@@ -7,6 +7,7 @@ using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
+using static DragaliaAPI.Services.Game.TutorialService;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
@@ -97,6 +98,15 @@ public class DungeonRecordService(
             .Select(x => x.ToConvertedEntityList())
             .Merge()
             .ToList();
+
+        if (
+            session.QuestId == TutorialQuestIds.AvenueToPowerBeginner
+            && await tutorialService.GetCurrentTutorialStatus() == TutorialStatusIds.CoopTutorial
+        )
+        {
+            logger.LogDebug("Detected co-op tutorial: updating tutorial status");
+            await tutorialService.UpdateTutorialStatus(20501);
+        }
 
         return ingameResultData;
     }
