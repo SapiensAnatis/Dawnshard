@@ -1156,12 +1156,8 @@ public class DungeonRecordTest : TestFixture
     public async Task Record_IsCoopTutorial_AdvancesTutorialStatus()
     {
         await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(
-                e =>
-                    e.SetProperty(
-                        p => p.TutorialStatus,
-                        TutorialService.TutorialStatusIds.CoopTutorial
-                    )
+            .ExecuteUpdateAsync(e =>
+                e.SetProperty(p => p.TutorialStatus, TutorialService.TutorialStatusIds.CoopTutorial)
             );
 
         int questId = TutorialService.TutorialQuestIds.AvenueToPowerBeginner;

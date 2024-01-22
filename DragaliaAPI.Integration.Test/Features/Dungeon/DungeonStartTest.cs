@@ -252,12 +252,8 @@ public class DungeonStartTest : TestFixture
     public async Task Start_CoopTutorial_SetsIsBotTutorial()
     {
         await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(
-                e =>
-                    e.SetProperty(
-                        p => p.TutorialStatus,
-                        TutorialService.TutorialStatusIds.CoopTutorial
-                    )
+            .ExecuteUpdateAsync(e =>
+                e.SetProperty(p => p.TutorialStatus, TutorialService.TutorialStatusIds.CoopTutorial)
             );
 
         DragaliaResponse<DungeonStartStartData> response =
@@ -277,12 +273,11 @@ public class DungeonStartTest : TestFixture
     public async Task Start_AtpBeginner_NotCoopTutorial_SetsIsBotTutorial()
     {
         await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(
-                e =>
-                    e.SetProperty(
-                        p => p.TutorialStatus,
-                        TutorialService.TutorialStatusIds.CoopTutorial + 1
-                    )
+            .ExecuteUpdateAsync(e =>
+                e.SetProperty(
+                    p => p.TutorialStatus,
+                    TutorialService.TutorialStatusIds.CoopTutorial + 1
+                )
             );
 
         DragaliaResponse<DungeonStartStartData> response =
