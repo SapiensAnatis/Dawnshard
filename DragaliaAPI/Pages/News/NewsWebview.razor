@@ -1,16 +1,59 @@
 ﻿@page "/news/webview"
 @using DragaliaAPI.RazorComponents.News
 @layout WebviewLayout
+@inject IJSRuntime JsRuntime;
 
 <div>
-    <MudStack AlignItems="AlignItems.Center" Spacing="5">
-        <MudText class="title" Typo="Typo.h1">Welcome to Dawnshard</MudText>
-        <MudStack Row=true>
-            <MudIconButton Variant="Variant.Filled" Icon="@Icons.Custom.Brands.Discord" Href="https://discord.gg/j9zSttjjWj"/>
-            <MudIconButton Variant="Variant.Filled" Icon="@Icons.Custom.Brands.GitHub" Href="https://github.com/SapiensAnatis/Dawnshard" />
-            <MudIconButton Variant="Variant.Filled" Icon="@CustomIcons.Patreon" Href="https://www.patreon.com/dawnshard" />
-            <MudIconButton Variant="Variant.Filled" Icon="@CustomIcons.BuyMeACoffee" Href="https://www.buymeacoffee.com/dawnshard" />
+    @if (this.IsShowWallEndeavours)
+    {
+        <MudStack AlignItems="AlignItems.Center" Spacing="5">
+            <MudText Typo="Typo.h1">MG Endeavours</MudText>
+            <MudStack AlignItems="AlignItems.Center">
+                <MudText Typo="Typo.h2">Individual element completion</MudText>
+                <MudText Class="px-4">
+                    These are granted across each of the five elements for reaching a particular level in that element.
+                </MudText>
+                <MudImage Width="400" Src="img/wall/individualEndeavours.webp"/>
+            </MudStack>
+            <MudStack AlignItems="AlignItems.Center">
+                <MudText Typo="Typo.h2">Combined completion</MudText>
+                <MudText Class="px-4">
+                    These are granted for reaching a minimum level across all five elements.
+                </MudText>
+                <MudImage Width="400" Src="img/wall/combinedEndeavours.webp"/>
+            </MudStack>
         </MudStack>
-        <NewsComponent/>
-    </MudStack>
+    }
+    else
+    {
+        <MudStack AlignItems="AlignItems.Center" Spacing="5">
+            <MudText class="title" Typo="Typo.h1">Welcome to Dawnshard</MudText>
+            <MudStack Row=true>
+                <MudIconButton Variant="Variant.Filled" Icon="@Icons.Custom.Brands.Discord" Href="https://discord.gg/j9zSttjjWj"/>
+                <MudIconButton Variant="Variant.Filled" Icon="@Icons.Custom.Brands.GitHub" Href="https://github.com/SapiensAnatis/Dawnshard"/>
+                <MudIconButton Variant="Variant.Filled" Icon="@CustomIcons.Patreon" Href="https://www.patreon.com/dawnshard"/>
+                <MudIconButton Variant="Variant.Filled" Icon="@CustomIcons.BuyMeACoffee" Href="https://www.buymeacoffee.com/dawnshard"/>
+            </MudStack>
+            <NewsComponent/>
+        </MudStack>
+    }
 </div>
+
+@code {
+
+    public bool IsShowWallEndeavours { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        string windowHash = await this.JsRuntime.InvokeAsync<string>("blazorExtensions.getHash");
+
+        if (windowHash == "#detail/20000")
+        {
+            this.IsShowWallEndeavours = true;
+            this.StateHasChanged();
+        }
+    }
+
+}

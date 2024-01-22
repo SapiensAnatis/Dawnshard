@@ -54,8 +54,11 @@
             document.cookie = `${name}=${value}; SameSite=Lax`;
         },
         scrollToTop: function () {
-             document.documentElement.scrollTop = 0;
-        }
+            document.documentElement.scrollTop = 0;
+        },
+        getHash: function () {
+            return window.location.hash
+        }    
     }
 </script>
 
