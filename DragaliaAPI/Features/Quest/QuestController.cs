@@ -157,14 +157,11 @@ public class QuestController : DragaliaControllerBase
             {
                 quest_drop_info = new()
                 {
-                    drop_info_list = drops.Select(
-                        x =>
-                            new AtgenDuplicateEntityList()
-                            {
-                                entity_id = x.Id,
-                                entity_type = x.EntityType,
-                            }
-                    )
+                    drop_info_list = drops.Select(x => new AtgenDuplicateEntityList()
+                    {
+                        entity_id = x.Id,
+                        entity_type = x.EntityType,
+                    })
                 }
             }
         );

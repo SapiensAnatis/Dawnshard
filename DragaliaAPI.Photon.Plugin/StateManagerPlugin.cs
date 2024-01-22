@@ -138,8 +138,8 @@ namespace DragaliaAPI.Photon.Plugin
                 return;
             }
 
-            IActor actor = this.PluginHost.GameActors.FirstOrDefault(
-                x => x.ActorNr == info.ActorNr
+            IActor actor = this.PluginHost.GameActors.FirstOrDefault(x =>
+                x.ActorNr == info.ActorNr
             );
 
             if (actor is null)
@@ -260,8 +260,8 @@ namespace DragaliaAPI.Photon.Plugin
 
         private void OnSetGoToIngameState(ISetPropertiesCallInfo info)
         {
-            IEnumerable<int> goToIngameState = this.PluginHost.GameActors.Select(
-                x => x.Properties.GetIntOrDefault(ActorPropertyKeys.GoToIngameState)
+            IEnumerable<int> goToIngameState = this.PluginHost.GameActors.Select(x =>
+                x.Properties.GetIntOrDefault(ActorPropertyKeys.GoToIngameState)
             );
 
             bool shouldHideRoom = goToIngameState.All(x => x > 1) && !this.roomHidden;

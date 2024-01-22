@@ -100,15 +100,12 @@ public class BonusService(
     private static IEnumerable<AtgenElementBonus> GetFortElementBonus(IEnumerable<int> buildIds)
     {
         IDictionary<UnitElement, AtgenElementBonus> result = Enum.GetValues<UnitElement>()
-            .Select(
-                x =>
-                    new AtgenElementBonus()
-                    {
-                        elemental_type = x,
-                        hp = 0,
-                        attack = 0
-                    }
-            )
+            .Select(x => new AtgenElementBonus()
+            {
+                elemental_type = x,
+                hp = 0,
+                attack = 0
+            })
             .ToDictionary(x => x.elemental_type, x => x);
 
         foreach (int id in buildIds)
@@ -141,15 +138,12 @@ public class BonusService(
     private static IEnumerable<AtgenParamBonus> GetFortParamBonus(IEnumerable<int> buildIds)
     {
         IDictionary<WeaponTypes, AtgenParamBonus> result = Enum.GetValues<WeaponTypes>()
-            .Select(
-                x =>
-                    new AtgenParamBonus()
-                    {
-                        weapon_type = x,
-                        hp = 0,
-                        attack = 0
-                    }
-            )
+            .Select(x => new AtgenParamBonus()
+            {
+                weapon_type = x,
+                hp = 0,
+                attack = 0
+            })
             .ToDictionary(x => x.weapon_type, x => x);
 
         foreach (int id in buildIds)
@@ -181,16 +175,13 @@ public class BonusService(
     private static IEnumerable<AtgenDragonBonus> GetFortDragonBonus(IEnumerable<int> buildIds)
     {
         IDictionary<UnitElement, AtgenDragonBonus> result = Enum.GetValues<UnitElement>()
-            .Select(
-                x =>
-                    new AtgenDragonBonus()
-                    {
-                        elemental_type = x,
-                        hp = 0,
-                        attack = 0,
-                        dragon_bonus = 0,
-                    }
-            )
+            .Select(x => new AtgenDragonBonus()
+            {
+                elemental_type = x,
+                hp = 0,
+                attack = 0,
+                dragon_bonus = 0,
+            })
             .ToDictionary(x => x.elemental_type, x => x);
 
         foreach (int id in buildIds)
@@ -232,15 +223,12 @@ public class BonusService(
     )
     {
         IDictionary<WeaponTypes, AtgenParamBonus> result = Enum.GetValues<WeaponTypes>()
-            .Select(
-                x =>
-                    new AtgenParamBonus()
-                    {
-                        weapon_type = x,
-                        hp = 0,
-                        attack = 0
-                    }
-            )
+            .Select(x => new AtgenParamBonus()
+            {
+                weapon_type = x,
+                hp = 0,
+                attack = 0
+            })
             .ToDictionary(x => x.weapon_type, x => x);
 
         foreach (WeaponBodies id in weaponBodyIds)

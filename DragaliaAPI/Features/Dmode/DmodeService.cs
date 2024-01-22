@@ -130,18 +130,15 @@ public class DmodeService(
 
     public async Task<IEnumerable<DmodeCharaList>> GetCharaList()
     {
-        return (await dmodeRepository.GetCharasAsync()).Select(
-            x =>
-                new DmodeCharaList(
-                    x.CharaId,
-                    x.MaxFloor,
-                    x.SelectedServitorId,
-                    x.SelectEditSkillCharaId1,
-                    x.SelectEditSkillCharaId2,
-                    x.SelectEditSkillCharaId3,
-                    x.MaxScore
-                )
-        );
+        return (await dmodeRepository.GetCharasAsync()).Select(x => new DmodeCharaList(
+            x.CharaId,
+            x.MaxFloor,
+            x.SelectedServitorId,
+            x.SelectEditSkillCharaId1,
+            x.SelectEditSkillCharaId2,
+            x.SelectEditSkillCharaId3,
+            x.MaxScore
+        ));
     }
 
     public async Task UseRecovery()
@@ -211,9 +208,10 @@ public class DmodeService(
             passive.Level = passiveList.passive_level;
         }
 
-        return currentPassives.Values.Select(
-            x => new DmodeServitorPassiveList(x.PassiveId, x.Level)
-        );
+        return currentPassives.Values.Select(x => new DmodeServitorPassiveList(
+            x.PassiveId,
+            x.Level
+        ));
     }
 
     public async Task<DmodeExpedition> StartExpedition(int targetFloor, IEnumerable<Charas> charas)

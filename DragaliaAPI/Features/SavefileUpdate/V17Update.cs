@@ -28,13 +28,11 @@ public class V17Update(
         IAsyncEnumerable<Dragons> missingReliabilities = this.apiContext.PlayerDragonData.Where(
             dragon => dragon.ViewerId == this.playerIdentityService.ViewerId
         )
-            .Where(
-                dragon =>
-                    !this.apiContext.PlayerDragonReliability.Any(
-                        rel =>
-                            rel.ViewerId == this.playerIdentityService.ViewerId
-                            && rel.DragonId == dragon.DragonId
-                    )
+            .Where(dragon =>
+                !this.apiContext.PlayerDragonReliability.Any(rel =>
+                    rel.ViewerId == this.playerIdentityService.ViewerId
+                    && rel.DragonId == dragon.DragonId
+                )
             )
             .Select(x => x.DragonId)
             .Distinct()

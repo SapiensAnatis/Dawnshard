@@ -17,13 +17,13 @@ public class ShopRepository : IShopRepository
     }
 
     public IQueryable<DbPlayerShopInfo> ShopInfos =>
-        this.apiContext.PlayerShopInfos.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId
+        this.apiContext.PlayerShopInfos.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
         );
 
     public IQueryable<DbPlayerShopPurchase> Purchases =>
-        this.apiContext.PlayerPurchases.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId
+        this.apiContext.PlayerPurchases.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
         );
 
     public async Task<DbPlayerShopInfo> GetShopInfoAsync()
@@ -48,8 +48,8 @@ public class ShopRepository : IShopRepository
     {
         DateTimeOffset current = DateTimeOffset.UtcNow;
 
-        await this.Purchases.Where(
-            x => x.EffectEndTime != DateTimeOffset.UnixEpoch && current >= x.EffectEndTime
+        await this.Purchases.Where(x =>
+            x.EffectEndTime != DateTimeOffset.UnixEpoch && current >= x.EffectEndTime
         )
             .ExecuteDeleteAsync();
     }
@@ -65,8 +65,8 @@ public class ShopRepository : IShopRepository
     {
         await ClearExpiredShopPurchases();
 
-        DbPlayerShopPurchase? existing = await this.Purchases.FirstOrDefaultAsync(
-            x => x.GoodsId == goodsId
+        DbPlayerShopPurchase? existing = await this.Purchases.FirstOrDefaultAsync(x =>
+            x.GoodsId == goodsId
         );
         if (existing == null)
         {

@@ -72,48 +72,43 @@ public static class Extensions
         this IEnumerable<ConvertedEntityList> source
     ) =>
         source
-            .GroupBy(
-                x =>
-                    new
+            .GroupBy(x => new
+            {
+                x.before_entity_id,
+                x.before_entity_type,
+                x.after_entity_id,
+                x.after_entity_type
+            })
+            .Select(group =>
+                group.Aggregate(
+                    new ConvertedEntityList
                     {
-                        x.before_entity_id,
-                        x.before_entity_type,
-                        x.after_entity_id,
-                        x.after_entity_type
+                        before_entity_id = group.Key.before_entity_id,
+                        before_entity_type = group.Key.before_entity_type,
+                        after_entity_id = group.Key.after_entity_id,
+                        after_entity_type = group.Key.after_entity_type
+                    },
+                    (acc, current) =>
+                    {
+                        acc.before_entity_quantity += current.before_entity_quantity;
+                        acc.after_entity_quantity += current.after_entity_quantity;
+                        return acc;
                     }
-            )
-            .Select(
-                group =>
-                    group.Aggregate(
-                        new ConvertedEntityList
-                        {
-                            before_entity_id = group.Key.before_entity_id,
-                            before_entity_type = group.Key.before_entity_type,
-                            after_entity_id = group.Key.after_entity_id,
-                            after_entity_type = group.Key.after_entity_type
-                        },
-                        (acc, current) =>
-                        {
-                            acc.before_entity_quantity += current.before_entity_quantity;
-                            acc.after_entity_quantity += current.after_entity_quantity;
-                            return acc;
-                        }
-                    )
+                )
             );
 
     private static IEnumerable<AtgenDropAll> Merge(this IEnumerable<AtgenDropAll> source) =>
         source
             .GroupBy(x => new { x.type, x.id, })
-            .Select(
-                group =>
-                    group.Aggregate(
-                        new AtgenDropAll { id = group.Key.id, type = group.Key.type, },
-                        (acc, current) =>
-                        {
-                            acc.quantity += current.quantity;
-                            return acc;
-                        }
-                    )
+            .Select(group =>
+                group.Aggregate(
+                    new AtgenDropAll { id = group.Key.id, type = group.Key.type, },
+                    (acc, current) =>
+                    {
+                        acc.quantity += current.quantity;
+                        return acc;
+                    }
+                )
             );
 
     private static IEnumerable<TElement>? UnionNullableLists<TElement, TKey>(

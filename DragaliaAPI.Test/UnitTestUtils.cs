@@ -74,26 +74,22 @@ public static class UnitTestUtils
     /// </summary>
     public static void ApplyDateTimeAssertionOptions(int thresholdSec = TimeComparisonThresholdSec)
     {
-        AssertionOptions.AssertEquivalencyUsing(
-            options =>
-                options
-                    .Using<DateTimeOffset>(
-                        ctx =>
-                            ctx.Subject.Should()
-                                .BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(thresholdSec))
-                    )
-                    .WhenTypeIs<DateTimeOffset>()
+        AssertionOptions.AssertEquivalencyUsing(options =>
+            options
+                .Using<DateTimeOffset>(ctx =>
+                    ctx.Subject.Should()
+                        .BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(thresholdSec))
+                )
+                .WhenTypeIs<DateTimeOffset>()
         );
 
-        AssertionOptions.AssertEquivalencyUsing(
-            options =>
-                options
-                    .Using<TimeSpan>(
-                        ctx =>
-                            ctx.Subject.Should()
-                                .BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(thresholdSec))
-                    )
-                    .WhenTypeIs<TimeSpan>()
+        AssertionOptions.AssertEquivalencyUsing(options =>
+            options
+                .Using<TimeSpan>(ctx =>
+                    ctx.Subject.Should()
+                        .BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(thresholdSec))
+                )
+                .WhenTypeIs<TimeSpan>()
         );
     }
 

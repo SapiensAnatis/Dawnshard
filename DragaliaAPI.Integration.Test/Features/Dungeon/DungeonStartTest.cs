@@ -85,8 +85,8 @@ public class DungeonStartTest : TestFixture
         ).data;
 
         response
-            .ingame_data.party_info.party_unit_list.First(
-                x => x.chara_data!.chara_id == Charas.GalaMascula
+            .ingame_data.party_info.party_unit_list.First(x =>
+                x.chara_data!.chara_id == Charas.GalaMascula
             )
             .game_weapon_passive_ability_list.Should()
             .Contain(x => x.weapon_passive_ability_id == 1020211);
@@ -160,17 +160,17 @@ public class DungeonStartTest : TestFixture
     [InlineData("start_assign_unit")]
     public async Task Start_InsufficientStamina_ReturnsError(string endpoint)
     {
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            p => p.SetProperty(e => e.StaminaSingle, e => 0)
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(p =>
+            p.SetProperty(e => e.StaminaSingle, e => 0)
         );
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            p => p.SetProperty(e => e.StaminaMulti, e => 0)
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(p =>
+            p.SetProperty(e => e.StaminaMulti, e => 0)
         );
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            p => p.SetProperty(e => e.LastStaminaSingleUpdateTime, e => DateTimeOffset.UtcNow)
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(p =>
+            p.SetProperty(e => e.LastStaminaSingleUpdateTime, e => DateTimeOffset.UtcNow)
         );
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            p => p.SetProperty(e => e.LastStaminaMultiUpdateTime, e => DateTimeOffset.UtcNow)
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(p =>
+            p.SetProperty(e => e.LastStaminaMultiUpdateTime, e => DateTimeOffset.UtcNow)
         );
 
         (
@@ -189,17 +189,17 @@ public class DungeonStartTest : TestFixture
     {
         await this.ApiContext.PlayerQuests.ExecuteDeleteAsync();
 
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            p => p.SetProperty(e => e.StaminaSingle, e => 0)
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(p =>
+            p.SetProperty(e => e.StaminaSingle, e => 0)
         );
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            p => p.SetProperty(e => e.StaminaMulti, e => 0)
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(p =>
+            p.SetProperty(e => e.StaminaMulti, e => 0)
         );
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            p => p.SetProperty(e => e.LastStaminaSingleUpdateTime, e => DateTimeOffset.UtcNow)
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(p =>
+            p.SetProperty(e => e.LastStaminaSingleUpdateTime, e => DateTimeOffset.UtcNow)
         );
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            p => p.SetProperty(e => e.LastStaminaMultiUpdateTime, e => DateTimeOffset.UtcNow)
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(p =>
+            p.SetProperty(e => e.LastStaminaMultiUpdateTime, e => DateTimeOffset.UtcNow)
         );
 
         (

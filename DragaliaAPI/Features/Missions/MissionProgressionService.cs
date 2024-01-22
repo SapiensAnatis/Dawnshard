@@ -300,12 +300,11 @@ public class MissionProgressionService(
         {
             List<(MissionType Type, int Id)> affectedMissions = MasterAsset
                 .MissionProgressionInfo.Enumerable.Where(x => x.CompleteType == evt.Type)
-                .Where(
-                    x =>
-                        (x.Parameter is null || x.Parameter == evt.Parameter)
-                        && (x.Parameter2 is null || x.Parameter2 == evt.Parameter2)
-                        && (x.Parameter3 is null || x.Parameter3 == evt.Parameter3)
-                        && (x.Parameter4 is null || x.Parameter4 == evt.Parameter4)
+                .Where(x =>
+                    (x.Parameter is null || x.Parameter == evt.Parameter)
+                    && (x.Parameter2 is null || x.Parameter2 == evt.Parameter2)
+                    && (x.Parameter3 is null || x.Parameter3 == evt.Parameter3)
+                    && (x.Parameter4 is null || x.Parameter4 == evt.Parameter4)
                 )
                 .Select(x => (x.MissionType, x.MissionId))
                 .ToList();
@@ -318,20 +317,17 @@ public class MissionProgressionService(
                 .ToListAsync();
 
             foreach (
-                DbPlayerMission progressingMission in missionList.Where(
-                    x =>
-                        affectedMissions.Contains((x.Type, x.Id))
-                        && x.State == MissionState.InProgress
+                DbPlayerMission progressingMission in missionList.Where(x =>
+                    affectedMissions.Contains((x.Type, x.Id)) && x.State == MissionState.InProgress
                 )
             )
             {
                 Mission mission = Mission.From(progressingMission.Type, progressingMission.Id);
 
                 MissionProgressionInfo progressionInfo =
-                    MasterAsset.MissionProgressionInfo.Enumerable.Single(
-                        x =>
-                            x.MissionType == progressingMission.Type
-                            && x.MissionId == progressingMission.Id
+                    MasterAsset.MissionProgressionInfo.Enumerable.Single(x =>
+                        x.MissionType == progressingMission.Type
+                        && x.MissionId == progressingMission.Id
                     );
 
                 if (progressionInfo.UseTotalValue)

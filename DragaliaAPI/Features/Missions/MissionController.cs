@@ -51,9 +51,13 @@ public class MissionController(
         )
             .ToListAsync();
 
-        response.drill_mission_list = drillMissions.Select(
-            x => new DrillMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
-        );
+        response.drill_mission_list = drillMissions.Select(x => new DrillMissionList(
+            x.Id,
+            x.Progress,
+            (int)x.State,
+            x.End,
+            x.Start
+        ));
 
         response.drill_mission_group_list = await this.missionService.GetCompletedDrillGroups();
 
@@ -70,9 +74,13 @@ public class MissionController(
         IEnumerable<DbPlayerMission> drillMissions =
             await this.missionService.UnlockDrillMissionGroup(request.drill_mission_group_id);
 
-        response.drill_mission_list = drillMissions.Select(
-            x => new DrillMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
-        );
+        response.drill_mission_list = drillMissions.Select(x => new DrillMissionList(
+            x.Id,
+            x.Progress,
+            (int)x.State,
+            x.End,
+            x.Start
+        ));
 
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
 
@@ -89,9 +97,13 @@ public class MissionController(
         (IEnumerable<MainStoryMissionGroupReward> rewards, IEnumerable<DbPlayerMission> missions) =
             await this.missionService.UnlockMainMissionGroup(request.main_story_mission_group_id);
 
-        response.main_story_mission_list = missions.Select(
-            x => new MainStoryMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
-        );
+        response.main_story_mission_list = missions.Select(x => new MainStoryMissionList(
+            x.Id,
+            x.Progress,
+            (int)x.State,
+            x.End,
+            x.Start
+        ));
 
         response.main_story_mission_unlock_bonus_list = rewards.Select(
             x => new AtgenBuildEventRewardEntityList(x.Type, x.Id, x.Quantity)
@@ -123,9 +135,13 @@ public class MissionController(
         )
             .ToListAsync();
 
-        response.drill_mission_list = missions.Select(
-            x => new DrillMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
-        );
+        response.drill_mission_list = missions.Select(x => new DrillMissionList(
+            x.Id,
+            x.Progress,
+            (int)x.State,
+            x.End,
+            x.Start
+        ));
 
         response.drill_mission_group_list = await this.missionService.GetCompletedDrillGroups();
         response.entity_result = this.rewardService.GetEntityResult();

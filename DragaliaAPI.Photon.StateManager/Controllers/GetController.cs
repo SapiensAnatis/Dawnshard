@@ -42,8 +42,8 @@ public class GetController : ControllerBase
     {
         this.logger.LogDebug("Retrieving all open games.");
 
-        IRedisCollection<RedisGame> query = this.VisibleGames.Where(
-            x => x.MatchingType == MatchingTypes.Anyone
+        IRedisCollection<RedisGame> query = this.VisibleGames.Where(x =>
+            x.MatchingType == MatchingTypes.Anyone
         );
 
         if (questId is not null)
@@ -93,8 +93,8 @@ public class GetController : ControllerBase
     {
         this.logger.LogDebug("Checking whether player {viewerId} is a host in any game", viewerId);
 
-        bool result = (await this.Games.ToListAsync()).Any(
-            x => x.Players.Any(y => y.ViewerId == viewerId && y.ActorNr == 1)
+        bool result = (await this.Games.ToListAsync()).Any(x =>
+            x.Players.Any(y => y.ViewerId == viewerId && y.ActorNr == 1)
         );
 
         this.logger.LogDebug("Result: {result}", result);

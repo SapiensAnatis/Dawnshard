@@ -23,8 +23,8 @@ public class EulaController : DragaliaControllerBase
     public DragaliaResult GetVersion(EulaGetVersionRequest request)
     {
         AtgenVersionHash version =
-            AllEulaVersions.FirstOrDefault(
-                x => x.region == request.region && x.lang == request.lang
+            AllEulaVersions.FirstOrDefault(x =>
+                x.region == request.region && x.lang == request.lang
             ) ?? AllEulaVersions[0];
 
         return this.Ok(new EulaGetVersionData(version, false, 1));

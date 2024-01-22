@@ -103,11 +103,10 @@ public class MissionMutations : MutationBase
         MissionMutationArgs args
     )
     {
-        List<DbPlayerMission> affectedMissions = await db.PlayerMissions.Where(
-            x =>
-                x.Id == args.MissionId
-                && x.Type == args.MissionType
-                && x.State == MissionState.InProgress
+        List<DbPlayerMission> affectedMissions = await db.PlayerMissions.Where(x =>
+            x.Id == args.MissionId
+            && x.Type == args.MissionType
+            && x.State == MissionState.InProgress
         )
             .ToListAsync();
 
@@ -130,11 +129,8 @@ public class MissionMutations : MutationBase
         await db.SaveChangesAsync();
 
         return context =>
-            context.PlayerMissions.Where(
-                x =>
-                    players.Contains(x.ViewerId)
-                    && x.Id == args.MissionId
-                    && x.Type == args.MissionType
+            context.PlayerMissions.Where(x =>
+                players.Contains(x.ViewerId) && x.Id == args.MissionId && x.Type == args.MissionType
             );
     }
 
@@ -158,10 +154,7 @@ public class MissionMutations : MutationBase
         DbPlayer player,
         MissionMutationArgs args
     ) =>
-        context.PlayerMissions.FirstOrDefault(
-            x =>
-                x.Id == args.MissionId
-                && x.Type == args.MissionType
-                && x.ViewerId == player.ViewerId
+        context.PlayerMissions.FirstOrDefault(x =>
+            x.Id == args.MissionId && x.Type == args.MissionType && x.ViewerId == player.ViewerId
         ) ?? throw new InvalidOperationException("No mission found.");
 }

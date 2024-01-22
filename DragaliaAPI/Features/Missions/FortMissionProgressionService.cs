@@ -14,8 +14,8 @@ public class FortMissionProgressionService(
     {
         return await fortRepository
                 .Builds.Where(x => x.PlantId != FortPlants.TheHalidom)
-                .SumAsync(
-                    x => x.BuildEndDate == DateTimeOffset.UnixEpoch ? x.Level : (int?)x.Level - 1
+                .SumAsync(x =>
+                    x.BuildEndDate == DateTimeOffset.UnixEpoch ? x.Level : (int?)x.Level - 1
                 ) ?? 0;
     }
 
@@ -29,11 +29,10 @@ public class FortMissionProgressionService(
 
     public async Task<int> GetFortPlantCount(FortPlants plant)
     {
-        return await fortRepository.Builds.CountAsync(
-            x =>
-                x.PlantId == plant
-                && x.PositionX != -1 // not in storage
-                && x.PositionZ != -1
+        return await fortRepository.Builds.CountAsync(x =>
+            x.PlantId == plant
+            && x.PositionX != -1 // not in storage
+            && x.PositionZ != -1
         );
     }
 

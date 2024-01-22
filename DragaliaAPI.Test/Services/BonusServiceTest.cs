@@ -59,15 +59,12 @@ public class BonusServiceTest
         this.mockFortRepository.SetupGet(x => x.Builds)
             .Returns(
                 inputBuildList
-                    .Select(
-                        x =>
-                            new DbFortBuild()
-                            {
-                                ViewerId = ViewerId,
-                                PlantId = x.plant_id,
-                                Level = x.level
-                            }
-                    )
+                    .Select(x => new DbFortBuild()
+                    {
+                        ViewerId = ViewerId,
+                        PlantId = x.plant_id,
+                        Level = x.level
+                    })
                     .AsQueryable()
                     .BuildMock()
             );
@@ -75,16 +72,13 @@ public class BonusServiceTest
         this.mockWeaponBodyRepository.SetupGet(x => x.WeaponBodies)
             .Returns(
                 inputWeaponList
-                    .Select(
-                        x =>
-                            new DbWeaponBody()
-                            {
-                                ViewerId = ViewerId,
-                                WeaponBodyId = x.weapon_body_id,
-                                FortPassiveCharaWeaponBuildupCount =
-                                    x.fort_passive_chara_weapon_buildup_count
-                            }
-                    )
+                    .Select(x => new DbWeaponBody()
+                    {
+                        ViewerId = ViewerId,
+                        WeaponBodyId = x.weapon_body_id,
+                        FortPassiveCharaWeaponBuildupCount =
+                            x.fort_passive_chara_weapon_buildup_count
+                    })
                     .AsQueryable()
                     .BuildMock()
             );

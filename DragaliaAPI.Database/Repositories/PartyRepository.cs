@@ -23,10 +23,8 @@ public class PartyRepository : BaseRepository, IPartyRepository
     public IQueryable<DbPartyUnit> GetPartyUnits(IEnumerable<int> partySlots)
     {
         return apiContext
-            .PlayerPartyUnits.Where(
-                x =>
-                    x.ViewerId == this.playerIdentityService.ViewerId
-                    && partySlots.Contains(x.PartyNo)
+            .PlayerPartyUnits.Where(x =>
+                x.ViewerId == this.playerIdentityService.ViewerId && partySlots.Contains(x.PartyNo)
             )
             .OrderBy(x => x.PartyNo == partySlots.First())
             .ThenBy(x => x.UnitNo);
@@ -47,10 +45,8 @@ public class PartyRepository : BaseRepository, IPartyRepository
         // TODO: this method executes a query where it deletes the old units and adds the new ones
         // Could it be optimized by updating the units instead? Anticipate that most changes will be small
         DbParty existingParty = await apiContext
-            .PlayerParties.Where(
-                x =>
-                    x.ViewerId == this.playerIdentityService.ViewerId
-                    && x.PartyNo == newParty.PartyNo
+            .PlayerParties.Where(x =>
+                x.ViewerId == this.playerIdentityService.ViewerId && x.PartyNo == newParty.PartyNo
             )
             .Include(x => x.Units)
             .SingleAsync();
@@ -64,8 +60,8 @@ public class PartyRepository : BaseRepository, IPartyRepository
     public async Task UpdatePartyName(int partyNo, string newName)
     {
         DbParty existingParty = await apiContext
-            .PlayerParties.Where(
-                x => x.ViewerId == this.playerIdentityService.ViewerId && x.PartyNo == partyNo
+            .PlayerParties.Where(x =>
+                x.ViewerId == this.playerIdentityService.ViewerId && x.PartyNo == partyNo
             )
             .Include(x => x.Units) // Need to return full unit list in update_data_list
             .SingleAsync();

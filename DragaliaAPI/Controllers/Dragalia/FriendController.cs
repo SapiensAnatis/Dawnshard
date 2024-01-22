@@ -64,8 +64,8 @@ public class FriendController : DragaliaControllerBase
 
         AtgenSupportUserDetailList helperDetail =
             helperList
-                .support_user_detail_list.Where(
-                    helper => helper.viewer_id == request.support_viewer_id
+                .support_user_detail_list.Where(helper =>
+                    helper.viewer_id == request.support_viewer_id
                 )
                 .FirstOrDefault()
             ?? new()

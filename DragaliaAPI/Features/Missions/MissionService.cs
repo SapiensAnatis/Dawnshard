@@ -107,12 +107,12 @@ public class MissionService(
             .ToList();
 
         if (
-            await this.missionRepository.Missions.AnyAsync(
-                x => x.GroupId == groupId && x.Type == MissionType.Drill
+            await this.missionRepository.Missions.AnyAsync(x =>
+                x.GroupId == groupId && x.Type == MissionType.Drill
             )
         )
-            return await this.missionRepository.Missions.Where(
-                x => x.GroupId == groupId && x.Type == MissionType.Drill
+            return await this.missionRepository.Missions.Where(x =>
+                x.GroupId == groupId && x.Type == MissionType.Drill
             )
                 .ToListAsync();
 
@@ -141,12 +141,12 @@ public class MissionService(
             .ToList();
 
         if (
-            await this.missionRepository.Missions.AnyAsync(
-                x => x.GroupId == eventId && x.Type == MissionType.MemoryEvent
+            await this.missionRepository.Missions.AnyAsync(x =>
+                x.GroupId == eventId && x.Type == MissionType.MemoryEvent
             )
         )
-            return await this.missionRepository.Missions.Where(
-                x => x.GroupId == eventId && x.Type == MissionType.MemoryEvent
+            return await this.missionRepository.Missions.Where(x =>
+                x.GroupId == eventId && x.Type == MissionType.MemoryEvent
             )
                 .ToListAsync();
 
@@ -307,8 +307,8 @@ public class MissionService(
             await this.missionRepository.CompletedDailyMissions.Where(x => ids.Contains(x.Id))
                 .ToListAsync();
 
-        List<DbPlayerMission> regularMissions = await this.missionRepository.Missions.Where(
-            x => x.Type == MissionType.Daily && ids.Contains(x.Id)
+        List<DbPlayerMission> regularMissions = await this.missionRepository.Missions.Where(x =>
+            x.Type == MissionType.Daily && ids.Contains(x.Id)
         )
             .ToListAsync();
 
@@ -319,15 +319,15 @@ public class MissionService(
                 == DateOnly.FromDateTime(this.resetHelper.LastDailyReset.UtcDateTime)
             )
             {
-                DbPlayerMission regularMission = regularMissions.First(
-                    x => x.Id == claimRequest.daily_mission_id
+                DbPlayerMission regularMission = regularMissions.First(x =>
+                    x.Id == claimRequest.daily_mission_id
                 );
 
                 regularMission.State = MissionState.Claimed;
             }
 
-            DbCompletedDailyMission? dbMission = completed.FirstOrDefault(
-                x => x.Id == claimRequest.daily_mission_id && x.Date == claimRequest.day_no
+            DbCompletedDailyMission? dbMission = completed.FirstOrDefault(x =>
+                x.Id == claimRequest.daily_mission_id && x.Date == claimRequest.day_no
             );
 
             if (dbMission is null)
@@ -424,14 +424,11 @@ public class MissionService(
                 await this.missionRepository.GetMissionsByType(MissionType.MainStory).ToListAsync()
             )
                 .Where(x => x.GroupId == mainStoryMissionGroupId.Value)
-                .Select(
-                    x =>
-                        new AtgenMainStoryMissionStateList()
-                        {
-                            main_story_mission_id = x.Id,
-                            state = (int)x.State,
-                        }
-                )
+                .Select(x => new AtgenMainStoryMissionStateList()
+                {
+                    main_story_mission_id = x.Id,
+                    state = (int)x.State,
+                })
         };
     }
 
@@ -542,8 +539,8 @@ public class MissionService(
         ILookup<MissionType, DbPlayerMission> allMissions =
             await this.missionRepository.GetActiveMissionsPerTypeAsync();
 
-        int activeEventId = await this.userDataRepository.UserData.Select(
-            x => x.ActiveMemoryEventId
+        int activeEventId = await this.userDataRepository.UserData.Select(x =>
+            x.ActiveMemoryEventId
         )
             .FirstAsync();
 
@@ -570,30 +567,26 @@ public class MissionService(
                 ),
                 memory_event_mission_list = allMissions[MissionType.MemoryEvent]
                     .Where(x => x.GroupId == activeEventId)
-                    .Select(
-                        x =>
-                            new MemoryEventMissionList(
-                                x.Id,
-                                x.Progress,
-                                (int)x.State,
-                                x.End,
-                                x.Start
-                            )
-                    ),
+                    .Select(x => new MemoryEventMissionList(
+                        x.Id,
+                        x.Progress,
+                        (int)x.State,
+                        x.End,
+                        x.Start
+                    )),
             };
 
         List<DailyMissionList> historicalDailyMissions = await this.GetHistoricalDailyMissions();
         IEnumerable<DailyMissionList> currentDailyMissions = allMissions[MissionType.Daily].Select(
-            x =>
-                new DailyMissionList()
-                {
-                    daily_mission_id = x.Id,
-                    progress = x.Progress,
-                    state = x.State,
-                    start_date = x.Start,
-                    end_date = x.End,
-                    day_no = DateOnly.FromDateTime(this.resetHelper.LastDailyReset.UtcDateTime)
-                }
+            x => new DailyMissionList()
+            {
+                daily_mission_id = x.Id,
+                progress = x.Progress,
+                state = x.State,
+                start_date = x.Start,
+                end_date = x.End,
+                day_no = DateOnly.FromDateTime(this.resetHelper.LastDailyReset.UtcDateTime)
+            }
         );
 
         response.daily_mission_list = currentDailyMissions.UnionBy(
@@ -605,17 +598,14 @@ public class MissionService(
     }
 
     private Task<List<DailyMissionList>> GetHistoricalDailyMissions() =>
-        this.missionRepository.CompletedDailyMissions.Select(
-            x =>
-                new DailyMissionList()
-                {
-                    daily_mission_id = x.Id,
-                    progress = x.Progress,
-                    state = MissionState.Completed,
-                    start_date = x.StartDate,
-                    end_date = x.EndDate,
-                    day_no = x.Date
-                }
-        )
+        this.missionRepository.CompletedDailyMissions.Select(x => new DailyMissionList()
+        {
+            daily_mission_id = x.Id,
+            progress = x.Progress,
+            state = MissionState.Completed,
+            start_date = x.StartDate,
+            end_date = x.EndDate,
+            day_no = x.Date
+        })
             .ToListAsync();
 }

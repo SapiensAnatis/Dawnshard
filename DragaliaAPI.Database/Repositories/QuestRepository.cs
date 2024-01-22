@@ -22,8 +22,8 @@ public class QuestRepository : IQuestRepository
         this.apiContext.QuestEvents.Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbQuestTreasureList> QuestTreasureList =>
-        this.apiContext.QuestTreasureList.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId
+        this.apiContext.QuestTreasureList.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
         );
 
     private async Task<DbQuest?> FindQuestAsync(int questId)

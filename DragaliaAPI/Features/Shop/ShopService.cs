@@ -132,16 +132,13 @@ public class ShopService(
         List<ShopPurchaseList> currentPurchases = (
             await shopRepository.Purchases.Where(x => x.ShopType == purchaseType).ToListAsync()
         )
-            .Select(
-                x =>
-                    new ShopPurchaseList(
-                        x.GoodsId,
-                        x.LastBuyTime,
-                        x.EffectStartTime,
-                        x.EffectEndTime,
-                        x.BuyCount
-                    )
-            )
+            .Select(x => new ShopPurchaseList(
+                x.GoodsId,
+                x.LastBuyTime,
+                x.EffectStartTime,
+                x.EffectEndTime,
+                x.BuyCount
+            ))
             .ToList();
 
         if (newlyAdded) // Change tracker weirdness
@@ -160,14 +157,13 @@ public class ShopService(
 
         return (await shopRepository.Purchases.ToListAsync()).ToLookup(
             x => x.ShopType,
-            x =>
-                new ShopPurchaseList(
-                    x.GoodsId,
-                    x.LastBuyTime,
-                    x.EffectStartTime,
-                    x.EffectEndTime,
-                    x.BuyCount
-                )
+            x => new ShopPurchaseList(
+                x.GoodsId,
+                x.LastBuyTime,
+                x.EffectStartTime,
+                x.EffectEndTime,
+                x.BuyCount
+            )
         );
     }
 

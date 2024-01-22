@@ -170,16 +170,11 @@ public class AbilityCrestController : DragaliaControllerBase
 
         IEnumerable<AbilityCrestSetList> abilityCrestSetList = Enumerable
             .Range(1, 54)
-            .Select(
-                x =>
-                    index < dbAbilityCrestSets.Count()
-                    && dbAbilityCrestSets[index].AbilityCrestSetNo == x
-                        ? dbAbilityCrestSets[index++]
-                        : new DbAbilityCrestSet()
-                        {
-                            ViewerId = this.ViewerId,
-                            AbilityCrestSetNo = x
-                        }
+            .Select(x =>
+                index < dbAbilityCrestSets.Count()
+                && dbAbilityCrestSets[index].AbilityCrestSetNo == x
+                    ? dbAbilityCrestSets[index++]
+                    : new DbAbilityCrestSet() { ViewerId = this.ViewerId, AbilityCrestSetNo = x }
             )
             .Select(mapper.Map<AbilityCrestSetList>)
             .ToArray();

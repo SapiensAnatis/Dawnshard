@@ -65,8 +65,8 @@ public class StoryService(
         if (
             storyData.UnlockQuestStoryId != default
             && (
-                await storyRepository.QuestStories.FirstOrDefaultAsync(
-                    x => x.StoryId == storyData.UnlockQuestStoryId
+                await storyRepository.QuestStories.FirstOrDefaultAsync(x =>
+                    x.StoryId == storyData.UnlockQuestStoryId
                 )
             )?.State != StoryState.Read
         )
@@ -78,8 +78,8 @@ public class StoryService(
         if (
             storyData.UnlockTriggerStoryId != default
             && (
-                await storyRepository.UnitStories.FirstOrDefaultAsync(
-                    x => x.StoryId == storyData.UnlockTriggerStoryId
+                await storyRepository.UnitStories.FirstOrDefaultAsync(x =>
+                    x.StoryId == storyData.UnlockTriggerStoryId
                 )
             )?.State != StoryState.Read
         )
@@ -319,14 +319,11 @@ public class StoryService(
     {
         IEnumerable<AtgenDuplicateEntityList> newGetEntityList = rewardList
             .Where(x => x.entity_type is EntityTypes.Dragon or EntityTypes.Chara)
-            .Select(
-                x =>
-                    new AtgenDuplicateEntityList()
-                    {
-                        entity_id = x.entity_id,
-                        entity_type = x.entity_type,
-                    }
-            );
+            .Select(x => new AtgenDuplicateEntityList()
+            {
+                entity_id = x.entity_id,
+                entity_type = x.entity_type,
+            });
 
         return new() { new_get_entity_list = newGetEntityList, };
     }

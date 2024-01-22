@@ -260,8 +260,8 @@ public class AbilityCrestTest : TestFixture
         );
 
         // Reset
-        this.ApiContext.PlayerAbilityCrests.ExecuteUpdate(
-            x => x.SetProperty(y => y.BuildupCount, 1)
+        this.ApiContext.PlayerAbilityCrests.ExecuteUpdate(x =>
+            x.SetProperty(y => y.BuildupCount, 1)
         );
 
         await this.Client.PostMsgpack<AbilityCrestBuildupPieceData>(

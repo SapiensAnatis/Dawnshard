@@ -81,8 +81,8 @@ public class WeaponBodyTest : TestFixture
             new WeaponBodyCraftRequest() { weapon_body_id = WeaponBodies.PrimalCrimson }
         );
 
-        this.ApiContext.PlayerWeapons.SingleOrDefault(
-            x => x.ViewerId == ViewerId && x.WeaponBodyId == WeaponBodies.PrimalCrimson
+        this.ApiContext.PlayerWeapons.SingleOrDefault(x =>
+            x.ViewerId == ViewerId && x.WeaponBodyId == WeaponBodies.PrimalCrimson
         )
             .Should()
             .NotBeNull();
@@ -341,14 +341,11 @@ public class WeaponBodyTest : TestFixture
                     },
                     Enumerable
                         .Range(1, 55)
-                        .Select(
-                            x =>
-                                new AtgenBuildupWeaponBodyPieceList()
-                                {
-                                    buildup_piece_type = BuildupPieceTypes.Stats,
-                                    step = x
-                                }
-                        )
+                        .Select(x => new AtgenBuildupWeaponBodyPieceList()
+                        {
+                            buildup_piece_type = BuildupPieceTypes.Stats,
+                            step = x
+                        })
                         .ToList(),
                     new() { { Materials.BronzeWhetstone, 275 }, { Materials.GoldWhetstone, 5 } },
                     0,
@@ -583,8 +580,8 @@ public class WeaponBodyTest : TestFixture
 
     private int GetMaterialCount(Materials id)
     {
-        return this.ApiContext.PlayerMaterials.Where(
-            x => x.ViewerId == ViewerId && x.MaterialId == id
+        return this.ApiContext.PlayerMaterials.Where(x =>
+            x.ViewerId == ViewerId && x.MaterialId == id
         )
             .Select(x => x.Quantity)
             .First();

@@ -17,9 +17,8 @@ if (Environment.GetEnvironmentVariable("ENABLE_HTTPS") != null)
 {
     X509Certificate2 certificate = X509Certificate2.CreateFromPemFile("cert.pem", "cert.key");
 
-    builder.WebHost.ConfigureKestrel(
-        serverOptions =>
-            serverOptions.ConfigureHttpsDefaults(options => options.ServerCertificate = certificate)
+    builder.WebHost.ConfigureKestrel(serverOptions =>
+        serverOptions.ConfigureHttpsDefaults(options => options.ServerCertificate = certificate)
     );
 }
 

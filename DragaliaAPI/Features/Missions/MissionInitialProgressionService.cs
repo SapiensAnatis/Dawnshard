@@ -32,8 +32,8 @@ public class MissionInitialProgressionService(
         Mission missionInfo = Mission.From(mission.Type, mission.Id);
 
         MissionProgressionInfo? progressionInfo =
-            MasterAsset.MissionProgressionInfo.Enumerable.SingleOrDefault(
-                x => x.MissionType == mission.Type && x.MissionId == mission.Id
+            MasterAsset.MissionProgressionInfo.Enumerable.SingleOrDefault(x =>
+                x.MissionType == mission.Type && x.MissionId == mission.Id
             );
 
         if (progressionInfo == null)
@@ -99,10 +99,9 @@ public class MissionInitialProgressionService(
             MissionCompleteType.AbilityCrestTotalPlusCountUp
                 => (
                     await abilityCrestRepository
-                        .AbilityCrests.Where(
-                            x =>
-                                progressionInfo.Parameter == null
-                                || x.AbilityCrestId == (AbilityCrests)progressionInfo.Parameter
+                        .AbilityCrests.Where(x =>
+                            progressionInfo.Parameter == null
+                            || x.AbilityCrestId == (AbilityCrests)progressionInfo.Parameter
                         )
                         .Select(x => new { x.AttackPlusCount, x.HpPlusCount })
                         .ToListAsync()
@@ -112,10 +111,9 @@ public class MissionInitialProgressionService(
             MissionCompleteType.AbilityCrestLevelUp
                 => (
                     await abilityCrestRepository
-                        .AbilityCrests.Where(
-                            x =>
-                                progressionInfo.Parameter == null
-                                || x.AbilityCrestId == (AbilityCrests)progressionInfo.Parameter
+                        .AbilityCrests.Where(x =>
+                            progressionInfo.Parameter == null
+                            || x.AbilityCrestId == (AbilityCrests)progressionInfo.Parameter
                         )
                         .Select(x => (int?)x.BuildupCount)
                         .ToListAsync()
@@ -208,10 +206,9 @@ public class MissionInitialProgressionService(
 
         int treasureTradeCount = trades
             .Select(x => MasterAsset.TreasureTrade[x])
-            .Count(
-                x =>
-                    (type == null || x.DestinationEntityType == type)
-                    && (id == null || x.DestinationEntityId == id)
+            .Count(x =>
+                (type == null || x.DestinationEntityType == type)
+                && (id == null || x.DestinationEntityId == id)
             );
 
         if (treasureTradeCount == 0 && type == EntityTypes.Wyrmprint)
@@ -222,8 +219,8 @@ public class MissionInitialProgressionService(
              * be unable to complete the mission because the trade shows as locked if the print
              * is owned. (These trades were reworked and given new IDs in 2.0).
             */
-            treasureTradeCount += await abilityCrestRepository.AbilityCrests.CountAsync(
-                x => x.AbilityCrestId == (AbilityCrests?)id
+            treasureTradeCount += await abilityCrestRepository.AbilityCrests.CountAsync(x =>
+                x.AbilityCrestId == (AbilityCrests?)id
             );
         }
 
@@ -337,8 +334,8 @@ public class MissionInitialProgressionService(
         }
 
         List<int> validQuests = MasterAsset
-            .QuestData.Enumerable.Where(
-                x => x.Gid == questGroupId && (playMode == null || x.QuestPlayModeType == playMode)
+            .QuestData.Enumerable.Where(x =>
+                x.Gid == questGroupId && (playMode == null || x.QuestPlayModeType == playMode)
             )
             .Select(x => x.Id)
             .ToList();
@@ -458,17 +455,16 @@ public class MissionInitialProgressionService(
         }
 
         List<WeaponBodies> validWeaponBodies = MasterAsset
-            .WeaponBody.Enumerable.Where(
-                x =>
-                    (element is null || x.ElementalType == element)
-                    && (rarity is null || x.Rarity == rarity)
-                    && (series is null || x.WeaponSeriesId == series)
+            .WeaponBody.Enumerable.Where(x =>
+                (element is null || x.ElementalType == element)
+                && (rarity is null || x.Rarity == rarity)
+                && (series is null || x.WeaponSeriesId == series)
             )
             .Select(x => x.Id)
             .ToList();
 
-        return await weaponRepository.WeaponBodies.CountAsync(
-            x => validWeaponBodies.Contains(x.WeaponBodyId)
+        return await weaponRepository.WeaponBodies.CountAsync(x =>
+            validWeaponBodies.Contains(x.WeaponBodyId)
         );
     }
 
@@ -485,11 +481,10 @@ public class MissionInitialProgressionService(
         }
 
         List<WeaponBodies> validWeaponBodies = MasterAsset
-            .WeaponBody.Enumerable.Where(
-                x =>
-                    (element is null || x.ElementalType == element)
-                    && (rarity is null || x.Rarity == rarity)
-                    && (series is null || x.WeaponSeriesId == series)
+            .WeaponBody.Enumerable.Where(x =>
+                (element is null || x.ElementalType == element)
+                && (rarity is null || x.Rarity == rarity)
+                && (series is null || x.WeaponSeriesId == series)
             )
             .Select(x => x.Id)
             .ToList();
@@ -514,10 +509,9 @@ public class MissionInitialProgressionService(
 
         List<int> questPool = MasterAsset
             .QuestData.Enumerable.Where(x => eventGroupPool.Contains(x.Gid))
-            .Where(
-                x =>
-                    (type == null || x.VariationType == type)
-                    && (playMode == null || x.QuestPlayModeType == playMode)
+            .Where(x =>
+                (type == null || x.VariationType == type)
+                && (playMode == null || x.QuestPlayModeType == playMode)
             )
             .Select(x => x.Id)
             .ToList();

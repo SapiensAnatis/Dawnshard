@@ -173,14 +173,10 @@ app.MapWhen(
         applicationBuilder.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
-            endpoints.MapGraphQL<ApiContext>(
-                configureEndpoint: endpoint =>
-                    endpoint.RequireAuthorization(
-                        policy =>
-                            policy
-                                .RequireAuthenticatedUser()
-                                .AddAuthenticationSchemes(SchemeName.Developer)
-                    )
+            endpoints.MapGraphQL<ApiContext>(configureEndpoint: endpoint =>
+                endpoint.RequireAuthorization(policy =>
+                    policy.RequireAuthenticatedUser().AddAuthenticationSchemes(SchemeName.Developer)
+                )
             );
         });
     }

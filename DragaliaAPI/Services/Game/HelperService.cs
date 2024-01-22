@@ -42,8 +42,8 @@ public class HelperService : IHelperService
 
     public async Task<UserSupportList?> GetHelper(ulong viewerId)
     {
-        UserSupportList? helper = (await this.GetHelpers()).support_user_list.FirstOrDefault(
-            x => x.viewer_id == viewerId
+        UserSupportList? helper = (await this.GetHelpers()).support_user_list.FirstOrDefault(x =>
+            x.viewer_id == viewerId
         );
 
         this.logger.LogDebug("Retrieved support list {@helper}", helper);

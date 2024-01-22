@@ -39,8 +39,8 @@ public class CharaMutations : MutationBase
             query => query.Include(x => x.CharaList)
         );
 
-        DbPlayerCharaData? charaData = this.Player.CharaList.FirstOrDefault(
-            x => x.CharaId == args.CharaId
+        DbPlayerCharaData? charaData = this.Player.CharaList.FirstOrDefault(x =>
+            x.CharaId == args.CharaId
         );
 
         if (charaData is null)
@@ -53,8 +53,8 @@ public class CharaMutations : MutationBase
         db.SaveChanges();
 
         return (ctx) =>
-            ctx.PlayerCharaData.First(
-                x => x.ViewerId == this.Player.ViewerId && x.CharaId == args.CharaId
+            ctx.PlayerCharaData.First(x =>
+                x.ViewerId == this.Player.ViewerId && x.CharaId == args.CharaId
             );
     }
 

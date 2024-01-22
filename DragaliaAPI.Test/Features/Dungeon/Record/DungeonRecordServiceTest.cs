@@ -171,8 +171,8 @@ public class DungeonRecordServiceTest
         this.mockUserService.Setup(x => x.AddExperience(400))
             .ReturnsAsync(new PlayerLevelResult(true, 100, 50));
 
-        this.mockDungeonRewardService.Setup(
-            x => x.ProcessQuestMissionCompletion(playRecord, session)
+        this.mockDungeonRewardService.Setup(x =>
+            x.ProcessQuestMissionCompletion(playRecord, session)
         )
             .ReturnsAsync((missionStatus, firstClearSets));
         this.mockDungeonRewardService.Setup(x => x.ProcessEnemyDrops(playRecord, session))

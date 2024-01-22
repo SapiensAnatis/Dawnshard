@@ -19,8 +19,8 @@ public class DmodeRepository(ApiContext apiContext, IPlayerIdentityService playe
         apiContext.PlayerDmodeDungeons.Where(x => x.ViewerId == playerIdentityService.ViewerId);
 
     public IQueryable<DbPlayerDmodeServitorPassive> ServitorPassives =>
-        apiContext.PlayerDmodeServitorPassives.Where(
-            x => x.ViewerId == playerIdentityService.ViewerId
+        apiContext.PlayerDmodeServitorPassives.Where(x =>
+            x.ViewerId == playerIdentityService.ViewerId
         );
 
     public IQueryable<DbPlayerDmodeExpedition> Expedition =>

@@ -86,10 +86,9 @@ public class EventService(
                 ? rewardIds.Select(x => rewards[x])
                 : rewards
                     .Values.ExceptBy(alreadyObtainedRewardIds, x => x.Id)
-                    .Where(
-                        x =>
-                            eventItemQuantities.ContainsKey(x.EventItemId)
-                            && eventItemQuantities[x.EventItemId] >= x.EventItemQuantity
+                    .Where(x =>
+                        eventItemQuantities.ContainsKey(x.EventItemId)
+                        && eventItemQuantities[x.EventItemId] >= x.EventItemQuantity
                     )
         ).ToList();
 
@@ -126,8 +125,8 @@ public class EventService(
 
         CombatEventLocation location = MasterAsset.CombatEventLocation[locationId];
         if (
-            await questRepository.Quests.SingleOrDefaultAsync(
-                x => x.QuestId == location.ClearQuestId
+            await questRepository.Quests.SingleOrDefaultAsync(x =>
+                x.QuestId == location.ClearQuestId
             )
             is not { State: 3 }
         )
@@ -136,8 +135,8 @@ public class EventService(
         }
 
         List<CombatEventLocationReward> rewards = MasterAsset
-            .CombatEventLocationReward.Enumerable.Where(
-                x => x.EventId == eventId && x.LocationRewardId == location.LocationRewardId
+            .CombatEventLocationReward.Enumerable.Where(x =>
+                x.EventId == eventId && x.LocationRewardId == location.LocationRewardId
             )
             .ToList();
 
@@ -230,14 +229,13 @@ public class EventService(
 
             foreach (
                 (int entityId, int entityQuantity) in CombatEventQuestLookup[data.Id]
-                    .Where(
-                        x =>
-                            completedQuestIds.Contains(x.Id)
-                            && x
-                                is {
-                                    HoldEntityType: EntityTypes.CombatEventItem,
-                                    HoldEntityQuantity: > 0
-                                }
+                    .Where(x =>
+                        completedQuestIds.Contains(x.Id)
+                        && x
+                            is {
+                                HoldEntityType: EntityTypes.CombatEventItem,
+                                HoldEntityQuantity: > 0
+                            }
                     )
                     .ToLookup(x => x.HoldEntityId, x => x.HoldEntityQuantity)
                     .ToDictionary(x => x.Key, x => x.Max())
@@ -257,8 +255,8 @@ public class EventService(
 
             foreach (
                 int locationId in MasterAsset
-                    .CombatEventLocation.Enumerable.Where(
-                        x => x.EventId == eventId && completedQuestIds.Contains(x.ClearQuestId)
+                    .CombatEventLocation.Enumerable.Where(x =>
+                        x.EventId == eventId && completedQuestIds.Contains(x.ClearQuestId)
                     )
                     .Select(x => x.Id)
             )
