@@ -65,7 +65,23 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Discord
             this.PluginHost.HttpRequest(request, info);
         }
 
-        public override void OnSetProperties(ISetPropertiesCallInfo info) { }
+        public override void OnSetProperties(ISetPropertiesCallInfo info)
+        {
+            if (!info.Request.Properties.ContainsKey(GamePropertyKeys.EntryConditions))
+                return;
+
+            HttpRequest request = this.CreateRequest(
+                GameUpdateEndpoint,
+                new GameModifyConditionsRequest()
+                {
+                    GameName = this.PluginHost.GameId,
+                    NewEntryConditions = DtoHelpers.CreateEntryConditions(info.Request.Properties),
+                    Player = null
+                }
+            );
+
+            this.PluginHost.HttpRequest(request, info);
+        }
 
         public override void BeforeCloseGame(IBeforeCloseGameCallInfo info)
         {
