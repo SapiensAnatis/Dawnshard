@@ -40,13 +40,12 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
         this.TestOutputHelper = testOutputHelper;
 
         this.Client = factory
-            .WithWebHostBuilder(
-                builder =>
-                    builder.ConfigureLogging(logging =>
-                    {
-                        logging.ClearProviders();
-                        logging.AddXUnit(this.TestOutputHelper);
-                    })
+            .WithWebHostBuilder(builder =>
+                builder.ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddXUnit(this.TestOutputHelper);
+                })
             )
             .CreateClient(
                 new WebApplicationFactoryClientOptions()
@@ -229,28 +228,22 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
 
         this.ApiContext.PlayerMaterials.AddRange(
             Enum.GetValues<Materials>()
-                .Select(
-                    x =>
-                        new DbPlayerMaterial()
-                        {
-                            ViewerId = newPlayer.ViewerId,
-                            MaterialId = x,
-                            Quantity = 99999999
-                        }
-                )
+                .Select(x => new DbPlayerMaterial()
+                {
+                    ViewerId = newPlayer.ViewerId,
+                    MaterialId = x,
+                    Quantity = 99999999
+                })
         );
 
         this.ApiContext.PlayerDragonGifts.AddRange(
             Enum.GetValues<DragonGifts>()
-                .Select(
-                    x =>
-                        new DbPlayerDragonGift()
-                        {
-                            ViewerId = newPlayer.ViewerId,
-                            DragonGiftId = x,
-                            Quantity = x < DragonGifts.FourLeafClover ? 1 : 999
-                        }
-                )
+                .Select(x => new DbPlayerDragonGift()
+                {
+                    ViewerId = newPlayer.ViewerId,
+                    DragonGiftId = x,
+                    Quantity = x < DragonGifts.FourLeafClover ? 1 : 999
+                })
         );
 
         IFortRepository fortRepository = this.Services.GetRequiredService<IFortRepository>();

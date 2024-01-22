@@ -38,8 +38,8 @@ public class CombatEventTest : TestFixture
     {
         DbPlayerEventItem pointItem = await ApiContext
             .PlayerEventItems.AsTracking()
-            .SingleAsync(
-                x => x.EventId == EventId && x.Type == (int)CombatEventItemType.EventPoint
+            .SingleAsync(x =>
+                x.EventId == EventId && x.Type == (int)CombatEventItemType.EventPoint
             );
 
         pointItem.Quantity += 1000;
@@ -68,8 +68,8 @@ public class CombatEventTest : TestFixture
     {
         DbPlayerEventItem pointItem = await ApiContext
             .PlayerEventItems.AsTracking()
-            .SingleAsync(
-                x => x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint
+            .SingleAsync(x =>
+                x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint
             );
 
         pointItem.Quantity += 500;

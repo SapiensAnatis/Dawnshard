@@ -19,9 +19,10 @@ public class ItemService(
 {
     public async Task<IEnumerable<ItemList>> GetItemList()
     {
-        return (await itemRepository.Items.ToListAsync()).Select(
-            x => new ItemList(x.ItemId, x.Quantity)
-        );
+        return (await itemRepository.Items.ToListAsync()).Select(x => new ItemList(
+            x.ItemId,
+            x.Quantity
+        ));
     }
 
     public async Task<AtgenRecoverData> UseItems(IEnumerable<AtgenUseItemList> items)

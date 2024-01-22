@@ -20,8 +20,8 @@ public class HelperServiceTest
 
     public HelperServiceTest()
     {
-        this.mapper = new MapperConfiguration(
-            cfg => cfg.AddMaps(typeof(Program).Assembly)
+        this.mapper = new MapperConfiguration(cfg =>
+            cfg.AddMaps(typeof(Program).Assembly)
         ).CreateMapper();
 
         this.mockPartyRepository = new(MockBehavior.Strict);

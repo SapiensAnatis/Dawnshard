@@ -19,9 +19,11 @@ public class EmblemController(
     {
         EmblemGetListData resp = new();
 
-        resp.emblem_list = (await emblemRepository.GetEmblemsAsync()).Select(
-            x => new EmblemList(x.EmblemId, x.IsNew, x.GetTime)
-        );
+        resp.emblem_list = (await emblemRepository.GetEmblemsAsync()).Select(x => new EmblemList(
+            x.EmblemId,
+            x.IsNew,
+            x.GetTime
+        ));
 
         return Ok(resp);
     }

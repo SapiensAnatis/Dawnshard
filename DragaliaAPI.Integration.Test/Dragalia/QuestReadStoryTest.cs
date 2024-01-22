@@ -45,8 +45,8 @@ public class QuestReadStoryTest : TestFixture
             .State.Should()
             .Be(StoryState.Read);
 
-        List<DbPlayerStoryState> storyStates = await this.ApiContext.PlayerStoryState.Where(
-            x => x.ViewerId == ViewerId
+        List<DbPlayerStoryState> storyStates = await this.ApiContext.PlayerStoryState.Where(x =>
+            x.ViewerId == ViewerId
         )
             .ToListAsync();
 

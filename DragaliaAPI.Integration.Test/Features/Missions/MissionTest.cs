@@ -129,14 +129,11 @@ public class MissionTest : TestFixture
                     ability_crest_id = AbilityCrests.Aromatherapy,
                     buildup_ability_crest_piece_list = Enumerable
                         .Range(2, 15)
-                        .Select(
-                            x =>
-                                new AtgenBuildupAbilityCrestPieceList()
-                                {
-                                    buildup_piece_type = BuildupPieceTypes.Stats,
-                                    step = x
-                                }
-                        )
+                        .Select(x => new AtgenBuildupAbilityCrestPieceList()
+                        {
+                            buildup_piece_type = BuildupPieceTypes.Stats,
+                            step = x
+                        })
                 }
             );
 
@@ -174,8 +171,8 @@ public class MissionTest : TestFixture
 
         response
             .update_data_list.ability_crest_list.Should()
-            .Contain(
-                x => x.ability_crest_id == AbilityCrests.HavingaSummerBall && x.equipable_count == 1
+            .Contain(x =>
+                x.ability_crest_id == AbilityCrests.HavingaSummerBall && x.equipable_count == 1
             );
     }
 
@@ -292,8 +289,8 @@ public class MissionTest : TestFixture
         // The Miracle Of Dragonyule: Clear a Boss Battle Five Times. Grants 'Splendid!' sticker
         int missionId = 10020502;
 
-        int oldWyrmite = this.ApiContext.PlayerUserData.First(
-            x => x.ViewerId == this.ViewerId
+        int oldWyrmite = this.ApiContext.PlayerUserData.First(x =>
+            x.ViewerId == this.ViewerId
         ).Crystal;
 
         await this.AddToDatabase(
@@ -505,16 +502,13 @@ public class MissionTest : TestFixture
         await this.AddRangeToDatabase(
             MasterAsset
                 .DrillMission.Enumerable.Where(x => x.MissionDrillGroupId == 1)
-                .Select(
-                    x =>
-                        new DbPlayerMission()
-                        {
-                            ViewerId = this.ViewerId,
-                            Id = x.Id,
-                            State = MissionState.Claimed,
-                            Type = MissionType.Drill
-                        }
-                )
+                .Select(x => new DbPlayerMission()
+                {
+                    ViewerId = this.ViewerId,
+                    Id = x.Id,
+                    State = MissionState.Claimed,
+                    Type = MissionType.Drill
+                })
         );
 
         MissionGetMissionListData response = (

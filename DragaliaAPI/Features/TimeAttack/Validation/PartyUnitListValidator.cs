@@ -14,10 +14,8 @@ public class PartyUnitListValidator : AbstractValidator<PartyUnitList>
                 && x.edit_skill_2_chara_data is not null and not { chara_id: Charas.Empty },
             () =>
                 RuleFor(x => new { x.edit_skill_1_chara_data, x.edit_skill_2_chara_data })
-                    .Must(
-                        x =>
-                            x.edit_skill_1_chara_data!.chara_id
-                            != x.edit_skill_2_chara_data!.chara_id
+                    .Must(x =>
+                        x.edit_skill_1_chara_data!.chara_id != x.edit_skill_2_chara_data!.chara_id
                     )
                     .WithMessage("Duplicate shared skills")
         );

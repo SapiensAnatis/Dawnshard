@@ -299,10 +299,9 @@ public class LoginTest : TestFixture
 
         response
             .update_data_list.dragon_gift_list.Should()
-            .Contain(
-                x =>
-                    x.dragon_gift_id == DragonGifts.FourLeafClover
-                    && x.quantity == oldCloverQuantity + 3
+            .Contain(x =>
+                x.dragon_gift_id == DragonGifts.FourLeafClover
+                && x.quantity == oldCloverQuantity + 3
             );
     }
 

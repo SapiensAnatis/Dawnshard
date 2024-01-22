@@ -22,8 +22,8 @@ public class V6Update : ISavefileUpdate
     public async Task Apply()
     {
         foreach (
-            DbFortBuild build in (await this.fortRepository.Builds.ToListAsync()).Where(
-                x => x.BuildStatus == FortBuildStatus.LevelUp
+            DbFortBuild build in (await this.fortRepository.Builds.ToListAsync()).Where(x =>
+                x.BuildStatus == FortBuildStatus.LevelUp
             )
         )
         {

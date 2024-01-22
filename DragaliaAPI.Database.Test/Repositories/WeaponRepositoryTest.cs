@@ -73,9 +73,8 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
         await this.weaponRepository.Add(WeaponBodies.Arondight);
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        this.fixture.ApiContext.PlayerWeapons.Single(
-            x =>
-                x.WeaponBodyId == WeaponBodies.Arondight && x.ViewerId == IdentityTestUtils.ViewerId
+        this.fixture.ApiContext.PlayerWeapons.Single(x =>
+            x.WeaponBodyId == WeaponBodies.Arondight && x.ViewerId == IdentityTestUtils.ViewerId
         )
             .Should()
             .BeEquivalentTo(
@@ -96,9 +95,11 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
                 WeaponBodies.Abyssbringer,
                 WeaponBodies.Blitzfang,
                 WeaponBodies.Camelot
-            }.Select(
-                x => new DbWeaponBody() { ViewerId = IdentityTestUtils.ViewerId, WeaponBodyId = x }
-            )
+            }.Select(x => new DbWeaponBody()
+            {
+                ViewerId = IdentityTestUtils.ViewerId,
+                WeaponBodyId = x
+            })
         );
 
         (
@@ -153,8 +154,8 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
         await this.weaponRepository.AddPassiveAbility(WeaponBodies.InfernoApogee, passiveAbility);
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        this.fixture.ApiContext.PlayerWeapons.Single(
-            x => x.WeaponBodyId == WeaponBodies.InfernoApogee
+        this.fixture.ApiContext.PlayerWeapons.Single(x =>
+            x.WeaponBodyId == WeaponBodies.InfernoApogee
         )
             .UnlockWeaponPassiveAbilityNoList.Should()
             .BeEquivalentTo(Enumerable.Repeat(0, 14).Prepend(1));
@@ -184,8 +185,8 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
             .GetPassiveAbilityId(1);
         WeaponPassiveAbility passiveAbility = MasterAsset.WeaponPassiveAbility.Get(passiveId);
 
-        await this.weaponRepository.Invoking(
-            x => x.AddPassiveAbility(WeaponBodies.RoaringWeald, passiveAbility)
+        await this.weaponRepository.Invoking(x =>
+            x.AddPassiveAbility(WeaponBodies.RoaringWeald, passiveAbility)
         )
             .Should()
             .NotThrowAsync();

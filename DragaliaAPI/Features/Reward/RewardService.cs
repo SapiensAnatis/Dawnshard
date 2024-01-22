@@ -101,8 +101,8 @@ public class RewardService(
 
     private IRewardHandler GetHandler(EntityTypes type)
     {
-        IRewardHandler? handler = rewardHandlers.SingleOrDefault(
-            x => x.SupportedTypes.Contains(type)
+        IRewardHandler? handler = rewardHandlers.SingleOrDefault(x =>
+            x.SupportedTypes.Contains(type)
         );
 
         if (handler is null)
@@ -157,14 +157,14 @@ public class RewardService(
         {
             new_get_entity_list = newEntities.Select(x => x.ToDuplicateEntityList()),
             converted_entity_list = convertedEntities.Select(x => x.ToConvertedEntityList()),
-            over_discard_entity_list = discardedEntities.Select(
-                x => x.ToBuildEventRewardEntityList()
+            over_discard_entity_list = discardedEntities.Select(x =>
+                x.ToBuildEventRewardEntityList()
             ),
-            over_present_entity_list = this.presentEntites.Select(
-                x => x.ToBuildEventRewardEntityList()
+            over_present_entity_list = this.presentEntites.Select(x =>
+                x.ToBuildEventRewardEntityList()
             ),
-            over_present_limit_entity_list = this.presentLimitEntities.Select(
-                x => x.ToBuildEventRewardEntityList()
+            over_present_limit_entity_list = this.presentLimitEntities.Select(x =>
+                x.ToBuildEventRewardEntityList()
             ),
         };
     }

@@ -28,15 +28,12 @@ public class V2Update : ISavefileUpdate
             await this.stampRepository.SetEquipStampList(
                 Enumerable
                     .Range(1, StampService.EquipListSize)
-                    .Select(
-                        x =>
-                            new DbEquippedStamp()
-                            {
-                                ViewerId = this.playerIdentityService.ViewerId,
-                                StampId = 0,
-                                Slot = x
-                            }
-                    )
+                    .Select(x => new DbEquippedStamp()
+                    {
+                        ViewerId = this.playerIdentityService.ViewerId,
+                        StampId = 0,
+                        Slot = x
+                    })
             );
         }
     }

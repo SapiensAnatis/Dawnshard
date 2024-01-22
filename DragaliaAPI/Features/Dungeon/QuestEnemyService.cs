@@ -90,16 +90,15 @@ public class QuestEnemyService : IQuestEnemyService
             enemy.enemy_drop_list[0].drop_list = enemy
                 .enemy_drop_list[0]
                 .drop_list.GroupBy(x => new { x.id, x.type })
-                .Select(
-                    group =>
-                        group.Aggregate(
-                            new AtgenDropList() { id = group.Key.id, type = group.Key.type },
-                            (acc, current) =>
-                            {
-                                acc.quantity += current.quantity;
-                                return acc;
-                            }
-                        )
+                .Select(group =>
+                    group.Aggregate(
+                        new AtgenDropList() { id = group.Key.id, type = group.Key.type },
+                        (acc, current) =>
+                        {
+                            acc.quantity += current.quantity;
+                            return acc;
+                        }
+                    )
                 )
                 .ToList();
         }
@@ -117,8 +116,8 @@ public class QuestEnemyService : IQuestEnemyService
 
     private static IPick<AtgenEnemy> GetEnemyPicker(AtgenEnemy[] enemyList)
     {
-        AtgenEnemy? boss = enemyList.FirstOrDefault(
-            x => MasterAsset.EnemyParam[x.param_id].Tough >= Toughness.Boss
+        AtgenEnemy? boss = enemyList.FirstOrDefault(x =>
+            MasterAsset.EnemyParam[x.param_id].Tough >= Toughness.Boss
         );
 
         if (boss != null)
@@ -196,8 +195,8 @@ public class QuestEnemyService : IQuestEnemyService
 
         if (questData.EventKindType == EventKindType.Earn)
         {
-            enemyParamList = enemyParamList.SelectMany(
-                x => DuplicateEarnEventEnemies(x, questData.VariationType)
+            enemyParamList = enemyParamList.SelectMany(x =>
+                DuplicateEarnEventEnemies(x, questData.VariationType)
             );
         }
 

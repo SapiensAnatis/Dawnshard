@@ -40,8 +40,8 @@ public class DungeonRepositoryTest : RepositoryTestFixture
         DbDetailedPartyUnit expectedResult = await this.SeedDatabase();
         int partySlot = 1;
 
-        IQueryable<DbPartyUnit> unitQuery = this.ApiContext.PlayerPartyUnits.Where(
-            x => x.ViewerId == ViewerId && x.PartyNo == partySlot
+        IQueryable<DbPartyUnit> unitQuery = this.ApiContext.PlayerPartyUnits.Where(x =>
+            x.ViewerId == ViewerId && x.PartyNo == partySlot
         );
 
         IQueryable<DbDetailedPartyUnit> buildQuery = this.dungeonRepository.BuildDetailedPartyUnit(
@@ -60,8 +60,8 @@ public class DungeonRepositoryTest : RepositoryTestFixture
         DbDetailedPartyUnit expectedResult = await this.SeedDatabase();
 
         IEnumerable<PartySettingList> party = (
-            await this.ApiContext.PlayerPartyUnits.Where(
-                x => x.ViewerId == ViewerId && x.PartyNo == 1
+            await this.ApiContext.PlayerPartyUnits.Where(x =>
+                x.ViewerId == ViewerId && x.PartyNo == 1
             )
                 .ToListAsync()
         ).Select(this.Mapper.Map<PartySettingList>);
@@ -157,8 +157,8 @@ public class DungeonRepositoryTest : RepositoryTestFixture
         await this.AddToDatabase(skin);
 
         // Set up party
-        DbParty party = await this.ApiContext.PlayerParties.Where(
-            x => x.ViewerId == ViewerId && x.PartyNo == 1
+        DbParty party = await this.ApiContext.PlayerParties.Where(x =>
+            x.ViewerId == ViewerId && x.PartyNo == 1
         )
             .FirstAsync();
 

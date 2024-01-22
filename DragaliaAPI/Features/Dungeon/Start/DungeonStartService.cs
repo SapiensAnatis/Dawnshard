@@ -234,8 +234,8 @@ public class DungeonStartService(
 
     public async Task<IngameQuestData> InitiateQuest(int questId)
     {
-        DbQuest? quest = await questRepository.Quests.SingleOrDefaultAsync(
-            x => x.QuestId == questId
+        DbQuest? quest = await questRepository.Quests.SingleOrDefaultAsync(x =>
+            x.QuestId == questId
         );
 
         if (quest?.State < 3)
@@ -258,13 +258,13 @@ public class DungeonStartService(
     {
         QuestGetSupportUserListData helperList = await helperService.GetHelpers();
 
-        UserSupportList? helperInfo = helperList.support_user_list.FirstOrDefault(
-            helper => helper.viewer_id == supportViewerId
+        UserSupportList? helperInfo = helperList.support_user_list.FirstOrDefault(helper =>
+            helper.viewer_id == supportViewerId
         );
 
         AtgenSupportUserDetailList? helperDetails =
-            helperList.support_user_detail_list.FirstOrDefault(
-                helper => helper.viewer_id == supportViewerId
+            helperList.support_user_detail_list.FirstOrDefault(helper =>
+                helper.viewer_id == supportViewerId
             );
 
         if (helperInfo is not null && helperDetails is not null)
@@ -281,14 +281,14 @@ public class DungeonStartService(
         // Post-processing: filter out null crests and load weapon passive data
         foreach (DbDetailedPartyUnit detailedUnit in detailedPartyUnits)
         {
-            detailedUnit.CrestSlotType1CrestList = detailedUnit.CrestSlotType1CrestList.Where(
-                x => x is not null
+            detailedUnit.CrestSlotType1CrestList = detailedUnit.CrestSlotType1CrestList.Where(x =>
+                x is not null
             );
-            detailedUnit.CrestSlotType2CrestList = detailedUnit.CrestSlotType2CrestList.Where(
-                x => x is not null
+            detailedUnit.CrestSlotType2CrestList = detailedUnit.CrestSlotType2CrestList.Where(x =>
+                x is not null
             );
-            detailedUnit.CrestSlotType3CrestList = detailedUnit.CrestSlotType3CrestList.Where(
-                x => x is not null
+            detailedUnit.CrestSlotType3CrestList = detailedUnit.CrestSlotType3CrestList.Where(x =>
+                x is not null
             );
 
             if (detailedUnit.WeaponBodyData is not null)

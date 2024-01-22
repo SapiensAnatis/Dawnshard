@@ -22,8 +22,8 @@ public class LoginBonusService(
         DateTimeOffset time = dateTimeProvider.UtcNow;
 
         foreach (
-            LoginBonusData bonusData in MasterAsset.LoginBonusData.Enumerable.Where(
-                x => x.StartTime <= time && time <= x.EndTime
+            LoginBonusData bonusData in MasterAsset.LoginBonusData.Enumerable.Where(x =>
+                x.StartTime <= time && time <= x.EndTime
             )
         )
         {
@@ -37,16 +37,16 @@ public class LoginBonusService(
                 continue;
             }
 
-            int bonusCount = MasterAsset.LoginBonusReward.Enumerable.Count(
-                x => x.Gid == bonusData.Id
+            int bonusCount = MasterAsset.LoginBonusReward.Enumerable.Count(x =>
+                x.Gid == bonusData.Id
             );
 
             int dayId = bonusData.IsLoop ? dbBonus.CurrentDay % bonusCount : dbBonus.CurrentDay;
 
             dayId += 1;
 
-            LoginBonusReward? reward = MasterAsset.LoginBonusReward.Enumerable.FirstOrDefault(
-                x => x.Gid == bonusData.Id && x.Day == dayId
+            LoginBonusReward? reward = MasterAsset.LoginBonusReward.Enumerable.FirstOrDefault(x =>
+                x.Gid == bonusData.Id && x.Day == dayId
             );
 
             if (reward == null)

@@ -193,8 +193,8 @@ public class QuestService(
 
         questEvent.QuestBonusReceiveCount += bonusesToReceive;
 
-        return (await GenerateBonusDrops(questData.Id, bonusesToReceive)).Select(
-            x => x.ToFirstClearSet()
+        return (await GenerateBonusDrops(questData.Id, bonusesToReceive)).Select(x =>
+            x.ToFirstClearSet()
         );
     }
 

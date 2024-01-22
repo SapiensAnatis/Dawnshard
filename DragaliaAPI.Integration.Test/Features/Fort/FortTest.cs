@@ -66,8 +66,8 @@ public class FortTest : TestFixture
     [Fact]
     public async Task GetData_ReportsFreeDragonGiftCount()
     {
-        await this.ApiContext.PlayerDragonGifts.Where(
-            x => x.ViewerId == this.ViewerId && x.DragonGiftId == DragonGifts.FreshBread
+        await this.ApiContext.PlayerDragonGifts.Where(x =>
+            x.ViewerId == this.ViewerId && x.DragonGiftId == DragonGifts.FreshBread
         )
             .ExecuteUpdateAsync(e => e.SetProperty(p => p.Quantity, 1));
 
@@ -75,8 +75,8 @@ public class FortTest : TestFixture
             .data.dragon_contact_free_gift_count.Should()
             .Be(1);
 
-        await this.ApiContext.PlayerDragonGifts.Where(
-            x => x.ViewerId == this.ViewerId && x.DragonGiftId == DragonGifts.FreshBread
+        await this.ApiContext.PlayerDragonGifts.Where(x =>
+            x.ViewerId == this.ViewerId && x.DragonGiftId == DragonGifts.FreshBread
         )
             .ExecuteUpdateAsync(e => e.SetProperty(p => p.Quantity, 0));
 
@@ -128,8 +128,8 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(
-            x => x.build_id == (ulong)build.BuildId
+        BuildList result = response.update_data_list.build_list.First(x =>
+            x.build_id == (ulong)build.BuildId
         );
         // The level changes when building starts, not when it ends, so no need to check it here
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
@@ -191,8 +191,8 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(
-            x => x.build_id == (ulong)build.BuildId
+        BuildList result = response.update_data_list.build_list.First(x =>
+            x.build_id == (ulong)build.BuildId
         );
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
@@ -251,8 +251,8 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(
-            x => x.build_id == (ulong)build.BuildId
+        BuildList result = response.update_data_list.build_list.First(x =>
+            x.build_id == (ulong)build.BuildId
         );
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
@@ -329,8 +329,8 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(
-            x => x.build_id == (ulong)build.BuildId
+        BuildList result = response.update_data_list.build_list.First(x =>
+            x.build_id == (ulong)build.BuildId
         );
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
@@ -364,8 +364,8 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(
-            x => x.build_id == (ulong)build.BuildId
+        BuildList result = response.update_data_list.build_list.First(x =>
+            x.build_id == (ulong)build.BuildId
         );
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
@@ -441,8 +441,8 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(
-            x => x.build_id == (ulong)build.BuildId
+        BuildList result = response.update_data_list.build_list.First(x =>
+            x.build_id == (ulong)build.BuildId
         );
         result.build_start_date.Should().NotBe(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().NotBe(DateTimeOffset.UnixEpoch);
@@ -478,8 +478,8 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(
-            x => x.build_id == (ulong)build.BuildId
+        BuildList result = response.update_data_list.build_list.First(x =>
+            x.build_id == (ulong)build.BuildId
         );
         result.position_x.Should().Be(expectedPositionX);
         result.position_z.Should().Be(expectedPositionZ);

@@ -51,8 +51,8 @@ public class ToolTest : TestFixture
     [Fact]
     public async Task Auth_PendingImport_ImportsSave()
     {
-        this.ApiContext.PlayerUserData.ExecuteUpdate(
-            p => p.SetProperty(e => e.LastSaveImportTime, DateTimeOffset.UnixEpoch)
+        this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
+            p.SetProperty(e => e.LastSaveImportTime, DateTimeOffset.UnixEpoch)
         );
 
         string token = TokenHelper

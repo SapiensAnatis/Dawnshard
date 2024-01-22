@@ -48,11 +48,9 @@ public class BaasRequestHelperTest
         this.mockHttpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>(
                 "SendAsync",
-                ItExpr.Is<HttpRequestMessage>(
-                    x =>
-                        x.RequestUri!.ToString()
-                            == "https://www.taylorswift.com/.well-known/jwks.json"
-                        && x.Method == HttpMethod.Get
+                ItExpr.Is<HttpRequestMessage>(x =>
+                    x.RequestUri!.ToString() == "https://www.taylorswift.com/.well-known/jwks.json"
+                    && x.Method == HttpMethod.Get
                 ),
                 ItExpr.IsAny<CancellationToken>()
             )
@@ -146,11 +144,9 @@ public class BaasRequestHelperTest
         this.mockHttpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>(
                 "SendAsync",
-                ItExpr.Is<HttpRequestMessage>(
-                    x =>
-                        x.RequestUri!.ToString()
-                            == "https://www.taylorswift.com/gameplay/v1/savefile"
-                        && x.Method == HttpMethod.Post
+                ItExpr.Is<HttpRequestMessage>(x =>
+                    x.RequestUri!.ToString() == "https://www.taylorswift.com/gameplay/v1/savefile"
+                    && x.Method == HttpMethod.Post
                 ),
                 ItExpr.IsAny<CancellationToken>()
             )

@@ -536,16 +536,15 @@ public class DmodeServiceTest
             .Setup(x => x.GrantReward(It.IsAny<Entity>()))
             .ReturnsAsync(RewardGrantResult.Added);
         mockRewardService
-            .Setup(
-                x =>
-                    x.GrantTalisman(
-                        It.IsAny<Talismans>(),
-                        It.IsAny<int>(),
-                        It.IsAny<int>(),
-                        It.IsAny<int>(),
-                        It.IsAny<int>(),
-                        It.IsAny<int>()
-                    )
+            .Setup(x =>
+                x.GrantTalisman(
+                    It.IsAny<Talismans>(),
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<int>()
+                )
             )
             .ReturnsAsync(
                 (

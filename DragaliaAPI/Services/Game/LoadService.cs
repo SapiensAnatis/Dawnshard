@@ -69,8 +69,8 @@ public class LoadService(
                     .StoryStates.Where(x => x.StoryType == StoryTypes.Quest)
                     .Select(mapper.Map<QuestStoryList>),
                 unit_story_list = savefile
-                    .StoryStates.Where(
-                        x => x.StoryType == StoryTypes.Chara || x.StoryType == StoryTypes.Dragon
+                    .StoryStates.Where(x =>
+                        x.StoryType == StoryTypes.Chara || x.StoryType == StoryTypes.Dragon
                     )
                     .Select(mapper.Map<UnitStoryList>),
                 castle_story_list = savefile

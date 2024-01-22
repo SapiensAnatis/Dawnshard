@@ -327,13 +327,12 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         foreach (FortPlants plant in plants)
         {
             this.fixture.ApiContext.PlayerFortBuilds.Should()
-                .Contain(
-                    x =>
-                        x.PlantId == plant
-                        && x.ViewerId == 80
-                        && x.PositionX == -1
-                        && x.PositionZ == -1
-                        && x.Level == 1
+                .Contain(x =>
+                    x.PlantId == plant
+                    && x.ViewerId == 80
+                    && x.PositionX == -1
+                    && x.PositionZ == -1
+                    && x.Level == 1
                 );
         }
 
@@ -362,8 +361,8 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.ApiContext.SaveChangesAsync();
 
         this.fixture.ApiContext.PlayerFortBuilds.Should()
-            .Contain(
-                x => x.ViewerId == 2 && x.Level == 4 && x.PositionX == -1 && x.PositionZ == -1
+            .Contain(x =>
+                x.ViewerId == 2 && x.Level == 4 && x.PositionX == -1 && x.PositionZ == -1
             );
     }
 

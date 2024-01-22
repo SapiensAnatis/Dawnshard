@@ -84,8 +84,8 @@ public class DungeonRecordRewardServiceTest
 
         this.mockQuestRepository.Setup(x => x.GetQuestDataAsync(questId)).ReturnsAsync(questEntity);
 
-        this.mockQuestCompletionService.Setup(
-            x => x.CompleteQuestMissions(session, new[] { false, false, false }, playRecord)
+        this.mockQuestCompletionService.Setup(x =>
+            x.CompleteQuestMissions(session, new[] { false, false, false }, playRecord)
         )
             .ReturnsAsync(status);
         this.mockQuestCompletionService.Setup(x => x.GrantFirstClearRewards(questId))
@@ -208,12 +208,12 @@ public class DungeonRecordRewardServiceTest
 
         this.mockRewardService.Setup(x => x.GrantRewards(It.IsAny<List<Entity>>()))
             .Returns(Task.CompletedTask);
-        this.mockRewardService.Setup(
-            x => x.GrantReward(It.Is<Entity>(e => e.Type == EntityTypes.Mana && e.Quantity == 40))
+        this.mockRewardService.Setup(x =>
+            x.GrantReward(It.Is<Entity>(e => e.Type == EntityTypes.Mana && e.Quantity == 40))
         )
             .ReturnsAsync(RewardGrantResult.Added);
-        this.mockRewardService.Setup(
-            x => x.GrantReward(It.Is<Entity>(e => e.Type == EntityTypes.Rupies && e.Quantity == 40))
+        this.mockRewardService.Setup(x =>
+            x.GrantReward(It.Is<Entity>(e => e.Type == EntityTypes.Rupies && e.Quantity == 40))
         )
             .ReturnsAsync(RewardGrantResult.Added);
 
@@ -282,34 +282,33 @@ public class DungeonRecordRewardServiceTest
         int boostedPoints = 20;
         int enemyPoints = 30;
 
-        this.mockAbilityCrestMultiplierService.Setup(
-            x => x.GetEventMultiplier(session.Party, session.QuestData.Gid)
+        this.mockAbilityCrestMultiplierService.Setup(x =>
+            x.GetEventMultiplier(session.Party, session.QuestData.Gid)
         )
             .ReturnsAsync((materialMultiplier, pointMultiplier));
 
-        this.mockQuestCompletionService.Setup(
-            x => x.CompleteQuestScoreMissions(session, playRecord, pointMultiplier)
+        this.mockQuestCompletionService.Setup(x =>
+            x.CompleteQuestScoreMissions(session, playRecord, pointMultiplier)
         )
             .ReturnsAsync((scoreMissionSuccessLists, points, boostedPoints));
-        this.mockQuestCompletionService.Setup(
-            x => x.CompleteEnemyScoreMissions(session, playRecord)
+        this.mockQuestCompletionService.Setup(x =>
+            x.CompleteEnemyScoreMissions(session, playRecord)
         )
             .ReturnsAsync((enemyScoring, enemyPoints));
 
         this.mockEventDropService.Setup(x => x.ProcessEventPassiveDrops(session.QuestData))
             .ReturnsAsync(passiveUpLists);
-        this.mockEventDropService.Setup(
-            x => x.ProcessEventMaterialDrops(session.QuestData, playRecord, materialMultiplier)
+        this.mockEventDropService.Setup(x =>
+            x.ProcessEventMaterialDrops(session.QuestData, playRecord, materialMultiplier)
         )
             .ReturnsAsync(eventDrops);
 
-        this.mockMissionProgressionService.Setup(
-            x =>
-                x.OnEventPointCollected(
-                    session.QuestData.Gid,
-                    session.QuestVariation,
-                    points + boostedPoints
-                )
+        this.mockMissionProgressionService.Setup(x =>
+            x.OnEventPointCollected(
+                session.QuestData.Gid,
+                session.QuestVariation,
+                points + boostedPoints
+            )
         );
 
         (await this.dungeonRecordRewardService.ProcessEventRewards(playRecord, session))

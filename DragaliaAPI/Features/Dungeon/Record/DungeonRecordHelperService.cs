@@ -65,14 +65,13 @@ public class DungeonRecordHelperService(
 
         // TODO: Replace with friend system once implemented
         IEnumerable<AtgenHelperDetailList> teammateDetailLists = teammates.Select(
-            x =>
-                new AtgenHelperDetailList()
-                {
-                    is_friend = true,
-                    viewer_id = (ulong)x.ViewerId,
-                    get_mana_point = 50,
-                    apply_send_status = 0,
-                }
+            x => new AtgenHelperDetailList()
+            {
+                is_friend = true,
+                viewer_id = (ulong)x.ViewerId,
+                get_mana_point = 50,
+                apply_send_status = 0,
+            }
         );
 
         return (teammateSupportLists, teammateDetailLists);

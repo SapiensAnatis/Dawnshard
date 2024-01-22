@@ -24,13 +24,13 @@ public class StoryRepository : IStoryRepository
     }
 
     public IQueryable<DbPlayerStoryState> Stories =>
-        this.apiContext.PlayerStoryState.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId
+        this.apiContext.PlayerStoryState.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
         );
 
     public IQueryable<DbPlayerStoryState> UnitStories =>
-        this.Stories.Where(
-            x => x.StoryType == StoryTypes.Chara || x.StoryType == StoryTypes.Dragon
+        this.Stories.Where(x =>
+            x.StoryType == StoryTypes.Chara || x.StoryType == StoryTypes.Dragon
         );
 
     public IQueryable<DbPlayerStoryState> QuestStories =>

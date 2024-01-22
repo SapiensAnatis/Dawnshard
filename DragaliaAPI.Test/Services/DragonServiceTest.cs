@@ -134,22 +134,21 @@ public class DragonServiceTest
 
         dragonRels.Add(DbPlayerDragonReliabilityFactory.Create(ViewerId, Dragons.Garuda));
 
-        mockMissionProgressionService.Setup(
-            x => x.OnDragonBondLevelUp(Dragons.Garuda, UnitElement.Wind, 3, 4)
+        mockMissionProgressionService.Setup(x =>
+            x.OnDragonBondLevelUp(Dragons.Garuda, UnitElement.Wind, 3, 4)
         );
-        mockMissionProgressionService.Setup(
-            x => x.OnDragonBondLevelUp(Dragons.Garuda, UnitElement.Wind, 6, 10)
+        mockMissionProgressionService.Setup(x =>
+            x.OnDragonBondLevelUp(Dragons.Garuda, UnitElement.Wind, 6, 10)
         );
 
-        mockMissionProgressionService.Setup(
-            x =>
-                x.OnDragonGiftSent(
-                    Dragons.Garuda,
-                    It.IsIn(DragonGifts.StrawberryTart, DragonGifts.CompellingBook),
-                    UnitElement.Wind,
-                    1,
-                    0
-                )
+        mockMissionProgressionService.Setup(x =>
+            x.OnDragonGiftSent(
+                Dragons.Garuda,
+                It.IsIn(DragonGifts.StrawberryTart, DragonGifts.CompellingBook),
+                UnitElement.Wind,
+                1,
+                0
+            )
         );
 
         long startCoin = userData.Coin;
@@ -214,8 +213,8 @@ public class DragonServiceTest
 
         dragonRels.Add(dd);
 
-        mockMissionProgressionService.Setup(
-            x => x.OnDragonGiftSent(Dragons.Garuda, DragonGifts.FreshBread, UnitElement.Wind, 1, 0)
+        mockMissionProgressionService.Setup(x =>
+            x.OnDragonGiftSent(Dragons.Garuda, DragonGifts.FreshBread, UnitElement.Wind, 1, 0)
         );
 
         long startCoin = userData.Coin;
@@ -273,12 +272,12 @@ public class DragonServiceTest
 
         UnitElement element = MasterAsset.DragonData[dragon].ElementalType;
 
-        mockMissionProgressionService.Setup(
-            x => x.OnDragonBondLevelUp(dragon, element, expectedLvl - 1, expectedLvl)
+        mockMissionProgressionService.Setup(x =>
+            x.OnDragonBondLevelUp(dragon, element, expectedLvl - 1, expectedLvl)
         );
 
-        mockMissionProgressionService.Setup(
-            x => x.OnDragonGiftSent(dragon, gift, element, usedQuantity, 0)
+        mockMissionProgressionService.Setup(x =>
+            x.OnDragonGiftSent(dragon, gift, element, usedQuantity, 0)
         );
 
         DragonSendGiftMultipleData responseData = await dragonService.DoDragonSendGiftMultiple(
@@ -375,8 +374,8 @@ public class DragonServiceTest
 
         UnitElement element = MasterAsset.DragonData[dragon].ElementalType;
 
-        mockMissionProgressionService.Setup(
-            x => x.OnDragonLevelUp(dragon, element, expectedLvl - 1, expectedLvl)
+        mockMissionProgressionService.Setup(x =>
+            x.OnDragonLevelUp(dragon, element, expectedLvl - 1, expectedLvl)
         );
 
         DbPlayerMaterial mat = new DbPlayerMaterial()
@@ -438,29 +437,27 @@ public class DragonServiceTest
         };
 
         mockPaymentService
-            .Setup(
-                x =>
-                    x.ProcessPayment(
-                        PaymentTypes.Coin,
-                        null,
-                        DragonConstants.AugmentResetCost * dragonData.AttackPlusCount
-                    )
+            .Setup(x =>
+                x.ProcessPayment(
+                    PaymentTypes.Coin,
+                    null,
+                    DragonConstants.AugmentResetCost * dragonData.AttackPlusCount
+                )
             )
             .Returns(Task.CompletedTask);
 
         mockRewardService
-            .Setup(
-                x =>
-                    x.GrantReward(
-                        new Entity(
-                            EntityTypes.Material,
-                            (int)Materials.AmplifyingDragonscale,
-                            50,
-                            null,
-                            null,
-                            null
-                        )
+            .Setup(x =>
+                x.GrantReward(
+                    new Entity(
+                        EntityTypes.Material,
+                        (int)Materials.AmplifyingDragonscale,
+                        50,
+                        null,
+                        null,
+                        null
                     )
+                )
             )
             .ReturnsAsync(RewardGrantResult.Added);
 
@@ -683,12 +680,11 @@ public class DragonServiceTest
 
         mockStoryRepository.SetupGet(x => x.Stories).Returns(stories.AsQueryable().BuildMock());
         mockStoryRepository
-            .Setup(
-                x =>
-                    x.GetOrCreateStory(
-                        StoryTypes.Dragon,
-                        MasterAsset.DragonStories.Get((int)Dragons.Garuda).storyIds[0]
-                    )
+            .Setup(x =>
+                x.GetOrCreateStory(
+                    StoryTypes.Dragon,
+                    MasterAsset.DragonStories.Get((int)Dragons.Garuda).storyIds[0]
+                )
             )
             .ReturnsAsync(
                 new DbPlayerStoryState()

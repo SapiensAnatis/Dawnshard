@@ -22,13 +22,13 @@ public class MissionRepository(
     private readonly IPlayerIdentityService playerIdentityService = playerIdentityService;
 
     public IQueryable<DbPlayerMission> Missions =>
-        this.apiContext.PlayerMissions.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId
+        this.apiContext.PlayerMissions.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
         );
 
     public IQueryable<DbCompletedDailyMission> CompletedDailyMissions =>
-        this.apiContext.CompletedDailyMissions.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId
+        this.apiContext.CompletedDailyMissions.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
         );
 
     public IQueryable<DbPlayerMission> GetMissionsByType(MissionType type)
@@ -49,10 +49,9 @@ public class MissionRepository(
     {
         return (
             await Missions
-                .Where(
-                    x =>
-                        (x.Start == DateTimeOffset.UnixEpoch || x.Start < resetHelper.UtcNow)
-                        && (x.End == DateTimeOffset.UnixEpoch || x.End > resetHelper.UtcNow)
+                .Where(x =>
+                    (x.Start == DateTimeOffset.UnixEpoch || x.Start < resetHelper.UtcNow)
+                    && (x.End == DateTimeOffset.UnixEpoch || x.End > resetHelper.UtcNow)
                 )
                 .ToListAsync()
         )

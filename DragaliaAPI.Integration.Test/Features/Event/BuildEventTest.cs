@@ -38,8 +38,8 @@ public class BuildEventTest : TestFixture
     {
         DbPlayerEventItem pointItem = await ApiContext
             .PlayerEventItems.AsTracking()
-            .SingleAsync(
-                x => x.EventId == EventId && x.Type == (int)BuildEventItemType.BuildEventPoint
+            .SingleAsync(x =>
+                x.EventId == EventId && x.Type == (int)BuildEventItemType.BuildEventPoint
             );
 
         pointItem.Quantity += 10;

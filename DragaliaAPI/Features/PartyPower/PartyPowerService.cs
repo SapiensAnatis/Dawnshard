@@ -566,8 +566,8 @@ public class PartyPowerService(
 
         abilityIdList.AddRange(abilityIds);
         abilityIdList.AddRange(
-            crests.SelectMany(
-                x => MasterAsset.AbilityCrest[x.AbilityCrestId].GetAbilities(x.AbilityLevel)
+            crests.SelectMany(x =>
+                MasterAsset.AbilityCrest[x.AbilityCrestId].GetAbilities(x.AbilityLevel)
             )
         );
 
@@ -634,19 +634,19 @@ file record BonusParams(double FortAtk, double FortHp, double AlbumAtk, double A
 
         AtgenParamBonus paramBonus = bonus.param_bonus.First(x => x.weapon_type == data.WeaponType);
 
-        AtgenElementBonus elementBonus = bonus.element_bonus.First(
-            x => x.elemental_type == data.ElementalType
+        AtgenElementBonus elementBonus = bonus.element_bonus.First(x =>
+            x.elemental_type == data.ElementalType
         );
 
-        AtgenParamBonus paramByWeaponBonus = bonus.param_bonus_by_weapon.First(
-            x => x.weapon_type == data.WeaponType
+        AtgenParamBonus paramByWeaponBonus = bonus.param_bonus_by_weapon.First(x =>
+            x.weapon_type == data.WeaponType
         );
 
         double atk = (paramBonus.attack + elementBonus.attack + paramByWeaponBonus.attack) / 100.0;
         double hp = (paramBonus.hp + elementBonus.hp + paramByWeaponBonus.hp) / 100.0;
 
-        AtgenElementBonus albumBonus = bonus.chara_bonus_by_album.First(
-            x => x.elemental_type == data.ElementalType
+        AtgenElementBonus albumBonus = bonus.chara_bonus_by_album.First(x =>
+            x.elemental_type == data.ElementalType
         );
 
         return new BonusParams(atk, hp, albumBonus.attack / 100.0, albumBonus.hp / 100.0);
@@ -656,15 +656,15 @@ file record BonusParams(double FortAtk, double FortHp, double AlbumAtk, double A
     {
         DragonData data = MasterAsset.DragonData[dragonId];
 
-        AtgenDragonBonus dragonBonus = bonus.dragon_bonus.First(
-            x => x.elemental_type == data.ElementalType
+        AtgenDragonBonus dragonBonus = bonus.dragon_bonus.First(x =>
+            x.elemental_type == data.ElementalType
         );
 
         double atk = dragonBonus.attack / 100.0;
         double hp = dragonBonus.hp / 100.0;
 
-        AtgenElementBonus albumBonus = bonus.dragon_bonus_by_album.First(
-            x => x.elemental_type == data.ElementalType
+        AtgenElementBonus albumBonus = bonus.dragon_bonus_by_album.First(x =>
+            x.elemental_type == data.ElementalType
         );
 
         return new BonusParams(atk, hp, albumBonus.attack / 100.0, albumBonus.hp / 100.0);

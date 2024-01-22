@@ -50,8 +50,8 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
             .Where(x => x.EventId == eventId)
             .ToListAsync();
 
-        return (isLocationReward ? rewards.Where(x => x.IsLocationReward) : rewards).Select(
-            x => x.RewardId
+        return (isLocationReward ? rewards.Where(x => x.IsLocationReward) : rewards).Select(x =>
+            x.RewardId
         );
     }
 

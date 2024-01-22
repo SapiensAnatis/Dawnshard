@@ -33,13 +33,10 @@ public class V9Update(
                 .Where(x => x.CharaId != Charas.ThePrince && x.CharaId != Charas.MegaMan) // No stories
                 .Select(x => new { x.CharaId, x.ManaNodeUnlockCount })
                 .ToListAsync()
-        ).Select(
-            x =>
-                new ValueTuple<Charas, SortedSet<int>>(
-                    x.CharaId,
-                    ManaNodesUtil.GetSetFromManaNodes((ManaNodes)x.ManaNodeUnlockCount)
-                )
-        );
+        ).Select(x => new ValueTuple<Charas, SortedSet<int>>(
+            x.CharaId,
+            ManaNodesUtil.GetSetFromManaNodes((ManaNodes)x.ManaNodeUnlockCount)
+        ));
 
         HashSet<int> stories = (
             await storyRepository.UnitStories.Select(x => x.StoryId).ToListAsync()

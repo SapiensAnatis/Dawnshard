@@ -192,8 +192,8 @@ public class DragonTest : TestFixture
         response.update_data_list.user_data.Should().NotBeNull();
         response.update_data_list.user_data.coin.Should().Be(startCoin - (20000 * 50));
         response
-            .update_data_list.material_list.Where(
-                x => x.material_id == Materials.AmplifyingDragonscale
+            .update_data_list.material_list.Where(x =>
+                x.material_id == Materials.AmplifyingDragonscale
             )
             .First()
             .quantity.Should()
@@ -227,8 +227,8 @@ public class DragonTest : TestFixture
         await this.ApiContext.SaveChangesAsync();
 
         this.ApiContext.ChangeTracker.Clear();
-        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.Where(
-            x => x.ViewerId == ViewerId
+        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.Where(x =>
+            x.ViewerId == ViewerId
         )
             .FirstAsync();
 
@@ -266,8 +266,8 @@ public class DragonTest : TestFixture
         response.dragon_gift_reward_list.Should().NotBeNullOrEmpty();
         response.update_data_list.user_data.coin.Should().Be(startCoin - 1500);
         DragonReliabilityList dragonData = response
-            .update_data_list.dragon_reliability_list.Where(
-                x => x.dragon_id == Dragons.HighChthonius
+            .update_data_list.dragon_reliability_list.Where(x =>
+                x.dragon_id == Dragons.HighChthonius
             )
             .First();
         dragonData.reliability_total_exp.Should().Be(400);

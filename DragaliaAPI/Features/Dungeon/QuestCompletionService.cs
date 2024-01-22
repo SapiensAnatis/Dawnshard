@@ -242,33 +242,22 @@ public class QuestCompletionService(
             QuestCompleteType.None => false,
             QuestCompleteType.LimitFall => record.down_count <= completionValue,
             QuestCompleteType.DefeatAllEnemies
-                => record.treasure_record.All(
-                    x =>
-                        x.enemy == null
-                        || !session
-                            .EnemyList[x.area_idx]
-                            .Select(y => y.enemy_idx)
-                            .Except(x.enemy)
-                            .Any()
+                => record.treasure_record.All(x =>
+                    x.enemy == null
+                    || !session.EnemyList[x.area_idx].Select(y => y.enemy_idx).Except(x.enemy).Any()
                 ), // (Maybe)TODO
             QuestCompleteType.MaxTeamSize => party.Count() <= completionValue,
             QuestCompleteType.AdventurerElementRequired
-                => party.All(
-                    x =>
-                        MasterAsset.CharaData[x.chara_id].ElementalType
-                        == (UnitElement)completionValue
+                => party.All(x =>
+                    MasterAsset.CharaData[x.chara_id].ElementalType == (UnitElement)completionValue
                 ),
             QuestCompleteType.AdventurerElementNeeded
-                => party.Any(
-                    x =>
-                        MasterAsset.CharaData[x.chara_id].ElementalType
-                        == (UnitElement)completionValue
+                => party.Any(x =>
+                    MasterAsset.CharaData[x.chara_id].ElementalType == (UnitElement)completionValue
                 ),
             QuestCompleteType.AdventurerElementLocked
-                => party.All(
-                    x =>
-                        MasterAsset.CharaData[x.chara_id].ElementalType
-                        != (UnitElement)completionValue
+                => party.All(x =>
+                    MasterAsset.CharaData[x.chara_id].ElementalType != (UnitElement)completionValue
                 ),
             QuestCompleteType.DragonElementRequired
                 => await IsDragonConditionMet(type, completionValue, party),
@@ -291,25 +280,22 @@ public class QuestCompletionService(
             QuestCompleteType.MaxDamageTimes => record.damage_count <= completionValue,
             QuestCompleteType.MinShapeshift => record.dragon_transform_count >= completionValue,
             QuestCompleteType.DefeatImperialCommander
-                => record.treasure_record.Any(
-                    x =>
-                        x.enemy.Any(
-                            y => y == 500200001 /* Imperial Commander */
-                        )
+                => record.treasure_record.Any(x =>
+                    x.enemy.Any(y =>
+                        y == 500200001 /* Imperial Commander */
+                    )
                 ),
             QuestCompleteType.DefeatMinBandits
-                => record.treasure_record.Sum(
-                    x =>
-                        x.enemy.Count(
-                            y => y == 500210001 /* Bandit */
-                        )
+                => record.treasure_record.Sum(x =>
+                    x.enemy.Count(y =>
+                        y == 500210001 /* Bandit */
+                    )
                 ) >= completionValue,
             QuestCompleteType.DefeatShadowKnight
-                => record.treasure_record.Any(
-                    x =>
-                        x.enemy.Any(
-                            y => y == 500170001 /* Shadow Knight */
-                        )
+                => record.treasure_record.Any(x =>
+                    x.enemy.Any(y =>
+                        y == 500170001 /* Shadow Knight */
+                    )
                 ),
             QuestCompleteType.SaveMinHouses => record.visit_private_house >= completionValue,
             QuestCompleteType.MinGateHp => record.protection_damage >= completionValue,
@@ -317,17 +303,16 @@ public class QuestCompletionService(
             QuestCompleteType.MinDrawbridgesLowered
                 => record.lower_drawbridge_count >= completionValue,
             QuestCompleteType.FireEmblemAdventurerNeeded
-                => party.Any(
-                    x =>
-                        x.chara_id
-                            is Charas.Alfonse
-                                or Charas.Veronica
-                                or Charas.Fjorm
-                                or Charas.Marth
-                                or Charas.Sharena
-                                or Charas.Peony
-                                or Charas.Tiki
-                                or Charas.Chrom
+                => party.Any(x =>
+                    x.chara_id
+                        is Charas.Alfonse
+                            or Charas.Veronica
+                            or Charas.Fjorm
+                            or Charas.Marth
+                            or Charas.Sharena
+                            or Charas.Peony
+                            or Charas.Tiki
+                            or Charas.Chrom
                 ),
             QuestCompleteType.MinStarsAdventurerNeeded
                 => party.Any(x => MasterAsset.CharaData[x.chara_id].Rarity == completionValue),
@@ -338,11 +323,10 @@ public class QuestCompletionService(
             QuestCompleteType.MaxShapeshift => record.dragon_transform_count <= completionValue,
             QuestCompleteType.NoRevives => record.reborn_count == 0,
             QuestCompleteType.DefeatFormaChrom
-                => record.treasure_record.Any(
-                    x =>
-                        x.enemy.Any(
-                            y => y == 601500002 /* Forma Chrom */
-                        )
+                => record.treasure_record.Any(x =>
+                    x.enemy.Any(y =>
+                        y == 601500002 /* Forma Chrom */
+                    )
                 ),
             _
                 => throw new DragaliaException(

@@ -81,39 +81,38 @@ public class ClearPartyService : IClearPartyService
         IEnumerable<PartySettingList> party
     )
     {
-        Dictionary<long, Dragons> dragons = await this.unitRepository.Dragons.Where(
-            x => party.Select(y => y.equip_dragon_key_id).Contains((ulong)x.DragonKeyId)
+        Dictionary<long, Dragons> dragons = await this.unitRepository.Dragons.Where(x =>
+            party.Select(y => y.equip_dragon_key_id).Contains((ulong)x.DragonKeyId)
         )
             .ToDictionaryAsync(x => x.DragonKeyId, x => x.DragonId);
 
-        Dictionary<long, Talismans> talismans = await this.unitRepository.Talismans.Where(
-            x => party.Select(y => y.equip_talisman_key_id).Contains((ulong)x.TalismanKeyId)
+        Dictionary<long, Talismans> talismans = await this.unitRepository.Talismans.Where(x =>
+            party.Select(y => y.equip_talisman_key_id).Contains((ulong)x.TalismanKeyId)
         )
             .ToDictionaryAsync(x => x.TalismanKeyId, x => x.TalismanId);
 
-        IEnumerable<DbQuestClearPartyUnit> dbUnits = party.Select(
-            x =>
-                this.mapper.Map<DbQuestClearPartyUnit>(
-                    x,
-                    opts =>
-                        opts.AfterMap(
-                            (src, dest) =>
-                            {
-                                dest.ViewerId = this.playerIdentityService.ViewerId;
-                                dest.QuestId = questId;
-                                dest.IsMulti = isMulti;
+        IEnumerable<DbQuestClearPartyUnit> dbUnits = party.Select(x =>
+            this.mapper.Map<DbQuestClearPartyUnit>(
+                x,
+                opts =>
+                    opts.AfterMap(
+                        (src, dest) =>
+                        {
+                            dest.ViewerId = this.playerIdentityService.ViewerId;
+                            dest.QuestId = questId;
+                            dest.IsMulti = isMulti;
 
-                                dest.EquippedDragonEntityId = dragons.GetValueOrDefault(
-                                    dest.EquipDragonKeyId,
-                                    Dragons.Empty
-                                );
-                                dest.EquippedTalismanEntityId = talismans.GetValueOrDefault(
-                                    dest.EquipTalismanKeyId,
-                                    Talismans.Empty
-                                );
-                            }
-                        )
-                )
+                            dest.EquippedDragonEntityId = dragons.GetValueOrDefault(
+                                dest.EquipDragonKeyId,
+                                Dragons.Empty
+                            );
+                            dest.EquippedTalismanEntityId = talismans.GetValueOrDefault(
+                                dest.EquipTalismanKeyId,
+                                Talismans.Empty
+                            );
+                        }
+                    )
+            )
         );
 
         this.logger.LogDebug(

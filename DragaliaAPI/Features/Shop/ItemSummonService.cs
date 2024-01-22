@@ -55,9 +55,12 @@ public class ItemSummonService : IItemSummonService
 
     public IEnumerable<AtgenItemSummonRateList> GetOdds()
     {
-        return config.Odds.Select(
-            x => new AtgenItemSummonRateList(x.Type, x.Id, x.Quantity, $"{x.Rate / 100000.0d:P}")
-        );
+        return config.Odds.Select(x => new AtgenItemSummonRateList(
+            x.Type,
+            x.Id,
+            x.Quantity,
+            $"{x.Rate / 100000.0d:P}"
+        ));
     }
 
     public async Task<IEnumerable<AtgenBuildEventRewardEntityList>> DoSummon(

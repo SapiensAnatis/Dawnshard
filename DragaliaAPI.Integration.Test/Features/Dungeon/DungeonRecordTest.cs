@@ -17,11 +17,11 @@ public class DungeonRecordTest : TestFixture
     {
         CommonAssertionOptions.ApplyTimeOptions(2);
 
-        this.ApiContext.PlayerUserData.ExecuteUpdate(
-            p => p.SetProperty(e => e.StaminaSingle, e => 100)
+        this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
+            p.SetProperty(e => e.StaminaSingle, e => 100)
         );
-        this.ApiContext.PlayerUserData.ExecuteUpdate(
-            p => p.SetProperty(e => e.StaminaMulti, e => 100)
+        this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
+            p.SetProperty(e => e.StaminaMulti, e => 100)
         );
     }
 
@@ -945,8 +945,8 @@ public class DungeonRecordTest : TestFixture
 
         this.ApiContext.TimeAttackClears.Should().ContainSingle(x => x.GameId == gameId);
 
-        DbTimeAttackClear recordedClear = await this.ApiContext.TimeAttackClears.Include(
-            x => x.Players
+        DbTimeAttackClear recordedClear = await this.ApiContext.TimeAttackClears.Include(x =>
+            x.Players
         )
             .ThenInclude(x => x.Units)
             .FirstAsync(x => x.GameId == gameId);
@@ -974,8 +974,8 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        this.ApiContext.PlayerUserData.ExecuteUpdate(
-            p => p.SetProperty(e => e.StaminaSingle, e => 0)
+        this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
+            p.SetProperty(e => e.StaminaSingle, e => 0)
         );
 
         DungeonSession mockSession =
@@ -1029,8 +1029,8 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        this.ApiContext.PlayerUserData.ExecuteUpdate(
-            p => p.SetProperty(e => e.StaminaSingle, e => 0)
+        this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
+            p.SetProperty(e => e.StaminaSingle, e => 0)
         );
 
         DungeonSession mockSession =
@@ -1156,12 +1156,8 @@ public class DungeonRecordTest : TestFixture
     public async Task Record_IsCoopTutorial_AdvancesTutorialStatus()
     {
         await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(
-                e =>
-                    e.SetProperty(
-                        p => p.TutorialStatus,
-                        TutorialService.TutorialStatusIds.CoopTutorial
-                    )
+            .ExecuteUpdateAsync(e =>
+                e.SetProperty(p => p.TutorialStatus, TutorialService.TutorialStatusIds.CoopTutorial)
             );
 
         int questId = TutorialService.TutorialQuestIds.AvenueToPowerBeginner;

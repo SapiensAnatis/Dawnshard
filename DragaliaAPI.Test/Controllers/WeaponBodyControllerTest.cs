@@ -105,12 +105,11 @@ public class WeaponBodyControllerTest
     public async Task BuildupPiece_SingleBuildupFailure_ReturnsError()
     {
         this.mockWeaponService.Setup(x => x.CheckOwned(WeaponBodies.Caduceus)).ReturnsAsync(true);
-        this.mockWeaponService.SetupSequence(
-            x =>
-                x.TryBuildup(
-                    MasterAsset.WeaponBody.Get(WeaponBodies.Caduceus),
-                    It.IsAny<AtgenBuildupWeaponBodyPieceList>()
-                )
+        this.mockWeaponService.SetupSequence(x =>
+            x.TryBuildup(
+                MasterAsset.WeaponBody.Get(WeaponBodies.Caduceus),
+                It.IsAny<AtgenBuildupWeaponBodyPieceList>()
+            )
         )
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.Success)
@@ -139,12 +138,11 @@ public class WeaponBodyControllerTest
     public async Task BuildupPiece_AllBuildupSuccess_ReturnsSuccess()
     {
         this.mockWeaponService.Setup(x => x.CheckOwned(WeaponBodies.Caduceus)).ReturnsAsync(true);
-        this.mockWeaponService.Setup(
-            x =>
-                x.TryBuildup(
-                    MasterAsset.WeaponBody.Get(WeaponBodies.Caduceus),
-                    It.IsAny<AtgenBuildupWeaponBodyPieceList>()
-                )
+        this.mockWeaponService.Setup(x =>
+            x.TryBuildup(
+                MasterAsset.WeaponBody.Get(WeaponBodies.Caduceus),
+                It.IsAny<AtgenBuildupWeaponBodyPieceList>()
+            )
         )
             .ReturnsAsync(ResultCode.Success);
 

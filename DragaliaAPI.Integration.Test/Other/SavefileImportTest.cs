@@ -98,10 +98,9 @@ public class SavefileImportTest : TestFixture
                     // Inaccurate for other reasons
                     opts.Excluding(x => x.user_data!.stamina_single);
                     opts.Excluding(x => x.user_data!.stamina_multi);
-                    opts.Excluding(
-                        x =>
-                            x.Path.StartsWith("ability_crest_list")
-                            && (x.Name == "ability_1_level" || x.Name == "ability_2_level")
+                    opts.Excluding(x =>
+                        x.Path.StartsWith("ability_crest_list")
+                        && (x.Name == "ability_1_level" || x.Name == "ability_2_level")
                     );
                     opts.Excluding(x => x.user_data!.level);
                     opts.Excluding(x => x.user_data!.crystal);
@@ -153,14 +152,14 @@ public class SavefileImportTest : TestFixture
         HttpContent content = PrepareSavefileRequest();
         await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
 
-        this.ApiContext.PlayerStoryState.Single(
-            x => x.ViewerId == this.ViewerId && x.StoryId == 110313011
+        this.ApiContext.PlayerStoryState.Single(x =>
+            x.ViewerId == this.ViewerId && x.StoryId == 110313011
         )
             .StoryType.Should()
             .Be(StoryTypes.Chara);
 
-        this.ApiContext.PlayerStoryState.Single(
-            x => x.ViewerId == this.ViewerId && x.StoryId == 210091011
+        this.ApiContext.PlayerStoryState.Single(x =>
+            x.ViewerId == this.ViewerId && x.StoryId == 210091011
         )
             .StoryType.Should()
             .Be(StoryTypes.Dragon);
@@ -180,8 +179,8 @@ public class SavefileImportTest : TestFixture
 
         this.ApiContext.Emblems.AsNoTracking()
             .Should()
-            .Contain(
-                x => x.ViewerId == this.ViewerId && x.EmblemId == Emblems.IsolationSpeedslayer_1
+            .Contain(x =>
+                x.ViewerId == this.ViewerId && x.EmblemId == Emblems.IsolationSpeedslayer_1
             );
     }
 
@@ -189,16 +188,16 @@ public class SavefileImportTest : TestFixture
     public async Task Import_DoesNotDeleteBuyableDragonGifts()
     {
         this.ApiContext.PlayerDragonGifts.Should()
-            .Contain(
-                x => x.ViewerId == this.ViewerId && x.DragonGiftId == DragonGifts.CompellingBook
+            .Contain(x =>
+                x.ViewerId == this.ViewerId && x.DragonGiftId == DragonGifts.CompellingBook
             );
 
         HttpContent content = PrepareSavefileRequest();
         await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
 
         this.ApiContext.PlayerDragonGifts.Should()
-            .Contain(
-                x => x.ViewerId == this.ViewerId && x.DragonGiftId == DragonGifts.CompellingBook
+            .Contain(x =>
+                x.ViewerId == this.ViewerId && x.DragonGiftId == DragonGifts.CompellingBook
             );
     }
 

@@ -564,13 +564,12 @@ public class FortServiceTest
 
         mockFortRepository.Setup(x => x.GetBuilding(444)).ReturnsAsync(build);
         mockPaymentService
-            .Setup(
-                x =>
-                    x.ProcessPayment(
-                        PaymentTypes.Wyrmite,
-                        null,
-                        It.IsInRange(840, 842, Range.Inclusive)
-                    )
+            .Setup(x =>
+                x.ProcessPayment(
+                    PaymentTypes.Wyrmite,
+                    null,
+                    It.IsInRange(840, 842, Range.Inclusive)
+                )
             )
             .Returns(Task.CompletedTask);
 
@@ -604,17 +603,12 @@ public class FortServiceTest
 
         mockFortRepository.Setup(x => x.GetBuilding(445)).ReturnsAsync(build);
         mockPaymentService
-            .Setup(
-                x =>
-                    x.ProcessPayment(
-                        PaymentTypes.Wyrmite,
-                        null,
-                        It.IsInRange(
-                            840 - wyrmiteDifference,
-                            842 - wyrmiteDifference,
-                            Range.Inclusive
-                        )
-                    )
+            .Setup(x =>
+                x.ProcessPayment(
+                    PaymentTypes.Wyrmite,
+                    null,
+                    It.IsInRange(840 - wyrmiteDifference, 842 - wyrmiteDifference, Range.Inclusive)
+                )
             )
             .Returns(Task.CompletedTask);
 

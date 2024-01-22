@@ -129,8 +129,8 @@ namespace DragaliaAPI.Photon.Plugin
 
         public override void OnJoin(IJoinGameCallInfo info)
         {
-            int currentActorCount = this.PluginHost.GameActors.Count(
-                x => x.ActorNr != info.ActorNr
+            int currentActorCount = this.PluginHost.GameActors.Count(x =>
+                x.ActorNr != info.ActorNr
             );
 
             long viewerId = info.Request.ActorProperties.GetLong(ActorPropertyKeys.PlayerId);
@@ -221,8 +221,8 @@ namespace DragaliaAPI.Photon.Plugin
         public override void OnLeave(ILeaveGameCallInfo info)
         {
             // Get actor before continuing
-            IActor actor = this.PluginHost.GameActors.FirstOrDefault(
-                x => x.ActorNr == info.ActorNr
+            IActor actor = this.PluginHost.GameActors.FirstOrDefault(x =>
+                x.ActorNr == info.ActorNr
             );
 
             if (info.ActorNr == -1)
@@ -277,8 +277,8 @@ namespace DragaliaAPI.Photon.Plugin
 
             if (this.roomState.MinGoToIngameState > 0)
             {
-                int newMinGoToIngameState = this.PluginHost.GameActors.Where(
-                    x => x.ActorNr != info.ActorNr
+                int newMinGoToIngameState = this.PluginHost.GameActors.Where(x =>
+                    x.ActorNr != info.ActorNr
                 )
                     .Select(x => x.Properties.GetIntOrDefault(ActorPropertyKeys.GoToIngameState))
                     .DefaultIfEmpty()
@@ -553,14 +553,11 @@ namespace DragaliaAPI.Photon.Plugin
                     {
                         playerId = actor.ActorNr,
                         heroParamExs = heroParams
-                            .Select(
-                                x =>
-                                    new HeroParamExData()
-                                    {
-                                        limitOverCount = x.exAbilityLv,
-                                        sequenceNumber = x.position
-                                    }
-                            )
+                            .Select(x => new HeroParamExData()
+                            {
+                                limitOverCount = x.exAbilityLv,
+                                sequenceNumber = x.position
+                            })
                             .ToArray(),
                         heroParams = heroParams.Take(state.MemberCount).ToArray()
                     };
@@ -602,13 +599,12 @@ namespace DragaliaAPI.Photon.Plugin
         private void RequestHeroParam(ICallInfo info)
         {
             IEnumerable<ActorInfo> heroParamRequest = this.PluginHost.GameActors.Select(
-                x =>
-                    new ActorInfo()
-                    {
-                        ActorNr = x.ActorNr,
-                        ViewerId = x.GetViewerId(),
-                        PartySlots = x.GetPartySlots()
-                    }
+                x => new ActorInfo()
+                {
+                    ActorNr = x.ActorNr,
+                    ViewerId = x.GetViewerId(),
+                    PartySlots = x.GetPartySlots()
+                }
             );
 
             Uri baseUri = this.pluginStateService.IsUseSecondaryServer

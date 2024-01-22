@@ -206,16 +206,13 @@ public class DungeonSkipController(
             {
                 is_clear = 1,
                 time = -1,
-                treasure_record = session.EnemyList.Select(
-                    x =>
-                        new AtgenTreasureRecord()
-                        {
-                            area_idx = x.Key,
-                            enemy = x.Value.Select(y => 1),
-                            drop_obj = new List<int>(), // TODO
-                            enemy_smash = new List<AtgenEnemySmash>() // TODO
-                        }
-                )
+                treasure_record = session.EnemyList.Select(x => new AtgenTreasureRecord()
+                {
+                    area_idx = x.Key,
+                    enemy = x.Value.Select(y => 1),
+                    drop_obj = new List<int>(), // TODO
+                    enemy_smash = new List<AtgenEnemySmash>() // TODO
+                })
             };
 
         IngameResultData ingameResultData = await dungeonRecordService.GenerateIngameResultData(

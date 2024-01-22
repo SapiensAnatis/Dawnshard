@@ -23,13 +23,13 @@ public class AbilityCrestRepository : IAbilityCrestRepository
     }
 
     public IQueryable<DbAbilityCrest> AbilityCrests =>
-        this.apiContext.PlayerAbilityCrests.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId
+        this.apiContext.PlayerAbilityCrests.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
         );
 
     public IQueryable<DbAbilityCrestSet> AbilityCrestSets =>
-        this.apiContext.PlayerAbilityCrestSets.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId
+        this.apiContext.PlayerAbilityCrestSets.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
         );
 
     public async Task Add(

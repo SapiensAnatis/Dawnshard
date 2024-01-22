@@ -58,13 +58,13 @@ public class RedoableSummonTest : TestFixture
             .update_data_list.dragon_list!.Select(x => (int)x.dragon_id)
             .OrderBy(x => x);
 
-        IEnumerable<int> dbCharaIds = this.ApiContext.PlayerCharaData.Where(
-            x => x.ViewerId == ViewerId
+        IEnumerable<int> dbCharaIds = this.ApiContext.PlayerCharaData.Where(x =>
+            x.ViewerId == ViewerId
         )
             .Select(x => (int)x.CharaId)
             .OrderBy(x => x);
-        IEnumerable<int> dbDragonIds = this.ApiContext.PlayerDragonData.Where(
-            x => x.ViewerId == ViewerId
+        IEnumerable<int> dbDragonIds = this.ApiContext.PlayerDragonData.Where(x =>
+            x.ViewerId == ViewerId
         )
             .Select(x => (int)x.DragonId)
             .OrderBy(x => x);

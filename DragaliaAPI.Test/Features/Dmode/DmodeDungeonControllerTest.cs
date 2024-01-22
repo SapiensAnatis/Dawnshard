@@ -41,14 +41,13 @@ public class DmodeDungeonControllerTest
         DmodeDungeonStartRequest request = new(Charas.ThePrince, 0, 0, new List<Charas>());
 
         mockDmodeDungeonService
-            .Setup(
-                x =>
-                    x.StartDungeon(
-                        request.chara_id,
-                        request.start_floor_num,
-                        request.servitor_id,
-                        request.bring_edit_skill_chara_id_list
-                    )
+            .Setup(x =>
+                x.StartDungeon(
+                    request.chara_id,
+                    request.start_floor_num,
+                    request.servitor_id,
+                    request.bring_edit_skill_chara_id_list
+                )
             )
             .ReturnsAsync((state, ingameData));
 

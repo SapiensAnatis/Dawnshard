@@ -573,8 +573,8 @@ public class FortService(
 
     public async Task<AtgenProductionRp> GetDragonfruitProduction()
     {
-        DbFortBuild? build = await fortRepository.Builds.SingleOrDefaultAsync(
-            x => x.PlantId == FortPlants.Dragontree
+        DbFortBuild? build = await fortRepository.Builds.SingleOrDefaultAsync(x =>
+            x.PlantId == FortPlants.Dragontree
         );
         if (build == null)
         {
@@ -591,8 +591,8 @@ public class FortService(
 
     public async Task<AtgenProductionRp> GetStaminaProduction()
     {
-        DbFortBuild? build = await fortRepository.Builds.SingleOrDefaultAsync(
-            x => x.PlantId == FortPlants.TheHalidom
+        DbFortBuild? build = await fortRepository.Builds.SingleOrDefaultAsync(x =>
+            x.PlantId == FortPlants.TheHalidom
         );
         if (build == null)
         {

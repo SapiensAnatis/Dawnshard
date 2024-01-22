@@ -186,11 +186,10 @@ file static class Extensions
     public static IEnumerable<Entity> Merge(this IEnumerable<Entity> source) =>
         source
             .GroupBy(x => new { x.Id, x.Type })
-            .Select(
-                group =>
-                    group.Aggregate(
-                        new Entity(group.Key.Type, group.Key.Id, 0),
-                        (acc, current) => acc with { Quantity = acc.Quantity + current.Quantity }
-                    )
+            .Select(group =>
+                group.Aggregate(
+                    new Entity(group.Key.Type, group.Key.Id, 0),
+                    (acc, current) => acc with { Quantity = acc.Quantity + current.Quantity }
+                )
             );
 }

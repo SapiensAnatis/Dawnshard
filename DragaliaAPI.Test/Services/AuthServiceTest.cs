@@ -140,8 +140,8 @@ public class AuthServiceTest
             )
             .AsString();
 
-        this.mockSessionService.Setup(
-            x => x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch)
+        this.mockSessionService.Setup(x =>
+            x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch)
         )
             .ReturnsAsync("session id");
 
@@ -193,11 +193,10 @@ public class AuthServiceTest
             .Returns(new BaasOptions() { TokenAudience = "audience", TokenIssuer = "issuer" });
         this.mockLoginOptions.Setup(x => x.CurrentValue)
             .Returns(new LoginOptions() { UseBaasLogin = true });
-        await this.authService.Invoking(
-            x =>
-                x.DoAuth(
-                    "We cry tears of mascara in the bathroom / Honey life is just a classroom / Ah-ah-ah-ah"
-                )
+        await this.authService.Invoking(x =>
+            x.DoAuth(
+                "We cry tears of mascara in the bathroom / Honey life is just a classroom / Ah-ah-ah-ah"
+            )
         )
             .Should()
             .ThrowExactlyAsync<DragaliaException>()
@@ -257,8 +256,8 @@ public class AuthServiceTest
 
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(AccountId);
 
-        this.mockSessionService.Setup(
-            x => x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch)
+        this.mockSessionService.Setup(x =>
+            x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch)
         )
             .ReturnsAsync("session id");
 
@@ -324,8 +323,8 @@ public class AuthServiceTest
 
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(AccountId);
 
-        this.mockSessionService.Setup(
-            x => x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch)
+        this.mockSessionService.Setup(x =>
+            x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch)
         )
             .ReturnsAsync("session id");
 
@@ -375,8 +374,8 @@ public class AuthServiceTest
 
         this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
 
-        this.mockSessionService.Setup(
-            x => x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch)
+        this.mockSessionService.Setup(x =>
+            x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch)
         )
             .ReturnsAsync("session id");
 
@@ -438,8 +437,8 @@ public class AuthServiceTest
 
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(AccountId);
 
-        this.mockSessionService.Setup(
-            x => x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch)
+        this.mockSessionService.Setup(x =>
+            x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch)
         )
             .ReturnsAsync("session id");
 

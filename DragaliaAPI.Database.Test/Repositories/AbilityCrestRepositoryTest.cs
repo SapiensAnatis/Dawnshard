@@ -34,10 +34,8 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
         await this.abilityCrestRepository.Add(AbilityCrests.ADogsDay);
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        this.fixture.ApiContext.PlayerAbilityCrests.Single(
-            x =>
-                x.AbilityCrestId == AbilityCrests.ADogsDay
-                && x.ViewerId == IdentityTestUtils.ViewerId
+        this.fixture.ApiContext.PlayerAbilityCrests.Single(x =>
+            x.AbilityCrestId == AbilityCrests.ADogsDay && x.ViewerId == IdentityTestUtils.ViewerId
         )
             .Should()
             .BeEquivalentTo(
@@ -105,8 +103,8 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
         );
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        this.fixture.ApiContext.PlayerAbilityCrestSets.Single(
-            x => x.ViewerId == IdentityTestUtils.ViewerId && x.AbilityCrestSetNo == 54
+        this.fixture.ApiContext.PlayerAbilityCrestSets.Single(x =>
+            x.ViewerId == IdentityTestUtils.ViewerId && x.AbilityCrestSetNo == 54
         )
             .Should()
             .BeEquivalentTo(new DbAbilityCrestSet(IdentityTestUtils.ViewerId, 54));
@@ -121,8 +119,8 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
         );
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        this.fixture.ApiContext.PlayerAbilityCrestSets.Single(
-            x => x.ViewerId == IdentityTestUtils.ViewerId && x.AbilityCrestSetNo == 54
+        this.fixture.ApiContext.PlayerAbilityCrestSets.Single(x =>
+            x.ViewerId == IdentityTestUtils.ViewerId && x.AbilityCrestSetNo == 54
         )
             .Should()
             .BeEquivalentTo(

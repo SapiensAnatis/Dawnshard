@@ -353,14 +353,11 @@ public class CharaController(
             request.chara_id_list
         );
 
-        resp.chara_unit_set_list = setUnitData.Select(
-            x =>
-                new CharaUnitSetList
-                {
-                    chara_id = x.Key,
-                    chara_unit_set_detail_list = x.Value.Select(ToAtgenCharaUnitSetDetailList)
-                }
-        );
+        resp.chara_unit_set_list = setUnitData.Select(x => new CharaUnitSetList
+        {
+            chara_id = x.Key,
+            chara_unit_set_detail_list = x.Value.Select(ToAtgenCharaUnitSetDetailList)
+        });
 
         return Ok(resp);
     }
@@ -718,11 +715,10 @@ public class CharaController(
                 );
 
                 ManaPieceMaterial? material =
-                    MasterAsset.ManaPieceMaterial.Enumerable.FirstOrDefault(
-                        x =>
-                            x.ElementId == charaData.PieceMaterialElementId
-                            && x.Step == manaNodeInfo.Step
-                            && x.ManaPieceType == manaNodeInfo.ManaPieceType
+                    MasterAsset.ManaPieceMaterial.Enumerable.FirstOrDefault(x =>
+                        x.ElementId == charaData.PieceMaterialElementId
+                        && x.Step == manaNodeInfo.Step
+                        && x.ManaPieceType == manaNodeInfo.ManaPieceType
                     );
 
                 if (material != null)
