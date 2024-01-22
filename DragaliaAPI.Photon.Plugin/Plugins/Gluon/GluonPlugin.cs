@@ -125,9 +125,6 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
         {
             this.gameLogicPlugin.BeforeSetProperties(info);
 
-            if (this.pluginStateService.ShouldPublish)
-                this.stateManagerPlugin.BeforeSetProperties(info);
-
             if (!info.IsProcessed)
                 info.Continue();
         }
@@ -137,7 +134,10 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
             this.gameLogicPlugin.OnSetProperties(info);
 
             if (this.pluginStateService.ShouldPublish)
+            {
                 this.stateManagerPlugin.OnSetProperties(info);
+                this.discordPlugin.OnSetProperties(info);
+            }
 
             if (!info.IsProcessed)
                 info.Continue();

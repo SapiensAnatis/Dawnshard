@@ -7,6 +7,7 @@ using DragaliaAPI.Photon.Plugin.Shared.Constants;
 using DragaliaAPI.Photon.Plugin.Shared.Helpers;
 using DragaliaAPI.Photon.Shared.Requests;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Photon.Hive.Plugin;
 
 namespace DragaliaAPI.Photon.Plugin.Plugins.Discord
@@ -16,6 +17,14 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Discord
         private static readonly Uri GameCreateEndpoint = new Uri("room_opened", UriKind.Relative);
         private static readonly Uri GameUpdateEndpoint = new Uri("room_updated", UriKind.Relative);
         private static readonly Uri GameCloseEndpoint = new Uri("room_closed", UriKind.Relative);
+
+        private static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings()
+        {
+            ContractResolver = new DefaultContractResolver()
+            {
+                NamingStrategy = new CamelCaseNamingStrategy()
+            }
+        };
 
         private readonly PluginConfiguration configuration;
         private IPluginLogger logger;
@@ -56,6 +65,8 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Discord
             this.PluginHost.HttpRequest(request, info);
         }
 
+        public override void OnSetProperties(ISetPropertiesCallInfo info) { }
+
         public override void BeforeCloseGame(IBeforeCloseGameCallInfo info)
         {
             HttpRequest request = this.CreateRequest(
@@ -72,7 +83,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Discord
         {
             Uri requestUri = new Uri(this.configuration.DiscordUrl, endpoint);
 
-            string json = JsonConvert.SerializeObject(request);
+            string json = JsonConvert.SerializeObject(request, JsonSettings);
             MemoryStream requestBody = new MemoryStream(Encoding.UTF8.GetBytes(json));
 
             return new HttpRequest()

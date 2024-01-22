@@ -176,11 +176,6 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.StateManager
             this.PluginHost.HttpRequest(request, info);
         }
 
-        public override void BeforeSetProperties(IBeforeSetPropertiesCallInfo info)
-        {
-            // Need to override to avoid calling info.Continue() twice
-        }
-
         public override void OnSetProperties(ISetPropertiesCallInfo info)
         {
             if (info.Request.Properties.ContainsKey(GamePropertyKeys.EntryConditions))
