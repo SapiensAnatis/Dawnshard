@@ -34,6 +34,9 @@ public class TutorialService : ITutorialService
         this.wallRepository = wallRepository;
     }
 
+    public Task<int> GetCurrentTutorialStatus() =>
+        this.userDataRepository.UserData.Select(x => x.TutorialStatus).FirstAsync();
+
     public async Task<int> UpdateTutorialStatus(int newStatus)
     {
         DbPlayerUserData userData = await userDataRepository.UserData.SingleAsync();
@@ -153,8 +156,14 @@ public class TutorialService : ITutorialService
         public const int Ch16Done = 1001613;
     }
 
+    public static class TutorialQuestIds
+    {
+        public const int AvenueToPowerBeginner = 201010101;
+    }
+
     internal static class TutorialStatusIds
     {
+        public const int CoopTutorial = 20402;
         public const int Dojos = 60999;
     }
 
