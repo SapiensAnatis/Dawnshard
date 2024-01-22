@@ -27,8 +27,8 @@ public class FortRepository : IFortRepository
     }
 
     public IQueryable<DbFortBuild> Builds =>
-        this.apiContext.PlayerFortBuilds.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId
+        this.apiContext.PlayerFortBuilds.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
         );
 
     public async Task InitializeFort()
@@ -36,8 +36,8 @@ public class FortRepository : IFortRepository
         this.logger.LogInformation("Initializing fort.");
 
         if (
-            !await this.apiContext.PlayerFortDetails.AnyAsync(
-                x => x.ViewerId == this.playerIdentityService.ViewerId
+            !await this.apiContext.PlayerFortDetails.AnyAsync(x =>
+                x.ViewerId == this.playerIdentityService.ViewerId
             )
         )
         {
@@ -242,8 +242,8 @@ public class FortRepository : IFortRepository
     {
         // TODO: remove this when testcontainers gets merged in
         return this.apiContext.Database.IsSqlite()
-            ? (await this.Builds.ToListAsync()).Count(
-                x => x.BuildEndDate != DateTimeOffset.UnixEpoch
+            ? (await this.Builds.ToListAsync()).Count(x =>
+                x.BuildEndDate != DateTimeOffset.UnixEpoch
             )
             : await this.Builds.CountAsync(x => x.BuildEndDate != DateTimeOffset.UnixEpoch);
     }

@@ -135,8 +135,8 @@ public class PaymentServiceTest
 
         this.mockUserDataRepository.SetupUserData(userData);
 
-        await this.paymentService.Invoking(
-            x => x.ProcessPayment(type, new PaymentTarget(total, cost))
+        await this.paymentService.Invoking(x =>
+            x.ProcessPayment(type, new PaymentTarget(total, cost))
         )
             .Should()
             .ThrowAsync<DragaliaException>()

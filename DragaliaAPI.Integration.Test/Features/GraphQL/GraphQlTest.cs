@@ -37,14 +37,14 @@ public class GraphQlTest : GraphQlTestFixture
             new GraphQLRequest
             {
                 Query = $$"""
-                query {
-                    player(viewerId: {{ViewerId}}) {
-                        charaList {
-                            charaId
+                    query {
+                        player(viewerId: {{ViewerId}}) {
+                            charaList {
+                                charaId
+                            }
                         }
                     }
-                }
-                """
+                    """
             }
         );
 
@@ -67,12 +67,12 @@ public class GraphQlTest : GraphQlTestFixture
             new GraphQLRequest
             {
                 Query = $$"""
-                mutation {
-                    resetCharacter(viewerId: {{ViewerId}}, charaId: ThePrince) {
-                        level
+                    mutation {
+                        resetCharacter(viewerId: {{ViewerId}}, charaId: ThePrince) {
+                            level
+                        }
                     }
-                }
-                """
+                    """
             }
         );
 
@@ -94,12 +94,12 @@ public class GraphQlTest : GraphQlTestFixture
                 new GraphQLRequest
                 {
                     Query = $$"""
-                    mutation {
-                        givePresent(viewerId: {{ViewerId}}, entityType: Dragon, entityId: 20050525) {
-                            presentId
+                        mutation {
+                            givePresent(viewerId: {{ViewerId}}, entityType: Dragon, entityId: 20050525) {
+                                presentId
+                            }
                         }
-                    }
-                    """
+                        """
                 }
             );
 
@@ -136,12 +136,12 @@ public class GraphQlTest : GraphQlTestFixture
                 new GraphQLRequest
                 {
                     Query = $$"""
-                    mutation {
-                        updateTutorialStatus(viewerId: {{ViewerId}}, newStatus: 60999) {
-                            tutorialStatus
+                        mutation {
+                            updateTutorialStatus(viewerId: {{ViewerId}}, newStatus: 60999) {
+                                tutorialStatus
+                            }
                         }
-                    }
-                    """
+                        """
                 }
             );
 

@@ -21,8 +21,8 @@ public class V17UpdateTest : SavefileUpdateTestFixture
 
         this.ApiContext.PlayerDragonReliability.AsNoTracking()
             .Should()
-            .Contain(
-                x => x.ViewerId == this.ViewerId && x.DragonId == Dragons.Arsene && x.Level == 30
+            .Contain(x =>
+                x.ViewerId == this.ViewerId && x.DragonId == Dragons.Arsene && x.Level == 30
             );
     }
 }

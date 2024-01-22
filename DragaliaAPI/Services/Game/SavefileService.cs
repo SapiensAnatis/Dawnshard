@@ -135,8 +135,8 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            DbPlayer player = await this.apiContext.Players.FirstAsync(
-                x => x.ViewerId == this.playerIdentityService.ViewerId
+            DbPlayer player = await this.apiContext.Players.FirstAsync(x =>
+                x.ViewerId == this.playerIdentityService.ViewerId
             );
 
             player.SavefileVersion = 0;
@@ -475,8 +475,8 @@ public class SavefileService : ISavefileService
             .ExecuteDeleteAsync();
         await this.apiContext.PlayerPassiveAbilities.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this.apiContext.PlayerDragonGifts.Where(
-            x => x.ViewerId == viewerId && x.DragonGiftId >= DragonGifts.FourLeafClover
+        await this.apiContext.PlayerDragonGifts.Where(x =>
+            x.ViewerId == viewerId && x.DragonGiftId >= DragonGifts.FourLeafClover
         )
             .ExecuteDeleteAsync();
         await this.apiContext.PlayerMissions.Where(x => x.ViewerId == viewerId)
@@ -534,8 +534,8 @@ public class SavefileService : ISavefileService
 
     public IQueryable<DbPlayer> Load()
     {
-        return this.apiContext.Players.Where(
-            x => x.AccountId == this.playerIdentityService.AccountId
+        return this.apiContext.Players.Where(x =>
+            x.AccountId == this.playerIdentityService.AccountId
         )
             .Include(x => x.UserData)
             .Include(x => x.AbilityCrestList)
@@ -609,41 +609,38 @@ public class SavefileService : ISavefileService
         player.PartyList.AddRange(
             Enumerable
                 .Range(1, DefaultSavefileData.PartySlotCount)
-                .Select(
-                    x =>
-                        new DbParty()
+                .Select(x => new DbParty()
+                {
+                    PartyName = "Default",
+                    PartyNo = x,
+                    Units = new List<DbPartyUnit>()
+                    {
+                        new()
                         {
-                            PartyName = "Default",
                             PartyNo = x,
-                            Units = new List<DbPartyUnit>()
-                            {
-                                new()
-                                {
-                                    PartyNo = x,
-                                    UnitNo = 1,
-                                    CharaId = Charas.ThePrince
-                                },
-                                new()
-                                {
-                                    PartyNo = x,
-                                    UnitNo = 2,
-                                    CharaId = Charas.Empty
-                                },
-                                new()
-                                {
-                                    PartyNo = x,
-                                    UnitNo = 3,
-                                    CharaId = Charas.Empty
-                                },
-                                new()
-                                {
-                                    PartyNo = x,
-                                    UnitNo = 4,
-                                    CharaId = Charas.Empty
-                                }
-                            }
+                            UnitNo = 1,
+                            CharaId = Charas.ThePrince
+                        },
+                        new()
+                        {
+                            PartyNo = x,
+                            UnitNo = 2,
+                            CharaId = Charas.Empty
+                        },
+                        new()
+                        {
+                            PartyNo = x,
+                            UnitNo = 3,
+                            CharaId = Charas.Empty
+                        },
+                        new()
+                        {
+                            PartyNo = x,
+                            UnitNo = 4,
+                            CharaId = Charas.Empty
                         }
-                )
+                    }
+                })
         );
     }
 

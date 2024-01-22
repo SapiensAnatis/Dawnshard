@@ -23,8 +23,8 @@ public class WallRepository : IWallRepository
     }
 
     public IQueryable<DbPlayerQuestWall> QuestWalls =>
-        this.apiContext.PlayerQuestWalls.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId
+        this.apiContext.PlayerQuestWalls.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
         );
 
     public async Task InitializeWall()

@@ -179,8 +179,8 @@ public class StoryServiceTest
         this.mockStoryRepository.Setup(x => x.GetOrCreateStory(type, storyId))
             .ReturnsAsync(new DbPlayerStoryState() { ViewerId = 1, State = StoryState.Unlocked });
 
-        this.mockRewardService.Setup(
-            x => x.GrantReward(new Entity(EntityTypes.Title, expectedEmblemId, 1, null, null, null))
+        this.mockRewardService.Setup(x =>
+            x.GrantReward(new Entity(EntityTypes.Title, expectedEmblemId, 1, null, null, null))
         )
             .ReturnsAsync(RewardGrantResult.Added);
 
@@ -228,11 +228,10 @@ public class StoryServiceTest
             .Returns(Task.CompletedTask);
         this.mockMissionProgressionService.Setup(x => x.OnQuestStoryCleared(1000311));
 
-        this.mockRewardService.Setup(
-            x =>
-                x.GrantReward(
-                    new Entity(EntityTypes.Dragon, (int)Dragons.Brunhilda, 1, null, null, null)
-                )
+        this.mockRewardService.Setup(x =>
+            x.GrantReward(
+                new Entity(EntityTypes.Dragon, (int)Dragons.Brunhilda, 1, null, null, null)
+            )
         )
             .ReturnsAsync(RewardGrantResult.Added);
 
@@ -368,11 +367,10 @@ public class StoryServiceTest
         this.mockTutorialService.Setup(x => x.OnStoryQuestRead(storyId))
             .Returns(Task.CompletedTask);
 
-        this.mockRewardService.Setup(
-            x =>
-                x.GrantReward(
-                    It.Is<Entity>(y => y.Type == EntityTypes.Chara && y.Id == (int)Charas.Audric)
-                )
+        this.mockRewardService.Setup(x =>
+            x.GrantReward(
+                It.Is<Entity>(y => y.Type == EntityTypes.Chara && y.Id == (int)Charas.Audric)
+            )
         )
             .ReturnsAsync(RewardGrantResult.Added);
 

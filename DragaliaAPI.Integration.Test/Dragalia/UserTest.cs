@@ -10,8 +10,8 @@ public class UserTest : TestFixture
     [Fact]
     public async Task LinkedNAccount_ReturnsExpectedResponse()
     {
-        DbPlayerUserData dbUserData = this.ApiContext.PlayerUserData.Single(
-            x => x.ViewerId == ViewerId
+        DbPlayerUserData dbUserData = this.ApiContext.PlayerUserData.Single(x =>
+            x.ViewerId == ViewerId
         );
 
         UserData expectedUserData = this.Mapper.Map<UserData>(dbUserData);

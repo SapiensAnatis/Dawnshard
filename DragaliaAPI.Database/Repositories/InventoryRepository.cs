@@ -26,13 +26,13 @@ public class InventoryRepository : IInventoryRepository
     }
 
     public IQueryable<DbPlayerMaterial> Materials =>
-        this.apiContext.PlayerMaterials.Where(
-            storage => storage.ViewerId == this.playerIdentityService.ViewerId
+        this.apiContext.PlayerMaterials.Where(storage =>
+            storage.ViewerId == this.playerIdentityService.ViewerId
         );
 
     public IQueryable<DbPlayerDragonGift> DragonGifts =>
-        this.apiContext.PlayerDragonGifts.Where(
-            gifts => gifts.ViewerId == this.playerIdentityService.ViewerId
+        this.apiContext.PlayerDragonGifts.Where(gifts =>
+            gifts.ViewerId == this.playerIdentityService.ViewerId
         );
 
     public DbPlayerMaterial AddMaterial(Materials type)

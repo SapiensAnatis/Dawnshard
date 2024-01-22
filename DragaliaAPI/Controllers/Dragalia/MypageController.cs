@@ -29,16 +29,15 @@ public class MypageController(
         resp.quest_event_schedule_list = new List<QuestEventScheduleList>();
 
         resp.quest_schedule_detail_list = MasterAsset.QuestScheduleInfo.Enumerable.Select(
-            x =>
-                new QuestScheduleDetailList(
-                    x.Id,
-                    x.ScheduleGroupId,
-                    x.DropBonusCount,
-                    0,
-                    x.IntervalType,
-                    x.StartDate,
-                    x.EndDate
-                )
+            x => new QuestScheduleDetailList(
+                x.Id,
+                x.ScheduleGroupId,
+                x.DropBonusCount,
+                0,
+                x.IntervalType,
+                x.StartDate,
+                x.EndDate
+            )
         );
 
         resp.is_shop_notification = await shopRepository.GetDailySummonCountAsync() == 0;

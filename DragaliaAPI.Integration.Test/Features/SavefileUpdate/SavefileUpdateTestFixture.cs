@@ -30,7 +30,7 @@ public abstract class SavefileUpdateTestFixture : TestFixture
     }
 
     protected override async Task Setup() =>
-        await this.ApiContext.Players.ExecuteUpdateAsync(
-            u => u.SetProperty(e => e.SavefileVersion, 0)
+        await this.ApiContext.Players.ExecuteUpdateAsync(u =>
+            u.SetProperty(e => e.SavefileVersion, 0)
         );
 }

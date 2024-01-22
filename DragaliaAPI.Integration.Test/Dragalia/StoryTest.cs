@@ -101,8 +101,8 @@ public class StoryTest : TestFixture
 
         newCrystal.Should().Be(oldCrystal + 25);
 
-        IEnumerable<DbPlayerStoryState> stories = this.ApiContext.PlayerStoryState.Where(
-            x => x.ViewerId == ViewerId
+        IEnumerable<DbPlayerStoryState> stories = this.ApiContext.PlayerStoryState.Where(x =>
+            x.ViewerId == ViewerId
         );
 
         stories

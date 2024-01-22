@@ -14,8 +14,8 @@ public class PresentTest : TestFixture
         CommonAssertionOptions.ApplyTimeOptions(toleranceSec: 3);
 
         // Ignore auto-generated PK
-        AssertionOptions.AssertEquivalencyUsing(
-            opts => opts.Excluding(member => member.Name == nameof(PresentDetailList.present_id))
+        AssertionOptions.AssertEquivalencyUsing(opts =>
+            opts.Excluding(member => member.Name == nameof(PresentDetailList.present_id))
         );
     }
 
@@ -145,17 +145,14 @@ public class PresentTest : TestFixture
     {
         List<DbPlayerPresent> presents = Enumerable
             .Range(1000, 120)
-            .Select(
-                x =>
-                    new DbPlayerPresent()
-                    {
-                        PresentId = x,
-                        ViewerId = ViewerId,
-                        EntityType = EntityTypes.Rupies,
-                        EntityQuantity = 100_000,
-                        CreateTime = DateTimeOffset.UnixEpoch,
-                    }
-            )
+            .Select(x => new DbPlayerPresent()
+            {
+                PresentId = x,
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Rupies,
+                EntityQuantity = 100_000,
+                CreateTime = DateTimeOffset.UnixEpoch,
+            })
             .OrderByDescending(x => x.PresentId)
             .ToList();
 
@@ -193,8 +190,8 @@ public class PresentTest : TestFixture
         DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
-        DbPlayerMaterial oldSquishums = this.ApiContext.PlayerMaterials.First(
-            x => x.ViewerId == ViewerId && x.MaterialId == Materials.Squishums
+        DbPlayerMaterial oldSquishums = this.ApiContext.PlayerMaterials.First(x =>
+            x.ViewerId == ViewerId && x.MaterialId == Materials.Squishums
         );
 
         List<DbPlayerPresent> presents =
@@ -465,17 +462,14 @@ public class PresentTest : TestFixture
     {
         List<DbPlayerPresentHistory> presentHistories = Enumerable
             .Range(2000, 120)
-            .Select(
-                x =>
-                    new DbPlayerPresentHistory()
-                    {
-                        Id = x,
-                        ViewerId = ViewerId,
-                        EntityType = EntityTypes.Rupies,
-                        EntityQuantity = 100_000,
-                        CreateTime = DateTimeOffset.UnixEpoch,
-                    }
-            )
+            .Select(x => new DbPlayerPresentHistory()
+            {
+                Id = x,
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Rupies,
+                EntityQuantity = 100_000,
+                CreateTime = DateTimeOffset.UnixEpoch,
+            })
             .OrderByDescending(x => x.Id)
             .ToList();
 

@@ -235,8 +235,8 @@ public class MissionControllerTest
         this.mockMissionService.Setup(x => x.RedeemMissions(MissionType.Drill, fakeIdList))
             .Returns(Task.CompletedTask);
 
-        this.mockMissionService.Setup(
-            x => x.TryRedeemDrillMissionGroups(It.IsAny<IEnumerable<int>>())
+        this.mockMissionService.Setup(x =>
+            x.TryRedeemDrillMissionGroups(It.IsAny<IEnumerable<int>>())
         )
             .ReturnsAsync(new List<AtgenBuildEventRewardEntityList>());
 

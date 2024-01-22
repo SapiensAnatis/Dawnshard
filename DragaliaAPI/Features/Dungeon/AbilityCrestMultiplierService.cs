@@ -22,8 +22,8 @@ public class AbilityCrestMultiplierService(
         double materialBoost = 0;
         double pointBoost = 0;
 
-        IEnumerable<AbilityCrests> equippedCrestIds = partySettingList.SelectMany(
-            y => y.GetAbilityCrestList()
+        IEnumerable<AbilityCrests> equippedCrestIds = partySettingList.SelectMany(y =>
+            y.GetAbilityCrestList()
         );
 
         IEnumerable<DbAbilityCrest> equippedCrests = await abilityCrestRepository
@@ -37,12 +37,11 @@ public class AbilityCrestMultiplierService(
                 .ToList();
 
             List<AbilityData> buildPointAbilities = this.GetUnitCrestAbilities(dbCrests)
-                .Where(
-                    x =>
-                        x.AbilityType1
-                            is AbilityTypes.BuildEventPointBoost
-                                or AbilityTypes.DefensiveEventPointBoost
-                        && x.EventId == eventId
+                .Where(x =>
+                    x.AbilityType1
+                        is AbilityTypes.BuildEventPointBoost
+                            or AbilityTypes.DefensiveEventPointBoost
+                    && x.EventId == eventId
                 )
                 .ToList();
 
@@ -55,10 +54,8 @@ public class AbilityCrestMultiplierService(
             pointBoost += CalculatePercentageValue(buildPointAbilities);
 
             List<AbilityData> buildMaterialAbilities = this.GetUnitCrestAbilities(dbCrests)
-                .Where(
-                    x =>
-                        x.AbilityType1 is AbilityTypes.BuildEventMaterialBoost
-                        && x.EventId == eventId
+                .Where(x =>
+                    x.AbilityType1 is AbilityTypes.BuildEventMaterialBoost && x.EventId == eventId
                 )
                 .ToList();
 
@@ -87,8 +84,8 @@ public class AbilityCrestMultiplierService(
 
             // After filtering by event ID, they should all have the same AbilityLimitedGroupId1
             Debug.Assert(
-                abilities.All(
-                    x => x.AbilityLimitedGroupId1 == abilities.First().AbilityLimitedGroupId1
+                abilities.All(x =>
+                    x.AbilityLimitedGroupId1 == abilities.First().AbilityLimitedGroupId1
                 )
             );
 

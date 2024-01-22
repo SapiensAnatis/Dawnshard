@@ -31,9 +31,11 @@ public class StampService : IStampService
         // TODO: implement database table for earned stickers.
 
         return Task.FromResult(
-            MasterAsset.StampData.Enumerable.Select(
-                x => new StampList() { stamp_id = x.Id, is_new = false }
-            )
+            MasterAsset.StampData.Enumerable.Select(x => new StampList()
+            {
+                stamp_id = x.Id,
+                is_new = false
+            })
         );
     }
 
@@ -45,15 +47,14 @@ public class StampService : IStampService
         // TODO: validate which stamps are owned
 
         await this.repository.SetEquipStampList(
-            newStampList.Select(
-                x =>
-                    this.mapper.Map<EquipStampList, DbEquippedStamp>(
-                        x,
-                        opts =>
-                            opts.AfterMap(
-                                (src, dest) => dest.ViewerId = this.playerIdentityService.ViewerId
-                            )
-                    )
+            newStampList.Select(x =>
+                this.mapper.Map<EquipStampList, DbEquippedStamp>(
+                    x,
+                    opts =>
+                        opts.AfterMap(
+                            (src, dest) => dest.ViewerId = this.playerIdentityService.ViewerId
+                        )
+                )
             )
         );
 

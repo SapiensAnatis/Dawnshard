@@ -192,9 +192,10 @@ public class MatchingService : IMatchingService
             quest_type = QuestTypes.Dungeon,
             room_id = game.RoomId,
             status = game.MemberNum >= 4 ? RoomStatuses.Full : RoomStatuses.Available,
-            room_member_list = game.Players.Select(
-                x => new AtgenRoomMemberList() { viewer_id = (ulong)x.ViewerId }
-            ),
+            room_member_list = game.Players.Select(x => new AtgenRoomMemberList()
+            {
+                viewer_id = (ulong)x.ViewerId
+            }),
             entry_type = 1,
             start_entry_time = game.StartEntryTime,
             entry_guild_id = default,

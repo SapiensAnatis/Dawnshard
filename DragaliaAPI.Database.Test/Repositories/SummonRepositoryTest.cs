@@ -22,8 +22,8 @@ public class SummonRepositoryTest : IClassFixture<DbTestFixture>
             IdentityTestUtils.MockPlayerDetailsService.Object
         );
 
-        AssertionOptions.AssertEquivalencyUsing(
-            options => options.Excluding(x => x.Name == "Owner")
+        AssertionOptions.AssertEquivalencyUsing(options =>
+            options.Excluding(x => x.Name == "Owner")
         );
     }
 

@@ -98,16 +98,16 @@ public class DmodeTest : TestFixture
             );
 
         resp.data.dmode_servitor_passive_list.Should()
-            .Contain(
-                x => x.passive_no == DmodeServitorPassiveType.BurstDamage && x.passive_level == 2
+            .Contain(x =>
+                x.passive_no == DmodeServitorPassiveType.BurstDamage && x.passive_level == 2
             );
         resp.data.dmode_servitor_passive_list.Should()
-            .Contain(
-                x => x.passive_no == DmodeServitorPassiveType.ResistUndead && x.passive_level == 10
+            .Contain(x =>
+                x.passive_no == DmodeServitorPassiveType.ResistUndead && x.passive_level == 10
             );
         resp.data.dmode_servitor_passive_list.Should()
-            .Contain(
-                x => x.passive_no == DmodeServitorPassiveType.ResistNatural && x.passive_level == 2
+            .Contain(x =>
+                x.passive_no == DmodeServitorPassiveType.ResistNatural && x.passive_level == 2
             );
 
         ApiContext

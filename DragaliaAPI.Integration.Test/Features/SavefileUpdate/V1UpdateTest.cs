@@ -87,8 +87,8 @@ public class V1UpdateTest : SavefileUpdateTestFixture
     [Fact]
     public async Task V1Update_NoDojos_TutorialComplete_Adds()
     {
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            u => u.SetProperty(e => e.TutorialStatus, TutorialService.TutorialStatusIds.Dojos)
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(u =>
+            u.SetProperty(e => e.TutorialStatus, TutorialService.TutorialStatusIds.Dojos)
         );
 
         LoadIndexData data = (
@@ -101,8 +101,8 @@ public class V1UpdateTest : SavefileUpdateTestFixture
 
         this.GetSavefileVersion().Should().Be(this.MaxVersion);
 
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            u => u.SetProperty(e => e.TutorialStatus, 0)
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(u =>
+            u.SetProperty(e => e.TutorialStatus, 0)
         );
     }
 

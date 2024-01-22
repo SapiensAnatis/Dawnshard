@@ -35,8 +35,8 @@ public class DbTestFixture : IDisposable
             new(
                 this.ApiContext,
                 mockCache.Object,
-                new MapperConfiguration(
-                    opts => opts.AddMaps(typeof(Program).Assembly)
+                new MapperConfiguration(opts =>
+                    opts.AddMaps(typeof(Program).Assembly)
                 ).CreateMapper(),
                 mockLogger.Object,
                 IdentityTestUtils.MockPlayerDetailsService.Object,

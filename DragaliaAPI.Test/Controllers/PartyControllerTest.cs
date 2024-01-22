@@ -29,8 +29,8 @@ public class PartyControllerTest
         this.mockLogger = new(MockBehavior.Loose);
         this.mockMissionProgressionService = new(MockBehavior.Strict);
 
-        IMapper mapper = new MapperConfiguration(
-            cfg => cfg.AddMaps(typeof(Program).Assembly)
+        IMapper mapper = new MapperConfiguration(cfg =>
+            cfg.AddMaps(typeof(Program).Assembly)
         ).CreateMapper();
 
         this.partyController = new(

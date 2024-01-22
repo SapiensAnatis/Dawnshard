@@ -21,8 +21,8 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
             IdentityTestUtils.MockPlayerDetailsService.Object
         );
 
-        AssertionOptions.AssertEquivalencyUsing(
-            options => options.Excluding(x => x.Name == "Owner")
+        AssertionOptions.AssertEquivalencyUsing(options =>
+            options.Excluding(x => x.Name == "Owner")
         );
     }
 
@@ -55,8 +55,8 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
         await this.partyRepository.SetParty(toAdd);
         await this.partyRepository.SaveChangesAsync();
 
-        DbParty dbEntry = await this.fixture.ApiContext.PlayerParties.Where(
-            x => x.ViewerId == ViewerId && x.PartyNo == 3
+        DbParty dbEntry = await this.fixture.ApiContext.PlayerParties.Where(x =>
+            x.ViewerId == ViewerId && x.PartyNo == 3
         )
             .Include(x => x.Units)
             .SingleAsync();
@@ -91,8 +91,8 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
         await this.partyRepository.SetParty(toAdd);
         await this.partyRepository.SaveChangesAsync();
 
-        DbParty dbEntry = await this.fixture.ApiContext.PlayerParties.Where(
-            x => x.ViewerId == ViewerId && x.PartyNo == 5
+        DbParty dbEntry = await this.fixture.ApiContext.PlayerParties.Where(x =>
+            x.ViewerId == ViewerId && x.PartyNo == 5
         )
             .Include(x => x.Units)
             .SingleAsync();

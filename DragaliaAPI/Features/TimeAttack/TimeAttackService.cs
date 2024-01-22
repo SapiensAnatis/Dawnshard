@@ -31,8 +31,8 @@ public class TimeAttackService(
     public IEnumerable<RankingTierReward> GetRewards()
     {
         IEnumerable<RankingTierReward> applicableRewards =
-            MasterAsset.RankingTierReward.Enumerable.Where(
-                x => x.GroupId == options.CurrentValue.GroupId
+            MasterAsset.RankingTierReward.Enumerable.Where(x =>
+                x.GroupId == options.CurrentValue.GroupId
             );
 
         return applicableRewards;
@@ -115,26 +115,20 @@ public class TimeAttackService(
             .ToList();
 
         await rewardService.GrantRewards(
-            rewardsToReceive.Select(
-                x =>
-                    new Entity(
-                        x.RankingRewardEntityType,
-                        x.RankingRewardEntityId,
-                        x.RankingRewardEntityQuantity
-                    )
-            )
+            rewardsToReceive.Select(x => new Entity(
+                x.RankingRewardEntityType,
+                x.RankingRewardEntityId,
+                x.RankingRewardEntityQuantity
+            ))
         );
 
         timeAttackRepository.AddRewards(
-            rewardsToReceive.Select(
-                x =>
-                    new DbReceivedRankingTierReward()
-                    {
-                        ViewerId = playerIdentityService.ViewerId,
-                        QuestId = questId,
-                        RewardId = x.Id
-                    }
-            )
+            rewardsToReceive.Select(x => new DbReceivedRankingTierReward()
+            {
+                ViewerId = playerIdentityService.ViewerId,
+                QuestId = questId,
+                RewardId = x.Id
+            })
         );
 
         return rewardsToReceive;

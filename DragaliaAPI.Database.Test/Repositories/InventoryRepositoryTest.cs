@@ -204,14 +204,14 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        this.fixture.ApiContext.PlayerMaterials.Single(
-            x => x.ViewerId == IdentityTestUtils.ViewerId && x.MaterialId == Materials.Valor
+        this.fixture.ApiContext.PlayerMaterials.Single(x =>
+            x.ViewerId == IdentityTestUtils.ViewerId && x.MaterialId == Materials.Valor
         )
             .Quantity.Should()
             .Be(6);
 
-        this.fixture.ApiContext.PlayerMaterials.Single(
-            x => x.ViewerId == IdentityTestUtils.ViewerId && x.MaterialId == Materials.Acclaim
+        this.fixture.ApiContext.PlayerMaterials.Single(x =>
+            x.ViewerId == IdentityTestUtils.ViewerId && x.MaterialId == Materials.Acclaim
         )
             .Quantity.Should()
             .Be(8);
@@ -232,21 +232,18 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             }
         );
 
-        await this.inventoryRepository.Invoking(
-            x =>
-                x.UpdateQuantity(
-                    new Dictionary<Materials, int>() { { Materials.SummerEstelleSkin, -6 } }
-                )
+        await this.inventoryRepository.Invoking(x =>
+            x.UpdateQuantity(
+                new Dictionary<Materials, int>() { { Materials.SummerEstelleSkin, -6 } }
+            )
         )
             .Should()
             .ThrowAsync<InvalidOperationException>();
 
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        this.fixture.ApiContext.PlayerMaterials.Single(
-            x =>
-                x.ViewerId == IdentityTestUtils.ViewerId
-                && x.MaterialId == Materials.SummerEstelleSkin
+        this.fixture.ApiContext.PlayerMaterials.Single(x =>
+            x.ViewerId == IdentityTestUtils.ViewerId && x.MaterialId == Materials.SummerEstelleSkin
         )
             .Quantity.Should()
             .Be(5);

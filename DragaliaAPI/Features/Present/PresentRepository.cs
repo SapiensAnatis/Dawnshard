@@ -17,8 +17,8 @@ public class PresentRepository : IPresentRepository
     }
 
     public IQueryable<DbPlayerPresentHistory> PresentHistory =>
-        apiContext.PlayerPresentHistory.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId
+        apiContext.PlayerPresentHistory.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
         );
 
     public IQueryable<DbPlayerPresent> Presents =>
@@ -32,10 +32,9 @@ public class PresentRepository : IPresentRepository
     public async Task DeletePlayerPresents(IEnumerable<long> presentIds)
     {
         ICollection<DbPlayerPresent> playerPresents = await apiContext
-            .PlayerPresents.Where(
-                x =>
-                    x.ViewerId == this.playerIdentityService.ViewerId
-                    && presentIds.Contains(x.PresentId)
+            .PlayerPresents.Where(x =>
+                x.ViewerId == this.playerIdentityService.ViewerId
+                && presentIds.Contains(x.PresentId)
             )
             .ToListAsync();
 

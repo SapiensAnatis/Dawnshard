@@ -112,8 +112,8 @@ public class CharaTest : TestFixture
         responseCharaData.exp.Should().Be(expectedXp);
 
         response
-            .update_data_list.material_list.Where(
-                x => (Materials)x.material_id == Materials.GoldCrystal
+            .update_data_list.material_list.Where(x =>
+                (Materials)x.material_id == Materials.GoldCrystal
             )
             .First()
             .quantity.Should()

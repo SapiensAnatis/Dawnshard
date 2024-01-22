@@ -58,15 +58,12 @@ public class LoginGiftResetAction : IDailyResetAction
                 Materials.WaterTome,
                 Materials.ShadowTome,
                 Materials.LightTome
-            }.Select(
-                x =>
-                    new Present.Present(
-                        PresentMessage.DragaliaLostTeam,
-                        EntityTypes.Material,
-                        (int)x,
-                        5
-                    )
-            )
+            }.Select(x => new Present.Present(
+                PresentMessage.DragaliaLostTeam,
+                EntityTypes.Material,
+                (int)x,
+                5
+            ))
         );
 
         return Task.CompletedTask;

@@ -22,11 +22,10 @@ public class V14Update(
     public async Task Apply()
     {
         int[] readStoryIdList = await storyRepository
-            .UnitStories.Where(
-                x =>
-                    (x.State == StoryState.Read)
-                    && x.StoryType == StoryTypes.Chara
-                    && x.StoryId % 10 == 5
+            .UnitStories.Where(x =>
+                (x.State == StoryState.Read)
+                && x.StoryType == StoryTypes.Chara
+                && x.StoryId % 10 == 5
             )
             .Select(x => x.StoryId)
             .ToArrayAsync();

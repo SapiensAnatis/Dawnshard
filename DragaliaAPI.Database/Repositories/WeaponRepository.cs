@@ -39,13 +39,13 @@ public class WeaponRepository : IWeaponRepository
         this.apiContext.PlayerWeapons.Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbWeaponSkin> WeaponSkins =>
-        this.apiContext.PlayerWeaponSkins.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId
+        this.apiContext.PlayerWeaponSkins.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
         );
 
     public IQueryable<DbWeaponPassiveAbility> WeaponPassiveAbilities =>
-        this.apiContext.PlayerPassiveAbilities.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId
+        this.apiContext.PlayerPassiveAbilities.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
         );
 
     public IQueryable<DbWeaponPassiveAbility> GetPassiveAbilities(WeaponBodies id)
@@ -53,16 +53,15 @@ public class WeaponRepository : IWeaponRepository
         WeaponBody data = MasterAsset.WeaponBody.Get(id);
 
         IEnumerable<int> searchIds = MasterAsset
-            .WeaponPassiveAbility.Enumerable.Where(
-                x => x.WeaponType == data.WeaponType && x.ElementalType == data.ElementalType
+            .WeaponPassiveAbility.Enumerable.Where(x =>
+                x.WeaponType == data.WeaponType && x.ElementalType == data.ElementalType
             )
             .ExceptBy(AstralsBaneAbilityIds, x => x.AbilityId) // Sending astral abilities in the list breaks scorch res. Don't ask me why.
             .Select(x => x.Id);
 
-        return this.apiContext.PlayerPassiveAbilities.Where(
-            x =>
-                x.ViewerId == this.playerIdentityService.ViewerId
-                && searchIds.Contains(x.WeaponPassiveAbilityId)
+        return this.apiContext.PlayerPassiveAbilities.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
+            && searchIds.Contains(x.WeaponPassiveAbilityId)
         );
     }
 
@@ -129,8 +128,8 @@ public class WeaponRepository : IWeaponRepository
         entity.UnlockWeaponPassiveAbilityNoList[passiveAbility.WeaponPassiveAbilityNo - 1] = 1;
 
         if (
-            await this.WeaponPassiveAbilities.AnyAsync(
-                x => x.WeaponPassiveAbilityId == passiveAbility.Id
+            await this.WeaponPassiveAbilities.AnyAsync(x =>
+                x.WeaponPassiveAbilityId == passiveAbility.Id
             )
         )
         {

@@ -36,8 +36,8 @@ public class Clb01EventTest : TestFixture
     {
         DbPlayerEventItem pointItem = await ApiContext
             .PlayerEventItems.AsTracking()
-            .SingleAsync(
-                x => x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint
+            .SingleAsync(x =>
+                x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint
             );
 
         pointItem.Quantity += 20;

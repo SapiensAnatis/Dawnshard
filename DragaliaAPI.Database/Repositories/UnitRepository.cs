@@ -27,31 +27,31 @@ public class UnitRepository : IUnitRepository
     }
 
     public IQueryable<DbPlayerCharaData> Charas =>
-        this.apiContext.PlayerCharaData.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId
+        this.apiContext.PlayerCharaData.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
         );
 
     public IQueryable<DbPlayerDragonData> Dragons =>
-        this.apiContext.PlayerDragonData.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId
+        this.apiContext.PlayerDragonData.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
         );
 
     public IQueryable<DbAbilityCrest> AbilityCrests =>
-        this.apiContext.PlayerAbilityCrests.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId
+        this.apiContext.PlayerAbilityCrests.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
         );
 
     public IQueryable<DbWeaponBody> WeaponBodies =>
         this.apiContext.PlayerWeapons.Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbPlayerDragonReliability> DragonReliabilities =>
-        this.apiContext.PlayerDragonReliability.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId
+        this.apiContext.PlayerDragonReliability.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
         );
 
     public IQueryable<DbTalisman> Talismans =>
-        this.apiContext.PlayerTalismans.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId
+        this.apiContext.PlayerTalismans.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
         );
 
     public async Task<bool> CheckHasCharas(IEnumerable<Charas> idList)
@@ -122,9 +122,10 @@ public class UnitRepository : IUnitRepository
 
         if (newCharas.Any())
         {
-            IEnumerable<DbPlayerCharaData> dbEntries = newCharas.Select(
-                id => new DbPlayerCharaData(this.playerIdentityService.ViewerId, id)
-            );
+            IEnumerable<DbPlayerCharaData> dbEntries = newCharas.Select(id => new DbPlayerCharaData(
+                this.playerIdentityService.ViewerId,
+                id
+            ));
 
             await apiContext.PlayerCharaData.AddRangeAsync(dbEntries);
 
@@ -175,8 +176,8 @@ public class UnitRepository : IUnitRepository
 
         IEnumerable<(Dragons id, bool isNew)> newMapping = MarkNewIds(ownedDragons, idList);
 
-        IEnumerable<DbPlayerDragonReliability> newReliabilities = newMapping.Select(
-            x => DbPlayerDragonReliabilityFactory.Create(this.playerIdentityService.ViewerId, x.id)
+        IEnumerable<DbPlayerDragonReliability> newReliabilities = newMapping.Select(x =>
+            DbPlayerDragonReliabilityFactory.Create(this.playerIdentityService.ViewerId, x.id)
         );
 
         foreach ((Dragons id, _) in newMapping.Where(x => x.isNew))
@@ -198,8 +199,8 @@ public class UnitRepository : IUnitRepository
         }
 
         await apiContext.AddRangeAsync(
-            idList.Select(
-                id => DbPlayerDragonDataFactory.Create(this.playerIdentityService.ViewerId, id)
+            idList.Select(id =>
+                DbPlayerDragonDataFactory.Create(this.playerIdentityService.ViewerId, id)
             )
         );
 
@@ -214,10 +215,9 @@ public class UnitRepository : IUnitRepository
     public async Task RemoveDragons(IEnumerable<long> keyIdList)
     {
         IEnumerable<DbPlayerDragonData> ownedDragons = await Dragons
-            .Where(
-                x =>
-                    x.ViewerId == this.playerIdentityService.ViewerId
-                    && keyIdList.Contains(x.DragonKeyId)
+            .Where(x =>
+                x.ViewerId == this.playerIdentityService.ViewerId
+                && keyIdList.Contains(x.DragonKeyId)
             )
             .ToListAsync();
 
@@ -250,8 +250,8 @@ public class UnitRepository : IUnitRepository
 
     public IEnumerable<DbSetUnit> GetCharaSets(Charas charaId)
     {
-        return apiContext.PlayerSetUnits.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId && x.CharaId == charaId
+        return apiContext.PlayerSetUnits.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId && x.CharaId == charaId
         );
     }
 
@@ -260,10 +260,8 @@ public class UnitRepository : IUnitRepository
     )
     {
         return await apiContext
-            .PlayerSetUnits.Where(
-                x =>
-                    charaIds.Contains(x.CharaId)
-                    && x.ViewerId == this.playerIdentityService.ViewerId
+            .PlayerSetUnits.Where(x =>
+                charaIds.Contains(x.CharaId) && x.ViewerId == this.playerIdentityService.ViewerId
             )
             .GroupBy(x => x.CharaId)
             .ToDictionaryAsync(x => x.Key, x => x.AsEnumerable());
