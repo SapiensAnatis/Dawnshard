@@ -83,13 +83,27 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
                 base.OnLeave(info);
         }
 
+        public override void BeforeCloseGame(IBeforeCloseGameCallInfo info)
+        {
+            // This can't use OnCloseGame with StateManagerPlugin, as there can only be one synchronous outbound HTTP request
+            // per event handler. (Unless we chain them together using callbacks...)
+
+            if (this.pluginStateService.ShouldPublish)
+            {
+                this.discordPlugin.BeforeCloseGame(info);
+            }
+
+            if (!info.IsProcessed)
+                info.Continue();
+        }
+
         public override void OnCloseGame(ICloseGameCallInfo info)
         {
             // GameLogicPlugin has no override for closing a game
+
             if (this.pluginStateService.ShouldPublish)
             {
                 this.stateManagerPlugin.OnCloseGame(info);
-                this.discordPlugin.OnCloseGame(info);
             }
 
             if (!info.IsProcessed)

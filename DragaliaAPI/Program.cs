@@ -9,6 +9,7 @@ using DragaliaAPI.Features.GraphQL;
 using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Features.Version;
+using DragaliaAPI.Features.Zena;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
@@ -103,6 +104,7 @@ builder
         opts.AddScheme<SessionAuthenticationHandler>(SchemeName.Session, null);
         opts.AddScheme<DeveloperAuthenticationHandler>(SchemeName.Developer, null);
         opts.AddScheme<PhotonAuthenticationHandler>(nameof(PhotonAuthenticationHandler), null);
+        opts.AddScheme<ZenaAuthenticationHandler>(SchemeName.Zena, null);
 
         opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     })

@@ -56,7 +56,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Discord
             this.PluginHost.HttpRequest(request, info);
         }
 
-        public override void OnCloseGame(ICloseGameCallInfo info)
+        public override void BeforeCloseGame(IBeforeCloseGameCallInfo info)
         {
             HttpRequest request = this.CreateRequest(
                 GameCloseEndpoint,
