@@ -10,11 +10,13 @@ using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
+using static DragaliaAPI.Services.Game.TutorialService;
 
 namespace DragaliaAPI.Features.Dungeon.Start;
 
@@ -33,7 +35,8 @@ public class DungeonStartService(
     ILogger<DungeonStartService> logger,
     IPaymentService paymentService,
     IEventService eventService,
-    IAutoRepeatService autoRepeatService
+    IAutoRepeatService autoRepeatService,
+    ITutorialService tutorialService
 ) : IDungeonStartService
 {
     public async Task<bool> ValidateStamina(int questId, StaminaType staminaType)
@@ -105,6 +108,15 @@ public class DungeonStartService(
         else
         {
             await autoRepeatService.ClearRepeatInfo();
+        }
+
+        if (
+            questId == TutorialQuestIds.AvenueToPowerBeginner
+            && await tutorialService.GetCurrentTutorialStatus() == TutorialStatusIds.CoopTutorial
+        )
+        {
+            logger.LogDebug("Detected co-op tutorial: setting is_bot_tutorial");
+            result.is_bot_tutorial = true;
         }
 
         return result;

@@ -3,6 +3,7 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Models;
+using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -1149,6 +1150,64 @@ public class DungeonRecordTest : TestFixture
         ).data;
 
         response2.ingame_result_data.reward_record.first_clear_set.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task Record_IsCoopTutorial_AdvancesTutorialStatus()
+    {
+        await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdateAsync(
+                e =>
+                    e.SetProperty(
+                        p => p.TutorialStatus,
+                        TutorialService.TutorialStatusIds.CoopTutorial
+                    )
+            );
+
+        int questId = TutorialService.TutorialQuestIds.AvenueToPowerBeginner;
+
+        await this.AddToDatabase(
+            new DbQuest()
+            {
+                QuestId = questId,
+                State = 0,
+                PlayCount = 0,
+            }
+        );
+
+        string dungeonKey = await this.StartDungeon(
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
+            }
+        );
+
+        DungeonRecordRecordRequest request =
+            new()
+            {
+                dungeon_key = dungeonKey,
+                play_record = new PlayRecord
+                {
+                    time = 10,
+                    treasure_record = new List<AtgenTreasureRecord>()
+                    {
+                        new() { area_idx = 1, enemy = [] }
+                    },
+                    live_unit_no_list = new List<int>(),
+                    damage_record = [],
+                    dragon_damage_record = [],
+                    battle_royal_record = new AtgenBattleRoyalRecord()
+                }
+            };
+
+        DungeonRecordRecordData response = (
+            await Client.PostMsgpack<DungeonRecordRecordData>("/dungeon_record/record", request)
+        ).data;
+
+        response.update_data_list.user_data.Should().NotBeNull();
+        response.update_data_list.user_data.tutorial_status.Should().Be(20501);
     }
 
     private async Task<string> StartDungeon(DungeonSession session) =>

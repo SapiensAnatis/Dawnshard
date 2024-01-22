@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Shared.MasterAsset;
+﻿using DragaliaAPI.Services.Game;
+using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Enemy;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +41,7 @@ public class DungeonStartTest : TestFixture
         response
             .ingame_data.party_info.party_unit_list.Should()
             .OnlyHaveUniqueItems(x => x.position);
+        response.ingame_data.is_bot_tutorial.Should().BeFalse();
     }
 
     [Fact]
@@ -244,6 +246,56 @@ public class DungeonStartTest : TestFixture
             .Enemies[questData.VariationType];
 
         response.data.odds_info.enemy.Should().HaveCountGreaterThan(enemies.Count());
+    }
+
+    [Fact]
+    public async Task Start_CoopTutorial_SetsIsBotTutorial()
+    {
+        await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdateAsync(
+                e =>
+                    e.SetProperty(
+                        p => p.TutorialStatus,
+                        TutorialService.TutorialStatusIds.CoopTutorial
+                    )
+            );
+
+        DragaliaResponse<DungeonStartStartData> response =
+            await this.Client.PostMsgpack<DungeonStartStartData>(
+                $"/dungeon_start/start",
+                new DungeonStartStartRequest()
+                {
+                    quest_id = TutorialService.TutorialQuestIds.AvenueToPowerBeginner,
+                    party_no_list = [1]
+                }
+            );
+
+        response.data.ingame_data.is_bot_tutorial.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task Start_AtpBeginner_NotCoopTutorial_SetsIsBotTutorial()
+    {
+        await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdateAsync(
+                e =>
+                    e.SetProperty(
+                        p => p.TutorialStatus,
+                        TutorialService.TutorialStatusIds.CoopTutorial + 1
+                    )
+            );
+
+        DragaliaResponse<DungeonStartStartData> response =
+            await this.Client.PostMsgpack<DungeonStartStartData>(
+                $"/dungeon_start/start",
+                new DungeonStartStartRequest()
+                {
+                    quest_id = TutorialService.TutorialQuestIds.AvenueToPowerBeginner,
+                    party_no_list = [1]
+                }
+            );
+
+        response.data.ingame_data.is_bot_tutorial.Should().BeFalse();
     }
 
     private static readonly Func<MatchOptions, MatchOptions> SnapshotOptions = opts =>
