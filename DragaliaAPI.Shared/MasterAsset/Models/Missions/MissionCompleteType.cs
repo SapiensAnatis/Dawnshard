@@ -184,9 +184,9 @@ public enum MissionCompleteType
     EarnEnemiesKilled,
 
     /// <summary>
-    /// QuestWallTypes type
+    /// int level, QuestWallTypes type
     /// </summary>
-    WallIndividualLevelReached,
+    WallLevelCleared,
 
     /// <summary>
     /// None
