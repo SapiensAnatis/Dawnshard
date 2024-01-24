@@ -184,6 +184,11 @@ public enum MissionCompleteType
     EarnEnemiesKilled,
 
     /// <summary>
+    /// QuestWallTypes type
+    /// </summary>
+    WallIndividualLevelReached,
+
+    /// <summary>
     /// None
     /// </summary>
     UnimplementedAutoComplete = 99999, // Auto-completes upon receiving

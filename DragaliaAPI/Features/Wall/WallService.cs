@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.MasterAsset.Models.Wall;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +17,7 @@ public class WallService(
     ILogger<WallService> logger,
     IMapper mapper,
     IRewardService rewardService,
+    IMissionProgressionService missionProgressionService,
     IPlayerIdentityService playerIdentityService
 ) : IWallService
 {
@@ -28,11 +31,17 @@ public class WallService(
         DbPlayerQuestWall questWall = await wallRepository.GetQuestWall(wallId);
 
         // Increment level if it's not at max
-        if (questWall.WallLevel < MaximumQuestWallLevel)
-        {
-            questWall.WallLevel++;
-            questWall.IsStartNextLevel = false;
-        }
+        if (questWall.WallLevel >= MaximumQuestWallLevel)
+            return;
+
+        questWall.WallLevel++;
+        questWall.IsStartNextLevel = false;
+
+        missionProgressionService.EnqueueEvent(
+            MissionCompleteType.WallIndividualLevelReached,
+            value: 1,
+            total: questWall.WallLevel
+        );
     }
 
     public async Task SetQuestWallIsStartNextLevel(int wallId, bool value)

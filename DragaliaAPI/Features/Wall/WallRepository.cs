@@ -69,4 +69,7 @@ public class WallRepository : IWallRepository
 
         return questWall;
     }
+
+    public Task<int> GetMinQuestWallLevel() =>
+        this.QuestWalls.Select(x => x.WallLevel).DefaultIfEmpty().MinAsync();
 }

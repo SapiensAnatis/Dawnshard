@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -289,6 +290,9 @@ public class MissionProgressionService(
         if (this.eventQueue.Count == 0)
             return;
 
+        Stopwatch stopwatch = Stopwatch.StartNew();
+        int eventCount = this.eventQueue.Count;
+
         List<DbPlayerMission>? missionList = null;
 
         logger.LogDebug(
@@ -380,6 +384,14 @@ public class MissionProgressionService(
                 }
             }
         }
+
+        stopwatch.Stop();
+
+        logger.LogDebug(
+            "Processed {EventCount} mission events in {ElapsedTime}",
+            eventCount,
+            stopwatch
+        );
     }
 
     private record MissionEvent(
