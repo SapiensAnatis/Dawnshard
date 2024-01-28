@@ -21,4 +21,7 @@ public interface IWallService
         int levelTotal,
         RewardStatus rewardStatus
     );
+
+    Task InitializeWall();
+    Task InitializeWallMissions();
 }

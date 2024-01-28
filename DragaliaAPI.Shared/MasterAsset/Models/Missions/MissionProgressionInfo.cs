@@ -9,6 +9,7 @@ public record MissionProgressionInfo(
     [property: JsonConverter(typeof(JsonStringEnumConverter))] MissionCompleteType CompleteType,
     bool UseTotalValue,
     int? ProgressionGroupId = null,
+    int[]? UnlockedOnComplete = null,
     int? Parameter = null,
     int? Parameter2 = null,
     int? Parameter3 = null,

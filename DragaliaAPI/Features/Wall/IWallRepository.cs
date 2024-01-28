@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Features.Wall;
 
@@ -6,8 +7,9 @@ public interface IWallRepository
 {
     IQueryable<DbPlayerQuestWall> QuestWalls { get; }
 
-    Task InitializeWall();
+    Task AddInitialWall();
 
     Task<DbPlayerQuestWall> GetQuestWall(int wallId);
     Task<int> GetMinQuestWallLevel();
+    Task<int> GetQuestWallLevel(QuestWallTypes type);
 }

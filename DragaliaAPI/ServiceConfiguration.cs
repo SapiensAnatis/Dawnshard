@@ -150,7 +150,8 @@ public static class ServiceConfiguration
             .AddScoped<ICharaService, CharaService>()
             // Wall feature
             .AddScoped<IWallService, WallService>()
-            .AddScoped<IWallRepository, WallRepository>();
+            .AddScoped<IWallRepository, WallRepository>()
+            .AddScoped<WallInitialProgressionService>();
 
         services.AddScoped<IBlazorIdentityService, BlazorIdentityService>();
 

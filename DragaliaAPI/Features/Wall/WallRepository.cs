@@ -1,5 +1,6 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,15 +28,8 @@ public class WallRepository : IWallRepository
             x.ViewerId == this.playerIdentityService.ViewerId
         );
 
-    public async Task InitializeWall()
+    public async Task AddInitialWall()
     {
-        if (await IsInitialized())
-        {
-            return;
-        }
-
-        this.logger.LogInformation("Initializing wall.");
-
         for (int element = 0; element < 5; element++)
         {
             await apiContext.PlayerQuestWalls.AddAsync(
@@ -48,11 +42,6 @@ public class WallRepository : IWallRepository
                 }
             );
         }
-    }
-
-    public async Task<bool> IsInitialized()
-    {
-        return await this.QuestWalls.AnyAsync();
     }
 
     public async Task<DbPlayerQuestWall> GetQuestWall(int wallId)
@@ -69,6 +58,11 @@ public class WallRepository : IWallRepository
 
         return questWall;
     }
+
+    public Task<int> GetQuestWallLevel(QuestWallTypes type) =>
+        this.QuestWalls.Where(x => x.WallId == (int)type)
+            .Select(x => x.WallLevel)
+            .FirstOrDefaultAsync();
 
     public Task<int> GetMinQuestWallLevel() =>
         this.QuestWalls.Select(x => x.WallLevel).DefaultIfEmpty().MinAsync();

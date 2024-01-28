@@ -5,6 +5,7 @@ using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Features.Trade;
+using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -24,7 +25,8 @@ public class MissionInitialProgressionService(
     IUserDataRepository userDataRepository,
     ITradeRepository tradeRepository,
     IPartyPowerRepository partyPowerRepository,
-    IEventRepository eventRepository
+    IEventRepository eventRepository,
+    WallInitialProgressionService wallInitialProgressionService
 ) : IMissionInitialProgressionService
 {
     public async Task GetInitialMissionProgress(DbPlayerMission mission)
@@ -162,6 +164,11 @@ public class MissionInitialProgressionService(
             MissionCompleteType.ProgressionGroupCleared => 0,
             MissionCompleteType.FortIncomeCollected => 0,
             MissionCompleteType.EarnEnemiesKilled => 0,
+            MissionCompleteType.WallLevelCleared
+                => await this.GetWallLevelClearedProgress(
+                    progressionInfo.Parameter,
+                    progressionInfo.Parameter2
+                ),
             MissionCompleteType.UnimplementedAutoComplete => amountToComplete,
             _
                 => throw new UnreachableException(
@@ -195,6 +202,35 @@ public class MissionInitialProgressionService(
                 amountToComplete
             );
         }
+    }
+
+    private async Task<int> GetWallLevelClearedProgress(int? level, int? element)
+    {
+        if (level is null)
+        {
+            throw new ArgumentException(
+                "Invalid wall level in MissionProgressionInfo",
+                nameof(level)
+            );
+        }
+
+        if (element == null)
+        {
+            // Mission is "Clear Lv. X of The Mercurial Gauntlet in All Elements"
+            // These have a CompleteValue of 5, where the progress is the number of elements meeting the threshold
+            Dictionary<QuestWallTypes, int> wallLevels =
+                await wallInitialProgressionService.GetAllWallLevels();
+
+            return wallLevels.Count(x => x.Value >= level);
+        }
+
+        QuestWallTypes elementCasted = (QuestWallTypes)element.Value;
+        Debug.Assert(Enum.IsDefined(elementCasted));
+
+        // Mission is Clear The Mercurial Gauntlet (Element): Lv. X
+        // These have a CompleteValue of 1, indicating whether the associated level is completed or not.
+        int attainedLevel = await wallInitialProgressionService.GetWallLevel(elementCasted);
+        return attainedLevel >= level ? 1 : 0;
     }
 
     private async Task<int> GetTreasureTradeCount(int? tradeId, EntityTypes? type, int? id)
