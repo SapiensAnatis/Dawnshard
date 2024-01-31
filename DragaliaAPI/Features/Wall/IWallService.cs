@@ -24,4 +24,5 @@ public interface IWallService
 
     Task InitializeWall();
     Task InitializeWallMissions();
+    Task<Dictionary<QuestWallTypes, int>> GetWallLevelMap();
 }

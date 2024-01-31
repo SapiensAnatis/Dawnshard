@@ -51,15 +51,39 @@ public class MissionService(
     {
         logger.LogInformation("Starting mission {missionId} ({missionType})", id, type);
 
-        DbPlayerMission mission = missionRepository.AddMission(
+        DbPlayerMission mission = await this.missionInitialProgressionService.StartMission(
             type,
             id,
             startTime: startTime,
             endTime: endTime,
             groupId: groupId
         );
-        await this.missionInitialProgressionService.GetInitialMissionProgress(mission);
+
         return mission;
+    }
+
+    public DbPlayerMission AddCompletedMission(
+        MissionType type,
+        int id,
+        int groupId = 0,
+        DateTimeOffset? startTime = null,
+        DateTimeOffset? endTime = null
+    )
+    {
+        logger.LogInformation("Adding completed mission {missionId} ({missionType})", id, type);
+        Mission missionInfo = Mission.From(type, id);
+
+        DbPlayerMission dbMission = missionRepository.AddMission(
+            type,
+            id,
+            progress: missionInfo.CompleteValue,
+            state: MissionState.Completed,
+            startTime: startTime,
+            endTime: endTime,
+            groupId: groupId
+        );
+
+        return dbMission;
     }
 
     public async Task<(

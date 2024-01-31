@@ -38,15 +38,15 @@ public class WallService(
         if (questWall.WallLevel >= MaximumQuestWallLevel)
             return;
 
+        questWall.WallLevel++;
+        questWall.IsStartNextLevel = false;
+
         missionProgressionService.EnqueueEvent(
             MissionCompleteType.WallLevelCleared,
             value: 1,
             parameter: questWall.WallLevel,
             parameter2: questWall.WallId
         );
-
-        questWall.WallLevel++;
-        questWall.IsStartNextLevel = false;
     }
 
     public async Task SetQuestWallIsStartNextLevel(int wallId, bool value)
@@ -78,6 +78,14 @@ public class WallService(
             return MaximumQuestWallTotalLevel;
         }
         return levelTotal;
+    }
+
+    public Task<Dictionary<QuestWallTypes, int>> GetWallLevelMap()
+    {
+        return wallRepository.QuestWalls.ToDictionaryAsync(
+            x => (QuestWallTypes)x.WallId,
+            x => x.WallLevel
+        );
     }
 
     public async Task InitializeWall()

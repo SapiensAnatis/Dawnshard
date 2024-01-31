@@ -10,6 +10,7 @@ namespace DragaliaAPI.Features.Missions;
 
 public class MissionProgressionService(
     IMissionRepository missionRepository,
+    IMissionInitialProgressionService missionInitialProgressionService,
     ILogger<MissionProgressionService> logger
 ) : IMissionProgressionService
 {
@@ -370,6 +371,22 @@ public class MissionProgressionService(
                     if (progressionInfo.MissionType == MissionType.Daily)
                     {
                         await missionRepository.AddCompletedDailyMission(progressingMission);
+                    }
+
+                    logger.LogInformation(
+                        "Adding dependent missions: {Missions}",
+                        progressionInfo.UnlockedOnComplete
+                    );
+
+                    foreach (int dependentMissionId in progressionInfo.UnlockedOnComplete ?? [])
+                    {
+                        // Unsure how to derive start / end time here. Inheriting it from progressingMission would be
+                        // appropriate for some, but not all, mission types.
+                        await missionInitialProgressionService.StartMission(
+                            progressingMission.Type,
+                            dependentMissionId,
+                            progressingMission.GroupId ?? default
+                        );
                     }
                 }
                 else
