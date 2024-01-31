@@ -5,18 +5,17 @@ using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Features.Trade;
-using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Features.Missions;
+namespace DragaliaAPI.Features.Missions.InitialProgress;
 
 public class MissionInitialProgressionService(
     ILogger<MissionInitialProgressionService> logger,
-    IFortMissionProgressionService fortMissionProgressionService,
+    FortDataService fortDataService,
     IMissionRepository missionRepository,
     IAbilityCrestRepository abilityCrestRepository,
     IQuestRepository questRepository,
@@ -26,7 +25,8 @@ public class MissionInitialProgressionService(
     IUserDataRepository userDataRepository,
     ITradeRepository tradeRepository,
     IPartyPowerRepository partyPowerRepository,
-    IEventRepository eventRepository
+    IEventRepository eventRepository,
+    IServiceProvider provider
 ) : IMissionInitialProgressionService
 {
     public async Task<DbPlayerMission> StartMission(
@@ -63,135 +63,152 @@ public class MissionInitialProgressionService(
             return;
 
         int amountToComplete = missionInfo.CompleteValue;
-        int currentAmount = progressionInfo.CompleteType switch
+        int currentAmount;
+
+        IInitialProgressCalculator? calculator =
+            provider.GetKeyedService<IInitialProgressCalculator>(progressionInfo.CompleteType);
+
+        if (calculator != null)
         {
-            MissionCompleteType.FortPlantLevelUp
-                => await fortMissionProgressionService.GetMaxFortPlantLevel(
-                    (FortPlants)progressionInfo.Parameter!
-                ),
-            MissionCompleteType.FortPlantBuilt
-            or MissionCompleteType.FortPlantPlaced
-                => await fortMissionProgressionService.GetFortPlantCount(
-                    (FortPlants)progressionInfo.Parameter!
-                ),
-            MissionCompleteType.FortLevelUp
-                => await fortMissionProgressionService.GetTotalFortLevel(),
-            MissionCompleteType.QuestCleared
-                => await GetQuestClearedCount(
-                    progressionInfo.Parameter,
-                    progressionInfo.Parameter2,
-                    (QuestPlayModeTypes?)progressionInfo.Parameter3
-                ),
-            MissionCompleteType.QuestStoryCleared
-                => await storyRepository.HasReadQuestStory(progressionInfo.Parameter!.Value)
-                    ? 1
-                    : 0,
-            MissionCompleteType.EventGroupCleared
-                => await GetQuestGroupClearedCount(
-                    progressionInfo.Parameter,
-                    (VariationTypes?)progressionInfo.Parameter2,
-                    (QuestPlayModeTypes?)progressionInfo.Parameter3
-                ),
-            MissionCompleteType.WeaponEarned
-                => await GetWeaponEarnedCount(
-                    (WeaponBodies?)progressionInfo.Parameter,
-                    (UnitElement?)progressionInfo.Parameter2,
-                    progressionInfo.Parameter3,
-                    (WeaponSeries?)progressionInfo.Parameter4
-                ),
-            MissionCompleteType.WeaponRefined
-                => await GetWeaponRefinedCount(
-                    (WeaponBodies?)progressionInfo.Parameter,
-                    (UnitElement?)progressionInfo.Parameter2,
-                    progressionInfo.Parameter3,
-                    (WeaponSeries?)progressionInfo.Parameter4
-                ),
-            MissionCompleteType.AbilityCrestBuildupPlusCount
-                => await GetWyrmprintBuildupCount(
-                    (AbilityCrests?)progressionInfo.Parameter,
-                    (PlusCountType?)progressionInfo.Parameter2
-                ),
-            MissionCompleteType.CharacterBuildupPlusCount
-                => await GetCharacterBuildupCount(
-                    (Charas?)progressionInfo.Parameter,
-                    (UnitElement?)progressionInfo.Parameter2,
-                    (PlusCountType?)progressionInfo.Parameter3
-                ),
-            MissionCompleteType.PlayerLevelUp
-                => (await userDataRepository.GetUserDataAsync()).Level,
-            MissionCompleteType.AbilityCrestTotalPlusCountUp
-                => (
-                    await abilityCrestRepository
-                        .AbilityCrests.Where(x =>
-                            progressionInfo.Parameter == null
-                            || x.AbilityCrestId == (AbilityCrests)progressionInfo.Parameter
-                        )
-                        .Select(x => new { x.AttackPlusCount, x.HpPlusCount })
-                        .ToListAsync()
-                )
-                    .Select(x => (int?)Math.Min(x.AttackPlusCount, x.HpPlusCount))
-                    .Max() ?? 0,
-            MissionCompleteType.AbilityCrestLevelUp
-                => (
-                    await abilityCrestRepository
-                        .AbilityCrests.Where(x =>
-                            progressionInfo.Parameter == null
-                            || x.AbilityCrestId == (AbilityCrests)progressionInfo.Parameter
-                        )
-                        .Select(x => (int?)x.BuildupCount)
-                        .ToListAsync()
-                ).Sum() ?? 0,
-            MissionCompleteType.CharacterLevelUp
-                => await GetCharacterMaxLevel(
-                    (Charas?)progressionInfo.Parameter,
-                    (UnitElement?)progressionInfo.Parameter2
-                ),
-            MissionCompleteType.CharacterManaNodeUnlock
-                => await GetCharacterManaNodeCount(
-                    (Charas?)progressionInfo.Parameter,
-                    (UnitElement?)progressionInfo.Parameter2
-                ),
-            MissionCompleteType.DragonLevelUp
-                => await GetDragonMaxLevel(
-                    (Dragons?)progressionInfo.Parameter,
-                    (UnitElement?)progressionInfo.Parameter2
-                ),
-            MissionCompleteType.TreasureTrade
-                => await GetTreasureTradeCount(
-                    progressionInfo.Parameter,
-                    (EntityTypes?)progressionInfo.Parameter2,
-                    progressionInfo.Parameter3
-                ),
-            MissionCompleteType.DragonBondLevelUp
-                => await GetDragonBondLevel(
-                    (Dragons?)progressionInfo.Parameter,
-                    (UnitElement?)progressionInfo.Parameter2
-                ),
-            MissionCompleteType.PartyPowerReached
-                => await partyPowerRepository.GetMaxPartyPowerAsync(),
-            MissionCompleteType.DragonGiftSent => 0, // Unsure about this
-            MissionCompleteType.ItemSummon => 0, // TODO: As daily quests also use this, should we make it actually count the item summons?
-            MissionCompleteType.AccountLinked => 0,
-            MissionCompleteType.PartyOptimized => 0,
-            MissionCompleteType.AbilityCrestTradeViewed => 0,
-            MissionCompleteType.GuildCheckInRewardClaimed => amountToComplete, // TODO
-            MissionCompleteType.EventParticipation
-                => await this.GetEventParticipationProgress(progressionInfo.Parameter),
-            MissionCompleteType.EventRegularBattleClear => 0,
-            MissionCompleteType.EventQuestClearWithCrest => 0,
-            MissionCompleteType.EventPointCollection => 0,
-            MissionCompleteType.EventChallengeBattleClear => 0,
-            MissionCompleteType.EventTrialClear => 0,
-            MissionCompleteType.ProgressionGroupCleared => 0,
-            MissionCompleteType.FortIncomeCollected => 0,
-            MissionCompleteType.EarnEnemiesKilled => 0,
-            MissionCompleteType.WallLevelCleared => 0, // We don't start all the missions at once, only when needed
-            MissionCompleteType.UnimplementedAutoComplete => amountToComplete,
-            _
-                => throw new UnreachableException(
-                    $"Invalid MissionProgressType {progressionInfo.CompleteType} in initial progress handling"
-                )
-        };
+            if (!calculator.Validate(progressionInfo))
+            {
+                throw new InvalidOperationException(
+                    $"Progression info is not valid: {progressionInfo}"
+                );
+            }
+
+            currentAmount = await calculator.GetInitialProgress(progressionInfo);
+        }
+        else
+        {
+            currentAmount = progressionInfo.CompleteType switch
+            {
+                MissionCompleteType.FortPlantLevelUp
+                    => await fortDataService.GetMaxFortPlantLevel(
+                        (FortPlants)progressionInfo.Parameter!
+                    ),
+                MissionCompleteType.FortPlantBuilt
+                or MissionCompleteType.FortPlantPlaced
+                    => await fortDataService.GetFortPlantCount(
+                        (FortPlants)progressionInfo.Parameter!
+                    ),
+                MissionCompleteType.FortLevelUp => await fortDataService.GetTotalFortLevel(),
+                MissionCompleteType.QuestCleared
+                    => await this.GetQuestClearedCount(
+                        progressionInfo.Parameter,
+                        progressionInfo.Parameter2,
+                        (QuestPlayModeTypes?)progressionInfo.Parameter3
+                    ),
+                MissionCompleteType.QuestStoryCleared
+                    => await storyRepository.HasReadQuestStory(progressionInfo.Parameter!.Value)
+                        ? 1
+                        : 0,
+                MissionCompleteType.EventGroupCleared
+                    => await this.GetQuestGroupClearedCount(
+                        progressionInfo.Parameter,
+                        (VariationTypes?)progressionInfo.Parameter2,
+                        (QuestPlayModeTypes?)progressionInfo.Parameter3
+                    ),
+                MissionCompleteType.WeaponEarned
+                    => await this.GetWeaponEarnedCount(
+                        (WeaponBodies?)progressionInfo.Parameter,
+                        (UnitElement?)progressionInfo.Parameter2,
+                        progressionInfo.Parameter3,
+                        (WeaponSeries?)progressionInfo.Parameter4
+                    ),
+                MissionCompleteType.WeaponRefined
+                    => await this.GetWeaponRefinedCount(
+                        (WeaponBodies?)progressionInfo.Parameter,
+                        (UnitElement?)progressionInfo.Parameter2,
+                        progressionInfo.Parameter3,
+                        (WeaponSeries?)progressionInfo.Parameter4
+                    ),
+                MissionCompleteType.AbilityCrestBuildupPlusCount
+                    => await this.GetWyrmprintBuildupCount(
+                        (AbilityCrests?)progressionInfo.Parameter,
+                        (PlusCountType?)progressionInfo.Parameter2
+                    ),
+                MissionCompleteType.CharacterBuildupPlusCount
+                    => await this.GetCharacterBuildupCount(
+                        (Charas?)progressionInfo.Parameter,
+                        (UnitElement?)progressionInfo.Parameter2,
+                        (PlusCountType?)progressionInfo.Parameter3
+                    ),
+                MissionCompleteType.PlayerLevelUp
+                    => (await userDataRepository.GetUserDataAsync()).Level,
+                MissionCompleteType.AbilityCrestTotalPlusCountUp
+                    => (
+                        await abilityCrestRepository
+                            .AbilityCrests.Where(x =>
+                                progressionInfo.Parameter == null
+                                || x.AbilityCrestId == (AbilityCrests)progressionInfo.Parameter
+                            )
+                            .Select(x => new { x.AttackPlusCount, x.HpPlusCount })
+                            .ToListAsync()
+                    )
+                        .Select(x => (int?)Math.Min(x.AttackPlusCount, x.HpPlusCount))
+                        .Max() ?? 0,
+                MissionCompleteType.AbilityCrestLevelUp
+                    => (
+                        await abilityCrestRepository
+                            .AbilityCrests.Where(x =>
+                                progressionInfo.Parameter == null
+                                || x.AbilityCrestId == (AbilityCrests)progressionInfo.Parameter
+                            )
+                            .Select(x => (int?)x.BuildupCount)
+                            .ToListAsync()
+                    ).Sum() ?? 0,
+                MissionCompleteType.CharacterLevelUp
+                    => await this.GetCharacterMaxLevel(
+                        (Charas?)progressionInfo.Parameter,
+                        (UnitElement?)progressionInfo.Parameter2
+                    ),
+                MissionCompleteType.CharacterManaNodeUnlock
+                    => await this.GetCharacterManaNodeCount(
+                        (Charas?)progressionInfo.Parameter,
+                        (UnitElement?)progressionInfo.Parameter2
+                    ),
+                MissionCompleteType.DragonLevelUp
+                    => await this.GetDragonMaxLevel(
+                        (Dragons?)progressionInfo.Parameter,
+                        (UnitElement?)progressionInfo.Parameter2
+                    ),
+                MissionCompleteType.TreasureTrade
+                    => await this.GetTreasureTradeCount(
+                        progressionInfo.Parameter,
+                        (EntityTypes?)progressionInfo.Parameter2,
+                        progressionInfo.Parameter3
+                    ),
+                MissionCompleteType.DragonBondLevelUp
+                    => await this.GetDragonBondLevel(
+                        (Dragons?)progressionInfo.Parameter,
+                        (UnitElement?)progressionInfo.Parameter2
+                    ),
+                MissionCompleteType.PartyPowerReached
+                    => await partyPowerRepository.GetMaxPartyPowerAsync(),
+                MissionCompleteType.DragonGiftSent => 0, // Unsure about this
+                MissionCompleteType.ItemSummon => 0, // TODO: As daily quests also use this, should we make it actually count the item summons?
+                MissionCompleteType.AccountLinked => 0,
+                MissionCompleteType.PartyOptimized => 0,
+                MissionCompleteType.AbilityCrestTradeViewed => 0,
+                MissionCompleteType.GuildCheckInRewardClaimed => amountToComplete, // TODO
+                MissionCompleteType.EventParticipation
+                    => await this.GetEventParticipationProgress(progressionInfo.Parameter),
+                MissionCompleteType.EventRegularBattleClear => 0,
+                MissionCompleteType.EventQuestClearWithCrest => 0,
+                MissionCompleteType.EventPointCollection => 0,
+                MissionCompleteType.EventChallengeBattleClear => 0,
+                MissionCompleteType.EventTrialClear => 0,
+                MissionCompleteType.ProgressionGroupCleared => 0,
+                MissionCompleteType.FortIncomeCollected => 0,
+                MissionCompleteType.EarnEnemiesKilled => 0,
+                MissionCompleteType.UnimplementedAutoComplete => amountToComplete,
+                _
+                    => throw new UnreachableException(
+                        $"Invalid MissionProgressType {progressionInfo.CompleteType} in initial progress handling"
+                    )
+            };
+        }
 
         if (currentAmount == 0)
             return;

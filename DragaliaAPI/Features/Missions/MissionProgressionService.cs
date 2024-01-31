@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Features.Missions.InitialProgress;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
@@ -405,9 +406,9 @@ public class MissionProgressionService(
         stopwatch.Stop();
 
         logger.LogDebug(
-            "Processed {EventCount} mission events in {ElapsedTime}",
+            "Processed {EventCount} mission events in {ElapsedTime} ms",
             eventCount,
-            stopwatch
+            stopwatch.ElapsedMilliseconds
         );
     }
 

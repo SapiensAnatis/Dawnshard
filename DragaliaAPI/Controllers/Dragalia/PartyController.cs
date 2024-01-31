@@ -63,6 +63,7 @@ public class PartyController(
         );
 
         await partyPowerRepository.SetMaxPartyPowerAsync(partyPower);
+        missionProgressionService.OnPartyPowerReached(partyPower);
 
         logger.LogTrace("Party power {power}", partyPower);
 

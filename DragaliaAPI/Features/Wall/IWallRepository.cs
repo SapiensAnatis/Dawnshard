@@ -10,6 +10,5 @@ public interface IWallRepository
     Task AddInitialWall();
 
     Task<DbPlayerQuestWall> GetQuestWall(int wallId);
-    Task<int> GetMinQuestWallLevel();
     Task<int> GetQuestWallLevel(QuestWallTypes type);
 }

@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
-namespace DragaliaAPI.Features.Missions;
+namespace DragaliaAPI.Features.Missions.InitialProgress;
 
 public interface IMissionInitialProgressionService
 {

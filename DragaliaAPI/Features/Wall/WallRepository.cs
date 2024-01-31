@@ -63,7 +63,4 @@ public class WallRepository : IWallRepository
         this.QuestWalls.Where(x => x.WallId == (int)type)
             .Select(x => x.WallLevel)
             .FirstOrDefaultAsync();
-
-    public Task<int> GetMinQuestWallLevel() =>
-        this.QuestWalls.Select(x => x.WallLevel).DefaultIfEmpty().MinAsync();
 }

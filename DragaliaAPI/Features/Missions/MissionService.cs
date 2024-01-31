@@ -3,6 +3,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Extensions;
+using DragaliaAPI.Features.Missions.InitialProgress;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Helpers;
