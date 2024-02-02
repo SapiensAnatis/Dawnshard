@@ -36,6 +36,7 @@ public abstract class Mission
             this.CompleteType,
             this.UseTotalValue,
             this.ProgressionGroupId,
+            [],
             this.Parameter,
             this.Parameter2,
             this.Parameter3,

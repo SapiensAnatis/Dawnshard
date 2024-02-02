@@ -21,4 +21,8 @@ public interface IWallService
         int levelTotal,
         RewardStatus rewardStatus
     );
+
+    Task InitializeWall();
+    Task InitializeWallMissions();
+    Task<Dictionary<QuestWallTypes, int>> GetWallLevelMap();
 }

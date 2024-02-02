@@ -5,11 +5,13 @@ using DragaliaAPI.MissionDesigner;
 using DragaliaAPI.MissionDesigner.Missions;
 using DragaliaAPI.MissionDesigner.Models.Attributes;
 using DragaliaAPI.Shared.Json;
+using DragaliaAPI.Shared.MasterAsset;
 
-List<MissionProgressionInfo> missions = new();
+Dictionary<int, MissionProgressionInfo> missions = new();
 
 // Get legacy missions
-missions.AddRange(V1Missions.V1MissionList);
+foreach (MissionProgressionInfo mission in V1Missions.V1MissionList)
+    missions[mission.Id] = mission;
 
 IEnumerable<Type> types = Assembly
     .GetExecutingAssembly()
@@ -25,8 +27,35 @@ foreach (Type type in types)
     foreach (PropertyInfo listProperty in listProperties)
     {
         Console.WriteLine($"Found list {type.Name}.{listProperty.Name}");
-        missions.AddRange(ReflectionHelper.ProcessList(listProperty));
+        foreach (MissionProgressionInfo mission in ReflectionHelper.ProcessList(listProperty))
+        {
+            missions[mission.Id] = mission;
+        }
     }
+}
+
+foreach ((_, MissionProgressionInfo progInfo) in missions)
+{
+    if (
+        progInfo.MissionType != MissionType.Normal
+        || !MasterAsset.NormalMission.TryGetValue(
+            progInfo.MissionId,
+            out NormalMission? normalMission
+        )
+        || normalMission.NeedCompleteMissionId == default
+    )
+    {
+        continue;
+    }
+
+    int requiredMissionId = int.Parse(
+        $"{normalMission.NeedCompleteMissionId}{(int)MissionType.Normal:00}"
+    );
+
+    missions[requiredMissionId] = missions[requiredMissionId] with
+    {
+        UnlockedOnComplete = [..missions[requiredMissionId].UnlockedOnComplete, progInfo.MissionId]
+    };
 }
 
 JsonSerializerOptions options =
@@ -36,6 +65,6 @@ JsonSerializerOptions options =
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
     };
 
-string json = JsonSerializer.Serialize(missions, options);
+string json = JsonSerializer.Serialize(missions.Values, options);
 
 File.WriteAllText(args[^1], json);

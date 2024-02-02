@@ -1,6 +1,8 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -187,5 +189,147 @@ public class WallRecordTest : TestFixture
                     after_wall_level = wallLevel
                 }
             );
+    }
+
+    [Fact]
+    public async Task Record_CompletesMissionsAndStartsNext()
+    {
+        int flameLv6MissionId = 10010206;
+        int flameLv7MissionId = 10010207;
+        int clearAllLv6MissionId = 10010703;
+        int clearAllLv8MissionId = 10010704;
+
+        await this.AddRangeToDatabase(
+            new List<DbPlayerQuestWall>()
+            {
+                new() { WallId = (int)QuestWallTypes.Flame, WallLevel = 5, },
+                new() { WallId = (int)QuestWallTypes.Water, WallLevel = 6, },
+                new() { WallId = (int)QuestWallTypes.Wind, WallLevel = 6, },
+                new() { WallId = (int)QuestWallTypes.Light, WallLevel = 6, },
+                new() { WallId = (int)QuestWallTypes.Shadow, WallLevel = 6, }
+            }
+        );
+
+        await this.AddRangeToDatabase(
+            new List<DbPlayerMission>()
+            {
+                new()
+                {
+                    Id = flameLv6MissionId,
+                    State = MissionState.InProgress,
+                    Type = MissionType.Normal
+                },
+                new()
+                {
+                    Id = clearAllLv6MissionId,
+                    State = MissionState.InProgress,
+                    Type = MissionType.Normal,
+                    Progress = 4,
+                },
+            }
+        );
+
+        DungeonSession mockSession =
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                WallId = (int)QuestWallTypes.Flame,
+                WallLevel = 6
+            };
+
+        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
+
+        WallRecordRecordData response = (
+            await Client.PostMsgpack<WallRecordRecordData>(
+                "/wall_record/record",
+                new WallRecordRecordRequest()
+                {
+                    wall_id = (int)QuestWallTypes.Flame,
+                    dungeon_key = key
+                }
+            )
+        ).data;
+
+        AtgenNormalMissionNotice? missionNotice = response
+            .update_data_list
+            .mission_notice
+            ?.normal_mission_notice;
+
+        missionNotice.Should().NotBeNull();
+        missionNotice!
+            .new_complete_mission_id_list.Should()
+            .BeEquivalentTo([flameLv6MissionId, clearAllLv6MissionId]);
+
+        MissionGetMissionListData missionList = (
+            await this.Client.PostMsgpack<MissionGetMissionListData>(
+                "mission/get_mission_list",
+                new MissionGetMissionListRequest()
+            )
+        ).data;
+
+        missionList
+            .normal_mission_list.Should()
+            .Contain(x => x.normal_mission_id == flameLv7MissionId);
+        missionList
+            .normal_mission_list.Should()
+            .Contain(x => x.normal_mission_id == clearAllLv8MissionId);
+    }
+
+    [Fact]
+    public async Task Record_ClearingAlreadyClearedLevel_DoesNotProgressMission()
+    {
+        int clearAllLv80MissionId = 10010740;
+
+        await this.AddRangeToDatabase(
+            new List<DbPlayerQuestWall>()
+            {
+                new() { WallId = (int)QuestWallTypes.Flame, WallLevel = 80, },
+                new() { WallId = (int)QuestWallTypes.Water, WallLevel = 80, },
+                new() { WallId = (int)QuestWallTypes.Wind, WallLevel = 80, },
+                new() { WallId = (int)QuestWallTypes.Light, WallLevel = 80, },
+                new() { WallId = (int)QuestWallTypes.Shadow, WallLevel = 79, }
+            }
+        );
+
+        await this.AddRangeToDatabase(
+            new List<DbPlayerMission>()
+            {
+                new()
+                {
+                    Id = clearAllLv80MissionId,
+                    State = MissionState.InProgress,
+                    Type = MissionType.Normal,
+                    Progress = 4,
+                },
+            }
+        );
+
+        DungeonSession mockSession =
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                WallId = (int)QuestWallTypes.Flame,
+                WallLevel = 80
+            };
+
+        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
+
+        WallRecordRecordData response = (
+            await Client.PostMsgpack<WallRecordRecordData>(
+                "/wall_record/record",
+                new WallRecordRecordRequest()
+                {
+                    wall_id = (int)QuestWallTypes.Flame,
+                    dungeon_key = key
+                }
+            )
+        ).data;
+
+        AtgenNormalMissionNotice? missionNotice = response
+            .update_data_list
+            .mission_notice
+            ?.normal_mission_notice;
+
+        missionNotice.Should().BeNull();
     }
 }

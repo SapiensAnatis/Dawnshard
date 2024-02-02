@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
 namespace DragaliaAPI.Features.Missions;
@@ -25,4 +26,14 @@ public interface IMissionRepository
 
     void RemoveCompletedDailyMission(DbCompletedDailyMission completedDailyMission);
     Task ClearDailyMissions();
+
+    DbPlayerMission AddMission(
+        MissionType type,
+        int id,
+        int progress,
+        MissionState state,
+        DateTimeOffset? startTime = null,
+        DateTimeOffset? endTime = null,
+        int? groupId = null
+    );
 }
