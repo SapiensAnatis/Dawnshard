@@ -70,13 +70,6 @@ public class MissionInitialProgressionService(
 
         if (calculator != null)
         {
-            if (!calculator.Validate(progressionInfo))
-            {
-                throw new InvalidOperationException(
-                    $"Progression info is not valid: {progressionInfo}"
-                );
-            }
-
             currentAmount = await calculator.GetInitialProgress(progressionInfo);
         }
         else

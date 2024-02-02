@@ -61,8 +61,7 @@ public class V18Update(
     {
         Dictionary<QuestWallTypes, int> wallMap = await this.wallService.GetWallLevelMap();
 
-        if (wallMap.Any(x => x.Value > 0))
-            this.missionService.AddCompletedMission(MissionType.Normal, ClearAnyMgMissionId);
+        await this.missionService.StartMission(MissionType.Normal, ClearAnyMgMissionId);
 
         foreach ((QuestWallTypes type, int obtainedLevel) in wallMap)
         {

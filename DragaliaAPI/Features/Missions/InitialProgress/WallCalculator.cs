@@ -9,18 +9,6 @@ namespace DragaliaAPI.Features.Missions.InitialProgress;
 [UsedImplicitly]
 public class WallCalculator(IWallRepository wallRepository) : IInitialProgressCalculator
 {
-    public bool Validate(MissionProgressionInfo progressionInfo)
-    {
-        bool valid =
-            progressionInfo
-                is { CompleteType: MissionCompleteType.WallLevelCleared, Parameter: not null };
-
-        if (progressionInfo.Parameter2 != null)
-            valid &= Enum.IsDefined((QuestWallTypes)progressionInfo.Parameter2.Value);
-
-        return valid;
-    }
-
     public async Task<int> GetInitialProgress(MissionProgressionInfo progressionInfo)
     {
         int level = progressionInfo.Parameter!.Value;
