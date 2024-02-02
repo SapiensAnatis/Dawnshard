@@ -2562,6 +2562,139 @@ public class HelperService : IHelperService
                         },
                         guild = new() { guild_id = 0, guild_name = "Guild" }
                     },
+                    new()
+                    {
+                        viewer_id = 1019,
+                        name = "g.",
+                        level = 250,
+                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        emblem_id = Emblems.MelodysMaster,
+                        max_party_power = 9999,
+                        support_chara = new()
+                        {
+                            chara_id = Charas.Melody,
+                            level = 100,
+                            additional_max_level = 20,
+                            rarity = 5,
+                            hp = 888,
+                            attack = 563,
+                            hp_plus_count = 100,
+                            attack_plus_count = 100,
+                            ability_1_level = 3,
+                            ability_2_level = 3,
+                            ability_3_level = 3,
+                            ex_ability_level = 5,
+                            ex_ability_2_level = 5,
+                            skill_1_level = 4,
+                            skill_2_level = 3,
+                            is_unlock_edit_skill = true,
+                        },
+                        support_dragon = new()
+                        {
+                            dragon_key_id = 0,
+                            dragon_id = Dragons.GalaBahamut,
+                            level = 100,
+                            hp = 368,
+                            attack = 128,
+                            skill_1_level = 2,
+                            ability_1_level = 5,
+                            ability_2_level = 5,
+                            hp_plus_count = 50,
+                            attack_plus_count = 50,
+                            limit_break_count = 4
+                        },
+                        support_weapon_body = new()
+                        {
+                            weapon_body_id = WeaponBodies.NobleHorizon,
+                            buildup_count = 80,
+                            limit_break_count = 8,
+                            limit_over_count = 1,
+                            equipable_count = 4,
+                            additional_crest_slot_type_1_count = 1,
+                            additional_crest_slot_type_2_count = 0,
+                            additional_crest_slot_type_3_count = 2
+                        },
+                        support_talisman = new()
+                        {
+                            talisman_key_id = 0,
+                            talisman_id = Talismans.GalaMym,
+                            talisman_ability_id_1 = 340000030, // Critical Rate +15%
+                            talisman_ability_id_2 = 340000132 // Easy Hitter I
+                        },
+                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        {
+                            new()
+                            {
+                                ability_crest_id = AbilityCrests.CastleCheerCorps,
+                                buildup_count = 50,
+                                limit_break_count = 4,
+                                hp_plus_count = 50,
+                                attack_plus_count = 50,
+                                equipable_count = 4
+                            },
+                            new()
+                            {
+                                ability_crest_id = AbilityCrests.StudyRabbits,
+                                buildup_count = 50,
+                                limit_break_count = 4,
+                                hp_plus_count = 50,
+                                attack_plus_count = 50,
+                                equipable_count = 4
+                            },
+                            new()
+                            {
+                                ability_crest_id = AbilityCrests.ProperMaintenance,
+                                buildup_count = 50,
+                                limit_break_count = 4,
+                                hp_plus_count = 50,
+                                attack_plus_count = 50,
+                                equipable_count = 4
+                            },
+                        },
+                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        {
+                            new()
+                            {
+                                ability_crest_id = AbilityCrests.FromWhenceHeComes,
+                                buildup_count = 40,
+                                limit_break_count = 4,
+                                hp_plus_count = 50,
+                                attack_plus_count = 50,
+                                equipable_count = 4
+                            },
+                            new()
+                            {
+                                ability_crest_id = AbilityCrests.DragonsNest,
+                                buildup_count = 20,
+                                limit_break_count = 4,
+                                hp_plus_count = 50,
+                                attack_plus_count = 50,
+                                equipable_count = 4
+                            },
+                        },
+                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        {
+                            new()
+                            {
+                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
+                                buildup_count = 30,
+                                limit_break_count = 4,
+                                hp_plus_count = 40,
+                                attack_plus_count = 40,
+                                equipable_count = 4
+                            },
+                            new()
+                            {
+                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
+                                buildup_count = 30,
+                                limit_break_count = 4,
+                                hp_plus_count = 40,
+                                attack_plus_count = 40,
+                                equipable_count = 4
+                            }
+                        },
+                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                    },
                 },
                 support_user_detail_list = new List<AtgenSupportUserDetailList>()
                 {
@@ -2676,6 +2809,12 @@ public class HelperService : IHelperService
                     new()
                     {
                         viewer_id = 1018,
+                        gettable_mana_point = 50,
+                        is_friend = true
+                    },
+                    new()
+                    {
+                        viewer_id = 1019,
                         gettable_mana_point = 50,
                         is_friend = true
                     },
