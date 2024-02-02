@@ -67,6 +67,27 @@ public class MissionRepository(
         int? groupId = null
     )
     {
+        return this.AddMission(
+            type,
+            id,
+            progress: 0,
+            state: MissionState.InProgress,
+            startTime: startTime,
+            endTime: endTime,
+            groupId: groupId
+        );
+    }
+
+    public DbPlayerMission AddMission(
+        MissionType type,
+        int id,
+        int progress,
+        MissionState state,
+        DateTimeOffset? startTime = null,
+        DateTimeOffset? endTime = null,
+        int? groupId = null
+    )
+    {
         return this.apiContext.PlayerMissions.Add(
             new DbPlayerMission
             {
@@ -75,8 +96,9 @@ public class MissionRepository(
                 Type = type,
                 Start = startTime ?? DateTimeOffset.UnixEpoch,
                 End = endTime ?? DateTimeOffset.UnixEpoch,
-                State = MissionState.InProgress,
-                GroupId = groupId
+                State = state,
+                GroupId = groupId,
+                Progress = progress
             }
         ).Entity;
     }

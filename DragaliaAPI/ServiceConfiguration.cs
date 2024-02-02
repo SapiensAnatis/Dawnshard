@@ -71,13 +71,8 @@ public static class ServiceConfiguration
             .AddTransient<PlayerIdentityLoggingMiddleware>();
 
         services
-            // Mission Feature
-            .AddScoped<IMissionRepository, MissionRepository>()
-            .AddScoped<IMissionService, MissionService>()
             .AddScoped<IRewardService, RewardService>()
-            .AddScoped<IMissionProgressionService, MissionProgressionService>()
-            .AddScoped<IMissionInitialProgressionService, MissionInitialProgressionService>()
-            .AddScoped<IFortMissionProgressionService, FortMissionProgressionService>()
+            .RegisterMissionServices()
             // Shop Feature
             .AddScoped<IShopRepository, ShopRepository>()
             .AddScoped<IItemSummonService, ItemSummonService>()
@@ -150,7 +145,8 @@ public static class ServiceConfiguration
             .AddScoped<ICharaService, CharaService>()
             // Wall feature
             .AddScoped<IWallService, WallService>()
-            .AddScoped<IWallRepository, WallRepository>();
+            .AddScoped<IWallRepository, WallRepository>()
+            .AddScoped<WallInitialProgressionService>();
 
         services.AddScoped<IBlazorIdentityService, BlazorIdentityService>();
 

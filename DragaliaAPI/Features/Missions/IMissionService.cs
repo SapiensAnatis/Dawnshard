@@ -38,4 +38,12 @@ public interface IMissionService
         where TResponse : INormalMissionEndpointResponse, new();
 
     Task RedeemDailyMissions(IEnumerable<AtgenMissionParamsList> missions);
+
+    DbPlayerMission AddCompletedMission(
+        MissionType type,
+        int id,
+        int groupId = 0,
+        DateTimeOffset? startTime = null,
+        DateTimeOffset? endTime = null
+    );
 }

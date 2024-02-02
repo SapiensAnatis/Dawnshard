@@ -1,9 +1,14 @@
-﻿using AutoMapper;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using AutoMapper;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.MasterAsset.Models.Wall;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +20,8 @@ public class WallService(
     ILogger<WallService> logger,
     IMapper mapper,
     IRewardService rewardService,
+    IMissionService missionService,
+    IMissionProgressionService missionProgressionService,
     IPlayerIdentityService playerIdentityService
 ) : IWallService
 {
@@ -28,11 +35,18 @@ public class WallService(
         DbPlayerQuestWall questWall = await wallRepository.GetQuestWall(wallId);
 
         // Increment level if it's not at max
-        if (questWall.WallLevel < MaximumQuestWallLevel)
-        {
-            questWall.WallLevel++;
-            questWall.IsStartNextLevel = false;
-        }
+        if (questWall.WallLevel >= MaximumQuestWallLevel)
+            return;
+
+        questWall.WallLevel++;
+        questWall.IsStartNextLevel = false;
+
+        missionProgressionService.EnqueueEvent(
+            MissionCompleteType.WallLevelCleared,
+            value: 1,
+            parameter: questWall.WallLevel,
+            parameter2: questWall.WallId
+        );
     }
 
     public async Task SetQuestWallIsStartNextLevel(int wallId, bool value)
@@ -64,6 +78,25 @@ public class WallService(
             return MaximumQuestWallTotalLevel;
         }
         return levelTotal;
+    }
+
+    public Task<Dictionary<QuestWallTypes, int>> GetWallLevelMap()
+    {
+        return wallRepository.QuestWalls.ToDictionaryAsync(
+            x => (QuestWallTypes)x.WallId,
+            x => x.WallLevel
+        );
+    }
+
+    public async Task InitializeWall()
+    {
+        if (await wallRepository.QuestWalls.AnyAsync())
+            return;
+
+        logger.LogInformation("Initializing wall.");
+
+        await wallRepository.AddInitialWall();
+        await this.InitializeWallMissions();
     }
 
     public async Task GrantMonthlyRewardEntityList(
@@ -144,5 +177,26 @@ public class WallService(
                 reward_status = rewardStatus
             };
         return new[] { rewardList };
+    }
+
+    public async Task InitializeWallMissions()
+    {
+        const int clearAnyMission = 10010101; // Clear The Mercurial Gauntlet
+        await missionService.StartMission(MissionType.Normal, clearAnyMission);
+
+        int[] elementalMissionStarts =
+        [
+            10010201, // Clear Flame level 1
+            10010301, // Clear Water level 1
+            10010401, // Clear Wind level 1
+            10010501, // Clear Light level 1
+            10010601, // Clear Shadow level 1
+        ];
+
+        foreach (int missionId in elementalMissionStarts)
+            await missionService.StartMission(MissionType.Normal, missionId);
+
+        const int allMissionStart = 10010701; // Clear Lv. 2 of The Mercurial Gauntlet in All Elements
+        await missionService.StartMission(MissionType.Normal, allMissionStart);
     }
 }

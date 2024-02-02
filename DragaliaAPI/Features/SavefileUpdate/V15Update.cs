@@ -4,8 +4,7 @@ using DragaliaAPI.Services.Game;
 
 namespace DragaliaAPI.Features.SavefileUpdate;
 
-public class V15Update(IWallRepository wallRepository, IStoryRepository storyRepository)
-    : ISavefileUpdate
+public class V15Update(IWallService wallService, IStoryRepository storyRepository) : ISavefileUpdate
 {
     public int SavefileVersion => 15;
 
@@ -17,7 +16,7 @@ public class V15Update(IWallRepository wallRepository, IStoryRepository storyRep
             )
         )
         {
-            await wallRepository.InitializeWall();
+            await wallService.InitializeWall();
         }
     }
 }

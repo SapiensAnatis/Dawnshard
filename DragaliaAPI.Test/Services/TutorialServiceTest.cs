@@ -16,7 +16,7 @@ public class TutorialServiceTest
     private readonly Mock<IAbilityCrestRepository> mockAbilityCrestRepository;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IFortRepository> mockFortRepository;
-    private readonly Mock<IWallRepository> mockWallRepository;
+    private readonly Mock<IWallService> mockWallService;
 
     private readonly ITutorialService tutorialService;
 
@@ -27,7 +27,7 @@ public class TutorialServiceTest
         mockAbilityCrestRepository = new(MockBehavior.Strict);
         mockUserDataRepository = new(MockBehavior.Strict);
         mockFortRepository = new(MockBehavior.Strict);
-        mockWallRepository = new(MockBehavior.Strict);
+        this.mockWallService = new(MockBehavior.Strict);
 
         tutorialService = new TutorialService(
             mockLogger.Object,
@@ -35,7 +35,7 @@ public class TutorialServiceTest
             mockAbilityCrestRepository.Object,
             mockUserDataRepository.Object,
             mockFortRepository.Object,
-            mockWallRepository.Object
+            this.mockWallService.Object
         );
     }
 

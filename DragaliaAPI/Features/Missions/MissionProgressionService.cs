@@ -1,5 +1,7 @@
+using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Features.Missions.InitialProgress;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
@@ -9,6 +11,7 @@ namespace DragaliaAPI.Features.Missions;
 
 public class MissionProgressionService(
     IMissionRepository missionRepository,
+    IMissionInitialProgressionService missionInitialProgressionService,
     ILogger<MissionProgressionService> logger
 ) : IMissionProgressionService
 {
@@ -289,6 +292,9 @@ public class MissionProgressionService(
         if (this.eventQueue.Count == 0)
             return;
 
+        Stopwatch stopwatch = Stopwatch.StartNew();
+        int eventCount = this.eventQueue.Count;
+
         List<DbPlayerMission>? missionList = null;
 
         logger.LogDebug(
@@ -367,6 +373,22 @@ public class MissionProgressionService(
                     {
                         await missionRepository.AddCompletedDailyMission(progressingMission);
                     }
+
+                    logger.LogInformation(
+                        "Adding dependent missions: {Missions}",
+                        progressionInfo.UnlockedOnComplete
+                    );
+
+                    foreach (int dependentMissionId in progressionInfo.UnlockedOnComplete ?? [])
+                    {
+                        // Unsure how to derive start / end time here. Inheriting it from progressingMission would be
+                        // appropriate for some, but not all, mission types.
+                        await missionInitialProgressionService.StartMission(
+                            progressingMission.Type,
+                            dependentMissionId,
+                            progressingMission.GroupId ?? default
+                        );
+                    }
                 }
                 else
                 {
@@ -380,6 +402,14 @@ public class MissionProgressionService(
                 }
             }
         }
+
+        stopwatch.Stop();
+
+        logger.LogDebug(
+            "Processed {EventCount} mission events in {ElapsedTime} ms",
+            eventCount,
+            stopwatch.ElapsedMilliseconds
+        );
     }
 
     private record MissionEvent(

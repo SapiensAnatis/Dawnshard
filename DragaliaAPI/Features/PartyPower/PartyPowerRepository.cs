@@ -7,8 +7,7 @@ namespace DragaliaAPI.Features.PartyPower;
 
 public class PartyPowerRepository(
     ApiContext apiContext,
-    IPlayerIdentityService playerIdentityService,
-    IMissionProgressionService missionProgressionService
+    IPlayerIdentityService playerIdentityService
 ) : IPartyPowerRepository
 {
     public async Task<DbPartyPower> GetPartyPowerAsync()
@@ -31,7 +30,6 @@ public class PartyPowerRepository(
         if (power > dbPower.MaxPartyPower)
         {
             dbPower.MaxPartyPower = power;
-            missionProgressionService.OnPartyPowerReached(power);
         }
     }
 }

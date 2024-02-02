@@ -15,7 +15,7 @@ public class TutorialService : ITutorialService
     private readonly IAbilityCrestRepository abilityCrestRepository;
     private readonly IUserDataRepository userDataRepository;
     private readonly IFortRepository fortRepository;
-    private readonly IWallRepository wallRepository;
+    private readonly IWallService wallService;
 
     public TutorialService(
         ILogger<TutorialService> logger,
@@ -23,7 +23,7 @@ public class TutorialService : ITutorialService
         IAbilityCrestRepository abilityCrestRepository,
         IUserDataRepository userDataRepository,
         IFortRepository fortRepository,
-        IWallRepository wallRepository
+        IWallService wallService
     )
     {
         this.logger = logger;
@@ -31,7 +31,7 @@ public class TutorialService : ITutorialService
         this.abilityCrestRepository = abilityCrestRepository;
         this.userDataRepository = userDataRepository;
         this.fortRepository = fortRepository;
-        this.wallRepository = wallRepository;
+        this.wallService = wallService;
     }
 
     public Task<int> GetCurrentTutorialStatus() =>
@@ -82,7 +82,7 @@ public class TutorialService : ITutorialService
                 await UpdateTutorialStatus(11001);
                 break;
             case TutorialStoryIds.MercurialGauntlet:
-                await this.wallRepository.InitializeWall();
+                await this.wallService.InitializeWall();
                 break;
             case TutorialStoryIds.Smithy:
                 await this.fortRepository.InitializeSmithy();
