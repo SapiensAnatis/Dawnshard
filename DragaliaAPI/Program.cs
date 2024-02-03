@@ -142,6 +142,11 @@ watch.Stop();
 
 app.Logger.LogInformation("Loaded MasterAsset in {time}.", watch.Elapsed);
 
+app.Logger.LogDebug(
+    "Attempting to establish PostgreSQL connection to host {Host}",
+    builder.Configuration.GetConnectionString("PostgresHost")
+);
+
 if (Environment.GetEnvironmentVariable("DISABLE_AUTO_MIGRATION") == null)
     app.MigrateDatabase();
 

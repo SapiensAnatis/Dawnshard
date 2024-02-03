@@ -26,11 +26,7 @@ public static class DatabaseConfiguration
 
         services = services
             .AddDbContext<ApiContext>(
-                options =>
-                    options
-                        .UseNpgsql(connectionString)
-                        .EnableSensitiveDataLogging()
-                        .EnableDetailedErrors(),
+                options => options.UseNpgsql(connectionString).EnableDetailedErrors(),
                 optionsLifetime: ServiceLifetime.Singleton
             )
             .AddDbContextFactory<ApiContext>(options => options.UseNpgsql(connectionString))
@@ -79,6 +75,7 @@ public static class DatabaseConfiguration
             return;
 
         int tries = 0;
+
         while (!context.Database.CanConnect())
         {
             tries++;
