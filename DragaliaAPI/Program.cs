@@ -22,6 +22,7 @@ using EntityGraphQL.AspNet;
 using EntityGraphQL.Schema;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
@@ -208,7 +209,10 @@ app.MapWhen(
     }
 );
 
-app.MapHealthChecks("/health"); // Kubernetes readiness check
+app.MapHealthChecks(
+    "/health",
+    new HealthCheckOptions() { ResponseWriter = HealthCheckWriter.WriteResponse }
+); // Kubernetes readiness check
 app.MapGet("/ping", () => Results.Ok()); // Kubernetes liveness check
 app.MapGet(
     "/dragalipatch/config",
