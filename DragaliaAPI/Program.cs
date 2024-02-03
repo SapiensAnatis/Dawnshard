@@ -119,12 +119,12 @@ builder.Services.AddAuthorization();
 
 builder
     .Services.AddResponseCompression()
-    .ConfigureDatabaseServices(builder.Configuration.GetConnectionString("PostgresHost"))
+    .ConfigureDatabaseServices()
     .ConfigureSharedServices()
     .AddAutoMapper(Assembly.GetExecutingAssembly())
     .AddStackExchangeRedisCache(options =>
     {
-        options.Configuration = builder.Configuration.GetConnectionString("RedisHost");
+        options.Configuration = builder.Configuration.GetConnectionString("RedisConnectionString");
         options.InstanceName = "RedisInstance";
     })
     .AddHttpContextAccessor();

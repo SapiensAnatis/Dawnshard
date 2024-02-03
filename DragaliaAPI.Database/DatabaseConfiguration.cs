@@ -17,12 +17,9 @@ public static class DatabaseConfiguration
     private const int MigrationMaxRetries = 5;
     private const int RetrySleepMs = 3000;
 
-    public static IServiceCollection ConfigureDatabaseServices(
-        this IServiceCollection services,
-        string? host
-    )
+    public static IServiceCollection ConfigureDatabaseServices(this IServiceCollection services)
     {
-        string connectionString = GetConnectionString(host);
+        string connectionString = GetConnectionString();
 
         services = services
             .AddDbContext<ApiContext>(
@@ -47,16 +44,28 @@ public static class DatabaseConfiguration
         return services;
     }
 
-    private static string GetConnectionString(string? host)
+    private static string GetConnectionString()
     {
+        string host = Environment.GetEnvironmentVariable("POSTGRES_HOST") ?? "postgres";
+        int port = int.TryParse(
+            Environment.GetEnvironmentVariable("POSTGRES_PORT"),
+            out int parsedPort
+        )
+            ? parsedPort
+            : 5432;
+
+        string? username = Environment.GetEnvironmentVariable("POSTGRES_USER");
+        string? password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
+        string? database = Environment.GetEnvironmentVariable("POSTGRES_DB");
+
         NpgsqlConnectionStringBuilder connectionStringBuilder =
             new()
             {
-                Host = host ?? "postgres",
-                Username = Environment.GetEnvironmentVariable("POSTGRES_USER") ?? "postgres",
-                Password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD"),
-                Database = Environment.GetEnvironmentVariable("POSTGRES_DB"),
-                LogParameters = true,
+                Host = host,
+                Port = port,
+                Username = username,
+                Password = password,
+                Database = database,
                 IncludeErrorDetail = true,
             };
 
