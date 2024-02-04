@@ -19,7 +19,6 @@ using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Json;
 using DragaliaAPI.Shared.MasterAsset;
 using EntityGraphQL.AspNet;
-using EntityGraphQL.Schema;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -44,7 +43,7 @@ builder
     .Services.Configure<BaasOptions>(config.GetRequiredSection("Baas"))
     .Configure<LoginOptions>(config.GetRequiredSection("Login"))
     .Configure<DragalipatchOptions>(config.GetRequiredSection("Dragalipatch"))
-    .Configure<RedisOptions>(config.GetRequiredSection("Redis"))
+    .Configure<RedisCachingOptions>(config.GetRequiredSection(nameof(RedisCachingOptions)))
     .Configure<PhotonOptions>(config.GetRequiredSection(nameof(PhotonOptions)))
     .Configure<ItemSummonConfig>(config)
     .Configure<DragonfruitConfig>(config)
@@ -118,14 +117,25 @@ builder
 
 builder.Services.AddAuthorization();
 
+PostgresOptions postgresOptions =
+    builder.Configuration.GetSection(nameof(PostgresOptions)).Get<PostgresOptions>()
+    ?? throw new InvalidOperationException("Failed to get PostgreSQL config");
+RedisOptions redisOptions =
+    builder.Configuration.GetSection(nameof(RedisOptions)).Get<RedisOptions>()
+    ?? throw new InvalidOperationException("Failed to get Redis config");
+
 builder
     .Services.AddResponseCompression()
-    .ConfigureDatabaseServices()
+    .ConfigureDatabaseServices(postgresOptions)
     .ConfigureSharedServices()
     .AddAutoMapper(Assembly.GetExecutingAssembly())
     .AddStackExchangeRedisCache(options =>
     {
-        options.Configuration = builder.Configuration.GetConnectionString("RedisConnectionString");
+        options.ConfigurationOptions = new()
+        {
+            EndPoints = new() { { redisOptions.Hostname, redisOptions.Port } },
+            Password = redisOptions.Password,
+        };
         options.InstanceName = "RedisInstance";
     })
     .AddHttpContextAccessor();
@@ -147,8 +157,15 @@ watch.Stop();
 app.Logger.LogInformation("Loaded MasterAsset in {time}.", watch.Elapsed);
 
 app.Logger.LogDebug(
-    "Attempting to establish PostgreSQL connection to host {Host}",
-    builder.Configuration.GetConnectionString("PostgresHost")
+    "Using PostgreSQL connection {Host}:{Port}",
+    postgresOptions.Hostname,
+    postgresOptions.Port
+);
+
+app.Logger.LogDebug(
+    "Using Redis connection {Host}:{Port}",
+    redisOptions.Hostname,
+    redisOptions.Port
 );
 
 if (Environment.GetEnvironmentVariable("DISABLE_AUTO_MIGRATION") == null)
@@ -233,5 +250,5 @@ app.Run();
 
 namespace DragaliaAPI
 {
-    public partial class Program { }
+    public class Program;
 }

@@ -17,9 +17,12 @@ public static class DatabaseConfiguration
     private const int MigrationMaxRetries = 5;
     private const int RetrySleepMs = 3000;
 
-    public static IServiceCollection ConfigureDatabaseServices(this IServiceCollection services)
+    public static IServiceCollection ConfigureDatabaseServices(
+        this IServiceCollection services,
+        PostgresOptions postgresOptions
+    )
     {
-        string connectionString = GetConnectionString();
+        string connectionString = GetConnectionString(postgresOptions);
 
         services = services
             .AddDbContext<ApiContext>(
@@ -44,28 +47,16 @@ public static class DatabaseConfiguration
         return services;
     }
 
-    private static string GetConnectionString()
+    private static string GetConnectionString(PostgresOptions options)
     {
-        string host = Environment.GetEnvironmentVariable("POSTGRES_HOST") ?? "postgres";
-        int port = int.TryParse(
-            Environment.GetEnvironmentVariable("POSTGRES_PORT"),
-            out int parsedPort
-        )
-            ? parsedPort
-            : 5432;
-
-        string? username = Environment.GetEnvironmentVariable("POSTGRES_USER");
-        string? password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
-        string? database = Environment.GetEnvironmentVariable("POSTGRES_DB");
-
         NpgsqlConnectionStringBuilder connectionStringBuilder =
             new()
             {
-                Host = host,
-                Port = port,
-                Username = username,
-                Password = password,
-                Database = database,
+                Host = options.Hostname,
+                Port = options.Port,
+                Username = options.Username,
+                Password = options.Password,
+                Database = options.Database,
                 IncludeErrorDetail = true,
             };
 

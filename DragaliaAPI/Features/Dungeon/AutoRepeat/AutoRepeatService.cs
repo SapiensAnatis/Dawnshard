@@ -12,7 +12,7 @@ namespace DragaliaAPI.Features.Dungeon.AutoRepeat;
 public class AutoRepeatService(
     IDistributedCache distributedCache,
     IPlayerIdentityService playerIdentityService,
-    IOptionsMonitor<RedisOptions> options,
+    IOptionsMonitor<RedisCachingOptions> options,
     ILogger<AutoRepeatService> logger
 ) : IAutoRepeatService
 {
