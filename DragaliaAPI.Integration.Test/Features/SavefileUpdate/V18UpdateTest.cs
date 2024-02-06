@@ -316,4 +316,19 @@ public class V18UpdateTest : SavefileUpdateTestFixture
                 opts => opts.Excluding(x => x.ViewerId).Excluding(x => x.GroupId)
             );
     }
+
+    [Fact]
+    public async Task Update_DoesNotClashWithV15()
+    {
+        await this.AddToDatabase(
+            new DbPlayerStoryState()
+            {
+                StoryId = TutorialService.TutorialStoryIds.MercurialGauntlet,
+                StoryType = StoryTypes.Quest,
+                State = StoryState.Read,
+            }
+        );
+
+        await this.Invoking(x => x.LoadIndex()).Should().NotThrowAsync();
+    }
 }

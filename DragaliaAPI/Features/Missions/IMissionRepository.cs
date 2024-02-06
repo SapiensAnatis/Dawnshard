@@ -36,4 +36,6 @@ public interface IMissionRepository
         DateTimeOffset? endTime = null,
         int? groupId = null
     );
+
+    Task<DbPlayerMission?> FindMissionByIdAsync(MissionType type, int id);
 }

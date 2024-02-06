@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Wall;
@@ -16,6 +17,7 @@ public class V18Update(
     IWallService wallService,
     IStoryRepository storyRepository,
     IMissionRepository missionRepository,
+    ApiContext context,
     IMissionService missionService,
     ILogger<V18Update> logger
 ) : ISavefileUpdate
@@ -43,9 +45,10 @@ public class V18Update(
         }
 
         if (
-            await this.missionRepository.Missions.AnyAsync(x =>
-                x.Type == MissionType.Normal && x.Id == ClearAnyMgMissionId
-            )
+            await this.missionRepository.FindMissionByIdAsync(
+                MissionType.Normal,
+                ClearAnyMgMissionId
+            ) != null
         )
         {
             this.logger.LogInformation("Player has already unlocked wall missions, skipping...");

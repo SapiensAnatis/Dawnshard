@@ -36,13 +36,19 @@ public class MissionRepository(
         return this.Missions.Where(x => x.Type == type);
     }
 
-    public async Task<DbPlayerMission> GetMissionByIdAsync(MissionType type, int id)
+    public async Task<DbPlayerMission?> FindMissionByIdAsync(MissionType type, int id)
     {
         return await this.apiContext.PlayerMissions.FindAsync(
-                this.playerIdentityService.ViewerId,
-                id,
-                type
-            ) ?? throw new DragaliaException(ResultCode.MissionIdNotFound, "Mission not found");
+            this.playerIdentityService.ViewerId,
+            id,
+            type
+        );
+    }
+
+    public async Task<DbPlayerMission> GetMissionByIdAsync(MissionType type, int id)
+    {
+        return await this.FindMissionByIdAsync(type, id)
+            ?? throw new DragaliaException(ResultCode.MissionIdNotFound, "Mission not found");
     }
 
     public async Task<ILookup<MissionType, DbPlayerMission>> GetActiveMissionsPerTypeAsync()
