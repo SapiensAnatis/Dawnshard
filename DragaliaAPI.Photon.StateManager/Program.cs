@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authentication;
 using Redis.OM;
 using Redis.OM.Contracts;
 using Serilog;
-using Serilog.Events;
 using StackExchange.Redis;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -27,17 +26,9 @@ builder.Services.AddControllers();
 builder.Host.UseSerilog(
     (context, config) =>
     {
-        config.WriteTo.Console();
+        config.ReadFrom.Configuration(context.Configuration);
+        config.Enrich.FromLogContext();
 
-        SeqOptions seqOptions =
-            builder.Configuration.GetSection(nameof(SeqOptions)).Get<SeqOptions>()
-            ?? throw new NullReferenceException("Failed to get seq config!");
-
-        if (seqOptions.Enabled)
-            config.WriteTo.Seq(seqOptions.Url, apiKey: seqOptions.Key);
-
-        config.MinimumLevel.Debug();
-        config.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning);
         config.Filter.ByExcluding(
             "EndsWith(RequestPath, '/health') and Coalesce(StatusCode, 200) = 200"
         );
@@ -48,8 +39,8 @@ builder.Host.UseSerilog(
 );
 
 builder
-    .Services.AddOptions<RedisOptions>()
-    .BindConfiguration(nameof(RedisOptions))
+    .Services.AddOptions<RedisCachingOptions>()
+    .BindConfiguration(nameof(RedisCachingOptions))
     .Validate(x => x.KeyExpiryTimeMins > 0)
     .ValidateOnStart();
 
@@ -78,12 +69,19 @@ builder.Services.AddSwaggerGen(config =>
 
 Log.Logger.Information("App environment {@env}", builder.Environment);
 
+RedisOptions redisOptions =
+    builder.Configuration.GetRequiredSection(nameof(RedisOptions)).Get<RedisOptions>()
+    ?? throw new InvalidOperationException("Failed to deserialize Redis configuration");
+
 // Don't attempt to connect to Redis when running tests
 if (builder.Environment.EnvironmentName != "Testing")
 {
     IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(
-        builder.Configuration.GetConnectionString("Redis")
-            ?? throw new InvalidOperationException("Missing required Redis connection string!")
+        new ConfigurationOptions()
+        {
+            EndPoints = new() { { redisOptions.Hostname, redisOptions.Port } },
+            Password = redisOptions.Password,
+        }
     );
 
     IRedisConnectionProvider provider = new RedisConnectionProvider(multiplexer);

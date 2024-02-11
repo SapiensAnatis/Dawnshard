@@ -18,7 +18,7 @@ namespace DragaliaAPI.Photon.StateManager.Controllers;
 [Authorize(AuthenticationSchemes = nameof(PhotonAuthenticationHandler))]
 public class EventController : ControllerBase
 {
-    private readonly IOptionsMonitor<RedisOptions> options;
+    private readonly IOptionsMonitor<RedisCachingOptions> options;
     private readonly IRedisConnectionProvider connectionProvider;
     private readonly ILogger<EventController> logger;
 
@@ -34,7 +34,7 @@ public class EventController : ControllerBase
     /// <param name="logger"></param>
     public EventController(
         IRedisConnectionProvider connectionProvider,
-        IOptionsMonitor<RedisOptions> options,
+        IOptionsMonitor<RedisCachingOptions> options,
         ILogger<EventController> logger
     )
     {
