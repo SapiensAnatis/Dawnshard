@@ -13,16 +13,14 @@ public class ZenaService(IPlayerIdentityService playerIdentityService, ApiContex
 
     public async Task<GetTeamDataResponse> GetTeamData(IEnumerable<int> partyNumbers)
     {
-        string playerName = await this.apiContext.PlayerUserData.Where(
-            x => x.ViewerId == this.playerIdentityService.ViewerId
+        string playerName = await this.apiContext.PlayerUserData.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId
         )
             .Select(x => x.Name)
             .FirstAsync();
 
-        Charas[] charas = await this.apiContext.PlayerPartyUnits.Where(
-            x =>
-                x.ViewerId == this.playerIdentityService.ViewerId
-                && partyNumbers.Contains(x.PartyNo)
+        Charas[] charas = await this.apiContext.PlayerPartyUnits.Where(x =>
+            x.ViewerId == this.playerIdentityService.ViewerId && partyNumbers.Contains(x.PartyNo)
         )
             .Select(x => x.CharaId)
             .ToArrayAsync();

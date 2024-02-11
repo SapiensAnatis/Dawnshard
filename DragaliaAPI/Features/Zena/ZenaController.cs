@@ -24,7 +24,7 @@ public class ZenaController(IPlayerIdentityService playerIdentityService, IZenaS
         if (teamnum2 != -1)
             teamNumbers.Add(teamnum2);
 
-        using IDisposable impersionation = this.playerIdentityService.StartUserImpersonation(id);
+        using IDisposable impersonation = this.playerIdentityService.StartUserImpersonation(id);
 
         return await this.zenaService.GetTeamData(teamNumbers);
     }
