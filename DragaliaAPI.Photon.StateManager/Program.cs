@@ -73,7 +73,14 @@ RedisOptions redisOptions =
     builder.Configuration.GetRequiredSection(nameof(RedisOptions)).Get<RedisOptions>()
     ?? throw new InvalidOperationException("Failed to deserialize Redis configuration");
 
+Log.Logger.Information(
+    "Connecting to Redis at {Hostname}:{Port}",
+    redisOptions.Hostname,
+    redisOptions.Port
+);
+
 // Don't attempt to connect to Redis when running tests
+// TODO: refactor this out using env vars maybe?
 if (builder.Environment.EnvironmentName != "Testing")
 {
     IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(
