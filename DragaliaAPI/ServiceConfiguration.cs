@@ -29,6 +29,7 @@ using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Features.Version;
 using DragaliaAPI.Features.Wall;
+using DragaliaAPI.Features.Zena;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Options;
@@ -146,7 +147,9 @@ public static class ServiceConfiguration
             // Wall feature
             .AddScoped<IWallService, WallService>()
             .AddScoped<IWallRepository, WallRepository>()
-            .AddScoped<WallInitialProgressionService>();
+            .AddScoped<WallInitialProgressionService>()
+            // Zena feature
+            .AddScoped<IZenaService, ZenaService>();
 
         services.AddScoped<IBlazorIdentityService, BlazorIdentityService>();
 

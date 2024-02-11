@@ -1,3 +1,4 @@
+using DragaliaAPI.Photon.Plugin.Plugins.GameLogic;
 using FluentAssertions;
 using Xunit;
 

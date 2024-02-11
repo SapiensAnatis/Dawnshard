@@ -8,4 +8,6 @@ public static class SchemeName
     public const string Session = "SessionAuthentication";
 
     public const string Developer = "DeveloperAuthentication";
+
+    public const string Zena = "ZenaAuthentication";
 }
