@@ -10,11 +10,8 @@ namespace DragaliaAPI.Features.Zena;
 public class ZenaController(IPlayerIdentityService playerIdentityService, IZenaService zenaService)
     : ControllerBase
 {
-    private readonly IPlayerIdentityService playerIdentityService = playerIdentityService;
-    private readonly IZenaService zenaService = zenaService;
-
     [HttpGet("get_team_data")]
-    public async Task<GetTeamDataResponse> GetTeamData(
+    public async Task<ActionResult<GetTeamDataResponse>> GetTeamData(
         [FromQuery] long id,
         [FromQuery] int teamnum,
         [FromQuery] int teamnum2
@@ -24,8 +21,13 @@ public class ZenaController(IPlayerIdentityService playerIdentityService, IZenaS
         if (teamnum2 != -1)
             teamNumbers.Add(teamnum2);
 
-        using IDisposable impersonation = this.playerIdentityService.StartUserImpersonation(id);
+        using IDisposable impersonation = playerIdentityService.StartUserImpersonation(id);
 
-        return await this.zenaService.GetTeamData(teamNumbers);
+        GetTeamDataResponse? response = await zenaService.GetTeamData(teamNumbers);
+
+        if (response is null)
+            return this.NotFound();
+
+        return response;
     }
 }

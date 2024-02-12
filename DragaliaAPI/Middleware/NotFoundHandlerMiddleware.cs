@@ -22,17 +22,21 @@ public class NotFoundHandlerMiddleware
     {
         await next(context);
 
-        if (context.Response.StatusCode == (int)HttpStatusCode.NotFound)
-        {
-            this.logger.LogInformation("HTTP 404 on {RequestPath}", context.Request.Path);
-            context.Response.StatusCode = (int)HttpStatusCode.OK;
+        if (context.Response.StatusCode != (int)HttpStatusCode.NotFound)
+            return;
 
-            DragaliaResponse<ResultCodeData> gameResponse =
-                new(new DataHeaders(NotFoundCode), new(NotFoundCode));
+        if (context.GetEndpoint() is not null)
+            // Exclude controllers where we return this.NotFound() explicitly
+            return;
 
-            await context.Response.Body.WriteAsync(
-                MessagePackSerializer.Serialize(gameResponse, CustomResolver.Options)
-            );
-        }
+        this.logger.LogInformation("HTTP 404 on {RequestPath}", context.Request.Path);
+        context.Response.StatusCode = (int)HttpStatusCode.OK;
+
+        DragaliaResponse<ResultCodeData> gameResponse =
+            new(new DataHeaders(NotFoundCode), new(NotFoundCode));
+
+        await context.Response.Body.WriteAsync(
+            MessagePackSerializer.Serialize(gameResponse, CustomResolver.Options)
+        );
     }
 }

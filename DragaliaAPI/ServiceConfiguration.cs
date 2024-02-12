@@ -13,6 +13,7 @@ using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Login;
+using DragaliaAPI.Features.Maintenance;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Features.Player;
@@ -149,7 +150,9 @@ public static class ServiceConfiguration
             .AddScoped<IWallRepository, WallRepository>()
             .AddScoped<WallInitialProgressionService>()
             // Zena feature
-            .AddScoped<IZenaService, ZenaService>();
+            .AddScoped<IZenaService, ZenaService>()
+            // Maintenance feature
+            .AddScoped<MaintenanceService>();
 
         services.AddScoped<IBlazorIdentityService, BlazorIdentityService>();
 
@@ -170,7 +173,7 @@ public static class ServiceConfiguration
         });
         services.AddScoped<IMatchingService, MatchingService>();
 
-        services.AddScoped<ResourceVersionActionFilter>();
+        services.AddScoped<ResourceVersionActionFilter>().AddScoped<MaintenanceActionFilter>();
 
         return services;
     }

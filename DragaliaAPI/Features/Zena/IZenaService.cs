@@ -2,5 +2,5 @@
 
 public interface IZenaService
 {
-    Task<GetTeamDataResponse> GetTeamData(IEnumerable<int> partyNumbers);
+    Task<GetTeamDataResponse?> GetTeamData(IEnumerable<int> partyNumbers);
 }
