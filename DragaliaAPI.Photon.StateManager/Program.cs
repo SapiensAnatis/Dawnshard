@@ -88,6 +88,7 @@ if (builder.Environment.EnvironmentName != "Testing")
         {
             EndPoints = new() { { redisOptions.Hostname, redisOptions.Port } },
             Password = redisOptions.Password,
+            AbortOnConnectFail = false,
         }
     );
 
