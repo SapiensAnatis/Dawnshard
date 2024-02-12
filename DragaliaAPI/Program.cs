@@ -50,7 +50,8 @@ builder
     .Configure<TimeAttackOptions>(config.GetRequiredSection(nameof(TimeAttackOptions)))
     .Configure<ResourceVersionOptions>(config.GetRequiredSection(nameof(ResourceVersionOptions)))
     .Configure<BlazorOptions>(config.GetRequiredSection(nameof(BlazorOptions)))
-    .Configure<EventOptions>(config.GetRequiredSection(nameof(EventOptions)));
+    .Configure<EventOptions>(config.GetRequiredSection(nameof(EventOptions)))
+    .Configure<MaintenanceOptions>(config.GetRequiredSection(nameof(MaintenanceOptions)));
 
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices(options =>
