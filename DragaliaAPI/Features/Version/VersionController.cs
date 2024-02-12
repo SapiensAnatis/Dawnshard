@@ -7,9 +7,8 @@ namespace DragaliaAPI.Features.Version;
 
 [Route("version")]
 [AllowAnonymous]
-[BypassResourceVersionCheck]
 public class VersionController(IResourceVersionService resourceVersionService)
-    : DragaliaControllerBase
+    : DragaliaControllerBaseCore
 {
     [HttpPost]
     [Route("get_resource_version")]

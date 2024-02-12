@@ -13,17 +13,6 @@ public class ResourceVersionActionFilter(
 {
     public void OnActionExecuting(ActionExecutingContext context)
     {
-        if (
-            context
-                .HttpContext.GetEndpoint()
-                ?.Metadata
-                .GetMetadata<BypassResourceVersionCheckAttribute>()
-            is not null
-        )
-        {
-            return;
-        }
-
         string? clientResourceVer = context.HttpContext.Request.Headers["Res-Ver"].FirstOrDefault();
         if (clientResourceVer is null)
             return;

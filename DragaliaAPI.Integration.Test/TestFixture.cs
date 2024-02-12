@@ -30,7 +30,7 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
     /// <summary>
     /// The session ID which is associated with the logged in test user.
     /// </summary>
-    private const string SessionId = "session_id";
+    protected const string SessionId = "session_id";
 
     private readonly CustomWebApplicationFactory factory;
 
@@ -39,24 +39,7 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
         this.factory = factory;
         this.TestOutputHelper = testOutputHelper;
 
-        this.Client = factory
-            .WithWebHostBuilder(builder =>
-                builder.ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.AddXUnit(this.TestOutputHelper);
-                })
-            )
-            .CreateClient(
-                new WebApplicationFactoryClientOptions()
-                {
-                    BaseAddress = new Uri("http://localhost/api/", UriKind.Absolute),
-                }
-            );
-
-        this.Client.DefaultRequestHeaders.Add("SID", SessionId);
-        this.Client.DefaultRequestHeaders.Add("Platform", "2");
-        this.Client.DefaultRequestHeaders.Add("Res-Ver", "y2XM6giU6zz56wCm");
+        this.Client = this.CreateClient();
 
         this.MockBaasApi.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
         this.MockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(() => DateTimeOffset.UtcNow);
@@ -91,7 +74,7 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
     /// </remarks>
     protected long ViewerId { get; private set; }
 
-    protected HttpClient Client { get; }
+    protected HttpClient Client { get; set; }
 
     protected IMapper Mapper { get; }
 
@@ -187,6 +170,32 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
             .Select(x => x.DragonKeyId)
             .DefaultIfEmpty()
             .First();
+    }
+
+    protected HttpClient CreateClient(Action<IWebHostBuilder>? extraBuilderConfig = null)
+    {
+        HttpClient client = factory
+            .WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddXUnit(this.TestOutputHelper);
+                });
+                extraBuilderConfig?.Invoke(builder);
+            })
+            .CreateClient(
+                new WebApplicationFactoryClientOptions()
+                {
+                    BaseAddress = new Uri("http://localhost/api/", UriKind.Absolute),
+                }
+            );
+
+        client.DefaultRequestHeaders.Add("SID", SessionId);
+        client.DefaultRequestHeaders.Add("Platform", "2");
+        client.DefaultRequestHeaders.Add("Res-Ver", "y2XM6giU6zz56wCm");
+
+        return client;
     }
 
     protected long GetTalismanKeyId(Talismans talisman)
