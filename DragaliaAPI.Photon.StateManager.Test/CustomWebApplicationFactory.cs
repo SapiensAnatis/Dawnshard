@@ -26,6 +26,5 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {
         Environment.SetEnvironmentVariable("RedisOptions__Hostname", null);
         Environment.SetEnvironmentVariable("RedisOptions__Port", null);
-        base.Dispose();
     }
 }
