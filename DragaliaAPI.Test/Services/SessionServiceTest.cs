@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Helpers;
-using DragaliaAPI.Models;
+﻿using DragaliaAPI.Models;
 using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Game;
@@ -16,8 +15,8 @@ public class SessionServiceTest
 {
     // TODO: Refactor this file to use the new methods
     private readonly Mock<ILogger<SessionService>> mockLogger;
-    private readonly Mock<IOptionsMonitor<RedisOptions>> mockOptions;
-    private readonly Mock<IDateTimeProvider> mockDateTimeProvider;
+    private readonly Mock<IOptionsMonitor<RedisCachingOptions>> mockOptions;
+    private readonly Mock<TimeProvider> mockTimeProvider;
     private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
     private readonly SessionService sessionService;
 
@@ -33,7 +32,7 @@ public class SessionServiceTest
     {
         this.mockLogger = new(MockBehavior.Loose);
         this.mockOptions = new(MockBehavior.Strict);
-        this.mockDateTimeProvider = new(MockBehavior.Strict);
+        this.mockTimeProvider = new(MockBehavior.Strict);
         this.mockPlayerIdentityService = new(MockBehavior.Strict);
 
         IOptions<MemoryDistributedCacheOptions> opts = Options.Create(
@@ -42,17 +41,17 @@ public class SessionServiceTest
 
         this.testCache = new MemoryDistributedCache(opts);
         this.mockOptions.SetupGet(x => x.CurrentValue)
-            .Returns(new RedisOptions() { SessionExpiryTimeMinutes = 1 });
+            .Returns(new RedisCachingOptions() { SessionExpiryTimeMinutes = 1 });
 
         sessionService = new(
             this.testCache,
             this.mockOptions.Object,
             this.mockLogger.Object,
-            this.mockDateTimeProvider.Object,
+            this.mockTimeProvider.Object,
             this.mockPlayerIdentityService.Object
         );
 
-        this.mockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(DateTimeOffset.UnixEpoch);
+        this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(DateTimeOffset.UnixEpoch);
     }
 
     [Fact]
@@ -126,10 +125,10 @@ public class SessionServiceTest
     [Obsolete(ObsoleteReasons.BaaS)]
     private async Task<string> PrepareAndRegisterSession(
         string idToken,
-        DeviceAccount deviceAccount
+        DeviceAccount deviceAccountId
     )
     {
-        await sessionService.PrepareSession(deviceAccount, idToken);
+        await sessionService.PrepareSession(deviceAccountId, idToken);
         return await sessionService.ActivateSession(idToken);
     }
 }

@@ -79,36 +79,29 @@ Log.Logger.Information(
     redisOptions.Port
 );
 
-// Don't attempt to connect to Redis when running tests
-// TODO: refactor this out using env vars maybe?
-if (builder.Environment.EnvironmentName != "Testing")
-{
-    IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(
-        new ConfigurationOptions()
-        {
-            EndPoints = new() { { redisOptions.Hostname, redisOptions.Port } },
-            Password = redisOptions.Password,
-            AbortOnConnectFail = false,
-        }
-    );
-
-    IRedisConnectionProvider provider = new RedisConnectionProvider(multiplexer);
-    builder.Services.AddSingleton(provider);
-
-    bool created = await provider.Connection.CreateIndexAsync(typeof(RedisGame));
-
-    RedisIndexInfo? info = await provider.Connection.GetIndexInfoAsync(typeof(RedisGame));
-    Log.Logger.Information("Index created: {created}", created);
-    Log.Logger.Information("Index info: {@info}", info);
-
-    if (builder.Environment.IsDevelopment())
+IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(
+    new ConfigurationOptions()
     {
-        Log.Logger.Information("App is in development mode -- clearing all pre-existing games");
-
-        await provider
-            .RedisCollection<RedisGame>()
-            .DeleteAsync(provider.RedisCollection<RedisGame>());
+        EndPoints = new() { { redisOptions.Hostname, redisOptions.Port } },
+        Password = redisOptions.Password,
+        AbortOnConnectFail = false,
     }
+);
+
+IRedisConnectionProvider provider = new RedisConnectionProvider(multiplexer);
+builder.Services.AddSingleton(provider);
+
+bool created = await provider.Connection.CreateIndexAsync(typeof(RedisGame));
+
+RedisIndexInfo? info = await provider.Connection.GetIndexInfoAsync(typeof(RedisGame));
+Log.Logger.Information("Index created: {created}", created);
+Log.Logger.Information("Index info: {@info}", info);
+
+if (builder.Environment.IsDevelopment())
+{
+    Log.Logger.Information("App is in development mode -- clearing all pre-existing games");
+
+    await provider.RedisCollection<RedisGame>().DeleteAsync(provider.RedisCollection<RedisGame>());
 }
 
 WebApplication app = builder.Build();

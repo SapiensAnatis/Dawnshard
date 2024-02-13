@@ -12,7 +12,7 @@ namespace DragaliaAPI.Test.Features.Dungeon;
 
 public class DungeonServiceTest
 {
-    private readonly Mock<IOptionsMonitor<RedisOptions>> mockOptions;
+    private readonly Mock<IOptionsMonitor<RedisCachingOptions>> mockOptions;
     private readonly Mock<ILogger<DungeonService>> mockLogger;
     private readonly IDungeonService dungeonService;
 
@@ -28,7 +28,7 @@ public class DungeonServiceTest
 
         mockOptions
             .SetupGet(x => x.CurrentValue)
-            .Returns(new RedisOptions() { DungeonExpiryTimeMinutes = 1 });
+            .Returns(new RedisCachingOptions() { DungeonExpiryTimeMinutes = 1 });
 
         dungeonService = new DungeonService(
             testCache,
