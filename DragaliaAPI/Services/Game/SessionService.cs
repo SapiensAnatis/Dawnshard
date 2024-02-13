@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Helpers;
-using DragaliaAPI.Models;
+﻿using DragaliaAPI.Models;
 using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
@@ -14,27 +13,18 @@ namespace DragaliaAPI.Services.Game;
 /// SessionService interfaces with Redis to store the information about current sessions in-memory.
 /// The basic flow looks like this:
 ///
-/// 1. The NintendoLoginController calls PrepareSession with DeviceAccount information and an ID
-///    token, and a session is created and stored in the cache indexed by the ID token. The
-///    controller sends back the ID token.
-///
-/// 2. The client *may* later send that ID token in a request to SignupController, in which case it
-///    just needs to be sent the ViewerId of the DeviceAccount's associated savefile. This does not
-///    involve any cache writes.
-///
-/// 3. The client will later send the ID token in a request to AuthController, where ActivateSession
-///    is called, which moves the key of the session from the id_token (hereafter unused) to the
-///    session ID. The session ID is returned and sent in the response from AuthController.
-///
+/// 1. User comes to /tool/auth from BaaS with ID token
+/// 2. SessionService creates a session which contains the claims from the ID token, such as viewer ID and account ID.
+/// 3. This SID is sent back from the response in /tool/auth.
 /// 4. All subsequent requests will contain the session ID in the header, and this can be used to
 ///    retrieve the savefile and update it if necessary.
 /// </summary>
 public class SessionService : ISessionService
 {
     private readonly IDistributedCache cache;
-    private readonly IOptionsMonitor<RedisOptions> options;
+    private readonly IOptionsMonitor<RedisCachingOptions> options;
     private readonly ILogger<SessionService> logger;
-    private readonly IDateTimeProvider dateTimeProvider;
+    private readonly TimeProvider dateTimeProvider;
     private readonly IPlayerIdentityService playerIdentityService;
 
     private DistributedCacheEntryOptions CacheOptions =>
@@ -45,9 +35,9 @@ public class SessionService : ISessionService
 
     public SessionService(
         IDistributedCache cache,
-        IOptionsMonitor<RedisOptions> options,
+        IOptionsMonitor<RedisCachingOptions> options,
         ILogger<SessionService> logger,
-        IDateTimeProvider dateTimeProvider,
+        TimeProvider dateTimeProvider,
         IPlayerIdentityService playerIdentityService
     )
     {
@@ -90,7 +80,7 @@ public class SessionService : ISessionService
 
         // Filler viewerid for session as this flow is deprecated
         Session session =
-            new(sessionId, idToken, deviceAccount.id, 47337, this.dateTimeProvider.UtcNow);
+            new(sessionId, idToken, deviceAccount.id, 47337, this.dateTimeProvider.GetUtcNow());
         await cache.SetStringAsync(
             Schema.Session_IdToken(idToken),
             JsonSerializer.Serialize(session),

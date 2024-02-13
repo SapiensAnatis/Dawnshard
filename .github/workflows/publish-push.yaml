@@ -28,12 +28,12 @@ jobs:
       image-tag: latest
     secrets: inherit
 
-  deploy:
-    strategy:
-      matrix:
-        github-environment: ["PhotonStateManager", "Dawnshard"]
-    needs: publish
-    uses: ./.github/workflows/deploy.yaml
-    with:
-      github-environment: ${{ matrix.github-environment }}
-    secrets: inherit
+#  deploy:
+#    strategy:
+#      matrix:
+#        github-environment: ["PhotonStateManager", "Dawnshard"]
+#    needs: publish
+#    uses: ./.github/workflows/deploy.yaml
+#    with:
+#      github-environment: ${{ matrix.github-environment }}
+#    secrets: inherit

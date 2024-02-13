@@ -19,10 +19,10 @@ public static class DatabaseConfiguration
 
     public static IServiceCollection ConfigureDatabaseServices(
         this IServiceCollection services,
-        string? host
+        PostgresOptions postgresOptions
     )
     {
-        string connectionString = GetConnectionString(host);
+        string connectionString = GetConnectionString(postgresOptions);
 
         services = services
             .AddDbContext<ApiContext>(
@@ -47,16 +47,16 @@ public static class DatabaseConfiguration
         return services;
     }
 
-    private static string GetConnectionString(string? host)
+    private static string GetConnectionString(PostgresOptions options)
     {
         NpgsqlConnectionStringBuilder connectionStringBuilder =
             new()
             {
-                Host = host ?? "postgres",
-                Username = Environment.GetEnvironmentVariable("POSTGRES_USER") ?? "postgres",
-                Password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD"),
-                Database = Environment.GetEnvironmentVariable("POSTGRES_DB"),
-                LogParameters = true,
+                Host = options.Hostname,
+                Port = options.Port,
+                Username = options.Username,
+                Password = options.Password,
+                Database = options.Database,
                 IncludeErrorDetail = true,
             };
 

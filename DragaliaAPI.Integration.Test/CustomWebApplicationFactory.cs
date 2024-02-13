@@ -77,8 +77,13 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
             );
             services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration =
-                    $"{this.testContainersHelper.RedisHost}:{this.testContainersHelper.RedisPort}";
+                options.ConfigurationOptions = new()
+                {
+                    EndPoints = new()
+                    {
+                        { this.testContainersHelper.RedisHost, this.testContainersHelper.RedisPort }
+                    }
+                };
                 options.InstanceName = "RedisInstance";
             });
         });

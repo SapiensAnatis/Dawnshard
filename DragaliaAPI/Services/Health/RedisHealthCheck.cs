@@ -6,10 +6,12 @@ namespace DragaliaAPI.Services.Health;
 public class RedisHealthCheck : IHealthCheck
 {
     private readonly IDistributedCache cache;
+    private readonly ILogger<RedisHealthCheck> logger;
 
-    public RedisHealthCheck(IDistributedCache cache)
+    public RedisHealthCheck(IDistributedCache cache, ILogger<RedisHealthCheck> logger)
     {
         this.cache = cache;
+        this.logger = logger;
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(
@@ -25,6 +27,8 @@ public class RedisHealthCheck : IHealthCheck
         }
         catch (Exception ex)
         {
+            this.logger.LogError(ex, "Redis health check failed");
+
             return new HealthCheckResult(
                 status: context.Registration.FailureStatus,
                 exception: ex,

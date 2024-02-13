@@ -8,7 +8,7 @@ namespace DragaliaAPI.Features.Dungeon;
 public class DungeonService : IDungeonService
 {
     private readonly IDistributedCache cache;
-    private readonly IOptionsMonitor<RedisOptions> options;
+    private readonly IOptionsMonitor<RedisCachingOptions> options;
     private readonly ILogger<DungeonService> logger;
 
     private DistributedCacheEntryOptions CacheOptions =>
@@ -24,7 +24,7 @@ public class DungeonService : IDungeonService
 
     public DungeonService(
         IDistributedCache cache,
-        IOptionsMonitor<RedisOptions> options,
+        IOptionsMonitor<RedisCachingOptions> options,
         ILogger<DungeonService> logger
     )
     {

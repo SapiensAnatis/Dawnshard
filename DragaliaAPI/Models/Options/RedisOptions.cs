@@ -2,8 +2,9 @@
 
 public class RedisOptions
 {
-    public int SessionExpiryTimeMinutes { get; set; }
-    public int DungeonExpiryTimeMinutes { get; set; }
+    public string Hostname { get; set; } = "redis";
 
-    public int AutoRepeatExpiryTimeMinutes { get; set; }
+    public int Port { get; set; } = 6379;
+
+    public string? Password { get; set; }
 }

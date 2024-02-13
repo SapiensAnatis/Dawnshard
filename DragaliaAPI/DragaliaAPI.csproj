@@ -4,6 +4,7 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
         <Version>3.0.0</Version>
+        <UserSecretsId>f95759aa-167b-4511-aeb2-ea87d3c0798c</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
