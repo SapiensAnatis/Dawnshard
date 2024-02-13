@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Redis.OM;
@@ -14,21 +15,16 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.UseEnvironment("Testing");
+        Environment.SetEnvironmentVariable("RedisOptions__Hostname", TestContainers.RedisHost);
+        Environment.SetEnvironmentVariable(
+            "RedisOptions__Port",
+            TestContainers.RedisPort.ToString()
+        );
+    }
 
-        builder.ConfigureTestServices(services =>
-        {
-            services.RemoveAll<IConnectionMultiplexer>();
-            services.RemoveAll<IRedisConnectionProvider>();
-
-            IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(
-                $"{TestContainers.RedisHost}:{TestContainers.RedisPort}"
-            );
-
-            IRedisConnectionProvider provider = new RedisConnectionProvider(multiplexer);
-            services.AddSingleton(provider);
-
-            provider.Connection.CreateIndex(typeof(RedisGame));
-        });
+    protected override void Dispose(bool disposing)
+    {
+        Environment.SetEnvironmentVariable("RedisOptions__Hostname", null);
+        Environment.SetEnvironmentVariable("RedisOptions__Port", null);
     }
 }

@@ -12,7 +12,9 @@ services:
       context: .
       dockerfile: DragaliaAPI/Dockerfile
     environment:
-      - ASPNETCORE_URLS=http://+:80
+      - PostgresOptions__Username=$POSTGRES_USER
+      - PostgresOptions__Password=$POSTGRES_PASSWORD
+      - PostgresOptions__Database=$POSTGRES_DB
     ports:
       - "80:80"
       - "5000:80"
@@ -27,10 +29,8 @@ services:
     build:
         context: .
         dockerfile: DragaliaAPI.Photon.StateManager/Dockerfile
-    environment:
-      - HTTP_PORTS=80
     ports:
-      - "5001:80"
+      - "5001:8080"
     env_file:
       - .env
     profiles:
