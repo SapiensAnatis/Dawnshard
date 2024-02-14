@@ -24,5 +24,6 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script_stop: true
           script: |
-            kubectl rollout restart deployment/${{ vars.K8S_DEPLOYMENT }} -n ${{ vars.K8S_NAMESPACE }} --kubeconfig "$HOME/.kube/config"
-            kubectl rollout status deployment/${{ vars.K8S_DEPLOYMENT }} -n ${{ vars.K8S_NAMESPACE }} --kubeconfig "$HOME/.kube/config"
+            export NOMAD_TOKEN="${{ secrets.NOMAD_TOKEN }}";
+            cd "${{ vars.JOB_DIRECTORY }}";
+            nomad job run "${{ vars.JOB_FILE_NAME }}";
