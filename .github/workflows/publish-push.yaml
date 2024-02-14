@@ -31,7 +31,6 @@ jobs:
   deploy:
     strategy:      
       # Nomad will re-template Dawnshard when PhotonStateManager's address changes. 
-      # Deploy PSM first to avoid a double redeploy.
       # TODO: Consider using Consul DNS to work around this problem
       max-parallel: 1 
       matrix:

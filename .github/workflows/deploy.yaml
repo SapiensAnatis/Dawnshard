@@ -24,6 +24,8 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script_stop: true
           script: |
-            export NOMAD_TOKEN="${{ secrets.NOMAD_TOKEN }}";
-            cd "${{ vars.JOB_DIRECTORY }}";
-            nomad job run "${{ vars.JOB_FILE_NAME }}";
+            export NOMAD_ADDR="https://10.0.0.2:4646"
+            export NOMAD_CACERT="/srv/certs/cluster-agent-ca.pem"
+            export NOMAD_TOKEN="${{ secrets.NOMAD_TOKEN }}"
+            cd "${{ vars.JOB_DIRECTORY }}"
+            nomad job run "${{ vars.JOB_FILE_NAME }}"
