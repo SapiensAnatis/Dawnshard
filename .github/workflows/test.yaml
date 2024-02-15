@@ -18,11 +18,11 @@ jobs:
       matrix:
         project:
           [
-            "DragaliaAPI.Test",
-            "DragaliaAPI.Integration.Test",
-            "DragaliaAPI.Database.Test",
-            "DragaliaAPI.Shared.Test",
-            "DragaliaAPI.Photon.StateManager.Test",
+            "DragaliaAPI/DragaliaAPI.Test",
+            "DragaliaAPI/DragaliaAPI.Integration.Test",
+            "DragaliaAPI/DragaliaAPI.Database.Test",
+            "DragaliaAPI/DragaliaAPI.Shared.Test",
+            "Photon/DragaliaAPI.Photon.StateManager.Test",
           ]
 
     services:
@@ -49,6 +49,10 @@ jobs:
           --health-retries 5
 
     steps:
+      - name: Get project name # Remove folder from project
+        id: get-name
+        run: >
+          echo ${{ matrix.project }} | sed 's/.*\//name=/' >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
       - name: Setup .NET Core SDK 7
         uses: actions/setup-dotnet@v4
@@ -61,10 +65,11 @@ jobs:
           dotnet test ${{ matrix.project }}
           --no-restore 
           --logger "console;verbosity=detailed"
-          --logger "trx;LogFileName=${{ matrix.project }}.trx"
+          --logger "trx;LogFileName=${{ steps.get-name.outputs.name }}.trx"
+      
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: success() || failure() # run this step even if previous step failed
         with:
-          name: test-result-${{ matrix.project }}
-          path: ${{ matrix.project }}/TestResults/${{ matrix.project }}.trx
+          name: test-result-${{ steps.get-name.outputs.name }}
+          path: ${{ matrix.project }}/TestResults/${{ steps.get-name.outputs.name }}.trx

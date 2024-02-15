@@ -15,10 +15,10 @@ jobs:
         args:
           [
             {
-              dockerfile: "DragaliaAPI.Photon.StateManager/Dockerfile",
+              dockerfile: "DragaliaAPI/DragaliaAPI.Photon.StateManager/Dockerfile",
               image: "photon-state-manager",
             },
-            { dockerfile: "DragaliaAPI/Dockerfile", image: "dragalia-api" }
+            { dockerfile: "DragaliaAPI/DragaliaAPI/Dockerfile", image: "dragalia-api" }
           ]
     uses: ./.github/workflows/publish.yaml
     with:
