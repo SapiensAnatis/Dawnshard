@@ -20,5 +20,5 @@ jobs:
           dotnet-version: "8.0.x"
       - name: Run MissionDesigner
         run: |
-          dotnet run --project DragaliaAPI.MissionDesigner -- NewProgressionInfo.json
-          cmp NewProgressionInfo.json DragaliaAPI.Shared/Resources/Missions/MissionProgressionInfo.json
+          dotnet run --project DragaliaAPI/DragaliaAPI.MissionDesigner -- NewProgressionInfo.json
+          cmp NewProgressionInfo.json DragaliaAPI/DragaliaAPI.Shared/Resources/Missions/MissionProgressionInfo.json
