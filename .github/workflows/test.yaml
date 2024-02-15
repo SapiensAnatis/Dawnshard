@@ -22,7 +22,7 @@ jobs:
             "DragaliaAPI/DragaliaAPI.Integration.Test",
             "DragaliaAPI/DragaliaAPI.Database.Test",
             "DragaliaAPI/DragaliaAPI.Shared.Test",
-            "Photon/DragaliaAPI.Photon.StateManager.Test",
+            "PhotonStateManager/DragaliaAPI.Photon.StateManager.Test",
           ]
 
     services:
