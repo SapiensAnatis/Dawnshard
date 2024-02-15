@@ -10,14 +10,14 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG CI
 
 WORKDIR /src
-COPY ["DragaliaAPI/DragaliaAPI/DragaliaAPI.csproj", "DragaliaAPI/"]
+COPY ["DragaliaAPI/DragaliaAPI/DragaliaAPI.csproj", "DragaliaAPI/DragaliaAPI/"]
 COPY ["Directory.Build.props", "."]
 COPY ["Directory.Packages.props", "."]
 COPY ["nuget.config", "."]
-RUN dotnet restore "DragaliaAPI/DragaliaAPI.csproj"
+RUN dotnet restore "DragaliaAPI/DragaliaAPI/DragaliaAPI.csproj"
 COPY . .
 RUN ls
-WORKDIR "/src/DragaliaAPI"
+WORKDIR "/src/DragaliaAPI/DragaliaAPI"
 RUN dotnet build "DragaliaAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish
