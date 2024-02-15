@@ -16,7 +16,7 @@ jobs:
           [
             {
               dockerfile: "PhotonStateManager/DragaliaAPI.Photon.StateManager/Dockerfile",
-              image: "photon-state-manager",
+              image: "photon-state-manager"
             },
             { dockerfile: "DragaliaAPI/DragaliaAPI/Dockerfile", image: "dragalia-api" }
           ]

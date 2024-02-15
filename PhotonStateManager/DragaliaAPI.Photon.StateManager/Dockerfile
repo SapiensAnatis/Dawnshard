@@ -2,12 +2,14 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+
+EXPOSE 8080
+EXPOSE 8081
+ENV ASPNETCORE_HTTPS_PORTS=8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["DragaliaAPI.Photon.StateManager/DragaliaAPI.Photon.StateManager.csproj", "DragaliaAPI.Photon.StateManager/"]
+COPY ["PhotonStateManager/DragaliaAPI.Photon.StateManager/DragaliaAPI.Photon.StateManager.csproj", "DragaliaAPI.Photon.StateManager/"]
 COPY ["Directory.Build.props", "."]
 COPY ["Directory.Packages.props", "."]
 COPY ["nuget.config", "."]
