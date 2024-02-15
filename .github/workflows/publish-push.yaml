@@ -15,7 +15,7 @@ jobs:
         args:
           [
             {
-              dockerfile: "DragaliaAPI/DragaliaAPI.Photon.StateManager/Dockerfile",
+              dockerfile: "PhotonStateManager/DragaliaAPI.Photon.StateManager/Dockerfile",
               image: "photon-state-manager",
             },
             { dockerfile: "DragaliaAPI/DragaliaAPI/Dockerfile", image: "dragalia-api" }
