@@ -49,6 +49,10 @@ jobs:
           --health-retries 5
 
     steps:
+      - name: Get project name # Remove folder from project
+        id: get-name
+        run: >
+          echo ${{ matrix.project }} | sed 's/.*\//name=/' >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
       - name: Setup .NET Core SDK 7
         uses: actions/setup-dotnet@v4
@@ -61,14 +65,11 @@ jobs:
           dotnet test ${{ matrix.project }}
           --no-restore 
           --logger "console;verbosity=detailed"
-          --logger "trx;LogFileName=${{ matrix.project }}.trx"
-      - name: Get test report name # Can't have '/' in artefact name
-        id: get-name
-        run: >
-          echo ${{ matrix.project }} | sed 's/.*\//name=/' >> "$GITHUB_OUTPUT"
+          --logger "trx;LogFileName=${{ steps.get-name.outputs.name }}.trx"
+      
       - name: Upload test report
         uses: actions/upload-artifact@v4
-        if: success() || failure() # Run this step even if previous step failed
+        if: success() || failure() # run this step even if previous step failed
         with:
-          name: test-result-${{ matrix.project }}
+          name: test-result-${{ steps.get-name.outputs.name }}
           path: ${{ matrix.project }}/TestResults/${{ steps.get-name.outputs.name }}.trx
