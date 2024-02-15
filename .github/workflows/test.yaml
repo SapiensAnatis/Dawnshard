@@ -18,11 +18,11 @@ jobs:
       matrix:
         project:
           [
-            "DragaliaAPI.Test",
-            "DragaliaAPI.Integration.Test",
-            "DragaliaAPI.Database.Test",
-            "DragaliaAPI.Shared.Test",
-            "DragaliaAPI.Photon.StateManager.Test",
+            "DragaliaAPI/DragaliaAPI.Test",
+            "DragaliaAPI/DragaliaAPI.Integration.Test",
+            "DragaliaAPI/DragaliaAPI.Database.Test",
+            "DragaliaAPI/DragaliaAPI.Shared.Test",
+            "Photon/DragaliaAPI.Photon.StateManager.Test",
           ]
 
     services:
