@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI", "DragaliaAPI\DragaliaAPI.csproj", "{161BE542-C5B4-441D-BEA1-5F3553BFD839}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI", "DragaliaAPI\DragaliaAPI\DragaliaAPI.csproj", "{161BE542-C5B4-441D-BEA1-5F3553BFD839}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Test", "DragaliaAPI.Test\DragaliaAPI.Test.csproj", "{A1E6C76A-4D4F-427D-80AF-CF289CBBAF00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Test", "DragaliaAPI\DragaliaAPI.Test\DragaliaAPI.Test.csproj", "{A1E6C76A-4D4F-427D-80AF-CF289CBBAF00}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{6E4BCC4D-1998-4135-A474-681EC6E6AF57}"
 EndProject
@@ -23,13 +23,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.json = global.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Database", "DragaliaAPI.Database\DragaliaAPI.Database.csproj", "{3B1A86CE-A656-453B-BC3F-EA42DF9E3FC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Database", "DragaliaAPI\DragaliaAPI.Database\DragaliaAPI.Database.csproj", "{3B1A86CE-A656-453B-BC3F-EA42DF9E3FC6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Shared", "DragaliaAPI.Shared\DragaliaAPI.Shared.csproj", "{A8051BCA-7E23-417C-986A-943DE4F81E1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Shared", "DragaliaAPI\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj", "{A8051BCA-7E23-417C-986A-943DE4F81E1B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Shared.Test", "DragaliaAPI.Shared.Test\DragaliaAPI.Shared.Test.csproj", "{283F16C6-1EB5-4062-90C6-663D975977FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Shared.Test", "DragaliaAPI\DragaliaAPI.Shared.Test\DragaliaAPI.Shared.Test.csproj", "{283F16C6-1EB5-4062-90C6-663D975977FE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Database.Test", "DragaliaAPI.Database.Test\DragaliaAPI.Database.Test.csproj", "{BF6A04DC-56FE-491F-A73B-F54A3E7BAA4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Database.Test", "DragaliaAPI\DragaliaAPI.Database.Test\DragaliaAPI.Database.Test.csproj", "{BF6A04DC-56FE-491F-A73B-F54A3E7BAA4B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{1A23D473-87C4-40FB-8DF0-43F4B0FE7414}"
 	ProjectSection(SolutionItems) = preProject
@@ -43,19 +43,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{1A23D4
 		.github\workflows\test.yaml = .github\workflows\test.yaml
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Test.Utils", "DragaliaAPI.Test.Utils\DragaliaAPI.Test.Utils.csproj", "{41916B7C-6304-4504-99C0-B24D23982F7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Test.Utils", "DragaliaAPI\DragaliaAPI.Test.Utils\DragaliaAPI.Test.Utils.csproj", "{41916B7C-6304-4504-99C0-B24D23982F7E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Photon.StateManager", "DragaliaAPI.Photon.StateManager\DragaliaAPI.Photon.StateManager.csproj", "{8E4D9C20-3914-4A8A-ACC0-22997F2947AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Photon.StateManager", "Photon\DragaliaAPI.Photon.StateManager\DragaliaAPI.Photon.StateManager.csproj", "{8E4D9C20-3914-4A8A-ACC0-22997F2947AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Photon.Plugin", "DragaliaAPI.Photon.Plugin\DragaliaAPI.Photon.Plugin.csproj", "{D9AC51A5-38F6-4DD1-8839-9FE881396A6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Photon.Plugin", "Photon\DragaliaAPI.Photon.Plugin\DragaliaAPI.Photon.Plugin.csproj", "{D9AC51A5-38F6-4DD1-8839-9FE881396A6B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Photon", "Photon", "{8B4B2FE9-B1FC-44FC-BC49-0E277731A68A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Integration.Test", "DragaliaAPI.Integration.Test\DragaliaAPI.Integration.Test.csproj", "{CA0AE7C5-2742-4FC9-B668-BC7459E4BCE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Integration.Test", "DragaliaAPI\DragaliaAPI.Integration.Test\DragaliaAPI.Integration.Test.csproj", "{CA0AE7C5-2742-4FC9-B668-BC7459E4BCE5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Photon.Shared", "DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj", "{7394DCE5-7E1B-44C7-B3CA-735885D97695}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Photon.Shared", "Photon\DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj", "{7394DCE5-7E1B-44C7-B3CA-735885D97695}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Photon.StateManager.Test", "DragaliaAPI.Photon.StateManager.Test\DragaliaAPI.Photon.StateManager.Test.csproj", "{D940A00F-39CC-48C5-996E-DF0EC55FD140}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Photon.StateManager.Test", "Photon\DragaliaAPI.Photon.StateManager.Test\DragaliaAPI.Photon.StateManager.Test.csproj", "{D940A00F-39CC-48C5-996E-DF0EC55FD140}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".husky", ".husky", "{7D333F35-F74C-4A63-AB6E-5F0EE4590ADB}"
 	ProjectSection(SolutionItems) = preProject
@@ -63,9 +63,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".husky", ".husky", "{7D333F
 		.husky\task-runner.json = .husky\task-runner.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Photon.Plugin.Test", "DragaliaAPI.Photon.Plugin.Test\DragaliaAPI.Photon.Plugin.Test.csproj", "{64D07506-1978-4981-AF90-B73C4B6AFCE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Photon.Plugin.Test", "Photon\DragaliaAPI.Photon.Plugin.Test\DragaliaAPI.Photon.Plugin.Test.csproj", "{64D07506-1978-4981-AF90-B73C4B6AFCE5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.MissionDesigner", "DragaliaAPI.MissionDesigner\DragaliaAPI.MissionDesigner.csproj", "{00908D51-DB79-4A9C-AFBF-501F9981E6F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.MissionDesigner", "DragaliaAPI\DragaliaAPI.MissionDesigner\DragaliaAPI.MissionDesigner.csproj", "{00908D51-DB79-4A9C-AFBF-501F9981E6F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
