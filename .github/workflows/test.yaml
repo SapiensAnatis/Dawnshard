@@ -62,9 +62,13 @@ jobs:
           --no-restore 
           --logger "console;verbosity=detailed"
           --logger "trx;LogFileName=${{ matrix.project }}.trx"
+      - name: Get test report name # Can't have '/' in artefact name
+        id: get-name
+        run: >
+          echo ${{ matrix.project }} | sed 's/.*\//name=/' >> "$GITHUB_OUTPUT"
       - name: Upload test report
         uses: actions/upload-artifact@v4
-        if: success() || failure() # run this step even if previous step failed
+        if: success() || failure() # Run this step even if previous step failed
         with:
           name: test-result-${{ matrix.project }}
-          path: ${{ matrix.project }}/TestResults/${{ matrix.project }}.trx
+          path: ${{ matrix.project }}/TestResults/${{ steps.get-name.outputs.name }}.trx
