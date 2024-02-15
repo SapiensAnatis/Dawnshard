@@ -8,6 +8,8 @@
 **/.toolstarget
 **/.vs
 **/.vscode
+**/.idea
+.github/
 **/*.*proj.user
 **/*.dbmdl
 **/*.jfm
@@ -23,5 +25,6 @@
 **/values.dev.yaml
 LICENSE
 README.md
-DragaliaAPI.Photon.Plugin/**
-*.Test/**/*
+PhotonPlugin/
+**/*.Test/
+**/logs

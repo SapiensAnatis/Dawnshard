@@ -9,13 +9,13 @@ ENV ASPNETCORE_HTTPS_PORTS=8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["PhotonStateManager/DragaliaAPI.Photon.StateManager/DragaliaAPI.Photon.StateManager.csproj", "DragaliaAPI.Photon.StateManager/"]
+COPY ["PhotonStateManager/DragaliaAPI.Photon.StateManager/DragaliaAPI.Photon.StateManager.csproj", "PhotonStateManager/DragaliaAPI.Photon.StateManager/"]
 COPY ["Directory.Build.props", "."]
 COPY ["Directory.Packages.props", "."]
 COPY ["nuget.config", "."]
-RUN dotnet restore "DragaliaAPI.Photon.StateManager/DragaliaAPI.Photon.StateManager.csproj"
+RUN dotnet restore "PhotonStateManager/DragaliaAPI.Photon.StateManager/DragaliaAPI.Photon.StateManager.csproj"
 COPY . .
-WORKDIR "/src/DragaliaAPI.Photon.StateManager"
+WORKDIR "/src/PhotonStateManager/DragaliaAPI.Photon.StateManager"
 RUN dotnet build "DragaliaAPI.Photon.StateManager.csproj" -c Release -o /app/build
 
 FROM build AS publish
