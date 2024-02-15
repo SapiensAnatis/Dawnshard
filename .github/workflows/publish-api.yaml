@@ -13,6 +13,6 @@ jobs:
     uses: ./.github/workflows/publish.yaml
     with:
       ref: ${{ github.ref_name }}
-      dockerfile: "DragaliaAPI/Dockerfile"
+      dockerfile: "DragaliaAPI/DragaliaAPI/Dockerfile"
       image-name: "dragalia-api"
     secrets: inherit

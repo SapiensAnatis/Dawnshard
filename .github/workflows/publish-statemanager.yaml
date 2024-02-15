@@ -13,6 +13,6 @@ jobs:
     uses: ./.github/workflows/publish.yaml
     with:
       ref: ${{ github.ref_name }}
-      dockerfile: "DragaliaAPI.Photon.StateManager/Dockerfile"
+      dockerfile: "PhotonStateManager/DragaliaAPI.Photon.StateManager/Dockerfile"
       image-name: "photon-state-manager"
     secrets: inherit

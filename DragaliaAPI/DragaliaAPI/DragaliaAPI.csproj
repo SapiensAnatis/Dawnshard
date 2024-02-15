@@ -52,7 +52,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj" />
-        <ProjectReference Include="..\..\Photon\DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj" />
+        <ProjectReference Include="..\..\Shared\DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj" />
         <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj" />
     </ItemGroup>
     
