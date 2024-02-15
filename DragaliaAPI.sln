@@ -41,6 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{1A23D4
 		.github\workflows\publish-statemanager.yaml = .github\workflows\publish-statemanager.yaml
 		.github\workflows\publish.yaml = .github\workflows\publish.yaml
 		.github\workflows\test.yaml = .github\workflows\test.yaml
+		.github\workflows\missiondesigner.yaml = .github\workflows\missiondesigner.yaml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Test.Utils", "DragaliaAPI\DragaliaAPI.Test.Utils\DragaliaAPI.Test.Utils.csproj", "{41916B7C-6304-4504-99C0-B24D23982F7E}"
