@@ -1,4 +1,4 @@
-name: publish
+name: Build
 
 on:
   workflow_call:
@@ -25,14 +25,15 @@ env:
   HUSKY: 0
 
 jobs:
-  publish:
+  build:
+    name: Build Docker image
     runs-on: ubuntu-latest
     strategy:
       matrix:
         dotnet-version: ["8.0.x"]
 
     steps:
-      - name: derive tag
+      - name: Derive image tag
         id: derive-tag
         run: |
           TAG_REGEX="[\w]+?@v(.*)"

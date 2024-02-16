@@ -1,18 +1,29 @@
-name: publish-tag
+name: Publish DragaliaAPI
 
 on:
   push:
-    tags:
-      - "statemanager@*"
+    branches:
+      - main
+    paths:
+      - PhotonStateManager/**
+      - Shared/**
+      - Directory.Build.props
+      - Directory.Packages.props
 
 env:
   HUSKY: 0
 
 jobs:
-  publish:
+  build:
     uses: ./.github/workflows/publish.yaml
     with:
-      ref: ${{ github.ref_name }}
+      ref: main
       dockerfile: "PhotonStateManager/DragaliaAPI.Photon.StateManager/Dockerfile"
       image-name: "photon-state-manager"
+    secrets: inherit
+  deploy:
+    needs: build
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      github-environment: "PhotonStateManager"
     secrets: inherit

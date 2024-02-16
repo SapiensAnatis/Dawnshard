@@ -1,4 +1,4 @@
-name: csharpier
+name: CSharpier
 
 on:
   pull_request:
@@ -11,6 +11,7 @@ env:
 
 jobs:
   csharpier:
+    name: CSharpier
     runs-on: ubuntu-latest
     strategy:
       matrix:
