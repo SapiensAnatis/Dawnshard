@@ -2,7 +2,7 @@ name: "test-report"
 
 on:
   workflow_run:
-    workflows: ["test"]
+    workflows: ["Test API", "Test PhotonStateManager"]
     types:
       - completed
 

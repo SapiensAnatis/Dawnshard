@@ -8,9 +8,6 @@ using Redis.OM.Contracts;
 using Serilog;
 using StackExchange.Redis;
 
-// test
-
-
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();

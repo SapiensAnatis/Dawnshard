@@ -19,8 +19,8 @@ on:
       - Directory.Packages.props
 
 jobs:
-  integration-test:
-    name: Integration test
+  test:
+    name: Test
     uses: ./.github/workflows/integration-test.yaml
     with:
       project: PhotonStateManager/DragaliaAPI.Photon.StateManager.Test
