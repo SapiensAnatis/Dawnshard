@@ -1,4 +1,4 @@
-name: Test
+name: Integration test
 
 on:
   workflow_call:
@@ -8,15 +8,43 @@ on:
         required: true
         description: "Path to project under test"
 
+env:
+  HUSKY: 0
+  POSTGRES_USER: testing
+  POSTGRES_PASSWORD: verystrongpassword
+
 jobs:
   test:
-    name: Test
+    name: Integration test
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis/redis-stack:7.2.0-v6
+        ports:
+          - "6379:6379"
+        options: >-
+          --health-cmd "redis-cli PING"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Get project name # Remove folder from project
         id: get-name
         run: >
-          echo ${{ matrix.project }} | sed 's/.*\//name=/' >> "$GITHUB_OUTPUT"
+          echo ${{ inputs.project }} | sed 's/.*\//name=/' >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v4
@@ -26,7 +54,7 @@ jobs:
         run: dotnet restore ${{ inputs.project }}
       - name: Test
         run: >
-          dotnet test ${{ matrix.project }}
+          dotnet test ${{ inputs.project }}
           --no-restore 
           --logger "console;verbosity=detailed"
           --logger "trx;LogFileName=${{ steps.get-name.outputs.name }}.trx"

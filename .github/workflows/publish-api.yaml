@@ -1,18 +1,31 @@
-name: publish-tag
+name: Publish DragaliaAPI
 
 on:
   push:
-    tags:
-      - "api@*"
+    branches:
+      - main
+    paths:
+      - DragaliaAPI/**
+      - Shared/**
+      - Directory.Build.props
+      - Directory.Packages.props
 
 env:
   HUSKY: 0
 
 jobs:
-  publish:
+  build:
+    name: Build
     uses: ./.github/workflows/publish.yaml
     with:
-      ref: ${{ github.ref_name }}
+      ref: main
       dockerfile: "DragaliaAPI/DragaliaAPI/Dockerfile"
       image-name: "dragalia-api"
+    secrets: inherit
+  deploy:
+    name: Deploy
+    needs: build
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      github-environment: "Dawnshard"
     secrets: inherit
