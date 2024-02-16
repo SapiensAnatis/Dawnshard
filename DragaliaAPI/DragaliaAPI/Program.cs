@@ -37,7 +37,6 @@ IConfiguration config = builder
     .AddJsonFile("dragonfruitOdds.json", optional: false, reloadOnChange: true)
     .Build();
 
-// Test
 builder.WebHost.UseStaticWebAssets();
 
 builder

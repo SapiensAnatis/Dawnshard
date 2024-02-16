@@ -35,6 +35,6 @@ jobs:
             "DragaliaAPI/DragaliaAPI.Database.Test",
             "DragaliaAPI/DragaliaAPI.Shared.Test"
           ]
-    uses: ./.github/workflows/integration-test.yaml
+    uses: ./.github/workflows/test.yaml
     with:
       project: ${{ matrix.project }}
