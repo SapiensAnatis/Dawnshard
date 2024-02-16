@@ -20,7 +20,7 @@ on:
 
 jobs:
   integration-test:
-    name: Integration test PhotonStateManager
+    name: Integration test
     uses: ./.github/workflows/integration-test.yaml
     with:
       project: PhotonStateManager/DragaliaAPI.Photon.StateManager.Test

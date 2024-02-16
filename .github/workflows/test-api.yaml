@@ -20,7 +20,7 @@ on:
 
 jobs:
   integration-test:
-    name: Integration test API
+    name: Integration test
     uses: ./.github/workflows/integration-test.yaml
     with:
       project: DragaliaAPI/DragaliaAPI.Integration.Test

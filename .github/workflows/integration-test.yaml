@@ -1,4 +1,4 @@
-name: Integration Test
+name: Integration test
 
 on:
   workflow_call:
@@ -15,7 +15,7 @@ env:
 
 jobs:
   test:
-    name: Integration Test
+    name: Integration test
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -51,7 +51,7 @@ jobs:
         with:
           dotnet-version: "8.0.x"
       - name: Install dependencies
-        run: dotnet restore ${{ matrix.project }}
+        run: dotnet restore ${{ inputs.project }}
       - name: Test
         run: >
           dotnet test ${{ inputs.project }}
