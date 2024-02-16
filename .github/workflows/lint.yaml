@@ -1,4 +1,4 @@
-name: CSharpier
+name: Lint
 
 on:
   pull_request:
