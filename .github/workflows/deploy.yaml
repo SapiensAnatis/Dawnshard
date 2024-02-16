@@ -1,4 +1,4 @@
-name: deploy
+name: Deploy
 
 on:
   workflow_call:
@@ -10,12 +10,13 @@ on:
 
 jobs:
   deploy:
+    name: Deploy
     runs-on: ubuntu-latest
     environment:
       name: ${{ inputs.github-environment }}
       url: https://dawnshard.co.uk
     steps:
-      - name: ssh and restart pods
+      - name: ssh and submit job
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}

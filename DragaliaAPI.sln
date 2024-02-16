@@ -37,9 +37,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{1A23D4
 		.github\workflows\lint.yaml = .github\workflows\lint.yaml
 		.github\workflows\publish-api.yaml = .github\workflows\publish-api.yaml
 		.github\workflows\publish-manual.yaml = .github\workflows\publish-manual.yaml
-		.github\workflows\publish-push.yaml = .github\workflows\publish-push.yaml
 		.github\workflows\publish-statemanager.yaml = .github\workflows\publish-statemanager.yaml
-		.github\workflows\publish.yaml = .github\workflows\publish.yaml
 		.github\workflows\test.yaml = .github\workflows\test.yaml
 		.github\workflows\missiondesigner.yaml = .github\workflows\missiondesigner.yaml
 	EndProjectSection

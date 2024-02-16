@@ -1,4 +1,4 @@
-name: publish
+name: Build
 
 on:
   workflow_call:
@@ -25,14 +25,12 @@ env:
   HUSKY: 0
 
 jobs:
-  publish:
+  build:
+    name: Build Docker image
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dotnet-version: ["8.0.x"]
 
     steps:
-      - name: derive tag
+      - name: Derive image tag
         id: derive-tag
         run: |
           TAG_REGEX="[\w]+?@v(.*)"
@@ -62,10 +60,10 @@ jobs:
       - name: Log in to registry
         # This is where you will update the personal access token to GITHUB_TOKEN
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+      - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ matrix.dotnet-version }}
+          dotnet-version: 8.0.x
       - name: Build and push
         run: |
           IMAGE=ghcr.io/sapiensanatis/${{ inputs.image-name }}:${{ steps.derive-tag.outputs.tag }}
