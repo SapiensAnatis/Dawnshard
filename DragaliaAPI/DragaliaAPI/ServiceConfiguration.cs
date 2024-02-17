@@ -92,7 +92,9 @@ public static class ServiceConfiguration
             .AddScoped<IFortRepository, FortRepository>()
             // Login feature
             .AddScoped<IResetHelper, ResetHelper>()
+#pragma warning disable CS0618 // Type or member is obsolete
             .AddScoped<IDateTimeProvider, DateTimeProvider>()
+#pragma warning restore CS0618 // Type or member is obsolete
             .AddScoped<ILoginBonusService, LoginBonusService>()
             .AddScoped<ILoginBonusRepository, LoginBonusRepository>()
             // Dungeon Feature
