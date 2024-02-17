@@ -1,4 +1,4 @@
-name: Publish DragaliaAPI
+name: Publish PhotonStateManager
 
 on:
   push:
