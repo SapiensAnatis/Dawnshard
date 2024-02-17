@@ -10,7 +10,7 @@ services:
     hostname: dragaliaapi
     build:
       context: .
-      dockerfile: DragaliaAPI/Dockerfile
+      dockerfile: DragaliaAPI/DragaliaAPI/Dockerfile
     environment:
       - PostgresOptions__Username=$POSTGRES_USER
       - PostgresOptions__Password=$POSTGRES_PASSWORD
@@ -28,7 +28,7 @@ services:
     image: ${DOCKER_REGISTRY-}photonstatemanager
     build:
         context: .
-        dockerfile: DragaliaAPI.Photon.StateManager/Dockerfile
+        dockerfile: PhotonStateManager/DragaliaAPI.Photon.StateManager/Dockerfile
     ports:
       - "5001:8080"
     env_file:
