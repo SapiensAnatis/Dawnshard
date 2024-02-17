@@ -43,7 +43,7 @@ jobs:
             exit 0;
           fi
           
-          if [ ${{ inputs.ref }} = "develop" ]
+          if [ ${{ inputs.ref }} = "main" ]
           then
              echo "tag=latest" >> "$GITHUB_OUTPUT"
           elif [[ ${{ inputs.ref }} =~ $TAG_REGEX ]]
