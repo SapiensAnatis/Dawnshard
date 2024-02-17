@@ -10,8 +10,6 @@ using StackExchange.Redis;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
-
 if (Environment.GetEnvironmentVariable("ENABLE_HTTPS") != null)
 {
     X509Certificate2 certificate = X509Certificate2.CreateFromPemFile("cert.pem", "cert.key");
@@ -67,8 +65,6 @@ builder.Services.AddSwaggerGen(config =>
     );
 });
 
-Log.Logger.Information("App environment {@env}", builder.Environment);
-
 RedisOptions redisOptions =
     builder.Configuration.GetRequiredSection(nameof(RedisOptions)).Get<RedisOptions>()
     ?? throw new InvalidOperationException("Failed to deserialize Redis configuration");
@@ -88,23 +84,22 @@ IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(
     }
 );
 
-IRedisConnectionProvider provider = new RedisConnectionProvider(multiplexer);
-builder.Services.AddSingleton(provider);
+RedisConnectionProvider provider = new(multiplexer);
+builder.Services.AddSingleton<IRedisConnectionProvider>(provider);
+
+WebApplication app = builder.Build();
 
 bool created = await provider.Connection.CreateIndexAsync(typeof(RedisGame));
-
 RedisIndexInfo? info = await provider.Connection.GetIndexInfoAsync(typeof(RedisGame));
-Log.Logger.Information("Index created: {created}", created);
-Log.Logger.Information("Index info: {@info}", info);
+
+app.Logger.LogInformation("Index created: {Created}", created);
+app.Logger.LogInformation("Index info: {@Info}", info);
 
 if (builder.Environment.IsDevelopment())
 {
-    Log.Logger.Information("App is in development mode -- clearing all pre-existing games");
-
+    app.Logger.LogInformation("App is in development mode -- clearing all pre-existing games");
     await provider.RedisCollection<RedisGame>().DeleteAsync(provider.RedisCollection<RedisGame>());
 }
-
-WebApplication app = builder.Build();
 
 app.UseSerilogRequestLogging();
 
