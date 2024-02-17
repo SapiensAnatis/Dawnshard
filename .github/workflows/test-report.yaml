@@ -1,4 +1,4 @@
-name: "test-report"
+name: Test report
 
 on:
   workflow_run:
@@ -8,6 +8,7 @@ on:
 
 jobs:
   report:
+    name: Generate test report
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
