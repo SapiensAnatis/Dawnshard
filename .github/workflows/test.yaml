@@ -35,4 +35,4 @@ jobs:
         if: success() || failure() # run this step even if previous step failed
         with:
           name: test-result-${{ steps.get-name.outputs.name }}
-          path: ${{ matrix.project }}/TestResults/${{ steps.get-name.outputs.name }}.trx
+          path: ${{ inputs.project }}/TestResults/${{ steps.get-name.outputs.name }}.trx
