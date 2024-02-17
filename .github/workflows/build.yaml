@@ -28,7 +28,9 @@ jobs:
   build:
     name: Build Docker image
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Derive image tag
         id: derive-tag
