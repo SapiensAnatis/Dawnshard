@@ -16,7 +16,7 @@ jobs:
       - name: Get project name # Remove folder from project
         id: get-name
         run: >
-          echo ${{ matrix.project }} | sed 's/.*\//name=/' >> "$GITHUB_OUTPUT"
+          echo ${{ inputs.project }} | sed 's/.*\//name=/' >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v4
@@ -26,7 +26,7 @@ jobs:
         run: dotnet restore ${{ inputs.project }}
       - name: Test
         run: >
-          dotnet test ${{ matrix.project }}
+          dotnet test ${{ inputs.project }}
           --no-restore 
           --logger "console;verbosity=detailed"
           --logger "trx;LogFileName=${{ steps.get-name.outputs.name }}.trx"
