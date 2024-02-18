@@ -136,7 +136,7 @@ public class FortService(
 
                     for (int i = 0; i < fruits; i++)
                     {
-                        int value = rdm.Next(100);
+                        int value = rdm.Next(101);
                         if (odds.Normal >= value)
                             normal++;
                         else if (odds.Normal + odds.Ripe >= value)

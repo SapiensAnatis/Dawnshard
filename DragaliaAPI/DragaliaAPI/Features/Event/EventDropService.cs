@@ -57,7 +57,7 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         if (progress.Count == 0)
             return Enumerable.Empty<AtgenEventPassiveUpList>();
 
-        int amount = rdm.Next(0, progress.Count);
+        int amount = rdm.Next(progress.Count);
         if (amount == 0)
             return Enumerable.Empty<AtgenEventPassiveUpList>();
 
@@ -71,7 +71,7 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
 
         for (int i = 0; i < amount; i++)
         {
-            int roll = rdm.Next(100);
+            int roll = rdm.Next(101);
 
             bool isRare = roll > 95;
             List<int> table = isRare ? rare : normal;
@@ -441,7 +441,7 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
 
     private int GenerateDropAmount(double average)
     {
-        double val = rdm.Next(75, 125) / 100d;
+        double val = rdm.Next(75, 126) / 100d;
         return (int)Math.Floor(average * val);
     }
 }
