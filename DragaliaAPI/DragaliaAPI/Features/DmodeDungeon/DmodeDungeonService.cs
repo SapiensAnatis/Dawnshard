@@ -175,8 +175,8 @@ public class DmodeDungeonService(
         {
             int talismanAmount = floorNum switch
             {
-                < 50 => rdm.Next(1, 2),
-                < 60 => rdm.Next(3, 4),
+                < 50 => rdm.Next(1, 3),
+                < 60 => rdm.Next(3, 5),
                 _ => 6
             };
 
@@ -680,7 +680,7 @@ public class DmodeDungeonService(
             theme.PlusLevelMax,
             toughness =>
             {
-                int rarityPool = rdm.Next(100);
+                int rarityPool = rdm.Next(101);
                 rarityPool += toughness * 10;
 
                 int rarity = rarityPool switch
@@ -708,7 +708,7 @@ public class DmodeDungeonService(
             areaInfo,
             remainingPool =>
             {
-                int rarityPool = rdm.Next(100);
+                int rarityPool = rdm.Next(101);
                 rarityPool += dmodeAreaInfo.floor_num;
 
                 int rarity = rarityPool switch
@@ -772,12 +772,12 @@ public class DmodeDungeonService(
 
                 int dragonRarity = MasterAsset.DragonData[selectDragon.dragon_id].Rarity;
 
-                if (rdm.Next(100) > 80 && dragonList.Any(x => !x.is_rare))
+                if (rdm.Next(101) > 80 && dragonList.Any(x => !x.is_rare))
                 {
                     selectDragon.is_rare = true;
                     selectDragon.pay_dmode_point_1 = rdm.Next(
                         (int)Math.Ceiling(floor.Id * 0.5d),
-                        (int)Math.Ceiling(floor.Id * 2d)
+                        (int)Math.Ceiling(floor.Id * 2d) + 1
                     );
                     selectDragon.pay_dmode_point_2 = 0;
                 }
@@ -798,7 +798,7 @@ public class DmodeDungeonService(
         DmodeDungeonItemType type;
         DmodeDungeonItemList item;
 
-        switch (rdm.Next(100))
+        switch (rdm.Next(101))
         {
             case < 80:
                 type = DmodeDungeonItemType.Skill;
@@ -906,7 +906,7 @@ public class DmodeDungeonService(
             item.option.strength_param_id = param.Id;
         }
 
-        if (strengthSkillGroupId != 0 && rdm.Next(100) > 50)
+        if (strengthSkillGroupId != 0 && rdm.Next(101) > 50)
         {
             DmodeStrengthSkill skill = rdm.Next(
                 MasterAsset
@@ -919,7 +919,7 @@ public class DmodeDungeonService(
             item.option.strength_skill_id = skill.Id;
         }
 
-        if (strengthAbilityGroupId != 0 && rdm.Next(100) > 50)
+        if (strengthAbilityGroupId != 0 && rdm.Next(101) > 50)
         {
             DmodeStrengthAbility ability = rdm.Next(
                 MasterAsset
@@ -1039,7 +1039,7 @@ public class DmodeDungeonService(
             int numDrops = (int)paramData.Tough * 2;
 
             // Occasionally grant drops to regular enemies with toughness 0
-            if (rdm.Next(100) > 50)
+            if (rdm.Next(101) > 50)
                 numDrops += 1;
 
             for (int j = 0; j < numDrops; j++)
@@ -1111,9 +1111,9 @@ public class DmodeDungeonService(
             {
                 DmodeEnemyLevelType.None => 1,
                 DmodeEnemyLevelType.Enemy
-                    => rdm.Next(baseEnemyLevel + plusMin, baseEnemyLevel + plusMax),
+                    => rdm.Next(baseEnemyLevel + plusMin, baseEnemyLevel + plusMax + 1),
                 DmodeEnemyLevelType.BossEnemy
-                    => rdm.Next(baseBossLevel + plusMin, baseBossLevel + plusMax),
+                    => rdm.Next(baseBossLevel + plusMin, baseBossLevel + plusMax + 1),
                 _ => 1
             };
         }

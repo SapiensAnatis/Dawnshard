@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
@@ -267,15 +268,15 @@ public class DragonService(
         int rewardQuantity = 5;
         foreach (DragonGifts gift in gifts)
         {
-            int rIndex = new Random().Next(rewards.Length);
+            Materials material = Random.Shared.Next(rewards);
             (
-                await inventoryRepository.GetMaterial(rewards[rIndex])
-                ?? inventoryRepository.AddMaterial(rewards[rIndex])
+                await inventoryRepository.GetMaterial(material)
+                ?? inventoryRepository.AddMaterial(material)
             ).Quantity += rewardQuantity;
             DragonRewardEntityList reward = new DragonRewardEntityList()
             {
                 entity_type = EntityTypes.Material,
-                entity_id = (int)rewards[rIndex],
+                entity_id = (int)material,
                 entity_quantity = rewardQuantity,
                 //TODO: check for mat limit
                 is_over = 0
@@ -327,8 +328,7 @@ public class DragonService(
                         case 0:
                             reward.entity_type = EntityTypes.Mana;
                             reward.entity_id = 0;
-                            reward.entity_quantity =
-                                rarityQuantities[1][r.Next(rarityQuantities[1].Length)] * 500;
+                            reward.entity_quantity = r.Next(rarityQuantities[1]) * 500;
                             (await userDataRepository.UserData.SingleAsync()).ManaPoint +=
                                 reward.entity_quantity;
                             break;
@@ -337,9 +337,7 @@ public class DragonService(
                             Materials fruitMat = fruits[rIndex];
                             reward.entity_type = EntityTypes.Material;
                             reward.entity_id = (int)fruitMat;
-                            reward.entity_quantity = rarityQuantities[rIndex][
-                                r.Next(rarityQuantities[rIndex].Length)
-                            ];
+                            reward.entity_quantity = r.Next(rarityQuantities[rIndex]);
                             (
                                 await inventoryRepository.GetMaterial(fruitMat)
                                 ?? inventoryRepository.AddMaterial(fruitMat)
@@ -349,9 +347,7 @@ public class DragonService(
                             rIndex = r.Next(orbs.Length);
                             reward.entity_type = EntityTypes.Material;
                             reward.entity_id = (int)orbs[rIndex][dragonElement];
-                            reward.entity_quantity = rarityQuantities[rIndex][
-                                r.Next(rarityQuantities[rIndex].Length)
-                            ];
+                            reward.entity_quantity = r.Next(rarityQuantities[rIndex]);
                             (
                                 await inventoryRepository.GetMaterial((Materials)reward.entity_id)
                                 ?? inventoryRepository.AddMaterial((Materials)reward.entity_id)
@@ -360,9 +356,7 @@ public class DragonService(
                         case 3:
                             reward.entity_type = EntityTypes.Material;
                             reward.entity_id = (int)Materials.Talonstone;
-                            reward.entity_quantity = rarityQuantities[1][
-                                r.Next(rarityQuantities[1].Length)
-                            ];
+                            reward.entity_quantity = r.Next(rarityQuantities[1]);
                             (
                                 await inventoryRepository.GetMaterial(Materials.Talonstone)
                                 ?? inventoryRepository.AddMaterial(Materials.Talonstone)
