@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Photon.Shared.Enums;
@@ -56,7 +57,7 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         if (progress.Count == 0)
             return Enumerable.Empty<AtgenEventPassiveUpList>();
 
-        int amount = rdm.Next(0, progress.Count);
+        int amount = rdm.Next(progress.Count);
         if (amount == 0)
             return Enumerable.Empty<AtgenEventPassiveUpList>();
 
@@ -70,17 +71,15 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
 
         for (int i = 0; i < amount; i++)
         {
-            int roll = rdm.Next(100);
+            int roll = rdm.Next(101);
 
             bool isRare = roll > 95;
             List<int> table = isRare ? rare : normal;
 
-            int drop = table[rdm.Next(table.Count - 1)];
+            int drop = rdm.Next(table);
 
-            if (drops.ContainsKey(drop))
+            if (!drops.TryAdd(drop, 1))
                 drops[drop]++;
-            else
-                drops[drop] = 1;
 
             progress[drop]++;
             if (progress[drop] == info[drop].MaxProgress)
@@ -442,7 +441,7 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
 
     private int GenerateDropAmount(double average)
     {
-        double val = rdm.Next(75, 125) / 100d;
+        double val = rdm.Next(75, 126) / 100d;
         return (int)Math.Floor(average * val);
     }
 }

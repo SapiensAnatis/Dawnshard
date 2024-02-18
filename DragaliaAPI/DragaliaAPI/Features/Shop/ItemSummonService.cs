@@ -92,7 +92,7 @@ public class ItemSummonService : IItemSummonService
         AtgenBuildEventRewardEntityList[] results = new AtgenBuildEventRewardEntityList[10];
         for (int i = 0; i < results.Length; i++)
         {
-            int value = random.Next(100000);
+            int value = random.Next(100001);
             int index = Array.IndexOf(this.summonWeights, this.summonWeights.Last(x => x <= value));
             ItemSummonOddsEntry entity = this.config.Odds[index];
             await this.rewardService.GrantReward(new(entity.Type, entity.Id, entity.Quantity));
