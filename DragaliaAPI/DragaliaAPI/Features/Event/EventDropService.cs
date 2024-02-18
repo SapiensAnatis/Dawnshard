@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Photon.Shared.Enums;
@@ -75,12 +76,10 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
             bool isRare = roll > 95;
             List<int> table = isRare ? rare : normal;
 
-            int drop = table[rdm.Next(table.Count - 1)];
+            int drop = rdm.Next(table);
 
-            if (drops.ContainsKey(drop))
+            if (!drops.TryAdd(drop, 1))
                 drops[drop]++;
-            else
-                drops[drop] = 1;
 
             progress[drop]++;
             if (progress[drop] == info[drop].MaxProgress)
