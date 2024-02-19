@@ -69,7 +69,8 @@ public class PhotonAuthenticationHandler : AuthenticationHandler<AuthenticationS
             return AuthenticateResult.Fail("Missing or malformed Auth-ViewerId header.");
         }
 
-        string? accountId = await this.apiContext.Players.Where(x => x.ViewerId == viewerId)
+        string? accountId = await this
+            .apiContext.Players.Where(x => x.ViewerId == viewerId)
             .Select(x => x.AccountId)
             .FirstOrDefaultAsync();
 

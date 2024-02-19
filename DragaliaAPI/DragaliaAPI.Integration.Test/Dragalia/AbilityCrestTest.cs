@@ -695,7 +695,8 @@ public class AbilityCrestTest : TestFixture
 
     private int GetDewpoint()
     {
-        return this.ApiContext.PlayerUserData.AsNoTracking()
+        return this
+            .ApiContext.PlayerUserData.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)
             .Select(x => x.DewPoint)
             .First();
@@ -703,7 +704,8 @@ public class AbilityCrestTest : TestFixture
 
     private long GetCoin()
     {
-        return this.ApiContext.PlayerUserData.AsNoTracking()
+        return this
+            .ApiContext.PlayerUserData.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)
             .Select(x => x.Coin)
             .First();
@@ -711,7 +713,8 @@ public class AbilityCrestTest : TestFixture
 
     private int GetMaterial(Materials materialId)
     {
-        return this.ApiContext.PlayerMaterials.AsNoTracking()
+        return this
+            .ApiContext.PlayerMaterials.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId && x.MaterialId == materialId)
             .Select(x => x.Quantity)
             .First();

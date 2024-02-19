@@ -85,7 +85,8 @@ public class TradeService(
                 destination_entity_type = x.DestinationEntityType,
                 destination_entity_id = x.DestinationEntityId,
                 destination_entity_quantity = x.DestinationEntityQuantity,
-                need_entity_list = x.NeedEntities.Where(y => y.Type != EntityTypes.None)
+                need_entity_list = x
+                    .NeedEntities.Where(y => y.Type != EntityTypes.None)
                     .Select(z => new AtgenBuildEventRewardEntityList(z.Type, z.Id, z.Quantity)),
                 read_story_count = 0,
                 clear_target_quest_id = 0

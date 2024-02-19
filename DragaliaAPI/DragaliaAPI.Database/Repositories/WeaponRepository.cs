@@ -109,7 +109,8 @@ public class WeaponRepository : IWeaponRepository
         List<WeaponBodies> filtered = weaponIds.Where(x => x != WeaponBodiesEnum.Empty).ToList();
 
         return (
-                await this.WeaponBodies.Select(x => x.WeaponBodyId)
+                await this
+                    .WeaponBodies.Select(x => x.WeaponBodyId)
                     .Where(x => filtered.Contains(x))
                     .CountAsync()
             ) == filtered.Count;

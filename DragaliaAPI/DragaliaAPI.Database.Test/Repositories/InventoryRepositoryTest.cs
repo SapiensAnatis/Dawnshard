@@ -232,11 +232,12 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             }
         );
 
-        await this.inventoryRepository.Invoking(x =>
-            x.UpdateQuantity(
-                new Dictionary<Materials, int>() { { Materials.SummerEstelleSkin, -6 } }
+        await this
+            .inventoryRepository.Invoking(x =>
+                x.UpdateQuantity(
+                    new Dictionary<Materials, int>() { { Materials.SummerEstelleSkin, -6 } }
+                )
             )
-        )
             .Should()
             .ThrowAsync<InvalidOperationException>();
 

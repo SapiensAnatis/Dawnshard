@@ -448,51 +448,71 @@ public class SavefileService : ISavefileService
         // Options commented out have been excluded from save import deletion process.
         // They will still be deleted by cascade delete when a player is actually deleted
         // without being re-added as they are in save imports.
-        await this.apiContext.PlayerUserData.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerUserData.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this.apiContext.PlayerCharaData.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerCharaData.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this.apiContext.PlayerDragonReliability.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerDragonReliability.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this.apiContext.PlayerDragonData.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerDragonData.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this.apiContext.PlayerAbilityCrests.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerAbilityCrests.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this.apiContext.PlayerStoryState.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerStoryState.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
         await this.apiContext.PlayerQuests.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
         await this.apiContext.PlayerParties.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
-        await this.apiContext.PlayerPartyUnits.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerPartyUnits.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
         await this.apiContext.PlayerWeapons.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
-        await this.apiContext.PlayerMaterials.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerMaterials.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this.apiContext.PlayerTalismans.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerTalismans.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this.apiContext.PlayerFortBuilds.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerFortBuilds.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this.apiContext.PlayerWeaponSkins.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerWeaponSkins.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this.apiContext.PlayerPassiveAbilities.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerPassiveAbilities.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this.apiContext.PlayerDragonGifts.Where(x =>
-            x.ViewerId == viewerId && x.DragonGiftId >= DragonGifts.FourLeafClover
-        )
+        await this
+            .apiContext.PlayerDragonGifts.Where(x =>
+                x.ViewerId == viewerId && x.DragonGiftId >= DragonGifts.FourLeafClover
+            )
             .ExecuteDeleteAsync();
-        await this.apiContext.PlayerMissions.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerMissions.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this.apiContext.EquippedStamps.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.EquippedStamps.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this.apiContext.PlayerShopInfos.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerShopInfos.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
         await this.apiContext.PlayerTrades.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
-        await this.apiContext.PlayerEventData.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerEventData.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this.apiContext.PlayerEventItems.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerEventItems.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this.apiContext.PlayerEventRewards.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerEventRewards.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this.apiContext.PlayerEventPassives.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerEventPassives.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
         // this.apiContext.PlayerDmodeInfos.RemoveRange(
         //     this.apiContext.PlayerDmodeInfos.Where(x => x.ViewerId == viewerId)
@@ -511,18 +531,22 @@ public class SavefileService : ISavefileService
         // this.apiContext.PlayerDmodeExpeditions.RemoveRange(
         //     this.apiContext.PlayerDmodeExpeditions.Where(x => x.ViewerId == viewerId)
         // );
-        await this.apiContext.PlayerUseItems.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerUseItems.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this.apiContext.PlayerSummonTickets.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerSummonTickets.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
         // this.apiContext.Emblems.RemoveRange(
         //     this.apiContext.Emblems.Where(x => x.ViewerId == viewerId)
         // );
         await this.apiContext.QuestEvents.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
-        await this.apiContext.QuestTreasureList.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.QuestTreasureList.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
         await this.apiContext.PartyPowers.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
-        await this.apiContext.PlayerQuestWalls.Where(x => x.ViewerId == viewerId)
+        await this
+            .apiContext.PlayerQuestWalls.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
     }
 
@@ -534,9 +558,8 @@ public class SavefileService : ISavefileService
 
     public IQueryable<DbPlayer> Load()
     {
-        return this.apiContext.Players.Where(x =>
-            x.AccountId == this.playerIdentityService.AccountId
-        )
+        return this
+            .apiContext.Players.Where(x => x.AccountId == this.playerIdentityService.AccountId)
             .Include(x => x.UserData)
             .Include(x => x.AbilityCrestList)
             .Include(x => x.CharaList)

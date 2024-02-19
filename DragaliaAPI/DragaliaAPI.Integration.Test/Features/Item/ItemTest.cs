@@ -19,7 +19,8 @@ public class ItemTest : TestFixture
             }
         );
 
-        await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+        await this
+            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
             .ExecuteUpdateAsync(e => e.SetProperty(p => p.StaminaSingle, 5));
     }
 

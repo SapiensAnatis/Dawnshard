@@ -46,9 +46,8 @@ public class MissionController(
         MissionGetDrillMissionListData response = new();
         response.mission_notice = await this.missionService.GetMissionNotice(null);
 
-        IEnumerable<DbPlayerMission> drillMissions = await this.missionRepository.GetMissionsByType(
-            MissionType.Drill
-        )
+        IEnumerable<DbPlayerMission> drillMissions = await this
+            .missionRepository.GetMissionsByType(MissionType.Drill)
             .ToListAsync();
 
         response.drill_mission_list = drillMissions.Select(x => new DrillMissionList(
@@ -130,9 +129,8 @@ public class MissionController(
 
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
 
-        IEnumerable<DbPlayerMission> missions = await this.missionRepository.GetMissionsByType(
-            MissionType.Drill
-        )
+        IEnumerable<DbPlayerMission> missions = await this
+            .missionRepository.GetMissionsByType(MissionType.Drill)
             .ToListAsync();
 
         response.drill_mission_list = missions.Select(x => new DrillMissionList(

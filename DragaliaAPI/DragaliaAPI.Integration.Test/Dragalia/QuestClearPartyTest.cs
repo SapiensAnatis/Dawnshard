@@ -162,9 +162,10 @@ public class QuestClearPartyTest : TestFixture
 
         response.data.result.Should().Be(1);
 
-        List<DbQuestClearPartyUnit> storedList = await this.ApiContext.QuestClearPartyUnits.Where(
-            x => x.QuestId == 3 && x.ViewerId == ViewerId && x.IsMulti == false
-        )
+        List<DbQuestClearPartyUnit> storedList = await this
+            .ApiContext.QuestClearPartyUnits.Where(x =>
+                x.QuestId == 3 && x.ViewerId == ViewerId && x.IsMulti == false
+            )
             .ToListAsync();
 
         storedList.Should().BeEquivalentTo(SoloDbEntities, opts => opts.Excluding(x => x.QuestId));
@@ -188,9 +189,10 @@ public class QuestClearPartyTest : TestFixture
 
         response.data.result.Should().Be(1);
 
-        List<DbQuestClearPartyUnit> storedList = await this.ApiContext.QuestClearPartyUnits.Where(
-            x => x.QuestId == 4 && x.ViewerId == ViewerId && x.IsMulti == true
-        )
+        List<DbQuestClearPartyUnit> storedList = await this
+            .ApiContext.QuestClearPartyUnits.Where(x =>
+                x.QuestId == 4 && x.ViewerId == ViewerId && x.IsMulti == true
+            )
             .ToListAsync();
 
         storedList.Should().BeEquivalentTo(MultiDbEntities, opts => opts.Excluding(x => x.QuestId));

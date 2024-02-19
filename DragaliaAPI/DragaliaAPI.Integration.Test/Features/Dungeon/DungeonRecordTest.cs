@@ -945,9 +945,8 @@ public class DungeonRecordTest : TestFixture
 
         this.ApiContext.TimeAttackClears.Should().ContainSingle(x => x.GameId == gameId);
 
-        DbTimeAttackClear recordedClear = await this.ApiContext.TimeAttackClears.Include(x =>
-            x.Players
-        )
+        DbTimeAttackClear recordedClear = await this
+            .ApiContext.TimeAttackClears.Include(x => x.Players)
             .ThenInclude(x => x.Units)
             .FirstAsync(x => x.GameId == gameId);
 
@@ -1155,7 +1154,8 @@ public class DungeonRecordTest : TestFixture
     [Fact]
     public async Task Record_IsCoopTutorial_AdvancesTutorialStatus()
     {
-        await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+        await this
+            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
             .ExecuteUpdateAsync(e =>
                 e.SetProperty(p => p.TutorialStatus, TutorialService.TutorialStatusIds.CoopTutorial)
             );

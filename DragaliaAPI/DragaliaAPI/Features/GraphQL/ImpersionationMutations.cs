@@ -32,7 +32,8 @@ public class ImpersionationMutations : MutationBase
     {
         using IDisposable userImpersonation = this.StartUserImpersonation(viewerId);
 
-        string targetAccountId = this.apiContext.Players.Include(x => x.UserData)
+        string targetAccountId = this
+            .apiContext.Players.Include(x => x.UserData)
             .Where(x => x.UserData!.ViewerId == targetViewerId)
             .Select(x => x.AccountId)
             .First();

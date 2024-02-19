@@ -29,7 +29,8 @@ public class DungeonSkipTest : TestFixture
             }
         );
 
-        DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData.AsNoTracking()
+        DbPlayerUserData oldUserData = this
+            .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
         DragaliaResponse<DungeonSkipStartData> response =
@@ -89,7 +90,8 @@ public class DungeonSkipTest : TestFixture
             }
         );
 
-        DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData.AsNoTracking()
+        DbPlayerUserData oldUserData = this
+            .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
         DragaliaResponse<DungeonSkipStartAssignUnitData> response =
@@ -147,7 +149,8 @@ public class DungeonSkipTest : TestFixture
 
         int totalStamina = 9 + 9 + 9 + 12 + 9;
 
-        DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData.AsNoTracking()
+        DbPlayerUserData oldUserData = this
+            .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
         DragaliaResponse<DungeonSkipStartMultipleQuestData> response =
@@ -230,7 +233,8 @@ public class DungeonSkipTest : TestFixture
             }
         );
 
-        DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData.AsNoTracking()
+        DbPlayerUserData oldUserData = this
+            .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
         DragaliaResponse<DungeonSkipStartData> response =

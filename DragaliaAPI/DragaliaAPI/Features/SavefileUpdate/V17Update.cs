@@ -25,9 +25,10 @@ public class V17Update(
 
     public async Task Apply()
     {
-        IAsyncEnumerable<Dragons> missingReliabilities = this.apiContext.PlayerDragonData.Where(
-            dragon => dragon.ViewerId == this.playerIdentityService.ViewerId
-        )
+        IAsyncEnumerable<Dragons> missingReliabilities = this
+            .apiContext.PlayerDragonData.Where(dragon =>
+                dragon.ViewerId == this.playerIdentityService.ViewerId
+            )
             .Where(dragon =>
                 !this.apiContext.PlayerDragonReliability.Any(rel =>
                     rel.ViewerId == this.playerIdentityService.ViewerId

@@ -94,19 +94,21 @@ public class MissionRepository(
         int? groupId = null
     )
     {
-        return this.apiContext.PlayerMissions.Add(
-            new DbPlayerMission
-            {
-                ViewerId = this.playerIdentityService.ViewerId,
-                Id = id,
-                Type = type,
-                Start = startTime ?? DateTimeOffset.UnixEpoch,
-                End = endTime ?? DateTimeOffset.UnixEpoch,
-                State = state,
-                GroupId = groupId,
-                Progress = progress
-            }
-        ).Entity;
+        return this
+            .apiContext.PlayerMissions.Add(
+                new DbPlayerMission
+                {
+                    ViewerId = this.playerIdentityService.ViewerId,
+                    Id = id,
+                    Type = type,
+                    Start = startTime ?? DateTimeOffset.UnixEpoch,
+                    End = endTime ?? DateTimeOffset.UnixEpoch,
+                    State = state,
+                    GroupId = groupId,
+                    Progress = progress
+                }
+            )
+            .Entity;
     }
 
     public async Task AddCompletedDailyMission(DbPlayerMission originalMission)

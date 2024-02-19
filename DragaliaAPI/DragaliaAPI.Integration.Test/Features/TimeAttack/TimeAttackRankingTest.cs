@@ -27,7 +27,8 @@ public class TimeAttackRankingTest : TestFixture
     [Fact]
     public async Task ReceiveTierReward_GrantsRewardsOnce()
     {
-        DbPlayerUserData oldUserData = await this.ApiContext.PlayerUserData.AsNoTracking()
+        DbPlayerUserData oldUserData = await this
+            .ApiContext.PlayerUserData.AsNoTracking()
             .FirstAsync(x => x.ViewerId == ViewerId);
 
         int questId = 227010101; // First Volk TA quest
