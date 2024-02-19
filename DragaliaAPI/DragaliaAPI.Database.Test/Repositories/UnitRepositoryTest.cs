@@ -144,7 +144,8 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.ApiContext.SaveChangesAsync();
 
         (
-            await this.fixture.ApiContext.PlayerCharaData.Where(x => x.ViewerId == ViewerId)
+            await this
+                .fixture.ApiContext.PlayerCharaData.Where(x => x.ViewerId == ViewerId)
                 .Select(x => x.CharaId)
                 .ToListAsync()
         )
@@ -193,7 +194,8 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.ApiContext.SaveChangesAsync();
 
         (
-            await this.fixture.ApiContext.PlayerDragonData.Where(x => x.ViewerId == ViewerId)
+            await this
+                .fixture.ApiContext.PlayerDragonData.Where(x => x.ViewerId == ViewerId)
                 .Select(x => x.DragonId)
                 .ToListAsync()
         )
@@ -209,7 +211,8 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
             );
 
         (
-            await this.fixture.ApiContext.PlayerDragonReliability.Where(x => x.ViewerId == ViewerId)
+            await this
+                .fixture.ApiContext.PlayerDragonReliability.Where(x => x.ViewerId == ViewerId)
                 .Select(x => x.DragonId)
                 .ToListAsync()
         )

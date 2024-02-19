@@ -135,9 +135,8 @@ public class PaymentServiceTest
 
         this.mockUserDataRepository.SetupUserData(userData);
 
-        await this.paymentService.Invoking(x =>
-            x.ProcessPayment(type, new PaymentTarget(total, cost))
-        )
+        await this
+            .paymentService.Invoking(x => x.ProcessPayment(type, new PaymentTarget(total, cost)))
             .Should()
             .ThrowAsync<DragaliaException>()
             .Where(x => x.Code == ResultCode.CommonMaterialShort);
@@ -168,7 +167,8 @@ public class PaymentServiceTest
 
         this.mockUserDataRepository.SetupUserData(userData);
 
-        await this.paymentService.Invoking(x => x.ProcessPayment(type, null, cost))
+        await this
+            .paymentService.Invoking(x => x.ProcessPayment(type, null, cost))
             .Should()
             .ThrowAsync<DragaliaException>()
             .Where(x => x.Code == ResultCode.CommonMaterialShort);

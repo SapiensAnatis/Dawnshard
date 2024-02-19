@@ -21,7 +21,8 @@ public class LoginTest : TestFixture
     [Fact]
     public async Task LoginIndex_LastLoginBeforeReset_ResetsItemSummonCount()
     {
-        await this.ApiContext.PlayerShopInfos.Where(x => x.ViewerId == ViewerId)
+        await this
+            .ApiContext.PlayerShopInfos.Where(x => x.ViewerId == ViewerId)
             .ExecuteUpdateAsync(entity => entity.SetProperty(x => x.DailySummonCount, 5));
 
         (await this.GetSummonCount()).Should().Be(5);
@@ -34,7 +35,8 @@ public class LoginTest : TestFixture
     [Fact]
     public async Task LoginIndex_LastLoginBeforeReset_ResetsDragonGiftCount()
     {
-        await this.ApiContext.PlayerDragonGifts.Where(x => x.ViewerId == ViewerId)
+        await this
+            .ApiContext.PlayerDragonGifts.Where(x => x.ViewerId == ViewerId)
             .ExecuteUpdateAsync(entity => entity.SetProperty(x => x.Quantity, 0));
 
         (await this.GetDragonGifts()).Should().AllSatisfy(x => x.Quantity.Should().Be(0));
@@ -245,7 +247,8 @@ public class LoginTest : TestFixture
             );
 
         (
-            await this.ApiContext.LoginBonuses.AsNoTracking()
+            await this
+                .ApiContext.LoginBonuses.AsNoTracking()
                 .FirstAsync(x => x.ViewerId == ViewerId && x.Id == 2)
         )
             .IsComplete.Should()
@@ -269,7 +272,8 @@ public class LoginTest : TestFixture
             }
         );
 
-        int oldCloverQuantity = await this.ApiContext.PlayerDragonGifts.AsNoTracking()
+        int oldCloverQuantity = await this
+            .ApiContext.PlayerDragonGifts.AsNoTracking()
             .Where(x => x.DragonGiftId == DragonGifts.FourLeafClover && x.ViewerId == ViewerId)
             .Select(x => x.Quantity)
             .FirstAsync();
@@ -437,12 +441,14 @@ public class LoginTest : TestFixture
 
     private async Task<int> GetSummonCount() =>
         (
-            await this.ApiContext.PlayerShopInfos.AsNoTracking()
+            await this
+                .ApiContext.PlayerShopInfos.AsNoTracking()
                 .FirstAsync(x => x.ViewerId == ViewerId)
         ).DailySummonCount;
 
     private async Task<IEnumerable<DbPlayerDragonGift>> GetDragonGifts() =>
-        await this.ApiContext.PlayerDragonGifts.AsNoTracking()
+        await this
+            .ApiContext.PlayerDragonGifts.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)
             .ToListAsync();
 }

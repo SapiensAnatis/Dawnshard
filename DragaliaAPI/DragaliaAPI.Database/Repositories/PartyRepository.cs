@@ -17,7 +17,8 @@ public class PartyRepository : BaseRepository, IPartyRepository
     }
 
     public IQueryable<DbParty> Parties =>
-        this.apiContext.PlayerParties.Include(x => x.Units.OrderBy(x => x.UnitNo))
+        this
+            .apiContext.PlayerParties.Include(x => x.Units.OrderBy(x => x.UnitNo))
             .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbPartyUnit> GetPartyUnits(IEnumerable<int> partySlots)

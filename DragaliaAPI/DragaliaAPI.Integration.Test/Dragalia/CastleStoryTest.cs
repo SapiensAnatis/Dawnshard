@@ -74,7 +74,8 @@ public class CastleStoryTest : TestFixture
     [Fact]
     public async Task ReadStory_StoryNotRead_UpdatesDatabase()
     {
-        int oldCrystal = await this.ApiContext.PlayerUserData.AsNoTracking()
+        int oldCrystal = await this
+            .ApiContext.PlayerUserData.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)
             .Select(x => x.Crystal)
             .SingleAsync();
@@ -86,7 +87,8 @@ public class CastleStoryTest : TestFixture
             )
         ).data;
 
-        int newCrystal = await this.ApiContext.PlayerUserData.AsNoTracking()
+        int newCrystal = await this
+            .ApiContext.PlayerUserData.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)
             .Select(x => x.Crystal)
             .SingleAsync();

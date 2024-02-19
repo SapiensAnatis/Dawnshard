@@ -177,7 +177,8 @@ public class AuthServiceTest
             )
             .AsString();
 
-        await this.authService.Invoking(x => x.DoAuth(token))
+        await this
+            .authService.Invoking(x => x.DoAuth(token))
             .Should()
             .ThrowExactlyAsync<SecurityTokenExpiredException>();
 
@@ -193,11 +194,12 @@ public class AuthServiceTest
             .Returns(new BaasOptions() { TokenAudience = "audience", TokenIssuer = "issuer" });
         this.mockLoginOptions.Setup(x => x.CurrentValue)
             .Returns(new LoginOptions() { UseBaasLogin = true });
-        await this.authService.Invoking(x =>
-            x.DoAuth(
-                "We cry tears of mascara in the bathroom / Honey life is just a classroom / Ah-ah-ah-ah"
+        await this
+            .authService.Invoking(x =>
+                x.DoAuth(
+                    "We cry tears of mascara in the bathroom / Honey life is just a classroom / Ah-ah-ah-ah"
+                )
             )
-        )
             .Should()
             .ThrowExactlyAsync<DragaliaException>()
             .Where(x => x.Code == ResultCode.IdTokenError);

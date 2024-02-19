@@ -277,9 +277,8 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
 
             if (this.roomState.MinGoToIngameState > 0)
             {
-                int newMinGoToIngameState = this.PluginHost.GameActors.Where(x =>
-                    x.ActorNr != info.ActorNr
-                )
+                int newMinGoToIngameState = this
+                    .PluginHost.GameActors.Where(x => x.ActorNr != info.ActorNr)
                     .Select(x => x.Properties.GetIntOrDefault(ActorPropertyKeys.GoToIngameState))
                     .DefaultIfEmpty()
                     .Min();
@@ -355,7 +354,8 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                 // Wait for everyone to reach a particular GoToIngameState value before doing anything.
                 // But let the host set GoToIngameState = 1 unilaterally to signal the game start process.
 
-                int minValue = this.PluginHost.GameActors.Where(x => x.ActorNr != info.ActorNr) // Exclude the value which we are in the BeforeSet handler for
+                int minValue = this
+                    .PluginHost.GameActors.Where(x => x.ActorNr != info.ActorNr) // Exclude the value which we are in the BeforeSet handler for
                     .Select(x => x.Properties.GetIntOrDefault(ActorPropertyKeys.GoToIngameState))
                     .Concat(new[] { value }) // Fun fact: Enumerable.Append() was added in .NET 4.7.1
                     .Min();

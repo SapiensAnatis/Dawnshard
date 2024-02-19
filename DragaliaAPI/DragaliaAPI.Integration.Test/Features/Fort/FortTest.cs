@@ -66,18 +66,20 @@ public class FortTest : TestFixture
     [Fact]
     public async Task GetData_ReportsFreeDragonGiftCount()
     {
-        await this.ApiContext.PlayerDragonGifts.Where(x =>
-            x.ViewerId == this.ViewerId && x.DragonGiftId == DragonGifts.FreshBread
-        )
+        await this
+            .ApiContext.PlayerDragonGifts.Where(x =>
+                x.ViewerId == this.ViewerId && x.DragonGiftId == DragonGifts.FreshBread
+            )
             .ExecuteUpdateAsync(e => e.SetProperty(p => p.Quantity, 1));
 
         (await this.Client.PostMsgpack<FortGetDataData>("/fort/get_data", new FortGetDataRequest()))
             .data.dragon_contact_free_gift_count.Should()
             .Be(1);
 
-        await this.ApiContext.PlayerDragonGifts.Where(x =>
-            x.ViewerId == this.ViewerId && x.DragonGiftId == DragonGifts.FreshBread
-        )
+        await this
+            .ApiContext.PlayerDragonGifts.Where(x =>
+                x.ViewerId == this.ViewerId && x.DragonGiftId == DragonGifts.FreshBread
+            )
             .ExecuteUpdateAsync(e => e.SetProperty(p => p.Quantity, 0));
 
         (await this.Client.PostMsgpack<FortGetDataData>("/fort/get_data", new FortGetDataRequest()))
@@ -88,7 +90,8 @@ public class FortTest : TestFixture
     [Fact]
     public async Task AddCarpenter_ReturnsValidResult()
     {
-        DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData.AsNoTracking()
+        DbPlayerUserData oldUserData = this
+            .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
         FortAddCarpenterData response = (
@@ -105,20 +108,22 @@ public class FortTest : TestFixture
     [Fact]
     public async Task BuildAtOnce_ReturnsValidResult()
     {
-        DbFortBuild build = this.ApiContext.PlayerFortBuilds.Add(
-            new()
-            {
-                ViewerId = ViewerId,
-                PlantId = FortPlants.StaffDojo,
-                Level = 0,
-                PositionX = 2,
-                PositionZ = 2,
-                BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
-                BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1888924543),
-                IsNew = true,
-                LastIncomeDate = DateTimeOffset.UnixEpoch
-            }
-        ).Entity;
+        DbFortBuild build = this
+            .ApiContext.PlayerFortBuilds.Add(
+                new()
+                {
+                    ViewerId = ViewerId,
+                    PlantId = FortPlants.StaffDojo,
+                    Level = 0,
+                    PositionX = 2,
+                    PositionZ = 2,
+                    BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
+                    BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1888924543),
+                    IsNew = true,
+                    LastIncomeDate = DateTimeOffset.UnixEpoch
+                }
+            )
+            .Entity;
         await this.ApiContext.SaveChangesAsync();
 
         FortBuildAtOnceData response = (
@@ -139,20 +144,22 @@ public class FortTest : TestFixture
     [Fact]
     public async Task BuildCancel_ReturnsValidResult()
     {
-        DbFortBuild build = this.ApiContext.PlayerFortBuilds.Add(
-            new()
-            {
-                ViewerId = ViewerId,
-                PlantId = FortPlants.StaffDojo,
-                Level = 0,
-                PositionX = 2,
-                PositionZ = 2,
-                BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
-                BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1888924543),
-                IsNew = true,
-                LastIncomeDate = DateTimeOffset.UnixEpoch
-            }
-        ).Entity;
+        DbFortBuild build = this
+            .ApiContext.PlayerFortBuilds.Add(
+                new()
+                {
+                    ViewerId = ViewerId,
+                    PlantId = FortPlants.StaffDojo,
+                    Level = 0,
+                    PositionX = 2,
+                    PositionZ = 2,
+                    BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
+                    BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1888924543),
+                    IsNew = true,
+                    LastIncomeDate = DateTimeOffset.UnixEpoch
+                }
+            )
+            .Entity;
         await this.ApiContext.SaveChangesAsync();
 
         await this.Client.PostMsgpack<FortBuildCancelData>(
@@ -228,20 +235,22 @@ public class FortTest : TestFixture
     [Fact]
     public async Task LevelupAtOnce_ReturnsValidResult()
     {
-        DbFortBuild build = this.ApiContext.PlayerFortBuilds.Add(
-            new()
-            {
-                ViewerId = ViewerId,
-                PlantId = FortPlants.StaffDojo,
-                Level = 2,
-                PositionX = 2,
-                PositionZ = 2,
-                BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
-                BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1888924543),
-                IsNew = true,
-                LastIncomeDate = DateTimeOffset.UnixEpoch
-            }
-        ).Entity;
+        DbFortBuild build = this
+            .ApiContext.PlayerFortBuilds.Add(
+                new()
+                {
+                    ViewerId = ViewerId,
+                    PlantId = FortPlants.StaffDojo,
+                    Level = 2,
+                    PositionX = 2,
+                    PositionZ = 2,
+                    BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
+                    BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1888924543),
+                    IsNew = true,
+                    LastIncomeDate = DateTimeOffset.UnixEpoch
+                }
+            )
+            .Entity;
         await this.ApiContext.SaveChangesAsync();
 
         FortLevelupAtOnceData response = (
@@ -262,7 +271,8 @@ public class FortTest : TestFixture
     [Fact]
     public async Task LevelupAtOnce_Halidom_ReturnsNewFortLevel()
     {
-        DbFortBuild halidom = await this.ApiContext.PlayerFortBuilds.AsTracking()
+        DbFortBuild halidom = await this
+            .ApiContext.PlayerFortBuilds.AsTracking()
             .SingleAsync(x => x.PlantId == FortPlants.TheHalidom);
 
         halidom.BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1287924543);
@@ -284,7 +294,8 @@ public class FortTest : TestFixture
     [Fact]
     public async Task LevelupAtOnce_Smithy_ReturnsNewFortCraftLevel()
     {
-        DbFortBuild smithy = await this.ApiContext.PlayerFortBuilds.AsTracking()
+        DbFortBuild smithy = await this
+            .ApiContext.PlayerFortBuilds.AsTracking()
             .SingleAsync(x => x.PlantId == FortPlants.Smithy);
 
         smithy.BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1287924543);
@@ -306,20 +317,22 @@ public class FortTest : TestFixture
     [Fact]
     public async Task LevelUpCancel_ReturnsValidResult()
     {
-        DbFortBuild build = this.ApiContext.PlayerFortBuilds.Add(
-            new()
-            {
-                ViewerId = ViewerId,
-                PlantId = FortPlants.StaffDojo,
-                Level = 1,
-                PositionX = 2,
-                PositionZ = 2,
-                BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
-                BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1888924543),
-                IsNew = true,
-                LastIncomeDate = DateTimeOffset.UnixEpoch
-            }
-        ).Entity;
+        DbFortBuild build = this
+            .ApiContext.PlayerFortBuilds.Add(
+                new()
+                {
+                    ViewerId = ViewerId,
+                    PlantId = FortPlants.StaffDojo,
+                    Level = 1,
+                    PositionX = 2,
+                    PositionZ = 2,
+                    BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
+                    BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1888924543),
+                    IsNew = true,
+                    LastIncomeDate = DateTimeOffset.UnixEpoch
+                }
+            )
+            .Entity;
         await this.ApiContext.SaveChangesAsync();
 
         FortLevelupCancelData response = (
@@ -340,20 +353,22 @@ public class FortTest : TestFixture
     [Fact]
     public async Task LevelUpEnd_ReturnsValidResult()
     {
-        DbFortBuild build = this.ApiContext.PlayerFortBuilds.Add(
-            new()
-            {
-                ViewerId = ViewerId,
-                PlantId = FortPlants.StaffDojo,
-                Level = 1,
-                PositionX = 2,
-                PositionZ = 2,
-                BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1287924543),
-                BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1388924543),
-                IsNew = true,
-                LastIncomeDate = DateTimeOffset.UnixEpoch
-            }
-        ).Entity;
+        DbFortBuild build = this
+            .ApiContext.PlayerFortBuilds.Add(
+                new()
+                {
+                    ViewerId = ViewerId,
+                    PlantId = FortPlants.StaffDojo,
+                    Level = 1,
+                    PositionX = 2,
+                    PositionZ = 2,
+                    BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1287924543),
+                    BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1388924543),
+                    IsNew = true,
+                    LastIncomeDate = DateTimeOffset.UnixEpoch
+                }
+            )
+            .Entity;
 
         await this.ApiContext.SaveChangesAsync();
 
@@ -374,7 +389,8 @@ public class FortTest : TestFixture
     [Fact]
     public async Task LevelupEnd_Smithy_ReturnsNewFortCraftLevel()
     {
-        DbFortBuild smithy = await this.ApiContext.PlayerFortBuilds.AsTracking()
+        DbFortBuild smithy = await this
+            .ApiContext.PlayerFortBuilds.AsTracking()
             .SingleAsync(x => x.PlantId == FortPlants.Smithy);
 
         smithy.BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1287924543);
@@ -396,7 +412,8 @@ public class FortTest : TestFixture
     [Fact]
     public async Task LevelupEnd_Halidom_ReturnsNewFortLevel()
     {
-        DbFortBuild halidom = await this.ApiContext.PlayerFortBuilds.AsTracking()
+        DbFortBuild halidom = await this
+            .ApiContext.PlayerFortBuilds.AsTracking()
             .SingleAsync(x => x.PlantId == FortPlants.TheHalidom);
 
         halidom.BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1287924543);
@@ -418,20 +435,22 @@ public class FortTest : TestFixture
     [Fact]
     public async Task LevelUpStart_ReturnsValidResult()
     {
-        DbFortBuild build = this.ApiContext.PlayerFortBuilds.Add(
-            new()
-            {
-                ViewerId = ViewerId,
-                PlantId = FortPlants.StaffDojo,
-                Level = 1,
-                PositionX = 2,
-                PositionZ = 2,
-                BuildStartDate = DateTimeOffset.UnixEpoch,
-                BuildEndDate = DateTimeOffset.UnixEpoch,
-                IsNew = true,
-                LastIncomeDate = DateTimeOffset.UnixEpoch
-            }
-        ).Entity;
+        DbFortBuild build = this
+            .ApiContext.PlayerFortBuilds.Add(
+                new()
+                {
+                    ViewerId = ViewerId,
+                    PlantId = FortPlants.StaffDojo,
+                    Level = 1,
+                    PositionX = 2,
+                    PositionZ = 2,
+                    BuildStartDate = DateTimeOffset.UnixEpoch,
+                    BuildEndDate = DateTimeOffset.UnixEpoch,
+                    IsNew = true,
+                    LastIncomeDate = DateTimeOffset.UnixEpoch
+                }
+            )
+            .Entity;
         await this.ApiContext.SaveChangesAsync();
 
         FortLevelupStartData response = (
@@ -453,20 +472,22 @@ public class FortTest : TestFixture
     [Fact]
     public async Task Move_ReturnsValidResult()
     {
-        DbFortBuild build = this.ApiContext.PlayerFortBuilds.Add(
-            new()
-            {
-                ViewerId = ViewerId,
-                PlantId = FortPlants.StaffDojo,
-                Level = 1,
-                PositionX = 2,
-                PositionZ = 2,
-                BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
-                BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1888924543),
-                IsNew = true,
-                LastIncomeDate = DateTimeOffset.UnixEpoch
-            }
-        ).Entity;
+        DbFortBuild build = this
+            .ApiContext.PlayerFortBuilds.Add(
+                new()
+                {
+                    ViewerId = ViewerId,
+                    PlantId = FortPlants.StaffDojo,
+                    Level = 1,
+                    PositionX = 2,
+                    PositionZ = 2,
+                    BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
+                    BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1888924543),
+                    IsNew = true,
+                    LastIncomeDate = DateTimeOffset.UnixEpoch
+                }
+            )
+            .Entity;
         await this.ApiContext.SaveChangesAsync();
 
         int expectedPositionX = 4;
@@ -489,7 +510,8 @@ public class FortTest : TestFixture
     public async Task GetMultiIncome_ReturnsExpectedResponse()
     {
         DateTimeOffset lastIncome = DateTimeOffset.UtcNow - TimeSpan.FromHours(6);
-        long oldCoin = this.ApiContext.PlayerUserData.AsNoTracking()
+        long oldCoin = this
+            .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId)
             .Coin;
 
@@ -513,7 +535,8 @@ public class FortTest : TestFixture
         this.ApiContext.PlayerFortBuilds.Add(rupieMine);
         this.ApiContext.PlayerFortBuilds.Add(dragonTree);
 
-        DbFortBuild halidom = this.ApiContext.PlayerFortBuilds.AsTracking()
+        DbFortBuild halidom = this
+            .ApiContext.PlayerFortBuilds.AsTracking()
             .First(x => x.PlantId == FortPlants.TheHalidom && x.ViewerId == ViewerId);
         halidom.LastIncomeDate = lastIncome;
 

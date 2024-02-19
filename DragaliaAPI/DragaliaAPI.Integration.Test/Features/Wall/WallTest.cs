@@ -121,7 +121,8 @@ public class WallTest : TestFixture
     [Fact]
     public async Task ReceiveMonthlyRewards_ReceivesRewards()
     {
-        DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData.AsNoTracking()
+        DbPlayerUserData oldUserData = this
+            .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
         int expectedMana = 15_000;

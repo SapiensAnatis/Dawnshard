@@ -37,14 +37,14 @@ public class GraphQlTest : GraphQlTestFixture
             new GraphQLRequest
             {
                 Query = $$"""
-                    query {
-                        player(viewerId: {{ViewerId}}) {
-                            charaList {
-                                charaId
-                            }
+                query {
+                    player(viewerId: {{ViewerId}}) {
+                        charaList {
+                            charaId
                         }
                     }
-                    """
+                }
+                """
             }
         );
 
@@ -58,7 +58,8 @@ public class GraphQlTest : GraphQlTestFixture
     public async Task Mutation_ResetCharacter_ResetsCharacter()
     {
         (
-            await this.ApiContext.PlayerCharaData.AsNoTracking()
+            await this
+                .ApiContext.PlayerCharaData.AsNoTracking()
                 .SingleAsync(x => x.ViewerId == ViewerId && x.CharaId == Charas.ThePrince)
         ).Level = 100;
         await this.ApiContext.SaveChangesAsync();
@@ -67,19 +68,20 @@ public class GraphQlTest : GraphQlTestFixture
             new GraphQLRequest
             {
                 Query = $$"""
-                    mutation {
-                        resetCharacter(viewerId: {{ViewerId}}, charaId: ThePrince) {
-                            level
-                        }
+                mutation {
+                    resetCharacter(viewerId: {{ViewerId}}, charaId: ThePrince) {
+                        level
                     }
-                    """
+                }
+                """
             }
         );
 
         response.Errors.Should().BeNullOrEmpty();
 
         (
-            await this.ApiContext.PlayerCharaData.AsNoTracking()
+            await this
+                .ApiContext.PlayerCharaData.AsNoTracking()
                 .SingleAsync(x => x.ViewerId == ViewerId && x.CharaId == Charas.ThePrince)
         )
             .Level.Should()
@@ -94,12 +96,12 @@ public class GraphQlTest : GraphQlTestFixture
                 new GraphQLRequest
                 {
                     Query = $$"""
-                        mutation {
-                            givePresent(viewerId: {{ViewerId}}, entityType: Dragon, entityId: 20050525) {
-                                presentId
-                            }
+                    mutation {
+                        givePresent(viewerId: {{ViewerId}}, entityType: Dragon, entityId: 20050525) {
+                            presentId
                         }
-                        """
+                    }
+                    """
                 }
             );
 
@@ -136,19 +138,20 @@ public class GraphQlTest : GraphQlTestFixture
                 new GraphQLRequest
                 {
                     Query = $$"""
-                        mutation {
-                            updateTutorialStatus(viewerId: {{ViewerId}}, newStatus: 60999) {
-                                tutorialStatus
-                            }
+                    mutation {
+                        updateTutorialStatus(viewerId: {{ViewerId}}, newStatus: 60999) {
+                            tutorialStatus
                         }
-                        """
+                    }
+                    """
                 }
             );
 
         response.Errors.Should().BeNullOrEmpty();
 
         (
-            await this.ApiContext.PlayerUserData.AsNoTracking()
+            await this
+                .ApiContext.PlayerUserData.AsNoTracking()
                 .FirstAsync(x => x.ViewerId == ViewerId)
         )
             .TutorialStatus.Should()

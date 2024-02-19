@@ -227,9 +227,8 @@ public class DragonTest : TestFixture
         await this.ApiContext.SaveChangesAsync();
 
         this.ApiContext.ChangeTracker.Clear();
-        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.Where(x =>
-            x.ViewerId == ViewerId
-        )
+        DbPlayerUserData userData = await this
+            .ApiContext.PlayerUserData.Where(x => x.ViewerId == ViewerId)
             .FirstAsync();
 
         long startCoin = userData.Coin;
@@ -636,7 +635,8 @@ public class DragonTest : TestFixture
 
         DragonData dragonData = MasterAsset.DragonData.Get(Dragons.GaibhneCreidhne);
 
-        DbPlayerUserData uData = await this.ApiContext.PlayerUserData.AsNoTracking()
+        DbPlayerUserData uData = await this
+            .ApiContext.PlayerUserData.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)
             .FirstAsync();
 

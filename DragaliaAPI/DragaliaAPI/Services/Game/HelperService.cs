@@ -56,10 +56,8 @@ public class HelperService : IHelperService
         DbPlayerUserData userData = await this.userDataRepository.GetUserDataAsync();
 
         IQueryable<DbPartyUnit> leadUnitQuery = this.partyRepository.GetPartyUnits(partyNo).Take(1);
-        DbDetailedPartyUnit? detailedUnit = await this.dungeonRepository.BuildDetailedPartyUnit(
-            leadUnitQuery,
-            0
-        )
+        DbDetailedPartyUnit? detailedUnit = await this
+            .dungeonRepository.BuildDetailedPartyUnit(leadUnitQuery, 0)
             .FirstAsync();
 
         UserSupportList supportList =

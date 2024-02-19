@@ -251,7 +251,8 @@ public class DungeonStartTest : TestFixture
     [Fact]
     public async Task Start_CoopTutorial_SetsIsBotTutorial()
     {
-        await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+        await this
+            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
             .ExecuteUpdateAsync(e =>
                 e.SetProperty(p => p.TutorialStatus, TutorialService.TutorialStatusIds.CoopTutorial)
             );
@@ -272,7 +273,8 @@ public class DungeonStartTest : TestFixture
     [Fact]
     public async Task Start_AtpBeginner_NotCoopTutorial_SetsIsBotTutorial()
     {
-        await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+        await this
+            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
             .ExecuteUpdateAsync(e =>
                 e.SetProperty(
                     p => p.TutorialStatus,

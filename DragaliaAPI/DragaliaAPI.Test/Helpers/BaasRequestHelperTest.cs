@@ -127,7 +127,8 @@ public class BaasRequestHelperTest
                 new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.NotFound, }
             );
 
-        await this.baasRequestHelper.Invoking(x => x.GetKeys())
+        await this
+            .baasRequestHelper.Invoking(x => x.GetKeys())
             .Should()
             .ThrowExactlyAsync<DragaliaException>()
             .Where(x => x.Code == ResultCode.CommonAuthError);
@@ -183,7 +184,8 @@ public class BaasRequestHelperTest
                 new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.BadRequest, }
             );
 
-        await this.baasRequestHelper.Invoking(x => x.GetSavefile("token"))
+        await this
+            .baasRequestHelper.Invoking(x => x.GetSavefile("token"))
             .Should()
             .ThrowExactlyAsync<DragaliaException>()
             .Where(x => x.Code == ResultCode.TransitionLinkedDataNotFound);
