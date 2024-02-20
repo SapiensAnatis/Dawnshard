@@ -16,9 +16,8 @@ public class ZenaService(
 
     public async Task<GetTeamDataResponse?> GetTeamData(IEnumerable<int> partyNumbers)
     {
-        string? playerName = await this.apiContext.PlayerUserData.Where(x =>
-            x.ViewerId == this.playerIdentityService.ViewerId
-        )
+        string? playerName = await this
+            .apiContext.PlayerUserData.Where(x => x.ViewerId == this.playerIdentityService.ViewerId)
             .Select(x => x.Name)
             .FirstOrDefaultAsync();
 
@@ -32,9 +31,11 @@ public class ZenaService(
             return null;
         }
 
-        Charas[] charas = await this.apiContext.PlayerPartyUnits.Where(x =>
-            x.ViewerId == this.playerIdentityService.ViewerId && partyNumbers.Contains(x.PartyNo)
-        )
+        Charas[] charas = await this
+            .apiContext.PlayerPartyUnits.Where(x =>
+                x.ViewerId == this.playerIdentityService.ViewerId
+                && partyNumbers.Contains(x.PartyNo)
+            )
             .OrderBy(x => x.PartyNo)
             .ThenBy(x => x.UnitNo)
             .Select(x => x.CharaId)

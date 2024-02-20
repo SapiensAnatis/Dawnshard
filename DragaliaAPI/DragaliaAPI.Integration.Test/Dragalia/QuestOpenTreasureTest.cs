@@ -36,9 +36,8 @@ public class QuestOpenTreasureTest : TestFixture
             )
         ).data;
 
-        List<DbQuestTreasureList> questTreasureList = await this.ApiContext.QuestTreasureList.Where(
-            x => x.ViewerId == ViewerId
-        )
+        List<DbQuestTreasureList> questTreasureList = await this
+            .ApiContext.QuestTreasureList.Where(x => x.ViewerId == ViewerId)
             .ToListAsync();
 
         questTreasureList.Should().Contain(x => x.QuestTreasureId == 126201);

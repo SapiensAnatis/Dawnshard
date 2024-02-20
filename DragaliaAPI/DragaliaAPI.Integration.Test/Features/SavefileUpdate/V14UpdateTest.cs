@@ -12,7 +12,8 @@ public class V14UpdateTest : SavefileUpdateTestFixture
     [Fact]
     public async Task V14Update_DoesNotConflictWithV10Update()
     {
-        await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+        await this
+            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
             .ExecuteUpdateAsync(entity =>
                 entity.SetProperty(e => e.EmblemId, Emblems.HotBloodedInstructor)
             );

@@ -48,9 +48,10 @@ public class ShopRepository : IShopRepository
     {
         DateTimeOffset current = DateTimeOffset.UtcNow;
 
-        await this.Purchases.Where(x =>
-            x.EffectEndTime != DateTimeOffset.UnixEpoch && current >= x.EffectEndTime
-        )
+        await this
+            .Purchases.Where(x =>
+                x.EffectEndTime != DateTimeOffset.UnixEpoch && current >= x.EffectEndTime
+            )
             .ExecuteDeleteAsync();
     }
 

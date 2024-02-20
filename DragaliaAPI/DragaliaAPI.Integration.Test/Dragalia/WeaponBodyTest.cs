@@ -580,16 +580,16 @@ public class WeaponBodyTest : TestFixture
 
     private int GetMaterialCount(Materials id)
     {
-        return this.ApiContext.PlayerMaterials.Where(x =>
-            x.ViewerId == ViewerId && x.MaterialId == id
-        )
+        return this
+            .ApiContext.PlayerMaterials.Where(x => x.ViewerId == ViewerId && x.MaterialId == id)
             .Select(x => x.Quantity)
             .First();
     }
 
     private long GetRupies()
     {
-        return this.ApiContext.PlayerUserData.AsNoTracking()
+        return this
+            .ApiContext.PlayerUserData.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)
             .Select(x => x.Coin)
             .First();

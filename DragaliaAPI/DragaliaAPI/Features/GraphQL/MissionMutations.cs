@@ -104,11 +104,12 @@ public class MissionMutations : MutationBase
         MissionMutationArgs args
     )
     {
-        List<DbPlayerMission> affectedMissions = await db.PlayerMissions.Where(x =>
-            x.Id == args.MissionId
-            && x.Type == args.MissionType
-            && x.State == MissionState.InProgress
-        )
+        List<DbPlayerMission> affectedMissions = await db
+            .PlayerMissions.Where(x =>
+                x.Id == args.MissionId
+                && x.Type == args.MissionType
+                && x.State == MissionState.InProgress
+            )
             .ToListAsync();
 
         long[] players = affectedMissions.Select(x => x.ViewerId).ToArray();

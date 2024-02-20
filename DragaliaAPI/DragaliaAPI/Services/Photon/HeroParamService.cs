@@ -61,17 +61,18 @@ public class HeroParamService : IHeroParamService
     {
         this.logger.LogDebug("Fetching HeroParam for slot {partySlots}", partySlot);
 
-        DbPlayerUserData userData = await this.userDataRepository.GetViewerData(viewerId)
+        DbPlayerUserData userData = await this
+            .userDataRepository.GetViewerData(viewerId)
             .SingleAsync();
 
         using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(viewerId);
 
-        List<DbDetailedPartyUnit> detailedPartyUnits =
-            await this.dungeonRepository.BuildDetailedPartyUnit(
+        List<DbDetailedPartyUnit> detailedPartyUnits = await this
+            .dungeonRepository.BuildDetailedPartyUnit(
                 partyRepository.GetPartyUnits(partySlot),
                 partySlot
             )
-                .ToListAsync();
+            .ToListAsync();
 
         this.logger.LogDebug("Retrieved {n} party units", detailedPartyUnits.Count);
 
@@ -79,9 +80,8 @@ public class HeroParamService : IHeroParamService
         {
             if (unit.WeaponBodyData is not null)
             {
-                unit.GameWeaponPassiveAbilityList = await this.weaponRepository.GetPassiveAbilities(
-                    unit.WeaponBodyData.WeaponBodyId
-                )
+                unit.GameWeaponPassiveAbilityList = await this
+                    .weaponRepository.GetPassiveAbilities(unit.WeaponBodyData.WeaponBodyId)
                     .ToListAsync();
             }
         }
@@ -139,9 +139,8 @@ public class HeroParamService : IHeroParamService
             result.weaponBodyAbility2Lv = unit.WeaponBodyData.Ability2Level;
             result.weaponBodySkillLv = unit.WeaponBodyData.SkillLevel;
             result.weaponBodySkillNo = unit.WeaponBodyData.SkillNo;
-            result.weaponPassiveAbilityIds = unit.GameWeaponPassiveAbilityList.Select(x =>
-                x.WeaponPassiveAbilityId
-            )
+            result.weaponPassiveAbilityIds = unit
+                .GameWeaponPassiveAbilityList.Select(x => x.WeaponPassiveAbilityId)
                 .ToArray();
         }
         else

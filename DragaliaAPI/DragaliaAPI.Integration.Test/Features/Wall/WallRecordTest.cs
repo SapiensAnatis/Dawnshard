@@ -19,10 +19,12 @@ public class WallRecordTest : TestFixture
     [Fact]
     public async Task Record_ReceivesRewards()
     {
-        DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData.AsNoTracking()
+        DbPlayerUserData oldUserData = this
+            .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
-        DbPlayerMaterial oldPlayerGoldCrystals = this.ApiContext.PlayerMaterials.AsNoTracking()
+        DbPlayerMaterial oldPlayerGoldCrystals = this
+            .ApiContext.PlayerMaterials.AsNoTracking()
             .First(x => x.ViewerId == ViewerId && x.MaterialId == Materials.GoldCrystal);
 
         int wallId = 216010001;

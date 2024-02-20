@@ -14,7 +14,8 @@ public abstract class SavefileUpdateTestFixture : TestFixture
     )
         : base(factory, outputHelper)
     {
-        this.MaxVersion = this.Services.GetServices<ISavefileUpdate>()
+        this.MaxVersion = this
+            .Services.GetServices<ISavefileUpdate>()
             .MaxBy(x => x.SavefileVersion)!
             .SavefileVersion;
     }

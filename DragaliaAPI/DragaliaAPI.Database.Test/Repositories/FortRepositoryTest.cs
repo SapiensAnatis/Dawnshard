@@ -188,7 +188,8 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
 
         await this.fixture.AddToDatabase(build);
 
-        await this.fortRepository.Invoking(x => x.GetBuilding(9))
+        await this
+            .fortRepository.Invoking(x => x.GetBuilding(9))
             .Should()
             .ThrowAsync<InvalidOperationException>();
         this.mockPlayerIdentityService.VerifyAll();
