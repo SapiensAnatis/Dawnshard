@@ -187,7 +187,8 @@ public class PresentTest : TestFixture
     [Fact]
     public async Task Receive_ReceiveAllPresents_ClaimsAll()
     {
-        DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData.AsNoTracking()
+        DbPlayerUserData oldUserData = this
+            .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
         DbPlayerMaterial oldSquishums = this.ApiContext.PlayerMaterials.First(x =>
@@ -364,7 +365,8 @@ public class PresentTest : TestFixture
     [Fact]
     public async Task Receive_DuplicateWyrmprint_ConvertsEntity()
     {
-        DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData.AsNoTracking()
+        DbPlayerUserData oldUserData = this
+            .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
         List<DbPlayerPresent> presents =

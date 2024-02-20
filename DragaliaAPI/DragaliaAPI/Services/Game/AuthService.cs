@@ -101,7 +101,8 @@ public class AuthService : IAuthService
             jwt.Subject
         );
 
-        DbPlayer? player = await this.apiContext.Players.AsNoTracking()
+        DbPlayer? player = await this
+            .apiContext.Players.AsNoTracking()
             .Include(x => x.UserData)
             .FirstOrDefaultAsync(x => x.AccountId == jwt.Subject);
 

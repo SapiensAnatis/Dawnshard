@@ -30,7 +30,8 @@ public class DmodeTest : TestFixture
     [Fact]
     public async Task ReadStory_ReadsStory()
     {
-        int oldWyrmite = this.ApiContext.PlayerUserData.AsNoTracking()
+        int oldWyrmite = this
+            .ApiContext.PlayerUserData.AsNoTracking()
             .Single(x => x.ViewerId == ViewerId)
             .Crystal;
 

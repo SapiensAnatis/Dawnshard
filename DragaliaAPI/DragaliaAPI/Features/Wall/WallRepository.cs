@@ -46,7 +46,8 @@ public class WallRepository : IWallRepository
 
     public async Task<DbPlayerQuestWall> GetQuestWall(int wallId)
     {
-        DbPlayerQuestWall? questWall = await this.QuestWalls.Where(x => x.WallId == wallId)
+        DbPlayerQuestWall? questWall = await this
+            .QuestWalls.Where(x => x.WallId == wallId)
             .FirstOrDefaultAsync();
 
         if (questWall is null)
@@ -60,7 +61,8 @@ public class WallRepository : IWallRepository
     }
 
     public Task<int> GetQuestWallLevel(QuestWallTypes type) =>
-        this.QuestWalls.Where(x => x.WallId == (int)type)
+        this
+            .QuestWalls.Where(x => x.WallId == (int)type)
             .Select(x => x.WallLevel)
             .FirstOrDefaultAsync();
 }

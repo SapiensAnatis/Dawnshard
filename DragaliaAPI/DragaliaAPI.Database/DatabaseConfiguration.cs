@@ -66,7 +66,8 @@ public static class DatabaseConfiguration
     [ExcludeFromCodeCoverage]
     public static void MigrateDatabase(this WebApplication app)
     {
-        using IServiceScope scope = app.Services.GetRequiredService<IServiceScopeFactory>()
+        using IServiceScope scope = app
+            .Services.GetRequiredService<IServiceScopeFactory>()
             .CreateScope();
 
         ApiContext context = scope.ServiceProvider.GetRequiredService<ApiContext>();

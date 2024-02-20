@@ -166,7 +166,8 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
 
     protected long GetDragonKeyId(Dragons dragon)
     {
-        return this.ApiContext.PlayerDragonData.Where(x => x.DragonId == dragon)
+        return this
+            .ApiContext.PlayerDragonData.Where(x => x.DragonId == dragon)
             .Select(x => x.DragonKeyId)
             .DefaultIfEmpty()
             .First();
@@ -200,7 +201,8 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
 
     protected long GetTalismanKeyId(Talismans talisman)
     {
-        return this.ApiContext.PlayerTalismans.Where(x => x.TalismanId == talisman)
+        return this
+            .ApiContext.PlayerTalismans.Where(x => x.TalismanId == talisman)
             .Select(x => x.TalismanKeyId)
             .DefaultIfEmpty()
             .First();

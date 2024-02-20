@@ -185,9 +185,10 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
             .GetPassiveAbilityId(1);
         WeaponPassiveAbility passiveAbility = MasterAsset.WeaponPassiveAbility.Get(passiveId);
 
-        await this.weaponRepository.Invoking(x =>
-            x.AddPassiveAbility(WeaponBodies.RoaringWeald, passiveAbility)
-        )
+        await this
+            .weaponRepository.Invoking(x =>
+                x.AddPassiveAbility(WeaponBodies.RoaringWeald, passiveAbility)
+            )
             .Should()
             .NotThrowAsync();
     }

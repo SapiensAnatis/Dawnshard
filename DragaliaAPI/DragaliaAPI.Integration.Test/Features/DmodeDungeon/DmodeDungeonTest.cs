@@ -48,7 +48,8 @@ public class DmodeDungeonTest : TestFixture
     {
         this.AddCharacter(Charas.Shingen);
 
-        DbPlayerDmodeInfo oldInfo = this.ApiContext.PlayerDmodeInfos.AsNoTracking()
+        DbPlayerDmodeInfo oldInfo = this
+            .ApiContext.PlayerDmodeInfos.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
         await this.Client.PostMsgpack<DmodeDungeonStartData>(
@@ -104,7 +105,8 @@ public class DmodeDungeonTest : TestFixture
     {
         this.AddCharacter(Charas.Shingen);
 
-        DbPlayerDmodeInfo oldInfo = this.ApiContext.PlayerDmodeInfos.AsNoTracking()
+        DbPlayerDmodeInfo oldInfo = this
+            .ApiContext.PlayerDmodeInfos.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
         await this.Client.PostMsgpack<DmodeDungeonStartData>(
@@ -148,7 +150,8 @@ public class DmodeDungeonTest : TestFixture
     private async Task<DungeonState> GetDungeonState()
     {
         return (
-            await this.ApiContext.PlayerDmodeDungeons.AsNoTracking()
+            await this
+                .ApiContext.PlayerDmodeDungeons.AsNoTracking()
                 .FirstAsync(x => x.ViewerId == ViewerId)
         ).State;
     }

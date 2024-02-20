@@ -62,8 +62,9 @@ public class ClearPartyService : IClearPartyService
             return new(mappedPartyList, Enumerable.Empty<AtgenLostUnitList>());
         }
 
-        IEnumerable<DbDetailedPartyUnit> detailedPartyUnits =
-            await this.dungeonRepository.BuildDetailedPartyUnit(clearPartyQuery).ToListAsync();
+        IEnumerable<DbDetailedPartyUnit> detailedPartyUnits = await this
+            .dungeonRepository.BuildDetailedPartyUnit(clearPartyQuery)
+            .ToListAsync();
         IEnumerable<AtgenLostUnitList> lostUnitList = ProcessLostUnitList(
                 clearPartyUnits,
                 detailedPartyUnits
@@ -81,14 +82,16 @@ public class ClearPartyService : IClearPartyService
         IEnumerable<PartySettingList> party
     )
     {
-        Dictionary<long, Dragons> dragons = await this.unitRepository.Dragons.Where(x =>
-            party.Select(y => y.equip_dragon_key_id).Contains((ulong)x.DragonKeyId)
-        )
+        Dictionary<long, Dragons> dragons = await this
+            .unitRepository.Dragons.Where(x =>
+                party.Select(y => y.equip_dragon_key_id).Contains((ulong)x.DragonKeyId)
+            )
             .ToDictionaryAsync(x => x.DragonKeyId, x => x.DragonId);
 
-        Dictionary<long, Talismans> talismans = await this.unitRepository.Talismans.Where(x =>
-            party.Select(y => y.equip_talisman_key_id).Contains((ulong)x.TalismanKeyId)
-        )
+        Dictionary<long, Talismans> talismans = await this
+            .unitRepository.Talismans.Where(x =>
+                party.Select(y => y.equip_talisman_key_id).Contains((ulong)x.TalismanKeyId)
+            )
             .ToDictionaryAsync(x => x.TalismanKeyId, x => x.TalismanId);
 
         IEnumerable<DbQuestClearPartyUnit> dbUnits = party.Select(x =>

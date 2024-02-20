@@ -28,65 +28,86 @@ public class DungeonRepository : IDungeonRepository
     {
         return (
             from unit in input
-            from chara in this.apiContext.PlayerCharaData.Where(x =>
-                x.CharaId == unit.CharaId && x.ViewerId == unit.ViewerId
-            )
+            from chara in this
+                .apiContext.PlayerCharaData.Where(x =>
+                    x.CharaId == unit.CharaId && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from dragon in this.apiContext.PlayerDragonData.Where(x =>
-                x.DragonKeyId == unit.EquipDragonKeyId && x.ViewerId == unit.ViewerId
-            )
+            from dragon in this
+                .apiContext.PlayerDragonData.Where(x =>
+                    x.DragonKeyId == unit.EquipDragonKeyId && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from weapon in this.apiContext.PlayerWeapons.Where(x =>
-                x.WeaponBodyId == unit.EquipWeaponBodyId && x.ViewerId == unit.ViewerId
-            )
+            from weapon in this
+                .apiContext.PlayerWeapons.Where(x =>
+                    x.WeaponBodyId == unit.EquipWeaponBodyId && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from crests11 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                x.AbilityCrestId == unit.EquipCrestSlotType1CrestId1 && x.ViewerId == unit.ViewerId
-            )
+            from crests11 in this
+                .apiContext.PlayerAbilityCrests.Where(x =>
+                    x.AbilityCrestId == unit.EquipCrestSlotType1CrestId1
+                    && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from crests12 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                x.AbilityCrestId == unit.EquipCrestSlotType1CrestId2 && x.ViewerId == unit.ViewerId
-            )
+            from crests12 in this
+                .apiContext.PlayerAbilityCrests.Where(x =>
+                    x.AbilityCrestId == unit.EquipCrestSlotType1CrestId2
+                    && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from crests13 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                x.AbilityCrestId == unit.EquipCrestSlotType1CrestId3 && x.ViewerId == unit.ViewerId
-            )
+            from crests13 in this
+                .apiContext.PlayerAbilityCrests.Where(x =>
+                    x.AbilityCrestId == unit.EquipCrestSlotType1CrestId3
+                    && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from crests21 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                x.AbilityCrestId == unit.EquipCrestSlotType2CrestId1 && x.ViewerId == unit.ViewerId
-            )
+            from crests21 in this
+                .apiContext.PlayerAbilityCrests.Where(x =>
+                    x.AbilityCrestId == unit.EquipCrestSlotType2CrestId1
+                    && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from crests22 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                x.AbilityCrestId == unit.EquipCrestSlotType2CrestId2 && x.ViewerId == unit.ViewerId
-            )
+            from crests22 in this
+                .apiContext.PlayerAbilityCrests.Where(x =>
+                    x.AbilityCrestId == unit.EquipCrestSlotType2CrestId2
+                    && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from crests31 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                x.AbilityCrestId == unit.EquipCrestSlotType3CrestId1 && x.ViewerId == unit.ViewerId
-            )
+            from crests31 in this
+                .apiContext.PlayerAbilityCrests.Where(x =>
+                    x.AbilityCrestId == unit.EquipCrestSlotType3CrestId1
+                    && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from crests32 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                x.AbilityCrestId == unit.EquipCrestSlotType3CrestId2 && x.ViewerId == unit.ViewerId
-            )
+            from crests32 in this
+                .apiContext.PlayerAbilityCrests.Where(x =>
+                    x.AbilityCrestId == unit.EquipCrestSlotType3CrestId2
+                    && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from charaEs1 in this.apiContext.PlayerCharaData.Where(x =>
-                x.CharaId == unit.EditSkill1CharaId
-                && x.ViewerId == unit.ViewerId
-                && x.IsUnlockEditSkill
-            )
+            from charaEs1 in this
+                .apiContext.PlayerCharaData.Where(x =>
+                    x.CharaId == unit.EditSkill1CharaId
+                    && x.ViewerId == unit.ViewerId
+                    && x.IsUnlockEditSkill
+                )
                 .DefaultIfEmpty()
-            from charaEs2 in this.apiContext.PlayerCharaData.Where(x =>
-                x.CharaId == unit.EditSkill2CharaId
-                && x.ViewerId == unit.ViewerId
-                && x.IsUnlockEditSkill
-            )
+            from charaEs2 in this
+                .apiContext.PlayerCharaData.Where(x =>
+                    x.CharaId == unit.EditSkill2CharaId
+                    && x.ViewerId == unit.ViewerId
+                    && x.IsUnlockEditSkill
+                )
                 .DefaultIfEmpty()
-            from talisman in this.apiContext.PlayerTalismans.Where(x =>
-                x.TalismanKeyId == unit.EquipTalismanKeyId && x.ViewerId == unit.ViewerId
-            )
+            from talisman in this
+                .apiContext.PlayerTalismans.Where(x =>
+                    x.TalismanKeyId == unit.EquipTalismanKeyId && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from skin in this.apiContext.PlayerWeaponSkins.Where(x =>
-                x.WeaponSkinId == unit.EquipWeaponSkinId && x.ViewerId == unit.ViewerId
-            )
+            from skin in this
+                .apiContext.PlayerWeaponSkins.Where(x =>
+                    x.WeaponSkinId == unit.EquipWeaponSkinId && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
             select new DbDetailedPartyUnit
             {
@@ -134,65 +155,86 @@ public class DungeonRepository : IDungeonRepository
             from unit in input
             join chara in this.apiContext.PlayerCharaData
                 on new { unit.ViewerId, unit.CharaId } equals new { chara.ViewerId, chara.CharaId }
-            from dragon in this.apiContext.PlayerDragonData.Where(x =>
-                x.DragonKeyId == unit.EquipDragonKeyId && x.ViewerId == unit.ViewerId
-            )
+            from dragon in this
+                .apiContext.PlayerDragonData.Where(x =>
+                    x.DragonKeyId == unit.EquipDragonKeyId && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from dragonReliability in this.apiContext.PlayerDragonReliability.Where(x =>
-                x.DragonId == dragon.DragonId && x.ViewerId == unit.ViewerId
-            )
+            from dragonReliability in this
+                .apiContext.PlayerDragonReliability.Where(x =>
+                    x.DragonId == dragon.DragonId && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from weapon in this.apiContext.PlayerWeapons.Where(x =>
-                x.WeaponBodyId == unit.EquipWeaponBodyId && x.ViewerId == unit.ViewerId
-            )
+            from weapon in this
+                .apiContext.PlayerWeapons.Where(x =>
+                    x.WeaponBodyId == unit.EquipWeaponBodyId && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from crests11 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                x.AbilityCrestId == unit.EquipCrestSlotType1CrestId1 && x.ViewerId == unit.ViewerId
-            )
+            from crests11 in this
+                .apiContext.PlayerAbilityCrests.Where(x =>
+                    x.AbilityCrestId == unit.EquipCrestSlotType1CrestId1
+                    && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from crests12 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                x.AbilityCrestId == unit.EquipCrestSlotType1CrestId2 && x.ViewerId == unit.ViewerId
-            )
+            from crests12 in this
+                .apiContext.PlayerAbilityCrests.Where(x =>
+                    x.AbilityCrestId == unit.EquipCrestSlotType1CrestId2
+                    && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from crests13 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                x.AbilityCrestId == unit.EquipCrestSlotType1CrestId3 && x.ViewerId == unit.ViewerId
-            )
+            from crests13 in this
+                .apiContext.PlayerAbilityCrests.Where(x =>
+                    x.AbilityCrestId == unit.EquipCrestSlotType1CrestId3
+                    && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from crests21 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                x.AbilityCrestId == unit.EquipCrestSlotType2CrestId1 && x.ViewerId == unit.ViewerId
-            )
+            from crests21 in this
+                .apiContext.PlayerAbilityCrests.Where(x =>
+                    x.AbilityCrestId == unit.EquipCrestSlotType2CrestId1
+                    && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from crests22 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                x.AbilityCrestId == unit.EquipCrestSlotType2CrestId2 && x.ViewerId == unit.ViewerId
-            )
+            from crests22 in this
+                .apiContext.PlayerAbilityCrests.Where(x =>
+                    x.AbilityCrestId == unit.EquipCrestSlotType2CrestId2
+                    && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from crests31 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                x.AbilityCrestId == unit.EquipCrestSlotType3CrestId1 && x.ViewerId == unit.ViewerId
-            )
+            from crests31 in this
+                .apiContext.PlayerAbilityCrests.Where(x =>
+                    x.AbilityCrestId == unit.EquipCrestSlotType3CrestId1
+                    && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from crests32 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                x.AbilityCrestId == unit.EquipCrestSlotType3CrestId2 && x.ViewerId == unit.ViewerId
-            )
+            from crests32 in this
+                .apiContext.PlayerAbilityCrests.Where(x =>
+                    x.AbilityCrestId == unit.EquipCrestSlotType3CrestId2
+                    && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from charaEs1 in this.apiContext.PlayerCharaData.Where(x =>
-                x.CharaId == unit.EditSkill1CharaId
-                && x.ViewerId == unit.ViewerId
-                && x.IsUnlockEditSkill
-            )
+            from charaEs1 in this
+                .apiContext.PlayerCharaData.Where(x =>
+                    x.CharaId == unit.EditSkill1CharaId
+                    && x.ViewerId == unit.ViewerId
+                    && x.IsUnlockEditSkill
+                )
                 .DefaultIfEmpty()
-            from charaEs2 in this.apiContext.PlayerCharaData.Where(x =>
-                x.CharaId == unit.EditSkill2CharaId
-                && x.ViewerId == unit.ViewerId
-                && x.IsUnlockEditSkill
-            )
+            from charaEs2 in this
+                .apiContext.PlayerCharaData.Where(x =>
+                    x.CharaId == unit.EditSkill2CharaId
+                    && x.ViewerId == unit.ViewerId
+                    && x.IsUnlockEditSkill
+                )
                 .DefaultIfEmpty()
-            from talisman in this.apiContext.PlayerTalismans.Where(x =>
-                x.TalismanKeyId == unit.EquipTalismanKeyId && x.ViewerId == unit.ViewerId
-            )
+            from talisman in this
+                .apiContext.PlayerTalismans.Where(x =>
+                    x.TalismanKeyId == unit.EquipTalismanKeyId && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
-            from skin in this.apiContext.PlayerWeaponSkins.Where(x =>
-                x.WeaponSkinId == unit.EquipWeaponSkinId && x.ViewerId == unit.ViewerId
-            )
+            from skin in this
+                .apiContext.PlayerWeaponSkins.Where(x =>
+                    x.WeaponSkinId == unit.EquipWeaponSkinId && x.ViewerId == unit.ViewerId
+                )
                 .DefaultIfEmpty()
             select new DbDetailedPartyUnit
             {
@@ -247,81 +289,97 @@ public class DungeonRepository : IDungeonRepository
         foreach (PartySettingList unit in party)
         {
             IQueryable<DbDetailedPartyUnit> detailQuery = (
-                from chara in this.apiContext.PlayerCharaData.Where(x =>
-                    x.CharaId == unit.chara_id && x.ViewerId == this.playerIdentityService.ViewerId
-                )
+                from chara in this
+                    .apiContext.PlayerCharaData.Where(x =>
+                        x.CharaId == unit.chara_id
+                        && x.ViewerId == this.playerIdentityService.ViewerId
+                    )
                     .DefaultIfEmpty()
-                from dragon in this.apiContext.PlayerDragonData.Where(x =>
-                    x.DragonKeyId == (long)unit.equip_dragon_key_id
-                    && x.ViewerId == this.playerIdentityService.ViewerId
-                )
+                from dragon in this
+                    .apiContext.PlayerDragonData.Where(x =>
+                        x.DragonKeyId == (long)unit.equip_dragon_key_id
+                        && x.ViewerId == this.playerIdentityService.ViewerId
+                    )
                     .DefaultIfEmpty()
-                from dragonReliability in this.apiContext.PlayerDragonReliability.Where(x =>
-                    x.DragonId == dragon.DragonId
-                    && x.ViewerId == this.playerIdentityService.ViewerId
-                )
+                from dragonReliability in this
+                    .apiContext.PlayerDragonReliability.Where(x =>
+                        x.DragonId == dragon.DragonId
+                        && x.ViewerId == this.playerIdentityService.ViewerId
+                    )
                     .DefaultIfEmpty()
-                from weapon in this.apiContext.PlayerWeapons.Where(x =>
-                    x.WeaponBodyId == unit.equip_weapon_body_id
-                    && x.ViewerId == this.playerIdentityService.ViewerId
-                )
+                from weapon in this
+                    .apiContext.PlayerWeapons.Where(x =>
+                        x.WeaponBodyId == unit.equip_weapon_body_id
+                        && x.ViewerId == this.playerIdentityService.ViewerId
+                    )
                     .DefaultIfEmpty()
-                from crests11 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                    x.AbilityCrestId == unit.equip_crest_slot_type_1_crest_id_1
-                    && x.ViewerId == this.playerIdentityService.ViewerId
-                )
+                from crests11 in this
+                    .apiContext.PlayerAbilityCrests.Where(x =>
+                        x.AbilityCrestId == unit.equip_crest_slot_type_1_crest_id_1
+                        && x.ViewerId == this.playerIdentityService.ViewerId
+                    )
                     .DefaultIfEmpty()
-                from crests12 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                    x.AbilityCrestId == unit.equip_crest_slot_type_1_crest_id_2
-                    && x.ViewerId == this.playerIdentityService.ViewerId
-                )
+                from crests12 in this
+                    .apiContext.PlayerAbilityCrests.Where(x =>
+                        x.AbilityCrestId == unit.equip_crest_slot_type_1_crest_id_2
+                        && x.ViewerId == this.playerIdentityService.ViewerId
+                    )
                     .DefaultIfEmpty()
-                from crests13 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                    x.AbilityCrestId == unit.equip_crest_slot_type_1_crest_id_3
-                    && x.ViewerId == this.playerIdentityService.ViewerId
-                )
+                from crests13 in this
+                    .apiContext.PlayerAbilityCrests.Where(x =>
+                        x.AbilityCrestId == unit.equip_crest_slot_type_1_crest_id_3
+                        && x.ViewerId == this.playerIdentityService.ViewerId
+                    )
                     .DefaultIfEmpty()
-                from crests21 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                    x.AbilityCrestId == unit.equip_crest_slot_type_2_crest_id_1
-                    && x.ViewerId == this.playerIdentityService.ViewerId
-                )
+                from crests21 in this
+                    .apiContext.PlayerAbilityCrests.Where(x =>
+                        x.AbilityCrestId == unit.equip_crest_slot_type_2_crest_id_1
+                        && x.ViewerId == this.playerIdentityService.ViewerId
+                    )
                     .DefaultIfEmpty()
-                from crests22 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                    x.AbilityCrestId == unit.equip_crest_slot_type_2_crest_id_2
-                    && x.ViewerId == this.playerIdentityService.ViewerId
-                )
+                from crests22 in this
+                    .apiContext.PlayerAbilityCrests.Where(x =>
+                        x.AbilityCrestId == unit.equip_crest_slot_type_2_crest_id_2
+                        && x.ViewerId == this.playerIdentityService.ViewerId
+                    )
                     .DefaultIfEmpty()
-                from crests31 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                    x.AbilityCrestId == unit.equip_crest_slot_type_3_crest_id_1
-                    && x.ViewerId == this.playerIdentityService.ViewerId
-                )
+                from crests31 in this
+                    .apiContext.PlayerAbilityCrests.Where(x =>
+                        x.AbilityCrestId == unit.equip_crest_slot_type_3_crest_id_1
+                        && x.ViewerId == this.playerIdentityService.ViewerId
+                    )
                     .DefaultIfEmpty()
-                from crests32 in this.apiContext.PlayerAbilityCrests.Where(x =>
-                    x.AbilityCrestId == unit.equip_crest_slot_type_3_crest_id_2
-                    && x.ViewerId == this.playerIdentityService.ViewerId
-                )
+                from crests32 in this
+                    .apiContext.PlayerAbilityCrests.Where(x =>
+                        x.AbilityCrestId == unit.equip_crest_slot_type_3_crest_id_2
+                        && x.ViewerId == this.playerIdentityService.ViewerId
+                    )
                     .DefaultIfEmpty()
-                from charaEs1 in this.apiContext.PlayerCharaData.Where(x =>
-                    x.CharaId == unit.edit_skill_1_chara_id
-                    && x.ViewerId == this.playerIdentityService.ViewerId
-                    && x.IsUnlockEditSkill
-                )
+                from charaEs1 in this
+                    .apiContext.PlayerCharaData.Where(x =>
+                        x.CharaId == unit.edit_skill_1_chara_id
+                        && x.ViewerId == this.playerIdentityService.ViewerId
+                        && x.IsUnlockEditSkill
+                    )
                     .DefaultIfEmpty()
-                from charaEs2 in this.apiContext.PlayerCharaData.Where(x =>
-                    x.CharaId == unit.edit_skill_2_chara_id
-                    && x.ViewerId == this.playerIdentityService.ViewerId
-                    && x.IsUnlockEditSkill
-                )
+                from charaEs2 in this
+                    .apiContext.PlayerCharaData.Where(x =>
+                        x.CharaId == unit.edit_skill_2_chara_id
+                        && x.ViewerId == this.playerIdentityService.ViewerId
+                        && x.IsUnlockEditSkill
+                    )
                     .DefaultIfEmpty()
-                from talisman in this.apiContext.PlayerTalismans.Where(x =>
-                    x.TalismanKeyId == (long)unit.equip_talisman_key_id
-                    && x.ViewerId == this.playerIdentityService.ViewerId
-                )
+                from talisman in this
+                    .apiContext.PlayerTalismans.Where(x =>
+                        x.TalismanKeyId == (long)unit.equip_talisman_key_id
+                        && x.ViewerId == this.playerIdentityService.ViewerId
+                    )
                     .DefaultIfEmpty()
-                from skin in this.apiContext.PlayerWeaponSkins.Where(x =>
-                    x.WeaponSkinId == unit.equip_weapon_skin_id
-                    && x.ViewerId == this.playerIdentityService.ViewerId
-                )
+                from skin in this
+                    .apiContext.PlayerWeaponSkins.Where(x =>
+                        x.WeaponSkinId == unit.equip_weapon_skin_id
+                        && x.ViewerId == this.playerIdentityService.ViewerId
+                    )
                     .DefaultIfEmpty()
                 select new DbDetailedPartyUnit
                 {

@@ -289,9 +289,9 @@ public class MissionTest : TestFixture
         // The Miracle Of Dragonyule: Clear a Boss Battle Five Times. Grants 'Splendid!' sticker
         int missionId = 10020502;
 
-        int oldWyrmite = this.ApiContext.PlayerUserData.First(x =>
-            x.ViewerId == this.ViewerId
-        ).Crystal;
+        int oldWyrmite = this
+            .ApiContext.PlayerUserData.First(x => x.ViewerId == this.ViewerId)
+            .Crystal;
 
         await this.AddToDatabase(
             new DbPlayerMission()

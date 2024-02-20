@@ -67,16 +67,19 @@ public class CharaTest : TestFixture
         int matQuantity;
 
         using (
-            IDisposable ctx = this.Services.GetRequiredService<IPlayerIdentityService>()
+            IDisposable ctx = this
+                .Services.GetRequiredService<IPlayerIdentityService>()
                 .StartUserImpersonation(viewer: ViewerId)
         )
         {
-            charaData = await this.Services.GetRequiredService<IUnitRepository>()
+            charaData = await this
+                .Services.GetRequiredService<IUnitRepository>()
                 .Charas.Where(x => x.CharaId == Charas.Celliera)
                 .FirstAsync();
 
             matQuantity = (
-                await this.Services.GetRequiredService<IInventoryRepository>()
+                await this
+                    .Services.GetRequiredService<IInventoryRepository>()
                     .GetMaterial(Materials.GoldCrystal)
             )!.Quantity;
         }
@@ -131,7 +134,8 @@ public class CharaTest : TestFixture
             )
         );
 
-        byte currentLevel = this.ApiContext.PlayerCharaData.AsNoTracking()
+        byte currentLevel = this
+            .ApiContext.PlayerCharaData.AsNoTracking()
             .First(x => x.CharaId == Charas.Gauld)
             .Level;
 
@@ -155,7 +159,8 @@ public class CharaTest : TestFixture
         int manaPointNum;
 
         using (
-            IDisposable ctx = this.Services.GetRequiredService<IPlayerIdentityService>()
+            IDisposable ctx = this
+                .Services.GetRequiredService<IPlayerIdentityService>()
                 .StartUserImpersonation(viewer: ViewerId)
         )
         {
@@ -221,7 +226,8 @@ public class CharaTest : TestFixture
             mat2Quantity;
 
         using (
-            IDisposable ctx = this.Services.GetRequiredService<IPlayerIdentityService>()
+            IDisposable ctx = this
+                .Services.GetRequiredService<IPlayerIdentityService>()
                 .StartUserImpersonation(viewer: ViewerId)
         )
         {
@@ -259,7 +265,8 @@ public class CharaTest : TestFixture
             manaPointNum;
 
         using (
-            IDisposable ctx = this.Services.GetRequiredService<IPlayerIdentityService>()
+            IDisposable ctx = this
+                .Services.GetRequiredService<IPlayerIdentityService>()
                 .StartUserImpersonation(viewer: ViewerId)
         )
         {

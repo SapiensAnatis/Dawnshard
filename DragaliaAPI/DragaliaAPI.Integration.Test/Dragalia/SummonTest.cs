@@ -165,18 +165,16 @@ public class SummonTest : TestFixture
     {
         if (reward.entity_type == EntityTypes.Dragon)
         {
-            List<DbPlayerDragonData> dragonData = await this.ApiContext.PlayerDragonData.Where(x =>
-                x.ViewerId == ViewerId
-            )
+            List<DbPlayerDragonData> dragonData = await this
+                .ApiContext.PlayerDragonData.Where(x => x.ViewerId == ViewerId)
                 .ToListAsync();
 
             dragonData.Where(x => (int)x.DragonId == reward.id).Should().NotBeEmpty();
         }
         else
         {
-            List<DbPlayerCharaData> charaData = await this.ApiContext.PlayerCharaData.Where(x =>
-                x.ViewerId == ViewerId
-            )
+            List<DbPlayerCharaData> charaData = await this
+                .ApiContext.PlayerCharaData.Where(x => x.ViewerId == ViewerId)
                 .ToListAsync();
 
             charaData.Where(x => (int)x.CharaId == reward.id).Should().NotBeEmpty();

@@ -63,13 +63,15 @@ public class TreasureTradeTest : TestFixture
         int preTradeAmount;
 
         using (
-            IDisposable ctx = this.Services.GetRequiredService<IPlayerIdentityService>()
+            IDisposable ctx = this
+                .Services.GetRequiredService<IPlayerIdentityService>()
                 .StartUserImpersonation(viewer: ViewerId)
         )
         {
             preTradeAmount =
                 (
-                    await this.Services.GetRequiredService<IInventoryRepository>()
+                    await this
+                        .Services.GetRequiredService<IInventoryRepository>()
                         .GetMaterial(Materials.DamascusIngot)
                 )?.Quantity ?? 0;
         }
@@ -89,7 +91,8 @@ public class TreasureTradeTest : TestFixture
         response.treasure_trade_list.Should().BeNullOrEmpty();
         response.update_data_list.Should().NotBeNull();
 
-        int newMatQuantity = this.ApiContext.PlayerMaterials.AsNoTracking()
+        int newMatQuantity = this
+            .ApiContext.PlayerMaterials.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId && x.MaterialId == Materials.DamascusIngot)
             .Select(x => x.Quantity)
             .First();

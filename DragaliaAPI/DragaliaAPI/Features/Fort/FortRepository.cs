@@ -145,7 +145,8 @@ public class FortRepository : IFortRepository
 
     public async Task<bool> CheckPlantLevel(FortPlants plant, int requiredLevel)
     {
-        int level = await this.Builds.Where(x => x.PlantId == plant)
+        int level = await this
+            .Builds.Where(x => x.PlantId == plant)
             .Select(x => x.Level)
             .FirstOrDefaultAsync();
         bool result = level >= requiredLevel;
@@ -174,7 +175,8 @@ public class FortRepository : IFortRepository
 
     public async Task<DbFortBuild> GetBuilding(long buildId)
     {
-        DbFortBuild? fort = await this.Builds.Where(x => x.BuildId == buildId)
+        DbFortBuild? fort = await this
+            .Builds.Where(x => x.BuildId == buildId)
             .FirstOrDefaultAsync();
 
         if (fort is null)

@@ -54,7 +54,7 @@ foreach ((_, MissionProgressionInfo progInfo) in missions)
 
     missions[requiredMissionId] = missions[requiredMissionId] with
     {
-        UnlockedOnComplete = [..missions[requiredMissionId].UnlockedOnComplete, progInfo.MissionId]
+        UnlockedOnComplete = [.. missions[requiredMissionId].UnlockedOnComplete, progInfo.MissionId]
     };
 }
 
