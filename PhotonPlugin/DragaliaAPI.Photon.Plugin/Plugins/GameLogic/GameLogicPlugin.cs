@@ -8,6 +8,7 @@ using DragaliaAPI.Photon.Plugin.Plugins.GameLogic.Events;
 using DragaliaAPI.Photon.Plugin.Shared;
 using DragaliaAPI.Photon.Plugin.Shared.Constants;
 using DragaliaAPI.Photon.Plugin.Shared.Helpers;
+using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Photon.Shared.Models;
 using MessagePack;
 using Newtonsoft.Json;
@@ -84,7 +85,6 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             this.actorState[actorNr] = new ActorState();
 
             long viewerId = info.Request.ActorProperties.GetLong(ActorPropertyKeys.PlayerId);
-            bool isUseSecondaryServer;
 
             if (
                 this.configuration.EnableSecondaryServer
@@ -92,12 +92,12 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             )
             {
                 this.logger.Info("Using secondary server config");
-                isUseSecondaryServer = true;
+                this.pluginStateService.IsUseSecondaryServer = true;
             }
             else
             {
                 this.logger.Info("Using primary server config");
-                isUseSecondaryServer = false;
+                this.pluginStateService.IsUseSecondaryServer = false;
             }
 
             if (
@@ -115,6 +115,8 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             this.roomState.IsRandomMatching = QuestHelper.GetIsRandomMatching(
                 this.roomState.QuestId
             );
+            MatchingTypes matchingType = (MatchingTypes)
+                info.Request.GameProperties.GetInt(GamePropertyKeys.MatchingType);
 
             this.logger.InfoFormat(
                 "Viewer ID {0} created room {1} with room ID {2}",
@@ -123,8 +125,8 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                 roomId
             );
 
-            this.pluginStateService.ShouldPublish = !this.roomState.IsRandomMatching;
-            this.pluginStateService.IsUseSecondaryServer = isUseSecondaryServer;
+            this.pluginStateService.ShouldPublish =
+                matchingType == MatchingTypes.Anyone && !this.roomState.IsRandomMatching;
         }
 
         public override void OnJoin(IJoinGameCallInfo info)

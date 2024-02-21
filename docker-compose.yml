@@ -16,8 +16,8 @@ services:
       - PostgresOptions__Password=$POSTGRES_PASSWORD
       - PostgresOptions__Database=$POSTGRES_DB
     ports:
-      - "80:80"
-      - "5000:80"
+      - "80:8080"
+      - "5000:8080"
     links:
       - postgres
     env_file:
