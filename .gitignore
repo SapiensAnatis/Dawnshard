@@ -1,3 +1,6 @@
+PhotonServer/**/*
+!PhotonServer/.gitkeep
+PhotonRealtimeDotnetSdk/**/*
 .idea
 .run
 .env
