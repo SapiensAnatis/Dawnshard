@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace DragaliaAPI.Photon.Shared.Models
+﻿namespace DragaliaAPI.Photon.Shared.Models
 {
     /// <summary>
     /// An object representing an open game with additional derived properties,
@@ -58,7 +56,6 @@ namespace DragaliaAPI.Photon.Shared.Models
             MatchingType = gameBase.MatchingType;
         }
 
-        [JsonConstructor]
         public ApiGame() { }
     }
 }
