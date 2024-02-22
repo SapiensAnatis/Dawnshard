@@ -1,6 +1,6 @@
-﻿using DragaliaAPI.Photon.Shared.Enums;
+﻿using System.Text.Json.Serialization;
+using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Photon.Shared.Models;
-using Newtonsoft.Json;
 using Redis.OM.Modeling;
 
 namespace DragaliaAPI.Photon.StateManager.Models;

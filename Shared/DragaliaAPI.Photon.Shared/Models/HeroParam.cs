@@ -8,351 +8,351 @@ namespace DragaliaAPI.Photon.Shared.Models
     public class HeroParam
     {
         [Key(0)]
-        public int level { get; set; }
+        public int Level { get; set; }
 
         [Key(1)]
-        public int characterId { get; set; }
+        public int CharacterId { get; set; }
 
         [Key(2)]
-        public int hp { get; set; }
+        public int Hp { get; set; }
 
         [Key(3)]
-        public int attack { get; set; }
+        public int Attack { get; set; }
 
         [Key(4)]
-        public int defence { get; set; }
+        public int Defence { get; set; }
 
         [Key(5)]
-        public int exAbilityLv { get; set; }
+        public int ExAbilityLv { get; set; }
 
         [Key(6)]
-        public int exAbility2Lv { get; set; }
+        public int ExAbility2Lv { get; set; }
 
         [Key(7)]
-        public int ability1Lv { get; set; }
+        public int Ability1Lv { get; set; }
 
         [Key(8)]
-        public int ability2Lv { get; set; }
+        public int Ability2Lv { get; set; }
 
         [Key(9)]
-        public int ability3Lv { get; set; }
+        public int Ability3Lv { get; set; }
 
         [Key(10)]
-        public int skill1Lv { get; set; }
+        public int Skill1Lv { get; set; }
 
         [Key(11)]
-        public int skill2Lv { get; set; }
+        public int Skill2Lv { get; set; }
 
         [Key(12)]
-        public int burstAttackLv { get; set; }
+        public int BurstAttackLv { get; set; }
 
         [Key(13)]
-        public int hpPlusCount { get; set; }
+        public int HpPlusCount { get; set; }
 
         [Key(14)]
-        public int attackPlusCount { get; set; }
+        public int AttackPlusCount { get; set; }
 
         [Key(15)]
-        public int comboBuildupCount { get; set; }
+        public int ComboBuildupCount { get; set; }
 
         [Key(20)]
-        public int dragonId { get; set; }
+        public int DragonId { get; set; }
 
         [Key(21)]
-        public int dragonLevel { get; set; }
+        public int DragonLevel { get; set; }
 
         [Key(22)]
-        public int dragonAbility1Lv { get; set; }
+        public int DragonAbility1Lv { get; set; }
 
         [Key(23)]
-        public int dragonAbility2Lv { get; set; }
+        public int DragonAbility2Lv { get; set; }
 
         [Key(24)]
-        public int dragonSkill1Lv { get; set; }
+        public int DragonSkill1Lv { get; set; }
 
         [Key(25)]
-        public int dragonSkill2Lv { get; set; }
+        public int DragonSkill2Lv { get; set; }
 
         [Key(26)]
-        public int dragonHpPlusCount { get; set; }
+        public int DragonHpPlusCount { get; set; }
 
         [Key(27)]
-        public int dragonAttackPlusCount { get; set; }
+        public int DragonAttackPlusCount { get; set; }
 
         [Key(30)]
-        public int weaponBodyId { get; set; }
+        public int WeaponBodyId { get; set; }
 
         [Key(31)]
-        public int weaponBodyBuildupCount { get; set; }
+        public int WeaponBodyBuildupCount { get; set; }
 
         [Key(34)]
-        public int weaponBodySkillNo { get; set; }
+        public int WeaponBodySkillNo { get; set; }
 
         [Key(35)]
-        public int weaponBodySkillLv { get; set; }
+        public int WeaponBodySkillLv { get; set; }
 
         [Key(36)]
-        public int weaponBodyAbility1Lv { get; set; }
+        public int WeaponBodyAbility1Lv { get; set; }
 
         [Key(37)]
-        public int weaponBodyAbility2Lv { get; set; }
+        public int WeaponBodyAbility2Lv { get; set; }
 
         [Key(38)]
-        public int[] weaponPassiveAbilityIds { get; set; } = Array.Empty<int>();
+        public int[] WeaponPassiveAbilityIds { get; set; } = Array.Empty<int>();
 
         [Key(45)]
-        public int weaponSkinId { get; set; }
+        public int WeaponSkinId { get; set; }
 
         [Key(50)]
-        public int abilityCrestId { get; set; }
+        public int AbilityCrestId { get; set; }
 
         [Key(51)]
-        public int abilityCrestBuildupCount { get; set; }
+        public int AbilityCrestBuildupCount { get; set; }
 
         [Key(52)]
-        public int abilityCrestAbility1Lv { get; set; }
+        public int AbilityCrestAbility1Lv { get; set; }
 
         [Key(53)]
-        public int abilityCrestAbility2Lv { get; set; }
+        public int AbilityCrestAbility2Lv { get; set; }
 
         [Key(54)]
-        public int abilityCrestHpPlusCount { get; set; }
+        public int AbilityCrestHpPlusCount { get; set; }
 
         [Key(55)]
-        public int abilityCrestAttackPlusCount { get; set; }
+        public int AbilityCrestAttackPlusCount { get; set; }
 
         [Key(56)]
-        public int abilityCrest2Id { get; set; }
+        public int AbilityCrest2Id { get; set; }
 
         [Key(57)]
-        public int abilityCrest2BuildupCount { get; set; }
+        public int AbilityCrest2BuildupCount { get; set; }
 
         [Key(58)]
-        public int abilityCrest2Ability1Lv { get; set; }
+        public int AbilityCrest2Ability1Lv { get; set; }
 
         [Key(59)]
-        public int abilityCrest2Ability2Lv { get; set; }
+        public int AbilityCrest2Ability2Lv { get; set; }
 
         [Key(60)]
-        public int abilityCrest2HpPlusCount { get; set; }
+        public int AbilityCrest2HpPlusCount { get; set; }
 
         [Key(61)]
-        public int abilityCrest2AttackPlusCount { get; set; }
+        public int AbilityCrest2AttackPlusCount { get; set; }
 
         [Key(62)]
-        public int abilityCrest3Id { get; set; }
+        public int AbilityCrest3Id { get; set; }
 
         [Key(63)]
-        public int abilityCrest3BuildupCount { get; set; }
+        public int AbilityCrest3BuildupCount { get; set; }
 
         [Key(64)]
-        public int abilityCrest3Ability1Lv { get; set; }
+        public int AbilityCrest3Ability1Lv { get; set; }
 
         [Key(65)]
-        public int abilityCrest3Ability2Lv { get; set; }
+        public int AbilityCrest3Ability2Lv { get; set; }
 
         [Key(66)]
-        public int abilityCrest3HpPlusCount { get; set; }
+        public int AbilityCrest3HpPlusCount { get; set; }
 
         [Key(67)]
-        public int abilityCrest3AttackPlusCount { get; set; }
+        public int AbilityCrest3AttackPlusCount { get; set; }
 
         [Key(68)]
-        public int abilityCrest4Id { get; set; }
+        public int AbilityCrest4Id { get; set; }
 
         [Key(69)]
-        public int abilityCrest4BuildupCount { get; set; }
+        public int AbilityCrest4BuildupCount { get; set; }
 
         [Key(70)]
-        public int abilityCrest4Ability1Lv { get; set; }
+        public int AbilityCrest4Ability1Lv { get; set; }
 
         [Key(71)]
-        public int abilityCrest4Ability2Lv { get; set; }
+        public int AbilityCrest4Ability2Lv { get; set; }
 
         [Key(72)]
-        public int abilityCrest4HpPlusCount { get; set; }
+        public int AbilityCrest4HpPlusCount { get; set; }
 
         [Key(73)]
-        public int abilityCrest4AttackPlusCount { get; set; }
+        public int AbilityCrest4AttackPlusCount { get; set; }
 
         [Key(74)]
-        public int abilityCrest5Id { get; set; }
+        public int AbilityCrest5Id { get; set; }
 
         [Key(75)]
-        public int abilityCrest5BuildupCount { get; set; }
+        public int AbilityCrest5BuildupCount { get; set; }
 
         [Key(76)]
-        public int abilityCrest5Ability1Lv { get; set; }
+        public int AbilityCrest5Ability1Lv { get; set; }
 
         [Key(77)]
-        public int abilityCrest5Ability2Lv { get; set; }
+        public int AbilityCrest5Ability2Lv { get; set; }
 
         [Key(78)]
-        public int abilityCrest5HpPlusCount { get; set; }
+        public int AbilityCrest5HpPlusCount { get; set; }
 
         [Key(79)]
-        public int abilityCrest5AttackPlusCount { get; set; }
+        public int AbilityCrest5AttackPlusCount { get; set; }
 
         [Key(90)]
-        public int plusHp { get; set; }
+        public int PlusHp { get; set; }
 
         [Key(91)]
-        public int plusAtk { get; set; }
+        public int PlusAtk { get; set; }
 
         [Key(92)]
-        public int plusDef { get; set; }
+        public int PlusDef { get; set; }
 
         [Key(93)]
-        public float relativeHp { get; set; }
+        public float RelativeHp { get; set; }
 
         [Key(94)]
-        public float relativeAtk { get; set; }
+        public float RelativeAtk { get; set; }
 
         [Key(95)]
-        public float relativeDef { get; set; }
+        public float RelativeDef { get; set; }
 
         [Key(96)]
-        public float dragonRelativeDmg { get; set; }
+        public float DragonRelativeDmg { get; set; }
 
         [Key(97)]
-        public float dragonTime { get; set; }
+        public float DragonTime { get; set; }
 
         [Key(98)]
-        public int position { get; set; } // !
+        public int Position { get; set; } // !
 
         [Key(99)]
-        public int aiType { get; set; } // !
+        public int AiType { get; set; } // !
 
         [Key(100)]
-        public bool isEnemyTarget { get; set; }
+        public bool IsEnemyTarget { get; set; }
 
         [Key(101)]
-        public bool isFriend { get; set; }
+        public bool IsFriend { get; set; }
 
         [Key(102)]
-        public int dragonReliabilityLevel { get; set; }
+        public int DragonReliabilityLevel { get; set; }
 
         [Key(103)]
-        public float dragonRelativeHp { get; set; }
+        public float DragonRelativeHp { get; set; }
 
         [Key(104)]
-        public float dragonRelativeAtk { get; set; }
+        public float DragonRelativeAtk { get; set; }
 
         [Key(105)]
-        public float dragonRelativeDef { get; set; }
+        public float DragonRelativeDef { get; set; }
 
         [Key(106)]
-        public int battleGroup { get; set; } // !
+        public int BattleGroup { get; set; } // !
 
         [Key(107)]
-        public int[] eventPassiveGrowList { get; set; } = Array.Empty<int>();
+        public int[] EventPassiveGrowList { get; set; } = Array.Empty<int>();
 
         [Key(108)]
-        public float eventBoostDmg { get; set; }
+        public float EventBoostDmg { get; set; }
 
         [Key(120)]
-        public int editSkillcharacterId1 { get; set; }
+        public int EditSkillcharacterId1 { get; set; }
 
         [Key(121)]
-        public int editSkillcharacterId2 { get; set; }
+        public int EditSkillcharacterId2 { get; set; }
 
         [Key(122)]
-        public int editSkillLv1 { get; set; }
+        public int EditSkillLv1 { get; set; }
 
         [Key(123)]
-        public int editSkillLv2 { get; set; }
+        public int EditSkillLv2 { get; set; }
 
         [Key(130)]
-        public int abilityCrest6Id { get; set; }
+        public int AbilityCrest6Id { get; set; }
 
         [Key(131)]
-        public int abilityCrest6BuildupCount { get; set; }
+        public int AbilityCrest6BuildupCount { get; set; }
 
         [Key(132)]
-        public int abilityCrest6Ability1Lv { get; set; }
+        public int AbilityCrest6Ability1Lv { get; set; }
 
         [Key(133)]
-        public int abilityCrest6Ability2Lv { get; set; }
+        public int AbilityCrest6Ability2Lv { get; set; }
 
         [Key(134)]
-        public int abilityCrest6HpPlusCount { get; set; }
+        public int AbilityCrest6HpPlusCount { get; set; }
 
         [Key(135)]
-        public int abilityCrest6AttackPlusCount { get; set; }
+        public int AbilityCrest6AttackPlusCount { get; set; }
 
         [Key(136)]
-        public int abilityCrest7Id { get; set; }
+        public int AbilityCrest7Id { get; set; }
 
         [Key(137)]
-        public int abilityCrest7BuildupCount { get; set; }
+        public int AbilityCrest7BuildupCount { get; set; }
 
         [Key(138)]
-        public int abilityCrest7Ability1Lv { get; set; }
+        public int AbilityCrest7Ability1Lv { get; set; }
 
         [Key(139)]
-        public int abilityCrest7Ability2Lv { get; set; }
+        public int AbilityCrest7Ability2Lv { get; set; }
 
         [Key(140)]
-        public int abilityCrest7HpPlusCount { get; set; }
+        public int AbilityCrest7HpPlusCount { get; set; }
 
         [Key(141)]
-        public int abilityCrest7AttackPlusCount { get; set; }
+        public int AbilityCrest7AttackPlusCount { get; set; }
 
         [Key(142)]
-        public int originalPosition { get; set; } // !
+        public int OriginalPosition { get; set; } // !
 
         [Key(143)]
-        public float relativeHpFort { get; set; }
+        public float RelativeHpFort { get; set; }
 
         [Key(144)]
-        public float relativeAtkFort { get; set; }
+        public float RelativeAtkFort { get; set; }
 
         [Key(145)]
-        public float relativeDefFort { get; set; }
+        public float RelativeDefFort { get; set; }
 
         [Key(146)]
-        public float relativeHpAlbum { get; set; }
+        public float RelativeHpAlbum { get; set; }
 
         [Key(147)]
-        public float relativeAtkAlbum { get; set; }
+        public float RelativeAtkAlbum { get; set; }
 
         [Key(148)]
-        public float relativeDefAlbum { get; set; }
+        public float RelativeDefAlbum { get; set; }
 
         [Key(149)]
-        public float dragonRelativeHpFort { get; set; }
+        public float DragonRelativeHpFort { get; set; }
 
         [Key(150)]
-        public float dragonRelativeAtkFort { get; set; }
+        public float DragonRelativeAtkFort { get; set; }
 
         [Key(151)]
-        public float dragonRelativeDefFort { get; set; }
+        public float DragonRelativeDefFort { get; set; }
 
         [Key(152)]
-        public float dragonRelativeHpAlbum { get; set; }
+        public float DragonRelativeHpAlbum { get; set; }
 
         [Key(153)]
-        public float dragonRelativeAtkAlbum { get; set; }
+        public float DragonRelativeAtkAlbum { get; set; }
 
         [Key(154)]
-        public float dragonRelativeDefAlbum { get; set; }
+        public float DragonRelativeDefAlbum { get; set; }
 
         [Key(155)]
-        public int talismanId { get; set; }
+        public int TalismanId { get; set; }
 
         [Key(156)]
-        public int talismanAbilityId1 { get; set; }
+        public int TalismanAbilityId1 { get; set; }
 
         [Key(157)]
-        public int talismanAbilityId2 { get; set; }
+        public int TalismanAbilityId2 { get; set; }
 
         [Key(158)]
-        public int talismanAbilityId3 { get; set; }
+        public int TalismanAbilityId3 { get; set; }
 
         [Key(159)]
-        public int talismanAdditionalHp { get; set; }
+        public int TalismanAdditionalHp { get; set; }
 
         [Key(160)]
-        public int talismanAdditionalAttack { get; set; }
+        public int TalismanAdditionalAttack { get; set; }
     }
 }
