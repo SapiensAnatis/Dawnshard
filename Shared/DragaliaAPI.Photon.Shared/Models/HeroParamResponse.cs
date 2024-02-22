@@ -6,6 +6,10 @@
 
         public long ViewerId { get; set; }
 
+        public int UsedMemberCount { get; set; }
+
         public List<List<HeroParam>> HeroParamLists { get; set; } = new List<List<HeroParam>>();
+
+        public int HeroParamCount => HeroParamLists.FirstOrDefault()?.Count ?? 0;
     }
 }
