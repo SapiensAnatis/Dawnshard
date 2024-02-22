@@ -68,12 +68,12 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             if (minValue > this.MinGoToIngameState)
             {
                 this.MinGoToIngameState = minValue;
-                this.OnMinStateIncrease(info);
+                this.OnMinStateChange(info);
             }
             else if (value == 1 && actorNr == 1)
             {
                 this.MinGoToIngameState = 1;
-                this.OnMinStateIncrease(info);
+                this.OnMinStateChange(info);
             }
             else if (value == 0 && this.pluginHost.GetIsSoloPlay())
             {
@@ -99,7 +99,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                 return;
 
             this.MinGoToIngameState = newMinGoToIngameState;
-            this.OnSetGoToIngameState(info, info.ActorNr, newMinGoToIngameState);
+            this.OnMinStateChange(info);
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
         /// Represents various stages of loading into a quest, during which events/properties need to be raised/set.
         /// </remarks>
         /// <param name="info">Call info.</param>
-        private void OnMinStateIncrease(ICallInfo info)
+        private void OnMinStateChange(ICallInfo info)
         {
             this.logger.InfoFormat(
                 "OnSetGoToIngameState: updating with value {0}",
@@ -126,6 +126,8 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                     break;
                 case 3:
                     this.RaisePartyEvent();
+                    break;
+                case 4:
                     this.RaiseCharacterDataEvent();
                     break;
             }
@@ -223,10 +225,8 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
         {
             Dictionary<int, int> memberCountTable = this.GetMemberCountTable();
 
-            foreach (IActor actor in this.pluginHost.GameActors)
-                this.heroParamStorage[actor.ActorNr].UsedMemberCount = memberCountTable[
-                    actor.ActorNr
-                ];
+            foreach (HeroParamData data in this.heroParamStorage.Values)
+                data.UsedMemberCount = memberCountTable[data.ActorNr];
 
             int questId = this.pluginHost.GetQuestId();
             int rankingType = QuestHelper.GetIsRanked(questId) ? 1 : 0;

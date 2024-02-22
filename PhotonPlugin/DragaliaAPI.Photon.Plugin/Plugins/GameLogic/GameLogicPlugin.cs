@@ -416,6 +416,11 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             }
 
             this.roomState = new RoomState(this.roomState);
+            this.goToIngameStateManager = new GoToIngameStateManager(
+                this.PluginHost,
+                this.pluginStateService,
+                this.configuration
+            );
         }
 
         /// <summary>
