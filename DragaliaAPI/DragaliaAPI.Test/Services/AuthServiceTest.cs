@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database;
+﻿using System.Text.Json;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Helpers;
@@ -18,7 +19,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MockQueryable.Moq;
-using Newtonsoft.Json;
 
 namespace DragaliaAPI.Test.Services;
 

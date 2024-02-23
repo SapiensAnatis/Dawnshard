@@ -98,82 +98,82 @@ public class HeroParamService : IHeroParamService
         HeroParam result =
             new()
             {
-                characterId = (int)unit.CharaData.CharaId,
-                hp = unit.CharaData.Hp,
-                attack = unit.CharaData.Attack,
-                defence = 0, // Apparently meant to be zero
-                ability1Lv = unit.CharaData.Ability1Level,
-                ability2Lv = unit.CharaData.Ability2Level,
-                ability3Lv = unit.CharaData.Ability3Level,
-                skill1Lv = unit.CharaData.Skill1Level,
-                skill2Lv = unit.CharaData.Skill2Level,
-                level = unit.CharaData.Level,
-                burstAttackLv = unit.CharaData.BurstAttackLevel,
-                attackPlusCount = unit.CharaData.AttackPlusCount,
-                hpPlusCount = unit.CharaData.HpPlusCount,
-                exAbilityLv = unit.CharaData.ExAbilityLevel,
-                exAbility2Lv = unit.CharaData.ExAbility2Level,
-                comboBuildupCount = unit.CharaData.ComboBuildupCount,
-                position = unit.Position,
-                isEnemyTarget = true,
+                CharacterId = (int)unit.CharaData.CharaId,
+                Hp = unit.CharaData.Hp,
+                Attack = unit.CharaData.Attack,
+                Defence = 0, // Apparently meant to be zero
+                Ability1Lv = unit.CharaData.Ability1Level,
+                Ability2Lv = unit.CharaData.Ability2Level,
+                Ability3Lv = unit.CharaData.Ability3Level,
+                Skill1Lv = unit.CharaData.Skill1Level,
+                Skill2Lv = unit.CharaData.Skill2Level,
+                Level = unit.CharaData.Level,
+                BurstAttackLv = unit.CharaData.BurstAttackLevel,
+                AttackPlusCount = unit.CharaData.AttackPlusCount,
+                HpPlusCount = unit.CharaData.HpPlusCount,
+                ExAbilityLv = unit.CharaData.ExAbilityLevel,
+                ExAbility2Lv = unit.CharaData.ExAbility2Level,
+                ComboBuildupCount = unit.CharaData.ComboBuildupCount,
+                Position = unit.Position,
+                IsEnemyTarget = true,
             };
 
         if (unit.DragonData is not null)
         {
-            result.dragonId = (int)unit.DragonData.DragonId;
-            result.dragonLevel = unit.DragonData.Level;
-            result.dragonAbility1Lv = unit.DragonData.Ability1Level;
-            result.dragonAbility2Lv = unit.DragonData.Ability2Level;
-            result.dragonReliabilityLevel = unit.DragonReliabilityLevel;
-            result.dragonAttackPlusCount = unit.DragonData.AttackPlusCount;
-            result.dragonHpPlusCount = unit.DragonData.HpPlusCount;
-            result.dragonSkill1Lv = unit.DragonData.Skill1Level;
-            result.dragonSkill2Lv = 0; // ???
+            result.DragonId = (int)unit.DragonData.DragonId;
+            result.DragonLevel = unit.DragonData.Level;
+            result.DragonAbility1Lv = unit.DragonData.Ability1Level;
+            result.DragonAbility2Lv = unit.DragonData.Ability2Level;
+            result.DragonReliabilityLevel = unit.DragonReliabilityLevel;
+            result.DragonAttackPlusCount = unit.DragonData.AttackPlusCount;
+            result.DragonHpPlusCount = unit.DragonData.HpPlusCount;
+            result.DragonSkill1Lv = unit.DragonData.Skill1Level;
+            result.DragonSkill2Lv = 0; // ???
         }
 
         if (unit.WeaponBodyData is not null)
         {
-            result.weaponBodyId = (int)unit.WeaponBodyData.WeaponBodyId;
-            result.weaponBodyBuildupCount = unit.WeaponBodyData.BuildupCount;
-            result.weaponBodyAbility1Lv = unit.WeaponBodyData.Ability1Level;
-            result.weaponBodyAbility2Lv = unit.WeaponBodyData.Ability2Level;
-            result.weaponBodySkillLv = unit.WeaponBodyData.SkillLevel;
-            result.weaponBodySkillNo = unit.WeaponBodyData.SkillNo;
-            result.weaponPassiveAbilityIds = unit
+            result.WeaponBodyId = (int)unit.WeaponBodyData.WeaponBodyId;
+            result.WeaponBodyBuildupCount = unit.WeaponBodyData.BuildupCount;
+            result.WeaponBodyAbility1Lv = unit.WeaponBodyData.Ability1Level;
+            result.WeaponBodyAbility2Lv = unit.WeaponBodyData.Ability2Level;
+            result.WeaponBodySkillLv = unit.WeaponBodyData.SkillLevel;
+            result.WeaponBodySkillNo = unit.WeaponBodyData.SkillNo;
+            result.WeaponPassiveAbilityIds = unit
                 .GameWeaponPassiveAbilityList.Select(x => x.WeaponPassiveAbilityId)
                 .ToArray();
         }
         else
         {
-            result.weaponBodyId = (int)DefaultWeapons[charaData.WeaponType];
+            result.WeaponBodyId = (int)DefaultWeapons[charaData.WeaponType];
         }
 
         if (unit.TalismanData is not null)
         {
-            result.talismanId = (int)unit.TalismanData.TalismanId;
-            result.talismanAbilityId1 = unit.TalismanData.TalismanAbilityId1;
-            result.talismanAbilityId2 = unit.TalismanData.TalismanAbilityId2;
-            result.talismanAbilityId3 = unit.TalismanData.TalismanAbilityId3;
-            result.talismanAdditionalAttack = unit.TalismanData.AdditionalAttack;
-            result.talismanAdditionalHp = unit.TalismanData.AdditionalHp;
+            result.TalismanId = (int)unit.TalismanData.TalismanId;
+            result.TalismanAbilityId1 = unit.TalismanData.TalismanAbilityId1;
+            result.TalismanAbilityId2 = unit.TalismanData.TalismanAbilityId2;
+            result.TalismanAbilityId3 = unit.TalismanData.TalismanAbilityId3;
+            result.TalismanAdditionalAttack = unit.TalismanData.AdditionalAttack;
+            result.TalismanAdditionalHp = unit.TalismanData.AdditionalHp;
         }
 
         if (unit.WeaponSkinData is not null)
         {
-            result.weaponSkinId = unit.WeaponSkinData.WeaponSkinId;
+            result.WeaponSkinId = unit.WeaponSkinData.WeaponSkinId;
         }
 
         // If AI units are given skill share data, it can cause softlocks for other players
         if (unit is { EditSkill1CharaData: not null, Position: 1 })
         {
-            result.editSkillcharacterId1 = (int)unit.EditSkill1CharaData.CharaId;
-            result.editSkillLv1 = unit.EditSkill1CharaData.EditSkillLevel;
+            result.EditSkillcharacterId1 = (int)unit.EditSkill1CharaData.CharaId;
+            result.EditSkillLv1 = unit.EditSkill1CharaData.EditSkillLevel;
         }
 
         if (unit is { EditSkill2CharaData: not null, Position: 1 })
         {
-            result.editSkillcharacterId2 = (int)unit.EditSkill2CharaData.CharaId;
-            result.editSkillLv2 = unit.EditSkill2CharaData.EditSkillLevel;
+            result.EditSkillcharacterId2 = (int)unit.EditSkill2CharaData.CharaId;
+            result.EditSkillLv2 = unit.EditSkill2CharaData.EditSkillLevel;
         }
 
         MapBonuses(unit, fortBonusList, result);
@@ -193,26 +193,26 @@ public class HeroParamService : IHeroParamService
         AtgenParamBonus paramBonus = fortBonusList.param_bonus.First(x =>
             x.weapon_type == charaData.WeaponType
         );
-        result.relativeAtkFort += paramBonus.attack / 100;
-        result.relativeHpFort += paramBonus.hp / 100;
+        result.RelativeAtkFort += paramBonus.attack / 100;
+        result.RelativeHpFort += paramBonus.hp / 100;
 
         AtgenElementBonus elementBonus = fortBonusList.element_bonus.First(x =>
             x.elemental_type == charaData.ElementalType
         );
-        result.relativeAtkFort += elementBonus.attack / 100;
-        result.relativeHpFort += elementBonus.hp / 100;
+        result.RelativeAtkFort += elementBonus.attack / 100;
+        result.RelativeHpFort += elementBonus.hp / 100;
 
         AtgenParamBonus paramBonusByWeapon = fortBonusList.param_bonus_by_weapon.First(x =>
             x.weapon_type == charaData.WeaponType
         );
-        result.relativeAtkFort += paramBonusByWeapon.attack / 100;
-        result.relativeHpFort += paramBonusByWeapon.hp / 100;
+        result.RelativeAtkFort += paramBonusByWeapon.attack / 100;
+        result.RelativeHpFort += paramBonusByWeapon.hp / 100;
 
         AtgenElementBonus charaAlbumBonus = fortBonusList.chara_bonus_by_album.First(x =>
             x.elemental_type == charaData.ElementalType
         );
-        result.relativeAtkAlbum += charaAlbumBonus.attack / 100;
-        result.relativeHpAlbum += charaAlbumBonus.hp / 100;
+        result.RelativeAtkAlbum += charaAlbumBonus.attack / 100;
+        result.RelativeHpAlbum += charaAlbumBonus.hp / 100;
 
         if (unit.DragonData is not null)
         {
@@ -224,16 +224,16 @@ public class HeroParamService : IHeroParamService
                 x.elemental_type == dragonData.ElementalType
             );
 
-            result.dragonRelativeAtkFort += dragonBonus.attack / 100;
-            result.dragonRelativeHpFort += dragonBonus.hp / 100;
-            result.dragonRelativeDmg += dragonBonus.dragon_bonus / 100;
-            result.dragonTime += fortBonusList.dragon_time_bonus.dragon_time_bonus;
-            result.dragonRelativeAtkAlbum += dragonAlbumBonus.attack / 100;
-            result.dragonRelativeHpAlbum += dragonAlbumBonus.hp / 100;
+            result.DragonRelativeAtkFort += dragonBonus.attack / 100;
+            result.DragonRelativeHpFort += dragonBonus.hp / 100;
+            result.DragonRelativeDmg += dragonBonus.dragon_bonus / 100;
+            result.DragonTime += fortBonusList.dragon_time_bonus.dragon_time_bonus;
+            result.DragonRelativeAtkAlbum += dragonAlbumBonus.attack / 100;
+            result.DragonRelativeHpAlbum += dragonAlbumBonus.hp / 100;
         }
 
-        result.plusAtk += fortBonusList.all_bonus.attack / 100;
-        result.plusHp += fortBonusList.all_bonus.hp / 100;
+        result.PlusAtk += fortBonusList.all_bonus.attack / 100;
+        result.PlusHp += fortBonusList.all_bonus.hp / 100;
     }
 
     private static void MapCrests(DbDetailedPartyUnit unit, HeroParam result)
@@ -242,72 +242,72 @@ public class HeroParamService : IHeroParamService
 
         if (unit.CrestSlotType1CrestList.TryGetElementAt(0, out DbAbilityCrest? crest1))
         {
-            result.abilityCrestId = (int)crest1.AbilityCrestId;
-            result.abilityCrestAbility1Lv = crest1.AbilityLevel;
-            result.abilityCrestAbility2Lv = crest1.AbilityLevel;
-            result.abilityCrestBuildupCount = crest1.BuildupCount;
-            result.abilityCrestHpPlusCount = crest1.HpPlusCount;
-            result.abilityCrestAttackPlusCount = crest1.AttackPlusCount;
+            result.AbilityCrestId = (int)crest1.AbilityCrestId;
+            result.AbilityCrestAbility1Lv = crest1.AbilityLevel;
+            result.AbilityCrestAbility2Lv = crest1.AbilityLevel;
+            result.AbilityCrestBuildupCount = crest1.BuildupCount;
+            result.AbilityCrestHpPlusCount = crest1.HpPlusCount;
+            result.AbilityCrestAttackPlusCount = crest1.AttackPlusCount;
         }
 
         if (unit.CrestSlotType1CrestList.TryGetElementAt(1, out DbAbilityCrest? crest2))
         {
-            result.abilityCrest2Id = (int)crest2.AbilityCrestId;
-            result.abilityCrest2Ability1Lv = crest2.AbilityLevel;
-            result.abilityCrest2Ability2Lv = crest2.AbilityLevel;
-            result.abilityCrest2BuildupCount = crest2.BuildupCount;
-            result.abilityCrest2HpPlusCount = crest2.HpPlusCount;
-            result.abilityCrest2AttackPlusCount = crest2.AttackPlusCount;
+            result.AbilityCrest2Id = (int)crest2.AbilityCrestId;
+            result.AbilityCrest2Ability1Lv = crest2.AbilityLevel;
+            result.AbilityCrest2Ability2Lv = crest2.AbilityLevel;
+            result.AbilityCrest2BuildupCount = crest2.BuildupCount;
+            result.AbilityCrest2HpPlusCount = crest2.HpPlusCount;
+            result.AbilityCrest2AttackPlusCount = crest2.AttackPlusCount;
         }
 
         if (unit.CrestSlotType1CrestList.TryGetElementAt(2, out DbAbilityCrest? crest3))
         {
-            result.abilityCrest3Id = (int)crest3.AbilityCrestId;
-            result.abilityCrest3Ability1Lv = crest3.AbilityLevel;
-            result.abilityCrest3Ability2Lv = crest3.AbilityLevel;
-            result.abilityCrest3BuildupCount = crest3.BuildupCount;
-            result.abilityCrest3HpPlusCount = crest3.HpPlusCount;
-            result.abilityCrest3AttackPlusCount = crest3.AttackPlusCount;
+            result.AbilityCrest3Id = (int)crest3.AbilityCrestId;
+            result.AbilityCrest3Ability1Lv = crest3.AbilityLevel;
+            result.AbilityCrest3Ability2Lv = crest3.AbilityLevel;
+            result.AbilityCrest3BuildupCount = crest3.BuildupCount;
+            result.AbilityCrest3HpPlusCount = crest3.HpPlusCount;
+            result.AbilityCrest3AttackPlusCount = crest3.AttackPlusCount;
         }
 
         if (unit.CrestSlotType2CrestList.TryGetElementAt(0, out DbAbilityCrest? crest4))
         {
-            result.abilityCrest4Id = (int)crest4.AbilityCrestId;
-            result.abilityCrest4Ability1Lv = crest4.AbilityLevel;
-            result.abilityCrest4Ability2Lv = crest4.AbilityLevel;
-            result.abilityCrest4BuildupCount = crest4.BuildupCount;
-            result.abilityCrest4HpPlusCount = crest4.HpPlusCount;
-            result.abilityCrest4AttackPlusCount = crest4.AttackPlusCount;
+            result.AbilityCrest4Id = (int)crest4.AbilityCrestId;
+            result.AbilityCrest4Ability1Lv = crest4.AbilityLevel;
+            result.AbilityCrest4Ability2Lv = crest4.AbilityLevel;
+            result.AbilityCrest4BuildupCount = crest4.BuildupCount;
+            result.AbilityCrest4HpPlusCount = crest4.HpPlusCount;
+            result.AbilityCrest4AttackPlusCount = crest4.AttackPlusCount;
         }
 
         if (unit.CrestSlotType2CrestList.TryGetElementAt(1, out DbAbilityCrest? crest5))
         {
-            result.abilityCrest5Id = (int)crest5.AbilityCrestId;
-            result.abilityCrest5Ability1Lv = crest5.AbilityLevel;
-            result.abilityCrest5Ability2Lv = crest5.AbilityLevel;
-            result.abilityCrest5BuildupCount = crest5.BuildupCount;
-            result.abilityCrest5HpPlusCount = crest5.HpPlusCount;
-            result.abilityCrest5AttackPlusCount = crest5.AttackPlusCount;
+            result.AbilityCrest5Id = (int)crest5.AbilityCrestId;
+            result.AbilityCrest5Ability1Lv = crest5.AbilityLevel;
+            result.AbilityCrest5Ability2Lv = crest5.AbilityLevel;
+            result.AbilityCrest5BuildupCount = crest5.BuildupCount;
+            result.AbilityCrest5HpPlusCount = crest5.HpPlusCount;
+            result.AbilityCrest5AttackPlusCount = crest5.AttackPlusCount;
         }
 
         if (unit.CrestSlotType3CrestList.TryGetElementAt(0, out DbAbilityCrest? crest6))
         {
-            result.abilityCrest6Id = (int)crest6.AbilityCrestId;
-            result.abilityCrest6Ability1Lv = crest6.AbilityLevel;
-            result.abilityCrest6Ability2Lv = crest6.AbilityLevel;
-            result.abilityCrest6BuildupCount = crest6.BuildupCount;
-            result.abilityCrest6HpPlusCount = crest6.HpPlusCount;
-            result.abilityCrest6AttackPlusCount = crest6.AttackPlusCount;
+            result.AbilityCrest6Id = (int)crest6.AbilityCrestId;
+            result.AbilityCrest6Ability1Lv = crest6.AbilityLevel;
+            result.AbilityCrest6Ability2Lv = crest6.AbilityLevel;
+            result.AbilityCrest6BuildupCount = crest6.BuildupCount;
+            result.AbilityCrest6HpPlusCount = crest6.HpPlusCount;
+            result.AbilityCrest6AttackPlusCount = crest6.AttackPlusCount;
         }
 
         if (unit.CrestSlotType3CrestList.TryGetElementAt(1, out DbAbilityCrest? crest7))
         {
-            result.abilityCrest7Id = (int)crest7.AbilityCrestId;
-            result.abilityCrest7Ability1Lv = crest7.AbilityLevel;
-            result.abilityCrest7Ability2Lv = crest7.AbilityLevel;
-            result.abilityCrest7BuildupCount = crest7.BuildupCount;
-            result.abilityCrest7HpPlusCount = crest7.HpPlusCount;
-            result.abilityCrest7AttackPlusCount = crest7.AttackPlusCount;
+            result.AbilityCrest7Id = (int)crest7.AbilityCrestId;
+            result.AbilityCrest7Ability1Lv = crest7.AbilityLevel;
+            result.AbilityCrest7Ability2Lv = crest7.AbilityLevel;
+            result.AbilityCrest7BuildupCount = crest7.BuildupCount;
+            result.AbilityCrest7HpPlusCount = crest7.HpPlusCount;
+            result.AbilityCrest7AttackPlusCount = crest7.AttackPlusCount;
         }
     }
 }
