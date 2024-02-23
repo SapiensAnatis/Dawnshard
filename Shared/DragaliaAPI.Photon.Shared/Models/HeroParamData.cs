@@ -6,6 +6,6 @@
 
         public long ViewerId { get; set; }
 
-        public List<List<HeroParam>> HeroParamLists { get; set; } = new List<List<HeroParam>>();
+        public List<List<HeroParam>> HeroParamLists { get; set; } = [];
     }
 }
