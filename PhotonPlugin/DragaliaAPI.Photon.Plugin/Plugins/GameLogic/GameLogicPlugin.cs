@@ -343,7 +343,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                 ) && objValue is int value
             )
             {
-                this.goToIngameStateManager.OnSetGoToIngameState(info, info.ActorNr, value);
+                this.goToIngameStateManager.OnSetGoToIngameState(info, value);
             }
 
             if (!info.IsProcessed)

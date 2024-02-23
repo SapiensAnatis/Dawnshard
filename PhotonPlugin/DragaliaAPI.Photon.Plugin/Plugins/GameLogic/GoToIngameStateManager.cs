@@ -47,15 +47,19 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             this.logger = this.pluginHost.CreateLogger(nameof(GoToIngameStateManager));
         }
 
-        public void OnSetGoToIngameState(ICallInfo info, int actorNr, int value)
+        public void OnSetGoToIngameState(IBeforeSetPropertiesCallInfo info, int value)
         {
             int minValue = this
-                .pluginHost.GameActors.Where(x => x.ActorNr != actorNr) // Exclude the value which we are in the BeforeSet handler for
+                .pluginHost.GameActors.Where(x => x.ActorNr != info.ActorNr) // Exclude the value which we are in the BeforeSet handler for
                 .Select(x => x.Properties.GetIntOrDefault(ActorPropertyKeys.GoToIngameState))
                 .Append(value)
                 .Min();
 
-            this.logger.InfoFormat("Received GoToIngameState {0} from actor {1}", value, actorNr);
+            this.logger.InfoFormat(
+                "Received GoToIngameState {0} from actor {1}",
+                value,
+                info.ActorNr
+            );
 
 #if DEBUG
             this.logger.DebugFormat(
@@ -70,7 +74,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                 this.MinGoToIngameState = minValue;
                 this.OnMinStateChange(info);
             }
-            else if (value == 1 && actorNr == 1)
+            else if (value == 1 && info.ActorNr == 1)
             {
                 this.MinGoToIngameState = 1;
                 this.OnMinStateChange(info);
