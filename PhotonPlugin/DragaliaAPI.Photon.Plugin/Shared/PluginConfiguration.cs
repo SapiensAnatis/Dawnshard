@@ -58,6 +58,10 @@ namespace DragaliaAPI.Photon.Plugin.Shared
             this.BearerToken = config[nameof(this.BearerToken)];
             this.ReplayTimeoutSeconds = config.GetInt(nameof(this.ReplayTimeoutSeconds));
 
+            this.RandomMatchingStartDelayMs = config.GetInt(
+                nameof(this.RandomMatchingStartDelayMs)
+            );
+
             if (
                 config.TryGetBool(nameof(this.EnableSecondaryServer), out bool enableMultiServer)
                 && enableMultiServer
@@ -80,10 +84,6 @@ namespace DragaliaAPI.Photon.Plugin.Shared
                 );
 
                 this.SecondaryBearerToken = config[nameof(this.SecondaryBearerToken)];
-
-                this.RandomMatchingStartDelayMs = config.GetInt(
-                    nameof(this.RandomMatchingStartDelayMs)
-                );
             }
 
             if (

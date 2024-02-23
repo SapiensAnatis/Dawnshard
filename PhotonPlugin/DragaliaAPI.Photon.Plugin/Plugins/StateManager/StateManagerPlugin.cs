@@ -308,7 +308,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.StateManager
             {
                 Url = requestUri.AbsoluteUri,
                 ContentType = "application/json",
-                Callback = this.LogIfFailedCallback,
+                Callback = this.PluginHost.LogIfFailedCallback,
                 Async = true,
                 Accept = "application/json",
                 DataStream = requestBody,
@@ -323,22 +323,6 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.StateManager
                     }
                 }
             };
-        }
-
-        private void LogIfFailedCallback(IHttpResponse httpResponse, object userState)
-        {
-            if (httpResponse.Status != HttpRequestQueueResult.Success)
-            {
-                this.ReportError(
-                    $"Request to {httpResponse.Request.Url} failed with Photon status {httpResponse.Status} and HTTP status {httpResponse.HttpCode} ({httpResponse.Reason})"
-                );
-            }
-        }
-
-        private void ReportError(string msg)
-        {
-            this.PluginHost.LogError(msg);
-            this.PluginHost.BroadcastErrorInfoEvent(msg);
         }
     }
 }

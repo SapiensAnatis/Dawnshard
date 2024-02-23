@@ -1,4 +1,5 @@
 using DragaliaAPI.Photon.Plugin.Plugins.GameLogic;
+using DragaliaAPI.Photon.Plugin.Plugins.GameLogic.Events;
 using FluentAssertions;
 using Xunit;
 
@@ -12,7 +13,10 @@ namespace DragaliaAPI.Photon.Plugin.Test
             List<(int ActorNr, int HeroParamCount)> actorData,
             Dictionary<int, int> expectedTable
         ) =>
-            GameLogicPlugin.BuildMemberCountTable(actorData).Should().BeEquivalentTo(expectedTable);
+            MemberCountHelper
+                .BuildMemberCountTable(actorData)
+                .Should()
+                .BeEquivalentTo(expectedTable);
 
         private class BuildMemberCountTableData
             : TheoryData<List<(int ActorNr, int HeroParamCount)>, Dictionary<int, int>>

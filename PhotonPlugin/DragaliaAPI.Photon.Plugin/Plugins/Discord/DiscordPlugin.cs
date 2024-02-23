@@ -23,22 +23,10 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Discord
         };
 
         private readonly PluginConfiguration configuration;
-        private IPluginLogger logger;
 
         public DiscordPlugin(PluginConfiguration configuration)
         {
             this.configuration = configuration;
-        }
-
-        public override bool SetupInstance(
-            IPluginHost host,
-            Dictionary<string, string> config,
-            out string errorMsg
-        )
-        {
-            this.logger = host.CreateLogger(this.Name);
-
-            return base.SetupInstance(host, config, out errorMsg);
         }
 
         public override void OnCreateGame(ICreateGameCallInfo info)
@@ -102,7 +90,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Discord
             {
                 Url = requestUri.AbsoluteUri,
                 ContentType = "application/json",
-                Callback = this.LogIfFailedCallback,
+                Callback = this.PluginHost.LogIfFailedCallback,
                 Async = true,
                 Accept = "application/json",
                 DataStream = requestBody,
@@ -117,22 +105,6 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Discord
                     }
                 }
             };
-        }
-
-        private void LogIfFailedCallback(IHttpResponse httpResponse, object userState)
-        {
-            if (httpResponse.Status != HttpRequestQueueResult.Success)
-            {
-                this.ReportError(
-                    $"Request to {httpResponse.Request.Url} failed with Photon status {httpResponse.Status} and HTTP status {httpResponse.HttpCode} ({httpResponse.Reason})"
-                );
-            }
-        }
-
-        private void ReportError(string msg)
-        {
-            this.PluginHost.LogError(msg);
-            this.PluginHost.BroadcastErrorInfoEvent(msg);
         }
     }
 }

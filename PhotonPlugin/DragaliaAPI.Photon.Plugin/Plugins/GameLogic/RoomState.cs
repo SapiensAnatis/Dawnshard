@@ -2,8 +2,6 @@
 {
     public class RoomState
     {
-        public int MinGoToIngameState { get; set; }
-
         public int StartActorCount { get; set; }
 
         public int QuestId { get; set; }
