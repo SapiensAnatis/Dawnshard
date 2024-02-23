@@ -29,7 +29,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
         private readonly PluginStateService pluginStateService;
         private readonly PluginConfiguration pluginConfiguration;
         private readonly IPluginLogger logger;
-        private readonly Dictionary<int, HeroParamData> heroParamStorage;
+        private readonly Dictionary<int, HeroParamState> heroParamStorage;
 
         public int MinGoToIngameState { get; private set; }
 
@@ -43,7 +43,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             this.pluginStateService = pluginStateService;
             this.pluginConfiguration = pluginConfiguration;
 
-            this.heroParamStorage = new Dictionary<int, HeroParamData>(4);
+            this.heroParamStorage = new Dictionary<int, HeroParamState>(4);
             this.logger = this.pluginHost.CreateLogger(nameof(GoToIngameStateManager));
         }
 
@@ -215,7 +215,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             );
 
             foreach (HeroParamData data in responseObject)
-                this.heroParamStorage[data.ActorNr] = data;
+                this.heroParamStorage[data.ActorNr] = new HeroParamState() { Data = data };
         }
 
         /// <summary>
@@ -225,8 +225,8 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
         {
             Dictionary<int, int> memberCountTable = this.GetMemberCountTable();
 
-            foreach (HeroParamData data in this.heroParamStorage.Values)
-                data.UsedMemberCount = memberCountTable[data.ActorNr];
+            foreach (HeroParamState state in this.heroParamStorage.Values)
+                state.UsedMemberCount = memberCountTable[state.ActorNr];
 
             int questId = this.pluginHost.GetQuestId();
             int rankingType = QuestHelper.GetIsRanked(questId) ? 1 : 0;
@@ -274,12 +274,12 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
         /// </summary>
         private void RaiseCharacterDataEvent()
         {
-            foreach (KeyValuePair<int, HeroParamData> kvp in this.heroParamStorage)
+            foreach (KeyValuePair<int, HeroParamState> kvp in this.heroParamStorage)
             {
                 int actorNr = kvp.Key;
-                HeroParamData data = kvp.Value;
+                HeroParamState state = kvp.Value;
 
-                foreach (List<HeroParam> heroParams in data.HeroParamLists)
+                foreach (List<HeroParam> heroParams in state.Data.HeroParamLists)
                 {
                     CharacterData evt = new CharacterData()
                     {
@@ -291,7 +291,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                                 sequenceNumber = x.Position
                             })
                             .ToArray(),
-                        heroParams = heroParams.Take(data.UsedMemberCount).ToArray()
+                        heroParams = heroParams.Take(state.UsedMemberCount).ToArray()
                     };
 
                     this.pluginHost.RaiseEvent(Event.CharacterData, evt);

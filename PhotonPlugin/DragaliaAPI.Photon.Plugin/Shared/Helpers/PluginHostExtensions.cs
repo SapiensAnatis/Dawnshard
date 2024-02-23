@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using DragaliaAPI.Photon.Plugin.Plugins.GameLogic.Events;
@@ -59,18 +58,14 @@ namespace DragaliaAPI.Photon.Plugin.Shared.Helpers
             }
         }
 
-        public static bool GetIsSoloPlay(this IPluginHost pluginHost)
-        {
-            return pluginHost.GameProperties.TryGetValue(
-                    GamePropertyKeys.IsSoloPlayWithPhoton,
-                    out object isSoloPlay
-                ) && isSoloPlay is true;
-        }
+        public static bool GetIsSoloPlay(this IPluginHost pluginHost) =>
+            pluginHost.GameProperties.TryGetValue(
+                GamePropertyKeys.IsSoloPlayWithPhoton,
+                out object isSoloPlay
+            ) && isSoloPlay is true;
 
-        public static int GetQuestId(this IPluginHost pluginHost)
-        {
-            return pluginHost.GameProperties.GetInt(GamePropertyKeys.QuestId);
-        }
+        public static int GetQuestId(this IPluginHost pluginHost) =>
+            pluginHost.GameProperties.GetInt(GamePropertyKeys.QuestId);
 
         /// <summary>
         /// Logs an error if a HTTP response was not successful.
