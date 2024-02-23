@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using DragaliaAPI.Photon.Plugin.Plugins.GameLogic.Events;
 using DragaliaAPI.Photon.Plugin.Shared;
 using DragaliaAPI.Photon.Plugin.Shared.Constants;
@@ -11,7 +12,6 @@ using DragaliaAPI.Photon.Plugin.Shared.Helpers;
 using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Photon.Shared.Models;
 using MessagePack;
-using Newtonsoft.Json;
 using Photon.Hive.Plugin;
 
 namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
@@ -26,6 +26,11 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
 
         private static readonly MessagePackSerializerOptions MessagePackOptions =
             MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4Block);
+
+        private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions()
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
 
         private IPluginLogger logger;
         private RoomState roomState;
@@ -69,7 +74,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
 #if DEBUG
             this.logger.DebugFormat(
                 "Room properties: {0}",
-                JsonConvert.SerializeObject(info.Request.GameProperties)
+                JsonSerializer.Serialize(info.Request.GameProperties)
             );
 #endif
             info.Request.ActorProperties.InitializeViewerId();
@@ -319,7 +324,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             );
             this.logger.DebugFormat(
                 "Event properties: {0}",
-                JsonConvert.SerializeObject(info.Request.Parameters)
+                JsonSerializer.Serialize(info.Request.Parameters)
             );
 #endif
 
@@ -405,7 +410,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
 
 #if DEBUG
             this.logger.DebugFormat("Actor {0} set properties", info.ActorNr);
-            this.logger.Debug(JsonConvert.SerializeObject(info.Request.Properties));
+            this.logger.Debug(JsonSerializer.Serialize(info.Request.Properties));
 #endif
         }
 
@@ -557,8 +562,8 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                         heroParamExs = heroParams
                             .Select(x => new HeroParamExData()
                             {
-                                limitOverCount = x.exAbilityLv,
-                                sequenceNumber = x.position
+                                limitOverCount = x.ExAbilityLv,
+                                sequenceNumber = x.Position
                             })
                             .ToArray(),
                         heroParams = heroParams.Take(state.MemberCount).ToArray()
@@ -625,7 +630,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                 Async = false,
                 Accept = "application/json",
                 DataStream = new MemoryStream(
-                    Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(heroParamRequest))
+                    Encoding.UTF8.GetBytes(JsonSerializer.Serialize(heroParamRequest, JsonOptions))
                 ),
                 Method = "POST",
             };
@@ -645,8 +650,9 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             if (response.Status != HttpRequestQueueResult.Success)
                 return;
 
-            List<HeroParamData> responseObject = JsonConvert.DeserializeObject<List<HeroParamData>>(
-                response.ResponseText
+            List<HeroParamData> responseObject = JsonSerializer.Deserialize<List<HeroParamData>>(
+                response.ResponseText,
+                JsonOptions
             );
 
             foreach (HeroParamData data in responseObject)
@@ -856,7 +862,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
 
             this.logger.InfoFormat("Raising event {0} (0x{1})", eventCode, eventCode.ToString("X"));
 #if DEBUG
-            this.logger.DebugFormat("Event data: {0}", JsonConvert.SerializeObject(eventData));
+            this.logger.DebugFormat("Event data: {0}", JsonSerializer.Serialize(eventData));
 #endif
 
             if (target is null)

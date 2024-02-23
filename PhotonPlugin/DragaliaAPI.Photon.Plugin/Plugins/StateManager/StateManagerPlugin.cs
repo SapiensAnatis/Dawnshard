@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using DragaliaAPI.Photon.Plugin.Plugins.GameLogic.Events;
 using DragaliaAPI.Photon.Plugin.Shared;
 using DragaliaAPI.Photon.Plugin.Shared.Constants;
@@ -10,7 +12,6 @@ using DragaliaAPI.Photon.Plugin.Shared.Helpers;
 using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Photon.Shared.Requests;
-using Newtonsoft.Json;
 using Photon.Hive.Plugin;
 
 namespace DragaliaAPI.Photon.Plugin.Plugins.StateManager
@@ -52,11 +53,10 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.StateManager
 
         private static readonly Uri VisibleEndpoint = new Uri("Event/Visible", UriKind.Relative);
 
-        private static readonly JsonSerializerSettings JsonSerializerSettings =
-            new JsonSerializerSettings
+        private static readonly JsonSerializerOptions JsonSerializerSettings =
+            new JsonSerializerOptions
             {
-                NullValueHandling = NullValueHandling.Ignore,
-                TypeNameHandling = TypeNameHandling.None,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             };
 
         private readonly PluginStateService pluginStateService;
@@ -301,7 +301,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.StateManager
         {
             Uri requestUri = new Uri(this.StateManagerUrl, endpoint);
 
-            string json = JsonConvert.SerializeObject(request, JsonSerializerSettings);
+            string json = JsonSerializer.Serialize(request, JsonSerializerSettings);
             MemoryStream requestBody = new MemoryStream(Encoding.UTF8.GetBytes(json));
 
             return new HttpRequest()

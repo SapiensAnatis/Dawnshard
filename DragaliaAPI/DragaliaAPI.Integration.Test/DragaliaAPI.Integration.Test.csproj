@@ -43,7 +43,6 @@
         <Folder Include="Features\Dmode\"/>
         <Folder Include="Features\Item\"/>
         <Folder Include="Features\Shop\"/>
-        <Folder Include="Other\__snapshots__\"/>
     </ItemGroup>
 
 
