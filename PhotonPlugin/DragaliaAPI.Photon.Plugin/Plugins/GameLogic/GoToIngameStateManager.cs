@@ -215,7 +215,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             );
 
             foreach (HeroParamData data in responseObject)
-                this.heroParamStorage[data.ActorNr] = new HeroParamState() { Data = data };
+                this.heroParamStorage[data.ActorNr] = new HeroParamState(data);
         }
 
         /// <summary>
