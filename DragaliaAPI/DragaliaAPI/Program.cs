@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.JSInterop;
 using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -40,6 +41,18 @@ builder
     );
 
 builder.WebHost.UseStaticWebAssets();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog();
+builder.Host.UseSerilog(
+    (context, services, loggerConfig) =>
+        loggerConfig
+            .ReadFrom.Configuration(context.Configuration)
+            .ReadFrom.Services(services)
+            .Enrich.FromLogContext()
+            // Blazor keeps throwing these errors from MudBlazor internals; there is nothing we can do about them
+            .Filter.ByExcluding(evt => evt.Exception is JSDisconnectedException)
+);
 
 builder
     .Services.AddControllers()

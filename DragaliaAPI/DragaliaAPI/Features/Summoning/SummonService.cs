@@ -7,7 +7,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 
-namespace DragaliaAPI.Services.Game;
+namespace DragaliaAPI.Features.Summoning;
 
 public class SummonService : ISummonService
 {
@@ -114,24 +114,24 @@ public class SummonService : ISummonService
 
         for (int i = 0; i < numSummons; i++)
         {
-            bool isDragon = random.NextSingle() > 0.5;
+            bool isDragon = this.random.NextSingle() > 0.5;
             if (isDragon)
             {
-                Dragons id = random.NextEnum<Dragons>();
+                Dragons id = this.random.NextEnum<Dragons>();
                 while (id == 0 || DragonConstants.UnsummonableDragons.Contains(id))
-                    id = random.NextEnum<Dragons>();
+                    id = this.random.NextEnum<Dragons>();
 
                 int rarity = MasterAsset.DragonData.Get(id).Rarity;
                 resultList.Add(new(EntityTypes.Dragon, (int)id, rarity));
             }
             else
             {
-                Charas id = random.NextEnum<Charas>();
+                Charas id = this.random.NextEnum<Charas>();
                 while (
                     id == 0 || MasterAsset.CharaData[id].Availability == CharaAvailabilities.Story
                 )
                 {
-                    id = random.NextEnum<Charas>();
+                    id = this.random.NextEnum<Charas>();
                 }
 
                 int rarity = MasterAsset.CharaData.Get(id).Rarity;
@@ -139,7 +139,7 @@ public class SummonService : ISummonService
             }
         }
 
-        logger.LogDebug("Generated summon result: {@summonResult}", resultList);
+        this.logger.LogDebug("Generated summon result: {@summonResult}", resultList);
 
         return resultList;
     }

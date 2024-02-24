@@ -123,7 +123,7 @@ public class PaymentService(
                 break;
             case EntityTypes.SummonTicket:
                 DbSummonTicket? ticket = await ticketRepository.Tickets.SingleOrDefaultAsync(x =>
-                    x.TicketKeyId == entity.Id
+                    x.KeyId == entity.Id
                 );
                 quantity = ticket?.Quantity;
                 // NOTE: Maybe remove here once quantity == 0?

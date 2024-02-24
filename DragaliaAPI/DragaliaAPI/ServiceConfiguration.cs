@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Blazor.Authentication;
+﻿using DragaliaAPI.Authentication;
 using DragaliaAPI.Database;
 using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Blazor;
@@ -27,6 +27,7 @@ using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Stamp;
+using DragaliaAPI.Features.Summoning;
 using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Features.TimeAttack;
@@ -61,7 +62,6 @@ public static class ServiceConfiguration
 #pragma warning disable CS0618 // Type or member is obsolete
             .AddScoped<IDeviceAccountService, DeviceAccountService>()
 #pragma warning restore CS0618 // Type or member is obsolete
-            .AddScoped<ISummonService, SummonService>()
             .AddScoped<IUpdateDataService, UpdateDataService>()
             .AddScoped<IDragonService, DragonService>()
             .AddScoped<ISavefileService, SavefileService>()
@@ -79,6 +79,8 @@ public static class ServiceConfiguration
             .AddScoped<IStampRepository, StampRepository>()
             .AddScoped<ISavefileUpdateService, SavefileUpdateService>()
             .AddTransient<PlayerIdentityLoggingMiddleware>();
+
+        services.AddSummoningFeature();
 
         services
             .AddScoped<IRewardService, RewardService>()
@@ -207,7 +209,8 @@ public static class ServiceConfiguration
             )
             .Configure<BlazorOptions>(config.GetRequiredSection(nameof(BlazorOptions)))
             .Configure<EventOptions>(config.GetRequiredSection(nameof(EventOptions)))
-            .Configure<MaintenanceOptions>(config.GetRequiredSection(nameof(MaintenanceOptions)));
+            .Configure<MaintenanceOptions>(config.GetRequiredSection(nameof(MaintenanceOptions)))
+            .Configure<SummonBannerOptions>(config.GetRequiredSection(nameof(SummonBannerOptions)));
 
         // Ensure item summon weightings add to 100%
         services

@@ -9,10 +9,10 @@ public class SummonReverseMapProfile : Profile
     public SummonReverseMapProfile()
     {
         this.CreateMap<SummonTicketList, DbSummonTicket>()
-            .ForMember(x => x.Type, o => o.MapFrom(src => src.summon_ticket_id))
-            .ForMember(x => x.Quantity, o => o.MapFrom(src => src.quantity))
-            .ForMember(x => x.ExpirationTime, o => o.MapFrom(src => src.use_limit_time))
-            .ForMember(x => x.TicketKeyId, o => o.Ignore())
+            .ForMember(x => x.SummonTicketId, o => o.MapFrom(src => src.SummonTicketId))
+            .ForMember(x => x.Quantity, o => o.MapFrom(src => src.Quantity))
+            .ForMember(x => x.UseLimitTime, o => o.MapFrom(src => src.UseLimitTime))
+            .ForMember(x => x.KeyId, o => o.Ignore())
             .ForMember(x => x.ViewerId, o => o.Ignore())
             .ForMember(x => x.Owner, o => o.Ignore());
 
