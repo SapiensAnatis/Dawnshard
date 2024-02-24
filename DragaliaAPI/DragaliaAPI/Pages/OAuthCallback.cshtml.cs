@@ -1,7 +1,7 @@
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
-using DragaliaAPI.Blazor.Authentication;
+using DragaliaAPI.Authentication;
 using DragaliaAPI.Database;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.PlayerDetails;
@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 
-namespace DragaliaAPI.Blazor.Pages;
+namespace DragaliaAPI.Pages;
 
 public class OAuthCallbackModel(
     IOptionsMonitor<BaasOptions> options,

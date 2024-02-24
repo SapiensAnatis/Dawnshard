@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Blazor.Authentication;
+﻿namespace DragaliaAPI.Authentication;
 
 public class Constants
 {

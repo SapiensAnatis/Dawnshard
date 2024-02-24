@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace DragaliaAPI.Blazor.Pages;
+namespace DragaliaAPI.Pages;
 
 [AllowAnonymous]
 public class LogoutModel : PageModel
