@@ -1,5 +1,36 @@
 {
+    // Use this file to generate the actual odds at build time using a rust tool.
     "SummonBannerOptions": {
-        
+        "Banners": [
+            {
+                "Id": 1020203,
+                "Start": "2024-02-24T15:22:06Z",
+                "End": "2024-02-24T15:22:06Z",
+                "IsGala": false,
+                "IsPrizeShowcase": false, // Initially unsupported.
+                "FeaturedAdventurers": [
+                    "Joker"
+                    // Implies LimitedAdventurers.[1] = "Joker"
+                ],
+                "FeaturedDragons": [
+                    "Arsene"
+                ],
+                "LimitedAdventurers": [
+                    "Mona"
+                ],
+                "LimitedDragons": [
+                    "Thor"
+                ],
+                "TradeAdventurers": [
+                    // Generate trade ID from banner ID: first chara is 1020203001, second 1020203002, etc.
+                    // Means that each wyrmsigil trade is locked to one banner.
+                    "Mona"
+                ],
+                "TradeDragons": [
+                    // Generate these trade IDs with an offset of 100: arsene is 1020203101. Means max of 100 adv trades. 
+                    "Arsene"
+                ]
+            }
+        ]
     }
 }
