@@ -35,6 +35,7 @@
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" />
         <PackageReference Include="MudBlazor" />
+        <PackageReference Include="Riok.Mapperly" />
         <PackageReference Include="Serilog.Exceptions" />
         <PackageReference Include="Serilog.Expressions" />
         <PackageReference Include="Serilog.Settings.Configuration" />

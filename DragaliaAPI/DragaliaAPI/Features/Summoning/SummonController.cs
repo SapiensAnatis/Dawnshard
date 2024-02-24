@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using AutoMapper;
+using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Shop;
@@ -12,7 +13,7 @@ using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Controllers.Dragalia;
+namespace DragaliaAPI.Features.Summoning;
 
 [Route("summon")]
 [Consumes("application/octet-stream")]
@@ -25,7 +26,8 @@ public class SummonController(
     IMapper mapper,
     ISummonRepository summonRepository,
     ISummonService summonService,
-    IPaymentService paymentService
+    IPaymentService paymentService,
+    SummonListService summonListService
 ) : DragaliaControllerBase
 {
     // Repeated from RedoableSummonController, but no point putting this in a shared location
@@ -77,57 +79,6 @@ public class SummonController(
 
         public static readonly SummonPrizeOddsRate PrizeOddsRate =
             new(new List<AtgenSummonPrizeRankList>(), new List<AtgenSummonPrizeEntitySetList>());
-
-        public static readonly SummonGetSummonListData SummonListData =
-            new(
-                new List<SummonList>()
-                {
-                    new(
-                        summon_id: 1020203,
-                        summon_type: 0,
-                        summon_group_id: (int)BannerTypes.Normal,
-                        single_crystal: 120,
-                        single_diamond: 120,
-                        multi_crystal: 1200,
-                        multi_diamond: 1200,
-                        limited_crystal: 5,
-                        limited_diamond: 30,
-                        summon_point_id: 1,
-                        add_summon_point: 2,
-                        exchange_summon_point: 300,
-                        add_summon_point_stone: 1,
-                        complete_date: int.MaxValue,
-                        commence_date: 0,
-                        daily_count: 0,
-                        daily_limit: 1,
-                        total_count: 0,
-                        total_limit: 0,
-                        campaign_type: (int)SummonCampaignTypes.Normal,
-                        free_count_rest: 0,
-                        is_beginner_campaign: 1,
-                        beginner_campaign_count_rest: 1,
-                        consecution_campaign_count_rest: 0,
-                        status: 0
-                    )
-                },
-                new List<SummonList>(),
-                new List<SummonList>(),
-                new List<SummonList>(),
-                new List<SummonList>(),
-                new List<SummonList>(),
-                new List<SummonList>(),
-                new List<SummonList>(),
-                new List<SummonList>(),
-                new(
-                    new List<SummonList>(),
-                    new List<SummonList>(),
-                    new List<SummonList>(),
-                    new List<SummonList>(),
-                    new List<SummonList>()
-                ),
-                new List<SummonTicketList>(),
-                new List<SummonPointList>()
-            );
     }
 
     /// <summary>
@@ -182,15 +133,38 @@ public class SummonController(
             await summonRepository.SummonHistory.ToListAsync()
         ).Select(mapper.Map<SummonHistoryList>);
 
-        return Ok(new SummonGetSummonHistoryData(dbList));
+        return this.Ok(new SummonGetSummonHistoryData(dbList));
     }
 
     [HttpPost]
     [Route("get_summon_list")]
-    public DragaliaResult GetSummonList()
+    public async Task<DragaliaResult<SummonGetSummonListData>> GetSummonList()
     {
-        // TODO: Add tickets into this when refactoring
-        return Ok(Data.SummonListData);
+        IEnumerable<SummonList> bannerList = await summonListService.GetSummonList();
+        IEnumerable<SummonTicketList> ticketList = await summonListService.GetSummonTicketList();
+
+        return new SummonGetSummonListData()
+        {
+            summon_list = bannerList,
+            summon_ticket_list = ticketList,
+            campaign_summon_list = [],
+            chara_ssr_summon_list = [],
+            dragon_ssr_summon_list = [],
+            chara_ssr_update_summon_list = [],
+            dragon_ssr_update_summon_list = [],
+            campaign_ssr_summon_list = [],
+            platinum_summon_list = [],
+            exclude_summon_list = [],
+            cs_summon_list = new()
+            {
+                summon_list = [],
+                platinum_summon_list = [],
+                campaign_summon_list = [],
+                campaign_ssr_summon_list = [],
+                exclude_summon_list = [],
+            },
+            summon_point_list = [],
+        };
     }
 
     [HttpPost]
@@ -209,7 +183,7 @@ public class SummonController(
                 new(bannerId * 1000 + 2, EntityTypes.Chara, (int)Charas.SummerCelliera)
             };
 
-        return Ok(
+        return this.Ok(
             new SummonGetSummonPointTradeData(
                 tradableUnits,
                 new List<SummonPointList>() { new(bannerId, 0, 0, 0, int.MaxValue) },
@@ -240,9 +214,9 @@ public class SummonController(
                 2,
                 300,
                 1,
-                (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
-                (int)DateTimeOffset.UtcNow.AddDays(7).ToUnixTimeSeconds(),
-                0,
+                status: 1,
+                DateTimeOffset.UtcNow,
+                DateTimeOffset.UtcNow.AddDays(7),
                 1,
                 0,
                 0,

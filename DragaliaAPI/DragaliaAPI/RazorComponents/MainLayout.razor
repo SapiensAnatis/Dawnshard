@@ -1,9 +1,8 @@
-﻿@using DragaliaAPI.Blazor.Authentication;
-
-@inject IBlazorIdentityService BlazorIdentityService;
+﻿@inject IBlazorIdentityService BlazorIdentityService;
 @inject IJSRuntime JsRuntime;
 @inject NavigationManager NavigationManager;
 
+@using DragaliaAPI.Authentication
 @inherits LayoutComponentBase
 
 <MudThemeProvider Theme="theme" @ref=provider IsDarkMode="@darkMode" IsDarkModeChanged="OnIsDarkModeChanged"/>

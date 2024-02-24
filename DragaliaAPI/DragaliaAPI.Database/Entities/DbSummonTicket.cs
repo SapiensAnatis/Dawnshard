@@ -10,18 +10,19 @@ public class DbSummonTicket : DbPlayerData
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Key]
-    public long TicketKeyId { get; set; }
+    [Column("TicketKeyId")]
+    public long KeyId { get; set; }
 
     [Column("Type")]
-    public SummonTickets Type { get; set; }
+    public SummonTickets SummonTicketId { get; set; }
 
     [Column("Quantity")]
     public int Quantity { get; set; }
 
     [Column("ExpirationTime")]
-    public DateTimeOffset ExpirationTime { get; set; }
+    public DateTimeOffset UseLimitTime { get; set; }
 
     [NotMapped]
     public bool IsExpired =>
-        ExpirationTime != DateTimeOffset.UnixEpoch && ExpirationTime > DateTimeOffset.UtcNow;
+        this.UseLimitTime != DateTimeOffset.UnixEpoch && this.UseLimitTime > DateTimeOffset.UtcNow;
 }

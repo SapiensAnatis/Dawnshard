@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace DragaliaAPI.Blazor.Authentication;
+namespace DragaliaAPI.Authentication;
 
 public class BlazorIdentityService : IBlazorIdentityService
 {
@@ -14,7 +14,8 @@ public class BlazorIdentityService : IBlazorIdentityService
     public BlazorIdentityService(AuthenticationStateProvider authenticationStateProvider)
     {
         this.authenticationStateProvider = authenticationStateProvider;
-        this.authenticationStateProvider.AuthenticationStateChanged += OnAuthenticationStateChanged;
+        this.authenticationStateProvider.AuthenticationStateChanged +=
+            this.OnAuthenticationStateChanged;
     }
 
     public async Task InitializeAsync()

@@ -7,8 +7,8 @@ public static class ServiceConfiguration
 {
     public static IServiceCollection ConfigureSharedServices(
         this IServiceCollection serviceCollection
-    )
-    {
-        return serviceCollection.AddScoped<IPlayerIdentityService, PlayerIdentityService>();
-    }
+    ) =>
+        serviceCollection
+            .AddHttpContextAccessor()
+            .AddScoped<IPlayerIdentityService, PlayerIdentityService>();
 }

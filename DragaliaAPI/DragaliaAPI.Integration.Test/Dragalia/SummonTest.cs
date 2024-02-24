@@ -1,10 +1,11 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Summoning;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
-/// Tests <see cref="Controllers.Dragalia.SummonController"/>
+/// Tests <see cref="SummonController"/>
 /// </summary>
 public class SummonTest : TestFixture
 {
@@ -76,8 +77,31 @@ public class SummonTest : TestFixture
     }
 
     [Fact]
-    public async Task SummonGetSummonList_ReturnsAnyData()
+    public async Task SummonGetSummonList_ReturnsDataWithBannerInformation()
     {
+        int bannerId = 1020010;
+        int dailyCount = 1;
+        int summonCount = 10;
+
+        await this.AddToDatabase(
+            new DbPlayerBannerData()
+            {
+                SummonBannerId = bannerId,
+                DailyLimitedSummonCount = dailyCount,
+                SummonCount = summonCount
+            }
+        );
+
+        await this.AddToDatabase(
+            new DbSummonTicket()
+            {
+                SummonTicketId = SummonTickets.SingleSummon,
+                KeyId = 2,
+                Quantity = 1,
+                UseLimitTime = DateTimeOffset.UnixEpoch
+            }
+        );
+
         SummonGetSummonListData response = (
             await this.Client.PostMsgpack<SummonGetSummonListData>(
                 "summon/get_summon_list",
@@ -85,7 +109,53 @@ public class SummonTest : TestFixture
             )
         ).data;
 
-        response.Should().NotBeNull();
+        response
+            .summon_list.Should()
+            .ContainSingle()
+            .Which.Should()
+            .BeEquivalentTo(
+                new SummonList()
+                {
+                    summon_id = bannerId,
+                    summon_type = 2,
+                    single_crystal = 120,
+                    single_diamond = 120,
+                    multi_crystal = 1200,
+                    multi_diamond = 1200,
+                    limited_crystal = 0,
+                    limited_diamond = 30,
+                    summon_point_id = bannerId,
+                    add_summon_point = 1,
+                    add_summon_point_stone = 2,
+                    exchange_summon_point = 300,
+                    status = 1,
+                    commence_date = DateTimeOffset.Parse("2024-02-24T15:22:06Z"),
+                    complete_date = DateTimeOffset.Parse("2037-02-24T15:22:06Z"),
+                    daily_count = dailyCount,
+                    daily_limit = 1,
+                    total_limit = 0,
+                    total_count = summonCount,
+                    campaign_type = 0,
+                    free_count_rest = 0,
+                    is_beginner_campaign = 0,
+                    beginner_campaign_count_rest = 0,
+                    consecution_campaign_count_rest = 0,
+                }
+            );
+
+        response
+            .summon_ticket_list.Should()
+            .ContainSingle()
+            .Which.Should()
+            .BeEquivalentTo(
+                new SummonTicketList()
+                {
+                    SummonTicketId = SummonTickets.SingleSummon,
+                    KeyId = 2,
+                    Quantity = 1,
+                    UseLimitTime = DateTimeOffset.UnixEpoch
+                }
+            );
     }
 
     [Fact]
