@@ -15,6 +15,7 @@ using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.Json;
 using DragaliaAPI.Shared.Definitions.Enums.Dungeon;
 using MessagePack;
+using KeyAttribute = MessagePack.KeyAttribute;
 
 namespace DragaliaAPI.Models.Generated;
 
@@ -8628,8 +8629,8 @@ public class SummonList
     public int add_summon_point_stone { get; set; }
     public int exchange_summon_point { get; set; }
     public int status { get; set; }
-    public int commence_date { get; set; }
-    public int complete_date { get; set; }
+    public DateTimeOffset commence_date { get; set; }
+    public DateTimeOffset complete_date { get; set; }
     public int daily_count { get; set; }
     public int daily_limit { get; set; }
     public int total_count { get; set; }
@@ -8684,8 +8685,8 @@ public class SummonList
         int add_summon_point_stone,
         int exchange_summon_point,
         int status,
-        int commence_date,
-        int complete_date,
+        DateTimeOffset commence_date,
+        DateTimeOffset complete_date,
         int daily_count,
         int daily_limit,
         int total_count,
@@ -8787,20 +8788,27 @@ public class SummonPrizeOddsRateList
     public SummonPrizeOddsRateList() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public class SummonTicketList
 {
-    public long key_id { get; set; }
-    public SummonTickets summon_ticket_id { get; set; }
-    public int quantity { get; set; }
-    public DateTimeOffset use_limit_time { get; set; }
+    [Key("key_id")]
+    public long KeyId { get; set; }
+    
+    [Key("summon_ticket_id")]
+    public SummonTickets SummonTicketId { get; set; }
+    
+    [Key("quantity")]
+    public int Quantity { get; set; }
+    
+    [Key("use_limit_time")]
+    public DateTimeOffset UseLimitTime { get; set; }
 
     public SummonTicketList(long key_id, SummonTickets summon_ticket_id, int quantity, DateTimeOffset use_limit_time)
     {
-        this.key_id = key_id;
-        this.summon_ticket_id = summon_ticket_id;
-        this.quantity = quantity;
-        this.use_limit_time = use_limit_time;
+        this.KeyId = key_id;
+        this.SummonTicketId = summon_ticket_id;
+        this.Quantity = quantity;
+        this.UseLimitTime = use_limit_time;
     }
 
     public SummonTicketList() { }

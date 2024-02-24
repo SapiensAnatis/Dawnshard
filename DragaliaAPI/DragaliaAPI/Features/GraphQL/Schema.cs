@@ -7,7 +7,7 @@ namespace DragaliaAPI.Features.GraphQL;
 
 public static class Schema
 {
-    public static IServiceCollection ConfigureGraphQlSchema(this IServiceCollection collection) =>
+    public static IServiceCollection ConfigureGraphQLSchema(this IServiceCollection collection) =>
         collection.AddGraphQLSchema<ApiContext>(options =>
         {
             options.AutoBuildSchemaFromContext = true;

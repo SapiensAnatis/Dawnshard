@@ -1,0 +1,31 @@
+{
+    "SummonBannerOptions": {
+        "Banners": [
+            {
+                "Id": 1020010,
+                "Start": "2024-02-24T15:22:06Z",
+                "End": "2025-02-24T15:22:06Z",
+                "IsGala": false,
+                "IsPrizeShowcase": false,
+                "FeaturedAdventurers": [
+                    "Joker"
+                ],
+                "FeaturedDragons": [
+                    "Arsene"
+                ],
+                "LimitedAdventurers": [
+                    "Mona"
+                ],
+                "LimitedDragons": [
+                    "Thor"
+                ],
+                "TradeAdventurers": [
+                    "Mona"
+                ],
+                "TradeDragons": [
+                    "Arsene"
+                ]
+            }
+        ]
+    }
+}

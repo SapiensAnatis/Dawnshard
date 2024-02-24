@@ -1,15 +1,10 @@
-using System.Collections.Immutable;
+using System.Collections.Frozen;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using DragaliaAPI;
 using DragaliaAPI.Database;
-using DragaliaAPI.Features.Blazor;
 using DragaliaAPI.Features.GraphQL;
-using DragaliaAPI.Features.Shared.Options;
-using DragaliaAPI.Features.TimeAttack;
-using DragaliaAPI.Features.Version;
-using DragaliaAPI.Features.Zena;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
@@ -19,54 +14,33 @@ using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Json;
 using DragaliaAPI.Shared.MasterAsset;
 using EntityGraphQL.AspNet;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
-using MudBlazor;
-using MudBlazor.Services;
 using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-IConfiguration config = builder
-    .Configuration.AddJsonFile("itemSummonOdds.json", optional: false, reloadOnChange: true)
-    .AddJsonFile("dragonfruitOdds.json", optional: false, reloadOnChange: true)
-    .Build();
+builder
+    .Configuration.AddJsonFile(
+        Path.Join("Resources", "itemSummonOdds.json"),
+        optional: false,
+        reloadOnChange: true
+    )
+    .AddJsonFile(
+        Path.Join("Resources", "dragonfruitOdds.json"),
+        optional: false,
+        reloadOnChange: true
+    )
+    .AddJsonFile(
+        Path.Join("Resources", "bannerConfig.json"),
+        optional: false,
+        reloadOnChange: true
+    );
 
 builder.WebHost.UseStaticWebAssets();
-
-builder
-    .Services.Configure<BaasOptions>(config.GetRequiredSection("Baas"))
-    .Configure<LoginOptions>(config.GetRequiredSection("Login"))
-    .Configure<DragalipatchOptions>(config.GetRequiredSection("Dragalipatch"))
-    .Configure<RedisCachingOptions>(config.GetRequiredSection(nameof(RedisCachingOptions)))
-    .Configure<PhotonOptions>(config.GetRequiredSection(nameof(PhotonOptions)))
-    .Configure<ItemSummonConfig>(config)
-    .Configure<DragonfruitConfig>(config)
-    .Configure<TimeAttackOptions>(config.GetRequiredSection(nameof(TimeAttackOptions)))
-    .Configure<ResourceVersionOptions>(config.GetRequiredSection(nameof(ResourceVersionOptions)))
-    .Configure<BlazorOptions>(config.GetRequiredSection(nameof(BlazorOptions)))
-    .Configure<EventOptions>(config.GetRequiredSection(nameof(EventOptions)))
-    .Configure<MaintenanceOptions>(config.GetRequiredSection(nameof(MaintenanceOptions)));
-
-builder.Services.AddServerSideBlazor();
-builder.Services.AddMudServices(options =>
-{
-    options.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;
-    options.SnackbarConfiguration.VisibleStateDuration = 5000;
-    options.SnackbarConfiguration.ShowTransitionDuration = 500;
-    options.SnackbarConfiguration.HideTransitionDuration = 500;
-});
-
-// Ensure item summon weightings add to 100%
-builder.Services.AddOptions<ItemSummonConfig>().Validate(x => x.Odds.Sum(y => y.Rate) == 100_000);
-builder
-    .Services.AddOptions<DragonfruitConfig>()
-    .Validate(x => x.FruitOdds.Values.All(y => y.Normal + y.Ripe + y.Succulent == 100));
 
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
@@ -80,42 +54,14 @@ builder.Host.UseSerilog(
             .Filter.ByExcluding(evt => evt.Exception is JSDisconnectedException)
 );
 
-// Add services to the container.
-
-builder.Services.AddControllers();
 builder
-    .Services.AddMvc()
+    .Services.AddControllers()
     .AddMvcOptions(option =>
     {
         option.OutputFormatters.Add(new CustomMessagePackOutputFormatter(CustomResolver.Options));
         option.InputFormatters.Add(new CustomMessagePackInputFormatter(CustomResolver.Options));
     })
     .AddJsonOptions(options => ApiJsonOptions.Action.Invoke(options.JsonSerializerOptions));
-
-builder.Services.AddRazorComponents().AddInteractiveServerComponents();
-builder.Services.AddRazorPages();
-builder
-    .Services.AddHealthChecks()
-    .AddDbContextCheck<ApiContext>()
-    .AddCheck<RedisHealthCheck>("Redis", failureStatus: HealthStatus.Unhealthy);
-
-builder
-    .Services.AddAuthentication(opts =>
-    {
-        opts.AddScheme<SessionAuthenticationHandler>(SchemeName.Session, null);
-        opts.AddScheme<DeveloperAuthenticationHandler>(SchemeName.Developer, null);
-        opts.AddScheme<PhotonAuthenticationHandler>(nameof(PhotonAuthenticationHandler), null);
-        opts.AddScheme<ZenaAuthenticationHandler>(SchemeName.Zena, null);
-
-        opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    })
-    .AddCookie(opts =>
-    {
-        opts.ExpireTimeSpan = TimeSpan.FromMinutes(20);
-        opts.SlidingExpiration = true;
-    });
-
-builder.Services.AddAuthorization();
 
 PostgresOptions postgresOptions =
     builder.Configuration.GetSection(nameof(PostgresOptions)).Get<PostgresOptions>()
@@ -124,26 +70,32 @@ RedisOptions redisOptions =
     builder.Configuration.GetSection(nameof(RedisOptions)).Get<RedisOptions>()
     ?? throw new InvalidOperationException("Failed to get Redis config");
 
-builder
-    .Services.AddResponseCompression()
-    .ConfigureDatabaseServices(postgresOptions)
-    .ConfigureSharedServices()
-    .AddAutoMapper(Assembly.GetExecutingAssembly())
-    .AddStackExchangeRedisCache(options =>
+builder.Services.ConfigureDatabaseServices(postgresOptions);
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.ConfigurationOptions = new()
     {
-        options.ConfigurationOptions = new()
-        {
-            EndPoints = new() { { redisOptions.Hostname, redisOptions.Port } },
-            Password = redisOptions.Password,
-        };
-        options.InstanceName = "RedisInstance";
-    })
-    .AddHttpContextAccessor();
+        EndPoints = new() { { redisOptions.Hostname, redisOptions.Port } },
+        Password = redisOptions.Password,
+    };
+    options.InstanceName = "RedisInstance";
+});
 
 builder.Services.AddDataProtection().PersistKeysToDbContext<ApiContext>();
 
-builder.Services.ConfigureGameServices(builder.Configuration);
-builder.Services.ConfigureGraphQlSchema();
+builder
+    .Services.AddAuthorization()
+    .ConfigureAuthentication()
+    .AddResponseCompression()
+    .ConfigureHealthchecks()
+    .AddAutoMapper(Assembly.GetExecutingAssembly());
+
+builder
+    .Services.ConfigureGameServices(builder.Configuration)
+    .ConfigureGameOptions(builder.Configuration)
+    .ConfigureSharedServices()
+    .ConfigureGraphQLSchema()
+    .ConfigureBlazorFrontend();
 
 WebApplication app = builder.Build();
 
@@ -175,12 +127,12 @@ app.UseStaticFiles();
 app.UseAuthentication();
 app.UseResponseCompression();
 
-ImmutableArray<string> apiRoutePrefixes = new[]
+FrozenSet<string> apiRoutePrefixes = new[]
 {
     "/api",
     "/2.19.0_20220714193707",
     "/2.19.0_20220719103923"
-}.ToImmutableArray();
+}.ToFrozenSet();
 
 app.MapWhen(
     ctx => apiRoutePrefixes.Any(prefix => ctx.Request.Path.StartsWithSegments(prefix)),
@@ -229,8 +181,8 @@ app.MapWhen(
 app.MapHealthChecks(
     "/health",
     new HealthCheckOptions() { ResponseWriter = HealthCheckWriter.WriteResponse }
-); // Kubernetes readiness check
-app.MapGet("/ping", () => Results.Ok()); // Kubernetes liveness check
+);
+app.MapGet("/ping", () => Results.Ok());
 app.MapGet(
     "/dragalipatch/config",
     (

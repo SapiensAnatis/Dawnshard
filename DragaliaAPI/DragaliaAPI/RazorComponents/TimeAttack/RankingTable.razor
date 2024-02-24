@@ -1,8 +1,6 @@
 ﻿@inject IDbContextFactory<ApiContext> ApiContextFactory
 @inject IBlazorIdentityService BlazorIdentityService
 @inject ILogger<RankingTable> Logger
-
-@using DragaliaAPI.Blazor.Authentication;
 @using DragaliaAPI.Database;
 @using DragaliaAPI.Database.Entities;
 @using DragaliaAPI.RazorComponents.TimeAttack.Team
@@ -14,6 +12,7 @@
 @using System.Collections.Immutable;
 @using System.Diagnostics;
 @using System.Diagnostics.CodeAnalysis;
+@using DragaliaAPI.Authentication
 
 
 <MudTable 

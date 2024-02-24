@@ -23,9 +23,9 @@ public class TicketRepository(ApiContext apiContext, IPlayerIdentityService play
                 new DbSummonTicket
                 {
                     ViewerId = playerIdentityService.ViewerId,
-                    Type = ticketId,
+                    SummonTicketId = ticketId,
                     Quantity = quantity,
-                    ExpirationTime =
+                    UseLimitTime =
                         expirationTime == default ? DateTimeOffset.UnixEpoch : expirationTime,
                 }
             )

@@ -1,5 +1,4 @@
-﻿@using DragaliaAPI.Blazor.Authentication
-
+﻿@using DragaliaAPI.Authentication
 @{
     string? darkModeCookie = this.HttpContext?.Request.Cookies.FirstOrDefault(x => x.Key == "darkMode").Value;
     bool? isDarkMode = null;
