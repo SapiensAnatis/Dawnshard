@@ -28,7 +28,7 @@ If you don't want to use Docker, see the [no-docker branch](https://github.com/s
 
 ### Dedicated server
 
-On a dedicated server, it is recommended to use the [Kubernetes helm chart](https://github.com/SapiensAnatis/helm-charts). 
+On a dedicated server, the basic `docker-compose` setup will work, but additional considerations should be made regarding reverse proxying, logging, etc. Speak to the maintainer if you are interested in hosting your own instance for further guidance.
 
 ## Acknowledgements
 
