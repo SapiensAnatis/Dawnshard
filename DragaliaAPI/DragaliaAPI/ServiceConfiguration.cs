@@ -1,5 +1,7 @@
 ﻿using DragaliaAPI.Blazor.Authentication;
+using DragaliaAPI.Database;
 using DragaliaAPI.Extensions;
+using DragaliaAPI.Features.Blazor;
 using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.Dmode;
@@ -22,6 +24,7 @@ using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Reward.Handlers;
 using DragaliaAPI.Features.SavefileUpdate;
+using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Features.Talisman;
@@ -37,7 +40,12 @@ using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Api;
 using DragaliaAPI.Services.Game;
+using DragaliaAPI.Services.Health;
 using DragaliaAPI.Services.Photon;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using MudBlazor;
+using MudBlazor.Services;
 
 namespace DragaliaAPI;
 
@@ -176,6 +184,91 @@ public static class ServiceConfiguration
         services.AddScoped<IMatchingService, MatchingService>();
 
         services.AddScoped<ResourceVersionActionFilter>().AddScoped<MaintenanceActionFilter>();
+
+        return services;
+    }
+
+    public static IServiceCollection ConfigureGameOptions(
+        this IServiceCollection services,
+        IConfiguration config
+    )
+    {
+        services
+            .Configure<BaasOptions>(config.GetRequiredSection("Baas"))
+            .Configure<LoginOptions>(config.GetRequiredSection("Login"))
+            .Configure<DragalipatchOptions>(config.GetRequiredSection("Dragalipatch"))
+            .Configure<RedisCachingOptions>(config.GetRequiredSection(nameof(RedisCachingOptions)))
+            .Configure<PhotonOptions>(config.GetRequiredSection(nameof(PhotonOptions)))
+            .Configure<ItemSummonConfig>(config)
+            .Configure<DragonfruitConfig>(config)
+            .Configure<TimeAttackOptions>(config.GetRequiredSection(nameof(TimeAttackOptions)))
+            .Configure<ResourceVersionOptions>(
+                config.GetRequiredSection(nameof(ResourceVersionOptions))
+            )
+            .Configure<BlazorOptions>(config.GetRequiredSection(nameof(BlazorOptions)))
+            .Configure<EventOptions>(config.GetRequiredSection(nameof(EventOptions)))
+            .Configure<MaintenanceOptions>(config.GetRequiredSection(nameof(MaintenanceOptions)));
+
+        // Ensure item summon weightings add to 100%
+        services
+            .AddOptions<ItemSummonConfig>()
+            .Validate(x => x.Odds.Sum(y => y.Rate) == 100_000)
+            .ValidateOnStart();
+
+        services
+            .AddOptions<DragonfruitConfig>()
+            .Validate(x => x.FruitOdds.Values.All(y => y.Normal + y.Ripe + y.Succulent == 100))
+            .ValidateOnStart();
+
+        return services;
+    }
+
+    public static IServiceCollection ConfigureBlazorFrontend(this IServiceCollection services)
+    {
+        services.AddServerSideBlazor();
+        services.AddMudServices(options =>
+        {
+            options.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;
+            options.SnackbarConfiguration.VisibleStateDuration = 5000;
+            options.SnackbarConfiguration.ShowTransitionDuration = 500;
+            options.SnackbarConfiguration.HideTransitionDuration = 500;
+        });
+        services.AddRazorComponents().AddInteractiveServerComponents();
+        services.AddRazorPages();
+
+        return services;
+    }
+
+    public static IServiceCollection ConfigureHealthchecks(this IServiceCollection services)
+    {
+        services
+            .AddHealthChecks()
+            .AddDbContextCheck<ApiContext>()
+            .AddCheck<RedisHealthCheck>("Redis", failureStatus: HealthStatus.Unhealthy);
+
+        return services;
+    }
+
+    public static IServiceCollection ConfigureAuthentication(this IServiceCollection services)
+    {
+        services
+            .AddAuthentication(opts =>
+            {
+                opts.AddScheme<SessionAuthenticationHandler>(SchemeName.Session, null);
+                opts.AddScheme<DeveloperAuthenticationHandler>(SchemeName.Developer, null);
+                opts.AddScheme<PhotonAuthenticationHandler>(
+                    nameof(PhotonAuthenticationHandler),
+                    null
+                );
+                opts.AddScheme<ZenaAuthenticationHandler>(SchemeName.Zena, null);
+
+                opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+            .AddCookie(opts =>
+            {
+                opts.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                opts.SlidingExpiration = true;
+            });
 
         return services;
     }
