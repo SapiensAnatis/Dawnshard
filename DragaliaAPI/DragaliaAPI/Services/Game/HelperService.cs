@@ -195,7 +195,7 @@ public class HelperService : IHelperService
                         support_dragon = new()
                         {
                             dragon_key_id = 0,
-                            dragon_id = Dragons.GalaBahamut,
+                            dragon_id = Dragons.Ramiel,
                             level = 100,
                             hp = 368,
                             attack = 128,
