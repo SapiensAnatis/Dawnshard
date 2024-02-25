@@ -121,8 +121,5 @@ public class UnitMapProfile : Profile
         this.CreateMap<DbTalisman, AtgenSupportTalisman>();
 
         this.DisableConstructorMapping();
-
-        this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
-        this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
     }
 }

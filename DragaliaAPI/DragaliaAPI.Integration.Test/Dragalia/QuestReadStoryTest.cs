@@ -28,7 +28,9 @@ public class QuestReadStoryTest : TestFixture
 
         response
             .UpdateDataList.QuestStoryList.Should()
-            .ContainEquivalentOf(new QuestStoryList() { QuestStoryId = 1000106, State = 1 });
+            .ContainEquivalentOf(
+                new QuestStoryList() { QuestStoryId = 1000106, State = StoryState.Read }
+            );
     }
 
     [Fact]
@@ -70,7 +72,11 @@ public class QuestReadStoryTest : TestFixture
         response
             .UpdateDataList.QuestStoryList.Should()
             .ContainEquivalentOf(
-                new QuestStoryList() { QuestStoryId = theLonePaladynStoryId, State = 1 }
+                new QuestStoryList()
+                {
+                    QuestStoryId = theLonePaladynStoryId,
+                    State = StoryState.Read
+                }
             );
 
         response.UpdateDataList.UserData.TutorialStatus.Should().Be(10600);

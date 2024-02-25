@@ -15,8 +15,5 @@ public class SummonReverseMapProfile : Profile
             .ForMember(x => x.KeyId, o => o.Ignore())
             .ForMember(x => x.ViewerId, o => o.Ignore())
             .ForMember(x => x.Owner, o => o.Ignore());
-
-        this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
-        this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
     }
 }

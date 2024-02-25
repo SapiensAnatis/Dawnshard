@@ -32,8 +32,5 @@ public class PresentMapProfile : Profile
         this.CreateMap<DbPlayerPresentHistory, PresentHistoryList>();
 
         this.DisableConstructorMapping();
-
-        this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
-        this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
     }
 }

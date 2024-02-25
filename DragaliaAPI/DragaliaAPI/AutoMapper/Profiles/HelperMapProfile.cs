@@ -54,8 +54,5 @@ public class HelperMapProfile : Profile
             .ForMember(x => x.IsNew, opts => opts.Ignore())
             .ForMember(x => x.IsLock, opts => opts.Ignore())
             .ForMember(x => x.GetTime, opts => opts.Ignore());
-
-        this.SourceMemberNamingConvention = ExactMatchNamingConvention.Instance;
-        this.DestinationMemberNamingConvention = ExactMatchNamingConvention.Instance;
     }
 }

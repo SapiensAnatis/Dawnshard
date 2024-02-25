@@ -14,8 +14,5 @@ public class InventoryReverseMapProfile : Profile
         this.CreateMap<MaterialList, DbPlayerMaterial>();
         this.CreateMap<DragonGiftList, DbPlayerDragonGift>();
         this.CreateMap<EquipStampList, DbEquippedStamp>();
-
-        this.SourceMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
-        this.DestinationMemberNamingConvention = DatabaseNamingConvention.Instance;
     }
 }

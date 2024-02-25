@@ -14,8 +14,5 @@ public class FortReverseMapProfile : Profile
         this.CreateMap<BuildList, DbFortBuild>()
             .ForMember(x => x.LastIncomeDate, opts => opts.MapFrom(src => DateTime.UnixEpoch))
             .ForMember(x => x.BuildId, opts => opts.Ignore());
-
-        this.SourceMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
-        this.DestinationMemberNamingConvention = DatabaseNamingConvention.Instance;
     }
 }

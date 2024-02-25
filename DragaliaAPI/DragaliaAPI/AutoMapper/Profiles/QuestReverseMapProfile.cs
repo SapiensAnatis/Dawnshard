@@ -39,8 +39,5 @@ public class QuestReverseMapProfile : Profile
                 o => o.MapFrom(src => src.IsRead ? StoryState.Read : StoryState.Unlocked)
             )
             .ForMember(x => x.StoryType, o => o.MapFrom(src => StoryTypes.DungeonMode));
-
-        this.SourceMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
-        this.DestinationMemberNamingConvention = DatabaseNamingConvention.Instance;
     }
 }

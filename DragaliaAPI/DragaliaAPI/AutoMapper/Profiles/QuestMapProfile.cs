@@ -32,8 +32,5 @@ public class QuestMapProfile : Profile
             .ForMember(x => x.IsRead, o => o.MapFrom(src => src.State == StoryState.Read));
 
         this.CreateMap<AreaInfo, AreaInfoList>();
-
-        this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
-        this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
     }
 }

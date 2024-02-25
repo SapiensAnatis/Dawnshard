@@ -15,8 +15,5 @@ public class UserDataReverseMapProfile : Profile
             .ForMember(x => x.TutorialFlag, opts => opts.Ignore()) // Mapped from TutorialFlagList
             .ForMember(x => x.LastSaveImportTime, opts => opts.Ignore())
             .ForMember(x => x.ActiveMemoryEventId, opts => opts.MapFrom(src => 0));
-
-        this.SourceMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
-        this.DestinationMemberNamingConvention = DatabaseNamingConvention.Instance;
     }
 }

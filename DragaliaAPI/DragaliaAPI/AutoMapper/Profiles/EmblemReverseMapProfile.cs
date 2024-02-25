@@ -13,8 +13,5 @@ public class EmblemReverseMapProfile : Profile
 
         this.CreateMap<EmblemList, DbEmblem>()
             .ForMember(x => x.GetTime, o => o.MapFrom(src => src.GetTime));
-
-        this.SourceMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
-        this.DestinationMemberNamingConvention = DatabaseNamingConvention.Instance;
     }
 }

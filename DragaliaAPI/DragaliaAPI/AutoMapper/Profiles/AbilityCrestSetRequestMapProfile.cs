@@ -44,8 +44,5 @@ public class AbilityCrestSetRequestMapProfile : Profile
                 x => x.TalismanKeyId,
                 opts => opts.MapFrom(src => src.RequestAbilityCrestSetData.TalismanKeyId)
             );
-
-        this.SourceMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
-        this.DestinationMemberNamingConvention = DatabaseNamingConvention.Instance;
     }
 }

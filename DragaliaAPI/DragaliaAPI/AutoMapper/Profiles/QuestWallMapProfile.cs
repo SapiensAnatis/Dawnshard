@@ -9,8 +9,5 @@ public class QuestWallMapProfile : Profile
     public QuestWallMapProfile()
     {
         this.CreateMap<DbPlayerQuestWall, QuestWallList>().ReverseMap();
-
-        this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
-        this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
     }
 }
