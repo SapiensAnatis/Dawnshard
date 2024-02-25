@@ -161,7 +161,7 @@ public class FortController : DragaliaControllerBase
             new()
             {
                 Result = 1,
-                BuildId = (ulong)build.BuildId,
+                BuildId = build.BuildId,
                 BuildStartDate = build.BuildStartDate,
                 BuildEndDate = build.BuildEndDate,
                 RemainTime = build.RemainTime,

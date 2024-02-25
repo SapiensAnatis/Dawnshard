@@ -38,9 +38,9 @@ public class ShopController : DragaliaControllerBase
             new()
             {
                 // i don't know what like half of these are for lmao
-                IsQuestBonus = 0,
-                IsStoneBonus = 0,
-                IsStaminaBonus = 0,
+                IsQuestBonus = false,
+                IsStoneBonus = false,
+                IsStaminaBonus = false,
                 MaterialShopPurchase = purchases[PurchaseShopType.Material],
                 NormalShopPurchase = purchases[PurchaseShopType.Normal],
                 SpecialShopPurchase = purchases[PurchaseShopType.Special],

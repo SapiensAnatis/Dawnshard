@@ -35,7 +35,7 @@ public class DmodeController(
         resp.DmodeServitorPassiveList = await dmodeService.GetServitorPassiveList();
 
         resp.DmodeStoryList = (await storyRepository.DmodeStories.ToListAsync()).Select(
-            x => new DmodeStoryList(x.StoryId, (int)x.State)
+            x => new DmodeStoryList(x.StoryId, x.State == StoryState.Read)
         );
 
         resp.UpdateDataList = await updateDataService.SaveChangesAsync();

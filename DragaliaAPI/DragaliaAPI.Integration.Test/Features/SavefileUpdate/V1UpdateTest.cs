@@ -26,7 +26,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
             await this.Client.PostMsgpack<LoadIndexResponse>("/load/index", new LoadIndexRequest())
         ).Data;
 
-        data.build_list.Should().Contain(x => x.PlantId == FortPlants.TheHalidom);
+        data.BuildList.Should().Contain(x => x.PlantId == FortPlants.TheHalidom);
 
         this.ApiContext.PlayerFortBuilds.Should()
             .Contain(x => x.PlantId == FortPlants.TheHalidom && x.ViewerId == ViewerId);
@@ -51,7 +51,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
             await this.Client.PostMsgpack<LoadIndexResponse>("/load/index", new LoadIndexRequest())
         ).Data;
 
-        data.build_list.Should().Contain(x => x.PlantId == FortPlants.Smithy);
+        data.BuildList.Should().Contain(x => x.PlantId == FortPlants.Smithy);
 
         this.ApiContext.PlayerFortBuilds.Should()
             .Contain(x => x.PlantId == FortPlants.Smithy && x.ViewerId == ViewerId);
@@ -76,7 +76,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
             await this.Client.PostMsgpack<LoadIndexResponse>("/load/index", new LoadIndexRequest())
         ).Data;
 
-        data.build_list.Should().Contain(x => x.PlantId == FortPlants.FlameDracolith);
+        data.BuildList.Should().Contain(x => x.PlantId == FortPlants.FlameDracolith);
 
         this.ApiContext.PlayerFortBuilds.Should()
             .Contain(x => x.PlantId == FortPlants.FlameDracolith);
@@ -95,7 +95,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
             await this.Client.PostMsgpack<LoadIndexResponse>("/load/index", new LoadIndexRequest())
         ).Data;
 
-        data.build_list.Should().Contain(x => x.PlantId == FortPlants.SwordDojo);
+        data.BuildList.Should().Contain(x => x.PlantId == FortPlants.SwordDojo);
 
         this.ApiContext.PlayerFortBuilds.Should().Contain(x => x.PlantId == FortPlants.SwordDojo);
 
@@ -116,7 +116,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
             await this.Client.PostMsgpack<LoadIndexResponse>("/load/index", new LoadIndexRequest())
         ).Data;
 
-        data.build_list.Should().BeEmpty();
+        data.BuildList.Should().BeEmpty();
         this.ApiContext.PlayerFortBuilds.Should().BeEmpty();
 
         this.GetSavefileVersion().Should().Be(this.MaxVersion);

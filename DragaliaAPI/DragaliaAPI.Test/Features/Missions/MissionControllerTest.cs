@@ -46,7 +46,7 @@ public class MissionControllerTest
             {
                 NormalMissionNotice = new AtgenNormalMissionNotice()
                 {
-                    IsUpdate = 1,
+                    IsUpdate = true,
                     AllMissionCount = 420
                 }
             };
@@ -62,7 +62,7 @@ public class MissionControllerTest
             .ReturnsAsync(
                 new MissionGetMissionListResponse()
                 {
-                    normal_mission_list = [],
+                    NormalMissionList = [],
                     MissionNotice = notice,
                     CurrentMainStoryMission = mainStoryMission
                 }
@@ -76,7 +76,7 @@ public class MissionControllerTest
 
         response!.MissionNotice.Should().Be(notice);
         response.CurrentMainStoryMission.Should().Be(mainStoryMission);
-        response.normal_mission_list.Should().BeEmpty();
+        response.NormalMissionList.Should().BeEmpty();
 
         mockMissionService.VerifyAll();
         mockUpdateDataService.VerifyAll();
@@ -90,7 +90,7 @@ public class MissionControllerTest
             {
                 NormalMissionNotice = new AtgenNormalMissionNotice()
                 {
-                    IsUpdate = 1,
+                    IsUpdate = true,
                     AllMissionCount = 420
                 }
             };

@@ -71,7 +71,7 @@ public class DmodeControllerTest
         DmodeDungeonInfo dungeonInfo = new(0, 0, 0, 0, false, DungeonState.Waiting);
         mockDmodeService.Setup(x => x.GetDungeonInfo()).ReturnsAsync(dungeonInfo);
 
-        List<DmodeStoryList> stories = new() { new DmodeStoryList(1000, 1) };
+        List<DmodeStoryList> stories = new() { new DmodeStoryList(1000, true) };
         mockStoryRepository
             .SetupGet(x => x.DmodeStories)
             .Returns(
@@ -138,7 +138,7 @@ public class DmodeControllerTest
         DmodeDungeonInfo dungeonInfo = new(0, 0, 0, 0, false, DungeonState.Waiting);
         mockDmodeService.Setup(x => x.GetDungeonInfo()).ReturnsAsync(dungeonInfo);
 
-        List<DmodeStoryList> stories = new() { new DmodeStoryList(1000, 1) };
+        List<DmodeStoryList> stories = new() { new DmodeStoryList(1000, true) };
         mockStoryRepository
             .SetupGet(x => x.DmodeStories)
             .Returns(

@@ -243,8 +243,8 @@ public class AuthServiceTest
         LoadIndexResponse importSavefile =
             new()
             {
-                user_data = new() { Name = "Euden 2" },
-                fort_bonus_list = null!
+                UserData = new() { Name = "Euden 2" },
+                FortBonusList = null!
             };
 
         this.mockLoginOptions.Setup(x => x.CurrentValue)
@@ -309,8 +309,8 @@ public class AuthServiceTest
         LoadIndexResponse importSavefile =
             new()
             {
-                user_data = new() { Name = "Euden 2" },
-                fort_bonus_list = null!
+                UserData = new() { Name = "Euden 2" },
+                FortBonusList = null!
             };
 
         this.mockLoginOptions.Setup(x => x.CurrentValue)

@@ -13,12 +13,7 @@ public class PresentMapProfile : Profile
             .ForMember(
                 x => x.ReceiveLimitTime,
                 opts => opts.NullSubstitute(DateTimeOffset.UnixEpoch)
-            )
-            .ForMember(x => x.ExtraParameter1, opts => opts.Ignore())
-            .ForMember(x => x.ExtraParameter2, opts => opts.Ignore())
-            .ForMember(x => x.ExtraParameter3, opts => opts.Ignore())
-            .ForMember(x => x.ExtraParameter4, opts => opts.Ignore())
-            .ForMember(x => x.ExtraParameter5, opts => opts.Ignore());
+            );
 
         this.CreateMap<DbPlayerPresent, DbPlayerPresentHistory>()
             .ForMember(

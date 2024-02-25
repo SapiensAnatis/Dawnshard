@@ -3,8 +3,6 @@ using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
-using Humanizer;
-using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Missions;
 
@@ -90,14 +88,14 @@ public class MissionTest : TestFixture
             new MissionUnlockDrillMissionGroupRequest(3)
         );
 
-        DragaliaResponse<TreasureTradeTradeReponse> resp =
+        DragaliaResponse<TreasureTradeTradeResponse> resp =
             await this.Client.PostMsgpack<TreasureTradeTradeResponse>(
                 "/treasure_trade/trade",
                 new TreasureTradeTradeRequest() { TreasureTradeId = 10020101, TradeCount = 1 }
             );
 
         resp.DataHeaders.result_code.Should().Be(ResultCode.Success);
-        resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.IsUpdate.Should().Be(1);
+        resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.IsUpdate.Should().BeTrue();
         resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.CompletedMissionCount.Should()
             .BeGreaterThan(1); // One has to be completed because of the above, multiple can be completed due to other factors
         resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.NewCompleteMissionIdList.Should()
@@ -138,7 +136,7 @@ public class MissionTest : TestFixture
             );
 
         resp.DataHeaders.result_code.Should().Be(ResultCode.Success);
-        resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.IsUpdate.Should().Be(1);
+        resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.IsUpdate.Should().BeTrue();
         resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.CompletedMissionCount.Should()
             .BeGreaterThan(1);
         resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.NewCompleteMissionIdList.Should()
@@ -254,7 +252,7 @@ public class MissionTest : TestFixture
             );
 
         response
-            .Data.daily_mission_list.Should()
+            .Data.DailyMissionList.Should()
             .BeEquivalentTo(
                 [
                     new DailyMissionList()
@@ -357,7 +355,7 @@ public class MissionTest : TestFixture
             );
 
         response
-            .Data.daily_mission_list.Should()
+            .Data.DailyMissionList.Should()
             .BeEquivalentTo(
                 [
                     new DailyMissionList()
@@ -575,7 +573,7 @@ public class MissionTest : TestFixture
         ).Data;
 
         response
-            .period_mission_list.Should()
+            .PeriodMissionList.Should()
             .HaveCount(2)
             .And.Contain(x => x.PeriodMissionId == expectedMission.Id)
             .And.Contain(x => x.PeriodMissionId == otherExpectedMission.Id);

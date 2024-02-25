@@ -187,7 +187,10 @@ public class SummonController(
         return this.Ok(
             new SummonGetSummonPointTradeResponse(
                 tradableUnits,
-                new List<SummonPointList>() { new(bannerId, 0, 0, 0, int.MaxValue) },
+                new List<SummonPointList>()
+                {
+                    new(bannerId, 0, 0, DateTimeOffset.UnixEpoch, DateTimeOffset.UnixEpoch)
+                },
                 new(),
                 new()
             )
@@ -224,7 +227,7 @@ public class SummonController(
                 (int)SummonCampaignTypes.Normal,
                 0,
                 1,
-                1,
+                true,
                 0,
                 0
             );
@@ -270,7 +273,7 @@ public class SummonController(
                 break;
             case PaymentTypes.FreeDailyExecDependant:
             case PaymentTypes.FreeDailyTenfold:
-                if (bannerData.IsBeginnerCampaign == 1)
+                if (bannerData.IsBeginnerCampaign)
                     playerBannerData.IsBeginnerFreeSummonAvailable = 0;
                 paymentCost = 0;
                 break;

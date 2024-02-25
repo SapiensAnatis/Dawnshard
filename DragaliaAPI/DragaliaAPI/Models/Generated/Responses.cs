@@ -1422,7 +1422,7 @@ public partial class DmodeBuildupServitorPassiveResponse
 public partial class DmodeDungeonFinishResponse
 {
     [Key("dmode_dungeon_state")]
-    public int DmodeDungeonState { get; set; }
+    public DungeonState DmodeDungeonState { get; set; }
 
     [Key("dmode_ingame_result")]
     public DmodeIngameResult DmodeIngameResult { get; set; }
@@ -1434,7 +1434,7 @@ public partial class DmodeDungeonFinishResponse
     public EntityResult EntityResult { get; set; }
 
     public DmodeDungeonFinishResponse(
-        int dmodeDungeonState,
+        DungeonState dmodeDungeonState,
         DmodeIngameResult dmodeIngameResult,
         UpdateDataList updateDataList,
         EntityResult entityResult
@@ -1453,7 +1453,7 @@ public partial class DmodeDungeonFinishResponse
 public partial class DmodeDungeonFloorResponse
 {
     [Key("dmode_dungeon_state")]
-    public int DmodeDungeonState { get; set; }
+    public DungeonState DmodeDungeonState { get; set; }
 
     [Key("dmode_floor_data")]
     public DmodeFloorData DmodeFloorData { get; set; }
@@ -1465,7 +1465,7 @@ public partial class DmodeDungeonFloorResponse
     public EntityResult EntityResult { get; set; }
 
     public DmodeDungeonFloorResponse(
-        int dmodeDungeonState,
+        DungeonState dmodeDungeonState,
         DmodeFloorData dmodeFloorData,
         UpdateDataList updateDataList,
         EntityResult entityResult
@@ -1484,7 +1484,7 @@ public partial class DmodeDungeonFloorResponse
 public partial class DmodeDungeonFloorSkipResponse
 {
     [Key("dmode_dungeon_state")]
-    public int DmodeDungeonState { get; set; }
+    public DungeonState DmodeDungeonState { get; set; }
 
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -1493,7 +1493,7 @@ public partial class DmodeDungeonFloorSkipResponse
     public EntityResult EntityResult { get; set; }
 
     public DmodeDungeonFloorSkipResponse(
-        int dmodeDungeonState,
+        DungeonState dmodeDungeonState,
         UpdateDataList updateDataList,
         EntityResult entityResult
     )
@@ -1513,9 +1513,9 @@ public partial class DmodeDungeonRestartResponse
     public DmodeIngameData DmodeIngameData { get; set; }
 
     [Key("dmode_dungeon_state")]
-    public int DmodeDungeonState { get; set; }
+    public DungeonState DmodeDungeonState { get; set; }
 
-    public DmodeDungeonRestartResponse(DmodeIngameData dmodeIngameData, int dmodeDungeonState)
+    public DmodeDungeonRestartResponse(DmodeIngameData dmodeIngameData, DungeonState dmodeDungeonState)
     {
         this.DmodeIngameData = dmodeIngameData;
         this.DmodeDungeonState = dmodeDungeonState;
@@ -1533,7 +1533,7 @@ public partial class DmodeDungeonStartResponse
     [Key("dmode_dungeon_state")]
     public DungeonState DmodeDungeonState { get; set; }
 
-    public DmodeDungeonStartResponse(DmodeIngameData dmodeIngameData, int dmodeDungeonState)
+    public DmodeDungeonStartResponse(DmodeIngameData dmodeIngameData, DungeonState dmodeDungeonState)
     {
         this.DmodeIngameData = dmodeIngameData;
         this.DmodeDungeonState = dmodeDungeonState;
@@ -1546,7 +1546,7 @@ public partial class DmodeDungeonStartResponse
 public partial class DmodeDungeonSystemHaltResponse
 {
     [Key("dmode_dungeon_state")]
-    public int DmodeDungeonState { get; set; }
+    public DungeonState DmodeDungeonState { get; set; }
 
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -1555,7 +1555,7 @@ public partial class DmodeDungeonSystemHaltResponse
     public EntityResult EntityResult { get; set; }
 
     public DmodeDungeonSystemHaltResponse(
-        int dmodeDungeonState,
+        DungeonState dmodeDungeonState,
         UpdateDataList updateDataList,
         EntityResult entityResult
     )
@@ -1572,7 +1572,7 @@ public partial class DmodeDungeonSystemHaltResponse
 public partial class DmodeDungeonUserHaltResponse
 {
     [Key("dmode_dungeon_state")]
-    public int DmodeDungeonState { get; set; }
+    public DungeonState DmodeDungeonState { get; set; }
 
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -1581,7 +1581,7 @@ public partial class DmodeDungeonUserHaltResponse
     public EntityResult EntityResult { get; set; }
 
     public DmodeDungeonUserHaltResponse(
-        int dmodeDungeonState,
+        DungeonState dmodeDungeonState,
         UpdateDataList updateDataList,
         EntityResult entityResult
     )
@@ -3119,7 +3119,7 @@ public partial class FortBuildAtOnceResponse
     public UpdateDataList UpdateDataList { get; set; }
 
     [Key("build_id")]
-    public ulong BuildId { get; set; }
+    public long BuildId { get; set; }
 
     [Key("fort_detail")]
     public FortDetail FortDetail { get; set; }
@@ -3139,7 +3139,7 @@ public partial class FortBuildAtOnceResponse
     public FortBuildAtOnceResponse(
         int result,
         UpdateDataList updateDataList,
-        ulong buildId,
+        long buildId,
         FortDetail fortDetail,
         FortBonusList fortBonusList,
         AtgenProductionRp productionRp,
@@ -3167,7 +3167,7 @@ public partial class FortBuildCancelResponse
     public int Result { get; set; }
 
     [Key("build_id")]
-    public ulong BuildId { get; set; }
+    public long BuildId { get; set; }
 
     [Key("fort_detail")]
     public FortDetail FortDetail { get; set; }
@@ -3177,7 +3177,7 @@ public partial class FortBuildCancelResponse
 
     public FortBuildCancelResponse(
         int result,
-        ulong buildId,
+        long buildId,
         FortDetail fortDetail,
         UpdateDataList updateDataList
     )
@@ -3198,7 +3198,7 @@ public partial class FortBuildEndResponse
     public int Result { get; set; }
 
     [Key("build_id")]
-    public ulong BuildId { get; set; }
+    public long BuildId { get; set; }
 
     [Key("fort_bonus_list")]
     public FortBonusList FortBonusList { get; set; }
@@ -3220,7 +3220,7 @@ public partial class FortBuildEndResponse
 
     public FortBuildEndResponse(
         int result,
-        ulong buildId,
+        long buildId,
         FortBonusList fortBonusList,
         FortDetail fortDetail,
         AtgenProductionRp productionRp,
@@ -3249,7 +3249,7 @@ public partial class FortBuildStartResponse
     public int Result { get; set; }
 
     [Key("build_id")]
-    public ulong BuildId { get; set; }
+    public long BuildId { get; set; }
 
     [Key("build_start_date")]
     public DateTimeOffset BuildStartDate { get; set; }
@@ -3258,7 +3258,7 @@ public partial class FortBuildStartResponse
     public DateTimeOffset BuildEndDate { get; set; }
 
     [Key("remain_time")]
-    public DateTimeOffset RemainTime { get; set; }
+    public TimeSpan RemainTime { get; set; }
 
     [Key("fort_detail")]
     public FortDetail FortDetail { get; set; }
@@ -3271,10 +3271,10 @@ public partial class FortBuildStartResponse
 
     public FortBuildStartResponse(
         int result,
-        ulong buildId,
+        long buildId,
         DateTimeOffset buildStartDate,
         DateTimeOffset buildEndDate,
-        DateTimeOffset remainTime,
+        TimeSpan remainTime,
         FortDetail fortDetail,
         UpdateDataList updateDataList,
         EntityResult entityResult
@@ -3404,7 +3404,7 @@ public partial class FortLevelupAtOnceResponse
     public int Result { get; set; }
 
     [Key("build_id")]
-    public ulong BuildId { get; set; }
+    public long BuildId { get; set; }
 
     [Key("fort_detail")]
     public FortDetail FortDetail { get; set; }
@@ -3432,7 +3432,7 @@ public partial class FortLevelupAtOnceResponse
 
     public FortLevelupAtOnceResponse(
         int result,
-        ulong buildId,
+        long buildId,
         FortDetail fortDetail,
         FortBonusList fortBonusList,
         int currentFortLevel,
@@ -3465,7 +3465,7 @@ public partial class FortLevelupCancelResponse
     public int Result { get; set; }
 
     [Key("build_id")]
-    public ulong BuildId { get; set; }
+    public long BuildId { get; set; }
 
     [Key("fort_detail")]
     public FortDetail FortDetail { get; set; }
@@ -3475,7 +3475,7 @@ public partial class FortLevelupCancelResponse
 
     public FortLevelupCancelResponse(
         int result,
-        ulong buildId,
+        long buildId,
         FortDetail fortDetail,
         UpdateDataList updateDataList
     )
@@ -3496,7 +3496,7 @@ public partial class FortLevelupEndResponse
     public int Result { get; set; }
 
     [Key("build_id")]
-    public ulong BuildId { get; set; }
+    public long BuildId { get; set; }
 
     [Key("fort_detail")]
     public FortDetail FortDetail { get; set; }
@@ -3524,7 +3524,7 @@ public partial class FortLevelupEndResponse
 
     public FortLevelupEndResponse(
         int result,
-        ulong buildId,
+        long buildId,
         FortDetail fortDetail,
         FortBonusList fortBonusList,
         int currentFortLevel,
@@ -3563,10 +3563,10 @@ public partial class FortLevelupStartResponse
     public DateTimeOffset LevelupEndDate { get; set; }
 
     [Key("remain_time")]
-    public DateTimeOffset RemainTime { get; set; }
+    public TimeSpan RemainTime { get; set; }
 
     [Key("build_id")]
-    public ulong BuildId { get; set; }
+    public long BuildId { get; set; }
 
     [Key("fort_detail")]
     public FortDetail FortDetail { get; set; }
@@ -3581,8 +3581,8 @@ public partial class FortLevelupStartResponse
         int result,
         DateTimeOffset levelupStartDate,
         DateTimeOffset levelupEndDate,
-        DateTimeOffset remainTime,
-        ulong buildId,
+        TimeSpan remainTime,
+        long buildId,
         FortDetail fortDetail,
         UpdateDataList updateDataList,
         EntityResult entityResult
@@ -3608,7 +3608,7 @@ public partial class FortMoveResponse
     public int Result { get; set; }
 
     [Key("build_id")]
-    public ulong BuildId { get; set; }
+    public long BuildId { get; set; }
 
     [Key("fort_bonus_list")]
     public FortBonusList FortBonusList { get; set; }
@@ -3627,7 +3627,7 @@ public partial class FortMoveResponse
 
     public FortMoveResponse(
         int result,
-        ulong buildId,
+        long buildId,
         FortBonusList fortBonusList,
         AtgenProductionRp productionRp,
         AtgenProductionRp productionDf,
@@ -8024,7 +8024,7 @@ public partial class ToolSignupResponse
     [Key("servertime")]
     public DateTimeOffset ServerTime { get; set; }
 
-    public ToolSignupResponse(ulong viewerId, int serverTime)
+    public ToolSignupResponse(ulong viewerId, DateTimeOffset serverTime)
     {
         this.ViewerId = viewerId;
         this.ServerTime = serverTime;

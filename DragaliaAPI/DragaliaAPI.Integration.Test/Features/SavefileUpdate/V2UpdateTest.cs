@@ -52,7 +52,7 @@ public class V2UpdateTest : SavefileUpdateTestFixture
                 new() { Slot = 32, StampId = 0 },
             };
 
-        data.equip_stamp_list.Should().BeEquivalentTo(expectedStampList);
+        data.EquipStampList.Should().BeEquivalentTo(expectedStampList);
 
         this.ApiContext.EquippedStamps.Where(x => x.ViewerId == ViewerId)
             .Should()

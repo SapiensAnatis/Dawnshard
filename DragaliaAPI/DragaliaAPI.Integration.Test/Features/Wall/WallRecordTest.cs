@@ -269,11 +269,9 @@ public class WallRecordTest : TestFixture
             )
         ).Data;
 
+        missionList.NormalMissionList.Should().Contain(x => x.NormalMissionId == flameLv7MissionId);
         missionList
-            .normal_mission_list.Should()
-            .Contain(x => x.NormalMissionId == flameLv7MissionId);
-        missionList
-            .normal_mission_list.Should()
+            .NormalMissionList.Should()
             .Contain(x => x.NormalMissionId == clearAllLv8MissionId);
     }
 

@@ -1028,7 +1028,7 @@ public class DmodeDungeonService(
             dmodeEnemies.Add(
                 new AtgenDmodeEnemy(
                     dmodeEnemies.Count,
-                    1,
+                    true,
                     enemyLevel,
                     enemyParam,
                     hasSecondForm ? Enumerable.Empty<AtgenDmodeDropList>() : enemyDropList
@@ -1043,7 +1043,7 @@ public class DmodeDungeonService(
                 dmodeEnemies.Add(
                     new AtgenDmodeEnemy(
                         dmodeEnemies.Count,
-                        0,
+                        false,
                         level,
                         paramData.Form2nd,
                         enemyDropList
@@ -1100,7 +1100,7 @@ public class DmodeDungeonService(
                 dmodeEnemies.Add(
                     new AtgenDmodeEnemy(
                         dmodeEnemies.Count,
-                        0,
+                        false,
                         level,
                         enemyParam,
                         Enumerable.Empty<AtgenDmodeDropList>()

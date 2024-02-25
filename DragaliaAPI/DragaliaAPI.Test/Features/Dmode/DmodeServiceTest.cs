@@ -131,7 +131,7 @@ public class DmodeServiceTest
                 State = DungeonState.Waiting,
                 CharaId = charaId,
                 Floor = floor,
-                QuestTime = questTime,
+                QuestTime = 0,
                 DungeonScore = dungeonScore,
                 IsPlayEnd = isPlayEnd
             };

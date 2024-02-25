@@ -536,7 +536,7 @@ public class MissionService(
 
         return new AtgenNormalMissionNotice
         {
-            IsUpdate = 1,
+            IsUpdate = true,
             AllMissionCount = totalCount,
             CompletedMissionCount = completedCount,
             ReceivableRewardCount = receivableRewardCount,
@@ -575,7 +575,7 @@ public class MissionService(
         TResponse response =
             new()
             {
-                album_mission_list = allMissions[MissionType.Album]
+                AlbumMissionList = allMissions[MissionType.Album]
                     .Select(x => new AlbumMissionList(
                         x.Id,
                         x.Progress,
@@ -583,7 +583,7 @@ public class MissionService(
                         x.End,
                         x.Start
                     )),
-                beginner_mission_list = allMissions[MissionType.Beginner]
+                BeginnerMissionList = allMissions[MissionType.Beginner]
                     .Select(x => new BeginnerMissionList(
                         x.Id,
                         x.Progress,
@@ -591,7 +591,7 @@ public class MissionService(
                         x.End,
                         x.Start
                     )),
-                main_story_mission_list = allMissions[MissionType.MainStory]
+                MainStoryMissionList = allMissions[MissionType.MainStory]
                     .Select(x => new MainStoryMissionList(
                         x.Id,
                         x.Progress,
@@ -599,7 +599,7 @@ public class MissionService(
                         x.End,
                         x.Start
                     )),
-                normal_mission_list = allMissions[MissionType.Normal]
+                NormalMissionList = allMissions[MissionType.Normal]
                     .Select(x => new NormalMissionList(
                         x.Id,
                         x.Progress,
@@ -607,7 +607,7 @@ public class MissionService(
                         x.End,
                         x.Start
                     )),
-                period_mission_list = allMissions[MissionType.Period]
+                PeriodMissionList = allMissions[MissionType.Period]
                     .Select(x => new PeriodMissionList(
                         x.Id,
                         x.Progress,
@@ -615,7 +615,7 @@ public class MissionService(
                         x.End,
                         x.Start
                     )),
-                special_mission_list = allMissions[MissionType.Special]
+                SpecialMissionList = allMissions[MissionType.Special]
                     .Select(x => new SpecialMissionList(
                         x.Id,
                         x.Progress,
@@ -623,7 +623,7 @@ public class MissionService(
                         x.End,
                         x.Start
                     )),
-                memory_event_mission_list = allMissions[MissionType.MemoryEvent]
+                MemoryEventMissionList = allMissions[MissionType.MemoryEvent]
                     .Where(x => x.GroupId == activeEventId)
                     .Select(x => new MemoryEventMissionList(
                         x.Id,
@@ -646,7 +646,7 @@ public class MissionService(
                 DayNo = DateOnly.FromDateTime(this.resetHelper.LastDailyReset.UtcDateTime)
             });
 
-        response.daily_mission_list = currentDailyMissions.UnionBy(
+        response.DailyMissionList = currentDailyMissions.UnionBy(
             historicalDailyMissions,
             x => new { daily_mission_id = x.DailyMissionId, day_no = x.DayNo }
         );

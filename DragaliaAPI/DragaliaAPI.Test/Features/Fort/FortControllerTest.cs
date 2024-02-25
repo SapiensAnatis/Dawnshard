@@ -255,7 +255,7 @@ public class FortControllerTest
         ).GetData<FortBuildStartResponse>()!;
 
         data.Result.Should().Be(1);
-        data.BuildId.Should().Be((ulong)build.BuildId);
+        data.BuildId.Should().Be(build.BuildId);
         data.BuildStartDate.Should().Be(build.BuildStartDate);
         data.BuildEndDate.Should().Be(build.BuildEndDate);
         data.RemainTime.Should().Be(build.RemainTime);

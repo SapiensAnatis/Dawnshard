@@ -76,7 +76,7 @@ public class TreasureTradeTest : TestFixture
                 )?.Quantity ?? 0;
         }
 
-        TreasureTradeTradeReponse response = (
+        TreasureTradeTradeResponse response = (
             await Client.PostMsgpack<TreasureTradeTradeResponse>(
                 "treasure_trade/trade",
                 new TreasureTradeTradeRequest(1001, 10010101, null, 1)
@@ -103,7 +103,7 @@ public class TreasureTradeTest : TestFixture
     [Fact]
     public async Task Trade_WeaponSkin_Trades()
     {
-        TreasureTradeTradeReponse response = (
+        TreasureTradeTradeResponse response = (
             await Client.PostMsgpack<TreasureTradeTradeResponse>(
                 "treasure_trade/trade",
                 new TreasureTradeTradeRequest(1012, 10124101, null, 1)

@@ -204,7 +204,7 @@ public class DungeonSkipController(
         PlayRecord playRecord =
             new()
             {
-                IsClear = 1,
+                IsClear = true,
                 Time = -1,
                 TreasureRecord = session.EnemyList.Select(x => new AtgenTreasureRecord()
                 {

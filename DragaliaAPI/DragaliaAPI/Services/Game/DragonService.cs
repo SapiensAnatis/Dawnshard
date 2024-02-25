@@ -217,7 +217,7 @@ public class DragonService(
                     if (nextStoryId != default)
                     {
                         await storyRepository.GetOrCreateStory(StoryTypes.Dragon, nextStoryId);
-                        reward.IsReleaseStory = 1;
+                        reward.IsReleaseStory = true;
                     }
                     else
                     {
@@ -240,7 +240,6 @@ public class DragonService(
                 EntityId = (int)rewardMats[levelIndex - 1],
                 EntityQuantity = rewardQuantity[levelIndex - 1],
                 //TODO: check for mat limit
-                IsOver = 0
             };
             DbPlayerMaterial mat =
                 await inventoryRepository.GetMaterial((Materials)rewardItem.EntityId)
@@ -279,7 +278,6 @@ public class DragonService(
                 EntityId = (int)material,
                 EntityQuantity = rewardQuantity,
                 //TODO: check for mat limit
-                IsOver = 0
             };
             giftPerGift.Add(new(gift, reward));
         }
@@ -364,7 +362,6 @@ public class DragonService(
                             break;
                     }
                     //TODO: check for mat limit
-                    reward.IsOver = 0;
                     tyGifts.Add(reward);
                 }
                 tyGiftsPerItem.AddRange(tyGifts);
