@@ -1515,7 +1515,10 @@ public partial class DmodeDungeonRestartResponse
     [Key("dmode_dungeon_state")]
     public DungeonState DmodeDungeonState { get; set; }
 
-    public DmodeDungeonRestartResponse(DmodeIngameData dmodeIngameData, DungeonState dmodeDungeonState)
+    public DmodeDungeonRestartResponse(
+        DmodeIngameData dmodeIngameData,
+        DungeonState dmodeDungeonState
+    )
     {
         this.DmodeIngameData = dmodeIngameData;
         this.DmodeDungeonState = dmodeDungeonState;
@@ -1533,7 +1536,10 @@ public partial class DmodeDungeonStartResponse
     [Key("dmode_dungeon_state")]
     public DungeonState DmodeDungeonState { get; set; }
 
-    public DmodeDungeonStartResponse(DmodeIngameData dmodeIngameData, DungeonState dmodeDungeonState)
+    public DmodeDungeonStartResponse(
+        DmodeIngameData dmodeIngameData,
+        DungeonState dmodeDungeonState
+    )
     {
         this.DmodeIngameData = dmodeIngameData;
         this.DmodeDungeonState = dmodeDungeonState;
@@ -2701,8 +2707,7 @@ public partial class EulaGetVersionResponse
     [Key("version_hash")]
     public AtgenVersionHash VersionHash { get; set; }
 
-    [Key("is_required_agree")] 
-    // Actually a bool instead of int 0/1; bool formatter omitted.
+    [Key("is_required_agree")]
     public bool IsRequiredAgree { get; set; }
 
     [Key("agreement_status")]
@@ -6131,7 +6136,6 @@ public partial class MypageInfoResponse
     public int FriendApply { get; set; }
 
     [Key("friend")]
-    [MessagePackFormatter(typeof(BoolToIntFormatter))]
     public bool Friend { get; set; }
 
     [Key("achievement_cnt")]

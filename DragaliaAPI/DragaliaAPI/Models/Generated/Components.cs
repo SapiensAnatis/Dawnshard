@@ -3443,7 +3443,7 @@ public partial class AtgenMissionParamsList
     [Key("daily_mission_id")]
     public int DailyMissionId { get; set; }
 
-    [Key("day_no")]  
+    [Key("day_no")]
     [MessagePackFormatter(typeof(DayNoFormatter))]
     public DateOnly DayNo { get; set; }
 
@@ -3489,7 +3489,6 @@ public partial class AtgenMonthlyWallReceiveList
     public int QuestGroupId { get; set; }
 
     [Key("is_receive_reward")]
-    [MessagePackFormatter(typeof(BoolToIntFormatter))]
     public RewardStatus IsReceiveReward { get; set; }
 
     public AtgenMonthlyWallReceiveList(int questGroupId, RewardStatus isReceiveReward)
@@ -4182,7 +4181,6 @@ public partial class AtgenQuestStoryRewardList
 public partial class AtgenRarityGroupList
 {
     [Key("pickup")]
-    [MessagePackFormatter(typeof(BoolToIntFormatter))]
     public bool Pickup { get; set; }
 
     [Key("rarity")]
@@ -4477,7 +4475,6 @@ public partial class AtgenResultUnitList
     public int Rarity { get; set; }
 
     [Key("is_new")]
-    [MessagePackFormatter(typeof(BoolToIntFormatter))]
     public bool IsNew { get; set; }
 
     [Key("prev_rarity")]
@@ -6201,10 +6198,10 @@ public partial class BuildList
     public DateTimeOffset BuildEndDate { get; set; }
 
     [Key("remain_time")]
-    public DateTimeOffset RemainTime { get; set; }
+    public TimeSpan RemainTime { get; set; }
 
     [Key("last_income_time")]
-    public DateTimeOffset LastIncomeTime { get; set; }
+    public TimeSpan LastIncomeTime { get; set; }
 
     [Key("is_new")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
@@ -6220,8 +6217,8 @@ public partial class BuildList
         FortBuildStatus buildStatus,
         DateTimeOffset buildStartDate,
         DateTimeOffset buildEndDate,
-        DateTimeOffset remainTime,
-        DateTimeOffset lastIncomeTime,
+        TimeSpan remainTime,
+        TimeSpan lastIncomeTime,
         bool isNew
     )
     {
