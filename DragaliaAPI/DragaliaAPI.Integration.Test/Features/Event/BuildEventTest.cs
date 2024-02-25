@@ -26,11 +26,11 @@ public class BuildEventTest : TestFixture
                 new BuildEventGetEventDataRequest(EventId)
             );
 
-        evtData.data.build_event_reward_list.Should().NotBeNull();
-        evtData.data.build_event_user_data.Should().NotBeNull();
-        evtData.data.build_event_user_data.user_build_event_item_list.Should().HaveCount(3);
+        evtData.data.BuildEventRewardList.Should().NotBeNull();
+        evtData.data.BuildEventUserData.Should().NotBeNull();
+        evtData.data.BuildEventUserData.UserBuildEventItemList.Should().HaveCount(3);
         // evtData.data.event_fort_data.Should().NotBeNull(); -- unused
-        evtData.data.event_trade_list.Should().NotBeNullOrEmpty();
+        evtData.data.EventTradeList.Should().NotBeNullOrEmpty();
     }
 
     [Fact]
@@ -57,13 +57,13 @@ public class BuildEventTest : TestFixture
             );
 
         evtResp
-            .data.build_event_reward_entity_list.Should()
+            .data.BuildEventRewardEntityList.Should()
             .HaveCount(1)
             .And.ContainEquivalentOf(
                 new AtgenBuildEventRewardEntityList(EntityTypes.Mana, 0, 3000)
             );
-        evtResp.data.build_event_reward_list.Should().HaveCount(1);
-        evtResp.data.entity_result.Should().NotBeNull();
-        evtResp.data.update_data_list.Should().NotBeNull();
+        evtResp.data.BuildEventRewardList.Should().HaveCount(1);
+        evtResp.data.EntityResult.Should().NotBeNull();
+        evtResp.data.UpdateDataList.Should().NotBeNull();
     }
 }

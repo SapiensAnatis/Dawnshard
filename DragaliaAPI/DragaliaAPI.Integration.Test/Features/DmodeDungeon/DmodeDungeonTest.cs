@@ -18,10 +18,10 @@ public class DmodeDungeonTest : TestFixture
                 "dmode_dungeon/start",
                 new DmodeDungeonStartRequest()
                 {
-                    chara_id = Charas.Shingen,
-                    start_floor_num = 1,
-                    servitor_id = 1,
-                    bring_edit_skill_chara_id_list = new List<Charas>()
+                    CharaId = Charas.Shingen,
+                    StartFloorNum = 1,
+                    ServitorId = 1,
+                    BringEditSkillCharaIdList = new List<Charas>()
                     {
                         Charas.Ranzal,
                         Charas.GalaCleo
@@ -34,13 +34,13 @@ public class DmodeDungeonTest : TestFixture
         DragaliaResponse<DmodeDungeonFloorData> floorResponse =
             await this.Client.PostMsgpack<DmodeDungeonFloorData>(
                 "dmode_dungeon/floor",
-                new DmodeDungeonFloorRequest() { dmode_play_record = null }
+                new DmodeDungeonFloorRequest() { DmodePlayRecord = null }
             );
 
-        floorResponse.data.dmode_floor_data.dmode_area_info.floor_num.Should().Be(1);
+        floorResponse.data.DmodeFloorData.DmodeAreaInfo.FloorNum.Should().Be(1);
         floorResponse
-            .data.dmode_floor_data.dmode_dungeon_odds.dmode_dungeon_item_list.Should()
-            .OnlyHaveUniqueItems(item => item.item_no);
+            .data.DmodeFloorData.DmodeDungeonOdds.DmodeDungeonItemList.Should()
+            .OnlyHaveUniqueItems(item => item.ItemNo);
     }
 
     [Fact]
@@ -56,14 +56,10 @@ public class DmodeDungeonTest : TestFixture
             "dmode_dungeon/start",
             new DmodeDungeonStartRequest()
             {
-                chara_id = Charas.Shingen,
-                start_floor_num = 30,
-                servitor_id = 1,
-                bring_edit_skill_chara_id_list = new List<Charas>()
-                {
-                    Charas.Ranzal,
-                    Charas.GalaCleo
-                }
+                CharaId = Charas.Shingen,
+                StartFloorNum = 30,
+                ServitorId = 1,
+                BringEditSkillCharaIdList = new List<Charas>() { Charas.Ranzal, Charas.GalaCleo }
             }
         );
 
@@ -77,22 +73,20 @@ public class DmodeDungeonTest : TestFixture
         DragaliaResponse<DmodeDungeonFloorData> floorResponse =
             await this.Client.PostMsgpack<DmodeDungeonFloorData>(
                 "dmode_dungeon/floor",
-                new DmodeDungeonFloorRequest() { dmode_play_record = null }
+                new DmodeDungeonFloorRequest() { DmodePlayRecord = null }
             );
 
-        floorResponse.data.dmode_floor_data.dmode_area_info.floor_num.Should().Be(30);
+        floorResponse.data.DmodeFloorData.DmodeAreaInfo.FloorNum.Should().Be(30);
         floorResponse
-            .data.dmode_floor_data.dmode_dungeon_odds.dmode_dungeon_item_list.Should()
-            .OnlyHaveUniqueItems(item => item.item_no);
+            .data.DmodeFloorData.DmodeDungeonOdds.DmodeDungeonItemList.Should()
+            .OnlyHaveUniqueItems(item => item.ItemNo);
+        floorResponse.data.DmodeFloorData.DmodeUnitInfo.DmodeHoldDragonList.Should().NotBeEmpty();
         floorResponse
-            .data.dmode_floor_data.dmode_unit_info.dmode_hold_dragon_list.Should()
-            .NotBeEmpty();
+            .data.DmodeFloorData.DmodeDungeonOdds.DmodeDungeonItemList.Should()
+            .Contain(x => x.ItemState == DmodeDungeonItemState.EquipWeapon);
         floorResponse
-            .data.dmode_floor_data.dmode_dungeon_odds.dmode_dungeon_item_list.Should()
-            .Contain(x => x.item_state == DmodeDungeonItemState.EquipWeapon);
-        floorResponse
-            .data.dmode_floor_data.dmode_dungeon_odds.dmode_dungeon_item_list.Should()
-            .Contain(x => x.item_state == DmodeDungeonItemState.EquipCrest);
+            .data.DmodeFloorData.DmodeDungeonOdds.DmodeDungeonItemList.Should()
+            .Contain(x => x.ItemState == DmodeDungeonItemState.EquipCrest);
 
         this.ApiContext.PlayerDmodeInfos.AsNoTracking()
             .First(x => x.ViewerId == ViewerId)
@@ -113,14 +107,10 @@ public class DmodeDungeonTest : TestFixture
             "dmode_dungeon/start",
             new DmodeDungeonStartRequest()
             {
-                chara_id = Charas.Shingen,
-                start_floor_num = 1,
-                servitor_id = 1,
-                bring_edit_skill_chara_id_list = new List<Charas>()
-                {
-                    Charas.Ranzal,
-                    Charas.GalaCleo
-                }
+                CharaId = Charas.Shingen,
+                StartFloorNum = 1,
+                ServitorId = 1,
+                BringEditSkillCharaIdList = new List<Charas>() { Charas.Ranzal, Charas.GalaCleo }
             }
         );
 

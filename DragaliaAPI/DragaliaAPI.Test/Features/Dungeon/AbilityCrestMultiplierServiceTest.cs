@@ -54,23 +54,23 @@ public class AbilityCrestMultiplierServiceTest
             {
                 new()
                 {
-                    equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut,
-                    equip_crest_slot_type_1_crest_id_2 = AbilityCrests.TheDragonSmiths
+                    EquipCrestSlotType1CrestId1 = AbilityCrests.SistersDayOut,
+                    EquipCrestSlotType1CrestId2 = AbilityCrests.TheDragonSmiths
                 },
                 new()
                 {
-                    equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut,
-                    equip_crest_slot_type_1_crest_id_2 = AbilityCrests.TheDragonSmiths
+                    EquipCrestSlotType1CrestId1 = AbilityCrests.SistersDayOut,
+                    EquipCrestSlotType1CrestId2 = AbilityCrests.TheDragonSmiths
                 },
                 new()
                 {
-                    equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut,
-                    equip_crest_slot_type_1_crest_id_2 = AbilityCrests.TheDragonSmiths
+                    EquipCrestSlotType1CrestId1 = AbilityCrests.SistersDayOut,
+                    EquipCrestSlotType1CrestId2 = AbilityCrests.TheDragonSmiths
                 },
                 new()
                 {
-                    equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut,
-                    equip_crest_slot_type_1_crest_id_2 = AbilityCrests.TheDragonSmiths
+                    EquipCrestSlotType1CrestId1 = AbilityCrests.SistersDayOut,
+                    EquipCrestSlotType1CrestId2 = AbilityCrests.TheDragonSmiths
                 },
             };
 
@@ -116,8 +116,8 @@ public class AbilityCrestMultiplierServiceTest
             {
                 new()
                 {
-                    equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut, // +150%
-                    equip_crest_slot_type_2_crest_id_1 = AbilityCrests.TotheExtreme // +100%
+                    EquipCrestSlotType1CrestId1 = AbilityCrests.SistersDayOut, // +150%
+                    EquipCrestSlotType2CrestId1 = AbilityCrests.TotheExtreme // +100%
                 },
             };
 
@@ -163,13 +163,13 @@ public class AbilityCrestMultiplierServiceTest
             {
                 new()
                 {
-                    equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut, // +150%
-                    equip_crest_slot_type_2_crest_id_1 = AbilityCrests.TotheExtreme // +100%
+                    EquipCrestSlotType1CrestId1 = AbilityCrests.SistersDayOut, // +150%
+                    EquipCrestSlotType2CrestId1 = AbilityCrests.TotheExtreme // +100%
                 },
                 new()
                 {
-                    equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut, // +150%
-                    equip_crest_slot_type_2_crest_id_1 = AbilityCrests.TotheExtreme // +100%
+                    EquipCrestSlotType1CrestId1 = AbilityCrests.SistersDayOut, // +150%
+                    EquipCrestSlotType2CrestId1 = AbilityCrests.TotheExtreme // +100%
                 },
             };
 
@@ -215,8 +215,8 @@ public class AbilityCrestMultiplierServiceTest
             {
                 new()
                 {
-                    equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut, // +100%
-                    equip_crest_slot_type_1_crest_id_2 = AbilityCrests.TheDragonSmiths, // +50%
+                    EquipCrestSlotType1CrestId1 = AbilityCrests.SistersDayOut, // +100%
+                    EquipCrestSlotType1CrestId2 = AbilityCrests.TheDragonSmiths, // +50%
                 },
             };
 
@@ -254,10 +254,10 @@ public class AbilityCrestMultiplierServiceTest
         List<PartySettingList> party =
             new()
             {
-                new() { equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut, },
-                new() { equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut, },
-                new() { equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut, },
-                new() { equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut, },
+                new() { EquipCrestSlotType1CrestId1 = AbilityCrests.SistersDayOut, },
+                new() { EquipCrestSlotType1CrestId1 = AbilityCrests.SistersDayOut, },
+                new() { EquipCrestSlotType1CrestId1 = AbilityCrests.SistersDayOut, },
+                new() { EquipCrestSlotType1CrestId1 = AbilityCrests.SistersDayOut, },
             };
 
         (double material, double point) = (

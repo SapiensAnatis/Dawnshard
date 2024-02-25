@@ -26,19 +26,19 @@ public class DmodeController(
     {
         DmodeGetDataData resp = new();
 
-        resp.current_server_time = dateTimeProvider.UtcNow;
+        resp.CurrentServerTime = dateTimeProvider.UtcNow;
 
-        resp.dmode_info = await dmodeService.GetInfo();
-        resp.dmode_chara_list = await dmodeService.GetCharaList();
-        resp.dmode_expedition = await dmodeService.GetExpedition();
-        resp.dmode_dungeon_info = await dmodeService.GetDungeonInfo();
-        resp.dmode_servitor_passive_list = await dmodeService.GetServitorPassiveList();
+        resp.DmodeInfo = await dmodeService.GetInfo();
+        resp.DmodeCharaList = await dmodeService.GetCharaList();
+        resp.DmodeExpedition = await dmodeService.GetExpedition();
+        resp.DmodeDungeonInfo = await dmodeService.GetDungeonInfo();
+        resp.DmodeServitorPassiveList = await dmodeService.GetServitorPassiveList();
 
-        resp.dmode_story_list = (await storyRepository.DmodeStories.ToListAsync()).Select(
+        resp.DmodeStoryList = (await storyRepository.DmodeStories.ToListAsync()).Select(
             x => new DmodeStoryList(x.StoryId, (int)x.State)
         );
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
 
         return Ok(resp);
     }
@@ -58,13 +58,13 @@ public class DmodeController(
     {
         DmodeReadStoryData resp = new();
 
-        resp.dmode_story_reward_list = await storyService.ReadStory(
+        resp.DmodeStoryRewardList = await storyService.ReadStory(
             StoryTypes.DungeonMode,
-            request.dmode_story_id
+            request.DmodeStoryId
         );
-        resp.duplicate_entity_list = new List<AtgenDuplicateEntityList>();
-        resp.entity_result = rewardService.GetEntityResult();
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
+        resp.DuplicateEntityList = new List<AtgenDuplicateEntityList>();
+        resp.EntityResult = rewardService.GetEntityResult();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
 
         return Ok(resp);
     }
@@ -76,10 +76,10 @@ public class DmodeController(
     {
         DmodeBuildupServitorPassiveData resp = new();
 
-        resp.dmode_servitor_passive_list = await dmodeService.BuildupServitorPassive(
-            request.request_buildup_passive_list
+        resp.DmodeServitorPassiveList = await dmodeService.BuildupServitorPassive(
+            request.RequestBuildupPassiveList
         );
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
 
         return Ok(resp);
     }
@@ -89,11 +89,11 @@ public class DmodeController(
     {
         DmodeExpeditionStartData resp = new();
 
-        resp.dmode_expedition = await dmodeService.StartExpedition(
-            request.target_floor_num,
-            request.chara_id_list
+        resp.DmodeExpedition = await dmodeService.StartExpedition(
+            request.TargetFloorNum,
+            request.CharaIdList
         );
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
 
         return Ok(resp);
     }
@@ -103,12 +103,10 @@ public class DmodeController(
     {
         DmodeExpeditionFinishData resp = new();
 
-        (resp.dmode_expedition, resp.dmode_ingame_result) = await dmodeService.FinishExpedition(
-            false
-        );
+        (resp.DmodeExpedition, resp.DmodeIngameResult) = await dmodeService.FinishExpedition(false);
 
-        resp.entity_result = rewardService.GetEntityResult();
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
 
         return Ok(resp);
     }
@@ -118,12 +116,10 @@ public class DmodeController(
     {
         DmodeExpeditionForceFinishData resp = new();
 
-        (resp.dmode_expedition, resp.dmode_ingame_result) = await dmodeService.FinishExpedition(
-            true
-        );
+        (resp.DmodeExpedition, resp.DmodeIngameResult) = await dmodeService.FinishExpedition(true);
 
-        resp.entity_result = rewardService.GetEntityResult();
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
 
         return Ok(resp);
     }

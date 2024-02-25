@@ -24,49 +24,49 @@ public class DungeonController(
     [HttpPost("get_area_odds")]
     public async Task<DragaliaResult> GetAreaOdds(DungeonGetAreaOddsRequest request)
     {
-        DungeonSession session = await dungeonService.GetDungeon(request.dungeon_key);
+        DungeonSession session = await dungeonService.GetDungeon(request.DungeonKey);
 
         ArgumentNullException.ThrowIfNull(session.QuestData);
 
-        OddsInfo oddsInfo = oddsInfoService.GetOddsInfo(session.QuestData.Id, request.area_idx);
+        OddsInfo oddsInfo = oddsInfoService.GetOddsInfo(session.QuestData.Id, request.AreaIdx);
 
         await dungeonService.ModifySession(
-            request.dungeon_key,
-            s => s.EnemyList[request.area_idx] = oddsInfo.enemy
+            request.DungeonKey,
+            s => s.EnemyList[request.AreaIdx] = oddsInfo.Enemy
         );
 
-        return Ok(new DungeonGetAreaOddsData() { odds_info = oddsInfo });
+        return Ok(new DungeonGetAreaOddsData() { OddsInfo = oddsInfo });
     }
 
     [HttpPost("fail")]
     public async Task<DragaliaResult> Fail(DungeonFailRequest request)
     {
-        DungeonSession session = await dungeonService.FinishDungeon(request.dungeon_key);
+        DungeonSession session = await dungeonService.FinishDungeon(request.DungeonKey);
 
         DungeonFailData response =
             new()
             {
-                result = 1,
-                fail_helper_list = new List<UserSupportList>(),
-                fail_helper_detail_list = new List<AtgenHelperDetailList>(),
-                fail_quest_detail = new()
+                Result = 1,
+                FailHelperList = new List<UserSupportList>(),
+                FailHelperDetailList = new List<AtgenHelperDetailList>(),
+                FailQuestDetail = new()
                 {
-                    quest_id = session.QuestId,
-                    wall_id = 0,
-                    wall_level = 0,
-                    is_host = true,
+                    QuestId = session.QuestId,
+                    WallId = 0,
+                    WallLevel = 0,
+                    IsHost = true,
                 }
             };
 
         if (session.IsMulti)
         {
-            response.fail_quest_detail.is_host = await matchingService.GetIsHost();
-            (response.fail_helper_list, response.fail_helper_detail_list) =
+            response.FailQuestDetail.IsHost = await matchingService.GetIsHost();
+            (response.FailHelperList, response.FailHelperDetailList) =
                 await dungeonRecordHelperService.ProcessHelperDataMulti();
         }
         else
         {
-            (response.fail_helper_list, response.fail_helper_detail_list) =
+            (response.FailHelperList, response.FailHelperDetailList) =
                 await dungeonRecordHelperService.ProcessHelperDataSolo(session.SupportViewerId);
         }
 
@@ -78,14 +78,14 @@ public class DungeonController(
     {
         DungeonReceiveQuestBonusData resp = new();
 
-        resp.receive_quest_bonus = await questService.ReceiveQuestBonus(
-            request.quest_event_id,
-            request.is_receive,
-            request.receive_bonus_count
+        resp.ReceiveQuestBonus = await questService.ReceiveQuestBonus(
+            request.QuestEventId,
+            request.IsReceive,
+            request.ReceiveBonusCount
         );
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }

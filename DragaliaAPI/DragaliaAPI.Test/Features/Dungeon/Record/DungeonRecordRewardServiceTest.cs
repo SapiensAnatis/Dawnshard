@@ -66,9 +66,9 @@ public class DungeonRecordRewardServiceTest
             {
                 new()
                 {
-                    id = 0,
-                    quantity = 2,
-                    type = EntityTypes.Wyrmite
+                    Id = 0,
+                    Quantity = 2,
+                    Type = EntityTypes.Wyrmite
                 }
             };
 
@@ -106,17 +106,17 @@ public class DungeonRecordRewardServiceTest
         PlayRecord playRecord =
             new()
             {
-                treasure_record = new List<AtgenTreasureRecord>()
+                TreasureRecord = new List<AtgenTreasureRecord>()
                 {
                     new()
                     {
-                        area_idx = 0,
-                        enemy = new List<int>() { 1, 0, 1 }
+                        AreaIdx = 0,
+                        Enemy = new List<int>() { 1, 0, 1 }
                     },
                     new()
                     {
-                        area_idx = 1,
-                        enemy = new List<int>() { 0, 1, 0 }
+                        AreaIdx = 1,
+                        Enemy = new List<int>() { 0, 1, 0 }
                     }
                 }
             };
@@ -134,55 +134,55 @@ public class DungeonRecordRewardServiceTest
                         {
                             new()
                             {
-                                enemy_drop_list = new List<EnemyDropList>()
+                                EnemyDropList = new List<EnemyDropList>()
                                 {
                                     new()
                                     {
-                                        mana = 10,
-                                        coin = 10,
-                                        drop_list = new List<AtgenDropList>()
+                                        Mana = 10,
+                                        Coin = 10,
+                                        DropList = new List<AtgenDropList>()
                                         {
-                                            new() { type = EntityTypes.Dew, quantity = 10 },
-                                            new() { type = EntityTypes.HustleHammer, quantity = 10 }
+                                            new() { Type = EntityTypes.Dew, Quantity = 10 },
+                                            new() { Type = EntityTypes.HustleHammer, Quantity = 10 }
                                         }
                                     },
                                 }
                             },
                             new()
                             {
-                                enemy_drop_list = new List<EnemyDropList>()
+                                EnemyDropList = new List<EnemyDropList>()
                                 {
                                     new()
                                     {
-                                        mana = 10,
-                                        coin = 10,
-                                        drop_list = new List<AtgenDropList>()
+                                        Mana = 10,
+                                        Coin = 10,
+                                        DropList = new List<AtgenDropList>()
                                         {
-                                            new() { type = EntityTypes.AstralItem, quantity = 10 }
+                                            new() { Type = EntityTypes.AstralItem, Quantity = 10 }
                                         }
                                     },
                                 }
                             },
                             new()
                             {
-                                enemy_drop_list = new List<EnemyDropList>()
+                                EnemyDropList = new List<EnemyDropList>()
                                 {
                                     new()
                                     {
-                                        mana = 10,
-                                        coin = 10,
-                                        drop_list = new List<AtgenDropList>()
+                                        Mana = 10,
+                                        Coin = 10,
+                                        DropList = new List<AtgenDropList>()
                                         {
-                                            new() { type = EntityTypes.Wyrmite, quantity = 10 }
+                                            new() { Type = EntityTypes.Wyrmite, Quantity = 10 }
                                         }
                                     },
                                     new()
                                     {
-                                        mana = 10,
-                                        coin = 10,
-                                        drop_list = new List<AtgenDropList>()
+                                        Mana = 10,
+                                        Coin = 10,
+                                        DropList = new List<AtgenDropList>()
                                         {
-                                            new() { type = EntityTypes.FafnirMedal, quantity = 10 }
+                                            new() { Type = EntityTypes.FafnirMedal, Quantity = 10 }
                                         }
                                     },
                                 }
@@ -196,9 +196,9 @@ public class DungeonRecordRewardServiceTest
                             new(),
                             new()
                             {
-                                enemy_drop_list = new List<EnemyDropList>()
+                                EnemyDropList = new List<EnemyDropList>()
                                 {
-                                    new() { coin = 10, mana = 10, }
+                                    new() { Coin = 10, Mana = 10, }
                                 }
                             }
                         }
@@ -223,10 +223,10 @@ public class DungeonRecordRewardServiceTest
                 (
                     new List<AtgenDropAll>()
                     {
-                        new() { type = EntityTypes.Dew, quantity = 10 },
-                        new() { type = EntityTypes.HustleHammer, quantity = 10 },
-                        new() { type = EntityTypes.FafnirMedal, quantity = 10 },
-                        new() { type = EntityTypes.Wyrmite, quantity = 10 }
+                        new() { Type = EntityTypes.Dew, Quantity = 10 },
+                        new() { Type = EntityTypes.HustleHammer, Quantity = 10 },
+                        new() { Type = EntityTypes.FafnirMedal, Quantity = 10 },
+                        new() { Type = EntityTypes.Wyrmite, Quantity = 10 }
                     },
                     40,
                     40
@@ -249,30 +249,30 @@ public class DungeonRecordRewardServiceTest
             {
                 new()
                 {
-                    score_mission_complete_type = QuestCompleteType.DragonElementLocked,
-                    score_target_value = 2,
+                    ScoreMissionCompleteType = QuestCompleteType.DragonElementLocked,
+                    ScoreTargetValue = 2,
                 }
             };
 
         List<AtgenEventPassiveUpList> passiveUpLists =
             new()
             {
-                new() { passive_id = 3, progress = 10 }
+                new() { PassiveId = 3, Progress = 10 }
             };
 
         List<AtgenDropAll> eventDrops =
             new()
             {
-                new() { type = EntityTypes.Clb01EventItem, quantity = 100 }
+                new() { Type = EntityTypes.Clb01EventItem, Quantity = 100 }
             };
 
         List<AtgenScoringEnemyPointList> enemyScoring =
         [
             new()
             {
-                scoring_enemy_id = 100,
-                point = 1,
-                smash_count = 2
+                ScoringEnemyId = 100,
+                Point = 1,
+                SmashCount = 2
             }
         ];
 

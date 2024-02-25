@@ -17,29 +17,29 @@ public class CastleStoryTest : TestFixture
         CastleStoryReadData data = (
             await this.Client.PostMsgpack<CastleStoryReadData>(
                 "/castle_story/read",
-                new CastleStoryReadRequest() { castle_story_id = 1 }
+                new CastleStoryReadRequest() { CastleStoryId = 1 }
             )
         ).data;
 
-        data.castle_story_reward_list.Should()
+        data.CastleStoryRewardList.Should()
             .BeEquivalentTo(
                 new List<AtgenBuildEventRewardEntityList>()
                 {
                     new()
                     {
-                        entity_type = EntityTypes.Wyrmite,
-                        entity_quantity = 50,
-                        entity_id = 0
+                        EntityType = EntityTypes.Wyrmite,
+                        EntityQuantity = 50,
+                        EntityId = 0
                     }
                 }
             );
 
-        data.update_data_list.user_data.Should().NotBeNull();
-        data.update_data_list.castle_story_list.Should()
+        data.UpdateDataList.UserData.Should().NotBeNull();
+        data.UpdateDataList.CastleStoryList.Should()
             .BeEquivalentTo(
                 new List<CastleStoryList>()
                 {
-                    new() { castle_story_id = 1, is_read = 1, }
+                    new() { CastleStoryId = 1, IsRead = 1, }
                 }
             );
     }
@@ -61,14 +61,14 @@ public class CastleStoryTest : TestFixture
         CastleStoryReadData data = (
             await this.Client.PostMsgpack<CastleStoryReadData>(
                 "/castle_story/read",
-                new CastleStoryReadRequest() { castle_story_id = 2 }
+                new CastleStoryReadRequest() { CastleStoryId = 2 }
             )
         ).data;
 
-        data.castle_story_reward_list.Should().BeEmpty();
+        data.CastleStoryRewardList.Should().BeEmpty();
 
-        data.update_data_list.user_data.Should().BeNull();
-        data.update_data_list.unit_story_list.Should().BeNull();
+        data.UpdateDataList.UserData.Should().BeNull();
+        data.UpdateDataList.UnitStoryList.Should().BeNull();
     }
 
     [Fact]
@@ -83,7 +83,7 @@ public class CastleStoryTest : TestFixture
         CastleStoryReadData data = (
             await this.Client.PostMsgpack<CastleStoryReadData>(
                 "/castle_story/read",
-                new CastleStoryReadRequest() { castle_story_id = 3 }
+                new CastleStoryReadRequest() { CastleStoryId = 3 }
             )
         ).data;
 

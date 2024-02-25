@@ -77,10 +77,10 @@ public class DragonServiceTest
         );
 
         responseData.Should().NotBeNull();
-        responseData.shop_gift_list.Should().NotBeNullOrEmpty();
+        responseData.ShopGiftList.Should().NotBeNullOrEmpty();
 
-        responseData.shop_gift_list.Count().Should().Be(5);
-        ((DragonGifts)responseData.shop_gift_list.Last().dragon_gift_id)
+        responseData.ShopGiftList.Count().Should().Be(5);
+        ((DragonGifts)responseData.ShopGiftList.Last().DragonGiftId)
             .Should()
             .Be(DragonConstants.RotatingGifts[(int)lastReset.DayOfWeek]);
     }
@@ -103,22 +103,22 @@ public class DragonServiceTest
         this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(wednesday);
 
         (await this.dragonService.DoDragonGetContactData(new DragonGetContactDataRequest() { }))
-            .shop_gift_list.Should()
-            .Contain(x => x.dragon_gift_id == (int)DragonGifts.FloralCirclet);
+            .ShopGiftList.Should()
+            .Contain(x => x.DragonGiftId == (int)DragonGifts.FloralCirclet);
 
         DateTimeOffset thuBeforeReset = new DateTimeOffset(2023, 12, 28, 01, 49, 23, TimeSpan.Zero);
         this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(thuBeforeReset);
 
         (await this.dragonService.DoDragonGetContactData(new DragonGetContactDataRequest() { }))
-            .shop_gift_list.Should()
-            .Contain(x => x.dragon_gift_id == (int)DragonGifts.FloralCirclet);
+            .ShopGiftList.Should()
+            .Contain(x => x.DragonGiftId == (int)DragonGifts.FloralCirclet);
 
         DateTimeOffset thursday = new DateTimeOffset(2023, 12, 28, 09, 49, 23, TimeSpan.Zero);
         this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(thursday);
 
         (await this.dragonService.DoDragonGetContactData(new DragonGetContactDataRequest() { }))
-            .shop_gift_list.Should()
-            .Contain(x => x.dragon_gift_id == (int)DragonGifts.CompellingBook);
+            .ShopGiftList.Should()
+            .Contain(x => x.DragonGiftId == (int)DragonGifts.CompellingBook);
     }
 
     [Fact]
@@ -156,8 +156,8 @@ public class DragonServiceTest
             await dragonService.DoDragonBuyGiftToSendMultiple(
                 new DragonBuyGiftToSendMultipleRequest()
                 {
-                    dragon_id = Dragons.Garuda,
-                    dragon_gift_id_list = new List<DragonGifts>()
+                    DragonId = Dragons.Garuda,
+                    DragonGiftIdList = new List<DragonGifts>()
                     {
                         DragonGifts.StrawberryTart,
                         DragonGifts.CompellingBook
@@ -166,9 +166,9 @@ public class DragonServiceTest
             );
 
         responseData.Should().NotBeNull();
-        responseData.dragon_gift_reward_list.Should().NotBeNullOrEmpty();
+        responseData.DragonGiftRewardList.Should().NotBeNullOrEmpty();
 
-        responseData.shop_gift_list.Count().Should().Be(5);
+        responseData.ShopGiftList.Count().Should().Be(5);
 
         gifts
             .Where(x => x.DragonGiftId == DragonGifts.StrawberryTart)
@@ -181,7 +181,7 @@ public class DragonServiceTest
             .Quantity.Should()
             .Be(0);
 
-        responseData.dragon_gift_reward_list.Count().Should().Be(2);
+        responseData.DragonGiftRewardList.Count().Should().Be(2);
 
         dragonRels[0].Exp.Should().Be(2400);
         dragonRels[0].Level.Should().Be(10);
@@ -222,22 +222,22 @@ public class DragonServiceTest
             await dragonService.DoDragonBuyGiftToSendMultiple(
                 new DragonBuyGiftToSendMultipleRequest()
                 {
-                    dragon_id = Dragons.Garuda,
-                    dragon_gift_id_list = new List<DragonGifts>() { DragonGifts.FreshBread }
+                    DragonId = Dragons.Garuda,
+                    DragonGiftIdList = new List<DragonGifts>() { DragonGifts.FreshBread }
                 }
             );
 
         responseData.Should().NotBeNull();
-        responseData.dragon_gift_reward_list.Should().NotBeNullOrEmpty();
+        responseData.DragonGiftRewardList.Should().NotBeNullOrEmpty();
 
-        responseData.shop_gift_list.Count().Should().Be(5);
+        responseData.ShopGiftList.Count().Should().Be(5);
 
         gifts.Where(x => x.DragonGiftId == DragonGifts.FreshBread).First().Quantity.Should().Be(0);
 
-        responseData.dragon_gift_reward_list.Count().Should().Be(1);
+        responseData.DragonGiftRewardList.Count().Should().Be(1);
         responseData
-            .dragon_gift_reward_list.First(x => x.dragon_gift_id == DragonGifts.FreshBread)
-            .reward_reliability_list.Should()
+            .DragonGiftRewardList.First(x => x.DragonGiftId == DragonGifts.FreshBread)
+            .RewardReliabilityList.Should()
             .BeEmpty();
 
         dragonRels[0].Exp.Should().Be(36300);
@@ -283,15 +283,15 @@ public class DragonServiceTest
         DragonSendGiftMultipleData responseData = await dragonService.DoDragonSendGiftMultiple(
             new DragonSendGiftMultipleRequest()
             {
-                dragon_id = dragon,
-                dragon_gift_id = gift,
-                quantity = usedQuantity
+                DragonId = dragon,
+                DragonGiftId = gift,
+                Quantity = usedQuantity
             }
         );
 
         responseData.Should().NotBeNull();
 
-        responseData.return_gift_list.Should().NotBeNullOrEmpty();
+        responseData.ReturnGiftList.Should().NotBeNullOrEmpty();
 
         dragonRels[0].Exp.Should().Be(expectedXp);
         dragonRels[0].Level.Should().Be(expectedLvl);
@@ -332,14 +332,14 @@ public class DragonServiceTest
         await dragonService.DoBuildup(
             new DragonBuildupRequest()
             {
-                base_dragon_key_id = 1,
-                grow_material_list = new List<GrowMaterialList>()
+                BaseDragonKeyId = 1,
+                GrowMaterialList = new List<GrowMaterialList>()
                 {
                     new GrowMaterialList()
                     {
-                        type = EntityTypes.Material,
-                        id = (int)Materials.AmplifyingDragonscale,
-                        quantity = 50
+                        Type = EntityTypes.Material,
+                        Id = (int)Materials.AmplifyingDragonscale,
+                        Quantity = 50
                     }
                 }
             }
@@ -395,14 +395,14 @@ public class DragonServiceTest
         await dragonService.DoBuildup(
             new DragonBuildupRequest()
             {
-                base_dragon_key_id = 1,
-                grow_material_list = new List<GrowMaterialList>()
+                BaseDragonKeyId = 1,
+                GrowMaterialList = new List<GrowMaterialList>()
                 {
                     new GrowMaterialList()
                     {
-                        type = EntityTypes.Material,
-                        id = (int)upgradeMat,
-                        quantity = usedQuantity
+                        Type = EntityTypes.Material,
+                        Id = (int)upgradeMat,
+                        Quantity = usedQuantity
                     }
                 }
             }
@@ -464,11 +464,7 @@ public class DragonServiceTest
         mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());
 
         await dragonService.DoDragonResetPlusCount(
-            new DragonResetPlusCountRequest()
-            {
-                dragon_key_id = 1,
-                plus_count_type = PlusCountType.Atk
-            }
+            new DragonResetPlusCountRequest() { DragonKeyId = 1, PlusCountType = PlusCountType.Atk }
         );
 
         mockRewardService.VerifyAll();
@@ -532,14 +528,14 @@ public class DragonServiceTest
         await dragonService.DoDragonLimitBreak(
             new DragonLimitBreakRequest()
             {
-                base_dragon_key_id = 1,
-                limit_break_grow_list = new List<LimitBreakGrowList>()
+                BaseDragonKeyId = 1,
+                LimitBreakGrowList = new List<LimitBreakGrowList>()
                 {
                     new LimitBreakGrowList()
                     {
-                        limit_break_item_type = (int)lbMatType,
-                        limit_break_count = limitBreakNr,
-                        target_id = (ulong)(lbMatType == DragonLimitBreakMatTypes.Dupe ? 2 : 0)
+                        LimitBreakItemType = (int)lbMatType,
+                        LimitBreakCount = limitBreakNr,
+                        TargetId = (ulong)(lbMatType == DragonLimitBreakMatTypes.Dupe ? 2 : 0)
                     }
                 }
             }
@@ -577,7 +573,7 @@ public class DragonServiceTest
             .Returns(dragonDataList.AsQueryable().BuildMock());
 
         await dragonService.DoDragonSetLock(
-            new DragonSetLockRequest() { dragon_key_id = 1, is_lock = true }
+            new DragonSetLockRequest() { DragonKeyId = 1, IsLock = true }
         );
 
         dragonData.IsLock.Should().BeTrue();
@@ -614,7 +610,7 @@ public class DragonServiceTest
             .Callback(() => dragonDataList.RemoveAll(x => x.DragonKeyId == 1));
 
         DragonSellData response = await dragonService.DoDragonSell(
-            new DragonSellRequest() { dragon_key_id_list = new List<ulong>() { 1 } }
+            new DragonSellRequest() { DragonKeyIdList = new List<ulong>() { 1 } }
         );
 
         dragonDataList.Count().Should().Be(0);

@@ -243,7 +243,7 @@ public class AuthServiceTest
         LoadIndexData importSavefile =
             new()
             {
-                user_data = new() { name = "Euden 2" },
+                user_data = new() { Name = "Euden 2" },
                 fort_bonus_list = null!
             };
 
@@ -309,7 +309,7 @@ public class AuthServiceTest
         LoadIndexData importSavefile =
             new()
             {
-                user_data = new() { name = "Euden 2" },
+                user_data = new() { Name = "Euden 2" },
                 fort_bonus_list = null!
             };
 

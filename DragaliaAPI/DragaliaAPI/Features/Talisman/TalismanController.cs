@@ -18,9 +18,9 @@ public class TalismanController(
     {
         TalismanSellData resp = new();
 
-        resp.delete_data_list = await talismanService.SellTalismans(request.talisman_key_id_list);
-        resp.entity_result = rewardService.GetEntityResult();
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
+        resp.DeleteDataList = await talismanService.SellTalismans(request.TalismanKeyIdList);
+        resp.EntityResult = rewardService.GetEntityResult();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
 
         return Ok(resp);
     }
@@ -30,9 +30,9 @@ public class TalismanController(
     {
         TalismanSetLockData resp = new();
 
-        await talismanService.SetLock(request.talisman_key_id, request.is_lock);
+        await talismanService.SetLock(request.TalismanKeyId, request.IsLock);
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
 
         return Ok(resp);
     }

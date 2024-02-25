@@ -38,22 +38,22 @@ public class ShopController : DragaliaControllerBase
             new()
             {
                 // i don't know what like half of these are for lmao
-                is_quest_bonus = 0,
-                is_stone_bonus = 0,
-                is_stamina_bonus = 0,
-                material_shop_purchase = purchases[PurchaseShopType.Material],
-                normal_shop_purchase = purchases[PurchaseShopType.Normal],
-                special_shop_purchase = purchases[PurchaseShopType.Special],
-                stone_bonus = new List<AtgenStoneBonus>(),
-                stamina_bonus = new List<AtgenStaminaBonus>(),
-                quest_bonus = new List<AtgenQuestBonus>(),
-                product_lock_list = new List<AtgenProductLockList>(),
-                product_list = new List<ProductList>(),
-                infancy_paid_diamond_limit = 4800
+                IsQuestBonus = 0,
+                IsStoneBonus = 0,
+                IsStaminaBonus = 0,
+                MaterialShopPurchase = purchases[PurchaseShopType.Material],
+                NormalShopPurchase = purchases[PurchaseShopType.Normal],
+                SpecialShopPurchase = purchases[PurchaseShopType.Special],
+                StoneBonus = new List<AtgenStoneBonus>(),
+                StaminaBonus = new List<AtgenStaminaBonus>(),
+                QuestBonus = new List<AtgenQuestBonus>(),
+                ProductLockList = new List<AtgenProductLockList>(),
+                ProductList = new List<ProductList>(),
+                InfancyPaidDiamondLimit = 4800
             };
 
-        response.user_item_summon = await this.itemSummonService.GetItemSummon();
-        response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.UserItemSummon = await this.itemSummonService.GetItemSummon();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
 
         return Ok(response);
     }
@@ -69,10 +69,10 @@ public class ShopController : DragaliaControllerBase
     {
         ShopItemSummonExecData resp = new();
 
-        resp.item_summon_reward_list = await this.itemSummonService.DoSummon(request);
-        resp.user_item_summon = await this.itemSummonService.GetItemSummon();
-        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
-        resp.entity_result = this.rewardService.GetEntityResult();
+        resp.ItemSummonRewardList = await this.itemSummonService.DoSummon(request);
+        resp.UserItemSummon = await this.itemSummonService.GetItemSummon();
+        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        resp.EntityResult = this.rewardService.GetEntityResult();
 
         return Ok(resp);
     }
@@ -82,14 +82,14 @@ public class ShopController : DragaliaControllerBase
     {
         ShopMaterialShopPurchaseData resp = new();
 
-        resp.material_shop_purchase = await this.shopService.DoPurchase(
-            request.shop_type.ToShopType(),
-            request.payment_type,
-            request.goods_id,
-            request.quantity
+        resp.MaterialShopPurchase = await this.shopService.DoPurchase(
+            request.ShopType.ToShopType(),
+            request.PaymentType,
+            request.GoodsId,
+            request.Quantity
         );
 
-        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync();
 
         return Ok(resp);
     }
@@ -99,14 +99,14 @@ public class ShopController : DragaliaControllerBase
     {
         ShopNormalShopPurchaseData resp = new();
 
-        resp.normal_shop_purchase = await this.shopService.DoPurchase(
+        resp.NormalShopPurchase = await this.shopService.DoPurchase(
             ShopType.Normal,
-            request.payment_type,
-            request.goods_id,
-            request.quantity
+            request.PaymentType,
+            request.GoodsId,
+            request.Quantity
         );
 
-        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync();
 
         return Ok(resp);
     }
@@ -116,14 +116,14 @@ public class ShopController : DragaliaControllerBase
     {
         ShopSpecialShopPurchaseData resp = new();
 
-        resp.special_shop_purchase = await this.shopService.DoPurchase(
+        resp.SpecialShopPurchase = await this.shopService.DoPurchase(
             ShopType.Special,
-            request.payment_type,
-            request.goods_id,
-            request.quantity
+            request.PaymentType,
+            request.GoodsId,
+            request.Quantity
         );
 
-        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync();
 
         return Ok(resp);
     }

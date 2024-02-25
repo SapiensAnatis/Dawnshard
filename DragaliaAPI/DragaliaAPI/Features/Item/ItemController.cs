@@ -14,7 +14,7 @@ public class ItemController(IUpdateDataService updateDataService, IItemService i
     {
         ItemGetListData resp = new();
 
-        resp.item_list = await itemService.GetItemList();
+        resp.ItemList = await itemService.GetItemList();
 
         return Ok(resp);
     }
@@ -24,9 +24,9 @@ public class ItemController(IUpdateDataService updateDataService, IItemService i
     {
         ItemUseRecoveryStaminaData resp = new();
 
-        resp.recover_data = await itemService.UseItems(request.use_item_list);
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = new EntityResult();
+        resp.RecoverData = await itemService.UseItems(request.UseItemList);
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = new EntityResult();
 
         return Ok(resp);
     }

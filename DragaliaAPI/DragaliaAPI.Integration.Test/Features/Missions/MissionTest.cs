@@ -23,7 +23,7 @@ public class MissionTest : TestFixture
             );
 
         resp.data_headers.result_code.Should().Be(ResultCode.Success);
-        resp.data.drill_mission_list.Should()
+        resp.data.DrillMissionList.Should()
             .HaveCount(55)
             .And.ContainEquivalentOf(
                 new DrillMissionList(
@@ -46,7 +46,7 @@ public class MissionTest : TestFixture
             );
 
         resp.data_headers.result_code.Should().Be(ResultCode.Success);
-        resp.data.main_story_mission_list.Should().HaveCount(5);
+        resp.data.MainStoryMissionList.Should().HaveCount(5);
         // Don't test for a specific quest as other tests mess with the quest progress
     }
 
@@ -61,14 +61,14 @@ public class MissionTest : TestFixture
         DragaliaResponse<QuestReadStoryData> resp =
             await this.Client.PostMsgpack<QuestReadStoryData>(
                 "/quest/read_story",
-                new QuestReadStoryRequest() { quest_story_id = 1000106 }
+                new QuestReadStoryRequest() { QuestStoryId = 1000106 }
             );
 
         resp.data_headers.result_code.Should().Be(ResultCode.Success);
-        resp.data.update_data_list.mission_notice.drill_mission_notice.is_update.Should().Be(1);
-        resp.data.update_data_list.mission_notice.drill_mission_notice.completed_mission_count.Should()
+        resp.data.UpdateDataList.MissionNotice.DrillMissionNotice.IsUpdate.Should().Be(1);
+        resp.data.UpdateDataList.MissionNotice.DrillMissionNotice.CompletedMissionCount.Should()
             .BeGreaterThan(1); // One has to be completed because of the above, multiple can be completed due to other factors
-        resp.data.update_data_list.mission_notice.drill_mission_notice.new_complete_mission_id_list.Should()
+        resp.data.UpdateDataList.MissionNotice.DrillMissionNotice.NewCompleteMissionIdList.Should()
             .Contain(100200);
 
         DragaliaResponse<MissionReceiveDrillRewardData> rewardResp =
@@ -78,8 +78,8 @@ public class MissionTest : TestFixture
             );
 
         rewardResp.data_headers.result_code.Should().Be(ResultCode.Success);
-        rewardResp.data.entity_result.converted_entity_list.Should().NotBeNull();
-        rewardResp.data.drill_mission_list.Should().HaveCount(55);
+        rewardResp.data.EntityResult.ConvertedEntityList.Should().NotBeNull();
+        rewardResp.data.DrillMissionList.Should().HaveCount(55);
     }
 
     [Fact]
@@ -93,14 +93,14 @@ public class MissionTest : TestFixture
         DragaliaResponse<TreasureTradeTradeData> resp =
             await this.Client.PostMsgpack<TreasureTradeTradeData>(
                 "/treasure_trade/trade",
-                new TreasureTradeTradeRequest() { treasure_trade_id = 10020101, trade_count = 1 }
+                new TreasureTradeTradeRequest() { TreasureTradeId = 10020101, TradeCount = 1 }
             );
 
         resp.data_headers.result_code.Should().Be(ResultCode.Success);
-        resp.data.update_data_list.mission_notice.drill_mission_notice.is_update.Should().Be(1);
-        resp.data.update_data_list.mission_notice.drill_mission_notice.completed_mission_count.Should()
+        resp.data.UpdateDataList.MissionNotice.DrillMissionNotice.IsUpdate.Should().Be(1);
+        resp.data.UpdateDataList.MissionNotice.DrillMissionNotice.CompletedMissionCount.Should()
             .BeGreaterThan(1); // One has to be completed because of the above, multiple can be completed due to other factors
-        resp.data.update_data_list.mission_notice.drill_mission_notice.new_complete_mission_id_list.Should()
+        resp.data.UpdateDataList.MissionNotice.DrillMissionNotice.NewCompleteMissionIdList.Should()
             .Contain(300100);
     }
 
@@ -126,22 +126,22 @@ public class MissionTest : TestFixture
                 "/ability_crest/buildup_piece",
                 new AbilityCrestBuildupPieceRequest()
                 {
-                    ability_crest_id = AbilityCrests.Aromatherapy,
-                    buildup_ability_crest_piece_list = Enumerable
+                    AbilityCrestId = AbilityCrests.Aromatherapy,
+                    BuildupAbilityCrestPieceList = Enumerable
                         .Range(2, 15)
                         .Select(x => new AtgenBuildupAbilityCrestPieceList()
                         {
-                            buildup_piece_type = BuildupPieceTypes.Stats,
-                            step = x
+                            BuildupPieceType = BuildupPieceTypes.Stats,
+                            Step = x
                         })
                 }
             );
 
         resp.data_headers.result_code.Should().Be(ResultCode.Success);
-        resp.data.update_data_list.mission_notice.drill_mission_notice.is_update.Should().Be(1);
-        resp.data.update_data_list.mission_notice.drill_mission_notice.completed_mission_count.Should()
+        resp.data.UpdateDataList.MissionNotice.DrillMissionNotice.IsUpdate.Should().Be(1);
+        resp.data.UpdateDataList.MissionNotice.DrillMissionNotice.CompletedMissionCount.Should()
             .BeGreaterThan(1);
-        resp.data.update_data_list.mission_notice.drill_mission_notice.new_complete_mission_id_list.Should()
+        resp.data.UpdateDataList.MissionNotice.DrillMissionNotice.NewCompleteMissionIdList.Should()
             .Contain(301700);
     }
 
@@ -164,15 +164,15 @@ public class MissionTest : TestFixture
                 "mission/receive_memory_event_reward",
                 new MissionReceiveMemoryEventRewardRequest()
                 {
-                    memory_event_mission_id_list = new[] { 10220101 }, // Participate in the Event (Toll of the Deep)
+                    MemoryEventMissionIdList = new[] { 10220101 }, // Participate in the Event (Toll of the Deep)
                 }
             )
         ).data;
 
         response
-            .update_data_list.ability_crest_list.Should()
+            .UpdateDataList.AbilityCrestList.Should()
             .Contain(x =>
-                x.ability_crest_id == AbilityCrests.HavingaSummerBall && x.equipable_count == 1
+                x.AbilityCrestId == AbilityCrests.HavingaSummerBall && x.EquipableCount == 1
             );
     }
 
@@ -244,11 +244,11 @@ public class MissionTest : TestFixture
                 "mission/receive_daily_reward",
                 new MissionReceiveDailyRewardRequest()
                 {
-                    mission_params_list =
+                    MissionParamsList =
                     [
-                        new() { daily_mission_id = missionId1, day_no = today, },
-                        new() { daily_mission_id = missionId2, day_no = today, },
-                        new() { daily_mission_id = missionId1, day_no = yesterday, },
+                        new() { DailyMissionId = missionId1, DayNo = today, },
+                        new() { DailyMissionId = missionId2, DayNo = today, },
+                        new() { DailyMissionId = missionId1, DayNo = yesterday, },
                     ]
                 }
             );
@@ -259,27 +259,27 @@ public class MissionTest : TestFixture
                 [
                     new DailyMissionList()
                     {
-                        daily_mission_id = missionId1,
-                        day_no = today,
-                        state = MissionState.Claimed,
+                        DailyMissionId = missionId1,
+                        DayNo = today,
+                        State = MissionState.Claimed,
                     },
                     new DailyMissionList()
                     {
-                        daily_mission_id = missionId2,
-                        day_no = today,
-                        state = MissionState.Claimed,
+                        DailyMissionId = missionId2,
+                        DayNo = today,
+                        State = MissionState.Claimed,
                     },
                     new DailyMissionList()
                     {
-                        daily_mission_id = missionId2,
-                        day_no = yesterday,
-                        state = MissionState.Completed,
+                        DailyMissionId = missionId2,
+                        DayNo = yesterday,
+                        State = MissionState.Completed,
                     },
                 ],
                 opts =>
-                    opts.Including(x => x.daily_mission_id)
-                        .Including(x => x.day_no)
-                        .Including(x => x.state)
+                    opts.Including(x => x.DailyMissionId)
+                        .Including(x => x.DayNo)
+                        .Including(x => x.State)
             );
     }
 
@@ -308,12 +308,12 @@ public class MissionTest : TestFixture
                 "mission/receive_memory_event_reward",
                 new MissionReceiveMemoryEventRewardRequest()
                 {
-                    memory_event_mission_id_list = [missionId],
+                    MemoryEventMissionIdList = [missionId],
                 }
             )
         ).data;
 
-        response.update_data_list.user_data.crystal.Should().Be(oldWyrmite + 25);
+        response.UpdateDataList.UserData.Crystal.Should().Be(oldWyrmite + 25);
     }
 
     [Fact]
@@ -362,21 +362,21 @@ public class MissionTest : TestFixture
                 [
                     new DailyMissionList()
                     {
-                        daily_mission_id = missionId,
-                        day_no = today,
-                        state = MissionState.Completed
+                        DailyMissionId = missionId,
+                        DayNo = today,
+                        State = MissionState.Completed
                     },
                     new DailyMissionList()
                     {
-                        daily_mission_id = missionId,
-                        day_no = yesterday,
-                        state = MissionState.Completed
+                        DailyMissionId = missionId,
+                        DayNo = yesterday,
+                        State = MissionState.Completed
                     }
                 ],
                 opts =>
-                    opts.Including(x => x.daily_mission_id)
-                        .Including(x => x.day_no)
-                        .Including(x => x.state)
+                    opts.Including(x => x.DailyMissionId)
+                        .Including(x => x.DayNo)
+                        .Including(x => x.State)
             );
     }
 
@@ -410,7 +410,7 @@ public class MissionTest : TestFixture
         DragaliaResponse<ShopItemSummonExecData> response =
             await this.Client.PostMsgpack<ShopItemSummonExecData>(
                 "shop/item_summon_exec",
-                new ShopItemSummonExecRequest() { payment_type = PaymentTypes.Wyrmite },
+                new ShopItemSummonExecRequest() { PaymentType = PaymentTypes.Wyrmite },
                 ensureSuccessHeader: false
             );
 
@@ -438,7 +438,7 @@ public class MissionTest : TestFixture
             )
         ).data;
 
-        response.drill_mission_group_list.Should().BeEmpty();
+        response.DrillMissionGroupList.Should().BeEmpty();
 
         await this.AddRangeToDatabase(
             MasterAsset
@@ -453,7 +453,7 @@ public class MissionTest : TestFixture
             )
         ).data;
 
-        response.drill_mission_group_list.Should().BeEquivalentTo([new DrillMissionGroupList(1)]);
+        response.DrillMissionGroupList.Should().BeEquivalentTo([new DrillMissionGroupList(1)]);
 
         await this.AddRangeToDatabase(
             MasterAsset
@@ -469,7 +469,7 @@ public class MissionTest : TestFixture
         ).data;
 
         response
-            .drill_mission_group_list.Should()
+            .DrillMissionGroupList.Should()
             .BeEquivalentTo([new DrillMissionGroupList(1), new DrillMissionGroupList(2)]);
 
         await this.AddRangeToDatabase(
@@ -486,7 +486,7 @@ public class MissionTest : TestFixture
         ).data;
 
         response
-            .drill_mission_group_list.Should()
+            .DrillMissionGroupList.Should()
             .BeEquivalentTo(
                 [
                     new DrillMissionGroupList(1),
@@ -519,7 +519,7 @@ public class MissionTest : TestFixture
         ).data;
 
         response
-            .mission_notice.drill_mission_notice.receivable_reward_count.Should()
+            .MissionNotice.DrillMissionNotice.ReceivableRewardCount.Should()
             .Be(1, "because otherwise the drill mission popup disappears");
     }
 
@@ -577,7 +577,7 @@ public class MissionTest : TestFixture
         response
             .period_mission_list.Should()
             .HaveCount(2)
-            .And.Contain(x => x.period_mission_id == expectedMission.Id)
-            .And.Contain(x => x.period_mission_id == otherExpectedMission.Id);
+            .And.Contain(x => x.PeriodMissionId == expectedMission.Id)
+            .And.Contain(x => x.PeriodMissionId == otherExpectedMission.Id);
     }
 }

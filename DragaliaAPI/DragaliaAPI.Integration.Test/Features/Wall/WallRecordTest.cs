@@ -38,8 +38,8 @@ public class WallRecordTest : TestFixture
         MaterialList expectedGoldCrystals =
             new()
             {
-                material_id = Materials.GoldCrystal,
-                quantity = oldPlayerGoldCrystals.Quantity + expectedGoldCrystalsAmount
+                MaterialId = Materials.GoldCrystal,
+                Quantity = oldPlayerGoldCrystals.Quantity + expectedGoldCrystalsAmount
             };
 
         await this.AddRangeToDatabase(
@@ -57,7 +57,7 @@ public class WallRecordTest : TestFixture
         DungeonSession mockSession =
             new()
             {
-                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 WallId = wallId,
                 WallLevel = wallLevel + 1 // Client passes (db wall level + 1)
             };
@@ -67,67 +67,67 @@ public class WallRecordTest : TestFixture
         WallRecordRecordData response = (
             await Client.PostMsgpack<WallRecordRecordData>(
                 "/wall_record/record",
-                new WallRecordRecordRequest() { wall_id = wallId, dungeon_key = key }
+                new WallRecordRecordRequest() { WallId = wallId, DungeonKey = key }
             )
         ).data;
 
-        response.update_data_list.user_data.coin.Should().Be(oldUserData.Coin + expectedCoin);
+        response.UpdateDataList.UserData.Coin.Should().Be(oldUserData.Coin + expectedCoin);
 
         response
-            .update_data_list.user_data.mana_point.Should()
+            .UpdateDataList.UserData.ManaPoint.Should()
             .Be(oldUserData.ManaPoint + expectedMana);
 
-        response.update_data_list.material_list.Should().ContainEquivalentOf(expectedGoldCrystals);
+        response.UpdateDataList.MaterialList.Should().ContainEquivalentOf(expectedGoldCrystals);
 
         response
-            .play_wall_detail.Should()
+            .PlayWallDetail.Should()
             .BeEquivalentTo(
                 new AtgenPlayWallDetail()
                 {
-                    wall_id = wallId,
-                    before_wall_level = wallLevel,
-                    after_wall_level = wallLevel + 1
+                    WallId = wallId,
+                    BeforeWallLevel = wallLevel,
+                    AfterWallLevel = wallLevel + 1
                 }
             );
 
         response
-            .wall_clear_reward_list.Should()
+            .WallClearRewardList.Should()
             .ContainEquivalentOf(
                 new AtgenBuildEventRewardEntityList()
                 {
-                    entity_type = EntityTypes.Wyrmite,
-                    entity_id = 0,
-                    entity_quantity = expectedWyrmites
+                    EntityType = EntityTypes.Wyrmite,
+                    EntityId = 0,
+                    EntityQuantity = expectedWyrmites
                 }
             );
 
         response
-            .wall_drop_reward.Should()
+            .WallDropReward.Should()
             .BeEquivalentTo(
                 new AtgenWallDropReward()
                 {
-                    reward_entity_list = new[]
+                    RewardEntityList = new[]
                     {
                         new AtgenBuildEventRewardEntityList()
                         {
-                            entity_type = EntityTypes.Material,
-                            entity_id = (int)Materials.GoldCrystal,
-                            entity_quantity = expectedGoldCrystalsAmount
+                            EntityType = EntityTypes.Material,
+                            EntityId = (int)Materials.GoldCrystal,
+                            EntityQuantity = expectedGoldCrystalsAmount
                         }
                     },
-                    take_coin = expectedCoin,
-                    take_mana = expectedMana
+                    TakeCoin = expectedCoin,
+                    TakeMana = expectedMana
                 }
             );
 
         response
-            .wall_unit_info.Should()
+            .WallUnitInfo.Should()
             .BeEquivalentTo(
                 new AtgenWallUnitInfo()
                 {
-                    quest_party_setting_list = mockSession.Party,
-                    helper_list = new List<UserSupportList>(),
-                    helper_detail_list = new List<AtgenHelperDetailList>()
+                    QuestPartySettingList = mockSession.Party,
+                    HelperList = new List<UserSupportList>(),
+                    HelperDetailList = new List<AtgenHelperDetailList>()
                 }
             );
     }
@@ -155,7 +155,7 @@ public class WallRecordTest : TestFixture
         DungeonSession mockSession =
             new()
             {
-                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 WallId = wallId,
                 WallLevel = wallLevel
             };
@@ -165,30 +165,30 @@ public class WallRecordTest : TestFixture
         WallRecordRecordData response = (
             await Client.PostMsgpack<WallRecordRecordData>(
                 "/wall_record/record",
-                new WallRecordRecordRequest() { wall_id = wallId, dungeon_key = key }
+                new WallRecordRecordRequest() { WallId = wallId, DungeonKey = key }
             )
         ).data;
 
         response
-            .wall_clear_reward_list.Should()
+            .WallClearRewardList.Should()
             .NotContainEquivalentOf(
                 new AtgenBuildEventRewardEntityList()
                 {
-                    entity_type = EntityTypes.Wyrmite,
-                    entity_id = 0,
-                    entity_quantity = notExpectedWyrmites
+                    EntityType = EntityTypes.Wyrmite,
+                    EntityId = 0,
+                    EntityQuantity = notExpectedWyrmites
                 }
             );
 
         // Also check if before_wall_level and after_wall_level are correct
         response
-            .play_wall_detail.Should()
+            .PlayWallDetail.Should()
             .BeEquivalentTo(
                 new AtgenPlayWallDetail()
                 {
-                    wall_id = wallId,
-                    before_wall_level = wallLevel,
-                    after_wall_level = wallLevel
+                    WallId = wallId,
+                    BeforeWallLevel = wallLevel,
+                    AfterWallLevel = wallLevel
                 }
             );
     }
@@ -234,7 +234,7 @@ public class WallRecordTest : TestFixture
         DungeonSession mockSession =
             new()
             {
-                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 WallId = (int)QuestWallTypes.Flame,
                 WallLevel = 6
             };
@@ -246,20 +246,20 @@ public class WallRecordTest : TestFixture
                 "/wall_record/record",
                 new WallRecordRecordRequest()
                 {
-                    wall_id = (int)QuestWallTypes.Flame,
-                    dungeon_key = key
+                    WallId = (int)QuestWallTypes.Flame,
+                    DungeonKey = key
                 }
             )
         ).data;
 
         AtgenNormalMissionNotice? missionNotice = response
-            .update_data_list
-            .mission_notice
-            ?.normal_mission_notice;
+            .UpdateDataList
+            .MissionNotice
+            ?.NormalMissionNotice;
 
         missionNotice.Should().NotBeNull();
         missionNotice!
-            .new_complete_mission_id_list.Should()
+            .NewCompleteMissionIdList.Should()
             .BeEquivalentTo([flameLv6MissionId, clearAllLv6MissionId]);
 
         MissionGetMissionListData missionList = (
@@ -271,10 +271,10 @@ public class WallRecordTest : TestFixture
 
         missionList
             .normal_mission_list.Should()
-            .Contain(x => x.normal_mission_id == flameLv7MissionId);
+            .Contain(x => x.NormalMissionId == flameLv7MissionId);
         missionList
             .normal_mission_list.Should()
-            .Contain(x => x.normal_mission_id == clearAllLv8MissionId);
+            .Contain(x => x.NormalMissionId == clearAllLv8MissionId);
     }
 
     [Fact]
@@ -309,7 +309,7 @@ public class WallRecordTest : TestFixture
         DungeonSession mockSession =
             new()
             {
-                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 WallId = (int)QuestWallTypes.Flame,
                 WallLevel = 80
             };
@@ -321,16 +321,16 @@ public class WallRecordTest : TestFixture
                 "/wall_record/record",
                 new WallRecordRecordRequest()
                 {
-                    wall_id = (int)QuestWallTypes.Flame,
-                    dungeon_key = key
+                    WallId = (int)QuestWallTypes.Flame,
+                    DungeonKey = key
                 }
             )
         ).data;
 
         AtgenNormalMissionNotice? missionNotice = response
-            .update_data_list
-            .mission_notice
-            ?.normal_mission_notice;
+            .UpdateDataList
+            .MissionNotice
+            ?.NormalMissionNotice;
 
         missionNotice.Should().BeNull();
     }

@@ -43,22 +43,22 @@ public class PresentController : DragaliaControllerBase
     {
         PresentGetPresentListData data = new();
 
-        if (request.is_limit)
+        if (request.IsLimit)
         {
-            data.present_limit_list = await this.presentControllerService.GetLimitPresentList(
-                request.present_id
+            data.PresentLimitList = await this.presentControllerService.GetLimitPresentList(
+                request.PresentId
             );
         }
         else
         {
-            data.present_list = await this.presentControllerService.GetPresentList(
-                request.present_id
+            data.PresentList = await this.presentControllerService.GetPresentList(
+                request.PresentId
             );
         }
 
-        data.update_data_list = new()
+        data.UpdateDataList = new()
         {
-            present_notice = await this.presentService.GetPresentNotice()
+            PresentNotice = await this.presentService.GetPresentNotice()
         };
 
         return Ok(data);
@@ -72,14 +72,11 @@ public class PresentController : DragaliaControllerBase
             IEnumerable<long> receivedPresents,
             IEnumerable<long> notReceivedPresents,
             IEnumerable<long> deletedPresents
-        ) = await presentControllerService.ReceivePresent(
-            request.present_id_list,
-            request.is_limit
-        );
+        ) = await presentControllerService.ReceivePresent(request.PresentIdList, request.IsLimit);
 
         EntityResult entityResult = this.rewardService.GetEntityResult();
         // Prevent double messages popping up about discarded entities
-        entityResult.over_discard_entity_list = Enumerable.Empty<AtgenBuildEventRewardEntityList>();
+        entityResult.OverDiscardEntityList = Enumerable.Empty<AtgenBuildEventRewardEntityList>();
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
@@ -90,15 +87,15 @@ public class PresentController : DragaliaControllerBase
 
         PresentReceiveData data = new PresentReceiveData()
         {
-            receive_present_id_list = receivedPresents.Select(x => (ulong)x),
-            not_receive_present_id_list = notReceivedPresents.Select(x => (ulong)x),
-            delete_present_id_list = deletedPresents.Select(x => (ulong)x),
-            limit_over_present_id_list = Enumerable.Empty<ulong>(), // TODO
-            present_list = presentList,
-            present_limit_list = limitPresentList,
-            update_data_list = updateDataList,
-            entity_result = entityResult,
-            converted_entity_list = entityResult.converted_entity_list,
+            ReceivePresentIdList = receivedPresents.Select(x => (ulong)x),
+            NotReceivePresentIdList = notReceivedPresents.Select(x => (ulong)x),
+            DeletePresentIdList = deletedPresents.Select(x => (ulong)x),
+            LimitOverPresentIdList = Enumerable.Empty<ulong>(), // TODO
+            PresentList = presentList,
+            PresentLimitList = limitPresentList,
+            UpdateDataList = updateDataList,
+            EntityResult = entityResult,
+            ConvertedEntityList = entityResult.ConvertedEntityList,
         };
 
         return Ok(data);
@@ -111,9 +108,9 @@ public class PresentController : DragaliaControllerBase
     )
     {
         IEnumerable<PresentHistoryList> list = await presentControllerService.GetPresentHistoryList(
-            request.present_history_id
+            request.PresentHistoryId
         );
 
-        return Ok(new PresentGetHistoryListData() { present_history_list = list, });
+        return Ok(new PresentGetHistoryListData() { PresentHistoryList = list, });
     }
 }

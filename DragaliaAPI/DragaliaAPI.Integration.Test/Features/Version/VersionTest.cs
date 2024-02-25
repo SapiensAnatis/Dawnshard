@@ -25,7 +25,7 @@ public class VersionTest : TestFixture
             )
         ).data;
 
-        response.resource_version.Should().Be(expectedVersion);
+        response.ResourceVersion.Should().Be(expectedVersion);
     }
 
     [Fact]

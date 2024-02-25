@@ -48,7 +48,7 @@ public class AbilityCrestControllerTest
 
         ResultCodeData data = (
             await this.abilityCrestController.SetFavorite(
-                new() { ability_crest_id = AbilityCrests.ManaFount, is_favorite = true }
+                new() { AbilityCrestId = AbilityCrests.ManaFount, IsFavorite = true }
             )
         ).GetData<ResultCodeData>()!;
 
@@ -60,7 +60,7 @@ public class AbilityCrestControllerTest
     public async Task BuildupPiece_AbilityCrestNotInMasterAssetReturnsError()
     {
         ResultCodeData data = (
-            await this.abilityCrestController.BuildupPiece(new() { ability_crest_id = 0 })
+            await this.abilityCrestController.BuildupPiece(new() { AbilityCrestId = 0 })
         ).GetData<ResultCodeData>()!;
 
         data.result_code.Should().Be(ResultCode.AbilityCrestIsNotPlayable);
@@ -83,8 +83,8 @@ public class AbilityCrestControllerTest
             await this.abilityCrestController.BuildupPiece(
                 new AbilityCrestBuildupPieceRequest()
                 {
-                    ability_crest_id = AbilityCrests.ManaFount,
-                    buildup_ability_crest_piece_list = new List<AtgenBuildupAbilityCrestPieceList>()
+                    AbilityCrestId = AbilityCrests.ManaFount,
+                    BuildupAbilityCrestPieceList = new List<AtgenBuildupAbilityCrestPieceList>()
                     {
                         new(),
                         new(),
@@ -116,8 +116,8 @@ public class AbilityCrestControllerTest
             await this.abilityCrestController.BuildupPiece(
                 new AbilityCrestBuildupPieceRequest()
                 {
-                    ability_crest_id = AbilityCrests.ManaFount,
-                    buildup_ability_crest_piece_list = new List<AtgenBuildupAbilityCrestPieceList>()
+                    AbilityCrestId = AbilityCrests.ManaFount,
+                    BuildupAbilityCrestPieceList = new List<AtgenBuildupAbilityCrestPieceList>()
                     {
                         new(),
                         new(),
@@ -127,7 +127,7 @@ public class AbilityCrestControllerTest
             )
         ).GetData<AbilityCrestBuildupPieceData>()!;
 
-        data.update_data_list.Should().BeEquivalentTo(new UpdateDataList() { });
+        data.UpdateDataList.Should().BeEquivalentTo(new UpdateDataList() { });
         this.mockAbilityCrestService.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
@@ -136,7 +136,7 @@ public class AbilityCrestControllerTest
     public async Task BuildupPlusCount_AbilityCrestNotInMasterAssetReturnsError()
     {
         ResultCodeData data = (
-            await this.abilityCrestController.BuildupPlusCount(new() { ability_crest_id = 0 })
+            await this.abilityCrestController.BuildupPlusCount(new() { AbilityCrestId = 0 })
         ).GetData<ResultCodeData>()!;
 
         data.result_code.Should().Be(ResultCode.AbilityCrestIsNotPlayable);
@@ -158,8 +158,8 @@ public class AbilityCrestControllerTest
             await this.abilityCrestController.BuildupPlusCount(
                 new AbilityCrestBuildupPlusCountRequest()
                 {
-                    ability_crest_id = AbilityCrests.ManaFount,
-                    plus_count_params_list = new List<AtgenPlusCountParamsList>() { new(), new() }
+                    AbilityCrestId = AbilityCrests.ManaFount,
+                    PlusCountParamsList = new List<AtgenPlusCountParamsList>() { new(), new() }
                 }
             )
         ).GetData<ResultCodeData>()!;
@@ -187,13 +187,13 @@ public class AbilityCrestControllerTest
             await this.abilityCrestController.BuildupPlusCount(
                 new AbilityCrestBuildupPlusCountRequest()
                 {
-                    ability_crest_id = AbilityCrests.ManaFount,
-                    plus_count_params_list = new List<AtgenPlusCountParamsList>() { new(), new() }
+                    AbilityCrestId = AbilityCrests.ManaFount,
+                    PlusCountParamsList = new List<AtgenPlusCountParamsList>() { new(), new() }
                 }
             )
         ).GetData<AbilityCrestBuildupPlusCountData>()!;
 
-        data.update_data_list.Should().BeEquivalentTo(new UpdateDataList() { });
+        data.UpdateDataList.Should().BeEquivalentTo(new UpdateDataList() { });
         this.mockAbilityCrestService.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
@@ -211,8 +211,8 @@ public class AbilityCrestControllerTest
             await this.abilityCrestController.ResetPlusCount(
                 new AbilityCrestResetPlusCountRequest()
                 {
-                    ability_crest_id = AbilityCrests.ManaFount,
-                    plus_count_type_list = new List<PlusCountType>() { PlusCountType.Hp, 0 }
+                    AbilityCrestId = AbilityCrests.ManaFount,
+                    PlusCountTypeList = new List<PlusCountType>() { PlusCountType.Hp, 0 }
                 }
             )
         ).GetData<ResultCodeData>()!;
@@ -237,8 +237,8 @@ public class AbilityCrestControllerTest
             await this.abilityCrestController.ResetPlusCount(
                 new AbilityCrestResetPlusCountRequest()
                 {
-                    ability_crest_id = AbilityCrests.ManaFount,
-                    plus_count_type_list = new List<PlusCountType>()
+                    AbilityCrestId = AbilityCrests.ManaFount,
+                    PlusCountTypeList = new List<PlusCountType>()
                     {
                         PlusCountType.Hp,
                         PlusCountType.Atk
@@ -247,7 +247,7 @@ public class AbilityCrestControllerTest
             )
         ).GetData<AbilityCrestResetPlusCountData>()!;
 
-        data.update_data_list.Should().BeEquivalentTo(new UpdateDataList() { });
+        data.UpdateDataList.Should().BeEquivalentTo(new UpdateDataList() { });
         this.mockAbilityCrestService.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
@@ -266,7 +266,7 @@ public class AbilityCrestControllerTest
 
         int setNo = 1;
 
-        foreach (AbilityCrestSetList abilityCrestSet in data.ability_crest_set_list)
+        foreach (AbilityCrestSetList abilityCrestSet in data.AbilityCrestSetList)
         {
             abilityCrestSet
                 .Should()
@@ -283,7 +283,7 @@ public class AbilityCrestControllerTest
             ++setNo;
         }
 
-        data.ability_crest_set_list.Count().Should().Be(54);
+        data.AbilityCrestSetList.Count().Should().Be(54);
         this.mockAbilityCrestRepository.VerifyAll();
     }
 
@@ -324,7 +324,7 @@ public class AbilityCrestControllerTest
 
         int setNo = 1;
 
-        foreach (AbilityCrestSetList abilityCrestSet in data.ability_crest_set_list)
+        foreach (AbilityCrestSetList abilityCrestSet in data.AbilityCrestSetList)
         {
             if (setNo == mappedSet)
             {
@@ -367,7 +367,7 @@ public class AbilityCrestControllerTest
             ++setNo;
         }
 
-        data.ability_crest_set_list.Count().Should().Be(54);
+        data.AbilityCrestSetList.Count().Should().Be(54);
         this.mockAbilityCrestRepository.VerifyAll();
     }
 
@@ -378,7 +378,7 @@ public class AbilityCrestControllerTest
     {
         ResultCodeData data = (
             await this.abilityCrestController.SetAbilityCrestSet(
-                new() { ability_crest_set_no = setNo }
+                new() { AbilityCrestSetNo = setNo }
             )
         ).GetData<ResultCodeData>()!;
 
@@ -402,14 +402,14 @@ public class AbilityCrestControllerTest
             await this.abilityCrestController.SetAbilityCrestSet(
                 new AbilityCrestSetAbilityCrestSetRequest()
                 {
-                    ability_crest_set_name = "",
-                    ability_crest_set_no = setNo,
-                    request_ability_crest_set_data = new() { }
+                    AbilityCrestSetName = "",
+                    AbilityCrestSetNo = setNo,
+                    RequestAbilityCrestSetData = new() { }
                 }
             )
         ).GetData<AbilityCrestSetAbilityCrestSetData>()!;
 
-        data.update_data_list.Should().BeEquivalentTo(new UpdateDataList() { });
+        data.UpdateDataList.Should().BeEquivalentTo(new UpdateDataList() { });
         this.mockAbilityCrestService.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
@@ -438,13 +438,13 @@ public class AbilityCrestControllerTest
             await this.abilityCrestController.UpdateAbilityCrestSetName(
                 new AbilityCrestUpdateAbilityCrestSetNameRequest()
                 {
-                    ability_crest_set_no = setNo,
-                    ability_crest_set_name = newName
+                    AbilityCrestSetNo = setNo,
+                    AbilityCrestSetName = newName
                 }
             )
         ).GetData<AbilityCrestUpdateAbilityCrestSetNameData>()!;
 
-        data.update_data_list.Should().BeEquivalentTo(new UpdateDataList() { });
+        data.UpdateDataList.Should().BeEquivalentTo(new UpdateDataList() { });
         this.mockAbilityCrestService.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
@@ -471,13 +471,13 @@ public class AbilityCrestControllerTest
             await this.abilityCrestController.UpdateAbilityCrestSetName(
                 new AbilityCrestUpdateAbilityCrestSetNameRequest()
                 {
-                    ability_crest_set_no = setNo,
-                    ability_crest_set_name = newName
+                    AbilityCrestSetNo = setNo,
+                    AbilityCrestSetName = newName
                 }
             )
         ).GetData<AbilityCrestUpdateAbilityCrestSetNameData>()!;
 
-        data.update_data_list.Should().BeEquivalentTo(new UpdateDataList() { });
+        data.UpdateDataList.Should().BeEquivalentTo(new UpdateDataList() { });
         this.mockAbilityCrestService.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }

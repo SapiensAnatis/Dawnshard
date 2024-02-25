@@ -40,12 +40,12 @@ public class FortControllerTest
         FortDetail detail =
             new()
             {
-                carpenter_num = 1,
-                max_carpenter_count = 2,
-                working_carpenter_num = 3
+                CarpenterNum = 1,
+                MaxCarpenterCount = 2,
+                WorkingCarpenterNum = 3
             };
-        List<BuildList> buildList = new() { new() { fort_plant_detail_id = 4 } };
-        FortBonusList bonusList = new() { all_bonus = new(2, 3) };
+        List<BuildList> buildList = new() { new() { FortPlantDetailId = 4 } };
+        FortBonusList bonusList = new() { AllBonus = new(2, 3) };
 
         mockFortService
             .Setup(x => x.GetRupieProduction())
@@ -70,10 +70,10 @@ public class FortControllerTest
 
         FortGetDataData data = (await fortController.GetData()).GetData<FortGetDataData>()!;
 
-        data.build_list.Should().BeEquivalentTo(buildList);
-        data.fort_bonus_list.Should().BeEquivalentTo(bonusList);
-        data.fort_detail.Should().BeEquivalentTo(detail);
-        data.dragon_contact_free_gift_count.Should().Be(2);
+        data.BuildList.Should().BeEquivalentTo(buildList);
+        data.FortBonusList.Should().BeEquivalentTo(bonusList);
+        data.FortDetail.Should().BeEquivalentTo(detail);
+        data.DragonContactFreeGiftCount.Should().Be(2);
 
         mockFortService.VerifyAll();
         mockBonusService.VerifyAll();
@@ -82,8 +82,8 @@ public class FortControllerTest
     [Fact]
     public async Task AddCarpenter_AddsCarpenter()
     {
-        UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
-        FortDetail detail = new() { working_carpenter_num = 4 };
+        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        FortDetail detail = new() { WorkingCarpenterNum = 4 };
 
         mockFortService
             .Setup(x => x.AddCarpenter(PaymentTypes.Diamantium))
@@ -94,13 +94,13 @@ public class FortControllerTest
 
         FortAddCarpenterData data = (
             await fortController.AddCarpenter(
-                new FortAddCarpenterRequest() { payment_type = PaymentTypes.Diamantium }
+                new FortAddCarpenterRequest() { PaymentType = PaymentTypes.Diamantium }
             )
         ).GetData<FortAddCarpenterData>()!;
 
-        data.result.Should().Be(1);
-        data.fort_detail.Should().BeEquivalentTo(detail);
-        data.update_data_list.Should().BeEquivalentTo(updateDataList);
+        data.Result.Should().Be(1);
+        data.FortDetail.Should().BeEquivalentTo(detail);
+        data.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockFortService.VerifyAll();
         mockUpdateDataService.VerifyAll();
@@ -109,9 +109,9 @@ public class FortControllerTest
     [Fact]
     public async Task BuildAtOnce_CallsBuildAtOnce()
     {
-        UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
-        FortBonusList bonusList = new() { all_bonus = new(2, 3) };
-        FortDetail detail = new() { working_carpenter_num = 4 };
+        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        FortBonusList bonusList = new() { AllBonus = new(2, 3) };
+        FortDetail detail = new() { WorkingCarpenterNum = 4 };
 
         mockFortService
             .Setup(x => x.GetRupieProduction())
@@ -138,17 +138,17 @@ public class FortControllerTest
             await fortController.BuildAtOnce(
                 new FortBuildAtOnceRequest()
                 {
-                    payment_type = PaymentTypes.HalidomHustleHammer,
-                    build_id = 8
+                    PaymentType = PaymentTypes.HalidomHustleHammer,
+                    BuildId = 8
                 }
             )
         ).GetData<FortBuildAtOnceData>()!;
 
-        data.result.Should().Be(1);
-        data.build_id.Should().Be(8);
-        data.fort_bonus_list.Should().BeEquivalentTo(bonusList);
-        data.fort_detail.Should().BeEquivalentTo(detail);
-        data.update_data_list.Should().BeEquivalentTo(updateDataList);
+        data.Result.Should().Be(1);
+        data.BuildId.Should().Be(8);
+        data.FortBonusList.Should().BeEquivalentTo(bonusList);
+        data.FortDetail.Should().BeEquivalentTo(detail);
+        data.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockFortService.VerifyAll();
         mockBonusService.VerifyAll();
@@ -158,8 +158,8 @@ public class FortControllerTest
     [Fact]
     public async Task BuildCancel_CallsCancelBuild()
     {
-        UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
-        FortDetail detail = new() { working_carpenter_num = 4 };
+        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        FortDetail detail = new() { WorkingCarpenterNum = 4 };
 
         mockFortService
             .Setup(x => x.CancelBuild(1))
@@ -169,13 +169,13 @@ public class FortControllerTest
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
         FortBuildCancelData data = (
-            await fortController.BuildCancel(new FortBuildCancelRequest() { build_id = 1 })
+            await fortController.BuildCancel(new FortBuildCancelRequest() { BuildId = 1 })
         ).GetData<FortBuildCancelData>()!;
 
-        data.result.Should().Be(1);
-        data.build_id.Should().Be(1);
-        data.fort_detail.Should().BeEquivalentTo(detail);
-        data.update_data_list.Should().BeEquivalentTo(updateDataList);
+        data.Result.Should().Be(1);
+        data.BuildId.Should().Be(1);
+        data.FortDetail.Should().BeEquivalentTo(detail);
+        data.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockFortService.VerifyAll();
         mockUpdateDataService.VerifyAll();
@@ -184,9 +184,9 @@ public class FortControllerTest
     [Fact]
     public async Task BuildEnd_CallsEndBuild()
     {
-        UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
-        FortBonusList bonusList = new() { all_bonus = new(2, 3) };
-        FortDetail detail = new() { working_carpenter_num = 4 };
+        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        FortBonusList bonusList = new() { AllBonus = new(2, 3) };
+        FortDetail detail = new() { WorkingCarpenterNum = 4 };
 
         mockFortService
             .Setup(x => x.GetRupieProduction())
@@ -208,14 +208,14 @@ public class FortControllerTest
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
         FortBuildEndData data = (
-            await fortController.BuildEnd(new FortBuildEndRequest() { build_id = 8 })
+            await fortController.BuildEnd(new FortBuildEndRequest() { BuildId = 8 })
         ).GetData<FortBuildEndData>()!;
 
-        data.result.Should().Be(1);
-        data.build_id.Should().Be(8);
-        data.fort_bonus_list.Should().BeEquivalentTo(bonusList);
-        data.fort_detail.Should().BeEquivalentTo(detail);
-        data.update_data_list.Should().BeEquivalentTo(updateDataList);
+        data.Result.Should().Be(1);
+        data.BuildId.Should().Be(8);
+        data.FortBonusList.Should().BeEquivalentTo(bonusList);
+        data.FortDetail.Should().BeEquivalentTo(detail);
+        data.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockFortService.VerifyAll();
         mockBonusService.VerifyAll();
@@ -225,8 +225,8 @@ public class FortControllerTest
     [Fact]
     public async Task BuildStart_CallsBuildStart()
     {
-        UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
-        FortDetail detail = new() { working_carpenter_num = 4 };
+        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        FortDetail detail = new() { WorkingCarpenterNum = 4 };
         DbFortBuild build =
             new()
             {
@@ -247,20 +247,20 @@ public class FortControllerTest
             await fortController.BuildStart(
                 new FortBuildStartRequest()
                 {
-                    fort_plant_id = FortPlants.BroadleafTree,
-                    position_x = 2,
-                    position_z = 3
+                    FortPlantId = FortPlants.BroadleafTree,
+                    PositionX = 2,
+                    PositionZ = 3
                 }
             )
         ).GetData<FortBuildStartData>()!;
 
-        data.result.Should().Be(1);
-        data.build_id.Should().Be((ulong)build.BuildId);
-        data.build_start_date.Should().Be(build.BuildStartDate);
-        data.build_end_date.Should().Be(build.BuildEndDate);
-        data.remain_time.Should().Be(build.RemainTime);
-        data.fort_detail.Should().BeEquivalentTo(detail);
-        data.update_data_list.Should().BeEquivalentTo(updateDataList);
+        data.Result.Should().Be(1);
+        data.BuildId.Should().Be((ulong)build.BuildId);
+        data.BuildStartDate.Should().Be(build.BuildStartDate);
+        data.BuildEndDate.Should().Be(build.BuildEndDate);
+        data.RemainTime.Should().Be(build.RemainTime);
+        data.FortDetail.Should().BeEquivalentTo(detail);
+        data.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockFortService.VerifyAll();
         mockUpdateDataService.VerifyAll();
@@ -269,9 +269,9 @@ public class FortControllerTest
     [Fact]
     public async Task LevelupAtOnce_CallsLevelupAtOnce()
     {
-        UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
-        FortBonusList bonusList = new() { all_bonus = new(2, 3) };
-        FortDetail detail = new() { working_carpenter_num = 4 };
+        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        FortBonusList bonusList = new() { AllBonus = new(2, 3) };
+        FortDetail detail = new() { WorkingCarpenterNum = 4 };
 
         mockFortService
             .Setup(x => x.GetRupieProduction())
@@ -299,19 +299,19 @@ public class FortControllerTest
             await fortController.LevelupAtOnce(
                 new FortLevelupAtOnceRequest()
                 {
-                    payment_type = PaymentTypes.HalidomHustleHammer,
-                    build_id = 8
+                    PaymentType = PaymentTypes.HalidomHustleHammer,
+                    BuildId = 8
                 }
             )
         ).GetData<FortLevelupAtOnceData>()!;
 
-        data.result.Should().Be(1);
-        data.build_id.Should().Be(8);
-        data.current_fort_level.Should().Be(3);
-        data.current_fort_craft_level.Should().Be(2);
-        data.fort_bonus_list.Should().BeEquivalentTo(bonusList);
-        data.fort_detail.Should().BeEquivalentTo(detail);
-        data.update_data_list.Should().BeEquivalentTo(updateDataList);
+        data.Result.Should().Be(1);
+        data.BuildId.Should().Be(8);
+        data.CurrentFortLevel.Should().Be(3);
+        data.CurrentFortCraftLevel.Should().Be(2);
+        data.FortBonusList.Should().BeEquivalentTo(bonusList);
+        data.FortDetail.Should().BeEquivalentTo(detail);
+        data.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockFortService.VerifyAll();
         mockBonusService.VerifyAll();
@@ -321,8 +321,8 @@ public class FortControllerTest
     [Fact]
     public async Task LevelupCancel_CallsCancelLevelup()
     {
-        UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
-        FortDetail detail = new() { working_carpenter_num = 4 };
+        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        FortDetail detail = new() { WorkingCarpenterNum = 4 };
 
         mockFortService
             .Setup(x => x.CancelLevelup(1))
@@ -332,13 +332,13 @@ public class FortControllerTest
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
         FortLevelupCancelData data = (
-            await fortController.LevelupCancel(new FortLevelupCancelRequest() { build_id = 1 })
+            await fortController.LevelupCancel(new FortLevelupCancelRequest() { BuildId = 1 })
         ).GetData<FortLevelupCancelData>()!;
 
-        data.result.Should().Be(1);
-        data.build_id.Should().Be(1);
-        data.fort_detail.Should().BeEquivalentTo(detail);
-        data.update_data_list.Should().BeEquivalentTo(updateDataList);
+        data.Result.Should().Be(1);
+        data.BuildId.Should().Be(1);
+        data.FortDetail.Should().BeEquivalentTo(detail);
+        data.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockFortService.VerifyAll();
         mockUpdateDataService.VerifyAll();
@@ -347,9 +347,9 @@ public class FortControllerTest
     [Fact]
     public async Task LevelupEnd_CallsEndLevelup()
     {
-        UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
-        FortBonusList bonusList = new() { all_bonus = new(2, 3) };
-        FortDetail detail = new() { working_carpenter_num = 4 };
+        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        FortBonusList bonusList = new() { AllBonus = new(2, 3) };
+        FortDetail detail = new() { WorkingCarpenterNum = 4 };
 
         mockFortService
             .Setup(x => x.GetRupieProduction())
@@ -372,16 +372,16 @@ public class FortControllerTest
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
         FortLevelupEndData data = (
-            await fortController.LevelupEnd(new FortLevelupEndRequest() { build_id = 8 })
+            await fortController.LevelupEnd(new FortLevelupEndRequest() { BuildId = 8 })
         ).GetData<FortLevelupEndData>()!;
 
-        data.result.Should().Be(1);
-        data.build_id.Should().Be(8);
-        data.current_fort_level.Should().Be(3);
-        data.current_fort_craft_level.Should().Be(2);
-        data.fort_bonus_list.Should().BeEquivalentTo(bonusList);
-        data.fort_detail.Should().BeEquivalentTo(detail);
-        data.update_data_list.Should().BeEquivalentTo(updateDataList);
+        data.Result.Should().Be(1);
+        data.BuildId.Should().Be(8);
+        data.CurrentFortLevel.Should().Be(3);
+        data.CurrentFortCraftLevel.Should().Be(2);
+        data.FortBonusList.Should().BeEquivalentTo(bonusList);
+        data.FortDetail.Should().BeEquivalentTo(detail);
+        data.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockFortService.VerifyAll();
         mockBonusService.VerifyAll();
@@ -391,8 +391,8 @@ public class FortControllerTest
     [Fact]
     public async Task LevelupStart_CallsBuildStart()
     {
-        UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
-        FortDetail detail = new() { working_carpenter_num = 4 };
+        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        FortDetail detail = new() { WorkingCarpenterNum = 4 };
         DbFortBuild build =
             new()
             {
@@ -410,16 +410,16 @@ public class FortControllerTest
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
         FortLevelupStartData data = (
-            await fortController.LevelupStart(new FortLevelupStartRequest() { build_id = 1 })
+            await fortController.LevelupStart(new FortLevelupStartRequest() { BuildId = 1 })
         ).GetData<FortLevelupStartData>()!;
 
-        data.result.Should().Be(1);
-        data.build_id.Should().Be(build.BuildId);
-        data.levelup_start_date.Should().Be(build.BuildStartDate);
-        data.levelup_end_date.Should().Be(build.BuildEndDate);
-        data.remain_time.Should().BeCloseTo(build.RemainTime, TimeSpan.FromSeconds(1));
-        data.fort_detail.Should().BeEquivalentTo(detail);
-        data.update_data_list.Should().BeEquivalentTo(updateDataList);
+        data.Result.Should().Be(1);
+        data.BuildId.Should().Be(build.BuildId);
+        data.LevelupStartDate.Should().Be(build.BuildStartDate);
+        data.LevelupEndDate.Should().Be(build.BuildEndDate);
+        data.RemainTime.Should().BeCloseTo(build.RemainTime, TimeSpan.FromSeconds(1));
+        data.FortDetail.Should().BeEquivalentTo(detail);
+        data.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockFortService.VerifyAll();
         mockUpdateDataService.VerifyAll();
@@ -428,8 +428,8 @@ public class FortControllerTest
     [Fact]
     public async Task Move_CallsMove()
     {
-        UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
-        FortBonusList bonusList = new() { all_bonus = new(2, 3) };
+        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        FortBonusList bonusList = new() { AllBonus = new(2, 3) };
 
         mockFortService
             .Setup(x => x.GetRupieProduction())
@@ -455,17 +455,17 @@ public class FortControllerTest
             await fortController.Move(
                 new FortMoveRequest()
                 {
-                    build_id = 1,
-                    after_position_x = 2,
-                    after_position_z = 3
+                    BuildId = 1,
+                    AfterPositionX = 2,
+                    AfterPositionZ = 3
                 }
             )
         ).GetData<FortMoveData>()!;
 
-        data.result.Should().Be(1);
-        data.build_id.Should().Be(1);
-        data.fort_bonus_list.Should().BeEquivalentTo(bonusList);
-        data.update_data_list.Should().BeEquivalentTo(updateDataList);
+        data.Result.Should().Be(1);
+        data.BuildId.Should().Be(1);
+        data.FortBonusList.Should().BeEquivalentTo(bonusList);
+        data.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockFortService.VerifyAll();
         mockUpdateDataService.VerifyAll();

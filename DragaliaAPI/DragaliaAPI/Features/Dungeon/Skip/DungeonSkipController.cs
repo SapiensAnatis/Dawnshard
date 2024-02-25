@@ -33,17 +33,17 @@ public class DungeonSkipController(
     public async Task<DragaliaResult> Start(DungeonSkipStartRequest request)
     {
         await paymentService.ProcessPayment(
-            new Entity(EntityTypes.SkipTicket, Quantity: request.play_count)
+            new Entity(EntityTypes.SkipTicket, Quantity: request.PlayCount)
         );
 
         IEnumerable<PartySettingList> party = (
-            await partyRepository.GetPartyUnits(request.party_no).AsNoTracking().ToListAsync()
+            await partyRepository.GetPartyUnits(request.PartyNo).AsNoTracking().ToListAsync()
         ).Select(mapper.Map<PartySettingList>);
 
         IngameResultData ingameData = await this.GetIngameResultData(
-            request.quest_id,
-            request.play_count,
-            request.support_viewer_id,
+            request.QuestId,
+            request.PlayCount,
+            request.SupportViewerId,
             party
         );
 
@@ -53,9 +53,9 @@ public class DungeonSkipController(
         return this.Ok(
             new DungeonSkipStartData()
             {
-                ingame_result_data = ingameData,
-                update_data_list = updateDataList,
-                entity_result = entityResult
+                IngameResultData = ingameData,
+                UpdateDataList = updateDataList,
+                EntityResult = entityResult
             }
         );
     }
@@ -64,14 +64,14 @@ public class DungeonSkipController(
     public async Task<DragaliaResult> StartAssignUnit(DungeonSkipStartAssignUnitRequest request)
     {
         await paymentService.ProcessPayment(
-            new Entity(EntityTypes.SkipTicket, Quantity: request.play_count)
+            new Entity(EntityTypes.SkipTicket, Quantity: request.PlayCount)
         );
 
         IngameResultData ingameData = await this.GetIngameResultData(
-            request.quest_id,
-            request.play_count,
-            request.support_viewer_id,
-            request.request_party_setting_list
+            request.QuestId,
+            request.PlayCount,
+            request.SupportViewerId,
+            request.RequestPartySettingList
         );
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
@@ -80,9 +80,9 @@ public class DungeonSkipController(
         return this.Ok(
             new DungeonSkipStartData()
             {
-                ingame_result_data = ingameData,
-                update_data_list = updateDataList,
-                entity_result = entityResult
+                IngameResultData = ingameData,
+                UpdateDataList = updateDataList,
+                EntityResult = entityResult
             }
         );
     }
@@ -92,24 +92,24 @@ public class DungeonSkipController(
         DungeonSkipStartMultipleQuestRequest request
     )
     {
-        int totalSkipQuantity = request.request_quest_multiple_list.Sum(x => x.play_count);
+        int totalSkipQuantity = request.RequestQuestMultipleList.Sum(x => x.PlayCount);
 
         await paymentService.ProcessPayment(
             new Entity(EntityTypes.SkipTicket, Quantity: totalSkipQuantity)
         );
 
         IEnumerable<PartySettingList> party = (
-            await partyRepository.GetPartyUnits(request.party_no).AsNoTracking().ToListAsync()
+            await partyRepository.GetPartyUnits(request.PartyNo).AsNoTracking().ToListAsync()
         ).Select(mapper.Map<PartySettingList>);
 
-        List<IngameResultData> results = new(request.request_quest_multiple_list.Count());
+        List<IngameResultData> results = new(request.RequestQuestMultipleList.Count());
 
-        foreach (AtgenRequestQuestMultipleList quest in request.request_quest_multiple_list)
+        foreach (AtgenRequestQuestMultipleList quest in request.RequestQuestMultipleList)
         {
             IngameResultData resultData = await this.GetIngameResultData(
-                quest.quest_id,
-                quest.play_count,
-                request.support_viewer_id,
+                quest.QuestId,
+                quest.PlayCount,
+                request.SupportViewerId,
                 party
             );
             results.Add(resultData);
@@ -123,9 +123,9 @@ public class DungeonSkipController(
         return this.Ok(
             new DungeonSkipStartMultipleQuestData()
             {
-                ingame_result_data = combinedResults,
-                entity_result = entityResult,
-                update_data_list = updateDataList,
+                IngameResultData = combinedResults,
+                EntityResult = entityResult,
+                UpdateDataList = updateDataList,
             }
         );
     }
@@ -137,21 +137,21 @@ public class DungeonSkipController(
     {
         // Unsure what calls this endpoint -- can't repeat daily bonus skip or do it with assigned team
 
-        int totalSkipQuantity = request.request_quest_multiple_list.Sum(x => x.play_count);
+        int totalSkipQuantity = request.RequestQuestMultipleList.Sum(x => x.PlayCount);
 
         await paymentService.ProcessPayment(
             new Entity(EntityTypes.SkipTicket, Quantity: totalSkipQuantity)
         );
 
-        List<IngameResultData> results = new(request.request_quest_multiple_list.Count());
+        List<IngameResultData> results = new(request.RequestQuestMultipleList.Count());
 
-        foreach (AtgenRequestQuestMultipleList quest in request.request_quest_multiple_list)
+        foreach (AtgenRequestQuestMultipleList quest in request.RequestQuestMultipleList)
         {
             IngameResultData resultData = await this.GetIngameResultData(
-                quest.quest_id,
-                quest.play_count,
-                request.support_viewer_id,
-                request.request_party_setting_list
+                quest.QuestId,
+                quest.PlayCount,
+                request.SupportViewerId,
+                request.RequestPartySettingList
             );
             results.Add(resultData);
         }
@@ -164,9 +164,9 @@ public class DungeonSkipController(
         return this.Ok(
             new DungeonSkipStartMultipleQuestData()
             {
-                ingame_result_data = combinedResults,
-                entity_result = entityResult,
-                update_data_list = updateDataList,
+                IngameResultData = combinedResults,
+                EntityResult = entityResult,
+                UpdateDataList = updateDataList,
             }
         );
     }
@@ -189,7 +189,7 @@ public class DungeonSkipController(
         DungeonSession session =
             new()
             {
-                Party = party.Where(x => x.chara_id != 0),
+                Party = party.Where(x => x.CharaId != 0),
                 QuestData = questData,
                 SupportViewerId = supportViewerId,
                 IsHost = true,
@@ -199,19 +199,19 @@ public class DungeonSkipController(
 
         session.EnemyList = questData
             .AreaInfo.Select((_, index) => oddsInfoService.GetOddsInfo(questData.Id, index))
-            .ToDictionary(x => x.area_index, x => x.enemy.Repeat(playCount));
+            .ToDictionary(x => x.AreaIndex, x => x.Enemy.Repeat(playCount));
 
         PlayRecord playRecord =
             new()
             {
-                is_clear = 1,
-                time = -1,
-                treasure_record = session.EnemyList.Select(x => new AtgenTreasureRecord()
+                IsClear = 1,
+                Time = -1,
+                TreasureRecord = session.EnemyList.Select(x => new AtgenTreasureRecord()
                 {
-                    area_idx = x.Key,
-                    enemy = x.Value.Select(y => 1),
-                    drop_obj = new List<int>(), // TODO
-                    enemy_smash = new List<AtgenEnemySmash>() // TODO
+                    AreaIdx = x.Key,
+                    Enemy = x.Value.Select(y => 1),
+                    DropObj = new List<int>(), // TODO
+                    EnemySmash = new List<AtgenEnemySmash>() // TODO
                 })
             };
 
@@ -221,7 +221,7 @@ public class DungeonSkipController(
             session
         );
 
-        (ingameResultData.helper_list, ingameResultData.helper_detail_list) =
+        (ingameResultData.HelperList, ingameResultData.HelperDetailList) =
             await dungeonRecordHelperService.ProcessHelperDataSolo(supportViewerId);
 
         return ingameResultData;

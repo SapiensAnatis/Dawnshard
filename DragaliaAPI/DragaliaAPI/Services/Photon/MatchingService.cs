@@ -84,10 +84,10 @@ public class MatchingService : IMatchingService
 
         return new()
         {
-            room_name = game.Name,
-            quest_id = game.QuestId,
-            cluster_name = game.ClusterName,
-            room_data = roomList,
+            RoomName = game.Name,
+            QuestId = game.QuestId,
+            ClusterName = game.ClusterName,
+            RoomData = roomList,
         };
     }
 
@@ -177,35 +177,35 @@ public class MatchingService : IMatchingService
 
         return new RoomList()
         {
-            room_name = game.Name,
-            cluster_name = game.ClusterName,
-            region = game.Region,
-            language = game.Language,
-            host_name = hostUserData.Name,
-            leader_chara_id = hostCharaData.CharaId,
-            leader_chara_level = hostCharaData.Level,
-            leader_chara_rarity = hostCharaData.Rarity,
-            host_level = hostUserData.Level,
-            host_viewer_id = (ulong)game.HostViewerId,
-            member_num = game.MemberNum,
-            quest_id = game.QuestId,
-            quest_type = QuestTypes.Dungeon,
-            room_id = game.RoomId,
-            status = game.MemberNum >= 4 ? RoomStatuses.Full : RoomStatuses.Available,
-            room_member_list = game.Players.Select(x => new AtgenRoomMemberList()
+            RoomName = game.Name,
+            ClusterName = game.ClusterName,
+            Region = game.Region,
+            Language = game.Language,
+            HostName = hostUserData.Name,
+            LeaderCharaId = hostCharaData.CharaId,
+            LeaderCharaLevel = hostCharaData.Level,
+            LeaderCharaRarity = hostCharaData.Rarity,
+            HostLevel = hostUserData.Level,
+            HostViewerId = (ulong)game.HostViewerId,
+            MemberNum = game.MemberNum,
+            QuestId = game.QuestId,
+            QuestType = QuestTypes.Dungeon,
+            RoomId = game.RoomId,
+            Status = game.MemberNum >= 4 ? RoomStatuses.Full : RoomStatuses.Available,
+            RoomMemberList = game.Players.Select(x => new AtgenRoomMemberList()
             {
-                viewer_id = (ulong)x.ViewerId
+                ViewerId = (ulong)x.ViewerId
             }),
-            entry_type = 1,
-            start_entry_time = game.StartEntryTime,
-            entry_guild_id = default,
-            compatible_id = game.MatchingCompatibleId,
-            entry_conditions = new()
+            EntryType = 1,
+            StartEntryTime = game.StartEntryTime,
+            EntryGuildId = default,
+            CompatibleId = game.MatchingCompatibleId,
+            EntryConditions = new()
             {
-                objective_text_id = game.EntryConditions.ObjectiveTextId,
-                required_party_power = game.EntryConditions.RequiredPartyPower,
-                unaccepted_element_type_list = game.EntryConditions.UnacceptedElementTypeList,
-                unaccepted_weapon_type_list = game.EntryConditions.UnacceptedWeaponTypeList,
+                ObjectiveTextId = game.EntryConditions.ObjectiveTextId,
+                RequiredPartyPower = game.EntryConditions.RequiredPartyPower,
+                UnacceptedElementTypeList = game.EntryConditions.UnacceptedElementTypeList,
+                UnacceptedWeaponTypeList = game.EntryConditions.UnacceptedWeaponTypeList,
             },
         };
     }

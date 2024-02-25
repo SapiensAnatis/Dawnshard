@@ -17,13 +17,13 @@ public class QuestOpenTreasureTest : TestFixture
         QuestOpenTreasureData response = (
             await this.Client.PostMsgpack<QuestOpenTreasureData>(
                 "/quest/open_treasure",
-                new QuestOpenTreasureRequest() { quest_treasure_id = 104101 }
+                new QuestOpenTreasureRequest() { QuestTreasureId = 104101 }
             )
         ).data;
 
         response
-            .update_data_list.quest_treasure_list.Should()
-            .ContainEquivalentOf(new QuestTreasureList() { quest_treasure_id = 104101 });
+            .UpdateDataList.QuestTreasureList.Should()
+            .ContainEquivalentOf(new QuestTreasureList() { QuestTreasureId = 104101 });
     }
 
     [Fact]
@@ -32,7 +32,7 @@ public class QuestOpenTreasureTest : TestFixture
         QuestOpenTreasureData response = (
             await this.Client.PostMsgpack<QuestOpenTreasureData>(
                 "/quest/open_treasure",
-                new QuestOpenTreasureRequest() { quest_treasure_id = 126201 }
+                new QuestOpenTreasureRequest() { QuestTreasureId = 126201 }
             )
         ).data;
 

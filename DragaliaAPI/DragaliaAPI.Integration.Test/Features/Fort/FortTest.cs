@@ -40,24 +40,24 @@ public class FortTest : TestFixture
         await this.ApiContext.SaveChangesAsync();
 
         (await this.Client.PostMsgpack<FortGetDataData>("/fort/get_data", new FortGetDataRequest()))
-            .data.build_list.Should()
+            .data.BuildList.Should()
             .ContainEquivalentOf(
                 new BuildList()
                 {
-                    plant_id = FortPlants.AxeDojo,
-                    level = 10,
-                    position_x = 10,
-                    position_z = 10,
-                    build_start_date = start,
-                    build_end_date = end,
-                    fort_plant_detail_id = 10050411,
-                    build_status = FortBuildStatus.LevelUp,
-                    is_new = false
+                    PlantId = FortPlants.AxeDojo,
+                    Level = 10,
+                    PositionX = 10,
+                    PositionZ = 10,
+                    BuildStartDate = start,
+                    BuildEndDate = end,
+                    FortPlantDetailId = 10050411,
+                    BuildStatus = FortBuildStatus.LevelUp,
+                    IsNew = false
                 },
                 opts =>
-                    opts.Excluding(x => x.build_id)
-                        .Excluding(x => x.last_income_time)
-                        .Excluding(x => x.remain_time)
+                    opts.Excluding(x => x.BuildId)
+                        .Excluding(x => x.LastIncomeTime)
+                        .Excluding(x => x.RemainTime)
             );
 
         // Not much point asserting against the other properties since they're stubs
@@ -73,7 +73,7 @@ public class FortTest : TestFixture
             .ExecuteUpdateAsync(e => e.SetProperty(p => p.Quantity, 1));
 
         (await this.Client.PostMsgpack<FortGetDataData>("/fort/get_data", new FortGetDataRequest()))
-            .data.dragon_contact_free_gift_count.Should()
+            .data.DragonContactFreeGiftCount.Should()
             .Be(1);
 
         await this
@@ -83,7 +83,7 @@ public class FortTest : TestFixture
             .ExecuteUpdateAsync(e => e.SetProperty(p => p.Quantity, 0));
 
         (await this.Client.PostMsgpack<FortGetDataData>("/fort/get_data", new FortGetDataRequest()))
-            .data.dragon_contact_free_gift_count.Should()
+            .data.DragonContactFreeGiftCount.Should()
             .Be(0);
     }
 
@@ -101,8 +101,8 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        response.fort_detail.carpenter_num.Should().Be(3);
-        response.update_data_list.user_data.crystal.Should().Be(oldUserData.Crystal - 250);
+        response.FortDetail.CarpenterNum.Should().Be(3);
+        response.UpdateDataList.UserData.Crystal.Should().Be(oldUserData.Crystal - 250);
     }
 
     [Fact]
@@ -133,12 +133,12 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x =>
-            x.build_id == (ulong)build.BuildId
+        BuildList result = response.UpdateDataList.BuildList.First(x =>
+            x.BuildId == (ulong)build.BuildId
         );
         // The level changes when building starts, not when it ends, so no need to check it here
-        result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
-        result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
+        result.BuildStartDate.Should().Be(DateTimeOffset.UnixEpoch);
+        result.BuildEndDate.Should().Be(DateTimeOffset.UnixEpoch);
     }
 
     [Fact]
@@ -198,12 +198,12 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x =>
-            x.build_id == (ulong)build.BuildId
+        BuildList result = response.UpdateDataList.BuildList.First(x =>
+            x.BuildId == (ulong)build.BuildId
         );
-        result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
-        result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
-        result.level.Should().Be(1);
+        result.BuildStartDate.Should().Be(DateTimeOffset.UnixEpoch);
+        result.BuildEndDate.Should().Be(DateTimeOffset.UnixEpoch);
+        result.Level.Should().Be(1);
     }
 
     [Fact]
@@ -223,13 +223,13 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First();
-        result.position_x.Should().Be(expectedPositionX);
-        result.position_z.Should().Be(expectedPositionZ);
-        result.build_start_date.Should().NotBe(DateTimeOffset.UnixEpoch);
-        result.build_end_date.Should().NotBe(DateTimeOffset.UnixEpoch);
-        result.build_end_date.Should().BeAfter(result.build_start_date);
-        response.fort_detail.working_carpenter_num.Should().BeGreaterThan(0); // Requiring '1' can conflict with other building tests
+        BuildList result = response.UpdateDataList.BuildList.First();
+        result.PositionX.Should().Be(expectedPositionX);
+        result.PositionZ.Should().Be(expectedPositionZ);
+        result.BuildStartDate.Should().NotBe(DateTimeOffset.UnixEpoch);
+        result.BuildEndDate.Should().NotBe(DateTimeOffset.UnixEpoch);
+        result.BuildEndDate.Should().BeAfter(result.BuildStartDate);
+        response.FortDetail.WorkingCarpenterNum.Should().BeGreaterThan(0); // Requiring '1' can conflict with other building tests
     }
 
     [Fact]
@@ -260,12 +260,12 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x =>
-            x.build_id == (ulong)build.BuildId
+        BuildList result = response.UpdateDataList.BuildList.First(x =>
+            x.BuildId == (ulong)build.BuildId
         );
-        result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
-        result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
-        result.level.Should().Be(3);
+        result.BuildStartDate.Should().Be(DateTimeOffset.UnixEpoch);
+        result.BuildEndDate.Should().Be(DateTimeOffset.UnixEpoch);
+        result.Level.Should().Be(3);
     }
 
     [Fact]
@@ -288,7 +288,7 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        response.current_fort_level.Should().Be(11);
+        response.CurrentFortLevel.Should().Be(11);
     }
 
     [Fact]
@@ -311,7 +311,7 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        response.current_fort_craft_level.Should().Be(2);
+        response.CurrentFortCraftLevel.Should().Be(2);
     }
 
     [Fact]
@@ -342,12 +342,12 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x =>
-            x.build_id == (ulong)build.BuildId
+        BuildList result = response.UpdateDataList.BuildList.First(x =>
+            x.BuildId == (ulong)build.BuildId
         );
-        result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
-        result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
-        result.level.Should().Be(1); // Level should have decreased
+        result.BuildStartDate.Should().Be(DateTimeOffset.UnixEpoch);
+        result.BuildEndDate.Should().Be(DateTimeOffset.UnixEpoch);
+        result.Level.Should().Be(1); // Level should have decreased
     }
 
     [Fact]
@@ -379,11 +379,11 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x =>
-            x.build_id == (ulong)build.BuildId
+        BuildList result = response.UpdateDataList.BuildList.First(x =>
+            x.BuildId == (ulong)build.BuildId
         );
-        result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
-        result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
+        result.BuildStartDate.Should().Be(DateTimeOffset.UnixEpoch);
+        result.BuildEndDate.Should().Be(DateTimeOffset.UnixEpoch);
     }
 
     [Fact]
@@ -406,7 +406,7 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        response.current_fort_craft_level.Should().Be(2);
+        response.CurrentFortCraftLevel.Should().Be(2);
     }
 
     [Fact]
@@ -429,7 +429,7 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        response.current_fort_level.Should().Be(11);
+        response.CurrentFortLevel.Should().Be(11);
     }
 
     [Fact]
@@ -460,13 +460,13 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x =>
-            x.build_id == (ulong)build.BuildId
+        BuildList result = response.UpdateDataList.BuildList.First(x =>
+            x.BuildId == (ulong)build.BuildId
         );
-        result.build_start_date.Should().NotBe(DateTimeOffset.UnixEpoch);
-        result.build_end_date.Should().NotBe(DateTimeOffset.UnixEpoch);
-        result.build_end_date.Should().BeAfter(result.build_start_date);
-        result.level.Should().Be(1);
+        result.BuildStartDate.Should().NotBe(DateTimeOffset.UnixEpoch);
+        result.BuildEndDate.Should().NotBe(DateTimeOffset.UnixEpoch);
+        result.BuildEndDate.Should().BeAfter(result.BuildStartDate);
+        result.Level.Should().Be(1);
     }
 
     [Fact]
@@ -499,11 +499,11 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x =>
-            x.build_id == (ulong)build.BuildId
+        BuildList result = response.UpdateDataList.BuildList.First(x =>
+            x.BuildId == (ulong)build.BuildId
         );
-        result.position_x.Should().Be(expectedPositionX);
-        result.position_z.Should().Be(expectedPositionZ);
+        result.PositionX.Should().Be(expectedPositionX);
+        result.PositionZ.Should().Be(expectedPositionZ);
     }
 
     [Fact]
@@ -547,27 +547,27 @@ public class FortTest : TestFixture
                 "/fort/get_multi_income",
                 new FortGetMultiIncomeRequest()
                 {
-                    build_id_list = new[] { rupieMine.BuildId, dragonTree.BuildId, halidom.BuildId }
+                    BuildIdList = new[] { rupieMine.BuildId, dragonTree.BuildId, halidom.BuildId }
                 }
             );
 
-        response.data.add_coin_list.Should().NotBeEmpty();
-        AtgenAddCoinList coinList = response.data.add_coin_list.First();
-        coinList.build_id.Should().Be(rupieMine.BuildId);
-        coinList.add_coin.Should().BeCloseTo(3098, 10);
+        response.data.AddCoinList.Should().NotBeEmpty();
+        AtgenAddCoinList coinList = response.data.AddCoinList.First();
+        coinList.BuildId.Should().Be(rupieMine.BuildId);
+        coinList.AddCoin.Should().BeCloseTo(3098, 10);
 
-        response.data.harvest_build_list.Should().NotBeEmpty();
-        AtgenHarvestBuildList harvestList = response.data.harvest_build_list.First();
-        harvestList.build_id.Should().Be(dragonTree.BuildId);
-        harvestList.add_harvest_list.Should().NotBeEmpty();
+        response.data.HarvestBuildList.Should().NotBeEmpty();
+        AtgenHarvestBuildList harvestList = response.data.HarvestBuildList.First();
+        harvestList.BuildId.Should().Be(dragonTree.BuildId);
+        harvestList.AddHarvestList.Should().NotBeEmpty();
 
-        response.data.add_stamina_list.Should().NotBeEmpty();
-        AtgenAddStaminaList staminaList = response.data.add_stamina_list.First();
-        staminaList.build_id.Should().Be(halidom.BuildId);
-        staminaList.add_stamina.Should().Be(12);
+        response.data.AddStaminaList.Should().NotBeEmpty();
+        AtgenAddStaminaList staminaList = response.data.AddStaminaList.First();
+        staminaList.BuildId.Should().Be(halidom.BuildId);
+        staminaList.AddStamina.Should().Be(12);
 
-        response.data.update_data_list.user_data.coin.Should().BeCloseTo(oldCoin + 3098, 10);
-        response.data.update_data_list.material_list.Should().NotBeEmpty();
+        response.data.UpdateDataList.UserData.Coin.Should().BeCloseTo(oldCoin + 3098, 10);
+        response.data.UpdateDataList.MaterialList.Should().NotBeEmpty();
     }
 
     [Fact]
@@ -597,11 +597,11 @@ public class FortTest : TestFixture
         DragaliaResponse<FortGetMultiIncomeData> response =
             await this.Client.PostMsgpack<FortGetMultiIncomeData>(
                 "/fort/get_multi_income",
-                new FortGetMultiIncomeRequest() { build_id_list = new[] { rupieMine.BuildId } }
+                new FortGetMultiIncomeRequest() { BuildIdList = new[] { rupieMine.BuildId } }
             );
 
         response
-            .data.update_data_list.mission_notice.daily_mission_notice.new_complete_mission_id_list.Should()
+            .data.UpdateDataList.MissionNotice.DailyMissionNotice.NewCompleteMissionIdList.Should()
             .Contain(15070201);
     }
 }

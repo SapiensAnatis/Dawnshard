@@ -14,7 +14,7 @@ public class VersionController(IResourceVersionService resourceVersionService)
     [Route("get_resource_version")]
     public DragaliaResult GetResourceVersion(VersionGetResourceVersionRequest request)
     {
-        string resourceVersion = resourceVersionService.GetResourceVersion(request.platform);
+        string resourceVersion = resourceVersionService.GetResourceVersion(request.Platform);
         return this.Ok(new VersionGetResourceVersionData(resourceVersion));
     }
 }

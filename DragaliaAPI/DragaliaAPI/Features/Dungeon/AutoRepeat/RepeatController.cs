@@ -30,17 +30,17 @@ public class RepeatController(
         RepeatEndData response =
             new()
             {
-                ingame_result_data = info.IngameResultData,
-                update_data_list = info.UpdateDataList,
-                entity_result = new()
+                IngameResultData = info.IngameResultData,
+                UpdateDataList = info.UpdateDataList,
+                EntityResult = new()
                 {
-                    converted_entity_list = [],
-                    new_get_entity_list = [],
-                    over_discard_entity_list = [],
-                    over_present_limit_entity_list = [],
-                    over_present_entity_list = []
+                    ConvertedEntityList = [],
+                    NewGetEntityList = [],
+                    OverDiscardEntityList = [],
+                    OverPresentLimitEntityList = [],
+                    OverPresentEntityList = []
                 },
-                repeat_data = new(info.Key.ToString(), info.CurrentCount, 1)
+                RepeatData = new(info.Key.ToString(), info.CurrentCount, 1)
             };
 
         return response;

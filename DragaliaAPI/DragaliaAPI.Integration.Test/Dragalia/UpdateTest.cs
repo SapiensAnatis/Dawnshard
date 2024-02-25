@@ -14,7 +14,7 @@ public class UpdateTest : TestFixture
 
         await this.Client.PostMsgpack<UpdateNamechangeData>(
             "/update/namechange",
-            new UpdateNamechangeRequest() { name = newName }
+            new UpdateNamechangeRequest() { Name = newName }
         );
 
         DbPlayerUserData userData = this.ApiContext.PlayerUserData.Find(ViewerId)!;
@@ -29,11 +29,11 @@ public class UpdateTest : TestFixture
         UpdateNamechangeData response = (
             await this.Client.PostMsgpack<UpdateNamechangeData>(
                 "/update/namechange",
-                new UpdateNamechangeRequest() { name = newName }
+                new UpdateNamechangeRequest() { Name = newName }
             )
         ).data;
 
-        response.checked_name.Should().Be(newName);
+        response.CheckedName.Should().Be(newName);
     }
 
     [Fact]
@@ -44,9 +44,9 @@ public class UpdateTest : TestFixture
                 "/update/reset_new",
                 new UpdateResetNewRequest()
                 {
-                    target_list = new List<AtgenTargetList>()
+                    TargetList = new List<AtgenTargetList>()
                     {
-                        new AtgenTargetList() { target_name = "emblem", target_id_list = null, }
+                        new AtgenTargetList() { TargetName = "emblem", TargetIdList = null, }
                     }
                 }
             )

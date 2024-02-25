@@ -44,10 +44,10 @@ public class MissionControllerTest
         MissionNotice notice =
             new()
             {
-                normal_mission_notice = new AtgenNormalMissionNotice()
+                NormalMissionNotice = new AtgenNormalMissionNotice()
                 {
-                    is_update = 1,
-                    all_mission_count = 420
+                    IsUpdate = 1,
+                    AllMissionCount = 420
                 }
             };
 
@@ -63,8 +63,8 @@ public class MissionControllerTest
                 new MissionGetMissionListData()
                 {
                     normal_mission_list = [],
-                    mission_notice = notice,
-                    current_main_story_mission = mainStoryMission
+                    MissionNotice = notice,
+                    CurrentMainStoryMission = mainStoryMission
                 }
             );
 
@@ -74,8 +74,8 @@ public class MissionControllerTest
         MissionGetMissionListData? response = resp.Value;
         response.Should().NotBeNull();
 
-        response!.mission_notice.Should().Be(notice);
-        response.current_main_story_mission.Should().Be(mainStoryMission);
+        response!.MissionNotice.Should().Be(notice);
+        response.CurrentMainStoryMission.Should().Be(mainStoryMission);
         response.normal_mission_list.Should().BeEmpty();
 
         mockMissionService.VerifyAll();
@@ -88,10 +88,10 @@ public class MissionControllerTest
         MissionNotice notice =
             new()
             {
-                normal_mission_notice = new AtgenNormalMissionNotice()
+                NormalMissionNotice = new AtgenNormalMissionNotice()
                 {
-                    is_update = 1,
-                    all_mission_count = 420
+                    IsUpdate = 1,
+                    AllMissionCount = 420
                 }
             };
 
@@ -123,13 +123,13 @@ public class MissionControllerTest
         MissionGetDrillMissionListData? response = resp.Value;
         response.Should().NotBeNull();
 
-        response!.mission_notice.Should().Be(notice);
+        response!.MissionNotice.Should().Be(notice);
         response
-            .drill_mission_list.Should()
+            .DrillMissionList.Should()
             .ContainEquivalentOf(
                 new DrillMissionList(500, 0, 0, DateTimeOffset.UnixEpoch, DateTimeOffset.UnixEpoch)
             );
-        response.drill_mission_group_list.Should().BeEquivalentTo([new DrillMissionGroupList(1)]);
+        response.DrillMissionGroupList.Should().BeEquivalentTo([new DrillMissionGroupList(1)]);
 
         mockMissionService.VerifyAll();
         mockUpdateDataService.VerifyAll();
@@ -165,7 +165,7 @@ public class MissionControllerTest
 
         MissionUnlockDrillMissionGroupData? response = resp.Value;
         response!
-            .drill_mission_list.Should()
+            .DrillMissionList.Should()
             .ContainEquivalentOf(
                 new DrillMissionList(5000, 0, 1, DateTimeOffset.UnixEpoch, DateTimeOffset.UnixEpoch)
             );
@@ -204,7 +204,7 @@ public class MissionControllerTest
 
         MissionUnlockMainStoryGroupData? response = resp.Value;
         response!
-            .main_story_mission_list.Should()
+            .MainStoryMissionList.Should()
             .ContainEquivalentOf(
                 new MainStoryMissionList(
                     5000,
@@ -215,7 +215,7 @@ public class MissionControllerTest
                 )
             );
         response
-            .main_story_mission_unlock_bonus_list.Should()
+            .MainStoryMissionUnlockBonusList.Should()
             .ContainEquivalentOf(
                 new AtgenBuildEventRewardEntityList(EntityTypes.FortPlant, 10, 500)
             );

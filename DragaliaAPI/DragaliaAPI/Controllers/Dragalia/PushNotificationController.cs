@@ -8,5 +8,5 @@ public class PushNotificationController : DragaliaControllerBase
 {
     [HttpPost("update_setting")]
     public DragaliaResult UpdateSetting() =>
-        this.Ok(new PushNotificationUpdateSettingData() { result = 1 });
+        this.Ok(new PushNotificationUpdateSettingData() { Result = 1 });
 }

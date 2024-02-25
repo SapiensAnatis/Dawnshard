@@ -44,7 +44,7 @@ public class QuestController : DragaliaControllerBase
     {
         IEnumerable<AtgenBuildEventRewardEntityList> rewardList = await this.storyService.ReadStory(
             StoryTypes.Quest,
-            request.quest_story_id
+            request.QuestStoryId
         );
 
         EntityResult entityResult = StoryService.GetEntityResult(rewardList);
@@ -57,9 +57,9 @@ public class QuestController : DragaliaControllerBase
         return this.Ok(
             new QuestReadStoryData()
             {
-                quest_story_reward_list = questRewardList,
-                entity_result = entityResult,
-                update_data_list = updateDataList
+                QuestStoryRewardList = questRewardList,
+                EntityResult = entityResult,
+                UpdateDataList = updateDataList
             }
         );
     }
@@ -76,15 +76,15 @@ public class QuestController : DragaliaControllerBase
     public async Task<DragaliaResult> GetQuestClearParty(QuestGetQuestClearPartyRequest request)
     {
         (IEnumerable<PartySettingList> clearParty, IEnumerable<AtgenLostUnitList> lostUnitList) =
-            await this.clearPartyService.GetQuestClearParty(request.quest_id, false);
+            await this.clearPartyService.GetQuestClearParty(request.QuestId, false);
 
         await this.updateDataService.SaveChangesAsync(); // Updated lost entities
 
         return Ok(
             new QuestGetQuestClearPartyData()
             {
-                quest_clear_party_setting_list = clearParty,
-                lost_unit_list = lostUnitList
+                QuestClearPartySettingList = clearParty,
+                LostUnitList = lostUnitList
             }
         );
     }
@@ -95,15 +95,15 @@ public class QuestController : DragaliaControllerBase
     )
     {
         (IEnumerable<PartySettingList> clearParty, IEnumerable<AtgenLostUnitList> lostUnitList) =
-            await this.clearPartyService.GetQuestClearParty(request.quest_id, true);
+            await this.clearPartyService.GetQuestClearParty(request.QuestId, true);
 
         await this.updateDataService.SaveChangesAsync();
 
         return Ok(
             new QuestGetQuestClearPartyMultiData()
             {
-                quest_multi_clear_party_setting_list = clearParty,
-                lost_unit_list = lostUnitList
+                QuestMultiClearPartySettingList = clearParty,
+                LostUnitList = lostUnitList
             }
         );
     }
@@ -119,14 +119,14 @@ public class QuestController : DragaliaControllerBase
     public async Task<DragaliaResult> SetQuestClearParty(QuestSetQuestClearPartyRequest request)
     {
         await this.clearPartyService.SetQuestClearParty(
-            request.quest_id,
+            request.QuestId,
             false,
-            request.request_party_setting_list
+            request.RequestPartySettingList
         );
 
         await this.updateDataService.SaveChangesAsync();
 
-        return Ok(new QuestSetQuestClearPartyData() { result = 1 });
+        return Ok(new QuestSetQuestClearPartyData() { Result = 1 });
     }
 
     [HttpPost("set_quest_clear_party_multi")]
@@ -135,32 +135,32 @@ public class QuestController : DragaliaControllerBase
     )
     {
         await this.clearPartyService.SetQuestClearParty(
-            request.quest_id,
+            request.QuestId,
             true,
-            request.request_party_setting_list
+            request.RequestPartySettingList
         );
 
         await this.updateDataService.SaveChangesAsync();
 
-        return Ok(new QuestSetQuestClearPartyMultiData() { result = 1 });
+        return Ok(new QuestSetQuestClearPartyMultiData() { Result = 1 });
     }
 
     [HttpPost("drop_list")]
     public DragaliaResult DropList(QuestDropListRequest request)
     {
         IEnumerable<DropEntity> drops = Enumerable.Empty<DropEntity>();
-        if (MasterAsset.QuestDrops.TryGetValue(request.quest_id, out QuestDropInfo? dropInfo))
+        if (MasterAsset.QuestDrops.TryGetValue(request.QuestId, out QuestDropInfo? dropInfo))
             drops = dropInfo.Drops;
 
         return Ok(
             new QuestDropListData()
             {
-                quest_drop_info = new()
+                QuestDropInfo = new()
                 {
-                    drop_info_list = drops.Select(x => new AtgenDuplicateEntityList()
+                    DropInfoList = drops.Select(x => new AtgenDuplicateEntityList()
                     {
-                        entity_id = x.Id,
-                        entity_type = x.EntityType,
+                        EntityId = x.Id,
+                        EntityType = x.EntityType,
                     })
                 }
             }

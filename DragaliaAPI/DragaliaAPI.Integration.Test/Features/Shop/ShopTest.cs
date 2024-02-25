@@ -22,8 +22,8 @@ public class ShopTest : TestFixture
         );
 
         resp.data_headers.result_code.Should().Be(ResultCode.Success);
-        resp.data.material_shop_purchase.Should().BeEmpty();
-        resp.data.user_item_summon.Should().NotBeNull();
+        resp.data.MaterialShopPurchase.Should().BeEmpty();
+        resp.data.UserItemSummon.Should().NotBeNull();
     }
 
     [Fact]
@@ -41,10 +41,10 @@ public class ShopTest : TestFixture
             );
 
         resp.data_headers.result_code.Should().Be(ResultCode.Success);
-        resp.data.update_data_list.Should().NotBeNull();
-        resp.data.material_shop_purchase.Should().HaveCount(1);
-        resp.data.material_shop_purchase.First().goods_id.Should().Be(1000001);
-        resp.data.material_shop_purchase.First().buy_count.Should().Be(1);
+        resp.data.UpdateDataList.Should().NotBeNull();
+        resp.data.MaterialShopPurchase.Should().HaveCount(1);
+        resp.data.MaterialShopPurchase.First().GoodsId.Should().Be(1000001);
+        resp.data.MaterialShopPurchase.First().BuyCount.Should().Be(1);
     }
 
     [Fact]

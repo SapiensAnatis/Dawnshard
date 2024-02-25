@@ -29,21 +29,24 @@ public class TradeService(
             )
             .Select(trade => new TreasureTradeList
             {
-                treasure_trade_id = trade.Id,
-                priority = trade.Priority,
-                tab_group_id = trade.TabGroupId,
-                commence_date = trade.CommenceDate,
-                complete_date = trade.CompleteDate,
-                is_lock_view = trade.IsLockView,
-                reset_type = trade.ResetType,
-                limit = trade.Limit,
-                destination_entity_type = trade.DestinationEntityType,
-                destination_entity_id = trade.DestinationEntityId,
-                destination_entity_quantity = trade.DestinationEntityQuantity,
-                destination_limit_break_count = trade.DestinationLimitBreakCount,
-                need_trade_entity_list = trade.NeedEntities.Select(
-                    x => new AtgenNeedTradeEntityList(x.Type, x.Id, x.Quantity, x.LimitBreakCount)
-                )
+                TreasureTradeId = trade.Id,
+                Priority = trade.Priority,
+                TabGroupId = trade.TabGroupId,
+                CommenceDate = trade.CommenceDate,
+                CompleteDate = trade.CompleteDate,
+                IsLockView = trade.IsLockView,
+                ResetType = trade.ResetType,
+                Limit = trade.Limit,
+                DestinationEntityType = trade.DestinationEntityType,
+                DestinationEntityId = trade.DestinationEntityId,
+                DestinationEntityQuantity = trade.DestinationEntityQuantity,
+                DestinationLimitBreakCount = trade.DestinationLimitBreakCount,
+                NeedTradeEntityList = trade.NeedEntities.Select(x => new AtgenNeedTradeEntityList(
+                    x.Type,
+                    x.Id,
+                    x.Quantity,
+                    x.LimitBreakCount
+                ))
             });
     }
 
@@ -57,13 +60,13 @@ public class TradeService(
             )
             .Select(trade => new AbilityCrestTradeList
             {
-                ability_crest_trade_id = trade.Id,
-                ability_crest_id = trade.AbilityCrestId,
-                complete_date = trade.CompleteDate,
-                pickup_view_start_date = trade.PickupViewStartDate,
-                pickup_view_end_date = trade.PickupViewEndDate,
-                need_dew_point = trade.NeedDewPoint,
-                priority = trade.Priority
+                AbilityCrestTradeId = trade.Id,
+                AbilityCrestId = trade.AbilityCrestId,
+                CompleteDate = trade.CompleteDate,
+                PickupViewStartDate = trade.PickupViewStartDate,
+                PickupViewEndDate = trade.PickupViewEndDate,
+                NeedDewPoint = trade.NeedDewPoint,
+                Priority = trade.Priority
             });
     }
 
@@ -73,23 +76,23 @@ public class TradeService(
             .EventTreasureTrade.Enumerable.Where(x => x.TradeGroupId == tradeGroupId)
             .Select(x => new EventTradeList
             {
-                event_trade_id = x.Id,
-                trade_group_id = x.TradeGroupId,
-                tab_group_id = x.TabGroupId,
-                priority = x.Priority,
-                is_lock_view = x.IsLockView,
-                commence_date = x.CommenceDate,
-                complete_date = x.CompleteDate,
-                reset_type = x.ResetType,
-                limit = x.Limit,
-                destination_entity_type = x.DestinationEntityType,
-                destination_entity_id = x.DestinationEntityId,
-                destination_entity_quantity = x.DestinationEntityQuantity,
-                need_entity_list = x
+                EventTradeId = x.Id,
+                TradeGroupId = x.TradeGroupId,
+                TabGroupId = x.TabGroupId,
+                Priority = x.Priority,
+                IsLockView = x.IsLockView,
+                CommenceDate = x.CommenceDate,
+                CompleteDate = x.CompleteDate,
+                ResetType = x.ResetType,
+                Limit = x.Limit,
+                DestinationEntityType = x.DestinationEntityType,
+                DestinationEntityId = x.DestinationEntityId,
+                DestinationEntityQuantity = x.DestinationEntityQuantity,
+                NeedEntityList = x
                     .NeedEntities.Where(y => y.Type != EntityTypes.None)
                     .Select(z => new AtgenBuildEventRewardEntityList(z.Type, z.Id, z.Quantity)),
-                read_story_count = 0,
-                clear_target_quest_id = 0
+                ReadStoryCount = 0,
+                ClearTargetQuestId = 0
             });
     }
 

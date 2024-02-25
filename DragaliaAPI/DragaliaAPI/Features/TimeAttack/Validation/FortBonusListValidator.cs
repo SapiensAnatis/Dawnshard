@@ -7,57 +7,57 @@ public class FortBonusListValidator : AbstractValidator<FortBonusList>
 {
     public FortBonusListValidator()
     {
-        RuleForEach(x => x.param_bonus_by_weapon)
+        RuleForEach(x => x.ParamBonusByWeapon)
             .ChildRules(x =>
             {
-                x.RuleFor(y => y.hp).LessThanOrEqualTo(30);
-                x.RuleFor(y => y.attack).LessThanOrEqualTo(30);
+                x.RuleFor(y => y.Hp).LessThanOrEqualTo(30);
+                x.RuleFor(y => y.Attack).LessThanOrEqualTo(30);
             });
 
-        RuleForEach(x => x.param_bonus)
+        RuleForEach(x => x.ParamBonus)
             .ChildRules(x =>
             {
-                x.RuleFor(y => y.hp).LessThanOrEqualTo(45);
-                x.RuleFor(y => y.attack).LessThanOrEqualTo(45);
+                x.RuleFor(y => y.Hp).LessThanOrEqualTo(45);
+                x.RuleFor(y => y.Attack).LessThanOrEqualTo(45);
             });
 
-        RuleForEach(x => x.element_bonus)
+        RuleForEach(x => x.ElementBonus)
             .ChildRules(x =>
             {
-                x.RuleFor(y => y.hp).LessThanOrEqualTo(80);
-                x.RuleFor(y => y.attack).LessThanOrEqualTo(80);
+                x.RuleFor(y => y.Hp).LessThanOrEqualTo(80);
+                x.RuleFor(y => y.Attack).LessThanOrEqualTo(80);
             });
 
-        RuleForEach(x => x.dragon_bonus)
+        RuleForEach(x => x.DragonBonus)
             .ChildRules(x =>
             {
-                x.RuleFor(y => y.dragon_bonus).LessThanOrEqualTo(50);
-                x.RuleFor(y => y.hp).LessThanOrEqualTo(11.5f);
-                x.RuleFor(y => y.attack).LessThanOrEqualTo(11.5f);
+                x.RuleFor(y => y.DragonBonus).LessThanOrEqualTo(50);
+                x.RuleFor(y => y.Hp).LessThanOrEqualTo(11.5f);
+                x.RuleFor(y => y.Attack).LessThanOrEqualTo(11.5f);
             });
 
-        RuleForEach(x => x.dragon_bonus_by_album)
+        RuleForEach(x => x.DragonBonusByAlbum)
             .ChildRules(x =>
             {
-                x.RuleFor(y => y.hp).LessThanOrEqualTo(8);
-                x.RuleFor(y => y.attack).LessThanOrEqualTo(8);
+                x.RuleFor(y => y.Hp).LessThanOrEqualTo(8);
+                x.RuleFor(y => y.Attack).LessThanOrEqualTo(8);
             });
 
-        RuleForEach(x => x.chara_bonus_by_album)
+        RuleForEach(x => x.CharaBonusByAlbum)
             .ChildRules(x =>
             {
-                x.RuleFor(y => y.hp).LessThanOrEqualTo(15);
-                x.RuleFor(y => y.attack).LessThanOrEqualTo(15);
+                x.RuleFor(y => y.Hp).LessThanOrEqualTo(15);
+                x.RuleFor(y => y.Attack).LessThanOrEqualTo(15);
             });
 
-        RuleFor(x => x.dragon_time_bonus)
-            .ChildRules(x => x.RuleFor(y => y.dragon_time_bonus).LessThanOrEqualTo(0));
+        RuleFor(x => x.DragonTimeBonus)
+            .ChildRules(x => x.RuleFor(y => y.DragonTimeBonus).LessThanOrEqualTo(0));
 
-        RuleFor(x => x.all_bonus)
+        RuleFor(x => x.AllBonus)
             .ChildRules(x =>
             {
-                x.RuleFor(y => y.hp).LessThanOrEqualTo(0);
-                x.RuleFor(y => y.attack).LessThanOrEqualTo(0);
+                x.RuleFor(y => y.Hp).LessThanOrEqualTo(0);
+                x.RuleFor(y => y.Attack).LessThanOrEqualTo(0);
             });
     }
 }

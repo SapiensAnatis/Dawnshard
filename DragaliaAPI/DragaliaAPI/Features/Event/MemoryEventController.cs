@@ -23,12 +23,12 @@ public class MemoryEventController(
 
         DbPlayerUserData userData = await userDataRepository.GetUserDataAsync();
 
-        await eventService.CreateEventData(request.event_id);
-        userData.ActiveMemoryEventId = request.event_id;
+        await eventService.CreateEventData(request.EventId);
+        userData.ActiveMemoryEventId = request.EventId;
 
-        resp.result = 1;
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.Result = 1;
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }

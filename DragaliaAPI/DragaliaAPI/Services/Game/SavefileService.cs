@@ -177,7 +177,7 @@ public class SavefileService : ISavefileService
 
             foreach (DragonList d in savefile.dragon_list ?? new List<DragonList>())
             {
-                ulong oldKeyId = d.dragon_key_id;
+                ulong oldKeyId = d.DragonKeyId;
                 DbPlayerDragonData dbEntry = d.Map<DbPlayerDragonData>(mapper);
                 player.DragonList.Add(dbEntry);
 
@@ -193,7 +193,7 @@ public class SavefileService : ISavefileService
 
             foreach (TalismanList t in savefile.talisman_list ?? new List<TalismanList>())
             {
-                ulong oldKeyId = t.talisman_key_id;
+                ulong oldKeyId = t.TalismanKeyId;
                 DbTalisman dbEntry = t.Map<DbTalisman>(mapper);
                 player.TalismanList.Add(dbEntry);
 
@@ -364,17 +364,17 @@ public class SavefileService : ISavefileService
             );
 
             if (
-                savefile.user_data.emblem_id != Emblems.DragonbloodPrince
+                savefile.user_data.EmblemId != Emblems.DragonbloodPrince
                 && await this.apiContext.Emblems.FindAsync(
                     player.ViewerId,
-                    savefile.user_data.emblem_id
+                    savefile.user_data.EmblemId
                 ) == null
             )
             {
                 player.Emblems.Add(
                     new DbEmblem
                     {
-                        EmblemId = savefile.user_data.emblem_id,
+                        EmblemId = savefile.user_data.EmblemId,
                         GetTime = DateTimeOffset.UnixEpoch,
                         IsNew = false
                     }

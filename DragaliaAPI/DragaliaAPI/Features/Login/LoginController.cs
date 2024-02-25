@@ -76,19 +76,19 @@ public class LoginController : DragaliaControllerBase
                 await action.Apply();
             }
 
-            resp.login_bonus_list = await this.loginBonusService.RewardLoginBonus();
+            resp.LoginBonusList = await this.loginBonusService.RewardLoginBonus();
         }
 
         userData.LastLoginTime = this.dateTimeProvider.UtcNow;
 
-        resp.penalty_data = new AtgenPenaltyData();
-        resp.dragon_contact_free_gift_count = 1;
-        resp.login_lottery_reward_list = Enumerable.Empty<AtgenLoginLotteryRewardList>();
-        resp.exchange_summom_point_list = Enumerable.Empty<AtgenExchangeSummomPointList>();
-        resp.monthly_wall_receive_list = Enumerable.Empty<AtgenMonthlyWallReceiveList>();
-        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
-        resp.entity_result = this.rewardService.GetEntityResult();
-        resp.server_time = DateTimeOffset.UtcNow;
+        resp.PenaltyData = new AtgenPenaltyData();
+        resp.DragonContactFreeGiftCount = 1;
+        resp.LoginLotteryRewardList = Enumerable.Empty<AtgenLoginLotteryRewardList>();
+        resp.ExchangeSummomPointList = Enumerable.Empty<AtgenExchangeSummomPointList>();
+        resp.MonthlyWallReceiveList = Enumerable.Empty<AtgenMonthlyWallReceiveList>();
+        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        resp.EntityResult = this.rewardService.GetEntityResult();
+        resp.ServerTime = DateTimeOffset.UtcNow;
 
         return this.Ok(resp);
     }

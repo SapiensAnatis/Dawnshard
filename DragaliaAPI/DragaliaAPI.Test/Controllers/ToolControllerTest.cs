@@ -27,9 +27,9 @@ public class ToolControllerTest
             .BeEquivalentTo(
                 new ToolAuthData()
                 {
-                    session_id = "session_id",
-                    viewer_id = 1,
-                    nonce = "placeholder nonce"
+                    SessionId = "session_id",
+                    ViewerId = 1,
+                    Nonce = "placeholder nonce"
                 }
             );
     }
@@ -43,8 +43,8 @@ public class ToolControllerTest
             .GetData<ToolSignupData>()
             .Should()
             .BeEquivalentTo(
-                new ToolSignupData() { viewer_id = 1, },
-                opts => opts.Excluding(x => x.servertime)
+                new ToolSignupData() { ViewerId = 1, },
+                opts => opts.Excluding(x => x.Servertime)
             );
     }
 }

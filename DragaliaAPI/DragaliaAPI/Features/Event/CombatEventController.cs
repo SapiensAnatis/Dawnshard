@@ -21,15 +21,15 @@ public class CombatEventController(
     {
         CombatEventGetEventDataData resp = new();
 
-        resp.combat_event_user_data = await eventService.GetCombatEventUserData(request.event_id);
-        resp.event_reward_list = await eventService.GetEventRewardList<BuildEventRewardList>(
-            request.event_id
+        resp.CombatEventUserData = await eventService.GetCombatEventUserData(request.EventId);
+        resp.EventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
+            request.EventId
         );
-        resp.user_event_location_reward_list =
-            await eventService.GetEventRewardList<UserEventLocationRewardList>(request.event_id);
+        resp.UserEventLocationRewardList =
+            await eventService.GetEventRewardList<UserEventLocationRewardList>(request.EventId);
 
-        resp.event_trade_list = MasterAsset
-            .EventTradeGroup.Enumerable.Where(x => x.EventId == request.event_id)
+        resp.EventTradeList = MasterAsset
+            .EventTradeGroup.Enumerable.Where(x => x.EventId == request.EventId)
             .SelectMany(x => tradeService.GetEventTradeList(x.Id));
 
         return Ok(resp);
@@ -42,9 +42,9 @@ public class CombatEventController(
 
         // TODO: Complete first event mission once thats implemented
 
-        resp.combat_event_user_data = await eventService.GetCombatEventUserData(request.event_id);
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.CombatEventUserData = await eventService.GetCombatEventUserData(request.EventId);
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
@@ -56,13 +56,13 @@ public class CombatEventController(
     {
         CombatEventReceiveEventPointRewardData resp = new();
 
-        resp.event_reward_entity_list = await eventService.ReceiveEventRewards(request.event_id);
+        resp.EventRewardEntityList = await eventService.ReceiveEventRewards(request.EventId);
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
-        resp.event_reward_list = await eventService.GetEventRewardList<BuildEventRewardList>(
-            request.event_id
+        resp.EventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
+            request.EventId
         );
 
         return Ok(resp);
@@ -75,16 +75,16 @@ public class CombatEventController(
     {
         CombatEventReceiveEventLocationRewardData resp = new();
 
-        resp.event_location_reward_entity_list = await eventService.ReceiveEventLocationReward(
-            request.event_id,
-            request.event_location_reward_id
+        resp.EventLocationRewardEntityList = await eventService.ReceiveEventLocationReward(
+            request.EventId,
+            request.EventLocationRewardId
         );
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
-        resp.user_event_location_reward_list =
-            await eventService.GetEventRewardList<UserEventLocationRewardList>(request.event_id);
+        resp.UserEventLocationRewardList =
+            await eventService.GetEventRewardList<UserEventLocationRewardList>(request.EventId);
 
         return Ok(resp);
     }

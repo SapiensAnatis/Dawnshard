@@ -8,100 +8,100 @@ public static class TestData
     public static UserSupportList supportListEuden =
         new()
         {
-            viewer_id = 1000,
-            name = "Euden",
-            level = 10,
-            last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-            emblem_id = (Emblems)40000002,
-            max_party_power = 9999,
-            support_chara = new()
+            ViewerId = 1000,
+            Name = "Euden",
+            Level = 10,
+            LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+            EmblemId = (Emblems)40000002,
+            MaxPartyPower = 9999,
+            SupportChara = new()
             {
-                chara_id = Charas.ThePrince,
-                level = 10,
-                additional_max_level = 0,
-                rarity = 5,
-                hp = 60,
-                attack = 40,
-                hp_plus_count = 0,
-                attack_plus_count = 0,
-                ability_1_level = 0,
-                ability_2_level = 0,
-                ability_3_level = 0,
-                ex_ability_level = 1,
-                ex_ability_2_level = 1,
-                skill_1_level = 1,
-                skill_2_level = 0,
-                is_unlock_edit_skill = true
+                CharaId = Charas.ThePrince,
+                Level = 10,
+                AdditionalMaxLevel = 0,
+                Rarity = 5,
+                Hp = 60,
+                Attack = 40,
+                HpPlusCount = 0,
+                AttackPlusCount = 0,
+                Ability1Level = 0,
+                Ability2Level = 0,
+                Ability3Level = 0,
+                ExAbilityLevel = 1,
+                ExAbility2Level = 1,
+                Skill1Level = 1,
+                Skill2Level = 0,
+                IsUnlockEditSkill = true
             },
-            support_dragon = new() { dragon_id = Dragons.Midgardsormr },
-            support_weapon_body = new() { weapon_body_id = WeaponBodies.SoldiersBrand },
-            support_talisman = new() { talisman_id = Talismans.ThePrince },
-            support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+            SupportDragon = new() { DragonId = Dragons.Midgardsormr },
+            SupportWeaponBody = new() { WeaponBodyId = WeaponBodies.SoldiersBrand },
+            SupportTalisman = new() { TalismanId = Talismans.ThePrince },
+            SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
             {
-                new() { ability_crest_id = AbilityCrests.TheGreatestGift },
-                new() { ability_crest_id = 0 },
-                new() { ability_crest_id = 0 },
+                new() { AbilityCrestId = AbilityCrests.TheGreatestGift },
+                new() { AbilityCrestId = 0 },
+                new() { AbilityCrestId = 0 },
             },
-            support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+            SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
             {
-                new() { ability_crest_id = AbilityCrests.ManaFount },
-                new() { ability_crest_id = 0 },
+                new() { AbilityCrestId = AbilityCrests.ManaFount },
+                new() { AbilityCrestId = 0 },
             },
-            support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+            SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
             {
-                new() { ability_crest_id = 0 },
-                new() { ability_crest_id = 0 },
+                new() { AbilityCrestId = 0 },
+                new() { AbilityCrestId = 0 },
             },
-            guild = new() { guild_id = 0, guild_name = "Guild" }
+            Guild = new() { GuildId = 0, GuildName = "Guild" }
         };
 
     public static UserSupportList supportListElisanne =
         new()
         {
-            viewer_id = 1001,
-            name = "Elisanne",
-            level = 10,
-            last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-            emblem_id = (Emblems)40000002,
-            max_party_power = 9999,
-            support_chara = new()
+            ViewerId = 1001,
+            Name = "Elisanne",
+            Level = 10,
+            LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+            EmblemId = (Emblems)40000002,
+            MaxPartyPower = 9999,
+            SupportChara = new()
             {
-                chara_id = Charas.Elisanne,
-                level = 10,
-                additional_max_level = 0,
-                rarity = 5,
-                hp = 60,
-                attack = 40,
-                hp_plus_count = 0,
-                attack_plus_count = 0,
-                ability_1_level = 0,
-                ability_2_level = 0,
-                ability_3_level = 0,
-                ex_ability_level = 1,
-                ex_ability_2_level = 1,
-                skill_1_level = 1,
-                skill_2_level = 0,
-                is_unlock_edit_skill = true
+                CharaId = Charas.Elisanne,
+                Level = 10,
+                AdditionalMaxLevel = 0,
+                Rarity = 5,
+                Hp = 60,
+                Attack = 40,
+                HpPlusCount = 0,
+                AttackPlusCount = 0,
+                Ability1Level = 0,
+                Ability2Level = 0,
+                Ability3Level = 0,
+                ExAbilityLevel = 1,
+                ExAbility2Level = 1,
+                Skill1Level = 1,
+                Skill2Level = 0,
+                IsUnlockEditSkill = true
             },
-            support_dragon = new() { dragon_key_id = 0, },
-            support_weapon_body = new() { weapon_body_id = 0, },
-            support_talisman = new() { talisman_key_id = 0, },
-            support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+            SupportDragon = new() { DragonKeyId = 0, },
+            SupportWeaponBody = new() { WeaponBodyId = 0, },
+            SupportTalisman = new() { TalismanKeyId = 0, },
+            SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
             {
-                new() { ability_crest_id = 0 },
-                new() { ability_crest_id = 0 },
-                new() { ability_crest_id = 0 },
+                new() { AbilityCrestId = 0 },
+                new() { AbilityCrestId = 0 },
+                new() { AbilityCrestId = 0 },
             },
-            support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+            SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
             {
-                new() { ability_crest_id = 0 },
-                new() { ability_crest_id = 0 },
+                new() { AbilityCrestId = 0 },
+                new() { AbilityCrestId = 0 },
             },
-            support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+            SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
             {
-                new() { ability_crest_id = 0 },
-                new() { ability_crest_id = 0 },
+                new() { AbilityCrestId = 0 },
+                new() { AbilityCrestId = 0 },
             },
-            guild = new() { guild_id = 0, guild_name = "Guild" }
+            Guild = new() { GuildId = 0, GuildName = "Guild" }
         };
 }

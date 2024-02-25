@@ -23,26 +23,26 @@ public class RaidEventController(
     {
         RaidEventGetEventDataData resp = new();
 
-        resp.is_receive_event_damage_reward = await eventService.GetCustomEventFlag(
-            request.raid_event_id
+        resp.IsReceiveEventDamageReward = await eventService.GetCustomEventFlag(
+            request.RaidEventId
         );
-        resp.raid_event_user_data = await eventService.GetRaidEventUserData(request.raid_event_id);
-        resp.raid_event_reward_list = await eventService.GetEventRewardList<RaidEventRewardList>(
-            request.raid_event_id
+        resp.RaidEventUserData = await eventService.GetRaidEventUserData(request.RaidEventId);
+        resp.RaidEventRewardList = await eventService.GetEventRewardList<RaidEventRewardList>(
+            request.RaidEventId
         );
-        resp.event_passive_list = new List<EventPassiveList>
+        resp.EventPassiveList = new List<EventPassiveList>
         {
-            await eventService.GetEventPassiveList(request.raid_event_id)
+            await eventService.GetEventPassiveList(request.RaidEventId)
         };
 
         if (
             MasterAsset
-                .EventTradeGroup.Enumerable.FirstOrDefault(x => x.EventId == request.raid_event_id)
+                .EventTradeGroup.Enumerable.FirstOrDefault(x => x.EventId == request.RaidEventId)
                 ?.Id is
             { } tradeGroupId
         )
         {
-            resp.event_trade_list = tradeService.GetEventTradeList(tradeGroupId);
+            resp.EventTradeList = tradeService.GetEventTradeList(tradeGroupId);
         }
 
         return Ok(resp);
@@ -53,9 +53,9 @@ public class RaidEventController(
     {
         RaidEventEntryData resp = new();
 
-        resp.raid_event_user_data = await eventService.GetRaidEventUserData(request.raid_event_id);
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.RaidEventUserData = await eventService.GetRaidEventUserData(request.RaidEventId);
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
@@ -67,16 +67,13 @@ public class RaidEventController(
     {
         RaidEventReceiveRaidPointRewardData resp = new();
 
-        await eventService.ReceiveEventRewards(
-            request.raid_event_id,
-            request.raid_event_reward_id_list
-        );
+        await eventService.ReceiveEventRewards(request.RaidEventId, request.RaidEventRewardIdList);
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
-        resp.raid_event_reward_list = await eventService.GetEventRewardList<RaidEventRewardList>(
-            request.raid_event_id
+        resp.RaidEventRewardList = await eventService.GetEventRewardList<RaidEventRewardList>(
+            request.RaidEventId
         );
 
         return Ok(resp);

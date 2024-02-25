@@ -44,18 +44,18 @@ public class QuestControllerTest
             .ReturnsAsync(
                 new List<AtgenBuildEventRewardEntityList>()
                 {
-                    new() { entity_type = EntityTypes.Wyrmite, entity_quantity = 25 },
+                    new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = 25 },
                     new()
                     {
-                        entity_type = EntityTypes.Chara,
-                        entity_id = (int)Charas.Ilia,
-                        entity_quantity = 1,
+                        EntityType = EntityTypes.Chara,
+                        EntityId = (int)Charas.Ilia,
+                        EntityQuantity = 1,
                     },
                     new()
                     {
-                        entity_type = EntityTypes.Dragon,
-                        entity_id = (int)Dragons.BronzeFafnir,
-                        entity_quantity = 2
+                        EntityType = EntityTypes.Dragon,
+                        EntityId = (int)Dragons.BronzeFafnir,
+                        EntityQuantity = 2
                     }
                 }
             );
@@ -63,43 +63,43 @@ public class QuestControllerTest
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList());
 
-        (await this.questController.ReadStory(new QuestReadStoryRequest() { quest_story_id = 1 }))
+        (await this.questController.ReadStory(new QuestReadStoryRequest() { QuestStoryId = 1 }))
             .GetData<QuestReadStoryData>()
             .Should()
             .BeEquivalentTo(
                 new QuestReadStoryData()
                 {
-                    entity_result = new()
+                    EntityResult = new()
                     {
-                        new_get_entity_list = new List<AtgenDuplicateEntityList>()
+                        NewGetEntityList = new List<AtgenDuplicateEntityList>()
                         {
                             new()
                             {
-                                entity_type = EntityTypes.Dragon,
-                                entity_id = (int)Dragons.BronzeFafnir
+                                EntityType = EntityTypes.Dragon,
+                                EntityId = (int)Dragons.BronzeFafnir
                             },
-                            new() { entity_type = EntityTypes.Chara, entity_id = (int)Charas.Ilia }
+                            new() { EntityType = EntityTypes.Chara, EntityId = (int)Charas.Ilia }
                         }
                     },
-                    update_data_list = new(),
-                    quest_story_reward_list = new List<AtgenQuestStoryRewardList>()
+                    UpdateDataList = new(),
+                    QuestStoryRewardList = new List<AtgenQuestStoryRewardList>()
                     {
-                        new() { entity_type = EntityTypes.Wyrmite, entity_quantity = 25, },
+                        new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = 25, },
                         new()
                         {
-                            entity_type = EntityTypes.Dragon,
-                            entity_id = (int)Dragons.BronzeFafnir,
-                            entity_quantity = 2,
-                            entity_level = 1,
-                            entity_limit_break_count = 0
+                            EntityType = EntityTypes.Dragon,
+                            EntityId = (int)Dragons.BronzeFafnir,
+                            EntityQuantity = 2,
+                            EntityLevel = 1,
+                            EntityLimitBreakCount = 0
                         },
                         new()
                         {
-                            entity_type = EntityTypes.Chara,
-                            entity_id = (int)Charas.Ilia,
-                            entity_quantity = 1,
-                            entity_level = 1,
-                            entity_limit_break_count = 0
+                            EntityType = EntityTypes.Chara,
+                            EntityId = (int)Charas.Ilia,
+                            EntityQuantity = 1,
+                            EntityLevel = 1,
+                            EntityLimitBreakCount = 0
                         }
                     }
                 }

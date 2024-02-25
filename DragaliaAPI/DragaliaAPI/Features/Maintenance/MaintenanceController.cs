@@ -21,7 +21,7 @@ public class MaintenanceController(
 
         return new MaintenanceGetTextData()
         {
-            maintenance_text = maintenanceService.GetMaintenanceText()
+            MaintenanceText = maintenanceService.GetMaintenanceText()
         };
     }
 }

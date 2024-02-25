@@ -46,10 +46,10 @@ public class WallControllerTest
         AtgenUserWallRewardList rewardList =
             new()
             {
-                quest_group_id = questGroupId,
-                sum_wall_level = totalLevel,
-                last_reward_date = lastRewardDate,
-                reward_status = rewardStatus
+                QuestGroupId = questGroupId,
+                SumWallLevel = totalLevel,
+                LastRewardDate = lastRewardDate,
+                RewardStatus = rewardStatus
             };
         IEnumerable<AtgenUserWallRewardList> userRewardList = new[] { rewardList };
 
@@ -63,7 +63,7 @@ public class WallControllerTest
             await wallController.GetMonthlyReward()
         ).GetData<WallGetMonthlyRewardData>()!;
 
-        data.user_wall_reward_list.Should().BeEquivalentTo(userRewardList);
+        data.UserWallRewardList.Should().BeEquivalentTo(userRewardList);
 
         mockWallService.VerifyAll();
     }
@@ -79,18 +79,18 @@ public class WallControllerTest
         AtgenUserWallRewardList rewardList =
             new()
             {
-                quest_group_id = questGroupId,
-                sum_wall_level = totalLevel,
-                last_reward_date = lastRewardDate,
-                reward_status = rewardStatus
+                QuestGroupId = questGroupId,
+                SumWallLevel = totalLevel,
+                LastRewardDate = lastRewardDate,
+                RewardStatus = rewardStatus
             };
         IEnumerable<AtgenUserWallRewardList> userRewardList = new[] { rewardList };
 
         AtgenMonthlyWallReceiveList monthlyWallReceiveList =
             new()
             {
-                quest_group_id = WallService.WallQuestGroupId,
-                is_receive_reward = RewardStatus.Received
+                QuestGroupId = WallService.WallQuestGroupId,
+                IsReceiveReward = RewardStatus.Received
             };
         IEnumerable<AtgenMonthlyWallReceiveList> monthlyWallReceiveListList = new[]
         {
@@ -102,15 +102,15 @@ public class WallControllerTest
             {
                 new AtgenBuildEventRewardEntityList()
                 {
-                    entity_type = EntityTypes.Mana,
-                    entity_id = 0,
-                    entity_quantity = 2500
+                    EntityType = EntityTypes.Mana,
+                    EntityId = 0,
+                    EntityQuantity = 2500
                 },
                 new AtgenBuildEventRewardEntityList()
                 {
-                    entity_type = EntityTypes.Rupies,
-                    entity_id = 0,
-                    entity_quantity = 10000
+                    EntityType = EntityTypes.Rupies,
+                    EntityId = 0,
+                    EntityQuantity = 10000
                 }
             };
 
@@ -136,8 +136,8 @@ public class WallControllerTest
             await wallController.ReceiveMonthlyReward(new WallReceiveMonthlyRewardRequest())
         ).GetData<WallReceiveMonthlyRewardData>()!;
 
-        data.user_wall_reward_list.Should().BeEquivalentTo(userRewardList);
-        data.monthly_wall_receive_list.Should().BeEquivalentTo(monthlyWallReceiveListList);
+        data.UserWallRewardList.Should().BeEquivalentTo(userRewardList);
+        data.MonthlyWallReceiveList.Should().BeEquivalentTo(monthlyWallReceiveListList);
 
         mockWallService.VerifyAll();
     }

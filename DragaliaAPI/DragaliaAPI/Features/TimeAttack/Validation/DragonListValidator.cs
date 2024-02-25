@@ -10,17 +10,17 @@ public class DragonListValidator : AbstractValidator<DragonList>
 {
     public DragonListValidator(int questId)
     {
-        RuleFor(x => x.hp_plus_count).InclusiveBetween(0, 100);
-        RuleFor(x => x.attack_plus_count).InclusiveBetween(0, 100);
+        RuleFor(x => x.HpPlusCount).InclusiveBetween(0, 100);
+        RuleFor(x => x.AttackPlusCount).InclusiveBetween(0, 100);
 
-        RuleFor(x => x.dragon_id).IsInEnum();
+        RuleFor(x => x.DragonId).IsInEnum();
 
         if (
             MasterAsset.QuestData.TryGetValue(questId, out QuestData? questData)
             && questData.LimitedElementalType != UnitElement.None
         )
         {
-            RuleFor(x => MasterAsset.DragonData.GetValueOrDefault(x.dragon_id))
+            RuleFor(x => MasterAsset.DragonData.GetValueOrDefault(x.DragonId))
                 .Must(x => x?.ElementalType == questData.LimitedElementalType)
                 .WithMessage("Element lock violation");
         }

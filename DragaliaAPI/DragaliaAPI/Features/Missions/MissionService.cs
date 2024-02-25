@@ -328,7 +328,7 @@ public class MissionService(
     {
         this.logger.LogDebug("Claiming daily missions: {@missions}", missions);
 
-        int[] ids = missions.Select(x => x.daily_mission_id).ToArray();
+        int[] ids = missions.Select(x => x.DailyMissionId).ToArray();
 
         List<DbCompletedDailyMission> completed = await this
             .missionRepository.CompletedDailyMissions.Where(x => ids.Contains(x.Id))
@@ -343,19 +343,19 @@ public class MissionService(
         foreach (AtgenMissionParamsList claimRequest in missions)
         {
             if (
-                claimRequest.day_no
+                claimRequest.DayNo
                 == DateOnly.FromDateTime(this.resetHelper.LastDailyReset.UtcDateTime)
             )
             {
                 DbPlayerMission regularMission = regularMissions.First(x =>
-                    x.Id == claimRequest.daily_mission_id
+                    x.Id == claimRequest.DailyMissionId
                 );
 
                 regularMission.State = MissionState.Claimed;
             }
 
             DbCompletedDailyMission? dbMission = completed.FirstOrDefault(x =>
-                x.Id == claimRequest.daily_mission_id && x.Date == claimRequest.day_no
+                x.Id == claimRequest.DailyMissionId && x.Date == claimRequest.DayNo
             );
 
             if (dbMission is null)
@@ -367,7 +367,7 @@ public class MissionService(
                 continue;
             }
 
-            await this.GrantMissionReward(MissionType.Daily, claimRequest.daily_mission_id);
+            await this.GrantMissionReward(MissionType.Daily, claimRequest.DailyMissionId);
 
             completed.Remove(dbMission);
             missionRepository.RemoveCompletedDailyMission(dbMission);
@@ -448,15 +448,15 @@ public class MissionService(
 
         return new CurrentMainStoryMission()
         {
-            main_story_mission_group_id = mainStoryMissionGroupId.Value,
-            main_story_mission_state_list = (
+            MainStoryMissionGroupId = mainStoryMissionGroupId.Value,
+            MainStoryMissionStateList = (
                 await this.missionRepository.GetMissionsByType(MissionType.MainStory).ToListAsync()
             )
                 .Where(x => x.GroupId == mainStoryMissionGroupId.Value)
                 .Select(x => new AtgenMainStoryMissionStateList()
                 {
-                    main_story_mission_id = x.Id,
-                    state = (int)x.State,
+                    MainStoryMissionId = x.Id,
+                    State = (int)x.State,
                 })
         };
     }
@@ -485,15 +485,15 @@ public class MissionService(
             );
         }
 
-        notice.main_story_mission_notice = await BuildNotice(MissionType.MainStory);
-        notice.album_mission_notice = await BuildNotice(MissionType.Album);
-        notice.beginner_mission_notice = await BuildNotice(MissionType.Beginner);
-        notice.daily_mission_notice = await BuildNotice(MissionType.Daily);
-        notice.drill_mission_notice = await BuildNotice(MissionType.Drill);
-        notice.memory_event_mission_notice = await BuildNotice(MissionType.MemoryEvent);
-        notice.normal_mission_notice = await BuildNotice(MissionType.Normal);
-        notice.period_mission_notice = await BuildNotice(MissionType.Period);
-        notice.special_mission_notice = await BuildNotice(MissionType.Special);
+        notice.MainStoryMissionNotice = await BuildNotice(MissionType.MainStory);
+        notice.AlbumMissionNotice = await BuildNotice(MissionType.Album);
+        notice.BeginnerMissionNotice = await BuildNotice(MissionType.Beginner);
+        notice.DailyMissionNotice = await BuildNotice(MissionType.Daily);
+        notice.DrillMissionNotice = await BuildNotice(MissionType.Drill);
+        notice.MemoryEventMissionNotice = await BuildNotice(MissionType.MemoryEvent);
+        notice.NormalMissionNotice = await BuildNotice(MissionType.Normal);
+        notice.PeriodMissionNotice = await BuildNotice(MissionType.Period);
+        notice.SpecialMissionNotice = await BuildNotice(MissionType.Special);
 
         return notice;
     }
@@ -536,13 +536,13 @@ public class MissionService(
 
         return new AtgenNormalMissionNotice
         {
-            is_update = 1,
-            all_mission_count = totalCount,
-            completed_mission_count = completedCount,
-            receivable_reward_count = receivableRewardCount,
-            new_complete_mission_id_list = newCompletedMissionList,
-            pickup_mission_count = type == MissionType.Daily ? allMissions.Count(x => x.Pickup) : 0,
-            current_mission_id = currentMissionId
+            IsUpdate = 1,
+            AllMissionCount = totalCount,
+            CompletedMissionCount = completedCount,
+            ReceivableRewardCount = receivableRewardCount,
+            NewCompleteMissionIdList = newCompletedMissionList,
+            PickupMissionCount = type == MissionType.Daily ? allMissions.Count(x => x.Pickup) : 0,
+            CurrentMissionId = currentMissionId
         };
     }
 
@@ -638,17 +638,17 @@ public class MissionService(
         IEnumerable<DailyMissionList> currentDailyMissions = allMissions[MissionType.Daily]
             .Select(x => new DailyMissionList()
             {
-                daily_mission_id = x.Id,
-                progress = x.Progress,
-                state = x.State,
-                start_date = x.Start,
-                end_date = x.End,
-                day_no = DateOnly.FromDateTime(this.resetHelper.LastDailyReset.UtcDateTime)
+                DailyMissionId = x.Id,
+                Progress = x.Progress,
+                State = x.State,
+                StartDate = x.Start,
+                EndDate = x.End,
+                DayNo = DateOnly.FromDateTime(this.resetHelper.LastDailyReset.UtcDateTime)
             });
 
         response.daily_mission_list = currentDailyMissions.UnionBy(
             historicalDailyMissions,
-            x => new { x.daily_mission_id, x.day_no }
+            x => new { daily_mission_id = x.DailyMissionId, day_no = x.DayNo }
         );
 
         return response;
@@ -658,12 +658,12 @@ public class MissionService(
         this
             .missionRepository.CompletedDailyMissions.Select(x => new DailyMissionList()
             {
-                daily_mission_id = x.Id,
-                progress = x.Progress,
-                state = MissionState.Completed,
-                start_date = x.StartDate,
-                end_date = x.EndDate,
-                day_no = x.Date
+                DailyMissionId = x.Id,
+                Progress = x.Progress,
+                State = MissionState.Completed,
+                StartDate = x.StartDate,
+                EndDate = x.EndDate,
+                DayNo = x.Date
             })
             .ToListAsync();
 }

@@ -26,7 +26,7 @@ public partial class TutorialController : DragaliaControllerBase
     [Route("update_step")]
     public async Task<DragaliaResult> UpdateStep(TutorialUpdateStepRequest request)
     {
-        int currentStep = await tutorialService.UpdateTutorialStatus(request.step);
+        int currentStep = await tutorialService.UpdateTutorialStatus(request.Step);
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
@@ -37,7 +37,7 @@ public partial class TutorialController : DragaliaControllerBase
     [Route("update_flags")]
     public async Task<DragaliaResult> UpdateFlags(TutorialUpdateFlagsRequest flagRequest)
     {
-        List<int> currentFlags = await this.tutorialService.AddTutorialFlag(flagRequest.flag_id);
+        List<int> currentFlags = await this.tutorialService.AddTutorialFlag(flagRequest.FlagId);
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 

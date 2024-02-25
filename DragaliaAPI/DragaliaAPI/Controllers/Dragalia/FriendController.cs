@@ -58,21 +58,18 @@ public class FriendController : DragaliaControllerBase
 
         UserSupportList helperInfo =
             helperList
-                .support_user_list.Where(helper => helper.viewer_id == request.support_viewer_id)
-                .FirstOrDefault()
-            ?? HelperService.StubData.SupportListData.support_user_list.First();
+                .SupportUserList.Where(helper => helper.ViewerId == request.SupportViewerId)
+                .FirstOrDefault() ?? HelperService.StubData.SupportListData.SupportUserList.First();
 
         AtgenSupportUserDetailList helperDetail =
             helperList
-                .support_user_detail_list.Where(helper =>
-                    helper.viewer_id == request.support_viewer_id
-                )
+                .SupportUserDetailList.Where(helper => helper.ViewerId == request.SupportViewerId)
                 .FirstOrDefault()
             ?? new()
             {
-                is_friend = false,
-                viewer_id = request.support_viewer_id,
-                gettable_mana_point = 50,
+                IsFriend = false,
+                ViewerId = request.SupportViewerId,
+                GettableManaPoint = 50,
             };
 
         // TODO: when helpers are converted to use other account ids, get the bonuses of that account id
@@ -81,17 +78,17 @@ public class FriendController : DragaliaControllerBase
         FriendGetSupportCharaDetailData response =
             new()
             {
-                support_user_data_detail = new()
+                SupportUserDataDetail = new()
                 {
-                    user_support_data = helperInfo,
-                    fort_bonus_list = bonusList,
-                    mana_circle_piece_id_list = Enumerable.Range(
+                    UserSupportData = helperInfo,
+                    FortBonusList = bonusList,
+                    ManaCirclePieceIdList = Enumerable.Range(
                         1,
-                        helperInfo.support_chara.additional_max_level == 20 ? 70 : 50
+                        helperInfo.SupportChara.AdditionalMaxLevel == 20 ? 70 : 50
                     ),
-                    dragon_reliability_level = 30,
-                    is_friend = helperDetail.is_friend,
-                    apply_send_status = 0,
+                    DragonReliabilityLevel = 30,
+                    IsFriend = helperDetail.IsFriend,
+                    ApplySendStatus = 0,
                 }
             };
 
@@ -102,38 +99,38 @@ public class FriendController : DragaliaControllerBase
     public DragaliaResult<FriendFriendIndexData> FriendIndex() =>
         new FriendFriendIndexData()
         {
-            friend_count = 0,
-            entity_result = new(),
-            update_data_list = new()
+            FriendCount = 0,
+            EntityResult = new(),
+            UpdateDataList = new()
         };
 
     [HttpPost("friend_list")]
     public DragaliaResult<FriendFriendListData> FriendList() =>
-        new FriendFriendListData() { friend_list = [], new_friend_viewer_id_list = [] };
+        new FriendFriendListData() { FriendList = [], NewFriendViewerIdList = [] };
 
     [HttpPost("auto_search")]
     public DragaliaResult<FriendAutoSearchData> AutoSearch() =>
-        new FriendAutoSearchData() { result = 1, search_list = [], };
+        new FriendAutoSearchData() { Result = 1, SearchList = [], };
 
     [HttpPost("request_list")]
     public DragaliaResult<FriendRequestListData> RequestList() =>
-        new FriendRequestListData() { result = 1, request_list = [] };
+        new FriendRequestListData() { Result = 1, RequestList = [] };
 
     [HttpPost("apply_list")]
     public DragaliaResult<FriendApplyListData> ApplyList() =>
         new FriendApplyListData()
         {
-            result = 1,
-            new_apply_viewer_id_list = [],
-            friend_apply = []
+            Result = 1,
+            NewApplyViewerIdList = [],
+            FriendApply = []
         };
 
     [HttpPost("set_support_chara")]
     public DragaliaResult<FriendSetSupportCharaData> SetSupportChara() =>
         new FriendSetSupportCharaData()
         {
-            result = 1,
-            update_data_list = new(),
-            setting_support = StubSupportCharacter,
+            Result = 1,
+            UpdateDataList = new(),
+            SettingSupport = StubSupportCharacter,
         };
 }

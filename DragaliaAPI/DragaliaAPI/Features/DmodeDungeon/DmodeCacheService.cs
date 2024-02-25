@@ -12,10 +12,10 @@ public class DmodeCacheService(
 {
     public async Task StoreIngameInfo(DmodeIngameData data)
     {
-        if (data.unique_key == string.Empty)
-            data.unique_key = CacheKeys.IngameInfo(playerIdentityService.AccountId);
+        if (data.UniqueKey == string.Empty)
+            data.UniqueKey = CacheKeys.IngameInfo(playerIdentityService.AccountId);
 
-        await cache.SetStringAsync(data.unique_key, JsonSerializer.Serialize(data));
+        await cache.SetStringAsync(data.UniqueKey, JsonSerializer.Serialize(data));
     }
 
     public async Task<DmodeIngameData> LoadIngameInfo()
@@ -42,11 +42,11 @@ public class DmodeCacheService(
 
     public async Task StoreFloorInfo(DmodeFloorData data)
     {
-        if (data.floor_key == string.Empty)
-            data.floor_key = Guid.NewGuid().ToString();
+        if (data.FloorKey == string.Empty)
+            data.FloorKey = Guid.NewGuid().ToString();
 
         await cache.SetStringAsync(
-            CacheKeys.DungeonFloor(data.floor_key),
+            CacheKeys.DungeonFloor(data.FloorKey),
             JsonSerializer.Serialize(data)
         );
     }

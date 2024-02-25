@@ -15,6 +15,6 @@ public class UrlListTest : TestFixture
             )
         ).data;
 
-        response.webview_url_list.Should().NotBeEmpty();
+        response.WebviewUrlList.Should().NotBeEmpty();
     }
 }

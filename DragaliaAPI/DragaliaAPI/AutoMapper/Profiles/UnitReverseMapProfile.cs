@@ -24,15 +24,15 @@ public class UnitReverseMapProfile : Profile
             .ForMember(x => x.IsTemporary, opts => opts.MapFrom(x => false));
 
         this.CreateMap<DragonReliabilityList, DbPlayerDragonReliability>()
-            .ForMember(x => x.Level, opts => opts.MapFrom(src => src.reliability_level))
-            .ForMember(x => x.Exp, opts => opts.MapFrom(src => src.reliability_total_exp));
+            .ForMember(x => x.Level, opts => opts.MapFrom(src => src.ReliabilityLevel))
+            .ForMember(x => x.Exp, opts => opts.MapFrom(src => src.ReliabilityTotalExp));
 
         this.CreateMap<AbilityCrestList, DbAbilityCrest>();
 
         this.CreateMap<WeaponBodyList, DbWeaponBody>();
 
         this.CreateMap<PartyList, DbParty>()
-            .ForMember(x => x.Units, opts => opts.MapFrom(src => src.party_setting_list));
+            .ForMember(x => x.Units, opts => opts.MapFrom(src => src.PartySettingList));
 
         this.CreateMap<TalismanList, DbTalisman>()
             .ForMember(x => x.TalismanKeyId, opts => opts.Ignore());

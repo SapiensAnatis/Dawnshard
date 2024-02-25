@@ -40,22 +40,19 @@ public class AbilityCrestController : DragaliaControllerBase
     public async Task<DragaliaResult> SetFavorite(AbilityCrestSetFavoriteRequest request)
     {
         DbAbilityCrest? abilityCrest = await abilityCrestRepository.FindAsync(
-            request.ability_crest_id
+            request.AbilityCrestId
         );
 
         if (abilityCrest == null)
         {
-            this.logger.LogError(
-                "Player does not own ability crest {id}",
-                request.ability_crest_id
-            );
+            this.logger.LogError("Player does not own ability crest {id}", request.AbilityCrestId);
             return this.Code(ResultCode.CommonInvalidArgument);
         }
 
-        abilityCrest.IsFavorite = request.is_favorite;
+        abilityCrest.IsFavorite = request.IsFavorite;
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
-        return Ok(new AbilityCrestSetFavoriteData() { update_data_list = updateDataList });
+        return Ok(new AbilityCrestSetFavoriteData() { UpdateDataList = updateDataList });
     }
 
     [Route("buildup_piece")]
@@ -64,22 +61,22 @@ public class AbilityCrestController : DragaliaControllerBase
     {
         if (
             !MasterAsset.AbilityCrest.TryGetValue(
-                request.ability_crest_id,
+                request.AbilityCrestId,
                 out AbilityCrest? abilityCrest
             )
         )
         {
             this.logger.LogError(
                 "Ability crest {id} had no MasterAsset entry",
-                request.ability_crest_id
+                request.AbilityCrestId
             );
             return this.Code(ResultCode.AbilityCrestIsNotPlayable);
         }
 
         foreach (
             AtgenBuildupAbilityCrestPieceList buildupPiece in request
-                .buildup_ability_crest_piece_list.OrderBy(x => x.buildup_piece_type)
-                .ThenBy(x => x.step)
+                .BuildupAbilityCrestPieceList.OrderBy(x => x.BuildupPieceType)
+                .ThenBy(x => x.Step)
         )
         {
             ResultCode resultCode = await this.abilityCrestService.TryBuildup(
@@ -95,7 +92,7 @@ public class AbilityCrestController : DragaliaControllerBase
         }
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
-        return this.Ok(new AbilityCrestBuildupPieceData() { update_data_list = updateDataList });
+        return this.Ok(new AbilityCrestBuildupPieceData() { UpdateDataList = updateDataList });
     }
 
     [Route("buildup_plus_count")]
@@ -104,19 +101,19 @@ public class AbilityCrestController : DragaliaControllerBase
     {
         if (
             !MasterAsset.AbilityCrest.TryGetValue(
-                request.ability_crest_id,
+                request.AbilityCrestId,
                 out AbilityCrest? abilityCrest
             )
         )
         {
             this.logger.LogError(
                 "Ability crest {id} had no MasterAsset entry",
-                request.ability_crest_id
+                request.AbilityCrestId
             );
             return this.Code(ResultCode.AbilityCrestIsNotPlayable);
         }
 
-        foreach (AtgenPlusCountParamsList buildup in request.plus_count_params_list)
+        foreach (AtgenPlusCountParamsList buildup in request.PlusCountParamsList)
         {
             ResultCode resultCode = await this.abilityCrestService.TryBuildupAugments(
                 abilityCrest,
@@ -131,17 +128,17 @@ public class AbilityCrestController : DragaliaControllerBase
         }
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
-        return Ok(new AbilityCrestBuildupPlusCountData() { update_data_list = updateDataList });
+        return Ok(new AbilityCrestBuildupPlusCountData() { UpdateDataList = updateDataList });
     }
 
     [Route("reset_plus_count")]
     [HttpPost]
     public async Task<DragaliaResult> ResetPlusCount(AbilityCrestResetPlusCountRequest request)
     {
-        foreach (PlusCountType augmentType in request.plus_count_type_list)
+        foreach (PlusCountType augmentType in request.PlusCountTypeList)
         {
             ResultCode resultCode = await this.abilityCrestService.TryResetAugments(
-                request.ability_crest_id,
+                request.AbilityCrestId,
                 augmentType
             );
 
@@ -153,7 +150,7 @@ public class AbilityCrestController : DragaliaControllerBase
         }
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
-        return Ok(new AbilityCrestResetPlusCountData() { update_data_list = updateDataList });
+        return Ok(new AbilityCrestResetPlusCountData() { UpdateDataList = updateDataList });
     }
 
     [Route("get_ability_crest_set_list")]
@@ -182,7 +179,7 @@ public class AbilityCrestController : DragaliaControllerBase
         return Ok(
             new AbilityCrestGetAbilityCrestSetListData()
             {
-                ability_crest_set_list = abilityCrestSetList
+                AbilityCrestSetList = abilityCrestSetList
             }
         );
     }
@@ -193,9 +190,9 @@ public class AbilityCrestController : DragaliaControllerBase
         AbilityCrestSetAbilityCrestSetRequest request
     )
     {
-        if (request.ability_crest_set_no is <= 0 or > 54)
+        if (request.AbilityCrestSetNo is <= 0 or > 54)
         {
-            this.logger.LogError("Invalid ability crest no", request.ability_crest_set_no);
+            this.logger.LogError("Invalid ability crest no", request.AbilityCrestSetNo);
             return this.Code(ResultCode.CommonInvalidArgument);
         }
 
@@ -203,7 +200,7 @@ public class AbilityCrestController : DragaliaControllerBase
         await this.abilityCrestRepository.AddOrUpdateSet(newAbilityCrestSet);
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
-        return Ok(new AbilityCrestSetAbilityCrestSetData() { update_data_list = updateDataList });
+        return Ok(new AbilityCrestSetAbilityCrestSetData() { UpdateDataList = updateDataList });
     }
 
     [Route("update_ability_crest_set_name")]
@@ -213,7 +210,7 @@ public class AbilityCrestController : DragaliaControllerBase
     )
     {
         DbAbilityCrestSet? dbAbilityCrestSet = await abilityCrestRepository.FindSetAsync(
-            request.ability_crest_set_no
+            request.AbilityCrestSetNo
         );
 
         if (dbAbilityCrestSet is null)
@@ -221,19 +218,19 @@ public class AbilityCrestController : DragaliaControllerBase
             await abilityCrestRepository.AddOrUpdateSet(
                 new DbAbilityCrestSet()
                 {
-                    AbilityCrestSetNo = request.ability_crest_set_no,
-                    AbilityCrestSetName = request.ability_crest_set_name
+                    AbilityCrestSetNo = request.AbilityCrestSetNo,
+                    AbilityCrestSetName = request.AbilityCrestSetName
                 }
             );
         }
         else
         {
-            dbAbilityCrestSet.AbilityCrestSetName = request.ability_crest_set_name;
+            dbAbilityCrestSet.AbilityCrestSetName = request.AbilityCrestSetName;
         }
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
         return Ok(
-            new AbilityCrestUpdateAbilityCrestSetNameData() { update_data_list = updateDataList }
+            new AbilityCrestUpdateAbilityCrestSetNameData() { UpdateDataList = updateDataList }
         );
     }
 }

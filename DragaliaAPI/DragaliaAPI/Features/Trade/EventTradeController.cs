@@ -19,9 +19,9 @@ public class EventTradeController(
     {
         EventTradeGetListData resp = new();
 
-        resp.event_trade_list = tradeService.GetEventTradeList(request.trade_group_id);
-        resp.user_event_item_data = new UserEventItemData(); //await eventService.GetUserEventItemData(group.EventId);
-        resp.user_event_trade_list = await tradeService.GetUserEventTradeList();
+        resp.EventTradeList = tradeService.GetEventTradeList(request.TradeGroupId);
+        resp.UserEventItemData = new UserEventItemData(); //await eventService.GetUserEventItemData(group.EventId);
+        resp.UserEventTradeList = await tradeService.GetUserEventTradeList();
 
         return Ok(resp);
     }
@@ -31,13 +31,13 @@ public class EventTradeController(
     {
         EventTradeTradeData resp = new();
 
-        await tradeService.DoTrade(TradeType.Event, request.trade_id, request.trade_count);
+        await tradeService.DoTrade(TradeType.Event, request.TradeId, request.TradeCount);
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
-        resp.event_trade_list = tradeService.GetEventTradeList(request.trade_group_id);
-        resp.user_event_trade_list = await tradeService.GetUserEventTradeList();
-        resp.user_event_item_data = new UserEventItemData(); // await eventService.GetUserEventItemData(group.EventId);
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
+        resp.EventTradeList = tradeService.GetEventTradeList(request.TradeGroupId);
+        resp.UserEventTradeList = await tradeService.GetUserEventTradeList();
+        resp.UserEventItemData = new UserEventItemData(); // await eventService.GetUserEventItemData(group.EventId);
 
         return Ok(resp);
     }

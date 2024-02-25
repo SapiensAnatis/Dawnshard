@@ -43,8 +43,8 @@ public class TutorialTest : TestFixture
         )!;
 
         UserData expUserData = this.Mapper.Map<UserData>(dbUserData);
-        expUserData.tutorial_status = step;
-        UpdateDataList expUpdateData = new() { user_data = expUserData };
+        expUserData.TutorialStatus = step;
+        UpdateDataList expUpdateData = new() { UserData = expUserData };
 
         TutorialUpdateStepData response = (
             await this.Client.PostMsgpack<TutorialUpdateStepData>(
@@ -53,7 +53,7 @@ public class TutorialTest : TestFixture
             )
         ).data;
 
-        response.update_data_list.Should().BeEquivalentTo(expUpdateData);
+        response.UpdateDataList.Should().BeEquivalentTo(expUpdateData);
     }
 
     [Fact]
@@ -64,7 +64,7 @@ public class TutorialTest : TestFixture
         TutorialUpdateFlagsData response = (
             await this.Client.PostMsgpack<TutorialUpdateFlagsData>(
                 "/tutorial/update_flags",
-                new TutorialUpdateFlagsRequest() { flag_id = flag }
+                new TutorialUpdateFlagsRequest() { FlagId = flag }
             )
         ).data;
 

@@ -162,16 +162,16 @@ public class LoginTest : TestFixture
         );
 
         response
-            .data.login_bonus_list.Should()
+            .data.LoginBonusList.Should()
             .ContainSingle()
             .And.ContainEquivalentOf(
                 new AtgenLoginBonusList()
                 {
-                    login_bonus_id = 17,
-                    reward_day = 5,
-                    total_login_day = 5,
-                    entity_type = EntityTypes.Rupies,
-                    entity_quantity = 30_000,
+                    LoginBonusId = 17,
+                    RewardDay = 5,
+                    TotalLoginDay = 5,
+                    EntityType = EntityTypes.Rupies,
+                    EntityQuantity = 30_000,
                 }
             );
 
@@ -197,17 +197,17 @@ public class LoginTest : TestFixture
         );
 
         response
-            .data.login_bonus_list.Should()
+            .data.LoginBonusList.Should()
             .ContainSingle()
             .And.ContainEquivalentOf(
                 new AtgenLoginBonusList()
                 {
-                    login_bonus_id = 17,
-                    reward_day = 1,
-                    total_login_day = 1,
-                    entity_type = EntityTypes.Material,
-                    entity_id = 101001003,
-                    entity_quantity = 10,
+                    LoginBonusId = 17,
+                    RewardDay = 1,
+                    TotalLoginDay = 1,
+                    EntityType = EntityTypes.Material,
+                    EntityId = 101001003,
+                    EntityQuantity = 10,
                 }
             );
     }
@@ -233,16 +233,16 @@ public class LoginTest : TestFixture
         );
 
         response
-            .data.login_bonus_list.Should()
+            .data.LoginBonusList.Should()
             .ContainEquivalentOf(
                 new AtgenLoginBonusList()
                 {
-                    login_bonus_id = 2,
-                    reward_day = 7,
-                    total_login_day = 7,
-                    entity_type = EntityTypes.Wyrmite,
-                    entity_id = 0,
-                    entity_quantity = 150,
+                    LoginBonusId = 2,
+                    RewardDay = 7,
+                    TotalLoginDay = 7,
+                    EntityType = EntityTypes.Wyrmite,
+                    EntityId = 0,
+                    EntityQuantity = 150,
                 }
             );
 
@@ -257,7 +257,7 @@ public class LoginTest : TestFixture
         DragaliaResponse<LoginIndexData> secondResponse =
             await this.Client.PostMsgpack<LoginIndexData>("/login/index", new LoginIndexRequest());
 
-        secondResponse.data.login_bonus_list.Should().NotContain(x => x.login_bonus_id == 2);
+        secondResponse.data.LoginBonusList.Should().NotContain(x => x.LoginBonusId == 2);
     }
 
     [Fact]
@@ -281,31 +281,30 @@ public class LoginTest : TestFixture
         LoginIndexData response = (
             await this.Client.PostMsgpack<LoginIndexData>(
                 "login/index",
-                new LoginIndexRequest() { jws_result = string.Empty }
+                new LoginIndexRequest() { JwsResult = string.Empty }
             )
         ).data;
 
         response
-            .login_bonus_list.Should()
+            .LoginBonusList.Should()
             .ContainEquivalentOf(
                 new AtgenLoginBonusList()
                 {
-                    entity_id = 30001,
-                    entity_quantity = 3,
-                    entity_type = EntityTypes.DragonGift,
-                    entity_level = 0,
-                    entity_limit_break_count = 0,
-                    login_bonus_id = 17,
-                    reward_day = 8,
-                    total_login_day = 8
+                    EntityId = 30001,
+                    EntityQuantity = 3,
+                    EntityType = EntityTypes.DragonGift,
+                    EntityLevel = 0,
+                    EntityLimitBreakCount = 0,
+                    LoginBonusId = 17,
+                    RewardDay = 8,
+                    TotalLoginDay = 8
                 }
             );
 
         response
-            .update_data_list.dragon_gift_list.Should()
+            .UpdateDataList.DragonGiftList.Should()
             .Contain(x =>
-                x.dragon_gift_id == DragonGifts.FourLeafClover
-                && x.quantity == oldCloverQuantity + 3
+                x.DragonGiftId == DragonGifts.FourLeafClover && x.Quantity == oldCloverQuantity + 3
             );
     }
 
@@ -329,7 +328,7 @@ public class LoginTest : TestFixture
 
         await this.Client.PostMsgpack(
             "login/index",
-            new LoginIndexRequest() { jws_result = string.Empty }
+            new LoginIndexRequest() { JwsResult = string.Empty }
         );
 
         this.ApiContext.PlayerMissions.AsNoTracking()
@@ -398,7 +397,7 @@ public class LoginTest : TestFixture
 
         await this.Client.PostMsgpack(
             "login/index",
-            new LoginIndexRequest() { jws_result = string.Empty }
+            new LoginIndexRequest() { JwsResult = string.Empty }
         );
 
         this.ApiContext.PlayerMissions.AsNoTracking()

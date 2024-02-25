@@ -24,7 +24,7 @@ public class TimeAttackController(
             .GetRewards()
             .Select(ToRankingTierRewardList);
 
-        return new TimeAttackRankingGetDataData() { ranking_tier_reward_list = rewardList };
+        return new TimeAttackRankingGetDataData() { RankingTierRewardList = rewardList };
     }
 
     [Route("receive_tier_reward")]
@@ -34,7 +34,7 @@ public class TimeAttackController(
     )
     {
         IEnumerable<RankingTierReward> receivedRewards = await timeAttackService.ReceiveTierReward(
-            request.quest_id
+            request.QuestId
         );
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
@@ -45,10 +45,10 @@ public class TimeAttackController(
         return this.Ok(
             new TimeAttackRankingReceiveTierRewardData()
             {
-                update_data_list = updateDataList,
-                entity_result = entityResult,
-                ranking_tier_reward_list = rewardList.Select(ToRankingTierRewardList),
-                ranking_tier_reward_entity_list = receivedRewards.Select(ToRewardEntityList)
+                UpdateDataList = updateDataList,
+                EntityResult = entityResult,
+                RankingTierRewardList = rewardList.Select(ToRankingTierRewardList),
+                RankingTierRewardEntityList = receivedRewards.Select(ToRewardEntityList)
             }
         );
     }

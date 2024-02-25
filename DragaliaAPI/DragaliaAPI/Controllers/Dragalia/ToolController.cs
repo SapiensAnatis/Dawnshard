@@ -21,11 +21,7 @@ public class ToolController(IAuthService authService) : DragaliaControllerBaseCo
         (long viewerId, _) = await authService.DoAuth(idToken);
 
         return this.Ok(
-            new ToolSignupData()
-            {
-                viewer_id = (ulong)viewerId,
-                servertime = DateTimeOffset.UtcNow,
-            }
+            new ToolSignupData() { ViewerId = (ulong)viewerId, Servertime = DateTimeOffset.UtcNow, }
         );
     }
 
@@ -48,9 +44,9 @@ public class ToolController(IAuthService authService) : DragaliaControllerBaseCo
         return this.Ok(
             new ToolAuthData()
             {
-                session_id = sessionId,
-                viewer_id = (ulong)viewerId,
-                nonce = "placeholder nonce"
+                SessionId = sessionId,
+                ViewerId = (ulong)viewerId,
+                Nonce = "placeholder nonce"
             }
         );
     }
@@ -63,9 +59,9 @@ public class ToolController(IAuthService authService) : DragaliaControllerBaseCo
         return this.Ok(
             new ToolReauthData()
             {
-                session_id = sessionId,
-                viewer_id = (ulong)viewerId,
-                nonce = "placeholder nonce"
+                SessionId = sessionId,
+                ViewerId = (ulong)viewerId,
+                Nonce = "placeholder nonce"
             }
         );
     }

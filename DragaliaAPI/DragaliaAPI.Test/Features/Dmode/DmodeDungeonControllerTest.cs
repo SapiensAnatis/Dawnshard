@@ -15,7 +15,7 @@ public class DmodeDungeonControllerTest
     private readonly DmodeDungeonController dmodeDungeonController;
 
     private readonly UpdateDataList updateDataList =
-        new() { material_list = new List<MaterialList>() { new(Materials.Squishums, 5000) } };
+        new() { MaterialList = new List<MaterialList>() { new(Materials.Squishums, 5000) } };
 
     public DmodeDungeonControllerTest()
     {
@@ -36,17 +36,17 @@ public class DmodeDungeonControllerTest
     public async Task Start_StartsDungeon()
     {
         DungeonState state = DungeonState.WaitingInitEnd;
-        DmodeIngameData ingameData = new() { unique_key = "unique" };
+        DmodeIngameData ingameData = new() { UniqueKey = "unique" };
 
         DmodeDungeonStartRequest request = new(Charas.ThePrince, 0, 0, new List<Charas>());
 
         mockDmodeDungeonService
             .Setup(x =>
                 x.StartDungeon(
-                    request.chara_id,
-                    request.start_floor_num,
-                    request.servitor_id,
-                    request.bring_edit_skill_chara_id_list
+                    request.CharaId,
+                    request.StartFloorNum,
+                    request.ServitorId,
+                    request.BringEditSkillCharaIdList
                 )
             )
             .ReturnsAsync((state, ingameData));
@@ -56,8 +56,8 @@ public class DmodeDungeonControllerTest
         ).GetData<DmodeDungeonStartData>();
 
         resp.Should().NotBeNull();
-        resp!.dmode_dungeon_state.Should().Be(state);
-        resp.dmode_ingame_data.Should().Be(ingameData);
+        resp!.DmodeDungeonState.Should().Be(state);
+        resp.DmodeIngameData.Should().Be(ingameData);
 
         mockDmodeDungeonService.VerifyAll();
         mockUpdateDataService.VerifyAll();
@@ -67,7 +67,7 @@ public class DmodeDungeonControllerTest
     public async Task Restart_RestartsDungeon()
     {
         DungeonState state = DungeonState.RestartEnd;
-        DmodeIngameData ingameData = new() { unique_key = "unique" };
+        DmodeIngameData ingameData = new() { UniqueKey = "unique" };
 
         mockDmodeDungeonService.Setup(x => x.RestartDungeon()).ReturnsAsync((state, ingameData));
 
@@ -76,8 +76,8 @@ public class DmodeDungeonControllerTest
         ).GetData<DmodeDungeonRestartData>();
 
         resp.Should().NotBeNull();
-        resp!.dmode_dungeon_state.Should().Be(state);
-        resp.dmode_ingame_data.Should().Be(ingameData);
+        resp!.DmodeDungeonState.Should().Be(state);
+        resp.DmodeIngameData.Should().Be(ingameData);
 
         mockDmodeDungeonService.VerifyAll();
         mockUpdateDataService.VerifyAll();
@@ -90,11 +90,11 @@ public class DmodeDungeonControllerTest
         DmodeFloorData floorData =
             new()
             {
-                dmode_area_info = new AtgenDmodeAreaInfo()
+                DmodeAreaInfo = new AtgenDmodeAreaInfo()
                 {
-                    floor_num = 50,
-                    current_area_id = 10,
-                    current_area_theme_id = 100
+                    FloorNum = 50,
+                    CurrentAreaId = 10,
+                    CurrentAreaThemeId = 100
                 }
             };
 
@@ -109,9 +109,9 @@ public class DmodeDungeonControllerTest
         ).GetData<DmodeDungeonFloorData>();
 
         resp.Should().NotBeNull();
-        resp!.dmode_dungeon_state.Should().Be(state);
-        resp.dmode_floor_data.Should().BeEquivalentTo(floorData);
-        resp.update_data_list.Should().BeEquivalentTo(updateDataList);
+        resp!.DmodeDungeonState.Should().Be(state);
+        resp.DmodeFloorData.Should().BeEquivalentTo(floorData);
+        resp.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockDmodeDungeonService.VerifyAll();
         mockUpdateDataService.VerifyAll();
@@ -123,7 +123,7 @@ public class DmodeDungeonControllerTest
     public async Task Finish_FinishesDungeon(bool isGameOver)
     {
         DungeonState state = DungeonState.Waiting;
-        DmodeIngameResult ingameResult = new() { floor_num = 50, take_dmode_point_1 = 5000 };
+        DmodeIngameResult ingameResult = new() { FloorNum = 50, TakeDmodePoint1 = 5000 };
 
         mockDmodeDungeonService
             .Setup(x => x.FinishDungeon(isGameOver))
@@ -137,10 +137,10 @@ public class DmodeDungeonControllerTest
         ).GetData<DmodeDungeonFinishData>();
 
         resp.Should().NotBeNull();
-        resp!.dmode_dungeon_state.Should().Be(state);
-        resp.dmode_ingame_result.Should().Be(ingameResult);
-        resp.entity_result.Should().Be(entityResult);
-        resp.update_data_list.Should().BeEquivalentTo(updateDataList);
+        resp!.DmodeDungeonState.Should().Be(state);
+        resp.DmodeIngameResult.Should().Be(ingameResult);
+        resp.EntityResult.Should().Be(entityResult);
+        resp.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockRewardService.VerifyAll();
         mockDmodeDungeonService.VerifyAll();
@@ -159,8 +159,8 @@ public class DmodeDungeonControllerTest
         ).GetData<DmodeDungeonFloorSkipData>();
 
         resp.Should().NotBeNull();
-        resp!.dmode_dungeon_state.Should().Be(state);
-        resp.update_data_list.Should().BeEquivalentTo(updateDataList);
+        resp!.DmodeDungeonState.Should().Be(state);
+        resp.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockDmodeDungeonService.VerifyAll();
         mockUpdateDataService.VerifyAll();
@@ -178,8 +178,8 @@ public class DmodeDungeonControllerTest
         ).GetData<DmodeDungeonUserHaltData>();
 
         resp.Should().NotBeNull();
-        resp!.dmode_dungeon_state.Should().Be(state);
-        resp.update_data_list.Should().BeEquivalentTo(updateDataList);
+        resp!.DmodeDungeonState.Should().Be(state);
+        resp.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockDmodeDungeonService.VerifyAll();
         mockUpdateDataService.VerifyAll();
@@ -197,8 +197,8 @@ public class DmodeDungeonControllerTest
         ).GetData<DmodeDungeonSystemHaltData>();
 
         resp.Should().NotBeNull();
-        resp!.dmode_dungeon_state.Should().Be(state);
-        resp.update_data_list.Should().BeEquivalentTo(updateDataList);
+        resp!.DmodeDungeonState.Should().Be(state);
+        resp.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockDmodeDungeonService.VerifyAll();
         mockUpdateDataService.VerifyAll();

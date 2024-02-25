@@ -18,9 +18,9 @@ public class Clb01EventController(
     {
         Clb01EventGetEventDataData resp = new();
 
-        resp.clb_01_event_user_data = await eventService.GetClb01EventUserData(request.event_id);
-        resp.clb_01_event_reward_list = await eventService.GetEventRewardList<BuildEventRewardList>(
-            request.event_id
+        resp.Clb01EventUserData = await eventService.GetClb01EventUserData(request.EventId);
+        resp.Clb01EventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
+            request.EventId
         );
 
         return Ok(resp);
@@ -33,9 +33,9 @@ public class Clb01EventController(
 
         // TODO: Complete first event mission once thats implemented
 
-        resp.clb_01_event_user_data = await eventService.GetClb01EventUserData(request.event_id);
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.Clb01EventUserData = await eventService.GetClb01EventUserData(request.EventId);
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
@@ -47,15 +47,13 @@ public class Clb01EventController(
     {
         Clb01EventReceiveClb01PointRewardData resp = new();
 
-        resp.clb_01_event_reward_entity_list = await eventService.ReceiveEventRewards(
-            request.event_id
-        );
+        resp.Clb01EventRewardEntityList = await eventService.ReceiveEventRewards(request.EventId);
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
-        resp.clb_01_event_reward_list = await eventService.GetEventRewardList<BuildEventRewardList>(
-            request.event_id
+        resp.Clb01EventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
+            request.EventId
         );
 
         return Ok(resp);

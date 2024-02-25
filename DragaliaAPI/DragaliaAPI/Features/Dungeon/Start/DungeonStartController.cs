@@ -27,17 +27,17 @@ public class DungeonStartController(
     [HttpPost("start")]
     public async Task<DragaliaResult> Start(DungeonStartStartRequest request)
     {
-        if (!await dungeonStartService.ValidateStamina(request.quest_id, StaminaType.Single))
+        if (!await dungeonStartService.ValidateStamina(request.QuestId, StaminaType.Single))
             return this.Code(ResultCode.QuestStaminaSingleShort);
 
         IngameData ingameData = await dungeonStartService.GetIngameData(
-            request.quest_id,
-            request.party_no_list,
-            request.repeat_setting,
-            request.support_viewer_id
+            request.QuestId,
+            request.PartyNoList,
+            request.RepeatSetting,
+            request.SupportViewerId
         );
 
-        DungeonStartStartData response = await BuildResponse(request.quest_id, ingameData);
+        DungeonStartStartData response = await BuildResponse(request.QuestId, ingameData);
 
         return Ok(response);
     }
@@ -45,37 +45,37 @@ public class DungeonStartController(
     [HttpPost("start_multi")]
     public async Task<DragaliaResult> StartMulti(DungeonStartStartMultiRequest request)
     {
-        if (!await dungeonStartService.ValidateStamina(request.quest_id, StaminaType.Multi))
+        if (!await dungeonStartService.ValidateStamina(request.QuestId, StaminaType.Multi))
             return this.Code(ResultCode.QuestStaminaMultiShort);
 
         IngameData ingameData = await dungeonStartService.GetIngameData(
-            request.quest_id,
-            request.party_no_list
+            request.QuestId,
+            request.PartyNoList
         );
 
         // All time attack quests, regardless of whether they are played solo, appear to use Photon.
         // So we don't need to do this in the solo start endpoints.
         if (
-            timeAttackService.GetIsRankedQuest(request.quest_id)
-            && !await timeAttackService.SetupRankedClear(request.quest_id, ingameData.party_info)
+            timeAttackService.GetIsRankedQuest(request.QuestId)
+            && !await timeAttackService.SetupRankedClear(request.QuestId, ingameData.PartyInfo)
         )
         {
             return this.Code(FailedValidationCode);
         }
 
-        ingameData.play_type = QuestPlayType.Multi;
-        ingameData.is_host = await matchingService.GetIsHost();
+        ingameData.PlayType = QuestPlayType.Multi;
+        ingameData.IsHost = await matchingService.GetIsHost();
 
         await dungeonService.ModifySession(
-            ingameData.dungeon_key,
+            ingameData.DungeonKey,
             session =>
             {
-                session.IsHost = ingameData.is_host;
+                session.IsHost = ingameData.IsHost;
                 session.IsMulti = true;
             }
         );
 
-        DungeonStartStartData response = await BuildResponse(request.quest_id, ingameData);
+        DungeonStartStartData response = await BuildResponse(request.QuestId, ingameData);
 
         return Ok(response);
     }
@@ -85,19 +85,19 @@ public class DungeonStartController(
         DungeonStartStartAssignUnitRequest request
     )
     {
-        if (!await dungeonStartService.ValidateStamina(request.quest_id, StaminaType.Single))
+        if (!await dungeonStartService.ValidateStamina(request.QuestId, StaminaType.Single))
             return this.Code(ResultCode.QuestStaminaSingleShort);
 
         IngameData ingameData = await dungeonStartService.GetAssignUnitIngameData(
-            request.quest_id,
-            request.request_party_setting_list,
-            request.support_viewer_id,
-            request.repeat_setting
+            request.QuestId,
+            request.RequestPartySettingList,
+            request.SupportViewerId,
+            request.RepeatSetting
         );
 
-        DungeonStartStartData response = await BuildResponse(request.quest_id, ingameData);
+        DungeonStartStartData response = await BuildResponse(request.QuestId, ingameData);
 
-        response.ingame_data.repeat_state = request.repeat_state;
+        response.IngameData.RepeatState = request.RepeatState;
 
         return Ok(response);
     }
@@ -110,37 +110,37 @@ public class DungeonStartController(
         DungeonStartStartMultiAssignUnitRequest request
     )
     {
-        if (!await dungeonStartService.ValidateStamina(request.quest_id, StaminaType.Multi))
+        if (!await dungeonStartService.ValidateStamina(request.QuestId, StaminaType.Multi))
             return this.Code(ResultCode.QuestStaminaMultiShort);
 
         IngameData ingameData = await dungeonStartService.GetAssignUnitIngameData(
-            request.quest_id,
-            request.request_party_setting_list
+            request.QuestId,
+            request.RequestPartySettingList
         );
 
         // All time attack quests, regardless of whether they are played solo, appear to use Photon.
         // So we don't need to do this in the solo start endpoints.
         if (
-            timeAttackService.GetIsRankedQuest(request.quest_id)
-            && !await timeAttackService.SetupRankedClear(request.quest_id, ingameData.party_info)
+            timeAttackService.GetIsRankedQuest(request.QuestId)
+            && !await timeAttackService.SetupRankedClear(request.QuestId, ingameData.PartyInfo)
         )
         {
             return this.Code(FailedValidationCode);
         }
 
-        ingameData.play_type = QuestPlayType.Multi;
-        ingameData.is_host = await matchingService.GetIsHost();
+        ingameData.PlayType = QuestPlayType.Multi;
+        ingameData.IsHost = await matchingService.GetIsHost();
 
         await dungeonService.ModifySession(
-            ingameData.dungeon_key,
+            ingameData.DungeonKey,
             session =>
             {
-                session.IsHost = ingameData.is_host;
+                session.IsHost = ingameData.IsHost;
                 session.IsMulti = true;
             }
         );
 
-        DungeonStartStartData response = await BuildResponse(request.quest_id, ingameData);
+        DungeonStartStartData response = await BuildResponse(request.QuestId, ingameData);
 
         return Ok(response);
     }
@@ -155,23 +155,23 @@ public class DungeonStartController(
 
         OddsInfo oddsInfo = oddsInfoService.GetOddsInfo(questId, 0);
         await dungeonService.ModifySession(
-            ingameData.dungeon_key,
-            session => session.EnemyList[0] = oddsInfo.enemy
+            ingameData.DungeonKey,
+            session => session.EnemyList[0] = oddsInfo.Enemy
         );
 
         if (questId == 204270302)
         {
             // Chronos Clash issue workaround: setting the is_rare flag will force him to spawn
             // https://github.com/SapiensAnatis/Dawnshard/issues/515
-            oddsInfo.enemy.First().is_rare = true;
+            oddsInfo.Enemy.First().IsRare = true;
         }
 
         return new()
         {
-            ingame_data = ingameData,
-            ingame_quest_data = ingameQuestData,
-            odds_info = oddsInfo,
-            update_data_list = updateData
+            IngameData = ingameData,
+            IngameQuestData = ingameQuestData,
+            OddsInfo = oddsInfo,
+            UpdateDataList = updateData
         };
     }
 }

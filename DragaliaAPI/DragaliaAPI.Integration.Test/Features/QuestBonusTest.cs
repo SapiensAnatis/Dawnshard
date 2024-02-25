@@ -27,20 +27,20 @@ public class QuestBonusTest : TestFixture
         DragaliaResponse<DungeonRecordRecordData> response = await this.CompleteQuest(questId);
 
         response
-            .data.update_data_list.quest_event_list.Should()
+            .data.UpdateDataList.QuestEventList.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
-                    quest_event_id = questEventId,
-                    quest_bonus_receive_count = 0,
-                    quest_bonus_reserve_count = 1,
-                    quest_bonus_reserve_time = response.data.ingame_result_data.end_time,
-                    quest_bonus_stack_count = 0,
-                    quest_bonus_stack_time = DateTimeOffset.UnixEpoch,
-                    last_daily_reset_time = response.data.ingame_result_data.end_time,
-                    last_weekly_reset_time = response.data.ingame_result_data.end_time,
-                    daily_play_count = 1,
-                    weekly_play_count = 1
+                    QuestEventId = questEventId,
+                    QuestBonusReceiveCount = 0,
+                    QuestBonusReserveCount = 1,
+                    QuestBonusReserveTime = response.data.IngameResultData.EndTime,
+                    QuestBonusStackCount = 0,
+                    QuestBonusStackTime = DateTimeOffset.UnixEpoch,
+                    LastDailyResetTime = response.data.IngameResultData.EndTime,
+                    LastWeeklyResetTime = response.data.IngameResultData.EndTime,
+                    DailyPlayCount = 1,
+                    WeeklyPlayCount = 1
                 }
             );
 
@@ -49,66 +49,66 @@ public class QuestBonusTest : TestFixture
                 "/dungeon/receive_quest_bonus",
                 new DungeonReceiveQuestBonusRequest()
                 {
-                    quest_event_id = questEventId,
-                    is_receive = true,
-                    receive_bonus_count = 1
+                    QuestEventId = questEventId,
+                    IsReceive = true,
+                    ReceiveBonusCount = 1
                 }
             );
 
-        bonusResponse.data.receive_quest_bonus.target_quest_id.Should().Be(questId);
-        bonusResponse.data.receive_quest_bonus.receive_bonus_count.Should().Be(1);
-        bonusResponse.data.receive_quest_bonus.bonus_factor.Should().Be(1);
+        bonusResponse.data.ReceiveQuestBonus.TargetQuestId.Should().Be(questId);
+        bonusResponse.data.ReceiveQuestBonus.ReceiveBonusCount.Should().Be(1);
+        bonusResponse.data.ReceiveQuestBonus.BonusFactor.Should().Be(1);
 
         bonusResponse
-            .data.receive_quest_bonus.quest_bonus_entity_list.Should()
+            .data.ReceiveQuestBonus.QuestBonusEntityList.Should()
             .BeEquivalentTo(
                 new List<AtgenBuildEventRewardEntityList>()
                 {
                     new()
                     {
-                        entity_type = EntityTypes.Material,
-                        entity_id = (int)Materials.ConsecratedWater,
+                        EntityType = EntityTypes.Material,
+                        EntityId = (int)Materials.ConsecratedWater,
                     },
                     new()
                     {
-                        entity_type = EntityTypes.Material,
-                        entity_id = (int)Materials.SoaringOnesMaskFragment,
+                        EntityType = EntityTypes.Material,
+                        EntityId = (int)Materials.SoaringOnesMaskFragment,
                     },
                     new()
                     {
-                        entity_type = EntityTypes.Material,
-                        entity_id = (int)Materials.LiberatedOnesMaskFragment,
+                        EntityType = EntityTypes.Material,
+                        EntityId = (int)Materials.LiberatedOnesMaskFragment,
                     },
                     new()
                     {
-                        entity_type = EntityTypes.Material,
-                        entity_id = (int)Materials.RebelliousOnesCruelty,
+                        EntityType = EntityTypes.Material,
+                        EntityId = (int)Materials.RebelliousOnesCruelty,
                     },
                     new()
                     {
-                        entity_type = EntityTypes.Material,
-                        entity_id = (int)Materials.TwinklingSand,
+                        EntityType = EntityTypes.Material,
+                        EntityId = (int)Materials.TwinklingSand,
                     }
                 },
-                opts => opts.Excluding(x => x.entity_quantity)
+                opts => opts.Excluding(x => x.EntityQuantity)
             );
 
-        bonusResponse.data.update_data_list.material_list.Should().NotBeEmpty();
+        bonusResponse.data.UpdateDataList.MaterialList.Should().NotBeEmpty();
         bonusResponse
-            .data.update_data_list.quest_event_list.Should()
+            .data.UpdateDataList.QuestEventList.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
-                    quest_event_id = questEventId,
-                    quest_bonus_receive_count = 1,
-                    quest_bonus_reserve_count = 0,
-                    quest_bonus_reserve_time = DateTimeOffset.UnixEpoch,
-                    quest_bonus_stack_count = 0,
-                    quest_bonus_stack_time = DateTimeOffset.UnixEpoch,
-                    last_daily_reset_time = response.data.ingame_result_data.end_time,
-                    last_weekly_reset_time = response.data.ingame_result_data.end_time,
-                    daily_play_count = 1,
-                    weekly_play_count = 1
+                    QuestEventId = questEventId,
+                    QuestBonusReceiveCount = 1,
+                    QuestBonusReserveCount = 0,
+                    QuestBonusReserveTime = DateTimeOffset.UnixEpoch,
+                    QuestBonusStackCount = 0,
+                    QuestBonusStackTime = DateTimeOffset.UnixEpoch,
+                    LastDailyResetTime = response.data.IngameResultData.EndTime,
+                    LastWeeklyResetTime = response.data.IngameResultData.EndTime,
+                    DailyPlayCount = 1,
+                    WeeklyPlayCount = 1
                 }
             );
     }
@@ -137,20 +137,20 @@ public class QuestBonusTest : TestFixture
         DragaliaResponse<DungeonRecordRecordData> response = await this.CompleteQuest(questId);
 
         response
-            .data.update_data_list.quest_event_list.Should()
+            .data.UpdateDataList.QuestEventList.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
-                    quest_event_id = questEventId,
-                    quest_bonus_receive_count = 1,
-                    quest_bonus_reserve_count = 0,
-                    quest_bonus_reserve_time = DateTimeOffset.UnixEpoch,
-                    quest_bonus_stack_count = 0,
-                    quest_bonus_stack_time = DateTimeOffset.UnixEpoch,
-                    last_daily_reset_time = resetTime,
-                    last_weekly_reset_time = resetTime,
-                    daily_play_count = 11,
-                    weekly_play_count = 21
+                    QuestEventId = questEventId,
+                    QuestBonusReceiveCount = 1,
+                    QuestBonusReserveCount = 0,
+                    QuestBonusReserveTime = DateTimeOffset.UnixEpoch,
+                    QuestBonusStackCount = 0,
+                    QuestBonusStackTime = DateTimeOffset.UnixEpoch,
+                    LastDailyResetTime = resetTime,
+                    LastWeeklyResetTime = resetTime,
+                    DailyPlayCount = 11,
+                    WeeklyPlayCount = 21
                 }
             );
     }
@@ -176,20 +176,20 @@ public class QuestBonusTest : TestFixture
         DragaliaResponse<DungeonRecordRecordData> response = await this.CompleteQuest(questId);
 
         response
-            .data.update_data_list.quest_event_list.Should()
+            .data.UpdateDataList.QuestEventList.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
-                    quest_event_id = questEventId,
-                    quest_bonus_receive_count = 0,
-                    quest_bonus_reserve_count = 1,
-                    quest_bonus_reserve_time = response.data.ingame_result_data.end_time,
-                    quest_bonus_stack_count = 0,
-                    quest_bonus_stack_time = DateTimeOffset.UnixEpoch,
-                    last_daily_reset_time = response.data.ingame_result_data.end_time,
-                    last_weekly_reset_time = response.data.ingame_result_data.end_time,
-                    daily_play_count = 1,
-                    weekly_play_count = 1
+                    QuestEventId = questEventId,
+                    QuestBonusReceiveCount = 0,
+                    QuestBonusReserveCount = 1,
+                    QuestBonusReserveTime = response.data.IngameResultData.EndTime,
+                    QuestBonusStackCount = 0,
+                    QuestBonusStackTime = DateTimeOffset.UnixEpoch,
+                    LastDailyResetTime = response.data.IngameResultData.EndTime,
+                    LastWeeklyResetTime = response.data.IngameResultData.EndTime,
+                    DailyPlayCount = 1,
+                    WeeklyPlayCount = 1
                 }
             );
 
@@ -198,18 +198,18 @@ public class QuestBonusTest : TestFixture
                 "/dungeon/receive_quest_bonus",
                 new DungeonReceiveQuestBonusRequest()
                 {
-                    quest_event_id = questEventId,
-                    is_receive = true,
-                    receive_bonus_count = 1
+                    QuestEventId = questEventId,
+                    IsReceive = true,
+                    ReceiveBonusCount = 1
                 }
             );
 
-        bonusResponse.data.receive_quest_bonus.target_quest_id.Should().Be(questId);
-        bonusResponse.data.receive_quest_bonus.receive_bonus_count.Should().Be(1);
-        bonusResponse.data.receive_quest_bonus.bonus_factor.Should().Be(1);
+        bonusResponse.data.ReceiveQuestBonus.TargetQuestId.Should().Be(questId);
+        bonusResponse.data.ReceiveQuestBonus.ReceiveBonusCount.Should().Be(1);
+        bonusResponse.data.ReceiveQuestBonus.BonusFactor.Should().Be(1);
 
-        bonusResponse.data.receive_quest_bonus.quest_bonus_entity_list.Should().NotBeEmpty();
-        bonusResponse.data.update_data_list.material_list.Should().NotBeEmpty();
+        bonusResponse.data.ReceiveQuestBonus.QuestBonusEntityList.Should().NotBeEmpty();
+        bonusResponse.data.UpdateDataList.MaterialList.Should().NotBeEmpty();
     }
 
     [Fact]
@@ -221,20 +221,20 @@ public class QuestBonusTest : TestFixture
         DragaliaResponse<DungeonRecordRecordData> response = await this.CompleteQuest(questId);
 
         response
-            .data.update_data_list.quest_event_list.Should()
+            .data.UpdateDataList.QuestEventList.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
-                    quest_event_id = questEventId,
-                    quest_bonus_receive_count = 0,
-                    quest_bonus_reserve_count = 1,
-                    quest_bonus_reserve_time = response.data.ingame_result_data.end_time,
-                    quest_bonus_stack_count = 0,
-                    quest_bonus_stack_time = DateTimeOffset.UnixEpoch,
-                    last_daily_reset_time = response.data.ingame_result_data.end_time,
-                    last_weekly_reset_time = response.data.ingame_result_data.end_time,
-                    daily_play_count = 1,
-                    weekly_play_count = 1
+                    QuestEventId = questEventId,
+                    QuestBonusReceiveCount = 0,
+                    QuestBonusReserveCount = 1,
+                    QuestBonusReserveTime = response.data.IngameResultData.EndTime,
+                    QuestBonusStackCount = 0,
+                    QuestBonusStackTime = DateTimeOffset.UnixEpoch,
+                    LastDailyResetTime = response.data.IngameResultData.EndTime,
+                    LastWeeklyResetTime = response.data.IngameResultData.EndTime,
+                    DailyPlayCount = 1,
+                    WeeklyPlayCount = 1
                 }
             );
 
@@ -243,31 +243,31 @@ public class QuestBonusTest : TestFixture
                 "/dungeon/receive_quest_bonus",
                 new DungeonReceiveQuestBonusRequest()
                 {
-                    quest_event_id = questEventId,
-                    is_receive = false,
-                    receive_bonus_count = 0
+                    QuestEventId = questEventId,
+                    IsReceive = false,
+                    ReceiveBonusCount = 0
                 }
             );
 
-        bonusResponse.data.receive_quest_bonus.target_quest_id.Should().Be(questId);
-        bonusResponse.data.receive_quest_bonus.receive_bonus_count.Should().Be(0);
+        bonusResponse.data.ReceiveQuestBonus.TargetQuestId.Should().Be(questId);
+        bonusResponse.data.ReceiveQuestBonus.ReceiveBonusCount.Should().Be(0);
 
-        bonusResponse.data.update_data_list.material_list.Should().BeNullOrEmpty();
+        bonusResponse.data.UpdateDataList.MaterialList.Should().BeNullOrEmpty();
         bonusResponse
-            .data.update_data_list.quest_event_list.Should()
+            .data.UpdateDataList.QuestEventList.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
-                    quest_event_id = questEventId,
-                    quest_bonus_receive_count = 0,
-                    quest_bonus_reserve_count = 0,
-                    quest_bonus_reserve_time = DateTimeOffset.UnixEpoch,
-                    quest_bonus_stack_count = 0,
-                    quest_bonus_stack_time = DateTimeOffset.UnixEpoch,
-                    last_daily_reset_time = response.data.ingame_result_data.end_time,
-                    last_weekly_reset_time = response.data.ingame_result_data.end_time,
-                    daily_play_count = 1,
-                    weekly_play_count = 1
+                    QuestEventId = questEventId,
+                    QuestBonusReceiveCount = 0,
+                    QuestBonusReserveCount = 0,
+                    QuestBonusReserveTime = DateTimeOffset.UnixEpoch,
+                    QuestBonusStackCount = 0,
+                    QuestBonusStackTime = DateTimeOffset.UnixEpoch,
+                    LastDailyResetTime = response.data.IngameResultData.EndTime,
+                    LastWeeklyResetTime = response.data.IngameResultData.EndTime,
+                    DailyPlayCount = 1,
+                    WeeklyPlayCount = 1
                 }
             );
     }
@@ -281,20 +281,20 @@ public class QuestBonusTest : TestFixture
         DragaliaResponse<DungeonRecordRecordData> response = await this.CompleteQuest(questId);
 
         response
-            .data.update_data_list.quest_event_list.Should()
+            .data.UpdateDataList.QuestEventList.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
-                    quest_event_id = questEventId,
-                    quest_bonus_receive_count = 0,
-                    quest_bonus_reserve_count = 1,
-                    quest_bonus_reserve_time = response.data.ingame_result_data.end_time,
-                    quest_bonus_stack_count = 0,
-                    quest_bonus_stack_time = DateTimeOffset.UnixEpoch,
-                    last_daily_reset_time = response.data.ingame_result_data.end_time,
-                    last_weekly_reset_time = response.data.ingame_result_data.end_time,
-                    daily_play_count = 1,
-                    weekly_play_count = 1
+                    QuestEventId = questEventId,
+                    QuestBonusReceiveCount = 0,
+                    QuestBonusReserveCount = 1,
+                    QuestBonusReserveTime = response.data.IngameResultData.EndTime,
+                    QuestBonusStackCount = 0,
+                    QuestBonusStackTime = DateTimeOffset.UnixEpoch,
+                    LastDailyResetTime = response.data.IngameResultData.EndTime,
+                    LastWeeklyResetTime = response.data.IngameResultData.EndTime,
+                    DailyPlayCount = 1,
+                    WeeklyPlayCount = 1
                 }
             );
 
@@ -303,31 +303,31 @@ public class QuestBonusTest : TestFixture
                 "/dungeon/receive_quest_bonus",
                 new DungeonReceiveQuestBonusRequest()
                 {
-                    quest_event_id = questEventId,
-                    is_receive = false,
-                    receive_bonus_count = 1
+                    QuestEventId = questEventId,
+                    IsReceive = false,
+                    ReceiveBonusCount = 1
                 }
             );
 
-        bonusResponse.data.receive_quest_bonus.target_quest_id.Should().Be(questId);
-        bonusResponse.data.receive_quest_bonus.receive_bonus_count.Should().Be(0);
+        bonusResponse.data.ReceiveQuestBonus.TargetQuestId.Should().Be(questId);
+        bonusResponse.data.ReceiveQuestBonus.ReceiveBonusCount.Should().Be(0);
 
-        bonusResponse.data.update_data_list.material_list.Should().BeNullOrEmpty();
+        bonusResponse.data.UpdateDataList.MaterialList.Should().BeNullOrEmpty();
         bonusResponse
-            .data.update_data_list.quest_event_list.Should()
+            .data.UpdateDataList.QuestEventList.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
-                    quest_event_id = questEventId,
-                    quest_bonus_receive_count = 0,
-                    quest_bonus_reserve_count = 0,
-                    quest_bonus_reserve_time = DateTimeOffset.UnixEpoch,
-                    quest_bonus_stack_count = 0,
-                    quest_bonus_stack_time = DateTimeOffset.UnixEpoch,
-                    last_daily_reset_time = response.data.ingame_result_data.end_time,
-                    last_weekly_reset_time = response.data.ingame_result_data.end_time,
-                    daily_play_count = 1,
-                    weekly_play_count = 1
+                    QuestEventId = questEventId,
+                    QuestBonusReceiveCount = 0,
+                    QuestBonusReserveCount = 0,
+                    QuestBonusReserveTime = DateTimeOffset.UnixEpoch,
+                    QuestBonusStackCount = 0,
+                    QuestBonusStackTime = DateTimeOffset.UnixEpoch,
+                    LastDailyResetTime = response.data.IngameResultData.EndTime,
+                    LastWeeklyResetTime = response.data.IngameResultData.EndTime,
+                    DailyPlayCount = 1,
+                    WeeklyPlayCount = 1
                 }
             );
     }
@@ -339,8 +339,8 @@ public class QuestBonusTest : TestFixture
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
                 {
-                    quest_id = questId,
-                    party_no_list = new() { 1 }
+                    QuestId = questId,
+                    PartyNoList = new() { 1 }
                 }
             );
 
@@ -349,15 +349,15 @@ public class QuestBonusTest : TestFixture
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
-                    dungeon_key = startResponse.data.ingame_data.dungeon_key,
-                    play_record = new()
+                    DungeonKey = startResponse.data.IngameData.DungeonKey,
+                    PlayRecord = new()
                     {
-                        time = 10,
-                        treasure_record = new List<AtgenTreasureRecord>(),
-                        live_unit_no_list = new List<int>(),
-                        damage_record = new List<AtgenDamageRecord>(),
-                        dragon_damage_record = new List<AtgenDamageRecord>(),
-                        battle_royal_record = new AtgenBattleRoyalRecord()
+                        Time = 10,
+                        TreasureRecord = new List<AtgenTreasureRecord>(),
+                        LiveUnitNoList = new List<int>(),
+                        DamageRecord = new List<AtgenDamageRecord>(),
+                        DragonDamageRecord = new List<AtgenDamageRecord>(),
+                        BattleRoyalRecord = new AtgenBattleRoyalRecord()
                     }
                 }
             );

@@ -14,21 +14,21 @@ public class QuestReadStoryTest : TestFixture
         QuestReadStoryData response = (
             await this.Client.PostMsgpack<QuestReadStoryData>(
                 "/quest/read_story",
-                new QuestReadStoryRequest() { quest_story_id = 1000106 }
+                new QuestReadStoryRequest() { QuestStoryId = 1000106 }
             )
         ).data;
 
-        response.update_data_list.user_data.Should().NotBeNull();
+        response.UpdateDataList.UserData.Should().NotBeNull();
         response
-            .update_data_list.chara_list.Should()
+            .UpdateDataList.CharaList.Should()
             .ContainSingle()
-            .And.Subject.Any(x => x.chara_id == Charas.Ranzal)
+            .And.Subject.Any(x => x.CharaId == Charas.Ranzal)
             .Should()
             .BeTrue();
 
         response
-            .update_data_list.quest_story_list.Should()
-            .ContainEquivalentOf(new QuestStoryList() { quest_story_id = 1000106, state = 1 });
+            .UpdateDataList.QuestStoryList.Should()
+            .ContainEquivalentOf(new QuestStoryList() { QuestStoryId = 1000106, State = 1 });
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public class QuestReadStoryTest : TestFixture
         QuestReadStoryData response = (
             await this.Client.PostMsgpack<QuestReadStoryData>(
                 "/quest/read_story",
-                new QuestReadStoryRequest() { quest_story_id = 1001410 }
+                new QuestReadStoryRequest() { QuestStoryId = 1001410 }
             )
         ).data;
 
@@ -63,16 +63,16 @@ public class QuestReadStoryTest : TestFixture
         QuestReadStoryData response = (
             await this.Client.PostMsgpack<QuestReadStoryData>(
                 "/quest/read_story",
-                new QuestReadStoryRequest() { quest_story_id = theLonePaladynStoryId }
+                new QuestReadStoryRequest() { QuestStoryId = theLonePaladynStoryId }
             )
         ).data;
 
         response
-            .update_data_list.quest_story_list.Should()
+            .UpdateDataList.QuestStoryList.Should()
             .ContainEquivalentOf(
-                new QuestStoryList() { quest_story_id = theLonePaladynStoryId, state = 1 }
+                new QuestStoryList() { QuestStoryId = theLonePaladynStoryId, State = 1 }
             );
 
-        response.update_data_list.user_data.tutorial_status.Should().Be(10600);
+        response.UpdateDataList.UserData.TutorialStatus.Should().Be(10600);
     }
 }

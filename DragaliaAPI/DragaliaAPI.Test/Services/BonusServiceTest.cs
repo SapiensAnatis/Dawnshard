@@ -62,8 +62,8 @@ public class BonusServiceTest
                     .Select(x => new DbFortBuild()
                     {
                         ViewerId = ViewerId,
-                        PlantId = x.plant_id,
-                        Level = x.level
+                        PlantId = x.PlantId,
+                        Level = x.Level
                     })
                     .AsQueryable()
                     .BuildMock()
@@ -75,9 +75,8 @@ public class BonusServiceTest
                     .Select(x => new DbWeaponBody()
                     {
                         ViewerId = ViewerId,
-                        WeaponBodyId = x.weapon_body_id,
-                        FortPassiveCharaWeaponBuildupCount =
-                            x.fort_passive_chara_weapon_buildup_count
+                        WeaponBodyId = x.WeaponBodyId,
+                        FortPassiveCharaWeaponBuildupCount = x.FortPassiveCharaWeaponBuildupCount
                     })
                     .AsQueryable()
                     .BuildMock()
@@ -90,8 +89,7 @@ public class BonusServiceTest
             .BeEquivalentTo(
                 expectedBonusList,
                 opts =>
-                    opts.Excluding(x => x!.chara_bonus_by_album)
-                        .Excluding(x => x!.dragon_bonus_by_album)
+                    opts.Excluding(x => x!.CharaBonusByAlbum).Excluding(x => x!.DragonBonusByAlbum)
             );
     }
 
@@ -120,8 +118,8 @@ public class BonusServiceTest
             .BeEquivalentTo(
                 new AtgenEventBoost()
                 {
-                    event_effect = EventEffectTypes.EventDamageBoost,
-                    effect_value = 50
+                    EventEffect = EventEffectTypes.EventDamageBoost,
+                    EffectValue = 50
                 }
             );
     }

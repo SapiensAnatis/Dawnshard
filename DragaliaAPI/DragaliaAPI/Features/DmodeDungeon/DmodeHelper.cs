@@ -20,7 +20,7 @@ public static class DmodeHelper
         DmodeDungeonItemList item
     )
     {
-        item.item_no = list.Count + 1;
+        item.ItemNo = list.Count + 1;
         list.Add(item);
     }
 

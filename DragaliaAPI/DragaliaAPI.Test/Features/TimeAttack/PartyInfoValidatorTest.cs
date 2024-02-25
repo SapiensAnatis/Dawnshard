@@ -31,16 +31,16 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { chara_data = new() { chara_id = Charas.GalaGatov } },
-                    new() { chara_data = new() { chara_id = Charas.GalaGatov } }
+                    new() { CharaData = new() { CharaId = Charas.GalaGatov } },
+                    new() { CharaData = new() { CharaId = Charas.GalaGatov } }
                 }
             }
         );
 
         result.Errors.Count.Should().Be(1);
-        result.ShouldHaveValidationErrorFor(x => x.party_unit_list);
+        result.ShouldHaveValidationErrorFor(x => x.PartyUnitList);
     }
 
     [Fact]
@@ -49,13 +49,13 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        chara_data = new() { chara_id = Charas.GalaGatov },
-                        edit_skill_1_chara_data = new() { chara_id = Charas.ShaWujing },
-                        edit_skill_2_chara_data = new() { chara_id = Charas.ShaWujing }
+                        CharaData = new() { CharaId = Charas.GalaGatov },
+                        EditSkill1CharaData = new() { CharaId = Charas.ShaWujing },
+                        EditSkill2CharaData = new() { CharaId = Charas.ShaWujing }
                     }
                 }
             }
@@ -73,12 +73,12 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        chara_data = new() { chara_id = Charas.GalaGatov },
-                        dragon_reliability_level = 31,
+                        CharaData = new() { CharaId = Charas.GalaGatov },
+                        DragonReliabilityLevel = 31,
                     }
                 }
             }
@@ -94,18 +94,18 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        chara_data = new() { chara_id = Charas.GalaGatov },
-                        crest_slot_type_1_crest_list = new List<GameAbilityCrest>()
+                        CharaData = new() { CharaId = Charas.GalaGatov },
+                        CrestSlotType1CrestList = new List<GameAbilityCrest>()
                         {
-                            new() { ability_crest_id = AbilityCrests.CastleCheerCorps },
+                            new() { AbilityCrestId = AbilityCrests.CastleCheerCorps },
                         },
-                        crest_slot_type_2_crest_list = new List<GameAbilityCrest>()
+                        CrestSlotType2CrestList = new List<GameAbilityCrest>()
                         {
-                            new() { ability_crest_id = AbilityCrests.CastleCheerCorps }
+                            new() { AbilityCrestId = AbilityCrests.CastleCheerCorps }
                         }
                     }
                 }
@@ -124,9 +124,9 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { chara_data = new() { chara_id = (Charas)1234, }, }
+                    new() { CharaData = new() { CharaId = (Charas)1234, }, }
                 }
             }
         );
@@ -144,15 +144,15 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        chara_data = new()
+                        CharaData = new()
                         {
-                            chara_id = Charas.GalaGatov,
-                            attack_plus_count = 101,
-                            hp_plus_count = 101
+                            CharaId = Charas.GalaGatov,
+                            AttackPlusCount = 101,
+                            HpPlusCount = 101
                         },
                     }
                 }
@@ -170,9 +170,9 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { chara_data = new() { chara_id = Charas.SummerIeyasu }, }
+                    new() { CharaData = new() { CharaId = Charas.SummerIeyasu }, }
                 }
             }
         );
@@ -189,9 +189,9 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { dragon_data = new() { dragon_id = (Dragons)1234, }, }
+                    new() { DragonData = new() { DragonId = (Dragons)1234, }, }
                 }
             }
         );
@@ -209,15 +209,15 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        dragon_data = new()
+                        DragonData = new()
                         {
-                            dragon_id = Dragons.GalaRebornAgni,
-                            attack_plus_count = 101,
-                            hp_plus_count = 101
+                            DragonId = Dragons.GalaRebornAgni,
+                            AttackPlusCount = 101,
+                            HpPlusCount = 101
                         },
                     }
                 }
@@ -235,9 +235,9 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { dragon_data = new() { dragon_id = Dragons.SummerMarishiten }, }
+                    new() { DragonData = new() { DragonId = Dragons.SummerMarishiten }, }
                 }
             }
         );
@@ -254,13 +254,13 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        crest_slot_type_1_crest_list = new List<GameAbilityCrest>()
+                        CrestSlotType1CrestList = new List<GameAbilityCrest>()
                         {
-                            new() { ability_crest_id = (AbilityCrests)1234 }
+                            new() { AbilityCrestId = (AbilityCrests)1234 }
                         },
                     }
                 }
@@ -277,13 +277,13 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        crest_slot_type_1_crest_list = new List<GameAbilityCrest>()
+                        CrestSlotType1CrestList = new List<GameAbilityCrest>()
                         {
-                            new() { attack_plus_count = 101, hp_plus_count = 101 }
+                            new() { AttackPlusCount = 101, HpPlusCount = 101 }
                         },
                     }
                 }
@@ -301,9 +301,9 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { weapon_body_data = new() { weapon_body_id = (WeaponBodies)1234 } }
+                    new() { WeaponBodyData = new() { WeaponBodyId = (WeaponBodies)1234 } }
                 }
             }
         );
@@ -318,15 +318,15 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        talisman_data = new()
+                        TalismanData = new()
                         {
-                            talisman_id = Talismans.GalaLuca,
-                            additional_attack = 101,
-                            additional_hp = 101
+                            TalismanId = Talismans.GalaLuca,
+                            AdditionalAttack = 101,
+                            AdditionalHp = 101
                         }
                     }
                 }
@@ -344,9 +344,9 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { talisman_data = new() { talisman_id = (Talismans)1234, } }
+                    new() { TalismanData = new() { TalismanId = (Talismans)1234, } }
                 }
             }
         );
@@ -361,15 +361,15 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        talisman_data = new()
+                        TalismanData = new()
                         {
-                            talisman_id = Talismans.GalaLuca,
-                            talisman_ability_id_1 = 330000569,
-                            talisman_ability_id_2 = 3004
+                            TalismanId = Talismans.GalaLuca,
+                            TalismanAbilityId1 = 330000569,
+                            TalismanAbilityId2 = 3004
                         }
                     }
                 }
@@ -391,15 +391,15 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        talisman_data = new()
+                        TalismanData = new()
                         {
-                            talisman_id = Talismans.GalaLuca,
-                            talisman_ability_id_1 = 340000029,
-                            talisman_ability_id_2 = 340000029
+                            TalismanId = Talismans.GalaLuca,
+                            TalismanAbilityId1 = 340000029,
+                            TalismanAbilityId2 = 340000029
                         }
                     }
                 }
@@ -418,16 +418,16 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        talisman_data = new()
+                        TalismanData = new()
                         {
-                            talisman_id = Talismans.GalaLuca,
-                            talisman_ability_id_1 = 340000029,
-                            talisman_ability_id_2 = 340000077,
-                            talisman_ability_id_3 = 340000118,
+                            TalismanId = Talismans.GalaLuca,
+                            TalismanAbilityId1 = 340000029,
+                            TalismanAbilityId2 = 340000077,
+                            TalismanAbilityId3 = 340000118,
                         }
                     }
                 }

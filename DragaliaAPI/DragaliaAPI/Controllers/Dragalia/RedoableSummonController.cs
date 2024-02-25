@@ -162,16 +162,14 @@ public class RedoableSummonController : DragaliaControllerBase
 
         IEnumerable<(Charas id, bool isNew)> repositoryCharaOuput =
             await this.unitRepository.AddCharas(
-                cachedResult
-                    .Where(x => x.entity_type == EntityTypes.Chara)
-                    .Select(x => (Charas)x.id)
+                cachedResult.Where(x => x.EntityType == EntityTypes.Chara).Select(x => (Charas)x.Id)
             );
 
         IEnumerable<(Dragons id, bool isNew)> repositoryDragonOutput =
             await this.unitRepository.AddDragons(
                 cachedResult
-                    .Where(x => x.entity_type == EntityTypes.Dragon)
-                    .Select(x => (Dragons)x.id)
+                    .Where(x => x.EntityType == EntityTypes.Dragon)
+                    .Select(x => (Dragons)x.Id)
             );
 
         UpdateDataList updateData = await this.updateDataService.SaveChangesAsync();
@@ -180,29 +178,29 @@ public class RedoableSummonController : DragaliaControllerBase
             .Where(x => x.isNew)
             .Select(x => new AtgenDuplicateEntityList()
             {
-                entity_type = EntityTypes.Chara,
-                entity_id = (int)x.id
+                EntityType = EntityTypes.Chara,
+                EntityId = (int)x.id
             });
         IEnumerable<AtgenDuplicateEntityList> newDragons = repositoryDragonOutput
             .Where(x => x.isNew)
             .Select(x => new AtgenDuplicateEntityList()
             {
-                entity_type = EntityTypes.Dragon,
-                entity_id = (int)x.id
+                EntityType = EntityTypes.Dragon,
+                EntityId = (int)x.id
             });
 
         return this.Ok(
             new RedoableSummonFixExecData()
             {
-                user_redoable_summon_data = new UserRedoableSummonData()
+                UserRedoableSummonData = new UserRedoableSummonData()
                 {
-                    is_fixed_result = 1,
-                    redoable_summon_result_unit_list = cachedResult
+                    IsFixedResult = 1,
+                    RedoableSummonResultUnitList = cachedResult
                 },
-                update_data_list = updateData,
-                entity_result = new EntityResult()
+                UpdateDataList = updateData,
+                EntityResult = new EntityResult()
                 {
-                    new_get_entity_list = newCharas.Concat(newDragons)
+                    NewGetEntityList = newCharas.Concat(newDragons)
                 }
             }
         );

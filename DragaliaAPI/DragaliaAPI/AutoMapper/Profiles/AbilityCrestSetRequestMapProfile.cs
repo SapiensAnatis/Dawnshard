@@ -14,56 +14,35 @@ public class AbilityCrestSetRequestMapProfile : Profile
         this.CreateMap<AbilityCrestSetAbilityCrestSetRequest, DbAbilityCrestSet>()
             .ForMember(
                 x => x.CrestSlotType1CrestId1,
-                opts =>
-                    opts.MapFrom(src =>
-                        src.request_ability_crest_set_data.crest_slot_type_1_crest_id_1
-                    )
+                opts => opts.MapFrom(src => src.RequestAbilityCrestSetData.CrestSlotType1CrestId1)
             )
             .ForMember(
                 x => x.CrestSlotType1CrestId2,
-                opts =>
-                    opts.MapFrom(src =>
-                        src.request_ability_crest_set_data.crest_slot_type_1_crest_id_2
-                    )
+                opts => opts.MapFrom(src => src.RequestAbilityCrestSetData.CrestSlotType1CrestId2)
             )
             .ForMember(
                 x => x.CrestSlotType1CrestId3,
-                opts =>
-                    opts.MapFrom(src =>
-                        src.request_ability_crest_set_data.crest_slot_type_1_crest_id_3
-                    )
+                opts => opts.MapFrom(src => src.RequestAbilityCrestSetData.CrestSlotType1CrestId3)
             )
             .ForMember(
                 x => x.CrestSlotType2CrestId1,
-                opts =>
-                    opts.MapFrom(src =>
-                        src.request_ability_crest_set_data.crest_slot_type_2_crest_id_1
-                    )
+                opts => opts.MapFrom(src => src.RequestAbilityCrestSetData.CrestSlotType2CrestId1)
             )
             .ForMember(
                 x => x.CrestSlotType2CrestId2,
-                opts =>
-                    opts.MapFrom(src =>
-                        src.request_ability_crest_set_data.crest_slot_type_2_crest_id_2
-                    )
+                opts => opts.MapFrom(src => src.RequestAbilityCrestSetData.CrestSlotType2CrestId2)
             )
             .ForMember(
                 x => x.CrestSlotType3CrestId1,
-                opts =>
-                    opts.MapFrom(src =>
-                        src.request_ability_crest_set_data.crest_slot_type_3_crest_id_1
-                    )
+                opts => opts.MapFrom(src => src.RequestAbilityCrestSetData.CrestSlotType3CrestId1)
             )
             .ForMember(
                 x => x.CrestSlotType3CrestId2,
-                opts =>
-                    opts.MapFrom(src =>
-                        src.request_ability_crest_set_data.crest_slot_type_3_crest_id_2
-                    )
+                opts => opts.MapFrom(src => src.RequestAbilityCrestSetData.CrestSlotType3CrestId2)
             )
             .ForMember(
                 x => x.TalismanKeyId,
-                opts => opts.MapFrom(src => src.request_ability_crest_set_data.talisman_key_id)
+                opts => opts.MapFrom(src => src.RequestAbilityCrestSetData.TalismanKeyId)
             );
 
         this.SourceMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;

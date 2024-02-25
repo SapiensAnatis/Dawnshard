@@ -182,7 +182,7 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         {
             // T3 only drops from Challenge Battle quests
             int t3Quantity = GenerateDropAmount(
-                10 * record.wave * ((variation - VariationTypes.Hard) / 2d) * buildDropMultiplier
+                10 * record.Wave * ((variation - VariationTypes.Hard) / 2d) * buildDropMultiplier
             );
             yield return new Entity(evt.ViewEntityType3, evt.ViewEntityId3, t3Quantity);
         }

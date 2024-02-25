@@ -33,7 +33,7 @@ public class WallTest : TestFixture
         DungeonSession mockSession =
             new()
             {
-                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 WallId = expectedWallId,
                 WallLevel = expectedWallLevel
             };
@@ -43,18 +43,18 @@ public class WallTest : TestFixture
         WallFailData response = (
             await Client.PostMsgpack<WallFailData>(
                 "/wall/fail",
-                new WallFailRequest() { dungeon_key = key, fail_state = 0 }
+                new WallFailRequest() { DungeonKey = key, FailState = 0 }
             )
         ).data;
 
         response
-            .fail_quest_detail.Should()
+            .FailQuestDetail.Should()
             .BeEquivalentTo(
                 new AtgenFailQuestDetail()
                 {
-                    wall_id = expectedWallId,
-                    wall_level = expectedWallLevel,
-                    is_host = true
+                    WallId = expectedWallId,
+                    WallLevel = expectedWallLevel,
+                    IsHost = true
                 }
             );
     }
@@ -106,14 +106,14 @@ public class WallTest : TestFixture
         ).data;
 
         response
-            .user_wall_reward_list.Should()
+            .UserWallRewardList.Should()
             .ContainEquivalentOf(
                 new AtgenUserWallRewardList()
                 {
-                    quest_group_id = 21601,
-                    sum_wall_level = 1 + 2 + 3 + 4 + 5,
-                    last_reward_date = DateTimeOffset.UtcNow,
-                    reward_status = RewardStatus.Received
+                    QuestGroupId = 21601,
+                    SumWallLevel = 1 + 2 + 3 + 4 + 5,
+                    LastRewardDate = DateTimeOffset.UtcNow,
+                    RewardStatus = RewardStatus.Received
                 }
             );
     }
@@ -168,30 +168,30 @@ public class WallTest : TestFixture
         WallReceiveMonthlyRewardData response = (
             await this.Client.PostMsgpack<WallReceiveMonthlyRewardData>(
                 "wall/receive_monthly_reward",
-                new WallGetMonthlyRewardRequest() { quest_group_id = 21601 }
+                new WallGetMonthlyRewardRequest() { QuestGroupId = 21601 }
             )
         ).data;
 
         response
-            .user_wall_reward_list.Should()
+            .UserWallRewardList.Should()
             .ContainEquivalentOf(
                 new AtgenUserWallRewardList()
                 {
-                    quest_group_id = 21601,
-                    sum_wall_level = 6 + 2 + 3 + 2 + 1,
-                    last_reward_date = DateTimeOffset.UtcNow,
-                    reward_status = RewardStatus.Received
+                    QuestGroupId = 21601,
+                    SumWallLevel = 6 + 2 + 3 + 2 + 1,
+                    LastRewardDate = DateTimeOffset.UtcNow,
+                    RewardStatus = RewardStatus.Received
                 }
             );
 
         response
-            .update_data_list.user_data.dew_point.Should()
+            .UpdateDataList.UserData.DewPoint.Should()
             .Be(oldUserData.DewPoint + expectedDewPoint);
 
-        response.update_data_list.user_data.coin.Should().Be(oldUserData.Coin + expectedCoin);
+        response.UpdateDataList.UserData.Coin.Should().Be(oldUserData.Coin + expectedCoin);
 
         response
-            .update_data_list.user_data.mana_point.Should()
+            .UpdateDataList.UserData.ManaPoint.Should()
             .Be(oldUserData.ManaPoint + expectedMana);
     }
 }

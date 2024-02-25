@@ -22,10 +22,10 @@ public class AbilityCrestTradeController(
 
         missionProgressionService.OnAbilityCrestTradeViewed();
 
-        resp.ability_crest_trade_list = tradeService.GetCurrentAbilityCrestTradeList();
-        resp.user_ability_crest_trade_list = await tradeService.GetUserAbilityCrestTradeList();
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.AbilityCrestTradeList = tradeService.GetCurrentAbilityCrestTradeList();
+        resp.UserAbilityCrestTradeList = await tradeService.GetUserAbilityCrestTradeList();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
@@ -35,12 +35,12 @@ public class AbilityCrestTradeController(
     {
         AbilityCrestTradeTradeData resp = new();
 
-        await tradeService.DoAbilityCrestTrade(request.ability_crest_trade_id, request.trade_count);
+        await tradeService.DoAbilityCrestTrade(request.AbilityCrestTradeId, request.TradeCount);
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
-        resp.ability_crest_trade_list = tradeService.GetCurrentAbilityCrestTradeList();
-        resp.user_ability_crest_trade_list = await tradeService.GetUserAbilityCrestTradeList();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
+        resp.AbilityCrestTradeList = tradeService.GetCurrentAbilityCrestTradeList();
+        resp.UserAbilityCrestTradeList = await tradeService.GetUserAbilityCrestTradeList();
 
         return Ok(resp);
     }

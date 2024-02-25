@@ -9,7 +9,7 @@ public class SummonMapProfile : Profile
     public SummonMapProfile()
     {
         this.CreateMap<DbPlayerSummonHistory, SummonHistoryList>()
-            .ForMember(nameof(SummonHistoryList.summon_point_id), o => o.MapFrom(x => x.SummonId));
+            .ForMember(nameof(SummonHistoryList.SummonPointId), o => o.MapFrom(x => x.SummonId));
 
         this.CreateMap<DbSummonTicket, SummonTicketList>()
             .ForMember(x => x.KeyId, o => o.MapFrom(src => src.KeyId))

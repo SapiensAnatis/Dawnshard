@@ -55,9 +55,9 @@ public class CharaTest : TestFixture
         ).data;
 
         CharaList charaData = response
-            .update_data_list.chara_list.Where(x => (Charas)x.chara_id == Charas.Celliera)
+            .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Celliera)
             .First();
-        charaData.rarity.Should().Be(5);
+        charaData.Rarity.Should().Be(5);
     }
 
     [Fact]
@@ -91,7 +91,7 @@ public class CharaTest : TestFixture
                     Charas.Celliera,
                     new List<AtgenEnemyPiece>()
                     {
-                        new AtgenEnemyPiece() { id = Materials.GoldCrystal, quantity = 300 }
+                        new AtgenEnemyPiece() { Id = Materials.GoldCrystal, Quantity = 300 }
                     }
                 )
             )
@@ -107,19 +107,19 @@ public class CharaTest : TestFixture
         );
 
         CharaList responseCharaData = response
-            .update_data_list.chara_list.Where(x => (Charas)x.chara_id == Charas.Celliera)
+            .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Celliera)
             .First();
         responseCharaData
-            .level.Should()
+            .Level.Should()
             .Be(Math.Min(CharaConstants.XpLimits.FindIndex(0, x => x > expectedXp), maxLevel));
-        responseCharaData.exp.Should().Be(expectedXp);
+        responseCharaData.Exp.Should().Be(expectedXp);
 
         response
-            .update_data_list.material_list.Where(x =>
-                (Materials)x.material_id == Materials.GoldCrystal
+            .UpdateDataList.MaterialList.Where(x =>
+                (Materials)x.MaterialId == Materials.GoldCrystal
             )
             .First()
-            .quantity.Should()
+            .Quantity.Should()
             .Be(matQuantity - 300);
     }
 
@@ -130,7 +130,7 @@ public class CharaTest : TestFixture
             "chara/buildup",
             new CharaBuildupRequest(
                 Charas.Gauld,
-                [new AtgenEnemyPiece() { id = Materials.GoldCrystal, quantity = 10 }]
+                [new AtgenEnemyPiece() { Id = Materials.GoldCrystal, Quantity = 10 }]
             )
         );
 
@@ -143,7 +143,7 @@ public class CharaTest : TestFixture
             "chara/buildup",
             new CharaBuildupRequest(
                 Charas.Gauld,
-                [new AtgenEnemyPiece() { id = Materials.BronzeCrystal, quantity = 1 }]
+                [new AtgenEnemyPiece() { Id = Materials.BronzeCrystal, Quantity = 1 }]
             )
         );
 
@@ -181,15 +181,15 @@ public class CharaTest : TestFixture
         ).data;
 
         CharaList responseCharaData = response
-            .update_data_list.chara_list.Where(x => (Charas)x.chara_id == Charas.Celliera)
+            .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Celliera)
             .First();
 
         responseCharaData
-            .mana_circle_piece_id_list.Should()
+            .ManaCirclePieceIdList.Should()
             .ContainInOrder(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
         response
-            .update_data_list.user_data.mana_point.Should()
+            .UpdateDataList.UserData.ManaPoint.Should()
             .Be(manaPointNum - 350 - 450 - 650 - 350 - 450 - 350 - 500 - 450 - 350 - 650);
     }
 
@@ -245,13 +245,13 @@ public class CharaTest : TestFixture
         ).data;
 
         CharaList responseCharaData = response
-            .update_data_list.chara_list.Where(x => (Charas)x.chara_id == Charas.Celliera)
+            .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Celliera)
             .First();
 
-        responseCharaData.limit_break_count.Should().Be(1);
+        responseCharaData.LimitBreakCount.Should().Be(1);
 
         response
-            .update_data_list.material_list.Should()
+            .UpdateDataList.MaterialList.Should()
             .ContainEquivalentOf(new MaterialList(Materials.WaterOrb, mat1Quantity - 8))
             .And.ContainEquivalentOf(new MaterialList(Materials.StreamOrb, mat2Quantity - 1));
     }
@@ -294,12 +294,12 @@ public class CharaTest : TestFixture
         ).data;
 
         CharaList responseCharaData = response
-            .update_data_list.chara_list.Where(x => (Charas)x.chara_id == Charas.Celliera)
+            .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Celliera)
             .First();
 
-        responseCharaData.limit_break_count.Should().Be(2);
+        responseCharaData.LimitBreakCount.Should().Be(2);
         responseCharaData
-            .mana_circle_piece_id_list.Should()
+            .ManaCirclePieceIdList.Should()
             .ContainInOrder(
                 1,
                 2,
@@ -329,11 +329,11 @@ public class CharaTest : TestFixture
             );
 
         response
-            .update_data_list.user_data.mana_point.Should()
+            .UpdateDataList.UserData.ManaPoint.Should()
             .Be(manaPointNum - 2800 - 3400 - 5200 - 3400 - 2800);
 
         response
-            .update_data_list.material_list.Should()
+            .UpdateDataList.MaterialList.Should()
             .ContainEquivalentOf(new MaterialList(Materials.WaterOrb, mat1Quantity - 15 - 25))
             .And.ContainEquivalentOf(new MaterialList(Materials.StreamOrb, mat2Quantity - 4 - 5))
             .And.ContainEquivalentOf(new MaterialList(Materials.DelugeOrb, mat3Quantity - 1 - 1));
@@ -355,16 +355,16 @@ public class CharaTest : TestFixture
         ).data;
 
         CharaList preSpiralResponseCharaData = preSpiralResponse
-            .update_data_list.chara_list.Where(x => (Charas)x.chara_id == Charas.Delphi)
+            .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Delphi)
             .First();
 
         CharaData charaData = MasterAsset.CharaData.Get(Charas.Delphi);
 
-        preSpiralResponseCharaData.level.Should().Be(1);
-        preSpiralResponseCharaData.mana_circle_piece_id_list.Count().Should().Be(50);
-        preSpiralResponseCharaData.additional_max_level.Should().Be(0);
+        preSpiralResponseCharaData.Level.Should().Be(1);
+        preSpiralResponseCharaData.ManaCirclePieceIdList.Count().Should().Be(50);
+        preSpiralResponseCharaData.AdditionalMaxLevel.Should().Be(0);
         preSpiralResponseCharaData
-            .hp.Should()
+            .Hp.Should()
             .Be(
                 charaData.PlusHp0
                     + charaData.PlusHp1
@@ -375,7 +375,7 @@ public class CharaTest : TestFixture
                     + 67
             );
         preSpiralResponseCharaData
-            .attack.Should()
+            .Attack.Should()
             .Be(
                 charaData.PlusAtk0
                     + charaData.PlusAtk1
@@ -399,14 +399,14 @@ public class CharaTest : TestFixture
         ).data;
 
         CharaList postSpiralResponseCharaData = postSpiralResponse
-            .update_data_list.chara_list.Where(x => (Charas)x.chara_id == Charas.Delphi)
+            .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Delphi)
             .First();
 
-        postSpiralResponseCharaData.level.Should().Be(1);
-        postSpiralResponseCharaData.mana_circle_piece_id_list.Count().Should().Be(70);
-        postSpiralResponseCharaData.additional_max_level.Should().Be(20);
+        postSpiralResponseCharaData.Level.Should().Be(1);
+        postSpiralResponseCharaData.ManaCirclePieceIdList.Count().Should().Be(70);
+        postSpiralResponseCharaData.AdditionalMaxLevel.Should().Be(20);
         postSpiralResponseCharaData
-            .hp.Should()
+            .Hp.Should()
             .Be(
                 charaData.PlusHp0
                     + charaData.PlusHp1
@@ -418,7 +418,7 @@ public class CharaTest : TestFixture
                     + 67
             );
         postSpiralResponseCharaData
-            .attack.Should()
+            .Attack.Should()
             .Be(
                 charaData.PlusAtk0
                     + charaData.PlusAtk1
@@ -442,27 +442,25 @@ public class CharaTest : TestFixture
         ).data;
 
         CharaList responseCharaData = response
-            .update_data_list.chara_list.Where(x => x.chara_id == Charas.SummerCelliera)
+            .UpdateDataList.CharaList.Where(x => x.CharaId == Charas.SummerCelliera)
             .First();
 
-        responseCharaData.level.Should().Be(100);
-        responseCharaData.exp.Should().Be(CharaConstants.XpLimits[99]);
-        responseCharaData.additional_max_level.Should().Be(20);
+        responseCharaData.Level.Should().Be(100);
+        responseCharaData.Exp.Should().Be(CharaConstants.XpLimits[99]);
+        responseCharaData.AdditionalMaxLevel.Should().Be(20);
 
         // Values from wiki
-        responseCharaData.hp.Should().Be(956);
-        responseCharaData.attack.Should().Be(574);
+        responseCharaData.Hp.Should().Be(956);
+        responseCharaData.Attack.Should().Be(574);
 
-        responseCharaData.limit_break_count.Should().Be(5);
-        responseCharaData
-            .mana_circle_piece_id_list.Should()
-            .BeEquivalentTo(Enumerable.Range(1, 70));
+        responseCharaData.LimitBreakCount.Should().Be(5);
+        responseCharaData.ManaCirclePieceIdList.Should().BeEquivalentTo(Enumerable.Range(1, 70));
 
-        responseCharaData.skill_1_level.Should().Be(4);
-        responseCharaData.skill_2_level.Should().Be(3);
-        responseCharaData.ability_1_level.Should().Be(3);
-        responseCharaData.ability_2_level.Should().Be(3);
-        responseCharaData.ability_3_level.Should().Be(3);
+        responseCharaData.Skill1Level.Should().Be(4);
+        responseCharaData.Skill2Level.Should().Be(3);
+        responseCharaData.Ability1Level.Should().Be(3);
+        responseCharaData.Ability2Level.Should().Be(3);
+        responseCharaData.Ability3Level.Should().Be(3);
     }
 
     [Fact]
@@ -476,26 +474,24 @@ public class CharaTest : TestFixture
         ).data;
 
         CharaList responseCharaData = response
-            .update_data_list.chara_list.Where(x => x.chara_id == Charas.Harle)
+            .UpdateDataList.CharaList.Where(x => x.CharaId == Charas.Harle)
             .First();
 
-        responseCharaData.level.Should().Be(80);
-        responseCharaData.exp.Should().Be(CharaConstants.XpLimits[79]);
-        responseCharaData.additional_max_level.Should().Be(0);
+        responseCharaData.Level.Should().Be(80);
+        responseCharaData.Exp.Should().Be(CharaConstants.XpLimits[79]);
+        responseCharaData.AdditionalMaxLevel.Should().Be(0);
 
-        responseCharaData.hp.Should().Be(741);
-        responseCharaData.attack.Should().Be(470);
+        responseCharaData.Hp.Should().Be(741);
+        responseCharaData.Attack.Should().Be(470);
 
-        responseCharaData.limit_break_count.Should().Be(4);
-        responseCharaData
-            .mana_circle_piece_id_list.Should()
-            .BeEquivalentTo(Enumerable.Range(1, 50));
+        responseCharaData.LimitBreakCount.Should().Be(4);
+        responseCharaData.ManaCirclePieceIdList.Should().BeEquivalentTo(Enumerable.Range(1, 50));
 
-        responseCharaData.skill_1_level.Should().Be(3);
-        responseCharaData.skill_2_level.Should().Be(2);
-        responseCharaData.ability_1_level.Should().Be(2);
-        responseCharaData.ability_2_level.Should().Be(2);
-        responseCharaData.ability_3_level.Should().Be(2);
+        responseCharaData.Skill1Level.Should().Be(3);
+        responseCharaData.Skill2Level.Should().Be(2);
+        responseCharaData.Ability1Level.Should().Be(2);
+        responseCharaData.Ability2Level.Should().Be(2);
+        responseCharaData.Ability3Level.Should().Be(2);
     }
 
     [Theory]
@@ -542,17 +538,17 @@ public class CharaTest : TestFixture
         ).data;
 
         CharaList responseCharaData = response
-            .update_data_list.chara_list.Where(x => x.chara_id == id)
+            .UpdateDataList.CharaList.Where(x => x.CharaId == id)
             .First();
 
-        responseCharaData.level.Should().Be(100);
-        responseCharaData.exp.Should().Be(CharaConstants.XpLimits[99]);
+        responseCharaData.Level.Should().Be(100);
+        responseCharaData.Exp.Should().Be(CharaConstants.XpLimits[99]);
 
         CharaData charaData = MasterAsset.CharaData.Get(id);
 
         // Values from wiki
         responseCharaData
-            .hp.Should()
+            .Hp.Should()
             .Be(
                 charaData.AddMaxHp1
                     + charaData.PlusHp0
@@ -564,7 +560,7 @@ public class CharaTest : TestFixture
                     + charaData.McFullBonusHp5
             );
         responseCharaData
-            .attack.Should()
+            .Attack.Should()
             .Be(
                 charaData.AddMaxAtk1
                     + charaData.PlusAtk0
@@ -576,16 +572,14 @@ public class CharaTest : TestFixture
                     + charaData.McFullBonusAtk5
             );
 
-        responseCharaData.limit_break_count.Should().Be(5);
-        responseCharaData
-            .mana_circle_piece_id_list.Should()
-            .BeEquivalentTo(Enumerable.Range(1, 70));
+        responseCharaData.LimitBreakCount.Should().Be(5);
+        responseCharaData.ManaCirclePieceIdList.Should().BeEquivalentTo(Enumerable.Range(1, 70));
 
-        responseCharaData.skill_1_level.Should().Be(4);
-        responseCharaData.skill_2_level.Should().Be(3);
-        responseCharaData.ability_1_level.Should().Be(charaData.MaxAbility1Level);
-        responseCharaData.ability_2_level.Should().Be(charaData.MaxAbility2Level);
-        responseCharaData.ability_3_level.Should().Be(charaData.MaxAbility3Level);
+        responseCharaData.Skill1Level.Should().Be(4);
+        responseCharaData.Skill2Level.Should().Be(3);
+        responseCharaData.Ability1Level.Should().Be(charaData.MaxAbility1Level);
+        responseCharaData.Ability2Level.Should().Be(charaData.MaxAbility2Level);
+        responseCharaData.Ability3Level.Should().Be(charaData.MaxAbility3Level);
     }
 
     [Theory]
@@ -627,17 +621,17 @@ public class CharaTest : TestFixture
         ).data;
 
         CharaList responseCharaData = response
-            .update_data_list.chara_list.Where(x => x.chara_id == id)
+            .UpdateDataList.CharaList.Where(x => x.CharaId == id)
             .First();
 
-        responseCharaData.level.Should().Be(80);
-        responseCharaData.exp.Should().Be(CharaConstants.XpLimits[79]);
-        responseCharaData.additional_max_level.Should().Be(0);
+        responseCharaData.Level.Should().Be(80);
+        responseCharaData.Exp.Should().Be(CharaConstants.XpLimits[79]);
+        responseCharaData.AdditionalMaxLevel.Should().Be(0);
 
         CharaData charaData = MasterAsset.CharaData.Get(id);
 
         responseCharaData
-            .hp.Should()
+            .Hp.Should()
             .Be(
                 charaData.MaxHp
                     + charaData.PlusHp0
@@ -648,7 +642,7 @@ public class CharaTest : TestFixture
                     + charaData.McFullBonusHp5
             );
         responseCharaData
-            .attack.Should()
+            .Attack.Should()
             .Be(
                 charaData.MaxAtk
                     + charaData.PlusAtk0
@@ -659,16 +653,14 @@ public class CharaTest : TestFixture
                     + charaData.McFullBonusAtk5
             );
 
-        responseCharaData.limit_break_count.Should().Be(4);
-        responseCharaData
-            .mana_circle_piece_id_list.Should()
-            .BeEquivalentTo(Enumerable.Range(1, 50));
+        responseCharaData.LimitBreakCount.Should().Be(4);
+        responseCharaData.ManaCirclePieceIdList.Should().BeEquivalentTo(Enumerable.Range(1, 50));
 
-        responseCharaData.skill_1_level.Should().Be(3);
-        responseCharaData.skill_2_level.Should().Be(id == Charas.GalaZethia ? 0 : 2);
-        responseCharaData.ability_1_level.Should().Be(charaData.MaxAbility1Level);
-        responseCharaData.ability_2_level.Should().Be(charaData.MaxAbility2Level);
-        responseCharaData.ability_3_level.Should().Be(charaData.MaxAbility3Level);
+        responseCharaData.Skill1Level.Should().Be(3);
+        responseCharaData.Skill2Level.Should().Be(id == Charas.GalaZethia ? 0 : 2);
+        responseCharaData.Ability1Level.Should().Be(charaData.MaxAbility1Level);
+        responseCharaData.Ability2Level.Should().Be(charaData.MaxAbility2Level);
+        responseCharaData.Ability3Level.Should().Be(charaData.MaxAbility3Level);
     }
 
     [Fact]
@@ -694,14 +686,14 @@ public class CharaTest : TestFixture
                     1,
                     "Exercise",
                     Charas.Celliera,
-                    new AtgenRequestCharaUnitSetData() { dragon_key_id = 5 }
+                    new AtgenRequestCharaUnitSetData() { DragonKeyId = 5 }
                 )
             )
         ).data;
 
         CharaUnitSetList responseCharaData = response
-            .update_data_list.chara_unit_set_list.Where(x => (Charas)x.chara_id == Charas.Celliera)
+            .UpdateDataList.CharaUnitSetList.Where(x => (Charas)x.CharaId == Charas.Celliera)
             .First();
-        responseCharaData.chara_unit_set_detail_list.ToList()[0].dragon_key_id.Should().Be(5);
+        responseCharaData.CharaUnitSetDetailList.ToList()[0].DragonKeyId.Should().Be(5);
     }
 }

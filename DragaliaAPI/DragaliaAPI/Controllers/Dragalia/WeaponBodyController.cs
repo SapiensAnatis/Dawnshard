@@ -27,7 +27,7 @@ public class WeaponBodyController : DragaliaControllerBase
     [HttpPost("craft")]
     public async Task<DragaliaResult> Craft(WeaponBodyCraftRequest request)
     {
-        if (!await this.weaponService.ValidateCraft(request.weapon_body_id))
+        if (!await this.weaponService.ValidateCraft(request.WeaponBodyId))
         {
             this.logger.LogWarning("Weapon craft request was invalid.");
             return this.Code(ResultCode.WeaponBodyCraftShortWeaponBody);
@@ -35,41 +35,38 @@ public class WeaponBodyController : DragaliaControllerBase
 
         this.logger.LogInformation(
             "Validated request to craft weapon {weapon}",
-            request.weapon_body_id
+            request.WeaponBodyId
         );
 
-        await this.weaponService.Craft(request.weapon_body_id);
+        await this.weaponService.Craft(request.WeaponBodyId);
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
-        WeaponBodyCraftData response = new() { update_data_list = updateDataList };
+        WeaponBodyCraftData response = new() { UpdateDataList = updateDataList };
         return this.Ok(response);
     }
 
     [HttpPost("buildup_piece")]
     public async Task<DragaliaResult> BuildupPiece(WeaponBodyBuildupPieceRequest request)
     {
-        this.logger.LogDebug("Received request to upgrade weapon {weapon}", request.weapon_body_id);
+        this.logger.LogDebug("Received request to upgrade weapon {weapon}", request.WeaponBodyId);
 
-        if (!MasterAsset.WeaponBody.TryGetValue(request.weapon_body_id, out WeaponBody? bodyData))
+        if (!MasterAsset.WeaponBody.TryGetValue(request.WeaponBodyId, out WeaponBody? bodyData))
         {
-            this.logger.LogError(
-                "Weapon {weapon} had no MasterAsset entry",
-                request.weapon_body_id
-            );
+            this.logger.LogError("Weapon {weapon} had no MasterAsset entry", request.WeaponBodyId);
             return this.Code(ResultCode.WeaponBodyIsNotPlayable);
         }
 
-        if (!await this.weaponService.CheckOwned(request.weapon_body_id))
+        if (!await this.weaponService.CheckOwned(request.WeaponBodyId))
         {
-            this.logger.LogError("User did not own weapon {weapon}", request.weapon_body_id);
+            this.logger.LogError("User did not own weapon {weapon}", request.WeaponBodyId);
             return this.Code(ResultCode.WeaponBodyCraftShortWeaponBody);
         }
 
         foreach (
             AtgenBuildupWeaponBodyPieceList buildup in request
-                .buildup_weapon_body_piece_list.OrderBy(x => x.buildup_piece_type)
-                .ThenBy(x => x.step)
+                .BuildupWeaponBodyPieceList.OrderBy(x => x.BuildupPieceType)
+                .ThenBy(x => x.Step)
         )
         {
             ResultCode buildupResult = await weaponService.TryBuildup(bodyData, buildup);
@@ -90,9 +87,9 @@ public class WeaponBodyController : DragaliaControllerBase
 
         this.logger.LogInformation(
             "Completed request to upgrade weapon {weapon}",
-            request.weapon_body_id
+            request.WeaponBodyId
         );
 
-        return this.Ok(new WeaponBodyBuildupPieceData() { update_data_list = updateDataList });
+        return this.Ok(new WeaponBodyBuildupPieceData() { UpdateDataList = updateDataList });
     }
 }

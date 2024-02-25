@@ -13,12 +13,12 @@ public class MemoryEventTest : TestFixture
         MemoryEventActivateData result = (
             await this.Client.PostMsgpack<MemoryEventActivateData>(
                 "memory_event/activate",
-                new MemoryEventActivateRequest() { event_id = eventId }
+                new MemoryEventActivateRequest() { EventId = eventId }
             )
         ).data;
 
         result
-            .update_data_list.mission_notice.memory_event_mission_notice.new_complete_mission_id_list.Should()
+            .UpdateDataList.MissionNotice.MemoryEventMissionNotice.NewCompleteMissionIdList.Should()
             .Contain(10220101); // Participate in the Event
     }
 
@@ -32,7 +32,7 @@ public class MemoryEventTest : TestFixture
 
         await this.Client.PostMsgpack<MemoryEventActivateData>(
             "memory_event/activate",
-            new MemoryEventActivateRequest() { event_id = eventId }
+            new MemoryEventActivateRequest() { EventId = eventId }
         );
 
         MissionGetMissionListData missionListResponse = (
@@ -47,32 +47,32 @@ public class MemoryEventTest : TestFixture
             .BeEquivalentTo(
                 new MemoryEventMissionList[]
                 {
-                    new() { memory_event_mission_id = 10020101 },
-                    new() { memory_event_mission_id = 10020102 },
-                    new() { memory_event_mission_id = 10020103 },
-                    new() { memory_event_mission_id = 10020104 },
-                    new() { memory_event_mission_id = 10020201 },
-                    new() { memory_event_mission_id = 10020302 },
-                    new() { memory_event_mission_id = 10020303 },
-                    new() { memory_event_mission_id = 10020304 },
-                    new() { memory_event_mission_id = 10020305 },
-                    new() { memory_event_mission_id = 10020401 },
-                    new() { memory_event_mission_id = 10020502 },
-                    new() { memory_event_mission_id = 10020503 },
-                    new() { memory_event_mission_id = 10020504 },
-                    new() { memory_event_mission_id = 10020505 },
-                    new() { memory_event_mission_id = 10020601 },
-                    new() { memory_event_mission_id = 10020602 },
-                    new() { memory_event_mission_id = 10020603 },
-                    new() { memory_event_mission_id = 10020604 },
-                    new() { memory_event_mission_id = 10020702 },
-                    new() { memory_event_mission_id = 10020703 },
-                    new() { memory_event_mission_id = 10020704 },
-                    new() { memory_event_mission_id = 10020801 },
-                    new() { memory_event_mission_id = 10020901 },
-                    new() { memory_event_mission_id = 10021001 },
+                    new() { MemoryEventMissionId = 10020101 },
+                    new() { MemoryEventMissionId = 10020102 },
+                    new() { MemoryEventMissionId = 10020103 },
+                    new() { MemoryEventMissionId = 10020104 },
+                    new() { MemoryEventMissionId = 10020201 },
+                    new() { MemoryEventMissionId = 10020302 },
+                    new() { MemoryEventMissionId = 10020303 },
+                    new() { MemoryEventMissionId = 10020304 },
+                    new() { MemoryEventMissionId = 10020305 },
+                    new() { MemoryEventMissionId = 10020401 },
+                    new() { MemoryEventMissionId = 10020502 },
+                    new() { MemoryEventMissionId = 10020503 },
+                    new() { MemoryEventMissionId = 10020504 },
+                    new() { MemoryEventMissionId = 10020505 },
+                    new() { MemoryEventMissionId = 10020601 },
+                    new() { MemoryEventMissionId = 10020602 },
+                    new() { MemoryEventMissionId = 10020603 },
+                    new() { MemoryEventMissionId = 10020604 },
+                    new() { MemoryEventMissionId = 10020702 },
+                    new() { MemoryEventMissionId = 10020703 },
+                    new() { MemoryEventMissionId = 10020704 },
+                    new() { MemoryEventMissionId = 10020801 },
+                    new() { MemoryEventMissionId = 10020901 },
+                    new() { MemoryEventMissionId = 10021001 },
                 },
-                opts => opts.Including(x => x.memory_event_mission_id)
+                opts => opts.Including(x => x.MemoryEventMissionId)
             );
 
         this.ApiContext.PlayerMissions.Should().NotContain(x => x.Id == obsoleteMissionId1);

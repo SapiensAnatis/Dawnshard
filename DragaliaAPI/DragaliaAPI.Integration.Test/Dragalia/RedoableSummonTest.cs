@@ -31,7 +31,7 @@ public class RedoableSummonTest : TestFixture
             )
         ).data;
 
-        response.user_redoable_summon_data.redoable_summon_result_unit_list.Count().Should().Be(50);
+        response.UserRedoableSummonData.RedoableSummonResultUnitList.Count().Should().Be(50);
     }
 
     [Fact]
@@ -51,11 +51,11 @@ public class RedoableSummonTest : TestFixture
         ).data;
 
         IEnumerable<int> newCharaIds = response
-            .update_data_list.chara_list!.Select(x => (int)x.chara_id)
+            .UpdateDataList.CharaList!.Select(x => (int)x.CharaId)
             .OrderBy(x => x);
 
         IEnumerable<int> newDragonIds = response
-            .update_data_list.dragon_list!.Select(x => (int)x.dragon_id)
+            .UpdateDataList.DragonList!.Select(x => (int)x.DragonId)
             .OrderBy(x => x);
 
         IEnumerable<int> dbCharaIds = this

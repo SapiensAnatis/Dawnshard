@@ -31,10 +31,10 @@ public class PartyTest : TestFixture
                 {
                     new()
                     {
-                        unit_no = 1,
-                        chara_id = Charas.Ilia,
-                        equip_weapon_body_id = WeaponBodies.DivineTrigger,
-                        equip_crest_slot_type_1_crest_id_1 = AbilityCrests.ADragonyuleforIlia
+                        UnitNo = 1,
+                        CharaId = Charas.Ilia,
+                        EquipWeaponBodyId = WeaponBodies.DivineTrigger,
+                        EquipCrestSlotType1CrestId1 = AbilityCrests.ADragonyuleforIlia
                     }
                 },
                 "My New Party",
@@ -118,7 +118,7 @@ public class PartyTest : TestFixture
                     1,
                     new List<PartySettingList>()
                     {
-                        new() { unit_no = 1, chara_id = storyZethia, }
+                        new() { UnitNo = 1, CharaId = storyZethia, }
                     },
                     "My New Party",
                     false,
@@ -215,7 +215,7 @@ public class PartyTest : TestFixture
 
         await this.Client.PostMsgpack<PartyUpdatePartyNameData>(
             "/party/update_party_name",
-            new PartyUpdatePartyNameRequest() { party_no = 1, party_name = "LIblis Full Auto" }
+            new PartyUpdatePartyNameRequest() { PartyNo = 1, PartyName = "LIblis Full Auto" }
         );
 
         await this.ApiContext.Entry(party).ReloadAsync();
@@ -229,16 +229,16 @@ public class PartyTest : TestFixture
         PartyUpdatePartyNameData response = (
             await this.Client.PostMsgpack<PartyUpdatePartyNameData>(
                 "/party/update_party_name",
-                new PartyUpdatePartyNameRequest() { party_no = 2, party_name = "LIblis Full Auto" }
+                new PartyUpdatePartyNameRequest() { PartyNo = 2, PartyName = "LIblis Full Auto" }
             )
         ).data;
 
-        response.update_data_list.Should().NotBeNull();
+        response.UpdateDataList.Should().NotBeNull();
 
-        PartyList updateParty = response.update_data_list.party_list.ElementAt(0);
-        updateParty.party_name.Should().Be("LIblis Full Auto");
-        updateParty.party_no.Should().Be(2);
-        updateParty.party_setting_list.Should().NotBeEmpty();
-        updateParty.party_setting_list.Should().BeInAscendingOrder(x => x.unit_no);
+        PartyList updateParty = response.UpdateDataList.PartyList.ElementAt(0);
+        updateParty.PartyName.Should().Be("LIblis Full Auto");
+        updateParty.PartyNo.Should().Be(2);
+        updateParty.PartySettingList.Should().NotBeEmpty();
+        updateParty.PartySettingList.Should().BeInAscendingOrder(x => x.UnitNo);
     }
 }

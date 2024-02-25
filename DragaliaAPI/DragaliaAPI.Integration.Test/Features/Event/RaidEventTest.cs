@@ -27,8 +27,8 @@ public class RaidEventTest : TestFixture
                 new RaidEventGetEventDataRequest(EventId)
             );
 
-        evtData.data.raid_event_user_data.Should().NotBeNull();
-        evtData.data.raid_event_reward_list.Should().NotBeNull();
+        evtData.data.RaidEventUserData.Should().NotBeNull();
+        evtData.data.RaidEventRewardList.Should().NotBeNull();
     }
 
     [Fact]
@@ -52,10 +52,10 @@ public class RaidEventTest : TestFixture
                 new RaidEventReceiveRaidPointRewardRequest(EventId, new[] { 1001 })
             );
 
-        evtResp.data.raid_event_reward_list.Should().HaveCount(1);
-        evtResp.data.entity_result.Should().NotBeNull();
-        evtResp.data.update_data_list.Should().NotBeNull();
-        evtResp.data.update_data_list.raid_event_user_list.Should().HaveCount(1); // Reward is a raid event item so we test this
+        evtResp.data.RaidEventRewardList.Should().HaveCount(1);
+        evtResp.data.EntityResult.Should().NotBeNull();
+        evtResp.data.UpdateDataList.Should().NotBeNull();
+        evtResp.data.UpdateDataList.RaidEventUserList.Should().HaveCount(1); // Reward is a raid event item so we test this
     }
 
     [Fact]
@@ -74,6 +74,6 @@ public class RaidEventTest : TestFixture
                 new RaidEventGetEventDataRequest(fracturedFuturesId)
             );
 
-        response.data.raid_event_user_data.Should().NotBeNull();
+        response.data.RaidEventUserData.Should().NotBeNull();
     }
 }

@@ -21,15 +21,15 @@ public class TransitionController : DragaliaControllerBase
         TransitionTransitionByNAccountRequest request
     )
     {
-        (long viewerId, _) = await this.authService.DoAuth(request.id_token);
+        (long viewerId, _) = await this.authService.DoAuth(request.IdToken);
 
         return this.Ok(
             new TransitionTransitionByNAccountData()
             {
-                transition_result_data = new()
+                TransitionResultData = new()
                 {
-                    abolished_viewer_id = 0,
-                    linked_viewer_id = (ulong)viewerId,
+                    AbolishedViewerId = 0,
+                    LinkedViewerId = (ulong)viewerId,
                 }
             }
         );

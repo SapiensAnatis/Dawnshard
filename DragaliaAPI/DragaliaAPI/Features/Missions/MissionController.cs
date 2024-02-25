@@ -33,9 +33,8 @@ public class MissionController(
         MissionGetMissionListData response =
             await this.missionService.BuildNormalResponse<MissionGetMissionListData>();
 
-        response.mission_notice = await this.missionService.GetMissionNotice(null);
-        response.current_main_story_mission =
-            await this.missionService.GetCurrentMainStoryMission();
+        response.MissionNotice = await this.missionService.GetMissionNotice(null);
+        response.CurrentMainStoryMission = await this.missionService.GetCurrentMainStoryMission();
 
         return response;
     }
@@ -44,13 +43,13 @@ public class MissionController(
     public async Task<DragaliaResult<MissionGetDrillMissionListData>> GetDrillMissionList()
     {
         MissionGetDrillMissionListData response = new();
-        response.mission_notice = await this.missionService.GetMissionNotice(null);
+        response.MissionNotice = await this.missionService.GetMissionNotice(null);
 
         IEnumerable<DbPlayerMission> drillMissions = await this
             .missionRepository.GetMissionsByType(MissionType.Drill)
             .ToListAsync();
 
-        response.drill_mission_list = drillMissions.Select(x => new DrillMissionList(
+        response.DrillMissionList = drillMissions.Select(x => new DrillMissionList(
             x.Id,
             x.Progress,
             (int)x.State,
@@ -58,7 +57,7 @@ public class MissionController(
             x.Start
         ));
 
-        response.drill_mission_group_list = await this.missionService.GetCompletedDrillGroups();
+        response.DrillMissionGroupList = await this.missionService.GetCompletedDrillGroups();
 
         return response;
     }
@@ -71,9 +70,9 @@ public class MissionController(
         MissionUnlockDrillMissionGroupData response = new();
 
         IEnumerable<DbPlayerMission> drillMissions =
-            await this.missionService.UnlockDrillMissionGroup(request.drill_mission_group_id);
+            await this.missionService.UnlockDrillMissionGroup(request.DrillMissionGroupId);
 
-        response.drill_mission_list = drillMissions.Select(x => new DrillMissionList(
+        response.DrillMissionList = drillMissions.Select(x => new DrillMissionList(
             x.Id,
             x.Progress,
             (int)x.State,
@@ -81,7 +80,7 @@ public class MissionController(
             x.Start
         ));
 
-        response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
 
         return response;
     }
@@ -94,9 +93,9 @@ public class MissionController(
         MissionUnlockMainStoryGroupData response = new();
 
         (IEnumerable<MainStoryMissionGroupReward> rewards, IEnumerable<DbPlayerMission> missions) =
-            await this.missionService.UnlockMainMissionGroup(request.main_story_mission_group_id);
+            await this.missionService.UnlockMainMissionGroup(request.MainStoryMissionGroupId);
 
-        response.main_story_mission_list = missions.Select(x => new MainStoryMissionList(
+        response.MainStoryMissionList = missions.Select(x => new MainStoryMissionList(
             x.Id,
             x.Progress,
             (int)x.State,
@@ -104,11 +103,11 @@ public class MissionController(
             x.Start
         ));
 
-        response.main_story_mission_unlock_bonus_list = rewards.Select(
+        response.MainStoryMissionUnlockBonusList = rewards.Select(
             x => new AtgenBuildEventRewardEntityList(x.Type, x.Id, x.Quantity)
         );
 
-        response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
 
         return response;
     }
@@ -120,20 +119,18 @@ public class MissionController(
     {
         MissionReceiveDrillRewardData response = new();
 
-        await this.missionService.RedeemMissions(MissionType.Drill, request.drill_mission_id_list);
+        await this.missionService.RedeemMissions(MissionType.Drill, request.DrillMissionIdList);
 
-        response.drill_mission_group_complete_reward_list =
-            await this.missionService.TryRedeemDrillMissionGroups(
-                request.drill_mission_group_id_list
-            );
+        response.DrillMissionGroupCompleteRewardList =
+            await this.missionService.TryRedeemDrillMissionGroups(request.DrillMissionGroupIdList);
 
-        response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
 
         IEnumerable<DbPlayerMission> missions = await this
             .missionRepository.GetMissionsByType(MissionType.Drill)
             .ToListAsync();
 
-        response.drill_mission_list = missions.Select(x => new DrillMissionList(
+        response.DrillMissionList = missions.Select(x => new DrillMissionList(
             x.Id,
             x.Progress,
             (int)x.State,
@@ -141,9 +138,9 @@ public class MissionController(
             x.Start
         ));
 
-        response.drill_mission_group_list = await this.missionService.GetCompletedDrillGroups();
-        response.entity_result = this.rewardService.GetEntityResult();
-        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
+        response.DrillMissionGroupList = await this.missionService.GetCompletedDrillGroups();
+        response.EntityResult = this.rewardService.GetEntityResult();
+        response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
 
         return response;
     }
@@ -155,14 +152,14 @@ public class MissionController(
     {
         await this.missionService.RedeemMissions(
             MissionType.MainStory,
-            request.main_story_mission_id_list
+            request.MainStoryMissionIdList
         );
 
         MissionReceiveMainStoryRewardData response =
             await this.missionService.BuildNormalResponse<MissionReceiveMainStoryRewardData>();
-        response.update_data_list = await this.updateDataService.SaveChangesAsync();
-        response.entity_result = this.rewardService.GetEntityResult();
-        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        response.EntityResult = this.rewardService.GetEntityResult();
+        response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
 
         return response;
     }
@@ -172,16 +169,13 @@ public class MissionController(
         MissionReceivePeriodRewardRequest request
     )
     {
-        await this.missionService.RedeemMissions(
-            MissionType.Period,
-            request.period_mission_id_list
-        );
+        await this.missionService.RedeemMissions(MissionType.Period, request.PeriodMissionIdList);
 
         MissionReceivePeriodRewardData response =
             await this.missionService.BuildNormalResponse<MissionReceivePeriodRewardData>();
-        response.update_data_list = await this.updateDataService.SaveChangesAsync();
-        response.entity_result = this.rewardService.GetEntityResult();
-        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        response.EntityResult = this.rewardService.GetEntityResult();
+        response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
 
         return response;
     }
@@ -191,16 +185,13 @@ public class MissionController(
         MissionReceiveNormalRewardRequest request
     )
     {
-        await this.missionService.RedeemMissions(
-            MissionType.Normal,
-            request.normal_mission_id_list
-        );
+        await this.missionService.RedeemMissions(MissionType.Normal, request.NormalMissionIdList);
 
         MissionReceiveNormalRewardData response =
             await this.missionService.BuildNormalResponse<MissionReceiveNormalRewardData>();
-        response.update_data_list = await this.updateDataService.SaveChangesAsync();
-        response.entity_result = this.rewardService.GetEntityResult();
-        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        response.EntityResult = this.rewardService.GetEntityResult();
+        response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
 
         return response;
     }
@@ -210,13 +201,13 @@ public class MissionController(
         MissionReceiveAlbumRewardRequest request
     )
     {
-        await this.missionService.RedeemMissions(MissionType.Album, request.album_mission_id_list);
+        await this.missionService.RedeemMissions(MissionType.Album, request.AlbumMissionIdList);
 
         MissionReceiveAlbumRewardData response =
             await this.missionService.BuildNormalResponse<MissionReceiveAlbumRewardData>();
-        response.update_data_list = await this.updateDataService.SaveChangesAsync();
-        response.entity_result = this.rewardService.GetEntityResult();
-        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        response.EntityResult = this.rewardService.GetEntityResult();
+        response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
 
         return response;
     }
@@ -228,14 +219,14 @@ public class MissionController(
     {
         await this.missionService.RedeemMissions(
             MissionType.MemoryEvent,
-            request.memory_event_mission_id_list
+            request.MemoryEventMissionIdList
         );
 
         MissionReceiveMemoryEventRewardData response =
             await this.missionService.BuildNormalResponse<MissionReceiveMemoryEventRewardData>();
-        response.update_data_list = await this.updateDataService.SaveChangesAsync();
-        response.entity_result = this.rewardService.GetEntityResult();
-        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        response.EntityResult = this.rewardService.GetEntityResult();
+        response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
 
         return response;
     }
@@ -247,14 +238,14 @@ public class MissionController(
     {
         await this.missionService.RedeemMissions(
             MissionType.Beginner,
-            request.beginner_mission_id_list
+            request.BeginnerMissionIdList
         );
 
         MissionReceiveBeginnerRewardData response =
             await this.missionService.BuildNormalResponse<MissionReceiveBeginnerRewardData>();
-        response.update_data_list = await this.updateDataService.SaveChangesAsync();
-        response.entity_result = this.rewardService.GetEntityResult();
-        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        response.EntityResult = this.rewardService.GetEntityResult();
+        response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
 
         return response;
     }
@@ -264,16 +255,13 @@ public class MissionController(
         MissionReceiveSpecialRewardRequest request
     )
     {
-        await this.missionService.RedeemMissions(
-            MissionType.Special,
-            request.special_mission_id_list
-        );
+        await this.missionService.RedeemMissions(MissionType.Special, request.SpecialMissionIdList);
 
         MissionReceiveSpecialRewardData response =
             await this.missionService.BuildNormalResponse<MissionReceiveSpecialRewardData>();
-        response.update_data_list = await this.updateDataService.SaveChangesAsync();
-        response.entity_result = this.rewardService.GetEntityResult();
-        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        response.EntityResult = this.rewardService.GetEntityResult();
+        response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
 
         return response;
     }
@@ -283,16 +271,16 @@ public class MissionController(
         MissionReceiveDailyRewardRequest request
     )
     {
-        await this.missionService.RedeemDailyMissions(request.mission_params_list);
+        await this.missionService.RedeemDailyMissions(request.MissionParamsList);
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         MissionReceiveDailyRewardData response =
             await this.missionService.BuildNormalResponse<MissionReceiveDailyRewardData>();
 
-        response.entity_result = this.rewardService.GetEntityResult();
-        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
-        response.update_data_list = updateDataList;
+        response.EntityResult = this.rewardService.GetEntityResult();
+        response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
+        response.UpdateDataList = updateDataList;
 
         return response;
     }

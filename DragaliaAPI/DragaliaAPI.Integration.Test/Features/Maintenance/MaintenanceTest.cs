@@ -43,7 +43,7 @@ public class MaintenanceTest : TestFixture
             );
 
         response.data_headers.result_code.Should().Be(ResultCode.Success);
-        response.data.service_status.Should().Be(1);
+        response.data.ServiceStatus.Should().Be(1);
     }
 
     [Fact]
@@ -66,7 +66,7 @@ public class MaintenanceTest : TestFixture
             );
 
         response
-            .data.maintenance_text.Should()
+            .data.MaintenanceText.Should()
             .BeEquivalentTo(
                 $"""
                 <title>Title</title>

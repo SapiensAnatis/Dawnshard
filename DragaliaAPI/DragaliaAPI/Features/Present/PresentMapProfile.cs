@@ -11,14 +11,14 @@ public class PresentMapProfile : Profile
     {
         this.CreateMap<DbPlayerPresent, PresentDetailList>()
             .ForMember(
-                x => x.receive_limit_time,
+                x => x.ReceiveLimitTime,
                 opts => opts.NullSubstitute(DateTimeOffset.UnixEpoch)
             )
-            .ForMember(x => x.extra_parameter_1, opts => opts.Ignore())
-            .ForMember(x => x.extra_parameter_2, opts => opts.Ignore())
-            .ForMember(x => x.extra_parameter_3, opts => opts.Ignore())
-            .ForMember(x => x.extra_parameter_4, opts => opts.Ignore())
-            .ForMember(x => x.extra_parameter_5, opts => opts.Ignore());
+            .ForMember(x => x.ExtraParameter1, opts => opts.Ignore())
+            .ForMember(x => x.ExtraParameter2, opts => opts.Ignore())
+            .ForMember(x => x.ExtraParameter3, opts => opts.Ignore())
+            .ForMember(x => x.ExtraParameter4, opts => opts.Ignore())
+            .ForMember(x => x.ExtraParameter5, opts => opts.Ignore());
 
         this.CreateMap<DbPlayerPresent, DbPlayerPresentHistory>()
             .ForMember(

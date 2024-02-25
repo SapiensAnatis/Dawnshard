@@ -27,16 +27,16 @@ public class AbilityCrestTradeTest : TestFixture
                 "ability_crest_trade/trade",
                 new AbilityCrestTradeTradeRequest()
                 {
-                    ability_crest_trade_id = trade_id,
-                    trade_count = 1
+                    AbilityCrestTradeId = trade_id,
+                    TradeCount = 1
                 }
             )
         ).data;
 
         AbilityCrests ability_crest_id = data
-            .update_data_list.ability_crest_list.First()
-            .ability_crest_id;
-        int dewpoint = data.update_data_list.user_data.dew_point;
+            .UpdateDataList.AbilityCrestList.First()
+            .AbilityCrestId;
+        int dewpoint = data.UpdateDataList.UserData.DewPoint;
 
         ability_crest_id.Should().Be(expected_crest_id);
         dewpoint.Should().Be(old_dewpoint - expected_dewpoint_cost);

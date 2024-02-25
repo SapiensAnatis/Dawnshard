@@ -18,15 +18,15 @@ public record Entity(
     {
         return new()
         {
-            entity_id = this.Id,
-            entity_type = this.Type,
-            entity_quantity = this.Quantity
+            EntityId = this.Id,
+            EntityType = this.Type,
+            EntityQuantity = this.Quantity
         };
     }
 
     public AtgenDuplicateEntityList ToDuplicateEntityList()
     {
-        return new() { entity_id = this.Id, entity_type = this.Type };
+        return new() { EntityId = this.Id, EntityType = this.Type };
     }
 
     public AtgenFirstClearSet ToFirstClearSet()

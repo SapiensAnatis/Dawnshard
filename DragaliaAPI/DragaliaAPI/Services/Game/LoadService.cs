@@ -100,13 +100,13 @@ public class LoadService(
                 functional_maintenance_list = new List<FunctionalMaintenanceList>(),
                 multi_server = new()
                 {
-                    host = photonOptions.CurrentValue.ServerUrl,
-                    app_id = string.Empty
+                    Host = photonOptions.CurrentValue.ServerUrl,
+                    AppId = string.Empty
                 },
                 mission_notice = await missionService.GetMissionNotice(null),
                 equip_stamp_list = savefile
                     .EquippedStampList.Select(mapper.Map<DbEquippedStamp, EquipStampList>)
-                    .OrderBy(x => x.slot),
+                    .OrderBy(x => x.Slot),
                 quest_entry_condition_list = await missionService.GetEntryConditions(),
                 user_treasure_trade_list = await tradeService.GetUserTreasureTradeList(),
                 treasure_trade_all_list = tradeService.GetCurrentTreasureTradeList(),

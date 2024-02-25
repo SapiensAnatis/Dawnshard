@@ -29,13 +29,13 @@ public class AbilityCrestTest : TestFixture
                 "ability_crest/set_favorite",
                 new AbilityCrestSetFavoriteRequest()
                 {
-                    ability_crest_id = AbilityCrests.FromWhenceHeComes,
-                    is_favorite = true
+                    AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                    IsFavorite = true
                 }
             )
         ).data;
 
-        data.update_data_list.ability_crest_list.Single().is_favorite.Should().BeTrue();
+        data.UpdateDataList.AbilityCrestList.Single().IsFavorite.Should().BeTrue();
 
         DbAbilityCrest ability_crest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
@@ -56,8 +56,8 @@ public class AbilityCrestTest : TestFixture
                 "ability_crest/set_favorite",
                 new AbilityCrestSetFavoriteRequest()
                 {
-                    ability_crest_id = AbilityCrests.SweetSurprise,
-                    is_favorite = true
+                    AbilityCrestId = AbilityCrests.SweetSurprise,
+                    IsFavorite = true
                 },
                 ensureSuccessHeader: false
             )
@@ -74,14 +74,14 @@ public class AbilityCrestTest : TestFixture
                 "ability_crest/buildup_piece",
                 new AbilityCrestBuildupPieceRequest()
                 {
-                    ability_crest_id = AbilityCrests.InanUnendingWorld,
-                    buildup_ability_crest_piece_list = new List<AtgenBuildupAbilityCrestPieceList>()
+                    AbilityCrestId = AbilityCrests.InanUnendingWorld,
+                    BuildupAbilityCrestPieceList = new List<AtgenBuildupAbilityCrestPieceList>()
                     {
                         new()
                         {
-                            buildup_piece_type = BuildupPieceTypes.Unbind,
-                            is_use_dedicated_material = true,
-                            step = 1
+                            BuildupPieceType = BuildupPieceTypes.Unbind,
+                            IsUseDedicatedMaterial = true,
+                            Step = 1
                         }
                     }
                 },
@@ -112,20 +112,20 @@ public class AbilityCrestTest : TestFixture
                 "ability_crest/buildup_piece",
                 new AbilityCrestBuildupPieceRequest()
                 {
-                    ability_crest_id = AbilityCrests.HappyNewYear,
-                    buildup_ability_crest_piece_list = new List<AtgenBuildupAbilityCrestPieceList>()
+                    AbilityCrestId = AbilityCrests.HappyNewYear,
+                    BuildupAbilityCrestPieceList = new List<AtgenBuildupAbilityCrestPieceList>()
                     {
                         new()
                         {
-                            buildup_piece_type = BuildupPieceTypes.Unbind,
-                            is_use_dedicated_material = true,
-                            step = 1
+                            BuildupPieceType = BuildupPieceTypes.Unbind,
+                            IsUseDedicatedMaterial = true,
+                            Step = 1
                         },
                         new()
                         {
-                            buildup_piece_type = BuildupPieceTypes.Unbind,
-                            is_use_dedicated_material = true,
-                            step = 4
+                            BuildupPieceType = BuildupPieceTypes.Unbind,
+                            IsUseDedicatedMaterial = true,
+                            Step = 4
                         }
                     }
                 },
@@ -168,38 +168,38 @@ public class AbilityCrestTest : TestFixture
             "ability_crest/buildup_piece",
             new AbilityCrestBuildupPieceRequest()
             {
-                ability_crest_id = AbilityCrests.WorthyRivals,
-                buildup_ability_crest_piece_list = new List<AtgenBuildupAbilityCrestPieceList>()
+                AbilityCrestId = AbilityCrests.WorthyRivals,
+                BuildupAbilityCrestPieceList = new List<AtgenBuildupAbilityCrestPieceList>()
                 {
                     new()
                     {
-                        buildup_piece_type = BuildupPieceTypes.Unbind,
-                        is_use_dedicated_material = true,
-                        step = 2
+                        BuildupPieceType = BuildupPieceTypes.Unbind,
+                        IsUseDedicatedMaterial = true,
+                        Step = 2
                     },
                     new()
                     {
-                        buildup_piece_type = BuildupPieceTypes.Unbind,
-                        is_use_dedicated_material = false,
-                        step = 1
+                        BuildupPieceType = BuildupPieceTypes.Unbind,
+                        IsUseDedicatedMaterial = false,
+                        Step = 1
                     },
                     new()
                     {
-                        buildup_piece_type = BuildupPieceTypes.Stats,
-                        is_use_dedicated_material = false,
-                        step = 3
+                        BuildupPieceType = BuildupPieceTypes.Stats,
+                        IsUseDedicatedMaterial = false,
+                        Step = 3
                     },
                     new()
                     {
-                        buildup_piece_type = BuildupPieceTypes.Stats,
-                        is_use_dedicated_material = false,
-                        step = 2
+                        BuildupPieceType = BuildupPieceTypes.Stats,
+                        IsUseDedicatedMaterial = false,
+                        Step = 2
                     },
                     new()
                     {
-                        buildup_piece_type = BuildupPieceTypes.Copies,
-                        is_use_dedicated_material = false,
-                        step = 2
+                        BuildupPieceType = BuildupPieceTypes.Copies,
+                        IsUseDedicatedMaterial = false,
+                        Step = 2
                     }
                 }
             }
@@ -246,14 +246,14 @@ public class AbilityCrestTest : TestFixture
             "ability_crest/buildup_piece",
             new AbilityCrestBuildupPieceRequest()
             {
-                ability_crest_id = AbilityCrests.MaskofDeterminationLancesBoon,
-                buildup_ability_crest_piece_list =
+                AbilityCrestId = AbilityCrests.MaskofDeterminationLancesBoon,
+                BuildupAbilityCrestPieceList =
                 [
                     new()
                     {
-                        buildup_piece_type = BuildupPieceTypes.Stats,
-                        is_use_dedicated_material = false,
-                        step = 2
+                        BuildupPieceType = BuildupPieceTypes.Stats,
+                        IsUseDedicatedMaterial = false,
+                        Step = 2
                     },
                 ]
             }
@@ -268,14 +268,14 @@ public class AbilityCrestTest : TestFixture
             "ability_crest/buildup_piece",
             new AbilityCrestBuildupPieceRequest()
             {
-                ability_crest_id = AbilityCrests.MaskofDeterminationLancesBoon,
-                buildup_ability_crest_piece_list =
+                AbilityCrestId = AbilityCrests.MaskofDeterminationLancesBoon,
+                BuildupAbilityCrestPieceList =
                 [
                     new()
                     {
-                        buildup_piece_type = BuildupPieceTypes.Stats,
-                        is_use_dedicated_material = false,
-                        step = 2
+                        BuildupPieceType = BuildupPieceTypes.Stats,
+                        IsUseDedicatedMaterial = false,
+                        Step = 2
                     },
                 ]
             }
@@ -290,10 +290,10 @@ public class AbilityCrestTest : TestFixture
                 "ability_crest/buildup_plus_count",
                 new AbilityCrestBuildupPlusCountRequest()
                 {
-                    ability_crest_id = AbilityCrests.InanUnendingWorld,
-                    plus_count_params_list = new List<AtgenPlusCountParamsList>()
+                    AbilityCrestId = AbilityCrests.InanUnendingWorld,
+                    PlusCountParamsList = new List<AtgenPlusCountParamsList>()
                     {
-                        new() { plus_count = 50, plus_count_type = PlusCountType.Hp, }
+                        new() { PlusCount = 50, PlusCountType = PlusCountType.Hp, }
                     }
                 },
                 ensureSuccessHeader: false
@@ -325,11 +325,11 @@ public class AbilityCrestTest : TestFixture
                 "ability_crest/buildup_plus_count",
                 new AbilityCrestBuildupPlusCountRequest()
                 {
-                    ability_crest_id = AbilityCrests.TwinfoldBonds,
-                    plus_count_params_list = new List<AtgenPlusCountParamsList>()
+                    AbilityCrestId = AbilityCrests.TwinfoldBonds,
+                    PlusCountParamsList = new List<AtgenPlusCountParamsList>()
                     {
-                        new() { plus_count = 50, plus_count_type = PlusCountType.Hp },
-                        new() { plus_count = 25, plus_count_type = PlusCountType.Atk }
+                        new() { PlusCount = 50, PlusCountType = PlusCountType.Hp },
+                        new() { PlusCount = 25, PlusCountType = PlusCountType.Atk }
                     }
                 },
                 ensureSuccessHeader: false
@@ -372,11 +372,11 @@ public class AbilityCrestTest : TestFixture
             "ability_crest/buildup_plus_count",
             new AbilityCrestBuildupPlusCountRequest()
             {
-                ability_crest_id = AbilityCrests.EndlessWaltz,
-                plus_count_params_list = new List<AtgenPlusCountParamsList>()
+                AbilityCrestId = AbilityCrests.EndlessWaltz,
+                PlusCountParamsList = new List<AtgenPlusCountParamsList>()
                 {
-                    new() { plus_count = 1, plus_count_type = PlusCountType.Hp },
-                    new() { plus_count = 50, plus_count_type = PlusCountType.Atk, }
+                    new() { PlusCount = 1, PlusCountType = PlusCountType.Hp },
+                    new() { PlusCount = 50, PlusCountType = PlusCountType.Atk, }
                 }
             }
         );
@@ -403,8 +403,8 @@ public class AbilityCrestTest : TestFixture
                 "ability_crest/reset_plus_count",
                 new AbilityCrestResetPlusCountRequest()
                 {
-                    ability_crest_id = AbilityCrests.InanUnendingWorld,
-                    plus_count_type_list = new List<PlusCountType>()
+                    AbilityCrestId = AbilityCrests.InanUnendingWorld,
+                    PlusCountTypeList = new List<PlusCountType>()
                     {
                         PlusCountType.Hp,
                         PlusCountType.Atk
@@ -438,8 +438,8 @@ public class AbilityCrestTest : TestFixture
                 "ability_crest/reset_plus_count",
                 new AbilityCrestResetPlusCountRequest()
                 {
-                    ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
-                    plus_count_type_list = new List<PlusCountType>() { PlusCountType.Hp, 0 }
+                    AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                    PlusCountTypeList = new List<PlusCountType>() { PlusCountType.Hp, 0 }
                 },
                 ensureSuccessHeader: false
             )
@@ -482,8 +482,8 @@ public class AbilityCrestTest : TestFixture
             "ability_crest/reset_plus_count",
             new AbilityCrestResetPlusCountRequest()
             {
-                ability_crest_id = AbilityCrests.TheGeniusTacticianBowsBoon,
-                plus_count_type_list = new List<PlusCountType>()
+                AbilityCrestId = AbilityCrests.TheGeniusTacticianBowsBoon,
+                PlusCountTypeList = new List<PlusCountType>()
                 {
                     PlusCountType.Hp,
                     PlusCountType.Atk
@@ -536,7 +536,7 @@ public class AbilityCrestTest : TestFixture
 
         int index = 1;
 
-        foreach (AbilityCrestSetList abilityCrestSet in data.ability_crest_set_list)
+        foreach (AbilityCrestSetList abilityCrestSet in data.AbilityCrestSetList)
         {
             if (index == setNo)
             {
@@ -566,7 +566,7 @@ public class AbilityCrestTest : TestFixture
             ++index;
         }
 
-        data.ability_crest_set_list.Count().Should().Be(54);
+        data.AbilityCrestSetList.Count().Should().Be(54);
     }
 
     [Theory]
@@ -577,7 +577,7 @@ public class AbilityCrestTest : TestFixture
         ResultCodeData data = (
             await this.Client.PostMsgpack<ResultCodeData>(
                 "ability_crest/set_ability_crest_set",
-                new AbilityCrestSetAbilityCrestSetRequest() { ability_crest_set_no = setNo },
+                new AbilityCrestSetAbilityCrestSetRequest() { AbilityCrestSetNo = setNo },
                 ensureSuccessHeader: false
             )
         ).data;
@@ -599,9 +599,9 @@ public class AbilityCrestTest : TestFixture
             "ability_crest/set_ability_crest_set",
             new AbilityCrestSetAbilityCrestSetRequest()
             {
-                ability_crest_set_no = setNo,
-                ability_crest_set_name = "",
-                request_ability_crest_set_data = new() { talisman_key_id = 1 }
+                AbilityCrestSetNo = setNo,
+                AbilityCrestSetName = "",
+                RequestAbilityCrestSetData = new() { TalismanKeyId = 1 }
             }
         );
 
@@ -630,11 +630,11 @@ public class AbilityCrestTest : TestFixture
             "ability_crest/set_ability_crest_set",
             new AbilityCrestSetAbilityCrestSetRequest()
             {
-                ability_crest_set_no = setNo,
-                ability_crest_set_name = "",
-                request_ability_crest_set_data = new()
+                AbilityCrestSetNo = setNo,
+                AbilityCrestSetName = "",
+                RequestAbilityCrestSetData = new()
                 {
-                    crest_slot_type_2_crest_id_2 = AbilityCrests.DragonsNest
+                    CrestSlotType2CrestId2 = AbilityCrests.DragonsNest
                 }
             }
         );
@@ -654,8 +654,8 @@ public class AbilityCrestTest : TestFixture
             "ability_crest/update_ability_crest_set_name",
             new AbilityCrestUpdateAbilityCrestSetNameRequest()
             {
-                ability_crest_set_no = setNo,
-                ability_crest_set_name = "test"
+                AbilityCrestSetNo = setNo,
+                AbilityCrestSetName = "test"
             }
         );
 
@@ -684,8 +684,8 @@ public class AbilityCrestTest : TestFixture
             "ability_crest/update_ability_crest_set_name",
             new AbilityCrestUpdateAbilityCrestSetNameRequest()
             {
-                ability_crest_set_no = setNo,
-                ability_crest_set_name = "test"
+                AbilityCrestSetNo = setNo,
+                AbilityCrestSetName = "test"
             }
         );
 

@@ -44,14 +44,14 @@ public class FortController : DragaliaControllerBase
         FortGetDataData data =
             new()
             {
-                build_list = buildList,
-                fort_bonus_list = bonusList,
-                dragon_contact_free_gift_count = freeGiftCount,
-                production_rp = await this.fortService.GetRupieProduction(),
-                production_st = await this.fortService.GetStaminaProduction(),
-                production_df = await this.fortService.GetDragonfruitProduction(),
-                fort_detail = fortDetail,
-                current_server_time = DateTimeOffset.UtcNow
+                BuildList = buildList,
+                FortBonusList = bonusList,
+                DragonContactFreeGiftCount = freeGiftCount,
+                ProductionRp = await this.fortService.GetRupieProduction(),
+                ProductionSt = await this.fortService.GetStaminaProduction(),
+                ProductionDf = await this.fortService.GetDragonfruitProduction(),
+                FortDetail = fortDetail,
+                CurrentServerTime = DateTimeOffset.UtcNow
             };
 
         await updateDataService.SaveChangesAsync();
@@ -62,16 +62,16 @@ public class FortController : DragaliaControllerBase
     [HttpPost("add_carpenter")]
     public async Task<DragaliaResult> AddCarpenter(FortAddCarpenterRequest request)
     {
-        await fortService.AddCarpenter(request.payment_type);
+        await fortService.AddCarpenter(request.PaymentType);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
         FortAddCarpenterData data =
             new()
             {
-                result = 1,
-                fort_detail = await fortService.GetFortDetail(),
-                update_data_list = updateDataList
+                Result = 1,
+                FortDetail = await fortService.GetFortDetail(),
+                UpdateDataList = updateDataList
             };
         return Ok(data);
     }
@@ -81,7 +81,7 @@ public class FortController : DragaliaControllerBase
     {
         FortBonusList bonusList = await bonusService.GetBonusList();
 
-        await fortService.BuildAtOnce(request.payment_type, request.build_id);
+        await fortService.BuildAtOnce(request.PaymentType, request.BuildId);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
         FortDetail fortDetail = await fortService.GetFortDetail();
@@ -89,14 +89,14 @@ public class FortController : DragaliaControllerBase
         FortBuildAtOnceData data =
             new()
             {
-                result = 1,
-                build_id = request.build_id,
-                fort_bonus_list = bonusList,
-                production_rp = await this.fortService.GetRupieProduction(),
-                production_st = await this.fortService.GetStaminaProduction(),
-                production_df = await this.fortService.GetDragonfruitProduction(),
-                fort_detail = fortDetail,
-                update_data_list = updateDataList,
+                Result = 1,
+                BuildId = request.BuildId,
+                FortBonusList = bonusList,
+                ProductionRp = await this.fortService.GetRupieProduction(),
+                ProductionSt = await this.fortService.GetStaminaProduction(),
+                ProductionDf = await this.fortService.GetDragonfruitProduction(),
+                FortDetail = fortDetail,
+                UpdateDataList = updateDataList,
             };
         return Ok(data);
     }
@@ -104,7 +104,7 @@ public class FortController : DragaliaControllerBase
     [HttpPost("build_cancel")]
     public async Task<DragaliaResult> BuildCancel(FortBuildCancelRequest request)
     {
-        DbFortBuild cancelledBuild = await fortService.CancelBuild(request.build_id);
+        DbFortBuild cancelledBuild = await fortService.CancelBuild(request.BuildId);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
         FortDetail fortDetail = await fortService.GetFortDetail();
@@ -112,10 +112,10 @@ public class FortController : DragaliaControllerBase
         FortBuildCancelData data =
             new()
             {
-                result = 1,
-                build_id = cancelledBuild.BuildId,
-                fort_detail = fortDetail,
-                update_data_list = updateDataList
+                Result = 1,
+                BuildId = cancelledBuild.BuildId,
+                FortDetail = fortDetail,
+                UpdateDataList = updateDataList
             };
         return Ok(data);
     }
@@ -125,7 +125,7 @@ public class FortController : DragaliaControllerBase
     {
         FortBonusList bonusList = await bonusService.GetBonusList();
 
-        await fortService.EndBuild(request.build_id);
+        await fortService.EndBuild(request.BuildId);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
         FortDetail fortDetail = await fortService.GetFortDetail();
@@ -133,14 +133,14 @@ public class FortController : DragaliaControllerBase
         FortBuildEndData data =
             new()
             {
-                result = 1,
-                build_id = request.build_id,
-                fort_bonus_list = bonusList,
-                production_rp = await this.fortService.GetRupieProduction(),
-                production_st = await this.fortService.GetStaminaProduction(),
-                production_df = await this.fortService.GetDragonfruitProduction(),
-                fort_detail = fortDetail,
-                update_data_list = updateDataList,
+                Result = 1,
+                BuildId = request.BuildId,
+                FortBonusList = bonusList,
+                ProductionRp = await this.fortService.GetRupieProduction(),
+                ProductionSt = await this.fortService.GetStaminaProduction(),
+                ProductionDf = await this.fortService.GetDragonfruitProduction(),
+                FortDetail = fortDetail,
+                UpdateDataList = updateDataList,
             };
         return Ok(data);
     }
@@ -149,9 +149,9 @@ public class FortController : DragaliaControllerBase
     public async Task<DragaliaResult> BuildStart(FortBuildStartRequest request)
     {
         DbFortBuild build = await fortService.BuildStart(
-            request.fort_plant_id,
-            request.position_x,
-            request.position_z
+            request.FortPlantId,
+            request.PositionX,
+            request.PositionZ
         );
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
@@ -160,14 +160,14 @@ public class FortController : DragaliaControllerBase
         FortBuildStartData data =
             new()
             {
-                result = 1,
-                build_id = (ulong)build.BuildId,
-                build_start_date = build.BuildStartDate,
-                build_end_date = build.BuildEndDate,
-                remain_time = build.RemainTime,
-                fort_detail = fortDetail,
-                update_data_list = updateDataList,
-                entity_result = new EntityResult() // What does it do?
+                Result = 1,
+                BuildId = (ulong)build.BuildId,
+                BuildStartDate = build.BuildStartDate,
+                BuildEndDate = build.BuildEndDate,
+                RemainTime = build.RemainTime,
+                FortDetail = fortDetail,
+                UpdateDataList = updateDataList,
+                EntityResult = new EntityResult() // What does it do?
             };
         return Ok(data);
     }
@@ -177,7 +177,7 @@ public class FortController : DragaliaControllerBase
     {
         FortBonusList bonusList = await bonusService.GetBonusList();
 
-        await fortService.LevelupAtOnce(request.payment_type, request.build_id);
+        await fortService.LevelupAtOnce(request.PaymentType, request.BuildId);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
@@ -187,16 +187,16 @@ public class FortController : DragaliaControllerBase
         FortLevelupAtOnceData data =
             new()
             {
-                result = 1,
-                build_id = request.build_id,
-                current_fort_level = levels.HalidomLevel,
-                current_fort_craft_level = levels.SmithyLevel,
-                fort_bonus_list = bonusList,
-                production_rp = await this.fortService.GetRupieProduction(),
-                production_st = await this.fortService.GetStaminaProduction(),
-                production_df = await this.fortService.GetDragonfruitProduction(),
-                fort_detail = fortDetail,
-                update_data_list = updateDataList,
+                Result = 1,
+                BuildId = request.BuildId,
+                CurrentFortLevel = levels.HalidomLevel,
+                CurrentFortCraftLevel = levels.SmithyLevel,
+                FortBonusList = bonusList,
+                ProductionRp = await this.fortService.GetRupieProduction(),
+                ProductionSt = await this.fortService.GetStaminaProduction(),
+                ProductionDf = await this.fortService.GetDragonfruitProduction(),
+                FortDetail = fortDetail,
+                UpdateDataList = updateDataList,
             };
         return Ok(data);
     }
@@ -204,7 +204,7 @@ public class FortController : DragaliaControllerBase
     [HttpPost("levelup_cancel")]
     public async Task<DragaliaResult> LevelupCancel(FortLevelupCancelRequest request)
     {
-        DbFortBuild cancelledBuild = await fortService.CancelLevelup(request.build_id);
+        DbFortBuild cancelledBuild = await fortService.CancelLevelup(request.BuildId);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
         FortDetail fortDetail = await fortService.GetFortDetail();
@@ -212,10 +212,10 @@ public class FortController : DragaliaControllerBase
         FortLevelupCancelData data =
             new()
             {
-                result = 1,
-                build_id = cancelledBuild.BuildId,
-                fort_detail = fortDetail,
-                update_data_list = updateDataList
+                Result = 1,
+                BuildId = cancelledBuild.BuildId,
+                FortDetail = fortDetail,
+                UpdateDataList = updateDataList
             };
         return Ok(data);
     }
@@ -225,7 +225,7 @@ public class FortController : DragaliaControllerBase
     {
         FortBonusList bonusList = await bonusService.GetBonusList();
 
-        await fortService.EndLevelup(request.build_id);
+        await fortService.EndLevelup(request.BuildId);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
@@ -235,16 +235,16 @@ public class FortController : DragaliaControllerBase
         FortLevelupEndData data =
             new()
             {
-                result = 1,
-                build_id = request.build_id,
-                current_fort_level = levels.HalidomLevel,
-                current_fort_craft_level = levels.SmithyLevel,
-                fort_bonus_list = bonusList,
-                production_rp = await this.fortService.GetRupieProduction(),
-                production_st = await this.fortService.GetStaminaProduction(),
-                production_df = await this.fortService.GetDragonfruitProduction(),
-                fort_detail = fortDetail,
-                update_data_list = updateDataList,
+                Result = 1,
+                BuildId = request.BuildId,
+                CurrentFortLevel = levels.HalidomLevel,
+                CurrentFortCraftLevel = levels.SmithyLevel,
+                FortBonusList = bonusList,
+                ProductionRp = await this.fortService.GetRupieProduction(),
+                ProductionSt = await this.fortService.GetStaminaProduction(),
+                ProductionDf = await this.fortService.GetDragonfruitProduction(),
+                FortDetail = fortDetail,
+                UpdateDataList = updateDataList,
             };
         return Ok(data);
     }
@@ -252,7 +252,7 @@ public class FortController : DragaliaControllerBase
     [HttpPost("levelup_start")]
     public async Task<DragaliaResult> LevelupStart(FortLevelupStartRequest request)
     {
-        DbFortBuild build = await fortService.LevelupStart(request.build_id);
+        DbFortBuild build = await fortService.LevelupStart(request.BuildId);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
         FortDetail fortDetail = await fortService.GetFortDetail();
@@ -260,14 +260,14 @@ public class FortController : DragaliaControllerBase
         FortLevelupStartData data =
             new()
             {
-                result = 1,
-                build_id = build.BuildId,
-                levelup_start_date = build.BuildStartDate,
-                levelup_end_date = build.BuildEndDate,
-                remain_time = build.BuildEndDate - build.BuildStartDate,
-                fort_detail = fortDetail,
-                update_data_list = updateDataList,
-                entity_result = this.rewardService.GetEntityResult()
+                Result = 1,
+                BuildId = build.BuildId,
+                LevelupStartDate = build.BuildStartDate,
+                LevelupEndDate = build.BuildEndDate,
+                RemainTime = build.BuildEndDate - build.BuildStartDate,
+                FortDetail = fortDetail,
+                UpdateDataList = updateDataList,
+                EntityResult = this.rewardService.GetEntityResult()
             };
         return Ok(data);
     }
@@ -276,9 +276,9 @@ public class FortController : DragaliaControllerBase
     public async Task<DragaliaResult> Move(FortMoveRequest request)
     {
         DbFortBuild build = await fortService.Move(
-            request.build_id,
-            request.after_position_x,
-            request.after_position_z
+            request.BuildId,
+            request.AfterPositionX,
+            request.AfterPositionZ
         );
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
@@ -287,13 +287,13 @@ public class FortController : DragaliaControllerBase
         FortMoveData data =
             new()
             {
-                result = 1,
-                build_id = build.BuildId,
-                fort_bonus_list = bonusList,
-                production_rp = await this.fortService.GetRupieProduction(),
-                production_st = await this.fortService.GetStaminaProduction(),
-                production_df = await this.fortService.GetDragonfruitProduction(),
-                update_data_list = updateDataList
+                Result = 1,
+                BuildId = build.BuildId,
+                FortBonusList = bonusList,
+                ProductionRp = await this.fortService.GetRupieProduction(),
+                ProductionSt = await this.fortService.GetStaminaProduction(),
+                ProductionDf = await this.fortService.GetDragonfruitProduction(),
+                UpdateDataList = updateDataList
             };
         return Ok(data);
     }
@@ -306,10 +306,10 @@ public class FortController : DragaliaControllerBase
     {
         FortSetNewFortPlantData resp = new();
 
-        await fortService.ClearPlantNewStatuses(request.fort_plant_id_list);
+        await fortService.ClearPlantNewStatuses(request.FortPlantIdList);
 
-        resp.result = 1;
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
+        resp.Result = 1;
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
 
         return Ok(resp);
     }
@@ -317,10 +317,10 @@ public class FortController : DragaliaControllerBase
     [HttpPost("get_multi_income")]
     public async Task<DragaliaResult> GetMultiIncome(FortGetMultiIncomeRequest request)
     {
-        FortGetMultiIncomeData resp = await this.fortService.CollectIncome(request.build_id_list);
+        FortGetMultiIncomeData resp = await this.fortService.CollectIncome(request.BuildIdList);
 
-        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
-        resp.entity_result = this.rewardService.GetEntityResult();
+        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        resp.EntityResult = this.rewardService.GetEntityResult();
 
         return Ok(resp);
     }

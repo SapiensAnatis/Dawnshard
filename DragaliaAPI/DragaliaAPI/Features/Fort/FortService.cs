@@ -49,7 +49,7 @@ public class FortService(
 
         // https://dragalialost.wiki/w/Facilities
         // First 2 are free, 3rd 250, 4th 400, 5th 700
-        int paymentCost = fortDetail.carpenter_num switch
+        int paymentCost = fortDetail.CarpenterNum switch
         {
             < 2 => 0,
             2 => 250,
@@ -73,12 +73,12 @@ public class FortService(
         await paymentService.ProcessPayment(paymentType, expectedPrice: paymentCost);
 
         // Add carpenter
-        await fortRepository.UpdateFortMaximumCarpenter(fortDetail.carpenter_num + 1);
+        await fortRepository.UpdateFortMaximumCarpenter(fortDetail.CarpenterNum + 1);
 
         logger.LogDebug(
             "Added carpenter using payment type {type}. New count: {count}",
             paymentType,
-            fortDetail.carpenter_num
+            fortDetail.CarpenterNum
         );
 
         return fortDetail;
@@ -208,9 +208,9 @@ public class FortService(
             await userService.AddStamina(StaminaType.Single, staminaTotal);
         }
 
-        resp.add_coin_list = coinList;
-        resp.add_stamina_list = staminaList;
-        resp.harvest_build_list = harvestList;
+        resp.AddCoinList = coinList;
+        resp.AddStaminaList = staminaList;
+        resp.HarvestBuildList = harvestList;
 
         return resp;
     }
@@ -236,9 +236,9 @@ public class FortService(
 
         return new()
         {
-            max_carpenter_count = MaximumCarpenterNum,
-            working_carpenter_num = activeCarpenters,
-            carpenter_num = dbDetail.CarpenterNum
+            MaxCarpenterCount = MaximumCarpenterNum,
+            WorkingCarpenterNum = activeCarpenters,
+            CarpenterNum = dbDetail.CarpenterNum
         };
     }
 
@@ -501,7 +501,7 @@ public class FortService(
         FortDetail fortDetail = await GetFortDetail();
 
         // Check Carpenter available
-        if (fortDetail.working_carpenter_num >= fortDetail.carpenter_num)
+        if (fortDetail.WorkingCarpenterNum >= fortDetail.CarpenterNum)
         {
             throw new DragaliaException(
                 ResultCode.FortBuildCarpenterBusy,

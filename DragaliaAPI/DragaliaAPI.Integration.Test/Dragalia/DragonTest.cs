@@ -78,17 +78,17 @@ public class DragonTest : TestFixture
 
         DragonBuildupRequest request = new DragonBuildupRequest()
         {
-            base_dragon_key_id = (ulong)dbDragon.DragonKeyId,
-            grow_material_list = new List<GrowMaterialList>()
+            BaseDragonKeyId = (ulong)dbDragon.DragonKeyId,
+            GrowMaterialList = new List<GrowMaterialList>()
             {
                 new GrowMaterialList()
                 {
-                    type = testCase.MatType,
-                    id =
+                    Type = testCase.MatType,
+                    Id =
                         testCase.MatType == EntityTypes.Dragon
                             ? (int)dbDragonSacrifice.DragonKeyId
                             : testCase.UpgradeMat,
-                    quantity = testCase.UsedQuantity
+                    Quantity = testCase.UsedQuantity
                 }
             }
         };
@@ -98,17 +98,17 @@ public class DragonTest : TestFixture
         ).data;
 
         response.Should().NotBeNull();
-        response.update_data_list.Should().NotBeNull();
-        response.update_data_list.dragon_list.Should().NotBeNullOrEmpty();
+        response.UpdateDataList.Should().NotBeNull();
+        response.UpdateDataList.DragonList.Should().NotBeNullOrEmpty();
         DragonList returnDragon = response
-            .update_data_list.dragon_list.Where(x => (long)x.dragon_key_id == dbDragon.DragonKeyId)
+            .UpdateDataList.DragonList.Where(x => (long)x.DragonKeyId == dbDragon.DragonKeyId)
             .First();
-        returnDragon.exp.Should().Be(testCase.ExpectedXp);
-        returnDragon.level.Should().Be(testCase.ExpectedLvl);
+        returnDragon.Exp.Should().Be(testCase.ExpectedXp);
+        returnDragon.Level.Should().Be(testCase.ExpectedLvl);
         if (testCase.MatType == EntityTypes.Dragon)
         {
-            returnDragon.attack_plus_count.Should().Be(dbDragonSacrifice.AttackPlusCount);
-            returnDragon.hp_plus_count.Should().Be(dbDragonSacrifice.HpPlusCount);
+            returnDragon.AttackPlusCount.Should().Be(dbDragonSacrifice.AttackPlusCount);
+            returnDragon.HpPlusCount.Should().Be(dbDragonSacrifice.HpPlusCount);
         }
     }
 
@@ -125,14 +125,14 @@ public class DragonTest : TestFixture
 
         DragonBuildupRequest request = new DragonBuildupRequest()
         {
-            base_dragon_key_id = (ulong)dbDragon.DragonKeyId,
-            grow_material_list = new List<GrowMaterialList>()
+            BaseDragonKeyId = (ulong)dbDragon.DragonKeyId,
+            GrowMaterialList = new List<GrowMaterialList>()
             {
                 new GrowMaterialList()
                 {
-                    type = EntityTypes.Material,
-                    id = (int)Materials.AmplifyingDragonscale,
-                    quantity = 25
+                    Type = EntityTypes.Material,
+                    Id = (int)Materials.AmplifyingDragonscale,
+                    Quantity = 25
                 }
             }
         };
@@ -142,12 +142,12 @@ public class DragonTest : TestFixture
         ).data;
 
         response.Should().NotBeNull();
-        response.update_data_list.Should().NotBeNull();
-        response.update_data_list.dragon_list.Should().NotBeNullOrEmpty();
+        response.UpdateDataList.Should().NotBeNull();
+        response.UpdateDataList.DragonList.Should().NotBeNullOrEmpty();
         DragonList returnDragon = response
-            .update_data_list.dragon_list.Where(x => (long)x.dragon_key_id == dbDragon.DragonKeyId)
+            .UpdateDataList.DragonList.Where(x => (long)x.DragonKeyId == dbDragon.DragonKeyId)
             .First();
-        returnDragon.attack_plus_count.Should().Be(25);
+        returnDragon.AttackPlusCount.Should().Be(25);
     }
 
     [Fact]
@@ -174,8 +174,8 @@ public class DragonTest : TestFixture
 
         DragonResetPlusCountRequest request = new DragonResetPlusCountRequest()
         {
-            dragon_key_id = (ulong)dragon.DragonKeyId,
-            plus_count_type = PlusCountType.Atk
+            DragonKeyId = (ulong)dragon.DragonKeyId,
+            PlusCountType = PlusCountType.Atk
         };
 
         DragonSetLockData? response = (
@@ -183,20 +183,18 @@ public class DragonTest : TestFixture
         ).data;
 
         response.Should().NotBeNull();
-        response.update_data_list.Should().NotBeNull();
-        response.update_data_list.dragon_list.Should().NotBeNullOrEmpty();
+        response.UpdateDataList.Should().NotBeNull();
+        response.UpdateDataList.DragonList.Should().NotBeNullOrEmpty();
         DragonList returnDragon = response
-            .update_data_list.dragon_list.Where(x => (long)x.dragon_key_id == dragon.DragonKeyId)
+            .UpdateDataList.DragonList.Where(x => (long)x.DragonKeyId == dragon.DragonKeyId)
             .First();
-        returnDragon.attack_plus_count.Should().Be(0);
-        response.update_data_list.user_data.Should().NotBeNull();
-        response.update_data_list.user_data.coin.Should().Be(startCoin - (20000 * 50));
+        returnDragon.AttackPlusCount.Should().Be(0);
+        response.UpdateDataList.UserData.Should().NotBeNull();
+        response.UpdateDataList.UserData.Coin.Should().Be(startCoin - (20000 * 50));
         response
-            .update_data_list.material_list.Where(x =>
-                x.material_id == Materials.AmplifyingDragonscale
-            )
+            .UpdateDataList.MaterialList.Where(x => x.MaterialId == Materials.AmplifyingDragonscale)
             .First()
-            .quantity.Should()
+            .Quantity.Should()
             .Be(augmentCount + 50);
     }
 
@@ -213,8 +211,8 @@ public class DragonTest : TestFixture
         ).data;
 
         response.Should().NotBeNull();
-        response.shop_gift_list.Should().NotBeNullOrEmpty();
-        response.shop_gift_list.Count().Should().Be(5);
+        response.ShopGiftList.Should().NotBeNullOrEmpty();
+        response.ShopGiftList.Count().Should().Be(5);
     }
 
     [Fact]
@@ -235,8 +233,8 @@ public class DragonTest : TestFixture
 
         DragonBuyGiftToSendMultipleRequest request = new DragonBuyGiftToSendMultipleRequest()
         {
-            dragon_id = Dragons.HighChthonius,
-            dragon_gift_id_list = new List<DragonGifts>()
+            DragonId = Dragons.HighChthonius,
+            DragonGiftIdList = new List<DragonGifts>()
             {
                 DragonGifts.FreshBread,
                 DragonGifts.TastyMilk
@@ -252,25 +250,23 @@ public class DragonTest : TestFixture
 
         response.Should().NotBeNull();
         response
-            .shop_gift_list.Where(x => (DragonGifts)x.dragon_gift_id == DragonGifts.FreshBread)
+            .ShopGiftList.Where(x => (DragonGifts)x.DragonGiftId == DragonGifts.FreshBread)
             .First()
-            .is_buy.Should()
+            .IsBuy.Should()
             .Be(false);
         response
-            .shop_gift_list.Where(x => (DragonGifts)x.dragon_gift_id == DragonGifts.TastyMilk)
+            .ShopGiftList.Where(x => (DragonGifts)x.DragonGiftId == DragonGifts.TastyMilk)
             .First()
-            .is_buy.Should()
+            .IsBuy.Should()
             .Be(false);
 
-        response.dragon_gift_reward_list.Should().NotBeNullOrEmpty();
-        response.update_data_list.user_data.coin.Should().Be(startCoin - 1500);
+        response.DragonGiftRewardList.Should().NotBeNullOrEmpty();
+        response.UpdateDataList.UserData.Coin.Should().Be(startCoin - 1500);
         DragonReliabilityList dragonData = response
-            .update_data_list.dragon_reliability_list.Where(x =>
-                x.dragon_id == Dragons.HighChthonius
-            )
+            .UpdateDataList.DragonReliabilityList.Where(x => x.DragonId == Dragons.HighChthonius)
             .First();
-        dragonData.reliability_total_exp.Should().Be(400);
-        dragonData.reliability_level.Should().Be(3);
+        dragonData.ReliabilityTotalExp.Should().Be(400);
+        dragonData.ReliabilityLevel.Should().Be(3);
     }
 
     [Fact]
@@ -282,8 +278,8 @@ public class DragonTest : TestFixture
 
         DragonBuyGiftToSendRequest request = new DragonBuyGiftToSendRequest()
         {
-            dragon_id = Dragons.HighJupiter,
-            dragon_gift_id = DragonGifts.HeartyStew
+            DragonId = Dragons.HighJupiter,
+            DragonGiftId = DragonGifts.HeartyStew
         };
 
         DragonBuyGiftToSendData? response = (
@@ -295,19 +291,19 @@ public class DragonTest : TestFixture
 
         response.Should().NotBeNull();
         response
-            .shop_gift_list.Where(x => (DragonGifts)x.dragon_gift_id == DragonGifts.HeartyStew)
+            .ShopGiftList.Where(x => (DragonGifts)x.DragonGiftId == DragonGifts.HeartyStew)
             .First()
-            .is_buy.Should()
+            .IsBuy.Should()
             .Be(false);
 
-        response.return_gift_list.Should().NotBeNullOrEmpty();
+        response.ReturnGiftList.Should().NotBeNullOrEmpty();
         DragonReliabilityList dragonData = response
-            .update_data_list.dragon_reliability_list.Where(x => x.dragon_id == Dragons.HighJupiter)
+            .UpdateDataList.DragonReliabilityList.Where(x => x.DragonId == Dragons.HighJupiter)
             .First();
-        dragonData.reliability_total_exp.Should().Be(1000);
-        dragonData.reliability_level.Should().Be(6);
+        dragonData.ReliabilityTotalExp.Should().Be(1000);
+        dragonData.ReliabilityLevel.Should().Be(6);
         dragonData
-            .last_contact_time.Should()
+            .LastContactTime.Should()
             .BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMinutes(1));
     }
 
@@ -320,9 +316,9 @@ public class DragonTest : TestFixture
 
         DragonSendGiftMultipleRequest request = new DragonSendGiftMultipleRequest()
         {
-            dragon_id = Dragons.HighMercury,
-            dragon_gift_id = DragonGifts.FourLeafClover,
-            quantity = 10
+            DragonId = Dragons.HighMercury,
+            DragonGiftId = DragonGifts.FourLeafClover,
+            Quantity = 10
         };
 
         DragonSendGiftMultipleData? response = (
@@ -333,12 +329,12 @@ public class DragonTest : TestFixture
         ).data;
 
         response.Should().NotBeNull();
-        response.return_gift_list.Should().NotBeNullOrEmpty();
+        response.ReturnGiftList.Should().NotBeNullOrEmpty();
         DragonReliabilityList dragonData = response
-            .update_data_list.dragon_reliability_list.Where(x => x.dragon_id == Dragons.HighMercury)
+            .UpdateDataList.DragonReliabilityList.Where(x => x.DragonId == Dragons.HighMercury)
             .First();
-        dragonData.reliability_total_exp.Should().Be(10000);
-        dragonData.reliability_level.Should().Be(18);
+        dragonData.ReliabilityTotalExp.Should().Be(10000);
+        dragonData.ReliabilityLevel.Should().Be(18);
     }
 
     [Fact]
@@ -366,9 +362,9 @@ public class DragonTest : TestFixture
             "dragon/send_gift_multiple",
             new DragonSendGiftMultipleRequest()
             {
-                dragon_id = Dragons.Apollo,
-                dragon_gift_id = DragonGifts.FourLeafClover,
-                quantity = 2,
+                DragonId = Dragons.Apollo,
+                DragonGiftId = DragonGifts.FourLeafClover,
+                Quantity = 2,
             }
         );
 
@@ -381,9 +377,9 @@ public class DragonTest : TestFixture
             "dragon/send_gift_multiple",
             new DragonSendGiftMultipleRequest()
             {
-                dragon_id = Dragons.Kagutsuchi,
-                dragon_gift_id = DragonGifts.FourLeafClover,
-                quantity = 1,
+                DragonId = Dragons.Kagutsuchi,
+                DragonGiftId = DragonGifts.FourLeafClover,
+                Quantity = 1,
             }
         );
 
@@ -397,15 +393,15 @@ public class DragonTest : TestFixture
                 "dragon/send_gift_multiple",
                 new DragonSendGiftMultipleRequest()
                 {
-                    dragon_id = Dragons.Kagutsuchi,
-                    dragon_gift_id = DragonGifts.FourLeafClover,
-                    quantity = 200,
+                    DragonId = Dragons.Kagutsuchi,
+                    DragonGiftId = DragonGifts.FourLeafClover,
+                    Quantity = 200,
                 }
             )
         ).data;
 
         completeMissionResponse
-            .update_data_list.mission_notice.drill_mission_notice.new_complete_mission_id_list.Should()
+            .UpdateDataList.MissionNotice.DrillMissionNotice.NewCompleteMissionIdList.Should()
             .Contain(missionId);
 
         this.ApiContext.PlayerMissions.AsNoTracking()
@@ -430,8 +426,8 @@ public class DragonTest : TestFixture
 
         DragonSendGiftRequest request = new DragonSendGiftRequest()
         {
-            dragon_id = Dragons.Puppy,
-            dragon_gift_id = DragonGifts.PupGrub
+            DragonId = Dragons.Puppy,
+            DragonGiftId = DragonGifts.PupGrub
         };
 
         DragonSendGiftData? response = (
@@ -440,10 +436,10 @@ public class DragonTest : TestFixture
 
         response.Should().NotBeNull();
         DragonReliabilityList dragonData = response
-            .update_data_list.dragon_reliability_list.Where(x => x.dragon_id == Dragons.Puppy)
+            .UpdateDataList.DragonReliabilityList.Where(x => x.DragonId == Dragons.Puppy)
             .First();
-        dragonData.reliability_total_exp.Should().Be(200);
-        dragonData.reliability_level.Should().Be(3);
+        dragonData.ReliabilityTotalExp.Should().Be(200);
+        dragonData.ReliabilityLevel.Should().Be(3);
     }
 
     [Fact]
@@ -469,9 +465,9 @@ public class DragonTest : TestFixture
         DragonSendGiftMultipleRequest request =
             new()
             {
-                dragon_id = Dragons.MidgardsormrZero,
-                dragon_gift_id = DragonGifts.FourLeafClover,
-                quantity = 100
+                DragonId = Dragons.MidgardsormrZero,
+                DragonGiftId = DragonGifts.FourLeafClover,
+                Quantity = 100
             };
 
         DragaliaResponse<DragonSendGiftMultipleData>? response = (
@@ -560,14 +556,14 @@ public class DragonTest : TestFixture
 
         DragonLimitBreakRequest request = new DragonLimitBreakRequest()
         {
-            base_dragon_key_id = (ulong)dbDragon.DragonKeyId,
-            limit_break_grow_list = new List<LimitBreakGrowList>()
+            BaseDragonKeyId = (ulong)dbDragon.DragonKeyId,
+            LimitBreakGrowList = new List<LimitBreakGrowList>()
             {
                 new LimitBreakGrowList()
                 {
-                    limit_break_count = testCase.LimitBreakNr,
-                    limit_break_item_type = (int)testCase.LbMatType,
-                    target_id =
+                    LimitBreakCount = testCase.LimitBreakNr,
+                    LimitBreakItemType = (int)testCase.LbMatType,
+                    TargetId =
                         testCase.LbMatType == DragonLimitBreakMatTypes.Dupe
                             ? (ulong)dbDragonSacrifice!.DragonKeyId
                             : 0
@@ -580,23 +576,23 @@ public class DragonTest : TestFixture
         ).data;
 
         response.Should().NotBeNull();
-        response.update_data_list.Should().NotBeNull();
-        response.update_data_list.dragon_list.Should().NotBeNullOrEmpty();
+        response.UpdateDataList.Should().NotBeNull();
+        response.UpdateDataList.DragonList.Should().NotBeNullOrEmpty();
         DragonList returnDragon = response
-            .update_data_list.dragon_list.Where(x => (long)x.dragon_key_id == dbDragon.DragonKeyId)
+            .UpdateDataList.DragonList.Where(x => (long)x.DragonKeyId == dbDragon.DragonKeyId)
             .First();
-        returnDragon.limit_break_count.Should().Be(testCase.LimitBreakNr);
+        returnDragon.LimitBreakCount.Should().Be(testCase.LimitBreakNr);
         if (testCase.LbMatType == DragonLimitBreakMatTypes.Dupe)
         {
-            response.delete_data_list.Should().NotBeNull();
-            response.delete_data_list.delete_dragon_list.Should().NotBeNullOrEmpty();
+            response.DeleteDataList.Should().NotBeNull();
+            response.DeleteDataList.DeleteDragonList.Should().NotBeNullOrEmpty();
             response
-                .delete_data_list.delete_dragon_list.Should()
-                .Contain(x => (long)x.dragon_key_id == dbDragonSacrifice!.DragonKeyId);
+                .DeleteDataList.DeleteDragonList.Should()
+                .Contain(x => (long)x.DragonKeyId == dbDragonSacrifice!.DragonKeyId);
         }
         else
         {
-            response.update_data_list.material_list.Should().NotBeNullOrEmpty();
+            response.UpdateDataList.MaterialList.Should().NotBeNullOrEmpty();
         }
     }
 
@@ -609,8 +605,8 @@ public class DragonTest : TestFixture
 
         DragonSetLockRequest request = new DragonSetLockRequest()
         {
-            dragon_key_id = (ulong)dragon.DragonKeyId,
-            is_lock = true
+            DragonKeyId = (ulong)dragon.DragonKeyId,
+            IsLock = true
         };
 
         DragonSetLockData? response = (
@@ -618,12 +614,12 @@ public class DragonTest : TestFixture
         ).data;
 
         response.Should().NotBeNull();
-        response.update_data_list.Should().NotBeNull();
-        response.update_data_list.dragon_list.Should().NotBeNullOrEmpty();
+        response.UpdateDataList.Should().NotBeNull();
+        response.UpdateDataList.DragonList.Should().NotBeNullOrEmpty();
         DragonList returnDragon = response
-            .update_data_list.dragon_list.Where(x => (long)x.dragon_key_id == dragon.DragonKeyId)
+            .UpdateDataList.DragonList.Where(x => (long)x.DragonKeyId == dragon.DragonKeyId)
             .First();
-        returnDragon.is_lock.Should().BeTrue();
+        returnDragon.IsLock.Should().BeTrue();
     }
 
     [Fact]
@@ -645,7 +641,7 @@ public class DragonTest : TestFixture
 
         DragonSellRequest request = new DragonSellRequest()
         {
-            dragon_key_id_list = new List<ulong>() { (ulong)dragon.DragonKeyId }
+            DragonKeyIdList = new List<ulong>() { (ulong)dragon.DragonKeyId }
         };
 
         DragonSellData? response = (
@@ -653,11 +649,11 @@ public class DragonTest : TestFixture
         ).data;
 
         response.Should().NotBeNull();
-        response.delete_data_list.Should().NotBeNull();
-        response.delete_data_list.delete_dragon_list.Should().NotBeNullOrEmpty();
-        response.update_data_list.user_data.coin.Should().Be(startCoin + dragonData.SellCoin);
+        response.DeleteDataList.Should().NotBeNull();
+        response.DeleteDataList.DeleteDragonList.Should().NotBeNullOrEmpty();
+        response.UpdateDataList.UserData.Coin.Should().Be(startCoin + dragonData.SellCoin);
         response
-            .update_data_list.user_data.dew_point.Should()
+            .UpdateDataList.UserData.DewPoint.Should()
             .Be((int)startDew + dragonData.SellDewPoint);
     }
 
@@ -690,7 +686,7 @@ public class DragonTest : TestFixture
 
         DragonSellRequest request = new DragonSellRequest()
         {
-            dragon_key_id_list = new List<ulong>()
+            DragonKeyIdList = new List<ulong>()
             {
                 (ulong)dragonSimurgh.DragonKeyId,
                 (ulong)dragonStribog.DragonKeyId
@@ -702,13 +698,13 @@ public class DragonTest : TestFixture
         ).data;
 
         response.Should().NotBeNull();
-        response.delete_data_list.Should().NotBeNull();
-        response.delete_data_list.delete_dragon_list.Should().NotBeNullOrEmpty();
+        response.DeleteDataList.Should().NotBeNull();
+        response.DeleteDataList.DeleteDragonList.Should().NotBeNullOrEmpty();
         response
-            .update_data_list.user_data.coin.Should()
+            .UpdateDataList.UserData.Coin.Should()
             .Be(startCoin + dragonDataSimurgh.SellCoin + (dragonDataStribog.SellCoin * 5));
         response
-            .update_data_list.user_data.dew_point.Should()
+            .UpdateDataList.UserData.DewPoint.Should()
             .Be(
                 (int)startDew
                     + dragonDataSimurgh.SellDewPoint

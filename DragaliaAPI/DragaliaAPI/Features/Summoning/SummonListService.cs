@@ -59,25 +59,25 @@ public sealed class SummonListService(
             results.Add(
                 new SummonList()
                 {
-                    summon_id = banner.Id,
-                    summon_type = 2, // No idea what this does.
-                    single_crystal = SingleCrystalCost,
-                    single_diamond = SingleDiamondCost,
-                    multi_crystal = MultiCrystalCost,
-                    multi_diamond = MultiDiamondCost,
-                    limited_crystal = LimitedCrystalCost,
-                    limited_diamond = LimitedDiamondCost,
-                    summon_point_id = banner.Id,
-                    add_summon_point = AddSummonPoint,
-                    add_summon_point_stone = AddSummonPointStone,
-                    exchange_summon_point = ExchangeSummonPoint,
-                    status = 1,
-                    commence_date = banner.Start,
-                    complete_date = banner.End,
-                    daily_count = dailyCount,
-                    daily_limit = DailyLimit,
-                    total_count = totalCount,
-                    total_limit = 0,
+                    SummonId = banner.Id,
+                    SummonType = 2, // No idea what this does.
+                    SingleCrystal = SingleCrystalCost,
+                    SingleDiamond = SingleDiamondCost,
+                    MultiCrystal = MultiCrystalCost,
+                    MultiDiamond = MultiDiamondCost,
+                    LimitedCrystal = LimitedCrystalCost,
+                    LimitedDiamond = LimitedDiamondCost,
+                    SummonPointId = banner.Id,
+                    AddSummonPoint = AddSummonPoint,
+                    AddSummonPointStone = AddSummonPointStone,
+                    ExchangeSummonPoint = ExchangeSummonPoint,
+                    Status = 1,
+                    CommenceDate = banner.Start,
+                    CompleteDate = banner.End,
+                    DailyCount = dailyCount,
+                    DailyLimit = DailyLimit,
+                    TotalCount = totalCount,
+                    TotalLimit = 0,
                 }
             );
         }

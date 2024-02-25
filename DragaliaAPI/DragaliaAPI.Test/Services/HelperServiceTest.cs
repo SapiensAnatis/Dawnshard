@@ -42,11 +42,11 @@ public class HelperServiceTest
     public void BuildHelperDataContainsCorrectInformationWhenFriended()
     {
         UserSupportList? helperInfo = StubData
-            .HelperList.support_user_list.Where(helper => helper.viewer_id == 1000)
+            .HelperList.SupportUserList.Where(helper => helper.ViewerId == 1000)
             .FirstOrDefault();
 
         AtgenSupportUserDetailList? helperDetails = StubData
-            .HelperList.support_user_detail_list.Where(helper => helper.viewer_id == 1000)
+            .HelperList.SupportUserDetailList.Where(helper => helper.ViewerId == 1000)
             .FirstOrDefault();
 
         AtgenSupportData supportData = this.helperService.BuildHelperData(
@@ -54,39 +54,39 @@ public class HelperServiceTest
             helperDetails!
         );
 
-        supportData.viewer_id.Should().Be(1000);
-        supportData.name.Should().BeEquivalentTo("Euden");
-        supportData.is_friend.Should().Be(true);
-        supportData.chara_data.Should().BeEquivalentTo(TestData.supportListEuden.support_chara);
+        supportData.ViewerId.Should().Be(1000);
+        supportData.Name.Should().BeEquivalentTo("Euden");
+        supportData.IsFriend.Should().Be(true);
+        supportData.CharaData.Should().BeEquivalentTo(TestData.supportListEuden.SupportChara);
         supportData
-            .dragon_data.Should()
+            .DragonData.Should()
             .BeEquivalentTo(
-                TestData.supportListEuden.support_dragon,
-                o => o.Excluding(x => x.hp).Excluding(x => x.attack)
+                TestData.supportListEuden.SupportDragon,
+                o => o.Excluding(x => x.Hp).Excluding(x => x.Attack)
             );
         supportData
-            .weapon_body_data.Should()
-            .BeEquivalentTo(TestData.supportListEuden.support_weapon_body);
+            .WeaponBodyData.Should()
+            .BeEquivalentTo(TestData.supportListEuden.SupportWeaponBody);
         supportData
-            .crest_slot_type_1_crest_list.Should()
-            .BeEquivalentTo(TestData.supportListEuden.support_crest_slot_type_1_list);
+            .CrestSlotType1CrestList.Should()
+            .BeEquivalentTo(TestData.supportListEuden.SupportCrestSlotType1List);
         supportData
-            .crest_slot_type_2_crest_list.Should()
-            .BeEquivalentTo(TestData.supportListEuden.support_crest_slot_type_2_list);
+            .CrestSlotType2CrestList.Should()
+            .BeEquivalentTo(TestData.supportListEuden.SupportCrestSlotType2List);
         supportData
-            .crest_slot_type_3_crest_list.Should()
-            .BeEquivalentTo(TestData.supportListEuden.support_crest_slot_type_3_list);
+            .CrestSlotType3CrestList.Should()
+            .BeEquivalentTo(TestData.supportListEuden.SupportCrestSlotType3List);
     }
 
     [Fact]
     public void BuildHelperDataContainsCorrectInformationWhenNotFriended()
     {
         UserSupportList? helperInfo = StubData
-            .HelperList.support_user_list.Where(helper => helper.viewer_id == 1001)
+            .HelperList.SupportUserList.Where(helper => helper.ViewerId == 1001)
             .FirstOrDefault();
 
         AtgenSupportUserDetailList? helperDetails = StubData
-            .HelperList.support_user_detail_list.Where(helper => helper.viewer_id == 1001)
+            .HelperList.SupportUserDetailList.Where(helper => helper.ViewerId == 1001)
             .FirstOrDefault();
 
         AtgenSupportData supportData = this.helperService.BuildHelperData(
@@ -94,28 +94,28 @@ public class HelperServiceTest
             helperDetails!
         );
 
-        supportData.viewer_id.Should().Be(1001);
-        supportData.name.Should().BeEquivalentTo("Elisanne");
-        supportData.is_friend.Should().Be(false);
-        supportData.chara_data.Should().BeEquivalentTo(TestData.supportListElisanne.support_chara);
+        supportData.ViewerId.Should().Be(1001);
+        supportData.Name.Should().BeEquivalentTo("Elisanne");
+        supportData.IsFriend.Should().Be(false);
+        supportData.CharaData.Should().BeEquivalentTo(TestData.supportListElisanne.SupportChara);
         supportData
-            .dragon_data.Should()
+            .DragonData.Should()
             .BeEquivalentTo(
-                TestData.supportListElisanne.support_dragon,
-                o => o.Excluding(x => x.hp).Excluding(x => x.attack)
+                TestData.supportListElisanne.SupportDragon,
+                o => o.Excluding(x => x.Hp).Excluding(x => x.Attack)
             );
         supportData
-            .weapon_body_data.Should()
-            .BeEquivalentTo(TestData.supportListElisanne.support_weapon_body);
+            .WeaponBodyData.Should()
+            .BeEquivalentTo(TestData.supportListElisanne.SupportWeaponBody);
         supportData
-            .crest_slot_type_1_crest_list.Should()
-            .BeEquivalentTo(TestData.supportListElisanne.support_crest_slot_type_1_list);
+            .CrestSlotType1CrestList.Should()
+            .BeEquivalentTo(TestData.supportListElisanne.SupportCrestSlotType1List);
         supportData
-            .crest_slot_type_2_crest_list.Should()
-            .BeEquivalentTo(TestData.supportListElisanne.support_crest_slot_type_2_list);
+            .CrestSlotType2CrestList.Should()
+            .BeEquivalentTo(TestData.supportListElisanne.SupportCrestSlotType2List);
         supportData
-            .crest_slot_type_3_crest_list.Should()
-            .BeEquivalentTo(TestData.supportListElisanne.support_crest_slot_type_3_list);
+            .CrestSlotType3CrestList.Should()
+            .BeEquivalentTo(TestData.supportListElisanne.SupportCrestSlotType3List);
     }
 
     private static class StubData
@@ -123,15 +123,15 @@ public class HelperServiceTest
         public static readonly QuestGetSupportUserListData HelperList =
             new()
             {
-                support_user_list = new List<UserSupportList>()
+                SupportUserList = new List<UserSupportList>()
                 {
                     TestData.supportListEuden,
                     TestData.supportListElisanne
                 },
-                support_user_detail_list = new List<AtgenSupportUserDetailList>()
+                SupportUserDetailList = new List<AtgenSupportUserDetailList>()
                 {
-                    new() { viewer_id = 1000, is_friend = true },
-                    new() { viewer_id = 1001, is_friend = false }
+                    new() { ViewerId = 1000, IsFriend = true },
+                    new() { ViewerId = 1001, IsFriend = false }
                 }
             };
     }

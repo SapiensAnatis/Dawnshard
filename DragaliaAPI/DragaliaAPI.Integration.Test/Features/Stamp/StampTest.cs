@@ -19,7 +19,7 @@ public class StampTest : TestFixture
             )
         ).data;
 
-        data.stamp_list.Should().HaveCount(123);
+        data.StampList.Should().HaveCount(123);
     }
 
     [Fact]
@@ -28,43 +28,43 @@ public class StampTest : TestFixture
         List<EquipStampList> requestList =
             new()
             {
-                new() { slot = 1, stamp_id = 10001 },
-                new() { slot = 2, stamp_id = 10004 },
-                new() { slot = 3, stamp_id = 10003 },
-                new() { slot = 4, stamp_id = 10002 },
-                new() { slot = 5, stamp_id = 10005 },
-                new() { slot = 6, stamp_id = 10303 },
-                new() { slot = 7, stamp_id = 10007 },
-                new() { slot = 8, stamp_id = 10008 },
-                new() { slot = 9, stamp_id = 10009 },
-                new() { slot = 10, stamp_id = 10010 },
-                new() { slot = 11, stamp_id = 10011 },
-                new() { slot = 12, stamp_id = 10012 },
-                new() { slot = 13, stamp_id = 10013 },
-                new() { slot = 14, stamp_id = 10014 },
-                new() { slot = 15, stamp_id = 10015 },
-                new() { slot = 16, stamp_id = 10016 },
-                new() { slot = 17, stamp_id = 10017 },
-                new() { slot = 18, stamp_id = 10018 },
-                new() { slot = 19, stamp_id = 10019 },
-                new() { slot = 20, stamp_id = 10020 },
-                new() { slot = 21, stamp_id = 10021 },
-                new() { slot = 22, stamp_id = 10022 },
-                new() { slot = 23, stamp_id = 10023 },
-                new() { slot = 24, stamp_id = 10024 },
-                new() { slot = 25, stamp_id = 10025 },
-                new() { slot = 26, stamp_id = 10026 },
-                new() { slot = 27, stamp_id = 10027 },
-                new() { slot = 28, stamp_id = 10028 },
-                new() { slot = 29, stamp_id = 10029 },
-                new() { slot = 30, stamp_id = 10030 },
-                new() { slot = 31, stamp_id = 10031 },
-                new() { slot = 32, stamp_id = 10201 }
+                new() { Slot = 1, StampId = 10001 },
+                new() { Slot = 2, StampId = 10004 },
+                new() { Slot = 3, StampId = 10003 },
+                new() { Slot = 4, StampId = 10002 },
+                new() { Slot = 5, StampId = 10005 },
+                new() { Slot = 6, StampId = 10303 },
+                new() { Slot = 7, StampId = 10007 },
+                new() { Slot = 8, StampId = 10008 },
+                new() { Slot = 9, StampId = 10009 },
+                new() { Slot = 10, StampId = 10010 },
+                new() { Slot = 11, StampId = 10011 },
+                new() { Slot = 12, StampId = 10012 },
+                new() { Slot = 13, StampId = 10013 },
+                new() { Slot = 14, StampId = 10014 },
+                new() { Slot = 15, StampId = 10015 },
+                new() { Slot = 16, StampId = 10016 },
+                new() { Slot = 17, StampId = 10017 },
+                new() { Slot = 18, StampId = 10018 },
+                new() { Slot = 19, StampId = 10019 },
+                new() { Slot = 20, StampId = 10020 },
+                new() { Slot = 21, StampId = 10021 },
+                new() { Slot = 22, StampId = 10022 },
+                new() { Slot = 23, StampId = 10023 },
+                new() { Slot = 24, StampId = 10024 },
+                new() { Slot = 25, StampId = 10025 },
+                new() { Slot = 26, StampId = 10026 },
+                new() { Slot = 27, StampId = 10027 },
+                new() { Slot = 28, StampId = 10028 },
+                new() { Slot = 29, StampId = 10029 },
+                new() { Slot = 30, StampId = 10030 },
+                new() { Slot = 31, StampId = 10031 },
+                new() { Slot = 32, StampId = 10201 }
             };
 
         await this.Client.PostMsgpack<StampSetEquipStampData>(
             $"{Controller}/set_equip_stamp",
-            new StampSetEquipStampRequest() { stamp_list = requestList }
+            new StampSetEquipStampRequest() { StampList = requestList }
         );
 
         this.ApiContext.ChangeTracker.Clear();
@@ -75,8 +75,8 @@ public class StampTest : TestFixture
                 requestList,
                 opts =>
                     opts.ExcludingMissingMembers()
-                        .WithMapping<DbEquippedStamp>(dto => dto.slot, db => db.Slot)
-                        .WithMapping<DbEquippedStamp>(dto => dto.stamp_id, db => db.StampId)
+                        .WithMapping<DbEquippedStamp>(dto => dto.Slot, db => db.Slot)
+                        .WithMapping<DbEquippedStamp>(dto => dto.StampId, db => db.StampId)
             );
     }
 
@@ -86,48 +86,47 @@ public class StampTest : TestFixture
         List<EquipStampList> requestList =
             new()
             {
-                new() { slot = 1, stamp_id = 10001 },
-                new() { slot = 2, stamp_id = 10004 },
-                new() { slot = 3, stamp_id = 10003 },
-                new() { slot = 4, stamp_id = 10002 },
-                new() { slot = 5, stamp_id = 10005 },
-                new() { slot = 6, stamp_id = 10303 },
-                new() { slot = 7, stamp_id = 10007 },
-                new() { slot = 8, stamp_id = 10008 },
-                new() { slot = 9, stamp_id = 10009 },
-                new() { slot = 10, stamp_id = 10010 },
-                new() { slot = 11, stamp_id = 10011 },
-                new() { slot = 12, stamp_id = 10012 },
-                new() { slot = 13, stamp_id = 10013 },
-                new() { slot = 14, stamp_id = 10014 },
-                new() { slot = 15, stamp_id = 10015 },
-                new() { slot = 16, stamp_id = 10016 },
-                new() { slot = 17, stamp_id = 10017 },
-                new() { slot = 18, stamp_id = 10018 },
-                new() { slot = 19, stamp_id = 10019 },
-                new() { slot = 20, stamp_id = 10020 },
-                new() { slot = 21, stamp_id = 10021 },
-                new() { slot = 22, stamp_id = 10022 },
-                new() { slot = 23, stamp_id = 10023 },
-                new() { slot = 24, stamp_id = 10024 },
-                new() { slot = 25, stamp_id = 10025 },
-                new() { slot = 26, stamp_id = 10026 },
-                new() { slot = 27, stamp_id = 10027 },
-                new() { slot = 28, stamp_id = 10028 },
-                new() { slot = 29, stamp_id = 10029 },
-                new() { slot = 30, stamp_id = 10030 },
-                new() { slot = 31, stamp_id = 10031 },
-                new() { slot = 32, stamp_id = 10201 }
+                new() { Slot = 1, StampId = 10001 },
+                new() { Slot = 2, StampId = 10004 },
+                new() { Slot = 3, StampId = 10003 },
+                new() { Slot = 4, StampId = 10002 },
+                new() { Slot = 5, StampId = 10005 },
+                new() { Slot = 6, StampId = 10303 },
+                new() { Slot = 7, StampId = 10007 },
+                new() { Slot = 8, StampId = 10008 },
+                new() { Slot = 9, StampId = 10009 },
+                new() { Slot = 10, StampId = 10010 },
+                new() { Slot = 11, StampId = 10011 },
+                new() { Slot = 12, StampId = 10012 },
+                new() { Slot = 13, StampId = 10013 },
+                new() { Slot = 14, StampId = 10014 },
+                new() { Slot = 15, StampId = 10015 },
+                new() { Slot = 16, StampId = 10016 },
+                new() { Slot = 17, StampId = 10017 },
+                new() { Slot = 18, StampId = 10018 },
+                new() { Slot = 19, StampId = 10019 },
+                new() { Slot = 20, StampId = 10020 },
+                new() { Slot = 21, StampId = 10021 },
+                new() { Slot = 22, StampId = 10022 },
+                new() { Slot = 23, StampId = 10023 },
+                new() { Slot = 24, StampId = 10024 },
+                new() { Slot = 25, StampId = 10025 },
+                new() { Slot = 26, StampId = 10026 },
+                new() { Slot = 27, StampId = 10027 },
+                new() { Slot = 28, StampId = 10028 },
+                new() { Slot = 29, StampId = 10029 },
+                new() { Slot = 30, StampId = 10030 },
+                new() { Slot = 31, StampId = 10031 },
+                new() { Slot = 32, StampId = 10201 }
             };
 
         StampSetEquipStampData data = (
             await this.Client.PostMsgpack<StampSetEquipStampData>(
                 $"{Controller}/set_equip_stamp",
-                new StampSetEquipStampRequest() { stamp_list = requestList }
+                new StampSetEquipStampRequest() { StampList = requestList }
             )
         ).data;
 
-        data.Should()
-            .BeEquivalentTo(new StampSetEquipStampData() { equip_stamp_list = requestList });
+        data.Should().BeEquivalentTo(new StampSetEquipStampData() { EquipStampList = requestList });
     }
 }

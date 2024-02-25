@@ -13,21 +13,21 @@ public class DungeonTest : TestFixture
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
                 {
-                    party_no_list = new List<int>() { 2 },
-                    quest_id = 100010306
+                    PartyNoList = new List<int>() { 2 },
+                    QuestId = 100010306
                 }
             )
-        ).data.ingame_data.dungeon_key;
+        ).data.IngameData.DungeonKey;
 
         DungeonGetAreaOddsData response = (
             await this.Client.PostMsgpack<DungeonGetAreaOddsData>(
                 "/dungeon/get_area_odds",
-                new DungeonGetAreaOddsRequest() { area_idx = 1, dungeon_key = key }
+                new DungeonGetAreaOddsRequest() { AreaIdx = 1, DungeonKey = key }
             )
         ).data;
 
         // there isn't too much to test here
-        response.odds_info.area_index.Should().Be(1);
+        response.OddsInfo.AreaIndex.Should().Be(1);
     }
 
     [Fact]
@@ -38,28 +38,28 @@ public class DungeonTest : TestFixture
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
                 {
-                    party_no_list = new List<int>() { 1 },
-                    quest_id = 100010207
+                    PartyNoList = new List<int>() { 1 },
+                    QuestId = 100010207
                 }
             )
-        ).data.ingame_data.dungeon_key;
+        ).data.IngameData.DungeonKey;
 
         DungeonFailData response = (
             await this.Client.PostMsgpack<DungeonFailData>(
                 "/dungeon/fail",
-                new DungeonFailRequest() { dungeon_key = key }
+                new DungeonFailRequest() { DungeonKey = key }
             )
         ).data;
 
         response
-            .fail_quest_detail.Should()
+            .FailQuestDetail.Should()
             .BeEquivalentTo(
                 new AtgenFailQuestDetail()
                 {
-                    is_host = true,
-                    quest_id = 100010207,
-                    wall_id = 0,
-                    wall_level = 0
+                    IsHost = true,
+                    QuestId = 100010207,
+                    WallId = 0,
+                    WallLevel = 0
                 }
             );
     }

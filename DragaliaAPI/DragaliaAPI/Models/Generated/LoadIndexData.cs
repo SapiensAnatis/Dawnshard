@@ -1,8 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using MessagePack;
 
-// ReSharper disable InconsistentNaming
-
 namespace DragaliaAPI.Models.Generated;
 
 [MessagePackObject(true)]

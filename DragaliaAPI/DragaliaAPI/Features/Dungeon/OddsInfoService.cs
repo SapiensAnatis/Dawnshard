@@ -18,8 +18,8 @@ public class OddsInfoService : IOddsInfoService
         OddsInfo odds = StubData.OddsInfo;
 
         // TODO: drop_obj (treasure chests / crates, I think?)
-        odds.enemy = this.questEnemyService.BuildQuestEnemyList(questId, areaNum);
-        odds.area_index = areaNum;
+        odds.Enemy = this.questEnemyService.BuildQuestEnemyList(questId, areaNum);
+        odds.AreaIndex = areaNum;
 
         // this.logger.LogTrace("Generated enemy list: {@list}", odds.enemy);
 
@@ -31,8 +31,8 @@ public class OddsInfoService : IOddsInfoService
     {
         OddsInfo odds = StubData.OddsInfo;
 
-        odds.enemy = this.questEnemyService.BuildQuestWallEnemyList(wallId, wallLevel);
-        odds.area_index = 0;
+        odds.Enemy = this.questEnemyService.BuildQuestWallEnemyList(wallId, wallLevel);
+        odds.AreaIndex = 0;
 
         // this.logger.LogTrace("Generated enemy list: {@list}", odds.enemy);
 
@@ -44,10 +44,10 @@ public class OddsInfoService : IOddsInfoService
         public static OddsInfo OddsInfo =>
             new()
             {
-                area_index = 0,
-                reaction_obj_count = 1,
-                drop_obj = new List<AtgenDropObj>() { },
-                grade = new List<AtgenGrade>()
+                AreaIndex = 0,
+                ReactionObjCount = 1,
+                DropObj = new List<AtgenDropObj>() { },
+                Grade = new List<AtgenGrade>()
             };
     }
 }

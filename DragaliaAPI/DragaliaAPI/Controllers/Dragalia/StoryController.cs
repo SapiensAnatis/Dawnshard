@@ -27,35 +27,31 @@ public class StoryController : DragaliaControllerBase
     [HttpPost("read")]
     public async Task<DragaliaResult> Read(StoryReadRequest request)
     {
-        if (!MasterAsset.UnitStory.TryGetValue(request.unit_story_id, out UnitStory? data))
+        if (!MasterAsset.UnitStory.TryGetValue(request.UnitStoryId, out UnitStory? data))
         {
             this.logger.LogWarning(
                 "Requested to read non-existent unit story {id}",
-                request.unit_story_id
+                request.UnitStoryId
             );
 
             return this.Code(ResultCode.StoryNotGet);
         }
 
-        if (!await this.storyService.CheckStoryEligibility(data.Type, request.unit_story_id))
+        if (!await this.storyService.CheckStoryEligibility(data.Type, request.UnitStoryId))
         {
-            this.logger.LogWarning("User did not have access to story {id}", request.unit_story_id);
+            this.logger.LogWarning("User did not have access to story {id}", request.UnitStoryId);
             return this.Code(ResultCode.StoryNotReadThePrevious);
         }
 
         IEnumerable<AtgenBuildEventRewardEntityList> rewards = await this.storyService.ReadStory(
             data.Type,
-            request.unit_story_id
+            request.UnitStoryId
         );
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return this.Ok(
-            new StoryReadData()
-            {
-                unit_story_reward_list = rewards,
-                update_data_list = updateDataList,
-            }
+            new StoryReadData() { UnitStoryRewardList = rewards, UpdateDataList = updateDataList, }
         );
     }
 }

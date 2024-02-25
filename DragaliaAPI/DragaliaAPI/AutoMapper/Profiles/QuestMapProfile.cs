@@ -16,19 +16,19 @@ public class QuestMapProfile : Profile
         this.CreateMap<DbQuestTreasureList, QuestTreasureList>().ReverseMap();
 
         this.CreateMap<DbPlayerStoryState, QuestStoryList>()
-            .ForMember(x => x.quest_story_id, o => o.MapFrom(nameof(DbPlayerStoryState.StoryId)));
+            .ForMember(x => x.QuestStoryId, o => o.MapFrom(nameof(DbPlayerStoryState.StoryId)));
 
         this.CreateMap<DbPlayerStoryState, UnitStoryList>()
-            .ForMember(x => x.unit_story_id, o => o.MapFrom(src => src.StoryId))
-            .ForMember(x => x.is_read, o => o.MapFrom(src => src.State));
+            .ForMember(x => x.UnitStoryId, o => o.MapFrom(src => src.StoryId))
+            .ForMember(x => x.IsRead, o => o.MapFrom(src => src.State));
 
         this.CreateMap<DbPlayerStoryState, CastleStoryList>()
-            .ForMember(x => x.castle_story_id, o => o.MapFrom(src => src.StoryId))
-            .ForMember(x => x.is_read, o => o.MapFrom(src => src.State));
+            .ForMember(x => x.CastleStoryId, o => o.MapFrom(src => src.StoryId))
+            .ForMember(x => x.IsRead, o => o.MapFrom(src => src.State));
 
         this.CreateMap<DbPlayerStoryState, DmodeStoryList>()
-            .ForMember(x => x.dmode_story_id, o => o.MapFrom(src => src.StoryId))
-            .ForMember(x => x.is_read, o => o.MapFrom(o => o.State));
+            .ForMember(x => x.DmodeStoryId, o => o.MapFrom(src => src.StoryId))
+            .ForMember(x => x.IsRead, o => o.MapFrom(o => o.State));
 
         this.CreateMap<AreaInfo, AreaInfoList>();
 

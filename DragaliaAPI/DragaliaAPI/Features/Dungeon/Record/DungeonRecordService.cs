@@ -38,18 +38,18 @@ public class DungeonRecordService(
         IngameResultData ingameResultData =
             new()
             {
-                dungeon_key = dungeonKey,
-                play_type = QuestPlayType.Default,
-                quest_id = session.QuestId,
-                is_host = session.IsHost,
-                quest_party_setting_list = session.Party,
-                start_time = session.StartTime,
-                end_time = DateTimeOffset.UtcNow,
-                current_play_count = 1,
-                reborn_count = playRecord.reborn_count,
-                total_play_damage = playRecord.total_play_damage,
-                clear_time = playRecord.time,
-                is_clear = true,
+                DungeonKey = dungeonKey,
+                PlayType = QuestPlayType.Default,
+                QuestId = session.QuestId,
+                IsHost = session.IsHost,
+                QuestPartySettingList = session.Party,
+                StartTime = session.StartTime,
+                EndTime = DateTimeOffset.UtcNow,
+                CurrentPlayCount = 1,
+                RebornCount = playRecord.RebornCount,
+                TotalPlayDamage = playRecord.TotalPlayDamage,
+                ClearTime = playRecord.Time,
+                IsClear = true,
             };
 
         await this.ProcessStaminaConsumption(session);
@@ -57,25 +57,25 @@ public class DungeonRecordService(
         (QuestMissionStatus missionStatus, IEnumerable<AtgenFirstClearSet>? firstClearSets) =
             await dungeonRecordRewardService.ProcessQuestMissionCompletion(playRecord, session);
 
-        (ingameResultData.is_best_clear_time, ingameResultData.reward_record.quest_bonus_list) =
+        (ingameResultData.IsBestClearTime, ingameResultData.RewardRecord.QuestBonusList) =
             await questService.ProcessQuestCompletion(session, playRecord);
 
         await this.ProcessExperience(
-            ingameResultData.grow_record,
-            ingameResultData.reward_record,
+            ingameResultData.GrowRecord,
+            ingameResultData.RewardRecord,
             session
         );
 
-        ingameResultData.reward_record.first_clear_set = firstClearSets;
-        ingameResultData.reward_record.missions_clear_set = missionStatus.MissionsClearSet;
-        ingameResultData.reward_record.mission_complete = missionStatus.MissionCompleteSet;
+        ingameResultData.RewardRecord.FirstClearSet = firstClearSets;
+        ingameResultData.RewardRecord.MissionsClearSet = missionStatus.MissionsClearSet;
+        ingameResultData.RewardRecord.MissionComplete = missionStatus.MissionCompleteSet;
 
         (IEnumerable<AtgenDropAll> dropList, int manaDrop, int coinDrop) =
             await dungeonRecordRewardService.ProcessEnemyDrops(playRecord, session);
 
-        ingameResultData.reward_record.take_coin = coinDrop;
-        ingameResultData.grow_record.take_mana = manaDrop;
-        ingameResultData.reward_record.drop_all.AddRange(dropList);
+        ingameResultData.RewardRecord.TakeCoin = coinDrop;
+        ingameResultData.GrowRecord.TakeMana = manaDrop;
+        ingameResultData.RewardRecord.DropAll.AddRange(dropList);
 
         (
             IEnumerable<AtgenScoreMissionSuccessList> scoreMissionSuccessList,
@@ -86,14 +86,14 @@ public class DungeonRecordService(
             IEnumerable<AtgenDropAll> eventDrops
         ) = await dungeonRecordRewardService.ProcessEventRewards(playRecord, session);
 
-        ingameResultData.score_mission_success_list = scoreMissionSuccessList;
-        ingameResultData.reward_record.take_accumulate_point = takeAccumulatePoint;
-        ingameResultData.scoring_enemy_point_list = enemyScoreMissionList;
-        ingameResultData.reward_record.take_boost_accumulate_point = takeBoostAccumulatePoint;
-        ingameResultData.event_passive_up_list = eventPassiveUpLists;
-        ingameResultData.reward_record.drop_all.AddRange(eventDrops);
+        ingameResultData.ScoreMissionSuccessList = scoreMissionSuccessList;
+        ingameResultData.RewardRecord.TakeAccumulatePoint = takeAccumulatePoint;
+        ingameResultData.ScoringEnemyPointList = enemyScoreMissionList;
+        ingameResultData.RewardRecord.TakeBoostAccumulatePoint = takeBoostAccumulatePoint;
+        ingameResultData.EventPassiveUpList = eventPassiveUpLists;
+        ingameResultData.RewardRecord.DropAll.AddRange(eventDrops);
 
-        ingameResultData.converted_entity_list = rewardService
+        ingameResultData.ConvertedEntityList = rewardService
             .GetConvertedEntityList()
             .Select(x => x.ToConvertedEntityList())
             .Merge()
@@ -142,8 +142,8 @@ public class DungeonRecordService(
 
         PlayerLevelResult playerLevelResult = await userService.AddExperience(experience); // TODO: Exp boost
 
-        rewardRecord.player_level_up_fstone = playerLevelResult.RewardedWyrmite;
-        growRecord.take_player_exp = experience;
+        rewardRecord.PlayerLevelUpFstone = playerLevelResult.RewardedWyrmite;
+        growRecord.TakePlayerExp = experience;
 
         int experiencePerChara = experience * 2;
 
@@ -151,17 +151,17 @@ public class DungeonRecordService(
 
         foreach (PartySettingList chara in session.Party)
         {
-            if (chara.chara_id == 0)
+            if (chara.CharaId == 0)
                 continue;
 
-            await charaService.LevelUpChara(chara.chara_id, experiencePerChara);
+            await charaService.LevelUpChara(chara.CharaId, experiencePerChara);
 
-            charaGrowRecord.Add(new AtgenCharaGrowRecord(chara.chara_id, experiencePerChara));
-            growRecord.take_chara_exp += experiencePerChara;
+            charaGrowRecord.Add(new AtgenCharaGrowRecord(chara.CharaId, experiencePerChara));
+            growRecord.TakeCharaExp += experiencePerChara;
         }
 
-        growRecord.chara_grow_record = charaGrowRecord;
-        growRecord.bonus_factor = 1;
-        growRecord.mana_bonus_factor = 1;
+        growRecord.CharaGrowRecord = charaGrowRecord;
+        growRecord.BonusFactor = 1;
+        growRecord.ManaBonusFactor = 1;
     }
 }

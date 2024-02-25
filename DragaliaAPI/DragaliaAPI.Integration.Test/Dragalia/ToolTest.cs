@@ -27,7 +27,7 @@ public class ToolTest : TestFixture
             )
         ).data;
 
-        response.service_status.Should().Be(1);
+        response.ServiceStatus.Should().Be(1);
     }
 
     [Theory]
@@ -45,7 +45,7 @@ public class ToolTest : TestFixture
             await this.Client.PostMsgpack<ToolAuthData>(endpoint, new ToolAuthRequest() { })
         ).data;
 
-        response.viewer_id.Should().Be((ulong)ViewerId);
+        response.ViewerId.Should().Be((ulong)ViewerId);
     }
 
     [Fact]
