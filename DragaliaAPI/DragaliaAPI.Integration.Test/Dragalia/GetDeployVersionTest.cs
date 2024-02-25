@@ -9,7 +9,7 @@ public class GetDeployVersionTest : TestFixture
     public async Task GetDeployVersion_ReturnsCorrectResponse()
     {
         DeployGetDeployVersionData response = (
-            await this.Client.PostMsgpack<DeployGetDeployVersionData>(
+            await this.Client.PostMsgpack<DeployGetDeployVersionResponse>(
                 "deploy/get_deploy_version",
                 new DeployGetDeployVersionRequest()
             )

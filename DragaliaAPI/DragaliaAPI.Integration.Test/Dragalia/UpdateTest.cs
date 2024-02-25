@@ -12,7 +12,7 @@ public class UpdateTest : TestFixture
     {
         string newName = "Euden 2";
 
-        await this.Client.PostMsgpack<UpdateNamechangeData>(
+        await this.Client.PostMsgpack<UpdateNamechangeResponse>(
             "/update/namechange",
             new UpdateNamechangeRequest() { Name = newName }
         );
@@ -27,7 +27,7 @@ public class UpdateTest : TestFixture
     {
         string newName = "Euden 2";
         UpdateNamechangeData response = (
-            await this.Client.PostMsgpack<UpdateNamechangeData>(
+            await this.Client.PostMsgpack<UpdateNamechangeResponse>(
                 "/update/namechange",
                 new UpdateNamechangeRequest() { Name = newName }
             )
@@ -40,7 +40,7 @@ public class UpdateTest : TestFixture
     public async Task UpdateResetNew_NullList_Handles()
     {
         DragaliaResponse<UpdateResetNewData> response = (
-            await this.Client.PostMsgpack<UpdateResetNewData>(
+            await this.Client.PostMsgpack<UpdateResetNewResponse>(
                 "/update/reset_new",
                 new UpdateResetNewRequest()
                 {

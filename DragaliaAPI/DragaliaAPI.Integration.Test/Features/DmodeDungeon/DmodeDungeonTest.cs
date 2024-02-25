@@ -14,7 +14,7 @@ public class DmodeDungeonTest : TestFixture
         this.AddCharacter(Charas.Shingen);
 
         DragaliaResponse<DmodeDungeonStartData> startResponse =
-            await this.Client.PostMsgpack<DmodeDungeonStartData>(
+            await this.Client.PostMsgpack<DmodeDungeonStartResponse>(
                 "dmode_dungeon/start",
                 new DmodeDungeonStartRequest()
                 {
@@ -32,7 +32,7 @@ public class DmodeDungeonTest : TestFixture
         (await this.GetDungeonState()).Should().Be(DungeonState.WaitingInitEnd);
 
         DragaliaResponse<DmodeDungeonFloorData> floorResponse =
-            await this.Client.PostMsgpack<DmodeDungeonFloorData>(
+            await this.Client.PostMsgpack<DmodeDungeonFloorResponse>(
                 "dmode_dungeon/floor",
                 new DmodeDungeonFloorRequest() { DmodePlayRecord = null }
             );
@@ -52,7 +52,7 @@ public class DmodeDungeonTest : TestFixture
             .ApiContext.PlayerDmodeInfos.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
-        await this.Client.PostMsgpack<DmodeDungeonStartData>(
+        await this.Client.PostMsgpack<DmodeDungeonStartResponse>(
             "dmode_dungeon/start",
             new DmodeDungeonStartRequest()
             {
@@ -63,7 +63,7 @@ public class DmodeDungeonTest : TestFixture
             }
         );
 
-        await this.Client.PostMsgpack<DmodeDungeonFloorSkipData>(
+        await this.Client.PostMsgpack<DmodeDungeonFloorSkipResponse>(
             "dmode_dungeon/floor_skip",
             new DmodeDungeonFloorSkipRequest() { }
         );
@@ -71,7 +71,7 @@ public class DmodeDungeonTest : TestFixture
         (await this.GetDungeonState()).Should().Be(DungeonState.WaitingSkipEnd);
 
         DragaliaResponse<DmodeDungeonFloorData> floorResponse =
-            await this.Client.PostMsgpack<DmodeDungeonFloorData>(
+            await this.Client.PostMsgpack<DmodeDungeonFloorResponse>(
                 "dmode_dungeon/floor",
                 new DmodeDungeonFloorRequest() { DmodePlayRecord = null }
             );
@@ -103,7 +103,7 @@ public class DmodeDungeonTest : TestFixture
             .ApiContext.PlayerDmodeInfos.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
-        await this.Client.PostMsgpack<DmodeDungeonStartData>(
+        await this.Client.PostMsgpack<DmodeDungeonStartResponse>(
             "dmode_dungeon/start",
             new DmodeDungeonStartRequest()
             {
@@ -114,7 +114,7 @@ public class DmodeDungeonTest : TestFixture
             }
         );
 
-        await this.Client.PostMsgpack<DmodeDungeonUserHaltData>(
+        await this.Client.PostMsgpack<DmodeDungeonUserHaltResponse>(
             "dmode_dungeon/user_halt",
             new DmodeDungeonUserHaltRequest() { }
         );
@@ -124,7 +124,7 @@ public class DmodeDungeonTest : TestFixture
             .State.Should()
             .Be(DungeonState.Halting);
 
-        await this.Client.PostMsgpack<DmodeDungeonRestartData>(
+        await this.Client.PostMsgpack<DmodeDungeonRestartResponse>(
             "dmode_dungeon/restart",
             new DmodeDungeonRestartRequest() { }
         );

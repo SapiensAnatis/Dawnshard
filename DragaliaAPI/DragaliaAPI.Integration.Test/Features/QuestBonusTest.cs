@@ -45,7 +45,7 @@ public class QuestBonusTest : TestFixture
             );
 
         DragaliaResponse<DungeonReceiveQuestBonusData> bonusResponse =
-            await this.Client.PostMsgpack<DungeonReceiveQuestBonusData>(
+            await this.Client.PostMsgpack<DungeonReceiveQuestBonusResponse>(
                 "/dungeon/receive_quest_bonus",
                 new DungeonReceiveQuestBonusRequest()
                 {
@@ -194,7 +194,7 @@ public class QuestBonusTest : TestFixture
             );
 
         DragaliaResponse<DungeonReceiveQuestBonusData> bonusResponse =
-            await this.Client.PostMsgpack<DungeonReceiveQuestBonusData>(
+            await this.Client.PostMsgpack<DungeonReceiveQuestBonusResponse>(
                 "/dungeon/receive_quest_bonus",
                 new DungeonReceiveQuestBonusRequest()
                 {
@@ -239,7 +239,7 @@ public class QuestBonusTest : TestFixture
             );
 
         DragaliaResponse<DungeonReceiveQuestBonusData> bonusResponse =
-            await this.Client.PostMsgpack<DungeonReceiveQuestBonusData>(
+            await this.Client.PostMsgpack<DungeonReceiveQuestBonusResponse>(
                 "/dungeon/receive_quest_bonus",
                 new DungeonReceiveQuestBonusRequest()
                 {
@@ -299,7 +299,7 @@ public class QuestBonusTest : TestFixture
             );
 
         DragaliaResponse<DungeonReceiveQuestBonusData> bonusResponse =
-            await this.Client.PostMsgpack<DungeonReceiveQuestBonusData>(
+            await this.Client.PostMsgpack<DungeonReceiveQuestBonusResponse>(
                 "/dungeon/receive_quest_bonus",
                 new DungeonReceiveQuestBonusRequest()
                 {
@@ -335,7 +335,7 @@ public class QuestBonusTest : TestFixture
     private async Task<DragaliaResponse<DungeonRecordRecordData>> CompleteQuest(int questId)
     {
         DragaliaResponse<DungeonStartStartData> startResponse =
-            await this.Client.PostMsgpack<DungeonStartStartData>(
+            await this.Client.PostMsgpack<DungeonStartStartResponse>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
                 {
@@ -345,7 +345,7 @@ public class QuestBonusTest : TestFixture
             );
 
         DragaliaResponse<DungeonRecordRecordData> recordResponse =
-            await this.Client.PostMsgpack<DungeonRecordRecordData>(
+            await this.Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {

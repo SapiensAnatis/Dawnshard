@@ -7,7 +7,7 @@ using MessagePack;
 namespace DragaliaAPI.Models.Generated;
 
 [MessagePackObject(true)]
-public class AbilityCrestBuildupPieceResponse
+public partial class AbilityCrestBuildupPieceResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -28,7 +28,7 @@ public class AbilityCrestBuildupPieceResponse
 }
 
 [MessagePackObject(true)]
-public class AbilityCrestBuildupPlusCountResponse
+public partial class AbilityCrestBuildupPlusCountResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -49,7 +49,7 @@ public class AbilityCrestBuildupPlusCountResponse
 }
 
 [MessagePackObject(true)]
-public class AbilityCrestGetAbilityCrestSetListResponse
+public partial class AbilityCrestGetAbilityCrestSetListResponse
 {
     [Key("ability_crest_set_list")]
     public IEnumerable<AbilityCrestSetList> AbilityCrestSetList { get; set; } = [];
@@ -65,7 +65,7 @@ public class AbilityCrestGetAbilityCrestSetListResponse
 }
 
 [MessagePackObject(true)]
-public class AbilityCrestResetPlusCountResponse
+public partial class AbilityCrestResetPlusCountResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -86,7 +86,7 @@ public class AbilityCrestResetPlusCountResponse
 }
 
 [MessagePackObject(true)]
-public class AbilityCrestSetAbilityCrestSetResponse
+public partial class AbilityCrestSetAbilityCrestSetResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -107,7 +107,7 @@ public class AbilityCrestSetAbilityCrestSetResponse
 }
 
 [MessagePackObject(true)]
-public class AbilityCrestSetFavoriteResponse
+public partial class AbilityCrestSetFavoriteResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -125,7 +125,7 @@ public class AbilityCrestSetFavoriteResponse
 }
 
 [MessagePackObject(true)]
-public class AbilityCrestTradeGetListResponse
+public partial class AbilityCrestTradeGetListResponse
 {
     [Key("user_ability_crest_trade_list")]
     public IEnumerable<UserAbilityCrestTradeList> UserAbilityCrestTradeList { get; set; } = [];
@@ -156,7 +156,7 @@ public class AbilityCrestTradeGetListResponse
 }
 
 [MessagePackObject(true)]
-public class AbilityCrestTradeTradeResponse
+public partial class AbilityCrestTradeTradeResponse
 {
     [Key("user_ability_crest_trade_list")]
     public IEnumerable<UserAbilityCrestTradeList> UserAbilityCrestTradeList { get; set; } = [];
@@ -187,7 +187,7 @@ public class AbilityCrestTradeTradeResponse
 }
 
 [MessagePackObject(true)]
-public class AbilityCrestUpdateAbilityCrestSetNameResponse
+public partial class AbilityCrestUpdateAbilityCrestSetNameResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -208,7 +208,7 @@ public class AbilityCrestUpdateAbilityCrestSetNameResponse
 }
 
 [MessagePackObject(true)]
-public class AlbumIndexResponse
+public partial class AlbumIndexResponse
 {
     [Key("album_quest_play_record_list")]
     public IEnumerable<AtgenAlbumQuestPlayRecordList> AlbumQuestPlayRecordList { get; set; } = [];
@@ -244,7 +244,7 @@ public class AlbumIndexResponse
 }
 
 [MessagePackObject(true)]
-public class AmuletBuildupResponse
+public partial class AmuletBuildupResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -270,7 +270,7 @@ public class AmuletBuildupResponse
 }
 
 [MessagePackObject(true)]
-public class AmuletLimitBreakResponse
+public partial class AmuletLimitBreakResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -296,7 +296,7 @@ public class AmuletLimitBreakResponse
 }
 
 [MessagePackObject(true)]
-public class AmuletResetPlusCountResponse
+public partial class AmuletResetPlusCountResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -314,7 +314,7 @@ public class AmuletResetPlusCountResponse
 }
 
 [MessagePackObject(true)]
-public class AmuletSellResponse
+public partial class AmuletSellResponse
 {
     [Key("delete_data_list")]
     public DeleteDataList DeleteDataList { get; set; }
@@ -340,7 +340,7 @@ public class AmuletSellResponse
 }
 
 [MessagePackObject(true)]
-public class AmuletSetLockResponse
+public partial class AmuletSetLockResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -358,7 +358,7 @@ public class AmuletSetLockResponse
 }
 
 [MessagePackObject(true)]
-public class AmuletTradeGetListResponse
+public partial class AmuletTradeGetListResponse
 {
     [Key("user_amulet_trade_list")]
     public IEnumerable<UserAmuletTradeList> UserAmuletTradeList { get; set; } = [];
@@ -389,7 +389,7 @@ public class AmuletTradeGetListResponse
 }
 
 [MessagePackObject(true)]
-public class AmuletTradeTradeResponse
+public partial class AmuletTradeTradeResponse
 {
     [Key("user_amulet_trade_list")]
     public IEnumerable<UserAmuletTradeList> UserAmuletTradeList { get; set; } = [];
@@ -420,7 +420,7 @@ public class AmuletTradeTradeResponse
 }
 
 [MessagePackObject(true)]
-public class BattleRoyalEventEntryResponse
+public partial class BattleRoyalEventEntryResponse
 {
     [Key("battle_royal_event_user_record")]
     public BattleRoyalEventUserRecord BattleRoyalEventUserRecord { get; set; }
@@ -466,7 +466,7 @@ public class BattleRoyalEventEntryResponse
 }
 
 [MessagePackObject(true)]
-public class BattleRoyalEventGetEventDataResponse
+public partial class BattleRoyalEventGetEventDataResponse
 {
     [Key("battle_royal_event_user_record")]
     public BattleRoyalEventUserRecord BattleRoyalEventUserRecord { get; set; }
@@ -507,7 +507,7 @@ public class BattleRoyalEventGetEventDataResponse
 }
 
 [MessagePackObject(true)]
-public class BattleRoyalEventReceiveEventCyclePointRewardResponse
+public partial class BattleRoyalEventReceiveEventCyclePointRewardResponse
 {
     [Key("event_cycle_reward_list")]
     public IEnumerable<EventCycleRewardList> EventCycleRewardList { get; set; } = [];
@@ -539,7 +539,7 @@ public class BattleRoyalEventReceiveEventCyclePointRewardResponse
 }
 
 [MessagePackObject(true)]
-public class BattleRoyalEventReleaseCharaSkinResponse
+public partial class BattleRoyalEventReleaseCharaSkinResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -560,7 +560,7 @@ public class BattleRoyalEventReleaseCharaSkinResponse
 }
 
 [MessagePackObject(true)]
-public class BattleRoyalFailResponse
+public partial class BattleRoyalFailResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -574,7 +574,7 @@ public class BattleRoyalFailResponse
 }
 
 [MessagePackObject(true)]
-public class BattleRoyalGetBattleRoyalHistoryResponse
+public partial class BattleRoyalGetBattleRoyalHistoryResponse
 {
     [Key("battle_royal_history_list")]
     public IEnumerable<AtgenBattleRoyalHistoryList> BattleRoyalHistoryList { get; set; } = [];
@@ -590,7 +590,7 @@ public class BattleRoyalGetBattleRoyalHistoryResponse
 }
 
 [MessagePackObject(true)]
-public class BattleRoyalRecordRoyalRecordMultiResponse
+public partial class BattleRoyalRecordRoyalRecordMultiResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -622,7 +622,7 @@ public class BattleRoyalRecordRoyalRecordMultiResponse
 }
 
 [MessagePackObject(true)]
-public class BattleRoyalStartMultiResponse
+public partial class BattleRoyalStartMultiResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -648,7 +648,7 @@ public class BattleRoyalStartMultiResponse
 }
 
 [MessagePackObject(true)]
-public class BattleRoyalStartRoyalMultiResponse
+public partial class BattleRoyalStartRoyalMultiResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -674,7 +674,7 @@ public class BattleRoyalStartRoyalMultiResponse
 }
 
 [MessagePackObject(true)]
-public class BuildEventEntryResponse
+public partial class BuildEventEntryResponse
 {
     [Key("build_event_user_data")]
     public BuildEventUserList BuildEventUserData { get; set; }
@@ -706,7 +706,7 @@ public class BuildEventEntryResponse
 }
 
 [MessagePackObject(true)]
-public class BuildEventGetEventDataResponse
+public partial class BuildEventGetEventDataResponse
 {
     [Key("build_event_user_data")]
     public BuildEventUserList BuildEventUserData { get; set; }
@@ -743,7 +743,7 @@ public class BuildEventGetEventDataResponse
 }
 
 [MessagePackObject(true)]
-public class BuildEventReceiveBuildPointRewardResponse
+public partial class BuildEventReceiveBuildPointRewardResponse
 {
     [Key("build_event_reward_list")]
     public IEnumerable<BuildEventRewardList> BuildEventRewardList { get; set; } = [];
@@ -775,7 +775,7 @@ public class BuildEventReceiveBuildPointRewardResponse
 }
 
 [MessagePackObject(true)]
-public class BuildEventReceiveDailyBonusResponse
+public partial class BuildEventReceiveDailyBonusResponse
 {
     [Key("event_daily_bonus_list")]
     public IEnumerable<AtgenBuildEventRewardEntityList> EventDailyBonusList { get; set; } = [];
@@ -801,7 +801,7 @@ public class BuildEventReceiveDailyBonusResponse
 }
 
 [MessagePackObject(true)]
-public class CartoonLatestResponse
+public partial class CartoonLatestResponse
 {
     [Key("latest")]
     public AtgenLatest Latest { get; set; }
@@ -815,7 +815,7 @@ public class CartoonLatestResponse
 }
 
 [MessagePackObject(true)]
-public class CastleStoryReadResponse
+public partial class CastleStoryReadResponse
 {
     [Key("castle_story_reward_list")]
     public IEnumerable<AtgenBuildEventRewardEntityList> CastleStoryRewardList { get; set; } = [];
@@ -846,7 +846,7 @@ public class CastleStoryReadResponse
 }
 
 [MessagePackObject(true)]
-public class CharaAwakeResponse
+public partial class CharaAwakeResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -860,7 +860,7 @@ public class CharaAwakeResponse
 }
 
 [MessagePackObject(true)]
-public class CharaBuildupManaResponse
+public partial class CharaBuildupManaResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -878,7 +878,7 @@ public class CharaBuildupManaResponse
 }
 
 [MessagePackObject(true)]
-public class CharaBuildupPlatinumResponse
+public partial class CharaBuildupPlatinumResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -896,7 +896,7 @@ public class CharaBuildupPlatinumResponse
 }
 
 [MessagePackObject(true)]
-public class CharaBuildupResponse
+public partial class CharaBuildupResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -914,7 +914,7 @@ public class CharaBuildupResponse
 }
 
 [MessagePackObject(true)]
-public class CharaGetCharaUnitSetResponse
+public partial class CharaGetCharaUnitSetResponse
 {
     [Key("chara_unit_set_list")]
     public IEnumerable<CharaUnitSetList> CharaUnitSetList { get; set; } = [];
@@ -928,7 +928,7 @@ public class CharaGetCharaUnitSetResponse
 }
 
 [MessagePackObject(true)]
-public class CharaGetListResponse
+public partial class CharaGetListResponse
 {
     [Key("chara_list")]
     public IEnumerable<CharaList> CharaList { get; set; } = [];
@@ -942,7 +942,7 @@ public class CharaGetListResponse
 }
 
 [MessagePackObject(true)]
-public class CharaLimitBreakAndBuildupManaResponse
+public partial class CharaLimitBreakAndBuildupManaResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -963,7 +963,7 @@ public class CharaLimitBreakAndBuildupManaResponse
 }
 
 [MessagePackObject(true)]
-public class CharaLimitBreakResponse
+public partial class CharaLimitBreakResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -981,7 +981,7 @@ public class CharaLimitBreakResponse
 }
 
 [MessagePackObject(true)]
-public class CharaResetPlusCountResponse
+public partial class CharaResetPlusCountResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -999,7 +999,7 @@ public class CharaResetPlusCountResponse
 }
 
 [MessagePackObject(true)]
-public class CharaSetCharaUnitSetResponse
+public partial class CharaSetCharaUnitSetResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -1017,7 +1017,7 @@ public class CharaSetCharaUnitSetResponse
 }
 
 [MessagePackObject(true)]
-public class CharaUnlockEditSkillResponse
+public partial class CharaUnlockEditSkillResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -1035,7 +1035,7 @@ public class CharaUnlockEditSkillResponse
 }
 
 [MessagePackObject(true)]
-public class Clb01EventEntryResponse
+public partial class Clb01EventEntryResponse
 {
     [Key("clb_01_event_user_data")]
     public Clb01EventUserList Clb01EventUserData { get; set; }
@@ -1061,7 +1061,7 @@ public class Clb01EventEntryResponse
 }
 
 [MessagePackObject(true)]
-public class Clb01EventGetEventDataResponse
+public partial class Clb01EventGetEventDataResponse
 {
     [Key("clb_01_event_user_data")]
     public Clb01EventUserList Clb01EventUserData { get; set; }
@@ -1087,7 +1087,7 @@ public class Clb01EventGetEventDataResponse
 }
 
 [MessagePackObject(true)]
-public class Clb01EventReceiveClb01PointRewardResponse
+public partial class Clb01EventReceiveClb01PointRewardResponse
 {
     [Key("clb_01_event_reward_list")]
     public IEnumerable<BuildEventRewardList> Clb01EventRewardList { get; set; } = [];
@@ -1119,7 +1119,7 @@ public class Clb01EventReceiveClb01PointRewardResponse
 }
 
 [MessagePackObject(true)]
-public class CollectEventEntryResponse
+public partial class CollectEventEntryResponse
 {
     [Key("collect_event_user_data")]
     public CollectEventUserList CollectEventUserData { get; set; }
@@ -1145,7 +1145,7 @@ public class CollectEventEntryResponse
 }
 
 [MessagePackObject(true)]
-public class CollectEventGetEventDataResponse
+public partial class CollectEventGetEventDataResponse
 {
     [Key("collect_event_user_data")]
     public CollectEventUserList CollectEventUserData { get; set; }
@@ -1166,7 +1166,7 @@ public class CollectEventGetEventDataResponse
 }
 
 [MessagePackObject(true)]
-public class CombatEventEntryResponse
+public partial class CombatEventEntryResponse
 {
     [Key("combat_event_user_data")]
     public CombatEventUserList CombatEventUserData { get; set; }
@@ -1192,7 +1192,7 @@ public class CombatEventEntryResponse
 }
 
 [MessagePackObject(true)]
-public class CombatEventGetEventDataResponse
+public partial class CombatEventGetEventDataResponse
 {
     [Key("combat_event_user_data")]
     public CombatEventUserList CombatEventUserData { get; set; }
@@ -1223,7 +1223,7 @@ public class CombatEventGetEventDataResponse
 }
 
 [MessagePackObject(true)]
-public class CombatEventReceiveEventLocationRewardResponse
+public partial class CombatEventReceiveEventLocationRewardResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -1255,7 +1255,7 @@ public class CombatEventReceiveEventLocationRewardResponse
 }
 
 [MessagePackObject(true)]
-public class CombatEventReceiveEventPointRewardResponse
+public partial class CombatEventReceiveEventPointRewardResponse
 {
     [Key("event_reward_list")]
     public IEnumerable<BuildEventRewardList> EventRewardList { get; set; } = [];
@@ -1286,7 +1286,7 @@ public class CombatEventReceiveEventPointRewardResponse
 }
 
 [MessagePackObject(true)]
-public class CraftAssembleResponse
+public partial class CraftAssembleResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -1312,7 +1312,7 @@ public class CraftAssembleResponse
 }
 
 [MessagePackObject(true)]
-public class CraftCreateResponse
+public partial class CraftCreateResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -1338,7 +1338,7 @@ public class CraftCreateResponse
 }
 
 [MessagePackObject(true)]
-public class CraftDisassembleResponse
+public partial class CraftDisassembleResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -1364,7 +1364,7 @@ public class CraftDisassembleResponse
 }
 
 [MessagePackObject(true)]
-public class CraftResetNewResponse
+public partial class CraftResetNewResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -1378,7 +1378,7 @@ public class CraftResetNewResponse
 }
 
 [MessagePackObject(true)]
-public class DeployGetDeployVersionResponse
+public partial class DeployGetDeployVersionResponse
 {
     [Key("deploy_hash")]
     public string DeployHash { get; set; }
@@ -1392,7 +1392,7 @@ public class DeployGetDeployVersionResponse
 }
 
 [MessagePackObject(true)]
-public class DmodeBuildupServitorPassiveResponse
+public partial class DmodeBuildupServitorPassiveResponse
 {
     [Key("dmode_servitor_passive_list")]
     public IEnumerable<DmodeServitorPassiveList> DmodeServitorPassiveList { get; set; } = [];
@@ -1418,7 +1418,7 @@ public class DmodeBuildupServitorPassiveResponse
 }
 
 [MessagePackObject(true)]
-public class DmodeDungeonFinishResponse
+public partial class DmodeDungeonFinishResponse
 {
     [Key("dmode_dungeon_state")]
     public int DmodeDungeonState { get; set; }
@@ -1449,7 +1449,7 @@ public class DmodeDungeonFinishResponse
 }
 
 [MessagePackObject(true)]
-public class DmodeDungeonFloorResponse
+public partial class DmodeDungeonFloorResponse
 {
     [Key("dmode_dungeon_state")]
     public int DmodeDungeonState { get; set; }
@@ -1480,7 +1480,7 @@ public class DmodeDungeonFloorResponse
 }
 
 [MessagePackObject(true)]
-public class DmodeDungeonFloorSkipResponse
+public partial class DmodeDungeonFloorSkipResponse
 {
     [Key("dmode_dungeon_state")]
     public int DmodeDungeonState { get; set; }
@@ -1506,7 +1506,7 @@ public class DmodeDungeonFloorSkipResponse
 }
 
 [MessagePackObject(true)]
-public class DmodeDungeonRestartResponse
+public partial class DmodeDungeonRestartResponse
 {
     [Key("dmode_ingame_data")]
     public DmodeIngameData DmodeIngameData { get; set; }
@@ -1524,7 +1524,7 @@ public class DmodeDungeonRestartResponse
 }
 
 [MessagePackObject(true)]
-public class DmodeDungeonStartResponse
+public partial class DmodeDungeonStartResponse
 {
     [Key("dmode_ingame_data")]
     public DmodeIngameData DmodeIngameData { get; set; }
@@ -1542,7 +1542,7 @@ public class DmodeDungeonStartResponse
 }
 
 [MessagePackObject(true)]
-public class DmodeDungeonSystemHaltResponse
+public partial class DmodeDungeonSystemHaltResponse
 {
     [Key("dmode_dungeon_state")]
     public int DmodeDungeonState { get; set; }
@@ -1568,7 +1568,7 @@ public class DmodeDungeonSystemHaltResponse
 }
 
 [MessagePackObject(true)]
-public class DmodeDungeonUserHaltResponse
+public partial class DmodeDungeonUserHaltResponse
 {
     [Key("dmode_dungeon_state")]
     public int DmodeDungeonState { get; set; }
@@ -1594,7 +1594,7 @@ public class DmodeDungeonUserHaltResponse
 }
 
 [MessagePackObject(true)]
-public class DmodeEntryResponse
+public partial class DmodeEntryResponse
 {
     [Key("dmode_info")]
     public DmodeInfo DmodeInfo { get; set; }
@@ -1635,7 +1635,7 @@ public class DmodeEntryResponse
 }
 
 [MessagePackObject(true)]
-public class DmodeExpeditionFinishResponse
+public partial class DmodeExpeditionFinishResponse
 {
     [Key("dmode_ingame_result")]
     public DmodeIngameResult DmodeIngameResult { get; set; }
@@ -1666,7 +1666,7 @@ public class DmodeExpeditionFinishResponse
 }
 
 [MessagePackObject(true)]
-public class DmodeExpeditionForceFinishResponse
+public partial class DmodeExpeditionForceFinishResponse
 {
     [Key("dmode_ingame_result")]
     public DmodeIngameResult DmodeIngameResult { get; set; }
@@ -1697,7 +1697,7 @@ public class DmodeExpeditionForceFinishResponse
 }
 
 [MessagePackObject(true)]
-public class DmodeExpeditionStartResponse
+public partial class DmodeExpeditionStartResponse
 {
     [Key("dmode_expedition")]
     public DmodeExpedition DmodeExpedition { get; set; }
@@ -1723,7 +1723,7 @@ public class DmodeExpeditionStartResponse
 }
 
 [MessagePackObject(true)]
-public class DmodeGetDataResponse
+public partial class DmodeGetDataResponse
 {
     [Key("dmode_info")]
     public DmodeInfo DmodeInfo { get; set; }
@@ -1779,7 +1779,7 @@ public class DmodeGetDataResponse
 }
 
 [MessagePackObject(true)]
-public class DmodeReadStoryResponse
+public partial class DmodeReadStoryResponse
 {
     [Key("dmode_story_reward_list")]
     public IEnumerable<AtgenBuildEventRewardEntityList> DmodeStoryRewardList { get; set; } = [];
@@ -1810,7 +1810,7 @@ public class DmodeReadStoryResponse
 }
 
 [MessagePackObject(true)]
-public class DragonBuildupResponse
+public partial class DragonBuildupResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -1836,7 +1836,7 @@ public class DragonBuildupResponse
 }
 
 [MessagePackObject(true)]
-public class DragonBuyGiftToSendMultipleResponse
+public partial class DragonBuyGiftToSendMultipleResponse
 {
     [Key("shop_gift_list")]
     public IEnumerable<AtgenShopGiftList> ShopGiftList { get; set; } = [];
@@ -1872,7 +1872,7 @@ public class DragonBuyGiftToSendMultipleResponse
 }
 
 [MessagePackObject(true)]
-public class DragonBuyGiftToSendResponse
+public partial class DragonBuyGiftToSendResponse
 {
     [Key("shop_gift_list")]
     public IEnumerable<AtgenShopGiftList> ShopGiftList { get; set; } = [];
@@ -1919,7 +1919,7 @@ public class DragonBuyGiftToSendResponse
 }
 
 [MessagePackObject(true)]
-public class DragonGetContactDataResponse
+public partial class DragonGetContactDataResponse
 {
     [Key("shop_gift_list")]
     public IEnumerable<AtgenShopGiftList> ShopGiftList { get; set; } = [];
@@ -1933,7 +1933,7 @@ public class DragonGetContactDataResponse
 }
 
 [MessagePackObject(true)]
-public class DragonLimitBreakResponse
+public partial class DragonLimitBreakResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -1959,7 +1959,7 @@ public class DragonLimitBreakResponse
 }
 
 [MessagePackObject(true)]
-public class DragonResetPlusCountResponse
+public partial class DragonResetPlusCountResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -1977,7 +1977,7 @@ public class DragonResetPlusCountResponse
 }
 
 [MessagePackObject(true)]
-public class DragonSellResponse
+public partial class DragonSellResponse
 {
     [Key("delete_data_list")]
     public DeleteDataList DeleteDataList { get; set; }
@@ -2003,7 +2003,7 @@ public class DragonSellResponse
 }
 
 [MessagePackObject(true)]
-public class DragonSendGiftMultipleResponse
+public partial class DragonSendGiftMultipleResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -2035,7 +2035,7 @@ public class DragonSendGiftMultipleResponse
 }
 
 [MessagePackObject(true)]
-public class DragonSendGiftResponse
+public partial class DragonSendGiftResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -2067,7 +2067,7 @@ public class DragonSendGiftResponse
 }
 
 [MessagePackObject(true)]
-public class DragonSetLockResponse
+public partial class DragonSetLockResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -2085,7 +2085,7 @@ public class DragonSetLockResponse
 }
 
 [MessagePackObject(true)]
-public class DreamAdventureClearResponse
+public partial class DreamAdventureClearResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -2111,7 +2111,7 @@ public class DreamAdventureClearResponse
 }
 
 [MessagePackObject(true)]
-public class DreamAdventurePlayResponse
+public partial class DreamAdventurePlayResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -2137,7 +2137,7 @@ public class DreamAdventurePlayResponse
 }
 
 [MessagePackObject(true)]
-public class DungeonFailResponse
+public partial class DungeonFailResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -2168,7 +2168,7 @@ public class DungeonFailResponse
 }
 
 [MessagePackObject(true)]
-public class DungeonGetAreaOddsResponse
+public partial class DungeonGetAreaOddsResponse
 {
     [Key("odds_info")]
     public OddsInfo OddsInfo { get; set; }
@@ -2182,7 +2182,7 @@ public class DungeonGetAreaOddsResponse
 }
 
 [MessagePackObject(true)]
-public class DungeonReceiveQuestBonusResponse
+public partial class DungeonReceiveQuestBonusResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -2208,7 +2208,7 @@ public class DungeonReceiveQuestBonusResponse
 }
 
 [MessagePackObject(true)]
-public class DungeonRecordRecordMultiResponse
+public partial class DungeonRecordRecordMultiResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -2244,7 +2244,7 @@ public class DungeonRecordRecordMultiResponse
 }
 
 [MessagePackObject(true)]
-public class DungeonRecordRecordResponse
+public partial class DungeonRecordRecordResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -2285,7 +2285,7 @@ public class DungeonRecordRecordResponse
 }
 
 [MessagePackObject(true)]
-public class DungeonRetryResponse
+public partial class DungeonRetryResponse
 {
     [Key("continue_count")]
     public int ContinueCount { get; set; }
@@ -2303,7 +2303,7 @@ public class DungeonRetryResponse
 }
 
 [MessagePackObject(true)]
-public class DungeonSkipStartAssignUnitResponse
+public partial class DungeonSkipStartAssignUnitResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -2334,7 +2334,7 @@ public class DungeonSkipStartAssignUnitResponse
 }
 
 [MessagePackObject(true)]
-public class DungeonSkipStartMultipleQuestAssignUnitResponse
+public partial class DungeonSkipStartMultipleQuestAssignUnitResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -2365,7 +2365,7 @@ public class DungeonSkipStartMultipleQuestAssignUnitResponse
 }
 
 [MessagePackObject(true)]
-public class DungeonSkipStartMultipleQuestResponse
+public partial class DungeonSkipStartMultipleQuestResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -2396,7 +2396,7 @@ public class DungeonSkipStartMultipleQuestResponse
 }
 
 [MessagePackObject(true)]
-public class DungeonSkipStartResponse
+public partial class DungeonSkipStartResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -2427,7 +2427,7 @@ public class DungeonSkipStartResponse
 }
 
 [MessagePackObject(true)]
-public class DungeonStartStartAssignUnitResponse
+public partial class DungeonStartStartAssignUnitResponse
 {
     [Key("ingame_data")]
     public IngameData IngameData { get; set; }
@@ -2458,7 +2458,7 @@ public class DungeonStartStartAssignUnitResponse
 }
 
 [MessagePackObject(true)]
-public class DungeonStartStartMultiAssignUnitResponse
+public partial class DungeonStartStartMultiAssignUnitResponse
 {
     [Key("ingame_data")]
     public IngameData IngameData { get; set; }
@@ -2489,7 +2489,7 @@ public class DungeonStartStartMultiAssignUnitResponse
 }
 
 [MessagePackObject(true)]
-public class DungeonStartStartMultiResponse
+public partial class DungeonStartStartMultiResponse
 {
     [Key("ingame_data")]
     public IngameData IngameData { get; set; }
@@ -2520,7 +2520,7 @@ public class DungeonStartStartMultiResponse
 }
 
 [MessagePackObject(true)]
-public class DungeonStartStartResponse
+public partial class DungeonStartStartResponse
 {
     [Key("ingame_data")]
     public IngameData IngameData { get; set; }
@@ -2551,7 +2551,7 @@ public class DungeonStartStartResponse
 }
 
 [MessagePackObject(true)]
-public class EarnEventEntryResponse
+public partial class EarnEventEntryResponse
 {
     [Key("earn_event_user_data")]
     public EarnEventUserList EarnEventUserData { get; set; }
@@ -2577,7 +2577,7 @@ public class EarnEventEntryResponse
 }
 
 [MessagePackObject(true)]
-public class EarnEventGetEventDataResponse
+public partial class EarnEventGetEventDataResponse
 {
     [Key("earn_event_user_data")]
     public EarnEventUserList EarnEventUserData { get; set; }
@@ -2603,7 +2603,7 @@ public class EarnEventGetEventDataResponse
 }
 
 [MessagePackObject(true)]
-public class EarnEventReceiveEventPointRewardResponse
+public partial class EarnEventReceiveEventPointRewardResponse
 {
     [Key("event_reward_list")]
     public IEnumerable<BuildEventRewardList> EventRewardList { get; set; } = [];
@@ -2634,7 +2634,7 @@ public class EarnEventReceiveEventPointRewardResponse
 }
 
 [MessagePackObject(true)]
-public class EmblemGetListResponse
+public partial class EmblemGetListResponse
 {
     [Key("emblem_list")]
     public IEnumerable<EmblemList> EmblemList { get; set; } = [];
@@ -2648,7 +2648,7 @@ public class EmblemGetListResponse
 }
 
 [MessagePackObject(true)]
-public class EmblemSetResponse
+public partial class EmblemSetResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -2662,7 +2662,7 @@ public class EmblemSetResponse
 }
 
 [MessagePackObject(true)]
-public class EulaAgreeAgreeResponse
+public partial class EulaAgreeAgreeResponse
 {
     [Key("version_hash")]
     public AtgenVersionHash VersionHash { get; set; }
@@ -2681,7 +2681,7 @@ public class EulaAgreeAgreeResponse
 }
 
 [MessagePackObject(true)]
-public class EulaGetVersionListResponse
+public partial class EulaGetVersionListResponse
 {
     [Key("version_hash_list")]
     public IEnumerable<AtgenVersionHash> VersionHashList { get; set; } = [];
@@ -2695,7 +2695,7 @@ public class EulaGetVersionListResponse
 }
 
 [MessagePackObject(true)]
-public class EulaGetVersionResponse
+public partial class EulaGetVersionResponse
 {
     [Key("version_hash")]
     public AtgenVersionHash VersionHash { get; set; }
@@ -2722,7 +2722,7 @@ public class EulaGetVersionResponse
 }
 
 [MessagePackObject(true)]
-public class EventDamageGetTotalDamageHistoryResponse
+public partial class EventDamageGetTotalDamageHistoryResponse
 {
     [Key("event_damage_history_list")]
     public IEnumerable<AtgenEventDamageHistoryList> EventDamageHistoryList { get; set; } = [];
@@ -2738,7 +2738,7 @@ public class EventDamageGetTotalDamageHistoryResponse
 }
 
 [MessagePackObject(true)]
-public class EventDamageReceiveDamageRewardResponse
+public partial class EventDamageReceiveDamageRewardResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -2764,7 +2764,7 @@ public class EventDamageReceiveDamageRewardResponse
 }
 
 [MessagePackObject(true)]
-public class EventStoryReadResponse
+public partial class EventStoryReadResponse
 {
     [Key("event_story_reward_list")]
     public IEnumerable<AtgenBuildEventRewardEntityList> EventStoryRewardList { get; set; } = [];
@@ -2790,7 +2790,7 @@ public class EventStoryReadResponse
 }
 
 [MessagePackObject(true)]
-public class EventSummonExecResponse
+public partial class EventSummonExecResponse
 {
     [Key("box_summon_result")]
     public AtgenBoxSummonResult BoxSummonResult { get; set; }
@@ -2816,7 +2816,7 @@ public class EventSummonExecResponse
 }
 
 [MessagePackObject(true)]
-public class EventSummonGetDataResponse
+public partial class EventSummonGetDataResponse
 {
     [Key("box_summon_data")]
     public AtgenBoxSummonData BoxSummonData { get; set; }
@@ -2830,7 +2830,7 @@ public class EventSummonGetDataResponse
 }
 
 [MessagePackObject(true)]
-public class EventSummonResetResponse
+public partial class EventSummonResetResponse
 {
     [Key("box_summon_data")]
     public AtgenBoxSummonData BoxSummonData { get; set; }
@@ -2844,7 +2844,7 @@ public class EventSummonResetResponse
 }
 
 [MessagePackObject(true)]
-public class EventTradeGetListResponse
+public partial class EventTradeGetListResponse
 {
     [Key("user_event_trade_list")]
     public IEnumerable<AtgenUserEventTradeList> UserEventTradeList { get; set; } = [];
@@ -2875,7 +2875,7 @@ public class EventTradeGetListResponse
 }
 
 [MessagePackObject(true)]
-public class EventTradeTradeResponse
+public partial class EventTradeTradeResponse
 {
     [Key("user_event_trade_list")]
     public IEnumerable<AtgenUserEventTradeList> UserEventTradeList { get; set; } = [];
@@ -2916,7 +2916,7 @@ public class EventTradeTradeResponse
 }
 
 [MessagePackObject(true)]
-public class ExHunterEventEntryResponse
+public partial class ExHunterEventEntryResponse
 {
     [Key("ex_hunter_event_user_data")]
     public ExHunterEventUserList ExHunterEventUserData { get; set; }
@@ -2942,7 +2942,7 @@ public class ExHunterEventEntryResponse
 }
 
 [MessagePackObject(true)]
-public class ExHunterEventGetEventDataResponse
+public partial class ExHunterEventGetEventDataResponse
 {
     [Key("ex_hunter_event_user_data")]
     public ExHunterEventUserList ExHunterEventUserData { get; set; }
@@ -2973,7 +2973,7 @@ public class ExHunterEventGetEventDataResponse
 }
 
 [MessagePackObject(true)]
-public class ExHunterEventReceiveExHunterPointRewardResponse
+public partial class ExHunterEventReceiveExHunterPointRewardResponse
 {
     [Key("ex_hunter_event_reward_list")]
     public IEnumerable<BuildEventRewardList> ExHunterEventRewardList { get; set; } = [];
@@ -2999,7 +2999,7 @@ public class ExHunterEventReceiveExHunterPointRewardResponse
 }
 
 [MessagePackObject(true)]
-public class ExRushEventEntryResponse
+public partial class ExRushEventEntryResponse
 {
     [Key("ex_rush_event_user_data")]
     public ExRushEventUserList ExRushEventUserData { get; set; }
@@ -3025,7 +3025,7 @@ public class ExRushEventEntryResponse
 }
 
 [MessagePackObject(true)]
-public class ExRushEventGetEventDataResponse
+public partial class ExRushEventGetEventDataResponse
 {
     [Key("ex_rush_event_user_data")]
     public ExRushEventUserList ExRushEventUserData { get; set; }
@@ -3051,7 +3051,7 @@ public class ExRushEventGetEventDataResponse
 }
 
 [MessagePackObject(true)]
-public class ExchangeGetUnitListResponse
+public partial class ExchangeGetUnitListResponse
 {
     [Key("select_unit_list")]
     public IEnumerable<AtgenDuplicateEntityList> SelectUnitList { get; set; } = [];
@@ -3065,7 +3065,7 @@ public class ExchangeGetUnitListResponse
 }
 
 [MessagePackObject(true)]
-public class ExchangeSelectUnitResponse
+public partial class ExchangeSelectUnitResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -3083,7 +3083,7 @@ public class ExchangeSelectUnitResponse
 }
 
 [MessagePackObject(true)]
-public class FortAddCarpenterResponse
+public partial class FortAddCarpenterResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3109,7 +3109,7 @@ public class FortAddCarpenterResponse
 }
 
 [MessagePackObject(true)]
-public class FortBuildAtOnceResponse
+public partial class FortBuildAtOnceResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3160,7 +3160,7 @@ public class FortBuildAtOnceResponse
 }
 
 [MessagePackObject(true)]
-public class FortBuildCancelResponse
+public partial class FortBuildCancelResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3191,7 +3191,7 @@ public class FortBuildCancelResponse
 }
 
 [MessagePackObject(true)]
-public class FortBuildEndResponse
+public partial class FortBuildEndResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3242,7 +3242,7 @@ public class FortBuildEndResponse
 }
 
 [MessagePackObject(true)]
-public class FortBuildStartResponse
+public partial class FortBuildStartResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3293,7 +3293,7 @@ public class FortBuildStartResponse
 }
 
 [MessagePackObject(true)]
-public class FortGetDataResponse
+public partial class FortGetDataResponse
 {
     [Key("fort_detail")]
     public FortDetail FortDetail { get; set; }
@@ -3344,7 +3344,7 @@ public class FortGetDataResponse
 }
 
 [MessagePackObject(true)]
-public class FortGetMultiIncomeResponse
+public partial class FortGetMultiIncomeResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3397,7 +3397,7 @@ public class FortGetMultiIncomeResponse
 }
 
 [MessagePackObject(true)]
-public class FortLevelupAtOnceResponse
+public partial class FortLevelupAtOnceResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3458,7 +3458,7 @@ public class FortLevelupAtOnceResponse
 }
 
 [MessagePackObject(true)]
-public class FortLevelupCancelResponse
+public partial class FortLevelupCancelResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3489,7 +3489,7 @@ public class FortLevelupCancelResponse
 }
 
 [MessagePackObject(true)]
-public class FortLevelupEndResponse
+public partial class FortLevelupEndResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3550,7 +3550,7 @@ public class FortLevelupEndResponse
 }
 
 [MessagePackObject(true)]
-public class FortLevelupStartResponse
+public partial class FortLevelupStartResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3601,7 +3601,7 @@ public class FortLevelupStartResponse
 }
 
 [MessagePackObject(true)]
-public class FortMoveResponse
+public partial class FortMoveResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3647,7 +3647,7 @@ public class FortMoveResponse
 }
 
 [MessagePackObject(true)]
-public class FortSetNewFortPlantResponse
+public partial class FortSetNewFortPlantResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3665,7 +3665,7 @@ public class FortSetNewFortPlantResponse
 }
 
 [MessagePackObject(true)]
-public class FriendAllReplyDenyResponse
+public partial class FriendAllReplyDenyResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3691,7 +3691,7 @@ public class FriendAllReplyDenyResponse
 }
 
 [MessagePackObject(true)]
-public class FriendApplyListResponse
+public partial class FriendApplyListResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3717,7 +3717,7 @@ public class FriendApplyListResponse
 }
 
 [MessagePackObject(true)]
-public class FriendAutoSearchResponse
+public partial class FriendAutoSearchResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3735,7 +3735,7 @@ public class FriendAutoSearchResponse
 }
 
 [MessagePackObject(true)]
-public class FriendDeleteResponse
+public partial class FriendDeleteResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3749,7 +3749,7 @@ public class FriendDeleteResponse
 }
 
 [MessagePackObject(true)]
-public class FriendFriendIndexResponse
+public partial class FriendFriendIndexResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -3775,7 +3775,7 @@ public class FriendFriendIndexResponse
 }
 
 [MessagePackObject(true)]
-public class FriendFriendListResponse
+public partial class FriendFriendListResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3801,7 +3801,7 @@ public class FriendFriendListResponse
 }
 
 [MessagePackObject(true)]
-public class FriendGetSupportCharaDetailResponse
+public partial class FriendGetSupportCharaDetailResponse
 {
     [Key("support_user_data_detail")]
     public AtgenSupportUserDataDetail SupportUserDataDetail { get; set; }
@@ -3815,7 +3815,7 @@ public class FriendGetSupportCharaDetailResponse
 }
 
 [MessagePackObject(true)]
-public class FriendGetSupportCharaResponse
+public partial class FriendGetSupportCharaResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3833,7 +3833,7 @@ public class FriendGetSupportCharaResponse
 }
 
 [MessagePackObject(true)]
-public class FriendIdSearchResponse
+public partial class FriendIdSearchResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3851,7 +3851,7 @@ public class FriendIdSearchResponse
 }
 
 [MessagePackObject(true)]
-public class FriendReplyResponse
+public partial class FriendReplyResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3873,7 +3873,7 @@ public class FriendReplyResponse
 }
 
 [MessagePackObject(true)]
-public class FriendRequestCancelResponse
+public partial class FriendRequestCancelResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3887,7 +3887,7 @@ public class FriendRequestCancelResponse
 }
 
 [MessagePackObject(true)]
-public class FriendRequestListResponse
+public partial class FriendRequestListResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3905,7 +3905,7 @@ public class FriendRequestListResponse
 }
 
 [MessagePackObject(true)]
-public class FriendRequestResponse
+public partial class FriendRequestResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3923,7 +3923,7 @@ public class FriendRequestResponse
 }
 
 [MessagePackObject(true)]
-public class FriendSetSupportCharaResponse
+public partial class FriendSetSupportCharaResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -3949,7 +3949,7 @@ public class FriendSetSupportCharaResponse
 }
 
 [MessagePackObject(true)]
-public class GuildChatGetNewMessageListResponse
+public partial class GuildChatGetNewMessageListResponse
 {
     [Key("guild_chat_message_list")]
     public IEnumerable<GuildChatMessageList> GuildChatMessageList { get; set; } = [];
@@ -3970,7 +3970,7 @@ public class GuildChatGetNewMessageListResponse
 }
 
 [MessagePackObject(true)]
-public class GuildChatGetOldMessageListResponse
+public partial class GuildChatGetOldMessageListResponse
 {
     [Key("guild_chat_message_list")]
     public IEnumerable<GuildChatMessageList> GuildChatMessageList { get; set; } = [];
@@ -3986,7 +3986,7 @@ public class GuildChatGetOldMessageListResponse
 }
 
 [MessagePackObject(true)]
-public class GuildChatPostMessageStampResponse
+public partial class GuildChatPostMessageStampResponse
 {
     [Key("guild_chat_message_list")]
     public IEnumerable<GuildChatMessageList> GuildChatMessageList { get; set; } = [];
@@ -4007,7 +4007,7 @@ public class GuildChatPostMessageStampResponse
 }
 
 [MessagePackObject(true)]
-public class GuildChatPostMessageTextResponse
+public partial class GuildChatPostMessageTextResponse
 {
     [Key("guild_chat_message_list")]
     public IEnumerable<GuildChatMessageList> GuildChatMessageList { get; set; } = [];
@@ -4028,7 +4028,7 @@ public class GuildChatPostMessageTextResponse
 }
 
 [MessagePackObject(true)]
-public class GuildChatPostReportResponse
+public partial class GuildChatPostReportResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -4042,7 +4042,7 @@ public class GuildChatPostReportResponse
 }
 
 [MessagePackObject(true)]
-public class GuildDisbandResponse
+public partial class GuildDisbandResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -4056,7 +4056,7 @@ public class GuildDisbandResponse
 }
 
 [MessagePackObject(true)]
-public class GuildDropMemberResponse
+public partial class GuildDropMemberResponse
 {
     [Key("guild_member_list")]
     public IEnumerable<GuildMemberList> GuildMemberList { get; set; } = [];
@@ -4070,7 +4070,7 @@ public class GuildDropMemberResponse
 }
 
 [MessagePackObject(true)]
-public class GuildEstablishResponse
+public partial class GuildEstablishResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -4091,7 +4091,7 @@ public class GuildEstablishResponse
 }
 
 [MessagePackObject(true)]
-public class GuildGetGuildApplyDataResponse
+public partial class GuildGetGuildApplyDataResponse
 {
     [Key("guild_apply_list")]
     public IEnumerable<GuildApplyList> GuildApplyList { get; set; } = [];
@@ -4105,7 +4105,7 @@ public class GuildGetGuildApplyDataResponse
 }
 
 [MessagePackObject(true)]
-public class GuildGetGuildMemberDataResponse
+public partial class GuildGetGuildMemberDataResponse
 {
     [Key("guild_member_list")]
     public IEnumerable<GuildMemberList> GuildMemberList { get; set; } = [];
@@ -4119,7 +4119,7 @@ public class GuildGetGuildMemberDataResponse
 }
 
 [MessagePackObject(true)]
-public class GuildIndexResponse
+public partial class GuildIndexResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -4181,7 +4181,7 @@ public class GuildIndexResponse
 }
 
 [MessagePackObject(true)]
-public class GuildInviteGetGuildInviteReceiveDataResponse
+public partial class GuildInviteGetGuildInviteReceiveDataResponse
 {
     [Key("guild_invite_receive_list")]
     public IEnumerable<GuildInviteReceiveList> GuildInviteReceiveList { get; set; } = [];
@@ -4197,7 +4197,7 @@ public class GuildInviteGetGuildInviteReceiveDataResponse
 }
 
 [MessagePackObject(true)]
-public class GuildInviteGetGuildInviteSendDataResponse
+public partial class GuildInviteGetGuildInviteSendDataResponse
 {
     [Key("guild_invite_send_list")]
     public IEnumerable<GuildInviteSendList> GuildInviteSendList { get; set; } = [];
@@ -4213,7 +4213,7 @@ public class GuildInviteGetGuildInviteSendDataResponse
 }
 
 [MessagePackObject(true)]
-public class GuildInviteInviteCancelResponse
+public partial class GuildInviteInviteCancelResponse
 {
     [Key("guild_invite_send_list")]
     public IEnumerable<GuildInviteSendList> GuildInviteSendList { get; set; } = [];
@@ -4227,7 +4227,7 @@ public class GuildInviteInviteCancelResponse
 }
 
 [MessagePackObject(true)]
-public class GuildInviteInviteReplyAllDenyResponse
+public partial class GuildInviteInviteReplyAllDenyResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -4248,7 +4248,7 @@ public class GuildInviteInviteReplyAllDenyResponse
 }
 
 [MessagePackObject(true)]
-public class GuildInviteInviteReplyResponse
+public partial class GuildInviteInviteReplyResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -4269,7 +4269,7 @@ public class GuildInviteInviteReplyResponse
 }
 
 [MessagePackObject(true)]
-public class GuildInviteInviteSendResponse
+public partial class GuildInviteInviteSendResponse
 {
     [Key("guild_invite_send_list")]
     public IEnumerable<GuildInviteSendList> GuildInviteSendList { get; set; } = [];
@@ -4283,7 +4283,7 @@ public class GuildInviteInviteSendResponse
 }
 
 [MessagePackObject(true)]
-public class GuildJoinReplyAllDenyResponse
+public partial class GuildJoinReplyAllDenyResponse
 {
     [Key("guild_apply_list")]
     public IEnumerable<GuildApplyList> GuildApplyList { get; set; } = [];
@@ -4297,7 +4297,7 @@ public class GuildJoinReplyAllDenyResponse
 }
 
 [MessagePackObject(true)]
-public class GuildJoinReplyResponse
+public partial class GuildJoinReplyResponse
 {
     [Key("guild_member_list")]
     public IEnumerable<GuildMemberList> GuildMemberList { get; set; } = [];
@@ -4318,7 +4318,7 @@ public class GuildJoinReplyResponse
 }
 
 [MessagePackObject(true)]
-public class GuildJoinRequestCancelResponse
+public partial class GuildJoinRequestCancelResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -4332,7 +4332,7 @@ public class GuildJoinRequestCancelResponse
 }
 
 [MessagePackObject(true)]
-public class GuildJoinRequestResponse
+public partial class GuildJoinRequestResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -4346,7 +4346,7 @@ public class GuildJoinRequestResponse
 }
 
 [MessagePackObject(true)]
-public class GuildJoinResponse
+public partial class GuildJoinResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -4367,7 +4367,7 @@ public class GuildJoinResponse
 }
 
 [MessagePackObject(true)]
-public class GuildPostReportResponse
+public partial class GuildPostReportResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -4381,7 +4381,7 @@ public class GuildPostReportResponse
 }
 
 [MessagePackObject(true)]
-public class GuildResignResponse
+public partial class GuildResignResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -4395,7 +4395,7 @@ public class GuildResignResponse
 }
 
 [MessagePackObject(true)]
-public class GuildSearchAutoSearchResponse
+public partial class GuildSearchAutoSearchResponse
 {
     [Key("auto_search_guild_list")]
     public IEnumerable<GuildData> AutoSearchGuildList { get; set; } = [];
@@ -4409,7 +4409,7 @@ public class GuildSearchAutoSearchResponse
 }
 
 [MessagePackObject(true)]
-public class GuildSearchGetGuildDetailResponse
+public partial class GuildSearchGetGuildDetailResponse
 {
     [Key("search_guild_list")]
     public IEnumerable<GuildData> SearchGuildList { get; set; } = [];
@@ -4423,7 +4423,7 @@ public class GuildSearchGetGuildDetailResponse
 }
 
 [MessagePackObject(true)]
-public class GuildSearchIdSearchResponse
+public partial class GuildSearchIdSearchResponse
 {
     [Key("search_guild_list")]
     public IEnumerable<GuildData> SearchGuildList { get; set; } = [];
@@ -4437,7 +4437,7 @@ public class GuildSearchIdSearchResponse
 }
 
 [MessagePackObject(true)]
-public class GuildSearchNameSearchResponse
+public partial class GuildSearchNameSearchResponse
 {
     [Key("search_guild_list")]
     public IEnumerable<GuildData> SearchGuildList { get; set; } = [];
@@ -4451,7 +4451,7 @@ public class GuildSearchNameSearchResponse
 }
 
 [MessagePackObject(true)]
-public class GuildUpdateGuildPositionTypeResponse
+public partial class GuildUpdateGuildPositionTypeResponse
 {
     [Key("guild_member_list")]
     public IEnumerable<GuildMemberList> GuildMemberList { get; set; } = [];
@@ -4465,7 +4465,7 @@ public class GuildUpdateGuildPositionTypeResponse
 }
 
 [MessagePackObject(true)]
-public class GuildUpdateGuildSettingResponse
+public partial class GuildUpdateGuildSettingResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -4479,7 +4479,7 @@ public class GuildUpdateGuildSettingResponse
 }
 
 [MessagePackObject(true)]
-public class GuildUpdateUserSettingResponse
+public partial class GuildUpdateUserSettingResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -4493,7 +4493,7 @@ public class GuildUpdateUserSettingResponse
 }
 
 [MessagePackObject(true)]
-public class InquiryAggregationResponse
+public partial class InquiryAggregationResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -4507,7 +4507,7 @@ public class InquiryAggregationResponse
 }
 
 [MessagePackObject(true)]
-public class InquiryDetailResponse
+public partial class InquiryDetailResponse
 {
     [Key("opinion_id")]
     public string OpinionId { get; set; }
@@ -4548,13 +4548,13 @@ public class InquiryDetailResponse
 }
 
 [MessagePackObject(true)]
-public class InquiryReplyResponse { }
+public partial class InquiryReplyResponse { }
 
 [MessagePackObject(true)]
-public class InquirySendResponse { }
+public partial class InquirySendResponse { }
 
 [MessagePackObject(true)]
-public class InquiryTopResponse
+public partial class InquiryTopResponse
 {
     [Key("opinion_list")]
     public IEnumerable<AtgenOpinionList> OpinionList { get; set; } = [];
@@ -4580,7 +4580,7 @@ public class InquiryTopResponse
 }
 
 [MessagePackObject(true)]
-public class ItemGetListResponse
+public partial class ItemGetListResponse
 {
     [Key("item_list")]
     public IEnumerable<ItemList> ItemList { get; set; } = [];
@@ -4594,7 +4594,7 @@ public class ItemGetListResponse
 }
 
 [MessagePackObject(true)]
-public class ItemUseRecoveryStaminaResponse
+public partial class ItemUseRecoveryStaminaResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -4620,7 +4620,7 @@ public class ItemUseRecoveryStaminaResponse
 }
 
 [MessagePackObject(true)]
-public class LoadIndexResponse
+public partial class LoadIndexResponse
 {
     [Key("user_data")]
     public UserData UserData { get; set; }
@@ -4662,7 +4662,7 @@ public class LoadIndexResponse
     public IEnumerable<WeaponSkinList> WeaponSkinList { get; set; } = [];
 
     [Key("weapon_body_list")]
-    public WeaponBodies WeaponBodyList { get; set; }
+    public IEnumerable<WeaponBodyList> WeaponBodyList { get; set; } = [];
 
     [Key("weapon_passive_ability_list")]
     public IEnumerable<WeaponPassiveAbilityList> WeaponPassiveAbilityList { get; set; } = [];
@@ -4819,7 +4819,7 @@ public class LoadIndexResponse
         IEnumerable<AlbumWeaponList> albumWeaponList,
         IEnumerable<AmuletList> amuletList,
         IEnumerable<WeaponSkinList> weaponSkinList,
-        WeaponBodies weaponBodyList,
+        IEnumerable<WeaponBodyList> weaponBodyList,
         IEnumerable<WeaponPassiveAbilityList> weaponPassiveAbilityList,
         IEnumerable<AbilityCrestList> abilityCrestList,
         IEnumerable<TalismanList> talismanList,
@@ -4936,7 +4936,7 @@ public class LoadIndexResponse
 }
 
 [MessagePackObject(true)]
-public class LoginIndexResponse
+public partial class LoginIndexResponse
 {
     [Key("login_bonus_list")]
     public IEnumerable<AtgenLoginBonusList> LoginBonusList { get; set; } = [];
@@ -5002,7 +5002,7 @@ public class LoginIndexResponse
 }
 
 [MessagePackObject(true)]
-public class LoginPenaltyConfirmResponse
+public partial class LoginPenaltyConfirmResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -5020,10 +5020,10 @@ public class LoginPenaltyConfirmResponse
 }
 
 [MessagePackObject(true)]
-public class LoginVerifyJwsResponse { }
+public partial class LoginVerifyJwsResponse { }
 
 [MessagePackObject(true)]
-public class LotteryGetOddsDataResponse
+public partial class LotteryGetOddsDataResponse
 {
     [Key("lottery_odds_rate_list")]
     public LotteryOddsRateList LotteryOddsRateList { get; set; }
@@ -5037,7 +5037,7 @@ public class LotteryGetOddsDataResponse
 }
 
 [MessagePackObject(true)]
-public class LotteryLotteryExecResponse
+public partial class LotteryLotteryExecResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -5063,7 +5063,7 @@ public class LotteryLotteryExecResponse
 }
 
 [MessagePackObject(true)]
-public class LotteryResultResponse
+public partial class LotteryResultResponse
 {
     [Key("lottery_result_list")]
     public IEnumerable<AtgenLotteryResultList> LotteryResultList { get; set; } = [];
@@ -5077,7 +5077,7 @@ public class LotteryResultResponse
 }
 
 [MessagePackObject(true)]
-public class MaintenanceGetTextResponse
+public partial class MaintenanceGetTextResponse
 {
     [Key("maintenance_text")]
     public string MaintenanceText { get; set; }
@@ -5091,7 +5091,7 @@ public class MaintenanceGetTextResponse
 }
 
 [MessagePackObject(true)]
-public class MatchingCheckPenaltyUserResponse
+public partial class MatchingCheckPenaltyUserResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -5105,7 +5105,7 @@ public class MatchingCheckPenaltyUserResponse
 }
 
 [MessagePackObject(true)]
-public class MatchingGetRoomListByGuildResponse
+public partial class MatchingGetRoomListByGuildResponse
 {
     [Key("room_list")]
     public IEnumerable<RoomList> RoomList { get; set; } = [];
@@ -5119,7 +5119,7 @@ public class MatchingGetRoomListByGuildResponse
 }
 
 [MessagePackObject(true)]
-public class MatchingGetRoomListByLocationResponse
+public partial class MatchingGetRoomListByLocationResponse
 {
     [Key("room_list")]
     public IEnumerable<RoomList> RoomList { get; set; } = [];
@@ -5133,7 +5133,7 @@ public class MatchingGetRoomListByLocationResponse
 }
 
 [MessagePackObject(true)]
-public class MatchingGetRoomListByQuestIdResponse
+public partial class MatchingGetRoomListByQuestIdResponse
 {
     [Key("room_list")]
     public IEnumerable<RoomList> RoomList { get; set; } = [];
@@ -5147,7 +5147,7 @@ public class MatchingGetRoomListByQuestIdResponse
 }
 
 [MessagePackObject(true)]
-public class MatchingGetRoomListResponse
+public partial class MatchingGetRoomListResponse
 {
     [Key("room_list")]
     public IEnumerable<RoomList> RoomList { get; set; } = [];
@@ -5178,7 +5178,7 @@ public class MatchingGetRoomListResponse
 }
 
 [MessagePackObject(true)]
-public class MatchingGetRoomNameResponse
+public partial class MatchingGetRoomNameResponse
 {
     [Key("room_name")]
     public string RoomName { get; set; }
@@ -5215,7 +5215,7 @@ public class MatchingGetRoomNameResponse
 }
 
 [MessagePackObject(true)]
-public class MazeEventEntryResponse
+public partial class MazeEventEntryResponse
 {
     [Key("maze_event_user_data")]
     public MazeEventUserList MazeEventUserData { get; set; }
@@ -5229,7 +5229,7 @@ public class MazeEventEntryResponse
 }
 
 [MessagePackObject(true)]
-public class MazeEventGetEventDataResponse
+public partial class MazeEventGetEventDataResponse
 {
     [Key("maze_event_user_data")]
     public MazeEventUserList MazeEventUserData { get; set; }
@@ -5255,7 +5255,7 @@ public class MazeEventGetEventDataResponse
 }
 
 [MessagePackObject(true)]
-public class MazeEventReceiveMazePointRewardResponse
+public partial class MazeEventReceiveMazePointRewardResponse
 {
     [Key("maze_event_reward_list")]
     public IEnumerable<BuildEventRewardList> MazeEventRewardList { get; set; } = [];
@@ -5287,7 +5287,7 @@ public class MazeEventReceiveMazePointRewardResponse
 }
 
 [MessagePackObject(true)]
-public class MemoryEventActivateResponse
+public partial class MemoryEventActivateResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -5313,7 +5313,7 @@ public class MemoryEventActivateResponse
 }
 
 [MessagePackObject(true)]
-public class MissionGetDrillMissionListResponse
+public partial class MissionGetDrillMissionListResponse
 {
     [Key("drill_mission_list")]
     public IEnumerable<DrillMissionList> DrillMissionList { get; set; } = [];
@@ -5339,7 +5339,7 @@ public class MissionGetDrillMissionListResponse
 }
 
 [MessagePackObject(true)]
-public class MissionGetMissionListResponse
+public partial class MissionGetMissionListResponse
 {
     [Key("normal_mission_list")]
     public IEnumerable<NormalMissionList> NormalMissionList { get; set; } = [];
@@ -5405,7 +5405,7 @@ public class MissionGetMissionListResponse
 }
 
 [MessagePackObject(true)]
-public class MissionReceiveAlbumRewardResponse
+public partial class MissionReceiveAlbumRewardResponse
 {
     [Key("normal_mission_list")]
     public IEnumerable<NormalMissionList> NormalMissionList { get; set; } = [];
@@ -5481,7 +5481,7 @@ public class MissionReceiveAlbumRewardResponse
 }
 
 [MessagePackObject(true)]
-public class MissionReceiveBeginnerRewardResponse
+public partial class MissionReceiveBeginnerRewardResponse
 {
     [Key("normal_mission_list")]
     public IEnumerable<NormalMissionList> NormalMissionList { get; set; } = [];
@@ -5557,7 +5557,7 @@ public class MissionReceiveBeginnerRewardResponse
 }
 
 [MessagePackObject(true)]
-public class MissionReceiveDailyRewardResponse
+public partial class MissionReceiveDailyRewardResponse
 {
     [Key("normal_mission_list")]
     public IEnumerable<NormalMissionList> NormalMissionList { get; set; } = [];
@@ -5634,7 +5634,7 @@ public class MissionReceiveDailyRewardResponse
 }
 
 [MessagePackObject(true)]
-public class MissionReceiveDrillRewardResponse
+public partial class MissionReceiveDrillRewardResponse
 {
     [Key("drill_mission_list")]
     public IEnumerable<DrillMissionList> DrillMissionList { get; set; } = [];
@@ -5686,7 +5686,7 @@ public class MissionReceiveDrillRewardResponse
 }
 
 [MessagePackObject(true)]
-public class MissionReceiveMainStoryRewardResponse
+public partial class MissionReceiveMainStoryRewardResponse
 {
     [Key("normal_mission_list")]
     public IEnumerable<NormalMissionList> NormalMissionList { get; set; } = [];
@@ -5762,7 +5762,7 @@ public class MissionReceiveMainStoryRewardResponse
 }
 
 [MessagePackObject(true)]
-public class MissionReceiveMemoryEventRewardResponse
+public partial class MissionReceiveMemoryEventRewardResponse
 {
     [Key("normal_mission_list")]
     public IEnumerable<NormalMissionList> NormalMissionList { get; set; } = [];
@@ -5838,7 +5838,7 @@ public class MissionReceiveMemoryEventRewardResponse
 }
 
 [MessagePackObject(true)]
-public class MissionReceiveNormalRewardResponse
+public partial class MissionReceiveNormalRewardResponse
 {
     [Key("normal_mission_list")]
     public IEnumerable<NormalMissionList> NormalMissionList { get; set; } = [];
@@ -5914,7 +5914,7 @@ public class MissionReceiveNormalRewardResponse
 }
 
 [MessagePackObject(true)]
-public class MissionReceivePeriodRewardResponse
+public partial class MissionReceivePeriodRewardResponse
 {
     [Key("normal_mission_list")]
     public IEnumerable<NormalMissionList> NormalMissionList { get; set; } = [];
@@ -5990,7 +5990,7 @@ public class MissionReceivePeriodRewardResponse
 }
 
 [MessagePackObject(true)]
-public class MissionReceiveSpecialRewardResponse
+public partial class MissionReceiveSpecialRewardResponse
 {
     [Key("normal_mission_list")]
     public IEnumerable<NormalMissionList> NormalMissionList { get; set; } = [];
@@ -6066,7 +6066,7 @@ public class MissionReceiveSpecialRewardResponse
 }
 
 [MessagePackObject(true)]
-public class MissionUnlockDrillMissionGroupResponse
+public partial class MissionUnlockDrillMissionGroupResponse
 {
     [Key("drill_mission_list")]
     public IEnumerable<DrillMissionList> DrillMissionList { get; set; } = [];
@@ -6092,7 +6092,7 @@ public class MissionUnlockDrillMissionGroupResponse
 }
 
 [MessagePackObject(true)]
-public class MissionUnlockMainStoryGroupResponse
+public partial class MissionUnlockMainStoryGroupResponse
 {
     [Key("main_story_mission_list")]
     public IEnumerable<MainStoryMissionList> MainStoryMissionList { get; set; } = [];
@@ -6119,7 +6119,7 @@ public class MissionUnlockMainStoryGroupResponse
 }
 
 [MessagePackObject(true)]
-public class MypageInfoResponse
+public partial class MypageInfoResponse
 {
     [Key("present_cnt")]
     public int PresentCnt { get; set; }
@@ -6200,7 +6200,7 @@ public class MypageInfoResponse
 }
 
 [MessagePackObject(true)]
-public class OptionGetOptionResponse
+public partial class OptionGetOptionResponse
 {
     [Key("option_data")]
     public OptionData OptionData { get; set; }
@@ -6214,7 +6214,7 @@ public class OptionGetOptionResponse
 }
 
 [MessagePackObject(true)]
-public class OptionSetOptionResponse
+public partial class OptionSetOptionResponse
 {
     [Key("option_data")]
     public OptionData OptionData { get; set; }
@@ -6228,7 +6228,7 @@ public class OptionSetOptionResponse
 }
 
 [MessagePackObject(true)]
-public class PartyIndexResponse
+public partial class PartyIndexResponse
 {
     [Key("build_list")]
     public IEnumerable<BuildList> BuildList { get; set; } = [];
@@ -6242,7 +6242,7 @@ public class PartyIndexResponse
 }
 
 [MessagePackObject(true)]
-public class PartySetMainPartyNoResponse
+public partial class PartySetMainPartyNoResponse
 {
     [Key("main_party_no")]
     public int MainPartyNo { get; set; }
@@ -6256,7 +6256,7 @@ public class PartySetMainPartyNoResponse
 }
 
 [MessagePackObject(true)]
-public class PartySetPartySettingResponse
+public partial class PartySetPartySettingResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -6274,7 +6274,7 @@ public class PartySetPartySettingResponse
 }
 
 [MessagePackObject(true)]
-public class PartyUpdatePartyNameResponse
+public partial class PartyUpdatePartyNameResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -6292,7 +6292,7 @@ public class PartyUpdatePartyNameResponse
 }
 
 [MessagePackObject(true)]
-public class PlatformAchievementGetPlatformAchievementListResponse
+public partial class PlatformAchievementGetPlatformAchievementListResponse
 {
     [Key("achievement_list")]
     public IEnumerable<AchievementList> AchievementList { get; set; } = [];
@@ -6308,7 +6308,7 @@ public class PlatformAchievementGetPlatformAchievementListResponse
 }
 
 [MessagePackObject(true)]
-public class PresentGetHistoryListResponse
+public partial class PresentGetHistoryListResponse
 {
     [Key("present_history_list")]
     public IEnumerable<PresentHistoryList> PresentHistoryList { get; set; } = [];
@@ -6322,7 +6322,7 @@ public class PresentGetHistoryListResponse
 }
 
 [MessagePackObject(true)]
-public class PresentGetPresentListResponse
+public partial class PresentGetPresentListResponse
 {
     [Key("present_list")]
     public IEnumerable<PresentDetailList> PresentList { get; set; } = [];
@@ -6353,7 +6353,7 @@ public class PresentGetPresentListResponse
 }
 
 [MessagePackObject(true)]
-public class PresentReceiveResponse
+public partial class PresentReceiveResponse
 {
     [Key("receive_present_id_list")]
     public IEnumerable<ulong> ReceivePresentIdList { get; set; } = [];
@@ -6409,7 +6409,7 @@ public class PresentReceiveResponse
 }
 
 [MessagePackObject(true)]
-public class PushNotificationUpdateSettingResponse
+public partial class PushNotificationUpdateSettingResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -6423,7 +6423,7 @@ public class PushNotificationUpdateSettingResponse
 }
 
 [MessagePackObject(true)]
-public class QuestDropListResponse
+public partial class QuestDropListResponse
 {
     [Key("quest_drop_info")]
     public AtgenQuestDropInfo QuestDropInfo { get; set; }
@@ -6437,7 +6437,7 @@ public class QuestDropListResponse
 }
 
 [MessagePackObject(true)]
-public class QuestGetQuestClearPartyMultiResponse
+public partial class QuestGetQuestClearPartyMultiResponse
 {
     [Key("quest_multi_clear_party_setting_list")]
     public IEnumerable<PartySettingList> QuestMultiClearPartySettingList { get; set; } = [];
@@ -6458,7 +6458,7 @@ public class QuestGetQuestClearPartyMultiResponse
 }
 
 [MessagePackObject(true)]
-public class QuestGetQuestClearPartyResponse
+public partial class QuestGetQuestClearPartyResponse
 {
     [Key("quest_clear_party_setting_list")]
     public IEnumerable<PartySettingList> QuestClearPartySettingList { get; set; } = [];
@@ -6479,7 +6479,7 @@ public class QuestGetQuestClearPartyResponse
 }
 
 [MessagePackObject(true)]
-public class QuestGetSupportUserListResponse
+public partial class QuestGetSupportUserListResponse
 {
     [Key("support_user_list")]
     public IEnumerable<UserSupportList> SupportUserList { get; set; } = [];
@@ -6500,7 +6500,7 @@ public class QuestGetSupportUserListResponse
 }
 
 [MessagePackObject(true)]
-public class QuestOpenTreasureResponse
+public partial class QuestOpenTreasureResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -6546,7 +6546,7 @@ public class QuestOpenTreasureResponse
 }
 
 [MessagePackObject(true)]
-public class QuestReadStoryResponse
+public partial class QuestReadStoryResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -6577,7 +6577,7 @@ public class QuestReadStoryResponse
 }
 
 [MessagePackObject(true)]
-public class QuestSearchQuestClearPartyCharaMultiResponse
+public partial class QuestSearchQuestClearPartyCharaMultiResponse
 {
     [Key("search_quest_clear_party_chara_list")]
     public IEnumerable<SearchClearPartyCharaList> SearchQuestClearPartyCharaList { get; set; } = [];
@@ -6593,7 +6593,7 @@ public class QuestSearchQuestClearPartyCharaMultiResponse
 }
 
 [MessagePackObject(true)]
-public class QuestSearchQuestClearPartyCharaResponse
+public partial class QuestSearchQuestClearPartyCharaResponse
 {
     [Key("search_quest_clear_party_chara_list")]
     public IEnumerable<SearchClearPartyCharaList> SearchQuestClearPartyCharaList { get; set; } = [];
@@ -6609,7 +6609,7 @@ public class QuestSearchQuestClearPartyCharaResponse
 }
 
 [MessagePackObject(true)]
-public class QuestSearchQuestClearPartyMultiResponse
+public partial class QuestSearchQuestClearPartyMultiResponse
 {
     [Key("search_quest_clear_party_list")]
     public IEnumerable<SearchClearPartyList> SearchQuestClearPartyList { get; set; } = [];
@@ -6625,7 +6625,7 @@ public class QuestSearchQuestClearPartyMultiResponse
 }
 
 [MessagePackObject(true)]
-public class QuestSearchQuestClearPartyResponse
+public partial class QuestSearchQuestClearPartyResponse
 {
     [Key("search_quest_clear_party_list")]
     public IEnumerable<SearchClearPartyList> SearchQuestClearPartyList { get; set; } = [];
@@ -6641,7 +6641,7 @@ public class QuestSearchQuestClearPartyResponse
 }
 
 [MessagePackObject(true)]
-public class QuestSetQuestClearPartyMultiResponse
+public partial class QuestSetQuestClearPartyMultiResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -6655,7 +6655,7 @@ public class QuestSetQuestClearPartyMultiResponse
 }
 
 [MessagePackObject(true)]
-public class QuestSetQuestClearPartyResponse
+public partial class QuestSetQuestClearPartyResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -6669,7 +6669,7 @@ public class QuestSetQuestClearPartyResponse
 }
 
 [MessagePackObject(true)]
-public class RaidEventEntryResponse
+public partial class RaidEventEntryResponse
 {
     [Key("raid_event_user_data")]
     public RaidEventUserList RaidEventUserData { get; set; }
@@ -6695,7 +6695,7 @@ public class RaidEventEntryResponse
 }
 
 [MessagePackObject(true)]
-public class RaidEventGetEventDataResponse
+public partial class RaidEventGetEventDataResponse
 {
     [Key("raid_event_user_data")]
     public RaidEventUserList RaidEventUserData { get; set; }
@@ -6747,7 +6747,7 @@ public class RaidEventGetEventDataResponse
 }
 
 [MessagePackObject(true)]
-public class RaidEventReceiveRaidPointRewardResponse
+public partial class RaidEventReceiveRaidPointRewardResponse
 {
     [Key("raid_event_reward_list")]
     public IEnumerable<RaidEventRewardList> RaidEventRewardList { get; set; } = [];
@@ -6773,7 +6773,7 @@ public class RaidEventReceiveRaidPointRewardResponse
 }
 
 [MessagePackObject(true)]
-public class RedoableSummonFixExecResponse
+public partial class RedoableSummonFixExecResponse
 {
     [Key("user_redoable_summon_data")]
     public UserRedoableSummonData UserRedoableSummonData { get; set; }
@@ -6799,7 +6799,7 @@ public class RedoableSummonFixExecResponse
 }
 
 [MessagePackObject(true)]
-public class RedoableSummonGetDataResponse
+public partial class RedoableSummonGetDataResponse
 {
     [Key("user_redoable_summon_data")]
     public UserRedoableSummonData UserRedoableSummonData { get; set; }
@@ -6820,7 +6820,7 @@ public class RedoableSummonGetDataResponse
 }
 
 [MessagePackObject(true)]
-public class RedoableSummonPreExecResponse
+public partial class RedoableSummonPreExecResponse
 {
     [Key("user_redoable_summon_data")]
     public UserRedoableSummonData UserRedoableSummonData { get; set; }
@@ -6834,7 +6834,7 @@ public class RedoableSummonPreExecResponse
 }
 
 [MessagePackObject(true)]
-public class RepeatEndResponse
+public partial class RepeatEndResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -6865,7 +6865,7 @@ public class RepeatEndResponse
 }
 
 [MessagePackObject(true)]
-public class ShopChargeCancelResponse
+public partial class ShopChargeCancelResponse
 {
     [Key("is_quest_bonus")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
@@ -6949,7 +6949,7 @@ public class ShopChargeCancelResponse
 }
 
 [MessagePackObject(true)]
-public class ShopGetBonusResponse
+public partial class ShopGetBonusResponse
 {
     [Key("is_quest_bonus")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
@@ -7003,7 +7003,7 @@ public class ShopGetBonusResponse
 }
 
 [MessagePackObject(true)]
-public class ShopGetDreamSelectUnitListResponse
+public partial class ShopGetDreamSelectUnitListResponse
 {
     [Key("dream_select_unit_list")]
     public IEnumerable<AtgenDuplicateEntityList> DreamSelectUnitList { get; set; } = [];
@@ -7019,7 +7019,7 @@ public class ShopGetDreamSelectUnitListResponse
 }
 
 [MessagePackObject(true)]
-public class ShopGetListResponse
+public partial class ShopGetListResponse
 {
     [Key("is_quest_bonus")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
@@ -7103,7 +7103,7 @@ public class ShopGetListResponse
 }
 
 [MessagePackObject(true)]
-public class ShopGetProductListResponse
+public partial class ShopGetProductListResponse
 {
     [Key("product_list")]
     public IEnumerable<ProductList> ProductList { get; set; } = [];
@@ -7129,7 +7129,7 @@ public class ShopGetProductListResponse
 }
 
 [MessagePackObject(true)]
-public class ShopItemSummonExecResponse
+public partial class ShopItemSummonExecResponse
 {
     [Key("user_item_summon")]
     public AtgenUserItemSummon UserItemSummon { get; set; }
@@ -7160,7 +7160,7 @@ public class ShopItemSummonExecResponse
 }
 
 [MessagePackObject(true)]
-public class ShopItemSummonOddResponse
+public partial class ShopItemSummonOddResponse
 {
     [Key("item_summon_rate_list")]
     public IEnumerable<AtgenItemSummonRateList> ItemSummonRateList { get; set; } = [];
@@ -7174,7 +7174,7 @@ public class ShopItemSummonOddResponse
 }
 
 [MessagePackObject(true)]
-public class ShopMaterialShopPurchaseResponse
+public partial class ShopMaterialShopPurchaseResponse
 {
     [Key("is_quest_bonus")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
@@ -7213,7 +7213,7 @@ public class ShopMaterialShopPurchaseResponse
 }
 
 [MessagePackObject(true)]
-public class ShopNormalShopPurchaseResponse
+public partial class ShopNormalShopPurchaseResponse
 {
     [Key("is_quest_bonus")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
@@ -7252,7 +7252,7 @@ public class ShopNormalShopPurchaseResponse
 }
 
 [MessagePackObject(true)]
-public class ShopPreChargeCheckResponse
+public partial class ShopPreChargeCheckResponse
 {
     [Key("is_quest_bonus")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
@@ -7342,7 +7342,7 @@ public class ShopPreChargeCheckResponse
 }
 
 [MessagePackObject(true)]
-public class ShopSpecialShopPurchaseResponse
+public partial class ShopSpecialShopPurchaseResponse
 {
     [Key("is_quest_bonus")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
@@ -7396,7 +7396,7 @@ public class ShopSpecialShopPurchaseResponse
 }
 
 [MessagePackObject(true)]
-public class SimpleEventEntryResponse
+public partial class SimpleEventEntryResponse
 {
     [Key("simple_event_user_data")]
     public SimpleEventUserList SimpleEventUserData { get; set; }
@@ -7422,7 +7422,7 @@ public class SimpleEventEntryResponse
 }
 
 [MessagePackObject(true)]
-public class SimpleEventGetEventDataResponse
+public partial class SimpleEventGetEventDataResponse
 {
     [Key("simple_event_user_data")]
     public SimpleEventUserList SimpleEventUserData { get; set; }
@@ -7443,7 +7443,7 @@ public class SimpleEventGetEventDataResponse
 }
 
 [MessagePackObject(true)]
-public class StampGetStampResponse
+public partial class StampGetStampResponse
 {
     [Key("stamp_list")]
     public IEnumerable<StampList> StampList { get; set; } = [];
@@ -7457,7 +7457,7 @@ public class StampGetStampResponse
 }
 
 [MessagePackObject(true)]
-public class StampSetEquipStampResponse
+public partial class StampSetEquipStampResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -7475,7 +7475,7 @@ public class StampSetEquipStampResponse
 }
 
 [MessagePackObject(true)]
-public class StoryReadResponse
+public partial class StoryReadResponse
 {
     [Key("unit_story_reward_list")]
     public IEnumerable<AtgenBuildEventRewardEntityList> UnitStoryRewardList { get; set; } = [];
@@ -7506,7 +7506,7 @@ public class StoryReadResponse
 }
 
 [MessagePackObject(true)]
-public class StorySkipSkipResponse
+public partial class StorySkipSkipResponse
 {
     [Key("result_state")]
     public int ResultState { get; set; }
@@ -7520,7 +7520,7 @@ public class StorySkipSkipResponse
 }
 
 [MessagePackObject(true)]
-public class SuggestionGetCategoryListResponse
+public partial class SuggestionGetCategoryListResponse
 {
     [Key("category_list")]
     public IEnumerable<AtgenCategoryList> CategoryList { get; set; } = [];
@@ -7534,10 +7534,10 @@ public class SuggestionGetCategoryListResponse
 }
 
 [MessagePackObject(true)]
-public class SuggestionSetResponse { }
+public partial class SuggestionSetResponse { }
 
 [MessagePackObject(true)]
-public class SummonExcludeGetListResponse
+public partial class SummonExcludeGetListResponse
 {
     [Key("summon_exclude_unit_list")]
     public IEnumerable<AtgenDuplicateEntityList> SummonExcludeUnitList { get; set; } = [];
@@ -7551,7 +7551,7 @@ public class SummonExcludeGetListResponse
 }
 
 [MessagePackObject(true)]
-public class SummonExcludeGetOddsDataResponse
+public partial class SummonExcludeGetOddsDataResponse
 {
     [Key("odds_rate_list")]
     public OddsRateList OddsRateList { get; set; }
@@ -7572,7 +7572,7 @@ public class SummonExcludeGetOddsDataResponse
 }
 
 [MessagePackObject(true)]
-public class SummonExcludeRequestResponse
+public partial class SummonExcludeRequestResponse
 {
     [Key("result_unit_list")]
     public IEnumerable<AtgenResultUnitList> ResultUnitList { get; set; } = [];
@@ -7628,7 +7628,7 @@ public class SummonExcludeRequestResponse
 }
 
 [MessagePackObject(true)]
-public class SummonGetOddsDataResponse
+public partial class SummonGetOddsDataResponse
 {
     [Key("odds_rate_list")]
     public OddsRateList OddsRateList { get; set; }
@@ -7649,7 +7649,7 @@ public class SummonGetOddsDataResponse
 }
 
 [MessagePackObject(true)]
-public class SummonGetSummonHistoryResponse
+public partial class SummonGetSummonHistoryResponse
 {
     [Key("summon_history_list")]
     public IEnumerable<SummonHistoryList> SummonHistoryList { get; set; } = [];
@@ -7663,7 +7663,7 @@ public class SummonGetSummonHistoryResponse
 }
 
 [MessagePackObject(true)]
-public class SummonGetSummonListResponse
+public partial class SummonGetSummonListResponse
 {
     [Key("summon_list")]
     public IEnumerable<SummonList> SummonList { get; set; } = [];
@@ -7734,7 +7734,7 @@ public class SummonGetSummonListResponse
 }
 
 [MessagePackObject(true)]
-public class SummonGetSummonPointTradeResponse
+public partial class SummonGetSummonPointTradeResponse
 {
     [Key("summon_point_trade_list")]
     public IEnumerable<AtgenSummonPointTradeList> SummonPointTradeList { get; set; } = [];
@@ -7765,7 +7765,7 @@ public class SummonGetSummonPointTradeResponse
 }
 
 [MessagePackObject(true)]
-public class SummonRequestResponse
+public partial class SummonRequestResponse
 {
     [Key("result_unit_list")]
     public IEnumerable<AtgenResultUnitList> ResultUnitList { get; set; } = [];
@@ -7821,7 +7821,7 @@ public class SummonRequestResponse
 }
 
 [MessagePackObject(true)]
-public class SummonSummonPointTradeResponse
+public partial class SummonSummonPointTradeResponse
 {
     [Key("exchange_entity_list")]
     public IEnumerable<AtgenBuildEventRewardEntityList> ExchangeEntityList { get; set; } = [];
@@ -7842,7 +7842,7 @@ public class SummonSummonPointTradeResponse
 }
 
 [MessagePackObject(true)]
-public class TalismanSellResponse
+public partial class TalismanSellResponse
 {
     [Key("delete_data_list")]
     public DeleteDataList DeleteDataList { get; set; }
@@ -7868,7 +7868,7 @@ public class TalismanSellResponse
 }
 
 [MessagePackObject(true)]
-public class TalismanSetLockResponse
+public partial class TalismanSetLockResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -7886,7 +7886,7 @@ public class TalismanSetLockResponse
 }
 
 [MessagePackObject(true)]
-public class TimeAttackRankingGetDataResponse
+public partial class TimeAttackRankingGetDataResponse
 {
     [Key("ranking_tier_reward_list")]
     public IEnumerable<RankingTierRewardList> RankingTierRewardList { get; set; } = [];
@@ -7902,7 +7902,7 @@ public class TimeAttackRankingGetDataResponse
 }
 
 [MessagePackObject(true)]
-public class TimeAttackRankingReceiveTierRewardResponse
+public partial class TimeAttackRankingReceiveTierRewardResponse
 {
     [Key("ranking_tier_reward_list")]
     public IEnumerable<RankingTierRewardList> RankingTierRewardList { get; set; } = [];
@@ -7934,7 +7934,7 @@ public class TimeAttackRankingReceiveTierRewardResponse
 }
 
 [MessagePackObject(true)]
-public class ToolAuthResponse
+public partial class ToolAuthResponse
 {
     [Key("viewer_id")]
     public ulong ViewerId { get; set; }
@@ -7956,7 +7956,7 @@ public class ToolAuthResponse
 }
 
 [MessagePackObject(true)]
-public class ToolGetMaintenanceTimeResponse
+public partial class ToolGetMaintenanceTimeResponse
 {
     [Key("maintenance_start_time")]
     public DateTimeOffset MaintenanceStartTime { get; set; }
@@ -7977,7 +7977,7 @@ public class ToolGetMaintenanceTimeResponse
 }
 
 [MessagePackObject(true)]
-public class ToolGetServiceStatusResponse
+public partial class ToolGetServiceStatusResponse
 {
     [Key("service_status")]
     public int ServiceStatus { get; set; }
@@ -7991,7 +7991,7 @@ public class ToolGetServiceStatusResponse
 }
 
 [MessagePackObject(true)]
-public class ToolReauthResponse
+public partial class ToolReauthResponse
 {
     [Key("viewer_id")]
     public ulong ViewerId { get; set; }
@@ -8013,7 +8013,7 @@ public class ToolReauthResponse
 }
 
 [MessagePackObject(true)]
-public class ToolSignupResponse
+public partial class ToolSignupResponse
 {
     [Key("viewer_id")]
     public ulong ViewerId { get; set; }
@@ -8031,7 +8031,7 @@ public class ToolSignupResponse
 }
 
 [MessagePackObject(true)]
-public class TrackRecordUpdateProgressResponse
+public partial class TrackRecordUpdateProgressResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -8045,7 +8045,7 @@ public class TrackRecordUpdateProgressResponse
 }
 
 [MessagePackObject(true)]
-public class TransitionTransitionByNAccountResponse
+public partial class TransitionTransitionByNAccountResponse
 {
     [Key("transition_result_data")]
     public AtgenTransitionResultData TransitionResultData { get; set; }
@@ -8059,7 +8059,7 @@ public class TransitionTransitionByNAccountResponse
 }
 
 [MessagePackObject(true)]
-public class TreasureTradeGetListAllResponse
+public partial class TreasureTradeGetListAllResponse
 {
     [Key("user_treasure_trade_list")]
     public IEnumerable<UserTreasureTradeList> UserTreasureTradeList { get; set; } = [];
@@ -8090,7 +8090,7 @@ public class TreasureTradeGetListAllResponse
 }
 
 [MessagePackObject(true)]
-public class TreasureTradeGetListResponse
+public partial class TreasureTradeGetListResponse
 {
     [Key("user_treasure_trade_list")]
     public IEnumerable<UserTreasureTradeList> UserTreasureTradeList { get; set; } = [];
@@ -8121,7 +8121,7 @@ public class TreasureTradeGetListResponse
 }
 
 [MessagePackObject(true)]
-public class TreasureTradeTradeResponse
+public partial class TreasureTradeTradeResponse
 {
     [Key("user_treasure_trade_list")]
     public IEnumerable<UserTreasureTradeList> UserTreasureTradeList { get; set; } = [];
@@ -8162,7 +8162,7 @@ public class TreasureTradeTradeResponse
 }
 
 [MessagePackObject(true)]
-public class TutorialUpdateFlagsResponse
+public partial class TutorialUpdateFlagsResponse
 {
     [Key("tutorial_flag_list")]
     public IEnumerable<int> TutorialFlagList { get; set; } = [];
@@ -8188,7 +8188,7 @@ public class TutorialUpdateFlagsResponse
 }
 
 [MessagePackObject(true)]
-public class TutorialUpdateStepResponse
+public partial class TutorialUpdateStepResponse
 {
     [Key("step")]
     public int Step { get; set; }
@@ -8214,7 +8214,7 @@ public class TutorialUpdateStepResponse
 }
 
 [MessagePackObject(true)]
-public class UpdateNamechangeResponse
+public partial class UpdateNamechangeResponse
 {
     [Key("checked_name")]
     public string CheckedName { get; set; }
@@ -8228,7 +8228,7 @@ public class UpdateNamechangeResponse
 }
 
 [MessagePackObject(true)]
-public class UpdateResetNewResponse
+public partial class UpdateResetNewResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -8242,7 +8242,7 @@ public class UpdateResetNewResponse
 }
 
 [MessagePackObject(true)]
-public class UserGetNAccountInfoResponse
+public partial class UserGetNAccountInfoResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -8263,7 +8263,7 @@ public class UserGetNAccountInfoResponse
 }
 
 [MessagePackObject(true)]
-public class UserGetWalletBalanceResponse
+public partial class UserGetWalletBalanceResponse
 {
     [Key("wallet_balance")]
     public WalletBalance WalletBalance { get; set; }
@@ -8277,7 +8277,7 @@ public class UserGetWalletBalanceResponse
 }
 
 [MessagePackObject(true)]
-public class UserLinkedNAccountResponse
+public partial class UserLinkedNAccountResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -8291,7 +8291,7 @@ public class UserLinkedNAccountResponse
 }
 
 [MessagePackObject(true)]
-public class UserOptInSettingResponse
+public partial class UserOptInSettingResponse
 {
     [Key("is_optin")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
@@ -8306,7 +8306,7 @@ public class UserOptInSettingResponse
 }
 
 [MessagePackObject(true)]
-public class UserRecoverStaminaByStoneResponse
+public partial class UserRecoverStaminaByStoneResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -8332,7 +8332,7 @@ public class UserRecoverStaminaByStoneResponse
 }
 
 [MessagePackObject(true)]
-public class UserWithdrawalResponse
+public partial class UserWithdrawalResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -8346,7 +8346,7 @@ public class UserWithdrawalResponse
 }
 
 [MessagePackObject(true)]
-public class VersionGetResourceVersionResponse
+public partial class VersionGetResourceVersionResponse
 {
     [Key("resource_version")]
     public string ResourceVersion { get; set; }
@@ -8360,7 +8360,7 @@ public class VersionGetResourceVersionResponse
 }
 
 [MessagePackObject(true)]
-public class WalkerSendGiftMultipleResponse
+public partial class WalkerSendGiftMultipleResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -8402,7 +8402,7 @@ public class WalkerSendGiftMultipleResponse
 }
 
 [MessagePackObject(true)]
-public class WallFailResponse
+public partial class WallFailResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -8433,7 +8433,7 @@ public class WallFailResponse
 }
 
 [MessagePackObject(true)]
-public class WallGetMonthlyRewardResponse
+public partial class WallGetMonthlyRewardResponse
 {
     [Key("user_wall_reward_list")]
     public IEnumerable<AtgenUserWallRewardList> UserWallRewardList { get; set; } = [];
@@ -8447,7 +8447,7 @@ public class WallGetMonthlyRewardResponse
 }
 
 [MessagePackObject(true)]
-public class WallGetWallClearPartyResponse
+public partial class WallGetWallClearPartyResponse
 {
     [Key("wall_clear_party_setting_list")]
     public IEnumerable<PartySettingList> WallClearPartySettingList { get; set; } = [];
@@ -8468,7 +8468,7 @@ public class WallGetWallClearPartyResponse
 }
 
 [MessagePackObject(true)]
-public class WallReceiveMonthlyRewardResponse
+public partial class WallReceiveMonthlyRewardResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -8504,7 +8504,7 @@ public class WallReceiveMonthlyRewardResponse
 }
 
 [MessagePackObject(true)]
-public class WallRecordRecordResponse
+public partial class WallRecordRecordResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -8545,7 +8545,7 @@ public class WallRecordRecordResponse
 }
 
 [MessagePackObject(true)]
-public class WallSetWallClearPartyResponse
+public partial class WallSetWallClearPartyResponse
 {
     [Key("result")]
     public int Result { get; set; }
@@ -8559,7 +8559,7 @@ public class WallSetWallClearPartyResponse
 }
 
 [MessagePackObject(true)]
-public class WallStartStartAssignUnitResponse
+public partial class WallStartStartAssignUnitResponse
 {
     [Key("ingame_data")]
     public IngameData IngameData { get; set; }
@@ -8590,7 +8590,7 @@ public class WallStartStartAssignUnitResponse
 }
 
 [MessagePackObject(true)]
-public class WallStartStartResponse
+public partial class WallStartStartResponse
 {
     [Key("ingame_data")]
     public IngameData IngameData { get; set; }
@@ -8621,7 +8621,7 @@ public class WallStartStartResponse
 }
 
 [MessagePackObject(true)]
-public class WeaponBodyBuildupPieceResponse
+public partial class WeaponBodyBuildupPieceResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -8639,7 +8639,7 @@ public class WeaponBodyBuildupPieceResponse
 }
 
 [MessagePackObject(true)]
-public class WeaponBodyCraftResponse
+public partial class WeaponBodyCraftResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -8657,7 +8657,7 @@ public class WeaponBodyCraftResponse
 }
 
 [MessagePackObject(true)]
-public class WeaponBuildupResponse
+public partial class WeaponBuildupResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -8683,7 +8683,7 @@ public class WeaponBuildupResponse
 }
 
 [MessagePackObject(true)]
-public class WeaponLimitBreakResponse
+public partial class WeaponLimitBreakResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -8709,7 +8709,7 @@ public class WeaponLimitBreakResponse
 }
 
 [MessagePackObject(true)]
-public class WeaponResetPlusCountResponse
+public partial class WeaponResetPlusCountResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -8727,7 +8727,7 @@ public class WeaponResetPlusCountResponse
 }
 
 [MessagePackObject(true)]
-public class WeaponSellResponse
+public partial class WeaponSellResponse
 {
     [Key("delete_data_list")]
     public DeleteDataList DeleteDataList { get; set; }
@@ -8753,7 +8753,7 @@ public class WeaponSellResponse
 }
 
 [MessagePackObject(true)]
-public class WeaponSetLockResponse
+public partial class WeaponSetLockResponse
 {
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
@@ -8771,7 +8771,7 @@ public class WeaponSetLockResponse
 }
 
 [MessagePackObject(true)]
-public class WebviewVersionUrlListResponse
+public partial class WebviewVersionUrlListResponse
 {
     [Key("webview_url_list")]
     public IEnumerable<AtgenWebviewUrlList> WebviewUrlList { get; set; } = [];

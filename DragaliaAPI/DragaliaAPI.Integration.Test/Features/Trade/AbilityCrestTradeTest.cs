@@ -23,7 +23,7 @@ public class AbilityCrestTradeTest : TestFixture
         int old_dewpoint = GetDewpoint();
 
         AbilityCrestTradeTradeData data = (
-            await Client.PostMsgpack<AbilityCrestTradeTradeData>(
+            await Client.PostMsgpack<AbilityCrestTradeTradeResponse>(
                 "ability_crest_trade/trade",
                 new AbilityCrestTradeTradeRequest()
                 {

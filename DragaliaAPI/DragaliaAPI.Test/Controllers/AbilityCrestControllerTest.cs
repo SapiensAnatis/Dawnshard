@@ -46,24 +46,24 @@ public class AbilityCrestControllerTest
         this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrests.ManaFount))
             .ReturnsAsync(() => null);
 
-        ResultCodeData data = (
+        ResultCodeResponse response = (
             await this.abilityCrestController.SetFavorite(
                 new() { AbilityCrestId = AbilityCrests.ManaFount, IsFavorite = true }
             )
-        ).GetData<ResultCodeData>()!;
+        ).GetData<ResultCodeResponse>()!;
 
-        data.result_code.Should().Be(ResultCode.CommonInvalidArgument);
+        response.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
         this.mockAbilityCrestRepository.VerifyAll();
     }
 
     [Fact]
     public async Task BuildupPiece_AbilityCrestNotInMasterAssetReturnsError()
     {
-        ResultCodeData data = (
+        ResultCodeResponse response = (
             await this.abilityCrestController.BuildupPiece(new() { AbilityCrestId = 0 })
-        ).GetData<ResultCodeData>()!;
+        ).GetData<ResultCodeResponse>()!;
 
-        data.result_code.Should().Be(ResultCode.AbilityCrestIsNotPlayable);
+        response.ResultCode.Should().Be(ResultCode.AbilityCrestIsNotPlayable);
     }
 
     [Fact]
@@ -79,7 +79,7 @@ public class AbilityCrestControllerTest
             .ReturnsAsync(ResultCode.AbilityCrestBuildupPieceStepError)
             .ReturnsAsync(ResultCode.Success);
 
-        ResultCodeData data = (
+        ResultCodeResponse response = (
             await this.abilityCrestController.BuildupPiece(
                 new AbilityCrestBuildupPieceRequest()
                 {
@@ -92,9 +92,9 @@ public class AbilityCrestControllerTest
                     }
                 }
             )
-        ).GetData<ResultCodeData>()!;
+        ).GetData<ResultCodeResponse>()!;
 
-        data.result_code.Should().Be(ResultCode.AbilityCrestBuildupPieceStepError);
+        response.ResultCode.Should().Be(ResultCode.AbilityCrestBuildupPieceStepError);
         this.mockAbilityCrestService.VerifyAll();
     }
 
@@ -135,11 +135,11 @@ public class AbilityCrestControllerTest
     [Fact]
     public async Task BuildupPlusCount_AbilityCrestNotInMasterAssetReturnsError()
     {
-        ResultCodeData data = (
+        ResultCodeResponse response = (
             await this.abilityCrestController.BuildupPlusCount(new() { AbilityCrestId = 0 })
-        ).GetData<ResultCodeData>()!;
+        ).GetData<ResultCodeResponse>()!;
 
-        data.result_code.Should().Be(ResultCode.AbilityCrestIsNotPlayable);
+        response.ResultCode.Should().Be(ResultCode.AbilityCrestIsNotPlayable);
     }
 
     [Fact]
@@ -154,7 +154,7 @@ public class AbilityCrestControllerTest
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.AbilityCrestBuildupPlusCountCountError);
 
-        ResultCodeData data = (
+        ResultCodeResponse response = (
             await this.abilityCrestController.BuildupPlusCount(
                 new AbilityCrestBuildupPlusCountRequest()
                 {
@@ -162,9 +162,9 @@ public class AbilityCrestControllerTest
                     PlusCountParamsList = new List<AtgenPlusCountParamsList>() { new(), new() }
                 }
             )
-        ).GetData<ResultCodeData>()!;
+        ).GetData<ResultCodeResponse>()!;
 
-        data.result_code.Should().Be(ResultCode.AbilityCrestBuildupPlusCountCountError);
+        response.ResultCode.Should().Be(ResultCode.AbilityCrestBuildupPlusCountCountError);
         this.mockAbilityCrestService.VerifyAll();
     }
 
@@ -207,7 +207,7 @@ public class AbilityCrestControllerTest
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.CommonInvalidArgument);
 
-        ResultCodeData data = (
+        ResultCodeResponse response = (
             await this.abilityCrestController.ResetPlusCount(
                 new AbilityCrestResetPlusCountRequest()
                 {
@@ -215,9 +215,9 @@ public class AbilityCrestControllerTest
                     PlusCountTypeList = new List<PlusCountType>() { PlusCountType.Hp, 0 }
                 }
             )
-        ).GetData<ResultCodeData>()!;
+        ).GetData<ResultCodeResponse>()!;
 
-        data.result_code.Should().Be(ResultCode.CommonInvalidArgument);
+        response.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
         this.mockAbilityCrestService.VerifyAll();
     }
 
@@ -376,13 +376,13 @@ public class AbilityCrestControllerTest
     [InlineData(55)]
     public async Task SetAbilityCrestSet_PreventsInvalidSetNo(int setNo)
     {
-        ResultCodeData data = (
+        ResultCodeResponse response = (
             await this.abilityCrestController.SetAbilityCrestSet(
                 new() { AbilityCrestSetNo = setNo }
             )
-        ).GetData<ResultCodeData>()!;
+        ).GetData<ResultCodeResponse>()!;
 
-        data.result_code.Should().Be(ResultCode.CommonInvalidArgument);
+        response.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
     }
 
     [Theory]

@@ -28,7 +28,7 @@ public class WeaponBodyTest : TestFixture
         );
 
         UpdateDataList list = (
-            await this.Client.PostMsgpack<WeaponBodyCraftData>(
+            await this.Client.PostMsgpack<WeaponBodyCraftResponse>(
                 $"{EndpointGroup}/craft",
                 new WeaponBodyCraftRequest() { WeaponBodyId = WeaponBodies.AquaticSpiral }
             )
@@ -76,7 +76,7 @@ public class WeaponBodyTest : TestFixture
         int oldMatCount3 = GetMaterialCount(Materials.TwinklingSand);
         long oldRupies = GetRupies();
 
-        await this.Client.PostMsgpack<WeaponBodyCraftData>(
+        await this.Client.PostMsgpack<WeaponBodyCraftResponse>(
             $"{EndpointGroup}/craft",
             new WeaponBodyCraftRequest() { WeaponBodyId = WeaponBodies.PrimalCrimson }
         );
@@ -118,7 +118,7 @@ public class WeaponBodyTest : TestFixture
             };
 
         WeaponBodyBuildupPieceData response = (
-            await this.Client.PostMsgpack<WeaponBodyBuildupPieceData>(
+            await this.Client.PostMsgpack<WeaponBodyBuildupPieceResponse>(
                 $"{EndpointGroup}/buildup_piece",
                 request
             )
@@ -208,15 +208,15 @@ public class WeaponBodyTest : TestFixture
     [Fact]
     public async Task Buildup_UnownedWeapon_ReturnsBadResultCode()
     {
-        ResultCodeData codeData = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse codeResponse = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 $"{EndpointGroup}/buildup_piece",
                 new WeaponBodyBuildupPieceRequest() { WeaponBodyId = WeaponBodies.Carnwennan },
                 ensureSuccessHeader: false
             )
         ).data;
 
-        codeData.result_code.Should().Be(ResultCode.WeaponBodyCraftShortWeaponBody);
+        codeResponse.ResultCode.Should().Be(ResultCode.WeaponBodyCraftShortWeaponBody);
     }
 
     [Fact]
@@ -231,8 +231,8 @@ public class WeaponBodyTest : TestFixture
             }
         );
 
-        ResultCodeData codeData = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse codeResponse = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 $"{EndpointGroup}/buildup_piece",
                 new WeaponBodyBuildupPieceRequest()
                 {
@@ -246,7 +246,7 @@ public class WeaponBodyTest : TestFixture
             )
         ).data;
 
-        codeData.result_code.Should().Be(ResultCode.WeaponBodyBuildupPieceStepError);
+        codeResponse.ResultCode.Should().Be(ResultCode.WeaponBodyBuildupPieceStepError);
     }
 
     public record WeaponUpgradeTestCase(

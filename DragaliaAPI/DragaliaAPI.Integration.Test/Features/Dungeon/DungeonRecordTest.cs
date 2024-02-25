@@ -103,7 +103,7 @@ public class DungeonRecordTest : TestFixture
         string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
 
         DungeonRecordRecordData response = (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
@@ -203,7 +203,7 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        await Client.PostMsgpack<MemoryEventActivateData>(
+        await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/memory_event/activate",
             new MemoryEventActivateRequest() { EventId = eventId }
         );
@@ -229,7 +229,7 @@ public class DungeonRecordTest : TestFixture
         string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
 
         DungeonRecordRecordData response = (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
@@ -261,7 +261,7 @@ public class DungeonRecordTest : TestFixture
     {
         await AddToDatabase(new DbQuest() { QuestId = questId, State = 0, });
 
-        await Client.PostMsgpack<MemoryEventActivateData>(
+        await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/memory_event/activate",
             new MemoryEventActivateRequest() { EventId = eventId }
         );
@@ -280,7 +280,7 @@ public class DungeonRecordTest : TestFixture
         string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
 
         DungeonRecordRecordData response = (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
@@ -315,7 +315,7 @@ public class DungeonRecordTest : TestFixture
             ]
         );
 
-        await Client.PostMsgpack<MemoryEventActivateData>(
+        await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/memory_event/activate",
             new MemoryEventActivateRequest() { EventId = eventId }
         );
@@ -342,7 +342,7 @@ public class DungeonRecordTest : TestFixture
         string key = await this.StartDungeon(mockSession);
 
         DungeonRecordRecordData response = (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
@@ -387,7 +387,7 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        await Client.PostMsgpack<MemoryEventActivateData>(
+        await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/memory_event/activate",
             new MemoryEventActivateRequest() { EventId = eventId }
         );
@@ -406,7 +406,7 @@ public class DungeonRecordTest : TestFixture
         string key = await this.StartDungeon(mockSession);
 
         DungeonRecordRecordData response = (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
@@ -442,7 +442,7 @@ public class DungeonRecordTest : TestFixture
 
         await this.AddToDatabase(new DbQuest() { QuestId = questId, PlayCount = 2, });
 
-        await Client.PostMsgpack<MemoryEventActivateData>(
+        await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/memory_event/activate",
             new MemoryEventActivateRequest() { EventId = eventId }
         );
@@ -461,7 +461,7 @@ public class DungeonRecordTest : TestFixture
         string key = await this.StartDungeon(mockSession);
 
         DungeonRecordRecordData response = (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
@@ -489,7 +489,7 @@ public class DungeonRecordTest : TestFixture
         int exQuestId = 208260401; // Revenge of the Pumpking
         int eventId = 20826; // Trick or Treasure
 
-        await Client.PostMsgpack<MemoryEventActivateData>(
+        await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/memory_event/activate",
             new MemoryEventActivateRequest() { EventId = eventId }
         );
@@ -508,7 +508,7 @@ public class DungeonRecordTest : TestFixture
         string key = await this.StartDungeon(mockSession);
 
         DungeonRecordRecordData response = (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
@@ -541,7 +541,7 @@ public class DungeonRecordTest : TestFixture
         int questId = 208450502; // Tempestuous Assault: Master
         int eventId = 20845; // Toll of the Deep
 
-        await Client.PostMsgpack<MemoryEventActivateData>(
+        await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/memory_event/activate",
             new MemoryEventActivateRequest() { EventId = eventId }
         );
@@ -560,7 +560,7 @@ public class DungeonRecordTest : TestFixture
         string key = await this.StartDungeon(mockSession);
 
         DungeonRecordRecordData response = (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
@@ -613,7 +613,7 @@ public class DungeonRecordTest : TestFixture
         string key = await this.StartDungeon(mockSession);
 
         DungeonRecordRecordData response = (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
@@ -655,7 +655,7 @@ public class DungeonRecordTest : TestFixture
         int questId = 208450702; // Wrath of Leviathan: Expert
         int eventId = 20845; // Toll of the Deep
 
-        await Client.PostMsgpack<MemoryEventActivateData>(
+        await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/memory_event/activate",
             new MemoryEventActivateRequest() { EventId = eventId }
         );
@@ -674,7 +674,7 @@ public class DungeonRecordTest : TestFixture
         string key = await this.StartDungeon(mockSession);
 
         DungeonRecordRecordData response = (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
@@ -704,7 +704,7 @@ public class DungeonRecordTest : TestFixture
         int questId = 229030303; // The Angelic Herald: Master (Co-Op)
         int eventId = 22903; // One Starry Dragonyule
 
-        await Client.PostMsgpack<EarnEventEntryData>(
+        await Client.PostMsgpack<EarnEventEntryResponse>(
             "/earn_event/entry",
             new EarnEventEntryRequest() { EventId = eventId }
         );
@@ -723,7 +723,7 @@ public class DungeonRecordTest : TestFixture
         string key = await this.StartDungeon(mockSession);
 
         DungeonRecordRecordData response = (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
@@ -766,7 +766,7 @@ public class DungeonRecordTest : TestFixture
         int questId = 229031201; // Repelling the Frosty Fiends: Standard (Solo)
         int eventId = 22903; // One Starry Dragonyule
 
-        await Client.PostMsgpack<MemoryEventActivateData>(
+        await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/earn_event/entry",
             new EarnEventEntryRequest() { EventId = eventId }
         );
@@ -808,7 +808,7 @@ public class DungeonRecordTest : TestFixture
         string key = await this.StartDungeon(mockSession);
 
         DungeonRecordRecordData response = (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
@@ -864,7 +864,7 @@ public class DungeonRecordTest : TestFixture
         string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
 
         DragaliaResponse<DungeonRecordRecordData> response =
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
@@ -912,7 +912,7 @@ public class DungeonRecordTest : TestFixture
             .ReturnsAsync(new Photon.Shared.Models.ApiGame() { Name = roomName });
 
         DungeonStartStartMultiData startResponse = (
-            await this.Client.PostMsgpack<DungeonStartStartMultiData>(
+            await this.Client.PostMsgpack<DungeonStartStartMultiResponse>(
                 "/dungeon_start/start_multi",
                 new DungeonStartStartMultiRequest()
                 {
@@ -988,7 +988,7 @@ public class DungeonRecordTest : TestFixture
         string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
 
         (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
@@ -1043,7 +1043,7 @@ public class DungeonRecordTest : TestFixture
         string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
 
         (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
@@ -1112,7 +1112,7 @@ public class DungeonRecordTest : TestFixture
             };
 
         DungeonRecordRecordData response = (
-            await Client.PostMsgpack<DungeonRecordRecordData>("/dungeon_record/record", request)
+            await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
         ).data;
 
         response
@@ -1145,7 +1145,7 @@ public class DungeonRecordTest : TestFixture
         );
 
         DungeonRecordRecordData response2 = (
-            await Client.PostMsgpack<DungeonRecordRecordData>("/dungeon_record/record", request)
+            await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
         ).data;
 
         response2.IngameResultData.RewardRecord.FirstClearSet.Should().BeEmpty();
@@ -1199,7 +1199,7 @@ public class DungeonRecordTest : TestFixture
             };
 
         DungeonRecordRecordData response = (
-            await Client.PostMsgpack<DungeonRecordRecordData>("/dungeon_record/record", request)
+            await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
         ).data;
 
         response.UpdateDataList.UserData.Should().NotBeNull();

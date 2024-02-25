@@ -7,7 +7,7 @@ using MessagePack;
 namespace DragaliaAPI.Models.Generated;
 
 [MessagePackObject]
-public class AbilityCrestBuildupPieceRequest
+public partial class AbilityCrestBuildupPieceRequest
 {
     [Key("ability_crest_id")]
     public AbilityCrests AbilityCrestId { get; set; }
@@ -29,7 +29,7 @@ public class AbilityCrestBuildupPieceRequest
 }
 
 [MessagePackObject]
-public class AbilityCrestBuildupPlusCountRequest
+public partial class AbilityCrestBuildupPlusCountRequest
 {
     [Key("ability_crest_id")]
     public AbilityCrests AbilityCrestId { get; set; }
@@ -50,10 +50,10 @@ public class AbilityCrestBuildupPlusCountRequest
 }
 
 [MessagePackObject]
-public class AbilityCrestGetAbilityCrestSetListRequest { }
+public partial class AbilityCrestGetAbilityCrestSetListRequest { }
 
 [MessagePackObject]
-public class AbilityCrestResetPlusCountRequest
+public partial class AbilityCrestResetPlusCountRequest
 {
     [Key("ability_crest_id")]
     public AbilityCrests AbilityCrestId { get; set; }
@@ -74,7 +74,7 @@ public class AbilityCrestResetPlusCountRequest
 }
 
 [MessagePackObject]
-public class AbilityCrestSetAbilityCrestSetRequest
+public partial class AbilityCrestSetAbilityCrestSetRequest
 {
     [Key("ability_crest_set_no")]
     public int AbilityCrestSetNo { get; set; }
@@ -100,7 +100,7 @@ public class AbilityCrestSetAbilityCrestSetRequest
 }
 
 [MessagePackObject]
-public class AbilityCrestSetFavoriteRequest
+public partial class AbilityCrestSetFavoriteRequest
 {
     [Key("ability_crest_id")]
     public AbilityCrests AbilityCrestId { get; set; }
@@ -119,10 +119,10 @@ public class AbilityCrestSetFavoriteRequest
 }
 
 [MessagePackObject]
-public class AbilityCrestTradeGetListRequest { }
+public partial class AbilityCrestTradeGetListRequest { }
 
 [MessagePackObject]
-public class AbilityCrestTradeTradeRequest
+public partial class AbilityCrestTradeTradeRequest
 {
     [Key("ability_crest_trade_id")]
     public int AbilityCrestTradeId { get; set; }
@@ -140,7 +140,7 @@ public class AbilityCrestTradeTradeRequest
 }
 
 [MessagePackObject]
-public class AbilityCrestUpdateAbilityCrestSetNameRequest
+public partial class AbilityCrestUpdateAbilityCrestSetNameRequest
 {
     [Key("ability_crest_set_no")]
     public int AbilityCrestSetNo { get; set; }
@@ -161,10 +161,10 @@ public class AbilityCrestUpdateAbilityCrestSetNameRequest
 }
 
 [MessagePackObject]
-public class AlbumIndexRequest { }
+public partial class AlbumIndexRequest { }
 
 [MessagePackObject]
-public class AmuletBuildupRequest
+public partial class AmuletBuildupRequest
 {
     [Key("base_amulet_key_id")]
     public ulong BaseAmuletKeyId { get; set; }
@@ -185,7 +185,7 @@ public class AmuletBuildupRequest
 }
 
 [MessagePackObject]
-public class AmuletLimitBreakRequest
+public partial class AmuletLimitBreakRequest
 {
     [Key("base_amulet_key_id")]
     public ulong BaseAmuletKeyId { get; set; }
@@ -206,15 +206,15 @@ public class AmuletLimitBreakRequest
 }
 
 [MessagePackObject]
-public class AmuletResetPlusCountRequest
+public partial class AmuletResetPlusCountRequest
 {
     [Key("amulet_key_id")]
     public ulong AmuletKeyId { get; set; }
 
     [Key("plus_count_type")]
-    public int PlusCountType { get; set; }
+    public PlusCountType PlusCountType { get; set; }
 
-    public AmuletResetPlusCountRequest(ulong amuletKeyId, int plusCountType)
+    public AmuletResetPlusCountRequest(ulong amuletKeyId, PlusCountType plusCountType)
     {
         this.AmuletKeyId = amuletKeyId;
         this.PlusCountType = plusCountType;
@@ -224,7 +224,7 @@ public class AmuletResetPlusCountRequest
 }
 
 [MessagePackObject]
-public class AmuletSellRequest
+public partial class AmuletSellRequest
 {
     [Key("amulet_key_id_list")]
     public IEnumerable<ulong> AmuletKeyIdList { get; set; } = [];
@@ -238,7 +238,7 @@ public class AmuletSellRequest
 }
 
 [MessagePackObject]
-public class AmuletSetLockRequest
+public partial class AmuletSetLockRequest
 {
     [Key("amulet_key_id")]
     public ulong AmuletKeyId { get; set; }
@@ -257,10 +257,10 @@ public class AmuletSetLockRequest
 }
 
 [MessagePackObject]
-public class AmuletTradeGetListRequest { }
+public partial class AmuletTradeGetListRequest { }
 
 [MessagePackObject]
-public class AmuletTradeTradeRequest
+public partial class AmuletTradeTradeRequest
 {
     [Key("amulet_trade_id")]
     public int AmuletTradeId { get; set; }
@@ -278,7 +278,7 @@ public class AmuletTradeTradeRequest
 }
 
 [MessagePackObject]
-public class BattleRoyalEventEntryRequest
+public partial class BattleRoyalEventEntryRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -292,7 +292,7 @@ public class BattleRoyalEventEntryRequest
 }
 
 [MessagePackObject]
-public class BattleRoyalEventGetEventDataRequest
+public partial class BattleRoyalEventGetEventDataRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -306,7 +306,7 @@ public class BattleRoyalEventGetEventDataRequest
 }
 
 [MessagePackObject]
-public class BattleRoyalEventReceiveEventCyclePointRewardRequest
+public partial class BattleRoyalEventReceiveEventCyclePointRewardRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -324,7 +324,7 @@ public class BattleRoyalEventReceiveEventCyclePointRewardRequest
 }
 
 [MessagePackObject]
-public class BattleRoyalEventReleaseCharaSkinRequest
+public partial class BattleRoyalEventReleaseCharaSkinRequest
 {
     [Key("battle_royal_chara_skin_id")]
     public int BattleRoyalCharaSkinId { get; set; }
@@ -343,7 +343,7 @@ public class BattleRoyalEventReleaseCharaSkinRequest
 }
 
 [MessagePackObject]
-public class BattleRoyalFailRequest
+public partial class BattleRoyalFailRequest
 {
     [Key("dungeon_key")]
     public string DungeonKey { get; set; }
@@ -365,7 +365,7 @@ public class BattleRoyalFailRequest
 }
 
 [MessagePackObject]
-public class BattleRoyalGetBattleRoyalHistoryRequest
+public partial class BattleRoyalGetBattleRoyalHistoryRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -379,7 +379,7 @@ public class BattleRoyalGetBattleRoyalHistoryRequest
 }
 
 [MessagePackObject]
-public class BattleRoyalRecordRoyalRecordMultiRequest
+public partial class BattleRoyalRecordRoyalRecordMultiRequest
 {
     [Key("play_record")]
     public PlayRecord PlayRecord { get; set; }
@@ -405,7 +405,7 @@ public class BattleRoyalRecordRoyalRecordMultiRequest
 }
 
 [MessagePackObject]
-public class BattleRoyalStartMultiRequest
+public partial class BattleRoyalStartMultiRequest
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -428,10 +428,10 @@ public class BattleRoyalStartMultiRequest
 }
 
 [MessagePackObject]
-public class BattleRoyalStartRoyalMultiRequest { }
+public partial class BattleRoyalStartRoyalMultiRequest { }
 
 [MessagePackObject]
-public class BuildEventEntryRequest
+public partial class BuildEventEntryRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -445,7 +445,7 @@ public class BuildEventEntryRequest
 }
 
 [MessagePackObject]
-public class BuildEventGetEventDataRequest
+public partial class BuildEventGetEventDataRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -459,7 +459,7 @@ public class BuildEventGetEventDataRequest
 }
 
 [MessagePackObject]
-public class BuildEventReceiveBuildPointRewardRequest
+public partial class BuildEventReceiveBuildPointRewardRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -473,7 +473,7 @@ public class BuildEventReceiveBuildPointRewardRequest
 }
 
 [MessagePackObject]
-public class BuildEventReceiveDailyBonusRequest
+public partial class BuildEventReceiveDailyBonusRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -487,10 +487,10 @@ public class BuildEventReceiveDailyBonusRequest
 }
 
 [MessagePackObject]
-public class CartoonLatestRequest { }
+public partial class CartoonLatestRequest { }
 
 [MessagePackObject]
-public class CastleStoryReadRequest
+public partial class CastleStoryReadRequest
 {
     [Key("castle_story_id")]
     public int CastleStoryId { get; set; }
@@ -504,7 +504,7 @@ public class CastleStoryReadRequest
 }
 
 [MessagePackObject]
-public class CharaAwakeRequest
+public partial class CharaAwakeRequest
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -522,7 +522,7 @@ public class CharaAwakeRequest
 }
 
 [MessagePackObject]
-public class CharaBuildupManaRequest
+public partial class CharaBuildupManaRequest
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -549,7 +549,7 @@ public class CharaBuildupManaRequest
 }
 
 [MessagePackObject]
-public class CharaBuildupPlatinumRequest
+public partial class CharaBuildupPlatinumRequest
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -563,7 +563,7 @@ public class CharaBuildupPlatinumRequest
 }
 
 [MessagePackObject]
-public class CharaBuildupRequest
+public partial class CharaBuildupRequest
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -581,7 +581,7 @@ public class CharaBuildupRequest
 }
 
 [MessagePackObject]
-public class CharaGetCharaUnitSetRequest
+public partial class CharaGetCharaUnitSetRequest
 {
     [Key("chara_id_list")]
     public Charas CharaIdList { get; set; }
@@ -595,10 +595,10 @@ public class CharaGetCharaUnitSetRequest
 }
 
 [MessagePackObject]
-public class CharaGetListRequest { }
+public partial class CharaGetListRequest { }
 
 [MessagePackObject]
-public class CharaLimitBreakAndBuildupManaRequest
+public partial class CharaLimitBreakAndBuildupManaRequest
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -630,7 +630,7 @@ public class CharaLimitBreakAndBuildupManaRequest
 }
 
 [MessagePackObject]
-public class CharaLimitBreakRequest
+public partial class CharaLimitBreakRequest
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -653,15 +653,15 @@ public class CharaLimitBreakRequest
 }
 
 [MessagePackObject]
-public class CharaResetPlusCountRequest
+public partial class CharaResetPlusCountRequest
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
 
     [Key("plus_count_type")]
-    public int PlusCountType { get; set; }
+    public PlusCountType PlusCountType { get; set; }
 
-    public CharaResetPlusCountRequest(Charas charaId, int plusCountType)
+    public CharaResetPlusCountRequest(Charas charaId, PlusCountType plusCountType)
     {
         this.CharaId = charaId;
         this.PlusCountType = plusCountType;
@@ -671,7 +671,7 @@ public class CharaResetPlusCountRequest
 }
 
 [MessagePackObject]
-public class CharaSetCharaUnitSetRequest
+public partial class CharaSetCharaUnitSetRequest
 {
     [Key("unit_set_no")]
     public int UnitSetNo { get; set; }
@@ -702,7 +702,7 @@ public class CharaSetCharaUnitSetRequest
 }
 
 [MessagePackObject]
-public class CharaUnlockEditSkillRequest
+public partial class CharaUnlockEditSkillRequest
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -716,7 +716,7 @@ public class CharaUnlockEditSkillRequest
 }
 
 [MessagePackObject]
-public class Clb01EventEntryRequest
+public partial class Clb01EventEntryRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -730,7 +730,7 @@ public class Clb01EventEntryRequest
 }
 
 [MessagePackObject]
-public class Clb01EventGetEventDataRequest
+public partial class Clb01EventGetEventDataRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -744,7 +744,7 @@ public class Clb01EventGetEventDataRequest
 }
 
 [MessagePackObject]
-public class Clb01EventReceiveClb01PointRewardRequest
+public partial class Clb01EventReceiveClb01PointRewardRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -758,7 +758,7 @@ public class Clb01EventReceiveClb01PointRewardRequest
 }
 
 [MessagePackObject]
-public class CollectEventEntryRequest
+public partial class CollectEventEntryRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -772,7 +772,7 @@ public class CollectEventEntryRequest
 }
 
 [MessagePackObject]
-public class CollectEventGetEventDataRequest
+public partial class CollectEventGetEventDataRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -786,7 +786,7 @@ public class CollectEventGetEventDataRequest
 }
 
 [MessagePackObject]
-public class CombatEventEntryRequest
+public partial class CombatEventEntryRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -800,7 +800,7 @@ public class CombatEventEntryRequest
 }
 
 [MessagePackObject]
-public class CombatEventGetEventDataRequest
+public partial class CombatEventGetEventDataRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -814,7 +814,7 @@ public class CombatEventGetEventDataRequest
 }
 
 [MessagePackObject]
-public class CombatEventReceiveEventLocationRewardRequest
+public partial class CombatEventReceiveEventLocationRewardRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -832,7 +832,7 @@ public class CombatEventReceiveEventLocationRewardRequest
 }
 
 [MessagePackObject]
-public class CombatEventReceiveEventPointRewardRequest
+public partial class CombatEventReceiveEventPointRewardRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -846,7 +846,7 @@ public class CombatEventReceiveEventPointRewardRequest
 }
 
 [MessagePackObject]
-public class CraftAssembleRequest
+public partial class CraftAssembleRequest
 {
     [Key("weapon_key_id")]
     public ulong WeaponKeyId { get; set; }
@@ -877,7 +877,7 @@ public class CraftAssembleRequest
 }
 
 [MessagePackObject]
-public class CraftCreateRequest
+public partial class CraftCreateRequest
 {
     [Key("target_weapon_id")]
     public int TargetWeaponId { get; set; }
@@ -908,7 +908,7 @@ public class CraftCreateRequest
 }
 
 [MessagePackObject]
-public class CraftDisassembleRequest
+public partial class CraftDisassembleRequest
 {
     [Key("weapon_key_id")]
     public ulong WeaponKeyId { get; set; }
@@ -926,7 +926,7 @@ public class CraftDisassembleRequest
 }
 
 [MessagePackObject]
-public class CraftResetNewRequest
+public partial class CraftResetNewRequest
 {
     [Key("weapon_id_list")]
     public IEnumerable<int> WeaponIdList { get; set; } = [];
@@ -940,10 +940,10 @@ public class CraftResetNewRequest
 }
 
 [MessagePackObject]
-public class DeployGetDeployVersionRequest { }
+public partial class DeployGetDeployVersionRequest { }
 
 [MessagePackObject]
-public class DmodeBuildupServitorPassiveRequest
+public partial class DmodeBuildupServitorPassiveRequest
 {
     [Key("request_buildup_passive_list")]
     public IEnumerable<DmodeServitorPassiveList> RequestBuildupPassiveList { get; set; } = [];
@@ -959,7 +959,7 @@ public class DmodeBuildupServitorPassiveRequest
 }
 
 [MessagePackObject]
-public class DmodeDungeonFinishRequest
+public partial class DmodeDungeonFinishRequest
 {
     [Key("is_game_over")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
@@ -974,7 +974,7 @@ public class DmodeDungeonFinishRequest
 }
 
 [MessagePackObject]
-public class DmodeDungeonFloorRequest
+public partial class DmodeDungeonFloorRequest
 {
     [Key("dmode_play_record")]
     public DmodePlayRecord DmodePlayRecord { get; set; }
@@ -988,13 +988,13 @@ public class DmodeDungeonFloorRequest
 }
 
 [MessagePackObject]
-public class DmodeDungeonFloorSkipRequest { }
+public partial class DmodeDungeonFloorSkipRequest { }
 
 [MessagePackObject]
-public class DmodeDungeonRestartRequest { }
+public partial class DmodeDungeonRestartRequest { }
 
 [MessagePackObject]
-public class DmodeDungeonStartRequest
+public partial class DmodeDungeonStartRequest
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -1025,22 +1025,22 @@ public class DmodeDungeonStartRequest
 }
 
 [MessagePackObject]
-public class DmodeDungeonSystemHaltRequest { }
+public partial class DmodeDungeonSystemHaltRequest { }
 
 [MessagePackObject]
-public class DmodeDungeonUserHaltRequest { }
+public partial class DmodeDungeonUserHaltRequest { }
 
 [MessagePackObject]
-public class DmodeEntryRequest { }
+public partial class DmodeEntryRequest { }
 
 [MessagePackObject]
-public class DmodeExpeditionFinishRequest { }
+public partial class DmodeExpeditionFinishRequest { }
 
 [MessagePackObject]
-public class DmodeExpeditionForceFinishRequest { }
+public partial class DmodeExpeditionForceFinishRequest { }
 
 [MessagePackObject]
-public class DmodeExpeditionStartRequest
+public partial class DmodeExpeditionStartRequest
 {
     [Key("target_floor_num")]
     public int TargetFloorNum { get; set; }
@@ -1058,10 +1058,10 @@ public class DmodeExpeditionStartRequest
 }
 
 [MessagePackObject]
-public class DmodeGetDataRequest { }
+public partial class DmodeGetDataRequest { }
 
 [MessagePackObject]
-public class DmodeReadStoryRequest
+public partial class DmodeReadStoryRequest
 {
     [Key("dmode_story_id")]
     public int DmodeStoryId { get; set; }
@@ -1075,7 +1075,7 @@ public class DmodeReadStoryRequest
 }
 
 [MessagePackObject]
-public class DragonBuildupRequest
+public partial class DragonBuildupRequest
 {
     [Key("base_dragon_key_id")]
     public ulong BaseDragonKeyId { get; set; }
@@ -1096,7 +1096,7 @@ public class DragonBuildupRequest
 }
 
 [MessagePackObject]
-public class DragonBuyGiftToSendMultipleRequest
+public partial class DragonBuyGiftToSendMultipleRequest
 {
     [Key("dragon_id")]
     public Dragons DragonId { get; set; }
@@ -1114,7 +1114,7 @@ public class DragonBuyGiftToSendMultipleRequest
 }
 
 [MessagePackObject]
-public class DragonBuyGiftToSendRequest
+public partial class DragonBuyGiftToSendRequest
 {
     [Key("dragon_id")]
     public Dragons DragonId { get; set; }
@@ -1132,10 +1132,10 @@ public class DragonBuyGiftToSendRequest
 }
 
 [MessagePackObject]
-public class DragonGetContactDataRequest { }
+public partial class DragonGetContactDataRequest { }
 
 [MessagePackObject]
-public class DragonLimitBreakRequest
+public partial class DragonLimitBreakRequest
 {
     [Key("base_dragon_key_id")]
     public ulong BaseDragonKeyId { get; set; }
@@ -1156,15 +1156,15 @@ public class DragonLimitBreakRequest
 }
 
 [MessagePackObject]
-public class DragonResetPlusCountRequest
+public partial class DragonResetPlusCountRequest
 {
     [Key("dragon_key_id")]
     public ulong DragonKeyId { get; set; }
 
     [Key("plus_count_type")]
-    public int PlusCountType { get; set; }
+    public PlusCountType PlusCountType { get; set; }
 
-    public DragonResetPlusCountRequest(ulong dragonKeyId, int plusCountType)
+    public DragonResetPlusCountRequest(ulong dragonKeyId, PlusCountType plusCountType)
     {
         this.DragonKeyId = dragonKeyId;
         this.PlusCountType = plusCountType;
@@ -1174,7 +1174,7 @@ public class DragonResetPlusCountRequest
 }
 
 [MessagePackObject]
-public class DragonSellRequest
+public partial class DragonSellRequest
 {
     [Key("dragon_key_id_list")]
     public IEnumerable<ulong> DragonKeyIdList { get; set; } = [];
@@ -1188,7 +1188,7 @@ public class DragonSellRequest
 }
 
 [MessagePackObject]
-public class DragonSendGiftMultipleRequest
+public partial class DragonSendGiftMultipleRequest
 {
     [Key("dragon_id")]
     public Dragons DragonId { get; set; }
@@ -1210,7 +1210,7 @@ public class DragonSendGiftMultipleRequest
 }
 
 [MessagePackObject]
-public class DragonSendGiftRequest
+public partial class DragonSendGiftRequest
 {
     [Key("dragon_id")]
     public Dragons DragonId { get; set; }
@@ -1228,7 +1228,7 @@ public class DragonSendGiftRequest
 }
 
 [MessagePackObject]
-public class DragonSetLockRequest
+public partial class DragonSetLockRequest
 {
     [Key("dragon_key_id")]
     public ulong DragonKeyId { get; set; }
@@ -1247,7 +1247,7 @@ public class DragonSetLockRequest
 }
 
 [MessagePackObject]
-public class DreamAdventureClearRequest
+public partial class DreamAdventureClearRequest
 {
     [Key("difficulty")]
     public int Difficulty { get; set; }
@@ -1261,7 +1261,7 @@ public class DreamAdventureClearRequest
 }
 
 [MessagePackObject]
-public class DreamAdventurePlayRequest
+public partial class DreamAdventurePlayRequest
 {
     [Key("difficulty")]
     public int Difficulty { get; set; }
@@ -1275,7 +1275,7 @@ public class DreamAdventurePlayRequest
 }
 
 [MessagePackObject]
-public class DungeonFailRequest
+public partial class DungeonFailRequest
 {
     [Key("dungeon_key")]
     public string DungeonKey { get; set; }
@@ -1297,7 +1297,7 @@ public class DungeonFailRequest
 }
 
 [MessagePackObject]
-public class DungeonGetAreaOddsRequest
+public partial class DungeonGetAreaOddsRequest
 {
     [Key("dungeon_key")]
     public string DungeonKey { get; set; }
@@ -1315,7 +1315,7 @@ public class DungeonGetAreaOddsRequest
 }
 
 [MessagePackObject]
-public class DungeonReceiveQuestBonusRequest
+public partial class DungeonReceiveQuestBonusRequest
 {
     [Key("quest_event_id")]
     public int QuestEventId { get; set; }
@@ -1338,7 +1338,7 @@ public class DungeonReceiveQuestBonusRequest
 }
 
 [MessagePackObject]
-public class DungeonRecordRecordMultiRequest
+public partial class DungeonRecordRecordMultiRequest
 {
     [Key("play_record")]
     public PlayRecord PlayRecord { get; set; }
@@ -1369,7 +1369,7 @@ public class DungeonRecordRecordMultiRequest
 }
 
 [MessagePackObject]
-public class DungeonRecordRecordRequest
+public partial class DungeonRecordRecordRequest
 {
     [Key("play_record")]
     public PlayRecord PlayRecord { get; set; }
@@ -1400,7 +1400,7 @@ public class DungeonRecordRecordRequest
 }
 
 [MessagePackObject]
-public class DungeonRetryRequest
+public partial class DungeonRetryRequest
 {
     [Key("dungeon_key")]
     public string DungeonKey { get; set; }
@@ -1418,7 +1418,7 @@ public class DungeonRetryRequest
 }
 
 [MessagePackObject]
-public class DungeonSkipStartAssignUnitRequest
+public partial class DungeonSkipStartAssignUnitRequest
 {
     [Key("quest_id")]
     public int QuestId { get; set; }
@@ -1454,7 +1454,7 @@ public class DungeonSkipStartAssignUnitRequest
 }
 
 [MessagePackObject]
-public class DungeonSkipStartMultipleQuestAssignUnitRequest
+public partial class DungeonSkipStartMultipleQuestAssignUnitRequest
 {
     [Key("request_party_setting_list")]
     public IEnumerable<PartySettingList> RequestPartySettingList { get; set; } = [];
@@ -1480,7 +1480,7 @@ public class DungeonSkipStartMultipleQuestAssignUnitRequest
 }
 
 [MessagePackObject]
-public class DungeonSkipStartMultipleQuestRequest
+public partial class DungeonSkipStartMultipleQuestRequest
 {
     [Key("party_no")]
     public int PartyNo { get; set; }
@@ -1506,7 +1506,7 @@ public class DungeonSkipStartMultipleQuestRequest
 }
 
 [MessagePackObject]
-public class DungeonSkipStartRequest
+public partial class DungeonSkipStartRequest
 {
     [Key("quest_id")]
     public int QuestId { get; set; }
@@ -1542,7 +1542,7 @@ public class DungeonSkipStartRequest
 }
 
 [MessagePackObject]
-public class DungeonStartStartAssignUnitRequest
+public partial class DungeonStartStartAssignUnitRequest
 {
     [Key("quest_id")]
     public int QuestId { get; set; }
@@ -1583,7 +1583,7 @@ public class DungeonStartStartAssignUnitRequest
 }
 
 [MessagePackObject]
-public class DungeonStartStartMultiAssignUnitRequest
+public partial class DungeonStartStartMultiAssignUnitRequest
 {
     [Key("quest_id")]
     public int QuestId { get; set; }
@@ -1604,7 +1604,7 @@ public class DungeonStartStartMultiAssignUnitRequest
 }
 
 [MessagePackObject]
-public class DungeonStartStartMultiRequest
+public partial class DungeonStartStartMultiRequest
 {
     [Key("quest_id")]
     public int QuestId { get; set; }
@@ -1626,7 +1626,7 @@ public class DungeonStartStartMultiRequest
 }
 
 [MessagePackObject]
-public class DungeonStartStartRequest
+public partial class DungeonStartStartRequest
 {
     [Key("quest_id")]
     public int QuestId { get; set; }
@@ -1672,7 +1672,7 @@ public class DungeonStartStartRequest
 }
 
 [MessagePackObject]
-public class EarnEventEntryRequest
+public partial class EarnEventEntryRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -1686,7 +1686,7 @@ public class EarnEventEntryRequest
 }
 
 [MessagePackObject]
-public class EarnEventGetEventDataRequest
+public partial class EarnEventGetEventDataRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -1700,7 +1700,7 @@ public class EarnEventGetEventDataRequest
 }
 
 [MessagePackObject]
-public class EarnEventReceiveEventPointRewardRequest
+public partial class EarnEventReceiveEventPointRewardRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -1714,10 +1714,10 @@ public class EarnEventReceiveEventPointRewardRequest
 }
 
 [MessagePackObject]
-public class EmblemGetListRequest { }
+public partial class EmblemGetListRequest { }
 
 [MessagePackObject]
-public class EmblemSetRequest
+public partial class EmblemSetRequest
 {
     [Key("emblem_id")]
     public int EmblemId { get; set; }
@@ -1731,7 +1731,7 @@ public class EmblemSetRequest
 }
 
 [MessagePackObject]
-public class EulaAgreeAgreeRequest
+public partial class EulaAgreeAgreeRequest
 {
     [Key("id_token")]
     public string IdToken { get; set; }
@@ -1772,10 +1772,10 @@ public class EulaAgreeAgreeRequest
 }
 
 [MessagePackObject]
-public class EulaGetVersionListRequest { }
+public partial class EulaGetVersionListRequest { }
 
 [MessagePackObject]
-public class EulaGetVersionRequest
+public partial class EulaGetVersionRequest
 {
     [Key("id_token")]
     public string IdToken { get; set; }
@@ -1797,7 +1797,7 @@ public class EulaGetVersionRequest
 }
 
 [MessagePackObject]
-public class EventDamageGetTotalDamageHistoryRequest
+public partial class EventDamageGetTotalDamageHistoryRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -1811,7 +1811,7 @@ public class EventDamageGetTotalDamageHistoryRequest
 }
 
 [MessagePackObject]
-public class EventDamageReceiveDamageRewardRequest
+public partial class EventDamageReceiveDamageRewardRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -1825,7 +1825,7 @@ public class EventDamageReceiveDamageRewardRequest
 }
 
 [MessagePackObject]
-public class EventStoryReadRequest
+public partial class EventStoryReadRequest
 {
     [Key("event_story_id")]
     public int EventStoryId { get; set; }
@@ -1839,7 +1839,7 @@ public class EventStoryReadRequest
 }
 
 [MessagePackObject]
-public class EventSummonExecRequest
+public partial class EventSummonExecRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -1862,7 +1862,7 @@ public class EventSummonExecRequest
 }
 
 [MessagePackObject]
-public class EventSummonGetDataRequest
+public partial class EventSummonGetDataRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -1876,7 +1876,7 @@ public class EventSummonGetDataRequest
 }
 
 [MessagePackObject]
-public class EventSummonResetRequest
+public partial class EventSummonResetRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -1890,7 +1890,7 @@ public class EventSummonResetRequest
 }
 
 [MessagePackObject]
-public class EventTradeGetListRequest
+public partial class EventTradeGetListRequest
 {
     [Key("trade_group_id")]
     public int TradeGroupId { get; set; }
@@ -1904,7 +1904,7 @@ public class EventTradeGetListRequest
 }
 
 [MessagePackObject]
-public class EventTradeTradeRequest
+public partial class EventTradeTradeRequest
 {
     [Key("trade_group_id")]
     public int TradeGroupId { get; set; }
@@ -1926,7 +1926,7 @@ public class EventTradeTradeRequest
 }
 
 [MessagePackObject]
-public class ExHunterEventEntryRequest
+public partial class ExHunterEventEntryRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -1940,7 +1940,7 @@ public class ExHunterEventEntryRequest
 }
 
 [MessagePackObject]
-public class ExHunterEventGetEventDataRequest
+public partial class ExHunterEventGetEventDataRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -1954,7 +1954,7 @@ public class ExHunterEventGetEventDataRequest
 }
 
 [MessagePackObject]
-public class ExHunterEventReceiveExHunterPointRewardRequest
+public partial class ExHunterEventReceiveExHunterPointRewardRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -1975,7 +1975,7 @@ public class ExHunterEventReceiveExHunterPointRewardRequest
 }
 
 [MessagePackObject]
-public class ExRushEventEntryRequest
+public partial class ExRushEventEntryRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -1989,7 +1989,7 @@ public class ExRushEventEntryRequest
 }
 
 [MessagePackObject]
-public class ExRushEventGetEventDataRequest
+public partial class ExRushEventGetEventDataRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -2003,7 +2003,7 @@ public class ExRushEventGetEventDataRequest
 }
 
 [MessagePackObject]
-public class ExchangeGetUnitListRequest
+public partial class ExchangeGetUnitListRequest
 {
     [Key("exchange_ticket_id")]
     public int ExchangeTicketId { get; set; }
@@ -2017,7 +2017,7 @@ public class ExchangeGetUnitListRequest
 }
 
 [MessagePackObject]
-public class ExchangeSelectUnitRequest
+public partial class ExchangeSelectUnitRequest
 {
     [Key("exchange_ticket_id")]
     public int ExchangeTicketId { get; set; }
@@ -2035,7 +2035,7 @@ public class ExchangeSelectUnitRequest
 }
 
 [MessagePackObject]
-public class FortAddCarpenterRequest
+public partial class FortAddCarpenterRequest
 {
     [Key("payment_type")]
     public PaymentTypes PaymentType { get; set; }
@@ -2049,7 +2049,7 @@ public class FortAddCarpenterRequest
 }
 
 [MessagePackObject]
-public class FortBuildAtOnceRequest
+public partial class FortBuildAtOnceRequest
 {
     [Key("build_id")]
     public ulong BuildId { get; set; }
@@ -2067,7 +2067,7 @@ public class FortBuildAtOnceRequest
 }
 
 [MessagePackObject]
-public class FortBuildCancelRequest
+public partial class FortBuildCancelRequest
 {
     [Key("build_id")]
     public ulong BuildId { get; set; }
@@ -2081,7 +2081,7 @@ public class FortBuildCancelRequest
 }
 
 [MessagePackObject]
-public class FortBuildEndRequest
+public partial class FortBuildEndRequest
 {
     [Key("build_id")]
     public ulong BuildId { get; set; }
@@ -2095,7 +2095,7 @@ public class FortBuildEndRequest
 }
 
 [MessagePackObject]
-public class FortBuildStartRequest
+public partial class FortBuildStartRequest
 {
     [Key("fort_plant_id")]
     public int FortPlantId { get; set; }
@@ -2117,10 +2117,10 @@ public class FortBuildStartRequest
 }
 
 [MessagePackObject]
-public class FortGetDataRequest { }
+public partial class FortGetDataRequest { }
 
 [MessagePackObject]
-public class FortGetMultiIncomeRequest
+public partial class FortGetMultiIncomeRequest
 {
     [Key("build_id_list")]
     public IEnumerable<ulong> BuildIdList { get; set; } = [];
@@ -2134,7 +2134,7 @@ public class FortGetMultiIncomeRequest
 }
 
 [MessagePackObject]
-public class FortLevelupAtOnceRequest
+public partial class FortLevelupAtOnceRequest
 {
     [Key("build_id")]
     public ulong BuildId { get; set; }
@@ -2152,7 +2152,7 @@ public class FortLevelupAtOnceRequest
 }
 
 [MessagePackObject]
-public class FortLevelupCancelRequest
+public partial class FortLevelupCancelRequest
 {
     [Key("build_id")]
     public ulong BuildId { get; set; }
@@ -2166,7 +2166,7 @@ public class FortLevelupCancelRequest
 }
 
 [MessagePackObject]
-public class FortLevelupEndRequest
+public partial class FortLevelupEndRequest
 {
     [Key("build_id")]
     public ulong BuildId { get; set; }
@@ -2180,7 +2180,7 @@ public class FortLevelupEndRequest
 }
 
 [MessagePackObject]
-public class FortLevelupStartRequest
+public partial class FortLevelupStartRequest
 {
     [Key("build_id")]
     public ulong BuildId { get; set; }
@@ -2194,7 +2194,7 @@ public class FortLevelupStartRequest
 }
 
 [MessagePackObject]
-public class FortMoveRequest
+public partial class FortMoveRequest
 {
     [Key("build_id")]
     public ulong BuildId { get; set; }
@@ -2216,7 +2216,7 @@ public class FortMoveRequest
 }
 
 [MessagePackObject]
-public class FortSetNewFortPlantRequest
+public partial class FortSetNewFortPlantRequest
 {
     [Key("fort_plant_id_list")]
     public IEnumerable<int> FortPlantIdList { get; set; } = [];
@@ -2230,16 +2230,16 @@ public class FortSetNewFortPlantRequest
 }
 
 [MessagePackObject]
-public class FriendAllReplyDenyRequest { }
+public partial class FriendAllReplyDenyRequest { }
 
 [MessagePackObject]
-public class FriendApplyListRequest { }
+public partial class FriendApplyListRequest { }
 
 [MessagePackObject]
-public class FriendAutoSearchRequest { }
+public partial class FriendAutoSearchRequest { }
 
 [MessagePackObject]
-public class FriendDeleteRequest
+public partial class FriendDeleteRequest
 {
     [Key("friend_id")]
     public ulong FriendId { get; set; }
@@ -2253,13 +2253,13 @@ public class FriendDeleteRequest
 }
 
 [MessagePackObject]
-public class FriendFriendIndexRequest { }
+public partial class FriendFriendIndexRequest { }
 
 [MessagePackObject]
-public class FriendFriendListRequest { }
+public partial class FriendFriendListRequest { }
 
 [MessagePackObject]
-public class FriendGetSupportCharaDetailRequest
+public partial class FriendGetSupportCharaDetailRequest
 {
     [Key("support_viewer_id")]
     public ulong SupportViewerId { get; set; }
@@ -2273,10 +2273,10 @@ public class FriendGetSupportCharaDetailRequest
 }
 
 [MessagePackObject]
-public class FriendGetSupportCharaRequest { }
+public partial class FriendGetSupportCharaRequest { }
 
 [MessagePackObject]
-public class FriendIdSearchRequest
+public partial class FriendIdSearchRequest
 {
     [Key("search_id")]
     public ulong SearchId { get; set; }
@@ -2290,7 +2290,7 @@ public class FriendIdSearchRequest
 }
 
 [MessagePackObject]
-public class FriendReplyRequest
+public partial class FriendReplyRequest
 {
     [Key("friend_id")]
     public ulong FriendId { get; set; }
@@ -2308,7 +2308,7 @@ public class FriendReplyRequest
 }
 
 [MessagePackObject]
-public class FriendRequestCancelRequest
+public partial class FriendRequestCancelRequest
 {
     [Key("friend_id")]
     public ulong FriendId { get; set; }
@@ -2322,10 +2322,10 @@ public class FriendRequestCancelRequest
 }
 
 [MessagePackObject]
-public class FriendRequestListRequest { }
+public partial class FriendRequestListRequest { }
 
 [MessagePackObject]
-public class FriendRequestRequest
+public partial class FriendRequestRequest
 {
     [Key("friend_id")]
     public ulong FriendId { get; set; }
@@ -2339,7 +2339,7 @@ public class FriendRequestRequest
 }
 
 [MessagePackObject]
-public class FriendSetSupportCharaRequest
+public partial class FriendSetSupportCharaRequest
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -2420,7 +2420,7 @@ public class FriendSetSupportCharaRequest
 }
 
 [MessagePackObject]
-public class GuildChatGetNewMessageListRequest
+public partial class GuildChatGetNewMessageListRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2438,7 +2438,7 @@ public class GuildChatGetNewMessageListRequest
 }
 
 [MessagePackObject]
-public class GuildChatGetOldMessageListRequest
+public partial class GuildChatGetOldMessageListRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2456,7 +2456,7 @@ public class GuildChatGetOldMessageListRequest
 }
 
 [MessagePackObject]
-public class GuildChatPostMessageStampRequest
+public partial class GuildChatPostMessageStampRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2482,7 +2482,7 @@ public class GuildChatPostMessageStampRequest
 }
 
 [MessagePackObject]
-public class GuildChatPostMessageTextRequest
+public partial class GuildChatPostMessageTextRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2504,7 +2504,7 @@ public class GuildChatPostMessageTextRequest
 }
 
 [MessagePackObject]
-public class GuildChatPostReportRequest
+public partial class GuildChatPostReportRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2535,7 +2535,7 @@ public class GuildChatPostReportRequest
 }
 
 [MessagePackObject]
-public class GuildDisbandRequest
+public partial class GuildDisbandRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2549,7 +2549,7 @@ public class GuildDisbandRequest
 }
 
 [MessagePackObject]
-public class GuildDropMemberRequest
+public partial class GuildDropMemberRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2567,7 +2567,7 @@ public class GuildDropMemberRequest
 }
 
 [MessagePackObject]
-public class GuildEstablishRequest
+public partial class GuildEstablishRequest
 {
     [Key("guild_name")]
     public string GuildName { get; set; }
@@ -2608,7 +2608,7 @@ public class GuildEstablishRequest
 }
 
 [MessagePackObject]
-public class GuildGetGuildApplyDataRequest
+public partial class GuildGetGuildApplyDataRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2622,7 +2622,7 @@ public class GuildGetGuildApplyDataRequest
 }
 
 [MessagePackObject]
-public class GuildGetGuildMemberDataRequest
+public partial class GuildGetGuildMemberDataRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2636,13 +2636,13 @@ public class GuildGetGuildMemberDataRequest
 }
 
 [MessagePackObject]
-public class GuildIndexRequest { }
+public partial class GuildIndexRequest { }
 
 [MessagePackObject]
-public class GuildInviteGetGuildInviteReceiveDataRequest { }
+public partial class GuildInviteGetGuildInviteReceiveDataRequest { }
 
 [MessagePackObject]
-public class GuildInviteGetGuildInviteSendDataRequest
+public partial class GuildInviteGetGuildInviteSendDataRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2656,7 +2656,7 @@ public class GuildInviteGetGuildInviteSendDataRequest
 }
 
 [MessagePackObject]
-public class GuildInviteInviteCancelRequest
+public partial class GuildInviteInviteCancelRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2674,7 +2674,7 @@ public class GuildInviteInviteCancelRequest
 }
 
 [MessagePackObject]
-public class GuildInviteInviteReplyAllDenyRequest
+public partial class GuildInviteInviteReplyAllDenyRequest
 {
     [Key("guild_invite_params_list")]
     public IEnumerable<AtgenGuildInviteParamsList> GuildInviteParamsList { get; set; } = [];
@@ -2690,7 +2690,7 @@ public class GuildInviteInviteReplyAllDenyRequest
 }
 
 [MessagePackObject]
-public class GuildInviteInviteReplyRequest
+public partial class GuildInviteInviteReplyRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2712,7 +2712,7 @@ public class GuildInviteInviteReplyRequest
 }
 
 [MessagePackObject]
-public class GuildInviteInviteSendRequest
+public partial class GuildInviteInviteSendRequest
 {
     [Key("target_viewer_id")]
     public ulong TargetViewerId { get; set; }
@@ -2734,7 +2734,7 @@ public class GuildInviteInviteSendRequest
 }
 
 [MessagePackObject]
-public class GuildJoinReplyAllDenyRequest
+public partial class GuildJoinReplyAllDenyRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2752,7 +2752,7 @@ public class GuildJoinReplyAllDenyRequest
 }
 
 [MessagePackObject]
-public class GuildJoinReplyRequest
+public partial class GuildJoinReplyRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2774,7 +2774,7 @@ public class GuildJoinReplyRequest
 }
 
 [MessagePackObject]
-public class GuildJoinRequest
+public partial class GuildJoinRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2788,7 +2788,7 @@ public class GuildJoinRequest
 }
 
 [MessagePackObject]
-public class GuildJoinRequestCancelRequest
+public partial class GuildJoinRequestCancelRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2802,7 +2802,7 @@ public class GuildJoinRequestCancelRequest
 }
 
 [MessagePackObject]
-public class GuildJoinRequestRequest
+public partial class GuildJoinRequestRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2816,7 +2816,7 @@ public class GuildJoinRequestRequest
 }
 
 [MessagePackObject]
-public class GuildPostReportRequest
+public partial class GuildPostReportRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2852,7 +2852,7 @@ public class GuildPostReportRequest
 }
 
 [MessagePackObject]
-public class GuildResignRequest
+public partial class GuildResignRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2871,7 +2871,7 @@ public class GuildResignRequest
 }
 
 [MessagePackObject]
-public class GuildSearchAutoSearchRequest
+public partial class GuildSearchAutoSearchRequest
 {
     [Key("joining_condition_type_list")]
     public IEnumerable<int> JoiningConditionTypeList { get; set; } = [];
@@ -2897,7 +2897,7 @@ public class GuildSearchAutoSearchRequest
 }
 
 [MessagePackObject]
-public class GuildSearchGetGuildDetailRequest
+public partial class GuildSearchGetGuildDetailRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2911,7 +2911,7 @@ public class GuildSearchGetGuildDetailRequest
 }
 
 [MessagePackObject]
-public class GuildSearchIdSearchRequest
+public partial class GuildSearchIdSearchRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2925,7 +2925,7 @@ public class GuildSearchIdSearchRequest
 }
 
 [MessagePackObject]
-public class GuildSearchNameSearchRequest
+public partial class GuildSearchNameSearchRequest
 {
     [Key("guild_name")]
     public string GuildName { get; set; }
@@ -2939,7 +2939,7 @@ public class GuildSearchNameSearchRequest
 }
 
 [MessagePackObject]
-public class GuildUpdateGuildPositionTypeRequest
+public partial class GuildUpdateGuildPositionTypeRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -2965,7 +2965,7 @@ public class GuildUpdateGuildPositionTypeRequest
 }
 
 [MessagePackObject]
-public class GuildUpdateGuildSettingRequest
+public partial class GuildUpdateGuildSettingRequest
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -3011,7 +3011,7 @@ public class GuildUpdateGuildSettingRequest
 }
 
 [MessagePackObject]
-public class GuildUpdateUserSettingRequest
+public partial class GuildUpdateUserSettingRequest
 {
     [Key("profile_entity_type")]
     public EntityTypes ProfileEntityType { get; set; }
@@ -3053,7 +3053,7 @@ public class GuildUpdateUserSettingRequest
 }
 
 [MessagePackObject]
-public class InquiryAggregationRequest
+public partial class InquiryAggregationRequest
 {
     [Key("language_code")]
     public string LanguageCode { get; set; }
@@ -3071,7 +3071,7 @@ public class InquiryAggregationRequest
 }
 
 [MessagePackObject]
-public class InquiryDetailRequest
+public partial class InquiryDetailRequest
 {
     [Key("opinion_id")]
     public string OpinionId { get; set; }
@@ -3089,7 +3089,7 @@ public class InquiryDetailRequest
 }
 
 [MessagePackObject]
-public class InquiryReplyRequest
+public partial class InquiryReplyRequest
 {
     [Key("opinion_id")]
     public string OpinionId { get; set; }
@@ -3107,7 +3107,7 @@ public class InquiryReplyRequest
 }
 
 [MessagePackObject]
-public class InquirySendRequest
+public partial class InquirySendRequest
 {
     [Key("opinion_text")]
     public string OpinionText { get; set; }
@@ -3143,7 +3143,7 @@ public class InquirySendRequest
 }
 
 [MessagePackObject]
-public class InquiryTopRequest
+public partial class InquiryTopRequest
 {
     [Key("language_code")]
     public string LanguageCode { get; set; }
@@ -3157,10 +3157,10 @@ public class InquiryTopRequest
 }
 
 [MessagePackObject]
-public class ItemGetListRequest { }
+public partial class ItemGetListRequest { }
 
 [MessagePackObject]
-public class ItemUseRecoveryStaminaRequest
+public partial class ItemUseRecoveryStaminaRequest
 {
     [Key("use_item_list")]
     public IEnumerable<AtgenUseItemList> UseItemList { get; set; } = [];
@@ -3174,10 +3174,10 @@ public class ItemUseRecoveryStaminaRequest
 }
 
 [MessagePackObject]
-public class LoadIndexRequest { }
+public partial class LoadIndexRequest { }
 
 [MessagePackObject]
-public class LoginIndexRequest
+public partial class LoginIndexRequest
 {
     [Key("jws_result")]
     public string JwsResult { get; set; }
@@ -3191,7 +3191,7 @@ public class LoginIndexRequest
 }
 
 [MessagePackObject]
-public class LoginPenaltyConfirmRequest
+public partial class LoginPenaltyConfirmRequest
 {
     [Key("penalty_type")]
     public int PenaltyType { get; set; }
@@ -3209,7 +3209,7 @@ public class LoginPenaltyConfirmRequest
 }
 
 [MessagePackObject]
-public class LoginVerifyJwsRequest
+public partial class LoginVerifyJwsRequest
 {
     [Key("jws_result")]
     public string JwsResult { get; set; }
@@ -3223,7 +3223,7 @@ public class LoginVerifyJwsRequest
 }
 
 [MessagePackObject]
-public class LotteryGetOddsDataRequest
+public partial class LotteryGetOddsDataRequest
 {
     [Key("lottery_id")]
     public int LotteryId { get; set; }
@@ -3237,7 +3237,7 @@ public class LotteryGetOddsDataRequest
 }
 
 [MessagePackObject]
-public class LotteryLotteryExecRequest
+public partial class LotteryLotteryExecRequest
 {
     [Key("lottery_id")]
     public int LotteryId { get; set; }
@@ -3251,7 +3251,7 @@ public class LotteryLotteryExecRequest
 }
 
 [MessagePackObject]
-public class LotteryResultRequest
+public partial class LotteryResultRequest
 {
     [Key("lottery_id")]
     public int LotteryId { get; set; }
@@ -3265,7 +3265,7 @@ public class LotteryResultRequest
 }
 
 [MessagePackObject]
-public class MaintenanceGetTextRequest
+public partial class MaintenanceGetTextRequest
 {
     [Key("type")]
     public int Type { get; set; }
@@ -3283,7 +3283,7 @@ public class MaintenanceGetTextRequest
 }
 
 [MessagePackObject]
-public class MatchingCheckPenaltyUserRequest
+public partial class MatchingCheckPenaltyUserRequest
 {
     [Key("viewwer_id")]
     public ulong ViewwerId { get; set; }
@@ -3297,7 +3297,7 @@ public class MatchingCheckPenaltyUserRequest
 }
 
 [MessagePackObject]
-public class MatchingGetRoomListByGuildRequest
+public partial class MatchingGetRoomListByGuildRequest
 {
     [Key("compatible_id")]
     public int CompatibleId { get; set; }
@@ -3311,7 +3311,7 @@ public class MatchingGetRoomListByGuildRequest
 }
 
 [MessagePackObject]
-public class MatchingGetRoomListByLocationRequest
+public partial class MatchingGetRoomListByLocationRequest
 {
     [Key("region")]
     public string Region { get; set; }
@@ -3347,7 +3347,7 @@ public class MatchingGetRoomListByLocationRequest
 }
 
 [MessagePackObject]
-public class MatchingGetRoomListByQuestIdRequest
+public partial class MatchingGetRoomListByQuestIdRequest
 {
     [Key("region")]
     public string Region { get; set; }
@@ -3369,7 +3369,7 @@ public class MatchingGetRoomListByQuestIdRequest
 }
 
 [MessagePackObject]
-public class MatchingGetRoomListRequest
+public partial class MatchingGetRoomListRequest
 {
     [Key("region")]
     public string Region { get; set; }
@@ -3391,7 +3391,7 @@ public class MatchingGetRoomListRequest
 }
 
 [MessagePackObject]
-public class MatchingGetRoomNameRequest
+public partial class MatchingGetRoomNameRequest
 {
     [Key("room_id")]
     public int RoomId { get; set; }
@@ -3405,7 +3405,7 @@ public class MatchingGetRoomNameRequest
 }
 
 [MessagePackObject]
-public class MazeEventEntryRequest
+public partial class MazeEventEntryRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -3419,7 +3419,7 @@ public class MazeEventEntryRequest
 }
 
 [MessagePackObject]
-public class MazeEventGetEventDataRequest
+public partial class MazeEventGetEventDataRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -3433,7 +3433,7 @@ public class MazeEventGetEventDataRequest
 }
 
 [MessagePackObject]
-public class MazeEventReceiveMazePointRewardRequest
+public partial class MazeEventReceiveMazePointRewardRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -3447,7 +3447,7 @@ public class MazeEventReceiveMazePointRewardRequest
 }
 
 [MessagePackObject]
-public class MemoryEventActivateRequest
+public partial class MemoryEventActivateRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -3461,13 +3461,13 @@ public class MemoryEventActivateRequest
 }
 
 [MessagePackObject]
-public class MissionGetDrillMissionListRequest { }
+public partial class MissionGetDrillMissionListRequest { }
 
 [MessagePackObject]
-public class MissionGetMissionListRequest { }
+public partial class MissionGetMissionListRequest { }
 
 [MessagePackObject]
-public class MissionReceiveAlbumRewardRequest
+public partial class MissionReceiveAlbumRewardRequest
 {
     [Key("album_mission_id_list")]
     public IEnumerable<int> AlbumMissionIdList { get; set; } = [];
@@ -3481,7 +3481,7 @@ public class MissionReceiveAlbumRewardRequest
 }
 
 [MessagePackObject]
-public class MissionReceiveBeginnerRewardRequest
+public partial class MissionReceiveBeginnerRewardRequest
 {
     [Key("beginner_mission_id_list")]
     public IEnumerable<int> BeginnerMissionIdList { get; set; } = [];
@@ -3495,7 +3495,7 @@ public class MissionReceiveBeginnerRewardRequest
 }
 
 [MessagePackObject]
-public class MissionReceiveDailyRewardRequest
+public partial class MissionReceiveDailyRewardRequest
 {
     [Key("mission_params_list")]
     public IEnumerable<AtgenMissionParamsList> MissionParamsList { get; set; } = [];
@@ -3509,7 +3509,7 @@ public class MissionReceiveDailyRewardRequest
 }
 
 [MessagePackObject]
-public class MissionReceiveDrillRewardRequest
+public partial class MissionReceiveDrillRewardRequest
 {
     [Key("drill_mission_id_list")]
     public IEnumerable<int> DrillMissionIdList { get; set; } = [];
@@ -3530,7 +3530,7 @@ public class MissionReceiveDrillRewardRequest
 }
 
 [MessagePackObject]
-public class MissionReceiveMainStoryRewardRequest
+public partial class MissionReceiveMainStoryRewardRequest
 {
     [Key("main_story_mission_id_list")]
     public IEnumerable<int> MainStoryMissionIdList { get; set; } = [];
@@ -3544,7 +3544,7 @@ public class MissionReceiveMainStoryRewardRequest
 }
 
 [MessagePackObject]
-public class MissionReceiveMemoryEventRewardRequest
+public partial class MissionReceiveMemoryEventRewardRequest
 {
     [Key("memory_event_mission_id_list")]
     public IEnumerable<int> MemoryEventMissionIdList { get; set; } = [];
@@ -3558,7 +3558,7 @@ public class MissionReceiveMemoryEventRewardRequest
 }
 
 [MessagePackObject]
-public class MissionReceiveNormalRewardRequest
+public partial class MissionReceiveNormalRewardRequest
 {
     [Key("normal_mission_id_list")]
     public IEnumerable<int> NormalMissionIdList { get; set; } = [];
@@ -3572,7 +3572,7 @@ public class MissionReceiveNormalRewardRequest
 }
 
 [MessagePackObject]
-public class MissionReceivePeriodRewardRequest
+public partial class MissionReceivePeriodRewardRequest
 {
     [Key("period_mission_id_list")]
     public IEnumerable<int> PeriodMissionIdList { get; set; } = [];
@@ -3586,7 +3586,7 @@ public class MissionReceivePeriodRewardRequest
 }
 
 [MessagePackObject]
-public class MissionReceiveSpecialRewardRequest
+public partial class MissionReceiveSpecialRewardRequest
 {
     [Key("special_mission_id_list")]
     public IEnumerable<int> SpecialMissionIdList { get; set; } = [];
@@ -3600,7 +3600,7 @@ public class MissionReceiveSpecialRewardRequest
 }
 
 [MessagePackObject]
-public class MissionUnlockDrillMissionGroupRequest
+public partial class MissionUnlockDrillMissionGroupRequest
 {
     [Key("drill_mission_group_id")]
     public int DrillMissionGroupId { get; set; }
@@ -3614,7 +3614,7 @@ public class MissionUnlockDrillMissionGroupRequest
 }
 
 [MessagePackObject]
-public class MissionUnlockMainStoryGroupRequest
+public partial class MissionUnlockMainStoryGroupRequest
 {
     [Key("main_story_mission_group_id")]
     public int MainStoryMissionGroupId { get; set; }
@@ -3628,13 +3628,13 @@ public class MissionUnlockMainStoryGroupRequest
 }
 
 [MessagePackObject]
-public class MypageInfoRequest { }
+public partial class MypageInfoRequest { }
 
 [MessagePackObject]
-public class OptionGetOptionRequest { }
+public partial class OptionGetOptionRequest { }
 
 [MessagePackObject]
-public class OptionSetOptionRequest
+public partial class OptionSetOptionRequest
 {
     [Key("option_setting")]
     public OptionData OptionSetting { get; set; }
@@ -3648,10 +3648,10 @@ public class OptionSetOptionRequest
 }
 
 [MessagePackObject]
-public class PartyIndexRequest { }
+public partial class PartyIndexRequest { }
 
 [MessagePackObject]
-public class PartySetMainPartyNoRequest
+public partial class PartySetMainPartyNoRequest
 {
     [Key("main_party_no")]
     public int MainPartyNo { get; set; }
@@ -3665,7 +3665,7 @@ public class PartySetMainPartyNoRequest
 }
 
 [MessagePackObject]
-public class PartySetPartySettingRequest
+public partial class PartySetPartySettingRequest
 {
     [Key("party_no")]
     public int PartyNo { get; set; }
@@ -3702,7 +3702,7 @@ public class PartySetPartySettingRequest
 }
 
 [MessagePackObject]
-public class PartyUpdatePartyNameRequest
+public partial class PartyUpdatePartyNameRequest
 {
     [Key("party_no")]
     public int PartyNo { get; set; }
@@ -3720,10 +3720,10 @@ public class PartyUpdatePartyNameRequest
 }
 
 [MessagePackObject]
-public class PlatformAchievementGetPlatformAchievementListRequest { }
+public partial class PlatformAchievementGetPlatformAchievementListRequest { }
 
 [MessagePackObject]
-public class PresentGetHistoryListRequest
+public partial class PresentGetHistoryListRequest
 {
     [Key("present_history_id")]
     public ulong PresentHistoryId { get; set; }
@@ -3737,7 +3737,7 @@ public class PresentGetHistoryListRequest
 }
 
 [MessagePackObject]
-public class PresentGetPresentListRequest
+public partial class PresentGetPresentListRequest
 {
     [Key("is_limit")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
@@ -3756,7 +3756,7 @@ public class PresentGetPresentListRequest
 }
 
 [MessagePackObject]
-public class PresentReceiveRequest
+public partial class PresentReceiveRequest
 {
     [Key("present_id_list")]
     public IEnumerable<ulong> PresentIdList { get; set; } = [];
@@ -3775,7 +3775,7 @@ public class PresentReceiveRequest
 }
 
 [MessagePackObject]
-public class PushNotificationUpdateSettingRequest
+public partial class PushNotificationUpdateSettingRequest
 {
     [Key("region")]
     public string Region { get; set; }
@@ -3797,7 +3797,7 @@ public class PushNotificationUpdateSettingRequest
 }
 
 [MessagePackObject]
-public class QuestDropListRequest
+public partial class QuestDropListRequest
 {
     [Key("quest_id")]
     public int QuestId { get; set; }
@@ -3811,7 +3811,7 @@ public class QuestDropListRequest
 }
 
 [MessagePackObject]
-public class QuestGetQuestClearPartyMultiRequest
+public partial class QuestGetQuestClearPartyMultiRequest
 {
     [Key("quest_id")]
     public int QuestId { get; set; }
@@ -3825,7 +3825,7 @@ public class QuestGetQuestClearPartyMultiRequest
 }
 
 [MessagePackObject]
-public class QuestGetQuestClearPartyRequest
+public partial class QuestGetQuestClearPartyRequest
 {
     [Key("quest_id")]
     public int QuestId { get; set; }
@@ -3839,10 +3839,10 @@ public class QuestGetQuestClearPartyRequest
 }
 
 [MessagePackObject]
-public class QuestGetSupportUserListRequest { }
+public partial class QuestGetSupportUserListRequest { }
 
 [MessagePackObject]
-public class QuestOpenTreasureRequest
+public partial class QuestOpenTreasureRequest
 {
     [Key("quest_treasure_id")]
     public int QuestTreasureId { get; set; }
@@ -3856,7 +3856,7 @@ public class QuestOpenTreasureRequest
 }
 
 [MessagePackObject]
-public class QuestReadStoryRequest
+public partial class QuestReadStoryRequest
 {
     [Key("quest_story_id")]
     public int QuestStoryId { get; set; }
@@ -3870,7 +3870,7 @@ public class QuestReadStoryRequest
 }
 
 [MessagePackObject]
-public class QuestSearchQuestClearPartyCharaMultiRequest
+public partial class QuestSearchQuestClearPartyCharaMultiRequest
 {
     [Key("quest_id_list")]
     public IEnumerable<int> QuestIdList { get; set; } = [];
@@ -3884,7 +3884,7 @@ public class QuestSearchQuestClearPartyCharaMultiRequest
 }
 
 [MessagePackObject]
-public class QuestSearchQuestClearPartyCharaRequest
+public partial class QuestSearchQuestClearPartyCharaRequest
 {
     [Key("quest_id_list")]
     public IEnumerable<int> QuestIdList { get; set; } = [];
@@ -3898,7 +3898,7 @@ public class QuestSearchQuestClearPartyCharaRequest
 }
 
 [MessagePackObject]
-public class QuestSearchQuestClearPartyMultiRequest
+public partial class QuestSearchQuestClearPartyMultiRequest
 {
     [Key("quest_id")]
     public int QuestId { get; set; }
@@ -3913,18 +3913,18 @@ public class QuestSearchQuestClearPartyMultiRequest
     public Dragons DragonIdList { get; set; }
 
     [Key("weapon_body_id_list")]
-    public WeaponBodies WeaponBodyIdList { get; set; }
+    public IEnumerable<int> WeaponBodyIdList { get; set; } = [];
 
     [Key("ability_crest_id_list")]
-    public AbilityCrests AbilityCrestIdList { get; set; }
+    public IEnumerable<int> AbilityCrestIdList { get; set; } = [];
 
     public QuestSearchQuestClearPartyMultiRequest(
         int questId,
         int partySwitchNo,
         Charas charaIdList,
         Dragons dragonIdList,
-        WeaponBodies weaponBodyIdList,
-        AbilityCrests abilityCrestIdList
+        IEnumerable<int> weaponBodyIdList,
+        IEnumerable<int> abilityCrestIdList
     )
     {
         this.QuestId = questId;
@@ -3939,7 +3939,7 @@ public class QuestSearchQuestClearPartyMultiRequest
 }
 
 [MessagePackObject]
-public class QuestSearchQuestClearPartyRequest
+public partial class QuestSearchQuestClearPartyRequest
 {
     [Key("quest_id")]
     public int QuestId { get; set; }
@@ -3954,18 +3954,18 @@ public class QuestSearchQuestClearPartyRequest
     public Dragons DragonIdList { get; set; }
 
     [Key("weapon_body_id_list")]
-    public WeaponBodies WeaponBodyIdList { get; set; }
+    public IEnumerable<int> WeaponBodyIdList { get; set; } = [];
 
     [Key("ability_crest_id_list")]
-    public AbilityCrests AbilityCrestIdList { get; set; }
+    public IEnumerable<int> AbilityCrestIdList { get; set; } = [];
 
     public QuestSearchQuestClearPartyRequest(
         int questId,
         int partySwitchNo,
         Charas charaIdList,
         Dragons dragonIdList,
-        WeaponBodies weaponBodyIdList,
-        AbilityCrests abilityCrestIdList
+        IEnumerable<int> weaponBodyIdList,
+        IEnumerable<int> abilityCrestIdList
     )
     {
         this.QuestId = questId;
@@ -3980,7 +3980,7 @@ public class QuestSearchQuestClearPartyRequest
 }
 
 [MessagePackObject]
-public class QuestSetQuestClearPartyMultiRequest
+public partial class QuestSetQuestClearPartyMultiRequest
 {
     [Key("quest_id")]
     public int QuestId { get; set; }
@@ -4001,7 +4001,7 @@ public class QuestSetQuestClearPartyMultiRequest
 }
 
 [MessagePackObject]
-public class QuestSetQuestClearPartyRequest
+public partial class QuestSetQuestClearPartyRequest
 {
     [Key("quest_id")]
     public int QuestId { get; set; }
@@ -4022,7 +4022,7 @@ public class QuestSetQuestClearPartyRequest
 }
 
 [MessagePackObject]
-public class RaidEventEntryRequest
+public partial class RaidEventEntryRequest
 {
     [Key("raid_event_id")]
     public int RaidEventId { get; set; }
@@ -4036,7 +4036,7 @@ public class RaidEventEntryRequest
 }
 
 [MessagePackObject]
-public class RaidEventGetEventDataRequest
+public partial class RaidEventGetEventDataRequest
 {
     [Key("raid_event_id")]
     public int RaidEventId { get; set; }
@@ -4050,7 +4050,7 @@ public class RaidEventGetEventDataRequest
 }
 
 [MessagePackObject]
-public class RaidEventReceiveRaidPointRewardRequest
+public partial class RaidEventReceiveRaidPointRewardRequest
 {
     [Key("raid_event_id")]
     public int RaidEventId { get; set; }
@@ -4071,13 +4071,13 @@ public class RaidEventReceiveRaidPointRewardRequest
 }
 
 [MessagePackObject]
-public class RedoableSummonFixExecRequest { }
+public partial class RedoableSummonFixExecRequest { }
 
 [MessagePackObject]
-public class RedoableSummonGetDataRequest { }
+public partial class RedoableSummonGetDataRequest { }
 
 [MessagePackObject]
-public class RedoableSummonPreExecRequest
+public partial class RedoableSummonPreExecRequest
 {
     [Key("summon_id")]
     public int SummonId { get; set; }
@@ -4091,10 +4091,10 @@ public class RedoableSummonPreExecRequest
 }
 
 [MessagePackObject]
-public class RepeatEndRequest { }
+public partial class RepeatEndRequest { }
 
 [MessagePackObject]
-public class ShopChargeCancelRequest
+public partial class ShopChargeCancelRequest
 {
     [Key("shop_type")]
     public int ShopType { get; set; }
@@ -4112,7 +4112,7 @@ public class ShopChargeCancelRequest
 }
 
 [MessagePackObject]
-public class ShopGetBonusRequest
+public partial class ShopGetBonusRequest
 {
     [Key("bonus_type")]
     public int BonusType { get; set; }
@@ -4126,7 +4126,7 @@ public class ShopGetBonusRequest
 }
 
 [MessagePackObject]
-public class ShopGetDreamSelectUnitListRequest
+public partial class ShopGetDreamSelectUnitListRequest
 {
     [Key("goods_id")]
     public int GoodsId { get; set; }
@@ -4140,13 +4140,13 @@ public class ShopGetDreamSelectUnitListRequest
 }
 
 [MessagePackObject]
-public class ShopGetListRequest { }
+public partial class ShopGetListRequest { }
 
 [MessagePackObject]
-public class ShopGetProductListRequest { }
+public partial class ShopGetProductListRequest { }
 
 [MessagePackObject]
-public class ShopItemSummonExecRequest
+public partial class ShopItemSummonExecRequest
 {
     [Key("payment_type")]
     public PaymentTypes PaymentType { get; set; }
@@ -4164,10 +4164,10 @@ public class ShopItemSummonExecRequest
 }
 
 [MessagePackObject]
-public class ShopItemSummonOddRequest { }
+public partial class ShopItemSummonOddRequest { }
 
 [MessagePackObject]
-public class ShopMaterialShopPurchaseRequest
+public partial class ShopMaterialShopPurchaseRequest
 {
     [Key("goods_id")]
     public int GoodsId { get; set; }
@@ -4198,7 +4198,7 @@ public class ShopMaterialShopPurchaseRequest
 }
 
 [MessagePackObject]
-public class ShopNormalShopPurchaseRequest
+public partial class ShopNormalShopPurchaseRequest
 {
     [Key("goods_id")]
     public int GoodsId { get; set; }
@@ -4220,7 +4220,7 @@ public class ShopNormalShopPurchaseRequest
 }
 
 [MessagePackObject]
-public class ShopPreChargeCheckRequest
+public partial class ShopPreChargeCheckRequest
 {
     [Key("shop_type")]
     public int ShopType { get; set; }
@@ -4242,7 +4242,7 @@ public class ShopPreChargeCheckRequest
 }
 
 [MessagePackObject]
-public class ShopSpecialShopPurchaseRequest
+public partial class ShopSpecialShopPurchaseRequest
 {
     [Key("goods_id")]
     public int GoodsId { get; set; }
@@ -4273,7 +4273,7 @@ public class ShopSpecialShopPurchaseRequest
 }
 
 [MessagePackObject]
-public class SimpleEventEntryRequest
+public partial class SimpleEventEntryRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -4287,7 +4287,7 @@ public class SimpleEventEntryRequest
 }
 
 [MessagePackObject]
-public class SimpleEventGetEventDataRequest
+public partial class SimpleEventGetEventDataRequest
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -4301,10 +4301,10 @@ public class SimpleEventGetEventDataRequest
 }
 
 [MessagePackObject]
-public class StampGetStampRequest { }
+public partial class StampGetStampRequest { }
 
 [MessagePackObject]
-public class StampSetEquipStampRequest
+public partial class StampSetEquipStampRequest
 {
     [Key("deck_no")]
     public int DeckNo { get; set; }
@@ -4322,7 +4322,7 @@ public class StampSetEquipStampRequest
 }
 
 [MessagePackObject]
-public class StoryReadRequest
+public partial class StoryReadRequest
 {
     [Key("unit_story_id")]
     public int UnitStoryId { get; set; }
@@ -4336,10 +4336,10 @@ public class StoryReadRequest
 }
 
 [MessagePackObject]
-public class StorySkipSkipRequest { }
+public partial class StorySkipSkipRequest { }
 
 [MessagePackObject]
-public class SuggestionGetCategoryListRequest
+public partial class SuggestionGetCategoryListRequest
 {
     [Key("language_code")]
     public string LanguageCode { get; set; }
@@ -4353,7 +4353,7 @@ public class SuggestionGetCategoryListRequest
 }
 
 [MessagePackObject]
-public class SuggestionSetRequest
+public partial class SuggestionSetRequest
 {
     [Key("message")]
     public string Message { get; set; }
@@ -4371,7 +4371,7 @@ public class SuggestionSetRequest
 }
 
 [MessagePackObject]
-public class SummonExcludeGetListRequest
+public partial class SummonExcludeGetListRequest
 {
     [Key("summon_id")]
     public int SummonId { get; set; }
@@ -4385,7 +4385,7 @@ public class SummonExcludeGetListRequest
 }
 
 [MessagePackObject]
-public class SummonExcludeGetOddsDataRequest
+public partial class SummonExcludeGetOddsDataRequest
 {
     [Key("summon_id")]
     public int SummonId { get; set; }
@@ -4411,7 +4411,7 @@ public class SummonExcludeGetOddsDataRequest
 }
 
 [MessagePackObject]
-public class SummonExcludeRequestRequest
+public partial class SummonExcludeRequestRequest
 {
     [Key("summon_id")]
     public int SummonId { get; set; }
@@ -4442,7 +4442,7 @@ public class SummonExcludeRequestRequest
 }
 
 [MessagePackObject]
-public class SummonGetOddsDataRequest
+public partial class SummonGetOddsDataRequest
 {
     [Key("summon_id")]
     public int SummonId { get; set; }
@@ -4456,13 +4456,13 @@ public class SummonGetOddsDataRequest
 }
 
 [MessagePackObject]
-public class SummonGetSummonHistoryRequest { }
+public partial class SummonGetSummonHistoryRequest { }
 
 [MessagePackObject]
-public class SummonGetSummonListRequest { }
+public partial class SummonGetSummonListRequest { }
 
 [MessagePackObject]
-public class SummonGetSummonPointTradeRequest
+public partial class SummonGetSummonPointTradeRequest
 {
     [Key("summon_id")]
     public int SummonId { get; set; }
@@ -4476,7 +4476,7 @@ public class SummonGetSummonPointTradeRequest
 }
 
 [MessagePackObject]
-public class SummonRequestRequest
+public partial class SummonRequestRequest
 {
     [Key("summon_id")]
     public int SummonId { get; set; }
@@ -4512,7 +4512,7 @@ public class SummonRequestRequest
 }
 
 [MessagePackObject]
-public class SummonSummonPointTradeRequest
+public partial class SummonSummonPointTradeRequest
 {
     [Key("summon_id")]
     public int SummonId { get; set; }
@@ -4530,7 +4530,7 @@ public class SummonSummonPointTradeRequest
 }
 
 [MessagePackObject]
-public class TalismanSellRequest
+public partial class TalismanSellRequest
 {
     [Key("talisman_key_id_list")]
     public IEnumerable<ulong> TalismanKeyIdList { get; set; } = [];
@@ -4544,7 +4544,7 @@ public class TalismanSellRequest
 }
 
 [MessagePackObject]
-public class TalismanSetLockRequest
+public partial class TalismanSetLockRequest
 {
     [Key("talisman_key_id")]
     public ulong TalismanKeyId { get; set; }
@@ -4563,10 +4563,10 @@ public class TalismanSetLockRequest
 }
 
 [MessagePackObject]
-public class TimeAttackRankingGetDataRequest { }
+public partial class TimeAttackRankingGetDataRequest { }
 
 [MessagePackObject]
-public class TimeAttackRankingReceiveTierRewardRequest
+public partial class TimeAttackRankingReceiveTierRewardRequest
 {
     [Key("quest_id")]
     public int QuestId { get; set; }
@@ -4580,7 +4580,7 @@ public class TimeAttackRankingReceiveTierRewardRequest
 }
 
 [MessagePackObject]
-public class ToolAuthRequest
+public partial class ToolAuthRequest
 {
     [Key("uuid")]
     public string Uuid { get; set; }
@@ -4598,13 +4598,13 @@ public class ToolAuthRequest
 }
 
 [MessagePackObject]
-public class ToolGetMaintenanceTimeRequest { }
+public partial class ToolGetMaintenanceTimeRequest { }
 
 [MessagePackObject]
-public class ToolGetServiceStatusRequest { }
+public partial class ToolGetServiceStatusRequest { }
 
 [MessagePackObject]
-public class ToolReauthRequest
+public partial class ToolReauthRequest
 {
     [Key("uuid")]
     public string Uuid { get; set; }
@@ -4622,7 +4622,7 @@ public class ToolReauthRequest
 }
 
 [MessagePackObject]
-public class ToolSignupRequest
+public partial class ToolSignupRequest
 {
     [Key("uuid")]
     public string Uuid { get; set; }
@@ -4683,10 +4683,10 @@ public class ToolSignupRequest
 }
 
 [MessagePackObject]
-public class TrackRecordUpdateProgressRequest { }
+public partial class TrackRecordUpdateProgressRequest { }
 
 [MessagePackObject]
-public class TransitionTransitionByNAccountRequest
+public partial class TransitionTransitionByNAccountRequest
 {
     [Key("uuid")]
     public string Uuid { get; set; }
@@ -4704,10 +4704,10 @@ public class TransitionTransitionByNAccountRequest
 }
 
 [MessagePackObject]
-public class TreasureTradeGetListAllRequest { }
+public partial class TreasureTradeGetListAllRequest { }
 
 [MessagePackObject]
-public class TreasureTradeGetListRequest
+public partial class TreasureTradeGetListRequest
 {
     [Key("trade_group_id")]
     public int TradeGroupId { get; set; }
@@ -4721,7 +4721,7 @@ public class TreasureTradeGetListRequest
 }
 
 [MessagePackObject]
-public class TreasureTradeTradeRequest
+public partial class TreasureTradeTradeRequest
 {
     [Key("trade_group_id")]
     public int TradeGroupId { get; set; }
@@ -4752,7 +4752,7 @@ public class TreasureTradeTradeRequest
 }
 
 [MessagePackObject]
-public class TutorialUpdateFlagsRequest
+public partial class TutorialUpdateFlagsRequest
 {
     [Key("flag_id")]
     public int FlagId { get; set; }
@@ -4766,7 +4766,7 @@ public class TutorialUpdateFlagsRequest
 }
 
 [MessagePackObject]
-public class TutorialUpdateStepRequest
+public partial class TutorialUpdateStepRequest
 {
     [Key("step")]
     public int Step { get; set; }
@@ -4793,7 +4793,7 @@ public class TutorialUpdateStepRequest
 }
 
 [MessagePackObject]
-public class UpdateNamechangeRequest
+public partial class UpdateNamechangeRequest
 {
     [Key("name")]
     public string Name { get; set; }
@@ -4807,7 +4807,7 @@ public class UpdateNamechangeRequest
 }
 
 [MessagePackObject]
-public class UpdateResetNewRequest
+public partial class UpdateResetNewRequest
 {
     [Key("target_list")]
     public IEnumerable<AtgenTargetList> TargetList { get; set; } = [];
@@ -4821,16 +4821,16 @@ public class UpdateResetNewRequest
 }
 
 [MessagePackObject]
-public class UserGetNAccountInfoRequest { }
+public partial class UserGetNAccountInfoRequest { }
 
 [MessagePackObject]
-public class UserGetWalletBalanceRequest { }
+public partial class UserGetWalletBalanceRequest { }
 
 [MessagePackObject]
-public class UserLinkedNAccountRequest { }
+public partial class UserLinkedNAccountRequest { }
 
 [MessagePackObject]
-public class UserOptInSettingRequest
+public partial class UserOptInSettingRequest
 {
     [Key("is_optin")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
@@ -4845,7 +4845,7 @@ public class UserOptInSettingRequest
 }
 
 [MessagePackObject]
-public class UserRecoverStaminaByStoneRequest
+public partial class UserRecoverStaminaByStoneRequest
 {
     [Key("recovery_type")]
     public int RecoveryType { get; set; }
@@ -4871,10 +4871,10 @@ public class UserRecoverStaminaByStoneRequest
 }
 
 [MessagePackObject]
-public class UserWithdrawalRequest { }
+public partial class UserWithdrawalRequest { }
 
 [MessagePackObject]
-public class VersionGetResourceVersionRequest
+public partial class VersionGetResourceVersionRequest
 {
     [Key("platform")]
     public int Platform { get; set; }
@@ -4892,7 +4892,7 @@ public class VersionGetResourceVersionRequest
 }
 
 [MessagePackObject]
-public class WalkerSendGiftMultipleRequest
+public partial class WalkerSendGiftMultipleRequest
 {
     [Key("dragon_gift_id")]
     public int DragonGiftId { get; set; }
@@ -4910,7 +4910,7 @@ public class WalkerSendGiftMultipleRequest
 }
 
 [MessagePackObject]
-public class WallFailRequest
+public partial class WallFailRequest
 {
     [Key("dungeon_key")]
     public string DungeonKey { get; set; }
@@ -4928,7 +4928,7 @@ public class WallFailRequest
 }
 
 [MessagePackObject]
-public class WallGetMonthlyRewardRequest
+public partial class WallGetMonthlyRewardRequest
 {
     [Key("quest_group_id")]
     public int QuestGroupId { get; set; }
@@ -4942,7 +4942,7 @@ public class WallGetMonthlyRewardRequest
 }
 
 [MessagePackObject]
-public class WallGetWallClearPartyRequest
+public partial class WallGetWallClearPartyRequest
 {
     [Key("wall_id")]
     public int WallId { get; set; }
@@ -4956,7 +4956,7 @@ public class WallGetWallClearPartyRequest
 }
 
 [MessagePackObject]
-public class WallReceiveMonthlyRewardRequest
+public partial class WallReceiveMonthlyRewardRequest
 {
     [Key("quest_group_id")]
     public int QuestGroupId { get; set; }
@@ -4970,7 +4970,7 @@ public class WallReceiveMonthlyRewardRequest
 }
 
 [MessagePackObject]
-public class WallRecordRecordRequest
+public partial class WallRecordRecordRequest
 {
     [Key("wall_id")]
     public int WallId { get; set; }
@@ -4988,7 +4988,7 @@ public class WallRecordRecordRequest
 }
 
 [MessagePackObject]
-public class WallSetWallClearPartyRequest
+public partial class WallSetWallClearPartyRequest
 {
     [Key("wall_id")]
     public int WallId { get; set; }
@@ -5009,7 +5009,7 @@ public class WallSetWallClearPartyRequest
 }
 
 [MessagePackObject]
-public class WallStartStartAssignUnitRequest
+public partial class WallStartStartAssignUnitRequest
 {
     [Key("wall_id")]
     public int WallId { get; set; }
@@ -5040,7 +5040,7 @@ public class WallStartStartAssignUnitRequest
 }
 
 [MessagePackObject]
-public class WallStartStartRequest
+public partial class WallStartStartRequest
 {
     [Key("wall_id")]
     public int WallId { get; set; }
@@ -5066,17 +5066,18 @@ public class WallStartStartRequest
 }
 
 [MessagePackObject]
-public class WeaponBodyBuildupPieceRequest
+public partial class WeaponBodyBuildupPieceRequest
 {
     [Key("weapon_body_id")]
     public WeaponBodies WeaponBodyId { get; set; }
 
     [Key("buildup_weapon_body_piece_list")]
-    public WeaponBodies BuildupWeaponBodyPieceList { get; set; }
+    public IEnumerable<AtgenBuildupWeaponBodyPieceList> BuildupWeaponBodyPieceList { get; set; } =
+        [];
 
     public WeaponBodyBuildupPieceRequest(
         WeaponBodies weaponBodyId,
-        WeaponBodies buildupWeaponBodyPieceList
+        IEnumerable<AtgenBuildupWeaponBodyPieceList> buildupWeaponBodyPieceList
     )
     {
         this.WeaponBodyId = weaponBodyId;
@@ -5087,7 +5088,7 @@ public class WeaponBodyBuildupPieceRequest
 }
 
 [MessagePackObject]
-public class WeaponBodyCraftRequest
+public partial class WeaponBodyCraftRequest
 {
     [Key("weapon_body_id")]
     public WeaponBodies WeaponBodyId { get; set; }
@@ -5101,7 +5102,7 @@ public class WeaponBodyCraftRequest
 }
 
 [MessagePackObject]
-public class WeaponBuildupRequest
+public partial class WeaponBuildupRequest
 {
     [Key("base_weapon_key_id")]
     public ulong BaseWeaponKeyId { get; set; }
@@ -5122,7 +5123,7 @@ public class WeaponBuildupRequest
 }
 
 [MessagePackObject]
-public class WeaponLimitBreakRequest
+public partial class WeaponLimitBreakRequest
 {
     [Key("base_weapon_key_id")]
     public ulong BaseWeaponKeyId { get; set; }
@@ -5143,15 +5144,15 @@ public class WeaponLimitBreakRequest
 }
 
 [MessagePackObject]
-public class WeaponResetPlusCountRequest
+public partial class WeaponResetPlusCountRequest
 {
     [Key("weapon_key_id")]
     public ulong WeaponKeyId { get; set; }
 
     [Key("plus_count_type")]
-    public int PlusCountType { get; set; }
+    public PlusCountType PlusCountType { get; set; }
 
-    public WeaponResetPlusCountRequest(ulong weaponKeyId, int plusCountType)
+    public WeaponResetPlusCountRequest(ulong weaponKeyId, PlusCountType plusCountType)
     {
         this.WeaponKeyId = weaponKeyId;
         this.PlusCountType = plusCountType;
@@ -5161,7 +5162,7 @@ public class WeaponResetPlusCountRequest
 }
 
 [MessagePackObject]
-public class WeaponSellRequest
+public partial class WeaponSellRequest
 {
     [Key("weapon_key_id_list")]
     public IEnumerable<ulong> WeaponKeyIdList { get; set; } = [];
@@ -5175,7 +5176,7 @@ public class WeaponSellRequest
 }
 
 [MessagePackObject]
-public class WeaponSetLockRequest
+public partial class WeaponSetLockRequest
 {
     [Key("weapon_key_id")]
     public ulong WeaponKeyId { get; set; }
@@ -5194,7 +5195,7 @@ public class WeaponSetLockRequest
 }
 
 [MessagePackObject]
-public class WebviewVersionUrlListRequest
+public partial class WebviewVersionUrlListRequest
 {
     [Key("region")]
     public string Region { get; set; }

@@ -12,8 +12,8 @@ public enum AbilityCrests
     [TextLabel("Ring of Exaltation")]
     RingofExaltation = 40020001,
 
-    [TextLabel("Seafood Soup")]
-    SeafoodSoup = 40020002,
+    [TextLabel("Seabard Soup")]
+    SeabardSoup = 40020002,
 
     [TextLabel("Dragon Arcanum")]
     DragonArcanum = 40020003,

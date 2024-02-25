@@ -15,8 +15,8 @@ public class StoryTest : TestFixture
     [Fact]
     public async Task ReadStory_StoryNotRead_ResponseHasRewards()
     {
-        StoryReadData data = (
-            await this.Client.PostMsgpack<StoryReadData>(
+        StoryReadResponse data = (
+            await this.Client.PostMsgpack<StoryReadResponse>(
                 "/story/read",
                 new StoryReadRequest() { UnitStoryId = 100001141 }
             )
@@ -66,8 +66,8 @@ public class StoryTest : TestFixture
         );
         await this.ApiContext.SaveChangesAsync();
 
-        StoryReadData data = (
-            await this.Client.PostMsgpack<StoryReadData>(
+        StoryReadResponse data = (
+            await this.Client.PostMsgpack<StoryReadResponse>(
                 "/story/read",
                 new StoryReadRequest() { UnitStoryId = 100001122 }
             )
@@ -88,8 +88,8 @@ public class StoryTest : TestFixture
             .Select(x => x.Crystal)
             .SingleAsync();
 
-        StoryReadData data = (
-            await this.Client.PostMsgpack<StoryReadData>(
+        StoryReadResponse data = (
+            await this.Client.PostMsgpack<StoryReadResponse>(
                 "/story/read",
                 new StoryReadRequest() { UnitStoryId = 100002011 }
             )

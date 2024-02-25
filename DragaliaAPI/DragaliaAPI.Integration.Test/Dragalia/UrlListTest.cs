@@ -9,7 +9,7 @@ public class UrlListTest : TestFixture
     public async Task UrlList_ReturnsList()
     {
         WebviewVersionUrlListData response = (
-            await this.Client.PostMsgpack<WebviewVersionUrlListData>(
+            await this.Client.PostMsgpack<WebviewVersionUrlListResponse>(
                 "webview_version/url_list",
                 new WebviewVersionUrlListRequest("region")
             )

@@ -17,7 +17,7 @@ public class UserTest : TestFixture
         UserData expectedUserData = this.Mapper.Map<UserData>(dbUserData);
 
         (
-            await this.Client.PostMsgpack<UserLinkedNAccountData>(
+            await this.Client.PostMsgpack<UserLinkedNAccountResponse>(
                 "/user/linked_n_account",
                 new UserLinkedNAccountRequest()
             )
@@ -36,7 +36,7 @@ public class UserTest : TestFixture
     public async Task GetNAccountInfo_ReturnsExpectedResponse()
     {
         (
-            await this.Client.PostMsgpack<UserGetNAccountInfoData>(
+            await this.Client.PostMsgpack<UserGetNAccountInfoResponse>(
                 "/user/get_n_account_info",
                 new UserGetNAccountInfoRequest()
             )

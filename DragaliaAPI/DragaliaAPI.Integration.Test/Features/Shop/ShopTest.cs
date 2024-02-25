@@ -16,7 +16,7 @@ public class ShopTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        DragaliaResponse<ShopGetListData> resp = await this.Client.PostMsgpack<ShopGetListData>(
+        DragaliaResponse<ShopGetListData> resp = await this.Client.PostMsgpack<ShopGetListResponse>(
             "shop/get_list",
             new ShopGetListRequest()
         );
@@ -30,7 +30,7 @@ public class ShopTest : TestFixture
     public async Task MaterialShopPurchase_ValidPurchase_AddsElement()
     {
         DragaliaResponse<ShopMaterialShopPurchaseData> resp =
-            await this.Client.PostMsgpack<ShopMaterialShopPurchaseData>(
+            await this.Client.PostMsgpack<ShopMaterialShopPurchaseResponse>(
                 "shop/material_shop_purchase",
                 new ShopMaterialShopPurchaseRequest(
                     1000001,
@@ -51,7 +51,7 @@ public class ShopTest : TestFixture
     public async Task MaterialShopPurchase_InvalidPurchase_ReturnsError()
     {
         DragaliaResponse<ShopMaterialShopPurchaseData> resp =
-            await this.Client.PostMsgpack<ShopMaterialShopPurchaseData>(
+            await this.Client.PostMsgpack<ShopMaterialShopPurchaseResponse>(
                 "shop/material_shop_purchase",
                 new ShopMaterialShopPurchaseRequest(
                     1000001,

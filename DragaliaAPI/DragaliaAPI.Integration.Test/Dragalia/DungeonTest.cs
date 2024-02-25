@@ -9,7 +9,7 @@ public class DungeonTest : TestFixture
     public async Task GetAreaOdds_ReturnsExpectedResponse()
     {
         string key = (
-            await this.Client.PostMsgpack<DungeonStartStartData>(
+            await this.Client.PostMsgpack<DungeonStartStartResponse>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
                 {
@@ -20,7 +20,7 @@ public class DungeonTest : TestFixture
         ).data.IngameData.DungeonKey;
 
         DungeonGetAreaOddsData response = (
-            await this.Client.PostMsgpack<DungeonGetAreaOddsData>(
+            await this.Client.PostMsgpack<DungeonGetAreaOddsResponse>(
                 "/dungeon/get_area_odds",
                 new DungeonGetAreaOddsRequest() { AreaIdx = 1, DungeonKey = key }
             )
@@ -34,7 +34,7 @@ public class DungeonTest : TestFixture
     public async Task Fail_ReturnsCorrectResponse()
     {
         string key = (
-            await this.Client.PostMsgpack<DungeonStartStartData>(
+            await this.Client.PostMsgpack<DungeonStartStartResponse>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
                 {
@@ -45,7 +45,7 @@ public class DungeonTest : TestFixture
         ).data.IngameData.DungeonKey;
 
         DungeonFailData response = (
-            await this.Client.PostMsgpack<DungeonFailData>(
+            await this.Client.PostMsgpack<DungeonFailResponse>(
                 "/dungeon/fail",
                 new DungeonFailRequest() { DungeonKey = key }
             )

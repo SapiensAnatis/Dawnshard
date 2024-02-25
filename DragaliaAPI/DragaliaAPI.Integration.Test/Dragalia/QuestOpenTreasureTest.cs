@@ -15,7 +15,7 @@ public class QuestOpenTreasureTest : TestFixture
     public async Task OpenTreasure_ReturnCorrectResponse()
     {
         QuestOpenTreasureData response = (
-            await this.Client.PostMsgpack<QuestOpenTreasureData>(
+            await this.Client.PostMsgpack<QuestOpenTreasureResponse>(
                 "/quest/open_treasure",
                 new QuestOpenTreasureRequest() { QuestTreasureId = 104101 }
             )
@@ -30,7 +30,7 @@ public class QuestOpenTreasureTest : TestFixture
     public async Task OpenTreasure_UpdatesDatabase()
     {
         QuestOpenTreasureData response = (
-            await this.Client.PostMsgpack<QuestOpenTreasureData>(
+            await this.Client.PostMsgpack<QuestOpenTreasureResponse>(
                 "/quest/open_treasure",
                 new QuestOpenTreasureRequest() { QuestTreasureId = 126201 }
             )

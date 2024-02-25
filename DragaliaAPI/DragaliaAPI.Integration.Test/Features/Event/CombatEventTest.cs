@@ -10,7 +10,7 @@ public class CombatEventTest : TestFixture
         : base(factory, outputHelper) { }
 
     protected override async Task Setup() =>
-        await this.Client.PostMsgpack<MemoryEventActivateData>(
+        await this.Client.PostMsgpack<MemoryEventActivateResponse>(
             "memory_event/activate",
             new MemoryEventActivateRequest(EventId)
         );
@@ -22,7 +22,7 @@ public class CombatEventTest : TestFixture
     public async Task GetEventData_ReturnsEventData()
     {
         DragaliaResponse<CombatEventGetEventDataData> evtData =
-            await Client.PostMsgpack<CombatEventGetEventDataData>(
+            await Client.PostMsgpack<CombatEventGetEventDataResponse>(
                 $"{Prefix}/get_event_data",
                 new CombatEventGetEventDataRequest(EventId)
             );
@@ -51,7 +51,7 @@ public class CombatEventTest : TestFixture
         await ApiContext.SaveChangesAsync();
 
         DragaliaResponse<CombatEventReceiveEventPointRewardData> evtResp =
-            await Client.PostMsgpack<CombatEventReceiveEventPointRewardData>(
+            await Client.PostMsgpack<CombatEventReceiveEventPointRewardResponse>(
                 $"{Prefix}/receive_event_point_reward",
                 new CombatEventReceiveEventPointRewardRequest(EventId)
             );
@@ -90,7 +90,7 @@ public class CombatEventTest : TestFixture
         await ApiContext.SaveChangesAsync();
 
         DragaliaResponse<CombatEventReceiveEventLocationRewardData> evtResp =
-            await Client.PostMsgpack<CombatEventReceiveEventLocationRewardData>(
+            await Client.PostMsgpack<CombatEventReceiveEventLocationRewardResponse>(
                 $"{Prefix}/receive_event_location_reward",
                 new CombatEventReceiveEventLocationRewardRequest(EventId, 2221302)
             );

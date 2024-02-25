@@ -23,7 +23,7 @@ public class PartyTest : TestFixture
             new DbWeaponBody { ViewerId = ViewerId, WeaponBodyId = WeaponBodies.DivineTrigger }
         );
 
-        await this.Client.PostMsgpack<PartySetPartySettingData>(
+        await this.Client.PostMsgpack<PartySetPartySettingResponse>(
             "/party/set_party_setting",
             new PartySetPartySettingRequest(
                 1,
@@ -112,7 +112,7 @@ public class PartyTest : TestFixture
         this.AddCharacter(storyZethia);
 
         (
-            await this.Client.PostMsgpack<PartySetPartySettingData>(
+            await this.Client.PostMsgpack<PartySetPartySettingResponse>(
                 "/party/set_party_setting",
                 new PartySetPartySettingRequest(
                     1,
@@ -144,7 +144,7 @@ public class PartyTest : TestFixture
             );
 
         (
-            await this.Client.PostMsgpack<ResultCodeData>(
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "/party/set_party_setting",
                 request,
                 ensureSuccessHeader: false
@@ -152,9 +152,9 @@ public class PartyTest : TestFixture
         )
             .Should()
             .BeEquivalentTo(
-                new DragaliaResponse<ResultCodeData>(
+                new DragaliaResponse<ResultCodeResponse>(
                     new DataHeaders(ResultCode.PartySwitchSettingCharaShort),
-                    new ResultCodeData(ResultCode.PartySwitchSettingCharaShort)
+                    new ResultCodeResponse(ResultCode.PartySwitchSettingCharaShort)
                 )
             );
     }
@@ -175,7 +175,7 @@ public class PartyTest : TestFixture
             );
 
         (
-            await this.Client.PostMsgpack<ResultCodeData>(
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "/party/set_party_setting",
                 request,
                 ensureSuccessHeader: false
@@ -183,9 +183,9 @@ public class PartyTest : TestFixture
         )
             .Should()
             .BeEquivalentTo(
-                new DragaliaResponse<ResultCodeData>(
+                new DragaliaResponse<ResultCodeResponse>(
                     new DataHeaders(ResultCode.PartySwitchSettingCharaShort),
-                    new ResultCodeData(ResultCode.PartySwitchSettingCharaShort)
+                    new ResultCodeResponse(ResultCode.PartySwitchSettingCharaShort)
                 )
             );
     }
@@ -193,7 +193,7 @@ public class PartyTest : TestFixture
     [Fact]
     public async Task SetMainPartyNo_UpdatesDatabase()
     {
-        await this.Client.PostMsgpack<PartySetMainPartyNoData>(
+        await this.Client.PostMsgpack<PartySetMainPartyNoResponse>(
             "/party/set_main_party_no",
             new PartySetMainPartyNoRequest(2)
         );
@@ -213,7 +213,7 @@ public class PartyTest : TestFixture
             await this.ApiContext.PlayerParties.FindAsync(ViewerId, 1)
             ?? throw new NullReferenceException();
 
-        await this.Client.PostMsgpack<PartyUpdatePartyNameData>(
+        await this.Client.PostMsgpack<PartyUpdatePartyNameResponse>(
             "/party/update_party_name",
             new PartyUpdatePartyNameRequest() { PartyNo = 1, PartyName = "LIblis Full Auto" }
         );
@@ -227,7 +227,7 @@ public class PartyTest : TestFixture
     public async Task UpdatePartyName_ReturnsCorrectResponse()
     {
         PartyUpdatePartyNameData response = (
-            await this.Client.PostMsgpack<PartyUpdatePartyNameData>(
+            await this.Client.PostMsgpack<PartyUpdatePartyNameResponse>(
                 "/party/update_party_name",
                 new PartyUpdatePartyNameRequest() { PartyNo = 2, PartyName = "LIblis Full Auto" }
             )

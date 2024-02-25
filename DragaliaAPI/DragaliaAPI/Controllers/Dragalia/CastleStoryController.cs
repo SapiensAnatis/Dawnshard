@@ -45,7 +45,7 @@ public class CastleStoryController : DragaliaControllerBase
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return this.Ok(
-            new CastleStoryReadData()
+            new CastleStoryReadResponse()
             {
                 CastleStoryRewardList = rewardList,
                 UpdateDataList = updateDataList

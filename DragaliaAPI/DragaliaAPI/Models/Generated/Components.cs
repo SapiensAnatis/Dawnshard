@@ -7,7 +7,7 @@ using MessagePack;
 namespace DragaliaAPI.Models.Generated;
 
 [MessagePackObject]
-public class AbilityCrestList
+public partial class AbilityCrestList
 {
     [Key("ability_crest_id")]
     public AbilityCrests AbilityCrestId { get; set; }
@@ -75,7 +75,7 @@ public class AbilityCrestList
 }
 
 [MessagePackObject]
-public class AbilityCrestSetList
+public partial class AbilityCrestSetList
 {
     [Key("ability_crest_set_no")]
     public int AbilityCrestSetNo { get; set; }
@@ -136,7 +136,7 @@ public class AbilityCrestSetList
 }
 
 [MessagePackObject]
-public class AbilityCrestTradeList
+public partial class AbilityCrestTradeList
 {
     [Key("ability_crest_trade_id")]
     public int AbilityCrestTradeId { get; set; }
@@ -182,7 +182,7 @@ public class AbilityCrestTradeList
 }
 
 [MessagePackObject]
-public class AchievementList
+public partial class AchievementList
 {
     [Key("achievement_id")]
     public int AchievementId { get; set; }
@@ -204,7 +204,7 @@ public class AchievementList
 }
 
 [MessagePackObject]
-public class AlbumDragonData
+public partial class AlbumDragonData
 {
     [Key("dragon_id")]
     public Dragons DragonId { get; set; }
@@ -226,7 +226,7 @@ public class AlbumDragonData
 }
 
 [MessagePackObject]
-public class AlbumMissionList
+public partial class AlbumMissionList
 {
     [Key("album_mission_id")]
     public int AlbumMissionId { get; set; }
@@ -262,7 +262,7 @@ public class AlbumMissionList
 }
 
 [MessagePackObject]
-public class AlbumPassiveNotice
+public partial class AlbumPassiveNotice
 {
     [Key("is_update_chara")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
@@ -282,7 +282,7 @@ public class AlbumPassiveNotice
 }
 
 [MessagePackObject]
-public class AlbumWeaponList
+public partial class AlbumWeaponList
 {
     [Key("weapon_id")]
     public int WeaponId { get; set; }
@@ -300,7 +300,7 @@ public class AlbumWeaponList
 }
 
 [MessagePackObject]
-public class AmuletList
+public partial class AmuletList
 {
     [Key("amulet_id")]
     public int AmuletId { get; set; }
@@ -383,7 +383,7 @@ public class AmuletList
 }
 
 [MessagePackObject]
-public class AmuletTradeList
+public partial class AmuletTradeList
 {
     [Key("amulet_trade_id")]
     public int AmuletTradeId { get; set; }
@@ -454,10 +454,10 @@ public class AmuletTradeList
 }
 
 [MessagePackObject]
-public class ApiTest { }
+public partial class ApiTest { }
 
 [MessagePackObject]
-public class AreaInfoList
+public partial class AreaInfoList
 {
     [Key("scene_path")]
     public string ScenePath { get; set; }
@@ -475,7 +475,7 @@ public class AreaInfoList
 }
 
 [MessagePackObject]
-public class AstralItemList
+public partial class AstralItemList
 {
     [Key("astral_item_id")]
     public int AstralItemId { get; set; }
@@ -493,7 +493,7 @@ public class AstralItemList
 }
 
 [MessagePackObject]
-public class AtgenAddCoinList
+public partial class AtgenAddCoinList
 {
     [Key("build_id")]
     public ulong BuildId { get; set; }
@@ -511,7 +511,7 @@ public class AtgenAddCoinList
 }
 
 [MessagePackObject]
-public class AtgenAddHarvestList
+public partial class AtgenAddHarvestList
 {
     [Key("material_id")]
     public int MaterialId { get; set; }
@@ -529,7 +529,7 @@ public class AtgenAddHarvestList
 }
 
 [MessagePackObject]
-public class AtgenAddStaminaList
+public partial class AtgenAddStaminaList
 {
     [Key("build_id")]
     public ulong BuildId { get; set; }
@@ -547,7 +547,7 @@ public class AtgenAddStaminaList
 }
 
 [MessagePackObject]
-public class AtgenAlbumQuestPlayRecordList
+public partial class AtgenAlbumQuestPlayRecordList
 {
     [Key("quest_play_record_id")]
     public int QuestPlayRecordId { get; set; }
@@ -565,7 +565,7 @@ public class AtgenAlbumQuestPlayRecordList
 }
 
 [MessagePackObject]
-public class AtgenAllBonus
+public partial class AtgenAllBonus
 {
     [Key("hp")]
     public int Hp { get; set; }
@@ -583,7 +583,7 @@ public class AtgenAllBonus
 }
 
 [MessagePackObject]
-public class AtgenArchivePartyCharaList
+public partial class AtgenArchivePartyCharaList
 {
     [Key("unit_no")]
     public int UnitNo { get; set; }
@@ -601,7 +601,7 @@ public class AtgenArchivePartyCharaList
 }
 
 [MessagePackObject]
-public class AtgenArchivePartyUnitList
+public partial class AtgenArchivePartyUnitList
 {
     [Key("unit_no")]
     public int UnitNo { get; set; }
@@ -717,7 +717,7 @@ public class AtgenArchivePartyUnitList
 }
 
 [MessagePackObject]
-public class AtgenBattleRoyalData
+public partial class AtgenBattleRoyalData
 {
     [Key("event_cycle_id")]
     public int EventCycleId { get; set; }
@@ -758,7 +758,7 @@ public class AtgenBattleRoyalData
 }
 
 [MessagePackObject]
-public class AtgenBattleRoyalHistoryList
+public partial class AtgenBattleRoyalHistoryList
 {
     [Key("id")]
     public int Id { get; set; }
@@ -814,7 +814,7 @@ public class AtgenBattleRoyalHistoryList
 }
 
 [MessagePackObject]
-public class AtgenBattleRoyalRecord
+public partial class AtgenBattleRoyalRecord
 {
     [Key("ranking")]
     public int Ranking { get; set; }
@@ -836,7 +836,7 @@ public class AtgenBattleRoyalRecord
 }
 
 [MessagePackObject]
-public class AtgenBonusFactorList
+public partial class AtgenBonusFactorList
 {
     [Key("factor_type")]
     public int FactorType { get; set; }
@@ -854,7 +854,7 @@ public class AtgenBonusFactorList
 }
 
 [MessagePackObject]
-public class AtgenBoxSummonData
+public partial class AtgenBoxSummonData
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -900,7 +900,7 @@ public class AtgenBoxSummonData
 }
 
 [MessagePackObject]
-public class AtgenBoxSummonDetail
+public partial class AtgenBoxSummonDetail
 {
     [Key("id")]
     public int Id { get; set; }
@@ -956,7 +956,7 @@ public class AtgenBoxSummonDetail
 }
 
 [MessagePackObject]
-public class AtgenBoxSummonResult
+public partial class AtgenBoxSummonResult
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -1013,7 +1013,7 @@ public class AtgenBoxSummonResult
 }
 
 [MessagePackObject]
-public class AtgenBuildEventRewardEntityList
+public partial class AtgenBuildEventRewardEntityList
 {
     [Key("entity_type")]
     public EntityTypes EntityType { get; set; }
@@ -1035,7 +1035,7 @@ public class AtgenBuildEventRewardEntityList
 }
 
 [MessagePackObject]
-public class AtgenBuildupAbilityCrestPieceList
+public partial class AtgenBuildupAbilityCrestPieceList
 {
     [Key("buildup_piece_type")]
     public int BuildupPieceType { get; set; }
@@ -1062,7 +1062,7 @@ public class AtgenBuildupAbilityCrestPieceList
 }
 
 [MessagePackObject]
-public class AtgenBuildupWeaponBodyPieceList
+public partial class AtgenBuildupWeaponBodyPieceList
 {
     [Key("buildup_piece_type")]
     public int BuildupPieceType { get; set; }
@@ -1094,7 +1094,7 @@ public class AtgenBuildupWeaponBodyPieceList
 }
 
 [MessagePackObject]
-public class AtgenCategoryList
+public partial class AtgenCategoryList
 {
     [Key("category_id")]
     public int CategoryId { get; set; }
@@ -1112,7 +1112,7 @@ public class AtgenCategoryList
 }
 
 [MessagePackObject]
-public class AtgenCharaGrowRecord
+public partial class AtgenCharaGrowRecord
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -1130,7 +1130,7 @@ public class AtgenCharaGrowRecord
 }
 
 [MessagePackObject]
-public class AtgenCharaHonorList
+public partial class AtgenCharaHonorList
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -1148,7 +1148,7 @@ public class AtgenCharaHonorList
 }
 
 [MessagePackObject]
-public class AtgenCharaUnitSetDetailList
+public partial class AtgenCharaUnitSetDetailList
 {
     [Key("unit_set_no")]
     public int UnitSetNo { get; set; }
@@ -1219,7 +1219,7 @@ public class AtgenCharaUnitSetDetailList
 }
 
 [MessagePackObject]
-public class AtgenCommentList
+public partial class AtgenCommentList
 {
     [Key("comment_text")]
     public string CommentText { get; set; }
@@ -1241,7 +1241,7 @@ public class AtgenCommentList
 }
 
 [MessagePackObject]
-public class AtgenCsSummonList
+public partial class AtgenCsSummonList
 {
     [Key("summon_list")]
     public IEnumerable<SummonList> SummonList { get; set; } = [];
@@ -1277,7 +1277,7 @@ public class AtgenCsSummonList
 }
 
 [MessagePackObject]
-public class AtgenDamageRecord
+public partial class AtgenDamageRecord
 {
     [Key("total")]
     public int Total { get; set; }
@@ -1307,7 +1307,7 @@ public class AtgenDamageRecord
 }
 
 [MessagePackObject]
-public class AtgenDebugDamageRecordLog
+public partial class AtgenDebugDamageRecordLog
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -1483,7 +1483,7 @@ public class AtgenDebugDamageRecordLog
 }
 
 [MessagePackObject]
-public class AtgenDebugDebugPartyList
+public partial class AtgenDebugDebugPartyList
 {
     [Key("id")]
     public int Id { get; set; }
@@ -1778,7 +1778,7 @@ public class AtgenDebugDebugPartyList
 }
 
 [MessagePackObject]
-public class AtgenDebugUnitDataList
+public partial class AtgenDebugUnitDataList
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -2058,7 +2058,7 @@ public class AtgenDebugUnitDataList
 }
 
 [MessagePackObject]
-public class AtgenDeleteAmuletList
+public partial class AtgenDeleteAmuletList
 {
     [Key("amulet_key_id")]
     public ulong AmuletKeyId { get; set; }
@@ -2072,7 +2072,7 @@ public class AtgenDeleteAmuletList
 }
 
 [MessagePackObject]
-public class AtgenDeleteDragonList
+public partial class AtgenDeleteDragonList
 {
     [Key("dragon_key_id")]
     public ulong DragonKeyId { get; set; }
@@ -2086,7 +2086,7 @@ public class AtgenDeleteDragonList
 }
 
 [MessagePackObject]
-public class AtgenDeleteTalismanList
+public partial class AtgenDeleteTalismanList
 {
     [Key("talisman_key_id")]
     public ulong TalismanKeyId { get; set; }
@@ -2100,7 +2100,7 @@ public class AtgenDeleteTalismanList
 }
 
 [MessagePackObject]
-public class AtgenDeleteWeaponList
+public partial class AtgenDeleteWeaponList
 {
     [Key("weapon_key_id")]
     public ulong WeaponKeyId { get; set; }
@@ -2114,7 +2114,7 @@ public class AtgenDeleteWeaponList
 }
 
 [MessagePackObject]
-public class AtgenDmodeAreaInfo
+public partial class AtgenDmodeAreaInfo
 {
     [Key("floor_num")]
     public int FloorNum { get; set; }
@@ -2150,7 +2150,7 @@ public class AtgenDmodeAreaInfo
 }
 
 [MessagePackObject]
-public class AtgenDmodeDragonUseList
+public partial class AtgenDmodeDragonUseList
 {
     [Key("dragon_id")]
     public Dragons DragonId { get; set; }
@@ -2168,7 +2168,7 @@ public class AtgenDmodeDragonUseList
 }
 
 [MessagePackObject]
-public class AtgenDmodeDropList
+public partial class AtgenDmodeDropList
 {
     [Key("type")]
     public int Type { get; set; }
@@ -2190,7 +2190,7 @@ public class AtgenDmodeDropList
 }
 
 [MessagePackObject]
-public class AtgenDmodeDropObj
+public partial class AtgenDmodeDropObj
 {
     [Key("obj_id")]
     public int ObjId { get; set; }
@@ -2212,7 +2212,7 @@ public class AtgenDmodeDropObj
 }
 
 [MessagePackObject]
-public class AtgenDmodeDungeonItemOptionList
+public partial class AtgenDmodeDungeonItemOptionList
 {
     [Key("item_no")]
     public int ItemNo { get; set; }
@@ -2230,7 +2230,7 @@ public class AtgenDmodeDungeonItemOptionList
 }
 
 [MessagePackObject]
-public class AtgenDmodeDungeonItemStateList
+public partial class AtgenDmodeDungeonItemStateList
 {
     [Key("item_no")]
     public int ItemNo { get; set; }
@@ -2248,7 +2248,7 @@ public class AtgenDmodeDungeonItemStateList
 }
 
 [MessagePackObject]
-public class AtgenDmodeDungeonOdds
+public partial class AtgenDmodeDungeonOdds
 {
     [Key("dmode_select_dragon_list")]
     public IEnumerable<AtgenDmodeSelectDragonList> DmodeSelectDragonList { get; set; } = [];
@@ -2274,7 +2274,7 @@ public class AtgenDmodeDungeonOdds
 }
 
 [MessagePackObject]
-public class AtgenDmodeEnemy
+public partial class AtgenDmodeEnemy
 {
     [Key("enemy_idx")]
     public int EnemyIdx { get; set; }
@@ -2311,7 +2311,7 @@ public class AtgenDmodeEnemy
 }
 
 [MessagePackObject]
-public class AtgenDmodeHoldDragonList
+public partial class AtgenDmodeHoldDragonList
 {
     [Key("dragon_id")]
     public Dragons DragonId { get; set; }
@@ -2329,7 +2329,7 @@ public class AtgenDmodeHoldDragonList
 }
 
 [MessagePackObject]
-public class AtgenDmodeSelectDragonList
+public partial class AtgenDmodeSelectDragonList
 {
     [Key("select_dragon_no")]
     public int SelectDragonNo { get; set; }
@@ -2366,7 +2366,7 @@ public class AtgenDmodeSelectDragonList
 }
 
 [MessagePackObject]
-public class AtgenDmodeTreasureRecord
+public partial class AtgenDmodeTreasureRecord
 {
     [Key("drop_obj")]
     public IEnumerable<int> DropObj { get; set; } = [];
@@ -2384,7 +2384,7 @@ public class AtgenDmodeTreasureRecord
 }
 
 [MessagePackObject]
-public class AtgenDmodeUnitInfo
+public partial class AtgenDmodeUnitInfo
 {
     [Key("level")]
     public int Level { get; set; }
@@ -2435,7 +2435,7 @@ public class AtgenDmodeUnitInfo
 }
 
 [MessagePackObject]
-public class AtgenDragonBonus
+public partial class AtgenDragonBonus
 {
     [Key("elemental_type")]
     public int ElementalType { get; set; }
@@ -2461,7 +2461,7 @@ public class AtgenDragonBonus
 }
 
 [MessagePackObject]
-public class AtgenDragonGiftRewardList
+public partial class AtgenDragonGiftRewardList
 {
     [Key("dragon_gift_id")]
     public int DragonGiftId { get; set; }
@@ -2493,7 +2493,7 @@ public class AtgenDragonGiftRewardList
 }
 
 [MessagePackObject]
-public class AtgenDragonTimeBonus
+public partial class AtgenDragonTimeBonus
 {
     [Key("dragon_time_bonus")]
     public float DragonTimeBonus { get; set; }
@@ -2507,7 +2507,7 @@ public class AtgenDragonTimeBonus
 }
 
 [MessagePackObject]
-public class AtgenDrawDetails
+public partial class AtgenDrawDetails
 {
     [Key("id")]
     public int Id { get; set; }
@@ -2549,7 +2549,7 @@ public class AtgenDrawDetails
 }
 
 [MessagePackObject]
-public class AtgenDropAll
+public partial class AtgenDropAll
 {
     [Key("id")]
     public int Id { get; set; }
@@ -2579,7 +2579,7 @@ public class AtgenDropAll
 }
 
 [MessagePackObject]
-public class AtgenDropList
+public partial class AtgenDropList
 {
     [Key("type")]
     public int Type { get; set; }
@@ -2605,7 +2605,7 @@ public class AtgenDropList
 }
 
 [MessagePackObject]
-public class AtgenDropObj
+public partial class AtgenDropObj
 {
     [Key("obj_id")]
     public int ObjId { get; set; }
@@ -2632,7 +2632,7 @@ public class AtgenDropObj
 }
 
 [MessagePackObject]
-public class AtgenDuplicateEntityList
+public partial class AtgenDuplicateEntityList
 {
     [Key("entity_type")]
     public EntityTypes EntityType { get; set; }
@@ -2650,7 +2650,7 @@ public class AtgenDuplicateEntityList
 }
 
 [MessagePackObject]
-public class AtgenElementBonus
+public partial class AtgenElementBonus
 {
     [Key("elemental_type")]
     public int ElementalType { get; set; }
@@ -2672,7 +2672,7 @@ public class AtgenElementBonus
 }
 
 [MessagePackObject]
-public class AtgenEnemy
+public partial class AtgenEnemy
 {
     [Key("piece")]
     public int Piece { get; set; }
@@ -2715,7 +2715,7 @@ public class AtgenEnemy
 }
 
 [MessagePackObject]
-public class AtgenEnemyPiece
+public partial class AtgenEnemyPiece
 {
     [Key("id")]
     public int Id { get; set; }
@@ -2733,7 +2733,7 @@ public class AtgenEnemyPiece
 }
 
 [MessagePackObject]
-public class AtgenEnemySmash
+public partial class AtgenEnemySmash
 {
     [Key("count")]
     public int Count { get; set; }
@@ -2747,7 +2747,7 @@ public class AtgenEnemySmash
 }
 
 [MessagePackObject]
-public class AtgenEntryConditions
+public partial class AtgenEntryConditions
 {
     [Key("unaccepted_element_type_list")]
     public IEnumerable<int> UnacceptedElementTypeList { get; set; } = [];
@@ -2783,7 +2783,7 @@ public class AtgenEntryConditions
 }
 
 [MessagePackObject]
-public class AtgenEventBoost
+public partial class AtgenEventBoost
 {
     [Key("event_effect")]
     public int EventEffect { get; set; }
@@ -2801,7 +2801,7 @@ public class AtgenEventBoost
 }
 
 [MessagePackObject]
-public class AtgenEventDamageData
+public partial class AtgenEventDamageData
 {
     [Key("user_damage_value")]
     public long UserDamageValue { get; set; }
@@ -2837,7 +2837,7 @@ public class AtgenEventDamageData
 }
 
 [MessagePackObject]
-public class AtgenEventDamageHistoryList
+public partial class AtgenEventDamageHistoryList
 {
     [Key("target_time")]
     public DateTimeOffset TargetTime { get; set; }
@@ -2855,7 +2855,7 @@ public class AtgenEventDamageHistoryList
 }
 
 [MessagePackObject]
-public class AtgenEventDamageRewardList
+public partial class AtgenEventDamageRewardList
 {
     [Key("target_time")]
     public DateTimeOffset TargetTime { get; set; }
@@ -2876,7 +2876,7 @@ public class AtgenEventDamageRewardList
 }
 
 [MessagePackObject]
-public class AtgenEventFortData
+public partial class AtgenEventFortData
 {
     [Key("plant_id")]
     public int PlantId { get; set; }
@@ -2894,7 +2894,7 @@ public class AtgenEventFortData
 }
 
 [MessagePackObject]
-public class AtgenEventPassiveUpList
+public partial class AtgenEventPassiveUpList
 {
     [Key("passive_id")]
     public int PassiveId { get; set; }
@@ -2912,7 +2912,7 @@ public class AtgenEventPassiveUpList
 }
 
 [MessagePackObject]
-public class AtgenExchangeSummomPointList
+public partial class AtgenExchangeSummomPointList
 {
     [Key("summon_point_id")]
     public int SummonPointId { get; set; }
@@ -2934,7 +2934,7 @@ public class AtgenExchangeSummomPointList
 }
 
 [MessagePackObject]
-public class AtgenFailQuestDetail
+public partial class AtgenFailQuestDetail
 {
     [Key("quest_id")]
     public int QuestId { get; set; }
@@ -2961,7 +2961,7 @@ public class AtgenFailQuestDetail
 }
 
 [MessagePackObject]
-public class AtgenFirstClearSet
+public partial class AtgenFirstClearSet
 {
     [Key("id")]
     public int Id { get; set; }
@@ -2983,7 +2983,7 @@ public class AtgenFirstClearSet
 }
 
 [MessagePackObject]
-public class AtgenFirstMeeting
+public partial class AtgenFirstMeeting
 {
     [Key("headcount")]
     public int Headcount { get; set; }
@@ -3009,7 +3009,7 @@ public class AtgenFirstMeeting
 }
 
 [MessagePackObject]
-public class AtgenGrade
+public partial class AtgenGrade
 {
     [Key("min_value")]
     public int MinValue { get; set; }
@@ -3035,7 +3035,7 @@ public class AtgenGrade
 }
 
 [MessagePackObject]
-public class AtgenGuild
+public partial class AtgenGuild
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -3062,7 +3062,7 @@ public class AtgenGuild
 }
 
 [MessagePackObject]
-public class AtgenGuildInviteParamsList
+public partial class AtgenGuildInviteParamsList
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -3080,7 +3080,7 @@ public class AtgenGuildInviteParamsList
 }
 
 [MessagePackObject]
-public class AtgenHarvestBuildList
+public partial class AtgenHarvestBuildList
 {
     [Key("build_id")]
     public ulong BuildId { get; set; }
@@ -3098,7 +3098,7 @@ public class AtgenHarvestBuildList
 }
 
 [MessagePackObject]
-public class AtgenHelperDetailList
+public partial class AtgenHelperDetailList
 {
     [Key("viewer_id")]
     public ulong ViewerId { get; set; }
@@ -3130,7 +3130,7 @@ public class AtgenHelperDetailList
 }
 
 [MessagePackObject]
-public class AtgenHonorList
+public partial class AtgenHonorList
 {
     [Key("honor_id")]
     public int HonorId { get; set; }
@@ -3144,7 +3144,7 @@ public class AtgenHonorList
 }
 
 [MessagePackObject]
-public class AtgenIngameWalker
+public partial class AtgenIngameWalker
 {
     [Key("skill_2_level")]
     public int Skill2Level { get; set; }
@@ -3158,7 +3158,7 @@ public class AtgenIngameWalker
 }
 
 [MessagePackObject]
-public class AtgenInquiryFaqList
+public partial class AtgenInquiryFaqList
 {
     [Key("id")]
     public int Id { get; set; }
@@ -3180,7 +3180,7 @@ public class AtgenInquiryFaqList
 }
 
 [MessagePackObject]
-public class AtgenItemSummonRateList
+public partial class AtgenItemSummonRateList
 {
     [Key("entity_type")]
     public EntityTypes EntityType { get; set; }
@@ -3211,7 +3211,7 @@ public class AtgenItemSummonRateList
 }
 
 [MessagePackObject]
-public class AtgenLatest
+public partial class AtgenLatest
 {
     [Key("episode")]
     public int Episode { get; set; }
@@ -3225,7 +3225,7 @@ public class AtgenLatest
 }
 
 [MessagePackObject]
-public class AtgenLoginBonusList
+public partial class AtgenLoginBonusList
 {
     [Key("reward_code")]
     public int RewardCode { get; set; }
@@ -3281,7 +3281,7 @@ public class AtgenLoginBonusList
 }
 
 [MessagePackObject]
-public class AtgenLoginLotteryRewardList
+public partial class AtgenLoginLotteryRewardList
 {
     [Key("login_lottery_id")]
     public int LoginLotteryId { get; set; }
@@ -3324,7 +3324,7 @@ public class AtgenLoginLotteryRewardList
 }
 
 [MessagePackObject]
-public class AtgenLostUnitList
+public partial class AtgenLostUnitList
 {
     [Key("unit_no")]
     public int UnitNo { get; set; }
@@ -3346,7 +3346,7 @@ public class AtgenLostUnitList
 }
 
 [MessagePackObject]
-public class AtgenLotteryEntitySetList
+public partial class AtgenLotteryEntitySetList
 {
     [Key("lottery_prize_rank")]
     public int LotteryPrizeRank { get; set; }
@@ -3372,7 +3372,7 @@ public class AtgenLotteryEntitySetList
 }
 
 [MessagePackObject]
-public class AtgenLotteryPrizeRankList
+public partial class AtgenLotteryPrizeRankList
 {
     [Key("lottery_prize_rank")]
     public int LotteryPrizeRank { get; set; }
@@ -3390,7 +3390,7 @@ public class AtgenLotteryPrizeRankList
 }
 
 [MessagePackObject]
-public class AtgenLotteryResultList
+public partial class AtgenLotteryResultList
 {
     [Key("lottery_rank")]
     public int LotteryRank { get; set; }
@@ -3416,7 +3416,7 @@ public class AtgenLotteryResultList
 }
 
 [MessagePackObject]
-public class AtgenMainStoryMissionStateList
+public partial class AtgenMainStoryMissionStateList
 {
     [Key("main_story_mission_id")]
     public int MainStoryMissionId { get; set; }
@@ -3434,7 +3434,7 @@ public class AtgenMainStoryMissionStateList
 }
 
 [MessagePackObject]
-public class AtgenMissionParamsList
+public partial class AtgenMissionParamsList
 {
     [Key("daily_mission_id")]
     public int DailyMissionId { get; set; }
@@ -3452,7 +3452,7 @@ public class AtgenMissionParamsList
 }
 
 [MessagePackObject]
-public class AtgenMissionsClearSet
+public partial class AtgenMissionsClearSet
 {
     [Key("id")]
     public int Id { get; set; }
@@ -3478,7 +3478,7 @@ public class AtgenMissionsClearSet
 }
 
 [MessagePackObject]
-public class AtgenMonthlyWallReceiveList
+public partial class AtgenMonthlyWallReceiveList
 {
     [Key("quest_group_id")]
     public int QuestGroupId { get; set; }
@@ -3497,7 +3497,7 @@ public class AtgenMonthlyWallReceiveList
 }
 
 [MessagePackObject]
-public class AtgenMultiServer
+public partial class AtgenMultiServer
 {
     [Key("host")]
     public string Host { get; set; }
@@ -3515,7 +3515,7 @@ public class AtgenMultiServer
 }
 
 [MessagePackObject]
-public class AtgenNAccountInfo
+public partial class AtgenNAccountInfo
 {
     [Key("email")]
     public string Email { get; set; }
@@ -3533,7 +3533,7 @@ public class AtgenNAccountInfo
 }
 
 [MessagePackObject]
-public class AtgenNeedTradeEntityList
+public partial class AtgenNeedTradeEntityList
 {
     [Key("entity_type")]
     public EntityTypes EntityType { get; set; }
@@ -3564,7 +3564,7 @@ public class AtgenNeedTradeEntityList
 }
 
 [MessagePackObject]
-public class AtgenNeedUnitList
+public partial class AtgenNeedUnitList
 {
     [Key("type")]
     public int Type { get; set; }
@@ -3582,7 +3582,7 @@ public class AtgenNeedUnitList
 }
 
 [MessagePackObject]
-public class AtgenNormalMissionNotice
+public partial class AtgenNormalMissionNotice
 {
     [Key("is_update")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
@@ -3629,7 +3629,7 @@ public class AtgenNormalMissionNotice
 }
 
 [MessagePackObject]
-public class AtgenNotReceivedMissionIdListWithDayNo
+public partial class AtgenNotReceivedMissionIdListWithDayNo
 {
     [Key("day_no")]
     public int DayNo { get; set; }
@@ -3650,7 +3650,7 @@ public class AtgenNotReceivedMissionIdListWithDayNo
 }
 
 [MessagePackObject]
-public class AtgenOpinionList
+public partial class AtgenOpinionList
 {
     [Key("opinion_id")]
     public string OpinionId { get; set; }
@@ -3676,7 +3676,7 @@ public class AtgenOpinionList
 }
 
 [MessagePackObject]
-public class AtgenOpinionTypeList
+public partial class AtgenOpinionTypeList
 {
     [Key("opinion_type")]
     public int OpinionType { get; set; }
@@ -3694,7 +3694,7 @@ public class AtgenOpinionTypeList
 }
 
 [MessagePackObject]
-public class AtgenOption
+public partial class AtgenOption
 {
     [Key("strength_param_id")]
     public int StrengthParamId { get; set; }
@@ -3725,7 +3725,7 @@ public class AtgenOption
 }
 
 [MessagePackObject]
-public class AtgenOwnDamageRankingList
+public partial class AtgenOwnDamageRankingList
 {
     [Key("rank")]
     public int Rank { get; set; }
@@ -3752,7 +3752,7 @@ public class AtgenOwnDamageRankingList
 }
 
 [MessagePackObject]
-public class AtgenOwnRankingList
+public partial class AtgenOwnRankingList
 {
     [Key("rank")]
     public int Rank { get; set; }
@@ -3889,7 +3889,7 @@ public class AtgenOwnRankingList
 }
 
 [MessagePackObject]
-public class AtgenPaid
+public partial class AtgenPaid
 {
     [Key("code")]
     public string Code { get; set; }
@@ -3907,7 +3907,7 @@ public class AtgenPaid
 }
 
 [MessagePackObject]
-public class AtgenParamBonus
+public partial class AtgenParamBonus
 {
     [Key("weapon_type")]
     public int WeaponType { get; set; }
@@ -3929,7 +3929,7 @@ public class AtgenParamBonus
 }
 
 [MessagePackObject]
-public class AtgenPenaltyData
+public partial class AtgenPenaltyData
 {
     [Key("report_id")]
     public int ReportId { get; set; }
@@ -3965,7 +3965,7 @@ public class AtgenPenaltyData
 }
 
 [MessagePackObject]
-public class AtgenPlayWallDetail
+public partial class AtgenPlayWallDetail
 {
     [Key("wall_id")]
     public int WallId { get; set; }
@@ -3987,15 +3987,15 @@ public class AtgenPlayWallDetail
 }
 
 [MessagePackObject]
-public class AtgenPlusCountParamsList
+public partial class AtgenPlusCountParamsList
 {
     [Key("plus_count_type")]
-    public int PlusCountType { get; set; }
+    public PlusCountType PlusCountType { get; set; }
 
     [Key("plus_count")]
     public int PlusCount { get; set; }
 
-    public AtgenPlusCountParamsList(int plusCountType, int plusCount)
+    public AtgenPlusCountParamsList(PlusCountType plusCountType, int plusCount)
     {
         this.PlusCountType = plusCountType;
         this.PlusCount = plusCount;
@@ -4005,7 +4005,7 @@ public class AtgenPlusCountParamsList
 }
 
 [MessagePackObject]
-public class AtgenProductLockList
+public partial class AtgenProductLockList
 {
     [Key("shop_type")]
     public int ShopType { get; set; }
@@ -4032,7 +4032,7 @@ public class AtgenProductLockList
 }
 
 [MessagePackObject]
-public class AtgenProductionRp
+public partial class AtgenProductionRp
 {
     [Key("speed")]
     public float Speed { get; set; }
@@ -4050,7 +4050,7 @@ public class AtgenProductionRp
 }
 
 [MessagePackObject]
-public class AtgenQuestBonus
+public partial class AtgenQuestBonus
 {
     [Key("goods_id")]
     public int GoodsId { get; set; }
@@ -4076,7 +4076,7 @@ public class AtgenQuestBonus
 }
 
 [MessagePackObject]
-public class AtgenQuestDropInfo
+public partial class AtgenQuestDropInfo
 {
     [Key("drop_info_list")]
     public IEnumerable<AtgenDuplicateEntityList> DropInfoList { get; set; } = [];
@@ -4117,7 +4117,7 @@ public class AtgenQuestDropInfo
 }
 
 [MessagePackObject]
-public class AtgenQuestRebornBonusInfoList
+public partial class AtgenQuestRebornBonusInfoList
 {
     [Key("reborn_count")]
     public int RebornCount { get; set; }
@@ -4138,7 +4138,7 @@ public class AtgenQuestRebornBonusInfoList
 }
 
 [MessagePackObject]
-public class AtgenQuestStoryRewardList
+public partial class AtgenQuestStoryRewardList
 {
     [Key("entity_type")]
     public EntityTypes EntityType { get; set; }
@@ -4174,7 +4174,7 @@ public class AtgenQuestStoryRewardList
 }
 
 [MessagePackObject]
-public class AtgenRarityGroupList
+public partial class AtgenRarityGroupList
 {
     [Key("pickup")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
@@ -4216,7 +4216,7 @@ public class AtgenRarityGroupList
 }
 
 [MessagePackObject]
-public class AtgenRarityList
+public partial class AtgenRarityList
 {
     [Key("rarity")]
     public int Rarity { get; set; }
@@ -4234,7 +4234,7 @@ public class AtgenRarityList
 }
 
 [MessagePackObject]
-public class AtgenReceiveQuestBonus
+public partial class AtgenReceiveQuestBonus
 {
     [Key("target_quest_id")]
     public int TargetQuestId { get; set; }
@@ -4265,7 +4265,7 @@ public class AtgenReceiveQuestBonus
 }
 
 [MessagePackObject]
-public class AtgenRecoverData
+public partial class AtgenRecoverData
 {
     [Key("recover_stamina_type")]
     public int RecoverStaminaType { get; set; }
@@ -4283,7 +4283,7 @@ public class AtgenRecoverData
 }
 
 [MessagePackObject]
-public class AtgenRedoableSummonResultUnitList
+public partial class AtgenRedoableSummonResultUnitList
 {
     [Key("entity_type")]
     public EntityTypes EntityType { get; set; }
@@ -4305,7 +4305,7 @@ public class AtgenRedoableSummonResultUnitList
 }
 
 [MessagePackObject]
-public class AtgenRequestAbilityCrestSetData
+public partial class AtgenRequestAbilityCrestSetData
 {
     [Key("crest_slot_type_1_crest_id_1")]
     public AbilityCrests CrestSlotType1CrestId1 { get; set; }
@@ -4356,7 +4356,7 @@ public class AtgenRequestAbilityCrestSetData
 }
 
 [MessagePackObject]
-public class AtgenRequestCharaUnitSetData
+public partial class AtgenRequestCharaUnitSetData
 {
     [Key("dragon_key_id")]
     public ulong DragonKeyId { get; set; }
@@ -4417,7 +4417,7 @@ public class AtgenRequestCharaUnitSetData
 }
 
 [MessagePackObject]
-public class AtgenRequestQuestMultipleList
+public partial class AtgenRequestQuestMultipleList
 {
     [Key("quest_id")]
     public int QuestId { get; set; }
@@ -4439,7 +4439,7 @@ public class AtgenRequestQuestMultipleList
 }
 
 [MessagePackObject]
-public class AtgenResultPrizeList
+public partial class AtgenResultPrizeList
 {
     [Key("summon_prize_rank")]
     public int SummonPrizeRank { get; set; }
@@ -4460,7 +4460,7 @@ public class AtgenResultPrizeList
 }
 
 [MessagePackObject]
-public class AtgenResultUnitList
+public partial class AtgenResultUnitList
 {
     [Key("entity_type")]
     public EntityTypes EntityType { get; set; }
@@ -4502,7 +4502,7 @@ public class AtgenResultUnitList
 }
 
 [MessagePackObject]
-public class AtgenRewardTalismanList
+public partial class AtgenRewardTalismanList
 {
     [Key("talisman_id")]
     public Talismans TalismanId { get; set; }
@@ -4543,7 +4543,7 @@ public class AtgenRewardTalismanList
 }
 
 [MessagePackObject]
-public class AtgenRoomMemberList
+public partial class AtgenRoomMemberList
 {
     [Key("viewer_id")]
     public ulong ViewerId { get; set; }
@@ -4557,7 +4557,7 @@ public class AtgenRoomMemberList
 }
 
 [MessagePackObject]
-public class AtgenScoreMissionSuccessList
+public partial class AtgenScoreMissionSuccessList
 {
     [Key("score_mission_complete_type")]
     public int ScoreMissionCompleteType { get; set; }
@@ -4583,7 +4583,7 @@ public class AtgenScoreMissionSuccessList
 }
 
 [MessagePackObject]
-public class AtgenScoringEnemyPointList
+public partial class AtgenScoringEnemyPointList
 {
     [Key("scoring_enemy_id")]
     public int ScoringEnemyId { get; set; }
@@ -4605,7 +4605,7 @@ public class AtgenScoringEnemyPointList
 }
 
 [MessagePackObject]
-public class AtgenShopGiftList
+public partial class AtgenShopGiftList
 {
     [Key("dragon_gift_id")]
     public int DragonGiftId { get; set; }
@@ -4628,7 +4628,7 @@ public class AtgenShopGiftList
 }
 
 [MessagePackObject]
-public class AtgenStaminaBonus
+public partial class AtgenStaminaBonus
 {
     [Key("goods_id")]
     public int GoodsId { get; set; }
@@ -4659,7 +4659,7 @@ public class AtgenStaminaBonus
 }
 
 [MessagePackObject]
-public class AtgenStoneBonus
+public partial class AtgenStoneBonus
 {
     [Key("goods_id")]
     public int GoodsId { get; set; }
@@ -4681,7 +4681,7 @@ public class AtgenStoneBonus
 }
 
 [MessagePackObject]
-public class AtgenSummonPointTradeList
+public partial class AtgenSummonPointTradeList
 {
     [Key("trade_id")]
     public int TradeId { get; set; }
@@ -4703,7 +4703,7 @@ public class AtgenSummonPointTradeList
 }
 
 [MessagePackObject]
-public class AtgenSummonPrizeEntitySetList
+public partial class AtgenSummonPrizeEntitySetList
 {
     [Key("summon_prize_rank")]
     public int SummonPrizeRank { get; set; }
@@ -4729,7 +4729,7 @@ public class AtgenSummonPrizeEntitySetList
 }
 
 [MessagePackObject]
-public class AtgenSummonPrizeRankList
+public partial class AtgenSummonPrizeRankList
 {
     [Key("summon_prize_rank")]
     public int SummonPrizeRank { get; set; }
@@ -4747,7 +4747,7 @@ public class AtgenSummonPrizeRankList
 }
 
 [MessagePackObject]
-public class AtgenSupportAmulet
+public partial class AtgenSupportAmulet
 {
     [Key("amulet_key_id")]
     public ulong AmuletKeyId { get; set; }
@@ -4813,7 +4813,7 @@ public class AtgenSupportAmulet
 }
 
 [MessagePackObject]
-public class AtgenSupportChara
+public partial class AtgenSupportChara
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -4910,7 +4910,7 @@ public class AtgenSupportChara
 }
 
 [MessagePackObject]
-public class AtgenSupportCrestSlotType1List
+public partial class AtgenSupportCrestSlotType1List
 {
     [Key("ability_crest_id")]
     public AbilityCrests AbilityCrestId { get; set; }
@@ -4951,7 +4951,7 @@ public class AtgenSupportCrestSlotType1List
 }
 
 [MessagePackObject]
-public class AtgenSupportData
+public partial class AtgenSupportData
 {
     [Key("viewer_id")]
     public ulong ViewerId { get; set; }
@@ -5038,7 +5038,7 @@ public class AtgenSupportData
 }
 
 [MessagePackObject]
-public class AtgenSupportDragon
+public partial class AtgenSupportDragon
 {
     [Key("dragon_key_id")]
     public ulong DragonKeyId { get; set; }
@@ -5109,7 +5109,7 @@ public class AtgenSupportDragon
 }
 
 [MessagePackObject]
-public class AtgenSupportReward
+public partial class AtgenSupportReward
 {
     [Key("serve_count")]
     public int ServeCount { get; set; }
@@ -5127,7 +5127,7 @@ public class AtgenSupportReward
 }
 
 [MessagePackObject]
-public class AtgenSupportTalisman
+public partial class AtgenSupportTalisman
 {
     [Key("talisman_key_id")]
     public ulong TalismanKeyId { get; set; }
@@ -5173,7 +5173,7 @@ public class AtgenSupportTalisman
 }
 
 [MessagePackObject]
-public class AtgenSupportUserDataDetail
+public partial class AtgenSupportUserDataDetail
 {
     [Key("user_support_data")]
     public UserSupportList UserSupportData { get; set; }
@@ -5215,7 +5215,7 @@ public class AtgenSupportUserDataDetail
 }
 
 [MessagePackObject]
-public class AtgenSupportUserDetailList
+public partial class AtgenSupportUserDetailList
 {
     [Key("viewer_id")]
     public ulong ViewerId { get; set; }
@@ -5238,7 +5238,7 @@ public class AtgenSupportUserDetailList
 }
 
 [MessagePackObject]
-public class AtgenSupportWeapon
+public partial class AtgenSupportWeapon
 {
     [Key("weapon_key_id")]
     public ulong WeaponKeyId { get; set; }
@@ -5294,7 +5294,7 @@ public class AtgenSupportWeapon
 }
 
 [MessagePackObject]
-public class AtgenSupportWeaponBody
+public partial class AtgenSupportWeaponBody
 {
     [Key("weapon_body_id")]
     public WeaponBodies WeaponBodyId { get; set; }
@@ -5350,7 +5350,7 @@ public class AtgenSupportWeaponBody
 }
 
 [MessagePackObject]
-public class AtgenTargetList
+public partial class AtgenTargetList
 {
     [Key("target_name")]
     public string TargetName { get; set; }
@@ -5368,7 +5368,7 @@ public class AtgenTargetList
 }
 
 [MessagePackObject]
-public class AtgenTransitionResultData
+public partial class AtgenTransitionResultData
 {
     [Key("abolished_viewer_id")]
     public ulong AbolishedViewerId { get; set; }
@@ -5386,7 +5386,7 @@ public class AtgenTransitionResultData
 }
 
 [MessagePackObject]
-public class AtgenTreasureRecord
+public partial class AtgenTreasureRecord
 {
     [Key("area_idx")]
     public int AreaIdx { get; set; }
@@ -5417,7 +5417,7 @@ public class AtgenTreasureRecord
 }
 
 [MessagePackObject]
-public class AtgenUnit
+public partial class AtgenUnit
 {
     [Key("chara_odds_list")]
     public IEnumerable<OddsUnitDetail> CharaOddsList { get; set; } = [];
@@ -5443,7 +5443,7 @@ public class AtgenUnit
 }
 
 [MessagePackObject]
-public class AtgenUnitData
+public partial class AtgenUnitData
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -5504,7 +5504,7 @@ public class AtgenUnitData
 }
 
 [MessagePackObject]
-public class AtgenUnitList
+public partial class AtgenUnitList
 {
     [Key("id")]
     public int Id { get; set; }
@@ -5522,7 +5522,7 @@ public class AtgenUnitList
 }
 
 [MessagePackObject]
-public class AtgenUseItemList
+public partial class AtgenUseItemList
 {
     [Key("item_id")]
     public int ItemId { get; set; }
@@ -5540,7 +5540,7 @@ public class AtgenUseItemList
 }
 
 [MessagePackObject]
-public class AtgenUserBuildEventItemList
+public partial class AtgenUserBuildEventItemList
 {
     [Key("user_build_event_item")]
     public int UserBuildEventItem { get; set; }
@@ -5558,7 +5558,7 @@ public class AtgenUserBuildEventItemList
 }
 
 [MessagePackObject]
-public class AtgenUserClb01EventItemList
+public partial class AtgenUserClb01EventItemList
 {
     [Key("user_clb_01_event_item")]
     public int UserClb01EventItem { get; set; }
@@ -5576,7 +5576,7 @@ public class AtgenUserClb01EventItemList
 }
 
 [MessagePackObject]
-public class AtgenUserCollectEventItemList
+public partial class AtgenUserCollectEventItemList
 {
     [Key("user_collect_event_item")]
     public int UserCollectEventItem { get; set; }
@@ -5594,7 +5594,7 @@ public class AtgenUserCollectEventItemList
 }
 
 [MessagePackObject]
-public class AtgenUserEventTradeList
+public partial class AtgenUserEventTradeList
 {
     [Key("event_trade_id")]
     public int EventTradeId { get; set; }
@@ -5612,7 +5612,7 @@ public class AtgenUserEventTradeList
 }
 
 [MessagePackObject]
-public class AtgenUserItemSummon
+public partial class AtgenUserItemSummon
 {
     [Key("daily_summon_count")]
     public int DailySummonCount { get; set; }
@@ -5630,7 +5630,7 @@ public class AtgenUserItemSummon
 }
 
 [MessagePackObject]
-public class AtgenUserMazeEventItemList
+public partial class AtgenUserMazeEventItemList
 {
     [Key("user_maze_event_item")]
     public int UserMazeEventItem { get; set; }
@@ -5648,7 +5648,7 @@ public class AtgenUserMazeEventItemList
 }
 
 [MessagePackObject]
-public class AtgenUserMazeEventItemList__2
+public partial class AtgenUserMazeEventItemList__2
 {
     [Key("event_item_id")]
     public int EventItemId { get; set; }
@@ -5666,7 +5666,7 @@ public class AtgenUserMazeEventItemList__2
 }
 
 [MessagePackObject]
-public class AtgenUserWallRewardList
+public partial class AtgenUserWallRewardList
 {
     [Key("quest_group_id")]
     public int QuestGroupId { get; set; }
@@ -5697,7 +5697,7 @@ public class AtgenUserWallRewardList
 }
 
 [MessagePackObject]
-public class AtgenVersionHash
+public partial class AtgenVersionHash
 {
     [Key("region")]
     public string Region { get; set; }
@@ -5723,7 +5723,7 @@ public class AtgenVersionHash
 }
 
 [MessagePackObject]
-public class AtgenWalkerData
+public partial class AtgenWalkerData
 {
     [Key("reliability_level")]
     public int ReliabilityLevel { get; set; }
@@ -5754,7 +5754,7 @@ public class AtgenWalkerData
 }
 
 [MessagePackObject]
-public class AtgenWallDropReward
+public partial class AtgenWallDropReward
 {
     [Key("reward_entity_list")]
     public IEnumerable<AtgenBuildEventRewardEntityList> RewardEntityList { get; set; } = [];
@@ -5780,7 +5780,7 @@ public class AtgenWallDropReward
 }
 
 [MessagePackObject]
-public class AtgenWallUnitInfo
+public partial class AtgenWallUnitInfo
 {
     [Key("quest_party_setting_list")]
     public IEnumerable<PartySettingList> QuestPartySettingList { get; set; } = [];
@@ -5806,7 +5806,7 @@ public class AtgenWallUnitInfo
 }
 
 [MessagePackObject]
-public class AtgenWeaponKeyDataList
+public partial class AtgenWeaponKeyDataList
 {
     [Key("key_id")]
     public ulong KeyId { get; set; }
@@ -5828,7 +5828,7 @@ public class AtgenWeaponKeyDataList
 }
 
 [MessagePackObject]
-public class AtgenWeaponSetList
+public partial class AtgenWeaponSetList
 {
     [Key("select_weapon_id")]
     public int SelectWeaponId { get; set; }
@@ -5849,7 +5849,7 @@ public class AtgenWeaponSetList
 }
 
 [MessagePackObject]
-public class AtgenWebviewUrlList
+public partial class AtgenWebviewUrlList
 {
     [Key("function_name")]
     public string FunctionName { get; set; }
@@ -5867,7 +5867,7 @@ public class AtgenWebviewUrlList
 }
 
 [MessagePackObject]
-public class BattleRoyalCharaSkinList
+public partial class BattleRoyalCharaSkinList
 {
     [Key("battle_royal_chara_skin_id")]
     public int BattleRoyalCharaSkinId { get; set; }
@@ -5885,7 +5885,7 @@ public class BattleRoyalCharaSkinList
 }
 
 [MessagePackObject]
-public class BattleRoyalCycleUserRecord
+public partial class BattleRoyalCycleUserRecord
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -5907,7 +5907,7 @@ public class BattleRoyalCycleUserRecord
 }
 
 [MessagePackObject]
-public class BattleRoyalEventItemList
+public partial class BattleRoyalEventItemList
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -5929,7 +5929,7 @@ public class BattleRoyalEventItemList
 }
 
 [MessagePackObject]
-public class BattleRoyalEventUserRecord
+public partial class BattleRoyalEventUserRecord
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -6030,7 +6030,7 @@ public class BattleRoyalEventUserRecord
 }
 
 [MessagePackObject]
-public class BattleRoyalResult
+public partial class BattleRoyalResult
 {
     [Key("battle_royal_cycle_id")]
     public int BattleRoyalCycleId { get; set; }
@@ -6091,7 +6091,7 @@ public class BattleRoyalResult
 }
 
 [MessagePackObject]
-public class BeginnerMissionList
+public partial class BeginnerMissionList
 {
     [Key("beginner_mission_id")]
     public int BeginnerMissionId { get; set; }
@@ -6127,7 +6127,7 @@ public class BeginnerMissionList
 }
 
 [MessagePackObject]
-public class BuildEventRewardList
+public partial class BuildEventRewardList
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -6145,7 +6145,7 @@ public class BuildEventRewardList
 }
 
 [MessagePackObject]
-public class BuildEventUserList
+public partial class BuildEventUserList
 {
     [Key("build_event_id")]
     public int BuildEventId { get; set; }
@@ -6166,7 +6166,7 @@ public class BuildEventUserList
 }
 
 [MessagePackObject]
-public class BuildList
+public partial class BuildList
 {
     [Key("build_id")]
     public ulong BuildId { get; set; }
@@ -6238,7 +6238,7 @@ public class BuildList
 }
 
 [MessagePackObject]
-public class CastleStoryList
+public partial class CastleStoryList
 {
     [Key("castle_story_id")]
     public int CastleStoryId { get; set; }
@@ -6257,7 +6257,7 @@ public class CastleStoryList
 }
 
 [MessagePackObject]
-public class CharaFriendshipList
+public partial class CharaFriendshipList
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -6284,7 +6284,7 @@ public class CharaFriendshipList
 }
 
 [MessagePackObject]
-public class CharaList
+public partial class CharaList
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -6428,7 +6428,7 @@ public class CharaList
 }
 
 [MessagePackObject]
-public class CharaUnitSetList
+public partial class CharaUnitSetList
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -6449,7 +6449,7 @@ public class CharaUnitSetList
 }
 
 [MessagePackObject]
-public class Clb01EventUserList
+public partial class Clb01EventUserList
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -6470,7 +6470,7 @@ public class Clb01EventUserList
 }
 
 [MessagePackObject]
-public class CollectEventUserList
+public partial class CollectEventUserList
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -6491,7 +6491,7 @@ public class CollectEventUserList
 }
 
 [MessagePackObject]
-public class CombatEventUserList
+public partial class CombatEventUserList
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -6532,7 +6532,7 @@ public class CombatEventUserList
 }
 
 [MessagePackObject]
-public class ConvertedEntityList
+public partial class ConvertedEntityList
 {
     [Key("before_entity_type")]
     public EntityTypes BeforeEntityType { get; set; }
@@ -6573,7 +6573,7 @@ public class ConvertedEntityList
 }
 
 [MessagePackObject]
-public class CraftList
+public partial class CraftList
 {
     [Key("weapon_id")]
     public int WeaponId { get; set; }
@@ -6592,7 +6592,7 @@ public class CraftList
 }
 
 [MessagePackObject]
-public class CurrentMainStoryMission
+public partial class CurrentMainStoryMission
 {
     [Key("main_story_mission_group_id")]
     public int MainStoryMissionGroupId { get; set; }
@@ -6613,7 +6613,7 @@ public class CurrentMainStoryMission
 }
 
 [MessagePackObject]
-public class DailyMissionList
+public partial class DailyMissionList
 {
     [Key("daily_mission_id")]
     public int DailyMissionId { get; set; }
@@ -6676,7 +6676,7 @@ public class DailyMissionList
 }
 
 [MessagePackObject]
-public class DataHeader
+public partial class DataHeader
 {
     [Key("result_code")]
     public int ResultCode { get; set; }
@@ -6690,7 +6690,7 @@ public class DataHeader
 }
 
 [MessagePackObject]
-public class DeleteDataList
+public partial class DeleteDataList
 {
     [Key("delete_dragon_list")]
     public IEnumerable<AtgenDeleteDragonList> DeleteDragonList { get; set; } = [];
@@ -6721,7 +6721,7 @@ public class DeleteDataList
 }
 
 [MessagePackObject]
-public class DiamondData
+public partial class DiamondData
 {
     [Key("paid_diamond")]
     public int PaidDiamond { get; set; }
@@ -6739,7 +6739,7 @@ public class DiamondData
 }
 
 [MessagePackObject]
-public class DmodeCharaList
+public partial class DmodeCharaList
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -6785,7 +6785,7 @@ public class DmodeCharaList
 }
 
 [MessagePackObject]
-public class DmodeDungeonInfo
+public partial class DmodeDungeonInfo
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -6827,7 +6827,7 @@ public class DmodeDungeonInfo
 }
 
 [MessagePackObject]
-public class DmodeDungeonItemList
+public partial class DmodeDungeonItemList
 {
     [Key("item_no")]
     public int ItemNo { get; set; }
@@ -6853,7 +6853,7 @@ public class DmodeDungeonItemList
 }
 
 [MessagePackObject]
-public class DmodeExpedition
+public partial class DmodeExpedition
 {
     [Key("chara_id_1")]
     public Charas CharaId1 { get; set; }
@@ -6899,7 +6899,7 @@ public class DmodeExpedition
 }
 
 [MessagePackObject]
-public class DmodeFloorData
+public partial class DmodeFloorData
 {
     [Key("unique_key")]
     public string UniqueKey { get; set; }
@@ -6953,7 +6953,7 @@ public class DmodeFloorData
 }
 
 [MessagePackObject]
-public class DmodeInfo
+public partial class DmodeInfo
 {
     [Key("total_max_floor_num")]
     public int TotalMaxFloorNum { get; set; }
@@ -7005,7 +7005,7 @@ public class DmodeInfo
 }
 
 [MessagePackObject]
-public class DmodeIngameData
+public partial class DmodeIngameData
 {
     [Key("unique_key")]
     public string UniqueKey { get; set; }
@@ -7061,7 +7061,7 @@ public class DmodeIngameData
 }
 
 [MessagePackObject]
-public class DmodeIngameResult
+public partial class DmodeIngameResult
 {
     [Key("floor_num")]
     public int FloorNum { get; set; }
@@ -7134,7 +7134,7 @@ public class DmodeIngameResult
 }
 
 [MessagePackObject]
-public class DmodeOddsInfo
+public partial class DmodeOddsInfo
 {
     [Key("dmode_drop_obj")]
     public IEnumerable<AtgenDmodeDropObj> DmodeDropObj { get; set; } = [];
@@ -7155,7 +7155,7 @@ public class DmodeOddsInfo
 }
 
 [MessagePackObject]
-public class DmodePlayRecord
+public partial class DmodePlayRecord
 {
     [Key("unique_key")]
     public string UniqueKey { get; set; }
@@ -7233,7 +7233,7 @@ public class DmodePlayRecord
 }
 
 [MessagePackObject]
-public class DmodeServitorPassiveList
+public partial class DmodeServitorPassiveList
 {
     [Key("passive_no")]
     public int PassiveNo { get; set; }
@@ -7251,7 +7251,7 @@ public class DmodeServitorPassiveList
 }
 
 [MessagePackObject]
-public class DmodeStoryList
+public partial class DmodeStoryList
 {
     [Key("dmode_story_id")]
     public int DmodeStoryId { get; set; }
@@ -7270,7 +7270,7 @@ public class DmodeStoryList
 }
 
 [MessagePackObject]
-public class DragonGiftList
+public partial class DragonGiftList
 {
     [Key("dragon_gift_id")]
     public int DragonGiftId { get; set; }
@@ -7288,7 +7288,7 @@ public class DragonGiftList
 }
 
 [MessagePackObject]
-public class DragonList
+public partial class DragonList
 {
     [Key("dragon_id")]
     public Dragons DragonId { get; set; }
@@ -7371,7 +7371,7 @@ public class DragonList
 }
 
 [MessagePackObject]
-public class DragonReliabilityList
+public partial class DragonReliabilityList
 {
     [Key("dragon_id")]
     public Dragons DragonId { get; set; }
@@ -7407,7 +7407,7 @@ public class DragonReliabilityList
 }
 
 [MessagePackObject]
-public class DragonRewardEntityList
+public partial class DragonRewardEntityList
 {
     [Key("entity_type")]
     public EntityTypes EntityType { get; set; }
@@ -7439,7 +7439,7 @@ public class DragonRewardEntityList
 }
 
 [MessagePackObject]
-public class DrillMissionGroupList
+public partial class DrillMissionGroupList
 {
     [Key("drill_mission_group_id")]
     public int DrillMissionGroupId { get; set; }
@@ -7453,7 +7453,7 @@ public class DrillMissionGroupList
 }
 
 [MessagePackObject]
-public class DrillMissionList
+public partial class DrillMissionList
 {
     [Key("drill_mission_id")]
     public int DrillMissionId { get; set; }
@@ -7489,7 +7489,7 @@ public class DrillMissionList
 }
 
 [MessagePackObject]
-public class EarnEventUserList
+public partial class EarnEventUserList
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -7525,7 +7525,7 @@ public class EarnEventUserList
 }
 
 [MessagePackObject]
-public class EditSkillCharaData
+public partial class EditSkillCharaData
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -7543,7 +7543,7 @@ public class EditSkillCharaData
 }
 
 [MessagePackObject]
-public class EmblemList
+public partial class EmblemList
 {
     [Key("emblem_id")]
     public int EmblemId { get; set; }
@@ -7566,7 +7566,7 @@ public class EmblemList
 }
 
 [MessagePackObject]
-public class EnemyBookList
+public partial class EnemyBookList
 {
     [Key("enemy_book_id")]
     public int EnemyBookId { get; set; }
@@ -7588,7 +7588,7 @@ public class EnemyBookList
 }
 
 [MessagePackObject]
-public class EnemyDamageHistory
+public partial class EnemyDamageHistory
 {
     [Key("damage")]
     public IEnumerable<int> Damage { get; set; } = [];
@@ -7606,7 +7606,7 @@ public class EnemyDamageHistory
 }
 
 [MessagePackObject]
-public class EnemyDropList
+public partial class EnemyDropList
 {
     [Key("coin")]
     public int Coin { get; set; }
@@ -7628,7 +7628,7 @@ public class EnemyDropList
 }
 
 [MessagePackObject]
-public class EntityResult
+public partial class EntityResult
 {
     [Key("over_discard_entity_list")]
     public IEnumerable<AtgenBuildEventRewardEntityList> OverDiscardEntityList { get; set; } = [];
@@ -7665,7 +7665,7 @@ public class EntityResult
 }
 
 [MessagePackObject]
-public class EquipStampList
+public partial class EquipStampList
 {
     [Key("slot")]
     public int Slot { get; set; }
@@ -7683,7 +7683,7 @@ public class EquipStampList
 }
 
 [MessagePackObject]
-public class EventAbilityCharaList
+public partial class EventAbilityCharaList
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -7705,7 +7705,7 @@ public class EventAbilityCharaList
 }
 
 [MessagePackObject]
-public class EventCycleRewardList
+public partial class EventCycleRewardList
 {
     [Key("event_cycle_id")]
     public int EventCycleId { get; set; }
@@ -7723,7 +7723,7 @@ public class EventCycleRewardList
 }
 
 [MessagePackObject]
-public class EventDamageRanking
+public partial class EventDamageRanking
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -7744,7 +7744,7 @@ public class EventDamageRanking
 }
 
 [MessagePackObject]
-public class EventPassiveList
+public partial class EventPassiveList
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -7762,7 +7762,7 @@ public class EventPassiveList
 }
 
 [MessagePackObject]
-public class EventStoryList
+public partial class EventStoryList
 {
     [Key("event_story_id")]
     public int EventStoryId { get; set; }
@@ -7780,7 +7780,7 @@ public class EventStoryList
 }
 
 [MessagePackObject]
-public class EventTradeList
+public partial class EventTradeList
 {
     [Key("event_trade_id")]
     public int EventTradeId { get; set; }
@@ -7867,7 +7867,7 @@ public class EventTradeList
 }
 
 [MessagePackObject]
-public class ExHunterEventUserList
+public partial class ExHunterEventUserList
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -7928,7 +7928,7 @@ public class ExHunterEventUserList
 }
 
 [MessagePackObject]
-public class ExRushEventUserList
+public partial class ExRushEventUserList
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -7950,7 +7950,7 @@ public class ExRushEventUserList
 }
 
 [MessagePackObject]
-public class ExchangeTicketList
+public partial class ExchangeTicketList
 {
     [Key("exchange_ticket_id")]
     public int ExchangeTicketId { get; set; }
@@ -7968,7 +7968,7 @@ public class ExchangeTicketList
 }
 
 [MessagePackObject]
-public class FortBonusList
+public partial class FortBonusList
 {
     [Key("param_bonus")]
     public IEnumerable<AtgenParamBonus> ParamBonus { get; set; } = [];
@@ -8019,7 +8019,7 @@ public class FortBonusList
 }
 
 [MessagePackObject]
-public class FortDetail
+public partial class FortDetail
 {
     [Key("max_carpenter_count")]
     public int MaxCarpenterCount { get; set; }
@@ -8041,7 +8041,7 @@ public class FortDetail
 }
 
 [MessagePackObject]
-public class FortPlantList
+public partial class FortPlantList
 {
     [Key("plant_id")]
     public int PlantId { get; set; }
@@ -8060,7 +8060,7 @@ public class FortPlantList
 }
 
 [MessagePackObject]
-public class FriendNotice
+public partial class FriendNotice
 {
     [Key("friend_new_count")]
     public int FriendNewCount { get; set; }
@@ -8078,7 +8078,7 @@ public class FriendNotice
 }
 
 [MessagePackObject]
-public class FunctionalMaintenanceList
+public partial class FunctionalMaintenanceList
 {
     [Key("functional_maintenance_type")]
     public int FunctionalMaintenanceType { get; set; }
@@ -8092,7 +8092,7 @@ public class FunctionalMaintenanceList
 }
 
 [MessagePackObject]
-public class GameAbilityCrest
+public partial class GameAbilityCrest
 {
     [Key("ability_crest_id")]
     public AbilityCrests AbilityCrestId { get; set; }
@@ -8143,7 +8143,7 @@ public class GameAbilityCrest
 }
 
 [MessagePackObject]
-public class GameWeaponBody
+public partial class GameWeaponBody
 {
     [Key("weapon_body_id")]
     public WeaponBodies WeaponBodyId { get; set; }
@@ -8219,7 +8219,7 @@ public class GameWeaponBody
 }
 
 [MessagePackObject]
-public class GameWeaponSkin
+public partial class GameWeaponSkin
 {
     [Key("weapon_skin_id")]
     public int WeaponSkinId { get; set; }
@@ -8233,7 +8233,7 @@ public class GameWeaponSkin
 }
 
 [MessagePackObject]
-public class GatherItemList
+public partial class GatherItemList
 {
     [Key("gather_item_id")]
     public int GatherItemId { get; set; }
@@ -8264,7 +8264,7 @@ public class GatherItemList
 }
 
 [MessagePackObject]
-public class GrowMaterialList
+public partial class GrowMaterialList
 {
     [Key("type")]
     public int Type { get; set; }
@@ -8286,7 +8286,7 @@ public class GrowMaterialList
 }
 
 [MessagePackObject]
-public class GrowRecord
+public partial class GrowRecord
 {
     [Key("take_player_exp")]
     public int TakePlayerExp { get; set; }
@@ -8332,7 +8332,7 @@ public class GrowRecord
 }
 
 [MessagePackObject]
-public class GuildApplyList
+public partial class GuildApplyList
 {
     [Key("viewer_id")]
     public ulong ViewerId { get; set; }
@@ -8388,7 +8388,7 @@ public class GuildApplyList
 }
 
 [MessagePackObject]
-public class GuildChatMessageList
+public partial class GuildChatMessageList
 {
     [Key("chat_message_id")]
     public ulong ChatMessageId { get; set; }
@@ -8474,7 +8474,7 @@ public class GuildChatMessageList
 }
 
 [MessagePackObject]
-public class GuildData
+public partial class GuildData
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -8543,7 +8543,7 @@ public class GuildData
 }
 
 [MessagePackObject]
-public class GuildInviteReceiveList
+public partial class GuildInviteReceiveList
 {
     [Key("guild_invite_id")]
     public ulong GuildInviteId { get; set; }
@@ -8604,7 +8604,7 @@ public class GuildInviteReceiveList
 }
 
 [MessagePackObject]
-public class GuildInviteSendList
+public partial class GuildInviteSendList
 {
     [Key("guild_invite_id")]
     public ulong GuildInviteId { get; set; }
@@ -8680,7 +8680,7 @@ public class GuildInviteSendList
 }
 
 [MessagePackObject]
-public class GuildMemberList
+public partial class GuildMemberList
 {
     [Key("viewer_id")]
     public ulong ViewerId { get; set; }
@@ -8751,7 +8751,7 @@ public class GuildMemberList
 }
 
 [MessagePackObject]
-public class GuildNotice
+public partial class GuildNotice
 {
     [Key("guild_apply_count")]
     public int GuildApplyCount { get; set; }
@@ -8791,7 +8791,7 @@ public class GuildNotice
 }
 
 [MessagePackObject]
-public class IngameData
+public partial class IngameData
 {
     [Key("viewer_id")]
     public ulong ViewerId { get; set; }
@@ -8922,7 +8922,7 @@ public class IngameData
 }
 
 [MessagePackObject]
-public class IngameQuestData
+public partial class IngameQuestData
 {
     [Key("quest_id")]
     public int QuestId { get; set; }
@@ -8961,7 +8961,7 @@ public class IngameQuestData
 }
 
 [MessagePackObject]
-public class IngameResultData
+public partial class IngameResultData
 {
     [Key("dungeon_key")]
     public string DungeonKey { get; set; }
@@ -9106,7 +9106,7 @@ public class IngameResultData
 }
 
 [MessagePackObject]
-public class IngameWallData
+public partial class IngameWallData
 {
     [Key("wall_id")]
     public int WallId { get; set; }
@@ -9124,7 +9124,7 @@ public class IngameWallData
 }
 
 [MessagePackObject]
-public class ItemList
+public partial class ItemList
 {
     [Key("item_id")]
     public int ItemId { get; set; }
@@ -9142,7 +9142,7 @@ public class ItemList
 }
 
 [MessagePackObject]
-public class LimitBreakGrowList
+public partial class LimitBreakGrowList
 {
     [Key("limit_break_count")]
     public int LimitBreakCount { get; set; }
@@ -9164,7 +9164,7 @@ public class LimitBreakGrowList
 }
 
 [MessagePackObject]
-public class LotteryOddsRate
+public partial class LotteryOddsRate
 {
     [Key("lottery_prize_rank_list")]
     public IEnumerable<AtgenLotteryPrizeRankList> LotteryPrizeRankList { get; set; } = [];
@@ -9185,7 +9185,7 @@ public class LotteryOddsRate
 }
 
 [MessagePackObject]
-public class LotteryOddsRateList
+public partial class LotteryOddsRateList
 {
     [Key("normal")]
     public LotteryOddsRate Normal { get; set; }
@@ -9203,7 +9203,7 @@ public class LotteryOddsRateList
 }
 
 [MessagePackObject]
-public class LotteryTicketList
+public partial class LotteryTicketList
 {
     [Key("lottery_ticket_id")]
     public int LotteryTicketId { get; set; }
@@ -9221,7 +9221,7 @@ public class LotteryTicketList
 }
 
 [MessagePackObject]
-public class MainStoryMissionList
+public partial class MainStoryMissionList
 {
     [Key("main_story_mission_id")]
     public int MainStoryMissionId { get; set; }
@@ -9257,7 +9257,7 @@ public class MainStoryMissionList
 }
 
 [MessagePackObject]
-public class MaterialList
+public partial class MaterialList
 {
     [Key("material_id")]
     public int MaterialId { get; set; }
@@ -9275,7 +9275,7 @@ public class MaterialList
 }
 
 [MessagePackObject]
-public class MazeEventUserList
+public partial class MazeEventUserList
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -9296,7 +9296,7 @@ public class MazeEventUserList
 }
 
 [MessagePackObject]
-public class MemoryEventMissionList
+public partial class MemoryEventMissionList
 {
     [Key("memory_event_mission_id")]
     public int MemoryEventMissionId { get; set; }
@@ -9332,7 +9332,7 @@ public class MemoryEventMissionList
 }
 
 [MessagePackObject]
-public class MissionNotice
+public partial class MissionNotice
 {
     [Key("normal_mission_notice")]
     public AtgenNormalMissionNotice NormalMissionNotice { get; set; }
@@ -9388,7 +9388,7 @@ public class MissionNotice
 }
 
 [MessagePackObject]
-public class MuseumDragonList
+public partial class MuseumDragonList
 {
     [Key("state")]
     public int State { get; set; }
@@ -9406,7 +9406,7 @@ public class MuseumDragonList
 }
 
 [MessagePackObject]
-public class MuseumList
+public partial class MuseumList
 {
     [Key("state")]
     public int State { get; set; }
@@ -9424,7 +9424,7 @@ public class MuseumList
 }
 
 [MessagePackObject]
-public class NormalMissionList
+public partial class NormalMissionList
 {
     [Key("normal_mission_id")]
     public int NormalMissionId { get; set; }
@@ -9460,7 +9460,7 @@ public class NormalMissionList
 }
 
 [MessagePackObject]
-public class OddsInfo
+public partial class OddsInfo
 {
     [Key("area_index")]
     public int AreaIndex { get; set; }
@@ -9496,7 +9496,7 @@ public class OddsInfo
 }
 
 [MessagePackObject]
-public class OddsRate
+public partial class OddsRate
 {
     [Key("rarity_list")]
     public IEnumerable<AtgenRarityList> RarityList { get; set; } = [];
@@ -9522,7 +9522,7 @@ public class OddsRate
 }
 
 [MessagePackObject]
-public class OddsRateList
+public partial class OddsRateList
 {
     [Key("required_count_to_next")]
     public int RequiredCountToNext { get; set; }
@@ -9544,7 +9544,7 @@ public class OddsRateList
 }
 
 [MessagePackObject]
-public class OddsUnitDetail
+public partial class OddsUnitDetail
 {
     [Key("pickup")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
@@ -9567,7 +9567,7 @@ public class OddsUnitDetail
 }
 
 [MessagePackObject]
-public class OptionData
+public partial class OptionData
 {
     [Key("is_enable_auto_lock_unit")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
@@ -9626,7 +9626,7 @@ public class OptionData
 }
 
 [MessagePackObject]
-public class PartyInfo
+public partial class PartyInfo
 {
     [Key("party_unit_list")]
     public IEnumerable<PartyUnitList> PartyUnitList { get; set; } = [];
@@ -9662,7 +9662,7 @@ public class PartyInfo
 }
 
 [MessagePackObject]
-public class PartyList
+public partial class PartyList
 {
     [Key("party_no")]
     public int PartyNo { get; set; }
@@ -9684,7 +9684,7 @@ public class PartyList
 }
 
 [MessagePackObject]
-public class PartyPowerData
+public partial class PartyPowerData
 {
     [Key("max_party_power")]
     public int MaxPartyPower { get; set; }
@@ -9698,7 +9698,7 @@ public class PartyPowerData
 }
 
 [MessagePackObject]
-public class PartySettingList
+public partial class PartySettingList
 {
     [Key("unit_no")]
     public int UnitNo { get; set; }
@@ -9804,7 +9804,7 @@ public class PartySettingList
 }
 
 [MessagePackObject]
-public class PartyUnitList
+public partial class PartyUnitList
 {
     [Key("position")]
     public int Position { get; set; }
@@ -9880,7 +9880,7 @@ public class PartyUnitList
 }
 
 [MessagePackObject]
-public class PaymentTarget
+public partial class PaymentTarget
 {
     [Key("target_hold_quantity")]
     public int TargetHoldQuantity { get; set; }
@@ -9898,7 +9898,7 @@ public class PaymentTarget
 }
 
 [MessagePackObject]
-public class PeriodMissionList
+public partial class PeriodMissionList
 {
     [Key("period_mission_id")]
     public int PeriodMissionId { get; set; }
@@ -9934,7 +9934,7 @@ public class PeriodMissionList
 }
 
 [MessagePackObject]
-public class PlayRecord
+public partial class PlayRecord
 {
     [Key("treasure_record")]
     public IEnumerable<AtgenTreasureRecord> TreasureRecord { get; set; } = [];
@@ -10106,7 +10106,7 @@ public class PlayRecord
 }
 
 [MessagePackObject]
-public class PresentDetailList
+public partial class PresentDetailList
 {
     [Key("present_id")]
     public ulong PresentId { get; set; }
@@ -10197,7 +10197,7 @@ public class PresentDetailList
 }
 
 [MessagePackObject]
-public class PresentHistoryList
+public partial class PresentHistoryList
 {
     [Key("id")]
     public ulong Id { get; set; }
@@ -10273,7 +10273,7 @@ public class PresentHistoryList
 }
 
 [MessagePackObject]
-public class PresentNotice
+public partial class PresentNotice
 {
     [Key("present_limit_count")]
     public int PresentLimitCount { get; set; }
@@ -10291,7 +10291,7 @@ public class PresentNotice
 }
 
 [MessagePackObject]
-public class ProductList
+public partial class ProductList
 {
     [Key("id")]
     public int Id { get; set; }
@@ -10327,7 +10327,7 @@ public class ProductList
 }
 
 [MessagePackObject]
-public class QuestCarryList
+public partial class QuestCarryList
 {
     [Key("quest_carry_id")]
     public int QuestCarryId { get; set; }
@@ -10349,7 +10349,7 @@ public class QuestCarryList
 }
 
 [MessagePackObject]
-public class QuestEntryConditionList
+public partial class QuestEntryConditionList
 {
     [Key("quest_entry_condition_id")]
     public int QuestEntryConditionId { get; set; }
@@ -10363,7 +10363,7 @@ public class QuestEntryConditionList
 }
 
 [MessagePackObject]
-public class QuestEventList
+public partial class QuestEventList
 {
     [Key("quest_event_id")]
     public int QuestEventId { get; set; }
@@ -10424,7 +10424,7 @@ public class QuestEventList
 }
 
 [MessagePackObject]
-public class QuestEventScheduleList
+public partial class QuestEventScheduleList
 {
     [Key("quest_group_id")]
     public int QuestGroupId { get; set; }
@@ -10490,7 +10490,7 @@ public class QuestEventScheduleList
 }
 
 [MessagePackObject]
-public class QuestList
+public partial class QuestList
 {
     [Key("quest_id")]
     public int QuestId { get; set; }
@@ -10565,7 +10565,7 @@ public class QuestList
 }
 
 [MessagePackObject]
-public class QuestScheduleDetailList
+public partial class QuestScheduleDetailList
 {
     [Key("schedule_detail_id")]
     public int ScheduleDetailId { get; set; }
@@ -10611,7 +10611,7 @@ public class QuestScheduleDetailList
 }
 
 [MessagePackObject]
-public class QuestStoryList
+public partial class QuestStoryList
 {
     [Key("quest_story_id")]
     public int QuestStoryId { get; set; }
@@ -10629,7 +10629,7 @@ public class QuestStoryList
 }
 
 [MessagePackObject]
-public class QuestTreasureList
+public partial class QuestTreasureList
 {
     [Key("quest_treasure_id")]
     public int QuestTreasureId { get; set; }
@@ -10643,7 +10643,7 @@ public class QuestTreasureList
 }
 
 [MessagePackObject]
-public class QuestWallList
+public partial class QuestWallList
 {
     [Key("wall_id")]
     public int WallId { get; set; }
@@ -10666,7 +10666,7 @@ public class QuestWallList
 }
 
 [MessagePackObject]
-public class RaidEventRewardList
+public partial class RaidEventRewardList
 {
     [Key("raid_event_id")]
     public int RaidEventId { get; set; }
@@ -10684,7 +10684,7 @@ public class RaidEventRewardList
 }
 
 [MessagePackObject]
-public class RaidEventUserList
+public partial class RaidEventUserList
 {
     [Key("raid_event_id")]
     public int RaidEventId { get; set; }
@@ -10745,7 +10745,7 @@ public class RaidEventUserList
 }
 
 [MessagePackObject]
-public class RankingTierRewardList
+public partial class RankingTierRewardList
 {
     [Key("ranking_group_id")]
     public int RankingGroupId { get; set; }
@@ -10763,7 +10763,7 @@ public class RankingTierRewardList
 }
 
 [MessagePackObject]
-public class RedoableSummonOddsRateList
+public partial class RedoableSummonOddsRateList
 {
     [Key("normal")]
     public OddsRate Normal { get; set; }
@@ -10781,7 +10781,7 @@ public class RedoableSummonOddsRateList
 }
 
 [MessagePackObject]
-public class RepeatData
+public partial class RepeatData
 {
     [Key("repeat_key")]
     public string RepeatKey { get; set; }
@@ -10803,7 +10803,7 @@ public class RepeatData
 }
 
 [MessagePackObject]
-public class RepeatSetting
+public partial class RepeatSetting
 {
     [Key("repeat_type")]
     public int RepeatType { get; set; }
@@ -10825,7 +10825,7 @@ public class RepeatSetting
 }
 
 [MessagePackObject]
-public class ResponseCommon
+public partial class ResponseCommon
 {
     [Key("data_headers")]
     public DataHeader DataHeaders { get; set; }
@@ -10839,7 +10839,7 @@ public class ResponseCommon
 }
 
 [MessagePackObject]
-public class RewardRecord
+public partial class RewardRecord
 {
     [Key("drop_all")]
     public IEnumerable<AtgenDropAll> DropAll { get; set; } = [];
@@ -10940,7 +10940,7 @@ public class RewardRecord
 }
 
 [MessagePackObject]
-public class RewardReliabilityList
+public partial class RewardReliabilityList
 {
     [Key("levelup_entity_list")]
     public IEnumerable<DragonRewardEntityList> LevelupEntityList { get; set; } = [];
@@ -10967,7 +10967,7 @@ public class RewardReliabilityList
 }
 
 [MessagePackObject]
-public class RoomList
+public partial class RoomList
 {
     [Key("room_id")]
     public int RoomId { get; set; }
@@ -11083,7 +11083,7 @@ public class RoomList
 }
 
 [MessagePackObject]
-public class SearchClearPartyCharaList
+public partial class SearchClearPartyCharaList
 {
     [Key("quest_id")]
     public int QuestId { get; set; }
@@ -11104,7 +11104,7 @@ public class SearchClearPartyCharaList
 }
 
 [MessagePackObject]
-public class SearchClearPartyList
+public partial class SearchClearPartyList
 {
     [Key("archive_party_unit_list")]
     public IEnumerable<AtgenArchivePartyUnitList> ArchivePartyUnitList { get; set; } = [];
@@ -11118,7 +11118,7 @@ public class SearchClearPartyList
 }
 
 [MessagePackObject]
-public class SettingSupport
+public partial class SettingSupport
 {
     [Key("chara_id")]
     public Charas CharaId { get; set; }
@@ -11199,7 +11199,7 @@ public class SettingSupport
 }
 
 [MessagePackObject]
-public class ShopNotice
+public partial class ShopNotice
 {
     [Key("is_shop_notification")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
@@ -11214,7 +11214,7 @@ public class ShopNotice
 }
 
 [MessagePackObject]
-public class ShopPurchaseList
+public partial class ShopPurchaseList
 {
     [Key("goods_id")]
     public int GoodsId { get; set; }
@@ -11250,7 +11250,7 @@ public class ShopPurchaseList
 }
 
 [MessagePackObject]
-public class SimpleEventUserList
+public partial class SimpleEventUserList
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -11281,7 +11281,7 @@ public class SimpleEventUserList
 }
 
 [MessagePackObject]
-public class SkinWeaponData
+public partial class SkinWeaponData
 {
     [Key("weapon_id")]
     public int WeaponId { get; set; }
@@ -11295,7 +11295,7 @@ public class SkinWeaponData
 }
 
 [MessagePackObject]
-public class SpecialMissionList
+public partial class SpecialMissionList
 {
     [Key("special_mission_id")]
     public int SpecialMissionId { get; set; }
@@ -11331,7 +11331,7 @@ public class SpecialMissionList
 }
 
 [MessagePackObject]
-public class StampList
+public partial class StampList
 {
     [Key("stamp_id")]
     public int StampId { get; set; }
@@ -11350,7 +11350,7 @@ public class StampList
 }
 
 [MessagePackObject]
-public class SummonHistoryList
+public partial class SummonHistoryList
 {
     [Key("key_id")]
     public int KeyId { get; set; }
@@ -11446,7 +11446,7 @@ public class SummonHistoryList
 }
 
 [MessagePackObject]
-public class SummonList
+public partial class SummonList
 {
     [Key("summon_id")]
     public int SummonId { get; set; }
@@ -11583,7 +11583,7 @@ public class SummonList
 }
 
 [MessagePackObject]
-public class SummonPointList
+public partial class SummonPointList
 {
     [Key("summon_point_id")]
     public int SummonPointId { get; set; }
@@ -11619,7 +11619,7 @@ public class SummonPointList
 }
 
 [MessagePackObject]
-public class SummonPrizeOddsRate
+public partial class SummonPrizeOddsRate
 {
     [Key("summon_prize_rank_list")]
     public IEnumerable<AtgenSummonPrizeRankList> SummonPrizeRankList { get; set; } = [];
@@ -11640,7 +11640,7 @@ public class SummonPrizeOddsRate
 }
 
 [MessagePackObject]
-public class SummonPrizeOddsRateList
+public partial class SummonPrizeOddsRateList
 {
     [Key("normal")]
     public SummonPrizeOddsRate Normal { get; set; }
@@ -11658,7 +11658,7 @@ public class SummonPrizeOddsRateList
 }
 
 [MessagePackObject]
-public class SummonTicketList
+public partial class SummonTicketList
 {
     [Key("key_id")]
     public ulong KeyId { get; set; }
@@ -11689,7 +11689,7 @@ public class SummonTicketList
 }
 
 [MessagePackObject]
-public class TalismanList
+public partial class TalismanList
 {
     [Key("talisman_key_id")]
     public ulong TalismanKeyId { get; set; }
@@ -11752,7 +11752,7 @@ public class TalismanList
 }
 
 [MessagePackObject]
-public class TimeAttackRankingData
+public partial class TimeAttackRankingData
 {
     [Key("ranking_id")]
     public int RankingId { get; set; }
@@ -11770,7 +11770,7 @@ public class TimeAttackRankingData
 }
 
 [MessagePackObject]
-public class TreasureTradeList
+public partial class TreasureTradeList
 {
     [Key("priority")]
     public int Priority { get; set; }
@@ -11847,7 +11847,7 @@ public class TreasureTradeList
 }
 
 [MessagePackObject]
-public class UnitStoryList
+public partial class UnitStoryList
 {
     [Key("unit_story_id")]
     public int UnitStoryId { get; set; }
@@ -11866,10 +11866,10 @@ public class UnitStoryList
 }
 
 [MessagePackObject]
-public class UnusedType { }
+public partial class UnusedType { }
 
 [MessagePackObject]
-public class UpdateDataList
+public partial class UpdateDataList
 {
     [Key("user_data")]
     public UserData UserData { get; set; }
@@ -11896,7 +11896,7 @@ public class UpdateDataList
     public IEnumerable<WeaponSkinList> WeaponSkinList { get; set; } = [];
 
     [Key("weapon_body_list")]
-    public WeaponBodies WeaponBodyList { get; set; }
+    public IEnumerable<WeaponBodyList> WeaponBodyList { get; set; } = [];
 
     [Key("weapon_passive_ability_list")]
     public IEnumerable<WeaponPassiveAbilityList> WeaponPassiveAbilityList { get; set; } = [];
@@ -12087,7 +12087,7 @@ public class UpdateDataList
         IEnumerable<WeaponList> weaponList,
         IEnumerable<AmuletList> amuletList,
         IEnumerable<WeaponSkinList> weaponSkinList,
-        WeaponBodies weaponBodyList,
+        IEnumerable<WeaponBodyList> weaponBodyList,
         IEnumerable<WeaponPassiveAbilityList> weaponPassiveAbilityList,
         IEnumerable<AbilityCrestList> abilityCrestList,
         IEnumerable<AbilityCrestSetList> abilityCrestSetList,
@@ -12225,7 +12225,7 @@ public class UpdateDataList
 }
 
 [MessagePackObject]
-public class UserAbilityCrestTradeList
+public partial class UserAbilityCrestTradeList
 {
     [Key("ability_crest_trade_id")]
     public int AbilityCrestTradeId { get; set; }
@@ -12243,7 +12243,7 @@ public class UserAbilityCrestTradeList
 }
 
 [MessagePackObject]
-public class UserAmuletTradeList
+public partial class UserAmuletTradeList
 {
     [Key("amulet_trade_id")]
     public int AmuletTradeId { get; set; }
@@ -12261,7 +12261,7 @@ public class UserAmuletTradeList
 }
 
 [MessagePackObject]
-public class UserData
+public partial class UserData
 {
     [Key("viewer_id")]
     public ulong ViewerId { get; set; }
@@ -12423,7 +12423,7 @@ public class UserData
 }
 
 [MessagePackObject]
-public class UserEventItemData
+public partial class UserEventItemData
 {
     [Key("user_maze_event_item_list")]
     public IEnumerable<AtgenUserMazeEventItemList__2> UserMazeEventItemList { get; set; } = [];
@@ -12437,7 +12437,7 @@ public class UserEventItemData
 }
 
 [MessagePackObject]
-public class UserEventLocationRewardList
+public partial class UserEventLocationRewardList
 {
     [Key("event_id")]
     public int EventId { get; set; }
@@ -12455,7 +12455,7 @@ public class UserEventLocationRewardList
 }
 
 [MessagePackObject]
-public class UserGuildData
+public partial class UserGuildData
 {
     [Key("guild_id")]
     public int GuildId { get; set; }
@@ -12523,7 +12523,7 @@ public class UserGuildData
 }
 
 [MessagePackObject]
-public class UserRedoableSummonData
+public partial class UserRedoableSummonData
 {
     [Key("is_fixed_result")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
@@ -12546,7 +12546,7 @@ public class UserRedoableSummonData
 }
 
 [MessagePackObject]
-public class UserSummonList
+public partial class UserSummonList
 {
     [Key("summon_id")]
     public int SummonId { get; set; }
@@ -12593,7 +12593,7 @@ public class UserSummonList
 }
 
 [MessagePackObject]
-public class UserSupportList
+public partial class UserSupportList
 {
     [Key("viewer_id")]
     public ulong ViewerId { get; set; }
@@ -12689,7 +12689,7 @@ public class UserSupportList
 }
 
 [MessagePackObject]
-public class UserTreasureTradeList
+public partial class UserTreasureTradeList
 {
     [Key("treasure_trade_id")]
     public int TreasureTradeId { get; set; }
@@ -12711,7 +12711,7 @@ public class UserTreasureTradeList
 }
 
 [MessagePackObject]
-public class WalletBalance
+public partial class WalletBalance
 {
     [Key("total")]
     public int Total { get; set; }
@@ -12733,7 +12733,7 @@ public class WalletBalance
 }
 
 [MessagePackObject]
-public class WeaponBodyList
+public partial class WeaponBodyList
 {
     [Key("weapon_body_id")]
     public WeaponBodies WeaponBodyId { get; set; }
@@ -12830,7 +12830,7 @@ public class WeaponBodyList
 }
 
 [MessagePackObject]
-public class WeaponList
+public partial class WeaponList
 {
     [Key("weapon_id")]
     public int WeaponId { get; set; }
@@ -12903,7 +12903,7 @@ public class WeaponList
 }
 
 [MessagePackObject]
-public class WeaponPassiveAbilityList
+public partial class WeaponPassiveAbilityList
 {
     [Key("weapon_passive_ability_id")]
     public int WeaponPassiveAbilityId { get; set; }
@@ -12917,7 +12917,7 @@ public class WeaponPassiveAbilityList
 }
 
 [MessagePackObject]
-public class WeaponSkinList
+public partial class WeaponSkinList
 {
     [Key("weapon_skin_id")]
     public int WeaponSkinId { get; set; }

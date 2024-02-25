@@ -21,11 +21,12 @@ public class MaintenanceTest : TestFixture
     {
         this.ConfigureMaintenanceClient(new MaintenanceOptions() { Enabled = true });
 
-        DragaliaResponse<ResultCodeData> response = await this.Client.PostMsgpack<ResultCodeData>(
-            "load/index",
-            new LoadIndexRequest(),
-            ensureSuccessHeader: false
-        );
+        DragaliaResponse<ResultCodeResponse> response =
+            await this.Client.PostMsgpack<ResultCodeResponse>(
+                "load/index",
+                new LoadIndexRequest(),
+                ensureSuccessHeader: false
+            );
 
         response.data_headers.result_code.Should().Be(ResultCode.CommonMaintenance);
     }
@@ -36,7 +37,7 @@ public class MaintenanceTest : TestFixture
         this.ConfigureMaintenanceClient(new MaintenanceOptions() { Enabled = true });
 
         DragaliaResponse<ToolGetServiceStatusData> response =
-            await this.Client.PostMsgpack<ToolGetServiceStatusData>(
+            await this.Client.PostMsgpack<ToolGetServiceStatusResponse>(
                 "tool/get_service_status",
                 new ToolGetServiceStatusRequest(),
                 ensureSuccessHeader: false
@@ -60,7 +61,7 @@ public class MaintenanceTest : TestFixture
         );
 
         DragaliaResponse<MaintenanceGetTextData> response =
-            await this.Client.PostMsgpack<MaintenanceGetTextData>(
+            await this.Client.PostMsgpack<MaintenanceGetTextResponse>(
                 "maintenance/get_text",
                 new MaintenanceGetTextRequest()
             );

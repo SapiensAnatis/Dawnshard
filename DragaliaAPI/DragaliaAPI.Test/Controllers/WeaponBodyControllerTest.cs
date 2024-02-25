@@ -63,25 +63,25 @@ public class WeaponBodyControllerTest
         this.mockWeaponService.Setup(x => x.ValidateCraft(WeaponBodies.Areadbhar))
             .ReturnsAsync(false);
 
-        ResultCodeData data = (
+        ResultCodeResponse response = (
             await this.weaponBodyController.Craft(
                 new WeaponBodyCraftRequest() { WeaponBodyId = WeaponBodies.Areadbhar }
             )
-        ).GetData<ResultCodeData>()!;
+        ).GetData<ResultCodeResponse>()!;
 
-        data.result_code.Should().Be(ResultCode.WeaponBodyCraftShortWeaponBody);
+        response.ResultCode.Should().Be(ResultCode.WeaponBodyCraftShortWeaponBody);
     }
 
     [Fact]
     public async Task BuildupPiece_InvalidWeapon_ReturnsError()
     {
-        ResultCodeData data = (
+        ResultCodeResponse response = (
             await this.weaponBodyController.BuildupPiece(
                 new WeaponBodyBuildupPieceRequest() { WeaponBodyId = (WeaponBodies)8 }
             )
-        ).GetData<ResultCodeData>()!;
+        ).GetData<ResultCodeResponse>()!;
 
-        data.result_code.Should().Be(ResultCode.WeaponBodyIsNotPlayable);
+        response.ResultCode.Should().Be(ResultCode.WeaponBodyIsNotPlayable);
     }
 
     [Fact]
@@ -89,13 +89,13 @@ public class WeaponBodyControllerTest
     {
         this.mockWeaponService.Setup(x => x.CheckOwned(WeaponBodies.Caduceus)).ReturnsAsync(false);
 
-        ResultCodeData data = (
+        ResultCodeResponse response = (
             await this.weaponBodyController.BuildupPiece(
                 new WeaponBodyBuildupPieceRequest() { WeaponBodyId = WeaponBodies.Caduceus }
             )
-        ).GetData<ResultCodeData>()!;
+        ).GetData<ResultCodeResponse>()!;
 
-        data.result_code.Should().Be(ResultCode.WeaponBodyCraftShortWeaponBody);
+        response.ResultCode.Should().Be(ResultCode.WeaponBodyCraftShortWeaponBody);
         this.mockWeaponService.VerifyAll();
     }
 
@@ -113,7 +113,7 @@ public class WeaponBodyControllerTest
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.CommonMaterialShort);
 
-        ResultCodeData data = (
+        ResultCodeResponse response = (
             await this.weaponBodyController.BuildupPiece(
                 new WeaponBodyBuildupPieceRequest()
                 {
@@ -126,9 +126,9 @@ public class WeaponBodyControllerTest
                     }
                 }
             )
-        ).GetData<ResultCodeData>()!;
+        ).GetData<ResultCodeResponse>()!;
 
-        data.result_code.Should().Be(ResultCode.CommonMaterialShort);
+        response.ResultCode.Should().Be(ResultCode.CommonMaterialShort);
         this.mockWeaponService.VerifyAll();
     }
 

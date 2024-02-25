@@ -47,7 +47,7 @@ public class MatchingTest : TestFixture
             );
 
         MatchingGetRoomListData data = (
-            await this.Client.PostMsgpack<MatchingGetRoomListData>(
+            await this.Client.PostMsgpack<MatchingGetRoomListResponse>(
                 $"{EndpointGroup}/get_room_list",
                 new MatchingGetRoomListRequest() { CompatibleId = 36 }
             )
@@ -132,7 +132,7 @@ public class MatchingTest : TestFixture
             );
 
         MatchingGetRoomListByQuestIdData data = (
-            await this.Client.PostMsgpack<MatchingGetRoomListByQuestIdData>(
+            await this.Client.PostMsgpack<MatchingGetRoomListByQuestIdResponse>(
                 $"{EndpointGroup}/get_room_list_by_quest_id",
                 new MatchingGetRoomListByQuestIdRequest() { CompatibleId = 36, QuestId = 204550501 }
             )
@@ -214,7 +214,7 @@ public class MatchingTest : TestFixture
             );
 
         MatchingGetRoomNameData data = (
-            await this.Client.PostMsgpack<MatchingGetRoomNameData>(
+            await this.Client.PostMsgpack<MatchingGetRoomNameResponse>(
                 $"{EndpointGroup}/get_room_name",
                 new MatchingGetRoomNameRequest() { RoomId = 911948 }
             )
@@ -297,7 +297,7 @@ public class MatchingTest : TestFixture
             );
 
         MatchingGetRoomNameData data = (
-            await this.Client.PostMsgpack<MatchingGetRoomNameData>(
+            await this.Client.PostMsgpack<MatchingGetRoomNameResponse>(
                 $"{EndpointGroup}/get_room_name",
                 new MatchingGetRoomNameRequest() { RoomId = 911948 }
             )

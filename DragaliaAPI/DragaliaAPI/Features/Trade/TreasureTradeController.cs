@@ -29,7 +29,7 @@ public class TreasureTradeController(
     [HttpPost("trade")]
     public async Task<DragaliaResult> Trade(TreasureTradeTradeRequest request)
     {
-        TreasureTradeTradeData resp = new();
+        TreasureTradeTradeResponse resp = new();
 
         await tradeService.DoTrade(
             TradeType.Treasure,

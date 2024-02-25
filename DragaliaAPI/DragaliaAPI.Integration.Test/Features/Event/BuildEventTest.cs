@@ -10,7 +10,7 @@ public class BuildEventTest : TestFixture
         : base(factory, outputHelper) { }
 
     protected override async Task Setup() =>
-        await this.Client.PostMsgpack<MemoryEventActivateData>(
+        await this.Client.PostMsgpack<MemoryEventActivateResponse>(
             "memory_event/activate",
             new MemoryEventActivateRequest(EventId)
         );
@@ -21,7 +21,7 @@ public class BuildEventTest : TestFixture
     public async Task GetEventData_ReturnsEventData()
     {
         DragaliaResponse<BuildEventGetEventDataData> evtData =
-            await Client.PostMsgpack<BuildEventGetEventDataData>(
+            await Client.PostMsgpack<BuildEventGetEventDataResponse>(
                 "build_event/get_event_data",
                 new BuildEventGetEventDataRequest(EventId)
             );
@@ -51,7 +51,7 @@ public class BuildEventTest : TestFixture
         await ApiContext.SaveChangesAsync();
 
         DragaliaResponse<BuildEventReceiveBuildPointRewardData> evtResp =
-            await Client.PostMsgpack<BuildEventReceiveBuildPointRewardData>(
+            await Client.PostMsgpack<BuildEventReceiveBuildPointRewardResponse>(
                 "build_event/receive_build_point_reward",
                 new BuildEventReceiveBuildPointRewardRequest(EventId)
             );

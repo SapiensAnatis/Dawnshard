@@ -27,7 +27,7 @@ public class ItemTest : TestFixture
     [Fact]
     public async Task GetList_ReturnsItemList()
     {
-        DragaliaResponse<ItemGetListData> resp = await Client.PostMsgpack<ItemGetListData>(
+        DragaliaResponse<ItemGetListData> resp = await Client.PostMsgpack<ItemGetListResponse>(
             "item/get_list",
             new ItemGetListRequest()
         );
@@ -41,7 +41,7 @@ public class ItemTest : TestFixture
     public async Task UseRecoveryStamina_SingleItem_RecoversStamina()
     {
         DragaliaResponse<ItemUseRecoveryStaminaData> resp =
-            await Client.PostMsgpack<ItemUseRecoveryStaminaData>(
+            await Client.PostMsgpack<ItemUseRecoveryStaminaResponse>(
                 "item/use_recovery_stamina",
                 new ItemUseRecoveryStaminaRequest(
                     new List<AtgenUseItemList> { new(UseItem.Honey, 1) }
@@ -59,7 +59,7 @@ public class ItemTest : TestFixture
     public async Task UseRecoveryStamina_MultipleItems_RecoversStamina()
     {
         DragaliaResponse<ItemUseRecoveryStaminaData> resp =
-            await Client.PostMsgpack<ItemUseRecoveryStaminaData>(
+            await Client.PostMsgpack<ItemUseRecoveryStaminaResponse>(
                 "item/use_recovery_stamina",
                 new ItemUseRecoveryStaminaRequest(
                     new List<AtgenUseItemList> { new(UseItem.Honey, 5) }

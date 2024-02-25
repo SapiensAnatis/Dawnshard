@@ -12,7 +12,7 @@ public class RedoableSummonTest : TestFixture
     public async Task RedoableSummonGetData_ReturnsData()
     {
         RedoableSummonGetDataData response = (
-            await this.Client.PostMsgpack<RedoableSummonGetDataData>(
+            await this.Client.PostMsgpack<RedoableSummonGetDataResponse>(
                 "redoable_summon/get_data",
                 new RedoableSummonGetDataRequest()
             )
@@ -25,7 +25,7 @@ public class RedoableSummonTest : TestFixture
     public async Task RedoableSummonPreExec_ReturnsValidResult()
     {
         RedoableSummonPreExecData response = (
-            await this.Client.PostMsgpack<RedoableSummonPreExecData>(
+            await this.Client.PostMsgpack<RedoableSummonPreExecResponse>(
                 "redoable_summon/pre_exec",
                 new RedoableSummonPreExecRequest(0)
             )
@@ -38,13 +38,13 @@ public class RedoableSummonTest : TestFixture
     public async Task RedoableSummonFixExec_UpdatesDatabase()
     {
         // Set up cached summon result
-        await this.Client.PostMsgpack<RedoableSummonPreExecData>(
+        await this.Client.PostMsgpack<RedoableSummonPreExecResponse>(
             "redoable_summon/pre_exec",
             new RedoableSummonPreExecRequest()
         );
 
         RedoableSummonFixExecData response = (
-            await this.Client.PostMsgpack<RedoableSummonFixExecData>(
+            await this.Client.PostMsgpack<RedoableSummonFixExecResponse>(
                 "redoable_summon/fix_exec",
                 new RedoableSummonFixExecRequest()
             )

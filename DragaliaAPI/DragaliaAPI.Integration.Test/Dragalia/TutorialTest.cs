@@ -21,7 +21,7 @@ public class TutorialTest : TestFixture
         int step = 20000;
 
         TutorialUpdateStepData response = (
-            await this.Client.PostMsgpack<TutorialUpdateStepData>(
+            await this.Client.PostMsgpack<TutorialUpdateStepResponse>(
                 "/tutorial/update_step",
                 new TutorialUpdateStepRequest(step, 0, 0, 0)
             )
@@ -47,7 +47,7 @@ public class TutorialTest : TestFixture
         UpdateDataList expUpdateData = new() { UserData = expUserData };
 
         TutorialUpdateStepData response = (
-            await this.Client.PostMsgpack<TutorialUpdateStepData>(
+            await this.Client.PostMsgpack<TutorialUpdateStepResponse>(
                 "/tutorial/update_step",
                 new TutorialUpdateStepRequest(step, 0, 0, 0)
             )
@@ -62,7 +62,7 @@ public class TutorialTest : TestFixture
         int flag = 1020;
 
         TutorialUpdateFlagsData response = (
-            await this.Client.PostMsgpack<TutorialUpdateFlagsData>(
+            await this.Client.PostMsgpack<TutorialUpdateFlagsResponse>(
                 "/tutorial/update_flags",
                 new TutorialUpdateFlagsRequest() { FlagId = flag }
             )

@@ -13,7 +13,7 @@ public class StampTest : TestFixture
     public async Task GetStamp_ReturnsStamps()
     {
         StampGetStampData data = (
-            await this.Client.PostMsgpack<StampGetStampData>(
+            await this.Client.PostMsgpack<StampGetStampResponse>(
                 $"{Controller}/get_stamp",
                 new StampGetStampRequest()
             )
@@ -62,7 +62,7 @@ public class StampTest : TestFixture
                 new() { Slot = 32, StampId = 10201 }
             };
 
-        await this.Client.PostMsgpack<StampSetEquipStampData>(
+        await this.Client.PostMsgpack<StampSetEquipStampResponse>(
             $"{Controller}/set_equip_stamp",
             new StampSetEquipStampRequest() { StampList = requestList }
         );
@@ -121,7 +121,7 @@ public class StampTest : TestFixture
             };
 
         StampSetEquipStampData data = (
-            await this.Client.PostMsgpack<StampSetEquipStampData>(
+            await this.Client.PostMsgpack<StampSetEquipStampResponse>(
                 $"{Controller}/set_equip_stamp",
                 new StampSetEquipStampRequest() { StampList = requestList }
             )

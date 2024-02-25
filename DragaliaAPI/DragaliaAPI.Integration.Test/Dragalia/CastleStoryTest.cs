@@ -14,8 +14,8 @@ public class CastleStoryTest : TestFixture
     [Fact]
     public async Task ReadStory_StoryNotRead_ResponseHasRewards()
     {
-        CastleStoryReadData data = (
-            await this.Client.PostMsgpack<CastleStoryReadData>(
+        CastleStoryReadResponse data = (
+            await this.Client.PostMsgpack<CastleStoryReadResponse>(
                 "/castle_story/read",
                 new CastleStoryReadRequest() { CastleStoryId = 1 }
             )
@@ -39,7 +39,7 @@ public class CastleStoryTest : TestFixture
             .BeEquivalentTo(
                 new List<CastleStoryList>()
                 {
-                    new() { CastleStoryId = 1, IsRead = 1, }
+                    new() { CastleStoryId = 1, IsRead = true, }
                 }
             );
     }
@@ -58,8 +58,8 @@ public class CastleStoryTest : TestFixture
         );
         await this.ApiContext.SaveChangesAsync();
 
-        CastleStoryReadData data = (
-            await this.Client.PostMsgpack<CastleStoryReadData>(
+        CastleStoryReadResponse data = (
+            await this.Client.PostMsgpack<CastleStoryReadResponse>(
                 "/castle_story/read",
                 new CastleStoryReadRequest() { CastleStoryId = 2 }
             )
@@ -80,8 +80,8 @@ public class CastleStoryTest : TestFixture
             .Select(x => x.Crystal)
             .SingleAsync();
 
-        CastleStoryReadData data = (
-            await this.Client.PostMsgpack<CastleStoryReadData>(
+        CastleStoryReadResponse data = (
+            await this.Client.PostMsgpack<CastleStoryReadResponse>(
                 "/castle_story/read",
                 new CastleStoryReadRequest() { CastleStoryId = 3 }
             )

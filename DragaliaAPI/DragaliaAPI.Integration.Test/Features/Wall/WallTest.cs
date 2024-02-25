@@ -41,7 +41,7 @@ public class WallTest : TestFixture
         string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
 
         WallFailData response = (
-            await Client.PostMsgpack<WallFailData>(
+            await Client.PostMsgpack<WallFailResponse>(
                 "/wall/fail",
                 new WallFailRequest() { DungeonKey = key, FailState = 0 }
             )
@@ -99,7 +99,7 @@ public class WallTest : TestFixture
         );
 
         WallGetMonthlyRewardData response = (
-            await this.Client.PostMsgpack<WallGetMonthlyRewardData>(
+            await this.Client.PostMsgpack<WallGetMonthlyRewardResponse>(
                 "wall/get_monthly_reward",
                 new WallGetMonthlyRewardData() { }
             )
@@ -166,7 +166,7 @@ public class WallTest : TestFixture
         );
 
         WallReceiveMonthlyRewardData response = (
-            await this.Client.PostMsgpack<WallReceiveMonthlyRewardData>(
+            await this.Client.PostMsgpack<WallReceiveMonthlyRewardResponse>(
                 "wall/receive_monthly_reward",
                 new WallGetMonthlyRewardRequest() { QuestGroupId = 21601 }
             )

@@ -10,7 +10,7 @@ public class Clb01EventTest : TestFixture
         : base(factory, outputHelper) { }
 
     protected override async Task Setup() =>
-        await this.Client.PostMsgpack<MemoryEventActivateData>(
+        await this.Client.PostMsgpack<MemoryEventActivateResponse>(
             "memory_event/activate",
             new MemoryEventActivateRequest(EventId)
         );
@@ -22,7 +22,7 @@ public class Clb01EventTest : TestFixture
     public async Task GetEventData_ReturnsEventData()
     {
         DragaliaResponse<Clb01EventGetEventDataData> evtData =
-            await Client.PostMsgpack<Clb01EventGetEventDataData>(
+            await Client.PostMsgpack<Clb01EventGetEventDataResponse>(
                 $"{Prefix}/get_event_data",
                 new Clb01EventGetEventDataRequest(EventId)
             );
@@ -49,7 +49,7 @@ public class Clb01EventTest : TestFixture
         await ApiContext.SaveChangesAsync();
 
         DragaliaResponse<Clb01EventReceiveClb01PointRewardData> evtResp =
-            await Client.PostMsgpack<Clb01EventReceiveClb01PointRewardData>(
+            await Client.PostMsgpack<Clb01EventReceiveClb01PointRewardResponse>(
                 $"{Prefix}/receive_clb01_point_reward",
                 new Clb01EventReceiveClb01PointRewardRequest(EventId)
             );

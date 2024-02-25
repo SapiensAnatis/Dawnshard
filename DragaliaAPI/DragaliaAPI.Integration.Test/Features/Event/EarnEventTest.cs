@@ -34,7 +34,7 @@ public class EarnEventTest : TestFixture
 
         this.ApiContext.PlayerEventData.Should().NotContain(x => x.ViewerId == this.ViewerId);
 
-        await this.Client.PostMsgpack<BuildEventEntryData>(
+        await this.Client.PostMsgpack<BuildEventEntryResponse>(
             "earn_event/entry",
             new EarnEventEntryRequest(EventId)
         );
@@ -69,7 +69,7 @@ public class EarnEventTest : TestFixture
     public async Task GetEventData_ReturnsNullUserDataInitially()
     {
         DragaliaResponse<EarnEventGetEventDataData> evtData =
-            await Client.PostMsgpack<EarnEventGetEventDataData>(
+            await Client.PostMsgpack<EarnEventGetEventDataResponse>(
                 "earn_event/get_event_data",
                 new EarnEventGetEventDataRequest(EventId)
             );
@@ -82,13 +82,13 @@ public class EarnEventTest : TestFixture
     [Fact]
     public async Task GetEventData_EntryCalled_ReturnsDataInitially()
     {
-        await this.Client.PostMsgpack<BuildEventEntryData>(
+        await this.Client.PostMsgpack<BuildEventEntryResponse>(
             "earn_event/entry",
             new EarnEventEntryRequest(EventId)
         );
 
         DragaliaResponse<EarnEventGetEventDataData> evtData =
-            await Client.PostMsgpack<EarnEventGetEventDataData>(
+            await Client.PostMsgpack<EarnEventGetEventDataResponse>(
                 "earn_event/get_event_data",
                 new EarnEventGetEventDataRequest(EventId)
             );
@@ -112,7 +112,7 @@ public class EarnEventTest : TestFixture
     [Fact]
     public async Task ReceiveEventRewards_ReturnsEventRewards()
     {
-        await this.Client.PostMsgpack<BuildEventEntryData>(
+        await this.Client.PostMsgpack<BuildEventEntryResponse>(
             "earn_event/entry",
             new EarnEventEntryRequest(EventId)
         );
@@ -132,7 +132,7 @@ public class EarnEventTest : TestFixture
         await ApiContext.SaveChangesAsync();
 
         DragaliaResponse<EarnEventReceiveEventPointRewardData> evtResp =
-            await Client.PostMsgpack<EarnEventReceiveEventPointRewardData>(
+            await Client.PostMsgpack<EarnEventReceiveEventPointRewardResponse>(
                 "earn_event/receive_event_point_reward",
                 new EarnEventReceiveEventPointRewardRequest(EventId)
             );

@@ -17,7 +17,7 @@ public class TreasureTradeTest : TestFixture
         await this.ApiContext.SaveChangesAsync();
 
         TreasureTradeGetListAllData response = (
-            await Client.PostMsgpack<TreasureTradeGetListAllData>(
+            await Client.PostMsgpack<TreasureTradeGetListAllResponse>(
                 "treasure_trade/get_list_all",
                 new TreasureTradeGetListAllRequest()
             )
@@ -43,7 +43,7 @@ public class TreasureTradeTest : TestFixture
         );
 
         TreasureTradeGetListAllData response = (
-            await Client.PostMsgpack<TreasureTradeGetListAllData>(
+            await Client.PostMsgpack<TreasureTradeGetListAllResponse>(
                 "treasure_trade/get_list_all",
                 new TreasureTradeGetListAllRequest()
             )
@@ -76,8 +76,8 @@ public class TreasureTradeTest : TestFixture
                 )?.Quantity ?? 0;
         }
 
-        TreasureTradeTradeData response = (
-            await Client.PostMsgpack<TreasureTradeTradeData>(
+        TreasureTradeTradeReponse response = (
+            await Client.PostMsgpack<TreasureTradeTradeResponse>(
                 "treasure_trade/trade",
                 new TreasureTradeTradeRequest(1001, 10010101, null, 1)
             )
@@ -103,8 +103,8 @@ public class TreasureTradeTest : TestFixture
     [Fact]
     public async Task Trade_WeaponSkin_Trades()
     {
-        TreasureTradeTradeData response = (
-            await Client.PostMsgpack<TreasureTradeTradeData>(
+        TreasureTradeTradeReponse response = (
+            await Client.PostMsgpack<TreasureTradeTradeResponse>(
                 "treasure_trade/trade",
                 new TreasureTradeTradeRequest(1012, 10124101, null, 1)
             )

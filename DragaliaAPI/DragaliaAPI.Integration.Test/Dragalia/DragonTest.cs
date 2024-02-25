@@ -94,7 +94,7 @@ public class DragonTest : TestFixture
         };
 
         DragonBuildupData? response = (
-            await this.Client.PostMsgpack<DragonBuildupData>("dragon/buildup", request)
+            await this.Client.PostMsgpack<DragonBuildupResponse>("dragon/buildup", request)
         ).data;
 
         response.Should().NotBeNull();
@@ -138,7 +138,7 @@ public class DragonTest : TestFixture
         };
 
         DragonBuildupData? response = (
-            await this.Client.PostMsgpack<DragonBuildupData>("dragon/buildup", request)
+            await this.Client.PostMsgpack<DragonBuildupResponse>("dragon/buildup", request)
         ).data;
 
         response.Should().NotBeNull();
@@ -179,7 +179,7 @@ public class DragonTest : TestFixture
         };
 
         DragonSetLockData? response = (
-            await this.Client.PostMsgpack<DragonSetLockData>("dragon/reset_plus_count", request)
+            await this.Client.PostMsgpack<DragonSetLockResponse>("dragon/reset_plus_count", request)
         ).data;
 
         response.Should().NotBeNull();
@@ -204,7 +204,7 @@ public class DragonTest : TestFixture
         DragonGetContactDataRequest request = new DragonGetContactDataRequest();
 
         DragonGetContactDataData? response = (
-            await this.Client.PostMsgpack<DragonGetContactDataData>(
+            await this.Client.PostMsgpack<DragonGetContactDataResponse>(
                 "dragon/get_contact_data",
                 request
             )
@@ -242,7 +242,7 @@ public class DragonTest : TestFixture
         };
 
         DragonBuyGiftToSendMultipleData? response = (
-            await this.Client.PostMsgpack<DragonBuyGiftToSendMultipleData>(
+            await this.Client.PostMsgpack<DragonBuyGiftToSendMultipleResponse>(
                 "dragon/buy_gift_to_send_multiple",
                 request
             )
@@ -283,7 +283,7 @@ public class DragonTest : TestFixture
         };
 
         DragonBuyGiftToSendData? response = (
-            await this.Client.PostMsgpack<DragonBuyGiftToSendData>(
+            await this.Client.PostMsgpack<DragonBuyGiftToSendResponse>(
                 "dragon/buy_gift_to_send",
                 request
             )
@@ -322,7 +322,7 @@ public class DragonTest : TestFixture
         };
 
         DragonSendGiftMultipleData? response = (
-            await this.Client.PostMsgpack<DragonSendGiftMultipleData>(
+            await this.Client.PostMsgpack<DragonSendGiftMultipleResponse>(
                 "dragon/send_gift_multiple",
                 request
             )
@@ -358,7 +358,7 @@ public class DragonTest : TestFixture
             ]
         );
 
-        await this.Client.PostMsgpack<DragonSendGiftMultipleData>(
+        await this.Client.PostMsgpack<DragonSendGiftMultipleResponse>(
             "dragon/send_gift_multiple",
             new DragonSendGiftMultipleRequest()
             {
@@ -373,7 +373,7 @@ public class DragonTest : TestFixture
             .Progress.Should()
             .Be(9);
 
-        await this.Client.PostMsgpack<DragonSendGiftMultipleData>(
+        await this.Client.PostMsgpack<DragonSendGiftMultipleResponse>(
             "dragon/send_gift_multiple",
             new DragonSendGiftMultipleRequest()
             {
@@ -389,7 +389,7 @@ public class DragonTest : TestFixture
             .Be(9, "the progress is based on the highest level reached");
 
         var completeMissionResponse = (
-            await this.Client.PostMsgpack<DragonSendGiftMultipleData>(
+            await this.Client.PostMsgpack<DragonSendGiftMultipleResponse>(
                 "dragon/send_gift_multiple",
                 new DragonSendGiftMultipleRequest()
                 {
@@ -431,7 +431,7 @@ public class DragonTest : TestFixture
         };
 
         DragonSendGiftData? response = (
-            await this.Client.PostMsgpack<DragonSendGiftData>("dragon/send_gift", request)
+            await this.Client.PostMsgpack<DragonSendGiftResponse>("dragon/send_gift", request)
         ).data;
 
         response.Should().NotBeNull();
@@ -471,7 +471,7 @@ public class DragonTest : TestFixture
             };
 
         DragaliaResponse<DragonSendGiftMultipleData>? response = (
-            await this.Client.PostMsgpack<DragonSendGiftMultipleData>(
+            await this.Client.PostMsgpack<DragonSendGiftMultipleResponse>(
                 "dragon/send_gift_multiple",
                 request
             )
@@ -572,7 +572,7 @@ public class DragonTest : TestFixture
         };
 
         DragonBuildupData? response = (
-            await this.Client.PostMsgpack<DragonBuildupData>("dragon/limit_break", request)
+            await this.Client.PostMsgpack<DragonBuildupResponse>("dragon/limit_break", request)
         ).data;
 
         response.Should().NotBeNull();
@@ -610,7 +610,7 @@ public class DragonTest : TestFixture
         };
 
         DragonSetLockData? response = (
-            await this.Client.PostMsgpack<DragonSetLockData>("dragon/set_lock", request)
+            await this.Client.PostMsgpack<DragonSetLockResponse>("dragon/set_lock", request)
         ).data;
 
         response.Should().NotBeNull();
@@ -645,7 +645,7 @@ public class DragonTest : TestFixture
         };
 
         DragonSellData? response = (
-            await this.Client.PostMsgpack<DragonSellData>("dragon/sell", request)
+            await this.Client.PostMsgpack<DragonSellResponse>("dragon/sell", request)
         ).data;
 
         response.Should().NotBeNull();
@@ -694,7 +694,7 @@ public class DragonTest : TestFixture
         };
 
         DragonSellData? response = (
-            await this.Client.PostMsgpack<DragonSellData>("dragon/sell", request)
+            await this.Client.PostMsgpack<DragonSellResponse>("dragon/sell", request)
         ).data;
 
         response.Should().NotBeNull();

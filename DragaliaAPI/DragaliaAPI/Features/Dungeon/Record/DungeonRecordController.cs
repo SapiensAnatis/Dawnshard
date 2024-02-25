@@ -123,6 +123,6 @@ public class DungeonRecordController(
         await timeAttackService.RegisterRankedClear(gameId, request.PlayRecord.Time);
         await updateDataService.SaveChangesAsync();
 
-        return this.Ok(new ResultCodeData(ResultCode.Success));
+        return this.Ok(new ResultCodeResponse(ResultCode.Success));
     }
 }

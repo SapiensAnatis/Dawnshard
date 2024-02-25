@@ -19,7 +19,7 @@ public class VersionTest : TestFixture
     )
     {
         VersionGetResourceVersionData response = (
-            await this.Client.PostMsgpack<VersionGetResourceVersionData>(
+            await this.Client.PostMsgpack<VersionGetResourceVersionResponse>(
                 "version/get_resource_version",
                 new VersionGetResourceVersionRequest(platform, "whatever")
             )
@@ -35,7 +35,7 @@ public class VersionTest : TestFixture
         this.Client.DefaultRequestHeaders.Add("Res-Ver", "aaaaaaa");
 
         (
-            await this.Client.PostMsgpack<ResultCodeData>(
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "fort/get_data",
                 new FortGetDataRequest(),
                 ensureSuccessHeader: false
@@ -52,7 +52,7 @@ public class VersionTest : TestFixture
         this.Client.DefaultRequestHeaders.Add("Res-Ver", "aaaaaaa");
 
         (
-            await this.Client.PostMsgpack<ResultCodeData>(
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "tool/get_service_status",
                 new FortGetDataRequest(),
                 ensureSuccessHeader: false

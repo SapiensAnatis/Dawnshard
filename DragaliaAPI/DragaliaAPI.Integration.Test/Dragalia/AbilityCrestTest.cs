@@ -24,8 +24,8 @@ public class AbilityCrestTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        AbilityCrestSetFavoriteData data = (
-            await this.Client.PostMsgpack<AbilityCrestSetFavoriteData>(
+        AbilityCrestSetFavoriteResponse data = (
+            await this.Client.PostMsgpack<AbilityCrestSetFavoriteResponse>(
                 "ability_crest/set_favorite",
                 new AbilityCrestSetFavoriteRequest()
                 {
@@ -37,22 +37,22 @@ public class AbilityCrestTest : TestFixture
 
         data.UpdateDataList.AbilityCrestList.Single().IsFavorite.Should().BeTrue();
 
-        DbAbilityCrest ability_crest = (
+        DbAbilityCrest abilityCrest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
                 ViewerId,
                 AbilityCrests.FromWhenceHeComes
             )
         )!;
-        await this.ApiContext.Entry(ability_crest).ReloadAsync();
+        await this.ApiContext.Entry(abilityCrest).ReloadAsync();
 
-        ability_crest.IsFavorite.Should().BeTrue();
+        abilityCrest.IsFavorite.Should().BeTrue();
     }
 
     [Fact]
     public async Task SetFavorite_ReturnsErrorWhenAbilityCrestNotFound()
     {
-        ResultCodeData data = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "ability_crest/set_favorite",
                 new AbilityCrestSetFavoriteRequest()
                 {
@@ -63,14 +63,14 @@ public class AbilityCrestTest : TestFixture
             )
         ).data;
 
-        data.result_code.Should().Be(ResultCode.CommonInvalidArgument);
+        response.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
     }
 
     [Fact]
     public async Task BuildupPiece_ReturnsErrorWhenAbilityCrestNotFound()
     {
-        ResultCodeData data = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "ability_crest/buildup_piece",
                 new AbilityCrestBuildupPieceRequest()
                 {
@@ -89,7 +89,7 @@ public class AbilityCrestTest : TestFixture
             )
         ).data;
 
-        data.result_code.Should().Be(ResultCode.AbilityCrestBuildupPieceUnablePiece);
+        response.ResultCode.Should().Be(ResultCode.AbilityCrestBuildupPieceUnablePiece);
     }
 
     [Fact]
@@ -107,8 +107,8 @@ public class AbilityCrestTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        ResultCodeData data = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "ability_crest/buildup_piece",
                 new AbilityCrestBuildupPieceRequest()
                 {
@@ -141,7 +141,7 @@ public class AbilityCrestTest : TestFixture
         )!;
         await this.ApiContext.Entry(ability_crest).ReloadAsync();
 
-        data.result_code.Should().Be(ResultCode.AbilityCrestBuildupPieceStepError);
+        response.ResultCode.Should().Be(ResultCode.AbilityCrestBuildupPieceStepError);
         ability_crest.LimitBreakCount.Should().Be(0);
         this.GetMaterial(Materials.GoldenKey).Should().Be(oldGoldenKey);
     }
@@ -164,7 +164,7 @@ public class AbilityCrestTest : TestFixture
         int oldHolyWater = this.GetMaterial(Materials.HolyWater);
         int oldConsecratedWater = this.GetMaterial(Materials.ConsecratedWater);
 
-        await this.Client.PostMsgpack<AbilityCrestBuildupPieceData>(
+        await this.Client.PostMsgpack<AbilityCrestBuildupPieceResponse>(
             "ability_crest/buildup_piece",
             new AbilityCrestBuildupPieceRequest()
             {
@@ -242,7 +242,7 @@ public class AbilityCrestTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        await this.Client.PostMsgpack<AbilityCrestBuildupPieceData>(
+        await this.Client.PostMsgpack<AbilityCrestBuildupPieceResponse>(
             "ability_crest/buildup_piece",
             new AbilityCrestBuildupPieceRequest()
             {
@@ -264,7 +264,7 @@ public class AbilityCrestTest : TestFixture
             x.SetProperty(y => y.BuildupCount, 1)
         );
 
-        await this.Client.PostMsgpack<AbilityCrestBuildupPieceData>(
+        await this.Client.PostMsgpack<AbilityCrestBuildupPieceResponse>(
             "ability_crest/buildup_piece",
             new AbilityCrestBuildupPieceRequest()
             {
@@ -285,8 +285,8 @@ public class AbilityCrestTest : TestFixture
     [Fact]
     public async Task BuildupPlusCount_ReturnsErrorWhenAbilityCrestNotFound()
     {
-        ResultCodeData data = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "ability_crest/buildup_plus_count",
                 new AbilityCrestBuildupPlusCountRequest()
                 {
@@ -300,7 +300,7 @@ public class AbilityCrestTest : TestFixture
             )
         ).data;
 
-        data.result_code.Should().Be(ResultCode.AbilityCrestBuildupPieceUnablePiece);
+        response.ResultCode.Should().Be(ResultCode.AbilityCrestBuildupPieceUnablePiece);
     }
 
     [Fact]
@@ -320,8 +320,8 @@ public class AbilityCrestTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        ResultCodeData data = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "ability_crest/buildup_plus_count",
                 new AbilityCrestBuildupPlusCountRequest()
                 {
@@ -344,7 +344,7 @@ public class AbilityCrestTest : TestFixture
         )!;
         await this.ApiContext.Entry(ability_crest).ReloadAsync();
 
-        data.result_code.Should().Be(ResultCode.AbilityCrestBuildupPlusCountCountError);
+        response.ResultCode.Should().Be(ResultCode.AbilityCrestBuildupPlusCountCountError);
         ability_crest.HpPlusCount.Should().Be(0);
         ability_crest.AttackPlusCount.Should().Be(26);
         this.GetMaterial(Materials.FortifyingGemstone).Should().Be(oldFortifyingGem);
@@ -368,7 +368,7 @@ public class AbilityCrestTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        await this.Client.PostMsgpack<ResultCodeData>(
+        await this.Client.PostMsgpack<ResultCodeResponse>(
             "ability_crest/buildup_plus_count",
             new AbilityCrestBuildupPlusCountRequest()
             {
@@ -398,8 +398,8 @@ public class AbilityCrestTest : TestFixture
     [Fact]
     public async Task ResetPlusCount_ReturnsErrorWhenAbilityCrestNotFound()
     {
-        ResultCodeData data = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "ability_crest/reset_plus_count",
                 new AbilityCrestResetPlusCountRequest()
                 {
@@ -414,7 +414,7 @@ public class AbilityCrestTest : TestFixture
             )
         ).data;
 
-        data.result_code.Should().Be(ResultCode.AbilityCrestBuildupPieceUnablePiece);
+        response.ResultCode.Should().Be(ResultCode.AbilityCrestBuildupPieceUnablePiece);
     }
 
     [Fact]
@@ -433,8 +433,8 @@ public class AbilityCrestTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        ResultCodeData data = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "ability_crest/reset_plus_count",
                 new AbilityCrestResetPlusCountRequest()
                 {
@@ -453,7 +453,7 @@ public class AbilityCrestTest : TestFixture
         )!;
         await this.ApiContext.Entry(ability_crest).ReloadAsync();
 
-        data.result_code.Should().Be(ResultCode.CommonInvalidArgument);
+        response.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
         ability_crest.HpPlusCount.Should().Be(40);
         ability_crest.AttackPlusCount.Should().Be(0);
         this.GetCoin().Should().Be(oldCoin);
@@ -478,7 +478,7 @@ public class AbilityCrestTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        await this.Client.PostMsgpack<ResultCodeData>(
+        await this.Client.PostMsgpack<ResultCodeResponse>(
             "ability_crest/reset_plus_count",
             new AbilityCrestResetPlusCountRequest()
             {
@@ -528,7 +528,7 @@ public class AbilityCrestTest : TestFixture
         await this.ApiContext.SaveChangesAsync();
 
         AbilityCrestGetAbilityCrestSetListData data = (
-            await this.Client.PostMsgpack<AbilityCrestGetAbilityCrestSetListData>(
+            await this.Client.PostMsgpack<AbilityCrestGetAbilityCrestSetListResponse>(
                 "ability_crest/get_ability_crest_set_list",
                 new AbilityCrestGetAbilityCrestSetListRequest()
             )
@@ -574,8 +574,8 @@ public class AbilityCrestTest : TestFixture
     [InlineData(55)]
     public async Task SetAbilityCrestSet_ShouldThrowErrorAndNotAddSetWhenSetNoInvalid(int setNo)
     {
-        ResultCodeData data = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "ability_crest/set_ability_crest_set",
                 new AbilityCrestSetAbilityCrestSetRequest() { AbilityCrestSetNo = setNo },
                 ensureSuccessHeader: false
@@ -585,7 +585,7 @@ public class AbilityCrestTest : TestFixture
         await this.ApiContext.SaveChangesAsync();
 
         (await this.ApiContext.PlayerAbilityCrestSets.FindAsync(ViewerId, setNo)).Should().BeNull();
-        data.result_code.Should().Be(ResultCode.CommonInvalidArgument);
+        response.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
     }
 
     [Fact]
@@ -595,7 +595,7 @@ public class AbilityCrestTest : TestFixture
 
         (await this.ApiContext.PlayerAbilityCrestSets.FindAsync(ViewerId, setNo)).Should().BeNull();
 
-        await this.Client.PostMsgpack<ResultCodeData>(
+        await this.Client.PostMsgpack<ResultCodeResponse>(
             "ability_crest/set_ability_crest_set",
             new AbilityCrestSetAbilityCrestSetRequest()
             {
@@ -626,7 +626,7 @@ public class AbilityCrestTest : TestFixture
         )!;
         dbAbilityCrestSet.CrestSlotType2CrestId2.Should().Be(0);
 
-        await this.Client.PostMsgpack<ResultCodeData>(
+        await this.Client.PostMsgpack<ResultCodeResponse>(
             "ability_crest/set_ability_crest_set",
             new AbilityCrestSetAbilityCrestSetRequest()
             {
@@ -650,7 +650,7 @@ public class AbilityCrestTest : TestFixture
 
         (await this.ApiContext.PlayerAbilityCrestSets.FindAsync(ViewerId, setNo)).Should().BeNull();
 
-        await this.Client.PostMsgpack<ResultCodeData>(
+        await this.Client.PostMsgpack<ResultCodeResponse>(
             "ability_crest/update_ability_crest_set_name",
             new AbilityCrestUpdateAbilityCrestSetNameRequest()
             {
@@ -680,7 +680,7 @@ public class AbilityCrestTest : TestFixture
         )!;
         dbAbilityCrestSet.AbilityCrestSetName.Should().Be("");
 
-        await this.Client.PostMsgpack<ResultCodeData>(
+        await this.Client.PostMsgpack<ResultCodeResponse>(
             "ability_crest/update_ability_crest_set_name",
             new AbilityCrestUpdateAbilityCrestSetNameRequest()
             {

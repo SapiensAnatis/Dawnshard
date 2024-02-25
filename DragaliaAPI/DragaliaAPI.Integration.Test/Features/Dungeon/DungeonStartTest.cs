@@ -22,7 +22,7 @@ public class DungeonStartTest : TestFixture
     public async Task Start_OneTeam_HasExpectedPartyUnitList()
     {
         DungeonStartStartData response = (
-            await Client.PostMsgpack<DungeonStartStartData>(
+            await Client.PostMsgpack<DungeonStartStartResponse>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
                 {
@@ -44,7 +44,7 @@ public class DungeonStartTest : TestFixture
     public async Task Start_TwoTeams_HasExpectedPartyUnitList()
     {
         DungeonStartStartData response = (
-            await Client.PostMsgpack<DungeonStartStartData>(
+            await Client.PostMsgpack<DungeonStartStartResponse>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
                 {
@@ -66,7 +66,7 @@ public class DungeonStartTest : TestFixture
     public async Task Start_WeaponPassivesUnlocked_IncludedInPartyUnitList()
     {
         DungeonStartStartData response = (
-            await Client.PostMsgpack<DungeonStartStartData>(
+            await Client.PostMsgpack<DungeonStartStartResponse>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
                 {
@@ -129,7 +129,7 @@ public class DungeonStartTest : TestFixture
             };
 
         DungeonStartStartAssignUnitData response = (
-            await Client.PostMsgpack<DungeonStartStartAssignUnitData>(
+            await Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(
                 "/dungeon_start/start_assign_unit",
                 request
             )
@@ -164,7 +164,7 @@ public class DungeonStartTest : TestFixture
         );
 
         (
-            await Client.PostMsgpack<DungeonStartStartData>(
+            await Client.PostMsgpack<DungeonStartStartResponse>(
                 $"/dungeon_start/{endpoint}",
                 new DungeonStartStartRequest() { QuestId = 100010104, PartyNoList = [1] },
                 ensureSuccessHeader: false
@@ -193,7 +193,7 @@ public class DungeonStartTest : TestFixture
         );
 
         (
-            await Client.PostMsgpack<DungeonStartStartData>(
+            await Client.PostMsgpack<DungeonStartStartResponse>(
                 $"/dungeon_start/start",
                 new DungeonStartStartRequest()
                 {
@@ -209,7 +209,7 @@ public class DungeonStartTest : TestFixture
     public async Task Start_ChronosClash_HasRareEnemy()
     {
         DragaliaResponse<DungeonStartStartData> response =
-            await this.Client.PostMsgpack<DungeonStartStartData>(
+            await this.Client.PostMsgpack<DungeonStartStartResponse>(
                 $"/dungeon_start/start",
                 new DungeonStartStartRequest() { QuestId = 204270302, PartyNoList = [1] }
             );
@@ -223,7 +223,7 @@ public class DungeonStartTest : TestFixture
         const int earnEventQuestId = 229031201; // Repelling the Frosty Fiends: Standard (Solo)
 
         DragaliaResponse<DungeonStartStartData> response =
-            await this.Client.PostMsgpack<DungeonStartStartData>(
+            await this.Client.PostMsgpack<DungeonStartStartResponse>(
                 $"/dungeon_start/start",
                 new DungeonStartStartRequest() { QuestId = earnEventQuestId, PartyNoList = [1] }
             );
@@ -248,7 +248,7 @@ public class DungeonStartTest : TestFixture
             );
 
         DragaliaResponse<DungeonStartStartData> response =
-            await this.Client.PostMsgpack<DungeonStartStartData>(
+            await this.Client.PostMsgpack<DungeonStartStartResponse>(
                 $"/dungeon_start/start",
                 new DungeonStartStartRequest()
                 {
@@ -273,7 +273,7 @@ public class DungeonStartTest : TestFixture
             );
 
         DragaliaResponse<DungeonStartStartData> response =
-            await this.Client.PostMsgpack<DungeonStartStartData>(
+            await this.Client.PostMsgpack<DungeonStartStartResponse>(
                 $"/dungeon_start/start",
                 new DungeonStartStartRequest()
                 {

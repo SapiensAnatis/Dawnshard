@@ -21,7 +21,7 @@ public class ToolTest : TestFixture
     public async Task ServiceStatus_ReturnsCorrectResponse()
     {
         ToolGetServiceStatusData response = (
-            await this.Client.PostMsgpack<ToolGetServiceStatusData>(
+            await this.Client.PostMsgpack<ToolGetServiceStatusResponse>(
                 "tool/get_service_status",
                 new ToolGetServiceStatusRequest()
             )
@@ -42,7 +42,7 @@ public class ToolTest : TestFixture
         this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
 
         ToolAuthData response = (
-            await this.Client.PostMsgpack<ToolAuthData>(endpoint, new ToolAuthRequest() { })
+            await this.Client.PostMsgpack<ToolAuthResponse>(endpoint, new ToolAuthRequest() { })
         ).data;
 
         response.ViewerId.Should().Be((ulong)ViewerId);
@@ -65,7 +65,7 @@ public class ToolTest : TestFixture
             .AsString();
         this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
 
-        await this.Client.PostMsgpack<ToolAuthData>("tool/auth", new ToolAuthRequest() { });
+        await this.Client.PostMsgpack<ToolAuthResponse>("tool/auth", new ToolAuthRequest() { });
 
         this.ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == this.ViewerId)
@@ -109,16 +109,17 @@ public class ToolTest : TestFixture
         string token = "im blue dabba dee dabba doo";
         this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
 
-        DragaliaResponse<ResultCodeData> response = await this.Client.PostMsgpack<ResultCodeData>(
-            endpoint,
-            new ToolAuthRequest() { },
-            ensureSuccessHeader: false
-        );
+        DragaliaResponse<ResultCodeResponse> response =
+            await this.Client.PostMsgpack<ResultCodeResponse>(
+                endpoint,
+                new ToolAuthRequest() { },
+                ensureSuccessHeader: false
+            );
 
         response
             .Should()
             .BeEquivalentTo(
-                new DragaliaResponse<ResultCodeData>(
+                new DragaliaResponse<ResultCodeResponse>(
                     new DataHeaders(ResultCode.IdTokenError),
                     new(ResultCode.IdTokenError)
                 )

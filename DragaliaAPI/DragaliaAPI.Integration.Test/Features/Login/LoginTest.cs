@@ -27,7 +27,7 @@ public class LoginTest : TestFixture
 
         (await this.GetSummonCount()).Should().Be(5);
 
-        await this.Client.PostMsgpack<LoginIndexData>("/login/index", new LoginIndexRequest());
+        await this.Client.PostMsgpack<LoginIndexResponse>("/login/index", new LoginIndexRequest());
 
         (await this.GetSummonCount()).Should().Be(0);
     }
@@ -41,7 +41,7 @@ public class LoginTest : TestFixture
 
         (await this.GetDragonGifts()).Should().AllSatisfy(x => x.Quantity.Should().Be(0));
 
-        await this.Client.PostMsgpack<LoginIndexData>("/login/index", new LoginIndexRequest());
+        await this.Client.PostMsgpack<LoginIndexResponse>("/login/index", new LoginIndexRequest());
 
         (await this.GetDragonGifts())
             .Should()
@@ -156,10 +156,11 @@ public class LoginTest : TestFixture
             }
         );
 
-        DragaliaResponse<LoginIndexData> response = await this.Client.PostMsgpack<LoginIndexData>(
-            "/login/index",
-            new LoginIndexRequest()
-        );
+        DragaliaResponse<LoginIndexData> response =
+            await this.Client.PostMsgpack<LoginIndexResponse>(
+                "/login/index",
+                new LoginIndexRequest()
+            );
 
         response
             .data.LoginBonusList.Should()
@@ -191,10 +192,11 @@ public class LoginTest : TestFixture
             }
         );
 
-        DragaliaResponse<LoginIndexData> response = await this.Client.PostMsgpack<LoginIndexData>(
-            "/login/index",
-            new LoginIndexRequest()
-        );
+        DragaliaResponse<LoginIndexData> response =
+            await this.Client.PostMsgpack<LoginIndexResponse>(
+                "/login/index",
+                new LoginIndexRequest()
+            );
 
         response
             .data.LoginBonusList.Should()
@@ -227,10 +229,11 @@ public class LoginTest : TestFixture
             }
         );
 
-        DragaliaResponse<LoginIndexData> response = await this.Client.PostMsgpack<LoginIndexData>(
-            "/login/index",
-            new LoginIndexRequest()
-        );
+        DragaliaResponse<LoginIndexData> response =
+            await this.Client.PostMsgpack<LoginIndexResponse>(
+                "/login/index",
+                new LoginIndexRequest()
+            );
 
         response
             .data.LoginBonusList.Should()
@@ -255,7 +258,10 @@ public class LoginTest : TestFixture
             .BeTrue();
 
         DragaliaResponse<LoginIndexData> secondResponse =
-            await this.Client.PostMsgpack<LoginIndexData>("/login/index", new LoginIndexRequest());
+            await this.Client.PostMsgpack<LoginIndexResponse>(
+                "/login/index",
+                new LoginIndexRequest()
+            );
 
         secondResponse.data.LoginBonusList.Should().NotContain(x => x.LoginBonusId == 2);
     }
@@ -279,7 +285,7 @@ public class LoginTest : TestFixture
             .FirstAsync();
 
         LoginIndexData response = (
-            await this.Client.PostMsgpack<LoginIndexData>(
+            await this.Client.PostMsgpack<LoginIndexResponse>(
                 "login/index",
                 new LoginIndexRequest() { JwsResult = string.Empty }
             )
@@ -428,14 +434,14 @@ public class LoginTest : TestFixture
     [Fact]
     public async Task LoginVerifyJws_ReturnsOK()
     {
-        ResultCodeData response = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "/login/verify_jws",
                 new LoginVerifyJwsRequest()
             )
         ).data;
 
-        response.Should().BeEquivalentTo(new ResultCodeData(ResultCode.Success, string.Empty));
+        response.Should().BeEquivalentTo(new ResultCodeResponse(ResultCode.Success, string.Empty));
     }
 
     private async Task<int> GetSummonCount() =>

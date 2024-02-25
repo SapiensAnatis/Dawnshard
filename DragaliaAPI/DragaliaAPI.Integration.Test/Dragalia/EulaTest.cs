@@ -12,7 +12,7 @@ public class EulaTest : TestFixture
     public async Task EulaGetVersionList_ReturnsAllVersions()
     {
         EulaGetVersionListData response = (
-            await this.Client.PostMsgpack<EulaGetVersionListData>(
+            await this.Client.PostMsgpack<EulaGetVersionListResponse>(
                 "eula/get_version_list",
                 new EulaGetVersionListRequest()
             )
@@ -35,7 +35,7 @@ public class EulaTest : TestFixture
     public async Task EulaGetVersion_ValidRegionAndLocale_ReturnsEulaData()
     {
         EulaGetVersionData response = (
-            await this.Client.PostMsgpack<EulaGetVersionData>(
+            await this.Client.PostMsgpack<EulaGetVersionResponse>(
                 "eula/get_version",
                 new EulaGetVersionRequest("id_token", "gb", "en_eu")
             )
@@ -52,7 +52,7 @@ public class EulaTest : TestFixture
     public async Task EulaGetVersion_InvalidRegionOrLocale_ReturnsDefault()
     {
         EulaGetVersionData response = (
-            await this.Client.PostMsgpack<EulaGetVersionData>(
+            await this.Client.PostMsgpack<EulaGetVersionResponse>(
                 "eula/get_version",
                 new EulaGetVersionRequest("id_token", "not even a country", "c#")
             )

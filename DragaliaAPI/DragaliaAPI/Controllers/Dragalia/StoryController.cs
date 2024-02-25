@@ -51,7 +51,11 @@ public class StoryController : DragaliaControllerBase
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return this.Ok(
-            new StoryReadData() { UnitStoryRewardList = rewards, UpdateDataList = updateDataList, }
+            new StoryReadResponse()
+            {
+                UnitStoryRewardList = rewards,
+                UpdateDataList = updateDataList,
+            }
         );
     }
 }

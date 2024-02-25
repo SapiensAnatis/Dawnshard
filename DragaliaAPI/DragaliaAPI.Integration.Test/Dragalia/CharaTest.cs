@@ -48,7 +48,7 @@ public class CharaTest : TestFixture
     public async Task CharaAwake_IncreasedRarity()
     {
         CharaAwakeData response = (
-            await this.Client.PostMsgpack<CharaAwakeData>(
+            await this.Client.PostMsgpack<CharaAwakeResponse>(
                 "chara/awake",
                 new CharaAwakeRequest(Charas.Celliera, 5)
             )
@@ -85,7 +85,7 @@ public class CharaTest : TestFixture
         }
 
         CharaBuildupData response = (
-            await this.Client.PostMsgpack<CharaBuildupData>(
+            await this.Client.PostMsgpack<CharaBuildupResponse>(
                 "chara/buildup",
                 new CharaBuildupRequest(
                     Charas.Celliera,
@@ -170,7 +170,7 @@ public class CharaTest : TestFixture
         }
 
         CharaBuildupManaData response = (
-            await this.Client.PostMsgpack<CharaBuildupManaData>(
+            await this.Client.PostMsgpack<CharaBuildupManaResponse>(
                 "chara/buildup_mana",
                 new CharaBuildupManaRequest(
                     Charas.Celliera,
@@ -210,7 +210,7 @@ public class CharaTest : TestFixture
         }
 
         DragaliaResponse<CharaBuildupManaData> response = (
-            await this.Client.PostMsgpack<CharaBuildupManaData>(
+            await this.Client.PostMsgpack<CharaBuildupManaResponse>(
                 "chara/buildup_mana",
                 new CharaBuildupManaRequest(Charas.GalaAudric, new List<int>() { 5 }, false)
             )
@@ -238,7 +238,7 @@ public class CharaTest : TestFixture
         }
 
         CharaLimitBreakData response = (
-            await this.Client.PostMsgpack<CharaLimitBreakData>(
+            await this.Client.PostMsgpack<CharaLimitBreakResponse>(
                 "chara/limit_break",
                 new CharaLimitBreakRequest(Charas.Celliera, 1, false)
             )
@@ -282,7 +282,7 @@ public class CharaTest : TestFixture
         }
 
         CharaLimitBreakAndBuildupManaData response = (
-            await this.Client.PostMsgpack<CharaLimitBreakAndBuildupManaData>(
+            await this.Client.PostMsgpack<CharaLimitBreakAndBuildupManaResponse>(
                 "chara/limit_break_and_buildup_mana",
                 new CharaLimitBreakAndBuildupManaRequest(
                     Charas.Celliera,
@@ -343,7 +343,7 @@ public class CharaTest : TestFixture
     public async Task CharaManaNodeBuildupHasCorrectInfoOnBothSidesOfSpiral()
     {
         CharaLimitBreakAndBuildupManaData preSpiralResponse = (
-            await this.Client.PostMsgpack<CharaLimitBreakAndBuildupManaData>(
+            await this.Client.PostMsgpack<CharaLimitBreakAndBuildupManaResponse>(
                 "chara/limit_break_and_buildup_mana",
                 new CharaLimitBreakAndBuildupManaRequest(
                     Charas.Delphi,
@@ -386,13 +386,13 @@ public class CharaTest : TestFixture
                     + 40
             );
 
-        await this.Client.PostMsgpack<CharaLimitBreakData>(
+        await this.Client.PostMsgpack<CharaLimitBreakResponse>(
             "chara/limit_break",
             new CharaLimitBreakRequest(Charas.Delphi, 5, false)
         );
 
         CharaBuildupManaData postSpiralResponse = (
-            await this.Client.PostMsgpack<CharaBuildupManaData>(
+            await this.Client.PostMsgpack<CharaBuildupManaResponse>(
                 "chara/buildup_mana",
                 new CharaBuildupManaRequest(Charas.Delphi, Enumerable.Range(51, 20), false)
             )
@@ -435,7 +435,7 @@ public class CharaTest : TestFixture
     public async Task CharaBuildupPlatinum_ReturnsFullyBuiltWithSpiralledCharacter()
     {
         CharaBuildupPlatinumData response = (
-            await this.Client.PostMsgpack<CharaBuildupPlatinumData>(
+            await this.Client.PostMsgpack<CharaBuildupPlatinumResponse>(
                 "chara/buildup_platinum",
                 new CharaBuildupPlatinumRequest(Charas.SummerCelliera)
             )
@@ -467,7 +467,7 @@ public class CharaTest : TestFixture
     public async Task CharaBuildupPlatinum_ReturnsFullyBuiltWithNonSpiralledCharacter()
     {
         CharaBuildupPlatinumData response = (
-            await this.Client.PostMsgpack<CharaBuildupPlatinumData>(
+            await this.Client.PostMsgpack<CharaBuildupPlatinumResponse>(
                 "chara/buildup_platinum",
                 new CharaBuildupPlatinumRequest(Charas.Harle)
             )
@@ -512,14 +512,14 @@ public class CharaTest : TestFixture
     {
         if (limitBreak == 0)
         {
-            await this.Client.PostMsgpack<CharaBuildupManaData>(
+            await this.Client.PostMsgpack<CharaBuildupManaResponse>(
                 "chara/buildup_mana",
                 new CharaBuildupManaRequest(id, Enumerable.Range(1, manaNodes), false)
             );
         }
         else
         {
-            await this.Client.PostMsgpack<CharaLimitBreakAndBuildupManaData>(
+            await this.Client.PostMsgpack<CharaLimitBreakAndBuildupManaResponse>(
                 "chara/limit_break_and_buildup_mana",
                 new CharaLimitBreakAndBuildupManaRequest(
                     id,
@@ -531,7 +531,7 @@ public class CharaTest : TestFixture
         }
 
         CharaBuildupPlatinumData response = (
-            await this.Client.PostMsgpack<CharaBuildupPlatinumData>(
+            await this.Client.PostMsgpack<CharaBuildupPlatinumResponse>(
                 "chara/buildup_platinum",
                 new CharaBuildupPlatinumRequest(id)
             )
@@ -595,14 +595,14 @@ public class CharaTest : TestFixture
     {
         if (limitBreak == 0)
         {
-            await this.Client.PostMsgpack<CharaBuildupManaData>(
+            await this.Client.PostMsgpack<CharaBuildupManaResponse>(
                 "chara/buildup_mana",
                 new CharaBuildupManaRequest(id, Enumerable.Range(1, manaNodes), false)
             );
         }
         else
         {
-            await this.Client.PostMsgpack<CharaLimitBreakAndBuildupManaData>(
+            await this.Client.PostMsgpack<CharaLimitBreakAndBuildupManaResponse>(
                 "chara/limit_break_and_buildup_mana",
                 new CharaLimitBreakAndBuildupManaRequest(
                     id,
@@ -614,7 +614,7 @@ public class CharaTest : TestFixture
         }
 
         CharaBuildupPlatinumData response = (
-            await this.Client.PostMsgpack<CharaBuildupPlatinumData>(
+            await this.Client.PostMsgpack<CharaBuildupPlatinumResponse>(
                 "chara/buildup_platinum",
                 new CharaBuildupPlatinumRequest(id)
             )
@@ -667,7 +667,7 @@ public class CharaTest : TestFixture
     public async Task CharaGetCharaUnitSet_ReturnsData()
     {
         CharaGetCharaUnitSetData response = (
-            await this.Client.PostMsgpack<CharaGetCharaUnitSetData>(
+            await this.Client.PostMsgpack<CharaGetCharaUnitSetResponse>(
                 "chara/get_chara_unit_set",
                 new CharaGetCharaUnitSetRequest(new List<Charas>() { Charas.Celliera })
             )
@@ -680,7 +680,7 @@ public class CharaTest : TestFixture
     public async Task CharaSetCharaUnitSet_ReturnsCorrectSetData()
     {
         CharaSetCharaUnitSetData response = (
-            await this.Client.PostMsgpack<CharaSetCharaUnitSetData>(
+            await this.Client.PostMsgpack<CharaSetCharaUnitSetResponse>(
                 "chara/set_chara_unit_set",
                 new CharaSetCharaUnitSetRequest(
                     1,
