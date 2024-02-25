@@ -3,6 +3,7 @@ using AutoMapper;
 using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -262,10 +263,7 @@ public class SummonController(
                         : bannerData.single_crystal * numSummons;
                 break;
             case PaymentTypes.Ticket:
-                paymentCost =
-                    summonRequest.exec_type == SummonExecTypes.Tenfold
-                        ? 1
-                        : summonRequest.exec_count * numSummons;
+                paymentCost = summonRequest.exec_type == SummonExecTypes.Tenfold ? 1 : numSummons;
                 break;
             case PaymentTypes.FreeDailyExecDependant:
             case PaymentTypes.FreeDailyTenfold:
@@ -280,10 +278,28 @@ public class SummonController(
                 );
         }
 
+        int entityId = 0;
+
+        if (summonRequest.payment_type == PaymentTypes.Ticket)
+        {
+            // TODO: Does not capture special ticket logic.
+            SummonTickets ticketType = summonRequest.exec_type switch
+            {
+                SummonExecTypes.Single => SummonTickets.SingleSummon,
+                SummonExecTypes.Tenfold => SummonTickets.TenfoldSummon,
+                _
+                    => throw new DragaliaException(
+                        ResultCode.CommonInvalidArgument,
+                        "Invalid exec type for ticket summon"
+                    )
+            };
+
+            entityId = (int)ticketType;
+        }
+
         await paymentService.ProcessPayment(
-            summonRequest.payment_type,
-            summonRequest.payment_target,
-            paymentCost
+            new Entity(summonRequest.payment_type.ToEntityType(), entityId, paymentCost),
+            summonRequest.payment_target
         );
 
         List<AtgenRedoableSummonResultUnitList> summonResult = summonService.GenerateSummonResult(

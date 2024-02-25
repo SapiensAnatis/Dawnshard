@@ -201,8 +201,6 @@ public class SummonTest : TestFixture
         await this.CheckRewardInDb(response.result_unit_list.ElementAt(0));
     }
 
-    /// Multisummon tests fail on testDB when saving 2+ new dragonData because sqlLite can't generate new Dragon_Key_Ids (always returns 0) via sequence
-    /// TODO: Low priority since it works with the actual DB, but maybe figure out how to change the generation so it works in tests too
     [Fact]
     public async Task SummonRequest_TenSummonWyrmite_ReturnsValidResult()
     {
@@ -229,6 +227,127 @@ public class SummonTest : TestFixture
         {
             await this.CheckRewardInDb(reward);
         }
+    }
+
+    [Fact]
+    public async Task SummonRequest_SingleSummonTicket_ReturnsValidResult()
+    {
+        await this.AddToDatabase(
+            new DbSummonTicket()
+            {
+                SummonTicketId = SummonTickets.SingleSummon,
+                KeyId = 1,
+                Quantity = 1
+            },
+            new DbSummonTicket()
+            {
+                SummonTicketId = SummonTickets.SingleSummon,
+                KeyId = 2,
+                Quantity = 1
+            }
+        );
+
+        DragaliaResponse<SummonRequestData> response = (
+            await this.Client.PostMsgpack<SummonRequestData>(
+                "summon/request",
+                new SummonRequestRequest(
+                    1020203,
+                    SummonExecTypes.Single,
+                    1,
+                    PaymentTypes.Ticket,
+                    new PaymentTarget(1, 1)
+                ),
+                ensureSuccessHeader: false
+            )
+        );
+
+        response.data_headers.result_code.Should().Be(ResultCode.Success);
+    }
+
+    [Fact]
+    public async Task SummonRequest_MultiSingleSummonTicket_ReturnsValidResult()
+    {
+        await this.AddToDatabase(
+            new DbSummonTicket()
+            {
+                SummonTicketId = SummonTickets.SingleSummon,
+                KeyId = 1,
+                Quantity = 5
+            }
+        );
+
+        DragaliaResponse<SummonRequestData> response = (
+            await this.Client.PostMsgpack<SummonRequestData>(
+                "summon/request",
+                new SummonRequestRequest(
+                    1020203,
+                    SummonExecTypes.Single,
+                    5,
+                    PaymentTypes.Ticket,
+                    new PaymentTarget(5, 5)
+                ),
+                ensureSuccessHeader: false
+            )
+        );
+
+        response.data_headers.result_code.Should().Be(ResultCode.Success);
+    }
+
+    [Fact]
+    public async Task SummonRequest_TenfoldSummonTicket_ReturnsValidResult()
+    {
+        await this.AddToDatabase(
+            new DbSummonTicket()
+            {
+                SummonTicketId = SummonTickets.TenfoldSummon,
+                KeyId = 1,
+                Quantity = 1,
+            }
+        );
+
+        DragaliaResponse<SummonRequestData> response = (
+            await this.Client.PostMsgpack<SummonRequestData>(
+                "summon/request",
+                new SummonRequestRequest(
+                    1020203,
+                    SummonExecTypes.Tenfold,
+                    0,
+                    PaymentTypes.Ticket,
+                    new PaymentTarget(1, 1)
+                ),
+                ensureSuccessHeader: false
+            )
+        );
+
+        response.data_headers.result_code.Should().Be(ResultCode.Success);
+    }
+
+    [Theory]
+    [InlineData(SummonExecTypes.Tenfold)]
+    [InlineData(SummonExecTypes.Single)]
+    public async Task SummonRequest_SummonTicket_NoMaterials_ReturnsMaterialShort(
+        SummonExecTypes types
+    )
+    {
+        await this.AddToDatabase(
+            new DbSummonTicket() { SummonTicketId = SummonTickets.TenfoldSummon, KeyId = 1, }
+        );
+
+        DragaliaResponse<SummonRequestData> response = (
+            await this.Client.PostMsgpack<SummonRequestData>(
+                "summon/request",
+                new SummonRequestRequest(
+                    1020203,
+                    SummonExecTypes.Tenfold,
+                    0,
+                    PaymentTypes.Ticket,
+                    new PaymentTarget(0, 1)
+                ),
+                ensureSuccessHeader: false
+            )
+        );
+
+        response.data_headers.result_code.Should().Be(ResultCode.CommonMaterialShort);
     }
 
     private async Task CheckRewardInDb(AtgenResultUnitList reward)
