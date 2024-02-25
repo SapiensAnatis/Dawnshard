@@ -36,7 +36,7 @@ public class AbilityCrestList
     public bool IsNew { get; set; }
 
     [Key("gettime")]
-    public int GetTime { get; set; }
+    public DateTimeOffset GetTime { get; set; }
 
     [Key("ability_1_level")]
     public int Ability1Level { get; set; }
@@ -53,7 +53,7 @@ public class AbilityCrestList
         int attackPlusCount,
         bool isFavorite,
         bool isNew,
-        int getTime,
+        DateTimeOffset getTime,
         int ability1Level,
         int ability2Level
     )
@@ -288,9 +288,9 @@ public class AlbumWeaponList
     public int WeaponId { get; set; }
 
     [Key("gettime")]
-    public int GetTime { get; set; }
+    public DateTimeOffset GetTime { get; set; }
 
-    public AlbumWeaponList(int weaponId, int getTime)
+    public AlbumWeaponList(int weaponId, DateTimeOffset getTime)
     {
         this.WeaponId = weaponId;
         this.GetTime = getTime;
@@ -317,7 +317,7 @@ public class AmuletList
     public bool IsNew { get; set; }
 
     [Key("gettime")]
-    public int GetTime { get; set; }
+    public DateTimeOffset GetTime { get; set; }
 
     [Key("ability_1_level")]
     public int Ability1Level { get; set; }
@@ -351,7 +351,7 @@ public class AmuletList
         ulong amuletKeyId,
         bool isLock,
         bool isNew,
-        int getTime,
+        DateTimeOffset getTime,
         int ability1Level,
         int ability2Level,
         int ability3Level,
@@ -5873,9 +5873,9 @@ public class BattleRoyalCharaSkinList
     public int BattleRoyalCharaSkinId { get; set; }
 
     [Key("gettime")]
-    public int GetTime { get; set; }
+    public DateTimeOffset GetTime { get; set; }
 
-    public BattleRoyalCharaSkinList(int battleRoyalCharaSkinId, int getTime)
+    public BattleRoyalCharaSkinList(int battleRoyalCharaSkinId, DateTimeOffset getTime)
     {
         this.BattleRoyalCharaSkinId = battleRoyalCharaSkinId;
         this.GetTime = getTime;
@@ -6355,7 +6355,7 @@ public class CharaList
     public bool IsUnlockEditSkill { get; set; }
 
     [Key("gettime")]
-    public int GetTime { get; set; }
+    public DateTimeOffset GetTime { get; set; }
 
     [Key("mana_circle_piece_id_list")]
     public IEnumerable<int> ManaCirclePieceIdList { get; set; } = [];
@@ -6390,7 +6390,7 @@ public class CharaList
         int statusPlusCount,
         int comboBuildupCount,
         bool isUnlockEditSkill,
-        int getTime,
+        DateTimeOffset getTime,
         IEnumerable<int> manaCirclePieceIdList,
         bool isTemporary,
         int listViewFlag
@@ -7383,7 +7383,7 @@ public class DragonReliabilityList
     public int ReliabilityTotalExp { get; set; }
 
     [Key("gettime")]
-    public int GetTime { get; set; }
+    public DateTimeOffset GetTime { get; set; }
 
     [Key("last_contact_time")]
     public DateTimeOffset LastContactTime { get; set; }
@@ -7392,7 +7392,7 @@ public class DragonReliabilityList
         Dragons dragonId,
         int reliabilityLevel,
         int reliabilityTotalExp,
-        int getTime,
+        DateTimeOffset getTime,
         DateTimeOffset lastContactTime
     )
     {
@@ -7553,9 +7553,9 @@ public class EmblemList
     public bool IsNew { get; set; }
 
     [Key("gettime")]
-    public int GetTime { get; set; }
+    public DateTimeOffset GetTime { get; set; }
 
-    public EmblemList(int emblemId, bool isNew, int getTime)
+    public EmblemList(int emblemId, bool isNew, DateTimeOffset getTime)
     {
         this.EmblemId = emblemId;
         this.IsNew = isNew;
@@ -11721,7 +11721,7 @@ public class TalismanList
     public bool IsLock { get; set; }
 
     [Key("gettime")]
-    public int GetTime { get; set; }
+    public DateTimeOffset GetTime { get; set; }
 
     public TalismanList(
         ulong talismanKeyId,
@@ -11733,7 +11733,7 @@ public class TalismanList
         int additionalAttack,
         bool isNew,
         bool isLock,
-        int getTime
+        DateTimeOffset getTime
     )
     {
         this.TalismanKeyId = talismanKeyId;
@@ -12773,7 +12773,7 @@ public class WeaponBodyList
     public bool IsNew { get; set; }
 
     [Key("gettime")]
-    public int GetTime { get; set; }
+    public DateTimeOffset GetTime { get; set; }
 
     [Key("skill_no")]
     public int SkillNo { get; set; }
@@ -12800,7 +12800,7 @@ public class WeaponBodyList
         IEnumerable<int> unlockWeaponPassiveAbilityNoList,
         int fortPassiveCharaWeaponBuildupCount,
         bool isNew,
-        int getTime,
+        DateTimeOffset getTime,
         int skillNo,
         int skillLevel,
         int ability1Level,
@@ -12847,7 +12847,7 @@ public class WeaponList
     public bool IsNew { get; set; }
 
     [Key("gettime")]
-    public int GetTime { get; set; }
+    public DateTimeOffset GetTime { get; set; }
 
     [Key("skill_level")]
     public int SkillLevel { get; set; }
@@ -12875,7 +12875,7 @@ public class WeaponList
         ulong weaponKeyId,
         bool isLock,
         bool isNew,
-        int getTime,
+        DateTimeOffset getTime,
         int skillLevel,
         int hpPlusCount,
         int attackPlusCount,
@@ -12927,9 +12927,9 @@ public class WeaponSkinList
     public bool IsNew { get; set; }
 
     [Key("gettime")]
-    public int GetTime { get; set; }
+    public DateTimeOffset GetTime { get; set; }
 
-    public WeaponSkinList(int weaponSkinId, bool isNew, int getTime)
+    public WeaponSkinList(int weaponSkinId, bool isNew, DateTimeOffset getTime)
     {
         this.WeaponSkinId = weaponSkinId;
         this.IsNew = isNew;
