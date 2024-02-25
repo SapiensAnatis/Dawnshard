@@ -5,7 +5,10 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 public class UserTest : TestFixture
 {
     public UserTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        CommonAssertionOptions.ApplyTimeOptions();
+    }
 
     [Fact]
     public async Task LinkedNAccount_ReturnsExpectedResponse()

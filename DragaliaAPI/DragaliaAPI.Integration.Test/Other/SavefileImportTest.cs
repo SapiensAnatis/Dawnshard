@@ -86,14 +86,14 @@ public class SavefileImportTest : TestFixture
                 {
                     // Modified properties
                     // Inaccurate because primary keys
-                    opts.Excluding(x => x.Name.Contains("key_id"));
-                    opts.Excluding(x => x.Name.Contains("build_id"));
-                    opts.Excluding(x => x.Name.Contains("plant_detail_id"));
+                    opts.Excluding(x => x.Name.Contains("KeyId"));
+                    opts.Excluding(x => x.Name.Contains("BuildId"));
+                    opts.Excluding(x => x.Name.Contains("PlantDetailId"));
                     opts.Excluding(x => x.UserData!.ViewerId);
                     // Inaccurate because transient
                     opts.Excluding(x => x.ServerTime);
                     opts.Excluding(x => x.SpecUpgradeTime);
-                    opts.Excluding(x => x.Name.Contains("last_income_time"));
+                    opts.Excluding(x => x.Name.Contains("LastIncomeTime"));
                     opts.Excluding(x => x.UserData!.LastLoginTime);
                     // Inaccurate because notification
                     opts.Excluding(x => x.PresentNotice);
@@ -102,8 +102,8 @@ public class SavefileImportTest : TestFixture
                     opts.Excluding(x => x.UserData!.StaminaSingle);
                     opts.Excluding(x => x.UserData!.StaminaMulti);
                     opts.Excluding(x =>
-                        x.Path.StartsWith("ability_crest_list")
-                        && (x.Name == "ability_1_level" || x.Name == "ability_2_level")
+                        x.Path.StartsWith("AbilityCrestList")
+                        && (x.Name == "Ability1Level" || x.Name == "Ability2Level")
                     );
                     opts.Excluding(x => x.UserData!.Level);
                     opts.Excluding(x => x.UserData!.Crystal);
@@ -122,7 +122,7 @@ public class SavefileImportTest : TestFixture
                     opts.Excluding(x => x.GuildData);
 
                     // Properties with no implementation
-                    opts.Excluding(x => x.Name.Contains("album"));
+                    opts.Excluding(x => x.Name.Contains("Album"));
 
                     opts.Excluding(x => x.QuestBonus);
                     opts.Excluding(x => x.QuestCarryList);

@@ -13,6 +13,7 @@ namespace DragaliaAPI.Controllers.Other;
 [Consumes("application/json")]
 [Authorize(AuthenticationSchemes = SchemeName.Developer)]
 [ApiController]
+[ApiJsonOutput]
 public class SavefileController : ControllerBase
 {
     private readonly ISavefileService savefileService;
@@ -33,7 +34,7 @@ public class SavefileController : ControllerBase
     [HttpPost("import/{viewerId:long}")]
     public async Task<IActionResult> Import(
         long viewerId,
-        [FromBody] DragaliaResponse<LoadIndexResponse> loadIndexResponse
+        [FromBodyUsingApiJson] DragaliaResponse<LoadIndexResponse> loadIndexResponse
     )
     {
         string accountId = await LookupAccountId(viewerId);

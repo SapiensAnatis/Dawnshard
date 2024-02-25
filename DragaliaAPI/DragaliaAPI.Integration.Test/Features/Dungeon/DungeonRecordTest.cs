@@ -530,7 +530,7 @@ public class DungeonRecordTest : TestFixture
         response
             .UpdateDataList.QuestList.Should()
             .ContainEquivalentOf(
-                new QuestList() { QuestId = exQuestId, IsAppear = true, },
+                new QuestList() { QuestId = exQuestId, IsAppear = false, },
                 opts => opts.Including(x => x.QuestId).Including(x => x.IsAppear)
             );
     }

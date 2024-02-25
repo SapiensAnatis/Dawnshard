@@ -63,7 +63,7 @@ public class PartyInfoValidatorTest
 
         result.Errors.Count.Should().Be(1);
         result
-            .ShouldHaveValidationErrorFor("party_unit_list[0]")
+            .ShouldHaveValidationErrorFor("PartyUnitList[0]")
             .WithErrorMessage("Duplicate shared skills");
     }
 
@@ -85,7 +85,7 @@ public class PartyInfoValidatorTest
         );
 
         result.Errors.Count.Should().Be(1);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].dragon_reliability_level");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].DragonReliabilityLevel");
     }
 
     [Fact]
@@ -114,7 +114,7 @@ public class PartyInfoValidatorTest
 
         result.Errors.Count.Should().Be(1);
         result
-            .ShouldHaveValidationErrorFor("party_unit_list[0]")
+            .ShouldHaveValidationErrorFor("PartyUnitList[0]")
             .WithErrorMessage("Duplicate ability crests");
     }
 
@@ -132,9 +132,9 @@ public class PartyInfoValidatorTest
         );
 
         result.Errors.Count.Should().Be(2);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].chara_data.chara_id");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].CharaData.CharaId");
         result
-            .ShouldHaveValidationErrorFor("party_unit_list[0].chara_data")
+            .ShouldHaveValidationErrorFor("PartyUnitList[0].CharaData")
             .WithErrorMessage("Element lock violation");
     }
 
@@ -160,8 +160,8 @@ public class PartyInfoValidatorTest
         );
 
         result.Errors.Count.Should().Be(2);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].chara_data.attack_plus_count");
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].chara_data.hp_plus_count");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].CharaData.AttackPlusCount");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].CharaData.HpPlusCount");
     }
 
     [Fact]
@@ -179,7 +179,7 @@ public class PartyInfoValidatorTest
 
         result.Errors.Count.Should().Be(1);
         result
-            .ShouldHaveValidationErrorFor("party_unit_list[0].chara_data")
+            .ShouldHaveValidationErrorFor("PartyUnitList[0].CharaData")
             .WithErrorMessage("Element lock violation");
     }
 
@@ -197,9 +197,9 @@ public class PartyInfoValidatorTest
         );
 
         result.Errors.Count.Should().Be(2);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].dragon_data.dragon_id");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].DragonData.DragonId");
         result
-            .ShouldHaveValidationErrorFor("party_unit_list[0].dragon_data")
+            .ShouldHaveValidationErrorFor("PartyUnitList[0].DragonData")
             .WithErrorMessage("Element lock violation");
     }
 
@@ -225,8 +225,8 @@ public class PartyInfoValidatorTest
         );
 
         result.Errors.Count.Should().Be(2);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].dragon_data.attack_plus_count");
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].dragon_data.hp_plus_count");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].DragonData.AttackPlusCount");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].DragonData.HpPlusCount");
     }
 
     [Fact]
@@ -244,7 +244,7 @@ public class PartyInfoValidatorTest
 
         result.Errors.Count.Should().Be(1);
         result
-            .ShouldHaveValidationErrorFor("party_unit_list[0].dragon_data")
+            .ShouldHaveValidationErrorFor("PartyUnitList[0].DragonData")
             .WithErrorMessage("Element lock violation");
     }
 
@@ -268,7 +268,7 @@ public class PartyInfoValidatorTest
         );
 
         result.Errors.Count.Should().Be(1);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0][0].ability_crest_id"); // wtf is this property name?
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0][0].AbilityCrestId"); // wtf is this property name?
     }
 
     [Fact]
@@ -291,8 +291,8 @@ public class PartyInfoValidatorTest
         );
 
         result.Errors.Count.Should().Be(2);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0][0].attack_plus_count");
-        result.ShouldHaveValidationErrorFor("party_unit_list[0][0].hp_plus_count");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0][0].AttackPlusCount");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0][0].HpPlusCount");
     }
 
     [Fact]
@@ -309,7 +309,7 @@ public class PartyInfoValidatorTest
         );
 
         result.Errors.Count.Should().Be(1);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].weapon_body_data.weapon_body_id");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].WeaponBodyData.WeaponBodyId");
     }
 
     [Fact]
@@ -334,8 +334,8 @@ public class PartyInfoValidatorTest
         );
 
         result.Errors.Count.Should().Be(2);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].talisman_data.additional_attack");
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].talisman_data.additional_hp");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].TalismanData.AdditionalAttack");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].TalismanData.AdditionalHp");
     }
 
     [Fact]
@@ -352,7 +352,7 @@ public class PartyInfoValidatorTest
         );
 
         result.Errors.Count.Should().Be(1);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].talisman_data.talisman_id");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].TalismanData.TalismanId");
     }
 
     [Fact]
@@ -377,12 +377,8 @@ public class PartyInfoValidatorTest
         );
 
         result.Errors.Count.Should().Be(2);
-        result.ShouldHaveValidationErrorFor(
-            "party_unit_list[0].talisman_data.talisman_ability_id_1"
-        );
-        result.ShouldHaveValidationErrorFor(
-            "party_unit_list[0].talisman_data.talisman_ability_id_2"
-        );
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].TalismanData.TalismanAbilityId1");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].TalismanData.TalismanAbilityId2");
     }
 
     [Fact]
@@ -408,7 +404,7 @@ public class PartyInfoValidatorTest
 
         result.Errors.Count.Should().Be(1);
         result
-            .ShouldHaveValidationErrorFor("party_unit_list[0].talisman_data")
+            .ShouldHaveValidationErrorFor("PartyUnitList[0].TalismanData")
             .WithErrorMessage("Duplicate talisman abilities");
     }
 
@@ -435,8 +431,6 @@ public class PartyInfoValidatorTest
         );
 
         result.Errors.Count.Should().Be(1);
-        result.ShouldHaveValidationErrorFor(
-            "party_unit_list[0].talisman_data.talisman_ability_id_3"
-        );
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].TalismanData.TalismanAbilityId3");
     }
 }

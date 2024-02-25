@@ -286,6 +286,6 @@ public class DungeonStartTest : TestFixture
     }
 
     private static readonly Func<MatchOptions, MatchOptions> SnapshotOptions = opts =>
-        opts.IgnoreField<long>("$..dragon_data.dragon_key_id")
-            .IgnoreField<long>("$..talisman_data.talisman_key_id");
+        opts.IgnoreField<long>("$..DragonData.DragonKeyId")
+            .IgnoreField<long>("$..TalismanData.TalismanKeyId");
 }

@@ -60,8 +60,7 @@ builder
     {
         option.OutputFormatters.Add(new CustomMessagePackOutputFormatter(CustomResolver.Options));
         option.InputFormatters.Add(new CustomMessagePackInputFormatter(CustomResolver.Options));
-    })
-    .AddJsonOptions(options => ApiJsonOptions.Action.Invoke(options.JsonSerializerOptions));
+    });
 
 PostgresOptions postgresOptions =
     builder.Configuration.GetSection(nameof(PostgresOptions)).Get<PostgresOptions>()
