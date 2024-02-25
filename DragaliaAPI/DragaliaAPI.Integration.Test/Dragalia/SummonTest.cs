@@ -201,8 +201,6 @@ public class SummonTest : TestFixture
         await this.CheckRewardInDb(response.result_unit_list.ElementAt(0));
     }
 
-    /// Multisummon tests fail on testDB when saving 2+ new dragonData because sqlLite can't generate new Dragon_Key_Ids (always returns 0) via sequence
-    /// TODO: Low priority since it works with the actual DB, but maybe figure out how to change the generation so it works in tests too
     [Fact]
     public async Task SummonRequest_TenSummonWyrmite_ReturnsValidResult()
     {
@@ -239,6 +237,12 @@ public class SummonTest : TestFixture
             {
                 SummonTicketId = SummonTickets.SingleSummon,
                 KeyId = 1,
+                Quantity = 1
+            },
+            new DbSummonTicket()
+            {
+                SummonTicketId = SummonTickets.SingleSummon,
+                KeyId = 2,
                 Quantity = 1
             }
         );

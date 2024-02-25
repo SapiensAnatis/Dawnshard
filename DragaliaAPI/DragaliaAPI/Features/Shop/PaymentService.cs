@@ -122,7 +122,7 @@ public class PaymentService(
                 };
                 break;
             case EntityTypes.SummonTicket:
-                DbSummonTicket? ticket = await ticketRepository.Tickets.SingleOrDefaultAsync(x =>
+                DbSummonTicket? ticket = await ticketRepository.Tickets.FirstOrDefaultAsync(x =>
                     x.SummonTicketId == (SummonTickets)entity.Id
                 );
                 quantity = ticket?.Quantity;
