@@ -23,7 +23,7 @@ public class TutorialTest : TestFixture
         TutorialUpdateStepResponse response = (
             await this.Client.PostMsgpack<TutorialUpdateStepResponse>(
                 "/tutorial/update_step",
-                new TutorialUpdateStepRequest(step, 0, 0, 0)
+                new TutorialUpdateStepRequest(step, false, 0, 0)
             )
         ).Data;
 
@@ -49,7 +49,7 @@ public class TutorialTest : TestFixture
         TutorialUpdateStepResponse response = (
             await this.Client.PostMsgpack<TutorialUpdateStepResponse>(
                 "/tutorial/update_step",
-                new TutorialUpdateStepRequest(step, 0, 0, 0)
+                new TutorialUpdateStepRequest(step, false, 0, 0)
             )
         ).Data;
 

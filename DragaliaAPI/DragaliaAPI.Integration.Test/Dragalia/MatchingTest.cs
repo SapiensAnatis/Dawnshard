@@ -258,7 +258,7 @@ public class MatchingTest : TestFixture
                         MemberNum = 1,
                     },
                     ClusterName = "jp",
-                    IsFriend = 0,
+                    IsFriend = false,
                     QuestId = 204550501,
                     RoomName = "7942ce2a-c0ac-4e41-8472-0cf5918f3953"
                 }
@@ -341,7 +341,7 @@ public class MatchingTest : TestFixture
                         MemberNum = 1,
                     },
                     ClusterName = "jp",
-                    IsFriend = 0,
+                    IsFriend = false,
                     QuestId = 204550501,
                     RoomName = "7942ce2a-c0ac-4e41-8472-0cf5918f3953"
                 }

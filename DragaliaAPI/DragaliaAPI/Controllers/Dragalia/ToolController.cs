@@ -24,7 +24,7 @@ public class ToolController(IAuthService authService) : DragaliaControllerBaseCo
             new ToolSignupResponse()
             {
                 ViewerId = (ulong)viewerId,
-                Servertime = DateTimeOffset.UtcNow,
+                ServerTime = DateTimeOffset.UtcNow,
             }
         );
     }

@@ -43,7 +43,7 @@ public class MemoryEventTest : TestFixture
         ).Data;
 
         missionListResponse
-            .memory_event_mission_list.Should()
+            .MemoryEventMissionList.Should()
             .BeEquivalentTo(
                 new MemoryEventMissionList[]
                 {

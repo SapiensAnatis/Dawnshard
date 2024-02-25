@@ -12,7 +12,7 @@ public class EulaAgreeController : DragaliaControllerBase
         return this.Ok(
             new EulaAgreeAgreeResponse()
             {
-                IsOptin = 0,
+                IsOptin = false,
                 VersionHash = new()
                 {
                     Region = request.Region,

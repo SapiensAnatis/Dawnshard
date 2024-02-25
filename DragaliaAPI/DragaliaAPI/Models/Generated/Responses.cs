@@ -3,10 +3,11 @@
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Shared.Definitions.Enums;
 using MessagePack;
+using Newtonsoft.Json;
 
 namespace DragaliaAPI.Models.Generated;
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class AbilityCrestBuildupPieceResponse
 {
     [Key("update_data_list")]
@@ -27,7 +28,7 @@ public partial class AbilityCrestBuildupPieceResponse
     public AbilityCrestBuildupPieceResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class AbilityCrestBuildupPlusCountResponse
 {
     [Key("update_data_list")]
@@ -48,7 +49,7 @@ public partial class AbilityCrestBuildupPlusCountResponse
     public AbilityCrestBuildupPlusCountResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class AbilityCrestGetAbilityCrestSetListResponse
 {
     [Key("ability_crest_set_list")]
@@ -64,7 +65,7 @@ public partial class AbilityCrestGetAbilityCrestSetListResponse
     public AbilityCrestGetAbilityCrestSetListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class AbilityCrestResetPlusCountResponse
 {
     [Key("update_data_list")]
@@ -85,7 +86,7 @@ public partial class AbilityCrestResetPlusCountResponse
     public AbilityCrestResetPlusCountResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class AbilityCrestSetAbilityCrestSetResponse
 {
     [Key("update_data_list")]
@@ -106,7 +107,7 @@ public partial class AbilityCrestSetAbilityCrestSetResponse
     public AbilityCrestSetAbilityCrestSetResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class AbilityCrestSetFavoriteResponse
 {
     [Key("update_data_list")]
@@ -124,7 +125,7 @@ public partial class AbilityCrestSetFavoriteResponse
     public AbilityCrestSetFavoriteResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class AbilityCrestTradeGetListResponse
 {
     [Key("user_ability_crest_trade_list")]
@@ -155,7 +156,7 @@ public partial class AbilityCrestTradeGetListResponse
     public AbilityCrestTradeGetListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class AbilityCrestTradeTradeResponse
 {
     [Key("user_ability_crest_trade_list")]
@@ -186,7 +187,7 @@ public partial class AbilityCrestTradeTradeResponse
     public AbilityCrestTradeTradeResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class AbilityCrestUpdateAbilityCrestSetNameResponse
 {
     [Key("update_data_list")]
@@ -207,7 +208,7 @@ public partial class AbilityCrestUpdateAbilityCrestSetNameResponse
     public AbilityCrestUpdateAbilityCrestSetNameResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class AlbumIndexResponse
 {
     [Key("album_quest_play_record_list")]
@@ -243,7 +244,7 @@ public partial class AlbumIndexResponse
     public AlbumIndexResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class AmuletBuildupResponse
 {
     [Key("update_data_list")]
@@ -269,7 +270,7 @@ public partial class AmuletBuildupResponse
     public AmuletBuildupResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class AmuletLimitBreakResponse
 {
     [Key("update_data_list")]
@@ -295,7 +296,7 @@ public partial class AmuletLimitBreakResponse
     public AmuletLimitBreakResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class AmuletResetPlusCountResponse
 {
     [Key("update_data_list")]
@@ -313,7 +314,7 @@ public partial class AmuletResetPlusCountResponse
     public AmuletResetPlusCountResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class AmuletSellResponse
 {
     [Key("delete_data_list")]
@@ -339,7 +340,7 @@ public partial class AmuletSellResponse
     public AmuletSellResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class AmuletSetLockResponse
 {
     [Key("update_data_list")]
@@ -357,7 +358,7 @@ public partial class AmuletSetLockResponse
     public AmuletSetLockResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class AmuletTradeGetListResponse
 {
     [Key("user_amulet_trade_list")]
@@ -388,7 +389,7 @@ public partial class AmuletTradeGetListResponse
     public AmuletTradeGetListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class AmuletTradeTradeResponse
 {
     [Key("user_amulet_trade_list")]
@@ -419,7 +420,7 @@ public partial class AmuletTradeTradeResponse
     public AmuletTradeTradeResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class BattleRoyalEventEntryResponse
 {
     [Key("battle_royal_event_user_record")]
@@ -465,7 +466,7 @@ public partial class BattleRoyalEventEntryResponse
     public BattleRoyalEventEntryResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class BattleRoyalEventGetEventDataResponse
 {
     [Key("battle_royal_event_user_record")]
@@ -506,7 +507,7 @@ public partial class BattleRoyalEventGetEventDataResponse
     public BattleRoyalEventGetEventDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class BattleRoyalEventReceiveEventCyclePointRewardResponse
 {
     [Key("event_cycle_reward_list")]
@@ -538,7 +539,7 @@ public partial class BattleRoyalEventReceiveEventCyclePointRewardResponse
     public BattleRoyalEventReceiveEventCyclePointRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class BattleRoyalEventReleaseCharaSkinResponse
 {
     [Key("update_data_list")]
@@ -559,7 +560,7 @@ public partial class BattleRoyalEventReleaseCharaSkinResponse
     public BattleRoyalEventReleaseCharaSkinResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class BattleRoyalFailResponse
 {
     [Key("result")]
@@ -573,7 +574,7 @@ public partial class BattleRoyalFailResponse
     public BattleRoyalFailResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class BattleRoyalGetBattleRoyalHistoryResponse
 {
     [Key("battle_royal_history_list")]
@@ -589,7 +590,7 @@ public partial class BattleRoyalGetBattleRoyalHistoryResponse
     public BattleRoyalGetBattleRoyalHistoryResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class BattleRoyalRecordRoyalRecordMultiResponse
 {
     [Key("update_data_list")]
@@ -621,7 +622,7 @@ public partial class BattleRoyalRecordRoyalRecordMultiResponse
     public BattleRoyalRecordRoyalRecordMultiResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class BattleRoyalStartMultiResponse
 {
     [Key("update_data_list")]
@@ -647,7 +648,7 @@ public partial class BattleRoyalStartMultiResponse
     public BattleRoyalStartMultiResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class BattleRoyalStartRoyalMultiResponse
 {
     [Key("update_data_list")]
@@ -673,7 +674,7 @@ public partial class BattleRoyalStartRoyalMultiResponse
     public BattleRoyalStartRoyalMultiResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class BuildEventEntryResponse
 {
     [Key("build_event_user_data")]
@@ -705,7 +706,7 @@ public partial class BuildEventEntryResponse
     public BuildEventEntryResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class BuildEventGetEventDataResponse
 {
     [Key("build_event_user_data")]
@@ -742,7 +743,7 @@ public partial class BuildEventGetEventDataResponse
     public BuildEventGetEventDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class BuildEventReceiveBuildPointRewardResponse
 {
     [Key("build_event_reward_list")]
@@ -774,7 +775,7 @@ public partial class BuildEventReceiveBuildPointRewardResponse
     public BuildEventReceiveBuildPointRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class BuildEventReceiveDailyBonusResponse
 {
     [Key("event_daily_bonus_list")]
@@ -800,7 +801,7 @@ public partial class BuildEventReceiveDailyBonusResponse
     public BuildEventReceiveDailyBonusResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CartoonLatestResponse
 {
     [Key("latest")]
@@ -814,7 +815,7 @@ public partial class CartoonLatestResponse
     public CartoonLatestResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CastleStoryReadResponse
 {
     [Key("castle_story_reward_list")]
@@ -845,7 +846,7 @@ public partial class CastleStoryReadResponse
     public CastleStoryReadResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CharaAwakeResponse
 {
     [Key("update_data_list")]
@@ -859,7 +860,7 @@ public partial class CharaAwakeResponse
     public CharaAwakeResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CharaBuildupManaResponse
 {
     [Key("update_data_list")]
@@ -877,7 +878,7 @@ public partial class CharaBuildupManaResponse
     public CharaBuildupManaResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CharaBuildupPlatinumResponse
 {
     [Key("update_data_list")]
@@ -895,7 +896,7 @@ public partial class CharaBuildupPlatinumResponse
     public CharaBuildupPlatinumResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CharaBuildupResponse
 {
     [Key("update_data_list")]
@@ -913,7 +914,7 @@ public partial class CharaBuildupResponse
     public CharaBuildupResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CharaGetCharaUnitSetResponse
 {
     [Key("chara_unit_set_list")]
@@ -927,7 +928,7 @@ public partial class CharaGetCharaUnitSetResponse
     public CharaGetCharaUnitSetResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CharaGetListResponse
 {
     [Key("chara_list")]
@@ -941,7 +942,7 @@ public partial class CharaGetListResponse
     public CharaGetListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CharaLimitBreakAndBuildupManaResponse
 {
     [Key("update_data_list")]
@@ -962,7 +963,7 @@ public partial class CharaLimitBreakAndBuildupManaResponse
     public CharaLimitBreakAndBuildupManaResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CharaLimitBreakResponse
 {
     [Key("update_data_list")]
@@ -980,7 +981,7 @@ public partial class CharaLimitBreakResponse
     public CharaLimitBreakResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CharaResetPlusCountResponse
 {
     [Key("update_data_list")]
@@ -998,7 +999,7 @@ public partial class CharaResetPlusCountResponse
     public CharaResetPlusCountResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CharaSetCharaUnitSetResponse
 {
     [Key("update_data_list")]
@@ -1016,7 +1017,7 @@ public partial class CharaSetCharaUnitSetResponse
     public CharaSetCharaUnitSetResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CharaUnlockEditSkillResponse
 {
     [Key("update_data_list")]
@@ -1034,7 +1035,7 @@ public partial class CharaUnlockEditSkillResponse
     public CharaUnlockEditSkillResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class Clb01EventEntryResponse
 {
     [Key("clb_01_event_user_data")]
@@ -1060,7 +1061,7 @@ public partial class Clb01EventEntryResponse
     public Clb01EventEntryResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class Clb01EventGetEventDataResponse
 {
     [Key("clb_01_event_user_data")]
@@ -1086,7 +1087,7 @@ public partial class Clb01EventGetEventDataResponse
     public Clb01EventGetEventDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class Clb01EventReceiveClb01PointRewardResponse
 {
     [Key("clb_01_event_reward_list")]
@@ -1118,7 +1119,7 @@ public partial class Clb01EventReceiveClb01PointRewardResponse
     public Clb01EventReceiveClb01PointRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CollectEventEntryResponse
 {
     [Key("collect_event_user_data")]
@@ -1144,7 +1145,7 @@ public partial class CollectEventEntryResponse
     public CollectEventEntryResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CollectEventGetEventDataResponse
 {
     [Key("collect_event_user_data")]
@@ -1165,7 +1166,7 @@ public partial class CollectEventGetEventDataResponse
     public CollectEventGetEventDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CombatEventEntryResponse
 {
     [Key("combat_event_user_data")]
@@ -1191,7 +1192,7 @@ public partial class CombatEventEntryResponse
     public CombatEventEntryResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CombatEventGetEventDataResponse
 {
     [Key("combat_event_user_data")]
@@ -1222,7 +1223,7 @@ public partial class CombatEventGetEventDataResponse
     public CombatEventGetEventDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CombatEventReceiveEventLocationRewardResponse
 {
     [Key("update_data_list")]
@@ -1254,7 +1255,7 @@ public partial class CombatEventReceiveEventLocationRewardResponse
     public CombatEventReceiveEventLocationRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CombatEventReceiveEventPointRewardResponse
 {
     [Key("event_reward_list")]
@@ -1285,7 +1286,7 @@ public partial class CombatEventReceiveEventPointRewardResponse
     public CombatEventReceiveEventPointRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CraftAssembleResponse
 {
     [Key("update_data_list")]
@@ -1311,7 +1312,7 @@ public partial class CraftAssembleResponse
     public CraftAssembleResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CraftCreateResponse
 {
     [Key("update_data_list")]
@@ -1337,7 +1338,7 @@ public partial class CraftCreateResponse
     public CraftCreateResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CraftDisassembleResponse
 {
     [Key("update_data_list")]
@@ -1363,7 +1364,7 @@ public partial class CraftDisassembleResponse
     public CraftDisassembleResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class CraftResetNewResponse
 {
     [Key("update_data_list")]
@@ -1377,7 +1378,7 @@ public partial class CraftResetNewResponse
     public CraftResetNewResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DeployGetDeployVersionResponse
 {
     [Key("deploy_hash")]
@@ -1391,7 +1392,7 @@ public partial class DeployGetDeployVersionResponse
     public DeployGetDeployVersionResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DmodeBuildupServitorPassiveResponse
 {
     [Key("dmode_servitor_passive_list")]
@@ -1417,7 +1418,7 @@ public partial class DmodeBuildupServitorPassiveResponse
     public DmodeBuildupServitorPassiveResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DmodeDungeonFinishResponse
 {
     [Key("dmode_dungeon_state")]
@@ -1448,7 +1449,7 @@ public partial class DmodeDungeonFinishResponse
     public DmodeDungeonFinishResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DmodeDungeonFloorResponse
 {
     [Key("dmode_dungeon_state")]
@@ -1479,7 +1480,7 @@ public partial class DmodeDungeonFloorResponse
     public DmodeDungeonFloorResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DmodeDungeonFloorSkipResponse
 {
     [Key("dmode_dungeon_state")]
@@ -1505,7 +1506,7 @@ public partial class DmodeDungeonFloorSkipResponse
     public DmodeDungeonFloorSkipResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DmodeDungeonRestartResponse
 {
     [Key("dmode_ingame_data")]
@@ -1523,14 +1524,14 @@ public partial class DmodeDungeonRestartResponse
     public DmodeDungeonRestartResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DmodeDungeonStartResponse
 {
     [Key("dmode_ingame_data")]
     public DmodeIngameData DmodeIngameData { get; set; }
 
     [Key("dmode_dungeon_state")]
-    public int DmodeDungeonState { get; set; }
+    public DungeonState DmodeDungeonState { get; set; }
 
     public DmodeDungeonStartResponse(DmodeIngameData dmodeIngameData, int dmodeDungeonState)
     {
@@ -1541,7 +1542,7 @@ public partial class DmodeDungeonStartResponse
     public DmodeDungeonStartResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DmodeDungeonSystemHaltResponse
 {
     [Key("dmode_dungeon_state")]
@@ -1567,7 +1568,7 @@ public partial class DmodeDungeonSystemHaltResponse
     public DmodeDungeonSystemHaltResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DmodeDungeonUserHaltResponse
 {
     [Key("dmode_dungeon_state")]
@@ -1593,7 +1594,7 @@ public partial class DmodeDungeonUserHaltResponse
     public DmodeDungeonUserHaltResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DmodeEntryResponse
 {
     [Key("dmode_info")]
@@ -1634,7 +1635,7 @@ public partial class DmodeEntryResponse
     public DmodeEntryResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DmodeExpeditionFinishResponse
 {
     [Key("dmode_ingame_result")]
@@ -1665,7 +1666,7 @@ public partial class DmodeExpeditionFinishResponse
     public DmodeExpeditionFinishResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DmodeExpeditionForceFinishResponse
 {
     [Key("dmode_ingame_result")]
@@ -1696,7 +1697,7 @@ public partial class DmodeExpeditionForceFinishResponse
     public DmodeExpeditionForceFinishResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DmodeExpeditionStartResponse
 {
     [Key("dmode_expedition")]
@@ -1722,7 +1723,7 @@ public partial class DmodeExpeditionStartResponse
     public DmodeExpeditionStartResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DmodeGetDataResponse
 {
     [Key("dmode_info")]
@@ -1778,7 +1779,7 @@ public partial class DmodeGetDataResponse
     public DmodeGetDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DmodeReadStoryResponse
 {
     [Key("dmode_story_reward_list")]
@@ -1809,7 +1810,7 @@ public partial class DmodeReadStoryResponse
     public DmodeReadStoryResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DragonBuildupResponse
 {
     [Key("update_data_list")]
@@ -1835,7 +1836,7 @@ public partial class DragonBuildupResponse
     public DragonBuildupResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DragonBuyGiftToSendMultipleResponse
 {
     [Key("shop_gift_list")]
@@ -1871,7 +1872,7 @@ public partial class DragonBuyGiftToSendMultipleResponse
     public DragonBuyGiftToSendMultipleResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DragonBuyGiftToSendResponse
 {
     [Key("shop_gift_list")]
@@ -1918,7 +1919,7 @@ public partial class DragonBuyGiftToSendResponse
     public DragonBuyGiftToSendResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DragonGetContactDataResponse
 {
     [Key("shop_gift_list")]
@@ -1932,7 +1933,7 @@ public partial class DragonGetContactDataResponse
     public DragonGetContactDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DragonLimitBreakResponse
 {
     [Key("update_data_list")]
@@ -1958,7 +1959,7 @@ public partial class DragonLimitBreakResponse
     public DragonLimitBreakResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DragonResetPlusCountResponse
 {
     [Key("update_data_list")]
@@ -1976,7 +1977,7 @@ public partial class DragonResetPlusCountResponse
     public DragonResetPlusCountResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DragonSellResponse
 {
     [Key("delete_data_list")]
@@ -2002,7 +2003,7 @@ public partial class DragonSellResponse
     public DragonSellResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DragonSendGiftMultipleResponse
 {
     [Key("update_data_list")]
@@ -2034,7 +2035,7 @@ public partial class DragonSendGiftMultipleResponse
     public DragonSendGiftMultipleResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DragonSendGiftResponse
 {
     [Key("update_data_list")]
@@ -2066,7 +2067,7 @@ public partial class DragonSendGiftResponse
     public DragonSendGiftResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DragonSetLockResponse
 {
     [Key("update_data_list")]
@@ -2084,7 +2085,7 @@ public partial class DragonSetLockResponse
     public DragonSetLockResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DreamAdventureClearResponse
 {
     [Key("update_data_list")]
@@ -2110,7 +2111,7 @@ public partial class DreamAdventureClearResponse
     public DreamAdventureClearResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DreamAdventurePlayResponse
 {
     [Key("update_data_list")]
@@ -2136,7 +2137,7 @@ public partial class DreamAdventurePlayResponse
     public DreamAdventurePlayResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DungeonFailResponse
 {
     [Key("result")]
@@ -2167,7 +2168,7 @@ public partial class DungeonFailResponse
     public DungeonFailResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DungeonGetAreaOddsResponse
 {
     [Key("odds_info")]
@@ -2181,7 +2182,7 @@ public partial class DungeonGetAreaOddsResponse
     public DungeonGetAreaOddsResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DungeonReceiveQuestBonusResponse
 {
     [Key("update_data_list")]
@@ -2207,7 +2208,7 @@ public partial class DungeonReceiveQuestBonusResponse
     public DungeonReceiveQuestBonusResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DungeonRecordRecordMultiResponse
 {
     [Key("update_data_list")]
@@ -2243,7 +2244,7 @@ public partial class DungeonRecordRecordMultiResponse
     public DungeonRecordRecordMultiResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DungeonRecordRecordResponse
 {
     [Key("update_data_list")]
@@ -2284,7 +2285,7 @@ public partial class DungeonRecordRecordResponse
     public DungeonRecordRecordResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DungeonRetryResponse
 {
     [Key("continue_count")]
@@ -2302,7 +2303,7 @@ public partial class DungeonRetryResponse
     public DungeonRetryResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DungeonSkipStartAssignUnitResponse
 {
     [Key("update_data_list")]
@@ -2333,7 +2334,7 @@ public partial class DungeonSkipStartAssignUnitResponse
     public DungeonSkipStartAssignUnitResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DungeonSkipStartMultipleQuestAssignUnitResponse
 {
     [Key("update_data_list")]
@@ -2364,7 +2365,7 @@ public partial class DungeonSkipStartMultipleQuestAssignUnitResponse
     public DungeonSkipStartMultipleQuestAssignUnitResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DungeonSkipStartMultipleQuestResponse
 {
     [Key("update_data_list")]
@@ -2395,7 +2396,7 @@ public partial class DungeonSkipStartMultipleQuestResponse
     public DungeonSkipStartMultipleQuestResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DungeonSkipStartResponse
 {
     [Key("update_data_list")]
@@ -2426,7 +2427,7 @@ public partial class DungeonSkipStartResponse
     public DungeonSkipStartResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DungeonStartStartAssignUnitResponse
 {
     [Key("ingame_data")]
@@ -2457,7 +2458,7 @@ public partial class DungeonStartStartAssignUnitResponse
     public DungeonStartStartAssignUnitResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DungeonStartStartMultiAssignUnitResponse
 {
     [Key("ingame_data")]
@@ -2488,7 +2489,7 @@ public partial class DungeonStartStartMultiAssignUnitResponse
     public DungeonStartStartMultiAssignUnitResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DungeonStartStartMultiResponse
 {
     [Key("ingame_data")]
@@ -2519,7 +2520,7 @@ public partial class DungeonStartStartMultiResponse
     public DungeonStartStartMultiResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class DungeonStartStartResponse
 {
     [Key("ingame_data")]
@@ -2550,7 +2551,7 @@ public partial class DungeonStartStartResponse
     public DungeonStartStartResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class EarnEventEntryResponse
 {
     [Key("earn_event_user_data")]
@@ -2576,7 +2577,7 @@ public partial class EarnEventEntryResponse
     public EarnEventEntryResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class EarnEventGetEventDataResponse
 {
     [Key("earn_event_user_data")]
@@ -2602,7 +2603,7 @@ public partial class EarnEventGetEventDataResponse
     public EarnEventGetEventDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class EarnEventReceiveEventPointRewardResponse
 {
     [Key("event_reward_list")]
@@ -2633,7 +2634,7 @@ public partial class EarnEventReceiveEventPointRewardResponse
     public EarnEventReceiveEventPointRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class EmblemGetListResponse
 {
     [Key("emblem_list")]
@@ -2647,7 +2648,7 @@ public partial class EmblemGetListResponse
     public EmblemGetListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class EmblemSetResponse
 {
     [Key("result")]
@@ -2661,7 +2662,7 @@ public partial class EmblemSetResponse
     public EmblemSetResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class EulaAgreeAgreeResponse
 {
     [Key("version_hash")]
@@ -2680,7 +2681,7 @@ public partial class EulaAgreeAgreeResponse
     public EulaAgreeAgreeResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class EulaGetVersionListResponse
 {
     [Key("version_hash_list")]
@@ -2694,7 +2695,7 @@ public partial class EulaGetVersionListResponse
     public EulaGetVersionListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class EulaGetVersionResponse
 {
     [Key("version_hash")]
@@ -2721,7 +2722,7 @@ public partial class EulaGetVersionResponse
     public EulaGetVersionResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class EventDamageGetTotalDamageHistoryResponse
 {
     [Key("event_damage_history_list")]
@@ -2737,7 +2738,7 @@ public partial class EventDamageGetTotalDamageHistoryResponse
     public EventDamageGetTotalDamageHistoryResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class EventDamageReceiveDamageRewardResponse
 {
     [Key("update_data_list")]
@@ -2763,7 +2764,7 @@ public partial class EventDamageReceiveDamageRewardResponse
     public EventDamageReceiveDamageRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class EventStoryReadResponse
 {
     [Key("event_story_reward_list")]
@@ -2789,7 +2790,7 @@ public partial class EventStoryReadResponse
     public EventStoryReadResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class EventSummonExecResponse
 {
     [Key("box_summon_result")]
@@ -2815,7 +2816,7 @@ public partial class EventSummonExecResponse
     public EventSummonExecResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class EventSummonGetDataResponse
 {
     [Key("box_summon_data")]
@@ -2829,7 +2830,7 @@ public partial class EventSummonGetDataResponse
     public EventSummonGetDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class EventSummonResetResponse
 {
     [Key("box_summon_data")]
@@ -2843,7 +2844,7 @@ public partial class EventSummonResetResponse
     public EventSummonResetResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class EventTradeGetListResponse
 {
     [Key("user_event_trade_list")]
@@ -2874,7 +2875,7 @@ public partial class EventTradeGetListResponse
     public EventTradeGetListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class EventTradeTradeResponse
 {
     [Key("user_event_trade_list")]
@@ -2915,7 +2916,7 @@ public partial class EventTradeTradeResponse
     public EventTradeTradeResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ExHunterEventEntryResponse
 {
     [Key("ex_hunter_event_user_data")]
@@ -2941,7 +2942,7 @@ public partial class ExHunterEventEntryResponse
     public ExHunterEventEntryResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ExHunterEventGetEventDataResponse
 {
     [Key("ex_hunter_event_user_data")]
@@ -2972,7 +2973,7 @@ public partial class ExHunterEventGetEventDataResponse
     public ExHunterEventGetEventDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ExHunterEventReceiveExHunterPointRewardResponse
 {
     [Key("ex_hunter_event_reward_list")]
@@ -2998,7 +2999,7 @@ public partial class ExHunterEventReceiveExHunterPointRewardResponse
     public ExHunterEventReceiveExHunterPointRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ExRushEventEntryResponse
 {
     [Key("ex_rush_event_user_data")]
@@ -3024,7 +3025,7 @@ public partial class ExRushEventEntryResponse
     public ExRushEventEntryResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ExRushEventGetEventDataResponse
 {
     [Key("ex_rush_event_user_data")]
@@ -3050,7 +3051,7 @@ public partial class ExRushEventGetEventDataResponse
     public ExRushEventGetEventDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ExchangeGetUnitListResponse
 {
     [Key("select_unit_list")]
@@ -3064,7 +3065,7 @@ public partial class ExchangeGetUnitListResponse
     public ExchangeGetUnitListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ExchangeSelectUnitResponse
 {
     [Key("update_data_list")]
@@ -3082,7 +3083,7 @@ public partial class ExchangeSelectUnitResponse
     public ExchangeSelectUnitResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FortAddCarpenterResponse
 {
     [Key("result")]
@@ -3108,7 +3109,7 @@ public partial class FortAddCarpenterResponse
     public FortAddCarpenterResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FortBuildAtOnceResponse
 {
     [Key("result")]
@@ -3159,7 +3160,7 @@ public partial class FortBuildAtOnceResponse
     public FortBuildAtOnceResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FortBuildCancelResponse
 {
     [Key("result")]
@@ -3190,7 +3191,7 @@ public partial class FortBuildCancelResponse
     public FortBuildCancelResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FortBuildEndResponse
 {
     [Key("result")]
@@ -3241,7 +3242,7 @@ public partial class FortBuildEndResponse
     public FortBuildEndResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FortBuildStartResponse
 {
     [Key("result")]
@@ -3292,7 +3293,7 @@ public partial class FortBuildStartResponse
     public FortBuildStartResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FortGetDataResponse
 {
     [Key("fort_detail")]
@@ -3343,7 +3344,7 @@ public partial class FortGetDataResponse
     public FortGetDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FortGetMultiIncomeResponse
 {
     [Key("result")]
@@ -3396,7 +3397,7 @@ public partial class FortGetMultiIncomeResponse
     public FortGetMultiIncomeResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FortLevelupAtOnceResponse
 {
     [Key("result")]
@@ -3457,7 +3458,7 @@ public partial class FortLevelupAtOnceResponse
     public FortLevelupAtOnceResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FortLevelupCancelResponse
 {
     [Key("result")]
@@ -3488,7 +3489,7 @@ public partial class FortLevelupCancelResponse
     public FortLevelupCancelResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FortLevelupEndResponse
 {
     [Key("result")]
@@ -3549,7 +3550,7 @@ public partial class FortLevelupEndResponse
     public FortLevelupEndResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FortLevelupStartResponse
 {
     [Key("result")]
@@ -3600,7 +3601,7 @@ public partial class FortLevelupStartResponse
     public FortLevelupStartResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FortMoveResponse
 {
     [Key("result")]
@@ -3646,7 +3647,7 @@ public partial class FortMoveResponse
     public FortMoveResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FortSetNewFortPlantResponse
 {
     [Key("result")]
@@ -3664,7 +3665,7 @@ public partial class FortSetNewFortPlantResponse
     public FortSetNewFortPlantResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FriendAllReplyDenyResponse
 {
     [Key("result")]
@@ -3690,7 +3691,7 @@ public partial class FriendAllReplyDenyResponse
     public FriendAllReplyDenyResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FriendApplyListResponse
 {
     [Key("result")]
@@ -3716,7 +3717,7 @@ public partial class FriendApplyListResponse
     public FriendApplyListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FriendAutoSearchResponse
 {
     [Key("result")]
@@ -3734,7 +3735,7 @@ public partial class FriendAutoSearchResponse
     public FriendAutoSearchResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FriendDeleteResponse
 {
     [Key("result")]
@@ -3748,7 +3749,7 @@ public partial class FriendDeleteResponse
     public FriendDeleteResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FriendFriendIndexResponse
 {
     [Key("update_data_list")]
@@ -3774,7 +3775,7 @@ public partial class FriendFriendIndexResponse
     public FriendFriendIndexResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FriendFriendListResponse
 {
     [Key("result")]
@@ -3800,7 +3801,7 @@ public partial class FriendFriendListResponse
     public FriendFriendListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FriendGetSupportCharaDetailResponse
 {
     [Key("support_user_data_detail")]
@@ -3814,7 +3815,7 @@ public partial class FriendGetSupportCharaDetailResponse
     public FriendGetSupportCharaDetailResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FriendGetSupportCharaResponse
 {
     [Key("result")]
@@ -3832,7 +3833,7 @@ public partial class FriendGetSupportCharaResponse
     public FriendGetSupportCharaResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FriendIdSearchResponse
 {
     [Key("result")]
@@ -3850,7 +3851,7 @@ public partial class FriendIdSearchResponse
     public FriendIdSearchResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FriendReplyResponse
 {
     [Key("result")]
@@ -3872,7 +3873,7 @@ public partial class FriendReplyResponse
     public FriendReplyResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FriendRequestCancelResponse
 {
     [Key("result")]
@@ -3886,7 +3887,7 @@ public partial class FriendRequestCancelResponse
     public FriendRequestCancelResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FriendRequestListResponse
 {
     [Key("result")]
@@ -3904,7 +3905,7 @@ public partial class FriendRequestListResponse
     public FriendRequestListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FriendRequestResponse
 {
     [Key("result")]
@@ -3922,7 +3923,7 @@ public partial class FriendRequestResponse
     public FriendRequestResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class FriendSetSupportCharaResponse
 {
     [Key("result")]
@@ -3948,7 +3949,7 @@ public partial class FriendSetSupportCharaResponse
     public FriendSetSupportCharaResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildChatGetNewMessageListResponse
 {
     [Key("guild_chat_message_list")]
@@ -3969,7 +3970,7 @@ public partial class GuildChatGetNewMessageListResponse
     public GuildChatGetNewMessageListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildChatGetOldMessageListResponse
 {
     [Key("guild_chat_message_list")]
@@ -3985,7 +3986,7 @@ public partial class GuildChatGetOldMessageListResponse
     public GuildChatGetOldMessageListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildChatPostMessageStampResponse
 {
     [Key("guild_chat_message_list")]
@@ -4006,7 +4007,7 @@ public partial class GuildChatPostMessageStampResponse
     public GuildChatPostMessageStampResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildChatPostMessageTextResponse
 {
     [Key("guild_chat_message_list")]
@@ -4027,7 +4028,7 @@ public partial class GuildChatPostMessageTextResponse
     public GuildChatPostMessageTextResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildChatPostReportResponse
 {
     [Key("result")]
@@ -4041,7 +4042,7 @@ public partial class GuildChatPostReportResponse
     public GuildChatPostReportResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildDisbandResponse
 {
     [Key("update_data_list")]
@@ -4055,7 +4056,7 @@ public partial class GuildDisbandResponse
     public GuildDisbandResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildDropMemberResponse
 {
     [Key("guild_member_list")]
@@ -4069,7 +4070,7 @@ public partial class GuildDropMemberResponse
     public GuildDropMemberResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildEstablishResponse
 {
     [Key("update_data_list")]
@@ -4090,7 +4091,7 @@ public partial class GuildEstablishResponse
     public GuildEstablishResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildGetGuildApplyDataResponse
 {
     [Key("guild_apply_list")]
@@ -4104,7 +4105,7 @@ public partial class GuildGetGuildApplyDataResponse
     public GuildGetGuildApplyDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildGetGuildMemberDataResponse
 {
     [Key("guild_member_list")]
@@ -4118,7 +4119,7 @@ public partial class GuildGetGuildMemberDataResponse
     public GuildGetGuildMemberDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildIndexResponse
 {
     [Key("update_data_list")]
@@ -4180,7 +4181,7 @@ public partial class GuildIndexResponse
     public GuildIndexResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildInviteGetGuildInviteReceiveDataResponse
 {
     [Key("guild_invite_receive_list")]
@@ -4196,7 +4197,7 @@ public partial class GuildInviteGetGuildInviteReceiveDataResponse
     public GuildInviteGetGuildInviteReceiveDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildInviteGetGuildInviteSendDataResponse
 {
     [Key("guild_invite_send_list")]
@@ -4212,7 +4213,7 @@ public partial class GuildInviteGetGuildInviteSendDataResponse
     public GuildInviteGetGuildInviteSendDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildInviteInviteCancelResponse
 {
     [Key("guild_invite_send_list")]
@@ -4226,7 +4227,7 @@ public partial class GuildInviteInviteCancelResponse
     public GuildInviteInviteCancelResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildInviteInviteReplyAllDenyResponse
 {
     [Key("update_data_list")]
@@ -4247,7 +4248,7 @@ public partial class GuildInviteInviteReplyAllDenyResponse
     public GuildInviteInviteReplyAllDenyResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildInviteInviteReplyResponse
 {
     [Key("update_data_list")]
@@ -4268,7 +4269,7 @@ public partial class GuildInviteInviteReplyResponse
     public GuildInviteInviteReplyResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildInviteInviteSendResponse
 {
     [Key("guild_invite_send_list")]
@@ -4282,7 +4283,7 @@ public partial class GuildInviteInviteSendResponse
     public GuildInviteInviteSendResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildJoinReplyAllDenyResponse
 {
     [Key("guild_apply_list")]
@@ -4296,7 +4297,7 @@ public partial class GuildJoinReplyAllDenyResponse
     public GuildJoinReplyAllDenyResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildJoinReplyResponse
 {
     [Key("guild_member_list")]
@@ -4317,7 +4318,7 @@ public partial class GuildJoinReplyResponse
     public GuildJoinReplyResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildJoinRequestCancelResponse
 {
     [Key("update_data_list")]
@@ -4331,7 +4332,7 @@ public partial class GuildJoinRequestCancelResponse
     public GuildJoinRequestCancelResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildJoinRequestResponse
 {
     [Key("update_data_list")]
@@ -4345,7 +4346,7 @@ public partial class GuildJoinRequestResponse
     public GuildJoinRequestResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildJoinResponse
 {
     [Key("update_data_list")]
@@ -4366,7 +4367,7 @@ public partial class GuildJoinResponse
     public GuildJoinResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildPostReportResponse
 {
     [Key("result")]
@@ -4380,7 +4381,7 @@ public partial class GuildPostReportResponse
     public GuildPostReportResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildResignResponse
 {
     [Key("update_data_list")]
@@ -4394,7 +4395,7 @@ public partial class GuildResignResponse
     public GuildResignResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildSearchAutoSearchResponse
 {
     [Key("auto_search_guild_list")]
@@ -4408,7 +4409,7 @@ public partial class GuildSearchAutoSearchResponse
     public GuildSearchAutoSearchResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildSearchGetGuildDetailResponse
 {
     [Key("search_guild_list")]
@@ -4422,7 +4423,7 @@ public partial class GuildSearchGetGuildDetailResponse
     public GuildSearchGetGuildDetailResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildSearchIdSearchResponse
 {
     [Key("search_guild_list")]
@@ -4436,7 +4437,7 @@ public partial class GuildSearchIdSearchResponse
     public GuildSearchIdSearchResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildSearchNameSearchResponse
 {
     [Key("search_guild_list")]
@@ -4450,7 +4451,7 @@ public partial class GuildSearchNameSearchResponse
     public GuildSearchNameSearchResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildUpdateGuildPositionTypeResponse
 {
     [Key("guild_member_list")]
@@ -4464,7 +4465,7 @@ public partial class GuildUpdateGuildPositionTypeResponse
     public GuildUpdateGuildPositionTypeResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildUpdateGuildSettingResponse
 {
     [Key("update_data_list")]
@@ -4478,7 +4479,7 @@ public partial class GuildUpdateGuildSettingResponse
     public GuildUpdateGuildSettingResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class GuildUpdateUserSettingResponse
 {
     [Key("update_data_list")]
@@ -4492,7 +4493,7 @@ public partial class GuildUpdateUserSettingResponse
     public GuildUpdateUserSettingResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class InquiryAggregationResponse
 {
     [Key("result")]
@@ -4506,7 +4507,7 @@ public partial class InquiryAggregationResponse
     public InquiryAggregationResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class InquiryDetailResponse
 {
     [Key("opinion_id")]
@@ -4547,13 +4548,13 @@ public partial class InquiryDetailResponse
     public InquiryDetailResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class InquiryReplyResponse { }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class InquirySendResponse { }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class InquiryTopResponse
 {
     [Key("opinion_list")]
@@ -4579,7 +4580,7 @@ public partial class InquiryTopResponse
     public InquiryTopResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ItemGetListResponse
 {
     [Key("item_list")]
@@ -4593,7 +4594,7 @@ public partial class ItemGetListResponse
     public ItemGetListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ItemUseRecoveryStaminaResponse
 {
     [Key("update_data_list")]
@@ -4619,7 +4620,7 @@ public partial class ItemUseRecoveryStaminaResponse
     public ItemUseRecoveryStaminaResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class LoadIndexResponse
 {
     [Key("user_data")]
@@ -4737,9 +4738,11 @@ public partial class LoadIndexResponse
     public IEnumerable<FortPlantList> FortPlantList { get; set; } = [];
 
     [Key("user_guild_data")]
+    [JsonIgnore]
     public UserGuildData UserGuildData { get; set; }
 
     [Key("guild_data")]
+    [JsonIgnore]
     public GuildData GuildData { get; set; }
 
     [Key("present_notice")]
@@ -4935,7 +4938,7 @@ public partial class LoadIndexResponse
     public LoadIndexResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class LoginIndexResponse
 {
     [Key("login_bonus_list")]
@@ -5001,7 +5004,7 @@ public partial class LoginIndexResponse
     public LoginIndexResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class LoginPenaltyConfirmResponse
 {
     [Key("result")]
@@ -5019,10 +5022,10 @@ public partial class LoginPenaltyConfirmResponse
     public LoginPenaltyConfirmResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class LoginVerifyJwsResponse { }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class LotteryGetOddsDataResponse
 {
     [Key("lottery_odds_rate_list")]
@@ -5036,7 +5039,7 @@ public partial class LotteryGetOddsDataResponse
     public LotteryGetOddsDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class LotteryLotteryExecResponse
 {
     [Key("update_data_list")]
@@ -5062,7 +5065,7 @@ public partial class LotteryLotteryExecResponse
     public LotteryLotteryExecResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class LotteryResultResponse
 {
     [Key("lottery_result_list")]
@@ -5076,7 +5079,7 @@ public partial class LotteryResultResponse
     public LotteryResultResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MaintenanceGetTextResponse
 {
     [Key("maintenance_text")]
@@ -5090,7 +5093,7 @@ public partial class MaintenanceGetTextResponse
     public MaintenanceGetTextResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MatchingCheckPenaltyUserResponse
 {
     [Key("result")]
@@ -5104,7 +5107,7 @@ public partial class MatchingCheckPenaltyUserResponse
     public MatchingCheckPenaltyUserResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MatchingGetRoomListByGuildResponse
 {
     [Key("room_list")]
@@ -5118,7 +5121,7 @@ public partial class MatchingGetRoomListByGuildResponse
     public MatchingGetRoomListByGuildResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MatchingGetRoomListByLocationResponse
 {
     [Key("room_list")]
@@ -5132,7 +5135,7 @@ public partial class MatchingGetRoomListByLocationResponse
     public MatchingGetRoomListByLocationResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MatchingGetRoomListByQuestIdResponse
 {
     [Key("room_list")]
@@ -5146,7 +5149,7 @@ public partial class MatchingGetRoomListByQuestIdResponse
     public MatchingGetRoomListByQuestIdResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MatchingGetRoomListResponse
 {
     [Key("room_list")]
@@ -5177,7 +5180,7 @@ public partial class MatchingGetRoomListResponse
     public MatchingGetRoomListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MatchingGetRoomNameResponse
 {
     [Key("room_name")]
@@ -5214,7 +5217,7 @@ public partial class MatchingGetRoomNameResponse
     public MatchingGetRoomNameResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MazeEventEntryResponse
 {
     [Key("maze_event_user_data")]
@@ -5228,7 +5231,7 @@ public partial class MazeEventEntryResponse
     public MazeEventEntryResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MazeEventGetEventDataResponse
 {
     [Key("maze_event_user_data")]
@@ -5254,7 +5257,7 @@ public partial class MazeEventGetEventDataResponse
     public MazeEventGetEventDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MazeEventReceiveMazePointRewardResponse
 {
     [Key("maze_event_reward_list")]
@@ -5286,7 +5289,7 @@ public partial class MazeEventReceiveMazePointRewardResponse
     public MazeEventReceiveMazePointRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MemoryEventActivateResponse
 {
     [Key("result")]
@@ -5312,7 +5315,7 @@ public partial class MemoryEventActivateResponse
     public MemoryEventActivateResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MissionGetDrillMissionListResponse
 {
     [Key("drill_mission_list")]
@@ -5338,7 +5341,7 @@ public partial class MissionGetDrillMissionListResponse
     public MissionGetDrillMissionListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MissionGetMissionListResponse
 {
     [Key("normal_mission_list")]
@@ -5404,7 +5407,7 @@ public partial class MissionGetMissionListResponse
     public MissionGetMissionListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MissionReceiveAlbumRewardResponse
 {
     [Key("normal_mission_list")]
@@ -5480,7 +5483,7 @@ public partial class MissionReceiveAlbumRewardResponse
     public MissionReceiveAlbumRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MissionReceiveBeginnerRewardResponse
 {
     [Key("normal_mission_list")]
@@ -5556,7 +5559,7 @@ public partial class MissionReceiveBeginnerRewardResponse
     public MissionReceiveBeginnerRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MissionReceiveDailyRewardResponse
 {
     [Key("normal_mission_list")]
@@ -5633,7 +5636,7 @@ public partial class MissionReceiveDailyRewardResponse
     public MissionReceiveDailyRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MissionReceiveDrillRewardResponse
 {
     [Key("drill_mission_list")]
@@ -5685,7 +5688,7 @@ public partial class MissionReceiveDrillRewardResponse
     public MissionReceiveDrillRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MissionReceiveMainStoryRewardResponse
 {
     [Key("normal_mission_list")]
@@ -5761,7 +5764,7 @@ public partial class MissionReceiveMainStoryRewardResponse
     public MissionReceiveMainStoryRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MissionReceiveMemoryEventRewardResponse
 {
     [Key("normal_mission_list")]
@@ -5837,7 +5840,7 @@ public partial class MissionReceiveMemoryEventRewardResponse
     public MissionReceiveMemoryEventRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MissionReceiveNormalRewardResponse
 {
     [Key("normal_mission_list")]
@@ -5913,7 +5916,7 @@ public partial class MissionReceiveNormalRewardResponse
     public MissionReceiveNormalRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MissionReceivePeriodRewardResponse
 {
     [Key("normal_mission_list")]
@@ -5989,7 +5992,7 @@ public partial class MissionReceivePeriodRewardResponse
     public MissionReceivePeriodRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MissionReceiveSpecialRewardResponse
 {
     [Key("normal_mission_list")]
@@ -6065,7 +6068,7 @@ public partial class MissionReceiveSpecialRewardResponse
     public MissionReceiveSpecialRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MissionUnlockDrillMissionGroupResponse
 {
     [Key("drill_mission_list")]
@@ -6091,7 +6094,7 @@ public partial class MissionUnlockDrillMissionGroupResponse
     public MissionUnlockDrillMissionGroupResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MissionUnlockMainStoryGroupResponse
 {
     [Key("main_story_mission_list")]
@@ -6118,7 +6121,7 @@ public partial class MissionUnlockMainStoryGroupResponse
     public MissionUnlockMainStoryGroupResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class MypageInfoResponse
 {
     [Key("present_cnt")]
@@ -6199,7 +6202,7 @@ public partial class MypageInfoResponse
     public MypageInfoResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class OptionGetOptionResponse
 {
     [Key("option_data")]
@@ -6213,7 +6216,7 @@ public partial class OptionGetOptionResponse
     public OptionGetOptionResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class OptionSetOptionResponse
 {
     [Key("option_data")]
@@ -6227,7 +6230,7 @@ public partial class OptionSetOptionResponse
     public OptionSetOptionResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class PartyIndexResponse
 {
     [Key("build_list")]
@@ -6241,7 +6244,7 @@ public partial class PartyIndexResponse
     public PartyIndexResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class PartySetMainPartyNoResponse
 {
     [Key("main_party_no")]
@@ -6255,7 +6258,7 @@ public partial class PartySetMainPartyNoResponse
     public PartySetMainPartyNoResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class PartySetPartySettingResponse
 {
     [Key("update_data_list")]
@@ -6273,7 +6276,7 @@ public partial class PartySetPartySettingResponse
     public PartySetPartySettingResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class PartyUpdatePartyNameResponse
 {
     [Key("update_data_list")]
@@ -6291,7 +6294,7 @@ public partial class PartyUpdatePartyNameResponse
     public PartyUpdatePartyNameResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class PlatformAchievementGetPlatformAchievementListResponse
 {
     [Key("achievement_list")]
@@ -6307,7 +6310,7 @@ public partial class PlatformAchievementGetPlatformAchievementListResponse
     public PlatformAchievementGetPlatformAchievementListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class PresentGetHistoryListResponse
 {
     [Key("present_history_list")]
@@ -6321,7 +6324,7 @@ public partial class PresentGetHistoryListResponse
     public PresentGetHistoryListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class PresentGetPresentListResponse
 {
     [Key("present_list")]
@@ -6352,7 +6355,7 @@ public partial class PresentGetPresentListResponse
     public PresentGetPresentListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class PresentReceiveResponse
 {
     [Key("receive_present_id_list")]
@@ -6408,7 +6411,7 @@ public partial class PresentReceiveResponse
     public PresentReceiveResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class PushNotificationUpdateSettingResponse
 {
     [Key("result")]
@@ -6422,7 +6425,7 @@ public partial class PushNotificationUpdateSettingResponse
     public PushNotificationUpdateSettingResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class QuestDropListResponse
 {
     [Key("quest_drop_info")]
@@ -6436,7 +6439,7 @@ public partial class QuestDropListResponse
     public QuestDropListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class QuestGetQuestClearPartyMultiResponse
 {
     [Key("quest_multi_clear_party_setting_list")]
@@ -6457,7 +6460,7 @@ public partial class QuestGetQuestClearPartyMultiResponse
     public QuestGetQuestClearPartyMultiResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class QuestGetQuestClearPartyResponse
 {
     [Key("quest_clear_party_setting_list")]
@@ -6478,7 +6481,7 @@ public partial class QuestGetQuestClearPartyResponse
     public QuestGetQuestClearPartyResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class QuestGetSupportUserListResponse
 {
     [Key("support_user_list")]
@@ -6499,7 +6502,7 @@ public partial class QuestGetSupportUserListResponse
     public QuestGetSupportUserListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class QuestOpenTreasureResponse
 {
     [Key("update_data_list")]
@@ -6545,7 +6548,7 @@ public partial class QuestOpenTreasureResponse
     public QuestOpenTreasureResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class QuestReadStoryResponse
 {
     [Key("update_data_list")]
@@ -6576,7 +6579,7 @@ public partial class QuestReadStoryResponse
     public QuestReadStoryResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class QuestSearchQuestClearPartyCharaMultiResponse
 {
     [Key("search_quest_clear_party_chara_list")]
@@ -6592,7 +6595,7 @@ public partial class QuestSearchQuestClearPartyCharaMultiResponse
     public QuestSearchQuestClearPartyCharaMultiResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class QuestSearchQuestClearPartyCharaResponse
 {
     [Key("search_quest_clear_party_chara_list")]
@@ -6608,7 +6611,7 @@ public partial class QuestSearchQuestClearPartyCharaResponse
     public QuestSearchQuestClearPartyCharaResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class QuestSearchQuestClearPartyMultiResponse
 {
     [Key("search_quest_clear_party_list")]
@@ -6624,7 +6627,7 @@ public partial class QuestSearchQuestClearPartyMultiResponse
     public QuestSearchQuestClearPartyMultiResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class QuestSearchQuestClearPartyResponse
 {
     [Key("search_quest_clear_party_list")]
@@ -6640,7 +6643,7 @@ public partial class QuestSearchQuestClearPartyResponse
     public QuestSearchQuestClearPartyResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class QuestSetQuestClearPartyMultiResponse
 {
     [Key("result")]
@@ -6654,7 +6657,7 @@ public partial class QuestSetQuestClearPartyMultiResponse
     public QuestSetQuestClearPartyMultiResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class QuestSetQuestClearPartyResponse
 {
     [Key("result")]
@@ -6668,7 +6671,7 @@ public partial class QuestSetQuestClearPartyResponse
     public QuestSetQuestClearPartyResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class RaidEventEntryResponse
 {
     [Key("raid_event_user_data")]
@@ -6694,7 +6697,7 @@ public partial class RaidEventEntryResponse
     public RaidEventEntryResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class RaidEventGetEventDataResponse
 {
     [Key("raid_event_user_data")]
@@ -6746,7 +6749,7 @@ public partial class RaidEventGetEventDataResponse
     public RaidEventGetEventDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class RaidEventReceiveRaidPointRewardResponse
 {
     [Key("raid_event_reward_list")]
@@ -6772,7 +6775,7 @@ public partial class RaidEventReceiveRaidPointRewardResponse
     public RaidEventReceiveRaidPointRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class RedoableSummonFixExecResponse
 {
     [Key("user_redoable_summon_data")]
@@ -6798,7 +6801,7 @@ public partial class RedoableSummonFixExecResponse
     public RedoableSummonFixExecResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class RedoableSummonGetDataResponse
 {
     [Key("user_redoable_summon_data")]
@@ -6819,7 +6822,7 @@ public partial class RedoableSummonGetDataResponse
     public RedoableSummonGetDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class RedoableSummonPreExecResponse
 {
     [Key("user_redoable_summon_data")]
@@ -6833,7 +6836,7 @@ public partial class RedoableSummonPreExecResponse
     public RedoableSummonPreExecResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class RepeatEndResponse
 {
     [Key("update_data_list")]
@@ -6864,7 +6867,7 @@ public partial class RepeatEndResponse
     public RepeatEndResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ShopChargeCancelResponse
 {
     [Key("is_quest_bonus")]
@@ -6948,7 +6951,7 @@ public partial class ShopChargeCancelResponse
     public ShopChargeCancelResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ShopGetBonusResponse
 {
     [Key("is_quest_bonus")]
@@ -7002,7 +7005,7 @@ public partial class ShopGetBonusResponse
     public ShopGetBonusResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ShopGetDreamSelectUnitListResponse
 {
     [Key("dream_select_unit_list")]
@@ -7018,7 +7021,7 @@ public partial class ShopGetDreamSelectUnitListResponse
     public ShopGetDreamSelectUnitListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ShopGetListResponse
 {
     [Key("is_quest_bonus")]
@@ -7102,7 +7105,7 @@ public partial class ShopGetListResponse
     public ShopGetListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ShopGetProductListResponse
 {
     [Key("product_list")]
@@ -7128,7 +7131,7 @@ public partial class ShopGetProductListResponse
     public ShopGetProductListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ShopItemSummonExecResponse
 {
     [Key("user_item_summon")]
@@ -7159,7 +7162,7 @@ public partial class ShopItemSummonExecResponse
     public ShopItemSummonExecResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ShopItemSummonOddResponse
 {
     [Key("item_summon_rate_list")]
@@ -7173,7 +7176,7 @@ public partial class ShopItemSummonOddResponse
     public ShopItemSummonOddResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ShopMaterialShopPurchaseResponse
 {
     [Key("is_quest_bonus")]
@@ -7212,7 +7215,7 @@ public partial class ShopMaterialShopPurchaseResponse
     public ShopMaterialShopPurchaseResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ShopNormalShopPurchaseResponse
 {
     [Key("is_quest_bonus")]
@@ -7251,7 +7254,7 @@ public partial class ShopNormalShopPurchaseResponse
     public ShopNormalShopPurchaseResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ShopPreChargeCheckResponse
 {
     [Key("is_quest_bonus")]
@@ -7341,7 +7344,7 @@ public partial class ShopPreChargeCheckResponse
     public ShopPreChargeCheckResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ShopSpecialShopPurchaseResponse
 {
     [Key("is_quest_bonus")]
@@ -7395,7 +7398,7 @@ public partial class ShopSpecialShopPurchaseResponse
     public ShopSpecialShopPurchaseResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class SimpleEventEntryResponse
 {
     [Key("simple_event_user_data")]
@@ -7421,7 +7424,7 @@ public partial class SimpleEventEntryResponse
     public SimpleEventEntryResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class SimpleEventGetEventDataResponse
 {
     [Key("simple_event_user_data")]
@@ -7442,7 +7445,7 @@ public partial class SimpleEventGetEventDataResponse
     public SimpleEventGetEventDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class StampGetStampResponse
 {
     [Key("stamp_list")]
@@ -7456,7 +7459,7 @@ public partial class StampGetStampResponse
     public StampGetStampResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class StampSetEquipStampResponse
 {
     [Key("result")]
@@ -7474,7 +7477,7 @@ public partial class StampSetEquipStampResponse
     public StampSetEquipStampResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class StoryReadResponse
 {
     [Key("unit_story_reward_list")]
@@ -7505,7 +7508,7 @@ public partial class StoryReadResponse
     public StoryReadResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class StorySkipSkipResponse
 {
     [Key("result_state")]
@@ -7519,7 +7522,7 @@ public partial class StorySkipSkipResponse
     public StorySkipSkipResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class SuggestionGetCategoryListResponse
 {
     [Key("category_list")]
@@ -7533,10 +7536,10 @@ public partial class SuggestionGetCategoryListResponse
     public SuggestionGetCategoryListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class SuggestionSetResponse { }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class SummonExcludeGetListResponse
 {
     [Key("summon_exclude_unit_list")]
@@ -7550,7 +7553,7 @@ public partial class SummonExcludeGetListResponse
     public SummonExcludeGetListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class SummonExcludeGetOddsDataResponse
 {
     [Key("odds_rate_list")]
@@ -7571,7 +7574,7 @@ public partial class SummonExcludeGetOddsDataResponse
     public SummonExcludeGetOddsDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class SummonExcludeRequestResponse
 {
     [Key("result_unit_list")]
@@ -7627,7 +7630,7 @@ public partial class SummonExcludeRequestResponse
     public SummonExcludeRequestResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class SummonGetOddsDataResponse
 {
     [Key("odds_rate_list")]
@@ -7648,7 +7651,7 @@ public partial class SummonGetOddsDataResponse
     public SummonGetOddsDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class SummonGetSummonHistoryResponse
 {
     [Key("summon_history_list")]
@@ -7662,7 +7665,7 @@ public partial class SummonGetSummonHistoryResponse
     public SummonGetSummonHistoryResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class SummonGetSummonListResponse
 {
     [Key("summon_list")]
@@ -7733,7 +7736,7 @@ public partial class SummonGetSummonListResponse
     public SummonGetSummonListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class SummonGetSummonPointTradeResponse
 {
     [Key("summon_point_trade_list")]
@@ -7764,7 +7767,7 @@ public partial class SummonGetSummonPointTradeResponse
     public SummonGetSummonPointTradeResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class SummonRequestResponse
 {
     [Key("result_unit_list")]
@@ -7820,7 +7823,7 @@ public partial class SummonRequestResponse
     public SummonRequestResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class SummonSummonPointTradeResponse
 {
     [Key("exchange_entity_list")]
@@ -7841,7 +7844,7 @@ public partial class SummonSummonPointTradeResponse
     public SummonSummonPointTradeResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class TalismanSellResponse
 {
     [Key("delete_data_list")]
@@ -7867,7 +7870,7 @@ public partial class TalismanSellResponse
     public TalismanSellResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class TalismanSetLockResponse
 {
     [Key("update_data_list")]
@@ -7885,7 +7888,7 @@ public partial class TalismanSetLockResponse
     public TalismanSetLockResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class TimeAttackRankingGetDataResponse
 {
     [Key("ranking_tier_reward_list")]
@@ -7901,7 +7904,7 @@ public partial class TimeAttackRankingGetDataResponse
     public TimeAttackRankingGetDataResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class TimeAttackRankingReceiveTierRewardResponse
 {
     [Key("ranking_tier_reward_list")]
@@ -7933,7 +7936,7 @@ public partial class TimeAttackRankingReceiveTierRewardResponse
     public TimeAttackRankingReceiveTierRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ToolAuthResponse
 {
     [Key("viewer_id")]
@@ -7955,7 +7958,7 @@ public partial class ToolAuthResponse
     public ToolAuthResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ToolGetMaintenanceTimeResponse
 {
     [Key("maintenance_start_time")]
@@ -7976,7 +7979,7 @@ public partial class ToolGetMaintenanceTimeResponse
     public ToolGetMaintenanceTimeResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ToolGetServiceStatusResponse
 {
     [Key("service_status")]
@@ -7990,7 +7993,7 @@ public partial class ToolGetServiceStatusResponse
     public ToolGetServiceStatusResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ToolReauthResponse
 {
     [Key("viewer_id")]
@@ -8012,25 +8015,25 @@ public partial class ToolReauthResponse
     public ToolReauthResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class ToolSignupResponse
 {
     [Key("viewer_id")]
     public ulong ViewerId { get; set; }
 
     [Key("servertime")]
-    public int Servertime { get; set; }
+    public DateTimeOffset ServerTime { get; set; }
 
-    public ToolSignupResponse(ulong viewerId, int servertime)
+    public ToolSignupResponse(ulong viewerId, int serverTime)
     {
         this.ViewerId = viewerId;
-        this.Servertime = servertime;
+        this.ServerTime = serverTime;
     }
 
     public ToolSignupResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class TrackRecordUpdateProgressResponse
 {
     [Key("update_data_list")]
@@ -8044,7 +8047,7 @@ public partial class TrackRecordUpdateProgressResponse
     public TrackRecordUpdateProgressResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class TransitionTransitionByNAccountResponse
 {
     [Key("transition_result_data")]
@@ -8058,7 +8061,7 @@ public partial class TransitionTransitionByNAccountResponse
     public TransitionTransitionByNAccountResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class TreasureTradeGetListAllResponse
 {
     [Key("user_treasure_trade_list")]
@@ -8089,7 +8092,7 @@ public partial class TreasureTradeGetListAllResponse
     public TreasureTradeGetListAllResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class TreasureTradeGetListResponse
 {
     [Key("user_treasure_trade_list")]
@@ -8120,7 +8123,7 @@ public partial class TreasureTradeGetListResponse
     public TreasureTradeGetListResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class TreasureTradeTradeResponse
 {
     [Key("user_treasure_trade_list")]
@@ -8161,7 +8164,7 @@ public partial class TreasureTradeTradeResponse
     public TreasureTradeTradeResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class TutorialUpdateFlagsResponse
 {
     [Key("tutorial_flag_list")]
@@ -8187,7 +8190,7 @@ public partial class TutorialUpdateFlagsResponse
     public TutorialUpdateFlagsResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class TutorialUpdateStepResponse
 {
     [Key("step")]
@@ -8213,7 +8216,7 @@ public partial class TutorialUpdateStepResponse
     public TutorialUpdateStepResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class UpdateNamechangeResponse
 {
     [Key("checked_name")]
@@ -8227,7 +8230,7 @@ public partial class UpdateNamechangeResponse
     public UpdateNamechangeResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class UpdateResetNewResponse
 {
     [Key("result")]
@@ -8241,7 +8244,7 @@ public partial class UpdateResetNewResponse
     public UpdateResetNewResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class UserGetNAccountInfoResponse
 {
     [Key("update_data_list")]
@@ -8262,7 +8265,7 @@ public partial class UserGetNAccountInfoResponse
     public UserGetNAccountInfoResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class UserGetWalletBalanceResponse
 {
     [Key("wallet_balance")]
@@ -8276,7 +8279,7 @@ public partial class UserGetWalletBalanceResponse
     public UserGetWalletBalanceResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class UserLinkedNAccountResponse
 {
     [Key("update_data_list")]
@@ -8290,7 +8293,7 @@ public partial class UserLinkedNAccountResponse
     public UserLinkedNAccountResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class UserOptInSettingResponse
 {
     [Key("is_optin")]
@@ -8305,7 +8308,7 @@ public partial class UserOptInSettingResponse
     public UserOptInSettingResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class UserRecoverStaminaByStoneResponse
 {
     [Key("update_data_list")]
@@ -8331,7 +8334,7 @@ public partial class UserRecoverStaminaByStoneResponse
     public UserRecoverStaminaByStoneResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class UserWithdrawalResponse
 {
     [Key("result")]
@@ -8345,7 +8348,7 @@ public partial class UserWithdrawalResponse
     public UserWithdrawalResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class VersionGetResourceVersionResponse
 {
     [Key("resource_version")]
@@ -8359,7 +8362,7 @@ public partial class VersionGetResourceVersionResponse
     public VersionGetResourceVersionResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class WalkerSendGiftMultipleResponse
 {
     [Key("update_data_list")]
@@ -8401,7 +8404,7 @@ public partial class WalkerSendGiftMultipleResponse
     public WalkerSendGiftMultipleResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class WallFailResponse
 {
     [Key("result")]
@@ -8432,7 +8435,7 @@ public partial class WallFailResponse
     public WallFailResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class WallGetMonthlyRewardResponse
 {
     [Key("user_wall_reward_list")]
@@ -8446,7 +8449,7 @@ public partial class WallGetMonthlyRewardResponse
     public WallGetMonthlyRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class WallGetWallClearPartyResponse
 {
     [Key("wall_clear_party_setting_list")]
@@ -8467,7 +8470,7 @@ public partial class WallGetWallClearPartyResponse
     public WallGetWallClearPartyResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class WallReceiveMonthlyRewardResponse
 {
     [Key("update_data_list")]
@@ -8503,7 +8506,7 @@ public partial class WallReceiveMonthlyRewardResponse
     public WallReceiveMonthlyRewardResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class WallRecordRecordResponse
 {
     [Key("update_data_list")]
@@ -8544,7 +8547,7 @@ public partial class WallRecordRecordResponse
     public WallRecordRecordResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class WallSetWallClearPartyResponse
 {
     [Key("result")]
@@ -8558,7 +8561,7 @@ public partial class WallSetWallClearPartyResponse
     public WallSetWallClearPartyResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class WallStartStartAssignUnitResponse
 {
     [Key("ingame_data")]
@@ -8589,7 +8592,7 @@ public partial class WallStartStartAssignUnitResponse
     public WallStartStartAssignUnitResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class WallStartStartResponse
 {
     [Key("ingame_data")]
@@ -8620,7 +8623,7 @@ public partial class WallStartStartResponse
     public WallStartStartResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class WeaponBodyBuildupPieceResponse
 {
     [Key("update_data_list")]
@@ -8638,7 +8641,7 @@ public partial class WeaponBodyBuildupPieceResponse
     public WeaponBodyBuildupPieceResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class WeaponBodyCraftResponse
 {
     [Key("update_data_list")]
@@ -8656,7 +8659,7 @@ public partial class WeaponBodyCraftResponse
     public WeaponBodyCraftResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class WeaponBuildupResponse
 {
     [Key("update_data_list")]
@@ -8682,7 +8685,7 @@ public partial class WeaponBuildupResponse
     public WeaponBuildupResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class WeaponLimitBreakResponse
 {
     [Key("update_data_list")]
@@ -8708,7 +8711,7 @@ public partial class WeaponLimitBreakResponse
     public WeaponLimitBreakResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class WeaponResetPlusCountResponse
 {
     [Key("update_data_list")]
@@ -8726,7 +8729,7 @@ public partial class WeaponResetPlusCountResponse
     public WeaponResetPlusCountResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class WeaponSellResponse
 {
     [Key("delete_data_list")]
@@ -8752,7 +8755,7 @@ public partial class WeaponSellResponse
     public WeaponSellResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class WeaponSetLockResponse
 {
     [Key("update_data_list")]
@@ -8770,7 +8773,7 @@ public partial class WeaponSetLockResponse
     public WeaponSetLockResponse() { }
 }
 
-[MessagePackObject(true)]
+[MessagePackObject]
 public partial class WebviewVersionUrlListResponse
 {
     [Key("webview_url_list")]

@@ -44,7 +44,7 @@ public class ToolControllerTest
             .Should()
             .BeEquivalentTo(
                 new ToolSignupResponse() { ViewerId = 1, },
-                opts => opts.Excluding(x => x.Servertime)
+                opts => opts.Excluding(x => x.ServerTime)
             );
     }
 }

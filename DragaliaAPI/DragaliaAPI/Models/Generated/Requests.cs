@@ -63,7 +63,7 @@ public partial class AbilityCrestResetPlusCountRequest
 
     public AbilityCrestResetPlusCountRequest(
         AbilityCrests abilityCrestId,
-        IEnumerable<int> plusCountTypeList
+        IEnumerable<PlusCountType> plusCountTypeList
     )
     {
         this.AbilityCrestId = abilityCrestId;
@@ -584,9 +584,9 @@ public partial class CharaBuildupRequest
 public partial class CharaGetCharaUnitSetRequest
 {
     [Key("chara_id_list")]
-    public Charas CharaIdList { get; set; }
+    public IEnumerable<Charas> CharaIdList { get; set; }
 
-    public CharaGetCharaUnitSetRequest(Charas charaIdList)
+    public CharaGetCharaUnitSetRequest(IEnumerable<Charas> charaIdList)
     {
         this.CharaIdList = charaIdList;
     }
@@ -1006,13 +1006,13 @@ public partial class DmodeDungeonStartRequest
     public int ServitorId { get; set; }
 
     [Key("bring_edit_skill_chara_id_list")]
-    public Charas BringEditSkillCharaIdList { get; set; }
+    public IEnumerable<Charas> BringEditSkillCharaIdList { get; set; }
 
     public DmodeDungeonStartRequest(
         Charas charaId,
         int startFloorNum,
         int servitorId,
-        Charas bringEditSkillCharaIdList
+        IEnumerable<Charas> bringEditSkillCharaIdList
     )
     {
         this.CharaId = charaId;
@@ -1046,9 +1046,9 @@ public partial class DmodeExpeditionStartRequest
     public int TargetFloorNum { get; set; }
 
     [Key("chara_id_list")]
-    public Charas CharaIdList { get; set; }
+    public IEnumerable<Charas> CharaIdList { get; set; } = [];
 
-    public DmodeExpeditionStartRequest(int targetFloorNum, Charas charaIdList)
+    public DmodeExpeditionStartRequest(int targetFloorNum, IEnumerable<Charas> charaIdList)
     {
         this.TargetFloorNum = targetFloorNum;
         this.CharaIdList = charaIdList;
@@ -1102,9 +1102,12 @@ public partial class DragonBuyGiftToSendMultipleRequest
     public Dragons DragonId { get; set; }
 
     [Key("dragon_gift_id_list")]
-    public IEnumerable<int> DragonGiftIdList { get; set; } = [];
+    public IEnumerable<DragonGifts> DragonGiftIdList { get; set; } = [];
 
-    public DragonBuyGiftToSendMultipleRequest(Dragons dragonId, IEnumerable<int> dragonGiftIdList)
+    public DragonBuyGiftToSendMultipleRequest(
+        Dragons dragonId,
+        IEnumerable<DragonGifts> dragonGiftIdList
+    )
     {
         this.DragonId = dragonId;
         this.DragonGiftIdList = dragonGiftIdList;
@@ -1194,12 +1197,12 @@ public partial class DragonSendGiftMultipleRequest
     public Dragons DragonId { get; set; }
 
     [Key("dragon_gift_id")]
-    public int DragonGiftId { get; set; }
+    public DragonGifts DragonGiftId { get; set; }
 
     [Key("quantity")]
     public int Quantity { get; set; }
 
-    public DragonSendGiftMultipleRequest(Dragons dragonId, int dragonGiftId, int quantity)
+    public DragonSendGiftMultipleRequest(Dragons dragonId, DragonGifts dragonGiftId, int quantity)
     {
         this.DragonId = dragonId;
         this.DragonGiftId = dragonGiftId;
@@ -1216,9 +1219,9 @@ public partial class DragonSendGiftRequest
     public Dragons DragonId { get; set; }
 
     [Key("dragon_gift_id")]
-    public int DragonGiftId { get; set; }
+    public DragonGifts DragonGiftId { get; set; }
 
-    public DragonSendGiftRequest(Dragons dragonId, int dragonGiftId)
+    public DragonSendGiftRequest(Dragons dragonId, DragonGifts dragonGiftId)
     {
         this.DragonId = dragonId;
         this.DragonGiftId = dragonGiftId;
@@ -3681,14 +3684,14 @@ public partial class PartySetPartySettingRequest
     public bool IsEntrust { get; set; }
 
     [Key("entrust_element")]
-    public int EntrustElement { get; set; }
+    public UnitElement EntrustElement { get; set; }
 
     public PartySetPartySettingRequest(
         int partyNo,
         IEnumerable<PartySettingList> requestPartySettingList,
         string partyName,
         bool isEntrust,
-        int entrustElement
+        UnitElement entrustElement
     )
     {
         this.PartyNo = partyNo;
@@ -4482,7 +4485,7 @@ public partial class SummonRequestRequest
     public int SummonId { get; set; }
 
     [Key("exec_type")]
-    public int ExecType { get; set; }
+    public SummonExecTypes ExecType { get; set; }
 
     [Key("exec_count")]
     public int ExecCount { get; set; }
@@ -4495,7 +4498,7 @@ public partial class SummonRequestRequest
 
     public SummonRequestRequest(
         int summonId,
-        int execType,
+        SummonExecTypes execType,
         int execCount,
         PaymentTypes paymentType,
         PaymentTarget paymentTarget

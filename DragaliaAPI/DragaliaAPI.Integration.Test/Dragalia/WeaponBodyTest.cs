@@ -52,7 +52,7 @@ public class WeaponBodyTest : TestFixture
                         AdditionalEffectCount = 0,
                         UnlockWeaponPassiveAbilityNoList = Enumerable.Repeat(0, 15),
                         IsNew = false,
-                        Gettime = DateTimeOffset.UtcNow
+                        GetTime = DateTimeOffset.UtcNow
                     }
                 }
             );
@@ -193,7 +193,7 @@ public class WeaponBodyTest : TestFixture
                 .UpdateDataList.WeaponSkinList.Should()
                 .ContainEquivalentOf(
                     this.Mapper.Map<WeaponSkinList>(expPassive),
-                    opts => opts.Excluding(x => x.Gettime)
+                    opts => opts.Excluding(x => x.GetTime)
                 );
 
             apiContext

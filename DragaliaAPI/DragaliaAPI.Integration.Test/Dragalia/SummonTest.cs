@@ -137,7 +137,7 @@ public class SummonTest : TestFixture
                     TotalCount = summonCount,
                     CampaignType = 0,
                     FreeCountRest = 0,
-                    IsBeginnerCampaign = 0,
+                    IsBeginnerCampaign = false,
                     BeginnerCampaignCountRest = 0,
                     ConsecutionCampaignCountRest = 0,
                 }

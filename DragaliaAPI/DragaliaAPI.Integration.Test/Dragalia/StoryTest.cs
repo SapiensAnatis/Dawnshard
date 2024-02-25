@@ -40,7 +40,7 @@ public class StoryTest : TestFixture
             .BeEquivalentTo(
                 new List<UnitStoryList>()
                 {
-                    new() { UnitStoryId = 100001141, IsRead = 1, }
+                    new() { UnitStoryId = 100001141, IsRead = true, }
                 }
             );
     }

@@ -135,7 +135,7 @@ public class RedoableSummonController : DragaliaControllerBase
         );
 
         return this.Ok(
-            new RedoableSummonPreExecResponse(new UserRedoableSummonData(1, summonResult))
+            new RedoableSummonPreExecResponse(new UserRedoableSummonData(true, summonResult))
         );
     }
 
@@ -196,7 +196,7 @@ public class RedoableSummonController : DragaliaControllerBase
             {
                 UserRedoableSummonData = new UserRedoableSummonData()
                 {
-                    IsFixedResult = 1,
+                    IsFixedResult = true,
                     RedoableSummonResultUnitList = cachedResult
                 },
                 UpdateDataList = updateData,

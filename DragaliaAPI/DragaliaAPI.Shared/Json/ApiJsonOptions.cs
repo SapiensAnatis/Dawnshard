@@ -18,6 +18,7 @@ public class ApiJsonOptions
         options.Converters.Add(new DateTimeUnixJsonConverter());
         options.Converters.Add(new TimeSpanUnixJsonConverter());
         options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        options.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
         options.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
         // GraphQL
         options.IncludeFields = true;

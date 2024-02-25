@@ -68,7 +68,7 @@ public class DmodeTest : TestFixture
             );
         resp.Data.UpdateDataList.UserData.Crystal.Should().Be(oldWyrmite + 25);
         resp.Data.UpdateDataList.DmodeStoryList.Should()
-            .ContainEquivalentOf(new DmodeStoryList() { DmodeStoryId = 1, IsRead = 1 });
+            .ContainEquivalentOf(new DmodeStoryList() { DmodeStoryId = 1, IsRead = true });
     }
 
     [Fact]

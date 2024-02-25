@@ -3,6 +3,7 @@
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Definitions.Enums.Dungeon;
 using DragaliaAPI.Shared.Features.Presents;
 using MessagePack;
 
@@ -1050,7 +1051,7 @@ public partial class AtgenBuildupAbilityCrestPieceList
     public bool IsUseDedicatedMaterial { get; set; }
 
     public AtgenBuildupAbilityCrestPieceList(
-        int buildupPieceType,
+        BuildupPieceTypes buildupPieceType,
         int step,
         bool isUseDedicatedMaterial
     )
@@ -1067,7 +1068,7 @@ public partial class AtgenBuildupAbilityCrestPieceList
 public partial class AtgenBuildupWeaponBodyPieceList
 {
     [Key("buildup_piece_type")]
-    public int BuildupPieceType { get; set; }
+    public BuildupPieceTypes BuildupPieceType { get; set; }
 
     [Key("buildup_piece_no")]
     public int BuildupPieceNo { get; set; }
@@ -1080,7 +1081,7 @@ public partial class AtgenBuildupWeaponBodyPieceList
     public bool IsUseDedicatedMaterial { get; set; }
 
     public AtgenBuildupWeaponBodyPieceList(
-        int buildupPieceType,
+        BuildupPieceTypes buildupPieceType,
         int buildupPieceNo,
         int step,
         bool isUseDedicatedMaterial
@@ -2557,7 +2558,7 @@ public partial class AtgenDropAll
     public int Id { get; set; }
 
     [Key("type")]
-    public int Type { get; set; }
+    public EntityTypes Type { get; set; }
 
     [Key("quantity")]
     public int Quantity { get; set; }
@@ -2568,7 +2569,7 @@ public partial class AtgenDropAll
     [Key("factor")]
     public float Factor { get; set; }
 
-    public AtgenDropAll(int id, int type, int quantity, int place, float factor)
+    public AtgenDropAll(int id, EntityTypes type, int quantity, int place, float factor)
     {
         this.Id = id;
         this.Type = type;
@@ -2584,7 +2585,7 @@ public partial class AtgenDropAll
 public partial class AtgenDropList
 {
     [Key("type")]
-    public int Type { get; set; }
+    public EntityTypes Type { get; set; }
 
     [Key("id")]
     public int Id { get; set; }
@@ -2595,7 +2596,7 @@ public partial class AtgenDropList
     [Key("place")]
     public int Place { get; set; }
 
-    public AtgenDropList(int type, int id, int quantity, int place)
+    public AtgenDropList(EntityTypes type, int id, int quantity, int place)
     {
         this.Type = type;
         this.Id = id;
@@ -2725,7 +2726,7 @@ public partial class AtgenEnemyPiece
     [Key("quantity")]
     public int Quantity { get; set; }
 
-    public AtgenEnemyPiece(int id, int quantity)
+    public AtgenEnemyPiece(Materials id, int quantity)
     {
         this.Id = id;
         this.Quantity = quantity;
@@ -2969,12 +2970,12 @@ public partial class AtgenFirstClearSet
     public int Id { get; set; }
 
     [Key("type")]
-    public int Type { get; set; }
+    public EntityTypes Type { get; set; }
 
     [Key("quantity")]
     public int Quantity { get; set; }
 
-    public AtgenFirstClearSet(int id, int type, int quantity)
+    public AtgenFirstClearSet(int id, EntityTypes type, int quantity)
     {
         this.Id = id;
         this.Type = type;
@@ -3912,7 +3913,7 @@ public partial class AtgenPaid
 public partial class AtgenParamBonus
 {
     [Key("weapon_type")]
-    public int WeaponType { get; set; }
+    public WeaponTypes WeaponType { get; set; }
 
     [Key("hp")]
     public float Hp { get; set; }
@@ -3920,7 +3921,7 @@ public partial class AtgenParamBonus
     [Key("attack")]
     public float Attack { get; set; }
 
-    public AtgenParamBonus(int weaponType, float hp, float attack)
+    public AtgenParamBonus(WeaponTypes weaponType, float hp, float attack)
     {
         this.WeaponType = weaponType;
         this.Hp = hp;
@@ -4984,7 +4985,7 @@ public partial class AtgenSupportData
     public GameWeaponSkin WeaponSkinData { get; set; }
 
     [Key("weapon_body_data")]
-    public WeaponBodies WeaponBodyData { get; set; }
+    public AtgenSupportWeaponBody WeaponBodyData { get; set; }
 
     [Key("crest_slot_type_1_crest_list")]
     public IEnumerable<GameAbilityCrest> CrestSlotType1CrestList { get; set; } = [];
@@ -5011,7 +5012,7 @@ public partial class AtgenSupportData
         AmuletList amuletData,
         AmuletList amulet2Data,
         GameWeaponSkin weaponSkinData,
-        WeaponBodies weaponBodyData,
+        AtgenSupportWeaponBody weaponBodyData,
         IEnumerable<GameAbilityCrest> crestSlotType1CrestList,
         IEnumerable<GameAbilityCrest> crestSlotType2CrestList,
         IEnumerable<GameAbilityCrest> crestSlotType3CrestList,
@@ -5358,9 +5359,9 @@ public partial class AtgenTargetList
     public string TargetName { get; set; }
 
     [Key("target_id_list")]
-    public IEnumerable<ulong> TargetIdList { get; set; } = [];
+    public IEnumerable<long> TargetIdList { get; set; } = [];
 
-    public AtgenTargetList(string targetName, IEnumerable<ulong> targetIdList)
+    public AtgenTargetList(string targetName, IEnumerable<long> targetIdList)
     {
         this.TargetName = targetName;
         this.TargetIdList = targetIdList;
@@ -6652,8 +6653,8 @@ public partial class DailyMissionList
     public DailyMissionList(
         int dailyMissionId,
         int progress,
-        int state,
-        int dayNo,
+        MissionState state,
+        DateOnly dayNo,
         int weeklyMissionId,
         int weekNo,
         DateTimeOffset endDate,
@@ -6806,7 +6807,7 @@ public partial class DmodeDungeonInfo
     public bool IsPlayEnd { get; set; }
 
     [Key("state")]
-    public int State { get; set; }
+    public DungeonState State { get; set; }
 
     public DmodeDungeonInfo(
         Charas charaId,
@@ -6814,7 +6815,7 @@ public partial class DmodeDungeonInfo
         DateTimeOffset questTime,
         int dungeonScore,
         bool isPlayEnd,
-        int state
+        DungeonState state
     )
     {
         this.CharaId = charaId;
@@ -6838,12 +6839,17 @@ public partial class DmodeDungeonItemList
     public int ItemId { get; set; }
 
     [Key("item_state")]
-    public int ItemState { get; set; }
+    public DmodeDungeonItemState ItemState { get; set; }
 
     [Key("option")]
     public AtgenOption Option { get; set; }
 
-    public DmodeDungeonItemList(int itemNo, int itemId, int itemState, AtgenOption option)
+    public DmodeDungeonItemList(
+        int itemNo,
+        int itemId,
+        DmodeDungeonItemState itemState,
+        AtgenOption option
+    )
     {
         this.ItemNo = itemNo;
         this.ItemId = itemId;
@@ -6876,7 +6882,7 @@ public partial class DmodeExpedition
     public int TargetFloorNum { get; set; }
 
     [Key("state")]
-    public int State { get; set; }
+    public ExpeditionState State { get; set; }
 
     public DmodeExpedition(
         Charas charaId1,
@@ -6885,7 +6891,7 @@ public partial class DmodeExpedition
         Charas charaId4,
         DateTimeOffset startTime,
         int targetFloorNum,
-        int state
+        ExpeditionState state
     )
     {
         this.CharaId1 = charaId1;
@@ -7073,7 +7079,7 @@ public partial class DmodeIngameResult
     public bool IsRecordFloorNum { get; set; }
 
     [Key("chara_id_list")]
-    public Charas CharaIdList { get; set; }
+    public IEnumerable<Charas> CharaIdList { get; set; } = [];
 
     [Key("quest_time")]
     public DateTimeOffset QuestTime { get; set; }
@@ -7106,7 +7112,7 @@ public partial class DmodeIngameResult
     public DmodeIngameResult(
         int floorNum,
         bool isRecordFloorNum,
-        Charas charaIdList,
+        IEnumerable<Charas> charaIdList,
         DateTimeOffset questTime,
         bool isViewQuestTime,
         int dmodeScore,
@@ -7238,12 +7244,12 @@ public partial class DmodePlayRecord
 public partial class DmodeServitorPassiveList
 {
     [Key("passive_no")]
-    public int PassiveNo { get; set; }
+    public DmodeServitorPassiveType PassiveNo { get; set; }
 
     [Key("passive_level")]
     public int PassiveLevel { get; set; }
 
-    public DmodeServitorPassiveList(int passiveNo, int passiveLevel)
+    public DmodeServitorPassiveList(DmodeServitorPassiveType passiveNo, int passiveLevel)
     {
         this.PassiveNo = passiveNo;
         this.PassiveLevel = passiveLevel;
@@ -8272,12 +8278,12 @@ public partial class GrowMaterialList
     public EntityTypes Type { get; set; }
 
     [Key("id")]
-    public ulong Id { get; set; }
+    public int Id { get; set; }
 
     [Key("quantity")]
     public int Quantity { get; set; }
 
-    public GrowMaterialList(EntityTypes type, ulong id, int quantity)
+    public GrowMaterialList(EntityTypes type, int id, int quantity)
     {
         this.Type = type;
         this.Id = id;
@@ -9852,7 +9858,7 @@ public partial class PartyUnitList
         CharaList charaData,
         DragonList dragonData,
         GameWeaponSkin weaponSkinData,
-        WeaponBodies weaponBodyData,
+        GameWeaponBody weaponBodyData,
         IEnumerable<GameAbilityCrest> crestSlotType1CrestList,
         IEnumerable<GameAbilityCrest> crestSlotType2CrestList,
         IEnumerable<GameAbilityCrest> crestSlotType3CrestList,
@@ -10168,7 +10174,7 @@ public partial class PresentDetailList
         int entityLevel,
         int entityLimitBreakCount,
         int entityStatusPlusCount,
-        int messageId,
+        PresentMessage messageId,
         int messageParamValue1,
         int messageParamValue2,
         int messageParamValue3,
@@ -10532,7 +10538,7 @@ public partial class QuestList
     public bool IsAppear { get; set; }
 
     [Key("best_clear_time")]
-    public DateTimeOffset BestClearTime { get; set; }
+    public float BestClearTime { get; set; }
 
     public QuestList(
         int questId,
@@ -10546,7 +10552,7 @@ public partial class QuestList
         DateTimeOffset lastDailyResetTime,
         DateTimeOffset lastWeeklyResetTime,
         bool isAppear,
-        DateTimeOffset bestClearTime
+        float bestClearTime
     )
     {
         this.QuestId = questId;
@@ -10582,7 +10588,7 @@ public partial class QuestScheduleDetailList
     public int LimitShopGoodsType { get; set; }
 
     [Key("interval_type")]
-    public int IntervalType { get; set; }
+    public QuestGroupIntervalType IntervalType { get; set; }
 
     [Key("start_date")]
     public DateTimeOffset StartDate { get; set; }
@@ -10595,7 +10601,7 @@ public partial class QuestScheduleDetailList
         int scheduleGroupId,
         int dropBonusPercent,
         int limitShopGoodsType,
-        int intervalType,
+        QuestGroupIntervalType intervalType,
         DateTimeOffset startDate,
         DateTimeOffset endDate
     )
@@ -10808,15 +10814,15 @@ public partial class RepeatData
 public partial class RepeatSetting
 {
     [Key("repeat_type")]
-    public int RepeatType { get; set; }
+    public RepeatSettingType RepeatType { get; set; }
 
     [Key("repeat_count")]
     public int RepeatCount { get; set; }
 
     [Key("use_item_list")]
-    public IEnumerable<int> UseItemList { get; set; } = [];
+    public IEnumerable<UseItem> UseItemList { get; set; } = [];
 
-    public RepeatSetting(int repeatType, int repeatCount, IEnumerable<int> useItemList)
+    public RepeatSetting(RepeatSettingType repeatType, int repeatCount, IEnumerable<UseItem> useItemList)
     {
         this.RepeatType = repeatType;
         this.RepeatCount = repeatCount;
@@ -11666,7 +11672,7 @@ public partial class SummonTicketList
     public ulong KeyId { get; set; }
 
     [Key("summon_ticket_id")]
-    public int SummonTicketId { get; set; }
+    public SummonTickets SummonTicketId { get; set; }
 
     [Key("quantity")]
     public int Quantity { get; set; }
@@ -11676,7 +11682,7 @@ public partial class SummonTicketList
 
     public SummonTicketList(
         ulong keyId,
-        int summonTicketId,
+        SummonTickets summonTicketId,
         int quantity,
         DateTimeOffset useLimitTime
     )
@@ -12659,7 +12665,7 @@ public partial class UserSupportList
         AtgenSupportChara supportChara,
         AtgenSupportWeapon supportWeapon,
         AtgenSupportDragon supportDragon,
-        WeaponBodies supportWeaponBody,
+        AtgenSupportWeaponBody supportWeaponBody,
         IEnumerable<AtgenSupportCrestSlotType1List> supportCrestSlotType1List,
         IEnumerable<AtgenSupportCrestSlotType1List> supportCrestSlotType2List,
         IEnumerable<AtgenSupportCrestSlotType1List> supportCrestSlotType3List,

@@ -167,10 +167,10 @@ public class DungeonRecordTest : TestFixture
                     DailyPlayCount = 1,
                     PlayCount = 1,
                     WeeklyPlayCount = 1,
-                    IsAppear = 1,
-                    IsMissionClear1 = 1,
-                    IsMissionClear2 = 1,
-                    IsMissionClear3 = 1,
+                    IsAppear = true,
+                    IsMissionClear1 = true,
+                    IsMissionClear2 = true,
+                    IsMissionClear3 = true,
                     BestClearTime = 10,
                     LastDailyResetTime = DateTimeOffset.UtcNow,
                     LastWeeklyResetTime = DateTimeOffset.UtcNow
@@ -428,7 +428,7 @@ public class DungeonRecordTest : TestFixture
         response
             .UpdateDataList.QuestList.Should()
             .ContainEquivalentOf(
-                new QuestList() { QuestId = exQuestId, IsAppear = 1, },
+                new QuestList() { QuestId = exQuestId, IsAppear = true, },
                 opts => opts.Including(x => x.QuestId).Including(x => x.IsAppear)
             );
     }
@@ -530,7 +530,7 @@ public class DungeonRecordTest : TestFixture
         response
             .UpdateDataList.QuestList.Should()
             .ContainEquivalentOf(
-                new QuestList() { QuestId = exQuestId, IsAppear = 0, },
+                new QuestList() { QuestId = exQuestId, IsAppear = true, },
                 opts => opts.Including(x => x.QuestId).Including(x => x.IsAppear)
             );
     }
