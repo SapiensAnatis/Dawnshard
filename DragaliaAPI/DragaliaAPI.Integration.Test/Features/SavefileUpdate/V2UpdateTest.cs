@@ -11,7 +11,7 @@ public class V2UpdateTest : SavefileUpdateTestFixture
     [Fact]
     public async Task V2Update_AddsStampList()
     {
-        LoadIndexData data = (
+        LoadIndexResponse data = (
             await this.Client.PostMsgpack<LoadIndexResponse>("/load/index", new LoadIndexRequest())
         ).data;
 

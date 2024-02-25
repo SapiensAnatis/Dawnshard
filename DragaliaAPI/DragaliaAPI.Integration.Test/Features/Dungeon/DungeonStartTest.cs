@@ -21,7 +21,7 @@ public class DungeonStartTest : TestFixture
     [Fact]
     public async Task Start_OneTeam_HasExpectedPartyUnitList()
     {
-        DungeonStartStartData response = (
+        DungeonStartStartResponse response = (
             await Client.PostMsgpack<DungeonStartStartResponse>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
@@ -43,7 +43,7 @@ public class DungeonStartTest : TestFixture
     [Fact]
     public async Task Start_TwoTeams_HasExpectedPartyUnitList()
     {
-        DungeonStartStartData response = (
+        DungeonStartStartResponse response = (
             await Client.PostMsgpack<DungeonStartStartResponse>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
@@ -65,7 +65,7 @@ public class DungeonStartTest : TestFixture
     [Fact]
     public async Task Start_WeaponPassivesUnlocked_IncludedInPartyUnitList()
     {
-        DungeonStartStartData response = (
+        DungeonStartStartResponse response = (
             await Client.PostMsgpack<DungeonStartStartResponse>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
@@ -128,7 +128,7 @@ public class DungeonStartTest : TestFixture
                 }
             };
 
-        DungeonStartStartAssignUnitData response = (
+        DungeonStartStartAssignUnitResponse response = (
             await Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(
                 "/dungeon_start/start_assign_unit",
                 request
@@ -208,7 +208,7 @@ public class DungeonStartTest : TestFixture
     [Fact]
     public async Task Start_ChronosClash_HasRareEnemy()
     {
-        DragaliaResponse<DungeonStartStartData> response =
+        DragaliaResponse<DungeonStartStartResponse> response =
             await this.Client.PostMsgpack<DungeonStartStartResponse>(
                 $"/dungeon_start/start",
                 new DungeonStartStartRequest() { QuestId = 204270302, PartyNoList = [1] }
@@ -222,7 +222,7 @@ public class DungeonStartTest : TestFixture
     {
         const int earnEventQuestId = 229031201; // Repelling the Frosty Fiends: Standard (Solo)
 
-        DragaliaResponse<DungeonStartStartData> response =
+        DragaliaResponse<DungeonStartStartResponse> response =
             await this.Client.PostMsgpack<DungeonStartStartResponse>(
                 $"/dungeon_start/start",
                 new DungeonStartStartRequest() { QuestId = earnEventQuestId, PartyNoList = [1] }
@@ -247,7 +247,7 @@ public class DungeonStartTest : TestFixture
                 e.SetProperty(p => p.TutorialStatus, TutorialService.TutorialStatusIds.CoopTutorial)
             );
 
-        DragaliaResponse<DungeonStartStartData> response =
+        DragaliaResponse<DungeonStartStartResponse> response =
             await this.Client.PostMsgpack<DungeonStartStartResponse>(
                 $"/dungeon_start/start",
                 new DungeonStartStartRequest()
@@ -272,7 +272,7 @@ public class DungeonStartTest : TestFixture
                 )
             );
 
-        DragaliaResponse<DungeonStartStartData> response =
+        DragaliaResponse<DungeonStartStartResponse> response =
             await this.Client.PostMsgpack<DungeonStartStartResponse>(
                 $"/dungeon_start/start",
                 new DungeonStartStartRequest()

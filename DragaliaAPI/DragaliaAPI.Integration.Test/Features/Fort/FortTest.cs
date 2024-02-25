@@ -109,7 +109,7 @@ public class FortTest : TestFixture
             .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
-        FortAddCarpenterData response = (
+        FortAddCarpenterResponse response = (
             await this.Client.PostMsgpack<FortAddCarpenterResponse>(
                 "/fort/add_carpenter",
                 new FortAddCarpenterRequest(PaymentTypes.Wyrmite)
@@ -141,7 +141,7 @@ public class FortTest : TestFixture
             .Entity;
         await this.ApiContext.SaveChangesAsync();
 
-        FortBuildAtOnceData response = (
+        FortBuildAtOnceResponse response = (
             await this.Client.PostMsgpack<FortBuildAtOnceResponse>(
                 "/fort/build_at_once",
                 new FortBuildAtOnceRequest(build.BuildId, PaymentTypes.Wyrmite)
@@ -206,7 +206,7 @@ public class FortTest : TestFixture
 
         await this.AddToDatabase(build);
 
-        FortBuildEndData response = (
+        FortBuildEndResponse response = (
             await this.Client.PostMsgpack<FortBuildEndResponse>(
                 "/fort/build_end",
                 new FortBuildEndRequest(build.BuildId)
@@ -227,7 +227,7 @@ public class FortTest : TestFixture
         int expectedPositionX = 2;
         int expectedPositionZ = 2;
 
-        FortBuildStartData response = (
+        FortBuildStartResponse response = (
             await this.Client.PostMsgpack<FortBuildStartResponse>(
                 "/fort/build_start",
                 new FortBuildStartRequest(
@@ -268,7 +268,7 @@ public class FortTest : TestFixture
             .Entity;
         await this.ApiContext.SaveChangesAsync();
 
-        FortLevelupAtOnceData response = (
+        FortLevelupAtOnceResponse response = (
             await this.Client.PostMsgpack<FortLevelupAtOnceResponse>(
                 "/fort/levelup_at_once",
                 new FortLevelupAtOnceRequest(build.BuildId, PaymentTypes.Wyrmite)
@@ -296,7 +296,7 @@ public class FortTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        FortLevelupAtOnceData response = (
+        FortLevelupAtOnceResponse response = (
             await this.Client.PostMsgpack<FortLevelupAtOnceResponse>(
                 "/fort/levelup_at_once",
                 new FortLevelupAtOnceRequest(halidom.BuildId, PaymentTypes.Wyrmite)
@@ -319,7 +319,7 @@ public class FortTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        FortLevelupAtOnceData response = (
+        FortLevelupAtOnceResponse response = (
             await this.Client.PostMsgpack<FortLevelupAtOnceResponse>(
                 "/fort/levelup_at_once",
                 new FortLevelupAtOnceRequest(smithy.BuildId, PaymentTypes.Wyrmite)
@@ -350,7 +350,7 @@ public class FortTest : TestFixture
             .Entity;
         await this.ApiContext.SaveChangesAsync();
 
-        FortLevelupCancelData response = (
+        FortLevelupCancelResponse response = (
             await this.Client.PostMsgpack<FortLevelupCancelResponse>(
                 "/fort/levelup_cancel",
                 new FortLevelupCancelRequest(build.BuildId)
@@ -387,7 +387,7 @@ public class FortTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        FortLevelupEndData response = (
+        FortLevelupEndResponse response = (
             await this.Client.PostMsgpack<FortLevelupEndResponse>(
                 "/fort/levelup_end",
                 new FortLevelupEndRequest(build.BuildId)
@@ -414,7 +414,7 @@ public class FortTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        FortLevelupEndData response = (
+        FortLevelupEndResponse response = (
             await this.Client.PostMsgpack<FortLevelupEndResponse>(
                 "/fort/levelup_end",
                 new FortLevelupEndRequest(smithy.BuildId)
@@ -437,7 +437,7 @@ public class FortTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        FortLevelupEndData response = (
+        FortLevelupEndResponse response = (
             await this.Client.PostMsgpack<FortLevelupEndResponse>(
                 "/fort/levelup_end",
                 new FortLevelupEndRequest(halidom.BuildId)
@@ -468,7 +468,7 @@ public class FortTest : TestFixture
             .Entity;
         await this.ApiContext.SaveChangesAsync();
 
-        FortLevelupStartData response = (
+        FortLevelupStartResponse response = (
             await this.Client.PostMsgpack<FortLevelupStartResponse>(
                 "/fort/levelup_start",
                 new FortLevelupStartRequest(build.BuildId)
@@ -507,7 +507,7 @@ public class FortTest : TestFixture
 
         int expectedPositionX = 4;
         int expectedPositionZ = 4;
-        FortMoveData response = (
+        FortMoveResponse response = (
             await this.Client.PostMsgpack<FortMoveResponse>(
                 "/fort/move",
                 new FortMoveRequest(build.BuildId, expectedPositionX, expectedPositionZ)
@@ -557,7 +557,7 @@ public class FortTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        DragaliaResponse<FortGetMultiIncomeData> response =
+        DragaliaResponse<FortGetMultiIncomeResponse> response =
             await this.Client.PostMsgpack<FortGetMultiIncomeResponse>(
                 "/fort/get_multi_income",
                 new FortGetMultiIncomeRequest()
@@ -609,7 +609,7 @@ public class FortTest : TestFixture
             }
         );
 
-        DragaliaResponse<FortGetMultiIncomeData> response =
+        DragaliaResponse<FortGetMultiIncomeResponse> response =
             await this.Client.PostMsgpack<FortGetMultiIncomeResponse>(
                 "/fort/get_multi_income",
                 new FortGetMultiIncomeRequest() { BuildIdList = new[] { rupieMine.BuildId } }

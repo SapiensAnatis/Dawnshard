@@ -63,7 +63,7 @@ public class WallStartController : DragaliaControllerBase
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        WallStartStartData data =
+        WallStartStartResponse data =
             new()
             {
                 IngameData = ingameData,
@@ -100,7 +100,7 @@ public class WallStartController : DragaliaControllerBase
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        WallStartStartAssignUnitData data =
+        WallStartStartAssignUnitResponse data =
             new()
             {
                 IngameData = ingameData,

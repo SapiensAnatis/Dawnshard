@@ -46,7 +46,7 @@ public class MatchingTest : TestFixture
                 }
             );
 
-        MatchingGetRoomListData data = (
+        MatchingGetRoomListResponse data = (
             await this.Client.PostMsgpack<MatchingGetRoomListResponse>(
                 $"{EndpointGroup}/get_room_list",
                 new MatchingGetRoomListRequest() { CompatibleId = 36 }
@@ -55,7 +55,7 @@ public class MatchingTest : TestFixture
 
         data.Should()
             .BeEquivalentTo(
-                new MatchingGetRoomListData()
+                new MatchingGetRoomListResponse()
                 {
                     RoomList = new List<RoomList>()
                     {
@@ -131,7 +131,7 @@ public class MatchingTest : TestFixture
                 }
             );
 
-        MatchingGetRoomListByQuestIdData data = (
+        MatchingGetRoomListByQuestIdResponse data = (
             await this.Client.PostMsgpack<MatchingGetRoomListByQuestIdResponse>(
                 $"{EndpointGroup}/get_room_list_by_quest_id",
                 new MatchingGetRoomListByQuestIdRequest() { CompatibleId = 36, QuestId = 204550501 }
@@ -140,7 +140,7 @@ public class MatchingTest : TestFixture
 
         data.Should()
             .BeEquivalentTo(
-                new MatchingGetRoomListByQuestIdData()
+                new MatchingGetRoomListByQuestIdResponse()
                 {
                     RoomList = new List<RoomList>()
                     {
@@ -213,7 +213,7 @@ public class MatchingTest : TestFixture
                 }
             );
 
-        MatchingGetRoomNameData data = (
+        MatchingGetRoomNameResponse data = (
             await this.Client.PostMsgpack<MatchingGetRoomNameResponse>(
                 $"{EndpointGroup}/get_room_name",
                 new MatchingGetRoomNameRequest() { RoomId = 911948 }
@@ -222,7 +222,7 @@ public class MatchingTest : TestFixture
 
         data.Should()
             .BeEquivalentTo(
-                new MatchingGetRoomNameData()
+                new MatchingGetRoomNameResponse()
                 {
                     RoomData = new()
                     {
@@ -296,7 +296,7 @@ public class MatchingTest : TestFixture
                 }
             );
 
-        MatchingGetRoomNameData data = (
+        MatchingGetRoomNameResponse data = (
             await this.Client.PostMsgpack<MatchingGetRoomNameResponse>(
                 $"{EndpointGroup}/get_room_name",
                 new MatchingGetRoomNameRequest() { RoomId = 911948 }
@@ -305,7 +305,7 @@ public class MatchingTest : TestFixture
 
         data.Should()
             .BeEquivalentTo(
-                new MatchingGetRoomNameData()
+                new MatchingGetRoomNameResponse()
                 {
                     RoomData = new()
                     {

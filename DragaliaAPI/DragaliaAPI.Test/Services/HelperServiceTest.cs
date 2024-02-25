@@ -120,7 +120,7 @@ public class HelperServiceTest
 
     private static class StubData
     {
-        public static readonly QuestGetSupportUserListData HelperList =
+        public static readonly QuestGetSupportUserListResponse HelperList =
             new()
             {
                 SupportUserList = new List<UserSupportList>()

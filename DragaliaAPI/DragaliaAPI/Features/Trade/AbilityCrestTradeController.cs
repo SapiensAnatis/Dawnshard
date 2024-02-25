@@ -18,7 +18,7 @@ public class AbilityCrestTradeController(
     [HttpPost("get_list")]
     public async Task<DragaliaResult> GetList()
     {
-        AbilityCrestTradeGetListData resp = new();
+        AbilityCrestTradeGetListResponse resp = new();
 
         missionProgressionService.OnAbilityCrestTradeViewed();
 
@@ -33,7 +33,7 @@ public class AbilityCrestTradeController(
     [HttpPost("trade")]
     public async Task<DragaliaResult> Trade(AbilityCrestTradeTradeRequest request)
     {
-        AbilityCrestTradeTradeData resp = new();
+        AbilityCrestTradeTradeResponse resp = new();
 
         await tradeService.DoAbilityCrestTrade(request.AbilityCrestTradeId, request.TradeCount);
 

@@ -33,7 +33,7 @@ public class DungeonSkipTest : TestFixture
             .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
-        DragaliaResponse<DungeonSkipStartData> response =
+        DragaliaResponse<DungeonSkipStartResponse> response =
             await this.Client.PostMsgpack<DungeonSkipStartResponse>(
                 $"{Endpoint}/start",
                 new DungeonSkipStartRequest()
@@ -94,7 +94,7 @@ public class DungeonSkipTest : TestFixture
             .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
-        DragaliaResponse<DungeonSkipStartAssignUnitData> response =
+        DragaliaResponse<DungeonSkipStartAssignUnitResponse> response =
             await this.Client.PostMsgpack<DungeonSkipStartAssignUnitResponse>(
                 $"{Endpoint}/start_assign_unit",
                 new DungeonSkipStartAssignUnitRequest()
@@ -153,7 +153,7 @@ public class DungeonSkipTest : TestFixture
             .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
-        DragaliaResponse<DungeonSkipStartMultipleQuestData> response =
+        DragaliaResponse<DungeonSkipStartMultipleQuestResponse> response =
             await this.Client.PostMsgpack<DungeonSkipStartMultipleQuestResponse>(
                 $"{Endpoint}/start_multiple_quest",
                 new DungeonSkipStartMultipleQuestRequest()
@@ -235,7 +235,7 @@ public class DungeonSkipTest : TestFixture
             .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
-        DragaliaResponse<DungeonSkipStartData> response =
+        DragaliaResponse<DungeonSkipStartResponse> response =
             await this.Client.PostMsgpack<DungeonSkipStartResponse>(
                 $"{Endpoint}/start",
                 new DungeonSkipStartRequest()

@@ -16,7 +16,7 @@ public class DmodeDungeonController(
     [HttpPost("start")]
     public async Task<DragaliaResult> Start(DmodeDungeonStartRequest request)
     {
-        DmodeDungeonStartData resp = new();
+        DmodeDungeonStartResponse resp = new();
 
         (resp.DmodeDungeonState, resp.DmodeIngameData) = await dmodeDungeonService.StartDungeon(
             request.CharaId,
@@ -33,7 +33,7 @@ public class DmodeDungeonController(
     [HttpPost("restart")]
     public async Task<DragaliaResult> Restart()
     {
-        DmodeDungeonRestartData resp = new();
+        DmodeDungeonRestartResponse resp = new();
 
         (resp.DmodeDungeonState, resp.DmodeIngameData) = await dmodeDungeonService.RestartDungeon();
 
@@ -45,7 +45,7 @@ public class DmodeDungeonController(
     [HttpPost("floor")]
     public async Task<DragaliaResult> Floor(DmodeDungeonFloorRequest request)
     {
-        DmodeDungeonFloorData resp = new();
+        DmodeDungeonFloorResponse resp = new();
 
         (resp.DmodeDungeonState, resp.DmodeFloorData) =
             await dmodeDungeonService.ProgressToNextFloor(request.DmodePlayRecord);
@@ -58,7 +58,7 @@ public class DmodeDungeonController(
     [HttpPost("finish")]
     public async Task<DragaliaResult> Finish(DmodeDungeonFinishRequest request)
     {
-        DmodeDungeonFinishData resp = new();
+        DmodeDungeonFinishResponse resp = new();
 
         (resp.DmodeDungeonState, resp.DmodeIngameResult) = await dmodeDungeonService.FinishDungeon(
             request.IsGameOver
@@ -73,7 +73,7 @@ public class DmodeDungeonController(
     [HttpPost("floor_skip")]
     public async Task<DragaliaResult> FloorSkip()
     {
-        DmodeDungeonFloorSkipData resp = new();
+        DmodeDungeonFloorSkipResponse resp = new();
 
         resp.DmodeDungeonState = await dmodeDungeonService.SkipFloor();
         resp.UpdateDataList = await updateDataService.SaveChangesAsync();
@@ -84,7 +84,7 @@ public class DmodeDungeonController(
     [HttpPost("user_halt")]
     public async Task<DragaliaResult> UserHalt()
     {
-        DmodeDungeonUserHaltData resp = new();
+        DmodeDungeonUserHaltResponse resp = new();
 
         resp.DmodeDungeonState = await dmodeDungeonService.HaltDungeon(true);
         resp.UpdateDataList = await updateDataService.SaveChangesAsync();
@@ -95,7 +95,7 @@ public class DmodeDungeonController(
     [HttpPost("system_halt")]
     public async Task<DragaliaResult> SystemHalt()
     {
-        DmodeDungeonSystemHaltData resp = new();
+        DmodeDungeonSystemHaltResponse resp = new();
 
         resp.DmodeDungeonState = await dmodeDungeonService.HaltDungeon(false);
         resp.UpdateDataList = await updateDataService.SaveChangesAsync();

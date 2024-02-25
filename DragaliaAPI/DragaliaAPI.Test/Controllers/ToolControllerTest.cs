@@ -22,10 +22,10 @@ public class ToolControllerTest
         this.mockAuthService.Setup(x => x.DoAuth("id token")).ReturnsAsync((1, "session_id"));
 
         (await this.toolController.Auth("id token"))
-            .GetData<ToolAuthData>()
+            .GetData<ToolAuthResponse>()
             .Should()
             .BeEquivalentTo(
-                new ToolAuthData()
+                new ToolAuthResponse()
                 {
                     SessionId = "session_id",
                     ViewerId = 1,
@@ -40,10 +40,10 @@ public class ToolControllerTest
         this.mockAuthService.Setup(x => x.DoAuth("id token")).ReturnsAsync((1, "session_id"));
 
         (await this.toolController.Signup("id token"))
-            .GetData<ToolSignupData>()
+            .GetData<ToolSignupResponse>()
             .Should()
             .BeEquivalentTo(
-                new ToolSignupData() { ViewerId = 1, },
+                new ToolSignupResponse() { ViewerId = 1, },
                 opts => opts.Excluding(x => x.Servertime)
             );
     }

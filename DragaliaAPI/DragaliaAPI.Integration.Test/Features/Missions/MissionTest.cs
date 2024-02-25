@@ -16,7 +16,7 @@ public class MissionTest : TestFixture
     [Fact]
     public async Task UnlockDrillMissionGroup_ValidRequest_UnlocksGroup()
     {
-        DragaliaResponse<MissionUnlockDrillMissionGroupData> resp =
+        DragaliaResponse<MissionUnlockDrillMissionGroupResponse> resp =
             await this.Client.PostMsgpack<MissionUnlockDrillMissionGroupResponse>(
                 "mission/unlock_drill_mission_group",
                 new MissionUnlockDrillMissionGroupRequest(1)
@@ -39,7 +39,7 @@ public class MissionTest : TestFixture
     [Fact]
     public async Task UnlockMainStoryGroup_ValidRequest_UnlocksGroup()
     {
-        DragaliaResponse<MissionUnlockMainStoryGroupData> resp =
+        DragaliaResponse<MissionUnlockMainStoryGroupResponse> resp =
             await this.Client.PostMsgpack<MissionUnlockMainStoryGroupResponse>(
                 "mission/unlock_main_story_group",
                 new MissionUnlockMainStoryGroupRequest(1)
@@ -58,7 +58,7 @@ public class MissionTest : TestFixture
             new MissionUnlockDrillMissionGroupRequest(1)
         );
 
-        DragaliaResponse<QuestReadStoryData> resp =
+        DragaliaResponse<QuestReadStoryResponse> resp =
             await this.Client.PostMsgpack<QuestReadStoryResponse>(
                 "/quest/read_story",
                 new QuestReadStoryRequest() { QuestStoryId = 1000106 }
@@ -71,7 +71,7 @@ public class MissionTest : TestFixture
         resp.data.UpdateDataList.MissionNotice.DrillMissionNotice.NewCompleteMissionIdList.Should()
             .Contain(100200);
 
-        DragaliaResponse<MissionReceiveDrillRewardData> rewardResp =
+        DragaliaResponse<MissionReceiveDrillRewardResponse> rewardResp =
             await this.Client.PostMsgpack<MissionReceiveDrillRewardResponse>(
                 "/mission/receive_drill_reward",
                 new MissionReceiveDrillRewardRequest(new[] { 100200 }, Enumerable.Empty<int>())
@@ -121,7 +121,7 @@ public class MissionTest : TestFixture
             new MissionUnlockDrillMissionGroupRequest(3)
         );
 
-        DragaliaResponse<AbilityCrestBuildupPieceData> resp =
+        DragaliaResponse<AbilityCrestBuildupPieceResponse> resp =
             await this.Client.PostMsgpack<AbilityCrestBuildupPieceResponse>(
                 "/ability_crest/buildup_piece",
                 new AbilityCrestBuildupPieceRequest()
@@ -159,7 +159,7 @@ public class MissionTest : TestFixture
             }
         );
 
-        MissionReceiveMemoryEventRewardData response = (
+        MissionReceiveMemoryEventRewardResponse response = (
             await this.Client.PostMsgpack<MissionReceiveMemoryEventRewardResponse>(
                 "mission/receive_memory_event_reward",
                 new MissionReceiveMemoryEventRewardRequest()
@@ -239,7 +239,7 @@ public class MissionTest : TestFixture
             ]
         );
 
-        DragaliaResponse<MissionReceiveDailyRewardData> response =
+        DragaliaResponse<MissionReceiveDailyRewardResponse> response =
             await this.Client.PostMsgpack<MissionReceiveDailyRewardResponse>(
                 "mission/receive_daily_reward",
                 new MissionReceiveDailyRewardRequest()
@@ -303,7 +303,7 @@ public class MissionTest : TestFixture
             }
         );
 
-        MissionReceiveMemoryEventRewardData response = (
+        MissionReceiveMemoryEventRewardResponse response = (
             await this.Client.PostMsgpack<MissionReceiveMemoryEventRewardResponse>(
                 "mission/receive_memory_event_reward",
                 new MissionReceiveMemoryEventRewardRequest()
@@ -350,7 +350,7 @@ public class MissionTest : TestFixture
             }
         );
 
-        DragaliaResponse<MissionGetMissionListData> response =
+        DragaliaResponse<MissionGetMissionListResponse> response =
             await this.Client.PostMsgpack<MissionGetMissionListResponse>(
                 "mission/get_mission_list",
                 new MissionGetMissionListRequest()
@@ -407,7 +407,7 @@ public class MissionTest : TestFixture
             }
         );
 
-        DragaliaResponse<ShopItemSummonExecData> response =
+        DragaliaResponse<ShopItemSummonExecResponse> response =
             await this.Client.PostMsgpack<ShopItemSummonExecResponse>(
                 "shop/item_summon_exec",
                 new ShopItemSummonExecRequest() { PaymentType = PaymentTypes.Wyrmite },
@@ -431,7 +431,7 @@ public class MissionTest : TestFixture
             };
         }
 
-        MissionGetDrillMissionListData response = (
+        MissionGetDrillMissionListResponse response = (
             await this.Client.PostMsgpack<MissionGetDrillMissionListResponse>(
                 "mission/get_drill_mission_list",
                 new MissionGetDrillMissionListRequest()
@@ -511,7 +511,7 @@ public class MissionTest : TestFixture
                 })
         );
 
-        MissionGetMissionListData response = (
+        MissionGetMissionListResponse response = (
             await this.Client.PostMsgpack<MissionGetMissionListResponse>(
                 "mission/get_mission_list",
                 new MissionGetMissionListRequest()
@@ -567,7 +567,7 @@ public class MissionTest : TestFixture
             [expiredMission, notStartedMission, expectedMission, otherExpectedMission]
         );
 
-        MissionGetMissionListData response = (
+        MissionGetMissionListResponse response = (
             await this.Client.PostMsgpack<MissionGetMissionListResponse>(
                 "mission/get_mission_list",
                 new MissionGetMissionListRequest()

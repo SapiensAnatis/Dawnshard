@@ -24,7 +24,7 @@ public class QuestBonusTest : TestFixture
         int questId = 219041102; // Ayaha and Otoha's Wrath: Expert (Solo)
         int questEventId = 21900;
 
-        DragaliaResponse<DungeonRecordRecordData> response = await this.CompleteQuest(questId);
+        DragaliaResponse<DungeonRecordRecordResponse> response = await this.CompleteQuest(questId);
 
         response
             .data.UpdateDataList.QuestEventList.Should()
@@ -44,7 +44,7 @@ public class QuestBonusTest : TestFixture
                 }
             );
 
-        DragaliaResponse<DungeonReceiveQuestBonusData> bonusResponse =
+        DragaliaResponse<DungeonReceiveQuestBonusResponse> bonusResponse =
             await this.Client.PostMsgpack<DungeonReceiveQuestBonusResponse>(
                 "/dungeon/receive_quest_bonus",
                 new DungeonReceiveQuestBonusRequest()
@@ -134,7 +134,7 @@ public class QuestBonusTest : TestFixture
             }
         );
 
-        DragaliaResponse<DungeonRecordRecordData> response = await this.CompleteQuest(questId);
+        DragaliaResponse<DungeonRecordRecordResponse> response = await this.CompleteQuest(questId);
 
         response
             .data.UpdateDataList.QuestEventList.Should()
@@ -173,7 +173,7 @@ public class QuestBonusTest : TestFixture
             }
         );
 
-        DragaliaResponse<DungeonRecordRecordData> response = await this.CompleteQuest(questId);
+        DragaliaResponse<DungeonRecordRecordResponse> response = await this.CompleteQuest(questId);
 
         response
             .data.UpdateDataList.QuestEventList.Should()
@@ -193,7 +193,7 @@ public class QuestBonusTest : TestFixture
                 }
             );
 
-        DragaliaResponse<DungeonReceiveQuestBonusData> bonusResponse =
+        DragaliaResponse<DungeonReceiveQuestBonusResponse> bonusResponse =
             await this.Client.PostMsgpack<DungeonReceiveQuestBonusResponse>(
                 "/dungeon/receive_quest_bonus",
                 new DungeonReceiveQuestBonusRequest()
@@ -218,7 +218,7 @@ public class QuestBonusTest : TestFixture
         int questId = 210020104; // High Mercury's Trial: Master
         int questEventId = 21000;
 
-        DragaliaResponse<DungeonRecordRecordData> response = await this.CompleteQuest(questId);
+        DragaliaResponse<DungeonRecordRecordResponse> response = await this.CompleteQuest(questId);
 
         response
             .data.UpdateDataList.QuestEventList.Should()
@@ -238,7 +238,7 @@ public class QuestBonusTest : TestFixture
                 }
             );
 
-        DragaliaResponse<DungeonReceiveQuestBonusData> bonusResponse =
+        DragaliaResponse<DungeonReceiveQuestBonusResponse> bonusResponse =
             await this.Client.PostMsgpack<DungeonReceiveQuestBonusResponse>(
                 "/dungeon/receive_quest_bonus",
                 new DungeonReceiveQuestBonusRequest()
@@ -278,7 +278,7 @@ public class QuestBonusTest : TestFixture
         int questId = 233010103; // Primal Midgardsormr's Trial: Master
         int questEventId = 23300;
 
-        DragaliaResponse<DungeonRecordRecordData> response = await this.CompleteQuest(questId);
+        DragaliaResponse<DungeonRecordRecordResponse> response = await this.CompleteQuest(questId);
 
         response
             .data.UpdateDataList.QuestEventList.Should()
@@ -298,7 +298,7 @@ public class QuestBonusTest : TestFixture
                 }
             );
 
-        DragaliaResponse<DungeonReceiveQuestBonusData> bonusResponse =
+        DragaliaResponse<DungeonReceiveQuestBonusResponse> bonusResponse =
             await this.Client.PostMsgpack<DungeonReceiveQuestBonusResponse>(
                 "/dungeon/receive_quest_bonus",
                 new DungeonReceiveQuestBonusRequest()
@@ -332,9 +332,9 @@ public class QuestBonusTest : TestFixture
             );
     }
 
-    private async Task<DragaliaResponse<DungeonRecordRecordData>> CompleteQuest(int questId)
+    private async Task<DragaliaResponse<DungeonRecordRecordResponse>> CompleteQuest(int questId)
     {
-        DragaliaResponse<DungeonStartStartData> startResponse =
+        DragaliaResponse<DungeonStartStartResponse> startResponse =
             await this.Client.PostMsgpack<DungeonStartStartResponse>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
@@ -344,7 +344,7 @@ public class QuestBonusTest : TestFixture
                 }
             );
 
-        DragaliaResponse<DungeonRecordRecordData> recordResponse =
+        DragaliaResponse<DungeonRecordRecordResponse> recordResponse =
             await this.Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()

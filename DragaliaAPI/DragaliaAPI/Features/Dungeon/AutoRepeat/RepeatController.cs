@@ -16,7 +16,7 @@ public class RepeatController(
     private readonly ILogger<RepeatController> logger = logger;
 
     [HttpPost("end")]
-    public async Task<DragaliaResult<RepeatEndData>> End()
+    public async Task<DragaliaResult<RepeatEndResponse>> End()
     {
         RepeatInfo? info = await this.autoRepeatService.ClearRepeatInfo();
         if (info == null)
@@ -27,7 +27,7 @@ public class RepeatController(
             );
         }
 
-        RepeatEndData response =
+        RepeatEndResponse response =
             new()
             {
                 IngameResultData = info.IngameResultData,

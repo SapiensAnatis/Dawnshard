@@ -12,7 +12,7 @@ public class ItemController(IUpdateDataService updateDataService, IItemService i
     [HttpPost("get_list")]
     public async Task<DragaliaResult> GetList()
     {
-        ItemGetListData resp = new();
+        ItemGetListResponse resp = new();
 
         resp.ItemList = await itemService.GetItemList();
 
@@ -22,7 +22,7 @@ public class ItemController(IUpdateDataService updateDataService, IItemService i
     [HttpPost("use_recovery_stamina")]
     public async Task<DragaliaResult> UseRecoveryStamina(ItemUseRecoveryStaminaRequest request)
     {
-        ItemUseRecoveryStaminaData resp = new();
+        ItemUseRecoveryStaminaResponse resp = new();
 
         resp.RecoverData = await itemService.UseItems(request.UseItemList);
         resp.UpdateDataList = await updateDataService.SaveChangesAsync();

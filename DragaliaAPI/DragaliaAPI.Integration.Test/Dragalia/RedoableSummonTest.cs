@@ -11,7 +11,7 @@ public class RedoableSummonTest : TestFixture
     [Fact]
     public async Task RedoableSummonGetData_ReturnsData()
     {
-        RedoableSummonGetDataData response = (
+        RedoableSummonGetDataResponse response = (
             await this.Client.PostMsgpack<RedoableSummonGetDataResponse>(
                 "redoable_summon/get_data",
                 new RedoableSummonGetDataRequest()
@@ -24,7 +24,7 @@ public class RedoableSummonTest : TestFixture
     [Fact]
     public async Task RedoableSummonPreExec_ReturnsValidResult()
     {
-        RedoableSummonPreExecData response = (
+        RedoableSummonPreExecResponse response = (
             await this.Client.PostMsgpack<RedoableSummonPreExecResponse>(
                 "redoable_summon/pre_exec",
                 new RedoableSummonPreExecRequest(0)
@@ -43,7 +43,7 @@ public class RedoableSummonTest : TestFixture
             new RedoableSummonPreExecRequest()
         );
 
-        RedoableSummonFixExecData response = (
+        RedoableSummonFixExecResponse response = (
             await this.Client.PostMsgpack<RedoableSummonFixExecResponse>(
                 "redoable_summon/fix_exec",
                 new RedoableSummonFixExecRequest()

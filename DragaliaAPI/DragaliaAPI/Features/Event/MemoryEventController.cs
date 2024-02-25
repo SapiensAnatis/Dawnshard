@@ -19,7 +19,7 @@ public class MemoryEventController(
     [HttpPost("activate")]
     public async Task<DragaliaResult> Activate(MemoryEventActivateRequest request)
     {
-        MemoryEventActivateData resp = new();
+        MemoryEventActivateResponse resp = new();
 
         DbPlayerUserData userData = await userDataRepository.GetUserDataAsync();
 

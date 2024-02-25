@@ -17,7 +17,7 @@ public class TreasureTradeController(
     [HttpPost("get_list_all")]
     public async Task<DragaliaResult> GetListAll()
     {
-        TreasureTradeGetListAllData resp = new();
+        TreasureTradeGetListAllResponse resp = new();
 
         resp.TreasureTradeAllList = tradeService.GetCurrentTreasureTradeList();
         resp.UserTreasureTradeList = await tradeService.GetUserTreasureTradeList();

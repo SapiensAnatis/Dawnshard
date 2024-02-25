@@ -11,7 +11,7 @@ public class EulaTest : TestFixture
     [Fact]
     public async Task EulaGetVersionList_ReturnsAllVersions()
     {
-        EulaGetVersionListData response = (
+        EulaGetVersionListResponse response = (
             await this.Client.PostMsgpack<EulaGetVersionListResponse>(
                 "eula/get_version_list",
                 new EulaGetVersionListRequest()
@@ -34,7 +34,7 @@ public class EulaTest : TestFixture
     [Fact]
     public async Task EulaGetVersion_ValidRegionAndLocale_ReturnsEulaData()
     {
-        EulaGetVersionData response = (
+        EulaGetVersionResponse response = (
             await this.Client.PostMsgpack<EulaGetVersionResponse>(
                 "eula/get_version",
                 new EulaGetVersionRequest("id_token", "gb", "en_eu")
@@ -44,14 +44,14 @@ public class EulaTest : TestFixture
         response
             .Should()
             .BeEquivalentTo(
-                new EulaGetVersionData(new AtgenVersionHash("gb", "en_eu", 1, 1), false, 1)
+                new EulaGetVersionResponse(new AtgenVersionHash("gb", "en_eu", 1, 1), false, 1)
             );
     }
 
     [Fact]
     public async Task EulaGetVersion_InvalidRegionOrLocale_ReturnsDefault()
     {
-        EulaGetVersionData response = (
+        EulaGetVersionResponse response = (
             await this.Client.PostMsgpack<EulaGetVersionResponse>(
                 "eula/get_version",
                 new EulaGetVersionRequest("id_token", "not even a country", "c#")
@@ -61,7 +61,7 @@ public class EulaTest : TestFixture
         response
             .Should()
             .BeEquivalentTo(
-                new EulaGetVersionData(new AtgenVersionHash("gb", "en_us", 1, 1), false, 1)
+                new EulaGetVersionResponse(new AtgenVersionHash("gb", "en_us", 1, 1), false, 1)
             );
     }
 }

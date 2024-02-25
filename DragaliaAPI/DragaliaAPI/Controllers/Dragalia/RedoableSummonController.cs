@@ -74,7 +74,7 @@ public class RedoableSummonController : DragaliaControllerBase
             )
         );
 
-    private static readonly RedoableSummonGetDataData CachedData =
+    private static readonly RedoableSummonGetDataResponse CachedData =
         new(null, new RedoableSummonOddsRateList(OddsRate, OddsRate));
 
     public RedoableSummonController(
@@ -134,7 +134,9 @@ public class RedoableSummonController : DragaliaControllerBase
             }
         );
 
-        return this.Ok(new RedoableSummonPreExecData(new UserRedoableSummonData(1, summonResult)));
+        return this.Ok(
+            new RedoableSummonPreExecResponse(new UserRedoableSummonData(1, summonResult))
+        );
     }
 
     [HttpPost]
@@ -190,7 +192,7 @@ public class RedoableSummonController : DragaliaControllerBase
             });
 
         return this.Ok(
-            new RedoableSummonFixExecData()
+            new RedoableSummonFixExecResponse()
             {
                 UserRedoableSummonData = new UserRedoableSummonData()
                 {

@@ -24,7 +24,7 @@ public class TransitionController : DragaliaControllerBase
         (long viewerId, _) = await this.authService.DoAuth(request.IdToken);
 
         return this.Ok(
-            new TransitionTransitionByNAccountData()
+            new TransitionTransitionByNAccountResponse()
             {
                 TransitionResultData = new()
                 {

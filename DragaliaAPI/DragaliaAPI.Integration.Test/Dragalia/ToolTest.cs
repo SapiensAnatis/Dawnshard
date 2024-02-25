@@ -20,7 +20,7 @@ public class ToolTest : TestFixture
     [Fact]
     public async Task ServiceStatus_ReturnsCorrectResponse()
     {
-        ToolGetServiceStatusData response = (
+        ToolGetServiceStatusResponse response = (
             await this.Client.PostMsgpack<ToolGetServiceStatusResponse>(
                 "tool/get_service_status",
                 new ToolGetServiceStatusRequest()
@@ -41,7 +41,7 @@ public class ToolTest : TestFixture
             .AsString();
         this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
 
-        ToolAuthData response = (
+        ToolAuthResponse response = (
             await this.Client.PostMsgpack<ToolAuthResponse>(endpoint, new ToolAuthRequest() { })
         ).data;
 

@@ -38,7 +38,7 @@ public class BonusServiceTest
     {
         string json = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
 
-        // Not deserializing to LoadIndexData directly as fort_bonus_list is [JsonIgnore]'d
+        // Not deserializing to LoadIndexResponse directly as fort_bonus_list is [JsonIgnore]'d
         JsonDocument savefile = JsonDocument.Parse(json);
 
         IEnumerable<BuildList> inputBuildList = savefile

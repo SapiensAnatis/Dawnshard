@@ -21,7 +21,11 @@ public class ToolController(IAuthService authService) : DragaliaControllerBaseCo
         (long viewerId, _) = await authService.DoAuth(idToken);
 
         return this.Ok(
-            new ToolSignupData() { ViewerId = (ulong)viewerId, Servertime = DateTimeOffset.UtcNow, }
+            new ToolSignupResponse()
+            {
+                ViewerId = (ulong)viewerId,
+                Servertime = DateTimeOffset.UtcNow,
+            }
         );
     }
 
@@ -29,7 +33,7 @@ public class ToolController(IAuthService authService) : DragaliaControllerBaseCo
     [Route("get_service_status")]
     public ActionResult<DragaliaResult> GetServiceStatus()
     {
-        return this.Ok(new ToolGetServiceStatusData(1));
+        return this.Ok(new ToolGetServiceStatusResponse(1));
     }
 
     [HttpPost]
@@ -42,7 +46,7 @@ public class ToolController(IAuthService authService) : DragaliaControllerBaseCo
         (long viewerId, string sessionId) = await authService.DoAuth(idToken);
 
         return this.Ok(
-            new ToolAuthData()
+            new ToolAuthResponse()
             {
                 SessionId = sessionId,
                 ViewerId = (ulong)viewerId,
@@ -57,7 +61,7 @@ public class ToolController(IAuthService authService) : DragaliaControllerBaseCo
         (long viewerId, string sessionId) = await authService.DoAuth(idToken);
 
         return this.Ok(
-            new ToolReauthData()
+            new ToolReauthResponse()
             {
                 SessionId = sessionId,
                 ViewerId = (ulong)viewerId,

@@ -19,7 +19,7 @@ public class DungeonTest : TestFixture
             )
         ).data.IngameData.DungeonKey;
 
-        DungeonGetAreaOddsData response = (
+        DungeonGetAreaOddsResponse response = (
             await this.Client.PostMsgpack<DungeonGetAreaOddsResponse>(
                 "/dungeon/get_area_odds",
                 new DungeonGetAreaOddsRequest() { AreaIdx = 1, DungeonKey = key }
@@ -44,7 +44,7 @@ public class DungeonTest : TestFixture
             )
         ).data.IngameData.DungeonKey;
 
-        DungeonFailData response = (
+        DungeonFailResponse response = (
             await this.Client.PostMsgpack<DungeonFailResponse>(
                 "/dungeon/fail",
                 new DungeonFailRequest() { DungeonKey = key }

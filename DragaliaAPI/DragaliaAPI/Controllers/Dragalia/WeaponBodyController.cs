@@ -42,7 +42,7 @@ public class WeaponBodyController : DragaliaControllerBase
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
-        WeaponBodyCraftData response = new() { UpdateDataList = updateDataList };
+        WeaponBodyCraftResponse response = new() { UpdateDataList = updateDataList };
         return this.Ok(response);
     }
 
@@ -90,6 +90,6 @@ public class WeaponBodyController : DragaliaControllerBase
             request.WeaponBodyId
         );
 
-        return this.Ok(new WeaponBodyBuildupPieceData() { UpdateDataList = updateDataList });
+        return this.Ok(new WeaponBodyBuildupPieceResponse() { UpdateDataList = updateDataList });
     }
 }

@@ -35,7 +35,7 @@ public class DungeonController(
             s => s.EnemyList[request.AreaIdx] = oddsInfo.Enemy
         );
 
-        return Ok(new DungeonGetAreaOddsData() { OddsInfo = oddsInfo });
+        return Ok(new DungeonGetAreaOddsResponse() { OddsInfo = oddsInfo });
     }
 
     [HttpPost("fail")]
@@ -43,7 +43,7 @@ public class DungeonController(
     {
         DungeonSession session = await dungeonService.FinishDungeon(request.DungeonKey);
 
-        DungeonFailData response =
+        DungeonFailResponse response =
             new()
             {
                 Result = 1,
@@ -76,7 +76,7 @@ public class DungeonController(
     [HttpPost("receive_quest_bonus")]
     public async Task<DragaliaResult> ReceiveQuestBonus(DungeonReceiveQuestBonusRequest request)
     {
-        DungeonReceiveQuestBonusData resp = new();
+        DungeonReceiveQuestBonusResponse resp = new();
 
         resp.ReceiveQuestBonus = await questService.ReceiveQuestBonus(
             request.QuestEventId,

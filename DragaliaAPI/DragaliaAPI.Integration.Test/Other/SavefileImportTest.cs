@@ -53,8 +53,11 @@ public class SavefileImportTest : TestFixture
     {
         string savefileJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
 
-        LoadIndexData savefile = JsonSerializer
-            .Deserialize<DragaliaResponse<LoadIndexData>>(savefileJson, ApiJsonOptions.Instance)!
+        LoadIndexResponse savefile = JsonSerializer
+            .Deserialize<DragaliaResponse<LoadIndexResponse>>(
+                savefileJson,
+                ApiJsonOptions.Instance
+            )!
             .data;
 
         HttpContent content = new StringContent(savefileJson);
@@ -71,7 +74,7 @@ public class SavefileImportTest : TestFixture
             .LastSaveImportTime.Should()
             .BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMinutes(1));
 
-        LoadIndexData storedSavefile = (
+        LoadIndexResponse storedSavefile = (
             await this.Client.PostMsgpack<LoadIndexResponse>("load/index", new LoadIndexRequest())
         ).data;
 
@@ -225,8 +228,11 @@ public class SavefileImportTest : TestFixture
     {
         string savefileJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
 
-        LoadIndexData savefile = JsonSerializer
-            .Deserialize<DragaliaResponse<LoadIndexData>>(savefileJson, ApiJsonOptions.Instance)!
+        LoadIndexResponse savefile = JsonSerializer
+            .Deserialize<DragaliaResponse<LoadIndexResponse>>(
+                savefileJson,
+                ApiJsonOptions.Instance
+            )!
             .data;
 
         HttpContent content = new StringContent(savefileJson);

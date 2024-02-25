@@ -44,7 +44,7 @@ public class FriendController : DragaliaControllerBase
     {
         // i think this method needs to be utilized by HelperService in the future? any friends' helpers
         // should be retrieved from this method while the gaps are filled by other ppl in the database
-        return Ok(new FriendGetSupportCharaData(0, StubSupportCharacter));
+        return Ok(new FriendGetSupportCharaResponse(0, StubSupportCharacter));
     }
 
     [HttpPost]
@@ -54,7 +54,7 @@ public class FriendController : DragaliaControllerBase
     )
     {
         // this eventually needs to pull from the database from another user's account based on viewer id
-        QuestGetSupportUserListData helperList = await this.helperService.GetHelpers();
+        QuestGetSupportUserListResponse helperList = await this.helperService.GetHelpers();
 
         UserSupportList helperInfo =
             helperList
@@ -75,7 +75,7 @@ public class FriendController : DragaliaControllerBase
         // TODO: when helpers are converted to use other account ids, get the bonuses of that account id
         FortBonusList bonusList = await bonusService.GetBonusList();
 
-        FriendGetSupportCharaDetailData response =
+        FriendGetSupportCharaDetailResponse response =
             new()
             {
                 SupportUserDataDetail = new()
@@ -96,8 +96,8 @@ public class FriendController : DragaliaControllerBase
     }
 
     [HttpPost("friend_index")]
-    public DragaliaResult<FriendFriendIndexData> FriendIndex() =>
-        new FriendFriendIndexData()
+    public DragaliaResult<FriendFriendIndexResponse> FriendIndex() =>
+        new FriendFriendIndexResponse()
         {
             FriendCount = 0,
             EntityResult = new(),
@@ -105,20 +105,20 @@ public class FriendController : DragaliaControllerBase
         };
 
     [HttpPost("friend_list")]
-    public DragaliaResult<FriendFriendListData> FriendList() =>
-        new FriendFriendListData() { FriendList = [], NewFriendViewerIdList = [] };
+    public DragaliaResult<FriendFriendListResponse> FriendList() =>
+        new FriendFriendListResponse() { FriendList = [], NewFriendViewerIdList = [] };
 
     [HttpPost("auto_search")]
-    public DragaliaResult<FriendAutoSearchData> AutoSearch() =>
-        new FriendAutoSearchData() { Result = 1, SearchList = [], };
+    public DragaliaResult<FriendAutoSearchResponse> AutoSearch() =>
+        new FriendAutoSearchResponse() { Result = 1, SearchList = [], };
 
     [HttpPost("request_list")]
-    public DragaliaResult<FriendRequestListData> RequestList() =>
-        new FriendRequestListData() { Result = 1, RequestList = [] };
+    public DragaliaResult<FriendRequestListResponse> RequestList() =>
+        new FriendRequestListResponse() { Result = 1, RequestList = [] };
 
     [HttpPost("apply_list")]
-    public DragaliaResult<FriendApplyListData> ApplyList() =>
-        new FriendApplyListData()
+    public DragaliaResult<FriendApplyListResponse> ApplyList() =>
+        new FriendApplyListResponse()
         {
             Result = 1,
             NewApplyViewerIdList = [],
@@ -126,8 +126,8 @@ public class FriendController : DragaliaControllerBase
         };
 
     [HttpPost("set_support_chara")]
-    public DragaliaResult<FriendSetSupportCharaData> SetSupportChara() =>
-        new FriendSetSupportCharaData()
+    public DragaliaResult<FriendSetSupportCharaResponse> SetSupportChara() =>
+        new FriendSetSupportCharaResponse()
         {
             Result = 1,
             UpdateDataList = new(),

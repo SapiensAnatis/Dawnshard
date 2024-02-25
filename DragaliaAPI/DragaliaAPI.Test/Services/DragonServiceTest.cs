@@ -72,7 +72,7 @@ public class DragonServiceTest
             out List<DbPlayerDragonReliability> dragonRels,
             out List<DbPlayerStoryState> stories
         );
-        DragonGetContactDataData responseData = await dragonService.DoDragonGetContactData(
+        DragonGetContactDataResponse responseData = await dragonService.DoDragonGetContactData(
             new DragonGetContactDataRequest()
         );
 
@@ -152,7 +152,7 @@ public class DragonServiceTest
         );
 
         long startCoin = userData.Coin;
-        DragonBuyGiftToSendMultipleData responseData =
+        DragonBuyGiftToSendMultipleResponse responseData =
             await dragonService.DoDragonBuyGiftToSendMultiple(
                 new DragonBuyGiftToSendMultipleRequest()
                 {
@@ -218,7 +218,7 @@ public class DragonServiceTest
         );
 
         long startCoin = userData.Coin;
-        DragonBuyGiftToSendMultipleData responseData =
+        DragonBuyGiftToSendMultipleResponse responseData =
             await dragonService.DoDragonBuyGiftToSendMultiple(
                 new DragonBuyGiftToSendMultipleRequest()
                 {
@@ -280,7 +280,7 @@ public class DragonServiceTest
             x.OnDragonGiftSent(dragon, gift, element, usedQuantity, 0)
         );
 
-        DragonSendGiftMultipleData responseData = await dragonService.DoDragonSendGiftMultiple(
+        DragonSendGiftMultipleResponse responseData = await dragonService.DoDragonSendGiftMultiple(
             new DragonSendGiftMultipleRequest()
             {
                 DragonId = dragon,
@@ -609,7 +609,7 @@ public class DragonServiceTest
             .Setup(x => x.RemoveDragons(new List<long>() { 1 }))
             .Callback(() => dragonDataList.RemoveAll(x => x.DragonKeyId == 1));
 
-        DragonSellData response = await dragonService.DoDragonSell(
+        DragonSellResponse response = await dragonService.DoDragonSell(
             new DragonSellRequest() { DragonKeyIdList = new List<ulong>() { 1 } }
         );
 

@@ -117,7 +117,7 @@ public class WeaponBodyTest : TestFixture
                 BuildupWeaponBodyPieceList = testCase.StepList
             };
 
-        WeaponBodyBuildupPieceData response = (
+        WeaponBodyBuildupPieceResponse response = (
             await this.Client.PostMsgpack<WeaponBodyBuildupPieceResponse>(
                 $"{EndpointGroup}/buildup_piece",
                 request

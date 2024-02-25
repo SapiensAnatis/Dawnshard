@@ -21,7 +21,7 @@ public class EarnEventController(
     [HttpPost("get_event_data")]
     public async Task<DragaliaResult> GetEventData(EarnEventGetEventDataRequest request)
     {
-        EarnEventGetEventDataData resp = new();
+        EarnEventGetEventDataResponse resp = new();
 
         resp.EarnEventUserData = await eventService.GetEarnEventUserData(request.EventId);
         resp.EventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
@@ -44,7 +44,7 @@ public class EarnEventController(
     [HttpPost("entry")]
     public async Task<DragaliaResult> Entry(EarnEventEntryRequest request)
     {
-        EarnEventEntryData resp = new();
+        EarnEventEntryResponse resp = new();
 
         // TODO: Complete first event mission once thats implemented
         await eventService.CreateEventData(request.EventId);
@@ -61,7 +61,7 @@ public class EarnEventController(
         EarnEventReceiveEventPointRewardRequest request
     )
     {
-        EarnEventReceiveEventPointRewardData resp = new();
+        EarnEventReceiveEventPointRewardResponse resp = new();
 
         resp.EventRewardEntityList = await eventService.ReceiveEventRewards(request.EventId);
 

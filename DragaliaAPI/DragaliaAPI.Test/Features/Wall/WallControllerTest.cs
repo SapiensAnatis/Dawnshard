@@ -59,9 +59,9 @@ public class WallControllerTest
 
         mockWallService.Setup(x => x.GetTotalWallLevel()).ReturnsAsync(totalLevel);
 
-        WallGetMonthlyRewardData data = (
+        WallGetMonthlyRewardResponse data = (
             await wallController.GetMonthlyReward()
-        ).GetData<WallGetMonthlyRewardData>()!;
+        ).GetData<WallGetMonthlyRewardResponse>()!;
 
         data.UserWallRewardList.Should().BeEquivalentTo(userRewardList);
 
@@ -132,9 +132,9 @@ public class WallControllerTest
 
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(new UpdateDataList());
 
-        WallReceiveMonthlyRewardData data = (
+        WallReceiveMonthlyRewardResponse data = (
             await wallController.ReceiveMonthlyReward(new WallReceiveMonthlyRewardRequest())
-        ).GetData<WallReceiveMonthlyRewardData>()!;
+        ).GetData<WallReceiveMonthlyRewardResponse>()!;
 
         data.UserWallRewardList.Should().BeEquivalentTo(userRewardList);
         data.MonthlyWallReceiveList.Should().BeEquivalentTo(monthlyWallReceiveListList);

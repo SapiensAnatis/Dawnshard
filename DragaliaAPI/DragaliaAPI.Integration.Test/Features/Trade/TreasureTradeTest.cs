@@ -16,7 +16,7 @@ public class TreasureTradeTest : TestFixture
     {
         await this.ApiContext.SaveChangesAsync();
 
-        TreasureTradeGetListAllData response = (
+        TreasureTradeGetListAllResponse response = (
             await Client.PostMsgpack<TreasureTradeGetListAllResponse>(
                 "treasure_trade/get_list_all",
                 new TreasureTradeGetListAllRequest()
@@ -42,7 +42,7 @@ public class TreasureTradeTest : TestFixture
             }
         );
 
-        TreasureTradeGetListAllData response = (
+        TreasureTradeGetListAllResponse response = (
             await Client.PostMsgpack<TreasureTradeGetListAllResponse>(
                 "treasure_trade/get_list_all",
                 new TreasureTradeGetListAllRequest()

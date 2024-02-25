@@ -24,7 +24,7 @@ public class UserTest : TestFixture
         )
             .data.Should()
             .BeEquivalentTo(
-                new UserLinkedNAccountData()
+                new UserLinkedNAccountResponse()
                 {
                     UpdateDataList = new() { UserData = expectedUserData }
                 },
@@ -43,7 +43,7 @@ public class UserTest : TestFixture
         )
             .data.Should()
             .BeEquivalentTo(
-                new UserGetNAccountInfoData()
+                new UserGetNAccountInfoResponse()
                 {
                     NAccountInfo = new()
                     {

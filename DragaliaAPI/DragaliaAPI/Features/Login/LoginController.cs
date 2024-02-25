@@ -61,7 +61,7 @@ public class LoginController : DragaliaControllerBase
     [Route("index")]
     public async Task<DragaliaResult> Index()
     {
-        LoginIndexData resp = new();
+        LoginIndexResponse resp = new();
 
         // TODO: Implement daily login bonuses/notifications/resets (status: daily login bonus done)
         DbPlayerUserData userData =

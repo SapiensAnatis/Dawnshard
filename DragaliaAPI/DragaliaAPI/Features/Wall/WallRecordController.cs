@@ -119,7 +119,7 @@ public class WallRecordController : DragaliaControllerBase
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        WallRecordRecordData data =
+        WallRecordRecordResponse data =
             new()
             {
                 UpdateDataList = updateDataList,

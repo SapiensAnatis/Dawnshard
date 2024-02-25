@@ -30,7 +30,7 @@ public partial class TutorialController : DragaliaControllerBase
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
-        return this.Ok(new TutorialUpdateStepData(currentStep, updateDataList, new()));
+        return this.Ok(new TutorialUpdateStepResponse(currentStep, updateDataList, new()));
     }
 
     [HttpPost]
@@ -41,6 +41,6 @@ public partial class TutorialController : DragaliaControllerBase
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
-        return this.Ok(new TutorialUpdateFlagsData(currentFlags, updateDataList, new()));
+        return this.Ok(new TutorialUpdateFlagsResponse(currentFlags, updateDataList, new()));
     }
 }

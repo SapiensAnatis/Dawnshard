@@ -23,7 +23,7 @@ public class MypageController(
     [HttpPost]
     public async Task<DragaliaResult> Info()
     {
-        MypageInfoData resp = new();
+        MypageInfoResponse resp = new();
 
         resp.UserSummonList = new List<UserSummonList>();
         resp.QuestEventScheduleList = new List<QuestEventScheduleList>();

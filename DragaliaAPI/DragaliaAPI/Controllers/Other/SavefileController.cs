@@ -33,7 +33,7 @@ public class SavefileController : ControllerBase
     [HttpPost("import/{viewerId:long}")]
     public async Task<IActionResult> Import(
         long viewerId,
-        [FromBody] DragaliaResponse<LoadIndexData> loadIndexResponse
+        [FromBody] DragaliaResponse<LoadIndexResponse> loadIndexResponse
     )
     {
         string accountId = await LookupAccountId(viewerId);
@@ -56,7 +56,7 @@ public class SavefileController : ControllerBase
             accountId
         );
 
-        DragaliaResponse<LoadIndexData> result = new(await loadService.BuildIndexData());
+        DragaliaResponse<LoadIndexResponse> result = new(await loadService.BuildIndexData());
         return Ok(result);
     }
 

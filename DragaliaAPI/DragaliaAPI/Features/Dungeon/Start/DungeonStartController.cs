@@ -37,7 +37,7 @@ public class DungeonStartController(
             request.SupportViewerId
         );
 
-        DungeonStartStartData response = await BuildResponse(request.QuestId, ingameData);
+        DungeonStartStartResponse response = await BuildResponse(request.QuestId, ingameData);
 
         return Ok(response);
     }
@@ -75,13 +75,13 @@ public class DungeonStartController(
             }
         );
 
-        DungeonStartStartData response = await BuildResponse(request.QuestId, ingameData);
+        DungeonStartStartResponse response = await BuildResponse(request.QuestId, ingameData);
 
         return Ok(response);
     }
 
     [HttpPost("start_assign_unit")]
-    public async Task<DragaliaResult<DungeonStartStartAssignUnitData>> StartAssignUnit(
+    public async Task<DragaliaResult<DungeonStartStartAssignUnitResponse>> StartAssignUnit(
         DungeonStartStartAssignUnitRequest request
     )
     {
@@ -95,7 +95,7 @@ public class DungeonStartController(
             request.RepeatSetting
         );
 
-        DungeonStartStartData response = await BuildResponse(request.QuestId, ingameData);
+        DungeonStartStartResponse response = await BuildResponse(request.QuestId, ingameData);
 
         response.IngameData.RepeatState = request.RepeatState;
 
@@ -140,12 +140,12 @@ public class DungeonStartController(
             }
         );
 
-        DungeonStartStartData response = await BuildResponse(request.QuestId, ingameData);
+        DungeonStartStartResponse response = await BuildResponse(request.QuestId, ingameData);
 
         return Ok(response);
     }
 
-    private async Task<DungeonStartStartData> BuildResponse(int questId, IngameData ingameData)
+    private async Task<DungeonStartStartResponse> BuildResponse(int questId, IngameData ingameData)
     {
         logger.LogDebug("Starting dungeon for quest id {questId}", questId);
 

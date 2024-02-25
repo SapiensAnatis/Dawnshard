@@ -35,7 +35,7 @@ public class PartyController(
     [HttpPost("index")]
     public DragaliaResult Index()
     {
-        return this.Ok(new PartyIndexData(new List<BuildList>()));
+        return this.Ok(new PartyIndexResponse(new List<BuildList>()));
     }
 
     [HttpPost("set_party_setting")]
@@ -84,7 +84,7 @@ public class PartyController(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        return this.Ok(new PartySetPartySettingData(updateDataList, new()));
+        return this.Ok(new PartySetPartySettingResponse(updateDataList, new()));
     }
 
     [HttpPost("set_main_party_no")]
@@ -94,7 +94,7 @@ public class PartyController(
 
         await updateDataService.SaveChangesAsync();
 
-        return this.Ok(new PartySetMainPartyNoData(request.MainPartyNo));
+        return this.Ok(new PartySetMainPartyNoResponse(request.MainPartyNo));
     }
 
     [HttpPost("update_party_name")]
@@ -104,7 +104,7 @@ public class PartyController(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        return this.Ok(new PartyUpdatePartyNameData() { UpdateDataList = updateDataList });
+        return this.Ok(new PartyUpdatePartyNameResponse() { UpdateDataList = updateDataList });
     }
 
     private async Task<bool> ValidateCharacterId(Charas id)

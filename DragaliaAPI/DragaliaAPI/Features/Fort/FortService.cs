@@ -84,12 +84,12 @@ public class FortService(
         return fortDetail;
     }
 
-    public async Task<FortGetMultiIncomeData> CollectIncome(IEnumerable<long> idsToCollect)
+    public async Task<FortGetMultiIncomeResponse> CollectIncome(IEnumerable<long> idsToCollect)
     {
         Random rdm = Random.Shared;
         DateTimeOffset current = dateTimeProvider.UtcNow;
 
-        FortGetMultiIncomeData resp = new();
+        FortGetMultiIncomeResponse resp = new();
 
         List<AtgenAddCoinList> coinList = new();
         List<AtgenAddStaminaList> staminaList = new();

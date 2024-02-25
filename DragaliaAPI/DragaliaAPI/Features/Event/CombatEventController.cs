@@ -19,7 +19,7 @@ public class CombatEventController(
     [HttpPost("get_event_data")]
     public async Task<DragaliaResult> GetEventData(CombatEventGetEventDataRequest request)
     {
-        CombatEventGetEventDataData resp = new();
+        CombatEventGetEventDataResponse resp = new();
 
         resp.CombatEventUserData = await eventService.GetCombatEventUserData(request.EventId);
         resp.EventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
@@ -38,7 +38,7 @@ public class CombatEventController(
     [HttpPost("entry")]
     public async Task<DragaliaResult> Entry(CombatEventEntryRequest request)
     {
-        CombatEventEntryData resp = new();
+        CombatEventEntryResponse resp = new();
 
         // TODO: Complete first event mission once thats implemented
 
@@ -54,7 +54,7 @@ public class CombatEventController(
         CombatEventReceiveEventPointRewardRequest request
     )
     {
-        CombatEventReceiveEventPointRewardData resp = new();
+        CombatEventReceiveEventPointRewardResponse resp = new();
 
         resp.EventRewardEntityList = await eventService.ReceiveEventRewards(request.EventId);
 
@@ -73,7 +73,7 @@ public class CombatEventController(
         CombatEventReceiveEventLocationRewardRequest request
     )
     {
-        CombatEventReceiveEventLocationRewardData resp = new();
+        CombatEventReceiveEventLocationRewardResponse resp = new();
 
         resp.EventLocationRewardEntityList = await eventService.ReceiveEventLocationReward(
             request.EventId,

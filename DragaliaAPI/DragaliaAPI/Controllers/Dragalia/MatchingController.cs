@@ -20,14 +20,17 @@ public class MatchingController : DragaliaControllerBase
     public async Task<DragaliaResult> GetRoomList(MatchingGetRoomListRequest request)
     {
         return this.Ok(
-            new MatchingGetRoomListData() { RoomList = await this.matchingService.GetRoomList() }
+            new MatchingGetRoomListResponse()
+            {
+                RoomList = await this.matchingService.GetRoomList()
+            }
         );
     }
 
     [HttpPost("get_room_name")]
     public async Task<DragaliaResult> GetRoomName(MatchingGetRoomNameRequest request)
     {
-        MatchingGetRoomNameData? data = await this.matchingService.GetRoomById(request.RoomId);
+        MatchingGetRoomNameResponse? data = await this.matchingService.GetRoomById(request.RoomId);
 
         if (data is null)
         {
@@ -45,7 +48,7 @@ public class MatchingController : DragaliaControllerBase
     )
     {
         return this.Ok(
-            new MatchingGetRoomListByQuestIdData()
+            new MatchingGetRoomListByQuestIdResponse()
             {
                 RoomList = await this.matchingService.GetRoomList(request.QuestId)
             }
@@ -55,6 +58,6 @@ public class MatchingController : DragaliaControllerBase
     [HttpPost("check_penalty_user")]
     public DragaliaResult CheckPenaltyUser(MatchingCheckPenaltyUserRequest request)
     {
-        return this.Ok(new MatchingCheckPenaltyUserData() { Result = 1 });
+        return this.Ok(new MatchingCheckPenaltyUserResponse() { Result = 1 });
     }
 }

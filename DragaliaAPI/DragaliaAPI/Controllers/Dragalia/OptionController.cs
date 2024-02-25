@@ -8,7 +8,7 @@ public class OptionController : DragaliaControllerBase
 {
     private static class StubData
     {
-        public static OptionGetOptionData OptionData =
+        public static OptionGetOptionResponse OptionData =
             new()
             {
                 OptionData = new()

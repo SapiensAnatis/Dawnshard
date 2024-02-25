@@ -18,7 +18,7 @@ public class VersionTest : TestFixture
         string expectedVersion
     )
     {
-        VersionGetResourceVersionData response = (
+        VersionGetResourceVersionResponse response = (
             await this.Client.PostMsgpack<VersionGetResourceVersionResponse>(
                 "version/get_resource_version",
                 new VersionGetResourceVersionRequest(platform, "whatever")

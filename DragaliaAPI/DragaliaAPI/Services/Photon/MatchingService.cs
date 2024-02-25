@@ -67,7 +67,7 @@ public class MatchingService : IMatchingService
         return mapped;
     }
 
-    public async Task<MatchingGetRoomNameData?> GetRoomById(int id)
+    public async Task<MatchingGetRoomNameResponse?> GetRoomById(int id)
     {
         this.logger.LogDebug("Getting room for ID {id}", id);
 

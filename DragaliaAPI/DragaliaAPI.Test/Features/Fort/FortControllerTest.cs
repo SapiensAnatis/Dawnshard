@@ -68,7 +68,7 @@ public class FortControllerTest
 
         this.mockDragonService.Setup(x => x.GetFreeGiftCount()).ReturnsAsync(2);
 
-        FortGetDataData data = (await fortController.GetData()).GetData<FortGetDataData>()!;
+        FortGetDataResponse data = (await fortController.GetData()).GetData<FortGetDataResponse>()!;
 
         data.BuildList.Should().BeEquivalentTo(buildList);
         data.FortBonusList.Should().BeEquivalentTo(bonusList);
@@ -92,11 +92,11 @@ public class FortControllerTest
 
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
-        FortAddCarpenterData data = (
+        FortAddCarpenterResponse data = (
             await fortController.AddCarpenter(
                 new FortAddCarpenterRequest() { PaymentType = PaymentTypes.Diamantium }
             )
-        ).GetData<FortAddCarpenterData>()!;
+        ).GetData<FortAddCarpenterResponse>()!;
 
         data.Result.Should().Be(1);
         data.FortDetail.Should().BeEquivalentTo(detail);
@@ -134,7 +134,7 @@ public class FortControllerTest
 
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
-        FortBuildAtOnceData data = (
+        FortBuildAtOnceResponse data = (
             await fortController.BuildAtOnce(
                 new FortBuildAtOnceRequest()
                 {
@@ -142,7 +142,7 @@ public class FortControllerTest
                     BuildId = 8
                 }
             )
-        ).GetData<FortBuildAtOnceData>()!;
+        ).GetData<FortBuildAtOnceResponse>()!;
 
         data.Result.Should().Be(1);
         data.BuildId.Should().Be(8);
@@ -168,9 +168,9 @@ public class FortControllerTest
 
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
-        FortBuildCancelData data = (
+        FortBuildCancelResponse data = (
             await fortController.BuildCancel(new FortBuildCancelRequest() { BuildId = 1 })
-        ).GetData<FortBuildCancelData>()!;
+        ).GetData<FortBuildCancelResponse>()!;
 
         data.Result.Should().Be(1);
         data.BuildId.Should().Be(1);
@@ -207,9 +207,9 @@ public class FortControllerTest
 
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
-        FortBuildEndData data = (
+        FortBuildEndResponse data = (
             await fortController.BuildEnd(new FortBuildEndRequest() { BuildId = 8 })
-        ).GetData<FortBuildEndData>()!;
+        ).GetData<FortBuildEndResponse>()!;
 
         data.Result.Should().Be(1);
         data.BuildId.Should().Be(8);
@@ -243,7 +243,7 @@ public class FortControllerTest
 
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
-        FortBuildStartData data = (
+        FortBuildStartResponse data = (
             await fortController.BuildStart(
                 new FortBuildStartRequest()
                 {
@@ -252,7 +252,7 @@ public class FortControllerTest
                     PositionZ = 3
                 }
             )
-        ).GetData<FortBuildStartData>()!;
+        ).GetData<FortBuildStartResponse>()!;
 
         data.Result.Should().Be(1);
         data.BuildId.Should().Be((ulong)build.BuildId);
@@ -295,7 +295,7 @@ public class FortControllerTest
 
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
-        FortLevelupAtOnceData data = (
+        FortLevelupAtOnceResponse data = (
             await fortController.LevelupAtOnce(
                 new FortLevelupAtOnceRequest()
                 {
@@ -303,7 +303,7 @@ public class FortControllerTest
                     BuildId = 8
                 }
             )
-        ).GetData<FortLevelupAtOnceData>()!;
+        ).GetData<FortLevelupAtOnceResponse>()!;
 
         data.Result.Should().Be(1);
         data.BuildId.Should().Be(8);
@@ -331,9 +331,9 @@ public class FortControllerTest
 
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
-        FortLevelupCancelData data = (
+        FortLevelupCancelResponse data = (
             await fortController.LevelupCancel(new FortLevelupCancelRequest() { BuildId = 1 })
-        ).GetData<FortLevelupCancelData>()!;
+        ).GetData<FortLevelupCancelResponse>()!;
 
         data.Result.Should().Be(1);
         data.BuildId.Should().Be(1);
@@ -371,9 +371,9 @@ public class FortControllerTest
 
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
-        FortLevelupEndData data = (
+        FortLevelupEndResponse data = (
             await fortController.LevelupEnd(new FortLevelupEndRequest() { BuildId = 8 })
-        ).GetData<FortLevelupEndData>()!;
+        ).GetData<FortLevelupEndResponse>()!;
 
         data.Result.Should().Be(1);
         data.BuildId.Should().Be(8);
@@ -409,9 +409,9 @@ public class FortControllerTest
 
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
-        FortLevelupStartData data = (
+        FortLevelupStartResponse data = (
             await fortController.LevelupStart(new FortLevelupStartRequest() { BuildId = 1 })
-        ).GetData<FortLevelupStartData>()!;
+        ).GetData<FortLevelupStartResponse>()!;
 
         data.Result.Should().Be(1);
         data.BuildId.Should().Be(build.BuildId);
@@ -451,7 +451,7 @@ public class FortControllerTest
 
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
-        FortMoveData data = (
+        FortMoveResponse data = (
             await fortController.Move(
                 new FortMoveRequest()
                 {
@@ -460,7 +460,7 @@ public class FortControllerTest
                     AfterPositionZ = 3
                 }
             )
-        ).GetData<FortMoveData>()!;
+        ).GetData<FortMoveResponse>()!;
 
         data.Result.Should().Be(1);
         data.BuildId.Should().Be(1);

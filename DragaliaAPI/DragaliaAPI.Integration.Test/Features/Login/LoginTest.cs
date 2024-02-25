@@ -156,7 +156,7 @@ public class LoginTest : TestFixture
             }
         );
 
-        DragaliaResponse<LoginIndexData> response =
+        DragaliaResponse<LoginIndexResponse> response =
             await this.Client.PostMsgpack<LoginIndexResponse>(
                 "/login/index",
                 new LoginIndexRequest()
@@ -192,7 +192,7 @@ public class LoginTest : TestFixture
             }
         );
 
-        DragaliaResponse<LoginIndexData> response =
+        DragaliaResponse<LoginIndexResponse> response =
             await this.Client.PostMsgpack<LoginIndexResponse>(
                 "/login/index",
                 new LoginIndexRequest()
@@ -229,7 +229,7 @@ public class LoginTest : TestFixture
             }
         );
 
-        DragaliaResponse<LoginIndexData> response =
+        DragaliaResponse<LoginIndexResponse> response =
             await this.Client.PostMsgpack<LoginIndexResponse>(
                 "/login/index",
                 new LoginIndexRequest()
@@ -257,7 +257,7 @@ public class LoginTest : TestFixture
             .IsComplete.Should()
             .BeTrue();
 
-        DragaliaResponse<LoginIndexData> secondResponse =
+        DragaliaResponse<LoginIndexResponse> secondResponse =
             await this.Client.PostMsgpack<LoginIndexResponse>(
                 "/login/index",
                 new LoginIndexRequest()
@@ -284,7 +284,7 @@ public class LoginTest : TestFixture
             .Select(x => x.Quantity)
             .FirstAsync();
 
-        LoginIndexData response = (
+        LoginIndexResponse response = (
             await this.Client.PostMsgpack<LoginIndexResponse>(
                 "login/index",
                 new LoginIndexRequest() { JwsResult = string.Empty }

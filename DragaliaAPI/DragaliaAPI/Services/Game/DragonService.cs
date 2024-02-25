@@ -29,7 +29,7 @@ public class DragonService(
     IResetHelper resetHelper
 ) : IDragonService
 {
-    public async Task<DragonGetContactDataData> DoDragonGetContactData(
+    public async Task<DragonGetContactDataResponse> DoDragonGetContactData(
         DragonGetContactDataRequest request
     )
     {
@@ -55,7 +55,7 @@ public class DragonService(
                 IsBuy = x.Quantity > 0
             })
             .ToList();
-        return new DragonGetContactDataData(giftList);
+        return new DragonGetContactDataResponse(giftList);
     }
 
     public Task<int> GetFreeGiftCount()
@@ -374,7 +374,7 @@ public class DragonService(
         return giftsPerGift;
     }
 
-    public async Task<DragonBuyGiftToSendMultipleData> DoDragonBuyGiftToSendMultiple(
+    public async Task<DragonBuyGiftToSendMultipleResponse> DoDragonBuyGiftToSendMultiple(
         DragonBuyGiftToSendMultipleRequest request
     )
     {
@@ -464,7 +464,7 @@ public class DragonService(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        return new DragonBuyGiftToSendMultipleData()
+        return new DragonBuyGiftToSendMultipleResponse()
         {
             DragonContactFreeGiftCount = 0,
             DragonGiftRewardList = rewardObjList,
@@ -474,7 +474,7 @@ public class DragonService(
         };
     }
 
-    public async Task<DragonSendGiftMultipleData> DoDragonSendGiftMultiple(
+    public async Task<DragonSendGiftMultipleResponse> DoDragonSendGiftMultiple(
         DragonSendGiftMultipleRequest request
     )
     {
@@ -539,7 +539,7 @@ public class DragonService(
             rewards,
             levelGifts
         );
-        return new DragonSendGiftMultipleData()
+        return new DragonSendGiftMultipleResponse()
         {
             IsFavorite = true,
             RewardReliabilityList =
@@ -549,7 +549,7 @@ public class DragonService(
         };
     }
 
-    public async Task<DragonBuildupData> DoBuildup(DragonBuildupRequest request)
+    public async Task<DragonBuildupResponse> DoBuildup(DragonBuildupRequest request)
     {
         IEnumerable<Materials> matIds = request
             .GrowMaterialList.Where(x => x.Type == EntityTypes.Material)
@@ -604,7 +604,7 @@ public class DragonService(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        return new DragonBuildupData(
+        return new DragonBuildupResponse(
             updateDataList,
             new DeleteDataList(
                 request
@@ -745,7 +745,7 @@ public class DragonService(
         }
     }
 
-    public async Task<DragonResetPlusCountData> DoDragonResetPlusCount(
+    public async Task<DragonResetPlusCountResponse> DoDragonResetPlusCount(
         DragonResetPlusCountRequest request
     )
     {
@@ -783,10 +783,10 @@ public class DragonService(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        return new DragonResetPlusCountData(updateDataList, rewardService.GetEntityResult());
+        return new DragonResetPlusCountResponse(updateDataList, rewardService.GetEntityResult());
     }
 
-    public async Task<DragonLimitBreakData> DoDragonLimitBreak(DragonLimitBreakRequest request)
+    public async Task<DragonLimitBreakResponse> DoDragonLimitBreak(DragonLimitBreakRequest request)
     {
         DbPlayerDragonData playerDragonData =
             await unitRepository
@@ -879,7 +879,7 @@ public class DragonService(
 
         UpdateDataList udl = await updateDataService.SaveChangesAsync();
 
-        return new DragonLimitBreakData()
+        return new DragonLimitBreakResponse()
         {
             DeleteDataList = new DeleteDataList()
             {
@@ -893,7 +893,7 @@ public class DragonService(
         };
     }
 
-    public async Task<DragonSetLockData> DoDragonSetLock(DragonSetLockRequest request)
+    public async Task<DragonSetLockResponse> DoDragonSetLock(DragonSetLockRequest request)
     {
         (
             await unitRepository.Dragons.SingleOrDefaultAsync(dragon =>
@@ -908,10 +908,10 @@ public class DragonService(
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
         await userDataRepository.SaveChangesAsync();
-        return new DragonSetLockData(updateDataList, new());
+        return new DragonSetLockResponse(updateDataList, new());
     }
 
-    public async Task<DragonSellData> DoDragonSell(DragonSellRequest request)
+    public async Task<DragonSellResponse> DoDragonSell(DragonSellRequest request)
     {
         List<DbPlayerDragonData> selectedPlayerDragons = await unitRepository
             .Dragons.Where(x =>
@@ -970,7 +970,7 @@ public class DragonService(
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
         await userDataRepository.SaveChangesAsync();
-        return new DragonSellData(
+        return new DragonSellResponse(
             new DeleteDataList(
                 request.DragonKeyIdList.Select(x => new AtgenDeleteDragonList()
                 {

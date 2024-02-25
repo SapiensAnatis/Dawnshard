@@ -10,7 +10,7 @@ public class AlbumController : DragaliaControllerBase
     [HttpPost("index")]
     public DragaliaResult Index()
     {
-        AlbumIndexData stubResponse =
+        AlbumIndexResponse stubResponse =
             new()
             {
                 AlbumDragonList = Enumerable.Empty<AlbumDragonData>(),

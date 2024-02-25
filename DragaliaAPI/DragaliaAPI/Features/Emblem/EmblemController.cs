@@ -17,7 +17,7 @@ public class EmblemController(
     [HttpPost("get_list")]
     public async Task<DragaliaResult> GetList()
     {
-        EmblemGetListData resp = new();
+        EmblemGetListResponse resp = new();
 
         resp.EmblemList = (await emblemRepository.GetEmblemsAsync()).Select(x => new EmblemList(
             x.EmblemId,
@@ -31,7 +31,7 @@ public class EmblemController(
     [HttpPost("set")]
     public async Task<DragaliaResult> Set(EmblemSetRequest request)
     {
-        EmblemSetData resp = new();
+        EmblemSetResponse resp = new();
 
         if (!await emblemRepository.HasEmblem(request.EmblemId))
         {

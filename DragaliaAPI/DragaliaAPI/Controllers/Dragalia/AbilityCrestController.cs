@@ -52,7 +52,7 @@ public class AbilityCrestController : DragaliaControllerBase
         abilityCrest.IsFavorite = request.IsFavorite;
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
-        return Ok(new AbilityCrestSetFavoriteData() { UpdateDataList = updateDataList });
+        return Ok(new AbilityCrestSetFavoriteResponse() { UpdateDataList = updateDataList });
     }
 
     [Route("buildup_piece")]
@@ -92,7 +92,7 @@ public class AbilityCrestController : DragaliaControllerBase
         }
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
-        return this.Ok(new AbilityCrestBuildupPieceData() { UpdateDataList = updateDataList });
+        return this.Ok(new AbilityCrestBuildupPieceResponse() { UpdateDataList = updateDataList });
     }
 
     [Route("buildup_plus_count")]
@@ -128,7 +128,7 @@ public class AbilityCrestController : DragaliaControllerBase
         }
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
-        return Ok(new AbilityCrestBuildupPlusCountData() { UpdateDataList = updateDataList });
+        return Ok(new AbilityCrestBuildupPlusCountResponse() { UpdateDataList = updateDataList });
     }
 
     [Route("reset_plus_count")]
@@ -150,7 +150,7 @@ public class AbilityCrestController : DragaliaControllerBase
         }
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
-        return Ok(new AbilityCrestResetPlusCountData() { UpdateDataList = updateDataList });
+        return Ok(new AbilityCrestResetPlusCountResponse() { UpdateDataList = updateDataList });
     }
 
     [Route("get_ability_crest_set_list")]
@@ -177,7 +177,7 @@ public class AbilityCrestController : DragaliaControllerBase
             .ToArray();
 
         return Ok(
-            new AbilityCrestGetAbilityCrestSetListData()
+            new AbilityCrestGetAbilityCrestSetListResponse()
             {
                 AbilityCrestSetList = abilityCrestSetList
             }
@@ -200,7 +200,7 @@ public class AbilityCrestController : DragaliaControllerBase
         await this.abilityCrestRepository.AddOrUpdateSet(newAbilityCrestSet);
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
-        return Ok(new AbilityCrestSetAbilityCrestSetData() { UpdateDataList = updateDataList });
+        return Ok(new AbilityCrestSetAbilityCrestSetResponse() { UpdateDataList = updateDataList });
     }
 
     [Route("update_ability_crest_set_name")]
@@ -230,7 +230,7 @@ public class AbilityCrestController : DragaliaControllerBase
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
         return Ok(
-            new AbilityCrestUpdateAbilityCrestSetNameData() { UpdateDataList = updateDataList }
+            new AbilityCrestUpdateAbilityCrestSetNameResponse() { UpdateDataList = updateDataList }
         );
     }
 }

@@ -42,7 +42,7 @@ public class PresentTest : TestFixture
             }
         );
 
-        DragaliaResponse<PresentGetPresentListData> response =
+        DragaliaResponse<PresentGetPresentListResponse> response =
             await this.Client.PostMsgpack<PresentGetPresentListResponse>(
                 $"{Controller}/get_present_list",
                 new PresentGetPresentListRequest() { IsLimit = false, PresentId = 0 }
@@ -51,7 +51,7 @@ public class PresentTest : TestFixture
         response
             .data.Should()
             .BeEquivalentTo(
-                new PresentGetPresentListData()
+                new PresentGetPresentListResponse()
                 {
                     PresentList = new List<PresentDetailList>()
                     {
@@ -108,7 +108,7 @@ public class PresentTest : TestFixture
             }
         );
 
-        DragaliaResponse<PresentGetPresentListData> response =
+        DragaliaResponse<PresentGetPresentListResponse> response =
             await this.Client.PostMsgpack<PresentGetPresentListResponse>(
                 $"{Controller}/get_present_list",
                 new PresentGetPresentListRequest() { IsLimit = true, PresentId = 0 }
@@ -117,7 +117,7 @@ public class PresentTest : TestFixture
         response
             .data.Should()
             .BeEquivalentTo(
-                new PresentGetPresentListData()
+                new PresentGetPresentListResponse()
                 {
                     PresentLimitList = new List<PresentDetailList>()
                     {
@@ -158,7 +158,7 @@ public class PresentTest : TestFixture
 
         await this.AddRangeToDatabase(presents);
 
-        DragaliaResponse<PresentGetPresentListData> firstResponse =
+        DragaliaResponse<PresentGetPresentListResponse> firstResponse =
             await this.Client.PostMsgpack<PresentGetPresentListResponse>(
                 $"{Controller}/get_present_list",
                 new PresentGetPresentListRequest() { IsLimit = false, PresentId = 0 }
@@ -166,7 +166,7 @@ public class PresentTest : TestFixture
 
         firstResponse.data.PresentList.Should().HaveCount(100);
 
-        DragaliaResponse<PresentGetPresentListData> secondResponse =
+        DragaliaResponse<PresentGetPresentListResponse> secondResponse =
             await this.Client.PostMsgpack<PresentGetPresentListResponse>(
                 $"{Controller}/get_present_list",
                 new PresentGetPresentListRequest()
@@ -260,7 +260,7 @@ public class PresentTest : TestFixture
 
         IEnumerable<ulong> presentIdList = presents.Select(x => (ulong)x.PresentId).ToList();
 
-        DragaliaResponse<PresentReceiveData> response =
+        DragaliaResponse<PresentReceiveResponse> response =
             await this.Client.PostMsgpack<PresentReceiveResponse>(
                 $"{Controller}/receive",
                 new PresentReceiveRequest() { PresentIdList = presentIdList }
@@ -336,7 +336,7 @@ public class PresentTest : TestFixture
 
         IEnumerable<ulong> presentIdList = new List<ulong>() { (ulong)presents.First().PresentId };
 
-        DragaliaResponse<PresentReceiveData> response =
+        DragaliaResponse<PresentReceiveResponse> response =
             await this.Client.PostMsgpack<PresentReceiveResponse>(
                 $"{Controller}/receive",
                 new PresentReceiveRequest() { PresentIdList = presentIdList }
@@ -386,7 +386,7 @@ public class PresentTest : TestFixture
 
         IEnumerable<ulong> presentIdList = presents.Select(x => (ulong)x.PresentId).ToList();
 
-        DragaliaResponse<PresentReceiveData> response =
+        DragaliaResponse<PresentReceiveResponse> response =
             await this.Client.PostMsgpack<PresentReceiveResponse>(
                 $"{Controller}/receive",
                 new PresentReceiveRequest() { PresentIdList = presentIdList }
@@ -440,7 +440,7 @@ public class PresentTest : TestFixture
 
         IEnumerable<ulong> presentIdList = presents.Select(x => (ulong)x.PresentId).ToList();
 
-        DragaliaResponse<PresentReceiveData> response =
+        DragaliaResponse<PresentReceiveResponse> response =
             await this.Client.PostMsgpack<PresentReceiveResponse>(
                 $"{Controller}/receive",
                 new PresentReceiveRequest() { PresentIdList = presentIdList }
@@ -473,7 +473,7 @@ public class PresentTest : TestFixture
 
         await this.AddRangeToDatabase(presentHistories);
 
-        DragaliaResponse<PresentGetHistoryListData> firstResponse =
+        DragaliaResponse<PresentGetHistoryListResponse> firstResponse =
             await this.Client.PostMsgpack<PresentGetHistoryListResponse>(
                 $"{Controller}/get_history_list",
                 new PresentGetHistoryListRequest() { PresentHistoryId = 0 }
@@ -484,7 +484,7 @@ public class PresentTest : TestFixture
             .HaveCount(100)
             .And.BeInDescendingOrder(x => x.Id);
 
-        DragaliaResponse<PresentGetHistoryListData> secondResponse =
+        DragaliaResponse<PresentGetHistoryListResponse> secondResponse =
             await this.Client.PostMsgpack<PresentGetHistoryListResponse>(
                 $"{Controller}/get_history_list",
                 new PresentGetHistoryListRequest()

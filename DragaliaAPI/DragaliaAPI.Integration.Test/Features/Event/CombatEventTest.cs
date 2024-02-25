@@ -21,7 +21,7 @@ public class CombatEventTest : TestFixture
     [Fact]
     public async Task GetEventData_ReturnsEventData()
     {
-        DragaliaResponse<CombatEventGetEventDataData> evtData =
+        DragaliaResponse<CombatEventGetEventDataResponse> evtData =
             await Client.PostMsgpack<CombatEventGetEventDataResponse>(
                 $"{Prefix}/get_event_data",
                 new CombatEventGetEventDataRequest(EventId)
@@ -50,7 +50,7 @@ public class CombatEventTest : TestFixture
 
         await ApiContext.SaveChangesAsync();
 
-        DragaliaResponse<CombatEventReceiveEventPointRewardData> evtResp =
+        DragaliaResponse<CombatEventReceiveEventPointRewardResponse> evtResp =
             await Client.PostMsgpack<CombatEventReceiveEventPointRewardResponse>(
                 $"{Prefix}/receive_event_point_reward",
                 new CombatEventReceiveEventPointRewardRequest(EventId)
@@ -89,7 +89,7 @@ public class CombatEventTest : TestFixture
 
         await ApiContext.SaveChangesAsync();
 
-        DragaliaResponse<CombatEventReceiveEventLocationRewardData> evtResp =
+        DragaliaResponse<CombatEventReceiveEventLocationRewardResponse> evtResp =
             await Client.PostMsgpack<CombatEventReceiveEventLocationRewardResponse>(
                 $"{Prefix}/receive_event_location_reward",
                 new CombatEventReceiveEventLocationRewardRequest(EventId, 2221302)

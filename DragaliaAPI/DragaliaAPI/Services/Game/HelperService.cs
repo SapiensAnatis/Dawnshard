@@ -32,7 +32,7 @@ public class HelperService : IHelperService
         this.logger = logger;
     }
 
-    public async Task<QuestGetSupportUserListData> GetHelpers()
+    public async Task<QuestGetSupportUserListResponse> GetHelpers()
     {
         // TODO: Make this actually pull from database
         await Task.CompletedTask;
@@ -115,7 +115,7 @@ public class HelperService : IHelperService
 
     internal static class StubData
     {
-        public static readonly QuestGetSupportUserListData SupportListData =
+        public static readonly QuestGetSupportUserListResponse SupportListData =
             new()
             {
                 SupportUserList = new List<UserSupportList>()

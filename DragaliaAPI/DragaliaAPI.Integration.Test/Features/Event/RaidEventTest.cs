@@ -21,7 +21,7 @@ public class RaidEventTest : TestFixture
     [Fact]
     public async Task GetEventData_ReturnsEventData()
     {
-        DragaliaResponse<RaidEventGetEventDataData> evtData =
+        DragaliaResponse<RaidEventGetEventDataResponse> evtData =
             await Client.PostMsgpack<RaidEventGetEventDataResponse>(
                 $"{Prefix}/get_event_data",
                 new RaidEventGetEventDataRequest(EventId)
@@ -46,7 +46,7 @@ public class RaidEventTest : TestFixture
 
         await ApiContext.SaveChangesAsync();
 
-        DragaliaResponse<RaidEventReceiveRaidPointRewardData> evtResp =
+        DragaliaResponse<RaidEventReceiveRaidPointRewardResponse> evtResp =
             await Client.PostMsgpack<RaidEventReceiveRaidPointRewardResponse>(
                 $"{Prefix}/receive_raid_point_reward",
                 new RaidEventReceiveRaidPointRewardRequest(EventId, new[] { 1001 })
@@ -68,7 +68,7 @@ public class RaidEventTest : TestFixture
             new MemoryEventActivateRequest(fracturedFuturesId)
         );
 
-        DragaliaResponse<RaidEventGetEventDataData> response =
+        DragaliaResponse<RaidEventGetEventDataResponse> response =
             await this.Client.PostMsgpack<RaidEventGetEventDataResponse>(
                 "raid_event/get_event_data",
                 new RaidEventGetEventDataRequest(fracturedFuturesId)

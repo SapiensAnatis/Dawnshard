@@ -527,7 +527,7 @@ public class AbilityCrestTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        AbilityCrestGetAbilityCrestSetListData data = (
+        AbilityCrestGetAbilityCrestSetListResponse data = (
             await this.Client.PostMsgpack<AbilityCrestGetAbilityCrestSetListResponse>(
                 "ability_crest/get_ability_crest_set_list",
                 new AbilityCrestGetAbilityCrestSetListRequest()

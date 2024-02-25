@@ -12,7 +12,7 @@ public class AutoRepeatTest : TestFixture
     [Fact]
     public async Task AutoRepeat_RecordReturnsRepeatKey()
     {
-        DungeonStartStartData startResponse = (
+        DungeonStartStartResponse startResponse = (
             await Client.PostMsgpack<DungeonStartStartResponse>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
@@ -31,7 +31,7 @@ public class AutoRepeatTest : TestFixture
 
         startResponse.IngameData.RepeatState.Should().Be(1);
 
-        DungeonRecordRecordData recordResponse = (
+        DungeonRecordRecordResponse recordResponse = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -47,7 +47,7 @@ public class AutoRepeatTest : TestFixture
         recordResponse.RepeatData.RepeatKey.Should().NotBeNullOrEmpty();
         recordResponse.RepeatData.RepeatState.Should().Be(1);
 
-        DungeonStartStartAssignUnitData startResponse2 = (
+        DungeonStartStartAssignUnitResponse startResponse2 = (
             await Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(
                 "/dungeon_start/start_assign_unit",
                 new DungeonStartStartAssignUnitRequest()
@@ -62,7 +62,7 @@ public class AutoRepeatTest : TestFixture
 
         startResponse2.IngameData.RepeatState.Should().Be(1);
 
-        DungeonRecordRecordData recordResponse2 = (
+        DungeonRecordRecordResponse recordResponse2 = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -82,7 +82,7 @@ public class AutoRepeatTest : TestFixture
     [Fact]
     public async Task AutoRepeat_CallsRepeatEnd_ReturnsMergedRewardLists()
     {
-        DungeonStartStartData startResponse = (
+        DungeonStartStartResponse startResponse = (
             await Client.PostMsgpack<DungeonStartStartResponse>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
@@ -99,7 +99,7 @@ public class AutoRepeatTest : TestFixture
             )
         ).data;
 
-        DungeonRecordRecordData recordResponse = (
+        DungeonRecordRecordResponse recordResponse = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -111,7 +111,7 @@ public class AutoRepeatTest : TestFixture
             )
         ).data;
 
-        DungeonStartStartAssignUnitData startResponse2 = (
+        DungeonStartStartAssignUnitResponse startResponse2 = (
             await Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(
                 "/dungeon_start/start_assign_unit",
                 new DungeonStartStartAssignUnitRequest()
@@ -124,7 +124,7 @@ public class AutoRepeatTest : TestFixture
             )
         ).data;
 
-        DungeonRecordRecordData recordResponse2 = (
+        DungeonRecordRecordResponse recordResponse2 = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -136,7 +136,7 @@ public class AutoRepeatTest : TestFixture
             )
         ).data;
 
-        RepeatEndData repeatEndResponse = (
+        RepeatEndResponse repeatEndResponse = (
             await Client.PostMsgpack<RepeatEndResponse>("repeat/end", new RepeatEndRequest())
         ).data;
 
@@ -179,7 +179,7 @@ public class AutoRepeatTest : TestFixture
             "/memory_event/activate",
             new MemoryEventActivateRequest() { EventId = eventId }
         );
-        DungeonStartStartData startResponse = (
+        DungeonStartStartResponse startResponse = (
             await Client.PostMsgpack<DungeonStartStartResponse>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
@@ -196,7 +196,7 @@ public class AutoRepeatTest : TestFixture
             )
         ).data;
 
-        DungeonRecordRecordData recordResponse = (
+        DungeonRecordRecordResponse recordResponse = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -208,7 +208,7 @@ public class AutoRepeatTest : TestFixture
             )
         ).data;
 
-        DungeonStartStartAssignUnitData startResponse2 = (
+        DungeonStartStartAssignUnitResponse startResponse2 = (
             await Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(
                 "/dungeon_start/start_assign_unit",
                 new DungeonStartStartAssignUnitRequest()
@@ -221,7 +221,7 @@ public class AutoRepeatTest : TestFixture
             )
         ).data;
 
-        DungeonRecordRecordData recordResponse2 = (
+        DungeonRecordRecordResponse recordResponse2 = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -233,7 +233,7 @@ public class AutoRepeatTest : TestFixture
             )
         ).data;
 
-        RepeatEndData repeatEndResponse = (
+        RepeatEndResponse repeatEndResponse = (
             await Client.PostMsgpack<RepeatEndResponse>("repeat/end", new RepeatEndRequest())
         ).data;
 
@@ -271,7 +271,7 @@ public class AutoRepeatTest : TestFixture
     [Fact]
     public async Task AutoRepeat_ActiveRepeat_MypageInfoReturnsRepeatInfo()
     {
-        DungeonStartStartData startResponse = (
+        DungeonStartStartResponse startResponse = (
             await Client.PostMsgpack<DungeonStartStartResponse>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
@@ -288,7 +288,7 @@ public class AutoRepeatTest : TestFixture
             )
         ).data;
 
-        DungeonRecordRecordData recordResponse = (
+        DungeonRecordRecordResponse recordResponse = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -300,7 +300,7 @@ public class AutoRepeatTest : TestFixture
             )
         ).data;
 
-        MypageInfoData mypageResponse = (
+        MypageInfoResponse mypageResponse = (
             await Client.PostMsgpack<MypageInfoResponse>("mypage/info", new MypageInfoRequest() { })
         ).data;
 

@@ -112,7 +112,7 @@ public class AbilityCrestControllerTest
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList() { });
 
-        AbilityCrestBuildupPieceData data = (
+        AbilityCrestBuildupPieceResponse data = (
             await this.abilityCrestController.BuildupPiece(
                 new AbilityCrestBuildupPieceRequest()
                 {
@@ -125,7 +125,7 @@ public class AbilityCrestControllerTest
                     }
                 }
             )
-        ).GetData<AbilityCrestBuildupPieceData>()!;
+        ).GetData<AbilityCrestBuildupPieceResponse>()!;
 
         data.UpdateDataList.Should().BeEquivalentTo(new UpdateDataList() { });
         this.mockAbilityCrestService.VerifyAll();
@@ -183,7 +183,7 @@ public class AbilityCrestControllerTest
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList() { });
 
-        AbilityCrestBuildupPlusCountData data = (
+        AbilityCrestBuildupPlusCountResponse data = (
             await this.abilityCrestController.BuildupPlusCount(
                 new AbilityCrestBuildupPlusCountRequest()
                 {
@@ -191,7 +191,7 @@ public class AbilityCrestControllerTest
                     PlusCountParamsList = new List<AtgenPlusCountParamsList>() { new(), new() }
                 }
             )
-        ).GetData<AbilityCrestBuildupPlusCountData>()!;
+        ).GetData<AbilityCrestBuildupPlusCountResponse>()!;
 
         data.UpdateDataList.Should().BeEquivalentTo(new UpdateDataList() { });
         this.mockAbilityCrestService.VerifyAll();
@@ -233,7 +233,7 @@ public class AbilityCrestControllerTest
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList() { });
 
-        AbilityCrestResetPlusCountData data = (
+        AbilityCrestResetPlusCountResponse data = (
             await this.abilityCrestController.ResetPlusCount(
                 new AbilityCrestResetPlusCountRequest()
                 {
@@ -245,7 +245,7 @@ public class AbilityCrestControllerTest
                     }
                 }
             )
-        ).GetData<AbilityCrestResetPlusCountData>()!;
+        ).GetData<AbilityCrestResetPlusCountResponse>()!;
 
         data.UpdateDataList.Should().BeEquivalentTo(new UpdateDataList() { });
         this.mockAbilityCrestService.VerifyAll();
@@ -258,11 +258,11 @@ public class AbilityCrestControllerTest
         this.mockAbilityCrestRepository.Setup(x => x.AbilityCrestSets)
             .Returns(new List<DbAbilityCrestSet>().AsQueryable().BuildMock());
 
-        AbilityCrestGetAbilityCrestSetListData data = (
+        AbilityCrestGetAbilityCrestSetListResponse data = (
             await this.abilityCrestController.GetAbilityCrestSetList(
                 new AbilityCrestGetAbilityCrestSetListRequest()
             )
-        ).GetData<AbilityCrestGetAbilityCrestSetListData>()!;
+        ).GetData<AbilityCrestGetAbilityCrestSetListResponse>()!;
 
         int setNo = 1;
 
@@ -316,11 +316,11 @@ public class AbilityCrestControllerTest
                     .BuildMock()
             );
 
-        AbilityCrestGetAbilityCrestSetListData data = (
+        AbilityCrestGetAbilityCrestSetListResponse data = (
             await this.abilityCrestController.GetAbilityCrestSetList(
                 new AbilityCrestGetAbilityCrestSetListRequest()
             )
-        ).GetData<AbilityCrestGetAbilityCrestSetListData>()!;
+        ).GetData<AbilityCrestGetAbilityCrestSetListResponse>()!;
 
         int setNo = 1;
 
@@ -398,7 +398,7 @@ public class AbilityCrestControllerTest
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList() { });
 
-        AbilityCrestSetAbilityCrestSetData data = (
+        AbilityCrestSetAbilityCrestSetResponse data = (
             await this.abilityCrestController.SetAbilityCrestSet(
                 new AbilityCrestSetAbilityCrestSetRequest()
                 {
@@ -407,7 +407,7 @@ public class AbilityCrestControllerTest
                     RequestAbilityCrestSetData = new() { }
                 }
             )
-        ).GetData<AbilityCrestSetAbilityCrestSetData>()!;
+        ).GetData<AbilityCrestSetAbilityCrestSetResponse>()!;
 
         data.UpdateDataList.Should().BeEquivalentTo(new UpdateDataList() { });
         this.mockAbilityCrestService.VerifyAll();
@@ -434,7 +434,7 @@ public class AbilityCrestControllerTest
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList() { });
 
-        AbilityCrestUpdateAbilityCrestSetNameData data = (
+        AbilityCrestUpdateAbilityCrestSetNameResponse data = (
             await this.abilityCrestController.UpdateAbilityCrestSetName(
                 new AbilityCrestUpdateAbilityCrestSetNameRequest()
                 {
@@ -442,7 +442,7 @@ public class AbilityCrestControllerTest
                     AbilityCrestSetName = newName
                 }
             )
-        ).GetData<AbilityCrestUpdateAbilityCrestSetNameData>()!;
+        ).GetData<AbilityCrestUpdateAbilityCrestSetNameResponse>()!;
 
         data.UpdateDataList.Should().BeEquivalentTo(new UpdateDataList() { });
         this.mockAbilityCrestService.VerifyAll();
@@ -467,7 +467,7 @@ public class AbilityCrestControllerTest
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList() { });
 
-        AbilityCrestUpdateAbilityCrestSetNameData data = (
+        AbilityCrestUpdateAbilityCrestSetNameResponse data = (
             await this.abilityCrestController.UpdateAbilityCrestSetName(
                 new AbilityCrestUpdateAbilityCrestSetNameRequest()
                 {
@@ -475,7 +475,7 @@ public class AbilityCrestControllerTest
                     AbilityCrestSetName = newName
                 }
             )
-        ).GetData<AbilityCrestUpdateAbilityCrestSetNameData>()!;
+        ).GetData<AbilityCrestUpdateAbilityCrestSetNameResponse>()!;
 
         data.UpdateDataList.Should().BeEquivalentTo(new UpdateDataList() { });
         this.mockAbilityCrestService.VerifyAll();

@@ -58,9 +58,9 @@ public class MissionControllerTest
 
         this.mockMissionService.Setup(x => x.GetCurrentMainStoryMission())
             .ReturnsAsync(mainStoryMission);
-        this.mockMissionService.Setup(x => x.BuildNormalResponse<MissionGetMissionListData>())
+        this.mockMissionService.Setup(x => x.BuildNormalResponse<MissionGetMissionListResponse>())
             .ReturnsAsync(
-                new MissionGetMissionListData()
+                new MissionGetMissionListResponse()
                 {
                     normal_mission_list = [],
                     MissionNotice = notice,
@@ -68,10 +68,10 @@ public class MissionControllerTest
                 }
             );
 
-        DragaliaResult<MissionGetMissionListData> resp =
+        DragaliaResult<MissionGetMissionListResponse> resp =
             await this.missionController.GetMissionList();
 
-        MissionGetMissionListData? response = resp.Value;
+        MissionGetMissionListResponse? response = resp.Value;
         response.Should().NotBeNull();
 
         response!.MissionNotice.Should().Be(notice);
@@ -117,10 +117,10 @@ public class MissionControllerTest
                     .BuildMock()
             );
 
-        DragaliaResult<MissionGetDrillMissionListData> resp =
+        DragaliaResult<MissionGetDrillMissionListResponse> resp =
             await this.missionController.GetDrillMissionList();
 
-        MissionGetDrillMissionListData? response = resp.Value;
+        MissionGetDrillMissionListResponse? response = resp.Value;
         response.Should().NotBeNull();
 
         response!.MissionNotice.Should().Be(notice);
@@ -158,12 +158,12 @@ public class MissionControllerTest
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList());
 
-        DragaliaResult<MissionUnlockDrillMissionGroupData> resp =
+        DragaliaResult<MissionUnlockDrillMissionGroupResponse> resp =
             await this.missionController.UnlockDrillMissionGroup(
                 new MissionUnlockDrillMissionGroupRequest(100)
             );
 
-        MissionUnlockDrillMissionGroupData? response = resp.Value;
+        MissionUnlockDrillMissionGroupResponse? response = resp.Value;
         response!
             .DrillMissionList.Should()
             .ContainEquivalentOf(
@@ -197,12 +197,12 @@ public class MissionControllerTest
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList());
 
-        DragaliaResult<MissionUnlockMainStoryGroupData> resp =
+        DragaliaResult<MissionUnlockMainStoryGroupResponse> resp =
             await this.missionController.UnlockMainStoryMissionGroup(
                 new MissionUnlockMainStoryGroupRequest(100)
             );
 
-        MissionUnlockMainStoryGroupData? response = resp.Value;
+        MissionUnlockMainStoryGroupResponse? response = resp.Value;
         response!
             .MainStoryMissionList.Should()
             .ContainEquivalentOf(
@@ -251,12 +251,12 @@ public class MissionControllerTest
 
         this.mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());
 
-        DragaliaResult<MissionReceiveDrillRewardData> resp =
+        DragaliaResult<MissionReceiveDrillRewardResponse> resp =
             await this.missionController.ReceiveDrillStoryReward(
                 new MissionReceiveDrillRewardRequest(fakeIdList, Enumerable.Empty<int>())
             );
 
-        MissionReceiveDrillRewardData? response = resp.Value;
+        MissionReceiveDrillRewardResponse? response = resp.Value;
 
         mockRewardService.VerifyAll();
         mockMissionService.VerifyAll();

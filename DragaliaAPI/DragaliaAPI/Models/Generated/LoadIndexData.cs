@@ -4,7 +4,7 @@ using MessagePack;
 namespace DragaliaAPI.Models.Generated;
 
 [MessagePackObject(true)]
-public class LoadIndexData
+public class LoadIndexResponse
 {
     [JsonPropertyName("origin")]
     public string Origin => "dawnshard";
@@ -135,7 +135,7 @@ public class LoadIndexData
 
     public AtgenWalkerData? walker_data { get; set; } = new();
 
-    public LoadIndexData(
+    public LoadIndexResponse(
         UserData user_data,
         PartyPowerData party_power_data,
         IEnumerable<PartyList> party_list,
@@ -267,5 +267,5 @@ public class LoadIndexData
     }
 
     [JsonConstructor]
-    public LoadIndexData() { }
+    public LoadIndexResponse() { }
 }

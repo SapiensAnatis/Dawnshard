@@ -63,11 +63,11 @@ public class PartyControllerTest
             };
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
-        PartyUpdatePartyNameData? response = (
+        PartyUpdatePartyNameResponse? response = (
             await this.partyController.UpdatePartyName(
                 new PartyUpdatePartyNameRequest() { PartyName = "Z Team", PartyNo = 1 }
             )
-        ).GetData<PartyUpdatePartyNameData>();
+        ).GetData<PartyUpdatePartyNameResponse>();
 
         response.Should().NotBeNull();
         response!.UpdateDataList.Should().BeEquivalentTo(updateDataList);

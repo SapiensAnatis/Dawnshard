@@ -33,7 +33,7 @@ public class LoadService(
     IDateTimeProvider dateTimeProvider
 ) : ILoadService
 {
-    public async Task<LoadIndexData> BuildIndexData()
+    public async Task<LoadIndexResponse> BuildIndexData()
     {
         Stopwatch stopwatch = new();
         stopwatch.Start();
@@ -48,7 +48,7 @@ public class LoadService(
 
         // TODO/NOTE: special shop purchase list is not set here. maybe change once that fully works?
 
-        LoadIndexData data =
+        LoadIndexResponse data =
             new()
             {
                 build_list = savefile.BuildList.Select(mapper.Map<BuildList>),

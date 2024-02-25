@@ -22,7 +22,7 @@ public class QuestClearPartyTest : TestFixture
 
         await this.AddRangeToDatabase(SoloDbEntities);
 
-        DragaliaResponse<QuestGetQuestClearPartyData> response =
+        DragaliaResponse<QuestGetQuestClearPartyResponse> response =
             await this.Client.PostMsgpack<QuestGetQuestClearPartyResponse>(
                 "/quest/get_quest_clear_party",
                 new QuestGetQuestClearPartyRequest() { QuestId = 1 }
@@ -39,7 +39,7 @@ public class QuestClearPartyTest : TestFixture
 
         await this.AddRangeToDatabase(MultiDbEntities);
 
-        DragaliaResponse<QuestGetQuestClearPartyMultiData> response =
+        DragaliaResponse<QuestGetQuestClearPartyMultiResponse> response =
             await this.Client.PostMsgpack<QuestGetQuestClearPartyMultiResponse>(
                 "/quest/get_quest_clear_party_multi",
                 new QuestGetQuestClearPartyRequest() { QuestId = 2 }
@@ -65,7 +65,7 @@ public class QuestClearPartyTest : TestFixture
             }
         );
 
-        DragaliaResponse<QuestGetQuestClearPartyData> response =
+        DragaliaResponse<QuestGetQuestClearPartyResponse> response =
             await this.Client.PostMsgpack<QuestGetQuestClearPartyResponse>(
                 "/quest/get_quest_clear_party",
                 new QuestGetQuestClearPartyRequest() { QuestId = questId }
@@ -83,7 +83,7 @@ public class QuestClearPartyTest : TestFixture
 
         await this.AddRangeToDatabase(MissingItemDbEntities);
 
-        DragaliaResponse<QuestGetQuestClearPartyData> response =
+        DragaliaResponse<QuestGetQuestClearPartyResponse> response =
             await this.Client.PostMsgpack<QuestGetQuestClearPartyResponse>(
                 "/quest/get_quest_clear_party",
                 new QuestGetQuestClearPartyRequest() { QuestId = questId }
@@ -150,7 +150,7 @@ public class QuestClearPartyTest : TestFixture
     {
         await this.ImportSave();
 
-        DragaliaResponse<QuestSetQuestClearPartyData> response =
+        DragaliaResponse<QuestSetQuestClearPartyResponse> response =
             await this.Client.PostMsgpack<QuestSetQuestClearPartyResponse>(
                 "/quest/set_quest_clear_party",
                 new QuestSetQuestClearPartyRequest()
@@ -177,7 +177,7 @@ public class QuestClearPartyTest : TestFixture
     {
         await this.ImportSave();
 
-        DragaliaResponse<QuestSetQuestClearPartyData> response =
+        DragaliaResponse<QuestSetQuestClearPartyResponse> response =
             await this.Client.PostMsgpack<QuestSetQuestClearPartyResponse>(
                 "/quest/set_quest_clear_party_multi",
                 new QuestSetQuestClearPartyRequest()

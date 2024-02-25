@@ -25,7 +25,7 @@ public class DungeonRecordController(
 ) : DragaliaControllerBase
 {
     [HttpPost("record")]
-    public async Task<DragaliaResult<DungeonRecordRecordData>> Record(
+    public async Task<DragaliaResult<DungeonRecordRecordResponse>> Record(
         DungeonRecordRecordRequest request
     )
     {
@@ -47,7 +47,7 @@ public class DungeonRecordController(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        DungeonRecordRecordData response =
+        DungeonRecordRecordResponse response =
             new() { IngameResultData = ingameResultData, UpdateDataList = updateDataList };
 
         if (session.QuestData?.IsSumUpTotalDamage ?? false)
@@ -93,7 +93,7 @@ public class DungeonRecordController(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        DungeonRecordRecordData response =
+        DungeonRecordRecordResponse response =
             new() { IngameResultData = ingameResultData, UpdateDataList = updateDataList, };
 
         if (session.QuestData?.IsSumUpTotalDamage ?? false)

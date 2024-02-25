@@ -18,7 +18,7 @@ public class QuestTreasureService(
     ApiContext apiContext
 ) : IQuestTreasureService
 {
-    public async Task<QuestOpenTreasureData> DoOpenTreasure(QuestOpenTreasureRequest request)
+    public async Task<QuestOpenTreasureResponse> DoOpenTreasure(QuestOpenTreasureRequest request)
     {
         QuestTreasureData questTreasureData = MasterAsset.QuestTreasureData[
             request.QuestTreasureId
@@ -67,7 +67,7 @@ public class QuestTreasureService(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        return new QuestOpenTreasureData()
+        return new QuestOpenTreasureResponse()
         {
             UpdateDataList = updateDataList,
             EntityResult = entityResult,

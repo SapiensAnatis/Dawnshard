@@ -226,7 +226,7 @@ public class PartyTest : TestFixture
     [Fact]
     public async Task UpdatePartyName_ReturnsCorrectResponse()
     {
-        PartyUpdatePartyNameData response = (
+        PartyUpdatePartyNameResponse response = (
             await this.Client.PostMsgpack<PartyUpdatePartyNameResponse>(
                 "/party/update_party_name",
                 new PartyUpdatePartyNameRequest() { PartyNo = 2, PartyName = "LIblis Full Auto" }

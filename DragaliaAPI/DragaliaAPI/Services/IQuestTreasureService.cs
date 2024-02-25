@@ -4,5 +4,5 @@ namespace DragaliaAPI.Services;
 
 public interface IQuestTreasureService
 {
-    Task<QuestOpenTreasureData> DoOpenTreasure(QuestOpenTreasureRequest request);
+    Task<QuestOpenTreasureResponse> DoOpenTreasure(QuestOpenTreasureRequest request);
 }

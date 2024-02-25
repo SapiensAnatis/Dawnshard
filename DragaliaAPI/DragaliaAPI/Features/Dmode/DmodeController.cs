@@ -24,7 +24,7 @@ public class DmodeController(
     [HttpPost("get_data")]
     public async Task<DragaliaResult> GetData()
     {
-        DmodeGetDataData resp = new();
+        DmodeGetDataResponse resp = new();
 
         resp.CurrentServerTime = dateTimeProvider.UtcNow;
 
@@ -56,7 +56,7 @@ public class DmodeController(
     [HttpPost("read_story")]
     public async Task<DragaliaResult> ReadStory(DmodeReadStoryRequest request)
     {
-        DmodeReadStoryData resp = new();
+        DmodeReadStoryResponse resp = new();
 
         resp.DmodeStoryRewardList = await storyService.ReadStory(
             StoryTypes.DungeonMode,
@@ -74,7 +74,7 @@ public class DmodeController(
         DmodeBuildupServitorPassiveRequest request
     )
     {
-        DmodeBuildupServitorPassiveData resp = new();
+        DmodeBuildupServitorPassiveResponse resp = new();
 
         resp.DmodeServitorPassiveList = await dmodeService.BuildupServitorPassive(
             request.RequestBuildupPassiveList
@@ -87,7 +87,7 @@ public class DmodeController(
     [HttpPost("expedition_start")]
     public async Task<DragaliaResult> ExpeditionStart(DmodeExpeditionStartRequest request)
     {
-        DmodeExpeditionStartData resp = new();
+        DmodeExpeditionStartResponse resp = new();
 
         resp.DmodeExpedition = await dmodeService.StartExpedition(
             request.TargetFloorNum,
@@ -101,7 +101,7 @@ public class DmodeController(
     [HttpPost("expedition_finish")]
     public async Task<DragaliaResult> ExpeditionFinish()
     {
-        DmodeExpeditionFinishData resp = new();
+        DmodeExpeditionFinishResponse resp = new();
 
         (resp.DmodeExpedition, resp.DmodeIngameResult) = await dmodeService.FinishExpedition(false);
 
@@ -114,7 +114,7 @@ public class DmodeController(
     [HttpPost("expedition_force_finish")]
     public async Task<DragaliaResult> ExpeditionForceFinish()
     {
-        DmodeExpeditionForceFinishData resp = new();
+        DmodeExpeditionForceFinishResponse resp = new();
 
         (resp.DmodeExpedition, resp.DmodeIngameResult) = await dmodeService.FinishExpedition(true);
 

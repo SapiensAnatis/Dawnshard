@@ -21,7 +21,7 @@ public class BuildEventController(
     [HttpPost("get_event_data")]
     public async Task<DragaliaResult> GetEventData(BuildEventGetEventDataRequest request)
     {
-        BuildEventGetEventDataData resp = new();
+        BuildEventGetEventDataResponse resp = new();
 
         resp.IsReceivableEventDailyBonus = await eventService.GetCustomEventFlag(request.EventId);
 
@@ -46,7 +46,7 @@ public class BuildEventController(
     [HttpPost("entry")]
     public async Task<DragaliaResult> Entry(BuildEventEntryRequest request)
     {
-        BuildEventEntryData resp = new();
+        BuildEventEntryResponse resp = new();
 
         resp.IsReceivableEventDailyBonus = await eventService.GetCustomEventFlag(request.EventId);
         resp.BuildEventUserData = await eventService.GetBuildEventUserData(request.EventId);
@@ -61,7 +61,7 @@ public class BuildEventController(
         BuildEventReceiveBuildPointRewardRequest request
     )
     {
-        BuildEventReceiveBuildPointRewardData resp = new();
+        BuildEventReceiveBuildPointRewardResponse resp = new();
 
         resp.BuildEventRewardEntityList = await eventService.ReceiveEventRewards(request.EventId);
 

@@ -16,7 +16,7 @@ public class TalismanController(
     [HttpPost("sell")]
     public async Task<DragaliaResult> Sell(TalismanSellRequest request)
     {
-        TalismanSellData resp = new();
+        TalismanSellResponse resp = new();
 
         resp.DeleteDataList = await talismanService.SellTalismans(request.TalismanKeyIdList);
         resp.EntityResult = rewardService.GetEntityResult();
@@ -28,7 +28,7 @@ public class TalismanController(
     [HttpPost("set_lock")]
     public async Task<DragaliaResult> SetLock(TalismanSetLockRequest request)
     {
-        TalismanSetLockData resp = new();
+        TalismanSetLockResponse resp = new();
 
         await talismanService.SetLock(request.TalismanKeyId, request.IsLock);
 

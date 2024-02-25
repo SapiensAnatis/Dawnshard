@@ -10,7 +10,7 @@ public class MemoryEventTest : TestFixture
     {
         int eventId = 20845; // Toll of the Deep
 
-        MemoryEventActivateData result = (
+        MemoryEventActivateResponse result = (
             await this.Client.PostMsgpack<MemoryEventActivateResponse>(
                 "memory_event/activate",
                 new MemoryEventActivateRequest() { EventId = eventId }
@@ -35,7 +35,7 @@ public class MemoryEventTest : TestFixture
             new MemoryEventActivateRequest() { EventId = eventId }
         );
 
-        MissionGetMissionListData missionListResponse = (
+        MissionGetMissionListResponse missionListResponse = (
             await this.Client.PostMsgpack<MissionGetMissionListResponse>(
                 "mission/get_mission_list",
                 new MissionGetMissionListRequest() { }

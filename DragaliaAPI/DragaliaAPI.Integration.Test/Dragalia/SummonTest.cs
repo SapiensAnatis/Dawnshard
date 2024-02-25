@@ -15,7 +15,7 @@ public class SummonTest : TestFixture
     [Fact]
     public async Task SummonExcludeGetList_ReturnsAnyData()
     {
-        SummonExcludeGetListData response = (
+        SummonExcludeGetListResponse response = (
             await this.Client.PostMsgpack<SummonExcludeGetListResponse>(
                 "summon_exclude/get_list",
                 new SummonExcludeGetListRequest(1020203)
@@ -28,7 +28,7 @@ public class SummonTest : TestFixture
     [Fact]
     public async Task SummonGetOddsData_ReturnsAnyData()
     {
-        SummonGetOddsDataData response = (
+        SummonGetOddsDataResponse response = (
             await this.Client.PostMsgpack<SummonGetOddsDataResponse>(
                 "summon/get_odds_data",
                 new SummonGetOddsDataRequest(1020203)
@@ -65,7 +65,7 @@ public class SummonTest : TestFixture
         await this.ApiContext.PlayerSummonHistory.AddAsync(historyEntry);
         await this.ApiContext.SaveChangesAsync();
 
-        SummonGetSummonHistoryData response = (
+        SummonGetSummonHistoryResponse response = (
             await this.Client.PostMsgpack<SummonGetSummonHistoryResponse>(
                 "summon/get_summon_history",
                 new SummonGetSummonHistoryRequest()
@@ -102,7 +102,7 @@ public class SummonTest : TestFixture
             }
         );
 
-        SummonGetSummonListData response = (
+        SummonGetSummonListResponse response = (
             await this.Client.PostMsgpack<SummonGetSummonListResponse>(
                 "summon/get_summon_list",
                 new SummonGetSummonListRequest()
@@ -161,7 +161,7 @@ public class SummonTest : TestFixture
     [Fact]
     public async Task SummonRequest_GetSummonPointData_ReturnsAnyData()
     {
-        SummonGetSummonPointTradeData response = (
+        SummonGetSummonPointTradeResponse response = (
             await this.Client.PostMsgpack<SummonGetSummonPointTradeResponse>(
                 "summon/get_summon_point_trade",
                 new SummonGetSummonPointTradeRequest(1020203)
@@ -183,7 +183,7 @@ public class SummonTest : TestFixture
 
         await this.ApiContext.Entry(userData).ReloadAsync();
 
-        SummonRequestData response = (
+        SummonRequestResponse response = (
             await this.Client.PostMsgpack<SummonRequestResponse>(
                 "summon/request",
                 new SummonRequestRequest(
@@ -208,7 +208,7 @@ public class SummonTest : TestFixture
             x.ViewerId == ViewerId
         );
 
-        SummonRequestData response = (
+        SummonRequestResponse response = (
             await this.Client.PostMsgpack<SummonRequestResponse>(
                 "summon/request",
                 new SummonRequestRequest(

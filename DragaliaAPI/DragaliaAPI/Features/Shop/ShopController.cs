@@ -34,7 +34,7 @@ public class ShopController : DragaliaControllerBase
         ILookup<PurchaseShopType, ShopPurchaseList> purchases =
             await this.shopService.GetPurchases();
 
-        ShopGetListData response =
+        ShopGetListResponse response =
             new()
             {
                 // i don't know what like half of these are for lmao
@@ -61,13 +61,13 @@ public class ShopController : DragaliaControllerBase
     [HttpPost("item_summon_odd")]
     public DragaliaResult GetOdds()
     {
-        return Ok(new ShopItemSummonOddData(itemSummonService.GetOdds()));
+        return Ok(new ShopItemSummonOddResponse(itemSummonService.GetOdds()));
     }
 
     [HttpPost("item_summon_exec")]
     public async Task<DragaliaResult> ExecItemSummon(ShopItemSummonExecRequest request)
     {
-        ShopItemSummonExecData resp = new();
+        ShopItemSummonExecResponse resp = new();
 
         resp.ItemSummonRewardList = await this.itemSummonService.DoSummon(request);
         resp.UserItemSummon = await this.itemSummonService.GetItemSummon();
@@ -80,7 +80,7 @@ public class ShopController : DragaliaControllerBase
     [HttpPost("material_shop_purchase")]
     public async Task<DragaliaResult> MaterialShopPurchase(ShopMaterialShopPurchaseRequest request)
     {
-        ShopMaterialShopPurchaseData resp = new();
+        ShopMaterialShopPurchaseResponse resp = new();
 
         resp.MaterialShopPurchase = await this.shopService.DoPurchase(
             request.ShopType.ToShopType(),
@@ -97,7 +97,7 @@ public class ShopController : DragaliaControllerBase
     [HttpPost("normal_shop_purchase")]
     public async Task<DragaliaResult> NormalShopPurchase(ShopNormalShopPurchaseRequest request)
     {
-        ShopNormalShopPurchaseData resp = new();
+        ShopNormalShopPurchaseResponse resp = new();
 
         resp.NormalShopPurchase = await this.shopService.DoPurchase(
             ShopType.Normal,
@@ -114,7 +114,7 @@ public class ShopController : DragaliaControllerBase
     [HttpPost("special_shop_purchase")]
     public async Task<DragaliaResult> SpecialShopPurchase(ShopSpecialShopPurchaseRequest request)
     {
-        ShopSpecialShopPurchaseData resp = new();
+        ShopSpecialShopPurchaseResponse resp = new();
 
         resp.SpecialShopPurchase = await this.shopService.DoPurchase(
             ShopType.Special,

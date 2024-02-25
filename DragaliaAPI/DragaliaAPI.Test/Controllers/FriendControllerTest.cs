@@ -31,7 +31,7 @@ public class FriendControllerTest
     {
         this.mockHelperService.Setup(x => x.GetHelpers())
             .ReturnsAsync(
-                new QuestGetSupportUserListData()
+                new QuestGetSupportUserListResponse()
                 {
                     SupportUserList = new List<UserSupportList>() { TestData.supportListEuden },
                     SupportUserDetailList = new List<AtgenSupportUserDetailList>()
@@ -45,7 +45,8 @@ public class FriendControllerTest
             new FriendGetSupportCharaDetailRequest() { SupportViewerId = 1000 }
         );
 
-        FriendGetSupportCharaDetailData? data = response.GetData<FriendGetSupportCharaDetailData>();
+        FriendGetSupportCharaDetailResponse? data =
+            response.GetData<FriendGetSupportCharaDetailResponse>();
         data.Should().NotBeNull();
 
         data!
@@ -62,7 +63,7 @@ public class FriendControllerTest
     {
         this.mockHelperService.Setup(x => x.GetHelpers())
             .ReturnsAsync(
-                new QuestGetSupportUserListData()
+                new QuestGetSupportUserListResponse()
                 {
                     SupportUserList = new List<UserSupportList>() { TestData.supportListEuden },
                     SupportUserDetailList = new List<AtgenSupportUserDetailList>()
@@ -76,7 +77,8 @@ public class FriendControllerTest
             new FriendGetSupportCharaDetailRequest() { SupportViewerId = 0 }
         );
 
-        FriendGetSupportCharaDetailData? data = response.GetData<FriendGetSupportCharaDetailData>();
+        FriendGetSupportCharaDetailResponse? data =
+            response.GetData<FriendGetSupportCharaDetailResponse>();
         data.Should().NotBeNull();
 
         data!

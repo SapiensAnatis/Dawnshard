@@ -41,7 +41,7 @@ public class PresentController : DragaliaControllerBase
         [FromBody] PresentGetPresentListRequest request
     )
     {
-        PresentGetPresentListData data = new();
+        PresentGetPresentListResponse data = new();
 
         if (request.IsLimit)
         {
@@ -85,7 +85,7 @@ public class PresentController : DragaliaControllerBase
         IEnumerable<PresentDetailList> limitPresentList =
             await this.presentControllerService.GetLimitPresentList(0);
 
-        PresentReceiveData data = new PresentReceiveData()
+        PresentReceiveResponse data = new PresentReceiveResponse()
         {
             ReceivePresentIdList = receivedPresents.Select(x => (ulong)x),
             NotReceivePresentIdList = notReceivedPresents.Select(x => (ulong)x),
@@ -111,6 +111,6 @@ public class PresentController : DragaliaControllerBase
             request.PresentHistoryId
         );
 
-        return Ok(new PresentGetHistoryListData() { PresentHistoryList = list, });
+        return Ok(new PresentGetHistoryListResponse() { PresentHistoryList = list, });
     }
 }

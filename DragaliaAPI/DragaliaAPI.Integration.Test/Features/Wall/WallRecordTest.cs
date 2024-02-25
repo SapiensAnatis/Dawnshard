@@ -64,7 +64,7 @@ public class WallRecordTest : TestFixture
 
         string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
 
-        WallRecordRecordData response = (
+        WallRecordRecordResponse response = (
             await Client.PostMsgpack<WallRecordRecordResponse>(
                 "/wall_record/record",
                 new WallRecordRecordRequest() { WallId = wallId, DungeonKey = key }
@@ -162,7 +162,7 @@ public class WallRecordTest : TestFixture
 
         string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
 
-        WallRecordRecordData response = (
+        WallRecordRecordResponse response = (
             await Client.PostMsgpack<WallRecordRecordResponse>(
                 "/wall_record/record",
                 new WallRecordRecordRequest() { WallId = wallId, DungeonKey = key }
@@ -241,7 +241,7 @@ public class WallRecordTest : TestFixture
 
         string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
 
-        WallRecordRecordData response = (
+        WallRecordRecordResponse response = (
             await Client.PostMsgpack<WallRecordRecordResponse>(
                 "/wall_record/record",
                 new WallRecordRecordRequest()
@@ -262,7 +262,7 @@ public class WallRecordTest : TestFixture
             .NewCompleteMissionIdList.Should()
             .BeEquivalentTo([flameLv6MissionId, clearAllLv6MissionId]);
 
-        MissionGetMissionListData missionList = (
+        MissionGetMissionListResponse missionList = (
             await this.Client.PostMsgpack<MissionGetMissionListResponse>(
                 "mission/get_mission_list",
                 new MissionGetMissionListRequest()
@@ -316,7 +316,7 @@ public class WallRecordTest : TestFixture
 
         string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
 
-        WallRecordRecordData response = (
+        WallRecordRecordResponse response = (
             await Client.PostMsgpack<WallRecordRecordResponse>(
                 "/wall_record/record",
                 new WallRecordRecordRequest()

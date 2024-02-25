@@ -20,7 +20,7 @@ public class BuildEventTest : TestFixture
     [Fact]
     public async Task GetEventData_ReturnsEventData()
     {
-        DragaliaResponse<BuildEventGetEventDataData> evtData =
+        DragaliaResponse<BuildEventGetEventDataResponse> evtData =
             await Client.PostMsgpack<BuildEventGetEventDataResponse>(
                 "build_event/get_event_data",
                 new BuildEventGetEventDataRequest(EventId)
@@ -50,7 +50,7 @@ public class BuildEventTest : TestFixture
 
         await ApiContext.SaveChangesAsync();
 
-        DragaliaResponse<BuildEventReceiveBuildPointRewardData> evtResp =
+        DragaliaResponse<BuildEventReceiveBuildPointRewardResponse> evtResp =
             await Client.PostMsgpack<BuildEventReceiveBuildPointRewardResponse>(
                 "build_event/receive_build_point_reward",
                 new BuildEventReceiveBuildPointRewardRequest(EventId)

@@ -40,7 +40,7 @@ public class WallController : DragaliaControllerBase
         DungeonSession session = await dungeonService.FinishDungeon(request.DungeonKey);
 
         return Ok(
-            new WallFailData()
+            new WallFailResponse()
             {
                 Result = 1,
                 FailHelperList = new List<UserSupportList>(),
@@ -66,7 +66,7 @@ public class WallController : DragaliaControllerBase
             RewardStatus.Received
         );
 
-        WallGetMonthlyRewardData data = new() { UserWallRewardList = userWallRewardList };
+        WallGetMonthlyRewardResponse data = new() { UserWallRewardList = userWallRewardList };
 
         return Ok(data);
     }
@@ -80,7 +80,7 @@ public class WallController : DragaliaControllerBase
 
         await this.updateDataService.SaveChangesAsync(); // Updated lost entities
 
-        WallGetWallClearPartyData data =
+        WallGetWallClearPartyResponse data =
             new() { WallClearPartySettingList = clearParty, LostUnitList = lostUnitList };
         return Ok(data);
     }
@@ -114,7 +114,7 @@ public class WallController : DragaliaControllerBase
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
-        WallReceiveMonthlyRewardData data =
+        WallReceiveMonthlyRewardResponse data =
             new()
             {
                 UpdateDataList = updateDataList,
@@ -140,7 +140,7 @@ public class WallController : DragaliaControllerBase
 
         await this.updateDataService.SaveChangesAsync();
 
-        WallSetWallClearPartyData data = new() { Result = 1 };
+        WallSetWallClearPartyResponse data = new() { Result = 1 };
 
         return Ok(data);
     }

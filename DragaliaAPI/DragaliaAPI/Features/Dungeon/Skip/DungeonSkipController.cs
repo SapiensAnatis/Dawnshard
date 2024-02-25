@@ -51,7 +51,7 @@ public class DungeonSkipController(
         EntityResult entityResult = rewardService.GetEntityResult();
 
         return this.Ok(
-            new DungeonSkipStartData()
+            new DungeonSkipStartResponse()
             {
                 IngameResultData = ingameData,
                 UpdateDataList = updateDataList,
@@ -78,7 +78,7 @@ public class DungeonSkipController(
         EntityResult entityResult = rewardService.GetEntityResult();
 
         return this.Ok(
-            new DungeonSkipStartData()
+            new DungeonSkipStartResponse()
             {
                 IngameResultData = ingameData,
                 UpdateDataList = updateDataList,
@@ -121,7 +121,7 @@ public class DungeonSkipController(
         EntityResult entityResult = rewardService.GetEntityResult();
 
         return this.Ok(
-            new DungeonSkipStartMultipleQuestData()
+            new DungeonSkipStartMultipleQuestResponse()
             {
                 IngameResultData = combinedResults,
                 EntityResult = entityResult,
@@ -162,7 +162,7 @@ public class DungeonSkipController(
         EntityResult entityResult = rewardService.GetEntityResult();
 
         return this.Ok(
-            new DungeonSkipStartMultipleQuestData()
+            new DungeonSkipStartMultipleQuestResponse()
             {
                 IngameResultData = combinedResults,
                 EntityResult = entityResult,

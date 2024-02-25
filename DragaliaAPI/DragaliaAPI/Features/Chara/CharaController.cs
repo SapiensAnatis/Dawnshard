@@ -36,7 +36,7 @@ public class CharaController(
     [HttpPost("awake")]
     public async Task<DragaliaResult> Awake(CharaAwakeRequest request)
     {
-        CharaAwakeData resp = new();
+        CharaAwakeResponse resp = new();
 
         DbPlayerCharaData playerCharData =
             await unitRepository.FindCharaAsync(request.CharaId)
@@ -89,7 +89,7 @@ public class CharaController(
     [HttpPost("buildup")]
     public async Task<DragaliaResult> Buildup(CharaBuildupRequest request)
     {
-        CharaBuildupData resp = new();
+        CharaBuildupResponse resp = new();
 
         int experiencePlus = 0;
         int hpPlus = 0;
@@ -139,7 +139,7 @@ public class CharaController(
     [HttpPost("reset_plus_count")]
     public async Task<DragaliaResult> CharaResetPlusCount(CharaResetPlusCountRequest request)
     {
-        CharaResetPlusCountData resp = new();
+        CharaResetPlusCountResponse resp = new();
 
         DbPlayerCharaData playerCharData =
             await unitRepository.FindCharaAsync(request.CharaId)
@@ -182,7 +182,7 @@ public class CharaController(
     [HttpPost("buildup_mana")]
     public async Task<DragaliaResult> CharaBuildupMana(CharaBuildupManaRequest request)
     {
-        CharaBuildupManaData resp = new();
+        CharaBuildupManaResponse resp = new();
 
         logger.LogDebug("Received mana node request {@request}", request);
 
@@ -207,7 +207,7 @@ public class CharaController(
     [HttpPost("limit_break")]
     public async Task<DragaliaResult> CharaLimitBreak(CharaLimitBreakRequest request)
     {
-        CharaBuildupData resp = new();
+        CharaBuildupResponse resp = new();
 
         DbPlayerCharaData playerCharData =
             await unitRepository.FindCharaAsync(request.CharaId)
@@ -230,7 +230,7 @@ public class CharaController(
         CharaLimitBreakAndBuildupManaRequest request
     )
     {
-        CharaLimitBreakAndBuildupManaData resp = new();
+        CharaLimitBreakAndBuildupManaResponse resp = new();
 
         DbPlayerCharaData playerCharData =
             await unitRepository.FindCharaAsync(request.CharaId)
@@ -260,7 +260,7 @@ public class CharaController(
     [HttpPost("buildup_platinum")]
     public async Task<DragaliaResult> CharaBuildupPlatinum(CharaBuildupPlatinumRequest request)
     {
-        CharaBuildupPlatinumData resp = new();
+        CharaBuildupPlatinumResponse resp = new();
 
         DbPlayerCharaData playerCharaData =
             await unitRepository.FindCharaAsync(request.CharaId)
@@ -304,7 +304,7 @@ public class CharaController(
     [HttpPost("unlock_edit_skill")]
     public async Task<DragaliaResult> CharaUnlockEditSkill(CharaUnlockEditSkillRequest request)
     {
-        CharaUnlockEditSkillData resp = new();
+        CharaUnlockEditSkillResponse resp = new();
 
         DbPlayerCharaData playerCharData =
             await unitRepository.FindCharaAsync(request.CharaId)
@@ -347,7 +347,7 @@ public class CharaController(
     [HttpPost("get_chara_unit_set")]
     public async Task<DragaliaResult> GetCharaUnitSet(CharaGetCharaUnitSetRequest request)
     {
-        CharaGetCharaUnitSetData resp = new();
+        CharaGetCharaUnitSetResponse resp = new();
 
         IDictionary<Charas, IEnumerable<DbSetUnit>> setUnitData = await unitRepository.GetCharaSets(
             request.CharaIdList
@@ -365,7 +365,7 @@ public class CharaController(
     [HttpPost("set_chara_unit_set")]
     public async Task<DragaliaResult> SetCharaUnitSet(CharaSetCharaUnitSetRequest request)
     {
-        CharaSetCharaUnitSetData resp = new();
+        CharaSetCharaUnitSetResponse resp = new();
 
         DbSetUnit setUnitData =
             await unitRepository.GetCharaSetData(request.CharaId, request.UnitSetNo)

@@ -21,7 +21,7 @@ public class Clb01EventTest : TestFixture
     [Fact]
     public async Task GetEventData_ReturnsEventData()
     {
-        DragaliaResponse<Clb01EventGetEventDataData> evtData =
+        DragaliaResponse<Clb01EventGetEventDataResponse> evtData =
             await Client.PostMsgpack<Clb01EventGetEventDataResponse>(
                 $"{Prefix}/get_event_data",
                 new Clb01EventGetEventDataRequest(EventId)
@@ -48,7 +48,7 @@ public class Clb01EventTest : TestFixture
 
         await ApiContext.SaveChangesAsync();
 
-        DragaliaResponse<Clb01EventReceiveClb01PointRewardData> evtResp =
+        DragaliaResponse<Clb01EventReceiveClb01PointRewardResponse> evtResp =
             await Client.PostMsgpack<Clb01EventReceiveClb01PointRewardResponse>(
                 $"{Prefix}/receive_clb01_point_reward",
                 new Clb01EventReceiveClb01PointRewardRequest(EventId)

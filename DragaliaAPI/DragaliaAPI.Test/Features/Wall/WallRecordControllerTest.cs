@@ -106,9 +106,9 @@ public class WallRecordControllerTest
 
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(new UpdateDataList());
 
-        WallRecordRecordData data = (
+        WallRecordRecordResponse data = (
             await wallRecordController.Record(new WallRecordRecordRequest(wallId, dungeonKey))
-        ).GetData<WallRecordRecordData>()!;
+        ).GetData<WallRecordRecordResponse>()!;
 
         AtgenPlayWallDetail dataPlayWallDetail =
             new()

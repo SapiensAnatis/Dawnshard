@@ -26,7 +26,7 @@ public class UpdateTest : TestFixture
     public async Task UpdateNamechange_ReturnsCorrectResponse()
     {
         string newName = "Euden 2";
-        UpdateNamechangeData response = (
+        UpdateNamechangeResponse response = (
             await this.Client.PostMsgpack<UpdateNamechangeResponse>(
                 "/update/namechange",
                 new UpdateNamechangeRequest() { Name = newName }
@@ -39,7 +39,7 @@ public class UpdateTest : TestFixture
     [Fact]
     public async Task UpdateResetNew_NullList_Handles()
     {
-        DragaliaResponse<UpdateResetNewData> response = (
+        DragaliaResponse<UpdateResetNewResponse> response = (
             await this.Client.PostMsgpack<UpdateResetNewResponse>(
                 "/update/reset_new",
                 new UpdateResetNewRequest()

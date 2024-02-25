@@ -16,7 +16,7 @@ public class FriendTest : TestFixture
     [Fact]
     public async Task GetSupportCharaDetail_GetsCorrectCharacter()
     {
-        FriendGetSupportCharaDetailData response = (
+        FriendGetSupportCharaDetailResponse response = (
             await this.Client.PostMsgpack<FriendGetSupportCharaDetailResponse>(
                 "/friend/get_support_chara_detail",
                 new FriendGetSupportCharaDetailRequest() { SupportViewerId = 1001 }
@@ -167,7 +167,7 @@ public class FriendTest : TestFixture
     [Fact]
     public async Task GetSupportCharaDetail_GetsCorrectDefaultCharacter()
     {
-        FriendGetSupportCharaDetailData response = (
+        FriendGetSupportCharaDetailResponse response = (
             await this.Client.PostMsgpack<FriendGetSupportCharaDetailResponse>(
                 "/friend/get_support_chara_detail",
                 new FriendGetSupportCharaDetailRequest() { SupportViewerId = 0 }

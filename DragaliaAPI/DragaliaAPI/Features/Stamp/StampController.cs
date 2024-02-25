@@ -28,7 +28,7 @@ public class StampController : DragaliaControllerBase
     {
         IEnumerable<StampList> list = (await this.stampService.GetStampList()).ToList();
 
-        return this.Ok(new StampGetStampData() { StampList = list, });
+        return this.Ok(new StampGetStampResponse() { StampList = list, });
     }
 
     [HttpPost("set_equip_stamp")]
@@ -43,7 +43,7 @@ public class StampController : DragaliaControllerBase
         await this.updateDataService.SaveChangesAsync();
 
         return this.Ok(
-            new StampSetEquipStampData() { EquipStampList = newStampList.OrderBy(x => x.Slot) }
+            new StampSetEquipStampResponse() { EquipStampList = newStampList.OrderBy(x => x.Slot) }
         );
     }
 }

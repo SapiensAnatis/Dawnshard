@@ -11,7 +11,7 @@ public class MaintenanceController(
 ) : DragaliaControllerBaseCore
 {
     [HttpPost("get_text")]
-    public DragaliaResult<MaintenanceGetTextData> GetText(MaintenanceGetTextRequest request)
+    public DragaliaResult<MaintenanceGetTextResponse> GetText(MaintenanceGetTextRequest request)
     {
         if (!maintenanceService.CheckIsMaintenance())
         {
@@ -19,7 +19,7 @@ public class MaintenanceController(
             return this.Code(ResultCode.CommonServerError);
         }
 
-        return new MaintenanceGetTextData()
+        return new MaintenanceGetTextResponse()
         {
             MaintenanceText = maintenanceService.GetMaintenanceText()
         };

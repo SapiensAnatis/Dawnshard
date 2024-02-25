@@ -11,7 +11,7 @@ public class QuestReadStoryTest : TestFixture
     [Fact]
     public async Task ReadStory_ReturnCorrectResponse()
     {
-        QuestReadStoryData response = (
+        QuestReadStoryResponse response = (
             await this.Client.PostMsgpack<QuestReadStoryResponse>(
                 "/quest/read_story",
                 new QuestReadStoryRequest() { QuestStoryId = 1000106 }
@@ -34,7 +34,7 @@ public class QuestReadStoryTest : TestFixture
     [Fact]
     public async Task ReadStory_UpdatesDatabase()
     {
-        QuestReadStoryData response = (
+        QuestReadStoryResponse response = (
             await this.Client.PostMsgpack<QuestReadStoryResponse>(
                 "/quest/read_story",
                 new QuestReadStoryRequest() { QuestStoryId = 1001410 }
@@ -60,7 +60,7 @@ public class QuestReadStoryTest : TestFixture
 
         int theLonePaladynStoryId = 1000103;
 
-        QuestReadStoryData response = (
+        QuestReadStoryResponse response = (
             await this.Client.PostMsgpack<QuestReadStoryResponse>(
                 "/quest/read_story",
                 new QuestReadStoryRequest() { QuestStoryId = theLonePaladynStoryId }

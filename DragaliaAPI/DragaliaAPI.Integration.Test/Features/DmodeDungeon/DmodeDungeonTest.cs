@@ -13,7 +13,7 @@ public class DmodeDungeonTest : TestFixture
     {
         this.AddCharacter(Charas.Shingen);
 
-        DragaliaResponse<DmodeDungeonStartData> startResponse =
+        DragaliaResponse<DmodeDungeonStartResponse> startResponse =
             await this.Client.PostMsgpack<DmodeDungeonStartResponse>(
                 "dmode_dungeon/start",
                 new DmodeDungeonStartRequest()
@@ -31,7 +31,7 @@ public class DmodeDungeonTest : TestFixture
 
         (await this.GetDungeonState()).Should().Be(DungeonState.WaitingInitEnd);
 
-        DragaliaResponse<DmodeDungeonFloorData> floorResponse =
+        DragaliaResponse<DmodeDungeonFloorResponse> floorResponse =
             await this.Client.PostMsgpack<DmodeDungeonFloorResponse>(
                 "dmode_dungeon/floor",
                 new DmodeDungeonFloorRequest() { DmodePlayRecord = null }
@@ -70,7 +70,7 @@ public class DmodeDungeonTest : TestFixture
 
         (await this.GetDungeonState()).Should().Be(DungeonState.WaitingSkipEnd);
 
-        DragaliaResponse<DmodeDungeonFloorData> floorResponse =
+        DragaliaResponse<DmodeDungeonFloorResponse> floorResponse =
             await this.Client.PostMsgpack<DmodeDungeonFloorResponse>(
                 "dmode_dungeon/floor",
                 new DmodeDungeonFloorRequest() { DmodePlayRecord = null }

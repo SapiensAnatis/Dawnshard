@@ -30,7 +30,7 @@ public class UpdateController(
 
         await updateDataService.SaveChangesAsync();
 
-        return this.Ok(new UpdateNamechangeData(request.Name));
+        return this.Ok(new UpdateNamechangeResponse(request.Name));
     }
 
     [HttpPost]
@@ -77,6 +77,6 @@ public class UpdateController(
 
         await updateDataService.SaveChangesAsync();
 
-        return this.Ok(new UpdateResetNewData(1));
+        return this.Ok(new UpdateResetNewResponse(1));
     }
 }

@@ -21,7 +21,7 @@ public class RaidEventController(
     [HttpPost("get_event_data")]
     public async Task<DragaliaResult> GetEventData(RaidEventGetEventDataRequest request)
     {
-        RaidEventGetEventDataData resp = new();
+        RaidEventGetEventDataResponse resp = new();
 
         resp.IsReceiveEventDamageReward = await eventService.GetCustomEventFlag(
             request.RaidEventId
@@ -51,7 +51,7 @@ public class RaidEventController(
     [HttpPost("entry")]
     public async Task<DragaliaResult> Entry(RaidEventEntryRequest request)
     {
-        RaidEventEntryData resp = new();
+        RaidEventEntryResponse resp = new();
 
         resp.RaidEventUserData = await eventService.GetRaidEventUserData(request.RaidEventId);
         resp.UpdateDataList = await updateDataService.SaveChangesAsync();
@@ -65,7 +65,7 @@ public class RaidEventController(
         RaidEventReceiveRaidPointRewardRequest request
     )
     {
-        RaidEventReceiveRaidPointRewardData resp = new();
+        RaidEventReceiveRaidPointRewardResponse resp = new();
 
         await eventService.ReceiveEventRewards(request.RaidEventId, request.RaidEventRewardIdList);
 

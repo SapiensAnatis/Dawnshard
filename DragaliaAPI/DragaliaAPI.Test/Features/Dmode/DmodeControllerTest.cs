@@ -93,7 +93,9 @@ public class DmodeControllerTest
             new() { new DmodeServitorPassiveList(DmodeServitorPassiveType.Exp, 5) };
         mockDmodeService.Setup(x => x.GetServitorPassiveList()).ReturnsAsync(passiveList);
 
-        DmodeGetDataData? resp = (await dmodeController.GetData()).GetData<DmodeGetDataData>();
+        DmodeGetDataResponse? resp = (
+            await dmodeController.GetData()
+        ).GetData<DmodeGetDataResponse>();
 
         resp.Should().NotBeNull();
 
@@ -158,7 +160,9 @@ public class DmodeControllerTest
             new() { new DmodeServitorPassiveList(DmodeServitorPassiveType.Exp, 5) };
         mockDmodeService.Setup(x => x.GetServitorPassiveList()).ReturnsAsync(passiveList);
 
-        DmodeGetDataData? resp = (await dmodeController.Entry()).GetData<DmodeGetDataData>();
+        DmodeGetDataResponse? resp = (
+            await dmodeController.Entry()
+        ).GetData<DmodeGetDataResponse>();
 
         resp.Should().NotBeNull();
 
@@ -192,9 +196,9 @@ public class DmodeControllerTest
         UpdateDataList updateDataList = new();
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
-        DmodeReadStoryData? resp = (
+        DmodeReadStoryResponse? resp = (
             await dmodeController.ReadStory(new DmodeReadStoryRequest(1000))
-        ).GetData<DmodeReadStoryData>();
+        ).GetData<DmodeReadStoryResponse>();
 
         resp.Should().NotBeNull();
         resp!.DmodeStoryRewardList.Should().BeEquivalentTo(rewards);
@@ -220,11 +224,11 @@ public class DmodeControllerTest
             .Setup(x => x.BuildupServitorPassive(It.IsAny<IEnumerable<DmodeServitorPassiveList>>()))
             .ReturnsAsync(passiveList);
 
-        DmodeBuildupServitorPassiveData? resp = (
+        DmodeBuildupServitorPassiveResponse? resp = (
             await dmodeController.BuildupServitorPassive(
                 new DmodeBuildupServitorPassiveRequest(passiveList)
             )
-        ).GetData<DmodeBuildupServitorPassiveData>();
+        ).GetData<DmodeBuildupServitorPassiveResponse>();
 
         resp.Should().NotBeNull();
         resp!.DmodeServitorPassiveList.Should().BeEquivalentTo(passiveList);
@@ -248,9 +252,9 @@ public class DmodeControllerTest
             .Setup(x => x.StartExpedition(10, It.IsAny<IEnumerable<Charas>>()))
             .ReturnsAsync(expedition);
 
-        DmodeExpeditionStartData? resp = (
+        DmodeExpeditionStartResponse? resp = (
             await dmodeController.ExpeditionStart(new DmodeExpeditionStartRequest(10, charaIdList))
-        ).GetData<DmodeExpeditionStartData>();
+        ).GetData<DmodeExpeditionStartResponse>();
 
         mockUpdateDataService.VerifyAll();
         mockDmodeService.VerifyAll();
@@ -274,9 +278,9 @@ public class DmodeControllerTest
             .Setup(x => x.FinishExpedition(false))
             .ReturnsAsync((expedition, ingameResult));
 
-        DmodeExpeditionFinishData? resp = (
+        DmodeExpeditionFinishResponse? resp = (
             await dmodeController.ExpeditionFinish()
-        ).GetData<DmodeExpeditionFinishData>();
+        ).GetData<DmodeExpeditionFinishResponse>();
 
         resp.Should().NotBeNull();
         resp!.DmodeExpedition.Should().BeEquivalentTo(expedition);
@@ -306,9 +310,9 @@ public class DmodeControllerTest
             .Setup(x => x.FinishExpedition(true))
             .ReturnsAsync((expedition, ingameResult));
 
-        DmodeExpeditionForceFinishData? resp = (
+        DmodeExpeditionForceFinishResponse? resp = (
             await dmodeController.ExpeditionForceFinish()
-        ).GetData<DmodeExpeditionForceFinishData>();
+        ).GetData<DmodeExpeditionForceFinishResponse>();
 
         resp.Should().NotBeNull();
         resp!.DmodeExpedition.Should().BeEquivalentTo(expedition);

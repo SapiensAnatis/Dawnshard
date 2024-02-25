@@ -32,7 +32,7 @@ public class WallStartTest : TestFixture
             }
         );
 
-        WallStartStartData response = (
+        WallStartStartResponse response = (
             await Client.PostMsgpack<WallStartStartResponse>(
                 "/wall_start/start",
                 new WallStartStartRequest()
@@ -72,7 +72,7 @@ public class WallStartTest : TestFixture
             }
         );
 
-        WallStartStartAssignUnitData response = (
+        WallStartStartAssignUnitResponse response = (
             await Client.PostMsgpack<WallStartStartAssignUnitResponse>(
                 "/wall_start/start",
                 new WallStartStartAssignUnitRequest()

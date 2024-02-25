@@ -10,7 +10,7 @@ public class EulaAgreeController : DragaliaControllerBase
     public DragaliaResult Agree(EulaAgreeAgreeRequest request)
     {
         return this.Ok(
-            new EulaAgreeAgreeData()
+            new EulaAgreeAgreeResponse()
             {
                 IsOptin = 0,
                 VersionHash = new()

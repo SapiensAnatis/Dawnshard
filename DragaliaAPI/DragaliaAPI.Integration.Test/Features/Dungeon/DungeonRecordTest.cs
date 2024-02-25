@@ -102,7 +102,7 @@ public class DungeonRecordTest : TestFixture
 
         string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
 
-        DungeonRecordRecordData response = (
+        DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -228,7 +228,7 @@ public class DungeonRecordTest : TestFixture
 
         string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
 
-        DungeonRecordRecordData response = (
+        DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -279,7 +279,7 @@ public class DungeonRecordTest : TestFixture
 
         string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
 
-        DungeonRecordRecordData response = (
+        DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -341,7 +341,7 @@ public class DungeonRecordTest : TestFixture
 
         string key = await this.StartDungeon(mockSession);
 
-        DungeonRecordRecordData response = (
+        DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -405,7 +405,7 @@ public class DungeonRecordTest : TestFixture
 
         string key = await this.StartDungeon(mockSession);
 
-        DungeonRecordRecordData response = (
+        DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -460,7 +460,7 @@ public class DungeonRecordTest : TestFixture
 
         string key = await this.StartDungeon(mockSession);
 
-        DungeonRecordRecordData response = (
+        DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -507,7 +507,7 @@ public class DungeonRecordTest : TestFixture
 
         string key = await this.StartDungeon(mockSession);
 
-        DungeonRecordRecordData response = (
+        DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -559,7 +559,7 @@ public class DungeonRecordTest : TestFixture
 
         string key = await this.StartDungeon(mockSession);
 
-        DungeonRecordRecordData response = (
+        DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -612,7 +612,7 @@ public class DungeonRecordTest : TestFixture
 
         string key = await this.StartDungeon(mockSession);
 
-        DungeonRecordRecordData response = (
+        DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -673,7 +673,7 @@ public class DungeonRecordTest : TestFixture
 
         string key = await this.StartDungeon(mockSession);
 
-        DungeonRecordRecordData response = (
+        DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -722,7 +722,7 @@ public class DungeonRecordTest : TestFixture
 
         string key = await this.StartDungeon(mockSession);
 
-        DungeonRecordRecordData response = (
+        DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -807,7 +807,7 @@ public class DungeonRecordTest : TestFixture
 
         string key = await this.StartDungeon(mockSession);
 
-        DungeonRecordRecordData response = (
+        DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -863,7 +863,7 @@ public class DungeonRecordTest : TestFixture
 
         string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
 
-        DragaliaResponse<DungeonRecordRecordData> response =
+        DragaliaResponse<DungeonRecordRecordResponse> response =
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
@@ -911,7 +911,7 @@ public class DungeonRecordTest : TestFixture
         this.MockPhotonStateApi.Setup(x => x.GetGameByViewerId(this.ViewerId))
             .ReturnsAsync(new Photon.Shared.Models.ApiGame() { Name = roomName });
 
-        DungeonStartStartMultiData startResponse = (
+        DungeonStartStartMultiResponse startResponse = (
             await this.Client.PostMsgpack<DungeonStartStartMultiResponse>(
                 "/dungeon_start/start_multi",
                 new DungeonStartStartMultiRequest()
@@ -1111,7 +1111,7 @@ public class DungeonRecordTest : TestFixture
                 }
             };
 
-        DungeonRecordRecordData response = (
+        DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
         ).data;
 
@@ -1144,7 +1144,7 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        DungeonRecordRecordData response2 = (
+        DungeonRecordRecordResponse response2 = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
         ).data;
 
@@ -1198,7 +1198,7 @@ public class DungeonRecordTest : TestFixture
                 }
             };
 
-        DungeonRecordRecordData response = (
+        DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
         ).data;
 

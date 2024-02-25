@@ -64,10 +64,10 @@ public class QuestControllerTest
             .ReturnsAsync(new UpdateDataList());
 
         (await this.questController.ReadStory(new QuestReadStoryRequest() { QuestStoryId = 1 }))
-            .GetData<QuestReadStoryData>()
+            .GetData<QuestReadStoryResponse>()
             .Should()
             .BeEquivalentTo(
-                new QuestReadStoryData()
+                new QuestReadStoryResponse()
                 {
                     EntityResult = new()
                     {

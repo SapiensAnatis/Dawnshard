@@ -93,7 +93,7 @@ public class DragonTest : TestFixture
             }
         };
 
-        DragonBuildupData? response = (
+        DragonBuildupResponse? response = (
             await this.Client.PostMsgpack<DragonBuildupResponse>("dragon/buildup", request)
         ).data;
 
@@ -137,7 +137,7 @@ public class DragonTest : TestFixture
             }
         };
 
-        DragonBuildupData? response = (
+        DragonBuildupResponse? response = (
             await this.Client.PostMsgpack<DragonBuildupResponse>("dragon/buildup", request)
         ).data;
 
@@ -178,7 +178,7 @@ public class DragonTest : TestFixture
             PlusCountType = PlusCountType.Atk
         };
 
-        DragonSetLockData? response = (
+        DragonSetLockResponse? response = (
             await this.Client.PostMsgpack<DragonSetLockResponse>("dragon/reset_plus_count", request)
         ).data;
 
@@ -203,7 +203,7 @@ public class DragonTest : TestFixture
     {
         DragonGetContactDataRequest request = new DragonGetContactDataRequest();
 
-        DragonGetContactDataData? response = (
+        DragonGetContactDataResponse? response = (
             await this.Client.PostMsgpack<DragonGetContactDataResponse>(
                 "dragon/get_contact_data",
                 request
@@ -241,7 +241,7 @@ public class DragonTest : TestFixture
             }
         };
 
-        DragonBuyGiftToSendMultipleData? response = (
+        DragonBuyGiftToSendMultipleResponse? response = (
             await this.Client.PostMsgpack<DragonBuyGiftToSendMultipleResponse>(
                 "dragon/buy_gift_to_send_multiple",
                 request
@@ -282,7 +282,7 @@ public class DragonTest : TestFixture
             DragonGiftId = DragonGifts.HeartyStew
         };
 
-        DragonBuyGiftToSendData? response = (
+        DragonBuyGiftToSendResponse? response = (
             await this.Client.PostMsgpack<DragonBuyGiftToSendResponse>(
                 "dragon/buy_gift_to_send",
                 request
@@ -321,7 +321,7 @@ public class DragonTest : TestFixture
             Quantity = 10
         };
 
-        DragonSendGiftMultipleData? response = (
+        DragonSendGiftMultipleResponse? response = (
             await this.Client.PostMsgpack<DragonSendGiftMultipleResponse>(
                 "dragon/send_gift_multiple",
                 request
@@ -430,7 +430,7 @@ public class DragonTest : TestFixture
             DragonGiftId = DragonGifts.PupGrub
         };
 
-        DragonSendGiftData? response = (
+        DragonSendGiftResponse? response = (
             await this.Client.PostMsgpack<DragonSendGiftResponse>("dragon/send_gift", request)
         ).data;
 
@@ -470,7 +470,7 @@ public class DragonTest : TestFixture
                 Quantity = 100
             };
 
-        DragaliaResponse<DragonSendGiftMultipleData>? response = (
+        DragaliaResponse<DragonSendGiftMultipleResponse>? response = (
             await this.Client.PostMsgpack<DragonSendGiftMultipleResponse>(
                 "dragon/send_gift_multiple",
                 request
@@ -571,7 +571,7 @@ public class DragonTest : TestFixture
             }
         };
 
-        DragonBuildupData? response = (
+        DragonBuildupResponse? response = (
             await this.Client.PostMsgpack<DragonBuildupResponse>("dragon/limit_break", request)
         ).data;
 
@@ -609,7 +609,7 @@ public class DragonTest : TestFixture
             IsLock = true
         };
 
-        DragonSetLockData? response = (
+        DragonSetLockResponse? response = (
             await this.Client.PostMsgpack<DragonSetLockResponse>("dragon/set_lock", request)
         ).data;
 
@@ -644,7 +644,7 @@ public class DragonTest : TestFixture
             DragonKeyIdList = new List<ulong>() { (ulong)dragon.DragonKeyId }
         };
 
-        DragonSellData? response = (
+        DragonSellResponse? response = (
             await this.Client.PostMsgpack<DragonSellResponse>("dragon/sell", request)
         ).data;
 
@@ -693,7 +693,7 @@ public class DragonTest : TestFixture
             }
         };
 
-        DragonSellData? response = (
+        DragonSellResponse? response = (
             await this.Client.PostMsgpack<DragonSellResponse>("dragon/sell", request)
         ).data;
 

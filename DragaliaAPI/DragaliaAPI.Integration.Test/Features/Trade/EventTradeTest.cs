@@ -8,7 +8,7 @@ public class EventTradeTest : TestFixture
     [Fact]
     public async Task GetList_FetchesEventTrades()
     {
-        DragaliaResponse<EventTradeGetListData> response =
+        DragaliaResponse<EventTradeGetListResponse> response =
             await this.Client.PostMsgpack<EventTradeGetListResponse>(
                 "event_trade/get_list",
                 new EventTradeGetListRequest() { TradeGroupId = 10803 }

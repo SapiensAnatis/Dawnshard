@@ -77,15 +77,15 @@ public class DungeonControllerTest
         this.mockDungeonRecordHelperService.Setup(x => x.ProcessHelperDataSolo(4))
             .ReturnsAsync((userSupportList, supportDetailList));
 
-        DungeonFailData? response = (
+        DungeonFailResponse? response = (
             await this.dungeonController.Fail(new DungeonFailRequest() { DungeonKey = "my key" })
-        ).GetData<DungeonFailData>();
+        ).GetData<DungeonFailResponse>();
 
         response.Should().NotBeNull();
         response!
             .Should()
             .BeEquivalentTo(
-                new DungeonFailData()
+                new DungeonFailResponse()
                 {
                     Result = 1,
                     FailHelperList = userSupportList,
@@ -138,15 +138,15 @@ public class DungeonControllerTest
 
         this.mockMatchingService.Setup(x => x.GetIsHost()).ReturnsAsync(false);
 
-        DungeonFailData? response = (
+        DungeonFailResponse? response = (
             await this.dungeonController.Fail(new DungeonFailRequest() { DungeonKey = "my key" })
-        ).GetData<DungeonFailData>();
+        ).GetData<DungeonFailResponse>();
 
         response.Should().NotBeNull();
         response!
             .Should()
             .BeEquivalentTo(
-                new DungeonFailData()
+                new DungeonFailResponse()
                 {
                     Result = 1,
                     FailHelperList = userSupportList,

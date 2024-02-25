@@ -28,10 +28,10 @@ public class MissionController(
     private readonly IUpdateDataService updateDataService = updateDataService;
 
     [HttpPost("get_mission_list")]
-    public async Task<DragaliaResult<MissionGetMissionListData>> GetMissionList()
+    public async Task<DragaliaResult<MissionGetMissionListResponse>> GetMissionList()
     {
-        MissionGetMissionListData response =
-            await this.missionService.BuildNormalResponse<MissionGetMissionListData>();
+        MissionGetMissionListResponse response =
+            await this.missionService.BuildNormalResponse<MissionGetMissionListResponse>();
 
         response.MissionNotice = await this.missionService.GetMissionNotice(null);
         response.CurrentMainStoryMission = await this.missionService.GetCurrentMainStoryMission();
@@ -40,9 +40,9 @@ public class MissionController(
     }
 
     [HttpPost("get_drill_mission_list")]
-    public async Task<DragaliaResult<MissionGetDrillMissionListData>> GetDrillMissionList()
+    public async Task<DragaliaResult<MissionGetDrillMissionListResponse>> GetDrillMissionList()
     {
-        MissionGetDrillMissionListData response = new();
+        MissionGetDrillMissionListResponse response = new();
         response.MissionNotice = await this.missionService.GetMissionNotice(null);
 
         IEnumerable<DbPlayerMission> drillMissions = await this
@@ -63,11 +63,11 @@ public class MissionController(
     }
 
     [HttpPost("unlock_drill_mission_group")]
-    public async Task<DragaliaResult<MissionUnlockDrillMissionGroupData>> UnlockDrillMissionGroup(
-        MissionUnlockDrillMissionGroupRequest request
-    )
+    public async Task<
+        DragaliaResult<MissionUnlockDrillMissionGroupResponse>
+    > UnlockDrillMissionGroup(MissionUnlockDrillMissionGroupRequest request)
     {
-        MissionUnlockDrillMissionGroupData response = new();
+        MissionUnlockDrillMissionGroupResponse response = new();
 
         IEnumerable<DbPlayerMission> drillMissions =
             await this.missionService.UnlockDrillMissionGroup(request.DrillMissionGroupId);
@@ -86,11 +86,11 @@ public class MissionController(
     }
 
     [HttpPost("unlock_main_story_group")]
-    public async Task<DragaliaResult<MissionUnlockMainStoryGroupData>> UnlockMainStoryMissionGroup(
-        MissionUnlockMainStoryGroupRequest request
-    )
+    public async Task<
+        DragaliaResult<MissionUnlockMainStoryGroupResponse>
+    > UnlockMainStoryMissionGroup(MissionUnlockMainStoryGroupRequest request)
     {
-        MissionUnlockMainStoryGroupData response = new();
+        MissionUnlockMainStoryGroupResponse response = new();
 
         (IEnumerable<MainStoryMissionGroupReward> rewards, IEnumerable<DbPlayerMission> missions) =
             await this.missionService.UnlockMainMissionGroup(request.MainStoryMissionGroupId);
@@ -113,11 +113,11 @@ public class MissionController(
     }
 
     [HttpPost("receive_drill_reward")]
-    public async Task<DragaliaResult<MissionReceiveDrillRewardData>> ReceiveDrillStoryReward(
+    public async Task<DragaliaResult<MissionReceiveDrillRewardResponse>> ReceiveDrillStoryReward(
         MissionReceiveDrillRewardRequest request
     )
     {
-        MissionReceiveDrillRewardData response = new();
+        MissionReceiveDrillRewardResponse response = new();
 
         await this.missionService.RedeemMissions(MissionType.Drill, request.DrillMissionIdList);
 
@@ -146,7 +146,7 @@ public class MissionController(
     }
 
     [HttpPost("receive_main_story_reward")]
-    public async Task<DragaliaResult<MissionReceiveMainStoryRewardData>> ReceiveMainStoryReward(
+    public async Task<DragaliaResult<MissionReceiveMainStoryRewardResponse>> ReceiveMainStoryReward(
         MissionReceiveMainStoryRewardRequest request
     )
     {
@@ -155,8 +155,8 @@ public class MissionController(
             request.MainStoryMissionIdList
         );
 
-        MissionReceiveMainStoryRewardData response =
-            await this.missionService.BuildNormalResponse<MissionReceiveMainStoryRewardData>();
+        MissionReceiveMainStoryRewardResponse response =
+            await this.missionService.BuildNormalResponse<MissionReceiveMainStoryRewardResponse>();
         response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
         response.EntityResult = this.rewardService.GetEntityResult();
         response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
@@ -165,14 +165,14 @@ public class MissionController(
     }
 
     [HttpPost("receive_period_reward")]
-    public async Task<DragaliaResult<MissionReceivePeriodRewardData>> ReceivePeriodReward(
+    public async Task<DragaliaResult<MissionReceivePeriodRewardResponse>> ReceivePeriodReward(
         MissionReceivePeriodRewardRequest request
     )
     {
         await this.missionService.RedeemMissions(MissionType.Period, request.PeriodMissionIdList);
 
-        MissionReceivePeriodRewardData response =
-            await this.missionService.BuildNormalResponse<MissionReceivePeriodRewardData>();
+        MissionReceivePeriodRewardResponse response =
+            await this.missionService.BuildNormalResponse<MissionReceivePeriodRewardResponse>();
         response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
         response.EntityResult = this.rewardService.GetEntityResult();
         response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
@@ -181,14 +181,14 @@ public class MissionController(
     }
 
     [HttpPost("receive_normal_reward")]
-    public async Task<DragaliaResult<MissionReceiveNormalRewardData>> ReceiveNormalReward(
+    public async Task<DragaliaResult<MissionReceiveNormalRewardResponse>> ReceiveNormalReward(
         MissionReceiveNormalRewardRequest request
     )
     {
         await this.missionService.RedeemMissions(MissionType.Normal, request.NormalMissionIdList);
 
-        MissionReceiveNormalRewardData response =
-            await this.missionService.BuildNormalResponse<MissionReceiveNormalRewardData>();
+        MissionReceiveNormalRewardResponse response =
+            await this.missionService.BuildNormalResponse<MissionReceiveNormalRewardResponse>();
         response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
         response.EntityResult = this.rewardService.GetEntityResult();
         response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
@@ -197,14 +197,14 @@ public class MissionController(
     }
 
     [HttpPost("receive_album_reward")]
-    public async Task<DragaliaResult<MissionReceiveAlbumRewardData>> ReceiveAlbumReward(
+    public async Task<DragaliaResult<MissionReceiveAlbumRewardResponse>> ReceiveAlbumReward(
         MissionReceiveAlbumRewardRequest request
     )
     {
         await this.missionService.RedeemMissions(MissionType.Album, request.AlbumMissionIdList);
 
-        MissionReceiveAlbumRewardData response =
-            await this.missionService.BuildNormalResponse<MissionReceiveAlbumRewardData>();
+        MissionReceiveAlbumRewardResponse response =
+            await this.missionService.BuildNormalResponse<MissionReceiveAlbumRewardResponse>();
         response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
         response.EntityResult = this.rewardService.GetEntityResult();
         response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
@@ -213,7 +213,7 @@ public class MissionController(
     }
 
     [HttpPost("receive_memory_event_reward")]
-    public async Task<DragaliaResult<MissionReceiveMemoryEventRewardData>> ReceiveNormalReward(
+    public async Task<DragaliaResult<MissionReceiveMemoryEventRewardResponse>> ReceiveNormalReward(
         MissionReceiveMemoryEventRewardRequest request
     )
     {
@@ -222,8 +222,8 @@ public class MissionController(
             request.MemoryEventMissionIdList
         );
 
-        MissionReceiveMemoryEventRewardData response =
-            await this.missionService.BuildNormalResponse<MissionReceiveMemoryEventRewardData>();
+        MissionReceiveMemoryEventRewardResponse response =
+            await this.missionService.BuildNormalResponse<MissionReceiveMemoryEventRewardResponse>();
         response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
         response.EntityResult = this.rewardService.GetEntityResult();
         response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
@@ -232,7 +232,7 @@ public class MissionController(
     }
 
     [HttpPost("receive_beginner_reward")]
-    public async Task<DragaliaResult<MissionReceiveBeginnerRewardData>> ReceiveBeginnerReward(
+    public async Task<DragaliaResult<MissionReceiveBeginnerRewardResponse>> ReceiveBeginnerReward(
         MissionReceiveBeginnerRewardRequest request
     )
     {
@@ -241,8 +241,8 @@ public class MissionController(
             request.BeginnerMissionIdList
         );
 
-        MissionReceiveBeginnerRewardData response =
-            await this.missionService.BuildNormalResponse<MissionReceiveBeginnerRewardData>();
+        MissionReceiveBeginnerRewardResponse response =
+            await this.missionService.BuildNormalResponse<MissionReceiveBeginnerRewardResponse>();
         response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
         response.EntityResult = this.rewardService.GetEntityResult();
         response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
@@ -251,14 +251,14 @@ public class MissionController(
     }
 
     [HttpPost("receive_special_reward")]
-    public async Task<DragaliaResult<MissionReceiveSpecialRewardData>> ReceiveBeginnerReward(
+    public async Task<DragaliaResult<MissionReceiveSpecialRewardResponse>> ReceiveBeginnerReward(
         MissionReceiveSpecialRewardRequest request
     )
     {
         await this.missionService.RedeemMissions(MissionType.Special, request.SpecialMissionIdList);
 
-        MissionReceiveSpecialRewardData response =
-            await this.missionService.BuildNormalResponse<MissionReceiveSpecialRewardData>();
+        MissionReceiveSpecialRewardResponse response =
+            await this.missionService.BuildNormalResponse<MissionReceiveSpecialRewardResponse>();
         response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
         response.EntityResult = this.rewardService.GetEntityResult();
         response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
@@ -267,7 +267,7 @@ public class MissionController(
     }
 
     [HttpPost("receive_daily_reward")]
-    public async Task<DragaliaResult<MissionReceiveDailyRewardData>> ReceiveDailyReward(
+    public async Task<DragaliaResult<MissionReceiveDailyRewardResponse>> ReceiveDailyReward(
         MissionReceiveDailyRewardRequest request
     )
     {
@@ -275,8 +275,8 @@ public class MissionController(
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
-        MissionReceiveDailyRewardData response =
-            await this.missionService.BuildNormalResponse<MissionReceiveDailyRewardData>();
+        MissionReceiveDailyRewardResponse response =
+            await this.missionService.BuildNormalResponse<MissionReceiveDailyRewardResponse>();
 
         response.EntityResult = this.rewardService.GetEntityResult();
         response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();

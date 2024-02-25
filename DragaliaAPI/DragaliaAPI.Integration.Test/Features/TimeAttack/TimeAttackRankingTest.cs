@@ -44,7 +44,7 @@ public class TimeAttackRankingTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        TimeAttackRankingReceiveTierRewardData rewardResponse = (
+        TimeAttackRankingReceiveTierRewardResponse rewardResponse = (
             await this.Client.PostMsgpack<TimeAttackRankingReceiveTierRewardResponse>(
                 "/time_attack_ranking/receive_tier_reward",
                 new TimeAttackRankingReceiveTierRewardRequest() { QuestId = questId }
@@ -72,7 +72,7 @@ public class TimeAttackRankingTest : TestFixture
 
         rewardResponse.UpdateDataList.UserData.DewPoint.Should().Be(oldUserData.DewPoint + 7000);
 
-        TimeAttackRankingReceiveTierRewardData secondRewardResponse = (
+        TimeAttackRankingReceiveTierRewardResponse secondRewardResponse = (
             await this.Client.PostMsgpack<TimeAttackRankingReceiveTierRewardResponse>(
                 "/time_attack_ranking/receive_tier_reward",
                 new TimeAttackRankingReceiveTierRewardRequest() { QuestId = questId }

@@ -45,11 +45,11 @@ public class WeaponBodyControllerTest
                 }
             );
 
-        WeaponBodyCraftData data = (
+        WeaponBodyCraftResponse data = (
             await this.weaponBodyController.Craft(
                 new WeaponBodyCraftRequest() { WeaponBodyId = WeaponBodies.Areadbhar }
             )
-        ).GetData<WeaponBodyCraftData>()!;
+        ).GetData<WeaponBodyCraftResponse>()!;
 
         data.UpdateDataList.WeaponBodyList.First().WeaponBodyId.Should().Be(WeaponBodies.Areadbhar);
 
@@ -154,7 +154,7 @@ public class WeaponBodyControllerTest
             };
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(udl);
 
-        WeaponBodyBuildupPieceData data = (
+        WeaponBodyBuildupPieceResponse data = (
             await this.weaponBodyController.BuildupPiece(
                 new WeaponBodyBuildupPieceRequest()
                 {
@@ -167,7 +167,7 @@ public class WeaponBodyControllerTest
                     }
                 }
             )
-        ).GetData<WeaponBodyBuildupPieceData>()!;
+        ).GetData<WeaponBodyBuildupPieceResponse>()!;
 
         data.UpdateDataList.Should().Be(udl);
 

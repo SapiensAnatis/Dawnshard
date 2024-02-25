@@ -22,7 +22,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
             }
         );
 
-        LoadIndexData data = (
+        LoadIndexResponse data = (
             await this.Client.PostMsgpack<LoadIndexResponse>("/load/index", new LoadIndexRequest())
         ).data;
 
@@ -47,7 +47,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
             }
         );
 
-        LoadIndexData data = (
+        LoadIndexResponse data = (
             await this.Client.PostMsgpack<LoadIndexResponse>("/load/index", new LoadIndexRequest())
         ).data;
 
@@ -72,7 +72,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
             }
         );
 
-        LoadIndexData data = (
+        LoadIndexResponse data = (
             await this.Client.PostMsgpack<LoadIndexResponse>("/load/index", new LoadIndexRequest())
         ).data;
 
@@ -91,7 +91,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
             u.SetProperty(e => e.TutorialStatus, TutorialService.TutorialStatusIds.Dojos)
         );
 
-        LoadIndexData data = (
+        LoadIndexResponse data = (
             await this.Client.PostMsgpack<LoadIndexResponse>("/load/index", new LoadIndexRequest())
         ).data;
 
@@ -112,7 +112,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
         await this.ApiContext.PlayerFortBuilds.ExecuteDeleteAsync();
         await this.ApiContext.PlayerStoryState.ExecuteDeleteAsync();
 
-        LoadIndexData data = (
+        LoadIndexResponse data = (
             await this.Client.PostMsgpack<LoadIndexResponse>("/load/index", new LoadIndexRequest())
         ).data;
 

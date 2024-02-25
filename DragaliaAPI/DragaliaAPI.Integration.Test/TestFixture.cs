@@ -208,9 +208,9 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
             .First();
     }
 
-    private static LoadIndexData GetSavefile() =>
+    private static LoadIndexResponse GetSavefile() =>
         JsonSerializer
-            .Deserialize<DragaliaResponse<LoadIndexData>>(
+            .Deserialize<DragaliaResponse<LoadIndexResponse>>(
                 File.ReadAllText(Path.Join("Data", "endgame_savefile.json")),
                 ApiJsonOptions.Instance
             )!

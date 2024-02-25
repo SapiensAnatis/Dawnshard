@@ -67,11 +67,11 @@ public class SavefileService : ISavefileService
         };
 
     /// <summary>
-    /// Thread safe version of <see cref="Import(LoadIndexData)"/>.
+    /// Thread safe version of <see cref="Import(LoadIndexResponse)"/>.
     /// </summary>
     /// <param name="savefile">The savefile to import/</param>
     /// <returns>The task.</returns>
-    public async Task ThreadSafeImport(LoadIndexData savefile)
+    public async Task ThreadSafeImport(LoadIndexResponse savefile)
     {
         string key = RedisSchema.PendingImport(this.playerIdentityService.AccountId);
 
@@ -106,7 +106,7 @@ public class SavefileService : ISavefileService
     /// <param name="savefile">Savefile data.</param>
     /// <returns>The task.</returns>
     /// <remarks>Not thread safe if called for the same account id from two different threads.</remarks>
-    public async Task Import(LoadIndexData savefile)
+    public async Task Import(LoadIndexResponse savefile)
     {
         string deviceAccountId = this.playerIdentityService.AccountId;
         Stopwatch stopwatch = Stopwatch.StartNew();

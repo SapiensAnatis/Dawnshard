@@ -256,7 +256,7 @@ public class DungeonStartService(
 
     private async Task<AtgenSupportData> GetSupportData(ulong supportViewerId)
     {
-        QuestGetSupportUserListData helperList = await helperService.GetHelpers();
+        QuestGetSupportUserListResponse helperList = await helperService.GetHelpers();
 
         UserSupportList? helperInfo = helperList.SupportUserList.FirstOrDefault(helper =>
             helper.ViewerId == supportViewerId

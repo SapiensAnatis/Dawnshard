@@ -14,10 +14,11 @@ public class DmodeTest : TestFixture
     [Fact]
     public async Task GetData_ReturnsData()
     {
-        DragaliaResponse<DmodeGetDataData> resp = await Client.PostMsgpack<DmodeGetDataResponse>(
-            "dmode/get_data",
-            new DmodeGetDataRequest()
-        );
+        DragaliaResponse<DmodeGetDataResponse> resp =
+            await Client.PostMsgpack<DmodeGetDataResponse>(
+                "dmode/get_data",
+                new DmodeGetDataRequest()
+            );
 
         resp.data.DmodeInfo.IsEntry.Should().BeTrue();
         resp.data.DmodeCharaList.Should().NotBeNull();
@@ -35,7 +36,7 @@ public class DmodeTest : TestFixture
             .Single(x => x.ViewerId == ViewerId)
             .Crystal;
 
-        DragaliaResponse<DmodeReadStoryData> resp =
+        DragaliaResponse<DmodeReadStoryResponse> resp =
             await Client.PostMsgpack<DmodeReadStoryResponse>(
                 "dmode/read_story",
                 new DmodeReadStoryRequest() { DmodeStoryId = 1 }
@@ -73,7 +74,7 @@ public class DmodeTest : TestFixture
     [Fact]
     public async Task BuildupServitorPassive_BuildsUp()
     {
-        DragaliaResponse<DmodeBuildupServitorPassiveData> resp =
+        DragaliaResponse<DmodeBuildupServitorPassiveResponse> resp =
             await Client.PostMsgpack<DmodeBuildupServitorPassiveResponse>(
                 "dmode/buildup_servitor_passive",
                 new DmodeBuildupServitorPassiveRequest()
@@ -150,7 +151,7 @@ public class DmodeTest : TestFixture
     [Fact]
     public async Task Expedition_CanStartAndForceFinish()
     {
-        DragaliaResponse<DmodeExpeditionStartData> resp =
+        DragaliaResponse<DmodeExpeditionStartResponse> resp =
             await this.Client.PostMsgpack<DmodeExpeditionStartResponse>(
                 "dmode/expedition_start",
                 new DmodeExpeditionStartRequest()
@@ -180,7 +181,7 @@ public class DmodeTest : TestFixture
                 }
             );
 
-        DragaliaResponse<DmodeExpeditionForceFinishData> finishResp =
+        DragaliaResponse<DmodeExpeditionForceFinishResponse> finishResp =
             await this.Client.PostMsgpack<DmodeExpeditionForceFinishResponse>(
                 "dmode/expedition_force_finish",
                 new DmodeExpeditionForceFinishRequest() { }
@@ -217,7 +218,7 @@ public class DmodeTest : TestFixture
 
         this.MockDateTimeProvider.Setup(x => x.UtcNow).Returns(startTime);
 
-        DragaliaResponse<DmodeExpeditionStartData> resp =
+        DragaliaResponse<DmodeExpeditionStartResponse> resp =
             await this.Client.PostMsgpack<DmodeExpeditionStartResponse>(
                 "dmode/expedition_start",
                 new DmodeExpeditionStartRequest()
@@ -249,7 +250,7 @@ public class DmodeTest : TestFixture
 
         this.MockDateTimeProvider.Setup(x => x.UtcNow).Returns(DateTimeOffset.UtcNow);
 
-        DragaliaResponse<DmodeExpeditionFinishData> finishResp =
+        DragaliaResponse<DmodeExpeditionFinishResponse> finishResp =
             await this.Client.PostMsgpack<DmodeExpeditionFinishResponse>(
                 "dmode/expedition_finish",
                 new DmodeExpeditionFinishRequest() { }

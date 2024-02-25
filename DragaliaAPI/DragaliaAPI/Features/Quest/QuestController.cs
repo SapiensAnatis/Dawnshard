@@ -55,7 +55,7 @@ public class QuestController : DragaliaControllerBase
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return this.Ok(
-            new QuestReadStoryData()
+            new QuestReadStoryResponse()
             {
                 QuestStoryRewardList = questRewardList,
                 EntityResult = entityResult,
@@ -68,7 +68,7 @@ public class QuestController : DragaliaControllerBase
     public async Task<DragaliaResult> GetUserSupportList()
     {
         // TODO: this is actually going to be a pretty complicated system
-        QuestGetSupportUserListData response = await this.helperService.GetHelpers();
+        QuestGetSupportUserListResponse response = await this.helperService.GetHelpers();
         return Ok(response);
     }
 
@@ -81,7 +81,7 @@ public class QuestController : DragaliaControllerBase
         await this.updateDataService.SaveChangesAsync(); // Updated lost entities
 
         return Ok(
-            new QuestGetQuestClearPartyData()
+            new QuestGetQuestClearPartyResponse()
             {
                 QuestClearPartySettingList = clearParty,
                 LostUnitList = lostUnitList
@@ -100,7 +100,7 @@ public class QuestController : DragaliaControllerBase
         await this.updateDataService.SaveChangesAsync();
 
         return Ok(
-            new QuestGetQuestClearPartyMultiData()
+            new QuestGetQuestClearPartyMultiResponse()
             {
                 QuestMultiClearPartySettingList = clearParty,
                 LostUnitList = lostUnitList
@@ -111,7 +111,9 @@ public class QuestController : DragaliaControllerBase
     [HttpPost("open_treasure")]
     public async Task<DragaliaResult> OpenTreasure(QuestOpenTreasureRequest request)
     {
-        QuestOpenTreasureData response = await this.questTreasureService.DoOpenTreasure(request);
+        QuestOpenTreasureResponse response = await this.questTreasureService.DoOpenTreasure(
+            request
+        );
         return Ok(response);
     }
 
@@ -126,7 +128,7 @@ public class QuestController : DragaliaControllerBase
 
         await this.updateDataService.SaveChangesAsync();
 
-        return Ok(new QuestSetQuestClearPartyData() { Result = 1 });
+        return Ok(new QuestSetQuestClearPartyResponse() { Result = 1 });
     }
 
     [HttpPost("set_quest_clear_party_multi")]
@@ -142,7 +144,7 @@ public class QuestController : DragaliaControllerBase
 
         await this.updateDataService.SaveChangesAsync();
 
-        return Ok(new QuestSetQuestClearPartyMultiData() { Result = 1 });
+        return Ok(new QuestSetQuestClearPartyMultiResponse() { Result = 1 });
     }
 
     [HttpPost("drop_list")]
@@ -153,7 +155,7 @@ public class QuestController : DragaliaControllerBase
             drops = dropInfo.Drops;
 
         return Ok(
-            new QuestDropListData()
+            new QuestDropListResponse()
             {
                 QuestDropInfo = new()
                 {

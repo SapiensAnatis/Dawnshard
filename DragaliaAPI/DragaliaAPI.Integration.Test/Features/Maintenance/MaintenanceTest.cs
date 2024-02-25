@@ -36,7 +36,7 @@ public class MaintenanceTest : TestFixture
     {
         this.ConfigureMaintenanceClient(new MaintenanceOptions() { Enabled = true });
 
-        DragaliaResponse<ToolGetServiceStatusData> response =
+        DragaliaResponse<ToolGetServiceStatusResponse> response =
             await this.Client.PostMsgpack<ToolGetServiceStatusResponse>(
                 "tool/get_service_status",
                 new ToolGetServiceStatusRequest(),
@@ -60,7 +60,7 @@ public class MaintenanceTest : TestFixture
             }
         );
 
-        DragaliaResponse<MaintenanceGetTextData> response =
+        DragaliaResponse<MaintenanceGetTextResponse> response =
             await this.Client.PostMsgpack<MaintenanceGetTextResponse>(
                 "maintenance/get_text",
                 new MaintenanceGetTextRequest()

@@ -68,7 +68,7 @@ public class EarnEventTest : TestFixture
     [Fact]
     public async Task GetEventData_ReturnsNullUserDataInitially()
     {
-        DragaliaResponse<EarnEventGetEventDataData> evtData =
+        DragaliaResponse<EarnEventGetEventDataResponse> evtData =
             await Client.PostMsgpack<EarnEventGetEventDataResponse>(
                 "earn_event/get_event_data",
                 new EarnEventGetEventDataRequest(EventId)
@@ -87,7 +87,7 @@ public class EarnEventTest : TestFixture
             new EarnEventEntryRequest(EventId)
         );
 
-        DragaliaResponse<EarnEventGetEventDataData> evtData =
+        DragaliaResponse<EarnEventGetEventDataResponse> evtData =
             await Client.PostMsgpack<EarnEventGetEventDataResponse>(
                 "earn_event/get_event_data",
                 new EarnEventGetEventDataRequest(EventId)
@@ -131,7 +131,7 @@ public class EarnEventTest : TestFixture
 
         await ApiContext.SaveChangesAsync();
 
-        DragaliaResponse<EarnEventReceiveEventPointRewardData> evtResp =
+        DragaliaResponse<EarnEventReceiveEventPointRewardResponse> evtResp =
             await Client.PostMsgpack<EarnEventReceiveEventPointRewardResponse>(
                 "earn_event/receive_event_point_reward",
                 new EarnEventReceiveEventPointRewardRequest(EventId)

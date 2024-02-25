@@ -62,7 +62,7 @@ public class DragonController : DragaliaControllerBase
         [FromBody] DragonBuyGiftToSendRequest request
     )
     {
-        DragonBuyGiftToSendMultipleData resultData =
+        DragonBuyGiftToSendMultipleResponse resultData =
             await dragonService.DoDragonBuyGiftToSendMultiple(
                 new DragonBuyGiftToSendMultipleRequest()
                 {
@@ -71,7 +71,7 @@ public class DragonController : DragaliaControllerBase
                 }
             );
         return Ok(
-            new DragonBuyGiftToSendData()
+            new DragonBuyGiftToSendResponse()
             {
                 DragonContactFreeGiftCount = resultData.DragonContactFreeGiftCount,
                 EntityResult = resultData.EntityResult,
@@ -99,7 +99,7 @@ public class DragonController : DragaliaControllerBase
     [HttpPost]
     public async Task<DragaliaResult> DragonSendGift([FromBody] DragonSendGiftRequest request)
     {
-        DragonSendGiftMultipleData resultData = await dragonService.DoDragonSendGiftMultiple(
+        DragonSendGiftMultipleResponse resultData = await dragonService.DoDragonSendGiftMultiple(
             new DragonSendGiftMultipleRequest()
             {
                 DragonId = request.DragonId,
@@ -108,7 +108,7 @@ public class DragonController : DragaliaControllerBase
             }
         );
         return Ok(
-            new DragonSendGiftData()
+            new DragonSendGiftResponse()
             {
                 IsFavorite = resultData.IsFavorite,
                 ReturnGiftList = resultData.ReturnGiftList,

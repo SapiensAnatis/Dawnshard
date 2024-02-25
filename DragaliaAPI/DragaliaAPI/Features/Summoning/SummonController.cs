@@ -105,7 +105,7 @@ public class SummonController(
             excludableList.Add(new AtgenDuplicateEntityList(EntityTypes.Dragon, (int)d));
         }
 
-        return this.Ok(new SummonExcludeGetListData(excludableList));
+        return this.Ok(new SummonExcludeGetListResponse(excludableList));
     }
 
     [HttpPost]
@@ -117,7 +117,7 @@ public class SummonController(
         //TODO Replace Dummy data with oddscalculation
 
         return this.Ok(
-            new SummonGetOddsDataData(
+            new SummonGetOddsDataResponse(
                 new OddsRateList(0, Data.OddsRate, Data.OddsRate),
                 new(Data.PrizeOddsRate, Data.PrizeOddsRate)
             )
@@ -134,17 +134,17 @@ public class SummonController(
             await summonRepository.SummonHistory.ToListAsync()
         ).Select(mapper.Map<SummonHistoryList>);
 
-        return this.Ok(new SummonGetSummonHistoryData(dbList));
+        return this.Ok(new SummonGetSummonHistoryResponse(dbList));
     }
 
     [HttpPost]
     [Route("get_summon_list")]
-    public async Task<DragaliaResult<SummonGetSummonListData>> GetSummonList()
+    public async Task<DragaliaResult<SummonGetSummonListResponse>> GetSummonList()
     {
         IEnumerable<SummonList> bannerList = await summonListService.GetSummonList();
         IEnumerable<SummonTicketList> ticketList = await summonListService.GetSummonTicketList();
 
-        return new SummonGetSummonListData()
+        return new SummonGetSummonListResponse()
         {
             SummonList = bannerList,
             SummonTicketList = ticketList,
@@ -185,7 +185,7 @@ public class SummonController(
             };
 
         return this.Ok(
-            new SummonGetSummonPointTradeData(
+            new SummonGetSummonPointTradeResponse(
                 tradableUnits,
                 new List<SummonPointList>() { new(bannerId, 0, 0, 0, int.MaxValue) },
                 new(),
@@ -452,7 +452,7 @@ public class SummonController(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        var response = new SummonRequestData(
+        var response = new SummonRequestResponse(
             returnedResult,
             new List<AtgenResultPrizeList>(),
             new List<int>() { sageEffect, circleEffect },
