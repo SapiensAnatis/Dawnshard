@@ -2701,8 +2701,8 @@ public partial class EulaGetVersionResponse
     [Key("version_hash")]
     public AtgenVersionHash VersionHash { get; set; }
 
-    [Key("is_required_agree")]
-    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [Key("is_required_agree")] 
+    // Actually a bool instead of int 0/1; bool formatter omitted.
     public bool IsRequiredAgree { get; set; }
 
     [Key("agreement_status")]

@@ -10628,9 +10628,9 @@ public partial class QuestStoryList
     public int QuestStoryId { get; set; }
 
     [Key("state")]
-    public int State { get; set; }
+    public StoryState State { get; set; }
 
-    public QuestStoryList(int questStoryId, int state)
+    public QuestStoryList(int questStoryId, StoryState state)
     {
         this.QuestStoryId = questStoryId;
         this.State = state;
@@ -11370,7 +11370,7 @@ public partial class SummonHistoryList
     public int SummonId { get; set; }
 
     [Key("summon_exec_type")]
-    public int SummonExecType { get; set; }
+    public SummonExecTypes SummonExecType { get; set; }
 
     [Key("exec_date")]
     public DateTimeOffset ExecDate { get; set; }
@@ -11417,7 +11417,7 @@ public partial class SummonHistoryList
     public SummonHistoryList(
         int keyId,
         int summonId,
-        int summonExecType,
+        SummonExecTypes summonExecType,
         DateTimeOffset execDate,
         PaymentTypes paymentType,
         EntityTypes entityType,

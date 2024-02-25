@@ -4,6 +4,6 @@ namespace DragaliaAPI.Models.Generated;
 
 public partial class LoadIndexResponse
 {
-    [Key("origin")]
+    [IgnoreMember]
     public string Origin => "dawnshard";
 }

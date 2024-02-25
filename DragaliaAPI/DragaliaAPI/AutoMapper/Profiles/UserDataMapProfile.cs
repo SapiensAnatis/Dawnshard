@@ -13,7 +13,7 @@ public class UserDataMapProfile : Profile
             .ForMember(x => x.MaxAmuletQuantity, opts => opts.MapFrom(x => 0))
             .ForMember(x => x.MaxWeaponQuantity, opts => opts.MapFrom(x => 0))
             .ForMember(x => x.IsOptin, opts => opts.MapFrom(x => 0))
-            .ForMember(x => x.PrologueEndTime, opts => opts.MapFrom(x => 0));
+            .ForMember(x => x.PrologueEndTime, opts => opts.MapFrom(x => DateTimeOffset.UnixEpoch));
 
         this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
         this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;

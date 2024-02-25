@@ -18,8 +18,5 @@ public class TradeMapProfile : Profile
             .ForMember(x => x.Count, opts => opts.MapFrom(src => src.TradeCount))
             .ForMember(x => x.Type, opts => opts.MapFrom(src => TradeType.Treasure))
             .ForMember(x => x.LastTradeTime, opts => opts.MapFrom(src => src.LastResetTime));
-
-        this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
-        this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
     }
 }
