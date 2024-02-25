@@ -19,7 +19,7 @@ public class CastleStoryTest : TestFixture
                 "/castle_story/read",
                 new CastleStoryReadRequest() { CastleStoryId = 1 }
             )
-        ).data;
+        ).Data;
 
         data.CastleStoryRewardList.Should()
             .BeEquivalentTo(
@@ -63,7 +63,7 @@ public class CastleStoryTest : TestFixture
                 "/castle_story/read",
                 new CastleStoryReadRequest() { CastleStoryId = 2 }
             )
-        ).data;
+        ).Data;
 
         data.CastleStoryRewardList.Should().BeEmpty();
 
@@ -85,7 +85,7 @@ public class CastleStoryTest : TestFixture
                 "/castle_story/read",
                 new CastleStoryReadRequest() { CastleStoryId = 3 }
             )
-        ).data;
+        ).Data;
 
         int newCrystal = await this
             .ApiContext.PlayerUserData.AsNoTracking()

@@ -22,7 +22,7 @@ public class UserTest : TestFixture
                 new UserLinkedNAccountRequest()
             )
         )
-            .data.Should()
+            .Data.Should()
             .BeEquivalentTo(
                 new UserLinkedNAccountResponse()
                 {
@@ -41,7 +41,7 @@ public class UserTest : TestFixture
                 new UserGetNAccountInfoRequest()
             )
         )
-            .data.Should()
+            .Data.Should()
             .BeEquivalentTo(
                 new UserGetNAccountInfoResponse()
                 {

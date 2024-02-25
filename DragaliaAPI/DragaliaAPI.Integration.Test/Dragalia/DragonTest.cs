@@ -95,7 +95,7 @@ public class DragonTest : TestFixture
 
         DragonBuildupResponse? response = (
             await this.Client.PostMsgpack<DragonBuildupResponse>("dragon/buildup", request)
-        ).data;
+        ).Data;
 
         response.Should().NotBeNull();
         response.UpdateDataList.Should().NotBeNull();
@@ -139,7 +139,7 @@ public class DragonTest : TestFixture
 
         DragonBuildupResponse? response = (
             await this.Client.PostMsgpack<DragonBuildupResponse>("dragon/buildup", request)
-        ).data;
+        ).Data;
 
         response.Should().NotBeNull();
         response.UpdateDataList.Should().NotBeNull();
@@ -180,7 +180,7 @@ public class DragonTest : TestFixture
 
         DragonSetLockResponse? response = (
             await this.Client.PostMsgpack<DragonSetLockResponse>("dragon/reset_plus_count", request)
-        ).data;
+        ).Data;
 
         response.Should().NotBeNull();
         response.UpdateDataList.Should().NotBeNull();
@@ -208,7 +208,7 @@ public class DragonTest : TestFixture
                 "dragon/get_contact_data",
                 request
             )
-        ).data;
+        ).Data;
 
         response.Should().NotBeNull();
         response.ShopGiftList.Should().NotBeNullOrEmpty();
@@ -246,7 +246,7 @@ public class DragonTest : TestFixture
                 "dragon/buy_gift_to_send_multiple",
                 request
             )
-        ).data;
+        ).Data;
 
         response.Should().NotBeNull();
         response
@@ -287,7 +287,7 @@ public class DragonTest : TestFixture
                 "dragon/buy_gift_to_send",
                 request
             )
-        ).data;
+        ).Data;
 
         response.Should().NotBeNull();
         response
@@ -326,7 +326,7 @@ public class DragonTest : TestFixture
                 "dragon/send_gift_multiple",
                 request
             )
-        ).data;
+        ).Data;
 
         response.Should().NotBeNull();
         response.ReturnGiftList.Should().NotBeNullOrEmpty();
@@ -398,7 +398,7 @@ public class DragonTest : TestFixture
                     Quantity = 200,
                 }
             )
-        ).data;
+        ).Data;
 
         completeMissionResponse
             .UpdateDataList.MissionNotice.DrillMissionNotice.NewCompleteMissionIdList.Should()
@@ -432,7 +432,7 @@ public class DragonTest : TestFixture
 
         DragonSendGiftResponse? response = (
             await this.Client.PostMsgpack<DragonSendGiftResponse>("dragon/send_gift", request)
-        ).data;
+        ).Data;
 
         response.Should().NotBeNull();
         DragonReliabilityList dragonData = response
@@ -477,7 +477,7 @@ public class DragonTest : TestFixture
             )
         );
 
-        response.data_headers.result_code.Should().Be(ResultCode.Success);
+        response.DataHeaders.result_code.Should().Be(ResultCode.Success);
     }
 
     public record DragonLimitBreakTestCase(
@@ -573,7 +573,7 @@ public class DragonTest : TestFixture
 
         DragonBuildupResponse? response = (
             await this.Client.PostMsgpack<DragonBuildupResponse>("dragon/limit_break", request)
-        ).data;
+        ).Data;
 
         response.Should().NotBeNull();
         response.UpdateDataList.Should().NotBeNull();
@@ -611,7 +611,7 @@ public class DragonTest : TestFixture
 
         DragonSetLockResponse? response = (
             await this.Client.PostMsgpack<DragonSetLockResponse>("dragon/set_lock", request)
-        ).data;
+        ).Data;
 
         response.Should().NotBeNull();
         response.UpdateDataList.Should().NotBeNull();
@@ -646,7 +646,7 @@ public class DragonTest : TestFixture
 
         DragonSellResponse? response = (
             await this.Client.PostMsgpack<DragonSellResponse>("dragon/sell", request)
-        ).data;
+        ).Data;
 
         response.Should().NotBeNull();
         response.DeleteDataList.Should().NotBeNull();
@@ -695,7 +695,7 @@ public class DragonTest : TestFixture
 
         DragonSellResponse? response = (
             await this.Client.PostMsgpack<DragonSellResponse>("dragon/sell", request)
-        ).data;
+        ).Data;
 
         response.Should().NotBeNull();
         response.DeleteDataList.Should().NotBeNull();

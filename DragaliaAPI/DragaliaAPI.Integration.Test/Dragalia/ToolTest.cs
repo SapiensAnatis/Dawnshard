@@ -25,7 +25,7 @@ public class ToolTest : TestFixture
                 "tool/get_service_status",
                 new ToolGetServiceStatusRequest()
             )
-        ).data;
+        ).Data;
 
         response.ServiceStatus.Should().Be(1);
     }
@@ -43,7 +43,7 @@ public class ToolTest : TestFixture
 
         ToolAuthResponse response = (
             await this.Client.PostMsgpack<ToolAuthResponse>(endpoint, new ToolAuthRequest() { })
-        ).data;
+        ).Data;
 
         response.ViewerId.Should().Be((ulong)ViewerId);
     }

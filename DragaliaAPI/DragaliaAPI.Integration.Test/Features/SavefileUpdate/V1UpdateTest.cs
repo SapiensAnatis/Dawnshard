@@ -24,7 +24,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
 
         LoadIndexResponse data = (
             await this.Client.PostMsgpack<LoadIndexResponse>("/load/index", new LoadIndexRequest())
-        ).data;
+        ).Data;
 
         data.build_list.Should().Contain(x => x.PlantId == FortPlants.TheHalidom);
 
@@ -49,7 +49,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
 
         LoadIndexResponse data = (
             await this.Client.PostMsgpack<LoadIndexResponse>("/load/index", new LoadIndexRequest())
-        ).data;
+        ).Data;
 
         data.build_list.Should().Contain(x => x.PlantId == FortPlants.Smithy);
 
@@ -74,7 +74,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
 
         LoadIndexResponse data = (
             await this.Client.PostMsgpack<LoadIndexResponse>("/load/index", new LoadIndexRequest())
-        ).data;
+        ).Data;
 
         data.build_list.Should().Contain(x => x.PlantId == FortPlants.FlameDracolith);
 
@@ -93,7 +93,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
 
         LoadIndexResponse data = (
             await this.Client.PostMsgpack<LoadIndexResponse>("/load/index", new LoadIndexRequest())
-        ).data;
+        ).Data;
 
         data.build_list.Should().Contain(x => x.PlantId == FortPlants.SwordDojo);
 
@@ -114,7 +114,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
 
         LoadIndexResponse data = (
             await this.Client.PostMsgpack<LoadIndexResponse>("/load/index", new LoadIndexRequest())
-        ).data;
+        ).Data;
 
         data.build_list.Should().BeEmpty();
         this.ApiContext.PlayerFortBuilds.Should().BeEmpty();

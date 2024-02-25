@@ -20,7 +20,7 @@ public class StoryTest : TestFixture
                 "/story/read",
                 new StoryReadRequest() { UnitStoryId = 100001141 }
             )
-        ).data;
+        ).Data;
 
         data.UnitStoryRewardList.Should()
             .BeEquivalentTo(
@@ -71,7 +71,7 @@ public class StoryTest : TestFixture
                 "/story/read",
                 new StoryReadRequest() { UnitStoryId = 100001122 }
             )
-        ).data;
+        ).Data;
 
         data.UnitStoryRewardList.Should().BeEmpty();
 
@@ -93,7 +93,7 @@ public class StoryTest : TestFixture
                 "/story/read",
                 new StoryReadRequest() { UnitStoryId = 100002011 }
             )
-        ).data;
+        ).Data;
 
         int newCrystal = await this
             .ApiContext.PlayerUserData.AsNoTracking()

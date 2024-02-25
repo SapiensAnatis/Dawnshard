@@ -20,7 +20,7 @@ public class TimeAttackRankingTest : TestFixture
                 new TimeAttackRankingGetDataRequest() { }
             )
         )
-            .data.RankingTierRewardList.Should()
+            .Data.RankingTierRewardList.Should()
             .NotBeEmpty();
     }
 
@@ -49,7 +49,7 @@ public class TimeAttackRankingTest : TestFixture
                 "/time_attack_ranking/receive_tier_reward",
                 new TimeAttackRankingReceiveTierRewardRequest() { QuestId = questId }
             )
-        ).data;
+        ).Data;
 
         rewardResponse.RankingTierRewardList.Should().NotBeEmpty();
 
@@ -77,7 +77,7 @@ public class TimeAttackRankingTest : TestFixture
                 "/time_attack_ranking/receive_tier_reward",
                 new TimeAttackRankingReceiveTierRewardRequest() { QuestId = questId }
             )
-        ).data;
+        ).Data;
 
         secondRewardResponse.RankingTierRewardEntityList.Should().BeEmpty();
         secondRewardResponse.UpdateDataList.UserData.Should().BeNull();

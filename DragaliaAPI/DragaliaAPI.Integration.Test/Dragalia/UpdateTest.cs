@@ -31,7 +31,7 @@ public class UpdateTest : TestFixture
                 "/update/namechange",
                 new UpdateNamechangeRequest() { Name = newName }
             )
-        ).data;
+        ).Data;
 
         response.CheckedName.Should().Be(newName);
     }
@@ -52,6 +52,6 @@ public class UpdateTest : TestFixture
             )
         );
 
-        response.data_headers.result_code.Should().Be(ResultCode.Success);
+        response.DataHeaders.result_code.Should().Be(ResultCode.Success);
     }
 }

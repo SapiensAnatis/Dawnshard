@@ -13,7 +13,7 @@ public class V2UpdateTest : SavefileUpdateTestFixture
     {
         LoadIndexResponse data = (
             await this.Client.PostMsgpack<LoadIndexResponse>("/load/index", new LoadIndexRequest())
-        ).data;
+        ).Data;
 
         List<EquipStampList> expectedStampList =
             new()

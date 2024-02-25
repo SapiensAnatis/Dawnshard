@@ -163,7 +163,7 @@ public class LoginTest : TestFixture
             );
 
         response
-            .data.LoginBonusList.Should()
+            .Data.LoginBonusList.Should()
             .ContainSingle()
             .And.ContainEquivalentOf(
                 new AtgenLoginBonusList()
@@ -199,7 +199,7 @@ public class LoginTest : TestFixture
             );
 
         response
-            .data.LoginBonusList.Should()
+            .Data.LoginBonusList.Should()
             .ContainSingle()
             .And.ContainEquivalentOf(
                 new AtgenLoginBonusList()
@@ -236,7 +236,7 @@ public class LoginTest : TestFixture
             );
 
         response
-            .data.LoginBonusList.Should()
+            .Data.LoginBonusList.Should()
             .ContainEquivalentOf(
                 new AtgenLoginBonusList()
                 {
@@ -263,7 +263,7 @@ public class LoginTest : TestFixture
                 new LoginIndexRequest()
             );
 
-        secondResponse.data.LoginBonusList.Should().NotContain(x => x.LoginBonusId == 2);
+        secondResponse.Data.LoginBonusList.Should().NotContain(x => x.LoginBonusId == 2);
     }
 
     [Fact]
@@ -289,7 +289,7 @@ public class LoginTest : TestFixture
                 "login/index",
                 new LoginIndexRequest() { JwsResult = string.Empty }
             )
-        ).data;
+        ).Data;
 
         response
             .LoginBonusList.Should()
@@ -439,7 +439,7 @@ public class LoginTest : TestFixture
                 "/login/verify_jws",
                 new LoginVerifyJwsRequest()
             )
-        ).data;
+        ).Data;
 
         response.Should().BeEquivalentTo(new ResultCodeResponse(ResultCode.Success, string.Empty));
     }

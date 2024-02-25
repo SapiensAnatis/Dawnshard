@@ -33,7 +33,7 @@ public class WeaponBodyTest : TestFixture
                 new WeaponBodyCraftRequest() { WeaponBodyId = WeaponBodies.AquaticSpiral }
             )
         )
-            .data
+            .Data
             .UpdateDataList;
 
         list.WeaponBodyList.Should()
@@ -122,7 +122,7 @@ public class WeaponBodyTest : TestFixture
                 $"{EndpointGroup}/buildup_piece",
                 request
             )
-        ).data;
+        ).Data;
 
         // Check coin
         DbPlayerUserData userData = (await apiContext.PlayerUserData.FindAsync(ViewerId))!;
@@ -214,7 +214,7 @@ public class WeaponBodyTest : TestFixture
                 new WeaponBodyBuildupPieceRequest() { WeaponBodyId = WeaponBodies.Carnwennan },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
         codeResponse.ResultCode.Should().Be(ResultCode.WeaponBodyCraftShortWeaponBody);
     }
@@ -244,7 +244,7 @@ public class WeaponBodyTest : TestFixture
                 },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
         codeResponse.ResultCode.Should().Be(ResultCode.WeaponBodyBuildupPieceStepError);
     }

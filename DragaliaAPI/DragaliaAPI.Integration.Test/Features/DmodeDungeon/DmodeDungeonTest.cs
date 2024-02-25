@@ -37,9 +37,9 @@ public class DmodeDungeonTest : TestFixture
                 new DmodeDungeonFloorRequest() { DmodePlayRecord = null }
             );
 
-        floorResponse.data.DmodeFloorData.DmodeAreaInfo.FloorNum.Should().Be(1);
+        floorResponse.Data.DmodeFloorData.DmodeAreaInfo.FloorNum.Should().Be(1);
         floorResponse
-            .data.DmodeFloorData.DmodeDungeonOdds.DmodeDungeonItemList.Should()
+            .Data.DmodeFloorData.DmodeDungeonOdds.DmodeDungeonItemList.Should()
             .OnlyHaveUniqueItems(item => item.ItemNo);
     }
 
@@ -76,16 +76,16 @@ public class DmodeDungeonTest : TestFixture
                 new DmodeDungeonFloorRequest() { DmodePlayRecord = null }
             );
 
-        floorResponse.data.DmodeFloorData.DmodeAreaInfo.FloorNum.Should().Be(30);
+        floorResponse.Data.DmodeFloorData.DmodeAreaInfo.FloorNum.Should().Be(30);
         floorResponse
-            .data.DmodeFloorData.DmodeDungeonOdds.DmodeDungeonItemList.Should()
+            .Data.DmodeFloorData.DmodeDungeonOdds.DmodeDungeonItemList.Should()
             .OnlyHaveUniqueItems(item => item.ItemNo);
-        floorResponse.data.DmodeFloorData.DmodeUnitInfo.DmodeHoldDragonList.Should().NotBeEmpty();
+        floorResponse.Data.DmodeFloorData.DmodeUnitInfo.DmodeHoldDragonList.Should().NotBeEmpty();
         floorResponse
-            .data.DmodeFloorData.DmodeDungeonOdds.DmodeDungeonItemList.Should()
+            .Data.DmodeFloorData.DmodeDungeonOdds.DmodeDungeonItemList.Should()
             .Contain(x => x.ItemState == DmodeDungeonItemState.EquipWeapon);
         floorResponse
-            .data.DmodeFloorData.DmodeDungeonOdds.DmodeDungeonItemList.Should()
+            .Data.DmodeFloorData.DmodeDungeonOdds.DmodeDungeonItemList.Should()
             .Contain(x => x.ItemState == DmodeDungeonItemState.EquipCrest);
 
         this.ApiContext.PlayerDmodeInfos.AsNoTracking()

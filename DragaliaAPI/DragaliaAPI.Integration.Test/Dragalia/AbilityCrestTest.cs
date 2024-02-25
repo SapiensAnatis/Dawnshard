@@ -33,7 +33,7 @@ public class AbilityCrestTest : TestFixture
                     IsFavorite = true
                 }
             )
-        ).data;
+        ).Data;
 
         data.UpdateDataList.AbilityCrestList.Single().IsFavorite.Should().BeTrue();
 
@@ -61,7 +61,7 @@ public class AbilityCrestTest : TestFixture
                 },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
         response.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
     }
@@ -87,7 +87,7 @@ public class AbilityCrestTest : TestFixture
                 },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
         response.ResultCode.Should().Be(ResultCode.AbilityCrestBuildupPieceUnablePiece);
     }
@@ -131,7 +131,7 @@ public class AbilityCrestTest : TestFixture
                 },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
         DbAbilityCrest ability_crest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
@@ -298,7 +298,7 @@ public class AbilityCrestTest : TestFixture
                 },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
         response.ResultCode.Should().Be(ResultCode.AbilityCrestBuildupPieceUnablePiece);
     }
@@ -334,7 +334,7 @@ public class AbilityCrestTest : TestFixture
                 },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
         DbAbilityCrest ability_crest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
@@ -412,7 +412,7 @@ public class AbilityCrestTest : TestFixture
                 },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
         response.ResultCode.Should().Be(ResultCode.AbilityCrestBuildupPieceUnablePiece);
     }
@@ -443,7 +443,7 @@ public class AbilityCrestTest : TestFixture
                 },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
         DbAbilityCrest ability_crest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
@@ -532,7 +532,7 @@ public class AbilityCrestTest : TestFixture
                 "ability_crest/get_ability_crest_set_list",
                 new AbilityCrestGetAbilityCrestSetListRequest()
             )
-        ).data!;
+        ).Data!;
 
         int index = 1;
 
@@ -580,7 +580,7 @@ public class AbilityCrestTest : TestFixture
                 new AbilityCrestSetAbilityCrestSetRequest() { AbilityCrestSetNo = setNo },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
         await this.ApiContext.SaveChangesAsync();
 

@@ -25,7 +25,7 @@ public class TutorialTest : TestFixture
                 "/tutorial/update_step",
                 new TutorialUpdateStepRequest(step, 0, 0, 0)
             )
-        ).data;
+        ).Data;
 
         this.ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == this.ViewerId)
@@ -51,7 +51,7 @@ public class TutorialTest : TestFixture
                 "/tutorial/update_step",
                 new TutorialUpdateStepRequest(step, 0, 0, 0)
             )
-        ).data;
+        ).Data;
 
         response.UpdateDataList.Should().BeEquivalentTo(expUpdateData);
     }
@@ -66,7 +66,7 @@ public class TutorialTest : TestFixture
                 "/tutorial/update_flags",
                 new TutorialUpdateFlagsRequest() { FlagId = flag }
             )
-        ).data;
+        ).Data;
 
         TutorialFlagUtil
             .ConvertIntToFlagIntList(

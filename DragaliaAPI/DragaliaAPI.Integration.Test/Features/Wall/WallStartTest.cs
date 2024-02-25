@@ -42,7 +42,7 @@ public class WallStartTest : TestFixture
                     PartyNo = 1
                 }
             )
-        ).data;
+        ).Data;
 
         response.OddsInfo.Enemy.First().ParamId.Should().Be(expectedWallBossParamId);
 
@@ -82,7 +82,7 @@ public class WallStartTest : TestFixture
                     RequestPartySettingList = new List<PartySettingList>()
                 }
             )
-        ).data;
+        ).Data;
 
         response.OddsInfo.Enemy.First().ParamId.Should().Be(expectedWallBossParamId);
 

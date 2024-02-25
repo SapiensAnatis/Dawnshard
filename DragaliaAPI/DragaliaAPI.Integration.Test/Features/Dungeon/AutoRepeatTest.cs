@@ -27,7 +27,7 @@ public class AutoRepeatTest : TestFixture
                     }
                 }
             )
-        ).data;
+        ).Data;
 
         startResponse.IngameData.RepeatState.Should().Be(1);
 
@@ -41,7 +41,7 @@ public class AutoRepeatTest : TestFixture
                     RepeatState = 1,
                 }
             )
-        ).data;
+        ).Data;
 
         recordResponse.RepeatData.RepeatCount.Should().Be(1);
         recordResponse.RepeatData.RepeatKey.Should().NotBeNullOrEmpty();
@@ -58,7 +58,7 @@ public class AutoRepeatTest : TestFixture
                     RepeatSetting = null,
                 }
             )
-        ).data;
+        ).Data;
 
         startResponse2.IngameData.RepeatState.Should().Be(1);
 
@@ -72,7 +72,7 @@ public class AutoRepeatTest : TestFixture
                     RepeatState = 1,
                 }
             )
-        ).data;
+        ).Data;
 
         recordResponse2.RepeatData.RepeatCount.Should().Be(2);
         recordResponse2.RepeatData.RepeatKey.Should().NotBeNullOrEmpty();
@@ -97,7 +97,7 @@ public class AutoRepeatTest : TestFixture
                     }
                 }
             )
-        ).data;
+        ).Data;
 
         DungeonRecordRecordResponse recordResponse = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
@@ -109,7 +109,7 @@ public class AutoRepeatTest : TestFixture
                     RepeatState = 1,
                 }
             )
-        ).data;
+        ).Data;
 
         DungeonStartStartAssignUnitResponse startResponse2 = (
             await Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(
@@ -122,7 +122,7 @@ public class AutoRepeatTest : TestFixture
                     RepeatSetting = null,
                 }
             )
-        ).data;
+        ).Data;
 
         DungeonRecordRecordResponse recordResponse2 = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
@@ -134,11 +134,11 @@ public class AutoRepeatTest : TestFixture
                     RepeatState = 1,
                 }
             )
-        ).data;
+        ).Data;
 
         RepeatEndResponse repeatEndResponse = (
             await Client.PostMsgpack<RepeatEndResponse>("repeat/end", new RepeatEndRequest())
-        ).data;
+        ).Data;
 
         repeatEndResponse.RepeatData.Should().BeEquivalentTo(recordResponse2.RepeatData);
 
@@ -194,7 +194,7 @@ public class AutoRepeatTest : TestFixture
                     }
                 }
             )
-        ).data;
+        ).Data;
 
         DungeonRecordRecordResponse recordResponse = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
@@ -206,7 +206,7 @@ public class AutoRepeatTest : TestFixture
                     RepeatState = 1,
                 }
             )
-        ).data;
+        ).Data;
 
         DungeonStartStartAssignUnitResponse startResponse2 = (
             await Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(
@@ -219,7 +219,7 @@ public class AutoRepeatTest : TestFixture
                     RepeatSetting = null,
                 }
             )
-        ).data;
+        ).Data;
 
         DungeonRecordRecordResponse recordResponse2 = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
@@ -231,11 +231,11 @@ public class AutoRepeatTest : TestFixture
                     RepeatState = 1,
                 }
             )
-        ).data;
+        ).Data;
 
         RepeatEndResponse repeatEndResponse = (
             await Client.PostMsgpack<RepeatEndResponse>("repeat/end", new RepeatEndRequest())
-        ).data;
+        ).Data;
 
         int expectedPoints =
             recordResponse.IngameResultData.RewardRecord.TakeAccumulatePoint
@@ -286,7 +286,7 @@ public class AutoRepeatTest : TestFixture
                     }
                 }
             )
-        ).data;
+        ).Data;
 
         DungeonRecordRecordResponse recordResponse = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
@@ -298,11 +298,11 @@ public class AutoRepeatTest : TestFixture
                     RepeatState = 1,
                 }
             )
-        ).data;
+        ).Data;
 
         MypageInfoResponse mypageResponse = (
             await Client.PostMsgpack<MypageInfoResponse>("mypage/info", new MypageInfoRequest() { })
-        ).data;
+        ).Data;
 
         mypageResponse.RepeatData.Should().BeEquivalentTo(recordResponse.RepeatData);
     }

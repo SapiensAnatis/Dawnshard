@@ -126,7 +126,7 @@ public class DungeonRecordTest : TestFixture
                     }
                 }
             )
-        ).data;
+        ).Data;
 
         response.IngameResultData.DungeonKey.Should().Be(key);
         response.IngameResultData.QuestId.Should().Be(227100106);
@@ -246,7 +246,7 @@ public class DungeonRecordTest : TestFixture
                     }
                 }
             )
-        ).data;
+        ).Data;
 
         response.IngameResultData.ScoreMissionSuccessList.Should().NotBeEmpty();
         response.IngameResultData.RewardRecord.TakeAccumulatePoint.Should().NotBe(0);
@@ -296,7 +296,7 @@ public class DungeonRecordTest : TestFixture
                     }
                 }
             )
-        ).data;
+        ).Data;
 
         response.IngameResultData.RewardRecord.TakeAccumulatePoint.Should().NotBe(0);
         response.IngameResultData.RewardRecord.TakeBoostAccumulatePoint.Should().Be(0);
@@ -359,7 +359,7 @@ public class DungeonRecordTest : TestFixture
                     }
                 }
             )
-        ).data;
+        ).Data;
 
         response.IngameResultData.RewardRecord.TakeAccumulatePoint.Should().NotBe(0);
         response.IngameResultData.RewardRecord.TakeBoostAccumulatePoint.Should().NotBe(0);
@@ -423,7 +423,7 @@ public class DungeonRecordTest : TestFixture
                     }
                 }
             )
-        ).data;
+        ).Data;
 
         response
             .UpdateDataList.QuestList.Should()
@@ -478,7 +478,7 @@ public class DungeonRecordTest : TestFixture
                     }
                 }
             )
-        ).data;
+        ).Data;
 
         response.UpdateDataList.QuestList.Should().NotContain(x => x.QuestId == exQuestId);
     }
@@ -525,7 +525,7 @@ public class DungeonRecordTest : TestFixture
                     }
                 }
             )
-        ).data;
+        ).Data;
 
         response
             .UpdateDataList.QuestList.Should()
@@ -577,7 +577,7 @@ public class DungeonRecordTest : TestFixture
                     }
                 }
             )
-        ).data;
+        ).Data;
 
         response
             .UpdateDataList.MissionNotice.MemoryEventMissionNotice.NewCompleteMissionIdList.Should()
@@ -638,7 +638,7 @@ public class DungeonRecordTest : TestFixture
                     }
                 }
             )
-        ).data;
+        ).Data;
 
         AtgenNormalMissionNotice? missionNotice = response
             .UpdateDataList
@@ -691,7 +691,7 @@ public class DungeonRecordTest : TestFixture
                     }
                 }
             )
-        ).data;
+        ).Data;
 
         response
             .UpdateDataList.MissionNotice.MemoryEventMissionNotice.NewCompleteMissionIdList.Should()
@@ -749,7 +749,7 @@ public class DungeonRecordTest : TestFixture
                     }
                 }
             )
-        ).data;
+        ).Data;
 
         AtgenNormalMissionNotice? missionNotice = response
             .UpdateDataList
@@ -837,7 +837,7 @@ public class DungeonRecordTest : TestFixture
                     }
                 }
             )
-        ).data;
+        ).Data;
 
         response
             .IngameResultData.RewardRecord.TakeAccumulatePoint.Should()
@@ -882,7 +882,7 @@ public class DungeonRecordTest : TestFixture
                 }
             );
 
-        response.data_headers.result_code.Should().Be(ResultCode.Success);
+        response.DataHeaders.result_code.Should().Be(ResultCode.Success);
     }
 
     [Fact]
@@ -920,7 +920,7 @@ public class DungeonRecordTest : TestFixture
                     QuestId = questId
                 }
             )
-        ).data;
+        ).Data;
 
         string dungeonKey = startResponse.IngameData.DungeonKey;
         float clearTime = 10.4f;
@@ -1012,7 +1012,7 @@ public class DungeonRecordTest : TestFixture
                 },
                 ensureSuccessHeader: false
             )
-        ).data_headers.result_code.Should().Be(ResultCode.QuestStaminaSingleShort);
+        ).DataHeaders.result_code.Should().Be(ResultCode.QuestStaminaSingleShort);
     }
 
     [Fact]
@@ -1067,7 +1067,7 @@ public class DungeonRecordTest : TestFixture
                 },
                 ensureSuccessHeader: false
             )
-        ).data_headers.result_code.Should().Be(ResultCode.Success);
+        ).DataHeaders.result_code.Should().Be(ResultCode.Success);
     }
 
     [Fact]
@@ -1113,7 +1113,7 @@ public class DungeonRecordTest : TestFixture
 
         DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
-        ).data;
+        ).Data;
 
         response
             .IngameResultData.RewardRecord.FirstClearSet.Should()
@@ -1146,7 +1146,7 @@ public class DungeonRecordTest : TestFixture
 
         DungeonRecordRecordResponse response2 = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
-        ).data;
+        ).Data;
 
         response2.IngameResultData.RewardRecord.FirstClearSet.Should().BeEmpty();
     }
@@ -1200,7 +1200,7 @@ public class DungeonRecordTest : TestFixture
 
         DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
-        ).data;
+        ).Data;
 
         response.UpdateDataList.UserData.Should().NotBeNull();
         response.UpdateDataList.UserData.TutorialStatus.Should().Be(20501);

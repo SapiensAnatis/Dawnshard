@@ -45,32 +45,32 @@ public class DungeonSkipTest : TestFixture
                 }
             );
 
-        response.data.IngameResultData.RewardRecord.DropAll.Should().NotBeEmpty();
-        response.data.IngameResultData.RewardRecord.TakeCoin.Should().NotBe(0);
+        response.Data.IngameResultData.RewardRecord.DropAll.Should().NotBeEmpty();
+        response.Data.IngameResultData.RewardRecord.TakeCoin.Should().NotBe(0);
 
-        response.data.IngameResultData.GrowRecord.TakeMana.Should().NotBe(0);
+        response.Data.IngameResultData.GrowRecord.TakeMana.Should().NotBe(0);
         response
-            .data.IngameResultData.GrowRecord.TakePlayerExp.Should()
+            .Data.IngameResultData.GrowRecord.TakePlayerExp.Should()
             .Be(staminaCost * 10 * playCount);
 
         response
-            .data.IngameResultData.QuestPartySettingList.Should()
+            .Data.IngameResultData.QuestPartySettingList.Should()
             .Contain(x => x.CharaId == Shared.Definitions.Enums.Charas.ThePrince);
         response
-            .data.IngameResultData.HelperList.Should()
+            .Data.IngameResultData.HelperList.Should()
             .Contain(x => x.Name == "dreadfullydistinct");
 
         response
-            .data.UpdateDataList.QuestList.Should()
+            .Data.UpdateDataList.QuestList.Should()
             .Contain(x => x.QuestId == questId && x.PlayCount == playCount);
         response
-            .data.UpdateDataList.UserData.StaminaSingle.Should()
+            .Data.UpdateDataList.UserData.StaminaSingle.Should()
             .Be(oldUserData.StaminaSingle - (staminaCost * playCount));
         response
-            .data.UpdateDataList.UserData.Exp.Should()
+            .Data.UpdateDataList.UserData.Exp.Should()
             .Be(oldUserData.Exp + (staminaCost * 10 * playCount));
         response
-            .data.UpdateDataList.UserData.QuestSkipPoint.Should()
+            .Data.UpdateDataList.UserData.QuestSkipPoint.Should()
             .Be(oldUserData.QuestSkipPoint - playCount);
     }
 
@@ -109,32 +109,32 @@ public class DungeonSkipTest : TestFixture
                 }
             );
 
-        response.data.IngameResultData.RewardRecord.DropAll.Should().NotBeEmpty();
-        response.data.IngameResultData.RewardRecord.TakeCoin.Should().NotBe(0);
+        response.Data.IngameResultData.RewardRecord.DropAll.Should().NotBeEmpty();
+        response.Data.IngameResultData.RewardRecord.TakeCoin.Should().NotBe(0);
 
-        response.data.IngameResultData.GrowRecord.TakeMana.Should().NotBe(0);
+        response.Data.IngameResultData.GrowRecord.TakeMana.Should().NotBe(0);
         response
-            .data.IngameResultData.GrowRecord.TakePlayerExp.Should()
+            .Data.IngameResultData.GrowRecord.TakePlayerExp.Should()
             .Be(staminaCost * 10 * playCount);
 
         response
-            .data.IngameResultData.QuestPartySettingList.Should()
+            .Data.IngameResultData.QuestPartySettingList.Should()
             .Contain(x => x.CharaId == Shared.Definitions.Enums.Charas.ThePrince);
         response
-            .data.IngameResultData.HelperList.Should()
+            .Data.IngameResultData.HelperList.Should()
             .Contain(x => x.Name == "dreadfullydistinct");
 
         response
-            .data.UpdateDataList.QuestList.Should()
+            .Data.UpdateDataList.QuestList.Should()
             .Contain(x => x.QuestId == questId && x.PlayCount == playCount);
         response
-            .data.UpdateDataList.UserData.StaminaSingle.Should()
+            .Data.UpdateDataList.UserData.StaminaSingle.Should()
             .Be(oldUserData.StaminaSingle - (staminaCost * playCount));
         response
-            .data.UpdateDataList.UserData.Exp.Should()
+            .Data.UpdateDataList.UserData.Exp.Should()
             .Be(oldUserData.Exp + (staminaCost * 10 * playCount));
         response
-            .data.UpdateDataList.UserData.QuestSkipPoint.Should()
+            .Data.UpdateDataList.UserData.QuestSkipPoint.Should()
             .Be(oldUserData.QuestSkipPoint - playCount);
     }
 
@@ -171,21 +171,21 @@ public class DungeonSkipTest : TestFixture
                 }
             );
 
-        response.data.IngameResultData.RewardRecord.DropAll.Should().NotBeEmpty();
-        response.data.IngameResultData.RewardRecord.TakeCoin.Should().NotBe(0);
+        response.Data.IngameResultData.RewardRecord.DropAll.Should().NotBeEmpty();
+        response.Data.IngameResultData.RewardRecord.TakeCoin.Should().NotBe(0);
 
-        response.data.IngameResultData.GrowRecord.TakeMana.Should().NotBe(0);
-        response.data.IngameResultData.GrowRecord.TakePlayerExp.Should().Be(totalStamina * 10);
+        response.Data.IngameResultData.GrowRecord.TakeMana.Should().NotBe(0);
+        response.Data.IngameResultData.GrowRecord.TakePlayerExp.Should().Be(totalStamina * 10);
 
         response
-            .data.IngameResultData.QuestPartySettingList.Should()
+            .Data.IngameResultData.QuestPartySettingList.Should()
             .Contain(x => x.CharaId == Shared.Definitions.Enums.Charas.ThePrince);
         response
-            .data.IngameResultData.HelperList.Should()
+            .Data.IngameResultData.HelperList.Should()
             .Contain(x => x.Name == "dreadfullydistinct");
 
         response
-            .data.UpdateDataList.QuestList.Select(x => x.QuestId)
+            .Data.UpdateDataList.QuestList.Select(x => x.QuestId)
             .Should()
             .BeEquivalentTo(
                 new List<int>()
@@ -197,16 +197,16 @@ public class DungeonSkipTest : TestFixture
                     flameIoStandard
                 }
             );
-        response.data.UpdateDataList.QuestList.Should().AllSatisfy(x => x.PlayCount.Should().Be(1));
+        response.Data.UpdateDataList.QuestList.Should().AllSatisfy(x => x.PlayCount.Should().Be(1));
 
         response
-            .data.UpdateDataList.UserData.StaminaSingle.Should()
+            .Data.UpdateDataList.UserData.StaminaSingle.Should()
             .Be(oldUserData.StaminaSingle - totalStamina);
         response
-            .data.UpdateDataList.UserData.Exp.Should()
+            .Data.UpdateDataList.UserData.Exp.Should()
             .Be(oldUserData.Exp + (totalStamina * 10));
         response
-            .data.UpdateDataList.UserData.QuestSkipPoint.Should()
+            .Data.UpdateDataList.UserData.QuestSkipPoint.Should()
             .Be(oldUserData.QuestSkipPoint - 5);
     }
 
@@ -248,7 +248,7 @@ public class DungeonSkipTest : TestFixture
             );
 
         response
-            .data.UpdateDataList.QuestEventList.Should()
+            .Data.UpdateDataList.QuestEventList.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
@@ -259,7 +259,7 @@ public class DungeonSkipTest : TestFixture
                     LastWeeklyResetTime = resetTime,
                     QuestBonusReceiveCount = 2,
                     QuestBonusReserveCount = 3,
-                    QuestBonusReserveTime = response.data.IngameResultData.EndTime,
+                    QuestBonusReserveTime = response.Data.IngameResultData.EndTime,
                     QuestBonusStackCount = 0,
                     QuestBonusStackTime = DateTimeOffset.UnixEpoch
                 }

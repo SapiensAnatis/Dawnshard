@@ -75,7 +75,7 @@ public class EarnEventTest : TestFixture
             );
 
         evtData
-            .data.EarnEventUserData.Should()
+            .Data.EarnEventUserData.Should()
             .BeNull(because: "this signals the client to call /earn_event/entry");
     }
 
@@ -94,7 +94,7 @@ public class EarnEventTest : TestFixture
             );
 
         evtData
-            .data.EarnEventUserData.Should()
+            .Data.EarnEventUserData.Should()
             .BeEquivalentTo(
                 new EarnEventUserList()
                 {
@@ -105,8 +105,8 @@ public class EarnEventTest : TestFixture
                     AdventItemQuantity01 = 0
                 }
             );
-        evtData.data.EventRewardList.Should().BeEmpty();
-        evtData.data.EventTradeList.Should().NotBeEmpty();
+        evtData.Data.EventRewardList.Should().BeEmpty();
+        evtData.Data.EventTradeList.Should().NotBeEmpty();
     }
 
     [Fact]
@@ -138,13 +138,13 @@ public class EarnEventTest : TestFixture
             );
 
         evtResp
-            .data.EventRewardEntityList.Should()
+            .Data.EventRewardEntityList.Should()
             .HaveCount(1)
             .And.ContainEquivalentOf(
                 new AtgenBuildEventRewardEntityList(EntityTypes.Mana, 0, 3000)
             );
-        evtResp.data.EventRewardList.Should().HaveCount(1);
-        evtResp.data.EntityResult.Should().NotBeNull();
-        evtResp.data.UpdateDataList.Should().NotBeNull();
+        evtResp.Data.EventRewardList.Should().HaveCount(1);
+        evtResp.Data.EntityResult.Should().NotBeNull();
+        evtResp.Data.UpdateDataList.Should().NotBeNull();
     }
 }

@@ -13,7 +13,7 @@ public class UrlListTest : TestFixture
                 "webview_version/url_list",
                 new WebviewVersionUrlListRequest("region")
             )
-        ).data;
+        ).Data;
 
         response.WebviewUrlList.Should().NotBeEmpty();
     }

@@ -42,7 +42,7 @@ public class SavefileController : ControllerBase
             accountId
         );
 
-        await this.savefileService.ThreadSafeImport(loadIndexResponse.data);
+        await this.savefileService.ThreadSafeImport(loadIndexResponse.Data);
 
         return this.NoContent();
     }

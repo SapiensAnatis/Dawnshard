@@ -14,6 +14,6 @@ public class EventTradeTest : TestFixture
                 new EventTradeGetListRequest() { TradeGroupId = 10803 }
             );
 
-        response.data.EventTradeList.Should().NotBeEmpty();
+        response.Data.EventTradeList.Should().NotBeEmpty();
     }
 }

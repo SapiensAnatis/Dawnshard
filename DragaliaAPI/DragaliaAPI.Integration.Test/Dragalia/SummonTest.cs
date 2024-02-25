@@ -20,7 +20,7 @@ public class SummonTest : TestFixture
                 "summon_exclude/get_list",
                 new SummonExcludeGetListRequest(1020203)
             )
-        ).data;
+        ).Data;
 
         response.SummonExcludeUnitList.Should().NotBeEmpty();
     }
@@ -33,7 +33,7 @@ public class SummonTest : TestFixture
                 "summon/get_odds_data",
                 new SummonGetOddsDataRequest(1020203)
             )
-        ).data;
+        ).Data;
 
         response.Should().NotBeNull();
     }
@@ -70,7 +70,7 @@ public class SummonTest : TestFixture
                 "summon/get_summon_history",
                 new SummonGetSummonHistoryRequest()
             )
-        ).data;
+        ).Data;
 
         // Too lazy to set up automapper to check exact result and it is covered more or less in SummonRepositoryTests.cs
         response.SummonHistoryList.Should().NotBeEmpty();
@@ -107,7 +107,7 @@ public class SummonTest : TestFixture
                 "summon/get_summon_list",
                 new SummonGetSummonListRequest()
             )
-        ).data;
+        ).Data;
 
         response
             .SummonList.Should()
@@ -166,7 +166,7 @@ public class SummonTest : TestFixture
                 "summon/get_summon_point_trade",
                 new SummonGetSummonPointTradeRequest(1020203)
             )
-        ).data;
+        ).Data;
 
         response.Should().NotBeNull();
 
@@ -194,7 +194,7 @@ public class SummonTest : TestFixture
                     new PaymentTarget(userData.Crystal, 120) // TODO: Change when banners are implemented otherwise this test breaks
                 )
             )
-        ).data;
+        ).Data;
 
         response.ResultUnitList.Count().Should().Be(1);
 
@@ -219,7 +219,7 @@ public class SummonTest : TestFixture
                     new PaymentTarget(userData.Crystal, 1200)
                 )
             )
-        ).data;
+        ).Data;
 
         response.ResultUnitList.Count().Should().Be(10);
 

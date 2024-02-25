@@ -27,8 +27,8 @@ public class Clb01EventTest : TestFixture
                 new Clb01EventGetEventDataRequest(EventId)
             );
 
-        evtData.data.Clb01EventUserData.Should().NotBeNull();
-        evtData.data.Clb01EventRewardList.Should().NotBeNull();
+        evtData.Data.Clb01EventUserData.Should().NotBeNull();
+        evtData.Data.Clb01EventRewardList.Should().NotBeNull();
     }
 
     [Fact]
@@ -55,13 +55,13 @@ public class Clb01EventTest : TestFixture
             );
 
         evtResp
-            .data.Clb01EventRewardEntityList.Should()
+            .Data.Clb01EventRewardEntityList.Should()
             .HaveCount(1)
             .And.ContainEquivalentOf(
                 new AtgenBuildEventRewardEntityList(EntityTypes.Material, 101001003, 5)
             );
-        evtResp.data.Clb01EventRewardList.Should().HaveCount(1);
-        evtResp.data.EntityResult.Should().NotBeNull();
-        evtResp.data.UpdateDataList.Should().NotBeNull();
+        evtResp.Data.Clb01EventRewardList.Should().HaveCount(1);
+        evtResp.Data.EntityResult.Should().NotBeNull();
+        evtResp.Data.UpdateDataList.Should().NotBeNull();
     }
 }

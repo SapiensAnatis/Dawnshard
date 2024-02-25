@@ -15,7 +15,7 @@ public class MemoryEventTest : TestFixture
                 "memory_event/activate",
                 new MemoryEventActivateRequest() { EventId = eventId }
             )
-        ).data;
+        ).Data;
 
         result
             .UpdateDataList.MissionNotice.MemoryEventMissionNotice.NewCompleteMissionIdList.Should()
@@ -40,7 +40,7 @@ public class MemoryEventTest : TestFixture
                 "mission/get_mission_list",
                 new MissionGetMissionListRequest() { }
             )
-        ).data;
+        ).Data;
 
         missionListResponse
             .memory_event_mission_list.Should()

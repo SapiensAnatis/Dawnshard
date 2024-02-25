@@ -16,7 +16,7 @@ public class QuestReadStoryTest : TestFixture
                 "/quest/read_story",
                 new QuestReadStoryRequest() { QuestStoryId = 1000106 }
             )
-        ).data;
+        ).Data;
 
         response.UpdateDataList.UserData.Should().NotBeNull();
         response
@@ -39,7 +39,7 @@ public class QuestReadStoryTest : TestFixture
                 "/quest/read_story",
                 new QuestReadStoryRequest() { QuestStoryId = 1001410 }
             )
-        ).data;
+        ).Data;
 
         this.ApiContext.PlayerStoryState.First(x => x.ViewerId == ViewerId && x.StoryId == 1001410)
             .State.Should()
@@ -65,7 +65,7 @@ public class QuestReadStoryTest : TestFixture
                 "/quest/read_story",
                 new QuestReadStoryRequest() { QuestStoryId = theLonePaladynStoryId }
             )
-        ).data;
+        ).Data;
 
         response
             .UpdateDataList.QuestStoryList.Should()

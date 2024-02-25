@@ -45,7 +45,7 @@ public class FortTest : TestFixture
                 new FortGetDataRequest()
             )
         )
-            .data.BuildList.Should()
+            .Data.BuildList.Should()
             .ContainEquivalentOf(
                 new BuildList()
                 {
@@ -83,7 +83,7 @@ public class FortTest : TestFixture
                 new FortGetDataRequest()
             )
         )
-            .data.DragonContactFreeGiftCount.Should()
+            .Data.DragonContactFreeGiftCount.Should()
             .Be(1);
 
         await this
@@ -98,7 +98,7 @@ public class FortTest : TestFixture
                 new FortGetDataRequest()
             )
         )
-            .data.DragonContactFreeGiftCount.Should()
+            .Data.DragonContactFreeGiftCount.Should()
             .Be(0);
     }
 
@@ -114,7 +114,7 @@ public class FortTest : TestFixture
                 "/fort/add_carpenter",
                 new FortAddCarpenterRequest(PaymentTypes.Wyrmite)
             )
-        ).data;
+        ).Data;
 
         response.FortDetail.CarpenterNum.Should().Be(3);
         response.UpdateDataList.UserData.Crystal.Should().Be(oldUserData.Crystal - 250);
@@ -146,7 +146,7 @@ public class FortTest : TestFixture
                 "/fort/build_at_once",
                 new FortBuildAtOnceRequest(build.BuildId, PaymentTypes.Wyrmite)
             )
-        ).data;
+        ).Data;
 
         BuildList result = response.UpdateDataList.BuildList.First(x =>
             x.BuildId == (ulong)build.BuildId
@@ -211,7 +211,7 @@ public class FortTest : TestFixture
                 "/fort/build_end",
                 new FortBuildEndRequest(build.BuildId)
             )
-        ).data;
+        ).Data;
 
         BuildList result = response.UpdateDataList.BuildList.First(x =>
             x.BuildId == (ulong)build.BuildId
@@ -236,7 +236,7 @@ public class FortTest : TestFixture
                     expectedPositionZ
                 )
             )
-        ).data;
+        ).Data;
 
         BuildList result = response.UpdateDataList.BuildList.First();
         result.PositionX.Should().Be(expectedPositionX);
@@ -273,7 +273,7 @@ public class FortTest : TestFixture
                 "/fort/levelup_at_once",
                 new FortLevelupAtOnceRequest(build.BuildId, PaymentTypes.Wyrmite)
             )
-        ).data;
+        ).Data;
 
         BuildList result = response.UpdateDataList.BuildList.First(x =>
             x.BuildId == (ulong)build.BuildId
@@ -301,7 +301,7 @@ public class FortTest : TestFixture
                 "/fort/levelup_at_once",
                 new FortLevelupAtOnceRequest(halidom.BuildId, PaymentTypes.Wyrmite)
             )
-        ).data;
+        ).Data;
 
         response.CurrentFortLevel.Should().Be(11);
     }
@@ -324,7 +324,7 @@ public class FortTest : TestFixture
                 "/fort/levelup_at_once",
                 new FortLevelupAtOnceRequest(smithy.BuildId, PaymentTypes.Wyrmite)
             )
-        ).data;
+        ).Data;
 
         response.CurrentFortCraftLevel.Should().Be(2);
     }
@@ -355,7 +355,7 @@ public class FortTest : TestFixture
                 "/fort/levelup_cancel",
                 new FortLevelupCancelRequest(build.BuildId)
             )
-        ).data;
+        ).Data;
 
         BuildList result = response.UpdateDataList.BuildList.First(x =>
             x.BuildId == (ulong)build.BuildId
@@ -392,7 +392,7 @@ public class FortTest : TestFixture
                 "/fort/levelup_end",
                 new FortLevelupEndRequest(build.BuildId)
             )
-        ).data;
+        ).Data;
 
         BuildList result = response.UpdateDataList.BuildList.First(x =>
             x.BuildId == (ulong)build.BuildId
@@ -419,7 +419,7 @@ public class FortTest : TestFixture
                 "/fort/levelup_end",
                 new FortLevelupEndRequest(smithy.BuildId)
             )
-        ).data;
+        ).Data;
 
         response.CurrentFortCraftLevel.Should().Be(2);
     }
@@ -442,7 +442,7 @@ public class FortTest : TestFixture
                 "/fort/levelup_end",
                 new FortLevelupEndRequest(halidom.BuildId)
             )
-        ).data;
+        ).Data;
 
         response.CurrentFortLevel.Should().Be(11);
     }
@@ -473,7 +473,7 @@ public class FortTest : TestFixture
                 "/fort/levelup_start",
                 new FortLevelupStartRequest(build.BuildId)
             )
-        ).data;
+        ).Data;
 
         BuildList result = response.UpdateDataList.BuildList.First(x =>
             x.BuildId == (ulong)build.BuildId
@@ -512,7 +512,7 @@ public class FortTest : TestFixture
                 "/fort/move",
                 new FortMoveRequest(build.BuildId, expectedPositionX, expectedPositionZ)
             )
-        ).data;
+        ).Data;
 
         BuildList result = response.UpdateDataList.BuildList.First(x =>
             x.BuildId == (ulong)build.BuildId
@@ -566,23 +566,23 @@ public class FortTest : TestFixture
                 }
             );
 
-        response.data.AddCoinList.Should().NotBeEmpty();
-        AtgenAddCoinList coinList = response.data.AddCoinList.First();
+        response.Data.AddCoinList.Should().NotBeEmpty();
+        AtgenAddCoinList coinList = response.Data.AddCoinList.First();
         coinList.BuildId.Should().Be(rupieMine.BuildId);
         coinList.AddCoin.Should().BeCloseTo(3098, 10);
 
-        response.data.HarvestBuildList.Should().NotBeEmpty();
-        AtgenHarvestBuildList harvestList = response.data.HarvestBuildList.First();
+        response.Data.HarvestBuildList.Should().NotBeEmpty();
+        AtgenHarvestBuildList harvestList = response.Data.HarvestBuildList.First();
         harvestList.BuildId.Should().Be(dragonTree.BuildId);
         harvestList.AddHarvestList.Should().NotBeEmpty();
 
-        response.data.AddStaminaList.Should().NotBeEmpty();
-        AtgenAddStaminaList staminaList = response.data.AddStaminaList.First();
+        response.Data.AddStaminaList.Should().NotBeEmpty();
+        AtgenAddStaminaList staminaList = response.Data.AddStaminaList.First();
         staminaList.BuildId.Should().Be(halidom.BuildId);
         staminaList.AddStamina.Should().Be(12);
 
-        response.data.UpdateDataList.UserData.Coin.Should().BeCloseTo(oldCoin + 3098, 10);
-        response.data.UpdateDataList.MaterialList.Should().NotBeEmpty();
+        response.Data.UpdateDataList.UserData.Coin.Should().BeCloseTo(oldCoin + 3098, 10);
+        response.Data.UpdateDataList.MaterialList.Should().NotBeEmpty();
     }
 
     [Fact]
@@ -616,7 +616,7 @@ public class FortTest : TestFixture
             );
 
         response
-            .data.UpdateDataList.MissionNotice.DailyMissionNotice.NewCompleteMissionIdList.Should()
+            .Data.UpdateDataList.MissionNotice.DailyMissionNotice.NewCompleteMissionIdList.Should()
             .Contain(15070201);
     }
 }

@@ -45,7 +45,7 @@ public class WallTest : TestFixture
                 "/wall/fail",
                 new WallFailRequest() { DungeonKey = key, FailState = 0 }
             )
-        ).data;
+        ).Data;
 
         response
             .FailQuestDetail.Should()
@@ -103,7 +103,7 @@ public class WallTest : TestFixture
                 "wall/get_monthly_reward",
                 new WallGetMonthlyRewardResponse() { }
             )
-        ).data;
+        ).Data;
 
         response
             .UserWallRewardList.Should()
@@ -170,7 +170,7 @@ public class WallTest : TestFixture
                 "wall/receive_monthly_reward",
                 new WallGetMonthlyRewardRequest() { QuestGroupId = 21601 }
             )
-        ).data;
+        ).Data;
 
         response
             .UserWallRewardList.Should()

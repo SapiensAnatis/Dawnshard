@@ -17,14 +17,14 @@ public class DungeonTest : TestFixture
                     QuestId = 100010306
                 }
             )
-        ).data.IngameData.DungeonKey;
+        ).Data.IngameData.DungeonKey;
 
         DungeonGetAreaOddsResponse response = (
             await this.Client.PostMsgpack<DungeonGetAreaOddsResponse>(
                 "/dungeon/get_area_odds",
                 new DungeonGetAreaOddsRequest() { AreaIdx = 1, DungeonKey = key }
             )
-        ).data;
+        ).Data;
 
         // there isn't too much to test here
         response.OddsInfo.AreaIndex.Should().Be(1);
@@ -42,14 +42,14 @@ public class DungeonTest : TestFixture
                     QuestId = 100010207
                 }
             )
-        ).data.IngameData.DungeonKey;
+        ).Data.IngameData.DungeonKey;
 
         DungeonFailResponse response = (
             await this.Client.PostMsgpack<DungeonFailResponse>(
                 "/dungeon/fail",
                 new DungeonFailRequest() { DungeonKey = key }
             )
-        ).data;
+        ).Data;
 
         response
             .FailQuestDetail.Should()

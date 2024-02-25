@@ -51,7 +51,7 @@ public class MatchingTest : TestFixture
                 $"{EndpointGroup}/get_room_list",
                 new MatchingGetRoomListRequest() { CompatibleId = 36 }
             )
-        ).data;
+        ).Data;
 
         data.Should()
             .BeEquivalentTo(
@@ -136,7 +136,7 @@ public class MatchingTest : TestFixture
                 $"{EndpointGroup}/get_room_list_by_quest_id",
                 new MatchingGetRoomListByQuestIdRequest() { CompatibleId = 36, QuestId = 204550501 }
             )
-        ).data;
+        ).Data;
 
         data.Should()
             .BeEquivalentTo(
@@ -218,7 +218,7 @@ public class MatchingTest : TestFixture
                 $"{EndpointGroup}/get_room_name",
                 new MatchingGetRoomNameRequest() { RoomId = 911948 }
             )
-        ).data;
+        ).Data;
 
         data.Should()
             .BeEquivalentTo(
@@ -301,7 +301,7 @@ public class MatchingTest : TestFixture
                 $"{EndpointGroup}/get_room_name",
                 new MatchingGetRoomNameRequest() { RoomId = 911948 }
             )
-        ).data;
+        ).Data;
 
         data.Should()
             .BeEquivalentTo(

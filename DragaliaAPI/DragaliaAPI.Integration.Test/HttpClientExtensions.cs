@@ -35,7 +35,7 @@ public static class HttpClientExtensions
         >(body, CustomResolver.Options);
 
         if (ensureSuccessHeader)
-            deserialized.data_headers.result_code.Should().Be(ResultCode.Success);
+            deserialized.DataHeaders.result_code.Should().Be(ResultCode.Success);
 
         return deserialized;
     }

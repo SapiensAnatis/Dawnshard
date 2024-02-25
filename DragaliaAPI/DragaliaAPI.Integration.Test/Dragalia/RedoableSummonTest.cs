@@ -16,7 +16,7 @@ public class RedoableSummonTest : TestFixture
                 "redoable_summon/get_data",
                 new RedoableSummonGetDataRequest()
             )
-        ).data;
+        ).Data;
 
         response.Should().NotBeNull();
     }
@@ -29,7 +29,7 @@ public class RedoableSummonTest : TestFixture
                 "redoable_summon/pre_exec",
                 new RedoableSummonPreExecRequest(0)
             )
-        ).data;
+        ).Data;
 
         response.UserRedoableSummonData.RedoableSummonResultUnitList.Count().Should().Be(50);
     }
@@ -48,7 +48,7 @@ public class RedoableSummonTest : TestFixture
                 "redoable_summon/fix_exec",
                 new RedoableSummonFixExecRequest()
             )
-        ).data;
+        ).Data;
 
         IEnumerable<int> newCharaIds = response
             .UpdateDataList.CharaList!.Select(x => (int)x.CharaId)

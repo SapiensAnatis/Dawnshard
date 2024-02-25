@@ -214,7 +214,7 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
                 File.ReadAllText(Path.Join("Data", "endgame_savefile.json")),
                 ApiJsonOptions.Instance
             )!
-            .data;
+            .Data;
 
     private async Task SeedDatabase()
     {

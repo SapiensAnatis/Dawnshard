@@ -27,18 +27,18 @@ public class QuestBonusTest : TestFixture
         DragaliaResponse<DungeonRecordRecordResponse> response = await this.CompleteQuest(questId);
 
         response
-            .data.UpdateDataList.QuestEventList.Should()
+            .Data.UpdateDataList.QuestEventList.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
                     QuestEventId = questEventId,
                     QuestBonusReceiveCount = 0,
                     QuestBonusReserveCount = 1,
-                    QuestBonusReserveTime = response.data.IngameResultData.EndTime,
+                    QuestBonusReserveTime = response.Data.IngameResultData.EndTime,
                     QuestBonusStackCount = 0,
                     QuestBonusStackTime = DateTimeOffset.UnixEpoch,
-                    LastDailyResetTime = response.data.IngameResultData.EndTime,
-                    LastWeeklyResetTime = response.data.IngameResultData.EndTime,
+                    LastDailyResetTime = response.Data.IngameResultData.EndTime,
+                    LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
                     WeeklyPlayCount = 1
                 }
@@ -55,12 +55,12 @@ public class QuestBonusTest : TestFixture
                 }
             );
 
-        bonusResponse.data.ReceiveQuestBonus.TargetQuestId.Should().Be(questId);
-        bonusResponse.data.ReceiveQuestBonus.ReceiveBonusCount.Should().Be(1);
-        bonusResponse.data.ReceiveQuestBonus.BonusFactor.Should().Be(1);
+        bonusResponse.Data.ReceiveQuestBonus.TargetQuestId.Should().Be(questId);
+        bonusResponse.Data.ReceiveQuestBonus.ReceiveBonusCount.Should().Be(1);
+        bonusResponse.Data.ReceiveQuestBonus.BonusFactor.Should().Be(1);
 
         bonusResponse
-            .data.ReceiveQuestBonus.QuestBonusEntityList.Should()
+            .Data.ReceiveQuestBonus.QuestBonusEntityList.Should()
             .BeEquivalentTo(
                 new List<AtgenBuildEventRewardEntityList>()
                 {
@@ -93,9 +93,9 @@ public class QuestBonusTest : TestFixture
                 opts => opts.Excluding(x => x.EntityQuantity)
             );
 
-        bonusResponse.data.UpdateDataList.MaterialList.Should().NotBeEmpty();
+        bonusResponse.Data.UpdateDataList.MaterialList.Should().NotBeEmpty();
         bonusResponse
-            .data.UpdateDataList.QuestEventList.Should()
+            .Data.UpdateDataList.QuestEventList.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
@@ -105,8 +105,8 @@ public class QuestBonusTest : TestFixture
                     QuestBonusReserveTime = DateTimeOffset.UnixEpoch,
                     QuestBonusStackCount = 0,
                     QuestBonusStackTime = DateTimeOffset.UnixEpoch,
-                    LastDailyResetTime = response.data.IngameResultData.EndTime,
-                    LastWeeklyResetTime = response.data.IngameResultData.EndTime,
+                    LastDailyResetTime = response.Data.IngameResultData.EndTime,
+                    LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
                     WeeklyPlayCount = 1
                 }
@@ -137,7 +137,7 @@ public class QuestBonusTest : TestFixture
         DragaliaResponse<DungeonRecordRecordResponse> response = await this.CompleteQuest(questId);
 
         response
-            .data.UpdateDataList.QuestEventList.Should()
+            .Data.UpdateDataList.QuestEventList.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
@@ -176,18 +176,18 @@ public class QuestBonusTest : TestFixture
         DragaliaResponse<DungeonRecordRecordResponse> response = await this.CompleteQuest(questId);
 
         response
-            .data.UpdateDataList.QuestEventList.Should()
+            .Data.UpdateDataList.QuestEventList.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
                     QuestEventId = questEventId,
                     QuestBonusReceiveCount = 0,
                     QuestBonusReserveCount = 1,
-                    QuestBonusReserveTime = response.data.IngameResultData.EndTime,
+                    QuestBonusReserveTime = response.Data.IngameResultData.EndTime,
                     QuestBonusStackCount = 0,
                     QuestBonusStackTime = DateTimeOffset.UnixEpoch,
-                    LastDailyResetTime = response.data.IngameResultData.EndTime,
-                    LastWeeklyResetTime = response.data.IngameResultData.EndTime,
+                    LastDailyResetTime = response.Data.IngameResultData.EndTime,
+                    LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
                     WeeklyPlayCount = 1
                 }
@@ -204,12 +204,12 @@ public class QuestBonusTest : TestFixture
                 }
             );
 
-        bonusResponse.data.ReceiveQuestBonus.TargetQuestId.Should().Be(questId);
-        bonusResponse.data.ReceiveQuestBonus.ReceiveBonusCount.Should().Be(1);
-        bonusResponse.data.ReceiveQuestBonus.BonusFactor.Should().Be(1);
+        bonusResponse.Data.ReceiveQuestBonus.TargetQuestId.Should().Be(questId);
+        bonusResponse.Data.ReceiveQuestBonus.ReceiveBonusCount.Should().Be(1);
+        bonusResponse.Data.ReceiveQuestBonus.BonusFactor.Should().Be(1);
 
-        bonusResponse.data.ReceiveQuestBonus.QuestBonusEntityList.Should().NotBeEmpty();
-        bonusResponse.data.UpdateDataList.MaterialList.Should().NotBeEmpty();
+        bonusResponse.Data.ReceiveQuestBonus.QuestBonusEntityList.Should().NotBeEmpty();
+        bonusResponse.Data.UpdateDataList.MaterialList.Should().NotBeEmpty();
     }
 
     [Fact]
@@ -221,18 +221,18 @@ public class QuestBonusTest : TestFixture
         DragaliaResponse<DungeonRecordRecordResponse> response = await this.CompleteQuest(questId);
 
         response
-            .data.UpdateDataList.QuestEventList.Should()
+            .Data.UpdateDataList.QuestEventList.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
                     QuestEventId = questEventId,
                     QuestBonusReceiveCount = 0,
                     QuestBonusReserveCount = 1,
-                    QuestBonusReserveTime = response.data.IngameResultData.EndTime,
+                    QuestBonusReserveTime = response.Data.IngameResultData.EndTime,
                     QuestBonusStackCount = 0,
                     QuestBonusStackTime = DateTimeOffset.UnixEpoch,
-                    LastDailyResetTime = response.data.IngameResultData.EndTime,
-                    LastWeeklyResetTime = response.data.IngameResultData.EndTime,
+                    LastDailyResetTime = response.Data.IngameResultData.EndTime,
+                    LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
                     WeeklyPlayCount = 1
                 }
@@ -249,12 +249,12 @@ public class QuestBonusTest : TestFixture
                 }
             );
 
-        bonusResponse.data.ReceiveQuestBonus.TargetQuestId.Should().Be(questId);
-        bonusResponse.data.ReceiveQuestBonus.ReceiveBonusCount.Should().Be(0);
+        bonusResponse.Data.ReceiveQuestBonus.TargetQuestId.Should().Be(questId);
+        bonusResponse.Data.ReceiveQuestBonus.ReceiveBonusCount.Should().Be(0);
 
-        bonusResponse.data.UpdateDataList.MaterialList.Should().BeNullOrEmpty();
+        bonusResponse.Data.UpdateDataList.MaterialList.Should().BeNullOrEmpty();
         bonusResponse
-            .data.UpdateDataList.QuestEventList.Should()
+            .Data.UpdateDataList.QuestEventList.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
@@ -264,8 +264,8 @@ public class QuestBonusTest : TestFixture
                     QuestBonusReserveTime = DateTimeOffset.UnixEpoch,
                     QuestBonusStackCount = 0,
                     QuestBonusStackTime = DateTimeOffset.UnixEpoch,
-                    LastDailyResetTime = response.data.IngameResultData.EndTime,
-                    LastWeeklyResetTime = response.data.IngameResultData.EndTime,
+                    LastDailyResetTime = response.Data.IngameResultData.EndTime,
+                    LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
                     WeeklyPlayCount = 1
                 }
@@ -281,18 +281,18 @@ public class QuestBonusTest : TestFixture
         DragaliaResponse<DungeonRecordRecordResponse> response = await this.CompleteQuest(questId);
 
         response
-            .data.UpdateDataList.QuestEventList.Should()
+            .Data.UpdateDataList.QuestEventList.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
                     QuestEventId = questEventId,
                     QuestBonusReceiveCount = 0,
                     QuestBonusReserveCount = 1,
-                    QuestBonusReserveTime = response.data.IngameResultData.EndTime,
+                    QuestBonusReserveTime = response.Data.IngameResultData.EndTime,
                     QuestBonusStackCount = 0,
                     QuestBonusStackTime = DateTimeOffset.UnixEpoch,
-                    LastDailyResetTime = response.data.IngameResultData.EndTime,
-                    LastWeeklyResetTime = response.data.IngameResultData.EndTime,
+                    LastDailyResetTime = response.Data.IngameResultData.EndTime,
+                    LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
                     WeeklyPlayCount = 1
                 }
@@ -309,12 +309,12 @@ public class QuestBonusTest : TestFixture
                 }
             );
 
-        bonusResponse.data.ReceiveQuestBonus.TargetQuestId.Should().Be(questId);
-        bonusResponse.data.ReceiveQuestBonus.ReceiveBonusCount.Should().Be(0);
+        bonusResponse.Data.ReceiveQuestBonus.TargetQuestId.Should().Be(questId);
+        bonusResponse.Data.ReceiveQuestBonus.ReceiveBonusCount.Should().Be(0);
 
-        bonusResponse.data.UpdateDataList.MaterialList.Should().BeNullOrEmpty();
+        bonusResponse.Data.UpdateDataList.MaterialList.Should().BeNullOrEmpty();
         bonusResponse
-            .data.UpdateDataList.QuestEventList.Should()
+            .Data.UpdateDataList.QuestEventList.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
@@ -324,8 +324,8 @@ public class QuestBonusTest : TestFixture
                     QuestBonusReserveTime = DateTimeOffset.UnixEpoch,
                     QuestBonusStackCount = 0,
                     QuestBonusStackTime = DateTimeOffset.UnixEpoch,
-                    LastDailyResetTime = response.data.IngameResultData.EndTime,
-                    LastWeeklyResetTime = response.data.IngameResultData.EndTime,
+                    LastDailyResetTime = response.Data.IngameResultData.EndTime,
+                    LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
                     WeeklyPlayCount = 1
                 }
@@ -337,11 +337,7 @@ public class QuestBonusTest : TestFixture
         DragaliaResponse<DungeonStartStartResponse> startResponse =
             await this.Client.PostMsgpack<DungeonStartStartResponse>(
                 "/dungeon_start/start",
-                new DungeonStartStartRequest()
-                {
-                    QuestId = questId,
-                    PartyNoList = new() { 1 }
-                }
+                new DungeonStartStartRequest() { QuestId = questId, PartyNoList = [1] }
             );
 
         DragaliaResponse<DungeonRecordRecordResponse> recordResponse =
@@ -349,7 +345,7 @@ public class QuestBonusTest : TestFixture
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
-                    DungeonKey = startResponse.data.IngameData.DungeonKey,
+                    DungeonKey = startResponse.Data.IngameData.DungeonKey,
                     PlayRecord = new()
                     {
                         Time = 10,

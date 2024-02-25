@@ -17,7 +17,7 @@ public class StampTest : TestFixture
                 $"{Controller}/get_stamp",
                 new StampGetStampRequest()
             )
-        ).data;
+        ).Data;
 
         data.StampList.Should().HaveCount(123);
     }
@@ -125,7 +125,7 @@ public class StampTest : TestFixture
                 $"{Controller}/set_equip_stamp",
                 new StampSetEquipStampRequest() { StampList = requestList }
             )
-        ).data;
+        ).Data;
 
         data.Should()
             .BeEquivalentTo(new StampSetEquipStampResponse() { EquipStampList = requestList });

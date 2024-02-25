@@ -13,7 +13,7 @@ public class GetDeployVersionTest : TestFixture
                 "deploy/get_deploy_version",
                 new DeployGetDeployVersionRequest()
             )
-        ).data;
+        ).Data;
 
         response.DeployHash.Should().Be("13bb2827ce9e6a66015ac2808112e3442740e862");
     }

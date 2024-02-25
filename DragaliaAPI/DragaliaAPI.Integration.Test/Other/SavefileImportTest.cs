@@ -58,7 +58,7 @@ public class SavefileImportTest : TestFixture
                 savefileJson,
                 ApiJsonOptions.Instance
             )!
-            .data;
+            .Data;
 
         HttpContent content = new StringContent(savefileJson);
         content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
@@ -76,7 +76,7 @@ public class SavefileImportTest : TestFixture
 
         LoadIndexResponse storedSavefile = (
             await this.Client.PostMsgpack<LoadIndexResponse>("load/index", new LoadIndexRequest())
-        ).data;
+        ).Data;
 
         storedSavefile
             .Should()
@@ -233,7 +233,7 @@ public class SavefileImportTest : TestFixture
                 savefileJson,
                 ApiJsonOptions.Instance
             )!
-            .data;
+            .Data;
 
         HttpContent content = new StringContent(savefileJson);
         content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");

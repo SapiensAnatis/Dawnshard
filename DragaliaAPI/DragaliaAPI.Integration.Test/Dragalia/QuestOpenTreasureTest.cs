@@ -19,7 +19,7 @@ public class QuestOpenTreasureTest : TestFixture
                 "/quest/open_treasure",
                 new QuestOpenTreasureRequest() { QuestTreasureId = 104101 }
             )
-        ).data;
+        ).Data;
 
         response
             .UpdateDataList.QuestTreasureList.Should()
@@ -34,7 +34,7 @@ public class QuestOpenTreasureTest : TestFixture
                 "/quest/open_treasure",
                 new QuestOpenTreasureRequest() { QuestTreasureId = 126201 }
             )
-        ).data;
+        ).Data;
 
         List<DbQuestTreasureList> questTreasureList = await this
             .ApiContext.QuestTreasureList.Where(x => x.ViewerId == ViewerId)

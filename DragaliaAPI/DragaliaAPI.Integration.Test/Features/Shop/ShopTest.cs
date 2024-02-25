@@ -22,9 +22,9 @@ public class ShopTest : TestFixture
                 new ShopGetListRequest()
             );
 
-        resp.data_headers.result_code.Should().Be(ResultCode.Success);
-        resp.data.MaterialShopPurchase.Should().BeEmpty();
-        resp.data.UserItemSummon.Should().NotBeNull();
+        resp.DataHeaders.result_code.Should().Be(ResultCode.Success);
+        resp.Data.MaterialShopPurchase.Should().BeEmpty();
+        resp.Data.UserItemSummon.Should().NotBeNull();
     }
 
     [Fact]
@@ -41,11 +41,11 @@ public class ShopTest : TestFixture
                 )
             );
 
-        resp.data_headers.result_code.Should().Be(ResultCode.Success);
-        resp.data.UpdateDataList.Should().NotBeNull();
-        resp.data.MaterialShopPurchase.Should().HaveCount(1);
-        resp.data.MaterialShopPurchase.First().GoodsId.Should().Be(1000001);
-        resp.data.MaterialShopPurchase.First().BuyCount.Should().Be(1);
+        resp.DataHeaders.result_code.Should().Be(ResultCode.Success);
+        resp.Data.UpdateDataList.Should().NotBeNull();
+        resp.Data.MaterialShopPurchase.Should().HaveCount(1);
+        resp.Data.MaterialShopPurchase.First().GoodsId.Should().Be(1000001);
+        resp.Data.MaterialShopPurchase.First().BuyCount.Should().Be(1);
     }
 
     [Fact]
@@ -63,6 +63,6 @@ public class ShopTest : TestFixture
                 false
             );
 
-        resp.data_headers.result_code.Should().Be(ResultCode.ShopPaymentTypeInvalid);
+        resp.DataHeaders.result_code.Should().Be(ResultCode.ShopPaymentTypeInvalid);
     }
 }

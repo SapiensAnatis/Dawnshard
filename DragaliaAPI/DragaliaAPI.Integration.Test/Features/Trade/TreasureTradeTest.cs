@@ -21,7 +21,7 @@ public class TreasureTradeTest : TestFixture
                 "treasure_trade/get_list_all",
                 new TreasureTradeGetListAllRequest()
             )
-        ).data;
+        ).Data;
 
         response.UserTreasureTradeList.Should().BeEmpty();
         response.TreasureTradeAllList.Should().NotBeEmpty();
@@ -47,7 +47,7 @@ public class TreasureTradeTest : TestFixture
                 "treasure_trade/get_list_all",
                 new TreasureTradeGetListAllRequest()
             )
-        ).data;
+        ).Data;
 
         response
             .UserTreasureTradeList.Should()
@@ -81,7 +81,7 @@ public class TreasureTradeTest : TestFixture
                 "treasure_trade/trade",
                 new TreasureTradeTradeRequest(1001, 10010101, null, 1)
             )
-        ).data;
+        ).Data;
 
         response
             .UserTreasureTradeList.Should()
@@ -108,7 +108,7 @@ public class TreasureTradeTest : TestFixture
                 "treasure_trade/trade",
                 new TreasureTradeTradeRequest(1012, 10124101, null, 1)
             )
-        ).data;
+        ).Data;
 
         response
             .UserTreasureTradeList.Should()

@@ -52,7 +52,7 @@ public class CharaTest : TestFixture
                 "chara/awake",
                 new CharaAwakeRequest(Charas.Celliera, 5)
             )
-        ).data;
+        ).Data;
 
         CharaList charaData = response
             .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Celliera)
@@ -95,7 +95,7 @@ public class CharaTest : TestFixture
                     }
                 )
             )
-        ).data;
+        ).Data;
 
         byte maxLevel = (byte)(
             CharaConstants.GetMaxLevelFor(charaData.Rarity) + charaData.AdditionalMaxLevel
@@ -178,7 +178,7 @@ public class CharaTest : TestFixture
                     false
                 )
             )
-        ).data;
+        ).Data;
 
         CharaList responseCharaData = response
             .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Celliera)
@@ -216,7 +216,7 @@ public class CharaTest : TestFixture
             )
         );
 
-        response.data_headers.result_code.Should().Be(ResultCode.Success);
+        response.DataHeaders.result_code.Should().Be(ResultCode.Success);
     }
 
     [Fact]
@@ -242,7 +242,7 @@ public class CharaTest : TestFixture
                 "chara/limit_break",
                 new CharaLimitBreakRequest(Charas.Celliera, 1, false)
             )
-        ).data;
+        ).Data;
 
         CharaList responseCharaData = response
             .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Celliera)
@@ -291,7 +291,7 @@ public class CharaTest : TestFixture
                     false
                 )
             )
-        ).data;
+        ).Data;
 
         CharaList responseCharaData = response
             .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Celliera)
@@ -352,7 +352,7 @@ public class CharaTest : TestFixture
                     false
                 )
             )
-        ).data;
+        ).Data;
 
         CharaList preSpiralResponseCharaData = preSpiralResponse
             .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Delphi)
@@ -396,7 +396,7 @@ public class CharaTest : TestFixture
                 "chara/buildup_mana",
                 new CharaBuildupManaRequest(Charas.Delphi, Enumerable.Range(51, 20), false)
             )
-        ).data;
+        ).Data;
 
         CharaList postSpiralResponseCharaData = postSpiralResponse
             .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Delphi)
@@ -439,7 +439,7 @@ public class CharaTest : TestFixture
                 "chara/buildup_platinum",
                 new CharaBuildupPlatinumRequest(Charas.SummerCelliera)
             )
-        ).data;
+        ).Data;
 
         CharaList responseCharaData = response
             .UpdateDataList.CharaList.Where(x => x.CharaId == Charas.SummerCelliera)
@@ -471,7 +471,7 @@ public class CharaTest : TestFixture
                 "chara/buildup_platinum",
                 new CharaBuildupPlatinumRequest(Charas.Harle)
             )
-        ).data;
+        ).Data;
 
         CharaList responseCharaData = response
             .UpdateDataList.CharaList.Where(x => x.CharaId == Charas.Harle)
@@ -535,7 +535,7 @@ public class CharaTest : TestFixture
                 "chara/buildup_platinum",
                 new CharaBuildupPlatinumRequest(id)
             )
-        ).data;
+        ).Data;
 
         CharaList responseCharaData = response
             .UpdateDataList.CharaList.Where(x => x.CharaId == id)
@@ -618,7 +618,7 @@ public class CharaTest : TestFixture
                 "chara/buildup_platinum",
                 new CharaBuildupPlatinumRequest(id)
             )
-        ).data;
+        ).Data;
 
         CharaList responseCharaData = response
             .UpdateDataList.CharaList.Where(x => x.CharaId == id)
@@ -671,7 +671,7 @@ public class CharaTest : TestFixture
                 "chara/get_chara_unit_set",
                 new CharaGetCharaUnitSetRequest(new List<Charas>() { Charas.Celliera })
             )
-        ).data;
+        ).Data;
 
         response.Should().NotBeNull();
     }
@@ -689,7 +689,7 @@ public class CharaTest : TestFixture
                     new AtgenRequestCharaUnitSetData() { DragonKeyId = 5 }
                 )
             )
-        ).data;
+        ).Data;
 
         CharaUnitSetList responseCharaData = response
             .UpdateDataList.CharaUnitSetList.Where(x => (Charas)x.CharaId == Charas.Celliera)

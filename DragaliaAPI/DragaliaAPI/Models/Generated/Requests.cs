@@ -59,7 +59,7 @@ public partial class AbilityCrestResetPlusCountRequest
     public AbilityCrests AbilityCrestId { get; set; }
 
     [Key("plus_count_type_list")]
-    public IEnumerable<int> PlusCountTypeList { get; set; } = [];
+    public IEnumerable<PlusCountType> PlusCountTypeList { get; set; } = [];
 
     public AbilityCrestResetPlusCountRequest(
         AbilityCrests abilityCrestId,
@@ -1120,9 +1120,9 @@ public partial class DragonBuyGiftToSendRequest
     public Dragons DragonId { get; set; }
 
     [Key("dragon_gift_id")]
-    public int DragonGiftId { get; set; }
+    public DragonGifts DragonGiftId { get; set; }
 
-    public DragonBuyGiftToSendRequest(Dragons dragonId, int dragonGiftId)
+    public DragonBuyGiftToSendRequest(Dragons dragonId, DragonGifts dragonGiftId)
     {
         this.DragonId = dragonId;
         this.DragonGiftId = dragonGiftId;

@@ -31,7 +31,7 @@ public class AbilityCrestTradeTest : TestFixture
                     TradeCount = 1
                 }
             )
-        ).data;
+        ).Data;
 
         AbilityCrests ability_crest_id = data
             .UpdateDataList.AbilityCrestList.First()

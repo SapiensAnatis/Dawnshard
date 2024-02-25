@@ -21,7 +21,7 @@ public class FriendTest : TestFixture
                 "/friend/get_support_chara_detail",
                 new FriendGetSupportCharaDetailRequest() { SupportViewerId = 1001 }
             )
-        ).data;
+        ).Data;
 
         response
             .SupportUserDataDetail.UserSupportData.Should()
@@ -172,7 +172,7 @@ public class FriendTest : TestFixture
                 "/friend/get_support_chara_detail",
                 new FriendGetSupportCharaDetailRequest() { SupportViewerId = 0 }
             )
-        ).data;
+        ).Data;
 
         response
             .SupportUserDataDetail.UserSupportData.Should()

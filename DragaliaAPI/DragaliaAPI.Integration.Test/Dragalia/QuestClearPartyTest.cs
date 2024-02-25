@@ -28,8 +28,8 @@ public class QuestClearPartyTest : TestFixture
                 new QuestGetQuestClearPartyRequest() { QuestId = 1 }
             );
 
-        response.data.QuestClearPartySettingList.Should().BeEquivalentTo(SoloPartySettingLists);
-        response.data.LostUnitList.Should().BeEmpty();
+        response.Data.QuestClearPartySettingList.Should().BeEquivalentTo(SoloPartySettingLists);
+        response.Data.LostUnitList.Should().BeEmpty();
     }
 
     [Fact]
@@ -46,9 +46,9 @@ public class QuestClearPartyTest : TestFixture
             );
 
         response
-            .data.QuestMultiClearPartySettingList.Should()
+            .Data.QuestMultiClearPartySettingList.Should()
             .BeEquivalentTo(MultiPartySettingLists);
-        response.data.LostUnitList.Should().BeEmpty();
+        response.Data.LostUnitList.Should().BeEmpty();
     }
 
     [Fact]
@@ -71,7 +71,7 @@ public class QuestClearPartyTest : TestFixture
                 new QuestGetQuestClearPartyRequest() { QuestId = questId }
             );
 
-        response.data.QuestClearPartySettingList.Should().BeEmpty();
+        response.Data.QuestClearPartySettingList.Should().BeEmpty();
     }
 
     [Fact]
@@ -90,7 +90,7 @@ public class QuestClearPartyTest : TestFixture
             );
 
         response
-            .data.LostUnitList.Should()
+            .Data.LostUnitList.Should()
             .BeEquivalentTo(
                 new List<AtgenLostUnitList>()
                 {
@@ -133,7 +133,7 @@ public class QuestClearPartyTest : TestFixture
                 }
             );
 
-        List<PartySettingList> partyList = response.data.QuestClearPartySettingList.ToList();
+        List<PartySettingList> partyList = response.Data.QuestClearPartySettingList.ToList();
 
         partyList[0].CharaId.Should().Be(0);
         partyList[1].EquipCrestSlotType1CrestId1.Should().Be(0);
@@ -160,7 +160,7 @@ public class QuestClearPartyTest : TestFixture
                 }
             );
 
-        response.data.Result.Should().Be(1);
+        response.Data.Result.Should().Be(1);
 
         List<DbQuestClearPartyUnit> storedList = await this
             .ApiContext.QuestClearPartyUnits.Where(x =>
@@ -187,7 +187,7 @@ public class QuestClearPartyTest : TestFixture
                 }
             );
 
-        response.data.Result.Should().Be(1);
+        response.Data.Result.Should().Be(1);
 
         List<DbQuestClearPartyUnit> storedList = await this
             .ApiContext.QuestClearPartyUnits.Where(x =>

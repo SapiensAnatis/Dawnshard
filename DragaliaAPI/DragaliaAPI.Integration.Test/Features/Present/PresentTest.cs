@@ -49,7 +49,7 @@ public class PresentTest : TestFixture
             );
 
         response
-            .data.Should()
+            .Data.Should()
             .BeEquivalentTo(
                 new PresentGetPresentListResponse()
                 {
@@ -79,7 +79,7 @@ public class PresentTest : TestFixture
                 }
             );
 
-        response.data.PresentList.Should().BeInAscendingOrder(x => x.PresentId);
+        response.Data.PresentList.Should().BeInAscendingOrder(x => x.PresentId);
     }
 
     [Fact]
@@ -115,7 +115,7 @@ public class PresentTest : TestFixture
             );
 
         response
-            .data.Should()
+            .Data.Should()
             .BeEquivalentTo(
                 new PresentGetPresentListResponse()
                 {
@@ -137,7 +137,7 @@ public class PresentTest : TestFixture
                 }
             );
 
-        response.data.PresentLimitList.Should().BeInAscendingOrder(x => x.PresentId);
+        response.Data.PresentLimitList.Should().BeInAscendingOrder(x => x.PresentId);
     }
 
     [Fact]
@@ -164,7 +164,7 @@ public class PresentTest : TestFixture
                 new PresentGetPresentListRequest() { IsLimit = false, PresentId = 0 }
             );
 
-        firstResponse.data.PresentList.Should().HaveCount(100);
+        firstResponse.Data.PresentList.Should().HaveCount(100);
 
         DragaliaResponse<PresentGetPresentListResponse> secondResponse =
             await this.Client.PostMsgpack<PresentGetPresentListResponse>(
@@ -176,10 +176,10 @@ public class PresentTest : TestFixture
                 }
             );
 
-        secondResponse.data.PresentList.Should().HaveCount(20);
+        secondResponse.Data.PresentList.Should().HaveCount(20);
 
         firstResponse
-            .data.PresentList.Concat(secondResponse.data.PresentList)
+            .Data.PresentList.Concat(secondResponse.Data.PresentList)
             .Should()
             .OnlyHaveUniqueItems(x => x.PresentId);
     }
@@ -266,19 +266,19 @@ public class PresentTest : TestFixture
                 new PresentReceiveRequest() { PresentIdList = presentIdList }
             );
 
-        response.data.ReceivePresentIdList.Should().BeEquivalentTo(presentIdList);
-        response.data.PresentList.Should().BeEmpty();
-        response.data.PresentLimitList.Should().BeEmpty();
+        response.Data.ReceivePresentIdList.Should().BeEquivalentTo(presentIdList);
+        response.Data.PresentList.Should().BeEmpty();
+        response.Data.PresentLimitList.Should().BeEmpty();
 
-        response.data.UpdateDataList.UserData.Coin.Should().Be(oldUserData.Coin + 100_000);
-        response.data.UpdateDataList.UserData.Crystal.Should().Be(oldUserData.Crystal + 100);
+        response.Data.UpdateDataList.UserData.Coin.Should().Be(oldUserData.Coin + 100_000);
+        response.Data.UpdateDataList.UserData.Crystal.Should().Be(oldUserData.Crystal + 100);
         response
-            .data.UpdateDataList.UserData.BuildTimePoint.Should()
+            .Data.UpdateDataList.UserData.BuildTimePoint.Should()
             .Be(oldUserData.BuildTimePoint + 100);
-        response.data.UpdateDataList.UserData.DewPoint.Should().Be(oldUserData.DewPoint + 200);
+        response.Data.UpdateDataList.UserData.DewPoint.Should().Be(oldUserData.DewPoint + 200);
 
         response
-            .data.UpdateDataList.MaterialList.Should()
+            .Data.UpdateDataList.MaterialList.Should()
             .ContainEquivalentOf(
                 new MaterialList()
                 {
@@ -287,19 +287,19 @@ public class PresentTest : TestFixture
                 }
             );
 
-        response.data.UpdateDataList.CharaList.Should().Contain(x => x.CharaId == Charas.Akasha);
+        response.Data.UpdateDataList.CharaList.Should().Contain(x => x.CharaId == Charas.Akasha);
 
-        response.data.UpdateDataList.DragonList.Should().Contain(x => x.DragonId == Dragons.Arsene);
+        response.Data.UpdateDataList.DragonList.Should().Contain(x => x.DragonId == Dragons.Arsene);
         response
-            .data.UpdateDataList.DragonReliabilityList.Should()
+            .Data.UpdateDataList.DragonReliabilityList.Should()
             .Contain(x => x.DragonId == Dragons.Arsene);
 
         response
-            .data.UpdateDataList.AbilityCrestList.Should()
+            .Data.UpdateDataList.AbilityCrestList.Should()
             .Contain(x => x.AbilityCrestId == AbilityCrests.ADogsDay);
 
         response
-            .data.UpdateDataList.PresentNotice.Should()
+            .Data.UpdateDataList.PresentNotice.Should()
             .BeEquivalentTo(new PresentNotice() { PresentCount = 0, PresentLimitCount = 0, });
 
         // Not sure if entity_result is correct so won't test that
@@ -342,19 +342,19 @@ public class PresentTest : TestFixture
                 new PresentReceiveRequest() { PresentIdList = presentIdList }
             );
 
-        response.data.ReceivePresentIdList.Should().BeEquivalentTo(presentIdList);
-        response.data.PresentList.Should().ContainSingle();
-        response.data.PresentLimitList.Should().ContainSingle();
+        response.Data.ReceivePresentIdList.Should().BeEquivalentTo(presentIdList);
+        response.Data.PresentList.Should().ContainSingle();
+        response.Data.PresentLimitList.Should().ContainSingle();
 
         response
-            .data.UpdateDataList.DragonList.Should()
+            .Data.UpdateDataList.DragonList.Should()
             .Contain(x => x.DragonId == Dragons.Raphael);
         response
-            .data.UpdateDataList.DragonReliabilityList.Should()
+            .Data.UpdateDataList.DragonReliabilityList.Should()
             .Contain(x => x.DragonId == Dragons.Raphael);
 
         response
-            .data.UpdateDataList.PresentNotice.Should()
+            .Data.UpdateDataList.PresentNotice.Should()
             .BeEquivalentTo(new PresentNotice() { PresentCount = 1, PresentLimitCount = 1, });
     }
 
@@ -392,16 +392,16 @@ public class PresentTest : TestFixture
                 new PresentReceiveRequest() { PresentIdList = presentIdList }
             );
 
-        response.data.ReceivePresentIdList.Should().BeEquivalentTo(presentIdList);
+        response.Data.ReceivePresentIdList.Should().BeEquivalentTo(presentIdList);
 
         response
-            .data.UpdateDataList.AbilityCrestList.Should()
+            .Data.UpdateDataList.AbilityCrestList.Should()
             .ContainSingle()
             .And.Contain(x => x.AbilityCrestId == AbilityCrests.DearDiary);
-        response.data.UpdateDataList.UserData.DewPoint.Should().Be(oldUserData.DewPoint + 3000);
+        response.Data.UpdateDataList.UserData.DewPoint.Should().Be(oldUserData.DewPoint + 3000);
 
         response
-            .data.ConvertedEntityList.Should()
+            .Data.ConvertedEntityList.Should()
             .ContainSingle()
             .And.ContainEquivalentOf(
                 new ConvertedEntityList()
@@ -446,11 +446,11 @@ public class PresentTest : TestFixture
                 new PresentReceiveRequest() { PresentIdList = presentIdList }
             );
 
-        response.data.ReceivePresentIdList.Should().Contain((ulong)presents.First().PresentId);
-        response.data.DeletePresentIdList.Should().Contain((ulong)presents.Last().PresentId);
+        response.Data.ReceivePresentIdList.Should().Contain((ulong)presents.First().PresentId);
+        response.Data.DeletePresentIdList.Should().Contain((ulong)presents.Last().PresentId);
 
         response
-            .data.UpdateDataList.CharaList.Should()
+            .Data.UpdateDataList.CharaList.Should()
             .ContainSingle()
             .And.Contain(x => x.CharaId == Charas.Addis);
     }
@@ -480,7 +480,7 @@ public class PresentTest : TestFixture
             );
 
         firstResponse
-            .data.PresentHistoryList.Should()
+            .Data.PresentHistoryList.Should()
             .HaveCount(100)
             .And.BeInDescendingOrder(x => x.Id);
 
@@ -493,10 +493,10 @@ public class PresentTest : TestFixture
                 }
             );
 
-        secondResponse.data.PresentHistoryList.Should().HaveCount(20);
+        secondResponse.Data.PresentHistoryList.Should().HaveCount(20);
 
         firstResponse
-            .data.PresentHistoryList.Concat(secondResponse.data.PresentHistoryList)
+            .Data.PresentHistoryList.Concat(secondResponse.Data.PresentHistoryList)
             .Should()
             .OnlyHaveUniqueItems(x => x.Id);
     }

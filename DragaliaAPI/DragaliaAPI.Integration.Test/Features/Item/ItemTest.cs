@@ -32,7 +32,7 @@ public class ItemTest : TestFixture
             new ItemGetListRequest()
         );
 
-        resp.data.ItemList.Should()
+        resp.Data.ItemList.Should()
             .HaveCount(1)
             .And.ContainEquivalentOf(new ItemList(UseItem.Honey, 50));
     }
@@ -48,10 +48,10 @@ public class ItemTest : TestFixture
                 )
             );
 
-        resp.data.RecoverData.RecoverStaminaType.Should().Be(UseItemEffect.RecoverStamina);
-        resp.data.RecoverData.RecoverStaminaPoint.Should().Be(10);
-        resp.data.UpdateDataList.UserData.StaminaSingle.Should().Be(15);
-        resp.data.UpdateDataList.ItemList.Should()
+        resp.Data.RecoverData.RecoverStaminaType.Should().Be(UseItemEffect.RecoverStamina);
+        resp.Data.RecoverData.RecoverStaminaPoint.Should().Be(10);
+        resp.Data.UpdateDataList.UserData.StaminaSingle.Should().Be(15);
+        resp.Data.UpdateDataList.ItemList.Should()
             .ContainEquivalentOf(new ItemList(UseItem.Honey, 49));
     }
 
@@ -66,10 +66,10 @@ public class ItemTest : TestFixture
                 )
             );
 
-        resp.data.RecoverData.RecoverStaminaType.Should().Be(UseItemEffect.RecoverStamina);
-        resp.data.RecoverData.RecoverStaminaPoint.Should().Be(10 * 5);
-        resp.data.UpdateDataList.UserData.StaminaSingle.Should().Be(5 + (10 * 5));
-        resp.data.UpdateDataList.ItemList.Should()
+        resp.Data.RecoverData.RecoverStaminaType.Should().Be(UseItemEffect.RecoverStamina);
+        resp.Data.RecoverData.RecoverStaminaPoint.Should().Be(10 * 5);
+        resp.Data.UpdateDataList.UserData.StaminaSingle.Should().Be(5 + (10 * 5));
+        resp.Data.UpdateDataList.ItemList.Should()
             .ContainEquivalentOf(new ItemList(UseItem.Honey, 45));
     }
 }

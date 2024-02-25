@@ -3,7 +3,6 @@ using MessagePack;
 
 namespace DragaliaAPI.Models.Generated;
 
-[MessagePackObject(true)]
 public class LoadIndexResponse
 {
     [JsonPropertyName("origin")]

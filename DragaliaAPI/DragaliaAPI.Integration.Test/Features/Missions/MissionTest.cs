@@ -22,8 +22,8 @@ public class MissionTest : TestFixture
                 new MissionUnlockDrillMissionGroupRequest(1)
             );
 
-        resp.data_headers.result_code.Should().Be(ResultCode.Success);
-        resp.data.DrillMissionList.Should()
+        resp.DataHeaders.result_code.Should().Be(ResultCode.Success);
+        resp.Data.DrillMissionList.Should()
             .HaveCount(55)
             .And.ContainEquivalentOf(
                 new DrillMissionList(
@@ -45,8 +45,8 @@ public class MissionTest : TestFixture
                 new MissionUnlockMainStoryGroupRequest(1)
             );
 
-        resp.data_headers.result_code.Should().Be(ResultCode.Success);
-        resp.data.MainStoryMissionList.Should().HaveCount(5);
+        resp.DataHeaders.result_code.Should().Be(ResultCode.Success);
+        resp.Data.MainStoryMissionList.Should().HaveCount(5);
         // Don't test for a specific quest as other tests mess with the quest progress
     }
 
@@ -64,11 +64,11 @@ public class MissionTest : TestFixture
                 new QuestReadStoryRequest() { QuestStoryId = 1000106 }
             );
 
-        resp.data_headers.result_code.Should().Be(ResultCode.Success);
-        resp.data.UpdateDataList.MissionNotice.DrillMissionNotice.IsUpdate.Should().Be(1);
-        resp.data.UpdateDataList.MissionNotice.DrillMissionNotice.CompletedMissionCount.Should()
+        resp.DataHeaders.result_code.Should().Be(ResultCode.Success);
+        resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.IsUpdate.Should().BeTrue();
+        resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.CompletedMissionCount.Should()
             .BeGreaterThan(1); // One has to be completed because of the above, multiple can be completed due to other factors
-        resp.data.UpdateDataList.MissionNotice.DrillMissionNotice.NewCompleteMissionIdList.Should()
+        resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.NewCompleteMissionIdList.Should()
             .Contain(100200);
 
         DragaliaResponse<MissionReceiveDrillRewardResponse> rewardResp =
@@ -77,9 +77,9 @@ public class MissionTest : TestFixture
                 new MissionReceiveDrillRewardRequest(new[] { 100200 }, Enumerable.Empty<int>())
             );
 
-        rewardResp.data_headers.result_code.Should().Be(ResultCode.Success);
-        rewardResp.data.EntityResult.ConvertedEntityList.Should().NotBeNull();
-        rewardResp.data.DrillMissionList.Should().HaveCount(55);
+        rewardResp.DataHeaders.result_code.Should().Be(ResultCode.Success);
+        rewardResp.Data.EntityResult.ConvertedEntityList.Should().NotBeNull();
+        rewardResp.Data.DrillMissionList.Should().HaveCount(55);
     }
 
     [Fact]
@@ -96,11 +96,11 @@ public class MissionTest : TestFixture
                 new TreasureTradeTradeRequest() { TreasureTradeId = 10020101, TradeCount = 1 }
             );
 
-        resp.data_headers.result_code.Should().Be(ResultCode.Success);
-        resp.data.UpdateDataList.MissionNotice.DrillMissionNotice.IsUpdate.Should().Be(1);
-        resp.data.UpdateDataList.MissionNotice.DrillMissionNotice.CompletedMissionCount.Should()
+        resp.DataHeaders.result_code.Should().Be(ResultCode.Success);
+        resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.IsUpdate.Should().Be(1);
+        resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.CompletedMissionCount.Should()
             .BeGreaterThan(1); // One has to be completed because of the above, multiple can be completed due to other factors
-        resp.data.UpdateDataList.MissionNotice.DrillMissionNotice.NewCompleteMissionIdList.Should()
+        resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.NewCompleteMissionIdList.Should()
             .Contain(300100);
     }
 
@@ -137,11 +137,11 @@ public class MissionTest : TestFixture
                 }
             );
 
-        resp.data_headers.result_code.Should().Be(ResultCode.Success);
-        resp.data.UpdateDataList.MissionNotice.DrillMissionNotice.IsUpdate.Should().Be(1);
-        resp.data.UpdateDataList.MissionNotice.DrillMissionNotice.CompletedMissionCount.Should()
+        resp.DataHeaders.result_code.Should().Be(ResultCode.Success);
+        resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.IsUpdate.Should().Be(1);
+        resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.CompletedMissionCount.Should()
             .BeGreaterThan(1);
-        resp.data.UpdateDataList.MissionNotice.DrillMissionNotice.NewCompleteMissionIdList.Should()
+        resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.NewCompleteMissionIdList.Should()
             .Contain(301700);
     }
 
@@ -167,7 +167,7 @@ public class MissionTest : TestFixture
                     MemoryEventMissionIdList = new[] { 10220101 }, // Participate in the Event (Toll of the Deep)
                 }
             )
-        ).data;
+        ).Data;
 
         response
             .UpdateDataList.AbilityCrestList.Should()
@@ -254,7 +254,7 @@ public class MissionTest : TestFixture
             );
 
         response
-            .data.daily_mission_list.Should()
+            .Data.daily_mission_list.Should()
             .BeEquivalentTo(
                 [
                     new DailyMissionList()
@@ -311,7 +311,7 @@ public class MissionTest : TestFixture
                     MemoryEventMissionIdList = [missionId],
                 }
             )
-        ).data;
+        ).Data;
 
         response.UpdateDataList.UserData.Crystal.Should().Be(oldWyrmite + 25);
     }
@@ -357,7 +357,7 @@ public class MissionTest : TestFixture
             );
 
         response
-            .data.daily_mission_list.Should()
+            .Data.daily_mission_list.Should()
             .BeEquivalentTo(
                 [
                     new DailyMissionList()
@@ -414,7 +414,7 @@ public class MissionTest : TestFixture
                 ensureSuccessHeader: false
             );
 
-        response.data_headers.result_code.Should().Be(ResultCode.Success);
+        response.DataHeaders.result_code.Should().Be(ResultCode.Success);
     }
 
     [Fact]
@@ -436,7 +436,7 @@ public class MissionTest : TestFixture
                 "mission/get_drill_mission_list",
                 new MissionGetDrillMissionListRequest()
             )
-        ).data;
+        ).Data;
 
         response.DrillMissionGroupList.Should().BeEmpty();
 
@@ -451,7 +451,7 @@ public class MissionTest : TestFixture
                 "mission/get_drill_mission_list",
                 new MissionGetDrillMissionListRequest()
             )
-        ).data;
+        ).Data;
 
         response.DrillMissionGroupList.Should().BeEquivalentTo([new DrillMissionGroupList(1)]);
 
@@ -466,7 +466,7 @@ public class MissionTest : TestFixture
                 "mission/get_drill_mission_list",
                 new MissionGetDrillMissionListRequest()
             )
-        ).data;
+        ).Data;
 
         response
             .DrillMissionGroupList.Should()
@@ -483,7 +483,7 @@ public class MissionTest : TestFixture
                 "mission/get_drill_mission_list",
                 new MissionGetDrillMissionListRequest()
             )
-        ).data;
+        ).Data;
 
         response
             .DrillMissionGroupList.Should()
@@ -516,7 +516,7 @@ public class MissionTest : TestFixture
                 "mission/get_mission_list",
                 new MissionGetMissionListRequest()
             )
-        ).data;
+        ).Data;
 
         response
             .MissionNotice.DrillMissionNotice.ReceivableRewardCount.Should()
@@ -572,7 +572,7 @@ public class MissionTest : TestFixture
                 "mission/get_mission_list",
                 new MissionGetMissionListRequest()
             )
-        ).data;
+        ).Data;
 
         response
             .period_mission_list.Should()

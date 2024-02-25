@@ -28,7 +28,7 @@ public class MaintenanceTest : TestFixture
                 ensureSuccessHeader: false
             );
 
-        response.data_headers.result_code.Should().Be(ResultCode.CommonMaintenance);
+        response.DataHeaders.result_code.Should().Be(ResultCode.CommonMaintenance);
     }
 
     [Fact]
@@ -43,8 +43,8 @@ public class MaintenanceTest : TestFixture
                 ensureSuccessHeader: false
             );
 
-        response.data_headers.result_code.Should().Be(ResultCode.Success);
-        response.data.ServiceStatus.Should().Be(1);
+        response.DataHeaders.result_code.Should().Be(ResultCode.Success);
+        response.Data.ServiceStatus.Should().Be(1);
     }
 
     [Fact]
@@ -67,7 +67,7 @@ public class MaintenanceTest : TestFixture
             );
 
         response
-            .data.MaintenanceText.Should()
+            .Data.MaintenanceText.Should()
             .BeEquivalentTo(
                 $"""
                 <title>Title</title>

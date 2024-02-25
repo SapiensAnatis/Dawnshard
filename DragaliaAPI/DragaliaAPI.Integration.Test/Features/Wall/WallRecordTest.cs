@@ -69,7 +69,7 @@ public class WallRecordTest : TestFixture
                 "/wall_record/record",
                 new WallRecordRecordRequest() { WallId = wallId, DungeonKey = key }
             )
-        ).data;
+        ).Data;
 
         response.UpdateDataList.UserData.Coin.Should().Be(oldUserData.Coin + expectedCoin);
 
@@ -167,7 +167,7 @@ public class WallRecordTest : TestFixture
                 "/wall_record/record",
                 new WallRecordRecordRequest() { WallId = wallId, DungeonKey = key }
             )
-        ).data;
+        ).Data;
 
         response
             .WallClearRewardList.Should()
@@ -250,7 +250,7 @@ public class WallRecordTest : TestFixture
                     DungeonKey = key
                 }
             )
-        ).data;
+        ).Data;
 
         AtgenNormalMissionNotice? missionNotice = response
             .UpdateDataList
@@ -267,7 +267,7 @@ public class WallRecordTest : TestFixture
                 "mission/get_mission_list",
                 new MissionGetMissionListRequest()
             )
-        ).data;
+        ).Data;
 
         missionList
             .normal_mission_list.Should()
@@ -325,7 +325,7 @@ public class WallRecordTest : TestFixture
                     DungeonKey = key
                 }
             )
-        ).data;
+        ).Data;
 
         AtgenNormalMissionNotice? missionNotice = response
             .UpdateDataList

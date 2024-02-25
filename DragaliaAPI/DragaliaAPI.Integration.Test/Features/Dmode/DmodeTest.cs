@@ -20,12 +20,12 @@ public class DmodeTest : TestFixture
                 new DmodeGetDataRequest()
             );
 
-        resp.data.DmodeInfo.IsEntry.Should().BeTrue();
-        resp.data.DmodeCharaList.Should().NotBeNull();
-        resp.data.DmodeDungeonInfo.State.Should().Be(DungeonState.Waiting);
-        resp.data.DmodeExpedition.State.Should().Be(ExpeditionState.Waiting);
-        resp.data.DmodeServitorPassiveList.Should().NotBeNull();
-        resp.data.DmodeStoryList.Should().NotBeNull();
+        resp.Data.DmodeInfo.IsEntry.Should().BeTrue();
+        resp.Data.DmodeCharaList.Should().NotBeNull();
+        resp.Data.DmodeDungeonInfo.State.Should().Be(DungeonState.Waiting);
+        resp.Data.DmodeExpedition.State.Should().Be(ExpeditionState.Waiting);
+        resp.Data.DmodeServitorPassiveList.Should().NotBeNull();
+        resp.Data.DmodeStoryList.Should().NotBeNull();
     }
 
     [Fact]
@@ -42,7 +42,7 @@ public class DmodeTest : TestFixture
                 new DmodeReadStoryRequest() { DmodeStoryId = 1 }
             );
 
-        resp.data.DmodeStoryRewardList.Should()
+        resp.Data.DmodeStoryRewardList.Should()
             .BeEquivalentTo(
                 new List<AtgenBuildEventRewardEntityList>()
                 {
@@ -66,8 +66,8 @@ public class DmodeTest : TestFixture
                     }
                 }
             );
-        resp.data.UpdateDataList.UserData.Crystal.Should().Be(oldWyrmite + 25);
-        resp.data.UpdateDataList.DmodeStoryList.Should()
+        resp.Data.UpdateDataList.UserData.Crystal.Should().Be(oldWyrmite + 25);
+        resp.Data.UpdateDataList.DmodeStoryList.Should()
             .ContainEquivalentOf(new DmodeStoryList() { DmodeStoryId = 1, IsRead = 1 });
     }
 
@@ -100,15 +100,15 @@ public class DmodeTest : TestFixture
                 }
             );
 
-        resp.data.DmodeServitorPassiveList.Should()
+        resp.Data.DmodeServitorPassiveList.Should()
             .Contain(x =>
                 x.PassiveNo == DmodeServitorPassiveType.BurstDamage && x.PassiveLevel == 2
             );
-        resp.data.DmodeServitorPassiveList.Should()
+        resp.Data.DmodeServitorPassiveList.Should()
             .Contain(x =>
                 x.PassiveNo == DmodeServitorPassiveType.ResistUndead && x.PassiveLevel == 10
             );
-        resp.data.DmodeServitorPassiveList.Should()
+        resp.Data.DmodeServitorPassiveList.Should()
             .Contain(x =>
                 x.PassiveNo == DmodeServitorPassiveType.ResistNatural && x.PassiveLevel == 2
             );
@@ -167,7 +167,7 @@ public class DmodeTest : TestFixture
                 }
             );
 
-        resp.data.DmodeExpedition.Should()
+        resp.Data.DmodeExpedition.Should()
             .BeEquivalentTo(
                 new DmodeExpedition()
                 {
@@ -188,7 +188,7 @@ public class DmodeTest : TestFixture
             );
 
         finishResp
-            .data.DmodeExpedition.Should()
+            .Data.DmodeExpedition.Should()
             .BeEquivalentTo(
                 new DmodeExpedition()
                 {
@@ -198,17 +198,17 @@ public class DmodeTest : TestFixture
                     CharaId4 = Charas.Empty,
                     TargetFloorNum = 30,
                     State = ExpeditionState.Waiting,
-                    StartTime = resp.data.DmodeExpedition.StartTime
+                    StartTime = resp.Data.DmodeExpedition.StartTime
                 }
             );
         finishResp
-            .data.DmodeIngameResult.CharaIdList.Should()
+            .Data.DmodeIngameResult.CharaIdList.Should()
             .BeEquivalentTo(
                 new[] { Charas.HunterBerserker, Charas.Empty, Charas.Empty, Charas.Empty }
             );
-        finishResp.data.DmodeIngameResult.RewardTalismanList.Should().BeEmpty();
-        finishResp.data.DmodeIngameResult.TakeDmodePoint1.Should().Be(0);
-        finishResp.data.DmodeIngameResult.TakeDmodePoint2.Should().Be(0);
+        finishResp.Data.DmodeIngameResult.RewardTalismanList.Should().BeEmpty();
+        finishResp.Data.DmodeIngameResult.TakeDmodePoint1.Should().Be(0);
+        finishResp.Data.DmodeIngameResult.TakeDmodePoint2.Should().Be(0);
     }
 
     [Fact]
@@ -234,7 +234,7 @@ public class DmodeTest : TestFixture
                 }
             );
 
-        resp.data.DmodeExpedition.Should()
+        resp.Data.DmodeExpedition.Should()
             .BeEquivalentTo(
                 new DmodeExpedition()
                 {
@@ -257,7 +257,7 @@ public class DmodeTest : TestFixture
             );
 
         finishResp
-            .data.DmodeExpedition.Should()
+            .Data.DmodeExpedition.Should()
             .BeEquivalentTo(
                 new DmodeExpedition()
                 {
@@ -271,20 +271,20 @@ public class DmodeTest : TestFixture
                 }
             );
 
-        finishResp.data.DmodeIngameResult.TakeDmodePoint1.Should().BeGreaterThan(0);
-        finishResp.data.DmodeIngameResult.TakeDmodePoint2.Should().Be(0);
-        finishResp.data.DmodeIngameResult.RewardTalismanList.Should().NotBeEmpty();
+        finishResp.Data.DmodeIngameResult.TakeDmodePoint1.Should().BeGreaterThan(0);
+        finishResp.Data.DmodeIngameResult.TakeDmodePoint2.Should().Be(0);
+        finishResp.Data.DmodeIngameResult.RewardTalismanList.Should().NotBeEmpty();
         finishResp
-            .data.DmodeIngameResult.RewardTalismanList.Should()
+            .Data.DmodeIngameResult.RewardTalismanList.Should()
             .Contain(x => x.TalismanId == Talismans.HunterBerserker);
         finishResp
-            .data.DmodeIngameResult.RewardTalismanList.Should()
+            .Data.DmodeIngameResult.RewardTalismanList.Should()
             .Contain(x => x.TalismanId == Talismans.Chrom);
         finishResp
-            .data.DmodeIngameResult.RewardTalismanList.Should()
+            .Data.DmodeIngameResult.RewardTalismanList.Should()
             .Contain(x => x.TalismanId == Talismans.Cassandra);
         finishResp
-            .data.DmodeIngameResult.RewardTalismanList.Should()
+            .Data.DmodeIngameResult.RewardTalismanList.Should()
             .Contain(x => x.TalismanId == Talismans.GalaMym);
     }
 }

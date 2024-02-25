@@ -27,10 +27,10 @@ public class CombatEventTest : TestFixture
                 new CombatEventGetEventDataRequest(EventId)
             );
 
-        evtData.data.CombatEventUserData.Should().NotBeNull();
-        evtData.data.UserEventLocationRewardList.Should().NotBeNull();
-        evtData.data.EventRewardList.Should().NotBeNull();
-        evtData.data.EventTradeList.Should().NotBeNull();
+        evtData.Data.CombatEventUserData.Should().NotBeNull();
+        evtData.Data.UserEventLocationRewardList.Should().NotBeNull();
+        evtData.Data.EventRewardList.Should().NotBeNull();
+        evtData.Data.EventTradeList.Should().NotBeNull();
     }
 
     [Fact]
@@ -56,11 +56,11 @@ public class CombatEventTest : TestFixture
                 new CombatEventReceiveEventPointRewardRequest(EventId)
             );
 
-        evtResp.data.EventRewardEntityList.Should().HaveCount(1);
-        evtResp.data.EventRewardList.Should().HaveCount(1);
-        evtResp.data.EntityResult.Should().NotBeNull();
-        evtResp.data.UpdateDataList.Should().NotBeNull();
-        evtResp.data.UpdateDataList.CombatEventUserList.Should().HaveCount(1); // Reward is event item so we check this
+        evtResp.Data.EventRewardEntityList.Should().HaveCount(1);
+        evtResp.Data.EventRewardList.Should().HaveCount(1);
+        evtResp.Data.EntityResult.Should().NotBeNull();
+        evtResp.Data.UpdateDataList.Should().NotBeNull();
+        evtResp.Data.UpdateDataList.CombatEventUserList.Should().HaveCount(1); // Reward is event item so we check this
     }
 
     [Fact]
@@ -95,8 +95,8 @@ public class CombatEventTest : TestFixture
                 new CombatEventReceiveEventLocationRewardRequest(EventId, 2221302)
             );
 
-        evtResp.data.EventLocationRewardEntityList.Should().HaveCount(9);
-        evtResp.data.UserEventLocationRewardList.Should().HaveCount(1);
-        evtResp.data.UpdateDataList.Should().NotBeNull();
+        evtResp.Data.EventLocationRewardEntityList.Should().HaveCount(9);
+        evtResp.Data.UserEventLocationRewardList.Should().HaveCount(1);
+        evtResp.Data.UpdateDataList.Should().NotBeNull();
     }
 }

@@ -125,7 +125,7 @@ public class PartyTest : TestFixture
                     0
                 )
             )
-        ).data_headers.result_code.Should().Be(ResultCode.Success);
+        ).DataHeaders.result_code.Should().Be(ResultCode.Success);
     }
 
     [Fact]
@@ -231,7 +231,7 @@ public class PartyTest : TestFixture
                 "/party/update_party_name",
                 new PartyUpdatePartyNameRequest() { PartyNo = 2, PartyName = "LIblis Full Auto" }
             )
-        ).data;
+        ).Data;
 
         response.UpdateDataList.Should().NotBeNull();
 

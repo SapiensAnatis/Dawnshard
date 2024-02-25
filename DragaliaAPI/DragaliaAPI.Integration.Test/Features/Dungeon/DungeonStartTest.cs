@@ -30,7 +30,7 @@ public class DungeonStartTest : TestFixture
                     QuestId = 100010103
                 }
             )
-        ).data;
+        ).Data;
 
         Snapshot.Match(response.IngameData.PartyInfo.PartyUnitList, SnapshotOptions);
 
@@ -52,7 +52,7 @@ public class DungeonStartTest : TestFixture
                     QuestId = 100010103
                 }
             )
-        ).data;
+        ).Data;
 
         // Abuse of snapshots here is lazy, but the resulting JSON is thousands of lines long...
         Snapshot.Match(response.IngameData.PartyInfo.PartyUnitList, SnapshotOptions);
@@ -74,7 +74,7 @@ public class DungeonStartTest : TestFixture
                     QuestId = 100010103
                 }
             )
-        ).data;
+        ).Data;
 
         response
             .IngameData.PartyInfo.PartyUnitList.First(x =>
@@ -133,7 +133,7 @@ public class DungeonStartTest : TestFixture
                 "/dungeon_start/start_assign_unit",
                 request
             )
-        ).data;
+        ).Data;
 
         // Only test the first two since the others are empty
         Snapshot.Match(response.IngameData.PartyInfo.PartyUnitList.Take(2), SnapshotOptions);
@@ -170,7 +170,7 @@ public class DungeonStartTest : TestFixture
                 ensureSuccessHeader: false
             )
         )
-            .data_headers.result_code.Should()
+            .DataHeaders.result_code.Should()
             .Be(ResultCode.QuestStaminaSingleShort);
     }
 
@@ -202,7 +202,7 @@ public class DungeonStartTest : TestFixture
                 },
                 ensureSuccessHeader: false
             )
-        ).data_headers.result_code.Should().Be(ResultCode.Success);
+        ).DataHeaders.result_code.Should().Be(ResultCode.Success);
     }
 
     [Fact]
@@ -214,7 +214,7 @@ public class DungeonStartTest : TestFixture
                 new DungeonStartStartRequest() { QuestId = 204270302, PartyNoList = [1] }
             );
 
-        response.data.OddsInfo.Enemy.Should().Contain(x => x.ParamId == 204130320 && x.IsRare);
+        response.Data.OddsInfo.Enemy.Should().Contain(x => x.ParamId == 204130320 && x.IsRare);
     }
 
     [Fact]
@@ -228,14 +228,14 @@ public class DungeonStartTest : TestFixture
                 new DungeonStartStartRequest() { QuestId = earnEventQuestId, PartyNoList = [1] }
             );
 
-        response.data.OddsInfo.Enemy.Should().HaveCount(31);
+        response.Data.OddsInfo.Enemy.Should().HaveCount(31);
 
         QuestData questData = MasterAsset.QuestData[earnEventQuestId];
         IEnumerable<int> enemies = MasterAsset
             .QuestEnemies[$"{questData.Scene01}/{questData.AreaName01}".ToLowerInvariant()]
             .Enemies[questData.VariationType];
 
-        response.data.OddsInfo.Enemy.Should().HaveCountGreaterThan(enemies.Count());
+        response.Data.OddsInfo.Enemy.Should().HaveCountGreaterThan(enemies.Count());
     }
 
     [Fact]
@@ -257,7 +257,7 @@ public class DungeonStartTest : TestFixture
                 }
             );
 
-        response.data.IngameData.IsBotTutorial.Should().BeTrue();
+        response.Data.IngameData.IsBotTutorial.Should().BeTrue();
     }
 
     [Fact]
@@ -282,7 +282,7 @@ public class DungeonStartTest : TestFixture
                 }
             );
 
-        response.data.IngameData.IsBotTutorial.Should().BeFalse();
+        response.Data.IngameData.IsBotTutorial.Should().BeFalse();
     }
 
     private static readonly Func<MatchOptions, MatchOptions> SnapshotOptions = opts =>

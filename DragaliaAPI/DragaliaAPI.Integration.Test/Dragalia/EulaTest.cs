@@ -16,7 +16,7 @@ public class EulaTest : TestFixture
                 "eula/get_version_list",
                 new EulaGetVersionListRequest()
             )
-        ).data;
+        ).Data;
 
         response
             .VersionHashList.Should()
@@ -39,7 +39,7 @@ public class EulaTest : TestFixture
                 "eula/get_version",
                 new EulaGetVersionRequest("id_token", "gb", "en_eu")
             )
-        ).data;
+        ).Data;
 
         response
             .Should()
@@ -56,7 +56,7 @@ public class EulaTest : TestFixture
                 "eula/get_version",
                 new EulaGetVersionRequest("id_token", "not even a country", "c#")
             )
-        ).data;
+        ).Data;
 
         response
             .Should()

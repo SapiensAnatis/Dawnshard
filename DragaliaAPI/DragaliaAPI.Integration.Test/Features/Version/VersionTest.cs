@@ -23,7 +23,7 @@ public class VersionTest : TestFixture
                 "version/get_resource_version",
                 new VersionGetResourceVersionRequest(platform, "whatever")
             )
-        ).data;
+        ).Data;
 
         response.ResourceVersion.Should().Be(expectedVersion);
     }
@@ -41,7 +41,7 @@ public class VersionTest : TestFixture
                 ensureSuccessHeader: false
             )
         )
-            .data_headers.result_code.Should()
+            .DataHeaders.result_code.Should()
             .Be(ResultCode.CommonResourceVersionError);
     }
 
@@ -58,7 +58,7 @@ public class VersionTest : TestFixture
                 ensureSuccessHeader: false
             )
         )
-            .data_headers.result_code.Should()
+            .DataHeaders.result_code.Should()
             .Be(ResultCode.Success);
     }
 }
