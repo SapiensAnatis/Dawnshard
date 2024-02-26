@@ -6,7 +6,7 @@ using Testcontainers.PostgreSql;
 
 namespace DragaliaAPI.Integration.Test;
 
-public class TestContainersHelper : IAsyncLifetime
+public class TestContainersHelper
 {
     private const int PostgresContainerPort = 5432;
     private const int RedisContainerPort = 6379;
@@ -99,7 +99,7 @@ public class TestContainersHelper : IAsyncLifetime
         }
     }
 
-    public async Task InitializeAsync()
+    public async Task StartAsync()
     {
         if (!this.ContainersAvailable)
             return;
@@ -113,7 +113,7 @@ public class TestContainersHelper : IAsyncLifetime
         this.RedisPort = this.redisContainer.GetMappedPublicPort(RedisContainerPort);
     }
 
-    public async Task DisposeAsync()
+    public async Task StopAsync()
     {
         if (!this.ContainersAvailable)
             return;

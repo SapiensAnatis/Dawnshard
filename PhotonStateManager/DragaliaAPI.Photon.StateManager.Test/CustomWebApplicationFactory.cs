@@ -11,16 +11,30 @@ using StackExchange.Redis;
 
 namespace DragaliaAPI.Photon.StateManager.Test;
 
-public class CustomWebApplicationFactory : WebApplicationFactory<Program>
+public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
+    private readonly TestContainersHelper testContainersHelper;
+
+    public CustomWebApplicationFactory()
+    {
+        this.testContainersHelper = new();
+    }
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        Environment.SetEnvironmentVariable("RedisOptions__Hostname", TestContainers.RedisHost);
+        Environment.SetEnvironmentVariable(
+            "RedisOptions__Hostname",
+            this.testContainersHelper.RedisHost
+        );
         Environment.SetEnvironmentVariable(
             "RedisOptions__Port",
-            TestContainers.RedisPort.ToString()
+            this.testContainersHelper.RedisPort.ToString()
         );
     }
+
+    public Task InitializeAsync() => this.testContainersHelper.StartAsync();
+
+    Task IAsyncLifetime.DisposeAsync() => this.testContainersHelper.StopAsync();
 
     protected override void Dispose(bool disposing)
     {
