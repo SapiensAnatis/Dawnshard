@@ -263,10 +263,7 @@ public class WallRecordTest : TestFixture
             .BeEquivalentTo([flameLv6MissionId, clearAllLv6MissionId]);
 
         MissionGetMissionListResponse missionList = (
-            await this.Client.PostMsgpack<MissionGetMissionListResponse>(
-                "mission/get_mission_list",
-                new MissionGetMissionListRequest()
-            )
+            await this.Client.PostMsgpack<MissionGetMissionListResponse>("mission/get_mission_list")
         ).Data;
 
         missionList.NormalMissionList.Should().Contain(x => x.NormalMissionId == flameLv7MissionId);

@@ -12,10 +12,7 @@ public class RedoableSummonTest : TestFixture
     public async Task RedoableSummonGetData_ReturnsData()
     {
         RedoableSummonGetDataResponse response = (
-            await this.Client.PostMsgpack<RedoableSummonGetDataResponse>(
-                "redoable_summon/get_data",
-                new RedoableSummonGetDataRequest()
-            )
+            await this.Client.PostMsgpack<RedoableSummonGetDataResponse>("redoable_summon/get_data")
         ).Data;
 
         response.Should().NotBeNull();
@@ -44,10 +41,7 @@ public class RedoableSummonTest : TestFixture
         );
 
         RedoableSummonFixExecResponse response = (
-            await this.Client.PostMsgpack<RedoableSummonFixExecResponse>(
-                "redoable_summon/fix_exec",
-                new RedoableSummonFixExecRequest()
-            )
+            await this.Client.PostMsgpack<RedoableSummonFixExecResponse>("redoable_summon/fix_exec")
         ).Data;
 
         IEnumerable<int> newCharaIds = response

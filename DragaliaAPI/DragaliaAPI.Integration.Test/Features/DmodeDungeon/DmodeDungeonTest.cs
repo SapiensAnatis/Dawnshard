@@ -63,10 +63,7 @@ public class DmodeDungeonTest : TestFixture
             }
         );
 
-        await this.Client.PostMsgpack<DmodeDungeonFloorSkipResponse>(
-            "dmode_dungeon/floor_skip",
-            new DmodeDungeonFloorSkipRequest() { }
-        );
+        await this.Client.PostMsgpack<DmodeDungeonFloorSkipResponse>("dmode_dungeon/floor_skip");
 
         (await this.GetDungeonState()).Should().Be(DungeonState.WaitingSkipEnd);
 
@@ -114,20 +111,14 @@ public class DmodeDungeonTest : TestFixture
             }
         );
 
-        await this.Client.PostMsgpack<DmodeDungeonUserHaltResponse>(
-            "dmode_dungeon/user_halt",
-            new DmodeDungeonUserHaltRequest() { }
-        );
+        await this.Client.PostMsgpack<DmodeDungeonUserHaltResponse>("dmode_dungeon/user_halt");
 
         this.ApiContext.PlayerDmodeDungeons.AsNoTracking()
             .First(x => x.ViewerId == ViewerId)
             .State.Should()
             .Be(DungeonState.Halting);
 
-        await this.Client.PostMsgpack<DmodeDungeonRestartResponse>(
-            "dmode_dungeon/restart",
-            new DmodeDungeonRestartRequest() { }
-        );
+        await this.Client.PostMsgpack<DmodeDungeonRestartResponse>("dmode_dungeon/restart");
 
         (await this.GetDungeonState()).Should().Be(DungeonState.RestartEnd);
 

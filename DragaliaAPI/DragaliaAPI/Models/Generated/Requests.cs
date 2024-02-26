@@ -51,8 +51,7 @@ public partial class AbilityCrestBuildupPlusCountRequest
     public AbilityCrestBuildupPlusCountRequest() { }
 }
 
-[MessagePackObject]
-public partial class AbilityCrestGetAbilityCrestSetListRequest { }
+
 
 [MessagePackObject]
 public partial class AbilityCrestResetPlusCountRequest
@@ -120,8 +119,7 @@ public partial class AbilityCrestSetFavoriteRequest
     public AbilityCrestSetFavoriteRequest() { }
 }
 
-[MessagePackObject]
-public partial class AbilityCrestTradeGetListRequest { }
+
 
 [MessagePackObject]
 public partial class AbilityCrestTradeTradeRequest
@@ -162,8 +160,7 @@ public partial class AbilityCrestUpdateAbilityCrestSetNameRequest
     public AbilityCrestUpdateAbilityCrestSetNameRequest() { }
 }
 
-[MessagePackObject]
-public partial class AlbumIndexRequest { }
+
 
 [MessagePackObject]
 public partial class AmuletBuildupRequest
@@ -258,8 +255,7 @@ public partial class AmuletSetLockRequest
     public AmuletSetLockRequest() { }
 }
 
-[MessagePackObject]
-public partial class AmuletTradeGetListRequest { }
+
 
 [MessagePackObject]
 public partial class AmuletTradeTradeRequest
@@ -429,8 +425,7 @@ public partial class BattleRoyalStartMultiRequest
     public BattleRoyalStartMultiRequest() { }
 }
 
-[MessagePackObject]
-public partial class BattleRoyalStartRoyalMultiRequest { }
+
 
 [MessagePackObject]
 public partial class BuildEventEntryRequest
@@ -488,8 +483,7 @@ public partial class BuildEventReceiveDailyBonusRequest
     public BuildEventReceiveDailyBonusRequest() { }
 }
 
-[MessagePackObject]
-public partial class CartoonLatestRequest { }
+
 
 [MessagePackObject]
 public partial class CastleStoryReadRequest
@@ -596,8 +590,7 @@ public partial class CharaGetCharaUnitSetRequest
     public CharaGetCharaUnitSetRequest() { }
 }
 
-[MessagePackObject]
-public partial class CharaGetListRequest { }
+
 
 [MessagePackObject]
 public partial class CharaLimitBreakAndBuildupManaRequest
@@ -941,8 +934,7 @@ public partial class CraftResetNewRequest
     public CraftResetNewRequest() { }
 }
 
-[MessagePackObject]
-public partial class DeployGetDeployVersionRequest { }
+
 
 [MessagePackObject]
 public partial class DmodeBuildupServitorPassiveRequest
@@ -989,11 +981,9 @@ public partial class DmodeDungeonFloorRequest
     public DmodeDungeonFloorRequest() { }
 }
 
-[MessagePackObject]
-public partial class DmodeDungeonFloorSkipRequest { }
 
-[MessagePackObject]
-public partial class DmodeDungeonRestartRequest { }
+
+
 
 [MessagePackObject]
 public partial class DmodeDungeonStartRequest
@@ -1026,20 +1016,15 @@ public partial class DmodeDungeonStartRequest
     public DmodeDungeonStartRequest() { }
 }
 
-[MessagePackObject]
-public partial class DmodeDungeonSystemHaltRequest { }
 
-[MessagePackObject]
-public partial class DmodeDungeonUserHaltRequest { }
 
-[MessagePackObject]
-public partial class DmodeEntryRequest { }
 
-[MessagePackObject]
-public partial class DmodeExpeditionFinishRequest { }
 
-[MessagePackObject]
-public partial class DmodeExpeditionForceFinishRequest { }
+
+
+
+
+
 
 [MessagePackObject]
 public partial class DmodeExpeditionStartRequest
@@ -1059,8 +1044,7 @@ public partial class DmodeExpeditionStartRequest
     public DmodeExpeditionStartRequest() { }
 }
 
-[MessagePackObject]
-public partial class DmodeGetDataRequest { }
+
 
 [MessagePackObject]
 public partial class DmodeReadStoryRequest
@@ -1136,8 +1120,7 @@ public partial class DragonBuyGiftToSendRequest
     public DragonBuyGiftToSendRequest() { }
 }
 
-[MessagePackObject]
-public partial class DragonGetContactDataRequest { }
+
 
 [MessagePackObject]
 public partial class DragonLimitBreakRequest
@@ -1718,8 +1701,7 @@ public partial class EarnEventReceiveEventPointRewardRequest
     public EarnEventReceiveEventPointRewardRequest() { }
 }
 
-[MessagePackObject]
-public partial class EmblemGetListRequest { }
+
 
 [MessagePackObject]
 public partial class EmblemSetRequest
@@ -1776,8 +1758,7 @@ public partial class EulaAgreeAgreeRequest
     public EulaAgreeAgreeRequest() { }
 }
 
-[MessagePackObject]
-public partial class EulaGetVersionListRequest { }
+
 
 [MessagePackObject]
 public partial class EulaGetVersionRequest
@@ -2121,8 +2102,7 @@ public partial class FortBuildStartRequest
     public FortBuildStartRequest() { }
 }
 
-[MessagePackObject]
-public partial class FortGetDataRequest { }
+
 
 [MessagePackObject]
 public partial class FortGetMultiIncomeRequest
@@ -2234,14 +2214,11 @@ public partial class FortSetNewFortPlantRequest
     public FortSetNewFortPlantRequest() { }
 }
 
-[MessagePackObject]
-public partial class FriendAllReplyDenyRequest { }
 
-[MessagePackObject]
-public partial class FriendApplyListRequest { }
 
-[MessagePackObject]
-public partial class FriendAutoSearchRequest { }
+
+
+
 
 [MessagePackObject]
 public partial class FriendDeleteRequest
@@ -2257,11 +2234,9 @@ public partial class FriendDeleteRequest
     public FriendDeleteRequest() { }
 }
 
-[MessagePackObject]
-public partial class FriendFriendIndexRequest { }
 
-[MessagePackObject]
-public partial class FriendFriendListRequest { }
+
+
 
 [MessagePackObject]
 public partial class FriendGetSupportCharaDetailRequest
@@ -2277,8 +2252,7 @@ public partial class FriendGetSupportCharaDetailRequest
     public FriendGetSupportCharaDetailRequest() { }
 }
 
-[MessagePackObject]
-public partial class FriendGetSupportCharaRequest { }
+
 
 [MessagePackObject]
 public partial class FriendIdSearchRequest
@@ -2326,8 +2300,7 @@ public partial class FriendRequestCancelRequest
     public FriendRequestCancelRequest() { }
 }
 
-[MessagePackObject]
-public partial class FriendRequestListRequest { }
+
 
 [MessagePackObject]
 public partial class FriendRequestRequest
@@ -2640,11 +2613,9 @@ public partial class GuildGetGuildMemberDataRequest
     public GuildGetGuildMemberDataRequest() { }
 }
 
-[MessagePackObject]
-public partial class GuildIndexRequest { }
 
-[MessagePackObject]
-public partial class GuildInviteGetGuildInviteReceiveDataRequest { }
+
+
 
 [MessagePackObject]
 public partial class GuildInviteGetGuildInviteSendDataRequest
@@ -3161,8 +3132,7 @@ public partial class InquiryTopRequest
     public InquiryTopRequest() { }
 }
 
-[MessagePackObject]
-public partial class ItemGetListRequest { }
+
 
 [MessagePackObject]
 public partial class ItemUseRecoveryStaminaRequest
@@ -3178,8 +3148,7 @@ public partial class ItemUseRecoveryStaminaRequest
     public ItemUseRecoveryStaminaRequest() { }
 }
 
-[MessagePackObject]
-public partial class LoadIndexRequest { }
+
 
 [MessagePackObject]
 public partial class LoginIndexRequest
@@ -3465,11 +3434,9 @@ public partial class MemoryEventActivateRequest
     public MemoryEventActivateRequest() { }
 }
 
-[MessagePackObject]
-public partial class MissionGetDrillMissionListRequest { }
 
-[MessagePackObject]
-public partial class MissionGetMissionListRequest { }
+
+
 
 [MessagePackObject]
 public partial class MissionReceiveAlbumRewardRequest
@@ -3632,11 +3599,9 @@ public partial class MissionUnlockMainStoryGroupRequest
     public MissionUnlockMainStoryGroupRequest() { }
 }
 
-[MessagePackObject]
-public partial class MypageInfoRequest { }
 
-[MessagePackObject]
-public partial class OptionGetOptionRequest { }
+
+
 
 [MessagePackObject]
 public partial class OptionSetOptionRequest
@@ -3652,8 +3617,7 @@ public partial class OptionSetOptionRequest
     public OptionSetOptionRequest() { }
 }
 
-[MessagePackObject]
-public partial class PartyIndexRequest { }
+
 
 [MessagePackObject]
 public partial class PartySetMainPartyNoRequest
@@ -3724,8 +3688,7 @@ public partial class PartyUpdatePartyNameRequest
     public PartyUpdatePartyNameRequest() { }
 }
 
-[MessagePackObject]
-public partial class PlatformAchievementGetPlatformAchievementListRequest { }
+
 
 [MessagePackObject]
 public partial class PresentGetHistoryListRequest
@@ -3843,8 +3806,7 @@ public partial class QuestGetQuestClearPartyRequest
     public QuestGetQuestClearPartyRequest() { }
 }
 
-[MessagePackObject]
-public partial class QuestGetSupportUserListRequest { }
+
 
 [MessagePackObject]
 public partial class QuestOpenTreasureRequest
@@ -4075,11 +4037,9 @@ public partial class RaidEventReceiveRaidPointRewardRequest
     public RaidEventReceiveRaidPointRewardRequest() { }
 }
 
-[MessagePackObject]
-public partial class RedoableSummonFixExecRequest { }
 
-[MessagePackObject]
-public partial class RedoableSummonGetDataRequest { }
+
+
 
 [MessagePackObject]
 public partial class RedoableSummonPreExecRequest
@@ -4095,8 +4055,7 @@ public partial class RedoableSummonPreExecRequest
     public RedoableSummonPreExecRequest() { }
 }
 
-[MessagePackObject]
-public partial class RepeatEndRequest { }
+
 
 [MessagePackObject]
 public partial class ShopChargeCancelRequest
@@ -4144,11 +4103,9 @@ public partial class ShopGetDreamSelectUnitListRequest
     public ShopGetDreamSelectUnitListRequest() { }
 }
 
-[MessagePackObject]
-public partial class ShopGetListRequest { }
 
-[MessagePackObject]
-public partial class ShopGetProductListRequest { }
+
+
 
 [MessagePackObject]
 public partial class ShopItemSummonExecRequest
@@ -4168,8 +4125,7 @@ public partial class ShopItemSummonExecRequest
     public ShopItemSummonExecRequest() { }
 }
 
-[MessagePackObject]
-public partial class ShopItemSummonOddRequest { }
+
 
 [MessagePackObject]
 public partial class ShopMaterialShopPurchaseRequest
@@ -4305,8 +4261,7 @@ public partial class SimpleEventGetEventDataRequest
     public SimpleEventGetEventDataRequest() { }
 }
 
-[MessagePackObject]
-public partial class StampGetStampRequest { }
+
 
 [MessagePackObject]
 public partial class StampSetEquipStampRequest
@@ -4340,8 +4295,7 @@ public partial class StoryReadRequest
     public StoryReadRequest() { }
 }
 
-[MessagePackObject]
-public partial class StorySkipSkipRequest { }
+
 
 [MessagePackObject]
 public partial class SuggestionGetCategoryListRequest
@@ -4460,11 +4414,9 @@ public partial class SummonGetOddsDataRequest
     public SummonGetOddsDataRequest() { }
 }
 
-[MessagePackObject]
-public partial class SummonGetSummonHistoryRequest { }
 
-[MessagePackObject]
-public partial class SummonGetSummonListRequest { }
+
+
 
 [MessagePackObject]
 public partial class SummonGetSummonPointTradeRequest
@@ -4567,8 +4519,7 @@ public partial class TalismanSetLockRequest
     public TalismanSetLockRequest() { }
 }
 
-[MessagePackObject]
-public partial class TimeAttackRankingGetDataRequest { }
+
 
 [MessagePackObject]
 public partial class TimeAttackRankingReceiveTierRewardRequest
@@ -4602,11 +4553,9 @@ public partial class ToolAuthRequest
     public ToolAuthRequest() { }
 }
 
-[MessagePackObject]
-public partial class ToolGetMaintenanceTimeRequest { }
 
-[MessagePackObject]
-public partial class ToolGetServiceStatusRequest { }
+
+
 
 [MessagePackObject]
 public partial class ToolReauthRequest
@@ -4687,8 +4636,7 @@ public partial class ToolSignupRequest
     public ToolSignupRequest() { }
 }
 
-[MessagePackObject]
-public partial class TrackRecordUpdateProgressRequest { }
+
 
 [MessagePackObject]
 public partial class TransitionTransitionByNAccountRequest
@@ -4708,8 +4656,7 @@ public partial class TransitionTransitionByNAccountRequest
     public TransitionTransitionByNAccountRequest() { }
 }
 
-[MessagePackObject]
-public partial class TreasureTradeGetListAllRequest { }
+
 
 [MessagePackObject]
 public partial class TreasureTradeGetListRequest
@@ -4825,14 +4772,11 @@ public partial class UpdateResetNewRequest
     public UpdateResetNewRequest() { }
 }
 
-[MessagePackObject]
-public partial class UserGetNAccountInfoRequest { }
 
-[MessagePackObject]
-public partial class UserGetWalletBalanceRequest { }
 
-[MessagePackObject]
-public partial class UserLinkedNAccountRequest { }
+
+
+
 
 [MessagePackObject]
 public partial class UserOptInSettingRequest
@@ -4875,8 +4819,7 @@ public partial class UserRecoverStaminaByStoneRequest
     public UserRecoverStaminaByStoneRequest() { }
 }
 
-[MessagePackObject]
-public partial class UserWithdrawalRequest { }
+
 
 [MessagePackObject]
 public partial class VersionGetResourceVersionRequest

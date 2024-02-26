@@ -37,7 +37,6 @@ public class VersionTest : TestFixture
         (
             await this.Client.PostMsgpack<ResultCodeResponse>(
                 "fort/get_data",
-                new FortGetDataRequest(),
                 ensureSuccessHeader: false
             )
         )
@@ -54,7 +53,6 @@ public class VersionTest : TestFixture
         (
             await this.Client.PostMsgpack<ResultCodeResponse>(
                 "tool/get_service_status",
-                new FortGetDataRequest(),
                 ensureSuccessHeader: false
             )
         )

@@ -16,9 +16,7 @@ public class TimeAttackController(
 {
     [Route("get_data")]
     [HttpPost]
-    public DragaliaResult<TimeAttackRankingGetDataResponse> GetData(
-        TimeAttackRankingGetDataRequest request
-    )
+    public DragaliaResult<TimeAttackRankingGetDataResponse> GetData()
     {
         IEnumerable<RankingTierRewardList> rewardList = timeAttackService
             .GetRewards()

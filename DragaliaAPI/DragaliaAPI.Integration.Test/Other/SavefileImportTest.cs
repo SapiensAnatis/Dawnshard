@@ -75,7 +75,7 @@ public class SavefileImportTest : TestFixture
             .BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMinutes(1));
 
         LoadIndexResponse storedSavefile = (
-            await this.Client.PostMsgpack<LoadIndexResponse>("load/index", new LoadIndexRequest())
+            await this.Client.PostMsgpack<LoadIndexResponse>("load/index")
         ).Data;
 
         storedSavefile

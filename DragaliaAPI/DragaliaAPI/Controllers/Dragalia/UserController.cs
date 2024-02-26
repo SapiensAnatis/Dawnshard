@@ -27,7 +27,7 @@ public class UserController : DragaliaControllerBase
     }
 
     [HttpPost("linked_n_account")]
-    public async Task<DragaliaResult> LinkedNAccount(UserLinkedNAccountRequest request)
+    public async Task<DragaliaResult> LinkedNAccount()
     {
         // This controller is meant to be used to set the 'Link a Nintendo Account' mission as complete
         DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync();
@@ -39,7 +39,7 @@ public class UserController : DragaliaControllerBase
     }
 
     [HttpPost("get_n_account_info")]
-    public DragaliaResult GetNAccountInfo(UserGetNAccountInfoRequest request)
+    public DragaliaResult GetNAccountInfo()
     {
         // TODO: Replace this with an API call to BaaS to return actual information
         return this.Ok(

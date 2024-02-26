@@ -21,10 +21,7 @@ public class ToolTest : TestFixture
     public async Task ServiceStatus_ReturnsCorrectResponse()
     {
         ToolGetServiceStatusResponse response = (
-            await this.Client.PostMsgpack<ToolGetServiceStatusResponse>(
-                "tool/get_service_status",
-                new ToolGetServiceStatusRequest()
-            )
+            await this.Client.PostMsgpack<ToolGetServiceStatusResponse>("tool/get_service_status")
         ).Data;
 
         response.ServiceStatus.Should().Be(1);

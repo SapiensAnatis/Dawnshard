@@ -529,8 +529,7 @@ public class AbilityCrestTest : TestFixture
 
         AbilityCrestGetAbilityCrestSetListResponse data = (
             await this.Client.PostMsgpack<AbilityCrestGetAbilityCrestSetListResponse>(
-                "ability_crest/get_ability_crest_set_list",
-                new AbilityCrestGetAbilityCrestSetListRequest()
+                "ability_crest/get_ability_crest_set_list"
             )
         ).Data!;
 

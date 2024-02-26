@@ -36,10 +36,7 @@ public class MemoryEventTest : TestFixture
         );
 
         MissionGetMissionListResponse missionListResponse = (
-            await this.Client.PostMsgpack<MissionGetMissionListResponse>(
-                "mission/get_mission_list",
-                new MissionGetMissionListRequest() { }
-            )
+            await this.Client.PostMsgpack<MissionGetMissionListResponse>("mission/get_mission_list")
         ).Data;
 
         missionListResponse

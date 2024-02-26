@@ -13,10 +13,7 @@ public class StampTest : TestFixture
     public async Task GetStamp_ReturnsStamps()
     {
         StampGetStampResponse data = (
-            await this.Client.PostMsgpack<StampGetStampResponse>(
-                $"{Controller}/get_stamp",
-                new StampGetStampRequest()
-            )
+            await this.Client.PostMsgpack<StampGetStampResponse>($"{Controller}/get_stamp")
         ).Data;
 
         data.StampList.Should().HaveCount(123);

@@ -259,9 +259,7 @@ public class AbilityCrestControllerTest
             .Returns(new List<DbAbilityCrestSet>().AsQueryable().BuildMock());
 
         AbilityCrestGetAbilityCrestSetListResponse data = (
-            await this.abilityCrestController.GetAbilityCrestSetList(
-                new AbilityCrestGetAbilityCrestSetListRequest()
-            )
+            await this.abilityCrestController.GetAbilityCrestSetList()
         ).GetData<AbilityCrestGetAbilityCrestSetListResponse>()!;
 
         int setNo = 1;
@@ -317,9 +315,7 @@ public class AbilityCrestControllerTest
             );
 
         AbilityCrestGetAbilityCrestSetListResponse data = (
-            await this.abilityCrestController.GetAbilityCrestSetList(
-                new AbilityCrestGetAbilityCrestSetListRequest()
-            )
+            await this.abilityCrestController.GetAbilityCrestSetList()
         ).GetData<AbilityCrestGetAbilityCrestSetListResponse>()!;
 
         int setNo = 1;
