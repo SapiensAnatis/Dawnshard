@@ -7318,7 +7318,6 @@ public partial class DragonList
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
     public bool IsNew { get; set; }
 
-
     [Key("skill_1_level")]
     public int Skill1Level { get; set; }
 
@@ -11885,14 +11884,12 @@ public partial class UpdateDataList
 
     [Key("party_power_data")]
     public PartyPowerData PartyPowerData { get; set; }
-   
+
     [Key("fort_bonus_list")]
     public FortBonusList FortBonusList { get; set; }
 
-
     [Key("current_main_story_mission")]
     public CurrentMainStoryMission CurrentMainStoryMission { get; set; }
-
 
     [Key("user_guild_data")]
     public UserGuildData UserGuildData { get; set; }
@@ -11900,10 +11897,8 @@ public partial class UpdateDataList
     [Key("guild_data")]
     public GuildData GuildData { get; set; }
 
-
     [Key("dmode_info")]
     public DmodeInfo DmodeInfo { get; set; }
-
 
     [Key("present_notice")]
     public PresentNotice PresentNotice { get; set; }

@@ -266,10 +266,7 @@ public class SummonController(
                         : bannerData.SingleCrystal * numSummons;
                 break;
             case PaymentTypes.Ticket:
-                paymentCost =
-                    summonRequest.ExecType == SummonExecTypes.Tenfold
-                        ? 1
-                        : numSummons;
+                paymentCost = summonRequest.ExecType == SummonExecTypes.Tenfold ? 1 : numSummons;
                 break;
             case PaymentTypes.FreeDailyExecDependant:
             case PaymentTypes.FreeDailyTenfold:
@@ -369,15 +366,15 @@ public class SummonController(
             switch (result.Rarity)
             {
                 case 5:
-                    {
-                        lastIndexOfRare5 = index;
+                {
+                    lastIndexOfRare5 = index;
 
-                        if (result.EntityType is EntityTypes.Chara)
-                            countOfRare5Char++;
-                        else
-                            countOfRare5Dragon++;
-                        break;
-                    }
+                    if (result.EntityType is EntityTypes.Chara)
+                        countOfRare5Char++;
+                    else
+                        countOfRare5Dragon++;
+                    break;
+                }
                 case 4:
                     countOfRare4++;
                     break;
