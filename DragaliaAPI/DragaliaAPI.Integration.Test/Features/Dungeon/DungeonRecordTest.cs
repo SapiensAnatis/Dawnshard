@@ -882,7 +882,7 @@ public class DungeonRecordTest : TestFixture
                 }
             );
 
-        response.DataHeaders.result_code.Should().Be(ResultCode.Success);
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
 
     [Fact]
@@ -1012,7 +1012,7 @@ public class DungeonRecordTest : TestFixture
                 },
                 ensureSuccessHeader: false
             )
-        ).DataHeaders.result_code.Should().Be(ResultCode.QuestStaminaSingleShort);
+        ).DataHeaders.ResultCode.Should().Be(ResultCode.QuestStaminaSingleShort);
     }
 
     [Fact]
@@ -1067,7 +1067,7 @@ public class DungeonRecordTest : TestFixture
                 },
                 ensureSuccessHeader: false
             )
-        ).DataHeaders.result_code.Should().Be(ResultCode.Success);
+        ).DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
 
     [Fact]

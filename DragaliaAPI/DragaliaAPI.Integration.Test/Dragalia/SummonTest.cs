@@ -247,8 +247,8 @@ public class SummonTest : TestFixture
             }
         );
 
-        DragaliaResponse<SummonRequestData> response = (
-            await this.Client.PostMsgpack<SummonRequestData>(
+        DragaliaResponse<SummonRequestResponse> response =
+            await this.Client.PostMsgpack<SummonRequestResponse>(
                 "summon/request",
                 new SummonRequestRequest(
                     1020203,
@@ -258,10 +258,9 @@ public class SummonTest : TestFixture
                     new PaymentTarget(1, 1)
                 ),
                 ensureSuccessHeader: false
-            )
-        );
+            );
 
-        response.data_headers.result_code.Should().Be(ResultCode.Success);
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
 
     [Fact]
@@ -276,8 +275,8 @@ public class SummonTest : TestFixture
             }
         );
 
-        DragaliaResponse<SummonRequestData> response = (
-            await this.Client.PostMsgpack<SummonRequestData>(
+        DragaliaResponse<SummonRequestResponse> response =
+            await this.Client.PostMsgpack<SummonRequestResponse>(
                 "summon/request",
                 new SummonRequestRequest(
                     1020203,
@@ -287,10 +286,9 @@ public class SummonTest : TestFixture
                     new PaymentTarget(5, 5)
                 ),
                 ensureSuccessHeader: false
-            )
-        );
+            );
 
-        response.data_headers.result_code.Should().Be(ResultCode.Success);
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
 
     [Fact]
@@ -305,8 +303,8 @@ public class SummonTest : TestFixture
             }
         );
 
-        DragaliaResponse<SummonRequestData> response = (
-            await this.Client.PostMsgpack<SummonRequestData>(
+        DragaliaResponse<SummonRequestResponse> response =
+            await this.Client.PostMsgpack<SummonRequestResponse>(
                 "summon/request",
                 new SummonRequestRequest(
                     1020203,
@@ -316,10 +314,9 @@ public class SummonTest : TestFixture
                     new PaymentTarget(1, 1)
                 ),
                 ensureSuccessHeader: false
-            )
-        );
+            );
 
-        response.data_headers.result_code.Should().Be(ResultCode.Success);
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
 
     [Theory]
@@ -333,21 +330,20 @@ public class SummonTest : TestFixture
             new DbSummonTicket() { SummonTicketId = SummonTickets.TenfoldSummon, KeyId = 1, }
         );
 
-        DragaliaResponse<SummonRequestData> response = (
-            await this.Client.PostMsgpack<SummonRequestData>(
+        DragaliaResponse<SummonRequestResponse> response =
+            await this.Client.PostMsgpack<SummonRequestResponse>(
                 "summon/request",
                 new SummonRequestRequest(
                     1020203,
-                    SummonExecTypes.Tenfold,
+                    types,
                     0,
                     PaymentTypes.Ticket,
                     new PaymentTarget(0, 1)
                 ),
                 ensureSuccessHeader: false
-            )
-        );
+            );
 
-        response.data_headers.result_code.Should().Be(ResultCode.CommonMaterialShort);
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.CommonMaterialShort);
     }
 
     private async Task CheckRewardInDb(AtgenResultUnitList reward)

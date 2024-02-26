@@ -41,7 +41,7 @@ public class VersionTest : TestFixture
                 ensureSuccessHeader: false
             )
         )
-            .DataHeaders.result_code.Should()
+            .DataHeaders.ResultCode.Should()
             .Be(ResultCode.CommonResourceVersionError);
     }
 
@@ -58,7 +58,7 @@ public class VersionTest : TestFixture
                 ensureSuccessHeader: false
             )
         )
-            .DataHeaders.result_code.Should()
+            .DataHeaders.ResultCode.Should()
             .Be(ResultCode.Success);
     }
 }

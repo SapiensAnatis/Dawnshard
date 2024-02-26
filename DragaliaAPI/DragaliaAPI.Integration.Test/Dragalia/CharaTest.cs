@@ -216,7 +216,7 @@ public class CharaTest : TestFixture
             )
         );
 
-        response.DataHeaders.result_code.Should().Be(ResultCode.Success);
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
 
     [Fact]

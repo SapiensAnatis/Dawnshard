@@ -170,7 +170,7 @@ public class DungeonStartTest : TestFixture
                 ensureSuccessHeader: false
             )
         )
-            .DataHeaders.result_code.Should()
+            .DataHeaders.ResultCode.Should()
             .Be(ResultCode.QuestStaminaSingleShort);
     }
 
@@ -202,7 +202,7 @@ public class DungeonStartTest : TestFixture
                 },
                 ensureSuccessHeader: false
             )
-        ).DataHeaders.result_code.Should().Be(ResultCode.Success);
+        ).DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
 
     [Fact]

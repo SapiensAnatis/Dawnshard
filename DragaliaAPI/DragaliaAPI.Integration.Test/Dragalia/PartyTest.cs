@@ -125,7 +125,7 @@ public class PartyTest : TestFixture
                     0
                 )
             )
-        ).DataHeaders.result_code.Should().Be(ResultCode.Success);
+        ).DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
 
     [Fact]

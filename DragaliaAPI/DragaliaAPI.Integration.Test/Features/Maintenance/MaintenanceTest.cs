@@ -28,7 +28,7 @@ public class MaintenanceTest : TestFixture
                 ensureSuccessHeader: false
             );
 
-        response.DataHeaders.result_code.Should().Be(ResultCode.CommonMaintenance);
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.CommonMaintenance);
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public class MaintenanceTest : TestFixture
                 ensureSuccessHeader: false
             );
 
-        response.DataHeaders.result_code.Should().Be(ResultCode.Success);
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
         response.Data.ServiceStatus.Should().Be(1);
     }
 

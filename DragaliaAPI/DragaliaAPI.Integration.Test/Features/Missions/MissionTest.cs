@@ -20,7 +20,7 @@ public class MissionTest : TestFixture
                 new MissionUnlockDrillMissionGroupRequest(1)
             );
 
-        resp.DataHeaders.result_code.Should().Be(ResultCode.Success);
+        resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
         resp.Data.DrillMissionList.Should()
             .HaveCount(55)
             .And.ContainEquivalentOf(
@@ -43,7 +43,7 @@ public class MissionTest : TestFixture
                 new MissionUnlockMainStoryGroupRequest(1)
             );
 
-        resp.DataHeaders.result_code.Should().Be(ResultCode.Success);
+        resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
         resp.Data.MainStoryMissionList.Should().HaveCount(5);
         // Don't test for a specific quest as other tests mess with the quest progress
     }
@@ -62,7 +62,7 @@ public class MissionTest : TestFixture
                 new QuestReadStoryRequest() { QuestStoryId = 1000106 }
             );
 
-        resp.DataHeaders.result_code.Should().Be(ResultCode.Success);
+        resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
         resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.IsUpdate.Should().BeTrue();
         resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.CompletedMissionCount.Should()
             .BeGreaterThan(1); // One has to be completed because of the above, multiple can be completed due to other factors
@@ -75,7 +75,7 @@ public class MissionTest : TestFixture
                 new MissionReceiveDrillRewardRequest(new[] { 100200 }, Enumerable.Empty<int>())
             );
 
-        rewardResp.DataHeaders.result_code.Should().Be(ResultCode.Success);
+        rewardResp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
         rewardResp.Data.EntityResult.ConvertedEntityList.Should().NotBeNull();
         rewardResp.Data.DrillMissionList.Should().HaveCount(55);
     }
@@ -94,7 +94,7 @@ public class MissionTest : TestFixture
                 new TreasureTradeTradeRequest() { TreasureTradeId = 10020101, TradeCount = 1 }
             );
 
-        resp.DataHeaders.result_code.Should().Be(ResultCode.Success);
+        resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
         resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.IsUpdate.Should().BeTrue();
         resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.CompletedMissionCount.Should()
             .BeGreaterThan(1); // One has to be completed because of the above, multiple can be completed due to other factors
@@ -135,7 +135,7 @@ public class MissionTest : TestFixture
                 }
             );
 
-        resp.DataHeaders.result_code.Should().Be(ResultCode.Success);
+        resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
         resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.IsUpdate.Should().BeTrue();
         resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.CompletedMissionCount.Should()
             .BeGreaterThan(1);
@@ -412,7 +412,7 @@ public class MissionTest : TestFixture
                 ensureSuccessHeader: false
             );
 
-        response.DataHeaders.result_code.Should().Be(ResultCode.Success);
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
 
     [Fact]

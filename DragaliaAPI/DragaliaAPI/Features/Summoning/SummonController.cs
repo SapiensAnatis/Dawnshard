@@ -283,10 +283,10 @@ public class SummonController(
 
         int entityId = 0;
 
-        if (summonRequest.payment_type == PaymentTypes.Ticket)
+        if (summonRequest.PaymentType == PaymentTypes.Ticket)
         {
             // TODO: Does not capture special ticket logic.
-            SummonTickets ticketType = summonRequest.exec_type switch
+            SummonTickets ticketType = summonRequest.ExecType switch
             {
                 SummonExecTypes.Single => SummonTickets.SingleSummon,
                 SummonExecTypes.Tenfold => SummonTickets.TenfoldSummon,
