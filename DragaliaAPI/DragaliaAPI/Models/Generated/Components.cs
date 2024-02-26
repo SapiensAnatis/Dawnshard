@@ -8977,12 +8977,6 @@ public partial class IngameResultData
     [Key("quest_id")]
     public int QuestId { get; set; }
 
-    [Key("reward_record")]
-    public RewardRecord RewardRecord { get; set; }
-
-    [Key("grow_record")]
-    public GrowRecord GrowRecord { get; set; }
-
     [Key("start_time")]
     public DateTimeOffset StartTime { get; set; }
 
