@@ -160,9 +160,7 @@ public class StoryService(
 
         await userDataRepository.GiveWyrmite(wyrmiteReward);
         story.State = StoryState.Read;
-        rewardList.Add(
-            new() { entity_type = EntityTypes.Wyrmite, entity_quantity = wyrmiteReward }
-        );
+        rewardList.Add(new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = wyrmiteReward });
         return rewardList;
     }
 
@@ -176,9 +174,9 @@ public class StoryService(
             {
                 new()
                 {
-                    entity_type = EntityTypes.Wyrmite,
-                    entity_id = 0,
-                    entity_quantity = CastleStoryWyrmite
+                    EntityType = EntityTypes.Wyrmite,
+                    EntityId = 0,
+                    EntityQuantity = CastleStoryWyrmite
                 }
             };
 
@@ -202,7 +200,7 @@ public class StoryService(
         List<AtgenBuildEventRewardEntityList> rewardList =
             new()
             {
-                new() { entity_type = EntityTypes.Wyrmite, entity_quantity = QuestStoryWyrmite }
+                new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = QuestStoryWyrmite }
             };
 
         if (
@@ -229,9 +227,9 @@ public class StoryService(
                 rewardList.Add(
                     new()
                     {
-                        entity_id = reward.Id,
-                        entity_type = reward.Type,
-                        entity_quantity = reward.Quantity,
+                        EntityId = reward.Id,
+                        EntityType = reward.Type,
+                        EntityQuantity = reward.Quantity,
                     }
                 );
             }
@@ -251,9 +249,9 @@ public class StoryService(
             rewardList.Add(
                 new AtgenBuildEventRewardEntityList()
                 {
-                    entity_id = (int)eventData.EventCharaId,
-                    entity_quantity = 1,
-                    entity_type = EntityTypes.Chara
+                    EntityId = (int)eventData.EventCharaId,
+                    EntityQuantity = 1,
+                    EntityType = EntityTypes.Chara
                 }
             );
         }
@@ -275,7 +273,7 @@ public class StoryService(
         List<AtgenBuildEventRewardEntityList> rewardList =
             new()
             {
-                new() { entity_type = EntityTypes.Wyrmite, entity_quantity = QuestStoryWyrmite }
+                new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = QuestStoryWyrmite }
             };
 
         // TODO(Events): ??? This is not used for compendium (maybe for collect events)
@@ -300,9 +298,9 @@ public class StoryService(
             {
                 new()
                 {
-                    entity_type = EntityTypes.Wyrmite,
-                    entity_id = 0,
-                    entity_quantity = DmodeStoryWyrmite
+                    EntityType = EntityTypes.Wyrmite,
+                    EntityId = 0,
+                    EntityQuantity = DmodeStoryWyrmite
                 },
                 dmodePoint1Entity.ToBuildEventRewardEntityList(),
                 dmodePoint2Entity.ToBuildEventRewardEntityList()
@@ -318,14 +316,14 @@ public class StoryService(
     )
     {
         IEnumerable<AtgenDuplicateEntityList> newGetEntityList = rewardList
-            .Where(x => x.entity_type is EntityTypes.Dragon or EntityTypes.Chara)
+            .Where(x => x.EntityType is EntityTypes.Dragon or EntityTypes.Chara)
             .Select(x => new AtgenDuplicateEntityList()
             {
-                entity_id = x.entity_id,
-                entity_type = x.entity_type,
+                EntityId = x.EntityId,
+                EntityType = x.EntityType,
             });
 
-        return new() { new_get_entity_list = newGetEntityList, };
+        return new() { NewGetEntityList = newGetEntityList, };
     }
 
     public static AtgenQuestStoryRewardList ToQuestStoryReward(
@@ -335,13 +333,13 @@ public class StoryService(
         AtgenQuestStoryRewardList questReward =
             new()
             {
-                entity_id = reward.entity_id,
-                entity_type = reward.entity_type,
-                entity_quantity = reward.entity_quantity
+                EntityId = reward.EntityId,
+                EntityType = reward.EntityType,
+                EntityQuantity = reward.EntityQuantity
             };
 
-        if (reward.entity_type is EntityTypes.Chara or EntityTypes.Dragon)
-            questReward.entity_level = 1;
+        if (reward.EntityType is EntityTypes.Chara or EntityTypes.Dragon)
+            questReward.EntityLevel = 1;
 
         return questReward;
     }

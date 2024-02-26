@@ -90,12 +90,12 @@ public class DungeonStartService(
 
         QuestData questInfo = MasterAsset.QuestData.Get(questId);
 
-        result.party_info.party_unit_list = await ProcessDetailedUnitList(detailedPartyUnits);
-        result.dungeon_key = await dungeonService.StartDungeon(
+        result.PartyInfo.PartyUnitList = await ProcessDetailedUnitList(detailedPartyUnits);
+        result.DungeonKey = await dungeonService.StartDungeon(
             new()
             {
                 QuestData = questInfo,
-                Party = party.Where(x => x.chara_id != 0),
+                Party = party.Where(x => x.CharaId != 0),
                 SupportViewerId = supportViewerId
             }
         );
@@ -103,7 +103,7 @@ public class DungeonStartService(
         if (repeatSetting != null)
         {
             await autoRepeatService.SetRepeatSetting(repeatSetting);
-            result.repeat_state = 1;
+            result.RepeatState = 1;
         }
         else
         {
@@ -116,7 +116,7 @@ public class DungeonStartService(
         )
         {
             logger.LogDebug("Detected co-op tutorial: setting is_bot_tutorial");
-            result.is_bot_tutorial = true;
+            result.IsBotTutorial = true;
         }
 
         return result;
@@ -149,12 +149,12 @@ public class DungeonStartService(
 
         QuestData questInfo = MasterAsset.QuestData.Get(questId);
 
-        result.party_info.party_unit_list = await ProcessDetailedUnitList(detailedPartyUnits);
-        result.dungeon_key = await dungeonService.StartDungeon(
+        result.PartyInfo.PartyUnitList = await ProcessDetailedUnitList(detailedPartyUnits);
+        result.DungeonKey = await dungeonService.StartDungeon(
             new()
             {
                 QuestData = questInfo,
-                Party = party.Where(x => x.chara_id != 0),
+                Party = party.Where(x => x.CharaId != 0),
                 SupportViewerId = supportViewerId
             }
         );
@@ -179,11 +179,11 @@ public class DungeonStartService(
             .BuildDetailedPartyUnit(partyQuery, partyNo)
             .ToListAsync();
 
-        result.party_info.party_unit_list = await ProcessDetailedUnitList(detailedPartyUnits);
-        result.dungeon_key = await dungeonService.StartDungeon(
+        result.PartyInfo.PartyUnitList = await ProcessDetailedUnitList(detailedPartyUnits);
+        result.DungeonKey = await dungeonService.StartDungeon(
             new()
             {
-                Party = party.Where(x => x.chara_id != 0),
+                Party = party.Where(x => x.CharaId != 0),
                 WallId = wallId,
                 WallLevel = wallLevel,
                 SupportViewerId = supportViewerId
@@ -218,11 +218,11 @@ public class DungeonStartService(
             );
         }
 
-        result.party_info.party_unit_list = await ProcessDetailedUnitList(detailedPartyUnits);
-        result.dungeon_key = await dungeonService.StartDungeon(
+        result.PartyInfo.PartyUnitList = await ProcessDetailedUnitList(detailedPartyUnits);
+        result.DungeonKey = await dungeonService.StartDungeon(
             new()
             {
-                Party = party.Where(x => x.chara_id != 0),
+                Party = party.Where(x => x.CharaId != 0),
                 WallId = wallId,
                 WallLevel = wallLevel,
                 SupportViewerId = supportViewerId
@@ -246,26 +246,25 @@ public class DungeonStartService(
 
         return new()
         {
-            quest_id = questId,
-            play_count = quest?.PlayCount ?? 0,
-            is_mission_clear_1 = quest?.IsMissionClear1 ?? false,
-            is_mission_clear_2 = quest?.IsMissionClear2 ?? false,
-            is_mission_clear_3 = quest?.IsMissionClear3 ?? false,
+            QuestId = questId,
+            PlayCount = quest?.PlayCount ?? 0,
+            IsMissionClear1 = quest?.IsMissionClear1 ?? false,
+            IsMissionClear2 = quest?.IsMissionClear2 ?? false,
+            IsMissionClear3 = quest?.IsMissionClear3 ?? false,
         };
     }
 
     private async Task<AtgenSupportData> GetSupportData(ulong supportViewerId)
     {
-        QuestGetSupportUserListData helperList = await helperService.GetHelpers();
+        QuestGetSupportUserListResponse helperList = await helperService.GetHelpers();
 
-        UserSupportList? helperInfo = helperList.support_user_list.FirstOrDefault(helper =>
-            helper.viewer_id == supportViewerId
+        UserSupportList? helperInfo = helperList.SupportUserList.FirstOrDefault(helper =>
+            helper.ViewerId == supportViewerId
         );
 
-        AtgenSupportUserDetailList? helperDetails =
-            helperList.support_user_detail_list.FirstOrDefault(helper =>
-                helper.viewer_id == supportViewerId
-            );
+        AtgenSupportUserDetailList? helperDetails = helperList.SupportUserDetailList.FirstOrDefault(
+            helper => helper.ViewerId == supportViewerId
+        );
 
         if (helperInfo is not null && helperDetails is not null)
             return helperService.BuildHelperData(helperInfo, helperDetails);
@@ -308,23 +307,23 @@ public class DungeonStartService(
         {
             for (int i = units.Count; i < 4; i++)
             {
-                units.Add(new PartyUnitList { position = i + 1 });
+                units.Add(new PartyUnitList { Position = i + 1 });
             }
         }
 
         foreach (PartyUnitList unit in units)
         {
-            unit.chara_data ??= new CharaList();
-            unit.dragon_data ??= new DragonList();
-            unit.weapon_skin_data ??= new GameWeaponSkin();
-            unit.weapon_body_data ??= new GameWeaponBody();
-            unit.crest_slot_type_1_crest_list ??= Enumerable.Empty<GameAbilityCrest>();
-            unit.crest_slot_type_2_crest_list ??= Enumerable.Empty<GameAbilityCrest>();
-            unit.crest_slot_type_3_crest_list ??= Enumerable.Empty<GameAbilityCrest>();
-            unit.talisman_data ??= new TalismanList();
-            unit.edit_skill_1_chara_data ??= new EditSkillCharaData();
-            unit.edit_skill_2_chara_data ??= new EditSkillCharaData();
-            unit.game_weapon_passive_ability_list ??= Enumerable.Empty<WeaponPassiveAbilityList>();
+            unit.CharaData ??= new CharaList();
+            unit.DragonData ??= new DragonList();
+            unit.WeaponSkinData ??= new GameWeaponSkin();
+            unit.WeaponBodyData ??= new GameWeaponBody();
+            unit.CrestSlotType1CrestList ??= Enumerable.Empty<GameAbilityCrest>();
+            unit.CrestSlotType2CrestList ??= Enumerable.Empty<GameAbilityCrest>();
+            unit.CrestSlotType3CrestList ??= Enumerable.Empty<GameAbilityCrest>();
+            unit.TalismanData ??= new TalismanList();
+            unit.EditSkill1CharaData ??= new EditSkillCharaData();
+            unit.EditSkill2CharaData ??= new EditSkillCharaData();
+            unit.GameWeaponPassiveAbilityList ??= Enumerable.Empty<WeaponPassiveAbilityList>();
         }
 
         return units;
@@ -338,7 +337,7 @@ public class DungeonStartService(
                 unit.UnitNo += 4;
         }
 
-        return partyUnits.Select(mapper.Map<PartySettingList>).OrderBy(x => x.unit_no).ToList();
+        return partyUnits.Select(mapper.Map<PartySettingList>).OrderBy(x => x.UnitNo).ToList();
     }
 
     private async Task<IngameData> InitializeIngameData(int questId, ulong? supportViewerId = null)
@@ -346,12 +345,12 @@ public class DungeonStartService(
         IngameData result =
             new()
             {
-                quest_id = questId,
-                viewer_id = (ulong)playerIdentityService.ViewerId,
-                play_type = QuestPlayType.Default,
-                party_info = new() { support_data = new() },
-                start_time = DateTimeOffset.UtcNow,
-                is_host = true,
+                QuestId = questId,
+                ViewerId = (ulong)playerIdentityService.ViewerId,
+                PlayType = QuestPlayType.Default,
+                PartyInfo = new() { SupportData = new() },
+                StartTime = DateTimeOffset.UtcNow,
+                IsHost = true,
             };
 
         QuestData questInfo = MasterAsset.QuestData.Get(questId);
@@ -368,24 +367,24 @@ public class DungeonStartService(
             );
         }
 
-        result.area_info_list = questInfo.AreaInfo.Select(mapper.Map<AreaInfoList>);
-        result.dungeon_type = questInfo.DungeonType;
-        result.reborn_limit = questInfo.RebornLimit;
-        result.continue_limit = questInfo.ContinueLimit;
+        result.AreaInfoList = questInfo.AreaInfo.Select(mapper.Map<AreaInfoList>);
+        result.DungeonType = questInfo.DungeonType;
+        result.RebornLimit = questInfo.RebornLimit;
+        result.ContinueLimit = questInfo.ContinueLimit;
 
-        result.party_info.fort_bonus_list = await bonusService.GetBonusList();
-        result.party_info.event_boost = await bonusService.GetEventBoost(questInfo.Gid);
+        result.PartyInfo.FortBonusList = await bonusService.GetBonusList();
+        result.PartyInfo.EventBoost = await bonusService.GetEventBoost(questInfo.Gid);
 
-        logger.LogDebug("Using event boost {@boost}", result.party_info.event_boost);
+        logger.LogDebug("Using event boost {@boost}", result.PartyInfo.EventBoost);
 
         if (supportViewerId is not null and not 0)
         {
-            result.party_info.support_data = await GetSupportData(supportViewerId.Value);
+            result.PartyInfo.SupportData = await GetSupportData(supportViewerId.Value);
         }
 
-        result.party_info.event_passive_grow_list = (
+        result.PartyInfo.EventPassiveGrowList = (
             await eventService.GetEventPassiveList(questInfo.Gid)
-        ).event_passive_grow_list;
+        ).EventPassiveGrowList;
 
         return result;
     }

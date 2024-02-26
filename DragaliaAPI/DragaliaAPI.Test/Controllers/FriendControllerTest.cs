@@ -31,27 +31,28 @@ public class FriendControllerTest
     {
         this.mockHelperService.Setup(x => x.GetHelpers())
             .ReturnsAsync(
-                new QuestGetSupportUserListData()
+                new QuestGetSupportUserListResponse()
                 {
-                    support_user_list = new List<UserSupportList>() { TestData.supportListEuden },
-                    support_user_detail_list = new List<AtgenSupportUserDetailList>()
+                    SupportUserList = new List<UserSupportList>() { TestData.supportListEuden },
+                    SupportUserDetailList = new List<AtgenSupportUserDetailList>()
                     {
-                        new() { viewer_id = 1000, is_friend = true, },
+                        new() { ViewerId = 1000, IsFriend = true, },
                     }
                 }
             );
 
         DragaliaResult response = await this.friendController.GetSupportCharaDetail(
-            new FriendGetSupportCharaDetailRequest() { support_viewer_id = 1000 }
+            new FriendGetSupportCharaDetailRequest() { SupportViewerId = 1000 }
         );
 
-        FriendGetSupportCharaDetailData? data = response.GetData<FriendGetSupportCharaDetailData>();
+        FriendGetSupportCharaDetailResponse? data =
+            response.GetData<FriendGetSupportCharaDetailResponse>();
         data.Should().NotBeNull();
 
         data!
-            .support_user_data_detail.user_support_data.Should()
+            .SupportUserDataDetail.UserSupportData.Should()
             .BeEquivalentTo(TestData.supportListEuden);
-        data!.support_user_data_detail.is_friend.Should().Be(true);
+        data!.SupportUserDataDetail.IsFriend.Should().Be(true);
 
         this.mockHelperService.VerifyAll();
         this.mockBonusService.VerifyAll();
@@ -62,28 +63,29 @@ public class FriendControllerTest
     {
         this.mockHelperService.Setup(x => x.GetHelpers())
             .ReturnsAsync(
-                new QuestGetSupportUserListData()
+                new QuestGetSupportUserListResponse()
                 {
-                    support_user_list = new List<UserSupportList>() { TestData.supportListEuden },
-                    support_user_detail_list = new List<AtgenSupportUserDetailList>()
+                    SupportUserList = new List<UserSupportList>() { TestData.supportListEuden },
+                    SupportUserDetailList = new List<AtgenSupportUserDetailList>()
                     {
-                        new() { viewer_id = 1000, is_friend = true },
+                        new() { ViewerId = 1000, IsFriend = true },
                     }
                 }
             );
 
         DragaliaResult response = await this.friendController.GetSupportCharaDetail(
-            new FriendGetSupportCharaDetailRequest() { support_viewer_id = 0 }
+            new FriendGetSupportCharaDetailRequest() { SupportViewerId = 0 }
         );
 
-        FriendGetSupportCharaDetailData? data = response.GetData<FriendGetSupportCharaDetailData>();
+        FriendGetSupportCharaDetailResponse? data =
+            response.GetData<FriendGetSupportCharaDetailResponse>();
         data.Should().NotBeNull();
 
         data!
-            .support_user_data_detail.user_support_data.Should()
-            .BeEquivalentTo(HelperService.StubData.SupportListData.support_user_list.First());
+            .SupportUserDataDetail.UserSupportData.Should()
+            .BeEquivalentTo(HelperService.StubData.SupportListData.SupportUserList.First());
 
-        data!.support_user_data_detail.is_friend.Should().Be(false);
+        data!.SupportUserDataDetail.IsFriend.Should().Be(false);
 
         this.mockHelperService.VerifyAll();
         this.mockBonusService.VerifyAll();

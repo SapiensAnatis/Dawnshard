@@ -81,8 +81,8 @@ public class ItemSummonService : IItemSummonService
         };
 
         await this.paymentService.ProcessPayment(
-            request.payment_type,
-            request.payment_target,
+            request.PaymentType,
+            request.PaymentTarget,
             expectedPrice
         );
 

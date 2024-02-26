@@ -78,7 +78,7 @@ public class AbilityCrestService : IAbilityCrestService
         AtgenBuildupAbilityCrestPieceList buildup
     )
     {
-        switch (buildup.buildup_piece_type)
+        switch (buildup.BuildupPieceType)
         {
             case BuildupPieceTypes.Unbind
             or BuildupPieceTypes.Copies:
@@ -88,7 +88,7 @@ public class AbilityCrestService : IAbilityCrestService
             default:
                 this.logger.LogWarning(
                     "Buildup piece type {type} invalid",
-                    buildup.buildup_piece_type
+                    buildup.BuildupPieceType
                 );
                 return ResultCode.CommonInvalidArgument;
         }
@@ -99,7 +99,7 @@ public class AbilityCrestService : IAbilityCrestService
         AtgenBuildupAbilityCrestPieceList buildup
     )
     {
-        int buildupId = abilityCrest.GetBuildupGroupId(buildup.buildup_piece_type, buildup.step);
+        int buildupId = abilityCrest.GetBuildupGroupId(buildup.BuildupPieceType, buildup.Step);
 
         if (
             !MasterAsset.AbilityCrestBuildupGroup.TryGetValue(
@@ -130,23 +130,23 @@ public class AbilityCrestService : IAbilityCrestService
 
         DbAbilityCrest dbAbilityCrest = await TryFindAsync(abilityCrest.Id);
 
-        if (buildup.buildup_piece_type == BuildupPieceTypes.Unbind)
+        if (buildup.BuildupPieceType == BuildupPieceTypes.Unbind)
         {
-            if (!ValidateStep(dbAbilityCrest.LimitBreakCount, buildup.step))
+            if (!ValidateStep(dbAbilityCrest.LimitBreakCount, buildup.Step))
             {
                 return ResultCode.AbilityCrestBuildupPieceStepError;
             }
 
-            dbAbilityCrest.LimitBreakCount = buildup.step;
+            dbAbilityCrest.LimitBreakCount = buildup.Step;
         }
         else
         {
-            if (!ValidateStep(dbAbilityCrest.EquipableCount, buildup.step))
+            if (!ValidateStep(dbAbilityCrest.EquipableCount, buildup.Step))
             {
                 return ResultCode.AbilityCrestBuildupPieceStepError;
             }
 
-            dbAbilityCrest.EquipableCount = buildup.step;
+            dbAbilityCrest.EquipableCount = buildup.Step;
         }
 
         await this.inventoryRepository.UpdateQuantity(materialMap.Invert());
@@ -160,7 +160,7 @@ public class AbilityCrestService : IAbilityCrestService
         AtgenBuildupAbilityCrestPieceList buildup
     )
     {
-        int levelId = abilityCrest.GetBuildupLevelId(buildup.step);
+        int levelId = abilityCrest.GetBuildupLevelId(buildup.Step);
 
         if (
             !MasterAsset.AbilityCrestBuildupLevel.TryGetValue(
@@ -191,25 +191,25 @@ public class AbilityCrestService : IAbilityCrestService
 
         DbAbilityCrest dbAbilityCrest = await TryFindAsync(abilityCrest.Id);
 
-        if (!ValidateStep(dbAbilityCrest.BuildupCount, buildup.step))
+        if (!ValidateStep(dbAbilityCrest.BuildupCount, buildup.Step))
         {
             return ResultCode.AbilityCrestBuildupPieceStepError;
         }
 
         AbilityCrestRarity rarityInfo = MasterAsset.AbilityCrestRarity.Get(abilityCrest.Rarity);
 
-        if (!ValidateLevel(rarityInfo, dbAbilityCrest.LimitBreakCount, buildup.step))
+        if (!ValidateLevel(rarityInfo, dbAbilityCrest.LimitBreakCount, buildup.Step))
         {
             return ResultCode.AbilityCrestBuildupPieceShortLimitBreakCount;
         }
 
         missionProgressionService.OnAbilityCrestLevelUp(
             dbAbilityCrest.AbilityCrestId,
-            buildup.step - dbAbilityCrest.BuildupCount,
-            buildup.step
+            buildup.Step - dbAbilityCrest.BuildupCount,
+            buildup.Step
         );
 
-        dbAbilityCrest.BuildupCount = buildup.step;
+        dbAbilityCrest.BuildupCount = buildup.Step;
         await this.inventoryRepository.UpdateQuantity(materialMap.Invert());
 
         return ResultCode.Success;
@@ -222,7 +222,7 @@ public class AbilityCrestService : IAbilityCrestService
     {
         AbilityCrestRarity rarityInfo = MasterAsset.AbilityCrestRarity.Get(abilityCrest.Rarity);
 
-        if (!ValidateAugments(rarityInfo, buildup.plus_count_type, buildup.plus_count))
+        if (!ValidateAugments(rarityInfo, buildup.PlusCountType, buildup.PlusCount))
         {
             return ResultCode.AbilityCrestBuildupPlusCountCountError;
         }
@@ -231,14 +231,14 @@ public class AbilityCrestService : IAbilityCrestService
         int usedAugments;
         Dictionary<Materials, int> materialMap;
 
-        if (buildup.plus_count_type == PlusCountType.Hp)
+        if (buildup.PlusCountType == PlusCountType.Hp)
         {
-            usedAugments = buildup.plus_count - dbAbilityCrest.HpPlusCount;
+            usedAugments = buildup.PlusCount - dbAbilityCrest.HpPlusCount;
             materialMap = new() { { Materials.FortifyingGemstone, usedAugments } };
         }
         else
         {
-            usedAugments = buildup.plus_count - dbAbilityCrest.AttackPlusCount;
+            usedAugments = buildup.PlusCount - dbAbilityCrest.AttackPlusCount;
             materialMap = new() { { Materials.AmplifyingGemstone, usedAugments } };
         }
 
@@ -247,20 +247,20 @@ public class AbilityCrestService : IAbilityCrestService
             return ResultCode.AbilityCrestBuildupPlusCountCountError;
         }
 
-        if (buildup.plus_count_type == PlusCountType.Hp)
+        if (buildup.PlusCountType == PlusCountType.Hp)
         {
-            dbAbilityCrest.HpPlusCount = buildup.plus_count;
+            dbAbilityCrest.HpPlusCount = buildup.PlusCount;
         }
         else
         {
-            dbAbilityCrest.AttackPlusCount = buildup.plus_count;
+            dbAbilityCrest.AttackPlusCount = buildup.PlusCount;
         }
 
         this.missionProgressionService.OnAbilityCrestBuildupPlusCount(
             dbAbilityCrest.AbilityCrestId,
-            buildup.plus_count_type,
+            buildup.PlusCountType,
             usedAugments,
-            buildup.plus_count
+            buildup.PlusCount
         );
 
         this.missionProgressionService.OnAbilityCrestTotalPlusCountUp(
@@ -359,12 +359,12 @@ public class AbilityCrestService : IAbilityCrestService
     // otherwise throws an exception
     private static bool CheckDedicated(AtgenBuildupAbilityCrestPieceList buildup)
     {
-        if (!buildup.is_use_dedicated_material)
+        if (!buildup.IsUseDedicatedMaterial)
         {
             return false;
         }
 
-        if (!(buildup.buildup_piece_type == BuildupPieceTypes.Unbind))
+        if (!(buildup.BuildupPieceType == BuildupPieceTypes.Unbind))
         {
             throw new DragaliaException(
                 ResultCode.AbilityCrestBuildupPieceStepError,

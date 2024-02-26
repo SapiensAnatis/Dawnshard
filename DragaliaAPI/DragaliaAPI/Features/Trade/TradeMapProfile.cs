@@ -14,12 +14,9 @@ public class TradeMapProfile : Profile
         this.AddGlobalIgnore("Owner");
 
         this.CreateMap<UserTreasureTradeList, DbPlayerTrade>()
-            .ForMember(x => x.Id, opts => opts.MapFrom(src => src.treasure_trade_id))
-            .ForMember(x => x.Count, opts => opts.MapFrom(src => src.trade_count))
+            .ForMember(x => x.Id, opts => opts.MapFrom(src => src.TreasureTradeId))
+            .ForMember(x => x.Count, opts => opts.MapFrom(src => src.TradeCount))
             .ForMember(x => x.Type, opts => opts.MapFrom(src => TradeType.Treasure))
-            .ForMember(x => x.LastTradeTime, opts => opts.MapFrom(src => src.last_reset_time));
-
-        this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
-        this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
+            .ForMember(x => x.LastTradeTime, opts => opts.MapFrom(src => src.LastResetTime));
     }
 }

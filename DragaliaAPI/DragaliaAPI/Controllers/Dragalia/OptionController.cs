@@ -8,19 +8,19 @@ public class OptionController : DragaliaControllerBase
 {
     private static class StubData
     {
-        public static OptionGetOptionData OptionData =
+        public static OptionGetOptionResponse OptionData =
             new()
             {
-                option_data = new()
+                OptionData = new()
                 {
-                    is_enable_auto_lock_unit = false,
-                    is_auto_lock_amulet_sr = false,
-                    is_auto_lock_amulet_ssr = false,
-                    is_auto_lock_dragon_sr = false,
-                    is_auto_lock_dragon_ssr = false,
-                    is_auto_lock_weapon_sr = false,
-                    is_auto_lock_weapon_ssr = false,
-                    is_auto_lock_weapon_sssr = false,
+                    IsEnableAutoLockUnit = false,
+                    IsAutoLockAmuletSr = false,
+                    IsAutoLockAmuletSsr = false,
+                    IsAutoLockDragonSr = false,
+                    IsAutoLockDragonSsr = false,
+                    IsAutoLockWeaponSr = false,
+                    IsAutoLockWeaponSsr = false,
+                    IsAutoLockWeaponSssr = false,
                 }
             };
     }

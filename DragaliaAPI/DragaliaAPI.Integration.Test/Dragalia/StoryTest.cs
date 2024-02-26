@@ -15,32 +15,32 @@ public class StoryTest : TestFixture
     [Fact]
     public async Task ReadStory_StoryNotRead_ResponseHasRewards()
     {
-        StoryReadData data = (
-            await this.Client.PostMsgpack<StoryReadData>(
+        StoryReadResponse data = (
+            await this.Client.PostMsgpack<StoryReadResponse>(
                 "/story/read",
-                new StoryReadRequest() { unit_story_id = 100001141 }
+                new StoryReadRequest() { UnitStoryId = 100001141 }
             )
-        ).data;
+        ).Data;
 
-        data.unit_story_reward_list.Should()
+        data.UnitStoryRewardList.Should()
             .BeEquivalentTo(
                 new List<AtgenBuildEventRewardEntityList>()
                 {
                     new()
                     {
-                        entity_type = EntityTypes.Wyrmite,
-                        entity_quantity = 25,
-                        entity_id = 0
+                        EntityType = EntityTypes.Wyrmite,
+                        EntityQuantity = 25,
+                        EntityId = 0
                     }
                 }
             );
 
-        data.update_data_list.user_data.Should().NotBeNull();
-        data.update_data_list.unit_story_list.Should()
+        data.UpdateDataList.UserData.Should().NotBeNull();
+        data.UpdateDataList.UnitStoryList.Should()
             .BeEquivalentTo(
                 new List<UnitStoryList>()
                 {
-                    new() { unit_story_id = 100001141, is_read = 1, }
+                    new() { UnitStoryId = 100001141, IsRead = true, }
                 }
             );
     }
@@ -66,17 +66,17 @@ public class StoryTest : TestFixture
         );
         await this.ApiContext.SaveChangesAsync();
 
-        StoryReadData data = (
-            await this.Client.PostMsgpack<StoryReadData>(
+        StoryReadResponse data = (
+            await this.Client.PostMsgpack<StoryReadResponse>(
                 "/story/read",
-                new StoryReadRequest() { unit_story_id = 100001122 }
+                new StoryReadRequest() { UnitStoryId = 100001122 }
             )
-        ).data;
+        ).Data;
 
-        data.unit_story_reward_list.Should().BeEmpty();
+        data.UnitStoryRewardList.Should().BeEmpty();
 
-        data.update_data_list.user_data.Should().BeNull();
-        data.update_data_list.unit_story_list.Should().BeNull();
+        data.UpdateDataList.UserData.Should().BeNull();
+        data.UpdateDataList.UnitStoryList.Should().BeNull();
     }
 
     [Fact]
@@ -88,12 +88,12 @@ public class StoryTest : TestFixture
             .Select(x => x.Crystal)
             .SingleAsync();
 
-        StoryReadData data = (
-            await this.Client.PostMsgpack<StoryReadData>(
+        StoryReadResponse data = (
+            await this.Client.PostMsgpack<StoryReadResponse>(
                 "/story/read",
-                new StoryReadRequest() { unit_story_id = 100002011 }
+                new StoryReadRequest() { UnitStoryId = 100002011 }
             )
-        ).data;
+        ).Data;
 
         int newCrystal = await this
             .ApiContext.PlayerUserData.AsNoTracking()

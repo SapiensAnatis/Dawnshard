@@ -38,10 +38,10 @@ public class DungeonRecordHelperService(
             helperDetailList.Add(
                 new AtgenHelperDetailList()
                 {
-                    viewer_id = supportList.viewer_id,
-                    is_friend = true,
-                    apply_send_status = 1,
-                    get_mana_point = 50
+                    ViewerId = supportList.ViewerId,
+                    IsFriend = true,
+                    ApplySendStatus = 1,
+                    GetManaPoint = 50
                 }
             );
         }
@@ -67,10 +67,10 @@ public class DungeonRecordHelperService(
         IEnumerable<AtgenHelperDetailList> teammateDetailLists = teammates.Select(
             x => new AtgenHelperDetailList()
             {
-                is_friend = true,
-                viewer_id = (ulong)x.ViewerId,
-                get_mana_point = 50,
-                apply_send_status = 0,
+                IsFriend = true,
+                ViewerId = (ulong)x.ViewerId,
+                GetManaPoint = 50,
+                ApplySendStatus = 0,
             }
         );
 

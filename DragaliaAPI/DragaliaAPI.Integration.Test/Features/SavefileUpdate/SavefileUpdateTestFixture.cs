@@ -27,7 +27,7 @@ public abstract class SavefileUpdateTestFixture : TestFixture
 
     protected async Task LoadIndex()
     {
-        await this.Client.PostMsgpack<LoadIndexData>("load/index", new LoadIndexRequest());
+        await this.Client.PostMsgpack<LoadIndexResponse>("load/index", new LoadIndexRequest());
     }
 
     protected override async Task Setup() =>

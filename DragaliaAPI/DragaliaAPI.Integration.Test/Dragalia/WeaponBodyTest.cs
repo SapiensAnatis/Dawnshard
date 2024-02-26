@@ -28,38 +28,38 @@ public class WeaponBodyTest : TestFixture
         );
 
         UpdateDataList list = (
-            await this.Client.PostMsgpack<WeaponBodyCraftData>(
+            await this.Client.PostMsgpack<WeaponBodyCraftResponse>(
                 $"{EndpointGroup}/craft",
-                new WeaponBodyCraftRequest() { weapon_body_id = WeaponBodies.AquaticSpiral }
+                new WeaponBodyCraftRequest() { WeaponBodyId = WeaponBodies.AquaticSpiral }
             )
         )
-            .data
-            .update_data_list;
+            .Data
+            .UpdateDataList;
 
-        list.weapon_body_list.Should()
+        list.WeaponBodyList.Should()
             .BeEquivalentTo(
                 new List<WeaponBodyList>()
                 {
                     new()
                     {
-                        weapon_body_id = WeaponBodies.AquaticSpiral,
-                        buildup_count = 0,
-                        equipable_count = 1,
-                        additional_crest_slot_type_1_count = 0,
-                        additional_crest_slot_type_2_count = 0,
-                        additional_crest_slot_type_3_count = 0,
-                        fort_passive_chara_weapon_buildup_count = 0,
-                        additional_effect_count = 0,
-                        unlock_weapon_passive_ability_no_list = Enumerable.Repeat(0, 15),
-                        is_new = false,
-                        gettime = DateTimeOffset.UtcNow
+                        WeaponBodyId = WeaponBodies.AquaticSpiral,
+                        BuildupCount = 0,
+                        EquipableCount = 1,
+                        AdditionalCrestSlotType1Count = 0,
+                        AdditionalCrestSlotType2Count = 0,
+                        AdditionalCrestSlotType3Count = 0,
+                        FortPassiveCharaWeaponBuildupCount = 0,
+                        AdditionalEffectCount = 0,
+                        UnlockWeaponPassiveAbilityNoList = Enumerable.Repeat(0, 15),
+                        IsNew = false,
+                        GetTime = DateTimeOffset.UtcNow
                     }
                 }
             );
 
-        list.user_data.Should().NotBeNull();
+        list.UserData.Should().NotBeNull();
 
-        list.material_list.Should().NotBeNullOrEmpty();
+        list.MaterialList.Should().NotBeNullOrEmpty();
     }
 
     [Fact]
@@ -76,9 +76,9 @@ public class WeaponBodyTest : TestFixture
         int oldMatCount3 = GetMaterialCount(Materials.TwinklingSand);
         long oldRupies = GetRupies();
 
-        await this.Client.PostMsgpack<WeaponBodyCraftData>(
+        await this.Client.PostMsgpack<WeaponBodyCraftResponse>(
             $"{EndpointGroup}/craft",
-            new WeaponBodyCraftRequest() { weapon_body_id = WeaponBodies.PrimalCrimson }
+            new WeaponBodyCraftRequest() { WeaponBodyId = WeaponBodies.PrimalCrimson }
         );
 
         this.ApiContext.PlayerWeapons.SingleOrDefault(x =>
@@ -113,25 +113,25 @@ public class WeaponBodyTest : TestFixture
         WeaponBodyBuildupPieceRequest request =
             new()
             {
-                weapon_body_id = testCase.InitialState.WeaponBodyId,
-                buildup_weapon_body_piece_list = testCase.StepList
+                WeaponBodyId = testCase.InitialState.WeaponBodyId,
+                BuildupWeaponBodyPieceList = testCase.StepList
             };
 
-        WeaponBodyBuildupPieceData response = (
-            await this.Client.PostMsgpack<WeaponBodyBuildupPieceData>(
+        WeaponBodyBuildupPieceResponse response = (
+            await this.Client.PostMsgpack<WeaponBodyBuildupPieceResponse>(
                 $"{EndpointGroup}/buildup_piece",
                 request
             )
-        ).data;
+        ).Data;
 
         // Check coin
         DbPlayerUserData userData = (await apiContext.PlayerUserData.FindAsync(ViewerId))!;
         await apiContext.Entry(userData).ReloadAsync();
 
         if (testCase.ExpCoinLoss != 0)
-            response.update_data_list.user_data.coin.Should().Be(oldCoin - testCase.ExpCoinLoss);
+            response.UpdateDataList.UserData.Coin.Should().Be(oldCoin - testCase.ExpCoinLoss);
         else
-            response.update_data_list.user_data.Should().BeNull();
+            response.UpdateDataList.UserData.Should().BeNull();
 
         userData.Coin.Should().Be(oldCoin - testCase.ExpCoinLoss);
 
@@ -145,7 +145,7 @@ public class WeaponBodyTest : TestFixture
             .Should()
             .BeEquivalentTo(testCase.ExpFinalState, opts => opts.Excluding(x => x.ViewerId));
         response
-            .update_data_list.weapon_body_list.Should()
+            .UpdateDataList.WeaponBodyList.Should()
             .BeEquivalentTo(
                 new List<WeaponBodyList>()
                 {
@@ -159,9 +159,9 @@ public class WeaponBodyTest : TestFixture
             int expQuantity = oldMaterials[material] - loss;
 
             response
-                .update_data_list.material_list.Should()
+                .UpdateDataList.MaterialList.Should()
                 .ContainEquivalentOf(
-                    new MaterialList() { material_id = material, quantity = expQuantity }
+                    new MaterialList() { MaterialId = material, Quantity = expQuantity }
                 );
 
             DbPlayerMaterial dbEntry = (
@@ -178,7 +178,7 @@ public class WeaponBodyTest : TestFixture
         )
         {
             response
-                .update_data_list.weapon_passive_ability_list.Should()
+                .UpdateDataList.WeaponPassiveAbilityList.Should()
                 .ContainEquivalentOf(this.Mapper.Map<WeaponPassiveAbilityList>(expPassive));
 
             apiContext
@@ -190,10 +190,10 @@ public class WeaponBodyTest : TestFixture
         foreach (DbWeaponSkin expPassive in testCase.ExpNewSkins ?? new List<DbWeaponSkin>())
         {
             response
-                .update_data_list.weapon_skin_list.Should()
+                .UpdateDataList.WeaponSkinList.Should()
                 .ContainEquivalentOf(
                     this.Mapper.Map<WeaponSkinList>(expPassive),
-                    opts => opts.Excluding(x => x.gettime)
+                    opts => opts.Excluding(x => x.GetTime)
                 );
 
             apiContext
@@ -208,15 +208,15 @@ public class WeaponBodyTest : TestFixture
     [Fact]
     public async Task Buildup_UnownedWeapon_ReturnsBadResultCode()
     {
-        ResultCodeData codeData = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse codeResponse = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 $"{EndpointGroup}/buildup_piece",
-                new WeaponBodyBuildupPieceRequest() { weapon_body_id = WeaponBodies.Carnwennan },
+                new WeaponBodyBuildupPieceRequest() { WeaponBodyId = WeaponBodies.Carnwennan },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
-        codeData.result_code.Should().Be(ResultCode.WeaponBodyCraftShortWeaponBody);
+        codeResponse.ResultCode.Should().Be(ResultCode.WeaponBodyCraftShortWeaponBody);
     }
 
     [Fact]
@@ -231,22 +231,22 @@ public class WeaponBodyTest : TestFixture
             }
         );
 
-        ResultCodeData codeData = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse codeResponse = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 $"{EndpointGroup}/buildup_piece",
                 new WeaponBodyBuildupPieceRequest()
                 {
-                    weapon_body_id = WeaponBodies.ChanzelianCaster,
-                    buildup_weapon_body_piece_list = new List<AtgenBuildupWeaponBodyPieceList>()
+                    WeaponBodyId = WeaponBodies.ChanzelianCaster,
+                    BuildupWeaponBodyPieceList = new List<AtgenBuildupWeaponBodyPieceList>()
                     {
-                        new() { buildup_piece_type = BuildupPieceTypes.Stats, step = 40 }
+                        new() { BuildupPieceType = BuildupPieceTypes.Stats, Step = 40 }
                     }
                 },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
-        codeData.result_code.Should().Be(ResultCode.WeaponBodyBuildupPieceStepError);
+        codeResponse.ResultCode.Should().Be(ResultCode.WeaponBodyBuildupPieceStepError);
     }
 
     public record WeaponUpgradeTestCase(
@@ -274,8 +274,8 @@ public class WeaponBodyTest : TestFixture
                     },
                     new()
                     {
-                        new() { buildup_piece_type = BuildupPieceTypes.Unbind, step = 1 },
-                        new() { buildup_piece_type = BuildupPieceTypes.Unbind, step = 2 },
+                        new() { BuildupPieceType = BuildupPieceTypes.Unbind, Step = 1 },
+                        new() { BuildupPieceType = BuildupPieceTypes.Unbind, Step = 2 },
                     },
                     new()
                     {
@@ -307,15 +307,15 @@ public class WeaponBodyTest : TestFixture
                     {
                         new()
                         {
-                            buildup_piece_type = BuildupPieceTypes.Unbind,
-                            step = 1,
-                            is_use_dedicated_material = true
+                            BuildupPieceType = BuildupPieceTypes.Unbind,
+                            Step = 1,
+                            IsUseDedicatedMaterial = true
                         },
                         new()
                         {
-                            buildup_piece_type = BuildupPieceTypes.Unbind,
-                            step = 2,
-                            is_use_dedicated_material = true
+                            BuildupPieceType = BuildupPieceTypes.Unbind,
+                            Step = 2,
+                            IsUseDedicatedMaterial = true
                         },
                     },
                     new() { { Materials.AdamantiteIngot, 2 }, },
@@ -343,8 +343,8 @@ public class WeaponBodyTest : TestFixture
                         .Range(1, 55)
                         .Select(x => new AtgenBuildupWeaponBodyPieceList()
                         {
-                            buildup_piece_type = BuildupPieceTypes.Stats,
-                            step = x
+                            BuildupPieceType = BuildupPieceTypes.Stats,
+                            Step = x
                         })
                         .ToList(),
                     new() { { Materials.BronzeWhetstone, 275 }, { Materials.GoldWhetstone, 5 } },
@@ -372,15 +372,15 @@ public class WeaponBodyTest : TestFixture
                     {
                         new()
                         {
-                            buildup_piece_type = BuildupPieceTypes.Passive,
-                            step = 1,
-                            buildup_piece_no = 3,
+                            BuildupPieceType = BuildupPieceTypes.Passive,
+                            Step = 1,
+                            BuildupPieceNo = 3,
                         },
                         new()
                         {
-                            buildup_piece_type = BuildupPieceTypes.Passive,
-                            step = 1,
-                            buildup_piece_no = 4,
+                            BuildupPieceType = BuildupPieceTypes.Passive,
+                            Step = 1,
+                            BuildupPieceNo = 4,
                         },
                     },
                     new()
@@ -443,7 +443,7 @@ public class WeaponBodyTest : TestFixture
                     },
                     new()
                     {
-                        new() { buildup_piece_type = BuildupPieceTypes.Refine, step = 2, }
+                        new() { BuildupPieceType = BuildupPieceTypes.Refine, Step = 2, }
                     },
                     new()
                     {
@@ -481,8 +481,8 @@ public class WeaponBodyTest : TestFixture
                     },
                     new()
                     {
-                        new() { buildup_piece_type = BuildupPieceTypes.Copies, step = 2 },
-                        new() { buildup_piece_type = BuildupPieceTypes.Copies, step = 3 },
+                        new() { BuildupPieceType = BuildupPieceTypes.Copies, Step = 2 },
+                        new() { BuildupPieceType = BuildupPieceTypes.Copies, Step = 3 },
                     },
                     new()
                     {
@@ -517,9 +517,9 @@ public class WeaponBodyTest : TestFixture
                     },
                     new()
                     {
-                        new() { buildup_piece_type = BuildupPieceTypes.CrestSlotType1, step = 1 },
-                        new() { buildup_piece_type = BuildupPieceTypes.CrestSlotType3, step = 1 },
-                        new() { buildup_piece_type = BuildupPieceTypes.CrestSlotType3, step = 2 },
+                        new() { BuildupPieceType = BuildupPieceTypes.CrestSlotType1, Step = 1 },
+                        new() { BuildupPieceType = BuildupPieceTypes.CrestSlotType3, Step = 1 },
+                        new() { BuildupPieceType = BuildupPieceTypes.CrestSlotType3, Step = 2 },
                     },
                     new()
                     {
@@ -554,7 +554,7 @@ public class WeaponBodyTest : TestFixture
                     },
                     new()
                     {
-                        new() { buildup_piece_type = BuildupPieceTypes.WeaponBonus, step = 1 },
+                        new() { BuildupPieceType = BuildupPieceTypes.WeaponBonus, Step = 1 },
                     },
                     new()
                     {

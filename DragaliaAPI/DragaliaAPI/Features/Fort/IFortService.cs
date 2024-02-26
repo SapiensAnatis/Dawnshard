@@ -10,7 +10,7 @@ public interface IFortService
     Task<FortDetail> AddCarpenter(PaymentTypes paymentType);
     Task<FortDetail> GetFortDetail();
 
-    Task<FortGetMultiIncomeData> CollectIncome(IEnumerable<long> idsToCollect);
+    Task<FortGetMultiIncomeResponse> CollectIncome(IEnumerable<long> idsToCollect);
 
     Task BuildAtOnce(PaymentTypes paymentType, long buildId);
     Task LevelupAtOnce(PaymentTypes paymentType, long buildId);

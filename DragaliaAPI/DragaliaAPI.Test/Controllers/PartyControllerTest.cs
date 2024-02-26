@@ -56,21 +56,21 @@ public class PartyControllerTest
         UpdateDataList updateDataList =
             new()
             {
-                party_list = new List<PartyList>()
+                PartyList = new List<PartyList>()
                 {
-                    new() { party_name = "Z Team", party_no = 1, }
+                    new() { PartyName = "Z Team", PartyNo = 1, }
                 }
             };
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
-        PartyUpdatePartyNameData? response = (
+        PartyUpdatePartyNameResponse? response = (
             await this.partyController.UpdatePartyName(
-                new PartyUpdatePartyNameRequest() { party_name = "Z Team", party_no = 1 }
+                new PartyUpdatePartyNameRequest() { PartyName = "Z Team", PartyNo = 1 }
             )
-        ).GetData<PartyUpdatePartyNameData>();
+        ).GetData<PartyUpdatePartyNameResponse>();
 
         response.Should().NotBeNull();
-        response!.update_data_list.Should().BeEquivalentTo(updateDataList);
+        response!.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         this.mockPartyRepository.VerifyAll();
         this.mockUpdateDataService.VerifyAll();

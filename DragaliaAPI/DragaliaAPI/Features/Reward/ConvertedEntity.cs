@@ -8,12 +8,12 @@ public record ConvertedEntity(Entity Before, Entity After)
     {
         return new()
         {
-            before_entity_type = Before.Type,
-            before_entity_id = Before.Id,
-            before_entity_quantity = Before.Quantity,
-            after_entity_type = After.Type,
-            after_entity_id = After.Id,
-            after_entity_quantity = After.Quantity
+            BeforeEntityType = Before.Type,
+            BeforeEntityId = Before.Id,
+            BeforeEntityQuantity = Before.Quantity,
+            AfterEntityType = After.Type,
+            AfterEntityId = After.Id,
+            AfterEntityQuantity = After.Quantity
         };
     }
 };

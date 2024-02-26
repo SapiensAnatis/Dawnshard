@@ -64,39 +64,39 @@ public class DungeonRecordRewardService(
         List<Entity> entities = new();
 
         foreach (
-            AtgenTreasureRecord record in playRecord.treasure_record
+            AtgenTreasureRecord record in playRecord.TreasureRecord
                 ?? Enumerable.Empty<AtgenTreasureRecord>()
         )
         {
             if (
                 !session.EnemyList.TryGetValue(
-                    record.area_idx,
+                    record.AreaIdx,
                     out IEnumerable<AtgenEnemy>? enemyList
                 )
             )
             {
                 logger.LogWarning(
                     "Could not retrieve enemy list for area_idx {idx}",
-                    record.area_idx
+                    record.AreaIdx
                 );
                 continue;
             }
 
             // Sometimes record.enemy is null for boss stages. Give all drops in this case.
-            IEnumerable<int> enemyRecord = record.enemy ?? Enumerable.Repeat(1, enemyList.Count());
+            IEnumerable<int> enemyRecord = record.Enemy ?? Enumerable.Repeat(1, enemyList.Count());
 
             foreach (
                 EnemyDropList enemyDropList in enemyList
                     .Zip(enemyRecord)
                     .Where(x => x.Second == 1)
-                    .SelectMany(x => x.First.enemy_drop_list)
+                    .SelectMany(x => x.First.EnemyDropList)
             )
             {
-                manaDrop += enemyDropList.mana;
-                coinDrop += enemyDropList.coin;
+                manaDrop += enemyDropList.Mana;
+                coinDrop += enemyDropList.Coin;
 
                 entities.AddRange(
-                    enemyDropList.drop_list.Select(x => new Entity(x.type, x.id, x.quantity))
+                    enemyDropList.DropList.Select(x => new Entity(x.Type, x.Id, x.Quantity))
                 );
             }
         }

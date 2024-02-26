@@ -20,9 +20,9 @@ public class CharaBaseHpResolver : IValueResolver<CharaList, DbPlayerCharaData, 
         ResolutionContext context
     )
     {
-        CharaData adventurer = MasterAsset.CharaData.Get(source.chara_id);
+        CharaData adventurer = MasterAsset.CharaData.Get(source.CharaId);
 
-        return (ushort)CharaUtils.CalculateBaseHp(adventurer, source.level, source.rarity);
+        return (ushort)CharaUtils.CalculateBaseHp(adventurer, source.Level, source.Rarity);
     }
 }
 
@@ -35,9 +35,9 @@ public class CharaBaseAtkResolver : IValueResolver<CharaList, DbPlayerCharaData,
         ResolutionContext context
     )
     {
-        CharaData adventurer = MasterAsset.CharaData.Get(source.chara_id);
+        CharaData adventurer = MasterAsset.CharaData.Get(source.CharaId);
 
-        return (ushort)CharaUtils.CalculateBaseAttack(adventurer, source.level, source.rarity);
+        return (ushort)CharaUtils.CalculateBaseAttack(adventurer, source.Level, source.Rarity);
     }
 }
 
@@ -50,10 +50,10 @@ public class CharaNodeHpResolver : IValueResolver<CharaList, DbPlayerCharaData, 
         ResolutionContext context
     )
     {
-        CharaData adventurer = MasterAsset.CharaData.Get(source.chara_id);
+        CharaData adventurer = MasterAsset.CharaData.Get(source.CharaId);
 
         int nodeHp =
-            source.hp - CharaUtils.CalculateBaseHp(adventurer, source.level, source.rarity);
+            source.Hp - CharaUtils.CalculateBaseHp(adventurer, source.Level, source.Rarity);
 
         return (ushort)Math.Clamp(nodeHp, ushort.MinValue, ushort.MaxValue);
     }
@@ -68,10 +68,10 @@ public class CharaNodeAtkResolver : IValueResolver<CharaList, DbPlayerCharaData,
         ResolutionContext context
     )
     {
-        CharaData adventurer = MasterAsset.CharaData.Get(source.chara_id);
+        CharaData adventurer = MasterAsset.CharaData.Get(source.CharaId);
 
         int nodeAtk =
-            source.attack - CharaUtils.CalculateBaseAttack(adventurer, source.level, source.rarity);
+            source.Attack - CharaUtils.CalculateBaseAttack(adventurer, source.Level, source.Rarity);
 
         return (ushort)Math.Clamp(nodeAtk, ushort.MinValue, ushort.MaxValue);
     }

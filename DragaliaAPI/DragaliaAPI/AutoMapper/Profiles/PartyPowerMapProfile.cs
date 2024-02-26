@@ -9,8 +9,5 @@ public class PartyPowerMapProfile : Profile
     public PartyPowerMapProfile()
     {
         this.CreateMap<DbPartyPower, PartyPowerData>();
-
-        this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
-        this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
     }
 }

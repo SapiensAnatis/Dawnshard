@@ -1,31 +1,31 @@
 ﻿[
   {
-    "position": 1,
-    "chara_data": {
-      "chara_id": "GalaZena",
-      "exp": 8866950,
-      "level": 100,
-      "additional_max_level": 20,
-      "hp": 923,
-      "attack": 586,
-      "ex_ability_level": 5,
-      "ex_ability_2_level": 5,
-      "ability_1_level": 3,
-      "ability_2_level": 3,
-      "ability_3_level": 3,
-      "is_new": 1,
-      "skill_1_level": 4,
-      "skill_2_level": 3,
-      "burst_attack_level": 2,
-      "rarity": 5,
-      "limit_break_count": 5,
-      "hp_plus_count": 100,
-      "attack_plus_count": 100,
-      "status_plus_count": 0,
-      "combo_buildup_count": 1,
-      "is_unlock_edit_skill": true,
-      "gettime": "2020-09-30T06:09:26+00:00",
-      "mana_circle_piece_id_list": [
+    "Position": 1,
+    "CharaData": {
+      "CharaId": "GalaZena",
+      "Exp": 8866950,
+      "Level": 100,
+      "AdditionalMaxLevel": 20,
+      "Hp": 923,
+      "Attack": 586,
+      "ExAbilityLevel": 5,
+      "ExAbility2Level": 5,
+      "Ability1Level": 3,
+      "Ability2Level": 3,
+      "Ability3Level": 3,
+      "IsNew": true,
+      "Skill1Level": 4,
+      "Skill2Level": 3,
+      "BurstAttackLevel": 2,
+      "Rarity": 5,
+      "LimitBreakCount": 5,
+      "HpPlusCount": 100,
+      "AttackPlusCount": 100,
+      "StatusPlusCount": 0,
+      "ComboBuildupCount": 1,
+      "IsUnlockEditSkill": true,
+      "GetTime": "2020-09-30T06:09:26+00:00",
+      "ManaCirclePieceIdList": [
         1,
         2,
         3,
@@ -97,169 +97,169 @@
         69,
         70
       ],
-      "is_temporary": 0,
-      "list_view_flag": 1
+      "IsTemporary": false,
+      "ListViewFlag": 1
     },
-    "dragon_data": {
-      "dragon_id": "JeannedArc",
-      "dragon_key_id": 813,
-      "level": 120,
-      "exp": 3365620,
-      "is_lock": true,
-      "is_new": true,
-      "get_time": "2019-10-13T08:40:10+00:00",
-      "skill_1_level": 2,
-      "ability_1_level": 6,
-      "ability_2_level": 6,
-      "limit_break_count": 5,
-      "hp_plus_count": 50,
-      "attack_plus_count": 50,
-      "status_plus_count": 0
+    "DragonData": {
+      "DragonId": "JeannedArc",
+      "DragonKeyId": 1068,
+      "Level": 120,
+      "Exp": 3365620,
+      "IsLock": true,
+      "IsNew": true,
+      "Skill1Level": 2,
+      "Ability1Level": 6,
+      "Ability2Level": 6,
+      "LimitBreakCount": 5,
+      "HpPlusCount": 50,
+      "AttackPlusCount": 50,
+      "StatusPlusCount": 0,
+      "GetTime": "2019-10-13T08:40:10+00:00"
     },
-    "weapon_skin_data": {
-      "weapon_skin_id": 0
+    "WeaponSkinData": {
+      "WeaponSkinId": 0
     },
-    "weapon_body_data": {
-      "weapon_body_id": "DelFrith",
-      "buildup_count": 80,
-      "limit_break_count": 8,
-      "limit_over_count": 1,
-      "skill_no": 1,
-      "skill_level": 2,
-      "ability_1_level": 2,
-      "ability_2_level": 2,
-      "equipable_count": 1,
-      "additional_crest_slot_type_1_count": 1,
-      "additional_crest_slot_type_2_count": 0,
-      "additional_crest_slot_type_3_count": 2,
-      "additional_effect_count": 0
+    "WeaponBodyData": {
+      "WeaponBodyId": "DelFrith",
+      "BuildupCount": 80,
+      "LimitBreakCount": 8,
+      "LimitOverCount": 1,
+      "SkillNo": 1,
+      "SkillLevel": 2,
+      "Ability1Level": 2,
+      "Ability2Level": 2,
+      "EquipableCount": 1,
+      "AdditionalCrestSlotType1Count": 1,
+      "AdditionalCrestSlotType2Count": 0,
+      "AdditionalCrestSlotType3Count": 2,
+      "AdditionalEffectCount": 0
     },
-    "crest_slot_type_1_crest_list": [
+    "CrestSlotType1CrestList": [
       {
-        "ability_crest_id": "ExtremeTeamwork",
-        "buildup_count": 50,
-        "limit_break_count": 4,
-        "equipable_count": 4,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "ExtremeTeamwork",
+        "BuildupCount": 50,
+        "LimitBreakCount": 4,
+        "EquipableCount": 4,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       },
       {
-        "ability_crest_id": "PrimalCrisis",
-        "buildup_count": 50,
-        "limit_break_count": 4,
-        "equipable_count": 4,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "PrimalCrisis",
+        "BuildupCount": 50,
+        "LimitBreakCount": 4,
+        "EquipableCount": 4,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       },
       {
-        "ability_crest_id": "SpiritoftheSeason",
-        "buildup_count": 50,
-        "limit_break_count": 4,
-        "equipable_count": 4,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "SpiritoftheSeason",
+        "BuildupCount": 50,
+        "LimitBreakCount": 4,
+        "EquipableCount": 4,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       }
     ],
-    "crest_slot_type_2_crest_list": [
+    "CrestSlotType2CrestList": [
       {
-        "ability_crest_id": "FromWhenceHeComes",
-        "buildup_count": 40,
-        "limit_break_count": 4,
-        "equipable_count": 2,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "FromWhenceHeComes",
+        "BuildupCount": 40,
+        "LimitBreakCount": 4,
+        "EquipableCount": 2,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       },
       {
-        "ability_crest_id": "TheWarrioresses",
-        "buildup_count": 40,
-        "limit_break_count": 4,
-        "equipable_count": 1,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "TheWarrioresses",
+        "BuildupCount": 40,
+        "LimitBreakCount": 4,
+        "EquipableCount": 1,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       }
     ],
-    "crest_slot_type_3_crest_list": [
+    "CrestSlotType3CrestList": [
       {
-        "ability_crest_id": "CrownofLightSerpentsBoon",
-        "buildup_count": 30,
-        "limit_break_count": 4,
-        "equipable_count": 3,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 40,
-        "attack_plus_count": 40
+        "AbilityCrestId": "CrownofLightSerpentsBoon",
+        "BuildupCount": 30,
+        "LimitBreakCount": 4,
+        "EquipableCount": 3,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 40,
+        "AttackPlusCount": 40
       },
       {
-        "ability_crest_id": "AKnightsDreamAxesBoon",
-        "buildup_count": 30,
-        "limit_break_count": 4,
-        "equipable_count": 4,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 40,
-        "attack_plus_count": 40
+        "AbilityCrestId": "AKnightsDreamAxesBoon",
+        "BuildupCount": 30,
+        "LimitBreakCount": 4,
+        "EquipableCount": 4,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 40,
+        "AttackPlusCount": 40
       }
     ],
-    "talisman_data": {
-      "talisman_key_id": 1406,
-      "talisman_id": "GalaLuca",
-      "talisman_ability_id_1": 340000069,
-      "talisman_ability_id_2": 340000108,
-      "talisman_ability_id_3": 0,
-      "additional_hp": 0,
-      "additional_attack": 0,
-      "is_new": true,
-      "is_lock": true,
-      "gettime": "2021-12-30T10:10:51+00:00"
+    "TalismanData": {
+      "TalismanKeyId": 1866,
+      "TalismanId": "GalaLuca",
+      "TalismanAbilityId1": 340000069,
+      "TalismanAbilityId2": 340000108,
+      "TalismanAbilityId3": 0,
+      "AdditionalHp": 0,
+      "AdditionalAttack": 0,
+      "IsNew": true,
+      "IsLock": true,
+      "GetTime": "2021-12-30T10:10:51+00:00"
     },
-    "edit_skill_1_chara_data": {
-      "chara_id": "ShaWujing",
-      "edit_skill_level": 2
+    "EditSkill1CharaData": {
+      "CharaId": "ShaWujing",
+      "EditSkillLevel": 2
     },
-    "edit_skill_2_chara_data": {
-      "chara_id": "GalaMym",
-      "edit_skill_level": 4
+    "EditSkill2CharaData": {
+      "CharaId": "GalaMym",
+      "EditSkillLevel": 4
     },
-    "game_weapon_passive_ability_list": [],
-    "dragon_reliability_level": 30
+    "GameWeaponPassiveAbilityList": [],
+    "DragonReliabilityLevel": 30
   },
   {
-    "position": 2,
-    "chara_data": {
-      "chara_id": "Mitsuhide",
-      "exp": 1191950,
-      "level": 80,
-      "additional_max_level": 0,
-      "hp": 763,
-      "attack": 497,
-      "ex_ability_level": 5,
-      "ex_ability_2_level": 5,
-      "ability_1_level": 2,
-      "ability_2_level": 2,
-      "ability_3_level": 2,
-      "is_new": 1,
-      "skill_1_level": 3,
-      "skill_2_level": 2,
-      "burst_attack_level": 2,
-      "rarity": 5,
-      "limit_break_count": 4,
-      "hp_plus_count": 100,
-      "attack_plus_count": 100,
-      "status_plus_count": 0,
-      "combo_buildup_count": 0,
-      "is_unlock_edit_skill": true,
-      "gettime": "2020-01-13T08:00:24+00:00",
-      "mana_circle_piece_id_list": [
+    "Position": 2,
+    "CharaData": {
+      "CharaId": "Mitsuhide",
+      "Exp": 1191950,
+      "Level": 80,
+      "AdditionalMaxLevel": 0,
+      "Hp": 763,
+      "Attack": 497,
+      "ExAbilityLevel": 5,
+      "ExAbility2Level": 5,
+      "Ability1Level": 2,
+      "Ability2Level": 2,
+      "Ability3Level": 2,
+      "IsNew": true,
+      "Skill1Level": 3,
+      "Skill2Level": 2,
+      "BurstAttackLevel": 2,
+      "Rarity": 5,
+      "LimitBreakCount": 4,
+      "HpPlusCount": 100,
+      "AttackPlusCount": 100,
+      "StatusPlusCount": 0,
+      "ComboBuildupCount": 0,
+      "IsUnlockEditSkill": true,
+      "GetTime": "2020-01-13T08:00:24+00:00",
+      "ManaCirclePieceIdList": [
         1,
         2,
         3,
@@ -311,173 +311,173 @@
         49,
         50
       ],
-      "is_temporary": 0,
-      "list_view_flag": 1
+      "IsTemporary": false,
+      "ListViewFlag": 1
     },
-    "dragon_data": {
-      "dragon_id": "GalaRebornJeanne",
-      "dragon_key_id": 879,
-      "level": 100,
-      "exp": 1240020,
-      "is_lock": true,
-      "is_new": true,
-      "get_time": "2021-09-29T07:23:05+00:00",
-      "skill_1_level": 2,
-      "ability_1_level": 5,
-      "ability_2_level": 5,
-      "limit_break_count": 4,
-      "hp_plus_count": 50,
-      "attack_plus_count": 50,
-      "status_plus_count": 0
+    "DragonData": {
+      "DragonId": "GalaRebornJeanne",
+      "DragonKeyId": 1134,
+      "Level": 100,
+      "Exp": 1240020,
+      "IsLock": true,
+      "IsNew": true,
+      "Skill1Level": 2,
+      "Ability1Level": 5,
+      "Ability2Level": 5,
+      "LimitBreakCount": 4,
+      "HpPlusCount": 50,
+      "AttackPlusCount": 50,
+      "StatusPlusCount": 0,
+      "GetTime": "2021-09-29T07:23:05+00:00"
     },
-    "weapon_skin_data": {
-      "weapon_skin_id": 0
+    "WeaponSkinData": {
+      "WeaponSkinId": 0
     },
-    "weapon_body_data": {
-      "weapon_body_id": "ClaiomhSolais",
-      "buildup_count": 80,
-      "limit_break_count": 8,
-      "limit_over_count": 1,
-      "skill_no": 1,
-      "skill_level": 2,
-      "ability_1_level": 2,
-      "ability_2_level": 2,
-      "equipable_count": 1,
-      "additional_crest_slot_type_1_count": 1,
-      "additional_crest_slot_type_2_count": 0,
-      "additional_crest_slot_type_3_count": 2,
-      "additional_effect_count": 0
+    "WeaponBodyData": {
+      "WeaponBodyId": "ClaiomhSolais",
+      "BuildupCount": 80,
+      "LimitBreakCount": 8,
+      "LimitOverCount": 1,
+      "SkillNo": 1,
+      "SkillLevel": 2,
+      "Ability1Level": 2,
+      "Ability2Level": 2,
+      "EquipableCount": 1,
+      "AdditionalCrestSlotType1Count": 1,
+      "AdditionalCrestSlotType2Count": 0,
+      "AdditionalCrestSlotType3Count": 2,
+      "AdditionalEffectCount": 0
     },
-    "crest_slot_type_1_crest_list": [
+    "CrestSlotType1CrestList": [
       {
-        "ability_crest_id": "ExtremeTeamwork",
-        "buildup_count": 50,
-        "limit_break_count": 4,
-        "equipable_count": 4,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "ExtremeTeamwork",
+        "BuildupCount": 50,
+        "LimitBreakCount": 4,
+        "EquipableCount": 4,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       },
       {
-        "ability_crest_id": "BlossomsontheWatersEdge",
-        "buildup_count": 50,
-        "limit_break_count": 4,
-        "equipable_count": 1,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "BlossomsontheWatersEdge",
+        "BuildupCount": 50,
+        "LimitBreakCount": 4,
+        "EquipableCount": 1,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       },
       {
-        "ability_crest_id": "SpiritoftheSeason",
-        "buildup_count": 50,
-        "limit_break_count": 4,
-        "equipable_count": 4,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "SpiritoftheSeason",
+        "BuildupCount": 50,
+        "LimitBreakCount": 4,
+        "EquipableCount": 4,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       }
     ],
-    "crest_slot_type_2_crest_list": [
+    "CrestSlotType2CrestList": [
       {
-        "ability_crest_id": "SnipersAllure",
-        "buildup_count": 40,
-        "limit_break_count": 4,
-        "equipable_count": 4,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "SnipersAllure",
+        "BuildupCount": 40,
+        "LimitBreakCount": 4,
+        "EquipableCount": 4,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       },
       {
-        "ability_crest_id": "APassionforProduce",
-        "buildup_count": 40,
-        "limit_break_count": 4,
-        "equipable_count": 2,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "APassionforProduce",
+        "BuildupCount": 40,
+        "LimitBreakCount": 4,
+        "EquipableCount": 2,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       }
     ],
-    "crest_slot_type_3_crest_list": [
+    "CrestSlotType3CrestList": [
       {
-        "ability_crest_id": "AKnightsDreamAxesBoon",
-        "buildup_count": 30,
-        "limit_break_count": 4,
-        "equipable_count": 4,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 40,
-        "attack_plus_count": 40
+        "AbilityCrestId": "AKnightsDreamAxesBoon",
+        "BuildupCount": 30,
+        "LimitBreakCount": 4,
+        "EquipableCount": 4,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 40,
+        "AttackPlusCount": 40
       },
       {
-        "ability_crest_id": "CrownofLightSerpentsBoon",
-        "buildup_count": 30,
-        "limit_break_count": 4,
-        "equipable_count": 3,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 40,
-        "attack_plus_count": 40
+        "AbilityCrestId": "CrownofLightSerpentsBoon",
+        "BuildupCount": 30,
+        "LimitBreakCount": 4,
+        "EquipableCount": 3,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 40,
+        "AttackPlusCount": 40
       }
     ],
-    "talisman_data": {
-      "talisman_key_id": 1506,
-      "talisman_id": "HalloweenLaxi",
-      "talisman_ability_id_1": 340000009,
-      "talisman_ability_id_2": 340000076,
-      "talisman_ability_id_3": 0,
-      "additional_hp": 0,
-      "additional_attack": 0,
-      "is_new": true,
-      "is_lock": true,
-      "gettime": "2022-01-18T18:57:35+00:00"
+    "TalismanData": {
+      "TalismanKeyId": 1966,
+      "TalismanId": "HalloweenLaxi",
+      "TalismanAbilityId1": 340000009,
+      "TalismanAbilityId2": 340000076,
+      "TalismanAbilityId3": 0,
+      "AdditionalHp": 0,
+      "AdditionalAttack": 0,
+      "IsNew": true,
+      "IsLock": true,
+      "GetTime": "2022-01-18T18:57:35+00:00"
     },
-    "edit_skill_1_chara_data": {
-      "chara_id": "Cleo",
-      "edit_skill_level": 4
+    "EditSkill1CharaData": {
+      "CharaId": "Cleo",
+      "EditSkillLevel": 4
     },
-    "edit_skill_2_chara_data": {
-      "chara_id": "Ranzal",
-      "edit_skill_level": 4
+    "EditSkill2CharaData": {
+      "CharaId": "Ranzal",
+      "EditSkillLevel": 4
     },
-    "game_weapon_passive_ability_list": [
+    "GameWeaponPassiveAbilityList": [
       {
-        "weapon_passive_ability_id": 1030405
+        "WeaponPassiveAbilityId": 1030405
       }
     ],
-    "dragon_reliability_level": 30
+    "DragonReliabilityLevel": 30
   },
   {
-    "position": 3,
-    "chara_data": {
-      "chara_id": "BondforgedZethia",
-      "exp": 1191950,
-      "level": 80,
-      "additional_max_level": 0,
-      "hp": 751,
-      "attack": 510,
-      "ex_ability_level": 5,
-      "ex_ability_2_level": 5,
-      "ability_1_level": 2,
-      "ability_2_level": 2,
-      "ability_3_level": 2,
-      "is_new": 1,
-      "skill_1_level": 3,
-      "skill_2_level": 2,
-      "burst_attack_level": 2,
-      "rarity": 5,
-      "limit_break_count": 4,
-      "hp_plus_count": 100,
-      "attack_plus_count": 100,
-      "status_plus_count": 0,
-      "combo_buildup_count": 0,
-      "is_unlock_edit_skill": false,
-      "gettime": "2022-03-31T13:48:38+00:00",
-      "mana_circle_piece_id_list": [
+    "Position": 3,
+    "CharaData": {
+      "CharaId": "BondforgedZethia",
+      "Exp": 1191950,
+      "Level": 80,
+      "AdditionalMaxLevel": 0,
+      "Hp": 751,
+      "Attack": 510,
+      "ExAbilityLevel": 5,
+      "ExAbility2Level": 5,
+      "Ability1Level": 2,
+      "Ability2Level": 2,
+      "Ability3Level": 2,
+      "IsNew": true,
+      "Skill1Level": 3,
+      "Skill2Level": 2,
+      "BurstAttackLevel": 2,
+      "Rarity": 5,
+      "LimitBreakCount": 4,
+      "HpPlusCount": 100,
+      "AttackPlusCount": 100,
+      "StatusPlusCount": 0,
+      "ComboBuildupCount": 0,
+      "IsUnlockEditSkill": false,
+      "GetTime": "2022-03-31T13:48:38+00:00",
+      "ManaCirclePieceIdList": [
         1,
         2,
         3,
@@ -529,169 +529,169 @@
         49,
         50
       ],
-      "is_temporary": 0,
-      "list_view_flag": 1
+      "IsTemporary": false,
+      "ListViewFlag": 1
     },
-    "dragon_data": {
-      "dragon_id": "GalaThor",
-      "dragon_key_id": 869,
-      "level": 100,
-      "exp": 1240020,
-      "is_lock": true,
-      "is_new": true,
-      "get_time": "2020-12-28T06:38:44+00:00",
-      "skill_1_level": 2,
-      "ability_1_level": 5,
-      "ability_2_level": 5,
-      "limit_break_count": 4,
-      "hp_plus_count": 50,
-      "attack_plus_count": 50,
-      "status_plus_count": 0
+    "DragonData": {
+      "DragonId": "GalaThor",
+      "DragonKeyId": 1124,
+      "Level": 100,
+      "Exp": 1240020,
+      "IsLock": true,
+      "IsNew": true,
+      "Skill1Level": 2,
+      "Ability1Level": 5,
+      "Ability2Level": 5,
+      "LimitBreakCount": 4,
+      "HpPlusCount": 50,
+      "AttackPlusCount": 50,
+      "StatusPlusCount": 0,
+      "GetTime": "2020-12-28T06:38:44+00:00"
     },
-    "weapon_skin_data": {
-      "weapon_skin_id": 0
+    "WeaponSkinData": {
+      "WeaponSkinId": 0
     },
-    "weapon_body_data": {
-      "weapon_body_id": "Brionac",
-      "buildup_count": 80,
-      "limit_break_count": 8,
-      "limit_over_count": 1,
-      "skill_no": 1,
-      "skill_level": 2,
-      "ability_1_level": 2,
-      "ability_2_level": 2,
-      "equipable_count": 1,
-      "additional_crest_slot_type_1_count": 1,
-      "additional_crest_slot_type_2_count": 0,
-      "additional_crest_slot_type_3_count": 2,
-      "additional_effect_count": 0
+    "WeaponBodyData": {
+      "WeaponBodyId": "Brionac",
+      "BuildupCount": 80,
+      "LimitBreakCount": 8,
+      "LimitOverCount": 1,
+      "SkillNo": 1,
+      "SkillLevel": 2,
+      "Ability1Level": 2,
+      "Ability2Level": 2,
+      "EquipableCount": 1,
+      "AdditionalCrestSlotType1Count": 1,
+      "AdditionalCrestSlotType2Count": 0,
+      "AdditionalCrestSlotType3Count": 2,
+      "AdditionalEffectCount": 0
     },
-    "crest_slot_type_1_crest_list": [
+    "CrestSlotType1CrestList": [
       {
-        "ability_crest_id": "ExtremeTeamwork",
-        "buildup_count": 50,
-        "limit_break_count": 4,
-        "equipable_count": 4,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "ExtremeTeamwork",
+        "BuildupCount": 50,
+        "LimitBreakCount": 4,
+        "EquipableCount": 4,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       },
       {
-        "ability_crest_id": "SpiritoftheSeason",
-        "buildup_count": 50,
-        "limit_break_count": 4,
-        "equipable_count": 4,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "SpiritoftheSeason",
+        "BuildupCount": 50,
+        "LimitBreakCount": 4,
+        "EquipableCount": 4,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       },
       {
-        "ability_crest_id": "BloodyLittleQueen",
-        "buildup_count": 50,
-        "limit_break_count": 4,
-        "equipable_count": 1,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "BloodyLittleQueen",
+        "BuildupCount": 50,
+        "LimitBreakCount": 4,
+        "EquipableCount": 1,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       }
     ],
-    "crest_slot_type_2_crest_list": [
+    "CrestSlotType2CrestList": [
       {
-        "ability_crest_id": "ChariotDrift",
-        "buildup_count": 40,
-        "limit_break_count": 4,
-        "equipable_count": 4,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "ChariotDrift",
+        "BuildupCount": 40,
+        "LimitBreakCount": 4,
+        "EquipableCount": 4,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       },
       {
-        "ability_crest_id": "SnipersAllure",
-        "buildup_count": 40,
-        "limit_break_count": 4,
-        "equipable_count": 4,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "SnipersAllure",
+        "BuildupCount": 40,
+        "LimitBreakCount": 4,
+        "EquipableCount": 4,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       }
     ],
-    "crest_slot_type_3_crest_list": [
+    "CrestSlotType3CrestList": [
       {
-        "ability_crest_id": "AKnightsDreamAxesBoon",
-        "buildup_count": 30,
-        "limit_break_count": 4,
-        "equipable_count": 4,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 40,
-        "attack_plus_count": 40
+        "AbilityCrestId": "AKnightsDreamAxesBoon",
+        "BuildupCount": 30,
+        "LimitBreakCount": 4,
+        "EquipableCount": 4,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 40,
+        "AttackPlusCount": 40
       },
       {
-        "ability_crest_id": "TutelarysDestinyWolfsBoon",
-        "buildup_count": 30,
-        "limit_break_count": 4,
-        "equipable_count": 4,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 40,
-        "attack_plus_count": 40
+        "AbilityCrestId": "TutelarysDestinyWolfsBoon",
+        "BuildupCount": 30,
+        "LimitBreakCount": 4,
+        "EquipableCount": 4,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 40,
+        "AttackPlusCount": 40
       }
     ],
-    "talisman_data": {
-      "talisman_key_id": 1446,
-      "talisman_id": "Pecorine",
-      "talisman_ability_id_1": 340000008,
-      "talisman_ability_id_2": 340000058,
-      "talisman_ability_id_3": 0,
-      "additional_hp": 0,
-      "additional_attack": 0,
-      "is_new": true,
-      "is_lock": true,
-      "gettime": "2022-01-08T20:49:41+00:00"
+    "TalismanData": {
+      "TalismanKeyId": 1906,
+      "TalismanId": "Pecorine",
+      "TalismanAbilityId1": 340000008,
+      "TalismanAbilityId2": 340000058,
+      "TalismanAbilityId3": 0,
+      "AdditionalHp": 0,
+      "AdditionalAttack": 0,
+      "IsNew": true,
+      "IsLock": true,
+      "GetTime": "2022-01-08T20:49:41+00:00"
     },
-    "edit_skill_1_chara_data": {
-      "chara_id": "HalloweenLowen",
-      "edit_skill_level": 3
+    "EditSkill1CharaData": {
+      "CharaId": "HalloweenLowen",
+      "EditSkillLevel": 3
     },
-    "edit_skill_2_chara_data": {
-      "chara_id": "Vixel",
-      "edit_skill_level": 4
+    "EditSkill2CharaData": {
+      "CharaId": "Vixel",
+      "EditSkillLevel": 4
     },
-    "game_weapon_passive_ability_list": [],
-    "dragon_reliability_level": 30
+    "GameWeaponPassiveAbilityList": [],
+    "DragonReliabilityLevel": 30
   },
   {
-    "position": 4,
-    "chara_data": {
-      "chara_id": "GalaLuca",
-      "exp": 3871830,
-      "level": 90,
-      "additional_max_level": 15,
-      "hp": 825,
-      "attack": 573,
-      "ex_ability_level": 5,
-      "ex_ability_2_level": 5,
-      "ability_1_level": 3,
-      "ability_2_level": 3,
-      "ability_3_level": 3,
-      "is_new": 1,
-      "skill_1_level": 3,
-      "skill_2_level": 3,
-      "burst_attack_level": 2,
-      "rarity": 5,
-      "limit_break_count": 5,
-      "hp_plus_count": 100,
-      "attack_plus_count": 100,
-      "status_plus_count": 0,
-      "combo_buildup_count": 0,
-      "is_unlock_edit_skill": true,
-      "gettime": "2020-01-24T20:32:42+00:00",
-      "mana_circle_piece_id_list": [
+    "Position": 4,
+    "CharaData": {
+      "CharaId": "GalaLuca",
+      "Exp": 3871830,
+      "Level": 90,
+      "AdditionalMaxLevel": 15,
+      "Hp": 825,
+      "Attack": 573,
+      "ExAbilityLevel": 5,
+      "ExAbility2Level": 5,
+      "Ability1Level": 3,
+      "Ability2Level": 3,
+      "Ability3Level": 3,
+      "IsNew": true,
+      "Skill1Level": 3,
+      "Skill2Level": 3,
+      "BurstAttackLevel": 2,
+      "Rarity": 5,
+      "LimitBreakCount": 5,
+      "HpPlusCount": 100,
+      "AttackPlusCount": 100,
+      "StatusPlusCount": 0,
+      "ComboBuildupCount": 0,
+      "IsUnlockEditSkill": true,
+      "GetTime": "2020-01-24T20:32:42+00:00",
+      "ManaCirclePieceIdList": [
         1,
         2,
         3,
@@ -756,140 +756,140 @@
         62,
         63
       ],
-      "is_temporary": 0,
-      "list_view_flag": 1
+      "IsTemporary": false,
+      "ListViewFlag": 1
     },
-    "dragon_data": {
-      "dragon_id": "GalaChronosNyx",
-      "dragon_key_id": 887,
-      "level": 100,
-      "exp": 1240020,
-      "is_lock": false,
-      "is_new": true,
-      "get_time": "2021-10-30T07:53:26+00:00",
-      "skill_1_level": 2,
-      "ability_1_level": 5,
-      "ability_2_level": 5,
-      "limit_break_count": 4,
-      "hp_plus_count": 50,
-      "attack_plus_count": 50,
-      "status_plus_count": 0
+    "DragonData": {
+      "DragonId": "GalaChronosNyx",
+      "DragonKeyId": 1142,
+      "Level": 100,
+      "Exp": 1240020,
+      "IsLock": false,
+      "IsNew": true,
+      "Skill1Level": 2,
+      "Ability1Level": 5,
+      "Ability2Level": 5,
+      "LimitBreakCount": 4,
+      "HpPlusCount": 50,
+      "AttackPlusCount": 50,
+      "StatusPlusCount": 0,
+      "GetTime": "2021-10-30T07:53:26+00:00"
     },
-    "weapon_skin_data": {
-      "weapon_skin_id": 0
+    "WeaponSkinData": {
+      "WeaponSkinId": 0
     },
-    "weapon_body_data": {
-      "weapon_body_id": "Fragarach",
-      "buildup_count": 80,
-      "limit_break_count": 8,
-      "limit_over_count": 1,
-      "skill_no": 1,
-      "skill_level": 2,
-      "ability_1_level": 2,
-      "ability_2_level": 2,
-      "equipable_count": 1,
-      "additional_crest_slot_type_1_count": 1,
-      "additional_crest_slot_type_2_count": 0,
-      "additional_crest_slot_type_3_count": 2,
-      "additional_effect_count": 0
+    "WeaponBodyData": {
+      "WeaponBodyId": "Fragarach",
+      "BuildupCount": 80,
+      "LimitBreakCount": 8,
+      "LimitOverCount": 1,
+      "SkillNo": 1,
+      "SkillLevel": 2,
+      "Ability1Level": 2,
+      "Ability2Level": 2,
+      "EquipableCount": 1,
+      "AdditionalCrestSlotType1Count": 1,
+      "AdditionalCrestSlotType2Count": 0,
+      "AdditionalCrestSlotType3Count": 2,
+      "AdditionalEffectCount": 0
     },
-    "crest_slot_type_1_crest_list": [
+    "CrestSlotType1CrestList": [
       {
-        "ability_crest_id": "PecorinesGrandAdventure",
-        "buildup_count": 50,
-        "limit_break_count": 4,
-        "equipable_count": 1,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "PecorinesGrandAdventure",
+        "BuildupCount": 50,
+        "LimitBreakCount": 4,
+        "EquipableCount": 1,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       },
       {
-        "ability_crest_id": "PrayersUntoHim",
-        "buildup_count": 50,
-        "limit_break_count": 4,
-        "equipable_count": 1,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "PrayersUntoHim",
+        "BuildupCount": 50,
+        "LimitBreakCount": 4,
+        "EquipableCount": 1,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       },
       {
-        "ability_crest_id": "SpiritoftheSeason",
-        "buildup_count": 50,
-        "limit_break_count": 4,
-        "equipable_count": 4,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "SpiritoftheSeason",
+        "BuildupCount": 50,
+        "LimitBreakCount": 4,
+        "EquipableCount": 4,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       }
     ],
-    "crest_slot_type_2_crest_list": [
+    "CrestSlotType2CrestList": [
       {
-        "ability_crest_id": "ChariotDrift",
-        "buildup_count": 40,
-        "limit_break_count": 4,
-        "equipable_count": 4,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "ChariotDrift",
+        "BuildupCount": 40,
+        "LimitBreakCount": 4,
+        "EquipableCount": 4,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       },
       {
-        "ability_crest_id": "TheNoblesDayOff",
-        "buildup_count": 40,
-        "limit_break_count": 4,
-        "equipable_count": 4,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 50,
-        "attack_plus_count": 50
+        "AbilityCrestId": "TheNoblesDayOff",
+        "BuildupCount": 40,
+        "LimitBreakCount": 4,
+        "EquipableCount": 4,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 50,
+        "AttackPlusCount": 50
       }
     ],
-    "crest_slot_type_3_crest_list": [
+    "CrestSlotType3CrestList": [
       {
-        "ability_crest_id": "CrownofLightSerpentsBoon",
-        "buildup_count": 30,
-        "limit_break_count": 4,
-        "equipable_count": 3,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 40,
-        "attack_plus_count": 40
+        "AbilityCrestId": "CrownofLightSerpentsBoon",
+        "BuildupCount": 30,
+        "LimitBreakCount": 4,
+        "EquipableCount": 3,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 40,
+        "AttackPlusCount": 40
       },
       {
-        "ability_crest_id": "AKnightsDreamAxesBoon",
-        "buildup_count": 30,
-        "limit_break_count": 4,
-        "equipable_count": 4,
-        "ability_1_level": 3,
-        "ability_2_level": 3,
-        "hp_plus_count": 40,
-        "attack_plus_count": 40
+        "AbilityCrestId": "AKnightsDreamAxesBoon",
+        "BuildupCount": 30,
+        "LimitBreakCount": 4,
+        "EquipableCount": 4,
+        "Ability1Level": 3,
+        "Ability2Level": 3,
+        "HpPlusCount": 40,
+        "AttackPlusCount": 40
       }
     ],
-    "talisman_data": {
-      "talisman_key_id": 1445,
-      "talisman_id": "Pecorine",
-      "talisman_ability_id_1": 340000029,
-      "talisman_ability_id_2": 340000056,
-      "talisman_ability_id_3": 0,
-      "additional_hp": 0,
-      "additional_attack": 0,
-      "is_new": true,
-      "is_lock": true,
-      "gettime": "2022-01-08T20:49:41+00:00"
+    "TalismanData": {
+      "TalismanKeyId": 1905,
+      "TalismanId": "Pecorine",
+      "TalismanAbilityId1": 340000029,
+      "TalismanAbilityId2": 340000056,
+      "TalismanAbilityId3": 0,
+      "AdditionalHp": 0,
+      "AdditionalAttack": 0,
+      "IsNew": true,
+      "IsLock": true,
+      "GetTime": "2022-01-08T20:49:41+00:00"
     },
-    "edit_skill_1_chara_data": {
-      "chara_id": "Empty",
-      "edit_skill_level": 0
+    "EditSkill1CharaData": {
+      "CharaId": "Empty",
+      "EditSkillLevel": 0
     },
-    "edit_skill_2_chara_data": {
-      "chara_id": "Vixel",
-      "edit_skill_level": 4
+    "EditSkill2CharaData": {
+      "CharaId": "Vixel",
+      "EditSkillLevel": 4
     },
-    "game_weapon_passive_ability_list": [],
-    "dragon_reliability_level": 30
+    "GameWeaponPassiveAbilityList": [],
+    "DragonReliabilityLevel": 30
   }
 ]

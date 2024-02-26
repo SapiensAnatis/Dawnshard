@@ -12,8 +12,5 @@ public class PartyPowerReverseMapProfile : Profile
         this.AddGlobalIgnore("Owner");
 
         this.CreateMap<PartyPowerData, DbPartyPower>();
-
-        this.SourceMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
-        this.DestinationMemberNamingConvention = DatabaseNamingConvention.Instance;
     }
 }

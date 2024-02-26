@@ -32,7 +32,7 @@ public class HelperService : IHelperService
         this.logger = logger;
     }
 
-    public async Task<QuestGetSupportUserListData> GetHelpers()
+    public async Task<QuestGetSupportUserListResponse> GetHelpers()
     {
         // TODO: Make this actually pull from database
         await Task.CompletedTask;
@@ -42,8 +42,8 @@ public class HelperService : IHelperService
 
     public async Task<UserSupportList?> GetHelper(ulong viewerId)
     {
-        UserSupportList? helper = (await this.GetHelpers()).support_user_list.FirstOrDefault(x =>
-            x.viewer_id == viewerId
+        UserSupportList? helper = (await this.GetHelpers()).SupportUserList.FirstOrDefault(x =>
+            x.ViewerId == viewerId
         );
 
         this.logger.LogDebug("Retrieved support list {@helper}", helper);
@@ -63,23 +63,26 @@ public class HelperService : IHelperService
         UserSupportList supportList =
             new()
             {
-                viewer_id = (ulong)userData.ViewerId,
-                name = userData.Name,
-                last_login_date = userData.LastLoginTime,
-                level = userData.Level,
-                emblem_id = userData.EmblemId,
-                max_party_power = 1000,
-                guild = new() { guild_id = 0, }
+                ViewerId = (ulong)userData.ViewerId,
+                Name = userData.Name,
+                LastLoginDate = userData.LastLoginTime,
+                Level = userData.Level,
+                EmblemId = userData.EmblemId,
+                MaxPartyPower = 1000,
+                Guild = new() { GuildId = 0, }
             };
 
         this.mapper.Map(detailedUnit, supportList);
 
-        supportList.support_crest_slot_type_1_list =
-            supportList.support_crest_slot_type_1_list.Where(x => x != null);
-        supportList.support_crest_slot_type_2_list =
-            supportList.support_crest_slot_type_2_list.Where(x => x != null);
-        supportList.support_crest_slot_type_3_list =
-            supportList.support_crest_slot_type_3_list.Where(x => x != null);
+        supportList.SupportCrestSlotType1List = supportList.SupportCrestSlotType1List.Where(x =>
+            x != null
+        );
+        supportList.SupportCrestSlotType2List = supportList.SupportCrestSlotType2List.Where(x =>
+            x != null
+        );
+        supportList.SupportCrestSlotType3List = supportList.SupportCrestSlotType3List.Where(x =>
+            x != null
+        );
 
         return supportList;
     }
@@ -91,2869 +94,2869 @@ public class HelperService : IHelperService
     {
         return new AtgenSupportData()
         {
-            viewer_id = helperInfo.viewer_id,
-            name = helperInfo.name,
-            is_friend = helperDetails.is_friend,
-            chara_data = this.mapper.Map<CharaList>(helperInfo.support_chara),
-            dragon_data = this.mapper.Map<DragonList>(helperInfo.support_dragon),
-            weapon_body_data = this.mapper.Map<GameWeaponBody>(helperInfo.support_weapon_body),
-            crest_slot_type_1_crest_list = helperInfo.support_crest_slot_type_1_list.Select(
+            ViewerId = helperInfo.ViewerId,
+            Name = helperInfo.Name,
+            IsFriend = helperDetails.IsFriend,
+            CharaData = this.mapper.Map<CharaList>(helperInfo.SupportChara),
+            DragonData = this.mapper.Map<DragonList>(helperInfo.SupportDragon),
+            WeaponBodyData = this.mapper.Map<GameWeaponBody>(helperInfo.SupportWeaponBody),
+            CrestSlotType1CrestList = helperInfo.SupportCrestSlotType1List.Select(
                 this.mapper.Map<GameAbilityCrest>
             ),
-            crest_slot_type_2_crest_list = helperInfo.support_crest_slot_type_2_list.Select(
+            CrestSlotType2CrestList = helperInfo.SupportCrestSlotType2List.Select(
                 this.mapper.Map<GameAbilityCrest>
             ),
-            crest_slot_type_3_crest_list = helperInfo.support_crest_slot_type_3_list.Select(
+            CrestSlotType3CrestList = helperInfo.SupportCrestSlotType3List.Select(
                 this.mapper.Map<GameAbilityCrest>
             ),
-            talisman_data = this.mapper.Map<TalismanList>(helperInfo.support_talisman)
+            TalismanData = this.mapper.Map<TalismanList>(helperInfo.SupportTalisman)
         };
     }
 
     internal static class StubData
     {
-        public static readonly QuestGetSupportUserListData SupportListData =
+        public static readonly QuestGetSupportUserListResponse SupportListData =
             new()
             {
-                support_user_list = new List<UserSupportList>()
+                SupportUserList = new List<UserSupportList>()
                 {
                     new()
                     {
-                        viewer_id = 1000,
-                        name = "dreadfullydistinct",
-                        level = 400,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = Emblems.TraitorousPrince,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1000,
+                        Name = "dreadfullydistinct",
+                        Level = 400,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = Emblems.TraitorousPrince,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.DragonyuleIlia,
-                            level = 10,
-                            additional_max_level = 0,
-                            rarity = 5,
-                            hp = 60,
-                            attack = 40,
-                            hp_plus_count = 0,
-                            attack_plus_count = 0,
-                            ability_1_level = 0,
-                            ability_2_level = 0,
-                            ability_3_level = 0,
-                            ex_ability_level = 1,
-                            ex_ability_2_level = 1,
-                            skill_1_level = 1,
-                            skill_2_level = 0,
-                            is_unlock_edit_skill = true
+                            CharaId = Charas.DragonyuleIlia,
+                            Level = 10,
+                            AdditionalMaxLevel = 0,
+                            Rarity = 5,
+                            Hp = 60,
+                            Attack = 40,
+                            HpPlusCount = 0,
+                            AttackPlusCount = 0,
+                            Ability1Level = 0,
+                            Ability2Level = 0,
+                            Ability3Level = 0,
+                            ExAbilityLevel = 1,
+                            ExAbility2Level = 1,
+                            Skill1Level = 1,
+                            Skill2Level = 0,
+                            IsUnlockEditSkill = true
                         },
-                        support_dragon = new() { dragon_key_id = 0, },
-                        support_weapon_body = new() { weapon_body_id = 0, },
-                        support_talisman = new() { talisman_key_id = 0, },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportDragon = new() { DragonKeyId = 0, },
+                        SupportWeaponBody = new() { WeaponBodyId = 0, },
+                        SupportTalisman = new() { TalismanKeyId = 0, },
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
-                            new() { ability_crest_id = 0 },
-                            new() { ability_crest_id = 0 },
-                            new() { ability_crest_id = 0 },
+                            new() { AbilityCrestId = 0 },
+                            new() { AbilityCrestId = 0 },
+                            new() { AbilityCrestId = 0 },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
-                            new() { ability_crest_id = 0 },
-                            new() { ability_crest_id = 0 },
+                            new() { AbilityCrestId = 0 },
+                            new() { AbilityCrestId = 0 },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
-                            new() { ability_crest_id = 0 },
-                            new() { ability_crest_id = 0 },
+                            new() { AbilityCrestId = 0 },
+                            new() { AbilityCrestId = 0 },
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1001,
-                        name = "Nightmerp",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = (Emblems)10250305,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1001,
+                        Name = "Nightmerp",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = (Emblems)10250305,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.GalaEmile,
-                            level = 80,
-                            additional_max_level = 0,
-                            rarity = 5,
-                            hp = 789,
-                            attack = 486,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 2,
-                            ability_2_level = 2,
-                            ability_3_level = 2,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 3,
-                            skill_2_level = 2,
-                            is_unlock_edit_skill = true
+                            CharaId = Charas.GalaEmile,
+                            Level = 80,
+                            AdditionalMaxLevel = 0,
+                            Rarity = 5,
+                            Hp = 789,
+                            Attack = 486,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 2,
+                            Ability2Level = 2,
+                            Ability3Level = 2,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 3,
+                            Skill2Level = 2,
+                            IsUnlockEditSkill = true
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.GalaBahamut,
-                            level = 100,
-                            hp = 368,
-                            attack = 128,
-                            skill_1_level = 2,
-                            ability_1_level = 5,
-                            ability_2_level = 5,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 4
+                            DragonKeyId = 0,
+                            DragonId = Dragons.GalaBahamut,
+                            Level = 100,
+                            Hp = 368,
+                            Attack = 128,
+                            Skill1Level = 2,
+                            Ability1Level = 5,
+                            Ability2Level = 5,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 4
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.AqueousPrison,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.AqueousPrison,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.GalaEmile,
-                            additional_attack = 100,
-                            additional_hp = 100
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.GalaEmile,
+                            AdditionalAttack = 100,
+                            AdditionalHp = 100
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ARoyalTeaParty,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ARoyalTeaParty,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.QueenoftheBlueSeas,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.QueenoftheBlueSeas,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.PeacefulWaterfront,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.PeacefulWaterfront,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.HisCleverBrother,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.HisCleverBrother,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.CrownofLightSerpentsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1002,
-                        name = "Alicia",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = (Emblems)10150503,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1002,
+                        Name = "Alicia",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = (Emblems)10150503,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.Alberius,
-                            level = 80,
-                            additional_max_level = 0,
-                            rarity = 5,
-                            hp = 752,
-                            attack = 506,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 2,
-                            ability_2_level = 2,
-                            ability_3_level = 2,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 3,
-                            skill_2_level = 2,
-                            is_unlock_edit_skill = true
+                            CharaId = Charas.Alberius,
+                            Level = 80,
+                            AdditionalMaxLevel = 0,
+                            Rarity = 5,
+                            Hp = 752,
+                            Attack = 506,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 2,
+                            Ability2Level = 2,
+                            Ability3Level = 2,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 3,
+                            Skill2Level = 2,
+                            IsUnlockEditSkill = true
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.Ramiel,
-                            level = 120,
-                            hp = 388,
-                            attack = 148,
-                            skill_1_level = 2,
-                            ability_1_level = 6,
-                            ability_2_level = 6,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 5
+                            DragonKeyId = 0,
+                            DragonId = Dragons.Ramiel,
+                            Level = 120,
+                            Hp = 388,
+                            Attack = 148,
+                            Skill1Level = 2,
+                            Ability1Level = 6,
+                            Ability2Level = 6,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 5
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.PrimalHex,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.PrimalHex,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.Alberius,
-                            talisman_ability_id_1 = 340000030,
-                            talisman_ability_id_2 = 340000132
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.Alberius,
+                            TalismanAbilityId1 = 340000030,
+                            TalismanAbilityId2 = 340000132
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.WelcometotheOpera,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.WelcometotheOpera,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.AManUnchanging,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.AManUnchanging,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.PrayersUntoHim,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.PrayersUntoHim,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ChariotDrift,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.CrownofLightSerpentsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1003,
-                        name = "alkaemist",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = (Emblems)10850503,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1003,
+                        Name = "alkaemist",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = (Emblems)10850503,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.Grace,
-                            level = 80,
-                            additional_max_level = 0,
-                            rarity = 5,
-                            hp = 804,
-                            attack = 470,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 2,
-                            ability_2_level = 2,
-                            ability_3_level = 2,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 3,
-                            skill_2_level = 2,
-                            is_unlock_edit_skill = true
+                            CharaId = Charas.Grace,
+                            Level = 80,
+                            AdditionalMaxLevel = 0,
+                            Rarity = 5,
+                            Hp = 804,
+                            Attack = 470,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 2,
+                            Ability2Level = 2,
+                            Ability3Level = 2,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 3,
+                            Skill2Level = 2,
+                            IsUnlockEditSkill = true
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.Ramiel,
-                            level = 120,
-                            hp = 388,
-                            attack = 148,
-                            skill_1_level = 2,
-                            ability_1_level = 6,
-                            ability_2_level = 6,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 5
+                            DragonKeyId = 0,
+                            DragonId = Dragons.Ramiel,
+                            Level = 120,
+                            Hp = 388,
+                            Attack = 148,
+                            Skill1Level = 2,
+                            Ability1Level = 6,
+                            Ability2Level = 6,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 5
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.ConsumingDarkness,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.ConsumingDarkness,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.Grace,
-                            talisman_ability_id_1 = 340000070,
-                            talisman_ability_id_2 = 340000134
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.Grace,
+                            TalismanAbilityId1 = 340000070,
+                            TalismanAbilityId2 = 340000134
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.GentleWinds,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.GentleWinds,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.TheChocolatiers,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.TheChocolatiers,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ProperMaintenance,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.AWidowsLament,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.AWidowsLament,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1004,
-                        name = "QwerbyKing",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = (Emblems)10850502,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1004,
+                        Name = "QwerbyKing",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = (Emblems)10850502,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.SummerVerica,
-                            level = 100,
-                            additional_max_level = 20,
-                            rarity = 5,
-                            hp = 964,
-                            attack = 563,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 3,
-                            ability_2_level = 3,
-                            ability_3_level = 3,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 4,
-                            skill_2_level = 3,
-                            is_unlock_edit_skill = true
+                            CharaId = Charas.SummerVerica,
+                            Level = 100,
+                            AdditionalMaxLevel = 20,
+                            Rarity = 5,
+                            Hp = 964,
+                            Attack = 563,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 3,
+                            Ability2Level = 3,
+                            Ability3Level = 3,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 4,
+                            Skill2Level = 3,
+                            IsUnlockEditSkill = true
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.Ramiel,
-                            level = 120,
-                            hp = 388,
-                            attack = 148,
-                            skill_1_level = 2,
-                            ability_1_level = 6,
-                            ability_2_level = 6,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 5
+                            DragonKeyId = 0,
+                            DragonId = Dragons.Ramiel,
+                            Level = 120,
+                            Hp = 388,
+                            Attack = 148,
+                            Skill1Level = 2,
+                            Ability1Level = 6,
+                            Ability2Level = 6,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 5
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.ConsumingDarkness,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.ConsumingDarkness,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.SummerVerica,
-                            talisman_ability_id_1 = 340000010,
-                            talisman_ability_id_2 = 340000134
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.SummerVerica,
+                            TalismanAbilityId1 = 340000010,
+                            TalismanAbilityId2 = 340000134
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.CastleCheerCorps,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.StudyRabbits,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ProperMaintenance,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.FromWhenceHeComes,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1005,
-                        name = "Zappypants",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = (Emblems)10550103,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1005,
+                        Name = "Zappypants",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = (Emblems)10550103,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.KimonoElisanne,
-                            level = 80,
-                            additional_max_level = 0,
-                            rarity = 5,
-                            hp = 789,
-                            attack = 486,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 2,
-                            ability_2_level = 2,
-                            ability_3_level = 2,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 3,
-                            skill_2_level = 2,
-                            is_unlock_edit_skill = true
+                            CharaId = Charas.KimonoElisanne,
+                            Level = 80,
+                            AdditionalMaxLevel = 0,
+                            Rarity = 5,
+                            Hp = 789,
+                            Attack = 486,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 2,
+                            Ability2Level = 2,
+                            Ability3Level = 2,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 3,
+                            Skill2Level = 2,
+                            IsUnlockEditSkill = true
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.Horus,
-                            level = 100,
-                            hp = 369,
-                            attack = 127,
-                            skill_1_level = 2,
-                            ability_1_level = 5,
-                            ability_2_level = 0,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 4
+                            DragonKeyId = 0,
+                            DragonId = Dragons.Horus,
+                            Level = 100,
+                            Hp = 369,
+                            Attack = 127,
+                            Skill1Level = 2,
+                            Ability1Level = 5,
+                            Ability2Level = 0,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 4
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.OmniflameLance,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.OmniflameLance,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.KimonoElisanne,
-                            talisman_ability_id_1 = 340000010,
-                            talisman_ability_id_2 = 340000134
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.KimonoElisanne,
+                            TalismanAbilityId1 = 340000010,
+                            TalismanAbilityId2 = 340000134
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.CastleCheerCorps,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.StudyRabbits,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ProperMaintenance,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.FromWhenceHeComes,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1006,
-                        name = "stairs",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = (Emblems)10550103,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1006,
+                        Name = "stairs",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = (Emblems)10550103,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.Elisanne,
-                            level = 100,
-                            additional_max_level = 20,
-                            rarity = 5,
-                            hp = 902,
-                            attack = 551,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 3,
-                            ability_2_level = 3,
-                            ability_3_level = 2,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 4,
-                            skill_2_level = 3,
-                            is_unlock_edit_skill = true
+                            CharaId = Charas.Elisanne,
+                            Level = 100,
+                            AdditionalMaxLevel = 20,
+                            Rarity = 5,
+                            Hp = 902,
+                            Attack = 551,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 3,
+                            Ability2Level = 3,
+                            Ability3Level = 2,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 4,
+                            Skill2Level = 3,
+                            IsUnlockEditSkill = true
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.GalaBahamut,
-                            level = 100,
-                            hp = 368,
-                            attack = 128,
-                            skill_1_level = 2,
-                            ability_1_level = 5,
-                            ability_2_level = 5,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 4
+                            DragonKeyId = 0,
+                            DragonId = Dragons.GalaBahamut,
+                            Level = 100,
+                            Hp = 368,
+                            Attack = 128,
+                            Skill1Level = 2,
+                            Ability1Level = 5,
+                            Ability2Level = 5,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 4
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.LimpidCascade,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.LimpidCascade,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.Elisanne,
-                            talisman_ability_id_1 = 340000010,
-                            talisman_ability_id_2 = 340000134
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.Elisanne,
+                            TalismanAbilityId1 = 340000010,
+                            TalismanAbilityId2 = 340000134
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.CastleCheerCorps,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.StudyRabbits,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ProperMaintenance,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.FromWhenceHeComes,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1007,
-                        name = "no",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = (Emblems)10250302,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1007,
+                        Name = "no",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = (Emblems)10250302,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.Tobias,
-                            level = 80,
-                            additional_max_level = 0,
-                            rarity = 5,
-                            hp = 781,
-                            attack = 494,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 2,
-                            ability_2_level = 2,
-                            ability_3_level = 2,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 3,
-                            skill_2_level = 2,
-                            is_unlock_edit_skill = true
+                            CharaId = Charas.Tobias,
+                            Level = 80,
+                            AdditionalMaxLevel = 0,
+                            Rarity = 5,
+                            Hp = 781,
+                            Attack = 494,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 2,
+                            Ability2Level = 2,
+                            Ability3Level = 2,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 3,
+                            Skill2Level = 2,
+                            IsUnlockEditSkill = true
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.GalaBahamut,
-                            level = 100,
-                            hp = 368,
-                            attack = 128,
-                            skill_1_level = 2,
-                            ability_1_level = 5,
-                            ability_2_level = 5,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 4
+                            DragonKeyId = 0,
+                            DragonId = Dragons.GalaBahamut,
+                            Level = 100,
+                            Hp = 368,
+                            Attack = 128,
+                            Skill1Level = 2,
+                            Ability1Level = 5,
+                            Ability2Level = 5,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 4
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.NobleHorizon,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.NobleHorizon,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.Tobias,
-                            talisman_ability_id_1 = 340000010,
-                            talisman_ability_id_2 = 340000134
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.Tobias,
+                            TalismanAbilityId1 = 340000010,
+                            TalismanAbilityId2 = 340000134
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.CastleCheerCorps,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.StudyRabbits,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ProperMaintenance,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.FromWhenceHeComes,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1008,
-                        name = "Euden",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = (Emblems)10850301,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1008,
+                        Name = "Euden",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = (Emblems)10850301,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.Akasha,
-                            level = 100,
-                            additional_max_level = 20,
-                            rarity = 5,
-                            hp = 967,
-                            attack = 561,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 3,
-                            ability_2_level = 3,
-                            ability_3_level = 3,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 4,
-                            skill_2_level = 3,
-                            is_unlock_edit_skill = true
+                            CharaId = Charas.Akasha,
+                            Level = 100,
+                            AdditionalMaxLevel = 20,
+                            Rarity = 5,
+                            Hp = 967,
+                            Attack = 561,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 3,
+                            Ability2Level = 3,
+                            Ability3Level = 3,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 4,
+                            Skill2Level = 3,
+                            IsUnlockEditSkill = true
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.GalaBahamut,
-                            level = 100,
-                            hp = 368,
-                            attack = 128,
-                            skill_1_level = 2,
-                            ability_1_level = 5,
-                            ability_2_level = 5,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 4
+                            DragonKeyId = 0,
+                            DragonId = Dragons.GalaBahamut,
+                            Level = 100,
+                            Hp = 368,
+                            Attack = 128,
+                            Skill1Level = 2,
+                            Ability1Level = 5,
+                            Ability2Level = 5,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 4
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.NobleHorizon,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.NobleHorizon,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.Akasha,
-                            talisman_ability_id_1 = 340000010,
-                            talisman_ability_id_2 = 340000134
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.Akasha,
+                            TalismanAbilityId1 = 340000010,
+                            TalismanAbilityId2 = 340000134
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.CastleCheerCorps,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.StudyRabbits,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ProperMaintenance,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.FromWhenceHeComes,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1009,
-                        name = "Euden",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = (Emblems)10850301,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1009,
+                        Name = "Euden",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = (Emblems)10850301,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.Patia,
-                            level = 100,
-                            additional_max_level = 20,
-                            rarity = 5,
-                            hp = 961,
-                            attack = 537,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 3,
-                            ability_2_level = 3,
-                            ability_3_level = 2,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 4,
-                            skill_2_level = 3,
-                            is_unlock_edit_skill = true
+                            CharaId = Charas.Patia,
+                            Level = 100,
+                            AdditionalMaxLevel = 20,
+                            Rarity = 5,
+                            Hp = 961,
+                            Attack = 537,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 3,
+                            Ability2Level = 3,
+                            Ability3Level = 2,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 4,
+                            Skill2Level = 3,
+                            IsUnlockEditSkill = true
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.Ramiel,
-                            level = 120,
-                            hp = 388,
-                            attack = 148,
-                            skill_1_level = 2,
-                            ability_1_level = 6,
-                            ability_2_level = 6,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 5
+                            DragonKeyId = 0,
+                            DragonId = Dragons.Ramiel,
+                            Level = 120,
+                            Hp = 388,
+                            Attack = 148,
+                            Skill1Level = 2,
+                            Ability1Level = 6,
+                            Ability2Level = 6,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 5
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.EbonPlagueLance,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.EbonPlagueLance,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.Patia,
-                            talisman_ability_id_1 = 340000010,
-                            talisman_ability_id_2 = 340000134
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.Patia,
+                            TalismanAbilityId1 = 340000010,
+                            TalismanAbilityId2 = 340000134
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.CastleCheerCorps,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.StudyRabbits,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ProperMaintenance,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.FromWhenceHeComes,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1010,
-                        name = "Leon",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = (Emblems)10850301,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1010,
+                        Name = "Leon",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = (Emblems)10850301,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.Delphi,
-                            level = 100,
-                            additional_max_level = 20,
-                            rarity = 5,
-                            hp = 956,
-                            attack = 572,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 3,
-                            ability_2_level = 3,
-                            ability_3_level = 3,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 4,
-                            skill_2_level = 3,
-                            is_unlock_edit_skill = true
+                            CharaId = Charas.Delphi,
+                            Level = 100,
+                            AdditionalMaxLevel = 20,
+                            Rarity = 5,
+                            Hp = 956,
+                            Attack = 572,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 3,
+                            Ability2Level = 3,
+                            Ability3Level = 3,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 4,
+                            Skill2Level = 3,
+                            IsUnlockEditSkill = true
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.Ramiel,
-                            level = 120,
-                            hp = 388,
-                            attack = 148,
-                            skill_1_level = 2,
-                            ability_1_level = 6,
-                            ability_2_level = 6,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 5
+                            DragonKeyId = 0,
+                            DragonId = Dragons.Ramiel,
+                            Level = 120,
+                            Hp = 388,
+                            Attack = 148,
+                            Skill1Level = 2,
+                            Ability1Level = 6,
+                            Ability2Level = 6,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 5
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.ShaderulersFang,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.ShaderulersFang,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.Delphi,
-                            talisman_ability_id_1 = 340000030,
-                            talisman_ability_id_2 = 340000132
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.Delphi,
+                            TalismanAbilityId1 = 340000030,
+                            TalismanAbilityId2 = 340000132
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.WelcometotheOpera,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.WelcometotheOpera,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.AManUnchanging,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.AManUnchanging,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.WorthyRivals,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ChariotDrift,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.CrownofLightSerpentsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1011,
-                        name = "Crown",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = (Emblems)10750201,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1011,
+                        Name = "Crown",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = (Emblems)10750201,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.Lily,
-                            level = 100,
-                            additional_max_level = 20,
-                            rarity = 5,
-                            hp = 899,
-                            attack = 613,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 3,
-                            ability_2_level = 3,
-                            ability_3_level = 3,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 4,
-                            skill_2_level = 3,
-                            is_unlock_edit_skill = true
+                            CharaId = Charas.Lily,
+                            Level = 100,
+                            AdditionalMaxLevel = 20,
+                            Rarity = 5,
+                            Hp = 899,
+                            Attack = 613,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 3,
+                            Ability2Level = 3,
+                            Ability3Level = 3,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 4,
+                            Skill2Level = 3,
+                            IsUnlockEditSkill = true
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.GalaBahamut,
-                            level = 100,
-                            hp = 368,
-                            attack = 128,
-                            skill_1_level = 2,
-                            ability_1_level = 5,
-                            ability_2_level = 5,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 4
+                            DragonKeyId = 0,
+                            DragonId = Dragons.GalaBahamut,
+                            Level = 100,
+                            Hp = 368,
+                            Attack = 128,
+                            Skill1Level = 2,
+                            Ability1Level = 5,
+                            Ability2Level = 5,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 4
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.AqueousPrison,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.AqueousPrison,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.Lily,
-                            talisman_ability_id_1 = 340000030,
-                            talisman_ability_id_2 = 340000132
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.Lily,
+                            TalismanAbilityId1 = 340000030,
+                            TalismanAbilityId2 = 340000132
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.WingsofRebellionatRest,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.WingsofRebellionatRest,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.WorthyRivals,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.SeasidePrincess,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.SeasidePrincess,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ChariotDrift,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.CrownofLightSerpentsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1012,
-                        name = "Euden",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = (Emblems)10150303,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1012,
+                        Name = "Euden",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = (Emblems)10150303,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.GalaLeif,
-                            level = 100,
-                            additional_max_level = 20,
-                            rarity = 5,
-                            hp = 1002,
-                            attack = 546,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 3,
-                            ability_2_level = 3,
-                            ability_3_level = 3,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 4,
-                            skill_2_level = 3,
-                            is_unlock_edit_skill = true
+                            CharaId = Charas.GalaLeif,
+                            Level = 100,
+                            AdditionalMaxLevel = 20,
+                            Rarity = 5,
+                            Hp = 1002,
+                            Attack = 546,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 3,
+                            Ability2Level = 3,
+                            Ability3Level = 3,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 4,
+                            Skill2Level = 3,
+                            IsUnlockEditSkill = true
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.GalaBahamut,
-                            level = 100,
-                            hp = 368,
-                            attack = 128,
-                            skill_1_level = 2,
-                            ability_1_level = 5,
-                            ability_2_level = 5,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 4
+                            DragonKeyId = 0,
+                            DragonId = Dragons.GalaBahamut,
+                            Level = 100,
+                            Hp = 368,
+                            Attack = 128,
+                            Skill1Level = 2,
+                            Ability1Level = 5,
+                            Ability2Level = 5,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 4
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.PrimalTempest,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.PrimalTempest,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.GalaLeif,
-                            talisman_ability_id_1 = 340000030,
-                            talisman_ability_id_2 = 340000132
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.GalaLeif,
+                            TalismanAbilityId1 = 340000030,
+                            TalismanAbilityId2 = 340000132
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.AManUnchanging,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.AManUnchanging,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.GoingUndercover,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.GoingUndercover,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.WorthyRivals,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ChariotDrift,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.CrownofLightSerpentsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1013,
-                        name = "sockperson",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = (Emblems)10350502,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1013,
+                        Name = "sockperson",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = (Emblems)10350502,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.Delphi,
-                            level = 100,
-                            additional_max_level = 20,
-                            rarity = 5,
-                            hp = 956,
-                            attack = 572,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 3,
-                            ability_2_level = 3,
-                            ability_3_level = 3,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 4,
-                            skill_2_level = 3,
-                            is_unlock_edit_skill = true
+                            CharaId = Charas.Delphi,
+                            Level = 100,
+                            AdditionalMaxLevel = 20,
+                            Rarity = 5,
+                            Hp = 956,
+                            Attack = 572,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 3,
+                            Ability2Level = 3,
+                            Ability3Level = 3,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 4,
+                            Skill2Level = 3,
+                            IsUnlockEditSkill = true
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.Ramiel,
-                            level = 120,
-                            hp = 388,
-                            attack = 148,
-                            skill_1_level = 2,
-                            ability_1_level = 6,
-                            ability_2_level = 6,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 5
+                            DragonKeyId = 0,
+                            DragonId = Dragons.Ramiel,
+                            Level = 120,
+                            Hp = 388,
+                            Attack = 148,
+                            Skill1Level = 2,
+                            Ability1Level = 6,
+                            Ability2Level = 6,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 5
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.ShaderulersFang,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.ShaderulersFang,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.Delphi,
-                            talisman_ability_id_1 = 340000030,
-                            talisman_ability_id_2 = 340000132
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.Delphi,
+                            TalismanAbilityId1 = 340000030,
+                            TalismanAbilityId2 = 340000132
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.WelcometotheOpera,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.WelcometotheOpera,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.AManUnchanging,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.AManUnchanging,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.WorthyRivals,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ChariotDrift,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.CrownofLightSerpentsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1014,
-                        name = "Delpolo",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = (Emblems)10840402,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1014,
+                        Name = "Delpolo",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = (Emblems)10840402,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.Vixel,
-                            level = 100,
-                            additional_max_level = 20,
-                            rarity = 5,
-                            hp = 943,
-                            attack = 542,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 3,
-                            ability_2_level = 3,
-                            ability_3_level = 2,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 4,
-                            skill_2_level = 3,
-                            is_unlock_edit_skill = true
+                            CharaId = Charas.Vixel,
+                            Level = 100,
+                            AdditionalMaxLevel = 20,
+                            Rarity = 5,
+                            Hp = 943,
+                            Attack = 542,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 3,
+                            Ability2Level = 3,
+                            Ability3Level = 2,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 4,
+                            Skill2Level = 3,
+                            IsUnlockEditSkill = true
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.GalaElysium,
-                            level = 100,
-                            hp = 371,
-                            attack = 124,
-                            skill_1_level = 2,
-                            ability_1_level = 5,
-                            ability_2_level = 5,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 4
+                            DragonKeyId = 0,
+                            DragonId = Dragons.GalaElysium,
+                            Level = 100,
+                            Hp = 371,
+                            Attack = 124,
+                            Skill1Level = 2,
+                            Ability1Level = 5,
+                            Ability2Level = 5,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 4
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.CosmicRuler,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.CosmicRuler,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.Vixel,
-                            talisman_ability_id_1 = 340000010,
-                            talisman_ability_id_2 = 340000134
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.Vixel,
+                            TalismanAbilityId1 = 340000010,
+                            TalismanAbilityId2 = 340000134
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.CastleCheerCorps,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.StudyRabbits,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ProperMaintenance,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.FromWhenceHeComes,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1015,
-                        name = "Euden",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = (Emblems)10850402,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1015,
+                        Name = "Euden",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = (Emblems)10850402,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.GalaZena,
-                            level = 100,
-                            additional_max_level = 20,
-                            rarity = 5,
-                            hp = 553,
-                            attack = 350,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 3,
-                            ability_2_level = 3,
-                            ability_3_level = 3,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 4,
-                            skill_2_level = 3,
-                            is_unlock_edit_skill = true
+                            CharaId = Charas.GalaZena,
+                            Level = 100,
+                            AdditionalMaxLevel = 20,
+                            Rarity = 5,
+                            Hp = 553,
+                            Attack = 350,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 3,
+                            Ability2Level = 3,
+                            Ability3Level = 3,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 4,
+                            Skill2Level = 3,
+                            IsUnlockEditSkill = true
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.GalaElysium,
-                            level = 100,
-                            hp = 371,
-                            attack = 124,
-                            skill_1_level = 2,
-                            ability_1_level = 5,
-                            ability_2_level = 5,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 4
+                            DragonKeyId = 0,
+                            DragonId = Dragons.GalaElysium,
+                            Level = 100,
+                            Hp = 371,
+                            Attack = 124,
+                            Skill1Level = 2,
+                            Ability1Level = 5,
+                            Ability2Level = 5,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 4
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.CosmicRuler,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.CosmicRuler,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.GalaZena,
-                            talisman_ability_id_1 = 340000010,
-                            talisman_ability_id_2 = 340000134
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.GalaZena,
+                            TalismanAbilityId1 = 340000010,
+                            TalismanAbilityId2 = 340000134
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.CastleCheerCorps,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.StudyRabbits,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ProperMaintenance,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.FromWhenceHeComes,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1016,
-                        name = "Nahxela",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = (Emblems)10350303,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1016,
+                        Name = "Nahxela",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = (Emblems)10350303,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.GalaNotte,
-                            level = 80,
-                            additional_max_level = 0,
-                            rarity = 5,
-                            hp = 760,
-                            attack = 499,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 2,
-                            ability_2_level = 2,
-                            ability_3_level = 2,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 3,
-                            skill_2_level = 2,
-                            is_unlock_edit_skill = true
+                            CharaId = Charas.GalaNotte,
+                            Level = 80,
+                            AdditionalMaxLevel = 0,
+                            Rarity = 5,
+                            Hp = 760,
+                            Attack = 499,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 2,
+                            Ability2Level = 2,
+                            Ability3Level = 2,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 3,
+                            Skill2Level = 2,
+                            IsUnlockEditSkill = true
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.GalaBahamut,
-                            level = 100,
-                            hp = 368,
-                            attack = 128,
-                            skill_1_level = 2,
-                            ability_1_level = 5,
-                            ability_2_level = 5,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 4
+                            DragonKeyId = 0,
+                            DragonId = Dragons.GalaBahamut,
+                            Level = 100,
+                            Hp = 368,
+                            Attack = 128,
+                            Skill1Level = 2,
+                            Ability1Level = 5,
+                            Ability2Level = 5,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 4
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.WindrulersFang,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.WindrulersFang,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.GalaNotte,
-                            talisman_ability_id_1 = 340000030,
-                            talisman_ability_id_2 = 340000132
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.GalaNotte,
+                            TalismanAbilityId1 = 340000030,
+                            TalismanAbilityId2 = 340000132
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.GoingUndercover,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.GoingUndercover,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.AManUnchanging,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.AManUnchanging,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.WorthyRivals,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ChariotDrift,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.CrownofLightSerpentsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1017,
-                        name = "Shiny ☆",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = (Emblems)10350303,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1017,
+                        Name = "Shiny ☆",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = (Emblems)10350303,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.GalaMym,
-                            level = 100,
-                            additional_max_level = 20,
-                            rarity = 5,
-                            hp = 898,
-                            attack = 612,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 3,
-                            ability_2_level = 3,
-                            ability_3_level = 3,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 4,
-                            skill_2_level = 3,
-                            is_unlock_edit_skill = true,
+                            CharaId = Charas.GalaMym,
+                            Level = 100,
+                            AdditionalMaxLevel = 20,
+                            Rarity = 5,
+                            Hp = 898,
+                            Attack = 612,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 3,
+                            Ability2Level = 3,
+                            Ability3Level = 3,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 4,
+                            Skill2Level = 3,
+                            IsUnlockEditSkill = true,
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.Horus,
-                            level = 100,
-                            hp = 368,
-                            attack = 128,
-                            skill_1_level = 2,
-                            ability_1_level = 5,
-                            ability_2_level = 5,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 4
+                            DragonKeyId = 0,
+                            DragonId = Dragons.Horus,
+                            Level = 100,
+                            Hp = 368,
+                            Attack = 128,
+                            Skill1Level = 2,
+                            Ability1Level = 5,
+                            Ability2Level = 5,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 4
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.OmniflameLance,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.OmniflameLance,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.GalaMym,
-                            talisman_ability_id_1 = 340000030,
-                            talisman_ability_id_2 = 340000132
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.GalaMym,
+                            TalismanAbilityId1 = 340000030,
+                            TalismanAbilityId2 = 340000132
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.MeandMyBestie,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.MeandMyBestie,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.TheCutieCompetition,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.TheCutieCompetition,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.WorthyRivals,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ChariotDrift,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.CrownofLightSerpentsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1018,
-                        name = "hateklauster",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = Emblems.HarvestGoddess,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1018,
+                        Name = "hateklauster",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = Emblems.HarvestGoddess,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.HumanoidZodiark,
-                            level = 80,
-                            additional_max_level = 0,
-                            rarity = 5,
-                            hp = 898,
-                            attack = 612,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 2,
-                            ability_2_level = 2,
-                            ability_3_level = 2,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 3,
-                            skill_2_level = 2,
-                            is_unlock_edit_skill = true,
+                            CharaId = Charas.HumanoidZodiark,
+                            Level = 80,
+                            AdditionalMaxLevel = 0,
+                            Rarity = 5,
+                            Hp = 898,
+                            Attack = 612,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 2,
+                            Ability2Level = 2,
+                            Ability3Level = 2,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 3,
+                            Skill2Level = 2,
+                            IsUnlockEditSkill = true,
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.Ramiel,
-                            level = 120,
-                            hp = 388,
-                            attack = 148,
-                            skill_1_level = 2,
-                            ability_1_level = 6,
-                            ability_2_level = 6,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 5
+                            DragonKeyId = 0,
+                            DragonId = Dragons.Ramiel,
+                            Level = 120,
+                            Hp = 388,
+                            Attack = 148,
+                            Skill1Level = 2,
+                            Ability1Level = 6,
+                            Ability2Level = 6,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 5
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.DuskTrigger,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.DuskTrigger,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.HumanoidZodiark,
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.HumanoidZodiark,
                             // Crit easy
-                            talisman_ability_id_1 = 340000030,
-                            talisman_ability_id_2 = 340000132
+                            TalismanAbilityId1 = 340000030,
+                            TalismanAbilityId2 = 340000132
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.TheHeroesArrive,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.TheHeroesArrive,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ANewLook,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ANewLook,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.UnconditionalLove,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.UnconditionalLove,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.BeautifulGunman,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.BeautifulGunman,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.CrownofLightSerpentsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1019,
-                        name = "g.",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = Emblems.MelodysMaster,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1019,
+                        Name = "g.",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = Emblems.MelodysMaster,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.Melody,
-                            level = 100,
-                            additional_max_level = 20,
-                            rarity = 5,
-                            hp = 888,
-                            attack = 563,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 3,
-                            ability_2_level = 3,
-                            ability_3_level = 3,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 4,
-                            skill_2_level = 3,
-                            is_unlock_edit_skill = true,
+                            CharaId = Charas.Melody,
+                            Level = 100,
+                            AdditionalMaxLevel = 20,
+                            Rarity = 5,
+                            Hp = 888,
+                            Attack = 563,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 3,
+                            Ability2Level = 3,
+                            Ability3Level = 3,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 4,
+                            Skill2Level = 3,
+                            IsUnlockEditSkill = true,
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.GalaBahamut,
-                            level = 100,
-                            hp = 368,
-                            attack = 128,
-                            skill_1_level = 2,
-                            ability_1_level = 5,
-                            ability_2_level = 5,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 4
+                            DragonKeyId = 0,
+                            DragonId = Dragons.GalaBahamut,
+                            Level = 100,
+                            Hp = 368,
+                            Attack = 128,
+                            Skill1Level = 2,
+                            Ability1Level = 5,
+                            Ability2Level = 5,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 4
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.NobleHorizon,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.NobleHorizon,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.GalaMym,
-                            talisman_ability_id_1 = 340000030, // Critical Rate +15%
-                            talisman_ability_id_2 = 340000132 // Easy Hitter I
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.GalaMym,
+                            TalismanAbilityId1 = 340000030, // Critical Rate +15%
+                            TalismanAbilityId2 = 340000132 // Easy Hitter I
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.CastleCheerCorps,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.StudyRabbits,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ProperMaintenance,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.FromWhenceHeComes,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                     new()
                     {
-                        viewer_id = 1020,
-                        name = "J. R. Oppenheimer",
-                        level = 250,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = Emblems.MadScientist,
-                        max_party_power = 9999,
-                        support_chara = new()
+                        ViewerId = 1020,
+                        Name = "J. R. Oppenheimer",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = Emblems.MadScientist,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
                         {
-                            chara_id = Charas.HalloweenSylas,
-                            level = 80,
-                            additional_max_level = 0,
-                            rarity = 5,
-                            hp = 789,
-                            attack = 486,
-                            hp_plus_count = 100,
-                            attack_plus_count = 100,
-                            ability_1_level = 2,
-                            ability_2_level = 2,
-                            ability_3_level = 2,
-                            ex_ability_level = 5,
-                            ex_ability_2_level = 5,
-                            skill_1_level = 3,
-                            skill_2_level = 2,
-                            is_unlock_edit_skill = true
+                            CharaId = Charas.HalloweenSylas,
+                            Level = 80,
+                            AdditionalMaxLevel = 0,
+                            Rarity = 5,
+                            Hp = 789,
+                            Attack = 486,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 2,
+                            Ability2Level = 2,
+                            Ability3Level = 2,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 3,
+                            Skill2Level = 2,
+                            IsUnlockEditSkill = true
                         },
-                        support_dragon = new()
+                        SupportDragon = new()
                         {
-                            dragon_key_id = 0,
-                            dragon_id = Dragons.Ramiel,
-                            level = 100,
-                            hp = 368,
-                            attack = 128,
-                            skill_1_level = 2,
-                            ability_1_level = 5,
-                            ability_2_level = 5,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            limit_break_count = 4
+                            DragonKeyId = 0,
+                            DragonId = Dragons.Ramiel,
+                            Level = 100,
+                            Hp = 368,
+                            Attack = 128,
+                            Skill1Level = 2,
+                            Ability1Level = 5,
+                            Ability2Level = 5,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 4
                         },
-                        support_weapon_body = new()
+                        SupportWeaponBody = new()
                         {
-                            weapon_body_id = WeaponBodies.NightmareProphecy,
-                            buildup_count = 80,
-                            limit_break_count = 8,
-                            limit_over_count = 1,
-                            equipable_count = 4,
-                            additional_crest_slot_type_1_count = 1,
-                            additional_crest_slot_type_2_count = 0,
-                            additional_crest_slot_type_3_count = 2
+                            WeaponBodyId = WeaponBodies.NightmareProphecy,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
                         },
-                        support_talisman = new()
+                        SupportTalisman = new()
                         {
-                            talisman_key_id = 0,
-                            talisman_id = Talismans.GalaMym,
-                            talisman_ability_id_1 = 340000030, // Critical Rate +15%
-                            talisman_ability_id_2 = 340000132 // Easy Hitter I
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.GalaMym,
+                            TalismanAbilityId1 = 340000030, // Critical Rate +15%
+                            TalismanAbilityId2 = 340000132 // Easy Hitter I
                         },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.AManUnchanging,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.AManUnchanging,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.WelcometotheOpera,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.WelcometotheOpera,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.WorthyRivals,
-                                buildup_count = 50,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.ChariotDrift,
-                                buildup_count = 40,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.DragonsNest,
-                                buildup_count = 20,
-                                limit_break_count = 4,
-                                hp_plus_count = 50,
-                                attack_plus_count = 50,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
                             },
                         },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
-                                buildup_count = 30,
-                                limit_break_count = 4,
-                                hp_plus_count = 40,
-                                attack_plus_count = 40,
-                                equipable_count = 4
+                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
                             }
                         },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
                 },
-                support_user_detail_list = new List<AtgenSupportUserDetailList>()
+                SupportUserDetailList = new List<AtgenSupportUserDetailList>()
                 {
                     new()
                     {
-                        viewer_id = 1000,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1000,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1001,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1001,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1002,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1002,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1003,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1003,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1004,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1004,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1005,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1005,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1006,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1006,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1007,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1007,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1008,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1008,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1009,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1009,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1010,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1010,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1011,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1011,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1012,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1012,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1013,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1013,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1014,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1014,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1015,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1015,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1016,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1016,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1017,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1017,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1018,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1018,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1019,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1019,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                     new()
                     {
-                        viewer_id = 1020,
-                        gettable_mana_point = 50,
-                        is_friend = true
+                        ViewerId = 1020,
+                        GettableManaPoint = 50,
+                        IsFriend = true
                     },
                 }
             };

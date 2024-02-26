@@ -23,15 +23,15 @@ public class EulaController : DragaliaControllerBaseCore
     {
         AtgenVersionHash version =
             AllEulaVersions.FirstOrDefault(x =>
-                x.region == request.region && x.lang == request.lang
+                x.Region == request.Region && x.Lang == request.Lang
             ) ?? AllEulaVersions[0];
 
-        return this.Ok(new EulaGetVersionData(version, false, 1));
+        return this.Ok(new EulaGetVersionResponse(version, false, 1));
     }
 
     [HttpPost("get_version_list")]
     public DragaliaResult GetVersionList()
     {
-        return this.Ok(new EulaGetVersionListData(AllEulaVersions));
+        return this.Ok(new EulaGetVersionListResponse(AllEulaVersions));
     }
 }

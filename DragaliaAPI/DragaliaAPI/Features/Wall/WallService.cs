@@ -114,16 +114,16 @@ public class WallService(
 
         foreach (AtgenBuildEventRewardEntityList entity in rewards)
         {
-            switch (entity.entity_type)
+            switch (entity.EntityType)
             {
                 case EntityTypes.Rupies:
-                    totalRupies += entity.entity_quantity;
+                    totalRupies += entity.EntityQuantity;
                     break;
                 case EntityTypes.Mana:
-                    totalMana += entity.entity_quantity;
+                    totalMana += entity.EntityQuantity;
                     break;
                 case EntityTypes.Dew:
-                    totalEldwater += entity.entity_quantity;
+                    totalEldwater += entity.EntityQuantity;
                     break;
             }
         }
@@ -154,9 +154,9 @@ public class WallService(
             rewardList.Add(
                 new AtgenBuildEventRewardEntityList()
                 {
-                    entity_type = reward.RewardEntityType,
-                    entity_id = reward.RewardEntityId,
-                    entity_quantity = reward.RewardEntityQuantity
+                    EntityType = reward.RewardEntityType,
+                    EntityId = reward.RewardEntityId,
+                    EntityQuantity = reward.RewardEntityQuantity
                 }
             );
         }
@@ -171,10 +171,10 @@ public class WallService(
         AtgenUserWallRewardList rewardList =
             new()
             {
-                quest_group_id = WallQuestGroupId,
-                sum_wall_level = levelTotal,
-                last_reward_date = DateTimeOffset.UtcNow,
-                reward_status = rewardStatus
+                QuestGroupId = WallQuestGroupId,
+                SumWallLevel = levelTotal,
+                LastRewardDate = DateTimeOffset.UtcNow,
+                RewardStatus = rewardStatus
             };
         return new[] { rewardList };
     }

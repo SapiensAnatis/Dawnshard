@@ -2,5 +2,5 @@
 
 namespace DragaliaAPI.Models;
 
-[MessagePackObject(keyAsPropertyName: true)]
-public record DataHeaders(ResultCode result_code);
+[MessagePackObject]
+public record DataHeaders([property: Key("result_code")] ResultCode ResultCode);

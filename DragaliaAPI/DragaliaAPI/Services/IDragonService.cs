@@ -4,17 +4,17 @@ namespace DragaliaAPI.Services;
 
 public interface IDragonService
 {
-    Task<DragonBuyGiftToSendMultipleData> DoDragonBuyGiftToSendMultiple(
+    Task<DragonBuyGiftToSendMultipleResponse> DoDragonBuyGiftToSendMultiple(
         DragonBuyGiftToSendMultipleRequest request
     );
-    Task<DragonSendGiftMultipleData> DoDragonSendGiftMultiple(
+    Task<DragonSendGiftMultipleResponse> DoDragonSendGiftMultiple(
         DragonSendGiftMultipleRequest request
     );
-    Task<DragonGetContactDataData> DoDragonGetContactData(DragonGetContactDataRequest request);
-    Task<DragonBuildupData> DoBuildup(DragonBuildupRequest request);
-    Task<DragonResetPlusCountData> DoDragonResetPlusCount(DragonResetPlusCountRequest request);
-    Task<DragonLimitBreakData> DoDragonLimitBreak(DragonLimitBreakRequest request);
-    Task<DragonSetLockData> DoDragonSetLock(DragonSetLockRequest request);
-    Task<DragonSellData> DoDragonSell(DragonSellRequest request);
+    Task<DragonGetContactDataResponse> DoDragonGetContactData(DragonGetContactDataRequest request);
+    Task<DragonBuildupResponse> DoBuildup(DragonBuildupRequest request);
+    Task<DragonResetPlusCountResponse> DoDragonResetPlusCount(DragonResetPlusCountRequest request);
+    Task<DragonLimitBreakResponse> DoDragonLimitBreak(DragonLimitBreakRequest request);
+    Task<DragonSetLockResponse> DoDragonSetLock(DragonSetLockRequest request);
+    Task<DragonSellResponse> DoDragonSell(DragonSellRequest request);
     Task<int> GetFreeGiftCount();
 }

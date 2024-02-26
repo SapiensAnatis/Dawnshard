@@ -34,13 +34,13 @@ public class ItemService(
 
         foreach (AtgenUseItemList item in items)
         {
-            UseItemData data = MasterAsset.UseItem[item.item_id];
+            UseItemData data = MasterAsset.UseItem[item.ItemId];
             if (effect == UseItemEffect.None)
                 effect = data.ItemEffect;
-            totalQuantity += data.ItemEffectValue * item.item_quantity;
+            totalQuantity += data.ItemEffectValue * item.ItemQuantity;
 
             await paymentService.ProcessPayment(
-                new Entity(EntityTypes.Item, (int)item.item_id, item.item_quantity)
+                new Entity(EntityTypes.Item, (int)item.ItemId, item.ItemQuantity)
             );
         }
 

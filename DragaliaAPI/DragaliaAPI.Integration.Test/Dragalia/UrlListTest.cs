@@ -8,13 +8,13 @@ public class UrlListTest : TestFixture
     [Fact]
     public async Task UrlList_ReturnsList()
     {
-        WebviewVersionUrlListData response = (
-            await this.Client.PostMsgpack<WebviewVersionUrlListData>(
+        WebviewVersionUrlListResponse response = (
+            await this.Client.PostMsgpack<WebviewVersionUrlListResponse>(
                 "webview_version/url_list",
                 new WebviewVersionUrlListRequest("region")
             )
-        ).data;
+        ).Data;
 
-        response.webview_url_list.Should().NotBeEmpty();
+        response.WebviewUrlList.Should().NotBeEmpty();
     }
 }

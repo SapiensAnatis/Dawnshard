@@ -14,32 +14,32 @@ public class CastleStoryTest : TestFixture
     [Fact]
     public async Task ReadStory_StoryNotRead_ResponseHasRewards()
     {
-        CastleStoryReadData data = (
-            await this.Client.PostMsgpack<CastleStoryReadData>(
+        CastleStoryReadResponse data = (
+            await this.Client.PostMsgpack<CastleStoryReadResponse>(
                 "/castle_story/read",
-                new CastleStoryReadRequest() { castle_story_id = 1 }
+                new CastleStoryReadRequest() { CastleStoryId = 1 }
             )
-        ).data;
+        ).Data;
 
-        data.castle_story_reward_list.Should()
+        data.CastleStoryRewardList.Should()
             .BeEquivalentTo(
                 new List<AtgenBuildEventRewardEntityList>()
                 {
                     new()
                     {
-                        entity_type = EntityTypes.Wyrmite,
-                        entity_quantity = 50,
-                        entity_id = 0
+                        EntityType = EntityTypes.Wyrmite,
+                        EntityQuantity = 50,
+                        EntityId = 0
                     }
                 }
             );
 
-        data.update_data_list.user_data.Should().NotBeNull();
-        data.update_data_list.castle_story_list.Should()
+        data.UpdateDataList.UserData.Should().NotBeNull();
+        data.UpdateDataList.CastleStoryList.Should()
             .BeEquivalentTo(
                 new List<CastleStoryList>()
                 {
-                    new() { castle_story_id = 1, is_read = 1, }
+                    new() { CastleStoryId = 1, IsRead = true, }
                 }
             );
     }
@@ -58,17 +58,17 @@ public class CastleStoryTest : TestFixture
         );
         await this.ApiContext.SaveChangesAsync();
 
-        CastleStoryReadData data = (
-            await this.Client.PostMsgpack<CastleStoryReadData>(
+        CastleStoryReadResponse data = (
+            await this.Client.PostMsgpack<CastleStoryReadResponse>(
                 "/castle_story/read",
-                new CastleStoryReadRequest() { castle_story_id = 2 }
+                new CastleStoryReadRequest() { CastleStoryId = 2 }
             )
-        ).data;
+        ).Data;
 
-        data.castle_story_reward_list.Should().BeEmpty();
+        data.CastleStoryRewardList.Should().BeEmpty();
 
-        data.update_data_list.user_data.Should().BeNull();
-        data.update_data_list.unit_story_list.Should().BeNull();
+        data.UpdateDataList.UserData.Should().BeNull();
+        data.UpdateDataList.UnitStoryList.Should().BeNull();
     }
 
     [Fact]
@@ -80,12 +80,12 @@ public class CastleStoryTest : TestFixture
             .Select(x => x.Crystal)
             .SingleAsync();
 
-        CastleStoryReadData data = (
-            await this.Client.PostMsgpack<CastleStoryReadData>(
+        CastleStoryReadResponse data = (
+            await this.Client.PostMsgpack<CastleStoryReadResponse>(
                 "/castle_story/read",
-                new CastleStoryReadRequest() { castle_story_id = 3 }
+                new CastleStoryReadRequest() { CastleStoryId = 3 }
             )
-        ).data;
+        ).Data;
 
         int newCrystal = await this
             .ApiContext.PlayerUserData.AsNoTracking()

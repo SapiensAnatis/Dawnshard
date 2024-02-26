@@ -26,7 +26,7 @@ public class LoadController : DragaliaControllerBase
     {
         await this.savefileUpdateService.UpdateSavefile();
 
-        LoadIndexData data = await loadService.BuildIndexData();
+        LoadIndexResponse data = await loadService.BuildIndexData();
         return this.Ok(data);
     }
 #endif

@@ -12,152 +12,152 @@ public class AutoRepeatTest : TestFixture
     [Fact]
     public async Task AutoRepeat_RecordReturnsRepeatKey()
     {
-        DungeonStartStartData startResponse = (
-            await Client.PostMsgpack<DungeonStartStartData>(
+        DungeonStartStartResponse startResponse = (
+            await Client.PostMsgpack<DungeonStartStartResponse>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
                 {
-                    party_no_list = [38],
-                    quest_id = 100010103,
-                    repeat_setting = new()
+                    PartyNoList = [38],
+                    QuestId = 100010103,
+                    RepeatSetting = new()
                     {
-                        repeat_count = 45,
-                        repeat_type = RepeatSettingType.Specified,
-                        use_item_list = [UseItem.Honey]
+                        RepeatCount = 45,
+                        RepeatType = RepeatSettingType.Specified,
+                        UseItemList = [UseItem.Honey]
                     }
                 }
             )
-        ).data;
+        ).Data;
 
-        startResponse.ingame_data.repeat_state.Should().Be(1);
+        startResponse.IngameData.RepeatState.Should().Be(1);
 
-        DungeonRecordRecordData recordResponse = (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+        DungeonRecordRecordResponse recordResponse = (
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
-                    dungeon_key = startResponse.ingame_data.dungeon_key,
-                    play_record = new() { treasure_record = [] },
-                    repeat_state = 1,
+                    DungeonKey = startResponse.IngameData.DungeonKey,
+                    PlayRecord = new() { TreasureRecord = [] },
+                    RepeatState = 1,
                 }
             )
-        ).data;
+        ).Data;
 
-        recordResponse.repeat_data.repeat_count.Should().Be(1);
-        recordResponse.repeat_data.repeat_key.Should().NotBeNullOrEmpty();
-        recordResponse.repeat_data.repeat_state.Should().Be(1);
+        recordResponse.RepeatData.RepeatCount.Should().Be(1);
+        recordResponse.RepeatData.RepeatKey.Should().NotBeNullOrEmpty();
+        recordResponse.RepeatData.RepeatState.Should().Be(1);
 
-        DungeonStartStartAssignUnitData startResponse2 = (
-            await Client.PostMsgpack<DungeonStartStartAssignUnitData>(
+        DungeonStartStartAssignUnitResponse startResponse2 = (
+            await Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(
                 "/dungeon_start/start_assign_unit",
                 new DungeonStartStartAssignUnitRequest()
                 {
-                    request_party_setting_list = [new() { chara_id = Charas.ThePrince }],
-                    quest_id = 100010103,
-                    repeat_state = 1,
-                    repeat_setting = null,
+                    RequestPartySettingList = [new() { CharaId = Charas.ThePrince }],
+                    QuestId = 100010103,
+                    RepeatState = 1,
+                    RepeatSetting = null,
                 }
             )
-        ).data;
+        ).Data;
 
-        startResponse2.ingame_data.repeat_state.Should().Be(1);
+        startResponse2.IngameData.RepeatState.Should().Be(1);
 
-        DungeonRecordRecordData recordResponse2 = (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+        DungeonRecordRecordResponse recordResponse2 = (
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
-                    dungeon_key = startResponse2.ingame_data.dungeon_key,
-                    play_record = new() { treasure_record = [] },
-                    repeat_state = 1,
+                    DungeonKey = startResponse2.IngameData.DungeonKey,
+                    PlayRecord = new() { TreasureRecord = [] },
+                    RepeatState = 1,
                 }
             )
-        ).data;
+        ).Data;
 
-        recordResponse2.repeat_data.repeat_count.Should().Be(2);
-        recordResponse2.repeat_data.repeat_key.Should().NotBeNullOrEmpty();
-        recordResponse2.repeat_data.repeat_state.Should().Be(1);
+        recordResponse2.RepeatData.RepeatCount.Should().Be(2);
+        recordResponse2.RepeatData.RepeatKey.Should().NotBeNullOrEmpty();
+        recordResponse2.RepeatData.RepeatState.Should().Be(1);
     }
 
     [Fact]
     public async Task AutoRepeat_CallsRepeatEnd_ReturnsMergedRewardLists()
     {
-        DungeonStartStartData startResponse = (
-            await Client.PostMsgpack<DungeonStartStartData>(
+        DungeonStartStartResponse startResponse = (
+            await Client.PostMsgpack<DungeonStartStartResponse>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
                 {
-                    party_no_list = [38],
-                    quest_id = 100010103,
-                    repeat_setting = new()
+                    PartyNoList = [38],
+                    QuestId = 100010103,
+                    RepeatSetting = new()
                     {
-                        repeat_count = 45,
-                        repeat_type = RepeatSettingType.Specified,
-                        use_item_list = [UseItem.Honey]
+                        RepeatCount = 45,
+                        RepeatType = RepeatSettingType.Specified,
+                        UseItemList = [UseItem.Honey]
                     }
                 }
             )
-        ).data;
+        ).Data;
 
-        DungeonRecordRecordData recordResponse = (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+        DungeonRecordRecordResponse recordResponse = (
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
-                    dungeon_key = startResponse.ingame_data.dungeon_key,
-                    play_record = new() { treasure_record = [] },
-                    repeat_state = 1,
+                    DungeonKey = startResponse.IngameData.DungeonKey,
+                    PlayRecord = new() { TreasureRecord = [] },
+                    RepeatState = 1,
                 }
             )
-        ).data;
+        ).Data;
 
-        DungeonStartStartAssignUnitData startResponse2 = (
-            await Client.PostMsgpack<DungeonStartStartAssignUnitData>(
+        DungeonStartStartAssignUnitResponse startResponse2 = (
+            await Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(
                 "/dungeon_start/start_assign_unit",
                 new DungeonStartStartAssignUnitRequest()
                 {
-                    request_party_setting_list = [new() { chara_id = Charas.ThePrince }],
-                    quest_id = 100010103,
-                    repeat_state = 1,
-                    repeat_setting = null,
+                    RequestPartySettingList = [new() { CharaId = Charas.ThePrince }],
+                    QuestId = 100010103,
+                    RepeatState = 1,
+                    RepeatSetting = null,
                 }
             )
-        ).data;
+        ).Data;
 
-        DungeonRecordRecordData recordResponse2 = (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+        DungeonRecordRecordResponse recordResponse2 = (
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
-                    dungeon_key = startResponse2.ingame_data.dungeon_key,
-                    play_record = new() { treasure_record = [] },
-                    repeat_state = 1,
+                    DungeonKey = startResponse2.IngameData.DungeonKey,
+                    PlayRecord = new() { TreasureRecord = [] },
+                    RepeatState = 1,
                 }
             )
-        ).data;
+        ).Data;
 
-        RepeatEndData repeatEndResponse = (
-            await Client.PostMsgpack<RepeatEndData>("repeat/end", new RepeatEndRequest())
-        ).data;
+        RepeatEndResponse repeatEndResponse = (
+            await Client.PostMsgpack<RepeatEndResponse>("repeat/end", new RepeatEndRequest())
+        ).Data;
 
-        repeatEndResponse.repeat_data.Should().BeEquivalentTo(recordResponse2.repeat_data);
+        repeatEndResponse.RepeatData.Should().BeEquivalentTo(recordResponse2.RepeatData);
 
         // Breaking news: lazy developer too lazy to test cumbersome merging logic
         int expectedCoin =
-            recordResponse.ingame_result_data.reward_record.take_coin
-            + recordResponse2.ingame_result_data.reward_record.take_coin;
+            recordResponse.IngameResultData.RewardRecord.TakeCoin
+            + recordResponse2.IngameResultData.RewardRecord.TakeCoin;
 
         repeatEndResponse
-            .ingame_result_data.reward_record.Should()
+            .IngameResultData.RewardRecord.Should()
             .BeEquivalentTo(
-                new RewardRecord() { take_coin = expectedCoin },
-                opts => opts.Including(x => x.take_coin)
+                new RewardRecord() { TakeCoin = expectedCoin },
+                opts => opts.Including(x => x.TakeCoin)
             );
 
-        repeatEndResponse.update_data_list.Should().NotBeNull();
+        repeatEndResponse.UpdateDataList.Should().NotBeNull();
         repeatEndResponse
-            .update_data_list.user_data.Should()
-            .BeEquivalentTo(recordResponse2.update_data_list.user_data);
+            .UpdateDataList.UserData.Should()
+            .BeEquivalentTo(recordResponse2.UpdateDataList.UserData);
     }
 
     [Fact]
@@ -175,95 +175,95 @@ public class AutoRepeatTest : TestFixture
             }
         );
 
-        await Client.PostMsgpack<MemoryEventActivateData>(
+        await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/memory_event/activate",
-            new MemoryEventActivateRequest() { event_id = eventId }
+            new MemoryEventActivateRequest() { EventId = eventId }
         );
-        DungeonStartStartData startResponse = (
-            await Client.PostMsgpack<DungeonStartStartData>(
+        DungeonStartStartResponse startResponse = (
+            await Client.PostMsgpack<DungeonStartStartResponse>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
                 {
-                    party_no_list = [38],
-                    quest_id = questId,
-                    repeat_setting = new()
+                    PartyNoList = [38],
+                    QuestId = questId,
+                    RepeatSetting = new()
                     {
-                        repeat_count = 45,
-                        repeat_type = RepeatSettingType.Specified,
-                        use_item_list = [UseItem.Honey]
+                        RepeatCount = 45,
+                        RepeatType = RepeatSettingType.Specified,
+                        UseItemList = [UseItem.Honey]
                     }
                 }
             )
-        ).data;
+        ).Data;
 
-        DungeonRecordRecordData recordResponse = (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+        DungeonRecordRecordResponse recordResponse = (
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
-                    dungeon_key = startResponse.ingame_data.dungeon_key,
-                    play_record = new() { treasure_record = [], wave = 5 },
-                    repeat_state = 1,
+                    DungeonKey = startResponse.IngameData.DungeonKey,
+                    PlayRecord = new() { TreasureRecord = [], Wave = 5 },
+                    RepeatState = 1,
                 }
             )
-        ).data;
+        ).Data;
 
-        DungeonStartStartAssignUnitData startResponse2 = (
-            await Client.PostMsgpack<DungeonStartStartAssignUnitData>(
+        DungeonStartStartAssignUnitResponse startResponse2 = (
+            await Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(
                 "/dungeon_start/start_assign_unit",
                 new DungeonStartStartAssignUnitRequest()
                 {
-                    request_party_setting_list = [new() { chara_id = Charas.ThePrince }],
-                    quest_id = questId,
-                    repeat_state = 1,
-                    repeat_setting = null,
+                    RequestPartySettingList = [new() { CharaId = Charas.ThePrince }],
+                    QuestId = questId,
+                    RepeatState = 1,
+                    RepeatSetting = null,
                 }
             )
-        ).data;
+        ).Data;
 
-        DungeonRecordRecordData recordResponse2 = (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+        DungeonRecordRecordResponse recordResponse2 = (
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
-                    dungeon_key = startResponse2.ingame_data.dungeon_key,
-                    play_record = new() { treasure_record = [], wave = 5 },
-                    repeat_state = 1,
+                    DungeonKey = startResponse2.IngameData.DungeonKey,
+                    PlayRecord = new() { TreasureRecord = [], Wave = 5 },
+                    RepeatState = 1,
                 }
             )
-        ).data;
+        ).Data;
 
-        RepeatEndData repeatEndResponse = (
-            await Client.PostMsgpack<RepeatEndData>("repeat/end", new RepeatEndRequest())
-        ).data;
+        RepeatEndResponse repeatEndResponse = (
+            await Client.PostMsgpack<RepeatEndResponse>("repeat/end", new RepeatEndRequest())
+        ).Data;
 
         int expectedPoints =
-            recordResponse.ingame_result_data.reward_record.take_accumulate_point
-            + recordResponse2.ingame_result_data.reward_record.take_accumulate_point;
+            recordResponse.IngameResultData.RewardRecord.TakeAccumulatePoint
+            + recordResponse2.IngameResultData.RewardRecord.TakeAccumulatePoint;
         int expectedBoostPoints =
-            recordResponse.ingame_result_data.reward_record.take_boost_accumulate_point
-            + recordResponse2.ingame_result_data.reward_record.take_boost_accumulate_point;
+            recordResponse.IngameResultData.RewardRecord.TakeBoostAccumulatePoint
+            + recordResponse2.IngameResultData.RewardRecord.TakeBoostAccumulatePoint;
 
         repeatEndResponse
-            .ingame_result_data.reward_record.take_accumulate_point.Should()
+            .IngameResultData.RewardRecord.TakeAccumulatePoint.Should()
             .Be(expectedPoints);
 
         repeatEndResponse
-            .ingame_result_data.reward_record.take_boost_accumulate_point.Should()
+            .IngameResultData.RewardRecord.TakeBoostAccumulatePoint.Should()
             .Be(expectedBoostPoints);
 
         repeatEndResponse
-            .update_data_list.build_event_user_list.Should()
-            .Contain(x => x.build_event_id == eventId);
+            .UpdateDataList.BuildEventUserList.Should()
+            .Contain(x => x.BuildEventId == eventId);
 
         repeatEndResponse
-            .update_data_list.build_event_user_list.First(x => x.build_event_id == eventId)
-            .user_build_event_item_list.Should()
+            .UpdateDataList.BuildEventUserList.First(x => x.BuildEventId == eventId)
+            .UserBuildEventItemList.Should()
             .ContainEquivalentOf(
                 new AtgenUserBuildEventItemList()
                 {
-                    user_build_event_item = (int)BuildEventItemType.BuildEventPoint,
-                    event_item_value = expectedPoints + expectedBoostPoints
+                    UserBuildEventItem = (int)BuildEventItemType.BuildEventPoint,
+                    EventItemValue = expectedPoints + expectedBoostPoints
                 }
             );
     }
@@ -271,39 +271,39 @@ public class AutoRepeatTest : TestFixture
     [Fact]
     public async Task AutoRepeat_ActiveRepeat_MypageInfoReturnsRepeatInfo()
     {
-        DungeonStartStartData startResponse = (
-            await Client.PostMsgpack<DungeonStartStartData>(
+        DungeonStartStartResponse startResponse = (
+            await Client.PostMsgpack<DungeonStartStartResponse>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
                 {
-                    party_no_list = [38],
-                    quest_id = 100010103,
-                    repeat_setting = new()
+                    PartyNoList = [38],
+                    QuestId = 100010103,
+                    RepeatSetting = new()
                     {
-                        repeat_count = 45,
-                        repeat_type = RepeatSettingType.Specified,
-                        use_item_list = [UseItem.Honey]
+                        RepeatCount = 45,
+                        RepeatType = RepeatSettingType.Specified,
+                        UseItemList = [UseItem.Honey]
                     }
                 }
             )
-        ).data;
+        ).Data;
 
-        DungeonRecordRecordData recordResponse = (
-            await Client.PostMsgpack<DungeonRecordRecordData>(
+        DungeonRecordRecordResponse recordResponse = (
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
                 "dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
-                    dungeon_key = startResponse.ingame_data.dungeon_key,
-                    play_record = new() { treasure_record = [] },
-                    repeat_state = 1,
+                    DungeonKey = startResponse.IngameData.DungeonKey,
+                    PlayRecord = new() { TreasureRecord = [] },
+                    RepeatState = 1,
                 }
             )
-        ).data;
+        ).Data;
 
-        MypageInfoData mypageResponse = (
-            await Client.PostMsgpack<MypageInfoData>("mypage/info", new MypageInfoRequest() { })
-        ).data;
+        MypageInfoResponse mypageResponse = (
+            await Client.PostMsgpack<MypageInfoResponse>("mypage/info", new MypageInfoRequest() { })
+        ).Data;
 
-        mypageResponse.repeat_data.Should().BeEquivalentTo(recordResponse.repeat_data);
+        mypageResponse.RepeatData.Should().BeEquivalentTo(recordResponse.RepeatData);
     }
 }

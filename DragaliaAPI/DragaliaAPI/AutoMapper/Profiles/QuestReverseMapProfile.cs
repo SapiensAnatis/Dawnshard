@@ -13,25 +13,31 @@ public class QuestReverseMapProfile : Profile
         this.AddGlobalIgnore("Owner");
 
         this.CreateMap<QuestStoryList, DbPlayerStoryState>()
-            .ForMember(x => x.StoryId, o => o.MapFrom(x => x.quest_story_id))
+            .ForMember(x => x.StoryId, o => o.MapFrom(x => x.QuestStoryId))
             .ForMember(x => x.StoryType, o => o.MapFrom(src => StoryTypes.Quest));
 
         this.CreateMap<UnitStoryList, DbPlayerStoryState>()
-            .ForMember(x => x.StoryId, o => o.MapFrom(src => src.unit_story_id))
-            .ForMember(x => x.State, o => o.MapFrom(src => src.is_read))
+            .ForMember(x => x.StoryId, o => o.MapFrom(src => src.UnitStoryId))
+            .ForMember(
+                x => x.State,
+                o => o.MapFrom(src => src.IsRead ? StoryState.Read : StoryState.Unlocked)
+            )
             .ForMember(x => x.StoryType, o => o.MapFrom<UnitStoryTypeResolver>());
 
         this.CreateMap<CastleStoryList, DbPlayerStoryState>()
-            .ForMember(x => x.StoryId, o => o.MapFrom(src => src.castle_story_id))
-            .ForMember(x => x.State, o => o.MapFrom(src => src.is_read))
+            .ForMember(x => x.StoryId, o => o.MapFrom(src => src.CastleStoryId))
+            .ForMember(
+                x => x.State,
+                o => o.MapFrom(src => src.IsRead ? StoryState.Read : StoryState.Unlocked)
+            )
             .ForMember(x => x.StoryType, o => o.MapFrom(src => StoryTypes.Castle));
 
         this.CreateMap<DmodeStoryList, DbPlayerStoryState>()
-            .ForMember(x => x.StoryId, o => o.MapFrom(src => src.dmode_story_id))
-            .ForMember(x => x.State, o => o.MapFrom(src => src.is_read))
+            .ForMember(x => x.StoryId, o => o.MapFrom(src => src.DmodeStoryId))
+            .ForMember(
+                x => x.State,
+                o => o.MapFrom(src => src.IsRead ? StoryState.Read : StoryState.Unlocked)
+            )
             .ForMember(x => x.StoryType, o => o.MapFrom(src => StoryTypes.DungeonMode));
-
-        this.SourceMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
-        this.DestinationMemberNamingConvention = DatabaseNamingConvention.Instance;
     }
 }

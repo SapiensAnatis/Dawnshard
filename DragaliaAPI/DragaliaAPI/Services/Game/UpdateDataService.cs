@@ -50,57 +50,56 @@ public class UpdateDataService(
         UpdateDataList list =
             new()
             {
-                user_data = ConvertEntities<UserData, DbPlayerUserData>(entities)?.Single(), // Can't use SingleOrDefault if the list itself is null
-                chara_list = ConvertEntities<CharaList, DbPlayerCharaData>(entities),
-                dragon_list = ConvertEntities<DragonList, DbPlayerDragonData>(entities),
-                dragon_reliability_list = ConvertEntities<
+                UserData = ConvertEntities<UserData, DbPlayerUserData>(entities)?.Single(), // Can't use SingleOrDefault if the list itself is null
+                CharaList = ConvertEntities<CharaList, DbPlayerCharaData>(entities),
+                DragonList = ConvertEntities<DragonList, DbPlayerDragonData>(entities),
+                DragonReliabilityList = ConvertEntities<
                     DragonReliabilityList,
                     DbPlayerDragonReliability
                 >(entities),
-                weapon_body_list = ConvertEntities<WeaponBodyList, DbWeaponBody>(entities),
-                weapon_skin_list = ConvertEntities<WeaponSkinList, DbWeaponSkin>(entities),
-                ability_crest_list = ConvertEntities<AbilityCrestList, DbAbilityCrest>(entities),
-                ability_crest_set_list = ConvertEntities<AbilityCrestSetList, DbAbilityCrestSet>(
+                WeaponBodyList = ConvertEntities<WeaponBodyList, DbWeaponBody>(entities),
+                WeaponSkinList = ConvertEntities<WeaponSkinList, DbWeaponSkin>(entities),
+                AbilityCrestList = ConvertEntities<AbilityCrestList, DbAbilityCrest>(entities),
+                AbilityCrestSetList = ConvertEntities<AbilityCrestSetList, DbAbilityCrestSet>(
                     entities
                 ),
-                party_list = ConvertEntities<PartyList, DbParty>(entities),
-                quest_story_list = ConvertEntities<QuestStoryList, DbPlayerStoryState>(
+                PartyList = ConvertEntities<PartyList, DbParty>(entities),
+                QuestStoryList = ConvertEntities<QuestStoryList, DbPlayerStoryState>(
                     entities,
                     x => x.StoryType == StoryTypes.Quest
                 ),
-                unit_story_list = ConvertEntities<UnitStoryList, DbPlayerStoryState>(
+                UnitStoryList = ConvertEntities<UnitStoryList, DbPlayerStoryState>(
                     entities,
                     x => x.StoryType == StoryTypes.Chara || x.StoryType == StoryTypes.Dragon
                 ),
-                castle_story_list = ConvertEntities<CastleStoryList, DbPlayerStoryState>(
+                CastleStoryList = ConvertEntities<CastleStoryList, DbPlayerStoryState>(
                     entities,
                     x => x.StoryType == StoryTypes.Castle
                 ),
-                dmode_story_list = ConvertEntities<DmodeStoryList, DbPlayerStoryState>(
+                DmodeStoryList = ConvertEntities<DmodeStoryList, DbPlayerStoryState>(
                     entities,
                     x => x.StoryType == StoryTypes.DungeonMode
                 ),
-                material_list = ConvertEntities<MaterialList, DbPlayerMaterial>(entities),
-                dragon_gift_list = ConvertEntities<DragonGiftList, DbPlayerDragonGift>(
+                MaterialList = ConvertEntities<MaterialList, DbPlayerMaterial>(entities),
+                DragonGiftList = ConvertEntities<DragonGiftList, DbPlayerDragonGift>(
                     entities,
                     x => x.DragonGiftId > DragonGifts.GoldenChalice
                 ),
-                quest_list = ConvertEntities<QuestList, DbQuest>(entities),
-                build_list = ConvertEntities<BuildList, DbFortBuild>(entities),
-                weapon_passive_ability_list = ConvertEntities<
+                QuestList = ConvertEntities<QuestList, DbQuest>(entities),
+                BuildList = ConvertEntities<BuildList, DbFortBuild>(entities),
+                WeaponPassiveAbilityList = ConvertEntities<
                     WeaponPassiveAbilityList,
                     DbWeaponPassiveAbility
                 >(entities),
-                item_list = ConvertEntities<ItemList, DbPlayerUseItem>(entities),
-                talisman_list = ConvertEntities<TalismanList, DbTalisman>(entities),
-                summon_ticket_list = ConvertEntities<SummonTicketList, DbSummonTicket>(entities),
-                quest_event_list = ConvertEntities<QuestEventList, DbQuestEvent>(entities),
-                quest_treasure_list = ConvertEntities<QuestTreasureList, DbQuestTreasureList>(
+                ItemList = ConvertEntities<ItemList, DbPlayerUseItem>(entities),
+                TalismanList = ConvertEntities<TalismanList, DbTalisman>(entities),
+                SummonTicketList = ConvertEntities<SummonTicketList, DbSummonTicket>(entities),
+                QuestEventList = ConvertEntities<QuestEventList, DbQuestEvent>(entities),
+                QuestTreasureList = ConvertEntities<QuestTreasureList, DbQuestTreasureList>(
                     entities
                 ),
-                party_power_data = ConvertEntities<PartyPowerData, DbPartyPower>(entities)
-                    ?.Single(),
-                quest_wall_list = ConvertEntities<QuestWallList, DbPlayerQuestWall>(entities)
+                PartyPowerData = ConvertEntities<PartyPowerData, DbPartyPower>(entities)?.Single(),
+                QuestWallList = ConvertEntities<QuestWallList, DbPlayerQuestWall>(entities)
             };
 
         IEnumerable<DbPlayerMission> updatedMissions = entities.OfType<DbPlayerMission>();
@@ -112,12 +111,12 @@ public class UpdateDataService(
                 .ToLookup(x => x.Type);
             if (missionsLookup.Contains(MissionType.MainStory))
             {
-                list.current_main_story_mission = await missionService.GetCurrentMainStoryMission();
+                list.CurrentMainStoryMission = await missionService.GetCurrentMainStoryMission();
 
-                list.quest_entry_condition_list = await missionService.GetEntryConditions();
+                list.QuestEntryConditionList = await missionService.GetEntryConditions();
             }
 
-            list.mission_notice = await missionService.GetMissionNotice(missionsLookup);
+            list.MissionNotice = await missionService.GetMissionNotice(missionsLookup);
         }
 
         if (
@@ -125,14 +124,14 @@ public class UpdateDataService(
             || entities.OfType<DbPlayerPresentHistory>().Any()
         )
         {
-            list.present_notice = await presentService.GetPresentNotice();
+            list.PresentNotice = await presentService.GetPresentNotice();
         }
 
         List<DbPlayerShopInfo> updatedInfo = entities.OfType<DbPlayerShopInfo>().ToList();
 
         if (updatedInfo.Count > 0)
         {
-            list.shop_notice = new ShopNotice(updatedInfo.First().DailySummonCount == 0);
+            list.ShopNotice = new ShopNotice(updatedInfo.First().DailySummonCount == 0);
         }
 
         List<int> updatedEvents = new();
@@ -155,61 +154,61 @@ public class UpdateDataService(
                 switch (eventGroup.Key)
                 {
                     case EventKindType.Raid:
-                        list.raid_event_user_list = await GetEventDataList(
+                        list.RaidEventUserList = await GetEventDataList(
                             eventGroup,
                             eventService.GetRaidEventUserData
                         );
                         break;
                     case EventKindType.Build:
-                        list.build_event_user_list = await GetEventDataList(
+                        list.BuildEventUserList = await GetEventDataList(
                             eventGroup,
                             eventService.GetBuildEventUserData
                         );
                         break;
                     case EventKindType.Random:
-                        list.maze_event_user_list = await GetEventDataList(
+                        list.MazeEventUserList = await GetEventDataList(
                             eventGroup,
                             eventService.GetMazeEventUserData
                         );
                         break;
                     case EventKindType.Collect:
-                        list.collect_event_user_list = await GetEventDataList(
+                        list.CollectEventUserList = await GetEventDataList(
                             eventGroup,
                             eventService.GetCollectEventUserData
                         );
                         break;
                     case EventKindType.Clb01:
-                        list.clb_01_event_user_list = await GetEventDataList(
+                        list.Clb01EventUserList = await GetEventDataList(
                             eventGroup,
                             eventService.GetClb01EventUserData
                         );
                         break;
                     case EventKindType.ExRush:
-                        list.ex_rush_event_user_list = await GetEventDataList(
+                        list.ExRushEventUserList = await GetEventDataList(
                             eventGroup,
                             eventService.GetExRushEventUserData
                         );
                         break;
                     case EventKindType.ExHunter:
-                        list.ex_hunter_event_user_list = await GetEventDataList(
+                        list.ExHunterEventUserList = await GetEventDataList(
                             eventGroup,
                             eventService.GetExHunterEventUserData
                         );
                         break;
                     case EventKindType.Simple:
-                        list.simple_event_user_list = await GetEventDataList(
+                        list.SimpleEventUserList = await GetEventDataList(
                             eventGroup,
                             eventService.GetSimpleEventUserData
                         );
                         break;
                     case EventKindType.Combat:
-                        list.combat_event_user_list = await GetEventDataList(
+                        list.CombatEventUserList = await GetEventDataList(
                             eventGroup,
                             eventService.GetCombatEventUserData
                         );
                         break;
                     case EventKindType.Earn:
-                        list.earn_event_user_list = await GetEventDataList(
+                        list.EarnEventUserList = await GetEventDataList(
                             eventGroup,
                             eventService.GetEarnEventUserData
                         );
@@ -233,15 +232,15 @@ public class UpdateDataService(
                 passiveList.Add(await eventService.GetEventPassiveList(updatedEventId));
             }
 
-            list.event_passive_list = passiveList;
+            list.EventPassiveList = passiveList;
         }
 
         if (entities.OfType<DbPlayerDmodeInfo>().Any())
         {
             DmodeInfo info = await dmodeService.GetInfo();
-            if (info.is_entry)
+            if (info.IsEntry)
                 // This is done to ensure that the change tracker does not mess anything up
-                list.dmode_info = info;
+                list.DmodeInfo = info;
         }
 
         return list;

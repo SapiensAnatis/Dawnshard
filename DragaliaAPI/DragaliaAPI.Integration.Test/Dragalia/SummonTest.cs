@@ -15,25 +15,25 @@ public class SummonTest : TestFixture
     [Fact]
     public async Task SummonExcludeGetList_ReturnsAnyData()
     {
-        SummonExcludeGetListData response = (
-            await this.Client.PostMsgpack<SummonExcludeGetListData>(
+        SummonExcludeGetListResponse response = (
+            await this.Client.PostMsgpack<SummonExcludeGetListResponse>(
                 "summon_exclude/get_list",
                 new SummonExcludeGetListRequest(1020203)
             )
-        ).data;
+        ).Data;
 
-        response.summon_exclude_unit_list.Should().NotBeEmpty();
+        response.SummonExcludeUnitList.Should().NotBeEmpty();
     }
 
     [Fact]
     public async Task SummonGetOddsData_ReturnsAnyData()
     {
-        SummonGetOddsDataData response = (
-            await this.Client.PostMsgpack<SummonGetOddsDataData>(
+        SummonGetOddsDataResponse response = (
+            await this.Client.PostMsgpack<SummonGetOddsDataResponse>(
                 "summon/get_odds_data",
                 new SummonGetOddsDataRequest(1020203)
             )
-        ).data;
+        ).Data;
 
         response.Should().NotBeNull();
     }
@@ -65,15 +65,15 @@ public class SummonTest : TestFixture
         await this.ApiContext.PlayerSummonHistory.AddAsync(historyEntry);
         await this.ApiContext.SaveChangesAsync();
 
-        SummonGetSummonHistoryData response = (
-            await this.Client.PostMsgpack<SummonGetSummonHistoryData>(
+        SummonGetSummonHistoryResponse response = (
+            await this.Client.PostMsgpack<SummonGetSummonHistoryResponse>(
                 "summon/get_summon_history",
                 new SummonGetSummonHistoryRequest()
             )
-        ).data;
+        ).Data;
 
         // Too lazy to set up automapper to check exact result and it is covered more or less in SummonRepositoryTests.cs
-        response.summon_history_list.Should().NotBeEmpty();
+        response.SummonHistoryList.Should().NotBeEmpty();
     }
 
     [Fact]
@@ -102,49 +102,49 @@ public class SummonTest : TestFixture
             }
         );
 
-        SummonGetSummonListData response = (
-            await this.Client.PostMsgpack<SummonGetSummonListData>(
+        SummonGetSummonListResponse response = (
+            await this.Client.PostMsgpack<SummonGetSummonListResponse>(
                 "summon/get_summon_list",
                 new SummonGetSummonListRequest()
             )
-        ).data;
+        ).Data;
 
         response
-            .summon_list.Should()
+            .SummonList.Should()
             .ContainSingle()
             .Which.Should()
             .BeEquivalentTo(
                 new SummonList()
                 {
-                    summon_id = bannerId,
-                    summon_type = 2,
-                    single_crystal = 120,
-                    single_diamond = 120,
-                    multi_crystal = 1200,
-                    multi_diamond = 1200,
-                    limited_crystal = 0,
-                    limited_diamond = 30,
-                    summon_point_id = bannerId,
-                    add_summon_point = 1,
-                    add_summon_point_stone = 2,
-                    exchange_summon_point = 300,
-                    status = 1,
-                    commence_date = DateTimeOffset.Parse("2024-02-24T15:22:06Z"),
-                    complete_date = DateTimeOffset.Parse("2037-02-24T15:22:06Z"),
-                    daily_count = dailyCount,
-                    daily_limit = 1,
-                    total_limit = 0,
-                    total_count = summonCount,
-                    campaign_type = 0,
-                    free_count_rest = 0,
-                    is_beginner_campaign = 0,
-                    beginner_campaign_count_rest = 0,
-                    consecution_campaign_count_rest = 0,
+                    SummonId = bannerId,
+                    SummonType = 2,
+                    SingleCrystal = 120,
+                    SingleDiamond = 120,
+                    MultiCrystal = 1200,
+                    MultiDiamond = 1200,
+                    LimitedCrystal = 0,
+                    LimitedDiamond = 30,
+                    SummonPointId = bannerId,
+                    AddSummonPoint = 1,
+                    AddSummonPointStone = 2,
+                    ExchangeSummonPoint = 300,
+                    Status = 1,
+                    CommenceDate = DateTimeOffset.Parse("2024-02-24T15:22:06Z"),
+                    CompleteDate = DateTimeOffset.Parse("2037-02-24T15:22:06Z"),
+                    DailyCount = dailyCount,
+                    DailyLimit = 1,
+                    TotalLimit = 0,
+                    TotalCount = summonCount,
+                    CampaignType = 0,
+                    FreeCountRest = 0,
+                    IsBeginnerCampaign = false,
+                    BeginnerCampaignCountRest = 0,
+                    ConsecutionCampaignCountRest = 0,
                 }
             );
 
         response
-            .summon_ticket_list.Should()
+            .SummonTicketList.Should()
             .ContainSingle()
             .Which.Should()
             .BeEquivalentTo(
@@ -161,17 +161,17 @@ public class SummonTest : TestFixture
     [Fact]
     public async Task SummonRequest_GetSummonPointData_ReturnsAnyData()
     {
-        SummonGetSummonPointTradeData response = (
-            await this.Client.PostMsgpack<SummonGetSummonPointTradeData>(
+        SummonGetSummonPointTradeResponse response = (
+            await this.Client.PostMsgpack<SummonGetSummonPointTradeResponse>(
                 "summon/get_summon_point_trade",
                 new SummonGetSummonPointTradeRequest(1020203)
             )
-        ).data;
+        ).Data;
 
         response.Should().NotBeNull();
 
-        response.summon_point_list.Should().NotBeEmpty();
-        response.summon_point_trade_list.Should().NotBeEmpty();
+        response.SummonPointList.Should().NotBeEmpty();
+        response.SummonPointTradeList.Should().NotBeEmpty();
     }
 
     [Fact]
@@ -183,8 +183,8 @@ public class SummonTest : TestFixture
 
         await this.ApiContext.Entry(userData).ReloadAsync();
 
-        SummonRequestData response = (
-            await this.Client.PostMsgpack<SummonRequestData>(
+        SummonRequestResponse response = (
+            await this.Client.PostMsgpack<SummonRequestResponse>(
                 "summon/request",
                 new SummonRequestRequest(
                     1,
@@ -194,11 +194,11 @@ public class SummonTest : TestFixture
                     new PaymentTarget(userData.Crystal, 120) // TODO: Change when banners are implemented otherwise this test breaks
                 )
             )
-        ).data;
+        ).Data;
 
-        response.result_unit_list.Count().Should().Be(1);
+        response.ResultUnitList.Count().Should().Be(1);
 
-        await this.CheckRewardInDb(response.result_unit_list.ElementAt(0));
+        await this.CheckRewardInDb(response.ResultUnitList.ElementAt(0));
     }
 
     [Fact]
@@ -208,8 +208,8 @@ public class SummonTest : TestFixture
             x.ViewerId == ViewerId
         );
 
-        SummonRequestData response = (
-            await this.Client.PostMsgpack<SummonRequestData>(
+        SummonRequestResponse response = (
+            await this.Client.PostMsgpack<SummonRequestResponse>(
                 "summon/request",
                 new SummonRequestRequest(
                     1020203,
@@ -219,11 +219,11 @@ public class SummonTest : TestFixture
                     new PaymentTarget(userData.Crystal, 1200)
                 )
             )
-        ).data;
+        ).Data;
 
-        response.result_unit_list.Count().Should().Be(10);
+        response.ResultUnitList.Count().Should().Be(10);
 
-        foreach (AtgenResultUnitList reward in response.result_unit_list)
+        foreach (AtgenResultUnitList reward in response.ResultUnitList)
         {
             await this.CheckRewardInDb(reward);
         }
@@ -247,8 +247,8 @@ public class SummonTest : TestFixture
             }
         );
 
-        DragaliaResponse<SummonRequestData> response = (
-            await this.Client.PostMsgpack<SummonRequestData>(
+        DragaliaResponse<SummonRequestResponse> response =
+            await this.Client.PostMsgpack<SummonRequestResponse>(
                 "summon/request",
                 new SummonRequestRequest(
                     1020203,
@@ -258,10 +258,9 @@ public class SummonTest : TestFixture
                     new PaymentTarget(1, 1)
                 ),
                 ensureSuccessHeader: false
-            )
-        );
+            );
 
-        response.data_headers.result_code.Should().Be(ResultCode.Success);
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
 
     [Fact]
@@ -276,8 +275,8 @@ public class SummonTest : TestFixture
             }
         );
 
-        DragaliaResponse<SummonRequestData> response = (
-            await this.Client.PostMsgpack<SummonRequestData>(
+        DragaliaResponse<SummonRequestResponse> response =
+            await this.Client.PostMsgpack<SummonRequestResponse>(
                 "summon/request",
                 new SummonRequestRequest(
                     1020203,
@@ -287,10 +286,9 @@ public class SummonTest : TestFixture
                     new PaymentTarget(5, 5)
                 ),
                 ensureSuccessHeader: false
-            )
-        );
+            );
 
-        response.data_headers.result_code.Should().Be(ResultCode.Success);
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
 
     [Fact]
@@ -305,8 +303,8 @@ public class SummonTest : TestFixture
             }
         );
 
-        DragaliaResponse<SummonRequestData> response = (
-            await this.Client.PostMsgpack<SummonRequestData>(
+        DragaliaResponse<SummonRequestResponse> response =
+            await this.Client.PostMsgpack<SummonRequestResponse>(
                 "summon/request",
                 new SummonRequestRequest(
                     1020203,
@@ -316,10 +314,9 @@ public class SummonTest : TestFixture
                     new PaymentTarget(1, 1)
                 ),
                 ensureSuccessHeader: false
-            )
-        );
+            );
 
-        response.data_headers.result_code.Should().Be(ResultCode.Success);
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
 
     [Theory]
@@ -333,32 +330,31 @@ public class SummonTest : TestFixture
             new DbSummonTicket() { SummonTicketId = SummonTickets.TenfoldSummon, KeyId = 1, }
         );
 
-        DragaliaResponse<SummonRequestData> response = (
-            await this.Client.PostMsgpack<SummonRequestData>(
+        DragaliaResponse<SummonRequestResponse> response =
+            await this.Client.PostMsgpack<SummonRequestResponse>(
                 "summon/request",
                 new SummonRequestRequest(
                     1020203,
-                    SummonExecTypes.Tenfold,
+                    types,
                     0,
                     PaymentTypes.Ticket,
                     new PaymentTarget(0, 1)
                 ),
                 ensureSuccessHeader: false
-            )
-        );
+            );
 
-        response.data_headers.result_code.Should().Be(ResultCode.CommonMaterialShort);
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.CommonMaterialShort);
     }
 
     private async Task CheckRewardInDb(AtgenResultUnitList reward)
     {
-        if (reward.entity_type == EntityTypes.Dragon)
+        if (reward.EntityType == EntityTypes.Dragon)
         {
             List<DbPlayerDragonData> dragonData = await this
                 .ApiContext.PlayerDragonData.Where(x => x.ViewerId == ViewerId)
                 .ToListAsync();
 
-            dragonData.Where(x => (int)x.DragonId == reward.id).Should().NotBeEmpty();
+            dragonData.Where(x => (int)x.DragonId == reward.Id).Should().NotBeEmpty();
         }
         else
         {
@@ -366,7 +362,7 @@ public class SummonTest : TestFixture
                 .ApiContext.PlayerCharaData.Where(x => x.ViewerId == ViewerId)
                 .ToListAsync();
 
-            charaData.Where(x => (int)x.CharaId == reward.id).Should().NotBeEmpty();
+            charaData.Where(x => (int)x.CharaId == reward.Id).Should().NotBeEmpty();
         }
     }
 }

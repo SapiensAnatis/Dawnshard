@@ -29,7 +29,7 @@ public class WebviewVersionController(
         AtgenWebviewUrlList news = new("information", this.GetUrl("news/webview"));
 
         return this.Ok(
-            new WebviewVersionUrlListData(
+            new WebviewVersionUrlListResponse(
                 new List<AtgenWebviewUrlList>()
                 {
                     news,

@@ -67,7 +67,7 @@ public class DmodeService(
                 if (await dmodeCacheService.DoesPlayRecordExist())
                 {
                     record = await dmodeCacheService.LoadPlayRecord();
-                    await dmodeCacheService.LoadFloorInfo(record.floor_key);
+                    await dmodeCacheService.LoadFloorInfo(record.FloorKey);
                 }
 
                 await dmodeCacheService.LoadIngameInfo();
@@ -81,7 +81,7 @@ public class DmodeService(
                 );
 
                 if (record != null)
-                    await dmodeCacheService.DeleteFloorInfo(record.floor_key);
+                    await dmodeCacheService.DeleteFloorInfo(record.FloorKey);
 
                 await dmodeCacheService.DeletePlayRecord();
                 await dmodeCacheService.DeleteIngameInfo();
@@ -181,22 +181,22 @@ public class DmodeService(
 
         logger.LogDebug("Building up servitors: {@servitorBuildups}", buildupList);
 
-        foreach (DmodeServitorPassiveList passiveList in buildupList.OrderBy(x => x.passive_level))
+        foreach (DmodeServitorPassiveList passiveList in buildupList.OrderBy(x => x.PassiveLevel))
         {
-            if (!currentPassives.ContainsKey(passiveList.passive_no))
+            if (!currentPassives.ContainsKey(passiveList.PassiveNo))
             {
-                currentPassives[passiveList.passive_no] = dmodeRepository.AddServitorPassive(
-                    passiveList.passive_no,
+                currentPassives[passiveList.PassiveNo] = dmodeRepository.AddServitorPassive(
+                    passiveList.PassiveNo,
                     0
                 );
             }
 
-            DbPlayerDmodeServitorPassive passive = currentPassives[passiveList.passive_no];
+            DbPlayerDmodeServitorPassive passive = currentPassives[passiveList.PassiveNo];
             ImmutableDictionary<int, DmodeServitorPassiveLevel> levels = DmodeHelper.PassiveLevels[
                 passive.PassiveId
             ];
 
-            DmodeServitorPassiveLevel level = levels[passiveList.passive_level];
+            DmodeServitorPassiveLevel level = levels[passiveList.PassiveLevel];
             foreach ((EntityTypes type, int id, int quantity) in level.NeededMaterials)
             {
                 if (type == EntityTypes.None)
@@ -205,7 +205,7 @@ public class DmodeService(
                 await paymentService.ProcessPayment(new Entity(type, id, quantity));
             }
 
-            passive.Level = passiveList.passive_level;
+            passive.Level = passiveList.PassiveLevel;
         }
 
         return currentPassives.Values.Select(x => new DmodeServitorPassiveList(
@@ -276,7 +276,7 @@ public class DmodeService(
         );
 
         DmodeIngameResult dmodeResult = new();
-        dmodeResult.chara_id_list = new[]
+        dmodeResult.CharaIdList = new[]
         {
             expedition.CharaId1,
             expedition.CharaId2,
@@ -286,7 +286,7 @@ public class DmodeService(
 
         List<AtgenRewardTalismanList> talismans = new();
 
-        dmodeResult.reward_talisman_list = talismans;
+        dmodeResult.RewardTalismanList = talismans;
 
         // No rewards for force-finishing
         if (forceFinish)
@@ -326,46 +326,36 @@ public class DmodeService(
             pointMultiplier2 += level.UpValue / 100;
         }
 
-        dmodeResult.floor_num = floor.FloorNum;
-        dmodeResult.take_dmode_point_1 = (int)
-            Math.Ceiling(floor.RewardDmodePoint1 * pointMultiplier1);
-        dmodeResult.take_dmode_point_2 = (int)
-            Math.Ceiling(floor.RewardDmodePoint2 * pointMultiplier2);
+        dmodeResult.FloorNum = floor.FloorNum;
+        dmodeResult.TakeDmodePoint1 = (int)Math.Ceiling(floor.RewardDmodePoint1 * pointMultiplier1);
+        dmodeResult.TakeDmodePoint2 = (int)Math.Ceiling(floor.RewardDmodePoint2 * pointMultiplier2);
 
         await rewardService.GrantReward(
-            new Entity(
-                EntityTypes.DmodePoint,
-                (int)DmodePoint.Point1,
-                dmodeResult.take_dmode_point_1
-            )
+            new Entity(EntityTypes.DmodePoint, (int)DmodePoint.Point1, dmodeResult.TakeDmodePoint1)
         );
         await rewardService.GrantReward(
-            new Entity(
-                EntityTypes.DmodePoint,
-                (int)DmodePoint.Point2,
-                dmodeResult.take_dmode_point_2
-            )
+            new Entity(EntityTypes.DmodePoint, (int)DmodePoint.Point2, dmodeResult.TakeDmodePoint2)
         );
 
         Random rdm = Random.Shared;
 
-        foreach (Charas charaId in dmodeResult.chara_id_list.Where(x => x != Charas.Empty))
+        foreach (Charas charaId in dmodeResult.CharaIdList.Where(x => x != Charas.Empty))
         {
             AtgenRewardTalismanList talisman = TalismanHelper.GenerateTalisman(rdm, charaId, 0);
 
             await rewardService.GrantTalisman(
-                talisman.talisman_id,
-                talisman.talisman_ability_id_1,
-                talisman.talisman_ability_id_2,
-                talisman.talisman_ability_id_3,
-                talisman.additional_hp,
-                talisman.additional_attack
+                talisman.TalismanId,
+                talisman.TalismanAbilityId1,
+                talisman.TalismanAbilityId2,
+                talisman.TalismanAbilityId3,
+                talisman.AdditionalHp,
+                talisman.AdditionalAttack
             );
 
             talismans.Add(talisman);
         }
 
-        dmodeResult.reward_talisman_list = talismans;
+        dmodeResult.RewardTalismanList = talismans;
 
         return (dmodeExpedition, dmodeResult);
     }

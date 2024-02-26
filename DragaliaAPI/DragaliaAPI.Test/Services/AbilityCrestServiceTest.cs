@@ -271,9 +271,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = BuildupPieceTypes.Refine,
-                is_use_dedicated_material = false,
-                step = 1
+                BuildupPieceType = BuildupPieceTypes.Refine,
+                IsUseDedicatedMaterial = false,
+                Step = 1
             };
 
         (await this.abilityCrestService.TryBuildup(abilityCrest, pieceList))
@@ -292,9 +292,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = buildupType,
-                is_use_dedicated_material = false,
-                step = 0
+                BuildupPieceType = buildupType,
+                IsUseDedicatedMaterial = false,
+                Step = 0
             };
 
         (await this.abilityCrestService.TryBuildup(abilityCrest, pieceList))
@@ -336,9 +336,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = buildupType,
-                is_use_dedicated_material = false,
-                step = 1
+                BuildupPieceType = buildupType,
+                IsUseDedicatedMaterial = false,
+                Step = 1
             };
 
         (await this.abilityCrestService.TryBuildup(abilityCrest, pieceList))
@@ -353,9 +353,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = BuildupPieceTypes.Copies,
-                is_use_dedicated_material = true,
-                step = 2
+                BuildupPieceType = BuildupPieceTypes.Copies,
+                IsUseDedicatedMaterial = true,
+                Step = 2
             };
 
         try
@@ -381,9 +381,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = BuildupPieceTypes.Unbind,
-                is_use_dedicated_material = true,
-                step = 1
+                BuildupPieceType = BuildupPieceTypes.Unbind,
+                IsUseDedicatedMaterial = true,
+                Step = 1
             };
 
         try
@@ -409,9 +409,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = BuildupPieceTypes.Unbind,
-                is_use_dedicated_material = true,
-                step = 1
+                BuildupPieceType = BuildupPieceTypes.Unbind,
+                IsUseDedicatedMaterial = true,
+                Step = 1
             };
 
         this.mockInventoryRepository.Setup(x =>
@@ -435,9 +435,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = BuildupPieceTypes.Unbind,
-                is_use_dedicated_material = false,
-                step = 2
+                BuildupPieceType = BuildupPieceTypes.Unbind,
+                IsUseDedicatedMaterial = false,
+                Step = 2
             };
 
         Dictionary<Materials, int> expectedMap =
@@ -467,9 +467,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = BuildupPieceTypes.Copies,
-                is_use_dedicated_material = false,
-                step = 3
+                BuildupPieceType = BuildupPieceTypes.Copies,
+                IsUseDedicatedMaterial = false,
+                Step = 3
             };
 
         this.mockInventoryRepository.Setup(x =>
@@ -498,9 +498,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = BuildupPieceTypes.Unbind,
-                is_use_dedicated_material = false,
-                step = 1
+                BuildupPieceType = BuildupPieceTypes.Unbind,
+                IsUseDedicatedMaterial = false,
+                Step = 1
             };
 
         this.mockInventoryRepository.Setup(x => x.CheckQuantity(new Dictionary<Materials, int>()))
@@ -522,9 +522,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = BuildupPieceTypes.Copies,
-                is_use_dedicated_material = false,
-                step = 2
+                BuildupPieceType = BuildupPieceTypes.Copies,
+                IsUseDedicatedMaterial = false,
+                Step = 2
             };
 
         this.mockInventoryRepository.Setup(x => x.CheckQuantity(new Dictionary<Materials, int>()))
@@ -550,9 +550,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = buildupType,
-                is_use_dedicated_material = false,
-                step = 2
+                BuildupPieceType = buildupType,
+                IsUseDedicatedMaterial = false,
+                Step = 2
             };
 
         this.mockInventoryRepository.Setup(x => x.CheckQuantity(new Dictionary<Materials, int>()))
@@ -591,9 +591,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = buildupType,
-                is_use_dedicated_material = false,
-                step = 3
+                BuildupPieceType = buildupType,
+                IsUseDedicatedMaterial = false,
+                Step = 3
             };
 
         this.mockInventoryRepository.Setup(x => x.CheckQuantity(new Dictionary<Materials, int>()))
@@ -632,9 +632,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = BuildupPieceTypes.Unbind,
-                is_use_dedicated_material = isDedicated,
-                step = step
+                BuildupPieceType = BuildupPieceTypes.Unbind,
+                IsUseDedicatedMaterial = isDedicated,
+                Step = step
             };
 
         this.mockInventoryRepository.Setup(x =>
@@ -687,9 +687,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = BuildupPieceTypes.Copies,
-                is_use_dedicated_material = false,
-                step = 2
+                BuildupPieceType = BuildupPieceTypes.Copies,
+                IsUseDedicatedMaterial = false,
+                Step = 2
             };
 
         this.mockInventoryRepository.Setup(x =>
@@ -760,9 +760,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = BuildupPieceTypes.Stats,
-                is_use_dedicated_material = false,
-                step = 1
+                BuildupPieceType = BuildupPieceTypes.Stats,
+                IsUseDedicatedMaterial = false,
+                Step = 1
             };
 
         (await this.abilityCrestService.TryBuildup(abilityCrest, pieceList))
@@ -777,9 +777,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = BuildupPieceTypes.Stats,
-                is_use_dedicated_material = true,
-                step = 15
+                BuildupPieceType = BuildupPieceTypes.Stats,
+                IsUseDedicatedMaterial = true,
+                Step = 15
             };
 
         try
@@ -802,9 +802,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = BuildupPieceTypes.Stats,
-                is_use_dedicated_material = false,
-                step = 15
+                BuildupPieceType = BuildupPieceTypes.Stats,
+                IsUseDedicatedMaterial = false,
+                Step = 15
             };
 
         this.mockInventoryRepository.Setup(x =>
@@ -832,9 +832,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = BuildupPieceTypes.Stats,
-                is_use_dedicated_material = false,
-                step = 12
+                BuildupPieceType = BuildupPieceTypes.Stats,
+                IsUseDedicatedMaterial = false,
+                Step = 12
             };
 
         this.mockInventoryRepository.Setup(x =>
@@ -879,9 +879,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = BuildupPieceTypes.Stats,
-                is_use_dedicated_material = false,
-                step = 5
+                BuildupPieceType = BuildupPieceTypes.Stats,
+                IsUseDedicatedMaterial = false,
+                Step = 5
             };
 
         this.mockInventoryRepository.Setup(x =>
@@ -920,9 +920,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = BuildupPieceTypes.Stats,
-                is_use_dedicated_material = false,
-                step = step
+                BuildupPieceType = BuildupPieceTypes.Stats,
+                IsUseDedicatedMaterial = false,
+                Step = step
             };
 
         this.mockInventoryRepository.Setup(x =>
@@ -961,9 +961,9 @@ public class AbilityCrestServiceTest
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
-                buildup_piece_type = BuildupPieceTypes.Stats,
-                is_use_dedicated_material = false,
-                step = step
+                BuildupPieceType = BuildupPieceTypes.Stats,
+                IsUseDedicatedMaterial = false,
+                Step = step
             };
 
         this.mockInventoryRepository.Setup(x => x.CheckQuantity(materialMap)).ReturnsAsync(true);
@@ -1000,7 +1000,7 @@ public class AbilityCrestServiceTest
             AbilityCrests.TutelarysDestinyWolfsBoon
         );
         AtgenPlusCountParamsList augmentParams =
-            new() { plus_count = 41, plus_count_type = PlusCountType.Hp };
+            new() { PlusCount = 41, PlusCountType = PlusCountType.Hp };
 
         (await this.abilityCrestService.TryBuildupAugments(abilityCrest, augmentParams))
             .Should()
@@ -1013,7 +1013,7 @@ public class AbilityCrestServiceTest
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
             AbilityCrests.TutelarysDestinyWolfsBoon
         );
-        AtgenPlusCountParamsList augmentParams = new() { plus_count = 40, plus_count_type = 0 };
+        AtgenPlusCountParamsList augmentParams = new() { PlusCount = 40, PlusCountType = 0 };
 
         try
         {
@@ -1033,7 +1033,7 @@ public class AbilityCrestServiceTest
             AbilityCrests.TutelarysDestinyWolfsBoon
         );
         AtgenPlusCountParamsList augmentParams =
-            new() { plus_count = 40, plus_count_type = PlusCountType.Atk };
+            new() { PlusCount = 40, PlusCountType = PlusCountType.Atk };
 
         this.mockAbilityCrestRepository.Setup(x =>
             x.FindAsync(AbilityCrests.TutelarysDestinyWolfsBoon)
@@ -1060,7 +1060,7 @@ public class AbilityCrestServiceTest
             AbilityCrests.TutelarysDestinyWolfsBoon
         );
         AtgenPlusCountParamsList augmentParams =
-            new() { plus_count = 39, plus_count_type = PlusCountType.Hp };
+            new() { PlusCount = 39, PlusCountType = PlusCountType.Hp };
 
         this.mockAbilityCrestRepository.Setup(x =>
             x.FindAsync(AbilityCrests.TutelarysDestinyWolfsBoon)
@@ -1089,7 +1089,7 @@ public class AbilityCrestServiceTest
             AbilityCrests.TutelarysDestinyWolfsBoon
         );
         AtgenPlusCountParamsList augmentParams =
-            new() { plus_count = 38, plus_count_type = PlusCountType.Atk };
+            new() { PlusCount = 38, PlusCountType = PlusCountType.Atk };
 
         this.mockAbilityCrestRepository.Setup(x =>
             x.FindAsync(AbilityCrests.TutelarysDestinyWolfsBoon)
@@ -1145,7 +1145,7 @@ public class AbilityCrestServiceTest
 
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(abilityCrestId);
         AtgenPlusCountParamsList augmentParams =
-            new() { plus_count = amount, plus_count_type = augmentType };
+            new() { PlusCount = amount, PlusCountType = augmentType };
         Materials material =
             augmentType == PlusCountType.Hp
                 ? Materials.FortifyingGemstone

@@ -33,9 +33,9 @@ public class AutoRepeatService(
             new()
             {
                 Key = Guid.NewGuid(),
-                Type = repeatSetting.repeat_type,
-                UseItemList = repeatSetting.use_item_list,
-                MaxCount = repeatSetting.repeat_count,
+                Type = repeatSetting.RepeatType,
+                UseItemList = repeatSetting.UseItemList,
+                MaxCount = repeatSetting.RepeatCount,
                 CurrentCount = 0
             };
 
@@ -87,9 +87,9 @@ public class AutoRepeatService(
 
         return new RepeatData()
         {
-            repeat_count = info.CurrentCount,
-            repeat_key = info.Key.ToString(),
-            repeat_state = 1,
+            RepeatCount = info.CurrentCount,
+            RepeatKey = info.Key.ToString(),
+            RepeatState = 1,
         };
     }
 

@@ -50,8 +50,8 @@ public class WallRecordController : DragaliaControllerBase
     [HttpPost("record")]
     public async Task<DragaliaResult> Record(WallRecordRecordRequest request)
     {
-        DungeonSession dungeonSession = await dungeonService.FinishDungeon(request.dungeon_key);
-        DbPlayerQuestWall questWall = await wallRepository.GetQuestWall(request.wall_id);
+        DungeonSession dungeonSession = await dungeonService.FinishDungeon(request.DungeonKey);
+        DbPlayerQuestWall questWall = await wallRepository.GetQuestWall(request.WallId);
 
         int finishedLevel = dungeonSession.WallLevel; // ex: if you finish level 2, this value should be 2
         int previousLevel = questWall.WallLevel;
@@ -60,12 +60,12 @@ public class WallRecordController : DragaliaControllerBase
 
         logger.LogInformation(
             "Cleared wall quest with 'wall_id' {@wall_id} and 'wall_level' {@wall_level}",
-            request.wall_id,
+            request.WallId,
             dungeonSession.WallLevel
         );
 
         // Level up completed wall quest
-        await wallService.LevelupQuestWall(request.wall_id);
+        await wallService.LevelupQuestWall(request.WallId);
 
         // Get helper data
         (
@@ -77,25 +77,25 @@ public class WallRecordController : DragaliaControllerBase
         AtgenWallUnitInfo wallUnitInfo =
             new()
             {
-                quest_party_setting_list = dungeonSession.Party,
-                helper_list = helperList,
-                helper_detail_list = helperDetailList
+                QuestPartySettingList = dungeonSession.Party,
+                HelperList = helperList,
+                HelperDetailList = helperDetailList
             };
 
         AtgenWallDropReward wallDropReward =
             new()
             {
-                reward_entity_list = new[] { GoldCrystals.ToBuildEventRewardEntityList() },
-                take_coin = Rupies.Quantity,
-                take_mana = Mana.Quantity
+                RewardEntityList = new[] { GoldCrystals.ToBuildEventRewardEntityList() },
+                TakeCoin = Rupies.Quantity,
+                TakeMana = Mana.Quantity
             };
 
         AtgenPlayWallDetail playWallDetail =
             new()
             {
-                wall_id = request.wall_id,
-                before_wall_level = previousLevel,
-                after_wall_level = finishedLevel
+                WallId = request.WallId,
+                BeforeWallLevel = previousLevel,
+                AfterWallLevel = finishedLevel
             };
 
         // Grant Rewards
@@ -119,15 +119,15 @@ public class WallRecordController : DragaliaControllerBase
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        WallRecordRecordData data =
+        WallRecordRecordResponse data =
             new()
             {
-                update_data_list = updateDataList,
-                entity_result = entityResult,
-                play_wall_detail = playWallDetail,
-                wall_clear_reward_list = wallClearRewardList,
-                wall_drop_reward = wallDropReward,
-                wall_unit_info = wallUnitInfo
+                UpdateDataList = updateDataList,
+                EntityResult = entityResult,
+                PlayWallDetail = playWallDetail,
+                WallClearRewardList = wallClearRewardList,
+                WallDropReward = wallDropReward,
+                WallUnitInfo = wallUnitInfo
             };
         return Ok(data);
     }

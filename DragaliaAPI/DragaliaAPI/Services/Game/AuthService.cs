@@ -136,9 +136,9 @@ public class AuthService : IAuthService
     {
         try
         {
-            LoadIndexData pendingSave = await this.baasRequestHelper.GetSavefile(idToken);
+            LoadIndexResponse pendingSave = await this.baasRequestHelper.GetSavefile(idToken);
 
-            this.logger.LogDebug("UserData: {@userData}", pendingSave.user_data);
+            this.logger.LogDebug("UserData: {@userData}", pendingSave.UserData);
             await this.savefileService.ThreadSafeImport(pendingSave);
         }
         catch (Exception e) when (e is JsonException or AutoMapperMappingException)

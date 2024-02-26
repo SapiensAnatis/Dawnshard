@@ -16,7 +16,7 @@ public class TimeAttackController(
 {
     [Route("get_data")]
     [HttpPost]
-    public DragaliaResult<TimeAttackRankingGetDataData> GetData(
+    public DragaliaResult<TimeAttackRankingGetDataResponse> GetData(
         TimeAttackRankingGetDataRequest request
     )
     {
@@ -24,7 +24,7 @@ public class TimeAttackController(
             .GetRewards()
             .Select(ToRankingTierRewardList);
 
-        return new TimeAttackRankingGetDataData() { ranking_tier_reward_list = rewardList };
+        return new TimeAttackRankingGetDataResponse() { RankingTierRewardList = rewardList };
     }
 
     [Route("receive_tier_reward")]
@@ -34,7 +34,7 @@ public class TimeAttackController(
     )
     {
         IEnumerable<RankingTierReward> receivedRewards = await timeAttackService.ReceiveTierReward(
-            request.quest_id
+            request.QuestId
         );
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
@@ -43,12 +43,12 @@ public class TimeAttackController(
         IEnumerable<RankingTierReward> rewardList = timeAttackService.GetRewards();
 
         return this.Ok(
-            new TimeAttackRankingReceiveTierRewardData()
+            new TimeAttackRankingReceiveTierRewardResponse()
             {
-                update_data_list = updateDataList,
-                entity_result = entityResult,
-                ranking_tier_reward_list = rewardList.Select(ToRankingTierRewardList),
-                ranking_tier_reward_entity_list = receivedRewards.Select(ToRewardEntityList)
+                UpdateDataList = updateDataList,
+                EntityResult = entityResult,
+                RankingTierRewardList = rewardList.Select(ToRankingTierRewardList),
+                RankingTierRewardEntityList = receivedRewards.Select(ToRewardEntityList)
             }
         );
     }

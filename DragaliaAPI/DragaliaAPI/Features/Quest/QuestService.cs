@@ -37,9 +37,9 @@ public class QuestService(
 
         bool isBestClearTime = false;
 
-        if (0 > quest.BestClearTime || quest.BestClearTime > playRecord.time)
+        if (0 > quest.BestClearTime || quest.BestClearTime > playRecord.Time)
         {
-            quest.BestClearTime = playRecord.time;
+            quest.BestClearTime = playRecord.Time;
             isBestClearTime = true;
         }
 
@@ -247,7 +247,7 @@ public class QuestService(
 
             await questCacheService.RemoveQuestGroupQuestIdAsync(eventGroupId);
 
-            return new AtgenReceiveQuestBonus() { target_quest_id = questId ?? 0 };
+            return new AtgenReceiveQuestBonus() { TargetQuestId = questId ?? 0 };
         }
 
         if (count > questEvent.QuestBonusReserveCount + questEvent.QuestBonusStackCount)
@@ -342,7 +342,7 @@ public class QuestService(
             missionProgressionService.OnEventChallengeBattleCleared(
                 questData.Gid,
                 questData.VariationType,
-                playRecord.wave >= waveCount,
+                playRecord.Wave >= waveCount,
                 questData.Id
             );
         }

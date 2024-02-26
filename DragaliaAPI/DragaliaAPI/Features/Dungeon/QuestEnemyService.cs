@@ -54,29 +54,29 @@ public class QuestEnemyService : IQuestEnemyService
             AtgenEnemy enemy = enemyPicker.PickOne();
             DropEntity drop = dropPicker.PickOne();
 
-            if (enemy.enemy_drop_list.Count == 0)
+            if (enemy.EnemyDropList.Count == 0)
             {
-                enemy.enemy_drop_list.Add(
+                enemy.EnemyDropList.Add(
                     new EnemyDropList()
                     {
-                        coin = 0,
-                        mana = 0,
-                        drop_list = new List<AtgenDropList>()
+                        Coin = 0,
+                        Mana = 0,
+                        DropList = new List<AtgenDropList>()
                     }
                 );
             }
 
-            enemy.enemy_drop_list[0].coin += rupieSlice;
-            enemy.enemy_drop_list[0].mana += manaSlice;
+            enemy.EnemyDropList[0].Coin += rupieSlice;
+            enemy.EnemyDropList[0].Mana += manaSlice;
 
             enemy
-                .enemy_drop_list[0]
-                .drop_list.Add(
+                .EnemyDropList[0]
+                .DropList.Add(
                     new AtgenDropList()
                     {
-                        id = drop.Id,
-                        type = drop.EntityType,
-                        quantity = 1
+                        Id = drop.Id,
+                        Type = drop.EntityType,
+                        Quantity = 1
                     }
                 );
         }
@@ -84,18 +84,18 @@ public class QuestEnemyService : IQuestEnemyService
         // Accumulate quantities of the same drops
         foreach (AtgenEnemy enemy in enemyList)
         {
-            if (enemy.enemy_drop_list.Count == 0)
+            if (enemy.EnemyDropList.Count == 0)
                 continue;
 
-            enemy.enemy_drop_list[0].drop_list = enemy
-                .enemy_drop_list[0]
-                .drop_list.GroupBy(x => new { x.id, x.type })
+            enemy.EnemyDropList[0].DropList = enemy
+                .EnemyDropList[0]
+                .DropList.GroupBy(x => new { id = x.Id, type = x.Type })
                 .Select(group =>
                     group.Aggregate(
-                        new AtgenDropList() { id = group.Key.id, type = group.Key.type },
+                        new AtgenDropList() { Id = group.Key.id, Type = group.Key.type },
                         (acc, current) =>
                         {
-                            acc.quantity += current.quantity;
+                            acc.Quantity += current.Quantity;
                             return acc;
                         }
                     )
@@ -117,7 +117,7 @@ public class QuestEnemyService : IQuestEnemyService
     private static IPick<AtgenEnemy> GetEnemyPicker(AtgenEnemy[] enemyList)
     {
         AtgenEnemy? boss = enemyList.FirstOrDefault(x =>
-            MasterAsset.EnemyParam[x.param_id].Tough >= Toughness.Boss
+            MasterAsset.EnemyParam[x.ParamId].Tough >= Toughness.Boss
         );
 
         if (boss != null)
@@ -130,7 +130,7 @@ public class QuestEnemyService : IQuestEnemyService
             enemyList,
             enemy =>
             {
-                if (MasterAsset.EnemyParam.TryGetValue(enemy.param_id, out EnemyParam? param))
+                if (MasterAsset.EnemyParam.TryGetValue(enemy.ParamId, out EnemyParam? param))
                     return (int)param.Tough + 1;
 
                 return 1;
@@ -206,11 +206,11 @@ public class QuestEnemyService : IQuestEnemyService
                 (x, idx) =>
                     new AtgenEnemy()
                     {
-                        enemy_idx = idx,
-                        is_pop = true,
-                        is_rare = false,
-                        param_id = x.Id,
-                        enemy_drop_list = []
+                        EnemyIdx = idx,
+                        IsPop = true,
+                        IsRare = false,
+                        ParamId = x.Id,
+                        EnemyDropList = []
                     }
             )
             .ToArray();
@@ -224,11 +224,11 @@ public class QuestEnemyService : IQuestEnemyService
         {
             new AtgenEnemy()
             {
-                enemy_idx = 0,
-                is_pop = true,
-                is_rare = false,
-                param_id = questWallDetail.BossEnemyParamId,
-                enemy_drop_list = new List<EnemyDropList>()
+                EnemyIdx = 0,
+                IsPop = true,
+                IsRare = false,
+                ParamId = questWallDetail.BossEnemyParamId,
+                EnemyDropList = new List<EnemyDropList>()
             }
         };
     }

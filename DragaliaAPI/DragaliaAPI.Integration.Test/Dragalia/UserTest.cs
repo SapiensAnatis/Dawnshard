@@ -5,7 +5,10 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 public class UserTest : TestFixture
 {
     public UserTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        CommonAssertionOptions.ApplyTimeOptions();
+    }
 
     [Fact]
     public async Task LinkedNAccount_ReturnsExpectedResponse()
@@ -17,18 +20,18 @@ public class UserTest : TestFixture
         UserData expectedUserData = this.Mapper.Map<UserData>(dbUserData);
 
         (
-            await this.Client.PostMsgpack<UserLinkedNAccountData>(
+            await this.Client.PostMsgpack<UserLinkedNAccountResponse>(
                 "/user/linked_n_account",
                 new UserLinkedNAccountRequest()
             )
         )
-            .data.Should()
+            .Data.Should()
             .BeEquivalentTo(
-                new UserLinkedNAccountData()
+                new UserLinkedNAccountResponse()
                 {
-                    update_data_list = new() { user_data = expectedUserData }
+                    UpdateDataList = new() { UserData = expectedUserData }
                 },
-                opts => opts.Excluding(x => x.update_data_list.user_data.crystal)
+                opts => opts.Excluding(x => x.UpdateDataList.UserData.Crystal)
             );
     }
 
@@ -36,23 +39,23 @@ public class UserTest : TestFixture
     public async Task GetNAccountInfo_ReturnsExpectedResponse()
     {
         (
-            await this.Client.PostMsgpack<UserGetNAccountInfoData>(
+            await this.Client.PostMsgpack<UserGetNAccountInfoResponse>(
                 "/user/get_n_account_info",
                 new UserGetNAccountInfoRequest()
             )
         )
-            .data.Should()
+            .Data.Should()
             .BeEquivalentTo(
-                new UserGetNAccountInfoData()
+                new UserGetNAccountInfoResponse()
                 {
-                    n_account_info = new()
+                    NAccountInfo = new()
                     {
-                        email = "placeholder@email.com",
-                        nickname = "placeholder nickname"
+                        Email = "placeholder@email.com",
+                        Nickname = "placeholder nickname"
                     },
-                    update_data_list = new()
+                    UpdateDataList = new()
                 },
-                opts => opts.Excluding(x => x.update_data_list.user_data.crystal)
+                opts => opts.Excluding(x => x.UpdateDataList.UserData.Crystal)
             );
     }
 }

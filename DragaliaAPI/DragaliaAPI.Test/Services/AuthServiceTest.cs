@@ -240,11 +240,11 @@ public class AuthServiceTest
             )
             .AsString();
 
-        LoadIndexData importSavefile =
+        LoadIndexResponse importSavefile =
             new()
             {
-                user_data = new() { name = "Euden 2" },
-                fort_bonus_list = null!
+                UserData = new() { Name = "Euden 2" },
+                FortBonusList = null!
             };
 
         this.mockLoginOptions.Setup(x => x.CurrentValue)
@@ -263,7 +263,7 @@ public class AuthServiceTest
         )
             .ReturnsAsync("session id");
 
-        this.mockSavefileService.Setup(x => x.ThreadSafeImport(It.IsAny<LoadIndexData>()))
+        this.mockSavefileService.Setup(x => x.ThreadSafeImport(It.IsAny<LoadIndexResponse>()))
             .Returns(Task.CompletedTask);
 
         await this.authService.DoAuth(token);
@@ -306,11 +306,11 @@ public class AuthServiceTest
             )
             .AsString();
 
-        LoadIndexData importSavefile =
+        LoadIndexResponse importSavefile =
             new()
             {
-                user_data = new() { name = "Euden 2" },
-                fort_bonus_list = null!
+                UserData = new() { Name = "Euden 2" },
+                FortBonusList = null!
             };
 
         this.mockLoginOptions.Setup(x => x.CurrentValue)
@@ -393,7 +393,7 @@ public class AuthServiceTest
         this.mockUserDataRepository.VerifyAll();
         this.mockUserDataRepository.Verify(x => x.UpdateSaveImportTime(), Times.Never);
         this.mockSessionService.VerifyAll();
-        this.mockSavefileService.Verify(x => x.Import(It.IsAny<LoadIndexData>()), Times.Never);
+        this.mockSavefileService.Verify(x => x.Import(It.IsAny<LoadIndexResponse>()), Times.Never);
     }
 
     [Fact]
@@ -451,6 +451,6 @@ public class AuthServiceTest
         this.mockUserDataRepository.VerifyAll();
         this.mockUserDataRepository.Verify(x => x.UpdateSaveImportTime(), Times.Never);
         this.mockSessionService.VerifyAll();
-        this.mockSavefileService.Verify(x => x.Import(It.IsAny<LoadIndexData>()), Times.Never);
+        this.mockSavefileService.Verify(x => x.Import(It.IsAny<LoadIndexResponse>()), Times.Never);
     }
 }

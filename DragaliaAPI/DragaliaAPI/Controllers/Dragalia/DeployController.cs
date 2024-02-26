@@ -14,6 +14,6 @@ public class DeployController : DragaliaControllerBaseCore
     [Route("get_deploy_version")]
     public DragaliaResult GetDeployVersion()
     {
-        return this.Ok(new DeployGetDeployVersionData(DeployHash));
+        return this.Ok(new DeployGetDeployVersionResponse(DeployHash));
     }
 }

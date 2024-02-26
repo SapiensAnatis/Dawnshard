@@ -25,15 +25,15 @@ public class DungeonRecordController(
 ) : DragaliaControllerBase
 {
     [HttpPost("record")]
-    public async Task<DragaliaResult<DungeonRecordRecordData>> Record(
+    public async Task<DragaliaResult<DungeonRecordRecordResponse>> Record(
         DungeonRecordRecordRequest request
     )
     {
-        DungeonSession session = await dungeonService.FinishDungeon(request.dungeon_key);
+        DungeonSession session = await dungeonService.FinishDungeon(request.DungeonKey);
 
         IngameResultData ingameResultData = await dungeonRecordService.GenerateIngameResultData(
-            request.dungeon_key,
-            request.play_record,
+            request.DungeonKey,
+            request.PlayRecord,
             session
         );
 
@@ -42,26 +42,26 @@ public class DungeonRecordController(
             IEnumerable<AtgenHelperDetailList> helperDetailList
         ) = await dungeonRecordHelperService.ProcessHelperDataSolo(session.SupportViewerId);
 
-        ingameResultData.helper_list = helperList;
-        ingameResultData.helper_detail_list = helperDetailList;
+        ingameResultData.HelperList = helperList;
+        ingameResultData.HelperDetailList = helperDetailList;
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        DungeonRecordRecordData response =
-            new() { ingame_result_data = ingameResultData, update_data_list = updateDataList };
+        DungeonRecordRecordResponse response =
+            new() { IngameResultData = ingameResultData, UpdateDataList = updateDataList };
 
         if (session.QuestData?.IsSumUpTotalDamage ?? false)
         {
-            response.event_damage_ranking = await dungeonRecordDamageService.GetEventDamageRanking(
-                request.play_record,
+            response.EventDamageRanking = await dungeonRecordDamageService.GetEventDamageRanking(
+                request.PlayRecord,
                 session.QuestData.Gid
             );
         }
 
-        if (request.repeat_state != 0)
+        if (request.RepeatState != 0)
         {
-            response.repeat_data = await autoRepeatService.RecordRepeat(
-                request.repeat_key,
+            response.RepeatData = await autoRepeatService.RecordRepeat(
+                request.RepeatKey,
                 ingameResultData,
                 updateDataList
             );
@@ -74,11 +74,11 @@ public class DungeonRecordController(
     [Authorize(AuthenticationSchemes = nameof(PhotonAuthenticationHandler))]
     public async Task<DragaliaResult> RecordMulti(DungeonRecordRecordMultiRequest request)
     {
-        DungeonSession session = await dungeonService.FinishDungeon(request.dungeon_key);
+        DungeonSession session = await dungeonService.FinishDungeon(request.DungeonKey);
 
         IngameResultData ingameResultData = await dungeonRecordService.GenerateIngameResultData(
-            request.dungeon_key,
-            request.play_record,
+            request.DungeonKey,
+            request.PlayRecord,
             session
         );
 
@@ -87,19 +87,19 @@ public class DungeonRecordController(
             IEnumerable<AtgenHelperDetailList> helperDetailList
         ) = await dungeonRecordHelperService.ProcessHelperDataMulti();
 
-        ingameResultData.helper_list = helperList;
-        ingameResultData.helper_detail_list = helperDetailList;
-        ingameResultData.play_type = QuestPlayType.Multi;
+        ingameResultData.HelperList = helperList;
+        ingameResultData.HelperDetailList = helperDetailList;
+        ingameResultData.PlayType = QuestPlayType.Multi;
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        DungeonRecordRecordData response =
-            new() { ingame_result_data = ingameResultData, update_data_list = updateDataList, };
+        DungeonRecordRecordResponse response =
+            new() { IngameResultData = ingameResultData, UpdateDataList = updateDataList, };
 
         if (session.QuestData?.IsSumUpTotalDamage ?? false)
         {
-            response.event_damage_ranking = await dungeonRecordDamageService.GetEventDamageRanking(
-                request.play_record,
+            response.EventDamageRanking = await dungeonRecordDamageService.GetEventDamageRanking(
+                request.PlayRecord,
                 session.QuestData.Gid
             );
         }
@@ -120,9 +120,9 @@ public class DungeonRecordController(
     {
         string gameId = $"{roomName}_{roomId}";
 
-        await timeAttackService.RegisterRankedClear(gameId, request.play_record.time);
+        await timeAttackService.RegisterRankedClear(gameId, request.PlayRecord.Time);
         await updateDataService.SaveChangesAsync();
 
-        return this.Ok(new ResultCodeData(ResultCode.Success));
+        return this.Ok(new ResultCodeResponse(ResultCode.Success));
     }
 }

@@ -84,14 +84,14 @@ public class DmodeServiceTest
         DmodeInfo info = await dmodeService.GetInfo();
 
         info.Should().NotBeNull();
-        info.total_max_floor_num.Should().Be(maxFloor);
-        info.recovery_count.Should().Be(recoveryCount);
-        info.recovery_time.Should().Be(FixedTime);
-        info.floor_skip_count.Should().Be(skipCount);
-        info.floor_skip_time.Should().Be(FixedTime);
-        info.dmode_point_1.Should().Be(point1Quantity);
-        info.dmode_point_2.Should().Be(point2Quantity);
-        info.is_entry.Should().BeTrue();
+        info.TotalMaxFloorNum.Should().Be(maxFloor);
+        info.RecoveryCount.Should().Be(recoveryCount);
+        info.RecoveryTime.Should().Be(FixedTime);
+        info.FloorSkipCount.Should().Be(skipCount);
+        info.FloorSkipTime.Should().Be(FixedTime);
+        info.DmodePoint1.Should().Be(point1Quantity);
+        info.DmodePoint2.Should().Be(point2Quantity);
+        info.IsEntry.Should().BeTrue();
 
         mockDmodeRepository.VerifyAll();
     }
@@ -109,7 +109,7 @@ public class DmodeServiceTest
 
         info.Should().NotBeNull();
         info.Should().BeEquivalentTo(expectedInfo);
-        info.is_entry.Should().BeFalse();
+        info.IsEntry.Should().BeFalse();
 
         mockDmodeRepository.VerifyAll();
     }
@@ -131,7 +131,7 @@ public class DmodeServiceTest
                 State = DungeonState.Waiting,
                 CharaId = charaId,
                 Floor = floor,
-                QuestTime = questTime,
+                QuestTime = 0,
                 DungeonScore = dungeonScore,
                 IsPlayEnd = isPlayEnd
             };
@@ -147,12 +147,12 @@ public class DmodeServiceTest
         DmodeDungeonInfo info = await dmodeService.GetDungeonInfo();
 
         info.Should().NotBeNull();
-        info.chara_id.Should().Be(charaId);
-        info.state.Should().Be(state);
-        info.floor_num.Should().Be(floor);
-        info.quest_time.Should().Be(questTime);
-        info.dungeon_score.Should().Be(dungeonScore);
-        info.is_play_end.Should().Be(isPlayEnd);
+        info.CharaId.Should().Be(charaId);
+        info.State.Should().Be(state);
+        info.FloorNum.Should().Be(floor);
+        info.QuestTime.Should().Be(questTime);
+        info.DungeonScore.Should().Be(dungeonScore);
+        info.IsPlayEnd.Should().Be(isPlayEnd);
 
         mockDmodeRepository.VerifyAll();
     }
@@ -233,13 +233,13 @@ public class DmodeServiceTest
         DmodeExpedition expedition = await dmodeService.GetExpedition();
 
         expedition.Should().NotBeNull();
-        expedition.chara_id_1.Should().Be(dbExpedition.CharaId1);
-        expedition.chara_id_2.Should().Be(dbExpedition.CharaId2);
-        expedition.chara_id_3.Should().Be(dbExpedition.CharaId3);
-        expedition.chara_id_4.Should().Be(dbExpedition.CharaId4);
-        expedition.state.Should().Be(dbExpedition.State);
-        expedition.start_time.Should().Be(dbExpedition.StartTime);
-        expedition.target_floor_num.Should().Be(dbExpedition.TargetFloor);
+        expedition.CharaId1.Should().Be(dbExpedition.CharaId1);
+        expedition.CharaId2.Should().Be(dbExpedition.CharaId2);
+        expedition.CharaId3.Should().Be(dbExpedition.CharaId3);
+        expedition.CharaId4.Should().Be(dbExpedition.CharaId4);
+        expedition.State.Should().Be(dbExpedition.State);
+        expedition.StartTime.Should().Be(dbExpedition.StartTime);
+        expedition.TargetFloorNum.Should().Be(dbExpedition.TargetFloor);
 
         mockDmodeRepository.VerifyAll();
     }
@@ -503,12 +503,12 @@ public class DmodeServiceTest
 
         DmodeExpedition expedition = await dmodeService.StartExpedition(targetFloor, charaList);
 
-        expedition.state.Should().Be(ExpeditionState.Playing);
-        expedition.chara_id_1.Should().Be(charaList[0]);
-        expedition.chara_id_2.Should().Be(charaList[1]);
-        expedition.chara_id_3.Should().Be(charaList[2]);
-        expedition.chara_id_4.Should().Be(charaList[3]);
-        expedition.target_floor_num.Should().Be(targetFloor);
+        expedition.State.Should().Be(ExpeditionState.Playing);
+        expedition.CharaId1.Should().Be(charaList[0]);
+        expedition.CharaId2.Should().Be(charaList[1]);
+        expedition.CharaId3.Should().Be(charaList[2]);
+        expedition.CharaId4.Should().Be(charaList[3]);
+        expedition.TargetFloorNum.Should().Be(targetFloor);
 
         mockDateTimeProvider.VerifyAll();
         mockDmodeRepository.VerifyAll();
@@ -567,16 +567,16 @@ public class DmodeServiceTest
             await dmodeService.FinishExpedition(false);
 
         expedition.Should().NotBeNull();
-        expedition.state.Should().Be(ExpeditionState.Waiting);
-        expedition.chara_id_1.Should().Be(dbExpedition.CharaId1);
-        expedition.chara_id_2.Should().Be(dbExpedition.CharaId2);
-        expedition.chara_id_3.Should().Be(dbExpedition.CharaId3);
-        expedition.chara_id_4.Should().Be(dbExpedition.CharaId4);
+        expedition.State.Should().Be(ExpeditionState.Waiting);
+        expedition.CharaId1.Should().Be(dbExpedition.CharaId1);
+        expedition.CharaId2.Should().Be(dbExpedition.CharaId2);
+        expedition.CharaId3.Should().Be(dbExpedition.CharaId3);
+        expedition.CharaId4.Should().Be(dbExpedition.CharaId4);
 
         ingameResult.Should().NotBeNull();
-        ingameResult.take_dmode_point_1.Should().Be(floorData.RewardDmodePoint1);
-        ingameResult.take_dmode_point_2.Should().Be(floorData.RewardDmodePoint2);
-        ingameResult.reward_talisman_list.Should().HaveCount(1);
+        ingameResult.TakeDmodePoint1.Should().Be(floorData.RewardDmodePoint1);
+        ingameResult.TakeDmodePoint2.Should().Be(floorData.RewardDmodePoint2);
+        ingameResult.RewardTalismanList.Should().HaveCount(1);
 
         mockDateTimeProvider.VerifyAll();
         mockDmodeRepository.VerifyAll();
@@ -632,16 +632,16 @@ public class DmodeServiceTest
             await dmodeService.FinishExpedition(true);
 
         expedition.Should().NotBeNull();
-        expedition.state.Should().Be(ExpeditionState.Waiting);
-        expedition.chara_id_1.Should().Be(dbExpedition.CharaId1);
-        expedition.chara_id_2.Should().Be(dbExpedition.CharaId2);
-        expedition.chara_id_3.Should().Be(dbExpedition.CharaId3);
-        expedition.chara_id_4.Should().Be(dbExpedition.CharaId4);
+        expedition.State.Should().Be(ExpeditionState.Waiting);
+        expedition.CharaId1.Should().Be(dbExpedition.CharaId1);
+        expedition.CharaId2.Should().Be(dbExpedition.CharaId2);
+        expedition.CharaId3.Should().Be(dbExpedition.CharaId3);
+        expedition.CharaId4.Should().Be(dbExpedition.CharaId4);
 
         ingameResult.Should().NotBeNull();
-        ingameResult.take_dmode_point_1.Should().Be(0);
-        ingameResult.take_dmode_point_2.Should().Be(0);
-        ingameResult.reward_talisman_list.Should().HaveCount(0);
+        ingameResult.TakeDmodePoint1.Should().Be(0);
+        ingameResult.TakeDmodePoint2.Should().Be(0);
+        ingameResult.RewardTalismanList.Should().HaveCount(0);
 
         mockDmodeRepository.VerifyAll();
     }

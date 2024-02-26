@@ -62,26 +62,26 @@ public class DragonController : DragaliaControllerBase
         [FromBody] DragonBuyGiftToSendRequest request
     )
     {
-        DragonBuyGiftToSendMultipleData resultData =
+        DragonBuyGiftToSendMultipleResponse resultData =
             await dragonService.DoDragonBuyGiftToSendMultiple(
                 new DragonBuyGiftToSendMultipleRequest()
                 {
-                    dragon_id = request.dragon_id,
-                    dragon_gift_id_list = new List<DragonGifts>() { request.dragon_gift_id }
+                    DragonId = request.DragonId,
+                    DragonGiftIdList = new List<DragonGifts>() { request.DragonGiftId }
                 }
             );
         return Ok(
-            new DragonBuyGiftToSendData()
+            new DragonBuyGiftToSendResponse()
             {
-                dragon_contact_free_gift_count = resultData.dragon_contact_free_gift_count,
-                entity_result = resultData.entity_result,
-                is_favorite = resultData.dragon_gift_reward_list.First().is_favorite,
-                return_gift_list = resultData.dragon_gift_reward_list.First().return_gift_list,
-                reward_reliability_list = resultData
-                    .dragon_gift_reward_list.First()
-                    .reward_reliability_list,
-                shop_gift_list = resultData.shop_gift_list,
-                update_data_list = resultData.update_data_list
+                DragonContactFreeGiftCount = resultData.DragonContactFreeGiftCount,
+                EntityResult = resultData.EntityResult,
+                IsFavorite = resultData.DragonGiftRewardList.First().IsFavorite,
+                ReturnGiftList = resultData.DragonGiftRewardList.First().ReturnGiftList,
+                RewardReliabilityList = resultData
+                    .DragonGiftRewardList.First()
+                    .RewardReliabilityList,
+                ShopGiftList = resultData.ShopGiftList,
+                UpdateDataList = resultData.UpdateDataList
             }
         );
     }
@@ -99,21 +99,21 @@ public class DragonController : DragaliaControllerBase
     [HttpPost]
     public async Task<DragaliaResult> DragonSendGift([FromBody] DragonSendGiftRequest request)
     {
-        DragonSendGiftMultipleData resultData = await dragonService.DoDragonSendGiftMultiple(
+        DragonSendGiftMultipleResponse resultData = await dragonService.DoDragonSendGiftMultiple(
             new DragonSendGiftMultipleRequest()
             {
-                dragon_id = request.dragon_id,
-                dragon_gift_id = request.dragon_gift_id,
-                quantity = 1
+                DragonId = request.DragonId,
+                DragonGiftId = request.DragonGiftId,
+                Quantity = 1
             }
         );
         return Ok(
-            new DragonSendGiftData()
+            new DragonSendGiftResponse()
             {
-                is_favorite = resultData.is_favorite,
-                return_gift_list = resultData.return_gift_list,
-                reward_reliability_list = resultData.reward_reliability_list,
-                update_data_list = resultData.update_data_list
+                IsFavorite = resultData.IsFavorite,
+                ReturnGiftList = resultData.ReturnGiftList,
+                RewardReliabilityList = resultData.RewardReliabilityList,
+                UpdateDataList = resultData.UpdateDataList
             }
         );
     }

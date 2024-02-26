@@ -14,27 +14,27 @@ public class QuestOpenTreasureTest : TestFixture
     [Fact]
     public async Task OpenTreasure_ReturnCorrectResponse()
     {
-        QuestOpenTreasureData response = (
-            await this.Client.PostMsgpack<QuestOpenTreasureData>(
+        QuestOpenTreasureResponse response = (
+            await this.Client.PostMsgpack<QuestOpenTreasureResponse>(
                 "/quest/open_treasure",
-                new QuestOpenTreasureRequest() { quest_treasure_id = 104101 }
+                new QuestOpenTreasureRequest() { QuestTreasureId = 104101 }
             )
-        ).data;
+        ).Data;
 
         response
-            .update_data_list.quest_treasure_list.Should()
-            .ContainEquivalentOf(new QuestTreasureList() { quest_treasure_id = 104101 });
+            .UpdateDataList.QuestTreasureList.Should()
+            .ContainEquivalentOf(new QuestTreasureList() { QuestTreasureId = 104101 });
     }
 
     [Fact]
     public async Task OpenTreasure_UpdatesDatabase()
     {
-        QuestOpenTreasureData response = (
-            await this.Client.PostMsgpack<QuestOpenTreasureData>(
+        QuestOpenTreasureResponse response = (
+            await this.Client.PostMsgpack<QuestOpenTreasureResponse>(
                 "/quest/open_treasure",
-                new QuestOpenTreasureRequest() { quest_treasure_id = 126201 }
+                new QuestOpenTreasureRequest() { QuestTreasureId = 126201 }
             )
-        ).data;
+        ).Data;
 
         List<DbQuestTreasureList> questTreasureList = await this
             .ApiContext.QuestTreasureList.Where(x => x.ViewerId == ViewerId)

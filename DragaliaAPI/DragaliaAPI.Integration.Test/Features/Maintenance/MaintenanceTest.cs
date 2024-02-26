@@ -21,13 +21,14 @@ public class MaintenanceTest : TestFixture
     {
         this.ConfigureMaintenanceClient(new MaintenanceOptions() { Enabled = true });
 
-        DragaliaResponse<ResultCodeData> response = await this.Client.PostMsgpack<ResultCodeData>(
-            "load/index",
-            new LoadIndexRequest(),
-            ensureSuccessHeader: false
-        );
+        DragaliaResponse<ResultCodeResponse> response =
+            await this.Client.PostMsgpack<ResultCodeResponse>(
+                "load/index",
+                new LoadIndexRequest(),
+                ensureSuccessHeader: false
+            );
 
-        response.data_headers.result_code.Should().Be(ResultCode.CommonMaintenance);
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.CommonMaintenance);
     }
 
     [Fact]
@@ -35,15 +36,15 @@ public class MaintenanceTest : TestFixture
     {
         this.ConfigureMaintenanceClient(new MaintenanceOptions() { Enabled = true });
 
-        DragaliaResponse<ToolGetServiceStatusData> response =
-            await this.Client.PostMsgpack<ToolGetServiceStatusData>(
+        DragaliaResponse<ToolGetServiceStatusResponse> response =
+            await this.Client.PostMsgpack<ToolGetServiceStatusResponse>(
                 "tool/get_service_status",
                 new ToolGetServiceStatusRequest(),
                 ensureSuccessHeader: false
             );
 
-        response.data_headers.result_code.Should().Be(ResultCode.Success);
-        response.data.service_status.Should().Be(1);
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
+        response.Data.ServiceStatus.Should().Be(1);
     }
 
     [Fact]
@@ -59,14 +60,14 @@ public class MaintenanceTest : TestFixture
             }
         );
 
-        DragaliaResponse<MaintenanceGetTextData> response =
-            await this.Client.PostMsgpack<MaintenanceGetTextData>(
+        DragaliaResponse<MaintenanceGetTextResponse> response =
+            await this.Client.PostMsgpack<MaintenanceGetTextResponse>(
                 "maintenance/get_text",
                 new MaintenanceGetTextRequest()
             );
 
         response
-            .data.maintenance_text.Should()
+            .Data.MaintenanceText.Should()
             .BeEquivalentTo(
                 $"""
                 <title>Title</title>

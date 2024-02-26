@@ -190,50 +190,50 @@ public class HeroParamService : IHeroParamService
     {
         CharaData charaData = MasterAsset.CharaData[unit.CharaData.CharaId];
 
-        AtgenParamBonus paramBonus = fortBonusList.param_bonus.First(x =>
-            x.weapon_type == charaData.WeaponType
+        AtgenParamBonus paramBonus = fortBonusList.ParamBonus.First(x =>
+            x.WeaponType == charaData.WeaponType
         );
-        result.RelativeAtkFort += paramBonus.attack / 100;
-        result.RelativeHpFort += paramBonus.hp / 100;
+        result.RelativeAtkFort += paramBonus.Attack / 100;
+        result.RelativeHpFort += paramBonus.Hp / 100;
 
-        AtgenElementBonus elementBonus = fortBonusList.element_bonus.First(x =>
-            x.elemental_type == charaData.ElementalType
+        AtgenElementBonus elementBonus = fortBonusList.ElementBonus.First(x =>
+            x.ElementalType == charaData.ElementalType
         );
-        result.RelativeAtkFort += elementBonus.attack / 100;
-        result.RelativeHpFort += elementBonus.hp / 100;
+        result.RelativeAtkFort += elementBonus.Attack / 100;
+        result.RelativeHpFort += elementBonus.Hp / 100;
 
-        AtgenParamBonus paramBonusByWeapon = fortBonusList.param_bonus_by_weapon.First(x =>
-            x.weapon_type == charaData.WeaponType
+        AtgenParamBonus paramBonusByWeapon = fortBonusList.ParamBonusByWeapon.First(x =>
+            x.WeaponType == charaData.WeaponType
         );
-        result.RelativeAtkFort += paramBonusByWeapon.attack / 100;
-        result.RelativeHpFort += paramBonusByWeapon.hp / 100;
+        result.RelativeAtkFort += paramBonusByWeapon.Attack / 100;
+        result.RelativeHpFort += paramBonusByWeapon.Hp / 100;
 
-        AtgenElementBonus charaAlbumBonus = fortBonusList.chara_bonus_by_album.First(x =>
-            x.elemental_type == charaData.ElementalType
+        AtgenElementBonus charaAlbumBonus = fortBonusList.CharaBonusByAlbum.First(x =>
+            x.ElementalType == charaData.ElementalType
         );
-        result.RelativeAtkAlbum += charaAlbumBonus.attack / 100;
-        result.RelativeHpAlbum += charaAlbumBonus.hp / 100;
+        result.RelativeAtkAlbum += charaAlbumBonus.Attack / 100;
+        result.RelativeHpAlbum += charaAlbumBonus.Hp / 100;
 
         if (unit.DragonData is not null)
         {
             DragonData dragonData = MasterAsset.DragonData[unit.DragonData.DragonId];
-            AtgenDragonBonus dragonBonus = fortBonusList.dragon_bonus.First(x =>
-                x.elemental_type == dragonData.ElementalType
+            AtgenDragonBonus dragonBonus = fortBonusList.DragonBonus.First(x =>
+                x.ElementalType == dragonData.ElementalType
             );
-            AtgenElementBonus dragonAlbumBonus = fortBonusList.dragon_bonus_by_album.First(x =>
-                x.elemental_type == dragonData.ElementalType
+            AtgenElementBonus dragonAlbumBonus = fortBonusList.DragonBonusByAlbum.First(x =>
+                x.ElementalType == dragonData.ElementalType
             );
 
-            result.DragonRelativeAtkFort += dragonBonus.attack / 100;
-            result.DragonRelativeHpFort += dragonBonus.hp / 100;
-            result.DragonRelativeDmg += dragonBonus.dragon_bonus / 100;
-            result.DragonTime += fortBonusList.dragon_time_bonus.dragon_time_bonus;
-            result.DragonRelativeAtkAlbum += dragonAlbumBonus.attack / 100;
-            result.DragonRelativeHpAlbum += dragonAlbumBonus.hp / 100;
+            result.DragonRelativeAtkFort += dragonBonus.Attack / 100;
+            result.DragonRelativeHpFort += dragonBonus.Hp / 100;
+            result.DragonRelativeDmg += dragonBonus.DragonBonus / 100;
+            result.DragonTime += fortBonusList.DragonTimeBonus.DragonTimeBonus;
+            result.DragonRelativeAtkAlbum += dragonAlbumBonus.Attack / 100;
+            result.DragonRelativeHpAlbum += dragonAlbumBonus.Hp / 100;
         }
 
-        result.PlusAtk += fortBonusList.all_bonus.attack / 100;
-        result.PlusHp += fortBonusList.all_bonus.hp / 100;
+        result.PlusAtk += fortBonusList.AllBonus.Attack / 100;
+        result.PlusHp += fortBonusList.AllBonus.Hp / 100;
     }
 
     private static void MapCrests(DbDetailedPartyUnit unit, HeroParam result)

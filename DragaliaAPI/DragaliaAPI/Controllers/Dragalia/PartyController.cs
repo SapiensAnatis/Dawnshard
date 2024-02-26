@@ -35,7 +35,7 @@ public class PartyController(
     [HttpPost("index")]
     public DragaliaResult Index()
     {
-        return this.Ok(new PartyIndexData(new List<BuildList>()));
+        return this.Ok(new PartyIndexResponse(new List<BuildList>()));
     }
 
     [HttpPost("set_party_setting")]
@@ -47,11 +47,11 @@ public class PartyController(
         // TODO: Talisman validation
         // TODO: Shared skill validation
 
-        foreach (PartySettingList partyUnit in requestParty.request_party_setting_list)
+        foreach (PartySettingList partyUnit in requestParty.RequestPartySettingList)
         {
             if (
-                !await this.ValidateCharacterId(partyUnit.chara_id)
-                || !await this.ValidateDragonKeyId(partyUnit.equip_dragon_key_id)
+                !await this.ValidateCharacterId(partyUnit.CharaId)
+                || !await this.ValidateDragonKeyId(partyUnit.EquipDragonKeyId)
             )
             {
                 throw new DragaliaException(ResultCode.PartySwitchSettingCharaShort);
@@ -59,7 +59,7 @@ public class PartyController(
         }
 
         int partyPower = await partyPowerService.CalculatePartyPower(
-            requestParty.request_party_setting_list
+            requestParty.RequestPartySettingList
         );
 
         await partyPowerRepository.SetMaxPartyPowerAsync(partyPower);
@@ -69,42 +69,42 @@ public class PartyController(
 
         DbParty dbEntry = mapper.Map<DbParty>(
             new PartyList(
-                requestParty.party_no,
-                requestParty.party_name,
-                requestParty.request_party_setting_list
+                requestParty.PartyNo,
+                requestParty.PartyName,
+                requestParty.RequestPartySettingList
             )
         );
 
         await partyRepository.SetParty(dbEntry);
 
-        if (requestParty.is_entrust)
+        if (requestParty.IsEntrust)
         {
-            missionProgressionService.OnPartyOptimized(requestParty.entrust_element);
+            missionProgressionService.OnPartyOptimized(requestParty.EntrustElement);
         }
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        return this.Ok(new PartySetPartySettingData(updateDataList, new()));
+        return this.Ok(new PartySetPartySettingResponse(updateDataList, new()));
     }
 
     [HttpPost("set_main_party_no")]
     public async Task<DragaliaResult> SetMainPartyNo(PartySetMainPartyNoRequest request)
     {
-        await userDataRepository.SetMainPartyNo(request.main_party_no);
+        await userDataRepository.SetMainPartyNo(request.MainPartyNo);
 
         await updateDataService.SaveChangesAsync();
 
-        return this.Ok(new PartySetMainPartyNoData(request.main_party_no));
+        return this.Ok(new PartySetMainPartyNoResponse(request.MainPartyNo));
     }
 
     [HttpPost("update_party_name")]
     public async Task<DragaliaResult> UpdatePartyName(PartyUpdatePartyNameRequest request)
     {
-        await partyRepository.UpdatePartyName(request.party_no, request.party_name);
+        await partyRepository.UpdatePartyName(request.PartyNo, request.PartyName);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        return this.Ok(new PartyUpdatePartyNameData() { update_data_list = updateDataList });
+        return this.Ok(new PartyUpdatePartyNameResponse() { UpdateDataList = updateDataList });
     }
 
     private async Task<bool> ValidateCharacterId(Charas id)

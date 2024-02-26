@@ -35,7 +35,7 @@ public class UserController : DragaliaControllerBase
         userData.Crystal += 12_000;
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
-        return this.Ok(new UserLinkedNAccountData() { update_data_list = updateDataList });
+        return this.Ok(new UserLinkedNAccountResponse() { UpdateDataList = updateDataList });
     }
 
     [HttpPost("get_n_account_info")]
@@ -43,14 +43,14 @@ public class UserController : DragaliaControllerBase
     {
         // TODO: Replace this with an API call to BaaS to return actual information
         return this.Ok(
-            new UserGetNAccountInfoData()
+            new UserGetNAccountInfoResponse()
             {
-                n_account_info = new()
+                NAccountInfo = new()
                 {
-                    email = "placeholder@email.com",
-                    nickname = "placeholder nickname"
+                    Email = "placeholder@email.com",
+                    Nickname = "placeholder nickname"
                 },
-                update_data_list = new()
+                UpdateDataList = new()
             }
         );
     }

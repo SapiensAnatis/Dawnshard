@@ -17,11 +17,11 @@ public class TreasureTradeController(
     [HttpPost("get_list_all")]
     public async Task<DragaliaResult> GetListAll()
     {
-        TreasureTradeGetListAllData resp = new();
+        TreasureTradeGetListAllResponse resp = new();
 
-        resp.treasure_trade_all_list = tradeService.GetCurrentTreasureTradeList();
-        resp.user_treasure_trade_list = await tradeService.GetUserTreasureTradeList();
-        resp.dmode_info = await dmodeService.GetInfo();
+        resp.TreasureTradeAllList = tradeService.GetCurrentTreasureTradeList();
+        resp.UserTreasureTradeList = await tradeService.GetUserTreasureTradeList();
+        resp.DmodeInfo = await dmodeService.GetInfo();
 
         return Ok(resp);
     }
@@ -29,18 +29,18 @@ public class TreasureTradeController(
     [HttpPost("trade")]
     public async Task<DragaliaResult> Trade(TreasureTradeTradeRequest request)
     {
-        TreasureTradeTradeData resp = new();
+        TreasureTradeTradeResponse resp = new();
 
         await tradeService.DoTrade(
             TradeType.Treasure,
-            request.treasure_trade_id,
-            request.trade_count,
-            request.need_unit_list
+            request.TreasureTradeId,
+            request.TradeCount,
+            request.NeedUnitList
         );
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.treasure_trade_all_list = tradeService.GetCurrentTreasureTradeList();
-        resp.user_treasure_trade_list = await tradeService.GetUserTreasureTradeList();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.TreasureTradeAllList = tradeService.GetCurrentTreasureTradeList();
+        resp.UserTreasureTradeList = await tradeService.GetUserTreasureTradeList();
 
         return Ok(resp);
     }

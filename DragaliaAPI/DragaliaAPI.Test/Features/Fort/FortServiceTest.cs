@@ -139,16 +139,16 @@ public class FortServiceTest
                 {
                     new()
                     {
-                        build_id = 4,
-                        build_end_date = new(2023, 04, 18, 18, 32, 35, TimeSpan.Zero),
-                        build_start_date = new(2023, 04, 18, 18, 32, 34, TimeSpan.Zero),
-                        level = 5,
-                        plant_id = FortPlants.Dragontree,
-                        fort_plant_detail_id = 10030106,
-                        build_status = FortBuildStatus.LevelUp,
+                        BuildId = 4,
+                        BuildEndDate = new(2023, 04, 18, 18, 32, 35, TimeSpan.Zero),
+                        BuildStartDate = new(2023, 04, 18, 18, 32, 34, TimeSpan.Zero),
+                        Level = 5,
+                        PlantId = FortPlants.Dragontree,
+                        FortPlantDetailId = 10030106,
+                        BuildStatus = FortBuildStatus.LevelUp,
                     },
                 },
-                opts => opts.Excluding(x => x.remain_time).Excluding(x => x.last_income_time)
+                opts => opts.Excluding(x => x.RemainTime).Excluding(x => x.LastIncomeTime)
             );
 
         mockFortRepository.VerifyAll();

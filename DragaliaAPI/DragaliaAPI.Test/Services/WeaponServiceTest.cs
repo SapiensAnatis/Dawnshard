@@ -308,9 +308,9 @@ public class WeaponServiceTest
                 body,
                 new AtgenBuildupWeaponBodyPieceList()
                 {
-                    buildup_piece_type = BuildupPieceTypes.Passive,
-                    buildup_piece_no = 4000,
-                    step = 1
+                    BuildupPieceType = BuildupPieceTypes.Passive,
+                    BuildupPieceNo = 4000,
+                    Step = 1
                 }
             )
         ).Should().Be(ResultCode.WeaponBodyBuildupPieceUnablePiece);
@@ -335,9 +335,9 @@ public class WeaponServiceTest
                 body,
                 new AtgenBuildupWeaponBodyPieceList()
                 {
-                    buildup_piece_type = BuildupPieceTypes.Passive,
-                    buildup_piece_no = 1,
-                    step = 1
+                    BuildupPieceType = BuildupPieceTypes.Passive,
+                    BuildupPieceNo = 1,
+                    Step = 1
                 }
             )
         ).Should().Be(ResultCode.CommonMaterialShort);
@@ -365,9 +365,9 @@ public class WeaponServiceTest
                 body,
                 new AtgenBuildupWeaponBodyPieceList()
                 {
-                    buildup_piece_type = BuildupPieceTypes.Passive,
-                    buildup_piece_no = 1,
-                    step = 1
+                    BuildupPieceType = BuildupPieceTypes.Passive,
+                    BuildupPieceNo = 1,
+                    Step = 1
                 }
             )
         ).Should().Be(ResultCode.CommonMaterialShort);
@@ -398,9 +398,9 @@ public class WeaponServiceTest
                 body,
                 new AtgenBuildupWeaponBodyPieceList()
                 {
-                    buildup_piece_type = BuildupPieceTypes.Passive,
-                    buildup_piece_no = 1,
-                    step = 1
+                    BuildupPieceType = BuildupPieceTypes.Passive,
+                    BuildupPieceNo = 1,
+                    Step = 1
                 }
             )
         ).Should().Be(ResultCode.WeaponBodyBuildupPieceShortLimitBreakCount);
@@ -456,9 +456,9 @@ public class WeaponServiceTest
                 body,
                 new AtgenBuildupWeaponBodyPieceList()
                 {
-                    buildup_piece_type = BuildupPieceTypes.Passive,
-                    buildup_piece_no = 1,
-                    step = 1
+                    BuildupPieceType = BuildupPieceTypes.Passive,
+                    BuildupPieceNo = 1,
+                    Step = 1
                 }
             )
         ).Should().Be(ResultCode.Success);
@@ -482,9 +482,9 @@ public class WeaponServiceTest
                 body,
                 new AtgenBuildupWeaponBodyPieceList()
                 {
-                    buildup_piece_type = BuildupPieceTypes.Stats,
-                    buildup_piece_no = 1,
-                    step = 222
+                    BuildupPieceType = BuildupPieceTypes.Stats,
+                    BuildupPieceNo = 1,
+                    Step = 222
                 }
             )
         ).Should().Be(ResultCode.WeaponBodyBuildupPieceUnablePiece);
@@ -512,9 +512,9 @@ public class WeaponServiceTest
                 body,
                 new AtgenBuildupWeaponBodyPieceList()
                 {
-                    buildup_piece_type = BuildupPieceTypes.Stats,
-                    buildup_piece_no = 1,
-                    step = 40
+                    BuildupPieceType = BuildupPieceTypes.Stats,
+                    BuildupPieceNo = 1,
+                    Step = 40
                 }
             )
         ).Should().Be(ResultCode.CommonMaterialShort);
@@ -544,9 +544,9 @@ public class WeaponServiceTest
                 body,
                 new AtgenBuildupWeaponBodyPieceList()
                 {
-                    buildup_piece_type = BuildupPieceTypes.Stats,
-                    buildup_piece_no = 1,
-                    step = 40
+                    BuildupPieceType = BuildupPieceTypes.Stats,
+                    BuildupPieceNo = 1,
+                    Step = 40
                 }
             )
         ).Should().Be(ResultCode.WeaponBodyBuildupPieceStepError);
@@ -584,9 +584,9 @@ public class WeaponServiceTest
                 body,
                 new AtgenBuildupWeaponBodyPieceList()
                 {
-                    buildup_piece_type = BuildupPieceTypes.Stats,
-                    buildup_piece_no = 1,
-                    step = 40
+                    BuildupPieceType = BuildupPieceTypes.Stats,
+                    BuildupPieceNo = 1,
+                    Step = 40
                 }
             )
         ).Should().Be(ResultCode.Success);
@@ -607,9 +607,9 @@ public class WeaponServiceTest
                 body,
                 new AtgenBuildupWeaponBodyPieceList()
                 {
-                    buildup_piece_type = BuildupPieceTypes.Unbind,
-                    buildup_piece_no = 1,
-                    step = 4000
+                    BuildupPieceType = BuildupPieceTypes.Unbind,
+                    BuildupPieceNo = 1,
+                    Step = 4000
                 }
             )
         ).Should().Be(ResultCode.WeaponBodyBuildupPieceUnablePiece);
@@ -634,9 +634,9 @@ public class WeaponServiceTest
                 body,
                 new AtgenBuildupWeaponBodyPieceList()
                 {
-                    buildup_piece_type = BuildupPieceTypes.Unbind,
-                    buildup_piece_no = 1,
-                    step = 5
+                    BuildupPieceType = BuildupPieceTypes.Unbind,
+                    BuildupPieceNo = 1,
+                    Step = 5
                 }
             )
         ).Should().Be(ResultCode.CommonMaterialShort);
@@ -664,9 +664,9 @@ public class WeaponServiceTest
                 body,
                 new AtgenBuildupWeaponBodyPieceList()
                 {
-                    buildup_piece_type = BuildupPieceTypes.Unbind,
-                    buildup_piece_no = 1,
-                    step = 5
+                    BuildupPieceType = BuildupPieceTypes.Unbind,
+                    BuildupPieceNo = 1,
+                    Step = 5
                 }
             )
         ).Should().Be(ResultCode.CommonMaterialShort);
@@ -697,9 +697,9 @@ public class WeaponServiceTest
                 body,
                 new AtgenBuildupWeaponBodyPieceList()
                 {
-                    buildup_piece_type = BuildupPieceTypes.WeaponBonus,
-                    buildup_piece_no = 1,
-                    step = 1
+                    BuildupPieceType = BuildupPieceTypes.WeaponBonus,
+                    BuildupPieceNo = 1,
+                    Step = 1
                 }
             )
         ).Should().Be(ResultCode.WeaponBodyBuildupPieceShortLimitBreakCount);
@@ -749,9 +749,9 @@ public class WeaponServiceTest
                 body,
                 new AtgenBuildupWeaponBodyPieceList()
                 {
-                    buildup_piece_type = pieceType,
-                    buildup_piece_no = 1,
-                    step = step
+                    BuildupPieceType = pieceType,
+                    BuildupPieceNo = 1,
+                    Step = step
                 }
             )
         ).Should().Be(ResultCode.WeaponBodyBuildupPieceStepError);
@@ -800,9 +800,9 @@ public class WeaponServiceTest
                 body,
                 new AtgenBuildupWeaponBodyPieceList()
                 {
-                    buildup_piece_type = BuildupPieceTypes.Unbind,
-                    buildup_piece_no = 1,
-                    step = 5
+                    BuildupPieceType = BuildupPieceTypes.Unbind,
+                    BuildupPieceNo = 1,
+                    Step = 5
                 }
             )
         ).Should().Be(ResultCode.Success);
@@ -858,10 +858,10 @@ public class WeaponServiceTest
                 body,
                 new AtgenBuildupWeaponBodyPieceList()
                 {
-                    buildup_piece_type = BuildupPieceTypes.Unbind,
-                    buildup_piece_no = 1,
-                    step = 3,
-                    is_use_dedicated_material = true
+                    BuildupPieceType = BuildupPieceTypes.Unbind,
+                    BuildupPieceNo = 1,
+                    Step = 3,
+                    IsUseDedicatedMaterial = true
                 }
             )
         ).Should().Be(ResultCode.Success);
@@ -932,9 +932,9 @@ public class WeaponServiceTest
                 body,
                 new AtgenBuildupWeaponBodyPieceList()
                 {
-                    buildup_piece_type = pieceType,
-                    buildup_piece_no = 1,
-                    step = step
+                    BuildupPieceType = pieceType,
+                    BuildupPieceNo = 1,
+                    Step = step
                 }
             )
         ).Should().Be(ResultCode.Success);
@@ -998,10 +998,10 @@ public class WeaponServiceTest
                 body,
                 new AtgenBuildupWeaponBodyPieceList()
                 {
-                    buildup_piece_type = BuildupPieceTypes.Refine,
-                    buildup_piece_no = 1,
-                    step = 2,
-                    is_use_dedicated_material = true
+                    BuildupPieceType = BuildupPieceTypes.Refine,
+                    BuildupPieceNo = 1,
+                    Step = 2,
+                    IsUseDedicatedMaterial = true
                 }
             )
         ).Should().Be(ResultCode.Success);

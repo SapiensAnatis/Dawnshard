@@ -22,14 +22,14 @@ public class QuestClearPartyTest : TestFixture
 
         await this.AddRangeToDatabase(SoloDbEntities);
 
-        DragaliaResponse<QuestGetQuestClearPartyData> response =
-            await this.Client.PostMsgpack<QuestGetQuestClearPartyData>(
+        DragaliaResponse<QuestGetQuestClearPartyResponse> response =
+            await this.Client.PostMsgpack<QuestGetQuestClearPartyResponse>(
                 "/quest/get_quest_clear_party",
-                new QuestGetQuestClearPartyRequest() { quest_id = 1 }
+                new QuestGetQuestClearPartyRequest() { QuestId = 1 }
             );
 
-        response.data.quest_clear_party_setting_list.Should().BeEquivalentTo(SoloPartySettingLists);
-        response.data.lost_unit_list.Should().BeEmpty();
+        response.Data.QuestClearPartySettingList.Should().BeEquivalentTo(SoloPartySettingLists);
+        response.Data.LostUnitList.Should().BeEmpty();
     }
 
     [Fact]
@@ -39,16 +39,16 @@ public class QuestClearPartyTest : TestFixture
 
         await this.AddRangeToDatabase(MultiDbEntities);
 
-        DragaliaResponse<QuestGetQuestClearPartyMultiData> response =
-            await this.Client.PostMsgpack<QuestGetQuestClearPartyMultiData>(
+        DragaliaResponse<QuestGetQuestClearPartyMultiResponse> response =
+            await this.Client.PostMsgpack<QuestGetQuestClearPartyMultiResponse>(
                 "/quest/get_quest_clear_party_multi",
-                new QuestGetQuestClearPartyRequest() { quest_id = 2 }
+                new QuestGetQuestClearPartyRequest() { QuestId = 2 }
             );
 
         response
-            .data.quest_multi_clear_party_setting_list.Should()
+            .Data.QuestMultiClearPartySettingList.Should()
             .BeEquivalentTo(MultiPartySettingLists);
-        response.data.lost_unit_list.Should().BeEmpty();
+        response.Data.LostUnitList.Should().BeEmpty();
     }
 
     [Fact]
@@ -56,22 +56,22 @@ public class QuestClearPartyTest : TestFixture
     {
         int questId = 5;
 
-        await this.Client.PostMsgpack<QuestSetQuestClearPartyData>(
+        await this.Client.PostMsgpack<QuestSetQuestClearPartyResponse>(
             "/quest/set_quest_clear_party_multi",
             new QuestSetQuestClearPartyRequest()
             {
-                quest_id = questId,
-                request_party_setting_list = MultiPartySettingLists
+                QuestId = questId,
+                RequestPartySettingList = MultiPartySettingLists
             }
         );
 
-        DragaliaResponse<QuestGetQuestClearPartyData> response =
-            await this.Client.PostMsgpack<QuestGetQuestClearPartyData>(
+        DragaliaResponse<QuestGetQuestClearPartyResponse> response =
+            await this.Client.PostMsgpack<QuestGetQuestClearPartyResponse>(
                 "/quest/get_quest_clear_party",
-                new QuestGetQuestClearPartyRequest() { quest_id = questId }
+                new QuestGetQuestClearPartyRequest() { QuestId = questId }
             );
 
-        response.data.quest_clear_party_setting_list.Should().BeEmpty();
+        response.Data.QuestClearPartySettingList.Should().BeEmpty();
     }
 
     [Fact]
@@ -83,66 +83,66 @@ public class QuestClearPartyTest : TestFixture
 
         await this.AddRangeToDatabase(MissingItemDbEntities);
 
-        DragaliaResponse<QuestGetQuestClearPartyData> response =
-            await this.Client.PostMsgpack<QuestGetQuestClearPartyData>(
+        DragaliaResponse<QuestGetQuestClearPartyResponse> response =
+            await this.Client.PostMsgpack<QuestGetQuestClearPartyResponse>(
                 "/quest/get_quest_clear_party",
-                new QuestGetQuestClearPartyRequest() { quest_id = questId }
+                new QuestGetQuestClearPartyRequest() { QuestId = questId }
             );
 
         response
-            .data.lost_unit_list.Should()
+            .Data.LostUnitList.Should()
             .BeEquivalentTo(
                 new List<AtgenLostUnitList>()
                 {
                     new()
                     {
-                        unit_no = 1,
-                        entity_type = EntityTypes.Chara,
-                        entity_id = (int)Charas.Basileus,
+                        UnitNo = 1,
+                        EntityType = EntityTypes.Chara,
+                        EntityId = (int)Charas.Basileus,
                     },
                     new()
                     {
-                        unit_no = 2,
-                        entity_type = EntityTypes.Wyrmprint,
-                        entity_id = (int)AbilityCrests.InanUnendingWorld,
+                        UnitNo = 2,
+                        EntityType = EntityTypes.Wyrmprint,
+                        EntityId = (int)AbilityCrests.InanUnendingWorld,
                     },
                     new()
                     {
-                        unit_no = 3,
-                        entity_type = EntityTypes.WeaponBody,
-                        entity_id = (int)WeaponBodies.PrimalAqua,
+                        UnitNo = 3,
+                        EntityType = EntityTypes.WeaponBody,
+                        EntityId = (int)WeaponBodies.PrimalAqua,
                     },
                     new()
                     {
-                        unit_no = 4,
-                        entity_type = EntityTypes.WeaponSkin,
-                        entity_id = 1000
+                        UnitNo = 4,
+                        EntityType = EntityTypes.WeaponSkin,
+                        EntityId = 1000
                     },
                     new()
                     {
-                        unit_no = 5,
-                        entity_type = EntityTypes.Dragon,
-                        entity_id = (int)Dragons.Ifrit
+                        UnitNo = 5,
+                        EntityType = EntityTypes.Dragon,
+                        EntityId = (int)Dragons.Ifrit
                     },
                     new()
                     {
-                        unit_no = 6,
-                        entity_type = EntityTypes.Talisman,
-                        entity_id = (int)Talismans.Raemond
+                        UnitNo = 6,
+                        EntityType = EntityTypes.Talisman,
+                        EntityId = (int)Talismans.Raemond
                     }
                 }
             );
 
-        List<PartySettingList> partyList = response.data.quest_clear_party_setting_list.ToList();
+        List<PartySettingList> partyList = response.Data.QuestClearPartySettingList.ToList();
 
-        partyList[0].chara_id.Should().Be(0);
-        partyList[1].equip_crest_slot_type_1_crest_id_1.Should().Be(0);
-        partyList[2].equip_weapon_body_id.Should().Be(0);
-        partyList[3].equip_weapon_skin_id.Should().Be(0);
-        partyList[4].equip_dragon_key_id.Should().Be(0);
-        partyList[5].equip_talisman_key_id.Should().Be(0);
-        partyList[6].edit_skill_1_chara_id.Should().Be(0);
-        partyList[6].edit_skill_2_chara_id.Should().Be(0);
+        partyList[0].CharaId.Should().Be(0);
+        partyList[1].EquipCrestSlotType1CrestId1.Should().Be(0);
+        partyList[2].EquipWeaponBodyId.Should().Be(0);
+        partyList[3].EquipWeaponSkinId.Should().Be(0);
+        partyList[4].EquipDragonKeyId.Should().Be(0);
+        partyList[5].EquipTalismanKeyId.Should().Be(0);
+        partyList[6].EditSkill1CharaId.Should().Be(0);
+        partyList[6].EditSkill2CharaId.Should().Be(0);
     }
 
     [Fact]
@@ -150,17 +150,17 @@ public class QuestClearPartyTest : TestFixture
     {
         await this.ImportSave();
 
-        DragaliaResponse<QuestSetQuestClearPartyData> response =
-            await this.Client.PostMsgpack<QuestSetQuestClearPartyData>(
+        DragaliaResponse<QuestSetQuestClearPartyResponse> response =
+            await this.Client.PostMsgpack<QuestSetQuestClearPartyResponse>(
                 "/quest/set_quest_clear_party",
                 new QuestSetQuestClearPartyRequest()
                 {
-                    quest_id = 3,
-                    request_party_setting_list = SoloPartySettingLists
+                    QuestId = 3,
+                    RequestPartySettingList = SoloPartySettingLists
                 }
             );
 
-        response.data.result.Should().Be(1);
+        response.Data.Result.Should().Be(1);
 
         List<DbQuestClearPartyUnit> storedList = await this
             .ApiContext.QuestClearPartyUnits.Where(x =>
@@ -177,17 +177,17 @@ public class QuestClearPartyTest : TestFixture
     {
         await this.ImportSave();
 
-        DragaliaResponse<QuestSetQuestClearPartyData> response =
-            await this.Client.PostMsgpack<QuestSetQuestClearPartyData>(
+        DragaliaResponse<QuestSetQuestClearPartyResponse> response =
+            await this.Client.PostMsgpack<QuestSetQuestClearPartyResponse>(
                 "/quest/set_quest_clear_party_multi",
                 new QuestSetQuestClearPartyRequest()
                 {
-                    quest_id = 4,
-                    request_party_setting_list = MultiPartySettingLists
+                    QuestId = 4,
+                    RequestPartySettingList = MultiPartySettingLists
                 }
             );
 
-        response.data.result.Should().Be(1);
+        response.Data.Result.Should().Be(1);
 
         List<DbQuestClearPartyUnit> storedList = await this
             .ApiContext.QuestClearPartyUnits.Where(x =>
@@ -255,39 +255,39 @@ public class QuestClearPartyTest : TestFixture
         {
             new()
             {
-                unit_no = 1,
-                chara_id = Charas.GalaNedrick,
-                equip_dragon_key_id = (ulong)GetDragonKeyId(Dragons.Cerberus),
-                equip_weapon_body_id = WeaponBodies.YitianJian,
-                equip_crest_slot_type_1_crest_id_1 = AbilityCrests.PrimalCrisis,
-                equip_crest_slot_type_1_crest_id_2 = AbilityCrests.WelcometotheOpera,
-                equip_crest_slot_type_1_crest_id_3 = AbilityCrests.FelyneHospitality,
-                equip_crest_slot_type_2_crest_id_1 = AbilityCrests.ThePlaguebringer,
-                equip_crest_slot_type_2_crest_id_2 = AbilityCrests.TotheExtreme,
-                equip_crest_slot_type_3_crest_id_1 = AbilityCrests.CrownofLightSerpentsBoon,
-                equip_crest_slot_type_3_crest_id_2 = AbilityCrests.TutelarysDestinyWolfsBoon,
-                equip_talisman_key_id = (ulong)GetTalismanKeyId(Talismans.GalaMym),
-                equip_weapon_skin_id = 30129901,
-                edit_skill_1_chara_id = Charas.Empty,
-                edit_skill_2_chara_id = Charas.GalaMym,
+                UnitNo = 1,
+                CharaId = Charas.GalaNedrick,
+                EquipDragonKeyId = (ulong)GetDragonKeyId(Dragons.Cerberus),
+                EquipWeaponBodyId = WeaponBodies.YitianJian,
+                EquipCrestSlotType1CrestId1 = AbilityCrests.PrimalCrisis,
+                EquipCrestSlotType1CrestId2 = AbilityCrests.WelcometotheOpera,
+                EquipCrestSlotType1CrestId3 = AbilityCrests.FelyneHospitality,
+                EquipCrestSlotType2CrestId1 = AbilityCrests.ThePlaguebringer,
+                EquipCrestSlotType2CrestId2 = AbilityCrests.TotheExtreme,
+                EquipCrestSlotType3CrestId1 = AbilityCrests.CrownofLightSerpentsBoon,
+                EquipCrestSlotType3CrestId2 = AbilityCrests.TutelarysDestinyWolfsBoon,
+                EquipTalismanKeyId = (ulong)GetTalismanKeyId(Talismans.GalaMym),
+                EquipWeaponSkinId = 30129901,
+                EditSkill1CharaId = Charas.Empty,
+                EditSkill2CharaId = Charas.GalaMym,
             },
             new()
             {
-                unit_no = 2,
-                chara_id = Charas.Patia,
-                equip_dragon_key_id = (ulong)GetDragonKeyId(Dragons.Pazuzu),
-                equip_weapon_body_id = WeaponBodies.QinglongYanyuedao,
-                equip_crest_slot_type_1_crest_id_1 = AbilityCrests.AHalloweenSpectacular,
-                equip_crest_slot_type_1_crest_id_2 = AbilityCrests.CastawaysJournal,
-                equip_crest_slot_type_1_crest_id_3 = AbilityCrests.TheChocolatiers,
-                equip_crest_slot_type_2_crest_id_1 = AbilityCrests.RoguesBanquet,
-                equip_crest_slot_type_2_crest_id_2 = AbilityCrests.LuckoftheDraw,
-                equip_crest_slot_type_3_crest_id_1 = AbilityCrests.RavenousFireCrownsBoon,
-                equip_crest_slot_type_3_crest_id_2 = AbilityCrests.PromisedPietyStaffsBoon,
-                equip_talisman_key_id = (ulong)GetTalismanKeyId(Talismans.GalaMym),
-                equip_weapon_skin_id = 30129901,
-                edit_skill_1_chara_id = Charas.TemplarHope,
-                edit_skill_2_chara_id = Charas.Zena,
+                UnitNo = 2,
+                CharaId = Charas.Patia,
+                EquipDragonKeyId = (ulong)GetDragonKeyId(Dragons.Pazuzu),
+                EquipWeaponBodyId = WeaponBodies.QinglongYanyuedao,
+                EquipCrestSlotType1CrestId1 = AbilityCrests.AHalloweenSpectacular,
+                EquipCrestSlotType1CrestId2 = AbilityCrests.CastawaysJournal,
+                EquipCrestSlotType1CrestId3 = AbilityCrests.TheChocolatiers,
+                EquipCrestSlotType2CrestId1 = AbilityCrests.RoguesBanquet,
+                EquipCrestSlotType2CrestId2 = AbilityCrests.LuckoftheDraw,
+                EquipCrestSlotType3CrestId1 = AbilityCrests.RavenousFireCrownsBoon,
+                EquipCrestSlotType3CrestId2 = AbilityCrests.PromisedPietyStaffsBoon,
+                EquipTalismanKeyId = (ulong)GetTalismanKeyId(Talismans.GalaMym),
+                EquipWeaponSkinId = 30129901,
+                EditSkill1CharaId = Charas.TemplarHope,
+                EditSkill2CharaId = Charas.Zena,
             }
         };
 
@@ -347,39 +347,39 @@ public class QuestClearPartyTest : TestFixture
         {
             new()
             {
-                unit_no = 1,
-                chara_id = Charas.GalaNotte,
-                equip_dragon_key_id = (ulong)GetDragonKeyId(Dragons.Leviathan),
-                equip_weapon_body_id = WeaponBodies.WindrulersFang,
-                equip_crest_slot_type_1_crest_id_1 = AbilityCrests.BondsBetweenWorlds,
-                equip_crest_slot_type_1_crest_id_2 = AbilityCrests.AManUnchanging,
-                equip_crest_slot_type_1_crest_id_3 = AbilityCrests.GoingUndercover,
-                equip_crest_slot_type_2_crest_id_1 = AbilityCrests.APassionforProduce,
-                equip_crest_slot_type_2_crest_id_2 = AbilityCrests.DragonsNest,
-                equip_crest_slot_type_3_crest_id_1 = AbilityCrests.TutelarysDestinyWolfsBoon,
-                equip_crest_slot_type_3_crest_id_2 = AbilityCrests.CrownofLightSerpentsBoon,
-                equip_talisman_key_id = (ulong)GetTalismanKeyId(Talismans.GalaMym),
-                equip_weapon_skin_id = 0,
-                edit_skill_1_chara_id = Charas.Empty,
-                edit_skill_2_chara_id = Charas.GalaMym,
+                UnitNo = 1,
+                CharaId = Charas.GalaNotte,
+                EquipDragonKeyId = (ulong)GetDragonKeyId(Dragons.Leviathan),
+                EquipWeaponBodyId = WeaponBodies.WindrulersFang,
+                EquipCrestSlotType1CrestId1 = AbilityCrests.BondsBetweenWorlds,
+                EquipCrestSlotType1CrestId2 = AbilityCrests.AManUnchanging,
+                EquipCrestSlotType1CrestId3 = AbilityCrests.GoingUndercover,
+                EquipCrestSlotType2CrestId1 = AbilityCrests.APassionforProduce,
+                EquipCrestSlotType2CrestId2 = AbilityCrests.DragonsNest,
+                EquipCrestSlotType3CrestId1 = AbilityCrests.TutelarysDestinyWolfsBoon,
+                EquipCrestSlotType3CrestId2 = AbilityCrests.CrownofLightSerpentsBoon,
+                EquipTalismanKeyId = (ulong)GetTalismanKeyId(Talismans.GalaMym),
+                EquipWeaponSkinId = 0,
+                EditSkill1CharaId = Charas.Empty,
+                EditSkill2CharaId = Charas.GalaMym,
             },
             new()
             {
-                unit_no = 2,
-                chara_id = Charas.GalaLeif,
-                equip_dragon_key_id = (ulong)GetDragonKeyId(Dragons.Phoenix),
-                equip_weapon_body_id = WeaponBodies.PrimalTempest,
-                equip_crest_slot_type_1_crest_id_1 = AbilityCrests.AdventureinthePast,
-                equip_crest_slot_type_1_crest_id_2 = AbilityCrests.PrimalCrisis,
-                equip_crest_slot_type_1_crest_id_3 = AbilityCrests.GoingUndercover,
-                equip_crest_slot_type_2_crest_id_1 = AbilityCrests.DragonsNest,
-                equip_crest_slot_type_2_crest_id_2 = AbilityCrests.ThePlaguebringer,
-                equip_crest_slot_type_3_crest_id_1 = AbilityCrests.AKnightsDreamAxesBoon,
-                equip_crest_slot_type_3_crest_id_2 = AbilityCrests.CrownofLightSerpentsBoon,
-                equip_talisman_key_id = (ulong)GetTalismanKeyId(Talismans.GalaMym),
-                equip_weapon_skin_id = 0,
-                edit_skill_1_chara_id = Charas.ShaWujing,
-                edit_skill_2_chara_id = Charas.Ranzal,
+                UnitNo = 2,
+                CharaId = Charas.GalaLeif,
+                EquipDragonKeyId = (ulong)GetDragonKeyId(Dragons.Phoenix),
+                EquipWeaponBodyId = WeaponBodies.PrimalTempest,
+                EquipCrestSlotType1CrestId1 = AbilityCrests.AdventureinthePast,
+                EquipCrestSlotType1CrestId2 = AbilityCrests.PrimalCrisis,
+                EquipCrestSlotType1CrestId3 = AbilityCrests.GoingUndercover,
+                EquipCrestSlotType2CrestId1 = AbilityCrests.DragonsNest,
+                EquipCrestSlotType2CrestId2 = AbilityCrests.ThePlaguebringer,
+                EquipCrestSlotType3CrestId1 = AbilityCrests.AKnightsDreamAxesBoon,
+                EquipCrestSlotType3CrestId2 = AbilityCrests.CrownofLightSerpentsBoon,
+                EquipTalismanKeyId = (ulong)GetTalismanKeyId(Talismans.GalaMym),
+                EquipWeaponSkinId = 0,
+                EditSkill1CharaId = Charas.ShaWujing,
+                EditSkill2CharaId = Charas.Ranzal,
             }
         };
 

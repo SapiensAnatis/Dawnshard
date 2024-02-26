@@ -37,19 +37,19 @@ public class WallController : DragaliaControllerBase
     [HttpPost("fail")]
     public async Task<DragaliaResult> Fail(WallFailRequest request)
     {
-        DungeonSession session = await dungeonService.FinishDungeon(request.dungeon_key);
+        DungeonSession session = await dungeonService.FinishDungeon(request.DungeonKey);
 
         return Ok(
-            new WallFailData()
+            new WallFailResponse()
             {
-                result = 1,
-                fail_helper_list = new List<UserSupportList>(),
-                fail_helper_detail_list = new List<AtgenHelperDetailList>(),
-                fail_quest_detail = new()
+                Result = 1,
+                FailHelperList = new List<UserSupportList>(),
+                FailHelperDetailList = new List<AtgenHelperDetailList>(),
+                FailQuestDetail = new()
                 {
-                    wall_id = session.WallId,
-                    wall_level = session.WallLevel,
-                    is_host = true,
+                    WallId = session.WallId,
+                    WallLevel = session.WallLevel,
+                    IsHost = true,
                 }
             }
         );
@@ -66,7 +66,7 @@ public class WallController : DragaliaControllerBase
             RewardStatus.Received
         );
 
-        WallGetMonthlyRewardData data = new() { user_wall_reward_list = userWallRewardList };
+        WallGetMonthlyRewardResponse data = new() { UserWallRewardList = userWallRewardList };
 
         return Ok(data);
     }
@@ -76,12 +76,12 @@ public class WallController : DragaliaControllerBase
     public async Task<DragaliaResult> GetWallClearParty(WallGetWallClearPartyRequest request)
     {
         (IEnumerable<PartySettingList> clearParty, IEnumerable<AtgenLostUnitList> lostUnitList) =
-            await this.clearPartyService.GetQuestClearParty(request.wall_id, false);
+            await this.clearPartyService.GetQuestClearParty(request.WallId, false);
 
         await this.updateDataService.SaveChangesAsync(); // Updated lost entities
 
-        WallGetWallClearPartyData data =
-            new() { wall_clear_party_setting_list = clearParty, lost_unit_list = lostUnitList };
+        WallGetWallClearPartyResponse data =
+            new() { WallClearPartySettingList = clearParty, LostUnitList = lostUnitList };
         return Ok(data);
     }
 
@@ -108,20 +108,20 @@ public class WallController : DragaliaControllerBase
         AtgenMonthlyWallReceiveList monthlyWallReceiveList =
             new()
             {
-                quest_group_id = WallService.WallQuestGroupId,
-                is_receive_reward = RewardStatus.Received
+                QuestGroupId = WallService.WallQuestGroupId,
+                IsReceiveReward = RewardStatus.Received
             };
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
-        WallReceiveMonthlyRewardData data =
+        WallReceiveMonthlyRewardResponse data =
             new()
             {
-                update_data_list = updateDataList,
-                entity_result = entityResult,
-                wall_monthly_reward_list = rewardEntityList,
-                user_wall_reward_list = userWallRewardList,
-                monthly_wall_receive_list = new[] { monthlyWallReceiveList }
+                UpdateDataList = updateDataList,
+                EntityResult = entityResult,
+                WallMonthlyRewardList = rewardEntityList,
+                UserWallRewardList = userWallRewardList,
+                MonthlyWallReceiveList = new[] { monthlyWallReceiveList }
             };
 
         return Ok(data);
@@ -133,14 +133,14 @@ public class WallController : DragaliaControllerBase
     public async Task<DragaliaResult> SetWallClearParty(WallSetWallClearPartyRequest request)
     {
         await this.clearPartyService.SetQuestClearParty(
-            request.wall_id,
+            request.WallId,
             false,
-            request.request_party_setting_list
+            request.RequestPartySettingList
         );
 
         await this.updateDataService.SaveChangesAsync();
 
-        WallSetWallClearPartyData data = new() { result = 1 };
+        WallSetWallClearPartyResponse data = new() { Result = 1 };
 
         return Ok(data);
     }

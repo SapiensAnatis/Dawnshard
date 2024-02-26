@@ -39,7 +39,7 @@ public static class UnitTestUtils
     {
         DragaliaResponse<object>? innerResponse =
             (response.Result as OkObjectResult)?.Value as DragaliaResponse<object>;
-        return innerResponse?.data as T;
+        return innerResponse?.Data as T;
     }
 
     /// <summary>

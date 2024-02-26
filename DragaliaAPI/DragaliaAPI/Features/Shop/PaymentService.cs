@@ -43,7 +43,7 @@ public class PaymentService(
             hasPaymentTarget ? payment : entity
         );
 
-        if (hasPaymentTarget && entity.Quantity != payment!.target_cost)
+        if (hasPaymentTarget && entity.Quantity != payment!.TargetCost)
             throw new DragaliaException(ResultCode.CommonUserStatusError, "Price mismatch.");
 
         int price = entity.Quantity;
@@ -151,7 +151,7 @@ public class PaymentService(
             throw new DragaliaException(ResultCode.CommonMaterialShort, "No entity owned.");
         }
 
-        if (hasPaymentTarget && quantity != payment!.target_hold_quantity)
+        if (hasPaymentTarget && quantity != payment!.TargetHoldQuantity)
         {
             logger.LogError(
                 "Held quantity {quantity} does not match target of payment {@payment}",
@@ -207,7 +207,7 @@ public class PaymentService(
                 }
 
                 await ProcessPayment(
-                    new Entity(entityType, Quantity: expectedPrice ?? payment?.target_cost ?? 0),
+                    new Entity(entityType, Quantity: expectedPrice ?? payment?.TargetCost ?? 0),
                     payment
                 );
                 break;

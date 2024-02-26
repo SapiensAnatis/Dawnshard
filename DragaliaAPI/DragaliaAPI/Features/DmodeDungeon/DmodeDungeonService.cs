@@ -101,7 +101,7 @@ public class DmodeDungeonService(
         await dmodeCacheService.StoreFloorInfo(firstFloor);
 
         DmodePlayRecord firstPlayRecord =
-            new() { unique_key = ingame.unique_key, floor_key = firstFloor.floor_key };
+            new() { UniqueKey = ingame.UniqueKey, FloorKey = firstFloor.FloorKey };
 
         await dmodeCacheService.StorePlayRecord(firstPlayRecord);
 
@@ -122,8 +122,8 @@ public class DmodeDungeonService(
 
         DbPlayerDmodeInfo info = await dmodeRepository.GetInfoAsync();
 
-        ingame.recovery_count = info.RecoveryCount;
-        ingame.recovery_time = info.RecoveryTime;
+        ingame.RecoveryCount = info.RecoveryCount;
+        ingame.RecoveryTime = info.RecoveryTime;
 
         await dmodeCacheService.StoreIngameInfo(ingame);
 
@@ -161,13 +161,11 @@ public class DmodeDungeonService(
     {
         DmodeIngameData ingameData = await dmodeCacheService.LoadIngameInfo();
         DmodePlayRecord playRecord = await dmodeCacheService.LoadPlayRecord();
-        DmodeFloorData floorData = await dmodeCacheService.LoadFloorInfo(playRecord.floor_key);
+        DmodeFloorData floorData = await dmodeCacheService.LoadFloorInfo(playRecord.FloorKey);
 
-        int floorNum = playRecord.is_floor_incomplete
-            ? playRecord.floor_num - 1
-            : playRecord.floor_num; // We take the floor num from playRecord due to the additional /floor call on pressing end
+        int floorNum = playRecord.IsFloorIncomplete ? playRecord.FloorNum - 1 : playRecord.FloorNum; // We take the floor num from playRecord due to the additional /floor call on pressing end
 
-        Charas charaId = ingameData.unit_data.chara_id;
+        Charas charaId = ingameData.UnitData.CharaId;
 
         List<AtgenRewardTalismanList> talismans = new();
 
@@ -189,12 +187,12 @@ public class DmodeDungeonService(
                 );
 
                 await rewardService.GrantTalisman(
-                    talisman.talisman_id,
-                    talisman.talisman_ability_id_1,
-                    talisman.talisman_ability_id_2,
-                    talisman.talisman_ability_id_3,
-                    talisman.additional_hp,
-                    talisman.additional_attack
+                    talisman.TalismanId,
+                    talisman.TalismanAbilityId1,
+                    talisman.TalismanAbilityId2,
+                    talisman.TalismanAbilityId3,
+                    talisman.AdditionalHp,
+                    talisman.AdditionalAttack
                 );
 
                 talismans.Add(talisman);
@@ -202,10 +200,7 @@ public class DmodeDungeonService(
         }
 
         Dictionary<DmodeServitorPassiveType, int> passives =
-            ingameData.dmode_servitor_passive_list.ToDictionary(
-                x => x.passive_no,
-                x => x.passive_level
-            );
+            ingameData.DmodeServitorPassiveList.ToDictionary(x => x.PassiveNo, x => x.PassiveLevel);
 
         double pointMultiplier1 = isGameOver ? 0.5d : 1d;
         double pointMultiplier2 = isGameOver ? 0.5d : 1d;
@@ -229,50 +224,42 @@ public class DmodeDungeonService(
         DmodeIngameResult ingameResult =
             new()
             {
-                floor_num = floorNum,
-                is_record_floor_num = floorNum > await dmodeRepository.GetTotalMaxFloorAsync(),
-                chara_id_list = new List<Charas> { ingameData.unit_data.chara_id, },
-                quest_time = floorData.dmode_area_info.quest_time,
-                is_view_quest_time = ingameData.start_floor_num == 1,
-                dmode_score = floorData.dmode_area_info.dmode_score,
-                reward_talisman_list = talismans,
-                take_dmode_point_1 = (int)
-                    Math.Ceiling(floorData.dmode_unit_info.take_dmode_point_1 * pointMultiplier1),
-                take_dmode_point_2 = (int)
-                    Math.Ceiling(floorData.dmode_unit_info.take_dmode_point_2 * pointMultiplier2),
-                take_player_exp = 0,
-                player_level_up_fstone = 0,
-                clear_state = isGameOver ? 0 : 1
+                FloorNum = floorNum,
+                IsRecordFloorNum = floorNum > await dmodeRepository.GetTotalMaxFloorAsync(),
+                CharaIdList = new List<Charas> { ingameData.UnitData.CharaId, },
+                QuestTime = floorData.DmodeAreaInfo.QuestTime,
+                IsViewQuestTime = ingameData.StartFloorNum == 1,
+                DmodeScore = floorData.DmodeAreaInfo.DmodeScore,
+                RewardTalismanList = talismans,
+                TakeDmodePoint1 = (int)
+                    Math.Ceiling(floorData.DmodeUnitInfo.TakeDmodePoint1 * pointMultiplier1),
+                TakeDmodePoint2 = (int)
+                    Math.Ceiling(floorData.DmodeUnitInfo.TakeDmodePoint2 * pointMultiplier2),
+                TakePlayerExp = 0,
+                PlayerLevelUpFstone = 0,
+                ClearState = isGameOver ? 0 : 1
             };
 
         DbPlayerDmodeChara chara = await dmodeRepository.Charas.SingleAsync(x =>
             x.CharaId == charaId
         );
 
-        if (ingameResult.floor_num > chara.MaxFloor)
-            chara.MaxFloor = ingameResult.floor_num;
+        if (ingameResult.FloorNum > chara.MaxFloor)
+            chara.MaxFloor = ingameResult.FloorNum;
 
-        if (ingameResult.dmode_score > chara.MaxScore)
-            chara.MaxScore = ingameResult.dmode_score;
+        if (ingameResult.DmodeScore > chara.MaxScore)
+            chara.MaxScore = ingameResult.DmodeScore;
 
         await rewardService.GrantReward(
-            new Entity(
-                EntityTypes.DmodePoint,
-                (int)DmodePoint.Point1,
-                ingameResult.take_dmode_point_1
-            )
+            new Entity(EntityTypes.DmodePoint, (int)DmodePoint.Point1, ingameResult.TakeDmodePoint1)
         );
         await rewardService.GrantReward(
-            new Entity(
-                EntityTypes.DmodePoint,
-                (int)DmodePoint.Point2,
-                ingameResult.take_dmode_point_2
-            )
+            new Entity(EntityTypes.DmodePoint, (int)DmodePoint.Point2, ingameResult.TakeDmodePoint2)
         );
 
         // Clear cache
         await dmodeCacheService.DeletePlayRecord();
-        await dmodeCacheService.DeleteFloorInfo(playRecord.floor_key);
+        await dmodeCacheService.DeleteFloorInfo(playRecord.FloorKey);
         await dmodeCacheService.DeleteIngameInfo();
 
         DbPlayerDmodeDungeon dungeon = await dmodeRepository.GetDungeonAsync();
@@ -297,7 +284,7 @@ public class DmodeDungeonService(
             {
                 // Used for restarting runs and the first floor (see dungeon/start for an explanation)
                 playRecord = await dmodeCacheService.LoadPlayRecord();
-                floorData = await dmodeCacheService.LoadFloorInfo(playRecord.floor_key);
+                floorData = await dmodeCacheService.LoadFloorInfo(playRecord.FloorKey);
             }
             else
             {
@@ -313,14 +300,14 @@ public class DmodeDungeonService(
         }
 
         dungeon.State = DungeonState.Playing;
-        dungeon.Floor = floorData.dmode_area_info.floor_num;
-        dungeon.DungeonScore = floorData.dmode_area_info.dmode_score;
-        dungeon.QuestTime = (int)Math.Ceiling(floorData.dmode_area_info.quest_time);
-        dungeon.IsPlayEnd = floorData.is_play_end;
+        dungeon.Floor = floorData.DmodeAreaInfo.FloorNum;
+        dungeon.DungeonScore = floorData.DmodeAreaInfo.DmodeScore;
+        dungeon.QuestTime = (int)Math.Ceiling(floorData.DmodeAreaInfo.QuestTime);
+        dungeon.IsPlayEnd = floorData.IsPlayEnd;
 
         logger.LogDebug(
             "Generated dmode floor with area info {@dmodeAreaInfo}",
-            floorData.dmode_area_info
+            floorData.DmodeAreaInfo
         );
 
         return (dungeon.State, floorData);
@@ -335,17 +322,17 @@ public class DmodeDungeonService(
         DmodeFloorData floorData =
             new()
             {
-                unique_key = ingameData.unique_key,
-                floor_key = string.Empty, // Will be set by cache service
-                is_end = ingameData.start_floor_num == ingameData.target_floor_num,
-                is_play_end = false,
-                is_view_area_start_equipment = ingameData.start_floor_num != 1, // For the first floor of skip runs
-                dmode_area_info = null,
-                dmode_unit_info = null,
-                dmode_dungeon_odds = null
+                UniqueKey = ingameData.UniqueKey,
+                FloorKey = string.Empty, // Will be set by cache service
+                IsEnd = ingameData.StartFloorNum == ingameData.TargetFloorNum,
+                IsPlayEnd = false,
+                IsViewAreaStartEquipment = ingameData.StartFloorNum != 1, // For the first floor of skip runs
+                DmodeAreaInfo = null,
+                DmodeUnitInfo = null,
+                DmodeDungeonOdds = null
             };
 
-        DmodeQuestFloor floor = MasterAsset.DmodeQuestFloor[ingameData.start_floor_num];
+        DmodeQuestFloor floor = MasterAsset.DmodeQuestFloor[ingameData.StartFloorNum];
 
         List<DmodeDungeonItemList> editSkillItemList = new();
 
@@ -365,33 +352,33 @@ public class DmodeDungeonService(
             );
         }
 
-        floorData.dmode_area_info = GenerateAreaInfo(floor, 0, 0, floorData.floor_key);
-        floorData.dmode_unit_info = new AtgenDmodeUnitInfo
+        floorData.DmodeAreaInfo = GenerateAreaInfo(floor, 0, 0, floorData.FloorKey);
+        floorData.DmodeUnitInfo = new AtgenDmodeUnitInfo
         {
-            level = 1,
-            exp = 0,
-            equip_crest_item_no_sort_list = new int[3],
-            bag_item_no_sort_list = new int[10],
-            skill_bag_item_no_sort_list = new int[8],
-            dmode_hold_dragon_list = Enumerable.Empty<AtgenDmodeHoldDragonList>(),
-            take_dmode_point_1 = 0,
-            take_dmode_point_2 = 0
+            Level = 1,
+            Exp = 0,
+            EquipCrestItemNoSortList = new int[3],
+            BagItemNoSortList = new int[10],
+            SkillBagItemNoSortList = new int[8],
+            DmodeHoldDragonList = Enumerable.Empty<AtgenDmodeHoldDragonList>(),
+            TakeDmodePoint1 = 0,
+            TakeDmodePoint2 = 0
         };
 
-        floorData.dmode_dungeon_odds = GenerateOddsInfo(
+        floorData.DmodeDungeonOdds = GenerateOddsInfo(
             floor,
-            floorData.dmode_area_info,
+            floorData.DmodeAreaInfo,
             editSkillItemList,
-            floorData.dmode_unit_info,
-            ingameData.unit_data.chara_id
+            floorData.DmodeUnitInfo,
+            ingameData.UnitData.CharaId
         );
 
         if (floor.FloorNum > 1)
         {
             int newLevel = floor.BaseEnemyLevel + 5;
 
-            floorData.dmode_unit_info.level = newLevel;
-            floorData.dmode_unit_info.exp = MasterAsset.DmodeCharaLevel[1000 + newLevel].TotalExp;
+            floorData.DmodeUnitInfo.Level = newLevel;
+            floorData.DmodeUnitInfo.Exp = MasterAsset.DmodeCharaLevel[1000 + newLevel].TotalExp;
 
             List<AtgenDmodeHoldDragonList> holdDragonList = new();
 
@@ -402,8 +389,8 @@ public class DmodeDungeonService(
                     x.DmodeDungeonItemType == DmodeDungeonItemType.Dragon
                 )
                 .Where(x =>
-                    floorData.dmode_dungeon_odds.dmode_select_dragon_list.All(y =>
-                        y.dragon_id != (Dragons)x.Id
+                    floorData.DmodeDungeonOdds.DmodeSelectDragonList.All(y =>
+                        y.DragonId != (Dragons)x.Id
                     )
                 )
                 .ToArray();
@@ -414,31 +401,31 @@ public class DmodeDungeonService(
                 do
                 {
                     dragon = rdm.Next(dragonPool);
-                } while (holdDragonList.Any(x => (int)x.dragon_id == dragon.Id));
+                } while (holdDragonList.Any(x => (int)x.DragonId == dragon.Id));
 
                 holdDragonList.Add(
-                    new AtgenDmodeHoldDragonList() { count = 0, dragon_id = (Dragons)dragon.Id }
+                    new AtgenDmodeHoldDragonList() { Count = 0, DragonId = (Dragons)dragon.Id }
                 );
             }
 
-            floorData.dmode_unit_info.dmode_hold_dragon_list = holdDragonList;
+            floorData.DmodeUnitInfo.DmodeHoldDragonList = holdDragonList;
 
             int slot = 0;
             for (int i = 0; i < floor.FloorNum; i += 20)
             {
                 DmodeDungeonItemList crest = GenerateDungeonAbilityCrest(minRarity + 1);
-                crest.item_state = DmodeDungeonItemState.EquipCrest;
+                crest.ItemState = DmodeDungeonItemState.EquipCrest;
 
-                floorData.dmode_dungeon_odds.dmode_dungeon_item_list.AddDmodeItem(crest);
-                floorData.dmode_unit_info.equip_crest_item_no_sort_list[slot] = crest.item_no;
+                floorData.DmodeDungeonOdds.DmodeDungeonItemList.AddDmodeItem(crest);
+                floorData.DmodeUnitInfo.EquipCrestItemNoSortList[slot] = crest.ItemNo;
                 slot++;
             }
 
             WeaponTypes weaponType = MasterAsset.CharaData[charaId].WeaponType;
             DmodeDungeonItemList weapon = GenerateDungeonWeapon(minRarity + 1, weaponType);
-            weapon.item_state = DmodeDungeonItemState.EquipWeapon;
+            weapon.ItemState = DmodeDungeonItemState.EquipWeapon;
 
-            floorData.dmode_dungeon_odds.dmode_dungeon_item_list.AddDmodeItem(weapon);
+            floorData.DmodeDungeonOdds.DmodeDungeonItemList.AddDmodeItem(weapon);
         }
 
         return floorData;
@@ -451,15 +438,15 @@ public class DmodeDungeonService(
     {
         await dmodeCacheService.StorePlayRecord(playRecord);
 
-        DmodeFloorData previousFloor = await dmodeCacheService.LoadFloorInfo(playRecord.floor_key);
+        DmodeFloorData previousFloor = await dmodeCacheService.LoadFloorInfo(playRecord.FloorKey);
 
-        AtgenDmodeUnitInfo unitInfo = previousFloor.dmode_unit_info;
+        AtgenDmodeUnitInfo unitInfo = previousFloor.DmodeUnitInfo;
 
-        int dmodeScore = previousFloor.dmode_area_info.dmode_score;
+        int dmodeScore = previousFloor.DmodeAreaInfo.DmodeScore;
 
         AtgenDmodeEnemy[] enemies =
-            previousFloor.dmode_dungeon_odds.dmode_odds_info.dmode_enemy.ToArray();
-        int[] enemyKilledStatus = playRecord.dmode_treasure_record.enemy.ToArray();
+            previousFloor.DmodeDungeonOdds.DmodeOddsInfo.DmodeEnemy.ToArray();
+        int[] enemyKilledStatus = playRecord.DmodeTreasureRecord.Enemy.ToArray();
 
         double expMultiplier = GetExpMultiplier(ingameData);
 
@@ -471,91 +458,83 @@ public class DmodeDungeonService(
 
             AtgenDmodeEnemy enemy = enemies[i];
             int dmodeEnemyParamGroupId = MasterAsset
-                .EnemyParam[enemy.param_id]
+                .EnemyParam[enemy.ParamId]
                 .DmodeEnemyParamGroupId;
 
             if (
                 !MasterAsset.DmodeEnemyParam.TryGetValue(
-                    (dmodeEnemyParamGroupId * 1000) + Math.Min(enemy.level, 100),
+                    (dmodeEnemyParamGroupId * 1000) + Math.Min(enemy.Level, 100),
                     out DmodeEnemyParam? enemyParam
                 )
             )
             {
                 continue;
             }
-            unitInfo.exp += (int)Math.Ceiling(enemyParam.DropExp * expMultiplier);
-            unitInfo.take_dmode_point_1 += enemyParam.DropDmodePoint1;
-            unitInfo.take_dmode_point_2 += enemyParam.DropDmodePoint2;
+            unitInfo.Exp += (int)Math.Ceiling(enemyParam.DropExp * expMultiplier);
+            unitInfo.TakeDmodePoint1 += enemyParam.DropDmodePoint1;
+            unitInfo.TakeDmodePoint2 += enemyParam.DropDmodePoint2;
             dmodeScore += enemyParam.DmodeScore;
         }
 
         // Now process levels
-        DmodeCharaLevel currentLevel = MasterAsset.DmodeCharaLevel[1000 + unitInfo.level]; // DmodeLevelGroup * 1000 (always 1) + level
+        DmodeCharaLevel currentLevel = MasterAsset.DmodeCharaLevel[1000 + unitInfo.Level]; // DmodeLevelGroup * 1000 (always 1) + level
         while (
             currentLevel.NecessaryExp != 0
-            && unitInfo.exp > currentLevel.TotalExp + currentLevel.NecessaryExp
+            && unitInfo.Exp > currentLevel.TotalExp + currentLevel.NecessaryExp
         )
         {
-            unitInfo.level++;
-            currentLevel = MasterAsset.DmodeCharaLevel[1000 + unitInfo.level];
+            unitInfo.Level++;
+            currentLevel = MasterAsset.DmodeCharaLevel[1000 + unitInfo.Level];
         }
 
         // Now process item list changes
         Dictionary<int, DmodeDungeonItemList> itemList =
-            previousFloor.dmode_dungeon_odds.dmode_dungeon_item_list.ToDictionary(
-                x => x.item_no,
-                x => x
-            );
+            previousFloor.DmodeDungeonOdds.DmodeDungeonItemList.ToDictionary(x => x.ItemNo, x => x);
 
-        foreach (
-            AtgenDmodeDungeonItemStateList stateChange in playRecord.dmode_dungeon_item_state_list
-        )
+        foreach (AtgenDmodeDungeonItemStateList stateChange in playRecord.DmodeDungeonItemStateList)
         {
-            if (stateChange.state == DmodeDungeonItemState.Sell)
+            if (stateChange.State == DmodeDungeonItemState.Sell)
             {
                 DmodeDungeonItemData item = MasterAsset.DmodeDungeonItemData[
-                    itemList[stateChange.item_no].item_id
+                    itemList[stateChange.ItemNo].ItemId
                 ];
-                unitInfo.take_dmode_point_1 += item.SellDmodePoint1;
-                unitInfo.take_dmode_point_2 += item.SellDmodePoint2;
-                itemList[stateChange.item_no].item_state = DmodeDungeonItemState.None;
+                unitInfo.TakeDmodePoint1 += item.SellDmodePoint1;
+                unitInfo.TakeDmodePoint2 += item.SellDmodePoint2;
+                itemList[stateChange.ItemNo].ItemState = DmodeDungeonItemState.None;
             }
             else
             {
-                itemList[stateChange.item_no].item_state = stateChange.state;
+                itemList[stateChange.ItemNo].ItemState = stateChange.State;
             }
         }
 
         foreach (
-            AtgenDmodeDungeonItemOptionList optionChange in playRecord.dmode_dungeon_item_option_list
+            AtgenDmodeDungeonItemOptionList optionChange in playRecord.DmodeDungeonItemOptionList
         )
         {
-            itemList[optionChange.item_no].option.abnormal_status_invalid_count =
-                optionChange.abnormal_status_invalid_count;
+            itemList[optionChange.ItemNo].Option.AbnormalStatusInvalidCount =
+                optionChange.AbnormalStatusInvalidCount;
         }
 
-        Dictionary<Dragons, int> dragonDict = unitInfo.dmode_hold_dragon_list.ToDictionary(
-            x => x.dragon_id,
-            x => x.count
+        Dictionary<Dragons, int> dragonDict = unitInfo.DmodeHoldDragonList.ToDictionary(
+            x => x.DragonId,
+            x => x.Count
         );
 
-        foreach (AtgenDmodeDragonUseList dragonUse in playRecord.dmode_dragon_use_list)
+        foreach (AtgenDmodeDragonUseList dragonUse in playRecord.DmodeDragonUseList)
         {
-            dragonDict[dragonUse.dragon_id] += dragonUse.use_count;
+            dragonDict[dragonUse.DragonId] += dragonUse.UseCount;
         }
 
         // Now process dragon selection (if applicable)
-        if (playRecord.select_dragon_no != 0)
+        if (playRecord.SelectDragonNo != 0)
         {
             List<AtgenDmodeSelectDragonList> dragonSelection =
-                previousFloor.dmode_dungeon_odds.dmode_select_dragon_list.ToList();
-            AtgenDmodeSelectDragonList dragon = dragonSelection[playRecord.select_dragon_no - 1];
-            if (dragon.is_rare)
+                previousFloor.DmodeDungeonOdds.DmodeSelectDragonList.ToList();
+            AtgenDmodeSelectDragonList dragon = dragonSelection[playRecord.SelectDragonNo - 1];
+            if (dragon.IsRare)
             {
-                if (
-                    dragon.pay_dmode_point_1 != 0
-                    && dragon.pay_dmode_point_1 > unitInfo.take_dmode_point_1
-                )
+                if (dragon.PayDmodePoint1 != 0 && dragon.PayDmodePoint1 > unitInfo.TakeDmodePoint1)
                 {
                     throw new DragaliaException(
                         ResultCode.DmodeDungeonFloorDragonParamInconsistent,
@@ -563,12 +542,9 @@ public class DmodeDungeonService(
                     );
                 }
 
-                unitInfo.take_dmode_point_1 -= dragon.pay_dmode_point_1;
+                unitInfo.TakeDmodePoint1 -= dragon.PayDmodePoint1;
 
-                if (
-                    dragon.pay_dmode_point_2 != 0
-                    && dragon.pay_dmode_point_2 > unitInfo.take_dmode_point_2
-                )
+                if (dragon.PayDmodePoint2 != 0 && dragon.PayDmodePoint2 > unitInfo.TakeDmodePoint2)
                 {
                     throw new DragaliaException(
                         ResultCode.DmodeDungeonFloorDragonParamInconsistent,
@@ -576,49 +552,49 @@ public class DmodeDungeonService(
                     );
                 }
 
-                unitInfo.take_dmode_point_2 -= dragon.pay_dmode_point_2;
+                unitInfo.TakeDmodePoint2 -= dragon.PayDmodePoint2;
             }
 
-            dragonDict[dragon.dragon_id] = 0;
+            dragonDict[dragon.DragonId] = 0;
         }
 
         // Transfer properties from play record
-        unitInfo.bag_item_no_sort_list = playRecord.bag_item_no_sort_list;
-        unitInfo.equip_crest_item_no_sort_list = playRecord.equip_crest_item_no_sort_list;
-        unitInfo.skill_bag_item_no_sort_list = playRecord.skill_bag_item_no_sort_list;
-        unitInfo.dmode_hold_dragon_list = dragonDict.Select(x => new AtgenDmodeHoldDragonList(
+        unitInfo.BagItemNoSortList = playRecord.BagItemNoSortList;
+        unitInfo.EquipCrestItemNoSortList = playRecord.EquipCrestItemNoSortList;
+        unitInfo.SkillBagItemNoSortList = playRecord.SkillBagItemNoSortList;
+        unitInfo.DmodeHoldDragonList = dragonDict.Select(x => new AtgenDmodeHoldDragonList(
             x.Key,
             x.Value
         ));
 
         // Generate random floor data
-        DmodeQuestFloor floor = MasterAsset.DmodeQuestFloor[Math.Min(playRecord.floor_num + 1, 60)];
+        DmodeQuestFloor floor = MasterAsset.DmodeQuestFloor[Math.Min(playRecord.FloorNum + 1, 60)];
 
         AtgenDmodeAreaInfo areaInfo = GenerateAreaInfo(
             floor,
-            playRecord.quest_time,
+            playRecord.QuestTime,
             dmodeScore,
-            previousFloor.floor_key
+            previousFloor.FloorKey
         );
         AtgenDmodeDungeonOdds odds = GenerateOddsInfo(
             floor,
             areaInfo,
             itemList.Values.ToList(),
             unitInfo,
-            ingameData.unit_data.chara_id
+            ingameData.UnitData.CharaId
         );
 
         DmodeFloorData floorData =
             new()
             {
-                unique_key = previousFloor.unique_key,
-                floor_key = previousFloor.floor_key, // Done so we can always reference the current floor
-                is_end = playRecord.floor_num == ingameData.target_floor_num, // Game ignores this
-                is_play_end = playRecord.is_floor_incomplete, // Game ignores this (it only checks the one in DmodeIngameData)
-                is_view_area_start_equipment = false, // This can never be true as it only applies to the first floor after skipping
-                dmode_area_info = areaInfo,
-                dmode_unit_info = unitInfo,
-                dmode_dungeon_odds = odds
+                UniqueKey = previousFloor.UniqueKey,
+                FloorKey = previousFloor.FloorKey, // Done so we can always reference the current floor
+                IsEnd = playRecord.FloorNum == ingameData.TargetFloorNum, // Game ignores this
+                IsPlayEnd = playRecord.IsFloorIncomplete, // Game ignores this (it only checks the one in DmodeIngameData)
+                IsViewAreaStartEquipment = false, // This can never be true as it only applies to the first floor after skipping
+                DmodeAreaInfo = areaInfo,
+                DmodeUnitInfo = unitInfo,
+                DmodeDungeonOdds = odds
             };
 
         return floorData;
@@ -657,11 +633,9 @@ public class DmodeDungeonService(
         Charas charaId
     )
     {
-        DmodeDungeonTheme theme = MasterAsset.DmodeDungeonTheme[
-            dmodeAreaInfo.current_area_theme_id
-        ];
+        DmodeDungeonTheme theme = MasterAsset.DmodeDungeonTheme[dmodeAreaInfo.CurrentAreaThemeId];
 
-        DmodeDungeonArea area = MasterAsset.DmodeDungeonArea[dmodeAreaInfo.current_area_id];
+        DmodeDungeonArea area = MasterAsset.DmodeDungeonArea[dmodeAreaInfo.CurrentAreaId];
         string assetName = $"{area.Scene}/{area.AreaName}".ToLowerInvariant();
 
         DmodeAreaInfo areaInfo = MasterAsset.DmodeAreaInfo[assetName];
@@ -692,7 +666,7 @@ public class DmodeDungeonService(
                     _ => 1
                 };
 
-                rarity = ClampRarityByFloor(dmodeAreaInfo.floor_num, rarity);
+                rarity = ClampRarityByFloor(dmodeAreaInfo.FloorNum, rarity);
 
                 (DmodeDungeonItemList item, DmodeDungeonItemType type) = GenerateDungeonItem(
                     rarity,
@@ -700,7 +674,7 @@ public class DmodeDungeonService(
                     itemList
                 );
 
-                return new AtgenDmodeDropList(EntityTypes.DmodeDungeonItem, item.item_no, 1);
+                return new AtgenDmodeDropList(EntityTypes.DmodeDungeonItem, item.ItemNo, 1);
             }
         );
 
@@ -709,7 +683,7 @@ public class DmodeDungeonService(
             remainingPool =>
             {
                 int rarityPool = rdm.Next(101);
-                rarityPool += dmodeAreaInfo.floor_num;
+                rarityPool += dmodeAreaInfo.FloorNum;
 
                 int rarity = rarityPool switch
                 {
@@ -720,7 +694,7 @@ public class DmodeDungeonService(
                     _ => 1
                 };
 
-                rarity = ClampRarityByFloor(dmodeAreaInfo.floor_num, rarity);
+                rarity = ClampRarityByFloor(dmodeAreaInfo.FloorNum, rarity);
 
                 (DmodeDungeonItemList item, DmodeDungeonItemType type) = GenerateDungeonItem(
                     rarity,
@@ -729,7 +703,7 @@ public class DmodeDungeonService(
                 );
 
                 return (
-                    new AtgenDmodeDropList(EntityTypes.DmodeDungeonItem, item.item_no, 1),
+                    new AtgenDmodeDropList(EntityTypes.DmodeDungeonItem, item.ItemNo, 1),
                     type,
                     rarity
                 );
@@ -740,11 +714,11 @@ public class DmodeDungeonService(
 
         List<AtgenDmodeSelectDragonList> dragonList = new();
 
-        if (theme.BossAppear && dmodeUnitInfo.dmode_hold_dragon_list.Count() < 8)
+        if (theme.BossAppear && dmodeUnitInfo.DmodeHoldDragonList.Count() < 8)
         {
             List<int> alreadyRolledDragonIds = new();
-            IEnumerable<int> alreadyOwnedDragonIds = dmodeUnitInfo.dmode_hold_dragon_list.Select(
-                x => (int)x.dragon_id
+            IEnumerable<int> alreadyOwnedDragonIds = dmodeUnitInfo.DmodeHoldDragonList.Select(x =>
+                (int)x.DragonId
             );
 
             DmodeDungeonItemData[] dragonPool = MasterAsset
@@ -767,19 +741,19 @@ public class DmodeDungeonService(
 
                 AtgenDmodeSelectDragonList selectDragon = new();
 
-                selectDragon.select_dragon_no = i + 1;
-                selectDragon.dragon_id = (Dragons)dragon.DungeonItemTargetId;
+                selectDragon.SelectDragonNo = i + 1;
+                selectDragon.DragonId = (Dragons)dragon.DungeonItemTargetId;
 
-                int dragonRarity = MasterAsset.DragonData[selectDragon.dragon_id].Rarity;
+                int dragonRarity = MasterAsset.DragonData[selectDragon.DragonId].Rarity;
 
-                if (rdm.Next(101) > 80 && dragonList.Any(x => !x.is_rare))
+                if (rdm.Next(101) > 80 && dragonList.Any(x => !x.IsRare))
                 {
-                    selectDragon.is_rare = true;
-                    selectDragon.pay_dmode_point_1 = rdm.Next(
+                    selectDragon.IsRare = true;
+                    selectDragon.PayDmodePoint1 = rdm.Next(
                         (int)Math.Ceiling(floor.Id * 0.5d),
                         (int)Math.Ceiling(floor.Id * 2d) + 1
                     );
-                    selectDragon.pay_dmode_point_2 = 0;
+                    selectDragon.PayDmodePoint2 = 0;
                 }
 
                 dragonList.Add(selectDragon);
@@ -874,7 +848,7 @@ public class DmodeDungeonService(
         DmodeDungeonItemList item =
             new(0, itemData.Id, DmodeDungeonItemState.None, new AtgenOption());
 
-        DmodeAbilityCrest crest = MasterAsset.DmodeAbilityCrest[item.item_id];
+        DmodeAbilityCrest crest = MasterAsset.DmodeAbilityCrest[item.ItemId];
 
         item = CalculateAbilities(
             item,
@@ -903,7 +877,7 @@ public class DmodeDungeonService(
                     .ToArray()
             );
 
-            item.option.strength_param_id = param.Id;
+            item.Option.StrengthParamId = param.Id;
         }
 
         if (strengthSkillGroupId != 0 && rdm.Next(101) > 50)
@@ -916,7 +890,7 @@ public class DmodeDungeonService(
                     .ToArray()
             );
 
-            item.option.strength_skill_id = skill.Id;
+            item.Option.StrengthSkillId = skill.Id;
         }
 
         if (strengthAbilityGroupId != 0 && rdm.Next(101) > 50)
@@ -929,7 +903,7 @@ public class DmodeDungeonService(
                     .ToArray()
             );
 
-            item.option.strength_ability_id = ability.Id;
+            item.Option.StrengthAbilityId = ability.Id;
         }
 
         return item;
@@ -1054,7 +1028,7 @@ public class DmodeDungeonService(
             dmodeEnemies.Add(
                 new AtgenDmodeEnemy(
                     dmodeEnemies.Count,
-                    1,
+                    true,
                     enemyLevel,
                     enemyParam,
                     hasSecondForm ? Enumerable.Empty<AtgenDmodeDropList>() : enemyDropList
@@ -1069,7 +1043,7 @@ public class DmodeDungeonService(
                 dmodeEnemies.Add(
                     new AtgenDmodeEnemy(
                         dmodeEnemies.Count,
-                        0,
+                        false,
                         level,
                         paramData.Form2nd,
                         enemyDropList
@@ -1126,7 +1100,7 @@ public class DmodeDungeonService(
                 dmodeEnemies.Add(
                     new AtgenDmodeEnemy(
                         dmodeEnemies.Count,
-                        0,
+                        false,
                         level,
                         enemyParam,
                         Enumerable.Empty<AtgenDmodeDropList>()
@@ -1166,16 +1140,15 @@ public class DmodeDungeonService(
     {
         double expMultiplier = 1d;
 
-        DmodeServitorPassiveList? expPassive =
-            ingameData.dmode_servitor_passive_list.SingleOrDefault(x =>
-                x.passive_no == DmodeServitorPassiveType.Exp
-            );
+        DmodeServitorPassiveList? expPassive = ingameData.DmodeServitorPassiveList.SingleOrDefault(
+            x => x.PassiveNo == DmodeServitorPassiveType.Exp
+        );
 
         if (expPassive != null)
         {
             DmodeServitorPassiveLevel level = DmodeHelper.PassiveLevels[
                 DmodeServitorPassiveType.Exp
-            ][expPassive.passive_level];
+            ][expPassive.PassiveLevel];
 
             expMultiplier += level.UpValue / 100;
         }

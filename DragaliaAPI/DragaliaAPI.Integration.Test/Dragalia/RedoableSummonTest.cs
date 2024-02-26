@@ -11,12 +11,12 @@ public class RedoableSummonTest : TestFixture
     [Fact]
     public async Task RedoableSummonGetData_ReturnsData()
     {
-        RedoableSummonGetDataData response = (
-            await this.Client.PostMsgpack<RedoableSummonGetDataData>(
+        RedoableSummonGetDataResponse response = (
+            await this.Client.PostMsgpack<RedoableSummonGetDataResponse>(
                 "redoable_summon/get_data",
                 new RedoableSummonGetDataRequest()
             )
-        ).data;
+        ).Data;
 
         response.Should().NotBeNull();
     }
@@ -24,38 +24,38 @@ public class RedoableSummonTest : TestFixture
     [Fact]
     public async Task RedoableSummonPreExec_ReturnsValidResult()
     {
-        RedoableSummonPreExecData response = (
-            await this.Client.PostMsgpack<RedoableSummonPreExecData>(
+        RedoableSummonPreExecResponse response = (
+            await this.Client.PostMsgpack<RedoableSummonPreExecResponse>(
                 "redoable_summon/pre_exec",
                 new RedoableSummonPreExecRequest(0)
             )
-        ).data;
+        ).Data;
 
-        response.user_redoable_summon_data.redoable_summon_result_unit_list.Count().Should().Be(50);
+        response.UserRedoableSummonData.RedoableSummonResultUnitList.Count().Should().Be(50);
     }
 
     [Fact]
     public async Task RedoableSummonFixExec_UpdatesDatabase()
     {
         // Set up cached summon result
-        await this.Client.PostMsgpack<RedoableSummonPreExecData>(
+        await this.Client.PostMsgpack<RedoableSummonPreExecResponse>(
             "redoable_summon/pre_exec",
             new RedoableSummonPreExecRequest()
         );
 
-        RedoableSummonFixExecData response = (
-            await this.Client.PostMsgpack<RedoableSummonFixExecData>(
+        RedoableSummonFixExecResponse response = (
+            await this.Client.PostMsgpack<RedoableSummonFixExecResponse>(
                 "redoable_summon/fix_exec",
                 new RedoableSummonFixExecRequest()
             )
-        ).data;
+        ).Data;
 
         IEnumerable<int> newCharaIds = response
-            .update_data_list.chara_list!.Select(x => (int)x.chara_id)
+            .UpdateDataList.CharaList!.Select(x => (int)x.CharaId)
             .OrderBy(x => x);
 
         IEnumerable<int> newDragonIds = response
-            .update_data_list.dragon_list!.Select(x => (int)x.dragon_id)
+            .UpdateDataList.DragonList!.Select(x => (int)x.DragonId)
             .OrderBy(x => x);
 
         IEnumerable<int> dbCharaIds = this

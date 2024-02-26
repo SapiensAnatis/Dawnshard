@@ -28,22 +28,22 @@ public class StampController : DragaliaControllerBase
     {
         IEnumerable<StampList> list = (await this.stampService.GetStampList()).ToList();
 
-        return this.Ok(new StampGetStampData() { stamp_list = list, });
+        return this.Ok(new StampGetStampResponse() { StampList = list, });
     }
 
     [HttpPost("set_equip_stamp")]
     public async Task<DragaliaResult> SetEquipStamp(StampSetEquipStampRequest request)
     {
-        this.logger.LogDebug("Updating stamp list to: {@stampList}", request.stamp_list);
+        this.logger.LogDebug("Updating stamp list to: {@stampList}", request.StampList);
 
         IEnumerable<EquipStampList> newStampList = await this.stampService.SetEquipStampList(
-            request.stamp_list
+            request.StampList
         );
 
         await this.updateDataService.SaveChangesAsync();
 
         return this.Ok(
-            new StampSetEquipStampData() { equip_stamp_list = newStampList.OrderBy(x => x.slot) }
+            new StampSetEquipStampResponse() { EquipStampList = newStampList.OrderBy(x => x.Slot) }
         );
     }
 }

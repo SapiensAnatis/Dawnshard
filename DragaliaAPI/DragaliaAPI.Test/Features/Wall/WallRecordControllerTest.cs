@@ -106,27 +106,27 @@ public class WallRecordControllerTest
 
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(new UpdateDataList());
 
-        WallRecordRecordData data = (
+        WallRecordRecordResponse data = (
             await wallRecordController.Record(new WallRecordRecordRequest(wallId, dungeonKey))
-        ).GetData<WallRecordRecordData>()!;
+        ).GetData<WallRecordRecordResponse>()!;
 
         AtgenPlayWallDetail dataPlayWallDetail =
             new()
             {
-                wall_id = wallId,
-                after_wall_level = wallLevel + 1,
-                before_wall_level = wallLevel
+                WallId = wallId,
+                AfterWallLevel = wallLevel + 1,
+                BeforeWallLevel = wallLevel
             };
 
         AtgenWallDropReward dataWallDropReward =
             new()
             {
-                reward_entity_list = new[]
+                RewardEntityList = new[]
                 {
                     WallRecordController.GoldCrystals.ToBuildEventRewardEntityList()
                 },
-                take_coin = WallRecordController.Rupies.Quantity,
-                take_mana = WallRecordController.Mana.Quantity
+                TakeCoin = WallRecordController.Rupies.Quantity,
+                TakeMana = WallRecordController.Mana.Quantity
             };
 
         IEnumerable<AtgenBuildEventRewardEntityList> dataWallClearRewardList = new[]
@@ -134,8 +134,8 @@ public class WallRecordControllerTest
             WallRecordController.Wyrmites.ToBuildEventRewardEntityList()
         };
 
-        data.play_wall_detail.Should().BeEquivalentTo(dataPlayWallDetail);
-        data.wall_clear_reward_list.Should().BeEquivalentTo(dataWallClearRewardList);
-        data.wall_drop_reward.Should().BeEquivalentTo(dataWallDropReward);
+        data.PlayWallDetail.Should().BeEquivalentTo(dataPlayWallDetail);
+        data.WallClearRewardList.Should().BeEquivalentTo(dataWallClearRewardList);
+        data.WallDropReward.Should().BeEquivalentTo(dataWallDropReward);
     }
 }

@@ -46,51 +46,51 @@ public class MatchingTest : TestFixture
                 }
             );
 
-        MatchingGetRoomListData data = (
-            await this.Client.PostMsgpack<MatchingGetRoomListData>(
+        MatchingGetRoomListResponse data = (
+            await this.Client.PostMsgpack<MatchingGetRoomListResponse>(
                 $"{EndpointGroup}/get_room_list",
-                new MatchingGetRoomListRequest() { compatible_id = 36 }
+                new MatchingGetRoomListRequest() { CompatibleId = 36 }
             )
-        ).data;
+        ).Data;
 
         data.Should()
             .BeEquivalentTo(
-                new MatchingGetRoomListData()
+                new MatchingGetRoomListResponse()
                 {
-                    room_list = new List<RoomList>()
+                    RoomList = new List<RoomList>()
                     {
                         new()
                         {
-                            room_id = 911948,
-                            room_name = "7942ce2a-c0ac-4e41-8472-0cf5918f3953",
-                            region = "jp",
-                            cluster_name = "jp",
-                            language = "en_us",
-                            status = RoomStatuses.Available,
-                            entry_type = 1,
-                            entry_guild_id = 0,
-                            host_viewer_id = (ulong)ViewerId,
-                            host_name = "Euden",
-                            host_level = 250,
-                            leader_chara_id = Charas.ThePrince,
-                            leader_chara_rarity = 4,
-                            leader_chara_level = 1,
-                            quest_id = 204550501,
-                            quest_type = QuestTypes.Dungeon,
-                            room_member_list = new List<AtgenRoomMemberList>()
+                            RoomId = 911948,
+                            RoomName = "7942ce2a-c0ac-4e41-8472-0cf5918f3953",
+                            Region = "jp",
+                            ClusterName = "jp",
+                            Language = "en_us",
+                            Status = RoomStatuses.Available,
+                            EntryType = 1,
+                            EntryGuildId = 0,
+                            HostViewerId = (ulong)ViewerId,
+                            HostName = "Euden",
+                            HostLevel = 250,
+                            LeaderCharaId = Charas.ThePrince,
+                            LeaderCharaRarity = 4,
+                            LeaderCharaLevel = 1,
+                            QuestId = 204550501,
+                            QuestType = QuestTypes.Dungeon,
+                            RoomMemberList = new List<AtgenRoomMemberList>()
                             {
-                                new() { viewer_id = (ulong)ViewerId, }
+                                new() { ViewerId = (ulong)ViewerId, }
                             },
-                            start_entry_time = DateTimeOffset.FromUnixTimeSeconds(1662160789),
-                            entry_conditions = new()
+                            StartEntryTime = DateTimeOffset.FromUnixTimeSeconds(1662160789),
+                            EntryConditions = new()
                             {
-                                unaccepted_element_type_list = new List<int>() { 1, 2, 3, 4, 5 },
-                                unaccepted_weapon_type_list = new List<int>() { 1, 2 },
-                                required_party_power = 100,
-                                objective_text_id = 2
+                                UnacceptedElementTypeList = new List<int>() { 1, 2, 3, 4, 5 },
+                                UnacceptedWeaponTypeList = new List<int>() { 1, 2 },
+                                RequiredPartyPower = 100,
+                                ObjectiveTextId = 2
                             },
-                            compatible_id = 36,
-                            member_num = 1,
+                            CompatibleId = 36,
+                            MemberNum = 1,
                         }
                     }
                 }
@@ -131,55 +131,51 @@ public class MatchingTest : TestFixture
                 }
             );
 
-        MatchingGetRoomListByQuestIdData data = (
-            await this.Client.PostMsgpack<MatchingGetRoomListByQuestIdData>(
+        MatchingGetRoomListByQuestIdResponse data = (
+            await this.Client.PostMsgpack<MatchingGetRoomListByQuestIdResponse>(
                 $"{EndpointGroup}/get_room_list_by_quest_id",
-                new MatchingGetRoomListByQuestIdRequest()
-                {
-                    compatible_id = 36,
-                    quest_id = 204550501
-                }
+                new MatchingGetRoomListByQuestIdRequest() { CompatibleId = 36, QuestId = 204550501 }
             )
-        ).data;
+        ).Data;
 
         data.Should()
             .BeEquivalentTo(
-                new MatchingGetRoomListByQuestIdData()
+                new MatchingGetRoomListByQuestIdResponse()
                 {
-                    room_list = new List<RoomList>()
+                    RoomList = new List<RoomList>()
                     {
                         new()
                         {
-                            room_id = 911948,
-                            room_name = "7942ce2a-c0ac-4e41-8472-0cf5918f3953",
-                            region = "jp",
-                            cluster_name = "jp",
-                            language = "en_us",
-                            status = RoomStatuses.Available,
-                            entry_type = 1,
-                            entry_guild_id = 0,
-                            host_viewer_id = (ulong)ViewerId,
-                            host_name = "Euden",
-                            host_level = 250,
-                            leader_chara_id = Charas.ThePrince,
-                            leader_chara_rarity = 4,
-                            leader_chara_level = 1,
-                            quest_id = 204550501,
-                            quest_type = QuestTypes.Dungeon,
-                            room_member_list = new List<AtgenRoomMemberList>()
+                            RoomId = 911948,
+                            RoomName = "7942ce2a-c0ac-4e41-8472-0cf5918f3953",
+                            Region = "jp",
+                            ClusterName = "jp",
+                            Language = "en_us",
+                            Status = RoomStatuses.Available,
+                            EntryType = 1,
+                            EntryGuildId = 0,
+                            HostViewerId = (ulong)ViewerId,
+                            HostName = "Euden",
+                            HostLevel = 250,
+                            LeaderCharaId = Charas.ThePrince,
+                            LeaderCharaRarity = 4,
+                            LeaderCharaLevel = 1,
+                            QuestId = 204550501,
+                            QuestType = QuestTypes.Dungeon,
+                            RoomMemberList = new List<AtgenRoomMemberList>()
                             {
-                                new() { viewer_id = (ulong)ViewerId, }
+                                new() { ViewerId = (ulong)ViewerId, }
                             },
-                            start_entry_time = DateTimeOffset.FromUnixTimeSeconds(1662160789),
-                            entry_conditions = new()
+                            StartEntryTime = DateTimeOffset.FromUnixTimeSeconds(1662160789),
+                            EntryConditions = new()
                             {
-                                unaccepted_element_type_list = new List<int>() { 1, 2, 3, 4, 5 },
-                                unaccepted_weapon_type_list = new List<int>() { 1, 2 },
-                                required_party_power = 100,
-                                objective_text_id = 2
+                                UnacceptedElementTypeList = new List<int>() { 1, 2, 3, 4, 5 },
+                                UnacceptedWeaponTypeList = new List<int>() { 1, 2 },
+                                RequiredPartyPower = 100,
+                                ObjectiveTextId = 2
                             },
-                            compatible_id = 36,
-                            member_num = 1,
+                            CompatibleId = 36,
+                            MemberNum = 1,
                         }
                     }
                 }
@@ -217,54 +213,54 @@ public class MatchingTest : TestFixture
                 }
             );
 
-        MatchingGetRoomNameData data = (
-            await this.Client.PostMsgpack<MatchingGetRoomNameData>(
+        MatchingGetRoomNameResponse data = (
+            await this.Client.PostMsgpack<MatchingGetRoomNameResponse>(
                 $"{EndpointGroup}/get_room_name",
-                new MatchingGetRoomNameRequest() { room_id = 911948 }
+                new MatchingGetRoomNameRequest() { RoomId = 911948 }
             )
-        ).data;
+        ).Data;
 
         data.Should()
             .BeEquivalentTo(
-                new MatchingGetRoomNameData()
+                new MatchingGetRoomNameResponse()
                 {
-                    room_data = new()
+                    RoomData = new()
                     {
-                        room_id = 911948,
-                        room_name = "7942ce2a-c0ac-4e41-8472-0cf5918f3953",
-                        region = "jp",
-                        cluster_name = "jp",
-                        language = "en_us",
-                        status = RoomStatuses.Available,
-                        entry_type = 1,
-                        entry_guild_id = 0,
-                        host_viewer_id = (ulong)ViewerId,
-                        host_name = "Euden",
-                        host_level = 250,
-                        leader_chara_id = Charas.ThePrince,
-                        leader_chara_rarity = 4,
-                        leader_chara_level = 1,
-                        quest_id = 204550501,
-                        quest_type = QuestTypes.Dungeon,
-                        room_member_list = new List<AtgenRoomMemberList>()
+                        RoomId = 911948,
+                        RoomName = "7942ce2a-c0ac-4e41-8472-0cf5918f3953",
+                        Region = "jp",
+                        ClusterName = "jp",
+                        Language = "en_us",
+                        Status = RoomStatuses.Available,
+                        EntryType = 1,
+                        EntryGuildId = 0,
+                        HostViewerId = (ulong)ViewerId,
+                        HostName = "Euden",
+                        HostLevel = 250,
+                        LeaderCharaId = Charas.ThePrince,
+                        LeaderCharaRarity = 4,
+                        LeaderCharaLevel = 1,
+                        QuestId = 204550501,
+                        QuestType = QuestTypes.Dungeon,
+                        RoomMemberList = new List<AtgenRoomMemberList>()
                         {
-                            new() { viewer_id = (ulong)ViewerId, }
+                            new() { ViewerId = (ulong)ViewerId, }
                         },
-                        start_entry_time = DateTimeOffset.FromUnixTimeSeconds(1662160789),
-                        entry_conditions = new()
+                        StartEntryTime = DateTimeOffset.FromUnixTimeSeconds(1662160789),
+                        EntryConditions = new()
                         {
-                            unaccepted_element_type_list = new List<int>() { 1, 2, 3, 4, 5 },
-                            unaccepted_weapon_type_list = new List<int>() { 1, 2 },
-                            required_party_power = 100,
-                            objective_text_id = 2
+                            UnacceptedElementTypeList = new List<int>() { 1, 2, 3, 4, 5 },
+                            UnacceptedWeaponTypeList = new List<int>() { 1, 2 },
+                            RequiredPartyPower = 100,
+                            ObjectiveTextId = 2
                         },
-                        compatible_id = 36,
-                        member_num = 1,
+                        CompatibleId = 36,
+                        MemberNum = 1,
                     },
-                    cluster_name = "jp",
-                    is_friend = 0,
-                    quest_id = 204550501,
-                    room_name = "7942ce2a-c0ac-4e41-8472-0cf5918f3953"
+                    ClusterName = "jp",
+                    IsFriend = false,
+                    QuestId = 204550501,
+                    RoomName = "7942ce2a-c0ac-4e41-8472-0cf5918f3953"
                 }
             );
     }
@@ -300,54 +296,54 @@ public class MatchingTest : TestFixture
                 }
             );
 
-        MatchingGetRoomNameData data = (
-            await this.Client.PostMsgpack<MatchingGetRoomNameData>(
+        MatchingGetRoomNameResponse data = (
+            await this.Client.PostMsgpack<MatchingGetRoomNameResponse>(
                 $"{EndpointGroup}/get_room_name",
-                new MatchingGetRoomNameRequest() { room_id = 911948 }
+                new MatchingGetRoomNameRequest() { RoomId = 911948 }
             )
-        ).data;
+        ).Data;
 
         data.Should()
             .BeEquivalentTo(
-                new MatchingGetRoomNameData()
+                new MatchingGetRoomNameResponse()
                 {
-                    room_data = new()
+                    RoomData = new()
                     {
-                        room_id = 911948,
-                        room_name = "7942ce2a-c0ac-4e41-8472-0cf5918f3953",
-                        region = "jp",
-                        cluster_name = "jp",
-                        language = "en_us",
-                        status = RoomStatuses.Available,
-                        entry_type = 1,
-                        entry_guild_id = 0,
-                        host_viewer_id = 40000,
-                        host_name = "Euden",
-                        host_level = 1,
-                        leader_chara_id = Charas.ThePrince,
-                        leader_chara_rarity = 4,
-                        leader_chara_level = 1,
-                        quest_id = 204550501,
-                        quest_type = QuestTypes.Dungeon,
-                        room_member_list = new List<AtgenRoomMemberList>()
+                        RoomId = 911948,
+                        RoomName = "7942ce2a-c0ac-4e41-8472-0cf5918f3953",
+                        Region = "jp",
+                        ClusterName = "jp",
+                        Language = "en_us",
+                        Status = RoomStatuses.Available,
+                        EntryType = 1,
+                        EntryGuildId = 0,
+                        HostViewerId = 40000,
+                        HostName = "Euden",
+                        HostLevel = 1,
+                        LeaderCharaId = Charas.ThePrince,
+                        LeaderCharaRarity = 4,
+                        LeaderCharaLevel = 1,
+                        QuestId = 204550501,
+                        QuestType = QuestTypes.Dungeon,
+                        RoomMemberList = new List<AtgenRoomMemberList>()
                         {
-                            new() { viewer_id = 40000, }
+                            new() { ViewerId = 40000, }
                         },
-                        start_entry_time = DateTimeOffset.FromUnixTimeSeconds(1662160789),
-                        entry_conditions = new()
+                        StartEntryTime = DateTimeOffset.FromUnixTimeSeconds(1662160789),
+                        EntryConditions = new()
                         {
-                            unaccepted_element_type_list = new List<int>() { 1, 2, 3, 4, 5 },
-                            unaccepted_weapon_type_list = new List<int>() { 1, 2 },
-                            required_party_power = 100,
-                            objective_text_id = 2
+                            UnacceptedElementTypeList = new List<int>() { 1, 2, 3, 4, 5 },
+                            UnacceptedWeaponTypeList = new List<int>() { 1, 2 },
+                            RequiredPartyPower = 100,
+                            ObjectiveTextId = 2
                         },
-                        compatible_id = 36,
-                        member_num = 1,
+                        CompatibleId = 36,
+                        MemberNum = 1,
                     },
-                    cluster_name = "jp",
-                    is_friend = 0,
-                    quest_id = 204550501,
-                    room_name = "7942ce2a-c0ac-4e41-8472-0cf5918f3953"
+                    ClusterName = "jp",
+                    IsFriend = false,
+                    QuestId = 204550501,
+                    RoomName = "7942ce2a-c0ac-4e41-8472-0cf5918f3953"
                 }
             );
     }

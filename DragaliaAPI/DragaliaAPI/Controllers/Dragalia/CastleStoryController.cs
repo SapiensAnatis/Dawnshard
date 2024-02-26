@@ -27,31 +27,28 @@ public class CastleStoryController : DragaliaControllerBase
     public async Task<DragaliaResult> Read(CastleStoryReadRequest request)
     {
         if (
-            !await this.storyService.CheckStoryEligibility(
-                StoryTypes.Castle,
-                request.castle_story_id
-            )
+            !await this.storyService.CheckStoryEligibility(StoryTypes.Castle, request.CastleStoryId)
         )
         {
             this.logger.LogWarning(
                 "User was not eligible to read castle story {id}",
-                request.castle_story_id
+                request.CastleStoryId
             );
             return this.Code(ResultCode.StoryNotGet);
         }
 
         IEnumerable<AtgenBuildEventRewardEntityList> rewardList = await this.storyService.ReadStory(
             StoryTypes.Castle,
-            request.castle_story_id
+            request.CastleStoryId
         );
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return this.Ok(
-            new CastleStoryReadData()
+            new CastleStoryReadResponse()
             {
-                castle_story_reward_list = rewardList,
-                update_data_list = updateDataList
+                CastleStoryRewardList = rewardList,
+                UpdateDataList = updateDataList
             }
         );
     }

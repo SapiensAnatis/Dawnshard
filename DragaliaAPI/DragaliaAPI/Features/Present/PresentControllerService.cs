@@ -35,7 +35,7 @@ public class PresentControllerService(
             .ToListAsync();
 
         return list.Select(mapper.Map<DbPlayerPresentHistory, PresentHistoryList>)
-            .OrderByDescending(x => x.id);
+            .OrderByDescending(x => x.Id);
     }
 
     public async Task<IEnumerable<PresentDetailList>> GetPresentList(ulong presentId) =>
@@ -66,7 +66,7 @@ public class PresentControllerService(
 
         return (list)
             .Select(mapper.Map<DbPlayerPresent, PresentDetailList>)
-            .OrderBy(x => x.present_id);
+            .OrderBy(x => x.PresentId);
     }
 
     public async Task<ClaimPresentResult> ReceivePresent(IEnumerable<ulong> ids, bool isLimit)

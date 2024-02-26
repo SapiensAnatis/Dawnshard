@@ -9,8 +9,5 @@ public class AbilityCrestSetMapProfile : Profile
     public AbilityCrestSetMapProfile()
     {
         this.CreateMap<DbAbilityCrestSet, AbilityCrestSetList>();
-
-        this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
-        this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
     }
 }

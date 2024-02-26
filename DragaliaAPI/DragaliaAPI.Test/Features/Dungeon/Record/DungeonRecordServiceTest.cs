@@ -64,7 +64,7 @@ public class DungeonRecordServiceTest
                 Party = new List<PartySettingList>(),
                 StartTime = DateTimeOffset.UtcNow
             };
-        PlayRecord playRecord = new() { time = 10, };
+        PlayRecord playRecord = new() { Time = 10, };
 
         DbQuest mockQuest =
             new()
@@ -80,9 +80,9 @@ public class DungeonRecordServiceTest
             {
                 new()
                 {
-                    id = (int)Materials.FirestormRuby,
-                    quantity = 10,
-                    type = EntityTypes.Material
+                    Id = (int)Materials.FirestormRuby,
+                    Quantity = 10,
+                    Type = EntityTypes.Material
                 }
             };
 
@@ -91,9 +91,9 @@ public class DungeonRecordServiceTest
             {
                 new()
                 {
-                    id = (int)Materials.WoodlandHerbs,
-                    quantity = 20,
-                    type = EntityTypes.Material
+                    Id = (int)Materials.WoodlandHerbs,
+                    Quantity = 20,
+                    Type = EntityTypes.Material
                 }
             };
 
@@ -102,24 +102,24 @@ public class DungeonRecordServiceTest
             {
                 new()
                 {
-                    score_mission_complete_type = QuestCompleteType.LimitFall,
-                    score_target_value = 100,
+                    ScoreMissionCompleteType = QuestCompleteType.LimitFall,
+                    ScoreTargetValue = 100,
                 }
             };
 
         List<AtgenEventPassiveUpList> passiveUpLists =
             new()
             {
-                new() { passive_id = 1, progress = 2 }
+                new() { PassiveId = 1, Progress = 2 }
             };
 
         List<AtgenMissionsClearSet> missionsClearSets = new List<AtgenMissionsClearSet>()
         {
             new()
             {
-                type = EntityTypes.CollectEventItem,
-                id = 1,
-                quantity = 2
+                Type = EntityTypes.CollectEventItem,
+                Id = 1,
+                Quantity = 2
             }
         };
 
@@ -128,9 +128,9 @@ public class DungeonRecordServiceTest
             {
                 new()
                 {
-                    type = EntityTypes.ExchangeTicket,
-                    id = 2,
-                    quantity = 3
+                    Type = EntityTypes.ExchangeTicket,
+                    Id = 2,
+                    Quantity = 3
                 }
             };
 
@@ -139,9 +139,9 @@ public class DungeonRecordServiceTest
             {
                 new()
                 {
-                    type = EntityTypes.RaidEventItem,
-                    id = 4,
-                    quantity = 5
+                    Type = EntityTypes.RaidEventItem,
+                    Id = 4,
+                    Quantity = 5
                 }
             };
 
@@ -149,9 +149,9 @@ public class DungeonRecordServiceTest
         [
             new()
             {
-                scoring_enemy_id = 100,
-                point = 1,
-                smash_count = 2
+                ScoringEnemyId = 100,
+                Point = 1,
+                SmashCount = 2
             }
         ];
 
@@ -207,44 +207,44 @@ public class DungeonRecordServiceTest
             .BeEquivalentTo(
                 new IngameResultData()
                 {
-                    dungeon_key = "dungeonKey",
-                    play_type = QuestPlayType.Default,
-                    quest_id = lSurtrSoloId,
-                    is_host = true,
-                    quest_party_setting_list = session.Party,
-                    start_time = session.StartTime,
-                    end_time = DateTimeOffset.UtcNow,
-                    reborn_count = playRecord.reborn_count,
-                    total_play_damage = playRecord.total_play_damage,
-                    is_clear = true,
-                    current_play_count = 1,
-                    reward_record = new()
+                    DungeonKey = "dungeonKey",
+                    PlayType = QuestPlayType.Default,
+                    QuestId = lSurtrSoloId,
+                    IsHost = true,
+                    QuestPartySettingList = session.Party,
+                    StartTime = session.StartTime,
+                    EndTime = DateTimeOffset.UtcNow,
+                    RebornCount = playRecord.RebornCount,
+                    TotalPlayDamage = playRecord.TotalPlayDamage,
+                    IsClear = true,
+                    CurrentPlayCount = 1,
+                    RewardRecord = new()
                     {
-                        drop_all = dropList.Concat(eventDrops).ToList(),
-                        take_boost_accumulate_point = takeBoostAccumulatePoint,
-                        take_accumulate_point = takeAccumulatePoint,
-                        take_coin = takeCoin,
-                        take_astral_item_quantity = 0,
-                        player_level_up_fstone = 50,
-                        first_clear_set = firstClearSets,
-                        mission_complete = missionCompleteSets,
-                        missions_clear_set = missionsClearSets,
+                        DropAll = dropList.Concat(eventDrops).ToList(),
+                        TakeBoostAccumulatePoint = takeBoostAccumulatePoint,
+                        TakeAccumulatePoint = takeAccumulatePoint,
+                        TakeCoin = takeCoin,
+                        TakeAstralItemQuantity = 0,
+                        PlayerLevelUpFstone = 50,
+                        FirstClearSet = firstClearSets,
+                        MissionComplete = missionCompleteSets,
+                        MissionsClearSet = missionsClearSets,
                     },
-                    grow_record = new()
+                    GrowRecord = new()
                     {
-                        take_mana = takeMana,
-                        take_player_exp = 400,
-                        take_chara_exp = 0,
-                        bonus_factor = 1,
-                        mana_bonus_factor = 1,
-                        chara_grow_record = new List<AtgenCharaGrowRecord>()
+                        TakeMana = takeMana,
+                        TakePlayerExp = 400,
+                        TakeCharaExp = 0,
+                        BonusFactor = 1,
+                        ManaBonusFactor = 1,
+                        CharaGrowRecord = new List<AtgenCharaGrowRecord>()
                     },
-                    event_passive_up_list = passiveUpLists,
-                    score_mission_success_list = scoreMissionSuccessLists,
-                    scoring_enemy_point_list = enemyScoring,
-                    is_best_clear_time = true,
-                    clear_time = playRecord.time,
-                    converted_entity_list = new List<ConvertedEntityList>()
+                    EventPassiveUpList = passiveUpLists,
+                    ScoreMissionSuccessList = scoreMissionSuccessLists,
+                    ScoringEnemyPointList = enemyScoring,
+                    IsBestClearTime = true,
+                    ClearTime = playRecord.Time,
+                    ConvertedEntityList = new List<ConvertedEntityList>()
                 }
             );
 

@@ -40,15 +40,15 @@ public class QuestCompletionService(
             return (Enumerable.Empty<AtgenScoringEnemyPointList>(), 0);
 
         // Assume all invasion events are single-area
-        AtgenTreasureRecord treasureRecord = record.treasure_record.First();
+        AtgenTreasureRecord treasureRecord = record.TreasureRecord.First();
         IEnumerable<AtgenEnemy> enemyList = session.EnemyList.GetValueOrDefault(
-            treasureRecord.area_idx,
+            treasureRecord.AreaIdx,
             []
         );
 
         IEnumerable<(int EnemyParam, int Count)> killedParamIds = enemyList
-            .Zip(treasureRecord.enemy_smash)
-            .Select(x => (x.First.param_id, x.Second.count));
+            .Zip(treasureRecord.EnemySmash)
+            .Select(x => (param_id: x.First.ParamId, count: x.Second.Count));
 
         int totalPoints = 0;
         int totalEnemies = 0;
@@ -63,7 +63,7 @@ public class QuestCompletionService(
 
             if (!results.TryGetValue(questScoringEnemy.Id, out AtgenScoringEnemyPointList? value))
             {
-                value = new() { scoring_enemy_id = questScoringEnemy.Id, };
+                value = new() { ScoringEnemyId = questScoringEnemy.Id, };
                 results.Add(questScoringEnemy.Id, value);
             }
 
@@ -72,8 +72,8 @@ public class QuestCompletionService(
             totalPoints += pointsGained;
             totalEnemies += count;
 
-            value.point += pointsGained;
-            value.smash_count += count;
+            value.Point += pointsGained;
+            value.SmashCount += count;
         }
 
         int eventPointsId = int.Parse($"{session.QuestGid}01");
@@ -147,7 +147,7 @@ public class QuestCompletionService(
         int questScoreMissionId = MasterAsset.QuestRewardData[questId].QuestScoreMissionId;
         int baseQuantity = MasterAsset
             .QuestScoreMissionData[questScoreMissionId]
-            .GetScore(record.wave, session.QuestVariation);
+            .GetScore(record.Wave, session.QuestVariation);
 
         double obtainedAmount = baseQuantity * (multiplier / 100.0f);
         int rewardQuantity = (int)Math.Floor(obtainedAmount);
@@ -240,24 +240,24 @@ public class QuestCompletionService(
         return type switch
         {
             QuestCompleteType.None => false,
-            QuestCompleteType.LimitFall => record.down_count <= completionValue,
+            QuestCompleteType.LimitFall => record.DownCount <= completionValue,
             QuestCompleteType.DefeatAllEnemies
-                => record.treasure_record.All(x =>
-                    x.enemy == null
-                    || !session.EnemyList[x.area_idx].Select(y => y.enemy_idx).Except(x.enemy).Any()
+                => record.TreasureRecord.All(x =>
+                    x.Enemy == null
+                    || !session.EnemyList[x.AreaIdx].Select(y => y.EnemyIdx).Except(x.Enemy).Any()
                 ), // (Maybe)TODO
             QuestCompleteType.MaxTeamSize => party.Count() <= completionValue,
             QuestCompleteType.AdventurerElementRequired
                 => party.All(x =>
-                    MasterAsset.CharaData[x.chara_id].ElementalType == (UnitElement)completionValue
+                    MasterAsset.CharaData[x.CharaId].ElementalType == (UnitElement)completionValue
                 ),
             QuestCompleteType.AdventurerElementNeeded
                 => party.Any(x =>
-                    MasterAsset.CharaData[x.chara_id].ElementalType == (UnitElement)completionValue
+                    MasterAsset.CharaData[x.CharaId].ElementalType == (UnitElement)completionValue
                 ),
             QuestCompleteType.AdventurerElementLocked
                 => party.All(x =>
-                    MasterAsset.CharaData[x.chara_id].ElementalType != (UnitElement)completionValue
+                    MasterAsset.CharaData[x.CharaId].ElementalType != (UnitElement)completionValue
                 ),
             QuestCompleteType.DragonElementRequired
                 => await IsDragonConditionMet(type, completionValue, party),
@@ -266,45 +266,45 @@ public class QuestCompletionService(
             QuestCompleteType.DragonElementLocked
                 => await IsDragonConditionMet(type, completionValue, party),
             QuestCompleteType.WeaponRequired
-                => party.All(x => x.equip_weapon_body_id == (WeaponBodies)completionValue),
-            QuestCompleteType.MaxTraps => record.trap_count <= completionValue,
-            QuestCompleteType.MaxAfflicted => record.bad_status <= completionValue,
+                => party.All(x => x.EquipWeaponBodyId == (WeaponBodies)completionValue),
+            QuestCompleteType.MaxTraps => record.TrapCount <= completionValue,
+            QuestCompleteType.MaxAfflicted => record.BadStatus <= completionValue,
             QuestCompleteType.TreasureChestCount
-                => record.treasure_record.Count() >= completionValue,
+                => record.TreasureRecord.Count() >= completionValue,
             QuestCompleteType.AllTreasureChestsOpened => true, // TODO
-            QuestCompleteType.NoContinues => record.play_continue_count == 0,
+            QuestCompleteType.NoContinues => record.PlayContinueCount == 0,
             QuestCompleteType.AdventurerRequired
-                => party.Any(x => x.chara_id == (Charas)completionValue),
+                => party.Any(x => x.CharaId == (Charas)completionValue),
             QuestCompleteType.AllEnemyParts => true, // TODO
-            QuestCompleteType.MaxTime => record.time < completionValue,
-            QuestCompleteType.MaxDamageTimes => record.damage_count <= completionValue,
-            QuestCompleteType.MinShapeshift => record.dragon_transform_count >= completionValue,
+            QuestCompleteType.MaxTime => record.Time < completionValue,
+            QuestCompleteType.MaxDamageTimes => record.DamageCount <= completionValue,
+            QuestCompleteType.MinShapeshift => record.DragonTransformCount >= completionValue,
             QuestCompleteType.DefeatImperialCommander
-                => record.treasure_record.Any(x =>
-                    x.enemy.Any(y =>
+                => record.TreasureRecord.Any(x =>
+                    x.Enemy.Any(y =>
                         y == 500200001 /* Imperial Commander */
                     )
                 ),
             QuestCompleteType.DefeatMinBandits
-                => record.treasure_record.Sum(x =>
-                    x.enemy.Count(y =>
+                => record.TreasureRecord.Sum(x =>
+                    x.Enemy.Count(y =>
                         y == 500210001 /* Bandit */
                     )
                 ) >= completionValue,
             QuestCompleteType.DefeatShadowKnight
-                => record.treasure_record.Any(x =>
-                    x.enemy.Any(y =>
+                => record.TreasureRecord.Any(x =>
+                    x.Enemy.Any(y =>
                         y == 500170001 /* Shadow Knight */
                     )
                 ),
-            QuestCompleteType.SaveMinHouses => record.visit_private_house >= completionValue,
-            QuestCompleteType.MinGateHp => record.protection_damage >= completionValue,
-            QuestCompleteType.MinTimeRemaining => record.remaining_time >= completionValue,
+            QuestCompleteType.SaveMinHouses => record.VisitPrivateHouse >= completionValue,
+            QuestCompleteType.MinGateHp => record.ProtectionDamage >= completionValue,
+            QuestCompleteType.MinTimeRemaining => record.RemainingTime >= completionValue,
             QuestCompleteType.MinDrawbridgesLowered
-                => record.lower_drawbridge_count >= completionValue,
+                => record.LowerDrawbridgeCount >= completionValue,
             QuestCompleteType.FireEmblemAdventurerNeeded
                 => party.Any(x =>
-                    x.chara_id
+                    x.CharaId
                         is Charas.Alfonse
                             or Charas.Veronica
                             or Charas.Fjorm
@@ -315,16 +315,16 @@ public class QuestCompletionService(
                             or Charas.Chrom
                 ),
             QuestCompleteType.MinStarsAdventurerNeeded
-                => party.Any(x => MasterAsset.CharaData[x.chara_id].Rarity == completionValue),
+                => party.Any(x => MasterAsset.CharaData[x.CharaId].Rarity == completionValue),
             QuestCompleteType.MinAdventurersWithSameWeapon
                 => party
-                    .ToLookup(x => MasterAsset.CharaData[x.chara_id].WeaponType)
+                    .ToLookup(x => MasterAsset.CharaData[x.CharaId].WeaponType)
                     .Any(x => x.Count() >= completionValue),
-            QuestCompleteType.MaxShapeshift => record.dragon_transform_count <= completionValue,
-            QuestCompleteType.NoRevives => record.reborn_count == 0,
+            QuestCompleteType.MaxShapeshift => record.DragonTransformCount <= completionValue,
+            QuestCompleteType.NoRevives => record.RebornCount == 0,
             QuestCompleteType.DefeatFormaChrom
-                => record.treasure_record.Any(x =>
-                    x.enemy.Any(y =>
+                => record.TreasureRecord.Any(x =>
+                    x.Enemy.Any(y =>
                         y == 601500002 /* Forma Chrom */
                     )
                 ),
@@ -342,7 +342,7 @@ public class QuestCompletionService(
         IEnumerable<PartySettingList> party
     )
     {
-        IEnumerable<long> dragonKeyIds = party.Select(x => (long)x.equip_dragon_key_id).ToList();
+        IEnumerable<long> dragonKeyIds = party.Select(x => (long)x.EquipDragonKeyId).ToList();
 
         IEnumerable<Dragons> dragons = await unitRepository
             .Dragons.Where(x => dragonKeyIds.Contains(x.DragonKeyId))

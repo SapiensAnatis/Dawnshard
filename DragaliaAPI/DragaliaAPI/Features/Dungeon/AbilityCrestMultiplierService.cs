@@ -47,7 +47,7 @@ public class AbilityCrestMultiplierService(
 
             logger.LogTrace(
                 "Unit {unitNo} build event point abilities: {@abilities}",
-                partyUnit.unit_no,
+                partyUnit.UnitNo,
                 buildPointAbilities
             );
 
@@ -61,7 +61,7 @@ public class AbilityCrestMultiplierService(
 
             logger.LogTrace(
                 "Unit {unitNo} build event material abilities: {@abilities}",
-                partyUnit.unit_no,
+                partyUnit.UnitNo,
                 buildPointAbilities
             );
 

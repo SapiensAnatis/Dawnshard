@@ -33,8 +33,8 @@ public class StampService : IStampService
         return Task.FromResult(
             MasterAsset.StampData.Enumerable.Select(x => new StampList()
             {
-                stamp_id = x.Id,
-                is_new = false
+                StampId = x.Id,
+                IsNew = false
             })
         );
     }

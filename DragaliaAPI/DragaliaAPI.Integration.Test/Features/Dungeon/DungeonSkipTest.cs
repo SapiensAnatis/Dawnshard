@@ -33,44 +33,44 @@ public class DungeonSkipTest : TestFixture
             .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
-        DragaliaResponse<DungeonSkipStartData> response =
-            await this.Client.PostMsgpack<DungeonSkipStartData>(
+        DragaliaResponse<DungeonSkipStartResponse> response =
+            await this.Client.PostMsgpack<DungeonSkipStartResponse>(
                 $"{Endpoint}/start",
                 new DungeonSkipStartRequest()
                 {
-                    party_no = 1,
-                    play_count = playCount,
-                    support_viewer_id = 1000,
-                    quest_id = questId
+                    PartyNo = 1,
+                    PlayCount = playCount,
+                    SupportViewerId = 1000,
+                    QuestId = questId
                 }
             );
 
-        response.data.ingame_result_data.reward_record.drop_all.Should().NotBeEmpty();
-        response.data.ingame_result_data.reward_record.take_coin.Should().NotBe(0);
+        response.Data.IngameResultData.RewardRecord.DropAll.Should().NotBeEmpty();
+        response.Data.IngameResultData.RewardRecord.TakeCoin.Should().NotBe(0);
 
-        response.data.ingame_result_data.grow_record.take_mana.Should().NotBe(0);
+        response.Data.IngameResultData.GrowRecord.TakeMana.Should().NotBe(0);
         response
-            .data.ingame_result_data.grow_record.take_player_exp.Should()
+            .Data.IngameResultData.GrowRecord.TakePlayerExp.Should()
             .Be(staminaCost * 10 * playCount);
 
         response
-            .data.ingame_result_data.quest_party_setting_list.Should()
-            .Contain(x => x.chara_id == Shared.Definitions.Enums.Charas.ThePrince);
+            .Data.IngameResultData.QuestPartySettingList.Should()
+            .Contain(x => x.CharaId == Shared.Definitions.Enums.Charas.ThePrince);
         response
-            .data.ingame_result_data.helper_list.Should()
-            .Contain(x => x.name == "dreadfullydistinct");
+            .Data.IngameResultData.HelperList.Should()
+            .Contain(x => x.Name == "dreadfullydistinct");
 
         response
-            .data.update_data_list.quest_list.Should()
-            .Contain(x => x.quest_id == questId && x.play_count == playCount);
+            .Data.UpdateDataList.QuestList.Should()
+            .Contain(x => x.QuestId == questId && x.PlayCount == playCount);
         response
-            .data.update_data_list.user_data.stamina_single.Should()
+            .Data.UpdateDataList.UserData.StaminaSingle.Should()
             .Be(oldUserData.StaminaSingle - (staminaCost * playCount));
         response
-            .data.update_data_list.user_data.exp.Should()
+            .Data.UpdateDataList.UserData.Exp.Should()
             .Be(oldUserData.Exp + (staminaCost * 10 * playCount));
         response
-            .data.update_data_list.user_data.quest_skip_point.Should()
+            .Data.UpdateDataList.UserData.QuestSkipPoint.Should()
             .Be(oldUserData.QuestSkipPoint - playCount);
     }
 
@@ -94,47 +94,47 @@ public class DungeonSkipTest : TestFixture
             .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
-        DragaliaResponse<DungeonSkipStartAssignUnitData> response =
-            await this.Client.PostMsgpack<DungeonSkipStartAssignUnitData>(
+        DragaliaResponse<DungeonSkipStartAssignUnitResponse> response =
+            await this.Client.PostMsgpack<DungeonSkipStartAssignUnitResponse>(
                 $"{Endpoint}/start_assign_unit",
                 new DungeonSkipStartAssignUnitRequest()
                 {
-                    play_count = playCount,
-                    support_viewer_id = 1000,
-                    quest_id = questId,
-                    request_party_setting_list = new List<PartySettingList>()
+                    PlayCount = playCount,
+                    SupportViewerId = 1000,
+                    QuestId = questId,
+                    RequestPartySettingList = new List<PartySettingList>()
                     {
-                        new() { chara_id = Shared.Definitions.Enums.Charas.ThePrince, }
+                        new() { CharaId = Shared.Definitions.Enums.Charas.ThePrince, }
                     }
                 }
             );
 
-        response.data.ingame_result_data.reward_record.drop_all.Should().NotBeEmpty();
-        response.data.ingame_result_data.reward_record.take_coin.Should().NotBe(0);
+        response.Data.IngameResultData.RewardRecord.DropAll.Should().NotBeEmpty();
+        response.Data.IngameResultData.RewardRecord.TakeCoin.Should().NotBe(0);
 
-        response.data.ingame_result_data.grow_record.take_mana.Should().NotBe(0);
+        response.Data.IngameResultData.GrowRecord.TakeMana.Should().NotBe(0);
         response
-            .data.ingame_result_data.grow_record.take_player_exp.Should()
+            .Data.IngameResultData.GrowRecord.TakePlayerExp.Should()
             .Be(staminaCost * 10 * playCount);
 
         response
-            .data.ingame_result_data.quest_party_setting_list.Should()
-            .Contain(x => x.chara_id == Shared.Definitions.Enums.Charas.ThePrince);
+            .Data.IngameResultData.QuestPartySettingList.Should()
+            .Contain(x => x.CharaId == Shared.Definitions.Enums.Charas.ThePrince);
         response
-            .data.ingame_result_data.helper_list.Should()
-            .Contain(x => x.name == "dreadfullydistinct");
+            .Data.IngameResultData.HelperList.Should()
+            .Contain(x => x.Name == "dreadfullydistinct");
 
         response
-            .data.update_data_list.quest_list.Should()
-            .Contain(x => x.quest_id == questId && x.play_count == playCount);
+            .Data.UpdateDataList.QuestList.Should()
+            .Contain(x => x.QuestId == questId && x.PlayCount == playCount);
         response
-            .data.update_data_list.user_data.stamina_single.Should()
+            .Data.UpdateDataList.UserData.StaminaSingle.Should()
             .Be(oldUserData.StaminaSingle - (staminaCost * playCount));
         response
-            .data.update_data_list.user_data.exp.Should()
+            .Data.UpdateDataList.UserData.Exp.Should()
             .Be(oldUserData.Exp + (staminaCost * 10 * playCount));
         response
-            .data.update_data_list.user_data.quest_skip_point.Should()
+            .Data.UpdateDataList.UserData.QuestSkipPoint.Should()
             .Be(oldUserData.QuestSkipPoint - playCount);
     }
 
@@ -153,39 +153,39 @@ public class DungeonSkipTest : TestFixture
             .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
-        DragaliaResponse<DungeonSkipStartMultipleQuestData> response =
-            await this.Client.PostMsgpack<DungeonSkipStartMultipleQuestData>(
+        DragaliaResponse<DungeonSkipStartMultipleQuestResponse> response =
+            await this.Client.PostMsgpack<DungeonSkipStartMultipleQuestResponse>(
                 $"{Endpoint}/start_multiple_quest",
                 new DungeonSkipStartMultipleQuestRequest()
                 {
-                    support_viewer_id = 1000,
-                    party_no = 1,
-                    request_quest_multiple_list = new List<AtgenRequestQuestMultipleList>
+                    SupportViewerId = 1000,
+                    PartyNo = 1,
+                    RequestQuestMultipleList = new List<AtgenRequestQuestMultipleList>
                     {
-                        new() { quest_id = atpMaster, play_count = 1, },
-                        new() { quest_id = flameRuinsExpert, play_count = 1, },
-                        new() { quest_id = atfMaster, play_count = 1, },
-                        new() { quest_id = brunhildaMaster, play_count = 1, },
-                        new() { quest_id = flameIoStandard, play_count = 1, },
+                        new() { QuestId = atpMaster, PlayCount = 1, },
+                        new() { QuestId = flameRuinsExpert, PlayCount = 1, },
+                        new() { QuestId = atfMaster, PlayCount = 1, },
+                        new() { QuestId = brunhildaMaster, PlayCount = 1, },
+                        new() { QuestId = flameIoStandard, PlayCount = 1, },
                     }
                 }
             );
 
-        response.data.ingame_result_data.reward_record.drop_all.Should().NotBeEmpty();
-        response.data.ingame_result_data.reward_record.take_coin.Should().NotBe(0);
+        response.Data.IngameResultData.RewardRecord.DropAll.Should().NotBeEmpty();
+        response.Data.IngameResultData.RewardRecord.TakeCoin.Should().NotBe(0);
 
-        response.data.ingame_result_data.grow_record.take_mana.Should().NotBe(0);
-        response.data.ingame_result_data.grow_record.take_player_exp.Should().Be(totalStamina * 10);
-
-        response
-            .data.ingame_result_data.quest_party_setting_list.Should()
-            .Contain(x => x.chara_id == Shared.Definitions.Enums.Charas.ThePrince);
-        response
-            .data.ingame_result_data.helper_list.Should()
-            .Contain(x => x.name == "dreadfullydistinct");
+        response.Data.IngameResultData.GrowRecord.TakeMana.Should().NotBe(0);
+        response.Data.IngameResultData.GrowRecord.TakePlayerExp.Should().Be(totalStamina * 10);
 
         response
-            .data.update_data_list.quest_list.Select(x => x.quest_id)
+            .Data.IngameResultData.QuestPartySettingList.Should()
+            .Contain(x => x.CharaId == Shared.Definitions.Enums.Charas.ThePrince);
+        response
+            .Data.IngameResultData.HelperList.Should()
+            .Contain(x => x.Name == "dreadfullydistinct");
+
+        response
+            .Data.UpdateDataList.QuestList.Select(x => x.QuestId)
             .Should()
             .BeEquivalentTo(
                 new List<int>()
@@ -197,18 +197,16 @@ public class DungeonSkipTest : TestFixture
                     flameIoStandard
                 }
             );
-        response
-            .data.update_data_list.quest_list.Should()
-            .AllSatisfy(x => x.play_count.Should().Be(1));
+        response.Data.UpdateDataList.QuestList.Should().AllSatisfy(x => x.PlayCount.Should().Be(1));
 
         response
-            .data.update_data_list.user_data.stamina_single.Should()
+            .Data.UpdateDataList.UserData.StaminaSingle.Should()
             .Be(oldUserData.StaminaSingle - totalStamina);
         response
-            .data.update_data_list.user_data.exp.Should()
+            .Data.UpdateDataList.UserData.Exp.Should()
             .Be(oldUserData.Exp + (totalStamina * 10));
         response
-            .data.update_data_list.user_data.quest_skip_point.Should()
+            .Data.UpdateDataList.UserData.QuestSkipPoint.Should()
             .Be(oldUserData.QuestSkipPoint - 5);
     }
 
@@ -237,33 +235,33 @@ public class DungeonSkipTest : TestFixture
             .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
-        DragaliaResponse<DungeonSkipStartData> response =
-            await this.Client.PostMsgpack<DungeonSkipStartData>(
+        DragaliaResponse<DungeonSkipStartResponse> response =
+            await this.Client.PostMsgpack<DungeonSkipStartResponse>(
                 $"{Endpoint}/start",
                 new DungeonSkipStartRequest()
                 {
-                    party_no = 1,
-                    play_count = playCount,
-                    support_viewer_id = 1000,
-                    quest_id = questId
+                    PartyNo = 1,
+                    PlayCount = playCount,
+                    SupportViewerId = 1000,
+                    QuestId = questId
                 }
             );
 
         response
-            .data.update_data_list.quest_event_list.Should()
+            .Data.UpdateDataList.QuestEventList.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
-                    quest_event_id = questEventId,
-                    weekly_play_count = playCount + 2,
-                    daily_play_count = playCount,
-                    last_daily_reset_time = resetTime,
-                    last_weekly_reset_time = resetTime,
-                    quest_bonus_receive_count = 2,
-                    quest_bonus_reserve_count = 3,
-                    quest_bonus_reserve_time = response.data.ingame_result_data.end_time,
-                    quest_bonus_stack_count = 0,
-                    quest_bonus_stack_time = DateTimeOffset.UnixEpoch
+                    QuestEventId = questEventId,
+                    WeeklyPlayCount = playCount + 2,
+                    DailyPlayCount = playCount,
+                    LastDailyResetTime = resetTime,
+                    LastWeeklyResetTime = resetTime,
+                    QuestBonusReceiveCount = 2,
+                    QuestBonusReserveCount = 3,
+                    QuestBonusReserveTime = response.Data.IngameResultData.EndTime,
+                    QuestBonusStackCount = 0,
+                    QuestBonusStackTime = DateTimeOffset.UnixEpoch
                 }
             );
     }

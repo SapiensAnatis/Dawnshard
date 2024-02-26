@@ -10,7 +10,7 @@ public class CombatEventTest : TestFixture
         : base(factory, outputHelper) { }
 
     protected override async Task Setup() =>
-        await this.Client.PostMsgpack<MemoryEventActivateData>(
+        await this.Client.PostMsgpack<MemoryEventActivateResponse>(
             "memory_event/activate",
             new MemoryEventActivateRequest(EventId)
         );
@@ -21,16 +21,16 @@ public class CombatEventTest : TestFixture
     [Fact]
     public async Task GetEventData_ReturnsEventData()
     {
-        DragaliaResponse<CombatEventGetEventDataData> evtData =
-            await Client.PostMsgpack<CombatEventGetEventDataData>(
+        DragaliaResponse<CombatEventGetEventDataResponse> evtData =
+            await Client.PostMsgpack<CombatEventGetEventDataResponse>(
                 $"{Prefix}/get_event_data",
                 new CombatEventGetEventDataRequest(EventId)
             );
 
-        evtData.data.combat_event_user_data.Should().NotBeNull();
-        evtData.data.user_event_location_reward_list.Should().NotBeNull();
-        evtData.data.event_reward_list.Should().NotBeNull();
-        evtData.data.event_trade_list.Should().NotBeNull();
+        evtData.Data.CombatEventUserData.Should().NotBeNull();
+        evtData.Data.UserEventLocationRewardList.Should().NotBeNull();
+        evtData.Data.EventRewardList.Should().NotBeNull();
+        evtData.Data.EventTradeList.Should().NotBeNull();
     }
 
     [Fact]
@@ -50,17 +50,17 @@ public class CombatEventTest : TestFixture
 
         await ApiContext.SaveChangesAsync();
 
-        DragaliaResponse<CombatEventReceiveEventPointRewardData> evtResp =
-            await Client.PostMsgpack<CombatEventReceiveEventPointRewardData>(
+        DragaliaResponse<CombatEventReceiveEventPointRewardResponse> evtResp =
+            await Client.PostMsgpack<CombatEventReceiveEventPointRewardResponse>(
                 $"{Prefix}/receive_event_point_reward",
                 new CombatEventReceiveEventPointRewardRequest(EventId)
             );
 
-        evtResp.data.event_reward_entity_list.Should().HaveCount(1);
-        evtResp.data.event_reward_list.Should().HaveCount(1);
-        evtResp.data.entity_result.Should().NotBeNull();
-        evtResp.data.update_data_list.Should().NotBeNull();
-        evtResp.data.update_data_list.combat_event_user_list.Should().HaveCount(1); // Reward is event item so we check this
+        evtResp.Data.EventRewardEntityList.Should().HaveCount(1);
+        evtResp.Data.EventRewardList.Should().HaveCount(1);
+        evtResp.Data.EntityResult.Should().NotBeNull();
+        evtResp.Data.UpdateDataList.Should().NotBeNull();
+        evtResp.Data.UpdateDataList.CombatEventUserList.Should().HaveCount(1); // Reward is event item so we check this
     }
 
     [Fact]
@@ -89,14 +89,14 @@ public class CombatEventTest : TestFixture
 
         await ApiContext.SaveChangesAsync();
 
-        DragaliaResponse<CombatEventReceiveEventLocationRewardData> evtResp =
-            await Client.PostMsgpack<CombatEventReceiveEventLocationRewardData>(
+        DragaliaResponse<CombatEventReceiveEventLocationRewardResponse> evtResp =
+            await Client.PostMsgpack<CombatEventReceiveEventLocationRewardResponse>(
                 $"{Prefix}/receive_event_location_reward",
                 new CombatEventReceiveEventLocationRewardRequest(EventId, 2221302)
             );
 
-        evtResp.data.event_location_reward_entity_list.Should().HaveCount(9);
-        evtResp.data.user_event_location_reward_list.Should().HaveCount(1);
-        evtResp.data.update_data_list.Should().NotBeNull();
+        evtResp.Data.EventLocationRewardEntityList.Should().HaveCount(9);
+        evtResp.Data.UserEventLocationRewardList.Should().HaveCount(1);
+        evtResp.Data.UpdateDataList.Should().NotBeNull();
     }
 }

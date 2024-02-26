@@ -140,7 +140,7 @@ public class StoryServiceTest
             .BeEquivalentTo(
                 new List<AtgenBuildEventRewardEntityList>()
                 {
-                    new() { entity_type = EntityTypes.Wyrmite, entity_quantity = expectedWyrmite }
+                    new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = expectedWyrmite }
                 }
             );
 
@@ -191,12 +191,12 @@ public class StoryServiceTest
             .BeEquivalentTo(
                 new List<AtgenBuildEventRewardEntityList>()
                 {
-                    new() { entity_type = EntityTypes.Wyrmite, entity_quantity = 10 },
+                    new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = 10 },
                     new()
                     {
-                        entity_type = EntityTypes.Title,
-                        entity_id = expectedEmblemId,
-                        entity_quantity = 1
+                        EntityType = EntityTypes.Title,
+                        EntityId = expectedEmblemId,
+                        EntityQuantity = 1
                     }
                 }
             );
@@ -240,12 +240,12 @@ public class StoryServiceTest
             .BeEquivalentTo(
                 new List<AtgenBuildEventRewardEntityList>()
                 {
-                    new() { entity_type = EntityTypes.Wyrmite, entity_quantity = 25 },
+                    new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = 25 },
                     new()
                     {
-                        entity_type = EntityTypes.Dragon,
-                        entity_id = (int)Dragons.Brunhilda,
-                        entity_quantity = 1,
+                        EntityType = EntityTypes.Dragon,
+                        EntityId = (int)Dragons.Brunhilda,
+                        EntityQuantity = 1,
                     }
                 }
             );
@@ -310,7 +310,7 @@ public class StoryServiceTest
             .BeEquivalentTo(
                 new List<AtgenBuildEventRewardEntityList>()
                 {
-                    new() { entity_type = EntityTypes.Wyrmite, entity_quantity = 50 }
+                    new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = 50 }
                 }
             );
 
@@ -338,12 +338,12 @@ public class StoryServiceTest
             .BeEquivalentTo(
                 new List<AtgenBuildEventRewardEntityList>()
                 {
-                    new() { entity_type = EntityTypes.Wyrmite, entity_quantity = 25 },
+                    new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = 25 },
                     new()
                     {
-                        entity_type = EntityTypes.FortPlant,
-                        entity_id = (int)FortPlants.WindDracolith,
-                        entity_quantity = 1,
+                        EntityType = EntityTypes.FortPlant,
+                        EntityId = (int)FortPlants.WindDracolith,
+                        EntityQuantity = 1,
                     }
                 }
             );
@@ -379,12 +379,12 @@ public class StoryServiceTest
             .BeEquivalentTo(
                 new List<AtgenBuildEventRewardEntityList>()
                 {
-                    new() { entity_type = EntityTypes.Wyrmite, entity_quantity = 25 },
+                    new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = 25 },
                     new()
                     {
-                        entity_type = EntityTypes.Chara,
-                        entity_id = (int)Charas.Audric,
-                        entity_quantity = 1,
+                        EntityType = EntityTypes.Chara,
+                        EntityId = (int)Charas.Audric,
+                        EntityQuantity = 1,
                     }
                 }
             );

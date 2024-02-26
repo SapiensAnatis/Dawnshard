@@ -42,21 +42,21 @@ public class BonusService(
 
         return new()
         {
-            param_bonus = GetFortParamBonus(buildIds),
-            element_bonus = GetFortElementBonus(buildIds),
-            dragon_bonus = GetFortDragonBonus(buildIds),
-            param_bonus_by_weapon = GetWeaponParamBonus(weaponIds),
+            ParamBonus = GetFortParamBonus(buildIds),
+            ElementBonus = GetFortElementBonus(buildIds),
+            DragonBonus = GetFortDragonBonus(buildIds),
+            ParamBonusByWeapon = GetWeaponParamBonus(weaponIds),
             // TODO: Implement these bonuses
-            chara_bonus_by_album = StubData.MaxAlbumCharaBonus,
-            dragon_bonus_by_album = StubData.MaxAlbumDragonBonus,
+            CharaBonusByAlbum = StubData.MaxAlbumCharaBonus,
+            DragonBonusByAlbum = StubData.MaxAlbumDragonBonus,
             // These are all 0 on my endgame save. Unsure of what, if anything, may increase them
-            dragon_time_bonus = new()
+            DragonTimeBonus = new()
             {
 #if CHEATING
                 dragon_time_bonus = 20
 #endif
             },
-            all_bonus = new()
+            AllBonus = new()
             {
 #if CHEATING
                 attack = 100,
@@ -92,8 +92,8 @@ public class BonusService(
 
         return new AtgenEventBoost()
         {
-            event_effect = detail.EventEffectType,
-            effect_value = detail.EventEffectArgs
+            EventEffect = detail.EventEffectType,
+            EffectValue = detail.EventEffectArgs
         };
     }
 
@@ -102,11 +102,11 @@ public class BonusService(
         IDictionary<UnitElement, AtgenElementBonus> result = Enum.GetValues<UnitElement>()
             .Select(x => new AtgenElementBonus()
             {
-                elemental_type = x,
-                hp = 0,
-                attack = 0
+                ElementalType = x,
+                Hp = 0,
+                Attack = 0
             })
-            .ToDictionary(x => x.elemental_type, x => x);
+            .ToDictionary(x => x.ElementalType, x => x);
 
         foreach (int id in buildIds)
         {
@@ -115,16 +115,16 @@ public class BonusService(
             if (d.EffectId != FortEffectTypes.Element)
                 continue;
 
-            result[(UnitElement)d.EffType1].hp += d.EffArgs1;
-            result[(UnitElement)d.EffType1].attack += d.EffArgs2;
+            result[(UnitElement)d.EffType1].Hp += d.EffArgs1;
+            result[(UnitElement)d.EffType1].Attack += d.EffArgs2;
 #if CHEATING
             result[(UnitElement)d.EffType1].attack += 100;
 #endif
 
             if (d.EffType2 != 0)
             {
-                result[(UnitElement)d.EffType2].hp += d.EffArgs1;
-                result[(UnitElement)d.EffType2].attack += d.EffArgs2;
+                result[(UnitElement)d.EffType2].Hp += d.EffArgs1;
+                result[(UnitElement)d.EffType2].Attack += d.EffArgs2;
 
 #if CHEATING
                 result[(UnitElement)d.EffType2].attack += 100;
@@ -140,11 +140,11 @@ public class BonusService(
         IDictionary<WeaponTypes, AtgenParamBonus> result = Enum.GetValues<WeaponTypes>()
             .Select(x => new AtgenParamBonus()
             {
-                weapon_type = x,
-                hp = 0,
-                attack = 0
+                WeaponType = x,
+                Hp = 0,
+                Attack = 0
             })
-            .ToDictionary(x => x.weapon_type, x => x);
+            .ToDictionary(x => x.WeaponType, x => x);
 
         foreach (int id in buildIds)
         {
@@ -153,16 +153,16 @@ public class BonusService(
             if (d.EffectId != FortEffectTypes.Weapon)
                 continue;
 
-            result[(WeaponTypes)d.EffType1].hp += d.EffArgs1;
-            result[(WeaponTypes)d.EffType1].attack += d.EffArgs2;
+            result[(WeaponTypes)d.EffType1].Hp += d.EffArgs1;
+            result[(WeaponTypes)d.EffType1].Attack += d.EffArgs2;
 #if CHEATING
             result[(WeaponTypes)d.EffType1].attack += 100;
 #endif
 
             if (d.EffType2 != 0)
             {
-                result[(WeaponTypes)d.EffType2].hp += d.EffArgs1;
-                result[(WeaponTypes)d.EffType2].attack += d.EffArgs2;
+                result[(WeaponTypes)d.EffType2].Hp += d.EffArgs1;
+                result[(WeaponTypes)d.EffType2].Attack += d.EffArgs2;
 #if CHEATING
                 result[(WeaponTypes)d.EffType2].attack += 100;
 #endif
@@ -177,12 +177,12 @@ public class BonusService(
         IDictionary<UnitElement, AtgenDragonBonus> result = Enum.GetValues<UnitElement>()
             .Select(x => new AtgenDragonBonus()
             {
-                elemental_type = x,
-                hp = 0,
-                attack = 0,
-                dragon_bonus = 0,
+                ElementalType = x,
+                Hp = 0,
+                Attack = 0,
+                DragonBonus = 0,
             })
-            .ToDictionary(x => x.elemental_type, x => x);
+            .ToDictionary(x => x.ElementalType, x => x);
 
         foreach (int id in buildIds)
         {
@@ -190,16 +190,16 @@ public class BonusService(
 
             if (d.EffectId == FortEffectTypes.DragonStats)
             {
-                result[(UnitElement)d.EffType1].hp += d.EffArgs1;
-                result[(UnitElement)d.EffType1].attack += d.EffArgs2;
+                result[(UnitElement)d.EffType1].Hp += d.EffArgs1;
+                result[(UnitElement)d.EffType1].Attack += d.EffArgs2;
 #if CHEATING
                 result[(UnitElement)d.EffType1].attack += 100;
 #endif
 
                 if (d.EffType2 != 0)
                 {
-                    result[(UnitElement)d.EffType2].hp += d.EffArgs1;
-                    result[(UnitElement)d.EffType2].attack += d.EffArgs2;
+                    result[(UnitElement)d.EffType2].Hp += d.EffArgs1;
+                    result[(UnitElement)d.EffType2].Attack += d.EffArgs2;
 #if CHEATING
                     result[(UnitElement)d.EffType2].attack += 100;
 #endif
@@ -207,7 +207,7 @@ public class BonusService(
             }
             else if (d.EffectId == FortEffectTypes.DragonDamage)
             {
-                result[(UnitElement)d.EffType1].dragon_bonus += d.EffArgs1;
+                result[(UnitElement)d.EffType1].DragonBonus += d.EffArgs1;
 #if CHEATING
                 result[(UnitElement)d.EffType1].dragon_bonus += 100;
 #endif
@@ -225,18 +225,18 @@ public class BonusService(
         IDictionary<WeaponTypes, AtgenParamBonus> result = Enum.GetValues<WeaponTypes>()
             .Select(x => new AtgenParamBonus()
             {
-                weapon_type = x,
-                hp = 0,
-                attack = 0
+                WeaponType = x,
+                Hp = 0,
+                Attack = 0
             })
-            .ToDictionary(x => x.weapon_type, x => x);
+            .ToDictionary(x => x.WeaponType, x => x);
 
         foreach (WeaponBodies id in weaponBodyIds)
         {
             WeaponBody w = MasterAsset.WeaponBody.Get(id);
 
-            result[w.WeaponType].hp += w.WeaponPassiveEffHp;
-            result[w.WeaponType].attack += w.WeaponPassiveEffAtk;
+            result[w.WeaponType].Hp += w.WeaponPassiveEffHp;
+            result[w.WeaponType].Attack += w.WeaponPassiveEffAtk;
 #if CHEATING
             result[w.WeaponType].attack += 100;
 #endif
@@ -254,13 +254,13 @@ public class BonusService(
                 {
                     new()
                     {
-                        elemental_type = UnitElement.Fire,
-                        hp = 14.1f
+                        ElementalType = UnitElement.Fire,
+                        Hp = 14.1f
 #if CHEATING
                             * 100
 #endif
                         ,
-                        attack = 14.1f
+                        Attack = 14.1f
 #if CHEATING
                             * 100
 #endif
@@ -268,27 +268,27 @@ public class BonusService(
                     },
                     new()
                     {
-                        elemental_type = UnitElement.Water,
-                        hp = 13.8f,
-                        attack = 13.8f
+                        ElementalType = UnitElement.Water,
+                        Hp = 13.8f,
+                        Attack = 13.8f
                     },
                     new()
                     {
-                        elemental_type = UnitElement.Wind,
-                        hp = 13.9f,
-                        attack = 13.9f
+                        ElementalType = UnitElement.Wind,
+                        Hp = 13.9f,
+                        Attack = 13.9f
                     },
                     new()
                     {
-                        elemental_type = UnitElement.Light,
-                        hp = 14.5f,
-                        attack = 14.5f
+                        ElementalType = UnitElement.Light,
+                        Hp = 14.5f,
+                        Attack = 14.5f
                     },
                     new()
                     {
-                        elemental_type = UnitElement.Dark,
-                        hp = 13.3f,
-                        attack = 13.3f
+                        ElementalType = UnitElement.Dark,
+                        Hp = 13.3f,
+                        Attack = 13.3f
                     }
                 }
             );
@@ -300,13 +300,13 @@ public class BonusService(
                 {
                     new()
                     {
-                        elemental_type = UnitElement.Fire,
-                        hp = 5.8f
+                        ElementalType = UnitElement.Fire,
+                        Hp = 5.8f
 #if CHEATING
                             * 100
 #endif
                         ,
-                        attack = 5f
+                        Attack = 5f
 #if CHEATING
                             * 100
 #endif
@@ -314,27 +314,27 @@ public class BonusService(
                     },
                     new()
                     {
-                        elemental_type = UnitElement.Water,
-                        hp = 5.4f,
-                        attack = 4.6f
+                        ElementalType = UnitElement.Water,
+                        Hp = 5.4f,
+                        Attack = 4.6f
                     },
                     new()
                     {
-                        elemental_type = UnitElement.Wind,
-                        hp = 6.3f,
-                        attack = 5.4f
+                        ElementalType = UnitElement.Wind,
+                        Hp = 6.3f,
+                        Attack = 5.4f
                     },
                     new()
                     {
-                        elemental_type = UnitElement.Light,
-                        hp = 6.0f,
-                        attack = 5.2f
+                        ElementalType = UnitElement.Light,
+                        Hp = 6.0f,
+                        Attack = 5.2f
                     },
                     new()
                     {
-                        elemental_type = UnitElement.Dark,
-                        hp = 7.3f,
-                        attack = 6.4f
+                        ElementalType = UnitElement.Dark,
+                        Hp = 7.3f,
+                        Attack = 6.4f
                     }
                 }
             );

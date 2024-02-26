@@ -27,7 +27,7 @@ public class DmodeDeveloperController(
 
         try
         {
-            string floorKey = (await dmodeCacheService.LoadPlayRecord()).floor_key;
+            string floorKey = (await dmodeCacheService.LoadPlayRecord()).FloorKey;
             return this.Ok(await dmodeCacheService.LoadFloorInfo(floorKey));
         }
         catch (DragaliaException e) when (e.Code == ResultCode.CommonDbError)
