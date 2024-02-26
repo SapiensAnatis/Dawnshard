@@ -50,8 +50,6 @@ public class DungeonRecordService(
                 TotalPlayDamage = playRecord.TotalPlayDamage,
                 ClearTime = playRecord.Time,
                 IsClear = true,
-                RewardRecord = new(),
-                GrowRecord = new(),
             };
 
         await this.ProcessStaminaConsumption(session);
