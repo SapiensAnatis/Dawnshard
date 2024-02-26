@@ -28,8 +28,7 @@ public class ItemTest : TestFixture
     public async Task GetList_ReturnsItemList()
     {
         DragaliaResponse<ItemGetListResponse> resp = await Client.PostMsgpack<ItemGetListResponse>(
-            "item/get_list",
-            new ItemGetListRequest()
+            "item/get_list"
         );
 
         resp.Data.ItemList.Should()

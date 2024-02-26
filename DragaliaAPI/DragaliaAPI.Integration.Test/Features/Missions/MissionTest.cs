@@ -350,8 +350,7 @@ public class MissionTest : TestFixture
 
         DragaliaResponse<MissionGetMissionListResponse> response =
             await this.Client.PostMsgpack<MissionGetMissionListResponse>(
-                "mission/get_mission_list",
-                new MissionGetMissionListRequest()
+                "mission/get_mission_list"
             );
 
         response
@@ -431,8 +430,7 @@ public class MissionTest : TestFixture
 
         MissionGetDrillMissionListResponse response = (
             await this.Client.PostMsgpack<MissionGetDrillMissionListResponse>(
-                "mission/get_drill_mission_list",
-                new MissionGetDrillMissionListRequest()
+                "mission/get_drill_mission_list"
             )
         ).Data;
 
@@ -446,8 +444,7 @@ public class MissionTest : TestFixture
 
         response = (
             await this.Client.PostMsgpack<MissionGetDrillMissionListResponse>(
-                "mission/get_drill_mission_list",
-                new MissionGetDrillMissionListRequest()
+                "mission/get_drill_mission_list"
             )
         ).Data;
 
@@ -461,8 +458,7 @@ public class MissionTest : TestFixture
 
         response = (
             await this.Client.PostMsgpack<MissionGetDrillMissionListResponse>(
-                "mission/get_drill_mission_list",
-                new MissionGetDrillMissionListRequest()
+                "mission/get_drill_mission_list"
             )
         ).Data;
 
@@ -478,8 +474,7 @@ public class MissionTest : TestFixture
 
         response = (
             await this.Client.PostMsgpack<MissionGetDrillMissionListResponse>(
-                "mission/get_drill_mission_list",
-                new MissionGetDrillMissionListRequest()
+                "mission/get_drill_mission_list"
             )
         ).Data;
 
@@ -510,10 +505,7 @@ public class MissionTest : TestFixture
         );
 
         MissionGetMissionListResponse response = (
-            await this.Client.PostMsgpack<MissionGetMissionListResponse>(
-                "mission/get_mission_list",
-                new MissionGetMissionListRequest()
-            )
+            await this.Client.PostMsgpack<MissionGetMissionListResponse>("mission/get_mission_list")
         ).Data;
 
         response
@@ -566,10 +558,7 @@ public class MissionTest : TestFixture
         );
 
         MissionGetMissionListResponse response = (
-            await this.Client.PostMsgpack<MissionGetMissionListResponse>(
-                "mission/get_mission_list",
-                new MissionGetMissionListRequest()
-            )
+            await this.Client.PostMsgpack<MissionGetMissionListResponse>("mission/get_mission_list")
         ).Data;
 
         response

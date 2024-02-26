@@ -137,7 +137,7 @@ public class AutoRepeatTest : TestFixture
         ).Data;
 
         RepeatEndResponse repeatEndResponse = (
-            await Client.PostMsgpack<RepeatEndResponse>("repeat/end", new RepeatEndRequest())
+            await Client.PostMsgpack<RepeatEndResponse>("repeat/end")
         ).Data;
 
         repeatEndResponse.RepeatData.Should().BeEquivalentTo(recordResponse2.RepeatData);
@@ -234,7 +234,7 @@ public class AutoRepeatTest : TestFixture
         ).Data;
 
         RepeatEndResponse repeatEndResponse = (
-            await Client.PostMsgpack<RepeatEndResponse>("repeat/end", new RepeatEndRequest())
+            await Client.PostMsgpack<RepeatEndResponse>("repeat/end")
         ).Data;
 
         int expectedPoints =
@@ -301,7 +301,7 @@ public class AutoRepeatTest : TestFixture
         ).Data;
 
         MypageInfoResponse mypageResponse = (
-            await Client.PostMsgpack<MypageInfoResponse>("mypage/info", new MypageInfoRequest() { })
+            await Client.PostMsgpack<MypageInfoResponse>("mypage/info")
         ).Data;
 
         mypageResponse.RepeatData.Should().BeEquivalentTo(recordResponse.RepeatData);

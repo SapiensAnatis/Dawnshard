@@ -39,12 +39,7 @@ public class FortTest : TestFixture
         );
         await this.ApiContext.SaveChangesAsync();
 
-        (
-            await this.Client.PostMsgpack<FortGetDataResponse>(
-                "/fort/get_data",
-                new FortGetDataRequest()
-            )
-        )
+        (await this.Client.PostMsgpack<FortGetDataResponse>("/fort/get_data"))
             .Data.BuildList.Should()
             .ContainEquivalentOf(
                 new BuildList()
@@ -77,12 +72,7 @@ public class FortTest : TestFixture
             )
             .ExecuteUpdateAsync(e => e.SetProperty(p => p.Quantity, 1));
 
-        (
-            await this.Client.PostMsgpack<FortGetDataResponse>(
-                "/fort/get_data",
-                new FortGetDataRequest()
-            )
-        )
+        (await this.Client.PostMsgpack<FortGetDataResponse>("/fort/get_data"))
             .Data.DragonContactFreeGiftCount.Should()
             .Be(1);
 
@@ -92,12 +82,7 @@ public class FortTest : TestFixture
             )
             .ExecuteUpdateAsync(e => e.SetProperty(p => p.Quantity, 0));
 
-        (
-            await this.Client.PostMsgpack<FortGetDataResponse>(
-                "/fort/get_data",
-                new FortGetDataRequest()
-            )
-        )
+        (await this.Client.PostMsgpack<FortGetDataResponse>("/fort/get_data"))
             .Data.DragonContactFreeGiftCount.Should()
             .Be(0);
     }

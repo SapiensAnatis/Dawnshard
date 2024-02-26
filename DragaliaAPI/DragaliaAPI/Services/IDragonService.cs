@@ -10,7 +10,7 @@ public interface IDragonService
     Task<DragonSendGiftMultipleResponse> DoDragonSendGiftMultiple(
         DragonSendGiftMultipleRequest request
     );
-    Task<DragonGetContactDataResponse> DoDragonGetContactData(DragonGetContactDataRequest request);
+    Task<DragonGetContactDataResponse> DoDragonGetContactData();
     Task<DragonBuildupResponse> DoBuildup(DragonBuildupRequest request);
     Task<DragonResetPlusCountResponse> DoDragonResetPlusCount(DragonResetPlusCountRequest request);
     Task<DragonLimitBreakResponse> DoDragonLimitBreak(DragonLimitBreakRequest request);

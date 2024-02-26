@@ -29,9 +29,7 @@ public class DragonService(
     IResetHelper resetHelper
 ) : IDragonService
 {
-    public async Task<DragonGetContactDataResponse> DoDragonGetContactData(
-        DragonGetContactDataRequest request
-    )
+    public async Task<DragonGetContactDataResponse> DoDragonGetContactData()
     {
         DragonGifts rotatingGift = DragonConstants.RotatingGifts[
             (int)resetHelper.LastDailyReset.DayOfWeek
@@ -466,7 +464,7 @@ public class DragonService(
             DragonContactFreeGiftCount = 0,
             DragonGiftRewardList = rewardObjList,
             EntityResult = null,
-            ShopGiftList = (await DoDragonGetContactData(new())).ShopGiftList,
+            ShopGiftList = (await DoDragonGetContactData()).ShopGiftList,
             UpdateDataList = updateDataList
         };
     }

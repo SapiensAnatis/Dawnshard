@@ -24,7 +24,6 @@ public class MaintenanceTest : TestFixture
         DragaliaResponse<ResultCodeResponse> response =
             await this.Client.PostMsgpack<ResultCodeResponse>(
                 "load/index",
-                new LoadIndexRequest(),
                 ensureSuccessHeader: false
             );
 
@@ -39,7 +38,6 @@ public class MaintenanceTest : TestFixture
         DragaliaResponse<ToolGetServiceStatusResponse> response =
             await this.Client.PostMsgpack<ToolGetServiceStatusResponse>(
                 "tool/get_service_status",
-                new ToolGetServiceStatusRequest(),
                 ensureSuccessHeader: false
             );
 

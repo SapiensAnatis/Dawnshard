@@ -40,11 +40,9 @@ public class DragonController : DragaliaControllerBase
 
     [Route("get_contact_data")]
     [HttpPost]
-    public async Task<DragaliaResult> DragonGetContactData(
-        [FromBody] DragonGetContactDataRequest request
-    )
+    public async Task<DragaliaResult> DragonGetContactData()
     {
-        return Ok(await dragonService.DoDragonGetContactData(request));
+        return Ok(await dragonService.DoDragonGetContactData());
     }
 
     [Route("buy_gift_to_send_multiple")]

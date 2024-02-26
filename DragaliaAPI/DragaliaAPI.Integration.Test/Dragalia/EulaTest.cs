@@ -12,10 +12,7 @@ public class EulaTest : TestFixture
     public async Task EulaGetVersionList_ReturnsAllVersions()
     {
         EulaGetVersionListResponse response = (
-            await this.Client.PostMsgpack<EulaGetVersionListResponse>(
-                "eula/get_version_list",
-                new EulaGetVersionListRequest()
-            )
+            await this.Client.PostMsgpack<EulaGetVersionListResponse>("eula/get_version_list")
         ).Data;
 
         response
