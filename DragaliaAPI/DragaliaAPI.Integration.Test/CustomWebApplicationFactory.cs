@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
 using Respawn;
+using Respawn.Graph;
 
 namespace DragaliaAPI.Integration.Test;
 
@@ -20,9 +21,9 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
 {
     private readonly TestContainersHelper testContainersHelper;
 
-    public CustomWebApplicationFactory(TestContainersHelper testContainersHelper)
+    public CustomWebApplicationFactory()
     {
-        this.testContainersHelper = testContainersHelper;
+        this.testContainersHelper = new TestContainersHelper();
     }
 
     public string PostgresConnectionString => this.testContainersHelper.PostgresConnectionString;
@@ -37,6 +38,8 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
 
     public async Task InitializeAsync()
     {
+        await this.testContainersHelper.StartAsync();
+
         using IServiceScope scope = this.Services.CreateScope();
         ApiContext context = scope.ServiceProvider.GetRequiredService<ApiContext>();
         await context.Database.MigrateAsync();
@@ -50,12 +53,12 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
             {
                 DbAdapter = DbAdapter.Postgres,
                 SchemasToInclude = ["public"],
-                TablesToIgnore = [new("__EFMigrationsHistory")],
+                TablesToIgnore = [new Table("__EFMigrationsHistory")],
             }
         );
     }
 
-    Task IAsyncLifetime.DisposeAsync() => Task.CompletedTask;
+    async Task IAsyncLifetime.DisposeAsync() => await this.testContainersHelper.StopAsync();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {

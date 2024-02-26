@@ -8,8 +8,8 @@ using Xunit.Abstractions;
 
 namespace DragaliaAPI.Photon.StateManager.Test;
 
-[Collection("IntegrationTest")]
-public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IDisposable
+[Collection(TestCollection.Name)]
+public class TestFixture : IDisposable
 {
     private const string PhotonToken = "photontoken";
 

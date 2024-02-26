@@ -19,8 +19,8 @@ using Respawn;
 
 namespace DragaliaAPI.Integration.Test;
 
-[Collection("DragaliaIntegration")]
-public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLifetime
+[Collection(TestCollection.Name)]
+public class TestFixture : IAsyncLifetime
 {
     /// <summary>
     /// The device account ID which links to the seeded savefiles <see cref="SeedDatabase"/>
