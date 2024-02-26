@@ -6,5 +6,5 @@ namespace DragaliaAPI.Models.Generated;
 public partial class BuildEventRewardList : IEventRewardList<BuildEventRewardList>
 {
     public static BuildEventRewardList FromDatabase(DbPlayerEventReward reward) =>
-        throw new NotImplementedException();
+        new(reward.EventId, reward.RewardId);
 }

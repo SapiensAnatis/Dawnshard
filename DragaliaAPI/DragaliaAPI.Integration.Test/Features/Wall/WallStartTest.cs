@@ -74,7 +74,7 @@ public class WallStartTest : TestFixture
 
         WallStartStartAssignUnitResponse response = (
             await Client.PostMsgpack<WallStartStartAssignUnitResponse>(
-                "/wall_start/start",
+                "/wall_start/start_assign_unit",
                 new WallStartStartAssignUnitRequest()
                 {
                     WallId = wallId,
