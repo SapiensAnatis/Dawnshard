@@ -38,22 +38,20 @@ public class WeaponBodyControllerTest
             .ReturnsAsync(
                 new UpdateDataList()
                 {
-                    weapon_body_list = new List<WeaponBodyList>()
+                    WeaponBodyList = new List<WeaponBodyList>()
                     {
-                        new() { weapon_body_id = WeaponBodies.Areadbhar }
+                        new() { WeaponBodyId = WeaponBodies.Areadbhar }
                     }
                 }
             );
 
-        WeaponBodyCraftData data = (
+        WeaponBodyCraftResponse data = (
             await this.weaponBodyController.Craft(
-                new WeaponBodyCraftRequest() { weapon_body_id = WeaponBodies.Areadbhar }
+                new WeaponBodyCraftRequest() { WeaponBodyId = WeaponBodies.Areadbhar }
             )
-        ).GetData<WeaponBodyCraftData>()!;
+        ).GetData<WeaponBodyCraftResponse>()!;
 
-        data.update_data_list.weapon_body_list.First()
-            .weapon_body_id.Should()
-            .Be(WeaponBodies.Areadbhar);
+        data.UpdateDataList.WeaponBodyList.First().WeaponBodyId.Should().Be(WeaponBodies.Areadbhar);
 
         this.mockUpdateDataService.VerifyAll();
         this.mockWeaponService.VerifyAll();
@@ -65,25 +63,25 @@ public class WeaponBodyControllerTest
         this.mockWeaponService.Setup(x => x.ValidateCraft(WeaponBodies.Areadbhar))
             .ReturnsAsync(false);
 
-        ResultCodeData data = (
+        ResultCodeResponse response = (
             await this.weaponBodyController.Craft(
-                new WeaponBodyCraftRequest() { weapon_body_id = WeaponBodies.Areadbhar }
+                new WeaponBodyCraftRequest() { WeaponBodyId = WeaponBodies.Areadbhar }
             )
-        ).GetData<ResultCodeData>()!;
+        ).GetData<ResultCodeResponse>()!;
 
-        data.result_code.Should().Be(ResultCode.WeaponBodyCraftShortWeaponBody);
+        response.ResultCode.Should().Be(ResultCode.WeaponBodyCraftShortWeaponBody);
     }
 
     [Fact]
     public async Task BuildupPiece_InvalidWeapon_ReturnsError()
     {
-        ResultCodeData data = (
+        ResultCodeResponse response = (
             await this.weaponBodyController.BuildupPiece(
-                new WeaponBodyBuildupPieceRequest() { weapon_body_id = (WeaponBodies)8 }
+                new WeaponBodyBuildupPieceRequest() { WeaponBodyId = (WeaponBodies)8 }
             )
-        ).GetData<ResultCodeData>()!;
+        ).GetData<ResultCodeResponse>()!;
 
-        data.result_code.Should().Be(ResultCode.WeaponBodyIsNotPlayable);
+        response.ResultCode.Should().Be(ResultCode.WeaponBodyIsNotPlayable);
     }
 
     [Fact]
@@ -91,13 +89,13 @@ public class WeaponBodyControllerTest
     {
         this.mockWeaponService.Setup(x => x.CheckOwned(WeaponBodies.Caduceus)).ReturnsAsync(false);
 
-        ResultCodeData data = (
+        ResultCodeResponse response = (
             await this.weaponBodyController.BuildupPiece(
-                new WeaponBodyBuildupPieceRequest() { weapon_body_id = WeaponBodies.Caduceus }
+                new WeaponBodyBuildupPieceRequest() { WeaponBodyId = WeaponBodies.Caduceus }
             )
-        ).GetData<ResultCodeData>()!;
+        ).GetData<ResultCodeResponse>()!;
 
-        data.result_code.Should().Be(ResultCode.WeaponBodyCraftShortWeaponBody);
+        response.ResultCode.Should().Be(ResultCode.WeaponBodyCraftShortWeaponBody);
         this.mockWeaponService.VerifyAll();
     }
 
@@ -115,12 +113,12 @@ public class WeaponBodyControllerTest
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.CommonMaterialShort);
 
-        ResultCodeData data = (
+        ResultCodeResponse response = (
             await this.weaponBodyController.BuildupPiece(
                 new WeaponBodyBuildupPieceRequest()
                 {
-                    weapon_body_id = WeaponBodies.Caduceus,
-                    buildup_weapon_body_piece_list = new List<AtgenBuildupWeaponBodyPieceList>()
+                    WeaponBodyId = WeaponBodies.Caduceus,
+                    BuildupWeaponBodyPieceList = new List<AtgenBuildupWeaponBodyPieceList>()
                     {
                         new(),
                         new(),
@@ -128,9 +126,9 @@ public class WeaponBodyControllerTest
                     }
                 }
             )
-        ).GetData<ResultCodeData>()!;
+        ).GetData<ResultCodeResponse>()!;
 
-        data.result_code.Should().Be(ResultCode.CommonMaterialShort);
+        response.ResultCode.Should().Be(ResultCode.CommonMaterialShort);
         this.mockWeaponService.VerifyAll();
     }
 
@@ -149,19 +147,19 @@ public class WeaponBodyControllerTest
         UpdateDataList udl =
             new()
             {
-                weapon_body_list = new List<WeaponBodyList>()
+                WeaponBodyList = new List<WeaponBodyList>()
                 {
-                    new() { weapon_body_id = WeaponBodies.Caduceus }
+                    new() { WeaponBodyId = WeaponBodies.Caduceus }
                 }
             };
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(udl);
 
-        WeaponBodyBuildupPieceData data = (
+        WeaponBodyBuildupPieceResponse data = (
             await this.weaponBodyController.BuildupPiece(
                 new WeaponBodyBuildupPieceRequest()
                 {
-                    weapon_body_id = WeaponBodies.Caduceus,
-                    buildup_weapon_body_piece_list = new List<AtgenBuildupWeaponBodyPieceList>()
+                    WeaponBodyId = WeaponBodies.Caduceus,
+                    BuildupWeaponBodyPieceList = new List<AtgenBuildupWeaponBodyPieceList>()
                     {
                         new(),
                         new(),
@@ -169,9 +167,9 @@ public class WeaponBodyControllerTest
                     }
                 }
             )
-        ).GetData<WeaponBodyBuildupPieceData>()!;
+        ).GetData<WeaponBodyBuildupPieceResponse>()!;
 
-        data.update_data_list.Should().Be(udl);
+        data.UpdateDataList.Should().Be(udl);
 
         this.mockWeaponService.VerifyAll();
         this.mockUpdateDataService.VerifyAll();

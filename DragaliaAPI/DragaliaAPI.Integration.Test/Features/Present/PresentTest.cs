@@ -15,7 +15,7 @@ public class PresentTest : TestFixture
 
         // Ignore auto-generated PK
         AssertionOptions.AssertEquivalencyUsing(opts =>
-            opts.Excluding(member => member.Name == nameof(PresentDetailList.present_id))
+            opts.Excluding(member => member.Name == nameof(PresentDetailList.PresentId))
         );
     }
 
@@ -42,44 +42,44 @@ public class PresentTest : TestFixture
             }
         );
 
-        DragaliaResponse<PresentGetPresentListData> response =
-            await this.Client.PostMsgpack<PresentGetPresentListData>(
+        DragaliaResponse<PresentGetPresentListResponse> response =
+            await this.Client.PostMsgpack<PresentGetPresentListResponse>(
                 $"{Controller}/get_present_list",
-                new PresentGetPresentListRequest() { is_limit = false, present_id = 0 }
+                new PresentGetPresentListRequest() { IsLimit = false, PresentId = 0 }
             );
 
         response
-            .data.Should()
+            .Data.Should()
             .BeEquivalentTo(
-                new PresentGetPresentListData()
+                new PresentGetPresentListResponse()
                 {
-                    present_list = new List<PresentDetailList>()
+                    PresentList = new List<PresentDetailList>()
                     {
                         new()
                         {
-                            entity_type = EntityTypes.Wyrmite,
-                            entity_quantity = 100,
-                            message_id = PresentMessage.Maintenance,
-                            create_time = DateTimeOffset.UtcNow,
-                            receive_limit_time = DateTimeOffset.UnixEpoch,
+                            EntityType = EntityTypes.Wyrmite,
+                            EntityQuantity = 100,
+                            MessageId = PresentMessage.Maintenance,
+                            CreateTime = DateTimeOffset.UtcNow,
+                            ReceiveLimitTime = DateTimeOffset.UnixEpoch,
                         },
                         new()
                         {
-                            entity_type = EntityTypes.Dew,
-                            entity_quantity = 200,
-                            message_id = PresentMessage.Chapter10Clear,
-                            create_time = DateTimeOffset.UtcNow,
-                            receive_limit_time = DateTimeOffset.UnixEpoch,
+                            EntityType = EntityTypes.Dew,
+                            EntityQuantity = 200,
+                            MessageId = PresentMessage.Chapter10Clear,
+                            CreateTime = DateTimeOffset.UtcNow,
+                            ReceiveLimitTime = DateTimeOffset.UnixEpoch,
                         }
                     },
-                    update_data_list = new UpdateDataList()
+                    UpdateDataList = new UpdateDataList()
                     {
-                        present_notice = new() { present_count = 2, present_limit_count = 0 }
+                        PresentNotice = new() { PresentCount = 2, PresentLimitCount = 0 }
                     }
                 }
             );
 
-        response.data.present_list.Should().BeInAscendingOrder(x => x.present_id);
+        response.Data.PresentList.Should().BeInAscendingOrder(x => x.PresentId);
     }
 
     [Fact]
@@ -108,36 +108,36 @@ public class PresentTest : TestFixture
             }
         );
 
-        DragaliaResponse<PresentGetPresentListData> response =
-            await this.Client.PostMsgpack<PresentGetPresentListData>(
+        DragaliaResponse<PresentGetPresentListResponse> response =
+            await this.Client.PostMsgpack<PresentGetPresentListResponse>(
                 $"{Controller}/get_present_list",
-                new PresentGetPresentListRequest() { is_limit = true, present_id = 0 }
+                new PresentGetPresentListRequest() { IsLimit = true, PresentId = 0 }
             );
 
         response
-            .data.Should()
+            .Data.Should()
             .BeEquivalentTo(
-                new PresentGetPresentListData()
+                new PresentGetPresentListResponse()
                 {
-                    present_limit_list = new List<PresentDetailList>()
+                    PresentLimitList = new List<PresentDetailList>()
                     {
                         new()
                         {
-                            entity_type = EntityTypes.Wyrmite,
-                            entity_quantity = 100,
-                            message_id = PresentMessage.Maintenance,
-                            create_time = DateTimeOffset.UtcNow,
-                            receive_limit_time = expireDate,
+                            EntityType = EntityTypes.Wyrmite,
+                            EntityQuantity = 100,
+                            MessageId = PresentMessage.Maintenance,
+                            CreateTime = DateTimeOffset.UtcNow,
+                            ReceiveLimitTime = expireDate,
                         }
                     },
-                    update_data_list = new UpdateDataList()
+                    UpdateDataList = new UpdateDataList()
                     {
-                        present_notice = new() { present_count = 1, present_limit_count = 1 }
+                        PresentNotice = new() { PresentCount = 1, PresentLimitCount = 1 }
                     }
                 }
             );
 
-        response.data.present_limit_list.Should().BeInAscendingOrder(x => x.present_id);
+        response.Data.PresentLimitList.Should().BeInAscendingOrder(x => x.PresentId);
     }
 
     [Fact]
@@ -158,30 +158,30 @@ public class PresentTest : TestFixture
 
         await this.AddRangeToDatabase(presents);
 
-        DragaliaResponse<PresentGetPresentListData> firstResponse =
-            await this.Client.PostMsgpack<PresentGetPresentListData>(
+        DragaliaResponse<PresentGetPresentListResponse> firstResponse =
+            await this.Client.PostMsgpack<PresentGetPresentListResponse>(
                 $"{Controller}/get_present_list",
-                new PresentGetPresentListRequest() { is_limit = false, present_id = 0 }
+                new PresentGetPresentListRequest() { IsLimit = false, PresentId = 0 }
             );
 
-        firstResponse.data.present_list.Should().HaveCount(100);
+        firstResponse.Data.PresentList.Should().HaveCount(100);
 
-        DragaliaResponse<PresentGetPresentListData> secondResponse =
-            await this.Client.PostMsgpack<PresentGetPresentListData>(
+        DragaliaResponse<PresentGetPresentListResponse> secondResponse =
+            await this.Client.PostMsgpack<PresentGetPresentListResponse>(
                 $"{Controller}/get_present_list",
                 new PresentGetPresentListRequest()
                 {
-                    is_limit = false,
-                    present_id = (ulong)presents[0].PresentId
+                    IsLimit = false,
+                    PresentId = (ulong)presents[0].PresentId
                 }
             );
 
-        secondResponse.data.present_list.Should().HaveCount(20);
+        secondResponse.Data.PresentList.Should().HaveCount(20);
 
         firstResponse
-            .data.present_list.Concat(secondResponse.data.present_list)
+            .Data.PresentList.Concat(secondResponse.Data.PresentList)
             .Should()
-            .OnlyHaveUniqueItems(x => x.present_id);
+            .OnlyHaveUniqueItems(x => x.PresentId);
     }
 
     [Fact]
@@ -260,51 +260,47 @@ public class PresentTest : TestFixture
 
         IEnumerable<ulong> presentIdList = presents.Select(x => (ulong)x.PresentId).ToList();
 
-        DragaliaResponse<PresentReceiveData> response =
-            await this.Client.PostMsgpack<PresentReceiveData>(
+        DragaliaResponse<PresentReceiveResponse> response =
+            await this.Client.PostMsgpack<PresentReceiveResponse>(
                 $"{Controller}/receive",
-                new PresentReceiveRequest() { present_id_list = presentIdList }
+                new PresentReceiveRequest() { PresentIdList = presentIdList }
             );
 
-        response.data.receive_present_id_list.Should().BeEquivalentTo(presentIdList);
-        response.data.present_list.Should().BeEmpty();
-        response.data.present_limit_list.Should().BeEmpty();
+        response.Data.ReceivePresentIdList.Should().BeEquivalentTo(presentIdList);
+        response.Data.PresentList.Should().BeEmpty();
+        response.Data.PresentLimitList.Should().BeEmpty();
 
-        response.data.update_data_list.user_data.coin.Should().Be(oldUserData.Coin + 100_000);
-        response.data.update_data_list.user_data.crystal.Should().Be(oldUserData.Crystal + 100);
+        response.Data.UpdateDataList.UserData.Coin.Should().Be(oldUserData.Coin + 100_000);
+        response.Data.UpdateDataList.UserData.Crystal.Should().Be(oldUserData.Crystal + 100);
         response
-            .data.update_data_list.user_data.build_time_point.Should()
+            .Data.UpdateDataList.UserData.BuildTimePoint.Should()
             .Be(oldUserData.BuildTimePoint + 100);
-        response.data.update_data_list.user_data.dew_point.Should().Be(oldUserData.DewPoint + 200);
+        response.Data.UpdateDataList.UserData.DewPoint.Should().Be(oldUserData.DewPoint + 200);
 
         response
-            .data.update_data_list.material_list.Should()
+            .Data.UpdateDataList.MaterialList.Should()
             .ContainEquivalentOf(
                 new MaterialList()
                 {
-                    material_id = Materials.Squishums,
-                    quantity = oldSquishums.Quantity + 100
+                    MaterialId = Materials.Squishums,
+                    Quantity = oldSquishums.Quantity + 100
                 }
             );
 
+        response.Data.UpdateDataList.CharaList.Should().Contain(x => x.CharaId == Charas.Akasha);
+
+        response.Data.UpdateDataList.DragonList.Should().Contain(x => x.DragonId == Dragons.Arsene);
         response
-            .data.update_data_list.chara_list.Should()
-            .Contain(x => x.chara_id == Charas.Akasha);
+            .Data.UpdateDataList.DragonReliabilityList.Should()
+            .Contain(x => x.DragonId == Dragons.Arsene);
 
         response
-            .data.update_data_list.dragon_list.Should()
-            .Contain(x => x.dragon_id == Dragons.Arsene);
-        response
-            .data.update_data_list.dragon_reliability_list.Should()
-            .Contain(x => x.dragon_id == Dragons.Arsene);
+            .Data.UpdateDataList.AbilityCrestList.Should()
+            .Contain(x => x.AbilityCrestId == AbilityCrests.ADogsDay);
 
         response
-            .data.update_data_list.ability_crest_list.Should()
-            .Contain(x => x.ability_crest_id == AbilityCrests.ADogsDay);
-
-        response
-            .data.update_data_list.present_notice.Should()
-            .BeEquivalentTo(new PresentNotice() { present_count = 0, present_limit_count = 0, });
+            .Data.UpdateDataList.PresentNotice.Should()
+            .BeEquivalentTo(new PresentNotice() { PresentCount = 0, PresentLimitCount = 0, });
 
         // Not sure if entity_result is correct so won't test that
     }
@@ -340,26 +336,26 @@ public class PresentTest : TestFixture
 
         IEnumerable<ulong> presentIdList = new List<ulong>() { (ulong)presents.First().PresentId };
 
-        DragaliaResponse<PresentReceiveData> response =
-            await this.Client.PostMsgpack<PresentReceiveData>(
+        DragaliaResponse<PresentReceiveResponse> response =
+            await this.Client.PostMsgpack<PresentReceiveResponse>(
                 $"{Controller}/receive",
-                new PresentReceiveRequest() { present_id_list = presentIdList }
+                new PresentReceiveRequest() { PresentIdList = presentIdList }
             );
 
-        response.data.receive_present_id_list.Should().BeEquivalentTo(presentIdList);
-        response.data.present_list.Should().ContainSingle();
-        response.data.present_limit_list.Should().ContainSingle();
+        response.Data.ReceivePresentIdList.Should().BeEquivalentTo(presentIdList);
+        response.Data.PresentList.Should().ContainSingle();
+        response.Data.PresentLimitList.Should().ContainSingle();
 
         response
-            .data.update_data_list.dragon_list.Should()
-            .Contain(x => x.dragon_id == Dragons.Raphael);
+            .Data.UpdateDataList.DragonList.Should()
+            .Contain(x => x.DragonId == Dragons.Raphael);
         response
-            .data.update_data_list.dragon_reliability_list.Should()
-            .Contain(x => x.dragon_id == Dragons.Raphael);
+            .Data.UpdateDataList.DragonReliabilityList.Should()
+            .Contain(x => x.DragonId == Dragons.Raphael);
 
         response
-            .data.update_data_list.present_notice.Should()
-            .BeEquivalentTo(new PresentNotice() { present_count = 1, present_limit_count = 1, });
+            .Data.UpdateDataList.PresentNotice.Should()
+            .BeEquivalentTo(new PresentNotice() { PresentCount = 1, PresentLimitCount = 1, });
     }
 
     [Fact]
@@ -390,32 +386,32 @@ public class PresentTest : TestFixture
 
         IEnumerable<ulong> presentIdList = presents.Select(x => (ulong)x.PresentId).ToList();
 
-        DragaliaResponse<PresentReceiveData> response =
-            await this.Client.PostMsgpack<PresentReceiveData>(
+        DragaliaResponse<PresentReceiveResponse> response =
+            await this.Client.PostMsgpack<PresentReceiveResponse>(
                 $"{Controller}/receive",
-                new PresentReceiveRequest() { present_id_list = presentIdList }
+                new PresentReceiveRequest() { PresentIdList = presentIdList }
             );
 
-        response.data.receive_present_id_list.Should().BeEquivalentTo(presentIdList);
+        response.Data.ReceivePresentIdList.Should().BeEquivalentTo(presentIdList);
 
         response
-            .data.update_data_list.ability_crest_list.Should()
+            .Data.UpdateDataList.AbilityCrestList.Should()
             .ContainSingle()
-            .And.Contain(x => x.ability_crest_id == AbilityCrests.DearDiary);
-        response.data.update_data_list.user_data.dew_point.Should().Be(oldUserData.DewPoint + 3000);
+            .And.Contain(x => x.AbilityCrestId == AbilityCrests.DearDiary);
+        response.Data.UpdateDataList.UserData.DewPoint.Should().Be(oldUserData.DewPoint + 3000);
 
         response
-            .data.converted_entity_list.Should()
+            .Data.ConvertedEntityList.Should()
             .ContainSingle()
             .And.ContainEquivalentOf(
                 new ConvertedEntityList()
                 {
-                    before_entity_type = EntityTypes.Wyrmprint,
-                    before_entity_id = (int)AbilityCrests.DearDiary,
-                    before_entity_quantity = 1,
-                    after_entity_type = EntityTypes.Dew,
-                    after_entity_id = 0,
-                    after_entity_quantity = 3000,
+                    BeforeEntityType = EntityTypes.Wyrmprint,
+                    BeforeEntityId = (int)AbilityCrests.DearDiary,
+                    BeforeEntityQuantity = 1,
+                    AfterEntityType = EntityTypes.Dew,
+                    AfterEntityId = 0,
+                    AfterEntityQuantity = 3000,
                 }
             );
     }
@@ -444,19 +440,19 @@ public class PresentTest : TestFixture
 
         IEnumerable<ulong> presentIdList = presents.Select(x => (ulong)x.PresentId).ToList();
 
-        DragaliaResponse<PresentReceiveData> response =
-            await this.Client.PostMsgpack<PresentReceiveData>(
+        DragaliaResponse<PresentReceiveResponse> response =
+            await this.Client.PostMsgpack<PresentReceiveResponse>(
                 $"{Controller}/receive",
-                new PresentReceiveRequest() { present_id_list = presentIdList }
+                new PresentReceiveRequest() { PresentIdList = presentIdList }
             );
 
-        response.data.receive_present_id_list.Should().Contain((ulong)presents.First().PresentId);
-        response.data.delete_present_id_list.Should().Contain((ulong)presents.Last().PresentId);
+        response.Data.ReceivePresentIdList.Should().Contain((ulong)presents.First().PresentId);
+        response.Data.DeletePresentIdList.Should().Contain((ulong)presents.Last().PresentId);
 
         response
-            .data.update_data_list.chara_list.Should()
+            .Data.UpdateDataList.CharaList.Should()
             .ContainSingle()
-            .And.Contain(x => x.chara_id == Charas.Addis);
+            .And.Contain(x => x.CharaId == Charas.Addis);
     }
 
     [Fact]
@@ -477,31 +473,31 @@ public class PresentTest : TestFixture
 
         await this.AddRangeToDatabase(presentHistories);
 
-        DragaliaResponse<PresentGetHistoryListData> firstResponse =
-            await this.Client.PostMsgpack<PresentGetHistoryListData>(
+        DragaliaResponse<PresentGetHistoryListResponse> firstResponse =
+            await this.Client.PostMsgpack<PresentGetHistoryListResponse>(
                 $"{Controller}/get_history_list",
-                new PresentGetHistoryListRequest() { present_history_id = 0 }
+                new PresentGetHistoryListRequest() { PresentHistoryId = 0 }
             );
 
         firstResponse
-            .data.present_history_list.Should()
+            .Data.PresentHistoryList.Should()
             .HaveCount(100)
-            .And.BeInDescendingOrder(x => x.id);
+            .And.BeInDescendingOrder(x => x.Id);
 
-        DragaliaResponse<PresentGetHistoryListData> secondResponse =
-            await this.Client.PostMsgpack<PresentGetHistoryListData>(
+        DragaliaResponse<PresentGetHistoryListResponse> secondResponse =
+            await this.Client.PostMsgpack<PresentGetHistoryListResponse>(
                 $"{Controller}/get_history_list",
                 new PresentGetHistoryListRequest()
                 {
-                    present_history_id = (ulong)presentHistories[0].Id
+                    PresentHistoryId = (ulong)presentHistories[0].Id
                 }
             );
 
-        secondResponse.data.present_history_list.Should().HaveCount(20);
+        secondResponse.Data.PresentHistoryList.Should().HaveCount(20);
 
         firstResponse
-            .data.present_history_list.Concat(secondResponse.data.present_history_list)
+            .Data.PresentHistoryList.Concat(secondResponse.Data.PresentHistoryList)
             .Should()
-            .OnlyHaveUniqueItems(x => x.id);
+            .OnlyHaveUniqueItems(x => x.Id);
     }
 }

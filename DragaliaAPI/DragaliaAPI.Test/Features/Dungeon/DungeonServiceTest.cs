@@ -46,7 +46,7 @@ public class DungeonServiceTest
                 QuestData = MasterAsset.QuestData.Get(100010303),
                 Party = new List<PartySettingList>()
                 {
-                    new() { chara_id = Shared.Definitions.Enums.Charas.Addis }
+                    new() { CharaId = Shared.Definitions.Enums.Charas.Addis }
                 }
             };
 

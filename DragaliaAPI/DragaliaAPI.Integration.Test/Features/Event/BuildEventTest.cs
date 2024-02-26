@@ -10,7 +10,7 @@ public class BuildEventTest : TestFixture
         : base(factory, outputHelper) { }
 
     protected override async Task Setup() =>
-        await this.Client.PostMsgpack<MemoryEventActivateData>(
+        await this.Client.PostMsgpack<MemoryEventActivateResponse>(
             "memory_event/activate",
             new MemoryEventActivateRequest(EventId)
         );
@@ -20,17 +20,17 @@ public class BuildEventTest : TestFixture
     [Fact]
     public async Task GetEventData_ReturnsEventData()
     {
-        DragaliaResponse<BuildEventGetEventDataData> evtData =
-            await Client.PostMsgpack<BuildEventGetEventDataData>(
+        DragaliaResponse<BuildEventGetEventDataResponse> evtData =
+            await Client.PostMsgpack<BuildEventGetEventDataResponse>(
                 "build_event/get_event_data",
                 new BuildEventGetEventDataRequest(EventId)
             );
 
-        evtData.data.build_event_reward_list.Should().NotBeNull();
-        evtData.data.build_event_user_data.Should().NotBeNull();
-        evtData.data.build_event_user_data.user_build_event_item_list.Should().HaveCount(3);
+        evtData.Data.BuildEventRewardList.Should().NotBeNull();
+        evtData.Data.BuildEventUserData.Should().NotBeNull();
+        evtData.Data.BuildEventUserData.UserBuildEventItemList.Should().HaveCount(3);
         // evtData.data.event_fort_data.Should().NotBeNull(); -- unused
-        evtData.data.event_trade_list.Should().NotBeNullOrEmpty();
+        evtData.Data.EventTradeList.Should().NotBeNullOrEmpty();
     }
 
     [Fact]
@@ -50,20 +50,20 @@ public class BuildEventTest : TestFixture
 
         await ApiContext.SaveChangesAsync();
 
-        DragaliaResponse<BuildEventReceiveBuildPointRewardData> evtResp =
-            await Client.PostMsgpack<BuildEventReceiveBuildPointRewardData>(
+        DragaliaResponse<BuildEventReceiveBuildPointRewardResponse> evtResp =
+            await Client.PostMsgpack<BuildEventReceiveBuildPointRewardResponse>(
                 "build_event/receive_build_point_reward",
                 new BuildEventReceiveBuildPointRewardRequest(EventId)
             );
 
         evtResp
-            .data.build_event_reward_entity_list.Should()
+            .Data.BuildEventRewardEntityList.Should()
             .HaveCount(1)
             .And.ContainEquivalentOf(
                 new AtgenBuildEventRewardEntityList(EntityTypes.Mana, 0, 3000)
             );
-        evtResp.data.build_event_reward_list.Should().HaveCount(1);
-        evtResp.data.entity_result.Should().NotBeNull();
-        evtResp.data.update_data_list.Should().NotBeNull();
+        evtResp.Data.BuildEventRewardList.Should().HaveCount(1);
+        evtResp.Data.EntityResult.Should().NotBeNull();
+        evtResp.Data.UpdateDataList.Should().NotBeNull();
     }
 }

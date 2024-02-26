@@ -15,12 +15,12 @@ public class TimeAttackRankingTest : TestFixture
     public async Task GetData_ReturnsRewards()
     {
         (
-            await this.Client.PostMsgpack<TimeAttackRankingGetDataData>(
+            await this.Client.PostMsgpack<TimeAttackRankingGetDataResponse>(
                 "/time_attack_ranking/get_data",
                 new TimeAttackRankingGetDataRequest() { }
             )
         )
-            .data.ranking_tier_reward_list.Should()
+            .Data.RankingTierRewardList.Should()
             .NotBeEmpty();
     }
 
@@ -44,44 +44,42 @@ public class TimeAttackRankingTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        TimeAttackRankingReceiveTierRewardData rewardResponse = (
-            await this.Client.PostMsgpack<TimeAttackRankingReceiveTierRewardData>(
+        TimeAttackRankingReceiveTierRewardResponse rewardResponse = (
+            await this.Client.PostMsgpack<TimeAttackRankingReceiveTierRewardResponse>(
                 "/time_attack_ranking/receive_tier_reward",
-                new TimeAttackRankingReceiveTierRewardRequest() { quest_id = questId }
+                new TimeAttackRankingReceiveTierRewardRequest() { QuestId = questId }
             )
-        ).data;
+        ).Data;
 
-        rewardResponse.ranking_tier_reward_list.Should().NotBeEmpty();
+        rewardResponse.RankingTierRewardList.Should().NotBeEmpty();
 
         rewardResponse
-            .ranking_tier_reward_entity_list.Should()
+            .RankingTierRewardEntityList.Should()
             .ContainEquivalentOf(
                 new AtgenBuildEventRewardEntityList()
                 {
-                    entity_id = 0,
-                    entity_type = EntityTypes.Dew,
-                    entity_quantity = 7000
+                    EntityId = 0,
+                    EntityType = EntityTypes.Dew,
+                    EntityQuantity = 7000
                 }
             );
 
         rewardResponse
-            .entity_result.new_get_entity_list.Should()
+            .EntityResult.NewGetEntityList.Should()
             .ContainEquivalentOf(
-                new AtgenDuplicateEntityList() { entity_id = 0, entity_type = EntityTypes.Dew }
+                new AtgenDuplicateEntityList() { EntityId = 0, EntityType = EntityTypes.Dew }
             );
 
-        rewardResponse
-            .update_data_list.user_data.dew_point.Should()
-            .Be(oldUserData.DewPoint + 7000);
+        rewardResponse.UpdateDataList.UserData.DewPoint.Should().Be(oldUserData.DewPoint + 7000);
 
-        TimeAttackRankingReceiveTierRewardData secondRewardResponse = (
-            await this.Client.PostMsgpack<TimeAttackRankingReceiveTierRewardData>(
+        TimeAttackRankingReceiveTierRewardResponse secondRewardResponse = (
+            await this.Client.PostMsgpack<TimeAttackRankingReceiveTierRewardResponse>(
                 "/time_attack_ranking/receive_tier_reward",
-                new TimeAttackRankingReceiveTierRewardRequest() { quest_id = questId }
+                new TimeAttackRankingReceiveTierRewardRequest() { QuestId = questId }
             )
-        ).data;
+        ).Data;
 
-        secondRewardResponse.ranking_tier_reward_entity_list.Should().BeEmpty();
-        secondRewardResponse.update_data_list.user_data.Should().BeNull();
+        secondRewardResponse.RankingTierRewardEntityList.Should().BeEmpty();
+        secondRewardResponse.UpdateDataList.UserData.Should().BeNull();
     }
 }

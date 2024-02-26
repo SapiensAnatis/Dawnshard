@@ -10,7 +10,7 @@ public class Clb01EventTest : TestFixture
         : base(factory, outputHelper) { }
 
     protected override async Task Setup() =>
-        await this.Client.PostMsgpack<MemoryEventActivateData>(
+        await this.Client.PostMsgpack<MemoryEventActivateResponse>(
             "memory_event/activate",
             new MemoryEventActivateRequest(EventId)
         );
@@ -21,14 +21,14 @@ public class Clb01EventTest : TestFixture
     [Fact]
     public async Task GetEventData_ReturnsEventData()
     {
-        DragaliaResponse<Clb01EventGetEventDataData> evtData =
-            await Client.PostMsgpack<Clb01EventGetEventDataData>(
+        DragaliaResponse<Clb01EventGetEventDataResponse> evtData =
+            await Client.PostMsgpack<Clb01EventGetEventDataResponse>(
                 $"{Prefix}/get_event_data",
                 new Clb01EventGetEventDataRequest(EventId)
             );
 
-        evtData.data.clb_01_event_user_data.Should().NotBeNull();
-        evtData.data.clb_01_event_reward_list.Should().NotBeNull();
+        evtData.Data.Clb01EventUserData.Should().NotBeNull();
+        evtData.Data.Clb01EventRewardList.Should().NotBeNull();
     }
 
     [Fact]
@@ -48,20 +48,20 @@ public class Clb01EventTest : TestFixture
 
         await ApiContext.SaveChangesAsync();
 
-        DragaliaResponse<Clb01EventReceiveClb01PointRewardData> evtResp =
-            await Client.PostMsgpack<Clb01EventReceiveClb01PointRewardData>(
+        DragaliaResponse<Clb01EventReceiveClb01PointRewardResponse> evtResp =
+            await Client.PostMsgpack<Clb01EventReceiveClb01PointRewardResponse>(
                 $"{Prefix}/receive_clb01_point_reward",
                 new Clb01EventReceiveClb01PointRewardRequest(EventId)
             );
 
         evtResp
-            .data.clb_01_event_reward_entity_list.Should()
+            .Data.Clb01EventRewardEntityList.Should()
             .HaveCount(1)
             .And.ContainEquivalentOf(
                 new AtgenBuildEventRewardEntityList(EntityTypes.Material, 101001003, 5)
             );
-        evtResp.data.clb_01_event_reward_list.Should().HaveCount(1);
-        evtResp.data.entity_result.Should().NotBeNull();
-        evtResp.data.update_data_list.Should().NotBeNull();
+        evtResp.Data.Clb01EventRewardList.Should().HaveCount(1);
+        evtResp.Data.EntityResult.Should().NotBeNull();
+        evtResp.Data.UpdateDataList.Should().NotBeNull();
     }
 }

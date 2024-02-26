@@ -10,14 +10,14 @@ public class AlbumController : DragaliaControllerBase
     [HttpPost("index")]
     public DragaliaResult Index()
     {
-        AlbumIndexData stubResponse =
+        AlbumIndexResponse stubResponse =
             new()
             {
-                album_dragon_list = Enumerable.Empty<AlbumDragonData>(),
-                album_quest_play_record_list = Enumerable.Empty<AtgenAlbumQuestPlayRecordList>(),
-                chara_honor_list = Enumerable.Empty<AtgenCharaHonorList>(),
-                album_passive_update_result = new(),
-                update_data_list = new()
+                AlbumDragonList = Enumerable.Empty<AlbumDragonData>(),
+                AlbumQuestPlayRecordList = Enumerable.Empty<AtgenAlbumQuestPlayRecordList>(),
+                CharaHonorList = Enumerable.Empty<AtgenCharaHonorList>(),
+                AlbumPassiveUpdateResult = new(),
+                UpdateDataList = new()
             };
 
         return this.Ok(stubResponse);

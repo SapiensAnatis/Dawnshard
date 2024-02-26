@@ -11,35 +11,37 @@ public class QuestReadStoryTest : TestFixture
     [Fact]
     public async Task ReadStory_ReturnCorrectResponse()
     {
-        QuestReadStoryData response = (
-            await this.Client.PostMsgpack<QuestReadStoryData>(
+        QuestReadStoryResponse response = (
+            await this.Client.PostMsgpack<QuestReadStoryResponse>(
                 "/quest/read_story",
-                new QuestReadStoryRequest() { quest_story_id = 1000106 }
+                new QuestReadStoryRequest() { QuestStoryId = 1000106 }
             )
-        ).data;
+        ).Data;
 
-        response.update_data_list.user_data.Should().NotBeNull();
+        response.UpdateDataList.UserData.Should().NotBeNull();
         response
-            .update_data_list.chara_list.Should()
+            .UpdateDataList.CharaList.Should()
             .ContainSingle()
-            .And.Subject.Any(x => x.chara_id == Charas.Ranzal)
+            .And.Subject.Any(x => x.CharaId == Charas.Ranzal)
             .Should()
             .BeTrue();
 
         response
-            .update_data_list.quest_story_list.Should()
-            .ContainEquivalentOf(new QuestStoryList() { quest_story_id = 1000106, state = 1 });
+            .UpdateDataList.QuestStoryList.Should()
+            .ContainEquivalentOf(
+                new QuestStoryList() { QuestStoryId = 1000106, State = StoryState.Read }
+            );
     }
 
     [Fact]
     public async Task ReadStory_UpdatesDatabase()
     {
-        QuestReadStoryData response = (
-            await this.Client.PostMsgpack<QuestReadStoryData>(
+        QuestReadStoryResponse response = (
+            await this.Client.PostMsgpack<QuestReadStoryResponse>(
                 "/quest/read_story",
-                new QuestReadStoryRequest() { quest_story_id = 1001410 }
+                new QuestReadStoryRequest() { QuestStoryId = 1001410 }
             )
-        ).data;
+        ).Data;
 
         this.ApiContext.PlayerStoryState.First(x => x.ViewerId == ViewerId && x.StoryId == 1001410)
             .State.Should()
@@ -60,19 +62,23 @@ public class QuestReadStoryTest : TestFixture
 
         int theLonePaladynStoryId = 1000103;
 
-        QuestReadStoryData response = (
-            await this.Client.PostMsgpack<QuestReadStoryData>(
+        QuestReadStoryResponse response = (
+            await this.Client.PostMsgpack<QuestReadStoryResponse>(
                 "/quest/read_story",
-                new QuestReadStoryRequest() { quest_story_id = theLonePaladynStoryId }
+                new QuestReadStoryRequest() { QuestStoryId = theLonePaladynStoryId }
             )
-        ).data;
+        ).Data;
 
         response
-            .update_data_list.quest_story_list.Should()
+            .UpdateDataList.QuestStoryList.Should()
             .ContainEquivalentOf(
-                new QuestStoryList() { quest_story_id = theLonePaladynStoryId, state = 1 }
+                new QuestStoryList()
+                {
+                    QuestStoryId = theLonePaladynStoryId,
+                    State = StoryState.Read
+                }
             );
 
-        response.update_data_list.user_data.tutorial_status.Should().Be(10600);
+        response.UpdateDataList.UserData.TutorialStatus.Should().Be(10600);
     }
 }

@@ -46,8 +46,8 @@ public abstract class DragaliaControllerBaseCore : ControllerBase
     {
         return base.Ok(
             new DragaliaResponse<object>(
-                data_headers: new DataHeaders(code),
-                new ResultCodeData(code, message)
+                dataHeaders: new DataHeaders(code),
+                new ResultCodeResponse(code, message)
             )
         );
     }

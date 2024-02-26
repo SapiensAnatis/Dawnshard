@@ -10,7 +10,7 @@ public class RaidEventTest : TestFixture
         : base(factory, outputHelper) { }
 
     protected override async Task Setup() =>
-        await this.Client.PostMsgpack<MemoryEventActivateData>(
+        await this.Client.PostMsgpack<MemoryEventActivateResponse>(
             "memory_event/activate",
             new MemoryEventActivateRequest(EventId)
         );
@@ -21,14 +21,14 @@ public class RaidEventTest : TestFixture
     [Fact]
     public async Task GetEventData_ReturnsEventData()
     {
-        DragaliaResponse<RaidEventGetEventDataData> evtData =
-            await Client.PostMsgpack<RaidEventGetEventDataData>(
+        DragaliaResponse<RaidEventGetEventDataResponse> evtData =
+            await Client.PostMsgpack<RaidEventGetEventDataResponse>(
                 $"{Prefix}/get_event_data",
                 new RaidEventGetEventDataRequest(EventId)
             );
 
-        evtData.data.raid_event_user_data.Should().NotBeNull();
-        evtData.data.raid_event_reward_list.Should().NotBeNull();
+        evtData.Data.RaidEventUserData.Should().NotBeNull();
+        evtData.Data.RaidEventRewardList.Should().NotBeNull();
     }
 
     [Fact]
@@ -46,16 +46,16 @@ public class RaidEventTest : TestFixture
 
         await ApiContext.SaveChangesAsync();
 
-        DragaliaResponse<RaidEventReceiveRaidPointRewardData> evtResp =
-            await Client.PostMsgpack<RaidEventReceiveRaidPointRewardData>(
+        DragaliaResponse<RaidEventReceiveRaidPointRewardResponse> evtResp =
+            await Client.PostMsgpack<RaidEventReceiveRaidPointRewardResponse>(
                 $"{Prefix}/receive_raid_point_reward",
                 new RaidEventReceiveRaidPointRewardRequest(EventId, new[] { 1001 })
             );
 
-        evtResp.data.raid_event_reward_list.Should().HaveCount(1);
-        evtResp.data.entity_result.Should().NotBeNull();
-        evtResp.data.update_data_list.Should().NotBeNull();
-        evtResp.data.update_data_list.raid_event_user_list.Should().HaveCount(1); // Reward is a raid event item so we test this
+        evtResp.Data.RaidEventRewardList.Should().HaveCount(1);
+        evtResp.Data.EntityResult.Should().NotBeNull();
+        evtResp.Data.UpdateDataList.Should().NotBeNull();
+        evtResp.Data.UpdateDataList.RaidEventUserList.Should().HaveCount(1); // Reward is a raid event item so we test this
     }
 
     [Fact]
@@ -68,12 +68,12 @@ public class RaidEventTest : TestFixture
             new MemoryEventActivateRequest(fracturedFuturesId)
         );
 
-        DragaliaResponse<RaidEventGetEventDataData> response =
-            await this.Client.PostMsgpack<RaidEventGetEventDataData>(
+        DragaliaResponse<RaidEventGetEventDataResponse> response =
+            await this.Client.PostMsgpack<RaidEventGetEventDataResponse>(
                 "raid_event/get_event_data",
                 new RaidEventGetEventDataRequest(fracturedFuturesId)
             );
 
-        response.data.raid_event_user_data.Should().NotBeNull();
+        response.Data.RaidEventUserData.Should().NotBeNull();
     }
 }

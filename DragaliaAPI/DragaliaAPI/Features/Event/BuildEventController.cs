@@ -21,25 +21,23 @@ public class BuildEventController(
     [HttpPost("get_event_data")]
     public async Task<DragaliaResult> GetEventData(BuildEventGetEventDataRequest request)
     {
-        BuildEventGetEventDataData resp = new();
+        BuildEventGetEventDataResponse resp = new();
 
-        resp.is_receivable_event_daily_bonus = await eventService.GetCustomEventFlag(
-            request.event_id
-        );
+        resp.IsReceivableEventDailyBonus = await eventService.GetCustomEventFlag(request.EventId);
 
-        resp.build_event_user_data = await eventService.GetBuildEventUserData(request.event_id);
-        resp.build_event_reward_list = await eventService.GetEventRewardList<BuildEventRewardList>(
-            request.event_id
+        resp.BuildEventUserData = await eventService.GetBuildEventUserData(request.EventId);
+        resp.BuildEventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
+            request.EventId
         );
 
         if (
             MasterAsset
-                .EventTradeGroup.Enumerable.FirstOrDefault(x => x.EventId == request.event_id)
+                .EventTradeGroup.Enumerable.FirstOrDefault(x => x.EventId == request.EventId)
                 ?.Id is
             { } tradeGroupId
         )
         {
-            resp.event_trade_list = tradeService.GetEventTradeList(tradeGroupId);
+            resp.EventTradeList = tradeService.GetEventTradeList(tradeGroupId);
         }
 
         return Ok(resp);
@@ -48,14 +46,12 @@ public class BuildEventController(
     [HttpPost("entry")]
     public async Task<DragaliaResult> Entry(BuildEventEntryRequest request)
     {
-        BuildEventEntryData resp = new();
+        BuildEventEntryResponse resp = new();
 
-        resp.is_receivable_event_daily_bonus = await eventService.GetCustomEventFlag(
-            request.event_id
-        );
-        resp.build_event_user_data = await eventService.GetBuildEventUserData(request.event_id);
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.IsReceivableEventDailyBonus = await eventService.GetCustomEventFlag(request.EventId);
+        resp.BuildEventUserData = await eventService.GetBuildEventUserData(request.EventId);
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
@@ -65,17 +61,15 @@ public class BuildEventController(
         BuildEventReceiveBuildPointRewardRequest request
     )
     {
-        BuildEventReceiveBuildPointRewardData resp = new();
+        BuildEventReceiveBuildPointRewardResponse resp = new();
 
-        resp.build_event_reward_entity_list = await eventService.ReceiveEventRewards(
-            request.event_id
-        );
+        resp.BuildEventRewardEntityList = await eventService.ReceiveEventRewards(request.EventId);
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
-        resp.build_event_reward_list = await eventService.GetEventRewardList<BuildEventRewardList>(
-            request.event_id
+        resp.BuildEventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
+            request.EventId
         );
 
         return Ok(resp);

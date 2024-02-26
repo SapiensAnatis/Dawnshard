@@ -16,16 +16,16 @@ public class TreasureTradeTest : TestFixture
     {
         await this.ApiContext.SaveChangesAsync();
 
-        TreasureTradeGetListAllData response = (
-            await Client.PostMsgpack<TreasureTradeGetListAllData>(
+        TreasureTradeGetListAllResponse response = (
+            await Client.PostMsgpack<TreasureTradeGetListAllResponse>(
                 "treasure_trade/get_list_all",
                 new TreasureTradeGetListAllRequest()
             )
-        ).data;
+        ).Data;
 
-        response.user_treasure_trade_list.Should().BeEmpty();
-        response.treasure_trade_all_list.Should().NotBeEmpty();
-        response.treasure_trade_list.Should().BeNullOrEmpty();
+        response.UserTreasureTradeList.Should().BeEmpty();
+        response.TreasureTradeAllList.Should().NotBeEmpty();
+        response.TreasureTradeList.Should().BeNullOrEmpty();
     }
 
     [Fact]
@@ -42,19 +42,19 @@ public class TreasureTradeTest : TestFixture
             }
         );
 
-        TreasureTradeGetListAllData response = (
-            await Client.PostMsgpack<TreasureTradeGetListAllData>(
+        TreasureTradeGetListAllResponse response = (
+            await Client.PostMsgpack<TreasureTradeGetListAllResponse>(
                 "treasure_trade/get_list_all",
                 new TreasureTradeGetListAllRequest()
             )
-        ).data;
+        ).Data;
 
         response
-            .user_treasure_trade_list.Should()
+            .UserTreasureTradeList.Should()
             .HaveCount(1)
             .And.ContainEquivalentOf(new UserTreasureTradeList(1000, 1, DateTimeOffset.UnixEpoch));
-        response.treasure_trade_all_list.Should().NotBeEmpty();
-        response.treasure_trade_list.Should().BeNullOrEmpty();
+        response.TreasureTradeAllList.Should().NotBeEmpty();
+        response.TreasureTradeList.Should().BeNullOrEmpty();
     }
 
     [Fact]
@@ -76,20 +76,20 @@ public class TreasureTradeTest : TestFixture
                 )?.Quantity ?? 0;
         }
 
-        TreasureTradeTradeData response = (
-            await Client.PostMsgpack<TreasureTradeTradeData>(
+        TreasureTradeTradeResponse response = (
+            await Client.PostMsgpack<TreasureTradeTradeResponse>(
                 "treasure_trade/trade",
                 new TreasureTradeTradeRequest(1001, 10010101, null, 1)
             )
-        ).data;
+        ).Data;
 
         response
-            .user_treasure_trade_list.Should()
+            .UserTreasureTradeList.Should()
             .HaveCount(1)
-            .And.Contain(x => x.treasure_trade_id == 10010101 && x.trade_count == 1);
-        response.treasure_trade_all_list.Should().NotBeEmpty();
-        response.treasure_trade_list.Should().BeNullOrEmpty();
-        response.update_data_list.Should().NotBeNull();
+            .And.Contain(x => x.TreasureTradeId == 10010101 && x.TradeCount == 1);
+        response.TreasureTradeAllList.Should().NotBeEmpty();
+        response.TreasureTradeList.Should().BeNullOrEmpty();
+        response.UpdateDataList.Should().NotBeNull();
 
         int newMatQuantity = this
             .ApiContext.PlayerMaterials.AsNoTracking()
@@ -103,22 +103,20 @@ public class TreasureTradeTest : TestFixture
     [Fact]
     public async Task Trade_WeaponSkin_Trades()
     {
-        TreasureTradeTradeData response = (
-            await Client.PostMsgpack<TreasureTradeTradeData>(
+        TreasureTradeTradeResponse response = (
+            await Client.PostMsgpack<TreasureTradeTradeResponse>(
                 "treasure_trade/trade",
                 new TreasureTradeTradeRequest(1012, 10124101, null, 1)
             )
-        ).data;
+        ).Data;
 
         response
-            .user_treasure_trade_list.Should()
+            .UserTreasureTradeList.Should()
             .HaveCount(1)
-            .And.Contain(x => x.treasure_trade_id == 10124101 && x.trade_count == 1);
-        response.treasure_trade_all_list.Should().NotBeEmpty();
-        response.treasure_trade_list.Should().BeNullOrEmpty();
-        response.update_data_list.Should().NotBeNull();
-        response
-            .update_data_list.weapon_skin_list.Should()
-            .Contain(x => x.weapon_skin_id == 30159921);
+            .And.Contain(x => x.TreasureTradeId == 10124101 && x.TradeCount == 1);
+        response.TreasureTradeAllList.Should().NotBeEmpty();
+        response.TreasureTradeList.Should().BeNullOrEmpty();
+        response.UpdateDataList.Should().NotBeNull();
+        response.UpdateDataList.WeaponSkinList.Should().Contain(x => x.WeaponSkinId == 30159921);
     }
 }

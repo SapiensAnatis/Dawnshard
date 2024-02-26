@@ -16,21 +16,22 @@ public class ShopTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        DragaliaResponse<ShopGetListData> resp = await this.Client.PostMsgpack<ShopGetListData>(
-            "shop/get_list",
-            new ShopGetListRequest()
-        );
+        DragaliaResponse<ShopGetListResponse> resp =
+            await this.Client.PostMsgpack<ShopGetListResponse>(
+                "shop/get_list",
+                new ShopGetListRequest()
+            );
 
-        resp.data_headers.result_code.Should().Be(ResultCode.Success);
-        resp.data.material_shop_purchase.Should().BeEmpty();
-        resp.data.user_item_summon.Should().NotBeNull();
+        resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
+        resp.Data.MaterialShopPurchase.Should().BeEmpty();
+        resp.Data.UserItemSummon.Should().NotBeNull();
     }
 
     [Fact]
     public async Task MaterialShopPurchase_ValidPurchase_AddsElement()
     {
-        DragaliaResponse<ShopMaterialShopPurchaseData> resp =
-            await this.Client.PostMsgpack<ShopMaterialShopPurchaseData>(
+        DragaliaResponse<ShopMaterialShopPurchaseResponse> resp =
+            await this.Client.PostMsgpack<ShopMaterialShopPurchaseResponse>(
                 "shop/material_shop_purchase",
                 new ShopMaterialShopPurchaseRequest(
                     1000001,
@@ -40,18 +41,18 @@ public class ShopTest : TestFixture
                 )
             );
 
-        resp.data_headers.result_code.Should().Be(ResultCode.Success);
-        resp.data.update_data_list.Should().NotBeNull();
-        resp.data.material_shop_purchase.Should().HaveCount(1);
-        resp.data.material_shop_purchase.First().goods_id.Should().Be(1000001);
-        resp.data.material_shop_purchase.First().buy_count.Should().Be(1);
+        resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
+        resp.Data.UpdateDataList.Should().NotBeNull();
+        resp.Data.MaterialShopPurchase.Should().HaveCount(1);
+        resp.Data.MaterialShopPurchase.First().GoodsId.Should().Be(1000001);
+        resp.Data.MaterialShopPurchase.First().BuyCount.Should().Be(1);
     }
 
     [Fact]
     public async Task MaterialShopPurchase_InvalidPurchase_ReturnsError()
     {
-        DragaliaResponse<ShopMaterialShopPurchaseData> resp =
-            await this.Client.PostMsgpack<ShopMaterialShopPurchaseData>(
+        DragaliaResponse<ShopMaterialShopPurchaseResponse> resp =
+            await this.Client.PostMsgpack<ShopMaterialShopPurchaseResponse>(
                 "shop/material_shop_purchase",
                 new ShopMaterialShopPurchaseRequest(
                     1000001,
@@ -62,6 +63,6 @@ public class ShopTest : TestFixture
                 false
             );
 
-        resp.data_headers.result_code.Should().Be(ResultCode.ShopPaymentTypeInvalid);
+        resp.DataHeaders.ResultCode.Should().Be(ResultCode.ShopPaymentTypeInvalid);
     }
 }

@@ -24,72 +24,72 @@ public class AbilityCrestTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        AbilityCrestSetFavoriteData data = (
-            await this.Client.PostMsgpack<AbilityCrestSetFavoriteData>(
+        AbilityCrestSetFavoriteResponse data = (
+            await this.Client.PostMsgpack<AbilityCrestSetFavoriteResponse>(
                 "ability_crest/set_favorite",
                 new AbilityCrestSetFavoriteRequest()
                 {
-                    ability_crest_id = AbilityCrests.FromWhenceHeComes,
-                    is_favorite = true
+                    AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                    IsFavorite = true
                 }
             )
-        ).data;
+        ).Data;
 
-        data.update_data_list.ability_crest_list.Single().is_favorite.Should().BeTrue();
+        data.UpdateDataList.AbilityCrestList.Single().IsFavorite.Should().BeTrue();
 
-        DbAbilityCrest ability_crest = (
+        DbAbilityCrest abilityCrest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
                 ViewerId,
                 AbilityCrests.FromWhenceHeComes
             )
         )!;
-        await this.ApiContext.Entry(ability_crest).ReloadAsync();
+        await this.ApiContext.Entry(abilityCrest).ReloadAsync();
 
-        ability_crest.IsFavorite.Should().BeTrue();
+        abilityCrest.IsFavorite.Should().BeTrue();
     }
 
     [Fact]
     public async Task SetFavorite_ReturnsErrorWhenAbilityCrestNotFound()
     {
-        ResultCodeData data = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "ability_crest/set_favorite",
                 new AbilityCrestSetFavoriteRequest()
                 {
-                    ability_crest_id = AbilityCrests.SweetSurprise,
-                    is_favorite = true
+                    AbilityCrestId = AbilityCrests.SweetSurprise,
+                    IsFavorite = true
                 },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
-        data.result_code.Should().Be(ResultCode.CommonInvalidArgument);
+        response.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
     }
 
     [Fact]
     public async Task BuildupPiece_ReturnsErrorWhenAbilityCrestNotFound()
     {
-        ResultCodeData data = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "ability_crest/buildup_piece",
                 new AbilityCrestBuildupPieceRequest()
                 {
-                    ability_crest_id = AbilityCrests.InanUnendingWorld,
-                    buildup_ability_crest_piece_list = new List<AtgenBuildupAbilityCrestPieceList>()
+                    AbilityCrestId = AbilityCrests.InanUnendingWorld,
+                    BuildupAbilityCrestPieceList = new List<AtgenBuildupAbilityCrestPieceList>()
                     {
                         new()
                         {
-                            buildup_piece_type = BuildupPieceTypes.Unbind,
-                            is_use_dedicated_material = true,
-                            step = 1
+                            BuildupPieceType = BuildupPieceTypes.Unbind,
+                            IsUseDedicatedMaterial = true,
+                            Step = 1
                         }
                     }
                 },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
-        data.result_code.Should().Be(ResultCode.AbilityCrestBuildupPieceUnablePiece);
+        response.ResultCode.Should().Be(ResultCode.AbilityCrestBuildupPieceUnablePiece);
     }
 
     [Fact]
@@ -107,31 +107,31 @@ public class AbilityCrestTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        ResultCodeData data = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "ability_crest/buildup_piece",
                 new AbilityCrestBuildupPieceRequest()
                 {
-                    ability_crest_id = AbilityCrests.HappyNewYear,
-                    buildup_ability_crest_piece_list = new List<AtgenBuildupAbilityCrestPieceList>()
+                    AbilityCrestId = AbilityCrests.HappyNewYear,
+                    BuildupAbilityCrestPieceList = new List<AtgenBuildupAbilityCrestPieceList>()
                     {
                         new()
                         {
-                            buildup_piece_type = BuildupPieceTypes.Unbind,
-                            is_use_dedicated_material = true,
-                            step = 1
+                            BuildupPieceType = BuildupPieceTypes.Unbind,
+                            IsUseDedicatedMaterial = true,
+                            Step = 1
                         },
                         new()
                         {
-                            buildup_piece_type = BuildupPieceTypes.Unbind,
-                            is_use_dedicated_material = true,
-                            step = 4
+                            BuildupPieceType = BuildupPieceTypes.Unbind,
+                            IsUseDedicatedMaterial = true,
+                            Step = 4
                         }
                     }
                 },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
         DbAbilityCrest ability_crest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
@@ -141,7 +141,7 @@ public class AbilityCrestTest : TestFixture
         )!;
         await this.ApiContext.Entry(ability_crest).ReloadAsync();
 
-        data.result_code.Should().Be(ResultCode.AbilityCrestBuildupPieceStepError);
+        response.ResultCode.Should().Be(ResultCode.AbilityCrestBuildupPieceStepError);
         ability_crest.LimitBreakCount.Should().Be(0);
         this.GetMaterial(Materials.GoldenKey).Should().Be(oldGoldenKey);
     }
@@ -164,42 +164,42 @@ public class AbilityCrestTest : TestFixture
         int oldHolyWater = this.GetMaterial(Materials.HolyWater);
         int oldConsecratedWater = this.GetMaterial(Materials.ConsecratedWater);
 
-        await this.Client.PostMsgpack<AbilityCrestBuildupPieceData>(
+        await this.Client.PostMsgpack<AbilityCrestBuildupPieceResponse>(
             "ability_crest/buildup_piece",
             new AbilityCrestBuildupPieceRequest()
             {
-                ability_crest_id = AbilityCrests.WorthyRivals,
-                buildup_ability_crest_piece_list = new List<AtgenBuildupAbilityCrestPieceList>()
+                AbilityCrestId = AbilityCrests.WorthyRivals,
+                BuildupAbilityCrestPieceList = new List<AtgenBuildupAbilityCrestPieceList>()
                 {
                     new()
                     {
-                        buildup_piece_type = BuildupPieceTypes.Unbind,
-                        is_use_dedicated_material = true,
-                        step = 2
+                        BuildupPieceType = BuildupPieceTypes.Unbind,
+                        IsUseDedicatedMaterial = true,
+                        Step = 2
                     },
                     new()
                     {
-                        buildup_piece_type = BuildupPieceTypes.Unbind,
-                        is_use_dedicated_material = false,
-                        step = 1
+                        BuildupPieceType = BuildupPieceTypes.Unbind,
+                        IsUseDedicatedMaterial = false,
+                        Step = 1
                     },
                     new()
                     {
-                        buildup_piece_type = BuildupPieceTypes.Stats,
-                        is_use_dedicated_material = false,
-                        step = 3
+                        BuildupPieceType = BuildupPieceTypes.Stats,
+                        IsUseDedicatedMaterial = false,
+                        Step = 3
                     },
                     new()
                     {
-                        buildup_piece_type = BuildupPieceTypes.Stats,
-                        is_use_dedicated_material = false,
-                        step = 2
+                        BuildupPieceType = BuildupPieceTypes.Stats,
+                        IsUseDedicatedMaterial = false,
+                        Step = 2
                     },
                     new()
                     {
-                        buildup_piece_type = BuildupPieceTypes.Copies,
-                        is_use_dedicated_material = false,
-                        step = 2
+                        BuildupPieceType = BuildupPieceTypes.Copies,
+                        IsUseDedicatedMaterial = false,
+                        Step = 2
                     }
                 }
             }
@@ -242,18 +242,18 @@ public class AbilityCrestTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        await this.Client.PostMsgpack<AbilityCrestBuildupPieceData>(
+        await this.Client.PostMsgpack<AbilityCrestBuildupPieceResponse>(
             "ability_crest/buildup_piece",
             new AbilityCrestBuildupPieceRequest()
             {
-                ability_crest_id = AbilityCrests.MaskofDeterminationLancesBoon,
-                buildup_ability_crest_piece_list =
+                AbilityCrestId = AbilityCrests.MaskofDeterminationLancesBoon,
+                BuildupAbilityCrestPieceList =
                 [
                     new()
                     {
-                        buildup_piece_type = BuildupPieceTypes.Stats,
-                        is_use_dedicated_material = false,
-                        step = 2
+                        BuildupPieceType = BuildupPieceTypes.Stats,
+                        IsUseDedicatedMaterial = false,
+                        Step = 2
                     },
                 ]
             }
@@ -264,18 +264,18 @@ public class AbilityCrestTest : TestFixture
             x.SetProperty(y => y.BuildupCount, 1)
         );
 
-        await this.Client.PostMsgpack<AbilityCrestBuildupPieceData>(
+        await this.Client.PostMsgpack<AbilityCrestBuildupPieceResponse>(
             "ability_crest/buildup_piece",
             new AbilityCrestBuildupPieceRequest()
             {
-                ability_crest_id = AbilityCrests.MaskofDeterminationLancesBoon,
-                buildup_ability_crest_piece_list =
+                AbilityCrestId = AbilityCrests.MaskofDeterminationLancesBoon,
+                BuildupAbilityCrestPieceList =
                 [
                     new()
                     {
-                        buildup_piece_type = BuildupPieceTypes.Stats,
-                        is_use_dedicated_material = false,
-                        step = 2
+                        BuildupPieceType = BuildupPieceTypes.Stats,
+                        IsUseDedicatedMaterial = false,
+                        Step = 2
                     },
                 ]
             }
@@ -285,22 +285,22 @@ public class AbilityCrestTest : TestFixture
     [Fact]
     public async Task BuildupPlusCount_ReturnsErrorWhenAbilityCrestNotFound()
     {
-        ResultCodeData data = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "ability_crest/buildup_plus_count",
                 new AbilityCrestBuildupPlusCountRequest()
                 {
-                    ability_crest_id = AbilityCrests.InanUnendingWorld,
-                    plus_count_params_list = new List<AtgenPlusCountParamsList>()
+                    AbilityCrestId = AbilityCrests.InanUnendingWorld,
+                    PlusCountParamsList = new List<AtgenPlusCountParamsList>()
                     {
-                        new() { plus_count = 50, plus_count_type = PlusCountType.Hp, }
+                        new() { PlusCount = 50, PlusCountType = PlusCountType.Hp, }
                     }
                 },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
-        data.result_code.Should().Be(ResultCode.AbilityCrestBuildupPieceUnablePiece);
+        response.ResultCode.Should().Be(ResultCode.AbilityCrestBuildupPieceUnablePiece);
     }
 
     [Fact]
@@ -320,21 +320,21 @@ public class AbilityCrestTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        ResultCodeData data = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "ability_crest/buildup_plus_count",
                 new AbilityCrestBuildupPlusCountRequest()
                 {
-                    ability_crest_id = AbilityCrests.TwinfoldBonds,
-                    plus_count_params_list = new List<AtgenPlusCountParamsList>()
+                    AbilityCrestId = AbilityCrests.TwinfoldBonds,
+                    PlusCountParamsList = new List<AtgenPlusCountParamsList>()
                     {
-                        new() { plus_count = 50, plus_count_type = PlusCountType.Hp },
-                        new() { plus_count = 25, plus_count_type = PlusCountType.Atk }
+                        new() { PlusCount = 50, PlusCountType = PlusCountType.Hp },
+                        new() { PlusCount = 25, PlusCountType = PlusCountType.Atk }
                     }
                 },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
         DbAbilityCrest ability_crest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
@@ -344,7 +344,7 @@ public class AbilityCrestTest : TestFixture
         )!;
         await this.ApiContext.Entry(ability_crest).ReloadAsync();
 
-        data.result_code.Should().Be(ResultCode.AbilityCrestBuildupPlusCountCountError);
+        response.ResultCode.Should().Be(ResultCode.AbilityCrestBuildupPlusCountCountError);
         ability_crest.HpPlusCount.Should().Be(0);
         ability_crest.AttackPlusCount.Should().Be(26);
         this.GetMaterial(Materials.FortifyingGemstone).Should().Be(oldFortifyingGem);
@@ -368,15 +368,15 @@ public class AbilityCrestTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        await this.Client.PostMsgpack<ResultCodeData>(
+        await this.Client.PostMsgpack<ResultCodeResponse>(
             "ability_crest/buildup_plus_count",
             new AbilityCrestBuildupPlusCountRequest()
             {
-                ability_crest_id = AbilityCrests.EndlessWaltz,
-                plus_count_params_list = new List<AtgenPlusCountParamsList>()
+                AbilityCrestId = AbilityCrests.EndlessWaltz,
+                PlusCountParamsList = new List<AtgenPlusCountParamsList>()
                 {
-                    new() { plus_count = 1, plus_count_type = PlusCountType.Hp },
-                    new() { plus_count = 50, plus_count_type = PlusCountType.Atk, }
+                    new() { PlusCount = 1, PlusCountType = PlusCountType.Hp },
+                    new() { PlusCount = 50, PlusCountType = PlusCountType.Atk, }
                 }
             }
         );
@@ -398,13 +398,13 @@ public class AbilityCrestTest : TestFixture
     [Fact]
     public async Task ResetPlusCount_ReturnsErrorWhenAbilityCrestNotFound()
     {
-        ResultCodeData data = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "ability_crest/reset_plus_count",
                 new AbilityCrestResetPlusCountRequest()
                 {
-                    ability_crest_id = AbilityCrests.InanUnendingWorld,
-                    plus_count_type_list = new List<PlusCountType>()
+                    AbilityCrestId = AbilityCrests.InanUnendingWorld,
+                    PlusCountTypeList = new List<PlusCountType>()
                     {
                         PlusCountType.Hp,
                         PlusCountType.Atk
@@ -412,9 +412,9 @@ public class AbilityCrestTest : TestFixture
                 },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
-        data.result_code.Should().Be(ResultCode.AbilityCrestBuildupPieceUnablePiece);
+        response.ResultCode.Should().Be(ResultCode.AbilityCrestBuildupPieceUnablePiece);
     }
 
     [Fact]
@@ -433,17 +433,17 @@ public class AbilityCrestTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        ResultCodeData data = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "ability_crest/reset_plus_count",
                 new AbilityCrestResetPlusCountRequest()
                 {
-                    ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
-                    plus_count_type_list = new List<PlusCountType>() { PlusCountType.Hp, 0 }
+                    AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                    PlusCountTypeList = new List<PlusCountType>() { PlusCountType.Hp, 0 }
                 },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
         DbAbilityCrest ability_crest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
@@ -453,7 +453,7 @@ public class AbilityCrestTest : TestFixture
         )!;
         await this.ApiContext.Entry(ability_crest).ReloadAsync();
 
-        data.result_code.Should().Be(ResultCode.CommonInvalidArgument);
+        response.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
         ability_crest.HpPlusCount.Should().Be(40);
         ability_crest.AttackPlusCount.Should().Be(0);
         this.GetCoin().Should().Be(oldCoin);
@@ -478,12 +478,12 @@ public class AbilityCrestTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        await this.Client.PostMsgpack<ResultCodeData>(
+        await this.Client.PostMsgpack<ResultCodeResponse>(
             "ability_crest/reset_plus_count",
             new AbilityCrestResetPlusCountRequest()
             {
-                ability_crest_id = AbilityCrests.TheGeniusTacticianBowsBoon,
-                plus_count_type_list = new List<PlusCountType>()
+                AbilityCrestId = AbilityCrests.TheGeniusTacticianBowsBoon,
+                PlusCountTypeList = new List<PlusCountType>()
                 {
                     PlusCountType.Hp,
                     PlusCountType.Atk
@@ -527,16 +527,16 @@ public class AbilityCrestTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        AbilityCrestGetAbilityCrestSetListData data = (
-            await this.Client.PostMsgpack<AbilityCrestGetAbilityCrestSetListData>(
+        AbilityCrestGetAbilityCrestSetListResponse data = (
+            await this.Client.PostMsgpack<AbilityCrestGetAbilityCrestSetListResponse>(
                 "ability_crest/get_ability_crest_set_list",
                 new AbilityCrestGetAbilityCrestSetListRequest()
             )
-        ).data!;
+        ).Data!;
 
         int index = 1;
 
-        foreach (AbilityCrestSetList abilityCrestSet in data.ability_crest_set_list)
+        foreach (AbilityCrestSetList abilityCrestSet in data.AbilityCrestSetList)
         {
             if (index == setNo)
             {
@@ -566,7 +566,7 @@ public class AbilityCrestTest : TestFixture
             ++index;
         }
 
-        data.ability_crest_set_list.Count().Should().Be(54);
+        data.AbilityCrestSetList.Count().Should().Be(54);
     }
 
     [Theory]
@@ -574,18 +574,18 @@ public class AbilityCrestTest : TestFixture
     [InlineData(55)]
     public async Task SetAbilityCrestSet_ShouldThrowErrorAndNotAddSetWhenSetNoInvalid(int setNo)
     {
-        ResultCodeData data = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "ability_crest/set_ability_crest_set",
-                new AbilityCrestSetAbilityCrestSetRequest() { ability_crest_set_no = setNo },
+                new AbilityCrestSetAbilityCrestSetRequest() { AbilityCrestSetNo = setNo },
                 ensureSuccessHeader: false
             )
-        ).data;
+        ).Data;
 
         await this.ApiContext.SaveChangesAsync();
 
         (await this.ApiContext.PlayerAbilityCrestSets.FindAsync(ViewerId, setNo)).Should().BeNull();
-        data.result_code.Should().Be(ResultCode.CommonInvalidArgument);
+        response.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
     }
 
     [Fact]
@@ -595,13 +595,13 @@ public class AbilityCrestTest : TestFixture
 
         (await this.ApiContext.PlayerAbilityCrestSets.FindAsync(ViewerId, setNo)).Should().BeNull();
 
-        await this.Client.PostMsgpack<ResultCodeData>(
+        await this.Client.PostMsgpack<ResultCodeResponse>(
             "ability_crest/set_ability_crest_set",
             new AbilityCrestSetAbilityCrestSetRequest()
             {
-                ability_crest_set_no = setNo,
-                ability_crest_set_name = "",
-                request_ability_crest_set_data = new() { talisman_key_id = 1 }
+                AbilityCrestSetNo = setNo,
+                AbilityCrestSetName = "",
+                RequestAbilityCrestSetData = new() { TalismanKeyId = 1 }
             }
         );
 
@@ -626,15 +626,15 @@ public class AbilityCrestTest : TestFixture
         )!;
         dbAbilityCrestSet.CrestSlotType2CrestId2.Should().Be(0);
 
-        await this.Client.PostMsgpack<ResultCodeData>(
+        await this.Client.PostMsgpack<ResultCodeResponse>(
             "ability_crest/set_ability_crest_set",
             new AbilityCrestSetAbilityCrestSetRequest()
             {
-                ability_crest_set_no = setNo,
-                ability_crest_set_name = "",
-                request_ability_crest_set_data = new()
+                AbilityCrestSetNo = setNo,
+                AbilityCrestSetName = "",
+                RequestAbilityCrestSetData = new()
                 {
-                    crest_slot_type_2_crest_id_2 = AbilityCrests.DragonsNest
+                    CrestSlotType2CrestId2 = AbilityCrests.DragonsNest
                 }
             }
         );
@@ -650,12 +650,12 @@ public class AbilityCrestTest : TestFixture
 
         (await this.ApiContext.PlayerAbilityCrestSets.FindAsync(ViewerId, setNo)).Should().BeNull();
 
-        await this.Client.PostMsgpack<ResultCodeData>(
+        await this.Client.PostMsgpack<ResultCodeResponse>(
             "ability_crest/update_ability_crest_set_name",
             new AbilityCrestUpdateAbilityCrestSetNameRequest()
             {
-                ability_crest_set_no = setNo,
-                ability_crest_set_name = "test"
+                AbilityCrestSetNo = setNo,
+                AbilityCrestSetName = "test"
             }
         );
 
@@ -680,12 +680,12 @@ public class AbilityCrestTest : TestFixture
         )!;
         dbAbilityCrestSet.AbilityCrestSetName.Should().Be("");
 
-        await this.Client.PostMsgpack<ResultCodeData>(
+        await this.Client.PostMsgpack<ResultCodeResponse>(
             "ability_crest/update_ability_crest_set_name",
             new AbilityCrestUpdateAbilityCrestSetNameRequest()
             {
-                ability_crest_set_no = setNo,
-                ability_crest_set_name = "test"
+                AbilityCrestSetNo = setNo,
+                AbilityCrestSetName = "test"
             }
         );
 

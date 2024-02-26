@@ -71,7 +71,7 @@ public class DmodeControllerTest
         DmodeDungeonInfo dungeonInfo = new(0, 0, 0, 0, false, DungeonState.Waiting);
         mockDmodeService.Setup(x => x.GetDungeonInfo()).ReturnsAsync(dungeonInfo);
 
-        List<DmodeStoryList> stories = new() { new DmodeStoryList(1000, 1) };
+        List<DmodeStoryList> stories = new() { new DmodeStoryList(1000, true) };
         mockStoryRepository
             .SetupGet(x => x.DmodeStories)
             .Returns(
@@ -93,17 +93,19 @@ public class DmodeControllerTest
             new() { new DmodeServitorPassiveList(DmodeServitorPassiveType.Exp, 5) };
         mockDmodeService.Setup(x => x.GetServitorPassiveList()).ReturnsAsync(passiveList);
 
-        DmodeGetDataData? resp = (await dmodeController.GetData()).GetData<DmodeGetDataData>();
+        DmodeGetDataResponse? resp = (
+            await dmodeController.GetData()
+        ).GetData<DmodeGetDataResponse>();
 
         resp.Should().NotBeNull();
 
-        resp!.current_server_time.Should().Be(FixedTime);
-        resp.dmode_info.Should().BeEquivalentTo(info);
-        resp.dmode_chara_list.Should().BeEquivalentTo(charaList);
-        resp.dmode_expedition.Should().BeEquivalentTo(expedition);
-        resp.dmode_dungeon_info.Should().BeEquivalentTo(dungeonInfo);
-        resp.dmode_story_list.Should().BeEquivalentTo(stories);
-        resp.update_data_list.Should().BeEquivalentTo(updateDataList);
+        resp!.CurrentServerTime.Should().Be(FixedTime);
+        resp.DmodeInfo.Should().BeEquivalentTo(info);
+        resp.DmodeCharaList.Should().BeEquivalentTo(charaList);
+        resp.DmodeExpedition.Should().BeEquivalentTo(expedition);
+        resp.DmodeDungeonInfo.Should().BeEquivalentTo(dungeonInfo);
+        resp.DmodeStoryList.Should().BeEquivalentTo(stories);
+        resp.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockDmodeService.VerifyAll();
         mockUpdateDataService.VerifyAll();
@@ -136,7 +138,7 @@ public class DmodeControllerTest
         DmodeDungeonInfo dungeonInfo = new(0, 0, 0, 0, false, DungeonState.Waiting);
         mockDmodeService.Setup(x => x.GetDungeonInfo()).ReturnsAsync(dungeonInfo);
 
-        List<DmodeStoryList> stories = new() { new DmodeStoryList(1000, 1) };
+        List<DmodeStoryList> stories = new() { new DmodeStoryList(1000, true) };
         mockStoryRepository
             .SetupGet(x => x.DmodeStories)
             .Returns(
@@ -158,17 +160,19 @@ public class DmodeControllerTest
             new() { new DmodeServitorPassiveList(DmodeServitorPassiveType.Exp, 5) };
         mockDmodeService.Setup(x => x.GetServitorPassiveList()).ReturnsAsync(passiveList);
 
-        DmodeGetDataData? resp = (await dmodeController.Entry()).GetData<DmodeGetDataData>();
+        DmodeGetDataResponse? resp = (
+            await dmodeController.Entry()
+        ).GetData<DmodeGetDataResponse>();
 
         resp.Should().NotBeNull();
 
-        resp!.current_server_time.Should().Be(FixedTime);
-        resp.dmode_info.Should().BeEquivalentTo(info);
-        resp.dmode_chara_list.Should().BeEquivalentTo(charaList);
-        resp.dmode_expedition.Should().BeEquivalentTo(expedition);
-        resp.dmode_dungeon_info.Should().BeEquivalentTo(dungeonInfo);
-        resp.dmode_story_list.Should().BeEquivalentTo(stories);
-        resp.update_data_list.Should().BeEquivalentTo(updateDataList);
+        resp!.CurrentServerTime.Should().Be(FixedTime);
+        resp.DmodeInfo.Should().BeEquivalentTo(info);
+        resp.DmodeCharaList.Should().BeEquivalentTo(charaList);
+        resp.DmodeExpedition.Should().BeEquivalentTo(expedition);
+        resp.DmodeDungeonInfo.Should().BeEquivalentTo(dungeonInfo);
+        resp.DmodeStoryList.Should().BeEquivalentTo(stories);
+        resp.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockDmodeService.VerifyAll();
         mockUpdateDataService.VerifyAll();
@@ -192,15 +196,15 @@ public class DmodeControllerTest
         UpdateDataList updateDataList = new();
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
-        DmodeReadStoryData? resp = (
+        DmodeReadStoryResponse? resp = (
             await dmodeController.ReadStory(new DmodeReadStoryRequest(1000))
-        ).GetData<DmodeReadStoryData>();
+        ).GetData<DmodeReadStoryResponse>();
 
         resp.Should().NotBeNull();
-        resp!.dmode_story_reward_list.Should().BeEquivalentTo(rewards);
-        resp.duplicate_entity_list.Should().NotBeNull();
-        resp.entity_result.Should().BeEquivalentTo(entityResult);
-        resp.update_data_list.Should().BeEquivalentTo(updateDataList);
+        resp!.DmodeStoryRewardList.Should().BeEquivalentTo(rewards);
+        resp.DuplicateEntityList.Should().NotBeNull();
+        resp.EntityResult.Should().BeEquivalentTo(entityResult);
+        resp.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockStoryService.VerifyAll();
         mockRewardService.VerifyAll();
@@ -220,15 +224,15 @@ public class DmodeControllerTest
             .Setup(x => x.BuildupServitorPassive(It.IsAny<IEnumerable<DmodeServitorPassiveList>>()))
             .ReturnsAsync(passiveList);
 
-        DmodeBuildupServitorPassiveData? resp = (
+        DmodeBuildupServitorPassiveResponse? resp = (
             await dmodeController.BuildupServitorPassive(
                 new DmodeBuildupServitorPassiveRequest(passiveList)
             )
-        ).GetData<DmodeBuildupServitorPassiveData>();
+        ).GetData<DmodeBuildupServitorPassiveResponse>();
 
         resp.Should().NotBeNull();
-        resp!.dmode_servitor_passive_list.Should().BeEquivalentTo(passiveList);
-        resp.update_data_list.Should().BeEquivalentTo(updateDataList);
+        resp!.DmodeServitorPassiveList.Should().BeEquivalentTo(passiveList);
+        resp.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockUpdateDataService.VerifyAll();
         mockDmodeService.VerifyAll();
@@ -248,9 +252,9 @@ public class DmodeControllerTest
             .Setup(x => x.StartExpedition(10, It.IsAny<IEnumerable<Charas>>()))
             .ReturnsAsync(expedition);
 
-        DmodeExpeditionStartData? resp = (
+        DmodeExpeditionStartResponse? resp = (
             await dmodeController.ExpeditionStart(new DmodeExpeditionStartRequest(10, charaIdList))
-        ).GetData<DmodeExpeditionStartData>();
+        ).GetData<DmodeExpeditionStartResponse>();
 
         mockUpdateDataService.VerifyAll();
         mockDmodeService.VerifyAll();
@@ -268,20 +272,20 @@ public class DmodeControllerTest
         DmodeExpedition expedition =
             new(Charas.ThePrince, 0, 0, 0, FixedTime, 10, ExpeditionState.Waiting);
         DmodeIngameResult ingameResult =
-            new() { chara_id_list = new Charas[] { Charas.ThePrince, 0, 0, 0 }, floor_num = 10 };
+            new() { CharaIdList = new Charas[] { Charas.ThePrince, 0, 0, 0 }, FloorNum = 10 };
 
         mockDmodeService
             .Setup(x => x.FinishExpedition(false))
             .ReturnsAsync((expedition, ingameResult));
 
-        DmodeExpeditionFinishData? resp = (
+        DmodeExpeditionFinishResponse? resp = (
             await dmodeController.ExpeditionFinish()
-        ).GetData<DmodeExpeditionFinishData>();
+        ).GetData<DmodeExpeditionFinishResponse>();
 
         resp.Should().NotBeNull();
-        resp!.dmode_expedition.Should().BeEquivalentTo(expedition);
-        resp.dmode_ingame_result.Should().BeEquivalentTo(ingameResult);
-        resp.update_data_list.Should().BeEquivalentTo(updateDataList);
+        resp!.DmodeExpedition.Should().BeEquivalentTo(expedition);
+        resp.DmodeIngameResult.Should().BeEquivalentTo(ingameResult);
+        resp.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockRewardService.VerifyAll();
         mockUpdateDataService.VerifyAll();
@@ -300,20 +304,20 @@ public class DmodeControllerTest
         DmodeExpedition expedition =
             new(Charas.ThePrince, 0, 0, 0, FixedTime, 10, ExpeditionState.Waiting);
         DmodeIngameResult ingameResult =
-            new() { chara_id_list = new Charas[] { Charas.ThePrince, 0, 0, 0 } };
+            new() { CharaIdList = new Charas[] { Charas.ThePrince, 0, 0, 0 } };
 
         mockDmodeService
             .Setup(x => x.FinishExpedition(true))
             .ReturnsAsync((expedition, ingameResult));
 
-        DmodeExpeditionForceFinishData? resp = (
+        DmodeExpeditionForceFinishResponse? resp = (
             await dmodeController.ExpeditionForceFinish()
-        ).GetData<DmodeExpeditionForceFinishData>();
+        ).GetData<DmodeExpeditionForceFinishResponse>();
 
         resp.Should().NotBeNull();
-        resp!.dmode_expedition.Should().BeEquivalentTo(expedition);
-        resp.dmode_ingame_result.Should().BeEquivalentTo(ingameResult);
-        resp.update_data_list.Should().BeEquivalentTo(updateDataList);
+        resp!.DmodeExpedition.Should().BeEquivalentTo(expedition);
+        resp.DmodeIngameResult.Should().BeEquivalentTo(ingameResult);
+        resp.UpdateDataList.Should().BeEquivalentTo(updateDataList);
 
         mockRewardService.VerifyAll();
         mockUpdateDataService.VerifyAll();

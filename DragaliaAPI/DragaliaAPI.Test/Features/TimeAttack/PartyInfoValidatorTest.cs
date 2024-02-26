@@ -31,16 +31,16 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { chara_data = new() { chara_id = Charas.GalaGatov } },
-                    new() { chara_data = new() { chara_id = Charas.GalaGatov } }
+                    new() { CharaData = new() { CharaId = Charas.GalaGatov } },
+                    new() { CharaData = new() { CharaId = Charas.GalaGatov } }
                 }
             }
         );
 
         result.Errors.Count.Should().Be(1);
-        result.ShouldHaveValidationErrorFor(x => x.party_unit_list);
+        result.ShouldHaveValidationErrorFor(x => x.PartyUnitList);
     }
 
     [Fact]
@@ -49,13 +49,13 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        chara_data = new() { chara_id = Charas.GalaGatov },
-                        edit_skill_1_chara_data = new() { chara_id = Charas.ShaWujing },
-                        edit_skill_2_chara_data = new() { chara_id = Charas.ShaWujing }
+                        CharaData = new() { CharaId = Charas.GalaGatov },
+                        EditSkill1CharaData = new() { CharaId = Charas.ShaWujing },
+                        EditSkill2CharaData = new() { CharaId = Charas.ShaWujing }
                     }
                 }
             }
@@ -63,7 +63,7 @@ public class PartyInfoValidatorTest
 
         result.Errors.Count.Should().Be(1);
         result
-            .ShouldHaveValidationErrorFor("party_unit_list[0]")
+            .ShouldHaveValidationErrorFor("PartyUnitList[0]")
             .WithErrorMessage("Duplicate shared skills");
     }
 
@@ -73,19 +73,19 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        chara_data = new() { chara_id = Charas.GalaGatov },
-                        dragon_reliability_level = 31,
+                        CharaData = new() { CharaId = Charas.GalaGatov },
+                        DragonReliabilityLevel = 31,
                     }
                 }
             }
         );
 
         result.Errors.Count.Should().Be(1);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].dragon_reliability_level");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].DragonReliabilityLevel");
     }
 
     [Fact]
@@ -94,18 +94,18 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        chara_data = new() { chara_id = Charas.GalaGatov },
-                        crest_slot_type_1_crest_list = new List<GameAbilityCrest>()
+                        CharaData = new() { CharaId = Charas.GalaGatov },
+                        CrestSlotType1CrestList = new List<GameAbilityCrest>()
                         {
-                            new() { ability_crest_id = AbilityCrests.CastleCheerCorps },
+                            new() { AbilityCrestId = AbilityCrests.CastleCheerCorps },
                         },
-                        crest_slot_type_2_crest_list = new List<GameAbilityCrest>()
+                        CrestSlotType2CrestList = new List<GameAbilityCrest>()
                         {
-                            new() { ability_crest_id = AbilityCrests.CastleCheerCorps }
+                            new() { AbilityCrestId = AbilityCrests.CastleCheerCorps }
                         }
                     }
                 }
@@ -114,7 +114,7 @@ public class PartyInfoValidatorTest
 
         result.Errors.Count.Should().Be(1);
         result
-            .ShouldHaveValidationErrorFor("party_unit_list[0]")
+            .ShouldHaveValidationErrorFor("PartyUnitList[0]")
             .WithErrorMessage("Duplicate ability crests");
     }
 
@@ -124,17 +124,17 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { chara_data = new() { chara_id = (Charas)1234, }, }
+                    new() { CharaData = new() { CharaId = (Charas)1234, }, }
                 }
             }
         );
 
         result.Errors.Count.Should().Be(2);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].chara_data.chara_id");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].CharaData.CharaId");
         result
-            .ShouldHaveValidationErrorFor("party_unit_list[0].chara_data")
+            .ShouldHaveValidationErrorFor("PartyUnitList[0].CharaData")
             .WithErrorMessage("Element lock violation");
     }
 
@@ -144,15 +144,15 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        chara_data = new()
+                        CharaData = new()
                         {
-                            chara_id = Charas.GalaGatov,
-                            attack_plus_count = 101,
-                            hp_plus_count = 101
+                            CharaId = Charas.GalaGatov,
+                            AttackPlusCount = 101,
+                            HpPlusCount = 101
                         },
                     }
                 }
@@ -160,8 +160,8 @@ public class PartyInfoValidatorTest
         );
 
         result.Errors.Count.Should().Be(2);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].chara_data.attack_plus_count");
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].chara_data.hp_plus_count");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].CharaData.AttackPlusCount");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].CharaData.HpPlusCount");
     }
 
     [Fact]
@@ -170,16 +170,16 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { chara_data = new() { chara_id = Charas.SummerIeyasu }, }
+                    new() { CharaData = new() { CharaId = Charas.SummerIeyasu }, }
                 }
             }
         );
 
         result.Errors.Count.Should().Be(1);
         result
-            .ShouldHaveValidationErrorFor("party_unit_list[0].chara_data")
+            .ShouldHaveValidationErrorFor("PartyUnitList[0].CharaData")
             .WithErrorMessage("Element lock violation");
     }
 
@@ -189,17 +189,17 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { dragon_data = new() { dragon_id = (Dragons)1234, }, }
+                    new() { DragonData = new() { DragonId = (Dragons)1234, }, }
                 }
             }
         );
 
         result.Errors.Count.Should().Be(2);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].dragon_data.dragon_id");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].DragonData.DragonId");
         result
-            .ShouldHaveValidationErrorFor("party_unit_list[0].dragon_data")
+            .ShouldHaveValidationErrorFor("PartyUnitList[0].DragonData")
             .WithErrorMessage("Element lock violation");
     }
 
@@ -209,15 +209,15 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        dragon_data = new()
+                        DragonData = new()
                         {
-                            dragon_id = Dragons.GalaRebornAgni,
-                            attack_plus_count = 101,
-                            hp_plus_count = 101
+                            DragonId = Dragons.GalaRebornAgni,
+                            AttackPlusCount = 101,
+                            HpPlusCount = 101
                         },
                     }
                 }
@@ -225,8 +225,8 @@ public class PartyInfoValidatorTest
         );
 
         result.Errors.Count.Should().Be(2);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].dragon_data.attack_plus_count");
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].dragon_data.hp_plus_count");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].DragonData.AttackPlusCount");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].DragonData.HpPlusCount");
     }
 
     [Fact]
@@ -235,16 +235,16 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { dragon_data = new() { dragon_id = Dragons.SummerMarishiten }, }
+                    new() { DragonData = new() { DragonId = Dragons.SummerMarishiten }, }
                 }
             }
         );
 
         result.Errors.Count.Should().Be(1);
         result
-            .ShouldHaveValidationErrorFor("party_unit_list[0].dragon_data")
+            .ShouldHaveValidationErrorFor("PartyUnitList[0].DragonData")
             .WithErrorMessage("Element lock violation");
     }
 
@@ -254,13 +254,13 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        crest_slot_type_1_crest_list = new List<GameAbilityCrest>()
+                        CrestSlotType1CrestList = new List<GameAbilityCrest>()
                         {
-                            new() { ability_crest_id = (AbilityCrests)1234 }
+                            new() { AbilityCrestId = (AbilityCrests)1234 }
                         },
                     }
                 }
@@ -268,7 +268,7 @@ public class PartyInfoValidatorTest
         );
 
         result.Errors.Count.Should().Be(1);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0][0].ability_crest_id"); // wtf is this property name?
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0][0].AbilityCrestId"); // wtf is this property name?
     }
 
     [Fact]
@@ -277,13 +277,13 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        crest_slot_type_1_crest_list = new List<GameAbilityCrest>()
+                        CrestSlotType1CrestList = new List<GameAbilityCrest>()
                         {
-                            new() { attack_plus_count = 101, hp_plus_count = 101 }
+                            new() { AttackPlusCount = 101, HpPlusCount = 101 }
                         },
                     }
                 }
@@ -291,8 +291,8 @@ public class PartyInfoValidatorTest
         );
 
         result.Errors.Count.Should().Be(2);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0][0].attack_plus_count");
-        result.ShouldHaveValidationErrorFor("party_unit_list[0][0].hp_plus_count");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0][0].AttackPlusCount");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0][0].HpPlusCount");
     }
 
     [Fact]
@@ -301,15 +301,15 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { weapon_body_data = new() { weapon_body_id = (WeaponBodies)1234 } }
+                    new() { WeaponBodyData = new() { WeaponBodyId = (WeaponBodies)1234 } }
                 }
             }
         );
 
         result.Errors.Count.Should().Be(1);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].weapon_body_data.weapon_body_id");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].WeaponBodyData.WeaponBodyId");
     }
 
     [Fact]
@@ -318,15 +318,15 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        talisman_data = new()
+                        TalismanData = new()
                         {
-                            talisman_id = Talismans.GalaLuca,
-                            additional_attack = 101,
-                            additional_hp = 101
+                            TalismanId = Talismans.GalaLuca,
+                            AdditionalAttack = 101,
+                            AdditionalHp = 101
                         }
                     }
                 }
@@ -334,8 +334,8 @@ public class PartyInfoValidatorTest
         );
 
         result.Errors.Count.Should().Be(2);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].talisman_data.additional_attack");
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].talisman_data.additional_hp");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].TalismanData.AdditionalAttack");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].TalismanData.AdditionalHp");
     }
 
     [Fact]
@@ -344,15 +344,15 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { talisman_data = new() { talisman_id = (Talismans)1234, } }
+                    new() { TalismanData = new() { TalismanId = (Talismans)1234, } }
                 }
             }
         );
 
         result.Errors.Count.Should().Be(1);
-        result.ShouldHaveValidationErrorFor("party_unit_list[0].talisman_data.talisman_id");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].TalismanData.TalismanId");
     }
 
     [Fact]
@@ -361,15 +361,15 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        talisman_data = new()
+                        TalismanData = new()
                         {
-                            talisman_id = Talismans.GalaLuca,
-                            talisman_ability_id_1 = 330000569,
-                            talisman_ability_id_2 = 3004
+                            TalismanId = Talismans.GalaLuca,
+                            TalismanAbilityId1 = 330000569,
+                            TalismanAbilityId2 = 3004
                         }
                     }
                 }
@@ -377,12 +377,8 @@ public class PartyInfoValidatorTest
         );
 
         result.Errors.Count.Should().Be(2);
-        result.ShouldHaveValidationErrorFor(
-            "party_unit_list[0].talisman_data.talisman_ability_id_1"
-        );
-        result.ShouldHaveValidationErrorFor(
-            "party_unit_list[0].talisman_data.talisman_ability_id_2"
-        );
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].TalismanData.TalismanAbilityId1");
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].TalismanData.TalismanAbilityId2");
     }
 
     [Fact]
@@ -391,15 +387,15 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        talisman_data = new()
+                        TalismanData = new()
                         {
-                            talisman_id = Talismans.GalaLuca,
-                            talisman_ability_id_1 = 340000029,
-                            talisman_ability_id_2 = 340000029
+                            TalismanId = Talismans.GalaLuca,
+                            TalismanAbilityId1 = 340000029,
+                            TalismanAbilityId2 = 340000029
                         }
                     }
                 }
@@ -408,7 +404,7 @@ public class PartyInfoValidatorTest
 
         result.Errors.Count.Should().Be(1);
         result
-            .ShouldHaveValidationErrorFor("party_unit_list[0].talisman_data")
+            .ShouldHaveValidationErrorFor("PartyUnitList[0].TalismanData")
             .WithErrorMessage("Duplicate talisman abilities");
     }
 
@@ -418,16 +414,16 @@ public class PartyInfoValidatorTest
         TestValidationResult<PartyInfo> result = validator.TestValidate(
             new PartyInfo()
             {
-                party_unit_list = new List<PartyUnitList>()
+                PartyUnitList = new List<PartyUnitList>()
                 {
                     new()
                     {
-                        talisman_data = new()
+                        TalismanData = new()
                         {
-                            talisman_id = Talismans.GalaLuca,
-                            talisman_ability_id_1 = 340000029,
-                            talisman_ability_id_2 = 340000077,
-                            talisman_ability_id_3 = 340000118,
+                            TalismanId = Talismans.GalaLuca,
+                            TalismanAbilityId1 = 340000029,
+                            TalismanAbilityId2 = 340000077,
+                            TalismanAbilityId3 = 340000118,
                         }
                     }
                 }
@@ -435,8 +431,6 @@ public class PartyInfoValidatorTest
         );
 
         result.Errors.Count.Should().Be(1);
-        result.ShouldHaveValidationErrorFor(
-            "party_unit_list[0].talisman_data.talisman_ability_id_3"
-        );
+        result.ShouldHaveValidationErrorFor("PartyUnitList[0].TalismanData.TalismanAbilityId3");
     }
 }

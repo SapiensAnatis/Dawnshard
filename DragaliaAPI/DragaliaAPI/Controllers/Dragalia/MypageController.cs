@@ -23,12 +23,12 @@ public class MypageController(
     [HttpPost]
     public async Task<DragaliaResult> Info()
     {
-        MypageInfoData resp = new();
+        MypageInfoResponse resp = new();
 
-        resp.user_summon_list = new List<UserSummonList>();
-        resp.quest_event_schedule_list = new List<QuestEventScheduleList>();
+        resp.UserSummonList = new List<UserSummonList>();
+        resp.QuestEventScheduleList = new List<QuestEventScheduleList>();
 
-        resp.quest_schedule_detail_list = MasterAsset.QuestScheduleInfo.Enumerable.Select(
+        resp.QuestScheduleDetailList = MasterAsset.QuestScheduleInfo.Enumerable.Select(
             x => new QuestScheduleDetailList(
                 x.Id,
                 x.ScheduleGroupId,
@@ -40,14 +40,14 @@ public class MypageController(
             )
         );
 
-        resp.is_shop_notification = await shopRepository.GetDailySummonCountAsync() == 0;
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.update_data_list.mission_notice = await missionService.GetMissionNotice(null);
+        resp.IsShopNotification = await shopRepository.GetDailySummonCountAsync() == 0;
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList.MissionNotice = await missionService.GetMissionNotice(null);
 
         RepeatInfo? repeatInfo = await autoRepeatService.GetRepeatInfo();
 
         if (repeatInfo != null)
-            resp.repeat_data = new(repeatInfo.Key.ToString(), repeatInfo.CurrentCount, 1);
+            resp.RepeatData = new(repeatInfo.Key.ToString(), repeatInfo.CurrentCount, 1);
 
         return Ok(resp);
     }

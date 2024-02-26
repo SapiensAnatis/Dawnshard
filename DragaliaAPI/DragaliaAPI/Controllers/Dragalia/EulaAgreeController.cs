@@ -10,15 +10,15 @@ public class EulaAgreeController : DragaliaControllerBase
     public DragaliaResult Agree(EulaAgreeAgreeRequest request)
     {
         return this.Ok(
-            new EulaAgreeAgreeData()
+            new EulaAgreeAgreeResponse()
             {
-                is_optin = 0,
-                version_hash = new()
+                IsOptin = false,
+                VersionHash = new()
                 {
-                    region = request.region,
-                    lang = request.lang,
-                    eula_version = request.eula_version,
-                    privacy_policy_version = request.privacy_policy_version
+                    Region = request.Region,
+                    Lang = request.Lang,
+                    EulaVersion = request.EulaVersion,
+                    PrivacyPolicyVersion = request.PrivacyPolicyVersion
                 }
             }
         );

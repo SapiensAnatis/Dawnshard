@@ -14,17 +14,18 @@ public class DmodeTest : TestFixture
     [Fact]
     public async Task GetData_ReturnsData()
     {
-        DragaliaResponse<DmodeGetDataData> resp = await Client.PostMsgpack<DmodeGetDataData>(
-            "dmode/get_data",
-            new DmodeGetDataRequest()
-        );
+        DragaliaResponse<DmodeGetDataResponse> resp =
+            await Client.PostMsgpack<DmodeGetDataResponse>(
+                "dmode/get_data",
+                new DmodeGetDataRequest()
+            );
 
-        resp.data.dmode_info.is_entry.Should().BeTrue();
-        resp.data.dmode_chara_list.Should().NotBeNull();
-        resp.data.dmode_dungeon_info.state.Should().Be(DungeonState.Waiting);
-        resp.data.dmode_expedition.state.Should().Be(ExpeditionState.Waiting);
-        resp.data.dmode_servitor_passive_list.Should().NotBeNull();
-        resp.data.dmode_story_list.Should().NotBeNull();
+        resp.Data.DmodeInfo.IsEntry.Should().BeTrue();
+        resp.Data.DmodeCharaList.Should().NotBeNull();
+        resp.Data.DmodeDungeonInfo.State.Should().Be(DungeonState.Waiting);
+        resp.Data.DmodeExpedition.State.Should().Be(ExpeditionState.Waiting);
+        resp.Data.DmodeServitorPassiveList.Should().NotBeNull();
+        resp.Data.DmodeStoryList.Should().NotBeNull();
     }
 
     [Fact]
@@ -35,80 +36,81 @@ public class DmodeTest : TestFixture
             .Single(x => x.ViewerId == ViewerId)
             .Crystal;
 
-        DragaliaResponse<DmodeReadStoryData> resp = await Client.PostMsgpack<DmodeReadStoryData>(
-            "dmode/read_story",
-            new DmodeReadStoryRequest() { dmode_story_id = 1 }
-        );
+        DragaliaResponse<DmodeReadStoryResponse> resp =
+            await Client.PostMsgpack<DmodeReadStoryResponse>(
+                "dmode/read_story",
+                new DmodeReadStoryRequest() { DmodeStoryId = 1 }
+            );
 
-        resp.data.dmode_story_reward_list.Should()
+        resp.Data.DmodeStoryRewardList.Should()
             .BeEquivalentTo(
                 new List<AtgenBuildEventRewardEntityList>()
                 {
                     new()
                     {
-                        entity_type = EntityTypes.Wyrmite,
-                        entity_id = 0,
-                        entity_quantity = 25
+                        EntityType = EntityTypes.Wyrmite,
+                        EntityId = 0,
+                        EntityQuantity = 25
                     },
                     new()
                     {
-                        entity_type = EntityTypes.DmodePoint,
-                        entity_id = (int)DmodePoint.Point1,
-                        entity_quantity = 5000,
+                        EntityType = EntityTypes.DmodePoint,
+                        EntityId = (int)DmodePoint.Point1,
+                        EntityQuantity = 5000,
                     },
                     new()
                     {
-                        entity_type = EntityTypes.DmodePoint,
-                        entity_id = (int)DmodePoint.Point2,
-                        entity_quantity = 1000,
+                        EntityType = EntityTypes.DmodePoint,
+                        EntityId = (int)DmodePoint.Point2,
+                        EntityQuantity = 1000,
                     }
                 }
             );
-        resp.data.update_data_list.user_data.crystal.Should().Be(oldWyrmite + 25);
-        resp.data.update_data_list.dmode_story_list.Should()
-            .ContainEquivalentOf(new DmodeStoryList() { dmode_story_id = 1, is_read = 1 });
+        resp.Data.UpdateDataList.UserData.Crystal.Should().Be(oldWyrmite + 25);
+        resp.Data.UpdateDataList.DmodeStoryList.Should()
+            .ContainEquivalentOf(new DmodeStoryList() { DmodeStoryId = 1, IsRead = true });
     }
 
     [Fact]
     public async Task BuildupServitorPassive_BuildsUp()
     {
-        DragaliaResponse<DmodeBuildupServitorPassiveData> resp =
-            await Client.PostMsgpack<DmodeBuildupServitorPassiveData>(
+        DragaliaResponse<DmodeBuildupServitorPassiveResponse> resp =
+            await Client.PostMsgpack<DmodeBuildupServitorPassiveResponse>(
                 "dmode/buildup_servitor_passive",
                 new DmodeBuildupServitorPassiveRequest()
                 {
-                    request_buildup_passive_list = new List<DmodeServitorPassiveList>()
+                    RequestBuildupPassiveList = new List<DmodeServitorPassiveList>()
                     {
                         new()
                         {
-                            passive_no = DmodeServitorPassiveType.BurstDamage,
-                            passive_level = 2
+                            PassiveNo = DmodeServitorPassiveType.BurstDamage,
+                            PassiveLevel = 2
                         },
                         new()
                         {
-                            passive_no = DmodeServitorPassiveType.ResistUndead,
-                            passive_level = 10
+                            PassiveNo = DmodeServitorPassiveType.ResistUndead,
+                            PassiveLevel = 10
                         },
                         new()
                         {
-                            passive_no = DmodeServitorPassiveType.ResistNatural,
-                            passive_level = 2
+                            PassiveNo = DmodeServitorPassiveType.ResistNatural,
+                            PassiveLevel = 2
                         }
                     }
                 }
             );
 
-        resp.data.dmode_servitor_passive_list.Should()
+        resp.Data.DmodeServitorPassiveList.Should()
             .Contain(x =>
-                x.passive_no == DmodeServitorPassiveType.BurstDamage && x.passive_level == 2
+                x.PassiveNo == DmodeServitorPassiveType.BurstDamage && x.PassiveLevel == 2
             );
-        resp.data.dmode_servitor_passive_list.Should()
+        resp.Data.DmodeServitorPassiveList.Should()
             .Contain(x =>
-                x.passive_no == DmodeServitorPassiveType.ResistUndead && x.passive_level == 10
+                x.PassiveNo == DmodeServitorPassiveType.ResistUndead && x.PassiveLevel == 10
             );
-        resp.data.dmode_servitor_passive_list.Should()
+        resp.Data.DmodeServitorPassiveList.Should()
             .Contain(x =>
-                x.passive_no == DmodeServitorPassiveType.ResistNatural && x.passive_level == 2
+                x.PassiveNo == DmodeServitorPassiveType.ResistNatural && x.PassiveLevel == 2
             );
 
         ApiContext
@@ -149,64 +151,64 @@ public class DmodeTest : TestFixture
     [Fact]
     public async Task Expedition_CanStartAndForceFinish()
     {
-        DragaliaResponse<DmodeExpeditionStartData> resp =
-            await this.Client.PostMsgpack<DmodeExpeditionStartData>(
+        DragaliaResponse<DmodeExpeditionStartResponse> resp =
+            await this.Client.PostMsgpack<DmodeExpeditionStartResponse>(
                 "dmode/expedition_start",
                 new DmodeExpeditionStartRequest()
                 {
-                    chara_id_list = new[]
+                    CharaIdList = new[]
                     {
                         Charas.HunterBerserker,
                         Charas.Empty,
                         Charas.Empty,
                         Charas.Empty
                     },
-                    target_floor_num = 30
+                    TargetFloorNum = 30
                 }
             );
 
-        resp.data.dmode_expedition.Should()
+        resp.Data.DmodeExpedition.Should()
             .BeEquivalentTo(
                 new DmodeExpedition()
                 {
-                    chara_id_1 = Charas.HunterBerserker,
-                    chara_id_2 = Charas.Empty,
-                    chara_id_3 = Charas.Empty,
-                    chara_id_4 = Charas.Empty,
-                    target_floor_num = 30,
-                    state = ExpeditionState.Playing,
-                    start_time = DateTimeOffset.UtcNow
+                    CharaId1 = Charas.HunterBerserker,
+                    CharaId2 = Charas.Empty,
+                    CharaId3 = Charas.Empty,
+                    CharaId4 = Charas.Empty,
+                    TargetFloorNum = 30,
+                    State = ExpeditionState.Playing,
+                    StartTime = DateTimeOffset.UtcNow
                 }
             );
 
-        DragaliaResponse<DmodeExpeditionForceFinishData> finishResp =
-            await this.Client.PostMsgpack<DmodeExpeditionForceFinishData>(
+        DragaliaResponse<DmodeExpeditionForceFinishResponse> finishResp =
+            await this.Client.PostMsgpack<DmodeExpeditionForceFinishResponse>(
                 "dmode/expedition_force_finish",
                 new DmodeExpeditionForceFinishRequest() { }
             );
 
         finishResp
-            .data.dmode_expedition.Should()
+            .Data.DmodeExpedition.Should()
             .BeEquivalentTo(
                 new DmodeExpedition()
                 {
-                    chara_id_1 = Charas.HunterBerserker,
-                    chara_id_2 = Charas.Empty,
-                    chara_id_3 = Charas.Empty,
-                    chara_id_4 = Charas.Empty,
-                    target_floor_num = 30,
-                    state = ExpeditionState.Waiting,
-                    start_time = resp.data.dmode_expedition.start_time
+                    CharaId1 = Charas.HunterBerserker,
+                    CharaId2 = Charas.Empty,
+                    CharaId3 = Charas.Empty,
+                    CharaId4 = Charas.Empty,
+                    TargetFloorNum = 30,
+                    State = ExpeditionState.Waiting,
+                    StartTime = resp.Data.DmodeExpedition.StartTime
                 }
             );
         finishResp
-            .data.dmode_ingame_result.chara_id_list.Should()
+            .Data.DmodeIngameResult.CharaIdList.Should()
             .BeEquivalentTo(
                 new[] { Charas.HunterBerserker, Charas.Empty, Charas.Empty, Charas.Empty }
             );
-        finishResp.data.dmode_ingame_result.reward_talisman_list.Should().BeEmpty();
-        finishResp.data.dmode_ingame_result.take_dmode_point_1.Should().Be(0);
-        finishResp.data.dmode_ingame_result.take_dmode_point_2.Should().Be(0);
+        finishResp.Data.DmodeIngameResult.RewardTalismanList.Should().BeEmpty();
+        finishResp.Data.DmodeIngameResult.TakeDmodePoint1.Should().Be(0);
+        finishResp.Data.DmodeIngameResult.TakeDmodePoint2.Should().Be(0);
     }
 
     [Fact]
@@ -216,73 +218,73 @@ public class DmodeTest : TestFixture
 
         this.MockDateTimeProvider.Setup(x => x.UtcNow).Returns(startTime);
 
-        DragaliaResponse<DmodeExpeditionStartData> resp =
-            await this.Client.PostMsgpack<DmodeExpeditionStartData>(
+        DragaliaResponse<DmodeExpeditionStartResponse> resp =
+            await this.Client.PostMsgpack<DmodeExpeditionStartResponse>(
                 "dmode/expedition_start",
                 new DmodeExpeditionStartRequest()
                 {
-                    chara_id_list = new[]
+                    CharaIdList = new[]
                     {
                         Charas.HunterBerserker,
                         Charas.Chrom,
                         Charas.Cassandra,
                         Charas.GalaMym
                     },
-                    target_floor_num = 30
+                    TargetFloorNum = 30
                 }
             );
 
-        resp.data.dmode_expedition.Should()
+        resp.Data.DmodeExpedition.Should()
             .BeEquivalentTo(
                 new DmodeExpedition()
                 {
-                    chara_id_1 = Charas.HunterBerserker,
-                    chara_id_2 = Charas.Chrom,
-                    chara_id_3 = Charas.Cassandra,
-                    chara_id_4 = Charas.GalaMym,
-                    target_floor_num = 30,
-                    state = ExpeditionState.Playing,
-                    start_time = startTime
+                    CharaId1 = Charas.HunterBerserker,
+                    CharaId2 = Charas.Chrom,
+                    CharaId3 = Charas.Cassandra,
+                    CharaId4 = Charas.GalaMym,
+                    TargetFloorNum = 30,
+                    State = ExpeditionState.Playing,
+                    StartTime = startTime
                 }
             );
 
         this.MockDateTimeProvider.Setup(x => x.UtcNow).Returns(DateTimeOffset.UtcNow);
 
-        DragaliaResponse<DmodeExpeditionFinishData> finishResp =
-            await this.Client.PostMsgpack<DmodeExpeditionFinishData>(
+        DragaliaResponse<DmodeExpeditionFinishResponse> finishResp =
+            await this.Client.PostMsgpack<DmodeExpeditionFinishResponse>(
                 "dmode/expedition_finish",
                 new DmodeExpeditionFinishRequest() { }
             );
 
         finishResp
-            .data.dmode_expedition.Should()
+            .Data.DmodeExpedition.Should()
             .BeEquivalentTo(
                 new DmodeExpedition()
                 {
-                    chara_id_1 = Charas.HunterBerserker,
-                    chara_id_2 = Charas.Chrom,
-                    chara_id_3 = Charas.Cassandra,
-                    chara_id_4 = Charas.GalaMym,
-                    target_floor_num = 30,
-                    state = ExpeditionState.Waiting,
-                    start_time = startTime
+                    CharaId1 = Charas.HunterBerserker,
+                    CharaId2 = Charas.Chrom,
+                    CharaId3 = Charas.Cassandra,
+                    CharaId4 = Charas.GalaMym,
+                    TargetFloorNum = 30,
+                    State = ExpeditionState.Waiting,
+                    StartTime = startTime
                 }
             );
 
-        finishResp.data.dmode_ingame_result.take_dmode_point_1.Should().BeGreaterThan(0);
-        finishResp.data.dmode_ingame_result.take_dmode_point_2.Should().Be(0);
-        finishResp.data.dmode_ingame_result.reward_talisman_list.Should().NotBeEmpty();
+        finishResp.Data.DmodeIngameResult.TakeDmodePoint1.Should().BeGreaterThan(0);
+        finishResp.Data.DmodeIngameResult.TakeDmodePoint2.Should().Be(0);
+        finishResp.Data.DmodeIngameResult.RewardTalismanList.Should().NotBeEmpty();
         finishResp
-            .data.dmode_ingame_result.reward_talisman_list.Should()
-            .Contain(x => x.talisman_id == Talismans.HunterBerserker);
+            .Data.DmodeIngameResult.RewardTalismanList.Should()
+            .Contain(x => x.TalismanId == Talismans.HunterBerserker);
         finishResp
-            .data.dmode_ingame_result.reward_talisman_list.Should()
-            .Contain(x => x.talisman_id == Talismans.Chrom);
+            .Data.DmodeIngameResult.RewardTalismanList.Should()
+            .Contain(x => x.TalismanId == Talismans.Chrom);
         finishResp
-            .data.dmode_ingame_result.reward_talisman_list.Should()
-            .Contain(x => x.talisman_id == Talismans.Cassandra);
+            .Data.DmodeIngameResult.RewardTalismanList.Should()
+            .Contain(x => x.TalismanId == Talismans.Cassandra);
         finishResp
-            .data.dmode_ingame_result.reward_talisman_list.Should()
-            .Contain(x => x.talisman_id == Talismans.GalaMym);
+            .Data.DmodeIngameResult.RewardTalismanList.Should()
+            .Contain(x => x.TalismanId == Talismans.GalaMym);
     }
 }

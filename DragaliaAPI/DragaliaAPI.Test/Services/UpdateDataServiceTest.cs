@@ -180,31 +180,31 @@ public class UpdateDataServiceTest : RepositoryTestFixture
 
         UpdateDataList list = await this.updateDataService.SaveChangesAsync();
 
-        list.user_data.Should().BeEquivalentTo(this.mapper.Map<UserData>(userData));
+        list.UserData.Should().BeEquivalentTo(this.mapper.Map<UserData>(userData));
 
-        AssertOnlyContains<CharaList>(list.chara_list, charaData);
+        AssertOnlyContains<CharaList>(list.CharaList, charaData);
 
-        AssertOnlyContains<DragonList>(list.dragon_list, dragonData);
+        AssertOnlyContains<DragonList>(list.DragonList, dragonData);
 
-        AssertOnlyContains<DragonReliabilityList>(list.dragon_reliability_list, reliabilityData);
+        AssertOnlyContains<DragonReliabilityList>(list.DragonReliabilityList, reliabilityData);
 
-        AssertOnlyContains<PartyList>(list.party_list, partyData);
+        AssertOnlyContains<PartyList>(list.PartyList, partyData);
 
-        AssertOnlyContains<QuestStoryList>(list.quest_story_list, questStoryState);
+        AssertOnlyContains<QuestStoryList>(list.QuestStoryList, questStoryState);
 
-        list.unit_story_list.Should()
+        list.UnitStoryList.Should()
             .ContainEquivalentOf(mapper.Map<UnitStoryList>(charaStoryState))
             .And.ContainEquivalentOf(mapper.Map<UnitStoryList>(dragonStoryState));
 
-        AssertOnlyContains<CastleStoryList>(list.castle_story_list, castleStoryState);
+        AssertOnlyContains<CastleStoryList>(list.CastleStoryList, castleStoryState);
 
-        AssertOnlyContains<QuestList>(list.quest_list, questData);
+        AssertOnlyContains<QuestList>(list.QuestList, questData);
 
-        AssertOnlyContains<MaterialList>(list.material_list, materialData);
+        AssertOnlyContains<MaterialList>(list.MaterialList, materialData);
 
-        AssertOnlyContains<BuildList>(list.build_list, buildData);
+        AssertOnlyContains<BuildList>(list.BuildList, buildData);
 
-        list.dragon_gift_list.Should().BeNull();
+        list.DragonGiftList.Should().BeNull();
 
         this.output.WriteLine(
             "{0}",
@@ -231,8 +231,8 @@ public class UpdateDataServiceTest : RepositoryTestFixture
 
         UpdateDataList list = await this.updateDataService.SaveChangesAsync();
 
-        list.dragon_list.Should().NotBeNullOrEmpty();
-        list.dragon_list!.Select(x => x.dragon_key_id).Should().OnlyHaveUniqueItems();
+        list.DragonList.Should().NotBeNullOrEmpty();
+        list.DragonList!.Select(x => x.DragonKeyId).Should().OnlyHaveUniqueItems();
     }
 
     [Fact]
@@ -244,12 +244,12 @@ public class UpdateDataServiceTest : RepositoryTestFixture
 
         UpdateDataList list = await this.updateDataService.SaveChangesAsync();
 
-        list.user_data.Should().BeNull();
-        list.chara_list.Should().BeNull();
-        list.dragon_list.Should().BeNull();
-        list.dragon_reliability_list.Should().BeNull();
-        list.party_list.Should().BeNull();
-        list.quest_story_list.Should().BeNull();
+        list.UserData.Should().BeNull();
+        list.CharaList.Should().BeNull();
+        list.DragonList.Should().BeNull();
+        list.DragonReliabilityList.Should().BeNull();
+        list.PartyList.Should().BeNull();
+        list.QuestStoryList.Should().BeNull();
     }
 
     [Fact]
@@ -261,7 +261,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
 
         this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(ViewerId);
 
-        (await this.updateDataService.SaveChangesAsync()).chara_list.Should().BeNull();
+        (await this.updateDataService.SaveChangesAsync()).CharaList.Should().BeNull();
     }
 
     [Fact]
@@ -273,7 +273,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        (await this.updateDataService.SaveChangesAsync()).chara_list.Should().BeNull();
+        (await this.updateDataService.SaveChangesAsync()).CharaList.Should().BeNull();
     }
 
     private void AssertOnlyContains<TNetwork>(IEnumerable<TNetwork> member, IDbPlayerData dbEntity)

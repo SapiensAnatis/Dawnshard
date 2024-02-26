@@ -163,11 +163,11 @@ public class BaasRequestHelperTest
             .Should()
             .BeEquivalentTo(
                 JsonSerializer
-                    .Deserialize<DragaliaResponse<LoadIndexData>>(
+                    .Deserialize<DragaliaResponse<LoadIndexResponse>>(
                         sampleSaveJson,
                         ApiJsonOptions.Instance
                     )!
-                    .data
+                    .Data
             );
     }
 

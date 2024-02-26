@@ -17,9 +17,9 @@ public class EmblemController(
     [HttpPost("get_list")]
     public async Task<DragaliaResult> GetList()
     {
-        EmblemGetListData resp = new();
+        EmblemGetListResponse resp = new();
 
-        resp.emblem_list = (await emblemRepository.GetEmblemsAsync()).Select(x => new EmblemList(
+        resp.EmblemList = (await emblemRepository.GetEmblemsAsync()).Select(x => new EmblemList(
             x.EmblemId,
             x.IsNew,
             x.GetTime
@@ -31,18 +31,18 @@ public class EmblemController(
     [HttpPost("set")]
     public async Task<DragaliaResult> Set(EmblemSetRequest request)
     {
-        EmblemSetData resp = new();
+        EmblemSetResponse resp = new();
 
-        if (!await emblemRepository.HasEmblem(request.emblem_id))
+        if (!await emblemRepository.HasEmblem(request.EmblemId))
         {
             throw new DragaliaException(ResultCode.CommonInvalidArgument, "Unowned emblem id");
         }
 
-        (await userDataRepository.GetUserDataAsync()).EmblemId = request.emblem_id;
+        (await userDataRepository.GetUserDataAsync()).EmblemId = request.EmblemId;
 
         await updateDataService.SaveChangesAsync();
 
-        resp.result = 1;
+        resp.Result = 1;
 
         return Ok(resp);
     }

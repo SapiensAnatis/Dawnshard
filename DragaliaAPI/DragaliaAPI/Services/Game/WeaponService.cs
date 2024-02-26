@@ -132,7 +132,7 @@ public class WeaponService : IWeaponService
         LogContext.PushProperty("WeaponBodyId", body.Id);
         LogContext.PushProperty("BuildupRequest", buildup, destructureObjects: true);
 
-        return buildup.buildup_piece_type switch
+        return buildup.BuildupPieceType switch
         {
             BuildupPieceTypes.Passive => await this.TryBuildupPassive(body, buildup),
             BuildupPieceTypes.Stats => await this.TryBuildupStats(body, buildup),
@@ -153,7 +153,7 @@ public class WeaponService : IWeaponService
     {
         // Possibly would be more readable if validation was done in a separate method, but it would require duplicating
         // a fair bit of logic, e.g. around getting the materials (first to validate them, then to deduct them).
-        int buildupKey = body.GetBuildupGroupId(buildup.buildup_piece_type, buildup.step);
+        int buildupKey = body.GetBuildupGroupId(buildup.BuildupPieceType, buildup.Step);
 
         // TODO: Use of WeaponBodyRarity table to validate unbind/stat upgrades against refine count
 
@@ -171,10 +171,7 @@ public class WeaponService : IWeaponService
         Dictionary<Materials, int> materialMap = buildupGroup.MaterialMap.ToDictionary();
         long coin = buildupGroup.BuildupCoin;
 
-        if (
-            buildup is
-            { buildup_piece_type: BuildupPieceTypes.Unbind, is_use_dedicated_material: true }
-        )
+        if (buildup is { BuildupPieceType: BuildupPieceTypes.Unbind, IsUseDedicatedMaterial: true })
         {
             SetMaterialMapSpecial(body, ref materialMap, ref coin);
             this.logger.LogInformation(
@@ -200,25 +197,25 @@ public class WeaponService : IWeaponService
             return ResultCode.WeaponBodyBuildupPieceShortLimitBreakCount;
         }
 
-        switch (buildup.buildup_piece_type)
+        switch (buildup.BuildupPieceType)
         {
             case BuildupPieceTypes.Copies:
                 if (!ValidateStep(entity.EquipableCount, buildup))
                     return ResultCode.WeaponBodyBuildupPieceStepError;
-                entity.EquipableCount = buildup.step;
+                entity.EquipableCount = buildup.Step;
                 break;
             case BuildupPieceTypes.Unbind:
                 if (!ValidateStep(entity.LimitBreakCount, buildup))
                     return ResultCode.WeaponBodyBuildupPieceStepError;
-                entity.LimitBreakCount = buildup.step;
+                entity.LimitBreakCount = buildup.Step;
                 break;
             case BuildupPieceTypes.Refine:
                 if (!ValidateStep(entity.LimitOverCount, buildup))
                     return ResultCode.WeaponBodyBuildupPieceStepError;
-                entity.LimitOverCount = buildup.step;
+                entity.LimitOverCount = buildup.Step;
                 this.missionProgressionService.OnWeaponRefined(
                     1,
-                    buildup.step,
+                    buildup.Step,
                     body.Id,
                     body.ElementalType,
                     body.Rarity,
@@ -228,17 +225,17 @@ public class WeaponService : IWeaponService
             case BuildupPieceTypes.WeaponBonus:
                 if (!ValidateStep(entity.FortPassiveCharaWeaponBuildupCount, buildup))
                     return ResultCode.WeaponBodyBuildupPieceStepError;
-                entity.FortPassiveCharaWeaponBuildupCount = buildup.step;
+                entity.FortPassiveCharaWeaponBuildupCount = buildup.Step;
                 break;
             case BuildupPieceTypes.CrestSlotType1:
                 if (!ValidateStep(entity.AdditionalCrestSlotType1Count, buildup))
                     return ResultCode.WeaponBodyBuildupPieceStepError;
-                entity.AdditionalCrestSlotType1Count = buildup.step;
+                entity.AdditionalCrestSlotType1Count = buildup.Step;
                 break;
             case BuildupPieceTypes.CrestSlotType3:
                 if (!ValidateStep(entity.AdditionalCrestSlotType3Count, buildup))
                     return ResultCode.WeaponBodyBuildupPieceStepError;
-                entity.AdditionalCrestSlotType3Count = buildup.step;
+                entity.AdditionalCrestSlotType3Count = buildup.Step;
                 break;
             case BuildupPieceTypes.Stats:
             case BuildupPieceTypes.Passive:
@@ -246,7 +243,7 @@ public class WeaponService : IWeaponService
             default:
                 this.logger.LogWarning(
                     "buildup_piece_type had invalid value: {type}",
-                    buildup.buildup_piece_type
+                    buildup.BuildupPieceType
                 );
                 return ResultCode.CommonInvalidArgument;
         }
@@ -269,7 +266,7 @@ public class WeaponService : IWeaponService
         AtgenBuildupWeaponBodyPieceList buildup
     )
     {
-        int passiveKey = body.GetPassiveAbilityId(buildup.buildup_piece_no);
+        int passiveKey = body.GetPassiveAbilityId(buildup.BuildupPieceNo);
 
         if (
             !MasterAsset.WeaponPassiveAbility.TryGetValue(
@@ -321,7 +318,7 @@ public class WeaponService : IWeaponService
         AtgenBuildupWeaponBodyPieceList buildup
     )
     {
-        int passiveKey = body.GetBuildupLevelId(buildup.step);
+        int passiveKey = body.GetBuildupLevelId(buildup.Step);
 
         if (
             !MasterAsset.WeaponBodyBuildupLevel.TryGetValue(
@@ -345,7 +342,7 @@ public class WeaponService : IWeaponService
         if (!ValidateStep(entity.BuildupCount, buildup))
             return ResultCode.WeaponBodyBuildupPieceStepError;
 
-        entity.BuildupCount = buildup.step;
+        entity.BuildupCount = buildup.Step;
         await this.inventoryRepository.UpdateQuantity(materialMap.Invert());
 
         return ResultCode.Success;
@@ -396,7 +393,7 @@ public class WeaponService : IWeaponService
     /// <returns>A bool indicating whether the request was valid.</returns>
     private bool ValidateStep(int entityProperty, AtgenBuildupWeaponBodyPieceList buildup)
     {
-        if (entityProperty != buildup.step - 1)
+        if (entityProperty != buildup.Step - 1)
         {
             this.logger.LogWarning(
                 "Weapon property value {value} was in invalid state for buildup {@buildup}",

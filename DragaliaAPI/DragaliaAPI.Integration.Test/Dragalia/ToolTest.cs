@@ -20,14 +20,14 @@ public class ToolTest : TestFixture
     [Fact]
     public async Task ServiceStatus_ReturnsCorrectResponse()
     {
-        ToolGetServiceStatusData response = (
-            await this.Client.PostMsgpack<ToolGetServiceStatusData>(
+        ToolGetServiceStatusResponse response = (
+            await this.Client.PostMsgpack<ToolGetServiceStatusResponse>(
                 "tool/get_service_status",
                 new ToolGetServiceStatusRequest()
             )
-        ).data;
+        ).Data;
 
-        response.service_status.Should().Be(1);
+        response.ServiceStatus.Should().Be(1);
     }
 
     [Theory]
@@ -41,11 +41,11 @@ public class ToolTest : TestFixture
             .AsString();
         this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
 
-        ToolAuthData response = (
-            await this.Client.PostMsgpack<ToolAuthData>(endpoint, new ToolAuthRequest() { })
-        ).data;
+        ToolAuthResponse response = (
+            await this.Client.PostMsgpack<ToolAuthResponse>(endpoint, new ToolAuthRequest() { })
+        ).Data;
 
-        response.viewer_id.Should().Be((ulong)ViewerId);
+        response.ViewerId.Should().Be((ulong)ViewerId);
     }
 
     [Fact]
@@ -65,7 +65,7 @@ public class ToolTest : TestFixture
             .AsString();
         this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
 
-        await this.Client.PostMsgpack<ToolAuthData>("tool/auth", new ToolAuthRequest() { });
+        await this.Client.PostMsgpack<ToolAuthResponse>("tool/auth", new ToolAuthRequest() { });
 
         this.ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == this.ViewerId)
@@ -109,16 +109,17 @@ public class ToolTest : TestFixture
         string token = "im blue dabba dee dabba doo";
         this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
 
-        DragaliaResponse<ResultCodeData> response = await this.Client.PostMsgpack<ResultCodeData>(
-            endpoint,
-            new ToolAuthRequest() { },
-            ensureSuccessHeader: false
-        );
+        DragaliaResponse<ResultCodeResponse> response =
+            await this.Client.PostMsgpack<ResultCodeResponse>(
+                endpoint,
+                new ToolAuthRequest() { },
+                ensureSuccessHeader: false
+            );
 
         response
             .Should()
             .BeEquivalentTo(
-                new DragaliaResponse<ResultCodeData>(
+                new DragaliaResponse<ResultCodeResponse>(
                     new DataHeaders(ResultCode.IdTokenError),
                     new(ResultCode.IdTokenError)
                 )

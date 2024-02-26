@@ -63,7 +63,7 @@ public class TimeAttackService(
         }
 
         List<DbTimeAttackClearUnit> clearUnits = entry
-            .PartyInfo.party_unit_list.Select(x => MapTimeAttackUnit(x, gameId))
+            .PartyInfo.PartyUnitList.Select(x => MapTimeAttackUnit(x, gameId))
             .ToList();
 
         await timeAttackRepository.CreateOrUpdateClear(
@@ -139,37 +139,37 @@ public class TimeAttackService(
         DbTimeAttackClearUnit unit =
             new()
             {
-                UnitNo = x.position,
+                UnitNo = x.Position,
                 ViewerId = playerIdentityService.ViewerId,
                 GameId = roomId
             };
 
-        if (x.chara_data is not null)
-            unit.CharaId = x.chara_data.chara_id;
+        if (x.CharaData is not null)
+            unit.CharaId = x.CharaData.CharaId;
 
-        if (x.dragon_data is not null)
-            unit.EquippedDragonEntityId = x.dragon_data.dragon_id;
+        if (x.DragonData is not null)
+            unit.EquippedDragonEntityId = x.DragonData.DragonId;
 
-        if (x.weapon_body_data is not null)
-            unit.EquipWeaponBodyId = x.weapon_body_data.weapon_body_id;
+        if (x.WeaponBodyData is not null)
+            unit.EquipWeaponBodyId = x.WeaponBodyData.WeaponBodyId;
 
-        if (x.edit_skill_1_chara_data is not null)
-            unit.EditSkill1CharaId = x.edit_skill_1_chara_data.chara_id;
+        if (x.EditSkill1CharaData is not null)
+            unit.EditSkill1CharaId = x.EditSkill1CharaData.CharaId;
 
-        if (x.edit_skill_2_chara_data is not null)
-            unit.EditSkill2CharaId = x.edit_skill_2_chara_data.chara_id;
+        if (x.EditSkill2CharaData is not null)
+            unit.EditSkill2CharaId = x.EditSkill2CharaData.CharaId;
 
-        if (x.talisman_data is not null)
+        if (x.TalismanData is not null)
         {
-            unit.EquippedTalismanEntityId = x.talisman_data.talisman_id;
-            unit.TalismanAbility1 = x.talisman_data.talisman_ability_id_1;
-            unit.TalismanAbility2 = x.talisman_data.talisman_ability_id_2;
+            unit.EquippedTalismanEntityId = x.TalismanData.TalismanId;
+            unit.TalismanAbility1 = x.TalismanData.TalismanAbilityId1;
+            unit.TalismanAbility2 = x.TalismanData.TalismanAbilityId2;
         }
 
         List<AbilityCrests> crests = x
-            .crest_slot_type_1_crest_list.Concat(x.crest_slot_type_2_crest_list)
-            .Concat(x.crest_slot_type_3_crest_list)
-            .Select(x => x.ability_crest_id)
+            .CrestSlotType1CrestList.Concat(x.CrestSlotType2CrestList)
+            .Concat(x.CrestSlotType3CrestList)
+            .Select(x => x.AbilityCrestId)
             .ToList();
 
         unit.EquipCrestSlotType1CrestId1 = crests.ElementAtOrDefault(0);

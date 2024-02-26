@@ -21,21 +21,21 @@ public class EarnEventController(
     [HttpPost("get_event_data")]
     public async Task<DragaliaResult> GetEventData(EarnEventGetEventDataRequest request)
     {
-        EarnEventGetEventDataData resp = new();
+        EarnEventGetEventDataResponse resp = new();
 
-        resp.earn_event_user_data = await eventService.GetEarnEventUserData(request.event_id);
-        resp.event_reward_list = await eventService.GetEventRewardList<BuildEventRewardList>(
-            request.event_id
+        resp.EarnEventUserData = await eventService.GetEarnEventUserData(request.EventId);
+        resp.EventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
+            request.EventId
         );
 
         if (
             MasterAsset
-                .EventTradeGroup.Enumerable.FirstOrDefault(x => x.EventId == request.event_id)
+                .EventTradeGroup.Enumerable.FirstOrDefault(x => x.EventId == request.EventId)
                 ?.Id is
             { } tradeGroupId
         )
         {
-            resp.event_trade_list = tradeService.GetEventTradeList(tradeGroupId);
+            resp.EventTradeList = tradeService.GetEventTradeList(tradeGroupId);
         }
 
         return Ok(resp);
@@ -44,14 +44,14 @@ public class EarnEventController(
     [HttpPost("entry")]
     public async Task<DragaliaResult> Entry(EarnEventEntryRequest request)
     {
-        EarnEventEntryData resp = new();
+        EarnEventEntryResponse resp = new();
 
         // TODO: Complete first event mission once thats implemented
-        await eventService.CreateEventData(request.event_id);
+        await eventService.CreateEventData(request.EventId);
 
-        resp.earn_event_user_data = await eventService.GetEarnEventUserData(request.event_id);
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.EarnEventUserData = await eventService.GetEarnEventUserData(request.EventId);
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
@@ -61,15 +61,15 @@ public class EarnEventController(
         EarnEventReceiveEventPointRewardRequest request
     )
     {
-        EarnEventReceiveEventPointRewardData resp = new();
+        EarnEventReceiveEventPointRewardResponse resp = new();
 
-        resp.event_reward_entity_list = await eventService.ReceiveEventRewards(request.event_id);
+        resp.EventRewardEntityList = await eventService.ReceiveEventRewards(request.EventId);
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
-        resp.event_reward_list = await eventService.GetEventRewardList<BuildEventRewardList>(
-            request.event_id
+        resp.EventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
+            request.EventId
         );
 
         return Ok(resp);

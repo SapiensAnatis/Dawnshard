@@ -41,38 +41,35 @@ public class WallStartController : DragaliaControllerBase
     public async Task<DragaliaResult> Start(WallStartStartRequest request)
     {
         // Set flag for having played the next level
-        await wallService.SetQuestWallIsStartNextLevel(request.wall_id, true);
+        await wallService.SetQuestWallIsStartNextLevel(request.WallId, true);
         QuestWallDetail questWallDetail = MasterAssetUtils.GetQuestWallDetail(
-            request.wall_id,
-            request.wall_level
+            request.WallId,
+            request.WallLevel
         );
 
         IngameData ingameData = await this.dungeonStartService.GetWallIngameData(
-            request.wall_id,
-            request.wall_level,
-            request.party_no,
-            request.support_viewer_id
+            request.WallId,
+            request.WallLevel,
+            request.PartyNo,
+            request.SupportViewerId
         );
 
-        ingameData.area_info_list = questWallDetail.AreaInfo.Select(mapper.Map<AreaInfoList>);
+        ingameData.AreaInfoList = questWallDetail.AreaInfo.Select(mapper.Map<AreaInfoList>);
 
         IngameWallData ingameWallData =
-            new() { wall_id = request.wall_id, wall_level = request.wall_level };
+            new() { WallId = request.WallId, WallLevel = request.WallLevel };
 
-        OddsInfo oddsInfo = this.oddsInfoService.GetWallOddsInfo(
-            request.wall_id,
-            request.wall_level
-        );
+        OddsInfo oddsInfo = this.oddsInfoService.GetWallOddsInfo(request.WallId, request.WallLevel);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        WallStartStartData data =
+        WallStartStartResponse data =
             new()
             {
-                ingame_data = ingameData,
-                ingame_wall_data = ingameWallData,
-                odds_info = oddsInfo,
-                update_data_list = updateDataList
+                IngameData = ingameData,
+                IngameWallData = ingameWallData,
+                OddsInfo = oddsInfo,
+                UpdateDataList = updateDataList
             };
 
         return Ok(data);
@@ -83,36 +80,33 @@ public class WallStartController : DragaliaControllerBase
     public async Task<DragaliaResult> StartAssignUnit(WallStartStartAssignUnitRequest request)
     {
         QuestWallDetail questWallDetail = MasterAssetUtils.GetQuestWallDetail(
-            request.wall_id,
-            request.wall_level
+            request.WallId,
+            request.WallLevel
         );
 
         IngameData ingameData = await this.dungeonStartService.GetWallIngameData(
-            request.wall_id,
-            request.wall_level,
-            request.request_party_setting_list,
-            request.support_viewer_id
+            request.WallId,
+            request.WallLevel,
+            request.RequestPartySettingList,
+            request.SupportViewerId
         );
 
-        ingameData.area_info_list = questWallDetail.AreaInfo.Select(mapper.Map<AreaInfoList>);
+        ingameData.AreaInfoList = questWallDetail.AreaInfo.Select(mapper.Map<AreaInfoList>);
 
         IngameWallData ingameWallData =
-            new() { wall_id = request.wall_id, wall_level = request.wall_level };
+            new() { WallId = request.WallId, WallLevel = request.WallLevel };
 
-        OddsInfo oddsInfo = this.oddsInfoService.GetWallOddsInfo(
-            request.wall_id,
-            request.wall_level
-        );
+        OddsInfo oddsInfo = this.oddsInfoService.GetWallOddsInfo(request.WallId, request.WallLevel);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        WallStartStartAssignUnitData data =
+        WallStartStartAssignUnitResponse data =
             new()
             {
-                ingame_data = ingameData,
-                ingame_wall_data = ingameWallData,
-                odds_info = oddsInfo,
-                update_data_list = updateDataList
+                IngameData = ingameData,
+                IngameWallData = ingameWallData,
+                OddsInfo = oddsInfo,
+                UpdateDataList = updateDataList
             };
 
         return Ok(data);

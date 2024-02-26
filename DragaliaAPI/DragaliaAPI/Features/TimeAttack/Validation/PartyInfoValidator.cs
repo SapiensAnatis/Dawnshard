@@ -8,12 +8,12 @@ public class PartyInfoValidator : AbstractValidator<PartyInfo>
 {
     public PartyInfoValidator(int questId)
     {
-        RuleForEach(x => x.party_unit_list).SetValidator(new PartyUnitListValidator(questId));
+        RuleForEach(x => x.PartyUnitList).SetValidator(new PartyUnitListValidator(questId));
 
-        RuleFor(x => x.party_unit_list)
+        RuleFor(x => x.PartyUnitList)
             .Must(x =>
             {
-                IEnumerable<Charas?> ids = x.Select(y => y.chara_data?.chara_id)
+                IEnumerable<Charas?> ids = x.Select(y => y.CharaData?.CharaId)
                     .Where(y => y != null);
 
                 return ids.Distinct().Count() == ids.Count();

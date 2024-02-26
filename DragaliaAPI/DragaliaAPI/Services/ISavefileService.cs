@@ -5,8 +5,8 @@ namespace DragaliaAPI.Services;
 
 public interface ISavefileService
 {
-    Task ThreadSafeImport(LoadIndexData savefile);
-    Task Import(LoadIndexData savefile);
+    Task ThreadSafeImport(LoadIndexResponse savefile);
+    Task Import(LoadIndexResponse savefile);
     IQueryable<DbPlayer> Load();
     Task Reset();
     Task<DbPlayer> Create();

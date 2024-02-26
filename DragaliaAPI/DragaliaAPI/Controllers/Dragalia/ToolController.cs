@@ -21,10 +21,10 @@ public class ToolController(IAuthService authService) : DragaliaControllerBaseCo
         (long viewerId, _) = await authService.DoAuth(idToken);
 
         return this.Ok(
-            new ToolSignupData()
+            new ToolSignupResponse()
             {
-                viewer_id = (ulong)viewerId,
-                servertime = DateTimeOffset.UtcNow,
+                ViewerId = (ulong)viewerId,
+                ServerTime = DateTimeOffset.UtcNow,
             }
         );
     }
@@ -33,7 +33,7 @@ public class ToolController(IAuthService authService) : DragaliaControllerBaseCo
     [Route("get_service_status")]
     public ActionResult<DragaliaResult> GetServiceStatus()
     {
-        return this.Ok(new ToolGetServiceStatusData(1));
+        return this.Ok(new ToolGetServiceStatusResponse(1));
     }
 
     [HttpPost]
@@ -46,11 +46,11 @@ public class ToolController(IAuthService authService) : DragaliaControllerBaseCo
         (long viewerId, string sessionId) = await authService.DoAuth(idToken);
 
         return this.Ok(
-            new ToolAuthData()
+            new ToolAuthResponse()
             {
-                session_id = sessionId,
-                viewer_id = (ulong)viewerId,
-                nonce = "placeholder nonce"
+                SessionId = sessionId,
+                ViewerId = (ulong)viewerId,
+                Nonce = "placeholder nonce"
             }
         );
     }
@@ -61,11 +61,11 @@ public class ToolController(IAuthService authService) : DragaliaControllerBaseCo
         (long viewerId, string sessionId) = await authService.DoAuth(idToken);
 
         return this.Ok(
-            new ToolReauthData()
+            new ToolReauthResponse()
             {
-                session_id = sessionId,
-                viewer_id = (ulong)viewerId,
-                nonce = "placeholder nonce"
+                SessionId = sessionId,
+                ViewerId = (ulong)viewerId,
+                Nonce = "placeholder nonce"
             }
         );
     }

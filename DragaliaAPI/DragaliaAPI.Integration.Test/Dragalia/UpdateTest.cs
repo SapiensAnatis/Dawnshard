@@ -12,9 +12,9 @@ public class UpdateTest : TestFixture
     {
         string newName = "Euden 2";
 
-        await this.Client.PostMsgpack<UpdateNamechangeData>(
+        await this.Client.PostMsgpack<UpdateNamechangeResponse>(
             "/update/namechange",
-            new UpdateNamechangeRequest() { name = newName }
+            new UpdateNamechangeRequest() { Name = newName }
         );
 
         DbPlayerUserData userData = this.ApiContext.PlayerUserData.Find(ViewerId)!;
@@ -26,32 +26,32 @@ public class UpdateTest : TestFixture
     public async Task UpdateNamechange_ReturnsCorrectResponse()
     {
         string newName = "Euden 2";
-        UpdateNamechangeData response = (
-            await this.Client.PostMsgpack<UpdateNamechangeData>(
+        UpdateNamechangeResponse response = (
+            await this.Client.PostMsgpack<UpdateNamechangeResponse>(
                 "/update/namechange",
-                new UpdateNamechangeRequest() { name = newName }
+                new UpdateNamechangeRequest() { Name = newName }
             )
-        ).data;
+        ).Data;
 
-        response.checked_name.Should().Be(newName);
+        response.CheckedName.Should().Be(newName);
     }
 
     [Fact]
     public async Task UpdateResetNew_NullList_Handles()
     {
-        DragaliaResponse<UpdateResetNewData> response = (
-            await this.Client.PostMsgpack<UpdateResetNewData>(
+        DragaliaResponse<UpdateResetNewResponse> response = (
+            await this.Client.PostMsgpack<UpdateResetNewResponse>(
                 "/update/reset_new",
                 new UpdateResetNewRequest()
                 {
-                    target_list = new List<AtgenTargetList>()
+                    TargetList = new List<AtgenTargetList>()
                     {
-                        new AtgenTargetList() { target_name = "emblem", target_id_list = null, }
+                        new AtgenTargetList() { TargetName = "emblem", TargetIdList = null, }
                     }
                 }
             )
         );
 
-        response.data_headers.result_code.Should().Be(ResultCode.Success);
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
 }

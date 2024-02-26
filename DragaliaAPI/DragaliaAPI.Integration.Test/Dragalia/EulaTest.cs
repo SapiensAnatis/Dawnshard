@@ -11,15 +11,15 @@ public class EulaTest : TestFixture
     [Fact]
     public async Task EulaGetVersionList_ReturnsAllVersions()
     {
-        EulaGetVersionListData response = (
-            await this.Client.PostMsgpack<EulaGetVersionListData>(
+        EulaGetVersionListResponse response = (
+            await this.Client.PostMsgpack<EulaGetVersionListResponse>(
                 "eula/get_version_list",
                 new EulaGetVersionListRequest()
             )
-        ).data;
+        ).Data;
 
         response
-            .version_hash_list.Should()
+            .VersionHashList.Should()
             .BeEquivalentTo(
                 new List<AtgenVersionHash>()
                 {
@@ -34,34 +34,34 @@ public class EulaTest : TestFixture
     [Fact]
     public async Task EulaGetVersion_ValidRegionAndLocale_ReturnsEulaData()
     {
-        EulaGetVersionData response = (
-            await this.Client.PostMsgpack<EulaGetVersionData>(
+        EulaGetVersionResponse response = (
+            await this.Client.PostMsgpack<EulaGetVersionResponse>(
                 "eula/get_version",
                 new EulaGetVersionRequest("id_token", "gb", "en_eu")
             )
-        ).data;
+        ).Data;
 
         response
             .Should()
             .BeEquivalentTo(
-                new EulaGetVersionData(new AtgenVersionHash("gb", "en_eu", 1, 1), false, 1)
+                new EulaGetVersionResponse(new AtgenVersionHash("gb", "en_eu", 1, 1), false, 1)
             );
     }
 
     [Fact]
     public async Task EulaGetVersion_InvalidRegionOrLocale_ReturnsDefault()
     {
-        EulaGetVersionData response = (
-            await this.Client.PostMsgpack<EulaGetVersionData>(
+        EulaGetVersionResponse response = (
+            await this.Client.PostMsgpack<EulaGetVersionResponse>(
                 "eula/get_version",
                 new EulaGetVersionRequest("id_token", "not even a country", "c#")
             )
-        ).data;
+        ).Data;
 
         response
             .Should()
             .BeEquivalentTo(
-                new EulaGetVersionData(new AtgenVersionHash("gb", "en_us", 1, 1), false, 1)
+                new EulaGetVersionResponse(new AtgenVersionHash("gb", "en_us", 1, 1), false, 1)
             );
     }
 }

@@ -18,14 +18,14 @@ public class VersionTest : TestFixture
         string expectedVersion
     )
     {
-        VersionGetResourceVersionData response = (
-            await this.Client.PostMsgpack<VersionGetResourceVersionData>(
+        VersionGetResourceVersionResponse response = (
+            await this.Client.PostMsgpack<VersionGetResourceVersionResponse>(
                 "version/get_resource_version",
                 new VersionGetResourceVersionRequest(platform, "whatever")
             )
-        ).data;
+        ).Data;
 
-        response.resource_version.Should().Be(expectedVersion);
+        response.ResourceVersion.Should().Be(expectedVersion);
     }
 
     [Fact]
@@ -35,13 +35,13 @@ public class VersionTest : TestFixture
         this.Client.DefaultRequestHeaders.Add("Res-Ver", "aaaaaaa");
 
         (
-            await this.Client.PostMsgpack<ResultCodeData>(
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "fort/get_data",
                 new FortGetDataRequest(),
                 ensureSuccessHeader: false
             )
         )
-            .data_headers.result_code.Should()
+            .DataHeaders.ResultCode.Should()
             .Be(ResultCode.CommonResourceVersionError);
     }
 
@@ -52,13 +52,13 @@ public class VersionTest : TestFixture
         this.Client.DefaultRequestHeaders.Add("Res-Ver", "aaaaaaa");
 
         (
-            await this.Client.PostMsgpack<ResultCodeData>(
+            await this.Client.PostMsgpack<ResultCodeResponse>(
                 "tool/get_service_status",
                 new FortGetDataRequest(),
                 ensureSuccessHeader: false
             )
         )
-            .data_headers.result_code.Should()
+            .DataHeaders.ResultCode.Should()
             .Be(ResultCode.Success);
     }
 }

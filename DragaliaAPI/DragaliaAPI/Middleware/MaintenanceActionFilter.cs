@@ -25,8 +25,8 @@ public class MaintenanceActionFilter(
 
         context.Result = new OkObjectResult(
             new DragaliaResponse<object>(
-                data_headers: new DataHeaders(ResultCode.CommonMaintenance),
-                new ResultCodeData(ResultCode.CommonMaintenance)
+                dataHeaders: new DataHeaders(ResultCode.CommonMaintenance),
+                new ResultCodeResponse(ResultCode.CommonMaintenance)
             )
         );
     }

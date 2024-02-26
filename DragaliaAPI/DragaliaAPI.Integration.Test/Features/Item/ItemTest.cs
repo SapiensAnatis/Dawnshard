@@ -27,12 +27,12 @@ public class ItemTest : TestFixture
     [Fact]
     public async Task GetList_ReturnsItemList()
     {
-        DragaliaResponse<ItemGetListData> resp = await Client.PostMsgpack<ItemGetListData>(
+        DragaliaResponse<ItemGetListResponse> resp = await Client.PostMsgpack<ItemGetListResponse>(
             "item/get_list",
             new ItemGetListRequest()
         );
 
-        resp.data.item_list.Should()
+        resp.Data.ItemList.Should()
             .HaveCount(1)
             .And.ContainEquivalentOf(new ItemList(UseItem.Honey, 50));
     }
@@ -40,36 +40,36 @@ public class ItemTest : TestFixture
     [Fact]
     public async Task UseRecoveryStamina_SingleItem_RecoversStamina()
     {
-        DragaliaResponse<ItemUseRecoveryStaminaData> resp =
-            await Client.PostMsgpack<ItemUseRecoveryStaminaData>(
+        DragaliaResponse<ItemUseRecoveryStaminaResponse> resp =
+            await Client.PostMsgpack<ItemUseRecoveryStaminaResponse>(
                 "item/use_recovery_stamina",
                 new ItemUseRecoveryStaminaRequest(
                     new List<AtgenUseItemList> { new(UseItem.Honey, 1) }
                 )
             );
 
-        resp.data.recover_data.recover_stamina_type.Should().Be(UseItemEffect.RecoverStamina);
-        resp.data.recover_data.recover_stamina_point.Should().Be(10);
-        resp.data.update_data_list.user_data.stamina_single.Should().Be(15);
-        resp.data.update_data_list.item_list.Should()
+        resp.Data.RecoverData.RecoverStaminaType.Should().Be(UseItemEffect.RecoverStamina);
+        resp.Data.RecoverData.RecoverStaminaPoint.Should().Be(10);
+        resp.Data.UpdateDataList.UserData.StaminaSingle.Should().Be(15);
+        resp.Data.UpdateDataList.ItemList.Should()
             .ContainEquivalentOf(new ItemList(UseItem.Honey, 49));
     }
 
     [Fact]
     public async Task UseRecoveryStamina_MultipleItems_RecoversStamina()
     {
-        DragaliaResponse<ItemUseRecoveryStaminaData> resp =
-            await Client.PostMsgpack<ItemUseRecoveryStaminaData>(
+        DragaliaResponse<ItemUseRecoveryStaminaResponse> resp =
+            await Client.PostMsgpack<ItemUseRecoveryStaminaResponse>(
                 "item/use_recovery_stamina",
                 new ItemUseRecoveryStaminaRequest(
                     new List<AtgenUseItemList> { new(UseItem.Honey, 5) }
                 )
             );
 
-        resp.data.recover_data.recover_stamina_type.Should().Be(UseItemEffect.RecoverStamina);
-        resp.data.recover_data.recover_stamina_point.Should().Be(10 * 5);
-        resp.data.update_data_list.user_data.stamina_single.Should().Be(5 + (10 * 5));
-        resp.data.update_data_list.item_list.Should()
+        resp.Data.RecoverData.RecoverStaminaType.Should().Be(UseItemEffect.RecoverStamina);
+        resp.Data.RecoverData.RecoverStaminaPoint.Should().Be(10 * 5);
+        resp.Data.UpdateDataList.UserData.StaminaSingle.Should().Be(5 + (10 * 5));
+        resp.Data.UpdateDataList.ItemList.Should()
             .ContainEquivalentOf(new ItemList(UseItem.Honey, 45));
     }
 }

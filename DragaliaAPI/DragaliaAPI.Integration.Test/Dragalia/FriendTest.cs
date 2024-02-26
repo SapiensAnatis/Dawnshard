@@ -16,168 +16,168 @@ public class FriendTest : TestFixture
     [Fact]
     public async Task GetSupportCharaDetail_GetsCorrectCharacter()
     {
-        FriendGetSupportCharaDetailData response = (
-            await this.Client.PostMsgpack<FriendGetSupportCharaDetailData>(
+        FriendGetSupportCharaDetailResponse response = (
+            await this.Client.PostMsgpack<FriendGetSupportCharaDetailResponse>(
                 "/friend/get_support_chara_detail",
-                new FriendGetSupportCharaDetailRequest() { support_viewer_id = 1001 }
+                new FriendGetSupportCharaDetailRequest() { SupportViewerId = 1001 }
             )
-        ).data;
+        ).Data;
 
         response
-            .support_user_data_detail.user_support_data.Should()
+            .SupportUserDataDetail.UserSupportData.Should()
             .BeEquivalentTo(
                 new UserSupportList()
                 {
-                    viewer_id = 1001,
-                    name = "Nightmerp",
-                    level = 250,
-                    emblem_id = (Emblems)10250305,
-                    max_party_power = 9999,
-                    support_chara = new()
+                    ViewerId = 1001,
+                    Name = "Nightmerp",
+                    Level = 250,
+                    EmblemId = (Emblems)10250305,
+                    MaxPartyPower = 9999,
+                    SupportChara = new()
                     {
-                        chara_id = Charas.GalaEmile,
-                        level = 80,
-                        additional_max_level = 0,
-                        rarity = 5,
-                        hp = 789,
-                        attack = 486,
-                        hp_plus_count = 100,
-                        attack_plus_count = 100,
-                        ability_1_level = 2,
-                        ability_2_level = 2,
-                        ability_3_level = 2,
-                        ex_ability_level = 5,
-                        ex_ability_2_level = 5,
-                        skill_1_level = 3,
-                        skill_2_level = 2,
-                        is_unlock_edit_skill = true
+                        CharaId = Charas.GalaEmile,
+                        Level = 80,
+                        AdditionalMaxLevel = 0,
+                        Rarity = 5,
+                        Hp = 789,
+                        Attack = 486,
+                        HpPlusCount = 100,
+                        AttackPlusCount = 100,
+                        Ability1Level = 2,
+                        Ability2Level = 2,
+                        Ability3Level = 2,
+                        ExAbilityLevel = 5,
+                        ExAbility2Level = 5,
+                        Skill1Level = 3,
+                        Skill2Level = 2,
+                        IsUnlockEditSkill = true
                     },
-                    support_dragon = new()
+                    SupportDragon = new()
                     {
-                        dragon_key_id = 0,
-                        dragon_id = Dragons.GalaBahamut,
-                        level = 100,
-                        hp = 368,
-                        attack = 128,
-                        skill_1_level = 2,
-                        ability_1_level = 5,
-                        ability_2_level = 5,
-                        hp_plus_count = 50,
-                        attack_plus_count = 50,
-                        limit_break_count = 4
+                        DragonKeyId = 0,
+                        DragonId = Dragons.GalaBahamut,
+                        Level = 100,
+                        Hp = 368,
+                        Attack = 128,
+                        Skill1Level = 2,
+                        Ability1Level = 5,
+                        Ability2Level = 5,
+                        HpPlusCount = 50,
+                        AttackPlusCount = 50,
+                        LimitBreakCount = 4
                     },
-                    support_weapon_body = new()
+                    SupportWeaponBody = new()
                     {
-                        weapon_body_id = WeaponBodies.AqueousPrison,
-                        buildup_count = 80,
-                        limit_break_count = 8,
-                        limit_over_count = 1,
-                        equipable_count = 4,
-                        additional_crest_slot_type_1_count = 1,
-                        additional_crest_slot_type_2_count = 0,
-                        additional_crest_slot_type_3_count = 2
+                        WeaponBodyId = WeaponBodies.AqueousPrison,
+                        BuildupCount = 80,
+                        LimitBreakCount = 8,
+                        LimitOverCount = 1,
+                        EquipableCount = 4,
+                        AdditionalCrestSlotType1Count = 1,
+                        AdditionalCrestSlotType2Count = 0,
+                        AdditionalCrestSlotType3Count = 2
                     },
-                    support_talisman = new()
+                    SupportTalisman = new()
                     {
-                        talisman_key_id = 0,
-                        talisman_id = Talismans.GalaEmile,
-                        additional_attack = 100,
-                        additional_hp = 100
+                        TalismanKeyId = 0,
+                        TalismanId = Talismans.GalaEmile,
+                        AdditionalAttack = 100,
+                        AdditionalHp = 100
                     },
-                    support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
+                    SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                     {
                         new()
                         {
-                            ability_crest_id = AbilityCrests.ARoyalTeaParty,
-                            buildup_count = 50,
-                            limit_break_count = 4,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            equipable_count = 4
+                            AbilityCrestId = AbilityCrests.ARoyalTeaParty,
+                            BuildupCount = 50,
+                            LimitBreakCount = 4,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            EquipableCount = 4
                         },
                         new()
                         {
-                            ability_crest_id = AbilityCrests.QueenoftheBlueSeas,
-                            buildup_count = 50,
-                            limit_break_count = 4,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            equipable_count = 4
+                            AbilityCrestId = AbilityCrests.QueenoftheBlueSeas,
+                            BuildupCount = 50,
+                            LimitBreakCount = 4,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            EquipableCount = 4
                         },
                         new()
                         {
-                            ability_crest_id = AbilityCrests.PeacefulWaterfront,
-                            buildup_count = 50,
-                            limit_break_count = 4,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            equipable_count = 4
+                            AbilityCrestId = AbilityCrests.PeacefulWaterfront,
+                            BuildupCount = 50,
+                            LimitBreakCount = 4,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            EquipableCount = 4
                         },
                     },
-                    support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
+                    SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                     {
                         new()
                         {
-                            ability_crest_id = AbilityCrests.HisCleverBrother,
-                            buildup_count = 40,
-                            limit_break_count = 4,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            equipable_count = 4
+                            AbilityCrestId = AbilityCrests.HisCleverBrother,
+                            BuildupCount = 40,
+                            LimitBreakCount = 4,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            EquipableCount = 4
                         },
                         new()
                         {
-                            ability_crest_id = AbilityCrests.DragonsNest,
-                            buildup_count = 20,
-                            limit_break_count = 4,
-                            hp_plus_count = 50,
-                            attack_plus_count = 50,
-                            equipable_count = 4
+                            AbilityCrestId = AbilityCrests.DragonsNest,
+                            BuildupCount = 20,
+                            LimitBreakCount = 4,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            EquipableCount = 4
                         },
                     },
-                    support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
+                    SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                     {
                         new()
                         {
-                            ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
-                            buildup_count = 30,
-                            limit_break_count = 4,
-                            hp_plus_count = 40,
-                            attack_plus_count = 40,
-                            equipable_count = 4
+                            AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                            BuildupCount = 30,
+                            LimitBreakCount = 4,
+                            HpPlusCount = 40,
+                            AttackPlusCount = 40,
+                            EquipableCount = 4
                         },
                         new()
                         {
-                            ability_crest_id = AbilityCrests.CrownofLightSerpentsBoon,
-                            buildup_count = 30,
-                            limit_break_count = 4,
-                            hp_plus_count = 40,
-                            attack_plus_count = 40,
-                            equipable_count = 4
+                            AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                            BuildupCount = 30,
+                            LimitBreakCount = 4,
+                            HpPlusCount = 40,
+                            AttackPlusCount = 40,
+                            EquipableCount = 4
                         }
                     },
-                    guild = new() { guild_id = 0, guild_name = "Guild" }
+                    Guild = new() { GuildId = 0, GuildName = "Guild" }
                 },
-                o => o.Excluding(x => x.last_login_date)
+                o => o.Excluding(x => x.LastLoginDate)
             );
 
-        response.support_user_data_detail.is_friend.Should().BeTrue();
+        response.SupportUserDataDetail.IsFriend.Should().BeTrue();
     }
 
     [Fact]
     public async Task GetSupportCharaDetail_GetsCorrectDefaultCharacter()
     {
-        FriendGetSupportCharaDetailData response = (
-            await this.Client.PostMsgpack<FriendGetSupportCharaDetailData>(
+        FriendGetSupportCharaDetailResponse response = (
+            await this.Client.PostMsgpack<FriendGetSupportCharaDetailResponse>(
                 "/friend/get_support_chara_detail",
-                new FriendGetSupportCharaDetailRequest() { support_viewer_id = 0 }
+                new FriendGetSupportCharaDetailRequest() { SupportViewerId = 0 }
             )
-        ).data;
+        ).Data;
 
         response
-            .support_user_data_detail.user_support_data.Should()
-            .BeEquivalentTo(HelperService.StubData.SupportListData.support_user_list.First());
+            .SupportUserDataDetail.UserSupportData.Should()
+            .BeEquivalentTo(HelperService.StubData.SupportListData.SupportUserList.First());
 
-        response.support_user_data_detail.is_friend.Should().BeFalse();
+        response.SupportUserDataDetail.IsFriend.Should().BeFalse();
     }
 }

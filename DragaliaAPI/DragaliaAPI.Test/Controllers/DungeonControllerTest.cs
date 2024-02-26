@@ -50,16 +50,16 @@ public class DungeonControllerTest
         int questId = 227060105;
 
         List<UserSupportList> userSupportList =
-            new() { new() { support_chara = new() { chara_id = Charas.HalloweenLowen } } };
+            new() { new() { SupportChara = new() { CharaId = Charas.HalloweenLowen } } };
 
         List<AtgenHelperDetailList> supportDetailList =
             new()
             {
                 new()
                 {
-                    is_friend = false,
-                    viewer_id = 1,
-                    get_mana_point = 50,
+                    IsFriend = false,
+                    ViewerId = 1,
+                    GetManaPoint = 50,
                 }
             };
 
@@ -77,25 +77,25 @@ public class DungeonControllerTest
         this.mockDungeonRecordHelperService.Setup(x => x.ProcessHelperDataSolo(4))
             .ReturnsAsync((userSupportList, supportDetailList));
 
-        DungeonFailData? response = (
-            await this.dungeonController.Fail(new DungeonFailRequest() { dungeon_key = "my key" })
-        ).GetData<DungeonFailData>();
+        DungeonFailResponse? response = (
+            await this.dungeonController.Fail(new DungeonFailRequest() { DungeonKey = "my key" })
+        ).GetData<DungeonFailResponse>();
 
         response.Should().NotBeNull();
         response!
             .Should()
             .BeEquivalentTo(
-                new DungeonFailData()
+                new DungeonFailResponse()
                 {
-                    result = 1,
-                    fail_helper_list = userSupportList,
-                    fail_helper_detail_list = supportDetailList,
-                    fail_quest_detail = new()
+                    Result = 1,
+                    FailHelperList = userSupportList,
+                    FailHelperDetailList = supportDetailList,
+                    FailQuestDetail = new()
                     {
-                        wall_id = 0,
-                        wall_level = 0,
-                        is_host = true,
-                        quest_id = questId
+                        WallId = 0,
+                        WallLevel = 0,
+                        IsHost = true,
+                        QuestId = questId
                     }
                 }
             );
@@ -110,16 +110,16 @@ public class DungeonControllerTest
         int questId = 227060105;
 
         List<UserSupportList> userSupportList =
-            new() { new() { support_chara = new() { chara_id = Charas.HalloweenLowen } } };
+            new() { new() { SupportChara = new() { CharaId = Charas.HalloweenLowen } } };
 
         List<AtgenHelperDetailList> supportDetailList =
             new()
             {
                 new()
                 {
-                    is_friend = false,
-                    viewer_id = 1,
-                    get_mana_point = 50,
+                    IsFriend = false,
+                    ViewerId = 1,
+                    GetManaPoint = 50,
                 }
             };
 
@@ -138,25 +138,25 @@ public class DungeonControllerTest
 
         this.mockMatchingService.Setup(x => x.GetIsHost()).ReturnsAsync(false);
 
-        DungeonFailData? response = (
-            await this.dungeonController.Fail(new DungeonFailRequest() { dungeon_key = "my key" })
-        ).GetData<DungeonFailData>();
+        DungeonFailResponse? response = (
+            await this.dungeonController.Fail(new DungeonFailRequest() { DungeonKey = "my key" })
+        ).GetData<DungeonFailResponse>();
 
         response.Should().NotBeNull();
         response!
             .Should()
             .BeEquivalentTo(
-                new DungeonFailData()
+                new DungeonFailResponse()
                 {
-                    result = 1,
-                    fail_helper_list = userSupportList,
-                    fail_helper_detail_list = supportDetailList,
-                    fail_quest_detail = new()
+                    Result = 1,
+                    FailHelperList = userSupportList,
+                    FailHelperDetailList = supportDetailList,
+                    FailQuestDetail = new()
                     {
-                        wall_id = 0,
-                        wall_level = 0,
-                        is_host = false,
-                        quest_id = questId
+                        WallId = 0,
+                        WallLevel = 0,
+                        IsHost = false,
+                        QuestId = questId
                     }
                 }
             );

@@ -4,7 +4,7 @@ namespace DragaliaAPI.Services;
 
 public interface IHelperService
 {
-    Task<QuestGetSupportUserListData> GetHelpers();
+    Task<QuestGetSupportUserListResponse> GetHelpers();
     AtgenSupportData BuildHelperData(
         UserSupportList helperInfo,
         AtgenSupportUserDetailList helperDetails

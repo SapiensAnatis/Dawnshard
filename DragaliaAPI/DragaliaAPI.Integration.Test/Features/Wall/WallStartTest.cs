@@ -32,23 +32,23 @@ public class WallStartTest : TestFixture
             }
         );
 
-        WallStartStartData response = (
-            await Client.PostMsgpack<WallStartStartData>(
+        WallStartStartResponse response = (
+            await Client.PostMsgpack<WallStartStartResponse>(
                 "/wall_start/start",
                 new WallStartStartRequest()
                 {
-                    wall_id = wallId,
-                    wall_level = wallLevel,
-                    party_no = 1
+                    WallId = wallId,
+                    WallLevel = wallLevel,
+                    PartyNo = 1
                 }
             )
-        ).data;
+        ).Data;
 
-        response.odds_info.enemy.First().param_id.Should().Be(expectedWallBossParamId);
+        response.OddsInfo.Enemy.First().ParamId.Should().Be(expectedWallBossParamId);
 
         response
-            .ingame_wall_data.Should()
-            .BeEquivalentTo(new IngameWallData() { wall_id = wallId, wall_level = wallLevel });
+            .IngameWallData.Should()
+            .BeEquivalentTo(new IngameWallData() { WallId = wallId, WallLevel = wallLevel });
     }
 
     [Fact]
@@ -72,22 +72,22 @@ public class WallStartTest : TestFixture
             }
         );
 
-        WallStartStartAssignUnitData response = (
-            await Client.PostMsgpack<WallStartStartAssignUnitData>(
-                "/wall_start/start",
+        WallStartStartAssignUnitResponse response = (
+            await Client.PostMsgpack<WallStartStartAssignUnitResponse>(
+                "/wall_start/start_assign_unit",
                 new WallStartStartAssignUnitRequest()
                 {
-                    wall_id = wallId,
-                    wall_level = wallLevel,
-                    request_party_setting_list = new List<PartySettingList>()
+                    WallId = wallId,
+                    WallLevel = wallLevel,
+                    RequestPartySettingList = new List<PartySettingList>()
                 }
             )
-        ).data;
+        ).Data;
 
-        response.odds_info.enemy.First().param_id.Should().Be(expectedWallBossParamId);
+        response.OddsInfo.Enemy.First().ParamId.Should().Be(expectedWallBossParamId);
 
         response
-            .ingame_wall_data.Should()
-            .BeEquivalentTo(new IngameWallData() { wall_id = wallId, wall_level = wallLevel });
+            .IngameWallData.Should()
+            .BeEquivalentTo(new IngameWallData() { WallId = wallId, WallLevel = wallLevel });
     }
 }

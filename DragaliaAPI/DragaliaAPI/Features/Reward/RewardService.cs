@@ -155,15 +155,13 @@ public class RewardService(
     {
         return new()
         {
-            new_get_entity_list = newEntities.Select(x => x.ToDuplicateEntityList()),
-            converted_entity_list = convertedEntities.Select(x => x.ToConvertedEntityList()),
-            over_discard_entity_list = discardedEntities.Select(x =>
+            NewGetEntityList = newEntities.Select(x => x.ToDuplicateEntityList()),
+            ConvertedEntityList = convertedEntities.Select(x => x.ToConvertedEntityList()),
+            OverDiscardEntityList = discardedEntities.Select(x => x.ToBuildEventRewardEntityList()),
+            OverPresentEntityList = this.presentEntites.Select(x =>
                 x.ToBuildEventRewardEntityList()
             ),
-            over_present_entity_list = this.presentEntites.Select(x =>
-                x.ToBuildEventRewardEntityList()
-            ),
-            over_present_limit_entity_list = this.presentLimitEntities.Select(x =>
+            OverPresentLimitEntityList = this.presentLimitEntities.Select(x =>
                 x.ToBuildEventRewardEntityList()
             ),
         };

@@ -26,23 +26,23 @@ public class UpdateController(
     [Route("namechange")]
     public async Task<DragaliaResult> Post(UpdateNamechangeRequest request)
     {
-        await userDataRepository.UpdateName(request.name);
+        await userDataRepository.UpdateName(request.Name);
 
         await updateDataService.SaveChangesAsync();
 
-        return this.Ok(new UpdateNamechangeData(request.name));
+        return this.Ok(new UpdateNamechangeResponse(request.Name));
     }
 
     [HttpPost]
     [Route("reset_new")]
     public async Task<DragaliaResult> ResetNew(UpdateResetNewRequest request)
     {
-        foreach (AtgenTargetList target in request.target_list)
+        foreach (AtgenTargetList target in request.TargetList)
         {
             logger.LogDebug("reset_new target: {@target}", target);
-            target.target_id_list ??= Enumerable.Empty<long>();
+            target.TargetIdList ??= Enumerable.Empty<long>();
 
-            switch (target.target_name)
+            switch (target.TargetName)
             {
                 case "friend":
                 case "friend_apply":
@@ -50,7 +50,7 @@ public class UpdateController(
                     // TODO
                     logger.LogInformation(
                         "Unhandled type {resetType} in update/reset_new",
-                        target.target_name
+                        target.TargetName
                     );
                     break;
                 case "emblem":
@@ -65,7 +65,7 @@ public class UpdateController(
 
                     break;
                 case "fort":
-                    await fortService.ClearPlantNewStatuses(target.target_id_list);
+                    await fortService.ClearPlantNewStatuses(target.TargetIdList);
                     break;
                 default:
                     throw new DragaliaException(
@@ -77,6 +77,6 @@ public class UpdateController(
 
         await updateDataService.SaveChangesAsync();
 
-        return this.Ok(new UpdateResetNewData(1));
+        return this.Ok(new UpdateResetNewResponse(1));
     }
 }

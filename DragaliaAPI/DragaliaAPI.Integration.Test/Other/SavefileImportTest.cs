@@ -53,9 +53,12 @@ public class SavefileImportTest : TestFixture
     {
         string savefileJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
 
-        LoadIndexData savefile = JsonSerializer
-            .Deserialize<DragaliaResponse<LoadIndexData>>(savefileJson, ApiJsonOptions.Instance)!
-            .data;
+        LoadIndexResponse savefile = JsonSerializer
+            .Deserialize<DragaliaResponse<LoadIndexResponse>>(
+                savefileJson,
+                ApiJsonOptions.Instance
+            )!
+            .Data;
 
         HttpContent content = new StringContent(savefileJson);
         content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
@@ -71,9 +74,9 @@ public class SavefileImportTest : TestFixture
             .LastSaveImportTime.Should()
             .BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMinutes(1));
 
-        LoadIndexData storedSavefile = (
-            await this.Client.PostMsgpack<LoadIndexData>("load/index", new LoadIndexRequest())
-        ).data;
+        LoadIndexResponse storedSavefile = (
+            await this.Client.PostMsgpack<LoadIndexResponse>("load/index", new LoadIndexRequest())
+        ).Data;
 
         storedSavefile
             .Should()
@@ -83,63 +86,63 @@ public class SavefileImportTest : TestFixture
                 {
                     // Modified properties
                     // Inaccurate because primary keys
-                    opts.Excluding(x => x.Name.Contains("key_id"));
-                    opts.Excluding(x => x.Name.Contains("build_id"));
-                    opts.Excluding(x => x.Name.Contains("plant_detail_id"));
-                    opts.Excluding(x => x.user_data!.viewer_id);
+                    opts.Excluding(x => x.Name.Contains("KeyId"));
+                    opts.Excluding(x => x.Name.Contains("BuildId"));
+                    opts.Excluding(x => x.Name.Contains("PlantDetailId"));
+                    opts.Excluding(x => x.UserData!.ViewerId);
                     // Inaccurate because transient
-                    opts.Excluding(x => x.server_time);
-                    opts.Excluding(x => x.spec_upgrade_time);
-                    opts.Excluding(x => x.Name.Contains("last_income_time"));
-                    opts.Excluding(x => x.user_data!.last_login_time);
+                    opts.Excluding(x => x.ServerTime);
+                    opts.Excluding(x => x.SpecUpgradeTime);
+                    opts.Excluding(x => x.Name.Contains("LastIncomeTime"));
+                    opts.Excluding(x => x.UserData!.LastLoginTime);
                     // Inaccurate because notification
-                    opts.Excluding(x => x.present_notice);
-                    opts.Excluding(x => x.shop_notice);
+                    opts.Excluding(x => x.PresentNotice);
+                    opts.Excluding(x => x.ShopNotice);
                     // Inaccurate for other reasons
-                    opts.Excluding(x => x.user_data!.stamina_single);
-                    opts.Excluding(x => x.user_data!.stamina_multi);
+                    opts.Excluding(x => x.UserData!.StaminaSingle);
+                    opts.Excluding(x => x.UserData!.StaminaMulti);
                     opts.Excluding(x =>
-                        x.Path.StartsWith("ability_crest_list")
-                        && (x.Name == "ability_1_level" || x.Name == "ability_2_level")
+                        x.Path.StartsWith("AbilityCrestList")
+                        && (x.Name == "Ability1Level" || x.Name == "Ability2Level")
                     );
-                    opts.Excluding(x => x.user_data!.level);
-                    opts.Excluding(x => x.user_data!.crystal);
-                    opts.Excluding(x => x.treasure_trade_all_list);
-                    opts.Excluding(x => x.multi_server);
-                    opts.Excluding(x => x.mission_notice);
-                    opts.Excluding(x => x.user_data!.active_memory_event_id);
+                    opts.Excluding(x => x.UserData!.Level);
+                    opts.Excluding(x => x.UserData!.Crystal);
+                    opts.Excluding(x => x.TreasureTradeAllList);
+                    opts.Excluding(x => x.MultiServer);
+                    opts.Excluding(x => x.MissionNotice);
+                    opts.Excluding(x => x.UserData!.ActiveMemoryEventId);
 
-                    opts.Excluding(x => x.user_data!.fort_open_time);
+                    opts.Excluding(x => x.UserData!.FortOpenTime);
 
                     // Ignored properties
-                    opts.Excluding(x => x.user_data!.prologue_end_time);
-                    opts.Excluding(x => x.fort_plant_list);
-                    opts.Excluding(x => x.fort_bonus_list);
-                    opts.Excluding(x => x.user_guild_data);
-                    opts.Excluding(x => x.guild_data);
+                    opts.Excluding(x => x.UserData!.PrologueEndTime);
+                    opts.Excluding(x => x.FortPlantList);
+                    opts.Excluding(x => x.FortBonusList);
+                    opts.Excluding(x => x.UserGuildData);
+                    opts.Excluding(x => x.GuildData);
 
                     // Properties with no implementation
-                    opts.Excluding(x => x.Name.Contains("album"));
+                    opts.Excluding(x => x.Name.Contains("Album"));
 
-                    opts.Excluding(x => x.quest_bonus);
-                    opts.Excluding(x => x.quest_carry_list);
-                    opts.Excluding(x => x.quest_entry_condition_list);
-                    opts.Excluding(x => x.quest_bonus_stack_base_time);
+                    opts.Excluding(x => x.QuestBonus);
+                    opts.Excluding(x => x.QuestCarryList);
+                    opts.Excluding(x => x.QuestEntryConditionList);
+                    opts.Excluding(x => x.QuestBonusStackBaseTime);
 
-                    opts.Excluding(x => x.user_summon_list);
-                    opts.Excluding(x => x.summon_ticket_list);
-                    opts.Excluding(x => x.summon_point_list);
+                    opts.Excluding(x => x.UserSummonList);
+                    opts.Excluding(x => x.SummonTicketList);
+                    opts.Excluding(x => x.SummonPointList);
 
-                    opts.Excluding(x => x.special_shop_purchase);
+                    opts.Excluding(x => x.SpecialShopPurchase);
 
-                    opts.Excluding(x => x.astral_item_list);
-                    opts.Excluding(x => x.walker_data);
-                    opts.Excluding(x => x.exchange_ticket_list);
-                    opts.Excluding(x => x.lottery_ticket_list);
-                    opts.Excluding(x => x.gather_item_list);
+                    opts.Excluding(x => x.AstralItemList);
+                    opts.Excluding(x => x.WalkerData);
+                    opts.Excluding(x => x.ExchangeTicketList);
+                    opts.Excluding(x => x.LotteryTicketList);
+                    opts.Excluding(x => x.GatherItemList);
 
-                    opts.Excluding(x => x.friend_notice);
-                    opts.Excluding(x => x.guild_notice);
+                    opts.Excluding(x => x.FriendNotice);
+                    opts.Excluding(x => x.GuildNotice);
 
                     return opts;
                 }
@@ -225,9 +228,12 @@ public class SavefileImportTest : TestFixture
     {
         string savefileJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
 
-        LoadIndexData savefile = JsonSerializer
-            .Deserialize<DragaliaResponse<LoadIndexData>>(savefileJson, ApiJsonOptions.Instance)!
-            .data;
+        LoadIndexResponse savefile = JsonSerializer
+            .Deserialize<DragaliaResponse<LoadIndexResponse>>(
+                savefileJson,
+                ApiJsonOptions.Instance
+            )!
+            .Data;
 
         HttpContent content = new StringContent(savefileJson);
         content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");

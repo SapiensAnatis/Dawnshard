@@ -3,25 +3,27 @@ using MessagePack;
 
 namespace DragaliaAPI.Models.Results;
 
-[MessagePackObject(keyAsPropertyName: true)]
+[MessagePackObject]
 public class DragaliaResponse<TData>
     where TData : class
 {
-    public DataHeaders data_headers { get; init; }
+    [Key("data_headers")]
+    public DataHeaders DataHeaders { get; init; }
 
-    public TData data { get; init; }
+    [Key("data")]
+    public TData Data { get; init; }
 
-    public DragaliaResponse(TData data, ResultCode result_code = ResultCode.Success)
+    public DragaliaResponse(TData data, ResultCode resultCode = ResultCode.Success)
     {
-        this.data = data;
-        this.data_headers = new(result_code);
+        this.Data = data;
+        this.DataHeaders = new(resultCode);
     }
 
     [JsonConstructor]
     [SerializationConstructor]
-    public DragaliaResponse(DataHeaders data_headers, TData data)
+    public DragaliaResponse(DataHeaders dataHeaders, TData data)
     {
-        this.data_headers = data_headers;
-        this.data = data;
+        this.DataHeaders = dataHeaders;
+        this.Data = data;
     }
 }

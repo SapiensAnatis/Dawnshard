@@ -17,17 +17,18 @@ public class ExceptionHandlerMiddlewareTest : TestFixture
     [Fact]
     public async Task DragaliaException_ReturnsSerializedResponse()
     {
-        DragaliaResponse<ResultCodeData> data = await this.Client.PostMsgpack<ResultCodeData>(
-            $"{Controller}/dragalia",
-            new { },
-            ensureSuccessHeader: false
-        );
+        DragaliaResponse<ResultCodeResponse> data =
+            await this.Client.PostMsgpack<ResultCodeResponse>(
+                $"{Controller}/dragalia",
+                new { },
+                ensureSuccessHeader: false
+            );
 
         data.Should()
             .BeEquivalentTo(
-                new DragaliaResponse<ResultCodeData>(
+                new DragaliaResponse<ResultCodeResponse>(
                     new DataHeaders(ResultCode.AbilityCrestBuildupPieceShortLevel),
-                    new ResultCodeData(ResultCode.AbilityCrestBuildupPieceShortLevel)
+                    new ResultCodeResponse(ResultCode.AbilityCrestBuildupPieceShortLevel)
                 )
             );
     }
@@ -56,16 +57,16 @@ public class ExceptionHandlerMiddlewareTest : TestFixture
 
         secondResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        DragaliaResponse<ResultCodeData> responseBody = MessagePackSerializer.Deserialize<
-            DragaliaResponse<ResultCodeData>
+        DragaliaResponse<ResultCodeResponse> responseBody = MessagePackSerializer.Deserialize<
+            DragaliaResponse<ResultCodeResponse>
         >(await secondResponse.Content.ReadAsByteArrayAsync());
 
         responseBody
             .Should()
             .BeEquivalentTo(
-                new DragaliaResponse<ResultCodeData>(
+                new DragaliaResponse<ResultCodeResponse>(
                     new DataHeaders(ResultCode.CommonAuthError),
-                    new ResultCodeData(ResultCode.CommonAuthError)
+                    new ResultCodeResponse(ResultCode.CommonAuthError)
                 )
             );
     }

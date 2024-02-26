@@ -36,15 +36,15 @@ public class CharaController(
     [HttpPost("awake")]
     public async Task<DragaliaResult> Awake(CharaAwakeRequest request)
     {
-        CharaAwakeData resp = new();
+        CharaAwakeResponse resp = new();
 
         DbPlayerCharaData playerCharData =
-            await unitRepository.FindCharaAsync(request.chara_id)
+            await unitRepository.FindCharaAsync(request.CharaId)
             ?? throw new DragaliaException(ResultCode.CommonDbError, "Unowned chara");
 
-        CharaData data = MasterAsset.CharaData[request.chara_id];
+        CharaData data = MasterAsset.CharaData[request.CharaId];
 
-        switch (request.next_rarity)
+        switch (request.NextRarity)
         {
             case 4:
                 await paymentService.ProcessPayment(
@@ -77,11 +77,11 @@ public class CharaController(
                 );
         }
 
-        playerCharData.Rarity = (byte)request.next_rarity;
+        playerCharData.Rarity = (byte)request.NextRarity;
 
         //TODO Get and update missions relating to promoting characters
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
 
         return Ok(resp);
     }
@@ -89,15 +89,15 @@ public class CharaController(
     [HttpPost("buildup")]
     public async Task<DragaliaResult> Buildup(CharaBuildupRequest request)
     {
-        CharaBuildupData resp = new();
+        CharaBuildupResponse resp = new();
 
         int experiencePlus = 0;
         int hpPlus = 0;
         int atkPlus = 0;
 
-        foreach (AtgenEnemyPiece material in request.material_list)
+        foreach (AtgenEnemyPiece material in request.MaterialList)
         {
-            if (material.quantity < 0)
+            if (material.Quantity < 0)
             {
                 throw new DragaliaException(
                     ResultCode.CommonMaterialShort,
@@ -105,18 +105,18 @@ public class CharaController(
                 );
             }
 
-            MaterialData materialData = MasterAsset.MaterialData[material.id];
+            MaterialData materialData = MasterAsset.MaterialData[material.Id];
 
             switch (materialData.Category)
             {
                 case MaterialCategory.BoostCharacter:
-                    experiencePlus += materialData.Exp * material.quantity;
+                    experiencePlus += materialData.Exp * material.Quantity;
                     break;
                 case MaterialCategory.PlusCharacterHp:
-                    hpPlus += materialData.Plus * material.quantity;
+                    hpPlus += materialData.Plus * material.Quantity;
                     break;
                 case MaterialCategory.PlusCharacterAtk:
-                    atkPlus += materialData.Plus * material.quantity;
+                    atkPlus += materialData.Plus * material.Quantity;
                     break;
                 default:
                     throw new DragaliaException(
@@ -125,13 +125,13 @@ public class CharaController(
                     );
             }
 
-            await paymentService.ProcessPayment(material.id, material.quantity);
+            await paymentService.ProcessPayment(material.Id, material.Quantity);
         }
 
-        await charaService.LevelUpChara(request.chara_id, experiencePlus, hpPlus, atkPlus);
+        await charaService.LevelUpChara(request.CharaId, experiencePlus, hpPlus, atkPlus);
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
@@ -139,16 +139,16 @@ public class CharaController(
     [HttpPost("reset_plus_count")]
     public async Task<DragaliaResult> CharaResetPlusCount(CharaResetPlusCountRequest request)
     {
-        CharaResetPlusCountData resp = new();
+        CharaResetPlusCountResponse resp = new();
 
         DbPlayerCharaData playerCharData =
-            await unitRepository.FindCharaAsync(request.chara_id)
+            await unitRepository.FindCharaAsync(request.CharaId)
             ?? throw new DragaliaException(ResultCode.CommonDbError, "Unowned chara");
 
         Materials material;
         int plusCount;
 
-        switch (request.plus_count_type)
+        switch (request.PlusCountType)
         {
             case PlusCountType.Atk:
                 material = Materials.AmplifyingCrystal;
@@ -173,8 +173,8 @@ public class CharaController(
 
         await rewardService.GrantReward(new Entity(EntityTypes.Material, (int)material, plusCount));
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
@@ -182,24 +182,24 @@ public class CharaController(
     [HttpPost("buildup_mana")]
     public async Task<DragaliaResult> CharaBuildupMana(CharaBuildupManaRequest request)
     {
-        CharaBuildupManaData resp = new();
+        CharaBuildupManaResponse resp = new();
 
         logger.LogDebug("Received mana node request {@request}", request);
 
         DbPlayerCharaData playerCharData =
-            await unitRepository.FindCharaAsync(request.chara_id)
+            await unitRepository.FindCharaAsync(request.CharaId)
             ?? throw new DragaliaException(ResultCode.CommonDbError, "Unowned chara");
 
         await CharaManaNodeUnlock(
-            request.mana_circle_piece_id_list,
+            request.ManaCirclePieceIdList,
             playerCharData,
-            request.is_use_grow_material
+            request.IsUseGrowMaterial
         );
 
         //TODO: Party power calculation call
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
         return this.Ok(resp);
     }
@@ -207,20 +207,20 @@ public class CharaController(
     [HttpPost("limit_break")]
     public async Task<DragaliaResult> CharaLimitBreak(CharaLimitBreakRequest request)
     {
-        CharaBuildupData resp = new();
+        CharaBuildupResponse resp = new();
 
         DbPlayerCharaData playerCharData =
-            await unitRepository.FindCharaAsync(request.chara_id)
+            await unitRepository.FindCharaAsync(request.CharaId)
             ?? throw new DragaliaException(ResultCode.CommonDbError, "Unowned chara");
 
         await LimitBreakChara(
             playerCharData,
-            (byte)request.next_limit_break_count,
-            request.is_use_grow_material
+            (byte)request.NextLimitBreakCount,
+            request.IsUseGrowMaterial
         );
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
@@ -230,29 +230,29 @@ public class CharaController(
         CharaLimitBreakAndBuildupManaRequest request
     )
     {
-        CharaLimitBreakAndBuildupManaData resp = new();
+        CharaLimitBreakAndBuildupManaResponse resp = new();
 
         DbPlayerCharaData playerCharData =
-            await unitRepository.FindCharaAsync(request.chara_id)
+            await unitRepository.FindCharaAsync(request.CharaId)
             ?? throw new DragaliaException(ResultCode.CommonDbError, "Unowned chara");
 
         await LimitBreakChara(
             playerCharData,
-            (byte)request.next_limit_break_count,
-            request.is_use_grow_material
+            (byte)request.NextLimitBreakCount,
+            request.IsUseGrowMaterial
         );
 
-        if (request.mana_circle_piece_id_list.Any())
+        if (request.ManaCirclePieceIdList.Any())
         {
             await CharaManaNodeUnlock(
-                request.mana_circle_piece_id_list,
+                request.ManaCirclePieceIdList,
                 playerCharData,
-                request.is_use_grow_material
+                request.IsUseGrowMaterial
             );
         }
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
@@ -260,10 +260,10 @@ public class CharaController(
     [HttpPost("buildup_platinum")]
     public async Task<DragaliaResult> CharaBuildupPlatinum(CharaBuildupPlatinumRequest request)
     {
-        CharaBuildupPlatinumData resp = new();
+        CharaBuildupPlatinumResponse resp = new();
 
         DbPlayerCharaData playerCharaData =
-            await unitRepository.FindCharaAsync(request.chara_id)
+            await unitRepository.FindCharaAsync(request.CharaId)
             ?? throw new DragaliaException(ResultCode.CommonDbError, "Unowned chara");
 
         CharaData charaData = MasterAsset.CharaData[playerCharaData.CharaId];
@@ -295,8 +295,8 @@ public class CharaController(
 
         await paymentService.ProcessPayment(Materials.Omnicite, 1);
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
@@ -304,13 +304,13 @@ public class CharaController(
     [HttpPost("unlock_edit_skill")]
     public async Task<DragaliaResult> CharaUnlockEditSkill(CharaUnlockEditSkillRequest request)
     {
-        CharaUnlockEditSkillData resp = new();
+        CharaUnlockEditSkillResponse resp = new();
 
         DbPlayerCharaData playerCharData =
-            await unitRepository.FindCharaAsync(request.chara_id)
+            await unitRepository.FindCharaAsync(request.CharaId)
             ?? throw new DragaliaException(ResultCode.CommonDbError, "Unowned character");
 
-        CharaData charaData = MasterAsset.CharaData[request.chara_id];
+        CharaData charaData = MasterAsset.CharaData[request.CharaId];
 
         //TODO: For now trust the client won't send the id of a chara who isn't allowed to share
         if (
@@ -338,8 +338,8 @@ public class CharaController(
 
         playerCharData.IsUnlockEditSkill = true;
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
@@ -347,16 +347,16 @@ public class CharaController(
     [HttpPost("get_chara_unit_set")]
     public async Task<DragaliaResult> GetCharaUnitSet(CharaGetCharaUnitSetRequest request)
     {
-        CharaGetCharaUnitSetData resp = new();
+        CharaGetCharaUnitSetResponse resp = new();
 
         IDictionary<Charas, IEnumerable<DbSetUnit>> setUnitData = await unitRepository.GetCharaSets(
-            request.chara_id_list
+            request.CharaIdList
         );
 
-        resp.chara_unit_set_list = setUnitData.Select(x => new CharaUnitSetList
+        resp.CharaUnitSetList = setUnitData.Select(x => new CharaUnitSetList
         {
-            chara_id = x.Key,
-            chara_unit_set_detail_list = x.Value.Select(ToAtgenCharaUnitSetDetailList)
+            CharaId = x.Key,
+            CharaUnitSetDetailList = x.Value.Select(ToAtgenCharaUnitSetDetailList)
         });
 
         return Ok(resp);
@@ -365,50 +365,50 @@ public class CharaController(
     [HttpPost("set_chara_unit_set")]
     public async Task<DragaliaResult> SetCharaUnitSet(CharaSetCharaUnitSetRequest request)
     {
-        CharaSetCharaUnitSetData resp = new();
+        CharaSetCharaUnitSetResponse resp = new();
 
         DbSetUnit setUnitData =
-            await unitRepository.GetCharaSetData(request.chara_id, request.unit_set_no)
-            ?? unitRepository.AddCharaSetData(request.chara_id, request.unit_set_no);
+            await unitRepository.GetCharaSetData(request.CharaId, request.UnitSetNo)
+            ?? unitRepository.AddCharaSetData(request.CharaId, request.UnitSetNo);
 
-        setUnitData.UnitSetName = request.unit_set_name;
-        setUnitData.EquipDragonKeyId = request.request_chara_unit_set_data.dragon_key_id;
-        setUnitData.EquipWeaponBodyId = request.request_chara_unit_set_data.weapon_body_id;
+        setUnitData.UnitSetName = request.UnitSetName;
+        setUnitData.EquipDragonKeyId = request.RequestCharaUnitSetData.DragonKeyId;
+        setUnitData.EquipWeaponBodyId = request.RequestCharaUnitSetData.WeaponBodyId;
         setUnitData.EquipCrestSlotType1CrestId1 = request
-            .request_chara_unit_set_data
-            .crest_slot_type_1_crest_id_1;
+            .RequestCharaUnitSetData
+            .CrestSlotType1CrestId1;
         setUnitData.EquipCrestSlotType1CrestId2 = request
-            .request_chara_unit_set_data
-            .crest_slot_type_1_crest_id_2;
+            .RequestCharaUnitSetData
+            .CrestSlotType1CrestId2;
         setUnitData.EquipCrestSlotType1CrestId3 = request
-            .request_chara_unit_set_data
-            .crest_slot_type_1_crest_id_3;
+            .RequestCharaUnitSetData
+            .CrestSlotType1CrestId3;
         setUnitData.EquipCrestSlotType2CrestId1 = request
-            .request_chara_unit_set_data
-            .crest_slot_type_2_crest_id_1;
+            .RequestCharaUnitSetData
+            .CrestSlotType2CrestId1;
         setUnitData.EquipCrestSlotType2CrestId2 = request
-            .request_chara_unit_set_data
-            .crest_slot_type_2_crest_id_2;
+            .RequestCharaUnitSetData
+            .CrestSlotType2CrestId2;
         setUnitData.EquipCrestSlotType3CrestId1 = request
-            .request_chara_unit_set_data
-            .crest_slot_type_3_crest_id_1;
+            .RequestCharaUnitSetData
+            .CrestSlotType3CrestId1;
         setUnitData.EquipCrestSlotType3CrestId2 = request
-            .request_chara_unit_set_data
-            .crest_slot_type_3_crest_id_2;
-        setUnitData.EquipTalismanKeyId = request.request_chara_unit_set_data.talisman_key_id;
+            .RequestCharaUnitSetData
+            .CrestSlotType3CrestId2;
+        setUnitData.EquipTalismanKeyId = request.RequestCharaUnitSetData.TalismanKeyId;
 
         CharaUnitSetList setList =
             new()
             {
-                chara_id = request.chara_id,
-                chara_unit_set_detail_list = unitRepository
-                    .GetCharaSets(request.chara_id)
+                CharaId = request.CharaId,
+                CharaUnitSetDetailList = unitRepository
+                    .GetCharaSets(request.CharaId)
                     .Select(ToAtgenCharaUnitSetDetailList)
             };
 
-        resp.update_data_list = await updateDataService.SaveChangesAsync();
-        resp.update_data_list.chara_unit_set_list = new List<CharaUnitSetList> { setList };
-        resp.entity_result = rewardService.GetEntityResult();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList.CharaUnitSetList = new List<CharaUnitSetList> { setList };
+        resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
@@ -793,18 +793,18 @@ public class CharaController(
     {
         return new AtgenCharaUnitSetDetailList
         {
-            unit_set_no = unit.UnitSetNo,
-            unit_set_name = unit.UnitSetName,
-            dragon_key_id = unit.EquipDragonKeyId,
-            weapon_body_id = unit.EquipWeaponBodyId,
-            crest_slot_type_1_crest_id_1 = unit.EquipCrestSlotType1CrestId1,
-            crest_slot_type_1_crest_id_2 = unit.EquipCrestSlotType1CrestId2,
-            crest_slot_type_1_crest_id_3 = unit.EquipCrestSlotType1CrestId3,
-            crest_slot_type_2_crest_id_1 = unit.EquipCrestSlotType2CrestId1,
-            crest_slot_type_2_crest_id_2 = unit.EquipCrestSlotType2CrestId2,
-            crest_slot_type_3_crest_id_1 = unit.EquipCrestSlotType3CrestId1,
-            crest_slot_type_3_crest_id_2 = unit.EquipCrestSlotType3CrestId2,
-            talisman_key_id = unit.EquipTalismanKeyId
+            UnitSetNo = unit.UnitSetNo,
+            UnitSetName = unit.UnitSetName,
+            DragonKeyId = unit.EquipDragonKeyId,
+            WeaponBodyId = unit.EquipWeaponBodyId,
+            CrestSlotType1CrestId1 = unit.EquipCrestSlotType1CrestId1,
+            CrestSlotType1CrestId2 = unit.EquipCrestSlotType1CrestId2,
+            CrestSlotType1CrestId3 = unit.EquipCrestSlotType1CrestId3,
+            CrestSlotType2CrestId1 = unit.EquipCrestSlotType2CrestId1,
+            CrestSlotType2CrestId2 = unit.EquipCrestSlotType2CrestId2,
+            CrestSlotType3CrestId1 = unit.EquipCrestSlotType3CrestId1,
+            CrestSlotType3CrestId2 = unit.EquipCrestSlotType3CrestId2,
+            TalismanKeyId = unit.EquipTalismanKeyId
         };
     }
 }

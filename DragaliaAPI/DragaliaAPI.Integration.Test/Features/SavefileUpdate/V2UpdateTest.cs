@@ -11,48 +11,48 @@ public class V2UpdateTest : SavefileUpdateTestFixture
     [Fact]
     public async Task V2Update_AddsStampList()
     {
-        LoadIndexData data = (
-            await this.Client.PostMsgpack<LoadIndexData>("/load/index", new LoadIndexRequest())
-        ).data;
+        LoadIndexResponse data = (
+            await this.Client.PostMsgpack<LoadIndexResponse>("/load/index", new LoadIndexRequest())
+        ).Data;
 
         List<EquipStampList> expectedStampList =
             new()
             {
-                new() { slot = 1, stamp_id = 0 },
-                new() { slot = 2, stamp_id = 0 },
-                new() { slot = 3, stamp_id = 0 },
-                new() { slot = 4, stamp_id = 0 },
-                new() { slot = 5, stamp_id = 0 },
-                new() { slot = 6, stamp_id = 0 },
-                new() { slot = 7, stamp_id = 0 },
-                new() { slot = 8, stamp_id = 0 },
-                new() { slot = 9, stamp_id = 0 },
-                new() { slot = 10, stamp_id = 0 },
-                new() { slot = 11, stamp_id = 0 },
-                new() { slot = 12, stamp_id = 0 },
-                new() { slot = 13, stamp_id = 0 },
-                new() { slot = 14, stamp_id = 0 },
-                new() { slot = 15, stamp_id = 0 },
-                new() { slot = 16, stamp_id = 0 },
-                new() { slot = 17, stamp_id = 0 },
-                new() { slot = 18, stamp_id = 0 },
-                new() { slot = 19, stamp_id = 0 },
-                new() { slot = 20, stamp_id = 0 },
-                new() { slot = 21, stamp_id = 0 },
-                new() { slot = 22, stamp_id = 0 },
-                new() { slot = 23, stamp_id = 0 },
-                new() { slot = 24, stamp_id = 0 },
-                new() { slot = 25, stamp_id = 0 },
-                new() { slot = 26, stamp_id = 0 },
-                new() { slot = 27, stamp_id = 0 },
-                new() { slot = 28, stamp_id = 0 },
-                new() { slot = 29, stamp_id = 0 },
-                new() { slot = 30, stamp_id = 0 },
-                new() { slot = 31, stamp_id = 0 },
-                new() { slot = 32, stamp_id = 0 },
+                new() { Slot = 1, StampId = 0 },
+                new() { Slot = 2, StampId = 0 },
+                new() { Slot = 3, StampId = 0 },
+                new() { Slot = 4, StampId = 0 },
+                new() { Slot = 5, StampId = 0 },
+                new() { Slot = 6, StampId = 0 },
+                new() { Slot = 7, StampId = 0 },
+                new() { Slot = 8, StampId = 0 },
+                new() { Slot = 9, StampId = 0 },
+                new() { Slot = 10, StampId = 0 },
+                new() { Slot = 11, StampId = 0 },
+                new() { Slot = 12, StampId = 0 },
+                new() { Slot = 13, StampId = 0 },
+                new() { Slot = 14, StampId = 0 },
+                new() { Slot = 15, StampId = 0 },
+                new() { Slot = 16, StampId = 0 },
+                new() { Slot = 17, StampId = 0 },
+                new() { Slot = 18, StampId = 0 },
+                new() { Slot = 19, StampId = 0 },
+                new() { Slot = 20, StampId = 0 },
+                new() { Slot = 21, StampId = 0 },
+                new() { Slot = 22, StampId = 0 },
+                new() { Slot = 23, StampId = 0 },
+                new() { Slot = 24, StampId = 0 },
+                new() { Slot = 25, StampId = 0 },
+                new() { Slot = 26, StampId = 0 },
+                new() { Slot = 27, StampId = 0 },
+                new() { Slot = 28, StampId = 0 },
+                new() { Slot = 29, StampId = 0 },
+                new() { Slot = 30, StampId = 0 },
+                new() { Slot = 31, StampId = 0 },
+                new() { Slot = 32, StampId = 0 },
             };
 
-        data.equip_stamp_list.Should().BeEquivalentTo(expectedStampList);
+        data.EquipStampList.Should().BeEquivalentTo(expectedStampList);
 
         this.ApiContext.EquippedStamps.Where(x => x.ViewerId == ViewerId)
             .Should()
@@ -60,8 +60,8 @@ public class V2UpdateTest : SavefileUpdateTestFixture
                 expectedStampList,
                 opts =>
                     opts.ExcludingMissingMembers()
-                        .WithMapping<DbEquippedStamp>(dto => dto.slot, db => db.Slot)
-                        .WithMapping<DbEquippedStamp>(dto => dto.stamp_id, db => db.StampId)
+                        .WithMapping<DbEquippedStamp>(dto => dto.Slot, db => db.Slot)
+                        .WithMapping<DbEquippedStamp>(dto => dto.StampId, db => db.StampId)
             );
         (await this.ApiContext.Players.FindAsync(ViewerId))!
             .SavefileVersion.Should()
