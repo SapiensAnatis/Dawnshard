@@ -4795,8 +4795,6 @@ public partial class LoadIndexResponse
     [Key("quest_skip_point_use_limit_max")]
     public int QuestSkipPointUseLimitMax { get; set; }
 
-    [Key("spec_upgrade_time")]
-    public DateTimeOffset SpecUpgradeTime { get; set; }
 
     [Key("server_time")]
     public DateTimeOffset ServerTime { get; set; }
@@ -4807,8 +4805,6 @@ public partial class LoadIndexResponse
     [Key("quest_bonus")]
     public IEnumerable<AtgenQuestBonus> QuestBonus { get; set; } = [];
 
-    [Key("multi_server")]
-    public AtgenMultiServer MultiServer { get; set; }
 
     [Key("walker_data")]
     public AtgenWalkerData WalkerData { get; set; }
