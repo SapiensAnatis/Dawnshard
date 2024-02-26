@@ -18,8 +18,15 @@ public class CustomSnakeCaseNamingPolicy : JsonNamingPolicy
         if (name == "GetTime")
             return "gettime";
 
-        string created = string.Create(
-            name.Length * 2,
+        int requiredLength = name.Length;
+        foreach (char c in name.AsSpan()[1..])
+        {
+            if (char.IsUpper(c) || char.IsDigit(c))
+                requiredLength++;
+        }
+
+        return string.Create(
+            requiredLength,
             name,
             (span, state) =>
             {
@@ -39,7 +46,5 @@ public class CustomSnakeCaseNamingPolicy : JsonNamingPolicy
                 }
             }
         );
-
-        return created.TrimEnd('\0');
     }
 }
