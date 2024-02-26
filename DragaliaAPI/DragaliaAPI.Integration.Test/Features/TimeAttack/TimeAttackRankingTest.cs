@@ -16,8 +16,7 @@ public class TimeAttackRankingTest : TestFixture
     {
         (
             await this.Client.PostMsgpack<TimeAttackRankingGetDataResponse>(
-                "/time_attack_ranking/get_data",
-                new TimeAttackRankingGetDataRequest() { }
+                "/time_attack_ranking/get_data"
             )
         )
             .Data.RankingTierRewardList.Should()

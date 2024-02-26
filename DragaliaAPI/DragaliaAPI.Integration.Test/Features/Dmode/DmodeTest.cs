@@ -15,10 +15,7 @@ public class DmodeTest : TestFixture
     public async Task GetData_ReturnsData()
     {
         DragaliaResponse<DmodeGetDataResponse> resp =
-            await Client.PostMsgpack<DmodeGetDataResponse>(
-                "dmode/get_data",
-                new DmodeGetDataRequest()
-            );
+            await Client.PostMsgpack<DmodeGetDataResponse>("dmode/get_data");
 
         resp.Data.DmodeInfo.IsEntry.Should().BeTrue();
         resp.Data.DmodeCharaList.Should().NotBeNull();
@@ -183,8 +180,7 @@ public class DmodeTest : TestFixture
 
         DragaliaResponse<DmodeExpeditionForceFinishResponse> finishResp =
             await this.Client.PostMsgpack<DmodeExpeditionForceFinishResponse>(
-                "dmode/expedition_force_finish",
-                new DmodeExpeditionForceFinishRequest() { }
+                "dmode/expedition_force_finish"
             );
 
         finishResp
@@ -251,10 +247,7 @@ public class DmodeTest : TestFixture
         this.MockDateTimeProvider.Setup(x => x.UtcNow).Returns(DateTimeOffset.UtcNow);
 
         DragaliaResponse<DmodeExpeditionFinishResponse> finishResp =
-            await this.Client.PostMsgpack<DmodeExpeditionFinishResponse>(
-                "dmode/expedition_finish",
-                new DmodeExpeditionFinishRequest() { }
-            );
+            await this.Client.PostMsgpack<DmodeExpeditionFinishResponse>("dmode/expedition_finish");
 
         finishResp
             .Data.DmodeExpedition.Should()

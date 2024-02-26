@@ -155,9 +155,7 @@ public class AbilityCrestController : DragaliaControllerBase
 
     [Route("get_ability_crest_set_list")]
     [HttpPost]
-    public async Task<DragaliaResult> GetAbilityCrestSetList(
-        AbilityCrestGetAbilityCrestSetListRequest request
-    )
+    public async Task<DragaliaResult> GetAbilityCrestSetList()
     {
         List<DbAbilityCrestSet> dbAbilityCrestSets = await abilityCrestRepository
             .AbilityCrestSets.OrderBy(x => x.AbilityCrestSetNo)

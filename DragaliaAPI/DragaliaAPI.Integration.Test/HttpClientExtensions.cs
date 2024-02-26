@@ -40,6 +40,28 @@ public static class HttpClientExtensions
         return deserialized;
     }
 
+    public static async Task<DragaliaResponse<TResponse>> PostMsgpack<TResponse>(
+        this HttpClient client,
+        string endpoint,
+        bool ensureSuccessHeader = true
+    )
+        where TResponse : class
+    {
+        HttpResponseMessage response = await client.PostAsync(endpoint.TrimStart('/'), null);
+
+        response.EnsureSuccessStatusCode();
+
+        byte[] body = await response.Content.ReadAsByteArrayAsync();
+        DragaliaResponse<TResponse> deserialized = MessagePackSerializer.Deserialize<
+            DragaliaResponse<TResponse>
+        >(body, CustomResolver.Options);
+
+        if (ensureSuccessHeader)
+            deserialized.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
+
+        return deserialized;
+    }
+
     public static async Task PostMsgpack(
         this HttpClient client,
         string endpoint,

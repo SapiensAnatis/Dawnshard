@@ -201,13 +201,8 @@ public class DragonTest : TestFixture
     [Fact]
     public async Task DragonGetContactData_ReturnsValidData()
     {
-        DragonGetContactDataRequest request = new DragonGetContactDataRequest();
-
         DragonGetContactDataResponse? response = (
-            await this.Client.PostMsgpack<DragonGetContactDataResponse>(
-                "dragon/get_contact_data",
-                request
-            )
+            await this.Client.PostMsgpack<DragonGetContactDataResponse>("dragon/get_contact_data")
         ).Data;
 
         response.Should().NotBeNull();

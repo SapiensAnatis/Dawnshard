@@ -17,10 +17,7 @@ public class ShopTest : TestFixture
         await this.ApiContext.SaveChangesAsync();
 
         DragaliaResponse<ShopGetListResponse> resp =
-            await this.Client.PostMsgpack<ShopGetListResponse>(
-                "shop/get_list",
-                new ShopGetListRequest()
-            );
+            await this.Client.PostMsgpack<ShopGetListResponse>("shop/get_list");
 
         resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
         resp.Data.MaterialShopPurchase.Should().BeEmpty();

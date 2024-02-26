@@ -72,9 +72,7 @@ public class DragonServiceTest
             out List<DbPlayerDragonReliability> dragonRels,
             out List<DbPlayerStoryState> stories
         );
-        DragonGetContactDataResponse responseData = await dragonService.DoDragonGetContactData(
-            new DragonGetContactDataRequest()
-        );
+        DragonGetContactDataResponse responseData = await dragonService.DoDragonGetContactData();
 
         responseData.Should().NotBeNull();
         responseData.ShopGiftList.Should().NotBeNullOrEmpty();
@@ -102,21 +100,21 @@ public class DragonServiceTest
         DateTimeOffset wednesday = new DateTimeOffset(2023, 12, 27, 19, 49, 23, TimeSpan.Zero);
         this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(wednesday);
 
-        (await this.dragonService.DoDragonGetContactData(new DragonGetContactDataRequest() { }))
+        (await this.dragonService.DoDragonGetContactData())
             .ShopGiftList.Should()
             .Contain(x => x.DragonGiftId == (int)DragonGifts.FloralCirclet);
 
         DateTimeOffset thuBeforeReset = new DateTimeOffset(2023, 12, 28, 01, 49, 23, TimeSpan.Zero);
         this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(thuBeforeReset);
 
-        (await this.dragonService.DoDragonGetContactData(new DragonGetContactDataRequest() { }))
+        (await this.dragonService.DoDragonGetContactData())
             .ShopGiftList.Should()
             .Contain(x => x.DragonGiftId == (int)DragonGifts.FloralCirclet);
 
         DateTimeOffset thursday = new DateTimeOffset(2023, 12, 28, 09, 49, 23, TimeSpan.Zero);
         this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(thursday);
 
-        (await this.dragonService.DoDragonGetContactData(new DragonGetContactDataRequest() { }))
+        (await this.dragonService.DoDragonGetContactData())
             .ShopGiftList.Should()
             .Contain(x => x.DragonGiftId == (int)DragonGifts.CompellingBook);
     }

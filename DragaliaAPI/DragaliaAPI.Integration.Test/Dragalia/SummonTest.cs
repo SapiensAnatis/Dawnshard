@@ -67,8 +67,7 @@ public class SummonTest : TestFixture
 
         SummonGetSummonHistoryResponse response = (
             await this.Client.PostMsgpack<SummonGetSummonHistoryResponse>(
-                "summon/get_summon_history",
-                new SummonGetSummonHistoryRequest()
+                "summon/get_summon_history"
             )
         ).Data;
 
@@ -103,10 +102,7 @@ public class SummonTest : TestFixture
         );
 
         SummonGetSummonListResponse response = (
-            await this.Client.PostMsgpack<SummonGetSummonListResponse>(
-                "summon/get_summon_list",
-                new SummonGetSummonListRequest()
-            )
+            await this.Client.PostMsgpack<SummonGetSummonListResponse>("summon/get_summon_list")
         ).Data;
 
         response

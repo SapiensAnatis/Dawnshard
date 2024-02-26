@@ -19,12 +19,7 @@ public class UserTest : TestFixture
 
         UserData expectedUserData = this.Mapper.Map<UserData>(dbUserData);
 
-        (
-            await this.Client.PostMsgpack<UserLinkedNAccountResponse>(
-                "/user/linked_n_account",
-                new UserLinkedNAccountRequest()
-            )
-        )
+        (await this.Client.PostMsgpack<UserLinkedNAccountResponse>("/user/linked_n_account"))
             .Data.Should()
             .BeEquivalentTo(
                 new UserLinkedNAccountResponse()
@@ -38,12 +33,7 @@ public class UserTest : TestFixture
     [Fact]
     public async Task GetNAccountInfo_ReturnsExpectedResponse()
     {
-        (
-            await this.Client.PostMsgpack<UserGetNAccountInfoResponse>(
-                "/user/get_n_account_info",
-                new UserGetNAccountInfoRequest()
-            )
-        )
+        (await this.Client.PostMsgpack<UserGetNAccountInfoResponse>("/user/get_n_account_info"))
             .Data.Should()
             .BeEquivalentTo(
                 new UserGetNAccountInfoResponse()
