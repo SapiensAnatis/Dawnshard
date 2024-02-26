@@ -13,5 +13,5 @@ public partial class LoadIndexResponse
 
     [Key("multi_server")]
     [JsonIgnore]
-    public AtgenMultiServer MultiServer { get; set; }
+    public AtgenMultiServer? MultiServer { get; set; }
 }
