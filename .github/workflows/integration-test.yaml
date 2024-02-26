@@ -54,7 +54,7 @@ jobs:
         run: dotnet restore ${{ inputs.project }}
       - name: Test
         run: >
-          dotnet test ${{ inputs.project }}
+          dotnet test -c Release ${{ inputs.project }}
           --no-restore 
           --logger "console;verbosity=detailed"
           --logger "trx;LogFileName=${{ steps.get-name.outputs.name }}.trx"
