@@ -142,12 +142,12 @@ public class SummonController(
     public async Task<DragaliaResult<SummonGetSummonListResponse>> GetSummonList()
     {
         IEnumerable<SummonList> bannerList = await summonListService.GetSummonList();
-        IEnumerable<SummonTicketList> ticketList = await summonListService.GetSummonTicketList();
+        // IEnumerable<SummonTicketList> ticketList = await summonListService.GetSummonTicketList();
 
         return new SummonGetSummonListResponse()
         {
             SummonList = bannerList,
-            SummonTicketList = ticketList,
+            SummonTicketList = [],
             CampaignSummonList = [],
             CharaSsrSummonList = [],
             DragonSsrSummonList = [],
