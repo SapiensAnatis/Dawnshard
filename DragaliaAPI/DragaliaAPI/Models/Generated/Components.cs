@@ -9546,7 +9546,6 @@ public partial class OddsRateList
 public partial class OddsUnitDetail
 {
     [Key("pickup")]
-    [MessagePackFormatter(typeof(BoolToIntFormatter))]
     public bool Pickup { get; set; }
 
     [Key("rarity")]
