@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Shared.Definitions.Enums;
+﻿using System.Collections.Frozen;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
@@ -154,7 +155,7 @@ public record CharaData(
             ? availability
             : CharaAvailabilities.Default;
 
-    private static readonly IReadOnlyDictionary<Charas, CharaAvailabilities> AvailabilityMap =
+    private static readonly FrozenDictionary<Charas, CharaAvailabilities> AvailabilityMap =
         new Dictionary<Charas, CharaAvailabilities>()
         {
             { Charas.ThePrince, CharaAvailabilities.Story },
@@ -166,7 +167,8 @@ public record CharaData(
             { Charas.Laxi, CharaAvailabilities.Story },
             { Charas.Chelle, CharaAvailabilities.Story },
             { Charas.Zena, CharaAvailabilities.Story }
-        };
+            // expand this
+        }.ToFrozenDictionary();
 
     public readonly int[] ExAbility =
     {
