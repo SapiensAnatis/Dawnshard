@@ -2892,11 +2892,7 @@ public partial class EventTradeTradeResponse
     [Key("update_data_list")]
     public UpdateDataList UpdateDataList { get; set; }
 
-    [Key("entity_result")]
-    public EntityResult EntityResult { get; set; }
-
-    [Key("material_list")]
-    public IEnumerable<MaterialList> MaterialList { get; set; } = [];
+    [Key("entity_result")] public EntityResult EntityResult { get; set; }
 
     [Key("user_event_item_data")]
     public UserEventItemData UserEventItemData { get; set; }
