@@ -2858,9 +2858,6 @@ public partial class EventTradeGetListResponse
     [Key("event_trade_list")]
     public IEnumerable<EventTradeList> EventTradeList { get; set; } = [];
 
-    [Key("material_list")]
-    public IEnumerable<MaterialList> MaterialList { get; set; } = [];
-
     [Key("user_event_item_data")]
     public UserEventItemData UserEventItemData { get; set; }
 
@@ -2894,9 +2891,6 @@ public partial class EventTradeTradeResponse
 
     [Key("entity_result")]
     public EntityResult EntityResult { get; set; }
-
-    [Key("material_list")]
-    public IEnumerable<MaterialList> MaterialList { get; set; } = [];
 
     [Key("user_event_item_data")]
     public UserEventItemData UserEventItemData { get; set; }
@@ -4795,7 +4789,6 @@ public partial class LoadIndexResponse
     [Key("quest_skip_point_use_limit_max")]
     public int QuestSkipPointUseLimitMax { get; set; }
 
-
     [Key("server_time")]
     public DateTimeOffset ServerTime { get; set; }
 
@@ -4804,7 +4797,6 @@ public partial class LoadIndexResponse
 
     [Key("quest_bonus")]
     public IEnumerable<AtgenQuestBonus> QuestBonus { get; set; } = [];
-
 
     [Key("walker_data")]
     public AtgenWalkerData WalkerData { get; set; }
