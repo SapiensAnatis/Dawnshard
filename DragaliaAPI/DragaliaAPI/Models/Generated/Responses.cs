@@ -2858,9 +2858,6 @@ public partial class EventTradeGetListResponse
     [Key("event_trade_list")]
     public IEnumerable<EventTradeList> EventTradeList { get; set; } = [];
 
-    [Key("material_list")]
-    public IEnumerable<MaterialList> MaterialList { get; set; } = [];
-
     [Key("user_event_item_data")]
     public UserEventItemData UserEventItemData { get; set; }
 
