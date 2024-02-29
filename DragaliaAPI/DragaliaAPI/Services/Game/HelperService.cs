@@ -2829,6 +2829,139 @@ public class HelperService : IHelperService
                         },
                         Guild = new() { GuildId = 0, GuildName = "Guild" }
                     },
+                    new()
+                    {
+                        ViewerId = 1021,
+                        Name = "Ms. Flashburn",
+                        Level = 250,
+                        LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                        EmblemId = Emblems.PureHeartedAndroid,
+                        MaxPartyPower = 9999,
+                        SupportChara = new()
+                        {
+                            CharaId = Charas.HalloweenLaxi,
+                            Level = 80,
+                            AdditionalMaxLevel = 0,
+                            Rarity = 5,
+                            Hp = 789,
+                            Attack = 486,
+                            HpPlusCount = 100,
+                            AttackPlusCount = 100,
+                            Ability1Level = 2,
+                            Ability2Level = 2,
+                            Ability3Level = 2,
+                            ExAbilityLevel = 5,
+                            ExAbility2Level = 5,
+                            Skill1Level = 3,
+                            Skill2Level = 2,
+                            IsUnlockEditSkill = true
+                        },
+                        SupportDragon = new()
+                        {
+                            DragonKeyId = 0,
+                            DragonId = Dragons.GalaChronosNyx,
+                            Level = 100,
+                            Hp = 368,
+                            Attack = 128,
+                            Skill1Level = 2,
+                            Ability1Level = 5,
+                            Ability2Level = 5,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            LimitBreakCount = 4
+                        },
+                        SupportWeaponBody = new()
+                        {
+                            WeaponBodyId = WeaponBodies.DivineTrigger,
+                            BuildupCount = 80,
+                            LimitBreakCount = 8,
+                            LimitOverCount = 1,
+                            EquipableCount = 4,
+                            AdditionalCrestSlotType1Count = 1,
+                            AdditionalCrestSlotType2Count = 0,
+                            AdditionalCrestSlotType3Count = 2
+                        },
+                        SupportTalisman = new()
+                        {
+                            TalismanKeyId = 0,
+                            TalismanId = Talismans.GalaMym,
+                            TalismanAbilityId1 = 340000030, // Critical Rate +15%
+                            TalismanAbilityId2 = 340000132 // Easy Hitter I
+                        },
+                        SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
+                        {
+                            new()
+                            {
+                                AbilityCrestId = AbilityCrests.AWonderfulValentines,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
+                            },
+                            new()
+                            {
+                                AbilityCrestId = AbilityCrests.ARainyDay,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
+                            },
+                            new()
+                            {
+                                AbilityCrestId = AbilityCrests.ExtremeTeamwork,
+                                BuildupCount = 50,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
+                            },
+                        },
+                        SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
+                        {
+                            new()
+                            {
+                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                BuildupCount = 40,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
+                            },
+                            new()
+                            {
+                                AbilityCrestId = AbilityCrests.BeautifulGunman,
+                                BuildupCount = 20,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 50,
+                                AttackPlusCount = 50,
+                                EquipableCount = 4
+                            },
+                        },
+                        SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
+                        {
+                            new()
+                            {
+                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
+                            },
+                            new()
+                            {
+                                AbilityCrestId = AbilityCrests.AKnightsDreamAxesBoon,
+                                BuildupCount = 30,
+                                LimitBreakCount = 4,
+                                HpPlusCount = 40,
+                                AttackPlusCount = 40,
+                                EquipableCount = 4
+                            }
+                        },
+                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                    },
                 },
                 SupportUserDetailList = new List<AtgenSupportUserDetailList>()
                 {
@@ -2955,6 +3088,12 @@ public class HelperService : IHelperService
                     new()
                     {
                         ViewerId = 1020,
+                        GettableManaPoint = 50,
+                        IsFriend = true
+                    },
+                    new()
+                    {
+                        ViewerId = 1021,
                         GettableManaPoint = 50,
                         IsFriend = true
                     },
