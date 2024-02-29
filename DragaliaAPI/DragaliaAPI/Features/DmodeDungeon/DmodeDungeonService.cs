@@ -159,9 +159,25 @@ public class DmodeDungeonService(
         bool isGameOver
     )
     {
-        DmodeIngameData ingameData = await dmodeCacheService.LoadIngameInfo();
-        DmodePlayRecord playRecord = await dmodeCacheService.LoadPlayRecord();
-        DmodeFloorData floorData = await dmodeCacheService.LoadFloorInfo(playRecord.FloorKey);
+        DmodeIngameData ingameData;
+        DmodePlayRecord playRecord;
+        DmodeFloorData floorData;
+
+        DbPlayerDmodeDungeon dungeon = await dmodeRepository.GetDungeonAsync();
+
+        try
+        {
+            ingameData = await dmodeCacheService.LoadIngameInfo();
+            playRecord = await dmodeCacheService.LoadPlayRecord();
+            floorData = await dmodeCacheService.LoadFloorInfo(playRecord.FloorKey);
+        }
+        catch (DragaliaException ex) when (ex.Code == ResultCode.CommonDbError)
+        {
+            logger.LogError(ex, "Failed to fetch Kaleidoscape data. Clearing dungeon entry.");
+            dungeon.Clear();
+
+            return (dungeon.State, new DmodeIngameResult());
+        }
 
         int floorNum = playRecord.IsFloorIncomplete ? playRecord.FloorNum - 1 : playRecord.FloorNum; // We take the floor num from playRecord due to the additional /floor call on pressing end
 
@@ -262,7 +278,6 @@ public class DmodeDungeonService(
         await dmodeCacheService.DeleteFloorInfo(playRecord.FloorKey);
         await dmodeCacheService.DeleteIngameInfo();
 
-        DbPlayerDmodeDungeon dungeon = await dmodeRepository.GetDungeonAsync();
         dungeon.Clear();
 
         return (dungeon.State, ingameResult);
