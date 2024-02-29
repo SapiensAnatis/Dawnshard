@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
 using Respawn;
 using Respawn.Graph;
+using StackExchange.Redis;
 
 namespace DragaliaAPI.Integration.Test;
 
@@ -20,6 +21,7 @@ namespace DragaliaAPI.Integration.Test;
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly TestContainersHelper testContainersHelper;
+    private ConnectionMultiplexer? connectionMultiplexer;
 
     public CustomWebApplicationFactory()
     {
@@ -56,6 +58,21 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
                 TablesToIgnore = [new Table("__EFMigrationsHistory")],
             }
         );
+
+        this.connectionMultiplexer = await ConnectionMultiplexer.ConnectAsync(
+            new ConfigurationOptions()
+            {
+                EndPoints = new EndPointCollection
+                {
+                    { this.testContainersHelper.RedisHost, this.testContainersHelper.RedisPort }
+                }
+            }
+        );
+    }
+
+    public void ResetCache()
+    {
+        this.connectionMultiplexer?.GetDatabase().Execute("FLUSHALL");
     }
 
     async Task IAsyncLifetime.DisposeAsync() => await this.testContainersHelper.StopAsync();
