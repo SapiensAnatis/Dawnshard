@@ -304,6 +304,8 @@ public class TestFixture : IAsyncLifetime
 
     private async Task SeedCache()
     {
+        this.factory.ResetCache();
+
         IDistributedCache cache = this.Services.GetRequiredService<IDistributedCache>();
 
         Session session =

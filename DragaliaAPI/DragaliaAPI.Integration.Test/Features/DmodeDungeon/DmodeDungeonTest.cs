@@ -128,6 +128,28 @@ public class DmodeDungeonTest : TestFixture
             .Be(oldInfo.RecoveryCount + 1);
     }
 
+    [Fact]
+    public async Task Finish_NoRedisData_ClearsDbEntry()
+    {
+        await this
+            .ApiContext.PlayerDmodeDungeons.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdateAsync(e =>
+                e.SetProperty(d => d.Floor, 55)
+                    .SetProperty(d => d.State, DungeonState.Halting)
+                    .SetProperty(d => d.CharaId, Charas.Berserker)
+            );
+
+        DmodeDungeonFinishResponse response = (
+            await this.Client.PostMsgpack<DmodeDungeonFinishResponse>(
+                "dmode_dungeon/finish",
+                new DmodeDungeonFinishRequest() { IsGameOver = false }
+            )
+        ).Data;
+
+        response.DmodeDungeonState.Should().Be(DungeonState.Waiting);
+        response.DmodeIngameResult.Should().BeEquivalentTo(new DmodeIngameResult());
+    }
+
     private async Task<DungeonState> GetDungeonState()
     {
         return (
