@@ -29,7 +29,6 @@ using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Features.Summoning;
 using DragaliaAPI.Features.Talisman;
-using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Features.Version;
@@ -142,8 +141,6 @@ public static class ServiceConfiguration
             .AddScoped<IUserService, UserService>()
             // Talisman feature
             .AddScoped<ITalismanService, TalismanService>()
-            // Tickets feature
-            .AddScoped<ITicketRepository, TicketRepository>()
             // Emblem feature
             .AddScoped<IEmblemRepository, EmblemRepository>()
             // Quest feature

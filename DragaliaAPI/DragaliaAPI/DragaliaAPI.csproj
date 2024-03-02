@@ -56,6 +56,10 @@
         <ProjectReference Include="..\..\Shared\DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj" />
         <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Features\Tickets\" />
+    </ItemGroup>
     
     <Target Name="MissionDesigner" BeforeTargets="AfterBuild" Condition="'$(CI)' == ''">
         <Exec Command="dotnet run --no-dependencies --project ../DragaliaAPI.MissionDesigner -- ../DragaliaAPI.Shared/Resources/Missions/MissionProgressionInfo.json" ConsoleToMSBuild="true" />

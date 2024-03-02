@@ -1,4 +1,5 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,8 +10,16 @@ namespace DragaliaAPI.Database;
 /// </summary>
 public class ApiContext : DbContext, IDataProtectionKeyContext
 {
-    public ApiContext(DbContextOptions<ApiContext> options)
-        : base(options) { }
+    private readonly IPlayerIdentityService playerIdentityService;
+
+    public ApiContext(
+        DbContextOptions<ApiContext> options,
+        IPlayerIdentityService playerIdentityService
+    )
+        : base(options)
+    {
+        this.playerIdentityService = playerIdentityService;
+    }
 
 #pragma warning disable CS0618 // Type or member is obsolete
     public DbSet<DbDeviceAccount> DeviceAccounts { get; set; }
@@ -123,4 +132,11 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
     public DbSet<DbPlayerQuestWall> PlayerQuestWalls { get; set; }
 
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder
+            .Entity<DbSummonTicket>()
+            .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
+    }
 }

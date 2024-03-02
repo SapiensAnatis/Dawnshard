@@ -1,0 +1,83 @@
+using System.Collections.Frozen;
+using System.Collections.Immutable;
+using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.EntityFrameworkCore;
+
+namespace DragaliaAPI.Features.Reward.Handlers;
+
+public class SummonTicketHandler(
+    ApiContext apiContext,
+    IPlayerIdentityService playerIdentityService
+) : IRewardHandler
+{
+    public IReadOnlyList<EntityTypes> SupportedTypes { get; } = [EntityTypes.SummonTicket];
+
+    public async Task<GrantReturn> Grant(Entity entity)
+    {
+        SummonTickets ticketId = (SummonTickets)entity.Id;
+        int quantity = entity.Quantity;
+
+        // TODO: Support expiring tickets.
+        // Not possible with Entity record, needs a wider rethink of reward handling.
+
+        switch (ticketId)
+        {
+            case SummonTickets.SingleSummon:
+            case SummonTickets.TenfoldSummon:
+                await this.AddStackableTicket(ticketId, quantity);
+                break;
+            case SummonTickets.TenfoldSummonLimited:
+            case SummonTickets.AdventurerSummon:
+            case SummonTickets.DragonSummon:
+            case SummonTickets.AdventurerSummonPlus:
+            case SummonTickets.DragonSummonPlus:
+                this.AddNonStackableTicket(ticketId, quantity);
+                break;
+            case SummonTickets.None:
+            default:
+                throw new ArgumentException($"Invalid ticket type: {ticketId}");
+        }
+
+        return new GrantReturn(RewardGrantResult.Added);
+    }
+
+    private async Task AddStackableTicket(SummonTickets ticketId, int quantity)
+    {
+        DbSummonTicket ticket =
+            await apiContext
+                .PlayerSummonTickets.Where(x => x.SummonTicketId == ticketId)
+                .FirstOrDefaultAsync() ?? this.InitializeEmptyStackableTicket(ticketId);
+
+        ticket.Quantity += quantity;
+    }
+
+    private void AddNonStackableTicket(SummonTickets ticketId, int quantity)
+    {
+        for (int i = 0; i < quantity; i++)
+        {
+            apiContext.PlayerSummonTickets.Add(
+                new DbSummonTicket()
+                {
+                    SummonTicketId = ticketId,
+                    ViewerId = playerIdentityService.ViewerId,
+                    Quantity = 1,
+                }
+            );
+        }
+    }
+
+    private DbSummonTicket InitializeEmptyStackableTicket(SummonTickets ticketId) =>
+        apiContext
+            .PlayerSummonTickets.Add(
+                new DbSummonTicket()
+                {
+                    ViewerId = playerIdentityService.ViewerId,
+                    SummonTicketId = ticketId,
+                    UseLimitTime = default,
+                }
+            )
+            .Entity;
+}

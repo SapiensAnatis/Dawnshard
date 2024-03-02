@@ -4,7 +4,6 @@ using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Shop;
-using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;

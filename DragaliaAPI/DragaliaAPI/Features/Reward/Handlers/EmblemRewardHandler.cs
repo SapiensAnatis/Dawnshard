@@ -8,7 +8,7 @@ namespace DragaliaAPI.Features.Reward.Handlers;
 [UsedImplicitly]
 public class EmblemRewardHandler(IEmblemRepository repository) : IRewardHandler
 {
-    public ImmutableArray<EntityTypes> SupportedTypes { get; } =
+    public IReadOnlyList<EntityTypes> SupportedTypes { get; } =
         ImmutableArray.Create(EntityTypes.Title);
 
     public async Task<GrantReturn> Grant(Entity entity)

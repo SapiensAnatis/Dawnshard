@@ -7,7 +7,7 @@ namespace DragaliaAPI.Features.Reward.Handlers;
 
 public class WeaponSkinHandler(IWeaponRepository weaponRepository) : IRewardHandler
 {
-    public ImmutableArray<EntityTypes> SupportedTypes { get; } =
+    public IReadOnlyList<EntityTypes> SupportedTypes { get; } =
         ImmutableArray.Create(EntityTypes.WeaponSkin);
 
     public async Task<GrantReturn> Grant(Entity entity)

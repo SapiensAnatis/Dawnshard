@@ -7,7 +7,6 @@ using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Player;
-using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,11 +23,10 @@ public class GenericRewardHandler(
     IEventRepository eventRepository,
     IDmodeRepository dmodeRepository,
     IItemRepository itemRepository,
-    IUserService userService,
-    ITicketRepository ticketRepository
+    IUserService userService
 ) : IRewardHandler
 {
-    public ImmutableArray<EntityTypes> SupportedTypes { get; } =
+    public IReadOnlyList<EntityTypes> SupportedTypes { get; } =
         ImmutableArray.Create(
             EntityTypes.Chara,
             EntityTypes.Item,
@@ -117,9 +115,6 @@ public class GenericRewardHandler(
                     info.Point2Quantity += entity.Quantity;
                 else
                     throw new UnreachableException("Invalid dmode point id");
-                break;
-            case EntityTypes.SummonTicket:
-                ticketRepository.AddTicket((SummonTickets)entity.Id, entity.Quantity);
                 break;
             default:
                 logger.LogWarning("Tried to reward unsupported entity {@entity}", entity);
