@@ -20,40 +20,26 @@ public class V19Update(ApiContext context, IPlayerIdentityService playerIdentity
 
     public async Task Apply()
     {
-        List<DbSummonTicket> allTickets = await context
-            .PlayerSummonTickets.Where(x =>
-                x.SummonTicketId == SummonTickets.SingleSummon
-                || x.SummonTicketId == SummonTickets.TenfoldSummon
-            )
-            .ToListAsync();
+        List<DbSummonTicket> allTickets = await context.PlayerSummonTickets.ToListAsync();
 
-        List<DbSummonTicket> singleTickets = allTickets
-            .Where(x => x.SummonTicketId == SummonTickets.SingleSummon)
-            .ToList();
+        foreach (SummonTickets ticketType in Enum.GetValues<SummonTickets>())
+        {
+            List<DbSummonTicket> ticketsOfType = allTickets
+                .Where(x => x.SummonTicketId == ticketType)
+                .ToList();
 
-        if (singleTickets.Count > 1)
-            this.StackTickets(singleTickets);
+            if (ticketsOfType.Count < 2)
+                continue;
 
-        List<DbSummonTicket> tenfoldTickets = allTickets
-            .Where(x => x.SummonTicketId == SummonTickets.TenfoldSummon)
-            .ToList();
-
-        if (tenfoldTickets.Count > 1)
-            this.StackTickets(tenfoldTickets);
-    }
-
-    private void StackTickets(List<DbSummonTicket> tickets)
-    {
-        DbSummonTicket sampleTicket = tickets[0];
-
-        context.RemoveRange(tickets);
-        context.Add(
-            new DbSummonTicket()
-            {
-                ViewerId = playerIdentityService.ViewerId,
-                SummonTicketId = sampleTicket.SummonTicketId,
-                Quantity = tickets.Sum(x => x.Quantity),
-            }
-        );
+            context.Add(
+                new DbSummonTicket()
+                {
+                    ViewerId = playerIdentityService.ViewerId,
+                    SummonTicketId = ticketType,
+                    Quantity = ticketsOfType.Sum(x => x.Quantity)
+                }
+            );
+            context.RemoveRange(ticketsOfType);
+        }
     }
 }

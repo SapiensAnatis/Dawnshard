@@ -15,6 +15,10 @@ public class RewardServiceTest : TestFixture
     [Theory]
     [InlineData(SummonTickets.SingleSummon)]
     [InlineData(SummonTickets.TenfoldSummon)]
+    [InlineData(SummonTickets.AdventurerSummon)]
+    [InlineData(SummonTickets.DragonSummon)]
+    [InlineData(SummonTickets.AdventurerSummonPlus)]
+    [InlineData(SummonTickets.DragonSummonPlus)]
     public async Task GrantSummoningTickets_Stackable_IncrementsExistingRow(
         SummonTickets ticketType
     )
@@ -52,6 +56,10 @@ public class RewardServiceTest : TestFixture
     [Theory]
     [InlineData(SummonTickets.SingleSummon)]
     [InlineData(SummonTickets.TenfoldSummon)]
+    [InlineData(SummonTickets.AdventurerSummon)]
+    [InlineData(SummonTickets.DragonSummon)]
+    [InlineData(SummonTickets.AdventurerSummonPlus)]
+    [InlineData(SummonTickets.DragonSummonPlus)]
     public async Task GrantSummoningTickets_Stackable_NoRow_CreatesNewRow(SummonTickets ticketType)
     {
         DbPlayerPresent present =
@@ -77,49 +85,6 @@ public class RewardServiceTest : TestFixture
                         ViewerId = this.ViewerId,
                         SummonTicketId = ticketType,
                         Quantity = 5,
-                    }
-                ],
-                opts => opts.Excluding(x => x.KeyId)
-            );
-    }
-
-    [Theory]
-    [InlineData(SummonTickets.TenfoldSummonLimited)]
-    [InlineData(SummonTickets.AdventurerSummon)]
-    [InlineData(SummonTickets.DragonSummon)]
-    [InlineData(SummonTickets.AdventurerSummonPlus)]
-    [InlineData(SummonTickets.DragonSummonPlus)]
-    public async Task GrantSummoningTickets_NonStackable_CreatesNewRow(SummonTickets ticketType)
-    {
-        DbPlayerPresent present =
-            new()
-            {
-                EntityType = EntityTypes.SummonTicket,
-                EntityQuantity = 2,
-                EntityId = (int)ticketType
-            };
-
-        await this.AddToDatabase(present);
-
-        await this.Client.PostMsgpack(
-            "/present/receive",
-            new PresentReceiveRequest() { PresentIdList = [(ulong)present.PresentId] }
-        );
-
-        this.ApiContext.PlayerSummonTickets.Should()
-            .BeEquivalentTo(
-                [
-                    new DbSummonTicket()
-                    {
-                        ViewerId = this.ViewerId,
-                        SummonTicketId = ticketType,
-                        Quantity = 1,
-                    },
-                    new DbSummonTicket()
-                    {
-                        ViewerId = this.ViewerId,
-                        SummonTicketId = ticketType,
-                        Quantity = 1,
                     }
                 ],
                 opts => opts.Excluding(x => x.KeyId)

@@ -20,22 +20,22 @@ public class SummonTicketHandler(
         SummonTickets ticketId = (SummonTickets)entity.Id;
         int quantity = entity.Quantity;
 
-        // TODO: Support expiring tickets.
-        // Not possible with Entity record, needs a wider rethink of reward handling.
-
         switch (ticketId)
         {
             case SummonTickets.SingleSummon:
             case SummonTickets.TenfoldSummon:
-                await this.AddStackableTicket(ticketId, quantity);
-                break;
-            case SummonTickets.TenfoldSummonLimited:
             case SummonTickets.AdventurerSummon:
             case SummonTickets.DragonSummon:
             case SummonTickets.AdventurerSummonPlus:
             case SummonTickets.DragonSummonPlus:
-                this.AddNonStackableTicket(ticketId, quantity);
+                await this.AddStackableTicket(ticketId, quantity);
                 break;
+            case SummonTickets.TenfoldSummonLimited:
+                // TODO: Support expiring tickets.
+                // Not possible with Entity record, needs a wider rethink of reward handling.
+                throw new NotImplementedException(
+                    "Expiring summon tickets are not yet implemented"
+                );
             case SummonTickets.None:
             default:
                 throw new ArgumentException($"Invalid ticket type: {ticketId}");
@@ -52,21 +52,6 @@ public class SummonTicketHandler(
                 .FirstOrDefaultAsync() ?? this.InitializeEmptyStackableTicket(ticketId);
 
         ticket.Quantity += quantity;
-    }
-
-    private void AddNonStackableTicket(SummonTickets ticketId, int quantity)
-    {
-        for (int i = 0; i < quantity; i++)
-        {
-            apiContext.PlayerSummonTickets.Add(
-                new DbSummonTicket()
-                {
-                    SummonTicketId = ticketId,
-                    ViewerId = playerIdentityService.ViewerId,
-                    Quantity = 1,
-                }
-            );
-        }
     }
 
     private DbSummonTicket InitializeEmptyStackableTicket(SummonTickets ticketId) =>

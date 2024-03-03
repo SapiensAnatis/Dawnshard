@@ -46,13 +46,7 @@ public class V19UpdateTest : SavefileUpdateTestFixture
                     {
                         ViewerId = this.ViewerId,
                         SummonTicketId = SummonTickets.DragonSummon,
-                        Quantity = 1
-                    },
-                    new()
-                    {
-                        ViewerId = this.ViewerId,
-                        SummonTicketId = SummonTickets.DragonSummon,
-                        Quantity = 1
+                        Quantity = 2
                     }
                 ],
                 opts => opts.Excluding(x => x.KeyId)
