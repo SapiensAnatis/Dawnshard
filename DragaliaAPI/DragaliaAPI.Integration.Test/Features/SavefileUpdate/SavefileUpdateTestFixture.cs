@@ -6,6 +6,8 @@ namespace DragaliaAPI.Integration.Test.Features.SavefileUpdate;
 
 public abstract class SavefileUpdateTestFixture : TestFixture
 {
+    protected virtual int StartingVersion => 0;
+
     protected int MaxVersion { get; }
 
     public SavefileUpdateTestFixture(
@@ -18,6 +20,10 @@ public abstract class SavefileUpdateTestFixture : TestFixture
             .Services.GetServices<ISavefileUpdate>()
             .MaxBy(x => x.SavefileVersion)!
             .SavefileVersion;
+
+        this.ApiContext.Players.ExecuteUpdate(u =>
+            u.SetProperty(e => e.SavefileVersion, StartingVersion)
+        );
     }
 
     protected int GetSavefileVersion()
@@ -29,9 +35,4 @@ public abstract class SavefileUpdateTestFixture : TestFixture
     {
         await this.Client.PostMsgpack<LoadIndexResponse>("load/index");
     }
-
-    protected override async Task Setup() =>
-        await this.ApiContext.Players.ExecuteUpdateAsync(u =>
-            u.SetProperty(e => e.SavefileVersion, 0)
-        );
 }

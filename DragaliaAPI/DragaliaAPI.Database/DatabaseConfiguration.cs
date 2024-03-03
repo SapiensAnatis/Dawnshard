@@ -25,11 +25,9 @@ public static class DatabaseConfiguration
         string connectionString = GetConnectionString(postgresOptions);
 
         services = services
-            .AddDbContext<ApiContext>(
-                options => options.UseNpgsql(connectionString).EnableDetailedErrors(),
-                optionsLifetime: ServiceLifetime.Singleton
+            .AddDbContext<ApiContext>(options =>
+                options.UseNpgsql(connectionString).EnableDetailedErrors()
             )
-            .AddDbContextFactory<ApiContext>(options => options.UseNpgsql(connectionString))
 #pragma warning disable CS0618 // Type or member is obsolete
             .AddScoped<IDeviceAccountRepository, DeviceAccountRepository>()
 #pragma warning restore CS0618 // Type or member is obsolete

@@ -28,7 +28,8 @@ public class SummonController(
     ISummonRepository summonRepository,
     ISummonService summonService,
     IPaymentService paymentService,
-    SummonListService summonListService
+    SummonListService summonListService,
+    SummonTicketService summonTicketService
 ) : DragaliaControllerBase
 {
     // Repeated from RedoableSummonController, but no point putting this in a shared location
@@ -142,12 +143,12 @@ public class SummonController(
     public async Task<DragaliaResult<SummonGetSummonListResponse>> GetSummonList()
     {
         IEnumerable<SummonList> bannerList = await summonListService.GetSummonList();
-        // IEnumerable<SummonTicketList> ticketList = await summonListService.GetSummonTicketList();
+        IEnumerable<SummonTicketList> ticketList = await summonTicketService.GetSummonTicketList();
 
         return new SummonGetSummonListResponse()
         {
             SummonList = bannerList,
-            SummonTicketList = [],
+            SummonTicketList = ticketList,
             CampaignSummonList = [],
             CharaSsrSummonList = [],
             DragonSsrSummonList = [],
@@ -452,28 +453,29 @@ public class SummonController(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        var response = new SummonRequestResponse(
-            returnedResult,
-            new List<AtgenResultPrizeList>(),
-            new List<int>() { sageEffect, circleEffect },
-            reversalIndex,
-            updateDataList,
-            new EntityResult() { NewGetEntityList = newGetEntityList },
-            new List<SummonTicketList>(),
-            playerBannerData.SummonPoints,
-            new List<UserSummonList>()
-            {
-                new(
-                    bannerData.SummonId,
-                    playerBannerData.SummonCount,
-                    bannerData.CampaignType,
-                    bannerData.FreeCountRest,
-                    bannerData.IsBeginnerCampaign,
-                    bannerData.BeginnerCampaignCountRest,
-                    bannerData.ConsecutionCampaignCountRest
-                )
-            }
-        );
+        SummonRequestResponse response =
+            new(
+                resultUnitList: returnedResult,
+                resultPrizeList: new List<AtgenResultPrizeList>(),
+                presageEffectList: new List<int>() { sageEffect, circleEffect },
+                reversalEffectIndex: reversalIndex,
+                updateDataList: updateDataList,
+                entityResult: new EntityResult() { NewGetEntityList = newGetEntityList },
+                summonTicketList: await summonTicketService.GetSummonTicketList(),
+                resultSummonPoint: playerBannerData.SummonPoints,
+                userSummonList: new List<UserSummonList>()
+                {
+                    new(
+                        bannerData.SummonId,
+                        playerBannerData.SummonCount,
+                        bannerData.CampaignType,
+                        bannerData.FreeCountRest,
+                        bannerData.IsBeginnerCampaign,
+                        bannerData.BeginnerCampaignCountRest,
+                        bannerData.ConsecutionCampaignCountRest
+                    )
+                }
+            );
 
         return this.Ok(response);
     }

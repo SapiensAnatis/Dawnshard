@@ -7,13 +7,14 @@ namespace DragaliaAPI.Integration.Test.Features.Event;
 public class Clb01EventTest : TestFixture
 {
     public Clb01EventTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
-
-    protected override async Task Setup() =>
-        await this.Client.PostMsgpack<MemoryEventActivateResponse>(
+        : base(factory, outputHelper)
+    {
+        this.Client.PostMsgpack<MemoryEventActivateResponse>(
             "memory_event/activate",
             new MemoryEventActivateRequest(EventId)
-        );
+        )
+            .Wait();
+    }
 
     private const int EventId = 21401;
     private const string Prefix = "clb01_event";

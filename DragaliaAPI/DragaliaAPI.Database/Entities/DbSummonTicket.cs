@@ -20,7 +20,7 @@ public class DbSummonTicket : DbPlayerData
     public int Quantity { get; set; }
 
     [Column("ExpirationTime")]
-    public DateTimeOffset UseLimitTime { get; set; }
+    public DateTimeOffset UseLimitTime { get; set; } = DateTimeOffset.UnixEpoch;
 
     [NotMapped]
     public bool IsExpired =>

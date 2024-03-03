@@ -16,9 +16,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 public class CharaTest : TestFixture
 {
     public CharaTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
-
-    protected override Task Setup()
+        : base(factory, outputHelper)
     {
         this.AddCharacter(Charas.Naveed);
         this.AddCharacter(Charas.Ezelith);
@@ -40,8 +38,6 @@ public class CharaTest : TestFixture
         this.AddCharacter(Charas.Delphi);
         this.AddCharacter(Charas.GalaAudric);
         this.AddCharacter(Charas.Gauld);
-
-        return Task.CompletedTask;
     }
 
     [Fact]

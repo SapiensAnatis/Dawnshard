@@ -1,10 +1,10 @@
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -19,7 +19,7 @@ public class PaymentService(
     IEventRepository eventRepository,
     IDmodeRepository dmodeRepository,
     IItemRepository itemRepository,
-    ITicketRepository ticketRepository
+    ApiContext apiContext
 ) : IPaymentService
 {
     private readonly List<AtgenDeleteDragonList> dragonList = new();
@@ -122,11 +122,10 @@ public class PaymentService(
                 };
                 break;
             case EntityTypes.SummonTicket:
-                DbSummonTicket? ticket = await ticketRepository.Tickets.FirstOrDefaultAsync(x =>
-                    x.SummonTicketId == (SummonTickets)entity.Id
+                DbSummonTicket? ticket = await apiContext.PlayerSummonTickets.FirstOrDefaultAsync(
+                    x => x.SummonTicketId == (SummonTickets)entity.Id
                 );
                 quantity = ticket?.Quantity;
-                // NOTE: Maybe remove here once quantity == 0?
                 updater = () => ticket!.Quantity -= price;
                 break;
             case EntityTypes.FreeDiamantium:

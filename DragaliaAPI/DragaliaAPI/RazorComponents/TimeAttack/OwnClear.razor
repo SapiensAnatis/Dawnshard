@@ -1,7 +1,7 @@
-﻿@inject IDbContextFactory<ApiContext> ContextFactory;
-
-@using DragaliaAPI.Database;
+﻿@using DragaliaAPI.Database;
+@using DragaliaAPI.Features.Blazor
 @using Microsoft.EntityFrameworkCore;
+@inherits ServiceComponentBase
 
 <MudPaper Elevation="@Elevation">
     @if (this.loading)
@@ -36,6 +36,9 @@
     [Parameter]
     public int Elevation { get; set; }
 
+    [InjectScoped] 
+    private ApiContext ApiContext { get; set; } = null!;
+
     private string OwnClearTime =>
     this.ownClear is null ?
         "N/A" :
@@ -53,9 +56,7 @@
 
         this.loading = true;
 
-        await using ApiContext context = await this.ContextFactory.CreateDbContextAsync();
-
-        IQueryable<DbTimeAttackClear> clears = context.TimeAttackClears
+        IQueryable<DbTimeAttackClear> clears = this.ApiContext.TimeAttackClears.IgnoreQueryFilters()
             .Where(x => x.QuestId == this.QuestId)
             .OrderBy(x => x.Time);
 

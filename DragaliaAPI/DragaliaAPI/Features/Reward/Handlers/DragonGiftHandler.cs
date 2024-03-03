@@ -7,7 +7,7 @@ namespace DragaliaAPI.Features.Reward.Handlers;
 
 public class DragonGiftHandler(IInventoryRepository inventoryRepository) : IRewardHandler
 {
-    public ImmutableArray<EntityTypes> SupportedTypes { get; } =
+    public IReadOnlyList<EntityTypes> SupportedTypes { get; } =
         ImmutableArray.Create(EntityTypes.DragonGift);
 
     public async Task<GrantReturn> Grant(Entity reward)

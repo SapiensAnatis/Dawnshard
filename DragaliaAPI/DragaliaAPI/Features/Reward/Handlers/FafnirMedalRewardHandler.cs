@@ -9,7 +9,7 @@ public class FafnirMedalRewardHandler(ILogger<FafnirMedalRewardHandler> logger) 
 {
     private readonly ILogger<FafnirMedalRewardHandler> logger = logger;
 
-    public ImmutableArray<EntityTypes> SupportedTypes { get; } = [EntityTypes.FafnirMedal];
+    public IReadOnlyList<EntityTypes> SupportedTypes { get; } = [EntityTypes.FafnirMedal];
 
     public Task<GrantReturn> Grant(Entity entity)
     {

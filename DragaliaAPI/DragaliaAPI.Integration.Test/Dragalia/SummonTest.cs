@@ -75,7 +75,7 @@ public class SummonTest : TestFixture
         response.SummonHistoryList.Should().NotBeEmpty();
     }
 
-    [Fact(Skip = "Summon tickets not yet fully implemented")]
+    [Fact]
     public async Task SummonGetSummonList_ReturnsDataWithBannerInformation()
     {
         int bannerId = 1020010;

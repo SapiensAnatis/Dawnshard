@@ -10,7 +10,7 @@ namespace DragaliaAPI.Features.Reward.Handlers;
 [UsedImplicitly]
 public class StampRewardHandler : IRewardHandler
 {
-    public ImmutableArray<EntityTypes> SupportedTypes { get; } = [EntityTypes.Stamp];
+    public IReadOnlyList<EntityTypes> SupportedTypes { get; } = [EntityTypes.Stamp];
 
     public Task<GrantReturn> Grant(Entity entity)
     {

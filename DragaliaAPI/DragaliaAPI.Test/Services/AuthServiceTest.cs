@@ -2,6 +2,7 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Database.Test.Utils;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -56,7 +57,7 @@ public class AuthServiceTest
             .UseInMemoryDatabase("apicontext")
             .Options;
 
-        this.apiContext = new ApiContext(options);
+        this.apiContext = new ApiContext(options, new StubPlayerIdentityService(ViewerId));
         this.apiContext.Database.EnsureDeleted();
         this.apiContext.Database.EnsureCreated();
 

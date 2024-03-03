@@ -1,3 +1,5 @@
+#nullable disable
+
 using MessagePack;
 
 namespace DragaliaAPI.Models.Generated;
