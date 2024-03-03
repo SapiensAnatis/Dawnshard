@@ -14,9 +14,10 @@ namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 public class DungeonStartTest : TestFixture
 {
     public DungeonStartTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
-
-    protected override async Task Setup() => await this.ImportSave();
+        : base(factory, outputHelper)
+    {
+        this.ImportSave().Wait();
+    }
 
     [Fact]
     public async Task Start_OneTeam_HasExpectedPartyUnitList()
