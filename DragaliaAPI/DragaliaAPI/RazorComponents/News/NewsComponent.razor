@@ -57,7 +57,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-
         this.allNewsItems = await this.ApiContext.NewsItems
             .OrderByDescending(x => x.Time)
             .Select(x => new NewsItem(x))

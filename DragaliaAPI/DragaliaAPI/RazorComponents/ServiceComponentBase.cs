@@ -11,7 +11,7 @@ public class ServiceComponentBase : OwningComponentBase
     protected override void OnInitialized()
     {
         IEnumerable<PropertyInfo> properties = this.GetType()
-            .GetProperties()
+            .GetProperties(BindingFlags.Instance | BindingFlags.NonPublic)
             .Where(p => p.GetCustomAttribute<InjectScopedAttribute>() != null);
 
         foreach (PropertyInfo p in properties)
