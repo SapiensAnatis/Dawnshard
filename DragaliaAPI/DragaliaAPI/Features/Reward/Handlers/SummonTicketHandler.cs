@@ -76,7 +76,6 @@ public class SummonTicketHandler(
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     SummonTicketId = ticketId,
-                    UseLimitTime = default,
                 }
             )
             .Entity;

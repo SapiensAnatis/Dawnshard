@@ -50,8 +50,7 @@ public class GenericRewardHandler(
             EntityTypes.BattleRoyalEventItem,
             EntityTypes.EarnEventItem,
             EntityTypes.CombatEventItem,
-            EntityTypes.DmodePoint,
-            EntityTypes.SummonTicket
+            EntityTypes.DmodePoint
         );
 
     public async Task<GrantReturn> Grant(Entity entity)
