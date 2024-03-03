@@ -6,22 +6,20 @@ namespace DragaliaAPI.Integration.Test.Features.Item;
 public class ItemTest : TestFixture
 {
     public ItemTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
-
-    protected override async Task Setup()
+        : base(factory, outputHelper)
     {
-        await this.AddToDatabase(
-            new DbPlayerUseItem()
-            {
-                ViewerId = ViewerId,
-                ItemId = UseItem.Honey,
-                Quantity = 50
-            }
-        );
+        this.AddToDatabase(
+                new DbPlayerUseItem()
+                {
+                    ViewerId = ViewerId,
+                    ItemId = UseItem.Honey,
+                    Quantity = 50
+                }
+            )
+            .Wait();
 
-        await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(e => e.SetProperty(p => p.StaminaSingle, 5));
+        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdate(e => e.SetProperty(p => p.StaminaSingle, 5));
     }
 
     [Fact]

@@ -13,7 +13,7 @@ public class AbilityCrestRewardHandler(
     ILogger<AbilityCrestRewardHandler> logger
 ) : IRewardHandler
 {
-    public ImmutableArray<EntityTypes> SupportedTypes { get; } =
+    public IReadOnlyList<EntityTypes> SupportedTypes { get; } =
         ImmutableArray.Create(EntityTypes.Wyrmprint);
 
     public async Task<GrantReturn> Grant(Entity entity)

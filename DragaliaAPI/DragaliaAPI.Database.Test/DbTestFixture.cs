@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Database.Test.Utils;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Test.Utils;
@@ -24,7 +25,7 @@ public class DbTestFixture : IDisposable
             .ConfigureWarnings(config => config.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
 
-        this.ApiContext = new ApiContext(options);
+        this.ApiContext = new ApiContext(options, new StubPlayerIdentityService(ViewerId));
         // Unused for creating saves
         Mock<ILogger<SavefileService>> mockLogger = new(MockBehavior.Loose);
         Mock<IDistributedCache> mockCache = new(MockBehavior.Loose);

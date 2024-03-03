@@ -1,7 +1,4 @@
-﻿@inject IDbContextFactory<ApiContext> ApiContextFactory
-@inject IBlazorIdentityService BlazorIdentityService
-@inject ILogger<RankingTable> Logger
-@using DragaliaAPI.Database;
+﻿@using DragaliaAPI.Database;
 @using DragaliaAPI.Database.Entities;
 @using DragaliaAPI.RazorComponents.TimeAttack.Team
 @using DragaliaAPI.Shared.MasterAsset;
@@ -13,7 +10,12 @@
 @using System.Diagnostics;
 @using System.Diagnostics.CodeAnalysis;
 @using DragaliaAPI.Authentication
+@using DragaliaAPI.Features.Blazor
 
+@inject IBlazorIdentityService BlazorIdentityService
+@inject ILogger<RankingTable> Logger
+
+@inherits ServiceComponentBase
 
 <MudTable 
     ServerData="@(new Func<TableState, Task<TableData<Clear>>>(ServerReload))"
@@ -97,6 +99,9 @@
 
     [Parameter]
     public bool EnableSearch { get; set; } = true;
+    
+    [InjectScoped]
+    private ApiContext ApiContext { get; set; } = null!;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -114,12 +119,11 @@
         Stopwatch stopwatch = Stopwatch.StartNew();
         Logger.LogDebug("Fetching data for quest {quest}", this.QuestId);
 
-        await using ApiContext context = await this.ApiContextFactory.CreateDbContextAsync();
 
         if (this.QuestId is null)
             return new TableData<Clear>() { Items = Enumerable.Empty<Clear>(), TotalItems = 0 };
 
-        IQueryable<DbTimeAttackClear> clearQuery = context.TimeAttackClears
+        IQueryable<DbTimeAttackClear> clearQuery = this.ApiContext.TimeAttackClears
             .Include(x => x.Players)
             .ThenInclude(x => x.Units)
             .Include(x => x.Players)

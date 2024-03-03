@@ -1,12 +1,12 @@
 ﻿using System.Diagnostics;
 using AutoMapper;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Summoning;
-using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Models.Generated;
@@ -19,6 +19,7 @@ namespace DragaliaAPI.Services.Game;
 
 public class LoadService(
     ISavefileService savefileService,
+    ApiContext apiContext,
     IBonusService bonusService,
     IMapper mapper,
     ILogger<LoadService> logger,
@@ -28,7 +29,6 @@ public class LoadService(
     ITradeService tradeService,
     IShopRepository shopRepository,
     IUserService userService,
-    ITicketRepository ticketRepository,
     IWallService wallService,
     TimeProvider timeProvider
 ) : ILoadService
@@ -111,8 +111,8 @@ public class LoadService(
                 UserTreasureTradeList = await tradeService.GetUserTreasureTradeList(),
                 TreasureTradeAllList = tradeService.GetCurrentTreasureTradeList(),
                 ShopNotice = new ShopNotice(await shopRepository.GetDailySummonCountAsync() == 0),
-                SummonTicketList = await ticketRepository
-                    .Tickets.ProjectToSummonTicketList()
+                SummonTicketList = await apiContext
+                    .PlayerSummonTickets.ProjectToSummonTicketList()
                     .ToListAsync(),
                 QuestBonusStackBaseTime = new DateTimeOffset(
                     2021,

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DotNet.Testcontainers.Builders;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Abstract;
@@ -20,7 +21,7 @@ using Respawn;
 namespace DragaliaAPI.Integration.Test;
 
 [Collection(TestCollection.Name)]
-public class TestFixture : IAsyncLifetime
+public class TestFixture
 {
     /// <summary>
     /// The device account ID which links to the seeded savefiles <see cref="SeedDatabase"/>
@@ -47,9 +48,15 @@ public class TestFixture : IAsyncLifetime
         this.Services = factory.Services.CreateScope().ServiceProvider;
 
         this.Mapper = this.Services.GetRequiredService<IMapper>();
-        this.ApiContext = this.Services.GetRequiredService<ApiContext>();
         this.LastDailyReset = this.Services.GetRequiredService<IResetHelper>().LastDailyReset;
 
+        this.SeedDatabase().Wait();
+        this.SeedCache().Wait();
+
+        DbContextOptions<ApiContext> options = this.Services.GetRequiredService<
+            DbContextOptions<ApiContext>
+        >();
+        this.ApiContext = new ApiContext(options, new StubPlayerIdentityService(this.ViewerId));
         this.ApiContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
     }
 
@@ -87,26 +94,6 @@ public class TestFixture : IAsyncLifetime
     /// <see cref="EntityFrameworkQueryableExtensions.AsTracking{TEntity}(IQueryable{TEntity})"/> on the query.
     /// </remarks>
     protected ApiContext ApiContext { get; }
-
-    public async Task InitializeAsync()
-    {
-        await this.SeedDatabase();
-        await this.SeedCache();
-        await this.Setup();
-    }
-
-    public Task DisposeAsync() => Task.CompletedTask;
-
-    /// <summary>
-    /// Defines test-specific setup to run at the end of <see cref="InitializeAsync"/>.
-    /// </summary>
-    /// <remarks>
-    /// Override this and put test-specific database seeding here, and not in a constructor, as the initial database
-    /// seeding (including the creation of the test savefile) is done in <see cref="InitializeAsync"/> which runs
-    /// after the constructor(s).
-    /// </remarks>
-    /// <returns>A task that performs setup operations.</returns>
-    protected virtual Task Setup() => Task.CompletedTask;
 
     protected void AddCharacter(Charas id)
     {
@@ -227,6 +214,7 @@ public class TestFixture : IAsyncLifetime
         ISavefileService savefileService = this.Services.GetRequiredService<ISavefileService>();
         IPlayerIdentityService playerIdentityService =
             this.Services.GetRequiredService<IPlayerIdentityService>();
+        ApiContext apiContext = this.Services.GetRequiredService<ApiContext>();
 
         DbPlayer newPlayer = await savefileService.Create(DeviceAccountId);
 
@@ -237,7 +225,7 @@ public class TestFixture : IAsyncLifetime
             newPlayer.AccountId
         );
 
-        this.ApiContext.PlayerMaterials.AddRange(
+        apiContext.PlayerMaterials.AddRange(
             Enum.GetValues<Materials>()
                 .Select(x => new DbPlayerMaterial()
                 {
@@ -247,7 +235,7 @@ public class TestFixture : IAsyncLifetime
                 })
         );
 
-        this.ApiContext.PlayerDragonGifts.AddRange(
+        apiContext.PlayerDragonGifts.AddRange(
             Enum.GetValues<DragonGifts>()
                 .Select(x => new DbPlayerDragonGift()
                 {
@@ -260,7 +248,7 @@ public class TestFixture : IAsyncLifetime
         IFortRepository fortRepository = this.Services.GetRequiredService<IFortRepository>();
         await fortRepository.InitializeFort();
 
-        this.ApiContext.PlayerFortBuilds.Add(
+        apiContext.PlayerFortBuilds.Add(
             new DbFortBuild()
             {
                 ViewerId = newPlayer.ViewerId,
@@ -270,7 +258,7 @@ public class TestFixture : IAsyncLifetime
         );
 
         DbPlayerUserData userData = (
-            await this.ApiContext.PlayerUserData.FindAsync(newPlayer.ViewerId)
+            await apiContext.PlayerUserData.FindAsync(newPlayer.ViewerId)
         )!;
 
         userData.Coin = 100_000_000;
@@ -281,7 +269,7 @@ public class TestFixture : IAsyncLifetime
         userData.StaminaSingle = 999;
         userData.QuestSkipPoint = 300;
 
-        this.ApiContext.PlayerDmodeInfos.Add(
+        apiContext.PlayerDmodeInfos.Add(
             new DbPlayerDmodeInfo
             {
                 ViewerId = newPlayer.ViewerId,
@@ -290,16 +278,16 @@ public class TestFixture : IAsyncLifetime
             }
         );
 
-        this.ApiContext.PlayerDmodeDungeons.Add(
+        apiContext.PlayerDmodeDungeons.Add(
             new DbPlayerDmodeDungeon { ViewerId = newPlayer.ViewerId }
         );
 
-        this.ApiContext.PlayerDmodeExpeditions.Add(
+        apiContext.PlayerDmodeExpeditions.Add(
             new DbPlayerDmodeExpedition { ViewerId = newPlayer.ViewerId }
         );
 
-        await this.ApiContext.SaveChangesAsync();
-        this.ApiContext.ChangeTracker.Clear();
+        await apiContext.SaveChangesAsync();
+        apiContext.ChangeTracker.Clear();
     }
 
     private async Task SeedCache()
