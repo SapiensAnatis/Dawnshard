@@ -1,7 +1,7 @@
 using DragaliaAPI.Features.Summoning;
 
 // ReSharper disable once CheckNamespace
-namespace Microsoft.Extensions.DependencyInjection;
+namespace DragaliaAPI;
 
 public static partial class FeatureExtensions
 {

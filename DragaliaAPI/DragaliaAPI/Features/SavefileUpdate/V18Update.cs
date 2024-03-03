@@ -17,7 +17,6 @@ public class V18Update(
     IWallService wallService,
     IStoryRepository storyRepository,
     IMissionRepository missionRepository,
-    ApiContext context,
     IMissionService missionService,
     ILogger<V18Update> logger
 ) : ISavefileUpdate

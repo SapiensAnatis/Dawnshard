@@ -11,7 +11,7 @@ using DragaliaAPI.Test.Utils;
 
 namespace DragaliaAPI.Test.Features.Shop;
 
-public class PaymentServiceTest
+public class PaymentServiceTest : RepositoryTestFixture
 {
     private readonly PaymentService paymentService;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
@@ -19,7 +19,6 @@ public class PaymentServiceTest
     private readonly Mock<IEventRepository> mockEventRepository;
     private readonly Mock<IDmodeRepository> mockDmodeRepository;
     private readonly Mock<IItemRepository> mockItemRepository;
-    private readonly Mock<ITicketRepository> mockTicketRepository;
 
     public PaymentServiceTest()
     {
@@ -28,7 +27,6 @@ public class PaymentServiceTest
         this.mockEventRepository = new(MockBehavior.Strict);
         this.mockDmodeRepository = new(MockBehavior.Strict);
         this.mockItemRepository = new(MockBehavior.Strict);
-        this.mockTicketRepository = new(MockBehavior.Strict);
 
         this.paymentService = new(
             LoggerTestUtils.Create<PaymentService>(),
@@ -37,7 +35,7 @@ public class PaymentServiceTest
             mockEventRepository.Object,
             mockDmodeRepository.Object,
             mockItemRepository.Object,
-            mockTicketRepository.Object
+            this.ApiContext
         );
     }
 

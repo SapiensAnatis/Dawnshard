@@ -34,7 +34,7 @@ public class UpdateDataService(
         List<IDbPlayerData> entities = apiContext
             .ChangeTracker.Entries<IDbPlayerData>()
             .Where(x =>
-                (x.State is EntityState.Modified or EntityState.Added)
+                x.State is EntityState.Modified or EntityState.Added
                 && x.Entity.ViewerId == playerIdentityService.ViewerId
             )
             .Select(x => x.Entity)

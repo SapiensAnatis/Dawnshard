@@ -1,13 +1,13 @@
-using System.Collections.Frozen;
-using System.Collections.Immutable;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Reward.Handlers;
 
+[UsedImplicitly]
 public class SummonTicketHandler(
     ApiContext apiContext,
     IPlayerIdentityService playerIdentityService

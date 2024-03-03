@@ -84,12 +84,4 @@ public sealed class SummonListService(
 
         return results;
     }
-
-    public async Task<IEnumerable<SummonTicketList>> GetSummonTicketList()
-    {
-        return await apiContext
-            .PlayerSummonTickets.Where(x => x.ViewerId == playerIdentityService.ViewerId)
-            .ProjectToSummonTicketList()
-            .ToListAsync();
-    }
 }

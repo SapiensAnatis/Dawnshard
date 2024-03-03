@@ -157,7 +157,6 @@ public static class ServiceConfiguration
             // Wall feature
             .AddScoped<IWallService, WallService>()
             .AddScoped<IWallRepository, WallRepository>()
-            .AddScoped<WallInitialProgressionService>()
             // Zena feature
             .AddScoped<IZenaService, ZenaService>()
             // Maintenance feature
