@@ -150,7 +150,6 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
 
     private static IEnumerable<UnitRate> GetUnitRarities(Banner banner)
     {
-        // TODO: subtract pickup rates
         BaseRateData rateData = GetBaseRates(banner);
 
         List<CharaData> charaPool = Enum.GetValues<Charas>()
@@ -200,9 +199,6 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
 
     private static bool IsCharaInBannerRegularPool(Charas chara, Banner banner)
     {
-        if (chara == Charas.Empty)
-            return false; // Hack to stop masterasset lookup fails
-
         if (banner.PickupCharas.Contains(chara))
             return false; // They are in the pickup pool instead.
 
@@ -219,9 +215,6 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
 
     private static bool IsDragonInBannerRegularPool(Dragons dragon, Banner banner)
     {
-        if (dragon == Dragons.Empty)
-            return false; // Hack to stop masterasset lookup fails
-
         if (banner.PickupDragons.Contains(dragon))
             return false; // They are in the pickup pool instead.
 

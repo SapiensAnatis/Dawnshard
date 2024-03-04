@@ -11,11 +11,6 @@ public enum UnitAvailability
     Permanent,
 
     /// <summary>
-    /// The unit can never be summoned, and is available from completing a story quest.
-    /// </summary>
-    Story,
-
-    /// <summary>
     /// The unit can only be summoned on Gala banners.
     /// </summary>
     Gala,
@@ -24,6 +19,11 @@ public enum UnitAvailability
     /// The unit can only be summoned on particular limited banners.
     /// </summary>
     Limited,
+
+    /// <summary>
+    /// The unit can never be summoned, but is available from completing a main story quest.
+    /// </summary>
+    Story,
 
     /// <summary>
     /// The unit can never be summoned.

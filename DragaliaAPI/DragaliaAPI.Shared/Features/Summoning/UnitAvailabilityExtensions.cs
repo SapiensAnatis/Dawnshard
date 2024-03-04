@@ -148,6 +148,9 @@ public static class UnitAvailabilityExtensions
             [Charas.Mona] = UnitAvailability.Limited,
             [Charas.Joker] = UnitAvailability.Limited,
             [Charas.Panther] = UnitAvailability.Limited,
+
+            // Not playable
+            [Charas.Empty] = UnitAvailability.Other,
         }.ToFrozenDictionary();
 
     private static readonly FrozenDictionary<Dragons, UnitAvailability> DragonAvailabilityMap =
@@ -221,7 +224,8 @@ public static class UnitAvailabilityExtensions
             [Dragons.MiniJupi] = UnitAvailability.Other,
             [Dragons.MiniZodi] = UnitAvailability.Other,
 
-            // No
-            [Dragons.Puppy] = UnitAvailability.Other
+            // Not playable
+            [Dragons.Puppy] = UnitAvailability.Other,
+            [Dragons.Empty] = UnitAvailability.Other
         }.ToFrozenDictionary();
 }
