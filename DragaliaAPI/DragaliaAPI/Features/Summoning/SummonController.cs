@@ -115,16 +115,8 @@ public class SummonController(
     [Route("get_odds_data")]
     public DragaliaResult<SummonGetOddsDataResponse> GetOddsData(SummonGetOddsDataRequest request)
     {
-        OddsRate? baseOddsRate = summonOddsService.GetNormalOddsRate(request.SummonId);
-        OddsRate? guaranteeOddsRate = summonOddsService.GetGuaranteeOddsRate(request.SummonId);
-
-        if (baseOddsRate == null || guaranteeOddsRate == null)
-        {
-            throw new DragaliaException(
-                ResultCode.CommonInvalidArgument,
-                $"Banner ID {request.SummonId} was not found"
-            );
-        }
+        OddsRate baseOddsRate = summonOddsService.GetNormalOddsRate(request.SummonId);
+        OddsRate guaranteeOddsRate = summonOddsService.GetGuaranteeOddsRate(request.SummonId);
 
         return new SummonGetOddsDataResponse(
             new OddsRateList(int.MaxValue, baseOddsRate, guaranteeOddsRate),

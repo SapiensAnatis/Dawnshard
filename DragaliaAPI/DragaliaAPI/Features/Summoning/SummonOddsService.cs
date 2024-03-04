@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.Summoning;
 using DragaliaAPI.Shared.MasterAsset;
@@ -12,12 +13,21 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
 {
     private readonly SummonBannerOptions summonOptions = optionsMonitor.CurrentValue;
 
-    public OddsRate? GetNormalOddsRate(int bannerId)
+    // Public for actual summon roll later
+    // ReSharper disable once MemberCanBePrivate.Global
+    public (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) GetUnitRates(
+        int bannerId
+    )
     {
         Banner? banner = this.summonOptions.Banners.FirstOrDefault(x => x.Id == bannerId);
 
         if (banner is null)
-            return null;
+        {
+            throw new DragaliaException(
+                ResultCode.CommonInvalidArgument,
+                $"Banner ID {bannerId} was not found"
+            );
+        }
 
         List<CharaData> charaPool = Enum.GetValues<Charas>()
             .Where(x => IsCharaInBannerRegularPool(x, banner))
@@ -37,59 +47,28 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
 
         BaseRateData rateData = GetBaseRates(pickupCharaPool, pickupDragonPool, banner.IsGala);
 
-        // TODO: Factor in pity rate
-        Dictionary<int, RarityList> pickupRarityLists =
-            new()
-            {
-                [5] = new(5, true, [], []),
-                [4] = new(4, true, [], []),
-                [3] = new(3, true, [], []),
-            };
-
-        Dictionary<int, RarityList> rarityLists =
-            new()
-            {
-                [5] = new(5, false, [], []),
-                [4] = new(4, false, [], []),
-                [3] = new(3, false, [], []),
-            };
-
-        foreach (UnitRate rate in GetPickupUnitRarities(pickupCharaPool, pickupDragonPool))
-            PopulateRarityDict(rate, pickupRarityLists);
-
-        foreach (UnitRate rate in GetUnitRarities(rateData, charaPool, dragonPool))
-            PopulateRarityDict(rate, rarityLists);
-
-        List<RarityList> combined =
-        [
-            .. pickupRarityLists.Values.Where(x => !x.IsEmpty),
-            .. rarityLists.Values
-        ];
-
-        return new OddsRate()
-        {
-            RarityList = combined
-                .GroupBy(x => x.Rarity)
-                .Select(x => new AtgenRarityList()
-                {
-                    Rarity = x.Key,
-                    TotalRate = x.Sum(y => y.CharaRate + y.DragonRate).ToPercentageString()
-                }),
-            RarityGroupList = combined.Select(x => x.ToRarityGroupList()),
-            Unit = new()
-            {
-                CharaOddsList = combined.Select(x => x.ToAdvOddsUnitDetail()),
-                DragonOddsList = combined.Select(x => x.ToDragonOddsUnitDetail()),
-            }
-        };
+        return (
+            GetPickupUnitRarities(pickupCharaPool, pickupDragonPool),
+            GetUnitRarities(rateData, charaPool, dragonPool)
+        );
     }
 
-    public OddsRate? GetGuaranteeOddsRate(int bannerId)
+    // Public for actual summon roll later
+    // ReSharper disable once MemberCanBePrivate.Global
+    public (
+        IEnumerable<UnitRate> PickupRates,
+        IEnumerable<UnitRate> NormalRates
+    ) GetGuaranteeUnitRates(int bannerId)
     {
         Banner? banner = this.summonOptions.Banners.FirstOrDefault(x => x.Id == bannerId);
 
         if (banner is null)
-            return null;
+        {
+            throw new DragaliaException(
+                ResultCode.CommonInvalidArgument,
+                $"Banner ID {bannerId} was not found"
+            );
+        }
 
         List<CharaData> charaPool = Enum.GetValues<Charas>()
             .Where(x => IsCharaInBannerRegularPool(x, banner))
@@ -117,16 +96,79 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
             banner.IsGala
         );
 
+        return (
+            GetGuaranteePickupUnitRarities(pickupCharaPool, pickupDragonPool),
+            GetUnitRarities(rateData, charaPool, dragonPool)
+        );
+    }
+
+    public OddsRate GetNormalOddsRate(int bannerId)
+    {
+        (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
+            this.GetUnitRates(bannerId);
+
+        // TODO: Factor in pity rate
+        Dictionary<int, RarityList> pickupRarityLists =
+            new()
+            {
+                [5] = new(5, true, [], []),
+                [4] = new(4, true, [], []),
+                [3] = new(3, true, [], []),
+            };
+
+        Dictionary<int, RarityList> rarityLists =
+            new()
+            {
+                [5] = new(5, false, [], []),
+                [4] = new(4, false, [], []),
+                [3] = new(3, false, [], []),
+            };
+
+        foreach (UnitRate rate in rates.PickupRates)
+            PopulateRarityDict(rate, pickupRarityLists);
+
+        foreach (UnitRate rate in rates.NormalRates)
+            PopulateRarityDict(rate, rarityLists);
+
+        List<RarityList> combined =
+        [
+            .. pickupRarityLists.Values.Where(x => !x.IsEmpty),
+            .. rarityLists.Values
+        ];
+
+        return new OddsRate()
+        {
+            RarityList = combined
+                .GroupBy(x => x.Rarity)
+                .Select(x => new AtgenRarityList()
+                {
+                    Rarity = x.Key,
+                    TotalRate = x.Sum(y => y.CharaRate + y.DragonRate).ToPercentageString()
+                }),
+            RarityGroupList = combined.Select(x => x.ToRarityGroupList()),
+            Unit = new()
+            {
+                CharaOddsList = combined.Select(x => x.ToAdvOddsUnitDetail()),
+                DragonOddsList = combined.Select(x => x.ToDragonOddsUnitDetail()),
+            }
+        };
+    }
+
+    public OddsRate GetGuaranteeOddsRate(int bannerId)
+    {
+        (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
+            this.GetGuaranteeUnitRates(bannerId);
+
         Dictionary<int, RarityList> pickupRarityLists =
             new() { [5] = new(5, true, [], []), [4] = new(4, true, [], []), };
 
         Dictionary<int, RarityList> rarityLists =
             new() { [5] = new(5, false, [], []), [4] = new(4, false, [], []), };
 
-        foreach (UnitRate rate in GetGuaranteePickupUnitRarities(pickupCharaPool, pickupDragonPool))
+        foreach (UnitRate rate in rates.PickupRates)
             PopulateRarityDict(rate, pickupRarityLists);
 
-        foreach (UnitRate rate in GetUnitRarities(rateData, charaPool, dragonPool))
+        foreach (UnitRate rate in rates.NormalRates)
             PopulateRarityDict(rate, rarityLists);
 
         List<RarityList> combined =
