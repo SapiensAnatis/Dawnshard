@@ -20,29 +20,57 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
             return null;
 
         // TODO: Factor in pity rate
-        RarityList fiveStarList = new(5, [], []);
-        RarityList fourStarList = new(4, [], []);
-        RarityList threeStarList = new(3, [], []);
+        Dictionary<int, RarityList> pickupRarityLists =
+            new()
+            {
+                [5] = new(5, true, [], []),
+                [4] = new(4, true, [], []),
+                [3] = new(3, true, [], []),
+            };
+
+        Dictionary<int, RarityList> rarityLists =
+            new()
+            {
+                [5] = new(5, false, [], []),
+                [4] = new(4, false, [], []),
+                [3] = new(3, false, [], []),
+            };
+
+        foreach (UnitRate rate in GetPickupUnitRarities(banner))
+            PopulateRarityList(rate, pickupRarityLists);
 
         foreach (UnitRate rate in GetUnitRarities(banner))
+            PopulateRarityList(rate, rarityLists);
+
+        List<RarityList> combined =
+        [
+            .. pickupRarityLists.Values.Where(x => !x.IsEmpty),
+            .. rarityLists.Values
+        ];
+
+        return new OddsRate()
         {
-            AtgenUnitList unitList = rate.ToAtgenUnitList();
-            RarityList list = rate.Rarity switch
+            RarityList = combined.Select(x => x.ToRarityList()),
+            RarityGroupList = combined.Select(x => x.ToRarityGroupList()),
+            Unit = new()
             {
-                5 => fiveStarList,
-                4 => fourStarList,
-                3 => threeStarList,
-                _ => throw new UnreachableException($"Invalid rarity: {rate.Rarity}")
-            };
+                CharaOddsList = combined.Select(x => x.ToAdvOddsUnitDetail()),
+                DragonOddsList = combined.Select(x => x.ToDragonOddsUnitDetail()),
+            }
+        };
+
+        void PopulateRarityList(UnitRate rate, Dictionary<int, RarityList> dict)
+        {
+            RarityList list = dict[rate.Rarity];
 
             if (rate.EntityType == EntityTypes.Chara)
             {
-                list.CharaList.Add(unitList);
+                list.CharaList.Add(rate);
                 list.CharaRate += rate.Rate;
             }
             else if (rate.EntityType == EntityTypes.Dragon)
             {
-                list.DragonList.Add(unitList);
+                list.DragonList.Add(rate);
                 list.DragonRate += rate.Rate;
             }
             else
@@ -52,71 +80,34 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
                 );
             }
         }
-
-        return new OddsRate()
-        {
-            RarityList =
-            [
-                fiveStarList.ToRarityList(),
-                fourStarList.ToRarityList(),
-                threeStarList.ToRarityList(),
-            ],
-            RarityGroupList =
-            [
-                fiveStarList.ToRarityGroupList(),
-                fourStarList.ToRarityGroupList(),
-                threeStarList.ToRarityGroupList()
-            ],
-            Unit = new()
-            {
-                CharaOddsList =
-                [
-                    fiveStarList.ToAdvOddsUnitDetail(),
-                    fourStarList.ToAdvOddsUnitDetail(),
-                    threeStarList.ToAdvOddsUnitDetail()
-                ],
-                DragonOddsList =
-                [
-                    fiveStarList.ToDragonOddsUnitDetail(),
-                    fourStarList.ToDragonOddsUnitDetail(),
-                    threeStarList.ToDragonOddsUnitDetail(),
-                ]
-            }
-        };
     }
 
-    private static IEnumerable<UnitRate> GetUnitRarities(Banner banner)
+    private static IEnumerable<UnitRate> GetPickupUnitRarities(Banner banner)
     {
-        List<CharaData> featuredCharaData = banner
-            .FeaturedAdventurers.Select(x => MasterAsset.CharaData[x])
+        List<CharaData> pickupCharaData = banner
+            .PickupCharas.Select(x => MasterAsset.CharaData[x])
             .ToList();
 
-        List<DragonData> featuredDragonData = banner
-            .FeaturedDragons.Select(x => MasterAsset.DragonData[x])
+        List<DragonData> pickupDragonData = banner
+            .PickupDragons.Select(x => MasterAsset.DragonData[x])
             .ToList();
 
-        BaseRateData rateData = GetBaseRates(banner);
+        int totalPickupFourStar =
+            pickupCharaData.Count(x => x.Rarity == 4) + pickupDragonData.Count(x => x.Rarity == 4);
 
-        int totalFeaturedFourStar =
-            featuredCharaData.Count(x => x.Rarity == 4)
-            + featuredDragonData.Count(x => x.Rarity == 4);
-
-        foreach (CharaData data in featuredCharaData)
+        foreach (CharaData data in pickupCharaData)
         {
             decimal rate;
             switch (data.Rarity)
             {
                 case 5:
                     rate = 0.005m;
-                    rateData.FiveStarAdvRate -= rate;
                     break;
                 case 4:
-                    rate = 0.07m / totalFeaturedFourStar;
-                    rateData.FourStarAdvRate -= rate;
+                    rate = 0.07m / totalPickupFourStar;
                     break;
                 case 3:
                     rate = 0.04m;
-                    rateData.ThreeStarAdvRate -= rate;
                     break;
                 default:
                     throw new UnreachableException(
@@ -127,22 +118,19 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
             yield return new UnitRate(data.Id, rate);
         }
 
-        foreach (DragonData data in featuredDragonData)
+        foreach (DragonData data in pickupDragonData)
         {
             decimal rate;
             switch (data.Rarity)
             {
                 case 5:
                     rate = 0.008m;
-                    rateData.FiveStarDragonRate -= rate;
                     break;
                 case 4:
-                    rate = 0.07m / totalFeaturedFourStar;
-                    rateData.FourStarDragonRate -= rate;
+                    rate = 0.07m / totalPickupFourStar;
                     break;
                 case 3:
                     rate = 0.04m;
-                    rateData.ThreeStarDragonRate -= rate;
                     break;
                 default:
                     throw new UnreachableException(
@@ -152,6 +140,12 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
 
             yield return new UnitRate(data.Id, rate);
         }
+    }
+
+    private static IEnumerable<UnitRate> GetUnitRarities(Banner banner)
+    {
+        // TODO: subtract pickup rates
+        BaseRateData rateData = GetBaseRates(banner);
 
         List<CharaData> charaPool = Enum.GetValues<Charas>()
             .Where(x => IsCharaInBannerRegularPool(x, banner))
@@ -203,8 +197,8 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
         if (chara == Charas.Empty)
             return false; // Hack to stop masterasset lookup fails
 
-        if (banner.FeaturedAdventurers.Contains(chara))
-            return false; // They are in the featured pool instead.
+        if (banner.PickupCharas.Contains(chara))
+            return false; // They are in the pickup pool instead.
 
         UnitAvailability availability = chara.GetAvailability();
 
@@ -212,7 +206,7 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
         {
             UnitAvailability.Permanent => true,
             UnitAvailability.Gala => banner.IsGala,
-            UnitAvailability.Limited => banner.LimitedAdventurers.Contains(chara),
+            UnitAvailability.Limited => banner.LimitedCharas.Contains(chara),
             _ => false
         };
     }
@@ -222,8 +216,8 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
         if (dragon == Dragons.Empty)
             return false; // Hack to stop masterasset lookup fails
 
-        if (banner.FeaturedDragons.Contains(dragon))
-            return false; // They are in the featured pool instead.
+        if (banner.PickupDragons.Contains(dragon))
+            return false; // They are in the pickup pool instead.
 
         UnitAvailability availability = dragon.GetAvailability();
 
@@ -238,16 +232,26 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
 
     private static BaseRateData GetBaseRates(Banner banner)
     {
+        List<CharaData> pickupCharaData = banner
+            .PickupCharas.Select(x => MasterAsset.CharaData[x])
+            .ToList();
+
+        List<DragonData> pickupDragonData = banner
+            .PickupDragons.Select(x => MasterAsset.DragonData[x])
+            .ToList();
+
         decimal fiveStarRate = banner.IsGala ? 0.06m : 0.04m;
+
+        fiveStarRate -= pickupCharaData.Count(x => x.Rarity == 5) * 0.005m;
+        fiveStarRate -= pickupDragonData.Count(x => x.Rarity == 5) * 0.008m;
 
         decimal fourStarAdvRate;
         decimal fourStarDragonRate;
 
-        bool anyFourStarFeatured =
-            banner.FeaturedAdventurers.Any(x => MasterAsset.CharaData[x].Rarity == 4)
-            || banner.FeaturedDragons.Any(x => MasterAsset.DragonData[x].Rarity == 4);
+        bool anyFourStarPickup =
+            pickupCharaData.Any(x => x.Rarity == 4) || pickupDragonData.Any(x => x.Rarity == 4);
 
-        if (anyFourStarFeatured)
+        if (anyFourStarPickup)
         {
             fourStarAdvRate = 0.045m;
             fourStarDragonRate = 0.045m;
@@ -258,8 +262,25 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
             fourStarDragonRate = 0.0745m;
         }
 
-        decimal threeStarAdvRate = banner.IsGala ? 0.47m : 0.48m;
-        decimal threeStarDragonRate = banner.IsGala ? 0.31m : 0.32m;
+        int threeStarPickupCount =
+            pickupCharaData.Count(x => x.Rarity == 3) + pickupCharaData.Count(x => x.Rarity == 3);
+
+        decimal threeStarAdvRate;
+        decimal threeStarDragonRate;
+
+        if (threeStarPickupCount > 0)
+        {
+            decimal threeStarRate = banner.IsGala ? 0.8m : 0.78m;
+            threeStarRate -= pickupCharaData.Count(x => x.Rarity == 5);
+
+            threeStarAdvRate = threeStarRate / 2m;
+            threeStarDragonRate = threeStarRate / 2m;
+        }
+        else
+        {
+            threeStarAdvRate = banner.IsGala ? 0.47m : 0.48m;
+            threeStarDragonRate = banner.IsGala ? 0.31m : 0.32m;
+        }
 
         return new()
         {
@@ -315,30 +336,48 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
 
     private record RarityList(
         int Rarity,
-        List<AtgenUnitList> DragonList,
-        List<AtgenUnitList> CharaList
+        bool Pickup,
+        List<UnitRate> DragonList,
+        List<UnitRate> CharaList
     )
     {
+        public bool IsEmpty => DragonList.Count == 0 && CharaList.Count == 0;
+
         public decimal CharaRate { get; set; }
 
         public decimal DragonRate { get; set; }
 
         public AtgenRarityList ToRarityList() =>
-            new() { Rarity = Rarity, TotalRate = (CharaRate + DragonRate).ToPercentageString() };
+            new()
+            {
+                Rarity = this.Rarity,
+                TotalRate = (this.CharaRate + this.DragonRate).ToPercentageString()
+            };
 
         public AtgenRarityGroupList ToRarityGroupList() =>
             new()
             {
-                Rarity = Rarity,
-                TotalRate = (CharaRate + DragonRate).ToPercentageString(),
-                DragonRate = DragonRate.ToPercentageString(),
-                CharaRate = CharaRate.ToPercentageString()
+                Rarity = this.Rarity,
+                Pickup = this.Pickup,
+                TotalRate = (this.CharaRate + this.DragonRate).ToPercentageString(),
+                DragonRate = this.DragonRate.ToPercentageString(),
+                CharaRate = this.CharaRate.ToPercentageString()
             };
 
         public OddsUnitDetail ToAdvOddsUnitDetail() =>
-            new() { Rarity = Rarity, UnitList = this.CharaList };
+            new()
+            {
+                Pickup = this.Pickup,
+                Rarity = this.Rarity,
+                UnitList = this.CharaList.Select(x => x.ToAtgenUnitList())
+            };
 
         public OddsUnitDetail ToDragonOddsUnitDetail() =>
-            new() { Rarity = Rarity, UnitList = DragonList };
+            new()
+            {
+                Pickup = this.Pickup,
+                Rarity = this.Rarity,
+                UnitList = this.DragonList.Select(x => x.ToAtgenUnitList())
+            };
     }
 }

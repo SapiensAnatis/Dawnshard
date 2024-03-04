@@ -19,15 +19,15 @@ public class Banner
 
     public bool IsPrizeShowcase { get; init; }
 
-    public required IReadOnlyList<Charas> FeaturedAdventurers { get; init; }
+    public required IReadOnlyList<Charas> PickupCharas { get; init; }
 
-    public required IReadOnlyList<Dragons> FeaturedDragons { get; init; }
+    public required IReadOnlyList<Dragons> PickupDragons { get; init; }
 
-    public required IReadOnlyList<Charas> LimitedAdventurers { get; init; }
+    public required IReadOnlyList<Charas> LimitedCharas { get; init; }
 
     public required IReadOnlyList<Dragons> LimitedDragons { get; init; }
 
-    public required IReadOnlyList<Charas> TradeAdventurers { get; init; }
+    public required IReadOnlyList<Charas> TradeCharas { get; init; }
 
     public required IReadOnlyList<Dragons> TradeDragons { get; init; }
 }

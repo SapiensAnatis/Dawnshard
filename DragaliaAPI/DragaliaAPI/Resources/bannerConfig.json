@@ -7,19 +7,19 @@
                 "End": "2025-02-24T15:22:06Z",
                 "IsGala": false,
                 "IsPrizeShowcase": false,
-                "FeaturedAdventurers": [
+                "PickupCharas": [
                     "Joker"
                 ],
-                "FeaturedDragons": [
+                "PickupDragons": [
                     "Arsene"
                 ],
-                "LimitedAdventurers": [
+                "LimitedCharas": [
                     "Mona"
                 ],
                 "LimitedDragons": [
                     "Thor"
                 ],
-                "TradeAdventurers": [
+                "TradeCharas": [
                     "Mona"
                 ],
                 "TradeDragons": [
