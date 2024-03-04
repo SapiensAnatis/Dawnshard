@@ -1,6 +1,7 @@
 ﻿using System.Collections.Frozen;
 using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Features.Summoning;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
@@ -157,17 +158,14 @@ public class MasterAssetTest
     }
 
     [Theory]
-    [InlineData(Charas.Elisanne, CharaAvailabilities.Story)]
-    [InlineData(Charas.Annelie, CharaAvailabilities.Default)]
-    [InlineData(Charas.Chelle, CharaAvailabilities.Story)]
-    public void CharaData_Availability_ReturnsExpectedResult(
-        Charas id,
-        CharaAvailabilities expected
-    )
+    [InlineData(Charas.Elisanne, UnitAvailability.Story)]
+    [InlineData(Charas.Annelie, UnitAvailability.Permanent)]
+    [InlineData(Charas.Chelle, UnitAvailability.Story)]
+    public void CharaData_Availability_ReturnsExpectedResult(Charas id, UnitAvailability expected)
     {
         CharaData chara = MasterAsset.MasterAsset.CharaData.Get(id);
 
-        chara.Availability.Should().Be(expected);
+        chara.GetAvailability().Should().Be(expected);
     }
 
     [Fact]

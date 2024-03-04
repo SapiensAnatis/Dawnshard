@@ -1,24 +1,41 @@
+using System.Globalization;
+using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
 
 namespace DragaliaAPI.Features.Summoning;
 
 public record RarityGroup(int Rarity, double TotalRate, double CharaRate, double DragonRate);
 
-public class UnitRarity
+public class UnitRate
 {
     public int Id { get; }
 
-    public double Rate { get; }
+    public EntityTypes EntityType { get; }
 
-    public UnitRarity(Dragons dragon, double rate)
+    public int Rarity { get; }
+
+    public decimal Rate { get; }
+
+    public UnitRate(Dragons dragon, decimal rate)
     {
         this.Id = (int)dragon;
+        this.EntityType = EntityTypes.Dragon;
+        this.Rarity = MasterAsset.DragonData[dragon].Rarity;
         this.Rate = rate;
     }
 
-    public UnitRarity(Charas chara, double rate)
+    public UnitRate(Charas chara, decimal rate)
     {
         this.Id = (int)chara;
+        this.EntityType = EntityTypes.Chara;
+        this.Rarity = MasterAsset.CharaData[chara].Rarity;
         this.Rate = rate;
+    }
+
+    public AtgenUnitList ToAtgenUnitList()
+    {
+        return new AtgenUnitList() { Id = this.Id, Rate = this.Rate.ToPercentageString() };
     }
 }

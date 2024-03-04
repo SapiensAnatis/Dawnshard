@@ -9,6 +9,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Features.Summoning;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,8 @@ public class SummonController(
     ISummonService summonService,
     IPaymentService paymentService,
     SummonListService summonListService,
-    SummonTicketService summonTicketService
+    SummonTicketService summonTicketService,
+    SummonOddsService summonOddsService
 ) : DragaliaControllerBase
 {
     // Repeated from RedoableSummonController, but no point putting this in a shared location
@@ -111,17 +113,20 @@ public class SummonController(
 
     [HttpPost]
     [Route("get_odds_data")]
-    public async Task<DragaliaResult> GetOddsData(SummonGetOddsDataRequest request)
+    public DragaliaResult<SummonGetOddsDataResponse> GetOddsData(SummonGetOddsDataRequest request)
     {
-        int bannerId = request.SummonId;
-        DbPlayerUserData userData = await userDataRepository.UserData.FirstAsync();
-        //TODO Replace Dummy data with oddscalculation
+        OddsRate? baseOddsRate = summonOddsService.GetNormalOddsRate(request.SummonId);
+        if (baseOddsRate == null)
+        {
+            throw new DragaliaException(
+                ResultCode.CommonInvalidArgument,
+                $"Banner ID {request.SummonId} was not found"
+            );
+        }
 
-        return this.Ok(
-            new SummonGetOddsDataResponse(
-                new OddsRateList(0, Data.OddsRate, Data.OddsRate),
-                new(Data.PrizeOddsRate, Data.PrizeOddsRate)
-            )
+        return new SummonGetOddsDataResponse(
+            new OddsRateList(0, baseOddsRate, Data.OddsRate),
+            new(null, null)
         );
     }
 
@@ -483,7 +488,7 @@ public class SummonController(
     private static int CalculateDewValue(Charas id)
     {
         CharaData data = MasterAsset.CharaData[id];
-        return data.Availability == CharaAvailabilities.Story
+        return data.GetAvailability() == UnitAvailability.Story
             ? DewValueData.DupeStorySummon[data.Rarity]
             : DewValueData.DupeSummon[data.Rarity];
     }

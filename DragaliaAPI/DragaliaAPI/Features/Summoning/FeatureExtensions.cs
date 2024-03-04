@@ -11,5 +11,6 @@ public static partial class FeatureExtensions
         serviceCollection
             .AddScoped<ISummonService, SummonService>()
             .AddScoped<SummonListService>()
-            .AddScoped<SummonTicketService>();
+            .AddScoped<SummonTicketService>()
+            .AddScoped<SummonOddsService>();
 }
