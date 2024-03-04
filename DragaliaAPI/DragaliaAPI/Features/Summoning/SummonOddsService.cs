@@ -19,6 +19,24 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
         if (banner is null)
             return null;
 
+        List<CharaData> charaPool = Enum.GetValues<Charas>()
+            .Where(x => IsCharaInBannerRegularPool(x, banner))
+            .Select(x => MasterAsset.CharaData[x])
+            .ToList();
+        List<DragonData> dragonPool = Enum.GetValues<Dragons>()
+            .Where(x => IsDragonInBannerRegularPool(x, banner))
+            .Select(x => MasterAsset.DragonData[x])
+            .ToList();
+
+        List<CharaData> pickupCharaPool = banner
+            .PickupCharas.Select(x => MasterAsset.CharaData[x])
+            .ToList();
+        List<DragonData> pickupDragonPool = banner
+            .PickupDragons.Select(x => MasterAsset.DragonData[x])
+            .ToList();
+
+        BaseRateData rateData = GetBaseRates(pickupCharaPool, pickupDragonPool, banner.IsGala);
+
         // TODO: Factor in pity rate
         Dictionary<int, RarityList> pickupRarityLists =
             new()
@@ -36,11 +54,11 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
                 [3] = new(3, false, [], []),
             };
 
-        foreach (UnitRate rate in GetPickupUnitRarities(banner))
-            PopulateRarityList(rate, pickupRarityLists);
+        foreach (UnitRate rate in GetPickupUnitRarities(pickupCharaPool, pickupDragonPool))
+            PopulateRarityDict(rate, pickupRarityLists);
 
-        foreach (UnitRate rate in GetUnitRarities(banner))
-            PopulateRarityList(rate, rarityLists);
+        foreach (UnitRate rate in GetUnitRarities(rateData, charaPool, dragonPool))
+            PopulateRarityDict(rate, rarityLists);
 
         List<RarityList> combined =
         [
@@ -64,103 +82,185 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
                 DragonOddsList = combined.Select(x => x.ToDragonOddsUnitDetail()),
             }
         };
-
-        void PopulateRarityList(UnitRate rate, Dictionary<int, RarityList> dict)
-        {
-            RarityList list = dict[rate.Rarity];
-
-            if (rate.EntityType == EntityTypes.Chara)
-            {
-                list.CharaList.Add(rate);
-                list.CharaRate += rate.Rate;
-            }
-            else if (rate.EntityType == EntityTypes.Dragon)
-            {
-                list.DragonList.Add(rate);
-                list.DragonRate += rate.Rate;
-            }
-            else
-            {
-                throw new UnreachableException(
-                    $"Invalid rarity entity type ({rate.EntityType}) or rarity ({rate.Rarity})"
-                );
-            }
-        }
     }
 
-    private static IEnumerable<UnitRate> GetPickupUnitRarities(Banner banner)
+    public OddsRate? GetGuaranteeOddsRate(int bannerId)
     {
-        List<CharaData> pickupCharaData = banner
-            .PickupCharas.Select(x => MasterAsset.CharaData[x])
-            .ToList();
+        Banner? banner = this.summonOptions.Banners.FirstOrDefault(x => x.Id == bannerId);
 
-        List<DragonData> pickupDragonData = banner
-            .PickupDragons.Select(x => MasterAsset.DragonData[x])
-            .ToList();
-
-        int totalPickupFourStar =
-            pickupCharaData.Count(x => x.Rarity == 4) + pickupDragonData.Count(x => x.Rarity == 4);
-
-        foreach (CharaData data in pickupCharaData)
-        {
-            decimal rate;
-            switch (data.Rarity)
-            {
-                case 5:
-                    rate = 0.005m;
-                    break;
-                case 4:
-                    rate = 0.07m / totalPickupFourStar;
-                    break;
-                case 3:
-                    rate = 0.04m;
-                    break;
-                default:
-                    throw new UnreachableException(
-                        $"Invalid rarity {data.Rarity} for character {data.Id}"
-                    );
-            }
-
-            yield return new UnitRate(data.Id, rate);
-        }
-
-        foreach (DragonData data in pickupDragonData)
-        {
-            decimal rate;
-            switch (data.Rarity)
-            {
-                case 5:
-                    rate = 0.008m;
-                    break;
-                case 4:
-                    rate = 0.07m / totalPickupFourStar;
-                    break;
-                case 3:
-                    rate = 0.04m;
-                    break;
-                default:
-                    throw new UnreachableException(
-                        $"Invalid rarity {data.Rarity} for character {data.Id}"
-                    );
-            }
-
-            yield return new UnitRate(data.Id, rate);
-        }
-    }
-
-    private static IEnumerable<UnitRate> GetUnitRarities(Banner banner)
-    {
-        BaseRateData rateData = GetBaseRates(banner);
+        if (banner is null)
+            return null;
 
         List<CharaData> charaPool = Enum.GetValues<Charas>()
             .Where(x => IsCharaInBannerRegularPool(x, banner))
             .Select(x => MasterAsset.CharaData[x])
+            .Where(x => x.Rarity >= 4)
             .ToList();
         List<DragonData> dragonPool = Enum.GetValues<Dragons>()
             .Where(x => IsDragonInBannerRegularPool(x, banner))
             .Select(x => MasterAsset.DragonData[x])
+            .Where(x => x.Rarity >= 4)
             .ToList();
 
+        List<CharaData> pickupCharaPool = banner
+            .PickupCharas.Select(x => MasterAsset.CharaData[x])
+            .Where(x => x.Rarity >= 4)
+            .ToList();
+        List<DragonData> pickupDragonPool = banner
+            .PickupDragons.Select(x => MasterAsset.DragonData[x])
+            .Where(x => x.Rarity >= 4)
+            .ToList();
+
+        BaseRateData rateData = GetGuaranteeBaseRates(
+            pickupCharaPool,
+            pickupDragonPool,
+            banner.IsGala
+        );
+
+        Dictionary<int, RarityList> pickupRarityLists =
+            new() { [5] = new(5, true, [], []), [4] = new(4, true, [], []), };
+
+        Dictionary<int, RarityList> rarityLists =
+            new() { [5] = new(5, false, [], []), [4] = new(4, false, [], []), };
+
+        foreach (UnitRate rate in GetGuaranteePickupUnitRarities(pickupCharaPool, pickupDragonPool))
+            PopulateRarityDict(rate, pickupRarityLists);
+
+        foreach (UnitRate rate in GetUnitRarities(rateData, charaPool, dragonPool))
+            PopulateRarityDict(rate, rarityLists);
+
+        List<RarityList> combined =
+        [
+            .. pickupRarityLists.Values.Where(x => !x.IsEmpty),
+            .. rarityLists.Values
+        ];
+
+        return new OddsRate()
+        {
+            RarityList = combined
+                .GroupBy(x => x.Rarity)
+                .Select(x => new AtgenRarityList()
+                {
+                    Rarity = x.Key,
+                    TotalRate = x.Sum(y => y.CharaRate + y.DragonRate).ToPercentageString()
+                }),
+            RarityGroupList = combined.Select(x => x.ToRarityGroupList()),
+            Unit = new()
+            {
+                CharaOddsList = combined.Select(x => x.ToAdvOddsUnitDetail()),
+                DragonOddsList = combined.Select(x => x.ToDragonOddsUnitDetail()),
+            }
+        };
+    }
+
+    private static void PopulateRarityDict(UnitRate rate, Dictionary<int, RarityList> dict)
+    {
+        RarityList list = dict[rate.Rarity];
+
+        if (rate.EntityType == EntityTypes.Chara)
+        {
+            list.CharaList.Add(rate);
+            list.CharaRate += rate.Rate;
+        }
+        else if (rate.EntityType == EntityTypes.Dragon)
+        {
+            list.DragonList.Add(rate);
+            list.DragonRate += rate.Rate;
+        }
+        else
+        {
+            throw new UnreachableException(
+                $"Invalid rarity entity type ({rate.EntityType}) or rarity ({rate.Rarity})"
+            );
+        }
+    }
+
+    private static IEnumerable<UnitRate> GetPickupUnitRarities(
+        List<CharaData> pickupCharaPool,
+        List<DragonData> pickupDragonPool
+    )
+    {
+        int totalPickupFourStar =
+            pickupCharaPool.Count(x => x.Rarity == 4) + pickupDragonPool.Count(x => x.Rarity == 4);
+
+        foreach (CharaData data in pickupCharaPool)
+        {
+            decimal rate = data.Rarity switch
+            {
+                5 => 0.005m,
+                4 => 0.07m / totalPickupFourStar,
+                3 => 0.04m,
+                _
+                    => throw new UnreachableException(
+                        $"Invalid rarity {data.Rarity} for character {data.Id}"
+                    )
+            };
+
+            yield return new UnitRate(data.Id, rate);
+        }
+
+        foreach (DragonData data in pickupDragonPool)
+        {
+            decimal rate = data.Rarity switch
+            {
+                5 => 0.008m,
+                4 => 0.07m / totalPickupFourStar,
+                3 => 0.04m,
+                _
+                    => throw new UnreachableException(
+                        $"Invalid rarity {data.Rarity} for character {data.Id}"
+                    )
+            };
+
+            yield return new UnitRate(data.Id, rate);
+        }
+    }
+
+    private static IEnumerable<UnitRate> GetGuaranteePickupUnitRarities(
+        List<CharaData> pickupCharaPool,
+        List<DragonData> pickupDragonPool
+    )
+    {
+        int totalPickupFourStar =
+            pickupCharaPool.Count(x => x.Rarity == 4) + pickupDragonPool.Count(x => x.Rarity == 4);
+
+        foreach (CharaData data in pickupCharaPool)
+        {
+            decimal rate = data.Rarity switch
+            {
+                5 => 0.005m,
+                4 => 0.42m / totalPickupFourStar,
+                _
+                    => throw new UnreachableException(
+                        $"Invalid guarantee rarity {data.Rarity} for character {data.Id}"
+                    )
+            };
+
+            yield return new UnitRate(data.Id, rate);
+        }
+
+        foreach (DragonData data in pickupDragonPool)
+        {
+            decimal rate = data.Rarity switch
+            {
+                5 => 0.008m,
+                4 => 0.42m / totalPickupFourStar,
+                _
+                    => throw new UnreachableException(
+                        $"Invalid guarantee rarity {data.Rarity} for character {data.Id}"
+                    )
+            };
+
+            yield return new UnitRate(data.Id, rate);
+        }
+    }
+
+    private static IEnumerable<UnitRate> GetUnitRarities(
+        BaseRateData rateData,
+        List<CharaData> charaPool,
+        List<DragonData> dragonPool
+    )
+    {
         PoolSizeData charaPoolData = GetPoolSizeByRarity(charaPool);
         PoolSizeData dragonPoolData = GetPoolSizeByRarity(dragonPool);
 
@@ -229,17 +329,13 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
         };
     }
 
-    private static BaseRateData GetBaseRates(Banner banner)
+    private static BaseRateData GetBaseRates(
+        List<CharaData> pickupCharaData,
+        List<DragonData> pickupDragonData,
+        bool isGala
+    )
     {
-        List<CharaData> pickupCharaData = banner
-            .PickupCharas.Select(x => MasterAsset.CharaData[x])
-            .ToList();
-
-        List<DragonData> pickupDragonData = banner
-            .PickupDragons.Select(x => MasterAsset.DragonData[x])
-            .ToList();
-
-        decimal fiveStarRate = banner.IsGala ? 0.06m : 0.04m;
+        decimal fiveStarRate = isGala ? 0.06m : 0.04m;
 
         fiveStarRate -= pickupCharaData.Count(x => x.Rarity == 5) * 0.005m;
         fiveStarRate -= pickupDragonData.Count(x => x.Rarity == 5) * 0.008m;
@@ -269,7 +365,7 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
 
         if (threeStarPickupCount > 0)
         {
-            decimal threeStarRate = banner.IsGala ? 0.8m : 0.78m;
+            decimal threeStarRate = isGala ? 0.8m : 0.78m;
             threeStarRate -= pickupCharaData.Count(x => x.Rarity == 5);
 
             threeStarAdvRate = threeStarRate / 2m;
@@ -277,8 +373,8 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
         }
         else
         {
-            threeStarAdvRate = banner.IsGala ? 0.47m : 0.48m;
-            threeStarDragonRate = banner.IsGala ? 0.31m : 0.32m;
+            threeStarAdvRate = isGala ? 0.47m : 0.48m;
+            threeStarDragonRate = isGala ? 0.31m : 0.32m;
         }
 
         return new()
@@ -292,14 +388,52 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
         };
     }
 
-    private static PoolSizeData GetPoolSizeByRarity<TUnitData>(IEnumerable<TUnitData> pool)
-        where TUnitData : IUnitData
+    private static BaseRateData GetGuaranteeBaseRates(
+        List<CharaData> pickupCharaData,
+        List<DragonData> pickupDragonData,
+        bool isGala
+    )
+    {
+        decimal fiveStarRate = isGala ? 0.06m : 0.04m;
+
+        fiveStarRate -= pickupCharaData.Count(x => x.Rarity == 5) * 0.005m;
+        fiveStarRate -= pickupDragonData.Count(x => x.Rarity == 5) * 0.008m;
+
+        decimal fourStarAdvRate;
+        decimal fourStarDragonRate;
+
+        bool anyFourStarPickup =
+            pickupCharaData.Any(x => x.Rarity == 4) || pickupDragonData.Any(x => x.Rarity == 4);
+
+        if (anyFourStarPickup)
+        {
+            fourStarAdvRate = 0.22m;
+            fourStarDragonRate = 0.22m;
+        }
+        else
+        {
+            fourStarAdvRate = 0.513m;
+            fourStarDragonRate = 0.447m;
+        }
+
+        return new()
+        {
+            FiveStarAdvRate = fiveStarRate / 2,
+            FiveStarDragonRate = fiveStarRate / 2,
+            FourStarAdvRate = fourStarAdvRate,
+            FourStarDragonRate = fourStarDragonRate,
+            ThreeStarAdvRate = 0m,
+            ThreeStarDragonRate = 0m
+        };
+    }
+
+    private static PoolSizeData GetPoolSizeByRarity(IEnumerable<IUnitData> pool)
     {
         int fiveStarPoolSize = 0;
         int fourStarPoolSize = 0;
         int threeStarPoolSize = 0;
 
-        foreach (TUnitData data in pool)
+        foreach (IUnitData data in pool)
         {
             switch (data.Rarity)
             {

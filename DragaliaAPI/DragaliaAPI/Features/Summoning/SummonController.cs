@@ -116,7 +116,9 @@ public class SummonController(
     public DragaliaResult<SummonGetOddsDataResponse> GetOddsData(SummonGetOddsDataRequest request)
     {
         OddsRate? baseOddsRate = summonOddsService.GetNormalOddsRate(request.SummonId);
-        if (baseOddsRate == null)
+        OddsRate? guaranteeOddsRate = summonOddsService.GetGuaranteeOddsRate(request.SummonId);
+
+        if (baseOddsRate == null || guaranteeOddsRate == null)
         {
             throw new DragaliaException(
                 ResultCode.CommonInvalidArgument,
@@ -125,7 +127,7 @@ public class SummonController(
         }
 
         return new SummonGetOddsDataResponse(
-            new OddsRateList(0, baseOddsRate, Data.OddsRate),
+            new OddsRateList(int.MaxValue, baseOddsRate, guaranteeOddsRate),
             new(null, null)
         );
     }
