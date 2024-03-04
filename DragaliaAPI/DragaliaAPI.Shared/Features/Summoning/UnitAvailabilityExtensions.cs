@@ -220,5 +220,8 @@ public static class UnitAvailabilityExtensions
             [Dragons.MiniHildy] = UnitAvailability.Other,
             [Dragons.MiniJupi] = UnitAvailability.Other,
             [Dragons.MiniZodi] = UnitAvailability.Other,
+
+            // No
+            [Dragons.Puppy] = UnitAvailability.Other
         }.ToFrozenDictionary();
 }

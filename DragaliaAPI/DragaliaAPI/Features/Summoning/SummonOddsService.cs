@@ -50,7 +50,13 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
 
         return new OddsRate()
         {
-            RarityList = combined.Select(x => x.ToRarityList()),
+            RarityList = combined
+                .GroupBy(x => x.Rarity)
+                .Select(x => new AtgenRarityList()
+                {
+                    Rarity = x.Key,
+                    TotalRate = x.Sum(y => y.CharaRate + y.DragonRate).ToPercentageString()
+                }),
             RarityGroupList = combined.Select(x => x.ToRarityGroupList()),
             Unit = new()
             {
@@ -346,13 +352,6 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
         public decimal CharaRate { get; set; }
 
         public decimal DragonRate { get; set; }
-
-        public AtgenRarityList ToRarityList() =>
-            new()
-            {
-                Rarity = this.Rarity,
-                TotalRate = (this.CharaRate + this.DragonRate).ToPercentageString()
-            };
 
         public AtgenRarityGroupList ToRarityGroupList() =>
             new()
