@@ -78,7 +78,7 @@ public class AutoRepeatService(
 
         if (info == null)
         {
-            info ??= CreateDefaultRepeatInfo();
+            info = CreateDefaultRepeatInfo();
             logger.LogTrace("Both lookups failed. Default data initialized.");
         }
 
