@@ -251,10 +251,10 @@ namespace DragaliaAPI.Photon.Shared.Models
         public float EventBoostDmg { get; set; }
 
         [Key(120)]
-        public int EditSkillcharacterId1 { get; set; }
+        public int EditSkillCharacterId1 { get; set; }
 
         [Key(121)]
-        public int EditSkillcharacterId2 { get; set; }
+        public int EditSkillCharacterId2 { get; set; }
 
         [Key(122)]
         public int EditSkillLv1 { get; set; }
