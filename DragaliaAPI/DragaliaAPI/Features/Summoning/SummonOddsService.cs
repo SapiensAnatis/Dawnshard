@@ -143,7 +143,7 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
                 .Select(x => new AtgenRarityList()
                 {
                     Rarity = x.Key,
-                    TotalRate = x.Sum(y => y.CharaRate + y.DragonRate).ToPercentageString(2)
+                    TotalRate = x.Sum(y => y.CharaRate + y.DragonRate).ToPercentageString2Dp()
                 }),
             RarityGroupList = combined.Select(x => x.ToRarityGroupList()),
             Unit = new()
@@ -191,7 +191,7 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
                 .Select(x => new AtgenRarityList()
                 {
                     Rarity = x.Key,
-                    TotalRate = x.Sum(y => y.CharaRate + y.DragonRate).ToPercentageString(2)
+                    TotalRate = x.Sum(y => y.CharaRate + y.DragonRate).ToPercentageString2Dp()
                 }),
             RarityGroupList = combined.Select(x => x.ToRarityGroupList()),
             Unit = new()
@@ -537,9 +537,9 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
             {
                 Rarity = this.Rarity,
                 Pickup = this.Pickup,
-                TotalRate = (this.CharaRate + this.DragonRate).ToPercentageString(2),
-                DragonRate = this.DragonRate.ToPercentageString(2),
-                CharaRate = this.CharaRate.ToPercentageString(2)
+                TotalRate = (this.CharaRate + this.DragonRate).ToPercentageString2Dp(),
+                DragonRate = this.DragonRate.ToPercentageString2Dp(),
+                CharaRate = this.CharaRate.ToPercentageString2Dp()
             };
 
         public OddsUnitDetail ToAdvOddsUnitDetail() =>

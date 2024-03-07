@@ -34,6 +34,6 @@ public class UnitRate
 
     public AtgenUnitList ToAtgenUnitList()
     {
-        return new AtgenUnitList() { Id = this.Id, Rate = this.Rate.ToPercentageString(3) };
+        return new AtgenUnitList() { Id = this.Id, Rate = this.Rate.ToPercentageString3Dp() };
     }
 }
