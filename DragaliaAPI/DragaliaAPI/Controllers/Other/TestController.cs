@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Services.Exceptions;
+﻿#if DEBUG || TEST
+using DragaliaAPI.Services.Exceptions;
 using MessagePack;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,6 @@ namespace DragaliaAPI.Controllers.Other;
 /// <summary>
 /// Used in the middleware tests: a controller whose expected response should never change
 /// </summary>
-#if DEBUG
 [Route("test")]
 [Produces("text/plain")]
 public class TestController : DragaliaControllerBase
