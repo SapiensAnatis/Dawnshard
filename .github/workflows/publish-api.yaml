@@ -2,13 +2,13 @@ name: Publish DragaliaAPI
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - DragaliaAPI/**
-      - Shared/**
-      - Directory.Build.props
-      - Directory.Packages.props
+#    branches:
+#      - main
+#    paths:
+#      - DragaliaAPI/**
+#      - Shared/**
+#      - Directory.Build.props
+#      - Directory.Packages.props
 
 env:
   HUSKY: 0
@@ -18,9 +18,10 @@ jobs:
     name: Build
     uses: ./.github/workflows/build.yaml
     with:
-      ref: main
+      ref: ci/build-cache
       dockerfile: "DragaliaAPI/DragaliaAPI/Dockerfile"
       image-name: "dragalia-api"
+      image-tag: cache-test
     secrets: inherit
   deploy:
     name: Deploy

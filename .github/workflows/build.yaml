@@ -20,7 +20,6 @@ on:
         default: "undefined"
         type: string
         description: Docker image tag
-  push:
 
 env:
   HUSKY: 0
