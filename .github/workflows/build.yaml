@@ -59,16 +59,25 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.ref }}
+          
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+          
       - name: Log in to registry
-        # This is where you will update the personal access token to GITHUB_TOKEN
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+        
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-      - name: Build and push
-        run: |
-          IMAGE=ghcr.io/sapiensanatis/${{ inputs.image-name }}:${{ steps.derive-tag.outputs.tag }}
           
-          docker build . --file ${{ inputs.dockerfile }} --tag ${IMAGE} --build-arg CI=true
-          docker push ${IMAGE}
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          file: ${{ inputs.dockerfile }}
+          build-args: CI=true,BASE_DOTNET_IMAGE=mcr.microsoft.com/dotnet/aspnet:8.0-jammy-chiseled
+          tags: ghcr.io/sapiensanatis/${{ inputs.image-name }}:${{ steps.derive-tag.outputs.tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max    
