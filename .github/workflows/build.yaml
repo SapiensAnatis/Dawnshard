@@ -75,9 +75,16 @@ jobs:
         run: |
           IMAGE=ghcr.io/sapiensanatis/${{ inputs.image-name }}:${{ steps.derive-tag.outputs.tag }}
           
-          docker build . \
+          docker buildx create \
+            --name container \
+            --driver=docker-container \
+            container
+          
+          docker buildx build . \
+            --builder=container
             --file ${{ inputs.dockerfile }} \
-            --tag ${IMAGE} --build-arg CI=true \
+            --tag ${IMAGE} \
+            --build-arg CI=true \
             --cache-to type=gha \
             --cache-from type=gha
           
