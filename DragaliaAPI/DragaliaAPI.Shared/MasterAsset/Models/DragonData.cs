@@ -37,7 +37,7 @@ public record DragonData(
     int SellDewPoint,
     int BaseId,
     int VariationId
-)
+) : IUnitData
 {
     public readonly int[][] Abilities =
     {

@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Shared.Definitions.Enums;
+﻿using System.Collections.Frozen;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
@@ -87,7 +88,7 @@ public record CharaData(
     int EditReleaseEntityQuantity1,
     int BaseId,
     int VariationId
-)
+) : IUnitData
 {
     public bool HasManaSpiral => this.MaxLimitBreakCount > 4;
 
@@ -148,25 +149,6 @@ public record CharaData(
             x.ManaCircleName == this.ManaCircleName && x.ManaPieceType != ManaNodeTypes.None
         );
     }
-
-    public CharaAvailabilities Availability =>
-        AvailabilityMap.TryGetValue(this.Id, out CharaAvailabilities availability)
-            ? availability
-            : CharaAvailabilities.Default;
-
-    private static readonly IReadOnlyDictionary<Charas, CharaAvailabilities> AvailabilityMap =
-        new Dictionary<Charas, CharaAvailabilities>()
-        {
-            { Charas.ThePrince, CharaAvailabilities.Story },
-            { Charas.Elisanne, CharaAvailabilities.Story },
-            { Charas.Ranzal, CharaAvailabilities.Story },
-            { Charas.Cleo, CharaAvailabilities.Story },
-            { Charas.Luca, CharaAvailabilities.Story },
-            { Charas.Alex, CharaAvailabilities.Story },
-            { Charas.Laxi, CharaAvailabilities.Story },
-            { Charas.Chelle, CharaAvailabilities.Story },
-            { Charas.Zena, CharaAvailabilities.Story }
-        };
 
     public readonly int[] ExAbility =
     {
