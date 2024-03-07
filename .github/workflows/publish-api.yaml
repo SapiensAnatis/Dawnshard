@@ -18,10 +18,9 @@ jobs:
     name: Build
     uses: ./.github/workflows/build.yaml
     with:
-      ref: ci/build-cache
+      ref: main
       dockerfile: "DragaliaAPI/DragaliaAPI/Dockerfile"
       image-name: "dragalia-api"
-      image-tag: cache-test
     secrets: inherit
   deploy:
     name: Deploy
