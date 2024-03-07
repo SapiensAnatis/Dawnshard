@@ -5,4 +5,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+
+    <PropertyGroup>
+        <!-- Define the TEST condition to allow test runs in release mode to access conditionally compiled controllers. -->
+        <DefineConstants Condition="$(AUTOMATED_TESTING) == 'true'">TEST;$(DefineConstants)</DefineConstants>
+    </PropertyGroup>
 </Project>

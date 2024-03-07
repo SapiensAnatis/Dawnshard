@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Shared.Test", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Database.Test", "DragaliaAPI\DragaliaAPI.Database.Test\DragaliaAPI.Database.Test.csproj", "{BF6A04DC-56FE-491F-A73B-F54A3E7BAA4B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{1A23D473-87C4-40FB-8DF0-43F4B0FE7414}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{1A23D473-87C4-40FB-8DF0-43F4B0FE7414}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\deploy.yaml = .github\workflows\deploy.yaml
 		.github\workflows\lint.yaml = .github\workflows\lint.yaml

@@ -10,7 +10,7 @@ public class AuthorizationMiddlewareTest : TestFixture
     )
         : base(factory, outputHelper)
     {
-#if !DEBUG
+#if !DEBUG && !TEST
         throw new InvalidOperationException(
             "These tests must be run in a debug build as they use a conditionally compiled controller"
         );
