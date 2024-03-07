@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Features.Summoning;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.EntityFrameworkCore;
@@ -202,6 +203,6 @@ public class DbPlayerCharaData : DbPlayerData
         this.Ability1Level = (byte)data.DefaultAbility1Level;
         this.Ability2Level = (byte)data.DefaultAbility2Level;
         this.Ability3Level = (byte)data.DefaultAbility3Level;
-        this.IsUnlockEditSkill = data.Availability == CharaAvailabilities.Story;
+        this.IsUnlockEditSkill = data.GetAvailability() == UnitAvailability.Story;
     }
 }

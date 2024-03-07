@@ -26,16 +26,122 @@ public class SummonTest : TestFixture
     }
 
     [Fact]
-    public async Task SummonGetOddsData_ReturnsAnyData()
+    public async Task SummonGetOddsData_ReturnsExpectedData()
     {
         SummonGetOddsDataResponse response = (
             await this.Client.PostMsgpack<SummonGetOddsDataResponse>(
                 "summon/get_odds_data",
-                new SummonGetOddsDataRequest(1020203)
+                new SummonGetOddsDataRequest(1020010)
             )
         ).Data;
 
-        response.Should().NotBeNull();
+        OddsRate normalOdds = response.OddsRateList.Normal;
+        OddsRate guaranteeOdds = response.OddsRateList.Guarantee;
+
+        normalOdds
+            .RarityList.Should()
+            .BeEquivalentTo(
+                [
+                    new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
+                    new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
+                    new AtgenRarityList { Rarity = 3, TotalRate = "80.00%" },
+                ]
+            );
+
+        guaranteeOdds
+            .RarityList.Should()
+            .BeEquivalentTo(
+                [
+                    new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
+                    new AtgenRarityList { Rarity = 4, TotalRate = "96.00%" },
+                ]
+            );
+
+        normalOdds
+            .RarityGroupList.Should()
+            .BeEquivalentTo(
+                [
+                    new AtgenRarityGroupList
+                    {
+                        Rarity = 5,
+                        CharaRate = "1.00%",
+                        DragonRate = "0.80%",
+                        Pickup = true,
+                        TotalRate = "1.80%"
+                    },
+                    new AtgenRarityGroupList
+                    {
+                        Rarity = 5,
+                        CharaRate = "1.10%",
+                        DragonRate = "1.10%",
+                        Pickup = false,
+                        TotalRate = "2.20%"
+                    },
+                    new AtgenRarityGroupList
+                    {
+                        Rarity = 4,
+                        CharaRate = "8.55%",
+                        DragonRate = "7.45%",
+                        Pickup = false,
+                        TotalRate = "16.00%"
+                    },
+                    new AtgenRarityGroupList
+                    {
+                        Rarity = 3,
+                        CharaRate = "48.00%",
+                        DragonRate = "32.00%",
+                        Pickup = false,
+                        TotalRate = "80.00%"
+                    }
+                ]
+            );
+
+        guaranteeOdds
+            .RarityGroupList.Should()
+            .BeEquivalentTo(
+                [
+                    new AtgenRarityGroupList
+                    {
+                        Rarity = 5,
+                        CharaRate = "1.00%",
+                        DragonRate = "0.80%",
+                        Pickup = true,
+                        TotalRate = "1.80%"
+                    },
+                    new AtgenRarityGroupList
+                    {
+                        Rarity = 5,
+                        CharaRate = "1.10%",
+                        DragonRate = "1.10%",
+                        Pickup = false,
+                        TotalRate = "2.20%"
+                    },
+                    new AtgenRarityGroupList
+                    {
+                        Rarity = 4,
+                        CharaRate = "51.30%",
+                        DragonRate = "44.70%",
+                        Pickup = false,
+                        TotalRate = "96.00%"
+                    }
+                ]
+            );
+
+        normalOdds.Unit.CharaOddsList.Should().HaveCount(4);
+
+        normalOdds
+            .Unit.CharaOddsList.ElementAt(0)
+            .UnitList.Should()
+            .BeEquivalentTo(
+                [
+                    new AtgenUnitList { Id = (int)Charas.Joker, Rate = "0.500%" },
+                    new AtgenUnitList { Id = (int)Charas.Mona, Rate = "0.500%" }
+                ]
+            );
+        normalOdds
+            .Unit.DragonOddsList.ElementAt(0)
+            .UnitList.Should()
+            .BeEquivalentTo([new AtgenUnitList { Id = (int)Dragons.Arsene, Rate = "0.800%" }]);
     }
 
     [Fact]

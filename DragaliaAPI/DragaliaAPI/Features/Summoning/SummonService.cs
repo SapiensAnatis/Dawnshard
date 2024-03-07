@@ -5,6 +5,7 @@ using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Extensions;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Features.Summoning;
 using DragaliaAPI.Shared.MasterAsset;
 
 namespace DragaliaAPI.Features.Summoning;
@@ -127,9 +128,7 @@ public class SummonService : ISummonService
             else
             {
                 Charas id = this.random.NextEnum<Charas>();
-                while (
-                    id == 0 || MasterAsset.CharaData[id].Availability == CharaAvailabilities.Story
-                )
+                while (id == 0 || id.GetAvailability() == UnitAvailability.Story)
                 {
                     id = this.random.NextEnum<Charas>();
                 }
