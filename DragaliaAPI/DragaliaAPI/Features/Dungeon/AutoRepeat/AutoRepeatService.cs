@@ -4,6 +4,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.Definitions.Enums.Dungeon;
 using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 
@@ -50,33 +51,35 @@ public class AutoRepeatService(
         UpdateDataList updateDataList
     )
     {
-        RepeatInfo? info;
+        RepeatInfo? info = null;
+
+        /*
+         * The repeat_key is null on the first auto-repeat iteration before the client knows the repeat_key.
+         * During the first auto repeat, it may have been configured in /dungeon_start/start, or during the quest.
+         *
+         * In the former case, we need to retrieve the pre-configured settings from the start request,
+         * and in the latter case we need to create default settings.
+         *
+         * Additionally, the client may also send a stale repeat key on the first iteration instead of a null value.
+         * This then fails to find any data. We treat this the same as not having provided a key in the first place.
+         */
 
         if (repeatKey != null)
         {
             info = await this.GetRepeatInfo(Guid.Parse(repeatKey));
-            if (info == null)
-            {
-                logger.LogWarning("Invalid repeat key: {@key}", repeatKey);
-                return null;
-            }
-
-            logger.LogTrace("Found repeat info: {@info}", info);
+            logger.LogTrace("Repeat key {Key} found: {@Info}", repeatKey, info);
         }
-        else
+
+        if (info == null)
         {
-            /*
-             * The repeat_key is null on the first auto-repeat iteration before the client knows the repeat_key.
-             * During the first auto repeat, it may have been configured in /dungeon_start/start, or during the quest.
-             *
-             * In the former case, we need to retrieve the pre-configured settings from the start request,
-             * and in the latter case we need to create default settings.
-             */
-
             info = await this.GetRepeatInfo();
-            logger.LogTrace("Repeat key was null, found repeat info {@info}", info);
+            logger.LogTrace("Repeat key lookup failed. Viewer ID lookup found: {@Info}", info);
+        }
 
-            info ??= CreateDefaultRepeatInfo();
+        if (info == null)
+        {
+            info = CreateDefaultRepeatInfo();
+            logger.LogTrace("Both lookups failed. Default data initialized.");
         }
 
         info.CurrentCount += 1;
