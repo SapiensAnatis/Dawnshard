@@ -1,4 +1,6 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-jammy-chiseled AS base
+ARG BASE_DOTNET_IMAGE=mcr.microsoft.com/dotnet/aspnet:8.0
+
+FROM $BASE_DOTNET_IMAGE AS base
 WORKDIR /app
 
 EXPOSE 8080
