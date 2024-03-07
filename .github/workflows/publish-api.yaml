@@ -2,13 +2,13 @@ name: Publish DragaliaAPI
 
 on:
   push:
-#    branches:
-#      - main
-#    paths:
-#      - DragaliaAPI/**
-#      - Shared/**
-#      - Directory.Build.props
-#      - Directory.Packages.props
+    branches:
+      - main
+    paths:
+      - DragaliaAPI/**
+      - Shared/**
+      - Directory.Build.props
+      - Directory.Packages.props
 
 env:
   HUSKY: 0
@@ -23,10 +23,10 @@ jobs:
       image-name: "dragalia-api"
       image-tag: cache-test
     secrets: inherit
-#  deploy:
-#    name: Deploy
-#    needs: build
-#    uses: ./.github/workflows/deploy.yaml
-#    with:
-#      github-environment: "Dawnshard"
-#    secrets: inherit
+  deploy:
+    name: Deploy
+    needs: build
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      github-environment: "Dawnshard"
+    secrets: inherit
