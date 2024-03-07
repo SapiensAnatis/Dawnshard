@@ -80,6 +80,51 @@ public class AutoRepeatTest : TestFixture
     }
 
     [Fact]
+    public async Task AutoRepeat_StaleRepeatKey_RecordReturnsRepeatKey()
+    {
+        DungeonStartStartResponse startResponse = (
+            await Client.PostMsgpack<DungeonStartStartResponse>(
+                "/dungeon_start/start",
+                new DungeonStartStartRequest()
+                {
+                    PartyNoList = [38],
+                    QuestId = 100010103,
+                    RepeatSetting = new()
+                    {
+                        RepeatCount = 45,
+                        RepeatType = RepeatSettingType.Specified,
+                        UseItemList = [UseItem.Honey]
+                    }
+                }
+            )
+        ).Data;
+
+        startResponse.IngameData.RepeatState.Should().Be(1);
+        string staleRepeatKey = Guid.NewGuid().ToString();
+
+        DungeonRecordRecordResponse recordResponse = (
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
+                "dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    RepeatKey = staleRepeatKey,
+                    DungeonKey = startResponse.IngameData.DungeonKey,
+                    PlayRecord = new() { TreasureRecord = [] },
+                    RepeatState = 1,
+                }
+            )
+        ).Data;
+
+        recordResponse.RepeatData.Should().NotBeNull();
+        recordResponse.RepeatData.RepeatCount.Should().Be(1);
+        recordResponse
+            .RepeatData.RepeatKey.Should()
+            .NotBeNullOrEmpty()
+            .And.NotBeEquivalentTo(staleRepeatKey);
+        recordResponse.RepeatData.RepeatState.Should().Be(1);
+    }
+
+    [Fact]
     public async Task AutoRepeat_CallsRepeatEnd_ReturnsMergedRewardLists()
     {
         DungeonStartStartResponse startResponse = (
