@@ -9,17 +9,17 @@ using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Features.Summoning;
 
+using RateData = (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates);
+
+/* Algorithm sourced from https://dragalialost.wiki/w/Summoning#Rarity_Distribution */
+
 public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonitor)
 {
-    private readonly SummonBannerOptions summonOptions = optionsMonitor.CurrentValue;
-
     // Public for actual summon roll later
     // ReSharper disable once MemberCanBePrivate.Global
-    public (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) GetUnitRates(
-        int bannerId
-    )
+    public Task<RateData> GetUnitRates(int bannerId)
     {
-        Banner? banner = this.summonOptions.Banners.FirstOrDefault(x => x.Id == bannerId);
+        Banner? banner = optionsMonitor.CurrentValue.Banners.FirstOrDefault(x => x.Id == bannerId);
 
         if (banner is null)
         {
@@ -47,20 +47,19 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
 
         BaseRateData rateData = GetBaseRates(pickupCharaPool, pickupDragonPool, banner.IsGala);
 
-        return (
-            GetPickupUnitRarities(pickupCharaPool, pickupDragonPool),
-            GetUnitRarities(rateData, charaPool, dragonPool)
+        return Task.FromResult(
+            (
+                GetPickupUnitRarities(pickupCharaPool, pickupDragonPool),
+                GetUnitRarities(charaPool, dragonPool, rateData)
+            )
         );
     }
 
     // Public for actual summon roll later
     // ReSharper disable once MemberCanBePrivate.Global
-    public (
-        IEnumerable<UnitRate> PickupRates,
-        IEnumerable<UnitRate> NormalRates
-    ) GetGuaranteeUnitRates(int bannerId)
+    public Task<RateData> GetGuaranteeUnitRates(int bannerId)
     {
-        Banner? banner = this.summonOptions.Banners.FirstOrDefault(x => x.Id == bannerId);
+        Banner? banner = optionsMonitor.CurrentValue.Banners.FirstOrDefault(x => x.Id == bannerId);
 
         if (banner is null)
         {
@@ -96,32 +95,33 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
             banner.IsGala
         );
 
-        return (
-            GetGuaranteePickupUnitRarities(pickupCharaPool, pickupDragonPool),
-            GetUnitRarities(rateData, charaPool, dragonPool)
+        return Task.FromResult(
+            (
+                GetGuaranteePickupUnitRarities(pickupCharaPool, pickupDragonPool, banner.IsGala),
+                GetUnitRarities(charaPool, dragonPool, rateData)
+            )
         );
     }
 
-    public OddsRate GetNormalOddsRate(int bannerId)
+    public async Task<OddsRate> GetNormalOddsRate(int bannerId)
     {
-        (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
-            this.GetUnitRates(bannerId);
+        RateData rates = await this.GetUnitRates(bannerId);
 
         // TODO: Factor in pity rate
         Dictionary<int, RarityList> pickupRarityLists =
             new()
             {
-                [5] = new(5, true, [], []),
-                [4] = new(4, true, [], []),
-                [3] = new(3, true, [], []),
+                [5] = new() { Rarity = 5, Pickup = true, },
+                [4] = new() { Rarity = 4, Pickup = true, },
+                [3] = new() { Rarity = 3, Pickup = true, },
             };
 
         Dictionary<int, RarityList> rarityLists =
             new()
             {
-                [5] = new(5, false, [], []),
-                [4] = new(4, false, [], []),
-                [3] = new(3, false, [], []),
+                [5] = new() { Rarity = 5, },
+                [4] = new() { Rarity = 4, },
+                [3] = new() { Rarity = 3, },
             };
 
         foreach (UnitRate rate in rates.PickupRates)
@@ -143,7 +143,7 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
                 .Select(x => new AtgenRarityList()
                 {
                     Rarity = x.Key,
-                    TotalRate = x.Sum(y => y.CharaRate + y.DragonRate).ToPercentageString()
+                    TotalRate = x.Sum(y => y.CharaRate + y.DragonRate).ToPercentageString(2)
                 }),
             RarityGroupList = combined.Select(x => x.ToRarityGroupList()),
             Unit = new()
@@ -154,16 +154,23 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
         };
     }
 
-    public OddsRate GetGuaranteeOddsRate(int bannerId)
+    public async Task<OddsRate> GetGuaranteeOddsRate(int bannerId)
     {
-        (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
-            this.GetGuaranteeUnitRates(bannerId);
+        RateData rates = await this.GetGuaranteeUnitRates(bannerId);
 
         Dictionary<int, RarityList> pickupRarityLists =
-            new() { [5] = new(5, true, [], []), [4] = new(4, true, [], []), };
+            new()
+            {
+                [5] = new() { Rarity = 5, Pickup = true, },
+                [4] = new() { Rarity = 4, Pickup = true, },
+            };
 
         Dictionary<int, RarityList> rarityLists =
-            new() { [5] = new(5, false, [], []), [4] = new(4, false, [], []), };
+            new()
+            {
+                [5] = new() { Rarity = 5, },
+                [4] = new() { Rarity = 4, },
+            };
 
         foreach (UnitRate rate in rates.PickupRates)
             PopulateRarityDict(rate, pickupRarityLists);
@@ -184,7 +191,7 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
                 .Select(x => new AtgenRarityList()
                 {
                     Rarity = x.Key,
-                    TotalRate = x.Sum(y => y.CharaRate + y.DragonRate).ToPercentageString()
+                    TotalRate = x.Sum(y => y.CharaRate + y.DragonRate).ToPercentageString(2)
                 }),
             RarityGroupList = combined.Select(x => x.ToRarityGroupList()),
             Unit = new()
@@ -211,9 +218,7 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
         }
         else
         {
-            throw new UnreachableException(
-                $"Invalid rarity entity type ({rate.EntityType}) or rarity ({rate.Rarity})"
-            );
+            throw new UnreachableException($"Invalid rarity entity type {rate.EntityType}");
         }
     }
 
@@ -250,7 +255,7 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
                 3 => 0.04m,
                 _
                     => throw new UnreachableException(
-                        $"Invalid rarity {data.Rarity} for character {data.Id}"
+                        $"Invalid rarity {data.Rarity} for dragon {data.Id}"
                     )
             };
 
@@ -260,18 +265,20 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
 
     private static IEnumerable<UnitRate> GetGuaranteePickupUnitRarities(
         List<CharaData> pickupCharaPool,
-        List<DragonData> pickupDragonPool
+        List<DragonData> pickupDragonPool,
+        bool isGala
     )
     {
         int totalPickupFourStar =
             pickupCharaPool.Count(x => x.Rarity == 4) + pickupDragonPool.Count(x => x.Rarity == 4);
+        decimal fourStarPickupRate = isGala ? 0.41125m : 0.42m;
 
         foreach (CharaData data in pickupCharaPool)
         {
             decimal rate = data.Rarity switch
             {
                 5 => 0.005m,
-                4 => 0.42m / totalPickupFourStar,
+                4 => fourStarPickupRate / totalPickupFourStar,
                 _
                     => throw new UnreachableException(
                         $"Invalid guarantee rarity {data.Rarity} for character {data.Id}"
@@ -286,10 +293,10 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
             decimal rate = data.Rarity switch
             {
                 5 => 0.008m,
-                4 => 0.42m / totalPickupFourStar,
+                4 => fourStarPickupRate / totalPickupFourStar,
                 _
                     => throw new UnreachableException(
-                        $"Invalid guarantee rarity {data.Rarity} for character {data.Id}"
+                        $"Invalid guarantee rarity {data.Rarity} for dragon {data.Id}"
                     )
             };
 
@@ -298,9 +305,9 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
     }
 
     private static IEnumerable<UnitRate> GetUnitRarities(
-        BaseRateData rateData,
         List<CharaData> charaPool,
-        List<DragonData> dragonPool
+        List<DragonData> dragonPool,
+        BaseRateData rateData
     )
     {
         PoolSizeData charaPoolData = GetPoolSizeByRarity(charaPool);
@@ -400,15 +407,15 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
         }
 
         int threeStarPickupCount =
-            pickupCharaData.Count(x => x.Rarity == 3) + pickupCharaData.Count(x => x.Rarity == 3);
+            pickupCharaData.Count(x => x.Rarity == 3) + pickupDragonData.Count(x => x.Rarity == 3);
 
         decimal threeStarAdvRate;
         decimal threeStarDragonRate;
 
         if (threeStarPickupCount > 0)
         {
-            decimal threeStarRate = isGala ? 0.8m : 0.78m;
-            threeStarRate -= pickupCharaData.Count(x => x.Rarity == 5);
+            decimal threeStarRate = isGala ? 0.78m : 0.8m;
+            threeStarRate -= threeStarPickupCount * 0.04m;
 
             threeStarAdvRate = threeStarRate / 2m;
             threeStarDragonRate = threeStarRate / 2m;
@@ -449,13 +456,13 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
 
         if (anyFourStarPickup)
         {
-            fourStarAdvRate = 0.22m;
-            fourStarDragonRate = 0.22m;
+            fourStarAdvRate = isGala ? 0.264375m : 0.27m;
+            fourStarDragonRate = isGala ? 0.264375m : 0.27m;
         }
         else
         {
-            fourStarAdvRate = 0.513m;
-            fourStarDragonRate = 0.447m;
+            fourStarAdvRate = isGala ? 0.5023m : 0.5130m;
+            fourStarDragonRate = isGala ? 0.4376m : 0.4470m;
         }
 
         return new()
@@ -509,14 +516,17 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
         int ThreeStarPoolSize
     );
 
-    private record RarityList(
-        int Rarity,
-        bool Pickup,
-        List<UnitRate> DragonList,
-        List<UnitRate> CharaList
-    )
+    private class RarityList
     {
+        public required int Rarity { get; init; }
+
+        public bool Pickup { get; init; }
+
         public bool IsEmpty => DragonList.Count == 0 && CharaList.Count == 0;
+
+        public List<UnitRate> DragonList { get; } = [];
+
+        public List<UnitRate> CharaList { get; } = [];
 
         public decimal CharaRate { get; set; }
 
@@ -527,9 +537,9 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
             {
                 Rarity = this.Rarity,
                 Pickup = this.Pickup,
-                TotalRate = (this.CharaRate + this.DragonRate).ToPercentageString(),
-                DragonRate = this.DragonRate.ToPercentageString(),
-                CharaRate = this.CharaRate.ToPercentageString()
+                TotalRate = (this.CharaRate + this.DragonRate).ToPercentageString(2),
+                DragonRate = this.DragonRate.ToPercentageString(2),
+                CharaRate = this.CharaRate.ToPercentageString(2)
             };
 
         public OddsUnitDetail ToAdvOddsUnitDetail() =>

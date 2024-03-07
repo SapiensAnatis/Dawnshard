@@ -113,10 +113,12 @@ public class SummonController(
 
     [HttpPost]
     [Route("get_odds_data")]
-    public DragaliaResult<SummonGetOddsDataResponse> GetOddsData(SummonGetOddsDataRequest request)
+    public async Task<DragaliaResult<SummonGetOddsDataResponse>> GetOddsData(
+        SummonGetOddsDataRequest request
+    )
     {
-        OddsRate baseOddsRate = summonOddsService.GetNormalOddsRate(request.SummonId);
-        OddsRate guaranteeOddsRate = summonOddsService.GetGuaranteeOddsRate(request.SummonId);
+        OddsRate baseOddsRate = await summonOddsService.GetNormalOddsRate(request.SummonId);
+        OddsRate guaranteeOddsRate = await summonOddsService.GetGuaranteeOddsRate(request.SummonId);
 
         return new SummonGetOddsDataResponse(
             new OddsRateList(int.MaxValue, baseOddsRate, guaranteeOddsRate),
