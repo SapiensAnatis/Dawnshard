@@ -12,7 +12,14 @@ public class ExceptionHandlerMiddlewareTest : TestFixture
         CustomWebApplicationFactory factory,
         ITestOutputHelper outputHelper
     )
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+#if !DEBUG && !TEST
+        throw new InvalidOperationException(
+            "These tests must be run in a debug build as they use a conditionally compiled controller"
+        );
+#endif
+    }
 
     [Fact]
     public async Task DragaliaException_ReturnsSerializedResponse()

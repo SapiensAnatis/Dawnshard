@@ -17,6 +17,8 @@ jobs:
   test:
     name: Integration test
     runs-on: ubuntu-latest
+    env:
+      AUTOMATED_TESTING: true
     services:
       postgres:
         image: postgres:16
@@ -55,6 +57,7 @@ jobs:
       - name: Test
         run: >
           dotnet test ${{ inputs.project }}
+          -c Release
           --no-restore 
           --logger "console;verbosity=detailed"
           --logger "trx;LogFileName=${{ steps.get-name.outputs.name }}.trx"

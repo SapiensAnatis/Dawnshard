@@ -12,6 +12,8 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    env:
+      AUTOMATED_TESTING: true
     steps:
       - name: Get project name # Remove folder from project
         id: get-name
@@ -27,6 +29,7 @@ jobs:
       - name: Test
         run: >
           dotnet test ${{ inputs.project }}
+          -c Release
           --no-restore 
           --logger "console;verbosity=detailed"
           --logger "trx;LogFileName=${{ steps.get-name.outputs.name }}.trx"
