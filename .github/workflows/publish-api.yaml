@@ -23,10 +23,10 @@ jobs:
       image-name: "dragalia-api"
       image-tag: cache-test
     secrets: inherit
-  deploy:
-    name: Deploy
-    needs: build
-    uses: ./.github/workflows/deploy.yaml
-    with:
-      github-environment: "Dawnshard"
-    secrets: inherit
+#  deploy:
+#    name: Deploy
+#    needs: build
+#    uses: ./.github/workflows/deploy.yaml
+#    with:
+#      github-environment: "Dawnshard"
+#    secrets: inherit

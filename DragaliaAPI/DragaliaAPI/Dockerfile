@@ -15,15 +15,11 @@ COPY ["Directory.Build.props", "."]
 COPY ["Directory.Packages.props", "."]
 COPY ["nuget.config", "."]
 RUN dotnet restore "DragaliaAPI/DragaliaAPI/DragaliaAPI.csproj"
-COPY . .
-RUN ls
+COPY [".", "."]
 WORKDIR "/src/DragaliaAPI/DragaliaAPI"
-RUN dotnet build "DragaliaAPI.csproj" -c Release -o /app/build
-
-FROM build AS publish
 RUN dotnet publish "DragaliaAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "DragaliaAPI.dll"]

@@ -12,14 +12,11 @@ COPY ["Directory.Build.props", "."]
 COPY ["Directory.Packages.props", "."]
 COPY ["nuget.config", "."]
 RUN dotnet restore "PhotonStateManager/DragaliaAPI.Photon.StateManager/DragaliaAPI.Photon.StateManager.csproj"
-COPY . .
+COPY [".", "."]
 WORKDIR "/src/PhotonStateManager/DragaliaAPI.Photon.StateManager"
-RUN dotnet build "DragaliaAPI.Photon.StateManager.csproj" -c Release -o /app/build
-
-FROM build AS publish
 RUN dotnet publish "DragaliaAPI.Photon.StateManager.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "DragaliaAPI.Photon.StateManager.dll"]
