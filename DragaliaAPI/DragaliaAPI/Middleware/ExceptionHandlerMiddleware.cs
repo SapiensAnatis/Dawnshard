@@ -53,7 +53,7 @@ public class ExceptionHandlerMiddleware(RequestDelegate next)
 
             logger.LogDebug("Issuing ID token refresh request.");
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            context.Response.Headers.Add("Is-Required-Refresh-Id-Token", "true");
+            context.Response.Headers.Append("Is-Required-Refresh-Id-Token", "true");
         }
         catch (Exception ex)
             when (serializeException && context.RequestAborted.IsCancellationRequested)
