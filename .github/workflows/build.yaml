@@ -20,6 +20,7 @@ on:
         default: "undefined"
         type: string
         description: Docker image tag
+  push:
 
 env:
   HUSKY: 0
@@ -59,16 +60,26 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.ref }}
+          
+      - name: Expose GitHub Runtime
+        uses: crazy-max/ghaction-github-runtime@v3
+        
       - name: Log in to registry
-        # This is where you will update the personal access token to GITHUB_TOKEN
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+        
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
+          
       - name: Build and push
         run: |
           IMAGE=ghcr.io/sapiensanatis/${{ inputs.image-name }}:${{ steps.derive-tag.outputs.tag }}
           
-          docker build . --file ${{ inputs.dockerfile }} --tag ${IMAGE} --build-arg CI=true
+          docker build . \
+            --file ${{ inputs.dockerfile }} \
+            --tag ${IMAGE} --build-arg CI=true \
+            --cache-to type=gha \
+            --cache-from type=gha
+          
           docker push ${IMAGE}
