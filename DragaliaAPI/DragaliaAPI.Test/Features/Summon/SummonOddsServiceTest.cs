@@ -866,8 +866,6 @@ public class SummonOddsServiceTest
     [Fact]
     public async Task GetUnitRates_ThreeStarPickup_ProducesExpectedRates()
     {
-        using var s = new AssertionScope();
-
         this.optionsMonitor.CurrentValue.Returns(
             new SummonBannerOptions()
             {
@@ -926,8 +924,6 @@ public class SummonOddsServiceTest
     [Fact]
     public async Task GetUnitRates_ThreeStarPickup_Gala_ProducesExpectedRates()
     {
-        using var s = new AssertionScope();
-
         this.optionsMonitor.CurrentValue.Returns(
             new SummonBannerOptions()
             {
@@ -1042,8 +1038,6 @@ public class SummonOddsServiceTest
     [Fact]
     public async Task GetGuaranteeUnitRates_ThreeStarPickup_Gala_ProducesExpectedRates()
     {
-        using var s = new AssertionScope();
-
         this.optionsMonitor.CurrentValue.Returns(
             new SummonBannerOptions()
             {

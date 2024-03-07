@@ -6,8 +6,6 @@ using DragaliaAPI.Shared.MasterAsset;
 
 namespace DragaliaAPI.Features.Summoning;
 
-public record RarityGroup(int Rarity, double TotalRate, double CharaRate, double DragonRate);
-
 public class UnitRate
 {
     public int Id { get; }
