@@ -11,7 +11,6 @@ using DragaliaAPI.Models;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Health;
 using DragaliaAPI.Shared;
-using DragaliaAPI.Shared.Json;
 using DragaliaAPI.Shared.MasterAsset;
 using EntityGraphQL.AspNet;
 using Microsoft.AspNetCore.DataProtection;
@@ -119,7 +118,7 @@ app.Logger.LogDebug(
     redisOptions.Port
 );
 
-if (Environment.GetEnvironmentVariable("DISABLE_AUTO_MIGRATION") == null)
+if (!postgresOptions.DisableAutoMigration)
     app.MigrateDatabase();
 
 app.UseStaticFiles();
