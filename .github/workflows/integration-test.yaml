@@ -65,14 +65,13 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         run: dotnet restore ${{ inputs.project }}
 
       - name: Test
         run: >
           dotnet test ${{ inputs.project }}
           -c Release
-          --no-restore 
+          --no-restore
           --logger "console;verbosity=detailed"
           --logger "trx;LogFileName=${{ steps.get-name.outputs.name }}.trx"
 
