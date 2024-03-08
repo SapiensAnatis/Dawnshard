@@ -55,13 +55,17 @@ jobs:
         with:
           dotnet-version: "8.0.x"
 
-      - name: Cache packages
+      - name: Load cache
+        id: cache
         uses: actions/cache@v4
         with:
           path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
 
       - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: dotnet restore ${{ inputs.project }}
 
       - name: Test
