@@ -12,6 +12,7 @@ env:
   HUSKY: 0
   POSTGRES_USER: testing
   POSTGRES_PASSWORD: verystrongpassword
+  PostgresOptions__DisableAutoMigration: true
 
 jobs:
   test:
@@ -48,19 +49,32 @@ jobs:
         run: >
           echo ${{ inputs.project }} | sed 's/.*\//name=/' >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
+
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
+
+      - name: Load cache
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: .nuget-cache
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}-${{ steps.get-name.outputs.name }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
       - name: Install dependencies
-        run: dotnet restore ${{ inputs.project }}
+        run: dotnet restore ${{ inputs.project }} --packages .nuget-cache --verbosity normal 
+
       - name: Test
         run: >
           dotnet test ${{ inputs.project }}
           -c Release
-          --no-restore 
+          --no-restore
           --logger "console;verbosity=detailed"
           --logger "trx;LogFileName=${{ steps.get-name.outputs.name }}.trx"
+
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: success() || failure() # run this step even if previous step failed

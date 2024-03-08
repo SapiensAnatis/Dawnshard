@@ -11,4 +11,6 @@ public class PostgresOptions
     public string? Password { get; set; }
 
     public string? Database { get; set; }
+
+    public bool DisableAutoMigration { get; set; }
 }
