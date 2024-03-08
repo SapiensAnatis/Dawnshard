@@ -49,12 +49,23 @@ jobs:
         run: >
           echo ${{ inputs.project }} | sed 's/.*\//name=/' >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
+
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
+
+      - name: Cache packages
+        uses: actions/cache@v4
+        with:
+          path: .nuget_cache
+          key: nuget
+
       - name: Install dependencies
-        run: dotnet restore ${{ inputs.project }}
+        run: |
+          dotnet nuget add source .nuget_cache --name cache --configfile nuget.config
+          dotnet restore ${{ inputs.project }}
+
       - name: Test
         run: >
           dotnet test ${{ inputs.project }}
@@ -62,6 +73,7 @@ jobs:
           --no-restore 
           --logger "console;verbosity=detailed"
           --logger "trx;LogFileName=${{ steps.get-name.outputs.name }}.trx"
+
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: success() || failure() # run this step even if previous step failed
