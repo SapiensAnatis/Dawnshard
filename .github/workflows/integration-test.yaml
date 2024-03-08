@@ -12,6 +12,7 @@ env:
   HUSKY: 0
   POSTGRES_USER: testing
   POSTGRES_PASSWORD: verystrongpassword
+  PostgresOptions__DisableAutoMigration: true
 
 jobs:
   test:
