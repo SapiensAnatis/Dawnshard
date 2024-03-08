@@ -60,12 +60,14 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .nuget-cache
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('${{ inputs.project }}/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
 
       - name: Install dependencies
-        run: dotnet restore ${{ inputs.project }} --packages .nuget-cache --verbosity normal
+        run: |
+          ls .nuget-cache
+          dotnet restore ${{ inputs.project }} --packages .nuget-cache --verbosity normal 
 
       - name: Test
         run: >
