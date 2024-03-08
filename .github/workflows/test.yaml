@@ -29,13 +29,11 @@ jobs:
       - name: Cache packages
         uses: actions/cache@v4
         with:
-          path: .nuget_cache
-          key: nuget
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget
 
       - name: Install dependencies
-        run: |
-          dotnet nuget add source .nuget_cache --name cache --configfile nuget.config
-          dotnet restore ${{ inputs.project }}
+        run: dotnet restore ${{ inputs.project }}
 
       - name: Test
         run: >
