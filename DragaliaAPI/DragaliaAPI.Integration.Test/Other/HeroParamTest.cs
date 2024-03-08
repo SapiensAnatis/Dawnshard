@@ -30,8 +30,8 @@ public class HeroParamTest : TestFixture
             .Should()
             .AllSatisfy(x =>
             {
-                x.EditSkillcharacterId1.Should().Be(0);
-                x.EditSkillcharacterId2.Should().Be(0);
+                x.EditSkillCharacterId1.Should().Be(0);
+                x.EditSkillCharacterId2.Should().Be(0);
                 x.EditSkillLv1.Should().Be(0);
                 x.EditSkillLv2.Should().Be(0);
             });
