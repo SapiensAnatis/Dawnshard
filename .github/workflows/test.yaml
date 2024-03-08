@@ -36,7 +36,7 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Install dependencies
-        run: dotnet restore ${{ inputs.project }} --packages .nuget-cache
+        run: dotnet restore ${{ inputs.project }} --packages .nuget-cache --verbosity normal 
 
       - name: Test
         run: >
