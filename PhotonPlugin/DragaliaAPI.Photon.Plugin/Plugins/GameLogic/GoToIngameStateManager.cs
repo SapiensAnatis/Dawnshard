@@ -218,6 +218,14 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                 JsonOptions
             );
 
+#if DEBUG
+            this.logger.DebugFormat("Response text: {0}", response.ResponseText);
+            this.logger.DebugFormat(
+                "Deserialized response: {0}",
+                JsonSerializer.Serialize(responseObject)
+            );
+#endif
+
             foreach (HeroParamData data in responseObject)
                 this.heroParamStorage[data.ActorNr] = new HeroParamState(data);
         }
