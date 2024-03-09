@@ -1,5 +1,6 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Mapping.Mapperly;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -52,7 +53,9 @@ public class WeaponBodyTest : TestFixture
                         AdditionalEffectCount = 0,
                         UnlockWeaponPassiveAbilityNoList = Enumerable.Repeat(0, 15),
                         IsNew = false,
-                        GetTime = DateTimeOffset.UtcNow
+                        GetTime = DateTimeOffset.UtcNow,
+                        SkillNo = 1,
+                        SkillLevel = 1,
                     }
                 }
             );
@@ -147,10 +150,7 @@ public class WeaponBodyTest : TestFixture
         response
             .UpdateDataList.WeaponBodyList.Should()
             .BeEquivalentTo(
-                new List<WeaponBodyList>()
-                {
-                    this.Mapper.Map<WeaponBodyList>(testCase.ExpFinalState)
-                }
+                new List<WeaponBodyList>() { testCase.ExpFinalState.ToWeaponBodyList() }
             );
 
         // Check materials

@@ -14,6 +14,7 @@ using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using SummonTicketMapper = DragaliaAPI.Mapping.Mapperly.SummonTicketMapper;
 
 namespace DragaliaAPI.Services.Game;
 
@@ -111,8 +112,8 @@ public class LoadService(
                 UserTreasureTradeList = await tradeService.GetUserTreasureTradeList(),
                 TreasureTradeAllList = tradeService.GetCurrentTreasureTradeList(),
                 ShopNotice = new ShopNotice(await shopRepository.GetDailySummonCountAsync() == 0),
-                SummonTicketList = await apiContext
-                    .PlayerSummonTickets.ProjectToSummonTicketList()
+                SummonTicketList = await SummonTicketMapper
+                    .ProjectToSummonTicketList(apiContext.PlayerSummonTickets)
                     .ToListAsync(),
                 QuestBonusStackBaseTime = new DateTimeOffset(
                     2021,

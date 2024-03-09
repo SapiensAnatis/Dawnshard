@@ -208,9 +208,9 @@
       },
       "Riok.Mapperly": {
         "type": "Direct",
-        "requested": "[3.4.0, )",
-        "resolved": "3.4.0",
-        "contentHash": "bTxBEQ0+2x816IL78Fv0B/KkaGRtzfisit9dfWTfa7jjjwMMzpMW9A+V/hyxqHdJtYvtDL6dUNMLJige4zxJvw=="
+        "requested": "[3.5.0-next.1, )",
+        "resolved": "3.5.0-next.1",
+        "contentHash": "VLpULZqJ5xNS8sGqt+eE39RxYzU1V7A9UX3ccQMWRz49fYen+wVlvKUaKY/UA4H5RscmUl23ZmjJyfkxIs71SQ=="
       },
       "Serilog": {
         "type": "Direct",

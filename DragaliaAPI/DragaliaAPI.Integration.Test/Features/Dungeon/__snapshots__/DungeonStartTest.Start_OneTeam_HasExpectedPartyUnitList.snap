@@ -98,11 +98,11 @@
         70
       ],
       "IsTemporary": false,
-      "ListViewFlag": 1
+      "ListViewFlag": true
     },
     "DragonData": {
       "DragonId": "JeannedArc",
-      "DragonKeyId": 1068,
+      "DragonKeyId": 2104,
       "Level": 120,
       "Exp": 3365620,
       "IsLock": true,
@@ -211,7 +211,7 @@
       }
     ],
     "TalismanData": {
-      "TalismanKeyId": 1866,
+      "TalismanKeyId": 3706,
       "TalismanId": "GalaLuca",
       "TalismanAbilityId1": 340000069,
       "TalismanAbilityId2": 340000108,
@@ -312,11 +312,11 @@
         50
       ],
       "IsTemporary": false,
-      "ListViewFlag": 1
+      "ListViewFlag": true
     },
     "DragonData": {
       "DragonId": "GalaRebornJeanne",
-      "DragonKeyId": 1134,
+      "DragonKeyId": 2170,
       "Level": 100,
       "Exp": 1240020,
       "IsLock": true,
@@ -425,7 +425,7 @@
       }
     ],
     "TalismanData": {
-      "TalismanKeyId": 1966,
+      "TalismanKeyId": 3806,
       "TalismanId": "HalloweenLaxi",
       "TalismanAbilityId1": 340000009,
       "TalismanAbilityId2": 340000076,
@@ -530,11 +530,11 @@
         50
       ],
       "IsTemporary": false,
-      "ListViewFlag": 1
+      "ListViewFlag": true
     },
     "DragonData": {
       "DragonId": "GalaThor",
-      "DragonKeyId": 1124,
+      "DragonKeyId": 2160,
       "Level": 100,
       "Exp": 1240020,
       "IsLock": true,
@@ -643,7 +643,7 @@
       }
     ],
     "TalismanData": {
-      "TalismanKeyId": 1906,
+      "TalismanKeyId": 3746,
       "TalismanId": "Pecorine",
       "TalismanAbilityId1": 340000008,
       "TalismanAbilityId2": 340000058,
@@ -757,11 +757,11 @@
         63
       ],
       "IsTemporary": false,
-      "ListViewFlag": 1
+      "ListViewFlag": true
     },
     "DragonData": {
       "DragonId": "GalaChronosNyx",
-      "DragonKeyId": 1142,
+      "DragonKeyId": 2178,
       "Level": 100,
       "Exp": 1240020,
       "IsLock": false,
@@ -870,7 +870,7 @@
       }
     ],
     "TalismanData": {
-      "TalismanKeyId": 1905,
+      "TalismanKeyId": 3745,
       "TalismanId": "Pecorine",
       "TalismanAbilityId1": 340000029,
       "TalismanAbilityId2": 340000056,

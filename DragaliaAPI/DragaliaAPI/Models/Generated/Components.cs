@@ -6367,7 +6367,8 @@ public partial class CharaList
     public bool IsTemporary { get; set; }
 
     [Key("list_view_flag")]
-    public int ListViewFlag { get; set; }
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool ListViewFlag { get; set; }
 
     public CharaList(
         Charas charaId,
@@ -6395,7 +6396,7 @@ public partial class CharaList
         DateTimeOffset getTime,
         IEnumerable<int> manaCirclePieceIdList,
         bool isTemporary,
-        int listViewFlag
+        bool listViewFlag
     )
     {
         this.CharaId = charaId;
@@ -9704,20 +9705,8 @@ public partial class PartySettingList
     [Key("chara_id")]
     public Charas CharaId { get; set; }
 
-    [Key("equip_weapon_key_id")]
-    public ulong EquipWeaponKeyId { get; set; }
-
     [Key("equip_dragon_key_id")]
     public ulong EquipDragonKeyId { get; set; }
-
-    [Key("equip_amulet_key_id")]
-    public ulong EquipAmuletKeyId { get; set; }
-
-    [Key("equip_amulet_2_key_id")]
-    public ulong EquipAmulet2KeyId { get; set; }
-
-    [Key("equip_skin_weapon_id")]
-    public int EquipSkinWeaponId { get; set; }
 
     [Key("equip_weapon_body_id")]
     public WeaponBodies EquipWeaponBodyId { get; set; }
@@ -11915,72 +11904,72 @@ public partial class UpdateDataList
         UserData userData,
         DiamondData diamondData,
         PartyPowerData partyPowerData,
-        IEnumerable<CharaList> charaList,
-        IEnumerable<DragonList> dragonList,
-        IEnumerable<WeaponList> weaponList,
-        IEnumerable<AmuletList> amuletList,
-        IEnumerable<WeaponSkinList> weaponSkinList,
-        IEnumerable<WeaponBodyList> weaponBodyList,
-        IEnumerable<WeaponPassiveAbilityList> weaponPassiveAbilityList,
-        IEnumerable<AbilityCrestList> abilityCrestList,
-        IEnumerable<AbilityCrestSetList> abilityCrestSetList,
-        IEnumerable<TalismanList> talismanList,
-        IEnumerable<PartyList> partyList,
-        IEnumerable<MuseumList> museumList,
-        IEnumerable<AlbumDragonData> albumDragonList,
-        IEnumerable<AlbumWeaponList> albumWeaponList,
-        IEnumerable<EnemyBookList> enemyBookList,
-        IEnumerable<ItemList> itemList,
-        IEnumerable<AstralItemList> astralItemList,
-        IEnumerable<MaterialList> materialList,
-        IEnumerable<QuestList> questList,
-        IEnumerable<QuestEventList> questEventList,
-        IEnumerable<DragonGiftList> dragonGiftList,
-        IEnumerable<DragonReliabilityList> dragonReliabilityList,
-        IEnumerable<UnitStoryList> unitStoryList,
-        IEnumerable<CastleStoryList> castleStoryList,
-        IEnumerable<QuestStoryList> questStoryList,
-        IEnumerable<QuestTreasureList> questTreasureList,
-        IEnumerable<QuestWallList> questWallList,
-        IEnumerable<QuestCarryList> questCarryList,
-        IEnumerable<QuestEntryConditionList> questEntryConditionList,
-        IEnumerable<SummonTicketList> summonTicketList,
-        IEnumerable<SummonPointList> summonPointList,
-        IEnumerable<LotteryTicketList> lotteryTicketList,
-        IEnumerable<ExchangeTicketList> exchangeTicketList,
-        IEnumerable<GatherItemList> gatherItemList,
-        IEnumerable<BuildList> buildList,
-        IEnumerable<FortPlantList> fortPlantList,
+        List<CharaList> charaList,
+        List<DragonList> dragonList,
+        List<WeaponList> weaponList,
+        List<AmuletList> amuletList,
+        List<WeaponSkinList> weaponSkinList,
+        List<WeaponBodyList> weaponBodyList,
+        List<WeaponPassiveAbilityList> weaponPassiveAbilityList,
+        List<AbilityCrestList> abilityCrestList,
+        List<AbilityCrestSetList> abilityCrestSetList,
+        List<TalismanList> talismanList,
+        List<PartyList> partyList,
+        List<MuseumList> museumList,
+        List<AlbumDragonData> albumDragonList,
+        List<AlbumWeaponList> albumWeaponList,
+        List<EnemyBookList> enemyBookList,
+        List<ItemList> itemList,
+        List<AstralItemList> astralItemList,
+        List<MaterialList> materialList,
+        List<QuestList> questList,
+        List<QuestEventList> questEventList,
+        List<DragonGiftList> dragonGiftList,
+        List<DragonReliabilityList> dragonReliabilityList,
+        List<UnitStoryList> unitStoryList,
+        List<CastleStoryList> castleStoryList,
+        List<QuestStoryList> questStoryList,
+        List<QuestTreasureList> questTreasureList,
+        List<QuestWallList> questWallList,
+        List<QuestCarryList> questCarryList,
+        List<QuestEntryConditionList> questEntryConditionList,
+        List<SummonTicketList> summonTicketList,
+        List<SummonPointList> summonPointList,
+        List<LotteryTicketList> lotteryTicketList,
+        List<ExchangeTicketList> exchangeTicketList,
+        List<GatherItemList> gatherItemList,
+        List<BuildList> buildList,
+        List<FortPlantList> fortPlantList,
         FortBonusList fortBonusList,
-        IEnumerable<CraftList> craftList,
+        List<CraftList> craftList,
         CurrentMainStoryMission currentMainStoryMission,
-        IEnumerable<CharaUnitSetList> charaUnitSetList,
+        List<CharaUnitSetList> charaUnitSetList,
         UserGuildData userGuildData,
         GuildData guildData,
-        IEnumerable<BattleRoyalCharaSkinList> battleRoyalCharaSkinList,
+        List<BattleRoyalCharaSkinList> battleRoyalCharaSkinList,
         DmodeInfo dmodeInfo,
-        IEnumerable<DmodeStoryList> dmodeStoryList,
+        List<DmodeStoryList> dmodeStoryList,
         PresentNotice presentNotice,
         FriendNotice friendNotice,
         MissionNotice missionNotice,
         GuildNotice guildNotice,
         ShopNotice shopNotice,
         AlbumPassiveNotice albumPassiveNotice,
-        IEnumerable<RaidEventUserList> raidEventUserList,
-        IEnumerable<MazeEventUserList> mazeEventUserList,
-        IEnumerable<BuildEventUserList> buildEventUserList,
-        IEnumerable<CollectEventUserList> collectEventUserList,
-        IEnumerable<Clb01EventUserList> clb01EventUserList,
-        IEnumerable<ExRushEventUserList> exRushEventUserList,
-        IEnumerable<SimpleEventUserList> simpleEventUserList,
-        IEnumerable<ExHunterEventUserList> exHunterEventUserList,
-        IEnumerable<CombatEventUserList> combatEventUserList,
-        IEnumerable<BattleRoyalEventItemList> battleRoyalEventItemList,
-        IEnumerable<BattleRoyalEventUserRecord> battleRoyalEventUserRecord,
-        IEnumerable<BattleRoyalCycleUserRecord> battleRoyalCycleUserRecord,
-        IEnumerable<EarnEventUserList> earnEventUserList,
-        IEnumerable<EventPassiveList> eventPassiveList,
-        IEnumerable<FunctionalMaintenanceList> functionalMaintenanceList
+        List<RaidEventUserList> raidEventUserList,
+        List<MazeEventUserList> mazeEventUserList,
+        List<BuildEventUserList> buildEventUserList,
+        List<CollectEventUserList> collectEventUserList,
+        List<Clb01EventUserList> clb01EventUserList,
+        List<ExRushEventUserList> exRushEventUserList,
+        List<SimpleEventUserList> simpleEventUserList,
+        List<ExHunterEventUserList> exHunterEventUserList,
+        List<CombatEventUserList> combatEventUserList,
+        List<BattleRoyalEventItemList> battleRoyalEventItemList,
+        List<BattleRoyalEventUserRecord> battleRoyalEventUserRecord,
+        List<BattleRoyalCycleUserRecord> battleRoyalCycleUserRecord,
+        List<EarnEventUserList> earnEventUserList,
+        List<EventPassiveList> eventPassiveList,
+        List<FunctionalMaintenanceList> functionalMaintenanceList
     )
     {
         this.UserData = userData;
@@ -12137,12 +12126,6 @@ public partial class UserData
 
     [Key("max_dragon_quantity")]
     public int MaxDragonQuantity { get; set; }
-
-    [Key("max_weapon_quantity")]
-    public int MaxWeaponQuantity { get; set; }
-
-    [Key("max_amulet_quantity")]
-    public int MaxAmuletQuantity { get; set; }
 
     [Key("quest_skip_point")]
     public int QuestSkipPoint { get; set; }

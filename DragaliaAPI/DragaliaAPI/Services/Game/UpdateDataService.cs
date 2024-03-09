@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Abstract;
@@ -7,6 +6,7 @@ using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Present;
+using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -18,7 +18,6 @@ namespace DragaliaAPI.Services.Game;
 
 public class UpdateDataService(
     ApiContext apiContext,
-    IMapper mapper,
     IPlayerIdentityService playerIdentityService,
     IMissionService missionService,
     IMissionProgressionService missionProgressionService,
@@ -27,9 +26,12 @@ public class UpdateDataService(
     IDmodeService dmodeService
 ) : IUpdateDataService
 {
-    public async Task<UpdateDataList> SaveChangesAsync()
+    [Obsolete("Use the SaveChangesAsync overload that accepts a CancellationToken instead.")]
+    public Task<UpdateDataList> SaveChangesAsync() => this.SaveChangesAsync(default);
+
+    public async Task<UpdateDataList> SaveChangesAsync(CancellationToken cancellationToken)
     {
-        await missionProgressionService.ProcessMissionEvents();
+        await missionProgressionService.ProcessMissionEvents(cancellationToken);
 
         List<IDbPlayerData> entities = apiContext
             .ChangeTracker.Entries<IDbPlayerData>()
@@ -40,67 +42,121 @@ public class UpdateDataService(
             .Select(x => x.Entity)
             .ToList();
 
-        await apiContext.SaveChangesAsync();
+        await apiContext.SaveChangesAsync(cancellationToken);
 
         return await MapUpdateDataList(entities);
     }
 
     private async Task<UpdateDataList> MapUpdateDataList(List<IDbPlayerData> entities)
     {
-        UpdateDataList list =
-            new()
+        UpdateDataList list = new();
+
+        foreach (IDbPlayerData entity in entities)
+        {
+            switch (entity)
             {
-                UserData = ConvertEntities<UserData, DbPlayerUserData>(entities)?.Single(), // Can't use SingleOrDefault if the list itself is null
-                CharaList = ConvertEntities<CharaList, DbPlayerCharaData>(entities),
-                DragonList = ConvertEntities<DragonList, DbPlayerDragonData>(entities),
-                DragonReliabilityList = ConvertEntities<
-                    DragonReliabilityList,
-                    DbPlayerDragonReliability
-                >(entities),
-                WeaponBodyList = ConvertEntities<WeaponBodyList, DbWeaponBody>(entities),
-                WeaponSkinList = ConvertEntities<WeaponSkinList, DbWeaponSkin>(entities),
-                AbilityCrestList = ConvertEntities<AbilityCrestList, DbAbilityCrest>(entities),
-                AbilityCrestSetList = ConvertEntities<AbilityCrestSetList, DbAbilityCrestSet>(
-                    entities
-                ),
-                PartyList = ConvertEntities<PartyList, DbParty>(entities),
-                QuestStoryList = ConvertEntities<QuestStoryList, DbPlayerStoryState>(
-                    entities,
-                    x => x.StoryType == StoryTypes.Quest
-                ),
-                UnitStoryList = ConvertEntities<UnitStoryList, DbPlayerStoryState>(
-                    entities,
-                    x => x.StoryType == StoryTypes.Chara || x.StoryType == StoryTypes.Dragon
-                ),
-                CastleStoryList = ConvertEntities<CastleStoryList, DbPlayerStoryState>(
-                    entities,
-                    x => x.StoryType == StoryTypes.Castle
-                ),
-                DmodeStoryList = ConvertEntities<DmodeStoryList, DbPlayerStoryState>(
-                    entities,
-                    x => x.StoryType == StoryTypes.DungeonMode
-                ),
-                MaterialList = ConvertEntities<MaterialList, DbPlayerMaterial>(entities),
-                DragonGiftList = ConvertEntities<DragonGiftList, DbPlayerDragonGift>(
-                    entities,
-                    x => x.DragonGiftId > DragonGifts.GoldenChalice
-                ),
-                QuestList = ConvertEntities<QuestList, DbQuest>(entities),
-                BuildList = ConvertEntities<BuildList, DbFortBuild>(entities),
-                WeaponPassiveAbilityList = ConvertEntities<
-                    WeaponPassiveAbilityList,
-                    DbWeaponPassiveAbility
-                >(entities),
-                ItemList = ConvertEntities<ItemList, DbPlayerUseItem>(entities),
-                TalismanList = ConvertEntities<TalismanList, DbTalisman>(entities),
-                SummonTicketList = ConvertEntities<SummonTicketList, DbSummonTicket>(entities),
-                QuestEventList = ConvertEntities<QuestEventList, DbQuestEvent>(entities),
-                QuestTreasureList = ConvertEntities<QuestTreasureList, DbQuestTreasureList>(
-                    entities
-                ),
-                PartyPowerData = ConvertEntities<PartyPowerData, DbPartyPower>(entities)?.Single(),
-                QuestWallList = ConvertEntities<QuestWallList, DbPlayerQuestWall>(entities)
-            };
+                case DbPlayerUserData userData:
+                    list.UserData = userData.ToUserData();
+                    break;
+                case DbPlayerCharaData charaData:
+                    list.CharaList ??= [];
+                    list.CharaList.Add(charaData.ToCharaList());
+                    break;
+                case DbPlayerDragonData dragonData:
+                    list.DragonList ??= [];
+                    list.DragonList.Add(dragonData.ToDragonList());
+                    break;
+                case DbPlayerDragonReliability reliability:
+                    list.DragonReliabilityList ??= [];
+                    list.DragonReliabilityList.Add(reliability.ToDragonReliabilityList());
+                    break;
+                case DbWeaponBody weaponBody:
+                    list.WeaponBodyList ??= [];
+                    list.WeaponBodyList.Add(weaponBody.ToWeaponBodyList());
+                    break;
+                case DbWeaponSkin weaponSkin:
+                    list.WeaponSkinList ??= [];
+                    list.WeaponSkinList.Add(weaponSkin.ToWeaponSkinList());
+                    break;
+                case DbAbilityCrest abilityCrest:
+                    list.AbilityCrestList ??= [];
+                    list.AbilityCrestList.Add(abilityCrest.ToAbilityCrestList());
+                    break;
+                case DbAbilityCrestSet abilityCrestSet:
+                    list.AbilityCrestSetList ??= [];
+                    list.AbilityCrestSetList.Add(abilityCrestSet.ToAbilityCrestSetList());
+                    break;
+                case DbParty party:
+                    list.PartyList ??= [];
+                    list.PartyList.Add(party.ToPartyList());
+                    break;
+                case DbPlayerStoryState { StoryType: StoryTypes.Quest } story:
+                    list.QuestStoryList ??= [];
+                    list.QuestStoryList.Add(story.ToQuestStoryList());
+                    break;
+                case DbPlayerStoryState { StoryType: StoryTypes.Chara or StoryTypes.Dragon } story:
+                    list.UnitStoryList ??= [];
+                    list.UnitStoryList.Add(story.ToUnitStoryList());
+                    break;
+                case DbPlayerStoryState { StoryType: StoryTypes.Castle } story:
+                    list.CastleStoryList ??= [];
+                    list.CastleStoryList.Add(story.ToCastleStoryList());
+                    break;
+                case DbPlayerStoryState { StoryType: StoryTypes.DungeonMode } story:
+                    list.DmodeStoryList ??= [];
+                    list.DmodeStoryList.Add(story.ToDmodeStoryList());
+                    break;
+                case DbPlayerMaterial material:
+                    list.MaterialList ??= [];
+                    list.MaterialList.Add(material.ToMaterialList());
+                    break;
+                case DbQuest quest:
+                    list.QuestList ??= [];
+                    list.QuestList.Add(quest.ToQuestList());
+                    break;
+                case DbPlayerDragonGift dragonGift:
+                    list.DragonGiftList ??= [];
+                    list.DragonGiftList.Add(dragonGift.ToDragonGift());
+                    break;
+                case DbFortBuild build:
+                    list.BuildList ??= [];
+                    list.BuildList.Add(build.ToBuildList());
+                    break;
+                case DbWeaponPassiveAbility weaponPassive:
+                    list.WeaponPassiveAbilityList ??= [];
+                    list.WeaponPassiveAbilityList.Add(weaponPassive.ToWeaponPassiveAbilityList());
+                    break;
+                case DbPlayerUseItem useItem:
+                    list.ItemList ??= [];
+                    list.ItemList.Add(useItem.ToItemList());
+                    break;
+                case DbTalisman talisman:
+                    list.TalismanList ??= [];
+                    list.TalismanList.Add(talisman.ToTalismanList());
+                    break;
+                case DbSummonTicket summonTicket:
+                    list.SummonTicketList ??= [];
+                    list.SummonTicketList.Add(summonTicket.ToSummonTicketList());
+                    break;
+                case DbQuestEvent questEvent:
+                    list.QuestEventList ??= [];
+                    list.QuestEventList.Add(questEvent.ToQuestEventList());
+                    break;
+                case DbQuestTreasureList questTreasure:
+                    list.QuestTreasureList ??= [];
+                    list.QuestTreasureList.Add(questTreasure.ToQuestTreasureList());
+                    break;
+                case DbPartyPower partyPower:
+                    list.PartyPowerData = partyPower.ToPartyPowerData();
+                    break;
+                case DbPlayerQuestWall wall:
+                    list.QuestWallList ??= [];
+                    list.QuestWallList.Add(wall.ToQuestWallList());
+                    break;
+                default:
+                    continue;
+            }
+        }
 
         IEnumerable<DbPlayerMission> updatedMissions = entities.OfType<DbPlayerMission>();
 
@@ -113,7 +169,7 @@ public class UpdateDataService(
             {
                 list.CurrentMainStoryMission = await missionService.GetCurrentMainStoryMission();
 
-                list.QuestEntryConditionList = await missionService.GetEntryConditions();
+                list.QuestEntryConditionList = (await missionService.GetEntryConditions()).ToList();
             }
 
             list.MissionNotice = await missionService.GetMissionNotice(missionsLookup);
@@ -245,33 +301,20 @@ public class UpdateDataService(
 
         return list;
 
-        static async Task<IEnumerable<T>> GetEventDataList<T>(
+        static async Task<List<T>> GetEventDataList<T>(
             IEnumerable<int> ids,
-            Func<int, Task<T>> dataCreator
+            Func<int, Task<T?>> dataCreator
         )
         {
             List<T> list = new();
             foreach (int id in ids)
             {
-                list.Add(await dataCreator(id));
+                T? data = await dataCreator(id);
+                if (data is not null)
+                    list.Add(data);
             }
 
             return list;
         }
-    }
-
-    private List<TNetwork>? ConvertEntities<TNetwork, TDatabase>(
-        IEnumerable<IDbPlayerData> baseEntries,
-        Func<TDatabase, bool>? filterPredicate = null
-    )
-        where TDatabase : IDbPlayerData
-    {
-        List<TDatabase> typedEntries = filterPredicate is not null
-            ? baseEntries.OfType<TDatabase>().Where(filterPredicate).ToList()
-            : baseEntries.OfType<TDatabase>().ToList();
-
-        return typedEntries.Any()
-            ? typedEntries.Select(x => mapper.Map<TNetwork>(x)).ToList()
-            : null;
     }
 }
