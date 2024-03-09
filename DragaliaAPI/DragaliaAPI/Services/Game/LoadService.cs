@@ -9,6 +9,7 @@ using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Summoning;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Features.Wall;
+using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -112,8 +113,8 @@ public class LoadService(
                 UserTreasureTradeList = await tradeService.GetUserTreasureTradeList(),
                 TreasureTradeAllList = tradeService.GetCurrentTreasureTradeList(),
                 ShopNotice = new ShopNotice(await shopRepository.GetDailySummonCountAsync() == 0),
-                SummonTicketList = await SummonTicketMapper
-                    .ProjectToSummonTicketList(apiContext.PlayerSummonTickets)
+                SummonTicketList = await apiContext
+                    .PlayerSummonTickets.ProjectToSummonTicketList()
                     .ToListAsync(),
                 QuestBonusStackBaseTime = new DateTimeOffset(
                     2021,

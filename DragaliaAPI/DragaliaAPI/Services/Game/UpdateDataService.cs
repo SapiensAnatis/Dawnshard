@@ -110,13 +110,13 @@ public class UpdateDataService(
                     list.MaterialList ??= [];
                     list.MaterialList.Add(material.ToMaterialList());
                     break;
-                case DbQuest quest:
-                    list.QuestList ??= [];
-                    list.QuestList.Add(quest.ToQuestList());
-                    break;
                 case DbPlayerDragonGift dragonGift:
                     list.DragonGiftList ??= [];
                     list.DragonGiftList.Add(dragonGift.ToDragonGift());
+                    break;
+                case DbQuest quest:
+                    list.QuestList ??= [];
+                    list.QuestList.Add(quest.ToQuestList());
                     break;
                 case DbFortBuild build:
                     list.BuildList ??= [];
