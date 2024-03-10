@@ -287,7 +287,7 @@ public class MissionProgressionService(
         );
     }
 
-    public async Task ProcessMissionEvents()
+    public async Task ProcessMissionEvents(CancellationToken cancellationToken)
     {
         if (this.eventQueue.Count == 0)
             return;
@@ -304,6 +304,8 @@ public class MissionProgressionService(
 
         while (this.eventQueue.TryDequeue(out MissionEvent? evt))
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             List<(MissionType Type, int Id)> affectedMissions = MasterAsset
                 .MissionProgressionInfo.Enumerable.Where(x => x.CompleteType == evt.Type)
                 .Where(x =>

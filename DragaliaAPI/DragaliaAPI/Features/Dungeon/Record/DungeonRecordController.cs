@@ -26,7 +26,8 @@ public class DungeonRecordController(
 {
     [HttpPost("record")]
     public async Task<DragaliaResult<DungeonRecordRecordResponse>> Record(
-        DungeonRecordRecordRequest request
+        DungeonRecordRecordRequest request,
+        CancellationToken cancellationToken
     )
     {
         DungeonSession session = await dungeonService.FinishDungeon(request.DungeonKey);
@@ -45,7 +46,7 @@ public class DungeonRecordController(
         ingameResultData.HelperList = helperList;
         ingameResultData.HelperDetailList = helperDetailList;
 
-        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         DungeonRecordRecordResponse response =
             new() { IngameResultData = ingameResultData, UpdateDataList = updateDataList };

@@ -78,11 +78,11 @@
         50
       ],
       "IsTemporary": false,
-      "ListViewFlag": 1
+      "ListViewFlag": true
     },
     "DragonData": {
       "DragonId": "GalaElysium",
-      "DragonKeyId": 1406,
+      "DragonKeyId": 2442,
       "Level": 100,
       "Exp": 1240020,
       "IsLock": false,
@@ -191,7 +191,7 @@
       }
     ],
     "TalismanData": {
-      "TalismanKeyId": 2335,
+      "TalismanKeyId": 4175,
       "TalismanId": "HalloweenLaxi",
       "TalismanAbilityId1": 340000050,
       "TalismanAbilityId2": 340000056,
@@ -316,11 +316,11 @@
         70
       ],
       "IsTemporary": false,
-      "ListViewFlag": 1
+      "ListViewFlag": true
     },
     "DragonData": {
       "DragonId": "GalaChronosNyx",
-      "DragonKeyId": 1400,
+      "DragonKeyId": 2436,
       "Level": 100,
       "Exp": 1240020,
       "IsLock": false,
@@ -429,7 +429,7 @@
       }
     ],
     "TalismanData": {
-      "TalismanKeyId": 2426,
+      "TalismanKeyId": 4266,
       "TalismanId": "HalloweenLaxi",
       "TalismanAbilityId1": 340000009,
       "TalismanAbilityId2": 340000076,
@@ -557,11 +557,11 @@
         70
       ],
       "IsTemporary": false,
-      "ListViewFlag": 1
+      "ListViewFlag": true
     },
     "DragonData": {
       "DragonId": "JeannedArc",
-      "DragonKeyId": 1326,
+      "DragonKeyId": 2362,
       "Level": 120,
       "Exp": 3365620,
       "IsLock": true,
@@ -670,7 +670,7 @@
       }
     ],
     "TalismanData": {
-      "TalismanKeyId": 2326,
+      "TalismanKeyId": 4166,
       "TalismanId": "GalaLuca",
       "TalismanAbilityId1": 340000069,
       "TalismanAbilityId2": 340000108,
@@ -771,11 +771,11 @@
         50
       ],
       "IsTemporary": false,
-      "ListViewFlag": 1
+      "ListViewFlag": true
     },
     "DragonData": {
       "DragonId": "Cupid",
-      "DragonKeyId": 1356,
+      "DragonKeyId": 2392,
       "Level": 120,
       "Exp": 3365620,
       "IsLock": true,
@@ -884,7 +884,7 @@
       }
     ],
     "TalismanData": {
-      "TalismanKeyId": 2365,
+      "TalismanKeyId": 4205,
       "TalismanId": "Pecorine",
       "TalismanAbilityId1": 340000029,
       "TalismanAbilityId2": 340000056,
@@ -1000,11 +1000,11 @@
         65
       ],
       "IsTemporary": false,
-      "ListViewFlag": 1
+      "ListViewFlag": true
     },
     "DragonData": {
       "DragonId": "GaibhneCreidhne",
-      "DragonKeyId": 1379,
+      "DragonKeyId": 2415,
       "Level": 100,
       "Exp": 1240020,
       "IsLock": true,
@@ -1113,7 +1113,7 @@
       }
     ],
     "TalismanData": {
-      "TalismanKeyId": 2349,
+      "TalismanKeyId": 4189,
       "TalismanId": "Lazry",
       "TalismanAbilityId1": 340000118,
       "TalismanAbilityId2": 340000107,
@@ -1234,11 +1234,11 @@
         70
       ],
       "IsTemporary": false,
-      "ListViewFlag": 1
+      "ListViewFlag": true
     },
     "DragonData": {
       "DragonId": "GalaBeastCiella",
-      "DragonKeyId": 1403,
+      "DragonKeyId": 2439,
       "Level": 100,
       "Exp": 1240020,
       "IsLock": true,
@@ -1347,7 +1347,7 @@
       }
     ],
     "TalismanData": {
-      "TalismanKeyId": 2433,
+      "TalismanKeyId": 4273,
       "TalismanId": "GalaEmile",
       "TalismanAbilityId1": 340000099,
       "TalismanAbilityId2": 340000128,
@@ -1448,11 +1448,11 @@
         50
       ],
       "IsTemporary": false,
-      "ListViewFlag": 1
+      "ListViewFlag": true
     },
     "DragonData": {
       "DragonId": "Leviathan",
-      "DragonKeyId": 1293,
+      "DragonKeyId": 2329,
       "Level": 120,
       "Exp": 3365620,
       "IsLock": true,
@@ -1561,7 +1561,7 @@
       }
     ],
     "TalismanData": {
-      "TalismanKeyId": 2368,
+      "TalismanKeyId": 4208,
       "TalismanId": "Pinon",
       "TalismanAbilityId1": 340000119,
       "TalismanAbilityId2": 340000089,
@@ -1662,11 +1662,11 @@
         50
       ],
       "IsTemporary": false,
-      "ListViewFlag": 1
+      "ListViewFlag": true
     },
     "DragonData": {
       "DragonId": "GalaRebornPoseidon",
-      "DragonKeyId": 1381,
+      "DragonKeyId": 2417,
       "Level": 100,
       "Exp": 1240020,
       "IsLock": true,
@@ -1775,7 +1775,7 @@
       }
     ],
     "TalismanData": {
-      "TalismanKeyId": 2336,
+      "TalismanKeyId": 4176,
       "TalismanId": "Valerio",
       "TalismanAbilityId1": 340000008,
       "TalismanAbilityId2": 340000036,

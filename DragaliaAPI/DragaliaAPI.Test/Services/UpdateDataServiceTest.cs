@@ -43,11 +43,10 @@ public class UpdateDataServiceTest : RepositoryTestFixture
         this.mockPresentService = new(MockBehavior.Strict);
         this.mockEventService = new(MockBehavior.Strict);
         this.mockDmodeService = new(MockBehavior.Strict);
-
         this.mapper = UnitTestUtils.CreateMapper();
+
         this.updateDataService = new UpdateDataService(
             this.ApiContext,
-            this.mapper,
             this.mockPlayerIdentityService.Object,
             this.mockMissionService.Object,
             this.mockMissionProgressionService.Object,
@@ -63,8 +62,10 @@ public class UpdateDataServiceTest : RepositoryTestFixture
     public async Task SaveChangesAsync_PopulatesAll()
     {
         long viewerId = 2;
+        CancellationTokenSource cts = new();
+
         this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(viewerId);
-        this.mockMissionProgressionService.Setup(x => x.ProcessMissionEvents())
+        this.mockMissionProgressionService.Setup(x => x.ProcessMissionEvents(cts.Token))
             .Returns(Task.CompletedTask);
 
         DbPlayerUserData userData = new() { ViewerId = viewerId };
@@ -178,7 +179,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
             }
         );
 
-        UpdateDataList list = await this.updateDataService.SaveChangesAsync();
+        UpdateDataList list = await this.updateDataService.SaveChangesAsync(cts.Token);
 
         list.UserData.Should().BeEquivalentTo(this.mapper.Map<UserData>(userData));
 
@@ -215,8 +216,10 @@ public class UpdateDataServiceTest : RepositoryTestFixture
     [Fact]
     public async Task SaveChangesAsync_RetrievesIdentityColumns()
     {
+        CancellationTokenSource cts = new();
+
         this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(ViewerId);
-        this.mockMissionProgressionService.Setup(x => x.ProcessMissionEvents())
+        this.mockMissionProgressionService.Setup(x => x.ProcessMissionEvents(cts.Token))
             .Returns(Task.CompletedTask);
 
         // This test is bullshit because in-mem works differently to an actual database in this regard
@@ -229,7 +232,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
             }
         );
 
-        UpdateDataList list = await this.updateDataService.SaveChangesAsync();
+        UpdateDataList list = await this.updateDataService.SaveChangesAsync(cts.Token);
 
         list.DragonList.Should().NotBeNullOrEmpty();
         list.DragonList!.Select(x => x.DragonKeyId).Should().OnlyHaveUniqueItems();
@@ -238,11 +241,12 @@ public class UpdateDataServiceTest : RepositoryTestFixture
     [Fact]
     public async Task SaveChangesAsync_NullIfNoUpdates()
     {
+        CancellationTokenSource cts = new();
         this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(ViewerId);
-        this.mockMissionProgressionService.Setup(x => x.ProcessMissionEvents())
+        this.mockMissionProgressionService.Setup(x => x.ProcessMissionEvents(cts.Token))
             .Returns(Task.CompletedTask);
 
-        UpdateDataList list = await this.updateDataService.SaveChangesAsync();
+        UpdateDataList list = await this.updateDataService.SaveChangesAsync(cts.Token);
 
         list.UserData.Should().BeNull();
         list.CharaList.Should().BeNull();
@@ -255,28 +259,30 @@ public class UpdateDataServiceTest : RepositoryTestFixture
     [Fact]
     public async Task SaveChangesAsync_NoDataFromOtherAccounts()
     {
+        CancellationTokenSource cts = new();
         this.ApiContext.PlayerCharaData.Add(new(ViewerId + 1, Charas.GalaZethia));
-        this.mockMissionProgressionService.Setup(x => x.ProcessMissionEvents())
+        this.mockMissionProgressionService.Setup(x => x.ProcessMissionEvents(cts.Token))
             .Returns(Task.CompletedTask);
 
         this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(ViewerId);
 
-        (await this.updateDataService.SaveChangesAsync()).CharaList.Should().BeNull();
+        (await this.updateDataService.SaveChangesAsync(cts.Token)).CharaList.Should().BeNull();
     }
 
     [Fact]
     public async Task SaveChangesAsync_NullAfterSave()
     {
+        CancellationTokenSource cts = new();
         this.ApiContext.PlayerCharaData.Add(new(ViewerId, Charas.HalloweenLowen));
-        this.mockMissionProgressionService.Setup(x => x.ProcessMissionEvents())
+        this.mockMissionProgressionService.Setup(x => x.ProcessMissionEvents(cts.Token))
             .Returns(Task.CompletedTask);
 
         await this.ApiContext.SaveChangesAsync();
 
-        (await this.updateDataService.SaveChangesAsync()).CharaList.Should().BeNull();
+        (await this.updateDataService.SaveChangesAsync(cts.Token)).CharaList.Should().BeNull();
     }
 
-    private void AssertOnlyContains<TNetwork>(IEnumerable<TNetwork> member, IDbPlayerData dbEntity)
+    private void AssertOnlyContains<TNetwork>(IEnumerable<TNetwork>? member, IDbPlayerData dbEntity)
     {
         member
             .Should()
