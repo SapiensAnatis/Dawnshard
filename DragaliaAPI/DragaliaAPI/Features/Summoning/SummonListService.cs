@@ -31,7 +31,7 @@ public sealed class SummonListService(
 
     private const int DailyLimit = 1;
 
-    public async Task<IEnumerable<SummonList>> GetSummonList()
+    public async Task<List<SummonList>> GetSummonList()
     {
         List<SummonList> results = new(optionsMonitor.CurrentValue.Banners.Count);
 
@@ -47,6 +47,9 @@ public sealed class SummonListService(
 
         foreach (Banner banner in optionsMonitor.CurrentValue.Banners)
         {
+            if (banner.Id == SummonConstants.RedoableSummonBannerId)
+                continue;
+
             int dailyCount = 0;
             int totalCount = 0;
 
@@ -83,5 +86,16 @@ public sealed class SummonListService(
         }
 
         return results;
+    }
+
+    public async Task<SummonList?> GetSummonList(int bannerId)
+    {
+        // Note: could be written to only fetch player data for a single banner to be more efficient. Should still be
+        // one query so not a high priority for now.
+        if (bannerId == SummonConstants.RedoableSummonBannerId)
+            return null;
+
+        List<SummonList> availableBanners = await GetSummonList();
+        return availableBanners.Find(x => x.SummonId == bannerId);
     }
 }
