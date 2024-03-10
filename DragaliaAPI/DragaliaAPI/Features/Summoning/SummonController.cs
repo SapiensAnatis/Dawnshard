@@ -148,7 +148,10 @@ public class SummonController(
 
     [HttpPost]
     [Route("request")]
-    public async Task<DragaliaResult> RequestSummon(SummonRequestRequest summonRequest)
+    public async Task<DragaliaResult> RequestSummon(
+        SummonRequestRequest summonRequest,
+        CancellationToken cancellationToken
+    )
     {
         SummonList? bannerData = await summonListService.GetSummonList(summonRequest.SummonId);
 
@@ -379,7 +382,7 @@ public class SummonController(
             }
         }
 
-        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         SummonRequestResponse response =
             new(

@@ -1,14 +1,9 @@
-using System.Collections;
 using System.Diagnostics;
-using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Database.Utils;
-using DragaliaAPI.Extensions;
+using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Features.Summoning;
-using DragaliaAPI.Shared.MasterAsset;
 using FluentRandomPicker;
 using FluentRandomPicker.FluentInterfaces.General;
 using Microsoft.EntityFrameworkCore;
@@ -118,9 +113,9 @@ public class SummonService(
 
         List<UnitRate> allRates = [.. rateData.PickupRates, .. rateData.NormalRates];
 
-        var picker = Out.Of()
+        IPick<AtgenRedoableSummonResultUnitList> picker = Out.Of()
             .PrioritizedElements(allRates)
-            .WithValueSelector(x => ToSummonResult(x))
+            .WithValueSelector(ToSummonResult)
             .AndWeightSelector(x => (int)(x.Rate * RateConversionFactor));
 
         List<AtgenRedoableSummonResultUnitList> result = new(numSummons);
@@ -154,7 +149,7 @@ public class SummonService(
 
         IPick<AtgenRedoableSummonResultUnitList> normalPicker = Out.Of()
             .PrioritizedElements(allNormalRates)
-            .WithValueSelector(x => ToSummonResult(x))
+            .WithValueSelector(ToSummonResult)
             .AndWeightSelector(x => x.Weighting);
 
         IPick<AtgenRedoableSummonResultUnitList> guaranteePicker = Out.Of()
