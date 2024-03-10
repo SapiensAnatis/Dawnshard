@@ -94,5 +94,5 @@ public interface IMissionProgressionService
         int? parameter4 = null
     );
 
-    Task ProcessMissionEvents();
+    Task ProcessMissionEvents(CancellationToken cancellationToken);
 }

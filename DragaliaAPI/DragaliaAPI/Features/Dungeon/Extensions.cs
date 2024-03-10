@@ -46,12 +46,14 @@ public static class Extensions
             second.MaterialList, // Second goes first for more up-to-date quantities
             first.MaterialList,
             m => m.MaterialId
-        );
+        )
+            ?.ToList();
         first.AbilityCrestList = UnionNullableLists(
             first.AbilityCrestList,
             second.AbilityCrestList,
             a => a.AbilityCrestId
-        );
+        )
+            ?.ToList();
 
         // Properties that will always be more up to date in the more recent list
         first.UserData = second.UserData;

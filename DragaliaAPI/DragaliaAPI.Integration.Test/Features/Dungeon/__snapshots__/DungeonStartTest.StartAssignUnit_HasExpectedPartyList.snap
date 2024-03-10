@@ -78,11 +78,11 @@
         50
       ],
       "IsTemporary": false,
-      "ListViewFlag": 1
+      "ListViewFlag": true
     },
     "DragonData": {
       "DragonId": "Horus",
-      "DragonKeyId": 993,
+      "DragonKeyId": 2029,
       "Level": 100,
       "Exp": 1240020,
       "IsLock": true,
@@ -191,7 +191,7 @@
       }
     ],
     "TalismanData": {
-      "TalismanKeyId": 1631,
+      "TalismanKeyId": 3471,
       "TalismanId": "GalaLeonidas",
       "TalismanAbilityId1": 340000049,
       "TalismanAbilityId2": 340000133,
@@ -292,11 +292,11 @@
         50
       ],
       "IsTemporary": false,
-      "ListViewFlag": 1
+      "ListViewFlag": true
     },
     "DragonData": {
       "DragonId": "GalaMars",
-      "DragonKeyId": 976,
+      "DragonKeyId": 2012,
       "Level": 100,
       "Exp": 1240020,
       "IsLock": true,
@@ -405,7 +405,7 @@
       }
     ],
     "TalismanData": {
-      "TalismanKeyId": 1611,
+      "TalismanKeyId": 3451,
       "TalismanId": "GalaMym",
       "TalismanAbilityId1": 340000029,
       "TalismanAbilityId2": 340000077,
