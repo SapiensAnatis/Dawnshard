@@ -19,7 +19,7 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
     // ReSharper disable once MemberCanBePrivate.Global
     public Task<RateData> GetUnitRates(int bannerId)
     {
-        Banner? banner = optionsMonitor.CurrentValue.Banners.FirstOrDefault(x => x.Id == bannerId);
+        Banner? banner = optionsMonitor.CurrentValue.Banners.SingleOrDefault(x => x.Id == bannerId);
 
         if (banner is null)
         {
@@ -59,7 +59,7 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
     // ReSharper disable once MemberCanBePrivate.Global
     public Task<RateData> GetGuaranteeUnitRates(int bannerId)
     {
-        Banner? banner = optionsMonitor.CurrentValue.Banners.FirstOrDefault(x => x.Id == bannerId);
+        Banner? banner = optionsMonitor.CurrentValue.Banners.SingleOrDefault(x => x.Id == bannerId);
 
         if (banner is null)
         {

@@ -1,7 +1,9 @@
-﻿namespace DragaliaAPI.Integration.Test.Dragalia;
+﻿using DragaliaAPI.Features.Summoning;
+
+namespace DragaliaAPI.Integration.Test.Features.Summoning;
 
 /// <summary>
-/// Tests <see cref="Controllers.Dragalia.RedoableSummonController"/>
+/// Tests <see cref="RedoableSummonController"/>
 /// </summary>
 public class RedoableSummonTest : TestFixture
 {
@@ -53,15 +55,15 @@ public class RedoableSummonTest : TestFixture
             .OrderBy(x => x);
 
         IEnumerable<int> dbCharaIds = this
-            .ApiContext.PlayerCharaData.Where(x => x.ViewerId == ViewerId)
+            .ApiContext.PlayerCharaData.Where(x => x.ViewerId == this.ViewerId)
             .Select(x => (int)x.CharaId)
             .OrderBy(x => x);
         IEnumerable<int> dbDragonIds = this
-            .ApiContext.PlayerDragonData.Where(x => x.ViewerId == ViewerId)
+            .ApiContext.PlayerDragonData.Where(x => x.ViewerId == this.ViewerId)
             .Select(x => (int)x.DragonId)
             .OrderBy(x => x);
 
         newCharaIds.Should().BeSubsetOf(dbCharaIds);
-        dbDragonIds.Should().BeSubsetOf(dbDragonIds);
+        newDragonIds.Should().BeSubsetOf(dbDragonIds);
     }
 }

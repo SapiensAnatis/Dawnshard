@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Diagnostics;
 using AutoMapper;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Extensions;
@@ -7,141 +9,45 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.Summoning;
 using DragaliaAPI.Shared.MasterAsset;
+using FluentRandomPicker;
+using FluentRandomPicker.FluentInterfaces.General;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Summoning;
 
-public class SummonService : ISummonService
+public class SummonService(
+    SummonOddsService summonOddsService,
+    IUnitRepository unitRepository,
+    ApiContext apiContext,
+    ILogger<SummonService> logger
+) : ISummonService
 {
-    private readonly IUnitRepository unitRepository;
-    private readonly IMapper mapper;
-    private readonly ILogger<SummonService> logger;
+    /// <summary>
+    /// The factor to use when converting the <see cref="decimal"/> rate to a <see cref="int"/> weighting for
+    /// FluentRandomPicker.
+    /// </summary>
+    /// <remarks>
+    /// A value of 100_000 means that a rate of 41.125% / 0.41125 does not lose any precision and is converted to
+    /// 41125. 3 decimal places of precision on the percentage is most likely 'good enough'.
+    /// </remarks>
+    private const int RateConversionFactor = 100_000;
 
-    private readonly Random random;
-
-    private const float SSRSummonRateChara = 0.5f;
-    private const float SSRSummonRateDragon = 0.8f;
-    private const float SRSummonRateTotalNormal = 9.0f;
-    private const float SRSummonRateTotalFeatured = 7.0f;
-    private const float SRSummonRateTotal = SRSummonRateTotalNormal + SRSummonRateTotalFeatured;
-    private const float RSummonRateChara = 4.0f;
-
-    public SummonService(
-        IUnitRepository unitRepository,
-        IMapper mapper,
-        ILogger<SummonService> logger
-    )
-    {
-        this.unitRepository = unitRepository;
-        this.mapper = mapper;
-        this.random = Random.Shared;
-        this.logger = logger;
-    }
-
-    /* public record BannerSummonInfo(
-         Dictionary<EntityTypes, SummonableEntity> featured,
-         Dictionary<EntityTypes, SummonableEntity> normal,
-         double baseSsrRate,
-         double baseRRate
-     );*/
-
-    //TODO
-    /* public Dictionary<SummonableEntity, double> CalculateOdds(
-         BannerSummonInfo bannerInfo,
-         float pity
-     )
-     {
-         Dictionary<SummonableEntity, double> pool = new Dictionary<SummonableEntity, double>();
-
-         double realSsrRate = bannerInfo.baseSsrRate + pity;
-         double realRRate = bannerInfo.baseRRate - pity;
-         int countSrFeaturedRewards = bannerInfo.featured.Values.Where(x => x.rarity == 4).Count();
-         int countSrRewards = bannerInfo.normal.Values.Where(x => x.rarity == 4).Count();
-         foreach (
-             Dictionary<EntityTypes, SummonableEntity> relPool in new List<
-                 Dictionary<EntityTypes, SummonableEntity>
-             >()
-             {
-                 bannerInfo.featured,
-                 bannerInfo.normal
-             }
-         )
-         {
-             double ssrRateChara =
-                 relPool == bannerInfo.featured
-                     ? SSRSummonRateChara
-                     : realSsrRate / bannerInfo.normal.Values.Where(x => x.rarity == 5).Count();
-             double srRate =
-                 relPool == bannerInfo.featured
-                     ? SRSummonRateTotalFeatured / countSrFeaturedRewards
-                     : realSsrRate / countSrFeaturedRewards;
-             foreach (SummonableEntity summonableEntity in relPool.Values)
-             {
-                 double summonRate = 0d;
-                 switch (summonableEntity.rarity)
-                 {
-                     case 5:
-                         realSsrRate -= ssrRateChara;
-                         break;
-                     case 4:
-                         summonRate -= ssrRateChara;
-                         break;
-                     case 3:
-
-                         break;
-                 }
-                 pool.Add(summonableEntity, summonRate);
-             }
-         }
-         return pool;
-     }*/
-
-    public List<AtgenRedoableSummonResultUnitList> GenerateSummonResult(int numSummons)
-    {
-        return this.GenerateSummonResult(
-            numSummons,
-            10,
-            0.0f /*,new(new(), new(), 6.0d, 80.0d) */
-        );
-    }
-
-    public List<AtgenRedoableSummonResultUnitList> GenerateSummonResult(
+    public Task<List<AtgenRedoableSummonResultUnitList>> GenerateSummonResult(
         int numSummons,
-        int summonsUntilNextPity,
-        float pity /*,
-        BannerSummonInfo bannerInfo */
-    )
-    {
-        List<AtgenRedoableSummonResultUnitList> resultList = new();
-
-        for (int i = 0; i < numSummons; i++)
+        int bannerId,
+        SummonExecTypes execType
+    ) =>
+        execType switch
         {
-            bool isDragon = this.random.NextSingle() > 0.5;
-            if (isDragon)
-            {
-                Dragons id = this.random.NextEnum<Dragons>();
-                while (id == 0 || DragonConstants.UnsummonableDragons.Contains(id))
-                    id = this.random.NextEnum<Dragons>();
+            SummonExecTypes.Single
+            or SummonExecTypes.DailyDeal
+                => this.GenerateSummonResultInternal(bannerId, numSummons),
+            SummonExecTypes.Tenfold => this.GenerateTenfoldResultInternal(bannerId, numTenfolds: 1),
+            _ => throw new ArgumentException($"Invalid summon type {execType}", nameof(execType)),
+        };
 
-                int rarity = MasterAsset.DragonData.Get(id).Rarity;
-                resultList.Add(new(EntityTypes.Dragon, (int)id, rarity));
-            }
-            else
-            {
-                Charas id = this.random.NextEnum<Charas>();
-                while (id == 0 || id.GetAvailability() == UnitAvailability.Story)
-                {
-                    id = this.random.NextEnum<Charas>();
-                }
-
-                int rarity = MasterAsset.CharaData.Get(id).Rarity;
-                resultList.Add(new(EntityTypes.Chara, (int)id, rarity));
-            }
-        }
-
-        this.logger.LogDebug("Generated summon result: {@summonResult}", resultList);
-
-        return resultList;
-    }
+    public Task<List<AtgenRedoableSummonResultUnitList>> GenerateRedoableSummonResult() =>
+        this.GenerateTenfoldResultInternal(SummonConstants.RedoableSummonBannerId, numTenfolds: 5);
 
     /// <summary>
     /// Populate a summon result with is_new and eldwater values.
@@ -152,9 +58,9 @@ public class SummonService : ISummonService
     {
         List<AtgenResultUnitList> newUnits = new();
 
-        IEnumerable<Charas> ownedCharas = this.unitRepository.Charas.Select(x => x.CharaId);
+        IEnumerable<Charas> ownedCharas = unitRepository.Charas.Select(x => x.CharaId);
 
-        IEnumerable<Dragons> ownedDragons = this.unitRepository.Dragons.Select(x => x.DragonId);
+        IEnumerable<Dragons> ownedDragons = unitRepository.Dragons.Select(x => x.DragonId);
 
         foreach (AtgenRedoableSummonResultUnitList reward in baseRewardList)
         {
@@ -198,4 +104,82 @@ public class SummonService : ISummonService
 
         return newUnits;
     }
+
+    public async Task<IEnumerable<SummonTicketList>> GetSummonTicketList() =>
+        await apiContext.PlayerSummonTickets.ProjectToSummonTicketList().ToListAsync();
+
+    private async Task<List<AtgenRedoableSummonResultUnitList>> GenerateSummonResultInternal(
+        int bannerId,
+        int numSummons
+    )
+    {
+        (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rateData =
+            await summonOddsService.GetUnitRates(bannerId);
+
+        List<UnitRate> allRates = [.. rateData.PickupRates, .. rateData.NormalRates];
+
+        var picker = Out.Of()
+            .PrioritizedElements(allRates)
+            .WithValueSelector(x => ToSummonResult(x))
+            .AndWeightSelector(x => (int)(x.Rate * RateConversionFactor));
+
+        List<AtgenRedoableSummonResultUnitList> result = new(numSummons);
+
+        for (int i = 0; i < numSummons; i++)
+            result.Add(picker.PickOne());
+
+        return result;
+    }
+
+    private async Task<List<AtgenRedoableSummonResultUnitList>> GenerateTenfoldResultInternal(
+        int bannerId,
+        int numTenfolds
+    )
+    {
+        (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) normalRateData =
+            await summonOddsService.GetUnitRates(bannerId);
+        (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) guaranteeRateData =
+            await summonOddsService.GetGuaranteeUnitRates(bannerId);
+
+        List<UnitRate> allNormalRates =
+        [
+            .. normalRateData.PickupRates,
+            .. normalRateData.NormalRates
+        ];
+        List<UnitRate> allGuaranteeRates =
+        [
+            .. guaranteeRateData.PickupRates,
+            .. guaranteeRateData.NormalRates
+        ];
+
+        IPick<AtgenRedoableSummonResultUnitList> normalPicker = Out.Of()
+            .PrioritizedElements(allNormalRates)
+            .WithValueSelector(x => ToSummonResult(x))
+            .AndWeightSelector(x => x.Weighting);
+
+        IPick<AtgenRedoableSummonResultUnitList> guaranteePicker = Out.Of()
+            .PrioritizedElements(allGuaranteeRates)
+            .WithValueSelector(ToSummonResult)
+            .AndWeightSelector(x => x.Weighting);
+
+        List<AtgenRedoableSummonResultUnitList> result = new(10);
+
+        for (int tenfold = 0; tenfold < numTenfolds; tenfold++)
+        {
+            for (int i = 0; i < 9; i++)
+                result.Add(normalPicker.PickOne());
+
+            result.Add(guaranteePicker.PickOne());
+        }
+
+        return result;
+    }
+
+    private static AtgenRedoableSummonResultUnitList ToSummonResult(UnitRate rate) =>
+        new()
+        {
+            Id = rate.Id,
+            EntityType = rate.EntityType,
+            Rarity = rate.Rarity,
+        };
 }
