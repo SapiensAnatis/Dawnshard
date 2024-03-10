@@ -205,8 +205,9 @@ public static class ServiceConfiguration
             )
             .Configure<BlazorOptions>(config.GetRequiredSection(nameof(BlazorOptions)))
             .Configure<EventOptions>(config.GetRequiredSection(nameof(EventOptions)))
-            .Configure<MaintenanceOptions>(config.GetRequiredSection(nameof(MaintenanceOptions)))
-            .Configure<SummonBannerOptions>(config.GetRequiredSection(nameof(SummonBannerOptions)));
+            .Configure<MaintenanceOptions>(config.GetRequiredSection(nameof(MaintenanceOptions)));
+
+        services.AddSummoningOptions(config);
 
         // Ensure item summon weightings add to 100%
         services

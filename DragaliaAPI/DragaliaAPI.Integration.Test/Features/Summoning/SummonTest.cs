@@ -2,13 +2,15 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Summoning;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Integration.Test.Features.Summoning;
 
 /// <summary>
 /// Tests <see cref="SummonController"/>
 /// </summary>
 public class SummonTest : TestFixture
 {
+    private const int TestBannerId = 1020010;
+
     public SummonTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
@@ -18,7 +20,7 @@ public class SummonTest : TestFixture
         SummonExcludeGetListResponse response = (
             await this.Client.PostMsgpack<SummonExcludeGetListResponse>(
                 "summon_exclude/get_list",
-                new SummonExcludeGetListRequest(1020203)
+                new SummonExcludeGetListRequest(TestBannerId)
             )
         ).Data;
 
@@ -150,7 +152,7 @@ public class SummonTest : TestFixture
         DbPlayerSummonHistory historyEntry =
             new()
             {
-                ViewerId = ViewerId,
+                ViewerId = this.ViewerId,
                 SummonId = 1,
                 SummonExecType = SummonExecTypes.DailyDeal,
                 ExecDate = DateTimeOffset.UtcNow,
@@ -266,7 +268,7 @@ public class SummonTest : TestFixture
         SummonGetSummonPointTradeResponse response = (
             await this.Client.PostMsgpack<SummonGetSummonPointTradeResponse>(
                 "summon/get_summon_point_trade",
-                new SummonGetSummonPointTradeRequest(1020203)
+                new SummonGetSummonPointTradeRequest(TestBannerId)
             )
         ).Data;
 
@@ -280,7 +282,7 @@ public class SummonTest : TestFixture
     public async Task SummonRequest_SingleSummonWyrmite_ReturnsValidResult()
     {
         DbPlayerUserData userData = await this.ApiContext.PlayerUserData.SingleAsync(x =>
-            x.ViewerId == ViewerId
+            x.ViewerId == this.ViewerId
         );
 
         await this.ApiContext.Entry(userData).ReloadAsync();
@@ -289,7 +291,7 @@ public class SummonTest : TestFixture
             await this.Client.PostMsgpack<SummonRequestResponse>(
                 "summon/request",
                 new SummonRequestRequest(
-                    1,
+                    TestBannerId,
                     SummonExecTypes.Single,
                     1,
                     PaymentTypes.Wyrmite,
@@ -307,14 +309,14 @@ public class SummonTest : TestFixture
     public async Task SummonRequest_TenSummonWyrmite_ReturnsValidResult()
     {
         DbPlayerUserData userData = await this.ApiContext.PlayerUserData.SingleAsync(x =>
-            x.ViewerId == ViewerId
+            x.ViewerId == this.ViewerId
         );
 
         SummonRequestResponse response = (
             await this.Client.PostMsgpack<SummonRequestResponse>(
                 "summon/request",
                 new SummonRequestRequest(
-                    1020203,
+                    TestBannerId,
                     SummonExecTypes.Tenfold,
                     0,
                     PaymentTypes.Wyrmite,
@@ -353,7 +355,7 @@ public class SummonTest : TestFixture
             await this.Client.PostMsgpack<SummonRequestResponse>(
                 "summon/request",
                 new SummonRequestRequest(
-                    1020203,
+                    TestBannerId,
                     SummonExecTypes.Single,
                     1,
                     PaymentTypes.Ticket,
@@ -381,7 +383,7 @@ public class SummonTest : TestFixture
             await this.Client.PostMsgpack<SummonRequestResponse>(
                 "summon/request",
                 new SummonRequestRequest(
-                    1020203,
+                    TestBannerId,
                     SummonExecTypes.Single,
                     5,
                     PaymentTypes.Ticket,
@@ -409,7 +411,7 @@ public class SummonTest : TestFixture
             await this.Client.PostMsgpack<SummonRequestResponse>(
                 "summon/request",
                 new SummonRequestRequest(
-                    1020203,
+                    TestBannerId,
                     SummonExecTypes.Tenfold,
                     0,
                     PaymentTypes.Ticket,
@@ -436,7 +438,7 @@ public class SummonTest : TestFixture
             await this.Client.PostMsgpack<SummonRequestResponse>(
                 "summon/request",
                 new SummonRequestRequest(
-                    1020203,
+                    TestBannerId,
                     types,
                     0,
                     PaymentTypes.Ticket,
@@ -453,7 +455,7 @@ public class SummonTest : TestFixture
         if (reward.EntityType == EntityTypes.Dragon)
         {
             List<DbPlayerDragonData> dragonData = await this
-                .ApiContext.PlayerDragonData.Where(x => x.ViewerId == ViewerId)
+                .ApiContext.PlayerDragonData.Where(x => x.ViewerId == this.ViewerId)
                 .ToListAsync();
 
             dragonData.Where(x => (int)x.DragonId == reward.Id).Should().NotBeEmpty();
@@ -461,7 +463,7 @@ public class SummonTest : TestFixture
         else
         {
             List<DbPlayerCharaData> charaData = await this
-                .ApiContext.PlayerCharaData.Where(x => x.ViewerId == ViewerId)
+                .ApiContext.PlayerCharaData.Where(x => x.ViewerId == this.ViewerId)
                 .ToListAsync();
 
             charaData.Where(x => (int)x.CharaId == reward.Id).Should().NotBeEmpty();

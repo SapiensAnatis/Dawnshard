@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Features.Summoning;
 
@@ -8,5 +9,12 @@ public interface ISummonService
         IEnumerable<AtgenRedoableSummonResultUnitList> baseRewardList
     );
 
-    List<AtgenRedoableSummonResultUnitList> GenerateSummonResult(int numSummons);
+    Task<List<AtgenRedoableSummonResultUnitList>> GenerateSummonResult(
+        int numSummons,
+        int bannerId,
+        SummonExecTypes execType
+    );
+
+    Task<IEnumerable<SummonTicketList>> GetSummonTicketList();
+    Task<List<AtgenRedoableSummonResultUnitList>> GenerateRedoableSummonResult();
 }

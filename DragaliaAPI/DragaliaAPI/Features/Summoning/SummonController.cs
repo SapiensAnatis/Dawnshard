@@ -30,65 +30,12 @@ public class SummonController(
     ISummonService summonService,
     IPaymentService paymentService,
     SummonListService summonListService,
-    SummonTicketService summonTicketService,
     SummonOddsService summonOddsService
 ) : DragaliaControllerBase
 {
-    // Repeated from RedoableSummonController, but no point putting this in a shared location
-    // as it's all bullshit anyway
-    private static class Data
-    {
-        public static readonly OddsRate OddsRate =
-            new(
-                new List<AtgenRarityList>()
-                {
-                    new(5, "placeholder"),
-                    new(4, "placeholder"),
-                    new(3, "placeholder")
-                },
-                new List<AtgenRarityGroupList>()
-                {
-                    new(false, 5, "placeholder", "placeholder", "placeholder", "placeholder")
-                },
-                new(
-                    new List<OddsUnitDetail>()
-                    {
-                        new(
-                            false,
-                            5,
-                            new List<AtgenUnitList>() { new((int)Charas.Addis, "placeholder") }
-                        )
-                    },
-                    new List<OddsUnitDetail>()
-                    {
-                        new(
-                            false,
-                            5,
-                            new List<AtgenUnitList>() { new((int)Dragons.Agni, "placeholder") }
-                        )
-                    },
-                    new List<OddsUnitDetail>()
-                    {
-                        new(
-                            false,
-                            5,
-                            new List<AtgenUnitList>()
-                            {
-                                new(40050001, "lol you can still summon prints")
-                            }
-                        )
-                    }
-                )
-            );
-
-        public static readonly SummonPrizeOddsRate PrizeOddsRate =
-            new(new List<AtgenSummonPrizeRankList>(), new List<AtgenSummonPrizeEntitySetList>());
-    }
-
     /// <summary>
     /// Returns excluded/excludable units for special banners
     /// </summary>
-    /// <param name="sessionId"></param>
     /// <param name="request"></param>
     /// <returns></returns>
     [HttpPost]
@@ -144,7 +91,7 @@ public class SummonController(
     public async Task<DragaliaResult<SummonGetSummonListResponse>> GetSummonList()
     {
         IEnumerable<SummonList> bannerList = await summonListService.GetSummonList();
-        IEnumerable<SummonTicketList> ticketList = await summonTicketService.GetSummonTicketList();
+        IEnumerable<SummonTicketList> ticketList = await summonService.GetSummonTicketList();
 
         return new SummonGetSummonListResponse()
         {
@@ -199,42 +146,22 @@ public class SummonController(
         );
     }
 
-    //TODO: Fully implement and refactor
     [HttpPost]
     [Route("request")]
-    public async Task<DragaliaResult> RequestSummon(SummonRequestRequest summonRequest)
+    public async Task<DragaliaResult> RequestSummon(
+        SummonRequestRequest summonRequest,
+        CancellationToken cancellationToken
+    )
     {
-        //TODO Fetch real data by bannerId
-        SummonList bannerData =
-            new(
-                1020203,
-                0,
-                (int)BannerTypes.Normal,
-                120,
-                120,
-                1200,
-                1200,
-                5,
-                30,
-                1,
-                2,
-                300,
-                1,
-                status: 1,
-                DateTimeOffset.UtcNow,
-                DateTimeOffset.UtcNow.AddDays(7),
-                1,
-                0,
-                0,
-                (int)SummonCampaignTypes.Normal,
-                0,
-                1,
-                true,
-                0,
-                0
-            );
+        SummonList? bannerData = await summonListService.GetSummonList(summonRequest.SummonId);
 
-        DateTimeOffset summonDate = DateTimeOffset.UtcNow;
+        if (bannerData == null)
+        {
+            throw new DragaliaException(
+                ResultCode.SummonNotFound,
+                $"Failed to find a banner with ID {summonRequest.SummonId}"
+            );
+        }
 
         DbPlayerBannerData playerBannerData = await summonRepository.GetPlayerBannerData(
             bannerData.SummonId
@@ -307,9 +234,12 @@ public class SummonController(
             summonRequest.PaymentTarget
         );
 
-        List<AtgenRedoableSummonResultUnitList> summonResult = summonService.GenerateSummonResult(
-            numSummons
-        );
+        List<AtgenRedoableSummonResultUnitList> summonResult =
+            await summonService.GenerateSummonResult(
+                numSummons,
+                summonRequest.SummonId,
+                summonRequest.ExecType
+            );
 
         List<AtgenResultUnitList> returnedResult = new();
         List<AtgenDuplicateEntityList> newGetEntityList = new();
@@ -388,7 +318,7 @@ public class SummonController(
                     ViewerId = this.ViewerId,
                     SummonId = bannerData.SummonId,
                     SummonExecType = summonRequest.ExecType,
-                    ExecDate = summonDate,
+                    ExecDate = DateTimeOffset.UtcNow,
                     PaymentType = summonRequest.PaymentType,
                     EntityType = result.EntityType,
                     EntityId = result.Id,
@@ -423,8 +353,8 @@ public class SummonController(
         if (reversalIndex != -1 && new Random().NextSingle() < 0.95)
             reversalIndex = -1;
 
-        int sageEffect = (int)SummonEffectsSage.Dull;
-        int circleEffect = (int)SummonEffectsSky.Blue;
+        int sageEffect;
+        int circleEffect;
         int rarityDisplayModifier = reversalIndex == -1 ? 0 : 1;
         if (countOfRare5Char + countOfRare5Dragon > 0 + rarityDisplayModifier)
         {
@@ -452,7 +382,7 @@ public class SummonController(
             }
         }
 
-        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         SummonRequestResponse response =
             new(
@@ -462,7 +392,7 @@ public class SummonController(
                 reversalEffectIndex: reversalIndex,
                 updateDataList: updateDataList,
                 entityResult: new EntityResult() { NewGetEntityList = newGetEntityList },
-                summonTicketList: await summonTicketService.GetSummonTicketList(),
+                summonTicketList: await summonService.GetSummonTicketList(),
                 resultSummonPoint: playerBannerData.SummonPoints,
                 userSummonList: new List<UserSummonList>()
                 {
