@@ -54,6 +54,8 @@ public class WeaponBodyTest : TestFixture
                         UnlockWeaponPassiveAbilityNoList = Enumerable.Repeat(0, 15),
                         IsNew = false,
                         GetTime = DateTimeOffset.UtcNow,
+                        SkillNo = 1,
+                        SkillLevel = 1,
                     }
                 }
             );

@@ -548,6 +548,34 @@ public class SavefileService : ISavefileService
         await this.Create();
     }
 
+    public IQueryable<DbPlayer> Load()
+    {
+        return this
+            .apiContext.Players.Where(x => x.AccountId == this.playerIdentityService.AccountId)
+            .Include(x => x.UserData)
+            .Include(x => x.AbilityCrestList)
+            .Include(x => x.CharaList)
+            .Include(x => x.DragonList)
+            .Include(x => x.DragonReliabilityList)
+            .Include(x => x.DragonGiftList)
+            .Include(x => x.BuildList)
+            .Include(x => x.QuestList)
+            .Include(x => x.StoryStates)
+            .Include(x => x.PartyList)
+            .ThenInclude(x => x.Units.OrderBy(x => x.UnitNo))
+            .Include(x => x.TalismanList)
+            .Include(x => x.WeaponBodyList)
+            .Include(x => x.MaterialList)
+            .Include(x => x.WeaponSkinList)
+            .Include(x => x.WeaponPassiveAbilityList)
+            .Include(x => x.EquippedStampList)
+            .Include(x => x.QuestEvents)
+            .Include(x => x.PartyPower)
+            .Include(x => x.QuestTreasureList)
+            .Include(x => x.QuestWalls)
+            .AsSplitQuery();
+    }
+
     public async Task<DbPlayer> Create()
     {
         string deviceAccountId = this.playerIdentityService.AccountId;

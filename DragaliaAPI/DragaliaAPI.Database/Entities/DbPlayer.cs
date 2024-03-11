@@ -19,75 +19,96 @@ public class DbPlayer
 
     public int SavefileVersion { get; set; }
 
-    public DbPlayerUserData? UserData { get; set; }
+    public virtual DbPlayerUserData? UserData { get; set; }
 
-    public List<DbAbilityCrest> AbilityCrestList { get; set; } = [];
+    public virtual ICollection<DbAbilityCrest> AbilityCrestList { get; set; } =
+        new List<DbAbilityCrest>();
 
-    public List<DbAbilityCrestSet> AbilityCrestSetList { get; set; } = [];
+    public virtual ICollection<DbAbilityCrestSet> AbilityCrestSetList { get; set; } =
+        new List<DbAbilityCrestSet>();
 
-    public List<DbFortBuild> BuildList { get; set; } = [];
+    public virtual ICollection<DbFortBuild> BuildList { get; set; } = new List<DbFortBuild>();
 
-    public List<DbParty> PartyList { get; set; } = [];
+    public virtual ICollection<DbParty> PartyList { get; set; } = new List<DbParty>();
 
-    public List<DbPlayerBannerData> UserSummonList { get; set; } = [];
+    public virtual ICollection<DbPlayerBannerData> UserSummonList { get; set; } =
+        new List<DbPlayerBannerData>();
 
-    public List<DbPlayerCharaData> CharaList { get; set; } = [];
+    public virtual ICollection<DbPlayerCharaData> CharaList { get; set; } =
+        new List<DbPlayerCharaData>();
 
-    public List<DbPlayerDragonData> DragonList { get; set; } = [];
+    public virtual ICollection<DbPlayerDragonData> DragonList { get; set; } =
+        new List<DbPlayerDragonData>();
 
-    public List<DbPlayerDragonGift> DragonGiftList { get; set; } = [];
+    public virtual ICollection<DbPlayerDragonGift> DragonGiftList { get; set; } =
+        new List<DbPlayerDragonGift>();
 
-    public List<DbPlayerDragonReliability> DragonReliabilityList { get; set; } = [];
+    public virtual ICollection<DbPlayerDragonReliability> DragonReliabilityList { get; set; } =
+        new List<DbPlayerDragonReliability>();
 
-    public List<DbPlayerMaterial> MaterialList { get; set; } = [];
+    public virtual ICollection<DbPlayerMaterial> MaterialList { get; set; } =
+        new List<DbPlayerMaterial>();
 
-    public List<DbSetUnit> UnitSets { get; set; } = [];
+    public virtual ICollection<DbSetUnit> UnitSets { get; set; } = new List<DbSetUnit>();
 
-    public List<DbPlayerStoryState> StoryStates { get; set; } = [];
+    public virtual ICollection<DbPlayerStoryState> StoryStates { get; set; } =
+        new List<DbPlayerStoryState>();
 
-    public List<DbPlayerSummonHistory> SummonHistory { get; set; } = [];
+    public virtual ICollection<DbPlayerSummonHistory> SummonHistory { get; set; } =
+        new List<DbPlayerSummonHistory>();
 
-    public List<DbQuest> QuestList { get; set; } = [];
+    public virtual ICollection<DbQuest> QuestList { get; set; } = new List<DbQuest>();
 
-    public List<DbWeaponBody> WeaponBodyList { get; set; } = [];
+    public virtual ICollection<DbWeaponBody> WeaponBodyList { get; set; } =
+        new List<DbWeaponBody>();
 
-    public List<DbTalisman> TalismanList { get; set; } = [];
+    public virtual ICollection<DbTalisman> TalismanList { get; set; } = new List<DbTalisman>();
 
-    public List<DbWeaponSkin> WeaponSkinList { get; set; } = [];
+    public virtual ICollection<DbWeaponSkin> WeaponSkinList { get; set; } =
+        new List<DbWeaponSkin>();
 
-    public List<DbWeaponPassiveAbility> WeaponPassiveAbilityList { get; set; } = [];
+    public virtual ICollection<DbWeaponPassiveAbility> WeaponPassiveAbilityList { get; set; } =
+        new List<DbWeaponPassiveAbility>();
 
-    public DbFortDetail? FortDetail { get; set; }
+    public virtual DbFortDetail? FortDetail { get; set; }
 
-    public List<DbEquippedStamp> EquippedStampList { get; set; } = [];
+    public virtual ICollection<DbEquippedStamp> EquippedStampList { get; set; } =
+        new List<DbEquippedStamp>();
 
-    public List<DbPlayerPresent> Presents { get; set; } = [];
+    public virtual ICollection<DbPlayerPresent> Presents { get; set; } =
+        new List<DbPlayerPresent>();
 
-    public List<DbPlayerPresentHistory> PresentHistory { get; set; } = [];
+    public virtual ICollection<DbPlayerPresentHistory> PresentHistory { get; set; } =
+        new List<DbPlayerPresentHistory>();
 
-    public List<DbPlayerDmodeChara> DmodeCharas { get; set; } = [];
+    public virtual ICollection<DbPlayerDmodeChara> DmodeCharas { get; set; } =
+        new List<DbPlayerDmodeChara>();
 
-    public DbPlayerDmodeDungeon? DmodeDungeon { get; set; }
+    public virtual DbPlayerDmodeDungeon? DmodeDungeon { get; set; }
 
-    public DbPlayerDmodeExpedition? DmodeExpedition { get; set; }
+    public virtual DbPlayerDmodeExpedition? DmodeExpedition { get; set; }
 
-    public DbPlayerDmodeInfo? DmodeInfo { get; set; }
+    public virtual DbPlayerDmodeInfo? DmodeInfo { get; set; }
 
-    public List<DbPlayerDmodeServitorPassive> DmodeServitorPassives { get; set; } = [];
+    public virtual ICollection<DbPlayerDmodeServitorPassive> DmodeServitorPassives { get; set; } =
+        new List<DbPlayerDmodeServitorPassive>();
 
-    public DbPlayerShopInfo? ShopInfo { get; set; }
+    public virtual DbPlayerShopInfo? ShopInfo { get; set; }
 
-    public List<DbQuestEvent> QuestEvents { get; set; } = [];
+    public virtual ICollection<DbQuestEvent> QuestEvents { get; set; } = new List<DbQuestEvent>();
 
-    public DbPartyPower? PartyPower { get; set; }
+    public virtual DbPartyPower? PartyPower { get; set; }
 
-    public List<DbQuestTreasureList> QuestTreasureList { get; set; } = [];
+    public virtual ICollection<DbQuestTreasureList> QuestTreasureList { get; set; } =
+        new List<DbQuestTreasureList>();
 
-    public List<DbPlayerQuestWall> QuestWalls { get; set; } = [];
+    public virtual ICollection<DbPlayerQuestWall> QuestWalls { get; set; } =
+        new List<DbPlayerQuestWall>();
 
-    public List<DbPlayerTrade> Trades { get; set; } = [];
+    public virtual ICollection<DbPlayerTrade> Trades { get; set; } = new List<DbPlayerTrade>();
 
-    public List<DbSummonTicket> SummonTickets { get; set; } = [];
+    public virtual ICollection<DbSummonTicket> SummonTickets { get; set; } =
+        new List<DbSummonTicket>();
 
-    public List<DbEmblem> Emblems { get; set; } = [];
+    public virtual ICollection<DbEmblem> Emblems { get; set; } = new List<DbEmblem>();
 }
