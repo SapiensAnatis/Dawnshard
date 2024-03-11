@@ -229,6 +229,5 @@ public static partial class LoadMapper
     [MapProperty(nameof(DbAbilityCrest.AbilityLevel), nameof(AbilityCrestList.Ability2Level))]
     private static partial AbilityCrestList Map(DbAbilityCrest abilityCrest);
 
-    [MapProperty(nameof(DbWeaponBody.Ability2Level), nameof(WeaponBodyList.Ability2Levell))]
     private static partial WeaponBodyList Map(DbWeaponBody weaponBody);
 }
