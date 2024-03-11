@@ -540,6 +540,9 @@ public class SavefileService : ISavefileService
         await this
             .apiContext.PlayerQuestWalls.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
+        await this
+            .apiContext.CompletedDailyMissions.Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
     }
 
     public async Task Reset()

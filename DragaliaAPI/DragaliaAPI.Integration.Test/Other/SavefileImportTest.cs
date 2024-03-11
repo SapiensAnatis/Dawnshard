@@ -205,6 +205,20 @@ public class SavefileImportTest : TestFixture
     }
 
     [Fact]
+    public async Task Import_DeletesDailyMissions()
+    {
+        this.ApiContext.CompletedDailyMissions.Add(
+            new() { ViewerId = this.ViewerId, Progress = 1, }
+        );
+
+        HttpContent content = PrepareSavefileRequest();
+        await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
+
+        this.ApiContext.CompletedDailyMissions.Should()
+            .NotContain(x => x.ViewerId == this.ViewerId);
+    }
+
+    [Fact]
     public async Task Import_IsIdempotent()
     {
         long viewerId = this.ApiContext.PlayerUserData.Single(x => x.ViewerId == ViewerId).ViewerId;
