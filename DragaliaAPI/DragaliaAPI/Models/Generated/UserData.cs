@@ -1,4 +1,5 @@
 using MessagePack;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DragaliaAPI.Models.Generated;
 
@@ -11,4 +12,7 @@ public partial class UserData
     [Key("max_amulet_quantity")]
     [Obsolete]
     public int MaxAmuletQuantity { get; set; }
+
+    [Key("prologue_end_time")]
+    public DateTimeOffset PrologueEndTime { get; set; } = DateTimeOffset.UnixEpoch;
 }
