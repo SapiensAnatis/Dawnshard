@@ -12157,9 +12157,6 @@ public partial class UserData
     [Key("tutorial_flag_list")]
     public IEnumerable<int> TutorialFlagList { get; set; } = [];
 
-    [Key("prologue_end_time")]
-    public DateTimeOffset PrologueEndTime { get; set; }
-
     [Key("fort_open_time")]
     public DateTimeOffset FortOpenTime { get; set; }
 
