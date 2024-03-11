@@ -12157,9 +12157,6 @@ public partial class UserData
     [Key("tutorial_flag_list")]
     public IEnumerable<int> TutorialFlagList { get; set; } = [];
 
-    [Key("prologue_end_time")]
-    public DateTimeOffset PrologueEndTime { get; set; }
-
     [Key("fort_open_time")]
     public DateTimeOffset FortOpenTime { get; set; }
 
@@ -12590,18 +12587,6 @@ public partial class WeaponBodyList
 
     [Key("gettime")]
     public DateTimeOffset GetTime { get; set; }
-
-    [Key("skill_no")]
-    public int SkillNo { get; set; }
-
-    [Key("skill_level")]
-    public int SkillLevel { get; set; }
-
-    [Key("ability_1_level")]
-    public int Ability1Level { get; set; }
-
-    [Key("ability_2_levell")]
-    public int Ability2Levell { get; set; }
 
     public WeaponBodyList(
         WeaponBodies weaponBodyId,
