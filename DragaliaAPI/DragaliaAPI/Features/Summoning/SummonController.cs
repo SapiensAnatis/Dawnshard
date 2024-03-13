@@ -256,8 +256,8 @@ public class SummonController(
                     .Select(x => (Dragons)x.Id)
             )
         )
-            .Where(x => x.isNew)
-            .Select(x => x.id)
+            .Where(x => x.IsNew)
+            .Select(x => x.Id)
             .ToList();
 
         List<Charas> newCharas = (

@@ -12,15 +12,11 @@ public interface IUnitRepository
     IQueryable<DbAbilityCrest> AbilityCrests { get; }
     IQueryable<DbTalisman> Talismans { get; }
 
-    Task<bool> CheckHasCharas(IEnumerable<Charas> idList);
-
-    Task<bool> CheckHasDragons(IEnumerable<Dragons> idList);
-
     Task<IEnumerable<(Charas id, bool isNew)>> AddCharas(IEnumerable<Charas> idList);
 
     Task<bool> AddCharas(Charas id);
 
-    Task<IEnumerable<(Dragons id, bool isNew)>> AddDragons(IEnumerable<Dragons> idList);
+    Task<IEnumerable<(Dragons Id, bool IsNew)>> AddDragons(IEnumerable<Dragons> idList);
 
     Task<bool> AddDragons(Dragons id);
 

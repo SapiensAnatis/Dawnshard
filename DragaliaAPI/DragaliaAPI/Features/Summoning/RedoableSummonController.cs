@@ -99,7 +99,7 @@ public class RedoableSummonController(
             cachedResult.Where(x => x.EntityType == EntityTypes.Chara).Select(x => (Charas)x.Id)
         );
 
-        IEnumerable<(Dragons id, bool isNew)> repositoryDragonOutput =
+        IEnumerable<(Dragons Id, bool IsNew)> repositoryDragonOutput =
             await unitRepository.AddDragons(
                 cachedResult
                     .Where(x => x.EntityType == EntityTypes.Dragon)
@@ -116,11 +116,11 @@ public class RedoableSummonController(
                 EntityId = (int)x.id
             });
         IEnumerable<AtgenDuplicateEntityList> newDragons = repositoryDragonOutput
-            .Where(x => x.isNew)
+            .Where(x => x.IsNew)
             .Select(x => new AtgenDuplicateEntityList()
             {
                 EntityType = EntityTypes.Dragon,
-                EntityId = (int)x.id
+                EntityId = (int)x.Id
             });
 
         return this.Ok(

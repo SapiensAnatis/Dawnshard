@@ -6,6 +6,7 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using static DragaliaAPI.Database.Test.DbTestFixture;
 
 namespace DragaliaAPI.Database.Test.Repositories;
@@ -20,6 +21,9 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     public UnitRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
+        this.fixture.ApiContext.Database.EnsureCreated();
+        this.fixture.ApiContext.Database.EnsureDeleted();
+
         this.mockPlayerIdentityService = new(MockBehavior.Strict);
         this.mockPlayerIdentityService.Setup(x => x.ViewerId).Returns(ViewerId);
 
@@ -28,11 +32,15 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
             this.mockPlayerIdentityService.Object,
             LoggerTestUtils.Create<UnitRepository>()
         );
+
+        this.fixture.ApiContext.ChangeTracker.Clear();
     }
 
     [Fact]
     public async Task GetAllCharaData_ValidId_ReturnsData()
     {
+        await this.fixture.AddToDatabase(new DbPlayerCharaData(1, Charas.Akasha));
+
         (await this.unitRepository.Charas.ToListAsync()).Should().NotBeEmpty();
     }
 
@@ -40,6 +48,8 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     public async Task GetAllCharaData_InvalidId_ReturnsEmpty()
     {
         this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(400);
+
+        await this.fixture.AddToDatabase(DbPlayerDragonDataFactory.Create(1, Dragons.Nyarlathotep));
 
         (await this.unitRepository.Charas.ToListAsync()).Should().BeEmpty();
     }
@@ -55,7 +65,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     }
 
     [Fact]
-    public async Task GetAllDragonata_ValidId_ReturnsData()
+    public async Task GetAllDragonData_ValidId_ReturnsData()
     {
         await this.fixture.AddToDatabase(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Agni));
         (await this.unitRepository.Dragons.ToListAsync()).Should().NotBeEmpty();
@@ -72,54 +82,12 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetAllDragonData_ReturnsOnlyDataForGivenId()
     {
+        await this.fixture.AddToDatabase(new DbPlayerCharaData(ViewerId, Charas.Ilia));
+        await this.fixture.AddToDatabase(new DbPlayerCharaData(244, Charas.Ilia));
+
         (await this.unitRepository.Charas.ToListAsync())
             .Should()
             .AllSatisfy(x => x.ViewerId.Should().Be(ViewerId));
-    }
-
-    [Fact]
-    public async Task CheckHasCharas_OwnedList_ReturnsTrue()
-    {
-        IEnumerable<Charas> idList = await fixture
-            .ApiContext.PlayerCharaData.Where(x => x.ViewerId == ViewerId)
-            .Select(x => x.CharaId)
-            .ToListAsync();
-
-        (await this.unitRepository.CheckHasCharas(idList)).Should().BeTrue();
-    }
-
-    [Fact]
-    public async Task CheckHasCharas_NotAllOwnedList_ReturnsFalse()
-    {
-        IEnumerable<Charas> idList = (
-            await fixture
-                .ApiContext.PlayerCharaData.Where(x => x.ViewerId == ViewerId)
-                .Select(x => x.CharaId)
-                .ToListAsync()
-        ).Append(Charas.BondforgedZethia);
-
-        (await this.unitRepository.CheckHasCharas(idList)).Should().BeFalse();
-    }
-
-    [Fact]
-    public async Task CheckHasDragons_OwnedList_ReturnsTrue()
-    {
-        await fixture.AddToDatabase(
-            DbPlayerDragonDataFactory.Create(ViewerId, Dragons.AC011Garland)
-        );
-        await fixture.AddToDatabase(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Ariel));
-
-        List<Dragons> idList = new() { Dragons.AC011Garland, Dragons.Ariel };
-
-        (await this.unitRepository.CheckHasDragons(idList)).Should().BeTrue();
-    }
-
-    [Fact]
-    public async Task CheckHasDragons_NotAllOwnedList_ReturnsFalse()
-    {
-        (await this.unitRepository.CheckHasDragons(new List<Dragons>() { Dragons.BronzeFafnir }))
-            .Should()
-            .BeFalse();
     }
 
     [Fact]
@@ -163,19 +131,109 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     }
 
     [Fact]
+    public async Task AddCharas_HandlesExistingStory()
+    {
+        int izumoStoryId = MasterAsset.CharaStories[(int)Charas.Izumo].storyIds[0];
+        int mitsuhideStoryId = MasterAsset.CharaStories[(int)Charas.Mitsuhide].storyIds[0];
+        await this.fixture.AddRangeToDatabase(
+            [
+                new DbPlayerStoryState()
+                {
+                    ViewerId = ViewerId,
+                    StoryType = StoryTypes.Chara,
+                    StoryId = izumoStoryId,
+                    State = 0,
+                },
+                new DbPlayerStoryState()
+                {
+                    ViewerId = ViewerId,
+                    StoryType = StoryTypes.Dragon,
+                    StoryId = mitsuhideStoryId,
+                    State = 0,
+                },
+                new DbPlayerStoryState()
+                {
+                    ViewerId = ViewerId + 1,
+                    StoryType = StoryTypes.Chara,
+                    StoryId = mitsuhideStoryId,
+                    State = 0,
+                }
+            ]
+        );
+
+        List<Charas> idList = [Charas.Izumo, Charas.Mitsuhide];
+
+        await this.unitRepository.AddCharas(idList);
+
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        this.fixture.ApiContext.PlayerStoryState.Should()
+            .ContainEquivalentOf(
+                new DbPlayerStoryState()
+                {
+                    ViewerId = ViewerId,
+                    StoryType = StoryTypes.Chara,
+                    StoryId = izumoStoryId,
+                    State = 0,
+                },
+                opts => opts.Excluding(x => x.Owner)
+            )
+            .And.ContainEquivalentOf(
+                new DbPlayerStoryState()
+                {
+                    ViewerId = ViewerId,
+                    StoryType = StoryTypes.Chara,
+                    StoryId = mitsuhideStoryId,
+                    State = 0,
+                },
+                opts => opts.Excluding(x => x.Owner)
+            );
+    }
+
+    [Fact]
     public async Task AddDragons_CorrectlyMarksDuplicates()
     {
         await fixture.AddToDatabase(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Barbatos));
 
         List<Dragons> idList = new() { Dragons.Marishiten, Dragons.Barbatos, Dragons.Marishiten };
 
-        IEnumerable<(Dragons id, bool isNew)> result = await this.unitRepository.AddDragons(idList);
+        IEnumerable<(Dragons Id, bool IsNew)> result = await this.unitRepository.AddDragons(idList);
 
         result
-            .Where(x => x.isNew)
-            .Select(x => x.id)
+            .Where(x => x.IsNew)
+            .Select(x => x.Id)
             .Should()
             .BeEquivalentTo(new List<Dragons>() { Dragons.Marishiten });
+    }
+
+    [Fact]
+    public async Task AddDragons_HandlesExistingReliability()
+    {
+        await this.fixture.AddRangeToDatabase(
+            [
+                new DbPlayerDragonReliability()
+                {
+                    ViewerId = ViewerId,
+                    DragonId = Dragons.AC011Garland,
+                },
+                new DbPlayerDragonReliability()
+                {
+                    ViewerId = ViewerId + 1,
+                    DragonId = Dragons.Agni,
+                },
+            ]
+        );
+
+        List<Dragons> idList = [Dragons.AC011Garland, Dragons.Agni];
+
+        await this.unitRepository.AddDragons(idList);
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        this.fixture.ApiContext.PlayerDragonReliability.Should()
+            .ContainEquivalentOf(
+                new DbPlayerDragonReliability() { ViewerId = ViewerId, DragonId = Dragons.Agni, },
+                opts => opts.Including(x => x.ViewerId).Including(x => x.DragonId)
+            );
     }
 
     [Fact]

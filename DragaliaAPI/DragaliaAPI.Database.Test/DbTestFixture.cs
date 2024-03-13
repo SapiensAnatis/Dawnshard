@@ -54,6 +54,7 @@ public class DbTestFixture : IDisposable
 
         await this.ApiContext.AddAsync(data);
         await this.ApiContext.SaveChangesAsync();
+        this.ApiContext.ChangeTracker.Clear();
     }
 
     public async Task AddRangeToDatabase<TEntity>(IEnumerable<TEntity> data)
@@ -63,6 +64,7 @@ public class DbTestFixture : IDisposable
 
         await this.ApiContext.AddRangeAsync((IEnumerable<object>)data);
         await this.ApiContext.SaveChangesAsync();
+        this.ApiContext.ChangeTracker.Clear();
     }
 
     public void Dispose()
