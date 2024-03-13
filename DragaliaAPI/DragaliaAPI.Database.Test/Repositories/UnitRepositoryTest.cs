@@ -6,6 +6,7 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using static DragaliaAPI.Database.Test.DbTestFixture;
 
 namespace DragaliaAPI.Database.Test.Repositories;
@@ -31,11 +32,15 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
             this.mockPlayerIdentityService.Object,
             LoggerTestUtils.Create<UnitRepository>()
         );
+
+        this.fixture.ApiContext.ChangeTracker.Clear();
     }
 
     [Fact]
     public async Task GetAllCharaData_ValidId_ReturnsData()
     {
+        await this.fixture.AddToDatabase(new DbPlayerCharaData(1, Charas.Akasha));
+
         (await this.unitRepository.Charas.ToListAsync()).Should().NotBeEmpty();
     }
 
@@ -43,6 +48,8 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     public async Task GetAllCharaData_InvalidId_ReturnsEmpty()
     {
         this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(400);
+
+        await this.fixture.AddToDatabase(DbPlayerDragonDataFactory.Create(1, Dragons.Nyarlathotep));
 
         (await this.unitRepository.Charas.ToListAsync()).Should().BeEmpty();
     }
@@ -58,7 +65,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     }
 
     [Fact]
-    public async Task GetAllDragonata_ValidId_ReturnsData()
+    public async Task GetAllDragonData_ValidId_ReturnsData()
     {
         await this.fixture.AddToDatabase(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Agni));
         (await this.unitRepository.Dragons.ToListAsync()).Should().NotBeEmpty();
@@ -75,6 +82,9 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetAllDragonData_ReturnsOnlyDataForGivenId()
     {
+        await this.fixture.AddToDatabase(new DbPlayerCharaData(ViewerId, Charas.Ilia));
+        await this.fixture.AddToDatabase(new DbPlayerCharaData(244, Charas.Ilia));
+
         (await this.unitRepository.Charas.ToListAsync())
             .Should()
             .AllSatisfy(x => x.ViewerId.Should().Be(ViewerId));

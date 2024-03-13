@@ -124,9 +124,12 @@ public class UnitRepository : IUnitRepository
 
         foreach (CharaNewCheckResult result in newMapping)
         {
-            this.apiContext.PlayerCharaData.Add(
-                new DbPlayerCharaData(this.playerIdentityService.ViewerId, result.Id)
-            );
+            if (result.IsNew)
+            {
+                this.apiContext.PlayerCharaData.Add(
+                    new DbPlayerCharaData(this.playerIdentityService.ViewerId, result.Id)
+                );
+            }
 
             if (
                 result.IsStoryNew
@@ -141,13 +144,6 @@ public class UnitRepository : IUnitRepository
                         StoryId = story.storyIds[0],
                         State = 0
                     }
-                );
-            }
-            else
-            {
-                logger.LogInformation(
-                    "Unable to find any storyIds for Character: {Chara}",
-                    result.Id
                 );
             }
         }
@@ -297,7 +293,8 @@ public class UnitRepository : IUnitRepository
         foreach (Charas c in idList)
         {
             bool isCharaNew = !(result.Any(x => x.Id.Equals(c)) || owned.Contains(c));
-            bool isStoryNew = !ownedStories.Contains(MasterAsset.CharaStories[(int)c].storyIds[0]);
+            bool isStoryNew =
+                isCharaNew && !ownedStories.Contains(MasterAsset.CharaStories[(int)c].storyIds[0]);
 
             result.Add((c, isCharaNew, isStoryNew));
         }
@@ -314,8 +311,8 @@ public class UnitRepository : IUnitRepository
         List<DragonNewCheckResult> result = new();
         foreach (Dragons c in idList)
         {
-            bool isDragonNew = !owned.Contains(c);
-            bool isReliabilityNew = !ownedReliabilities.Contains(c);
+            bool isDragonNew = !(result.Any(x => x.Id.Equals(c)) || owned.Contains(c));
+            bool isReliabilityNew = isDragonNew && !ownedReliabilities.Contains(c);
 
             result.Add((c, isDragonNew, isReliabilityNew));
         }
