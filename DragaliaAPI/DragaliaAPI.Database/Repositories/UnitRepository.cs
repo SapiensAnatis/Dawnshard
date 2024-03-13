@@ -103,12 +103,19 @@ public class UnitRepository : IUnitRepository
     public async Task<IEnumerable<(Charas id, bool isNew)>> AddCharas(IEnumerable<Charas> idList)
     {
         List<Charas> enumeratedIdList = idList.ToList();
+        IEnumerable<int> storyIdList = GetFirstCharaStories(enumeratedIdList);
 
         // Generate result. The first occurrence of a character in the list should be new (if not in the DB)
         // but subsequent results should then not be labelled as new.
-        List<Charas> ownedCharas = await Charas.Select(x => x.CharaId).ToListAsync();
+        List<Charas> ownedCharas = await Charas
+            .Select(x => x.CharaId)
+            .Where(x => enumeratedIdList.Contains(x))
+            .ToListAsync();
+
         List<int> ownedCharaStories = await this
-            .apiContext.PlayerStoryState.Where(x => x.StoryType == StoryTypes.Chara)
+            .apiContext.PlayerStoryState.Where(x =>
+                x.StoryType == StoryTypes.Chara && storyIdList.Contains(x.StoryId)
+            )
             .Select(x => x.StoryId)
             .ToListAsync();
 
@@ -149,6 +156,17 @@ public class UnitRepository : IUnitRepository
         }
 
         return newMapping.Select(x => (x.Id, x.IsNew));
+
+        static IEnumerable<int> GetFirstCharaStories(IEnumerable<Charas> charaIdList)
+        {
+            foreach (Charas c in charaIdList)
+            {
+                if (MasterAsset.CharaStories.TryGetValue((int)c, out StoryData? storyData))
+                {
+                    yield return storyData.storyIds[0];
+                }
+            }
+        }
     }
 
     public async Task<bool> AddCharas(Charas id)
@@ -160,9 +178,13 @@ public class UnitRepository : IUnitRepository
     {
         List<Dragons> enumeratedIdList = idList.ToList();
 
-        List<Dragons> ownedDragons = await Dragons.Select(x => x.DragonId).ToListAsync();
+        List<Dragons> ownedDragons = await Dragons
+            .Select(x => x.DragonId)
+            .Where(x => enumeratedIdList.Contains(x))
+            .ToListAsync();
         List<Dragons> ownedReliabilities = await DragonReliabilities
             .Select(x => x.DragonId)
+            .Where(x => enumeratedIdList.Contains(x))
             .ToListAsync();
 
         List<DragonNewCheckResult> newMapping = MarkNewDragons(
