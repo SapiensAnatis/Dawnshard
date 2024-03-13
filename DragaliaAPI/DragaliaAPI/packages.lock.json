@@ -197,9 +197,9 @@
       },
       "MudBlazor": {
         "type": "Direct",
-        "requested": "[6.16.0, )",
-        "resolved": "6.16.0",
-        "contentHash": "xOgh6oPWXVcjJ+8tzPniXLlz64skRpPgh5x/jY5s54Xy0fy7/WVWI5YwKirvJgJAl8CvJzikvEpNXVXTAStCqA==",
+        "requested": "[6.17.0, )",
+        "resolved": "6.17.0",
+        "contentHash": "f5WmJxdqvKK9zdk/3s80OLxeA80qWzzXlTasy0NKZ1eUxH6SdRDvfURDKj9H1pJ6Simc78pMDxpZXdfxoOVy9A==",
         "dependencies": {
           "Microsoft.AspNetCore.Components": "8.0.2",
           "Microsoft.AspNetCore.Components.Web": "8.0.2",
@@ -317,9 +317,9 @@
       },
       "System.Text.Json": {
         "type": "Direct",
-        "requested": "[8.0.1, )",
-        "resolved": "8.0.1",
-        "contentHash": "7AWk2za1hSEJBppe/Lg+uDcam2TrDqwIKa9XcPssSwyjC2xa39EKEGul3CO5RWNF+hMuZG4zlBDrvhBdDTg4lg==",
+        "requested": "[8.0.2, )",
+        "resolved": "8.0.2",
+        "contentHash": "29KA2StjWDYp32FvREifawRtNpTziLE1xyuDV9pVQ+MsaE9bIcIieP0io/eZZeLMxR+Nx9zI55RtUtpVpEIdeg==",
         "dependencies": {
           "System.Text.Encodings.Web": "8.0.0"
         }
