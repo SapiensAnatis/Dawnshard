@@ -294,7 +294,9 @@ public class UnitRepository : IUnitRepository
         {
             bool isCharaNew = !(result.Any(x => x.Id.Equals(c)) || owned.Contains(c));
             bool isStoryNew =
-                isCharaNew && !ownedStories.Contains(MasterAsset.CharaStories[(int)c].storyIds[0]);
+                isCharaNew
+                && MasterAsset.CharaStories.TryGetValue((int)c, out StoryData? storyData)
+                && !ownedStories.Contains(storyData.storyIds[0]);
 
             result.Add((c, isCharaNew, isStoryNew));
         }
