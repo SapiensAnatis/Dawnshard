@@ -2,12 +2,6 @@
   "version": 2,
   "dependencies": {
     ".NETFramework,Version=v4.8.1": {
-      "coverlet.collector": {
-        "type": "Direct",
-        "requested": "[6.0.0, )",
-        "resolved": "6.0.0",
-        "contentHash": "tW3lsNS+dAEII6YGUX/VMoJjBS1QvsxqJeqLaJXub08y1FSjasFPtQ4UBUsudE9PNrzLjooClMsPtY2cZLdXpQ=="
-      },
       "FluentAssertions": {
         "type": "Direct",
         "requested": "[6.12.0, )",
@@ -221,7 +215,7 @@
         "dependencies": {
           "DragaliaAPI.Photon.Shared": "[1.0.0, )",
           "MessagePack": "[2.5.140, )",
-          "System.Text.Json": "[8.0.1, )"
+          "System.Text.Json": "[8.0.2, )"
         }
       },
       "dragaliaapi.photon.shared": {
@@ -248,9 +242,9 @@
       },
       "System.Text.Json": {
         "type": "CentralTransitive",
-        "requested": "[8.0.1, )",
-        "resolved": "8.0.1",
-        "contentHash": "7AWk2za1hSEJBppe/Lg+uDcam2TrDqwIKa9XcPssSwyjC2xa39EKEGul3CO5RWNF+hMuZG4zlBDrvhBdDTg4lg==",
+        "requested": "[8.0.2, )",
+        "resolved": "8.0.2",
+        "contentHash": "29KA2StjWDYp32FvREifawRtNpTziLE1xyuDV9pVQ+MsaE9bIcIieP0io/eZZeLMxR+Nx9zI55RtUtpVpEIdeg==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "8.0.0",
           "System.Buffers": "4.5.1",
