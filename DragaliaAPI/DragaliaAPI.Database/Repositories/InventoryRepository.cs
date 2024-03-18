@@ -144,45 +144,4 @@ public class InventoryRepository : IInventoryRepository
 
         return true;
     }
-
-    public DbPlayerDragonGift AddDragonGift(DragonGifts giftId, int quantity) =>
-        apiContext
-            .PlayerDragonGifts.Add(
-                new DbPlayerDragonGift()
-                {
-                    ViewerId = this.playerIdentityService.ViewerId,
-                    DragonGiftId = giftId,
-                    Quantity = quantity
-                }
-            )
-            .Entity;
-
-    public async Task<DbPlayerDragonGift?> GetDragonGift(DragonGifts giftId)
-    {
-        return await this.apiContext.PlayerDragonGifts.FindAsync(
-            this.playerIdentityService.ViewerId,
-            giftId
-        );
-    }
-
-    public async Task RefreshPurchasableDragonGiftCounts()
-    {
-        Dictionary<DragonGifts, DbPlayerDragonGift> dbGifts = await DragonGifts.ToDictionaryAsync(
-            x => x.DragonGiftId
-        );
-        foreach (
-            DragonGifts gift in Enum.GetValues<DragonGifts>()
-                .Where(x => x < DragonGiftsEnum.FourLeafClover)
-        )
-        {
-            if (dbGifts.TryGetValue(gift, out DbPlayerDragonGift? dbGift))
-            {
-                dbGift.Quantity = 1;
-            }
-            else
-            {
-                this.AddDragonGift(gift, 1);
-            }
-        }
-    }
 }
