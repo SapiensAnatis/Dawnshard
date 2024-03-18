@@ -52,7 +52,7 @@ public class LoginTest : TestFixture
             .ExecuteUpdateAsync(e => e.SetProperty(p => p.Quantity, 100));
 
         this.MockTimeProvider.SetUtcNow(
-            new DateTimeOffset(2024, 03, 18, 23, 13, 59, TimeSpan.Zero)
+            new DateTimeOffset(2049, 03, 15, 23, 13, 59, TimeSpan.Zero)
         ); // Monday
 
         await this.Client.PostMsgpack<LoginIndexResponse>("/login/index", new LoginIndexRequest());
