@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
@@ -26,7 +27,8 @@ public class DragonService(
     IPaymentService paymentService,
     IRewardService rewardService,
     IMissionProgressionService missionProgressionService,
-    IResetHelper resetHelper
+    IResetHelper resetHelper,
+    ApiContext apiContext
 ) : IDragonService
 {
     public async Task<DragonGetContactDataResponse> DoDragonGetContactData()
@@ -35,8 +37,8 @@ public class DragonService(
             (int)resetHelper.LastDailyReset.DayOfWeek
         ];
 
-        Dictionary<DragonGifts, DbPlayerDragonGift> gifts = await inventoryRepository
-            .DragonGifts.Where(x =>
+        Dictionary<DragonGifts, DbPlayerDragonGift> gifts = await apiContext
+            .PlayerDragonGifts.Where(x =>
                 x.DragonGiftId == DragonGifts.FreshBread
                 || x.DragonGiftId == DragonGifts.TastyMilk
                 || x.DragonGiftId == DragonGifts.StrawberryTart
@@ -60,7 +62,7 @@ public class DragonService(
     {
         DragonGifts[] notificationGifts = [DragonGifts.FreshBread,];
 
-        return inventoryRepository.DragonGifts.CountAsync(x =>
+        return apiContext.PlayerDragonGifts.CountAsync(x =>
             notificationGifts.Contains(x.DragonGiftId) && x.Quantity > 0
         );
     }
@@ -381,8 +383,8 @@ public class DragonService(
         if (userData.Coin < totalCost)
             throw new DragaliaException(ResultCode.CommonMaterialShort, "Insufficient Rupies");
 
-        Dictionary<DragonGifts, DbPlayerDragonGift> gifts = await inventoryRepository
-            .DragonGifts.Where(x => request.DragonGiftIdList.Contains(x.DragonGiftId))
+        Dictionary<DragonGifts, DbPlayerDragonGift> gifts = await apiContext
+            .PlayerDragonGifts.Where(x => request.DragonGiftIdList.Contains(x.DragonGiftId))
             .ToDictionaryAsync(x => x.DragonGiftId);
 
         DbPlayerDragonReliability dragonReliability = await unitRepository
@@ -473,8 +475,8 @@ public class DragonService(
         DragonSendGiftMultipleRequest request
     )
     {
-        DbPlayerDragonGift? gift = await inventoryRepository
-            .DragonGifts.Where(x => x.DragonGiftId == request.DragonGiftId)
+        DbPlayerDragonGift? gift = await apiContext
+            .PlayerDragonGifts.Where(x => x.DragonGiftId == request.DragonGiftId)
             .FirstOrDefaultAsync();
 
         if (gift == null || gift.Quantity < request.Quantity)

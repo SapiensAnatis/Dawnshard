@@ -1,14 +1,21 @@
 using System.Collections.Immutable;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
+using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Reward.Handlers;
 
-public class DragonGiftHandler(IInventoryRepository inventoryRepository) : IRewardHandler
+[UsedImplicitly]
+public class DragonGiftHandler(ApiContext apiContext, IPlayerIdentityService playerIdentityService)
+    : IRewardHandler
 {
     public IReadOnlyList<EntityTypes> SupportedTypes { get; } =
         ImmutableArray.Create(EntityTypes.DragonGift);
+
+    private Dictionary<DragonGifts, DbPlayerDragonGift>? dragonGiftCache;
 
     public async Task<GrantReturn> Grant(Entity reward)
     {
@@ -16,12 +23,27 @@ public class DragonGiftHandler(IInventoryRepository inventoryRepository) : IRewa
         if (!Enum.IsDefined(gift))
             throw new ArgumentException($"Invalid dragon gift ID {reward.Id}", nameof(reward));
 
-        DbPlayerDragonGift? dbEntity = await inventoryRepository.GetDragonGift(gift);
+        this.dragonGiftCache ??= await apiContext
+            .PlayerDragonGifts.AsTracking()
+            .ToDictionaryAsync(x => x.DragonGiftId, x => x);
 
-        if (dbEntity is null)
-            inventoryRepository.AddDragonGift(gift, reward.Quantity);
-        else
+        if (this.dragonGiftCache.TryGetValue(gift, out DbPlayerDragonGift? dbEntity))
+        {
             dbEntity.Quantity += reward.Quantity;
+        }
+        else
+        {
+            DbPlayerDragonGift dragonGift =
+                new()
+                {
+                    ViewerId = playerIdentityService.ViewerId,
+                    DragonGiftId = gift,
+                    Quantity = reward.Quantity
+                };
+
+            apiContext.PlayerDragonGifts.Add(dragonGift);
+            this.dragonGiftCache[gift] = dragonGift;
+        }
 
         return new GrantReturn(RewardGrantResult.Added);
     }

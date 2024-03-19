@@ -18,7 +18,7 @@ using static DragaliaAPI.Test.UnitTestUtils;
 
 namespace DragaliaAPI.Test.Services;
 
-public class DragonServiceTest
+public class DragonServiceTest : RepositoryTestFixture
 {
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IUnitRepository> mockUnitRepository;
@@ -54,7 +54,8 @@ public class DragonServiceTest
             mockPaymentService.Object,
             mockRewardService.Object,
             mockMissionProgressionService.Object,
-            new ResetHelper(this.mockTimeProvider.Object)
+            new ResetHelper(this.mockTimeProvider.Object),
+            this.ApiContext
         );
 
         this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(DateTimeOffset.UtcNow);
@@ -86,16 +87,23 @@ public class DragonServiceTest
     [Fact]
     public async Task DoGetDragonContactData_RotatingGiftChangesAtReset()
     {
-        this.mockInventoryRepository.SetupGet(x => x.DragonGifts)
-            .Returns(
-                new List<DbPlayerDragonGift>()
+        await this.AddRangeToDatabase(
+            new List<DbPlayerDragonGift>()
+            {
+                new()
                 {
-                    new() { DragonGiftId = DragonGifts.FloralCirclet, Quantity = 1, },
-                    new() { DragonGiftId = DragonGifts.CompellingBook, Quantity = 1, }
+                    ViewerId = 1,
+                    DragonGiftId = DragonGifts.FloralCirclet,
+                    Quantity = 1,
+                },
+                new()
+                {
+                    ViewerId = 1,
+                    DragonGiftId = DragonGifts.CompellingBook,
+                    Quantity = 1,
                 }
-                    .AsQueryable()
-                    .BuildMock()
-            );
+            }
+        );
 
         DateTimeOffset wednesday = new DateTimeOffset(2023, 12, 27, 19, 49, 23, TimeSpan.Zero);
         this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(wednesday);
@@ -185,7 +193,6 @@ public class DragonServiceTest
         dragonRels[0].Level.Should().Be(10);
 
         mockUserDataRepository.Verify(x => x.UserData);
-        mockInventoryRepository.Verify(x => x.DragonGifts);
         mockInventoryRepository.Setup(x => x.GetMaterial(It.IsAny<Materials>()));
         mockMissionProgressionService.VerifyAll();
         mockStoryRepository.VerifyAll();
@@ -242,7 +249,6 @@ public class DragonServiceTest
         dragonRels[0].Level.Should().Be(30);
 
         mockUserDataRepository.Verify(x => x.UserData);
-        mockInventoryRepository.Verify(x => x.DragonGifts);
         mockInventoryRepository.Setup(x => x.GetMaterial(It.IsAny<Materials>()));
         mockMissionProgressionService.VerifyAll();
     }
@@ -294,7 +300,6 @@ public class DragonServiceTest
         dragonRels[0].Exp.Should().Be(expectedXp);
         dragonRels[0].Level.Should().Be(expectedLvl);
         mockUnitRepository.VerifyAll();
-        mockInventoryRepository.Verify(x => x.DragonGifts);
         mockInventoryRepository.Setup(x => x.GetMaterial(It.IsAny<Materials>()));
         mockMissionProgressionService.VerifyAll();
         if (dragon != Dragons.Puppy && dragonRels[0].Level > 4)
@@ -641,9 +646,7 @@ public class DragonServiceTest
             );
         }
 
-        mockInventoryRepository
-            .SetupGet(x => x.DragonGifts)
-            .Returns(dbPlayerDragonGifts.AsQueryable().BuildMock());
+        this.AddRangeToDatabase(dbPlayerDragonGifts).Wait();
 
         garudaEssence = new DbPlayerMaterial()
         {

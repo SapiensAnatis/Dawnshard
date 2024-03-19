@@ -11,10 +11,12 @@ using DragaliaAPI.Services.Api;
 using DragaliaAPI.Shared.Json;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Time.Testing;
 using Npgsql;
 using Respawn;
 
@@ -58,6 +60,8 @@ public class TestFixture
         >();
         this.ApiContext = new ApiContext(options, new StubPlayerIdentityService(this.ViewerId));
         this.ApiContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
+        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
     }
 
     protected DateTimeOffset LastDailyReset { get; }
@@ -67,6 +71,8 @@ public class TestFixture
     protected Mock<IPhotonStateApi> MockPhotonStateApi => this.factory.MockPhotonStateApi;
 
     protected Mock<IDateTimeProvider> MockDateTimeProvider => this.factory.MockDateTimeProvider;
+
+    protected FakeTimeProvider MockTimeProvider { get; } = new();
 
     protected ITestOutputHelper TestOutputHelper { get; }
 
@@ -169,6 +175,10 @@ public class TestFixture
                 {
                     logging.ClearProviders();
                     logging.AddXUnit(this.TestOutputHelper);
+                });
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddSingleton<TimeProvider>(this.MockTimeProvider);
                 });
                 extraBuilderConfig?.Invoke(builder);
             })

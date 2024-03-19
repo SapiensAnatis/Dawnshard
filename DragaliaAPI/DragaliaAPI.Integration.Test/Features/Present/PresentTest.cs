@@ -456,6 +456,80 @@ public class PresentTest : TestFixture
     }
 
     [Fact]
+    public async Task Receive_DragonGifts_HandlesCorrectly()
+    {
+        List<DbPlayerPresent> presents =
+        [
+            new DbPlayerPresent()
+            {
+                EntityType = EntityTypes.DragonGift,
+                EntityId = (int)DragonGifts.FourLeafClover,
+                EntityQuantity = 2,
+            },
+            new DbPlayerPresent()
+            {
+                EntityType = EntityTypes.DragonGift,
+                EntityId = (int)DragonGifts.DragonyuleCake,
+                EntityQuantity = 1,
+            },
+            new DbPlayerPresent()
+            {
+                EntityType = EntityTypes.DragonGift,
+                EntityId = (int)DragonGifts.DragonyuleCake,
+                EntityQuantity = 1,
+            }
+        ];
+
+        await this.ApiContext.PlayerDragonGifts.ExecuteDeleteAsync();
+
+        await this.AddRangeToDatabase(
+            [
+                new DbPlayerDragonGift()
+                {
+                    DragonGiftId = DragonGifts.FourLeafClover,
+                    Quantity = 4
+                },
+                .. presents
+            ]
+        );
+
+        IEnumerable<ulong> presentIdList = presents.Select(x => (ulong)x.PresentId);
+
+        DragaliaResponse<PresentReceiveResponse> response =
+            await this.Client.PostMsgpack<PresentReceiveResponse>(
+                $"{Controller}/receive",
+                new PresentReceiveRequest() { PresentIdList = presentIdList }
+            );
+
+        response
+            .Data.UpdateDataList.DragonGiftList.Should()
+            .BeEquivalentTo<DragonGiftList>(
+                [
+                    new() { DragonGiftId = DragonGifts.FourLeafClover, Quantity = 6, },
+                    new() { DragonGiftId = DragonGifts.DragonyuleCake, Quantity = 2, },
+                ]
+            );
+
+        this.ApiContext.PlayerDragonGifts.Should()
+            .BeEquivalentTo<DbPlayerDragonGift>(
+                [
+                    new DbPlayerDragonGift()
+                    {
+                        ViewerId = this.ViewerId,
+                        DragonGiftId = DragonGifts.FourLeafClover,
+                        Quantity = 6
+                    },
+                    new DbPlayerDragonGift()
+                    {
+                        ViewerId = this.ViewerId,
+                        DragonGiftId = DragonGifts.DragonyuleCake,
+                        Quantity = 2
+                    },
+                ]
+            );
+    }
+
+    [Fact]
     public async Task GetPresentHistoryList_IsPagedCorrectly()
     {
         List<DbPlayerPresentHistory> presentHistories = Enumerable

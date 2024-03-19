@@ -63,10 +63,10 @@ public class LoginControllerTest
 
         this.mockDailyResetAction.Setup(x => x.Apply()).Returns(Task.CompletedTask);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default(CancellationToken)))
             .ReturnsAsync(new UpdateDataList());
 
-        await this.loginController.Index();
+        await this.loginController.Index(default(CancellationToken));
 
         this.mockDateTimeProvider.VerifyAll();
         this.mockRewardService.VerifyAll();
@@ -85,10 +85,10 @@ public class LoginControllerTest
         this.mockResetHelper.SetupGet(x => x.LastDailyReset)
             .Returns(DateTimeOffset.UtcNow.AddHours(-1));
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default(CancellationToken)))
             .ReturnsAsync(new UpdateDataList());
 
-        await this.loginController.Index();
+        await this.loginController.Index(default(CancellationToken));
 
         this.mockDateTimeProvider.VerifyAll();
         this.mockRewardService.VerifyAll();

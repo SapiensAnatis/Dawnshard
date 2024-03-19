@@ -59,7 +59,7 @@ public class LoginController : DragaliaControllerBase
 
     [HttpPost]
     [Route("index")]
-    public async Task<DragaliaResult> Index()
+    public async Task<DragaliaResult> Index(CancellationToken cancellationToken)
     {
         LoginIndexResponse resp = new();
 
@@ -86,7 +86,7 @@ public class LoginController : DragaliaControllerBase
         resp.LoginLotteryRewardList = Enumerable.Empty<AtgenLoginLotteryRewardList>();
         resp.ExchangeSummomPointList = Enumerable.Empty<AtgenExchangeSummomPointList>();
         resp.MonthlyWallReceiveList = Enumerable.Empty<AtgenMonthlyWallReceiveList>();
-        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = this.rewardService.GetEntityResult();
         resp.ServerTime = DateTimeOffset.UtcNow;
 
