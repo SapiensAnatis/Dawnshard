@@ -22,6 +22,6 @@ jobs:
       - name: Generate report
         uses: dorny/test-reporter@v1
         with:
-          name: test report
+          name: ${{ github.event.workflow_run.name }} report
           path: "*.trx"
           reporter: dotnet-trx

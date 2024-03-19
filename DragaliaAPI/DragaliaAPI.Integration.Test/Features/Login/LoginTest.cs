@@ -39,101 +39,51 @@ public class LoginTest : TestFixture
             .ApiContext.PlayerDragonGifts.Where(x => x.ViewerId == ViewerId)
             .ExecuteUpdateAsync(entity => entity.SetProperty(x => x.Quantity, 0));
 
-        (await this.GetDragonGifts()).Should().AllSatisfy(x => x.Quantity.Should().Be(0));
+        await this
+            .ApiContext.PlayerDragonGifts.Where(x =>
+                x.ViewerId == this.ViewerId && x.DragonGiftId == DragonGifts.GoldenChalice
+            )
+            .ExecuteUpdateAsync(e => e.SetProperty(p => p.Quantity, 1));
+
+        await this
+            .ApiContext.PlayerDragonGifts.Where(x =>
+                x.ViewerId == this.ViewerId && x.DragonGiftId == DragonGifts.FourLeafClover
+            )
+            .ExecuteUpdateAsync(e => e.SetProperty(p => p.Quantity, 100));
+
+        this.MockTimeProvider.SetUtcNow(
+            new DateTimeOffset(2049, 03, 15, 23, 13, 59, TimeSpan.Zero)
+        ); // Monday
 
         await this.Client.PostMsgpack<LoginIndexResponse>("/login/index", new LoginIndexRequest());
 
-        (await this.GetDragonGifts())
+        List<DbPlayerDragonGift> dbPlayerDragonGifts = await this.GetDragonGifts();
+
+        dbPlayerDragonGifts
+            .Where(x => x.DragonGiftId <= DragonGifts.HeartyStew)
             .Should()
-            .BeEquivalentTo(
-                new List<DbPlayerDragonGift>()
-                {
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        DragonGiftId = DragonGifts.FreshBread,
-                        Quantity = 1
-                    },
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        DragonGiftId = DragonGifts.TastyMilk,
-                        Quantity = 1
-                    },
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        DragonGiftId = DragonGifts.StrawberryTart,
-                        Quantity = 1
-                    },
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        DragonGiftId = DragonGifts.HeartyStew,
-                        Quantity = 1
-                    },
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        DragonGiftId = DragonGifts.Kaleidoscope,
-                        Quantity = 1
-                    },
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        DragonGiftId = DragonGifts.FloralCirclet,
-                        Quantity = 1
-                    },
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        DragonGiftId = DragonGifts.CompellingBook,
-                        Quantity = 1
-                    },
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        DragonGiftId = DragonGifts.JuicyMeat,
-                        Quantity = 1
-                    },
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        DragonGiftId = DragonGifts.ManaEssence,
-                        Quantity = 1
-                    },
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        DragonGiftId = DragonGifts.GoldenChalice,
-                        Quantity = 1
-                    },
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        DragonGiftId = DragonGifts.FourLeafClover,
-                        Quantity = 0
-                    },
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        DragonGiftId = DragonGifts.DragonyuleCake,
-                        Quantity = 0
-                    },
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        DragonGiftId = DragonGifts.ValentinesCard,
-                        Quantity = 0
-                    },
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        DragonGiftId = DragonGifts.PupGrub,
-                        Quantity = 0
-                    }
-                }
+            .AllSatisfy(
+                x => x.Quantity.Should().Be(1),
+                because: "purchasable gifts should be reset"
             );
+
+        dbPlayerDragonGifts
+            .Should()
+            .Contain(x => x.DragonGiftId == DragonGifts.GoldenChalice)
+            .Which.Quantity.Should()
+            .Be(0, because: "the previous day's rotating gift should no longer be available");
+
+        dbPlayerDragonGifts
+            .Should()
+            .Contain(x => x.DragonGiftId == DragonGifts.JuicyMeat)
+            .Which.Quantity.Should()
+            .Be(1, because: "the current day's rotating gift should be made available");
+
+        dbPlayerDragonGifts
+            .Should()
+            .Contain(x => x.DragonGiftId == DragonGifts.FourLeafClover)
+            .Which.Quantity.Should()
+            .Be(100, because: "the reset action should not affect stored gifts");
     }
 
     [Fact]
@@ -451,7 +401,7 @@ public class LoginTest : TestFixture
                 .FirstAsync(x => x.ViewerId == ViewerId)
         ).DailySummonCount;
 
-    private async Task<IEnumerable<DbPlayerDragonGift>> GetDragonGifts() =>
+    private async Task<List<DbPlayerDragonGift>> GetDragonGifts() =>
         await this
             .ApiContext.PlayerDragonGifts.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)

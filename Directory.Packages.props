@@ -23,6 +23,7 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Analyzers" Version="8.0.3" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.3" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2" />
+    <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="8.3.0" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.2" />
