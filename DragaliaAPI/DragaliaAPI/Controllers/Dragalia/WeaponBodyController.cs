@@ -25,7 +25,10 @@ public class WeaponBodyController : DragaliaControllerBase
     }
 
     [HttpPost("craft")]
-    public async Task<DragaliaResult> Craft(WeaponBodyCraftRequest request)
+    public async Task<DragaliaResult> Craft(
+        WeaponBodyCraftRequest request,
+        CancellationToken cancellationToken
+    )
     {
         if (!await this.weaponService.ValidateCraft(request.WeaponBodyId))
         {
@@ -40,14 +43,19 @@ public class WeaponBodyController : DragaliaControllerBase
 
         await this.weaponService.Craft(request.WeaponBodyId);
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
+            cancellationToken
+        );
 
         WeaponBodyCraftResponse response = new() { UpdateDataList = updateDataList };
         return this.Ok(response);
     }
 
     [HttpPost("buildup_piece")]
-    public async Task<DragaliaResult> BuildupPiece(WeaponBodyBuildupPieceRequest request)
+    public async Task<DragaliaResult> BuildupPiece(
+        WeaponBodyBuildupPieceRequest request,
+        CancellationToken cancellationToken
+    )
     {
         this.logger.LogDebug("Received request to upgrade weapon {weapon}", request.WeaponBodyId);
 
@@ -83,7 +91,9 @@ public class WeaponBodyController : DragaliaControllerBase
             }
         }
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
+            cancellationToken
+        );
 
         this.logger.LogInformation(
             "Completed request to upgrade weapon {weapon}",

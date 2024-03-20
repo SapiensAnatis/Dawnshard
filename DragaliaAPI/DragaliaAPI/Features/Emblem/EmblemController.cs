@@ -29,7 +29,10 @@ public class EmblemController(
     }
 
     [HttpPost("set")]
-    public async Task<DragaliaResult> Set(EmblemSetRequest request)
+    public async Task<DragaliaResult> Set(
+        EmblemSetRequest request,
+        CancellationToken cancellationToken
+    )
     {
         EmblemSetResponse resp = new();
 
@@ -40,7 +43,7 @@ public class EmblemController(
 
         (await userDataRepository.GetUserDataAsync()).EmblemId = request.EmblemId;
 
-        await updateDataService.SaveChangesAsync();
+        await updateDataService.SaveChangesAsync(cancellationToken);
 
         resp.Result = 1;
 

@@ -9,7 +9,10 @@ namespace DragaliaAPI.Integration.Test.Features.Login;
 public class LoginTest : TestFixture
 {
     public LoginTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
+    }
 
     [Fact]
     public void IDailyResetAction_HasExpectedCount()
@@ -219,8 +222,7 @@ public class LoginTest : TestFixture
     [Fact]
     public async Task LoginIndex_LoginBonusLastDay_IsLoopFalse_SetsIsComplete()
     {
-        this.MockDateTimeProvider.SetupGet(x => x.UtcNow)
-            .Returns(DateTime.Parse("2018/09/28").ToUniversalTime());
+        this.MockTimeProvider.SetUtcNow(DateTime.Parse("2018/09/28").ToUniversalTime());
 
         await this.AddToDatabase(
             new DbLoginBonus()

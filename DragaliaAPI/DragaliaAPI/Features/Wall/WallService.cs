@@ -1,11 +1,8 @@
-﻿using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using AutoMapper;
+﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
@@ -144,7 +141,7 @@ public class WallService(
         }
     }
 
-    public IEnumerable<AtgenBuildEventRewardEntityList> GetMonthlyRewardEntityList(int levelTotal)
+    public List<AtgenBuildEventRewardEntityList> GetMonthlyRewardEntityList(int levelTotal)
     {
         List<AtgenBuildEventRewardEntityList> rewardList = new();
 

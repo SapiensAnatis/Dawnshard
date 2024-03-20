@@ -10,7 +10,7 @@ namespace DragaliaAPI.Database.Test.Repositories;
 public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
-    private readonly IUserDataRepository userDataRepository;
+    private readonly UserDataRepository userDataRepository;
     private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
 
     public UserDataRepositoryTest(DbTestFixture fixture)

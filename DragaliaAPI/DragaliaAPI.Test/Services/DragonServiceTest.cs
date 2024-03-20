@@ -13,8 +13,6 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Test.Utils;
 using MockQueryable.Moq;
-using NSubstitute;
-using static DragaliaAPI.Test.UnitTestUtils;
 
 namespace DragaliaAPI.Test.Services;
 
@@ -168,7 +166,8 @@ public class DragonServiceTest : RepositoryTestFixture
                         DragonGifts.StrawberryTart,
                         DragonGifts.CompellingBook
                     }
-                }
+                },
+                default
             );
 
         responseData.Should().NotBeNull();
@@ -229,7 +228,8 @@ public class DragonServiceTest : RepositoryTestFixture
                 {
                     DragonId = Dragons.Garuda,
                     DragonGiftIdList = new List<DragonGifts>() { DragonGifts.FreshBread }
-                }
+                },
+                default
             );
 
         responseData.Should().NotBeNull();
@@ -290,7 +290,8 @@ public class DragonServiceTest : RepositoryTestFixture
                 DragonId = dragon,
                 DragonGiftId = gift,
                 Quantity = usedQuantity
-            }
+            },
+            default
         );
 
         responseData.Should().NotBeNull();
@@ -345,7 +346,8 @@ public class DragonServiceTest : RepositoryTestFixture
                         Quantity = 50
                     }
                 }
-            }
+            },
+            default
         );
 
         dragonData.AttackPlusCount.Should().Be(50);
@@ -408,7 +410,8 @@ public class DragonServiceTest : RepositoryTestFixture
                         Quantity = usedQuantity
                     }
                 }
-            }
+            },
+            default
         );
         dragonData.Exp.Should().Be(expectedXp);
         dragonData.Level.Should().Be(expectedLvl);
@@ -467,7 +470,12 @@ public class DragonServiceTest : RepositoryTestFixture
         mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());
 
         await dragonService.DoDragonResetPlusCount(
-            new DragonResetPlusCountRequest() { DragonKeyId = 1, PlusCountType = PlusCountType.Atk }
+            new DragonResetPlusCountRequest()
+            {
+                DragonKeyId = 1,
+                PlusCountType = PlusCountType.Atk
+            },
+            default
         );
 
         mockRewardService.VerifyAll();
@@ -541,7 +549,8 @@ public class DragonServiceTest : RepositoryTestFixture
                         TargetId = (ulong)(lbMatType == DragonLimitBreakMatTypes.Dupe ? 2 : 0)
                     }
                 }
-            }
+            },
+            default
         );
 
         dragonData.LimitBreakCount.Should().Be(limitBreakNr);
@@ -576,7 +585,8 @@ public class DragonServiceTest : RepositoryTestFixture
             .Returns(dragonDataList.AsQueryable().BuildMock());
 
         await dragonService.DoDragonSetLock(
-            new DragonSetLockRequest() { DragonKeyId = 1, IsLock = true }
+            new DragonSetLockRequest() { DragonKeyId = 1, IsLock = true },
+            default
         );
 
         dragonData.IsLock.Should().BeTrue();
@@ -613,10 +623,11 @@ public class DragonServiceTest : RepositoryTestFixture
             .Callback(() => dragonDataList.RemoveAll(x => x.DragonKeyId == 1));
 
         DragonSellResponse response = await dragonService.DoDragonSell(
-            new DragonSellRequest() { DragonKeyIdList = new List<ulong>() { 1 } }
+            new DragonSellRequest() { DragonKeyIdList = new List<ulong>() { 1 } },
+            default
         );
 
-        dragonDataList.Count().Should().Be(0);
+        dragonDataList.Count.Should().Be(0);
         userData.Coin.Should().Be(MasterAsset.DragonData.Get(Dragons.Garuda).SellCoin);
         userData.DewPoint.Should().Be(MasterAsset.DragonData.Get(Dragons.Garuda).SellDewPoint);
 

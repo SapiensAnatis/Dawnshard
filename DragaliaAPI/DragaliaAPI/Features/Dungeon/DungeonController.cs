@@ -74,7 +74,10 @@ public class DungeonController(
     }
 
     [HttpPost("receive_quest_bonus")]
-    public async Task<DragaliaResult> ReceiveQuestBonus(DungeonReceiveQuestBonusRequest request)
+    public async Task<DragaliaResult> ReceiveQuestBonus(
+        DungeonReceiveQuestBonusRequest request,
+        CancellationToken cancellationToken
+    )
     {
         DungeonReceiveQuestBonusResponse resp = new();
 
@@ -84,7 +87,7 @@ public class DungeonController(
             request.ReceiveBonusCount
         );
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);

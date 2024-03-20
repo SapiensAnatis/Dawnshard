@@ -36,14 +36,17 @@ public class CombatEventController(
     }
 
     [HttpPost("entry")]
-    public async Task<DragaliaResult> Entry(CombatEventEntryRequest request)
+    public async Task<DragaliaResult> Entry(
+        CombatEventEntryRequest request,
+        CancellationToken cancellationToken
+    )
     {
         CombatEventEntryResponse resp = new();
 
         // TODO: Complete first event mission once thats implemented
 
         resp.CombatEventUserData = await eventService.GetCombatEventUserData(request.EventId);
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
@@ -51,14 +54,15 @@ public class CombatEventController(
 
     [HttpPost("receive_event_point_reward")]
     public async Task<DragaliaResult> ReceiveCombatPointReward(
-        CombatEventReceiveEventPointRewardRequest request
+        CombatEventReceiveEventPointRewardRequest request,
+        CancellationToken cancellationToken
     )
     {
         CombatEventReceiveEventPointRewardResponse resp = new();
 
         resp.EventRewardEntityList = await eventService.ReceiveEventRewards(request.EventId);
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         resp.EventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
@@ -70,7 +74,8 @@ public class CombatEventController(
 
     [HttpPost("receive_event_location_reward")]
     public async Task<DragaliaResult> ReceiveEventLocationReward(
-        CombatEventReceiveEventLocationRewardRequest request
+        CombatEventReceiveEventLocationRewardRequest request,
+        CancellationToken cancellationToken
     )
     {
         CombatEventReceiveEventLocationRewardResponse resp = new();
@@ -80,7 +85,7 @@ public class CombatEventController(
             request.EventLocationRewardId
         );
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         resp.UserEventLocationRewardList =

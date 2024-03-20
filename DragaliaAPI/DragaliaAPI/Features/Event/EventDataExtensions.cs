@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
 

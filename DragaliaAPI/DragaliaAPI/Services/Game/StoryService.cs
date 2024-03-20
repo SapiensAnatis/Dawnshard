@@ -100,7 +100,7 @@ public class StoryService(
 
     #region Reading methods
 
-    public async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReadStory(
+    public async Task<IList<AtgenBuildEventRewardEntityList>> ReadStory(
         StoryTypes type,
         int storyId
     )
@@ -112,12 +112,12 @@ public class StoryService(
         if (story.State == StoryState.Read)
         {
             logger.LogDebug("Story was already read");
-            return Enumerable.Empty<AtgenBuildEventRewardEntityList>();
+            return [];
         }
 
         story.State = StoryState.Read;
 
-        IEnumerable<AtgenBuildEventRewardEntityList> rewards = type switch
+        List<AtgenBuildEventRewardEntityList> rewards = type switch
         {
             StoryTypes.Chara or StoryTypes.Dragon => await ReadUnitStory(storyId),
             StoryTypes.Castle => await ReadCastleStory(storyId),
@@ -131,7 +131,7 @@ public class StoryService(
         return rewards;
     }
 
-    private async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReadUnitStory(int storyId)
+    private async Task<List<AtgenBuildEventRewardEntityList>> ReadUnitStory(int storyId)
     {
         UnitStory data = MasterAsset.UnitStory[storyId];
         StoryData charaStory;
@@ -164,7 +164,7 @@ public class StoryService(
         return rewardList;
     }
 
-    private async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReadCastleStory(int storyId)
+    private async Task<List<AtgenBuildEventRewardEntityList>> ReadCastleStory(int storyId)
     {
         await inventoryRepository.UpdateQuantity(Materials.LookingGlass, -1);
         await userDataRepository.GiveWyrmite(CastleStoryWyrmite);
@@ -183,7 +183,7 @@ public class StoryService(
         return rewardList;
     }
 
-    private async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReadQuestStory(int storyId)
+    private async Task<List<AtgenBuildEventRewardEntityList>> ReadQuestStory(int storyId)
     {
         QuestStory story = MasterAsset.QuestStory[storyId];
         if (story.PayEntityTargetType != PayTargetType.None)
@@ -259,7 +259,7 @@ public class StoryService(
         return rewardList;
     }
 
-    private async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReadEventStory(int storyId)
+    private async Task<List<AtgenBuildEventRewardEntityList>> ReadEventStory(int storyId)
     {
         EventStory story = MasterAsset.EventStory[storyId];
         if (story.PayEntityType != EntityTypes.None)
@@ -281,7 +281,7 @@ public class StoryService(
         return rewardList;
     }
 
-    private async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReadDmodeStory(int storyId)
+    private async Task<List<AtgenBuildEventRewardEntityList>> ReadDmodeStory(int storyId)
     {
         await userDataRepository.GiveWyrmite(DmodeStoryWyrmite);
 

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Database.Test.Utils;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Test.Utils;
@@ -59,9 +58,6 @@ public class DbTestFixture : IDisposable
 
     public async Task AddRangeToDatabase<TEntity>(IEnumerable<TEntity> data)
     {
-        if (data is null)
-            return;
-
         await this.ApiContext.AddRangeAsync((IEnumerable<object>)data);
         await this.ApiContext.SaveChangesAsync();
         this.ApiContext.ChangeTracker.Clear();

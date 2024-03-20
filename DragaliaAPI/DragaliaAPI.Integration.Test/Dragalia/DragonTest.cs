@@ -16,7 +16,10 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 public class DragonTest : TestFixture
 {
     public DragonTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
+    }
 
     public record DragonBuildUpTestCase(
         List<DbPlayerDragonData> SetupDragons,
@@ -93,7 +96,7 @@ public class DragonTest : TestFixture
             }
         };
 
-        DragonBuildupResponse? response = (
+        DragonBuildupResponse response = (
             await this.Client.PostMsgpack<DragonBuildupResponse>("dragon/buildup", request)
         ).Data;
 
@@ -101,7 +104,7 @@ public class DragonTest : TestFixture
         response.UpdateDataList.Should().NotBeNull();
         response.UpdateDataList.DragonList.Should().NotBeNullOrEmpty();
         DragonList returnDragon = response
-            .UpdateDataList.DragonList.Where(x => (long)x.DragonKeyId == dbDragon.DragonKeyId)
+            .UpdateDataList.DragonList!.Where(x => (long)x.DragonKeyId == dbDragon.DragonKeyId)
             .First();
         returnDragon.Exp.Should().Be(testCase.ExpectedXp);
         returnDragon.Level.Should().Be(testCase.ExpectedLvl);
@@ -145,7 +148,7 @@ public class DragonTest : TestFixture
         response.UpdateDataList.Should().NotBeNull();
         response.UpdateDataList.DragonList.Should().NotBeNullOrEmpty();
         DragonList returnDragon = response
-            .UpdateDataList.DragonList.Where(x => (long)x.DragonKeyId == dbDragon.DragonKeyId)
+            .UpdateDataList.DragonList!.Where(x => (long)x.DragonKeyId == dbDragon.DragonKeyId)
             .First();
         returnDragon.AttackPlusCount.Should().Be(25);
     }
@@ -186,13 +189,15 @@ public class DragonTest : TestFixture
         response.UpdateDataList.Should().NotBeNull();
         response.UpdateDataList.DragonList.Should().NotBeNullOrEmpty();
         DragonList returnDragon = response
-            .UpdateDataList.DragonList.Where(x => (long)x.DragonKeyId == dragon.DragonKeyId)
+            .UpdateDataList.DragonList!.Where(x => (long)x.DragonKeyId == dragon.DragonKeyId)
             .First();
         returnDragon.AttackPlusCount.Should().Be(0);
         response.UpdateDataList.UserData.Should().NotBeNull();
         response.UpdateDataList.UserData.Coin.Should().Be(startCoin - (20000 * 50));
         response
-            .UpdateDataList.MaterialList.Where(x => x.MaterialId == Materials.AmplifyingDragonscale)
+            .UpdateDataList.MaterialList!.Where(x =>
+                x.MaterialId == Materials.AmplifyingDragonscale
+            )
             .First()
             .Quantity.Should()
             .Be(augmentCount + 50);
@@ -258,7 +263,7 @@ public class DragonTest : TestFixture
         response.DragonGiftRewardList.Should().NotBeNullOrEmpty();
         response.UpdateDataList.UserData.Coin.Should().Be(startCoin - 1500);
         DragonReliabilityList dragonData = response
-            .UpdateDataList.DragonReliabilityList.Where(x => x.DragonId == Dragons.HighChthonius)
+            .UpdateDataList.DragonReliabilityList!.Where(x => x.DragonId == Dragons.HighChthonius)
             .First();
         dragonData.ReliabilityTotalExp.Should().Be(400);
         dragonData.ReliabilityLevel.Should().Be(3);
@@ -293,7 +298,7 @@ public class DragonTest : TestFixture
 
         response.ReturnGiftList.Should().NotBeNullOrEmpty();
         DragonReliabilityList dragonData = response
-            .UpdateDataList.DragonReliabilityList.Where(x => x.DragonId == Dragons.HighJupiter)
+            .UpdateDataList.DragonReliabilityList!.Where(x => x.DragonId == Dragons.HighJupiter)
             .First();
         dragonData.ReliabilityTotalExp.Should().Be(1000);
         dragonData.ReliabilityLevel.Should().Be(6);
@@ -326,7 +331,7 @@ public class DragonTest : TestFixture
         response.Should().NotBeNull();
         response.ReturnGiftList.Should().NotBeNullOrEmpty();
         DragonReliabilityList dragonData = response
-            .UpdateDataList.DragonReliabilityList.Where(x => x.DragonId == Dragons.HighMercury)
+            .UpdateDataList.DragonReliabilityList!.Where(x => x.DragonId == Dragons.HighMercury)
             .First();
         dragonData.ReliabilityTotalExp.Should().Be(10000);
         dragonData.ReliabilityLevel.Should().Be(18);
@@ -431,7 +436,7 @@ public class DragonTest : TestFixture
 
         response.Should().NotBeNull();
         DragonReliabilityList dragonData = response
-            .UpdateDataList.DragonReliabilityList.Where(x => x.DragonId == Dragons.Puppy)
+            .UpdateDataList.DragonReliabilityList!.Where(x => x.DragonId == Dragons.Puppy)
             .First();
         dragonData.ReliabilityTotalExp.Should().Be(200);
         dragonData.ReliabilityLevel.Should().Be(3);
@@ -574,7 +579,7 @@ public class DragonTest : TestFixture
         response.UpdateDataList.Should().NotBeNull();
         response.UpdateDataList.DragonList.Should().NotBeNullOrEmpty();
         DragonList returnDragon = response
-            .UpdateDataList.DragonList.Where(x => (long)x.DragonKeyId == dbDragon.DragonKeyId)
+            .UpdateDataList.DragonList!.Where(x => (long)x.DragonKeyId == dbDragon.DragonKeyId)
             .First();
         returnDragon.LimitBreakCount.Should().Be(testCase.LimitBreakNr);
         if (testCase.LbMatType == DragonLimitBreakMatTypes.Dupe)
@@ -612,7 +617,7 @@ public class DragonTest : TestFixture
         response.UpdateDataList.Should().NotBeNull();
         response.UpdateDataList.DragonList.Should().NotBeNullOrEmpty();
         DragonList returnDragon = response
-            .UpdateDataList.DragonList.Where(x => (long)x.DragonKeyId == dragon.DragonKeyId)
+            .UpdateDataList.DragonList!.Where(x => (long)x.DragonKeyId == dragon.DragonKeyId)
             .First();
         returnDragon.IsLock.Should().BeTrue();
     }

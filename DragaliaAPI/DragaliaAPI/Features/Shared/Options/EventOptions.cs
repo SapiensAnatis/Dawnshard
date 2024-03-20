@@ -1,5 +1,3 @@
-using System.Collections.Frozen;
-
 namespace DragaliaAPI.Features.Shared.Options;
 
 public class EventOptions

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Frozen;
-using System.Collections.Immutable;
 using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;

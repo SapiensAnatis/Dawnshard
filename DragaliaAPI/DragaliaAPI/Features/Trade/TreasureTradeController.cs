@@ -27,7 +27,10 @@ public class TreasureTradeController(
     }
 
     [HttpPost("trade")]
-    public async Task<DragaliaResult> Trade(TreasureTradeTradeRequest request)
+    public async Task<DragaliaResult> Trade(
+        TreasureTradeTradeRequest request,
+        CancellationToken cancellationToken
+    )
     {
         TreasureTradeTradeResponse resp = new();
 
@@ -38,7 +41,7 @@ public class TreasureTradeController(
             request.NeedUnitList
         );
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.TreasureTradeAllList = tradeService.GetCurrentTreasureTradeList();
         resp.UserTreasureTradeList = await tradeService.GetUserTreasureTradeList();
 

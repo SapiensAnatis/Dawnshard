@@ -1,4 +1,3 @@
-using DragaliaAPI.Controllers;
 using DragaliaAPI.Features.Version;
 using DragaliaAPI.Models;
 using Microsoft.AspNetCore.Mvc;

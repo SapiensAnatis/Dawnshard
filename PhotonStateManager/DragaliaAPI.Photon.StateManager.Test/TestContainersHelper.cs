@@ -7,16 +7,23 @@ public class TestContainersHelper
 {
     private const int RedisContainerPort = 6379;
 
-    private readonly IContainer redisContainer;
+    private readonly IContainer? redisContainer;
 
     public string RedisHost { get; private set; }
 
-    public int RedisPort =>
-        IsGithubActions
-            ? RedisContainerPort
-            : this.redisContainer.GetMappedPublicPort(RedisContainerPort);
+    public int RedisPort
+    {
+        get
+        {
+            if (IsGithubActions)
+                return RedisContainerPort;
 
-    private bool IsGithubActions =>
+            ArgumentNullException.ThrowIfNull(this.redisContainer);
+            return this.redisContainer.GetMappedPublicPort(RedisContainerPort);
+        }
+    }
+
+    private static bool IsGithubActions =>
         Environment.GetEnvironmentVariable("GITHUB_ACTIONS") is not null;
 
     public TestContainersHelper()
@@ -43,6 +50,7 @@ public class TestContainersHelper
         if (IsGithubActions)
             return;
 
+        ArgumentNullException.ThrowIfNull(this.redisContainer);
         await this.redisContainer.StartAsync();
     }
 
@@ -51,6 +59,7 @@ public class TestContainersHelper
         if (IsGithubActions)
             return;
 
+        ArgumentNullException.ThrowIfNull(this.redisContainer);
         await this.redisContainer.StopAsync();
     }
 }

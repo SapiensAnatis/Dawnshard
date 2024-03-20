@@ -88,7 +88,6 @@ public class RewardService(
             case RewardGrantResult.FailError:
                 logger.LogError("Granting of entity {@entity} failed.", entity);
                 throw new InvalidOperationException("Failed to grant reward");
-                break;
             default:
                 throw new ArgumentOutOfRangeException(
                     string.Empty,

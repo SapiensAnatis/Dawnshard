@@ -1,9 +1,9 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Database.Factories;
-using DragaliaAPI.Database.Test;
 using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
@@ -14,10 +14,7 @@ using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
-using FluentAssertions.Execution;
-using Microsoft.EntityFrameworkCore;
 using Xunit.Abstractions;
-using static DragaliaAPI.Test.Utils.IdentityTestUtils;
 
 namespace DragaliaAPI.Test.Services;
 

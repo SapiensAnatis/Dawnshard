@@ -1,4 +1,3 @@
-using DragaliaAPI.Extensions;
 using MessagePack;
 using MessagePack.Formatters;
 

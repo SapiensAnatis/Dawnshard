@@ -11,7 +11,6 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 using DragaliaAPI.Shared.MasterAsset.Models.Enemy;
-using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.DmodeDungeon;
@@ -924,7 +923,7 @@ public class DmodeDungeonService(
         return item;
     }
 
-    private IEnumerable<AtgenDmodeDropObj> GenerateDrops(
+    private static List<AtgenDmodeDropObj> GenerateDrops(
         DmodeAreaInfo areaInfo,
         Func<int, (AtgenDmodeDropList, DmodeDungeonItemType, int)> generateDmodeItemDrop
     )
@@ -975,7 +974,7 @@ public class DmodeDungeonService(
         return objs;
     }
 
-    private IEnumerable<AtgenDmodeEnemy> GenerateEnemies(
+    private List<AtgenDmodeEnemy> GenerateEnemies(
         DmodeAreaInfo areaInfo,
         bool isSelectedEntity,
         int baseEnemyLevel,
@@ -1125,7 +1124,7 @@ public class DmodeDungeonService(
         }
     }
 
-    private int GetMinRarity(int floorNum)
+    private static int GetMinRarity(int floorNum)
     {
         return floorNum switch
         {
@@ -1136,7 +1135,7 @@ public class DmodeDungeonService(
         };
     }
 
-    private int ClampRarityByFloor(int floorNum, int rarity)
+    private static int ClampRarityByFloor(int floorNum, int rarity)
     {
         int maxRarity = floorNum switch
         {
@@ -1151,7 +1150,7 @@ public class DmodeDungeonService(
         return Math.Clamp(rarity, minRarity, maxRarity);
     }
 
-    private double GetExpMultiplier(DmodeIngameData ingameData)
+    private static double GetExpMultiplier(DmodeIngameData ingameData)
     {
         double expMultiplier = 1d;
 

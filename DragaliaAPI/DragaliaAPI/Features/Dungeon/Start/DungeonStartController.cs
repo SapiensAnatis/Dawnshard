@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Controllers;
-using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Models.Generated;
@@ -25,7 +24,10 @@ public class DungeonStartController(
     private const ResultCode FailedValidationCode = ResultCode.CommonInvalidateJson;
 
     [HttpPost("start")]
-    public async Task<DragaliaResult> Start(DungeonStartStartRequest request)
+    public async Task<DragaliaResult> Start(
+        DungeonStartStartRequest request,
+        CancellationToken cancellationToken
+    )
     {
         if (!await dungeonStartService.ValidateStamina(request.QuestId, StaminaType.Single))
             return this.Code(ResultCode.QuestStaminaSingleShort);
@@ -37,13 +39,20 @@ public class DungeonStartController(
             request.SupportViewerId
         );
 
-        DungeonStartStartResponse response = await BuildResponse(request.QuestId, ingameData);
+        DungeonStartStartResponse response = await BuildResponse(
+            request.QuestId,
+            ingameData,
+            cancellationToken
+        );
 
         return Ok(response);
     }
 
     [HttpPost("start_multi")]
-    public async Task<DragaliaResult> StartMulti(DungeonStartStartMultiRequest request)
+    public async Task<DragaliaResult> StartMulti(
+        DungeonStartStartMultiRequest request,
+        CancellationToken cancellationToken
+    )
     {
         if (!await dungeonStartService.ValidateStamina(request.QuestId, StaminaType.Multi))
             return this.Code(ResultCode.QuestStaminaMultiShort);
@@ -75,14 +84,19 @@ public class DungeonStartController(
             }
         );
 
-        DungeonStartStartResponse response = await BuildResponse(request.QuestId, ingameData);
+        DungeonStartStartResponse response = await BuildResponse(
+            request.QuestId,
+            ingameData,
+            cancellationToken
+        );
 
         return Ok(response);
     }
 
     [HttpPost("start_assign_unit")]
     public async Task<DragaliaResult<DungeonStartStartAssignUnitResponse>> StartAssignUnit(
-        DungeonStartStartAssignUnitRequest request
+        DungeonStartStartAssignUnitRequest request,
+        CancellationToken cancellationToken
     )
     {
         if (!await dungeonStartService.ValidateStamina(request.QuestId, StaminaType.Single))
@@ -95,7 +109,11 @@ public class DungeonStartController(
             request.RepeatSetting
         );
 
-        DungeonStartStartResponse response = await BuildResponse(request.QuestId, ingameData);
+        DungeonStartStartResponse response = await BuildResponse(
+            request.QuestId,
+            ingameData,
+            cancellationToken
+        );
 
         response.IngameData.RepeatState = request.RepeatState;
 
@@ -107,7 +125,8 @@ public class DungeonStartController(
     /// </remarks>
     [HttpPost("start_multi_assign_unit")]
     public async Task<DragaliaResult> StartMultiAssignUnit(
-        DungeonStartStartMultiAssignUnitRequest request
+        DungeonStartStartMultiAssignUnitRequest request,
+        CancellationToken cancellationToken
     )
     {
         if (!await dungeonStartService.ValidateStamina(request.QuestId, StaminaType.Multi))
@@ -140,18 +159,26 @@ public class DungeonStartController(
             }
         );
 
-        DungeonStartStartResponse response = await BuildResponse(request.QuestId, ingameData);
+        DungeonStartStartResponse response = await BuildResponse(
+            request.QuestId,
+            ingameData,
+            cancellationToken
+        );
 
         return Ok(response);
     }
 
-    private async Task<DungeonStartStartResponse> BuildResponse(int questId, IngameData ingameData)
+    private async Task<DungeonStartStartResponse> BuildResponse(
+        int questId,
+        IngameData ingameData,
+        CancellationToken cancellationToken
+    )
     {
         logger.LogDebug("Starting dungeon for quest id {questId}", questId);
 
         IngameQuestData ingameQuestData = await dungeonStartService.InitiateQuest(questId);
 
-        UpdateDataList updateData = await updateDataService.SaveChangesAsync();
+        UpdateDataList updateData = await updateDataService.SaveChangesAsync(cancellationToken);
 
         OddsInfo oddsInfo = oddsInfoService.GetOddsInfo(questId, 0);
         await dungeonService.ModifySession(

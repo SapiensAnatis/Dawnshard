@@ -5,6 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <AnalysisLevel>latest-minimum</AnalysisLevel>
     </PropertyGroup>
 
     <PropertyGroup>

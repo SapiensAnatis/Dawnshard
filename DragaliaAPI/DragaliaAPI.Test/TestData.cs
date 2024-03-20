@@ -5,7 +5,7 @@ namespace DragaliaAPI.Test;
 
 public static class TestData
 {
-    public static UserSupportList supportListEuden =
+    public static readonly UserSupportList SupportListEuden =
         new()
         {
             ViewerId = 1000,
@@ -55,7 +55,7 @@ public static class TestData
             Guild = new() { GuildId = 0, GuildName = "Guild" }
         };
 
-    public static UserSupportList supportListElisanne =
+    public static readonly UserSupportList SupportListElisanne =
         new()
         {
             ViewerId = 1001,

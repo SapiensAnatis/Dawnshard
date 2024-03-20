@@ -1,6 +1,5 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +9,7 @@ namespace DragaliaAPI.Features.Emblem;
 public class EmblemRepository(
     ApiContext apiContext,
     IPlayerIdentityService playerIdentityService,
-    IDateTimeProvider dateTimeProvider
+    TimeProvider dateTimeProvider
 ) : IEmblemRepository
 {
     public IQueryable<DbEmblem> Emblems =>
@@ -29,7 +28,7 @@ public class EmblemRepository(
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     EmblemId = emblem,
-                    GetTime = dateTimeProvider.UtcNow,
+                    GetTime = dateTimeProvider.GetUtcNow(),
                     IsNew = true
                 }
             )

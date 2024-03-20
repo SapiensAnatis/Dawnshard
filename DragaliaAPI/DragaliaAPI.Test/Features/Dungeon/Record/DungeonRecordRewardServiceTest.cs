@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon;
@@ -77,7 +78,7 @@ public class DungeonRecordRewardServiceTest
             new() { QuestData = MasterAsset.QuestData[questId], Party = null! };
         QuestMissionStatus status =
             new(
-                new[] { true, true, true },
+                [true, true, true],
                 new List<AtgenMissionsClearSet>(),
                 new List<AtgenFirstClearSet>()
             );

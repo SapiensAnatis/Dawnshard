@@ -11,6 +11,7 @@ public class FortTest : TestFixture
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions();
+        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
     }
 
     [Fact]
@@ -133,7 +134,7 @@ public class FortTest : TestFixture
             )
         ).Data;
 
-        BuildList result = response.UpdateDataList.BuildList.First(x =>
+        BuildList result = response.UpdateDataList.BuildList!.First(x =>
             x.BuildId == (ulong)build.BuildId
         );
         // The level changes when building starts, not when it ends, so no need to check it here
@@ -198,7 +199,7 @@ public class FortTest : TestFixture
             )
         ).Data;
 
-        BuildList result = response.UpdateDataList.BuildList.First(x =>
+        BuildList result = response.UpdateDataList.BuildList!.First(x =>
             x.BuildId == (ulong)build.BuildId
         );
         result.BuildStartDate.Should().Be(DateTimeOffset.UnixEpoch);
@@ -223,7 +224,7 @@ public class FortTest : TestFixture
             )
         ).Data;
 
-        BuildList result = response.UpdateDataList.BuildList.First();
+        BuildList result = response.UpdateDataList.BuildList!.First();
         result.PositionX.Should().Be(expectedPositionX);
         result.PositionZ.Should().Be(expectedPositionZ);
         result.BuildStartDate.Should().NotBe(DateTimeOffset.UnixEpoch);
@@ -260,7 +261,7 @@ public class FortTest : TestFixture
             )
         ).Data;
 
-        BuildList result = response.UpdateDataList.BuildList.First(x =>
+        BuildList result = response.UpdateDataList.BuildList!.First(x =>
             x.BuildId == (ulong)build.BuildId
         );
         result.BuildStartDate.Should().Be(DateTimeOffset.UnixEpoch);
@@ -342,7 +343,7 @@ public class FortTest : TestFixture
             )
         ).Data;
 
-        BuildList result = response.UpdateDataList.BuildList.First(x =>
+        BuildList result = response.UpdateDataList.BuildList!.First(x =>
             x.BuildId == (ulong)build.BuildId
         );
         result.BuildStartDate.Should().Be(DateTimeOffset.UnixEpoch);
@@ -379,7 +380,7 @@ public class FortTest : TestFixture
             )
         ).Data;
 
-        BuildList result = response.UpdateDataList.BuildList.First(x =>
+        BuildList result = response.UpdateDataList.BuildList!.First(x =>
             x.BuildId == (ulong)build.BuildId
         );
         result.BuildStartDate.Should().Be(DateTimeOffset.UnixEpoch);
@@ -460,7 +461,7 @@ public class FortTest : TestFixture
             )
         ).Data;
 
-        BuildList result = response.UpdateDataList.BuildList.First(x =>
+        BuildList result = response.UpdateDataList.BuildList!.First(x =>
             x.BuildId == (ulong)build.BuildId
         );
         result.BuildStartDate.Should().NotBe(DateTimeOffset.UnixEpoch);
@@ -499,7 +500,7 @@ public class FortTest : TestFixture
             )
         ).Data;
 
-        BuildList result = response.UpdateDataList.BuildList.First(x =>
+        BuildList result = response.UpdateDataList.BuildList!.First(x =>
             x.BuildId == (ulong)build.BuildId
         );
         result.PositionX.Should().Be(expectedPositionX);

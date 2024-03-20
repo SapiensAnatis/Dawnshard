@@ -12,35 +12,26 @@ namespace DragaliaAPI.Features.Quest;
 
 [Route("quest")]
 [ApiController]
-public class QuestController : DragaliaControllerBase
+public class QuestController(
+    IStoryService storyService,
+    IHelperService helperService,
+    IUpdateDataService updateDataService,
+    IClearPartyService clearPartyService,
+    IQuestTreasureService questTreasureService
+) : DragaliaControllerBase
 {
-    private readonly IStoryService storyService;
-    private readonly IHelperService helperService;
-    private readonly IUpdateDataService updateDataService;
-    private readonly IClearPartyService clearPartyService;
-    private readonly IQuestTreasureService questTreasureService;
-    private readonly ILogger<QuestController> logger;
-
-    public QuestController(
-        IStoryService storyService,
-        IHelperService helperService,
-        IUpdateDataService updateDataService,
-        IClearPartyService clearPartyService,
-        IQuestTreasureService questTreasureService,
-        ILogger<QuestController> logger
-    )
-    {
-        this.storyService = storyService;
-        this.helperService = helperService;
-        this.updateDataService = updateDataService;
-        this.clearPartyService = clearPartyService;
-        this.questTreasureService = questTreasureService;
-        this.logger = logger;
-    }
+    private readonly IStoryService storyService = storyService;
+    private readonly IHelperService helperService = helperService;
+    private readonly IUpdateDataService updateDataService = updateDataService;
+    private readonly IClearPartyService clearPartyService = clearPartyService;
+    private readonly IQuestTreasureService questTreasureService = questTreasureService;
 
     [HttpPost]
     [Route("read_story")]
-    public async Task<DragaliaResult> ReadStory(QuestReadStoryRequest request)
+    public async Task<DragaliaResult> ReadStory(
+        QuestReadStoryRequest request,
+        CancellationToken cancellationToken
+    )
     {
         IEnumerable<AtgenBuildEventRewardEntityList> rewardList = await this.storyService.ReadStory(
             StoryTypes.Quest,
@@ -52,7 +43,9 @@ public class QuestController : DragaliaControllerBase
             StoryService.ToQuestStoryReward
         );
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
+            cancellationToken
+        );
 
         return this.Ok(
             new QuestReadStoryResponse()
@@ -73,12 +66,16 @@ public class QuestController : DragaliaControllerBase
     }
 
     [HttpPost("get_quest_clear_party")]
-    public async Task<DragaliaResult> GetQuestClearParty(QuestGetQuestClearPartyRequest request)
+    public async Task<DragaliaResult> GetQuestClearParty(
+        QuestGetQuestClearPartyRequest request,
+        CancellationToken cancellationToken
+    )
     {
         (IEnumerable<PartySettingList> clearParty, IEnumerable<AtgenLostUnitList> lostUnitList) =
             await this.clearPartyService.GetQuestClearParty(request.QuestId, false);
 
-        await this.updateDataService.SaveChangesAsync(); // Updated lost entities
+        await this.updateDataService.SaveChangesAsync(cancellationToken);
+        // Updated lost entities
 
         return Ok(
             new QuestGetQuestClearPartyResponse()
@@ -91,13 +88,14 @@ public class QuestController : DragaliaControllerBase
 
     [HttpPost("get_quest_clear_party_multi")]
     public async Task<DragaliaResult> GetQuestClearPartyMulti(
-        QuestGetQuestClearPartyMultiRequest request
+        QuestGetQuestClearPartyMultiRequest request,
+        CancellationToken cancellationToken
     )
     {
         (IEnumerable<PartySettingList> clearParty, IEnumerable<AtgenLostUnitList> lostUnitList) =
             await this.clearPartyService.GetQuestClearParty(request.QuestId, true);
 
-        await this.updateDataService.SaveChangesAsync();
+        await this.updateDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(
             new QuestGetQuestClearPartyMultiResponse()
@@ -109,16 +107,23 @@ public class QuestController : DragaliaControllerBase
     }
 
     [HttpPost("open_treasure")]
-    public async Task<DragaliaResult> OpenTreasure(QuestOpenTreasureRequest request)
+    public async Task<DragaliaResult> OpenTreasure(
+        QuestOpenTreasureRequest request,
+        CancellationToken cancellationToken
+    )
     {
         QuestOpenTreasureResponse response = await this.questTreasureService.DoOpenTreasure(
-            request
+            request,
+            cancellationToken
         );
         return Ok(response);
     }
 
     [HttpPost("set_quest_clear_party")]
-    public async Task<DragaliaResult> SetQuestClearParty(QuestSetQuestClearPartyRequest request)
+    public async Task<DragaliaResult> SetQuestClearParty(
+        QuestSetQuestClearPartyRequest request,
+        CancellationToken cancellationToken
+    )
     {
         await this.clearPartyService.SetQuestClearParty(
             request.QuestId,
@@ -126,14 +131,15 @@ public class QuestController : DragaliaControllerBase
             request.RequestPartySettingList
         );
 
-        await this.updateDataService.SaveChangesAsync();
+        await this.updateDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(new QuestSetQuestClearPartyResponse() { Result = 1 });
     }
 
     [HttpPost("set_quest_clear_party_multi")]
     public async Task<DragaliaResult> SetQuestClearParty(
-        QuestSetQuestClearPartyMultiRequest request
+        QuestSetQuestClearPartyMultiRequest request,
+        CancellationToken cancellationToken
     )
     {
         await this.clearPartyService.SetQuestClearParty(
@@ -142,7 +148,7 @@ public class QuestController : DragaliaControllerBase
             request.RequestPartySettingList
         );
 
-        await this.updateDataService.SaveChangesAsync();
+        await this.updateDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(new QuestSetQuestClearPartyMultiResponse() { Result = 1 });
     }

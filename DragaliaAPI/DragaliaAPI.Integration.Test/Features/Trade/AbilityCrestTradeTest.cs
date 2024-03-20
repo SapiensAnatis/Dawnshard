@@ -15,31 +15,30 @@ public class AbilityCrestTradeTest : TestFixture
     [InlineData(2902, AbilityCrests.HisCleverBrother, 2000)]
     [InlineData(167, AbilityCrests.DragonsNest, 200)]
     public async Task Trade_AddsAbilityCrestAndDecreasesDewpoint(
-        int trade_id,
-        AbilityCrests expected_crest_id,
-        int expected_dewpoint_cost
+        int tradeId,
+        AbilityCrests expectedCrestId,
+        int expectedDewpointCost
     )
     {
-        int old_dewpoint = GetDewpoint();
+        int oldDewpoint = GetDewpoint();
 
         AbilityCrestTradeTradeResponse data = (
             await Client.PostMsgpack<AbilityCrestTradeTradeResponse>(
                 "ability_crest_trade/trade",
                 new AbilityCrestTradeTradeRequest()
                 {
-                    AbilityCrestTradeId = trade_id,
+                    AbilityCrestTradeId = tradeId,
                     TradeCount = 1
                 }
             )
         ).Data;
 
-        AbilityCrests ability_crest_id = data
-            .UpdateDataList.AbilityCrestList.First()
-            .AbilityCrestId;
+        AbilityCrests abilityCrestId;
+        abilityCrestId = data.UpdateDataList.AbilityCrestList!.First().AbilityCrestId;
         int dewpoint = data.UpdateDataList.UserData.DewPoint;
 
-        ability_crest_id.Should().Be(expected_crest_id);
-        dewpoint.Should().Be(old_dewpoint - expected_dewpoint_cost);
+        abilityCrestId.Should().Be(expectedCrestId);
+        dewpoint.Should().Be(oldDewpoint - expectedDewpointCost);
     }
 
     private int GetDewpoint()

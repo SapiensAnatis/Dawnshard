@@ -27,14 +27,17 @@ public class Clb01EventController(
     }
 
     [HttpPost("entry")]
-    public async Task<DragaliaResult> Entry(Clb01EventEntryRequest request)
+    public async Task<DragaliaResult> Entry(
+        Clb01EventEntryRequest request,
+        CancellationToken cancellationToken
+    )
     {
         Clb01EventEntryResponse resp = new();
 
         // TODO: Complete first event mission once thats implemented
 
         resp.Clb01EventUserData = await eventService.GetClb01EventUserData(request.EventId);
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
@@ -42,14 +45,15 @@ public class Clb01EventController(
 
     [HttpPost("receive_clb01_point_reward")]
     public async Task<DragaliaResult> ReceiveEventPointReward(
-        Clb01EventReceiveClb01PointRewardRequest request
+        Clb01EventReceiveClb01PointRewardRequest request,
+        CancellationToken cancellationToken
     )
     {
         Clb01EventReceiveClb01PointRewardResponse resp = new();
 
         resp.Clb01EventRewardEntityList = await eventService.ReceiveEventRewards(request.EventId);
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         resp.Clb01EventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(

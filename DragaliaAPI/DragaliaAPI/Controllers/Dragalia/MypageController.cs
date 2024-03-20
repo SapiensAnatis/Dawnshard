@@ -21,7 +21,7 @@ public class MypageController(
 {
     [Route("info")]
     [HttpPost]
-    public async Task<DragaliaResult> Info()
+    public async Task<DragaliaResult> Info(CancellationToken cancellationToken)
     {
         MypageInfoResponse resp = new();
 
@@ -41,7 +41,7 @@ public class MypageController(
         );
 
         resp.IsShopNotification = await shopRepository.GetDailySummonCountAsync() == 0;
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.UpdateDataList.MissionNotice = await missionService.GetMissionNotice(null);
 
         RepeatInfo? repeatInfo = await autoRepeatService.GetRepeatInfo();

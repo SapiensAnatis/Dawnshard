@@ -176,8 +176,7 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
 
     public async Task AddItemQuantityAsync(int itemId, int quantity)
     {
-        if (quantity < 0)
-            throw new ArgumentOutOfRangeException(nameof(quantity));
+        ArgumentOutOfRangeException.ThrowIfNegative(quantity);
 
         DbPlayerEventItem item =
             await GetEventItemAsync(itemId)
@@ -188,8 +187,7 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
 
     public async Task RemoveItemQuantityAsync(int itemId, int quantity)
     {
-        if (quantity < 0)
-            throw new ArgumentOutOfRangeException(nameof(quantity));
+        ArgumentOutOfRangeException.ThrowIfNegative(quantity);
 
         DbPlayerEventItem item =
             await GetEventItemAsync(itemId)
@@ -200,8 +198,7 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
 
     public async Task AddEventPassiveProgressAsync(int eventId, int passiveId, int progress)
     {
-        if (progress < 0)
-            throw new ArgumentOutOfRangeException(nameof(progress));
+        ArgumentOutOfRangeException.ThrowIfNegative(progress);
 
         DbPlayerEventPassive passive =
             await GetEventPassiveAsync(eventId, passiveId)

@@ -6,25 +6,21 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("castle_story")]
-public class CastleStoryController : DragaliaControllerBase
+public class CastleStoryController(
+    IStoryService storyService,
+    IUpdateDataService updateDataService,
+    ILogger<CastleStoryController> logger
+) : DragaliaControllerBase
 {
-    private readonly IStoryService storyService;
-    private readonly IUpdateDataService updateDataService;
-    private readonly ILogger<CastleStoryController> logger;
-
-    public CastleStoryController(
-        IStoryService storyService,
-        IUpdateDataService updateDataService,
-        ILogger<CastleStoryController> logger
-    )
-    {
-        this.storyService = storyService;
-        this.updateDataService = updateDataService;
-        this.logger = logger;
-    }
+    private readonly IStoryService storyService = storyService;
+    private readonly IUpdateDataService updateDataService = updateDataService;
+    private readonly ILogger<CastleStoryController> logger = logger;
 
     [HttpPost("read")]
-    public async Task<DragaliaResult> Read(CastleStoryReadRequest request)
+    public async Task<DragaliaResult> Read(
+        CastleStoryReadRequest request,
+        CancellationToken cancellationToken
+    )
     {
         if (
             !await this.storyService.CheckStoryEligibility(StoryTypes.Castle, request.CastleStoryId)
@@ -42,7 +38,9 @@ public class CastleStoryController : DragaliaControllerBase
             request.CastleStoryId
         );
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
+            cancellationToken
+        );
 
         return this.Ok(
             new CastleStoryReadResponse()

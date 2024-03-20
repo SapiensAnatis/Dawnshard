@@ -1,7 +1,6 @@
-﻿namespace DragaliaAPI.Photon.Shared.Requests
+﻿namespace DragaliaAPI.Photon.Shared.Requests;
+
+public class GameModifyRoomIdRequest : GameModifyRequest
 {
-    public class GameModifyRoomIdRequest : GameModifyRequest
-    {
-        public int NewRoomId { get; set; }
-    }
+    public int NewRoomId { get; set; }
 }

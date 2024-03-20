@@ -130,10 +130,15 @@ public class WallControllerTest
 
         mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());
 
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(new UpdateDataList());
+        mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync(default))
+            .ReturnsAsync(new UpdateDataList());
 
         WallReceiveMonthlyRewardResponse data = (
-            await wallController.ReceiveMonthlyReward(new WallReceiveMonthlyRewardRequest())
+            await wallController.ReceiveMonthlyReward(
+                new WallReceiveMonthlyRewardRequest(),
+                default
+            )
         ).GetData<WallReceiveMonthlyRewardResponse>()!;
 
         data.UserWallRewardList.Should().BeEquivalentTo(userRewardList);

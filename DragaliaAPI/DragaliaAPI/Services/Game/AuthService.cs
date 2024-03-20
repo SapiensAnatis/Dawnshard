@@ -3,7 +3,6 @@ using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
@@ -18,44 +17,30 @@ using Serilog.Context;
 
 namespace DragaliaAPI.Services.Game;
 
-public class AuthService : IAuthService
+public class AuthService(
+    IBaasApi baasRequestHelper,
+    ISessionService sessionService,
+    ISavefileService savefileService,
+    IPlayerIdentityService playerIdentityService,
+    IUserDataRepository userDataRepository,
+    ApiContext apiContext,
+    IOptionsMonitor<LoginOptions> loginOptions,
+    IOptionsMonitor<BaasOptions> baasOptions,
+    ILogger<AuthService> logger,
+    TimeProvider dateTimeProvider
+) : IAuthService
 {
-    private readonly IBaasApi baasRequestHelper;
-    private readonly ISessionService sessionService;
-    private readonly ISavefileService savefileService;
-    private readonly IPlayerIdentityService playerIdentityService;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly ApiContext apiContext;
-    private readonly IOptionsMonitor<LoginOptions> loginOptions;
-    private readonly IOptionsMonitor<BaasOptions> baasOptions;
-    private readonly ILogger<AuthService> logger;
-    private readonly IDateTimeProvider dateTimeProvider;
-    private readonly JwtSecurityTokenHandler TokenHandler = new();
-
-    public AuthService(
-        IBaasApi baasRequestHelper,
-        ISessionService sessionService,
-        ISavefileService savefileService,
-        IPlayerIdentityService playerIdentityService,
-        IUserDataRepository userDataRepository,
-        ApiContext apiContext,
-        IOptionsMonitor<LoginOptions> loginOptions,
-        IOptionsMonitor<BaasOptions> baasOptions,
-        ILogger<AuthService> logger,
-        IDateTimeProvider dateTimeProvider
-    )
-    {
-        this.baasRequestHelper = baasRequestHelper;
-        this.sessionService = sessionService;
-        this.savefileService = savefileService;
-        this.playerIdentityService = playerIdentityService;
-        this.userDataRepository = userDataRepository;
-        this.apiContext = apiContext;
-        this.loginOptions = loginOptions;
-        this.baasOptions = baasOptions;
-        this.logger = logger;
-        this.dateTimeProvider = dateTimeProvider;
-    }
+    private readonly IBaasApi baasRequestHelper = baasRequestHelper;
+    private readonly ISessionService sessionService = sessionService;
+    private readonly ISavefileService savefileService = savefileService;
+    private readonly IPlayerIdentityService playerIdentityService = playerIdentityService;
+    private readonly IUserDataRepository userDataRepository = userDataRepository;
+    private readonly ApiContext apiContext = apiContext;
+    private readonly IOptionsMonitor<LoginOptions> loginOptions = loginOptions;
+    private readonly IOptionsMonitor<BaasOptions> baasOptions = baasOptions;
+    private readonly ILogger<AuthService> logger = logger;
+    private readonly TimeProvider dateTimeProvider = dateTimeProvider;
+    private readonly JwtSecurityTokenHandler tokenHandler = new();
 
     public async Task<(long viewerId, string sessionId)> DoAuth(string idToken)
     {
@@ -78,12 +63,7 @@ public class AuthService : IAuthService
 
         IQueryable<DbPlayerUserData> playerInfo;
 
-        using (
-            IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
-                viewerId,
-                deviceAccountId
-            )
-        )
+        using (this.playerIdentityService.StartUserImpersonation(viewerId, deviceAccountId))
         {
             playerInfo = this.userDataRepository.UserData;
         }
@@ -120,7 +100,7 @@ public class AuthService : IAuthService
             idToken,
             player.AccountId,
             player.ViewerId,
-            this.dateTimeProvider.UtcNow
+            this.dateTimeProvider.GetUtcNow()
         );
 
         this.logger.LogInformation(
@@ -154,7 +134,7 @@ public class AuthService : IAuthService
 
     private async Task<TokenValidationResult> ValidateToken(string idToken)
     {
-        TokenValidationResult validationResult = await TokenHandler.ValidateTokenAsync(
+        TokenValidationResult validationResult = await this.tokenHandler.ValidateTokenAsync(
             idToken,
             new()
             {

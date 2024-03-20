@@ -8,14 +8,10 @@ namespace DragaliaAPI.Database.Test.Repositories;
 [Obsolete(ObsoleteReasons.BaaS)]
 public class DeviceAccountRepositoryTest : IClassFixture<DbTestFixture>
 {
-    private readonly DbTestFixture fixture;
-
-    private readonly IDeviceAccountRepository deviceAccountRepository;
+    private readonly DeviceAccountRepository deviceAccountRepository;
 
     public DeviceAccountRepositoryTest(DbTestFixture fixture)
     {
-        this.fixture = fixture;
-
         deviceAccountRepository = new DeviceAccountRepository(fixture.ApiContext);
     }
 
@@ -29,7 +25,7 @@ public class DeviceAccountRepositoryTest : IClassFixture<DbTestFixture>
 
         result.Should().NotBeNull();
         result!.Id.Should().Be("id 2");
-        result!.HashedPassword.Should().Be("hashed password 2");
+        result.HashedPassword.Should().Be("hashed password 2");
     }
 
     [Fact]

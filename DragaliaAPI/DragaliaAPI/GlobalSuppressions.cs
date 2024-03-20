@@ -6,9 +6,9 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage(
-    "Style",
-    "IDE1006:Naming Styles",
+    "Design",
+    "CA1041:Provide ObsoleteAttribute message",
     Scope = "namespaceanddescendants",
     Target = "~N:DragaliaAPI.Models.Generated",
-    Justification = "msgpack/json object fields should start with lowercase to match real keys"
+    Justification = "In every case indicates a field no longer used by the game with no alternative"
 )]

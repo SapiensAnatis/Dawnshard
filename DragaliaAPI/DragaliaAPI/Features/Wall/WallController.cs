@@ -73,12 +73,15 @@ public class WallController : DragaliaControllerBase
 
     // Called when entering the team edit screen
     [HttpPost("get_wall_clear_party")]
-    public async Task<DragaliaResult> GetWallClearParty(WallGetWallClearPartyRequest request)
+    public async Task<DragaliaResult> GetWallClearParty(
+        WallGetWallClearPartyRequest request,
+        CancellationToken cancellationToken
+    )
     {
         (IEnumerable<PartySettingList> clearParty, IEnumerable<AtgenLostUnitList> lostUnitList) =
             await this.clearPartyService.GetQuestClearParty(request.WallId, false);
 
-        await this.updateDataService.SaveChangesAsync(); // Updated lost entities
+        await this.updateDataService.SaveChangesAsync(cancellationToken); // Updated lost entities
 
         WallGetWallClearPartyResponse data =
             new() { WallClearPartySettingList = clearParty, LostUnitList = lostUnitList };
@@ -88,7 +91,10 @@ public class WallController : DragaliaControllerBase
     // Called upon entering the MG menu when the user is available to receive
     // monthly MG rewards (i assume)
     [HttpPost("receive_monthly_reward")]
-    public async Task<DragaliaResult> ReceiveMonthlyReward(WallReceiveMonthlyRewardRequest request)
+    public async Task<DragaliaResult> ReceiveMonthlyReward(
+        WallReceiveMonthlyRewardRequest request,
+        CancellationToken cancellationToken
+    )
     {
         int totalLevel = await wallService.GetTotalWallLevel();
 
@@ -112,7 +118,9 @@ public class WallController : DragaliaControllerBase
                 IsReceiveReward = RewardStatus.Received
             };
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
+            cancellationToken
+        );
 
         WallReceiveMonthlyRewardResponse data =
             new()
@@ -130,7 +138,10 @@ public class WallController : DragaliaControllerBase
     // Called upon clearing a MG quest and then clicking on the Next button
     // what does this actually do?
     [HttpPost("set_wall_clear_party")]
-    public async Task<DragaliaResult> SetWallClearParty(WallSetWallClearPartyRequest request)
+    public async Task<DragaliaResult> SetWallClearParty(
+        WallSetWallClearPartyRequest request,
+        CancellationToken cancellationToken
+    )
     {
         await this.clearPartyService.SetQuestClearParty(
             request.WallId,
@@ -138,7 +149,7 @@ public class WallController : DragaliaControllerBase
             request.RequestPartySettingList
         );
 
-        await this.updateDataService.SaveChangesAsync();
+        await this.updateDataService.SaveChangesAsync(cancellationToken);
 
         WallSetWallClearPartyResponse data = new() { Result = 1 };
 

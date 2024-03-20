@@ -9,7 +9,7 @@ using Xunit.Abstractions;
 namespace DragaliaAPI.Photon.StateManager.Test;
 
 [Collection(TestCollection.Name)]
-public class TestFixture : IDisposable
+public class TestFixture : IAsyncLifetime
 {
     private const string PhotonToken = "photontoken";
 
@@ -41,9 +41,10 @@ public class TestFixture : IDisposable
 
     protected IRedisConnectionProvider RedisConnectionProvider { get; }
 
-    public void Dispose()
-    {
-        this.RedisConnectionProvider.RedisCollection<RedisGame>()
-            .Delete(this.RedisConnectionProvider.RedisCollection<RedisGame>());
-    }
+    public Task InitializeAsync() => Task.CompletedTask;
+
+    public async Task DisposeAsync() =>
+        await this
+            .RedisConnectionProvider.RedisCollection<RedisGame>()
+            .DeleteAsync(this.RedisConnectionProvider.RedisCollection<RedisGame>());
 }

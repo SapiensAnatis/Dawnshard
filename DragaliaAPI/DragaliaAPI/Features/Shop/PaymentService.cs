@@ -30,7 +30,7 @@ public class PaymentService(
     public async Task ProcessPayment(Entity entity, PaymentTarget? payment = null)
     {
         if (entity.Type == EntityTypes.None)
-            throw new ArgumentException("Invalid entity type", nameof(entity.Type));
+            throw new ArgumentException("Invalid entity type", nameof(entity));
 
         bool hasPaymentTarget = payment is not null;
 

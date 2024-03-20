@@ -17,7 +17,10 @@ public class MemoryEventController(
 ) : DragaliaControllerBase
 {
     [HttpPost("activate")]
-    public async Task<DragaliaResult> Activate(MemoryEventActivateRequest request)
+    public async Task<DragaliaResult> Activate(
+        MemoryEventActivateRequest request,
+        CancellationToken cancellationToken
+    )
     {
         MemoryEventActivateResponse resp = new();
 
@@ -27,7 +30,7 @@ public class MemoryEventController(
         userData.ActiveMemoryEventId = request.EventId;
 
         resp.Result = 1;
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);

@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Features.Reward.Handlers;
