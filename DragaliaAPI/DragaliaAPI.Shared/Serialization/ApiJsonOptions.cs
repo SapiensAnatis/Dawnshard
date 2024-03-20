@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
 
-namespace DragaliaAPI.Shared.Json;
+namespace DragaliaAPI.Shared.Serialization;
 
 /// <summary>
 /// Savefile options for Dragalia communication.

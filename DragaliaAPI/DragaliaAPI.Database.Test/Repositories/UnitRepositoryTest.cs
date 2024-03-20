@@ -123,8 +123,8 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
             .Contain(
                 new List<int>()
                 {
-                    MasterAsset.CharaStories[(int)Charas.Addis].storyIds[0],
-                    MasterAsset.CharaStories[(int)Charas.Aeleen].storyIds[0]
+                    MasterAsset.CharaStories[(int)Charas.Addis].StoryIds[0],
+                    MasterAsset.CharaStories[(int)Charas.Aeleen].StoryIds[0]
                 }
             );
     }
@@ -132,8 +132,8 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task AddCharas_HandlesExistingStory()
     {
-        int izumoStoryId = MasterAsset.CharaStories[(int)Charas.Izumo].storyIds[0];
-        int mitsuhideStoryId = MasterAsset.CharaStories[(int)Charas.Mitsuhide].storyIds[0];
+        int izumoStoryId = MasterAsset.CharaStories[(int)Charas.Izumo].StoryIds[0];
+        int mitsuhideStoryId = MasterAsset.CharaStories[(int)Charas.Mitsuhide].StoryIds[0];
         await this.fixture.AddRangeToDatabase(
             [
                 new DbPlayerStoryState()

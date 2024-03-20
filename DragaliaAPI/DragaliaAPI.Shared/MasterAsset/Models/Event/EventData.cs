@@ -1,12 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Json;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Event;
 
 public record EventData(
     int Id,
-    [property: JsonConverter(typeof(BoolIntJsonConverter))] bool IsMemoryEvent,
+    bool IsMemoryEvent,
     EventKindType EventKindType,
     FortPlants EventFortId,
     EntityTypes ViewEntityType1,

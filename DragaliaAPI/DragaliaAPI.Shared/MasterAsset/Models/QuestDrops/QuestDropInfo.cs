@@ -5,11 +5,7 @@ namespace DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 
 public record QuestDropInfo(int QuestId, int Rupies, int Mana, DropEntity[] Drops);
 
-public record DropEntity(
-    int Id,
-    [property: JsonConverter(typeof(JsonStringEnumConverter))] EntityTypes EntityType,
-    double Quantity
-)
+public record DropEntity(int Id, EntityTypes EntityType, double Quantity)
 {
     /// <summary>
     /// Gets a weight for FluentRandomPicker.

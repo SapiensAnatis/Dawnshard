@@ -1,4 +1,4 @@
-using DragaliaAPI.Shared.Json;
+using DragaliaAPI.Shared.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;

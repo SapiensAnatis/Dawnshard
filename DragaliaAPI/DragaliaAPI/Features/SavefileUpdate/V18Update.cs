@@ -106,7 +106,7 @@ public class V18Update(
         int elementOffset = type - QuestWallTypes.Flame;
 
         int missionId = baseMissionId + (elementOffset * 100) + level;
-        Debug.Assert(MasterAsset.NormalMission.ContainsKey(missionId));
+        Debug.Assert(MasterAsset.MissionNormalData.ContainsKey(missionId));
 
         return missionId;
     }
@@ -119,7 +119,7 @@ public class V18Update(
         const int baseMissionId = 10010700;
 
         int missionId = baseMissionId + (level / 2);
-        Debug.Assert(MasterAsset.NormalMission.ContainsKey(missionId));
+        Debug.Assert(MasterAsset.MissionDrillData.ContainsKey(missionId));
 
         return missionId;
     }

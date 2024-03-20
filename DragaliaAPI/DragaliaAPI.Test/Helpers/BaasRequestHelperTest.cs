@@ -3,7 +3,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Api;
 using DragaliaAPI.Services.Exceptions;
-using DragaliaAPI.Shared.Json;
+using DragaliaAPI.Shared.Serialization;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;

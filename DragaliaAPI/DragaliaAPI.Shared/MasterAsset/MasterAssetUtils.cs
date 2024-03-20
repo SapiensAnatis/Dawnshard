@@ -11,7 +11,7 @@ public static class MasterAssetUtils
         int.Parse($"{(int)id}{level:00}");
 
     public static FortPlantDetail GetFortPlant(FortPlants id, int level) =>
-        MasterAsset.FortPlant.Get(GetPlantDetailId(id, level));
+        MasterAsset.FortPlantDetail.Get(GetPlantDetailId(id, level));
 
     public static int GetQuestWallDetailId(int wallId, int wallLevel)
     {
@@ -34,7 +34,7 @@ public static class MasterAssetUtils
 
     public static FortPlantDetail GetInitialFortPlant(FortPlants id) =>
         MasterAsset
-            .FortPlant.Enumerable.Where(x => x.AssetGroup == id)
+            .FortPlantDetail.Enumerable.Where(x => x.AssetGroup == id)
             .OrderBy(x => x.Level)
             .First();
 

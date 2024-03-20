@@ -73,7 +73,7 @@ public class TradeService(
     public IEnumerable<EventTradeList> GetEventTradeList(int tradeGroupId)
     {
         return MasterAsset
-            .EventTreasureTrade.Enumerable.Where(x => x.TradeGroupId == tradeGroupId)
+            .EventTreasureTradeInfo.Enumerable.Where(x => x.TradeGroupId == tradeGroupId)
             .Select(x => new EventTradeList
             {
                 EventTradeId = x.Id,
@@ -141,7 +141,7 @@ public class TradeService(
                     "Invalid trade type none"
                 ),
             TradeType.Treasure => MasterAsset.TreasureTrade[tradeId],
-            TradeType.Event => MasterAsset.EventTreasureTrade[tradeId],
+            TradeType.Event => MasterAsset.EventTreasureTradeInfo[tradeId],
             TradeType.AbilityCrest
                 => throw new DragaliaException(
                     ResultCode.CommonInvalidArgument,

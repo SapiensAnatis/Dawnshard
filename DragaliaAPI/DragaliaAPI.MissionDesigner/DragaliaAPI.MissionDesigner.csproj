@@ -5,11 +5,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj" />
+      <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj" AdditionalProperties="Tool=true" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="JetBrains.Annotations" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\DragaliaAPI.Shared\Resources\Missions\MissionNormalData.json" LinkBase="Resources">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
     
 </Project>

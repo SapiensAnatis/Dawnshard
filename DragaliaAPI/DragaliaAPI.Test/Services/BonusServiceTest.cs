@@ -6,7 +6,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Json;
+using DragaliaAPI.Shared.Serialization;
 using Microsoft.Extensions.Logging;
 using MockQueryable.Moq;
 using static DragaliaAPI.Test.Utils.IdentityTestUtils;

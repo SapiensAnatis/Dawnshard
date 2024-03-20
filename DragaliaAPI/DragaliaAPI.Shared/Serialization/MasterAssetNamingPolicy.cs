@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace DragaliaAPI.Shared.Json;
+namespace DragaliaAPI.Shared.Serialization;
 
 internal class MasterAssetNamingPolicy : JsonNamingPolicy
 {

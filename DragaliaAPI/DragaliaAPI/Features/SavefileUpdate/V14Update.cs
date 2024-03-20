@@ -38,7 +38,7 @@ public class V14Update(
         foreach (int readStoryId in readStoryIdList)
         {
             storyCharacterId = MasterAsset.UnitStory[readStoryId].ReleaseTriggerId;
-            characterStoryList = MasterAsset.CharaStories[storyCharacterId].storyIds;
+            characterStoryList = MasterAsset.CharaStories[storyCharacterId].StoryIds;
 
             Emblems emblem = (Emblems)storyCharacterId;
 

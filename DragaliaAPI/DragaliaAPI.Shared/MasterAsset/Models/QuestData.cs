@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Json;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -14,7 +14,7 @@ public record QuestData(
     UnitElement LimitedElementalType,
     UnitElement LimitedElementalType2,
     int LimitedWeaponTypePatternId,
-    [property: JsonConverter(typeof(BoolIntJsonConverter))] bool IsPayForceStaminaSingle,
+    bool IsPayForceStaminaSingle,
     int PayStaminaSingle,
     int CampaignStaminaSingle,
     int PayStaminaMulti,
@@ -43,11 +43,12 @@ public record QuestData(
     EntityTypes HoldEntityType,
     int HoldEntityId,
     int HoldEntityQuantity,
-    [property: JsonConverter(typeof(BoolIntJsonConverter))] bool IsSumUpTotalDamage
+    bool IsSumUpTotalDamage
 )
 {
     private int IdSuffix => this.Id % 1000;
 
+    [IgnoreMember]
     public IEnumerable<AreaInfo> AreaInfo =>
         new List<AreaInfo>()
         {
@@ -59,6 +60,7 @@ public record QuestData(
             new(this.Scene06, this.AreaName06),
         }.Where(x => !string.IsNullOrEmpty(x.ScenePath) && !string.IsNullOrEmpty(x.AreaName));
 
+    [IgnoreMember]
     public bool IsEventRegularBattle =>
         this.EventKindType switch
         {
@@ -68,6 +70,7 @@ public record QuestData(
             _ => false
         };
 
+    [IgnoreMember]
     public bool IsEventChallengeBattle =>
         this.EventKindType switch
         {
@@ -75,6 +78,7 @@ public record QuestData(
             _ => false
         };
 
+    [IgnoreMember]
     public bool IsEventTrial =>
         this.EventKindType switch
         {
@@ -83,6 +87,7 @@ public record QuestData(
             _ => false
         };
 
+    [IgnoreMember]
     public bool IsEventExBattle =>
         this.EventKindType switch
         {
@@ -90,12 +95,15 @@ public record QuestData(
             _ => false,
         };
 
+    [IgnoreMember]
     public EventKindType EventKindType =>
         MasterAsset.EventData.TryGetValue(this.Gid, out EventData? eventData)
             ? eventData.EventKindType
             : EventKindType.None;
 
+    [IgnoreMember]
     public bool IsEventQuest => GroupType == QuestGroupType.Event;
 
+    [IgnoreMember]
     public bool CanPlayCoOp => this.PayStaminaMulti > 0;
 }

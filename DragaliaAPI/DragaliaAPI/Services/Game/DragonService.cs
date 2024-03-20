@@ -124,7 +124,7 @@ public class DragonService(
                             ? Array.Empty<int>()
                             : MasterAsset
                                 .DragonStories.Get((int)dragonReliability.DragonId)
-                                .storyIds,
+                                .StoryIds,
                         dragonReliability.DragonId == Dragons.Puppy
                     );
                     if (reward != null)

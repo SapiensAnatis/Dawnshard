@@ -27,7 +27,7 @@ public class V6Update : ISavefileUpdate
             )
         )
         {
-            if (!MasterAsset.FortPlant.TryGetValue(build.FortPlantDetailId, out _))
+            if (!MasterAsset.FortPlantDetail.TryGetValue(build.FortPlantDetailId, out _))
             {
                 logger.LogDebug(
                     "Fixing building {buildId}, current level {level}, detail id {detailId}",

@@ -18,7 +18,7 @@ public class V14UpdateTest : SavefileUpdateTestFixture
                 entity.SetProperty(e => e.EmblemId, Emblems.HotBloodedInstructor)
             );
 
-        int cellieraCh5 = MasterAsset.CharaStories[(int)Charas.Celliera].storyIds[^1];
+        int cellieraCh5 = MasterAsset.CharaStories[(int)Charas.Celliera].StoryIds[^1];
 
         await this.AddToDatabase(
             new DbPlayerStoryState()

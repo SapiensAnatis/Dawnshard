@@ -18,9 +18,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 		.config\dotnet-tools.json = .config\dotnet-tools.json
+		global.json = global.json
 		nuget.config = nuget.config
 		README.md = README.md
-		global.json = global.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Database", "DragaliaAPI\DragaliaAPI.Database\DragaliaAPI.Database.csproj", "{3B1A86CE-A656-453B-BC3F-EA42DF9E3FC6}"
@@ -33,17 +33,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Database.Test",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{1A23D473-87C4-40FB-8DF0-43F4B0FE7414}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yaml = .github\workflows\build.yaml
 		.github\workflows\deploy.yaml = .github\workflows\deploy.yaml
+		.github\workflows\integration-test.yaml = .github\workflows\integration-test.yaml
 		.github\workflows\lint.yaml = .github\workflows\lint.yaml
+		.github\workflows\missiondesigner.yaml = .github\workflows\missiondesigner.yaml
 		.github\workflows\publish-api.yaml = .github\workflows\publish-api.yaml
 		.github\workflows\publish-statemanager.yaml = .github\workflows\publish-statemanager.yaml
-		.github\workflows\test.yaml = .github\workflows\test.yaml
-		.github\workflows\missiondesigner.yaml = .github\workflows\missiondesigner.yaml
-		.github\workflows\test-report.yaml = .github\workflows\test-report.yaml
-		.github\workflows\build.yaml = .github\workflows\build.yaml
-		.github\workflows\integration-test.yaml = .github\workflows\integration-test.yaml
 		.github\workflows\test-api.yaml = .github\workflows\test-api.yaml
+		.github\workflows\test-report.yaml = .github\workflows\test-report.yaml
 		.github\workflows\test-statemanager.yaml = .github\workflows\test-statemanager.yaml
+		.github\workflows\test.yaml = .github\workflows\test.yaml
 		.github\workflows\build-manual.yaml = .github\workflows\build-manual.yaml
 	EndProjectSection
 EndProject
@@ -76,6 +76,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PhotonPlugin", "PhotonPlugin", "{5A97773C-C23E-4CFE-8B1F-15D8244D2134}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DragaliaAPI", "DragaliaAPI", "{F0C76530-C14A-4601-829B-EE0F4C7E24E6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.MasterAssetConverter", "DragaliaAPI\DragaliaAPI.MasterAssetConverter\DragaliaAPI.MasterAssetConverter.csproj", "{F0DFB899-ADC2-407E-AB32-647BA1C4122C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{18AB580B-2A52-4BD7-9642-60A7DFAA4FFE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Shared.SourceGenerator", "DragaliaAPI\DragaliaAPI.Shared.SourceGenerator\DragaliaAPI.Shared.SourceGenerator.csproj", "{FD0F2BDF-715C-417D-9059-1F2EF8FA8901}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -143,27 +149,38 @@ Global
 		{00908D51-DB79-4A9C-AFBF-501F9981E6F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00908D51-DB79-4A9C-AFBF-501F9981E6F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00908D51-DB79-4A9C-AFBF-501F9981E6F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0DFB899-ADC2-407E-AB32-647BA1C4122C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0DFB899-ADC2-407E-AB32-647BA1C4122C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0DFB899-ADC2-407E-AB32-647BA1C4122C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0DFB899-ADC2-407E-AB32-647BA1C4122C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD0F2BDF-715C-417D-9059-1F2EF8FA8901}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD0F2BDF-715C-417D-9059-1F2EF8FA8901}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD0F2BDF-715C-417D-9059-1F2EF8FA8901}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD0F2BDF-715C-417D-9059-1F2EF8FA8901}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{1A23D473-87C4-40FB-8DF0-43F4B0FE7414} = {BC72B633-A158-4169-9B47-3CB9C689A57E}
-		{8E4D9C20-3914-4A8A-ACC0-22997F2947AB} = {8B4B2FE9-B1FC-44FC-BC49-0E277731A68A}
-		{D940A00F-39CC-48C5-996E-DF0EC55FD140} = {8B4B2FE9-B1FC-44FC-BC49-0E277731A68A}
-		{7D333F35-F74C-4A63-AB6E-5F0EE4590ADB} = {BC72B633-A158-4169-9B47-3CB9C689A57E}
-		{7394DCE5-7E1B-44C7-B3CA-735885D97695} = {F6545B66-0303-4E4C-B872-7E89091885A8}
-		{D9AC51A5-38F6-4DD1-8839-9FE881396A6B} = {5A97773C-C23E-4CFE-8B1F-15D8244D2134}
-		{64D07506-1978-4981-AF90-B73C4B6AFCE5} = {5A97773C-C23E-4CFE-8B1F-15D8244D2134}
 		{161BE542-C5B4-441D-BEA1-5F3553BFD839} = {F0C76530-C14A-4601-829B-EE0F4C7E24E6}
+		{A1E6C76A-4D4F-427D-80AF-CF289CBBAF00} = {F0C76530-C14A-4601-829B-EE0F4C7E24E6}
 		{3B1A86CE-A656-453B-BC3F-EA42DF9E3FC6} = {F0C76530-C14A-4601-829B-EE0F4C7E24E6}
-		{BF6A04DC-56FE-491F-A73B-F54A3E7BAA4B} = {F0C76530-C14A-4601-829B-EE0F4C7E24E6}
-		{CA0AE7C5-2742-4FC9-B668-BC7459E4BCE5} = {F0C76530-C14A-4601-829B-EE0F4C7E24E6}
-		{00908D51-DB79-4A9C-AFBF-501F9981E6F1} = {F0C76530-C14A-4601-829B-EE0F4C7E24E6}
 		{A8051BCA-7E23-417C-986A-943DE4F81E1B} = {F0C76530-C14A-4601-829B-EE0F4C7E24E6}
 		{283F16C6-1EB5-4062-90C6-663D975977FE} = {F0C76530-C14A-4601-829B-EE0F4C7E24E6}
-		{A1E6C76A-4D4F-427D-80AF-CF289CBBAF00} = {F0C76530-C14A-4601-829B-EE0F4C7E24E6}
+		{BF6A04DC-56FE-491F-A73B-F54A3E7BAA4B} = {F0C76530-C14A-4601-829B-EE0F4C7E24E6}
+		{1A23D473-87C4-40FB-8DF0-43F4B0FE7414} = {BC72B633-A158-4169-9B47-3CB9C689A57E}
 		{41916B7C-6304-4504-99C0-B24D23982F7E} = {F0C76530-C14A-4601-829B-EE0F4C7E24E6}
+		{8E4D9C20-3914-4A8A-ACC0-22997F2947AB} = {8B4B2FE9-B1FC-44FC-BC49-0E277731A68A}
+		{D9AC51A5-38F6-4DD1-8839-9FE881396A6B} = {5A97773C-C23E-4CFE-8B1F-15D8244D2134}
+		{CA0AE7C5-2742-4FC9-B668-BC7459E4BCE5} = {F0C76530-C14A-4601-829B-EE0F4C7E24E6}
+		{7394DCE5-7E1B-44C7-B3CA-735885D97695} = {F6545B66-0303-4E4C-B872-7E89091885A8}
+		{D940A00F-39CC-48C5-996E-DF0EC55FD140} = {8B4B2FE9-B1FC-44FC-BC49-0E277731A68A}
+		{7D333F35-F74C-4A63-AB6E-5F0EE4590ADB} = {BC72B633-A158-4169-9B47-3CB9C689A57E}
+		{64D07506-1978-4981-AF90-B73C4B6AFCE5} = {5A97773C-C23E-4CFE-8B1F-15D8244D2134}
+		{00908D51-DB79-4A9C-AFBF-501F9981E6F1} = {18AB580B-2A52-4BD7-9642-60A7DFAA4FFE}
+		{F0DFB899-ADC2-407E-AB32-647BA1C4122C} = {18AB580B-2A52-4BD7-9642-60A7DFAA4FFE}
+		{18AB580B-2A52-4BD7-9642-60A7DFAA4FFE} = {F0C76530-C14A-4601-829B-EE0F4C7E24E6}
+		{FD0F2BDF-715C-417D-9059-1F2EF8FA8901} = {F0C76530-C14A-4601-829B-EE0F4C7E24E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D86831A9-C572-4B8D-BD12-EF0768BC9E4F}

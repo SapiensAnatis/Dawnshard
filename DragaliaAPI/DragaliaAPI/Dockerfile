@@ -1,11 +1,11 @@
-ARG BASE_DOTNET_IMAGE=mcr.microsoft.com/dotnet/aspnet:8.0
+ARG BASE_DOTNET_IMAGE=mcr.microsoft.com/dotnet/aspnet:8.0.3
 
 FROM $BASE_DOTNET_IMAGE AS base
 WORKDIR /app
 
 EXPOSE 8080
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0.203 AS build
 
 ARG CI
 
@@ -15,6 +15,7 @@ COPY ["Directory.Build.props", "."]
 COPY ["Directory.Packages.props", "."]
 COPY ["nuget.config", "."]
 RUN dotnet restore "DragaliaAPI/DragaliaAPI/DragaliaAPI.csproj"
+COPY [".editorconfig", ".editorconfig"]
 COPY ["DragaliaAPI/", "DragaliaAPI/"]
 COPY ["Shared/", "Shared/"]
 WORKDIR "/src/DragaliaAPI/DragaliaAPI"

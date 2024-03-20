@@ -145,7 +145,7 @@ public class StoryService(
         {
             wyrmiteReward = data.IsFirstEpisode ? CharaStoryWyrmite1 : CharaStoryWyrmite2;
             charaStory = MasterAsset.CharaStories[data.ReleaseTriggerId];
-            if (data.Id == charaStory.storyIds.Last())
+            if (data.Id == charaStory.StoryIds.Last())
             {
                 emblemRewardId = data.ReleaseTriggerId;
                 emblemRewardEntity = new Entity(EntityTypes.Title, emblemRewardId, 1);

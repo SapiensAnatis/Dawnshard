@@ -1,4 +1,4 @@
-using DragaliaAPI.Shared.Json;
+using DragaliaAPI.Shared.Serialization;
 
 namespace DragaliaAPI.Shared.Test.Json;
 
