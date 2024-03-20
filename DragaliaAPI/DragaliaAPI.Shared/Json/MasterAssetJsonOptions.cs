@@ -12,5 +12,6 @@ public class MasterAssetJsonOptions
         Instance.Converters.Add(new BoolIntJsonConverter());
         Instance.Converters.Add(new MasterAssetDateTimeOffsetConverter());
         Instance.PropertyNamingPolicy = new MasterAssetNamingPolicy();
+        Instance.TypeInfoResolver = SharedContext.Default;
     }
 }
