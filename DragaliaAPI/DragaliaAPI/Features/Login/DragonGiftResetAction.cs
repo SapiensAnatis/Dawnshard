@@ -43,11 +43,7 @@ public class DragonGiftResetAction(
 
         DayOfWeek todayDayOfWeek = timeProvider.GetUtcNow().DayOfWeek;
 
-        foreach (
-            (DragonGifts dailyGiftId, int dayNo) in DragonConstants.RotatingGifts.Select(
-                (x, index) => (x, index)
-            )
-        )
+        foreach (DragonGifts dailyGiftId in DragonConstants.RotatingGifts)
         {
             if (!dbGifts.TryGetValue(dailyGiftId, out DbPlayerDragonGift? dbGift))
             {
@@ -62,7 +58,7 @@ public class DragonGiftResetAction(
                 dbGifts[dailyGiftId] = dbGift;
             }
 
-            if (dayNo == (int)todayDayOfWeek)
+            if (DragonConstants.RotatingGifts[(int)todayDayOfWeek] == dailyGiftId)
             {
                 dbGift.Quantity = 1;
             }
