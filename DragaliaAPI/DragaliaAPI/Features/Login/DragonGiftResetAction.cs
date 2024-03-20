@@ -34,6 +34,8 @@ public class DragonGiftResetAction(
                 };
 
                 apiContext.PlayerDragonGifts.Add(dbGift);
+
+                dbGifts[giftId] = dbGift;
             }
 
             dbGift.Quantity = 1;
@@ -56,6 +58,8 @@ public class DragonGiftResetAction(
                 };
 
                 apiContext.PlayerDragonGifts.Add(dbGift);
+
+                dbGifts[dailyGiftId] = dbGift;
             }
 
             if (dayNo == (int)todayDayOfWeek)

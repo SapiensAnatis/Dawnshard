@@ -87,6 +87,36 @@ public class LoginTest : TestFixture
     }
 
     [Fact]
+    public async Task LoginIndex_LastLoginBeforeReset_NoDragonGifts_ResetsDragonGiftCount()
+    {
+        await this
+            .ApiContext.PlayerDragonGifts.Where(x => x.ViewerId == ViewerId)
+            .ExecuteDeleteAsync();
+
+        this.MockTimeProvider.SetUtcNow(
+            new DateTimeOffset(2049, 03, 15, 23, 13, 59, TimeSpan.Zero)
+        ); // Monday
+
+        await this.Client.PostMsgpack<LoginIndexResponse>("/login/index", new LoginIndexRequest());
+
+        List<DbPlayerDragonGift> dbPlayerDragonGifts = await this.GetDragonGifts();
+
+        dbPlayerDragonGifts
+            .Where(x => x.DragonGiftId <= DragonGifts.HeartyStew)
+            .Should()
+            .AllSatisfy(
+                x => x.Quantity.Should().Be(1),
+                because: "purchasable gifts should be reset"
+            );
+
+        dbPlayerDragonGifts
+            .Should()
+            .Contain(x => x.DragonGiftId == DragonGifts.JuicyMeat)
+            .Which.Quantity.Should()
+            .Be(1, because: "the current day's rotating gift should be made available");
+    }
+
+    [Fact]
     public async Task LoginIndex_GrantsLoginBonusBasedOnDb_GrantsEachDayReward()
     {
         /*
