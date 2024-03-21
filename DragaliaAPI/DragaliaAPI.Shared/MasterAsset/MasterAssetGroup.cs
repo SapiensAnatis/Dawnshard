@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
+﻿using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json;
@@ -16,13 +15,13 @@ public class MasterAssetGroup<TGroupKey, TKey, TItem>
 
     private readonly string jsonFilename;
     private readonly Func<TItem, TKey> keySelector;
-    private readonly Lazy<Dictionary<TGroupKey, InternalKeyedCollection>> internalDictionary;
+    private readonly FrozenDictionary<TGroupKey, FrozenDictionary<TKey, TItem>> internalDictionary;
 
     /// <summary>
     /// Gets a <see cref="IEnumerable{TItem}"/> of all the collection's values.
     /// </summary>
     public IEnumerable<IEnumerable<TItem>> Enumerable =>
-        this.internalDictionary.Value.Values.Select(x => x.AsEnumerable());
+        this.internalDictionary.Values.Select(x => x.Values.AsEnumerable());
 
     /// <summary>
     /// Get a <typeparam name="TItem"> instance corresponding to the given <typeparam name="TKey"/> key.</typeparam>
@@ -38,8 +37,7 @@ public class MasterAssetGroup<TGroupKey, TKey, TItem>
     /// <param name="key">The key to index with.</param>
     /// <returns>The returned value.</returns>
     /// <exception cref="KeyNotFoundException">The given key was not present in the collection.</exception>
-    public IDictionary<TKey, TItem> this[TGroupKey key] =>
-        this.internalDictionary.Value[key].AsImmutableDictionary();
+    public IDictionary<TKey, TItem> this[TGroupKey key] => this.internalDictionary[key];
 
     /// <summary>
     /// Attempts to get a <typeparam name="TItem"> instance corresponding to the given <typeparam name="TKey"/> key.</typeparam>
@@ -49,12 +47,12 @@ public class MasterAssetGroup<TGroupKey, TKey, TItem>
     /// <returns>A bool indicating whether the value was successfully retrieved.</returns>
     public bool TryGetValue(TGroupKey key, [NotNullWhen(true)] out IDictionary<TKey, TItem>? item)
     {
-        bool result = this.internalDictionary.Value.TryGetValue(
+        bool result = this.internalDictionary.TryGetValue(
             key,
-            out InternalKeyedCollection? entry
+            out FrozenDictionary<TKey, TItem>? entry
         );
 
-        item = result ? entry!.AsImmutableDictionary() : null;
+        item = result ? entry!.ToDictionary() : null;
 
         return result;
     }
@@ -69,10 +67,10 @@ public class MasterAssetGroup<TGroupKey, TKey, TItem>
     {
         this.jsonFilename = jsonFilename;
         this.keySelector = keySelector;
-        this.internalDictionary = new(DataFactory);
+        this.internalDictionary = this.DataFactory();
     }
 
-    private Dictionary<TGroupKey, InternalKeyedCollection> DataFactory()
+    private FrozenDictionary<TGroupKey, FrozenDictionary<TKey, TItem>> DataFactory()
     {
         string path = Path.Join(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
@@ -80,47 +78,20 @@ public class MasterAssetGroup<TGroupKey, TKey, TItem>
             jsonFilename
         );
 
-        Dictionary<TGroupKey, IEnumerable<TItem>> items =
-            JsonSerializer.Deserialize<Dictionary<TGroupKey, IEnumerable<TItem>>>(
+        Dictionary<TGroupKey, List<TItem>> items =
+            JsonSerializer.Deserialize<Dictionary<TGroupKey, List<TItem>>>(
                 File.ReadAllText(path),
                 MasterAssetJsonOptions.Instance
             )
             ?? throw new JsonException("Deserialized Dictionary<int, IEnumerable<TItem>> was null");
 
-        Dictionary<TGroupKey, InternalKeyedCollection> dict = items.ToDictionary(
-            x => x.Key,
-            x =>
-            {
-                InternalKeyedCollection collection = new(this.keySelector);
-                foreach (TItem item in x.Value)
-                    collection.Add(item);
-
-                return collection;
-            }
-        );
+        FrozenDictionary<TGroupKey, FrozenDictionary<TKey, TItem>> dict = items
+            .ToDictionary(
+                x => x.Key,
+                x => x.Value.ToDictionary(y => this.keySelector(y), y => y).ToFrozenDictionary()
+            )
+            .ToFrozenDictionary();
 
         return dict;
-    }
-
-    private class InternalKeyedCollection : KeyedCollection<TKey, TItem>
-    {
-        private readonly Func<TItem, TKey> keySelector;
-
-        public InternalKeyedCollection(Func<TItem, TKey> keySelector)
-        {
-            this.keySelector = keySelector;
-        }
-
-        protected override TKey GetKeyForItem(TItem item)
-        {
-            return this.keySelector.Invoke(item);
-        }
-
-        public Dictionary<TKey, TItem> AsImmutableDictionary()
-        {
-            Debug.Assert(this.Dictionary != null, "this.Dictionary != null");
-
-            return this.Dictionary.ToDictionary();
-        }
     }
 }

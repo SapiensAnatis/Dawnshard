@@ -106,11 +106,9 @@ public class MasterAssetData<TKey, TItem>
 
         using FileStream fs = File.OpenRead(path);
 
-        IReadOnlyCollection<TItem> items =
-            JsonSerializer.Deserialize<IReadOnlyCollection<TItem>>(
-                fs,
-                MasterAssetJsonOptions.Instance
-            ) ?? throw new JsonException("Deserialized IEnumerable was null");
+        List<TItem> items =
+            JsonSerializer.Deserialize<List<TItem>>(fs, MasterAssetJsonOptions.Instance)
+            ?? throw new JsonException("Deserialized IEnumerable was null");
 
         return new FrozenKeyedCollection(items, this.keySelector);
     }
