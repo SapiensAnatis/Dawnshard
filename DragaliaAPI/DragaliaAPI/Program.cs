@@ -101,7 +101,7 @@ Stopwatch watch = new();
 app.Logger.LogInformation("Loading MasterAsset data.");
 
 watch.Start();
-RuntimeHelpers.RunClassConstructor(typeof(MasterAsset).TypeHandle);
+await MasterAsset.LoadAsync();
 watch.Stop();
 
 app.Logger.LogInformation("Loaded MasterAsset in {time}.", watch.Elapsed);

@@ -11,10 +11,6 @@ public class MasterAssetGroup<TGroupKey, TKey, TItem>
     where TKey : notnull
     where TGroupKey : notnull
 {
-    private const string JsonFolder = "Resources";
-
-    private readonly string jsonFilename;
-    private readonly Func<TItem, TKey> keySelector;
     private readonly FrozenDictionary<TGroupKey, FrozenDictionary<TKey, TItem>> internalDictionary;
 
     /// <summary>
@@ -57,20 +53,24 @@ public class MasterAssetGroup<TGroupKey, TKey, TItem>
         return result;
     }
 
-    /// <summary>
-    /// Creates a new instance of <see cref="MasterAssetGroup{TGroupKey, TKey,TItem}"/>.
-    /// </summary>
-    /// <param name="jsonFilename">The filename of the JSON in <see cref="JsonFolder"/>.</param>
-    /// <param name="keySelector">A function that returns a unique <typeparamref name="TKey"/> value from a
-    /// <typeparamref name="TItem"/>.</param>
-    public MasterAssetGroup(string jsonFilename, Func<TItem, TKey> keySelector)
+    internal MasterAssetGroup(FrozenDictionary<TGroupKey, FrozenDictionary<TKey, TItem>> data)
     {
-        this.jsonFilename = jsonFilename;
-        this.keySelector = keySelector;
-        this.internalDictionary = this.DataFactory();
+        this.internalDictionary = data;
     }
+}
 
-    private FrozenDictionary<TGroupKey, FrozenDictionary<TKey, TItem>> DataFactory()
+public static class MasterAssetGroup
+{
+    private const string JsonFolder = "Resources";
+
+    public static async Task<MasterAssetGroup<TGroupKey, TKey, TItem>> LoadAsync<
+        TGroupKey,
+        TKey,
+        TItem
+    >(string jsonFilename, Func<TItem, TKey> keySelector)
+        where TItem : class
+        where TKey : notnull
+        where TGroupKey : notnull
     {
         string path = Path.Join(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
@@ -78,20 +78,21 @@ public class MasterAssetGroup<TGroupKey, TKey, TItem>
             jsonFilename
         );
 
+        await using FileStream fs = File.OpenRead(path);
+
         Dictionary<TGroupKey, List<TItem>> items =
-            JsonSerializer.Deserialize<Dictionary<TGroupKey, List<TItem>>>(
-                File.ReadAllText(path),
+            await JsonSerializer.DeserializeAsync<Dictionary<TGroupKey, List<TItem>>>(
+                fs,
                 MasterAssetJsonOptions.Instance
-            )
-            ?? throw new JsonException("Deserialized Dictionary<int, IEnumerable<TItem>> was null");
+            ) ?? throw new JsonException("Deserialized IEnumerable was null");
 
         FrozenDictionary<TGroupKey, FrozenDictionary<TKey, TItem>> dict = items
             .ToDictionary(
                 x => x.Key,
-                x => x.Value.ToDictionary(y => this.keySelector(y), y => y).ToFrozenDictionary()
+                x => x.Value.ToDictionary(keySelector, y => y).ToFrozenDictionary()
             )
             .ToFrozenDictionary();
 
-        return dict;
+        return new MasterAssetGroup<TGroupKey, TKey, TItem>(dict);
     }
 }

@@ -20,25 +20,21 @@ namespace DragaliaAPI.Shared.MasterAsset;
 /// </remarks>
 /// <typeparam name="TKey">The type of the data's unique key.</typeparam>
 /// <typeparam name="TItem">The type of the data models that will be returned. Should be a record or immutable class.</typeparam>
-public class MasterAssetData<TKey, TItem>
+public sealed class MasterAssetData<TKey, TItem>
     where TItem : class
     where TKey : notnull
 {
-    private const string JsonFolder = "Resources";
-
-    private readonly string jsonFilename;
-    private readonly Func<TItem, TKey> keySelector;
-    private readonly FrozenKeyedCollection internalKeyCollection;
+    private readonly FrozenDictionary<TKey, TItem> internalKeyCollection;
 
     /// <summary>
     /// Gets a <see cref="IEnumerable{TItem}"/> of all the collection's values.
     /// </summary>
-    public IEnumerable<TItem> Enumerable => this.internalKeyCollection.Items;
+    public IEnumerable<TItem> Enumerable => this.internalKeyCollection.Values;
 
     /// <summary>
     /// Gets the number of items in the collection.
     /// </summary>
-    public int Count => this.internalKeyCollection.Items.Length;
+    public int Count => this.internalKeyCollection.Count;
 
     /// <summary>
     /// Get a <typeparam name="TItem"> instance corresponding to the given <typeparam name="TKey"/> key.</typeparam>
@@ -83,20 +79,22 @@ public class MasterAssetData<TKey, TItem>
     /// <returns>A bool indicating whether that key is in the dictionary.</returns>
     public bool ContainsKey(TKey key) => this.internalKeyCollection.ContainsKey(key);
 
-    /// <summary>
-    /// Creates a new instance of <see cref="MasterAssetData{TKey,TItem}"/>.
-    /// </summary>
-    /// <param name="jsonFilename">The filename of the JSON in <see cref="JsonFolder"/>.</param>
-    /// <param name="keySelector">A function that returns a unique <typeparamref name="TKey"/> value from a
-    /// <typeparamref name="TItem"/>.</param>
-    public MasterAssetData(string jsonFilename, Func<TItem, TKey> keySelector)
+    public MasterAssetData(FrozenDictionary<TKey, TItem> frozenKeyedCollection)
     {
-        this.jsonFilename = jsonFilename;
-        this.keySelector = keySelector;
-        this.internalKeyCollection = DataFactory();
+        this.internalKeyCollection = frozenKeyedCollection;
     }
+}
 
-    private FrozenKeyedCollection DataFactory()
+public static class MasterAssetData
+{
+    private const string JsonFolder = "Resources";
+
+    public static async Task<MasterAssetData<TKey, TItem>> LoadAsync<TKey, TItem>(
+        string jsonFilename,
+        Func<TItem, TKey> keySelector
+    )
+        where TItem : class
+        where TKey : notnull
     {
         string path = Path.Join(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
@@ -104,31 +102,16 @@ public class MasterAssetData<TKey, TItem>
             jsonFilename
         );
 
-        using FileStream fs = File.OpenRead(path);
+        await using FileStream fs = File.OpenRead(path);
 
         List<TItem> items =
-            JsonSerializer.Deserialize<List<TItem>>(fs, MasterAssetJsonOptions.Instance)
+            await JsonSerializer.DeserializeAsync<List<TItem>>(fs, MasterAssetJsonOptions.Instance)
             ?? throw new JsonException("Deserialized IEnumerable was null");
 
-        return new FrozenKeyedCollection(items, this.keySelector);
-    }
+        FrozenDictionary<TKey, TItem> frozenDict = items
+            .ToDictionary(keySelector, x => x)
+            .ToFrozenDictionary();
 
-    private class FrozenKeyedCollection
-    {
-        public ImmutableArray<TItem> Items { get; }
-        private readonly FrozenDictionary<TKey, TItem> dictionary;
-
-        public FrozenKeyedCollection(IReadOnlyCollection<TItem> items, Func<TItem, TKey> selector)
-        {
-            this.dictionary = items.ToFrozenDictionary(selector, x => x);
-            this.Items = this.dictionary.Values;
-        }
-
-        public TItem this[TKey key] => this.dictionary[key];
-
-        public bool TryGetValue(TKey key, [NotNullWhen(true)] out TItem? item) =>
-            this.dictionary.TryGetValue(key, out item);
-
-        public bool ContainsKey(TKey key) => this.dictionary.ContainsKey(key);
+        return new MasterAssetData<TKey, TItem>(frozenDict);
     }
 }

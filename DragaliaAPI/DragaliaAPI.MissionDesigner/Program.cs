@@ -34,6 +34,8 @@ foreach (Type type in types)
     }
 }
 
+await MasterAsset.LoadAsync();
+
 foreach ((_, MissionProgressionInfo progInfo) in missions)
 {
     if (
