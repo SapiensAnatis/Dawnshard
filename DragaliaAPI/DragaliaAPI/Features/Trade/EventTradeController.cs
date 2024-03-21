@@ -27,13 +27,16 @@ public class EventTradeController(
     }
 
     [HttpPost("trade")]
-    public async Task<DragaliaResult> Trade(EventTradeTradeRequest request)
+    public async Task<DragaliaResult> Trade(
+        EventTradeTradeRequest request,
+        CancellationToken cancellationToken
+    )
     {
         EventTradeTradeResponse resp = new();
 
         await tradeService.DoTrade(TradeType.Event, request.TradeId, request.TradeCount);
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
         resp.EventTradeList = tradeService.GetEventTradeList(request.TradeGroupId);
         resp.UserEventTradeList = await tradeService.GetUserEventTradeList();

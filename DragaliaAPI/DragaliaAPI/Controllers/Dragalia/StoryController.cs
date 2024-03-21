@@ -25,7 +25,10 @@ public class StoryController : DragaliaControllerBase
     }
 
     [HttpPost("read")]
-    public async Task<DragaliaResult> Read(StoryReadRequest request)
+    public async Task<DragaliaResult> Read(
+        StoryReadRequest request,
+        CancellationToken cancellationToken
+    )
     {
         if (!MasterAsset.UnitStory.TryGetValue(request.UnitStoryId, out UnitStory? data))
         {
@@ -48,7 +51,9 @@ public class StoryController : DragaliaControllerBase
             request.UnitStoryId
         );
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
+            cancellationToken
+        );
 
         return this.Ok(
             new StoryReadResponse()

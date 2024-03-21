@@ -49,12 +49,15 @@ public class RaidEventController(
     }
 
     [HttpPost("entry")]
-    public async Task<DragaliaResult> Entry(RaidEventEntryRequest request)
+    public async Task<DragaliaResult> Entry(
+        RaidEventEntryRequest request,
+        CancellationToken cancellationToken
+    )
     {
         RaidEventEntryResponse resp = new();
 
         resp.RaidEventUserData = await eventService.GetRaidEventUserData(request.RaidEventId);
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
@@ -62,14 +65,15 @@ public class RaidEventController(
 
     [HttpPost("receive_raid_point_reward")]
     public async Task<DragaliaResult> ReceiveRaidPointReward(
-        RaidEventReceiveRaidPointRewardRequest request
+        RaidEventReceiveRaidPointRewardRequest request,
+        CancellationToken cancellationToken
     )
     {
         RaidEventReceiveRaidPointRewardResponse resp = new();
 
         await eventService.ReceiveEventRewards(request.RaidEventId, request.RaidEventRewardIdList);
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         resp.RaidEventRewardList = await eventService.GetEventRewardList<RaidEventRewardList>(

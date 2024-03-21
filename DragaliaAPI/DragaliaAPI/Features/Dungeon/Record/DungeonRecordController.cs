@@ -1,13 +1,11 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Features.Dungeon.AutoRepeat;
-using DragaliaAPI.Features.Dungeon.Start;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Definitions.Enums.Dungeon;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -73,7 +71,10 @@ public class DungeonRecordController(
 
     [HttpPost("record_multi")]
     [Authorize(AuthenticationSchemes = nameof(PhotonAuthenticationHandler))]
-    public async Task<DragaliaResult> RecordMulti(DungeonRecordRecordMultiRequest request)
+    public async Task<DragaliaResult> RecordMulti(
+        DungeonRecordRecordMultiRequest request,
+        CancellationToken cancellationToken
+    )
     {
         DungeonSession session = await dungeonService.FinishDungeon(request.DungeonKey);
 
@@ -92,7 +93,7 @@ public class DungeonRecordController(
         ingameResultData.HelperDetailList = helperDetailList;
         ingameResultData.PlayType = QuestPlayType.Multi;
 
-        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         DungeonRecordRecordResponse response =
             new() { IngameResultData = ingameResultData, UpdateDataList = updateDataList, };
@@ -116,13 +117,14 @@ public class DungeonRecordController(
     public async Task<DragaliaResult> RecordTimeAttack(
         [FromHeader(Name = "RoomName")] string roomName,
         [FromHeader(Name = "RoomId")] int roomId,
-        [FromBody] DungeonRecordRecordMultiRequest request
+        [FromBody] DungeonRecordRecordMultiRequest request,
+        CancellationToken cancellationToken
     )
     {
         string gameId = $"{roomName}_{roomId}";
 
         await timeAttackService.RegisterRankedClear(gameId, request.PlayRecord.Time);
-        await updateDataService.SaveChangesAsync();
+        await updateDataService.SaveChangesAsync(cancellationToken);
 
         return this.Ok(new ResultCodeResponse(ResultCode.Success));
     }

@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net.Http.Headers;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Dungeon;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 
+[SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments")]
 public class DungeonRecordTest : TestFixture
 {
     public DungeonRecordTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
@@ -23,6 +25,8 @@ public class DungeonRecordTest : TestFixture
         this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
             p.SetProperty(e => e.StaminaMulti, e => 100)
         );
+
+        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
     }
 
     [Fact]
@@ -158,7 +162,7 @@ public class DungeonRecordTest : TestFixture
             .UpdateDataList.MaterialList.Should()
             .Contain(x => x.MaterialId == Materials.Squishums);
         response
-            .UpdateDataList.QuestList.Should()
+            .UpdateDataList.QuestList!.Should()
             .ContainEquivalentOf(
                 new QuestList()
                 {
@@ -426,7 +430,7 @@ public class DungeonRecordTest : TestFixture
         ).Data;
 
         response
-            .UpdateDataList.QuestList.Should()
+            .UpdateDataList.QuestList!.Should()
             .ContainEquivalentOf(
                 new QuestList() { QuestId = exQuestId, IsAppear = true, },
                 opts => opts.Including(x => x.QuestId).Including(x => x.IsAppear)
@@ -480,7 +484,7 @@ public class DungeonRecordTest : TestFixture
             )
         ).Data;
 
-        response.UpdateDataList.QuestList.Should().NotContain(x => x.QuestId == exQuestId);
+        response.UpdateDataList.QuestList!.Should().NotContain(x => x.QuestId == exQuestId);
     }
 
     [Fact]
@@ -528,7 +532,7 @@ public class DungeonRecordTest : TestFixture
         ).Data;
 
         response
-            .UpdateDataList.QuestList.Should()
+            .UpdateDataList.QuestList!.Should()
             .ContainEquivalentOf(
                 new QuestList() { QuestId = exQuestId, IsAppear = false, },
                 opts => opts.Including(x => x.QuestId).Including(x => x.IsAppear)

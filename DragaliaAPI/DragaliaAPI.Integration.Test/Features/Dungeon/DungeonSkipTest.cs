@@ -11,6 +11,7 @@ public class DungeonSkipTest : TestFixture
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions();
+        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
     }
 
     [Fact]
@@ -61,7 +62,7 @@ public class DungeonSkipTest : TestFixture
             .Contain(x => x.Name == "dreadfullydistinct");
 
         response
-            .Data.UpdateDataList.QuestList.Should()
+            .Data.UpdateDataList.QuestList!.Should()
             .Contain(x => x.QuestId == questId && x.PlayCount == playCount);
         response
             .Data.UpdateDataList.UserData.StaminaSingle.Should()
@@ -125,7 +126,7 @@ public class DungeonSkipTest : TestFixture
             .Contain(x => x.Name == "dreadfullydistinct");
 
         response
-            .Data.UpdateDataList.QuestList.Should()
+            .Data.UpdateDataList.QuestList!.Should()
             .Contain(x => x.QuestId == questId && x.PlayCount == playCount);
         response
             .Data.UpdateDataList.UserData.StaminaSingle.Should()
@@ -185,7 +186,7 @@ public class DungeonSkipTest : TestFixture
             .Contain(x => x.Name == "dreadfullydistinct");
 
         response
-            .Data.UpdateDataList.QuestList.Select(x => x.QuestId)
+            .Data.UpdateDataList.QuestList!.Select(x => x.QuestId)
             .Should()
             .BeEquivalentTo(
                 new List<int>()
@@ -197,7 +198,9 @@ public class DungeonSkipTest : TestFixture
                     flameIoStandard
                 }
             );
-        response.Data.UpdateDataList.QuestList.Should().AllSatisfy(x => x.PlayCount.Should().Be(1));
+        response
+            .Data.UpdateDataList.QuestList!.Should()
+            .AllSatisfy(x => x.PlayCount.Should().Be(1));
 
         response
             .Data.UpdateDataList.UserData.StaminaSingle.Should()

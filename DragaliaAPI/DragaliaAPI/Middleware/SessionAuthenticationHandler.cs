@@ -26,12 +26,11 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
         IOptionsMonitor<AuthenticationSchemeOptions> options,
         ILoggerFactory logger,
         UrlEncoder encoder,
-        ISystemClock clock,
         ISessionService sessionService,
         IWebHostEnvironment webHostEnvironment,
         ApiContext apiContext
     )
-        : base(options, logger, encoder, clock)
+        : base(options, logger, encoder)
     {
         this.sessionService = sessionService;
         this.webHostEnvironment = webHostEnvironment;
@@ -102,7 +101,7 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
         // Should make the client go back to /tool/reauth
         this.Logger.LogDebug("Returning Session-Expired BadRequest response");
         this.Response.StatusCode = 400;
-        this.Response.Headers.Add(SessionExpired, True);
+        this.Response.Headers.Append(SessionExpired, True);
 
         return Task.CompletedTask;
     }

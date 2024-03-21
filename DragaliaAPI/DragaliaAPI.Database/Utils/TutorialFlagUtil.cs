@@ -45,15 +45,15 @@ public static class TutorialFlagUtil
 
     public static ISet<int> ConvertIntToFlagIntList(int flags)
     {
-        ISet<int> setFlags = new SortedSet<int>();
+        SortedSet<int> setFlags = new SortedSet<int>();
         if (flags != (int)TutorialFlags.Clear)
         {
             for (int i = 0; i < 30; i++)
             {
-                int _flagNr = 1001 + i;
-                int _flag = 1 << i;
-                if ((flags & _flag) == _flag)
-                    setFlags.Add(_flagNr);
+                int flagNr = 1001 + i;
+                int flag = 1 << i;
+                if ((flags & flag) == flag)
+                    setFlags.Add(flagNr);
             }
         }
         return setFlags;

@@ -1,7 +1,6 @@
 using DragaliaAPI.MissionDesigner.Models;
 using DragaliaAPI.MissionDesigner.Models.Attributes;
 using DragaliaAPI.MissionDesigner.Models.EventMission;
-using JetBrains.Annotations;
 
 namespace DragaliaAPI.MissionDesigner.Missions;
 

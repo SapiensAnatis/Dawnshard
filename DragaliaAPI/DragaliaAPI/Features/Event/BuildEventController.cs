@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Controllers;
-using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Models.Generated;
@@ -14,8 +13,7 @@ public class BuildEventController(
     IUpdateDataService updateDataService,
     IRewardService rewardService,
     IEventService eventService,
-    ITradeService tradeService,
-    IMissionProgressionService missionProgressionService
+    ITradeService tradeService
 ) : DragaliaControllerBase
 {
     [HttpPost("get_event_data")]
@@ -44,13 +42,16 @@ public class BuildEventController(
     }
 
     [HttpPost("entry")]
-    public async Task<DragaliaResult> Entry(BuildEventEntryRequest request)
+    public async Task<DragaliaResult> Entry(
+        BuildEventEntryRequest request,
+        CancellationToken cancellationToken
+    )
     {
         BuildEventEntryResponse resp = new();
 
         resp.IsReceivableEventDailyBonus = await eventService.GetCustomEventFlag(request.EventId);
         resp.BuildEventUserData = await eventService.GetBuildEventUserData(request.EventId);
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
@@ -58,14 +59,15 @@ public class BuildEventController(
 
     [HttpPost("receive_build_point_reward")]
     public async Task<DragaliaResult> ReceiveBuildPointReward(
-        BuildEventReceiveBuildPointRewardRequest request
+        BuildEventReceiveBuildPointRewardRequest request,
+        CancellationToken cancellationToken
     )
     {
         BuildEventReceiveBuildPointRewardResponse resp = new();
 
         resp.BuildEventRewardEntityList = await eventService.ReceiveEventRewards(request.EventId);
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         resp.BuildEventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(

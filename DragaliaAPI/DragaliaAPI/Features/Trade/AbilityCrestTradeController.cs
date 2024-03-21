@@ -16,7 +16,7 @@ public class AbilityCrestTradeController(
 ) : DragaliaControllerBase
 {
     [HttpPost("get_list")]
-    public async Task<DragaliaResult> GetList()
+    public async Task<DragaliaResult> GetList(CancellationToken cancellationToken)
     {
         AbilityCrestTradeGetListResponse resp = new();
 
@@ -24,20 +24,23 @@ public class AbilityCrestTradeController(
 
         resp.AbilityCrestTradeList = tradeService.GetCurrentAbilityCrestTradeList();
         resp.UserAbilityCrestTradeList = await tradeService.GetUserAbilityCrestTradeList();
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
 
     [HttpPost("trade")]
-    public async Task<DragaliaResult> Trade(AbilityCrestTradeTradeRequest request)
+    public async Task<DragaliaResult> Trade(
+        AbilityCrestTradeTradeRequest request,
+        CancellationToken cancellationToken
+    )
     {
         AbilityCrestTradeTradeResponse resp = new();
 
         await tradeService.DoAbilityCrestTrade(request.AbilityCrestTradeId, request.TradeCount);
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
         resp.AbilityCrestTradeList = tradeService.GetCurrentAbilityCrestTradeList();
         resp.UserAbilityCrestTradeList = await tradeService.GetUserAbilityCrestTradeList();

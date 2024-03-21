@@ -48,7 +48,10 @@ public class WallRecordController : DragaliaControllerBase
 
     // Called upon completing a MG quest
     [HttpPost("record")]
-    public async Task<DragaliaResult> Record(WallRecordRecordRequest request)
+    public async Task<DragaliaResult> Record(
+        WallRecordRecordRequest request,
+        CancellationToken cancellationToken
+    )
     {
         DungeonSession dungeonSession = await dungeonService.FinishDungeon(request.DungeonKey);
         DbPlayerQuestWall questWall = await wallRepository.GetQuestWall(request.WallId);
@@ -117,7 +120,7 @@ public class WallRecordController : DragaliaControllerBase
 
         EntityResult entityResult = rewardService.GetEntityResult();
 
-        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         WallRecordRecordResponse data =
             new()

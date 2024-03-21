@@ -1,4 +1,3 @@
-using DragaliaAPI.MessagePack;
 using MessagePack;
 
 namespace DragaliaAPI.Models.Generated;

@@ -36,7 +36,7 @@ public class PhotonAuthenticationHandler : AuthenticationHandler<AuthenticationS
 
         string configuredToken =
             Environment.GetEnvironmentVariable("PHOTON_TOKEN")
-            ?? throw new ArgumentNullException("PHOTON_TOKEN environment variable not set!");
+            ?? throw new InvalidOperationException("PHOTON_TOKEN environment variable not set!");
 
         if (authenticationHeader.Parameter != configuredToken)
         {

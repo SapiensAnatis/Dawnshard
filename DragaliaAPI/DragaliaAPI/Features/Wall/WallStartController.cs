@@ -10,35 +10,26 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Features.Wall;
 
 [Route("wall_start")]
-public class WallStartController : DragaliaControllerBase
+public class WallStartController(
+    IMapper mapper,
+    IUpdateDataService updateDataService,
+    IOddsInfoService oddsInfoService,
+    IWallService wallService,
+    IDungeonStartService dungeonStartService
+) : DragaliaControllerBase
 {
-    private readonly IMapper mapper;
-    private readonly ILogger<WallStartController> logger;
-    private readonly IUpdateDataService updateDataService;
-    private readonly IOddsInfoService oddsInfoService;
-    private readonly IWallService wallService;
-    private readonly IDungeonStartService dungeonStartService;
-
-    public WallStartController(
-        IMapper mapper,
-        ILogger<WallStartController> logger,
-        IUpdateDataService updateDataService,
-        IOddsInfoService oddsInfoService,
-        IWallService wallService,
-        IDungeonStartService dungeonStartService
-    )
-    {
-        this.mapper = mapper;
-        this.logger = logger;
-        this.updateDataService = updateDataService;
-        this.oddsInfoService = oddsInfoService;
-        this.wallService = wallService;
-        this.dungeonStartService = dungeonStartService;
-    }
+    private readonly IMapper mapper = mapper;
+    private readonly IUpdateDataService updateDataService = updateDataService;
+    private readonly IOddsInfoService oddsInfoService = oddsInfoService;
+    private readonly IWallService wallService = wallService;
+    private readonly IDungeonStartService dungeonStartService = dungeonStartService;
 
     // Called when starting a Mercurial Gauntlet quest
     [HttpPost("start")]
-    public async Task<DragaliaResult> Start(WallStartStartRequest request)
+    public async Task<DragaliaResult> Start(
+        WallStartStartRequest request,
+        CancellationToken cancellationToken
+    )
     {
         // Set flag for having played the next level
         await wallService.SetQuestWallIsStartNextLevel(request.WallId, true);
@@ -61,7 +52,7 @@ public class WallStartController : DragaliaControllerBase
 
         OddsInfo oddsInfo = this.oddsInfoService.GetWallOddsInfo(request.WallId, request.WallLevel);
 
-        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         WallStartStartResponse data =
             new()
@@ -77,7 +68,10 @@ public class WallStartController : DragaliaControllerBase
 
     // Called from the play next level button from the MG clear screen
     [HttpPost("start_assign_unit")]
-    public async Task<DragaliaResult> StartAssignUnit(WallStartStartAssignUnitRequest request)
+    public async Task<DragaliaResult> StartAssignUnit(
+        WallStartStartAssignUnitRequest request,
+        CancellationToken cancellationToken
+    )
     {
         QuestWallDetail questWallDetail = MasterAssetUtils.GetQuestWallDetail(
             request.WallId,
@@ -98,7 +92,7 @@ public class WallStartController : DragaliaControllerBase
 
         OddsInfo oddsInfo = this.oddsInfoService.GetWallOddsInfo(request.WallId, request.WallLevel);
 
-        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         WallStartStartAssignUnitResponse data =
             new()

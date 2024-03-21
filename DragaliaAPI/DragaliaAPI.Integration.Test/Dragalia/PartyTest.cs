@@ -235,7 +235,7 @@ public class PartyTest : TestFixture
 
         response.UpdateDataList.Should().NotBeNull();
 
-        PartyList updateParty = response.UpdateDataList.PartyList.ElementAt(0);
+        PartyList updateParty = response.UpdateDataList.PartyList!.ElementAt(0);
         updateParty.PartyName.Should().Be("LIblis Full Auto");
         updateParty.PartyNo.Should().Be(2);
         updateParty.PartySettingList.Should().NotBeEmpty();

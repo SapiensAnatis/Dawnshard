@@ -57,25 +57,25 @@ public class HelperServiceTest
         supportData.ViewerId.Should().Be(1000);
         supportData.Name.Should().BeEquivalentTo("Euden");
         supportData.IsFriend.Should().Be(true);
-        supportData.CharaData.Should().BeEquivalentTo(TestData.supportListEuden.SupportChara);
+        supportData.CharaData.Should().BeEquivalentTo(TestData.SupportListEuden.SupportChara);
         supportData
             .DragonData.Should()
             .BeEquivalentTo(
-                TestData.supportListEuden.SupportDragon,
+                TestData.SupportListEuden.SupportDragon,
                 o => o.Excluding(x => x.Hp).Excluding(x => x.Attack)
             );
         supportData
             .WeaponBodyData.Should()
-            .BeEquivalentTo(TestData.supportListEuden.SupportWeaponBody);
+            .BeEquivalentTo(TestData.SupportListEuden.SupportWeaponBody);
         supportData
             .CrestSlotType1CrestList.Should()
-            .BeEquivalentTo(TestData.supportListEuden.SupportCrestSlotType1List);
+            .BeEquivalentTo(TestData.SupportListEuden.SupportCrestSlotType1List);
         supportData
             .CrestSlotType2CrestList.Should()
-            .BeEquivalentTo(TestData.supportListEuden.SupportCrestSlotType2List);
+            .BeEquivalentTo(TestData.SupportListEuden.SupportCrestSlotType2List);
         supportData
             .CrestSlotType3CrestList.Should()
-            .BeEquivalentTo(TestData.supportListEuden.SupportCrestSlotType3List);
+            .BeEquivalentTo(TestData.SupportListEuden.SupportCrestSlotType3List);
     }
 
     [Fact]
@@ -97,25 +97,25 @@ public class HelperServiceTest
         supportData.ViewerId.Should().Be(1001);
         supportData.Name.Should().BeEquivalentTo("Elisanne");
         supportData.IsFriend.Should().Be(false);
-        supportData.CharaData.Should().BeEquivalentTo(TestData.supportListElisanne.SupportChara);
+        supportData.CharaData.Should().BeEquivalentTo(TestData.SupportListElisanne.SupportChara);
         supportData
             .DragonData.Should()
             .BeEquivalentTo(
-                TestData.supportListElisanne.SupportDragon,
+                TestData.SupportListElisanne.SupportDragon,
                 o => o.Excluding(x => x.Hp).Excluding(x => x.Attack)
             );
         supportData
             .WeaponBodyData.Should()
-            .BeEquivalentTo(TestData.supportListElisanne.SupportWeaponBody);
+            .BeEquivalentTo(TestData.SupportListElisanne.SupportWeaponBody);
         supportData
             .CrestSlotType1CrestList.Should()
-            .BeEquivalentTo(TestData.supportListElisanne.SupportCrestSlotType1List);
+            .BeEquivalentTo(TestData.SupportListElisanne.SupportCrestSlotType1List);
         supportData
             .CrestSlotType2CrestList.Should()
-            .BeEquivalentTo(TestData.supportListElisanne.SupportCrestSlotType2List);
+            .BeEquivalentTo(TestData.SupportListElisanne.SupportCrestSlotType2List);
         supportData
             .CrestSlotType3CrestList.Should()
-            .BeEquivalentTo(TestData.supportListElisanne.SupportCrestSlotType3List);
+            .BeEquivalentTo(TestData.SupportListElisanne.SupportCrestSlotType3List);
     }
 
     private static class StubData
@@ -125,8 +125,8 @@ public class HelperServiceTest
             {
                 SupportUserList = new List<UserSupportList>()
                 {
-                    TestData.supportListEuden,
-                    TestData.supportListElisanne
+                    TestData.SupportListEuden,
+                    TestData.SupportListElisanne
                 },
                 SupportUserDetailList = new List<AtgenSupportUserDetailList>()
                 {

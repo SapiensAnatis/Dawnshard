@@ -4,7 +4,6 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -52,9 +51,6 @@ public class WeaponServiceTest
             { Materials.Orichalcum, 15 }
         };
 
-    private static Dictionary<Materials, int> PrimalHexSpecialMap =
-        new() { { Materials.AdamantiteIngot, 1 } };
-
     private static Dictionary<Materials, int> AmeNoMurakumoRefineMap =
         new()
         {
@@ -65,7 +61,7 @@ public class WeaponServiceTest
             { Materials.Orichalcum, 10 }
         };
 
-    private readonly IWeaponService weaponService;
+    private readonly WeaponService weaponService;
 
     public WeaponServiceTest()
     {
@@ -159,7 +155,7 @@ public class WeaponServiceTest
 
         this.mockInventoryRepository.Setup(x =>
             x.CheckQuantity(
-                It.Is<IEnumerable<KeyValuePair<Materials, int>>>(y =>
+                It.Is<IDictionary<Materials, int>>(y =>
                     ValidateMaterialMap(weaponData.CreateMaterialMap, y)
                 )
             )
@@ -193,7 +189,7 @@ public class WeaponServiceTest
 
         this.mockInventoryRepository.Setup(x =>
             x.CheckQuantity(
-                It.Is<IEnumerable<KeyValuePair<Materials, int>>>(y =>
+                It.Is<IDictionary<Materials, int>>(y =>
                     ValidateMaterialMap(weaponData.CreateMaterialMap, y)
                 )
             )
@@ -231,7 +227,7 @@ public class WeaponServiceTest
 
         this.mockInventoryRepository.Setup(x =>
             x.CheckQuantity(
-                It.Is<IEnumerable<KeyValuePair<Materials, int>>>(y =>
+                It.Is<IDictionary<Materials, int>>(y =>
                     ValidateMaterialMap(weaponData.CreateMaterialMap, y)
                 )
             )
@@ -323,7 +319,7 @@ public class WeaponServiceTest
 
         this.mockInventoryRepository.Setup(x =>
             x.CheckQuantity(
-                It.Is<IEnumerable<KeyValuePair<Materials, int>>>(y =>
+                It.Is<IDictionary<Materials, int>>(y =>
                     ValidateMaterialMap(InfernoApogeePassive1Map, y)
                 )
             )
@@ -352,7 +348,7 @@ public class WeaponServiceTest
 
         this.mockInventoryRepository.Setup(x =>
             x.CheckQuantity(
-                It.Is<IEnumerable<KeyValuePair<Materials, int>>>(y =>
+                It.Is<IDictionary<Materials, int>>(y =>
                     ValidateMaterialMap(InfernoApogeePassive1Map, y)
                 )
             )
@@ -383,7 +379,7 @@ public class WeaponServiceTest
 
         this.mockInventoryRepository.Setup(x =>
             x.CheckQuantity(
-                It.Is<IEnumerable<KeyValuePair<Materials, int>>>(y =>
+                It.Is<IDictionary<Materials, int>>(y =>
                     ValidateMaterialMap(InfernoApogeePassive1Map, y)
                 )
             )
@@ -417,7 +413,7 @@ public class WeaponServiceTest
 
         this.mockInventoryRepository.Setup(x =>
             x.CheckQuantity(
-                It.Is<IEnumerable<KeyValuePair<Materials, int>>>(y =>
+                It.Is<IDictionary<Materials, int>>(y =>
                     ValidateMaterialMap(InfernoApogeePassive1Map, y)
                 )
             )
@@ -442,7 +438,7 @@ public class WeaponServiceTest
             .Returns(Task.CompletedTask);
         this.mockInventoryRepository.Setup(x =>
             x.UpdateQuantity(
-                It.Is<Dictionary<Materials, int>>(y =>
+                It.Is<IDictionary<Materials, int>>(y =>
                     ValidateMaterialMap(InfernoApogeePassive1Map.Invert(), y)
                 )
             )
@@ -500,9 +496,7 @@ public class WeaponServiceTest
 
         this.mockInventoryRepository.Setup(x =>
             x.CheckQuantity(
-                It.Is<IEnumerable<KeyValuePair<Materials, int>>>(y =>
-                    ValidateMaterialMap(MjolnirBuildup40Map, y)
-                )
+                It.Is<IDictionary<Materials, int>>(y => ValidateMaterialMap(MjolnirBuildup40Map, y))
             )
         )
             .ReturnsAsync(false);
@@ -530,9 +524,7 @@ public class WeaponServiceTest
 
         this.mockInventoryRepository.Setup(x =>
             x.CheckQuantity(
-                It.Is<IEnumerable<KeyValuePair<Materials, int>>>(y =>
-                    ValidateMaterialMap(MjolnirBuildup40Map, y)
-                )
+                It.Is<IDictionary<Materials, int>>(y => ValidateMaterialMap(MjolnirBuildup40Map, y))
             )
         )
             .ReturnsAsync(true);
@@ -562,9 +554,7 @@ public class WeaponServiceTest
 
         this.mockInventoryRepository.Setup(x =>
             x.CheckQuantity(
-                It.Is<IEnumerable<KeyValuePair<Materials, int>>>(y =>
-                    ValidateMaterialMap(MjolnirBuildup40Map, y)
-                )
+                It.Is<IDictionary<Materials, int>>(y => ValidateMaterialMap(MjolnirBuildup40Map, y))
             )
         )
             .ReturnsAsync(true);
@@ -572,7 +562,7 @@ public class WeaponServiceTest
             .ReturnsAsync(new DbWeaponBody() { ViewerId = 1, BuildupCount = 39 });
         this.mockInventoryRepository.Setup(x =>
             x.UpdateQuantity(
-                It.Is<IEnumerable<KeyValuePair<Materials, int>>>(y =>
+                It.Is<IDictionary<Materials, int>>(y =>
                     ValidateMaterialMap(MjolnirBuildup40Map.Invert(), y)
                 )
             )
@@ -622,9 +612,7 @@ public class WeaponServiceTest
 
         this.mockInventoryRepository.Setup(x =>
             x.CheckQuantity(
-                It.Is<IEnumerable<KeyValuePair<Materials, int>>>(y =>
-                    ValidateMaterialMap(PrimalHexUnbind5Map, y)
-                )
+                It.Is<IDictionary<Materials, int>>(y => ValidateMaterialMap(PrimalHexUnbind5Map, y))
             )
         )
             .ReturnsAsync(false);
@@ -651,9 +639,7 @@ public class WeaponServiceTest
 
         this.mockInventoryRepository.Setup(x =>
             x.CheckQuantity(
-                It.Is<IEnumerable<KeyValuePair<Materials, int>>>(y =>
-                    ValidateMaterialMap(PrimalHexUnbind5Map, y)
-                )
+                It.Is<IDictionary<Materials, int>>(y => ValidateMaterialMap(PrimalHexUnbind5Map, y))
             )
         )
             .ReturnsAsync(true);
@@ -682,7 +668,7 @@ public class WeaponServiceTest
 
         this.mockInventoryRepository.Setup(x =>
             x.CheckQuantity(
-                It.Is<IEnumerable<KeyValuePair<Materials, int>>>(y =>
+                It.Is<IDictionary<Materials, int>>(y =>
                     ValidateMaterialMap(PrimalHexWeaponBonusMap, y)
                 )
             )
@@ -725,7 +711,7 @@ public class WeaponServiceTest
         WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.PrimalHex);
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(It.IsAny<IEnumerable<KeyValuePair<Materials, int>>>())
+            x.CheckQuantity(It.IsAny<Dictionary<Materials, int>>())
         )
             .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckCoin(It.IsAny<long>())).ReturnsAsync(true);
@@ -768,9 +754,7 @@ public class WeaponServiceTest
 
         this.mockInventoryRepository.Setup(x =>
             x.CheckQuantity(
-                It.Is<IEnumerable<KeyValuePair<Materials, int>>>(y =>
-                    ValidateMaterialMap(PrimalHexUnbind5Map, y)
-                )
+                It.Is<IDictionary<Materials, int>>(y => ValidateMaterialMap(PrimalHexUnbind5Map, y))
             )
         )
             .ReturnsAsync(true);
@@ -786,7 +770,7 @@ public class WeaponServiceTest
             );
         this.mockInventoryRepository.Setup(x =>
             x.UpdateQuantity(
-                It.Is<Dictionary<Materials, int>>(y =>
+                It.Is<IDictionary<Materials, int>>(y =>
                     ValidateMaterialMap(PrimalHexUnbind5Map.Invert(), y)
                 )
             )
@@ -826,9 +810,7 @@ public class WeaponServiceTest
 
         this.mockInventoryRepository.Setup(x =>
             x.CheckQuantity(
-                It.Is<IEnumerable<KeyValuePair<Materials, int>>>(y =>
-                    ValidateMaterialMap(expMaterialMap, y)
-                )
+                It.Is<IDictionary<Materials, int>>(y => ValidateMaterialMap(expMaterialMap, y))
             )
         )
             .ReturnsAsync(true);
@@ -845,7 +827,7 @@ public class WeaponServiceTest
 
         this.mockInventoryRepository.Setup(x =>
             x.UpdateQuantity(
-                It.Is<Dictionary<Materials, int>>(y =>
+                It.Is<IDictionary<Materials, int>>(y =>
                     ValidateMaterialMap(expMaterialMap.Invert(), y)
                 )
             )
@@ -900,7 +882,7 @@ public class WeaponServiceTest
         );
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(It.IsAny<IEnumerable<KeyValuePair<Materials, int>>>())
+            x.CheckQuantity(It.IsAny<Dictionary<Materials, int>>())
         )
             .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckCoin(It.IsAny<long>())).ReturnsAsync(true);
@@ -953,7 +935,7 @@ public class WeaponServiceTest
 
         this.mockInventoryRepository.Setup(x =>
             x.CheckQuantity(
-                It.Is<IEnumerable<KeyValuePair<Materials, int>>>(y =>
+                It.Is<IDictionary<Materials, int>>(y =>
                     ValidateMaterialMap(AmeNoMurakumoRefineMap, y)
                 )
             )
@@ -972,7 +954,7 @@ public class WeaponServiceTest
             );
         this.mockInventoryRepository.Setup(x =>
             x.UpdateQuantity(
-                It.Is<Dictionary<Materials, int>>(y =>
+                It.Is<IDictionary<Materials, int>>(y =>
                     ValidateMaterialMap(AmeNoMurakumoRefineMap.Invert(), y)
                 )
             )
@@ -1019,12 +1001,12 @@ public class WeaponServiceTest
     /// <param name="expected"></param>
     /// <param name="input"></param>
     /// <returns></returns>
-    private bool ValidateMaterialMap(
+    private static bool ValidateMaterialMap(
         IDictionary<Materials, int> expected,
-        IEnumerable<KeyValuePair<Materials, int>> input
+        IDictionary<Materials, int> input
     )
     {
-        if (input.Count() != expected.Count())
+        if (input.Count != expected.Count)
             return false;
 
         foreach ((Materials material, int quantity) in input)

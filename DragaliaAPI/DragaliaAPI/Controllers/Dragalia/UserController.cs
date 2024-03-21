@@ -27,13 +27,17 @@ public class UserController : DragaliaControllerBase
     }
 
     [HttpPost("linked_n_account")]
-    public async Task<DragaliaResult> LinkedNAccount()
+    public async Task<DragaliaResult> LinkedNAccount(CancellationToken cancellationToken)
     {
         // This controller is meant to be used to set the 'Link a Nintendo Account' mission as complete
-        DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync();
+        DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync(
+            cancellationToken
+        );
 
         userData.Crystal += 12_000;
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
+            cancellationToken
+        );
 
         return this.Ok(new UserLinkedNAccountResponse() { UpdateDataList = updateDataList });
     }

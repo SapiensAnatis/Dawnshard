@@ -6,6 +6,7 @@ using DragaliaAPI.Helpers;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Time.Testing;
 
 namespace DragaliaAPI.Test.Features.Login;
 
@@ -18,7 +19,7 @@ public class LoginControllerTest
     private readonly Mock<ILogger<LoginController>> mockLogger;
     private readonly Mock<ILoginBonusService> loginBonusService;
     private readonly Mock<IRewardService> mockRewardService;
-    private readonly Mock<IDateTimeProvider> mockDateTimeProvider;
+    private readonly FakeTimeProvider mockDateTimeProvider;
 
     private readonly LoginController loginController;
 
@@ -31,7 +32,7 @@ public class LoginControllerTest
         this.mockLogger = new(MockBehavior.Loose);
         this.loginBonusService = new(MockBehavior.Strict);
         this.mockRewardService = new(MockBehavior.Strict);
-        this.mockDateTimeProvider = new(MockBehavior.Strict);
+        this.mockDateTimeProvider = new FakeTimeProvider();
 
         this.loginController = new(
             this.mockUserDataRepository.Object,
@@ -41,10 +42,10 @@ public class LoginControllerTest
             this.mockLogger.Object,
             this.loginBonusService.Object,
             this.mockRewardService.Object,
-            this.mockDateTimeProvider.Object
+            this.mockDateTimeProvider
         );
 
-        this.mockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(DateTimeOffset.UtcNow);
+        this.mockDateTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
 
         this.mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());
     }
@@ -68,7 +69,6 @@ public class LoginControllerTest
 
         await this.loginController.Index(default(CancellationToken));
 
-        this.mockDateTimeProvider.VerifyAll();
         this.mockRewardService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
         this.mockResetHelper.VerifyAll();
@@ -90,7 +90,6 @@ public class LoginControllerTest
 
         await this.loginController.Index(default(CancellationToken));
 
-        this.mockDateTimeProvider.VerifyAll();
         this.mockRewardService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
         this.mockResetHelper.VerifyAll();

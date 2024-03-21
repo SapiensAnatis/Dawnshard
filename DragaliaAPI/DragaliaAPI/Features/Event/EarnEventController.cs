@@ -42,7 +42,10 @@ public class EarnEventController(
     }
 
     [HttpPost("entry")]
-    public async Task<DragaliaResult> Entry(EarnEventEntryRequest request)
+    public async Task<DragaliaResult> Entry(
+        EarnEventEntryRequest request,
+        CancellationToken cancellationToken
+    )
     {
         EarnEventEntryResponse resp = new();
 
@@ -50,7 +53,7 @@ public class EarnEventController(
         await eventService.CreateEventData(request.EventId);
 
         resp.EarnEventUserData = await eventService.GetEarnEventUserData(request.EventId);
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
@@ -58,14 +61,15 @@ public class EarnEventController(
 
     [HttpPost("receive_event_point_reward")]
     public async Task<DragaliaResult> ReceiveEventPointReward(
-        EarnEventReceiveEventPointRewardRequest request
+        EarnEventReceiveEventPointRewardRequest request,
+        CancellationToken cancellationToken
     )
     {
         EarnEventReceiveEventPointRewardResponse resp = new();
 
         resp.EventRewardEntityList = await eventService.ReceiveEventRewards(request.EventId);
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         resp.EventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(

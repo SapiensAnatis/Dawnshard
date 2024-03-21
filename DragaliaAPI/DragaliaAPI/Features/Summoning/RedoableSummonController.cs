@@ -74,10 +74,14 @@ public class RedoableSummonController(
 
     [HttpPost]
     [Route("fix_exec")]
-    public async Task<DragaliaResult> FixExec([FromHeader(Name = "SID")] string sessionId)
+    public async Task<DragaliaResult> FixExec(
+        [FromHeader(Name = "SID")] string sessionId,
+        CancellationToken cancellationToken
+    )
     {
         string? cachedResultJson = await cache.GetStringAsync(
-            Schema.SessionId_CachedSummonResult(sessionId)
+            Schema.SessionId_CachedSummonResult(sessionId),
+            cancellationToken
         );
 
         if (string.IsNullOrEmpty(cachedResultJson))
@@ -106,7 +110,7 @@ public class RedoableSummonController(
                     .Select(x => (Dragons)x.Id)
             );
 
-        UpdateDataList updateData = await updateDataService.SaveChangesAsync();
+        UpdateDataList updateData = await updateDataService.SaveChangesAsync(cancellationToken);
 
         IEnumerable<AtgenDuplicateEntityList> newCharas = repositoryCharaOuput
             .Where(x => x.isNew)

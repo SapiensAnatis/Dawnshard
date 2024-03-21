@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Shared.MasterAsset;
@@ -6,10 +7,14 @@ using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
 namespace DragaliaAPI.Integration.Test.Features.Missions;
 
+[SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments")]
 public class MissionTest : TestFixture
 {
     public MissionTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
+    }
 
     [Fact]
     public async Task UnlockDrillMissionGroup_ValidRequest_UnlocksGroup()

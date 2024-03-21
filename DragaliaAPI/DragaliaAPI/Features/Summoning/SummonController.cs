@@ -167,7 +167,7 @@ public class SummonController(
             bannerData.SummonId
         );
 
-        DbPlayerUserData userData = await userDataRepository.UserData.FirstAsync();
+        DbPlayerUserData userData = await userDataRepository.UserData.FirstAsync(cancellationToken);
 
         int numSummons =
             summonRequest.ExecType == SummonExecTypes.Tenfold

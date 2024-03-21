@@ -6,7 +6,6 @@ using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
@@ -14,6 +13,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Time.Testing;
 using MockQueryable.Moq;
 using Range = Moq.Range;
 
@@ -32,11 +32,11 @@ public class FortServiceTest
     private readonly Mock<IRewardService> mockRewardService;
     private readonly Mock<IOptionsMonitor<DragonfruitConfig>> mockConfig;
     private readonly Mock<IUserService> mockUserService;
-    private readonly Mock<IDateTimeProvider> mockDateTimeProvider;
+    private readonly FakeTimeProvider mockDateTimeProvider;
 
     private readonly DateTimeOffset FixedTime = DateTimeOffset.UtcNow;
 
-    private readonly IFortService fortService;
+    private readonly FortService fortService;
 
     public FortServiceTest()
     {
@@ -51,7 +51,7 @@ public class FortServiceTest
         this.mockRewardService = new(MockBehavior.Strict);
         this.mockConfig = new(MockBehavior.Strict);
         this.mockUserService = new(MockBehavior.Strict);
-        this.mockDateTimeProvider = new(MockBehavior.Strict);
+        this.mockDateTimeProvider = new();
 
         this.mockConfig.SetupGet(x => x.CurrentValue)
             .Returns(
@@ -102,10 +102,10 @@ public class FortServiceTest
             mockRewardService.Object,
             mockConfig.Object,
             mockUserService.Object,
-            mockDateTimeProvider.Object
+            mockDateTimeProvider
         );
 
-        mockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(FixedTime);
+        mockDateTimeProvider.SetUtcNow(FixedTime);
 
         UnitTestUtils.ApplyDateTimeAssertionOptions();
     }
@@ -249,7 +249,6 @@ public class FortServiceTest
         mockPaymentService.VerifyAll();
         mockFortMissionProgressionService.VerifyAll();
         mockFortRepository.VerifyAll();
-        mockDateTimeProvider.VerifyAll();
     }
 
     [Fact]
@@ -346,7 +345,6 @@ public class FortServiceTest
         build.BuildEndDate.Should().Be(DateTimeOffset.UnixEpoch);
 
         mockFortRepository.VerifyAll();
-        mockDateTimeProvider.VerifyAll();
     }
 
     [Fact]
@@ -373,7 +371,6 @@ public class FortServiceTest
         build.BuildEndDate.Should().Be(DateTimeOffset.MaxValue);
 
         mockFortRepository.VerifyAll();
-        mockDateTimeProvider.VerifyAll();
     }
 
     [Fact]
@@ -491,7 +488,6 @@ public class FortServiceTest
         mockFortRepository.VerifyAll();
         mockInventoryRepository.VerifyAll();
         mockUserDataRepository.VerifyAll();
-        mockDateTimeProvider.VerifyAll();
     }
 
     [Fact]
@@ -582,7 +578,6 @@ public class FortServiceTest
         mockFortMissionProgressionService.VerifyAll();
         mockPaymentService.VerifyAll();
         mockPlayerIdentityService.VerifyAll();
-        mockDateTimeProvider.VerifyAll();
     }
 
     [Fact]
@@ -621,7 +616,6 @@ public class FortServiceTest
         mockFortMissionProgressionService.VerifyAll();
         mockPaymentService.VerifyAll();
         mockPlayerIdentityService.VerifyAll();
-        mockDateTimeProvider.VerifyAll();
     }
 
     [Fact]
@@ -651,6 +645,5 @@ public class FortServiceTest
 
         mockFortMissionProgressionService.VerifyAll();
         mockPaymentService.VerifyAll();
-        mockDateTimeProvider.VerifyAll();
     }
 }

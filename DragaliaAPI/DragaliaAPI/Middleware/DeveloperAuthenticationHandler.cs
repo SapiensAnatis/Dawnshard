@@ -23,7 +23,7 @@ public class DeveloperAuthenticationHandler : AuthenticationHandler<Authenticati
 
         string[] expectedTokens = tokenVar.Split("|");
 
-        if (!this.Request.Headers.Authorization.Any())
+        if (this.Request.Headers.Authorization.Count == 0)
         {
             this.Logger.LogDebug("No Authorization header found.");
             return Task.FromResult(AuthenticateResult.NoResult());

@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.User;
@@ -11,7 +10,7 @@ namespace DragaliaAPI.Features.Player;
 public class UserService(
     IUserDataRepository userDataRepository,
     ILogger<UserService> logger,
-    IDateTimeProvider dateTimeProvider
+    TimeProvider dateTimeProvider
 ) : IUserService
 {
     private const int MaxSingleStamina = 999;
@@ -27,8 +26,7 @@ public class UserService(
 
     public async Task AddStamina(StaminaType type, int amount)
     {
-        if (amount < 0)
-            throw new ArgumentOutOfRangeException(nameof(amount));
+        ArgumentOutOfRangeException.ThrowIfNegative(amount);
 
         if (amount == 0)
             return;
@@ -39,7 +37,7 @@ public class UserService(
         logger.LogDebug("Adding {staminaAmount}x {staminaType}", amount, type);
 
         DbPlayerUserData data = await userDataRepository.GetUserDataAsync();
-        DateTimeOffset time = dateTimeProvider.UtcNow;
+        DateTimeOffset time = dateTimeProvider.GetUtcNow();
 
         switch (type)
         {
@@ -61,8 +59,7 @@ public class UserService(
 
     public async Task RemoveStamina(StaminaType type, int amount)
     {
-        if (amount < 0)
-            throw new ArgumentOutOfRangeException(nameof(amount));
+        ArgumentOutOfRangeException.ThrowIfNegative(amount);
 
         if (amount == 0)
             return;
@@ -140,7 +137,7 @@ public class UserService(
             return currentStamina;
         }
 
-        DateTimeOffset currentTime = dateTimeProvider.UtcNow;
+        DateTimeOffset currentTime = dateTimeProvider.GetUtcNow();
 
         long nowSeconds = currentTime.ToUnixTimeSeconds();
         long lastUpdatedSeconds = lastUpdatedTime.ToUnixTimeSeconds();
@@ -179,8 +176,7 @@ public class UserService(
 
     public async Task AddQuestSkipPoint(int amount)
     {
-        if (amount < 0)
-            throw new ArgumentOutOfRangeException(nameof(amount));
+        ArgumentOutOfRangeException.ThrowIfNegative(amount);
 
         if (amount == 0)
             return;
@@ -192,8 +188,7 @@ public class UserService(
 
     public async Task<PlayerLevelResult> AddExperience(int experience)
     {
-        if (experience < 0)
-            throw new ArgumentOutOfRangeException(nameof(experience));
+        ArgumentOutOfRangeException.ThrowIfNegative(experience);
 
         if (experience == 0)
             return new PlayerLevelResult();

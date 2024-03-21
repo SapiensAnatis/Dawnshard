@@ -14,7 +14,6 @@ public class QuestControllerTest
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly Mock<IClearPartyService> mockClearPartyService;
     private readonly Mock<IQuestTreasureService> mockQuestTreasureService;
-    private readonly Mock<ILogger<QuestController>> mockLogger;
 
     private readonly QuestController questController;
 
@@ -25,15 +24,13 @@ public class QuestControllerTest
         this.mockUpdateDataService = new(MockBehavior.Strict);
         this.mockClearPartyService = new(MockBehavior.Strict);
         this.mockQuestTreasureService = new(MockBehavior.Strict);
-        this.mockLogger = new(MockBehavior.Loose);
 
         this.questController = new(
             this.mockStoryService.Object,
             this.mockHelperService.Object,
             this.mockUpdateDataService.Object,
             this.mockClearPartyService.Object,
-            this.mockQuestTreasureService.Object,
-            this.mockLogger.Object
+            this.mockQuestTreasureService.Object
         );
     }
 
@@ -60,10 +57,15 @@ public class QuestControllerTest
                 }
             );
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
             .ReturnsAsync(new UpdateDataList());
 
-        (await this.questController.ReadStory(new QuestReadStoryRequest() { QuestStoryId = 1 }))
+        (
+            await this.questController.ReadStory(
+                new QuestReadStoryRequest() { QuestStoryId = 1 },
+                default
+            )
+        )
             .GetData<QuestReadStoryResponse>()
             .Should()
             .BeEquivalentTo(

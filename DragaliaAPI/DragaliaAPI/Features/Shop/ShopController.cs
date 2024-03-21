@@ -29,7 +29,7 @@ public class ShopController : DragaliaControllerBase
     }
 
     [HttpPost("get_list")]
-    public async Task<DragaliaResult> GetList()
+    public async Task<DragaliaResult> GetList(CancellationToken cancellationToken)
     {
         ILookup<PurchaseShopType, ShopPurchaseList> purchases =
             await this.shopService.GetPurchases();
@@ -53,7 +53,7 @@ public class ShopController : DragaliaControllerBase
             };
 
         response.UserItemSummon = await this.itemSummonService.GetItemSummon();
-        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(response);
     }
@@ -65,20 +65,27 @@ public class ShopController : DragaliaControllerBase
     }
 
     [HttpPost("item_summon_exec")]
-    public async Task<DragaliaResult> ExecItemSummon(ShopItemSummonExecRequest request)
+    public async Task<DragaliaResult> ExecItemSummon(
+        ShopItemSummonExecRequest request,
+        CancellationToken cancellationToken
+    )
     {
         ShopItemSummonExecResponse resp = new();
 
         resp.ItemSummonRewardList = await this.itemSummonService.DoSummon(request);
         resp.UserItemSummon = await this.itemSummonService.GetItemSummon();
-        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
+
         resp.EntityResult = this.rewardService.GetEntityResult();
 
         return Ok(resp);
     }
 
     [HttpPost("material_shop_purchase")]
-    public async Task<DragaliaResult> MaterialShopPurchase(ShopMaterialShopPurchaseRequest request)
+    public async Task<DragaliaResult> MaterialShopPurchase(
+        ShopMaterialShopPurchaseRequest request,
+        CancellationToken cancellationToken
+    )
     {
         ShopMaterialShopPurchaseResponse resp = new();
 
@@ -89,13 +96,16 @@ public class ShopController : DragaliaControllerBase
             request.Quantity
         );
 
-        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(resp);
     }
 
     [HttpPost("normal_shop_purchase")]
-    public async Task<DragaliaResult> NormalShopPurchase(ShopNormalShopPurchaseRequest request)
+    public async Task<DragaliaResult> NormalShopPurchase(
+        ShopNormalShopPurchaseRequest request,
+        CancellationToken cancellationToken
+    )
     {
         ShopNormalShopPurchaseResponse resp = new();
 
@@ -106,13 +116,16 @@ public class ShopController : DragaliaControllerBase
             request.Quantity
         );
 
-        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(resp);
     }
 
     [HttpPost("special_shop_purchase")]
-    public async Task<DragaliaResult> SpecialShopPurchase(ShopSpecialShopPurchaseRequest request)
+    public async Task<DragaliaResult> SpecialShopPurchase(
+        ShopSpecialShopPurchaseRequest request,
+        CancellationToken cancellationToken
+    )
     {
         ShopSpecialShopPurchaseResponse resp = new();
 
@@ -123,7 +136,7 @@ public class ShopController : DragaliaControllerBase
             request.Quantity
         );
 
-        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(resp);
     }

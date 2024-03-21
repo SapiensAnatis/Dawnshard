@@ -14,7 +14,10 @@ public class DmodeDungeonController(
 ) : DragaliaControllerBase
 {
     [HttpPost("start")]
-    public async Task<DragaliaResult> Start(DmodeDungeonStartRequest request)
+    public async Task<DragaliaResult> Start(
+        DmodeDungeonStartRequest request,
+        CancellationToken cancellationToken
+    )
     {
         DmodeDungeonStartResponse resp = new();
 
@@ -25,38 +28,44 @@ public class DmodeDungeonController(
             request.BringEditSkillCharaIdList
         );
 
-        await updateDataService.SaveChangesAsync();
+        await updateDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(resp);
     }
 
     [HttpPost("restart")]
-    public async Task<DragaliaResult> Restart()
+    public async Task<DragaliaResult> Restart(CancellationToken cancellationToken)
     {
         DmodeDungeonRestartResponse resp = new();
 
         (resp.DmodeDungeonState, resp.DmodeIngameData) = await dmodeDungeonService.RestartDungeon();
 
-        await updateDataService.SaveChangesAsync();
+        await updateDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(resp);
     }
 
     [HttpPost("floor")]
-    public async Task<DragaliaResult> Floor(DmodeDungeonFloorRequest request)
+    public async Task<DragaliaResult> Floor(
+        DmodeDungeonFloorRequest request,
+        CancellationToken cancellationToken
+    )
     {
         DmodeDungeonFloorResponse resp = new();
 
         (resp.DmodeDungeonState, resp.DmodeFloorData) =
             await dmodeDungeonService.ProgressToNextFloor(request.DmodePlayRecord);
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(resp);
     }
 
     [HttpPost("finish")]
-    public async Task<DragaliaResult> Finish(DmodeDungeonFinishRequest request)
+    public async Task<DragaliaResult> Finish(
+        DmodeDungeonFinishRequest request,
+        CancellationToken cancellationToken
+    )
     {
         DmodeDungeonFinishResponse resp = new();
 
@@ -65,40 +74,40 @@ public class DmodeDungeonController(
         );
 
         resp.EntityResult = rewardService.GetEntityResult();
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(resp);
     }
 
     [HttpPost("floor_skip")]
-    public async Task<DragaliaResult> FloorSkip()
+    public async Task<DragaliaResult> FloorSkip(CancellationToken cancellationToken)
     {
         DmodeDungeonFloorSkipResponse resp = new();
 
         resp.DmodeDungeonState = await dmodeDungeonService.SkipFloor();
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(resp);
     }
 
     [HttpPost("user_halt")]
-    public async Task<DragaliaResult> UserHalt()
+    public async Task<DragaliaResult> UserHalt(CancellationToken cancellationToken)
     {
         DmodeDungeonUserHaltResponse resp = new();
 
         resp.DmodeDungeonState = await dmodeDungeonService.HaltDungeon(true);
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(resp);
     }
 
     [HttpPost("system_halt")]
-    public async Task<DragaliaResult> SystemHalt()
+    public async Task<DragaliaResult> SystemHalt(CancellationToken cancellationToken)
     {
         DmodeDungeonSystemHaltResponse resp = new();
 
         resp.DmodeDungeonState = await dmodeDungeonService.HaltDungeon(false);
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(resp);
     }

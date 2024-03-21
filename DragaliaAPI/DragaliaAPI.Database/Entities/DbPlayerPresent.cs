@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.Presents;
-using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 

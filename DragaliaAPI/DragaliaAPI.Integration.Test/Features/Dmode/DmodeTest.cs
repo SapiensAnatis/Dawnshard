@@ -9,6 +9,7 @@ public class DmodeTest : TestFixture
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions(toleranceSec: 2);
+        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
     }
 
     [Fact]
@@ -210,9 +211,7 @@ public class DmodeTest : TestFixture
     [Fact]
     public async Task Expedition_CanStartAndFinish()
     {
-        DateTimeOffset startTime = DateTimeOffset.UtcNow.AddDays(-1);
-
-        this.MockDateTimeProvider.Setup(x => x.UtcNow).Returns(startTime);
+        DateTimeOffset startTime = DateTimeOffset.UtcNow;
 
         DragaliaResponse<DmodeExpeditionStartResponse> resp =
             await this.Client.PostMsgpack<DmodeExpeditionStartResponse>(
@@ -244,7 +243,7 @@ public class DmodeTest : TestFixture
                 }
             );
 
-        this.MockDateTimeProvider.Setup(x => x.UtcNow).Returns(DateTimeOffset.UtcNow);
+        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow.AddDays(1));
 
         DragaliaResponse<DmodeExpeditionFinishResponse> finishResp =
             await this.Client.PostMsgpack<DmodeExpeditionFinishResponse>("dmode/expedition_finish");
