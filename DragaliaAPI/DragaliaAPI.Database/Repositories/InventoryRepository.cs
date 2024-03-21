@@ -1,9 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using DragonGiftsEnum = DragaliaAPI.Shared.Definitions.Enums.DragonGifts;
 using MaterialsEnum = DragaliaAPI.Shared.Definitions.Enums.Materials;
 
 namespace DragaliaAPI.Database.Repositories;

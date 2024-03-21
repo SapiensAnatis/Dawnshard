@@ -1,5 +1,3 @@
-using JetBrains.Annotations;
-
 namespace DragaliaAPI.MissionDesigner.Models.Attributes;
 
 public sealed class MissionTypeAttribute(MissionType type) : ImplicitPropertyAttribute

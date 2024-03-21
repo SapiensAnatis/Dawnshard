@@ -6,7 +6,6 @@ using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Shop;
-using DragaliaAPI.Features.Summoning;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Mapping.Mapperly;
@@ -15,7 +14,6 @@ using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using SummonTicketMapper = DragaliaAPI.Mapping.Mapperly.SummonTicketMapper;
 
 namespace DragaliaAPI.Services.Game;
 

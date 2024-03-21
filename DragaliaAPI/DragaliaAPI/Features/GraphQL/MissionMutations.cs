@@ -47,7 +47,7 @@ public class MissionMutations : MutationBase
 
         await db.SaveChangesAsync();
 
-        return this.GetMissionExpression(this.Player, args);
+        return GetMissionExpression(this.Player, args);
     }
 
     [GraphQLMutation("Completes a mission")]
@@ -69,7 +69,7 @@ public class MissionMutations : MutationBase
 
         await db.SaveChangesAsync();
 
-        return this.GetMissionExpression(this.Player, args);
+        return GetMissionExpression(this.Player, args);
     }
 
     [GraphQLMutation("Starts a mission")]
@@ -95,7 +95,7 @@ public class MissionMutations : MutationBase
 
         await db.SaveChangesAsync();
 
-        return this.GetMissionExpression(this.Player, args);
+        return GetMissionExpression(this.Player, args);
     }
 
     [GraphQLMutation("Reset a mission's progress for all players")]
@@ -146,12 +146,12 @@ public class MissionMutations : MutationBase
     public record MissionPlayerMutationArgs(long ViewerId, MissionType MissionType, int MissionId)
         : MissionMutationArgs(MissionType, MissionId);
 
-    private Expression<Func<ApiContext, DbPlayerMission>> GetMissionExpression(
+    private static Expression<Func<ApiContext, DbPlayerMission>> GetMissionExpression(
         DbPlayer player,
         MissionMutationArgs args
     ) => context => GetMission(context, player, args);
 
-    private DbPlayerMission GetMission(
+    private static DbPlayerMission GetMission(
         ApiContext context,
         DbPlayer player,
         MissionMutationArgs args

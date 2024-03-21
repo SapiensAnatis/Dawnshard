@@ -77,7 +77,7 @@ public class ExceptionHandlerMiddleware(RequestDelegate next)
         }
     }
 
-    private async Task WriteResultCode(HttpContext context, ResultCode code)
+    private static async Task WriteResultCode(HttpContext context, ResultCode code)
     {
         context.Response.ContentType = CustomMessagePackOutputFormatter.ContentType;
         context.Response.StatusCode = StatusCodes.Status200OK;

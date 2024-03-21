@@ -7,6 +7,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.Dungeon;
 using DragaliaAPI.Shared.Features.Presents;
 using MessagePack;
+#pragma warning disable CS0612 // Type or member is obsolete
 
 namespace DragaliaAPI.Models.Generated;
 

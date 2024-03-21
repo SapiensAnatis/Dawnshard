@@ -30,8 +30,7 @@ public static class EnumerableExtensions
     )
         where TElement : class?
     {
-        if (count < 1)
-            throw new ArgumentOutOfRangeException(nameof(count));
+        ArgumentOutOfRangeException.ThrowIfLessThan(count, 1);
 
         return Enumerable.Repeat(enumerable, count).SelectMany(x => x);
     }

@@ -11,7 +11,7 @@ namespace DragaliaAPI.Database.Test.Repositories;
 public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
-    private readonly IInventoryRepository inventoryRepository;
+    private readonly InventoryRepository inventoryRepository;
 
     public InventoryRepositoryTest(DbTestFixture fixture)
     {
@@ -22,7 +22,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             LoggerTestUtils.Create<InventoryRepository>()
         );
 
-        AssertionOptions.AssertEquivalencyUsing(x => x.Excluding(x => x.Name.StartsWith("Owner")));
+        AssertionOptions.AssertEquivalencyUsing(x => x.Excluding(y => y.Name.StartsWith("Owner")));
     }
 
     [Fact]

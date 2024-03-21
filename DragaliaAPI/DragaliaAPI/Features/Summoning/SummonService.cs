@@ -13,8 +13,7 @@ namespace DragaliaAPI.Features.Summoning;
 public class SummonService(
     SummonOddsService summonOddsService,
     IUnitRepository unitRepository,
-    ApiContext apiContext,
-    ILogger<SummonService> logger
+    ApiContext apiContext
 ) : ISummonService
 {
     /// <summary>

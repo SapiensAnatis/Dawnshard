@@ -6,7 +6,6 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using static DragaliaAPI.Database.Test.DbTestFixture;
 
 namespace DragaliaAPI.Database.Test.Repositories;
@@ -15,7 +14,7 @@ namespace DragaliaAPI.Database.Test.Repositories;
 public class UnitRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
-    private readonly IUnitRepository unitRepository;
+    private readonly UnitRepository unitRepository;
     private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
 
     public UnitRepositoryTest(DbTestFixture fixture)

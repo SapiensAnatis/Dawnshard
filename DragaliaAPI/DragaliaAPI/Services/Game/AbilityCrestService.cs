@@ -319,7 +319,7 @@ public class AbilityCrestService : IAbilityCrestService
         return ResultCode.Success;
     }
 
-    private void SetMaterialMapSpecial(
+    private static void SetMaterialMapSpecial(
         int rarity,
         AtgenBuildupAbilityCrestPieceList buildup,
         ref Dictionary<Materials, int> materialMap,
@@ -425,7 +425,7 @@ public class AbilityCrestService : IAbilityCrestService
         return true;
     }
 
-    private bool ValidateLevel(AbilityCrestRarity rarityInfo, int limitBreak, int step)
+    private static bool ValidateLevel(AbilityCrestRarity rarityInfo, int limitBreak, int step)
     {
         int levelLimit = limitBreak switch
         {
@@ -444,7 +444,7 @@ public class AbilityCrestService : IAbilityCrestService
         return step <= levelLimit;
     }
 
-    private bool ValidateAugments(
+    private static bool ValidateAugments(
         AbilityCrestRarity rarityInfo,
         PlusCountType augmentType,
         int amount

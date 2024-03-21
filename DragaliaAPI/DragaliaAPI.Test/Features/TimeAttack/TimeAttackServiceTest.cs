@@ -18,7 +18,7 @@ public class TimeAttackServiceTest
     private readonly IPlayerIdentityService substituteIdentityService;
     private readonly ILogger<TimeAttackService> substituteLogger;
 
-    private readonly ITimeAttackService timeAttackService;
+    private readonly TimeAttackService timeAttackService;
 
     public TimeAttackServiceTest()
     {

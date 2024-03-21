@@ -33,7 +33,7 @@ public class FriendControllerTest
             .ReturnsAsync(
                 new QuestGetSupportUserListResponse()
                 {
-                    SupportUserList = new List<UserSupportList>() { TestData.supportListEuden },
+                    SupportUserList = new List<UserSupportList>() { TestData.SupportListEuden },
                     SupportUserDetailList = new List<AtgenSupportUserDetailList>()
                     {
                         new() { ViewerId = 1000, IsFriend = true, },
@@ -51,7 +51,7 @@ public class FriendControllerTest
 
         data!
             .SupportUserDataDetail.UserSupportData.Should()
-            .BeEquivalentTo(TestData.supportListEuden);
+            .BeEquivalentTo(TestData.SupportListEuden);
         data!.SupportUserDataDetail.IsFriend.Should().Be(true);
 
         this.mockHelperService.VerifyAll();
@@ -65,7 +65,7 @@ public class FriendControllerTest
             .ReturnsAsync(
                 new QuestGetSupportUserListResponse()
                 {
-                    SupportUserList = new List<UserSupportList>() { TestData.supportListEuden },
+                    SupportUserList = new List<UserSupportList>() { TestData.SupportListEuden },
                     SupportUserDetailList = new List<AtgenSupportUserDetailList>()
                     {
                         new() { ViewerId = 1000, IsFriend = true },

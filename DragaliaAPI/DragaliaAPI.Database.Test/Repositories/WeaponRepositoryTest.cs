@@ -12,7 +12,7 @@ namespace DragaliaAPI.Database.Test.Repositories;
 public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
-    private readonly IWeaponRepository weaponRepository;
+    private readonly WeaponRepository weaponRepository;
 
     public WeaponRepositoryTest(DbTestFixture fixture)
     {
@@ -33,16 +33,8 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddRangeToDatabase(
             new List<DbWeaponBody>()
             {
-                new()
-                {
-                    ViewerId = 2,
-                    WeaponBodyId = Shared.Definitions.Enums.WeaponBodies.SoldiersBrand
-                },
-                new()
-                {
-                    ViewerId = 1,
-                    WeaponBodyId = Shared.Definitions.Enums.WeaponBodies.AbsoluteAqua
-                }
+                new() { ViewerId = 2, WeaponBodyId = WeaponBodies.SoldiersBrand },
+                new() { ViewerId = 1, WeaponBodyId = WeaponBodies.AbsoluteAqua }
             }
         );
 

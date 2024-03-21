@@ -2,7 +2,6 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Database.Test.Utils;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -15,9 +14,9 @@ using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Time.Testing;
 using Microsoft.IdentityModel.Tokens;
 using MockQueryable.Moq;
 
@@ -26,6 +25,7 @@ namespace DragaliaAPI.Test.Services;
 public class AuthServiceTest
 {
     private readonly AuthService authService;
+    private static readonly DateTimeOffset fixedTime = DateTimeOffset.UtcNow;
 
     private readonly Mock<IBaasApi> mockBaasRequestHelper;
     private readonly Mock<ISessionService> mockSessionService;
@@ -34,7 +34,7 @@ public class AuthServiceTest
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IOptionsMonitor<LoginOptions>> mockLoginOptions;
     private readonly Mock<IOptionsMonitor<BaasOptions>> mockBaasOptions;
-    private readonly Mock<IDateTimeProvider> mockDateTimeProvider;
+    private readonly FakeTimeProvider mockDateTimeProvider;
     private readonly Mock<ILogger<AuthService>> mockLogger;
     private readonly ApiContext apiContext;
 
@@ -51,7 +51,7 @@ public class AuthServiceTest
         this.mockBaasOptions = new(MockBehavior.Strict);
         this.mockLoginOptions = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
-        this.mockDateTimeProvider = new(MockBehavior.Strict);
+        this.mockDateTimeProvider = new();
 
         DbContextOptions<ApiContext> options = new DbContextOptionsBuilder<ApiContext>()
             .UseInMemoryDatabase("apicontext")
@@ -60,8 +60,6 @@ public class AuthServiceTest
         this.apiContext = new ApiContext(options, new StubPlayerIdentityService(ViewerId));
         this.apiContext.Database.EnsureDeleted();
         this.apiContext.Database.EnsureCreated();
-
-        this.mockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(DateTimeOffset.UnixEpoch);
 
         this.authService = new(
             this.mockBaasRequestHelper.Object,
@@ -73,10 +71,11 @@ public class AuthServiceTest
             this.mockLoginOptions.Object,
             this.mockBaasOptions.Object,
             this.mockLogger.Object,
-            this.mockDateTimeProvider.Object
+            this.mockDateTimeProvider
         );
 
         this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
+        this.mockDateTimeProvider.SetUtcNow(fixedTime);
     }
 
     [Fact]
@@ -136,14 +135,12 @@ public class AuthServiceTest
             .GetToken(
                 this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
                 this.mockBaasOptions.Object.CurrentValue.TokenAudience,
-                DateTimeOffset.UtcNow.AddHours(1),
+                fixedTime.AddHours(1),
                 AccountId
             )
             .AsString();
 
-        this.mockSessionService.Setup(x =>
-            x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch)
-        )
+        this.mockSessionService.Setup(x => x.CreateSession(token, AccountId, 1, fixedTime))
             .ReturnsAsync("session id");
 
         this.mockPlayerIdentityService.Setup(x => x.StartUserImpersonation(ViewerId, AccountId))
@@ -173,7 +170,7 @@ public class AuthServiceTest
             .GetToken(
                 this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
                 this.mockBaasOptions.Object.CurrentValue.TokenAudience,
-                DateTimeOffset.UtcNow.AddHours(-1),
+                fixedTime.AddHours(-1),
                 AccountId
             )
             .AsString();
@@ -221,7 +218,7 @@ public class AuthServiceTest
                 UserData = new()
                 {
                     Name = "Euden",
-                    LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromSeconds(15)
+                    LastSaveImportTime = fixedTime - TimeSpan.FromSeconds(15)
                 }
             }
         );
@@ -234,10 +231,10 @@ public class AuthServiceTest
             .GetToken(
                 this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
                 this.mockBaasOptions.Object.CurrentValue.TokenAudience,
-                DateTimeOffset.UtcNow.AddHours(1),
+                fixedTime.AddHours(1),
                 AccountId,
                 savefileAvailable: true,
-                savefileTime: DateTimeOffset.UtcNow
+                savefileTime: fixedTime
             )
             .AsString();
 
@@ -259,9 +256,7 @@ public class AuthServiceTest
 
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(AccountId);
 
-        this.mockSessionService.Setup(x =>
-            x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch)
-        )
+        this.mockSessionService.Setup(x => x.CreateSession(token, AccountId, 1, fixedTime))
             .ReturnsAsync("session id");
 
         this.mockSavefileService.Setup(x => x.ThreadSafeImport(It.IsAny<LoadIndexResponse>()))
@@ -287,7 +282,7 @@ public class AuthServiceTest
                 UserData = new()
                 {
                     Name = "Euden",
-                    LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromSeconds(1)
+                    LastSaveImportTime = fixedTime - TimeSpan.FromSeconds(1)
                 }
             }
         );
@@ -300,10 +295,10 @@ public class AuthServiceTest
             .GetToken(
                 this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
                 this.mockBaasOptions.Object.CurrentValue.TokenAudience,
-                DateTimeOffset.UtcNow.AddHours(1),
+                fixedTime.AddHours(1),
                 AccountId,
                 savefileAvailable: true,
-                savefileTime: DateTimeOffset.UtcNow
+                savefileTime: fixedTime
             )
             .AsString();
 
@@ -326,9 +321,7 @@ public class AuthServiceTest
 
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(AccountId);
 
-        this.mockSessionService.Setup(x =>
-            x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch)
-        )
+        this.mockSessionService.Setup(x => x.CreateSession(token, AccountId, 1, fixedTime))
             .ReturnsAsync("session id");
 
         await this.authService.Invoking(x => x.DoAuth(token)).Should().NotThrowAsync();
@@ -352,7 +345,7 @@ public class AuthServiceTest
                 {
                     ViewerId = ViewerId,
                     Name = "Euden",
-                    LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromMinutes(2),
+                    LastSaveImportTime = fixedTime - TimeSpan.FromMinutes(2),
                 }
             }
         );
@@ -365,10 +358,10 @@ public class AuthServiceTest
             .GetToken(
                 this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
                 this.mockBaasOptions.Object.CurrentValue.TokenAudience,
-                DateTimeOffset.UtcNow.AddHours(1),
+                fixedTime.AddHours(1),
                 AccountId,
                 savefileAvailable: true,
-                savefileTime: DateTimeOffset.UtcNow - TimeSpan.FromMinutes(5)
+                savefileTime: fixedTime - TimeSpan.FromMinutes(5)
             )
             .AsString();
 
@@ -377,9 +370,7 @@ public class AuthServiceTest
 
         this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
 
-        this.mockSessionService.Setup(x =>
-            x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch)
-        )
+        this.mockSessionService.Setup(x => x.CreateSession(token, AccountId, 1, fixedTime))
             .ReturnsAsync("session id");
 
         this.mockPlayerIdentityService.Setup(x => x.StartUserImpersonation(ViewerId, "account id"))
@@ -408,7 +399,7 @@ public class AuthServiceTest
                 UserData = new()
                 {
                     Name = "Euden",
-                    LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromMinutes(2),
+                    LastSaveImportTime = fixedTime - TimeSpan.FromMinutes(2),
                 }
             }
         );
@@ -421,10 +412,10 @@ public class AuthServiceTest
             .GetToken(
                 this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
                 this.mockBaasOptions.Object.CurrentValue.TokenAudience,
-                DateTimeOffset.UtcNow.AddHours(1),
+                fixedTime.AddHours(1),
                 AccountId,
                 savefileAvailable: false,
-                savefileTime: DateTimeOffset.MaxValue
+                savefileTime: fixedTime
             )
             .AsString();
 
@@ -440,9 +431,7 @@ public class AuthServiceTest
 
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(AccountId);
 
-        this.mockSessionService.Setup(x =>
-            x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch)
-        )
+        this.mockSessionService.Setup(x => x.CreateSession(token, AccountId, 1, fixedTime))
             .ReturnsAsync("session id");
 
         await this.authService.DoAuth(token);

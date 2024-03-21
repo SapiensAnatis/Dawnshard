@@ -1,5 +1,4 @@
 using DragaliaAPI.Database.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.SavefileUpdate;
 

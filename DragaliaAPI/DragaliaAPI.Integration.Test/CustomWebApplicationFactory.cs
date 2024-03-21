@@ -34,8 +34,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
 
     public Mock<IPhotonStateApi> MockPhotonStateApi { get; } = new();
 
-    public Mock<IDateTimeProvider> MockDateTimeProvider { get; } = new();
-
     public Respawner? Respawner { get; private set; }
 
     public async Task InitializeAsync()
@@ -83,7 +81,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         {
             services.AddScoped(x => this.MockBaasApi.Object);
             services.AddScoped(x => this.MockPhotonStateApi.Object);
-            services.AddScoped(x => this.MockDateTimeProvider.Object);
             services.Configure<LoginOptions>(x => x.UseBaasLogin = true);
 
             services.RemoveAll<DbContextOptions<ApiContext>>();

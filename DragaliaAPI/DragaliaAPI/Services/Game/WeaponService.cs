@@ -413,7 +413,7 @@ public class WeaponService : IWeaponService
     /// <param name="materialMap">The old material map.</param>
     /// <param name="coin">The old coin cost.</param>
     /// <exception cref="DragaliaException">The weapon had an invalid rarity (higher than 6; lower than 4)</exception>
-    private void SetMaterialMapSpecial(
+    private static void SetMaterialMapSpecial(
         WeaponBody body,
         ref Dictionary<Materials, int> materialMap,
         ref long coin

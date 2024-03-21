@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using DragaliaAPI.Database.Entities.Abstract;
 using Microsoft.EntityFrameworkCore;
 

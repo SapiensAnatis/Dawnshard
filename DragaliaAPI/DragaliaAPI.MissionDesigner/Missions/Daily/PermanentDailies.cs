@@ -1,6 +1,5 @@
 using DragaliaAPI.MissionDesigner.Models;
 using DragaliaAPI.MissionDesigner.Models.Attributes;
-using JetBrains.Annotations;
 
 namespace DragaliaAPI.MissionDesigner.Missions;
 

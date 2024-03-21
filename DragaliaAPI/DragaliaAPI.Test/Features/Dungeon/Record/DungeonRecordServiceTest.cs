@@ -25,7 +25,7 @@ public class DungeonRecordServiceTest
     private readonly Mock<IRewardService> mockRewardService;
     private readonly Mock<ILogger<DungeonRecordService>> mockLogger;
 
-    private readonly IDungeonRecordService dungeonRecordService;
+    private readonly DungeonRecordService dungeonRecordService;
 
     public DungeonRecordServiceTest()
     {
@@ -155,8 +155,7 @@ public class DungeonRecordServiceTest
             }
         ];
 
-        QuestMissionStatus missionStatus =
-            new(new bool[] { }, missionsClearSets, missionCompleteSets);
+        QuestMissionStatus missionStatus = new([], missionsClearSets, missionCompleteSets);
 
         int takeCoin = 10;
         int takeMana = 20;

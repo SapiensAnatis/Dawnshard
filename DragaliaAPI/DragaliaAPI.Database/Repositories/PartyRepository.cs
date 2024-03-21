@@ -70,7 +70,7 @@ public class PartyRepository : BaseRepository, IPartyRepository
         existingParty.PartyName = newName;
     }
 
-    private static ICollection<DbPartyUnit> CleanUnitList(ICollection<DbPartyUnit> original)
+    private static List<DbPartyUnit> CleanUnitList(ICollection<DbPartyUnit> original)
     {
         // For some reason, pressing 'Optimize' can send a request to /party/set_party_setting with like 8 units in it
         // Take the first one under each number, and fill in blanks if needed.

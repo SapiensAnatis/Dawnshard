@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.Definitions.Enums;

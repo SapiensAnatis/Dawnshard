@@ -10,7 +10,7 @@ namespace DragaliaAPI.Database.Test.Repositories;
 public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
-    private readonly IAbilityCrestRepository abilityCrestRepository;
+    private readonly AbilityCrestRepository abilityCrestRepository;
     private readonly Mock<ILogger<AbilityCrestRepository>> logger;
 
     public AbilityCrestRepositoryTest(DbTestFixture fixture)

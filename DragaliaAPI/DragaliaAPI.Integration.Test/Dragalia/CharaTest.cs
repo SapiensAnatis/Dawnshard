@@ -50,9 +50,9 @@ public class CharaTest : TestFixture
             )
         ).Data;
 
-        CharaList charaData = response
-            .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Celliera)
-            .First();
+        CharaList charaData = response.UpdateDataList.CharaList!.First(x =>
+            x.CharaId == Charas.Celliera
+        );
         charaData.Rarity.Should().Be(5);
     }
 
@@ -103,7 +103,7 @@ public class CharaTest : TestFixture
         );
 
         CharaList responseCharaData = response
-            .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Celliera)
+            .UpdateDataList.CharaList!.Where(x => (Charas)x.CharaId == Charas.Celliera)
             .First();
         responseCharaData
             .Level.Should()
@@ -111,7 +111,7 @@ public class CharaTest : TestFixture
         responseCharaData.Exp.Should().Be(expectedXp);
 
         response
-            .UpdateDataList.MaterialList.Where(x =>
+            .UpdateDataList.MaterialList!.Where(x =>
                 (Materials)x.MaterialId == Materials.GoldCrystal
             )
             .First()
@@ -177,7 +177,7 @@ public class CharaTest : TestFixture
         ).Data;
 
         CharaList responseCharaData = response
-            .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Celliera)
+            .UpdateDataList.CharaList!.Where(x => (Charas)x.CharaId == Charas.Celliera)
             .First();
 
         responseCharaData
@@ -241,7 +241,7 @@ public class CharaTest : TestFixture
         ).Data;
 
         CharaList responseCharaData = response
-            .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Celliera)
+            .UpdateDataList.CharaList!.Where(x => (Charas)x.CharaId == Charas.Celliera)
             .First();
 
         responseCharaData.LimitBreakCount.Should().Be(1);
@@ -290,7 +290,7 @@ public class CharaTest : TestFixture
         ).Data;
 
         CharaList responseCharaData = response
-            .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Celliera)
+            .UpdateDataList.CharaList!.Where(x => (Charas)x.CharaId == Charas.Celliera)
             .First();
 
         responseCharaData.LimitBreakCount.Should().Be(2);
@@ -344,14 +344,14 @@ public class CharaTest : TestFixture
                 new CharaLimitBreakAndBuildupManaRequest(
                     Charas.Delphi,
                     4,
-                    Enumerable.Range(1, 50),
+                    Enumerable.Range(1, 50).ToList(),
                     false
                 )
             )
         ).Data;
 
         CharaList preSpiralResponseCharaData = preSpiralResponse
-            .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Delphi)
+            .UpdateDataList.CharaList!.Where(x => (Charas)x.CharaId == Charas.Delphi)
             .First();
 
         CharaData charaData = MasterAsset.CharaData.Get(Charas.Delphi);
@@ -390,12 +390,12 @@ public class CharaTest : TestFixture
         CharaBuildupManaResponse postSpiralResponse = (
             await this.Client.PostMsgpack<CharaBuildupManaResponse>(
                 "chara/buildup_mana",
-                new CharaBuildupManaRequest(Charas.Delphi, Enumerable.Range(51, 20), false)
+                new CharaBuildupManaRequest(Charas.Delphi, Enumerable.Range(51, 20).ToList(), false)
             )
         ).Data;
 
         CharaList postSpiralResponseCharaData = postSpiralResponse
-            .UpdateDataList.CharaList.Where(x => (Charas)x.CharaId == Charas.Delphi)
+            .UpdateDataList.CharaList!.Where(x => (Charas)x.CharaId == Charas.Delphi)
             .First();
 
         postSpiralResponseCharaData.Level.Should().Be(1);
@@ -438,7 +438,7 @@ public class CharaTest : TestFixture
         ).Data;
 
         CharaList responseCharaData = response
-            .UpdateDataList.CharaList.Where(x => x.CharaId == Charas.SummerCelliera)
+            .UpdateDataList.CharaList!.Where(x => x.CharaId == Charas.SummerCelliera)
             .First();
 
         responseCharaData.Level.Should().Be(100);
@@ -470,7 +470,7 @@ public class CharaTest : TestFixture
         ).Data;
 
         CharaList responseCharaData = response
-            .UpdateDataList.CharaList.Where(x => x.CharaId == Charas.Harle)
+            .UpdateDataList.CharaList!.Where(x => x.CharaId == Charas.Harle)
             .First();
 
         responseCharaData.Level.Should().Be(80);
@@ -510,7 +510,7 @@ public class CharaTest : TestFixture
         {
             await this.Client.PostMsgpack<CharaBuildupManaResponse>(
                 "chara/buildup_mana",
-                new CharaBuildupManaRequest(id, Enumerable.Range(1, manaNodes), false)
+                new CharaBuildupManaRequest(id, Enumerable.Range(1, manaNodes).ToList(), false)
             );
         }
         else
@@ -520,7 +520,7 @@ public class CharaTest : TestFixture
                 new CharaLimitBreakAndBuildupManaRequest(
                     id,
                     limitBreak,
-                    Enumerable.Range(1, manaNodes),
+                    Enumerable.Range(1, manaNodes).ToList(),
                     false
                 )
             );
@@ -534,7 +534,7 @@ public class CharaTest : TestFixture
         ).Data;
 
         CharaList responseCharaData = response
-            .UpdateDataList.CharaList.Where(x => x.CharaId == id)
+            .UpdateDataList.CharaList!.Where(x => x.CharaId == id)
             .First();
 
         responseCharaData.Level.Should().Be(100);
@@ -593,7 +593,7 @@ public class CharaTest : TestFixture
         {
             await this.Client.PostMsgpack<CharaBuildupManaResponse>(
                 "chara/buildup_mana",
-                new CharaBuildupManaRequest(id, Enumerable.Range(1, manaNodes), false)
+                new CharaBuildupManaRequest(id, Enumerable.Range(1, manaNodes).ToList(), false)
             );
         }
         else
@@ -603,7 +603,7 @@ public class CharaTest : TestFixture
                 new CharaLimitBreakAndBuildupManaRequest(
                     id,
                     limitBreak,
-                    Enumerable.Range(1, manaNodes),
+                    Enumerable.Range(1, manaNodes).ToList(),
                     false
                 )
             );
@@ -617,7 +617,7 @@ public class CharaTest : TestFixture
         ).Data;
 
         CharaList responseCharaData = response
-            .UpdateDataList.CharaList.Where(x => x.CharaId == id)
+            .UpdateDataList.CharaList!.Where(x => x.CharaId == id)
             .First();
 
         responseCharaData.Level.Should().Be(80);
@@ -688,7 +688,7 @@ public class CharaTest : TestFixture
         ).Data;
 
         CharaUnitSetList responseCharaData = response
-            .UpdateDataList.CharaUnitSetList.Where(x => (Charas)x.CharaId == Charas.Celliera)
+            .UpdateDataList.CharaUnitSetList!.Where(x => (Charas)x.CharaId == Charas.Celliera)
             .First();
         responseCharaData.CharaUnitSetDetailList.ToList()[0].DragonKeyId.Should().Be(5);
     }

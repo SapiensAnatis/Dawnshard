@@ -27,7 +27,6 @@ using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Stamp;
-using DragaliaAPI.Features.Summoning;
 using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Features.Trade;
@@ -101,9 +100,6 @@ public static class ServiceConfiguration
             .AddScoped<IFortRepository, FortRepository>()
             // Login feature
             .AddScoped<IResetHelper, ResetHelper>()
-#pragma warning disable CS0618 // Type or member is obsolete
-            .AddScoped<IDateTimeProvider, DateTimeProvider>()
-#pragma warning restore CS0618 // Type or member is obsolete
             .AddScoped<ILoginBonusService, LoginBonusService>()
             .AddScoped<ILoginBonusRepository, LoginBonusRepository>()
             // Dungeon Feature

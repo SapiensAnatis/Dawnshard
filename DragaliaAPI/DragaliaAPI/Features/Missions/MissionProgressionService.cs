@@ -322,7 +322,7 @@ public class MissionProgressionService(
 
             missionList ??= await missionRepository
                 .Missions.Where(x => x.State == MissionState.InProgress)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             foreach (
                 DbPlayerMission progressingMission in missionList.Where(x =>

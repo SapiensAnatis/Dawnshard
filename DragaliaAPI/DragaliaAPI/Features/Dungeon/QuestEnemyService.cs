@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Extensions;
-using DragaliaAPI.Features.Dungeon.Start;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -109,7 +108,7 @@ public class QuestEnemyService : IQuestEnemyService
     // Mercurial Gauntlet
     public IEnumerable<AtgenEnemy> BuildQuestWallEnemyList(int wallId, int wallLevel)
     {
-        List<AtgenEnemy> enemyList = this.GetWallEnemyList(wallId, wallLevel).ToList();
+        List<AtgenEnemy> enemyList = GetWallEnemyList(wallId, wallLevel).ToList();
         // should handle enemy drops but eh
         return enemyList;
     }
@@ -217,7 +216,7 @@ public class QuestEnemyService : IQuestEnemyService
     }
 
     // Mercurial Gauntlet
-    private IEnumerable<AtgenEnemy> GetWallEnemyList(int wallId, int wallLevel)
+    private static List<AtgenEnemy> GetWallEnemyList(int wallId, int wallLevel)
     {
         QuestWallDetail questWallDetail = MasterAssetUtils.GetQuestWallDetail(wallId, wallLevel);
         return new List<AtgenEnemy>()

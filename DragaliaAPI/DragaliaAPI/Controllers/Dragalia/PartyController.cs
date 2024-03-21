@@ -39,7 +39,10 @@ public class PartyController(
     }
 
     [HttpPost("set_party_setting")]
-    public async Task<DragaliaResult> SetPartySetting(PartySetPartySettingRequest requestParty)
+    public async Task<DragaliaResult> SetPartySetting(
+        PartySetPartySettingRequest requestParty,
+        CancellationToken cancellationToken
+    )
     {
         // Validate the player owns all the entities they have requested to add
         // TODO: Weapon validation
@@ -82,27 +85,33 @@ public class PartyController(
             missionProgressionService.OnPartyOptimized(requestParty.EntrustElement);
         }
 
-        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         return this.Ok(new PartySetPartySettingResponse(updateDataList, new()));
     }
 
     [HttpPost("set_main_party_no")]
-    public async Task<DragaliaResult> SetMainPartyNo(PartySetMainPartyNoRequest request)
+    public async Task<DragaliaResult> SetMainPartyNo(
+        PartySetMainPartyNoRequest request,
+        CancellationToken cancellationToken
+    )
     {
         await userDataRepository.SetMainPartyNo(request.MainPartyNo);
 
-        await updateDataService.SaveChangesAsync();
+        await updateDataService.SaveChangesAsync(cancellationToken);
 
         return this.Ok(new PartySetMainPartyNoResponse(request.MainPartyNo));
     }
 
     [HttpPost("update_party_name")]
-    public async Task<DragaliaResult> UpdatePartyName(PartyUpdatePartyNameRequest request)
+    public async Task<DragaliaResult> UpdatePartyName(
+        PartyUpdatePartyNameRequest request,
+        CancellationToken cancellationToken
+    )
     {
         await partyRepository.UpdatePartyName(request.PartyNo, request.PartyName);
 
-        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         return this.Ok(new PartyUpdatePartyNameResponse() { UpdateDataList = updateDataList });
     }

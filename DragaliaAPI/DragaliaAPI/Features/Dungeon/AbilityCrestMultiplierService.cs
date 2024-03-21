@@ -36,7 +36,7 @@ public class AbilityCrestMultiplierService(
                 .IntersectBy(partyUnit.GetAbilityCrestList(), x => x.AbilityCrestId)
                 .ToList();
 
-            List<AbilityData> buildPointAbilities = this.GetUnitCrestAbilities(dbCrests)
+            List<AbilityData> buildPointAbilities = GetUnitCrestAbilities(dbCrests)
                 .Where(x =>
                     x.AbilityType1
                         is AbilityTypes.BuildEventPointBoost
@@ -53,7 +53,7 @@ public class AbilityCrestMultiplierService(
 
             pointBoost += CalculatePercentageValue(buildPointAbilities);
 
-            List<AbilityData> buildMaterialAbilities = this.GetUnitCrestAbilities(dbCrests)
+            List<AbilityData> buildMaterialAbilities = GetUnitCrestAbilities(dbCrests)
                 .Where(x =>
                     x.AbilityType1 is AbilityTypes.BuildEventMaterialBoost && x.EventId == eventId
                 )
@@ -79,7 +79,7 @@ public class AbilityCrestMultiplierService(
 
         double CalculatePercentageValue(IReadOnlyCollection<AbilityData> abilities)
         {
-            if (!abilities.Any())
+            if (abilities.Count == 0)
                 return 0;
 
             // After filtering by event ID, they should all have the same AbilityLimitedGroupId1
@@ -100,7 +100,7 @@ public class AbilityCrestMultiplierService(
         }
     }
 
-    private IEnumerable<AbilityData> GetUnitCrestAbilities(IEnumerable<DbAbilityCrest> crests)
+    private static List<AbilityData> GetUnitCrestAbilities(IEnumerable<DbAbilityCrest> crests)
     {
         List<AbilityData> result = new();
 

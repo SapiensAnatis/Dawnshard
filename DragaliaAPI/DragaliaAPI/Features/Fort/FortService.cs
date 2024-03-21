@@ -5,7 +5,6 @@ using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
@@ -30,7 +29,7 @@ public class FortService(
     IRewardService rewardService,
     IOptionsMonitor<DragonfruitConfig> config,
     IUserService userService,
-    IDateTimeProvider dateTimeProvider
+    TimeProvider dateTimeProvider
 ) : IFortService
 {
     public const int MaximumCarpenterNum = 5;
@@ -87,7 +86,7 @@ public class FortService(
     public async Task<FortGetMultiIncomeResponse> CollectIncome(IEnumerable<long> idsToCollect)
     {
         Random rdm = Random.Shared;
-        DateTimeOffset current = dateTimeProvider.UtcNow;
+        DateTimeOffset current = dateTimeProvider.GetUtcNow();
 
         FortGetMultiIncomeResponse resp = new();
 
@@ -286,7 +285,7 @@ public class FortService(
 
         int paymentCost = GetUpgradePaymentCost(
             paymentType,
-            dateTimeProvider.UtcNow,
+            dateTimeProvider.GetUtcNow(),
             build.BuildEndDate
         );
 
@@ -326,7 +325,7 @@ public class FortService(
 
     public async Task EndBuild(long buildId)
     {
-        DateTimeOffset current = dateTimeProvider.UtcNow;
+        DateTimeOffset current = dateTimeProvider.GetUtcNow();
 
         logger.LogDebug("Build ended for build {buildId}", buildId);
 
@@ -355,7 +354,7 @@ public class FortService(
 
         if (
             build.BuildStatus is not FortBuildStatus.LevelUp
-            || dateTimeProvider.UtcNow < build.BuildEndDate
+            || dateTimeProvider.GetUtcNow() < build.BuildEndDate
         )
             throw new InvalidOperationException($"This building has not completed levelling up.");
 
@@ -484,7 +483,7 @@ public class FortService(
         else
         {
             DateTimeOffset fortOpenTime = await userDataRepository.GetFortOpenTimeAsync();
-            DateTimeOffset current = dateTimeProvider.UtcNow;
+            DateTimeOffset current = dateTimeProvider.GetUtcNow();
 
             build.BuildStartDate = current;
 

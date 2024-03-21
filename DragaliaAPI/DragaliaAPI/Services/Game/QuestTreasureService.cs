@@ -18,7 +18,10 @@ public class QuestTreasureService(
     ApiContext apiContext
 ) : IQuestTreasureService
 {
-    public async Task<QuestOpenTreasureResponse> DoOpenTreasure(QuestOpenTreasureRequest request)
+    public async Task<QuestOpenTreasureResponse> DoOpenTreasure(
+        QuestOpenTreasureRequest request,
+        CancellationToken cancellationToken
+    )
     {
         QuestTreasureData questTreasureData = MasterAsset.QuestTreasureData[
             request.QuestTreasureId
@@ -59,20 +62,20 @@ public class QuestTreasureService(
             }
         );
 
-        IEnumerable<AtgenBuildEventRewardEntityList> quest_treasure_reward_list = rewards;
+        IEnumerable<AtgenBuildEventRewardEntityList> questTreasureRewardList = rewards;
 
-        IEnumerable<AtgenDuplicateEntityList> duplicate_entity_list =
+        IEnumerable<AtgenDuplicateEntityList> duplicateEntityList =
             new List<AtgenDuplicateEntityList>();
         EntityResult entityResult = rewardService.GetEntityResult();
 
-        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         return new QuestOpenTreasureResponse()
         {
             UpdateDataList = updateDataList,
             EntityResult = entityResult,
-            QuestTreasureRewardList = quest_treasure_reward_list,
-            DuplicateEntityList = duplicate_entity_list,
+            QuestTreasureRewardList = questTreasureRewardList,
+            DuplicateEntityList = duplicateEntityList,
             AddMaxDragonQuantity = questTreasureData.AddMaxDragonStorage,
             AddMaxWeaponQuantity = 0,
             AddMaxAmuletQuantity = 0

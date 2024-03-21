@@ -34,7 +34,7 @@ public class WeaponBodyControllerTest
         this.mockWeaponService.Setup(x => x.Craft(WeaponBodies.Areadbhar))
             .Returns(Task.CompletedTask);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
             .ReturnsAsync(
                 new UpdateDataList()
                 {
@@ -47,11 +47,14 @@ public class WeaponBodyControllerTest
 
         WeaponBodyCraftResponse data = (
             await this.weaponBodyController.Craft(
-                new WeaponBodyCraftRequest() { WeaponBodyId = WeaponBodies.Areadbhar }
+                new WeaponBodyCraftRequest() { WeaponBodyId = WeaponBodies.Areadbhar },
+                default
             )
         ).GetData<WeaponBodyCraftResponse>()!;
 
-        data.UpdateDataList.WeaponBodyList.First().WeaponBodyId.Should().Be(WeaponBodies.Areadbhar);
+        data.UpdateDataList.WeaponBodyList!.First()
+            .WeaponBodyId.Should()
+            .Be(WeaponBodies.Areadbhar);
 
         this.mockUpdateDataService.VerifyAll();
         this.mockWeaponService.VerifyAll();
@@ -65,7 +68,8 @@ public class WeaponBodyControllerTest
 
         ResultCodeResponse response = (
             await this.weaponBodyController.Craft(
-                new WeaponBodyCraftRequest() { WeaponBodyId = WeaponBodies.Areadbhar }
+                new WeaponBodyCraftRequest() { WeaponBodyId = WeaponBodies.Areadbhar },
+                default
             )
         ).GetData<ResultCodeResponse>()!;
 
@@ -77,7 +81,8 @@ public class WeaponBodyControllerTest
     {
         ResultCodeResponse response = (
             await this.weaponBodyController.BuildupPiece(
-                new WeaponBodyBuildupPieceRequest() { WeaponBodyId = (WeaponBodies)8 }
+                new WeaponBodyBuildupPieceRequest() { WeaponBodyId = (WeaponBodies)8 },
+                default
             )
         ).GetData<ResultCodeResponse>()!;
 
@@ -91,7 +96,8 @@ public class WeaponBodyControllerTest
 
         ResultCodeResponse response = (
             await this.weaponBodyController.BuildupPiece(
-                new WeaponBodyBuildupPieceRequest() { WeaponBodyId = WeaponBodies.Caduceus }
+                new WeaponBodyBuildupPieceRequest() { WeaponBodyId = WeaponBodies.Caduceus },
+                default
             )
         ).GetData<ResultCodeResponse>()!;
 
@@ -124,7 +130,8 @@ public class WeaponBodyControllerTest
                         new(),
                         new(),
                     }
-                }
+                },
+                default
             )
         ).GetData<ResultCodeResponse>()!;
 
@@ -152,7 +159,7 @@ public class WeaponBodyControllerTest
                     new() { WeaponBodyId = WeaponBodies.Caduceus }
                 }
             };
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(udl);
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(udl);
 
         WeaponBodyBuildupPieceResponse data = (
             await this.weaponBodyController.BuildupPiece(
@@ -165,7 +172,8 @@ public class WeaponBodyControllerTest
                         new(),
                         new()
                     }
-                }
+                },
+                default
             )
         ).GetData<WeaponBodyBuildupPieceResponse>()!;
 

@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Features.Chara;
+﻿using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Features.Reward;

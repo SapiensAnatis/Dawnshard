@@ -125,12 +125,14 @@ app.UseStaticFiles();
 app.UseAuthentication();
 app.UseResponseCompression();
 
+#pragma warning disable CA1861 // Avoid constant arrays as arguments. Only created once as top-level statement.
 FrozenSet<string> apiRoutePrefixes = new[]
 {
     "/api",
     "/2.19.0_20220714193707",
     "/2.19.0_20220719103923"
 }.ToFrozenSet();
+#pragma warning restore CA1861
 
 app.MapWhen(
     ctx => apiRoutePrefixes.Any(prefix => ctx.Request.Path.StartsWithSegments(prefix)),

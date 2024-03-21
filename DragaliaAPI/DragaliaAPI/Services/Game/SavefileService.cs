@@ -213,7 +213,7 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.AddShopInfo(player);
+            AddShopInfo(player);
 
             this.logger.LogDebug(
                 "Adding shop info step done after {t} ms",
@@ -249,7 +249,7 @@ public class SavefileService : ISavefileService
             }
             else
             {
-                await this.AddDefaultParties(player);
+                AddDefaultParties(player);
             }
 
             this.logger.LogDebug(
@@ -609,11 +609,11 @@ public class SavefileService : ISavefileService
             player.AccountId
         );
 
-        await this.AddDefaultParties(player);
+        AddDefaultParties(player);
         await this.AddDefaultCharacters();
-        this.AddDefaultEquippedStamps(player);
-        this.AddShopInfo(player);
-        this.AddDefaultEmblem(player);
+        AddDefaultEquippedStamps(player);
+        AddShopInfo(player);
+        AddDefaultEmblem(player);
 
         await this.apiContext.SaveChangesAsync();
 
@@ -622,7 +622,7 @@ public class SavefileService : ISavefileService
         return player;
     }
 
-    private async Task AddDefaultParties(DbPlayer player)
+    private static void AddDefaultParties(DbPlayer player)
     {
         player.PartyList.AddRange(
             Enumerable
@@ -667,7 +667,7 @@ public class SavefileService : ISavefileService
         await this.unitRepository.AddCharas(DefaultSavefileData.Characters);
     }
 
-    private void AddDefaultEquippedStamps(DbPlayer player)
+    private static void AddDefaultEquippedStamps(DbPlayer player)
     {
         player.EquippedStampList.AddRange(
             Enumerable
@@ -676,12 +676,12 @@ public class SavefileService : ISavefileService
         );
     }
 
-    private void AddShopInfo(DbPlayer player)
+    private static void AddShopInfo(DbPlayer player)
     {
         player.ShopInfo = new DbPlayerShopInfo();
     }
 
-    private void AddDefaultEmblem(DbPlayer player)
+    private static void AddDefaultEmblem(DbPlayer player)
     {
         player.Emblems.Add(
             new DbEmblem

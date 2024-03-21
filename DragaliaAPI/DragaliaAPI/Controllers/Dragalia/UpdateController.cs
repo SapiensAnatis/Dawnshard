@@ -24,18 +24,24 @@ public class UpdateController(
 {
     [HttpPost]
     [Route("namechange")]
-    public async Task<DragaliaResult> Post(UpdateNamechangeRequest request)
+    public async Task<DragaliaResult> Post(
+        UpdateNamechangeRequest request,
+        CancellationToken cancellationToken
+    )
     {
         await userDataRepository.UpdateName(request.Name);
 
-        await updateDataService.SaveChangesAsync();
+        await updateDataService.SaveChangesAsync(cancellationToken);
 
         return this.Ok(new UpdateNamechangeResponse(request.Name));
     }
 
     [HttpPost]
     [Route("reset_new")]
-    public async Task<DragaliaResult> ResetNew(UpdateResetNewRequest request)
+    public async Task<DragaliaResult> ResetNew(
+        UpdateResetNewRequest request,
+        CancellationToken cancellationToken
+    )
     {
         foreach (AtgenTargetList target in request.TargetList)
         {
@@ -58,6 +64,7 @@ public class UpdateController(
                         DbEmblem emblem in emblemRepository
                             .Emblems.Where(x => x.IsNew)
                             .AsAsyncEnumerable()
+                            .WithCancellation(cancellationToken)
                     )
                     {
                         emblem.IsNew = false;
@@ -75,7 +82,7 @@ public class UpdateController(
             }
         }
 
-        await updateDataService.SaveChangesAsync();
+        await updateDataService.SaveChangesAsync(cancellationToken);
 
         return this.Ok(new UpdateResetNewResponse(1));
     }

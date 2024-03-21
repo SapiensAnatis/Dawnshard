@@ -1,7 +1,6 @@
-﻿namespace DragaliaAPI.Photon.Shared.Requests
+﻿namespace DragaliaAPI.Photon.Shared.Requests;
+
+public class GameModifyVisibleRequest : GameModifyRequest
 {
-    public class GameModifyVisibleRequest : GameModifyRequest
-    {
-        public bool NewVisibility { get; set; }
-    }
+    public bool NewVisibility { get; set; }
 }

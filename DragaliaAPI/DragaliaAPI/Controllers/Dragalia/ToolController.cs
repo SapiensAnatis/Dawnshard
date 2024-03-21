@@ -1,9 +1,7 @@
 ﻿using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 

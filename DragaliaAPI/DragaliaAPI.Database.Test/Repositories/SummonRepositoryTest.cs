@@ -12,7 +12,7 @@ namespace DragaliaAPI.Database.Test.Repositories;
 public class SummonRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
-    private readonly ISummonRepository summonRepository;
+    private readonly SummonRepository summonRepository;
 
     public SummonRepositoryTest(DbTestFixture fixture)
     {

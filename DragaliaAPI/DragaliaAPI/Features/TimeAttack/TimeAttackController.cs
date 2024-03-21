@@ -28,14 +28,15 @@ public class TimeAttackController(
     [Route("receive_tier_reward")]
     [HttpPost]
     public async Task<DragaliaResult> ReceiveTierReward(
-        TimeAttackRankingReceiveTierRewardRequest request
+        TimeAttackRankingReceiveTierRewardRequest request,
+        CancellationToken cancellationToken
     )
     {
         IEnumerable<RankingTierReward> receivedRewards = await timeAttackService.ReceiveTierReward(
             request.QuestId
         );
 
-        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         EntityResult entityResult = rewardService.GetEntityResult();
 
         IEnumerable<RankingTierReward> rewardList = timeAttackService.GetRewards();

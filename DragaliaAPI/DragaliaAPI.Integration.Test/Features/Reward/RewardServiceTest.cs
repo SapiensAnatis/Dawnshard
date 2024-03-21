@@ -1,6 +1,4 @@
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Features.Reward;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Integration.Test.Features.Reward;
 

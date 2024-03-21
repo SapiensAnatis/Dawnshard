@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using DragaliaAPI.Database.Entities.Abstract;
+﻿using DragaliaAPI.Database.Entities.Abstract;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;

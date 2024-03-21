@@ -66,7 +66,10 @@ public class PresentController : DragaliaControllerBase
 
     [Route("receive")]
     [HttpPost]
-    public async Task<DragaliaResult> Receive([FromBody] PresentReceiveRequest request)
+    public async Task<DragaliaResult> Receive(
+        [FromBody] PresentReceiveRequest request,
+        CancellationToken cancellationToken
+    )
     {
         (
             IEnumerable<long> receivedPresents,
@@ -78,7 +81,9 @@ public class PresentController : DragaliaControllerBase
         // Prevent double messages popping up about discarded entities
         entityResult.OverDiscardEntityList = Enumerable.Empty<AtgenBuildEventRewardEntityList>();
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
+            cancellationToken
+        );
 
         IEnumerable<PresentDetailList> presentList =
             await this.presentControllerService.GetPresentList(0);

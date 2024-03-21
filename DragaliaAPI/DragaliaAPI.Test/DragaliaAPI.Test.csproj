@@ -7,6 +7,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" />
         <PackageReference Include="Microsoft.NET.Test.Sdk"/>
         <PackageReference Include="MockQueryable.Moq"/>
         <PackageReference Include="Moq"/>
@@ -37,6 +38,12 @@
         <None Update="Data\endgame_savefile.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.Extensions.TimeProvider.Testing">
+        <HintPath>..\..\..\..\.nuget\packages\microsoft.extensions.timeprovider.testing\8.3.0\lib\net8.0\Microsoft.Extensions.TimeProvider.Testing.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

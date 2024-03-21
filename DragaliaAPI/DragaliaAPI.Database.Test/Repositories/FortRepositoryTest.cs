@@ -11,7 +11,7 @@ namespace DragaliaAPI.Database.Test.Repositories;
 public class FortRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
-    private readonly IFortRepository fortRepository;
+    private readonly FortRepository fortRepository;
     private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
 
     public FortRepositoryTest(DbTestFixture fixture)

@@ -5,6 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <AnalysisLevel>latest-recommended</AnalysisLevel>
     </PropertyGroup>
 
     <PropertyGroup>

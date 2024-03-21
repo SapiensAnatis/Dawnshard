@@ -2,7 +2,6 @@
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using DragaliaAPI.Database;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
@@ -11,23 +10,16 @@ using Microsoft.Extensions.Primitives;
 
 namespace DragaliaAPI.Middleware;
 
-public class PhotonAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+public class PhotonAuthenticationHandler(
+    IOptionsMonitor<AuthenticationSchemeOptions> options,
+    ILoggerFactory logger,
+    UrlEncoder encoder,
+    ApiContext apiContext
+) : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
 {
     public const string Role = "Photon";
 
-    private readonly IUserDataRepository userDataRepository;
-    private readonly ApiContext apiContext;
-
-    public PhotonAuthenticationHandler(
-        IOptionsMonitor<AuthenticationSchemeOptions> options,
-        ILoggerFactory logger,
-        UrlEncoder encoder,
-        ApiContext apiContext
-    )
-        : base(options, logger, encoder)
-    {
-        this.apiContext = apiContext;
-    }
+    private readonly ApiContext apiContext = apiContext;
 
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
@@ -50,7 +42,7 @@ public class PhotonAuthenticationHandler : AuthenticationHandler<AuthenticationS
 
         string configuredToken =
             Environment.GetEnvironmentVariable("PHOTON_TOKEN")
-            ?? throw new ArgumentNullException("PHOTON_TOKEN environment variable not set!");
+            ?? throw new InvalidOperationException("PHOTON_TOKEN environment variable not set!");
 
         if (authenticationHeader.Parameter != configuredToken)
         {

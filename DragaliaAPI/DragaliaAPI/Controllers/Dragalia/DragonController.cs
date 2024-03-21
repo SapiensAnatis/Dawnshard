@@ -17,25 +17,32 @@ public class DragonController : DragaliaControllerBase
 
     [Route("buildup")]
     [HttpPost]
-    public async Task<DragaliaResult> Buildup([FromBody] DragonBuildupRequest request)
+    public async Task<DragaliaResult> Buildup(
+        [FromBody] DragonBuildupRequest request,
+        CancellationToken cancellationToken
+    )
     {
-        return Ok(await dragonService.DoBuildup(request));
+        return Ok(await dragonService.DoBuildup(request, cancellationToken));
     }
 
     [Route("reset_plus_count")]
     [HttpPost]
     public async Task<DragaliaResult> DragonResetPlusCount(
-        [FromBody] DragonResetPlusCountRequest request
+        [FromBody] DragonResetPlusCountRequest request,
+        CancellationToken cancellationToken
     )
     {
-        return Ok(await dragonService.DoDragonResetPlusCount(request));
+        return Ok(await dragonService.DoDragonResetPlusCount(request, cancellationToken));
     }
 
     [Route("limit_break")]
     [HttpPost]
-    public async Task<DragaliaResult> DragonLimitBreak([FromBody] DragonLimitBreakRequest request)
+    public async Task<DragaliaResult> DragonLimitBreak(
+        [FromBody] DragonLimitBreakRequest request,
+        CancellationToken cancellationToken
+    )
     {
-        return Ok(await dragonService.DoDragonLimitBreak(request));
+        return Ok(await dragonService.DoDragonLimitBreak(request, cancellationToken));
     }
 
     [Route("get_contact_data")]
@@ -48,16 +55,18 @@ public class DragonController : DragaliaControllerBase
     [Route("buy_gift_to_send_multiple")]
     [HttpPost]
     public async Task<DragaliaResult> DragonBuyGiftToSendMultiple(
-        [FromBody] DragonBuyGiftToSendMultipleRequest request
+        [FromBody] DragonBuyGiftToSendMultipleRequest request,
+        CancellationToken cancellationToken
     )
     {
-        return Ok(await dragonService.DoDragonBuyGiftToSendMultiple(request));
+        return Ok(await dragonService.DoDragonBuyGiftToSendMultiple(request, cancellationToken));
     }
 
     [Route("buy_gift_to_send")]
     [HttpPost]
     public async Task<DragaliaResult> DragonBuyGiftToSend(
-        [FromBody] DragonBuyGiftToSendRequest request
+        [FromBody] DragonBuyGiftToSendRequest request,
+        CancellationToken cancellationToken
     )
     {
         DragonBuyGiftToSendMultipleResponse resultData =
@@ -66,7 +75,8 @@ public class DragonController : DragaliaControllerBase
                 {
                     DragonId = request.DragonId,
                     DragonGiftIdList = new List<DragonGifts>() { request.DragonGiftId }
-                }
+                },
+                cancellationToken
             );
         return Ok(
             new DragonBuyGiftToSendResponse()
@@ -87,15 +97,19 @@ public class DragonController : DragaliaControllerBase
     [Route("send_gift_multiple")]
     [HttpPost]
     public async Task<DragaliaResult> DragonSentGiftMultiple(
-        [FromBody] DragonSendGiftMultipleRequest request
+        [FromBody] DragonSendGiftMultipleRequest request,
+        CancellationToken cancellationToken
     )
     {
-        return Ok(await dragonService.DoDragonSendGiftMultiple(request));
+        return Ok(await dragonService.DoDragonSendGiftMultiple(request, cancellationToken));
     }
 
     [Route("send_gift")]
     [HttpPost]
-    public async Task<DragaliaResult> DragonSendGift([FromBody] DragonSendGiftRequest request)
+    public async Task<DragaliaResult> DragonSendGift(
+        [FromBody] DragonSendGiftRequest request,
+        CancellationToken cancellationToken
+    )
     {
         DragonSendGiftMultipleResponse resultData = await dragonService.DoDragonSendGiftMultiple(
             new DragonSendGiftMultipleRequest()
@@ -103,7 +117,8 @@ public class DragonController : DragaliaControllerBase
                 DragonId = request.DragonId,
                 DragonGiftId = request.DragonGiftId,
                 Quantity = 1
-            }
+            },
+            cancellationToken
         );
         return Ok(
             new DragonSendGiftResponse()
@@ -118,15 +133,21 @@ public class DragonController : DragaliaControllerBase
 
     [Route("set_lock")]
     [HttpPost]
-    public async Task<DragaliaResult> DragonSetLock([FromBody] DragonSetLockRequest request)
+    public async Task<DragaliaResult> DragonSetLock(
+        [FromBody] DragonSetLockRequest request,
+        CancellationToken cancellationToken
+    )
     {
-        return Ok(await dragonService.DoDragonSetLock(request));
+        return Ok(await dragonService.DoDragonSetLock(request, cancellationToken));
     }
 
     [Route("sell")]
     [HttpPost]
-    public async Task<DragaliaResult> DragonSell([FromBody] DragonSellRequest request)
+    public async Task<DragaliaResult> DragonSell(
+        [FromBody] DragonSellRequest request,
+        CancellationToken cancellationToken
+    )
     {
-        return Ok(await dragonService.DoDragonSell(request));
+        return Ok(await dragonService.DoDragonSell(request, cancellationToken));
     }
 }

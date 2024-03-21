@@ -18,10 +18,7 @@ public class ItemRepository(ApiContext apiContext, IPlayerIdentityService player
 
     public async Task AddItemQuantityAsync(UseItem id, int quantity)
     {
-        if (quantity < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(quantity));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(quantity);
 
         DbPlayerUseItem item =
             await GetItem(id)

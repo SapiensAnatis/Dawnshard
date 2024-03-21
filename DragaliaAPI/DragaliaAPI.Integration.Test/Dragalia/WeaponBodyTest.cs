@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Mapping.Mapperly;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
+[SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments")]
 public class WeaponBodyTest : TestFixture
 {
     private const string EndpointGroup = "/weapon_body";

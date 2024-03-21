@@ -11,7 +11,7 @@ namespace DragaliaAPI.Database.Test.Repositories;
 public class PartyRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
-    private readonly IPartyRepository partyRepository;
+    private readonly PartyRepository partyRepository;
 
     public PartyRepositoryTest(DbTestFixture fixture)
     {
@@ -34,7 +34,7 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
         result.Should().HaveCount(54);
 
         IEnumerable<IEnumerable<DbPartyUnit>> allUnits = result.Select(x => x.Units);
-        allUnits.Should().AllSatisfy(x => x.Select(x => x.UnitNo).Should().BeInAscendingOrder());
+        allUnits.Should().AllSatisfy(x => x.Select(y => y.UnitNo).Should().BeInAscendingOrder());
     }
 
     [Fact]

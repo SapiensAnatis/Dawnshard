@@ -6,7 +6,6 @@ using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
@@ -29,12 +28,15 @@ public class CharaController(
     IMissionProgressionService missionProgressionService,
     IPaymentService paymentService,
     IRewardService rewardService,
-    IDateTimeProvider dateTimeProvider,
+    TimeProvider timeProvider,
     ICharaService charaService
 ) : DragaliaControllerBase
 {
     [HttpPost("awake")]
-    public async Task<DragaliaResult> Awake(CharaAwakeRequest request)
+    public async Task<DragaliaResult> Awake(
+        CharaAwakeRequest request,
+        CancellationToken cancellationToken
+    )
     {
         CharaAwakeResponse resp = new();
 
@@ -81,13 +83,16 @@ public class CharaController(
 
         //TODO Get and update missions relating to promoting characters
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(resp);
     }
 
     [HttpPost("buildup")]
-    public async Task<DragaliaResult> Buildup(CharaBuildupRequest request)
+    public async Task<DragaliaResult> Buildup(
+        CharaBuildupRequest request,
+        CancellationToken cancellationToken
+    )
     {
         CharaBuildupResponse resp = new();
 
@@ -130,14 +135,17 @@ public class CharaController(
 
         await charaService.LevelUpChara(request.CharaId, experiencePlus, hpPlus, atkPlus);
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
 
     [HttpPost("reset_plus_count")]
-    public async Task<DragaliaResult> CharaResetPlusCount(CharaResetPlusCountRequest request)
+    public async Task<DragaliaResult> CharaResetPlusCount(
+        CharaResetPlusCountRequest request,
+        CancellationToken cancellationToken
+    )
     {
         CharaResetPlusCountResponse resp = new();
 
@@ -173,14 +181,17 @@ public class CharaController(
 
         await rewardService.GrantReward(new Entity(EntityTypes.Material, (int)material, plusCount));
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
 
     [HttpPost("buildup_mana")]
-    public async Task<DragaliaResult> CharaBuildupMana(CharaBuildupManaRequest request)
+    public async Task<DragaliaResult> CharaBuildupMana(
+        CharaBuildupManaRequest request,
+        CancellationToken cancellationToken
+    )
     {
         CharaBuildupManaResponse resp = new();
 
@@ -198,14 +209,17 @@ public class CharaController(
 
         //TODO: Party power calculation call
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         return this.Ok(resp);
     }
 
     [HttpPost("limit_break")]
-    public async Task<DragaliaResult> CharaLimitBreak(CharaLimitBreakRequest request)
+    public async Task<DragaliaResult> CharaLimitBreak(
+        CharaLimitBreakRequest request,
+        CancellationToken cancellationToken
+    )
     {
         CharaBuildupResponse resp = new();
 
@@ -219,7 +233,7 @@ public class CharaController(
             request.IsUseGrowMaterial
         );
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
@@ -227,7 +241,8 @@ public class CharaController(
 
     [HttpPost("limit_break_and_buildup_mana")]
     public async Task<DragaliaResult> CharaLimitBreakAndMana(
-        CharaLimitBreakAndBuildupManaRequest request
+        CharaLimitBreakAndBuildupManaRequest request,
+        CancellationToken cancellationToken
     )
     {
         CharaLimitBreakAndBuildupManaResponse resp = new();
@@ -251,14 +266,17 @@ public class CharaController(
             );
         }
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
 
     [HttpPost("buildup_platinum")]
-    public async Task<DragaliaResult> CharaBuildupPlatinum(CharaBuildupPlatinumRequest request)
+    public async Task<DragaliaResult> CharaBuildupPlatinum(
+        CharaBuildupPlatinumRequest request,
+        CancellationToken cancellationToken
+    )
     {
         CharaBuildupPlatinumResponse resp = new();
 
@@ -288,21 +306,24 @@ public class CharaController(
         }
 
         await CharaManaNodeUnlock(
-            maxManaNodes.Except(previouslyUnlockedPieces),
+            maxManaNodes.Except(previouslyUnlockedPieces).ToList(),
             playerCharaData,
             isOmnicite: true
         );
 
         await paymentService.ProcessPayment(Materials.Omnicite, 1);
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
 
     [HttpPost("unlock_edit_skill")]
-    public async Task<DragaliaResult> CharaUnlockEditSkill(CharaUnlockEditSkillRequest request)
+    public async Task<DragaliaResult> CharaUnlockEditSkill(
+        CharaUnlockEditSkillRequest request,
+        CancellationToken cancellationToken
+    )
     {
         CharaUnlockEditSkillResponse resp = new();
 
@@ -315,7 +336,7 @@ public class CharaController(
         //TODO: For now trust the client won't send the id of a chara who isn't allowed to share
         if (
             playerCharData.Level < 80
-            || (ManaNodes)playerCharData.ManaNodeUnlockCount < (ManaNodes.Circle5 - 1)
+            || (ManaNodes)playerCharData.ManaNodeUnlockCount < ManaNodes.Circle5 - 1
             || charaData.EditSkillId == 0
         )
         {
@@ -338,7 +359,7 @@ public class CharaController(
 
         playerCharData.IsUnlockEditSkill = true;
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
@@ -363,7 +384,10 @@ public class CharaController(
     }
 
     [HttpPost("set_chara_unit_set")]
-    public async Task<DragaliaResult> SetCharaUnitSet(CharaSetCharaUnitSetRequest request)
+    public async Task<DragaliaResult> SetCharaUnitSet(
+        CharaSetCharaUnitSetRequest request,
+        CancellationToken cancellationToken
+    )
     {
         CharaSetCharaUnitSetResponse resp = new();
 
@@ -406,7 +430,7 @@ public class CharaController(
                     .Select(ToAtgenCharaUnitSetDetailList)
             };
 
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.UpdateDataList.CharaUnitSetList = new List<CharaUnitSetList> { setList };
         resp.EntityResult = rewardService.GetEntityResult();
 
@@ -477,7 +501,7 @@ public class CharaController(
     /// <param name="isOmnicite">If this is unlocking omnicite nodes</param>
     /// <returns></returns>
     private async Task CharaManaNodeUnlock(
-        IEnumerable<int> manaNodes,
+        IList<int> manaNodes,
         DbPlayerCharaData playerCharData,
         bool useGrowMaterial = false,
         bool isOmnicite = false
@@ -486,7 +510,7 @@ public class CharaController(
         if (!manaNodes.Any())
             return;
 
-        DateTimeOffset time = dateTimeProvider.UtcNow;
+        DateTimeOffset time = timeProvider.GetUtcNow();
 
         logger.LogDebug("Pre-upgrade CharaData: {@charaData}", playerCharData);
 
@@ -649,8 +673,6 @@ public class CharaController(
                 case ManaNodeTypes.MaxLvUp:
                     // NOTE: This is handled in DbPlayerCharaData as a computed property.
                     break;
-                default:
-                    break;
             }
 
             if (manaNodeInfo.IsReleaseStory)
@@ -769,7 +791,7 @@ public class CharaController(
         missionProgressionService.OnCharacterManaNodeUnlock(
             playerCharData.CharaId,
             charaData.ElementalType,
-            manaNodes.Count(),
+            manaNodes.Count,
             nodes.Count
         );
 

@@ -11,7 +11,7 @@ public class TestContainersHelper
     private const int PostgresContainerPort = 5432;
     private const int RedisContainerPort = 6379;
 
-    private IContainer? postgresContainer;
+    private PostgreSqlContainer? postgresContainer;
     private IContainer? redisContainer;
 
     private string postgresUser;

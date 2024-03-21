@@ -35,7 +35,7 @@ public class AbilityCrestTest : TestFixture
             )
         ).Data;
 
-        data.UpdateDataList.AbilityCrestList.Single().IsFavorite.Should().BeTrue();
+        data.UpdateDataList.AbilityCrestList!.Single().IsFavorite.Should().BeTrue();
 
         DbAbilityCrest abilityCrest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(

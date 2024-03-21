@@ -1,23 +1,22 @@
-﻿namespace DragaliaAPI.Photon.Shared.Models
+﻿namespace DragaliaAPI.Photon.Shared.Models;
+
+/// <summary>
+/// Player data transfer object.
+/// </summary>
+public class Player
 {
     /// <summary>
-    /// Player data transfer object.
+    /// The player's actor number.
     /// </summary>
-    public class Player
-    {
-        /// <summary>
-        /// The player's actor number.
-        /// </summary>
-        public int ActorNr { get; set; }
+    public int ActorNr { get; set; }
 
-        /// <summary>
-        /// The player's viewer ID.
-        /// </summary>
-        public long ViewerId { get; set; }
+    /// <summary>
+    /// The player's viewer ID.
+    /// </summary>
+    public long ViewerId { get; set; }
 
-        /// <summary>
-        /// The player's selected party slot(s).
-        /// </summary>
-        public IEnumerable<int> PartyNoList { get; set; } = Enumerable.Empty<int>();
-    }
+    /// <summary>
+    /// The player's selected party slot(s).
+    /// </summary>
+    public IEnumerable<int> PartyNoList { get; set; } = Enumerable.Empty<int>();
 }

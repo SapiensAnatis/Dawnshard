@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using DotNet.Testcontainers.Builders;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Abstract;
@@ -18,7 +17,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Time.Testing;
 using Npgsql;
-using Respawn;
 
 namespace DragaliaAPI.Integration.Test;
 
@@ -45,7 +43,6 @@ public class TestFixture
         this.Client = this.CreateClient();
 
         this.MockBaasApi.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
-        this.MockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(() => DateTimeOffset.UtcNow);
 
         this.Services = factory.Services.CreateScope().ServiceProvider;
 
@@ -60,8 +57,6 @@ public class TestFixture
         >();
         this.ApiContext = new ApiContext(options, new StubPlayerIdentityService(this.ViewerId));
         this.ApiContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-
-        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
     }
 
     protected DateTimeOffset LastDailyReset { get; }
@@ -69,8 +64,6 @@ public class TestFixture
     protected Mock<IBaasApi> MockBaasApi => this.factory.MockBaasApi;
 
     protected Mock<IPhotonStateApi> MockPhotonStateApi => this.factory.MockPhotonStateApi;
-
-    protected Mock<IDateTimeProvider> MockDateTimeProvider => this.factory.MockDateTimeProvider;
 
     protected FakeTimeProvider MockTimeProvider { get; } = new();
 

@@ -3,7 +3,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Models.Generated;
 
-namespace DragaliaAPI.AutoMapper.Profiles;
+namespace DragaliaAPI.Mapping.AutoMapper;
 
 public class UnitMapProfile : Profile
 {
@@ -45,17 +45,21 @@ public class UnitMapProfile : Profile
 
         this.CreateMap<DbPartyUnit, PartySettingList>()
             // Deprecated
+#pragma warning disable CS0612 // Type or member is obsolete
             .ForMember(nameof(PartySettingList.EquipWeaponKeyId), opts => opts.Ignore())
             .ForMember(nameof(PartySettingList.EquipAmuletKeyId), opts => opts.Ignore())
             .ForMember(nameof(PartySettingList.EquipAmulet2KeyId), opts => opts.Ignore())
             .ForMember(nameof(PartySettingList.EquipSkinWeaponId), opts => opts.Ignore());
+#pragma warning restore CS0612 // Type or member is obsolete
 
         this.CreateMap<DbQuestClearPartyUnit, PartySettingList>()
             // Deprecated
+#pragma warning disable CS0612 // Type or member is obsolete
             .ForMember(nameof(PartySettingList.EquipWeaponKeyId), opts => opts.Ignore())
             .ForMember(nameof(PartySettingList.EquipAmuletKeyId), opts => opts.Ignore())
             .ForMember(nameof(PartySettingList.EquipAmulet2KeyId), opts => opts.Ignore())
             .ForMember(nameof(PartySettingList.EquipSkinWeaponId), opts => opts.Ignore());
+#pragma warning restore CS0612 // Type or member is obsolete
 
         this.CreateMap<DbDetailedPartyUnit, PartyUnitList>();
 

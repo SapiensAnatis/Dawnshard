@@ -3,7 +3,6 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.DmodeDungeon;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -15,7 +14,7 @@ namespace DragaliaAPI.Features.Dmode;
 
 public class DmodeService(
     IDmodeRepository dmodeRepository,
-    IDateTimeProvider dateTimeProvider,
+    TimeProvider dateTimeProvider,
     IDmodeCacheService dmodeCacheService,
     ILogger<DmodeService> logger,
     IPaymentService paymentService,
@@ -153,7 +152,7 @@ public class DmodeService(
         }
 
         info.RecoveryCount++;
-        info.RecoveryTime = dateTimeProvider.UtcNow;
+        info.RecoveryTime = dateTimeProvider.GetUtcNow();
     }
 
     public async Task UseSkip()
@@ -168,7 +167,7 @@ public class DmodeService(
         }
 
         info.FloorSkipCount++;
-        info.FloorSkipTime = dateTimeProvider.UtcNow;
+        info.FloorSkipTime = dateTimeProvider.GetUtcNow();
     }
 
     public async Task<IEnumerable<DmodeServitorPassiveList>> BuildupServitorPassive(
@@ -183,15 +182,18 @@ public class DmodeService(
 
         foreach (DmodeServitorPassiveList passiveList in buildupList.OrderBy(x => x.PassiveLevel))
         {
-            if (!currentPassives.ContainsKey(passiveList.PassiveNo))
-            {
-                currentPassives[passiveList.PassiveNo] = dmodeRepository.AddServitorPassive(
+            if (
+                !currentPassives.TryGetValue(
                     passiveList.PassiveNo,
-                    0
-                );
+                    out DbPlayerDmodeServitorPassive? value
+                )
+            )
+            {
+                value = dmodeRepository.AddServitorPassive(passiveList.PassiveNo, 0);
+                currentPassives[passiveList.PassiveNo] = value;
             }
 
-            DbPlayerDmodeServitorPassive passive = currentPassives[passiveList.PassiveNo];
+            DbPlayerDmodeServitorPassive passive = value;
             ImmutableDictionary<int, DmodeServitorPassiveLevel> levels = DmodeHelper.PassiveLevels[
                 passive.PassiveId
             ];
@@ -233,7 +235,7 @@ public class DmodeService(
         expedition.CharaId3 = charaArr[2];
         expedition.CharaId4 = charaArr[3];
 
-        expedition.StartTime = dateTimeProvider.UtcNow;
+        expedition.StartTime = dateTimeProvider.GetUtcNow();
         expedition.TargetFloor = targetFloor;
 
         expedition.State = ExpeditionState.Playing;
@@ -294,7 +296,7 @@ public class DmodeService(
 
         DmodeExpeditionFloor floor = MasterAsset.DmodeExpeditionFloor[expedition.TargetFloor];
         DateTimeOffset endTime = expedition.StartTime.AddSeconds(floor.NeedTime);
-        if (endTime > dateTimeProvider.UtcNow)
+        if (endTime > dateTimeProvider.GetUtcNow())
         {
             throw new DragaliaException(
                 ResultCode.DmodeExpeditionStateError,

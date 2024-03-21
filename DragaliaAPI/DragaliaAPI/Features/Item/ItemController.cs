@@ -20,12 +20,15 @@ public class ItemController(IUpdateDataService updateDataService, IItemService i
     }
 
     [HttpPost("use_recovery_stamina")]
-    public async Task<DragaliaResult> UseRecoveryStamina(ItemUseRecoveryStaminaRequest request)
+    public async Task<DragaliaResult> UseRecoveryStamina(
+        ItemUseRecoveryStaminaRequest request,
+        CancellationToken cancellationToken
+    )
     {
         ItemUseRecoveryStaminaResponse resp = new();
 
         resp.RecoverData = await itemService.UseItems(request.UseItemList);
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync();
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = new EntityResult();
 
         return Ok(resp);

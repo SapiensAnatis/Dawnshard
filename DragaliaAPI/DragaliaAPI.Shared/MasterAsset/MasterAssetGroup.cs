@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
@@ -117,11 +116,11 @@ public class MasterAssetGroup<TGroupKey, TKey, TItem>
             return this.keySelector.Invoke(item);
         }
 
-        public IDictionary<TKey, TItem> AsImmutableDictionary()
+        public Dictionary<TKey, TItem> AsImmutableDictionary()
         {
             Debug.Assert(this.Dictionary != null, "this.Dictionary != null");
 
-            return this.Dictionary.ToImmutableDictionary();
+            return this.Dictionary.ToDictionary();
         }
     }
 }

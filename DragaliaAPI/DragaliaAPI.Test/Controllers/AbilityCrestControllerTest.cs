@@ -48,7 +48,8 @@ public class AbilityCrestControllerTest
 
         ResultCodeResponse response = (
             await this.abilityCrestController.SetFavorite(
-                new() { AbilityCrestId = AbilityCrests.ManaFount, IsFavorite = true }
+                new() { AbilityCrestId = AbilityCrests.ManaFount, IsFavorite = true },
+                default
             )
         ).GetData<ResultCodeResponse>()!;
 
@@ -60,7 +61,7 @@ public class AbilityCrestControllerTest
     public async Task BuildupPiece_AbilityCrestNotInMasterAssetReturnsError()
     {
         ResultCodeResponse response = (
-            await this.abilityCrestController.BuildupPiece(new() { AbilityCrestId = 0 })
+            await this.abilityCrestController.BuildupPiece(new() { AbilityCrestId = 0 }, default)
         ).GetData<ResultCodeResponse>()!;
 
         response.ResultCode.Should().Be(ResultCode.AbilityCrestIsNotPlayable);
@@ -90,7 +91,8 @@ public class AbilityCrestControllerTest
                         new(),
                         new()
                     }
-                }
+                },
+                default
             )
         ).GetData<ResultCodeResponse>()!;
 
@@ -109,7 +111,7 @@ public class AbilityCrestControllerTest
         )
             .ReturnsAsync(ResultCode.Success);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
             .ReturnsAsync(new UpdateDataList() { });
 
         AbilityCrestBuildupPieceResponse data = (
@@ -123,7 +125,8 @@ public class AbilityCrestControllerTest
                         new(),
                         new()
                     }
-                }
+                },
+                default
             )
         ).GetData<AbilityCrestBuildupPieceResponse>()!;
 
@@ -136,7 +139,10 @@ public class AbilityCrestControllerTest
     public async Task BuildupPlusCount_AbilityCrestNotInMasterAssetReturnsError()
     {
         ResultCodeResponse response = (
-            await this.abilityCrestController.BuildupPlusCount(new() { AbilityCrestId = 0 })
+            await this.abilityCrestController.BuildupPlusCount(
+                new() { AbilityCrestId = 0 },
+                default
+            )
         ).GetData<ResultCodeResponse>()!;
 
         response.ResultCode.Should().Be(ResultCode.AbilityCrestIsNotPlayable);
@@ -160,7 +166,8 @@ public class AbilityCrestControllerTest
                 {
                     AbilityCrestId = AbilityCrests.ManaFount,
                     PlusCountParamsList = new List<AtgenPlusCountParamsList>() { new(), new() }
-                }
+                },
+                default
             )
         ).GetData<ResultCodeResponse>()!;
 
@@ -180,7 +187,7 @@ public class AbilityCrestControllerTest
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.Success);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
             .ReturnsAsync(new UpdateDataList() { });
 
         AbilityCrestBuildupPlusCountResponse data = (
@@ -189,7 +196,8 @@ public class AbilityCrestControllerTest
                 {
                     AbilityCrestId = AbilityCrests.ManaFount,
                     PlusCountParamsList = new List<AtgenPlusCountParamsList>() { new(), new() }
-                }
+                },
+                default
             )
         ).GetData<AbilityCrestBuildupPlusCountResponse>()!;
 
@@ -213,7 +221,8 @@ public class AbilityCrestControllerTest
                 {
                     AbilityCrestId = AbilityCrests.ManaFount,
                     PlusCountTypeList = new List<PlusCountType>() { PlusCountType.Hp, 0 }
-                }
+                },
+                default
             )
         ).GetData<ResultCodeResponse>()!;
 
@@ -230,7 +239,7 @@ public class AbilityCrestControllerTest
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.Success);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
             .ReturnsAsync(new UpdateDataList() { });
 
         AbilityCrestResetPlusCountResponse data = (
@@ -243,7 +252,8 @@ public class AbilityCrestControllerTest
                         PlusCountType.Hp,
                         PlusCountType.Atk
                     }
-                }
+                },
+                default
             )
         ).GetData<AbilityCrestResetPlusCountResponse>()!;
 
@@ -259,7 +269,7 @@ public class AbilityCrestControllerTest
             .Returns(new List<DbAbilityCrestSet>().AsQueryable().BuildMock());
 
         AbilityCrestGetAbilityCrestSetListResponse data = (
-            await this.abilityCrestController.GetAbilityCrestSetList()
+            await this.abilityCrestController.GetAbilityCrestSetList(default)
         ).GetData<AbilityCrestGetAbilityCrestSetListResponse>()!;
 
         int setNo = 1;
@@ -315,7 +325,7 @@ public class AbilityCrestControllerTest
             );
 
         AbilityCrestGetAbilityCrestSetListResponse data = (
-            await this.abilityCrestController.GetAbilityCrestSetList()
+            await this.abilityCrestController.GetAbilityCrestSetList(default)
         ).GetData<AbilityCrestGetAbilityCrestSetListResponse>()!;
 
         int setNo = 1;
@@ -374,7 +384,8 @@ public class AbilityCrestControllerTest
     {
         ResultCodeResponse response = (
             await this.abilityCrestController.SetAbilityCrestSet(
-                new() { AbilityCrestSetNo = setNo }
+                new() { AbilityCrestSetNo = setNo },
+                default
             )
         ).GetData<ResultCodeResponse>()!;
 
@@ -391,7 +402,7 @@ public class AbilityCrestControllerTest
         )
             .Returns(Task.CompletedTask);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
             .ReturnsAsync(new UpdateDataList() { });
 
         AbilityCrestSetAbilityCrestSetResponse data = (
@@ -401,7 +412,8 @@ public class AbilityCrestControllerTest
                     AbilityCrestSetName = "",
                     AbilityCrestSetNo = setNo,
                     RequestAbilityCrestSetData = new() { }
-                }
+                },
+                default
             )
         ).GetData<AbilityCrestSetAbilityCrestSetResponse>()!;
 
@@ -427,7 +439,7 @@ public class AbilityCrestControllerTest
         )
             .Returns(Task.CompletedTask);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
             .ReturnsAsync(new UpdateDataList() { });
 
         AbilityCrestUpdateAbilityCrestSetNameResponse data = (
@@ -436,7 +448,8 @@ public class AbilityCrestControllerTest
                 {
                     AbilityCrestSetNo = setNo,
                     AbilityCrestSetName = newName
-                }
+                },
+                default
             )
         ).GetData<AbilityCrestUpdateAbilityCrestSetNameResponse>()!;
 
@@ -460,7 +473,7 @@ public class AbilityCrestControllerTest
                 }
             );
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
             .ReturnsAsync(new UpdateDataList() { });
 
         AbilityCrestUpdateAbilityCrestSetNameResponse data = (
@@ -469,7 +482,8 @@ public class AbilityCrestControllerTest
                 {
                     AbilityCrestSetNo = setNo,
                     AbilityCrestSetName = newName
-                }
+                },
+                default
             )
         ).GetData<AbilityCrestUpdateAbilityCrestSetNameResponse>()!;
 

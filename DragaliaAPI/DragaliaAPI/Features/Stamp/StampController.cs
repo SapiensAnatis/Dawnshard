@@ -32,7 +32,10 @@ public class StampController : DragaliaControllerBase
     }
 
     [HttpPost("set_equip_stamp")]
-    public async Task<DragaliaResult> SetEquipStamp(StampSetEquipStampRequest request)
+    public async Task<DragaliaResult> SetEquipStamp(
+        StampSetEquipStampRequest request,
+        CancellationToken cancellationToken
+    )
     {
         this.logger.LogDebug("Updating stamp list to: {@stampList}", request.StampList);
 
@@ -40,7 +43,8 @@ public class StampController : DragaliaControllerBase
             request.StampList
         );
 
-        await this.updateDataService.SaveChangesAsync();
+        await this.updateDataService.SaveChangesAsync(cancellationToken);
+        ;
 
         return this.Ok(
             new StampSetEquipStampResponse() { EquipStampList = newStampList.OrderBy(x => x.Slot) }

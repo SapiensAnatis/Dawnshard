@@ -30,14 +30,20 @@ public class DungeonSkipController(
 ) : DragaliaControllerBase
 {
     [HttpPost("start")]
-    public async Task<DragaliaResult> Start(DungeonSkipStartRequest request)
+    public async Task<DragaliaResult> Start(
+        DungeonSkipStartRequest request,
+        CancellationToken cancellationToken
+    )
     {
         await paymentService.ProcessPayment(
             new Entity(EntityTypes.SkipTicket, Quantity: request.PlayCount)
         );
 
         IEnumerable<PartySettingList> party = (
-            await partyRepository.GetPartyUnits(request.PartyNo).AsNoTracking().ToListAsync()
+            await partyRepository
+                .GetPartyUnits(request.PartyNo)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken)
         ).Select(mapper.Map<PartySettingList>);
 
         IngameResultData ingameData = await this.GetIngameResultData(
@@ -47,7 +53,7 @@ public class DungeonSkipController(
             party
         );
 
-        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         EntityResult entityResult = rewardService.GetEntityResult();
 
         return this.Ok(
@@ -61,7 +67,10 @@ public class DungeonSkipController(
     }
 
     [HttpPost("start_assign_unit")]
-    public async Task<DragaliaResult> StartAssignUnit(DungeonSkipStartAssignUnitRequest request)
+    public async Task<DragaliaResult> StartAssignUnit(
+        DungeonSkipStartAssignUnitRequest request,
+        CancellationToken cancellationToken
+    )
     {
         await paymentService.ProcessPayment(
             new Entity(EntityTypes.SkipTicket, Quantity: request.PlayCount)
@@ -74,7 +83,7 @@ public class DungeonSkipController(
             request.RequestPartySettingList
         );
 
-        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         EntityResult entityResult = rewardService.GetEntityResult();
 
         return this.Ok(
@@ -89,7 +98,8 @@ public class DungeonSkipController(
 
     [HttpPost("start_multiple_quest")]
     public async Task<DragaliaResult> StartMultipleQuest(
-        DungeonSkipStartMultipleQuestRequest request
+        DungeonSkipStartMultipleQuestRequest request,
+        CancellationToken cancellationToken
     )
     {
         int totalSkipQuantity = request.RequestQuestMultipleList.Sum(x => x.PlayCount);
@@ -98,9 +108,14 @@ public class DungeonSkipController(
             new Entity(EntityTypes.SkipTicket, Quantity: totalSkipQuantity)
         );
 
-        IEnumerable<PartySettingList> party = (
-            await partyRepository.GetPartyUnits(request.PartyNo).AsNoTracking().ToListAsync()
-        ).Select(mapper.Map<PartySettingList>);
+        List<PartySettingList> party = (
+            await partyRepository
+                .GetPartyUnits(request.PartyNo)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken)
+        )
+            .Select(mapper.Map<PartySettingList>)
+            .ToList();
 
         List<IngameResultData> results = new(request.RequestQuestMultipleList.Count());
 
@@ -117,7 +132,7 @@ public class DungeonSkipController(
 
         IngameResultData combinedResults = CombineIngameResultData(results);
 
-        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         EntityResult entityResult = rewardService.GetEntityResult();
 
         return this.Ok(
@@ -132,7 +147,8 @@ public class DungeonSkipController(
 
     [HttpPost("start_multiple_quest_assign_unit")]
     public async Task<DragaliaResult> StartMultipleQuest(
-        DungeonSkipStartMultipleQuestAssignUnitRequest request
+        DungeonSkipStartMultipleQuestAssignUnitRequest request,
+        CancellationToken cancellationToken
     )
     {
         // Unsure what calls this endpoint -- can't repeat daily bonus skip or do it with assigned team
@@ -158,7 +174,7 @@ public class DungeonSkipController(
 
         IngameResultData combinedResults = CombineIngameResultData(results);
 
-        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         EntityResult entityResult = rewardService.GetEntityResult();
 
         return this.Ok(
@@ -209,7 +225,7 @@ public class DungeonSkipController(
                 TreasureRecord = session.EnemyList.Select(x => new AtgenTreasureRecord()
                 {
                     AreaIdx = x.Key,
-                    Enemy = x.Value.Select(y => 1),
+                    Enemy = x.Value.Select(_ => 1),
                     DropObj = new List<int>(), // TODO
                     EnemySmash = new List<AtgenEnemySmash>() // TODO
                 })

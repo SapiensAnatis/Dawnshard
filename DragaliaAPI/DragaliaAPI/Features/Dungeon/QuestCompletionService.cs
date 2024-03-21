@@ -5,7 +5,6 @@ using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Enemy;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;

@@ -1,8 +1,6 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
@@ -65,7 +63,10 @@ public class MissionController(
     [HttpPost("unlock_drill_mission_group")]
     public async Task<
         DragaliaResult<MissionUnlockDrillMissionGroupResponse>
-    > UnlockDrillMissionGroup(MissionUnlockDrillMissionGroupRequest request)
+    > UnlockDrillMissionGroup(
+        MissionUnlockDrillMissionGroupRequest request,
+        CancellationToken cancellationToken
+    )
     {
         MissionUnlockDrillMissionGroupResponse response = new();
 
@@ -80,7 +81,7 @@ public class MissionController(
             x.Start
         ));
 
-        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
 
         return response;
     }
@@ -88,7 +89,10 @@ public class MissionController(
     [HttpPost("unlock_main_story_group")]
     public async Task<
         DragaliaResult<MissionUnlockMainStoryGroupResponse>
-    > UnlockMainStoryMissionGroup(MissionUnlockMainStoryGroupRequest request)
+    > UnlockMainStoryMissionGroup(
+        MissionUnlockMainStoryGroupRequest request,
+        CancellationToken cancellationToken
+    )
     {
         MissionUnlockMainStoryGroupResponse response = new();
 
@@ -107,14 +111,15 @@ public class MissionController(
             x => new AtgenBuildEventRewardEntityList(x.Type, x.Id, x.Quantity)
         );
 
-        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
 
         return response;
     }
 
     [HttpPost("receive_drill_reward")]
     public async Task<DragaliaResult<MissionReceiveDrillRewardResponse>> ReceiveDrillStoryReward(
-        MissionReceiveDrillRewardRequest request
+        MissionReceiveDrillRewardRequest request,
+        CancellationToken cancellationToken
     )
     {
         MissionReceiveDrillRewardResponse response = new();
@@ -124,11 +129,11 @@ public class MissionController(
         response.DrillMissionGroupCompleteRewardList =
             await this.missionService.TryRedeemDrillMissionGroups(request.DrillMissionGroupIdList);
 
-        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
 
         IEnumerable<DbPlayerMission> missions = await this
             .missionRepository.GetMissionsByType(MissionType.Drill)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         response.DrillMissionList = missions.Select(x => new DrillMissionList(
             x.Id,
@@ -147,7 +152,8 @@ public class MissionController(
 
     [HttpPost("receive_main_story_reward")]
     public async Task<DragaliaResult<MissionReceiveMainStoryRewardResponse>> ReceiveMainStoryReward(
-        MissionReceiveMainStoryRewardRequest request
+        MissionReceiveMainStoryRewardRequest request,
+        CancellationToken cancellationToken
     )
     {
         await this.missionService.RedeemMissions(
@@ -157,7 +163,8 @@ public class MissionController(
 
         MissionReceiveMainStoryRewardResponse response =
             await this.missionService.BuildNormalResponse<MissionReceiveMainStoryRewardResponse>();
-        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
+
         response.EntityResult = this.rewardService.GetEntityResult();
         response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
 
@@ -166,14 +173,16 @@ public class MissionController(
 
     [HttpPost("receive_period_reward")]
     public async Task<DragaliaResult<MissionReceivePeriodRewardResponse>> ReceivePeriodReward(
-        MissionReceivePeriodRewardRequest request
+        MissionReceivePeriodRewardRequest request,
+        CancellationToken cancellationToken
     )
     {
         await this.missionService.RedeemMissions(MissionType.Period, request.PeriodMissionIdList);
 
         MissionReceivePeriodRewardResponse response =
             await this.missionService.BuildNormalResponse<MissionReceivePeriodRewardResponse>();
-        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
+
         response.EntityResult = this.rewardService.GetEntityResult();
         response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
 
@@ -182,14 +191,16 @@ public class MissionController(
 
     [HttpPost("receive_normal_reward")]
     public async Task<DragaliaResult<MissionReceiveNormalRewardResponse>> ReceiveNormalReward(
-        MissionReceiveNormalRewardRequest request
+        MissionReceiveNormalRewardRequest request,
+        CancellationToken cancellationToken
     )
     {
         await this.missionService.RedeemMissions(MissionType.Normal, request.NormalMissionIdList);
 
         MissionReceiveNormalRewardResponse response =
             await this.missionService.BuildNormalResponse<MissionReceiveNormalRewardResponse>();
-        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
+
         response.EntityResult = this.rewardService.GetEntityResult();
         response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
 
@@ -198,14 +209,16 @@ public class MissionController(
 
     [HttpPost("receive_album_reward")]
     public async Task<DragaliaResult<MissionReceiveAlbumRewardResponse>> ReceiveAlbumReward(
-        MissionReceiveAlbumRewardRequest request
+        MissionReceiveAlbumRewardRequest request,
+        CancellationToken cancellationToken
     )
     {
         await this.missionService.RedeemMissions(MissionType.Album, request.AlbumMissionIdList);
 
         MissionReceiveAlbumRewardResponse response =
             await this.missionService.BuildNormalResponse<MissionReceiveAlbumRewardResponse>();
-        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
+
         response.EntityResult = this.rewardService.GetEntityResult();
         response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
 
@@ -214,7 +227,8 @@ public class MissionController(
 
     [HttpPost("receive_memory_event_reward")]
     public async Task<DragaliaResult<MissionReceiveMemoryEventRewardResponse>> ReceiveNormalReward(
-        MissionReceiveMemoryEventRewardRequest request
+        MissionReceiveMemoryEventRewardRequest request,
+        CancellationToken cancellationToken
     )
     {
         await this.missionService.RedeemMissions(
@@ -224,7 +238,8 @@ public class MissionController(
 
         MissionReceiveMemoryEventRewardResponse response =
             await this.missionService.BuildNormalResponse<MissionReceiveMemoryEventRewardResponse>();
-        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
+
         response.EntityResult = this.rewardService.GetEntityResult();
         response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
 
@@ -233,7 +248,8 @@ public class MissionController(
 
     [HttpPost("receive_beginner_reward")]
     public async Task<DragaliaResult<MissionReceiveBeginnerRewardResponse>> ReceiveBeginnerReward(
-        MissionReceiveBeginnerRewardRequest request
+        MissionReceiveBeginnerRewardRequest request,
+        CancellationToken cancellationToken
     )
     {
         await this.missionService.RedeemMissions(
@@ -243,7 +259,8 @@ public class MissionController(
 
         MissionReceiveBeginnerRewardResponse response =
             await this.missionService.BuildNormalResponse<MissionReceiveBeginnerRewardResponse>();
-        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
+
         response.EntityResult = this.rewardService.GetEntityResult();
         response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
 
@@ -252,14 +269,16 @@ public class MissionController(
 
     [HttpPost("receive_special_reward")]
     public async Task<DragaliaResult<MissionReceiveSpecialRewardResponse>> ReceiveBeginnerReward(
-        MissionReceiveSpecialRewardRequest request
+        MissionReceiveSpecialRewardRequest request,
+        CancellationToken cancellationToken
     )
     {
         await this.missionService.RedeemMissions(MissionType.Special, request.SpecialMissionIdList);
 
         MissionReceiveSpecialRewardResponse response =
             await this.missionService.BuildNormalResponse<MissionReceiveSpecialRewardResponse>();
-        response.UpdateDataList = await this.updateDataService.SaveChangesAsync();
+        response.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
+
         response.EntityResult = this.rewardService.GetEntityResult();
         response.ConvertedEntityList = Enumerable.Empty<ConvertedEntityList>();
 
@@ -268,12 +287,15 @@ public class MissionController(
 
     [HttpPost("receive_daily_reward")]
     public async Task<DragaliaResult<MissionReceiveDailyRewardResponse>> ReceiveDailyReward(
-        MissionReceiveDailyRewardRequest request
+        MissionReceiveDailyRewardRequest request,
+        CancellationToken cancellationToken
     )
     {
         await this.missionService.RedeemDailyMissions(request.MissionParamsList);
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
+            cancellationToken
+        );
 
         MissionReceiveDailyRewardResponse response =
             await this.missionService.BuildNormalResponse<MissionReceiveDailyRewardResponse>();

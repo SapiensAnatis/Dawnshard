@@ -58,12 +58,14 @@ foreach ((_, MissionProgressionInfo progInfo) in missions)
     };
 }
 
+#pragma warning disable CA1869 // Avoid creating a new 'JsonSerializerOptions' instance for every serialization operation
 JsonSerializerOptions options =
     new(MasterAssetJsonOptions.Instance)
     {
         WriteIndented = true,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
     };
+#pragma warning restore CA1869
 
 string json = JsonSerializer.Serialize(missions.Values, options);
 

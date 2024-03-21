@@ -302,7 +302,7 @@ public class AutoRepeatTest : TestFixture
             .Contain(x => x.BuildEventId == eventId);
 
         repeatEndResponse
-            .UpdateDataList.BuildEventUserList.First(x => x.BuildEventId == eventId)
+            .UpdateDataList.BuildEventUserList!.First(x => x.BuildEventId == eventId)
             .UserBuildEventItemList.Should()
             .ContainEquivalentOf(
                 new AtgenUserBuildEventItemList()

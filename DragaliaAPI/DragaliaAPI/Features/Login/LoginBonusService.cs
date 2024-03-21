@@ -1,6 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -10,7 +9,7 @@ namespace DragaliaAPI.Features.Login;
 
 public class LoginBonusService(
     IRewardService rewardService,
-    IDateTimeProvider dateTimeProvider,
+    TimeProvider dateTimeProvider,
     ILoginBonusRepository loginBonusRepository,
     ILogger<LoginBonusService> logger
 ) : ILoginBonusService
@@ -19,7 +18,7 @@ public class LoginBonusService(
     {
         List<AtgenLoginBonusList> bonusList = new();
 
-        DateTimeOffset time = dateTimeProvider.UtcNow;
+        DateTimeOffset time = dateTimeProvider.GetUtcNow();
 
         foreach (
             LoginBonusData bonusData in MasterAsset.LoginBonusData.Enumerable.Where(x =>

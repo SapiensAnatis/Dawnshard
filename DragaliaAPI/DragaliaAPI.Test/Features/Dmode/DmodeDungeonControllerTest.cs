@@ -29,7 +29,7 @@ public class DmodeDungeonControllerTest
             mockRewardService.Object
         );
 
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
+        mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(updateDataList);
     }
 
     [Fact]
@@ -52,7 +52,7 @@ public class DmodeDungeonControllerTest
             .ReturnsAsync((state, ingameData));
 
         DmodeDungeonStartResponse? resp = (
-            await dmodeDungeonController.Start(request)
+            await dmodeDungeonController.Start(request, default)
         ).GetData<DmodeDungeonStartResponse>();
 
         resp.Should().NotBeNull();
@@ -72,7 +72,7 @@ public class DmodeDungeonControllerTest
         mockDmodeDungeonService.Setup(x => x.RestartDungeon()).ReturnsAsync((state, ingameData));
 
         DmodeDungeonRestartResponse? resp = (
-            await dmodeDungeonController.Restart()
+            await dmodeDungeonController.Restart(default)
         ).GetData<DmodeDungeonRestartResponse>();
 
         resp.Should().NotBeNull();
@@ -105,7 +105,7 @@ public class DmodeDungeonControllerTest
             .ReturnsAsync((state, floorData));
 
         DmodeDungeonFloorResponse? resp = (
-            await dmodeDungeonController.Floor(new DmodeDungeonFloorRequest(playRecord))
+            await dmodeDungeonController.Floor(new DmodeDungeonFloorRequest(playRecord), default)
         ).GetData<DmodeDungeonFloorResponse>();
 
         resp.Should().NotBeNull();
@@ -133,7 +133,7 @@ public class DmodeDungeonControllerTest
         mockRewardService.Setup(x => x.GetEntityResult()).Returns(entityResult);
 
         DmodeDungeonFinishResponse? resp = (
-            await dmodeDungeonController.Finish(new DmodeDungeonFinishRequest(isGameOver))
+            await dmodeDungeonController.Finish(new DmodeDungeonFinishRequest(isGameOver), default)
         ).GetData<DmodeDungeonFinishResponse>();
 
         resp.Should().NotBeNull();
@@ -155,7 +155,7 @@ public class DmodeDungeonControllerTest
         mockDmodeDungeonService.Setup(x => x.SkipFloor()).ReturnsAsync(state);
 
         DmodeDungeonFloorSkipResponse? resp = (
-            await dmodeDungeonController.FloorSkip()
+            await dmodeDungeonController.FloorSkip(default)
         ).GetData<DmodeDungeonFloorSkipResponse>();
 
         resp.Should().NotBeNull();
@@ -174,7 +174,7 @@ public class DmodeDungeonControllerTest
         mockDmodeDungeonService.Setup(x => x.HaltDungeon(true)).ReturnsAsync(state);
 
         DmodeDungeonUserHaltResponse? resp = (
-            await dmodeDungeonController.UserHalt()
+            await dmodeDungeonController.UserHalt(default)
         ).GetData<DmodeDungeonUserHaltResponse>();
 
         resp.Should().NotBeNull();
@@ -193,7 +193,7 @@ public class DmodeDungeonControllerTest
         mockDmodeDungeonService.Setup(x => x.HaltDungeon(false)).ReturnsAsync(state);
 
         DmodeDungeonSystemHaltResponse? resp = (
-            await dmodeDungeonController.SystemHalt()
+            await dmodeDungeonController.SystemHalt(default)
         ).GetData<DmodeDungeonSystemHaltResponse>();
 
         resp.Should().NotBeNull();

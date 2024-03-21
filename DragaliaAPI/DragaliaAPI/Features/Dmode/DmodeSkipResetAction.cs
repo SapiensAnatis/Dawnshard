@@ -1,14 +1,11 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Login;
-using DragaliaAPI.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Dmode;
 
-public class DmodeSkipResetAction(
-    IDmodeRepository dmodeRepository,
-    IDateTimeProvider dateTimeProvider
-) : IDailyResetAction
+public class DmodeSkipResetAction(IDmodeRepository dmodeRepository, TimeProvider dateTimeProvider)
+    : IDailyResetAction
 {
     public async Task Apply()
     {
@@ -16,7 +13,7 @@ public class DmodeSkipResetAction(
         if (info == null)
             return;
 
-        DateTimeOffset time = dateTimeProvider.UtcNow;
+        DateTimeOffset time = dateTimeProvider.GetUtcNow();
 
         info.FloorSkipCount = 0;
         info.FloorSkipTime = time;

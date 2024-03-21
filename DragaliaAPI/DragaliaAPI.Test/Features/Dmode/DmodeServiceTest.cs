@@ -10,6 +10,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Time.Testing;
 using MockQueryable.Moq;
 using DbPlayerDmodeDungeon = DragaliaAPI.Database.Entities.DbPlayerDmodeDungeon;
 
@@ -18,7 +19,7 @@ namespace DragaliaAPI.Test.Features.Dmode;
 public class DmodeServiceTest
 {
     private readonly Mock<IDmodeRepository> mockDmodeRepository;
-    private readonly Mock<IDateTimeProvider> mockDateTimeProvider;
+    private readonly FakeTimeProvider mockDateTimeProvider;
     private readonly Mock<IDmodeCacheService> mockDmodeCacheService;
     private readonly Mock<ILogger<DmodeService>> mockLogger;
     private readonly Mock<IPaymentService> mockPaymentService;
@@ -26,12 +27,12 @@ public class DmodeServiceTest
 
     private readonly DmodeService dmodeService;
 
-    private readonly DateTimeOffset FixedTime = DateTimeOffset.UtcNow;
+    private readonly DateTimeOffset fixedTime = DateTimeOffset.UtcNow;
 
     public DmodeServiceTest()
     {
         mockDmodeRepository = new(MockBehavior.Strict);
-        mockDateTimeProvider = new(MockBehavior.Strict);
+        mockDateTimeProvider = new FakeTimeProvider();
         mockDmodeCacheService = new(MockBehavior.Strict);
         mockLogger = new(MockBehavior.Loose);
         mockPaymentService = new(MockBehavior.Strict);
@@ -39,14 +40,14 @@ public class DmodeServiceTest
 
         dmodeService = new(
             mockDmodeRepository.Object,
-            mockDateTimeProvider.Object,
+            mockDateTimeProvider,
             mockDmodeCacheService.Object,
             mockLogger.Object,
             mockPaymentService.Object,
             mockRewardService.Object
         );
 
-        mockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(FixedTime);
+        mockDateTimeProvider.SetUtcNow(this.fixedTime);
     }
 
     [Fact]
@@ -70,11 +71,11 @@ public class DmodeServiceTest
                     {
                         ViewerId = UnitTestUtils.ViewerId,
                         FloorSkipCount = skipCount,
-                        FloorSkipTime = FixedTime,
+                        FloorSkipTime = this.fixedTime,
                         Point1Quantity = point1Quantity,
                         Point2Quantity = point2Quantity,
                         RecoveryCount = recoveryCount,
-                        RecoveryTime = FixedTime
+                        RecoveryTime = this.fixedTime
                     }
                 }
                     .AsQueryable()
@@ -86,9 +87,9 @@ public class DmodeServiceTest
         info.Should().NotBeNull();
         info.TotalMaxFloorNum.Should().Be(maxFloor);
         info.RecoveryCount.Should().Be(recoveryCount);
-        info.RecoveryTime.Should().Be(FixedTime);
+        info.RecoveryTime.Should().Be(this.fixedTime);
         info.FloorSkipCount.Should().Be(skipCount);
-        info.FloorSkipTime.Should().Be(FixedTime);
+        info.FloorSkipTime.Should().Be(this.fixedTime);
         info.DmodePoint1.Should().Be(point1Quantity);
         info.DmodePoint2.Should().Be(point2Quantity);
         info.IsEntry.Should().BeTrue();
@@ -217,7 +218,7 @@ public class DmodeServiceTest
                 CharaId2 = 0,
                 CharaId3 = 0,
                 CharaId4 = 0,
-                StartTime = FixedTime,
+                StartTime = this.fixedTime,
                 State = ExpeditionState.Playing,
                 TargetFloor = 30
             };
@@ -300,9 +301,8 @@ public class DmodeServiceTest
         await dmodeService.UseRecovery();
 
         dbInfo.RecoveryCount.Should().Be(1);
-        dbInfo.RecoveryTime.Should().Be(FixedTime);
+        dbInfo.RecoveryTime.Should().Be(this.fixedTime);
 
-        mockDateTimeProvider.VerifyAll();
         mockDmodeRepository.VerifyAll();
     }
 
@@ -340,9 +340,8 @@ public class DmodeServiceTest
         await dmodeService.UseSkip();
 
         dbInfo.FloorSkipCount.Should().Be(1);
-        dbInfo.FloorSkipTime.Should().Be(FixedTime);
+        dbInfo.FloorSkipTime.Should().Be(this.fixedTime);
 
-        mockDateTimeProvider.VerifyAll();
         mockDmodeRepository.VerifyAll();
     }
 
@@ -510,7 +509,6 @@ public class DmodeServiceTest
         expedition.CharaId4.Should().Be(charaList[3]);
         expedition.TargetFloorNum.Should().Be(targetFloor);
 
-        mockDateTimeProvider.VerifyAll();
         mockDmodeRepository.VerifyAll();
     }
 
@@ -578,7 +576,6 @@ public class DmodeServiceTest
         ingameResult.TakeDmodePoint2.Should().Be(floorData.RewardDmodePoint2);
         ingameResult.RewardTalismanList.Should().HaveCount(1);
 
-        mockDateTimeProvider.VerifyAll();
         mockDmodeRepository.VerifyAll();
         mockRewardService.VerifyAll();
     }
@@ -595,7 +592,7 @@ public class DmodeServiceTest
                 CharaId3 = 0,
                 CharaId4 = 0,
                 State = ExpeditionState.Playing,
-                StartTime = FixedTime,
+                StartTime = this.fixedTime,
                 TargetFloor = 30
             };
 
@@ -607,7 +604,6 @@ public class DmodeServiceTest
             .ThrowAsync<DragaliaException>();
 
         mockDmodeRepository.VerifyAll();
-        mockDateTimeProvider.VerifyAll();
     }
 
     [Fact]
@@ -622,7 +618,7 @@ public class DmodeServiceTest
                 CharaId3 = 0,
                 CharaId4 = 0,
                 State = ExpeditionState.Playing,
-                StartTime = FixedTime,
+                StartTime = this.fixedTime,
                 TargetFloor = 30
             };
 

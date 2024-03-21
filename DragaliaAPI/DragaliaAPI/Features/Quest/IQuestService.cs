@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Features.Player;
+﻿using DragaliaAPI.Features.Player;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 

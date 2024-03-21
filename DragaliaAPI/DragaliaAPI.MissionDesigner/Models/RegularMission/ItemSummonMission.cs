@@ -1,5 +1,3 @@
-using DragaliaAPI.MissionDesigner.Models;
-
 namespace DragaliaAPI.MissionDesigner.Models;
 
 public class ItemSummonMission : Mission

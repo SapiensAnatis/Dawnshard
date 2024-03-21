@@ -1,7 +1,6 @@
 ﻿using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
-using DragaliaAPI.Shared.MasterAsset.Models.Enemy;
 using Microsoft.EntityFrameworkCore;
 using Snapshooter;
 using Snapshooter.Xunit;

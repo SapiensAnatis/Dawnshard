@@ -18,9 +18,7 @@ public static partial class PartyMapper
     [MapperRequiredMapping(RequiredMappingStrategy.Target)]
     public static partial PartySettingList MapToPartySettingList(this DbPartyUnit dbEntity);
 
-    private static IEnumerable<PartySettingList> MapToPartySettingListArray(
-        ICollection<DbPartyUnit> source
-    )
+    private static PartySettingList[] MapToPartySettingListArray(ICollection<DbPartyUnit> source)
     {
         PartySettingList[] target = new PartySettingList[source.Count];
         int i = 0;

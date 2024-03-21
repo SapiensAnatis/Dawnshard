@@ -511,16 +511,13 @@ public partial class CharaBuildupManaRequest
     [Key("chara_id")]
     public Charas CharaId { get; set; }
 
-    [Key("mana_circle_piece_id_list")]
-    public IEnumerable<int> ManaCirclePieceIdList { get; set; } = [];
-
     [Key("is_use_grow_material")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
     public bool IsUseGrowMaterial { get; set; }
 
     public CharaBuildupManaRequest(
         Charas charaId,
-        IEnumerable<int> manaCirclePieceIdList,
+        IList<int> manaCirclePieceIdList,
         bool isUseGrowMaterial
     )
     {
@@ -587,9 +584,6 @@ public partial class CharaLimitBreakAndBuildupManaRequest
     [Key("next_limit_break_count")]
     public int NextLimitBreakCount { get; set; }
 
-    [Key("mana_circle_piece_id_list")]
-    public IEnumerable<int> ManaCirclePieceIdList { get; set; } = [];
-
     [Key("is_use_grow_material")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
     public bool IsUseGrowMaterial { get; set; }
@@ -597,7 +591,7 @@ public partial class CharaLimitBreakAndBuildupManaRequest
     public CharaLimitBreakAndBuildupManaRequest(
         Charas charaId,
         int nextLimitBreakCount,
-        IEnumerable<int> manaCirclePieceIdList,
+        IList<int> manaCirclePieceIdList,
         bool isUseGrowMaterial
     )
     {
