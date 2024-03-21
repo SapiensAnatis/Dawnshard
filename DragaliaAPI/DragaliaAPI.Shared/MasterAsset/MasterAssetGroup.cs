@@ -63,7 +63,7 @@ public static class MasterAssetGroup
 {
     private const string JsonFolder = "Resources";
 
-    public static async Task<MasterAssetGroup<TGroupKey, TKey, TItem>> LoadAsync<
+    public static async ValueTask<MasterAssetGroup<TGroupKey, TKey, TItem>> LoadAsync<
         TGroupKey,
         TKey,
         TItem

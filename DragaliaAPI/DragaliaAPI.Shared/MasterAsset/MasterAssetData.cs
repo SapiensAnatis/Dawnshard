@@ -89,7 +89,7 @@ public static class MasterAssetData
 {
     private const string JsonFolder = "Resources";
 
-    public static async Task<MasterAssetData<TKey, TItem>> LoadAsync<TKey, TItem>(
+    public static async ValueTask<MasterAssetData<TKey, TItem>> LoadAsync<TKey, TItem>(
         string jsonFilename,
         Func<TItem, TKey> keySelector
     )
