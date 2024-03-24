@@ -137,9 +137,17 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             if (currentActorCount >= 4)
             {
                 this.logger.WarnFormat(
-                    "Player attempted to join game which already had {0} actors",
+                    "Rejecting join request -- game already has {0} actors",
                     currentActorCount
                 );
+
+                info.Fail();
+                return;
+            }
+
+            if (this.goToIngameStateManager.MinGoToIngameState > 0)
+            {
+                this.logger.InfoFormat("Rejecting join request -- room is already in progress");
 
                 info.Fail();
                 return;
