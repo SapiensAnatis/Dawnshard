@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AUTOMATED_TESTING: true
-      CI_BUILD: true
     steps:
       - name: Get project name # Remove folder from project
         id: get-name
@@ -35,9 +34,9 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}-${{ steps.get-name.outputs.name }}
           restore-keys: |
             ${{ runner.os }}-nuget-
-
+        
       - name: Install dependencies
-        run: dotnet restore ${{ inputs.project }} --packages .nuget-cache --verbosity normal 
+        run: dotnet restore ${{ inputs.project }} --packages .nuget-cache --verbosity normal
 
       - name: Test
         run: >
