@@ -9,11 +9,12 @@ jobs:
   restore:
     name: Restore
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x

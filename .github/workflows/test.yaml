@@ -35,9 +35,13 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}-${{ steps.get-name.outputs.name }}
           restore-keys: |
             ${{ runner.os }}-nuget-
-
+            
+      - name: Disable lock file restore
+        if: contains(github.head_ref, 'dependabot') && github.event_name == 'pull_request'
+        run: echo "CI_BUILD=false_dependabot" >> $GITHUB_ENV
+        
       - name: Install dependencies
-        run: dotnet restore ${{ inputs.project }} --packages .nuget-cache --verbosity normal 
+        run: dotnet restore ${{ inputs.project }} --packages .nuget-cache --verbosity normal
 
       - name: Test
         run: >
