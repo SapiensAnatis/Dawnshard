@@ -1,0 +1,38 @@
+name: Update lock file
+
+on:
+  pull_request:
+    branches:
+      - dependabot*
+
+jobs:
+  restore:
+    name: Restore
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+  
+      - name: dotnet restore
+        run: dotnet restore
+        
+      - name: Calculate diff 
+        id: diff
+        continue-on-error: true
+        run: |
+          git add -N .
+          git diff --name-only --exit-code
+          
+      - name: Commit and push
+        if: steps.diff.outcome == 'failure' # --exit-code exits with 1 if there were any differences
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add .
+          git commit -m "Update NuGet lock file"
+          git push
