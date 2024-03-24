@@ -60,7 +60,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .nuget-cache
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}-${{ steps.get-name.outputs.name }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('Directory.Packages.props') }}-${{ steps.get-name.outputs.name }}
           restore-keys: |
             ${{ runner.os }}-nuget-
 
