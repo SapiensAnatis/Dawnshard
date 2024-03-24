@@ -23,6 +23,7 @@ on:
 
 env:
   HUSKY: 0
+  CI_BUILD: true
 
 jobs:
   build:

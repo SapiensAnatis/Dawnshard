@@ -4,12 +4,16 @@
         <LangVersion>latest</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
         <AnalysisLevel>latest-minimum</AnalysisLevel>
     </PropertyGroup>
 
     <PropertyGroup>
         <!-- Define the TEST condition to allow test runs in release mode to access conditionally compiled controllers. -->
         <DefineConstants Condition="$(AUTOMATED_TESTING) == 'true'">TEST;$(DefineConstants)</DefineConstants>
+    </PropertyGroup>
+    
+    <PropertyGroup Label="NuGet">
+        <RestoreLockedMode Condition="'$(CI_BUILD)' == 'true'">true</RestoreLockedMode>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     </PropertyGroup>
 </Project>

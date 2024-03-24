@@ -45,6 +45,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{1A23
 		.github\workflows\integration-test.yaml = .github\workflows\integration-test.yaml
 		.github\workflows\test-api.yaml = .github\workflows\test-api.yaml
 		.github\workflows\test-statemanager.yaml = .github\workflows\test-statemanager.yaml
+		.github\workflows\dependabot.yaml = .github\workflows\dependabot.yaml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Test.Utils", "DragaliaAPI\DragaliaAPI.Test.Utils\DragaliaAPI.Test.Utils.csproj", "{41916B7C-6304-4504-99C0-B24D23982F7E}"

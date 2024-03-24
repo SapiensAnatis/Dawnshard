@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AUTOMATED_TESTING: true
+      CI_BUILD: true
     steps:
       - name: Get project name # Remove folder from project
         id: get-name
