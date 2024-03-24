@@ -19,7 +19,7 @@ jobs:
           dotnet-version: 8.0.x
   
       - name: dotnet restore
-        run: dotnet restore --force-evaluate
+        run: dotnet restore DragaliaAPI.sln --force-evaluate
         
       - name: Calculate diff 
         id: diff
