@@ -49,7 +49,7 @@
     <PackageVersion Include="Serilog.Sinks.Console" Version="5.0.1" />
     <PackageVersion Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageVersion Include="FluentAssertions" Version="6.12.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.2" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.3" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageVersion Include="MockQueryable.Moq" Version="7.0.1" />
     <PackageVersion Include="Moq" Version="4.20.70" />
