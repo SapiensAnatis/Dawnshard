@@ -13,11 +13,11 @@
       },
       "Microsoft.EntityFrameworkCore.InMemory": {
         "type": "Direct",
-        "requested": "[8.0.2, )",
-        "resolved": "8.0.2",
-        "contentHash": "vPpioRk+6BwQf/apqBQQ2gLL/6FMOj25L6d2lli08FmRh2W9QrnShyKhzsDAydWcH6Po69gQXgHbBQFAafmo3A==",
+        "requested": "[8.0.3, )",
+        "resolved": "8.0.3",
+        "contentHash": "43rqIfq1/CGcIqCvQoZ2F/a2YJc1c2jdPQB6/6VtvYCg2aeXfQi2sEjj/hNiO+RI+Tz+Bq0/oXoejbGMUO7hZA==",
         "dependencies": {
-          "Microsoft.EntityFrameworkCore": "8.0.2"
+          "Microsoft.EntityFrameworkCore": "8.0.3"
         }
       },
       "Microsoft.NET.Test.Sdk": {
