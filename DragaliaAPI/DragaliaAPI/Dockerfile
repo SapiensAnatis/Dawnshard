@@ -15,7 +15,8 @@ COPY ["Directory.Build.props", "."]
 COPY ["Directory.Packages.props", "."]
 COPY ["nuget.config", "."]
 RUN dotnet restore "DragaliaAPI/DragaliaAPI/DragaliaAPI.csproj"
-COPY [".", "."]
+COPY ["DragaliaAPI/", "DragaliaAPI/"]
+COPY ["Shared/", "Shared/"]
 WORKDIR "/src/DragaliaAPI/DragaliaAPI"
 RUN dotnet publish "DragaliaAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
