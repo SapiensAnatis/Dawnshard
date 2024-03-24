@@ -20,7 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AUTOMATED_TESTING: true
-      CI_BUILD: true
     services:
       postgres:
         image: postgres:16
