@@ -12,25 +12,28 @@ using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Riok.Mapperly.Abstractions;
 
 namespace DragaliaAPI.Services.Game;
 
 public class LoadService(
     ApiContext apiContext,
     IBonusService bonusService,
-    ILogger<LoadService> logger,
     IOptionsMonitor<PhotonOptions> photonOptions,
     IMissionService missionService,
     IPresentService presentService,
     ITradeService tradeService,
     IUserService userService,
-    TimeProvider timeProvider
+    TimeProvider timeProvider,
+    IPlayerIdentityService playerIdentityService,
+    ILogger<LoadService> logger
 ) : ILoadService
 {
     private static readonly DateTimeOffset QuestBonusStackBaseTime =
-        new(2021, 04, 07, 06, 00, 00, TimeSpan.Zero); // 7. April 2017
+        new(2021, 04, 07, 06, 00, 00, TimeSpan.Zero);
 
     public async Task<LoadIndexResponse> BuildIndexData()
     {
@@ -38,15 +41,15 @@ public class LoadService(
         stopwatch.Start();
 
         Savefile savefile = await apiContext
-            .Players.ProjectToSavefile()
+            .Players.Where(x => x.ViewerId == playerIdentityService.ViewerId)
+            .ProjectToSavefile()
             .AsSplitQuery()
             .AsNoTracking()
             .FirstAsync();
 
-        logger.LogInformation("{time} ms: Load query complete", stopwatch.ElapsedMilliseconds);
-
+        logger.LogInformation("{Time} ms: Load query complete", stopwatch.ElapsedMilliseconds);
         // TODO/NOTE: special shop purchase list is not set here. maybe change once that fully works?
-
+        // csharpier-ignore-start
         LoadIndexResponse data =
             new()
             {
@@ -70,9 +73,8 @@ public class LoadService(
                 EquipStampList = savefile.EquippedStampList,
                 SummonTicketList = savefile.SummonTickets,
 
-                DragonGiftList = savefile.DragonGiftList.Where(x =>
-                    x.DragonGiftId > DragonGifts.GoldenChalice
-                ),
+                DragonGiftList = savefile
+                    .DragonGiftList.Where(x => x.DragonGiftId >= DragonGifts.FourLeafClover),
                 QuestStoryList = savefile
                     .StoryStates.Where(x => x.StoryType == StoryTypes.Quest)
                     .Select(x => x.MapToQuestStoryList()),
@@ -107,8 +109,9 @@ public class LoadService(
                 PresentNotice = await presentService.GetPresentNotice(),
                 FunctionalMaintenanceList = [],
             };
+        // csharpier-ignore-end
 
-        logger.LogInformation("{time} ms: Mapping complete", stopwatch.ElapsedMilliseconds);
+        logger.LogInformation("{Time} ms: Processing complete", stopwatch.ElapsedMilliseconds);
         return data;
     }
 }
