@@ -12,5 +12,5 @@ public record DmodeWeapon(
     int StrengthParamGroupId,
     int StrengthAbilityGroupId,
     int StrengthSkillGroupId,
-    [property: JsonConverter(typeof(BoolIntJsonConverter))] bool IsDefaultWeapon
+    bool IsDefaultWeapon
 );

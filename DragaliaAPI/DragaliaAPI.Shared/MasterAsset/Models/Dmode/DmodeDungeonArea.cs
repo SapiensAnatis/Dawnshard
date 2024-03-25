@@ -8,7 +8,7 @@ public record DmodeDungeonArea(
     int Id,
     int ThemeGroupId,
     VariationTypes VariationType,
-    [property: JsonConverter(typeof(BoolIntJsonConverter))] bool IsSelectedEntity,
+    bool IsSelectedEntity,
     string Scene,
     string AreaName,
     string BossMultiSceneName

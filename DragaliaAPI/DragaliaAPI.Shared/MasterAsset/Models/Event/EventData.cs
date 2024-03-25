@@ -6,7 +6,7 @@ namespace DragaliaAPI.Shared.MasterAsset.Models.Event;
 
 public record EventData(
     int Id,
-    [property: JsonConverter(typeof(BoolIntJsonConverter))] bool IsMemoryEvent,
+    bool IsMemoryEvent,
     EventKindType EventKindType,
     FortPlants EventFortId,
     EntityTypes ViewEntityType1,

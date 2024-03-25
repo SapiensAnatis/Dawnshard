@@ -14,7 +14,7 @@ public record QuestData(
     UnitElement LimitedElementalType,
     UnitElement LimitedElementalType2,
     int LimitedWeaponTypePatternId,
-    [property: JsonConverter(typeof(BoolIntJsonConverter))] bool IsPayForceStaminaSingle,
+    bool IsPayForceStaminaSingle,
     int PayStaminaSingle,
     int CampaignStaminaSingle,
     int PayStaminaMulti,
@@ -43,7 +43,7 @@ public record QuestData(
     EntityTypes HoldEntityType,
     int HoldEntityId,
     int HoldEntityQuantity,
-    [property: JsonConverter(typeof(BoolIntJsonConverter))] bool IsSumUpTotalDamage
+    bool IsSumUpTotalDamage
 )
 {
     private int IdSuffix => this.Id % 1000;
