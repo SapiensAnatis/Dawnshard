@@ -2,6 +2,9 @@
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record QuestScoreMissionData(
     int Id,
     int BaseScore1,

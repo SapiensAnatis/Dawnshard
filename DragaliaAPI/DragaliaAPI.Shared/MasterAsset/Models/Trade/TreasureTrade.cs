@@ -2,6 +2,9 @@
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Trade;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record TreasureTrade(
     int Id,
     int TradeGroupId,

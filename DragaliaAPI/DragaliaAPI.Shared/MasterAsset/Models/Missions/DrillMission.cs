@@ -1,7 +1,9 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
+[MemoryPackable]
 public record DrillMission(
     int Id,
     string TextTitle,

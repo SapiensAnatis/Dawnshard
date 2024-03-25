@@ -3,6 +3,9 @@ using DragaliaAPI.Shared.Features.TextLabel;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record AbilityData(
     int Id,
     AbilityTypes AbilityType1,

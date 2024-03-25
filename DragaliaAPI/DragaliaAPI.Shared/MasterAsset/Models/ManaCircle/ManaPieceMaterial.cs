@@ -2,6 +2,9 @@
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record ManaPieceMaterial(
     int Id,
     int ElementId,

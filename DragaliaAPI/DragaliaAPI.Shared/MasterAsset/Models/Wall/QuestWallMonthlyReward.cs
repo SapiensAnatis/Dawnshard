@@ -2,6 +2,9 @@
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Wall;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record QuestWallMonthlyReward(
     int Id,
     int TotalWallLevel,

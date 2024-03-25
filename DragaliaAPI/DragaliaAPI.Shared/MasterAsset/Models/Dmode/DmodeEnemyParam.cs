@@ -1,5 +1,8 @@
 ﻿namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record DmodeEnemyParam(
     int Id,
     int DropExp,

@@ -2,6 +2,9 @@
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Event;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record CombatEventLocationReward(
     int Id,
     int EventId,

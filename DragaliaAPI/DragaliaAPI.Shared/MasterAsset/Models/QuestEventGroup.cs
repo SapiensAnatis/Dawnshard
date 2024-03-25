@@ -2,6 +2,9 @@
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record QuestEventGroup(
     int Id,
     int BaseQuestGroupId,

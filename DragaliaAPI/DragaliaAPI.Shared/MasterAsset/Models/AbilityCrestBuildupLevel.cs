@@ -3,6 +3,9 @@ using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record AbilityCrestBuildupLevel(
     int Id,
     int RarityGroup,

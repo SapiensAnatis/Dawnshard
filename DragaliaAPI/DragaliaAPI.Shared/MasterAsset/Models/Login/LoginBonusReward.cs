@@ -2,6 +2,9 @@
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Login;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record LoginBonusReward(
     int Id,
     int Gid,

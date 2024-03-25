@@ -2,6 +2,9 @@
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Story;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record EventStory(
     int Id,
     int EventId,

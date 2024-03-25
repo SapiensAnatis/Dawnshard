@@ -3,6 +3,9 @@ using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record CharaData(
     Charas Id,
     WeaponTypes WeaponType,

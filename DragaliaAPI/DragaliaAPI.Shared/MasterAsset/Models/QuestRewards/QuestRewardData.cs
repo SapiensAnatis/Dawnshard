@@ -2,6 +2,9 @@
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record QuestRewardData(
     int Id,
     QuestCompleteType MissionCompleteType1,

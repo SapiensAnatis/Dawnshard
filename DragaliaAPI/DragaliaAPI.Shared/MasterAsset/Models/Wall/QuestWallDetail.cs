@@ -3,6 +3,9 @@ using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Wall;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record QuestWallDetail(
     int Id,
     int WallId,

@@ -5,6 +5,7 @@
 
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations"/>
+        <PackageReference Include="MemoryPack.Core" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
         <PackageReference Include="Microsoft.Extensions.Identity.Core"/>
         <PackageReference Include="Serilog"/>

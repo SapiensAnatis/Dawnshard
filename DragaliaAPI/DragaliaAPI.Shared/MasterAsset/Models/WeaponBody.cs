@@ -40,6 +40,9 @@ namespace DragaliaAPI.Shared.MasterAsset.Models;
 /// <param name="RewardWeaponSkinId4"></param>
 /// <param name="RewardWeaponSkinId5"></param>
 /// <param name="NeedFortCraftLevel">Required Smithy level to craft this weapon</param>
+using MemoryPack;
+
+[MemoryPackable]
 public record WeaponBody(
     WeaponBodies Id,
     WeaponSeries WeaponSeriesId,

@@ -2,6 +2,9 @@
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Enemy;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record EnemyParam(
     int Id,
     Toughness Tough,

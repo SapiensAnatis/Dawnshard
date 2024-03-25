@@ -2,6 +2,9 @@
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record NormalMission(
     int Id,
     string Text,

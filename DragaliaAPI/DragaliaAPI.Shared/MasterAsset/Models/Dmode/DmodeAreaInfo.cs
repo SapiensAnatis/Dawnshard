@@ -2,6 +2,9 @@
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record DmodeAreaInfo(
     string AreaName,
     int[] EnemyThemes,

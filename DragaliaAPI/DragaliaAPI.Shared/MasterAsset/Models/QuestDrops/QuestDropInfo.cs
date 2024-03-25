@@ -3,8 +3,12 @@ using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record QuestDropInfo(int QuestId, int Rupies, int Mana, DropEntity[] Drops);
 
+[MemoryPackable]
 public record DropEntity(int Id, EntityTypes EntityType, double Quantity)
 {
     /// <summary>

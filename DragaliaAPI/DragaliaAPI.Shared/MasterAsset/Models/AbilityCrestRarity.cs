@@ -1,5 +1,8 @@
 ﻿namespace DragaliaAPI.Shared.MasterAsset.Models;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record AbilityCrestRarity(
     int Id,
     int MaxLimitLevelByLimitBreak0,

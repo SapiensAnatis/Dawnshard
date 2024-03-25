@@ -4,6 +4,9 @@ using DragaliaAPI.Shared.Json;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Event;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record EventData(
     int Id,
     bool IsMemoryEvent,

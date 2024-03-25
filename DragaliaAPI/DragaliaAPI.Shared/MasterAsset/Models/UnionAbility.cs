@@ -1,5 +1,8 @@
 ﻿namespace DragaliaAPI.Shared.MasterAsset.Models;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record UnionAbility(
     int Id,
     int CrestGroup1Count1,

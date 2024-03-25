@@ -3,9 +3,11 @@ using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
+[MemoryPackable]
 public record QuestData(
     int Id,
     int Gid,

@@ -1,5 +1,8 @@
 ﻿namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record DmodeEnemyTheme(
     int Id,
     // :pensive:

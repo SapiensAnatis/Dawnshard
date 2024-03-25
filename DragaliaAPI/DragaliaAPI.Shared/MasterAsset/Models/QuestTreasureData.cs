@@ -2,6 +2,9 @@ using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record QuestTreasureData(
     int Id, // 126201 - 1 26 (chapter) 2 (difficulty: 1 - normal, 2 - hard, 3 - very hard) 01 (chest)
     int AddMaxDragonStorage,

@@ -2,6 +2,9 @@
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record DmodeQuestFloor(
     int Id,
     int FloorNum,

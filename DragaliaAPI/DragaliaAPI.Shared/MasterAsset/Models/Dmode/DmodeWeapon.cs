@@ -4,6 +4,9 @@ using DragaliaAPI.Shared.Json;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record DmodeWeapon(
     int Id,
     int WeaponSkinId,

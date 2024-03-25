@@ -2,6 +2,9 @@
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Shop;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record NormalShop(
     int Id,
     int Limit,

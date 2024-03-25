@@ -3,6 +3,9 @@ using DragaliaAPI.Shared.Json;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record DmodeDungeonTheme(
     int Id,
     int ThemeGroupId,

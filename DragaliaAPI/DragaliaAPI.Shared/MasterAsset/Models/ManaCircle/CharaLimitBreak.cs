@@ -1,7 +1,9 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 
+[MemoryPackable]
 public record CharaLimitBreak(
     int Id,
     Materials OrbData1Id1,
@@ -141,6 +143,7 @@ public record CharaLimitBreak(
     };
 }
 
+[MemoryPackable]
 public record CharaLimitBreakRequirements(
     (Materials Id, int Quantity)[] Orbs,
     int UniqueGrowMaterial1,

@@ -4,6 +4,9 @@ using DragaliaAPI.Shared.Json;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.QuestSchedule;
 
+using MemoryPack;
+
+[MemoryPackable]
 public record QuestScheduleInfo(
     int Id,
     int ScheduleGroupId,
