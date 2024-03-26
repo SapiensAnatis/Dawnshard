@@ -1,12 +1,11 @@
 ﻿using System.Collections.Frozen;
 using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record AbilityCrestBuildupGroup(
+public partial record AbilityCrestBuildupGroup(
     int Id,
     int AbilityCrestBuildupGroupId,
     BuildupPieceTypes BuildupPieceType,

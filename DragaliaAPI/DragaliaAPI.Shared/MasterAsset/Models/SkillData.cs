@@ -1,6 +1,6 @@
-﻿namespace DragaliaAPI.Shared.MasterAsset.Models;
+﻿using MemoryPack;
 
-using MemoryPack;
+namespace DragaliaAPI.Shared.MasterAsset.Models;
 
 [MemoryPackable]
-public record SkillData(int Id, string SkillLv4IconName);
+public partial record SkillData(int Id, string SkillLv4IconName);

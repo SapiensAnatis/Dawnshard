@@ -1,11 +1,10 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Login;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record LoginBonusData(
+public partial record LoginBonusData(
     int Id,
     bool IsLoop,
     DateTimeOffset StartTime,

@@ -1,13 +1,12 @@
 ﻿using System.Text.Json.Serialization;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.QuestSchedule;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record QuestScheduleInfo(
+public partial record QuestScheduleInfo(
     int Id,
     int ScheduleGroupId,
     QuestGroupIntervalType IntervalType,

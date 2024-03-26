@@ -1,11 +1,10 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record PeriodMission(
+public partial record PeriodMission(
     int Id,
     string Text,
     int SortId,

@@ -1,11 +1,10 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record MainStoryMission(
+public partial record MainStoryMission(
     int Id,
     string Text,
     int MissionMainStoryGroupId,

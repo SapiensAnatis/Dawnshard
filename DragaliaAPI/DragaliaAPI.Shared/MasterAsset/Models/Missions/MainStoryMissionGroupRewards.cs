@@ -1,15 +1,14 @@
 ﻿using System.Text.Json.Serialization;
 using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record MainStoryMissionGroupRewards(
+public partial record MainStoryMissionGroupRewards(
     int Id,
     IEnumerable<MainStoryMissionGroupReward> Rewards
 );
 
 [MemoryPackable]
-public record MainStoryMissionGroupReward(EntityTypes Type, int Id, int Quantity);
+public partial record MainStoryMissionGroupReward(EntityTypes Type, int Id, int Quantity);

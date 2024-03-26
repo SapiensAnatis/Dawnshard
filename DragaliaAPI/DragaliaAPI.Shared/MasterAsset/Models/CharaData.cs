@@ -1,12 +1,11 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record CharaData(
+public partial record CharaData(
     Charas Id,
     WeaponTypes WeaponType,
     int Rarity,
@@ -152,6 +151,7 @@ public record CharaData(
         );
     }
 
+    [MemoryPackIgnore]
     public readonly int[] ExAbility =
     {
         ExAbilityData1,
@@ -161,6 +161,7 @@ public record CharaData(
         ExAbilityData5
     };
 
+    [MemoryPackIgnore]
     public readonly int[] ExAbility2 =
     {
         ExAbility2Data1,
@@ -170,6 +171,7 @@ public record CharaData(
         ExAbility2Data5
     };
 
+    [MemoryPackIgnore]
     public readonly int[][] Abilities =
     {
         new[] { Abilities11, Abilities12, Abilities13, Abilities14 },

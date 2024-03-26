@@ -1,11 +1,10 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record DmodeServitorPassiveLevel(
+public partial record DmodeServitorPassiveLevel(
     int Id,
     DmodeServitorPassiveType PassiveNum,
     int Level,
@@ -18,6 +17,7 @@ public record DmodeServitorPassiveLevel(
     int ReleaseEntityQuantity2
 )
 {
+    [MemoryPackIgnore]
     public readonly (EntityTypes Type, int Id, int Quantity)[] NeededMaterials =
     {
         (ReleaseEntityType1, ReleaseEntityId1, ReleaseEntityQuantity1),

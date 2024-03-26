@@ -19,11 +19,7 @@
         <PackageReference Include="MessagePack.AspNetCoreMvcFormatter"/>
         <PackageReference Include="MessagePackAnalyzer">
             <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.AspNetCore.TestHost"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <IncludeAssets>build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
@@ -58,7 +54,7 @@
     </ItemGroup>
 
     <Target Name="MissionDesigner" BeforeTargets="AfterBuild" Condition="'$(CI)' == ''">
-        <Exec Command="dotnet run --no-dependencies --project ../DragaliaAPI.MissionDesigner -- ../DragaliaAPI.Shared/Resources/Missions/MissionProgressionInfo.json" ConsoleToMSBuild="true"/>
+<!--        <Exec Command="dotnet run &#45;&#45;no-dependencies &#45;&#45;project ../DragaliaAPI.MissionDesigner &#45;&#45; ../DragaliaAPI.Shared/Resources/Missions/MissionProgressionInfo.json" ConsoleToMSBuild="true"/>-->
     </Target>
 
 </Project>

@@ -1,11 +1,10 @@
 ﻿using System.Text.Json.Serialization;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record MissionProgressionInfo(
+public partial record MissionProgressionInfo(
     int Id,
     MissionType MissionType,
     int MissionId,

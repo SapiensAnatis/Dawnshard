@@ -1,9 +1,9 @@
-﻿namespace DragaliaAPI.Shared.MasterAsset.Models;
+﻿using MemoryPack;
 
-using MemoryPack;
+namespace DragaliaAPI.Shared.MasterAsset.Models;
 
 [MemoryPackable]
-public record WeaponBodyRarity(
+public partial record WeaponBodyRarity(
     int Id,
     int MaxLimitLevelByLimitBreak4,
     int MaxLimitLevelByLimitBreak8,

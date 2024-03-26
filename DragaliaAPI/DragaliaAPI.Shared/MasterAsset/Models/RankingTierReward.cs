@@ -1,11 +1,10 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record RankingTierReward(
+public partial record RankingTierReward(
     int Id,
     int GroupId,
     float ClearTimeLower,

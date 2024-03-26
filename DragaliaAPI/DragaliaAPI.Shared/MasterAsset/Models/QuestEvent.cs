@@ -1,11 +1,10 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record QuestEvent(
+public partial record QuestEvent(
     int Id,
     QuestEventType QuestEventType,
     QuestBonusReceiveType QuestBonusReceiveType,

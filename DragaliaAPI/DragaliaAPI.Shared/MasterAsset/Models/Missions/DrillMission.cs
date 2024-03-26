@@ -4,7 +4,7 @@ using MemoryPack;
 namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
 [MemoryPackable]
-public record DrillMission(
+public partial record DrillMission(
     int Id,
     string TextTitle,
     string TextDetail,

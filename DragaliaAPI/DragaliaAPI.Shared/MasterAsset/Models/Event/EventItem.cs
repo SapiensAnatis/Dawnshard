@@ -1,7 +1,7 @@
-﻿namespace DragaliaAPI.Shared.MasterAsset.Models.Event;
+﻿using MemoryPack;
 
-using MemoryPack;
+namespace DragaliaAPI.Shared.MasterAsset.Models.Event;
 
 [MemoryPackable]
-public record EventItem<T>(int Id, int EventId, T EventItemType)
+public partial record EventItem<T>(int Id, int EventId, T EventItemType)
     where T : struct, Enum;

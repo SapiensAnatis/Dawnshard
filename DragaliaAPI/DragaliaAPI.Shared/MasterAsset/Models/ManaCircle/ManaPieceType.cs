@@ -4,7 +4,7 @@ using MemoryPack;
 namespace DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 
 [MemoryPackable]
-public record ManaPieceType(
+public partial record ManaPieceType(
     ManaNodeTypes Id,
     EntityTypes EntityType1,
     int EntityId1,

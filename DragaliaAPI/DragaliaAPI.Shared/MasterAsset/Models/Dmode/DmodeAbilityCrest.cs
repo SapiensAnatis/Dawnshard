@@ -1,11 +1,10 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record DmodeAbilityCrest(
+public partial record DmodeAbilityCrest(
     int Id,
     AbilityCrests AbilityCrestId,
     int StrengthParamGroupId,

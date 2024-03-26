@@ -1,6 +1,6 @@
-﻿namespace DragaliaAPI.Shared.MasterAsset.Models;
+﻿using MemoryPack;
 
-using MemoryPack;
+namespace DragaliaAPI.Shared.MasterAsset.Models;
 
 [MemoryPackable]
-public record WeaponSkin(int Id, int VariationId, int BaseId, int FormId);
+public partial record WeaponSkin(int Id, int VariationId, int BaseId, int FormId);

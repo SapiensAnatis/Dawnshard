@@ -1,6 +1,6 @@
-namespace DragaliaAPI.Shared.MasterAsset.Models.Enemy;
-
 using MemoryPack;
 
+namespace DragaliaAPI.Shared.MasterAsset.Models.Enemy;
+
 [MemoryPackable]
-public record EnemyData(int Id, int BookId);
+public partial record EnemyData(int Id, int BookId);

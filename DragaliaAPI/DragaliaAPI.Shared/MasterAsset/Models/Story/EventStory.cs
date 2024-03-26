@@ -1,11 +1,10 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Story;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record EventStory(
+public partial record EventStory(
     int Id,
     int EventId,
     int BaseId,

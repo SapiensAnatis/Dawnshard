@@ -1,12 +1,11 @@
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.TextLabel;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record AbilityData(
+public partial record AbilityData(
     int Id,
     AbilityTypes AbilityType1,
     double AbilityType1UpValue,

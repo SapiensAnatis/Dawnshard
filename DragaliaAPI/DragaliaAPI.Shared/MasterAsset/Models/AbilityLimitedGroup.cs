@@ -1,6 +1,6 @@
-namespace DragaliaAPI.Shared.MasterAsset.Models;
-
 using MemoryPack;
 
+namespace DragaliaAPI.Shared.MasterAsset.Models;
+
 [MemoryPackable]
-public record AbilityLimitedGroup(int Id, double MaxLimitedValue);
+public partial record AbilityLimitedGroup(int Id, double MaxLimitedValue);

@@ -1,6 +1,12 @@
-﻿namespace DragaliaAPI.Shared.MasterAsset.Models.User;
+﻿using MemoryPack;
 
-using MemoryPack;
+namespace DragaliaAPI.Shared.MasterAsset.Models.User;
 
 [MemoryPackable]
-public record UserLevel(int Id, int NecessaryExp, int TotalExp, int StaminaSingle, int FriendCount);
+public partial record UserLevel(
+    int Id,
+    int NecessaryExp,
+    int TotalExp,
+    int StaminaSingle,
+    int FriendCount
+);

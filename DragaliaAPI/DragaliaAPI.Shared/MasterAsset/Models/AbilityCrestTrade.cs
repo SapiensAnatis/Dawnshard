@@ -1,11 +1,10 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record AbilityCrestTrade(
+public partial record AbilityCrestTrade(
     int Id,
     AbilityCrests AbilityCrestId,
     int NeedDewPoint,

@@ -5,7 +5,7 @@ using MemoryPack;
 namespace DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 
 [MemoryPackable]
-public record ManaNode(
+public partial record ManaNode(
     ManaNodeTypes ManaPieceType,
     bool IsReleaseStory,
     int NecessaryManaPoint,

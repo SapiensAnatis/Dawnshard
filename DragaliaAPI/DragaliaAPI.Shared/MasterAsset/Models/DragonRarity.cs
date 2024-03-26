@@ -3,7 +3,7 @@
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
 [MemoryPackable]
-public record DragonRarity(
+public partial record DragonRarity(
     int Id,
     int MaxLimitLevel,
     int LimitLevel00,

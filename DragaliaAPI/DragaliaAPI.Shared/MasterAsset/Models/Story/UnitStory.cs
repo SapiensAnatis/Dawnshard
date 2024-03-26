@@ -1,11 +1,10 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Story;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record UnitStory(
+public partial record UnitStory(
     int Id,
     int ReleaseTriggerId,
     int UnlockTriggerStoryId,

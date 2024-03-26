@@ -1,6 +1,6 @@
-﻿namespace DragaliaAPI.Shared.MasterAsset.Models.Event;
+﻿using MemoryPack;
 
-using MemoryPack;
+namespace DragaliaAPI.Shared.MasterAsset.Models.Event;
 
 [MemoryPackable]
-public record EventTradeGroup(int Id, int EventId);
+public partial record EventTradeGroup(int Id, int EventId);

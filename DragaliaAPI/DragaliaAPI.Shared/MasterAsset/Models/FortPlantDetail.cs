@@ -1,5 +1,6 @@
 ﻿using System.Collections.Frozen;
 using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -36,10 +37,10 @@ namespace DragaliaAPI.Shared.MasterAsset.Models;
 /// <param name="CostMaxTime">Time taken to accrue CostMax.</param>
 /// <param name="StaminaMax">Max stamina that can be claimed from the Halidom.</param>
 /// <param name="StaminaMaxTime">Time taken to accrue StaminaMax.</param>
-using MemoryPack;
+
 
 [MemoryPackable]
-public record FortPlantDetail(
+public partial record FortPlantDetail(
     int Id,
     FortPlants AssetGroup,
     int Level,

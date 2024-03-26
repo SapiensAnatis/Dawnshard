@@ -1,9 +1,9 @@
-﻿namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
+﻿using MemoryPack;
 
-using MemoryPack;
+namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
 [MemoryPackable]
-public record MainStoryMissionGroup(
+public partial record MainStoryMissionGroup(
     int Id,
     string Text,
     string LockText,

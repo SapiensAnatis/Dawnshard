@@ -1,6 +1,12 @@
-﻿namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
+﻿using MemoryPack;
 
-using MemoryPack;
+namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
 [MemoryPackable]
-public record DmodeStrengthParam(int Id, int StrengthParamGroupId, int Scarcity, int Hp, int Atk);
+public partial record DmodeStrengthParam(
+    int Id,
+    int StrengthParamGroupId,
+    int Scarcity,
+    int Hp,
+    int Atk
+);

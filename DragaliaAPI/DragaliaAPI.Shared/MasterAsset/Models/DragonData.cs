@@ -1,11 +1,10 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record DragonData(
+public partial record DragonData(
     Dragons Id,
     int Rarity,
     UnitElement ElementalType,
@@ -42,6 +41,7 @@ public record DragonData(
     int VariationId
 ) : IUnitData
 {
+    [MemoryPackIgnore]
     public readonly int[][] Abilities =
     {
         new[] { Abilities11, Abilities12, Abilities13, Abilities14, Abilities15, Abilities16 },

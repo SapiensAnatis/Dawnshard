@@ -1,11 +1,10 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Story;
 
-using MemoryPack;
+[MemoryPackable]
+public partial record QuestStoryRewardInfo(int Id, QuestStoryReward[] Rewards);
 
 [MemoryPackable]
-public record QuestStoryRewardInfo(int Id, QuestStoryReward[] Rewards);
-
-[MemoryPackable]
-public record QuestStoryReward(EntityTypes Type, int Id, int Quantity);
+public partial record QuestStoryReward(EntityTypes Type, int Id, int Quantity);

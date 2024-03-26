@@ -1,12 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 using DragaliaAPI.Shared.Json;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record DmodeDungeonTheme(
+public partial record DmodeDungeonTheme(
     int Id,
     int ThemeGroupId,
     int PlusLevelMin,

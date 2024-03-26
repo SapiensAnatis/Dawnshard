@@ -1,3 +1,5 @@
+using MemoryPack;
+
 namespace DragaliaAPI.Shared.MasterAsset.Models.Event;
 
 /*
@@ -13,7 +15,12 @@ namespace DragaliaAPI.Shared.MasterAsset.Models.Event;
  * _ScoringEnemyGroupId = {QuestData._Gid}{01, or 02 for daily ticket quest}
  */
 
-using MemoryPack;
+
 
 [MemoryPackable]
-public record QuestScoringEnemy(int Id, int ScoringEnemyGroupId, int EnemyListId, int Point);
+public partial record QuestScoringEnemy(
+    int Id,
+    int ScoringEnemyGroupId,
+    int EnemyListId,
+    int Point
+);

@@ -1,9 +1,9 @@
-﻿namespace DragaliaAPI.Shared.MasterAsset.Models;
+﻿using MemoryPack;
 
-using MemoryPack;
+namespace DragaliaAPI.Shared.MasterAsset.Models;
 
 [MemoryPackable]
-public record UnionAbility(
+public partial record UnionAbility(
     int Id,
     int CrestGroup1Count1,
     int AbilityId1,
@@ -22,6 +22,7 @@ public record UnionAbility(
     int PartyPower5
 )
 {
+    [MemoryPackIgnore]
     public readonly (int Count, int AbilityId, int Power)[] Abilities =
     {
         (CrestGroup1Count1, AbilityId1, PartyPower1),

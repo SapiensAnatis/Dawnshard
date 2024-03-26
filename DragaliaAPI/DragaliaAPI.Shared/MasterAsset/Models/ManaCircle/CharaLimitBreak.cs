@@ -4,7 +4,7 @@ using MemoryPack;
 namespace DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 
 [MemoryPackable]
-public record CharaLimitBreak(
+public partial record CharaLimitBreak(
     int Id,
     Materials OrbData1Id1,
     Materials OrbData2Id1,
@@ -73,6 +73,7 @@ public record CharaLimitBreak(
     int GrowMaterialNum5
 )
 {
+    [MemoryPackIgnore]
     public readonly CharaLimitBreakRequirements[] NeededMaterials =
     {
         new(
@@ -144,7 +145,7 @@ public record CharaLimitBreak(
 }
 
 [MemoryPackable]
-public record CharaLimitBreakRequirements(
+public partial record CharaLimitBreakRequirements(
     (Materials Id, int Quantity)[] Orbs,
     int UniqueGrowMaterial1,
     int UniqueGrowMaterial2,

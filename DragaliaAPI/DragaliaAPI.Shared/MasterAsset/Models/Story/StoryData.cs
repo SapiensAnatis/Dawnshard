@@ -1,6 +1,6 @@
-﻿namespace DragaliaAPI.Shared.MasterAsset.Models.Story;
+﻿using MemoryPack;
 
-using MemoryPack;
+namespace DragaliaAPI.Shared.MasterAsset.Models.Story;
 
 [MemoryPackable]
-public record StoryData(int id, int[] storyIds);
+public partial record StoryData(int id, int[] storyIds);

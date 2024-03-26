@@ -1,11 +1,10 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Trade;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record TreasureTrade(
+public partial record TreasureTrade(
     int Id,
     int TradeGroupId,
     int Limit,

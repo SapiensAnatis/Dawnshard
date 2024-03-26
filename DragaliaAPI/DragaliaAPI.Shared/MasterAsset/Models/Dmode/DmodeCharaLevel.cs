@@ -1,6 +1,6 @@
-﻿namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
+﻿using MemoryPack;
 
-using MemoryPack;
+namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
 [MemoryPackable]
-public record DmodeCharaLevel(int Id, int Level, int NecessaryExp, int TotalExp);
+public partial record DmodeCharaLevel(int Id, int Level, int NecessaryExp, int TotalExp);

@@ -1,11 +1,10 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record DmodeAreaInfo(
+public partial record DmodeAreaInfo(
     string AreaName,
     int[] EnemyThemes,
     int[] EnemyParams,

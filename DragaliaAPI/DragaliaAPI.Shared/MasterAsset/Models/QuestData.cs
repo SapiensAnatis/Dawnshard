@@ -8,7 +8,7 @@ using MemoryPack;
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
 [MemoryPackable]
-public record QuestData(
+public partial record QuestData(
     int Id,
     int Gid,
     QuestGroupType GroupType,
@@ -50,6 +50,7 @@ public record QuestData(
 {
     private int IdSuffix => this.Id % 1000;
 
+    [MemoryPackIgnore]
     public IEnumerable<AreaInfo> AreaInfo =>
         new List<AreaInfo>()
         {
@@ -61,6 +62,7 @@ public record QuestData(
             new(this.Scene06, this.AreaName06),
         }.Where(x => !string.IsNullOrEmpty(x.ScenePath) && !string.IsNullOrEmpty(x.AreaName));
 
+    [MemoryPackIgnore]
     public bool IsEventRegularBattle =>
         this.EventKindType switch
         {
@@ -70,6 +72,7 @@ public record QuestData(
             _ => false
         };
 
+    [MemoryPackIgnore]
     public bool IsEventChallengeBattle =>
         this.EventKindType switch
         {
@@ -77,6 +80,7 @@ public record QuestData(
             _ => false
         };
 
+    [MemoryPackIgnore]
     public bool IsEventTrial =>
         this.EventKindType switch
         {
@@ -85,6 +89,7 @@ public record QuestData(
             _ => false
         };
 
+    [MemoryPackIgnore]
     public bool IsEventExBattle =>
         this.EventKindType switch
         {
@@ -92,12 +97,15 @@ public record QuestData(
             _ => false,
         };
 
+    [MemoryPackIgnore]
     public EventKindType EventKindType =>
         MasterAsset.EventData.TryGetValue(this.Gid, out EventData? eventData)
             ? eventData.EventKindType
             : EventKindType.None;
 
+    [MemoryPackIgnore]
     public bool IsEventQuest => GroupType == QuestGroupType.Event;
 
+    [MemoryPackIgnore]
     public bool CanPlayCoOp => this.PayStaminaMulti > 0;
 }

@@ -1,11 +1,10 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Event;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record BuildEventReward(
+public partial record BuildEventReward(
     int Id,
     int EventItemId,
     int EventItemQuantity,

@@ -1,15 +1,14 @@
 ﻿using System.Text.Json.Serialization;
 using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 
-using MemoryPack;
+[MemoryPackable]
+public partial record QuestDropInfo(int QuestId, int Rupies, int Mana, DropEntity[] Drops);
 
 [MemoryPackable]
-public record QuestDropInfo(int QuestId, int Rupies, int Mana, DropEntity[] Drops);
-
-[MemoryPackable]
-public record DropEntity(int Id, EntityTypes EntityType, double Quantity)
+public partial record DropEntity(int Id, EntityTypes EntityType, double Quantity)
 {
     /// <summary>
     /// Gets a weight for FluentRandomPicker.

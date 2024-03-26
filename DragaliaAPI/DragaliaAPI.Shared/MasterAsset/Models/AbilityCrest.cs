@@ -1,12 +1,11 @@
 ﻿using System.Collections.Frozen;
 using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record AbilityCrest(
+public partial record AbilityCrest(
     AbilityCrests Id,
     int AbilityCrestBuildupGroupId,
     int AbilityCrestLevelRarityGroupId,

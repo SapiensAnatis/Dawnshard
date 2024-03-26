@@ -1,11 +1,10 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record ManaPieceMaterial(
+public partial record ManaPieceMaterial(
     int Id,
     int ElementId,
     ManaNodeTypes ManaPieceType,

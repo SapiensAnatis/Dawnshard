@@ -1,11 +1,10 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
-using MemoryPack;
-
 [MemoryPackable]
-public record MaterialData(
+public partial record MaterialData(
     Materials Id,
     MaterialCategory Category,
     MaterialRarities MaterialRarity,
