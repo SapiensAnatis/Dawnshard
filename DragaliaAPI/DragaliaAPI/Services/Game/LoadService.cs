@@ -12,122 +12,225 @@ using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Riok.Mapperly.Abstractions;
 
 namespace DragaliaAPI.Services.Game;
 
 public class LoadService(
-    ISavefileService savefileService,
     ApiContext apiContext,
     IBonusService bonusService,
-    IMapper mapper,
-    ILogger<LoadService> logger,
     IOptionsMonitor<PhotonOptions> photonOptions,
     IMissionService missionService,
     IPresentService presentService,
     ITradeService tradeService,
-    IShopRepository shopRepository,
     IUserService userService,
-    IWallService wallService,
-    TimeProvider timeProvider
+    TimeProvider timeProvider,
+    IPlayerIdentityService playerIdentityService,
+    ILogger<LoadService> logger
 ) : ILoadService
 {
+    private static readonly DateTimeOffset QuestBonusStackBaseTime =
+        new(2021, 04, 07, 06, 00, 00, TimeSpan.Zero);
+
     public async Task<LoadIndexResponse> BuildIndexData()
     {
         Stopwatch stopwatch = new();
         stopwatch.Start();
 
-        DbPlayer savefile = await savefileService.Load().AsNoTracking().FirstAsync();
+        Savefile savefile = await apiContext
+            .Players.Where(x => x.ViewerId == playerIdentityService.ViewerId)
+            .ProjectToSavefile()
+            .AsSplitQuery()
+            .AsNoTracking()
+            .FirstAsync();
 
-        logger.LogInformation("{time} ms: Load query complete", stopwatch.ElapsedMilliseconds);
-
-        FortBonusList bonusList = await bonusService.GetBonusList();
-
-        logger.LogInformation("{time} ms: Bonus list acquired", stopwatch.ElapsedMilliseconds);
-
+        logger.LogInformation("{Time} ms: Load query complete", stopwatch.ElapsedMilliseconds);
         // TODO/NOTE: special shop purchase list is not set here. maybe change once that fully works?
-
+        // csharpier-ignore-start
         LoadIndexResponse data =
             new()
             {
-                BuildList = savefile.BuildList.Select(mapper.Map<BuildList>),
-                UserData = mapper.Map<UserData>(savefile.UserData),
-                CharaList = savefile.CharaList.Select(mapper.Map<CharaList>),
-                DragonList = savefile.DragonList.Select(mapper.Map<DragonList>),
-                DragonReliabilityList = savefile.DragonReliabilityList.Select(
-                    mapper.Map<DragonReliabilityList>
-                ),
-                AbilityCrestList = savefile.AbilityCrestList.Select(mapper.Map<AbilityCrestList>),
+                BuildList = savefile.BuildList,
+                UserData = savefile.UserData,
+                CharaList = savefile.CharaList,
+                DragonList = savefile.DragonList,
+                DragonReliabilityList = savefile.DragonReliabilityList,
+                AbilityCrestList = savefile.AbilityCrestList,
+                TalismanList = savefile.TalismanList,
+                WeaponBodyList = savefile.WeaponBodyList,
+                PartyList = savefile.PartyList,
+                QuestList = savefile.QuestList,
+                QuestEventList = savefile.QuestEvents,
+                QuestTreasureList = savefile.QuestTreasureList,
+                QuestWallList = savefile.QuestWalls,
+                MaterialList = savefile.MaterialList,
+                WeaponSkinList = savefile.WeaponSkinList,
+                WeaponPassiveAbilityList = savefile.WeaponPassiveAbilityList,
+                PartyPowerData = savefile.PartyPower,
+                EquipStampList = savefile.EquippedStampList,
+                SummonTicketList = savefile.SummonTickets,
+
                 DragonGiftList = savefile
-                    .DragonGiftList.Where(x => x.DragonGiftId > DragonGifts.GoldenChalice)
-                    .Select(mapper.Map<DragonGiftList>),
-                TalismanList = savefile.TalismanList.Select(mapper.Map<TalismanList>),
-                WeaponBodyList = savefile.WeaponBodyList.Select(mapper.Map<WeaponBodyList>),
-                PartyList = savefile.PartyList.Select(mapper.Map<PartyList>),
+                    .DragonGiftList.Where(x => x.DragonGiftId >= DragonGifts.FourLeafClover),
                 QuestStoryList = savefile
                     .StoryStates.Where(x => x.StoryType == StoryTypes.Quest)
-                    .Select(mapper.Map<QuestStoryList>),
+                    .Select(x => x.MapToQuestStoryList()),
                 UnitStoryList = savefile
-                    .StoryStates.Where(x =>
-                        x.StoryType == StoryTypes.Chara || x.StoryType == StoryTypes.Dragon
-                    )
-                    .Select(mapper.Map<UnitStoryList>),
+                    .StoryStates.Where(x => x.StoryType is StoryTypes.Chara or StoryTypes.Dragon)
+                    .Select(x => x.MapToUnitStoryList()),
                 CastleStoryList = savefile
                     .StoryStates.Where(x => x.StoryType == StoryTypes.Castle)
-                    .Select(mapper.Map<CastleStoryList>),
-                QuestList = savefile.QuestList.Select(mapper.Map<QuestList>),
-                QuestEventList = savefile.QuestEvents.Select(mapper.Map<QuestEventList>),
-                QuestTreasureList = savefile.QuestTreasureList.Select(
-                    mapper.Map<QuestTreasureList>
-                ),
-                MaterialList = savefile.MaterialList.Select(mapper.Map<MaterialList>),
-                WeaponSkinList = savefile.WeaponSkinList.Select(mapper.Map<WeaponSkinList>),
-                WeaponPassiveAbilityList = savefile.WeaponPassiveAbilityList.Select(
-                    mapper.Map<WeaponPassiveAbilityList>
-                ),
-                FortBonusList = bonusList,
-                PartyPowerData = mapper.Map<PartyPowerData>(savefile.PartyPower),
+                    .Select(x => x.MapToCastleStoryList()),
+                UserTreasureTradeList = savefile
+                    .Trades.Where(x => x.Type == TradeType.Treasure)
+                    .Select(x => x.MapToUserTreasureTradeList()),
+
                 FriendNotice = new(0, 0),
-                PresentNotice = await presentService.GetPresentNotice(),
+                ShopNotice = new ShopNotice(savefile.ShopInfo?.DailySummonCount != 0),
                 GuildNotice = new(0, false, false, false, false),
-                //fort_plant_list = buildSummary,
-                ServerTime = timeProvider.GetUtcNow(),
                 StaminaMultiSystemMax = userService.StaminaMultiMax,
                 StaminaMultiUserMax = 12,
+                QuestBonusStackBaseTime = QuestBonusStackBaseTime,
                 QuestSkipPointSystemMax = userService.QuestSkipPointMax,
                 QuestSkipPointUseLimitMax = 30,
-                FunctionalMaintenanceList = new List<FunctionalMaintenanceList>(),
+                QuestEntryConditionList = await missionService.GetEntryConditions(),
                 MultiServer = new()
                 {
                     Host = photonOptions.CurrentValue.ServerUrl,
                     AppId = string.Empty
                 },
-                MissionNotice = await missionService.GetMissionNotice(null),
-                EquipStampList = savefile
-                    .EquippedStampList.Select(mapper.Map<DbEquippedStamp, EquipStampList>)
-                    .OrderBy(x => x.Slot),
-                QuestEntryConditionList = await missionService.GetEntryConditions(),
-                UserTreasureTradeList = await tradeService.GetUserTreasureTradeList(),
+                ServerTime = timeProvider.GetUtcNow(),
                 TreasureTradeAllList = tradeService.GetCurrentTreasureTradeList(),
-                ShopNotice = new ShopNotice(await shopRepository.GetDailySummonCountAsync() == 0),
-                SummonTicketList = await apiContext
-                    .PlayerSummonTickets.ProjectToSummonTicketList()
-                    .ToListAsync(),
-                QuestBonusStackBaseTime = new DateTimeOffset(
-                    2021,
-                    04,
-                    07,
-                    06,
-                    00,
-                    00,
-                    TimeSpan.Zero
-                ), // 7. April 2017
-                AlbumDragonList = Enumerable.Empty<AlbumDragonData>(),
-                QuestWallList = await wallService.GetQuestWallList()
+                MissionNotice = await missionService.GetMissionNotice(null),
+                FortBonusList = await bonusService.GetBonusList(),
+                PresentNotice = await presentService.GetPresentNotice(),
+                FunctionalMaintenanceList = [],
             };
+        // csharpier-ignore-end
 
-        logger.LogInformation("{time} ms: Mapping complete", stopwatch.ElapsedMilliseconds);
+        logger.LogInformation("{Time} ms: Processing complete", stopwatch.ElapsedMilliseconds);
         return data;
     }
+}
+
+public class Savefile
+{
+    public required UserData UserData { get; set; }
+
+    public required PartyPowerData PartyPower { get; set; }
+
+    public IEnumerable<PartyList> PartyList { get; set; } = [];
+
+    public IEnumerable<CharaList> CharaList { get; set; } = [];
+
+    public IEnumerable<DragonList> DragonList { get; set; } = [];
+
+    public IEnumerable<QuestList> QuestList { get; set; } = [];
+
+    public IEnumerable<QuestEventList> QuestEvents { get; set; } = [];
+
+    public IEnumerable<MaterialList> MaterialList { get; set; } = [];
+
+    public IEnumerable<WeaponSkinList> WeaponSkinList { get; set; } = [];
+
+    public IEnumerable<WeaponBodyList> WeaponBodyList { get; set; } = [];
+
+    public IEnumerable<WeaponPassiveAbilityList> WeaponPassiveAbilityList { get; set; } = [];
+
+    public IEnumerable<AbilityCrestList> AbilityCrestList { get; set; } = [];
+
+    public IEnumerable<TalismanList> TalismanList { get; set; } = [];
+
+    public IEnumerable<DragonReliabilityList> DragonReliabilityList { get; set; } = [];
+
+    public IEnumerable<DragonGiftList> DragonGiftList { get; set; } = [];
+
+    public IEnumerable<EquipStampList> EquippedStampList { get; set; } = [];
+
+    public IEnumerable<GenericStory> StoryStates { get; set; } = [];
+
+    public IEnumerable<QuestTreasureList> QuestTreasureList { get; set; } = [];
+
+    public IEnumerable<QuestWallList> QuestWalls { get; set; } = [];
+
+    public IEnumerable<BuildList> BuildList { get; set; } = [];
+
+    public IEnumerable<SummonTicketList> SummonTickets { get; set; } = [];
+
+    public IEnumerable<GenericTrade> Trades { get; set; } = [];
+
+    public DbPlayerShopInfo? ShopInfo { get; set; }
+}
+
+public class GenericStory
+{
+    public int StoryId { get; set; }
+
+    public StoryTypes StoryType { get; set; }
+
+    public StoryState State { get; set; }
+}
+
+public class GenericTrade
+{
+    public TradeType Type { get; set; }
+
+    public required int Id { get; set; }
+
+    public int Count { get; set; }
+
+    public DateTimeOffset LastTradeTime { get; set; } = DateTimeOffset.UnixEpoch;
+}
+
+[Mapper(
+    RequiredMappingStrategy = RequiredMappingStrategy.Target,
+    IgnoreObsoleteMembersStrategy = IgnoreObsoleteMembersStrategy.Target
+)]
+public static partial class LoadMapper
+{
+    public static partial IQueryable<Savefile> ProjectToSavefile(this IQueryable<DbPlayer> query);
+
+    public static UnitStoryList MapToUnitStoryList(this GenericStory story) =>
+        new() { UnitStoryId = story.StoryId, IsRead = story.State == StoryState.Read, };
+
+    public static QuestStoryList MapToQuestStoryList(this GenericStory story) =>
+        new() { QuestStoryId = story.StoryId, State = story.State };
+
+    public static CastleStoryList MapToCastleStoryList(this GenericStory story) =>
+        new() { CastleStoryId = story.StoryId, IsRead = story.State == StoryState.Read };
+
+    public static UserTreasureTradeList MapToUserTreasureTradeList(this GenericTrade trade) =>
+        new()
+        {
+            TreasureTradeId = trade.Id,
+            TradeCount = trade.Count,
+            LastResetTime = trade.LastTradeTime
+        };
+
+    [MapProperty(nameof(DbPlayerDragonData.Level), nameof(DragonReliabilityList.ReliabilityLevel))]
+    [MapProperty(nameof(DbPlayerDragonData.Exp), nameof(DragonReliabilityList.ReliabilityTotalExp))]
+    private static partial DragonReliabilityList Map(this DbPlayerDragonReliability dbEntity);
+
+    [MapProperty(nameof(DbParty.Units), nameof(PartyList.PartySettingList))]
+    private static partial PartyList Map(this DbParty dbEntity);
+
+    [MapperIgnoreTarget(nameof(CharaList.StatusPlusCount))]
+    private static partial CharaList Map(DbPlayerCharaData playerCharaData);
+
+    [MapperIgnoreTarget(nameof(UserData.AgeGroup))]
+    [MapperIgnoreTarget(nameof(UserData.IsOptin))]
+    [MapperIgnoreTarget(nameof(UserData.PrologueEndTime))]
+    private static partial UserData Map(DbPlayerUserData userData);
+
+    [MapperIgnoreTarget(nameof(DragonList.StatusPlusCount))]
+    private static partial DragonList Map(DbPlayerDragonData dragonData);
+
+    [MapProperty(nameof(DbAbilityCrest.AbilityLevel), nameof(AbilityCrestList.Ability1Level))]
+    [MapProperty(nameof(DbAbilityCrest.AbilityLevel), nameof(AbilityCrestList.Ability2Level))]
+    private static partial AbilityCrestList Map(DbAbilityCrest abilityCrest);
+
+    private static partial WeaponBodyList Map(DbWeaponBody weaponBody);
 }
