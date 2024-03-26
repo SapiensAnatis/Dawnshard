@@ -217,6 +217,12 @@ public static partial class LoadMapper
     [MapProperty(nameof(DbParty.Units), nameof(PartyList.PartySettingList))]
     private static partial PartyList Map(this DbParty dbEntity);
 
+    private static partial PartySettingList Map(DbPartyUnit dbEntity);
+
+    private static IEnumerable<PartySettingList?> MapOrderedUnitList(
+        ICollection<DbPartyUnit> dbEntity
+    ) => dbEntity.OrderBy(x => x.UnitNo).Select(x => Map(x));
+
     [MapperIgnoreTarget(nameof(CharaList.StatusPlusCount))]
     private static partial CharaList Map(DbPlayerCharaData playerCharaData);
 
