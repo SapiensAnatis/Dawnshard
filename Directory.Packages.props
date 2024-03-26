@@ -32,7 +32,7 @@
     <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
-    <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="7.3.1" />
+    <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="7.4.1" />
     <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
     <PackageVersion Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.1" />
     <PackageVersion Include="MudBlazor" Version="6.17.0" />
@@ -42,7 +42,7 @@
     <PackageVersion Include="Serilog.Settings.Configuration" Version="8.0.0" />
     <PackageVersion Include="Serilog.Sinks.Async" Version="1.5.0" />
     <PackageVersion Include="Serilog.Sinks.Seq" Version="6.0.0" />
-    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.2.0" />
+    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.4.1" />
     <PackageVersion Include="System.Text.Json" Version="8.0.3" />
     <PackageVersion Include="Serilog" Version="3.1.1" />
     <PackageVersion Include="Serilog.AspNetCore" Version="8.0.1" />
