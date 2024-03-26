@@ -1,9 +1,6 @@
-﻿using MemoryPack;
+﻿namespace DragaliaAPI.Shared.MasterAsset.Models;
 
-namespace DragaliaAPI.Shared.MasterAsset.Models;
-
-[MemoryPackable]
-public partial record AbilityCrestRarity(
+public record AbilityCrestRarity(
     int Id,
     int MaxLimitLevelByLimitBreak0,
     int MaxLimitLevelByLimitBreak1,

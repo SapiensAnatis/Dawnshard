@@ -1,9 +1,6 @@
-﻿using MemoryPack;
+﻿namespace DragaliaAPI.Shared.MasterAsset.Models;
 
-namespace DragaliaAPI.Shared.MasterAsset.Models;
-
-[MemoryPackable]
-public partial record DragonRarity(
+public record DragonRarity(
     int Id,
     int MaxLimitLevel,
     int LimitLevel00,

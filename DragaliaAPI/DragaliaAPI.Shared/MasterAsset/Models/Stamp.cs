@@ -1,5 +1,3 @@
-using MemoryPack;
-
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
 /// <summary>
@@ -8,5 +6,5 @@ namespace DragaliaAPI.Shared.MasterAsset.Models;
 /// <param name="Id">The ID of the sticker.</param>
 
 
-[MemoryPackable]
-public partial record Stamp(int Id);
+
+public record Stamp(int Id);

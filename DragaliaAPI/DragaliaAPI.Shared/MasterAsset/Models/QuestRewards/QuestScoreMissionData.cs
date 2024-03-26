@@ -1,10 +1,8 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
-using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 
-[MemoryPackable]
-public partial record QuestScoreMissionData(
+public record QuestScoreMissionData(
     int Id,
     int BaseScore1,
     int BaseScore2,

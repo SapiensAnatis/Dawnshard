@@ -1,10 +1,9 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
-using MemoryPack;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Enemy;
 
-[MemoryPackable]
-public partial record EnemyParam(
+public record EnemyParam(
     int Id,
     Toughness Tough,
     int DmodeEnemyParamGroupId,
@@ -29,7 +28,7 @@ public partial record EnemyParam(
     int DataId
 )
 {
-    [MemoryPackIgnore]
+    [IgnoreMember]
     public readonly (int Param, int Num)[] Children =
     {
         (Child01Param, Child01Num),
@@ -37,7 +36,7 @@ public partial record EnemyParam(
         (Child03Param, Child03Num)
     };
 
-    [MemoryPackIgnore]
+    [IgnoreMember]
     public readonly (int Param, int Num)[] Weaks =
     {
         (WeakA, WeakANum),
@@ -45,6 +44,6 @@ public partial record EnemyParam(
         (WeakC, WeakCNum)
     };
 
-    [MemoryPackIgnore]
+    [IgnoreMember]
     public readonly int[] Parts = { PartsA, PartsB, PartsC, PartsD };
 };

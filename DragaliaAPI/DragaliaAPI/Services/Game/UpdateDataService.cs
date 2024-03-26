@@ -110,7 +110,7 @@ public class UpdateDataService(
                     list.MaterialList ??= [];
                     list.MaterialList.Add(material.ToMaterialList());
                     break;
-                case DbPlayerDragonGift dragonGift:
+                case DbPlayerDragonGift { DragonGiftId: >= DragonGifts.FourLeafClover } dragonGift:
                     list.DragonGiftList ??= [];
                     list.DragonGiftList.Add(dragonGift.ToDragonGift());
                     break;

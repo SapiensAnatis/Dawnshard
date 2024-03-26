@@ -11,6 +11,7 @@ ARG CI
 
 WORKDIR /src
 COPY ["DragaliaAPI/DragaliaAPI/DragaliaAPI.csproj", "DragaliaAPI/DragaliaAPI/"]
+COPY [".editorconfig", ".editorconfig"]
 COPY ["Directory.Build.props", "."]
 COPY ["Directory.Packages.props", "."]
 COPY ["nuget.config", "."]

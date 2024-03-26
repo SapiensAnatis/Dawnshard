@@ -1,12 +1,10 @@
 ﻿using System.Text.Json.Serialization;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
-using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Event;
 
-[MemoryPackable]
-public partial record EventData(
+public record EventData(
     int Id,
     bool IsMemoryEvent,
     EventKindType EventKindType,

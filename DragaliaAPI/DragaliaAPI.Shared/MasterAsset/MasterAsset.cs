@@ -312,578 +312,590 @@ public static class MasterAsset
         ValueTask<MasterAssetData<Charas, CharaData>> charaData = MasterAssetData.LoadAsync<
             Charas,
             CharaData
-        >("CharaData.json", x => x.Id);
+        >("CharaData.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<Dragons, DragonData>> dragonData = MasterAssetData.LoadAsync<
             Dragons,
             DragonData
-        >("DragonData.json", x => x.Id);
+        >("DragonData.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, DragonRarity>> dragonRarity = MasterAssetData.LoadAsync<
             int,
             DragonRarity
-        >("DragonRarity.json", x => x.Id);
+        >("DragonRarity.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, QuestData>> questData = MasterAssetData.LoadAsync<
             int,
             QuestData
-        >("QuestData.json", x => x.Id);
+        >("QuestData.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<Materials, MaterialData>> materialData =
-            MasterAssetData.LoadAsync<Materials, MaterialData>("MaterialData.json", x => x.Id);
+            MasterAssetData.LoadAsync<Materials, MaterialData>("MaterialData.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, FortPlantDetail>> fortPlant = MasterAssetData.LoadAsync<
             int,
             FortPlantDetail
-        >("FortPlantDetail.json", x => x.Id);
+        >("FortPlantDetail.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<WeaponBodies, WeaponBody>> weaponBody = MasterAssetData.LoadAsync<
             WeaponBodies,
             WeaponBody
-        >("WeaponBody.json", x => x.Id);
+        >("WeaponBody.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, WeaponBodyBuildupGroup>> weaponBodyBuildupGroup =
             MasterAssetData.LoadAsync<int, WeaponBodyBuildupGroup>(
-                "WeaponBodyBuildupGroup.json",
+                "WeaponBodyBuildupGroup.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, WeaponBodyBuildupLevel>> weaponBodyBuildupLevel =
             MasterAssetData.LoadAsync<int, WeaponBodyBuildupLevel>(
-                "WeaponBodyBuildupLevel.json",
+                "WeaponBodyBuildupLevel.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, WeaponPassiveAbility>> weaponPassiveAbility =
             MasterAssetData.LoadAsync<int, WeaponPassiveAbility>(
-                "WeaponPassiveAbility.json",
+                "WeaponPassiveAbility.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, WeaponBodyRarity>> weaponBodyRarity =
-            MasterAssetData.LoadAsync<int, WeaponBodyRarity>("WeaponBodyRarity.json", x => x.Id);
+            MasterAssetData.LoadAsync<int, WeaponBodyRarity>("WeaponBodyRarity.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, WeaponSkin>> weaponSkin = MasterAssetData.LoadAsync<
             int,
             WeaponSkin
-        >("WeaponSkin.json", x => x.Id);
+        >("WeaponSkin.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, AbilityCrestBuildupGroup>> abilityCrestBuildupGroup =
             MasterAssetData.LoadAsync<int, AbilityCrestBuildupGroup>(
-                "AbilityCrestBuildupGroup.json",
+                "AbilityCrestBuildupGroup.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, AbilityCrestBuildupLevel>> abilityCrestBuildupLevel =
             MasterAssetData.LoadAsync<int, AbilityCrestBuildupLevel>(
-                "AbilityCrestBuildupLevel.json",
+                "AbilityCrestBuildupLevel.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, AbilityCrestRarity>> abilityCrestRarity =
             MasterAssetData.LoadAsync<int, AbilityCrestRarity>(
-                "AbilityCrestRarity.json",
+                "AbilityCrestRarity.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<AbilityCrests, AbilityCrest>> abilityCrest =
-            MasterAssetData.LoadAsync<AbilityCrests, AbilityCrest>("AbilityCrest.json", x => x.Id);
+            MasterAssetData.LoadAsync<AbilityCrests, AbilityCrest>(
+                "AbilityCrest.msgpack",
+                x => x.Id
+            );
 
         ValueTask<MasterAssetData<int, QuestEventGroup>> questEventGroup =
-            MasterAssetData.LoadAsync<int, QuestEventGroup>("QuestEventGroup.json", x => x.Id);
+            MasterAssetData.LoadAsync<int, QuestEventGroup>("QuestEventGroup.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, QuestEvent>> questEvent = MasterAssetData.LoadAsync<
             int,
             QuestEvent
-        >("QuestEvent.json", x => x.Id);
+        >("QuestEvent.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, QuestTreasureData>> questTreasureData =
-            MasterAssetData.LoadAsync<int, QuestTreasureData>("QuestTreasureData.json", x => x.Id);
+            MasterAssetData.LoadAsync<int, QuestTreasureData>(
+                "QuestTreasureData.msgpack",
+                x => x.Id
+            );
 
         ValueTask<MasterAssetData<UseItem, UseItemData>> useItem = MasterAssetData.LoadAsync<
             UseItem,
             UseItemData
-        >("UseItem.json", x => x.Id);
+        >("UseItem.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, AbilityData>> abilityData = MasterAssetData.LoadAsync<
             int,
             AbilityData
-        >("AbilityData.json", x => x.Id);
+        >("AbilityData.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, AbilityLimitedGroup>> abilityLimitedGroup =
             MasterAssetData.LoadAsync<int, AbilityLimitedGroup>(
-                "AbilityLimitedGroup.json",
+                "AbilityLimitedGroup.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, ExAbilityData>> exAbilityData = MasterAssetData.LoadAsync<
             int,
             ExAbilityData
-        >("ExAbilityData.json", x => x.Id);
+        >("ExAbilityData.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, UnionAbility>> unionAbility = MasterAssetData.LoadAsync<
             int,
             UnionAbility
-        >("UnionAbility.json", x => x.Id);
+        >("UnionAbility.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, SkillData>> skillData = MasterAssetData.LoadAsync<
             int,
             SkillData
-        >("SkillData.json", x => x.Id);
+        >("SkillData.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, AlbumMission>> albumMission = MasterAssetData.LoadAsync<
             int,
             AlbumMission
-        >("Missions/MissionAlbumData.json", x => x.Id);
+        >("Missions/MissionAlbumData.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, NormalMission>> beginnerMission = MasterAssetData.LoadAsync<
             int,
             NormalMission
-        >("Missions/MissionBeginnerData.json", x => x.Id);
+        >("Missions/MissionBeginnerData.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, DailyMission>> dailyMission = MasterAssetData.LoadAsync<
             int,
             DailyMission
-        >("Missions/MissionDailyData.json", x => x.Id);
+        >("Missions/MissionDailyData.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, DrillMission>> drillMission = MasterAssetData.LoadAsync<
             int,
             DrillMission
-        >("Missions/MissionDrillData.json", x => x.Id);
+        >("Missions/MissionDrillData.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, DrillMissionGroup>> drillMissionGroup =
             MasterAssetData.LoadAsync<int, DrillMissionGroup>(
-                "Missions/MissionDrillGroup.json",
+                "Missions/MissionDrillGroup.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, MainStoryMission>> mainStoryMission =
             MasterAssetData.LoadAsync<int, MainStoryMission>(
-                "Missions/MissionMainStoryData.json",
+                "Missions/MissionMainStoryData.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, MainStoryMissionGroup>> mainStoryMissionGroup =
             MasterAssetData.LoadAsync<int, MainStoryMissionGroup>(
-                "Missions/MissionMainStoryGroup.json",
+                "Missions/MissionMainStoryGroup.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, MemoryEventMission>> memoryEventMission =
             MasterAssetData.LoadAsync<int, MemoryEventMission>(
-                "Missions/MissionMemoryEventData.json",
+                "Missions/MissionMemoryEventData.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, NormalMission>> normalMission = MasterAssetData.LoadAsync<
             int,
             NormalMission
-        >("Missions/MissionNormalData.json", x => x.Id);
+        >("Missions/MissionNormalData.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, PeriodMission>> periodMission = MasterAssetData.LoadAsync<
             int,
             PeriodMission
-        >("Missions/MissionPeriodData.json", x => x.Id);
+        >("Missions/MissionPeriodData.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, SpecialMission>> specialMission = MasterAssetData.LoadAsync<
             int,
             SpecialMission
-        >("Missions/MissionSpecialData.json", x => x.Id);
+        >("Missions/MissionSpecialData.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, SpecialMissionGroup>> specialMissionGroup =
             MasterAssetData.LoadAsync<int, SpecialMissionGroup>(
-                "Missions/MissionSpecialGroup.json",
+                "Missions/MissionSpecialGroup.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, MissionProgressionInfo>> missionProgressionInfo =
             MasterAssetData.LoadAsync<int, MissionProgressionInfo>(
-                "Missions/MissionProgressionInfo.json",
+                "Missions/MissionProgressionInfo.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, MainStoryMissionGroupRewards>> mainStoryMissionGroupRewards =
             MasterAssetData.LoadAsync<int, MainStoryMissionGroupRewards>(
-                "Missions/MainStoryMissionGroupRewards.json",
+                "Missions/MainStoryMissionGroupRewards.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, Stamp>> stampData = MasterAssetData.LoadAsync<int, Stamp>(
-            "StampData.json",
+            "StampData.msgpack",
             x => x.Id
         );
 
         ValueTask<MasterAssetData<int, NormalShop>> normalShop = MasterAssetData.LoadAsync<
             int,
             NormalShop
-        >("Shop/NormalShop.json", x => x.Id);
+        >("Shop/NormalShop.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, SpecialShop>> specialShop = MasterAssetData.LoadAsync<
             int,
             SpecialShop
-        >("Shop/SpecialShop.json", x => x.Id);
+        >("Shop/SpecialShop.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, MaterialShop>> materialShopDaily = MasterAssetData.LoadAsync<
             int,
             MaterialShop
-        >("Shop/MaterialShopDaily.json", x => x.Id);
+        >("Shop/MaterialShopDaily.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, MaterialShop>> materialShopWeekly =
-            MasterAssetData.LoadAsync<int, MaterialShop>("Shop/MaterialShopWeekly.json", x => x.Id);
+            MasterAssetData.LoadAsync<int, MaterialShop>(
+                "Shop/MaterialShopWeekly.msgpack",
+                x => x.Id
+            );
 
         ValueTask<MasterAssetData<int, MaterialShop>> materialShopMonthly =
             MasterAssetData.LoadAsync<int, MaterialShop>(
-                "Shop/MaterialShopMonthly.json",
+                "Shop/MaterialShopMonthly.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, AbilityCrestTrade>> abilityCrestTrade =
             MasterAssetData.LoadAsync<int, AbilityCrestTrade>(
-                "Trade/AbilityCrestTrade.json",
+                "Trade/AbilityCrestTrade.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, TreasureTrade>> treasureTrade = MasterAssetData.LoadAsync<
             int,
             TreasureTrade
-        >("Trade/TreasureTrade.json", x => x.Id);
+        >("Trade/TreasureTrade.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, TreasureTrade>> eventTreasureTrade =
             MasterAssetData.LoadAsync<int, TreasureTrade>(
-                "Trade/EventTreasureTradeInfo.json",
+                "Trade/EventTreasureTradeInfo.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, LoginBonusData>> loginBonusData = MasterAssetData.LoadAsync<
             int,
             LoginBonusData
-        >("Login/LoginBonusData.json", x => x.Id);
+        >("Login/LoginBonusData.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, LoginBonusReward>> loginBonusReward =
             MasterAssetData.LoadAsync<int, LoginBonusReward>(
-                "Login/LoginBonusReward.json",
+                "Login/LoginBonusReward.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, ManaNode>> manaNode = MasterAssetData.LoadAsync<
             int,
             ManaNode
-        >("ManaCircle/MC.json", x => x.MC_0);
+        >("ManaCircle/MC.msgpack", x => x.MC_0);
 
         ValueTask<MasterAssetData<int, ManaPieceMaterial>> manaPieceMaterial =
             MasterAssetData.LoadAsync<int, ManaPieceMaterial>(
-                "ManaCircle/ManaPieceMaterial.json",
+                "ManaCircle/ManaPieceMaterial.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<ManaNodeTypes, ManaPieceType>> manaPieceType =
             MasterAssetData.LoadAsync<ManaNodeTypes, ManaPieceType>(
-                "ManaCircle/ManaPieceType.json",
+                "ManaCircle/ManaPieceType.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, CharaLimitBreak>> charaLimitBreak =
             MasterAssetData.LoadAsync<int, CharaLimitBreak>(
-                "ManaCircle/CharaLimitBreak.json",
+                "ManaCircle/CharaLimitBreak.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, StoryData>> dragonStories = MasterAssetData.LoadAsync<
             int,
             StoryData
-        >("Story/DragonStories.json", x => x.id);
+        >("Story/DragonStories.msgpack", x => x.id);
 
         ValueTask<MasterAssetData<int, StoryData>> charaStories = MasterAssetData.LoadAsync<
             int,
             StoryData
-        >("Story/CharaStories.json", x => x.id);
+        >("Story/CharaStories.msgpack", x => x.id);
 
         ValueTask<MasterAssetData<int, UnitStory>> unitStory = MasterAssetData.LoadAsync<
             int,
             UnitStory
-        >("Story/UnitStory.json", x => x.Id);
+        >("Story/UnitStory.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, QuestStory>> questStory = MasterAssetData.LoadAsync<
             int,
             QuestStory
-        >("Story/QuestStory.json", x => x.Id);
+        >("Story/QuestStory.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, EventStory>> eventStory = MasterAssetData.LoadAsync<
             int,
             EventStory
-        >("Story/EventStory.json", x => x.Id);
+        >("Story/EventStory.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, QuestStoryRewardInfo>> questStoryRewardInfo =
             MasterAssetData.LoadAsync<int, QuestStoryRewardInfo>(
-                "Story/QuestStoryRewardInfo.json",
+                "Story/QuestStoryRewardInfo.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<string, QuestEnemies>> questEnemies = MasterAssetData.LoadAsync<
             string,
             QuestEnemies
-        >("Enemy/QuestEnemies.json", x => x.AreaName);
+        >("Enemy/QuestEnemies.msgpack", x => x.AreaName);
 
         ValueTask<MasterAssetData<int, EnemyParam>> enemyParam = MasterAssetData.LoadAsync<
             int,
             EnemyParam
-        >("Enemy/EnemyParam.json", x => x.Id);
+        >("Enemy/EnemyParam.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, EnemyData>> enemyData = MasterAssetData.LoadAsync<
             int,
             EnemyData
-        >("Enemy/EnemyData.json", x => x.Id);
+        >("Enemy/EnemyData.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, QuestDropInfo>> questDrops = MasterAssetData.LoadAsync<
             int,
             QuestDropInfo
-        >("QuestDrops/QuestDrops.json", x => x.QuestId);
+        >("QuestDrops/QuestDrops.msgpack", x => x.QuestId);
 
         ValueTask<MasterAssetData<int, QuestBonusReward>> questBonusRewards =
             MasterAssetData.LoadAsync<int, QuestBonusReward>(
-                "QuestDrops/QuestBonusRewards.json",
+                "QuestDrops/QuestBonusRewards.msgpack",
                 x => x.QuestId
             );
 
         ValueTask<MasterAssetData<int, QuestRewardData>> questRewardData =
             MasterAssetData.LoadAsync<int, QuestRewardData>(
-                "QuestRewards/QuestRewardData.json",
+                "QuestRewards/QuestRewardData.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, QuestScoreMissionRewardInfo>> questScoreMissionRewardInfo =
             MasterAssetData.LoadAsync<int, QuestScoreMissionRewardInfo>(
-                "QuestRewards/QuestScoreMissionRewardInfo.json",
+                "QuestRewards/QuestScoreMissionRewardInfo.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, QuestScoreMissionData>> questScoreMissionData =
             MasterAssetData.LoadAsync<int, QuestScoreMissionData>(
-                "QuestRewards/QuestScoreMissionData.json",
+                "QuestRewards/QuestScoreMissionData.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, EventData>> eventData = MasterAssetData.LoadAsync<
             int,
             EventData
-        >("Event/EventData.json", x => x.Id);
+        >("Event/EventData.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, EventTradeGroup>> eventTradeGroup =
             MasterAssetData.LoadAsync<int, EventTradeGroup>(
-                "Event/EventTradeGroup.json",
+                "Event/EventTradeGroup.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetGroup<int, int, BuildEventReward>> buildEventReward =
             MasterAssetGroup.LoadAsync<int, int, BuildEventReward>(
-                "Event/BuildEventReward.json",
+                "Event/BuildEventReward.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetGroup<int, int, RaidEventReward>> raidEventReward =
             MasterAssetGroup.LoadAsync<int, int, RaidEventReward>(
-                "Event/RaidEventReward.json",
+                "Event/RaidEventReward.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, CombatEventLocation>> combatEventLocation =
             MasterAssetData.LoadAsync<int, CombatEventLocation>(
-                "Event/CombatEventLocation.json",
+                "Event/CombatEventLocation.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, CombatEventLocationReward>> combatEventLocationReward =
             MasterAssetData.LoadAsync<int, CombatEventLocationReward>(
-                "Event/CombatEventLocationReward.json",
+                "Event/CombatEventLocationReward.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, EventItem<BuildEventItemType>>> buildEventItem =
             MasterAssetData.LoadAsync<int, EventItem<BuildEventItemType>>(
-                "Event/BuildEventItem.json",
+                "Event/BuildEventItem.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, EventItem<CombatEventItemType>>> combatEventItem =
             MasterAssetData.LoadAsync<int, EventItem<CombatEventItemType>>(
-                "Event/CombatEventItem.json",
+                "Event/CombatEventItem.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, RaidEventItem>> raidEventItem = MasterAssetData.LoadAsync<
             int,
             RaidEventItem
-        >("Event/RaidEventItem.json", x => x.Id);
+        >("Event/RaidEventItem.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, EventItem<SimpleEventItemType>>> simpleEventItem =
             MasterAssetData.LoadAsync<int, EventItem<SimpleEventItemType>>(
-                "Event/SimpleEventItem.json",
+                "Event/SimpleEventItem.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, EventItem<ExRushEventItemType>>> exRushEventItem =
             MasterAssetData.LoadAsync<int, EventItem<ExRushEventItemType>>(
-                "Event/ExRushEventItem.json",
+                "Event/ExRushEventItem.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, EventItem<ExHunterEventItemType>>> exHunterEventItem =
             MasterAssetData.LoadAsync<int, EventItem<ExHunterEventItemType>>(
-                "Event/ExHunterEventItem.json",
+                "Event/ExHunterEventItem.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, EventItem<EarnEventItemType>>> earnEventItem =
             MasterAssetData.LoadAsync<int, EventItem<EarnEventItemType>>(
-                "Event/EarnEventItem.json",
+                "Event/EarnEventItem.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, EventItem<CollectEventItemType>>> collectEventItem =
             MasterAssetData.LoadAsync<int, EventItem<CollectEventItemType>>(
-                "Event/CollectEventItem.json",
+                "Event/CollectEventItem.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, EventItem<Clb01EventItemType>>> clb01EventItem =
             MasterAssetData.LoadAsync<int, EventItem<Clb01EventItemType>>(
-                "Event/Clb01EventItem.json",
+                "Event/Clb01EventItem.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, EventItem<BattleRoyalEventItemType>>> battleRoyalEventItem =
             MasterAssetData.LoadAsync<int, EventItem<BattleRoyalEventItemType>>(
-                "Event/BattleRoyalEventItem.json",
+                "Event/BattleRoyalEventItem.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, EventPassive>> eventPassive = MasterAssetData.LoadAsync<
             int,
             EventPassive
-        >("Event/EventPassive.json", x => x.Id);
+        >("Event/EventPassive.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, QuestScoringEnemy>> questScoringEnemy =
             MasterAssetData.LoadAsync<int, QuestScoringEnemy>(
-                "Event/QuestScoringEnemy.json",
+                "Event/QuestScoringEnemy.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, DmodeQuestFloor>> dmodeQuestFloor =
             MasterAssetData.LoadAsync<int, DmodeQuestFloor>(
-                "Dmode/DmodeQuestFloor.json",
+                "Dmode/DmodeQuestFloor.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, DmodeDungeonArea>> dmodeDungeonArea =
             MasterAssetData.LoadAsync<int, DmodeDungeonArea>(
-                "Dmode/DmodeDungeonArea.json",
+                "Dmode/DmodeDungeonArea.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, DmodeDungeonTheme>> dmodeDungeonTheme =
             MasterAssetData.LoadAsync<int, DmodeDungeonTheme>(
-                "Dmode/DmodeDungeonTheme.json",
+                "Dmode/DmodeDungeonTheme.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, DmodeEnemyTheme>> dmodeEnemyTheme =
             MasterAssetData.LoadAsync<int, DmodeEnemyTheme>(
-                "Dmode/DmodeEnemyTheme.json",
+                "Dmode/DmodeEnemyTheme.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<string, DmodeAreaInfo>> dmodeAreaInfo = MasterAssetData.LoadAsync<
             string,
             DmodeAreaInfo
-        >("Dmode/DmodeAreaInfo.json", x => x.AreaName);
+        >("Dmode/DmodeAreaInfo.msgpack", x => x.AreaName);
 
         ValueTask<MasterAssetData<int, DmodeEnemyParam>> dmodeEnemyParam =
             MasterAssetData.LoadAsync<int, DmodeEnemyParam>(
-                "Dmode/DmodeEnemyParam.json",
+                "Dmode/DmodeEnemyParam.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, DmodeCharaLevel>> dmodeCharaLevel =
             MasterAssetData.LoadAsync<int, DmodeCharaLevel>(
-                "Dmode/DmodeCharaLevel.json",
+                "Dmode/DmodeCharaLevel.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, DmodeWeapon>> dmodeWeapon = MasterAssetData.LoadAsync<
             int,
             DmodeWeapon
-        >("Dmode/DmodeWeapon.json", x => x.Id);
+        >("Dmode/DmodeWeapon.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, DmodeAbilityCrest>> dmodeAbilityCrest =
             MasterAssetData.LoadAsync<int, DmodeAbilityCrest>(
-                "Dmode/DmodeAbilityCrest.json",
+                "Dmode/DmodeAbilityCrest.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, DmodeStrengthParam>> dmodeStrengthParam =
             MasterAssetData.LoadAsync<int, DmodeStrengthParam>(
-                "Dmode/DmodeStrengthParam.json",
+                "Dmode/DmodeStrengthParam.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, DmodeStrengthSkill>> dmodeStrengthSkill =
             MasterAssetData.LoadAsync<int, DmodeStrengthSkill>(
-                "Dmode/DmodeStrengthSkill.json",
+                "Dmode/DmodeStrengthSkill.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, DmodeStrengthAbility>> dmodeStrengthAbility =
             MasterAssetData.LoadAsync<int, DmodeStrengthAbility>(
-                "Dmode/DmodeStrengthAbility.json",
+                "Dmode/DmodeStrengthAbility.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, DmodeDungeonItemData>> dmodeDungeonItemData =
             MasterAssetData.LoadAsync<int, DmodeDungeonItemData>(
-                "Dmode/DmodeDungeonItemData.json",
+                "Dmode/DmodeDungeonItemData.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, DmodeServitorPassiveLevel>> dmodeServitorPassiveLevel =
             MasterAssetData.LoadAsync<int, DmodeServitorPassiveLevel>(
-                "Dmode/DmodeServitorPassiveLevel.json",
+                "Dmode/DmodeServitorPassiveLevel.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, DmodeExpeditionFloor>> dmodeExpeditionFloor =
             MasterAssetData.LoadAsync<int, DmodeExpeditionFloor>(
-                "Dmode/DmodeExpeditionFloor.json",
+                "Dmode/DmodeExpeditionFloor.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, UserLevel>> userLevel = MasterAssetData.LoadAsync<
             int,
             UserLevel
-        >("User/UserLevel.json", x => x.Id);
+        >("User/UserLevel.msgpack", x => x.Id);
 
         ValueTask<MasterAssetData<int, QuestScheduleInfo>> questScheduleInfo =
             MasterAssetData.LoadAsync<int, QuestScheduleInfo>(
-                "QuestSchedule/QuestScheduleInfo.json",
+                "QuestSchedule/QuestScheduleInfo.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, RankingData>> rankingData = MasterAssetData.LoadAsync<
             int,
             RankingData
-        >("TimeAttack/RankingData.json", x => x.QuestId);
+        >("TimeAttack/RankingData.msgpack", x => x.QuestId);
 
         ValueTask<MasterAssetData<int, RankingTierReward>> rankingTierReward =
             MasterAssetData.LoadAsync<int, RankingTierReward>(
-                "TimeAttack/RankingTierReward.json",
+                "TimeAttack/RankingTierReward.msgpack",
                 x => x.Id
             );
 
         ValueTask<MasterAssetData<int, QuestWallDetail>> questWallDetail =
-            MasterAssetData.LoadAsync<int, QuestWallDetail>("Wall/QuestWallDetail.json", x => x.Id);
+            MasterAssetData.LoadAsync<int, QuestWallDetail>(
+                "Wall/QuestWallDetail.msgpack",
+                x => x.Id
+            );
 
         ValueTask<MasterAssetData<int, QuestWallMonthlyReward>> questWallMonthlyReward =
             MasterAssetData.LoadAsync<int, QuestWallMonthlyReward>(
-                "Wall/QuestWallMonthlyReward.json",
+                "Wall/QuestWallMonthlyReward.msgpack",
                 x => x.TotalWallLevel
             );
 

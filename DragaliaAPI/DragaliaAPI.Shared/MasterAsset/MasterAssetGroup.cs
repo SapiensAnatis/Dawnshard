@@ -3,6 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json;
 using DragaliaAPI.Shared.Json;
+using MessagePack;
+using MessagePack.Resolvers;
 
 namespace DragaliaAPI.Shared.MasterAsset;
 
@@ -61,7 +63,12 @@ public class MasterAssetGroup<TGroupKey, TKey, TItem>
 
 public static class MasterAssetGroup
 {
-    private const string JsonFolder = "Resources";
+    private const string DataFolder = "Resources";
+
+    private static readonly MessagePackSerializerOptions MsgpackOptions =
+        MessagePackSerializerOptions
+            .Standard.WithResolver(ContractlessStandardResolver.Instance)
+            .WithCompression(MessagePackCompression.Lz4BlockArray);
 
     public static async ValueTask<MasterAssetGroup<TGroupKey, TKey, TItem>> LoadAsync<
         TGroupKey,
@@ -74,16 +81,16 @@ public static class MasterAssetGroup
     {
         string path = Path.Join(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-            JsonFolder,
+            DataFolder,
             jsonFilename
         );
 
         await using FileStream fs = File.OpenRead(path);
 
         Dictionary<TGroupKey, List<TItem>> items =
-            await JsonSerializer.DeserializeAsync<Dictionary<TGroupKey, List<TItem>>>(
+            await MessagePackSerializer.DeserializeAsync<Dictionary<TGroupKey, List<TItem>>>(
                 fs,
-                MasterAssetJsonOptions.Instance
+                MsgpackOptions
             ) ?? throw new JsonException("Deserialized IEnumerable was null");
 
         FrozenDictionary<TGroupKey, FrozenDictionary<TKey, TItem>> dict = items

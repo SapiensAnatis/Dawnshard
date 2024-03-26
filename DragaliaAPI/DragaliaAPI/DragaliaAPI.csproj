@@ -53,8 +53,12 @@
         <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj"/>
     </ItemGroup>
 
-    <Target Name="MissionDesigner" BeforeTargets="AfterBuild" Condition="'$(CI)' == ''">
-<!--        <Exec Command="dotnet run &#45;&#45;no-dependencies &#45;&#45;project ../DragaliaAPI.MissionDesigner &#45;&#45; ../DragaliaAPI.Shared/Resources/Missions/MissionProgressionInfo.json" ConsoleToMSBuild="true"/>-->
+    <Target Name="MasterAssetConverter" BeforeTargets="GetCopyToOutputDirectoryItems">
+        <Exec Command="dotnet run --no-dependencies --project ../DragaliaAPI.MasterAssetConverter -- ../DragaliaAPI.Shared" ConsoleToMSBuild="true"/>
+    </Target>
+    
+    <Target Name="MissionDesigner" AfterTargets="MasterAssetConverter" Condition="'$(CI)' == ''">
+        <Exec Command="dotnet run --no-dependencies --project ../DragaliaAPI.MissionDesigner -- ../DragaliaAPI.Shared/Resources/Missions/MissionProgressionInfo.json" ConsoleToMSBuild="true"/>
     </Target>
 
 </Project>

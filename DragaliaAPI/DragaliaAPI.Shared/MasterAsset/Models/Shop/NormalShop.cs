@@ -1,10 +1,8 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
-using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Shop;
 
-[MemoryPackable]
-public partial record NormalShop(
+public record NormalShop(
     int Id,
     int Limit,
     PaymentTypes PaymentType,

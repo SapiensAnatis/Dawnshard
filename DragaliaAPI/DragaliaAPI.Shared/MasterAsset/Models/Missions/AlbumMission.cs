@@ -1,10 +1,8 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
-using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
-[MemoryPackable]
-public partial record AlbumMission(
+public record AlbumMission(
     int Id,
     string Text,
     int SortId,

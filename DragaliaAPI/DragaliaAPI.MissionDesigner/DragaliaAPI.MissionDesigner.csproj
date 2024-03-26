@@ -11,5 +11,11 @@
     <ItemGroup>
       <PackageReference Include="JetBrains.Annotations" />
     </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\DragaliaAPI.Shared\Resources\**\*.msgpack" LinkBase="Resources">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
     
 </Project>

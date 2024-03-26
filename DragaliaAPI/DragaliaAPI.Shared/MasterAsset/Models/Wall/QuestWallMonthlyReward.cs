@@ -1,10 +1,8 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
-using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Wall;
 
-[MemoryPackable]
-public partial record QuestWallMonthlyReward(
+public record QuestWallMonthlyReward(
     int Id,
     int TotalWallLevel,
     int RewardStageNum,

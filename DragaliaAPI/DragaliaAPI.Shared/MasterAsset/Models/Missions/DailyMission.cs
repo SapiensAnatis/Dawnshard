@@ -1,10 +1,8 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
-using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
-[MemoryPackable]
-public partial record DailyMission(
+public record DailyMission(
     int Id,
     string Text,
     int SortId,

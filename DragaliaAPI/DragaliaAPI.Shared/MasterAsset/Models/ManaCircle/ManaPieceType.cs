@@ -1,10 +1,8 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
-using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 
-[MemoryPackable]
-public partial record ManaPieceType(
+public record ManaPieceType(
     ManaNodeTypes Id,
     EntityTypes EntityType1,
     int EntityId1,

@@ -1,6 +1,3 @@
-﻿using MemoryPack;
+﻿namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
-namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
-
-[MemoryPackable]
-public partial record SpecialMissionGroup(int Id, int SortId, string Text);
+public record SpecialMissionGroup(int Id, int SortId, string Text);

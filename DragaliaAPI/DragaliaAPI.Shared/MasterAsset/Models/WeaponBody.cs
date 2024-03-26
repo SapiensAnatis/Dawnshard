@@ -1,6 +1,6 @@
 ﻿using System.Collections.Frozen;
 using DragaliaAPI.Shared.Definitions.Enums;
-using MemoryPack;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -43,8 +43,8 @@ namespace DragaliaAPI.Shared.MasterAsset.Models;
 /// <param name="NeedFortCraftLevel">Required Smithy level to craft this weapon</param>
 
 
-[MemoryPackable]
-public partial record WeaponBody(
+
+public record WeaponBody(
     WeaponBodies Id,
     WeaponSeries WeaponSeriesId,
     WeaponTypes WeaponType,
@@ -137,13 +137,13 @@ public partial record WeaponBody(
     public int GetPassiveAbilityId(int abilityNo) =>
         int.Parse($"{this.WeaponPassiveAbilityGroupId}{abilityNo:00}");
 
-    [MemoryPackIgnore]
+    [IgnoreMember]
     public readonly int[] Hp = { BaseHp, MaxHp1, MaxHp2, MaxHp3 };
 
-    [MemoryPackIgnore]
+    [IgnoreMember]
     public readonly int[] Atk = { BaseAtk, MaxAtk1, MaxAtk2, MaxAtk3 };
 
-    [MemoryPackIgnore]
+    [IgnoreMember]
     public readonly int[][] Abilities =
     {
         new[] { Abilities11, Abilities12, Abilities13 },

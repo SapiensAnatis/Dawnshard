@@ -3,12 +3,11 @@ using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
-using MemoryPack;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
-[MemoryPackable]
-public partial record QuestData(
+public record QuestData(
     int Id,
     int Gid,
     QuestGroupType GroupType,
@@ -50,7 +49,7 @@ public partial record QuestData(
 {
     private int IdSuffix => this.Id % 1000;
 
-    [MemoryPackIgnore]
+    [IgnoreMember]
     public IEnumerable<AreaInfo> AreaInfo =>
         new List<AreaInfo>()
         {
@@ -62,7 +61,7 @@ public partial record QuestData(
             new(this.Scene06, this.AreaName06),
         }.Where(x => !string.IsNullOrEmpty(x.ScenePath) && !string.IsNullOrEmpty(x.AreaName));
 
-    [MemoryPackIgnore]
+    [IgnoreMember]
     public bool IsEventRegularBattle =>
         this.EventKindType switch
         {
@@ -72,7 +71,7 @@ public partial record QuestData(
             _ => false
         };
 
-    [MemoryPackIgnore]
+    [IgnoreMember]
     public bool IsEventChallengeBattle =>
         this.EventKindType switch
         {
@@ -80,7 +79,7 @@ public partial record QuestData(
             _ => false
         };
 
-    [MemoryPackIgnore]
+    [IgnoreMember]
     public bool IsEventTrial =>
         this.EventKindType switch
         {
@@ -89,7 +88,7 @@ public partial record QuestData(
             _ => false
         };
 
-    [MemoryPackIgnore]
+    [IgnoreMember]
     public bool IsEventExBattle =>
         this.EventKindType switch
         {
@@ -97,15 +96,15 @@ public partial record QuestData(
             _ => false,
         };
 
-    [MemoryPackIgnore]
+    [IgnoreMember]
     public EventKindType EventKindType =>
         MasterAsset.EventData.TryGetValue(this.Gid, out EventData? eventData)
             ? eventData.EventKindType
             : EventKindType.None;
 
-    [MemoryPackIgnore]
+    [IgnoreMember]
     public bool IsEventQuest => GroupType == QuestGroupType.Event;
 
-    [MemoryPackIgnore]
+    [IgnoreMember]
     public bool CanPlayCoOp => this.PayStaminaMulti > 0;
 }

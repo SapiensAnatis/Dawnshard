@@ -1,9 +1,6 @@
-﻿using MemoryPack;
+﻿namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
-namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
-
-[MemoryPackable]
-public partial record DmodeEnemyTheme(
+public record DmodeEnemyTheme(
     int Id,
     // :pensive:
     int Param1,

@@ -1,9 +1,6 @@
-﻿using MemoryPack;
+﻿namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
-namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
-
-[MemoryPackable]
-public partial record DmodeExpeditionFloor(
+public record DmodeExpeditionFloor(
     int Id,
     int FloorNum,
     int NeedTime,

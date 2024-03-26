@@ -1,6 +1,3 @@
-﻿using MemoryPack;
+﻿namespace DragaliaAPI.Shared.MasterAsset.Models;
 
-namespace DragaliaAPI.Shared.MasterAsset.Models;
-
-[MemoryPackable]
-public partial record RankingData(int QuestId, int GroupId);
+public record RankingData(int QuestId, int GroupId);

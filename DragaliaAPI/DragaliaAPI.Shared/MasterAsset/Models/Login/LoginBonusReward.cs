@@ -1,10 +1,8 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
-using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Login;
 
-[MemoryPackable]
-public partial record LoginBonusReward(
+public record LoginBonusReward(
     int Id,
     int Gid,
     int Day,

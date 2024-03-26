@@ -1,5 +1,3 @@
-using MemoryPack;
-
 namespace DragaliaAPI.Shared.MasterAsset.Models.Event;
 
 /*
@@ -17,10 +15,5 @@ namespace DragaliaAPI.Shared.MasterAsset.Models.Event;
 
 
 
-[MemoryPackable]
-public partial record QuestScoringEnemy(
-    int Id,
-    int ScoringEnemyGroupId,
-    int EnemyListId,
-    int Point
-);
+
+public record QuestScoringEnemy(int Id, int ScoringEnemyGroupId, int EnemyListId, int Point);

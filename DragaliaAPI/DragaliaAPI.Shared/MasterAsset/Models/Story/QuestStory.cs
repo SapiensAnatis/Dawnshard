@@ -1,10 +1,8 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
-using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Story;
 
-[MemoryPackable]
-public partial record QuestStory(
+public record QuestStory(
     int Id,
     int GroupId,
     PayTargetType PayEntityTargetType,

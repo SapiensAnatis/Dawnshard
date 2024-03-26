@@ -1,6 +1,3 @@
-﻿using MemoryPack;
+﻿namespace DragaliaAPI.Shared.MasterAsset.Models;
 
-namespace DragaliaAPI.Shared.MasterAsset.Models;
-
-[MemoryPackable]
-public partial record ExAbilityData(int Id, int PartyPowerWeight);
+public record ExAbilityData(int Id, int PartyPowerWeight);

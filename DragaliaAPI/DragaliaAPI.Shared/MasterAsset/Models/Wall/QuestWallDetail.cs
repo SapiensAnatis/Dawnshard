@@ -1,11 +1,9 @@
 ﻿using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Shared.Definitions.Enums;
-using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Wall;
 
-[MemoryPackable]
-public partial record QuestWallDetail(
+public record QuestWallDetail(
     int Id,
     int WallId,
     int WallLevel,

@@ -1,10 +1,8 @@
 ﻿using DragaliaAPI.Photon.Shared.Enums;
-using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
-[MemoryPackable]
-public partial record DmodeQuestFloor(
+public record DmodeQuestFloor(
     int Id,
     int FloorNum,
     DungeonTypes DungeonType,

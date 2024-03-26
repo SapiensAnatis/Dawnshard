@@ -1,11 +1,9 @@
 using System.Collections.Frozen;
 using DragaliaAPI.Shared.Definitions.Enums;
-using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
-[MemoryPackable]
-public partial record WeaponBodyBuildupLevel(
+public record WeaponBodyBuildupLevel(
     int Id,
     int RarityGroup,
     int Level,

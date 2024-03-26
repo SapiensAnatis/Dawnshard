@@ -1,10 +1,9 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
-using MemoryPack;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 
-[MemoryPackable]
-public partial record QuestRewardData(
+public record QuestRewardData(
     int Id,
     QuestCompleteType MissionCompleteType1,
     int MissionCompleteValues1,
@@ -43,7 +42,7 @@ public partial record QuestRewardData(
     int FirstClearSetEntityQuantity5
 )
 {
-    [MemoryPackIgnore]
+    [IgnoreMember]
     public readonly (QuestCompleteType Type, int Value)[] Missions =
     {
         (MissionCompleteType1, MissionCompleteValues1),
@@ -51,7 +50,7 @@ public partial record QuestRewardData(
         (MissionCompleteType3, MissionCompleteValues3)
     };
 
-    [MemoryPackIgnore]
+    [IgnoreMember]
     public readonly (EntityTypes Type, int Id, int Quantity)[] Entities =
     {
         (MissionsClearSetEntityType1, MissionsClearSetEntityId1, MissionsClearSetEntityQuantity1),
@@ -59,7 +58,7 @@ public partial record QuestRewardData(
         (MissionsClearSetEntityType3, MissionsClearSetEntityId3, MissionsClearSetEntityQuantity3)
     };
 
-    [MemoryPackIgnore]
+    [IgnoreMember]
     public readonly (EntityTypes Type, int Id, int Quantity)[] FirstClearEntities =
     {
         (FirstClearSetEntityType1, FirstClearSetEntityId1, FirstClearSetEntityQuantity1),

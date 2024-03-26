@@ -1,9 +1,6 @@
-﻿using MemoryPack;
+﻿namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
-namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
-
-[MemoryPackable]
-public partial record DmodeEnemyParam(
+public record DmodeEnemyParam(
     int Id,
     int DropExp,
     int DropDmodePoint1,

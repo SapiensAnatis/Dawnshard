@@ -1,17 +1,14 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
-using MemoryPack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 
-[MemoryPackable]
-public partial record QuestScoreMissionRewardInfo(
+public record QuestScoreMissionRewardInfo(
     int Id,
     Materials RewardEntityId,
     IEnumerable<QuestMissionCondition> RewardConditions
 );
 
-[MemoryPackable]
-public partial record QuestMissionCondition(
+public record QuestMissionCondition(
     QuestCompleteType QuestCompleteType,
     int QuestCompleteValue,
     int PercentageAdded
