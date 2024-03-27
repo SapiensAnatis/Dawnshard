@@ -691,7 +691,7 @@ public class DragonServiceTest : RepositoryTestFixture
             .Setup(x =>
                 x.GetOrCreateStory(
                     StoryTypes.Dragon,
-                    MasterAsset.DragonStories.Get((int)Dragons.Garuda).storyIds[0]
+                    MasterAsset.DragonStories.Get((int)Dragons.Garuda).StoryIds[0]
                 )
             )
             .ReturnsAsync(
@@ -699,7 +699,7 @@ public class DragonServiceTest : RepositoryTestFixture
                 {
                     ViewerId = ViewerId,
                     State = 0,
-                    StoryId = MasterAsset.DragonStories.Get((int)Dragons.Garuda).storyIds[0],
+                    StoryId = MasterAsset.DragonStories.Get((int)Dragons.Garuda).StoryIds[0],
                     StoryType = StoryTypes.Dragon
                 }
             );

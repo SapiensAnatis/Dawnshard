@@ -518,11 +518,11 @@ public class MasterAssetTest
     [InlineData(Dragons.Liger, 210043011, 210043012)]
     public void DragonStories_ReturnsExpectedStoryIds(Dragons dragon, params int[] expectedStoryIds)
     {
-        int key = MasterAsset.MasterAsset.DragonStories[(int)dragon].id;
+        int key = MasterAsset.MasterAsset.DragonStories[(int)dragon].Id;
 
         MasterAsset
             .MasterAsset.DragonStories[key]
-            .storyIds.Should()
+            .StoryIds.Should()
             .ContainInConsecutiveOrder(expectedStoryIds);
     }
 

@@ -108,7 +108,7 @@ public class FortService(
         )
         {
             double incomeTime = build.LastIncomeTime.TotalSeconds;
-            FortPlantDetail detail = MasterAsset.FortPlant[build.FortPlantDetailId];
+            FortPlantDetail detail = MasterAsset.FortPlantDetail[build.FortPlantDetailId];
 
             switch (build.PlantId)
             {
@@ -406,7 +406,7 @@ public class FortService(
         // Get building
         DbFortBuild build = await fortRepository.GetBuilding(buildId);
 
-        FortPlantDetail currentBuilding = MasterAsset.FortPlant[build.FortPlantDetailId];
+        FortPlantDetail currentBuilding = MasterAsset.FortPlantDetail[build.FortPlantDetailId];
         if (currentBuilding.NextAssetGroup == 0)
         {
             logger.LogError("Tried to level up build {@build} but it has no next level", build);
@@ -419,7 +419,9 @@ public class FortService(
         // Get level up plans
         int buildPlantId = currentBuilding.NextAssetGroup;
 
-        if (!MasterAsset.FortPlant.TryGetValue(buildPlantId, out FortPlantDetail? plantDetail))
+        if (
+            !MasterAsset.FortPlantDetail.TryGetValue(buildPlantId, out FortPlantDetail? plantDetail)
+        )
         {
             // This is unlikely to happen, but best to keep the check just in case
 
@@ -562,7 +564,7 @@ public class FortService(
                 .ToListAsync()
         )
         {
-            FortPlantDetail detail = MasterAsset.FortPlant[build.FortPlantDetailId];
+            FortPlantDetail detail = MasterAsset.FortPlantDetail[build.FortPlantDetailId];
             production += detail.CostMax / (float)detail.CostMaxTime;
             max += detail.CostMax;
         }
@@ -580,7 +582,7 @@ public class FortService(
             return new AtgenProductionRp(0, 0);
         }
 
-        FortPlantDetail detail = MasterAsset.FortPlant[build.FortPlantDetailId];
+        FortPlantDetail detail = MasterAsset.FortPlantDetail[build.FortPlantDetailId];
 
         return new AtgenProductionRp(
             detail.MaterialMax / (float)detail.MaterialMaxTime,
@@ -598,7 +600,7 @@ public class FortService(
             return new AtgenProductionRp(0, 0);
         }
 
-        FortPlantDetail detail = MasterAsset.FortPlant[build.FortPlantDetailId];
+        FortPlantDetail detail = MasterAsset.FortPlantDetail[build.FortPlantDetailId];
 
         return new AtgenProductionRp(
             detail.StaminaMax / (float)detail.StaminaMaxTime,
