@@ -9,7 +9,7 @@ public sealed class GenerateMasterAssetAttribute<TKey, TItem> : System.Attribute
     where TKey : notnull
     where TItem : class
 {
-    public GenerateMasterAssetAttribute(string filepath, string keyPropertyName) 
+    public GenerateMasterAssetAttribute(string filepath, string keyPropertyName = "Id") 
     {
         this.Filepath = filepath;
         this.KeyPropertyName = keyPropertyName;

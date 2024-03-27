@@ -23,7 +23,7 @@ public sealed class {AttributeName}<TKey, TItem> : System.Attribute
     where TKey : notnull
     where TItem : class
 {{
-    public {AttributeName}(string filepath, string keyPropertyName) 
+    public {AttributeName}(string filepath, string keyPropertyName = ""Id"") 
     {{
         this.Filepath = filepath;
         this.KeyPropertyName = keyPropertyName;
@@ -86,11 +86,18 @@ public sealed class {AttributeName}<TKey, TItem> : System.Attribute
                 }
 
                 if (
-                    attribute.ConstructorArguments
-                    is not [{ Value: string jsonPath }, { Value: string keyName }]
+                    attribute.ConstructorArguments.Length < 1
+                    || attribute.ConstructorArguments[0].Value is not string jsonPath
                 )
                 {
                     continue;
+                }
+
+                if (
+                    attribute.ConstructorArguments.ElementAtOrDefault(1).Value is not string keyName
+                )
+                {
+                    keyName = "Id";
                 }
 
                 yield return new MasterAssetDeclaration(
