@@ -38,6 +38,7 @@ Dictionary<string, Type> typeLookup = typeof(MasterAsset)
     .Assembly.GetTypes()
     .ToDictionary(x => x.Name, x => x);
 
+#if false
 foreach ((string jsonFilename, TypeIdentifier typeName) in walker.JsonFileTypeMapping)
 {
     Type itemType;
@@ -101,3 +102,4 @@ foreach ((string jsonFilename, TypeIdentifier typeName) in walker.JsonFileTypeMa
 
     Console.WriteLine($"Serialized {pathName} to binary.");
 }
+#endif

@@ -21,9 +21,9 @@ namespace DragaliaAPI.Shared.MasterAsset;
 /// <summary>
 /// Provides access to instances of <see cref="MasterAssetData{TKey,TItem}"/> to retrieve internal game data.
 /// </summary>
-public static class MasterAsset
+[GenerateMasterAsset<Charas, CharaData>("CharaData.json", nameof(Models.CharaData.Id))]
+public static partial class MasterAsset
 {
-    public static MasterAssetData<Charas, CharaData> CharaData { get; private set; } = null!;
     public static MasterAssetData<Dragons, DragonData> DragonData { get; private set; } = null!;
     public static MasterAssetData<int, DragonRarity> DragonRarity { get; private set; } = null!;
     public static MasterAssetData<int, QuestData> QuestData { get; private set; } = null!;
@@ -899,7 +899,6 @@ public static class MasterAsset
                 x => x.TotalWallLevel
             );
 
-        CharaData = await charaData;
         DragonData = await dragonData;
         DragonRarity = await dragonRarity;
         QuestData = await questData;

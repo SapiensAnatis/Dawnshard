@@ -1,5 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+    <PropertyGroup>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+        <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- Exclude the output of source generators from the compilation -->
+        <Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
+        <None Include="Generated/**/*.cs"/>
+    </ItemGroup>
+    
     <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
@@ -18,6 +29,10 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\Shared\DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <ProjectReference Include="..\DragaliaAPI.Shared.SourceGenerator\DragaliaAPI.Shared.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
     </ItemGroup>
 
     <ItemGroup>
