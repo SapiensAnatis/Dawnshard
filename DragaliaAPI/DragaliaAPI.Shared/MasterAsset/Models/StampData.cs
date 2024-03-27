@@ -7,4 +7,4 @@ namespace DragaliaAPI.Shared.MasterAsset.Models;
 
 
 
-public record Stamp(int Id);
+public record StampData(int Id);

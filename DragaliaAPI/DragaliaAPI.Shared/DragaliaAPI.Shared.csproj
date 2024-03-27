@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
         <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
     </PropertyGroup>
@@ -8,9 +9,9 @@
     <ItemGroup>
         <!-- Exclude the output of source generators from the compilation -->
         <Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
-        <None Include="Generated/**/*.cs"/>
+        <None Include="Generated/**/*.cs" />
     </ItemGroup>
-    
+
     <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
@@ -19,8 +20,8 @@
         <PackageReference Include="JetBrains.Annotations" />
         <PackageReference Include="MessagePack" />
         <PackageReference Include="MessagePackAnalyzer">
-          <IncludeAssets>build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-          <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
         <PackageReference Include="Microsoft.Extensions.Identity.Core" />
@@ -29,10 +30,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\Shared\DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj" />
-    </ItemGroup>
-    
-    <ItemGroup>
-        <ProjectReference Include="..\DragaliaAPI.Shared.SourceGenerator\DragaliaAPI.Shared.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+        <ProjectReference Include="..\DragaliaAPI.Shared.SourceGenerator\DragaliaAPI.Shared.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup>
@@ -42,13 +40,6 @@
         <None Include="Resources\**\*.json">
             <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </None>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="MasterAsset\Models\Login\" />
-        <Folder Include="MasterAsset\Models\QuestSchedule\" />
-        <Folder Include="MasterAsset\Models\User\" />
-        <Folder Include="Resources\QuestSchedule\" />
     </ItemGroup>
 
     <ProjectExtensions>

@@ -12,6 +12,7 @@ using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestSchedule;
 using DragaliaAPI.Shared.MasterAsset.Models.Shop;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
+using DragaliaAPI.Shared.MasterAsset.Models.TimeAttack;
 using DragaliaAPI.Shared.MasterAsset.Models.Trade;
 using DragaliaAPI.Shared.MasterAsset.Models.User;
 using DragaliaAPI.Shared.MasterAsset.Models.Wall;
@@ -21,162 +22,116 @@ namespace DragaliaAPI.Shared.MasterAsset;
 /// <summary>
 /// Provides access to instances of <see cref="MasterAssetData{TKey,TItem}"/> to retrieve internal game data.
 /// </summary>
+// csharpier-ignore-start
+// ReSharper disable RedundantNameQualifier
 [GenerateMasterAsset<Charas, CharaData>("CharaData.json", nameof(Models.CharaData.Id))]
+[GenerateMasterAsset<Dragons, DragonData>("DragonData.json", nameof(Models.DragonData.Id))]
+[GenerateMasterAsset<int, DragonRarity>("DragonRarity.json", nameof(Models.DragonRarity.Id))]
+[GenerateMasterAsset<int, QuestData>("QuestData.json", nameof(Models.QuestData.Id))]
+[GenerateMasterAsset<Materials, MaterialData>("MaterialData.json", nameof(Models.MaterialData.Id))]
+[GenerateMasterAsset<int, FortPlantDetail>("FortPlantDetail.json", nameof(Models.MaterialData.Id))]
+[GenerateMasterAsset<WeaponBodies, WeaponBody>("WeaponBody.json", nameof(Models.WeaponBody.Id))]
+[GenerateMasterAsset<int, WeaponBodyBuildupGroup>("WeaponBodyBuildupGroup.json", nameof(Models.WeaponBodyBuildupGroup.Id))]
+[GenerateMasterAsset<int, WeaponBodyBuildupLevel>("WeaponBodyBuildupLevel.json", nameof(Models.WeaponBodyBuildupLevel.Id))]
+[GenerateMasterAsset<int, WeaponPassiveAbility>("WeaponPassiveAbility.json", nameof(Models.WeaponPassiveAbility.Id))]
+[GenerateMasterAsset<int, WeaponBodyRarity>("WeaponBodyRarity.json", nameof(Models.WeaponBodyRarity.Id))]
+[GenerateMasterAsset<int, WeaponSkin>("WeaponSkin.json", nameof(Models.WeaponSkin.Id))]
+[GenerateMasterAsset<int, AbilityCrestBuildupGroup>("AbilityCrestBuildupGroup.json", nameof(Models.AbilityCrestBuildupGroup.Id))]
+[GenerateMasterAsset<int, AbilityCrestBuildupLevel>("AbilityCrestBuildupLevel.json", nameof(Models.AbilityCrestBuildupLevel.Id))]
+[GenerateMasterAsset<int, AbilityCrestRarity>("AbilityCrestRarity.json", nameof(Models.AbilityCrestRarity.Id))]
+[GenerateMasterAsset<AbilityCrests, AbilityCrest>("AbilityCrest.json", nameof(Models.AbilityCrest.Id))]
+[GenerateMasterAsset<int, QuestEventGroup>("QuestEventGroup.json", nameof(Models.QuestEventGroup.Id))]
+[GenerateMasterAsset<int, QuestEvent>("QuestEvent.json", nameof(Models.QuestEvent.Id))]
+[GenerateMasterAsset<int, QuestTreasureData>("QuestTreasureData.json", nameof(Models.QuestTreasureData.Id))]
+[GenerateMasterAsset<int, AbilityData>("AbilityData.json", nameof(Models.AbilityData.Id))]
+[GenerateMasterAsset<int, AbilityLimitedGroup>("AbilityLimitedGroup.json", nameof(Models.AbilityLimitedGroup.Id))]
+[GenerateMasterAsset<int, ExAbilityData>("ExAbilityData.json", nameof(Models.ExAbilityData.Id))]
+[GenerateMasterAsset<int, UnionAbility>("UnionAbility.json", nameof(Models.UnionAbility.Id))]
+[GenerateMasterAsset<int, SkillData>("SkillData.json", nameof(Models.SkillData.Id))]
+[GenerateMasterAsset<int, StampData>("StampData.json", nameof(Models.StampData.Id))]
+[GenerateMasterAsset<int, AlbumMission>("Missions/AlbumMission.json", nameof(Models.Missions.AlbumMission.Id))]
+[GenerateMasterAsset<int, NormalMission>("Missions/BeginnerMission.json", nameof(Models.Missions.NormalMission.Id))]
+[GenerateMasterAsset<int, DailyMission>("Missions/DailyMission.json", nameof(Models.Missions.DailyMission.Id))]
+[GenerateMasterAsset<int, DrillMission>("Missions/DrillMission.json", nameof(Models.Missions.DrillMission.Id))]
+[GenerateMasterAsset<int, DrillMissionGroup>("Missions/DrillMissionGroup.json", nameof(Models.Missions.DrillMissionGroup.Id))]
+[GenerateMasterAsset<int, MainStoryMission>("Missions/MainStoryMission.json", nameof(Models.Missions.MainStoryMission.Id))]
+[GenerateMasterAsset<int, MainStoryMissionGroup>("Missions/MainStoryMissionGroup.json", nameof(Models.Missions.MainStoryMissionGroup.Id))]
+[GenerateMasterAsset<int, MemoryEventMission>("Missions/MemoryEventMission.json", nameof(Models.Missions.MemoryEventMission.Id))]
+[GenerateMasterAsset<int, NormalMission>("Missions/NormalMission.json", nameof(Models.Missions.NormalMission.Id))]
+[GenerateMasterAsset<int, PeriodMission>("Missions/PeriodMission.json", nameof(Models.Missions.PeriodMission.Id))]
+[GenerateMasterAsset<int, SpecialMission>("Missions/SpecialMission.json", nameof(Models.Missions.SpecialMission.Id))]
+[GenerateMasterAsset<int, SpecialMissionGroup>("Missions/SpecialMissionGroup.json", nameof(Models.Missions.SpecialMissionGroup.Id))]
+[GenerateMasterAsset<int, MissionProgressionInfo>("Missions/MissionProgressionInfo.json", nameof(Models.Missions.MissionProgressionInfo.Id))]
+[GenerateMasterAsset<int, MainStoryMissionGroupRewards>("Missions/MainStoryMissionGroupRewards.json", nameof(Models.Missions.MainStoryMissionGroupRewards.Id))]
+[GenerateMasterAsset<int, NormalShop>("Shop/NormalShop.json", nameof(Models.Shop.NormalShop.Id))]
+[GenerateMasterAsset<int, SpecialShop>("Shop/SpecialShop.json", nameof(Models.Shop.SpecialShop.Id))]
+[GenerateMasterAsset<int, MaterialShop>("Shop/MaterialShop.json", nameof(Models.Shop.MaterialShop.Id))]
+[GenerateMasterAsset<int, MaterialShop>("Shop/MaterialShopWeekly.json", nameof(Models.Shop.MaterialShop.Id))]
+[GenerateMasterAsset<int, MaterialShop>("Shop/MaterialShopMonthly.json", nameof(Models.Shop.MaterialShop.Id))]
+[GenerateMasterAsset<int, AbilityCrestTrade>("Trade/AbilityCrestTrade.json", nameof(Models.Trade.AbilityCrestTrade.Id))]
+[GenerateMasterAsset<UseItem, UseItemData>("Trade/UseItemData.json", nameof(Models.Trade.UseItemData.Id))]
+[GenerateMasterAsset<int, TreasureTrade>("Trade/TreasureTrade.json", nameof(Models.Trade.TreasureTrade.Id))]
+[GenerateMasterAsset<int, LoginBonusData>("Login/LoginBonusData.json", nameof(Models.Login.LoginBonusData.Id))]
+[GenerateMasterAsset<int, LoginBonusReward>("Login/LoginBonusReward.json", nameof(Models.Login.LoginBonusReward.Id))]
+[GenerateMasterAsset<int, ManaNode>("ManaCircle/ManaNode.json", nameof(Models.ManaCircle.ManaNode.MC_0))]
+[GenerateMasterAsset<int, ManaPieceMaterial>("ManaCircle/ManaPieceMaterial.json", nameof(Models.ManaCircle.ManaPieceMaterial.Id))]
+[GenerateMasterAsset<ManaNodeTypes, ManaPieceType>("ManaCircle/ManaPieceType.json", nameof(Models.ManaCircle.ManaPieceType.Id))]
+[GenerateMasterAsset<int, CharaLimitBreak>("ManaCircle/CharaLimitBreak.json", nameof(Models.ManaCircle.CharaLimitBreak.Id))]
+[GenerateMasterAsset<int, StoryData>("Story/DragonStories.json", nameof(Models.Story.StoryData.Id))]
+[GenerateMasterAsset<int, StoryData>("Story/CharaStories.json", nameof(Models.Story.StoryData.Id))]
+[GenerateMasterAsset<int, UnitStory>("Story/UnitStory.json", nameof(Models.Story.UnitStory.Id))]
+[GenerateMasterAsset<int, QuestStory>("Story/QuestStory.json", nameof(Models.Story.QuestStory.Id))]
+[GenerateMasterAsset<int, EventStory>("Story/EventStory.json", nameof(Models.Story.EventStory.Id))]
+[GenerateMasterAsset<int, QuestStoryRewardInfo>("Story/QuestStoryRewardInfo.json", nameof(Models.Story.QuestStoryRewardInfo.Id))]
+[GenerateMasterAsset<string, QuestEnemies>("Enemy/QuestEnemies.json", nameof(Models.Enemy.QuestEnemies.AreaName))]
+[GenerateMasterAsset<int, EnemyParam>("Enemy/EnemyParam.json", nameof(Models.Enemy.EnemyParam.Id))]
+[GenerateMasterAsset<int, EnemyData>("Enemy/EnemyData.json", nameof(Models.Enemy.EnemyData.Id))]
+[GenerateMasterAsset<int, QuestDropInfo>("QuestDrops/QuestDropInfo.json", nameof(Models.QuestDrops.QuestDropInfo.QuestId))]
+[GenerateMasterAsset<int, QuestBonusReward>("QuestDrops/QuestBonusRewardInfo.json", nameof(Models.QuestDrops.QuestBonusReward.QuestId))]
+[GenerateMasterAsset<int, QuestRewardData>("QuestRewards/QuestRewardData.json", nameof(Models.QuestRewards.QuestRewardData.Id))]
+[GenerateMasterAsset<int, QuestScoreMissionRewardInfo>("QuestRewards/QuestScoreMissionRewardInfo.json", nameof(Models.QuestRewards.QuestScoreMissionRewardInfo.Id))]
+[GenerateMasterAsset<int, QuestScoreMissionData>("QuestRewards/QuestScoreMissionData.json", nameof(Models.QuestRewards.QuestScoreMissionData.Id))]
+[GenerateMasterAsset<int, EventData>("Event/EventData.json", nameof(Models.Event.EventData.Id))]
+[GenerateMasterAsset<int, EventTradeGroup>("Event/EventTradeGroup.json", nameof(Models.Event.EventTradeGroup.Id))]
+// todo group generator
+[GenerateMasterAsset<int, CombatEventLocation>("Event/CombatEventLocation.json", nameof(Models.Event.CombatEventLocation.Id))]
+[GenerateMasterAsset<int, CombatEventLocationReward>("Event/CombatEventLocationReward.json", nameof(Models.Event.CombatEventLocationReward.Id))]
+[GenerateMasterAsset<int, EventItem<BuildEventItemType>>("Event/BuildEventItem.json", nameof(Models.Event.EventItem<BuildEventItemType>.Id))]
+[GenerateMasterAsset<int, EventItem<CombatEventItemType>>("Event/CombatEventItem.json", nameof(Models.Event.EventItem<CombatEventItemType>.Id))]
+[GenerateMasterAsset<int, EventItem<RaidEventItemType>>("Event/RaidEventItem.json", nameof(Models.Event.EventItem<RaidEventItemType>.Id))]
+[GenerateMasterAsset<int, EventItem<SimpleEventItemType>>("Event/SimpleEventItem.json", nameof(Models.Event.EventItem<SimpleEventItemType>.Id))]
+[GenerateMasterAsset<int, EventItem<ExRushEventItemType>>("Event/ExRushEventItem.json", nameof(Models.Event.EventItem<ExRushEventItemType>.Id))]
+[GenerateMasterAsset<int, EventItem<ExHunterEventItemType>>("Event/ExHunterEventItem.json", nameof(Models.Event.EventItem<ExHunterEventItemType>.Id))]
+[GenerateMasterAsset<int, EventItem<EarnEventItemType>>("Event/EarnEventItem.json", nameof(Models.Event.EventItem<EarnEventItemType>.Id))]
+[GenerateMasterAsset<int, EventItem<CollectEventItemType>>("Event/CollectEventItem.json", nameof(Models.Event.EventItem<CollectEventItemType>.Id))]
+[GenerateMasterAsset<int, EventItem<Clb01EventItemType>>("Event/Clb01EventItem.json", nameof(Models.Event.EventItem<Clb01EventItemType>.Id))]
+[GenerateMasterAsset<int, EventItem<BattleRoyalEventItemType>>("Event/BattleRoyalEventItem.json", nameof(Models.Event.EventItem<BattleRoyalEventItemType>.Id))]
+[GenerateMasterAsset<int, EventPassive>("Event/EventPassive.json", nameof(Models.Event.EventPassive.Id))]
+[GenerateMasterAsset<int, QuestScoringEnemy>("Event/QuestScoringEnemy.json", nameof(Models.Event.QuestScoringEnemy.Id))]
+[GenerateMasterAsset<int, DmodeQuestFloor>("Dmode/DmodeQuestFloor.json", nameof(Models.Dmode.DmodeQuestFloor.Id))]
+[GenerateMasterAsset<int, DmodeDungeonArea>("Dmode/DmodeDungeonArea.json", nameof(Models.Dmode.DmodeDungeonArea.Id))]
+[GenerateMasterAsset<int, DmodeDungeonTheme>("Dmode/DmodeDungeonTheme.json", nameof(Models.Dmode.DmodeDungeonTheme.Id))]
+[GenerateMasterAsset<int, DmodeEnemyTheme>("Dmode/DmodeEnemyTheme.json", nameof(Models.Dmode.DmodeEnemyTheme.Id))]
+[GenerateMasterAsset<string, DmodeAreaInfo>("Dmode/DmodeAreaInfo.json", nameof(Models.Dmode.DmodeAreaInfo.AreaName))]
+[GenerateMasterAsset<int, DmodeEnemyParam>("Dmode/DmodeEnemyParam.json", nameof(Models.Dmode.DmodeEnemyParam.Id))]
+[GenerateMasterAsset<int, DmodeCharaLevel>("Dmode/DmodeCharaLevel.json", nameof(Models.Dmode.DmodeCharaLevel.Id))]
+[GenerateMasterAsset<int, DmodeWeapon>("Dmode/DmodeWeapon.json", nameof(Models.Dmode.DmodeWeapon.Id))]
+[GenerateMasterAsset<int, DmodeAbilityCrest>("Dmode/DmodeAbilityCrest.json", nameof(Models.Dmode.DmodeAbilityCrest.Id))]
+[GenerateMasterAsset<int, DmodeStrengthParam>("Dmode/DmodeStrengthParam.json", nameof(Models.Dmode.DmodeStrengthParam.Id))]
+[GenerateMasterAsset<int, DmodeStrengthSkill>("Dmode/DmodeStrengthSkill.json", nameof(Models.Dmode.DmodeStrengthSkill.Id))]
+[GenerateMasterAsset<int, DmodeStrengthAbility>("Dmode/DmodeStrengthAbility.json", nameof(Models.Dmode.DmodeStrengthAbility.Id))]
+[GenerateMasterAsset<int, DmodeDungeonItemData>("Dmode/DmodeDungeonItemData.json", nameof(Models.Dmode.DmodeDungeonItemData.Id))]
+[GenerateMasterAsset<int, DmodeServitorPassiveLevel>("Dmode/DmodeServitorPassiveLevel.json", nameof(Models.Dmode.DmodeServitorPassiveLevel.Id))]
+[GenerateMasterAsset<int, DmodeExpeditionFloor>("Dmode/DmodeExpeditionFloor.json", nameof(Models.Dmode.DmodeExpeditionFloor.Id))]
+[GenerateMasterAsset<int, UserLevel>("User/UserLevel.json", nameof(Models.User.UserLevel.Id))]
+[GenerateMasterAsset<int, QuestScheduleInfo>("User/QuestScheduleInfo.json", nameof(Models.QuestSchedule.QuestScheduleInfo.Id))]
+[GenerateMasterAsset<int, RankingData>("TimeAttack/RankingData.json", nameof(Models.TimeAttack.RankingData.GroupId))]
+[GenerateMasterAsset<int, RankingTierReward>("TimeAttack/RankingTierReward.json", nameof(Models.TimeAttack.RankingTierReward.Id))]
+[GenerateMasterAsset<int, QuestWallDetail>("Wall/QuestWallDetail.json", nameof(Models.Wall.QuestWallDetail.Id))]
+[GenerateMasterAsset<int, QuestWallMonthlyReward>("Wall/QuestWallMonthlyReward.json", nameof(Models.Wall.QuestWallMonthlyReward.Id))]
+// csharpier-ignore-end
 public static partial class MasterAsset
 {
-    public static MasterAssetData<Dragons, DragonData> DragonData { get; private set; } = null!;
-    public static MasterAssetData<int, DragonRarity> DragonRarity { get; private set; } = null!;
-    public static MasterAssetData<int, QuestData> QuestData { get; private set; } = null!;
-    public static MasterAssetData<Materials, MaterialData> MaterialData { get; private set; } =
-        null!;
-    public static MasterAssetData<int, FortPlantDetail> FortPlant { get; private set; } = null!;
-    public static MasterAssetData<WeaponBodies, WeaponBody> WeaponBody { get; private set; } =
-        null!;
-    public static MasterAssetData<int, WeaponBodyBuildupGroup> WeaponBodyBuildupGroup
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, WeaponBodyBuildupLevel> WeaponBodyBuildupLevel
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, WeaponPassiveAbility> WeaponPassiveAbility
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, WeaponBodyRarity> WeaponBodyRarity { get; private set; } =
-        null!;
-    public static MasterAssetData<int, WeaponSkin> WeaponSkin { get; private set; } = null!;
-    public static MasterAssetData<int, AbilityCrestBuildupGroup> AbilityCrestBuildupGroup
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, AbilityCrestBuildupLevel> AbilityCrestBuildupLevel
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, AbilityCrestRarity> AbilityCrestRarity
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<AbilityCrests, AbilityCrest> AbilityCrest { get; private set; } =
-        null!;
-    public static MasterAssetData<int, QuestEventGroup> QuestEventGroup { get; private set; } =
-        null!;
-    public static MasterAssetData<int, QuestEvent> QuestEvent { get; private set; } = null!;
-    public static MasterAssetData<int, QuestTreasureData> QuestTreasureData { get; private set; } =
-        null!;
-    public static MasterAssetData<UseItem, UseItemData> UseItem { get; private set; } = null!;
-    public static MasterAssetData<int, AbilityData> AbilityData { get; private set; } = null!;
-    public static MasterAssetData<int, AbilityLimitedGroup> AbilityLimitedGroup
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, ExAbilityData> ExAbilityData { get; private set; } = null!;
-    public static MasterAssetData<int, UnionAbility> UnionAbility { get; private set; } = null!;
-    public static MasterAssetData<int, SkillData> SkillData { get; private set; } = null!;
-    public static MasterAssetData<int, AlbumMission> AlbumMission { get; private set; } = null!;
-    public static MasterAssetData<int, NormalMission> BeginnerMission { get; private set; } = null!;
-    public static MasterAssetData<int, DailyMission> DailyMission { get; private set; } = null!;
-    public static MasterAssetData<int, DrillMission> DrillMission { get; private set; } = null!;
-    public static MasterAssetData<int, DrillMissionGroup> DrillMissionGroup { get; private set; } =
-        null!;
-    public static MasterAssetData<int, MainStoryMission> MainStoryMission { get; private set; } =
-        null!;
-    public static MasterAssetData<int, MainStoryMissionGroup> MainStoryMissionGroup
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, MemoryEventMission> MemoryEventMission
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, NormalMission> NormalMission { get; private set; } = null!;
-    public static MasterAssetData<int, PeriodMission> PeriodMission { get; private set; } = null!;
-    public static MasterAssetData<int, SpecialMission> SpecialMission { get; private set; } = null!;
-    public static MasterAssetData<int, SpecialMissionGroup> SpecialMissionGroup
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, MissionProgressionInfo> MissionProgressionInfo
-    {
-        get;
-        private set;
-    } = null!;
-
-    public static MasterAssetData<int, MainStoryMissionGroupRewards> MainStoryMissionGroupRewards
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, Stamp> StampData { get; private set; } = null!;
-    public static MasterAssetData<int, NormalShop> NormalShop { get; private set; } = null!;
-    public static MasterAssetData<int, SpecialShop> SpecialShop { get; private set; } = null!;
-    public static MasterAssetData<int, MaterialShop> MaterialShopDaily { get; private set; } =
-        null!;
-    public static MasterAssetData<int, MaterialShop> MaterialShopWeekly { get; private set; } =
-        null!;
-    public static MasterAssetData<int, MaterialShop> MaterialShopMonthly { get; private set; } =
-        null!;
-    public static MasterAssetData<int, AbilityCrestTrade> AbilityCrestTrade { get; private set; } =
-        null!;
-    public static MasterAssetData<int, TreasureTrade> TreasureTrade { get; private set; } = null!;
-    public static MasterAssetData<int, TreasureTrade> EventTreasureTrade { get; private set; } =
-        null!;
-    public static MasterAssetData<int, LoginBonusData> LoginBonusData { get; private set; } = null!;
-    public static MasterAssetData<int, LoginBonusReward> LoginBonusReward { get; private set; } =
-        null!;
-    public static MasterAssetData<int, ManaNode> ManaNode { get; private set; } = null!;
-    public static MasterAssetData<int, ManaPieceMaterial> ManaPieceMaterial { get; private set; } =
-        null!;
-    public static MasterAssetData<ManaNodeTypes, ManaPieceType> ManaPieceType
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, CharaLimitBreak> CharaLimitBreak { get; private set; } =
-        null!;
-    public static MasterAssetData<int, StoryData> DragonStories { get; private set; } = null!;
-    public static MasterAssetData<int, StoryData> CharaStories { get; private set; } = null!;
-    public static MasterAssetData<int, UnitStory> UnitStory { get; private set; } = null!;
-    public static MasterAssetData<int, QuestStory> QuestStory { get; private set; } = null!;
-    public static MasterAssetData<int, EventStory> EventStory { get; private set; } = null!;
-    public static MasterAssetData<int, QuestStoryRewardInfo> QuestStoryRewardInfo
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<string, QuestEnemies> QuestEnemies { get; private set; } = null!;
-    public static MasterAssetData<int, EnemyParam> EnemyParam { get; private set; } = null!;
-    public static MasterAssetData<int, EnemyData> EnemyData { get; private set; } = null!;
-    public static MasterAssetData<int, QuestDropInfo> QuestDrops { get; private set; } = null!;
-    public static MasterAssetData<int, QuestBonusReward> QuestBonusRewards { get; private set; } =
-        null!;
-    public static MasterAssetData<int, QuestRewardData> QuestRewardData { get; private set; } =
-        null!;
-    public static MasterAssetData<int, QuestScoreMissionRewardInfo> QuestScoreMissionRewardInfo
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, QuestScoreMissionData> QuestScoreMissionData
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, EventData> EventData { get; private set; } = null!;
-    public static MasterAssetData<int, EventTradeGroup> EventTradeGroup { get; private set; } =
-        null!;
     public static MasterAssetGroup<int, int, BuildEventReward> BuildEventReward
     {
         get;
@@ -187,823 +142,4 @@ public static partial class MasterAsset
         get;
         private set;
     } = null!;
-    public static MasterAssetData<int, CombatEventLocation> CombatEventLocation
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, CombatEventLocationReward> CombatEventLocationReward
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, EventItem<BuildEventItemType>> BuildEventItem
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, EventItem<CombatEventItemType>> CombatEventItem
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, RaidEventItem> RaidEventItem { get; private set; } = null!;
-    public static MasterAssetData<int, EventItem<SimpleEventItemType>> SimpleEventItem
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, EventItem<ExRushEventItemType>> ExRushEventItem
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, EventItem<ExHunterEventItemType>> ExHunterEventItem
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, EventItem<EarnEventItemType>> EarnEventItem
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, EventItem<CollectEventItemType>> CollectEventItem
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, EventItem<Clb01EventItemType>> Clb01EventItem
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, EventItem<BattleRoyalEventItemType>> BattleRoyalEventItem
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, EventPassive> EventPassive { get; private set; } = null!;
-    public static MasterAssetData<int, QuestScoringEnemy> QuestScoringEnemy { get; private set; } =
-        null!;
-    public static MasterAssetData<int, DmodeQuestFloor> DmodeQuestFloor { get; private set; } =
-        null!;
-    public static MasterAssetData<int, DmodeDungeonArea> DmodeDungeonArea { get; private set; } =
-        null!;
-    public static MasterAssetData<int, DmodeDungeonTheme> DmodeDungeonTheme { get; private set; } =
-        null!;
-    public static MasterAssetData<int, DmodeEnemyTheme> DmodeEnemyTheme { get; private set; } =
-        null!;
-    public static MasterAssetData<string, DmodeAreaInfo> DmodeAreaInfo { get; private set; } =
-        null!;
-    public static MasterAssetData<int, DmodeEnemyParam> DmodeEnemyParam { get; private set; } =
-        null!;
-    public static MasterAssetData<int, DmodeCharaLevel> DmodeCharaLevel { get; private set; } =
-        null!;
-    public static MasterAssetData<int, DmodeWeapon> DmodeWeapon { get; private set; } = null!;
-    public static MasterAssetData<int, DmodeAbilityCrest> DmodeAbilityCrest { get; private set; } =
-        null!;
-    public static MasterAssetData<int, DmodeStrengthParam> DmodeStrengthParam
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, DmodeStrengthSkill> DmodeStrengthSkill
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, DmodeStrengthAbility> DmodeStrengthAbility
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, DmodeDungeonItemData> DmodeDungeonItemData
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, DmodeServitorPassiveLevel> DmodeServitorPassiveLevel
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, DmodeExpeditionFloor> DmodeExpeditionFloor
-    {
-        get;
-        private set;
-    } = null!;
-    public static MasterAssetData<int, UserLevel> UserLevel { get; private set; } = null!;
-    public static MasterAssetData<int, QuestScheduleInfo> QuestScheduleInfo { get; private set; } =
-        null!;
-    public static MasterAssetData<int, RankingData> RankingData { get; private set; } = null!;
-    public static MasterAssetData<int, RankingTierReward> RankingTierReward { get; private set; } =
-        null!;
-    public static MasterAssetData<int, QuestWallDetail> QuestWallDetail { get; private set; } =
-        null!;
-    public static MasterAssetData<int, QuestWallMonthlyReward> QuestWallMonthlyReward
-    {
-        get;
-        private set;
-    } = null!;
-
-    public static async Task LoadAsync()
-    {
-        ValueTask<MasterAssetData<Charas, CharaData>> charaData = MasterAssetData.LoadAsync<
-            Charas,
-            CharaData
-        >("CharaData.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<Dragons, DragonData>> dragonData = MasterAssetData.LoadAsync<
-            Dragons,
-            DragonData
-        >("DragonData.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, DragonRarity>> dragonRarity = MasterAssetData.LoadAsync<
-            int,
-            DragonRarity
-        >("DragonRarity.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, QuestData>> questData = MasterAssetData.LoadAsync<
-            int,
-            QuestData
-        >("QuestData.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<Materials, MaterialData>> materialData =
-            MasterAssetData.LoadAsync<Materials, MaterialData>("MaterialData.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, FortPlantDetail>> fortPlant = MasterAssetData.LoadAsync<
-            int,
-            FortPlantDetail
-        >("FortPlantDetail.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<WeaponBodies, WeaponBody>> weaponBody = MasterAssetData.LoadAsync<
-            WeaponBodies,
-            WeaponBody
-        >("WeaponBody.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, WeaponBodyBuildupGroup>> weaponBodyBuildupGroup =
-            MasterAssetData.LoadAsync<int, WeaponBodyBuildupGroup>(
-                "WeaponBodyBuildupGroup.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, WeaponBodyBuildupLevel>> weaponBodyBuildupLevel =
-            MasterAssetData.LoadAsync<int, WeaponBodyBuildupLevel>(
-                "WeaponBodyBuildupLevel.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, WeaponPassiveAbility>> weaponPassiveAbility =
-            MasterAssetData.LoadAsync<int, WeaponPassiveAbility>(
-                "WeaponPassiveAbility.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, WeaponBodyRarity>> weaponBodyRarity =
-            MasterAssetData.LoadAsync<int, WeaponBodyRarity>("WeaponBodyRarity.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, WeaponSkin>> weaponSkin = MasterAssetData.LoadAsync<
-            int,
-            WeaponSkin
-        >("WeaponSkin.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, AbilityCrestBuildupGroup>> abilityCrestBuildupGroup =
-            MasterAssetData.LoadAsync<int, AbilityCrestBuildupGroup>(
-                "AbilityCrestBuildupGroup.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, AbilityCrestBuildupLevel>> abilityCrestBuildupLevel =
-            MasterAssetData.LoadAsync<int, AbilityCrestBuildupLevel>(
-                "AbilityCrestBuildupLevel.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, AbilityCrestRarity>> abilityCrestRarity =
-            MasterAssetData.LoadAsync<int, AbilityCrestRarity>(
-                "AbilityCrestRarity.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<AbilityCrests, AbilityCrest>> abilityCrest =
-            MasterAssetData.LoadAsync<AbilityCrests, AbilityCrest>(
-                "AbilityCrest.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, QuestEventGroup>> questEventGroup =
-            MasterAssetData.LoadAsync<int, QuestEventGroup>("QuestEventGroup.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, QuestEvent>> questEvent = MasterAssetData.LoadAsync<
-            int,
-            QuestEvent
-        >("QuestEvent.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, QuestTreasureData>> questTreasureData =
-            MasterAssetData.LoadAsync<int, QuestTreasureData>(
-                "QuestTreasureData.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<UseItem, UseItemData>> useItem = MasterAssetData.LoadAsync<
-            UseItem,
-            UseItemData
-        >("UseItem.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, AbilityData>> abilityData = MasterAssetData.LoadAsync<
-            int,
-            AbilityData
-        >("AbilityData.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, AbilityLimitedGroup>> abilityLimitedGroup =
-            MasterAssetData.LoadAsync<int, AbilityLimitedGroup>(
-                "AbilityLimitedGroup.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, ExAbilityData>> exAbilityData = MasterAssetData.LoadAsync<
-            int,
-            ExAbilityData
-        >("ExAbilityData.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, UnionAbility>> unionAbility = MasterAssetData.LoadAsync<
-            int,
-            UnionAbility
-        >("UnionAbility.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, SkillData>> skillData = MasterAssetData.LoadAsync<
-            int,
-            SkillData
-        >("SkillData.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, AlbumMission>> albumMission = MasterAssetData.LoadAsync<
-            int,
-            AlbumMission
-        >("Missions/MissionAlbumData.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, NormalMission>> beginnerMission = MasterAssetData.LoadAsync<
-            int,
-            NormalMission
-        >("Missions/MissionBeginnerData.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, DailyMission>> dailyMission = MasterAssetData.LoadAsync<
-            int,
-            DailyMission
-        >("Missions/MissionDailyData.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, DrillMission>> drillMission = MasterAssetData.LoadAsync<
-            int,
-            DrillMission
-        >("Missions/MissionDrillData.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, DrillMissionGroup>> drillMissionGroup =
-            MasterAssetData.LoadAsync<int, DrillMissionGroup>(
-                "Missions/MissionDrillGroup.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, MainStoryMission>> mainStoryMission =
-            MasterAssetData.LoadAsync<int, MainStoryMission>(
-                "Missions/MissionMainStoryData.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, MainStoryMissionGroup>> mainStoryMissionGroup =
-            MasterAssetData.LoadAsync<int, MainStoryMissionGroup>(
-                "Missions/MissionMainStoryGroup.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, MemoryEventMission>> memoryEventMission =
-            MasterAssetData.LoadAsync<int, MemoryEventMission>(
-                "Missions/MissionMemoryEventData.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, NormalMission>> normalMission = MasterAssetData.LoadAsync<
-            int,
-            NormalMission
-        >("Missions/MissionNormalData.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, PeriodMission>> periodMission = MasterAssetData.LoadAsync<
-            int,
-            PeriodMission
-        >("Missions/MissionPeriodData.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, SpecialMission>> specialMission = MasterAssetData.LoadAsync<
-            int,
-            SpecialMission
-        >("Missions/MissionSpecialData.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, SpecialMissionGroup>> specialMissionGroup =
-            MasterAssetData.LoadAsync<int, SpecialMissionGroup>(
-                "Missions/MissionSpecialGroup.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, MissionProgressionInfo>> missionProgressionInfo =
-            MasterAssetData.LoadAsync<int, MissionProgressionInfo>(
-                "Missions/MissionProgressionInfo.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, MainStoryMissionGroupRewards>> mainStoryMissionGroupRewards =
-            MasterAssetData.LoadAsync<int, MainStoryMissionGroupRewards>(
-                "Missions/MainStoryMissionGroupRewards.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, Stamp>> stampData = MasterAssetData.LoadAsync<int, Stamp>(
-            "StampData.msgpack",
-            x => x.Id
-        );
-
-        ValueTask<MasterAssetData<int, NormalShop>> normalShop = MasterAssetData.LoadAsync<
-            int,
-            NormalShop
-        >("Shop/NormalShop.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, SpecialShop>> specialShop = MasterAssetData.LoadAsync<
-            int,
-            SpecialShop
-        >("Shop/SpecialShop.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, MaterialShop>> materialShopDaily = MasterAssetData.LoadAsync<
-            int,
-            MaterialShop
-        >("Shop/MaterialShopDaily.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, MaterialShop>> materialShopWeekly =
-            MasterAssetData.LoadAsync<int, MaterialShop>(
-                "Shop/MaterialShopWeekly.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, MaterialShop>> materialShopMonthly =
-            MasterAssetData.LoadAsync<int, MaterialShop>(
-                "Shop/MaterialShopMonthly.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, AbilityCrestTrade>> abilityCrestTrade =
-            MasterAssetData.LoadAsync<int, AbilityCrestTrade>(
-                "Trade/AbilityCrestTrade.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, TreasureTrade>> treasureTrade = MasterAssetData.LoadAsync<
-            int,
-            TreasureTrade
-        >("Trade/TreasureTrade.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, TreasureTrade>> eventTreasureTrade =
-            MasterAssetData.LoadAsync<int, TreasureTrade>(
-                "Trade/EventTreasureTradeInfo.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, LoginBonusData>> loginBonusData = MasterAssetData.LoadAsync<
-            int,
-            LoginBonusData
-        >("Login/LoginBonusData.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, LoginBonusReward>> loginBonusReward =
-            MasterAssetData.LoadAsync<int, LoginBonusReward>(
-                "Login/LoginBonusReward.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, ManaNode>> manaNode = MasterAssetData.LoadAsync<
-            int,
-            ManaNode
-        >("ManaCircle/MC.msgpack", x => x.MC_0);
-
-        ValueTask<MasterAssetData<int, ManaPieceMaterial>> manaPieceMaterial =
-            MasterAssetData.LoadAsync<int, ManaPieceMaterial>(
-                "ManaCircle/ManaPieceMaterial.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<ManaNodeTypes, ManaPieceType>> manaPieceType =
-            MasterAssetData.LoadAsync<ManaNodeTypes, ManaPieceType>(
-                "ManaCircle/ManaPieceType.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, CharaLimitBreak>> charaLimitBreak =
-            MasterAssetData.LoadAsync<int, CharaLimitBreak>(
-                "ManaCircle/CharaLimitBreak.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, StoryData>> dragonStories = MasterAssetData.LoadAsync<
-            int,
-            StoryData
-        >("Story/DragonStories.msgpack", x => x.id);
-
-        ValueTask<MasterAssetData<int, StoryData>> charaStories = MasterAssetData.LoadAsync<
-            int,
-            StoryData
-        >("Story/CharaStories.msgpack", x => x.id);
-
-        ValueTask<MasterAssetData<int, UnitStory>> unitStory = MasterAssetData.LoadAsync<
-            int,
-            UnitStory
-        >("Story/UnitStory.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, QuestStory>> questStory = MasterAssetData.LoadAsync<
-            int,
-            QuestStory
-        >("Story/QuestStory.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, EventStory>> eventStory = MasterAssetData.LoadAsync<
-            int,
-            EventStory
-        >("Story/EventStory.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, QuestStoryRewardInfo>> questStoryRewardInfo =
-            MasterAssetData.LoadAsync<int, QuestStoryRewardInfo>(
-                "Story/QuestStoryRewardInfo.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<string, QuestEnemies>> questEnemies = MasterAssetData.LoadAsync<
-            string,
-            QuestEnemies
-        >("Enemy/QuestEnemies.msgpack", x => x.AreaName);
-
-        ValueTask<MasterAssetData<int, EnemyParam>> enemyParam = MasterAssetData.LoadAsync<
-            int,
-            EnemyParam
-        >("Enemy/EnemyParam.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, EnemyData>> enemyData = MasterAssetData.LoadAsync<
-            int,
-            EnemyData
-        >("Enemy/EnemyData.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, QuestDropInfo>> questDrops = MasterAssetData.LoadAsync<
-            int,
-            QuestDropInfo
-        >("QuestDrops/QuestDrops.msgpack", x => x.QuestId);
-
-        ValueTask<MasterAssetData<int, QuestBonusReward>> questBonusRewards =
-            MasterAssetData.LoadAsync<int, QuestBonusReward>(
-                "QuestDrops/QuestBonusRewards.msgpack",
-                x => x.QuestId
-            );
-
-        ValueTask<MasterAssetData<int, QuestRewardData>> questRewardData =
-            MasterAssetData.LoadAsync<int, QuestRewardData>(
-                "QuestRewards/QuestRewardData.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, QuestScoreMissionRewardInfo>> questScoreMissionRewardInfo =
-            MasterAssetData.LoadAsync<int, QuestScoreMissionRewardInfo>(
-                "QuestRewards/QuestScoreMissionRewardInfo.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, QuestScoreMissionData>> questScoreMissionData =
-            MasterAssetData.LoadAsync<int, QuestScoreMissionData>(
-                "QuestRewards/QuestScoreMissionData.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, EventData>> eventData = MasterAssetData.LoadAsync<
-            int,
-            EventData
-        >("Event/EventData.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, EventTradeGroup>> eventTradeGroup =
-            MasterAssetData.LoadAsync<int, EventTradeGroup>(
-                "Event/EventTradeGroup.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetGroup<int, int, BuildEventReward>> buildEventReward =
-            MasterAssetGroup.LoadAsync<int, int, BuildEventReward>(
-                "Event/BuildEventReward.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetGroup<int, int, RaidEventReward>> raidEventReward =
-            MasterAssetGroup.LoadAsync<int, int, RaidEventReward>(
-                "Event/RaidEventReward.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, CombatEventLocation>> combatEventLocation =
-            MasterAssetData.LoadAsync<int, CombatEventLocation>(
-                "Event/CombatEventLocation.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, CombatEventLocationReward>> combatEventLocationReward =
-            MasterAssetData.LoadAsync<int, CombatEventLocationReward>(
-                "Event/CombatEventLocationReward.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, EventItem<BuildEventItemType>>> buildEventItem =
-            MasterAssetData.LoadAsync<int, EventItem<BuildEventItemType>>(
-                "Event/BuildEventItem.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, EventItem<CombatEventItemType>>> combatEventItem =
-            MasterAssetData.LoadAsync<int, EventItem<CombatEventItemType>>(
-                "Event/CombatEventItem.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, RaidEventItem>> raidEventItem = MasterAssetData.LoadAsync<
-            int,
-            RaidEventItem
-        >("Event/RaidEventItem.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, EventItem<SimpleEventItemType>>> simpleEventItem =
-            MasterAssetData.LoadAsync<int, EventItem<SimpleEventItemType>>(
-                "Event/SimpleEventItem.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, EventItem<ExRushEventItemType>>> exRushEventItem =
-            MasterAssetData.LoadAsync<int, EventItem<ExRushEventItemType>>(
-                "Event/ExRushEventItem.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, EventItem<ExHunterEventItemType>>> exHunterEventItem =
-            MasterAssetData.LoadAsync<int, EventItem<ExHunterEventItemType>>(
-                "Event/ExHunterEventItem.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, EventItem<EarnEventItemType>>> earnEventItem =
-            MasterAssetData.LoadAsync<int, EventItem<EarnEventItemType>>(
-                "Event/EarnEventItem.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, EventItem<CollectEventItemType>>> collectEventItem =
-            MasterAssetData.LoadAsync<int, EventItem<CollectEventItemType>>(
-                "Event/CollectEventItem.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, EventItem<Clb01EventItemType>>> clb01EventItem =
-            MasterAssetData.LoadAsync<int, EventItem<Clb01EventItemType>>(
-                "Event/Clb01EventItem.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, EventItem<BattleRoyalEventItemType>>> battleRoyalEventItem =
-            MasterAssetData.LoadAsync<int, EventItem<BattleRoyalEventItemType>>(
-                "Event/BattleRoyalEventItem.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, EventPassive>> eventPassive = MasterAssetData.LoadAsync<
-            int,
-            EventPassive
-        >("Event/EventPassive.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, QuestScoringEnemy>> questScoringEnemy =
-            MasterAssetData.LoadAsync<int, QuestScoringEnemy>(
-                "Event/QuestScoringEnemy.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, DmodeQuestFloor>> dmodeQuestFloor =
-            MasterAssetData.LoadAsync<int, DmodeQuestFloor>(
-                "Dmode/DmodeQuestFloor.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, DmodeDungeonArea>> dmodeDungeonArea =
-            MasterAssetData.LoadAsync<int, DmodeDungeonArea>(
-                "Dmode/DmodeDungeonArea.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, DmodeDungeonTheme>> dmodeDungeonTheme =
-            MasterAssetData.LoadAsync<int, DmodeDungeonTheme>(
-                "Dmode/DmodeDungeonTheme.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, DmodeEnemyTheme>> dmodeEnemyTheme =
-            MasterAssetData.LoadAsync<int, DmodeEnemyTheme>(
-                "Dmode/DmodeEnemyTheme.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<string, DmodeAreaInfo>> dmodeAreaInfo = MasterAssetData.LoadAsync<
-            string,
-            DmodeAreaInfo
-        >("Dmode/DmodeAreaInfo.msgpack", x => x.AreaName);
-
-        ValueTask<MasterAssetData<int, DmodeEnemyParam>> dmodeEnemyParam =
-            MasterAssetData.LoadAsync<int, DmodeEnemyParam>(
-                "Dmode/DmodeEnemyParam.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, DmodeCharaLevel>> dmodeCharaLevel =
-            MasterAssetData.LoadAsync<int, DmodeCharaLevel>(
-                "Dmode/DmodeCharaLevel.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, DmodeWeapon>> dmodeWeapon = MasterAssetData.LoadAsync<
-            int,
-            DmodeWeapon
-        >("Dmode/DmodeWeapon.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, DmodeAbilityCrest>> dmodeAbilityCrest =
-            MasterAssetData.LoadAsync<int, DmodeAbilityCrest>(
-                "Dmode/DmodeAbilityCrest.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, DmodeStrengthParam>> dmodeStrengthParam =
-            MasterAssetData.LoadAsync<int, DmodeStrengthParam>(
-                "Dmode/DmodeStrengthParam.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, DmodeStrengthSkill>> dmodeStrengthSkill =
-            MasterAssetData.LoadAsync<int, DmodeStrengthSkill>(
-                "Dmode/DmodeStrengthSkill.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, DmodeStrengthAbility>> dmodeStrengthAbility =
-            MasterAssetData.LoadAsync<int, DmodeStrengthAbility>(
-                "Dmode/DmodeStrengthAbility.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, DmodeDungeonItemData>> dmodeDungeonItemData =
-            MasterAssetData.LoadAsync<int, DmodeDungeonItemData>(
-                "Dmode/DmodeDungeonItemData.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, DmodeServitorPassiveLevel>> dmodeServitorPassiveLevel =
-            MasterAssetData.LoadAsync<int, DmodeServitorPassiveLevel>(
-                "Dmode/DmodeServitorPassiveLevel.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, DmodeExpeditionFloor>> dmodeExpeditionFloor =
-            MasterAssetData.LoadAsync<int, DmodeExpeditionFloor>(
-                "Dmode/DmodeExpeditionFloor.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, UserLevel>> userLevel = MasterAssetData.LoadAsync<
-            int,
-            UserLevel
-        >("User/UserLevel.msgpack", x => x.Id);
-
-        ValueTask<MasterAssetData<int, QuestScheduleInfo>> questScheduleInfo =
-            MasterAssetData.LoadAsync<int, QuestScheduleInfo>(
-                "QuestSchedule/QuestScheduleInfo.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, RankingData>> rankingData = MasterAssetData.LoadAsync<
-            int,
-            RankingData
-        >("TimeAttack/RankingData.msgpack", x => x.QuestId);
-
-        ValueTask<MasterAssetData<int, RankingTierReward>> rankingTierReward =
-            MasterAssetData.LoadAsync<int, RankingTierReward>(
-                "TimeAttack/RankingTierReward.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, QuestWallDetail>> questWallDetail =
-            MasterAssetData.LoadAsync<int, QuestWallDetail>(
-                "Wall/QuestWallDetail.msgpack",
-                x => x.Id
-            );
-
-        ValueTask<MasterAssetData<int, QuestWallMonthlyReward>> questWallMonthlyReward =
-            MasterAssetData.LoadAsync<int, QuestWallMonthlyReward>(
-                "Wall/QuestWallMonthlyReward.msgpack",
-                x => x.TotalWallLevel
-            );
-
-        DragonData = await dragonData;
-        DragonRarity = await dragonRarity;
-        QuestData = await questData;
-        MaterialData = await materialData;
-        FortPlant = await fortPlant;
-        WeaponBody = await weaponBody;
-        WeaponBodyBuildupGroup = await weaponBodyBuildupGroup;
-        WeaponBodyBuildupLevel = await weaponBodyBuildupLevel;
-        WeaponPassiveAbility = await weaponPassiveAbility;
-        WeaponBodyRarity = await weaponBodyRarity;
-        WeaponSkin = await weaponSkin;
-        AbilityCrestBuildupGroup = await abilityCrestBuildupGroup;
-        AbilityCrestBuildupLevel = await abilityCrestBuildupLevel;
-        AbilityCrestRarity = await abilityCrestRarity;
-        AbilityCrest = await abilityCrest;
-        QuestEventGroup = await questEventGroup;
-        QuestEvent = await questEvent;
-        QuestTreasureData = await questTreasureData;
-        UseItem = await useItem;
-        AbilityData = await abilityData;
-        AbilityLimitedGroup = await abilityLimitedGroup;
-        ExAbilityData = await exAbilityData;
-        UnionAbility = await unionAbility;
-        SkillData = await skillData;
-        AlbumMission = await albumMission;
-        BeginnerMission = await beginnerMission;
-        DailyMission = await dailyMission;
-        DrillMission = await drillMission;
-        DrillMissionGroup = await drillMissionGroup;
-        MainStoryMission = await mainStoryMission;
-        MainStoryMissionGroup = await mainStoryMissionGroup;
-        MemoryEventMission = await memoryEventMission;
-        NormalMission = await normalMission;
-        PeriodMission = await periodMission;
-        SpecialMission = await specialMission;
-        SpecialMissionGroup = await specialMissionGroup;
-        MissionProgressionInfo = await missionProgressionInfo;
-        MainStoryMissionGroupRewards = await mainStoryMissionGroupRewards;
-        StampData = await stampData;
-        NormalShop = await normalShop;
-        SpecialShop = await specialShop;
-        MaterialShopDaily = await materialShopDaily;
-        MaterialShopWeekly = await materialShopWeekly;
-        MaterialShopMonthly = await materialShopMonthly;
-        AbilityCrestTrade = await abilityCrestTrade;
-        TreasureTrade = await treasureTrade;
-        EventTreasureTrade = await eventTreasureTrade;
-        LoginBonusData = await loginBonusData;
-        LoginBonusReward = await loginBonusReward;
-        ManaNode = await manaNode;
-        ManaPieceMaterial = await manaPieceMaterial;
-        ManaPieceType = await manaPieceType;
-        CharaLimitBreak = await charaLimitBreak;
-        DragonStories = await dragonStories;
-        CharaStories = await charaStories;
-        UnitStory = await unitStory;
-        QuestStory = await questStory;
-        EventStory = await eventStory;
-        QuestStoryRewardInfo = await questStoryRewardInfo;
-        QuestEnemies = await questEnemies;
-        EnemyParam = await enemyParam;
-        EnemyData = await enemyData;
-        QuestDrops = await questDrops;
-        QuestBonusRewards = await questBonusRewards;
-        QuestRewardData = await questRewardData;
-        QuestScoreMissionRewardInfo = await questScoreMissionRewardInfo;
-        QuestScoreMissionData = await questScoreMissionData;
-        EventData = await eventData;
-        EventTradeGroup = await eventTradeGroup;
-        CombatEventLocation = await combatEventLocation;
-        CombatEventLocationReward = await combatEventLocationReward;
-        BuildEventItem = await buildEventItem;
-        CombatEventItem = await combatEventItem;
-        RaidEventItem = await raidEventItem;
-        SimpleEventItem = await simpleEventItem;
-        ExRushEventItem = await exRushEventItem;
-        ExHunterEventItem = await exHunterEventItem;
-        EarnEventItem = await earnEventItem;
-        CollectEventItem = await collectEventItem;
-        Clb01EventItem = await clb01EventItem;
-        BattleRoyalEventItem = await battleRoyalEventItem;
-        EventPassive = await eventPassive;
-        QuestScoringEnemy = await questScoringEnemy;
-        DmodeQuestFloor = await dmodeQuestFloor;
-        DmodeDungeonArea = await dmodeDungeonArea;
-        DmodeDungeonTheme = await dmodeDungeonTheme;
-        DmodeEnemyTheme = await dmodeEnemyTheme;
-        DmodeAreaInfo = await dmodeAreaInfo;
-        DmodeEnemyParam = await dmodeEnemyParam;
-        DmodeCharaLevel = await dmodeCharaLevel;
-        DmodeWeapon = await dmodeWeapon;
-        DmodeAbilityCrest = await dmodeAbilityCrest;
-        DmodeStrengthParam = await dmodeStrengthParam;
-        DmodeStrengthSkill = await dmodeStrengthSkill;
-        DmodeStrengthAbility = await dmodeStrengthAbility;
-        DmodeDungeonItemData = await dmodeDungeonItemData;
-        DmodeServitorPassiveLevel = await dmodeServitorPassiveLevel;
-        DmodeExpeditionFloor = await dmodeExpeditionFloor;
-        UserLevel = await userLevel;
-        QuestScheduleInfo = await questScheduleInfo;
-        RankingData = await rankingData;
-        RankingTierReward = await rankingTierReward;
-        QuestWallDetail = await questWallDetail;
-        QuestWallMonthlyReward = await questWallMonthlyReward;
-        BuildEventReward = await buildEventReward;
-        RaidEventReward = await raidEventReward;
-    }
 }

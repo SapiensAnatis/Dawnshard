@@ -192,7 +192,7 @@ public class CharaTest : TestFixture
     [Fact]
     public async Task CharaBuildupMana_AllStoriesUnlocked_DoesNotThrow()
     {
-        foreach (int storyId in MasterAsset.CharaStories[(int)Charas.GalaAudric].storyIds)
+        foreach (int storyId in MasterAsset.CharaStories[(int)Charas.GalaAudric].StoryIds)
         {
             await this.AddToDatabase(
                 new DbPlayerStoryState()

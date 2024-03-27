@@ -148,7 +148,7 @@ public class UnitRepository : IUnitRepository
                     {
                         ViewerId = this.playerIdentityService.ViewerId,
                         StoryType = StoryTypes.Chara,
-                        StoryId = story.storyIds[0],
+                        StoryId = story.StoryIds[0],
                         State = 0
                     }
                 );
@@ -163,7 +163,7 @@ public class UnitRepository : IUnitRepository
             {
                 if (MasterAsset.CharaStories.TryGetValue((int)c, out StoryData? storyData))
                 {
-                    yield return storyData.storyIds[0];
+                    yield return storyData.StoryIds[0];
                 }
             }
         }
@@ -318,7 +318,7 @@ public class UnitRepository : IUnitRepository
             bool isStoryNew =
                 isCharaNew
                 && MasterAsset.CharaStories.TryGetValue((int)c, out StoryData? storyData)
-                && !ownedStories.Contains(storyData.storyIds[0]);
+                && !ownedStories.Contains(storyData.StoryIds[0]);
 
             result.Add((c, isCharaNew, isStoryNew));
         }

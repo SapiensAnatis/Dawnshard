@@ -679,7 +679,7 @@ public class CharaController(
             {
                 int[] charaStories = MasterAsset
                     .CharaStories.Get((int)playerCharData.CharaId)
-                    .storyIds;
+                    .StoryIds;
 
                 int nextStoryUnlockIndex =
                     await storyRepository

@@ -12,6 +12,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 string sharedProjectPath = args[^1];
 
+#if false
 SyntaxTree testTree = CSharpSyntaxTree.ParseText(
     """
     ValueTask<MasterAssetData<int, NormalMission>> beginnerMission = MasterAssetData.LoadAsync<
@@ -34,11 +35,10 @@ CompilationUnitSyntax root = syntaxTree.GetCompilationUnitRoot();
 MasterAssetWalker walker = new();
 walker.Visit(root);
 
-Dictionary<string, Type> typeLookup = typeof(MasterAsset)
-    .Assembly.GetTypes()
-    .ToDictionary(x => x.Name, x => x);
+//Dictionary<string, Type> typeLookup = typeof(MasterAsset)
+//    .Assembly.GetTypes()
+//    .ToDictionary(x => x.Name, x => x);
 
-#if false
 foreach ((string jsonFilename, TypeIdentifier typeName) in walker.JsonFileTypeMapping)
 {
     Type itemType;

@@ -9,6 +9,7 @@ using DragaliaAPI.Shared.MasterAsset;
 
 Dictionary<int, MissionProgressionInfo> missions = new();
 
+#if false
 // Get legacy missions
 foreach (MissionProgressionInfo mission in V1Missions.V1MissionList)
     missions[mission.Id] = mission;
@@ -34,7 +35,7 @@ foreach (Type type in types)
     }
 }
 
-await MasterAsset.LoadAsync();
+await MasterAsset.LoadAsync(); // REMOVE THIS: CIRCULAR DEPENDENCY
 
 foreach ((_, MissionProgressionInfo progInfo) in missions)
 {
@@ -72,3 +73,4 @@ JsonSerializerOptions options =
 string json = JsonSerializer.Serialize(missions.Values, options);
 
 File.WriteAllText(args[^1], json);
+#endif
