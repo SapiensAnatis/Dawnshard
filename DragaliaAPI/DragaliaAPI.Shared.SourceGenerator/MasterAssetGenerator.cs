@@ -52,11 +52,7 @@ public sealed class {AttributeName}<TItem> : System.Attribute
             )
             .SelectMany(static (list, _) => list.AsEnumerable());
 
-        // Generate the source code.
-        context.RegisterSourceOutput(
-            context.CompilationProvider.Combine(provider.Collect()),
-            ((ctx, t) => GenerateCode(ctx, t.Right))
-        );
+        context.RegisterSourceOutput(provider.Collect(), GenerateCode);
     }
 
     private static EquatableReadOnlyList<MasterAssetDeclaration> TransformMasterAssetDeclarations(
@@ -129,8 +125,8 @@ public sealed class {AttributeName}<TItem> : System.Attribute
         ImmutableArray<MasterAssetDeclaration> declarations
     )
     {
-         const string masterAssetTypeName = "global::DragaliaAPI.Shared.MasterAsset.MasterAssetData";
-         const string masterAssetGroupTypeName = "global::DragaliaAPI.Shared.MasterAsset.MasterAssetGroup";
+        const string masterAssetTypeName = "global::DragaliaAPI.Shared.MasterAsset.MasterAssetData";
+        const string masterAssetGroupTypeName = "global::DragaliaAPI.Shared.MasterAsset.MasterAssetGroup";
 
         StringBuilder codeBuilder = new();
         codeBuilder.Append(
@@ -142,7 +138,8 @@ namespace {Namespace};
 
 public static partial class MasterAsset
 {{
-    private const string ErrorUninitialized = ""Property access failed: MasterAsset is not yet initialized. Call LoadAsync before accessing any properties."""
+    private const string ErrorUninitialized = ""Property access failed: MasterAsset is not yet initialized. Call LoadAsync before accessing any properties."";
+"
         );
 
         foreach (MasterAssetDeclaration declaration in declarations)

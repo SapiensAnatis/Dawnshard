@@ -9,7 +9,6 @@
     <ItemGroup>
         <!-- Exclude the output of source generators from the compilation -->
         <Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
-        <None Include="Generated/**/*.cs" />
     </ItemGroup>
 
     <ItemGroup>

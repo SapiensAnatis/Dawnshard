@@ -6,317 +6,331 @@ namespace DragaliaAPI.Shared.MasterAsset;
 
 public static partial class MasterAsset
 {
+    private const string ErrorUninitialized = "Property access failed: MasterAsset is not yet initialized. Call LoadAsync before accessing any properties.";
+
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>? charaData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData> CharaData => charaData ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData> CharaData => charaData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>? dragonData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData> DragonData => dragonData ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData> DragonData => dragonData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.DragonRarity>? dragonRarity;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.DragonRarity> DragonRarity => dragonRarity ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.DragonRarity> DragonRarity => dragonRarity ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestData>? questData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestData> QuestData => questData ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestData> QuestData => questData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Materials, global::DragaliaAPI.Shared.MasterAsset.Models.MaterialData>? materialData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Materials, global::DragaliaAPI.Shared.MasterAsset.Models.MaterialData> MaterialData => materialData ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Materials, global::DragaliaAPI.Shared.MasterAsset.Models.MaterialData> MaterialData => materialData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.FortPlantDetail>? fortPlantDetail;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.FortPlantDetail> FortPlantDetail => fortPlantDetail ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.FortPlantDetail> FortPlantDetail => fortPlantDetail ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.WeaponBodies, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBody>? weaponBody;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.WeaponBodies, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBody> WeaponBody => weaponBody ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.WeaponBodies, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBody> WeaponBody => weaponBody ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyBuildupGroup>? weaponBodyBuildupGroup;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyBuildupGroup> WeaponBodyBuildupGroup => weaponBodyBuildupGroup ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyBuildupGroup> WeaponBodyBuildupGroup => weaponBodyBuildupGroup ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyBuildupLevel>? weaponBodyBuildupLevel;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyBuildupLevel> WeaponBodyBuildupLevel => weaponBodyBuildupLevel ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyBuildupLevel> WeaponBodyBuildupLevel => weaponBodyBuildupLevel ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponPassiveAbility>? weaponPassiveAbility;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponPassiveAbility> WeaponPassiveAbility => weaponPassiveAbility ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponPassiveAbility> WeaponPassiveAbility => weaponPassiveAbility ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyRarity>? weaponBodyRarity;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyRarity> WeaponBodyRarity => weaponBodyRarity ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyRarity> WeaponBodyRarity => weaponBodyRarity ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponSkin>? weaponSkin;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponSkin> WeaponSkin => weaponSkin ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponSkin> WeaponSkin => weaponSkin ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestBuildupGroup>? abilityCrestBuildupGroup;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestBuildupGroup> AbilityCrestBuildupGroup => abilityCrestBuildupGroup ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestBuildupGroup> AbilityCrestBuildupGroup => abilityCrestBuildupGroup ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestBuildupLevel>? abilityCrestBuildupLevel;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestBuildupLevel> AbilityCrestBuildupLevel => abilityCrestBuildupLevel ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestBuildupLevel> AbilityCrestBuildupLevel => abilityCrestBuildupLevel ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestRarity>? abilityCrestRarity;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestRarity> AbilityCrestRarity => abilityCrestRarity ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestRarity> AbilityCrestRarity => abilityCrestRarity ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.AbilityCrests, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest>? abilityCrest;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.AbilityCrests, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest> AbilityCrest => abilityCrest ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.AbilityCrests, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest> AbilityCrest => abilityCrest ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestEventGroup>? questEventGroup;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestEventGroup> QuestEventGroup => questEventGroup ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestEventGroup> QuestEventGroup => questEventGroup ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestEvent>? questEvent;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestEvent> QuestEvent => questEvent ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestEvent> QuestEvent => questEvent ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestTreasureData>? questTreasureData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestTreasureData> QuestTreasureData => questTreasureData ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestTreasureData> QuestTreasureData => questTreasureData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityData>? abilityData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityData> AbilityData => abilityData ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityData> AbilityData => abilityData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityLimitedGroup>? abilityLimitedGroup;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityLimitedGroup> AbilityLimitedGroup => abilityLimitedGroup ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityLimitedGroup> AbilityLimitedGroup => abilityLimitedGroup ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ExAbilityData>? exAbilityData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ExAbilityData> ExAbilityData => exAbilityData ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ExAbilityData> ExAbilityData => exAbilityData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.UnionAbility>? unionAbility;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.UnionAbility> UnionAbility => unionAbility ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.UnionAbility> UnionAbility => unionAbility ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.SkillData>? skillData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.SkillData> SkillData => skillData ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.SkillData> SkillData => skillData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.StampData>? stampData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.StampData> StampData => stampData ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.StampData> StampData => stampData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.AlbumMission>? albumMission;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.AlbumMission> AlbumMission => albumMission ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.AlbumMission> AlbumMission => albumMission ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.NormalMission>? beginnerMission;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.NormalMission> BeginnerMission => beginnerMission ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.NormalMission> BeginnerMission => beginnerMission ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DailyMission>? dailyMission;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DailyMission> DailyMission => dailyMission ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DailyMission> DailyMission => dailyMission ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DrillMission>? drillMission;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DrillMission> DrillMission => drillMission ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DrillMission> DrillMission => drillMission ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DrillMissionGroup>? drillMissionGroup;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DrillMissionGroup> DrillMissionGroup => drillMissionGroup ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DrillMissionGroup> DrillMissionGroup => drillMissionGroup ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MainStoryMission>? mainStoryMission;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MainStoryMission> MainStoryMission => mainStoryMission ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MainStoryMission> MainStoryMission => mainStoryMission ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MainStoryMissionGroup>? mainStoryMissionGroup;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MainStoryMissionGroup> MainStoryMissionGroup => mainStoryMissionGroup ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MainStoryMissionGroup> MainStoryMissionGroup => mainStoryMissionGroup ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MemoryEventMission>? memoryEventMission;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MemoryEventMission> MemoryEventMission => memoryEventMission ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MemoryEventMission> MemoryEventMission => memoryEventMission ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.NormalMission>? normalMission;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.NormalMission> NormalMission => normalMission ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.NormalMission> NormalMission => normalMission ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.PeriodMission>? periodMission;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.PeriodMission> PeriodMission => periodMission ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.PeriodMission> PeriodMission => periodMission ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.SpecialMission>? specialMission;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.SpecialMission> SpecialMission => specialMission ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.SpecialMission> SpecialMission => specialMission ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.SpecialMissionGroup>? specialMissionGroup;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.SpecialMissionGroup> SpecialMissionGroup => specialMissionGroup ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.SpecialMissionGroup> SpecialMissionGroup => specialMissionGroup ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MissionProgressionInfo>? missionProgressionInfo;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MissionProgressionInfo> MissionProgressionInfo => missionProgressionInfo ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MissionProgressionInfo> MissionProgressionInfo => missionProgressionInfo ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MainStoryMissionGroupRewards>? mainStoryMissionGroupRewards;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MainStoryMissionGroupRewards> MainStoryMissionGroupRewards => mainStoryMissionGroupRewards ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MainStoryMissionGroupRewards> MainStoryMissionGroupRewards => mainStoryMissionGroupRewards ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.NormalShop>? normalShop;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.NormalShop> NormalShop => normalShop ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.NormalShop> NormalShop => normalShop ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.SpecialShop>? specialShop;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.SpecialShop> SpecialShop => specialShop ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.SpecialShop> SpecialShop => specialShop ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop>? materialShop;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop> MaterialShop => materialShop ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop>? materialShopDaily;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop> MaterialShopDaily => materialShopDaily ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop>? materialShopWeekly;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop> MaterialShopWeekly => materialShopWeekly ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop> MaterialShopWeekly => materialShopWeekly ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop>? materialShopMonthly;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop> MaterialShopMonthly => materialShopMonthly ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop> MaterialShopMonthly => materialShopMonthly ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.AbilityCrestTrade>? abilityCrestTrade;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.AbilityCrestTrade> AbilityCrestTrade => abilityCrestTrade ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.AbilityCrestTrade> AbilityCrestTrade => abilityCrestTrade ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData>? useItemData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData> UseItemData => useItemData ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.TreasureTrade>? treasureTradeInfo;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.TreasureTrade> TreasureTradeInfo => treasureTradeInfo ?? throw new InvalidOperationException(ErrorUninitialized);
+
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.TreasureTrade>? eventTreasureTradeInfo;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.TreasureTrade> EventTreasureTradeInfo => eventTreasureTradeInfo ?? throw new InvalidOperationException(ErrorUninitialized);
+
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData>? useItem;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData> UseItem => useItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.TreasureTrade>? treasureTrade;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.TreasureTrade> TreasureTrade => treasureTrade ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.TreasureTrade> TreasureTrade => treasureTrade ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Login.LoginBonusData>? loginBonusData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Login.LoginBonusData> LoginBonusData => loginBonusData ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Login.LoginBonusData> LoginBonusData => loginBonusData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Login.LoginBonusReward>? loginBonusReward;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Login.LoginBonusReward> LoginBonusReward => loginBonusReward ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Login.LoginBonusReward> LoginBonusReward => loginBonusReward ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaNode>? manaNode;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaNode> ManaNode => manaNode ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaNode> ManaNode => manaNode ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceMaterial>? manaPieceMaterial;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceMaterial> ManaPieceMaterial => manaPieceMaterial ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceMaterial> ManaPieceMaterial => manaPieceMaterial ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.ManaNodeTypes, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceType>? manaPieceType;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.ManaNodeTypes, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceType> ManaPieceType => manaPieceType ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.ManaNodeTypes, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceType> ManaPieceType => manaPieceType ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.CharaLimitBreak>? charaLimitBreak;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.CharaLimitBreak> CharaLimitBreak => charaLimitBreak ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.CharaLimitBreak> CharaLimitBreak => charaLimitBreak ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.StoryData>? dragonStories;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.StoryData> DragonStories => dragonStories ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.StoryData> DragonStories => dragonStories ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.StoryData>? charaStories;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.StoryData> CharaStories => charaStories ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.StoryData> CharaStories => charaStories ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.UnitStory>? unitStory;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.UnitStory> UnitStory => unitStory ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.UnitStory> UnitStory => unitStory ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.QuestStory>? questStory;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.QuestStory> QuestStory => questStory ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.QuestStory> QuestStory => questStory ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.EventStory>? eventStory;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.EventStory> EventStory => eventStory ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.EventStory> EventStory => eventStory ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.QuestStoryRewardInfo>? questStoryRewardInfo;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.QuestStoryRewardInfo> QuestStoryRewardInfo => questStoryRewardInfo ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.QuestStoryRewardInfo> QuestStoryRewardInfo => questStoryRewardInfo ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<string, global::DragaliaAPI.Shared.MasterAsset.Models.Enemy.QuestEnemies>? questEnemies;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<string, global::DragaliaAPI.Shared.MasterAsset.Models.Enemy.QuestEnemies> QuestEnemies => questEnemies ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<string, global::DragaliaAPI.Shared.MasterAsset.Models.Enemy.QuestEnemies> QuestEnemies => questEnemies ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Enemy.EnemyParam>? enemyParam;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Enemy.EnemyParam> EnemyParam => enemyParam ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Enemy.EnemyParam> EnemyParam => enemyParam ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Enemy.EnemyData>? enemyData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Enemy.EnemyData> EnemyData => enemyData ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Enemy.EnemyData> EnemyData => enemyData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestDrops.QuestDropInfo>? questDropInfo;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestDrops.QuestDropInfo> QuestDropInfo => questDropInfo ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestDrops.QuestDropInfo> QuestDropInfo => questDropInfo ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestDrops.QuestBonusReward>? questBonusRewardInfo;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestDrops.QuestBonusReward> QuestBonusRewardInfo => questBonusRewardInfo ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestDrops.QuestBonusReward> QuestBonusRewardInfo => questBonusRewardInfo ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestRewards.QuestRewardData>? questRewardData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestRewards.QuestRewardData> QuestRewardData => questRewardData ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestRewards.QuestRewardData> QuestRewardData => questRewardData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestRewards.QuestScoreMissionRewardInfo>? questScoreMissionRewardInfo;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestRewards.QuestScoreMissionRewardInfo> QuestScoreMissionRewardInfo => questScoreMissionRewardInfo ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestRewards.QuestScoreMissionRewardInfo> QuestScoreMissionRewardInfo => questScoreMissionRewardInfo ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestRewards.QuestScoreMissionData>? questScoreMissionData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestRewards.QuestScoreMissionData> QuestScoreMissionData => questScoreMissionData ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestRewards.QuestScoreMissionData> QuestScoreMissionData => questScoreMissionData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventData>? eventData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventData> EventData => eventData ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventData> EventData => eventData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventTradeGroup>? eventTradeGroup;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventTradeGroup> EventTradeGroup => eventTradeGroup ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventTradeGroup> EventTradeGroup => eventTradeGroup ?? throw new InvalidOperationException(ErrorUninitialized);
+
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetGroup<int, int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.BuildEventReward>? buildEventReward;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetGroup<int, int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.BuildEventReward> BuildEventReward => buildEventReward ?? throw new InvalidOperationException(ErrorUninitialized);
+
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetGroup<int, int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.RaidEventReward>? raidEventReward;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetGroup<int, int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.RaidEventReward> RaidEventReward => raidEventReward ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.CombatEventLocation>? combatEventLocation;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.CombatEventLocation> CombatEventLocation => combatEventLocation ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.CombatEventLocation> CombatEventLocation => combatEventLocation ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.CombatEventLocationReward>? combatEventLocationReward;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.CombatEventLocationReward> CombatEventLocationReward => combatEventLocationReward ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.CombatEventLocationReward> CombatEventLocationReward => combatEventLocationReward ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BuildEventItemType>>? buildEventItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BuildEventItemType>> BuildEventItem => buildEventItem ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BuildEventItemType>> BuildEventItem => buildEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CombatEventItemType>>? combatEventItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CombatEventItemType>> CombatEventItem => combatEventItem ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CombatEventItemType>> CombatEventItem => combatEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.RaidEventItemType>>? raidEventItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.RaidEventItemType>> RaidEventItem => raidEventItem ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.RaidEventItem>? raidEventItem;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.RaidEventItem> RaidEventItem => raidEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.SimpleEventItemType>>? simpleEventItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.SimpleEventItemType>> SimpleEventItem => simpleEventItem ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.SimpleEventItemType>> SimpleEventItem => simpleEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExRushEventItemType>>? exRushEventItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExRushEventItemType>> ExRushEventItem => exRushEventItem ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExRushEventItemType>> ExRushEventItem => exRushEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExHunterEventItemType>>? exHunterEventItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExHunterEventItemType>> ExHunterEventItem => exHunterEventItem ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExHunterEventItemType>> ExHunterEventItem => exHunterEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.EarnEventItemType>>? earnEventItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.EarnEventItemType>> EarnEventItem => earnEventItem ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.EarnEventItemType>> EarnEventItem => earnEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CollectEventItemType>>? collectEventItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CollectEventItemType>> CollectEventItem => collectEventItem ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CollectEventItemType>> CollectEventItem => collectEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.Clb01EventItemType>>? clb01EventItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.Clb01EventItemType>> Clb01EventItem => clb01EventItem ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.Clb01EventItemType>> Clb01EventItem => clb01EventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BattleRoyalEventItemType>>? battleRoyalEventItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BattleRoyalEventItemType>> BattleRoyalEventItem => battleRoyalEventItem ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BattleRoyalEventItemType>> BattleRoyalEventItem => battleRoyalEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventPassive>? eventPassive;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventPassive> EventPassive => eventPassive ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventPassive> EventPassive => eventPassive ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.QuestScoringEnemy>? questScoringEnemy;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.QuestScoringEnemy> QuestScoringEnemy => questScoringEnemy ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.QuestScoringEnemy> QuestScoringEnemy => questScoringEnemy ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeQuestFloor>? dmodeQuestFloor;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeQuestFloor> DmodeQuestFloor => dmodeQuestFloor ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeQuestFloor> DmodeQuestFloor => dmodeQuestFloor ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeDungeonArea>? dmodeDungeonArea;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeDungeonArea> DmodeDungeonArea => dmodeDungeonArea ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeDungeonArea> DmodeDungeonArea => dmodeDungeonArea ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeDungeonTheme>? dmodeDungeonTheme;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeDungeonTheme> DmodeDungeonTheme => dmodeDungeonTheme ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeDungeonTheme> DmodeDungeonTheme => dmodeDungeonTheme ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeEnemyTheme>? dmodeEnemyTheme;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeEnemyTheme> DmodeEnemyTheme => dmodeEnemyTheme ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeEnemyTheme> DmodeEnemyTheme => dmodeEnemyTheme ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<string, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeAreaInfo>? dmodeAreaInfo;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<string, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeAreaInfo> DmodeAreaInfo => dmodeAreaInfo ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<string, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeAreaInfo> DmodeAreaInfo => dmodeAreaInfo ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeEnemyParam>? dmodeEnemyParam;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeEnemyParam> DmodeEnemyParam => dmodeEnemyParam ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeEnemyParam> DmodeEnemyParam => dmodeEnemyParam ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeCharaLevel>? dmodeCharaLevel;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeCharaLevel> DmodeCharaLevel => dmodeCharaLevel ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeCharaLevel> DmodeCharaLevel => dmodeCharaLevel ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeWeapon>? dmodeWeapon;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeWeapon> DmodeWeapon => dmodeWeapon ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeWeapon> DmodeWeapon => dmodeWeapon ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeAbilityCrest>? dmodeAbilityCrest;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeAbilityCrest> DmodeAbilityCrest => dmodeAbilityCrest ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeAbilityCrest> DmodeAbilityCrest => dmodeAbilityCrest ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeStrengthParam>? dmodeStrengthParam;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeStrengthParam> DmodeStrengthParam => dmodeStrengthParam ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeStrengthParam> DmodeStrengthParam => dmodeStrengthParam ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeStrengthSkill>? dmodeStrengthSkill;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeStrengthSkill> DmodeStrengthSkill => dmodeStrengthSkill ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeStrengthSkill> DmodeStrengthSkill => dmodeStrengthSkill ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeStrengthAbility>? dmodeStrengthAbility;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeStrengthAbility> DmodeStrengthAbility => dmodeStrengthAbility ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeStrengthAbility> DmodeStrengthAbility => dmodeStrengthAbility ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeDungeonItemData>? dmodeDungeonItemData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeDungeonItemData> DmodeDungeonItemData => dmodeDungeonItemData ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeDungeonItemData> DmodeDungeonItemData => dmodeDungeonItemData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeServitorPassiveLevel>? dmodeServitorPassiveLevel;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeServitorPassiveLevel> DmodeServitorPassiveLevel => dmodeServitorPassiveLevel ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeServitorPassiveLevel> DmodeServitorPassiveLevel => dmodeServitorPassiveLevel ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeExpeditionFloor>? dmodeExpeditionFloor;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeExpeditionFloor> DmodeExpeditionFloor => dmodeExpeditionFloor ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeExpeditionFloor> DmodeExpeditionFloor => dmodeExpeditionFloor ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.User.UserLevel>? userLevel;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.User.UserLevel> UserLevel => userLevel ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.User.UserLevel> UserLevel => userLevel ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestSchedule.QuestScheduleInfo>? questScheduleInfo;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestSchedule.QuestScheduleInfo> QuestScheduleInfo => questScheduleInfo ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestSchedule.QuestScheduleInfo> QuestScheduleInfo => questScheduleInfo ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.TimeAttack.RankingData>? rankingData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.TimeAttack.RankingData> RankingData => rankingData ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.TimeAttack.RankingData> RankingData => rankingData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.TimeAttack.RankingTierReward>? rankingTierReward;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.TimeAttack.RankingTierReward> RankingTierReward => rankingTierReward ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.TimeAttack.RankingTierReward> RankingTierReward => rankingTierReward ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Wall.QuestWallDetail>? questWallDetail;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Wall.QuestWallDetail> QuestWallDetail => questWallDetail ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Wall.QuestWallDetail> QuestWallDetail => questWallDetail ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Wall.QuestWallMonthlyReward>? questWallMonthlyReward;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Wall.QuestWallMonthlyReward> QuestWallMonthlyReward => questWallMonthlyReward ?? throw new InvalidOperationException("MasterAsset not yet initialized!");
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Wall.QuestWallMonthlyReward> QuestWallMonthlyReward => questWallMonthlyReward ?? throw new InvalidOperationException(ErrorUninitialized);
 
     public static async Task LoadAsync()
     {
@@ -525,9 +539,9 @@ public static partial class MasterAsset
                 "Shop/SpecialShop.msgpack",
                 x => x.Id
             );
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop>> materialShopTask =
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop>> materialShopDailyTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop>(
-                "Shop/MaterialShop.msgpack",
+                "Shop/MaterialShopDaily.msgpack",
                 x => x.Id
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop>> materialShopWeeklyTask =
@@ -545,9 +559,19 @@ public static partial class MasterAsset
                 "Trade/AbilityCrestTrade.msgpack",
                 x => x.Id
             );
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData>> useItemDataTask =
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.TreasureTrade>> treasureTradeInfoTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.TreasureTrade>(
+                "Trade/TreasureTradeInfo.msgpack",
+                x => x.Id
+            );
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.TreasureTrade>> eventTreasureTradeInfoTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.TreasureTrade>(
+                "Trade/EventTreasureTradeInfo.msgpack",
+                x => x.Id
+            );
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData>> useItemTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData>(
-                "Trade/UseItemData.msgpack",
+                "Trade/UseItem.msgpack",
                 x => x.Id
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.TreasureTrade>> treasureTradeTask =
@@ -665,6 +689,16 @@ public static partial class MasterAsset
                 "Event/EventTradeGroup.msgpack",
                 x => x.Id
             );
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetGroup<int, int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.BuildEventReward>> buildEventRewardTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetGroup.LoadAsync<int, int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.BuildEventReward>(
+                "Event/BuildEventReward.msgpack",
+                x => x.Id
+            );
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetGroup<int, int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.RaidEventReward>> raidEventRewardTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetGroup.LoadAsync<int, int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.RaidEventReward>(
+                "Event/RaidEventReward.msgpack",
+                x => x.Id
+            );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.CombatEventLocation>> combatEventLocationTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.CombatEventLocation>(
                 "Event/CombatEventLocation.msgpack",
@@ -685,8 +719,8 @@ public static partial class MasterAsset
                 "Event/CombatEventItem.msgpack",
                 x => x.Id
             );
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.RaidEventItemType>>> raidEventItemTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.RaidEventItemType>>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.RaidEventItem>> raidEventItemTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.RaidEventItem>(
                 "Event/RaidEventItem.msgpack",
                 x => x.Id
             );
@@ -882,11 +916,13 @@ public static partial class MasterAsset
         mainStoryMissionGroupRewards = await mainStoryMissionGroupRewardsTask;
         normalShop = await normalShopTask;
         specialShop = await specialShopTask;
-        materialShop = await materialShopTask;
+        materialShopDaily = await materialShopDailyTask;
         materialShopWeekly = await materialShopWeeklyTask;
         materialShopMonthly = await materialShopMonthlyTask;
         abilityCrestTrade = await abilityCrestTradeTask;
-        useItemData = await useItemDataTask;
+        treasureTradeInfo = await treasureTradeInfoTask;
+        eventTreasureTradeInfo = await eventTreasureTradeInfoTask;
+        useItem = await useItemTask;
         treasureTrade = await treasureTradeTask;
         loginBonusData = await loginBonusDataTask;
         loginBonusReward = await loginBonusRewardTask;
@@ -910,6 +946,8 @@ public static partial class MasterAsset
         questScoreMissionData = await questScoreMissionDataTask;
         eventData = await eventDataTask;
         eventTradeGroup = await eventTradeGroupTask;
+        buildEventReward = await buildEventRewardTask;
+        raidEventReward = await raidEventRewardTask;
         combatEventLocation = await combatEventLocationTask;
         combatEventLocationReward = await combatEventLocationRewardTask;
         buildEventItem = await buildEventItemTask;

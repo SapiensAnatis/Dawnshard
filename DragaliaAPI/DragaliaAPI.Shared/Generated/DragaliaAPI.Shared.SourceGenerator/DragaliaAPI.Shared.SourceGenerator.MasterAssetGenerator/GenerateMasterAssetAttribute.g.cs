@@ -5,17 +5,17 @@
 namespace DragaliaAPI.Shared.MasterAsset;
 
 [System.AttributeUsage(global::System.AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
-public sealed class GenerateMasterAssetAttribute<TKey, TItem> : System.Attribute
-    where TKey : notnull
+public sealed class GenerateMasterAssetAttribute<TItem> : System.Attribute
     where TItem : class
 {
-    public GenerateMasterAssetAttribute(string filepath, string keyPropertyName = "Id") 
+    public GenerateMasterAssetAttribute(string filepath) 
     {
         this.Filepath = filepath;
-        this.KeyPropertyName = keyPropertyName;
     }
 
     public string Filepath { get; }
     
-    public string KeyPropertyName { get; }
+    public string Key { get; set; } = "Id";
+
+    public bool Group { get; set; }
 }
