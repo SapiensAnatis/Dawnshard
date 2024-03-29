@@ -51,11 +51,45 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj" />
-        <ProjectReference Include="..\..\Shared\DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj" />
-        <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj" />
+        <ProjectReference Include="../DragaliaAPI.Database/DragaliaAPI.Database.csproj" />
+        <ProjectReference Include="../../Shared/DragaliaAPI.Photon.Shared/DragaliaAPI.Photon.Shared.csproj" />
+        <ProjectReference Include="../DragaliaAPI.Shared/DragaliaAPI.Shared.csproj" />
+        <ProjectReference Include="../DragaliaAPI.MissionDesigner/DragaliaAPI.MissionDesigner.csproj" PrivateAssets="all" />
+        <ProjectReference Include="../DragaliaAPI.MasterAssetConverter/DragaliaAPI.MasterAssetConverter.csproj" PrivateAssets="all" />
+    </ItemGroup>
+    
+    <PropertyGroup>
+        <MasterAssetResources>../DragaliaAPI.Shared/Resources/</MasterAssetResources>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <MasterAssetJsonFiles Include="$(MasterAssetResources)**/*.json"/>
+        <MasterAssetMsgpackFiles Include="$(MasterAssetResources)**/*.msgpack"/>
+        <MissionProgressionInfoCs Include="../DragaliaAPI.MissionDesigner/**/*.cs"/>
     </ItemGroup>
 
+    <Target Name="MissionDesigner" 
+            BeforeTargets="MasterAssetConverter" 
+            Inputs="@(MissionProgressionInfoCs)" 
+            Outputs="$(MasterAssetResources)Missions/MissionProgressionInfo.json"
+    >
+        <Exec Command="dotnet $(OutDir)DragaliaAPI.MissionDesigner.dll -- $(MasterAssetResources)" ConsoleToMSBuild="true" />
+    </Target>
 
+    <Target Name="MasterAssetConverter" 
+            BeforeTargets="GetCopyToOutputDirectoryItems" 
+            Inputs="@(MasterAssetJsonFiles)"
+            Outputs="@(MasterAssetMsgpackFiles)"
+    >
+        <Exec Command="dotnet $(OutDir)DragaliaAPI.MasterAssetConverter.dll -- $(MasterAssetResources)" ConsoleToMSBuild="true" />
+    </Target>
+
+    <Target Name="CleanBinaryFiles" BeforeTargets="CoreClean">
+        <Message Text="Cleaning generated .msgpack files" Importance="high"/>
+        <ItemGroup>
+            <_CustomFilesToDelete Include="../DragaliaAPI.Shared/Resources/**/*.msgpack"/>
+        </ItemGroup>
+        <Delete Files="@(_CustomFilesToDelete)"/>
+    </Target>
 
 </Project>

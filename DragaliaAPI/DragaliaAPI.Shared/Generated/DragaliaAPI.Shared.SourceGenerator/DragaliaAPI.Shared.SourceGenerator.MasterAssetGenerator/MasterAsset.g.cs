@@ -7,6 +7,8 @@ namespace DragaliaAPI.Shared.MasterAsset;
 public static partial class MasterAsset
 {
     private const string ErrorUninitialized = "Property access failed: MasterAsset is not yet initialized. Call LoadAsync before accessing any properties.";
+    
+    private static bool loaded;
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>? charaData;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData> CharaData => charaData ?? throw new InvalidOperationException(ErrorUninitialized);
@@ -328,9 +330,12 @@ public static partial class MasterAsset
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Wall.QuestWallMonthlyReward>? questWallMonthlyReward;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Wall.QuestWallMonthlyReward> QuestWallMonthlyReward => questWallMonthlyReward ?? throw new InvalidOperationException(ErrorUninitialized);
-
     public static async Task LoadAsync()
     {
+        if (loaded)
+        {
+            return;
+        }
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>> charaDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>(
                 "CharaData.msgpack",
@@ -974,5 +979,6 @@ public static partial class MasterAsset
         rankingTierReward = await rankingTierRewardTask;
         questWallDetail = await questWallDetailTask;
         questWallMonthlyReward = await questWallMonthlyRewardTask;
+        loaded = true;
     }
 }

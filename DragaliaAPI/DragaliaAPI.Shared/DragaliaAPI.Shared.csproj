@@ -48,20 +48,6 @@
         </VisualStudio>
     </ProjectExtensions>
 
-    <Target Name="MissionDesigner" BeforeTargets="MasterAssetConverter" Condition="$(Tool) != 'true'">
-        <Exec Command="dotnet run --no-dependencies --project ../DragaliaAPI.MissionDesigner -- ./Resources/" ConsoleToMSBuild="true" />
-    </Target>
-
-    <Target Name="MasterAssetConverter" BeforeTargets="Build" Condition="$(Tool) != 'true'">
-        <Exec Command="dotnet run --no-dependencies --project ../DragaliaAPI.MasterAssetConverter -- ./Resources/" ConsoleToMSBuild="true" />
-    </Target>
-
-    <Target Name="CleanBinaryFiles" BeforeTargets="CoreClean">
-        <Message Text="Cleaning generated .msgpack files" Importance="high"/>
-        <ItemGroup>
-            <_CustomFilesToDelete Include="../DragaliaAPI.Shared/Resources/**/*.msgpack"/>
-        </ItemGroup>
-        <Delete Files="@(_CustomFilesToDelete)"/>
-    </Target>
+   
 
 </Project>
