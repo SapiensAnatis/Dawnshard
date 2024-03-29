@@ -11,10 +11,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <MasterAssetMsgpackFiles Include="..\DragaliaAPI.Shared\**\*.msgpack"/>
+        <!-- No symbols from DragaliaAPI.csproj are required, but we need the msgpack generation targets -->
+        <ProjectReference Include="..\DragaliaAPI\DragaliaAPI.csproj"/>
     </ItemGroup>
 
     <Target Name="CopyMsgpackFilesForTests" AfterTargets="Build">

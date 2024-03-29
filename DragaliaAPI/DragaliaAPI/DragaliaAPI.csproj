@@ -8,52 +8,52 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper" />
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
-        <PackageReference Include="EntityGraphQL" />
-        <PackageReference Include="EntityGraphQL.AspNet" />
-        <PackageReference Include="FluentRandomPicker" />
-        <PackageReference Include="FluentValidation" />
-        <PackageReference Include="JetBrains.Annotations" />
-        <PackageReference Include="MessagePack" />
-        <PackageReference Include="MessagePack.AspNetCoreMvcFormatter" />
+        <PackageReference Include="AutoMapper"/>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection"/>
+        <PackageReference Include="EntityGraphQL"/>
+        <PackageReference Include="EntityGraphQL.AspNet"/>
+        <PackageReference Include="FluentRandomPicker"/>
+        <PackageReference Include="FluentValidation"/>
+        <PackageReference Include="JetBrains.Annotations"/>
+        <PackageReference Include="MessagePack"/>
+        <PackageReference Include="MessagePack.AspNetCoreMvcFormatter"/>
         <PackageReference Include="MessagePackAnalyzer">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" />
-        <PackageReference Include="Microsoft.Extensions.Logging" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
-        <PackageReference Include="Microsoft.IdentityModel.Tokens" />
-        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
+        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore"/>
+        <PackageReference Include="Microsoft.Extensions.Logging"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"/>
+        <PackageReference Include="Microsoft.IdentityModel.Tokens"/>
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets"/>
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="MudBlazor" />
-        <PackageReference Include="Riok.Mapperly" />
-        <PackageReference Include="Serilog.Exceptions" />
-        <PackageReference Include="Serilog.Expressions" />
-        <PackageReference Include="Serilog.Settings.Configuration" />
-        <PackageReference Include="Serilog.Sinks.Async" />
-        <PackageReference Include="Serilog.Sinks.Seq" />
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
-        <PackageReference Include="System.Text.Json" />
-        <PackageReference Include="Serilog" />
-        <PackageReference Include="Serilog.AspNetCore" />
-        <PackageReference Include="Serilog.Sinks.Console" />
-        <PackageReference Include="Serilog.Sinks.File" />
-        <InternalsVisibleTo Include="DragaliaAPI.Test" />
-        <InternalsVisibleTo Include="DragaliaAPI.Integration.Test" />
+        <PackageReference Include="MudBlazor"/>
+        <PackageReference Include="Riok.Mapperly"/>
+        <PackageReference Include="Serilog.Exceptions"/>
+        <PackageReference Include="Serilog.Expressions"/>
+        <PackageReference Include="Serilog.Settings.Configuration"/>
+        <PackageReference Include="Serilog.Sinks.Async"/>
+        <PackageReference Include="Serilog.Sinks.Seq"/>
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt"/>
+        <PackageReference Include="System.Text.Json"/>
+        <PackageReference Include="Serilog"/>
+        <PackageReference Include="Serilog.AspNetCore"/>
+        <PackageReference Include="Serilog.Sinks.Console"/>
+        <PackageReference Include="Serilog.Sinks.File"/>
+        <InternalsVisibleTo Include="DragaliaAPI.Test"/>
+        <InternalsVisibleTo Include="DragaliaAPI.Integration.Test"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj" />
-        <ProjectReference Include="..\..\Shared\DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj" />
-        <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj" />
+        <ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj"/>
+        <ProjectReference Include="..\..\Shared\DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj"/>
+        <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj"/>
         <ProjectReference Include="..\DragaliaAPI.MissionDesigner\DragaliaAPI.MissionDesigner.csproj">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -69,21 +69,24 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <MasterAssetJsonFiles Include="$(MasterAssetResources)**\*.json" Exclude="$(MasterAssetResources)**\*.schema.json" />
+        <MasterAssetJsonFiles Include="$(MasterAssetResources)**\*.json" Exclude="$(MasterAssetResources)**\*.schema.json"/>
     </ItemGroup>
 
-    <Target Name="MasterAssetConverter" 
+    <Target Name="MasterAssetConverter"
             AfterTargets="Build"
             Inputs="@(MasterAssetJsonFiles)"
             Outputs="@(MasterAssetJsonFiles->'$(MasterAssetResources)%(RecursiveDir)%(Filename).msgpack')"
     >
-        <Exec Command="dotnet $(OutDir)DragaliaAPI.MasterAssetConverter.dll -- $(MasterAssetResources)" ConsoleToMSBuild="true" />
+        <Exec Command="dotnet $(OutDir)DragaliaAPI.MasterAssetConverter.dll $(MasterAssetResources)" ConsoleToMSBuild="true"/>
         <Copy SourceFiles="@(MasterAssetJsonFiles->'$(MasterAssetResources)%(RecursiveDir)%(Filename).msgpack')" DestinationFiles="@(MasterAssetJsonFiles->'$(OutDir)Resources\%(RecursiveDir)%(Filename).msgpack')"/>
     </Target>
 
-    <Target Name="CleanMsgpackFiles" BeforeTargets="CoreClean">
-        <Message Text="Cleaning generated .msgpack files" Importance="high"/>
-        <Delete Files="@(MasterAssetJsonFiles->'$(MasterAssetResources)%(RecursiveDir)%(Filename).msgpack')"/>
+    <Target Name="CleanMsgpackFiles" AfterTargets="Clean">
+        <ItemGroup>
+            <FilesToDelete Include="$(MasterAssetResources)**\*.msgpack"/>
+            <FilesToDelete Include="$(OutDir)Resources\**\*.msgpack"/>
+        </ItemGroup>
+        <Delete Files="(@FilesToDelete)"/>
     </Target>
 
 </Project>

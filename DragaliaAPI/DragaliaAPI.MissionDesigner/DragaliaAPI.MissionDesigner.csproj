@@ -13,13 +13,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="..\DragaliaAPI.Shared\Resources\Missions\MissionNormalData.json" LinkBase="Resources">
+        <None Include="$(MasterAssetResources)\Missions\MissionNormalData.json" LinkBase="Resources">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 
     <Target Name="MissionDesigner" AfterTargets="Build">
-        <Exec Command="dotnet $(OutDir)DragaliaAPI.MissionDesigner.dll -- $(MasterAssetResources)" ConsoleToMSBuild="true" />
+        <Exec Command="dotnet $(OutDir)DragaliaAPI.MissionDesigner.dll $(MasterAssetResources)" ConsoleToMSBuild="true" />
     </Target>
     
 </Project>
