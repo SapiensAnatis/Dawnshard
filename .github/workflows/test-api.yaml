@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build
-        run: dotnet build --project DragaliaAPI/DragaliaAPI.csproj
+        run: dotnet build DragaliaAPI/DragaliaAPI/DragaliaAPI.csproj
   integration-test:
     name: Integration test
     needs: build
