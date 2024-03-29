@@ -14,13 +14,6 @@ on:
       - Directory.Packages.props
 
 jobs:
-  build: # This is required to generate the msgpack files before running tests
-    name: Build main project
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build
-        run: dotnet build DragaliaAPI/DragaliaAPI/DragaliaAPI.csproj
   integration-test:
     name: Integration test
     needs: build

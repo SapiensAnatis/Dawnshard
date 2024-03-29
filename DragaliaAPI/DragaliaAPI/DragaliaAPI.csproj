@@ -64,15 +64,9 @@
         </ProjectReference>
     </ItemGroup>
 
-
-    <ItemGroup>
-        <!-- Even though we copy the msgpack files explicitly in the MasterAssetConverter target, we must signal
-             dependent projects (i.e. the test projects) to copy these files as well. -->
-        <Content Include="$(MasterAssetResources)\**\*.msgpack" LinkBase="Resources">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
-
+    <PropertyGroup>
+        <MasterAssetResources>..\DragaliaAPI.Shared\Resources\</MasterAssetResources>
+    </PropertyGroup>
 
     <ItemGroup>
         <MasterAssetJsonFiles Include="$(MasterAssetResources)**\*.json" Exclude="$(MasterAssetResources)**\*.schema.json" />

@@ -76,9 +76,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PhotonPlugin", "PhotonPlugin", "{5A97773C-C23E-4CFE-8B1F-15D8244D2134}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DragaliaAPI", "DragaliaAPI", "{F0C76530-C14A-4601-829B-EE0F4C7E24E6}"
-	ProjectSection(SolutionItems) = preProject
-		DragaliaAPI\Directory.Build.props = DragaliaAPI\Directory.Build.props
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.MasterAssetConverter", "DragaliaAPI\DragaliaAPI.MasterAssetConverter\DragaliaAPI.MasterAssetConverter.csproj", "{F0DFB899-ADC2-407E-AB32-647BA1C4122C}"
 EndProject
