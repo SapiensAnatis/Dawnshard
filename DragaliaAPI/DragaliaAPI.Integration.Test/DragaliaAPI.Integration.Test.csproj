@@ -37,10 +37,6 @@
         <Folder Include="Features\Shop\"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <MasterAssetMsgpackFiles Include="..\DragaliaAPI.Shared\**\*.msgpack"/>
-    </ItemGroup>
-
     <Target Name="CopyMsgpackFilesForTests" AfterTargets="Build">
         <ItemGroup>
             <MasterAssetMsgpackFiles Include="..\DragaliaAPI.Shared\**\*.msgpack"/>
