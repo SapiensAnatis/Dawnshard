@@ -35,7 +35,7 @@
 
     <ItemGroup>
         <Content Include="Resources\**\*.msgpack">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <None Include="Resources\**\*.json">
             <CopyToOutputDirectory>Never</CopyToOutputDirectory>
@@ -48,11 +48,11 @@
         </VisualStudio>
     </ProjectExtensions>
 
-    <Target Name="MissionDesigner" BeforeTargets="GetCopyToOutputDirectoryItems" Condition="$(Tool) != 'true'">
+    <Target Name="MissionDesigner" BeforeTargets="MasterAssetConverter" Condition="$(Tool) != 'true'">
         <Exec Command="dotnet run --no-dependencies --project ../DragaliaAPI.MissionDesigner -- ./Resources/" ConsoleToMSBuild="true" />
     </Target>
 
-    <Target Name="MasterAssetConverter" AfterTargets="MissionDesigner" Condition="$(Tool) != 'true'">
+    <Target Name="MasterAssetConverter" BeforeTargets="Build" Condition="$(Tool) != 'true'">
         <Exec Command="dotnet run --no-dependencies --project ../DragaliaAPI.MasterAssetConverter -- ./Resources/" ConsoleToMSBuild="true" />
     </Target>
 
@@ -63,5 +63,5 @@
         </ItemGroup>
         <Delete Files="@(_CustomFilesToDelete)"/>
     </Target>
-    
+
 </Project>
