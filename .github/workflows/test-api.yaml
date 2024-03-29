@@ -16,14 +16,12 @@ on:
 jobs:
   integration-test:
     name: Integration test
-    needs: build
     uses: ./.github/workflows/integration-test.yaml
     with:
       project: DragaliaAPI/DragaliaAPI.Integration.Test
     secrets: inherit
   unit-test:
     name: Unit test
-    needs: build
     strategy:
       matrix:
         project:
