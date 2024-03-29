@@ -40,10 +40,4 @@
         </None>
     </ItemGroup>
 
-    <ItemGroup>
-      <Reference Include="Microsoft.Extensions.TimeProvider.Testing">
-        <HintPath>..\..\..\..\.nuget\packages\microsoft.extensions.timeprovider.testing\8.3.0\lib\net8.0\Microsoft.Extensions.TimeProvider.Testing.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
 </Project>

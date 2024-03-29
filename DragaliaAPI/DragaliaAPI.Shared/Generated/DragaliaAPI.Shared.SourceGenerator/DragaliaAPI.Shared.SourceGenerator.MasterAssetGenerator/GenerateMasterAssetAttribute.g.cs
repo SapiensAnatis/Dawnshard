@@ -8,7 +8,7 @@ namespace DragaliaAPI.Shared.MasterAsset;
 public sealed class GenerateMasterAssetAttribute<TItem> : System.Attribute
     where TItem : class
 {
-    public GenerateMasterAssetAttribute(string filepath) 
+    public GenerateMasterAssetAttribute(string filepath)
     {
         this.Filepath = filepath;
     }

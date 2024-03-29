@@ -119,7 +119,7 @@ public class V18Update(
         const int baseMissionId = 10010700;
 
         int missionId = baseMissionId + (level / 2);
-        Debug.Assert(MasterAsset.MissionDrillData.ContainsKey(missionId));
+        Debug.Assert(MasterAsset.MissionNormalData.ContainsKey(missionId));
 
         return missionId;
     }
