@@ -24,7 +24,7 @@
             <MasterAssetMsgpackFiles Include="..\DragaliaAPI.Shared\**\*.msgpack"/>
         </ItemGroup>
 
-        <Copy SourceFiles="@(MasterAssetMsgpackFiles)" DestinationFolder="$(OutDir)Resources\%(RecursiveDir)"/>
+        <Copy SourceFiles="@(MasterAssetMsgpackFiles)" DestinationFolder="$(OutDir)%(RecursiveDir)"/>
     </Target>
 
 </Project>
