@@ -2,6 +2,7 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Api;
+using DragaliaAPI.Shared.MasterAsset;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
@@ -38,6 +39,8 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
 
     public async Task InitializeAsync()
     {
+        await MasterAsset.LoadAsync();
+
         await this.testContainersHelper.StartAsync();
 
         using IServiceScope scope = this.Services.CreateScope();

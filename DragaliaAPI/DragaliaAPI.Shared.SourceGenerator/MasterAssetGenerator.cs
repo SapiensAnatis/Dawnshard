@@ -139,6 +139,8 @@ namespace {Namespace};
 public static partial class MasterAsset
 {{
     private const string ErrorUninitialized = ""Property access failed: MasterAsset is not yet initialized. Call LoadAsync before accessing any properties."";
+
+    private static bool loaded;
 "
         );
 
@@ -169,7 +171,12 @@ $@"    public static {typeName} {propertyName} => {fieldName} ?? throw new Inval
         codeBuilder.AppendLine(
 $@"
     public static async Task LoadAsync()
-    {{"
+    {{
+        if (loaded)
+        {{
+            return;
+        }}
+"
         );
 
         foreach (MasterAssetDeclaration declaration in declarations)
@@ -208,7 +215,8 @@ $@"        {declaration.FieldName} = await {declaration.TaskName};"
         }
 
         codeBuilder.AppendLine(
-$@"    }}
+$@"       loaded = true;
+        }}
 }}"
         );
 
