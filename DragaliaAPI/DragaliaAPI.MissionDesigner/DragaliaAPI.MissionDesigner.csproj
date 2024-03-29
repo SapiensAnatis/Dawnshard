@@ -17,5 +17,9 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
+
+    <Target Name="MissionDesigner" AfterTargets="Build">
+        <Exec Command="dotnet $(OutDir)DragaliaAPI.MissionDesigner.dll -- $(MasterAssetResources)" ConsoleToMSBuild="true" />
+    </Target>
     
 </Project>

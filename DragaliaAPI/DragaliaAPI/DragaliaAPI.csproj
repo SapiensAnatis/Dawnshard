@@ -70,16 +70,7 @@
 
     <ItemGroup>
         <MasterAssetJsonFiles Include="$(MasterAssetResources)**\*.json" Exclude="$(MasterAssetResources)**\*.schema.json" />
-        <MissionProgressionInfoCs Include="..\DragaliaAPI.MissionDesigner\**\*.cs"/>
     </ItemGroup>
-
-    <Target Name="MissionDesigner"
-            BeforeTargets="MasterAssetConverter" 
-            Inputs="@(MissionProgressionInfoCs)" 
-            Outputs="$(MasterAssetResources)Missions\MissionProgressionInfo.json"
-    >
-        <Exec Command="dotnet $(OutDir)DragaliaAPI.MissionDesigner.dll -- $(MasterAssetResources)" ConsoleToMSBuild="true" />
-    </Target>
 
     <Target Name="MasterAssetConverter" 
             AfterTargets="Build"
