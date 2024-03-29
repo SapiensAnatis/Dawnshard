@@ -63,10 +63,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </ProjectReference>
     </ItemGroup>
-    
-    <PropertyGroup>
-        <MasterAssetResources>..\DragaliaAPI.Shared\Resources\</MasterAssetResources>
-    </PropertyGroup>
+
 
     <ItemGroup>
         <!-- Even though we copy the msgpack files explicitly in the MasterAssetConverter target, we must signal

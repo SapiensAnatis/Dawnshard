@@ -14,14 +14,22 @@ on:
       - Directory.Packages.props
 
 jobs:
+  build: # This is required to generate the msgpack files before running tests
+    name: Build main project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        run: dotnet build --project DragaliaAPI/DragaliaAPI.csproj
   integration-test:
     name: Integration test
+    needs: build
     uses: ./.github/workflows/integration-test.yaml
     with:
       project: DragaliaAPI/DragaliaAPI.Integration.Test
     secrets: inherit
   unit-test:
     name: Unit test
+    needs: build
     strategy:
       matrix:
         project:
