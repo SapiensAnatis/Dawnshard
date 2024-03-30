@@ -20,12 +20,8 @@
         <ProjectReference Include="..\DragaliaAPI\DragaliaAPI.csproj"/>
     </ItemGroup>
 
-    <Target Name="CopyMsgpackFilesForTests" AfterTargets="Build">
-        <ItemGroup>
-            <MasterAssetMsgpackFiles Include="$(MasterAssetResources)\**\*.msgpack"/>
-        </ItemGroup>
-
-        <Copy SourceFiles="@(MasterAssetMsgpackFiles)" DestinationFolder="$(OutDir)Resources\%(RecursiveDir)"/>
-    </Target>
+    <PropertyGroup>
+        <DependsOnApiMsgpackFiles>true</DependsOnApiMsgpackFiles>
+    </PropertyGroup>
 
 </Project>

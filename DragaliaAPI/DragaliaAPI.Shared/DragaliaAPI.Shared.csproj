@@ -43,7 +43,6 @@
             <UserProperties resources_4missions_4mainstorymissiongrouprewards_1json__JsonSchema="MainStoryMissionGroupRewards.schema.json" resources_4missions_4missionprogressioninfo_1json__JsonSchema="MissionProgressionInfo.schema.json" resources_4questschedule_4questscheduleinfo_1json__JsonSchema="QuestScheduleInfo.schema.json" />
         </VisualStudio>
     </ProjectExtensions>
-
    
 
 </Project>

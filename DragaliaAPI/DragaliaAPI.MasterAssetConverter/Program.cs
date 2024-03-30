@@ -8,7 +8,8 @@ using DragaliaAPI.Shared.Serialization;
 using MessagePack;
 using MessagePack.Resolvers;
 
-string resourcesPath = args[^1];
+string resourcesPath = args[^2];
+string outputDir = args[^1];
 
 List<AttributeInstance> attributeInstances = typeof(MasterAsset)
     .GetCustomAttributes(typeof(GenerateMasterAssetAttribute<>))
@@ -18,16 +19,17 @@ List<AttributeInstance> attributeInstances = typeof(MasterAsset)
 foreach (AttributeInstance instance in attributeInstances)
 {
     string fullJsonPath = Path.Combine(resourcesPath, instance.JsonPath);
-
-    string pathName = Path.GetFileNameWithoutExtension(fullJsonPath);
-    string outputPath = Path.Combine(Path.GetDirectoryName(fullJsonPath)!, $"{pathName}.msgpack");
+    string relativePath = Path.GetRelativePath(resourcesPath, fullJsonPath);
+    string outputPath = Path.Combine(outputDir, relativePath.Replace(".json", ".msgpack"));
 
     if (
         File.Exists(outputPath)
         && new FileInfo(outputPath).LastWriteTime >= new FileInfo(fullJsonPath).LastWriteTime
     )
     {
-        Console.WriteLine($"Skipping conversion of {pathName} - binary converted file is newer");
+        Console.WriteLine(
+            $"Skipping conversion of {relativePath} - binary converted file is newer"
+        );
         continue;
     }
 
@@ -46,6 +48,11 @@ foreach (AttributeInstance instance in attributeInstances)
             MasterAssetJsonOptions.Instance
         ) ?? throw new UnreachableException("Deserialization failure");
 
+    if (Path.GetDirectoryName(outputPath) is { } nonNullDir)
+    {
+        Directory.CreateDirectory(nonNullDir);
+    }
+
     await using FileStream outputFs = File.Create(outputPath);
 
     MessagePackSerializer.Serialize(
@@ -55,5 +62,5 @@ foreach (AttributeInstance instance in attributeInstances)
         MasterAssetMessagePackOptions.Instance
     );
 
-    Console.WriteLine($"Serialized {pathName} to binary.");
+    Console.WriteLine($"Serialized {relativePath} to binary at {outputPath}.");
 }
