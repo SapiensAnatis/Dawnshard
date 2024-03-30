@@ -16,7 +16,7 @@ public static class ModuleInitializer
     public static void InitializeMasterAsset()
     {
         TaskFactory
-            .StartNew(MasterAsset.LoadAsync())
+            .StartNew(MasterAsset.LoadAsync)
             .Unwrap()
             .ConfigureAwait(false)
             .GetAwaiter()
