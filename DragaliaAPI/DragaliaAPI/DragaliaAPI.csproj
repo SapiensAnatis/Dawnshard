@@ -70,9 +70,6 @@
 
     <ItemGroup>
         <MasterAssetJsonFiles Include="$(MasterAssetResources)**\*.json" Exclude="$(MasterAssetResources)**\*.schema.json"/>
-        <Content Include="$(MasterAssetResources)**\*.msgpack" LinkBase="Resources">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
     </ItemGroup>
 
     <Target Name="MasterAssetConverter"
@@ -82,6 +79,11 @@
     >
         <Exec Command="dotnet $(OutDir)DragaliaAPI.MasterAssetConverter.dll $(MasterAssetResources)" ConsoleToMSBuild="true"/>
         <Copy SourceFiles="@(MasterAssetJsonFiles->'$(MasterAssetResources)%(RecursiveDir)%(Filename).msgpack')" DestinationFiles="@(MasterAssetJsonFiles->'$(OutDir)Resources\%(RecursiveDir)%(Filename).msgpack')"/>
+    </Target>
+    
+    <Target Name="CopyMsgpackToPublish" BeforeTargets="BeforePublish">
+        <Message Text="Copying msgpack to $(PublishUrl)Resources" Importance="high"/>
+        <Copy SourceFiles="@(MasterAssetJsonFiles->'$(MasterAssetResources)%(RecursiveDir)%(Filename).msgpack')" DestinationFolder="$(PublishUrl)Resources\%(RecursiveDir)"/>
     </Target>
 
     <Target Name="CleanMsgpackFiles" AfterTargets="Clean">

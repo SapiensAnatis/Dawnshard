@@ -33,9 +33,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="Resources\**\*.msgpack">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
         <None Include="Resources\**\*.json">
             <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </None>
