@@ -36,5 +36,13 @@
         <Folder Include="Features\Item\"/>
         <Folder Include="Features\Shop\"/>
     </ItemGroup>
+
+    <Target Name="CopyMsgpackFilesForTests" AfterTargets="Build">
+        <ItemGroup>
+            <MasterAssetMsgpackFiles Include="$(MasterAssetResources)\**\*.msgpack"/>
+        </ItemGroup>
+
+        <Copy SourceFiles="@(MasterAssetMsgpackFiles)" DestinationFolder="$(OutDir)%(RecursiveDir)"/>
+    </Target>
     
 </Project>

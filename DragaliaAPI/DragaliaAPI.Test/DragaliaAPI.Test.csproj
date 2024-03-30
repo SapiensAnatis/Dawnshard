@@ -39,5 +39,13 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
-    
+
+    <Target Name="CopyMsgpackFilesForTests" AfterTargets="Build">
+        <ItemGroup>
+            <MasterAssetMsgpackFiles Include="$(MasterAssetResources)\**\*.msgpack"/>
+        </ItemGroup>
+
+        <Copy SourceFiles="@(MasterAssetMsgpackFiles)" DestinationFolder="$(OutDir)%(RecursiveDir)"/>
+    </Target>
+
 </Project>
