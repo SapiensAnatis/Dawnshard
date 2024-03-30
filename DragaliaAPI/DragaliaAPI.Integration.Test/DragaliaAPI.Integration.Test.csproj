@@ -42,7 +42,7 @@
             <MasterAssetMsgpackFiles Include="$(MasterAssetResources)\**\*.msgpack"/>
         </ItemGroup>
 
-        <Copy SourceFiles="@(MasterAssetMsgpackFiles)" DestinationFolder="$(OutDir)%(RecursiveDir)"/>
+        <Copy SourceFiles="@(MasterAssetMsgpackFiles)" DestinationFolder="$(OutDir)Resources\%(RecursiveDir)"/>
     </Target>
     
 </Project>
