@@ -20,5 +20,5 @@ RUN dotnet publish "DragaliaAPI.Photon.StateManager.csproj" -c Release -o /app/p
 
 FROM base AS final
 WORKDIR /app
-COPY --from=build /app/publish .
+COPY --from=build /app/publish/ .
 ENTRYPOINT ["dotnet", "DragaliaAPI.Photon.StateManager.dll"]

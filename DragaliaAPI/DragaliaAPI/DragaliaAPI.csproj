@@ -78,12 +78,12 @@
             Outputs="@(MasterAssetJsonFiles->'$(MasterAssetResources)%(RecursiveDir)%(Filename).msgpack')"
     >
         <Exec Command="dotnet $(OutDir)DragaliaAPI.MasterAssetConverter.dll $(MasterAssetResources)" ConsoleToMSBuild="true"/>
-        <Copy SourceFiles="@(MasterAssetJsonFiles->'$(MasterAssetResources)%(RecursiveDir)%(Filename).msgpack')" DestinationFiles="@(MasterAssetJsonFiles->'$(OutDir)Resources\%(RecursiveDir)%(Filename).msgpack')"/>
+        <Copy SourceFiles="@(MasterAssetJsonFiles->'$(MasterAssetResources)%(RecursiveDir)%(Filename).msgpack')" DestinationFolder="$(OutDir)Resources\%(RecursiveDir)"/>
     </Target>
     
     <Target Name="CopyMsgpackToPublish" BeforeTargets="BeforePublish">
-        <Message Text="Copying msgpack to $(PublishUrl)Resources" Importance="high"/>
-        <Copy SourceFiles="@(MasterAssetJsonFiles->'$(MasterAssetResources)%(RecursiveDir)%(Filename).msgpack')" DestinationFolder="$(PublishUrl)Resources\%(RecursiveDir)"/>
+        <Message Text="Copying msgpack to $(PublishDir)Resources" Importance="high"/>
+        <Copy SourceFiles="@(MasterAssetJsonFiles->'$(MasterAssetResources)%(RecursiveDir)%(Filename).msgpack')" DestinationFolder="$(PublishDir)Resources\%(RecursiveDir)"/>
     </Target>
 
     <Target Name="CleanMsgpackFiles" AfterTargets="Clean">

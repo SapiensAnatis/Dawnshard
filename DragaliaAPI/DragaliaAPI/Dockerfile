@@ -23,5 +23,5 @@ RUN dotnet publish "DragaliaAPI.csproj" -c Release -o /app/publish /p:UseAppHost
 
 FROM base AS final
 WORKDIR /app
-COPY --from=build /app/publish .
+COPY --from=build /app/publish/ .
 ENTRYPOINT ["dotnet", "DragaliaAPI.dll"]
