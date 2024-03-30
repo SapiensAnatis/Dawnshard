@@ -29,6 +29,7 @@ jobs:
             "DragaliaAPI/DragaliaAPI.Test",
             "DragaliaAPI/DragaliaAPI.Database.Test",
             "DragaliaAPI/DragaliaAPI.Shared.Test"
+            "DragaliaAPI/DragaliaAPI.Shared.SourceGenerator.Test"
           ]
     uses: ./.github/workflows/test.yaml
     with:

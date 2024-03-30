@@ -86,6 +86,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{18AB580B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Shared.SourceGenerator", "DragaliaAPI\DragaliaAPI.Shared.SourceGenerator\DragaliaAPI.Shared.SourceGenerator.csproj", "{FD0F2BDF-715C-417D-9059-1F2EF8FA8901}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragaliaAPI.Shared.SourceGenerator.Test", "DragaliaAPI\DragaliaAPI.Shared.SourceGenerator.Test\DragaliaAPI.Shared.SourceGenerator.Test.csproj", "{517FBE68-58A1-48DB-A798-13D6BDECF623}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -160,6 +162,10 @@ Global
 		{FD0F2BDF-715C-417D-9059-1F2EF8FA8901}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD0F2BDF-715C-417D-9059-1F2EF8FA8901}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD0F2BDF-715C-417D-9059-1F2EF8FA8901}.Release|Any CPU.Build.0 = Release|Any CPU
+		{517FBE68-58A1-48DB-A798-13D6BDECF623}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{517FBE68-58A1-48DB-A798-13D6BDECF623}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{517FBE68-58A1-48DB-A798-13D6BDECF623}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{517FBE68-58A1-48DB-A798-13D6BDECF623}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -184,6 +190,7 @@ Global
 		{F0DFB899-ADC2-407E-AB32-647BA1C4122C} = {18AB580B-2A52-4BD7-9642-60A7DFAA4FFE}
 		{18AB580B-2A52-4BD7-9642-60A7DFAA4FFE} = {F0C76530-C14A-4601-829B-EE0F4C7E24E6}
 		{FD0F2BDF-715C-417D-9059-1F2EF8FA8901} = {F0C76530-C14A-4601-829B-EE0F4C7E24E6}
+		{517FBE68-58A1-48DB-A798-13D6BDECF623} = {F0C76530-C14A-4601-829B-EE0F4C7E24E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D86831A9-C572-4B8D-BD12-EF0768BC9E4F}
