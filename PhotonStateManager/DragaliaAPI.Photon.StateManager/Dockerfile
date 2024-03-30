@@ -16,7 +16,7 @@ COPY [".editorconfig", ".editorconfig"]
 COPY ["PhotonStateManager/", "PhotonStateManager/"]
 COPY ["Shared/", "Shared/"]
 WORKDIR "/src/PhotonStateManager/DragaliaAPI.Photon.StateManager"
-RUN dotnet publish "DragaliaAPI.Photon.StateManager.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "DragaliaAPI.Photon.StateManager.csproj" -c Release -o /app/publish/ /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
