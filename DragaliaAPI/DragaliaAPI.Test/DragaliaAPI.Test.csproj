@@ -40,12 +40,4 @@
         </None>
     </ItemGroup>
     
-    <Target Name="CopyMsgpackFilesForTests" AfterTargets="Build">
-        <ItemGroup>
-            <MasterAssetMsgpackFiles Include="..\DragaliaAPI.Shared\**\*.msgpack"/>
-        </ItemGroup>
-
-        <Copy SourceFiles="@(MasterAssetMsgpackFiles)" DestinationFolder="$(OutDir)%(RecursiveDir)"/>
-    </Target>
-    
 </Project>

@@ -70,6 +70,9 @@
 
     <ItemGroup>
         <MasterAssetJsonFiles Include="$(MasterAssetResources)**\*.json" Exclude="$(MasterAssetResources)**\*.schema.json"/>
+        <Content Include="$(MasterAssetResources)**\*.msgpack" LinkBase="Resources">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <Target Name="MasterAssetConverter"
@@ -78,13 +81,11 @@
             Outputs="@(MasterAssetJsonFiles->'$(MasterAssetResources)%(RecursiveDir)%(Filename).msgpack')"
     >
         <Exec Command="dotnet $(OutDir)DragaliaAPI.MasterAssetConverter.dll $(MasterAssetResources)" ConsoleToMSBuild="true"/>
-        <Copy SourceFiles="@(MasterAssetJsonFiles->'$(MasterAssetResources)%(RecursiveDir)%(Filename).msgpack')" DestinationFiles="@(MasterAssetJsonFiles->'$(OutDir)Resources\%(RecursiveDir)%(Filename).msgpack')"/>
     </Target>
 
     <Target Name="CleanMsgpackFiles" AfterTargets="Clean">
         <ItemGroup>
             <FilesToDelete Include="$(MasterAssetResources)**\*.msgpack"/>
-            <FilesToDelete Include="$(OutDir)Resources\**\*.msgpack"/>
         </ItemGroup>
         <Delete Files="(@FilesToDelete)"/>
     </Target>
