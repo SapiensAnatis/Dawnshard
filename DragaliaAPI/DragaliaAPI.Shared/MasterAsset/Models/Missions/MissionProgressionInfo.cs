@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
+﻿namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
 public record MissionProgressionInfo(
     int Id,
