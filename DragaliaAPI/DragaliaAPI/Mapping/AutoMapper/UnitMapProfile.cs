@@ -31,10 +31,12 @@ public class UnitMapProfile : Profile
 
         this.CreateMap<DbWeaponBody, WeaponBodyList>()
             // These members do not appear in the savefile
+#pragma warning disable CS0612 // Type or member is obsolete
             .ForMember(x => x.Ability1Level, opts => opts.Ignore())
             .ForMember(x => x.Ability2Levell, opts => opts.Ignore())
             .ForMember(x => x.SkillNo, opts => opts.Ignore())
             .ForMember(x => x.SkillLevel, opts => opts.Ignore());
+#pragma warning restore CS0612 // Type or member is obsolete
 
         this.CreateMap<DbWeaponSkin, WeaponSkinList>();
 

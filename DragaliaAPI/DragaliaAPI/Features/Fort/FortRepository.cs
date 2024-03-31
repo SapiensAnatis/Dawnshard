@@ -240,13 +240,6 @@ public class FortRepository : IFortRepository
         apiContext.PlayerFortBuilds.Remove(build);
     }
 
-    public async Task<int> GetActiveCarpenters()
-    {
-        // TODO: remove this when testcontainers gets merged in
-        return this.apiContext.Database.IsSqlite()
-            ? (await this.Builds.ToListAsync()).Count(x =>
-                x.BuildEndDate != DateTimeOffset.UnixEpoch
-            )
-            : await this.Builds.CountAsync(x => x.BuildEndDate != DateTimeOffset.UnixEpoch);
-    }
+    public async Task<int> GetActiveCarpenters() =>
+        await this.Builds.CountAsync(x => x.BuildEndDate != DateTimeOffset.UnixEpoch);
 }

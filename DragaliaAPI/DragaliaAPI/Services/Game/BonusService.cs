@@ -110,7 +110,7 @@ public class BonusService(
 
         foreach (int id in buildIds)
         {
-            FortPlantDetail d = MasterAsset.FortPlant.Get(id);
+            FortPlantDetail d = MasterAsset.FortPlantDetail.Get(id);
 
             if (d.EffectId != FortEffectTypes.Element)
                 continue;
@@ -148,7 +148,7 @@ public class BonusService(
 
         foreach (int id in buildIds)
         {
-            FortPlantDetail d = MasterAsset.FortPlant.Get(id);
+            FortPlantDetail d = MasterAsset.FortPlantDetail.Get(id);
 
             if (d.EffectId != FortEffectTypes.Weapon)
                 continue;
@@ -186,7 +186,7 @@ public class BonusService(
 
         foreach (int id in buildIds)
         {
-            FortPlantDetail d = MasterAsset.FortPlant.Get(id);
+            FortPlantDetail d = MasterAsset.FortPlantDetail.Get(id);
 
             if (d.EffectId == FortEffectTypes.DragonStats)
             {

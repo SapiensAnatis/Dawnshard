@@ -157,7 +157,7 @@ public class QuestController(
     public DragaliaResult DropList(QuestDropListRequest request)
     {
         IEnumerable<DropEntity> drops = Enumerable.Empty<DropEntity>();
-        if (MasterAsset.QuestDrops.TryGetValue(request.QuestId, out QuestDropInfo? dropInfo))
+        if (MasterAsset.QuestDropInfo.TryGetValue(request.QuestId, out QuestDropInfo? dropInfo))
             drops = dropInfo.Drops;
 
         return Ok(

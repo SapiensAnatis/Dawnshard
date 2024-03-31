@@ -101,10 +101,10 @@ Stopwatch watch = new();
 app.Logger.LogInformation("Loading MasterAsset data.");
 
 watch.Start();
-RuntimeHelpers.RunClassConstructor(typeof(MasterAsset).TypeHandle);
+await MasterAsset.LoadAsync();
 watch.Stop();
 
-app.Logger.LogInformation("Loaded MasterAsset in {time}.", watch.Elapsed);
+app.Logger.LogInformation("Loaded MasterAsset in {Time} ms.", watch.ElapsedMilliseconds);
 
 app.Logger.LogDebug(
     "Using PostgreSQL connection {Host}:{Port}",

@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 
@@ -41,6 +42,7 @@ public record QuestRewardData(
     int FirstClearSetEntityQuantity5
 )
 {
+    [IgnoreMember]
     public readonly (QuestCompleteType Type, int Value)[] Missions =
     {
         (MissionCompleteType1, MissionCompleteValues1),
@@ -48,6 +50,7 @@ public record QuestRewardData(
         (MissionCompleteType3, MissionCompleteValues3)
     };
 
+    [IgnoreMember]
     public readonly (EntityTypes Type, int Id, int Quantity)[] Entities =
     {
         (MissionsClearSetEntityType1, MissionsClearSetEntityId1, MissionsClearSetEntityQuantity1),
@@ -55,6 +58,7 @@ public record QuestRewardData(
         (MissionsClearSetEntityType3, MissionsClearSetEntityId3, MissionsClearSetEntityQuantity3)
     };
 
+    [IgnoreMember]
     public readonly (EntityTypes Type, int Id, int Quantity)[] FirstClearEntities =
     {
         (FirstClearSetEntityType1, FirstClearSetEntityId1, FirstClearSetEntityQuantity1),

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.Json;
+using DragaliaAPI.Shared.Serialization;
 
 namespace DragaliaAPI.Test.Features.TimeAttack;
 

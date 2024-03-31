@@ -24,7 +24,7 @@ public class QuestEnemyService : IQuestEnemyService
     {
         AtgenEnemy[] enemyList = this.GetEnemyList(questId, areaNum);
 
-        if (!MasterAsset.QuestDrops.TryGetValue(questId, out QuestDropInfo? questDropInfo))
+        if (!MasterAsset.QuestDropInfo.TryGetValue(questId, out QuestDropInfo? questDropInfo))
         {
             this.logger.LogWarning("Failed to get drop data for quest id {questId}", questId);
             return enemyList;

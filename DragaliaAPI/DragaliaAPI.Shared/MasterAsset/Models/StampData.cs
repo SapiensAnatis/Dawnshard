@@ -4,4 +4,4 @@ namespace DragaliaAPI.Shared.MasterAsset.Models;
 /// A sticker.
 /// </summary>
 /// <param name="Id">The ID of the sticker.</param>
-public record Stamp(int Id);
+public record StampData(int Id);

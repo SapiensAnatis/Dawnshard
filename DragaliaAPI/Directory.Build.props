@@ -1,0 +1,27 @@
+<Project>
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+    <PropertyGroup>
+        <MasterAssetResources>$(MSBuildThisFileDirectory)DragaliaAPI.Shared\Resources\</MasterAssetResources>
+        <ApiOutputDirectory>$(MSBuildThisFileDirectory)DragaliaAPI\bin\$(Configuration)\$(TargetFramework)\</ApiOutputDirectory>
+    </PropertyGroup>
+    
+    <Target Name="Test" AfterTargets="Build">
+        <Message Text="$(MSBuildProjectFile) depends on msgpack: $(DependsOnApiMsgpackFiles)" Importance="high"/>
+    </Target>
+
+    <Target Name="CopyApiMsgpackFiles" AfterTargets="Build" Condition="$(DependsOnApiMsgpackFiles) == 'true'">
+        <ItemGroup>
+            <MasterAssetMsgpackFiles Include="$(ApiOutputDirectory)Resources\**\*.msgpack"/>
+        </ItemGroup>
+        <Copy SourceFiles="@(MasterAssetMsgpackFiles)" DestinationFolder="$(OutDir)Resources\%(RecursiveDir)"/>
+    </Target>
+
+    <Target Name="CleanMsgpackFiles" AfterTargets="Clean" Condition="$(DependsOnApiMsgpackFiles) == 'true'">
+        <ItemGroup>
+            <FilesToDelete Include="$(OutDir)Resources\**\*.msgpack"/>
+        </ItemGroup>
+        <Delete Files="@(FilesToDelete)"/>
+    </Target>
+    
+</Project>

@@ -14,7 +14,6 @@ using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Caching.Distributed;
-using NuGet.Packaging;
 
 namespace DragaliaAPI.Services.Game;
 

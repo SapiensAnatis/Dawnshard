@@ -1,5 +1,6 @@
 using System.Collections.Frozen;
 using DragaliaAPI.Shared.Definitions.Enums;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -15,6 +16,7 @@ public record WeaponBodyBuildupLevel(
     int BuildupMaterialQuantity3
 )
 {
+    [IgnoreMember]
     public FrozenDictionary<Materials, int> MaterialMap { get; } =
         new List<KeyValuePair<Materials, int>>()
         {

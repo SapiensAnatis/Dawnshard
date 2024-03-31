@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 
@@ -16,6 +17,7 @@ public record ManaPieceMaterial(
     int DewPoint
 )
 {
+    [IgnoreMember]
     public (Materials Id, int Quantity)[] NeededMaterials =
     {
         (MaterialId1, MaterialQuantity1),

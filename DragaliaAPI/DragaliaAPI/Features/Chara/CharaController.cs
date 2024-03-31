@@ -15,7 +15,6 @@ using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Packaging;
 
 namespace DragaliaAPI.Features.Chara;
 
@@ -679,7 +678,7 @@ public class CharaController(
             {
                 int[] charaStories = MasterAsset
                     .CharaStories.Get((int)playerCharData.CharaId)
-                    .storyIds;
+                    .StoryIds;
 
                 int nextStoryUnlockIndex =
                     await storyRepository
@@ -786,7 +785,7 @@ public class CharaController(
             }
         }
 
-        nodes.AddRange(manaNodes);
+        nodes.UnionWith(manaNodes);
 
         missionProgressionService.OnCharacterManaNodeUnlock(
             playerCharData.CharaId,

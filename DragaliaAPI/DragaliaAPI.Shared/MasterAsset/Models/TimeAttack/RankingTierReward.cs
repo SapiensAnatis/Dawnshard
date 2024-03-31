@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
 
-namespace DragaliaAPI.Shared.MasterAsset.Models;
+namespace DragaliaAPI.Shared.MasterAsset.Models.TimeAttack;
 
 public record RankingTierReward(
     int Id,

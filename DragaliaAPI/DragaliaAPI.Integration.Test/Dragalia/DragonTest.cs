@@ -449,7 +449,7 @@ public class DragonTest : TestFixture
             DbPlayerDragonReliabilityFactory.Create(ViewerId, Dragons.MidgardsormrZero)
         );
 
-        foreach (int storyId in MasterAsset.DragonStories[(int)Dragons.MidgardsormrZero].storyIds)
+        foreach (int storyId in MasterAsset.DragonStories[(int)Dragons.MidgardsormrZero].StoryIds)
         {
             await this.AddToDatabase(
                 new DbPlayerStoryState()

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Frozen;
 using DragaliaAPI.Shared.Definitions.Enums;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -16,6 +17,7 @@ public record AbilityCrestBuildupLevel(
     int UniqueBuildupMaterialCount
 )
 {
+    [IgnoreMember]
     public FrozenDictionary<Materials, int> MaterialMap { get; } =
         new List<KeyValuePair<Materials, int>>()
         {
@@ -26,5 +28,6 @@ public record AbilityCrestBuildupLevel(
             .Where(x => x.Key != Materials.Empty)
             .ToFrozenDictionary(x => x.Key, x => x.Value);
 
+    [IgnoreMember]
     public bool IsUseUniqueMaterial => UniqueBuildupMaterialCount != 0;
 };

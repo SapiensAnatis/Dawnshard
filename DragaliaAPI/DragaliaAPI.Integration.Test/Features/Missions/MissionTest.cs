@@ -443,7 +443,7 @@ public class MissionTest : TestFixture
 
         await this.AddRangeToDatabase(
             MasterAsset
-                .DrillMission.Enumerable.Where(x => x.MissionDrillGroupId == 1)
+                .MissionDrillData.Enumerable.Where(x => x.MissionDrillGroupId == 1)
                 .Select(ToDbMission)
         );
 
@@ -457,7 +457,7 @@ public class MissionTest : TestFixture
 
         await this.AddRangeToDatabase(
             MasterAsset
-                .DrillMission.Enumerable.Where(x => x.MissionDrillGroupId == 2)
+                .MissionDrillData.Enumerable.Where(x => x.MissionDrillGroupId == 2)
                 .Select(ToDbMission)
         );
 
@@ -473,7 +473,7 @@ public class MissionTest : TestFixture
 
         await this.AddRangeToDatabase(
             MasterAsset
-                .DrillMission.Enumerable.Where(x => x.MissionDrillGroupId == 3)
+                .MissionDrillData.Enumerable.Where(x => x.MissionDrillGroupId == 3)
                 .Select(ToDbMission)
         );
 
@@ -499,7 +499,7 @@ public class MissionTest : TestFixture
     {
         await this.AddRangeToDatabase(
             MasterAsset
-                .DrillMission.Enumerable.Where(x => x.MissionDrillGroupId == 1)
+                .MissionDrillData.Enumerable.Where(x => x.MissionDrillGroupId == 1)
                 .Select(x => new DbPlayerMission()
                 {
                     ViewerId = this.ViewerId,

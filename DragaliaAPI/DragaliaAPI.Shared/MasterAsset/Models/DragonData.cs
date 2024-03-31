@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -39,6 +40,7 @@ public record DragonData(
     int VariationId
 ) : IUnitData
 {
+    [IgnoreMember]
     public readonly int[][] Abilities =
     {
         new[] { Abilities11, Abilities12, Abilities13, Abilities14, Abilities15, Abilities16 },

@@ -6,6 +6,7 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
+using DragaliaAPI.Shared.MasterAsset.Models.Trade;
 
 namespace DragaliaAPI.Shared.Test.Unit;
 
@@ -218,7 +219,7 @@ public class MasterAssetTest
     [Fact]
     public void ManaNode_Get_ReturnsExpectedProperties()
     {
-        ManaNode node = MasterAsset.MasterAsset.ManaNode.Get(5045);
+        ManaNode node = MasterAsset.MasterAsset.MC.Get(5045);
 
         node.Should()
             .BeEquivalentTo(
@@ -504,11 +505,11 @@ public class MasterAssetTest
     [InlineData(Charas.SummerCelliera, 110255021, 110255022, 110255023, 110255024, 110255025)]
     public void CharaStories_ReturnsExpectedStoryIds(Charas chara, params int[] expectedStoryIds)
     {
-        int key = MasterAsset.MasterAsset.CharaStories[(int)chara].id;
+        int key = MasterAsset.MasterAsset.CharaStories[(int)chara].Id;
 
         MasterAsset
             .MasterAsset.CharaStories[key]
-            .storyIds.Should()
+            .StoryIds.Should()
             .ContainInConsecutiveOrder(expectedStoryIds);
     }
 
@@ -517,11 +518,11 @@ public class MasterAssetTest
     [InlineData(Dragons.Liger, 210043011, 210043012)]
     public void DragonStories_ReturnsExpectedStoryIds(Dragons dragon, params int[] expectedStoryIds)
     {
-        int key = MasterAsset.MasterAsset.DragonStories[(int)dragon].id;
+        int key = MasterAsset.MasterAsset.DragonStories[(int)dragon].Id;
 
         MasterAsset
             .MasterAsset.DragonStories[key]
-            .storyIds.Should()
+            .StoryIds.Should()
             .ContainInConsecutiveOrder(expectedStoryIds);
     }
 
