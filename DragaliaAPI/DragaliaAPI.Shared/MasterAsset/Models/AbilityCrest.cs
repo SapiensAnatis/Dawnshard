@@ -1,5 +1,6 @@
 ﻿using System.Collections.Frozen;
 using DragaliaAPI.Shared.Definitions.Enums;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -32,6 +33,7 @@ public record AbilityCrest(
 
     public int GetBuildupLevelId(int level) => int.Parse($"{this.Rarity}010{level:00}");
 
+    [IgnoreMember]
     public FrozenDictionary<Materials, int> DuplicateMaterialMap { get; } =
         new List<KeyValuePair<Materials, int>>() { new(DuplicateEntityId, DuplicateEntityQuantity) }
             .Where(x => x.Key != Materials.Empty)

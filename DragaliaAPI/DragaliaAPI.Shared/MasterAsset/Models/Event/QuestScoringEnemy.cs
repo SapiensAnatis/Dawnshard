@@ -13,7 +13,4 @@ namespace DragaliaAPI.Shared.MasterAsset.Models.Event;
  * _ScoringEnemyGroupId = {QuestData._Gid}{01, or 02 for daily ticket quest}
  */
 
-
-
-
 public record QuestScoringEnemy(int Id, int ScoringEnemyGroupId, int EnemyListId, int Point);

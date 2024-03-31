@@ -93,6 +93,7 @@ public record WeaponBody(
     int MaxAtk3
 )
 {
+    [IgnoreMember]
     public FrozenDictionary<Materials, int> CreateMaterialMap { get; } =
         new List<KeyValuePair<Materials, int>>()
         {

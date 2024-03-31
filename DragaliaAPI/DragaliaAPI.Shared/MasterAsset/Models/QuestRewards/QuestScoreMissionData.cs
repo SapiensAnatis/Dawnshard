@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 
@@ -43,5 +44,6 @@ public record QuestScoreMissionData(
         return this.scores[(int)variationType];
     }
 
+    [IgnoreMember]
     public int WaveCount => this.scores.Count(x => x != 0);
 };

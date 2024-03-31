@@ -1,5 +1,6 @@
 using System.Collections.Frozen;
 using DragaliaAPI.Shared.Definitions.Enums;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -26,6 +27,7 @@ public record WeaponPassiveAbility(
     int AbilityId
 )
 {
+    [IgnoreMember]
     public FrozenDictionary<Materials, int> MaterialMap { get; } =
         new List<KeyValuePair<Materials, int>>()
         {

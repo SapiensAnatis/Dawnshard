@@ -90,15 +90,22 @@ public record CharaData(
     int VariationId
 ) : IUnitData
 {
+    [IgnoreMember]
     public bool HasManaSpiral => this.MaxLimitBreakCount > 4;
 
+    [IgnoreMember]
     public byte MaxLevel => (byte)(MaxLimitBreakCount * 20);
 
+    [IgnoreMember]
     public ushort MaxBaseHp => (ushort)(HasManaSpiral ? AddMaxHp1 : MaxHp);
+
+    [IgnoreMember]
     public ushort MaxBaseAtk => (ushort)(HasManaSpiral ? AddMaxAtk1 : MaxAtk);
 
+    [IgnoreMember]
     public ManaNodes MaxManaNodes => HasManaSpiral ? ManaNodes.Circle7 : ManaNodesUtil.MaxManaNodes;
 
+    [IgnoreMember]
     public int MaxAbility1Level =
         Abilities14 != 0
             ? 4
@@ -110,6 +117,7 @@ public record CharaData(
                         ? 1
                         : 0;
 
+    [IgnoreMember]
     public int MaxAbility2Level =
         Abilities24 != 0
             ? 4
@@ -121,6 +129,7 @@ public record CharaData(
                         ? 1
                         : 0;
 
+    [IgnoreMember]
     public int MaxAbility3Level =
         Abilities34 != 0
             ? 4

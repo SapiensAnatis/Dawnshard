@@ -1,4 +1,6 @@
-﻿namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
+﻿using MessagePack;
+
+namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
 public record DmodeEnemyTheme(
     int Id,
@@ -35,6 +37,7 @@ public record DmodeEnemyTheme(
     int Param30
 )
 {
+    [IgnoreMember]
     public int[] AvailableParams =
     {
         Param1,

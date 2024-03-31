@@ -1,5 +1,6 @@
 ﻿using System.Collections.Frozen;
 using DragaliaAPI.Shared.Definitions.Enums;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -71,6 +72,7 @@ public record FortPlantDetail(
     string Odds
 )
 {
+    [IgnoreMember]
     public FrozenDictionary<Materials, int> CreateMaterialMap { get; } =
         new List<KeyValuePair<Materials, int>>()
         {

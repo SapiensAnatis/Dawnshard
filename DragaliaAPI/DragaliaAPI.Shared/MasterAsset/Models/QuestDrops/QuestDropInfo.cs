@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using DragaliaAPI.Shared.Definitions.Enums;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 
@@ -13,5 +14,6 @@ public record DropEntity(int Id, EntityTypes EntityType, double Quantity)
     /// <remarks>
     /// Loses any decimal points after 10e-4.
     /// </remarks>
+    [IgnoreMember]
     public int Weight => (int)Math.Round(Quantity * 100);
 }

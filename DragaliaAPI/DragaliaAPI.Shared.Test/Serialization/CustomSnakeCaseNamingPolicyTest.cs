@@ -1,6 +1,6 @@
 using DragaliaAPI.Shared.Serialization;
 
-namespace DragaliaAPI.Shared.Test.Json;
+namespace DragaliaAPI.Shared.Test.Serialization;
 
 public class CustomSnakeCaseNamingPolicyTest
 {
