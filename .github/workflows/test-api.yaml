@@ -19,6 +19,9 @@ jobs:
     uses: ./.github/workflows/integration-test.yaml
     with:
       project: DragaliaAPI/DragaliaAPI.Integration.Test
+      build-script: |
+        dotnet restore DragaliaAPI/DragaliaAPI.MissionDesigner/DragaliaAPI.MissionDesigner.csproj
+        dotnet restore DragaliaAPI/DragaliaAPI.MasterAssetConverter/DragaliaAPI.MasterAssetConverter.csproj
     secrets: inherit
   unit-test:
     name: Unit test
@@ -34,3 +37,6 @@ jobs:
     uses: ./.github/workflows/test.yaml
     with:
       project: ${{ matrix.project }}
+      build-script: |
+        dotnet restore DragaliaAPI/DragaliaAPI.MissionDesigner/DragaliaAPI.MissionDesigner.csproj
+        dotnet restore DragaliaAPI/DragaliaAPI.MasterAssetConverter/DragaliaAPI.MasterAssetConverter.csproj

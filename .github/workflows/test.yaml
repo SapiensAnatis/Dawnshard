@@ -7,6 +7,10 @@ on:
         type: string
         required: true
         description: "Path to project under test"
+      build-script:
+        type: string
+        description: "Any special commands required for the build, run in-between dotnet restore and dotnet test"
+        
 
 jobs:
   test:
@@ -37,6 +41,10 @@ jobs:
         
       - name: Install dependencies
         run: dotnet restore ${{ inputs.project }} --packages .nuget-cache --verbosity normal
+        
+      - name: Run build script
+        if: ${{ inputs.build-script != '' }}
+        run: ${{ inputs.build-script }}
 
       - name: Test
         run: >
