@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Shared.Definitions.Enums;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Wall;
 
@@ -50,6 +51,7 @@ public record QuestWallDetail(
     int ClearEntityQuantity5
 )
 {
+    [IgnoreMember]
     public IEnumerable<AreaInfo> AreaInfo =>
         new List<AreaInfo>() { new(Scene01, AreaName01) }.Where(x =>
             !string.IsNullOrEmpty(x.ScenePath) && !string.IsNullOrEmpty(x.AreaName)

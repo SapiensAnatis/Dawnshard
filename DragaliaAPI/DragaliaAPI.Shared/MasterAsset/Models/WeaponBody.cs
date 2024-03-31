@@ -1,5 +1,6 @@
 ﻿using System.Collections.Frozen;
 using DragaliaAPI.Shared.Definitions.Enums;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -92,6 +93,7 @@ public record WeaponBody(
     int MaxAtk3
 )
 {
+    [IgnoreMember]
     public FrozenDictionary<Materials, int> CreateMaterialMap { get; } =
         new List<KeyValuePair<Materials, int>>()
         {
@@ -133,10 +135,13 @@ public record WeaponBody(
     public int GetPassiveAbilityId(int abilityNo) =>
         int.Parse($"{this.WeaponPassiveAbilityGroupId}{abilityNo:00}");
 
+    [IgnoreMember]
     public readonly int[] Hp = { BaseHp, MaxHp1, MaxHp2, MaxHp3 };
 
+    [IgnoreMember]
     public readonly int[] Atk = { BaseAtk, MaxAtk1, MaxAtk2, MaxAtk3 };
 
+    [IgnoreMember]
     public readonly int[][] Abilities =
     {
         new[] { Abilities11, Abilities12, Abilities13 },

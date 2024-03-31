@@ -4,9 +4,9 @@ namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
 public record MissionProgressionInfo(
     int Id,
-    [property: JsonConverter(typeof(JsonStringEnumConverter))] MissionType MissionType,
+    MissionType MissionType,
     int MissionId,
-    [property: JsonConverter(typeof(JsonStringEnumConverter))] MissionCompleteType CompleteType,
+    MissionCompleteType CompleteType,
     bool UseTotalValue,
     int? ProgressionGroupId = null,
     int[]? UnlockedOnComplete = null,

@@ -91,7 +91,7 @@ public class MissionService(
     )> UnlockMainMissionGroup(int groupId)
     {
         IEnumerable<MainStoryMission> missions = MasterAsset
-            .MainStoryMission.Enumerable.Where(x => x.MissionMainStoryGroupId == groupId)
+            .MissionMainStoryData.Enumerable.Where(x => x.MissionMainStoryGroupId == groupId)
             .ToList();
 
         List<MainStoryMissionGroupReward> rewards = MasterAsset
@@ -126,7 +126,7 @@ public class MissionService(
     public async Task<IEnumerable<DbPlayerMission>> UnlockDrillMissionGroup(int groupId)
     {
         IEnumerable<DrillMission> missions = MasterAsset
-            .DrillMission.Enumerable.Where(x => x.MissionDrillGroupId == groupId)
+            .MissionDrillData.Enumerable.Where(x => x.MissionDrillGroupId == groupId)
             .ToList();
 
         if (
@@ -160,7 +160,7 @@ public class MissionService(
     public async Task<IEnumerable<DbPlayerMission>> UnlockMemoryEventMissions(int eventId)
     {
         IEnumerable<MemoryEventMission> missions = MasterAsset
-            .MemoryEventMission.Enumerable.Where(x => x.EventId == eventId)
+            .MissionMemoryEventData.Enumerable.Where(x => x.EventId == eventId)
             .ExceptBy(ObsoleteMemoryEventMissions, mission => mission.Id)
             .ToList();
 
@@ -219,11 +219,11 @@ public class MissionService(
         }
 
         List<PeriodMission> periodMissions = MasterAsset
-            .PeriodMission.Enumerable.Where(x => x.QuestGroupId == eventId)
+            .MissionPeriodData.Enumerable.Where(x => x.QuestGroupId == eventId)
             .ToList();
 
         List<DailyMission> dailyMissions = MasterAsset
-            .DailyMission.Enumerable.Where(x => x.QuestGroupId == eventId)
+            .MissionDailyData.Enumerable.Where(x => x.QuestGroupId == eventId)
             .ToList();
 
         logger.LogInformation("Unlocking event missions for event {eventId}", eventId);
@@ -387,7 +387,7 @@ public class MissionService(
             return [];
 
         IEnumerable<(int Group, int MaxId)> maxIds = MasterAsset
-            .DrillMission.Enumerable.GroupBy(x => x.MissionDrillGroupId)
+            .MissionDrillData.Enumerable.GroupBy(x => x.MissionDrillGroupId)
             .Select(group => (group.Key, group.Max(x => x.Id)));
 
         foreach ((int group, int maxId) in maxIds)
@@ -414,7 +414,7 @@ public class MissionService(
                 == 0
             )
             {
-                DrillMissionGroup group = MasterAsset.DrillMissionGroup.Get(groupId);
+                DrillMissionGroup group = MasterAsset.MissionDrillGroup.Get(groupId);
                 rewards.Add(
                     new AtgenBuildEventRewardEntityList(
                         group.UnlockEntityType1,
@@ -525,7 +525,7 @@ public class MissionService(
             {
                 currentMissionId = 100100;
             }
-            else if (completedCount < MasterAsset.DrillMission.Count)
+            else if (completedCount < MasterAsset.MissionDrillData.Count)
             {
                 // Prevent icon from disappearing while waiting to start the next group
                 receivableRewardCount = 1;

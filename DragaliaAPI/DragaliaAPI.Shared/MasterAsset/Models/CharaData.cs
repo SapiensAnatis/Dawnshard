@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -89,15 +90,22 @@ public record CharaData(
     int VariationId
 ) : IUnitData
 {
+    [IgnoreMember]
     public bool HasManaSpiral => this.MaxLimitBreakCount > 4;
 
+    [IgnoreMember]
     public byte MaxLevel => (byte)(MaxLimitBreakCount * 20);
 
+    [IgnoreMember]
     public ushort MaxBaseHp => (ushort)(HasManaSpiral ? AddMaxHp1 : MaxHp);
+
+    [IgnoreMember]
     public ushort MaxBaseAtk => (ushort)(HasManaSpiral ? AddMaxAtk1 : MaxAtk);
 
+    [IgnoreMember]
     public ManaNodes MaxManaNodes => HasManaSpiral ? ManaNodes.Circle7 : ManaNodesUtil.MaxManaNodes;
 
+    [IgnoreMember]
     public int MaxAbility1Level =
         Abilities14 != 0
             ? 4
@@ -109,6 +117,7 @@ public record CharaData(
                         ? 1
                         : 0;
 
+    [IgnoreMember]
     public int MaxAbility2Level =
         Abilities24 != 0
             ? 4
@@ -120,6 +129,7 @@ public record CharaData(
                         ? 1
                         : 0;
 
+    [IgnoreMember]
     public int MaxAbility3Level =
         Abilities34 != 0
             ? 4
@@ -136,7 +146,7 @@ public record CharaData(
         string MC_1 = this.ManaCircleName[3..];
         int MC_0 = int.Parse($"{MC_1}{num}");
 
-        return MasterAsset.ManaNode.Get(MC_0);
+        return MasterAsset.MC.Get(MC_0);
     }
 
     public IEnumerable<ManaNode> GetManaNodes()
@@ -144,11 +154,12 @@ public record CharaData(
         // There is a quirk in the DB where every mana circle has a node with index 0 and type 0, such that
         // characters always have 51/71 nodes instead of 50/70 as expected.
         // These are scattered through the data so it is easier to check in code than modify the auto-generated JSON.
-        return MasterAsset.ManaNode.Enumerable.Where(x =>
+        return MasterAsset.MC.Enumerable.Where(x =>
             x.ManaCircleName == this.ManaCircleName && x.ManaPieceType != ManaNodeTypes.None
         );
     }
 
+    [IgnoreMember]
     public readonly int[] ExAbility =
     {
         ExAbilityData1,
@@ -158,6 +169,7 @@ public record CharaData(
         ExAbilityData5
     };
 
+    [IgnoreMember]
     public readonly int[] ExAbility2 =
     {
         ExAbility2Data1,
@@ -167,6 +179,7 @@ public record CharaData(
         ExAbility2Data5
     };
 
+    [IgnoreMember]
     public readonly int[][] Abilities =
     {
         new[] { Abilities11, Abilities12, Abilities13, Abilities14 },

@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Event;
 
@@ -12,6 +13,9 @@ public record RaidEventReward(
     int RewardEntityQuantity
 ) : IEventReward
 {
+    [IgnoreMember]
     public int EventItemId => RaidEventItemId;
+
+    [IgnoreMember]
     public int EventItemQuantity => RaidEventItemQuantity;
 };

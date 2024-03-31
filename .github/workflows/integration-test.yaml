@@ -7,6 +7,9 @@ on:
         type: string
         required: true
         description: "Path to project under test"
+      before-test:
+        type: string
+        description: "Any special commands required for the build that should be invoked before dotnet test"
 
 env:
   HUSKY: 0
@@ -65,7 +68,11 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Install dependencies
-        run: dotnet restore ${{ inputs.project }} --packages .nuget-cache --verbosity normal 
+        run: dotnet restore ${{ inputs.project }} --packages .nuget-cache --verbosity normal
+
+      - name: Run build script
+        if: ${{ inputs.before-test != '' }}
+        run: ${{ inputs.before-test }}
 
       - name: Test
         run: >

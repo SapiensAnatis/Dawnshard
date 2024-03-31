@@ -53,7 +53,7 @@ public class V9Update(
                 continue;
             }
 
-            int[] storyArray = storyData.storyIds;
+            int[] storyArray = storyData.StoryIds;
 
             if (!stories.Contains(storyArray[0]))
             {

@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Enemy;
 
@@ -27,6 +28,7 @@ public record EnemyParam(
     int DataId
 )
 {
+    [IgnoreMember]
     public readonly (int Param, int Num)[] Children =
     {
         (Child01Param, Child01Num),
@@ -34,6 +36,7 @@ public record EnemyParam(
         (Child03Param, Child03Num)
     };
 
+    [IgnoreMember]
     public readonly (int Param, int Num)[] Weaks =
     {
         (WeakA, WeakANum),
@@ -41,5 +44,6 @@ public record EnemyParam(
         (WeakC, WeakCNum)
     };
 
+    [IgnoreMember]
     public readonly int[] Parts = { PartsA, PartsB, PartsC, PartsD };
 };

@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Trade;
 
@@ -38,6 +39,7 @@ public record TreasureTrade(
     int DestinationLimitBreakCount
 )
 {
+    [IgnoreMember]
     public (EntityTypes Type, int Id, int Quantity, int LimitBreakCount)[] NeedEntities =>
         new[]
         {

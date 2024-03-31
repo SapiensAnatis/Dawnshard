@@ -4,10 +4,11 @@ using System.Text.Json.Serialization;
 using DragaliaAPI.MissionDesigner;
 using DragaliaAPI.MissionDesigner.Missions;
 using DragaliaAPI.MissionDesigner.Models.Attributes;
-using DragaliaAPI.Shared.Json;
-using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.Serialization;
 
 Dictionary<int, MissionProgressionInfo> missions = new();
+
+string resourcesPath = args[^1];
 
 // Get legacy missions
 foreach (MissionProgressionInfo mission in V1Missions.V1MissionList)
@@ -34,14 +35,29 @@ foreach (Type type in types)
     }
 }
 
+#pragma warning disable CA1869 // Avoid creating a new 'JsonSerializerOptions' instance for every serialization operation
+JsonSerializerOptions options =
+    new(MasterAssetJsonOptions.Instance)
+    {
+        WriteIndented = true,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
+#pragma warning restore CA1869
+
+await using FileStream readNormalMissionFs = File.OpenRead(
+    Path.Combine(resourcesPath, "Missions", "MissionNormalData.json")
+);
+
+List<NormalMission> missionList =
+    await JsonSerializer.DeserializeAsync<List<NormalMission>>(readNormalMissionFs, options)
+    ?? throw new JsonException("Deserialization failure");
+Dictionary<int, NormalMission> normalMissions = missionList.ToDictionary(x => x.Id, x => x);
+
 foreach ((_, MissionProgressionInfo progInfo) in missions)
 {
     if (
         progInfo.MissionType != MissionType.Normal
-        || !MasterAsset.NormalMission.TryGetValue(
-            progInfo.MissionId,
-            out NormalMission? normalMission
-        )
+        || !normalMissions.TryGetValue(progInfo.MissionId, out NormalMission? normalMission)
         || normalMission.NeedCompleteMissionId == default
     )
     {
@@ -58,15 +74,7 @@ foreach ((_, MissionProgressionInfo progInfo) in missions)
     };
 }
 
-#pragma warning disable CA1869 // Avoid creating a new 'JsonSerializerOptions' instance for every serialization operation
-JsonSerializerOptions options =
-    new(MasterAssetJsonOptions.Instance)
-    {
-        WriteIndented = true,
-        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-    };
-#pragma warning restore CA1869
-
-string json = JsonSerializer.Serialize(missions.Values, options);
-
-File.WriteAllText(args[^1], json);
+await using FileStream fs = File.Create(
+    Path.Combine(resourcesPath, "Missions/", "MissionProgressionInfo.json")
+);
+await JsonSerializer.SerializeAsync(fs, missions.Values, options);

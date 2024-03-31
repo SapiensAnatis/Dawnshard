@@ -205,7 +205,7 @@ public class QuestService(
         List<Entity> drops = new();
 
         if (
-            !MasterAsset.QuestBonusRewards.TryGetValue(
+            !MasterAsset.QuestBonusRewardInfo.TryGetValue(
                 questId,
                 out QuestBonusReward? questBonusReward
             )

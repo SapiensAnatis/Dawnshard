@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization.Metadata;
-using DragaliaAPI.Shared.Json;
+using DragaliaAPI.Shared.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Formatters;

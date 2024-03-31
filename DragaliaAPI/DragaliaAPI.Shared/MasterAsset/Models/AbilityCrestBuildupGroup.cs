@@ -1,5 +1,6 @@
 ﻿using System.Collections.Frozen;
 using DragaliaAPI.Shared.Definitions.Enums;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -18,6 +19,7 @@ public record AbilityCrestBuildupGroup(
     int UniqueBuildupMaterialCount
 )
 {
+    [IgnoreMember]
     public FrozenDictionary<Materials, int> MaterialMap { get; } =
         new List<KeyValuePair<Materials, int>>()
         {
@@ -28,7 +30,9 @@ public record AbilityCrestBuildupGroup(
             .Where(x => x.Key != Materials.Empty)
             .ToFrozenDictionary(x => x.Key, x => x.Value);
 
+    [IgnoreMember]
     public bool IsUseUniqueMaterial => UniqueBuildupMaterialCount != 0;
 
+    [IgnoreMember]
     public bool IsUseDewpoint => BuildupDewPoint != 0;
 };

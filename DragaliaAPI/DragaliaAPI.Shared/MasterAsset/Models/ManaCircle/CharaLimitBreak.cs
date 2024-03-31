@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 
@@ -71,6 +72,7 @@ public record CharaLimitBreak(
     int GrowMaterialNum5
 )
 {
+    [IgnoreMember]
     public readonly CharaLimitBreakRequirements[] NeededMaterials =
     {
         new(

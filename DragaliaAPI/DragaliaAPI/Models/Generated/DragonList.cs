@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using DragaliaAPI.Shared.Serialization;
 using MessagePack;
 
 namespace DragaliaAPI.Models.Generated;
@@ -9,7 +10,7 @@ public partial class DragonList
     /// The time the dragon was obtained at.
     /// </summary>
     /// <remarks>
-    /// <see cref="DragaliaAPI.Shared.Json.CustomSnakeCaseNamingPolicy"/> special-cases properties called
+    /// <see cref="CustomSnakeCaseNamingPolicy"/> special-cases properties called
     /// "GetTime" into "gettime", which is true for all other types aside from this one, where it actually
     /// needs to be "get_time"
     /// </remarks>

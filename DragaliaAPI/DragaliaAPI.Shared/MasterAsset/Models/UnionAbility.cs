@@ -1,4 +1,6 @@
-﻿namespace DragaliaAPI.Shared.MasterAsset.Models;
+﻿using MessagePack;
+
+namespace DragaliaAPI.Shared.MasterAsset.Models;
 
 public record UnionAbility(
     int Id,
@@ -19,6 +21,7 @@ public record UnionAbility(
     int PartyPower5
 )
 {
+    [IgnoreMember]
     public readonly (int Count, int AbilityId, int Power)[] Abilities =
     {
         (CrestGroup1Count1, AbilityId1, PartyPower1),

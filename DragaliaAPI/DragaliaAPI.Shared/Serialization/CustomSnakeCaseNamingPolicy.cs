@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace DragaliaAPI.Shared.Json;
+namespace DragaliaAPI.Shared.Serialization;
 
 /// <summary>
 /// Custom JSON naming policy similar to <see cref="JsonNamingPolicy.SnakeCaseLower"/>, but which considers

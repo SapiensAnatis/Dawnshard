@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Photon.Shared.Enums;
+using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
@@ -18,6 +19,7 @@ public record DmodeQuestFloor(
     int SkipClearFloorNum
 )
 {
+    [IgnoreMember]
     public int[] AvailableThemes =
     {
         DrawDungeonThemeId1,
