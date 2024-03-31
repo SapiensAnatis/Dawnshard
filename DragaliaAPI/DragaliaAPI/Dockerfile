@@ -16,7 +16,7 @@ COPY ["Directory.Build.props", "."]
 COPY ["Directory.Packages.props", "."]
 COPY ["nuget.config", "."]
 RUN dotnet restore "DragaliaAPI/DragaliaAPI.MissionDesigner/DragaliaAPI.MissionDesigner.csproj"
-RUN dotnet restore "DragaliaAPI/DragaliaAPI.MasterAssetConverter/DragaliaAPI.MissionDesigner.csproj"
+RUN dotnet restore "DragaliaAPI/DragaliaAPI.MasterAssetConverter/DragaliaAPI.MasterAssetConverter.csproj"
 COPY ["DragaliaAPI/DragaliaAPI/DragaliaAPI.csproj", "DragaliaAPI/DragaliaAPI/"]
 RUN dotnet restore "DragaliaAPI/DragaliaAPI/DragaliaAPI.csproj"
 COPY [".editorconfig", ".editorconfig"]
