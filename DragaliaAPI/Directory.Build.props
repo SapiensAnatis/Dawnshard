@@ -5,10 +5,6 @@
         <MasterAssetResources>$(MSBuildThisFileDirectory)DragaliaAPI.Shared\Resources\</MasterAssetResources>
         <ApiOutputDirectory>$(MSBuildThisFileDirectory)DragaliaAPI\bin\$(Configuration)\$(TargetFramework)\</ApiOutputDirectory>
     </PropertyGroup>
-    
-    <Target Name="Test" AfterTargets="Build">
-        <Message Text="$(MSBuildProjectFile) depends on msgpack: $(DependsOnApiMsgpackFiles)" Importance="high"/>
-    </Target>
 
     <Target Name="CopyApiMsgpackFiles" AfterTargets="Build" Condition="$(DependsOnApiMsgpackFiles) == 'true'">
         <ItemGroup>
