@@ -12,7 +12,7 @@ indent_style = space
 tab_width = 4
 
 # New line preferences
-end_of_line = crlf
+end_of_line = lf
 insert_final_newline = true
 
 #### .NET Coding Conventions ####
@@ -23,10 +23,10 @@ dotnet_sort_system_directives_first = true
 file_header_template = unset
 
 # this. and Me. preferences
-dotnet_style_qualification_for_event = false
-dotnet_style_qualification_for_field = false
-dotnet_style_qualification_for_method = false
-dotnet_style_qualification_for_property = false
+dotnet_style_qualification_for_field = true:silent
+dotnet_style_qualification_for_property = true:silent
+dotnet_style_qualification_for_method = true:silent
+dotnet_style_qualification_for_event = true:silent
 
 # Language keywords vs BCL types preferences
 dotnet_style_predefined_type_for_locals_parameters_members = true:warning
@@ -227,22 +227,13 @@ dotnet_naming_style.begins_with_i.capitalization = pascal_case
 csharp_style_prefer_primary_constructors = true:suggestion
 csharp_style_allow_blank_line_after_token_in_arrow_expression_clause_experimental = true:silent
 
-[DragaliaAPI/DragaliaAPI.Database/Migrations/*.cs]
-generated_code = true
-
-[*.{cs,vb}]
-dotnet_style_operator_placement_when_wrapping = beginning_of_line
-tab_width = 4
-indent_size = 4
-end_of_line = crlf
-dotnet_style_qualification_for_field = true:silent
-dotnet_style_qualification_for_property = true:silent
-dotnet_style_qualification_for_method = true:silent
-dotnet_style_qualification_for_event = true:silent
-
-
-
-[*.cs]
+# Mapperly
 dotnet_diagnostic.RMG012.severity = error # Unmapped target member
 dotnet_diagnostic.RMG020.severity = error # Unmapped source member
 
+[DragaliaAPI/DragaliaAPI.Database/Migrations/*.cs]
+generated_code = true
+
+[*.xml]
+indent_style = space
+indent_size = 4
