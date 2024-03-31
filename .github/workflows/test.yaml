@@ -10,7 +10,6 @@ on:
       before-test:
         type: string
         description: "Any special commands required for the build that should be invoked before dotnet test"
-        
 
 jobs:
   test:
@@ -42,9 +41,9 @@ jobs:
       - name: Install dependencies
         run: dotnet restore ${{ inputs.project }} --packages .nuget-cache --verbosity normal
         
-      - name: Run build script
-        if: ${{ inputs.build-script != '' }}
-        run: ${{ inputs.build-script }}
+      - name: Run pre-test script
+        if: ${{ inputs.before-test != '' }}
+        run: ${{ inputs.before-test }}
 
       - name: Test
         run: >
