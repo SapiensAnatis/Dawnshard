@@ -7,9 +7,9 @@ on:
         type: string
         required: true
         description: "Path to project under test"
-      build-script:
+      before-test:
         type: string
-        description: "Any special commands required for the build, run in-between dotnet restore and dotnet test"
+        description: "Any special commands required for the build that should be invoked before dotnet test"
         
 
 jobs:
