@@ -21,6 +21,10 @@ public static class UnitAvailabilityExtensions
     private static readonly FrozenDictionary<Charas, UnitAvailability> CharaAvailabilityMap =
         new Dictionary<Charas, UnitAvailability>
         {
+            // Banned units
+            [Charas.KimonoElisanne] = UnitAvailability.Limited,
+            [Charas.WeddingElisanne] = UnitAvailability.Limited,
+
             // Story units
             [Charas.ThePrince] = UnitAvailability.Story,
             [Charas.Elisanne] = UnitAvailability.Story,
@@ -88,7 +92,7 @@ public static class UnitAvailabilityExtensions
             [Charas.GalaMym] = UnitAvailability.Gala,
             [Charas.GalaCleo] = UnitAvailability.Gala,
             [Charas.GalaPrince] = UnitAvailability.Gala,
-            [Charas.GalaElisanne] = UnitAvailability.Gala,
+            [Charas.GalaElisanne] = UnitAvailability.Limited,
             [Charas.GalaLuca] = UnitAvailability.Gala,
             [Charas.GalaAlex] = UnitAvailability.Gala,
             [Charas.GalaLeif] = UnitAvailability.Gala,

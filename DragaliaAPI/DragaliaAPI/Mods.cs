@@ -12,6 +12,7 @@ public static class Mods
             Charas.Elisanne,
             Charas.GalaElisanne,
             Charas.HalloweenElisanne,
-            Charas.KimonoElisanne
+            Charas.KimonoElisanne,
+            Charas.WeddingElisanne
         }.ToFrozenSet();
 }
