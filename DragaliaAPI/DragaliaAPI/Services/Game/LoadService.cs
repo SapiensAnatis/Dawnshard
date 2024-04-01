@@ -1,14 +1,11 @@
 ﻿using System.Diagnostics;
-using AutoMapper;
+using DragaliaAPI;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Present;
-using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Trade;
-using DragaliaAPI.Features.Wall;
-using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -55,13 +52,28 @@ public class LoadService(
             {
                 BuildList = savefile.BuildList,
                 UserData = savefile.UserData,
-                CharaList = savefile.CharaList,
+                CharaList = savefile.CharaList.Where(x => !Mods.RemovedCharacters.Contains(x.CharaId)),
                 DragonList = savefile.DragonList,
                 DragonReliabilityList = savefile.DragonReliabilityList,
                 AbilityCrestList = savefile.AbilityCrestList,
                 TalismanList = savefile.TalismanList,
                 WeaponBodyList = savefile.WeaponBodyList,
-                PartyList = savefile.PartyList,
+                PartyList = savefile.PartyList.Select(x => new PartyList()
+                {
+                    PartyName = x.PartyName,
+                    PartyNo = x.PartyNo,
+                    PartySettingList = x.PartySettingList.Select(y =>
+                    {
+                        if (Mods.RemovedCharacters.Contains(y.CharaId))
+                        {
+                            return new PartySettingList() { UnitNo = y.UnitNo };
+                        }
+                        else
+                        {
+                            return y;
+                        }
+                    })
+                }),
                 QuestList = savefile.QuestList,
                 QuestEventList = savefile.QuestEvents,
                 QuestTreasureList = savefile.QuestTreasureList,

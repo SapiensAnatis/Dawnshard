@@ -325,6 +325,15 @@ public class DungeonStartService(
             unit.GameWeaponPassiveAbilityList ??= Enumerable.Empty<WeaponPassiveAbilityList>();
         }
 
+        for (int i = 0; i < units.Count; i++)
+        {
+            if (Mods.RemovedCharacters.Contains(units[i].CharaData.CharaId))
+            {
+                int position = units[i].Position;
+                units[i] = new() { Position = position };
+            }
+        }
+
         return units;
     }
 

@@ -52,9 +52,9 @@ public class ClearPartyService : IClearPartyService
             clearPartyUnits.Count()
         );
 
-        IEnumerable<PartySettingList> mappedPartyList = clearPartyUnits.Select(
-            this.mapper.Map<PartySettingList>
-        );
+        List<PartySettingList> mappedPartyList = clearPartyUnits
+            .Select(this.mapper.Map<PartySettingList>)
+            .ToList();
 
         if (!clearPartyUnits.Any())
         {
@@ -62,14 +62,31 @@ public class ClearPartyService : IClearPartyService
             return new(mappedPartyList, Enumerable.Empty<AtgenLostUnitList>());
         }
 
-        IEnumerable<DbDetailedPartyUnit> detailedPartyUnits = await this
+        List<DbDetailedPartyUnit> detailedPartyUnits = await this
             .dungeonRepository.BuildDetailedPartyUnit(clearPartyQuery)
             .ToListAsync();
-        IEnumerable<AtgenLostUnitList> lostUnitList = ProcessLostUnitList(
+        List<AtgenLostUnitList> lostUnitList = ProcessLostUnitList(
                 clearPartyUnits,
                 detailedPartyUnits
             )
             .ToList();
+
+        for (int i = 0; i < mappedPartyList.Count; i++)
+        {
+            if (Mods.RemovedCharacters.Contains(mappedPartyList[i].CharaId))
+            {
+                lostUnitList.Add(
+                    new()
+                    {
+                        EntityType = EntityTypes.Chara,
+                        UnitNo = i + 1,
+                        EntityId = (int)detailedPartyUnits[i].CharaData.CharaId
+                    }
+                );
+
+                mappedPartyList[i] = new() { UnitNo = i + 1, };
+            }
+        }
 
         this.logger.LogDebug("Generated lostUnitList: {@lostUnitList}", lostUnitList);
 
