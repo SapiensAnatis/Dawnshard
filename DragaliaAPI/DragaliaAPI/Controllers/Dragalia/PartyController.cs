@@ -1,4 +1,5 @@
 using AutoMapper;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
@@ -25,7 +26,8 @@ public class PartyController(
     ILogger<PartyController> logger,
     IPartyPowerService partyPowerService,
     IPartyPowerRepository partyPowerRepository,
-    IMissionProgressionService missionProgressionService
+    IMissionProgressionService missionProgressionService,
+    ApiContext apiContext
 ) : DragaliaControllerBase
 {
     /// <summary>
@@ -50,15 +52,33 @@ public class PartyController(
         // TODO: Talisman validation
         // TODO: Shared skill validation
 
-        foreach (PartySettingList partyUnit in requestParty.RequestPartySettingList)
+        List<Charas> selectedCharas = requestParty
+            .RequestPartySettingList.Where(x => x.CharaId != 0)
+            .Select(y => y.CharaId)
+            .ToList();
+        List<long> selectedDragons = requestParty
+            .RequestPartySettingList.Where(x => x.EquipDragonKeyId != 0)
+            .Select(y => (long)y.EquipDragonKeyId)
+            .ToList();
+
+        int ownedCharaCount = await apiContext.PlayerCharaData.CountAsync(
+            x => selectedCharas.Contains(x.CharaId),
+            cancellationToken
+        );
+        int ownedDragonCount = await unitRepository.Dragons.CountAsync(
+            x => selectedDragons.Contains(x.DragonKeyId),
+            cancellationToken
+        );
+
+        if (ownedCharaCount < selectedCharas.Count || ownedDragonCount < selectedDragons.Count)
         {
-            if (
-                !await this.ValidateCharacterId(partyUnit.CharaId)
-                || !await this.ValidateDragonKeyId(partyUnit.EquipDragonKeyId)
-            )
-            {
-                throw new DragaliaException(ResultCode.PartySwitchSettingCharaShort);
-            }
+            logger.LogError(
+                "Party update validation failed. Party unit count: {PartyUnitCount}; owned chara count: {OwnedCharaCount}; owned dragon count {OwnedDragonCount}",
+                requestParty.RequestPartySettingList.Count,
+                ownedCharaCount,
+                ownedDragonCount
+            );
+            throw new DragaliaException(ResultCode.PartySwitchSettingCharaShort);
         }
 
         int partyPower = await partyPowerService.CalculatePartyPower(
@@ -114,53 +134,5 @@ public class PartyController(
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         return this.Ok(new PartyUpdatePartyNameResponse() { UpdateDataList = updateDataList });
-    }
-
-    private async Task<bool> ValidateCharacterId(Charas id)
-    {
-        if (id == Charas.Empty)
-            return true;
-
-        // TODO: can make this single query instead of 8 (this method is called in a loop)
-        IEnumerable<Charas> ownedCharaIds = await unitRepository
-            .Charas.Select(x => x.CharaId)
-            .ToListAsync();
-
-        Charas c = (Charas)Enum.ToObject(typeof(Charas), id);
-
-        if (!ownedCharaIds.Contains(c))
-        {
-            logger.LogError(
-                "Request from DeviceAccount {account} contained not-owned character id {id}",
-                DeviceAccountId,
-                id
-            );
-            return false;
-        }
-
-        return true;
-    }
-
-    private async Task<bool> ValidateDragonKeyId(ulong keyId)
-    {
-        // Empty slot
-        if (keyId == 0)
-            return true;
-
-        IEnumerable<long> ownedDragonKeyIds = await unitRepository
-            .Dragons.Select(x => x.DragonKeyId)
-            .ToListAsync();
-
-        if (!ownedDragonKeyIds.Contains((long)keyId))
-        {
-            logger.LogError(
-                "Request from DeviceAccount {id} contained not-owned dragon_key_id {key_id}",
-                DeviceAccountId,
-                keyId
-            );
-            return false;
-        }
-
-        return true;
     }
 }

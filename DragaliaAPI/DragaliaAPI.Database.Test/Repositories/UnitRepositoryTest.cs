@@ -28,39 +28,10 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
 
         this.unitRepository = new UnitRepository(
             fixture.ApiContext,
-            this.mockPlayerIdentityService.Object,
-            LoggerTestUtils.Create<UnitRepository>()
+            this.mockPlayerIdentityService.Object
         );
 
         this.fixture.ApiContext.ChangeTracker.Clear();
-    }
-
-    [Fact]
-    public async Task GetAllCharaData_ValidId_ReturnsData()
-    {
-        await this.fixture.AddToDatabase(new DbPlayerCharaData(1, Charas.Akasha));
-
-        (await this.unitRepository.Charas.ToListAsync()).Should().NotBeEmpty();
-    }
-
-    [Fact]
-    public async Task GetAllCharaData_InvalidId_ReturnsEmpty()
-    {
-        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(400);
-
-        await this.fixture.AddToDatabase(DbPlayerDragonDataFactory.Create(1, Dragons.Nyarlathotep));
-
-        (await this.unitRepository.Charas.ToListAsync()).Should().BeEmpty();
-    }
-
-    [Fact]
-    public async Task GetAllCharaData_ReturnsOnlyDataForGivenId()
-    {
-        await this.fixture.AddToDatabase(new DbPlayerCharaData(1, Charas.Ilia));
-
-        (await this.unitRepository.Charas.ToListAsync())
-            .Should()
-            .AllSatisfy(x => x.ViewerId.Should().Be(ViewerId));
     }
 
     [Fact]
@@ -81,10 +52,10 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetAllDragonData_ReturnsOnlyDataForGivenId()
     {
-        await this.fixture.AddToDatabase(new DbPlayerCharaData(ViewerId, Charas.Ilia));
-        await this.fixture.AddToDatabase(new DbPlayerCharaData(244, Charas.Ilia));
+        await this.fixture.AddToDatabase(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Agni));
+        await this.fixture.AddToDatabase(DbPlayerDragonDataFactory.Create(444, Dragons.Agni));
 
-        (await this.unitRepository.Charas.ToListAsync())
+        (await this.unitRepository.Dragons.ToListAsync())
             .Should()
             .AllSatisfy(x => x.ViewerId.Should().Be(ViewerId));
     }

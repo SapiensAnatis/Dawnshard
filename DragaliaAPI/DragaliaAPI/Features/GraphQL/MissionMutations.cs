@@ -156,7 +156,11 @@ public class MissionMutations : MutationBase
         DbPlayer player,
         MissionMutationArgs args
     ) =>
-        context.PlayerMissions.FirstOrDefault(x =>
-            x.Id == args.MissionId && x.Type == args.MissionType && x.ViewerId == player.ViewerId
-        ) ?? throw new InvalidOperationException("No mission found.");
+        context
+            .PlayerMissions.IgnoreQueryFilters()
+            .FirstOrDefault(x =>
+                x.Id == args.MissionId
+                && x.Type == args.MissionType
+                && x.ViewerId == player.ViewerId
+            ) ?? throw new InvalidOperationException("No mission found.");
 }

@@ -40,7 +40,8 @@ public class ImpersionationMutations : MutationBase
 
         await this.sessionService.StartUserImpersonation(targetAccountId, targetViewerId);
 
-        return context => context.Players.First(x => x.AccountId == targetAccountId);
+        return context =>
+            context.Players.IgnoreQueryFilters().First(x => x.AccountId == targetAccountId);
     }
 
     [GraphQLMutation]

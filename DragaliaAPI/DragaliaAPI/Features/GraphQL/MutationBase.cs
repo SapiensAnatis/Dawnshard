@@ -24,6 +24,8 @@ public abstract class MutationBase
         Func<IQueryable<DbPlayer>, IQueryable<DbPlayer>>? include = null
     )
     {
+        IDisposable context = this.identityService.StartUserImpersonation(viewerId, null);
+
         IQueryable<DbPlayer> query = this.apiContext.Players.Where(x =>
             x.UserData != null && x.UserData.ViewerId == viewerId
         );
@@ -38,6 +40,6 @@ public abstract class MutationBase
 
         this.Player = player;
 
-        return this.identityService.StartUserImpersonation(viewerId, player.AccountId);
+        return context;
     }
 }

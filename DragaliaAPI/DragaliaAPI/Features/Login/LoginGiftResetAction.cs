@@ -17,7 +17,7 @@ public class LoginGiftResetAction : IDailyResetAction
     {
         this.presentService.AddPresent(
             new Present.Present(
-                PresentMessage.DragaliaLostTeam,
+                PresentMessage.DragaliaLostTeamMessage,
                 EntityTypes.Material,
                 (int)Materials.ChampionsTestament,
                 5
@@ -26,7 +26,7 @@ public class LoginGiftResetAction : IDailyResetAction
 
         this.presentService.AddPresent(
             new Present.Present(
-                PresentMessage.DragaliaLostTeam,
+                PresentMessage.DragaliaLostTeamMessage,
                 EntityTypes.Material,
                 (int)Materials.KnightsTestament,
                 5
@@ -35,7 +35,7 @@ public class LoginGiftResetAction : IDailyResetAction
 
         this.presentService.AddPresent(
             new Present.Present(
-                PresentMessage.DragaliaLostTeam,
+                PresentMessage.DragaliaLostTeamMessage,
                 EntityTypes.Material,
                 (int)Materials.Omnicite
             )
@@ -43,7 +43,7 @@ public class LoginGiftResetAction : IDailyResetAction
 
         this.presentService.AddPresent(
             new Present.Present(
-                PresentMessage.DragaliaLostTeam,
+                PresentMessage.DragaliaLostTeamMessage,
                 EntityTypes.Material,
                 (int)Materials.TwinklingSand,
                 10
@@ -59,7 +59,7 @@ public class LoginGiftResetAction : IDailyResetAction
                 Materials.ShadowTome,
                 Materials.LightTome
             }.Select(x => new Present.Present(
-                PresentMessage.DragaliaLostTeam,
+                PresentMessage.DragaliaLostTeamMessage,
                 EntityTypes.Material,
                 (int)x,
                 5

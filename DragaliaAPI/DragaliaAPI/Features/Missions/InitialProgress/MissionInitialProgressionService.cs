@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
@@ -26,7 +27,8 @@ public class MissionInitialProgressionService(
     ITradeRepository tradeRepository,
     IPartyPowerRepository partyPowerRepository,
     IEventRepository eventRepository,
-    IServiceProvider provider
+    IServiceProvider provider,
+    ApiContext apiContext
 ) : IMissionInitialProgressionService
 {
     public async Task<DbPlayerMission> StartMission(
@@ -281,8 +283,8 @@ public class MissionInitialProgressionService(
         if (element != null)
         {
             return (
-                    await unitRepository
-                        .Charas.Select(x => new { x.CharaId, x.Level })
+                    await apiContext
+                        .PlayerCharaData.Select(x => new { x.CharaId, x.Level })
                         .ToListAsync()
                 )
                     .Where(x => MasterAsset.CharaData[x.CharaId].ElementalType == element)
@@ -290,7 +292,7 @@ public class MissionInitialProgressionService(
                     .Max() ?? 0;
         }
 
-        return await unitRepository.Charas.MaxAsync(x => x.Level);
+        return await apiContext.PlayerCharaData.MaxAsync(x => x.Level);
     }
 
     private async Task<int> GetCharacterManaNodeCount(Charas? charaId, UnitElement? element)
@@ -302,15 +304,18 @@ public class MissionInitialProgressionService(
 
         if (element != null)
         {
-            return (await unitRepository.Charas.ToListAsync())
+            return (
+                    await apiContext
+                        .PlayerCharaData.Select(x => new { x.CharaId, x.ManaNodeUnlockCount })
+                        .ToListAsync()
+                )
                     .Where(x => MasterAsset.CharaData[x.CharaId].ElementalType == element)
                     .Select(x => (int?)x.ManaNodeUnlockCount)
                     .Max() ?? 0;
         }
 
-        return (await unitRepository.Charas.ToListAsync())
-                .Select(x => (int?)x.ManaNodeUnlockCount)
-                .Max() ?? 0;
+        return await apiContext.PlayerCharaData.Select(x => (int?)x.ManaNodeUnlockCount).MaxAsync()
+            ?? 0;
     }
 
     private async Task<int> GetDragonMaxLevel(Dragons? dragonId, UnitElement? element)
@@ -425,11 +430,11 @@ public class MissionInitialProgressionService(
                 .Select(x => x.Id)
                 .ToHashSet();
 
-            charaQuery = unitRepository.Charas.Where(x => validCharas.Contains(x.CharaId));
+            charaQuery = apiContext.PlayerCharaData.Where(x => validCharas.Contains(x.CharaId));
         }
         else
         {
-            charaQuery = unitRepository.Charas;
+            charaQuery = apiContext.PlayerCharaData;
         }
 
         return type switch

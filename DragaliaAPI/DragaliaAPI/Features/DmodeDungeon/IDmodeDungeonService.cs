@@ -9,7 +9,7 @@ public interface IDmodeDungeonService
         Charas chara,
         int startFloor,
         int servitorId,
-        IEnumerable<Charas> editSkillCharaIds
+        IList<Charas> editSkillCharaIds
     );
 
     Task<(DungeonState State, DmodeIngameData IngameData)> RestartDungeon();

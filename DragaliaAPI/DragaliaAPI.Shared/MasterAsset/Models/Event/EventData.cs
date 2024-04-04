@@ -30,8 +30,8 @@ public record EventData(
         int
     >()
     {
-        [20462] = 2046203, // Advent of the Origin    / Origa / Originally 2043803
         [20443] = 2044303, // Faith Forsaken Part One / Harle / Originally 2043803
+        [20462] = 2046203, // Advent of the Origin    / Origa / Originally 2043803
     }.ToFrozenDictionary();
 
     public int GetActualGuestJoinStoryId() =>

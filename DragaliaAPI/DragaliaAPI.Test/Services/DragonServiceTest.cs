@@ -686,7 +686,6 @@ public class DragonServiceTest : RepositoryTestFixture
 
         stories = new List<DbPlayerStoryState>();
 
-        mockStoryRepository.SetupGet(x => x.Stories).Returns(stories.AsQueryable().BuildMock());
         mockStoryRepository
             .Setup(x =>
                 x.GetOrCreateStory(

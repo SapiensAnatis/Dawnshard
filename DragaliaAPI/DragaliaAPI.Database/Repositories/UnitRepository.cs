@@ -23,23 +23,12 @@ public class UnitRepository : IUnitRepository
 {
     private readonly ApiContext apiContext;
     private readonly IPlayerIdentityService playerIdentityService;
-    private readonly ILogger<UnitRepository> logger;
 
-    public UnitRepository(
-        ApiContext apiContext,
-        IPlayerIdentityService playerIdentityService,
-        ILogger<UnitRepository> logger
-    )
+    public UnitRepository(ApiContext apiContext, IPlayerIdentityService playerIdentityService)
     {
         this.apiContext = apiContext;
         this.playerIdentityService = playerIdentityService;
-        this.logger = logger;
     }
-
-    public IQueryable<DbPlayerCharaData> Charas =>
-        this.apiContext.PlayerCharaData.Where(x =>
-            x.ViewerId == this.playerIdentityService.ViewerId
-        );
 
     public IQueryable<DbPlayerDragonData> Dragons =>
         this.apiContext.PlayerDragonData.Where(x =>
@@ -107,8 +96,8 @@ public class UnitRepository : IUnitRepository
 
         // Generate result. The first occurrence of a character in the list should be new (if not in the DB)
         // but subsequent results should then not be labelled as new.
-        List<Charas> ownedCharas = await Charas
-            .Select(x => x.CharaId)
+        List<Charas> ownedCharas = await this
+            .apiContext.PlayerCharaData.Select(x => x.CharaId)
             .Where(x => enumeratedIdList.Contains(x))
             .ToListAsync();
 
