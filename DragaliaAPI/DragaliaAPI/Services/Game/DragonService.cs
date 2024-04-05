@@ -194,11 +194,7 @@ public class DragonService(
         RewardReliabilityList? reward = null;
         if (level > 4 && level % 5 == 0)
         {
-            reward = new RewardReliabilityList()
-            {
-                Level = level,
-                LevelupEntityList = new DragonRewardEntityList[1]
-            };
+            reward = new RewardReliabilityList() { Level = level, LevelupEntityList = [] };
             int levelIndex = level / 5;
             ImmutableArray<Materials> rewardMats = isPuppy ? PuppyLevelReward : DragonLevelReward;
             int[] rewardQuantity = isPuppy
@@ -208,6 +204,8 @@ public class DragonService(
             {
                 if (levelIndex == 1 || levelIndex == 3)
                 {
+                    reward.IsReleaseStory = true;
+
                     int nextStoryUnlockIndex = await apiContext
                         .PlayerStoryState.Where(x => dragonStories.Contains(x.StoryId))
                         .CountAsync();
@@ -217,7 +215,6 @@ public class DragonService(
                     if (nextStoryId != default)
                     {
                         await storyRepository.GetOrCreateStory(StoryTypes.Dragon, nextStoryId);
-                        reward.IsReleaseStory = true;
                     }
                     else
                     {
@@ -245,7 +242,7 @@ public class DragonService(
                 await inventoryRepository.GetMaterial((Materials)rewardItem.EntityId)
                 ?? inventoryRepository.AddMaterial((Materials)rewardItem.EntityId);
             mat.Quantity += rewardItem.EntityQuantity;
-            ((DragonRewardEntityList[])reward.LevelupEntityList)[0] = rewardItem;
+            reward.LevelupEntityList = [rewardItem];
         }
         return reward;
     }
