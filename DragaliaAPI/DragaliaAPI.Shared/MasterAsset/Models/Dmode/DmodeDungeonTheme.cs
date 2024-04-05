@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
+﻿namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
 public record DmodeDungeonTheme(
     int Id,

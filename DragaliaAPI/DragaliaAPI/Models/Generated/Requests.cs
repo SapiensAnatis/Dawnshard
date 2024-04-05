@@ -972,13 +972,13 @@ public partial class DmodeDungeonStartRequest
     public int ServitorId { get; set; }
 
     [Key("bring_edit_skill_chara_id_list")]
-    public IEnumerable<Charas> BringEditSkillCharaIdList { get; set; }
+    public IList<Charas> BringEditSkillCharaIdList { get; set; }
 
     public DmodeDungeonStartRequest(
         Charas charaId,
         int startFloorNum,
         int servitorId,
-        IEnumerable<Charas> bringEditSkillCharaIdList
+        IList<Charas> bringEditSkillCharaIdList
     )
     {
         this.CharaId = charaId;
@@ -3562,7 +3562,7 @@ public partial class PartySetPartySettingRequest
     public int PartyNo { get; set; }
 
     [Key("request_party_setting_list")]
-    public IEnumerable<PartySettingList> RequestPartySettingList { get; set; } = [];
+    public IList<PartySettingList> RequestPartySettingList { get; set; } = [];
 
     [Key("party_name")]
     public string PartyName { get; set; }
@@ -3576,7 +3576,7 @@ public partial class PartySetPartySettingRequest
 
     public PartySetPartySettingRequest(
         int partyNo,
-        IEnumerable<PartySettingList> requestPartySettingList,
+        IList<PartySettingList> requestPartySettingList,
         string partyName,
         bool isEntrust,
         UnitElement entrustElement

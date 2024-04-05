@@ -5,7 +5,6 @@ namespace DragaliaAPI.Database.Repositories;
 
 public interface IUnitRepository
 {
-    IQueryable<DbPlayerCharaData> Charas { get; }
     IQueryable<DbPlayerDragonData> Dragons { get; }
     IQueryable<DbPlayerDragonReliability> DragonReliabilities { get; }
     IQueryable<DbWeaponBody> WeaponBodies { get; }

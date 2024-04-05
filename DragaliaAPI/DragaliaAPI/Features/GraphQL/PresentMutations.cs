@@ -43,14 +43,15 @@ public class PresentMutations : MutationBase
                 EntityType = args.EntityType,
                 EntityQuantity = args.EntityQuantity ?? 1,
                 EntityLevel = args.EntityLevel ?? 1,
-                MessageId = PresentMessage.DragaliaLostTeam,
+                MessageId = PresentMessage.DragaliaLostTeamMessage,
             };
 
         this.logger.LogInformation("Granting present {@present}", present);
         this.Player.Presents.Add(present);
         db.SaveChanges();
 
-        return (ctx) => ctx.PlayerPresents.First(x => x.PresentId == present.PresentId);
+        return (ctx) =>
+            ctx.PlayerPresents.IgnoreQueryFilters().First(x => x.PresentId == present.PresentId);
     }
 
     [GraphQLMutation("Clear a player's presents")]

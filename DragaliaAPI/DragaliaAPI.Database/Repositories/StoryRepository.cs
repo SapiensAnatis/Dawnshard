@@ -23,21 +23,16 @@ public class StoryRepository : IStoryRepository
         this.logger = logger;
     }
 
-    public IQueryable<DbPlayerStoryState> Stories =>
-        this.apiContext.PlayerStoryState.Where(x =>
-            x.ViewerId == this.playerIdentityService.ViewerId
-        );
-
     public IQueryable<DbPlayerStoryState> UnitStories =>
-        this.Stories.Where(x =>
+        this.apiContext.PlayerStoryState.Where(x =>
             x.StoryType == StoryTypes.Chara || x.StoryType == StoryTypes.Dragon
         );
 
     public IQueryable<DbPlayerStoryState> QuestStories =>
-        this.Stories.Where(x => x.StoryType == StoryTypes.Quest);
+        this.apiContext.PlayerStoryState.Where(x => x.StoryType == StoryTypes.Quest);
 
     public IQueryable<DbPlayerStoryState> DmodeStories =>
-        this.Stories.Where(x => x.StoryType == StoryTypes.DungeonMode);
+        this.apiContext.PlayerStoryState.Where(x => x.StoryType == StoryTypes.DungeonMode);
 
     public async Task<DbPlayerStoryState> GetOrCreateStory(StoryTypes storyType, int storyId)
     {

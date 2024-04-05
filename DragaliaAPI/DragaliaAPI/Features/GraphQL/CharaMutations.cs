@@ -52,9 +52,9 @@ public class CharaMutations : MutationBase
         db.SaveChanges();
 
         return (ctx) =>
-            ctx.PlayerCharaData.First(x =>
-                x.ViewerId == this.Player.ViewerId && x.CharaId == args.CharaId
-            );
+            ctx
+                .PlayerCharaData.IgnoreQueryFilters()
+                .First(x => x.ViewerId == this.Player.ViewerId && x.CharaId == args.CharaId);
     }
 
     [GraphQLArguments]

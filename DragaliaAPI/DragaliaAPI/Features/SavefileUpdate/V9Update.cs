@@ -15,7 +15,6 @@ namespace DragaliaAPI.Features.SavefileUpdate;
 /// Fixes missing stories for 3* characters due to issue #358
 /// </summary>
 public class V9Update(
-    IUnitRepository unitRepository,
     IStoryRepository storyRepository,
     ApiContext apiContext,
     IPlayerIdentityService playerIdentityService,
@@ -27,8 +26,8 @@ public class V9Update(
     public async Task Apply()
     {
         IEnumerable<(Charas Id, SortedSet<int> ManaNodes)> charaManaData = (
-            await unitRepository
-                .Charas
+            await apiContext
+                .PlayerCharaData
                 /* .Where(x => x.Rarity == 3) // A 3-star character could have been upgraded */
                 .Where(x => x.CharaId != Charas.ThePrince && x.CharaId != Charas.MegaMan) // No stories
                 .Select(x => new { x.CharaId, x.ManaNodeUnlockCount })
