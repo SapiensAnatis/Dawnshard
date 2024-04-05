@@ -16,39 +16,6 @@ public class V20UpdateTest : SavefileUpdateTestFixture
     [Fact]
     public async Task V20Update_StoriesCompleted_AddsMissingCompendiumCharacters()
     {
-        this.ApiContext.PlayerStoryState.AddRange(
-            [
-                new DbPlayerStoryState()
-                {
-                    ViewerId = this.ViewerId,
-                    StoryId = HarleStoryId,
-                    StoryType = StoryTypes.Quest,
-                    State = StoryState.Read
-                },
-                new DbPlayerStoryState()
-                {
-                    ViewerId = this.ViewerId,
-                    StoryId = OrigaStoryId,
-                    StoryType = StoryTypes.Quest,
-                    State = StoryState.Read
-                }
-            ]
-        );
-        await this.ApiContext.SaveChangesAsync();
-
-        await this.LoadIndex();
-
-        this.ApiContext.PlayerPresents.AsNoTracking()
-            .Should()
-            .Contain(x => x.ViewerId == this.ViewerId && x.EntityId == (int)Charas.Harle);
-        this.ApiContext.PlayerPresents.AsNoTracking()
-            .Should()
-            .Contain(x => x.ViewerId == this.ViewerId && x.EntityId == (int)Charas.Origa);
-    }
-
-    [Fact]
-    public async Task V20Update_StoriesNotCompleted_DoesNotAddCharacters()
-    {
         await this.AddRangeToDatabase(
             [
                 new DbPlayerStoryState()
@@ -68,6 +35,38 @@ public class V20UpdateTest : SavefileUpdateTestFixture
             ]
         );
 
+        await this.LoadIndex();
+
+        this.ApiContext.PlayerPresents.AsNoTracking()
+            .Should()
+            .Contain(x => x.ViewerId == this.ViewerId && x.EntityId == (int)Charas.Harle);
+        this.ApiContext.PlayerPresents.AsNoTracking()
+            .Should()
+            .Contain(x => x.ViewerId == this.ViewerId && x.EntityId == (int)Charas.Origa);
+    }
+
+    [Fact]
+    public async Task V20Update_StoriesNotCompleted_DoesNotAddCharacters()
+    {
+        this.ApiContext.PlayerStoryState.AddRange(
+            [
+                new DbPlayerStoryState()
+                {
+                    Owner = new DbPlayer() { AccountId = "other player" },
+                    StoryId = HarleStoryId,
+                    StoryType = StoryTypes.Quest,
+                    State = StoryState.Read
+                },
+                new DbPlayerStoryState()
+                {
+                    ViewerId = this.ViewerId,
+                    StoryId = OrigaStoryId,
+                    StoryType = StoryTypes.Quest,
+                    State = StoryState.Unlocked
+                }
+            ]
+        );
+        await this.ApiContext.SaveChangesAsync();
         await this.LoadIndex();
 
         this.ApiContext.PlayerPresents.AsNoTracking()
