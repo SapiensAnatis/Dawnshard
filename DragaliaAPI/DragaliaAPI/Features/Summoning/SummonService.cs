@@ -46,15 +46,19 @@ public class SummonService(
     /// <summary>
     /// Populate a summon result with is_new and eldwater values.
     /// </summary>
-    public List<AtgenResultUnitList> GenerateRewardList(
+    public async Task<List<AtgenResultUnitList>> GenerateRewardList(
         IEnumerable<AtgenRedoableSummonResultUnitList> baseRewardList
     )
     {
         List<AtgenResultUnitList> newUnits = new();
 
-        IEnumerable<Charas> ownedCharas = unitRepository.Charas.Select(x => x.CharaId);
+        List<Charas> ownedCharas = await apiContext
+            .PlayerCharaData.Select(x => x.CharaId)
+            .ToListAsync();
 
-        IEnumerable<Dragons> ownedDragons = unitRepository.Dragons.Select(x => x.DragonId);
+        List<Dragons> ownedDragons = await unitRepository
+            .Dragons.Select(x => x.DragonId)
+            .ToListAsync();
 
         foreach (AtgenRedoableSummonResultUnitList reward in baseRewardList)
         {

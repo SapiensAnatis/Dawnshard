@@ -25,7 +25,8 @@ public static class Schema
                         new { viewerId = ArgumentHelper.Required<long>() },
                         (ctx, args) =>
                             ctx
-                                .Players.Include(x => x.UserData)
+                                .Players.IgnoreQueryFilters()
+                                .Include(x => x.UserData)
                                 .Include(x => x.AbilityCrestList)
                                 .Include(x => x.TalismanList)
                                 .Include(x => x.StoryStates)

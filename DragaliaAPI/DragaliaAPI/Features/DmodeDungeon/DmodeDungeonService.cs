@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Extensions;
@@ -18,10 +19,10 @@ namespace DragaliaAPI.Features.DmodeDungeon;
 public class DmodeDungeonService(
     IDmodeRepository dmodeRepository,
     IDmodeCacheService dmodeCacheService,
-    IUnitRepository unitRepository,
     IDmodeService dmodeService,
     ILogger<DmodeDungeonService> logger,
-    IRewardService rewardService
+    IRewardService rewardService,
+    ApiContext apiContext
 ) : IDmodeDungeonService
 {
     private const int MaxFloor = 60;
@@ -31,7 +32,7 @@ public class DmodeDungeonService(
         Charas charaId,
         int startFloor,
         int servitorId,
-        IEnumerable<Charas> editSkillCharaIds
+        IList<Charas> editSkillCharaIds
     )
     {
         DbPlayerDmodeDungeon dungeon = await dmodeRepository.GetDungeonAsync();
@@ -53,7 +54,7 @@ public class DmodeDungeonService(
         dungeon.IsPlayEnd = false;
         dungeon.QuestTime = 0;
 
-        DbPlayerCharaData chara = await unitRepository.Charas.SingleAsync(x =>
+        DbPlayerCharaData chara = await apiContext.PlayerCharaData.FirstAsync(x =>
             x.CharaId == charaId
         );
 

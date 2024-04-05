@@ -208,8 +208,8 @@ public class DragonService(
             {
                 if (levelIndex == 1 || levelIndex == 3)
                 {
-                    int nextStoryUnlockIndex = await storyRepository
-                        .Stories.Where(x => dragonStories.Contains(x.StoryId))
+                    int nextStoryUnlockIndex = await apiContext
+                        .PlayerStoryState.Where(x => dragonStories.Contains(x.StoryId))
                         .CountAsync();
 
                     int nextStoryId = dragonStories.ElementAtOrDefault(nextStoryUnlockIndex);

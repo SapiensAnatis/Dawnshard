@@ -11,12 +11,21 @@ namespace DragaliaAPI.Shared.Features.Presents;
 /// </remarks>
 public enum PresentMessage
 {
+    None = 0,
+
+    /// <summary>
+    /// Title: A Gift from the Dragalia Lost Team
+    /// <br/>
+    /// A Gift from the Dragalia Lost Team
+    /// </summary>
+    DragaliaLostTeamGift = 1001000,
+
     /// <summary>
     /// Title: A Message from the Dragalia Lost Team
     /// <br/>
     /// Description: Accept this gift from the Dragalia Lost team as a thank-you for enjoying the game on a regular basis!
     /// </summary>
-    DragaliaLostTeam = 1003000,
+    DragaliaLostTeamMessage = 1003000,
 
     /// <summary>
     /// Title: Maintenance Gift

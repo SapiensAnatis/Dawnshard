@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using DragaliaAPI.Shared.Definitions.Enums;
+﻿using DragaliaAPI.Shared.Definitions.Enums;
 using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;

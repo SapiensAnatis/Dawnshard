@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using DragaliaAPI.Controllers;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
@@ -28,7 +29,8 @@ public class CharaController(
     IPaymentService paymentService,
     IRewardService rewardService,
     TimeProvider timeProvider,
-    ICharaService charaService
+    ICharaService charaService,
+    ApiContext apiContext
 ) : DragaliaControllerBase
 {
     [HttpPost("awake")]
@@ -681,9 +683,9 @@ public class CharaController(
                     .StoryIds;
 
                 int nextStoryUnlockIndex =
-                    await storyRepository
-                        .Stories.Where(x => charaStories.Contains(x.StoryId))
-                        .CountAsync() + unlockedStories.Count;
+                    await apiContext.PlayerStoryState.CountAsync(x =>
+                        charaStories.Contains(x.StoryId)
+                    ) + unlockedStories.Count;
 
                 int nextStoryId = charaStories.ElementAtOrDefault(nextStoryUnlockIndex);
 

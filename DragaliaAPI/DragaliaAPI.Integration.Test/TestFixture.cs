@@ -121,7 +121,11 @@ public class TestFixture
     {
         foreach (IDbPlayerData entity in data)
         {
-            entity.ViewerId = this.ViewerId;
+            if (entity.ViewerId == default)
+            {
+                entity.ViewerId = this.ViewerId;
+            }
+
             this.ApiContext.Add(entity);
         }
 

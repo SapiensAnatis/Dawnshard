@@ -69,8 +69,7 @@ public class CharaTest : TestFixture
         )
         {
             charaData = await this
-                .Services.GetRequiredService<IUnitRepository>()
-                .Charas.Where(x => x.CharaId == Charas.Celliera)
+                .ApiContext.PlayerCharaData.Where(x => x.CharaId == Charas.Celliera)
                 .FirstAsync();
 
             matQuantity = (

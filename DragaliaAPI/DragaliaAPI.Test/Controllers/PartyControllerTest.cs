@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Test.Controllers;
 
-public class PartyControllerTest
+public class PartyControllerTest : RepositoryTestFixture
 {
     private readonly PartyController partyController;
 
@@ -42,7 +42,8 @@ public class PartyControllerTest
             this.mockLogger.Object,
             new Mock<IPartyPowerService>().Object,
             new Mock<IPartyPowerRepository>().Object,
-            this.mockMissionProgressionService.Object
+            this.mockMissionProgressionService.Object,
+            this.ApiContext
         );
         this.partyController.SetupMockContext();
     }

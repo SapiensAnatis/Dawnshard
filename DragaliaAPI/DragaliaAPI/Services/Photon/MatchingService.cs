@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Photon.Shared.Models;
@@ -17,6 +18,7 @@ public class MatchingService : IMatchingService
     private readonly IUserDataRepository userDataRepository;
     private readonly ILogger<MatchingService> logger;
     private readonly IPlayerIdentityService playerIdentityService;
+    private readonly ApiContext apiContext;
 
     public MatchingService(
         IPhotonStateApi photonStateApi,
@@ -24,7 +26,8 @@ public class MatchingService : IMatchingService
         IPartyRepository partyRepository,
         IUserDataRepository userDataRepository,
         ILogger<MatchingService> logger,
-        IPlayerIdentityService playerIdentityService
+        IPlayerIdentityService playerIdentityService,
+        ApiContext apiContext
     )
     {
         this.photonStateApi = photonStateApi;
@@ -33,6 +36,7 @@ public class MatchingService : IMatchingService
         this.userDataRepository = userDataRepository;
         this.logger = logger;
         this.playerIdentityService = playerIdentityService;
+        this.apiContext = apiContext;
     }
 
     public async Task<IEnumerable<RoomList>> GetRoomList()
@@ -147,7 +151,7 @@ public class MatchingService : IMatchingService
                 .GetPartyUnits(game.HostPartyNo)
                 .Where(x => x.UnitNo == 1)
                 .Join(
-                    unitRepository.Charas,
+                    this.apiContext.PlayerCharaData,
                     partyUnit => partyUnit.CharaId,
                     charaData => charaData.CharaId,
                     (partyUnit, charaData) => charaData

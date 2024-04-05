@@ -43,7 +43,8 @@ public class UserDataMutations : MutationBase
         this.Player.UserData.TutorialStatus = args.NewStatus;
         db.SaveChanges();
 
-        return (ctx) => ctx.PlayerUserData.First(x => x.ViewerId == this.Player.ViewerId);
+        return (ctx) =>
+            ctx.PlayerUserData.IgnoreQueryFilters().First(x => x.ViewerId == this.Player.ViewerId);
     }
 
     [GraphQLMutation("Add a tutorial flag to a user.")]
@@ -65,7 +66,8 @@ public class UserDataMutations : MutationBase
         tutorialService.AddTutorialFlag(args.Flag);
         db.SaveChanges();
 
-        return (ctx) => ctx.PlayerUserData.First(x => x.ViewerId == this.Player.ViewerId);
+        return (ctx) =>
+            ctx.PlayerUserData.IgnoreQueryFilters().First(x => x.ViewerId == this.Player.ViewerId);
     }
 
     [GraphQLMutation("Remove a tutorial flag to a user.")]
@@ -91,7 +93,8 @@ public class UserDataMutations : MutationBase
         this.Player.UserData.TutorialFlagList = flagList;
         db.SaveChanges();
 
-        return (ctx) => ctx.PlayerUserData.First(x => x.ViewerId == this.Player.ViewerId);
+        return (ctx) =>
+            ctx.PlayerUserData.IgnoreQueryFilters().First(x => x.ViewerId == this.Player.ViewerId);
     }
 
     [GraphQLArguments]

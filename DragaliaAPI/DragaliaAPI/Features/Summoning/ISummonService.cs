@@ -5,7 +5,7 @@ namespace DragaliaAPI.Features.Summoning;
 
 public interface ISummonService
 {
-    List<AtgenResultUnitList> GenerateRewardList(
+    Task<List<AtgenResultUnitList>> GenerateRewardList(
         IEnumerable<AtgenRedoableSummonResultUnitList> baseRewardList
     );
 

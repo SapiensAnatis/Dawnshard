@@ -81,4 +81,20 @@ public class QuestReadStoryTest : TestFixture
 
         response.UpdateDataList.UserData.TutorialStatus.Should().Be(10600);
     }
+
+    [Theory]
+    [InlineData(2044303, Charas.Harle)]
+    [InlineData(2046203, Charas.Origa)]
+    [InlineData(2042704, Charas.Audric)]
+    public async Task ReadCompendiumStory_GrantsCharacter(int storyId, Charas expectedChara)
+    {
+        QuestReadStoryResponse response = (
+            await this.Client.PostMsgpack<QuestReadStoryResponse>(
+                "/quest/read_story",
+                new QuestReadStoryRequest() { QuestStoryId = storyId }
+            )
+        ).Data;
+
+        response.UpdateDataList.CharaList.Should().Contain(x => x.CharaId == expectedChara);
+    }
 }

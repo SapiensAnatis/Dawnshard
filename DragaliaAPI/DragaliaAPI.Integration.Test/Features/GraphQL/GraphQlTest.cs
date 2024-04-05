@@ -124,7 +124,7 @@ public class GraphQlTest : GraphQlTestFixture
                     EntityLevel = 1,
                     EntityQuantity = 1,
                     ReceiveLimitTime = null,
-                    MessageId = PresentMessage.DragaliaLostTeam,
+                    MessageId = PresentMessage.DragaliaLostTeamMessage,
                 },
                 opts => opts.Excluding(x => x.CreateTime).Excluding(x => x.Owner)
             );
