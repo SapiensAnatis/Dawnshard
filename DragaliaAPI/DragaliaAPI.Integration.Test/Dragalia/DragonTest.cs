@@ -338,6 +338,42 @@ public class DragonTest : TestFixture
     }
 
     [Fact]
+    public async Task DragonGiftSendMultiple_ReachLevel5_ReturnsExpectedRewardReliabilityList()
+    {
+        await this.AddToDatabase(
+            DbPlayerDragonReliabilityFactory.Create(ViewerId, Dragons.HighMercury)
+        );
+
+        DragonSendGiftMultipleRequest request = new DragonSendGiftMultipleRequest()
+        {
+            DragonId = Dragons.HighMercury,
+            DragonGiftId = DragonGifts.FourLeafClover,
+            Quantity = 1
+        };
+
+        DragonSendGiftMultipleResponse? response = (
+            await this.Client.PostMsgpack<DragonSendGiftMultipleResponse>(
+                "dragon/send_gift_multiple",
+                request
+            )
+        ).Data;
+
+        response
+            .RewardReliabilityList.Should()
+            .BeEquivalentTo(
+                new List<RewardReliabilityList>()
+                {
+                    new()
+                    {
+                        Level = 5,
+                        IsReleaseStory = true,
+                        LevelupEntityList = []
+                    }
+                }
+            );
+    }
+
+    [Fact]
     public async Task DragonSendGiftMultiple_CompletesMissionsCorrectly()
     {
         int missionId = 302600; // Reach Bond Lv. 30 with a Dragon
