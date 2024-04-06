@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.GraphQL;
 
@@ -24,11 +25,9 @@ public abstract class MutationBase
         Func<IQueryable<DbPlayer>, IQueryable<DbPlayer>>? include = null
     )
     {
-        IDisposable context = this.identityService.StartUserImpersonation(viewerId, null);
-
-        IQueryable<DbPlayer> query = this.apiContext.Players.Where(x =>
-            x.UserData != null && x.UserData.ViewerId == viewerId
-        );
+        IQueryable<DbPlayer> query = this
+            .apiContext.Players.IgnoreQueryFilters()
+            .Where(x => x.UserData != null && x.UserData.ViewerId == viewerId);
 
         if (include is not null)
             query = include.Invoke(query);
@@ -39,6 +38,11 @@ public abstract class MutationBase
             throw new ArgumentException($"No player found for viewer ID {viewerId}");
 
         this.Player = player;
+
+        IDisposable context = this.identityService.StartUserImpersonation(
+            viewerId,
+            player.AccountId
+        );
 
         return context;
     }
