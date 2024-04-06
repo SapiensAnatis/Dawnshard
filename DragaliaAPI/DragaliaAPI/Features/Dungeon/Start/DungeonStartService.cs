@@ -289,12 +289,9 @@ public class DungeonStartService(
                 x is not null
             );
 
-            if (detailedUnit.WeaponBodyData is not null)
-            {
-                detailedUnit.GameWeaponPassiveAbilityList = await weaponRepository
-                    .GetPassiveAbilities(detailedUnit.CharaData.CharaId)
-                    .ToListAsync();
-            }
+            detailedUnit.GameWeaponPassiveAbilityList = await weaponRepository
+                .GetPassiveAbilities(detailedUnit.CharaData.CharaId)
+                .ToListAsync();
         }
 
         List<PartyUnitList> units = detailedPartyUnits

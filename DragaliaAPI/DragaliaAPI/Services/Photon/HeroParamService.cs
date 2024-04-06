@@ -104,6 +104,10 @@ public class HeroParamService(
             result.DragonSkill2Lv = 0; // ???
         }
 
+        result.WeaponPassiveAbilityIds = unit
+            .GameWeaponPassiveAbilityList.Select(x => x.WeaponPassiveAbilityId)
+            .ToArray();
+
         if (unit.WeaponBodyData is not null)
         {
             result.WeaponBodyId = (int)unit.WeaponBodyData.WeaponBodyId;
@@ -112,9 +116,6 @@ public class HeroParamService(
             result.WeaponBodyAbility2Lv = unit.WeaponBodyData.Ability2Level;
             result.WeaponBodySkillLv = unit.WeaponBodyData.SkillLevel;
             result.WeaponBodySkillNo = unit.WeaponBodyData.SkillNo;
-            result.WeaponPassiveAbilityIds = unit
-                .GameWeaponPassiveAbilityList.Select(x => x.WeaponPassiveAbilityId)
-                .ToArray();
         }
         else
         {
