@@ -8,7 +8,7 @@ public interface IWeaponRepository
 {
     IQueryable<DbWeaponBody> WeaponBodies { get; }
     IQueryable<DbWeaponSkin> WeaponSkins { get; }
-    IQueryable<DbWeaponPassiveAbility> GetPassiveAbilities(WeaponBodies id);
+    IQueryable<DbWeaponPassiveAbility> GetPassiveAbilities(Charas id);
     Task Add(WeaponBodies weaponBodyId);
     Task AddSkin(int weaponSkinId);
     Task<bool> CheckOwnsWeapons(params WeaponBodies[] weaponIds);

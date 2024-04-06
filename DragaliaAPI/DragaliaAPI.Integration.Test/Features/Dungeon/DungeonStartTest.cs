@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Services.Game;
+﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.EntityFrameworkCore;
@@ -239,7 +240,7 @@ public class DungeonStartTest : TestFixture
     }
 
     [Fact]
-    public async Task Start_CoopTutorial_SetsIsBotTutorial()
+    public async Task Start_CoopTutorial_SetsIsBotTutorialTrue()
     {
         await this
             .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
@@ -261,7 +262,7 @@ public class DungeonStartTest : TestFixture
     }
 
     [Fact]
-    public async Task Start_AtpBeginner_NotCoopTutorial_SetsIsBotTutorial()
+    public async Task Start_AtpBeginner_NotCoopTutorial_SetsIsBotTutorialFalse()
     {
         await this
             .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
@@ -283,6 +284,41 @@ public class DungeonStartTest : TestFixture
             );
 
         response.Data.IngameData.IsBotTutorial.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task Start_OffElementWeapon_SendsCorrectWeaponBonuses()
+    {
+        int flameDullRes = 1010104;
+        WeaponBodies waterSword = WeaponBodies.AbsoluteAqua;
+
+        await this.ApiContext.PlayerPassiveAbilities.ExecuteDeleteAsync();
+
+        await this.AddToDatabase(
+            new DbWeaponPassiveAbility() { WeaponPassiveAbilityId = flameDullRes }
+        );
+
+        await this
+            .ApiContext.PlayerPartyUnits.Where(x => x.PartyNo == 1 && x.UnitNo == 1)
+            .ExecuteUpdateAsync(e =>
+                e.SetProperty(u => u.EquipWeaponBodyId, waterSword)
+                    .SetProperty(u => u.CharaId, Charas.ThePrince)
+            );
+
+        DragaliaResponse<DungeonStartStartResponse> response =
+            await this.Client.PostMsgpack<DungeonStartStartResponse>(
+                $"/dungeon_start/start",
+                new DungeonStartStartRequest()
+                {
+                    QuestId = TutorialService.TutorialQuestIds.AvenueToPowerBeginner,
+                    PartyNoList = [1]
+                }
+            );
+
+        response
+            .Data.IngameData.PartyInfo.PartyUnitList.First(x => x.Position == 1)
+            .GameWeaponPassiveAbilityList.Should()
+            .Contain(x => x.WeaponPassiveAbilityId == flameDullRes);
     }
 
     private static readonly Func<MatchOptions, MatchOptions> SnapshotOptions = opts =>
