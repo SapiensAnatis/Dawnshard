@@ -81,7 +81,7 @@ public class HeroParamService : IHeroParamService
             if (unit.WeaponBodyData is not null)
             {
                 unit.GameWeaponPassiveAbilityList = await this
-                    .weaponRepository.GetPassiveAbilities(unit.WeaponBodyData.WeaponBodyId)
+                    .weaponRepository.GetPassiveAbilities(unit.CharaData.CharaId)
                     .ToListAsync();
             }
         }

@@ -54,7 +54,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
             }
         );
 
-        this.weaponRepository.GetPassiveAbilities(WeaponBodies.Nothung)
+        this.weaponRepository.GetPassiveAbilities(Charas.Marth)
             .Should()
             .NotContain(x => x.WeaponPassiveAbilityId == 1010108);
     }

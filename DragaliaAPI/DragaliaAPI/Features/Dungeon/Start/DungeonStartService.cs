@@ -292,7 +292,7 @@ public class DungeonStartService(
             if (detailedUnit.WeaponBodyData is not null)
             {
                 detailedUnit.GameWeaponPassiveAbilityList = await weaponRepository
-                    .GetPassiveAbilities(detailedUnit.WeaponBodyData.WeaponBodyId)
+                    .GetPassiveAbilities(detailedUnit.CharaData.CharaId)
                     .ToListAsync();
             }
         }
