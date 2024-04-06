@@ -439,6 +439,7 @@ public class MissionService(
     {
         int? mainStoryMissionGroupId = await this
             .missionRepository.GetMissionsByType(MissionType.MainStory)
+            .Where(x => x.State < MissionState.Claimed)
             .MaxAsync(x => x.GroupId);
 
         if (mainStoryMissionGroupId == null)

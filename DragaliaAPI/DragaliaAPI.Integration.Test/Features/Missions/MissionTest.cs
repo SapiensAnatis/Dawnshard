@@ -572,4 +572,68 @@ public class MissionTest : TestFixture
             .And.Contain(x => x.PeriodMissionId == expectedMission.Id)
             .And.Contain(x => x.PeriodMissionId == otherExpectedMission.Id);
     }
+
+    [Fact]
+    public async Task GetMissionList_DoesNotReturnPreviousMainStoryMissions()
+    {
+        IEnumerable<DbPlayerMission> completedMissions = MasterAsset
+            .MissionMainStoryData.Enumerable.Where(x => x.MissionMainStoryGroupId == 1)
+            .Select(x => new DbPlayerMission()
+            {
+                Id = x.Id,
+                GroupId = 1,
+                ViewerId = this.ViewerId,
+                Type = MissionType.MainStory,
+                State = MissionState.Claimed
+            });
+
+        await this.AddRangeToDatabase(completedMissions);
+
+        DragaliaResponse<MissionGetMissionListResponse> response =
+            await this.Client.PostMsgpack<MissionGetMissionListResponse>(
+                "mission/get_mission_list"
+            );
+
+        response
+            .Data.CurrentMainStoryMission.Should()
+            .BeEquivalentTo(new CurrentMainStoryMission());
+    }
+
+    [Fact]
+    public async Task GetMissionList_ReturnsCurrentMainStoryMissions()
+    {
+        IEnumerable<DbPlayerMission> inProgressMissions = MasterAsset
+            .MissionMainStoryData.Enumerable.Where(x => x.MissionMainStoryGroupId == 1)
+            .Select(x => new DbPlayerMission()
+            {
+                Id = x.Id,
+                GroupId = 1,
+                ViewerId = this.ViewerId,
+                Type = MissionType.MainStory,
+                State = MissionState.InProgress,
+            });
+
+        await this.AddRangeToDatabase(inProgressMissions);
+
+        DragaliaResponse<MissionGetMissionListResponse> response =
+            await this.Client.PostMsgpack<MissionGetMissionListResponse>(
+                "mission/get_mission_list"
+            );
+
+        response
+            .Data.CurrentMainStoryMission.Should()
+            .BeEquivalentTo(
+                new CurrentMainStoryMission()
+                {
+                    MainStoryMissionGroupId = 1,
+                    MainStoryMissionStateList = MasterAsset
+                        .MissionMainStoryData.Enumerable.Where(x => x.MissionMainStoryGroupId == 1)
+                        .Select(x => new AtgenMainStoryMissionStateList()
+                        {
+                            MainStoryMissionId = x.Id,
+                            State = (int)MissionState.InProgress,
+                        })
+                }
+            );
+    }
 }
