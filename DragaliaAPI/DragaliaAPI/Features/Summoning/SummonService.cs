@@ -1,31 +1,26 @@
 using System.Diagnostics;
 using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
 using FluentRandomPicker;
 using FluentRandomPicker.FluentInterfaces.General;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Features.Summoning;
 
-public class SummonService(
+public sealed class SummonService(
     SummonOddsService summonOddsService,
+    IOptionsMonitor<SummonBannerOptions> optionsMonitor,
     IUnitRepository unitRepository,
+    IPlayerIdentityService playerIdentityService,
     ApiContext apiContext
-) : ISummonService
+)
 {
-    /// <summary>
-    /// The factor to use when converting the <see cref="decimal"/> rate to a <see cref="int"/> weighting for
-    /// FluentRandomPicker.
-    /// </summary>
-    /// <remarks>
-    /// A value of 100_000 means that a rate of 41.125% / 0.41125 does not lose any precision and is converted to
-    /// 41125. 3 decimal places of precision on the percentage is most likely 'good enough'.
-    /// </remarks>
-    private const int RateConversionFactor = 100_000;
-
     public Task<List<AtgenRedoableSummonResultUnitList>> GenerateSummonResult(
         int numSummons,
         int bannerId,
@@ -106,6 +101,135 @@ public class SummonService(
     public async Task<IEnumerable<SummonTicketList>> GetSummonTicketList() =>
         await apiContext.PlayerSummonTickets.ProjectToSummonTicketList().ToListAsync();
 
+    public async Task<List<SummonList>> GetSummonList()
+    {
+        List<SummonList> results = new(optionsMonitor.CurrentValue.Banners.Count);
+
+        var individualDataDict = await apiContext
+            .PlayerBannerData.Where(x => x.ViewerId == playerIdentityService.ViewerId)
+            .Select(x => new
+            {
+                BannerId = x.SummonBannerId,
+                DailyCount = x.DailyLimitedSummonCount,
+                TotalCount = x.SummonCount,
+            })
+            .ToDictionaryAsync(x => x.BannerId, x => x);
+
+        foreach (Banner banner in optionsMonitor.CurrentValue.Banners)
+        {
+            if (banner.Id == SummonConstants.RedoableSummonBannerId)
+                continue;
+
+            int dailyCount = 0;
+            int totalCount = 0;
+
+            if (individualDataDict.TryGetValue(banner.Id, out var bannerData))
+            {
+                dailyCount = bannerData.DailyCount;
+                totalCount = bannerData.TotalCount;
+            }
+
+            results.Add(
+                new SummonList()
+                {
+                    SummonId = banner.Id,
+                    SummonPointId = banner.Id,
+                    SummonType = 2, // No idea what this does.
+                    SingleCrystal = SummonConstants.SingleCrystalCost,
+                    SingleDiamond = SummonConstants.SingleDiamondCost,
+                    MultiCrystal = SummonConstants.MultiCrystalCost,
+                    MultiDiamond = SummonConstants.MultiDiamondCost,
+                    LimitedCrystal = SummonConstants.LimitedCrystalCost,
+                    LimitedDiamond = SummonConstants.LimitedDiamondCost,
+                    AddSummonPoint = SummonConstants.AddSummonPoint,
+                    AddSummonPointStone = SummonConstants.AddSummonPointStone,
+                    ExchangeSummonPoint = SummonConstants.ExchangeSummonPoint,
+                    DailyLimit = SummonConstants.DailyLimit,
+                    Status = 1,
+                    CommenceDate = banner.Start,
+                    CompleteDate = banner.End,
+                    DailyCount = dailyCount,
+                    TotalCount = totalCount,
+                    TotalLimit = 0,
+                }
+            );
+        }
+
+        return results;
+    }
+
+    public async Task<SummonList?> GetSummonList(int bannerId)
+    {
+        // Note: could be written to only fetch player data for a single banner to be more efficient. Should still be
+        // one query so not a high priority for now.
+        if (bannerId == SummonConstants.RedoableSummonBannerId)
+            return null;
+
+        List<SummonList> availableBanners = await GetSummonList();
+        return availableBanners.Find(x => x.SummonId == bannerId);
+    }
+
+    public async Task<List<SummonPointList>> GetSummonPointList() =>
+        await apiContext
+            .PlayerBannerData.Select(x => new SummonPointList()
+            {
+                SummonPointId = x.SummonBannerId,
+                SummonPoint = x.SummonPoints,
+                CsSummonPoint = x.ConsecutionSummonPoints,
+                CsPointTermMinDate = x.ConsecutionSummonPointsMinDate,
+                CsPointTermMaxDate = x.ConsecutionSummonPointsMaxDate
+            })
+            .ToListAsync();
+
+    public async Task<SummonPointList?> GetSummonPointList(int summonBannerId)
+    {
+        DbPlayerBannerData? bannerData = await this.GetPlayerBannerData(summonBannerId);
+
+        if (bannerData is null)
+        {
+            return null;
+        }
+
+        return new SummonPointList()
+        {
+            SummonPointId = bannerData.SummonBannerId,
+            SummonPoint = bannerData.SummonPoints,
+            CsSummonPoint = bannerData.ConsecutionSummonPoints,
+            CsPointTermMinDate = bannerData.ConsecutionSummonPointsMinDate,
+            CsPointTermMaxDate = bannerData.ConsecutionSummonPointsMaxDate
+        };
+    }
+
+    public async Task<DbPlayerBannerData?> GetPlayerBannerData(int bannerId)
+    {
+        if (
+            optionsMonitor.CurrentValue.Banners.FirstOrDefault(x => x.Id == bannerId)
+            is not { } banner
+        )
+        {
+            return null;
+        }
+
+        DbPlayerBannerData? bannerData = await apiContext.PlayerBannerData.FirstOrDefaultAsync(x =>
+            x.SummonBannerId == bannerId
+        );
+
+        if (bannerData is null)
+        {
+            bannerData = new()
+            {
+                ViewerId = playerIdentityService.ViewerId,
+                SummonBannerId = banner.Id,
+                ConsecutionSummonPointsMinDate = DateTimeOffset.UtcNow,
+                ConsecutionSummonPointsMaxDate = banner.End,
+            };
+
+            apiContext.PlayerBannerData.Add(bannerData);
+        }
+
+        return bannerData;
+    }
+
     private async Task<List<AtgenRedoableSummonResultUnitList>> GenerateSummonResultInternal(
         int bannerId,
         int numSummons
@@ -119,7 +243,7 @@ public class SummonService(
         IPick<AtgenRedoableSummonResultUnitList> picker = Out.Of()
             .PrioritizedElements(allRates)
             .WithValueSelector(ToSummonResult)
-            .AndWeightSelector(x => (int)(x.Rate * RateConversionFactor));
+            .AndWeightSelector(x => x.Weighting);
 
         List<AtgenRedoableSummonResultUnitList> result = new(numSummons);
 

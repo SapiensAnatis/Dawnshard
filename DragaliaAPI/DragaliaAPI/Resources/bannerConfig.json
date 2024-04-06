@@ -2,30 +2,227 @@
     "SummonBannerOptions": {
         "Banners": [
             {
-                "Id": 1020010,
+                "Id": 1020115,
+                "Start": "2024-02-24T15:22:06Z",
+                "End": "2025-02-24T15:22:06Z",
+                "IsGala": true,
+                "IsPrizeShowcase": false,
+                "PickupCharas": [],
+                "PickupDragons": [
+                    "GalaRebornAgni",
+                    "GalaBeastCiella",
+                    "GalaRebornZephyr",
+                    "GalaChronosNyx",
+                    "GalaBahamut"
+                ],
+                "LimitedCharas": [],
+                "LimitedDragons": [],
+                "TradeCharas": [],
+                "TradeDragons": []
+            },
+            {
+                "Id": 1020183,
+                "Start": "2024-02-24T15:22:06Z",
+                "End": "2025-02-24T15:22:06Z",
+                "IsGala": true,
+                "IsPrizeShowcase": false,
+                "PickupCharas": [
+                    "Sheila",
+                    "GalaMascula",
+                    "BondforgedPrince",
+                    "BondforgedZethia",
+                    "GalaAlex"
+                ],
+                "PickupDragons": [],
+                "LimitedCharas": [],
+                "LimitedDragons": [],
+                "TradeCharas": [],
+                "TradeDragons": []
+            },
+            {
+                "Id": 1020193,
+                "Start": "2024-02-24T15:22:06Z",
+                "End": "2025-02-24T15:22:06Z",
+                "IsGala": true,
+                "IsPrizeShowcase": false,
+                "PickupCharas": [
+                    "DragonyuleIlia",
+                    "DragonyuleLily",
+                    "DragonyuleXainfried"
+                ],
+                "PickupDragons": [
+                    "DragonyuleJeanne"
+                ],
+                "LimitedCharas": [
+                    "DragonyuleCleo",
+                    "DragonyuleVictor",
+                    "DragonyuleNefaria",
+                    "DragonyuleXander",
+                    "DragonyuleNevin",
+                    "DragonyuleMalora"
+                ],
+                "LimitedDragons": [
+                    "DragonyuleJeanne"
+                ],
+                "TradeCharas": [],
+                "TradeDragons": []
+            },
+            {
+                "Id": 1020197,
+                "Start": "2024-02-24T15:22:06Z",
+                "End": "2025-02-24T15:22:06Z",
+                "IsGala": true,
+                "IsPrizeShowcase": false,
+                "PickupCharas": [
+                    "Nobunaga",
+                    "Yukimura",
+                    "Shingen",
+                    "Mitsuhide"
+                ],
+                "PickupDragons": [
+                    "GozuTenno",
+                    "FudoMyoo"
+                ],
+                "LimitedCharas": [
+                    "Addis",
+                    "Ieyasu",
+                    "Sazanka",
+                    "Chitose",
+                    "Seimei",
+                    "Yoshitsune"
+                ],
+                "LimitedDragons": [
+                    "Daikokuten",
+                    "Marishiten"
+                ],
+                "TradeCharas": [],
+                "TradeDragons": []
+            },
+            {
+                "Id": 1020123,
+                "Start": "2024-02-24T15:22:06Z",
+                "End": "2025-02-24T15:22:06Z",
+                "IsGala": true,
+                "IsPrizeShowcase": false,
+                "PickupCharas": [
+                    "GalaRanzal",
+                    "ValentinesChelsea",
+                    "ValentinesMelody",
+                    "ValentinesAddis"
+                ],
+                "PickupDragons": [
+                    "Menoetius"
+                ],
+                "LimitedCharas": [],
+                "LimitedDragons": [],
+                "TradeCharas": [],
+                "TradeDragons": []
+            },
+            {
+                "Id": 1020147,
+                "Start": "2024-02-24T15:22:06Z",
+                "End": "2025-02-24T15:22:06Z",
+                "IsGala": true,
+                "IsPrizeShowcase": false,
+                "PickupCharas": [
+                    "SummerMitsuhide",
+                    "GalaLeonidas",
+                    "SummerIeyasu"
+                ],
+                "PickupDragons": [
+                    "SummerMarishiten"
+                ],
+                "LimitedCharas": [],
+                "LimitedDragons": [],
+                "TradeCharas": [],
+                "TradeDragons": []
+            },
+            {
+                "Id": 1020189,
+                "Start": "2024-02-24T15:22:06Z",
+                "End": "2025-02-24T15:22:06Z",
+                "IsGala": true,
+                "IsPrizeShowcase": false,
+                "PickupCharas": [
+                    "HalloweenAkasha",
+                    "HalloweenLaxi",
+                    "HalloweenSylas",
+                    "HalloweenMym",
+                    "HalloweenLowen"
+                ],
+                "PickupDragons": [],
+                "LimitedCharas": [
+                    "HalloweenEdward",
+                    "HalloweenElisanne",
+                    "HalloweenAlthemia",
+                    "HalloweenOdetta",
+                    "HalloweenMelsa"
+                ],
+                "LimitedDragons": [
+                    "HalloweenMaritimus",
+                    "HalloweenSilke"
+                ],
+                "TradeCharas": [],
+                "TradeDragons": []
+            },
+            {
+                "Id": 1020121,
                 "Start": "2024-02-24T15:22:06Z",
                 "End": "2025-02-24T15:22:06Z",
                 "IsGala": false,
                 "IsPrizeShowcase": false,
                 "PickupCharas": [
                     "Joker",
+                    "Panther",
                     "Mona"
                 ],
                 "PickupDragons": [
                     "Arsene"
                 ],
-                "LimitedCharas": [
-                    "Mona"
+                "LimitedCharas": [],
+                "LimitedDragons": [],
+                "TradeCharas": [],
+                "TradeDragons": []
+            },
+            {
+                "Id": 1020074,
+                "Start": "2024-02-24T15:22:06Z",
+                "End": "2025-02-24T15:22:06Z",
+                "IsGala": false,
+                "IsPrizeShowcase": false,
+                "PickupCharas": [
+                    "Marth",
+                    "Tiki",
+                    "Chrom",
+                    "Fjorm",
+                    "Peony",
+                    "Veronica"
                 ],
-                "LimitedDragons": [
-                    "GalaThor"
+                "PickupDragons": [],
+                "LimitedCharas": [],
+                "LimitedDragons": [],
+                "TradeCharas": [],
+                "TradeDragons": []
+            },
+            {
+                "Id": 1020055,
+                "Start": "2024-02-24T15:22:06Z",
+                "End": "2025-02-24T15:22:06Z",
+                "IsGala": false,
+                "IsPrizeShowcase": false,
+                "PickupCharas": [
+                    "HunterBerserker",
+                    "HunterVanessa",
+                    "HunterSarisse"
                 ],
-                "TradeCharas": [
-                    "Mona"
+                "PickupDragons": [
+                    "DreadkingRathalos",
+                    "Fatalis"
                 ],
-                "TradeDragons": [
-                    "Arsene"
-                ]
+                "LimitedCharas": [],
+                "LimitedDragons": [],
+                "TradeCharas": [],
+                "TradeDragons": []
             }
         ]
     }

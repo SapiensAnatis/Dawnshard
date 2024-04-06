@@ -27,9 +27,8 @@ public class SummonController(
     IUpdateDataService updateDataService,
     IMapper mapper,
     ISummonRepository summonRepository,
-    ISummonService summonService,
+    SummonService summonService,
     IPaymentService paymentService,
-    SummonListService summonListService,
     SummonOddsService summonOddsService
 ) : DragaliaControllerBase
 {
@@ -90,13 +89,15 @@ public class SummonController(
     [Route("get_summon_list")]
     public async Task<DragaliaResult<SummonGetSummonListResponse>> GetSummonList()
     {
-        IEnumerable<SummonList> bannerList = await summonListService.GetSummonList();
+        IEnumerable<SummonList> bannerList = await summonService.GetSummonList();
         IEnumerable<SummonTicketList> ticketList = await summonService.GetSummonTicketList();
+        IEnumerable<SummonPointList> pointList = await summonService.GetSummonPointList();
 
         return new SummonGetSummonListResponse()
         {
             SummonList = bannerList,
             SummonTicketList = ticketList,
+            SummonPointList = pointList,
             CampaignSummonList = [],
             CharaSsrSummonList = [],
             DragonSsrSummonList = [],
@@ -113,36 +114,40 @@ public class SummonController(
                 CampaignSsrSummonList = [],
                 ExcludeSummonList = [],
             },
-            SummonPointList = [],
         };
     }
 
     [HttpPost]
     [Route("get_summon_point_trade")]
-    public async Task<DragaliaResult> GetSummonPointTrade(SummonGetSummonPointTradeRequest request)
+    public async Task<DragaliaResult> GetSummonPointTrade(
+        SummonGetSummonPointTradeRequest request,
+        CancellationToken cancellationToken
+    )
     {
-        int bannerId = request.SummonId;
-        DbPlayerUserData userData = await userDataRepository.UserData.FirstAsync();
-        //TODO maybe throw BadRequest on bad banner id, for now generate empty data if not exists
-        DbPlayerBannerData playerBannerData = await summonRepository.GetPlayerBannerData(bannerId);
+        SummonPointList? pointList = await summonService.GetSummonPointList(request.SummonId);
+
+        if (pointList is null)
+        {
+            return this.Code(
+                ResultCode.SummonNotFound,
+                $"Failed to get summon point list for banner {request.SummonId}"
+            );
+        }
+
         //TODO get real list from persisted BannerInfo or dynamic List from Db, dunno yet
         List<AtgenSummonPointTradeList> tradableUnits =
             new()
             {
-                new(bannerId * 1000 + 1, EntityTypes.Chara, (int)Charas.Celliera),
-                new(bannerId * 1000 + 2, EntityTypes.Chara, (int)Charas.SummerCelliera)
+                new((request.SummonId * 1000) + 1, EntityTypes.Chara, (int)Charas.Celliera),
+                new((request.SummonId * 1000) + 2, EntityTypes.Chara, (int)Charas.SummerCelliera)
             };
 
+        // We need to save changes as we may have created a DbPlayerBannerData
+        // in the process of fetching the player's banner data.
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+
         return this.Ok(
-            new SummonGetSummonPointTradeResponse(
-                tradableUnits,
-                new List<SummonPointList>()
-                {
-                    new(bannerId, 0, 0, DateTimeOffset.UnixEpoch, DateTimeOffset.UnixEpoch)
-                },
-                new(),
-                new()
-            )
+            new SummonGetSummonPointTradeResponse(tradableUnits, [pointList], updateDataList, new())
         );
     }
 
@@ -153,9 +158,9 @@ public class SummonController(
         CancellationToken cancellationToken
     )
     {
-        SummonList? bannerData = await summonListService.GetSummonList(summonRequest.SummonId);
+        SummonList? summonList = await summonService.GetSummonList(summonRequest.SummonId);
 
-        if (bannerData == null)
+        if (summonList == null)
         {
             throw new DragaliaException(
                 ResultCode.SummonNotFound,
@@ -163,9 +168,17 @@ public class SummonController(
             );
         }
 
-        DbPlayerBannerData playerBannerData = await summonRepository.GetPlayerBannerData(
-            bannerData.SummonId
+        DbPlayerBannerData? playerBannerData = await summonService.GetPlayerBannerData(
+            summonList.SummonId
         );
+
+        if (playerBannerData == null)
+        {
+            throw new DragaliaException(
+                ResultCode.SummonNotFound,
+                $"Failed to find a banner with ID {summonRequest.SummonId}"
+            );
+        }
 
         DbPlayerUserData userData = await userDataRepository.UserData.FirstAsync(cancellationToken);
 
@@ -174,32 +187,32 @@ public class SummonController(
                 ? 10
                 : Math.Max(1, summonRequest.ExecCount);
 
-        int summonPointMultiplier = bannerData.AddSummonPoint;
+        int summonPointMultiplier = summonList.AddSummonPoint;
 
         int paymentCost;
 
         switch (summonRequest.PaymentType)
         {
             case PaymentTypes.Diamantium:
-                summonPointMultiplier = bannerData.AddSummonPointStone;
+                summonPointMultiplier = summonList.AddSummonPointStone;
                 playerBannerData.DailyLimitedSummonCount++;
                 paymentCost =
                     summonRequest.ExecType == SummonExecTypes.Tenfold
-                        ? bannerData.MultiDiamond
-                        : bannerData.SingleDiamond * numSummons;
+                        ? summonList.MultiDiamond
+                        : summonList.SingleDiamond * numSummons;
                 break;
             case PaymentTypes.Wyrmite:
                 paymentCost =
                     summonRequest.ExecType == SummonExecTypes.Tenfold
-                        ? bannerData.MultiCrystal
-                        : bannerData.SingleCrystal * numSummons;
+                        ? summonList.MultiCrystal
+                        : summonList.SingleCrystal * numSummons;
                 break;
             case PaymentTypes.Ticket:
                 paymentCost = summonRequest.ExecType == SummonExecTypes.Tenfold ? 1 : numSummons;
                 break;
             case PaymentTypes.FreeDailyExecDependant:
             case PaymentTypes.FreeDailyTenfold:
-                if (bannerData.IsBeginnerCampaign)
+                if (summonList.IsBeginnerCampaign)
                     playerBannerData.IsBeginnerFreeSummonAvailable = 0;
                 paymentCost = 0;
                 break;
@@ -316,7 +329,7 @@ public class SummonController(
                 new DbPlayerSummonHistory()
                 {
                     ViewerId = this.ViewerId,
-                    SummonId = bannerData.SummonId,
+                    SummonId = summonList.SummonId,
                     SummonExecType = summonRequest.ExecType,
                     ExecDate = DateTimeOffset.UtcNow,
                     PaymentType = summonRequest.PaymentType,
@@ -346,7 +359,8 @@ public class SummonController(
             );
         }
 
-        playerBannerData.SummonPoints += numSummons * summonPointMultiplier;
+        int gainedSummonPoints = numSummons * summonPointMultiplier;
+        playerBannerData.SummonPoints += gainedSummonPoints;
         playerBannerData.SummonCount += numSummons;
 
         int reversalIndex = lastIndexOfRare5;
@@ -393,17 +407,17 @@ public class SummonController(
                 updateDataList: updateDataList,
                 entityResult: new EntityResult() { NewGetEntityList = newGetEntityList },
                 summonTicketList: await summonService.GetSummonTicketList(),
-                resultSummonPoint: playerBannerData.SummonPoints,
+                resultSummonPoint: gainedSummonPoints,
                 userSummonList: new List<UserSummonList>()
                 {
                     new(
-                        bannerData.SummonId,
+                        summonList.SummonId,
                         playerBannerData.SummonCount,
-                        bannerData.CampaignType,
-                        bannerData.FreeCountRest,
-                        bannerData.IsBeginnerCampaign,
-                        bannerData.BeginnerCampaignCountRest,
-                        bannerData.ConsecutionCampaignCountRest
+                        summonList.CampaignType,
+                        summonList.FreeCountRest,
+                        summonList.IsBeginnerCampaign,
+                        summonList.BeginnerCampaignCountRest,
+                        summonList.ConsecutionCampaignCountRest
                     )
                 }
             );

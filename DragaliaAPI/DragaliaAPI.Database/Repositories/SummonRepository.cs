@@ -22,27 +22,6 @@ public class SummonRepository : BaseRepository, ISummonRepository
             x.ViewerId == this.playerIdentityService.ViewerId
         );
 
-    public async Task<DbPlayerBannerData> GetPlayerBannerData(int bannerId)
-    {
-        DbPlayerBannerData bannerData =
-            await apiContext.PlayerBannerData.FirstOrDefaultAsync(x =>
-                x.ViewerId.Equals(this.playerIdentityService.ViewerId)
-                && x.SummonBannerId == bannerId
-            ) ?? await this.AddPlayerBannerData(bannerId);
-        return bannerData;
-    }
-
-    public async Task<DbPlayerBannerData> AddPlayerBannerData(int bannerId)
-    {
-        DbPlayerBannerData bannerData = DbPlayerBannerDataFactory.Create(
-            this.playerIdentityService.ViewerId,
-            bannerId
-        );
-        bannerData = (await apiContext.PlayerBannerData.AddAsync(bannerData)).Entity;
-
-        return bannerData;
-    }
-
     public async Task AddSummonHistory(DbPlayerSummonHistory summonHistory)
     {
         await apiContext.PlayerSummonHistory.AddRangeAsync(summonHistory);

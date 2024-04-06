@@ -11,7 +11,7 @@ namespace DragaliaAPI.Features.Summoning;
 
 [Route("redoable_summon")]
 public class RedoableSummonController(
-    ISummonService summonService,
+    SummonService summonService,
     SummonOddsService summonOddsService,
     IStoryRepository storyRepository,
     IUnitRepository unitRepository,

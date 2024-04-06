@@ -154,5 +154,9 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
         modelBuilder
             .Entity<DbPlayerStoryState>()
             .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
+
+        modelBuilder
+            .Entity<DbPlayerBannerData>()
+            .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
     }
 }

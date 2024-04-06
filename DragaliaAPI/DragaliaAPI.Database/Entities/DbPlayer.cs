@@ -29,7 +29,7 @@ public class DbPlayer
 
     public List<DbParty> PartyList { get; set; } = [];
 
-    public List<DbPlayerBannerData> UserSummonList { get; set; } = [];
+    public List<DbPlayerBannerData> BannerData { get; set; } = [];
 
     public List<DbPlayerCharaData> CharaList { get; set; } = [];
 

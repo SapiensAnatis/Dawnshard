@@ -7,6 +7,7 @@ using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Mapping.Mapperly;
+using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -152,6 +153,10 @@ public class UpdateDataService(
                 case DbPlayerQuestWall wall:
                     list.QuestWallList ??= [];
                     list.QuestWallList.Add(wall.ToQuestWallList());
+                    break;
+                case DbPlayerBannerData bannerData:
+                    list.SummonPointList ??= [];
+                    list.SummonPointList.Add(bannerData.MapToSummonPointList());
                     break;
                 default:
                     continue;
