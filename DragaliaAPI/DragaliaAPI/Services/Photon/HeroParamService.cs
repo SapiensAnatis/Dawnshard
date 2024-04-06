@@ -14,7 +14,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Services.Photon;
 
-public class HeroParamService : IHeroParamService
+public class HeroParamService(
+    IDungeonRepository dungeonRepository,
+    IWeaponRepository weaponRepository,
+    IBonusService bonusService,
+    IPartyRepository partyRepository,
+    ILogger<HeroParamService> logger,
+    IPlayerIdentityService playerIdentityService
+) : IHeroParamService
 {
     private static readonly ImmutableDictionary<WeaponTypes, WeaponBodies> DefaultWeapons =
         new Dictionary<WeaponTypes, WeaponBodies>()
@@ -30,63 +37,29 @@ public class HeroParamService : IHeroParamService
             { WeaponTypes.Gun, WeaponBodies.BattlewornManacaster }
         }.ToImmutableDictionary();
 
-    private readonly IDungeonRepository dungeonRepository;
-    private readonly IWeaponRepository weaponRepository;
-    private readonly IBonusService bonusService;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IPartyRepository partyRepository;
-    private readonly ILogger<HeroParamService> logger;
-    private readonly IPlayerIdentityService playerIdentityService;
-
-    public HeroParamService(
-        IDungeonRepository dungeonRepository,
-        IWeaponRepository weaponRepository,
-        IBonusService bonusService,
-        IUserDataRepository userDataRepository,
-        IPartyRepository partyRepository,
-        ILogger<HeroParamService> logger,
-        IPlayerIdentityService playerIdentityService
-    )
-    {
-        this.dungeonRepository = dungeonRepository;
-        this.weaponRepository = weaponRepository;
-        this.bonusService = bonusService;
-        this.userDataRepository = userDataRepository;
-        this.partyRepository = partyRepository;
-        this.logger = logger;
-        this.playerIdentityService = playerIdentityService;
-    }
-
     public async Task<List<HeroParam>> GetHeroParam(long viewerId, int partySlot)
     {
-        this.logger.LogDebug("Fetching HeroParam for slot {partySlots}", partySlot);
+        logger.LogDebug("Fetching HeroParam for slot {partySlots}", partySlot);
 
-        DbPlayerUserData userData = await this
-            .userDataRepository.GetViewerData(viewerId)
-            .SingleAsync();
+        using IDisposable ctx = playerIdentityService.StartUserImpersonation(viewerId);
 
-        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(viewerId);
-
-        List<DbDetailedPartyUnit> detailedPartyUnits = await this
-            .dungeonRepository.BuildDetailedPartyUnit(
-                partyRepository.GetPartyUnits(partySlot),
-                partySlot
-            )
+        List<DbDetailedPartyUnit> detailedPartyUnits = await dungeonRepository
+            .BuildDetailedPartyUnit(partyRepository.GetPartyUnits(partySlot), partySlot)
             .ToListAsync();
 
-        this.logger.LogDebug("Retrieved {n} party units", detailedPartyUnits.Count);
+        logger.LogDebug("Retrieved {n} party units", detailedPartyUnits.Count);
 
         foreach (DbDetailedPartyUnit unit in detailedPartyUnits)
         {
             if (unit.WeaponBodyData is not null)
             {
-                unit.GameWeaponPassiveAbilityList = await this
-                    .weaponRepository.GetPassiveAbilities(unit.WeaponBodyData.WeaponBodyId)
+                unit.GameWeaponPassiveAbilityList = await weaponRepository
+                    .GetPassiveAbilities(unit.CharaData.CharaId)
                     .ToListAsync();
             }
         }
 
-        FortBonusList bonusList = await this.bonusService.GetBonusList();
+        FortBonusList bonusList = await bonusService.GetBonusList();
 
         return detailedPartyUnits.Select(x => MapHeroParam(x, bonusList)).ToList();
     }
@@ -131,6 +104,10 @@ public class HeroParamService : IHeroParamService
             result.DragonSkill2Lv = 0; // ???
         }
 
+        result.WeaponPassiveAbilityIds = unit
+            .GameWeaponPassiveAbilityList.Select(x => x.WeaponPassiveAbilityId)
+            .ToArray();
+
         if (unit.WeaponBodyData is not null)
         {
             result.WeaponBodyId = (int)unit.WeaponBodyData.WeaponBodyId;
@@ -139,9 +116,6 @@ public class HeroParamService : IHeroParamService
             result.WeaponBodyAbility2Lv = unit.WeaponBodyData.Ability2Level;
             result.WeaponBodySkillLv = unit.WeaponBodyData.SkillLevel;
             result.WeaponBodySkillNo = unit.WeaponBodyData.SkillNo;
-            result.WeaponPassiveAbilityIds = unit
-                .GameWeaponPassiveAbilityList.Select(x => x.WeaponPassiveAbilityId)
-                .ToArray();
         }
         else
         {

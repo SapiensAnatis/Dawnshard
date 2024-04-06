@@ -48,13 +48,13 @@ public class WeaponRepository : IWeaponRepository
             x.ViewerId == this.playerIdentityService.ViewerId
         );
 
-    public IQueryable<DbWeaponPassiveAbility> GetPassiveAbilities(WeaponBodies id)
+    public IQueryable<DbWeaponPassiveAbility> GetPassiveAbilities(Charas id)
     {
-        WeaponBody data = MasterAsset.WeaponBody.Get(id);
+        CharaData charaData = MasterAsset.CharaData.Get(id);
 
         IEnumerable<int> searchIds = MasterAsset
             .WeaponPassiveAbility.Enumerable.Where(x =>
-                x.WeaponType == data.WeaponType && x.ElementalType == data.ElementalType
+                x.WeaponType == charaData.WeaponType && x.ElementalType == charaData.ElementalType
             )
             .ExceptBy(AstralsBaneAbilityIds, x => x.AbilityId) // Sending astral abilities in the list breaks scorch res. Don't ask me why.
             .Select(x => x.Id);
