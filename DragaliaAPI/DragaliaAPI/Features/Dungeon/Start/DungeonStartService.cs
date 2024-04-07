@@ -19,7 +19,7 @@ using static DragaliaAPI.Services.Game.TutorialService;
 
 namespace DragaliaAPI.Features.Dungeon.Start;
 
-public class DungeonStartService(
+public partial class DungeonStartService(
     IPartyRepository partyRepository,
     IDungeonRepository dungeonRepository,
     IWeaponRepository weaponRepository,
@@ -72,6 +72,8 @@ public class DungeonStartService(
         ulong? supportViewerId = null
     )
     {
+        Log.LoadingFromPartyNumbers(logger, partyNoList);
+
         IQueryable<DbPartyUnit> partyQuery = partyRepository
             .GetPartyUnits(partyNoList)
             .AsNoTracking();
@@ -128,6 +130,8 @@ public class DungeonStartService(
         RepeatSetting? repeatSetting = null
     )
     {
+        Log.LoadingFromPartySettingList(logger, party);
+
         IngameData result = await InitializeIngameData(questId, supportViewerId);
 
         List<DbDetailedPartyUnit> detailedPartyUnits = new();
@@ -139,7 +143,7 @@ public class DungeonStartService(
         )
         {
             detailedPartyUnits.Add(
-                await detailQuery.AsNoTracking().SingleOrDefaultAsync()
+                await detailQuery.AsNoTracking().FirstOrDefaultAsync()
                     ?? throw new InvalidOperationException(
                         "Detailed party query returned no results"
                     )
@@ -168,6 +172,8 @@ public class DungeonStartService(
         ulong? supportViewerId = null
     )
     {
+        Log.LoadingFromPartyNumber(logger, partyNo);
+
         IQueryable<DbPartyUnit> partyQuery = partyRepository.GetPartyUnits(partyNo).AsNoTracking();
 
         List<PartySettingList> party = ProcessUnitList(await partyQuery.ToListAsync(), partyNo);
@@ -210,7 +216,7 @@ public class DungeonStartService(
         )
         {
             detailedPartyUnits.Add(
-                await detailQuery.AsNoTracking().SingleOrDefaultAsync()
+                await detailQuery.AsNoTracking().FirstOrDefaultAsync()
                     ?? throw new InvalidOperationException(
                         "Detailed party query returned no results"
                     )
@@ -233,7 +239,7 @@ public class DungeonStartService(
 
     public async Task<IngameQuestData> InitiateQuest(int questId)
     {
-        DbQuest? quest = await questRepository.Quests.SingleOrDefaultAsync(x =>
+        DbQuest? quest = await questRepository.Quests.FirstOrDefaultAsync(x =>
             x.QuestId == questId
         );
 
@@ -289,9 +295,12 @@ public class DungeonStartService(
                 x is not null
             );
 
-            detailedUnit.GameWeaponPassiveAbilityList = await weaponRepository
-                .GetPassiveAbilities(detailedUnit.CharaData.CharaId)
-                .ToListAsync();
+            if (detailedUnit.CharaData is not null)
+            {
+                detailedUnit.GameWeaponPassiveAbilityList = await weaponRepository
+                    .GetPassiveAbilities(detailedUnit.CharaData.CharaId)
+                    .ToListAsync();
+            }
         }
 
         List<PartyUnitList> units = detailedPartyUnits

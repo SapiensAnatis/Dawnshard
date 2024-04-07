@@ -12,7 +12,7 @@ public class DbDetailedPartyUnit
 
     public int Position { get; set; }
 
-    public required DbPlayerCharaData CharaData { get; set; }
+    public DbPlayerCharaData? CharaData { get; set; }
 
     public DbPlayerDragonData? DragonData { get; set; }
 

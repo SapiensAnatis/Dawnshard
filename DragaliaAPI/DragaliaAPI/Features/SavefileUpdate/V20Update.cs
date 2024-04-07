@@ -15,7 +15,6 @@ namespace DragaliaAPI.Features.SavefileUpdate;
 public class V20Update(
     ApiContext apiContext,
     IPresentService presentService,
-    IPlayerIdentityService playerIdentityService,
     ILogger<V20Update> logger
 ) : ISavefileUpdate
 {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
@@ -51,7 +52,7 @@ public class HeroParamService(
 
         foreach (DbDetailedPartyUnit unit in detailedPartyUnits)
         {
-            if (unit.WeaponBodyData is not null)
+            if (unit.CharaData is not null)
             {
                 unit.GameWeaponPassiveAbilityList = await weaponRepository
                     .GetPassiveAbilities(unit.CharaData.CharaId)
@@ -61,11 +62,17 @@ public class HeroParamService(
 
         FortBonusList bonusList = await bonusService.GetBonusList();
 
-        return detailedPartyUnits.Select(x => MapHeroParam(x, bonusList)).ToList();
+        return detailedPartyUnits
+            .Select(x => MapHeroParam(x, bonusList))
+            .OfType<HeroParam>()
+            .ToList();
     }
 
-    private static HeroParam MapHeroParam(DbDetailedPartyUnit unit, FortBonusList fortBonusList)
+    private static HeroParam? MapHeroParam(DbDetailedPartyUnit unit, FortBonusList fortBonusList)
     {
+        if (unit.CharaData is null)
+            return null;
+
         CharaData charaData = MasterAsset.CharaData[unit.CharaData.CharaId];
 
         HeroParam result =
@@ -162,6 +169,12 @@ public class HeroParamService(
         HeroParam result
     )
     {
+        if (unit.CharaData is null)
+        {
+            // Validated in above method
+            throw new UnreachableException("CharaData is null");
+        }
+
         CharaData charaData = MasterAsset.CharaData[unit.CharaData.CharaId];
 
         AtgenParamBonus paramBonus = fortBonusList.ParamBonus.First(x =>
