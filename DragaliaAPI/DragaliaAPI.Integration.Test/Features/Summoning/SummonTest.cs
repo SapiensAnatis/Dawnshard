@@ -9,10 +9,13 @@ namespace DragaliaAPI.Integration.Test.Features.Summoning;
 /// </summary>
 public class SummonTest : TestFixture
 {
-    private const int TestBannerId = 1020010;
+    private const int TestBannerId = 1020121;
 
     public SummonTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        CommonAssertionOptions.ApplyTimeOptions();
+    }
 
     [Fact]
     public async Task SummonExcludeGetList_ReturnsAnyData()
@@ -33,7 +36,7 @@ public class SummonTest : TestFixture
         SummonGetOddsDataResponse response = (
             await this.Client.PostMsgpack<SummonGetOddsDataResponse>(
                 "summon/get_odds_data",
-                new SummonGetOddsDataRequest(1020010)
+                new SummonGetOddsDataRequest(TestBannerId)
             )
         ).Data;
 
@@ -186,14 +189,13 @@ public class SummonTest : TestFixture
     [Fact]
     public async Task SummonGetSummonList_ReturnsDataWithBannerInformation()
     {
-        int bannerId = 1020010;
         int dailyCount = 1;
         int summonCount = 10;
 
         await this.AddToDatabase(
             new DbPlayerBannerData()
             {
-                SummonBannerId = bannerId,
+                SummonBannerId = TestBannerId,
                 DailyLimitedSummonCount = dailyCount,
                 SummonCount = summonCount
             }
@@ -220,7 +222,7 @@ public class SummonTest : TestFixture
             .BeEquivalentTo(
                 new SummonList()
                 {
-                    SummonId = bannerId,
+                    SummonId = TestBannerId,
                     SummonType = 2,
                     SingleCrystal = 120,
                     SingleDiamond = 120,
@@ -228,7 +230,7 @@ public class SummonTest : TestFixture
                     MultiDiamond = 1200,
                     LimitedCrystal = 0,
                     LimitedDiamond = 30,
-                    SummonPointId = bannerId,
+                    SummonPointId = TestBannerId,
                     AddSummonPoint = 1,
                     AddSummonPointStone = 2,
                     ExchangeSummonPoint = 300,
@@ -263,8 +265,11 @@ public class SummonTest : TestFixture
     }
 
     [Fact]
-    public async Task SummonRequest_GetSummonPointData_ReturnsAnyData()
+    public async Task SummonGetSummonPointTrade_NoBannerData_CreatesDefaultData()
     {
+        this.ApiContext.PlayerBannerData.Should()
+            .NotContain(x => x.ViewerId == this.ViewerId && x.SummonBannerId == TestBannerId);
+
         SummonGetSummonPointTradeResponse response = (
             await this.Client.PostMsgpack<SummonGetSummonPointTradeResponse>(
                 "summon/get_summon_point_trade",
@@ -272,10 +277,80 @@ public class SummonTest : TestFixture
             )
         ).Data;
 
-        response.Should().NotBeNull();
+        response
+            .Should()
+            .BeEquivalentTo(
+                new SummonGetSummonPointTradeResponse()
+                {
+                    SummonPointTradeList =
+                    [
+                        new()
+                        {
+                            TradeId = int.Parse($"{TestBannerId}100"),
+                            EntityId = (int)Charas.Mona,
+                            EntityType = EntityTypes.Chara
+                        },
+                        new()
+                        {
+                            TradeId = int.Parse($"{TestBannerId}700"),
+                            EntityId = (int)Dragons.Arsene,
+                            EntityType = EntityTypes.Dragon
+                        }
+                    ],
+                    SummonPointList = [new() { SummonPointId = TestBannerId, SummonPoint = 0, }],
+                    UpdateDataList = new()
+                    {
+                        SummonPointList = [new() { SummonPointId = TestBannerId, SummonPoint = 0, }]
+                    },
+                    EntityResult = new(),
+                },
+                opts => opts.Excluding(x => x.Name.Contains("CsPoint"))
+            );
 
-        response.SummonPointList.Should().NotBeEmpty();
-        response.SummonPointTradeList.Should().NotBeEmpty();
+        this.ApiContext.PlayerBannerData.Should()
+            .Contain(x => x.ViewerId == this.ViewerId && x.SummonBannerId == TestBannerId);
+    }
+
+    [Fact]
+    public async Task SummonGetSummonPointTrade_ExistingBannerData_ReturnsData()
+    {
+        await this.AddToDatabase(
+            new DbPlayerBannerData() { SummonBannerId = TestBannerId, SummonPoints = 400, }
+        );
+
+        SummonGetSummonPointTradeResponse response = (
+            await this.Client.PostMsgpack<SummonGetSummonPointTradeResponse>(
+                "summon/get_summon_point_trade",
+                new SummonGetSummonPointTradeRequest(TestBannerId)
+            )
+        ).Data;
+
+        response
+            .Should()
+            .BeEquivalentTo(
+                new SummonGetSummonPointTradeResponse()
+                {
+                    SummonPointTradeList =
+                    [
+                        new()
+                        {
+                            TradeId = int.Parse($"{TestBannerId}100"),
+                            EntityId = (int)Charas.Mona,
+                            EntityType = EntityTypes.Chara
+                        },
+                        new()
+                        {
+                            TradeId = int.Parse($"{TestBannerId}700"),
+                            EntityId = (int)Dragons.Arsene,
+                            EntityType = EntityTypes.Dragon
+                        }
+                    ],
+                    SummonPointList = [new() { SummonPointId = TestBannerId, SummonPoint = 400, }],
+                    UpdateDataList = new(),
+                    EntityResult = new(),
+                },
+                opts => opts.Excluding(x => x.Name.Contains("CsPoint"))
+            );
     }
 
     [Fact]
@@ -423,6 +498,50 @@ public class SummonTest : TestFixture
         response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
 
+    [Fact]
+    public async Task SummonRequest_IncrementsWyrmsigilPoints()
+    {
+        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.SingleAsync(x =>
+            x.ViewerId == this.ViewerId
+        );
+
+        SummonRequestResponse response = (
+            await this.Client.PostMsgpack<SummonRequestResponse>(
+                "summon/request",
+                new SummonRequestRequest(
+                    TestBannerId,
+                    SummonExecTypes.Tenfold,
+                    1,
+                    PaymentTypes.Wyrmite,
+                    new PaymentTarget(userData.Crystal, 1200)
+                )
+            )
+        ).Data;
+
+        response.ResultSummonPoint.Should().Be(10);
+        response
+            .UpdateDataList.SummonPointList.Should()
+            .Contain(x => x.SummonPointId == TestBannerId && x.SummonPoint == 10);
+
+        SummonRequestResponse singleResponse = (
+            await this.Client.PostMsgpack<SummonRequestResponse>(
+                "summon/request",
+                new SummonRequestRequest(
+                    TestBannerId,
+                    SummonExecTypes.Single,
+                    3,
+                    PaymentTypes.Wyrmite,
+                    new PaymentTarget(userData.Crystal - 1200, 360)
+                )
+            )
+        ).Data;
+
+        singleResponse.ResultSummonPoint.Should().Be(3);
+        singleResponse
+            .UpdateDataList.SummonPointList.Should()
+            .Contain(x => x.SummonPointId == TestBannerId && x.SummonPoint == 13);
+    }
+
     [Theory]
     [InlineData(SummonExecTypes.Tenfold)]
     [InlineData(SummonExecTypes.Single)]
@@ -448,6 +567,72 @@ public class SummonTest : TestFixture
             );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.CommonMaterialShort);
+    }
+
+    [Fact]
+    public async Task SummonPointTrade_Chara_Success_ReturnsData()
+    {
+        int monaTradeId = int.Parse($"{TestBannerId}100");
+
+        await this.AddToDatabase(
+            new DbPlayerBannerData() { SummonBannerId = TestBannerId, SummonPoints = 400, }
+        );
+
+        SummonSummonPointTradeResponse response = (
+            await this.Client.PostMsgpack<SummonSummonPointTradeResponse>(
+                "summon/summon_point_trade",
+                new SummonSummonPointTradeRequest(TestBannerId, monaTradeId)
+            )
+        ).Data;
+
+        response
+            .ExchangeEntityList.Should()
+            .ContainEquivalentOf(
+                new AtgenBuildEventRewardEntityList()
+                {
+                    EntityId = (int)Charas.Mona,
+                    EntityType = EntityTypes.Chara,
+                    EntityQuantity = 1,
+                }
+            );
+
+        response.UpdateDataList.CharaList.Should().Contain(x => x.CharaId == Charas.Mona);
+
+        this.ApiContext.PlayerCharaData.Should()
+            .Contain(x => x.ViewerId == this.ViewerId && x.CharaId == Charas.Mona);
+    }
+
+    [Fact]
+    public async Task SummonPointTrade_Dragon_Success_ReturnsData()
+    {
+        int arseneTradeId = int.Parse($"{TestBannerId}700");
+
+        await this.AddToDatabase(
+            new DbPlayerBannerData() { SummonBannerId = TestBannerId, SummonPoints = 400, }
+        );
+
+        SummonSummonPointTradeResponse response = (
+            await this.Client.PostMsgpack<SummonSummonPointTradeResponse>(
+                "summon/summon_point_trade",
+                new SummonSummonPointTradeRequest(TestBannerId, arseneTradeId)
+            )
+        ).Data;
+
+        response
+            .ExchangeEntityList.Should()
+            .ContainEquivalentOf(
+                new AtgenBuildEventRewardEntityList()
+                {
+                    EntityId = (int)Dragons.Arsene,
+                    EntityType = EntityTypes.Dragon,
+                    EntityQuantity = 1,
+                }
+            );
+
+        response.UpdateDataList.DragonList.Should().Contain(x => x.DragonId == Dragons.Arsene);
+
+        this.ApiContext.PlayerDragonData.Should()
+            .Contain(x => x.ViewerId == this.ViewerId && x.DragonId == Dragons.Arsene);
     }
 
     private async Task CheckRewardInDb(AtgenResultUnitList reward)
