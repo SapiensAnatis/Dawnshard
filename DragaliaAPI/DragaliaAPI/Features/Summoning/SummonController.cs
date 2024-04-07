@@ -125,29 +125,24 @@ public class SummonController(
     )
     {
         SummonPointList? pointList = await summonService.GetSummonPointList(request.SummonId);
+        IEnumerable<AtgenSummonPointTradeList>? tradeList = summonService.GetSummonPointTradeList(
+            request.SummonId
+        );
 
-        if (pointList is null)
+        if (pointList is null || tradeList is null)
         {
             return this.Code(
                 ResultCode.SummonNotFound,
-                $"Failed to get summon point list for banner {request.SummonId}"
+                $"Failed to get summon trade data for banner {request.SummonId}"
             );
         }
 
-        //TODO get real list from persisted BannerInfo or dynamic List from Db, dunno yet
-        List<AtgenSummonPointTradeList> tradableUnits =
-            new()
-            {
-                new((request.SummonId * 1000) + 1, EntityTypes.Chara, (int)Charas.Celliera),
-                new((request.SummonId * 1000) + 2, EntityTypes.Chara, (int)Charas.SummerCelliera)
-            };
-
         // We need to save changes as we may have created a DbPlayerBannerData
-        // in the process of fetching the player's banner data.
+        // in the process of fetching the SummonPointList.
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         return this.Ok(
-            new SummonGetSummonPointTradeResponse(tradableUnits, [pointList], updateDataList, new())
+            new SummonGetSummonPointTradeResponse(tradeList, [pointList], updateDataList, new())
         );
     }
 
@@ -160,19 +155,11 @@ public class SummonController(
     {
         SummonList? summonList = await summonService.GetSummonList(summonRequest.SummonId);
 
-        if (summonList == null)
-        {
-            throw new DragaliaException(
-                ResultCode.SummonNotFound,
-                $"Failed to find a banner with ID {summonRequest.SummonId}"
-            );
-        }
-
         DbPlayerBannerData? playerBannerData = await summonService.GetPlayerBannerData(
-            summonList.SummonId
+            summonRequest.SummonId
         );
 
-        if (playerBannerData == null)
+        if (summonList == null || playerBannerData == null)
         {
             throw new DragaliaException(
                 ResultCode.SummonNotFound,
@@ -423,6 +410,26 @@ public class SummonController(
             );
 
         return this.Ok(response);
+    }
+
+    [HttpPost("summon_point_trade")]
+    public async Task<DragaliaResult<SummonSummonPointTradeResponse>> SummonPointTrade(
+        SummonSummonPointTradeRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        AtgenBuildEventRewardEntityList result = await summonService.DoSummonPointTrade(
+            request.SummonId,
+            request.TradeId
+        );
+
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+
+        return new SummonSummonPointTradeResponse()
+        {
+            ExchangeEntityList = [result],
+            UpdateDataList = updateDataList,
+        };
     }
 
     private static int CalculateDewValue(Charas id)

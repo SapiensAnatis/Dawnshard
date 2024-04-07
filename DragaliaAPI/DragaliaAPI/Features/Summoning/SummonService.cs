@@ -2,8 +2,10 @@ using System.Diagnostics;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using FluentRandomPicker;
@@ -13,12 +15,14 @@ using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Features.Summoning;
 
-public sealed class SummonService(
+public sealed partial class SummonService(
     SummonOddsService summonOddsService,
     IOptionsMonitor<SummonBannerOptions> optionsMonitor,
     IUnitRepository unitRepository,
     IPlayerIdentityService playerIdentityService,
-    ApiContext apiContext
+    IRewardService rewardService,
+    ApiContext apiContext,
+    ILogger<SummonService> logger
 )
 {
     public Task<List<AtgenRedoableSummonResultUnitList>> GenerateSummonResult(
@@ -228,6 +232,81 @@ public sealed class SummonService(
         }
 
         return bannerData;
+    }
+
+    public IEnumerable<AtgenSummonPointTradeList>? GetSummonPointTradeList(int bannerId)
+    {
+        if (
+            optionsMonitor.CurrentValue.Banners.FirstOrDefault(x => x.Id == bannerId)
+            is not { } banner
+        )
+        {
+            return null;
+        }
+
+        return banner.GetTradeDictionary().Values;
+    }
+
+    public async Task<AtgenBuildEventRewardEntityList> DoSummonPointTrade(int summonId, int tradeId)
+    {
+        if (
+            optionsMonitor.CurrentValue.Banners.FirstOrDefault(x => x.Id == summonId)
+            is not { } banner
+        )
+        {
+            throw new DragaliaException(
+                ResultCode.SummonNotFound,
+                $"Failed to find summon {summonId}"
+            );
+        }
+
+        if (
+            !banner
+                .GetTradeDictionary()
+                .TryGetValue(tradeId, out AtgenSummonPointTradeList? tradeList)
+        )
+        {
+            throw new DragaliaException(
+                ResultCode.SummonNotFound,
+                $"Failed to find summon trade {tradeId} for summon {summonId}"
+            );
+        }
+
+        DbPlayerBannerData bannerData = await apiContext.PlayerBannerData.FirstAsync(x =>
+            x.SummonBannerId == banner.Id
+        );
+
+        // TODO: Some banners had a lower spark cost. We should eventually retrieve the cost from the banner itself.
+
+        if (bannerData.SummonPoints < SummonConstants.ExchangeSummonPoint)
+        {
+            throw new DragaliaException(
+                ResultCode.SummonPointTradePointShort,
+                $"Failed to perform summon trade: point quantity {bannerData.SummonPoints} is insufficient"
+            );
+        }
+
+        Log.PerformingPointTrade(logger, tradeList);
+
+        bannerData.SummonPoints -= SummonConstants.ExchangeSummonPoint;
+        Entity entity = new(tradeList.EntityType, tradeList.EntityId);
+        RewardGrantResult result = await rewardService.GrantReward(entity);
+
+        Log.PointsDeducted(logger, bannerData.SummonPoints);
+
+        if (
+            result
+            is not (
+                RewardGrantResult.Added
+                or RewardGrantResult.GiftBox
+                or RewardGrantResult.GiftBoxDiscarded
+            )
+        )
+        {
+            Log.UnexpectedRewardResult(logger, result);
+        }
+
+        return entity.ToBuildEventRewardEntityList();
     }
 
     private async Task<List<AtgenRedoableSummonResultUnitList>> GenerateSummonResultInternal(

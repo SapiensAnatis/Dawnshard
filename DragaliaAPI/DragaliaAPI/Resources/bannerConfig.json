@@ -95,8 +95,8 @@
                     "Daikokuten",
                     "Marishiten"
                 ],
-                "TradeCharas": [],
-                "TradeDragons": []
+                "TradeCharas": ["Ieyasu"],
+                "TradeDragons": ["Marishiten"]
             },
             {
                 "Id": 1020123,
