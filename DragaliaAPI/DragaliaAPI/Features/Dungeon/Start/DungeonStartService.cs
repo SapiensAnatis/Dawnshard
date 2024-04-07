@@ -216,7 +216,7 @@ public partial class DungeonStartService(
         )
         {
             detailedPartyUnits.Add(
-                await detailQuery.AsNoTracking().SingleOrDefaultAsync()
+                await detailQuery.AsNoTracking().FirstOrDefaultAsync()
                     ?? throw new InvalidOperationException(
                         "Detailed party query returned no results"
                     )
@@ -239,7 +239,7 @@ public partial class DungeonStartService(
 
     public async Task<IngameQuestData> InitiateQuest(int questId)
     {
-        DbQuest? quest = await questRepository.Quests.SingleOrDefaultAsync(x =>
+        DbQuest? quest = await questRepository.Quests.FirstOrDefaultAsync(x =>
             x.QuestId == questId
         );
 
