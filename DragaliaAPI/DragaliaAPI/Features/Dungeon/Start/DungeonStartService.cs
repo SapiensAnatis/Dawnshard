@@ -172,7 +172,7 @@ public partial class DungeonStartService(
         ulong? supportViewerId = null
     )
     {
-        Log.LoadingFromPartyNumbers(logger, [partyNo]);
+        Log.LoadingFromPartyNumber(logger, partyNo);
 
         IQueryable<DbPartyUnit> partyQuery = partyRepository.GetPartyUnits(partyNo).AsNoTracking();
 
