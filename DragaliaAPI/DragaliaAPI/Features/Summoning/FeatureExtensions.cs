@@ -17,18 +17,7 @@ public static partial class FeatureExtensions
         serviceCollection
             .Configure<SummonBannerOptions>(config.GetRequiredSection(nameof(SummonBannerOptions)))
             .AddOptions<SummonBannerOptions>()
-            .PostConfigure(opts =>
-            {
-                opts.Banners.Add(
-                    new Banner()
-                    {
-                        Id = SummonConstants.RedoableSummonBannerId,
-                        IsGala = true,
-                        Start = DateTimeOffset.MinValue,
-                        End = DateTimeOffset.MaxValue,
-                    }
-                );
-            });
+            .PostConfigure(opts => opts.PostConfigure());
 
         return serviceCollection;
     }

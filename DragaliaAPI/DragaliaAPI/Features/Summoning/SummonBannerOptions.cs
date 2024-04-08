@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 
@@ -5,7 +6,32 @@ namespace DragaliaAPI.Features.Summoning;
 
 public class SummonBannerOptions
 {
-    public required List<Banner> Banners { get; init; }
+    private static readonly Banner RerollBanner =
+        new()
+        {
+            Id = SummonConstants.RedoableSummonBannerId,
+            IsGala = true,
+            Start = DateTimeOffset.MinValue,
+            End = DateTimeOffset.MaxValue,
+        };
+
+    private readonly List<Banner> banners = [];
+
+    public required IReadOnlyList<Banner> Banners
+    {
+        get => this.banners;
+        init => this.banners = value as List<Banner> ?? value.ToList();
+    }
+
+    public void PostConfigure()
+    {
+        this.banners.Add(RerollBanner);
+
+        foreach (Banner banner in this.banners)
+        {
+            banner.PostConfigure();
+        }
+    }
 }
 
 public class Banner
@@ -32,7 +58,13 @@ public class Banner
 
     public IReadOnlyList<Dragons> TradeDragons { get; init; } = [];
 
-    public Dictionary<int, AtgenSummonPointTradeList> GetTradeDictionary()
+    public IReadOnlyDictionary<int, AtgenSummonPointTradeList> TradeDictionary
+    {
+        get;
+        private set;
+    } = ReadOnlyDictionary<int, AtgenSummonPointTradeList>.Empty;
+
+    public void PostConfigure()
     {
         // Official trade IDs for a banner followed the format e.g. [1020203001, 1020203002, 1020203003, ...] for
         // summon_point_id = 1020203. The convention of including the entity type in the ID is our own and is used
@@ -59,6 +91,8 @@ public class Banner
                 }
         );
 
-        return tradeCharas.Concat(tradeDragons).ToDictionary(x => x.TradeId, x => x);
+        this.TradeDictionary = tradeCharas
+            .Concat(tradeDragons)
+            .ToDictionary(x => x.TradeId, x => x);
     }
 }

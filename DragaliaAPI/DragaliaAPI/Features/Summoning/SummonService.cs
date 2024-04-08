@@ -244,7 +244,7 @@ public sealed partial class SummonService(
             return null;
         }
 
-        return banner.GetTradeDictionary().Values;
+        return banner.TradeDictionary.Values;
     }
 
     public async Task<AtgenBuildEventRewardEntityList> DoSummonPointTrade(int summonId, int tradeId)
@@ -260,11 +260,7 @@ public sealed partial class SummonService(
             );
         }
 
-        if (
-            !banner
-                .GetTradeDictionary()
-                .TryGetValue(tradeId, out AtgenSummonPointTradeList? tradeList)
-        )
+        if (!banner.TradeDictionary.TryGetValue(tradeId, out AtgenSummonPointTradeList? tradeList))
         {
             throw new DragaliaException(
                 ResultCode.SummonNotFound,
