@@ -7,11 +7,7 @@ public static partial class FeatureExtensions
 {
     public static IServiceCollection AddSummoningFeature(
         this IServiceCollection serviceCollection
-    ) =>
-        serviceCollection
-            .AddScoped<ISummonService, SummonService>()
-            .AddScoped<SummonListService>()
-            .AddScoped<SummonOddsService>();
+    ) => serviceCollection.AddScoped<SummonService>().AddScoped<SummonOddsService>();
 
     public static IServiceCollection AddSummoningOptions(
         this IServiceCollection serviceCollection,
@@ -21,18 +17,7 @@ public static partial class FeatureExtensions
         serviceCollection
             .Configure<SummonBannerOptions>(config.GetRequiredSection(nameof(SummonBannerOptions)))
             .AddOptions<SummonBannerOptions>()
-            .PostConfigure(opts =>
-            {
-                opts.Banners.Add(
-                    new Banner()
-                    {
-                        Id = SummonConstants.RedoableSummonBannerId,
-                        IsGala = true,
-                        Start = DateTimeOffset.MinValue,
-                        End = DateTimeOffset.MaxValue,
-                    }
-                );
-            });
+            .PostConfigure(opts => opts.PostConfigure());
 
         return serviceCollection;
     }

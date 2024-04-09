@@ -153,6 +153,10 @@ public class UpdateDataService(
                     list.QuestWallList ??= [];
                     list.QuestWallList.Add(wall.ToQuestWallList());
                     break;
+                case DbPlayerBannerData bannerData:
+                    list.SummonPointList ??= [];
+                    list.SummonPointList.Add(bannerData.MapToSummonPointList());
+                    break;
                 default:
                     continue;
             }
