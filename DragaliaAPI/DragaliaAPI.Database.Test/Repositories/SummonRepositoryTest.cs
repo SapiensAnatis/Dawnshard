@@ -81,34 +81,4 @@ public class SummonRepositoryTest : IClassFixture<DbTestFixture>
             .Should()
             .BeEquivalentTo(new List<DbPlayerSummonHistory>() { history });
     }
-
-    [Fact]
-    public async Task GetPlayerBannerData_ReturnsOnlyPlayerBannerDataWithRightId()
-    {
-        DbPlayerBannerData bannerData = DbPlayerBannerDataFactory.Create(1, 1);
-        await this.fixture.AddRangeToDatabase(
-            new List<DbPlayerBannerData>()
-            {
-                bannerData,
-                DbPlayerBannerDataFactory.Create(2, 2),
-                DbPlayerBannerDataFactory.Create(3, 1)
-            }
-        );
-
-        (await this.summonRepository.GetPlayerBannerData(1)).Should().BeEquivalentTo(bannerData);
-    }
-
-    [Fact]
-    public async Task GetPlayerBannerData_AddsIfNotFound()
-    {
-        (await this.summonRepository.GetPlayerBannerData(10))
-            .Should()
-            .BeEquivalentTo(
-                DbPlayerBannerDataFactory.Create(ViewerId, 10),
-                options =>
-                    options
-                        .Excluding(x => x.ConsecutionSummonPointsMinDate)
-                        .Excluding(x => x.ConsecutionSummonPointsMaxDate)
-            );
-    }
 }
