@@ -1,4 +1,5 @@
 {
+    "$schema": "../Resources/bannerConfig.schema.json",
     "SummonBannerOptions": {
         "Banners": [
             {
