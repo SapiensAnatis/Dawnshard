@@ -98,15 +98,15 @@ public class DeviceAccountServiceTest
     public async Task CreateDeviceAccount_CallsAddNewDeviceAccount()
     {
         this.mockRepository.Setup(x =>
-            x.AddNewDeviceAccount(It.IsAny<string>(), It.IsAny<string>())
-        )
+                x.AddNewDeviceAccount(It.IsAny<string>(), It.IsAny<string>())
+            )
             .Returns(Task.CompletedTask);
         this.mockRepository.Setup(x => x.GetDeviceAccountById(It.IsAny<string>()))
             .ReturnsAsync((DbDeviceAccount?)null);
         this.mockRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
         this.mockPlayerIdentityService.Setup(x =>
-            x.StartUserImpersonation(null, It.IsAny<string>())
-        )
+                x.StartUserImpersonation(null, It.IsAny<string>())
+            )
             .Returns(new Mock<IDisposable>(MockBehavior.Loose).Object);
         this.mockSavefileService.Setup(x => x.Create())
             .ReturnsAsync(new DbPlayer() { AccountId = "foreign id", ViewerId = 1 });
