@@ -274,9 +274,9 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
 
             return MemberCountHelper.BuildMemberCountTable(
                 this.heroParamStorage.Select(x => new ValueTuple<int, int>(
-                    x.Value.ActorNr,
-                    x.Value.HeroParamCount
-                ))
+                        x.Value.ActorNr,
+                        x.Value.HeroParamCount
+                    ))
                     .ToList()
             );
         }

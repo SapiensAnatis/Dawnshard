@@ -66,8 +66,8 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.ApiContext.SaveChangesAsync();
 
         this.fixture.ApiContext.PlayerWeapons.Single(x =>
-            x.WeaponBodyId == WeaponBodies.Arondight && x.ViewerId == IdentityTestUtils.ViewerId
-        )
+                x.WeaponBodyId == WeaponBodies.Arondight && x.ViewerId == IdentityTestUtils.ViewerId
+            )
             .Should()
             .BeEquivalentTo(
                 new DbWeaponBody()
@@ -147,8 +147,8 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.ApiContext.SaveChangesAsync();
 
         this.fixture.ApiContext.PlayerWeapons.Single(x =>
-            x.WeaponBodyId == WeaponBodies.InfernoApogee
-        )
+                x.WeaponBodyId == WeaponBodies.InfernoApogee
+            )
             .UnlockWeaponPassiveAbilityNoList.Should()
             .BeEquivalentTo(Enumerable.Repeat(0, 14).Prepend(1));
         this.fixture.ApiContext.PlayerPassiveAbilities.Should()

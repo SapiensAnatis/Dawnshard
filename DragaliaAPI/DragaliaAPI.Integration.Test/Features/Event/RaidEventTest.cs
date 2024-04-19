@@ -14,9 +14,9 @@ public class RaidEventTest : TestFixture
         this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
 
         this.Client.PostMsgpack<MemoryEventActivateResponse>(
-            "memory_event/activate",
-            new MemoryEventActivateRequest(EventId)
-        )
+                "memory_event/activate",
+                new MemoryEventActivateRequest(EventId)
+            )
             .Wait();
     }
 

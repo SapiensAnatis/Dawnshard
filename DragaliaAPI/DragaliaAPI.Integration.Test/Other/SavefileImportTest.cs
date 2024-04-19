@@ -156,14 +156,14 @@ public class SavefileImportTest : TestFixture
         await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
 
         this.ApiContext.PlayerStoryState.Single(x =>
-            x.ViewerId == this.ViewerId && x.StoryId == 110313011
-        )
+                x.ViewerId == this.ViewerId && x.StoryId == 110313011
+            )
             .StoryType.Should()
             .Be(StoryTypes.Chara);
 
         this.ApiContext.PlayerStoryState.Single(x =>
-            x.ViewerId == this.ViewerId && x.StoryId == 210091011
-        )
+                x.ViewerId == this.ViewerId && x.StoryId == 210091011
+            )
             .StoryType.Should()
             .Be(StoryTypes.Dragon);
     }

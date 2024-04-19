@@ -71,11 +71,11 @@ public class AbilityCrestControllerTest
     public async Task BuildupPiece_OnePieceUnsuccessfulReturnsError()
     {
         this.mockAbilityCrestService.SetupSequence(x =>
-            x.TryBuildup(
-                MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount),
-                It.IsAny<AtgenBuildupAbilityCrestPieceList>()
+                x.TryBuildup(
+                    MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount),
+                    It.IsAny<AtgenBuildupAbilityCrestPieceList>()
+                )
             )
-        )
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.AbilityCrestBuildupPieceStepError)
             .ReturnsAsync(ResultCode.Success);
@@ -104,11 +104,11 @@ public class AbilityCrestControllerTest
     public async Task BuildupPiece_AllStepsSuccessfulReturnsSuccess()
     {
         this.mockAbilityCrestService.Setup(x =>
-            x.TryBuildup(
-                MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount),
-                It.IsAny<AtgenBuildupAbilityCrestPieceList>()
+                x.TryBuildup(
+                    MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount),
+                    It.IsAny<AtgenBuildupAbilityCrestPieceList>()
+                )
             )
-        )
             .ReturnsAsync(ResultCode.Success);
 
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
@@ -152,11 +152,11 @@ public class AbilityCrestControllerTest
     public async Task BuildupPlusCount_OnePieceUnsuccessfulReturnsError()
     {
         this.mockAbilityCrestService.SetupSequence(x =>
-            x.TryBuildupAugments(
-                MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount),
-                It.IsAny<AtgenPlusCountParamsList>()
+                x.TryBuildupAugments(
+                    MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount),
+                    It.IsAny<AtgenPlusCountParamsList>()
+                )
             )
-        )
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.AbilityCrestBuildupPlusCountCountError);
 
@@ -179,11 +179,11 @@ public class AbilityCrestControllerTest
     public async Task BuildupPlusCount_AllPiecesSuccessfulReturnsSuccess()
     {
         this.mockAbilityCrestService.SetupSequence(x =>
-            x.TryBuildupAugments(
-                MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount),
-                It.IsAny<AtgenPlusCountParamsList>()
+                x.TryBuildupAugments(
+                    MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount),
+                    It.IsAny<AtgenPlusCountParamsList>()
+                )
             )
-        )
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.Success);
 
@@ -210,8 +210,8 @@ public class AbilityCrestControllerTest
     public async Task ResetPlusCount_OnePieceUnsuccessfulReturnsError()
     {
         this.mockAbilityCrestService.SetupSequence(x =>
-            x.TryResetAugments(AbilityCrests.ManaFount, It.IsAny<PlusCountType>())
-        )
+                x.TryResetAugments(AbilityCrests.ManaFount, It.IsAny<PlusCountType>())
+            )
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.CommonInvalidArgument);
 
@@ -234,8 +234,8 @@ public class AbilityCrestControllerTest
     public async Task ResetPlusCount_AllPiecesSuccessfulReturnsSuccess()
     {
         this.mockAbilityCrestService.SetupSequence(x =>
-            x.TryResetAugments(AbilityCrests.ManaFount, It.IsAny<PlusCountType>())
-        )
+                x.TryResetAugments(AbilityCrests.ManaFount, It.IsAny<PlusCountType>())
+            )
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.Success);
 
@@ -398,8 +398,8 @@ public class AbilityCrestControllerTest
     public async Task SetAbilityCrestSet_UpdatesWhenValidSetNo(int setNo)
     {
         this.mockAbilityCrestRepository.Setup(x =>
-            x.AddOrUpdateSet(It.Is<DbAbilityCrestSet>(set => set.AbilityCrestSetNo == setNo))
-        )
+                x.AddOrUpdateSet(It.Is<DbAbilityCrestSet>(set => set.AbilityCrestSetNo == setNo))
+            )
             .Returns(Task.CompletedTask);
 
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
@@ -431,12 +431,12 @@ public class AbilityCrestControllerTest
         this.mockAbilityCrestRepository.Setup(x => x.FindSetAsync(setNo)).ReturnsAsync(() => null);
 
         this.mockAbilityCrestRepository.Setup(x =>
-            x.AddOrUpdateSet(
-                It.Is<DbAbilityCrestSet>(set =>
-                    set.AbilityCrestSetNo == setNo && set.AbilityCrestSetName == newName
+                x.AddOrUpdateSet(
+                    It.Is<DbAbilityCrestSet>(set =>
+                        set.AbilityCrestSetNo == setNo && set.AbilityCrestSetName == newName
+                    )
                 )
             )
-        )
             .Returns(Task.CompletedTask);
 
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
