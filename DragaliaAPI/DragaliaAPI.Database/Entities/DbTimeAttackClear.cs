@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using DragaliaAPI.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Database;
+namespace DragaliaAPI.Database.Entities;
 
 [Index(nameof(QuestId))]
 public class DbTimeAttackClear
 {
     [Key]
+    [StringLength(64)]
     public required string GameId { get; set; }
 
     public int QuestId { get; set; }

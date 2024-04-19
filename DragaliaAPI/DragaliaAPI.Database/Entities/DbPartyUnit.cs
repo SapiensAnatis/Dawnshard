@@ -9,6 +9,7 @@ public class DbPartyUnit : DbPartyUnitBase, IDbPlayerData
     // In theory, a composite primary key of [Party, UnitNo] would work great.
     // However, EF Core doesn't like navigation properties being used as keys.
     [Key]
+    [StringLength(64)]
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
     [ForeignKey($"{nameof(ViewerId)},{nameof(PartyNo)}")]

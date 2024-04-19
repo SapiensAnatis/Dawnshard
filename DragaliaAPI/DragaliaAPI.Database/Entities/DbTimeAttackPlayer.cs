@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
@@ -7,6 +8,7 @@ namespace DragaliaAPI.Database.Entities;
 public class DbTimeAttackPlayer
 {
     [ForeignKey(nameof(Clear))]
+    [StringLength(64)]
     public required string GameId { get; set; }
 
     [ForeignKey(nameof(Player))]
@@ -19,6 +21,7 @@ public class DbTimeAttackPlayer
     /// For manual inspection after contest ends.
     /// </remarks>
     [Column(TypeName = "jsonb")]
+    // ReSharper disable once EntityFramework.ModelValidation.UnlimitedStringLength
     public required string PartyInfo { get; set; }
 
     public List<DbTimeAttackClearUnit> Units { get; set; } = new();

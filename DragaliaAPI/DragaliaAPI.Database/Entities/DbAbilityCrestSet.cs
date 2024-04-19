@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,7 @@ public class DbAbilityCrestSet : DbPlayerData
     /// <summary>
     /// Gets or sets a string indicating the wyrmprint set's name.
     /// </summary>
+    [StringLength(32)]
     public string AbilityCrestSetName { get; set; } = "";
 
     /// <summary>

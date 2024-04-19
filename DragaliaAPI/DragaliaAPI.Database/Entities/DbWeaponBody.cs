@@ -59,7 +59,7 @@ public class DbWeaponBody : DbPlayerData
     /// <remarks>Always 0 on my endgame savefile, for all 235 weapons.</remarks>
     /// </summary>
     [NotMapped]
-    public int AdditionalEffectCount { get; }
+    public int AdditionalEffectCount { get; set; }
 
     /// <summary>
     /// Gets or sets a list of passive abilities that are unlocked on the weapon.
