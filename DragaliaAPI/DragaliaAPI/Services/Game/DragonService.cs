@@ -17,7 +17,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Services.Game;
 
-public class DragonService(
+public partial class DragonService(
     IUserDataRepository userDataRepository,
     IUnitRepository unitRepository,
     IInventoryRepository inventoryRepository,
@@ -33,9 +33,14 @@ public class DragonService(
 {
     public async Task<DragonGetContactDataResponse> DoDragonGetContactData()
     {
+        DateTimeOffset reset = resetHelper.LastDailyReset;
+        DayOfWeek dayOfWeek = reset.DayOfWeek;
+
         DragonGifts rotatingGift = DragonConstants.RotatingGifts[
             (int)resetHelper.LastDailyReset.DayOfWeek
         ];
+
+        Log.CurrentRotatingGift(logger, reset, dayOfWeek, rotatingGift);
 
         Dictionary<DragonGifts, DbPlayerDragonGift> gifts = await apiContext
             .PlayerDragonGifts.Where(x =>
