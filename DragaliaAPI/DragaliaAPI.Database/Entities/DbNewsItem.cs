@@ -9,9 +9,11 @@ public class DbNewsItem
     [Key]
     public int Id { get; set; }
 
+    [StringLength(256)]
     public required string Headline { get; set; }
 
     public DateTimeOffset Time { get; set; }
 
+    [StringLength(4096)]
     public required string Description { get; set; }
 }
