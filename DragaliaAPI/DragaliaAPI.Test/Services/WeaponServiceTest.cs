@@ -101,8 +101,8 @@ public class WeaponServiceTest
             .ReturnsAsync(false);
 
         this.mockFortRepository.Setup(x =>
-            x.CheckPlantLevel(FortPlants.Smithy, weaponData.NeedFortCraftLevel)
-        )
+                x.CheckPlantLevel(FortPlants.Smithy, weaponData.NeedFortCraftLevel)
+            )
             .ReturnsAsync(false);
 
         (await this.weaponService.ValidateCraft(WeaponBodies.Gjallarhorn)).Should().BeFalse();
@@ -120,13 +120,13 @@ public class WeaponServiceTest
             .ReturnsAsync(false);
 
         this.mockFortRepository.Setup(x =>
-            x.CheckPlantLevel(FortPlants.Smithy, weaponData.NeedFortCraftLevel)
-        )
+                x.CheckPlantLevel(FortPlants.Smithy, weaponData.NeedFortCraftLevel)
+            )
             .ReturnsAsync(true);
 
         this.mockWeaponRepository.Setup(x =>
-            x.CheckOwnsWeapons(WeaponBodies.AbsoluteAqua, WeaponBodies.Empty)
-        )
+                x.CheckOwnsWeapons(WeaponBodies.AbsoluteAqua, WeaponBodies.Empty)
+            )
             .ReturnsAsync(false);
 
         (await this.weaponService.ValidateCraft(WeaponBodies.PrimalAqua)).Should().BeFalse();
@@ -144,22 +144,22 @@ public class WeaponServiceTest
             .ReturnsAsync(false);
 
         this.mockFortRepository.Setup(x =>
-            x.CheckPlantLevel(FortPlants.Smithy, weaponData.NeedFortCraftLevel)
-        )
+                x.CheckPlantLevel(FortPlants.Smithy, weaponData.NeedFortCraftLevel)
+            )
             .ReturnsAsync(true);
 
         this.mockWeaponRepository.Setup(x =>
-            x.CheckOwnsWeapons(WeaponBodies.AbsoluteCrimson, WeaponBodies.Empty)
-        )
+                x.CheckOwnsWeapons(WeaponBodies.AbsoluteCrimson, WeaponBodies.Empty)
+            )
             .ReturnsAsync(true);
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(
-                It.Is<IDictionary<Materials, int>>(y =>
-                    ValidateMaterialMap(weaponData.CreateMaterialMap, y)
+                x.CheckQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(weaponData.CreateMaterialMap, y)
+                    )
                 )
             )
-        )
             .ReturnsAsync(false);
 
         (await this.weaponService.ValidateCraft(WeaponBodies.PrimalCrimson)).Should().BeFalse();
@@ -178,22 +178,22 @@ public class WeaponServiceTest
             .ReturnsAsync(false);
 
         this.mockFortRepository.Setup(x =>
-            x.CheckPlantLevel(FortPlants.Smithy, weaponData.NeedFortCraftLevel)
-        )
+                x.CheckPlantLevel(FortPlants.Smithy, weaponData.NeedFortCraftLevel)
+            )
             .ReturnsAsync(true);
 
         this.mockWeaponRepository.Setup(x =>
-            x.CheckOwnsWeapons(WeaponBodies.AbsoluteLightning, WeaponBodies.Empty)
-        )
+                x.CheckOwnsWeapons(WeaponBodies.AbsoluteLightning, WeaponBodies.Empty)
+            )
             .ReturnsAsync(true);
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(
-                It.Is<IDictionary<Materials, int>>(y =>
-                    ValidateMaterialMap(weaponData.CreateMaterialMap, y)
+                x.CheckQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(weaponData.CreateMaterialMap, y)
+                    )
                 )
             )
-        )
             .ReturnsAsync(true);
 
         this.mockUserDataRepository.Setup(x => x.CheckCoin(weaponData.CreateCoin))
@@ -216,22 +216,22 @@ public class WeaponServiceTest
             .ReturnsAsync(false);
 
         this.mockFortRepository.Setup(x =>
-            x.CheckPlantLevel(FortPlants.Smithy, weaponData.NeedFortCraftLevel)
-        )
+                x.CheckPlantLevel(FortPlants.Smithy, weaponData.NeedFortCraftLevel)
+            )
             .ReturnsAsync(true);
 
         this.mockWeaponRepository.Setup(x =>
-            x.CheckOwnsWeapons(WeaponBodies.AbsoluteHex, WeaponBodies.Empty)
-        )
+                x.CheckOwnsWeapons(WeaponBodies.AbsoluteHex, WeaponBodies.Empty)
+            )
             .ReturnsAsync(true);
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(
-                It.Is<IDictionary<Materials, int>>(y =>
-                    ValidateMaterialMap(weaponData.CreateMaterialMap, y)
+                x.CheckQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(weaponData.CreateMaterialMap, y)
+                    )
                 )
             )
-        )
             .ReturnsAsync(true);
 
         this.mockUserDataRepository.Setup(x => x.CheckCoin(weaponData.CreateCoin))
@@ -260,8 +260,8 @@ public class WeaponServiceTest
         );
 
         this.mockInventoryRepository.Setup(x =>
-            x.UpdateQuantity(It.IsAny<Dictionary<Materials, int>>())
-        )
+                x.UpdateQuantity(It.IsAny<Dictionary<Materials, int>>())
+            )
             .Returns(Task.CompletedTask);
 
         this.mockUserDataRepository.Setup(x => x.UpdateCoin(-data.CreateCoin))
@@ -318,12 +318,12 @@ public class WeaponServiceTest
         WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.InfernoApogee);
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(
-                It.Is<IDictionary<Materials, int>>(y =>
-                    ValidateMaterialMap(InfernoApogeePassive1Map, y)
+                x.CheckQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(InfernoApogeePassive1Map, y)
+                    )
                 )
             )
-        )
             .ReturnsAsync(false);
 
         (
@@ -347,12 +347,12 @@ public class WeaponServiceTest
         WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.InfernoApogee);
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(
-                It.Is<IDictionary<Materials, int>>(y =>
-                    ValidateMaterialMap(InfernoApogeePassive1Map, y)
+                x.CheckQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(InfernoApogeePassive1Map, y)
+                    )
                 )
             )
-        )
             .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckCoin(80_000)).ReturnsAsync(false);
 
@@ -378,12 +378,12 @@ public class WeaponServiceTest
         WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.InfernoApogee);
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(
-                It.Is<IDictionary<Materials, int>>(y =>
-                    ValidateMaterialMap(InfernoApogeePassive1Map, y)
+                x.CheckQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(InfernoApogeePassive1Map, y)
+                    )
                 )
             )
-        )
             .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckCoin(80_000)).ReturnsAsync(true);
         this.mockWeaponRepository.Setup(x => x.FindAsync(WeaponBodies.InfernoApogee))
@@ -412,12 +412,12 @@ public class WeaponServiceTest
         WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.InfernoApogee);
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(
-                It.Is<IDictionary<Materials, int>>(y =>
-                    ValidateMaterialMap(InfernoApogeePassive1Map, y)
+                x.CheckQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(InfernoApogeePassive1Map, y)
+                    )
                 )
             )
-        )
             .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckCoin(80_000)).ReturnsAsync(true);
         this.mockWeaponRepository.Setup(x => x.FindAsync(WeaponBodies.InfernoApogee))
@@ -430,19 +430,19 @@ public class WeaponServiceTest
                 }
             );
         this.mockWeaponRepository.Setup(x =>
-            x.AddPassiveAbility(
-                WeaponBodies.InfernoApogee,
-                It.Is<WeaponPassiveAbility>(y => y.Id == body.GetPassiveAbilityId(1))
-            )
-        )
-            .Returns(Task.CompletedTask);
-        this.mockInventoryRepository.Setup(x =>
-            x.UpdateQuantity(
-                It.Is<IDictionary<Materials, int>>(y =>
-                    ValidateMaterialMap(InfernoApogeePassive1Map.Invert(), y)
+                x.AddPassiveAbility(
+                    WeaponBodies.InfernoApogee,
+                    It.Is<WeaponPassiveAbility>(y => y.Id == body.GetPassiveAbilityId(1))
                 )
             )
-        )
+            .Returns(Task.CompletedTask);
+        this.mockInventoryRepository.Setup(x =>
+                x.UpdateQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(InfernoApogeePassive1Map.Invert(), y)
+                    )
+                )
+            )
             .Returns(Task.CompletedTask);
         this.mockUserDataRepository.Setup(x => x.UpdateCoin(-80_000)).Returns(Task.CompletedTask);
         this.mockWeaponRepository.Setup(x => x.AddSkin(30140105)).Returns(Task.CompletedTask);
@@ -495,10 +495,12 @@ public class WeaponServiceTest
         WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.Mjoelnir);
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(
-                It.Is<IDictionary<Materials, int>>(y => ValidateMaterialMap(MjolnirBuildup40Map, y))
+                x.CheckQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(MjolnirBuildup40Map, y)
+                    )
+                )
             )
-        )
             .ReturnsAsync(false);
 
         (
@@ -523,10 +525,12 @@ public class WeaponServiceTest
         WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.Mjoelnir);
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(
-                It.Is<IDictionary<Materials, int>>(y => ValidateMaterialMap(MjolnirBuildup40Map, y))
+                x.CheckQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(MjolnirBuildup40Map, y)
+                    )
+                )
             )
-        )
             .ReturnsAsync(true);
         this.mockWeaponRepository.Setup(x => x.FindAsync(WeaponBodies.Mjoelnir))
             .ReturnsAsync(new DbWeaponBody() { ViewerId = 1, BuildupCount = 0 });
@@ -553,20 +557,22 @@ public class WeaponServiceTest
         WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.Mjoelnir);
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(
-                It.Is<IDictionary<Materials, int>>(y => ValidateMaterialMap(MjolnirBuildup40Map, y))
+                x.CheckQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(MjolnirBuildup40Map, y)
+                    )
+                )
             )
-        )
             .ReturnsAsync(true);
         this.mockWeaponRepository.Setup(x => x.FindAsync(WeaponBodies.Mjoelnir))
             .ReturnsAsync(new DbWeaponBody() { ViewerId = 1, BuildupCount = 39 });
         this.mockInventoryRepository.Setup(x =>
-            x.UpdateQuantity(
-                It.Is<IDictionary<Materials, int>>(y =>
-                    ValidateMaterialMap(MjolnirBuildup40Map.Invert(), y)
+                x.UpdateQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(MjolnirBuildup40Map.Invert(), y)
+                    )
                 )
             )
-        )
             .Returns(Task.CompletedTask);
 
         (
@@ -611,10 +617,12 @@ public class WeaponServiceTest
         WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.PrimalHex);
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(
-                It.Is<IDictionary<Materials, int>>(y => ValidateMaterialMap(PrimalHexUnbind5Map, y))
+                x.CheckQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(PrimalHexUnbind5Map, y)
+                    )
+                )
             )
-        )
             .ReturnsAsync(false);
 
         (
@@ -638,10 +646,12 @@ public class WeaponServiceTest
         WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.PrimalHex);
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(
-                It.Is<IDictionary<Materials, int>>(y => ValidateMaterialMap(PrimalHexUnbind5Map, y))
+                x.CheckQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(PrimalHexUnbind5Map, y)
+                    )
+                )
             )
-        )
             .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckCoin(7_500_000)).ReturnsAsync(false);
 
@@ -667,12 +677,12 @@ public class WeaponServiceTest
         WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.PrimalHex);
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(
-                It.Is<IDictionary<Materials, int>>(y =>
-                    ValidateMaterialMap(PrimalHexWeaponBonusMap, y)
+                x.CheckQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(PrimalHexWeaponBonusMap, y)
+                    )
                 )
             )
-        )
             .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckCoin(5_000_000)).ReturnsAsync(true);
         this.mockWeaponRepository.Setup(x => x.FindAsync(WeaponBodies.PrimalHex))
@@ -711,8 +721,8 @@ public class WeaponServiceTest
         WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.PrimalHex);
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(It.IsAny<Dictionary<Materials, int>>())
-        )
+                x.CheckQuantity(It.IsAny<Dictionary<Materials, int>>())
+            )
             .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckCoin(It.IsAny<long>())).ReturnsAsync(true);
 
@@ -753,10 +763,12 @@ public class WeaponServiceTest
         WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.PrimalHex);
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(
-                It.Is<IDictionary<Materials, int>>(y => ValidateMaterialMap(PrimalHexUnbind5Map, y))
+                x.CheckQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(PrimalHexUnbind5Map, y)
+                    )
+                )
             )
-        )
             .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckCoin(7_500_000)).ReturnsAsync(true);
         this.mockWeaponRepository.Setup(x => x.FindAsync(WeaponBodies.PrimalHex))
@@ -769,12 +781,12 @@ public class WeaponServiceTest
                 }
             );
         this.mockInventoryRepository.Setup(x =>
-            x.UpdateQuantity(
-                It.Is<IDictionary<Materials, int>>(y =>
-                    ValidateMaterialMap(PrimalHexUnbind5Map.Invert(), y)
+                x.UpdateQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(PrimalHexUnbind5Map.Invert(), y)
+                    )
                 )
             )
-        )
             .Returns(Task.CompletedTask);
         this.mockUserDataRepository.Setup(x => x.UpdateCoin(-7_500_000))
             .Returns(Task.CompletedTask);
@@ -809,10 +821,10 @@ public class WeaponServiceTest
         Dictionary<Materials, int> expMaterialMap = new() { { expectedMaterial, 1 } };
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(
-                It.Is<IDictionary<Materials, int>>(y => ValidateMaterialMap(expMaterialMap, y))
+                x.CheckQuantity(
+                    It.Is<IDictionary<Materials, int>>(y => ValidateMaterialMap(expMaterialMap, y))
+                )
             )
-        )
             .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckCoin(0)).ReturnsAsync(true);
 
@@ -826,12 +838,12 @@ public class WeaponServiceTest
         this.mockWeaponRepository.Setup(x => x.FindAsync(id)).ReturnsAsync(mockEntity);
 
         this.mockInventoryRepository.Setup(x =>
-            x.UpdateQuantity(
-                It.Is<IDictionary<Materials, int>>(y =>
-                    ValidateMaterialMap(expMaterialMap.Invert(), y)
+                x.UpdateQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(expMaterialMap.Invert(), y)
+                    )
                 )
             )
-        )
             .Returns(Task.CompletedTask);
         this.mockUserDataRepository.Setup(x => x.UpdateCoin(-0)).Returns(Task.CompletedTask);
 
@@ -882,8 +894,8 @@ public class WeaponServiceTest
         );
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(It.IsAny<Dictionary<Materials, int>>())
-        )
+                x.CheckQuantity(It.IsAny<Dictionary<Materials, int>>())
+            )
             .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckCoin(It.IsAny<long>())).ReturnsAsync(true);
 
@@ -903,8 +915,8 @@ public class WeaponServiceTest
             .ReturnsAsync(mockEntity);
 
         this.mockInventoryRepository.Setup(x =>
-            x.UpdateQuantity(It.IsAny<Dictionary<Materials, int>>())
-        )
+                x.UpdateQuantity(It.IsAny<Dictionary<Materials, int>>())
+            )
             .Returns(Task.CompletedTask);
         this.mockUserDataRepository.Setup(x => x.UpdateCoin(It.IsAny<long>()))
             .Returns(Task.CompletedTask);
@@ -934,12 +946,12 @@ public class WeaponServiceTest
         WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.AmenoMurakumo);
 
         this.mockInventoryRepository.Setup(x =>
-            x.CheckQuantity(
-                It.Is<IDictionary<Materials, int>>(y =>
-                    ValidateMaterialMap(AmeNoMurakumoRefineMap, y)
+                x.CheckQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(AmeNoMurakumoRefineMap, y)
+                    )
                 )
             )
-        )
             .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckCoin(2_500_000)).ReturnsAsync(true);
         this.mockWeaponRepository.Setup(x => x.FindAsync(WeaponBodies.AmenoMurakumo))
@@ -953,12 +965,12 @@ public class WeaponServiceTest
                 }
             );
         this.mockInventoryRepository.Setup(x =>
-            x.UpdateQuantity(
-                It.Is<IDictionary<Materials, int>>(y =>
-                    ValidateMaterialMap(AmeNoMurakumoRefineMap.Invert(), y)
+                x.UpdateQuantity(
+                    It.Is<IDictionary<Materials, int>>(y =>
+                        ValidateMaterialMap(AmeNoMurakumoRefineMap.Invert(), y)
+                    )
                 )
             )
-        )
             .Returns(Task.CompletedTask);
         this.mockUserDataRepository.Setup(x => x.UpdateCoin(-2_500_000))
             .Returns(Task.CompletedTask);

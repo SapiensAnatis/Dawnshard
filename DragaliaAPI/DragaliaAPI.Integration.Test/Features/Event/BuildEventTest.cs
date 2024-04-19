@@ -10,9 +10,9 @@ public class BuildEventTest : TestFixture
         : base(factory, outputHelper)
     {
         this.Client.PostMsgpack<MemoryEventActivateResponse>(
-            "memory_event/activate",
-            new MemoryEventActivateRequest(EventId)
-        )
+                "memory_event/activate",
+                new MemoryEventActivateRequest(EventId)
+            )
             .Wait();
     }
 

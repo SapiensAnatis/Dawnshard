@@ -110,11 +110,11 @@ public class WeaponBodyControllerTest
     {
         this.mockWeaponService.Setup(x => x.CheckOwned(WeaponBodies.Caduceus)).ReturnsAsync(true);
         this.mockWeaponService.SetupSequence(x =>
-            x.TryBuildup(
-                MasterAsset.WeaponBody.Get(WeaponBodies.Caduceus),
-                It.IsAny<AtgenBuildupWeaponBodyPieceList>()
+                x.TryBuildup(
+                    MasterAsset.WeaponBody.Get(WeaponBodies.Caduceus),
+                    It.IsAny<AtgenBuildupWeaponBodyPieceList>()
+                )
             )
-        )
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.CommonMaterialShort);
@@ -144,11 +144,11 @@ public class WeaponBodyControllerTest
     {
         this.mockWeaponService.Setup(x => x.CheckOwned(WeaponBodies.Caduceus)).ReturnsAsync(true);
         this.mockWeaponService.Setup(x =>
-            x.TryBuildup(
-                MasterAsset.WeaponBody.Get(WeaponBodies.Caduceus),
-                It.IsAny<AtgenBuildupWeaponBodyPieceList>()
+                x.TryBuildup(
+                    MasterAsset.WeaponBody.Get(WeaponBodies.Caduceus),
+                    It.IsAny<AtgenBuildupWeaponBodyPieceList>()
+                )
             )
-        )
             .ReturnsAsync(ResultCode.Success);
 
         UpdateDataList udl =

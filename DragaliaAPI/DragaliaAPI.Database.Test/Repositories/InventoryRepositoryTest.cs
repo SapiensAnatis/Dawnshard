@@ -205,14 +205,14 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.ApiContext.SaveChangesAsync();
 
         this.fixture.ApiContext.PlayerMaterials.Single(x =>
-            x.ViewerId == IdentityTestUtils.ViewerId && x.MaterialId == Materials.Valor
-        )
+                x.ViewerId == IdentityTestUtils.ViewerId && x.MaterialId == Materials.Valor
+            )
             .Quantity.Should()
             .Be(6);
 
         this.fixture.ApiContext.PlayerMaterials.Single(x =>
-            x.ViewerId == IdentityTestUtils.ViewerId && x.MaterialId == Materials.Acclaim
-        )
+                x.ViewerId == IdentityTestUtils.ViewerId && x.MaterialId == Materials.Acclaim
+            )
             .Quantity.Should()
             .Be(8);
     }
@@ -244,8 +244,9 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.ApiContext.SaveChangesAsync();
 
         this.fixture.ApiContext.PlayerMaterials.Single(x =>
-            x.ViewerId == IdentityTestUtils.ViewerId && x.MaterialId == Materials.SummerEstelleSkin
-        )
+                x.ViewerId == IdentityTestUtils.ViewerId
+                && x.MaterialId == Materials.SummerEstelleSkin
+            )
             .Quantity.Should()
             .Be(5);
     }

@@ -85,8 +85,8 @@ public class WeaponBodyTest : TestFixture
         );
 
         this.ApiContext.PlayerWeapons.SingleOrDefault(x =>
-            x.ViewerId == ViewerId && x.WeaponBodyId == WeaponBodies.PrimalCrimson
-        )
+                x.ViewerId == ViewerId && x.WeaponBodyId == WeaponBodies.PrimalCrimson
+            )
             .Should()
             .NotBeNull();
 
