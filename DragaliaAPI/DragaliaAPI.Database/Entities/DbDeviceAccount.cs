@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using DragaliaAPI.Shared;
 
+// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
+// Deprecated model
+
 namespace DragaliaAPI.Database.Entities;
 
 [Obsolete(ObsoleteReasons.BaaS)]

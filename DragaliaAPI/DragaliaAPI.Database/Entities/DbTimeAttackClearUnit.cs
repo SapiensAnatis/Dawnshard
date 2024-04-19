@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ namespace DragaliaAPI.Database.Entities;
 [PrimaryKey(nameof(GameId), nameof(ViewerId), nameof(UnitNo))]
 public class DbTimeAttackClearUnit : DbPartyUnitBase, IDbPlayerData
 {
+    [StringLength(64)]
     public required string GameId { get; set; }
 
     public required long ViewerId { get; set; }
