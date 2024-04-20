@@ -27,7 +27,8 @@ public class StorySkipService(
     IQuestRepository questRepository,
     IRewardService rewardService,
     IStoryService storyService,
-    IUpdateDataService updateDataService
+    IUpdateDataService updateDataService,
+    IUserDataRepository userDataRepository
 ) : IStorySkipService
 {
 
@@ -74,6 +75,26 @@ public class StorySkipService(
         }
 
         return new QuestMissionStatus(newState, clearSet, completeSet);
+    }
+
+    public async Task IncreasePlayerLevel()
+    {
+        DbPlayerUserData data = await userDataRepository.GetUserDataAsync();
+
+        const int levelMax = 60;
+        const int expMax = 69990;
+
+        logger.LogDebug("Setting player {Name} level to 60.", data.Name);
+
+        if (data.Exp < expMax)
+        {
+            data.Exp = expMax;
+        }
+
+        if (data.Level < levelMax)
+        {
+            data.Level = levelMax;
+        }
     }
 
     public async Task<object> ProcessQuestCompletion(int questId)
