@@ -59,7 +59,7 @@ public class ItemTest : TestFixture
 
         DbPlayerUserData userData = this
             .ApiContext.PlayerUserData.AsTracking()
-            .First(x => x.ViewerId == 1);
+            .First(x => x.ViewerId == this.ViewerId);
         userData.StaminaSingle = 0;
         userData.LastStaminaSingleUpdateTime = DateTimeOffset.UtcNow - TimeSpan.FromHours(6);
         await this.ApiContext.SaveChangesAsync();
