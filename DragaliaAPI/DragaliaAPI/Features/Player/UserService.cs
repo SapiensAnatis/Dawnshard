@@ -36,6 +36,8 @@ public class UserService(
 
         logger.LogDebug("Adding {staminaAmount}x {staminaType}", amount, type);
 
+        _ = await GetAndUpdateStamina(type);
+
         DbPlayerUserData data = await userDataRepository.GetUserDataAsync();
         DateTimeOffset time = dateTimeProvider.GetUtcNow();
 
