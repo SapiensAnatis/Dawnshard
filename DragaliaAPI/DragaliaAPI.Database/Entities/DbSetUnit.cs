@@ -18,5 +18,6 @@ public class DbSetUnit : DbUnitBase, IDbPlayerData
     [Required]
     public int UnitSetNo { get; set; }
 
+    [StringLength(32)]
     public required string UnitSetName { get; set; }
 }

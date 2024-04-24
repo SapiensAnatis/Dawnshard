@@ -53,6 +53,33 @@ public class ItemTest : TestFixture
     }
 
     [Fact]
+    public async Task UseRecoveryStamina_UpdatesStaminaBeforeAdd()
+    {
+        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
+
+        DbPlayerUserData userData = this
+            .ApiContext.PlayerUserData.AsTracking()
+            .First(x => x.ViewerId == this.ViewerId);
+        userData.StaminaSingle = 0;
+        userData.LastStaminaSingleUpdateTime = DateTimeOffset.UtcNow - TimeSpan.FromHours(6);
+        await this.ApiContext.SaveChangesAsync();
+
+        int expectedPassiveRegen = (int)TimeSpan.FromHours(6).TotalSeconds / 360; // 6 minutes per stamina point
+
+        DragaliaResponse<ItemUseRecoveryStaminaResponse> resp =
+            await Client.PostMsgpack<ItemUseRecoveryStaminaResponse>(
+                "item/use_recovery_stamina",
+                new ItemUseRecoveryStaminaRequest(
+                    new List<AtgenUseItemList> { new(UseItem.Honey, 1) }
+                )
+            );
+
+        resp.Data.RecoverData.RecoverStaminaType.Should().Be(UseItemEffect.RecoverStamina);
+        resp.Data.RecoverData.RecoverStaminaPoint.Should().Be(10);
+        resp.Data.UpdateDataList.UserData.StaminaSingle.Should().Be(10 + expectedPassiveRegen);
+    }
+
+    [Fact]
     public async Task UseRecoveryStamina_MultipleItems_RecoversStamina()
     {
         DragaliaResponse<ItemUseRecoveryStaminaResponse> resp =

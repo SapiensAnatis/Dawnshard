@@ -22,11 +22,9 @@ public static class DatabaseConfiguration
         PostgresOptions postgresOptions
     )
     {
-        string connectionString = GetConnectionString(postgresOptions);
-
         services = services
             .AddDbContext<ApiContext>(options =>
-                options.UseNpgsql(connectionString).EnableDetailedErrors()
+                options.UseNpgsql(postgresOptions.GetConnectionString()).EnableDetailedErrors()
             )
 #pragma warning disable CS0618 // Type or member is obsolete
             .AddScoped<IDeviceAccountRepository, DeviceAccountRepository>()
@@ -43,22 +41,6 @@ public static class DatabaseConfiguration
             .AddScoped<IAbilityCrestRepository, AbilityCrestRepository>();
 
         return services;
-    }
-
-    private static string GetConnectionString(PostgresOptions options)
-    {
-        NpgsqlConnectionStringBuilder connectionStringBuilder =
-            new()
-            {
-                Host = options.Hostname,
-                Port = options.Port,
-                Username = options.Username,
-                Password = options.Password,
-                Database = options.Database,
-                IncludeErrorDetail = true,
-            };
-
-        return connectionStringBuilder.ConnectionString;
     }
 
     [ExcludeFromCodeCoverage]
