@@ -14,6 +14,9 @@
         <PackageReference Include="EntityGraphQL.AspNet"/>
         <PackageReference Include="FluentRandomPicker"/>
         <PackageReference Include="FluentValidation"/>
+        <PackageReference Include="Hangfire.AspNetCore"/>
+        <PackageReference Include="Hangfire.Core"/>
+        <PackageReference Include="Hangfire.Postgresql"/>
         <PackageReference Include="JetBrains.Annotations"/>
         <PackageReference Include="MessagePack"/>
         <PackageReference Include="MessagePack.AspNetCoreMvcFormatter"/>
@@ -47,7 +50,7 @@
         <PackageReference Include="Serilog.Sinks.Console"/>
         <PackageReference Include="Serilog.Sinks.File"/>
     </ItemGroup>
-    
+
     <ItemGroup>
         <InternalsVisibleTo Include="DragaliaAPI.Test"/>
         <InternalsVisibleTo Include="DragaliaAPI.Integration.Test"/>
@@ -64,14 +67,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <MasterAssetJsonFiles Include="$(MasterAssetResources)**\*.json" Exclude="$(MasterAssetResources)**\*.schema.json"/>
-        <MissionProgressionInfoCs Include="../DragaliaAPI.MissionDesigner/**/*.cs" Exclude="../DragaliaAPI.MissionDesigner/obj/**/*.*"/>
+        <MasterAssetJsonFiles Visible="false" Include="$(MasterAssetResources)**\*.json" Exclude="$(MasterAssetResources)**\*.schema.json"/>
+        <MissionProgressionInfoCs Visible="false" Include="../DragaliaAPI.MissionDesigner/**/*.cs" Exclude="../DragaliaAPI.MissionDesigner/obj/**/*.*"/>
     </ItemGroup>
 
-    <Target Name="MissionDesigner" 
-            BeforeTargets="MasterAssetConverter" 
-            Inputs="@(MissionProgressionInfoCs)" 
-            Outputs="$(MasterAssetResources)/Missions/MissionProgressionInfo.json">
+    <Target Name="MissionDesigner" BeforeTargets="MasterAssetConverter" Inputs="@(MissionProgressionInfoCs)" Outputs="$(MasterAssetResources)/Missions/MissionProgressionInfo.json">
         <MSBuild Projects="../DragaliaAPI.MissionDesigner/DragaliaAPI.MissionDesigner.csproj">
             <Output ItemName="DesignerOutputs" TaskParameter="TargetOutputs"/>
         </MSBuild>
@@ -79,14 +79,11 @@
         <PropertyGroup>
             <MissionDesignerDll>%(DesignerOutputs.Identity)</MissionDesignerDll>
         </PropertyGroup>
-        
-        <Exec Command="dotnet $(MissionDesignerDll) $(MasterAssetResources)" ConsoleToMSBuild="true" />
+
+        <Exec Command="dotnet $(MissionDesignerDll) $(MasterAssetResources)" ConsoleToMSBuild="true"/>
     </Target>
 
-    <Target Name="MasterAssetConverter" 
-            AfterTargets="Build" 
-            Inputs="@(MasterAssetJsonFiles)"
-            Outputs="@(MasterAssetJsonFiles->'$(OutDir)Resources\%(RecursiveDir)%(Filename).msgpack')">
+    <Target Name="MasterAssetConverter" AfterTargets="Build" Inputs="@(MasterAssetJsonFiles)" Outputs="@(MasterAssetJsonFiles->'$(OutDir)Resources\%(RecursiveDir)%(Filename).msgpack')">
         <Message Text="Building MasterAssetConverter" Importance="high"/>
         <MSBuild Projects="../DragaliaAPI.MasterAssetConverter/DragaliaAPI.MasterAssetConverter.csproj">
             <Output ItemName="ConverterOutputs" TaskParameter="TargetOutputs"/>

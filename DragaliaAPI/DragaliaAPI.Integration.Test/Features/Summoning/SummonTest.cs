@@ -182,8 +182,32 @@ public class SummonTest : TestFixture
             )
         ).Data;
 
-        // Too lazy to set up automapper to check exact result and it is covered more or less in SummonRepositoryTests.cs
-        response.SummonHistoryList.Should().NotBeEmpty();
+        response
+            .SummonHistoryList.Should()
+            .ContainSingle()
+            .Which.Should()
+            .BeEquivalentTo(
+                new SummonHistoryList()
+                {
+                    SummonId = 1,
+                    SummonPointId = 1,
+                    SummonExecType = SummonExecTypes.DailyDeal,
+                    ExecDate = DateTimeOffset.UtcNow,
+                    PaymentType = PaymentTypes.Diamantium,
+                    EntityType = EntityTypes.Dragon,
+                    EntityId = (int)Dragons.GalaRebornNidhogg,
+                    EntityQuantity = 1,
+                    EntityLevel = 1,
+                    EntityRarity = 5,
+                    EntityLimitBreakCount = 0,
+                    EntityHpPlusCount = 0,
+                    EntityAttackPlusCount = 0,
+                    SummonPrizeRank = (int)SummonPrizeRanks.None,
+                    SummonPoint = 10,
+                    GetDewPointQuantity = 0,
+                },
+                o => o.Excluding(x => x.KeyId)
+            );
     }
 
     [Fact]
