@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using AutoMapper;
 using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -25,8 +24,6 @@ public class SummonController(
     IUserDataRepository userDataRepository,
     IUnitRepository unitRepository,
     IUpdateDataService updateDataService,
-    IMapper mapper,
-    ISummonRepository summonRepository,
     SummonService summonService,
     IPaymentService paymentService,
     SummonOddsService summonOddsService
@@ -39,10 +36,8 @@ public class SummonController(
     /// <returns></returns>
     [HttpPost]
     [Route("~/summon_exclude/get_list")]
-    public async Task<DragaliaResult> SummonExcludeGetList(SummonExcludeGetListRequest request)
+    public DragaliaResult SummonExcludeGetList(SummonExcludeGetListRequest request)
     {
-        int bannerId = request.SummonId;
-        DbPlayerUserData userData = await userDataRepository.UserData.FirstAsync();
         //TODO Replace DummyData with real exludes from BannerInfo
         List<AtgenDuplicateEntityList> excludableList = new();
         foreach (Charas c in Enum.GetValues<Charas>())
@@ -74,16 +69,8 @@ public class SummonController(
 
     [HttpPost]
     [Route("get_summon_history")]
-    public async Task<DragaliaResult> GetSummonHistory()
-    {
-        DbPlayerUserData userData = await userDataRepository.UserData.FirstAsync();
-
-        IEnumerable<SummonHistoryList> dbList = (
-            await summonRepository.SummonHistory.ToListAsync()
-        ).Select(mapper.Map<SummonHistoryList>);
-
-        return this.Ok(new SummonGetSummonHistoryResponse(dbList));
-    }
+    public async Task<DragaliaResult<SummonGetSummonHistoryResponse>> GetSummonHistory() =>
+        new SummonGetSummonHistoryResponse(await summonService.GetSummonHistory());
 
     [HttpPost]
     [Route("get_summon_list")]
@@ -312,29 +299,7 @@ public class SummonController(
                     break;
             }
 
-            await summonRepository.AddSummonHistory(
-                new DbPlayerSummonHistory()
-                {
-                    ViewerId = this.ViewerId,
-                    SummonId = summonList.SummonId,
-                    SummonExecType = summonRequest.ExecType,
-                    ExecDate = DateTimeOffset.UtcNow,
-                    PaymentType = summonRequest.PaymentType,
-                    EntityType = result.EntityType,
-                    EntityId = result.Id,
-                    EntityQuantity = 1,
-                    EntityLevel = 1,
-                    EntityRarity = (byte)result.Rarity,
-                    EntityLimitBreakCount = 0,
-                    EntityHpPlusCount = 0,
-                    EntityAttackPlusCount = 0,
-                    SummonPrizeRank = SummonPrizeRanks.None,
-                    SummonPoint = summonPointMultiplier,
-                    GetDewPointQuantity = dewPoint,
-                }
-            );
-
-            returnedResult.Add(
+            AtgenResultUnitList processedResult =
                 new()
                 {
                     EntityType = result.EntityType,
@@ -342,8 +307,11 @@ public class SummonController(
                     IsNew = isNew,
                     Rarity = result.Rarity,
                     DewPoint = dewPoint,
-                }
-            );
+                };
+
+            summonService.AddSummonHistory(summonList, summonRequest, processedResult);
+
+            returnedResult.Add(processedResult);
         }
 
         int gainedSummonPoints = numSummons * summonPointMultiplier;
@@ -368,7 +336,7 @@ public class SummonController(
         else
         {
             circleEffect = (int)SummonEffectsSky.Yellow;
-            switch (countOfRare4 + (countOfRare5Char + countOfRare5Dragon) * 2)
+            switch (countOfRare4 + ((countOfRare5Char + countOfRare5Dragon) * 2))
             {
                 case > 1:
                     sageEffect = (int)SummonEffectsSage.MultiDoves;

@@ -41,6 +41,8 @@ using DragaliaAPI.Services.Api;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Services.Health;
 using DragaliaAPI.Services.Photon;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MudBlazor;
@@ -267,5 +269,24 @@ public static class ServiceConfiguration
             });
 
         return services;
+    }
+
+    public static IServiceCollection ConfigureHangfire(
+        this IServiceCollection serviceCollection,
+        PostgresOptions postgresOptions
+    )
+    {
+        serviceCollection.AddHangfire(cfg =>
+            cfg.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UsePostgreSqlStorage(pgCfg =>
+                    pgCfg.UseNpgsqlConnection(postgresOptions.GetConnectionString())
+                )
+        );
+
+        serviceCollection.AddHangfireServer();
+
+        return serviceCollection;
     }
 }

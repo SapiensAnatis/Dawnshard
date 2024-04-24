@@ -1,7 +1,5 @@
-using System.Diagnostics;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
@@ -18,7 +16,6 @@ namespace DragaliaAPI.Features.Summoning;
 public sealed partial class SummonService(
     SummonOddsService summonOddsService,
     IOptionsMonitor<SummonBannerOptions> optionsMonitor,
-    IUnitRepository unitRepository,
     IPlayerIdentityService playerIdentityService,
     IRewardService rewardService,
     ApiContext apiContext,
@@ -41,66 +38,6 @@ public sealed partial class SummonService(
 
     public Task<List<AtgenRedoableSummonResultUnitList>> GenerateRedoableSummonResult() =>
         this.GenerateTenfoldResultInternal(SummonConstants.RedoableSummonBannerId, numTenfolds: 5);
-
-    /// <summary>
-    /// Populate a summon result with is_new and eldwater values.
-    /// </summary>
-    public async Task<List<AtgenResultUnitList>> GenerateRewardList(
-        IEnumerable<AtgenRedoableSummonResultUnitList> baseRewardList
-    )
-    {
-        List<AtgenResultUnitList> newUnits = new();
-
-        List<Charas> ownedCharas = await apiContext
-            .PlayerCharaData.Select(x => x.CharaId)
-            .ToListAsync();
-
-        List<Dragons> ownedDragons = await unitRepository
-            .Dragons.Select(x => x.DragonId)
-            .ToListAsync();
-
-        foreach (AtgenRedoableSummonResultUnitList reward in baseRewardList)
-        {
-            bool isNew = newUnits.All(x => x.Id != reward.Id);
-
-            switch (reward.EntityType)
-            {
-                case EntityTypes.Chara:
-                {
-                    isNew |= ownedCharas.All(x => x != (Charas)reward.Id);
-
-                    AtgenResultUnitList toAdd =
-                        new(
-                            reward.EntityType,
-                            reward.Id,
-                            reward.Rarity,
-                            isNew,
-                            3,
-                            isNew ? 0 : DewValueData.DupeSummon[reward.Rarity]
-                        );
-
-                    newUnits.Add(toAdd);
-                    break;
-                }
-                case EntityTypes.Dragon:
-                {
-                    isNew |= ownedDragons.All(x => x != (Dragons)reward.Id);
-
-                    AtgenResultUnitList toAdd =
-                        new(reward.EntityType, reward.Id, reward.Rarity, isNew, 3, 0);
-
-                    newUnits.Add(toAdd);
-                    break;
-                }
-                default:
-                    throw new UnreachableException(
-                        "Invalid entity type for redoable summon result."
-                    );
-            }
-        }
-
-        return newUnits;
-    }
 
     public async Task<IEnumerable<SummonTicketList>> GetSummonTicketList() =>
         await apiContext.PlayerSummonTickets.ProjectToSummonTicketList().ToListAsync();
@@ -246,6 +183,42 @@ public sealed partial class SummonService(
 
         return banner.TradeDictionary.Values;
     }
+
+    public async Task<IList<SummonHistoryList>> GetSummonHistory() =>
+        await apiContext
+            .PlayerSummonHistory.Take(30) // See: https://dragalialost.wiki/w/Version_Changelog/Ver_1.18.0_Version_Update#Summon_History
+            .Select(x => SummonMapper.ToSummonHistoryList(x))
+            .ToListAsync();
+
+    public void AddSummonHistory(
+        SummonList summonList,
+        SummonRequestRequest summonRequest,
+        AtgenResultUnitList result
+    ) =>
+        apiContext.PlayerSummonHistory.Add(
+            new DbPlayerSummonHistory()
+            {
+                ViewerId = playerIdentityService.ViewerId,
+                SummonId = summonList.SummonId,
+                SummonExecType = summonRequest.ExecType,
+                ExecDate = DateTimeOffset.UtcNow,
+                PaymentType = summonRequest.PaymentType,
+                EntityType = result.EntityType,
+                EntityId = result.Id,
+                EntityQuantity = 1,
+                EntityLevel = 1,
+                EntityRarity = (byte)result.Rarity,
+                EntityLimitBreakCount = 0,
+                EntityHpPlusCount = 0,
+                EntityAttackPlusCount = 0,
+                SummonPrizeRank = SummonPrizeRanks.None,
+                SummonPoint =
+                    summonRequest.PaymentType == PaymentTypes.Diamantium
+                        ? summonList.AddSummonPointStone
+                        : summonList.AddSummonPoint,
+                GetDewPointQuantity = result.DewPoint,
+            }
+        );
 
     public async Task<AtgenBuildEventRewardEntityList> DoSummonPointTrade(int summonId, int tradeId)
     {
