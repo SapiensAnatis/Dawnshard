@@ -32,7 +32,6 @@ public static class DatabaseConfiguration
             .AddScoped<IUserDataRepository, UserDataRepository>()
             .AddScoped<IUnitRepository, UnitRepository>()
             .AddScoped<IInventoryRepository, InventoryRepository>()
-            .AddScoped<ISummonRepository, SummonRepository>()
             .AddScoped<IPartyRepository, PartyRepository>()
             .AddScoped<IQuestRepository, QuestRepository>()
             .AddScoped<IInventoryRepository, InventoryRepository>()

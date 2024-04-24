@@ -8,15 +8,26 @@ namespace DragaliaAPI.Middleware;
 
 public class DeveloperAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
+    private readonly IWebHostEnvironment environment;
+
     public DeveloperAuthenticationHandler(
         IOptionsMonitor<AuthenticationSchemeOptions> options,
         ILoggerFactory logger,
-        UrlEncoder encoder
+        UrlEncoder encoder,
+        IWebHostEnvironment environment
     )
-        : base(options, logger, encoder) { }
+        : base(options, logger, encoder)
+    {
+        this.environment = environment;
+    }
 
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
+        if (this.environment.IsDevelopment())
+        {
+            return Task.FromResult(GetSuccessResult());
+        }
+
         string? tokenVar =
             Environment.GetEnvironmentVariable("DEVELOPER_TOKEN")
             ?? throw new NullReferenceException("No developer token specified!");
@@ -49,11 +60,16 @@ public class DeveloperAuthenticationHandler : AuthenticationHandler<Authenticati
             authHeader.Parameter[..3] + "..."
         );
 
+        return Task.FromResult(GetSuccessResult());
+    }
+
+    private AuthenticateResult GetSuccessResult()
+    {
         Claim[] claims = { new(ClaimTypes.Role, "Developer"), };
         ClaimsIdentity identity = new(claims, this.Scheme.Name);
         ClaimsPrincipal principal = new(identity);
         AuthenticationTicket ticket = new(principal, this.Scheme.Name);
 
-        return Task.FromResult(AuthenticateResult.Success(ticket));
+        return AuthenticateResult.Success(ticket);
     }
 }
