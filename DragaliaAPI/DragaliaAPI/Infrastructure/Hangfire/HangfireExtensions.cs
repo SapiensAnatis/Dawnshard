@@ -11,7 +11,7 @@ public static class HangfireExtensions
         jobClient.AddOrUpdate(
             SummonHistoryJob.Id,
             Job.FromExpression<SummonHistoryJob>(s => s.PurgeSummonHistory()),
-            Cron.Daily()
+            Cron.Daily(01, 00)
         );
 
         return app;
