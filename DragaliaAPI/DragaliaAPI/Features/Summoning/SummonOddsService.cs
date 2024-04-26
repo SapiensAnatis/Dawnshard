@@ -15,8 +15,6 @@ using RateData = (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> Norma
 
 public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonitor)
 {
-    // Public for actual summon roll later
-    // ReSharper disable once MemberCanBePrivate.Global
     public Task<RateData> GetUnitRates(int bannerId)
     {
         Banner? banner = optionsMonitor.CurrentValue.Banners.SingleOrDefault(x => x.Id == bannerId);
@@ -26,6 +24,34 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
             throw new DragaliaException(
                 ResultCode.CommonInvalidArgument,
                 $"Banner ID {bannerId} was not found"
+            );
+        }
+
+        if (banner.OverrideCharaPool is not null)
+        {
+            return Task.FromResult(
+                new RateData
+                {
+                    NormalRates = banner.OverrideCharaPool.Select(x => new UnitRate(
+                        x,
+                        1m / banner.OverrideCharaPool.Count
+                    )),
+                    PickupRates = [],
+                }
+            );
+        }
+
+        if (banner.OverrideDragonPool is not null)
+        {
+            return Task.FromResult(
+                new RateData
+                {
+                    NormalRates = banner.OverrideDragonPool.Select(x => new UnitRate(
+                        x,
+                        1m / banner.OverrideDragonPool.Count
+                    )),
+                    PickupRates = [],
+                }
             );
         }
 
@@ -55,8 +81,6 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
         );
     }
 
-    // Public for actual summon roll later
-    // ReSharper disable once MemberCanBePrivate.Global
     public Task<RateData> GetGuaranteeUnitRates(int bannerId)
     {
         Banner? banner = optionsMonitor.CurrentValue.Banners.SingleOrDefault(x => x.Id == bannerId);

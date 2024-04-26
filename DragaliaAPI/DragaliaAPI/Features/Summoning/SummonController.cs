@@ -154,76 +154,15 @@ public class SummonController(
             );
         }
 
-        DbPlayerUserData userData = await userDataRepository.UserData.FirstAsync(cancellationToken);
+        await summonService.ProcessSummonPayment(summonRequest, summonList);
 
-        int numSummons =
-            summonRequest.ExecType == SummonExecTypes.Tenfold
-                ? 10
-                : Math.Max(1, summonRequest.ExecCount);
+        DbPlayerUserData userData = await userDataRepository.UserData.FirstAsync(cancellationToken);
 
         int summonPointMultiplier = summonList.AddSummonPoint;
 
-        int paymentCost;
-
-        switch (summonRequest.PaymentType)
-        {
-            case PaymentTypes.Diamantium:
-                summonPointMultiplier = summonList.AddSummonPointStone;
-                playerBannerData.DailyLimitedSummonCount++;
-                paymentCost =
-                    summonRequest.ExecType == SummonExecTypes.Tenfold
-                        ? summonList.MultiDiamond
-                        : summonList.SingleDiamond * numSummons;
-                break;
-            case PaymentTypes.Wyrmite:
-                paymentCost =
-                    summonRequest.ExecType == SummonExecTypes.Tenfold
-                        ? summonList.MultiCrystal
-                        : summonList.SingleCrystal * numSummons;
-                break;
-            case PaymentTypes.Ticket:
-                paymentCost = summonRequest.ExecType == SummonExecTypes.Tenfold ? 1 : numSummons;
-                break;
-            case PaymentTypes.FreeDailyExecDependant:
-            case PaymentTypes.FreeDailyTenfold:
-                if (summonList.IsBeginnerCampaign)
-                    playerBannerData.IsBeginnerFreeSummonAvailable = 0;
-                paymentCost = 0;
-                break;
-            default:
-                throw new DragaliaException(
-                    ResultCode.SummonTypeUnexpected,
-                    "Invalid payment type"
-                );
-        }
-
-        int entityId = 0;
-
-        if (summonRequest.PaymentType == PaymentTypes.Ticket)
-        {
-            // TODO: Does not capture special ticket logic.
-            SummonTickets ticketType = summonRequest.ExecType switch
-            {
-                SummonExecTypes.Single => SummonTickets.SingleSummon,
-                SummonExecTypes.Tenfold => SummonTickets.TenfoldSummon,
-                _
-                    => throw new DragaliaException(
-                        ResultCode.CommonInvalidArgument,
-                        "Invalid exec type for ticket summon"
-                    )
-            };
-
-            entityId = (int)ticketType;
-        }
-
-        await paymentService.ProcessPayment(
-            new Entity(summonRequest.PaymentType.ToEntityType(), entityId, paymentCost),
-            summonRequest.PaymentTarget
-        );
-
         List<AtgenRedoableSummonResultUnitList> summonResult =
             await summonService.GenerateSummonResult(
-                numSummons,
+                summonRequest.ExecCount,
                 summonRequest.SummonId,
                 summonRequest.ExecType
             );
@@ -314,9 +253,9 @@ public class SummonController(
             returnedResult.Add(processedResult);
         }
 
-        int gainedSummonPoints = numSummons * summonPointMultiplier;
+        int gainedSummonPoints = summonRequest.ExecCount * summonPointMultiplier;
         playerBannerData.SummonPoints += gainedSummonPoints;
-        playerBannerData.SummonCount += numSummons;
+        playerBannerData.SummonCount += summonRequest.ExecCount;
 
         int reversalIndex = lastIndexOfRare5;
         if (reversalIndex != -1 && new Random().NextSingle() < 0.95)

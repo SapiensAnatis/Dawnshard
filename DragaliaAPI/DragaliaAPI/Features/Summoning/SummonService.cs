@@ -1,10 +1,12 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.PlayerDetails;
 using FluentRandomPicker;
 using FluentRandomPicker.FluentInterfaces.General;
@@ -18,6 +20,7 @@ public sealed partial class SummonService(
     IOptionsMonitor<SummonBannerOptions> optionsMonitor,
     IPlayerIdentityService playerIdentityService,
     IRewardService rewardService,
+    IPaymentService paymentService,
     ApiContext apiContext,
     ILogger<SummonService> logger
 )
@@ -47,8 +50,7 @@ public sealed partial class SummonService(
         List<SummonList> results = new(optionsMonitor.CurrentValue.Banners.Count);
 
         var individualDataDict = await apiContext
-            .PlayerBannerData.Where(x => x.ViewerId == playerIdentityService.ViewerId)
-            .Select(x => new
+            .PlayerBannerData.Select(x => new
             {
                 BannerId = x.SummonBannerId,
                 DailyCount = x.DailyLimitedSummonCount,
@@ -56,10 +58,24 @@ public sealed partial class SummonService(
             })
             .ToDictionaryAsync(x => x.BannerId, x => x);
 
+        Dictionary<SummonTickets, int> summonTicketDataDict =
+            await apiContext.PlayerSummonTickets.ToDictionaryAsync(
+                x => x.SummonTicketId,
+                x => x.Quantity
+            );
+
         foreach (Banner banner in optionsMonitor.CurrentValue.Banners)
         {
             if (banner.Id == SummonConstants.RedoableSummonBannerId)
                 continue;
+
+            if (
+                banner.RequiredTicketId is not null
+                && summonTicketDataDict.GetValueOrDefault(banner.RequiredTicketId.Value, 0) <= 0
+            )
+            {
+                continue;
+            }
 
             int dailyCount = 0;
             int totalCount = 0;
@@ -276,6 +292,64 @@ public sealed partial class SummonService(
         }
 
         return entity.ToBuildEventRewardEntityList();
+    }
+
+    public async Task ProcessSummonPayment(
+        SummonRequestRequest summonRequest,
+        SummonList summonList
+    )
+    {
+        int paymentCost = (summonRequest.PaymentType, summonRequest.ExecType) switch
+        {
+            (PaymentTypes.Diamantium, SummonExecTypes.Tenfold) => summonList.MultiDiamond,
+            (PaymentTypes.Diamantium, SummonExecTypes.Single)
+                => summonList.SingleDiamond * summonRequest.ExecCount,
+            (PaymentTypes.Wyrmite, SummonExecTypes.Tenfold) => summonList.MultiCrystal,
+            (PaymentTypes.Wyrmite, SummonExecTypes.Single)
+                => summonList.SingleCrystal * summonRequest.ExecCount,
+            (PaymentTypes.Ticket, SummonExecTypes.Tenfold) => 1,
+            (PaymentTypes.Ticket, SummonExecTypes.Single) => summonRequest.ExecCount,
+            (PaymentTypes.FreeDailyExecDependant, SummonExecTypes.Single) => 0,
+            (PaymentTypes.FreeDailyTenfold, SummonExecTypes.Single) => 0,
+            _
+                => throw new DragaliaException(
+                    ResultCode.SummonTypeUnexpected,
+                    $"Failed to calculate summon cost for payment type {summonRequest.PaymentType} and exec type {summonRequest.ExecType}"
+                )
+        };
+
+        int entityId = 0;
+
+        if (summonRequest.PaymentType == PaymentTypes.Ticket)
+        {
+            if (
+                optionsMonitor.CurrentValue.Banners.First(x => x.Id == summonRequest.SummonId) is
+                { RequiredTicketId: { } requiredTicket }
+            )
+            {
+                entityId = (int)requiredTicket;
+            }
+            else
+            {
+                SummonTickets genericTicketId = summonRequest.ExecType switch
+                {
+                    SummonExecTypes.Single => SummonTickets.SingleSummon,
+                    SummonExecTypes.Tenfold => SummonTickets.TenfoldSummon,
+                    _
+                        => throw new DragaliaException(
+                            ResultCode.CommonInvalidArgument,
+                            $"Invalid exec type {summonRequest.ExecType} for ticket summon"
+                        )
+                };
+
+                entityId = (int)genericTicketId;
+            }
+        }
+
+        await paymentService.ProcessPayment(
+            new Entity(summonRequest.PaymentType.ToEntityType(), entityId, paymentCost),
+            summonRequest.PaymentTarget
+        );
     }
 
     private async Task<List<AtgenRedoableSummonResultUnitList>> GenerateSummonResultInternal(
