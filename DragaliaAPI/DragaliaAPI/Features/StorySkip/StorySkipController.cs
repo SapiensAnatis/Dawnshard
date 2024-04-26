@@ -3,6 +3,10 @@ using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.Story;
+using DragaliaAPI.Shared.PlayerDetails;
 
 namespace DragaliaAPI.Features.StorySkip;
 
@@ -10,16 +14,19 @@ namespace DragaliaAPI.Features.StorySkip;
 public class StorySkipController : DragaliaControllerBase
 {
     private readonly ILogger<StorySkipController> logger;
+    private readonly IPlayerIdentityService playerIdentityService;
     private readonly IStorySkipService storySkipService;
     private readonly IUpdateDataService updateDataService;
 
     public StorySkipController(
         ILogger<StorySkipController> logger,
+        IPlayerIdentityService playerIdentityService,
         IStorySkipService storySkipService,
         IUpdateDataService updateDataService
     )
     {
         this.logger = logger;
+        this.playerIdentityService = playerIdentityService;
         this.storySkipService = storySkipService;
         this.updateDataService = updateDataService;
     }
@@ -29,29 +36,51 @@ public class StorySkipController : DragaliaControllerBase
         CancellationToken cancellationToken
     )
     {
-        this.logger.LogDebug("Beginning story skip for player.");
-
-        List<int> storyQuestIds = StorySkipLists.StoryQuestIds;
-        List<int> questIds = StorySkipLists.QuestIds;
-
-        foreach (int storyQuestId in storyQuestIds)
+        try
         {
-            await storySkipService.ReadStory(storyQuestId, cancellationToken);
-        }
+            this.logger.LogDebug("Beginning story skip for player.");
 
-        foreach (int questId in questIds)
+            IEnumerable<QuestData> questData = MasterAsset.QuestData.Enumerable.Where(x =>
+                x.Gid < 10011 && x.Id > 100000000 && x.Id.ToString().Substring(6, 1) == "1"
+            );
+            IEnumerable<QuestTreasureData> questTreasureData = MasterAsset.QuestTreasureData.Enumerable.Where(x =>
+                x.Id is < 110000 && x.Id.ToString().Substring(3, 1) == "1"
+            );
+            IEnumerable<QuestStory> questStories = MasterAsset.QuestStory.Enumerable.Where(
+                x => x.GroupId is < 10011
+            );
+
+            foreach (QuestData quest in questData)
+            {
+                await storySkipService.ProcessQuestCompletion(quest.Id);
+            }
+
+            foreach (QuestTreasureData treasure in questTreasureData)
+            {
+                await storySkipService.OpenTreasure(treasure.Id, cancellationToken);
+            }
+
+            foreach (QuestStory questStory in questStories)
+            {
+                await storySkipService.ReadStory(questStory.Id, cancellationToken);
+            }
+
+            await storySkipService.IncreasePlayerLevel();
+
+            UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+
+            this.logger.LogDebug("Story Skip completed for player {AccountId}.", playerIdentityService.AccountId);
+
+            return this.Ok(
+                new StorySkipSkipResponse() { ResultState = 1 }
+            );
+        }
+        catch (Exception e)
         {
-            await storySkipService.ProcessQuestCompletion(questId);
+            this.logger.LogError("Error occurred while skipping story: {Message}", e.Message);
+            return this.Ok(
+                new StorySkipSkipResponse() { ResultState = 0 }
+            );
         }
-
-        await storySkipService.IncreasePlayerLevel();
-
-        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
-
-        this.logger.LogDebug("Story Skip completed for player {Name}.", updateDataList.UserData.Name);
-
-        return this.Ok(
-            new StorySkipSkipResponse() { }
-        );
     }
 }

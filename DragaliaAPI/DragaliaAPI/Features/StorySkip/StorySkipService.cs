@@ -1,36 +1,32 @@
-// using DragaliaAPI.AutoMapper.Profiles;
-// using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Quest;
-
-// using DragaliaAPI.Features.Dungeon.Record;
-// using DragaliaAPI.Features.Quest;
-// using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
-// using DragaliaAPI.Features.StorySkip;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
-// using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
-// using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.StorySkip;
 
 public class StorySkipService(
+    IFortService fortService,
     ILogger<StorySkipService> logger,
     IQuestCompletionService questCompletionService,
     IQuestRepository questRepository,
+    IQuestTreasureService questTreasureService,
     IRewardService rewardService,
     IStoryService storyService,
     IUpdateDataService updateDataService,
     IUserDataRepository userDataRepository
 ) : IStorySkipService
 {
+    private const int MaxLevel = 60;
+    private const int MaxExp = 69990;
 
     private async Task<QuestMissionStatus> CompleteQuestMissions(int questId, bool[] currentState)
     {
@@ -77,24 +73,34 @@ public class StorySkipService(
         return new QuestMissionStatus(newState, clearSet, completeSet);
     }
 
+
+    public async Task IncreaseBuildingLevel()
+    {
+        // MasterAsset.QuestData;
+        // await fortService.LevelupAtOnce(PaymentTypes.None, 8);
+    }
+
     public async Task IncreasePlayerLevel()
     {
         DbPlayerUserData data = await userDataRepository.GetUserDataAsync();
 
-        const int levelMax = 60;
-        const int expMax = 69990;
-
         logger.LogDebug("Setting player {Name} level to 60.", data.Name);
 
-        if (data.Exp < expMax)
+        if (data.Exp < MaxExp)
         {
-            data.Exp = expMax;
+            data.Exp = MaxExp;
         }
 
-        if (data.Level < levelMax)
+        if (data.Level < MaxLevel)
         {
-            data.Level = levelMax;
+            data.Level = MaxLevel;
         }
+    }
+
+    public async Task OpenTreasure(int questTreasureId, CancellationToken cancellationToken)
+    {
+        QuestOpenTreasureRequest req = new() { QuestTreasureId = questTreasureId };
+        await questTreasureService.DoOpenTreasure(req, cancellationToken);
     }
 
     public async Task<object> ProcessQuestCompletion(int questId)
