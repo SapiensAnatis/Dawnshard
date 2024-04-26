@@ -68,7 +68,7 @@
         <PackageVersion Include="Snapshooter.Xunit" Version="0.14.1"/>
         <PackageVersion Include="Testcontainers" Version="3.7.0"/>
         <PackageVersion Include="Testcontainers.PostgreSql" Version="3.7.0"/>
-        <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="8.0.2"/>
+        <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="8.0.4"/>
         <PackageVersion Include="Moq.EntityFrameworkCore" Version="8.0.1.2"/>
         <PackageVersion Include="NSubstitute" Version="5.1.0"/>
         <PackageVersion Include="NSubstitute.Analyzers.CSharp" Version="1.0.17"/>
