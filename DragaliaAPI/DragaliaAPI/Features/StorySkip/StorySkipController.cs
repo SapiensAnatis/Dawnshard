@@ -67,6 +67,8 @@ public class StorySkipController : DragaliaControllerBase
 
             await storySkipService.IncreasePlayerLevel();
 
+            await storySkipService.IncreaseFortLevels();
+
             UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
             this.logger.LogDebug("Story Skip completed for player {AccountId}.", playerIdentityService.AccountId);

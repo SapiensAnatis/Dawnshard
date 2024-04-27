@@ -14,6 +14,7 @@ using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 namespace DragaliaAPI.Features.StorySkip;
 
 public class StorySkipService(
+    IFortRepository fortRepository,
     IFortService fortService,
     ILogger<StorySkipService> logger,
     IQuestCompletionService questCompletionService,
@@ -72,19 +73,65 @@ public class StorySkipService(
 
         return new QuestMissionStatus(newState, clearSet, completeSet);
     }
-
-
-    public async Task IncreaseBuildingLevel()
+    public async Task IncreaseFortLevels()
     {
-        // MasterAsset.QuestData;
-        // await fortService.LevelupAtOnce(PaymentTypes.None, 8);
+        Dictionary<FortPlants, FortConfig> fortConfigs = new() {
+            { FortPlants.TheHalidom, new FortConfig(6, 1) },
+            { FortPlants.Smithy, new FortConfig(6, 1) },
+            { FortPlants.RupieMine, new FortConfig(15, 4) },
+            { FortPlants.Dragontree, new FortConfig(15, 1) },
+            { FortPlants.FlameAltar, new FortConfig(10, 2) },
+            { FortPlants.WaterAltar, new FortConfig(10, 2) },
+            { FortPlants.WindAltar, new FortConfig(10, 2) },
+            { FortPlants.LightAltar, new FortConfig(10, 2) },
+            { FortPlants.ShadowAltar, new FortConfig(10, 2) },
+            { FortPlants.SwordDojo, new FortConfig(10, 2) },
+            { FortPlants.BladeDojo, new FortConfig(10, 2) },
+            { FortPlants.DaggerDojo, new FortConfig(10, 2) },
+            { FortPlants.LanceDojo, new FortConfig(10, 2) },
+            { FortPlants.AxeDojo, new FortConfig(10, 2) },
+            { FortPlants.BowDojo, new FortConfig(10, 2) },
+            { FortPlants.WandDojo, new FortConfig(10, 2)},
+            { FortPlants.StaffDojo, new FortConfig(10, 2) },
+            { FortPlants.ManacasterDojo, new FortConfig(10, 2) }
+        };
+
+
+        foreach (KeyValuePair<FortPlants, FortConfig> keyValuePair in fortConfigs)
+        {
+            FortPlants fortPlant = keyValuePair.Key;
+            FortConfig fortConfig = keyValuePair.Value;
+            await fortRepository.AddToStorage(
+                fortPlant,
+                fortConfig.BuildCount,
+                true,
+                fortConfig.Level
+            );
+
+        }
+
+        IEnumerable<BuildList> buildListEnum = await fortService.GetBuildList();
+        foreach (BuildList buildList in buildListEnum)
+        {
+            if (fortConfigs.TryGetValue(buildList.PlantId, out FortConfig fortConfig))
+            {
+                DbFortBuild build = await fortRepository.GetBuilding((long)buildList.BuildId);
+                if (build.Level < fortConfig.Level)
+                {
+                    build.Level = fortConfig.Level;
+                    build.BuildStartDate = DateTimeOffset.UnixEpoch;
+                    build.BuildEndDate = DateTimeOffset.UnixEpoch;
+                }
+            }
+        }
     }
 
     public async Task IncreasePlayerLevel()
     {
         DbPlayerUserData data = await userDataRepository.GetUserDataAsync();
-
-        logger.LogDebug("Setting player {Name} level to 60.", data.Name);
+        data.TutorialFlag = 16640603;
+        data.StaminaSingle = 999;
+        data.StaminaMulti = 99;
 
         if (data.Exp < MaxExp)
         {
