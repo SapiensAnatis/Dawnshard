@@ -58,7 +58,7 @@
         <PackageVersion Include="Moq" Version="4.20.70"/>
         <PackageVersion Include="Verify.SourceGenerators" Version="2.2.0"/>
         <PackageVersion Include="Verify.XUnit" Version="24.1.0"/>
-        <PackageVersion Include="xunit" Version="2.7.0"/>
+        <PackageVersion Include="xunit" Version="2.7.1"/>
         <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.7"/>
         <PackageVersion Include="GraphQL.Client" Version="6.0.2"/>
         <PackageVersion Include="GraphQL.Client.Serializer.SystemTextJson" Version="6.0.3"/>
