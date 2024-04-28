@@ -1,5 +1,5 @@
 ﻿using DragaliaAPI.Controllers.Dragalia;
-using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.DTO;
 using DragaliaAPI.Services;
 
 namespace DragaliaAPI.Test.Controllers;

@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Features.Shared.Models.Generated;
+﻿using DragaliaAPI.DTO;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Services.Photon;
 using Microsoft.AspNetCore.Mvc;

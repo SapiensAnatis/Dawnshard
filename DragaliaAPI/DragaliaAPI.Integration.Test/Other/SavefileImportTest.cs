@@ -2,7 +2,9 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.DTO;
 using DragaliaAPI.Infrastructure.Results;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.Serialization;
 using Microsoft.EntityFrameworkCore;
 

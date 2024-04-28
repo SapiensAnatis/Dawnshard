@@ -1,8 +1,8 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.DTO;
 using DragaliaAPI.Features.Dungeon;
-using DragaliaAPI.Features.Shared.Models.Generated;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using Microsoft.Extensions.Logging.Abstractions;
 using MockQueryable.Moq;
 

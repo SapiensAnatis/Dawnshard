@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using DragaliaAPI.Infrastructure.Results;
-using DragaliaAPI.Models;
 using MessagePack;
 
 namespace DragaliaAPI.Integration.Test.Other;

@@ -1,6 +1,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Summoning;
 using DragaliaAPI.Infrastructure.Results;
+using DragaliaAPI.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Summoning;

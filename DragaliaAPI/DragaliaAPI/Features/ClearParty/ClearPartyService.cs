@@ -2,9 +2,9 @@ using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.DTO;
 using DragaliaAPI.Features.Dungeon;
-using DragaliaAPI.Features.Shared.Models.Generated;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 

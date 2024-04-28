@@ -1,9 +1,7 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Infrastructure.Exceptions;
 using DragaliaAPI.Infrastructure.Results;
-using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 

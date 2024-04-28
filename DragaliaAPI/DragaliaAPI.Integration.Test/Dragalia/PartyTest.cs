@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Infrastructure.Results;
-using DragaliaAPI.Models;
+using DragaliaAPI.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 

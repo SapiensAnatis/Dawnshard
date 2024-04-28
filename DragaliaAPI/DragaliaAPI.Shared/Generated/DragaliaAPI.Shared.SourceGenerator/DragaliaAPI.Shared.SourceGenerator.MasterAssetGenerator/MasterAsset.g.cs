@@ -10,11 +10,11 @@ public static partial class MasterAsset
     
     private static bool loaded;
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>? charaData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData> CharaData => charaData ?? throw new InvalidOperationException(ErrorUninitialized);
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>? charaData;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData> CharaData => charaData ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>? dragonData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData> DragonData => dragonData ?? throw new InvalidOperationException(ErrorUninitialized);
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>? dragonData;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData> DragonData => dragonData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.DragonRarity>? dragonRarity;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.DragonRarity> DragonRarity => dragonRarity ?? throw new InvalidOperationException(ErrorUninitialized);
@@ -22,14 +22,14 @@ public static partial class MasterAsset
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestData>? questData;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestData> QuestData => questData ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Materials, global::DragaliaAPI.Shared.MasterAsset.Models.MaterialData>? materialData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Materials, global::DragaliaAPI.Shared.MasterAsset.Models.MaterialData> MaterialData => materialData ?? throw new InvalidOperationException(ErrorUninitialized);
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.Materials, global::DragaliaAPI.Shared.MasterAsset.Models.MaterialData>? materialData;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.Materials, global::DragaliaAPI.Shared.MasterAsset.Models.MaterialData> MaterialData => materialData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.FortPlantDetail>? fortPlantDetail;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.FortPlantDetail> FortPlantDetail => fortPlantDetail ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.WeaponBodies, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBody>? weaponBody;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.WeaponBodies, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBody> WeaponBody => weaponBody ?? throw new InvalidOperationException(ErrorUninitialized);
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.WeaponBodies, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBody>? weaponBody;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.WeaponBodies, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBody> WeaponBody => weaponBody ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyBuildupGroup>? weaponBodyBuildupGroup;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyBuildupGroup> WeaponBodyBuildupGroup => weaponBodyBuildupGroup ?? throw new InvalidOperationException(ErrorUninitialized);
@@ -55,8 +55,8 @@ public static partial class MasterAsset
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestRarity>? abilityCrestRarity;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestRarity> AbilityCrestRarity => abilityCrestRarity ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.AbilityCrests, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest>? abilityCrest;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.AbilityCrests, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest> AbilityCrest => abilityCrest ?? throw new InvalidOperationException(ErrorUninitialized);
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.AbilityCrests, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest>? abilityCrest;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.AbilityCrests, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest> AbilityCrest => abilityCrest ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestEventGroup>? questEventGroup;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestEventGroup> QuestEventGroup => questEventGroup ?? throw new InvalidOperationException(ErrorUninitialized);
@@ -85,8 +85,8 @@ public static partial class MasterAsset
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.StampData>? stampData;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.StampData> StampData => stampData ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData>? useItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData> UseItem => useItem ?? throw new InvalidOperationException(ErrorUninitialized);
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData>? useItem;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData> UseItem => useItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.AlbumMission>? missionAlbumData;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.AlbumMission> MissionAlbumData => missionAlbumData ?? throw new InvalidOperationException(ErrorUninitialized);
@@ -166,8 +166,8 @@ public static partial class MasterAsset
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceMaterial>? manaPieceMaterial;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceMaterial> ManaPieceMaterial => manaPieceMaterial ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.ManaNodeTypes, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceType>? manaPieceType;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.ManaNodeTypes, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceType> ManaPieceType => manaPieceType ?? throw new InvalidOperationException(ErrorUninitialized);
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.ManaNodeTypes, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceType>? manaPieceType;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.ManaNodeTypes, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceType> ManaPieceType => manaPieceType ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.CharaLimitBreak>? charaLimitBreak;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.CharaLimitBreak> CharaLimitBreak => charaLimitBreak ?? throw new InvalidOperationException(ErrorUninitialized);
@@ -232,35 +232,35 @@ public static partial class MasterAsset
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.CombatEventLocationReward>? combatEventLocationReward;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.CombatEventLocationReward> CombatEventLocationReward => combatEventLocationReward ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BuildEventItemType>>? buildEventItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BuildEventItemType>> BuildEventItem => buildEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.BuildEventItemType>>? buildEventItem;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.BuildEventItemType>> BuildEventItem => buildEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CombatEventItemType>>? combatEventItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CombatEventItemType>> CombatEventItem => combatEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.CombatEventItemType>>? combatEventItem;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.CombatEventItemType>> CombatEventItem => combatEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.RaidEventItem>? raidEventItem;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.RaidEventItem> RaidEventItem => raidEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.SimpleEventItemType>>? simpleEventItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.SimpleEventItemType>> SimpleEventItem => simpleEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.SimpleEventItemType>>? simpleEventItem;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.SimpleEventItemType>> SimpleEventItem => simpleEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExRushEventItemType>>? exRushEventItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExRushEventItemType>> ExRushEventItem => exRushEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.ExRushEventItemType>>? exRushEventItem;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.ExRushEventItemType>> ExRushEventItem => exRushEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExHunterEventItemType>>? exHunterEventItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExHunterEventItemType>> ExHunterEventItem => exHunterEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.ExHunterEventItemType>>? exHunterEventItem;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.ExHunterEventItemType>> ExHunterEventItem => exHunterEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.EarnEventItemType>>? earnEventItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.EarnEventItemType>> EarnEventItem => earnEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.EarnEventItemType>>? earnEventItem;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.EarnEventItemType>> EarnEventItem => earnEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CollectEventItemType>>? collectEventItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CollectEventItemType>> CollectEventItem => collectEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.CollectEventItemType>>? collectEventItem;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.CollectEventItemType>> CollectEventItem => collectEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.Clb01EventItemType>>? clb01EventItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.Clb01EventItemType>> Clb01EventItem => clb01EventItem ?? throw new InvalidOperationException(ErrorUninitialized);
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.Clb01EventItemType>>? clb01EventItem;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.Clb01EventItemType>> Clb01EventItem => clb01EventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BattleRoyalEventItemType>>? battleRoyalEventItem;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BattleRoyalEventItemType>> BattleRoyalEventItem => battleRoyalEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.BattleRoyalEventItemType>>? battleRoyalEventItem;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.BattleRoyalEventItemType>> BattleRoyalEventItem => battleRoyalEventItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventPassive>? eventPassive;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventPassive> EventPassive => eventPassive ?? throw new InvalidOperationException(ErrorUninitialized);
@@ -336,13 +336,13 @@ public static partial class MasterAsset
         {
             return;
         }
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>> charaDataTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>> charaDataTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>(
                 "CharaData.msgpack",
                 x => x.Id
             );
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>> dragonDataTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>> dragonDataTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>(
                 "DragonData.msgpack",
                 x => x.Id
             );
@@ -356,8 +356,8 @@ public static partial class MasterAsset
                 "QuestData.msgpack",
                 x => x.Id
             );
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Materials, global::DragaliaAPI.Shared.MasterAsset.Models.MaterialData>> materialDataTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.Materials, global::DragaliaAPI.Shared.MasterAsset.Models.MaterialData>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.Materials, global::DragaliaAPI.Shared.MasterAsset.Models.MaterialData>> materialDataTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Enums.Materials, global::DragaliaAPI.Shared.MasterAsset.Models.MaterialData>(
                 "MaterialData.msgpack",
                 x => x.Id
             );
@@ -366,8 +366,8 @@ public static partial class MasterAsset
                 "FortPlantDetail.msgpack",
                 x => x.Id
             );
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.WeaponBodies, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBody>> weaponBodyTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.WeaponBodies, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBody>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.WeaponBodies, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBody>> weaponBodyTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Enums.WeaponBodies, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBody>(
                 "WeaponBody.msgpack",
                 x => x.Id
             );
@@ -411,8 +411,8 @@ public static partial class MasterAsset
                 "AbilityCrestRarity.msgpack",
                 x => x.Id
             );
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.AbilityCrests, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest>> abilityCrestTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.AbilityCrests, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.AbilityCrests, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest>> abilityCrestTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Enums.AbilityCrests, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest>(
                 "AbilityCrest.msgpack",
                 x => x.Id
             );
@@ -461,8 +461,8 @@ public static partial class MasterAsset
                 "StampData.msgpack",
                 x => x.Id
             );
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData>> useItemTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData>> useItemTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData>(
                 "UseItem.msgpack",
                 x => x.Id
             );
@@ -596,8 +596,8 @@ public static partial class MasterAsset
                 "ManaCircle/ManaPieceMaterial.msgpack",
                 x => x.Id
             );
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.ManaNodeTypes, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceType>> manaPieceTypeTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.ManaNodeTypes, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceType>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.ManaNodeTypes, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceType>> manaPieceTypeTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Enums.ManaNodeTypes, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceType>(
                 "ManaCircle/ManaPieceType.msgpack",
                 x => x.Id
             );
@@ -706,13 +706,13 @@ public static partial class MasterAsset
                 "Event/CombatEventLocationReward.msgpack",
                 x => x.Id
             );
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BuildEventItemType>>> buildEventItemTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BuildEventItemType>>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.BuildEventItemType>>> buildEventItemTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.BuildEventItemType>>(
                 "Event/BuildEventItem.msgpack",
                 x => x.Id
             );
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CombatEventItemType>>> combatEventItemTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CombatEventItemType>>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.CombatEventItemType>>> combatEventItemTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.CombatEventItemType>>(
                 "Event/CombatEventItem.msgpack",
                 x => x.Id
             );
@@ -721,38 +721,38 @@ public static partial class MasterAsset
                 "Event/RaidEventItem.msgpack",
                 x => x.Id
             );
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.SimpleEventItemType>>> simpleEventItemTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.SimpleEventItemType>>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.SimpleEventItemType>>> simpleEventItemTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.SimpleEventItemType>>(
                 "Event/SimpleEventItem.msgpack",
                 x => x.Id
             );
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExRushEventItemType>>> exRushEventItemTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExRushEventItemType>>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.ExRushEventItemType>>> exRushEventItemTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.ExRushEventItemType>>(
                 "Event/ExRushEventItem.msgpack",
                 x => x.Id
             );
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExHunterEventItemType>>> exHunterEventItemTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExHunterEventItemType>>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.ExHunterEventItemType>>> exHunterEventItemTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.ExHunterEventItemType>>(
                 "Event/ExHunterEventItem.msgpack",
                 x => x.Id
             );
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.EarnEventItemType>>> earnEventItemTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.EarnEventItemType>>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.EarnEventItemType>>> earnEventItemTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.EarnEventItemType>>(
                 "Event/EarnEventItem.msgpack",
                 x => x.Id
             );
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CollectEventItemType>>> collectEventItemTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CollectEventItemType>>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.CollectEventItemType>>> collectEventItemTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.CollectEventItemType>>(
                 "Event/CollectEventItem.msgpack",
                 x => x.Id
             );
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.Clb01EventItemType>>> clb01EventItemTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.Clb01EventItemType>>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.Clb01EventItemType>>> clb01EventItemTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.Clb01EventItemType>>(
                 "Event/Clb01EventItem.msgpack",
                 x => x.Id
             );
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BattleRoyalEventItemType>>> battleRoyalEventItemTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BattleRoyalEventItemType>>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.BattleRoyalEventItemType>>> battleRoyalEventItemTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Enums.EventItemTypes.BattleRoyalEventItemType>>(
                 "Event/BattleRoyalEventItem.msgpack",
                 x => x.Id
             );

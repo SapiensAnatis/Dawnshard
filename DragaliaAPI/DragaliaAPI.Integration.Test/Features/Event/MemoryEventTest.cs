@@ -1,3 +1,5 @@
+using DragaliaAPI.DTO;
+
 namespace DragaliaAPI.Integration.Test.Features.Event;
 
 public class MemoryEventTest : TestFixture

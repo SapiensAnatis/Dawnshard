@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Shared.Definitions.Enums;
+﻿using DragaliaAPI.Shared.Enums;
 
 namespace DragaliaAPI.Features.Zena;
 

@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Features.Shared.Models.Generated;
+﻿using DragaliaAPI.DTO;
 using FluentValidation;
 
 namespace DragaliaAPI.Features.TimeAttack.Validation;

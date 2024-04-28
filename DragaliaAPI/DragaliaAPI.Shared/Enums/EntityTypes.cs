@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace DragaliaAPI.Shared.Definitions.Enums;
+namespace DragaliaAPI.Shared.Enums;
 
 /// <summary>
 /// Default Entity_Id is 0

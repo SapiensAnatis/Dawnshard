@@ -1,12 +1,12 @@
 ﻿using System.Collections.Immutable;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using WeaponBodiesEnum = DragaliaAPI.Shared.Definitions.Enums.WeaponBodies;
+using WeaponBodiesEnum = DragaliaAPI.Shared.Enums.WeaponBodies;
 
 namespace DragaliaAPI.Database.Repositories;
 

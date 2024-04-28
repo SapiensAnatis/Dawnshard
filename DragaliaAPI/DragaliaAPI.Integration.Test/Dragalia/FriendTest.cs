@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Services.Game;
+using DragaliaAPI.Shared.Enums;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 

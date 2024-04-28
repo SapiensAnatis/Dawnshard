@@ -1,4 +1,5 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Shared.Enums;
 
 namespace DragaliaAPI.Integration.Test.Features.Reward;
 

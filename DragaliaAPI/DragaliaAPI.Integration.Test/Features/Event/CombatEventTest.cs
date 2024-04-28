@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Infrastructure.Results;
-using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
+using DragaliaAPI.Shared.Enums.EventItemTypes;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Event;

@@ -1,9 +1,9 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.DTO;
 using DragaliaAPI.Features.Reward.Handlers;
-using DragaliaAPI.Features.Shared.Models.Generated;
 using DragaliaAPI.Features.Talisman;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 
 namespace DragaliaAPI.Features.Reward;
 
@@ -29,7 +29,7 @@ public class RewardService(
 
         logger.LogTrace("Granting reward {@rewardEntity}", entity);
 
-        RewardGrantResult result = await GrantRewardInternal(entity);
+        RewardGrantResult result = await this.GrantRewardInternal(entity);
 
         logger.LogTrace("Result: {result}", result);
 
@@ -47,7 +47,7 @@ public class RewardService(
         List<RewardGrantResult> results = new(count);
         foreach (Entity entity in entities)
         {
-            RewardGrantResult result = await GrantRewardInternal(entity);
+            RewardGrantResult result = await this.GrantRewardInternal(entity);
             results.Add(result);
         }
 
@@ -129,9 +129,9 @@ public class RewardService(
         )
         {
             Entity coinReward = new(EntityTypes.Rupies, 0, TalismanService.TalismanCoinReward);
-            await GrantReward(coinReward);
+            await this.GrantReward(coinReward);
 
-            convertedEntities.Add(
+            this.convertedEntities.Add(
                 new ConvertedEntity(new Entity(EntityTypes.Talisman, (int)id), coinReward)
             );
 
@@ -154,9 +154,11 @@ public class RewardService(
     {
         return new()
         {
-            NewGetEntityList = newEntities.Select(x => x.ToDuplicateEntityList()),
-            ConvertedEntityList = convertedEntities.Select(x => x.ToConvertedEntityList()),
-            OverDiscardEntityList = discardedEntities.Select(x => x.ToBuildEventRewardEntityList()),
+            NewGetEntityList = this.newEntities.Select(x => x.ToDuplicateEntityList()),
+            ConvertedEntityList = this.convertedEntities.Select(x => x.ToConvertedEntityList()),
+            OverDiscardEntityList = this.discardedEntities.Select(x =>
+                x.ToBuildEventRewardEntityList()
+            ),
             OverPresentEntityList = this.presentEntites.Select(x =>
                 x.ToBuildEventRewardEntityList()
             ),

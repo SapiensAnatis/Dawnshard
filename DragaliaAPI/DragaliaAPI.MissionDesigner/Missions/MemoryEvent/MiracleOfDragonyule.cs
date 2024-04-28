@@ -2,6 +2,7 @@ using DragaliaAPI.MissionDesigner.Models;
 using DragaliaAPI.MissionDesigner.Models.Attributes;
 using DragaliaAPI.MissionDesigner.Models.EventMission;
 using DragaliaAPI.MissionDesigner.Models.RegularMission;
+using DragaliaAPI.Shared.Enums;
 
 namespace DragaliaAPI.MissionDesigner.Missions.MemoryEvent;
 

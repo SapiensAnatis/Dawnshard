@@ -2,15 +2,13 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.DTO;
 using DragaliaAPI.Features.Event;
+using DragaliaAPI.Features.Login;
 using DragaliaAPI.Features.Missions.InitialProgress;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Shared;
-using DragaliaAPI.Features.Shared.Helpers;
-using DragaliaAPI.Features.Shared.Models.Generated;
 using DragaliaAPI.Infrastructure.Exceptions;
 using DragaliaAPI.Infrastructure.Results;
-using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;

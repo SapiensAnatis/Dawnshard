@@ -3,6 +3,7 @@ using AutoMapper;
 using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Http;

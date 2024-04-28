@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 

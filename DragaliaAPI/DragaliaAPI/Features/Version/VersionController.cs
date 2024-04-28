@@ -1,5 +1,5 @@
-﻿using DragaliaAPI.Controllers;
-using DragaliaAPI.Features.Shared.Models.Generated;
+﻿using DragaliaAPI.DTO;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Infrastructure.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

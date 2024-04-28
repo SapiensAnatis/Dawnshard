@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Infrastructure.Results;
+using DragaliaAPI.Shared.Enums;
 
 namespace DragaliaAPI.Integration.Test.Features.Shop;
 

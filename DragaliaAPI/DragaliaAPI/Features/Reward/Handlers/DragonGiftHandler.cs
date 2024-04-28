@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;

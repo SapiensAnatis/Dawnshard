@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DragaliaAPI.Shared.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Trade;
 

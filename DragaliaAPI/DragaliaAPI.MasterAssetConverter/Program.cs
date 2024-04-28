@@ -1,12 +1,10 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
-using DragaliaAPI.MemoryPack;
+using DragaliaAPI.MasterAssetConverter;
 using DragaliaAPI.Shared.MasterAsset;
-using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.Serialization;
 using MessagePack;
-using MessagePack.Resolvers;
 
 string resourcesPath = args[^2];
 string outputDir = args[^1];

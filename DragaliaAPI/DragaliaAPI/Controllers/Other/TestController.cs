@@ -1,8 +1,7 @@
 ﻿#if DEBUG || TEST
-using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Infrastructure.Exceptions;
 using DragaliaAPI.Infrastructure.Results;
-using DragaliaAPI.Services.Exceptions;
 using MessagePack;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

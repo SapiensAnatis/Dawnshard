@@ -1,4 +1,5 @@
 using DragaliaAPI.MissionDesigner.Models.RegularMission;
+using DragaliaAPI.Shared.Enums;
 
 namespace DragaliaAPI.MissionDesigner.Models.Attributes;
 

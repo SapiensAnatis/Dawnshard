@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using EntityGraphQL.Schema;
 using Microsoft.EntityFrameworkCore;

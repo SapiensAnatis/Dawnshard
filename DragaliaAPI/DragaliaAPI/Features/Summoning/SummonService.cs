@@ -1,12 +1,10 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.DTO;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Shared;
-using DragaliaAPI.Features.Shared.Models.Generated;
 using DragaliaAPI.Infrastructure.Exceptions;
-using DragaliaAPI.Infrastructure.Mapping.Mapperly;
 using DragaliaAPI.Infrastructure.Results;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using FluentRandomPicker;
 using FluentRandomPicker.FluentInterfaces.General;

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.SavefileUpdate;
+using DragaliaAPI.Features.Savefile;
+using DragaliaAPI.Features.Savefile.Update;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;

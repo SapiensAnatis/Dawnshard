@@ -1,6 +1,6 @@
-using DragaliaAPI.Features.Shared.Models.Generated;
-using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Definitions.Enums.Dungeon;
+using DragaliaAPI.DTO;
+using DragaliaAPI.Shared.Enums;
+using DragaliaAPI.Shared.Enums.Dungeon;
 
 namespace DragaliaAPI.Features.Dungeon.AutoRepeat;
 

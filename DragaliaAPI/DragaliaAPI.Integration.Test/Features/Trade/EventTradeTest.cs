@@ -1,3 +1,4 @@
+using DragaliaAPI.DTO;
 using DragaliaAPI.Infrastructure.Results;
 
 namespace DragaliaAPI.Integration.Test.Features.Trade;

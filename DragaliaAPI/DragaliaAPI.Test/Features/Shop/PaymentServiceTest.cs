@@ -1,15 +1,13 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.DTO;
 using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Item;
-using DragaliaAPI.Features.Shared;
-using DragaliaAPI.Features.Shared.Models.Generated;
-using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Features.Payment;
 using DragaliaAPI.Infrastructure.Exceptions;
 using DragaliaAPI.Infrastructure.Results;
-using DragaliaAPI.Services.Exceptions;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Test.Utils;
 
 namespace DragaliaAPI.Test.Features.Shop;

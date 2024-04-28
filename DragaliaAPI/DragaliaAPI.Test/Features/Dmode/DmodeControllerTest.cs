@@ -1,10 +1,11 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.DTO;
 using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.Features.Savefile;
 using DragaliaAPI.Services;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using Microsoft.Extensions.Time.Testing;
 using MockQueryable.Moq;
 

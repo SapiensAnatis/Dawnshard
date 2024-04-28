@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Shared.Definitions.Enums;
+﻿namespace DragaliaAPI.Shared.Enums;
 
 /// <summary>
 /// The PlusCountType (augments) enum type.

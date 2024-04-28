@@ -1,4 +1,4 @@
-using DragaliaAPI.Features.Shared.Helpers;
+using DragaliaAPI.Features.Login;
 using Microsoft.Extensions.Time.Testing;
 
 namespace DragaliaAPI.Test.Features.Login;

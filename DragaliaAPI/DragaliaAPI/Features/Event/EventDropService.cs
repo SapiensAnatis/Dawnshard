@@ -1,11 +1,11 @@
 ﻿using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.DTO;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Shared.Models.Generated;
 using DragaliaAPI.Infrastructure.Extensions;
 using DragaliaAPI.Photon.Shared.Enums;
-using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
+using DragaliaAPI.Shared.Enums;
+using DragaliaAPI.Shared.Enums.EventItemTypes;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;

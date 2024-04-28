@@ -1,14 +1,12 @@
-using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.DTO;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Shared.Models.Generated;
-using DragaliaAPI.Models;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.Extensions.Logging;
 

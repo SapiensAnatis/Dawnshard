@@ -1,21 +1,12 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Factories;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using CharaNewCheckResult = (
-    DragaliaAPI.Shared.Definitions.Enums.Charas Id,
-    bool IsNew,
-    bool IsStoryNew
-);
-using DragonNewCheckResult = (
-    DragaliaAPI.Shared.Definitions.Enums.Dragons Id,
-    bool IsNew,
-    bool IsStoryNew
-);
+using CharaNewCheckResult = (DragaliaAPI.Shared.Enums.Charas Id, bool IsNew, bool IsStoryNew);
+using DragonNewCheckResult = (DragaliaAPI.Shared.Enums.Dragons Id, bool IsNew, bool IsStoryNew);
 
 namespace DragaliaAPI.Database.Repositories;
 

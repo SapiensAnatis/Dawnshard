@@ -11,8 +11,8 @@ public static partial class MasterAsset
     
     private static bool loaded;
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>? charaData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData> CharaData => charaData ?? throw new InvalidOperationException(ErrorUninitialized);
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>? charaData;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData> CharaData => charaData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.TimeAttack.RankingData>? rankingData;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.TimeAttack.RankingData> RankingData => rankingData ?? throw new InvalidOperationException(ErrorUninitialized);
@@ -25,8 +25,8 @@ public static partial class MasterAsset
         {
             return;
         }
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>> charaDataTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>> charaDataTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>(
                 "CharaData.msgpack",
                 x => x.Id
             );

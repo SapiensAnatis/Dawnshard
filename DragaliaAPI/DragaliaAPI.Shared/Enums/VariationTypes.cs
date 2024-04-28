@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.Shared.MasterAsset.Models;
 
-namespace DragaliaAPI.Shared.Definitions.Enums;
+namespace DragaliaAPI.Shared.Enums;
 
 /// <summary>
 /// Describes a quest difficulty in <see cref="QuestData"/>

@@ -3,7 +3,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Wall;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Services.Game;

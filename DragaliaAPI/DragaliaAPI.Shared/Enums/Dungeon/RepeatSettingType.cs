@@ -1,4 +1,4 @@
-namespace DragaliaAPI.Shared.Definitions.Enums.Dungeon;
+namespace DragaliaAPI.Shared.Enums.Dungeon;
 
 public enum RepeatSettingType
 {

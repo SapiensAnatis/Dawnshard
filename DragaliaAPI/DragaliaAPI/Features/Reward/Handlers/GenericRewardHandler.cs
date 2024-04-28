@@ -7,7 +7,7 @@ using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Player;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Reward.Handlers;

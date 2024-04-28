@@ -1,9 +1,10 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.DTO;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.Features.Savefile;
 using DragaliaAPI.Services;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 
 namespace DragaliaAPI.Test.Features.Fort;
 

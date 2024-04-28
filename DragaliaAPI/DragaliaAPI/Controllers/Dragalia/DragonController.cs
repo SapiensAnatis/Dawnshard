@@ -1,7 +1,8 @@
-﻿using DragaliaAPI.Features.Shared.Models.Generated;
+﻿using DragaliaAPI.DTO;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Services;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia;

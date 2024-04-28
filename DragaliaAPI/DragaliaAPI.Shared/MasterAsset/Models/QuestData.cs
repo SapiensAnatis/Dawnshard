@@ -1,5 +1,5 @@
 ﻿using DragaliaAPI.Photon.Shared.Enums;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using MessagePack;
 

@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Shared.Definitions.Enums;
+﻿namespace DragaliaAPI.Shared.Enums;
 
 /// <summary>
 /// Represents a unit's availability from a summoning perspective.

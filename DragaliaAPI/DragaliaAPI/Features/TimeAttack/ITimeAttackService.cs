@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Features.Shared.Models.Generated;
-using DragaliaAPI.Shared.MasterAsset.Models;
+﻿using DragaliaAPI.DTO;
 using DragaliaAPI.Shared.MasterAsset.Models.TimeAttack;
 
 namespace DragaliaAPI.Features.TimeAttack;

@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Features.Shared;
-using DragaliaAPI.Infrastructure.Exceptions;
+﻿using DragaliaAPI.Infrastructure.Exceptions;
 using DragaliaAPI.Infrastructure.Results;
 
 namespace DragaliaAPI.Services.Exceptions;

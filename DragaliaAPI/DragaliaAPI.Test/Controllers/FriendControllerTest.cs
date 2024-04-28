@@ -1,5 +1,5 @@
 ﻿using DragaliaAPI.Controllers.Dragalia;
-using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.DTO;
 using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;

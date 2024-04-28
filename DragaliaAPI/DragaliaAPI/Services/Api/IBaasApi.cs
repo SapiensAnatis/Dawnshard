@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Features.Shared.Models.Generated;
+﻿using DragaliaAPI.DTO;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DragaliaAPI.Services.Api;

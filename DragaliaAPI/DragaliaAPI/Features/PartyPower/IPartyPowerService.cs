@@ -1,5 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.DTO;
 
 namespace DragaliaAPI.Features.PartyPower;
 

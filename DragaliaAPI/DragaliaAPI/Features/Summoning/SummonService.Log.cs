@@ -1,5 +1,5 @@
+using DragaliaAPI.DTO;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Shared.Models.Generated;
 
 namespace DragaliaAPI.Features.Summoning;
 

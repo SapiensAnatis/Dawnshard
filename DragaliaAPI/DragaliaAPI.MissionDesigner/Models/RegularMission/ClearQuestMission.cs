@@ -1,3 +1,5 @@
+using DragaliaAPI.Shared.Enums;
+
 namespace DragaliaAPI.MissionDesigner.Models.RegularMission;
 
 public class ClearQuestMission : Mission

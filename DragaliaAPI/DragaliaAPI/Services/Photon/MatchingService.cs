@@ -1,10 +1,10 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.DTO;
 using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Services.Api;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 

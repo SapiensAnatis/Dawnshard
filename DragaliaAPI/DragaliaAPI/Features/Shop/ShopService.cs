@@ -1,14 +1,13 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.DTO;
+using DragaliaAPI.Features.Login;
+using DragaliaAPI.Features.Payment;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Shared;
-using DragaliaAPI.Features.Shared.Helpers;
-using DragaliaAPI.Features.Shared.Models.Generated;
 using DragaliaAPI.Infrastructure.Exceptions;
 using DragaliaAPI.Infrastructure.Results;
-using DragaliaAPI.Services.Exceptions;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models.Shop;
 using Microsoft.EntityFrameworkCore;
 

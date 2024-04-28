@@ -1,5 +1,5 @@
 using DragaliaAPI.Features.Summoning;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 

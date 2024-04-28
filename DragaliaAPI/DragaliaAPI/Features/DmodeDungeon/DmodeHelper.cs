@@ -1,7 +1,7 @@
 ﻿using System.Collections.Frozen;
 using System.Collections.Immutable;
-using DragaliaAPI.Features.Shared.Models.Generated;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.DTO;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 

@@ -1,6 +1,6 @@
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.DTO;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.PlayerDetails;
 

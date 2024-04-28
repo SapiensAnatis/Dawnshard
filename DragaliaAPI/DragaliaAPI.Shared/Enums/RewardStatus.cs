@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Shared.Definitions.Enums;
+﻿namespace DragaliaAPI.Shared.Enums;
 
 /// <summary>
 /// Mapping for player reward status for Mercurial Gauntlet.

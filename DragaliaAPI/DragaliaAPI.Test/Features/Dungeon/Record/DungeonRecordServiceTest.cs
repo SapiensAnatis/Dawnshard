@@ -1,14 +1,13 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.DTO;
 using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Shared.Models.Generated;
-using DragaliaAPI.Models;
 using DragaliaAPI.Services;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Test.Utils;
 using Microsoft.Extensions.Logging;

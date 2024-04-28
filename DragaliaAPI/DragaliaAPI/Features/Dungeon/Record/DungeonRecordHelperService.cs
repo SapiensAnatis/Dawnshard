@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.DTO;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared.PlayerDetails;

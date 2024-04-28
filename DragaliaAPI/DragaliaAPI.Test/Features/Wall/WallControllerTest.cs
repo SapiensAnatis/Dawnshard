@@ -1,10 +1,11 @@
+using DragaliaAPI.DTO;
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.Features.Savefile;
 using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Services;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 
 namespace DragaliaAPI.Test.Features.Wall;
 

@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Fort;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;

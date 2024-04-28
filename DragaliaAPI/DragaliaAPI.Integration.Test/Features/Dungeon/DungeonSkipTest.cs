@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Infrastructure.Results;
+using DragaliaAPI.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Dungeon;
@@ -57,7 +58,7 @@ public class DungeonSkipTest : TestFixture
 
         response
             .Data.IngameResultData.QuestPartySettingList.Should()
-            .Contain(x => x.CharaId == Shared.Definitions.Enums.Charas.ThePrince);
+            .Contain(x => x.CharaId == Charas.ThePrince);
         response
             .Data.IngameResultData.HelperList.Should()
             .Contain(x => x.Name == "dreadfullydistinct");
@@ -106,7 +107,7 @@ public class DungeonSkipTest : TestFixture
                     QuestId = questId,
                     RequestPartySettingList = new List<PartySettingList>()
                     {
-                        new() { CharaId = Shared.Definitions.Enums.Charas.ThePrince, }
+                        new() { CharaId = Charas.ThePrince, }
                     }
                 }
             );
@@ -121,7 +122,7 @@ public class DungeonSkipTest : TestFixture
 
         response
             .Data.IngameResultData.QuestPartySettingList.Should()
-            .Contain(x => x.CharaId == Shared.Definitions.Enums.Charas.ThePrince);
+            .Contain(x => x.CharaId == Charas.ThePrince);
         response
             .Data.IngameResultData.HelperList.Should()
             .Contain(x => x.Name == "dreadfullydistinct");
@@ -181,7 +182,7 @@ public class DungeonSkipTest : TestFixture
 
         response
             .Data.IngameResultData.QuestPartySettingList.Should()
-            .Contain(x => x.CharaId == Shared.Definitions.Enums.Charas.ThePrince);
+            .Contain(x => x.CharaId == Charas.ThePrince);
         response
             .Data.IngameResultData.HelperList.Should()
             .Contain(x => x.Name == "dreadfullydistinct");

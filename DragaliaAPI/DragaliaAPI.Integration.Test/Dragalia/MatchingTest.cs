@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Photon.Shared.Models;
+using DragaliaAPI.Shared.Enums;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 

@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Features.Version;
 using DragaliaAPI.Infrastructure.Results;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Integration.Test.Features.Version;
 
 /// <summary>
 /// Tests <see cref="DragaliaAPI.Features.Version.VersionController"/>

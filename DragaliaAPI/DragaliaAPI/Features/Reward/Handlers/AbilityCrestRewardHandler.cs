@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using JetBrains.Annotations;

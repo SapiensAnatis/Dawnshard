@@ -1,6 +1,6 @@
 ﻿using System.Collections.Frozen;
 using DragaliaAPI.Photon.Shared.Enums;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.Features.Summoning;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;

@@ -1,6 +1,7 @@
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Shared.Definitions.Enums.Dungeon;
-using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
+using DragaliaAPI.Shared.Enums;
+using DragaliaAPI.Shared.Enums.Dungeon;
+using DragaliaAPI.Shared.Enums.EventItemTypes;
 
 namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 

@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Infrastructure.Options;
-using DragaliaAPI.Models;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 

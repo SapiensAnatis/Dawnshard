@@ -1,5 +1,5 @@
 using System.Collections.Frozen;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models;
 
 namespace DragaliaAPI.Shared.Features.Summoning;

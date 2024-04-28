@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Features.Shared.Helpers;
+﻿using DragaliaAPI.Features.Login;
 using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Infrastructure.MessagePack;
 using DragaliaAPI.Infrastructure.Results;

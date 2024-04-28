@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text.Json.Serialization;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.Features.Presents;
 using GraphQL;
 using Microsoft.EntityFrameworkCore;

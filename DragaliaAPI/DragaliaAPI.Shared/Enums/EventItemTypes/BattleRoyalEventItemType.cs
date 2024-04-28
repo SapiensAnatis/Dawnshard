@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
+﻿namespace DragaliaAPI.Shared.Enums.EventItemTypes;
 
 public enum BattleRoyalEventItemType
 {

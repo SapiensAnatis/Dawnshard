@@ -3,6 +3,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Infrastructure.Results;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;

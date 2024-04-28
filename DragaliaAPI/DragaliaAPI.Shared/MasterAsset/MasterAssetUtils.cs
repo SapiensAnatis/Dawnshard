@@ -1,4 +1,4 @@
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.MasterAsset.Models.Wall;

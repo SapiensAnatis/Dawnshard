@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;

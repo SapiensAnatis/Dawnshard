@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 using DragaliaAPI.Features.Emblem;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using JetBrains.Annotations;
 
 namespace DragaliaAPI.Features.Reward.Handlers;

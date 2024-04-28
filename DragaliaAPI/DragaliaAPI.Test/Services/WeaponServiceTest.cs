@@ -1,12 +1,12 @@
 using System.Reflection;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.DTO;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Missions;
-using DragaliaAPI.Features.Shared.Models.Generated;
 using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Services.Game;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Test.Utils;

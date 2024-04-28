@@ -1,6 +1,6 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Dungeon;
-using DragaliaAPI.Models;
+using DragaliaAPI.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Database.Utils;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.EntityFrameworkCore;
 

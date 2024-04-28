@@ -2,7 +2,7 @@ using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Missions.InitialProgress;
-using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;

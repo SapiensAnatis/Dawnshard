@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.Shared.Features.TextLabel;
 
-namespace DragaliaAPI.Shared.Definitions.Enums;
+namespace DragaliaAPI.Shared.Enums;
 
 public enum WeaponTypes
 {
