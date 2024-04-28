@@ -2,11 +2,11 @@ using DragaliaAPI.Controllers;
 using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
-using Microsoft.AspNetCore.Mvc;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.StorySkip;
 
@@ -40,24 +40,24 @@ public class StorySkipController : DragaliaControllerBase
         {
             this.logger.LogDebug("Beginning story skip for player.");
 
-            IEnumerable<QuestData> questData = MasterAsset.QuestData.Enumerable.Where(x =>
+            IEnumerable<QuestData> questDatas = MasterAsset.QuestData.Enumerable.Where(x =>
                 x.Gid < 10011 && x.Id > 100000000 && x.Id.ToString().Substring(6, 1) == "1"
             );
-            IEnumerable<QuestTreasureData> questTreasureData = MasterAsset.QuestTreasureData.Enumerable.Where(x =>
+            IEnumerable<QuestTreasureData> questTreasureDatas = MasterAsset.QuestTreasureData.Enumerable.Where(x =>
                 x.Id is < 110000 && x.Id.ToString().Substring(3, 1) == "1"
             );
             IEnumerable<QuestStory> questStories = MasterAsset.QuestStory.Enumerable.Where(
                 x => x.GroupId is < 10011
             );
 
-            foreach (QuestData quest in questData)
+            foreach (QuestData questData in questDatas)
             {
-                await storySkipService.ProcessQuestCompletion(quest.Id);
+                await storySkipService.ProcessQuestCompletion(questData.Id);
             }
 
-            foreach (QuestTreasureData treasure in questTreasureData)
+            foreach (QuestTreasureData questTreasureData in questTreasureDatas)
             {
-                await storySkipService.OpenTreasure(treasure.Id, cancellationToken);
+                await storySkipService.OpenTreasure(questTreasureData.Id, cancellationToken);
             }
 
             foreach (QuestStory questStory in questStories)

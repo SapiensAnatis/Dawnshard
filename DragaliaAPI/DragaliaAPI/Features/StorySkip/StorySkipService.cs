@@ -26,9 +26,6 @@ public class StorySkipService(
     IUserDataRepository userDataRepository
 ) : IStorySkipService
 {
-    private const int MaxLevel = 60;
-    private const int MaxExp = 69990;
-
     private async Task<QuestMissionStatus> CompleteQuestMissions(int questId, bool[] currentState)
     {
         List<AtgenMissionsClearSet> clearSet = new();
@@ -73,6 +70,7 @@ public class StorySkipService(
 
         return new QuestMissionStatus(newState, clearSet, completeSet);
     }
+
     public async Task IncreaseFortLevels()
     {
         Dictionary<FortPlants, FortConfig> fortConfigs = new() {
@@ -128,8 +126,11 @@ public class StorySkipService(
 
     public async Task IncreasePlayerLevel()
     {
+        const int MaxLevel = 60;
+        const int MaxExp = 69990;
         DbPlayerUserData data = await userDataRepository.GetUserDataAsync();
         data.TutorialFlag = 16640603;
+        data.TutorialStatus = 60999;
         data.StaminaSingle = 999;
         data.StaminaMulti = 99;
 
@@ -146,19 +147,21 @@ public class StorySkipService(
 
     public async Task OpenTreasure(int questTreasureId, CancellationToken cancellationToken)
     {
-        QuestOpenTreasureRequest req = new() { QuestTreasureId = questTreasureId };
-        await questTreasureService.DoOpenTreasure(req, cancellationToken);
+        IQueryable<DbQuestTreasureList> questTreasureLists = questRepository.QuestTreasureList;
+        if (!questTreasureLists.Any(x => x.QuestTreasureId == questTreasureId))
+        {
+            QuestOpenTreasureRequest req = new() { QuestTreasureId = questTreasureId };
+            await questTreasureService.DoOpenTreasure(req, cancellationToken);
+        }
     }
 
-    public async Task<object> ProcessQuestCompletion(int questId)
+    public async Task ProcessQuestCompletion(int questId)
     {
         DbQuest questData = await questRepository.GetQuestDataAsync(questId);
 
         bool isFirstClear = questData.State < 3;
-
-        IEnumerable<AtgenFirstClearSet> firstClearRewards = isFirstClear
-            ? await questCompletionService.GrantFirstClearRewards(questData.QuestId)
-            : Enumerable.Empty<AtgenFirstClearSet>();
+        if (isFirstClear)
+            await questCompletionService.GrantFirstClearRewards(questData.QuestId);
 
         bool[] oldMissionStatus =
         {
@@ -184,10 +187,7 @@ public class StorySkipService(
         questData.PlayCount += 1;
         questData.DailyPlayCount += 1;
         questData.WeeklyPlayCount += 1;
-
         questData.State = 3;
-
-        return (status, firstClearRewards);
     }
 
     public async Task ReadStory(int questStoryId, CancellationToken cancellationToken)
