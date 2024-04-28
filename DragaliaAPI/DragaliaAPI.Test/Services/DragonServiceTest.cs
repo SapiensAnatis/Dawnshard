@@ -3,6 +3,7 @@ using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.DTO;
+using DragaliaAPI.Features.ClientState;
 using DragaliaAPI.Features.Login;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Payment;

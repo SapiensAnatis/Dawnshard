@@ -14,7 +14,7 @@ using Microsoft.Extensions.Options;
 using Riok.Mapperly.Abstractions;
 using DragaliaAPI.Shared.Enums;
 
-namespace DragaliaAPI.Features.Savefile;
+namespace DragaliaAPI.Features.ClientState;
 
 public class LoadService(
     ApiContext apiContext,

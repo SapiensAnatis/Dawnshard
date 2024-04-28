@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.DTO;
+using DragaliaAPI.Features.ClientState;
 using DragaliaAPI.Features.DmodeDungeon;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Savefile;

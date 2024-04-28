@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.Extensions.Options;
 
-namespace DragaliaAPI.Controllers.Other;
+namespace DragaliaAPI.Features.Savefile;
 
 public class ApiJsonModelBinder : IModelBinder
 {

@@ -1,5 +1,6 @@
 using DragaliaAPI.DTO;
 using DragaliaAPI.Features.ClearParty;
+using DragaliaAPI.Features.ClientState;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Savefile;

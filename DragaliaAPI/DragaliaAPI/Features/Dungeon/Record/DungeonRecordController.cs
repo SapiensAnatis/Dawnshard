@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.DTO;
+using DragaliaAPI.Features.ClientState;
 using DragaliaAPI.Features.Dungeon.AutoRepeat;
 using DragaliaAPI.Features.Savefile;
 using DragaliaAPI.Features.TimeAttack;

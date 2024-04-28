@@ -9,6 +9,6 @@ using System.Diagnostics.CodeAnalysis;
     "Design",
     "CA1041:Provide ObsoleteAttribute message",
     Scope = "namespaceanddescendants",
-    Target = "~N:DragaliaAPI.Models.Generated",
+    Target = "~N:DragaliaAPI.DTO",
     Justification = "In every case indicates a field no longer used by the game with no alternative"
 )]

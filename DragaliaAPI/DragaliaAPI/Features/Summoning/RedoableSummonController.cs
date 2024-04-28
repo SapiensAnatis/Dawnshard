@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.DTO;
+using DragaliaAPI.Features.ClientState;
 using DragaliaAPI.Features.Savefile;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Infrastructure.Results;

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Formatters;
 
-namespace DragaliaAPI.Controllers.Other;
+namespace DragaliaAPI.Features.Savefile;
 
 public class ApiJsonOutputAttribute : ResultFilterAttribute
 {

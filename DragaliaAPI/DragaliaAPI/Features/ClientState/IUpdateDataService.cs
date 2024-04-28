@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.DTO;
 
-namespace DragaliaAPI.Features.Savefile;
+namespace DragaliaAPI.Features.ClientState;
 
 public interface IUpdateDataService
 {

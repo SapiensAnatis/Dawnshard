@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.DTO;
+using DragaliaAPI.Features.ClientState;
 using DragaliaAPI.Features.Savefile;
 using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Infrastructure.Results;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Controllers.Other;
+namespace DragaliaAPI.Features.Savefile;
 
 [Route("savefile")]
 [Consumes("application/json")]

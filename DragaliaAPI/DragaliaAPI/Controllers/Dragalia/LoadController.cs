@@ -1,6 +1,7 @@
 ﻿//#define TEST
 
 using DragaliaAPI.DTO;
+using DragaliaAPI.Features.ClientState;
 using DragaliaAPI.Features.Savefile;
 using DragaliaAPI.Features.Savefile.Update;
 using DragaliaAPI.Infrastructure;

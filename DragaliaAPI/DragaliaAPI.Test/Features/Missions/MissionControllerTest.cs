@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.DTO;
 using DragaliaAPI.DTO;
+using DragaliaAPI.Features.ClientState;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Savefile;

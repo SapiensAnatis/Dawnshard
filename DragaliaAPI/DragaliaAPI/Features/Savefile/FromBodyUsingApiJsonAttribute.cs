@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace DragaliaAPI.Controllers.Other;
+namespace DragaliaAPI.Features.Savefile;
 
 public sealed class FromBodyUsingApiJsonAttribute : ModelBinderAttribute
 {

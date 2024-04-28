@@ -2,6 +2,7 @@ using AutoMapper;
 using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.DTO;
+using DragaliaAPI.Features.ClientState;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Features.Savefile;

@@ -20,7 +20,7 @@ using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using DragaliaAPI.Shared.Enums;
 
-namespace DragaliaAPI.Features.Savefile;
+namespace DragaliaAPI.Features.ClientState;
 
 public class UpdateDataService(
     ApiContext apiContext,

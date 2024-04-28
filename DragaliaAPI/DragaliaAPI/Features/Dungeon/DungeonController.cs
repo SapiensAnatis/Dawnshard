@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.DTO;
+using DragaliaAPI.Features.ClientState;
 using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Features.Reward;

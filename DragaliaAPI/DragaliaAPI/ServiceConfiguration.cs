@@ -2,6 +2,7 @@
 using DragaliaAPI.Features.Blazor;
 using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.ClearParty;
+using DragaliaAPI.Features.ClientState;
 using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.DmodeDungeon;
 using DragaliaAPI.Features.Dungeon;

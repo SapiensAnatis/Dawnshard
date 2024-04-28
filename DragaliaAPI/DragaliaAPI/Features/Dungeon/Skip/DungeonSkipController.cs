@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.DTO;
+using DragaliaAPI.Features.ClientState;
 using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Payment;
 using DragaliaAPI.Features.Reward;

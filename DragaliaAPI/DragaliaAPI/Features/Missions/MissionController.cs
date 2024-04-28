@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.DTO;
+using DragaliaAPI.Features.ClientState;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Savefile;
 using DragaliaAPI.Infrastructure;
