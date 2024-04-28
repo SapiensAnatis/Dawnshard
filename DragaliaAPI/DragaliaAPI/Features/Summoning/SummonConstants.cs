@@ -3,6 +3,8 @@ namespace DragaliaAPI.Features.Summoning;
 public static class SummonConstants
 {
     public const int RedoableSummonBannerId = -1;
+    public const int AdventurerSummonPlusBannerId = -2;
+    public const int DragonSummonPlusBannerId = -3;
 
     public const int SingleCrystalCost = 120;
     public const int SingleDiamondCost = 120;

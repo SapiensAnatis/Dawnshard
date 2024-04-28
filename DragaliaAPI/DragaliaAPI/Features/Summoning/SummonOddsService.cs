@@ -2,6 +2,7 @@ using System.Diagnostics;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using DragaliaAPI.Shared.Features.Summoning;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -178,8 +179,20 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
         };
     }
 
-    public async Task<OddsRate> GetGuaranteeOddsRate(int bannerId)
+    public async Task<OddsRate?> GetGuaranteeOddsRate(int bannerId)
     {
+        if (
+            optionsMonitor.CurrentValue.Banners.First(x => x.Id == bannerId).SummonType
+            != SummonTypes.Normal
+        )
+        {
+            // Certain special banners, like the 5* summon voucher ones, have no concept
+            // of a guarantee rate -- because you can't execute a tenfold on them.
+            // We must return null for these, otherwise the guarantee tab appears in
+            // Japanese text.
+            return null;
+        }
+
         RateData rates = await this.GetGuaranteeUnitRates(bannerId);
 
         Dictionary<int, RarityList> pickupRarityLists =

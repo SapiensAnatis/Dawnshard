@@ -1,5 +1,6 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Summoning;
+using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Summoning;
@@ -247,7 +248,7 @@ public class SummonTest : TestFixture
                 new SummonList()
                 {
                     SummonId = TestBannerId,
-                    SummonType = 2,
+                    SummonType = SummonTypes.Normal,
                     SingleCrystal = 120,
                     SingleDiamond = 120,
                     MultiCrystal = 1200,

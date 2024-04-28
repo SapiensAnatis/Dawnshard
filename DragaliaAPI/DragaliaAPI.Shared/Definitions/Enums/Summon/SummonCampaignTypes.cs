@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Shared.Definitions.Enums;
+﻿namespace DragaliaAPI.Shared.Definitions.Enums.Summon;
 
 /// <summary>
 /// Types of Summoning Banners

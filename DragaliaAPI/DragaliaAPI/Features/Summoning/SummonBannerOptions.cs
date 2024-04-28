@@ -1,46 +1,14 @@
 using System.Collections.ObjectModel;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models.Summon;
 
 namespace DragaliaAPI.Features.Summoning;
 
 public class SummonBannerOptions
 {
-    private static readonly Banner RerollBanner =
-        new()
-        {
-            Id = SummonConstants.RedoableSummonBannerId,
-            IsGala = true,
-            Start = DateTimeOffset.MinValue,
-            End = DateTimeOffset.MaxValue,
-        };
-
-    private static readonly Banner AdventurerSummonBanner =
-        new()
-        {
-            Id = MasterAsset.SummonTicket[SummonTickets.AdventurerSummon].SummonId,
-            RequiredTicketId = SummonTickets.AdventurerSummon,
-            Start = DateTimeOffset.MinValue,
-            End = DateTimeOffset.MaxValue,
-            OverrideCharaPool =
-            [
-                Charas.Naveed,
-                Charas.Mikoto,
-                Charas.Ezelith,
-                Charas.Xander,
-                Charas.Xainfried,
-                Charas.Lily,
-                Charas.Hawk,
-                Charas.Louise,
-                Charas.Maribelle,
-                Charas.Julietta,
-                Charas.Lucretia,
-                Charas.Hildegarde,
-                Charas.Nefaria
-            ]
-        };
-
     private readonly List<Banner> banners = [];
 
     /// <summary>
@@ -57,8 +25,11 @@ public class SummonBannerOptions
     /// </summary>
     public void PostConfigure()
     {
-        this.banners.Add(RerollBanner);
-        this.banners.Add(AdventurerSummonBanner);
+        this.banners.Add(SystemBanners.RerollBanner);
+        this.banners.Add(SystemBanners.AdventurerSummonBanner);
+        this.banners.Add(SystemBanners.DragonSummonBanner);
+        this.banners.Add(SystemBanners.AdventurerSummonPlusBanner);
+        this.banners.Add(SystemBanners.DragonSummonPlusBanner);
 
         foreach (Banner banner in this.banners)
         {
@@ -69,6 +40,8 @@ public class SummonBannerOptions
 
 public class Banner
 {
+    private SummonTypes summonType;
+
     /// <summary>
     /// Gets the ID of the banner, as well as its associated summon point trade.
     /// </summary>
@@ -93,11 +66,6 @@ public class Banner
     /// Gets a value indicating whether the banner is a prize showcase and awards materials too.
     /// </summary>
     public bool IsPrizeShowcase { get; init; }
-
-    /// <summary>
-    /// Gets the type of <see cref="SummonTickets"/> that are required to summon on the banner.
-    /// </summary>
-    public SummonTickets? RequiredTicketId { get; init; }
 
     /// <summary>
     /// Gets a list of characters on rate up.
@@ -137,6 +105,17 @@ public class Banner
         get;
         private set;
     } = ReadOnlyDictionary<int, AtgenSummonPointTradeList>.Empty;
+
+    /// <summary>
+    /// Gets the special ticket required to summon on this banner.
+    /// </summary>
+    public SummonTickets? RequiredTicketId { get; init; }
+
+    public SummonTypes SummonType
+    {
+        get => this.summonType;
+        init => this.summonType = value;
+    }
 
     /// <summary>
     /// Gets a list of characters that should override the default pool.
@@ -183,5 +162,14 @@ public class Banner
         this.TradeDictionary = tradeCharas
             .Concat(tradeDragons)
             .ToDictionary(x => x.TradeId, x => x);
+
+        // Get summon type from MasterAsset, if not explicitly specified
+        if (
+            this.summonType == default
+            && MasterAsset.SummonData.TryGetValue(this.Id, out SummonData? summonData)
+        )
+        {
+            this.summonType = summonData.SummonType;
+        }
     }
 }

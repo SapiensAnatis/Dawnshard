@@ -8,6 +8,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using DragaliaAPI.Shared.Features.Summoning;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -59,7 +60,9 @@ public class SummonController(
     )
     {
         OddsRate baseOddsRate = await summonOddsService.GetNormalOddsRate(request.SummonId);
-        OddsRate guaranteeOddsRate = await summonOddsService.GetGuaranteeOddsRate(request.SummonId);
+        OddsRate? guaranteeOddsRate = await summonOddsService.GetGuaranteeOddsRate(
+            request.SummonId
+        );
 
         return new SummonGetOddsDataResponse(
             new OddsRateList(int.MaxValue, baseOddsRate, guaranteeOddsRate),
@@ -76,23 +79,23 @@ public class SummonController(
     [Route("get_summon_list")]
     public async Task<DragaliaResult<SummonGetSummonListResponse>> GetSummonList()
     {
-        IEnumerable<SummonList> bannerList = await summonService.GetSummonList();
-        IEnumerable<SummonTicketList> ticketList = await summonService.GetSummonTicketList();
-        IEnumerable<SummonPointList> pointList = await summonService.GetSummonPointList();
-
+        IList<SummonList> bannerList = await summonService.GetSummonList();
+        IList<SummonTicketList> ticketList = await summonService.GetSummonTicketList();
+        IList<SummonPointList> pointList = await summonService.GetSummonPointList();
+        // csharpier-ignore-start
         return new SummonGetSummonListResponse()
         {
-            SummonList = bannerList,
+            SummonList = bannerList.Where(x => x.SummonType == SummonTypes.Normal),
             SummonTicketList = ticketList,
             SummonPointList = pointList,
             CampaignSummonList = [],
-            CharaSsrSummonList = [],
-            DragonSsrSummonList = [],
-            CharaSsrUpdateSummonList = [],
-            DragonSsrUpdateSummonList = [],
-            CampaignSsrSummonList = [],
-            PlatinumSummonList = [],
-            ExcludeSummonList = [],
+            CharaSsrSummonList = bannerList.Where(x => x.SummonType == SummonTypes.CharaSsr),
+            DragonSsrSummonList = bannerList.Where(x => x.SummonType == SummonTypes.DragonSsr),
+            CharaSsrUpdateSummonList = bannerList.Where(x => x.SummonType == SummonTypes.CharaSsrUpdate),
+            DragonSsrUpdateSummonList = bannerList.Where(x => x.SummonType == SummonTypes.DragonSsrUpdate),
+            CampaignSsrSummonList = bannerList.Where(x => x.SummonType == SummonTypes.CampaignSsr),
+            PlatinumSummonList = bannerList.Where(x => x.SummonType == SummonTypes.Platinum),
+            ExcludeSummonList = bannerList.Where(x => x.SummonType == SummonTypes.Exclude),
             CsSummonList = new()
             {
                 SummonList = [],
@@ -102,6 +105,7 @@ public class SummonController(
                 ExcludeSummonList = [],
             },
         };
+        // csharpier-ignore-end
     }
 
     [HttpPost]
@@ -140,6 +144,8 @@ public class SummonController(
         CancellationToken cancellationToken
     )
     {
+        int execCount = summonRequest.ExecCount > 0 ? summonRequest.ExecCount : 1;
+
         SummonList? summonList = await summonService.GetSummonList(summonRequest.SummonId);
 
         DbPlayerBannerData? playerBannerData = await summonService.GetPlayerBannerData(
@@ -162,7 +168,7 @@ public class SummonController(
 
         List<AtgenRedoableSummonResultUnitList> summonResult =
             await summonService.GenerateSummonResult(
-                summonRequest.ExecCount,
+                execCount,
                 summonRequest.SummonId,
                 summonRequest.ExecType
             );

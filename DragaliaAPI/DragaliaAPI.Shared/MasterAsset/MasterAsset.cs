@@ -132,6 +132,7 @@ namespace DragaliaAPI.Shared.MasterAsset;
 [GenerateMasterAsset<QuestWallDetail>("Wall/QuestWallDetail.json")]
 [GenerateMasterAsset<QuestWallMonthlyReward>("Wall/QuestWallMonthlyReward.json")]
 [GenerateMasterAsset<SummonTicket>("Summon/SummonTicket.json")]
+[GenerateMasterAsset<SummonData>("Summon/SummonData.json")]
 // csharpier-ignore-end
 public static partial class MasterAsset
 {
