@@ -330,8 +330,7 @@ public sealed partial class SummonService(
             (PaymentTypes.Wyrmite, SummonExecTypes.Single) => summonList.SingleCrystal * execCount,
             (PaymentTypes.Ticket, SummonExecTypes.Tenfold) => 1,
             (PaymentTypes.Ticket, SummonExecTypes.Single) => execCount,
-            (PaymentTypes.FreeDailyExecDependant, SummonExecTypes.Single) => 0,
-            (PaymentTypes.FreeDailyTenfold, SummonExecTypes.Single) => 0,
+            (PaymentTypes.FreeDailyTenfold, SummonExecTypes.Tenfold) => 0,
             _
                 => throw new DragaliaException(
                     ResultCode.SummonTypeUnexpected,

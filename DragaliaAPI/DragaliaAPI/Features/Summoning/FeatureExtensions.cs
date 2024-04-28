@@ -21,7 +21,8 @@ public static partial class FeatureExtensions
             .Validate(
                 opts => opts.Banners.DistinctBy(x => x.Id).Count() == opts.Banners.Count,
                 "bannerConfig.json IDs must be unique!"
-            );
+            )
+            .ValidateOnStart();
 
         return serviceCollection;
     }

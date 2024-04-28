@@ -2,8 +2,6 @@
 using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
@@ -26,7 +24,6 @@ public class SummonController(
     IUnitRepository unitRepository,
     IUpdateDataService updateDataService,
     SummonService summonService,
-    IPaymentService paymentService,
     SummonOddsService summonOddsService
 ) : DragaliaControllerBase
 {
