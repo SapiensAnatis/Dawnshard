@@ -1,10 +1,11 @@
 using System.Collections.Frozen;
 using System.Diagnostics;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using DragaliaAPI;
+using DragaliaAPI.Authentication;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.GraphQL;
+using DragaliaAPI.Infrastructure.Hangfire;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
@@ -13,6 +14,7 @@ using DragaliaAPI.Services.Health;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.MasterAsset;
 using EntityGraphQL.AspNet;
+using Hangfire;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
@@ -67,6 +69,9 @@ PostgresOptions postgresOptions =
 RedisOptions redisOptions =
     builder.Configuration.GetSection(nameof(RedisOptions)).Get<RedisOptions>()
     ?? throw new InvalidOperationException("Failed to get Redis config");
+HangfireOptions hangfireOptions =
+    builder.Configuration.GetSection(nameof(HangfireOptions)).Get<HangfireOptions>()
+    ?? new() { Enabled = false };
 
 builder.Services.ConfigureDatabaseServices(postgresOptions);
 builder.Services.AddStackExchangeRedisCache(options =>
@@ -78,6 +83,11 @@ builder.Services.AddStackExchangeRedisCache(options =>
     };
     options.InstanceName = "RedisInstance";
 });
+
+if (hangfireOptions.Enabled)
+{
+    builder.Services.ConfigureHangfire(postgresOptions);
+}
 
 builder.Services.AddDataProtection().PersistKeysToDbContext<ApiContext>();
 
@@ -177,6 +187,20 @@ app.MapWhen(
         });
     }
 );
+
+if (hangfireOptions.Enabled)
+{
+    app.AddHangfireJobs();
+    app.UseHangfireDashboard();
+    app.MapHangfireDashboard()
+        .RequireAuthorization(policy =>
+        {
+            policy
+                .RequireAuthenticatedUser()
+                .RequireRole(Constants.Roles.Developer)
+                .AddAuthenticationSchemes(SchemeName.Developer);
+        });
+}
 
 app.MapHealthChecks(
     "/health",

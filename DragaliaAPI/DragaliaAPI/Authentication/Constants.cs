@@ -10,4 +10,9 @@ public class Constants
     {
         public const string OriginalPage = "OriginalPage";
     }
+
+    public static class Roles
+    {
+        public const string Developer = "Developer";
+    }
 }

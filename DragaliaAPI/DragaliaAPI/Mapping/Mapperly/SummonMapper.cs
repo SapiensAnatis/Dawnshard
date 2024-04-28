@@ -1,6 +1,5 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services.Game;
 using Riok.Mapperly.Abstractions;
 
 namespace DragaliaAPI.Mapping.Mapperly;
@@ -28,4 +27,10 @@ public static partial class SummonMapper
 
     [MapperRequiredMapping(RequiredMappingStrategy.Target)]
     public static partial SummonTicketList ToSummonTicketList(this DbSummonTicket summonTicket);
+
+    [MapperRequiredMapping(RequiredMappingStrategy.Target)]
+    [MapProperty(nameof(DbPlayerSummonHistory.SummonId), nameof(SummonHistoryList.SummonPointId))] // Always the same for our purposes.
+    public static partial SummonHistoryList ToSummonHistoryList(
+        this DbPlayerSummonHistory summonHistory
+    );
 }
