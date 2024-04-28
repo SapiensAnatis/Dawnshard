@@ -1,5 +1,5 @@
-﻿using DragaliaAPI.Extensions;
-using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.Infrastructure.Extensions;
 using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Features.DmodeDungeon;

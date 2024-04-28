@@ -1,4 +1,4 @@
-﻿@using DragaliaAPI.Authentication
+﻿@using DragaliaAPI.Infrastructure.Authentication
 @{
     string? darkModeCookie = this.HttpContext?.Request.Cookies.FirstOrDefault(x => x.Key == "darkMode").Value;
     bool? isDarkMode = null;

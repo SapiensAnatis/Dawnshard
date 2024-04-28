@@ -1,5 +1,6 @@
 using DragaliaAPI.MissionDesigner.Models;
 using DragaliaAPI.MissionDesigner.Models.Attributes;
+using DragaliaAPI.MissionDesigner.Models.RegularMission;
 
 namespace DragaliaAPI.MissionDesigner.Missions.Normal.Wall;
 

@@ -1,4 +1,5 @@
-using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;

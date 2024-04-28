@@ -8,7 +8,7 @@ using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Present;
-using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Features.Shared.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;

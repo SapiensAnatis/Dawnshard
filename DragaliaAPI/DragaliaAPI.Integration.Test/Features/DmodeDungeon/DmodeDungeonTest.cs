@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Infrastructure.Results;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.DmodeDungeon;

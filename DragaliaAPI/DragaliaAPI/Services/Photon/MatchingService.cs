@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Features.Shared.Models.Generated;
 using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Services.Api;
 using DragaliaAPI.Shared.Definitions.Enums;

@@ -1,8 +1,9 @@
 using DragaliaAPI.MissionDesigner.Models;
 using DragaliaAPI.MissionDesigner.Models.Attributes;
 using DragaliaAPI.MissionDesigner.Models.EventMission;
+using DragaliaAPI.MissionDesigner.Models.RegularMission;
 
-namespace DragaliaAPI.MissionDesigner.Missions;
+namespace DragaliaAPI.MissionDesigner.Missions.MemoryEvent;
 
 [ContainsMissionList]
 public static class AccursedArchives

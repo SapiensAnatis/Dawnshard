@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

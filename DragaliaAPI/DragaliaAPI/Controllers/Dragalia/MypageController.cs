@@ -1,7 +1,8 @@
 ﻿using DragaliaAPI.Features.Dungeon.AutoRepeat;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Shared.Models.Generated;
 using DragaliaAPI.Features.Shop;
-using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.AspNetCore.Mvc;

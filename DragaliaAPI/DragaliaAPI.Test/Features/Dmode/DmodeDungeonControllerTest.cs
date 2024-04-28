@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.Features.DmodeDungeon;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Features.Shared.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 

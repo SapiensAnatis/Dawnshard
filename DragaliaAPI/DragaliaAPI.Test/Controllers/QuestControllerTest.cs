@@ -1,6 +1,6 @@
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.Quest;
-using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Features.Shared.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.Extensions.Logging;

@@ -2,7 +2,8 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 

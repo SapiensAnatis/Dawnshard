@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.Infrastructure.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia;

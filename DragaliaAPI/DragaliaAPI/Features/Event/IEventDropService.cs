@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Features.Shared.Models.Generated;
 using DragaliaAPI.Shared.MasterAsset.Models;
 
 namespace DragaliaAPI.Features.Event;

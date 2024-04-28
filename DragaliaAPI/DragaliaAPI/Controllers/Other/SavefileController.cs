@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Middleware;
-using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.Infrastructure.Authentication;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authorization;

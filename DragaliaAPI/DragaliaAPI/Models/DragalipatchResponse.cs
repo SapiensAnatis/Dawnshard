@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Models.Options;
+﻿using DragaliaAPI.Infrastructure.Options;
 
 namespace DragaliaAPI.Models;
 

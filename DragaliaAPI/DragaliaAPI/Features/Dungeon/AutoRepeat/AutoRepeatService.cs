@@ -1,6 +1,6 @@
-using DragaliaAPI.Extensions;
-using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Models.Options;
+using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.Infrastructure.Extensions;
+using DragaliaAPI.Infrastructure.Options;
 using DragaliaAPI.Shared.Definitions.Enums.Dungeon;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Caching.Distributed;

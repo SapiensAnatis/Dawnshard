@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Features.Version;
+using DragaliaAPI.Infrastructure.Results;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 

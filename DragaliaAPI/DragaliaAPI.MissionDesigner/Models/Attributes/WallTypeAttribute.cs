@@ -1,3 +1,5 @@
+using DragaliaAPI.MissionDesigner.Models.RegularMission;
+
 namespace DragaliaAPI.MissionDesigner.Models.Attributes;
 
 public sealed class WallTypeAttribute(QuestWallTypes type) : ImplicitPropertyAttribute

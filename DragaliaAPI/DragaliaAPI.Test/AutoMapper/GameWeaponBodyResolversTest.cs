@@ -1,6 +1,6 @@
 using AutoMapper;
-using DragaliaAPI.AutoMapper;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Infrastructure.Mapping.AutoMapper;
 using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Test.AutoMapper;

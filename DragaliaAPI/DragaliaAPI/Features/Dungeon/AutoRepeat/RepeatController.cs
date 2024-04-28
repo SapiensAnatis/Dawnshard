@@ -1,5 +1,8 @@
 using DragaliaAPI.Controllers;
-using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.Infrastructure.Exceptions;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Services.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 

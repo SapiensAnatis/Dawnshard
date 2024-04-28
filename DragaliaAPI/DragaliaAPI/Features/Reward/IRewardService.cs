@@ -1,5 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Features.Shared.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Features.Reward;

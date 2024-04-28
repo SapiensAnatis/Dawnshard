@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Features.Shared.Models.Generated;
 using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Infrastructure.Exceptions;
+using DragaliaAPI.Infrastructure.Extensions;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Models;
-using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;

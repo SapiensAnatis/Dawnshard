@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;

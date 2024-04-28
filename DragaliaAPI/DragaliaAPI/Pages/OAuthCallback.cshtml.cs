@@ -1,9 +1,9 @@
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
-using DragaliaAPI.Authentication;
 using DragaliaAPI.Database;
-using DragaliaAPI.Models.Options;
+using DragaliaAPI.Infrastructure.Authentication;
+using DragaliaAPI.Infrastructure.Options;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

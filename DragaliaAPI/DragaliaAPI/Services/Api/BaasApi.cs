@@ -1,5 +1,8 @@
-﻿using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Models.Options;
+﻿using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.Infrastructure.Exceptions;
+using DragaliaAPI.Infrastructure.Options;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Serialization;
 using Microsoft.Extensions.Caching.Distributed;

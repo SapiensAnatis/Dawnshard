@@ -1,6 +1,6 @@
-﻿using DragaliaAPI.Models;
+﻿using DragaliaAPI.Infrastructure.Options;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Nintendo;
-using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.PlayerDetails;

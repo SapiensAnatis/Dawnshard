@@ -1,3 +1,5 @@
+using DragaliaAPI.Infrastructure.Results;
+
 namespace DragaliaAPI.Integration.Test.Features.Load;
 
 public class LoadIndexTest : TestFixture

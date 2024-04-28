@@ -1,6 +1,7 @@
-﻿using DragaliaAPI.Features.Player;
+﻿using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Player;
+using DragaliaAPI.Features.Shared.Models.Generated;
 using DragaliaAPI.Models;
-using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Features.Quest;
 

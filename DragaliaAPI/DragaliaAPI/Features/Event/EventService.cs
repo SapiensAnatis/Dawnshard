@@ -2,7 +2,10 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.Infrastructure.Exceptions;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;

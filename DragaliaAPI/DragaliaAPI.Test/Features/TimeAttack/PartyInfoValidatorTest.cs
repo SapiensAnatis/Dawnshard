@@ -1,5 +1,5 @@
-﻿using DragaliaAPI.Features.TimeAttack.Validation;
-using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.Features.TimeAttack.Validation;
 using DragaliaAPI.Shared.Definitions.Enums;
 using FluentValidation.TestHelper;
 

@@ -2,8 +2,8 @@
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared.Models.Generated;
 using DragaliaAPI.Models;
-using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using static DragaliaAPI.Services.Game.TutorialService;

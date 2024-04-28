@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models;
+﻿using DragaliaAPI.Infrastructure.Results;
+using DragaliaAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;

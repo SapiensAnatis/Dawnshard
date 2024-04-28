@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Chara;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;

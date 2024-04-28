@@ -1,7 +1,8 @@
 using DragaliaAPI.MissionDesigner.Models;
 using DragaliaAPI.MissionDesigner.Models.Attributes;
+using DragaliaAPI.MissionDesigner.Models.RegularMission;
 
-namespace DragaliaAPI.MissionDesigner.Missions;
+namespace DragaliaAPI.MissionDesigner.Missions.Daily;
 
 [ContainsMissionList]
 public static class PermanentDailies

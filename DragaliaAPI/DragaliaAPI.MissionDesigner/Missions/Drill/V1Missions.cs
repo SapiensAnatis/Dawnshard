@@ -1,4 +1,4 @@
-namespace DragaliaAPI.MissionDesigner.Missions;
+namespace DragaliaAPI.MissionDesigner.Missions.Drill;
 
 public static class V1Missions
 {

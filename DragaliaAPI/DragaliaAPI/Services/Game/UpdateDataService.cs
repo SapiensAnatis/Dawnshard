@@ -6,8 +6,8 @@ using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Present;
-using DragaliaAPI.Mapping.Mapperly;
-using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.Infrastructure.Mapping.Mapperly;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
@@ -60,39 +60,43 @@ public class UpdateDataService(
                     break;
                 case DbPlayerCharaData charaData:
                     list.CharaList ??= [];
-                    list.CharaList.Add(charaData.ToCharaList());
+                    list.CharaList.Add(CharaMapper.ToCharaList(charaData));
                     break;
                 case DbPlayerDragonData dragonData:
                     list.DragonList ??= [];
-                    list.DragonList.Add(dragonData.ToDragonList());
+                    list.DragonList.Add(DragonMapper.ToDragonList(dragonData));
                     break;
                 case DbPlayerDragonReliability reliability:
                     list.DragonReliabilityList ??= [];
-                    list.DragonReliabilityList.Add(reliability.ToDragonReliabilityList());
+                    list.DragonReliabilityList.Add(
+                        DragonReliabilityMapper.ToDragonReliabilityList(reliability)
+                    );
                     break;
                 case DbWeaponBody weaponBody:
                     list.WeaponBodyList ??= [];
-                    list.WeaponBodyList.Add(weaponBody.ToWeaponBodyList());
+                    list.WeaponBodyList.Add(WeaponBodyMapper.ToWeaponBodyList(weaponBody));
                     break;
                 case DbWeaponSkin weaponSkin:
                     list.WeaponSkinList ??= [];
-                    list.WeaponSkinList.Add(weaponSkin.ToWeaponSkinList());
+                    list.WeaponSkinList.Add(WeaponSkinMapper.ToWeaponSkinList(weaponSkin));
                     break;
                 case DbAbilityCrest abilityCrest:
                     list.AbilityCrestList ??= [];
-                    list.AbilityCrestList.Add(abilityCrest.ToAbilityCrestList());
+                    list.AbilityCrestList.Add(AbilityCrestMapper.ToAbilityCrestList(abilityCrest));
                     break;
                 case DbAbilityCrestSet abilityCrestSet:
                     list.AbilityCrestSetList ??= [];
-                    list.AbilityCrestSetList.Add(abilityCrestSet.ToAbilityCrestSetList());
+                    list.AbilityCrestSetList.Add(
+                        AbilityCrestSetMapper.ToAbilityCrestSetList(abilityCrestSet)
+                    );
                     break;
                 case DbParty party:
                     list.PartyList ??= [];
-                    list.PartyList.Add(party.ToPartyList());
+                    list.PartyList.Add(PartyMapper.ToPartyList(party));
                     break;
                 case DbPlayerStoryState { StoryType: StoryTypes.Quest } story:
                     list.QuestStoryList ??= [];
-                    list.QuestStoryList.Add(story.ToQuestStoryList());
+                    list.QuestStoryList.Add(StoryMapper.ToQuestStoryList(story));
                     break;
                 case DbPlayerStoryState { StoryType: StoryTypes.Chara or StoryTypes.Dragon } story:
                     list.UnitStoryList ??= [];
@@ -108,50 +112,54 @@ public class UpdateDataService(
                     break;
                 case DbPlayerMaterial material:
                     list.MaterialList ??= [];
-                    list.MaterialList.Add(material.ToMaterialList());
+                    list.MaterialList.Add(MaterialMapper.ToMaterialList(material));
                     break;
                 case DbPlayerDragonGift dragonGift:
                     list.DragonGiftList ??= [];
-                    list.DragonGiftList.Add(dragonGift.ToDragonGift());
+                    list.DragonGiftList.Add(DragonGiftMapper.ToDragonGift(dragonGift));
                     break;
                 case DbQuest quest:
                     list.QuestList ??= [];
-                    list.QuestList.Add(quest.ToQuestList());
+                    list.QuestList.Add(QuestMapper.ToQuestList(quest));
                     break;
                 case DbFortBuild build:
                     list.BuildList ??= [];
-                    list.BuildList.Add(build.ToBuildList());
+                    list.BuildList.Add(FortBuildMapper.ToBuildList(build));
                     break;
                 case DbWeaponPassiveAbility weaponPassive:
                     list.WeaponPassiveAbilityList ??= [];
-                    list.WeaponPassiveAbilityList.Add(weaponPassive.ToWeaponPassiveAbilityList());
+                    list.WeaponPassiveAbilityList.Add(
+                        WeaponPassiveAbilityMapper.ToWeaponPassiveAbilityList(weaponPassive)
+                    );
                     break;
                 case DbPlayerUseItem useItem:
                     list.ItemList ??= [];
-                    list.ItemList.Add(useItem.ToItemList());
+                    list.ItemList.Add(UseItemMapper.ToItemList(useItem));
                     break;
                 case DbTalisman talisman:
                     list.TalismanList ??= [];
-                    list.TalismanList.Add(talisman.ToTalismanList());
+                    list.TalismanList.Add(TalismanMapper.ToTalismanList(talisman));
                     break;
                 case DbSummonTicket summonTicket:
                     list.SummonTicketList ??= [];
-                    list.SummonTicketList.Add(summonTicket.ToSummonTicketList());
+                    list.SummonTicketList.Add(SummonMapper.ToSummonTicketList(summonTicket));
                     break;
                 case DbQuestEvent questEvent:
                     list.QuestEventList ??= [];
-                    list.QuestEventList.Add(questEvent.ToQuestEventList());
+                    list.QuestEventList.Add(QuestEventMapper.ToQuestEventList(questEvent));
                     break;
                 case DbQuestTreasureList questTreasure:
                     list.QuestTreasureList ??= [];
-                    list.QuestTreasureList.Add(questTreasure.ToQuestTreasureList());
+                    list.QuestTreasureList.Add(
+                        QuestTreasureMapper.ToQuestTreasureList(questTreasure)
+                    );
                     break;
                 case DbPartyPower partyPower:
-                    list.PartyPowerData = partyPower.ToPartyPowerData();
+                    list.PartyPowerData = PartyPowerMapper.ToPartyPowerData(partyPower);
                     break;
                 case DbPlayerQuestWall wall:
                     list.QuestWallList ??= [];
-                    list.QuestWallList.Add(wall.ToQuestWallList());
+                    list.QuestWallList.Add(WallMapper.ToQuestWallList(wall));
                     break;
                 case DbPlayerBannerData bannerData:
                     list.SummonPointList ??= [];

@@ -1,7 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Mapping.Mapperly;
+using DragaliaAPI.Infrastructure.Mapping.Mapperly;
+using DragaliaAPI.Infrastructure.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -150,7 +151,10 @@ public class WeaponBodyTest : TestFixture
         response
             .UpdateDataList.WeaponBodyList.Should()
             .BeEquivalentTo(
-                new List<WeaponBodyList>() { testCase.ExpFinalState.ToWeaponBodyList() }
+                new List<WeaponBodyList>()
+                {
+                    WeaponBodyMapper.ToWeaponBodyList(testCase.ExpFinalState)
+                }
             );
 
         // Check materials

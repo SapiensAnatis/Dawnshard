@@ -1,5 +1,7 @@
 ﻿using System.Security.Claims;
-using DragaliaAPI.Middleware;
+using DragaliaAPI.Infrastructure.Authentication;
+using DragaliaAPI.Infrastructure.Middleware;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authorization;

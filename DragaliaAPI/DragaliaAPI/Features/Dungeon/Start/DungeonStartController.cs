@@ -1,7 +1,8 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Features.Player;
+using DragaliaAPI.Features.Shared.Models.Generated;
 using DragaliaAPI.Features.TimeAttack;
-using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared.Definitions.Enums;

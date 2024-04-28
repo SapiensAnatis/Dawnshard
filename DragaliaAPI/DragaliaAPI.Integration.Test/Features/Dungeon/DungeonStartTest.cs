@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;

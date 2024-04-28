@@ -1,8 +1,8 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Emblem;
+using DragaliaAPI.Infrastructure.Extensions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.EntityFrameworkCore;

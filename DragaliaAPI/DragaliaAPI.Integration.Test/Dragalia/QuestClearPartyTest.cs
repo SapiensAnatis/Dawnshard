@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Quest;
+using DragaliaAPI.Infrastructure.Results;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;

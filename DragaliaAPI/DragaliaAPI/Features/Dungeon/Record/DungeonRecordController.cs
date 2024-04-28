@@ -1,9 +1,10 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Features.Dungeon.AutoRepeat;
+using DragaliaAPI.Features.Shared.Models.Generated;
 using DragaliaAPI.Features.TimeAttack;
-using DragaliaAPI.Middleware;
+using DragaliaAPI.Infrastructure.Authentication;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Models;
-using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Authorization;

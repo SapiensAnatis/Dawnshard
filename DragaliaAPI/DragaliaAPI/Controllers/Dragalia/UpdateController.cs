@@ -2,7 +2,10 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Emblem;
 using DragaliaAPI.Features.Fort;
-using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Features.Shared.Models.Generated;
+using DragaliaAPI.Infrastructure.Exceptions;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
 using Microsoft.AspNetCore.Mvc;

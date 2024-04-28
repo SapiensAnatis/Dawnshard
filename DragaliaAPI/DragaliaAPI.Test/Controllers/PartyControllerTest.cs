@@ -3,7 +3,7 @@ using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.PartyPower;
-using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Features.Shared.Models.Generated;
 using DragaliaAPI.Services;
 using Microsoft.Extensions.Logging;
 

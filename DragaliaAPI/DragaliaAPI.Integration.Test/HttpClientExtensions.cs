@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
-using DragaliaAPI.MessagePack;
+using DragaliaAPI.Infrastructure.MessagePack;
+using DragaliaAPI.Infrastructure.Results;
 using MessagePack;
 
 namespace DragaliaAPI.Integration.Test;

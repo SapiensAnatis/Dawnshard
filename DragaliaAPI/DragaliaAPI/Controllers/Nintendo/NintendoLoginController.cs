@@ -1,5 +1,5 @@
-﻿using DragaliaAPI.Models.Nintendo;
-using DragaliaAPI.Models.Options;
+﻿using DragaliaAPI.Infrastructure.Options;
+using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared;
 using Microsoft.AspNetCore.Mvc;

@@ -1,6 +1,5 @@
 ﻿global using System.Text.Json;
-global using DragaliaAPI.Models.Generated;
-global using DragaliaAPI.Models.Results;
+global using DragaliaAPI.Features.Shared.Models.Generated;
 global using DragaliaAPI.Shared.Definitions.Enums;
 global using DragaliaAPI.Test.Utils;
 global using FluentAssertions;

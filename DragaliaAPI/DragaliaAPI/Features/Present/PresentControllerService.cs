@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Features.Shared.Models.Generated;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Present;
