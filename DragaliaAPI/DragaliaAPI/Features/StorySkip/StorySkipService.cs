@@ -8,8 +8,10 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Features.StorySkip;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
+using static DragaliaAPI.Shared.Features.StorySkip.FortConfigurations;
 
 namespace DragaliaAPI.Features.StorySkip;
 
@@ -73,27 +75,7 @@ public class StorySkipService(
 
     public async Task IncreaseFortLevels()
     {
-        Dictionary<FortPlants, FortConfig> fortConfigs = new() {
-            { FortPlants.TheHalidom, new FortConfig(6, 1) },
-            { FortPlants.Smithy, new FortConfig(6, 1) },
-            { FortPlants.RupieMine, new FortConfig(15, 4) },
-            { FortPlants.Dragontree, new FortConfig(15, 1) },
-            { FortPlants.FlameAltar, new FortConfig(10, 2) },
-            { FortPlants.WaterAltar, new FortConfig(10, 2) },
-            { FortPlants.WindAltar, new FortConfig(10, 2) },
-            { FortPlants.LightAltar, new FortConfig(10, 2) },
-            { FortPlants.ShadowAltar, new FortConfig(10, 2) },
-            { FortPlants.SwordDojo, new FortConfig(10, 2) },
-            { FortPlants.BladeDojo, new FortConfig(10, 2) },
-            { FortPlants.DaggerDojo, new FortConfig(10, 2) },
-            { FortPlants.LanceDojo, new FortConfig(10, 2) },
-            { FortPlants.AxeDojo, new FortConfig(10, 2) },
-            { FortPlants.BowDojo, new FortConfig(10, 2) },
-            { FortPlants.WandDojo, new FortConfig(10, 2)},
-            { FortPlants.StaffDojo, new FortConfig(10, 2) },
-            { FortPlants.ManacasterDojo, new FortConfig(10, 2) }
-        };
-
+        Dictionary<FortPlants, FortConfig> fortConfigs = FortConfigurations.FortConfigs;
 
         foreach (KeyValuePair<FortPlants, FortConfig> keyValuePair in fortConfigs)
         {
@@ -105,7 +87,6 @@ public class StorySkipService(
                 true,
                 fortConfig.Level
             );
-
         }
 
         IEnumerable<BuildList> buildListEnum = await fortService.GetBuildList();
