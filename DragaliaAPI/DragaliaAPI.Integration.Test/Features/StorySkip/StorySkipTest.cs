@@ -19,7 +19,7 @@ public class StorySkipTest : TestFixture
     { }
 
     [Fact]
-    public async Task StorySkip_UpdatePlayerStats()
+    public async Task StorySkip_CheckStats()
     {
         int questId = 100_100_107;
         int storyId = 1_001_009;
