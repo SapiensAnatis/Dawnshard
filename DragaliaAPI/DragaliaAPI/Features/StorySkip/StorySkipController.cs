@@ -1,10 +1,7 @@
 using DragaliaAPI.Controllers;
-using DragaliaAPI.Features.Quest;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
-using DragaliaAPI.Shared.MasterAsset;
-using DragaliaAPI.Shared.MasterAsset.Models;
-using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,74 +12,54 @@ public class StorySkipController : DragaliaControllerBase
 {
     private readonly ILogger<StorySkipController> logger;
     private readonly IPlayerIdentityService playerIdentityService;
-    private readonly IStorySkipService storySkipService;
+    private readonly IQuestRepository questRepository;
+    private readonly StorySkipService storySkipService;
     private readonly IUpdateDataService updateDataService;
+    private readonly IUserDataRepository userDataRepository;
 
     public StorySkipController(
         ILogger<StorySkipController> logger,
         IPlayerIdentityService playerIdentityService,
-        IStorySkipService storySkipService,
-        IUpdateDataService updateDataService
+        IQuestRepository questRepository,
+        StorySkipService storySkipService,
+        IUpdateDataService updateDataService,
+        IUserDataRepository userDataRepository
     )
     {
         this.logger = logger;
         this.playerIdentityService = playerIdentityService;
+        this.questRepository = questRepository;
         this.storySkipService = storySkipService;
         this.updateDataService = updateDataService;
+        this.userDataRepository = userDataRepository;
     }
 
     [HttpPost("skip")]
-    public async Task<DragaliaResult> Read(
-        CancellationToken cancellationToken
-    )
+    public async Task<DragaliaResult> Read(CancellationToken cancellationToken)
     {
-        try
-        {
-            this.logger.LogDebug("Beginning story skip for player.");
+        string accountId = playerIdentityService.AccountId;
+        long viewerId = playerIdentityService.ViewerId;
 
-            IEnumerable<QuestData> questDatas = MasterAsset.QuestData.Enumerable.Where(x =>
-                x.Gid < 10011 && x.Id > 100000000 && x.Id.ToString().Substring(6, 1) == "1"
-            );
-            IEnumerable<QuestTreasureData> questTreasureDatas = MasterAsset.QuestTreasureData.Enumerable.Where(x =>
-                x.Id is < 110000 && x.Id.ToString().Substring(3, 1) == "1"
-            );
-            IEnumerable<QuestStory> questStories = MasterAsset.QuestStory.Enumerable.Where(
-                x => x.GroupId is < 10011
-            );
+        this.logger.LogDebug("Beginning story skip for player {accountId}.", accountId);
 
-            foreach (QuestData questData in questDatas)
-            {
-                await storySkipService.ProcessQuestCompletion(questData.Id);
-            }
+        int wyrmite1 = storySkipService.ProcessQuestCompletions(viewerId);
+        this.logger.LogDebug("Wyrmite earned from quests: {wyrmite}", wyrmite1);
 
-            foreach (QuestTreasureData questTreasureData in questTreasureDatas)
-            {
-                await storySkipService.OpenTreasure(questTreasureData.Id, cancellationToken);
-            }
+        int wyrmite2 = storySkipService.ProcessStoryCompletions(viewerId);
+        this.logger.LogDebug("Wyrmite earned from quest stories: {wyrmite}", wyrmite2);
 
-            foreach (QuestStory questStory in questStories)
-            {
-                await storySkipService.ReadStory(questStory.Id, cancellationToken);
-            }
+        await storySkipService.UpdateUserData(wyrmite1 + wyrmite2);
 
-            await storySkipService.IncreasePlayerLevel();
+        storySkipService.IncreaseFortLevels(viewerId);
 
-            await storySkipService.IncreaseFortLevels();
+        storySkipService.RewardCharas(viewerId);
 
-            UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+        storySkipService.RewardDragons(viewerId);
 
-            this.logger.LogDebug("Story Skip completed for player {AccountId}.", playerIdentityService.AccountId);
+        await updateDataService.SaveChangesAsync(cancellationToken);
 
-            return this.Ok(
-                new StorySkipSkipResponse() { ResultState = 1 }
-            );
-        }
-        catch (Exception e)
-        {
-            this.logger.LogError("Error occurred while skipping story: {Message}", e.Message);
-            return this.Ok(
-                new StorySkipSkipResponse() { ResultState = 0 }
-            );
-        }
+        this.logger.LogDebug("Story Skip completed for player {accountId}.", accountId);
+
+        return this.Ok(new StorySkipSkipResponse() { ResultState = 1 });
     }
 }

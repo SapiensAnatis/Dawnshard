@@ -159,7 +159,7 @@ public static class ServiceConfiguration
             // Zena feature
             .AddScoped<IZenaService, ZenaService>()
             // Story skip feature
-            .AddScoped<IStorySkipService, StorySkipService>()
+            .AddScoped<StorySkipService>()
             // Maintenance feature
             .AddScoped<MaintenanceService>();
 

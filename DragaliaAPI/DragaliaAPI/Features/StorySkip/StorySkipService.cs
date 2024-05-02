@@ -1,111 +1,286 @@
+using System.Collections.Frozen;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Fort;
-using DragaliaAPI.Features.Quest;
-using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
-using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.StorySkip;
 using DragaliaAPI.Shared.MasterAsset;
-using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
-using static DragaliaAPI.Shared.Features.StorySkip.FortConfigurations;
+using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.Story;
+using static DragaliaAPI.Shared.Features.StorySkip.StorySkipRewards;
 
 namespace DragaliaAPI.Features.StorySkip;
 
 public class StorySkipService(
+    ApiContext apiContext,
     IFortRepository fortRepository,
-    IFortService fortService,
     ILogger<StorySkipService> logger,
-    IQuestCompletionService questCompletionService,
     IQuestRepository questRepository,
-    IQuestTreasureService questTreasureService,
-    IRewardService rewardService,
-    IStoryService storyService,
-    IUpdateDataService updateDataService,
+    IStoryRepository storyRepository,
     IUserDataRepository userDataRepository
-) : IStorySkipService
+)
 {
-    private async Task<QuestMissionStatus> CompleteQuestMissions(int questId, bool[] currentState)
+    public void IncreaseFortLevels(long viewerId)
     {
-        List<AtgenMissionsClearSet> clearSet = new();
+        Dictionary<FortPlants, FortConfig> fortConfigs = StorySkipRewards.FortConfigs;
+        IQueryable<DbFortBuild> userForts = fortRepository.Builds.Where(x =>
+            x.ViewerId == viewerId
+        );
+        List<DbFortBuild> newUserForts = new();
 
-        bool[] newState = { true, true, true };
-
-        QuestRewardData rewardData = MasterAsset.QuestRewardData[questId];
-        for (int i = 0; i < 3; i++)
+        foreach ((FortPlants fortPlant, FortConfig fortConfig) in fortConfigs)
         {
-            (QuestCompleteType type, int value) = rewardData.Missions[i];
+            IQueryable<DbFortBuild> fortsToUpdate = userForts.Where(x => x.PlantId == fortPlant);
 
-            if (!currentState[i])
+            foreach (DbFortBuild fortToUpdate in fortsToUpdate)
             {
-                newState[i] = true;
-                (EntityTypes entity, int id, int quantity) = rewardData.Entities[i];
-                await rewardService.GrantReward(new Entity(entity, id, quantity));
-                logger.LogDebug("Completed quest mission {missionId}", i);
-                clearSet.Add(new AtgenMissionsClearSet(id, entity, quantity, i + 1));
-            }
-        }
-
-        List<AtgenFirstClearSet> completeSet = new();
-
-        if (currentState.Any(x => !x) && newState.All(x => x))
-        {
-            await rewardService.GrantReward(
-                new Entity(
-                    rewardData.MissionCompleteEntityType,
-                    rewardData.MissionCompleteEntityId,
-                    rewardData.MissionCompleteEntityQuantity
-                )
-            );
-            logger.LogDebug("Granting bonus for completing all missions");
-            completeSet.Add(
-                new AtgenFirstClearSet(
-                    rewardData.MissionCompleteEntityId,
-                    rewardData.MissionCompleteEntityType,
-                    rewardData.MissionCompleteEntityQuantity
-                )
-            );
-        }
-
-        return new QuestMissionStatus(newState, clearSet, completeSet);
-    }
-
-    public async Task IncreaseFortLevels()
-    {
-        Dictionary<FortPlants, FortConfig> fortConfigs = FortConfigurations.FortConfigs;
-
-        foreach (KeyValuePair<FortPlants, FortConfig> keyValuePair in fortConfigs)
-        {
-            FortPlants fortPlant = keyValuePair.Key;
-            FortConfig fortConfig = keyValuePair.Value;
-            await fortRepository.AddToStorage(
-                fortPlant,
-                fortConfig.BuildCount,
-                true,
-                fortConfig.Level
-            );
-        }
-
-        IEnumerable<BuildList> buildListEnum = await fortService.GetBuildList();
-        foreach (BuildList buildList in buildListEnum)
-        {
-            if (fortConfigs.TryGetValue(buildList.PlantId, out FortConfig fortConfig))
-            {
-                DbFortBuild build = await fortRepository.GetBuilding((long)buildList.BuildId);
-                if (build.Level < fortConfig.Level)
+                if (fortToUpdate.Level < fortConfig.Level)
                 {
-                    build.Level = fortConfig.Level;
-                    build.BuildStartDate = DateTimeOffset.UnixEpoch;
-                    build.BuildEndDate = DateTimeOffset.UnixEpoch;
+                    logger.LogDebug("Updating fort at BuildId {buildId}", fortToUpdate.BuildId);
+                    fortToUpdate.Level = fortConfig.Level;
+                    fortToUpdate.BuildStartDate = DateTimeOffset.UnixEpoch;
+                    fortToUpdate.BuildEndDate = DateTimeOffset.UnixEpoch;
                 }
             }
+
+            for (int x = fortsToUpdate.Count(); x < fortConfig.BuildCount; x++)
+            {
+                logger.LogDebug("Adding fort {plantId}", fortPlant);
+                DbFortBuild newUserFort =
+                    new()
+                    {
+                        ViewerId = viewerId,
+                        PlantId = fortPlant,
+                        Level = fortConfig.Level,
+                        PositionX = fortConfig.PositionX,
+                        PositionZ = fortConfig.PositionZ,
+                        BuildStartDate = DateTimeOffset.UnixEpoch,
+                        BuildEndDate = DateTimeOffset.UnixEpoch,
+                        IsNew = true,
+                        LastIncomeDate = DateTimeOffset.UnixEpoch
+                    };
+                newUserForts.Add(newUserFort);
+            }
+        }
+
+        if (newUserForts.Count > 0)
+        {
+            apiContext.PlayerFortBuilds.AddRange(newUserForts);
         }
     }
 
-    public async Task IncreasePlayerLevel()
+    public int ProcessQuestCompletions(long viewerId)
+    {
+        int wyrmite = 0;
+        FrozenSet<QuestData> questDatas = MasterAsset
+            .QuestData.Enumerable.Where(x =>
+                x.Gid < 10011 && x.Id > 100000000 && x.Id.ToString().Substring(6, 1) == "1"
+            )
+            .ToFrozenSet();
+        IEnumerable<DbQuest> userQuests = questRepository.Quests.Where(x => x.ViewerId == viewerId);
+
+        List<DbQuest> newUserQuests = new();
+        foreach (QuestData questData in questDatas)
+        {
+            bool questExists = userQuests.Where(x => x.QuestId == questData.Id).Any();
+            if (questExists == false)
+            {
+                wyrmite += 25;
+                DbQuest userQuest =
+                    new()
+                    {
+                        ViewerId = viewerId,
+                        QuestId = questData.Id,
+                        State = 3,
+                        IsMissionClear1 = true,
+                        IsMissionClear2 = true,
+                        IsMissionClear3 = true,
+                        PlayCount = 1,
+                        DailyPlayCount = 1,
+                        WeeklyPlayCount = 1,
+                        IsAppear = true,
+                        BestClearTime = 36000,
+                        LastWeeklyResetTime = DateTimeOffset.UnixEpoch,
+                        LastDailyResetTime = DateTimeOffset.UnixEpoch
+                    };
+                newUserQuests.Add(userQuest);
+            }
+            else
+            {
+                DbQuest userQuest = userQuests.Where(x => x.QuestId == questData.Id).First();
+                bool isFirstClear = userQuest.State < 3;
+                if (isFirstClear)
+                    wyrmite += 10;
+                if (!userQuest.IsMissionClear1)
+                {
+                    userQuest.IsMissionClear1 = true;
+                    wyrmite += 5;
+                }
+
+                if (!userQuest.IsMissionClear2)
+                {
+                    userQuest.IsMissionClear2 = true;
+                    wyrmite += 5;
+                }
+
+                if (!userQuest.IsMissionClear3)
+                {
+                    userQuest.IsMissionClear3 = true;
+                    wyrmite += 5;
+                }
+
+                if (userQuest.BestClearTime == -1)
+                {
+                    userQuest.BestClearTime = 36000;
+                }
+
+                userQuest.PlayCount += 1;
+                userQuest.DailyPlayCount += 1;
+                userQuest.WeeklyPlayCount += 1;
+                userQuest.State = 3;
+            }
+        }
+
+        if (newUserQuests.Count > 0)
+        {
+            apiContext.PlayerQuests.AddRange(newUserQuests);
+        }
+
+        return wyrmite;
+    }
+
+    public int ProcessStoryCompletions(long viewerId)
+    {
+        int wyrmite = 0;
+        FrozenSet<QuestStory> questStories = MasterAsset
+            .QuestStory.Enumerable.Where(x => x.GroupId is < 10011)
+            .ToFrozenSet();
+
+        IEnumerable<DbPlayerStoryState> userStories = storyRepository.QuestStories.Where(x =>
+            x.ViewerId == viewerId
+        );
+
+        List<DbPlayerStoryState> newUserStories = new();
+        foreach (QuestStory questStory in questStories)
+        {
+            bool storyExists = userStories.Where(x => x.StoryId == questStory.Id).Any();
+            if (storyExists == false)
+            {
+                wyrmite += 25;
+                DbPlayerStoryState userStory =
+                    new()
+                    {
+                        ViewerId = viewerId,
+                        StoryType = StoryTypes.Quest,
+                        StoryId = questStory.Id,
+                        State = StoryState.Read
+                    };
+                newUserStories.Add(userStory);
+            }
+        }
+
+        if (newUserStories.Count > 0)
+        {
+            apiContext.PlayerStoryState.AddRange(newUserStories);
+        }
+
+        return wyrmite;
+    }
+
+    public void RewardCharas(long viewerId)
+    {
+        List<Charas> charas = StorySkipRewards.CharasList;
+        IEnumerable<DbPlayerCharaData> userCharas = apiContext.PlayerCharaData.Where(x =>
+            x.ViewerId == viewerId && charas.Contains(x.CharaId)
+        );
+
+        List<DbPlayerCharaData> newUserCharas = new();
+        foreach (Charas chara in charas)
+        {
+            bool charaExists = userCharas.Where(x => x.CharaId == chara).Any();
+            if (charaExists == false)
+            {
+                logger.LogDebug("Rewarding character {chara}", chara);
+                CharaData charaData = MasterAsset.CharaData[chara];
+                DbPlayerCharaData newUserChara =
+                    new()
+                    {
+                        ViewerId = viewerId,
+                        CharaId = chara,
+                        Rarity = 4,
+                        Exp = 0,
+                        Level = 1,
+                        HpPlusCount = 0,
+                        AttackPlusCount = 0,
+                        IsNew = true,
+                        Skill1Level = 1,
+                        Skill2Level = 0,
+                        Ability1Level = 1,
+                        Ability2Level = 0,
+                        Ability3Level = 0,
+                        BurstAttackLevel = 0,
+                        ComboBuildupCount = 0,
+                        HpBase = (ushort)charaData.MinHp4,
+                        HpNode = 0,
+                        AttackBase = (ushort)charaData.MinAtk4,
+                        AttackNode = 0,
+                        ExAbilityLevel = 1,
+                        ExAbility2Level = 1,
+                        IsTemporary = false,
+                        ListViewFlag = false
+                    };
+                newUserCharas.Add(newUserChara);
+            }
+        }
+
+        if (newUserCharas.Count > 0)
+        {
+            apiContext.PlayerCharaData.AddRange(newUserCharas);
+        }
+    }
+
+    public void RewardDragons(long viewerId)
+    {
+        List<Dragons> dragons = StorySkipRewards.DragonList;
+        IEnumerable<DbPlayerDragonData> userDragons = apiContext.PlayerDragonData.Where(x =>
+            x.ViewerId == viewerId && dragons.Contains(x.DragonId)
+        );
+
+        List<DbPlayerDragonData> newUserDragons = new();
+        foreach (Dragons dragon in dragons)
+        {
+            bool dragonExists = userDragons.Where(x => x.DragonId == dragon).Any();
+            if (dragonExists == false)
+            {
+                logger.LogDebug("Rewarding dragon {dragon}", dragon);
+                DbPlayerDragonData newUserDragon =
+                    new()
+                    {
+                        ViewerId = viewerId,
+                        DragonId = dragon,
+                        Exp = 0,
+                        Level = 1,
+                        HpPlusCount = 0,
+                        AttackPlusCount = 0,
+                        LimitBreakCount = 0,
+                        IsLock = false,
+                        IsNew = true,
+                        Skill1Level = 1,
+                        Ability1Level = 1,
+                        Ability2Level = 1
+                    };
+                newUserDragons.Add(newUserDragon);
+            }
+        }
+
+        if (newUserDragons.Count > 0)
+        {
+            apiContext.PlayerDragonData.AddRange(newUserDragons);
+        }
+    }
+
+    public async Task UpdateUserData(int wyrmite)
     {
         const int MaxLevel = 60;
         const int MaxExp = 69990;
@@ -114,6 +289,7 @@ public class StorySkipService(
         data.TutorialStatus = 60999;
         data.StaminaSingle = 999;
         data.StaminaMulti = 99;
+        data.Crystal += wyrmite;
 
         if (data.Exp < MaxExp)
         {
@@ -125,67 +301,4 @@ public class StorySkipService(
             data.Level = MaxLevel;
         }
     }
-
-    public async Task OpenTreasure(int questTreasureId, CancellationToken cancellationToken)
-    {
-        IQueryable<DbQuestTreasureList> questTreasureLists = questRepository.QuestTreasureList;
-        if (!questTreasureLists.Any(x => x.QuestTreasureId == questTreasureId))
-        {
-            QuestOpenTreasureRequest req = new() { QuestTreasureId = questTreasureId };
-            await questTreasureService.DoOpenTreasure(req, cancellationToken);
-        }
-    }
-
-    public async Task ProcessQuestCompletion(int questId)
-    {
-        DbQuest questData = await questRepository.GetQuestDataAsync(questId);
-
-        bool isFirstClear = questData.State < 3;
-        if (isFirstClear)
-            await questCompletionService.GrantFirstClearRewards(questData.QuestId);
-
-        bool[] oldMissionStatus =
-        {
-            questData.IsMissionClear1,
-            questData.IsMissionClear2,
-            questData.IsMissionClear3
-        };
-
-        QuestMissionStatus status = await CompleteQuestMissions(
-            questId,
-            oldMissionStatus
-        );
-
-        questData.IsMissionClear1 = status.Missions[0];
-        questData.IsMissionClear2 = status.Missions[1];
-        questData.IsMissionClear3 = status.Missions[2];
-
-        if (questData.BestClearTime == -1)
-        {
-            questData.BestClearTime = 36000;
-        }
-
-        questData.PlayCount += 1;
-        questData.DailyPlayCount += 1;
-        questData.WeeklyPlayCount += 1;
-        questData.State = 3;
-    }
-
-    public async Task ReadStory(int questStoryId, CancellationToken cancellationToken)
-    {
-        IEnumerable<AtgenBuildEventRewardEntityList> rewardList = await storyService.ReadStory(
-            StoryTypes.Quest,
-            questStoryId
-        );
-
-        EntityResult entityResult = StoryService.GetEntityResult(rewardList);
-        IEnumerable<AtgenQuestStoryRewardList> questRewardList = rewardList.Select(
-            StoryService.ToQuestStoryReward
-        );
-
-        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(
-            cancellationToken
-        );
-    }
-
 }
