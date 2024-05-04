@@ -48,9 +48,11 @@ public class SummonTicketHandler(
     private async Task AddStackableTicket(SummonTickets ticketId, int quantity)
     {
         DbSummonTicket ticket =
-            await apiContext
-                .PlayerSummonTickets.Where(x => x.SummonTicketId == ticketId)
-                .FirstOrDefaultAsync() ?? this.InitializeEmptyStackableTicket(ticketId);
+            apiContext.PlayerSummonTickets.Local.FirstOrDefault(x => x.SummonTicketId == ticketId)
+            ?? await apiContext.PlayerSummonTickets.FirstOrDefaultAsync(x =>
+                x.SummonTicketId == ticketId
+            )
+            ?? this.InitializeEmptyStackableTicket(ticketId);
 
         ticket.Quantity += quantity;
     }

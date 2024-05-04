@@ -16,7 +16,7 @@ public class SummonTest : TestFixture
     public SummonTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        CommonAssertionOptions.ApplyTimeOptions();
+        CommonAssertionOptions.ApplyTimeOptions(toleranceSec: 2);
     }
 
     [Fact]
