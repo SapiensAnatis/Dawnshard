@@ -2,6 +2,7 @@ using System.Diagnostics;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using DragaliaAPI.Shared.Features.Summoning;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -15,8 +16,6 @@ using RateData = (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> Norma
 
 public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonitor)
 {
-    // Public for actual summon roll later
-    // ReSharper disable once MemberCanBePrivate.Global
     public Task<RateData> GetUnitRates(int bannerId)
     {
         Banner? banner = optionsMonitor.CurrentValue.Banners.SingleOrDefault(x => x.Id == bannerId);
@@ -26,6 +25,34 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
             throw new DragaliaException(
                 ResultCode.CommonInvalidArgument,
                 $"Banner ID {bannerId} was not found"
+            );
+        }
+
+        if (banner.OverrideCharaPool is not null)
+        {
+            return Task.FromResult(
+                new RateData
+                {
+                    NormalRates = banner.OverrideCharaPool.Select(x => new UnitRate(
+                        x,
+                        1m / banner.OverrideCharaPool.Count
+                    )),
+                    PickupRates = [],
+                }
+            );
+        }
+
+        if (banner.OverrideDragonPool is not null)
+        {
+            return Task.FromResult(
+                new RateData
+                {
+                    NormalRates = banner.OverrideDragonPool.Select(x => new UnitRate(
+                        x,
+                        1m / banner.OverrideDragonPool.Count
+                    )),
+                    PickupRates = [],
+                }
             );
         }
 
@@ -55,8 +82,6 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
         );
     }
 
-    // Public for actual summon roll later
-    // ReSharper disable once MemberCanBePrivate.Global
     public Task<RateData> GetGuaranteeUnitRates(int bannerId)
     {
         Banner? banner = optionsMonitor.CurrentValue.Banners.SingleOrDefault(x => x.Id == bannerId);
@@ -154,8 +179,20 @@ public class SummonOddsService(IOptionsMonitor<SummonBannerOptions> optionsMonit
         };
     }
 
-    public async Task<OddsRate> GetGuaranteeOddsRate(int bannerId)
+    public async Task<OddsRate?> GetGuaranteeOddsRate(int bannerId)
     {
+        if (
+            optionsMonitor.CurrentValue.Banners.First(x => x.Id == bannerId).SummonType
+            != SummonTypes.Normal
+        )
+        {
+            // Certain special banners, like the 5* summon voucher ones, have no concept
+            // of a guarantee rate -- because you can't execute a tenfold on them.
+            // We must return null for these, otherwise the guarantee tab appears in
+            // Japanese text.
+            return null;
+        }
+
         RateData rates = await this.GetGuaranteeUnitRates(bannerId);
 
         Dictionary<int, RarityList> pickupRarityLists =

@@ -1,10 +1,12 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using DragaliaAPI.Shared.PlayerDetails;
 using FluentRandomPicker;
 using FluentRandomPicker.FluentInterfaces.General;
@@ -18,6 +20,7 @@ public sealed partial class SummonService(
     IOptionsMonitor<SummonBannerOptions> optionsMonitor,
     IPlayerIdentityService playerIdentityService,
     IRewardService rewardService,
+    IPaymentService paymentService,
     ApiContext apiContext,
     ILogger<SummonService> logger
 )
@@ -39,16 +42,15 @@ public sealed partial class SummonService(
     public Task<List<AtgenRedoableSummonResultUnitList>> GenerateRedoableSummonResult() =>
         this.GenerateTenfoldResultInternal(SummonConstants.RedoableSummonBannerId, numTenfolds: 5);
 
-    public async Task<IEnumerable<SummonTicketList>> GetSummonTicketList() =>
+    public async Task<IList<SummonTicketList>> GetSummonTicketList() =>
         await apiContext.PlayerSummonTickets.ProjectToSummonTicketList().ToListAsync();
 
-    public async Task<List<SummonList>> GetSummonList()
+    public async Task<IList<SummonList>> GetSummonList()
     {
         List<SummonList> results = new(optionsMonitor.CurrentValue.Banners.Count);
 
         var individualDataDict = await apiContext
-            .PlayerBannerData.Where(x => x.ViewerId == playerIdentityService.ViewerId)
-            .Select(x => new
+            .PlayerBannerData.Select(x => new
             {
                 BannerId = x.SummonBannerId,
                 DailyCount = x.DailyLimitedSummonCount,
@@ -56,10 +58,29 @@ public sealed partial class SummonService(
             })
             .ToDictionaryAsync(x => x.BannerId, x => x);
 
+        Dictionary<SummonTickets, int> summonTicketDataDict = await apiContext
+            .PlayerSummonTickets.GroupBy(x => x.SummonTicketId)
+            .ToDictionaryAsync(x => x.Key, x => x.Sum(y => y.Quantity));
+
         foreach (Banner banner in optionsMonitor.CurrentValue.Banners)
         {
             if (banner.Id == SummonConstants.RedoableSummonBannerId)
+            {
                 continue;
+            }
+
+            if (banner.RequiredTicketId != null)
+            {
+                int ownedQuantity = summonTicketDataDict.GetValueOrDefault(
+                    banner.RequiredTicketId.Value,
+                    0
+                );
+
+                if (ownedQuantity <= 0)
+                {
+                    continue;
+                }
+            }
 
             int dailyCount = 0;
             int totalCount = 0;
@@ -70,30 +91,34 @@ public sealed partial class SummonService(
                 totalCount = bannerData.TotalCount;
             }
 
-            results.Add(
-                new SummonList()
+            SummonList item =
+                new()
                 {
                     SummonId = banner.Id,
-                    SummonPointId = banner.Id,
-                    SummonType = 2, // No idea what this does.
-                    SingleCrystal = SummonConstants.SingleCrystalCost,
-                    SingleDiamond = SummonConstants.SingleDiamondCost,
-                    MultiCrystal = SummonConstants.MultiCrystalCost,
-                    MultiDiamond = SummonConstants.MultiDiamondCost,
-                    LimitedCrystal = SummonConstants.LimitedCrystalCost,
-                    LimitedDiamond = SummonConstants.LimitedDiamondCost,
-                    AddSummonPoint = SummonConstants.AddSummonPoint,
-                    AddSummonPointStone = SummonConstants.AddSummonPointStone,
-                    ExchangeSummonPoint = SummonConstants.ExchangeSummonPoint,
-                    DailyLimit = SummonConstants.DailyLimit,
+                    SummonType = banner.SummonType,
                     Status = 1,
                     CommenceDate = banner.Start,
                     CompleteDate = banner.End,
                     DailyCount = dailyCount,
                     TotalCount = totalCount,
-                    TotalLimit = 0,
-                }
-            );
+                };
+
+            if (banner.SummonType == SummonTypes.Normal)
+            {
+                item.SummonPointId = banner.Id;
+                item.SingleCrystal = SummonConstants.SingleCrystalCost;
+                item.SingleDiamond = SummonConstants.SingleDiamondCost;
+                item.MultiCrystal = SummonConstants.MultiCrystalCost;
+                item.MultiDiamond = SummonConstants.MultiDiamondCost;
+                item.LimitedCrystal = SummonConstants.LimitedCrystalCost;
+                item.LimitedDiamond = SummonConstants.LimitedDiamondCost;
+                item.AddSummonPoint = SummonConstants.AddSummonPoint;
+                item.AddSummonPointStone = SummonConstants.AddSummonPointStone;
+                item.ExchangeSummonPoint = SummonConstants.ExchangeSummonPoint;
+                item.DailyLimit = 1;
+            }
+
+            results.Add(item);
         }
 
         return results;
@@ -106,13 +131,23 @@ public sealed partial class SummonService(
         if (bannerId == SummonConstants.RedoableSummonBannerId)
             return null;
 
-        List<SummonList> availableBanners = await GetSummonList();
-        return availableBanners.Find(x => x.SummonId == bannerId);
+        IList<SummonList> availableBanners = await GetSummonList();
+        return availableBanners.FirstOrDefault(x => x.SummonId == bannerId);
     }
 
-    public async Task<List<SummonPointList>> GetSummonPointList() =>
-        await apiContext
-            .PlayerBannerData.Select(x => new SummonPointList()
+    public async Task<IList<SummonPointList>> GetSummonPointList()
+    {
+        // We should not return summon point information for special banners,
+        // like the 5* voucher ones, because this causes a 0 > 0 wyrmsigil reward
+        // pop-up after summoning.
+        List<int> searchBannerIds = optionsMonitor
+            .CurrentValue.Banners.Where(x => x.SummonType == SummonTypes.Normal)
+            .Select(x => x.Id)
+            .ToList();
+
+        return await apiContext
+            .PlayerBannerData.Where(x => searchBannerIds.Contains(x.SummonBannerId))
+            .Select(x => new SummonPointList()
             {
                 SummonPointId = x.SummonBannerId,
                 SummonPoint = x.SummonPoints,
@@ -121,6 +156,7 @@ public sealed partial class SummonService(
                 CsPointTermMaxDate = x.ConsecutionSummonPointsMaxDate
             })
             .ToListAsync();
+    }
 
     public async Task<SummonPointList?> GetSummonPointList(int summonBannerId)
     {
@@ -187,7 +223,7 @@ public sealed partial class SummonService(
     public async Task<IList<SummonHistoryList>> GetSummonHistory() =>
         await apiContext
             .PlayerSummonHistory.Take(30) // See: https://dragalialost.wiki/w/Version_Changelog/Ver_1.18.0_Version_Update#Summon_History
-            .Select(x => SummonMapper.ToSummonHistoryList(x))
+            .Select(x => x.ToSummonHistoryList())
             .ToListAsync();
 
     public void AddSummonHistory(
@@ -276,6 +312,64 @@ public sealed partial class SummonService(
         }
 
         return entity.ToBuildEventRewardEntityList();
+    }
+
+    public async Task ProcessSummonPayment(
+        SummonRequestRequest summonRequest,
+        SummonList summonList
+    )
+    {
+        int execCount = summonRequest.ExecCount > 0 ? summonRequest.ExecCount : 1;
+
+        int paymentCost = (summonRequest.PaymentType, summonRequest.ExecType) switch
+        {
+            (PaymentTypes.Diamantium, SummonExecTypes.Tenfold) => summonList.MultiDiamond,
+            (PaymentTypes.Diamantium, SummonExecTypes.Single)
+                => summonList.SingleDiamond * execCount,
+            (PaymentTypes.Wyrmite, SummonExecTypes.Tenfold) => summonList.MultiCrystal,
+            (PaymentTypes.Wyrmite, SummonExecTypes.Single) => summonList.SingleCrystal * execCount,
+            (PaymentTypes.Ticket, SummonExecTypes.Tenfold) => 1,
+            (PaymentTypes.Ticket, SummonExecTypes.Single) => execCount,
+            (PaymentTypes.FreeDailyTenfold, SummonExecTypes.Tenfold) => 0,
+            _
+                => throw new DragaliaException(
+                    ResultCode.SummonTypeUnexpected,
+                    $"Failed to calculate summon cost for payment type {summonRequest.PaymentType} and exec type {summonRequest.ExecType}"
+                )
+        };
+
+        int entityId = 0;
+
+        if (summonRequest.PaymentType == PaymentTypes.Ticket)
+        {
+            if (
+                optionsMonitor.CurrentValue.Banners.First(x => x.Id == summonRequest.SummonId) is
+                { RequiredTicketId: { } requiredTicket }
+            )
+            {
+                entityId = (int)requiredTicket;
+            }
+            else
+            {
+                SummonTickets genericTicketId = summonRequest.ExecType switch
+                {
+                    SummonExecTypes.Single => SummonTickets.SingleSummon,
+                    SummonExecTypes.Tenfold => SummonTickets.TenfoldSummon,
+                    _
+                        => throw new DragaliaException(
+                            ResultCode.CommonInvalidArgument,
+                            $"Invalid exec type {summonRequest.ExecType} for ticket summon"
+                        )
+                };
+
+                entityId = (int)genericTicketId;
+            }
+        }
+
+        await paymentService.ProcessPayment(
+            new Entity(summonRequest.PaymentType.ToEntityType(), entityId, paymentCost),
+            summonRequest.PaymentTarget
+        );
     }
 
     private async Task<List<AtgenRedoableSummonResultUnitList>> GenerateSummonResultInternal(

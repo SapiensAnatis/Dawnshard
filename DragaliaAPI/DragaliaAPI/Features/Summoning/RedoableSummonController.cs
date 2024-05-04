@@ -36,7 +36,7 @@ public class RedoableSummonController(
         OddsRate normalOddsRate = await summonOddsService.GetNormalOddsRate(
             SummonConstants.RedoableSummonBannerId
         );
-        OddsRate guaranteeRate = await summonOddsService.GetGuaranteeOddsRate(
+        OddsRate? guaranteeRate = await summonOddsService.GetGuaranteeOddsRate(
             SummonConstants.RedoableSummonBannerId
         );
 

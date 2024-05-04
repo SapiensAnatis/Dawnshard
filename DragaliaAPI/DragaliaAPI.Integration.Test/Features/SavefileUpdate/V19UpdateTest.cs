@@ -1,4 +1,5 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Shared.Definitions.Enums.Summon;
 
 namespace DragaliaAPI.Integration.Test.Features.SavefileUpdate;
 

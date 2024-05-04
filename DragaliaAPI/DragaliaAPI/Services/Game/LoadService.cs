@@ -4,6 +4,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Present;
+using DragaliaAPI.Features.Summoning;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
@@ -25,6 +26,7 @@ public class LoadService(
     IUserService userService,
     TimeProvider timeProvider,
     IPlayerIdentityService playerIdentityService,
+    SummonService summonService,
     ILogger<LoadService> logger
 ) : ILoadService
 {
@@ -85,9 +87,6 @@ public class LoadService(
                 UserSummonList = savefile
                     .BannerData
                     .Select(x => x.MapToUserSummonList()),
-                SummonPointList = savefile
-                    .BannerData
-                    .Select(x => x.MapToSummonPointList()),
 
                 FriendNotice = new(0, 0),
                 ShopNotice = new ShopNotice(savefile.ShopInfo?.DailySummonCount != 0),
@@ -108,6 +107,7 @@ public class LoadService(
                 MissionNotice = await missionService.GetMissionNotice(null),
                 FortBonusList = await bonusService.GetBonusList(),
                 PresentNotice = await presentService.GetPresentNotice(),
+                SummonPointList = await summonService.GetSummonPointList(),
                 FunctionalMaintenanceList = [],
             };
         // csharpier-ignore-end
@@ -230,16 +230,6 @@ public static partial class LoadMapper
 
     public static UserSummonList MapToUserSummonList(this BannerData bannerData) =>
         new() { SummonId = bannerData.SummonBannerId, SummonCount = bannerData.SummonCount, };
-
-    public static SummonPointList MapToSummonPointList(this BannerData bannerData) =>
-        new()
-        {
-            SummonPointId = bannerData.SummonBannerId,
-            SummonPoint = bannerData.SummonPoints,
-            CsSummonPoint = bannerData.ConsecutionSummonPoints,
-            CsPointTermMinDate = bannerData.ConsecutionSummonPointsMinDate,
-            CsPointTermMaxDate = bannerData.ConsecutionSummonPointsMaxDate
-        };
 
     [MapProperty(nameof(DbPlayerDragonData.Level), nameof(DragonReliabilityList.ReliabilityLevel))]
     [MapProperty(nameof(DbPlayerDragonData.Exp), nameof(DragonReliabilityList.ReliabilityTotalExp))]

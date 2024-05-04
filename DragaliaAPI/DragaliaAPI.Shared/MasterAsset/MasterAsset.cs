@@ -11,6 +11,7 @@ using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestSchedule;
 using DragaliaAPI.Shared.MasterAsset.Models.Shop;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
+using DragaliaAPI.Shared.MasterAsset.Models.Summon;
 using DragaliaAPI.Shared.MasterAsset.Models.TimeAttack;
 using DragaliaAPI.Shared.MasterAsset.Models.Trade;
 using DragaliaAPI.Shared.MasterAsset.Models.User;
@@ -130,6 +131,8 @@ namespace DragaliaAPI.Shared.MasterAsset;
 [GenerateMasterAsset<RankingTierReward>("TimeAttack/RankingTierReward.json")]
 [GenerateMasterAsset<QuestWallDetail>("Wall/QuestWallDetail.json")]
 [GenerateMasterAsset<QuestWallMonthlyReward>("Wall/QuestWallMonthlyReward.json")]
+[GenerateMasterAsset<SummonTicket>("Summon/SummonTicket.json")]
+[GenerateMasterAsset<SummonData>("Summon/SummonData.json")]
 // csharpier-ignore-end
 public static partial class MasterAsset
 {

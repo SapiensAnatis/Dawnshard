@@ -4,6 +4,7 @@ using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Version;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using MessagePack;
 
 namespace DragaliaAPI.Models.Generated;
