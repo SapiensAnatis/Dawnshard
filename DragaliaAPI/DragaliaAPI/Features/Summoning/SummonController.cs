@@ -145,6 +145,7 @@ public class SummonController(
     )
     {
         int execCount = summonRequest.ExecCount > 0 ? summonRequest.ExecCount : 1;
+        int summonCount = summonRequest.ExecType == SummonExecTypes.Tenfold ? 10 : execCount;
 
         SummonList? summonList = await summonService.GetSummonList(summonRequest.SummonId);
 
@@ -259,9 +260,9 @@ public class SummonController(
             returnedResult.Add(processedResult);
         }
 
-        int gainedSummonPoints = summonRequest.ExecCount * summonPointMultiplier;
+        int gainedSummonPoints = summonCount * summonPointMultiplier;
         playerBannerData.SummonPoints += gainedSummonPoints;
-        playerBannerData.SummonCount += summonRequest.ExecCount;
+        playerBannerData.SummonCount += summonCount;
 
         int reversalIndex = lastIndexOfRare5;
         if (reversalIndex != -1 && new Random().NextSingle() < 0.95)

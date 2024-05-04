@@ -58,11 +58,9 @@ public sealed partial class SummonService(
             })
             .ToDictionaryAsync(x => x.BannerId, x => x);
 
-        Dictionary<SummonTickets, int> summonTicketDataDict =
-            await apiContext.PlayerSummonTickets.ToDictionaryAsync(
-                x => x.SummonTicketId,
-                x => x.Quantity
-            );
+        Dictionary<SummonTickets, int> summonTicketDataDict = await apiContext
+            .PlayerSummonTickets.GroupBy(x => x.SummonTicketId)
+            .ToDictionaryAsync(x => x.Key, x => x.Sum(y => y.Quantity));
 
         foreach (Banner banner in optionsMonitor.CurrentValue.Banners)
         {

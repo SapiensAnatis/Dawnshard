@@ -1,6 +1,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Summoning;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
+using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Summoning;
@@ -151,6 +152,50 @@ public class SummonTest : TestFixture
     }
 
     [Fact]
+    public async Task SummonGetOddsData_CharaSsrSummon_ReturnsExpectedData()
+    {
+        int bannerId = MasterAsset.SummonTicket[SummonTickets.AdventurerSummon].SummonId;
+
+        SummonGetOddsDataResponse response = (
+            await this.Client.PostMsgpack<SummonGetOddsDataResponse>(
+                "summon/get_odds_data",
+                new SummonGetOddsDataRequest(bannerId)
+            )
+        ).Data;
+
+        response.OddsRateList.Guarantee.Should().BeNull();
+        response
+            .OddsRateList.Normal.Unit.CharaOddsList.Should()
+            .BeEquivalentTo(
+                new List<OddsUnitDetail>()
+                {
+                    new()
+                    {
+                        Rarity = 5,
+                        UnitList = new List<Charas>()
+                        {
+                            Charas.Naveed,
+                            Charas.Mikoto,
+                            Charas.Ezelith,
+                            Charas.Xander,
+                            Charas.Xainfried,
+                            Charas.Lily,
+                            Charas.Hawk,
+                            Charas.Louise,
+                            Charas.Maribelle,
+                            Charas.Julietta,
+                            Charas.Lucretia,
+                            Charas.Hildegarde,
+                            Charas.Nefaria
+                        }.Select(x => new AtgenUnitList() { Id = (int)x, Rate = "7.692%" })
+                    },
+                    new() { Rarity = 4, UnitList = [], },
+                    new() { Rarity = 3, UnitList = [], }
+                }
+            );
+    }
+
+    [Fact]
     public async Task SummonGetSummonHistory_ReturnsAnyData()
     {
         DbPlayerSummonHistory historyEntry =
@@ -287,6 +332,74 @@ public class SummonTest : TestFixture
                     UseLimitTime = DateTimeOffset.UnixEpoch
                 }
             );
+    }
+
+    [Fact]
+    public async Task SummonGetSummonList_SpecialTicketsHeld_ReturnsSpecialTicketBanners()
+    {
+        // csharpier-ignore
+        await this.AddRangeToDatabase(
+            [
+                new DbSummonTicket()
+                {
+                    SummonTicketId = SummonTickets.AdventurerSummon,
+                    Quantity = 1
+                },
+                new DbSummonTicket()
+                {
+                    SummonTicketId = SummonTickets.DragonSummon,
+                    Quantity = 1
+                },
+                new DbSummonTicket()
+                {
+                    SummonTicketId = SummonTickets.AdventurerSummonPlus,
+                    Quantity = 1
+                },
+                new DbSummonTicket()
+                {
+                    SummonTicketId = SummonTickets.DragonSummonPlus,
+                    Quantity = 1
+                },
+            ]
+        );
+
+        SummonGetSummonListResponse response = (
+            await this.Client.PostMsgpack<SummonGetSummonListResponse>("summon/get_summon_list")
+        ).Data;
+
+        response
+            .CharaSsrSummonList.Should()
+            .Contain(x =>
+                x.SummonId == MasterAsset.SummonTicket[SummonTickets.AdventurerSummon].SummonId
+            );
+        response
+            .DragonSsrSummonList.Should()
+            .Contain(x =>
+                x.SummonId == MasterAsset.SummonTicket[SummonTickets.DragonSummon].SummonId
+            );
+        response
+            .CharaSsrUpdateSummonList.Should()
+            .Contain(x => x.SummonId == SummonConstants.AdventurerSummonPlusBannerId);
+        response
+            .DragonSsrUpdateSummonList.Should()
+            .Contain(x => x.SummonId == SummonConstants.DragonSummonPlusBannerId);
+
+        response
+            .SummonPointList.Should()
+            .HaveCountLessOrEqualTo(1, "special ticket banners don't participate in wyrmsigils");
+
+        await this.ApiContext.PlayerSummonTickets.ExecuteUpdateAsync(e =>
+            e.SetProperty(p => p.Quantity, 0)
+        );
+
+        response = (
+            await this.Client.PostMsgpack<SummonGetSummonListResponse>("summon/get_summon_list")
+        ).Data;
+
+        response.CharaSsrSummonList.Should().BeEmpty();
+        response.DragonSsrSummonList.Should().BeEmpty();
+        response.CharaSsrUpdateSummonList.Should().BeEmpty();
+        response.DragonSsrUpdateSummonList.Should().BeEmpty();
     }
 
     [Fact]
@@ -592,6 +705,32 @@ public class SummonTest : TestFixture
             );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.CommonMaterialShort);
+    }
+
+    [Theory]
+    [InlineData(SummonTickets.AdventurerSummon, 1040001)]
+    [InlineData(SummonTickets.DragonSummon, 1060001)]
+    [InlineData(SummonTickets.AdventurerSummonPlus, SummonConstants.AdventurerSummonPlusBannerId)]
+    [InlineData(SummonTickets.DragonSummonPlus, SummonConstants.DragonSummonPlusBannerId)]
+    public async Task SummonRequest_SpecialTicket_Success(SummonTickets ticket, int bannerId)
+    {
+        await this.AddToDatabase(new DbSummonTicket() { SummonTicketId = ticket, Quantity = 1, });
+
+        SummonRequestResponse response = (
+            await this.Client.PostMsgpack<SummonRequestResponse>(
+                "summon/request",
+                new SummonRequestRequest(
+                    bannerId,
+                    SummonExecTypes.Single,
+                    0,
+                    PaymentTypes.Ticket,
+                    new PaymentTarget(1, 1)
+                )
+            )
+        ).Data;
+
+        response.ResultSummonPoint.Should().Be(0);
+        response.ResultUnitList.Should().ContainSingle().Which.Rarity.Should().Be(5);
     }
 
     [Fact]

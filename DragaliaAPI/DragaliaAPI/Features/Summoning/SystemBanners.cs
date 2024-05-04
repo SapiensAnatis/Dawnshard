@@ -34,7 +34,7 @@ public static class SystemBanners
         new()
         {
             Id = MasterAsset.SummonTicket[SummonTickets.AdventurerSummon].SummonId,
-            RequiredTicketId = SummonTickets.AdventurerSummonPlus,
+            RequiredTicketId = SummonTickets.AdventurerSummon,
             SummonType = SummonTypes.CharaSsr,
             Start = DateTimeOffset.MinValue,
             End = DateTimeOffset.MaxValue,
