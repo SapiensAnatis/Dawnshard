@@ -1,5 +1,7 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using DragaliaAPI.Shared.Features.Presents;
+using DragaliaAPI.Shared.MasterAsset.Models.Summon;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Present;
@@ -453,6 +455,51 @@ public class PresentTest : TestFixture
             .Data.UpdateDataList.CharaList.Should()
             .ContainSingle()
             .And.Contain(x => x.CharaId == Charas.Addis);
+    }
+
+    [Fact]
+    public async Task Receive_SummonTickets_StacksCorrectly()
+    {
+        List<DbPlayerPresent> presents =
+        [
+            new DbPlayerPresent()
+            {
+                EntityType = EntityTypes.SummonTicket,
+                EntityId = (int)SummonTickets.AdventurerSummon,
+                EntityQuantity = 2,
+            },
+            new DbPlayerPresent()
+            {
+                EntityType = EntityTypes.SummonTicket,
+                EntityId = (int)SummonTickets.AdventurerSummon,
+                EntityQuantity = 2,
+            }
+        ];
+
+        await this.AddRangeToDatabase(presents);
+
+        await this.ApiContext.PlayerSummonTickets.ExecuteDeleteAsync();
+
+        IEnumerable<ulong> presentIdList = presents.Select(x => (ulong)x.PresentId);
+
+        await this.Client.PostMsgpack<PresentReceiveResponse>(
+            $"{Controller}/receive",
+            new PresentReceiveRequest() { PresentIdList = presentIdList }
+        );
+
+        this.ApiContext.PlayerSummonTickets.AsNoTracking()
+            .Should()
+            .BeEquivalentTo<DbSummonTicket>(
+                [
+                    new DbSummonTicket()
+                    {
+                        ViewerId = this.ViewerId,
+                        SummonTicketId = SummonTickets.AdventurerSummon,
+                        Quantity = 4
+                    },
+                ],
+                opts => opts.Excluding(x => x.KeyId)
+            );
     }
 
     [Fact]
