@@ -8,6 +8,7 @@ using DragaliaAPI.Shared.Features.StorySkip;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
+using Microsoft.EntityFrameworkCore;
 using static DragaliaAPI.Shared.Features.StorySkip.StorySkipRewards;
 
 namespace DragaliaAPI.Features.StorySkip;
@@ -21,17 +22,29 @@ public class StorySkipService(
     IUserDataRepository userDataRepository
 )
 {
-    public void IncreaseFortLevels(long viewerId)
+    private static readonly FrozenSet<QuestData> questDatas = MasterAsset
+        .QuestData.Enumerable.Where(x =>
+            x.Gid < 10011 && x.Id > 100000000 && x.Id.ToString().Substring(6, 1) == "1"
+        )
+        .ToFrozenSet();
+
+    private static readonly FrozenSet<QuestStory> questStories = MasterAsset
+        .QuestStory.Enumerable.Where(x => x.GroupId is < 10011)
+        .ToFrozenSet();
+
+    public async Task IncreaseFortLevels(long viewerId)
     {
         Dictionary<FortPlants, FortConfig> fortConfigs = StorySkipRewards.FortConfigs;
-        IQueryable<DbFortBuild> userForts = fortRepository.Builds.Where(x =>
-            x.ViewerId == viewerId
-        );
+
+        List<DbFortBuild> userForts = await fortRepository
+            .Builds.Where(x => x.ViewerId == viewerId)
+            .ToListAsync();
+
         List<DbFortBuild> newUserForts = new();
 
         foreach ((FortPlants fortPlant, FortConfig fortConfig) in fortConfigs)
         {
-            IQueryable<DbFortBuild> fortsToUpdate = userForts.Where(x => x.PlantId == fortPlant);
+            List<DbFortBuild> fortsToUpdate = userForts.Where(x => x.PlantId == fortPlant).ToList();
 
             foreach (DbFortBuild fortToUpdate in fortsToUpdate)
             {
@@ -44,7 +57,7 @@ public class StorySkipService(
                 }
             }
 
-            for (int x = fortsToUpdate.Count(); x < fortConfig.BuildCount; x++)
+            for (int x = fortsToUpdate.Count; x < fortConfig.BuildCount; x++)
             {
                 logger.LogDebug("Adding fort {plantId}", fortPlant);
                 DbFortBuild newUserFort =
@@ -70,15 +83,13 @@ public class StorySkipService(
         }
     }
 
-    public int ProcessQuestCompletions(long viewerId)
+    public async Task<int> ProcessQuestCompletions(long viewerId)
     {
         int wyrmite = 0;
-        FrozenSet<QuestData> questDatas = MasterAsset
-            .QuestData.Enumerable.Where(x =>
-                x.Gid < 10011 && x.Id > 100000000 && x.Id.ToString().Substring(6, 1) == "1"
-            )
-            .ToFrozenSet();
-        IEnumerable<DbQuest> userQuests = questRepository.Quests.Where(x => x.ViewerId == viewerId);
+
+        List<DbQuest> userQuests = await questRepository
+            .Quests.Where(x => x.ViewerId == viewerId)
+            .ToListAsync();
 
         List<DbQuest> newUserQuests = new();
         foreach (QuestData questData in questDatas)
@@ -150,16 +161,13 @@ public class StorySkipService(
         return wyrmite;
     }
 
-    public int ProcessStoryCompletions(long viewerId)
+    public async Task<int> ProcessStoryCompletions(long viewerId)
     {
         int wyrmite = 0;
-        FrozenSet<QuestStory> questStories = MasterAsset
-            .QuestStory.Enumerable.Where(x => x.GroupId is < 10011)
-            .ToFrozenSet();
 
-        IEnumerable<DbPlayerStoryState> userStories = storyRepository.QuestStories.Where(x =>
-            x.ViewerId == viewerId
-        );
+        List<DbPlayerStoryState> userStories = await storyRepository
+            .QuestStories.Where(x => x.ViewerId == viewerId)
+            .ToListAsync();
 
         List<DbPlayerStoryState> newUserStories = new();
         foreach (QuestStory questStory in questStories)
@@ -188,12 +196,12 @@ public class StorySkipService(
         return wyrmite;
     }
 
-    public void RewardCharas(long viewerId)
+    public async Task RewardCharas(long viewerId)
     {
         List<Charas> charas = StorySkipRewards.CharasList;
-        IEnumerable<DbPlayerCharaData> userCharas = apiContext.PlayerCharaData.Where(x =>
-            x.ViewerId == viewerId && charas.Contains(x.CharaId)
-        );
+        List<DbPlayerCharaData> userCharas = await apiContext
+            .PlayerCharaData.Where(x => x.ViewerId == viewerId && charas.Contains(x.CharaId))
+            .ToListAsync();
 
         List<DbPlayerCharaData> newUserCharas = new();
         foreach (Charas chara in charas)
@@ -240,12 +248,12 @@ public class StorySkipService(
         }
     }
 
-    public void RewardDragons(long viewerId)
+    public async Task RewardDragons(long viewerId)
     {
         List<Dragons> dragons = StorySkipRewards.DragonList;
-        IEnumerable<DbPlayerDragonData> userDragons = apiContext.PlayerDragonData.Where(x =>
-            x.ViewerId == viewerId && dragons.Contains(x.DragonId)
-        );
+        List<DbPlayerDragonData> userDragons = await apiContext
+            .PlayerDragonData.Where(x => x.ViewerId == viewerId && dragons.Contains(x.DragonId))
+            .ToListAsync();
 
         List<DbPlayerDragonData> newUserDragons = new();
         foreach (Dragons dragon in dragons)

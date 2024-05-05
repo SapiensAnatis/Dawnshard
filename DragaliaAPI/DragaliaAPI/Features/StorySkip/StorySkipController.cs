@@ -42,19 +42,19 @@ public class StorySkipController : DragaliaControllerBase
 
         this.logger.LogDebug("Beginning story skip for player {accountId}.", accountId);
 
-        int wyrmite1 = storySkipService.ProcessQuestCompletions(viewerId);
+        int wyrmite1 = await storySkipService.ProcessQuestCompletions(viewerId);
         this.logger.LogDebug("Wyrmite earned from quests: {wyrmite}", wyrmite1);
 
-        int wyrmite2 = storySkipService.ProcessStoryCompletions(viewerId);
+        int wyrmite2 = await storySkipService.ProcessStoryCompletions(viewerId);
         this.logger.LogDebug("Wyrmite earned from quest stories: {wyrmite}", wyrmite2);
 
         await storySkipService.UpdateUserData(wyrmite1 + wyrmite2);
 
-        storySkipService.IncreaseFortLevels(viewerId);
+        await storySkipService.IncreaseFortLevels(viewerId);
 
-        storySkipService.RewardCharas(viewerId);
+        await storySkipService.RewardCharas(viewerId);
 
-        storySkipService.RewardDragons(viewerId);
+        await storySkipService.RewardDragons(viewerId);
 
         await updateDataService.SaveChangesAsync(cancellationToken);
 

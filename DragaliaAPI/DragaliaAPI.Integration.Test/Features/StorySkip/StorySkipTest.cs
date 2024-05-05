@@ -85,11 +85,13 @@ public class StorySkipTest : TestFixture
 
         foreach ((FortPlants fortPlant, FortConfig fortConfig) in fortConfigs)
         {
-            IQueryable<DbFortBuild> forts = this.ApiContext.PlayerFortBuilds.Where(x =>
-                x.ViewerId == this.ViewerId && x.PlantId == fortPlant
-            );
+            List<DbFortBuild> forts = await this
+                .ApiContext.PlayerFortBuilds.Where(x =>
+                    x.ViewerId == this.ViewerId && x.PlantId == fortPlant
+                )
+                .ToListAsync();
 
-            forts.Count().Should().Be(fortConfig.BuildCount);
+            forts.Count.Should().Be(fortConfig.BuildCount);
 
             foreach (DbFortBuild fort in forts)
             {
