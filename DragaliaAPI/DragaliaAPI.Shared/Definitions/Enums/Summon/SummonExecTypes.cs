@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Shared.Definitions.Enums;
+﻿namespace DragaliaAPI.Shared.Definitions.Enums.Summon;
 
 /// <summary>
 /// SummonExecTypes have weird interactions with <see cref="PaymentTypes"/> (taken from Summon History):<br/>
