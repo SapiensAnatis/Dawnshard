@@ -27,6 +27,7 @@ using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Stamp;
+using DragaliaAPI.Features.StorySkip;
 using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Features.Trade;
@@ -157,6 +158,8 @@ public static class ServiceConfiguration
             .AddScoped<IWallRepository, WallRepository>()
             // Zena feature
             .AddScoped<IZenaService, ZenaService>()
+            // Story skip feature
+            .AddScoped<StorySkipService>()
             // Maintenance feature
             .AddScoped<MaintenanceService>();
 
