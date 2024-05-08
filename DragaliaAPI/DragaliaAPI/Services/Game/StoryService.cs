@@ -2,10 +2,13 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Player;
+using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
@@ -18,11 +21,13 @@ public class StoryService(
     ILogger<StoryService> logger,
     IUserDataRepository userDataRepository,
     IInventoryRepository inventoryRepository,
+    IPresentService presentService,
     ITutorialService tutorialService,
     IFortRepository fortRepository,
     IMissionProgressionService missionProgressionService,
     IRewardService rewardService,
-    IPaymentService paymentService
+    IPaymentService paymentService,
+    IUserService userService
 ) : IStoryService
 {
     private const int DragonStoryWyrmite = 25;
@@ -256,6 +261,16 @@ public class StoryService(
             );
         }
 
+        if (storyId == 1001009)
+        {
+            logger.LogDebug("Granting chapter 10 completion rewards.");
+
+            IEnumerable<Present> presents = GetChapter10PresentList();
+            presentService.AddPresent(presents);
+
+            await userService.AddExperience(69990);
+        }
+
         return rewardList;
     }
 
@@ -342,5 +357,50 @@ public class StoryService(
             questReward.EntityLevel = 1;
 
         return questReward;
+    }
+
+    private static List<Present> GetChapter10PresentList()
+    {
+        Dictionary<Materials, int> materialCounts =
+            new()
+            {
+                { Materials.WindOrb, 76 },
+                { Materials.StormOrb, 1 },
+                { Materials.WaterOrb, 86 },
+                { Materials.StreamOrb, 3 },
+                { Materials.DelugeOrb, 1 },
+                { Materials.FlameOrb, 116 },
+                { Materials.BlazeOrb, 7 },
+                { Materials.InfernoOrb, 2 },
+                { Materials.LightOrb, 270 },
+                { Materials.RadianceOrb, 15 },
+                { Materials.RefulgenceOrb, 3 },
+                { Materials.ShadowOrb, 66 },
+                { Materials.Talonstone, 87 },
+                { Materials.LightMetal, 18 },
+                { Materials.IronOre, 25 },
+                { Materials.Granite, 10 },
+                { Materials.FiendsClaw, 25 },
+                { Materials.FiendsHorn, 10 },
+                { Materials.BatsWing, 25 },
+                { Materials.AncientBirdsFeather, 10 },
+                { Materials.DyrenellAes, 2520 }
+            };
+
+        List<Present> presents =
+            new() { new Present(PresentMessage.Chapter10Clear, EntityTypes.HustleHammer, 0, 350) };
+        foreach ((Materials material, int count) in materialCounts)
+        {
+            presents.Add(
+                new Present(
+                    PresentMessage.Chapter10Clear,
+                    EntityTypes.Material,
+                    (int)material,
+                    count
+                )
+            );
+        }
+
+        return presents;
     }
 }

@@ -82,6 +82,38 @@ public class QuestReadStoryTest : TestFixture
         response.UpdateDataList.UserData.TutorialStatus.Should().Be(10600);
     }
 
+    [Fact]
+    public async Task ReadStory_Chapter10Completion_GrantsRewards()
+    {
+        await this
+            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdateAsync(u => u.SetProperty(e => e.Level, 1).SetProperty(e => e.Exp, 0));
+
+        StoryReadResponse data = (
+            await this.Client.PostMsgpack<StoryReadResponse>(
+                "/quest/read_story",
+                new QuestReadStoryRequest() { QuestStoryId = 1001009 }
+            )
+        ).Data;
+
+        data.UpdateDataList.UserData.Should().NotBeNull();
+        data.UpdateDataList.QuestStoryList.Should()
+            .BeEquivalentTo(
+                new List<QuestStoryList>()
+                {
+                    new() { QuestStoryId = 1001009, State = StoryState.Read }
+                }
+            );
+        data.UpdateDataList.UserData.Exp.Should().BeGreaterThanOrEqualTo(69990);
+        data.UpdateDataList.UserData.Level.Should().BeGreaterThanOrEqualTo(60);
+        this.ApiContext.PlayerPresents.Where(x =>
+                x.ViewerId == this.ViewerId && x.EntityType == EntityTypes.HustleHammer
+            )
+            .First()
+            .EntityQuantity.Should()
+            .Be(350);
+    }
+
     [Theory]
     [InlineData(2044303, Charas.Harle)]
     [InlineData(2046203, Charas.Origa)]
