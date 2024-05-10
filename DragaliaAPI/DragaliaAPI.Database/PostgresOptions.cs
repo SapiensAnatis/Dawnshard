@@ -19,7 +19,7 @@ public class PostgresOptions
     /// <summary>
     /// Gets a connection string for the current instance.
     /// </summary>
-    /// <param name="subComponent">An optional suffix to add to the application name of the connection string.</param>
+    /// <param name="subComponent">A suffix indicating the owner of the connection string, to be added to the application name parameter.</param>
     /// <returns>The connection string.</returns>
     public string GetConnectionString(string subComponent)
     {
