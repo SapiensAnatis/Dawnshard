@@ -27,6 +27,7 @@ public class PostgresOptions
                 Password = this.Password,
                 Database = this.Database,
                 IncludeErrorDetail = true,
+                ApplicationName = "DragaliaAPI",
             };
 
         return connectionStringBuilder.ConnectionString;
