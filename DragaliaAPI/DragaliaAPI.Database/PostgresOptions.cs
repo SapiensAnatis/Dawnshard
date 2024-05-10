@@ -16,7 +16,12 @@ public class PostgresOptions
 
     public bool DisableAutoMigration { get; set; }
 
-    public string GetConnectionString()
+    /// <summary>
+    /// Gets a connection string for the current instance.
+    /// </summary>
+    /// <param name="subComponent">An optional suffix to add to the application name of the connection string.</param>
+    /// <returns>The connection string.</returns>
+    public string GetConnectionString(string subComponent)
     {
         NpgsqlConnectionStringBuilder connectionStringBuilder =
             new()
@@ -27,7 +32,7 @@ public class PostgresOptions
                 Password = this.Password,
                 Database = this.Database,
                 IncludeErrorDetail = true,
-                ApplicationName = "DragaliaAPI",
+                ApplicationName = $"DragaliaAPI_{subComponent}",
             };
 
         return connectionStringBuilder.ConnectionString;
