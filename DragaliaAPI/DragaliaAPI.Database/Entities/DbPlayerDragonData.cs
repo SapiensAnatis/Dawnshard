@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DragaliaAPI.Database.Entities;
 
@@ -54,4 +57,11 @@ public class DbPlayerDragonData : DbPlayerData, IHasXp
     [Column("GetTime")]
     [TypeConverter(typeof(DateTimeOffsetConverter))]
     public DateTimeOffset GetTime { get; set; } = DateTimeOffset.UtcNow;
+}
+
+public class DragonConfiguration(IPlayerIdentityService playerIdentityService)
+    : IEntityTypeConfiguration<DbPlayerDragonData>
+{
+    public void Configure(EntityTypeBuilder<DbPlayerDragonData> builder) =>
+        builder.HasQueryFilter(e => e.ViewerId == playerIdentityService.ViewerId);
 }

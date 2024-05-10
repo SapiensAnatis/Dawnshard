@@ -7,6 +7,8 @@ public static class DragonConstants
 {
     public static byte GetMaxLevelFor(int rarity, int limitBreak)
     {
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(limitBreak, 5);
+
         int baseLevel;
         switch (rarity)
         {
@@ -281,22 +283,4 @@ public static class DragonConstants
         2800,
         2900
     }.ToImmutableArray();
-
-    public static readonly IImmutableSet<Dragons> UnsummonableDragons = new HashSet<Dragons>
-    {
-        Dragons.BronzeFafnir,
-        Dragons.SilverFafnir,
-        Dragons.GoldFafnir,
-        Dragons.HighMidgardsormr,
-        Dragons.HighBrunhilda,
-        Dragons.HighMercury,
-        Dragons.HighJupiter,
-        Dragons.HighZodiark,
-        Dragons.MiniMids,
-        Dragons.MiniHildy,
-        Dragons.MiniMercs,
-        Dragons.MiniJupi,
-        Dragons.MiniZodi,
-        Dragons.Puppy
-    }.ToImmutableHashSet();
 }

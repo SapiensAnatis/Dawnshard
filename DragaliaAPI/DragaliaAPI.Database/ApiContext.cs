@@ -158,5 +158,7 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
         modelBuilder
             .Entity<DbPlayerSummonHistory>()
             .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
+
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApiContext).Assembly);
     }
 }

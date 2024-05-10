@@ -71,6 +71,10 @@
         <MissionProgressionInfoCs Visible="false" Include="../DragaliaAPI.MissionDesigner/**/*.cs" Exclude="../DragaliaAPI.MissionDesigner/obj/**/*.*"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Features\RewardV2\" />
+    </ItemGroup>
+
     <Target Name="MissionDesigner" BeforeTargets="MasterAssetConverter" Inputs="@(MissionProgressionInfoCs)" Outputs="$(MasterAssetResources)/Missions/MissionProgressionInfo.json">
         <MSBuild Projects="../DragaliaAPI.MissionDesigner/DragaliaAPI.MissionDesigner.csproj">
             <Output ItemName="DesignerOutputs" TaskParameter="TargetOutputs"/>
