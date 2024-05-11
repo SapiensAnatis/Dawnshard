@@ -28,10 +28,10 @@ builder.Host.UseSerilog(
         config.Enrich.FromLogContext();
 
         config.Filter.ByExcluding(
-            "EndsWith(RequestPath, '/health') and Coalesce(StatusCode, 200) = 200"
+            "EndsWith(RequestPath, '/health') and @l in ['verbose', 'debug', 'information'] ci"
         );
         config.Filter.ByExcluding(
-            "EndsWith(RequestPath, '/ping') and Coalesce(StatusCode, 200) = 200"
+            "EndsWith(RequestPath, '/ping') and @l in ['verbose', 'debug', 'information'] ci"
         );
     }
 );
