@@ -78,13 +78,10 @@ public class DungeonRepositoryTest : RepositoryTestFixture
         DbPlayerCharaData chara2 =
             new(ViewerId, Charas.SummerCleo) { IsUnlockEditSkill = true, Skill2Level = 2 };
 
-        DbPlayerDragonData dragon = DbPlayerDragonDataFactory.Create(
-            ViewerId,
-            Dragons.MidgardsormrZero
-        );
+        DbPlayerDragonData dragon = new DbPlayerDragonData(ViewerId, Dragons.MidgardsormrZero);
         dragon.DragonKeyId = 400;
 
-        DbPlayerDragonReliability reliability = DbPlayerDragonReliabilityFactory.Create(
+        DbPlayerDragonReliability reliability = new DbPlayerDragonReliability(
             ViewerId,
             Dragons.MidgardsormrZero
         );

@@ -27,10 +27,7 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
         this.logger = logger;
     }
 
-    public IQueryable<DbPlayerUserData> UserData =>
-        this.apiContext.PlayerUserData.Where(x =>
-            x.ViewerId == this.playerIdentityService.ViewerId
-        );
+    public IQueryable<DbPlayerUserData> UserData => this.apiContext.PlayerUserData;
 
     public async Task<DbPlayerUserData> GetUserDataAsync()
     {

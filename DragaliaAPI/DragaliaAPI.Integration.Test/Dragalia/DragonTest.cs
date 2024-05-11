@@ -37,9 +37,9 @@ public class DragonTest : TestFixture
             #region GarudaDragonSacrifice
             List<DbPlayerDragonData> setupDragons = new List<DbPlayerDragonData>
             {
-                DbPlayerDragonDataFactory.Create(0, Dragons.Garuda)
+                new DbPlayerDragonData(0, Dragons.Garuda)
             };
-            DbPlayerDragonData dragon = DbPlayerDragonDataFactory.Create(0, Dragons.Garuda);
+            DbPlayerDragonData dragon = new DbPlayerDragonData(0, Dragons.Garuda);
             dragon.AttackPlusCount = 25;
             dragon.HpPlusCount = 25;
             setupDragons.Add(dragon);
@@ -48,10 +48,7 @@ public class DragonTest : TestFixture
             #region FubukiFruit
             Add(
                 new DragonBuildUpTestCase(
-                    new List<DbPlayerDragonData>()
-                    {
-                        DbPlayerDragonDataFactory.Create(0, Dragons.Fubuki)
-                    },
+                    new List<DbPlayerDragonData>() { new DbPlayerDragonData(0, Dragons.Fubuki) },
                     EntityTypes.Material,
                     (int)Materials.Dragonfruit,
                     30,
@@ -121,7 +118,7 @@ public class DragonTest : TestFixture
         ApiContext context = this.Services.GetRequiredService<ApiContext>();
 
         DbPlayerDragonData dbDragon = context
-            .PlayerDragonData.Add(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Liger))
+            .PlayerDragonData.Add(new DbPlayerDragonData(ViewerId, Dragons.Liger))
             .Entity;
 
         await context.SaveChangesAsync();
@@ -158,7 +155,7 @@ public class DragonTest : TestFixture
     {
         ApiContext context = this.Services.GetRequiredService<ApiContext>();
 
-        DbPlayerDragonData dragon = DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Maritimus);
+        DbPlayerDragonData dragon = new DbPlayerDragonData(ViewerId, Dragons.Maritimus);
         dragon.AttackPlusCount = 50;
         dragon = context.PlayerDragonData.Add(dragon).Entity;
 
@@ -219,7 +216,7 @@ public class DragonTest : TestFixture
     public async Task DragonBuyGiftToSendMultiple_IncreasesReliabilityAndReturnsGifts()
     {
         this.ApiContext.PlayerDragonReliability.Add(
-            DbPlayerDragonReliabilityFactory.Create(ViewerId, Dragons.HighChthonius)
+            new DbPlayerDragonReliability(ViewerId, Dragons.HighChthonius)
         );
 
         await this.ApiContext.SaveChangesAsync();
@@ -310,9 +307,7 @@ public class DragonTest : TestFixture
     [Fact]
     public async Task DragonSendGiftMultiple_IncreasesReliabilityAndReturnsGifts()
     {
-        await this.AddToDatabase(
-            DbPlayerDragonReliabilityFactory.Create(ViewerId, Dragons.HighMercury)
-        );
+        await this.AddToDatabase(new DbPlayerDragonReliability(ViewerId, Dragons.HighMercury));
 
         DragonSendGiftMultipleRequest request = new DragonSendGiftMultipleRequest()
         {
@@ -340,9 +335,7 @@ public class DragonTest : TestFixture
     [Fact]
     public async Task DragonGiftSendMultiple_ReachLevel5_ReturnsExpectedRewardReliabilityList()
     {
-        await this.AddToDatabase(
-            DbPlayerDragonReliabilityFactory.Create(ViewerId, Dragons.HighMercury)
-        );
+        await this.AddToDatabase(new DbPlayerDragonReliability(ViewerId, Dragons.HighMercury));
 
         DragonSendGiftMultipleRequest request = new DragonSendGiftMultipleRequest()
         {
@@ -458,7 +451,7 @@ public class DragonTest : TestFixture
     [Fact]
     public async Task DragonSendGift_IncreasesReliabilityAndReturnsGifts()
     {
-        await this.AddToDatabase(DbPlayerDragonReliabilityFactory.Create(ViewerId, Dragons.Puppy));
+        await this.AddToDatabase(new DbPlayerDragonReliability(ViewerId, Dragons.Puppy));
 
         DragonSendGiftRequest request = new DragonSendGiftRequest()
         {
@@ -481,9 +474,7 @@ public class DragonTest : TestFixture
     [Fact]
     public async Task DragonSendGift_AllStoriesUnlocked_DoesNotThrow()
     {
-        await this.AddToDatabase(
-            DbPlayerDragonReliabilityFactory.Create(ViewerId, Dragons.MidgardsormrZero)
-        );
+        await this.AddToDatabase(new DbPlayerDragonReliability(ViewerId, Dragons.MidgardsormrZero));
 
         foreach (int storyId in MasterAsset.DragonStories[(int)Dragons.MidgardsormrZero].StoryIds)
         {
@@ -531,8 +522,8 @@ public class DragonTest : TestFixture
                 new DragonLimitBreakTestCase(
                     new List<DbPlayerDragonData>()
                     {
-                        DbPlayerDragonDataFactory.Create(0, Dragons.Juggernaut),
-                        DbPlayerDragonDataFactory.Create(0, Dragons.Juggernaut)
+                        new DbPlayerDragonData(0, Dragons.Juggernaut),
+                        new DbPlayerDragonData(0, Dragons.Juggernaut)
                     },
                     1,
                     DragonLimitBreakMatTypes.Dupe
@@ -544,7 +535,7 @@ public class DragonTest : TestFixture
                 new DragonLimitBreakTestCase(
                     new List<DbPlayerDragonData>()
                     {
-                        DbPlayerDragonDataFactory.Create(0, Dragons.Midgardsormr)
+                        new DbPlayerDragonData(0, Dragons.Midgardsormr)
                     },
                     1,
                     DragonLimitBreakMatTypes.Stone
@@ -554,10 +545,7 @@ public class DragonTest : TestFixture
             #region CupidSpheres
             Add(
                 new DragonLimitBreakTestCase(
-                    new List<DbPlayerDragonData>()
-                    {
-                        DbPlayerDragonDataFactory.Create(0, Dragons.Cupid)
-                    },
+                    new List<DbPlayerDragonData>() { new DbPlayerDragonData(0, Dragons.Cupid) },
                     1,
                     DragonLimitBreakMatTypes.Spheres
                 )
@@ -568,7 +556,7 @@ public class DragonTest : TestFixture
                 new DragonLimitBreakTestCase(
                     new List<DbPlayerDragonData>()
                     {
-                        DbPlayerDragonDataFactory.Create(0, Dragons.HighBrunhilda)
+                        new DbPlayerDragonData(0, Dragons.HighBrunhilda)
                     },
                     5,
                     DragonLimitBreakMatTypes.SpheresLB5
@@ -636,7 +624,7 @@ public class DragonTest : TestFixture
     public async Task DragonSetLock_ReturnsLockDragonData()
     {
         DbPlayerDragonData dragon = await this.AddToDatabase(
-            DbPlayerDragonDataFactory.Create(ViewerId, Dragons.HighZodiark)
+            new DbPlayerDragonData(ViewerId, Dragons.HighZodiark)
         );
 
         DragonSetLockRequest request = new DragonSetLockRequest()
@@ -662,7 +650,7 @@ public class DragonTest : TestFixture
     public async Task DragonSell_SuccessfulSale()
     {
         DbPlayerDragonData dragon = await this.AddToDatabase(
-            DbPlayerDragonDataFactory.Create(ViewerId, Dragons.GaibhneCreidhne)
+            new DbPlayerDragonData(ViewerId, Dragons.GaibhneCreidhne)
         );
 
         DragonData dragonData = MasterAsset.DragonData.Get(Dragons.GaibhneCreidhne);
@@ -699,11 +687,11 @@ public class DragonTest : TestFixture
         ApiContext context = this.Services.GetRequiredService<ApiContext>();
 
         DbPlayerDragonData dragonSimurgh = context
-            .PlayerDragonData.Add(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Simurgh))
+            .PlayerDragonData.Add(new DbPlayerDragonData(ViewerId, Dragons.Simurgh))
             .Entity;
 
         DbPlayerDragonData dragonStribog = context
-            .PlayerDragonData.Add(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Stribog))
+            .PlayerDragonData.Add(new DbPlayerDragonData(ViewerId, Dragons.Stribog))
             .Entity;
 
         dragonStribog.LimitBreakCount = 4;

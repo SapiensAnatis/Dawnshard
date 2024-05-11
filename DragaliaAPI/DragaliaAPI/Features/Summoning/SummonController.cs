@@ -146,11 +146,7 @@ public class SummonController(
 
         SummonList? summonList = await summonService.GetSummonList(summonRequest.SummonId);
 
-        DbPlayerBannerData? playerBannerData = await summonService.GetPlayerBannerData(
-            summonRequest.SummonId
-        );
-
-        if (summonList == null || playerBannerData == null)
+        if (summonList == null)
         {
             throw new DragaliaException(
                 ResultCode.SummonNotFound,
@@ -160,10 +156,6 @@ public class SummonController(
 
         await summonService.ProcessSummonPayment(summonRequest, summonList);
 
-        DbPlayerUserData userData = await userDataRepository.UserData.FirstAsync(cancellationToken);
-
-        int summonPointMultiplier = summonList.AddSummonPoint;
-
         List<AtgenRedoableSummonResultUnitList> summonResult =
             await summonService.GenerateSummonResult(
                 execCount,
@@ -171,153 +163,37 @@ public class SummonController(
                 summonRequest.ExecType
             );
 
-        List<AtgenResultUnitList> returnedResult = new();
-        List<AtgenDuplicateEntityList> newGetEntityList = new();
+        (
+            IList<AtgenResultUnitList> resultUnitList,
+            SummonService.SummonResultMetaInfo metaInfo,
+            EntityResult entityResult
+        ) = await summonService.CommitSummonResult(summonResult);
 
-        int lastIndexOfRare5 = 0;
-        int countOfRare5Char = 0;
-        int countOfRare5Dragon = 0;
-        int countOfRare4 = 0;
-
-        List<Dragons> newDragons = (
-            await unitRepository.AddDragons(
-                summonResult
-                    .Where(x => x.EntityType == EntityTypes.Dragon)
-                    .Select(x => (Dragons)x.Id)
-            )
-        )
-            .Where(x => x.IsNew)
-            .Select(x => x.Id)
-            .ToList();
-
-        List<Charas> newCharas = (
-            await unitRepository.AddCharas(
-                summonResult.Where(x => x.EntityType == EntityTypes.Chara).Select(x => (Charas)x.Id)
-            )
-        )
-            .Where(x => x.isNew)
-            .Select(x => x.id)
-            .ToList();
-
-        foreach (
-            (AtgenRedoableSummonResultUnitList result, int index) in summonResult.Select(
-                (x, i) => (x, i)
-            )
-        )
+        foreach (AtgenResultUnitList result in resultUnitList)
         {
-            bool isNew = result.EntityType switch
-            {
-                EntityTypes.Dragon => newDragons.Remove((Dragons)result.Id),
-                EntityTypes.Chara => newCharas.Remove((Charas)result.Id),
-                _ => throw new UnreachableException("Invalid entity type"),
-            };
-
-            int dewPoint = 0;
-            if (!isNew && result.EntityType is EntityTypes.Chara)
-            {
-                dewPoint = CalculateDewValue((Charas)result.Id);
-                userData.DewPoint += dewPoint;
-            }
-            else
-            {
-                newGetEntityList.Add(
-                    new() { EntityType = result.EntityType, EntityId = result.Id }
-                );
-            }
-
-            switch (result.Rarity)
-            {
-                case 5:
-                {
-                    lastIndexOfRare5 = index;
-
-                    if (result.EntityType is EntityTypes.Chara)
-                        countOfRare5Char++;
-                    else
-                        countOfRare5Dragon++;
-                    break;
-                }
-                case 4:
-                    countOfRare4++;
-                    break;
-            }
-
-            AtgenResultUnitList processedResult =
-                new()
-                {
-                    EntityType = result.EntityType,
-                    Id = result.Id,
-                    IsNew = isNew,
-                    Rarity = result.Rarity,
-                    DewPoint = dewPoint,
-                };
-
-            summonService.AddSummonHistory(summonList, summonRequest, processedResult);
-
-            returnedResult.Add(processedResult);
+            summonService.AddSummonHistory(summonList, summonRequest, result);
         }
 
-        int gainedSummonPoints = summonCount * summonPointMultiplier;
-        playerBannerData.SummonPoints += gainedSummonPoints;
-        playerBannerData.SummonCount += summonCount;
+        UserSummonList userSummonList = await summonService.UpdateUserSummonInformation(
+            summonList,
+            summonCount
+        );
 
-        int reversalIndex = lastIndexOfRare5;
-        if (reversalIndex != -1 && new Random().NextSingle() < 0.95)
-            reversalIndex = -1;
-
-        int sageEffect;
-        int circleEffect;
-        int rarityDisplayModifier = reversalIndex == -1 ? 0 : 1;
-        if (countOfRare5Char + countOfRare5Dragon > 0 + rarityDisplayModifier)
-        {
-            sageEffect =
-                countOfRare5Dragon > countOfRare5Char
-                    ? (int)SummonEffectsSage.GoldFafnirs
-                    : (int)SummonEffectsSage.RainbowCrystal;
-            circleEffect = (int)SummonEffectsSky.Rainbow;
-        }
-        else
-        {
-            circleEffect = (int)SummonEffectsSky.Yellow;
-            switch (countOfRare4 + ((countOfRare5Char + countOfRare5Dragon) * 2))
-            {
-                case > 1:
-                    sageEffect = (int)SummonEffectsSage.MultiDoves;
-                    break;
-                case > 0:
-                    sageEffect = (int)SummonEffectsSage.SingleDove;
-                    break;
-                default:
-                    sageEffect = (int)SummonEffectsSage.Dull;
-                    circleEffect = (int)SummonEffectsSky.Blue;
-                    break;
-            }
-        }
+        SummonEffect effect = SummonEffectHelper.CalculateEffect(metaInfo);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         SummonRequestResponse response =
             new(
-                resultUnitList: returnedResult,
-                resultPrizeList: new List<AtgenResultPrizeList>(),
-                presageEffectList: new List<int>() { sageEffect, circleEffect },
-                reversalEffectIndex: reversalIndex,
+                resultUnitList: resultUnitList,
+                resultPrizeList: [],
+                presageEffectList: [effect.SageEffect, effect.CircleEffect],
+                reversalEffectIndex: effect.ReversalIndex,
                 updateDataList: updateDataList,
-                entityResult: new EntityResult() { NewGetEntityList = newGetEntityList },
+                entityResult: entityResult,
                 summonTicketList: await summonService.GetSummonTicketList(),
-                resultSummonPoint: gainedSummonPoints,
-                userSummonList: new List<UserSummonList>()
-                {
-                    new(
-                        summonList.SummonId,
-                        playerBannerData.SummonCount,
-                        summonList.CampaignType,
-                        summonList.FreeCountRest,
-                        summonList.IsBeginnerCampaign,
-                        summonList.BeginnerCampaignCountRest,
-                        summonList.ConsecutionCampaignCountRest
-                    )
-                }
+                resultSummonPoint: summonList.AddSummonPoint * summonCount,
+                userSummonList: [userSummonList]
             );
 
         return this.Ok(response);
@@ -329,7 +205,7 @@ public class SummonController(
         CancellationToken cancellationToken
     )
     {
-        AtgenBuildEventRewardEntityList result = await summonService.DoSummonPointTrade(
+        AtgenBuildEventRewardEntityList entity = await summonService.DoSummonPointTrade(
             request.SummonId,
             request.TradeId
         );
@@ -338,16 +214,8 @@ public class SummonController(
 
         return new SummonSummonPointTradeResponse()
         {
-            ExchangeEntityList = [result],
+            ExchangeEntityList = [entity],
             UpdateDataList = updateDataList,
         };
-    }
-
-    private static int CalculateDewValue(Charas id)
-    {
-        CharaData data = MasterAsset.CharaData[id];
-        return data.GetAvailability() == UnitAvailability.Story
-            ? DewValueData.DupeStorySummon[data.Rarity]
-            : DewValueData.DupeSummon[data.Rarity];
     }
 }

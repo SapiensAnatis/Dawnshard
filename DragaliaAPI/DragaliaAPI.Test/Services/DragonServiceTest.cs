@@ -136,7 +136,7 @@ public class DragonServiceTest : RepositoryTestFixture
             out List<DbPlayerStoryState> stories
         );
 
-        dragonRels.Add(DbPlayerDragonReliabilityFactory.Create(ViewerId, Dragons.Garuda));
+        dragonRels.Add(new DbPlayerDragonReliability(ViewerId, Dragons.Garuda));
 
         mockMissionProgressionService.Setup(x =>
             x.OnDragonBondLevelUp(Dragons.Garuda, UnitElement.Wind, 3, 4)
@@ -208,10 +208,7 @@ public class DragonServiceTest : RepositoryTestFixture
             out List<DbPlayerStoryState> stories
         );
 
-        DbPlayerDragonReliability dd = DbPlayerDragonReliabilityFactory.Create(
-            ViewerId,
-            Dragons.Garuda
-        );
+        DbPlayerDragonReliability dd = new DbPlayerDragonReliability(ViewerId, Dragons.Garuda);
         dd.Level = 30;
         dd.Exp = 36300;
 
@@ -272,7 +269,7 @@ public class DragonServiceTest : RepositoryTestFixture
             out List<DbPlayerStoryState> stories
         );
 
-        dragonRels.Add(DbPlayerDragonReliabilityFactory.Create(ViewerId, dragon));
+        dragonRels.Add(new DbPlayerDragonReliability(ViewerId, dragon));
 
         UnitElement element = MasterAsset.DragonData[dragon].ElementalType;
 
@@ -310,7 +307,7 @@ public class DragonServiceTest : RepositoryTestFixture
     [Fact]
     public async Task DoBuildup_AddsAugments()
     {
-        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Garuda);
+        DbPlayerDragonData dragonData = new DbPlayerDragonData(ViewerId, Dragons.Garuda);
         dragonData.DragonKeyId = 1;
 
         List<DbPlayerDragonData> dragonDataList = new List<DbPlayerDragonData>() { dragonData };
@@ -368,7 +365,7 @@ public class DragonServiceTest : RepositoryTestFixture
         byte expectedLvl
     )
     {
-        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(ViewerId, dragon);
+        DbPlayerDragonData dragonData = new DbPlayerDragonData(ViewerId, dragon);
         dragonData.DragonKeyId = 1;
 
         List<DbPlayerDragonData> dragonDataList = new List<DbPlayerDragonData>() { dragonData };
@@ -425,7 +422,7 @@ public class DragonServiceTest : RepositoryTestFixture
     [Fact]
     public async Task DoDragonResetPlusCount_ResetsPlusCount()
     {
-        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Garuda);
+        DbPlayerDragonData dragonData = new DbPlayerDragonData(ViewerId, Dragons.Garuda);
         dragonData.DragonKeyId = 1;
         dragonData.AttackPlusCount = 50;
 
@@ -503,14 +500,11 @@ public class DragonServiceTest : RepositoryTestFixture
                 ? Materials.SunlightStone
                 : Materials.GarudasEssence;
 
-        DbPlayerDragonData dragonDataSacrifice = DbPlayerDragonDataFactory.Create(
-            ViewerId,
-            Dragons.Garuda
-        );
+        DbPlayerDragonData dragonDataSacrifice = new DbPlayerDragonData(ViewerId, Dragons.Garuda);
         dragonDataSacrifice.DragonKeyId = 2;
         dragonDataSacrifice.LimitBreakCount = 0;
 
-        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Garuda);
+        DbPlayerDragonData dragonData = new DbPlayerDragonData(ViewerId, Dragons.Garuda);
         dragonData.DragonKeyId = 1;
         dragonData.LimitBreakCount = (byte)(limitBreakNr - 1);
 
@@ -575,7 +569,7 @@ public class DragonServiceTest : RepositoryTestFixture
     [Fact]
     public async Task DoDragonLock_Locks()
     {
-        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Garuda);
+        DbPlayerDragonData dragonData = new DbPlayerDragonData(ViewerId, Dragons.Garuda);
         dragonData.DragonKeyId = 1;
 
         List<DbPlayerDragonData> dragonDataList = new List<DbPlayerDragonData>() { dragonData };
@@ -610,7 +604,7 @@ public class DragonServiceTest : RepositoryTestFixture
 
         mockUserDataRepository.SetupGet(x => x.UserData).Returns(userDataList);
 
-        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Garuda);
+        DbPlayerDragonData dragonData = new DbPlayerDragonData(ViewerId, Dragons.Garuda);
         dragonData.DragonKeyId = 1;
 
         List<DbPlayerDragonData> dragonDataList = new List<DbPlayerDragonData>() { dragonData };

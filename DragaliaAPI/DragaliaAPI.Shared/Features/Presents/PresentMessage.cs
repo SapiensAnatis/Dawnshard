@@ -175,6 +175,13 @@ public enum PresentMessage
     ShopPurchase = 2040005,
 
     /// <summary>
+    /// Title: Summon Showcase Reward
+    /// <br/>
+    /// Description: A reward from the Summon Showcase.
+    /// </summary>
+    SummonShowcase = 2070001,
+
+    /// <summary>
     /// Title: Mana Node Unlocking Reward
     /// <br/>
     /// Description: For unlocking a node on one of {0}'s mana circles.

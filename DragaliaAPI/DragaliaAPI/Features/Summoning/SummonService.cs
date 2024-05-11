@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Reward;
@@ -7,6 +8,9 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
+using DragaliaAPI.Shared.Features.Summoning;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using FluentRandomPicker;
 using FluentRandomPicker.FluentInterfaces.General;
@@ -17,6 +21,7 @@ namespace DragaliaAPI.Features.Summoning;
 
 public sealed partial class SummonService(
     SummonOddsService summonOddsService,
+    UnitService unitService,
     IOptionsMonitor<SummonBannerOptions> optionsMonitor,
     IPlayerIdentityService playerIdentityService,
     IRewardService rewardService,
@@ -299,14 +304,7 @@ public sealed partial class SummonService(
 
         Log.PointsDeducted(logger, bannerData.SummonPoints);
 
-        if (
-            result
-            is not (
-                RewardGrantResult.Added
-                or RewardGrantResult.GiftBox
-                or RewardGrantResult.GiftBoxDiscarded
-            )
-        )
+        if (result is not (RewardGrantResult.Added))
         {
             Log.UnexpectedRewardResult(logger, result);
         }
@@ -371,6 +369,170 @@ public sealed partial class SummonService(
             summonRequest.PaymentTarget
         );
     }
+
+    public async Task<(
+        IList<AtgenResultUnitList> ResultUnitList,
+        SummonResultMetaInfo MetaInfo,
+        EntityResult EntityResult
+    )> CommitSummonResult(IList<AtgenRedoableSummonResultUnitList> summonResult)
+    {
+        List<AtgenResultUnitList> returnedResult = [];
+        List<AtgenDuplicateEntityList> newGetEntityList = [];
+
+        int lastIndexOfRare5 = 0;
+        int countOfRare5Char = 0;
+        int countOfRare5Dragon = 0;
+        int countOfRare4 = 0;
+
+        List<Dragons> dragonList = summonResult
+            .Where(x => x.EntityType == EntityTypes.Dragon)
+            .Select(x => (Dragons)x.Id)
+            .ToList();
+
+        List<Charas> charaList = summonResult
+            .Where(x => x.EntityType == EntityTypes.Chara)
+            .Select(x => (Charas)x.Id)
+            .ToList();
+
+        List<Dragons> newDragons = (await unitService.AddDragons(dragonList))
+            .Where(x => x.IsNew)
+            .Select(x => x.Id)
+            .ToList();
+
+        List<Charas> newCharas = (await unitService.AddCharas(charaList))
+            .Where(x => x.IsNew)
+            .Select(x => x.Id)
+            .ToList();
+
+        DbPlayerUserData userData = await apiContext.PlayerUserData.FirstAsync();
+
+        foreach (
+            (AtgenRedoableSummonResultUnitList result, int index) in summonResult.Select(
+                (x, i) => (x, i)
+            )
+        )
+        {
+            bool isNew = result.EntityType switch
+            {
+                EntityTypes.Dragon => newDragons.Remove((Dragons)result.Id),
+                EntityTypes.Chara => newCharas.Remove((Charas)result.Id),
+                _ => throw new UnreachableException("Invalid entity type"),
+            };
+
+            int dewPoint = 0;
+            if (!isNew && result.EntityType is EntityTypes.Chara)
+            {
+                dewPoint = CalculateDewValue((Charas)result.Id);
+                userData.DewPoint += dewPoint;
+            }
+            else
+            {
+                newGetEntityList.Add(
+                    new AtgenDuplicateEntityList
+                    {
+                        EntityType = result.EntityType,
+                        EntityId = result.Id
+                    }
+                );
+            }
+
+            switch (result.Rarity)
+            {
+                case 5:
+                {
+                    lastIndexOfRare5 = index;
+                    if (result.EntityType is EntityTypes.Chara)
+                        countOfRare5Char++;
+                    else
+                        countOfRare5Dragon++;
+                    break;
+                }
+                case 4:
+                    countOfRare4++;
+                    break;
+            }
+
+            AtgenResultUnitList processedResult =
+                new()
+                {
+                    EntityType = result.EntityType,
+                    Id = result.Id,
+                    IsNew = isNew,
+                    Rarity = result.Rarity,
+                    DewPoint = dewPoint,
+                };
+
+            returnedResult.Add(processedResult);
+        }
+
+        IEnumerable<AtgenBuildEventRewardEntityList> overPresentEntityList = apiContext
+            .PlayerPresents.Local.Where(x => x.EntityType == EntityTypes.Dragon)
+            .Select(x => new AtgenBuildEventRewardEntityList(
+                x.EntityType,
+                x.EntityId,
+                x.EntityQuantity
+            ));
+
+        return (
+            returnedResult,
+            new SummonResultMetaInfo(
+                LastIndexOfRare5: lastIndexOfRare5,
+                CountOfRare5Char: countOfRare5Char,
+                CountOfRare5Dragon: countOfRare5Dragon,
+                CountOfRare4: countOfRare4
+            ),
+            new EntityResult()
+            {
+                NewGetEntityList = newGetEntityList,
+                OverPresentEntityList = overPresentEntityList,
+            }
+        );
+
+        static int CalculateDewValue(Charas id)
+        {
+            CharaData data = MasterAsset.CharaData[id];
+            return data.GetAvailability() == UnitAvailability.Story
+                ? DewValueData.DupeStorySummon[data.Rarity]
+                : DewValueData.DupeSummon[data.Rarity];
+        }
+    }
+
+    public async Task<UserSummonList> UpdateUserSummonInformation(
+        SummonList summonList,
+        int summonCount
+    )
+    {
+        DbPlayerBannerData? playerBannerData = await this.GetPlayerBannerData(summonList.SummonId);
+
+        if (playerBannerData is null)
+        {
+            throw new InvalidOperationException(
+                $"PlayerBannerData for banner {summonList.SummonId} was not found"
+            );
+        }
+
+        int gainedSummonPoints = summonCount * summonList.AddSummonPoint;
+        playerBannerData.SummonPoints += gainedSummonPoints;
+        playerBannerData.SummonCount += summonCount;
+
+        return new UserSummonList()
+        {
+            SummonId = summonList.SummonId,
+            SummonCount = playerBannerData.SummonCount,
+            CampaignType = summonList.CampaignType,
+            FreeCountRest = summonList.FreeCountRest,
+            IsBeginnerCampaign = summonList.IsBeginnerCampaign,
+            BeginnerCampaignCountRest = summonList.BeginnerCampaignCountRest,
+            ConsecutionCampaignCountRest = summonList.ConsecutionCampaignCountRest
+        };
+    }
+
+    public readonly record struct SummonResultMetaInfo(
+        int LastIndexOfRare5,
+        int CountOfRare5Char,
+        int CountOfRare5Dragon,
+        int CountOfRare4
+    );
 
     private async Task<List<AtgenRedoableSummonResultUnitList>> GenerateSummonResultInternal(
         int bannerId,
