@@ -120,7 +120,8 @@ public class OAuthCallbackModel(
         identity.AddClaim(new Claim(CustomClaimType.AccountId, userId.UserId));
 
         var playerInfo = await apiContext
-            .Players.Include(x => x.UserData)
+            .Players.IgnoreQueryFilters()
+            .Include(x => x.UserData)
             .Where(x => x.AccountId == userId.UserId)
             .Select(x => new { x.UserData!.Name, x.ViewerId })
             .FirstOrDefaultAsync();
