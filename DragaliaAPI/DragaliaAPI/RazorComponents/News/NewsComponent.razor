@@ -1,5 +1,4 @@
-﻿@using DragaliaAPI.Authentication
-@using DragaliaAPI.Database.Entities;
+﻿@using DragaliaAPI.Database.Entities;
 @using DragaliaAPI.Database;
 @using DragaliaAPI.Features.Blazor
 @using Microsoft.EntityFrameworkCore;
@@ -46,11 +45,7 @@
     private int selected = 1;
     private DateTimeOffset lastReadDate;
 
-    [InjectScoped] 
-    private ApiContext ApiContext { get; set; } = null!;
-
-    [CascadingParameter(Name = "HttpRequestState")]
-    protected HttpRequestState? HttpRequestState { get; set; }
+    [InjectScoped] private ApiContext ApiContext { get; set; } = null!;
 
     private int Selected
     {
@@ -69,7 +64,7 @@
     {
         if (!firstRender)
             return;
-        
+
         string? lastReadDateStr = await JsRuntime.InvokeAsync<string?>("localStorage.getItem", default(CancellationToken), [LastReadStorageKey]);
         if (!DateTimeOffset.TryParse(lastReadDateStr, out this.lastReadDate))
         {
@@ -109,5 +104,4 @@
 
         public RenderFragment Description { get; }
     }
-
 }
