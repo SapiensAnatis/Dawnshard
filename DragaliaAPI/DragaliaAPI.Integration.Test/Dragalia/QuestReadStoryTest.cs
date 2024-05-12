@@ -87,7 +87,9 @@ public class QuestReadStoryTest : TestFixture
     {
         await this
             .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(u => u.SetProperty(e => e.Level, 1).SetProperty(e => e.Exp, 0));
+            .ExecuteUpdateAsync(u =>
+                u.SetProperty(e => e.Level, 30).SetProperty(e => e.Exp, 18990)
+            );
 
         StoryReadResponse data = (
             await this.Client.PostMsgpack<StoryReadResponse>(
@@ -104,8 +106,8 @@ public class QuestReadStoryTest : TestFixture
                     new() { QuestStoryId = 1001009, State = StoryState.Read }
                 }
             );
-        data.UpdateDataList.UserData.Exp.Should().BeGreaterThanOrEqualTo(69990);
-        data.UpdateDataList.UserData.Level.Should().BeGreaterThanOrEqualTo(60);
+        data.UpdateDataList.UserData.Exp.Should().BeGreaterThanOrEqualTo(88980);
+        data.UpdateDataList.UserData.Level.Should().BeGreaterThanOrEqualTo(65);
         this.ApiContext.PlayerPresents.Where(x =>
                 x.ViewerId == this.ViewerId && x.EntityType == EntityTypes.HustleHammer
             )

@@ -222,6 +222,17 @@ public class StoryService(
                 {
                     await fortRepository.AddToStorage((FortPlants)reward.Id, reward.Quantity, true);
                 }
+                else if (storyId == 1001009)
+                {
+                    presentService.AddPresent(
+                        new Present(
+                            PresentMessage.Chapter10Clear,
+                            (EntityTypes)reward.Type,
+                            reward.Id,
+                            reward.Quantity
+                        )
+                    );
+                }
                 else
                 {
                     await rewardService.GrantReward(
@@ -263,11 +274,7 @@ public class StoryService(
 
         if (storyId == 1001009)
         {
-            logger.LogDebug("Granting chapter 10 completion rewards.");
-
-            IEnumerable<Present> presents = GetChapter10PresentList();
-            presentService.AddPresent(presents);
-
+            logger.LogDebug("Granting player experience for chapter 10 completion.");
             await userService.AddExperience(69990);
         }
 
@@ -357,50 +364,5 @@ public class StoryService(
             questReward.EntityLevel = 1;
 
         return questReward;
-    }
-
-    private static List<Present> GetChapter10PresentList()
-    {
-        Dictionary<Materials, int> materialCounts =
-            new()
-            {
-                { Materials.WindOrb, 76 },
-                { Materials.StormOrb, 1 },
-                { Materials.WaterOrb, 86 },
-                { Materials.StreamOrb, 3 },
-                { Materials.DelugeOrb, 1 },
-                { Materials.FlameOrb, 116 },
-                { Materials.BlazeOrb, 7 },
-                { Materials.InfernoOrb, 2 },
-                { Materials.LightOrb, 270 },
-                { Materials.RadianceOrb, 15 },
-                { Materials.RefulgenceOrb, 3 },
-                { Materials.ShadowOrb, 66 },
-                { Materials.Talonstone, 87 },
-                { Materials.LightMetal, 18 },
-                { Materials.IronOre, 25 },
-                { Materials.Granite, 10 },
-                { Materials.FiendsClaw, 25 },
-                { Materials.FiendsHorn, 10 },
-                { Materials.BatsWing, 25 },
-                { Materials.AncientBirdsFeather, 10 },
-                { Materials.DyrenellAes, 2520 }
-            };
-
-        List<Present> presents =
-            new() { new Present(PresentMessage.Chapter10Clear, EntityTypes.HustleHammer, 0, 350) };
-        foreach ((Materials material, int count) in materialCounts)
-        {
-            presents.Add(
-                new Present(
-                    PresentMessage.Chapter10Clear,
-                    EntityTypes.Material,
-                    (int)material,
-                    count
-                )
-            );
-        }
-
-        return presents;
     }
 }
