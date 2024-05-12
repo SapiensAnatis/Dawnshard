@@ -1,23 +1,28 @@
-﻿@using System.Text.Json;
-@using DragaliaAPI.Database.Entities;
+﻿@using DragaliaAPI.Database.Entities;
 @using DragaliaAPI.Database;
 @using DragaliaAPI.Features.Blazor
 @using Microsoft.EntityFrameworkCore;
 @inherits ServiceComponentBase
 @inject IJSRuntime JsRuntime;
 
-<MudStack Spacing="4" Class="mb-2" AlignItems="AlignItems.Center">
+<MudStack Style="width: 100%" Spacing="4" Class="mb-2" AlignItems="AlignItems.Center">
     <MudStack Style="width: 95%; min-height: 70vh;">
         @foreach (NewsItem item in this.visibleNewsItems)
         {
-            <MudCard>
+            <MudCard Style="@(item.Time > this.lastReadDate ? "border: medium solid var(--mud-palette-info); border-radius: var(--mud-default-borderradius);" : string.Empty)">
                 <MudCardHeader Style="margin-bottom: -1rem">
-                    <MudStack Spacing="-1">
-                        <MudText Typo="Typo.h6" Color="Color.Primary">
-                            @item.Headline
-                        </MudText>
+                    <MudStack Style="width: 100%" Spacing="-1">
+                        <MudStack Style="width: 100%" AlignItems="AlignItems.Start" Row="true" Justify="Justify.SpaceBetween">
+                            <MudText Typo="Typo.h6" Color="Color.Primary">
+                                @item.Headline
+                            </MudText>
+                            @if (item.Time > this.lastReadDate)
+                            {
+                                <MudIcon Color="Color.Info" Icon="@Icons.Material.Filled.NewReleases"></MudIcon>
+                            }
+                        </MudStack>
                         <MudText Typo="Typo.caption">
-                            @item.Time
+                            @item.TimeString
                         </MudText>
                     </MudStack>
                 </MudCardHeader>
@@ -31,16 +36,16 @@
 </MudStack>
 
 @code {
-
     private const int PageSize = 4;
-    
-    private List<NewsItem> allNewsItems = new();
-    private IEnumerable<NewsItem> visibleNewsItems = Enumerable.Empty<NewsItem>();
+    private const string LastReadStorageKey = "lastReadNews";
+
+    private List<NewsItem> allNewsItems = [];
+    private IEnumerable<NewsItem> visibleNewsItems = [];
     private int numPages = 1;
     private int selected = 1;
+    private DateTimeOffset lastReadDate;
 
-    [InjectScoped] 
-    private ApiContext ApiContext { get; set; } = null!;
+    [InjectScoped] private ApiContext ApiContext { get; set; } = null!;
 
     private int Selected
     {
@@ -49,22 +54,36 @@
         {
             this.visibleNewsItems = allNewsItems.Skip(PageSize * (value - 1)).Take(PageSize);
             this.selected = value;
-            
+
             // Fire-and-forget
             this.JsRuntime.InvokeVoidAsync("window.blazorExtensions.scrollToTop");
         }
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if (!firstRender)
+            return;
+
+        string? lastReadDateStr = await JsRuntime.InvokeAsync<string?>("localStorage.getItem", default(CancellationToken), [LastReadStorageKey]);
+        if (!DateTimeOffset.TryParse(lastReadDateStr, out this.lastReadDate))
+        {
+            // Do not show all news items as new on a first visit to the page
+            this.lastReadDate = DateTimeOffset.UtcNow;
+        }
+
         this.allNewsItems = await this.ApiContext.NewsItems
             .OrderByDescending(x => x.Time)
             .Select(x => new NewsItem(x))
             .ToListAsync();
 
         this.numPages = (int)Math.Ceiling((double)this.allNewsItems.Count / PageSize);
-
         this.visibleNewsItems = this.allNewsItems.Take(PageSize);
+
+        this.StateHasChanged();
+
+        string newLastReadDate = DateTimeOffset.UtcNow.ToString("O");
+        ValueTask _ = JsRuntime.InvokeVoidAsync("localStorage.setItem", default(CancellationToken), [LastReadStorageKey, newLastReadDate]);
     }
 
     private class NewsItem
@@ -72,13 +91,16 @@
         public NewsItem(DbNewsItem dbNewsItem)
         {
             this.Headline = dbNewsItem.Headline;
-            this.Time = $"{dbNewsItem.Time:dd/MM/yyyy HH:mm} UTC";
+            this.Time = dbNewsItem.Time;
+            this.TimeString = $"{dbNewsItem.Time:dd/MM/yyyy HH:mm} UTC";
             this.Description = new((builder) => builder.AddMarkupContent(0, dbNewsItem.Description));
         }
 
         public string Headline { get; }
 
-        public string Time { get; }
+        public DateTimeOffset Time { get; }
+
+        public string TimeString { get; }
 
         public RenderFragment Description { get; }
     }
