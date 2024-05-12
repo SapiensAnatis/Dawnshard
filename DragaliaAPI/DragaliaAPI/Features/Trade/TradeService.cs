@@ -1,9 +1,11 @@
 ﻿using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Trade;
@@ -16,6 +18,7 @@ public class TradeService(
     IRewardService rewardService,
     ILogger<TradeService> logger,
     IPaymentService paymentService,
+    IPresentService presentService,
     IMissionProgressionService missionProgressionService
 ) : ITradeService
 {
@@ -162,7 +165,7 @@ public class TradeService(
             );
         }
 
-        await rewardService.GrantReward(
+        RewardGrantResult result = await rewardService.GrantReward(
             new(
                 trade.DestinationEntityType,
                 trade.DestinationEntityId,
@@ -170,6 +173,17 @@ public class TradeService(
                 trade.DestinationLimitBreakCount
             )
         );
+
+        if (result == RewardGrantResult.Limit)
+        {
+            presentService.AddPresent(
+                new Present.Present(
+                    PresentMessage.TreasureTrade,
+                    trade.DestinationEntityType,
+                    trade.DestinationEntityId
+                )
+            );
+        }
 
         await tradeRepository.AddTrade(tradeType, tradeId, count, DateTimeOffset.UtcNow);
 

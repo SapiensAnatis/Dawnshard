@@ -28,19 +28,6 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
     }
 
     [Fact]
-    public async Task GetPlayerInfo_ValidId_ReturnsInfo()
-    {
-        (await this.userDataRepository.UserData.ToListAsync()).Should().NotBeEmpty();
-    }
-
-    [Fact]
-    public async Task GetPlayerInfo_InvalidId_ReturnsEmptyQueryable()
-    {
-        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(400);
-        (await this.userDataRepository.UserData.ToListAsync()).Should().BeEmpty();
-    }
-
-    [Fact]
     public async Task UpdateName_UpdatesName()
     {
         await this.userDataRepository.UpdateName("Euden 2");

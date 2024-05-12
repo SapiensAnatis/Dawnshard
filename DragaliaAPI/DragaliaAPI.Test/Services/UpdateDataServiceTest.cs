@@ -69,11 +69,8 @@ public class UpdateDataServiceTest : RepositoryTestFixture
 
         DbPlayerCharaData charaData = new(viewerId, Charas.GalaLeonidas);
 
-        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(
-            viewerId,
-            Dragons.DreadkingRathalos
-        );
-        DbPlayerDragonReliability reliabilityData = DbPlayerDragonReliabilityFactory.Create(
+        DbPlayerDragonData dragonData = new DbPlayerDragonData(viewerId, Dragons.DreadkingRathalos);
+        DbPlayerDragonReliability reliabilityData = new DbPlayerDragonReliability(
             viewerId,
             Dragons.DreadkingRathalos
         );
@@ -223,9 +220,9 @@ public class UpdateDataServiceTest : RepositoryTestFixture
         this.ApiContext.AddRange(
             new List<IDbPlayerData>()
             {
-                DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Arsene),
-                DbPlayerDragonDataFactory.Create(ViewerId, Dragons.GalaBeastVolk),
-                DbPlayerDragonDataFactory.Create(ViewerId, Dragons.HighZodiark)
+                new DbPlayerDragonData(ViewerId, Dragons.Arsene),
+                new DbPlayerDragonData(ViewerId, Dragons.GalaBeastVolk),
+                new DbPlayerDragonData(ViewerId, Dragons.HighZodiark)
             }
         );
 

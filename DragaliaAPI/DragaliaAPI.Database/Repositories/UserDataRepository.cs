@@ -27,10 +27,7 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
         this.logger = logger;
     }
 
-    public IQueryable<DbPlayerUserData> UserData =>
-        this.apiContext.PlayerUserData.Where(x =>
-            x.ViewerId == this.playerIdentityService.ViewerId
-        );
+    public IQueryable<DbPlayerUserData> UserData => this.apiContext.PlayerUserData;
 
     public async Task<DbPlayerUserData> GetUserDataAsync()
     {
@@ -45,22 +42,19 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
 
     public IQueryable<DbPlayerUserData> GetViewerData(long viewerId)
     {
+        // Ignore query filters as this is often used for dev controllers where IPlayerIdentityService may not be initialized
         return this
-            .apiContext.PlayerUserData.Where(x => x.ViewerId == viewerId)
+            .apiContext.PlayerUserData.IgnoreQueryFilters()
+            .Where(x => x.ViewerId == viewerId)
             .Include(x => x.Owner);
     }
 
     public IQueryable<DbPlayerUserData> GetMultipleViewerData(IEnumerable<long> viewerIds)
     {
-        return this.apiContext.PlayerUserData.Where(x => viewerIds.Contains(x.ViewerId));
-    }
-
-    public async Task<ISet<int>> GetTutorialFlags()
-    {
-        DbPlayerUserData userData = await UserData.SingleAsync();
-
-        int flags = userData.TutorialFlag;
-        return TutorialFlagUtil.ConvertIntToFlagIntList(flags);
+        // Ignore query filters as this is used for getting user data of co-op teammates
+        return this
+            .apiContext.PlayerUserData.IgnoreQueryFilters()
+            .Where(x => viewerIds.Contains(x.ViewerId));
     }
 
     public async Task UpdateName(string newName)

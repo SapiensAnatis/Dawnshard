@@ -168,11 +168,32 @@ public enum PresentMessage
     PuppyGiftReturn = 2031002,
 
     /// <summary>
+    /// Title: Treasure Trade Item
+    /// <br/>
+    /// Description: Your earnings from the treasure trade.
+    /// </summary>
+    TreasureTrade = 2040004,
+
+    /// <summary>
     /// Title: Shop Purchase
     /// <br/>
     /// Description: An item purchased from the shop.
     /// </summary>
     ShopPurchase = 2040005,
+
+    /// <summary>
+    /// Title: Summon Showcase Reward
+    /// <br/>
+    /// Description: A reward from the Summon Showcase.
+    /// </summary>
+    SummonShowcase = 2070001,
+
+    /// <summary>
+    /// Title: Wyrmsigil Reward
+    /// <br/>
+    /// Description: A reward obtained by trading in wyrmsigils..
+    /// </summary>
+    WyrmsigilReward = 2070004,
 
     /// <summary>
     /// Title: Mana Node Unlocking Reward

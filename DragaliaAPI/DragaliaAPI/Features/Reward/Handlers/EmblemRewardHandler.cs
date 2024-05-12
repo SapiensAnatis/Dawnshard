@@ -1,6 +1,8 @@
 using System.Collections.Immutable;
 using DragaliaAPI.Features.Emblem;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using JetBrains.Annotations;
 
 namespace DragaliaAPI.Features.Reward.Handlers;
@@ -18,13 +20,23 @@ public class EmblemRewardHandler(IEmblemRepository repository) : IRewardHandler
         if (!Enum.IsDefined(emblem))
             throw new ArgumentException("Entity ID is not a valid emblem", nameof(entity));
 
-        if (await repository.HasEmblem(emblem))
+        if (!await repository.HasEmblem(emblem))
         {
-            // TODO: load EmblemData.json and give correct entity
-            return new(RewardGrantResult.Discarded);
+            repository.AddEmblem(emblem);
+            return GrantReturn.Added();
         }
 
-        repository.AddEmblem(emblem);
-        return new(RewardGrantResult.Added);
+        if (
+            MasterAsset.EmblemData.TryGetValue(emblem, out EmblemData? data)
+            && data is { DuplicateEntityType: not 0, DuplicateEntityQuantity: not 0 }
+        )
+        {
+            Entity convertedEntity =
+                new(data.DuplicateEntityType, data.DuplicateEntityId, data.DuplicateEntityQuantity);
+
+            return GrantReturn.Converted(convertedEntity);
+        }
+
+        return GrantReturn.Discarded();
     }
 }

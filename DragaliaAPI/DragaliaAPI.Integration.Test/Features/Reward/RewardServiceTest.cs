@@ -1,5 +1,7 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Reward.Handlers;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Integration.Test.Features.Reward;
 
@@ -88,5 +90,15 @@ public class RewardServiceTest : TestFixture
                 ],
                 opts => opts.Excluding(x => x.KeyId)
             );
+    }
+
+    [Fact]
+    public void NoDuplicateSupportedTypes()
+    {
+        IEnumerable<EntityTypes> supportedTypes = this
+            .Services.GetServices<IRewardHandler>()
+            .SelectMany(x => x.SupportedTypes);
+
+        supportedTypes.Should().OnlyHaveUniqueItems();
     }
 }

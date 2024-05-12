@@ -11,14 +11,6 @@ public interface IUnitRepository
     IQueryable<DbAbilityCrest> AbilityCrests { get; }
     IQueryable<DbTalisman> Talismans { get; }
 
-    Task<IEnumerable<(Charas id, bool isNew)>> AddCharas(IEnumerable<Charas> idList);
-
-    Task<bool> AddCharas(Charas id);
-
-    Task<IEnumerable<(Dragons Id, bool IsNew)>> AddDragons(IEnumerable<Dragons> idList);
-
-    Task<bool> AddDragons(Dragons id);
-
     Task RemoveDragons(IEnumerable<long> keyIdList);
 
     Task<DbSetUnit?> GetCharaSetData(Charas charaId, int setNo);

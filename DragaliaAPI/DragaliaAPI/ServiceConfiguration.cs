@@ -21,8 +21,6 @@ using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Quest;
-using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Reward.Handlers;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Features.Shop;
@@ -81,10 +79,9 @@ public static class ServiceConfiguration
             .AddScoped<ISavefileUpdateService, SavefileUpdateService>()
             .AddTransient<PlayerIdentityLoggingMiddleware>();
 
-        services.AddSummoningFeature();
+        services.AddSummoningFeature().AddRewardFeature();
 
         services
-            .AddScoped<IRewardService, RewardService>()
             .RegisterMissionServices()
             // Shop Feature
             .AddScoped<IShopRepository, ShopRepository>()
@@ -167,7 +164,6 @@ public static class ServiceConfiguration
 
         services.AddAllOfType<ISavefileUpdate>();
         services.AddAllOfType<IDailyResetAction>();
-        services.AddAllOfType<IRewardHandler>();
 
         services.AddHttpClient<IBaasApi, BaasApi>();
 

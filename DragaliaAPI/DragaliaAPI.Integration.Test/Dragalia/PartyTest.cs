@@ -198,9 +198,8 @@ public class PartyTest : TestFixture
             new PartySetMainPartyNoRequest(2)
         );
 
-        ApiContext apiContext = this.Services.GetRequiredService<ApiContext>();
-        DbPlayerUserData userData = await apiContext
-            .PlayerUserData.Where(x => x.ViewerId == ViewerId)
+        DbPlayerUserData userData = await this
+            .ApiContext.PlayerUserData.Where(x => x.ViewerId == ViewerId)
             .SingleAsync();
 
         userData.MainPartyNo.Should().Be(2);

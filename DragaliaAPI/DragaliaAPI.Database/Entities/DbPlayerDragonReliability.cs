@@ -34,24 +34,19 @@ public class DbPlayerDragonReliability : DbPlayerData, IHasXp
     [Required]
     [TypeConverter(typeof(DateTimeOffsetConverter))]
     public DateTimeOffset GetTime { get; set; }
-}
 
-public static class DbPlayerDragonReliabilityFactory
-{
-    public static DbPlayerDragonReliability Create(long viewerId, Dragons id)
+    public DbPlayerDragonReliability() { }
+
+    public DbPlayerDragonReliability(long viewerId, Dragons id)
     {
         byte defaultRelLevel = (byte)MasterAsset.DragonData.Get(id).DefaultReliabilityLevel;
         defaultRelLevel = defaultRelLevel == default ? (byte)1 : defaultRelLevel;
-        DbPlayerDragonReliability newReliability =
-            new()
-            {
-                ViewerId = (int)viewerId,
-                DragonId = id,
-                Level = defaultRelLevel,
-                Exp = DragonConstants.BondXpLimits[defaultRelLevel - 1],
-                GetTime = DateTimeOffset.UtcNow,
-                LastContactTime = DateTimeOffset.UtcNow
-            };
-        return newReliability;
+
+        this.ViewerId = (int)viewerId;
+        this.DragonId = id;
+        this.Level = defaultRelLevel;
+        this.Exp = DragonConstants.BondXpLimits[defaultRelLevel - 1];
+        this.GetTime = DateTimeOffset.UtcNow;
+        this.LastContactTime = DateTimeOffset.UtcNow;
     }
 }

@@ -7,7 +7,11 @@ public static partial class FeatureExtensions
 {
     public static IServiceCollection AddSummoningFeature(
         this IServiceCollection serviceCollection
-    ) => serviceCollection.AddScoped<SummonService>().AddScoped<SummonOddsService>();
+    ) =>
+        serviceCollection
+            .AddScoped<SummonService>()
+            .AddScoped<SummonOddsService>()
+            .AddScoped<UnitService>();
 
     public static IServiceCollection AddSummoningOptions(
         this IServiceCollection serviceCollection,

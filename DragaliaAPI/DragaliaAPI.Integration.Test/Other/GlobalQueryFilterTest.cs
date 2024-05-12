@@ -35,6 +35,28 @@ public class GlobalQueryFilterTest : TestFixture
         await TestGlobalQueryFilter<DbPlayerBannerData>();
 
     [Fact]
+    public async Task DbPlayerUserData_HasGlobalQueryFilter()
+    {
+        // We will already have an instance for our own Viewer ID thanks to TestFixture
+        this.ApiContext.Players.Add(new() { ViewerId = this.ViewerId + 1, AccountId = "other" });
+        this.ApiContext.PlayerUserData.Add(new() { ViewerId = this.ViewerId + 1 });
+        await this.ApiContext.SaveChangesAsync();
+
+        (await this.ApiContext.PlayerUserData.AsNoTracking().ToListAsync())
+            .Should()
+            .HaveCount(1)
+            .And.AllSatisfy(x => x.ViewerId.Should().Be(this.ViewerId));
+    }
+
+    [Fact]
+    public async Task DbPlayerDragonData_HasGlobalQueryFilter() =>
+        await TestGlobalQueryFilter<DbPlayerDragonData>();
+
+    [Fact]
+    public async Task DbPlayerDragonReliability_HasGlobalQueryFilter() =>
+        await TestGlobalQueryFilter<DbPlayerDragonReliability>();
+
+    [Fact]
     public async Task DbPlayerSummonHistory_HasGlobalQueryFilter() =>
         await TestGlobalQueryFilter<DbPlayerSummonHistory>();
 
