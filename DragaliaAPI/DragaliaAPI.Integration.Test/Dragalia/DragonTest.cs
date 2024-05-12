@@ -64,8 +64,6 @@ public class DragonTest : TestFixture
     [ClassData(typeof(DragonBuildUpTheoryData))]
     public async Task DragonBuildUp_ReturnsUpgradedDragonData(DragonBuildUpTestCase testCase)
     {
-        ApiContext context = this.Services.GetRequiredService<ApiContext>();
-
         DbPlayerDragonData dbDragon = await this.AddToDatabase(testCase.SetupDragons[0]);
 
         DbPlayerDragonData dbDragonSacrifice = null!;
@@ -74,7 +72,7 @@ public class DragonTest : TestFixture
             dbDragonSacrifice = await this.AddToDatabase(testCase.SetupDragons[1]);
         }
 
-        await context.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync();
 
         DragonBuildupRequest request = new DragonBuildupRequest()
         {
@@ -115,13 +113,11 @@ public class DragonTest : TestFixture
     [Fact]
     public async Task DragonBuildUp_ReturnsDragonDataWithAugments()
     {
-        ApiContext context = this.Services.GetRequiredService<ApiContext>();
-
-        DbPlayerDragonData dbDragon = context
-            .PlayerDragonData.Add(new DbPlayerDragonData(ViewerId, Dragons.Liger))
+        DbPlayerDragonData dbDragon = this
+            .ApiContext.PlayerDragonData.Add(new DbPlayerDragonData(ViewerId, Dragons.Liger))
             .Entity;
 
-        await context.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync();
 
         DragonBuildupRequest request = new DragonBuildupRequest()
         {
@@ -153,23 +149,24 @@ public class DragonTest : TestFixture
     [Fact]
     public async Task DragonResetPlusCount_ResetsAugments()
     {
-        ApiContext context = this.Services.GetRequiredService<ApiContext>();
-
         DbPlayerDragonData dragon = new DbPlayerDragonData(ViewerId, Dragons.Maritimus);
         dragon.AttackPlusCount = 50;
-        dragon = context.PlayerDragonData.Add(dragon).Entity;
+        dragon = this.ApiContext.PlayerDragonData.Add(dragon).Entity;
 
-        await context.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync();
 
-        context.ChangeTracker.Clear();
-        DbPlayerUserData userData = await context
-            .PlayerUserData.Where(x => x.ViewerId == ViewerId)
+        this.ApiContext.ChangeTracker.Clear();
+        DbPlayerUserData userData = await this
+            .ApiContext.PlayerUserData.Where(x => x.ViewerId == ViewerId)
             .FirstAsync();
 
         long startCoin = userData.Coin;
 
         int augmentCount = (
-            await context.PlayerMaterials.FindAsync(ViewerId, Materials.AmplifyingDragonscale)
+            await this.ApiContext.PlayerMaterials.FindAsync(
+                ViewerId,
+                Materials.AmplifyingDragonscale
+            )
         )!.Quantity;
 
         DragonResetPlusCountRequest request = new DragonResetPlusCountRequest()
@@ -684,25 +681,23 @@ public class DragonTest : TestFixture
     [Fact]
     public async Task DragonSell_Multi_SuccessfulSale()
     {
-        ApiContext context = this.Services.GetRequiredService<ApiContext>();
-
-        DbPlayerDragonData dragonSimurgh = context
-            .PlayerDragonData.Add(new DbPlayerDragonData(ViewerId, Dragons.Simurgh))
+        DbPlayerDragonData dragonSimurgh = this
+            .ApiContext.PlayerDragonData.Add(new DbPlayerDragonData(ViewerId, Dragons.Simurgh))
             .Entity;
 
-        DbPlayerDragonData dragonStribog = context
-            .PlayerDragonData.Add(new DbPlayerDragonData(ViewerId, Dragons.Stribog))
+        DbPlayerDragonData dragonStribog = this
+            .ApiContext.PlayerDragonData.Add(new DbPlayerDragonData(ViewerId, Dragons.Stribog))
             .Entity;
 
         dragonStribog.LimitBreakCount = 4;
 
-        await context.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync();
         DragonData dragonDataSimurgh = MasterAsset.DragonData.Get(Dragons.Simurgh);
         DragonData dragonDataStribog = MasterAsset.DragonData.Get(Dragons.Stribog);
 
-        context.ChangeTracker.Clear();
-        DbPlayerUserData uData = await context
-            .PlayerUserData.Where(x => x.ViewerId == ViewerId)
+        this.ApiContext.ChangeTracker.Clear();
+        DbPlayerUserData uData = await this
+            .ApiContext.PlayerUserData.Where(x => x.ViewerId == ViewerId)
             .FirstAsync();
 
         long startCoin = uData.Coin;

@@ -28,7 +28,6 @@ public class GenericRewardHandler(
 {
     public IReadOnlyList<EntityTypes> SupportedTypes { get; } =
         ImmutableArray.Create(
-            EntityTypes.Chara,
             EntityTypes.Item,
             EntityTypes.Dew,
             EntityTypes.HustleHammer,

@@ -126,7 +126,7 @@ public class RewardService(
 
     private IRewardHandler GetHandler(EntityTypes type)
     {
-        IRewardHandler? handler = rewardHandlers.SingleOrDefault(x =>
+        IRewardHandler? handler = rewardHandlers.FirstOrDefault(x =>
             x.SupportedTypes.Contains(type)
         );
 

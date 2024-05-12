@@ -149,6 +149,10 @@ public class SavefileService : ISavefileService
             player.UserData = mapper.Map<DbPlayerUserData>(savefile.UserData);
             player.UserData.Crystal += 1_200_000;
 
+            // TODO: What was the actual maximum dragon storage you could get?
+            int cappedDragonStorage = Math.Min(savefile.UserData.MaxDragonQuantity, 500);
+            player.UserData.MaxDragonQuantity = cappedDragonStorage;
+
             this.logger.LogDebug(
                 "Mapping DbPlayerUserData step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
@@ -172,7 +176,7 @@ public class SavefileService : ISavefileService
             // Build key id mappings for dragons and talismans
             Dictionary<long, DbPlayerDragonData> dragonKeyIds = new();
 
-            foreach (DragonList d in savefile.DragonList ?? new List<DragonList>())
+            foreach (DragonList d in savefile.DragonList?.Take(cappedDragonStorage) ?? [])
             {
                 ulong oldKeyId = d.DragonKeyId;
                 DbPlayerDragonData dbEntry = d.Map<DbPlayerDragonData>(mapper);

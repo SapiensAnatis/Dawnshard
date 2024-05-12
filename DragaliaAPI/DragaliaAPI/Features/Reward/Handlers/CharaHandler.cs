@@ -26,7 +26,10 @@ public partial class CharaHandler(
             return GrantReturn.FailError();
         }
 
-        if (await apiContext.PlayerCharaData.AnyAsync(x => x.CharaId == chara))
+        if (
+            apiContext.PlayerCharaData.Local.Any(x => x.CharaId == chara)
+            || await apiContext.PlayerCharaData.AnyAsync(x => x.CharaId == chara)
+        )
         {
             return GrantReturn.Discarded();
         }
@@ -70,7 +73,10 @@ public partial class CharaHandler(
                 continue;
             }
 
-            if (ownedCharacters.Contains(chara))
+            if (
+                apiContext.PlayerCharaData.Local.Any(x => x.CharaId == chara)
+                || ownedCharacters.Contains(chara)
+            )
             {
                 result.Add(key, GrantReturn.Discarded());
                 continue;

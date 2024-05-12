@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Mapping.Mapperly;
@@ -8,6 +9,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
+using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.Features.Summoning;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -24,6 +26,7 @@ public sealed partial class SummonService(
     UnitService unitService,
     IOptionsMonitor<SummonBannerOptions> optionsMonitor,
     IPlayerIdentityService playerIdentityService,
+    IPresentService presentService,
     IRewardService rewardService,
     IPaymentService paymentService,
     ApiContext apiContext,
@@ -303,6 +306,18 @@ public sealed partial class SummonService(
         RewardGrantResult result = await rewardService.GrantReward(entity);
 
         Log.PointsDeducted(logger, bannerData.SummonPoints);
+
+        if (result == RewardGrantResult.Limit)
+        {
+            Log.AddingTradeToGiftBox(logger, tradeList);
+            presentService.AddPresent(
+                new Present.Present(
+                    PresentMessage.WyrmsigilReward,
+                    tradeList.EntityType,
+                    tradeList.EntityId
+                )
+            );
+        }
 
         if (result is not (RewardGrantResult.Added))
         {

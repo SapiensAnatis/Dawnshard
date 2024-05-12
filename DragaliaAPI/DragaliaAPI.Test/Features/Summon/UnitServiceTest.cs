@@ -41,7 +41,6 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
             new(
                 this.fixture.ApiContext,
                 this.mockPlayerIdentityService.Object,
-                TimeProvider.System,
                 NullLogger<DragonHandler>.Instance
             );
         RewardService rewardService =

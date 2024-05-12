@@ -458,6 +458,46 @@ public class PresentTest : TestFixture
     }
 
     [Fact]
+    public async Task Receive_DuplicateDragon_GrantsBoth()
+    {
+        List<DbPlayerPresent> presents =
+            new()
+            {
+                new()
+                {
+                    ViewerId = ViewerId,
+                    EntityType = EntityTypes.Dragon,
+                    EntityId = (int)Dragons.Homura,
+                },
+                new()
+                {
+                    ViewerId = ViewerId,
+                    EntityType = EntityTypes.Dragon,
+                    EntityId = (int)Dragons.Homura,
+                },
+            };
+
+        await this.AddRangeToDatabase(presents);
+
+        IEnumerable<ulong> presentIdList = presents.Select(x => (ulong)x.PresentId).ToList();
+
+        DragaliaResponse<PresentReceiveResponse> response =
+            await this.Client.PostMsgpack<PresentReceiveResponse>(
+                $"{Controller}/receive",
+                new PresentReceiveRequest() { PresentIdList = presentIdList }
+            );
+
+        response.Data.ReceivePresentIdList.Should().BeEquivalentTo(presentIdList);
+
+        response.Data.UpdateDataList.DragonList.Should().HaveCount(2);
+
+        response
+            .Data.UpdateDataList.DragonReliabilityList.Should()
+            .ContainSingle()
+            .And.Contain(x => x.DragonId == Dragons.Homura);
+    }
+
+    [Fact]
     public async Task Receive_SummonTickets_StacksCorrectly()
     {
         List<DbPlayerPresent> presents =

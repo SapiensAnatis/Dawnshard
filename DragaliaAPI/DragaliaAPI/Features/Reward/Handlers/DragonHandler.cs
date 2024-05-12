@@ -1,5 +1,6 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Extensions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,6 @@ namespace DragaliaAPI.Features.Reward.Handlers;
 public partial class DragonHandler(
     ApiContext apiContext,
     IPlayerIdentityService playerIdentityService,
-    TimeProvider timeProvider,
     ILogger<DragonHandler> logger
 ) : IRewardHandler, IBatchRewardHandler
 {
@@ -17,6 +17,13 @@ public partial class DragonHandler(
 
     public async Task<GrantReturn> Grant(Entity entity)
     {
+        Dragons dragon = (Dragons)entity.Id;
+        if (!Enum.IsDefined(dragon))
+        {
+            Log.InvalidDragonId(logger, entity, dragon);
+            return GrantReturn.FailError();
+        }
+
         int storageSpace = await apiContext
             .PlayerUserData.Select(x => x.MaxDragonQuantity)
             .FirstAsync();
@@ -28,13 +35,18 @@ public partial class DragonHandler(
         }
 
         apiContext.PlayerDragonData.Add(
-            new DbPlayerDragonData()
-            {
-                ViewerId = playerIdentityService.ViewerId,
-                DragonId = (Dragons)entity.Id,
-                GetTime = timeProvider.GetUtcNow(),
-            }
+            new DbPlayerDragonData(playerIdentityService.ViewerId, (Dragons)entity.Id)
         );
+
+        if (
+            !apiContext.PlayerDragonReliability.Local.Any(x => x.DragonId == dragon)
+            && !await apiContext.PlayerDragonReliability.AnyAsync(x => x.DragonId == dragon)
+        )
+        {
+            apiContext.PlayerDragonReliability.Add(
+                new DbPlayerDragonReliability(playerIdentityService.ViewerId, dragon)
+            );
+        }
 
         return GrantReturn.Added();
     }
@@ -49,14 +61,12 @@ public partial class DragonHandler(
             .FirstAsync();
         int dragonCount = await apiContext.PlayerDragonData.CountAsync();
 
-        List<Dragons> ownedReliabilities = await apiContext
+        HashSet<Dragons> ownedReliabilities = await apiContext
             .PlayerDragonReliability.Where(x =>
                 entities.Values.Select(y => (Dragons)y.Id).Contains(x.DragonId)
             )
             .Select(x => x.DragonId)
-            .ToListAsync();
-
-        DateTimeOffset getTime = timeProvider.GetUtcNow();
+            .ToHashSetAsync();
 
         Dictionary<TKey, GrantReturn> resultDict = [];
 
@@ -78,15 +88,13 @@ public partial class DragonHandler(
             }
 
             apiContext.PlayerDragonData.Add(
-                new DbPlayerDragonData()
-                {
-                    ViewerId = playerIdentityService.ViewerId,
-                    DragonId = dragon,
-                    GetTime = getTime,
-                }
+                new DbPlayerDragonData(playerIdentityService.ViewerId, dragon)
             );
 
-            if (!ownedReliabilities.Contains(dragon))
+            if (
+                !ownedReliabilities.Contains(dragon)
+                && !apiContext.PlayerDragonReliability.Local.Any(x => x.DragonId == dragon)
+            )
             {
                 apiContext.PlayerDragonReliability.Add(
                     new DbPlayerDragonReliability(playerIdentityService.ViewerId, dragon)
