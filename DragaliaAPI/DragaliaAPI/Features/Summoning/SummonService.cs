@@ -318,8 +318,7 @@ public sealed partial class SummonService(
                 )
             );
         }
-
-        if (result is not (RewardGrantResult.Added))
+        else if (result != RewardGrantResult.Added)
         {
             Log.UnexpectedRewardResult(logger, result);
         }

@@ -1,6 +1,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using DragaliaAPI.Shared.Features.Presents;
+using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Summon;
 using Microsoft.EntityFrameworkCore;
 
@@ -455,6 +456,12 @@ public class PresentTest : TestFixture
             .Data.UpdateDataList.CharaList.Should()
             .ContainSingle()
             .And.Contain(x => x.CharaId == Charas.Addis);
+        response
+            .Data.UpdateDataList.UnitStoryList.Should()
+            .ContainSingle()
+            .And.Contain(x =>
+                x.UnitStoryId == MasterAsset.CharaStories[(int)Charas.Addis].StoryIds[0]
+            );
     }
 
     [Fact]

@@ -11,7 +11,5 @@ public static partial class FeatureExtensions
         serviceCollection
             .AddScoped<IRewardService, RewardService>()
             .AddAllOfType<IRewardHandler>()
-            .AddAllOfType<IBatchRewardHandler>()
-            .AddScoped<CharaHandler>()
-            .AddScoped<DragonHandler>();
+            .AddAllOfType<IBatchRewardHandler>();
 }

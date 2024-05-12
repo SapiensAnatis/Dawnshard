@@ -15,7 +15,6 @@ public class RedoableSummonController(
     SummonOddsService summonOddsService,
     UnitService unitService,
     IStoryRepository storyRepository,
-    IUnitRepository unitRepository,
     ITutorialService tutorialService,
     IUpdateDataService updateDataService,
     IDistributedCache cache

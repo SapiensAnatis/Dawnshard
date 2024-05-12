@@ -20,11 +20,9 @@ namespace DragaliaAPI.Features.Summoning;
 [Produces("application/octet-stream")]
 [ApiController]
 public class SummonController(
-    IUserDataRepository userDataRepository,
-    IUnitRepository unitRepository,
-    IUpdateDataService updateDataService,
     SummonService summonService,
-    SummonOddsService summonOddsService
+    SummonOddsService summonOddsService,
+    IUpdateDataService updateDataService
 ) : DragaliaControllerBase
 {
     /// <summary>

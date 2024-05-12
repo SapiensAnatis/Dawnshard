@@ -38,6 +38,23 @@ public partial class CharaHandler(
             new DbPlayerCharaData(playerIdentityService.ViewerId, chara)
         );
 
+        if (
+            MasterAsset.CharaStories.TryGetValue((int)chara, out StoryData? storyData)
+            && !await apiContext.PlayerStoryState.AnyAsync(x =>
+                x.StoryType == StoryTypes.Chara && x.StoryId == storyData.StoryIds[0]
+            )
+        )
+        {
+            apiContext.PlayerStoryState.Add(
+                new DbPlayerStoryState()
+                {
+                    ViewerId = playerIdentityService.ViewerId,
+                    StoryType = StoryTypes.Chara,
+                    StoryId = storyData.StoryIds[0]
+                }
+            );
+        }
+
         return GrantReturn.Added();
     }
 

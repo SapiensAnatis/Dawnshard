@@ -22,8 +22,7 @@ using DragonNewCheckResult = (Dragons Id, bool IsNew);
 public class UnitService(
     IPresentService presentService,
     IRewardService rewardService,
-    ApiContext apiContext,
-    IPlayerIdentityService playerIdentityService
+    ApiContext apiContext
 )
 {
     /// <summary>
