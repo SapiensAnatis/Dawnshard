@@ -54,8 +54,7 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
         this.unitService = new UnitService(
             this.mockPresentService.Object,
             rewardService,
-            fixture.ApiContext,
-            this.mockPlayerIdentityService.Object
+            fixture.ApiContext
         );
 
         this.fixture.ApiContext.PlayerCharaData.RemoveRange(
