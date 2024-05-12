@@ -24,7 +24,9 @@ public static class DatabaseConfiguration
     {
         services = services
             .AddDbContext<ApiContext>(options =>
-                options.UseNpgsql(postgresOptions.GetConnectionString()).EnableDetailedErrors()
+                options
+                    .UseNpgsql(postgresOptions.GetConnectionString("ApiContext"))
+                    .EnableDetailedErrors()
             )
 #pragma warning disable CS0618 // Type or member is obsolete
             .AddScoped<IDeviceAccountRepository, DeviceAccountRepository>()

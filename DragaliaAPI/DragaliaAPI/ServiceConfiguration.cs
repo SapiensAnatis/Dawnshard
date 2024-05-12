@@ -284,7 +284,7 @@ public static class ServiceConfiguration
                 .UseSimpleAssemblyNameTypeSerializer()
                 .UseRecommendedSerializerSettings()
                 .UsePostgreSqlStorage(pgCfg =>
-                    pgCfg.UseNpgsqlConnection(postgresOptions.GetConnectionString())
+                    pgCfg.UseNpgsqlConnection(postgresOptions.GetConnectionString("Hangfire"))
                 )
         );
 
