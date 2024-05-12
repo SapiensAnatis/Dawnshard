@@ -5,7 +5,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.PlayerDetails;
-using LinqToDB;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Reward.Handlers;
 

@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using DragaliaAPI.Database.Repositories;
-using LinqToDB.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,8 +22,6 @@ public static class DatabaseConfiguration
         PostgresOptions postgresOptions
     )
     {
-        LinqToDBForEFTools.Initialize();
-
         services = services
             .AddDbContext<ApiContext>(options =>
                 options

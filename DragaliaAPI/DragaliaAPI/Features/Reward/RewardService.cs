@@ -49,7 +49,7 @@ public class RewardService(
         }
     }
 
-    public async Task<IDictionary<TKey, RewardGrantResult>> GrantRewards<TKey>(
+    public async Task<IDictionary<TKey, RewardGrantResult>> GrantRewardsWithBatchHandler<TKey>(
         IDictionary<TKey, Entity> entities
     )
         where TKey : struct
@@ -112,6 +112,7 @@ public class RewardService(
                 break;
             }
             case RewardGrantResult.Limit:
+            case RewardGrantResult.Discarded:
                 break;
             case RewardGrantResult.FailError:
                 logger.LogError("Granting of entity {@entity} failed.", entity);

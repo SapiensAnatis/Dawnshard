@@ -21,8 +21,7 @@ using DragonNewCheckResult = (Dragons Id, bool IsNew);
 /// <param name="apiContext">Instance of <see cref="ApiContext"/>.</param>
 public class UnitService(
     IPresentService presentService,
-    DragonHandler dragonHandler, // TODO: use generic RewardService
-    CharaHandler charaHandler,
+    IRewardService rewardService,
     ApiContext apiContext,
     IPlayerIdentityService playerIdentityService
 )
@@ -40,17 +39,14 @@ public class UnitService(
             .Select((x, index) => KeyValuePair.Create(index, new Entity(EntityTypes.Chara, (int)x)))
             .ToDictionary();
 
-        IDictionary<int, GrantReturn> outputRewardDict = await charaHandler.GrantRange(
-            inputRewardDict
-        );
+        IDictionary<int, RewardGrantResult> outputRewardDict =
+            await rewardService.GrantRewardsWithBatchHandler(inputRewardDict);
 
         List<CharaNewCheckResult> result = [];
 
-        foreach ((int key, GrantReturn grantReturn) in outputRewardDict)
+        foreach ((int key, RewardGrantResult grantResult) in outputRewardDict)
         {
-            result.Add(
-                ((Charas)inputRewardDict[key].Id, grantReturn.Result == RewardGrantResult.Added)
-            );
+            result.Add(((Charas)inputRewardDict[key].Id, grantResult == RewardGrantResult.Added));
         }
 
         return result;
@@ -64,12 +60,11 @@ public class UnitService(
             )
             .ToDictionary();
 
-        IDictionary<int, GrantReturn> outputRewardDict = await dragonHandler.GrantRange(
-            inputRewardDict
-        );
+        IDictionary<int, RewardGrantResult> outputRewardDict =
+            await rewardService.GrantRewardsWithBatchHandler(inputRewardDict);
 
         IEnumerable<Present.Present> presentsToAdd = outputRewardDict
-            .Where(kvp => kvp.Value.Result == RewardGrantResult.Limit)
+            .Where(kvp => kvp.Value == RewardGrantResult.Limit)
             .Select(x => new Present.Present(
                 PresentMessage.SummonShowcase,
                 EntityTypes.Dragon,

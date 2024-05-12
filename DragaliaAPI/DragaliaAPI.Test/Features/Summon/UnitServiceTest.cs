@@ -1,12 +1,15 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Test;
 using DragaliaAPI.Features.Present;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Reward.Handlers;
 using DragaliaAPI.Features.Summoning;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging.Abstractions;
 using static DragaliaAPI.Database.Test.DbTestFixture;
 
@@ -41,11 +44,17 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
                 TimeProvider.System,
                 NullLogger<DragonHandler>.Instance
             );
+        RewardService rewardService =
+            new(
+                NullLogger<RewardService>.Instance,
+                new Mock<IUnitRepository>().Object,
+                [],
+                [charaHandler, dragonHandler]
+            );
 
         this.unitService = new UnitService(
             this.mockPresentService.Object,
-            dragonHandler,
-            charaHandler,
+            rewardService,
             fixture.ApiContext,
             this.mockPlayerIdentityService.Object
         );
