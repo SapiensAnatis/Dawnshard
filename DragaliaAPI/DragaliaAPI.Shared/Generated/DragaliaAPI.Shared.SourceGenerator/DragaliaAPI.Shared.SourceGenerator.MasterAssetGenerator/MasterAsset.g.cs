@@ -88,6 +88,9 @@ public static partial class MasterAsset
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData>? useItem;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData> UseItem => useItem ?? throw new InvalidOperationException(ErrorUninitialized);
 
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Emblems, global::DragaliaAPI.Shared.MasterAsset.Models.EmblemData>? emblemData;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Emblems, global::DragaliaAPI.Shared.MasterAsset.Models.EmblemData> EmblemData => emblemData ?? throw new InvalidOperationException(ErrorUninitialized);
+
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.AlbumMission>? missionAlbumData;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.AlbumMission> MissionAlbumData => missionAlbumData ?? throw new InvalidOperationException(ErrorUninitialized);
 
@@ -470,6 +473,11 @@ public static partial class MasterAsset
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData>> useItemTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData>(
                 "UseItem.msgpack",
+                x => x.Id
+            );
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Emblems, global::DragaliaAPI.Shared.MasterAsset.Models.EmblemData>> emblemDataTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.Emblems, global::DragaliaAPI.Shared.MasterAsset.Models.EmblemData>(
+                "EmblemData.msgpack",
                 x => x.Id
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.AlbumMission>> missionAlbumDataTask =
@@ -914,6 +922,7 @@ public static partial class MasterAsset
         skillData = await skillDataTask;
         stampData = await stampDataTask;
         useItem = await useItemTask;
+        emblemData = await emblemDataTask;
         missionAlbumData = await missionAlbumDataTask;
         missionBeginnerData = await missionBeginnerDataTask;
         missionDailyData = await missionDailyDataTask;

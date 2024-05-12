@@ -115,9 +115,13 @@ public class PresentControllerService(
             }
 
             logger.LogDebug("Claimed present {@present}", present);
-            presentRepository.AddPlayerPresentHistory(
-                mapper.Map<DbPlayerPresent, DbPlayerPresentHistory>(present)
-            );
+
+            if (result is RewardGrantResult.Added or RewardGrantResult.Converted)
+            {
+                presentRepository.AddPlayerPresentHistory(
+                    mapper.Map<DbPlayerPresent, DbPlayerPresentHistory>(present)
+                );
+            }
         }
 
         await presentRepository.DeletePlayerPresents(receivedIds.Concat(removedIds));

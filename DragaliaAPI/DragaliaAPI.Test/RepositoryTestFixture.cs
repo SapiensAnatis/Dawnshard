@@ -47,8 +47,7 @@ public class RepositoryTestFixture : IDisposable
                 ).CreateMapper(),
                 mockLogger.Object,
                 IdentityTestUtils.MockPlayerDetailsService.Object,
-                Enumerable.Empty<ISavefileUpdate>(),
-                mockUnitRepository.Object
+                []
             );
         savefileService.Create().Wait();
 

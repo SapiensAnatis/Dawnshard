@@ -136,6 +136,10 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
+            .Entity<DbPlayerUserData>()
+            .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
+
+        modelBuilder
             .Entity<DbPlayerCharaData>()
             .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
@@ -157,6 +161,14 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
 
         modelBuilder
             .Entity<DbPlayerSummonHistory>()
+            .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
+
+        modelBuilder
+            .Entity<DbPlayerDragonData>()
+            .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
+
+        modelBuilder
+            .Entity<DbPlayerDragonReliability>()
             .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
     }
 }

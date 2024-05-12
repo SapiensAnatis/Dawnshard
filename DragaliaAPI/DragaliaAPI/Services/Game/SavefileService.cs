@@ -10,6 +10,7 @@ using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -24,7 +25,6 @@ public class SavefileService : ISavefileService
     private readonly IMapper mapper;
     private readonly ILogger<SavefileService> logger;
     private readonly IPlayerIdentityService playerIdentityService;
-    private readonly IUnitRepository unitRepository;
 
     private const int RecheckLockMs = 1000;
     private const int LockFailsafeExpiryMin = 5;
@@ -37,8 +37,7 @@ public class SavefileService : ISavefileService
         IMapper mapper,
         ILogger<SavefileService> logger,
         IPlayerIdentityService playerIdentityService,
-        IEnumerable<ISavefileUpdate> savefileUpdates,
-        IUnitRepository unitRepository
+        IEnumerable<ISavefileUpdate> savefileUpdates
     )
     {
         this.apiContext = apiContext;
@@ -46,7 +45,6 @@ public class SavefileService : ISavefileService
         this.mapper = mapper;
         this.logger = logger;
         this.playerIdentityService = playerIdentityService;
-        this.unitRepository = unitRepository;
 
         this.maxSavefileVersion =
             savefileUpdates.MaxBy(x => x.SavefileVersion)?.SavefileVersion ?? 0;
@@ -151,6 +149,10 @@ public class SavefileService : ISavefileService
             player.UserData = mapper.Map<DbPlayerUserData>(savefile.UserData);
             player.UserData.Crystal += 1_200_000;
 
+            // TODO: What was the actual maximum dragon storage you could get?
+            int cappedDragonStorage = Math.Min(savefile.UserData.MaxDragonQuantity, 500);
+            player.UserData.MaxDragonQuantity = cappedDragonStorage;
+
             this.logger.LogDebug(
                 "Mapping DbPlayerUserData step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
@@ -174,7 +176,7 @@ public class SavefileService : ISavefileService
             // Build key id mappings for dragons and talismans
             Dictionary<long, DbPlayerDragonData> dragonKeyIds = new();
 
-            foreach (DragonList d in savefile.DragonList ?? new List<DragonList>())
+            foreach (DragonList d in savefile.DragonList?.Take(cappedDragonStorage) ?? [])
             {
                 ulong oldKeyId = d.DragonKeyId;
                 DbPlayerDragonData dbEntry = d.Map<DbPlayerDragonData>(mapper);
@@ -581,7 +583,7 @@ public class SavefileService : ISavefileService
         );
 
         AddDefaultParties(player);
-        await this.AddDefaultCharacters();
+        AddDefaultCharacters(player);
         AddDefaultEquippedStamps(player);
         AddShopInfo(player);
         AddDefaultEmblem(player);
@@ -633,9 +635,25 @@ public class SavefileService : ISavefileService
         );
     }
 
-    private async Task AddDefaultCharacters()
+    private static void AddDefaultCharacters(DbPlayer player)
     {
-        await this.unitRepository.AddCharas(DefaultSavefileData.Characters);
+        foreach (Charas c in DefaultSavefileData.Characters)
+        {
+            player.CharaList.Add(new DbPlayerCharaData(player.ViewerId, c));
+
+            if (MasterAsset.CharaStories.TryGetValue((int)c, out StoryData? story))
+            {
+                player.StoryStates.Add(
+                    new DbPlayerStoryState
+                    {
+                        ViewerId = player.ViewerId,
+                        StoryType = StoryTypes.Chara,
+                        StoryId = story.StoryIds[0],
+                        State = 0
+                    }
+                );
+            }
+        }
     }
 
     private static void AddDefaultEquippedStamps(DbPlayer player)
