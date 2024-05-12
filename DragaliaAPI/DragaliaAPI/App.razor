@@ -2,9 +2,10 @@
 @{
     string? darkModeCookie = this.HttpContext?.Request.Cookies.FirstOrDefault(x => x.Key == Cookies.DarkMode).Value;
 
-    if (!bool.TryParse(darkModeCookie, out bool isDarkMode))
+    bool? isDarkMode = null;
+    if (bool.TryParse(darkModeCookie, out bool isDarkModeParsed))
     {
-        isDarkMode = false;
+        isDarkMode = isDarkModeParsed;
     }
 
     HttpRequestState httpRequestState = new() 
