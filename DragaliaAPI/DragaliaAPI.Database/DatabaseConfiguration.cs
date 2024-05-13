@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Npgsql;
 
 [assembly: InternalsVisibleTo("DragaliaAPI.Database.Test")]
 [assembly: InternalsVisibleTo("DragaliaAPI.Test")]

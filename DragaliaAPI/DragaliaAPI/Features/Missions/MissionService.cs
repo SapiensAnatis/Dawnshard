@@ -5,7 +5,6 @@ using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Missions.InitialProgress;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shared.Options;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.MasterAsset;
@@ -21,7 +20,7 @@ public class MissionService(
     IRewardService rewardService,
     IMissionInitialProgressionService missionInitialProgressionService,
     IUserDataRepository userDataRepository,
-    IResetHelper resetHelper,
+    TimeProvider timeProvider,
     IOptionsMonitor<EventOptions> eventOptionsMonitor
 ) : IMissionService
 {
@@ -37,7 +36,7 @@ public class MissionService(
         missionInitialProgressionService;
     private readonly IUserDataRepository userDataRepository = userDataRepository;
     private readonly IRewardService rewardService = rewardService;
-    private readonly IResetHelper resetHelper = resetHelper;
+    private readonly TimeProvider timeProvider = timeProvider;
     private readonly EventOptions eventOptions = eventOptionsMonitor.CurrentValue;
 
     public async Task<DbPlayerMission> StartMission(
@@ -208,8 +207,8 @@ public class MissionService(
         this.logger.LogDebug("Starting missions for event with run info {@info}", runInfo);
 
         if (
-            this.resetHelper.LastDailyReset < runInfo.Start
-            || this.resetHelper.LastDailyReset > runInfo.End
+            this.timeProvider.GetLastDailyReset() < runInfo.Start
+            || this.timeProvider.GetLastDailyReset() > runInfo.End
         )
         {
             throw new DragaliaException(
@@ -248,8 +247,8 @@ public class MissionService(
                     MissionType.Daily,
                     mission.Id,
                     groupId: mission.QuestGroupId,
-                    startTime: this.resetHelper.LastDailyReset,
-                    endTime: this.resetHelper.LastDailyReset.AddDays(1)
+                    startTime: this.timeProvider.GetLastDailyReset(),
+                    endTime: this.timeProvider.GetLastDailyReset().AddDays(1)
                 )
             );
         }
@@ -342,7 +341,7 @@ public class MissionService(
         {
             if (
                 claimRequest.DayNo
-                == DateOnly.FromDateTime(this.resetHelper.LastDailyReset.UtcDateTime)
+                == DateOnly.FromDateTime(this.timeProvider.GetLastDailyReset().UtcDateTime)
             )
             {
                 DbPlayerMission regularMission = regularMissions.First(x =>
@@ -642,7 +641,7 @@ public class MissionService(
                 State = x.State,
                 StartDate = x.Start,
                 EndDate = x.End,
-                DayNo = DateOnly.FromDateTime(this.resetHelper.LastDailyReset.UtcDateTime)
+                DayNo = DateOnly.FromDateTime(this.timeProvider.GetLastDailyReset().UtcDateTime)
             });
 
         response.DailyMissionList = currentDailyMissions.UnionBy(

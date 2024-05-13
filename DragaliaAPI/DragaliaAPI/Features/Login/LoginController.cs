@@ -2,7 +2,6 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -21,7 +20,6 @@ public class LoginController(
     IUserDataRepository userDataRepository,
     IUpdateDataService updateDataService,
     IEnumerable<IDailyResetAction> resetActions,
-    IResetHelper resetHelper,
     ILogger<LoginController> logger,
     ILoginBonusService loginBonusService,
     IRewardService rewardService,
@@ -31,7 +29,6 @@ public class LoginController(
     private readonly IUserDataRepository userDataRepository = userDataRepository;
     private readonly IUpdateDataService updateDataService = updateDataService;
     private readonly IEnumerable<IDailyResetAction> resetActions = resetActions;
-    private readonly IResetHelper resetHelper = resetHelper;
     private readonly ILogger<LoginController> logger = logger;
     private readonly ILoginBonusService loginBonusService = loginBonusService;
     private readonly IRewardService rewardService = rewardService;
@@ -56,7 +53,7 @@ public class LoginController(
             await userDataRepository.UserData.FirstOrDefaultAsync(cancellationToken)
             ?? throw new DragaliaException(ResultCode.CommonDataNotFoundError);
 
-        if (userData.LastLoginTime < resetHelper.LastDailyReset)
+        if (userData.LastLoginTime < this.dateTimeProvider.GetLastDailyReset())
         {
             foreach (IDailyResetAction action in resetActions)
             {

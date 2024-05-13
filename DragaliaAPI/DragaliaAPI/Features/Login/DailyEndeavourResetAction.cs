@@ -2,7 +2,6 @@ using System.Collections.Frozen;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Shared.Options;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using JetBrains.Annotations;
@@ -14,7 +13,7 @@ namespace DragaliaAPI.Features.Login;
 public class DailyEndeavourResetAction(
     IOptionsMonitor<EventOptions> eventOptionsMonitor,
     IMissionRepository missionRepository,
-    IResetHelper resetHelper,
+    TimeProvider timeProvider,
     IMissionService missionService,
     IEventRepository eventRepository,
     ILogger<DailyEndeavourResetAction> logger
@@ -22,7 +21,7 @@ public class DailyEndeavourResetAction(
 {
     private readonly EventOptions eventOptions = eventOptionsMonitor.CurrentValue;
     private readonly IMissionRepository missionRepository = missionRepository;
-    private readonly IResetHelper resetHelper = resetHelper;
+    private readonly TimeProvider timeProvider = timeProvider;
     private readonly IMissionService missionService = missionService;
     private readonly IEventRepository eventRepository = eventRepository;
     private readonly ILogger<DailyEndeavourResetAction> logger = logger;
@@ -37,7 +36,7 @@ public class DailyEndeavourResetAction(
 
         this.logger.LogDebug("Adding permanent daily endeavours");
 
-        DateTimeOffset lastDailyReset = this.resetHelper.LastDailyReset;
+        DateTimeOffset lastDailyReset = this.timeProvider.GetLastDailyReset();
 
         foreach (DailyMission permanentDaily in PermanentDailyMissions)
         {
