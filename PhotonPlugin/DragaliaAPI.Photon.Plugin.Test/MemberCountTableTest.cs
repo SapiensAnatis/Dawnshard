@@ -1,4 +1,3 @@
-using DragaliaAPI.Photon.Plugin.Plugins.GameLogic;
 using DragaliaAPI.Photon.Plugin.Plugins.GameLogic.Events;
 using FluentAssertions;
 using Xunit;

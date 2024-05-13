@@ -1,7 +1,6 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
@@ -13,11 +12,12 @@ namespace DragaliaAPI.Features.Missions;
 public class MissionRepository(
     ApiContext apiContext,
     IPlayerIdentityService playerIdentityService,
-    IResetHelper resetHelper
+    TimeProvider timeProvider
 ) : IMissionRepository
 {
     private readonly ApiContext apiContext = apiContext;
     private readonly IPlayerIdentityService playerIdentityService = playerIdentityService;
+    private readonly TimeProvider timeProvider = timeProvider;
 
     public IQueryable<DbPlayerMission> Missions =>
         this.apiContext.PlayerMissions.Where(x =>
@@ -54,8 +54,8 @@ public class MissionRepository(
         return (
             await Missions
                 .Where(x =>
-                    (x.Start == DateTimeOffset.UnixEpoch || x.Start < resetHelper.UtcNow)
-                    && (x.End == DateTimeOffset.UnixEpoch || x.End > resetHelper.UtcNow)
+                    (x.Start == DateTimeOffset.UnixEpoch || x.Start < timeProvider.GetUtcNow())
+                    && (x.End == DateTimeOffset.UnixEpoch || x.End > timeProvider.GetUtcNow())
                 )
                 .ToListAsync()
         )
@@ -113,7 +113,7 @@ public class MissionRepository(
     {
         long viewerId = this.playerIdentityService.ViewerId;
         int id = originalMission.Id;
-        DateOnly date = DateOnly.FromDateTime(resetHelper.LastDailyReset.UtcDateTime);
+        DateOnly date = DateOnly.FromDateTime(timeProvider.GetLastDailyReset().UtcDateTime);
 
         if (await this.apiContext.CompletedDailyMissions.FindAsync(viewerId, id, date) != null)
             return;

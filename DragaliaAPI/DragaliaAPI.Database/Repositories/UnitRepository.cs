@@ -1,11 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.MasterAsset;
-using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Database.Repositories;
 

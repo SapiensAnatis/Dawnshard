@@ -3,7 +3,6 @@ using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
-using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Test.Controllers;
 

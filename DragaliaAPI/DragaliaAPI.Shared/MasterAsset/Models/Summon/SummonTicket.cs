@@ -1,4 +1,3 @@
-using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Summon;

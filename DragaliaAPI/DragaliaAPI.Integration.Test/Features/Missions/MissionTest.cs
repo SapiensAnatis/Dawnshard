@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
-using DragaliaAPI.Helpers;
+using DragaliaAPI.Extensions;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
@@ -185,9 +185,9 @@ public class MissionTest : TestFixture
         int missionId1 = 15070301; // Clear a Quest
         int missionId2 = 15070401; // Clear Three Quests
 
-        ResetHelper resetHelper = new(TimeProvider.System);
+        TimeProvider timeProvider = TimeProvider.System;
 
-        DateOnly today = DateOnly.FromDateTime(resetHelper.LastDailyReset.Date);
+        DateOnly today = DateOnly.FromDateTime(timeProvider.GetLastDailyReset().Date);
         DateOnly yesterday = today.AddDays(-1);
 
         await this.AddToDatabase(
@@ -227,8 +227,8 @@ public class MissionTest : TestFixture
                     Id = missionId1,
                     Type = MissionType.Daily,
                     State = MissionState.Completed,
-                    Start = resetHelper.LastDailyReset,
-                    End = resetHelper.LastDailyReset.AddDays(1)
+                    Start = timeProvider.GetLastDailyReset(),
+                    End = timeProvider.GetLastDailyReset().AddDays(1)
                 },
                 new DbPlayerMission()
                 {
@@ -236,8 +236,8 @@ public class MissionTest : TestFixture
                     Id = missionId2,
                     Type = MissionType.Daily,
                     State = MissionState.Completed,
-                    Start = resetHelper.LastDailyReset,
-                    End = resetHelper.LastDailyReset.AddDays(1)
+                    Start = timeProvider.GetLastDailyReset(),
+                    End = timeProvider.GetLastDailyReset().AddDays(1)
                 }
             ]
         );

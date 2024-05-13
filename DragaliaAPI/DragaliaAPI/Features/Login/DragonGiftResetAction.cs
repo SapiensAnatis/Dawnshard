@@ -2,7 +2,6 @@ using System.Collections.Frozen;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +10,7 @@ namespace DragaliaAPI.Features.Login;
 
 public class DragonGiftResetAction(
     ApiContext apiContext,
-    IResetHelper resetHelper,
+    TimeProvider timeProvider,
     IPlayerIdentityService playerIdentityService
 ) : IDailyResetAction
 {
@@ -42,7 +41,7 @@ public class DragonGiftResetAction(
             dbGift.Quantity = 1;
         }
 
-        DayOfWeek todayDayOfWeek = resetHelper.LastDailyReset.DayOfWeek;
+        DayOfWeek todayDayOfWeek = timeProvider.GetLastDailyReset().DayOfWeek;
 
         foreach (DragonGifts dailyGiftId in DragonConstants.RotatingGifts)
         {
