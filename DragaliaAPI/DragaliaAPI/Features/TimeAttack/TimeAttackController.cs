@@ -2,7 +2,6 @@
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
-using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.TimeAttack;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Helpers;
-using DragaliaAPI.MessagePack;
+﻿using DragaliaAPI.MessagePack;
 using DragaliaAPI.Models;
 using MessagePack;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +14,7 @@ public class DailyResetMiddleware
         this.next = next;
     }
 
-    public async Task InvokeAsync(HttpContext context, IResetHelper resetHelper)
+    public async Task InvokeAsync(HttpContext context, TimeProvider timeProvider)
     {
         if (
             context.GetEndpoint()?.Metadata.GetMetadata<AllowAnonymousAttribute>() is null
@@ -27,7 +26,7 @@ public class DailyResetMiddleware
             && lastLoginTimeObj is DateTimeOffset lastLoginTime
         )
         {
-            if (resetHelper.LastDailyReset > lastLoginTime)
+            if (timeProvider.GetLastDailyReset() > lastLoginTime)
             {
                 context.Response.ContentType = CustomMessagePackOutputFormatter.ContentType;
                 context.Response.StatusCode = 200;

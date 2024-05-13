@@ -2,7 +2,6 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -16,7 +15,7 @@ public class ShopService(
     IPaymentService paymentService,
     IRewardService rewardService,
     ILogger<ShopService> logger,
-    IResetHelper resetHelper,
+    TimeProvider timeProvider,
     IUserService userService,
     IUserDataRepository userDataRepository
 ) : IShopService
@@ -173,18 +172,18 @@ public class ShopService(
         {
             ShopType.MaterialDaily
                 => (
-                    resetHelper.LastDailyReset,
-                    resetHelper.LastDailyReset.AddDays(1).AddSeconds(-1)
+                    timeProvider.GetLastDailyReset(),
+                    timeProvider.GetLastDailyReset().AddDays(1).AddSeconds(-1)
                 ),
             ShopType.MaterialWeekly
                 => (
-                    resetHelper.LastWeeklyReset,
-                    resetHelper.LastWeeklyReset.AddDays(7).AddSeconds(-1)
+                    timeProvider.GetLastWeeklyReset(),
+                    timeProvider.GetLastWeeklyReset().AddDays(7).AddSeconds(-1)
                 ),
             ShopType.MaterialMonthly
                 => (
-                    resetHelper.LastMonthlyReset,
-                    resetHelper.LastMonthlyReset.AddMonths(1).AddSeconds(-1)
+                    timeProvider.GetLastMonthlyReset(),
+                    timeProvider.GetLastMonthlyReset().AddMonths(1).AddSeconds(-1)
                 ),
             ShopType.Normal
             or ShopType.Special

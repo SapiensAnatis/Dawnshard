@@ -1,12 +1,9 @@
-﻿using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Factories;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 

@@ -1,9 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
-using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Mapping.Mapperly;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 

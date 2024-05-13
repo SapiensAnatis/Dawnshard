@@ -55,6 +55,12 @@
         <InternalsVisibleTo Include="DragaliaAPI.Test"/>
         <InternalsVisibleTo Include="DragaliaAPI.Integration.Test"/>
     </ItemGroup>
+    
+    <ItemGroup>
+        <Using Include="System.Text.Json"/>
+        <Using Include="DragaliaAPI.Models.Results"/>
+        <Using Include="DragaliaAPI.Extensions"/>
+    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj"/>

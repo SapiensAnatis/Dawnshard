@@ -1,7 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
-using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;

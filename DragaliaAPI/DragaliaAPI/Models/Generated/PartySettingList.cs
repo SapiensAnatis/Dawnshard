@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Shared.Definitions.Enums;
 using MessagePack;
 

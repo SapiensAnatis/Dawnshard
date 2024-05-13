@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using DragaliaAPI.Photon.Shared.Models;
-
-namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
+﻿namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
 {
     internal class ActorState
     {

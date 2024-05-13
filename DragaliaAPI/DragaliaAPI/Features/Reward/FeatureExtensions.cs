@@ -1,4 +1,3 @@
-using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Reward.Handlers;
 

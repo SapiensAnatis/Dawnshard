@@ -4,7 +4,6 @@ using DragaliaAPI.Features.Reward.Handlers;
 using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
-using StackExchange.Redis;
 
 namespace DragaliaAPI.Features.Reward;
 

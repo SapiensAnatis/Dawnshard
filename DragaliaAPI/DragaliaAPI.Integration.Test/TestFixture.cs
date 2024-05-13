@@ -2,8 +2,8 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Abstract;
+using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Fort;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Api;
@@ -47,7 +47,7 @@ public class TestFixture
         this.Services = factory.Services.CreateScope().ServiceProvider;
 
         this.Mapper = this.Services.GetRequiredService<IMapper>();
-        this.LastDailyReset = this.Services.GetRequiredService<IResetHelper>().LastDailyReset;
+        this.LastDailyReset = TimeProvider.System.GetLastDailyReset();
 
         this.SeedDatabase().Wait();
         this.SeedCache().Wait();

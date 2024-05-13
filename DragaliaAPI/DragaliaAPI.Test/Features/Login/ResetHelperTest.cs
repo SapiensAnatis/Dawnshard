@@ -1,4 +1,4 @@
-using DragaliaAPI.Helpers;
+using DragaliaAPI.Extensions;
 using Microsoft.Extensions.Time.Testing;
 
 namespace DragaliaAPI.Test.Features.Login;
@@ -7,13 +7,9 @@ public class ResetHelperTest
 {
     private readonly FakeTimeProvider fakeTimeProvider;
 
-    private readonly IResetHelper resetHelper;
-
     public ResetHelperTest()
     {
         this.fakeTimeProvider = new();
-
-        this.resetHelper = new ResetHelper(this.fakeTimeProvider);
     }
 
     /// <summary>
@@ -119,8 +115,8 @@ public class ResetHelperTest
             TimeZoneInfo.FindSystemTimeZoneById("Europe/Berlin")
         );
 
-        this.resetHelper.LastDailyReset.Should().Be(expectedReset);
-        this.resetHelper.LastDailyReset.Offset.Should().Be(TimeSpan.Zero);
+        this.fakeTimeProvider.GetLastDailyReset().Should().Be(expectedReset);
+        this.fakeTimeProvider.GetLastDailyReset().Offset.Should().Be(TimeSpan.Zero);
     }
 
     [Theory]
@@ -135,7 +131,7 @@ public class ResetHelperTest
             TimeZoneInfo.FindSystemTimeZoneById("Europe/Berlin")
         );
 
-        this.resetHelper.LastDailyReset.DayOfWeek.Should().Be(expectedDayOfWeek);
+        this.fakeTimeProvider.GetLastDailyReset().DayOfWeek.Should().Be(expectedDayOfWeek);
     }
 
     [Theory]
@@ -147,7 +143,7 @@ public class ResetHelperTest
     {
         this.fakeTimeProvider.SetUtcNow(now);
 
-        this.resetHelper.LastWeeklyReset.Should().Be(expectedReset);
+        this.fakeTimeProvider.GetLastWeeklyReset().Should().Be(expectedReset);
     }
 
     [Theory]
@@ -159,7 +155,7 @@ public class ResetHelperTest
     {
         this.fakeTimeProvider.SetUtcNow(now);
 
-        this.resetHelper.LastMonthlyReset.Should().Be(expectedReset);
+        this.fakeTimeProvider.GetLastMonthlyReset().Should().Be(expectedReset);
     }
 
     public class ResetTheoryData : TheoryData<DateTimeOffset, DateTimeOffset> { }

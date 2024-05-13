@@ -1,17 +1,17 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Test.Utils;
+using Microsoft.Extensions.Time.Testing;
 using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Services;
@@ -26,7 +26,7 @@ public class DragonServiceTest : RepositoryTestFixture
     private readonly Mock<IPaymentService> mockPaymentService;
     private readonly Mock<IRewardService> mockRewardService;
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
-    private readonly Mock<TimeProvider> mockTimeProvider;
+    private readonly FakeTimeProvider mockTimeProvider;
 
     private readonly DragonService dragonService;
 
@@ -40,7 +40,7 @@ public class DragonServiceTest : RepositoryTestFixture
         mockPaymentService = new(MockBehavior.Strict);
         mockRewardService = new(MockBehavior.Strict);
         mockMissionProgressionService = new(MockBehavior.Strict);
-        mockTimeProvider = new(MockBehavior.Strict);
+        mockTimeProvider = new FakeTimeProvider();
 
         dragonService = new DragonService(
             mockUserDataRepository.Object,
@@ -52,17 +52,17 @@ public class DragonServiceTest : RepositoryTestFixture
             mockPaymentService.Object,
             mockRewardService.Object,
             mockMissionProgressionService.Object,
-            new ResetHelper(this.mockTimeProvider.Object),
+            this.mockTimeProvider,
             this.ApiContext
         );
 
-        this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(DateTimeOffset.UtcNow);
+        this.mockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
     }
 
     [Fact]
     public async Task DoDragonGetContactData_ReturnsValidContactData()
     {
-        DateTimeOffset lastReset = new ResetHelper(this.mockTimeProvider.Object).LastDailyReset;
+        DateTimeOffset lastReset = this.mockTimeProvider.GetLastDailyReset();
 
         SetupReliabilityMock(
             out List<DbPlayerDragonGift> gifts,
@@ -103,22 +103,22 @@ public class DragonServiceTest : RepositoryTestFixture
             }
         );
 
-        DateTimeOffset wednesday = new DateTimeOffset(2023, 12, 27, 19, 49, 23, TimeSpan.Zero);
-        this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(wednesday);
+        DateTimeOffset wednesday = new DateTimeOffset(2030, 12, 25, 19, 49, 23, TimeSpan.Zero);
+        this.mockTimeProvider.SetUtcNow(wednesday);
 
         (await this.dragonService.DoDragonGetContactData())
             .ShopGiftList.Should()
             .Contain(x => x.DragonGiftId == (int)DragonGifts.FloralCirclet);
 
-        DateTimeOffset thuBeforeReset = new DateTimeOffset(2023, 12, 28, 01, 49, 23, TimeSpan.Zero);
-        this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(thuBeforeReset);
+        DateTimeOffset thuBeforeReset = new DateTimeOffset(2030, 12, 26, 01, 49, 23, TimeSpan.Zero);
+        this.mockTimeProvider.SetUtcNow(thuBeforeReset);
 
         (await this.dragonService.DoDragonGetContactData())
             .ShopGiftList.Should()
             .Contain(x => x.DragonGiftId == (int)DragonGifts.FloralCirclet);
 
-        DateTimeOffset thursday = new DateTimeOffset(2023, 12, 28, 09, 49, 23, TimeSpan.Zero);
-        this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(thursday);
+        DateTimeOffset thursday = new DateTimeOffset(2030, 12, 26, 09, 49, 23, TimeSpan.Zero);
+        this.mockTimeProvider.SetUtcNow(thursday);
 
         (await this.dragonService.DoDragonGetContactData())
             .ShopGiftList.Should()

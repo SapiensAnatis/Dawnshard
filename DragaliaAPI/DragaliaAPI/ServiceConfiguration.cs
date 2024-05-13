@@ -1,6 +1,5 @@
 ﻿using DragaliaAPI.Authentication;
 using DragaliaAPI.Database;
-using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Blazor;
 using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.ClearParty;
@@ -32,7 +31,6 @@ using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Features.Version;
 using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Features.Zena;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
@@ -99,7 +97,6 @@ public static class ServiceConfiguration
             .AddScoped<IFortService, FortService>()
             .AddScoped<IFortRepository, FortRepository>()
             // Login feature
-            .AddScoped<IResetHelper, ResetHelper>()
             .AddScoped<ILoginBonusService, LoginBonusService>()
             .AddScoped<ILoginBonusRepository, LoginBonusRepository>()
             // Dungeon Feature
