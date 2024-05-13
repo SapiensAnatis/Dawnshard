@@ -1,10 +1,14 @@
 ﻿@page "/account"
+@inherits ServiceComponentBase
 @using DragaliaAPI.Database.Entities;
 @using DragaliaAPI.Database.Repositories;
 @using DragaliaAPI.Models.Generated;
 @using DragaliaAPI.Services;
 @using System.Text.Json;
+@using DragaliaAPI.Database
+@using DragaliaAPI.Features.Blazor
 @using DragaliaAPI.Shared.Serialization
+@using Microsoft.EntityFrameworkCore
 
 @inject ILoadService LoadService;
 @inject AuthenticationStateProvider StateProvider
@@ -19,33 +23,79 @@
 <AuthorizeView>
     <Authorized>
         <MudText Typo="Typo.h4" GutterBottom=true>Account Management</MudText>
-        <MudDivider Class="mb-2" />
-            <MudText Typo="Typo.h5">Account Information</MudText>   
-            <MudList Clickable=false>
-                @if (UserData is not null)
-                {
-                    <MudListItem Icon="@Icons.Material.Filled._123"><strong>Viewer ID</strong>: @UserData.ViewerId</MudListItem>
-                    <MudListItem Icon="@Icons.Material.Filled.Person"><strong>Player name</strong>: @UserData.Name</MudListItem>
-                    <MudListItem Icon="@Icons.Material.Filled.CalendarToday"><strong>Last save import time</strong>: @UserData.LastSaveImportTime</MudListItem>
-                }
-            </MudList>
+        <MudDivider Class="mb-2"/>
+        <MudText Typo="Typo.h5">Account Information</MudText>
+        <MudList Clickable=false>
+            <MudListItem Icon="@Icons.Material.Filled._123">
+                <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
+                    <p><strong>Viewer ID</strong>:</p>
+                    @if (this.userData is null)
+                    {
+                        <MudSkeleton Width="5rem" Height="1.5rem"></MudSkeleton>
+                    }
+                    else
+                    {
+                        <p>@this.userData.ViewerId</p>
+                    }
+                </MudStack>
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.Person">
+                <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
+                    <p><strong>Player name</strong>:</p>
+                    @if (this.userData is null)
+                    {
+                        <MudSkeleton Width="10rem" Height="1.5rem"></MudSkeleton>
+                    }
+                    else
+                    {
+                        <p>@this.userData.Name</p>
+                    }
+                </MudStack>
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.CalendarToday">
+                <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
+                    <p><strong>Last save import time</strong>:</p>
+                    @if (this.userData is null)
+                    {
+                        <MudSkeleton Width="15rem" Height="1.5rem"></MudSkeleton>
+                    }
+                    else
+                    {
+                        <p>@this.userData.LastSaveImportTime</p>
+                    }
+                </MudStack>
+            </MudListItem>
 
-            <MudText Typo="Typo.h5" GutterBottom=true Class="mt-1">Save Export</MudText>
-            <MudText Typo="Typo.body1" GutterBottom=true>Press the button below to download your save file. This can then be edited or imported onto another server.</MudText>
+        </MudList>
 
-            <MudStack Class="pa-7 mx-10">
-                <MudButton OnClick="OnClickExportSave" Disabled=this.Loading Variant="Variant.Filled" Color="Color.Tertiary">Export save</MudButton>
-                @if (this.Loading)
-                {
-                    <MudProgressLinear Indeterminate="true" Class="my-2" />
-                }
-            </MudStack>
-                   
+        <MudText Typo="Typo.h5" GutterBottom=true Class="mt-1">Save Export</MudText>
+
+
+        <MudText Typo="Typo.body1" GutterBottom=true>Press the button below to download your save file. This can then be edited or imported onto another server.</MudText>
+
+        <MudStack Class="pa-7 mx-10">
+            <MudButton OnClick="OnClickExportSave" Disabled=this.exportLoading Variant="Variant.Filled" Color="Color.Tertiary">Export save</MudButton>
+            @if (this.exportLoading)
+            {
+                <MudProgressLinear Indeterminate="true" Class="my-2"/>
+            }
+        </MudStack>
+
+        @if (this.currentDragonCount != null && this.userData != null && this.currentDragonCount > this.userData.MaxDragonQuantity)
+        {
+            <MudAlert Class="ma-2" Severity="Severity.Warning" Icon="@Icons.Material.Filled.Warning">
+                You are currently exceeding your dragon limit with @this.currentDragonCount / @this.userData.MaxDragonQuantity dragons.
+                If you export and re-import your save any dragons over this limit will <strong>not be re-imported and will be lost</strong>.
+            </MudAlert>
+        }
         <MudAlert Class="ma-2" Icon="@Icons.Material.Filled.CloudUpload" Severity="Severity.Normal">
-            You can upload saves to be imported at <MudLink Typo="Typo.body2" Href="https://baas.lukefz.xyz/"><b>https://baas.lukefz.xyz/</b></MudLink>.
+            You can upload saves to be imported at
+            <MudLink Typo="Typo.body2" Href="https://baas.lukefz.xyz/">
+                <b>https://baas.lukefz.xyz/</b>
+            </MudLink>.
         </MudAlert>
         <MudAlert Class="ma-2" Severity="Severity.Normal" Icon="@Icons.Material.Outlined.Edit">
-            For a user-friendly way to edit your save file, check out sockperson's save editor at 
+            For a user-friendly way to edit your save file, check out sockperson's save editor at
             <MudLink Typo="Typo.body2" Href="https://github.com/sockperson/DragaliaSaveEditor">
                 <b>https://github.com/sockperson/DragaliaSaveEditor</b>
             </MudLink>.
@@ -57,9 +107,11 @@
 </AuthorizeView>
 
 @code {
-    public bool Loading { get; set; }
+    private bool exportLoading;
+    private DbPlayerUserData? userData;
+    private int? currentDragonCount;
 
-    public DbPlayerUserData? UserData { get; set; }
+    [InjectScoped] private ApiContext ApiContext { get; set; } = null!;
 
     private async Task OnClickExportSave()
     {
@@ -72,7 +124,7 @@
             options.WriteIndented = true;
             options.IncludeFields = false;
 
-            this.Loading = true;
+            this.exportLoading = true;
             LoadIndexResponse savefile = await this.LoadService.BuildIndexData();
             DragaliaResponse<LoadIndexResponse> response = new(savefile);
 
@@ -84,21 +136,32 @@
 
             await JsRuntime.InvokeVoidAsync("downloadFileFromStream", filename, streamRef);
 
-            this.Loading = false;
+            this.exportLoading = false;
             this.Snackbar.Add("Successfully exported savefile", Severity.Success);
         }
         catch (Exception ex)
         {
-            this.Loading = false;
+            this.exportLoading = false;
             this.Logger.LogError(ex, "Failed to export save");
             this.Snackbar.Add("Failed to export savefile", Severity.Error);
         }
     }
 
-
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if ((await this.StateProvider.GetAuthenticationStateAsync()).User.Identity?.IsAuthenticated ?? false)
-            this.UserData = await UserDataRepository.GetUserDataAsync();
+        if (!firstRender)
+        {
+            return;
+        }
+
+        if ((await this.StateProvider.GetAuthenticationStateAsync()).User.Identity is not { IsAuthenticated: true })
+        {
+            return;
+        }
+
+        this.userData = await this.ApiContext.PlayerUserData.FirstAsync();
+        this.currentDragonCount = await this.ApiContext.PlayerDragonData.CountAsync();
+        this.StateHasChanged();
     }
+
 }
