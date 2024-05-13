@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
@@ -12,13 +12,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Wall;
 
-public class WallService(
-    IWallRepository wallRepository,
+public partial class WallService(
     ILogger<WallService> logger,
-    IMapper mapper,
     IRewardService rewardService,
     IMissionService missionService,
     IMissionProgressionService missionProgressionService,
+    TimeProvider timeProvider,
+    ApiContext apiContext,
     IPlayerIdentityService playerIdentityService
 ) : IWallService
 {
@@ -29,7 +29,7 @@ public class WallService(
 
     public async Task LevelupQuestWall(int wallId)
     {
-        DbPlayerQuestWall questWall = await wallRepository.GetQuestWall(wallId);
+        DbPlayerQuestWall questWall = await this.GetQuestWall(wallId);
 
         // Increment level if it's not at max
         if (questWall.WallLevel >= MaximumQuestWallLevel)
@@ -48,22 +48,26 @@ public class WallService(
 
     public async Task SetQuestWallIsStartNextLevel(int wallId, bool value)
     {
-        DbPlayerQuestWall questWall = await wallRepository.GetQuestWall(wallId);
+        DbPlayerQuestWall questWall =
+            await apiContext.PlayerQuestWalls.FirstOrDefaultAsync(x => x.WallId == wallId)
+            ?? throw new InvalidOperationException($"Could not get questwall {wallId}");
+
         questWall.IsStartNextLevel = value;
     }
 
-    public async Task<IEnumerable<QuestWallList>> GetQuestWallList()
-    {
-        return (await wallRepository.QuestWalls.ToListAsync()).Select(mapper.Map<QuestWallList>);
-    }
+    public async Task<IEnumerable<QuestWallList>> GetQuestWallList() =>
+        await apiContext
+            .PlayerQuestWalls.Select(x => new QuestWallList()
+            {
+                WallId = x.WallId,
+                WallLevel = x.WallLevel,
+                IsStartNextLevel = x.IsStartNextLevel
+            })
+            .ToListAsync();
 
     public async Task<int> GetTotalWallLevel()
     {
-        int levelTotal = 0;
-        for (int element = 0; element < 5; element++)
-        {
-            levelTotal += (await wallRepository.GetQuestWall(FlameWallId + element)).WallLevel;
-        }
+        int levelTotal = await apiContext.PlayerQuestWalls.Take(5).SumAsync(x => x.WallLevel);
 
         if (levelTotal > MaximumQuestWallTotalLevel)
         {
@@ -77,37 +81,46 @@ public class WallService(
         return levelTotal;
     }
 
-    public Task<Dictionary<QuestWallTypes, int>> GetWallLevelMap()
-    {
-        return wallRepository.QuestWalls.ToDictionaryAsync(
+    public Task<Dictionary<QuestWallTypes, int>> GetWallLevelMap() =>
+        apiContext.PlayerQuestWalls.ToDictionaryAsync(
             x => (QuestWallTypes)x.WallId,
             x => x.WallLevel
         );
-    }
 
     public async Task InitializeWall()
     {
-        if (await wallRepository.QuestWalls.AnyAsync())
+        if (await this.CheckWallInitialized())
             return;
 
         logger.LogInformation("Initializing wall.");
 
-        await wallRepository.AddInitialWall();
+        for (int element = 0; element < 5; element++)
+        {
+            await apiContext.PlayerQuestWalls.AddAsync(
+                new DbPlayerQuestWall()
+                {
+                    ViewerId = playerIdentityService.ViewerId,
+                    WallId = FlameWallId + element,
+                    WallLevel = 0, // Indicates you have not completed level 1. Goes up to 80 upon completing level 80
+                    IsStartNextLevel = false,
+                }
+            );
+        }
+
         await this.InitializeWallMissions();
     }
 
-    public async Task GrantMonthlyRewardEntityList(
-        IEnumerable<AtgenBuildEventRewardEntityList> rewards
-    )
+    public async Task GrantMonthlyRewardEntityList(IList<AtgenBuildEventRewardEntityList> rewards)
     {
         logger.LogInformation(
             "Granting wall monthly reward list with size: {@wallRewardListSize}",
-            rewards.Count()
+            rewards.Count
         );
 
         int totalRupies = 0;
         int totalMana = 0;
         int totalEldwater = 0;
+        int totalSand = 0;
 
         foreach (AtgenBuildEventRewardEntityList entity in rewards)
         {
@@ -122,23 +135,46 @@ public class WallService(
                 case EntityTypes.Dew:
                     totalEldwater += entity.EntityQuantity;
                     break;
+                case EntityTypes.Material when entity.EntityId == (int)Materials.TwinklingSand:
+                    totalSand += entity.EntityQuantity;
+                    break;
             }
         }
 
+        // We are not too concerned if we get a result other than RewardGrantResult.Added here, since this is all
+        // just currency.
         if (totalRupies > 0)
         {
-            await rewardService.GrantReward(new Entity(EntityTypes.Rupies, 0, totalRupies));
+            _ = await rewardService.GrantReward(new Entity(EntityTypes.Rupies, 0, totalRupies));
         }
 
         if (totalMana > 0)
         {
-            await rewardService.GrantReward(new Entity(EntityTypes.Mana, 0, totalMana));
+            _ = await rewardService.GrantReward(new Entity(EntityTypes.Mana, 0, totalMana));
         }
 
         if (totalEldwater > 0)
         {
-            await rewardService.GrantReward(new Entity(EntityTypes.Dew, 0, totalEldwater));
+            _ = await rewardService.GrantReward(new Entity(EntityTypes.Dew, 0, totalEldwater));
         }
+
+        if (totalSand > 0)
+        {
+            _ = await rewardService.GrantReward(
+                new Entity(EntityTypes.Material, (int)Materials.TwinklingSand, totalSand)
+            );
+        }
+
+        DbWallRewardDate? trackedRewardDate = apiContext.WallRewardDates.Local.FirstOrDefault();
+
+        if (trackedRewardDate is null)
+        {
+            throw new InvalidOperationException(
+                "No instance of DbWallRewardDate is being tracked - update failed"
+            );
+        }
+
+        trackedRewardDate.LastClaimDate = timeProvider.GetUtcNow();
     }
 
     public List<AtgenBuildEventRewardEntityList> GetMonthlyRewardEntityList(int levelTotal)
@@ -195,5 +231,62 @@ public class WallService(
 
         const int allMissionStart = 10010701; // Clear Lv. 2 of The Mercurial Gauntlet in All Elements
         await missionService.StartMission(MissionType.Normal, allMissionStart);
+    }
+
+    public async Task<DbWallRewardDate> GetOrCreateLastRewardDate()
+    {
+        DbWallRewardDate? wallRewardDate = await apiContext.WallRewardDates.FirstOrDefaultAsync();
+        if (wallRewardDate is null)
+        {
+            wallRewardDate = new() { ViewerId = playerIdentityService.ViewerId };
+            apiContext.WallRewardDates.Add(wallRewardDate);
+        }
+
+        return wallRewardDate;
+    }
+
+    public async Task<bool> CheckWallInitialized()
+    {
+        bool initialized = await apiContext.PlayerQuestWalls.AnyAsync();
+
+        Log.WallInitializedStatus(logger, initialized);
+
+        return initialized;
+    }
+
+    public bool CheckCanClaimReward(DateTimeOffset lastClaimDate)
+    {
+        // The reward is available each month on the 15th.
+        DateTimeOffset mostRecentRewardDate = timeProvider.GetLastMonthlyReset().AddDays(14);
+
+        if (lastClaimDate > mostRecentRewardDate)
+        {
+            Log.ClaimDateIneligible(logger, lastClaimDate, mostRecentRewardDate);
+            return false;
+        }
+
+        return true;
+    }
+
+    public async Task<DbPlayerQuestWall> GetQuestWall(int wallId)
+    {
+        return await apiContext.PlayerQuestWalls.FirstOrDefaultAsync(x => x.WallId == wallId)
+            ?? throw new InvalidOperationException($"Could not get questwall {wallId}");
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "Wall initialization check: {WallInitialized}.")]
+        public static partial void WallInitializedStatus(ILogger logger, bool wallInitialized);
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Ineligible to claim wall monthly reward: last claim date {ClaimDate} is after most recent reward date {RewardDate}"
+        )]
+        public static partial void ClaimDateIneligible(
+            ILogger logger,
+            DateTimeOffset claimDate,
+            DateTimeOffset rewardDate
+        );
     }
 }

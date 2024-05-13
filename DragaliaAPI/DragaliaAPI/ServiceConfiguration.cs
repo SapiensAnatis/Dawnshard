@@ -13,7 +13,7 @@ using DragaliaAPI.Features.Emblem;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Item;
-using DragaliaAPI.Features.Login;
+using DragaliaAPI.Features.Login.Actions;
 using DragaliaAPI.Features.Maintenance;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.PartyPower;
@@ -29,7 +29,6 @@ using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Features.Version;
-using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Features.Zena;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Options;
@@ -77,7 +76,7 @@ public static class ServiceConfiguration
             .AddScoped<ISavefileUpdateService, SavefileUpdateService>()
             .AddTransient<PlayerIdentityLoggingMiddleware>();
 
-        services.AddSummoningFeature().AddRewardFeature();
+        services.AddSummoningFeature().AddRewardFeature().AddLoginFeature().AddWallFeature();
 
         services
             .RegisterMissionServices()
@@ -96,9 +95,6 @@ public static class ServiceConfiguration
             // Fort Feature
             .AddScoped<IFortService, FortService>()
             .AddScoped<IFortRepository, FortRepository>()
-            // Login feature
-            .AddScoped<ILoginBonusService, LoginBonusService>()
-            .AddScoped<ILoginBonusRepository, LoginBonusRepository>()
             // Dungeon Feature
             .AddScoped<IDungeonService, DungeonService>()
             .AddScoped<IDungeonStartService, DungeonStartService>()
@@ -147,9 +143,6 @@ public static class ServiceConfiguration
             .AddScoped<ICharaService, CharaService>()
             .AddScoped<IResourceVersionService, ResourceVersionService>()
             .AddScoped<ICharaService, CharaService>()
-            // Wall feature
-            .AddScoped<IWallService, WallService>()
-            .AddScoped<IWallRepository, WallRepository>()
             // Zena feature
             .AddScoped<IZenaService, ZenaService>()
             // Story skip feature

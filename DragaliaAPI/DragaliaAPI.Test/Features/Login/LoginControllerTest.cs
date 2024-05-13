@@ -1,6 +1,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Login;
+using DragaliaAPI.Features.Login.Actions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -15,8 +16,9 @@ public class LoginControllerTest
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly Mock<IDailyResetAction> mockDailyResetAction;
     private readonly Mock<ILogger<LoginController>> mockLogger;
-    private readonly Mock<ILoginBonusService> loginBonusService;
+    private readonly Mock<ILoginService> loginBonusService;
     private readonly Mock<IRewardService> mockRewardService;
+    private readonly Mock<IDragonService> mockDragonService;
     private readonly FakeTimeProvider mockDateTimeProvider;
 
     private readonly LoginController loginController;
@@ -29,6 +31,7 @@ public class LoginControllerTest
         this.mockLogger = new(MockBehavior.Loose);
         this.loginBonusService = new(MockBehavior.Strict);
         this.mockRewardService = new(MockBehavior.Strict);
+        this.mockDragonService = new(MockBehavior.Loose);
         this.mockDateTimeProvider = new FakeTimeProvider();
 
         this.loginController = new(
@@ -38,7 +41,8 @@ public class LoginControllerTest
             this.mockLogger.Object,
             this.loginBonusService.Object,
             this.mockRewardService.Object,
-            this.mockDateTimeProvider
+            this.mockDateTimeProvider,
+            this.mockDragonService.Object
         );
 
         this.mockDateTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);

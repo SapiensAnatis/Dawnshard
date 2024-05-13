@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Features.Wall;
@@ -13,7 +14,7 @@ public interface IWallService
 
     Task<int> GetTotalWallLevel();
 
-    Task GrantMonthlyRewardEntityList(IEnumerable<AtgenBuildEventRewardEntityList> rewards);
+    Task GrantMonthlyRewardEntityList(IList<AtgenBuildEventRewardEntityList> rewards);
 
     List<AtgenBuildEventRewardEntityList> GetMonthlyRewardEntityList(int levelTotal);
 
@@ -23,6 +24,9 @@ public interface IWallService
     );
 
     Task InitializeWall();
-    Task InitializeWallMissions();
     Task<Dictionary<QuestWallTypes, int>> GetWallLevelMap();
+    Task<DbWallRewardDate> GetOrCreateLastRewardDate();
+    Task<bool> CheckWallInitialized();
+    bool CheckCanClaimReward(DateTimeOffset lastClaimDate);
+    Task<DbPlayerQuestWall> GetQuestWall(int wallId);
 }

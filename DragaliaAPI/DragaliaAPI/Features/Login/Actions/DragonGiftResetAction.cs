@@ -6,7 +6,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Features.Login;
+namespace DragaliaAPI.Features.Login.Actions;
 
 public class DragonGiftResetAction(
     ApiContext apiContext,

@@ -5,6 +5,7 @@ using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace DragaliaAPI.Test.Features.Wall;
 
@@ -31,7 +32,8 @@ public class WallControllerTest
             mockRewardService.Object,
             mockClearPartyService.Object,
             mockDungeonService.Object,
-            mockWallService.Object
+            mockWallService.Object,
+            NullLogger<WallController>.Instance
         );
     }
 
@@ -135,10 +137,7 @@ public class WallControllerTest
             .ReturnsAsync(new UpdateDataList());
 
         WallReceiveMonthlyRewardResponse data = (
-            await wallController.ReceiveMonthlyReward(
-                new WallReceiveMonthlyRewardRequest(),
-                default
-            )
+            await wallController.ReceiveMonthlyReward(default)
         ).GetData<WallReceiveMonthlyRewardResponse>()!;
 
         data.UserWallRewardList.Should().BeEquivalentTo(userRewardList);

@@ -1,18 +1,24 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Login;
+using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Login;
 
-public class LoginBonusService(
+public class LoginService(
     IRewardService rewardService,
     TimeProvider dateTimeProvider,
-    ILoginBonusRepository loginBonusRepository,
-    ILogger<LoginBonusService> logger
-) : ILoginBonusService
+    ApiContext apiContext,
+    WallService wallService,
+    IPlayerIdentityService playerIdentityService,
+    ILogger<LoginService> logger
+) : ILoginService
 {
     public async Task<IEnumerable<AtgenLoginBonusList>> RewardLoginBonus()
     {
@@ -26,7 +32,20 @@ public class LoginBonusService(
             )
         )
         {
-            DbLoginBonus dbBonus = await loginBonusRepository.Get(bonusData.Id);
+            DbLoginBonus? dbBonus = await apiContext.LoginBonuses.FirstOrDefaultAsync(x =>
+                x.Id == bonusData.Id
+            );
+
+            if (dbBonus is null)
+            {
+                dbBonus = new DbLoginBonus()
+                {
+                    ViewerId = playerIdentityService.ViewerId,
+                    Id = bonusData.Id,
+                };
+                apiContext.LoginBonuses.Add(dbBonus);
+            }
+
             if (dbBonus.IsComplete)
             {
                 logger.LogDebug(
@@ -63,7 +82,8 @@ public class LoginBonusService(
             if (dbBonus.CurrentDay >= bonusCount && !bonusData.IsLoop)
                 dbBonus.IsComplete = true;
 
-            await rewardService.GrantReward(
+            // TODO: Propagate this information up to the EntityResult
+            _ = await rewardService.GrantReward(
                 new Entity(
                     reward.EntityType,
                     reward.EntityId,
@@ -90,7 +110,8 @@ public class LoginBonusService(
 
             if (bonusData.EachDayEntityType != EntityTypes.None)
             {
-                await rewardService.GrantReward(
+                // TODO: Propagate this information up to the EntityResult
+                _ = await rewardService.GrantReward(
                     new Entity(
                         bonusData.EachDayEntityType,
                         bonusData.EachDayEntityId,
@@ -100,9 +121,32 @@ public class LoginBonusService(
             }
         }
 
-        //bonusList.Add(new AtgenLoginBonusList(1, 17, 540));
-        //bonusList.Add(new AtgenLoginBonusList(1, 74, 2));
-
         return bonusList;
+    }
+
+    public async Task<IList<AtgenMonthlyWallReceiveList>> GetWallMonthlyReceiveList()
+    {
+        if (!await wallService.CheckWallInitialized())
+        {
+            return [];
+        }
+
+        DateTimeOffset lastWallClaimDate = await apiContext
+            .WallRewardDates.AsNoTracking()
+            .Select(x => x.LastClaimDate)
+            .FirstOrDefaultAsync();
+
+        RewardStatus wallRewardStatus = wallService.CheckCanClaimReward(lastWallClaimDate)
+            ? RewardStatus.Available
+            : RewardStatus.Received;
+
+        return
+        [
+            new()
+            {
+                QuestGroupId = WallService.WallQuestGroupId,
+                IsReceiveReward = wallRewardStatus,
+            }
+        ];
     }
 }

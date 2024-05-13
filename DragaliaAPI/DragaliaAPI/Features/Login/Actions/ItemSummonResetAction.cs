@@ -1,7 +1,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Shop;
 
-namespace DragaliaAPI.Features.Login;
+namespace DragaliaAPI.Features.Login.Actions;
 
 public class ItemSummonResetAction : IDailyResetAction
 {

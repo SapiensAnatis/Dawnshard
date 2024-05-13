@@ -59,6 +59,10 @@ public class GlobalQueryFilterTest : TestFixture
     public async Task DbPlayerSummonHistory_HasGlobalQueryFilter() =>
         await TestGlobalQueryFilter<DbPlayerSummonHistory>();
 
+    [Fact]
+    public async Task DbLoginBonus_HasGlobalQueryFilter() =>
+        await TestGlobalQueryFilter<DbLoginBonus>();
+
     private async Task TestGlobalQueryFilter<TEntity>()
         where TEntity : class, IDbPlayerData
     {
