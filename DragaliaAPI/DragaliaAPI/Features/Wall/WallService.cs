@@ -55,16 +55,6 @@ public partial class WallService(
         questWall.IsStartNextLevel = value;
     }
 
-    public async Task<IEnumerable<QuestWallList>> GetQuestWallList() =>
-        await apiContext
-            .PlayerQuestWalls.Select(x => new QuestWallList()
-            {
-                WallId = x.WallId,
-                WallLevel = x.WallLevel,
-                IsStartNextLevel = x.IsStartNextLevel
-            })
-            .ToListAsync();
-
     public async Task<int> GetTotalWallLevel()
     {
         int levelTotal = await apiContext.PlayerQuestWalls.Take(5).SumAsync(x => x.WallLevel);
@@ -208,15 +198,18 @@ public partial class WallService(
     {
         int totalWallLevel = await this.GetTotalWallLevel();
 
-        DbWallRewardDate rewardDate = await apiContext.WallRewardDates.AsNoTracking().FirstAsync();
+        DateTimeOffset lastClaimDate = await apiContext
+            .WallRewardDates.AsNoTracking()
+            .Select(x => x.LastClaimDate)
+            .FirstAsync();
 
-        bool eligible = this.CheckCanClaimReward(rewardDate.LastClaimDate);
+        bool eligible = this.CheckCanClaimReward(lastClaimDate);
 
         return new()
         {
             QuestGroupId = WallQuestGroupId,
             SumWallLevel = totalWallLevel,
-            LastRewardDate = rewardDate.LastClaimDate,
+            LastRewardDate = lastClaimDate,
             RewardStatus = eligible ? RewardStatus.Available : RewardStatus.Received,
         };
     }

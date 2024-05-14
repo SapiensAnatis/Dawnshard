@@ -63,6 +63,14 @@ public class GlobalQueryFilterTest : TestFixture
     public async Task DbLoginBonus_HasGlobalQueryFilter() =>
         await TestGlobalQueryFilter<DbLoginBonus>();
 
+    [Fact]
+    public async Task DbPlayerQuestWall_HasGlobalQueryFilter() =>
+        await TestGlobalQueryFilter<DbPlayerQuestWall>();
+
+    [Fact]
+    public async Task DbWallRewardDate_HasGlobalQueryFilter() =>
+        await TestGlobalQueryFilter<DbWallRewardDate>();
+
     private async Task TestGlobalQueryFilter<TEntity>()
         where TEntity : class, IDbPlayerData
     {

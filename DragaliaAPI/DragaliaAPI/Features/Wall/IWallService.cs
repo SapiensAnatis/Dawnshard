@@ -10,8 +10,6 @@ public interface IWallService
 
     Task SetQuestWallIsStartNextLevel(int wallId, bool value);
 
-    Task<IEnumerable<QuestWallList>> GetQuestWallList();
-
     Task<int> GetTotalWallLevel();
 
     Task GrantMonthlyRewardEntityList(IList<AtgenBuildEventRewardEntityList> rewards);

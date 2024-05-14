@@ -153,7 +153,6 @@ public static class ServiceConfiguration
         services.AddScoped<IBlazorIdentityService, BlazorIdentityService>();
 
         services.AddAllOfType<ISavefileUpdate>();
-        services.AddAllOfType<IDailyResetAction>();
 
         services.AddHttpClient<IBaasApi, BaasApi>();
 
