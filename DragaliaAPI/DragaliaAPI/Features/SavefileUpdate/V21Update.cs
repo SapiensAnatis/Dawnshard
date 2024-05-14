@@ -18,7 +18,10 @@ public partial class V21Update(
 
     public async Task Apply()
     {
-        if (await wallService.CheckWallInitialized())
+        if (
+            await wallService.CheckWallInitialized()
+            && await apiContext.WallRewardDates.FindAsync(playerIdentityService.ViewerId) is null
+        )
         {
             Log.AddingRewardDate(logger);
 
