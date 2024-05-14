@@ -543,6 +543,12 @@ public class SavefileService : ISavefileService
         await this
             .apiContext.CompletedDailyMissions.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
+        await this
+            .apiContext.WallRewardDates.Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this
+            .apiContext.PlayerSummonHistory.Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
     }
 
     public async Task Reset()
