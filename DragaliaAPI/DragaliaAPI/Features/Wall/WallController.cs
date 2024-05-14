@@ -92,7 +92,7 @@ public partial class WallController(
         }
 
         // Retrieve to track and update in GrantMonthlyRewardEntityList later
-        DbWallRewardDate lastRewardDate = await wallService.GetOrCreateLastRewardDate();
+        DbWallRewardDate lastRewardDate = await wallService.GetLastRewardDate();
 
         if (!wallService.CheckCanClaimReward(lastRewardDate.LastClaimDate))
         {

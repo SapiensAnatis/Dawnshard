@@ -56,6 +56,8 @@ public class LoginController(
             resp.LoginBonusList = await loginService.RewardLoginBonus();
         }
 
+        userData.LastLoginTime = dateTimeProvider.GetUtcNow();
+
         resp.MonthlyWallReceiveList = await loginService.GetWallMonthlyReceiveList();
         resp.DragonContactFreeGiftCount = await dragonService.GetFreeGiftCount();
 

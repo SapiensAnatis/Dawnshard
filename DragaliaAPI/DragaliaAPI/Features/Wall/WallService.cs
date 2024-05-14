@@ -96,7 +96,7 @@ public partial class WallService(
 
         for (int element = 0; element < 5; element++)
         {
-            await apiContext.PlayerQuestWalls.AddAsync(
+            apiContext.PlayerQuestWalls.Add(
                 new DbPlayerQuestWall()
                 {
                     ViewerId = playerIdentityService.ViewerId,
@@ -106,6 +106,14 @@ public partial class WallService(
                 }
             );
         }
+
+        apiContext.WallRewardDates.Add(
+            new DbWallRewardDate()
+            {
+                ViewerId = playerIdentityService.ViewerId,
+                LastClaimDate = DateTimeOffset.UtcNow, // Make them wait until next month to claim
+            }
+        );
 
         await this.InitializeWallMissions();
     }
@@ -233,13 +241,20 @@ public partial class WallService(
         await missionService.StartMission(MissionType.Normal, allMissionStart);
     }
 
-    public async Task<DbWallRewardDate> GetOrCreateLastRewardDate()
+    public async Task<DbWallRewardDate> GetLastRewardDate()
     {
-        DbWallRewardDate? wallRewardDate = await apiContext.WallRewardDates.FirstOrDefaultAsync();
+        // Get AsTracking for GrantMonthlyRewardEntityList
+        // Does not do anything for now -- but anticipates turning query tracking off later
+        DbWallRewardDate? wallRewardDate = await apiContext
+            .WallRewardDates.AsTracking()
+            .FirstOrDefaultAsync();
+
         if (wallRewardDate is null)
         {
-            wallRewardDate = new() { ViewerId = playerIdentityService.ViewerId };
-            apiContext.WallRewardDates.Add(wallRewardDate);
+            // We expect, if this function is being called properly behind a CheckWallInitialized, that there
+            // should be data here. Between InitializeWall and the V21Update, everyone using this data
+            // should have a row in this table.
+            throw new InvalidOperationException("Failed to fetch last DbWallRewardDate");
         }
 
         return wallRewardDate;
@@ -259,20 +274,18 @@ public partial class WallService(
         // The reward is available each month on the 15th.
         DateTimeOffset mostRecentRewardDate = timeProvider.GetLastMonthlyReset().AddDays(14);
 
-        if (lastClaimDate > mostRecentRewardDate)
-        {
-            Log.ClaimDateIneligible(logger, lastClaimDate, mostRecentRewardDate);
-            return false;
-        }
+        Log.CheckingClaimDate(logger, lastClaimDate, mostRecentRewardDate);
 
-        return true;
+        bool eligible = mostRecentRewardDate > lastClaimDate;
+
+        Log.ClaimCheckResult(logger, eligible);
+
+        return eligible;
     }
 
-    public async Task<DbPlayerQuestWall> GetQuestWall(int wallId)
-    {
-        return await apiContext.PlayerQuestWalls.FirstOrDefaultAsync(x => x.WallId == wallId)
-            ?? throw new InvalidOperationException($"Could not get questwall {wallId}");
-    }
+    public async Task<DbPlayerQuestWall> GetQuestWall(int wallId) =>
+        await apiContext.PlayerQuestWalls.FirstOrDefaultAsync(x => x.WallId == wallId)
+        ?? throw new InvalidOperationException($"Could not get questwall {wallId}");
 
     private static partial class Log
     {
@@ -280,13 +293,19 @@ public partial class WallService(
         public static partial void WallInitializedStatus(ILogger logger, bool wallInitialized);
 
         [LoggerMessage(
-            LogLevel.Information,
-            "Ineligible to claim wall monthly reward: last claim date {ClaimDate} is after most recent reward date {RewardDate}"
+            LogLevel.Debug,
+            "Checking wall monthly reward eligibility: last claim date: {ClaimDate}, most recent reward date {RewardDate}"
         )]
-        public static partial void ClaimDateIneligible(
+        public static partial void CheckingClaimDate(
             ILogger logger,
             DateTimeOffset claimDate,
             DateTimeOffset rewardDate
         );
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Wall monthly reward eligibility check result: {CheckResult}"
+        )]
+        public static partial void ClaimCheckResult(ILogger logger, bool checkResult);
     }
 }

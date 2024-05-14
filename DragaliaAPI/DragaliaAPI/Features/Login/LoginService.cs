@@ -15,7 +15,7 @@ public class LoginService(
     IRewardService rewardService,
     TimeProvider dateTimeProvider,
     ApiContext apiContext,
-    WallService wallService,
+    IWallService wallService,
     IPlayerIdentityService playerIdentityService,
     ILogger<LoginService> logger
 ) : ILoginService
@@ -131,12 +131,12 @@ public class LoginService(
             return [];
         }
 
-        DateTimeOffset lastWallClaimDate = await apiContext
+        DateTimeOffset lastClaimDate = await apiContext
             .WallRewardDates.AsNoTracking()
             .Select(x => x.LastClaimDate)
-            .FirstOrDefaultAsync();
+            .FirstAsync();
 
-        RewardStatus wallRewardStatus = wallService.CheckCanClaimReward(lastWallClaimDate)
+        RewardStatus wallRewardStatus = wallService.CheckCanClaimReward(lastClaimDate)
             ? RewardStatus.Available
             : RewardStatus.Received;
 
