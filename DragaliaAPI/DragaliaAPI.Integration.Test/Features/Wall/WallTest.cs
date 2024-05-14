@@ -63,39 +63,39 @@ public class WallTest : TestFixture
     public async Task GetMonthlyReward_ReturnsExpectedResponse()
     {
         await this.AddRangeToDatabase(
-            new List<DbPlayerQuestWall>()
-            {
-                new()
+            [
+                new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UnixEpoch, },
+                new DbPlayerQuestWall()
                 {
                     ViewerId = ViewerId,
                     WallId = 216010001,
                     WallLevel = 1,
                 },
-                new()
+                new DbPlayerQuestWall()
                 {
                     ViewerId = ViewerId,
                     WallId = 216010002,
                     WallLevel = 2,
                 },
-                new()
+                new DbPlayerQuestWall()
                 {
                     ViewerId = ViewerId,
                     WallId = 216010003,
                     WallLevel = 3,
                 },
-                new()
+                new DbPlayerQuestWall()
                 {
                     ViewerId = ViewerId,
                     WallId = 216010004,
                     WallLevel = 4,
                 },
-                new()
+                new DbPlayerQuestWall()
                 {
                     ViewerId = ViewerId,
                     WallId = 216010005,
                     WallLevel = 5,
                 }
-            }
+            ]
         );
 
         WallGetMonthlyRewardResponse response = (
@@ -112,8 +112,8 @@ public class WallTest : TestFixture
                 {
                     QuestGroupId = 21601,
                     SumWallLevel = 1 + 2 + 3 + 4 + 5,
-                    LastRewardDate = DateTimeOffset.UtcNow,
-                    RewardStatus = RewardStatus.Received
+                    LastRewardDate = DateTimeOffset.UnixEpoch,
+                    RewardStatus = RewardStatus.Available
                 }
             );
     }
@@ -189,8 +189,8 @@ public class WallTest : TestFixture
                 {
                     QuestGroupId = 21601,
                     SumWallLevel = 5 * 5,
-                    LastRewardDate = DateTimeOffset.UtcNow,
-                    RewardStatus = RewardStatus.Received
+                    LastRewardDate = DateTimeOffset.UnixEpoch,
+                    RewardStatus = RewardStatus.Available
                 }
             );
 

@@ -56,9 +56,8 @@ public class WallControllerTest
                 RewardStatus = rewardStatus
             };
 
+        mockWallService.Setup(x => x.CheckWallInitialized()).ReturnsAsync(true);
         mockWallService.Setup(x => x.GetUserWallRewardList()).ReturnsAsync(rewardList);
-
-        mockWallService.Setup(x => x.GetTotalWallLevel()).ReturnsAsync(totalLevel);
 
         WallGetMonthlyRewardResponse data = (
             await wallController.GetMonthlyReward()
