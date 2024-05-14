@@ -43,18 +43,22 @@ public partial class WallController(
         );
     }
 
-    // When is this called?
     [HttpPost("get_monthly_reward")]
     public async Task<DragaliaResult> GetMonthlyReward()
     {
-        int totalLevel = await wallService.GetTotalWallLevel();
+        if (!await wallService.CheckWallInitialized())
+        {
+            Log.InvalidCheckAttempt(logger);
 
-        IEnumerable<AtgenUserWallRewardList> userWallRewardList = wallService.GetUserWallRewardList(
-            totalLevel,
-            RewardStatus.Received
-        );
+            return this.Code(
+                ResultCode.CommonInvalidArgument,
+                "Invalid attempt to claim wall monthly reward: not initialized"
+            );
+        }
 
-        WallGetMonthlyRewardResponse data = new() { UserWallRewardList = userWallRewardList };
+        AtgenUserWallRewardList userWallRewardList = await wallService.GetUserWallRewardList();
+
+        WallGetMonthlyRewardResponse data = new() { UserWallRewardList = [userWallRewardList] };
 
         return Ok(data);
     }
@@ -109,10 +113,7 @@ public partial class WallController(
         List<AtgenBuildEventRewardEntityList> rewardEntityList =
             wallService.GetMonthlyRewardEntityList(totalLevel);
 
-        IEnumerable<AtgenUserWallRewardList> userWallRewardList = wallService.GetUserWallRewardList(
-            totalLevel,
-            RewardStatus.Received
-        );
+        AtgenUserWallRewardList userWallRewardList = await wallService.GetUserWallRewardList();
 
         // Grant Rewards
         await wallService.GrantMonthlyRewardEntityList(rewardEntityList);
@@ -134,7 +135,7 @@ public partial class WallController(
                 UpdateDataList = updateDataList,
                 EntityResult = entityResult,
                 WallMonthlyRewardList = rewardEntityList,
-                UserWallRewardList = userWallRewardList,
+                UserWallRewardList = [userWallRewardList],
                 MonthlyWallReceiveList = [monthlyWallReceiveList]
             };
 
@@ -166,5 +167,8 @@ public partial class WallController(
     {
         [LoggerMessage(LogLevel.Error, "Invalid attempt to claim wall reward")]
         public static partial void InvalidClaimAttempt(ILogger logger);
+
+        [LoggerMessage(LogLevel.Error, "Invalid attempt to check wall reward")]
+        public static partial void InvalidCheckAttempt(ILogger logger);
     }
 }

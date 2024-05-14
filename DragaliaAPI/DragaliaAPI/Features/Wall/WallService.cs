@@ -204,20 +204,21 @@ public partial class WallService(
         return rewardList;
     }
 
-    public IEnumerable<AtgenUserWallRewardList> GetUserWallRewardList(
-        int levelTotal,
-        RewardStatus rewardStatus
-    )
+    public async Task<AtgenUserWallRewardList> GetUserWallRewardList()
     {
-        AtgenUserWallRewardList rewardList =
-            new()
-            {
-                QuestGroupId = WallQuestGroupId,
-                SumWallLevel = levelTotal,
-                LastRewardDate = DateTimeOffset.UtcNow,
-                RewardStatus = rewardStatus
-            };
-        return new[] { rewardList };
+        int totalWallLevel = await this.GetTotalWallLevel();
+
+        DbWallRewardDate rewardDate = await apiContext.WallRewardDates.AsNoTracking().FirstAsync();
+
+        bool eligible = this.CheckCanClaimReward(rewardDate.LastClaimDate);
+
+        return new()
+        {
+            QuestGroupId = WallQuestGroupId,
+            SumWallLevel = totalWallLevel,
+            LastRewardDate = rewardDate.LastClaimDate,
+            RewardStatus = eligible ? RewardStatus.Available : RewardStatus.Received,
+        };
     }
 
     public async Task InitializeWallMissions()
@@ -272,7 +273,7 @@ public partial class WallService(
     public bool CheckCanClaimReward(DateTimeOffset lastClaimDate)
     {
         // The reward is available each month on the 15th.
-        DateTimeOffset mostRecentRewardDate = timeProvider.GetLastMonthlyReset().AddDays(14);
+        DateTimeOffset mostRecentRewardDate = timeProvider.GetLastWallRewardDate();
 
         Log.CheckingClaimDate(logger, lastClaimDate, mostRecentRewardDate);
 

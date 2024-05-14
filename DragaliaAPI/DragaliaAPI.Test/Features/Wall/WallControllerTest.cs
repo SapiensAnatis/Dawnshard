@@ -55,11 +55,8 @@ public class WallControllerTest
                 LastRewardDate = lastRewardDate,
                 RewardStatus = rewardStatus
             };
-        IEnumerable<AtgenUserWallRewardList> userRewardList = new[] { rewardList };
 
-        mockWallService
-            .Setup(x => x.GetUserWallRewardList(totalLevel, rewardStatus))
-            .Returns(userRewardList);
+        mockWallService.Setup(x => x.GetUserWallRewardList()).ReturnsAsync(rewardList);
 
         mockWallService.Setup(x => x.GetTotalWallLevel()).ReturnsAsync(totalLevel);
 
@@ -67,7 +64,7 @@ public class WallControllerTest
             await wallController.GetMonthlyReward()
         ).GetData<WallGetMonthlyRewardResponse>()!;
 
-        data.UserWallRewardList.Should().BeEquivalentTo(userRewardList);
+        data.UserWallRewardList.Should().ContainSingle().Which.Should().BeEquivalentTo(rewardList);
 
         mockWallService.VerifyAll();
     }
@@ -88,7 +85,6 @@ public class WallControllerTest
                 LastRewardDate = lastRewardDate,
                 RewardStatus = rewardStatus
             };
-        IEnumerable<AtgenUserWallRewardList> userRewardList = new[] { rewardList };
 
         AtgenMonthlyWallReceiveList monthlyWallReceiveList =
             new()
@@ -125,9 +121,7 @@ public class WallControllerTest
             .Setup(x => x.GetLastRewardDate())
             .ReturnsAsync(new DbWallRewardDate() { LastClaimDate = lastClaimDate });
         mockWallService.Setup(x => x.CheckCanClaimReward(lastClaimDate)).Returns(true);
-        mockWallService
-            .Setup(x => x.GetUserWallRewardList(totalLevel, rewardStatus))
-            .Returns(userRewardList);
+        mockWallService.Setup(x => x.GetUserWallRewardList()).ReturnsAsync(rewardList);
         mockWallService.Setup(x => x.GetTotalWallLevel()).ReturnsAsync(totalLevel);
         mockWallService
             .Setup(x => x.GetMonthlyRewardEntityList(totalLevel))
@@ -146,7 +140,7 @@ public class WallControllerTest
             await wallController.ReceiveMonthlyReward(default)
         ).GetData<WallReceiveMonthlyRewardResponse>()!;
 
-        data.UserWallRewardList.Should().BeEquivalentTo(userRewardList);
+        data.UserWallRewardList.Should().ContainSingle().Which.Should().BeEquivalentTo(rewardList);
         data.MonthlyWallReceiveList.Should().BeEquivalentTo(monthlyWallReceiveListList);
 
         mockWallService.VerifyAll();

@@ -18,10 +18,7 @@ public interface IWallService
 
     List<AtgenBuildEventRewardEntityList> GetMonthlyRewardEntityList(int levelTotal);
 
-    IEnumerable<AtgenUserWallRewardList> GetUserWallRewardList(
-        int levelTotal,
-        RewardStatus rewardStatus
-    );
+    public Task<AtgenUserWallRewardList> GetUserWallRewardList();
 
     Task InitializeWall();
     Task<Dictionary<QuestWallTypes, int>> GetWallLevelMap();
