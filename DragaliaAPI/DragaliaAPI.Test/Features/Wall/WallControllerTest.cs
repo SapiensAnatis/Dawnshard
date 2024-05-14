@@ -1,3 +1,4 @@
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Reward;
@@ -6,6 +7,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.Extensions.Logging.Abstractions;
+using NSubstitute;
 
 namespace DragaliaAPI.Test.Features.Wall;
 
@@ -116,16 +118,20 @@ public class WallControllerTest
                 }
             };
 
+        DateTimeOffset lastClaimDate = DateTimeOffset.UtcNow.AddDays(-62);
+
+        mockWallService.Setup(x => x.CheckWallInitialized()).ReturnsAsync(true);
+        mockWallService
+            .Setup(x => x.GetLastRewardDate())
+            .ReturnsAsync(new DbWallRewardDate() { LastClaimDate = lastClaimDate });
+        mockWallService.Setup(x => x.CheckCanClaimReward(lastClaimDate)).Returns(true);
         mockWallService
             .Setup(x => x.GetUserWallRewardList(totalLevel, rewardStatus))
             .Returns(userRewardList);
-
         mockWallService.Setup(x => x.GetTotalWallLevel()).ReturnsAsync(totalLevel);
-
         mockWallService
             .Setup(x => x.GetMonthlyRewardEntityList(totalLevel))
             .Returns(buildEventRewardEntityList);
-
         mockWallService
             .Setup(x => x.GrantMonthlyRewardEntityList(buildEventRewardEntityList))
             .Returns(Task.CompletedTask);

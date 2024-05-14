@@ -16,7 +16,7 @@ public class LoginControllerTest
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly Mock<IDailyResetAction> mockDailyResetAction;
     private readonly Mock<ILogger<LoginController>> mockLogger;
-    private readonly Mock<ILoginService> loginBonusService;
+    private readonly Mock<ILoginService> mockLoginService;
     private readonly Mock<IRewardService> mockRewardService;
     private readonly Mock<IDragonService> mockDragonService;
     private readonly FakeTimeProvider mockDateTimeProvider;
@@ -29,7 +29,7 @@ public class LoginControllerTest
         this.mockUpdateDataService = new(MockBehavior.Strict);
         this.mockDailyResetAction = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
-        this.loginBonusService = new(MockBehavior.Strict);
+        this.mockLoginService = new(MockBehavior.Strict);
         this.mockRewardService = new(MockBehavior.Strict);
         this.mockDragonService = new(MockBehavior.Loose);
         this.mockDateTimeProvider = new FakeTimeProvider();
@@ -39,7 +39,7 @@ public class LoginControllerTest
             this.mockUpdateDataService.Object,
             new List<IDailyResetAction>() { mockDailyResetAction.Object },
             this.mockLogger.Object,
-            this.loginBonusService.Object,
+            this.mockLoginService.Object,
             this.mockRewardService.Object,
             this.mockDateTimeProvider,
             this.mockDragonService.Object
@@ -59,10 +59,12 @@ public class LoginControllerTest
 
         this.mockDateTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
 
-        this.loginBonusService.Setup(x => x.RewardLoginBonus())
+        this.mockLoginService.Setup(x => x.RewardLoginBonus())
             .ReturnsAsync(Enumerable.Empty<AtgenLoginBonusList>());
 
         this.mockDailyResetAction.Setup(x => x.Apply()).Returns(Task.CompletedTask);
+
+        this.mockLoginService.Setup(x => x.GetWallMonthlyReceiveList()).ReturnsAsync([]);
 
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default(CancellationToken)))
             .ReturnsAsync(new UpdateDataList());
@@ -84,6 +86,8 @@ public class LoginControllerTest
         );
 
         this.mockDateTimeProvider.SetUtcNow(timeAfterReset);
+
+        this.mockLoginService.Setup(x => x.GetWallMonthlyReceiveList()).ReturnsAsync([]);
 
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default(CancellationToken)))
             .ReturnsAsync(new UpdateDataList());

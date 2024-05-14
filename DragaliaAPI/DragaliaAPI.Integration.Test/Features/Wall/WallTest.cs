@@ -121,13 +121,23 @@ public class WallTest : TestFixture
     [Fact]
     public async Task ReceiveMonthlyRewards_ReceivesRewards()
     {
+        await this.AddToDatabase(
+            new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UnixEpoch }
+        );
+
         DbPlayerUserData oldUserData = this
             .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
-        int expectedMana = 15_000;
-        int expectedCoin = 20_000;
-        int expectedDewPoint = 5_400;
+        int oldTwinklingSand = this
+            .ApiContext.PlayerMaterials.AsNoTracking()
+            .First(x => x.MaterialId == Materials.TwinklingSand)
+            .Quantity;
+
+        int expectedMana = 25_000;
+        int expectedCoin = 40_000;
+        int expectedDewPoint = 9_000;
+        int expectedTwinklingSand = 1;
 
         await this.AddRangeToDatabase(
             new List<DbPlayerQuestWall>()
@@ -136,31 +146,31 @@ public class WallTest : TestFixture
                 {
                     ViewerId = ViewerId,
                     WallId = 216010001,
-                    WallLevel = 6,
+                    WallLevel = 5,
                 },
                 new()
                 {
                     ViewerId = ViewerId,
                     WallId = 216010002,
-                    WallLevel = 2,
+                    WallLevel = 5,
                 },
                 new()
                 {
                     ViewerId = ViewerId,
                     WallId = 216010003,
-                    WallLevel = 3,
+                    WallLevel = 5,
                 },
                 new()
                 {
                     ViewerId = ViewerId,
                     WallId = 216010004,
-                    WallLevel = 2,
+                    WallLevel = 5,
                 },
                 new()
                 {
                     ViewerId = ViewerId,
                     WallId = 216010005,
-                    WallLevel = 1,
+                    WallLevel = 5,
                 }
             }
         );
@@ -178,7 +188,7 @@ public class WallTest : TestFixture
                 new AtgenUserWallRewardList()
                 {
                     QuestGroupId = 21601,
-                    SumWallLevel = 6 + 2 + 3 + 2 + 1,
+                    SumWallLevel = 5 * 5,
                     LastRewardDate = DateTimeOffset.UtcNow,
                     RewardStatus = RewardStatus.Received
                 }
@@ -193,5 +203,57 @@ public class WallTest : TestFixture
         response
             .UpdateDataList.UserData.ManaPoint.Should()
             .Be(oldUserData.ManaPoint + expectedMana);
+
+        response
+            .UpdateDataList.MaterialList.Should()
+            .ContainSingle()
+            .Which.Should()
+            .BeEquivalentTo(
+                new MaterialList()
+                {
+                    MaterialId = Materials.TwinklingSand,
+                    Quantity = oldTwinklingSand + expectedTwinklingSand
+                }
+            );
+    }
+
+    [Fact]
+    public async Task ReceiveMonthlyRewawrds_NotInitialized_ReturnsInvalidArgument()
+    {
+        DragaliaResponse<ResultCodeResponse> response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
+                "wall/receive_monthly_reward",
+                new WallGetMonthlyRewardRequest() { QuestGroupId = 21601 },
+                ensureSuccessHeader: false
+            )
+        );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
+    }
+
+    [Fact]
+    public async Task ReceiveMonthlyRewawrds_NotEligible_ReturnsInvalidArgument()
+    {
+        await this.AddRangeToDatabase(
+            [
+                new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UtcNow },
+                new DbPlayerQuestWall()
+                {
+                    ViewerId = ViewerId,
+                    WallId = 216010001,
+                    WallLevel = 5,
+                },
+            ]
+        );
+
+        DragaliaResponse<ResultCodeResponse> response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
+                "wall/receive_monthly_reward",
+                new WallGetMonthlyRewardRequest() { QuestGroupId = 21601 },
+                ensureSuccessHeader: false
+            )
+        );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
     }
 }

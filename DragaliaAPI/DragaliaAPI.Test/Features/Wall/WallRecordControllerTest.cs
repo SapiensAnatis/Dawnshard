@@ -77,6 +77,7 @@ public class WallRecordControllerTest
 
         mockDungeonService.Setup(x => x.FinishDungeon(dungeonKey)).ReturnsAsync(session);
 
+        mockWallService.Setup(x => x.GetQuestWall(wallId)).ReturnsAsync(playerQuestWall);
         mockWallService.Setup(x => x.LevelupQuestWall(wallId)).Returns(Task.CompletedTask);
 
         mockDungeonRecordHelperService
