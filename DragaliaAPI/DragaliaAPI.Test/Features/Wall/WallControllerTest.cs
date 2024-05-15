@@ -1,3 +1,4 @@
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Reward;
@@ -5,6 +6,8 @@ using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
+using Microsoft.Extensions.Logging.Abstractions;
+using NSubstitute;
 
 namespace DragaliaAPI.Test.Features.Wall;
 
@@ -31,7 +34,8 @@ public class WallControllerTest
             mockRewardService.Object,
             mockClearPartyService.Object,
             mockDungeonService.Object,
-            mockWallService.Object
+            mockWallService.Object,
+            NullLogger<WallController>.Instance
         );
     }
 
@@ -51,19 +55,15 @@ public class WallControllerTest
                 LastRewardDate = lastRewardDate,
                 RewardStatus = rewardStatus
             };
-        IEnumerable<AtgenUserWallRewardList> userRewardList = new[] { rewardList };
 
-        mockWallService
-            .Setup(x => x.GetUserWallRewardList(totalLevel, rewardStatus))
-            .Returns(userRewardList);
-
-        mockWallService.Setup(x => x.GetTotalWallLevel()).ReturnsAsync(totalLevel);
+        mockWallService.Setup(x => x.CheckWallInitialized()).ReturnsAsync(true);
+        mockWallService.Setup(x => x.GetUserWallRewardList()).ReturnsAsync(rewardList);
 
         WallGetMonthlyRewardResponse data = (
             await wallController.GetMonthlyReward()
         ).GetData<WallGetMonthlyRewardResponse>()!;
 
-        data.UserWallRewardList.Should().BeEquivalentTo(userRewardList);
+        data.UserWallRewardList.Should().ContainSingle().Which.Should().BeEquivalentTo(rewardList);
 
         mockWallService.VerifyAll();
     }
@@ -84,7 +84,6 @@ public class WallControllerTest
                 LastRewardDate = lastRewardDate,
                 RewardStatus = rewardStatus
             };
-        IEnumerable<AtgenUserWallRewardList> userRewardList = new[] { rewardList };
 
         AtgenMonthlyWallReceiveList monthlyWallReceiveList =
             new()
@@ -114,16 +113,18 @@ public class WallControllerTest
                 }
             };
 
+        DateTimeOffset lastClaimDate = DateTimeOffset.UtcNow.AddDays(-62);
+
+        mockWallService.Setup(x => x.CheckWallInitialized()).ReturnsAsync(true);
         mockWallService
-            .Setup(x => x.GetUserWallRewardList(totalLevel, rewardStatus))
-            .Returns(userRewardList);
-
+            .Setup(x => x.GetLastRewardDate())
+            .ReturnsAsync(new DbWallRewardDate() { LastClaimDate = lastClaimDate });
+        mockWallService.Setup(x => x.CheckCanClaimReward(lastClaimDate)).Returns(true);
+        mockWallService.Setup(x => x.GetUserWallRewardList()).ReturnsAsync(rewardList);
         mockWallService.Setup(x => x.GetTotalWallLevel()).ReturnsAsync(totalLevel);
-
         mockWallService
             .Setup(x => x.GetMonthlyRewardEntityList(totalLevel))
             .Returns(buildEventRewardEntityList);
-
         mockWallService
             .Setup(x => x.GrantMonthlyRewardEntityList(buildEventRewardEntityList))
             .Returns(Task.CompletedTask);
@@ -135,13 +136,10 @@ public class WallControllerTest
             .ReturnsAsync(new UpdateDataList());
 
         WallReceiveMonthlyRewardResponse data = (
-            await wallController.ReceiveMonthlyReward(
-                new WallReceiveMonthlyRewardRequest(),
-                default
-            )
+            await wallController.ReceiveMonthlyReward(default)
         ).GetData<WallReceiveMonthlyRewardResponse>()!;
 
-        data.UserWallRewardList.Should().BeEquivalentTo(userRewardList);
+        data.UserWallRewardList.Should().ContainSingle().Which.Should().BeEquivalentTo(rewardList);
         data.MonthlyWallReceiveList.Should().BeEquivalentTo(monthlyWallReceiveListList);
 
         mockWallService.VerifyAll();

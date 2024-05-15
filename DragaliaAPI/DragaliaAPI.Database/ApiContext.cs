@@ -133,8 +133,12 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
 
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
 
+    public DbSet<DbWallRewardDate> WallRewardDates { get; set; } = null!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApiContext).Assembly);
+
         modelBuilder
             .Entity<DbPlayerUserData>()
             .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
@@ -169,6 +173,18 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
 
         modelBuilder
             .Entity<DbPlayerDragonReliability>()
+            .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
+
+        modelBuilder
+            .Entity<DbLoginBonus>()
+            .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
+
+        modelBuilder
+            .Entity<DbPlayerQuestWall>()
+            .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
+
+        modelBuilder
+            .Entity<DbWallRewardDate>()
             .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
     }
 }

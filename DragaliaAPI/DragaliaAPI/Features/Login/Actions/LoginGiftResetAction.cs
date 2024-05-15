@@ -2,7 +2,7 @@ using DragaliaAPI.Features.Present;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.Presents;
 
-namespace DragaliaAPI.Features.Login;
+namespace DragaliaAPI.Features.Login.Actions;
 
 public class LoginGiftResetAction : IDailyResetAction
 {

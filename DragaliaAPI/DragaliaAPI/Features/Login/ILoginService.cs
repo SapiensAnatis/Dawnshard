@@ -2,7 +2,8 @@
 
 namespace DragaliaAPI.Features.Login;
 
-public interface ILoginBonusService
+public interface ILoginService
 {
     Task<IEnumerable<AtgenLoginBonusList>> RewardLoginBonus();
+    Task<IList<AtgenMonthlyWallReceiveList>> GetWallMonthlyReceiveList();
 }

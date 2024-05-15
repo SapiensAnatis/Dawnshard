@@ -7,7 +7,7 @@ using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 
-namespace DragaliaAPI.Features.Login;
+namespace DragaliaAPI.Features.Login.Actions;
 
 [UsedImplicitly]
 public class DailyEndeavourResetAction(
@@ -32,7 +32,7 @@ public class DailyEndeavourResetAction(
 
     public async Task Apply()
     {
-        await missionRepository.ClearDailyMissions();
+        await this.missionRepository.ClearDailyMissions();
 
         this.logger.LogDebug("Adding permanent daily endeavours");
 

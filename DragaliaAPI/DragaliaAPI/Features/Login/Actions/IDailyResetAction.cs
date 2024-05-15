@@ -1,4 +1,4 @@
-namespace DragaliaAPI.Features.Login;
+namespace DragaliaAPI.Features.Login.Actions;
 
 public interface IDailyResetAction
 {

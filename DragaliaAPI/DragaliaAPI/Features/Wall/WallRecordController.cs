@@ -17,7 +17,6 @@ namespace DragaliaAPI.Features.Wall;
 public class WallRecordController : DragaliaControllerBase
 {
     private readonly IUpdateDataService updateDataService;
-    private readonly IWallRepository wallRepository;
     private readonly IWallService wallService;
     private readonly IRewardService rewardService;
     private readonly IDungeonService dungeonService;
@@ -27,7 +26,6 @@ public class WallRecordController : DragaliaControllerBase
 
     public WallRecordController(
         IUpdateDataService updateDataService,
-        IWallRepository wallRepository,
         IWallService wallService,
         IRewardService rewardService,
         IDungeonService dungeonService,
@@ -37,7 +35,6 @@ public class WallRecordController : DragaliaControllerBase
     )
     {
         this.updateDataService = updateDataService;
-        this.wallRepository = wallRepository;
         this.wallService = wallService;
         this.rewardService = rewardService;
         this.dungeonService = dungeonService;
@@ -54,7 +51,7 @@ public class WallRecordController : DragaliaControllerBase
     )
     {
         DungeonSession dungeonSession = await dungeonService.FinishDungeon(request.DungeonKey);
-        DbPlayerQuestWall questWall = await wallRepository.GetQuestWall(request.WallId);
+        DbPlayerQuestWall questWall = await this.wallService.GetQuestWall(request.WallId);
 
         int finishedLevel = dungeonSession.WallLevel; // ex: if you finish level 2, this value should be 2
         int previousLevel = questWall.WallLevel;
@@ -102,11 +99,9 @@ public class WallRecordController : DragaliaControllerBase
             };
 
         // Grant Rewards
-        await rewardService.GrantReward(GoldCrystals);
-
-        await rewardService.GrantReward(Rupies);
-
-        await rewardService.GrantReward(Mana);
+        _ = await rewardService.GrantReward(GoldCrystals);
+        _ = await rewardService.GrantReward(Rupies);
+        _ = await rewardService.GrantReward(Mana);
 
         // Don't grant first clear wyrmite if you are re-clearing the last level
         if (!isRecompletingMaxLevel)
