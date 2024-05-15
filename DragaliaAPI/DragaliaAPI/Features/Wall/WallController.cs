@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Controllers;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Reward;
@@ -7,33 +8,20 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace DragaliaAPI.Features.Wall;
 
 [Route("wall")]
-public class WallController : DragaliaControllerBase
+public partial class WallController(
+    IUpdateDataService updateDataService,
+    IRewardService rewardService,
+    IClearPartyService clearPartyService,
+    IDungeonService dungeonService,
+    IWallService wallService,
+    ILogger<WallController> logger
+) : DragaliaControllerBase
 {
-    private readonly IUpdateDataService updateDataService;
-    private readonly IRewardService rewardService;
-    private readonly IClearPartyService clearPartyService;
-    private readonly IDungeonService dungeonService;
-    private readonly IWallService wallService;
-
-    public WallController(
-        IUpdateDataService updateDataService,
-        IRewardService rewardService,
-        IClearPartyService clearPartyService,
-        IDungeonService dungeonService,
-        IWallService wallService
-    )
-    {
-        this.updateDataService = updateDataService;
-        this.rewardService = rewardService;
-        this.clearPartyService = clearPartyService;
-        this.dungeonService = dungeonService;
-        this.wallService = wallService;
-    }
-
     [HttpPost("fail")]
     public async Task<DragaliaResult> Fail(WallFailRequest request)
     {
@@ -55,18 +43,22 @@ public class WallController : DragaliaControllerBase
         );
     }
 
-    // When is this called?
     [HttpPost("get_monthly_reward")]
     public async Task<DragaliaResult> GetMonthlyReward()
     {
-        int totalLevel = await wallService.GetTotalWallLevel();
+        if (!await wallService.CheckWallInitialized())
+        {
+            Log.InvalidCheckAttempt(logger);
 
-        IEnumerable<AtgenUserWallRewardList> userWallRewardList = wallService.GetUserWallRewardList(
-            totalLevel,
-            RewardStatus.Received
-        );
+            return this.Code(
+                ResultCode.CommonInvalidArgument,
+                "Invalid attempt to claim wall monthly reward: not initialized"
+            );
+        }
 
-        WallGetMonthlyRewardResponse data = new() { UserWallRewardList = userWallRewardList };
+        AtgenUserWallRewardList userWallRewardList = await wallService.GetUserWallRewardList();
+
+        WallGetMonthlyRewardResponse data = new() { UserWallRewardList = [userWallRewardList] };
 
         return Ok(data);
     }
@@ -79,37 +71,54 @@ public class WallController : DragaliaControllerBase
     )
     {
         (IEnumerable<PartySettingList> clearParty, IEnumerable<AtgenLostUnitList> lostUnitList) =
-            await this.clearPartyService.GetQuestClearParty(request.WallId, false);
+            await clearPartyService.GetQuestClearParty(request.WallId, false);
 
-        await this.updateDataService.SaveChangesAsync(cancellationToken); // Updated lost entities
+        await updateDataService.SaveChangesAsync(cancellationToken); // Updated lost entities
 
         WallGetWallClearPartyResponse data =
             new() { WallClearPartySettingList = clearParty, LostUnitList = lostUnitList };
         return Ok(data);
     }
 
-    // Called upon entering the MG menu when the user is available to receive
-    // monthly MG rewards (i assume)
     [HttpPost("receive_monthly_reward")]
-    public async Task<DragaliaResult> ReceiveMonthlyReward(
-        WallReceiveMonthlyRewardRequest request,
-        CancellationToken cancellationToken
-    )
+    public async Task<DragaliaResult> ReceiveMonthlyReward(CancellationToken cancellationToken)
     {
+        // Called when sending `monthly_wall_reward_list` from /login/index
+
+        if (!await wallService.CheckWallInitialized())
+        {
+            Log.InvalidClaimAttempt(logger);
+
+            return this.Code(
+                ResultCode.CommonInvalidArgument,
+                "Invalid attempt to claim wall monthly reward: not initialized"
+            );
+        }
+
+        // Retrieve to track and update in GrantMonthlyRewardEntityList later
+        DbWallRewardDate lastRewardDate = await wallService.GetLastRewardDate();
+
+        if (!wallService.CheckCanClaimReward(lastRewardDate.LastClaimDate))
+        {
+            Log.InvalidClaimAttempt(logger);
+
+            return this.Code(
+                ResultCode.CommonInvalidArgument,
+                "Invalid attempt to claim wall monthly reward: not eligible"
+            );
+        }
+
         int totalLevel = await wallService.GetTotalWallLevel();
 
-        IEnumerable<AtgenBuildEventRewardEntityList> rewardEntityList =
+        List<AtgenBuildEventRewardEntityList> rewardEntityList =
             wallService.GetMonthlyRewardEntityList(totalLevel);
 
-        IEnumerable<AtgenUserWallRewardList> userWallRewardList = wallService.GetUserWallRewardList(
-            totalLevel,
-            RewardStatus.Received
-        );
+        AtgenUserWallRewardList userWallRewardList = await wallService.GetUserWallRewardList();
 
         // Grant Rewards
         await wallService.GrantMonthlyRewardEntityList(rewardEntityList);
 
-        EntityResult entityResult = this.rewardService.GetEntityResult();
+        EntityResult entityResult = rewardService.GetEntityResult();
 
         AtgenMonthlyWallReceiveList monthlyWallReceiveList =
             new()
@@ -118,9 +127,7 @@ public class WallController : DragaliaControllerBase
                 IsReceiveReward = RewardStatus.Received
             };
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
-            cancellationToken
-        );
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         WallReceiveMonthlyRewardResponse data =
             new()
@@ -128,31 +135,40 @@ public class WallController : DragaliaControllerBase
                 UpdateDataList = updateDataList,
                 EntityResult = entityResult,
                 WallMonthlyRewardList = rewardEntityList,
-                UserWallRewardList = userWallRewardList,
-                MonthlyWallReceiveList = new[] { monthlyWallReceiveList }
+                UserWallRewardList = [userWallRewardList],
+                MonthlyWallReceiveList = [monthlyWallReceiveList]
             };
 
         return Ok(data);
     }
 
-    // Called upon clearing a MG quest and then clicking on the Next button
-    // what does this actually do?
     [HttpPost("set_wall_clear_party")]
     public async Task<DragaliaResult> SetWallClearParty(
         WallSetWallClearPartyRequest request,
         CancellationToken cancellationToken
     )
     {
-        await this.clearPartyService.SetQuestClearParty(
+        // Called upon clearing an MG quest and then clicking on the Next button
+
+        await clearPartyService.SetQuestClearParty(
             request.WallId,
             false,
             request.RequestPartySettingList
         );
 
-        await this.updateDataService.SaveChangesAsync(cancellationToken);
+        await updateDataService.SaveChangesAsync(cancellationToken);
 
         WallSetWallClearPartyResponse data = new() { Result = 1 };
 
         return Ok(data);
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Error, "Invalid attempt to claim wall reward")]
+        public static partial void InvalidClaimAttempt(ILogger logger);
+
+        [LoggerMessage(LogLevel.Error, "Invalid attempt to check wall reward")]
+        public static partial void InvalidCheckAttempt(ILogger logger);
     }
 }
