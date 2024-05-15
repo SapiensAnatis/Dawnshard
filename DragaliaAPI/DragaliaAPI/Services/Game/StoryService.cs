@@ -36,6 +36,7 @@ public class StoryService(
     private const int CharaStoryWyrmite2 = 10;
     private const int QuestStoryWyrmite = 25;
     private const int DmodeStoryWyrmite = 25;
+    private const int Chapter10LastStoryId = 1001009;
 
     #region Eligibility check methods
     public async Task<bool> CheckStoryEligibility(StoryTypes type, int storyId)
@@ -222,7 +223,7 @@ public class StoryService(
                 {
                     await fortRepository.AddToStorage((FortPlants)reward.Id, reward.Quantity, true);
                 }
-                else if (storyId == 1001009)
+                else if (storyId == Chapter10LastStoryId)
                 {
                     presentService.AddPresent(
                         new Present(
@@ -272,7 +273,7 @@ public class StoryService(
             );
         }
 
-        if (storyId == 1001009)
+        if (storyId == Chapter10LastStoryId)
         {
             logger.LogDebug("Granting player experience for chapter 10 completion.");
             await userService.AddExperience(69990);

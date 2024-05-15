@@ -107,6 +107,9 @@ public class SavefileImportTest : TestFixture
                     );
                     opts.Excluding(x => x.UserData!.Level);
                     opts.Excluding(x => x.UserData!.Crystal);
+                    opts.Excluding(x => x.UserData!.Exp);
+                    opts.Excluding(x => x.UserData!.LastStaminaSingleUpdateTime);
+                    opts.Excluding(x => x.UserData!.LastStaminaMultiUpdateTime);
                     opts.Excluding(x => x.TreasureTradeAllList);
                     opts.Excluding(x => x.MultiServer);
                     opts.Excluding(x => x.MissionNotice);
