@@ -2,7 +2,6 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.Presents;
-using DragaliaAPI.Shared.PlayerDetails;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 

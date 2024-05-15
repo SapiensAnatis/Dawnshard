@@ -9,6 +9,15 @@ namespace DragaliaAPI.Database.Entities;
 [Table("PlayerDragonData")]
 public class DbPlayerDragonData : DbPlayerData, IHasXp
 {
+    public DbPlayerDragonData() { }
+
+    public DbPlayerDragonData(long viewerId, Dragons id)
+    {
+        this.ViewerId = viewerId;
+        this.DragonId = id;
+        this.GetTime = DateTimeOffset.UtcNow;
+    }
+
     [Column("DragonKeyId")]
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

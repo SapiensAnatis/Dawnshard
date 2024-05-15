@@ -1,6 +1,5 @@
 ﻿using DragaliaAPI.Authentication;
 using DragaliaAPI.Database;
-using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Blazor;
 using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.ClearParty;
@@ -21,8 +20,6 @@ using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Quest;
-using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Reward.Handlers;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Features.Shop;
@@ -34,7 +31,6 @@ using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Features.Version;
 using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Features.Zena;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
@@ -81,10 +77,9 @@ public static class ServiceConfiguration
             .AddScoped<ISavefileUpdateService, SavefileUpdateService>()
             .AddTransient<PlayerIdentityLoggingMiddleware>();
 
-        services.AddSummoningFeature();
+        services.AddSummoningFeature().AddRewardFeature();
 
         services
-            .AddScoped<IRewardService, RewardService>()
             .RegisterMissionServices()
             // Shop Feature
             .AddScoped<IShopRepository, ShopRepository>()
@@ -102,7 +97,6 @@ public static class ServiceConfiguration
             .AddScoped<IFortService, FortService>()
             .AddScoped<IFortRepository, FortRepository>()
             // Login feature
-            .AddScoped<IResetHelper, ResetHelper>()
             .AddScoped<ILoginBonusService, LoginBonusService>()
             .AddScoped<ILoginBonusRepository, LoginBonusRepository>()
             // Dungeon Feature
@@ -167,7 +161,6 @@ public static class ServiceConfiguration
 
         services.AddAllOfType<ISavefileUpdate>();
         services.AddAllOfType<IDailyResetAction>();
-        services.AddAllOfType<IRewardHandler>();
 
         services.AddHttpClient<IBaasApi, BaasApi>();
 

@@ -50,6 +50,7 @@ namespace DragaliaAPI.Shared.MasterAsset;
 [GenerateMasterAsset<SkillData>("SkillData.json")]
 [GenerateMasterAsset<StampData>("StampData.json")]
 [GenerateMasterAsset<UseItemData>("UseItem.json")]
+[GenerateMasterAsset<EmblemData>("EmblemData.json")]
 [GenerateMasterAsset<AlbumMission>("Missions/MissionAlbumData.json")]
 [GenerateMasterAsset<NormalMission>("Missions/MissionBeginnerData.json")]
 [GenerateMasterAsset<DailyMission>("Missions/MissionDailyData.json")]

@@ -1,63 +1,76 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Database.Test;
+using DragaliaAPI.Features.Present;
+using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Reward.Handlers;
+using DragaliaAPI.Features.Summoning;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.PlayerDetails;
-using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
 using static DragaliaAPI.Database.Test.DbTestFixture;
 
-namespace DragaliaAPI.Database.Test.Repositories;
+namespace DragaliaAPI.Test.Features.Summon;
 
 [Collection("RepositoryTest")]
-public class UnitRepositoryTest : IClassFixture<DbTestFixture>
+public class UnitServiceTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
-    private readonly UnitRepository unitRepository;
+    private readonly UnitService unitService;
     private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
+    private readonly Mock<IPresentService> mockPresentService;
 
-    public UnitRepositoryTest(DbTestFixture fixture)
+    public UnitServiceTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
-        this.fixture.ApiContext.Database.EnsureCreated();
-        this.fixture.ApiContext.Database.EnsureDeleted();
 
         this.mockPlayerIdentityService = new(MockBehavior.Strict);
         this.mockPlayerIdentityService.Setup(x => x.ViewerId).Returns(ViewerId);
+        this.mockPresentService = new(MockBehavior.Loose);
 
-        this.unitRepository = new UnitRepository(
-            fixture.ApiContext,
-            this.mockPlayerIdentityService.Object
+        CharaHandler charaHandler =
+            new(
+                this.fixture.ApiContext,
+                this.mockPlayerIdentityService.Object,
+                NullLogger<CharaHandler>.Instance
+            );
+        DragonHandler dragonHandler =
+            new(
+                this.fixture.ApiContext,
+                this.mockPlayerIdentityService.Object,
+                NullLogger<DragonHandler>.Instance
+            );
+        RewardService rewardService =
+            new(
+                NullLogger<RewardService>.Instance,
+                new Mock<IUnitRepository>().Object,
+                [],
+                [charaHandler, dragonHandler]
+            );
+
+        this.unitService = new UnitService(
+            this.mockPresentService.Object,
+            rewardService,
+            fixture.ApiContext
         );
 
+        this.fixture.ApiContext.PlayerCharaData.RemoveRange(
+            this.fixture.ApiContext.PlayerCharaData.IgnoreQueryFilters()
+        );
+        this.fixture.ApiContext.PlayerDragonData.RemoveRange(
+            this.fixture.ApiContext.PlayerDragonData.IgnoreQueryFilters()
+        );
+        this.fixture.ApiContext.PlayerDragonReliability.RemoveRange(
+            this.fixture.ApiContext.PlayerDragonReliability.IgnoreQueryFilters()
+        );
+        this.fixture.ApiContext.PlayerStoryState.RemoveRange(
+            this.fixture.ApiContext.PlayerStoryState.IgnoreQueryFilters()
+        );
+        this.fixture.ApiContext.SaveChanges();
+
         this.fixture.ApiContext.ChangeTracker.Clear();
-    }
-
-    [Fact]
-    public async Task GetAllDragonData_ValidId_ReturnsData()
-    {
-        await this.fixture.AddToDatabase(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Agni));
-        (await this.unitRepository.Dragons.ToListAsync()).Should().NotBeEmpty();
-    }
-
-    [Fact]
-    public async Task GetAllDragonData_InvalidId_ReturnsEmpty()
-    {
-        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(400);
-
-        (await this.unitRepository.Dragons.ToListAsync()).Should().BeEmpty();
-    }
-
-    [Fact]
-    public async Task GetAllDragonData_ReturnsOnlyDataForGivenId()
-    {
-        await this.fixture.AddToDatabase(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Agni));
-        await this.fixture.AddToDatabase(DbPlayerDragonDataFactory.Create(444, Dragons.Agni));
-
-        (await this.unitRepository.Dragons.ToListAsync())
-            .Should()
-            .AllSatisfy(x => x.ViewerId.Should().Be(ViewerId));
     }
 
     [Fact]
@@ -66,9 +79,9 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         List<Charas> idList =
             new() { Charas.Chrom, Charas.Chrom, Charas.Panther, Charas.Izumo, Charas.Izumo };
 
-        (await this.unitRepository.AddCharas(idList))
-            .Where(x => x.isNew)
-            .Select(x => x.id)
+        (await this.unitService.AddCharas(idList))
+            .Where(x => x.IsNew)
+            .Select(x => x.Id)
             .Should()
             .BeEquivalentTo(new List<Charas>() { Charas.Chrom, Charas.Panther, Charas.Izumo });
     }
@@ -78,7 +91,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     {
         List<Charas> idList = new() { Charas.Addis, Charas.Aeleen };
 
-        await this.unitRepository.AddCharas(idList);
+        await this.unitService.AddCharas(idList);
         await this.fixture.ApiContext.SaveChangesAsync();
 
         (
@@ -89,7 +102,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         )
             .Should()
             .Contain(new List<Charas>() { Charas.Addis, Charas.Aeleen });
-        (await fixture.ApiContext.PlayerStoryState.Select(x => x.StoryId).ToListAsync())
+        (await this.fixture.ApiContext.PlayerStoryState.Select(x => x.StoryId).ToListAsync())
             .Should()
             .Contain(
                 new List<int>()
@@ -103,37 +116,37 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task AddCharas_HandlesExistingStory()
     {
-        int izumoStoryId = MasterAsset.CharaStories[(int)Charas.Izumo].StoryIds[0];
-        int mitsuhideStoryId = MasterAsset.CharaStories[(int)Charas.Mitsuhide].StoryIds[0];
+        int natalieStoryId = MasterAsset.CharaStories[(int)Charas.Natalie].StoryIds[0];
+        int catherineStoryId = MasterAsset.CharaStories[(int)Charas.Catherine].StoryIds[0];
         await this.fixture.AddRangeToDatabase(
             [
                 new DbPlayerStoryState()
                 {
                     ViewerId = ViewerId,
                     StoryType = StoryTypes.Chara,
-                    StoryId = izumoStoryId,
+                    StoryId = natalieStoryId,
                     State = 0,
                 },
                 new DbPlayerStoryState()
                 {
                     ViewerId = ViewerId,
                     StoryType = StoryTypes.Dragon,
-                    StoryId = mitsuhideStoryId,
+                    StoryId = catherineStoryId,
                     State = 0,
                 },
                 new DbPlayerStoryState()
                 {
                     ViewerId = ViewerId + 1,
                     StoryType = StoryTypes.Chara,
-                    StoryId = mitsuhideStoryId,
+                    StoryId = catherineStoryId,
                     State = 0,
                 }
             ]
         );
 
-        List<Charas> idList = [Charas.Izumo, Charas.Mitsuhide];
+        List<Charas> idList = [Charas.Natalie, Charas.Catherine];
 
-        await this.unitRepository.AddCharas(idList);
+        await this.unitService.AddCharas(idList);
 
         await this.fixture.ApiContext.SaveChangesAsync();
 
@@ -143,7 +156,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
                 {
                     ViewerId = ViewerId,
                     StoryType = StoryTypes.Chara,
-                    StoryId = izumoStoryId,
+                    StoryId = natalieStoryId,
                     State = 0,
                 },
                 opts => opts.Excluding(x => x.Owner)
@@ -153,7 +166,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
                 {
                     ViewerId = ViewerId,
                     StoryType = StoryTypes.Chara,
-                    StoryId = mitsuhideStoryId,
+                    StoryId = catherineStoryId,
                     State = 0,
                 },
                 opts => opts.Excluding(x => x.Owner)
@@ -163,11 +176,11 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task AddDragons_CorrectlyMarksDuplicates()
     {
-        await fixture.AddToDatabase(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Barbatos));
+        await this.fixture.AddToDatabase(new DbPlayerDragonData(ViewerId, Dragons.Barbatos));
 
         List<Dragons> idList = new() { Dragons.Marishiten, Dragons.Barbatos, Dragons.Marishiten };
 
-        IEnumerable<(Dragons Id, bool IsNew)> result = await this.unitRepository.AddDragons(idList);
+        IEnumerable<(Dragons Id, bool IsNew)> result = await this.unitService.AddDragons(idList);
 
         result
             .Where(x => x.IsNew)
@@ -196,7 +209,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
 
         List<Dragons> idList = [Dragons.AC011Garland, Dragons.Agni];
 
-        await this.unitRepository.AddDragons(idList);
+        await this.unitService.AddDragons(idList);
         await this.fixture.ApiContext.SaveChangesAsync();
 
         this.fixture.ApiContext.PlayerDragonReliability.Should()
@@ -209,16 +222,14 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task AddDragons_UpdatesDatabase()
     {
-        await fixture.AddToDatabase(
-            DbPlayerDragonDataFactory.Create(ViewerId, Dragons.KonohanaSakuya)
-        );
-        await fixture.AddToDatabase(
-            DbPlayerDragonReliabilityFactory.Create(ViewerId, Dragons.KonohanaSakuya)
+        await this.fixture.AddToDatabase(new DbPlayerDragonData(ViewerId, Dragons.KonohanaSakuya));
+        await this.fixture.AddToDatabase(
+            new DbPlayerDragonReliability(ViewerId, Dragons.KonohanaSakuya)
         );
 
         List<Dragons> idList = new() { Dragons.KonohanaSakuya, Dragons.Michael, Dragons.Michael };
 
-        await this.unitRepository.AddDragons(idList);
+        await this.unitService.AddDragons(idList);
         await this.fixture.ApiContext.SaveChangesAsync();
 
         (

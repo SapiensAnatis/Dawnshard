@@ -9,14 +9,16 @@
 </MudLayout>
 
 @code {
+
     private MudTheme theme = new()
+    {
+        Palette = new PaletteLight()
         {
-            Palette = new PaletteLight()
-            {
-                AppbarBackground = Colors.Teal.Default,
-                Primary = Colors.Teal.Accent4,
-                Secondary = Colors.Pink.Accent2,
-                Tertiary = Colors.DeepPurple.Lighten1,
-            }
-        };
+            AppbarBackground = Colors.Teal.Default,
+            Primary = Colors.Teal.Accent4,
+            Secondary = Colors.Pink.Accent2,
+            Tertiary = Colors.DeepPurple.Lighten1,
+        }
+    };
+
 }

@@ -1,9 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
-using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Mapping.Mapperly;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
@@ -104,8 +102,7 @@ public class WeaponBodyTest : TestFixture
     {
         await this.AddToDatabase(testCase.InitialState);
 
-        ApiContext apiContext = this.Services.GetRequiredService<ApiContext>();
-        apiContext.ChangeTracker.Clear();
+        this.ApiContext.ChangeTracker.Clear();
 
         long oldCoin = this.GetRupies();
         Dictionary<Materials, int> oldMaterials = testCase.ExpMaterialLoss.ToDictionary(
@@ -128,8 +125,8 @@ public class WeaponBodyTest : TestFixture
         ).Data;
 
         // Check coin
-        DbPlayerUserData userData = (await apiContext.PlayerUserData.FindAsync(ViewerId))!;
-        await apiContext.Entry(userData).ReloadAsync();
+        DbPlayerUserData userData = (await this.ApiContext.PlayerUserData.FindAsync(ViewerId))!;
+        await this.ApiContext.Entry(userData).ReloadAsync();
 
         if (testCase.ExpCoinLoss != 0)
             response.UpdateDataList.UserData.Coin.Should().Be(oldCoin - testCase.ExpCoinLoss);
@@ -140,9 +137,12 @@ public class WeaponBodyTest : TestFixture
 
         // Check weapon
         DbWeaponBody weaponBody = (
-            await apiContext.PlayerWeapons.FindAsync(ViewerId, testCase.InitialState.WeaponBodyId)
+            await this.ApiContext.PlayerWeapons.FindAsync(
+                ViewerId,
+                testCase.InitialState.WeaponBodyId
+            )
         )!;
-        await apiContext.Entry(weaponBody).ReloadAsync();
+        await this.ApiContext.Entry(weaponBody).ReloadAsync();
 
         weaponBody
             .Should()
@@ -165,7 +165,7 @@ public class WeaponBodyTest : TestFixture
                 );
 
             DbPlayerMaterial dbEntry = (
-                await apiContext.PlayerMaterials.FindAsync(ViewerId, material)
+                await this.ApiContext.PlayerMaterials.FindAsync(ViewerId, material)
             )!;
 
             dbEntry.Quantity.Should().Be(expQuantity);
@@ -181,8 +181,7 @@ public class WeaponBodyTest : TestFixture
                 .UpdateDataList.WeaponPassiveAbilityList.Should()
                 .ContainEquivalentOf(this.Mapper.Map<WeaponPassiveAbilityList>(expPassive));
 
-            apiContext
-                .PlayerPassiveAbilities.Should()
+            this.ApiContext.PlayerPassiveAbilities.Should()
                 .ContainEquivalentOf(expPassive, opts => opts.Excluding(x => x.ViewerId));
         }
 
@@ -196,8 +195,7 @@ public class WeaponBodyTest : TestFixture
                     opts => opts.Excluding(x => x.GetTime)
                 );
 
-            apiContext
-                .PlayerWeaponSkins.Should()
+            this.ApiContext.PlayerWeaponSkins.Should()
                 .ContainEquivalentOf(
                     expPassive,
                     opts => opts.Excluding(x => x.GetTime).Excluding(x => x.ViewerId)
