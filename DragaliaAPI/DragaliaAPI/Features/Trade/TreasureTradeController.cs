@@ -44,6 +44,7 @@ public class TreasureTradeController(
         resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.TreasureTradeAllList = tradeService.GetCurrentTreasureTradeList();
         resp.UserTreasureTradeList = await tradeService.GetUserTreasureTradeList();
+        resp.EntityResult = tradeService.GetEntityResult();
 
         return Ok(resp);
     }
