@@ -113,4 +113,38 @@ public class TreasureTradeTest : TestFixture
         response.UpdateDataList.Should().NotBeNull();
         response.UpdateDataList.WeaponSkinList.Should().Contain(x => x.WeaponSkinId == 30159921);
     }
+
+    [Fact]
+    public async Task Trade_MultiDragon_AlmostFull_Trades()
+    {
+        this.ApiContext.PlayerDragonData.ExecuteDelete();
+        this.ApiContext.PlayerUserData.ExecuteUpdate(e =>
+            e.SetProperty(x => x.MaxDragonQuantity, 2)
+        );
+
+        int highBrunhildaTrade = 10030302;
+
+        TreasureTradeTradeResponse response = (
+            await Client.PostMsgpack<TreasureTradeTradeResponse>(
+                "treasure_trade/trade",
+                new TreasureTradeTradeRequest(1003, highBrunhildaTrade, null, 4)
+            )
+        ).Data;
+
+        response.UpdateDataList.DragonList.Should().HaveCount(2);
+        response.EntityResult.OverPresentEntityList.Should().HaveCount(2);
+
+        this.ApiContext.PlayerDragonData.ToList()
+            .Should()
+            .HaveCount(2)
+            .And.AllSatisfy(x => x.DragonId.Should().Be(Dragons.HighBrunhilda));
+        this.ApiContext.PlayerPresents.ToList()
+            .Should()
+            .HaveCount(2)
+            .And.AllSatisfy(x =>
+            {
+                x.EntityType.Should().Be(EntityTypes.Dragon);
+                x.EntityId.Should().Be((int)Dragons.HighBrunhilda);
+            });
+    }
 }

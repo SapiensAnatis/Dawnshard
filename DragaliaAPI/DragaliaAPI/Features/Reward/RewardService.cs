@@ -48,7 +48,7 @@ public class RewardService(
         }
     }
 
-    public async Task<IDictionary<TKey, RewardGrantResult>> GrantRewardsWithBatchHandler<TKey>(
+    public async Task<IDictionary<TKey, RewardGrantResult>> BatchGrantRewards<TKey>(
         IDictionary<TKey, Entity> entities
     )
         where TKey : struct
@@ -63,23 +63,30 @@ public class RewardService(
         foreach ((EntityTypes type, Dictionary<TKey, Entity> dictionary) in grouping)
         {
             if (
-                batchRewardHandlers.FirstOrDefault(x => x.SupportedTypes.Contains(type))
-                is not { } batchRewardHandler
+                batchRewardHandlers.FirstOrDefault(x => x.SupportedTypes.Contains(type)) is
+                { } batchRewardHandler
             )
             {
-                throw new NotSupportedException(
-                    $"Entities of type {type} are not supported in this method"
+                IDictionary<TKey, GrantReturn> batchResult = await batchRewardHandler.GrantRange(
+                    dictionary
                 );
+
+                foreach ((TKey key, GrantReturn grantReturn) in batchResult)
+                {
+                    await ProcessGrantResult(grantReturn, dictionary[key]);
+                    result.Add(key, grantReturn.Result);
+                }
             }
-
-            IDictionary<TKey, GrantReturn> batchResult = await batchRewardHandler.GrantRange(
-                dictionary
-            );
-
-            foreach ((TKey key, GrantReturn grantReturn) in batchResult)
+            else
             {
-                await ProcessGrantResult(grantReturn, dictionary[key]);
-                result.Add(key, grantReturn.Result);
+                IRewardHandler handler = this.GetHandler(type);
+
+                foreach ((TKey key, Entity entity) in dictionary)
+                {
+                    GrantReturn grantReturn = await handler.Grant(entity);
+                    await ProcessGrantResult(grantReturn, entity);
+                    result.Add(key, grantReturn.Result);
+                }
             }
         }
 

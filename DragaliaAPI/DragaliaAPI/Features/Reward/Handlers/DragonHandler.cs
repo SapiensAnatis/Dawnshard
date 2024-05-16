@@ -16,6 +16,14 @@ public partial class DragonHandler(
 
     public async Task<GrantReturn> Grant(Entity entity)
     {
+        if (entity.Quantity > 1)
+        {
+            throw new ArgumentException(
+                "Cannot process dragons with quantity >1 in single reward handler due to the possibility of multiple results. Use the batch handler instead.",
+                nameof(entity)
+            );
+        }
+
         Dragons dragon = (Dragons)entity.Id;
         if (!Enum.IsDefined(dragon))
         {

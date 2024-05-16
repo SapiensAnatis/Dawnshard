@@ -20,4 +20,5 @@ public interface ITradeService
         IEnumerable<AtgenNeedUnitList>? needUnitList = null
     );
     Task DoAbilityCrestTrade(int id, int count);
+    EntityResult GetEntityResult();
 }

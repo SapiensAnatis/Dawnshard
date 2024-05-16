@@ -164,24 +164,53 @@ public class TradeService(
             );
         }
 
-        RewardGrantResult result = await rewardService.GrantReward(
-            new(
-                trade.DestinationEntityType,
-                trade.DestinationEntityId,
-                trade.DestinationEntityQuantity * count,
-                trade.DestinationLimitBreakCount
-            )
+        Dictionary<int, Entity> entities;
+
+        if (trade.DestinationEntityType == EntityTypes.Dragon)
+        {
+            // We must flatten dragons out into multiple entities, since each grant could have a different result
+            entities = Enumerable
+                .Repeat(
+                    new Entity(
+                        trade.DestinationEntityType,
+                        trade.DestinationEntityId,
+                        1,
+                        trade.DestinationLimitBreakCount
+                    ),
+                    trade.DestinationEntityQuantity * count
+                )
+                .Select((x, index) => KeyValuePair.Create(index, x))
+                .ToDictionary();
+        }
+        else
+        {
+            entities = new()
+            {
+                [1] = new Entity(
+                    trade.DestinationEntityType,
+                    trade.DestinationEntityId,
+                    trade.DestinationEntityQuantity * count,
+                    trade.DestinationLimitBreakCount
+                )
+            };
+        }
+
+        IDictionary<int, RewardGrantResult> batchResult = await rewardService.BatchGrantRewards(
+            entities
         );
 
-        if (result == RewardGrantResult.Limit)
+        foreach ((_, RewardGrantResult result) in batchResult)
         {
-            presentService.AddPresent(
-                new Present.Present(
-                    PresentMessage.TreasureTrade,
-                    trade.DestinationEntityType,
-                    trade.DestinationEntityId
-                )
-            );
+            if (result == RewardGrantResult.Limit)
+            {
+                presentService.AddPresent(
+                    new Present.Present(
+                        PresentMessage.TreasureTrade,
+                        trade.DestinationEntityType,
+                        trade.DestinationEntityId
+                    )
+                );
+            }
         }
 
         await tradeRepository.AddTrade(tradeType, tradeId, count, DateTimeOffset.UtcNow);
@@ -216,5 +245,13 @@ public class TradeService(
         );
 
         await tradeRepository.AddTrade(TradeType.AbilityCrest, id, count);
+    }
+
+    public EntityResult GetEntityResult()
+    {
+        EntityResult result = rewardService.GetEntityResult();
+        result.OverPresentEntityList = presentService.GetTrackedPresentList();
+
+        return result;
     }
 }
