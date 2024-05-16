@@ -479,13 +479,9 @@ public sealed partial class SummonService(
             returnedResult.Add(processedResult);
         }
 
-        IEnumerable<AtgenBuildEventRewardEntityList> overPresentEntityList = apiContext
-            .PlayerPresents.Local.Where(x => x.EntityType == EntityTypes.Dragon)
-            .Select(x => new AtgenBuildEventRewardEntityList(
-                x.EntityType,
-                x.EntityId,
-                x.EntityQuantity
-            ));
+        IEnumerable<AtgenBuildEventRewardEntityList> overPresentEntityList = presentService
+            .GetTrackedPresentList()
+            .Where(x => x.EntityType == EntityTypes.Dragon);
 
         return (
             returnedResult,
