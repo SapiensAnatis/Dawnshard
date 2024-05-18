@@ -1,13 +1,13 @@
 using DragaliaAPI.Extensions;
 using Microsoft.Extensions.Time.Testing;
 
-namespace DragaliaAPI.Test.Features.Login;
+namespace DragaliaAPI.Test.Extensions;
 
-public class ResetHelperTest
+public class ResetTimeProviderExtensionsTest
 {
     private readonly FakeTimeProvider fakeTimeProvider;
 
-    public ResetHelperTest()
+    public ResetTimeProviderExtensionsTest()
     {
         this.fakeTimeProvider = new();
     }
@@ -108,7 +108,10 @@ public class ResetHelperTest
 
     [Theory]
     [MemberData(nameof(DailyResetData))]
-    public void LastDailyReset_ReturnsCorrectReset(DateTimeOffset now, DateTimeOffset expectedReset)
+    public void GetLastDailyReset_ReturnsCorrectReset(
+        DateTimeOffset now,
+        DateTimeOffset expectedReset
+    )
     {
         this.fakeTimeProvider.SetUtcNow(now);
         this.fakeTimeProvider.SetLocalTimeZone(
@@ -121,7 +124,7 @@ public class ResetHelperTest
 
     [Theory]
     [MemberData(nameof(DailyResetDayOfWeekData))]
-    public void LastDailyResetDayOfWeek_ReturnsCorrectResult(
+    public void GetLastDailyResetDayOfWeek_ReturnsCorrectResult(
         DateTimeOffset now,
         DayOfWeek expectedDayOfWeek
     )
@@ -136,7 +139,7 @@ public class ResetHelperTest
 
     [Theory]
     [MemberData(nameof(WeeklyResetData))]
-    public void LastWeeklyReset_ReturnsCorrectReset(
+    public void GetLastWeeklyReset_ReturnsCorrectReset(
         DateTimeOffset now,
         DateTimeOffset expectedReset
     )
@@ -148,7 +151,7 @@ public class ResetHelperTest
 
     [Theory]
     [MemberData(nameof(MonthlyResetData))]
-    public void LastMonthlyReset_ReturnsCorrectReset(
+    public void GetLastMonthlyReset_ReturnsCorrectReset(
         DateTimeOffset now,
         DateTimeOffset expectedReset
     )

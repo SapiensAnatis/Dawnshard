@@ -12,4 +12,5 @@ public interface IPresentService
     void AddPresent(Present present);
 
     void AddPresent(IEnumerable<Present> presents);
+    IEnumerable<AtgenBuildEventRewardEntityList> GetTrackedPresentList();
 }

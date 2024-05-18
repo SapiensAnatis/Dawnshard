@@ -34,7 +34,7 @@ public class UnitService(
             .ToDictionary();
 
         IDictionary<int, RewardGrantResult> outputRewardDict =
-            await rewardService.GrantRewardsWithBatchHandler(inputRewardDict);
+            await rewardService.BatchGrantRewards(inputRewardDict);
 
         List<CharaNewCheckResult> result = [];
 
@@ -55,7 +55,7 @@ public class UnitService(
             .ToDictionary();
 
         IDictionary<int, RewardGrantResult> outputRewardDict =
-            await rewardService.GrantRewardsWithBatchHandler(inputRewardDict);
+            await rewardService.BatchGrantRewards(inputRewardDict);
 
         IEnumerable<Present.Present> presentsToAdd = outputRewardDict
             .Where(kvp => kvp.Value == RewardGrantResult.Limit)
