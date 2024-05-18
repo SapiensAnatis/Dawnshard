@@ -2,10 +2,13 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Player;
+using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
@@ -18,11 +21,13 @@ public class StoryService(
     ILogger<StoryService> logger,
     IUserDataRepository userDataRepository,
     IInventoryRepository inventoryRepository,
+    IPresentService presentService,
     ITutorialService tutorialService,
     IFortRepository fortRepository,
     IMissionProgressionService missionProgressionService,
     IRewardService rewardService,
-    IPaymentService paymentService
+    IPaymentService paymentService,
+    IUserService userService
 ) : IStoryService
 {
     private const int DragonStoryWyrmite = 25;
@@ -31,6 +36,7 @@ public class StoryService(
     private const int CharaStoryWyrmite2 = 10;
     private const int QuestStoryWyrmite = 25;
     private const int DmodeStoryWyrmite = 25;
+    private const int Chapter10LastStoryId = 1001009;
 
     #region Eligibility check methods
     public async Task<bool> CheckStoryEligibility(StoryTypes type, int storyId)
@@ -217,6 +223,17 @@ public class StoryService(
                 {
                     await fortRepository.AddToStorage((FortPlants)reward.Id, reward.Quantity, true);
                 }
+                else if (storyId == Chapter10LastStoryId)
+                {
+                    presentService.AddPresent(
+                        new Present(
+                            PresentMessage.Chapter10Clear,
+                            (EntityTypes)reward.Type,
+                            reward.Id,
+                            reward.Quantity
+                        )
+                    );
+                }
                 else
                 {
                     await rewardService.GrantReward(
@@ -254,6 +271,12 @@ public class StoryService(
                     EntityType = EntityTypes.Chara
                 }
             );
+        }
+
+        if (storyId == Chapter10LastStoryId)
+        {
+            logger.LogDebug("Granting player experience for chapter 10 completion.");
+            await userService.AddExperience(69990);
         }
 
         return rewardList;

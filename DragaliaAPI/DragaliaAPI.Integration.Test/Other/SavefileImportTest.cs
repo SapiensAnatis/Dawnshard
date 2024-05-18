@@ -78,6 +78,9 @@ public class SavefileImportTest : TestFixture
             await this.Client.PostMsgpack<LoadIndexResponse>("load/index")
         ).Data;
 
+        storedSavefile.UserData.Exp.Should().Be(savefile.UserData.Exp + 69990); // Exp rewarded from V22Update
+        storedSavefile.UserData.Level.Should().Be(savefile.UserData.Level + 1); // Level diffenece due to exp rewarded from V22Update
+
         storedSavefile
             .Should()
             .BeEquivalentTo(
@@ -107,6 +110,9 @@ public class SavefileImportTest : TestFixture
                     );
                     opts.Excluding(x => x.UserData!.Level);
                     opts.Excluding(x => x.UserData!.Crystal);
+                    opts.Excluding(x => x.UserData!.Exp);
+                    opts.Excluding(x => x.UserData!.LastStaminaSingleUpdateTime);
+                    opts.Excluding(x => x.UserData!.LastStaminaMultiUpdateTime);
                     opts.Excluding(x => x.TreasureTradeAllList);
                     opts.Excluding(x => x.MultiServer);
                     opts.Excluding(x => x.MissionNotice);
