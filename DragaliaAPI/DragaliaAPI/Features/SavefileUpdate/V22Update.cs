@@ -24,8 +24,7 @@ public class V22Update(
     private const int Chapter10LastStoryId = 1001009;
 
     private static readonly List<QuestStoryReward> Rewards = MasterAsset
-        .QuestStoryRewardInfo.Enumerable.Where(x => x.Id == Chapter10LastStoryId)
-        .First()
+        .QuestStoryRewardInfo[Chapter10LastStoryId]
         .Rewards.ToList();
 
     public int SavefileVersion => 22;
