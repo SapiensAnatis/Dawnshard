@@ -71,7 +71,7 @@ public class QuestService(
             questId,
             questData.Gid,
             questData.QuestPlayModeType,
-            1,
+            session.PlayCount,
             quest.PlayCount
         );
 
