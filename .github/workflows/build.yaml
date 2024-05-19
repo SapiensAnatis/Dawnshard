@@ -78,9 +78,6 @@ jobs:
           context: .
           push: true
           file: ${{ inputs.dockerfile }}
-          build-args: |
-            CI=true
-            BASE_DOTNET_IMAGE=mcr.microsoft.com/dotnet/aspnet:8.0-jammy-chiseled
           tags: ghcr.io/sapiensanatis/${{ inputs.image-name }}:${{ steps.derive-tag.outputs.tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max    
