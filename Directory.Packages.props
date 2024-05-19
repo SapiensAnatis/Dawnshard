@@ -23,7 +23,7 @@
         <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2"/>
         <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.5"/>
         <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.5"/>
-        <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="8.3.0"/>
+        <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="8.5.0"/>
         <PackageVersion Include="Microsoft.Bcl.HashCode" Version="1.1.1"/>
         <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4"/>
         <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2"/>
