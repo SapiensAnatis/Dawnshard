@@ -41,7 +41,28 @@
   },
   {
     "_Id": 3,
-    "_Rewards": []
+    "_Rewards": [
+      {
+        "_Type": "Material",
+        "_Id": 104001043,
+        "_Quantity": 8
+      },
+      {
+        "_Type": "Material",
+        "_Id": 103001003,
+        "_Quantity": 60
+      },
+      {
+        "_Type": "HustleHammer",
+        "_Id": 0,
+        "_Quantity": 4
+      },
+      {
+        "_Type": "Rupies",
+        "_Id": 0,
+        "_Quantity": 1000000
+      }
+    ]
   },
   {
     "_Id": 8,
