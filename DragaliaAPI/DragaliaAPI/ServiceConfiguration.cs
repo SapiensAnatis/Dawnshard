@@ -24,6 +24,7 @@ using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Stamp;
+using DragaliaAPI.Features.Story;
 using DragaliaAPI.Features.StorySkip;
 using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Features.TimeAttack;
@@ -65,7 +66,6 @@ public static class ServiceConfiguration
             .AddScoped<IAuthService, AuthService>()
             .AddScoped<IBonusService, BonusService>()
             .AddScoped<IWeaponService, WeaponService>()
-            .AddScoped<IStoryService, StoryService>()
             .AddScoped<IMatchingService, MatchingService>()
             .AddScoped<IAbilityCrestService, AbilityCrestService>()
             .AddScoped<IHeroParamService, HeroParamService>()
@@ -76,7 +76,14 @@ public static class ServiceConfiguration
             .AddScoped<ISavefileUpdateService, SavefileUpdateService>()
             .AddTransient<PlayerIdentityLoggingMiddleware>();
 
-        services.AddSummoningFeature().AddRewardFeature().AddLoginFeature().AddWallFeature();
+        services
+            .AddSummoningFeature()
+            .AddRewardFeature()
+            .AddLoginFeature()
+            .AddWallFeature()
+            .AddPresentFeature()
+            .AddQuestFeature()
+            .AddStoryFeature();
 
         services
             .RegisterMissionServices()
@@ -85,10 +92,6 @@ public static class ServiceConfiguration
             .AddScoped<IItemSummonService, ItemSummonService>()
             .AddScoped<IPaymentService, PaymentService>()
             .AddScoped<IShopService, ShopService>()
-            // Present feature
-            .AddScoped<IPresentService, PresentService>()
-            .AddScoped<IPresentControllerService, PresentControllerService>()
-            .AddScoped<IPresentRepository, PresentRepository>()
             // Treasure Trade Feature
             .AddScoped<ITradeRepository, TradeRepository>()
             .AddScoped<ITradeService, TradeService>()
@@ -133,9 +136,6 @@ public static class ServiceConfiguration
             // Emblem feature
             .AddScoped<IEmblemRepository, EmblemRepository>()
             // Quest feature
-            .AddScoped<IQuestService, QuestService>()
-            .AddScoped<IQuestCacheService, QuestCacheService>()
-            .AddScoped<IQuestTreasureService, QuestTreasureService>()
             // Party power feature
             .AddScoped<IPartyPowerService, PartyPowerService>()
             .AddScoped<IPartyPowerRepository, PartyPowerRepository>()

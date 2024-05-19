@@ -81,7 +81,7 @@ public class PresentTest : TestFixture
                 }
             );
 
-        response.Data.PresentList.Should().BeInAscendingOrder(x => x.PresentId);
+        response.Data.PresentList.Should().BeInDescendingOrder(x => x.PresentId);
     }
 
     [Fact]
@@ -139,7 +139,7 @@ public class PresentTest : TestFixture
                 }
             );
 
-        response.Data.PresentLimitList.Should().BeInAscendingOrder(x => x.PresentId);
+        response.Data.PresentLimitList.Should().BeInDescendingOrder(x => x.PresentId);
     }
 
     [Fact]
@@ -174,7 +174,7 @@ public class PresentTest : TestFixture
                 new PresentGetPresentListRequest()
                 {
                     IsLimit = false,
-                    PresentId = (ulong)presents[0].PresentId
+                    PresentId = firstResponse.Data.PresentList.Last().PresentId
                 }
             );
 
@@ -656,7 +656,7 @@ public class PresentTest : TestFixture
                 $"{Controller}/get_history_list",
                 new PresentGetHistoryListRequest()
                 {
-                    PresentHistoryId = (ulong)presentHistories[0].Id
+                    PresentHistoryId = (ulong)presentHistories[99].Id
                 }
             );
 

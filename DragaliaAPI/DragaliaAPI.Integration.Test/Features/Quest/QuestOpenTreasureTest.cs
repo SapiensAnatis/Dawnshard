@@ -1,7 +1,7 @@
 using DragaliaAPI.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Integration.Test.Features.Quest;
 
 public class QuestOpenTreasureTest : TestFixture
 {
@@ -37,7 +37,7 @@ public class QuestOpenTreasureTest : TestFixture
         ).Data;
 
         List<DbQuestTreasureList> questTreasureList = await this
-            .ApiContext.QuestTreasureList.Where(x => x.ViewerId == ViewerId)
+            .ApiContext.QuestTreasureList.Where(x => x.ViewerId == this.ViewerId)
             .ToListAsync();
 
         questTreasureList.Should().Contain(x => x.QuestTreasureId == 126201);

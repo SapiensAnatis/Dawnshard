@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 
-namespace DragaliaAPI.Database.Repositories;
+namespace DragaliaAPI.Features.Story;
 
 public interface IStoryRepository
 {

@@ -1,4 +1,5 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.Presents;
 
@@ -26,7 +27,7 @@ public record Present(
 
     public TimeSpan? ExpiryTime { get; init; }
 
-    public IEnumerable<int> MessageParamValues { get; init; } = Enumerable.Empty<int>();
+    public IEnumerable<int> MessageParamValues { get; init; } = [];
 
     public DbPlayerPresent ToEntity(long viewerId)
     {
@@ -45,6 +46,16 @@ public record Present(
             MessageParamValue4 = this.MessageParamValues.ElementAtOrDefault(3),
             CreateTime = this.CreateTime,
             ReceiveLimitTime = CreateTime + ExpiryTime
+        };
+    }
+
+    public AtgenBuildEventRewardEntityList ToBuildEventRewardList()
+    {
+        return new()
+        {
+            EntityId = this.EntityId,
+            EntityType = this.EntityType,
+            EntityQuantity = this.EntityQuantity
         };
     }
 }

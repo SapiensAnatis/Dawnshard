@@ -1,4 +1,5 @@
 using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
@@ -8,20 +9,21 @@ namespace DragaliaAPI.Features.Present;
 /// <summary>
 /// Base present service to be used by other features to check/add present data.
 /// </summary>
-public class PresentService(
-    IPresentRepository presentRepository,
-    IPlayerIdentityService playerIdentityService,
-    ApiContext apiContext
-) : IPresentService
+public class PresentService(IPlayerIdentityService playerIdentityService, ApiContext apiContext)
+    : IPresentService
 {
+    private readonly List<Present> addedPresents = [];
+
+    public IReadOnlyList<Present> AddedPresents => this.addedPresents;
+
     public async Task<PresentNotice> GetPresentNotice()
     {
         return new()
         {
-            PresentCount = await presentRepository.Presents.CountAsync(x =>
+            PresentCount = await apiContext.PlayerPresents.CountAsync(x =>
                 x.ReceiveLimitTime == null
             ),
-            PresentLimitCount = await presentRepository.Presents.CountAsync(x =>
+            PresentLimitCount = await apiContext.PlayerPresents.CountAsync(x =>
                 x.ReceiveLimitTime != null
             ),
         };
@@ -29,20 +31,15 @@ public class PresentService(
 
     public void AddPresent(Present present)
     {
-        this.AddPresent(new[] { present });
+        apiContext.PlayerPresents.Add(present.ToEntity(playerIdentityService.ViewerId));
+        this.addedPresents.Add(present);
     }
 
     public void AddPresent(IEnumerable<Present> presents)
     {
-        presentRepository.AddPlayerPresents(
-            presents.Select(x => x.ToEntity(playerIdentityService.ViewerId))
-        );
+        foreach (Present present in presents)
+        {
+            this.AddPresent(present);
+        }
     }
-
-    public IEnumerable<AtgenBuildEventRewardEntityList> GetTrackedPresentList() =>
-        apiContext.PlayerPresents.Local.Select(x => new AtgenBuildEventRewardEntityList(
-            x.EntityType,
-            x.EntityId,
-            x.EntityQuantity
-        ));
 }

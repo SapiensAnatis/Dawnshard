@@ -1,10 +1,11 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Controllers;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DragaliaAPI.Controllers.Dragalia;
+namespace DragaliaAPI.Features.Story;
 
 [Route("story")]
 public class StoryController : DragaliaControllerBase

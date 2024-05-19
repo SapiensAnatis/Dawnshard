@@ -71,6 +71,32 @@ public class GlobalQueryFilterTest : TestFixture
     public async Task DbWallRewardDate_HasGlobalQueryFilter() =>
         await TestGlobalQueryFilter<DbWallRewardDate>();
 
+    [Fact]
+    public async Task DbPlayerPresent_HasGlobalQueryFilter() =>
+        await TestGlobalQueryFilter<DbPlayerPresent>();
+
+    [Fact]
+    public async Task DbPlayerPresentHistory_HasGlobalQueryFilter()
+    {
+        // This entity uses a non-auto-incrementing integer primary key :/
+        this.ApiContext.PlayerPresentHistory.AddRange(
+            [
+                new() { Id = 1, ViewerId = this.ViewerId, },
+                new()
+                {
+                    Id = 2,
+                    Owner = new() { ViewerId = this.ViewerId + 1, AccountId = "otherhist" }
+                }
+            ]
+        );
+        await this.ApiContext.SaveChangesAsync();
+
+        this.ApiContext.PlayerPresentHistory.Should()
+            .ContainSingle()
+            .Which.ViewerId.Should()
+            .Be(this.ViewerId);
+    }
+
     private async Task TestGlobalQueryFilter<TEntity>()
         where TEntity : class, IDbPlayerData
     {
