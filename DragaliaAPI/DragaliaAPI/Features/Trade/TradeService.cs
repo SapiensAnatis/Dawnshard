@@ -240,7 +240,10 @@ public class TradeService(
             expectedPrice: trade.NeedDewPoint
         );
 
-        await rewardService.GrantReward(
+        // The client is unlikely to trade for an ability crest which it cannot hold more of, so it is unlikely we would
+        // get anything other than RewardGrantResult.Added here.
+        // TODO: this should be validated
+        _ = await rewardService.GrantReward(
             new Entity(EntityTypes.Wyrmprint, (int)trade.AbilityCrestId)
         );
 
@@ -250,7 +253,9 @@ public class TradeService(
     public EntityResult GetEntityResult()
     {
         EntityResult result = rewardService.GetEntityResult();
-        result.OverPresentEntityList = presentService.GetTrackedPresentList();
+        result.OverPresentEntityList = presentService.AddedPresents.Select(x =>
+            x.ToBuildEventRewardList()
+        );
 
         return result;
     }

@@ -35,10 +35,17 @@ public interface IRewardService
     );
 
     EntityResult GetEntityResult();
+
     IEnumerable<ConvertedEntity> GetConvertedEntityList();
 
     Task<IDictionary<TKey, RewardGrantResult>> BatchGrantRewards<TKey>(
         IDictionary<TKey, Entity> entities
     )
         where TKey : struct;
+
+    IReadOnlyList<Entity> NewEntities { get; }
+
+    IReadOnlyList<ConvertedEntity> ConvertedEntities { get; }
+
+    IReadOnlyList<Entity> DiscardedEntities { get; }
 }

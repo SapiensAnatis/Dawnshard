@@ -5,6 +5,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.PartyPower;
+using DragaliaAPI.Features.Story;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;

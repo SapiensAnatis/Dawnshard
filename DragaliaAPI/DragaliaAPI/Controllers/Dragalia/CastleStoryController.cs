@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Features.Story;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
