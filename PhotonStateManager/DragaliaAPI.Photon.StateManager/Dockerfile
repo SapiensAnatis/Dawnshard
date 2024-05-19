@@ -1,9 +1,7 @@
-ARG BASE_DOTNET_IMAGE=mcr.microsoft.com/dotnet/aspnet:8.0.3
-
-FROM $BASE_DOTNET_IMAGE AS base
-WORKDIR /app
-
+FROM mcr.microsoft.com/dotnet/aspnet:8.0.3-jammy-chiseled AS base
+USER app
 EXPOSE 8080
+WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0.203 AS build
 WORKDIR /src
@@ -19,6 +17,5 @@ WORKDIR "/src/PhotonStateManager/DragaliaAPI.Photon.StateManager"
 RUN dotnet publish "DragaliaAPI.Photon.StateManager.csproj" -c Release -o /app/publish/ /p:UseAppHost=false
 
 FROM base AS final
-WORKDIR /app
 COPY --from=build /app/publish/ .
 ENTRYPOINT ["dotnet", "DragaliaAPI.Photon.StateManager.dll"]
