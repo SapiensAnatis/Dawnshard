@@ -1,10 +1,10 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
-namespace DragaliaAPI.Database.Repositories;
+namespace DragaliaAPI.Features.Story;
 
 public class StoryRepository : IStoryRepository
 {
@@ -36,7 +36,7 @@ public class StoryRepository : IStoryRepository
 
     public async Task<DbPlayerStoryState> GetOrCreateStory(StoryTypes storyType, int storyId)
     {
-        DbPlayerStoryState? state = await apiContext.PlayerStoryState.FindAsync(
+        DbPlayerStoryState? state = await this.apiContext.PlayerStoryState.FindAsync(
             this.playerIdentityService.ViewerId,
             storyType,
             storyId
@@ -50,8 +50,8 @@ public class StoryRepository : IStoryRepository
                 storyType
             );
 
-            state = apiContext
-                .PlayerStoryState.Add(
+            state = this
+                .apiContext.PlayerStoryState.Add(
                     new DbPlayerStoryState
                     {
                         ViewerId = this.playerIdentityService.ViewerId,

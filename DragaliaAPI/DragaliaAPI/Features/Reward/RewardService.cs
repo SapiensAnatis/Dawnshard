@@ -14,8 +14,9 @@ public class RewardService(
     IEnumerable<IBatchRewardHandler> batchRewardHandlers
 ) : IRewardService
 {
-    private readonly List<Entity> newEntities = new();
-    private readonly List<ConvertedEntity> convertedEntities = new();
+    private readonly List<Entity> newEntities = [];
+    private readonly List<ConvertedEntity> convertedEntities = [];
+    private readonly List<Entity> discardedEntities = [];
 
     public async Task<RewardGrantResult> GrantReward(Entity entity)
     {
@@ -117,8 +118,10 @@ public class RewardService(
 
                 break;
             }
-            case RewardGrantResult.Limit:
             case RewardGrantResult.Discarded:
+                this.discardedEntities.Add(entity);
+                break;
+            case RewardGrantResult.Limit:
                 break;
             case RewardGrantResult.FailError:
                 logger.LogError("Granting of entity {@entity} failed.", entity);
@@ -188,6 +191,9 @@ public class RewardService(
         {
             NewGetEntityList = newEntities.Select(x => x.ToDuplicateEntityList()),
             ConvertedEntityList = convertedEntities.Select(x => x.ToConvertedEntityList()),
+            OverDiscardEntityList = this.discardedEntities.Select(x =>
+                x.ToBuildEventRewardEntityList()
+            )
         };
     }
 

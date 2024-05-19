@@ -3,12 +3,13 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 
-namespace DragaliaAPI.Services.Game;
+namespace DragaliaAPI.Features.Quest;
 
 public class QuestTreasureService(
     IRewardService rewardService,

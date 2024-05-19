@@ -1,6 +1,6 @@
 using DragaliaAPI.Models.Generated;
 
-namespace DragaliaAPI.Services;
+namespace DragaliaAPI.Features.Quest;
 
 public interface IQuestTreasureService
 {

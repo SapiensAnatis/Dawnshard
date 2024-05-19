@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Integration.Test.Features.Story;
 
 public class StoryTest : TestFixture
 {
@@ -51,14 +51,14 @@ public class StoryTest : TestFixture
         await this.AddToDatabase(
             new DbPlayerStoryState()
             {
-                ViewerId = ViewerId,
+                ViewerId = this.ViewerId,
                 State = StoryState.Read,
                 StoryId = 100001121,
                 StoryType = StoryTypes.Chara
             },
             new DbPlayerStoryState()
             {
-                ViewerId = ViewerId,
+                ViewerId = this.ViewerId,
                 State = StoryState.Read,
                 StoryId = 100001122,
                 StoryType = StoryTypes.Chara
@@ -84,7 +84,7 @@ public class StoryTest : TestFixture
     {
         int oldCrystal = await this
             .ApiContext.PlayerUserData.AsNoTracking()
-            .Where(x => x.ViewerId == ViewerId)
+            .Where(x => x.ViewerId == this.ViewerId)
             .Select(x => x.Crystal)
             .SingleAsync();
 
@@ -97,14 +97,14 @@ public class StoryTest : TestFixture
 
         int newCrystal = await this
             .ApiContext.PlayerUserData.AsNoTracking()
-            .Where(x => x.ViewerId == ViewerId)
+            .Where(x => x.ViewerId == this.ViewerId)
             .Select(x => x.Crystal)
             .SingleAsync();
 
         newCrystal.Should().Be(oldCrystal + 25);
 
         IEnumerable<DbPlayerStoryState> stories = this.ApiContext.PlayerStoryState.Where(x =>
-            x.ViewerId == ViewerId
+            x.ViewerId == this.ViewerId
         );
 
         stories
@@ -112,7 +112,7 @@ public class StoryTest : TestFixture
             .ContainEquivalentOf(
                 new DbPlayerStoryState()
                 {
-                    ViewerId = ViewerId,
+                    ViewerId = this.ViewerId,
                     State = StoryState.Read,
                     StoryId = 100002011,
                     StoryType = StoryTypes.Chara

@@ -37,7 +37,6 @@ public static class DatabaseConfiguration
             .AddScoped<IQuestRepository, QuestRepository>()
             .AddScoped<IInventoryRepository, InventoryRepository>()
             .AddScoped<IWeaponRepository, WeaponRepository>()
-            .AddScoped<IStoryRepository, StoryRepository>()
             .AddScoped<IAbilityCrestRepository, AbilityCrestRepository>();
 
         return services;

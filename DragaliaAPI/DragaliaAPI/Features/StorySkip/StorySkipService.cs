@@ -3,6 +3,7 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Features.Story;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.StorySkip;
 using DragaliaAPI.Shared.MasterAsset;

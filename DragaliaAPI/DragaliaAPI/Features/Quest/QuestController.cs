@@ -1,5 +1,7 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Features.ClearParty;
+using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Story;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
@@ -20,12 +22,6 @@ public class QuestController(
     IQuestTreasureService questTreasureService
 ) : DragaliaControllerBase
 {
-    private readonly IStoryService storyService = storyService;
-    private readonly IHelperService helperService = helperService;
-    private readonly IUpdateDataService updateDataService = updateDataService;
-    private readonly IClearPartyService clearPartyService = clearPartyService;
-    private readonly IQuestTreasureService questTreasureService = questTreasureService;
-
     [HttpPost]
     [Route("read_story")]
     public async Task<DragaliaResult> ReadStory(
@@ -33,19 +29,18 @@ public class QuestController(
         CancellationToken cancellationToken
     )
     {
-        IEnumerable<AtgenBuildEventRewardEntityList> rewardList = await this.storyService.ReadStory(
+        IEnumerable<AtgenBuildEventRewardEntityList> rewardList = await storyService.ReadStory(
             StoryTypes.Quest,
             request.QuestStoryId
         );
 
-        EntityResult entityResult = StoryService.GetEntityResult(rewardList);
+        EntityResult entityResult = storyService.GetEntityResult();
+
         IEnumerable<AtgenQuestStoryRewardList> questRewardList = rewardList.Select(
             StoryService.ToQuestStoryReward
         );
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
-            cancellationToken
-        );
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         return this.Ok(
             new QuestReadStoryResponse()
@@ -61,7 +56,7 @@ public class QuestController(
     public async Task<DragaliaResult> GetUserSupportList()
     {
         // TODO: this is actually going to be a pretty complicated system
-        QuestGetSupportUserListResponse response = await this.helperService.GetHelpers();
+        QuestGetSupportUserListResponse response = await helperService.GetHelpers();
         return Ok(response);
     }
 
@@ -72,9 +67,9 @@ public class QuestController(
     )
     {
         (IEnumerable<PartySettingList> clearParty, IEnumerable<AtgenLostUnitList> lostUnitList) =
-            await this.clearPartyService.GetQuestClearParty(request.QuestId, false);
+            await clearPartyService.GetQuestClearParty(request.QuestId, false);
 
-        await this.updateDataService.SaveChangesAsync(cancellationToken);
+        await updateDataService.SaveChangesAsync(cancellationToken);
         // Updated lost entities
 
         return Ok(
@@ -93,9 +88,9 @@ public class QuestController(
     )
     {
         (IEnumerable<PartySettingList> clearParty, IEnumerable<AtgenLostUnitList> lostUnitList) =
-            await this.clearPartyService.GetQuestClearParty(request.QuestId, true);
+            await clearPartyService.GetQuestClearParty(request.QuestId, true);
 
-        await this.updateDataService.SaveChangesAsync(cancellationToken);
+        await updateDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(
             new QuestGetQuestClearPartyMultiResponse()
@@ -112,7 +107,7 @@ public class QuestController(
         CancellationToken cancellationToken
     )
     {
-        QuestOpenTreasureResponse response = await this.questTreasureService.DoOpenTreasure(
+        QuestOpenTreasureResponse response = await questTreasureService.DoOpenTreasure(
             request,
             cancellationToken
         );
@@ -125,13 +120,13 @@ public class QuestController(
         CancellationToken cancellationToken
     )
     {
-        await this.clearPartyService.SetQuestClearParty(
+        await clearPartyService.SetQuestClearParty(
             request.QuestId,
             false,
             request.RequestPartySettingList
         );
 
-        await this.updateDataService.SaveChangesAsync(cancellationToken);
+        await updateDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(new QuestSetQuestClearPartyResponse() { Result = 1 });
     }
@@ -142,13 +137,13 @@ public class QuestController(
         CancellationToken cancellationToken
     )
     {
-        await this.clearPartyService.SetQuestClearParty(
+        await clearPartyService.SetQuestClearParty(
             request.QuestId,
             true,
             request.RequestPartySettingList
         );
 
-        await this.updateDataService.SaveChangesAsync(cancellationToken);
+        await updateDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(new QuestSetQuestClearPartyMultiResponse() { Result = 1 });
     }

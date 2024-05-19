@@ -480,8 +480,8 @@ public sealed partial class SummonService(
         }
 
         IEnumerable<AtgenBuildEventRewardEntityList> overPresentEntityList = presentService
-            .GetTrackedPresentList()
-            .Where(x => x.EntityType == EntityTypes.Dragon);
+            .AddedPresents.Where(x => x.EntityType == EntityTypes.Dragon)
+            .Select(x => x.ToBuildEventRewardList());
 
         return (
             returnedResult,
@@ -493,6 +493,7 @@ public sealed partial class SummonService(
             ),
             new EntityResult()
             {
+                // We are not using the RewardService method as it would include OverDiscardEntityList for any characters that were already owned.
                 NewGetEntityList = newGetEntityList,
                 OverPresentEntityList = overPresentEntityList,
             }

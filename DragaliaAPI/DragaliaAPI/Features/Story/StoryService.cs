@@ -1,3 +1,4 @@
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Fort;
@@ -7,14 +8,16 @@ using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Services.Game;
+namespace DragaliaAPI.Features.Story;
 
 public class StoryService(
     IStoryRepository storyRepository,
@@ -27,7 +30,9 @@ public class StoryService(
     IMissionProgressionService missionProgressionService,
     IRewardService rewardService,
     IPaymentService paymentService,
-    IUserService userService
+    IUserService userService,
+    ApiContext apiContext,
+    IPlayerIdentityService playerIdentityService
 ) : IStoryService
 {
     private const int DragonStoryWyrmite = 25;
@@ -52,8 +57,8 @@ public class StoryService(
 
         return type switch
         {
-            StoryTypes.Chara or StoryTypes.Dragon => await CheckUnitStoryEligibility(storyId),
-            StoryTypes.Castle => await CheckCastleStoryEligibility(storyId),
+            StoryTypes.Chara or StoryTypes.Dragon => await this.CheckUnitStoryEligibility(storyId),
+            StoryTypes.Castle => await this.CheckCastleStoryEligibility(storyId),
             StoryTypes.Quest => true,
             StoryTypes.Event => true,
             _ => throw new NotImplementedException($"Stories of type {type} are not implemented")
@@ -125,11 +130,11 @@ public class StoryService(
 
         List<AtgenBuildEventRewardEntityList> rewards = type switch
         {
-            StoryTypes.Chara or StoryTypes.Dragon => await ReadUnitStory(storyId),
-            StoryTypes.Castle => await ReadCastleStory(storyId),
-            StoryTypes.Quest => await ReadQuestStory(storyId),
-            StoryTypes.Event => await ReadEventStory(storyId),
-            StoryTypes.DungeonMode => await ReadDmodeStory(storyId),
+            StoryTypes.Chara or StoryTypes.Dragon => await this.ReadUnitStory(storyId),
+            StoryTypes.Castle => await this.ReadCastleStory(storyId),
+            StoryTypes.Quest => await this.ReadQuestStory(storyId),
+            StoryTypes.Event => await this.ReadEventStory(storyId),
+            StoryTypes.DungeonMode => await this.ReadDmodeStory(storyId),
             _ => throw new NotImplementedException($"Stories of type {type} are not implemented")
         };
 
@@ -218,29 +223,6 @@ public class StoryService(
         {
             foreach (QuestStoryReward reward in rewardInfo.Rewards)
             {
-                // We divert here as we care about quantity-restriction for story plants
-                if (reward.Type == EntityTypes.FortPlant)
-                {
-                    await fortRepository.AddToStorage((FortPlants)reward.Id, reward.Quantity, true);
-                }
-                else if (storyId == Chapter10LastStoryId)
-                {
-                    presentService.AddPresent(
-                        new Present(
-                            PresentMessage.Chapter10Clear,
-                            (EntityTypes)reward.Type,
-                            reward.Id,
-                            reward.Quantity
-                        )
-                    );
-                }
-                else
-                {
-                    await rewardService.GrantReward(
-                        new Entity(reward.Type, reward.Id, reward.Quantity)
-                    );
-                }
-
                 rewardList.Add(
                     new()
                     {
@@ -249,6 +231,54 @@ public class StoryService(
                         EntityQuantity = reward.Quantity,
                     }
                 );
+
+                // We divert here as we care about quantity-restriction for story plants
+                if (reward.Type == EntityTypes.FortPlant)
+                {
+                    await fortRepository.AddToStorage((FortPlants)reward.Id, reward.Quantity, true);
+                    continue;
+                }
+
+                if (storyId == Chapter10LastStoryId)
+                {
+                    presentService.AddPresent(
+                        new Present.Present(
+                            PresentMessage.Chapter10Clear,
+                            (EntityTypes)reward.Type,
+                            reward.Id,
+                            reward.Quantity
+                        )
+                    );
+
+                    continue;
+                }
+
+                RewardGrantResult result = await rewardService.GrantReward(
+                    new Entity(reward.Type, reward.Id, reward.Quantity)
+                );
+
+                if (result == RewardGrantResult.Limit)
+                {
+                    presentService.AddPresent(
+                        new Present.Present(
+                            PresentMessage.FirstViewReward,
+                            reward.Type,
+                            reward.Id,
+                            reward.Quantity
+                        )
+                    );
+
+                    if (reward is { Type: EntityTypes.Dragon, Id: (int)Dragons.Midgardsormr })
+                    {
+                        // The game doesn't handle it well if you send the Chapter 1 Midgardsormr to the gift box.
+                        // You will later be forced to give him a gift in the dragon's roost tutorial, which will fail
+                        // if he's in the gift box. Add the reliability manually as a hack to ensure he's always
+                        // available in the dragon's roost.
+                        apiContext.PlayerDragonReliability.Add(
+                            new(playerIdentityService.ViewerId, Dragons.Midgardsormr)
+                        );
+                    }
+                }
             }
         }
 
@@ -334,20 +364,6 @@ public class StoryService(
 
     #endregion
 
-    public static EntityResult GetEntityResult(
-        IEnumerable<AtgenBuildEventRewardEntityList> rewardList
-    )
-    {
-        IEnumerable<AtgenDuplicateEntityList> newGetEntityList = rewardList
-            .Where(x => x.EntityType is EntityTypes.Dragon or EntityTypes.Chara)
-            .Select(x => new AtgenDuplicateEntityList()
-            {
-                EntityId = x.EntityId,
-                EntityType = x.EntityType,
-            });
-
-        return new() { NewGetEntityList = newGetEntityList, };
-    }
 
     public static AtgenQuestStoryRewardList ToQuestStoryReward(
         AtgenBuildEventRewardEntityList reward
@@ -365,5 +381,15 @@ public class StoryService(
             questReward.EntityLevel = 1;
 
         return questReward;
+    }
+
+    public EntityResult GetEntityResult()
+    {
+        EntityResult result = rewardService.GetEntityResult();
+        result.OverPresentEntityList = presentService.AddedPresents.Select(x =>
+            x.ToBuildEventRewardList()
+        );
+
+        return result;
     }
 }
