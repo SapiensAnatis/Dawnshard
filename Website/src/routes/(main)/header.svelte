@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { toggleMode } from 'mode-watcher';
-	import { Button } from '$shadcn/components/ui/button';
-	import * as Drawer from '$shadcn/components/ui/drawer';
-	import { Sun, Moon, Menu, Close } from '$lib/icons';
-	import Routes from '$lib/components/routes.svelte';
-	import { onMount } from 'svelte';
+  import { toggleMode } from 'mode-watcher';
+  import { Button } from '$shadcn/components/ui/button';
+  import * as Drawer from '$shadcn/components/ui/drawer';
+  import { Sun, Moon, Menu, Close } from '$lib/icons';
+  import Routes from '$lib/components/routes.svelte';
+  import { onMount } from 'svelte';
+  import LoginButton from './loginButton.svelte';
 
 	let enhance = false;
 
@@ -14,27 +15,27 @@
 </script>
 
 {#if enhance}
-	<Drawer.Root direction="left">
-		<header id="header" class="gap-1 bg-background px-1 md:gap-2 md:px-3">
-			<Drawer.Trigger class="md:hidden">
-				<Button variant="ghost" class="md:hidden">
-					<Menu />
-				</Button>
-			</Drawer.Trigger>
-			<h1 class="scroll-m-20 text-2xl font-bold tracking-tight md:text-3xl">Dawnshard</h1>
-			<div class="flex-grow" />
-			<Button on:click={toggleMode} variant="outline" size="icon">
-				<Sun
-					class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
-					aria-hidden
-				/>
-				<Moon
-					class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
-					aria-hidden
-				/>
-				<span class="sr-only">Toggle theme</span>
-			</Button>
-			<Button>Login</Button>
+  <Drawer.Root direction="left">
+    <header id="header" class="gap-1 bg-background px-1 md:gap-2 md:px-3">
+      <Drawer.Trigger class="md:hidden">
+        <Button variant="ghost" class="md:hidden">
+          <Menu />
+        </Button>
+      </Drawer.Trigger>
+      <h1 class="scroll-m-20 text-2xl font-bold tracking-tight md:text-3xl">Dawnshard</h1>
+      <div class="flex-grow" />
+      <Button on:click={toggleMode} variant="outline" size="icon">
+        <Sun
+          class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
+          aria-hidden
+        />
+        <Moon
+          class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+          aria-hidden
+        />
+        <span class="sr-only">Toggle theme</span>
+      </Button>
+      <LoginButton />
 
 			<Drawer.Portal class="md:hidden">
 				<Drawer.Content
@@ -54,14 +55,14 @@
 		</header>
 	</Drawer.Root>
 {:else}
-	<header id="header" class="gap-1 bg-background px-1 md:gap-2 md:px-3">
-		<Button variant="ghost" class="md:hidden" href="/navigation">
-			<Menu />
-		</Button>
-		<h1 class="scroll-m-20 text-2xl font-bold tracking-tight md:text-3xl">Dawnshard</h1>
-		<div style:flex-grow="1" />
-		<Button>Login</Button>
-	</header>
+  <header id="header" class="gap-1 bg-background px-1 md:gap-2 md:px-3">
+    <Button variant="ghost" class="md:hidden" href="/navigation">
+      <Menu />
+    </Button>
+    <h1 class="scroll-m-20 text-2xl font-bold tracking-tight md:text-3xl">Dawnshard</h1>
+    <div style:flex-grow="1" />
+    <LoginButton />
+  </header>
 {/if}
 
 <style>
