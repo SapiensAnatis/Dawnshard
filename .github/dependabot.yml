@@ -14,6 +14,10 @@ updates:
     schedule:
       interval: "weekly"
   - package-ecosystem: "docker"
-    directory: "/"
+    directory: "/DragaliaAPI/DragaliaAPI"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "docker"
+    directory: "/PhotonStateManager/DragaliaAPI.Photon.StateManager"
     schedule:
       interval: "weekly"
