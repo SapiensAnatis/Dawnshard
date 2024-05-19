@@ -23,15 +23,15 @@
         <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2"/>
         <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.5"/>
         <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.5"/>
-        <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="8.3.0"/>
+        <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="8.5.0"/>
         <PackageVersion Include="Microsoft.Bcl.HashCode" Version="1.1.1"/>
         <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4"/>
         <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2"/>
         <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.5"/>
-        <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.3"/>
+        <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.5"/>
         <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
         <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1"/>
-        <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.4"/>
+        <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.5"/>
         <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0"/>
         <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1"/>
         <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="7.5.1"/>
@@ -68,7 +68,7 @@
         <PackageVersion Include="Snapshooter.Xunit" Version="0.14.1"/>
         <PackageVersion Include="Testcontainers" Version="3.7.0"/>
         <PackageVersion Include="Testcontainers.PostgreSql" Version="3.7.0"/>
-        <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="8.0.4"/>
+        <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="8.0.5"/>
         <PackageVersion Include="Moq.EntityFrameworkCore" Version="8.0.1.2"/>
         <PackageVersion Include="NSubstitute" Version="5.1.0"/>
         <PackageVersion Include="NSubstitute.Analyzers.CSharp" Version="1.0.17"/>
