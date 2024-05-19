@@ -42,10 +42,4 @@ public interface IRewardService
         IDictionary<TKey, Entity> entities
     )
         where TKey : struct;
-
-    IReadOnlyList<Entity> NewEntities { get; }
-
-    IReadOnlyList<ConvertedEntity> ConvertedEntities { get; }
-
-    IReadOnlyList<Entity> DiscardedEntities { get; }
 }

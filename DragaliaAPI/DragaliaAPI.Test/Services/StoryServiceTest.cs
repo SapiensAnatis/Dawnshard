@@ -32,7 +32,6 @@ public class StoryServiceTest : IClassFixture<DbTestFixture>
     private readonly Mock<IPaymentService> mockPaymentService;
     private readonly Mock<IPresentService> mockPresentService;
     private readonly Mock<IUserService> mockUserService;
-    private readonly Mock<ApiContext> mockApiContext;
     private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
 
     private readonly IStoryService storyService;

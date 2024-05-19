@@ -18,10 +18,6 @@ public class RewardService(
     private readonly List<ConvertedEntity> convertedEntities = [];
     private readonly List<Entity> discardedEntities = [];
 
-    public IReadOnlyList<Entity> NewEntities => newEntities;
-    public IReadOnlyList<ConvertedEntity> ConvertedEntities => convertedEntities;
-    public IReadOnlyList<Entity> DiscardedEntities => discardedEntities;
-
     public async Task<RewardGrantResult> GrantReward(Entity entity)
     {
         if (entity.Quantity <= 0)
