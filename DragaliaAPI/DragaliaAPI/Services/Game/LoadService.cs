@@ -89,7 +89,7 @@ public class LoadService(
                     .Select(x => x.MapToUserSummonList()),
 
                 FriendNotice = new(0, 0),
-                ShopNotice = new ShopNotice(savefile.ShopInfo?.DailySummonCount != 0),
+                ShopNotice = new ShopNotice(savefile.ShopInfo?.DailySummonCount == 0),
                 GuildNotice = new(0, false, false, false, false),
                 StaminaMultiSystemMax = userService.StaminaMultiMax,
                 StaminaMultiUserMax = 12,
