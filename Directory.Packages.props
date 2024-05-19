@@ -26,7 +26,7 @@
         <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="8.3.0"/>
         <PackageVersion Include="Microsoft.Bcl.HashCode" Version="1.1.1"/>
         <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4"/>
-        <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2"/>
+        <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4"/>
         <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.5"/>
         <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.3"/>
         <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
