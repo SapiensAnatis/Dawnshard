@@ -1,6 +1,10 @@
 # Dawnshard
 
-[![test](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yaml/badge.svg?branch=develop)](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yaml)
+[![Last Updated](https://img.shields.io/github/last-commit/sapiensanatis/dawnshard/main?label=updated
+)](https://github.com/SapiensAnatis/Dawnshard/commits/main/)
+[![GitHub License](https://img.shields.io/github/license/sapiensanatis/dawnshard)](https://github.com/SapiensAnatis/Dawnshard/blob/main/LICENSE)
+[![Open Issues](https://img.shields.io/github/issues/sapiensanatis/dawnshard)](https://github.com/sapiensAnatis/dawnshard/issues)
+[![Closed Issues](https://img.shields.io/github/issues-closed/sapiensanatis/dawnshard?color=%238957e5)](https://github.com/SapiensAnatis/Dawnshard/issues?q=is%3Aissue+is%3Aclosed)
 
 Dawnshard (internally named DragaliaAPI) is a server emulator for Dragalia Lost.
 
