@@ -7,15 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI", "DragaliaAPI\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Test", "DragaliaAPI\DragaliaAPI.Test\DragaliaAPI.Test.csproj", "{A1E6C76A-4D4F-427D-80AF-CF289CBBAF00}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{6E4BCC4D-1998-4135-A474-681EC6E6AF57}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BC72B633-A158-4169-9B47-3CB9C689A57E}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		.env = .env
-		.env.default = .env.default
 		.gitignore = .gitignore
-		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 		.config\dotnet-tools.json = .config\dotnet-tools.json
 		global.json = global.json
@@ -37,7 +32,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{1A23
 		.github\workflows\deploy.yaml = .github\workflows\deploy.yaml
 		.github\workflows\integration-test.yaml = .github\workflows\integration-test.yaml
 		.github\workflows\lint.yaml = .github\workflows\lint.yaml
-		.github\workflows\missiondesigner.yaml = .github\workflows\missiondesigner.yaml
 		.github\workflows\publish-api.yaml = .github\workflows\publish-api.yaml
 		.github\workflows\publish-statemanager.yaml = .github\workflows\publish-statemanager.yaml
 		.github\workflows\test-api.yaml = .github\workflows\test-api.yaml
@@ -54,6 +48,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Photon.Plugin", "PhotonPlugin\DragaliaAPI.Photon.Plugin\DragaliaAPI.Photon.Plugin.csproj", "{D9AC51A5-38F6-4DD1-8839-9FE881396A6B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PhotonStateManager", "PhotonStateManager", "{8B4B2FE9-B1FC-44FC-BC49-0E277731A68A}"
+	ProjectSection(SolutionItems) = preProject
+		PhotonStateManager\Dockerfile = PhotonStateManager\Dockerfile
+		PhotonStateManager\Directory.Build.props = PhotonStateManager\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Integration.Test", "DragaliaAPI\DragaliaAPI.Integration.Test\DragaliaAPI.Integration.Test.csproj", "{CA0AE7C5-2742-4FC9-B668-BC7459E4BCE5}"
 EndProject
@@ -78,6 +76,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DragaliaAPI", "DragaliaAPI", "{F0C76530-C14A-4601-829B-EE0F4C7E24E6}"
 	ProjectSection(SolutionItems) = preProject
 		DragaliaAPI\Directory.Build.props = DragaliaAPI\Directory.Build.props
+		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.MasterAssetConverter", "DragaliaAPI\DragaliaAPI.MasterAssetConverter\DragaliaAPI.MasterAssetConverter.csproj", "{F0DFB899-ADC2-407E-AB32-647BA1C4122C}"
@@ -102,10 +101,6 @@ Global
 		{A1E6C76A-4D4F-427D-80AF-CF289CBBAF00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1E6C76A-4D4F-427D-80AF-CF289CBBAF00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1E6C76A-4D4F-427D-80AF-CF289CBBAF00}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6E4BCC4D-1998-4135-A474-681EC6E6AF57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6E4BCC4D-1998-4135-A474-681EC6E6AF57}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6E4BCC4D-1998-4135-A474-681EC6E6AF57}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{6E4BCC4D-1998-4135-A474-681EC6E6AF57}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{3B1A86CE-A656-453B-BC3F-EA42DF9E3FC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3B1A86CE-A656-453B-BC3F-EA42DF9E3FC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B1A86CE-A656-453B-BC3F-EA42DF9E3FC6}.Release|Any CPU.ActiveCfg = Release|Any CPU

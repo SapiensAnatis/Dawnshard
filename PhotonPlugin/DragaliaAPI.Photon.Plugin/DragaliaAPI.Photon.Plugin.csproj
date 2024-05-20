@@ -1,11 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net481</TargetFramework>
-        <Nullable>disable</Nullable>
-        <ImplicitUsings>disable</ImplicitUsings>
-        <LangVersion>7.3</LangVersion>
-        <PlatformTarget>x64</PlatformTarget>
         <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
         <AssemblyVersion>3.2.4</AssemblyVersion>
     </PropertyGroup>
@@ -22,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Shared\DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj" />
+        <ProjectReference Include="..\..\Shared\DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj" />
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">

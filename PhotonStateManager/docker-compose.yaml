@@ -1,0 +1,18 @@
+version: "3.4"
+
+services:
+  photonstatemanager:
+    hostname: photonstatemanager
+    image: ${DOCKER_REGISTRY-}photonstatemanager
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5001:8080"
+
+  redis:
+    hostname: redis
+    image: redis/redis-stack:7.2.0-v6
+    ports:
+      - "6379:6379"
+      - "8001:8001"

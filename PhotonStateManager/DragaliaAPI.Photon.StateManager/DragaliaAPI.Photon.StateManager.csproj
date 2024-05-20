@@ -32,4 +32,8 @@
         <ProjectReference Include="..\..\Shared\DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="..\.dockerignore" />
+    </ItemGroup>
+
 </Project>
