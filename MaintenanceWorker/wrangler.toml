@@ -1,0 +1,11 @@
+name = "maintenance-worker"
+main = "build/worker/shim.mjs"
+compatibility_date = "2024-05-20"
+
+[build]
+command = "cargo install -q worker-build && worker-build --release"
+
+[vars]
+MAINTENANCE_END_DATE = "2024-05-20T22:00:00+01:00"
+MAINTENANCE_TITLE = "Maintenance"
+MAINTENANCE_BODY = "Dawnshard is currently under maintenance so\ndreadfullydistinct can fix his\nConsul install."

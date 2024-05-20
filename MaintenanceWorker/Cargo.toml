@@ -1,0 +1,25 @@
+[package]
+name = "maintenance-worker"
+version = "0.1.0"
+edition = "2021"
+authors = [ "Jay Malhotra <jay0@me.com>" ]
+
+[package.metadata.release]
+release = false
+
+# https://github.com/rustwasm/wasm-pack/issues/1247
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+worker = { version="0.2.0", features=['http', 'axum'] }
+worker-macros = { version="0.2.0", features=['http'] }
+axum  = { version = "0.7", default-features = false }
+tower-service = "0.3.2"
+console_error_panic_hook = { version = "0.1.1" }
+serde = "1.0.202"
+time = { version="0.3.36", features=['parsing','macros','formatting'] }
+rmp-serde = "1.3.0"
