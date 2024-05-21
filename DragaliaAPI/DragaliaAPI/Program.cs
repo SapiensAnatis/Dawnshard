@@ -138,7 +138,6 @@ app.UseResponseCompression();
 #pragma warning disable CA1861 // Avoid constant arrays as arguments. Only created once as top-level statement.
 FrozenSet<string> apiRoutePrefixes = new[]
 {
-    "/api",
     "/2.19.0_20220714193707",
     "/2.19.0_20220719103923"
 }.ToFrozenSet();
@@ -171,19 +170,26 @@ app.MapWhen(
 );
 
 app.MapWhen(
-    ctx => !apiRoutePrefixes.Any(prefix => ctx.Request.Path.StartsWithSegments(prefix)),
+    static ctx => ctx.Request.Path.StartsWithSegments("/api"),
     applicationBuilder =>
     {
+        // todo unfuck cors
+        applicationBuilder.UseCors(cors => 
+            cors.WithOrigins("http://localhost:3001")
+                .AllowCredentials()
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+            );
         applicationBuilder.UseRouting();
 #pragma warning disable ASP0001
         applicationBuilder.UseAuthorization();
 #pragma warning restore ASP0001
         applicationBuilder.UseAntiforgery();
         applicationBuilder.UseMiddleware<PlayerIdentityLoggingMiddleware>();
+        applicationBuilder.UseSerilogRequestLogging();
         applicationBuilder.UseEndpoints(endpoints =>
         {
-            endpoints.MapRazorPages();
-            endpoints.MapRazorComponents<App>().AddInteractiveServerRenderMode();
+            endpoints.MapDragaliaAPIEndpoints();
         });
     }
 );

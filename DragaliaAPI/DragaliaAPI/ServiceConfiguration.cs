@@ -150,6 +150,8 @@ public static class ServiceConfiguration
             // Maintenance feature
             .AddScoped<MaintenanceService>();
 
+        services.AddHandlers();
+
         services.AddScoped<IBlazorIdentityService, BlazorIdentityService>();
 
         services.AddAllOfType<ISavefileUpdate>();

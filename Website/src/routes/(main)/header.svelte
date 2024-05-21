@@ -4,14 +4,18 @@
   import * as Drawer from '$shadcn/components/ui/drawer';
   import { Sun, Moon, Menu, Close } from '$lib/icons';
   import Routes from '$lib/components/routes.svelte';
-  import { onMount } from 'svelte';
   import LoginButton from './loginButton.svelte';
+  import type { User } from './user';
+  import { onMount } from 'svelte';
 
 	let enhance = false;
 
-	onMount(() => {
-		enhance = true;
-	});
+  export let userInfo: User | undefined;
+
+  onMount(() => {
+    enhance = true;
+    console.log({ userInfo });
+  });
 </script>
 
 {#if enhance}
@@ -35,7 +39,12 @@
         />
         <span class="sr-only">Toggle theme</span>
       </Button>
-      <LoginButton />
+
+      {#if userInfo}
+        <p>Hello, {userInfo.name}</p>
+      {:else}
+        <LoginButton />
+      {/if}
 
 			<Drawer.Portal class="md:hidden">
 				<Drawer.Content
@@ -61,7 +70,11 @@
     </Button>
     <h1 class="scroll-m-20 text-2xl font-bold tracking-tight md:text-3xl">Dawnshard</h1>
     <div style:flex-grow="1" />
-    <LoginButton />
+    {#if userInfo}
+      <p>Hello, {userInfo.name}</p>
+    {:else}
+      <LoginButton />
+    {/if}
   </header>
 {/if}
 

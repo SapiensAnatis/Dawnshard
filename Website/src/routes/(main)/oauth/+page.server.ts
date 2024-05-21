@@ -1,7 +1,10 @@
 import type { PageServerLoad } from './$types';
 import { PUBLIC_BAAS_URL, PUBLIC_BAAS_CLIENT_ID } from '$env/static/public';
 
-export const load: PageServerLoad = async ({ cookies, url }) => {
+const sessionTokenUrl = new URL('/connect/1.0.0/api/session_token', PUBLIC_BAAS_URL);
+const sdkTokenUrl = new URL('/1.0.0/gateway/sdk/token', PUBLIC_BAAS_URL);
+
+export const load: PageServerLoad = async ({ cookies, url, fetch }) => {
   const challengeString = cookies.get('challengeString');
 
   if (!challengeString) {
@@ -19,7 +22,8 @@ export const load: PageServerLoad = async ({ cookies, url }) => {
     session_token_code: sessionTokenCode,
     session_token_code_verifier: challengeString
   });
-  const sessionTokenResponse = await fetch(`${PUBLIC_BAAS_URL}connect/1.0.0/api/session_token`, {
+
+  const sessionTokenResponse = await fetch(sessionTokenUrl, {
     method: 'POST',
     body: sessionTokenCodeParams
   });
@@ -39,7 +43,8 @@ export const load: PageServerLoad = async ({ cookies, url }) => {
     client_id: PUBLIC_BAAS_CLIENT_ID,
     session_token: sessionToken
   };
-  const sdkTokenResponse = await fetch(`${PUBLIC_BAAS_URL}1.0.0/gateway/sdk/token`, {
+
+  const sdkTokenResponse = await fetch(sdkTokenUrl, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -62,7 +67,6 @@ export const load: PageServerLoad = async ({ cookies, url }) => {
   cookies.set('idToken', idToken, {
     path: '/',
     sameSite: 'strict',
-    httpOnly: true,
     ...(import.meta.env.MODE !== 'development' && {
       secure: true
     })
