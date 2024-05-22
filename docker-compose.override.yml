@@ -4,6 +4,7 @@ services:
   dragaliaapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-#  photonstatemanager:
-#    environment:
-#      - ASPNETCORE_ENVIRONMENT=Development
+
+  photonstatemanager:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development

@@ -10,7 +10,7 @@ services:
     hostname: dragaliaapi
     build:
       context: .
-      dockerfile: DragaliaAPI/DragaliaAPI/Dockerfile
+      dockerfile: DragaliaAPI/Dockerfile
     environment:
       - PostgresOptions__Username=$POSTGRES_USER
       - PostgresOptions__Password=$POSTGRES_PASSWORD
@@ -28,7 +28,7 @@ services:
     image: ${DOCKER_REGISTRY-}photonstatemanager
     build:
         context: .
-        dockerfile: PhotonStateManager/DragaliaAPI.Photon.StateManager/Dockerfile
+        dockerfile: PhotonStateManager/Dockerfile
     ports:
       - "5001:8080"
     env_file:
@@ -52,13 +52,3 @@ services:
     ports:
       - "6379:6379"
       - "8001:8001"
-
-  #seq:
-  #  image: datalust/seq:latest
-  #  ports:
-  #    - 5340:80
-  #    - 5341:5341
-  #  environment:
-  #    ACCEPT_EULA: "Y"
-  #  volumes:
-  #    - logs:/data
