@@ -15,5 +15,7 @@
         </None>
         <None Include="docker-compose.yml" />
         <None Include=".dockerignore" />
+        <None Include=".env.default" />
+        <None Include=".env" Condition="Exists('.env')" />
     </ItemGroup>
 </Project>
