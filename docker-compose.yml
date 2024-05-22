@@ -10,7 +10,7 @@ services:
     hostname: dragaliaapi
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: DragaliaAPI/Dockerfile
     environment:
       - PostgresOptions__Username=$POSTGRES_USER
       - PostgresOptions__Password=$POSTGRES_PASSWORD
@@ -22,6 +22,19 @@ services:
       - postgres
     env_file:
       - .env
+
+  photonstatemanager:
+    hostname: photonstatemanager
+    image: ${DOCKER_REGISTRY-}photonstatemanager
+    build:
+        context: .
+        dockerfile: PhotonStateManager/Dockerfile
+    ports:
+      - "5001:8080"
+    env_file:
+      - .env
+    profiles:
+      - photon
 
   postgres:
     hostname: postgres
@@ -35,6 +48,7 @@ services:
 
   redis:
     hostname: redis
-    image: redis/redis:7.2.5
+    image: redis/redis-stack:7.2.0-v6
     ports:
       - "6379:6379"
+      - "8001:8001"
