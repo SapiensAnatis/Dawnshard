@@ -1,5 +1,16 @@
 <Project>
-    <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AnalysisLevel>latest-minimum</AnalysisLevel>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <!-- Define the TEST condition to allow test runs in release mode to access conditionally
+        compiled controllers. -->
+        <DefineConstants Condition="$(AUTOMATED_TESTING) == 'true'">TEST;$(DefineConstants)</DefineConstants>
+    </PropertyGroup>
 
     <PropertyGroup>
         <MasterAssetResources>$(MSBuildThisFileDirectory)DragaliaAPI.Shared\Resources\</MasterAssetResources>
@@ -8,16 +19,16 @@
 
     <Target Name="CopyApiMsgpackFiles" AfterTargets="Build" Condition="$(DependsOnApiMsgpackFiles) == 'true'">
         <ItemGroup>
-            <MasterAssetMsgpackFiles Include="$(ApiOutputDirectory)Resources\**\*.msgpack"/>
+            <MasterAssetMsgpackFiles Include="$(ApiOutputDirectory)Resources\**\*.msgpack" />
         </ItemGroup>
-        <Copy SourceFiles="@(MasterAssetMsgpackFiles)" DestinationFolder="$(OutDir)Resources\%(RecursiveDir)"/>
+        <Copy SourceFiles="@(MasterAssetMsgpackFiles)" DestinationFolder="$(OutDir)Resources\%(RecursiveDir)" />
     </Target>
 
     <Target Name="CleanMsgpackFiles" AfterTargets="Clean" Condition="$(DependsOnApiMsgpackFiles) == 'true'">
         <ItemGroup>
-            <FilesToDelete Include="$(OutDir)Resources\**\*.msgpack"/>
+            <FilesToDelete Include="$(OutDir)Resources\**\*.msgpack" />
         </ItemGroup>
-        <Delete Files="@(FilesToDelete)"/>
+        <Delete Files="@(FilesToDelete)" />
     </Target>
-    
+
 </Project>

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DragaliaAPI.Photon.Plugin.Plugins.GameLogic.Events;
 using FluentAssertions;
 using Xunit;

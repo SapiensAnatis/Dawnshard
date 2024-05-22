@@ -14,7 +14,6 @@
         <PackageVersion Include="Hangfire.Core" Version="1.8.12"/>
         <PackageVersion Include="Hangfire.Postgresql" Version="1.20.8"/>
         <PackageVersion Include="JetBrains.Annotations" Version="2023.3.0"/>
-        <PackageVersion Include="MemoryPack" Version="1.20.5"/>
         <PackageVersion Include="MessagePack" Version="2.5.140"/>
         <PackageVersion Include="MessagePack.AspNetCoreMvcFormatter" Version="2.5.140"/>
         <PackageVersion Include="MessagePackAnalyzer" Version="2.5.140"/>

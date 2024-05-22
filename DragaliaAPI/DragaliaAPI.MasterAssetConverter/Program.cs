@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
-using DragaliaAPI.MemoryPack;
+using DragaliaAPI.MasterAssetConverter;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.Serialization;
 using MessagePack;

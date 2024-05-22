@@ -7,7 +7,6 @@ on:
     paths:
       - PhotonStateManager/**
       - Shared/**
-      - Directory.Build.props
       - Directory.Packages.props
 
 env:
@@ -19,7 +18,7 @@ jobs:
     uses: ./.github/workflows/build.yaml
     with:
       ref: main
-      dockerfile: "PhotonStateManager/DragaliaAPI.Photon.StateManager/Dockerfile"
+      dockerfile: "PhotonStateManager/Dockerfile"
       image-name: "photon-state-manager"
     secrets: inherit
   deploy:
