@@ -1,5 +1,3 @@
-import { writable } from 'svelte/store';
-import type { User } from './userSchema';
 import { z } from 'zod';
 
 export const userSchema = z.object({
