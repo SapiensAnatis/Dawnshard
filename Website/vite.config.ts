@@ -5,6 +5,12 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [sveltekit(), enhancedImages()],
   server: {
-    port: 3001
+    port: 3001,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true
+      }
+    }
   }
 });
