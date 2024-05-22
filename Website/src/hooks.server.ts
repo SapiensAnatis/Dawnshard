@@ -6,17 +6,13 @@ const internalApiUrl = new URL(DAWNSHARD_API_URL_SSR);
 
 export const handleFetch = async ({ request, fetch }) => {
   const requestUrl = new URL(request.url);
-  console.log(requestUrl);
-  if (requestUrl.host === publicApiUrl.host) {
+  if (requestUrl.origin === publicApiUrl.origin) {
     // Rewrite URL to internal
-    const newUrl = new URL(request.url);
-    newUrl.host = internalApiUrl.host;
-    newUrl.protocol = 'http';
-
+    const newUrl = request.url.replace(publicApiUrl.origin, internalApiUrl.origin);
     console.log('Rewrote URL', requestUrl.toString(), 'to', newUrl.toString());
 
-    return await fetch(newUrl);
+    return await fetch(new Request(newUrl, request));
   }
 
-  return await fetch(requestUrl);
+  return await fetch(request);
 };

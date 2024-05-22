@@ -83,7 +83,8 @@ public static class ServiceConfiguration
             .AddWallFeature()
             .AddPresentFeature()
             .AddQuestFeature()
-            .AddStoryFeature();
+            .AddStoryFeature()
+            .AddWebFeature(configuration);
 
         services
             .RegisterMissionServices()

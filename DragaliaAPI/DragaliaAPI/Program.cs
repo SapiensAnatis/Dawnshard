@@ -174,19 +174,19 @@ app.MapWhen(
     applicationBuilder =>
     {
         // todo unfuck cors
-        applicationBuilder.UseCors(cors => 
+        applicationBuilder.UseCors(cors =>
             cors.WithOrigins("http://localhost:3001")
                 .AllowCredentials()
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-            );
-        applicationBuilder.UseRouting();
+        );
+        applicationBuilder.UseRouting();        
+        applicationBuilder.UseSerilogRequestLogging();
 #pragma warning disable ASP0001
         applicationBuilder.UseAuthorization();
 #pragma warning restore ASP0001
         applicationBuilder.UseAntiforgery();
         applicationBuilder.UseMiddleware<PlayerIdentityLoggingMiddleware>();
-        applicationBuilder.UseSerilogRequestLogging();
         applicationBuilder.UseEndpoints(endpoints =>
         {
             endpoints.MapDragaliaAPIEndpoints();
