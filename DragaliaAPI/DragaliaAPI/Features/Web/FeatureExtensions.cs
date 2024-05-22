@@ -18,22 +18,25 @@ public static partial class FeatureExtensions
             configuration.GetRequiredSection("Baas").Get<BaasOptions>()
             ?? throw new InvalidOperationException("Failed to load BaasOptions");
 
-        serviceCollection
-            .AddAuthentication()
-            .AddJwtBearer(
-                WebAuthenticationHelper.PolicyName,
-                opts =>
+    serviceCollection
+        .AddAuthentication()
+        .AddJwtBearer(
+            WebAuthenticationHelper.PolicyName,
+            opts =>
+            {
+                opts.Audience = baasOptions.TokenAudience;
+                opts.Events = new()
                 {
-                    opts.Audience = baasOptions.TokenAudience;
-                    opts.Authority = baasOptions.BaasUrl;
-                    opts.Events = new()
-                    {
-                        OnMessageReceived = WebAuthenticationHelper.OnMessageReceived,
-                        OnTokenValidated = WebAuthenticationHelper.OnTokenValidated
-                    };
-                }
-    
-            );
+                    OnMessageReceived = WebAuthenticationHelper.OnMessageReceived,
+                    OnTokenValidated = WebAuthenticationHelper.OnTokenValidated
+                };
+                opts.Configuration = new()
+                {
+                    JwksUri = new Uri(baasOptions.BaasUrlParsed, "/.well-known/jwks.json").AbsoluteUri,
+                    Issuer = baasOptions.TokenIssuer
+                };
+            }
+        );
 
         serviceCollection
             .AddAuthorizationBuilder()

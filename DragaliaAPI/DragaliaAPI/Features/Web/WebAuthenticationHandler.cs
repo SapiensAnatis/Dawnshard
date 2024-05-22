@@ -25,21 +25,6 @@ public static class WebAuthenticationHelper
             context.Token = idToken;
         }
 
-        IBaasApi baasApi = context.HttpContext.RequestServices.GetRequiredService<IBaasApi>();
-        BaasOptions options = context.Request.HttpContext.RequestServices.GetRequiredService<IOptions<BaasOptions>>().Value;
-
-
-        // TODO: submit a PR to baas to add openid config endpoint, so that we can use Authority and not fetch keys manually
-        // https://developer.okta.com/docs/reference/api/oidc/#well-known-openid-configuration
-        context.Options.TokenValidationParameters = new()
-        {
-            ValidateAudience = true,
-            ValidateIssuer = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = options.TokenIssuer,
-            ValidAudience = options.TokenAudience,
-            IssuerSigningKeys = await baasApi.GetKeys()
-        };
 
     }
 
