@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DragaliaAPI.Features.Web;
 
@@ -18,14 +19,14 @@ public static class WebAuthenticationHelper
 
     public const string PolicyName = "WebPolicy";
 
-    public static async Task OnMessageReceived(MessageReceivedContext context)
+    public static Task OnMessageReceived(MessageReceivedContext context)
     {
         if (context.Request.Cookies.TryGetValue("idToken", out string? idToken))
         {
             context.Token = idToken;
         }
 
-
+        return Task.CompletedTask;
     }
 
     public static async Task OnTokenValidated(TokenValidatedContext context)
@@ -40,8 +41,7 @@ public static class WebAuthenticationHelper
         ApiContext dbContext = context.HttpContext.RequestServices.GetRequiredService<ApiContext>();
 
         var playerInfo = await dbContext
-            .Players
-            .IgnoreQueryFilters()
+            .Players.IgnoreQueryFilters()
             .Where(x => x.AccountId == accountId)
             .Select(x => new
             {

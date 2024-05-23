@@ -3,40 +3,43 @@ using DragaliaAPI.Features.Web;
 using DragaliaAPI.Models.Options;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 // ReSharper disable once CheckNamespace
 namespace DragaliaAPI;
 
 public static partial class FeatureExtensions
 {
-    public static IServiceCollection AddWebFeature(
-        this IServiceCollection serviceCollection,
-        IConfiguration configuration
-    )
+    public static IServiceCollection AddWebFeature(this IServiceCollection serviceCollection)
     {
-        BaasOptions baasOptions =
-            configuration.GetRequiredSection("Baas").Get<BaasOptions>()
-            ?? throw new InvalidOperationException("Failed to load BaasOptions");
-
-    serviceCollection
-        .AddAuthentication()
-        .AddJwtBearer(
-            WebAuthenticationHelper.PolicyName,
-            opts =>
+        serviceCollection.AddHttpClient(
+            nameof(BaasConfigurationManager),
+            (provider, client) =>
             {
-                opts.Audience = baasOptions.TokenAudience;
-                opts.Events = new()
-                {
-                    OnMessageReceived = WebAuthenticationHelper.OnMessageReceived,
-                    OnTokenValidated = WebAuthenticationHelper.OnTokenValidated
-                };
-                opts.Configuration = new()
-                {
-                    JwksUri = new Uri(baasOptions.BaasUrlParsed, "/.well-known/jwks.json").AbsoluteUri,
-                    Issuer = baasOptions.TokenIssuer
-                };
+                BaasOptions baasOptions = provider
+                    .GetRequiredService<IOptions<BaasOptions>>()
+                    .Value;
+                client.BaseAddress = baasOptions.BaasUrlParsed;
             }
         );
+
+        serviceCollection
+            .AddSingleton<BaasConfigurationManager>()
+            .AddTransient<IConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>()
+            .AddAuthentication()
+            .AddJwtBearer(
+                WebAuthenticationHelper.PolicyName,
+                opts =>
+                {
+                    opts.Events = new()
+                    {
+                        OnMessageReceived = WebAuthenticationHelper.OnMessageReceived,
+                        OnTokenValidated = WebAuthenticationHelper.OnTokenValidated
+                    };
+                    // The rest is configured in ConfigureJwtBearerOptions.cs after the ServiceProvider is built.
+                }
+            );
 
         serviceCollection
             .AddAuthorizationBuilder()

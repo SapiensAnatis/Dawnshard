@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Frozen;
 using System.Diagnostics;
 using System.Reflection;
@@ -5,6 +6,7 @@ using DragaliaAPI;
 using DragaliaAPI.Authentication;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.GraphQL;
+using DragaliaAPI.Features.Web;
 using DragaliaAPI.Infrastructure.Hangfire;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
@@ -19,6 +21,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.JSInterop;
 using Serilog;
 
@@ -63,9 +66,6 @@ builder
         option.InputFormatters.Add(new CustomMessagePackInputFormatter(CustomResolver.Options));
     });
 
-PostgresOptions postgresOptions =
-    builder.Configuration.GetSection(nameof(PostgresOptions)).Get<PostgresOptions>()
-    ?? throw new InvalidOperationException("Failed to get PostgreSQL config");
 RedisOptions redisOptions =
     builder.Configuration.GetSection(nameof(RedisOptions)).Get<RedisOptions>()
     ?? throw new InvalidOperationException("Failed to get Redis config");
@@ -73,7 +73,7 @@ HangfireOptions hangfireOptions =
     builder.Configuration.GetSection(nameof(HangfireOptions)).Get<HangfireOptions>()
     ?? new() { Enabled = false };
 
-builder.Services.ConfigureDatabaseServices(postgresOptions);
+builder.Services.ConfigureDatabaseServices(builder.Configuration);
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.ConfigurationOptions = new()
@@ -86,7 +86,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 if (hangfireOptions.Enabled)
 {
-    builder.Services.ConfigureHangfire(postgresOptions);
+    builder.Services.ConfigureHangfire();
 }
 
 builder.Services.AddDataProtection().PersistKeysToDbContext<ApiContext>();
@@ -115,6 +115,10 @@ await MasterAsset.LoadAsync();
 watch.Stop();
 
 app.Logger.LogInformation("Loaded MasterAsset in {Time} ms.", watch.ElapsedMilliseconds);
+
+PostgresOptions postgresOptions = app
+    .Services.GetRequiredService<IOptions<PostgresOptions>>()
+    .Value;
 
 app.Logger.LogDebug(
     "Using PostgreSQL connection {Host}:{Port}",
@@ -180,7 +184,7 @@ app.MapWhen(
                 .AllowAnyHeader()
                 .AllowAnyMethod()
         );
-        applicationBuilder.UseRouting();        
+        applicationBuilder.UseRouting();
         applicationBuilder.UseSerilogRequestLogging();
 #pragma warning disable ASP0001
         applicationBuilder.UseAuthorization();

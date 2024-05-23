@@ -42,6 +42,7 @@ using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
 using MudBlazor;
 using MudBlazor.Services;
 
@@ -84,7 +85,7 @@ public static class ServiceConfiguration
             .AddPresentFeature()
             .AddQuestFeature()
             .AddStoryFeature()
-            .AddWebFeature(configuration);
+            .AddWebFeature();
 
         services
             .RegisterMissionServices()
@@ -262,18 +263,22 @@ public static class ServiceConfiguration
         return services;
     }
 
-    public static IServiceCollection ConfigureHangfire(
-        this IServiceCollection serviceCollection,
-        PostgresOptions postgresOptions
-    )
+    public static IServiceCollection ConfigureHangfire(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddHangfire(cfg =>
-            cfg.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-                .UseSimpleAssemblyNameTypeSerializer()
-                .UseRecommendedSerializerSettings()
-                .UsePostgreSqlStorage(pgCfg =>
-                    pgCfg.UseNpgsqlConnection(postgresOptions.GetConnectionString("Hangfire"))
-                )
+        serviceCollection.AddHangfire(
+            (serviceProvider, cfg) =>
+            {
+                PostgresOptions postgresOptions = serviceProvider
+                    .GetRequiredService<IOptions<PostgresOptions>>()
+                    .Value;
+
+                cfg.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                    .UseSimpleAssemblyNameTypeSerializer()
+                    .UseRecommendedSerializerSettings()
+                    .UsePostgreSqlStorage(pgCfg =>
+                        pgCfg.UseNpgsqlConnection(postgresOptions.GetConnectionString("Hangfire"))
+                    );
+            }
         );
 
         serviceCollection.AddHangfireServer();
