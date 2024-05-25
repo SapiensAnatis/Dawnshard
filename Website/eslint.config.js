@@ -34,7 +34,6 @@ export default [
       'package',
       '.env',
       '.env.*',
-      '!.env.example',
       'pnpm-lock.yaml',
       'package-lock.json',
       'postcss.config.cjs',
