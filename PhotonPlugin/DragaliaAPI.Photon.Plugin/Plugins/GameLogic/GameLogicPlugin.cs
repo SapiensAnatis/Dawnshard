@@ -122,7 +122,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                 roomId
             );
 
-            this.pluginStateService.ShouldPublish =
+            this.pluginStateService.IsPubliclyVisible =
                 matchingType == MatchingTypes.Anyone && !this.roomState.IsRandomMatching;
         }
 
