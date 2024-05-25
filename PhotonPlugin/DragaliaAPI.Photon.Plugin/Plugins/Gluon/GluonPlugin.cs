@@ -49,7 +49,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
         {
             this.gameLogicPlugin.OnCreateGame(info);
             this.stateManagerPlugin.OnCreateGame(info);
-            
+
             if (this.pluginStateService.IsPubliclyVisible)
             {
                 this.discordPlugin.OnCreateGame(info);
