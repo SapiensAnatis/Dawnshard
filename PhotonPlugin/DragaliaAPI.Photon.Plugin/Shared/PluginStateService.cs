@@ -11,8 +11,8 @@ namespace DragaliaAPI.Photon.Plugin.Shared
         public bool IsUseSecondaryServer { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether room events should be pushed to Redis / Discord.
+        /// Gets or sets a value indicating whether room events should be pushed to Discord.
         /// </summary>
-        public bool ShouldPublish { get; set; }
+        public bool IsPubliclyVisible { get; set; }
     }
 }
