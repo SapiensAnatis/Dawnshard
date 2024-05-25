@@ -13,19 +13,7 @@ public static partial class FeatureExtensions
 {
     public static IServiceCollection AddWebFeature(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddHttpClient(
-            nameof(BaasConfigurationManager),
-            (provider, client) =>
-            {
-                BaasOptions baasOptions = provider
-                    .GetRequiredService<IOptions<BaasOptions>>()
-                    .Value;
-                client.BaseAddress = baasOptions.BaasUrlParsed;
-            }
-        );
-
         serviceCollection
-            .AddSingleton<BaasConfigurationManager>()
             .AddTransient<IConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>()
             .AddAuthentication()
             .AddJwtBearer(

@@ -4,17 +4,12 @@
   import Header from './header.svelte';
   import SideNav from './sideNav.svelte';
   import type { LayoutData } from './$types';
-  import { onMount } from 'svelte';
 
   export let data: LayoutData;
-
-  onMount(() => {
-    console.log(data);
-  });
 </script>
 
 <ModeWatcher />
-<Header userInfo={data.userInfo} />
+<Header hasValidJwt={data.hasValidJwt} />
 <SideNav />
 
 <main class="pl-0 md:pl-[var(--navigation-width)]" style:padding-top="var(--header-height)">

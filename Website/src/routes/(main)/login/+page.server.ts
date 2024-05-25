@@ -18,11 +18,10 @@ const getUrlSafeBase64Hash = async (input: string) => {
   return base64.replace('+', '-').replace('/', '_').replace('=', '');
 };
 
-export const load: PageServerLoad = async ({ cookies }) => {
-  console.log('preload');
+export const load: PageServerLoad = async ({ cookies, url }) => {
+  const originalPage = url.searchParams.get('originalPage') ?? '/';
 
   const challengeStringValue = getChallengeString();
-
   cookies.set('challengeString', challengeStringValue, { path: '/' });
 
   const queryParams = new URLSearchParams({
@@ -32,7 +31,8 @@ export const load: PageServerLoad = async ({ cookies }) => {
     scope: 'user user.birthday openid',
     language: 'en-US',
     session_token_code_challenge: await getUrlSafeBase64Hash(challengeStringValue),
-    session_token_code_challenge_method: 'S256'
+    session_token_code_challenge_method: 'S256',
+    state: JSON.stringify({ originalPage })
   });
 
   const baasUrl = new URL(`/custom/thirdparty/auth?${queryParams}`, PUBLIC_BAAS_URL);

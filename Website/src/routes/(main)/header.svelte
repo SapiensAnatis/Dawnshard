@@ -1,21 +1,17 @@
 <script lang="ts">
-  import { toggleMode } from 'mode-watcher';
   import { Button } from '$shadcn/components/ui/button';
   import * as Drawer from '$shadcn/components/ui/drawer';
-  import { Sun, Moon, Menu, Close } from '$lib/icons';
+  import { Menu, Close } from '$lib/icons';
   import Routes from '$lib/components/routes.svelte';
-  import LoginButton from './loginButton.svelte';
-  import type { User } from './user';
   import { onMount } from 'svelte';
   import HeaderContents from './headerContents.svelte';
 
   let enhance = false;
 
-  export let userInfo: User | undefined;
+  export let hasValidJwt: boolean;
 
   onMount(() => {
     enhance = true;
-    console.log({ userInfo });
   });
 </script>
 
@@ -27,7 +23,7 @@
           <Menu />
         </Button>
       </Drawer.Trigger>
-      <HeaderContents {userInfo} />
+      <HeaderContents {hasValidJwt} />
 
       <Drawer.Portal class="md:hidden">
         <Drawer.Content
@@ -51,7 +47,7 @@
     <Button variant="ghost" class="md:hidden" href="/navigation">
       <Menu />
     </Button>
-    <HeaderContents {userInfo} />
+    <HeaderContents {hasValidJwt} />
   </header>
 {/if}
 

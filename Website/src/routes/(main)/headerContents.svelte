@@ -1,11 +1,12 @@
 <script lang="ts">
   import { toggleMode } from 'mode-watcher';
   import { Moon, Sun } from '$lib/icons.js';
-  import LoginButton from './loginButton.svelte';
-  import { Button } from '$shadcn/components/ui/button/index.js';
-  import type { User } from './user';
+  import { Button } from '$shadcn/components/ui/button';
+  import { invalidate } from '$app/navigation';
+  import Cookies from '$lib/cookies';
+  import { page } from '$app/stores';
 
-  export let userInfo: User | undefined;
+  export let hasValidJwt: boolean;
 </script>
 
 <h1 class="scroll-m-20 text-2xl font-bold tracking-tight md:text-3xl">Dawnshard</h1>
@@ -22,8 +23,12 @@
   <span class="sr-only">Toggle theme</span>
 </Button>
 
-{#if userInfo}
-  <p>Hello, {userInfo.name}</p>
+{#if hasValidJwt}
+  <Button
+    href="/logout"
+    variant="secondary"
+    on:click={() => invalidate(`cookie:${Cookies.IdToken}`)}>Log out</Button
+  >
 {:else}
-  <LoginButton />
+  <Button href={`/login?originalPage=${$page.url.pathname}`}>Login</Button>
 {/if}

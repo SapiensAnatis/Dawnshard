@@ -13,7 +13,6 @@ namespace DragaliaAPI.Features.Web;
 /// Sourced from: <see href="https://gist.github.com/xiaomi7732/20ff2ad11b085a851759d3835b95c8d7"/>
 /// </remarks>
 public class ConfigureJwtBearerOptions(
-    BaasConfigurationManager baasConfigurationManager,
     IOptions<BaasOptions> baasOptions
 ) : IConfigureNamedOptions<JwtBearerOptions>
 {
@@ -23,7 +22,7 @@ public class ConfigureJwtBearerOptions(
 
     public void Configure(string? name, JwtBearerOptions options)
     {
-        options.ConfigurationManager = baasConfigurationManager;
+        options.Authority = baasOptions.Value.BaasUrl;
         options.TokenValidationParameters = new()
         {
             ValidAudience = baasOptions.Value.TokenAudience,
