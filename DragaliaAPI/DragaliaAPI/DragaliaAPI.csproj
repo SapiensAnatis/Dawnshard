@@ -18,8 +18,6 @@
         <PackageReference Include="Hangfire.AspNetCore" />
         <PackageReference Include="Hangfire.Core" />
         <PackageReference Include="Hangfire.Postgresql" />
-        <PackageReference Include="Immediate.Apis" />
-        <PackageReference Include="Immediate.Handlers" />
         <PackageReference Include="JetBrains.Annotations" />
         <PackageReference Include="MessagePack" />
         <PackageReference Include="MessagePack.AspNetCoreMvcFormatter" />

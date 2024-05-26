@@ -1,6 +1,6 @@
 import type { Icon } from 'lucide-svelte';
 import type { ComponentType } from 'svelte';
-import * as Icons from './icons';
+import * as Icons from '../icons.ts';
 
 export type RouteGroup = {
   title: string;
@@ -17,8 +17,10 @@ export const routeGroups: RouteGroup[] = [
   {
     title: 'Information',
     routes: [
+      // @ts-expect-error https://github.com/lucide-icons/lucide/issues/2114
       { title: 'Home', href: '/', icon: Icons.Home },
-      { title: 'News', href: '/news', icon: Icons.Newspaper }
+      // @ts-expect-error https://github.com/lucide-icons/lucide/issues/2114
+      { title: 'News', href: '/news/1', icon: Icons.Newspaper }
     ]
   }
 ];

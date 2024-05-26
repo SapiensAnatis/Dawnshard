@@ -1,7 +1,7 @@
-<script>
-  import { routeGroups } from '../routes';
+<script lang="ts">
+  import { routeGroups } from './routes.ts';
   import { Button } from '$shadcn/components/ui/button';
-  import { cn } from '$shadcn/utils.js';
+  import { cn } from '$shadcn/utils.js.js';
 </script>
 
 {#each routeGroups as routeGroup}

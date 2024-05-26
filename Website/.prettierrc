@@ -12,5 +12,6 @@
         "parser": "svelte"
       }
     }
-  ]
+  ],
+  "bracketSameLine": true
 }

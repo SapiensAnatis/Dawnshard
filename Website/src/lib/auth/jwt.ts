@@ -24,6 +24,7 @@ const getJwtMetadata = (jwt: string): JwtMetadata => {
   // We only care here if the token is expired. We are not validating signatures, etc. because that
   // can be left to the main API server. This is used to inform non-security-critical things like
   // whether to show the login button, or how long to store the JWT in a cookie for.
+  // Although TODO: Consider signature validation anyway because why not
   const exp = payloadObject.exp;
   if (!exp || !Number.isInteger(exp)) {
     return { valid: false };
@@ -36,7 +37,6 @@ const getJwtMetadata = (jwt: string): JwtMetadata => {
 
   return {
     valid: true,
-    expiry: expDate,
     expiryTimestampMs: exp * 1000
   };
 };
