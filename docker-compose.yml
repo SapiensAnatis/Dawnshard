@@ -21,6 +21,7 @@ services:
       - postgres
     env_file:
       - .env
+    profiles: ["dragaliaapi"]
 
   photonstatemanager:
     hostname: photonstatemanager
@@ -32,8 +33,7 @@ services:
       - "5001:8080"
     env_file:
       - .env
-    profiles:
-      - photon
+    profiles: ["photonstatemanager"]
 
   postgres:
     hostname: postgres

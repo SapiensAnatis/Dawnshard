@@ -1,0 +1,16 @@
+{
+    "profiles": {
+        "DragaliaAPI": {
+            "commandName": "Project",
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "RedisOptions__Hostname": "localhost",
+                "PostgresOptions__Hostname": "localhost",
+                "PostgresOptions__Username": "change me",
+                "PostgresOptions__Password": "change me",
+                "PostgresOptions__Database": "change me"
+            },
+            "applicationUrl": "https://localhost:80"
+        }
+    }
+}
