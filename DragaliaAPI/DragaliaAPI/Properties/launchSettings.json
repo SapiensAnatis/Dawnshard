@@ -10,7 +10,7 @@
                 "PostgresOptions__Password": "change me",
                 "PostgresOptions__Database": "change me"
             },
-            "applicationUrl": "https://localhost:80"
+            "applicationUrl": "http://localhost:80"
         }
     }
 }
