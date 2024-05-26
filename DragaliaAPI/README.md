@@ -4,9 +4,13 @@ DragaliaAPI is the main server component of Dawnshard, which handles the vast ma
 
 ## Dependencies
 
-The server depends on [`DragaliaBaas`](https://github.com/DragaliaLostRevival/DragaliaBaasServer) as an identity provider. Clients are expected to go to an instance of the BaaS for login and authentication, and then come back to `/tool/auth` with a signed JSON web token to authenticate against DragaliaAPI.
+The server depends on [`DragaliaBaas`](https://github.com/DragaliaLostRevival/DragaliaBaasServer) as an identity
+provider. Clients are expected to go to an instance of the BaaS for login and authentication, and then come back
+to `/tool/auth` with a signed JSON web token to authenticate against DragaliaAPI.
 
 ## Development environment
+
+### Run the server
 
 To get started, copy the `.env.default` file to `.env`. Choose some values for the database credentials, and then launch
 the compose project from your IDE. Or, if using the command line,
@@ -28,6 +32,15 @@ running in the container network. An example configuration for this which hopefu
 Visual Studio, as well as the `dotnet` cli, is included in
 [launchSettings.json](./DragaliaAPI/Properties/launchSettings.json). You will need to populate the credentials with the
 values that the Docker containers are using from `.env`.
+
+### Set up a client
+
+The `docker-compose.yml` / `launchSettings.json` file will start the server on port 80, so you can
+use [Dragalipatch](https://github.com/LukeFZ/DragaliPatch/releases/latest) with
+your [PC's local IP address](https://support.microsoft.com/en-us/windows/find-your-ip-address-in-windows-f21a9bbc-c582-55cd-35e0-73431160a1b9)
+to play on your local server with an emulator or mobile device. You must input the local IP address
+as `http://192.168.xxx.xxx` because without a http prefix, Dragalipatch assumes HTTPS which is not enabled on the
+development setup.
 
 ## Self-hosting for general use
 
