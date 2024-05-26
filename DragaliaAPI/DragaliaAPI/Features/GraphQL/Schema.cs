@@ -14,7 +14,6 @@ public static class Schema
             options.PreBuildSchemaFromContext = (schema) =>
             {
                 schema.AddScalarType<TimeSpan>("TimeSpan", "time span");
-                schema.AddScalarType<DateOnly>("DateOnly", "date only");
             };
             options.ConfigureSchema = (schema) =>
             {
