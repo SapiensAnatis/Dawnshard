@@ -78,6 +78,49 @@ public class QuestReadStoryTest : TestFixture
     }
 
     [Fact]
+    public async Task ReadStory_Midgardsormr_DoesNotAddReliabilityIfOwned()
+    {
+        int midgardStoryId = 1000109;
+        this.ApiContext.PlayerUserData.ExecuteUpdate(x =>
+            x.SetProperty(e => e.MaxDragonQuantity, 0)
+        );
+
+        await this.AddToDatabase(
+            new DbPlayerDragonReliability() { DragonId = Dragons.Midgardsormr }
+        );
+
+        QuestReadStoryResponse response = (
+            await this.Client.PostMsgpack<QuestReadStoryResponse>(
+                "/quest/read_story",
+                new QuestReadStoryRequest() { QuestStoryId = midgardStoryId }
+            )
+        ).Data;
+
+        response.UpdateDataList.UserData.Should().NotBeNull();
+
+        response.UpdateDataList.DragonReliabilityList.Should().BeNull();
+
+        response
+            .EntityResult.OverPresentEntityList.Should()
+            .ContainSingle()
+            .Which.Should()
+            .BeEquivalentTo(
+                new AtgenBuildEventRewardEntityList()
+                {
+                    EntityType = EntityTypes.Dragon,
+                    EntityId = (int)Dragons.Midgardsormr,
+                    EntityQuantity = 1,
+                }
+            );
+
+        response
+            .UpdateDataList.QuestStoryList.Should()
+            .ContainEquivalentOf(
+                new QuestStoryList() { QuestStoryId = midgardStoryId, State = StoryState.Read }
+            );
+    }
+
+    [Fact]
     public async Task ReadStory_UpdatesDatabase()
     {
         QuestReadStoryResponse response = (
