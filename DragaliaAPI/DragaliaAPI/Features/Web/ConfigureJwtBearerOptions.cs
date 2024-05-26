@@ -4,8 +4,6 @@ using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Features.Web;
 
-// Sourced from: https://gist.github.com/xiaomi7732/20ff2ad11b085a851759d3835b95c8d7
-
 /// <summary>
 /// Allows setting additional properties on <see cref="JwtBearerOptions"/> using DI.
 /// </summary>

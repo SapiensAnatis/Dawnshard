@@ -54,9 +54,6 @@ public static class WebAuthenticationHelper
         if (playerInfo is null)
         {
             context.Fail("Unknown player");
-            return;
         }
-
-        return;
     }
 }

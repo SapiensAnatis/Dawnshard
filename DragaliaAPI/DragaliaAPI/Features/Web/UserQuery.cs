@@ -11,8 +11,9 @@ public static partial class UserQuery
 {
     public record Query;
 
-    private static async ValueTask<User> HandleAsync(Query _, CancellationToken cancellationToken)
-    {
-        return new User(1, "a");
-    }
+    private static async ValueTask<User> HandleAsync(
+        Query _,
+        UserService userService,
+        CancellationToken cancellationToken
+    ) => await userService.GetUser(cancellationToken);
 }

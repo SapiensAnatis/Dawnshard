@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Frozen;
 using System.Diagnostics;
 using System.Reflection;
@@ -6,7 +5,6 @@ using DragaliaAPI;
 using DragaliaAPI.Authentication;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.GraphQL;
-using DragaliaAPI.Features.Web;
 using DragaliaAPI.Infrastructure.Hangfire;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;

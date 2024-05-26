@@ -1,10 +1,6 @@
-using System.IdentityModel.Tokens.Jwt;
 using DragaliaAPI.Features.Web;
-using DragaliaAPI.Models.Options;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 
 // ReSharper disable once CheckNamespace
 namespace DragaliaAPI;
@@ -15,9 +11,12 @@ public static partial class FeatureExtensions
     {
         serviceCollection
             .AddTransient<IConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>()
+            .AddScoped<UserService>();
+
+        serviceCollection
             .AddAuthentication()
             .AddJwtBearer(
-                WebAuthenticationHelper.PolicyName,
+                WebAuthenticationHelper.SchemeName,
                 opts =>
                 {
                     opts.Events = new()
@@ -36,7 +35,7 @@ public static partial class FeatureExtensions
                 builder =>
                     builder
                         .RequireAuthenticatedUser()
-                        .AddAuthenticationSchemes(WebAuthenticationHelper.PolicyName)
+                        .AddAuthenticationSchemes(WebAuthenticationHelper.SchemeName)
             );
 
         return serviceCollection;
