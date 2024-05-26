@@ -19,15 +19,15 @@ use `docker-compose -f docker-compose.yml -f docker-compose.override.yml --profi
 The solution includes a `docker-compose.dcproj` project file which should be plug-and-play with Visual Studio and allow
 launching the API plus the supporting Postgres and Redis services. It is compatible with container fast mode, so you can
 iterate during development without rebuilding the containers each time. Other IDEs, including JetBrains Rider, should
-also able to use the `docker-compose.yaml` file if you add a run configuration pointed at it (as well
-as `docker-compose.override.yaml`). For users who are not using Visual Studio, ensure that your `docker-compose`
+also able to use the `docker-compose.yml` file if you add a run configuration pointed at it (as well
+as `docker-compose.override.yml`). For users who are not using Visual Studio, ensure that your `docker-compose`
 configuration or command includes an instruction to use the `dragaliaapi` profile so that the API is launched.
 
 If you have issues with using the container fast mode, you can use the docker-compose file to only launch the supporting
 services and then run the API directly on your machine. Either remove the profile arguments in your IDE or just
-run `docker-compose -f docker-compose.yaml up -d` from the command line without any `--profile` arguments to start Redis
+run `docker-compose -f docker-compose.yml up -d` from the command line without any `--profile` arguments to start Redis
 and Postgres, and then launch the main project. You will need to configure the environment variables that it is run with
-to match what is set in `docker-compose.yaml`, and also to adjust the hostnames of Redis and Postgres now that it is not
+to match what is set in `docker-compose.yml`, and also to adjust the hostnames of Redis and Postgres now that it is not
 running in the container network. 
 
 An example configuration for running outside a container which is supported by Rider, Visual Studio, and the `dotnet` 
