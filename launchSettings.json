@@ -1,0 +1,23 @@
+{
+    "profiles": {
+        "DragaliaAPI": {
+            "commandName": "DockerCompose",
+            "commandVersion": "1.0",
+            "composeProfile": {
+                "includes": [
+                    "dragaliaapi"
+                ]
+            }
+        },
+        "DragaliaAPI + PhotonStateManager": {
+            "commandName": "DockerCompose",
+            "commandVersion": "1.0",
+            "composeProfile": {
+                "includes": [
+                    "dragaliaapi",
+                    "photonstatemanager"
+                ]
+            }
+        }
+    }
+}

@@ -18,7 +18,7 @@ jobs:
     uses: ./.github/workflows/build.yaml
     with:
       ref: main
-      dockerfile: "PhotonStateManager/Dockerfile"
+      dockerfile: "PhotonStateManager/DragaliaAPI.Photon.StateManager/Dockerfile"
       image-name: "photon-state-manager"
     secrets: inherit
   deploy:
