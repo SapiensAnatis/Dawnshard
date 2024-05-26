@@ -145,6 +145,7 @@ FrozenSet<string> apiRoutePrefixes = new[]
 }.ToFrozenSet();
 #pragma warning restore CA1861
 
+// Game endpoints
 app.MapWhen(
     ctx => apiRoutePrefixes.Any(prefix => ctx.Request.Path.StartsWithSegments(prefix)),
     applicationBuilder =>
@@ -171,6 +172,7 @@ app.MapWhen(
     }
 );
 
+// Svelte website API
 app.MapWhen(
     static ctx => ctx.Request.Path.StartsWithSegments("/api"),
     applicationBuilder =>
@@ -193,6 +195,27 @@ app.MapWhen(
         {
             endpoints.MapDragaliaAPIEndpoints();
         });
+    }
+);
+
+// Blazor website
+app.MapWhen(
+    static ctx => !ctx.Request.Path.StartsWithSegments("/api"),
+    applicationBuilder =>
+    {
+        {
+            applicationBuilder.UseRouting();
+#pragma warning disable ASP0001
+            applicationBuilder.UseAuthorization();
+#pragma warning restore ASP0001
+            applicationBuilder.UseAntiforgery();
+            applicationBuilder.UseMiddleware<PlayerIdentityLoggingMiddleware>();
+            applicationBuilder.UseEndpoints(endpoints =>
+            {
+                endpoints.MapRazorPages();
+                endpoints.MapRazorComponents<App>().AddInteractiveServerRenderMode();
+            });
+        }
     }
 );
 
