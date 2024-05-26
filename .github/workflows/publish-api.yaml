@@ -18,7 +18,7 @@ jobs:
     uses: ./.github/workflows/build.yaml
     with:
       ref: main
-      dockerfile: "DragaliaAPI/Dockerfile"
+      dockerfile: "DragaliaAPI/DragaliaAPI/Dockerfile"
       image-name: "dragalia-api"
     secrets: inherit
   deploy:

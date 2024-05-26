@@ -1,0 +1,14 @@
+{
+    "$schema": "https://json.schemastore.org/launchsettings.json",
+    "profiles": {
+        "DragaliaAPI": {
+            "commandName": "Project",
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "RedisOptions__Hostname": "localhost",
+                "PostgresOptions__Hostname": "localhost"
+            },
+            "applicationUrl": "http://localhost:80"
+        }
+    }
+}

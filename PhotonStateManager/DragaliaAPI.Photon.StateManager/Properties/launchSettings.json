@@ -1,0 +1,13 @@
+{
+    "$schema": "https://json.schemastore.org/launchsettings.json",
+    "profiles": {
+        "DragaliaAPI.Photon.StateManager": {
+            "commandName": "Project",
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "RedisOptions__Hostname": "localhost"
+            },
+            "applicationUrl": "http://localhost:5001"
+        }
+    }
+}
