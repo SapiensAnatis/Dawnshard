@@ -268,7 +268,12 @@ public class StoryService(
                         )
                     );
 
-                    if (reward is { Type: EntityTypes.Dragon, Id: (int)Dragons.Midgardsormr })
+                    if (
+                        reward is { Type: EntityTypes.Dragon, Id: (int)Dragons.Midgardsormr }
+                        && !await apiContext.PlayerDragonReliability.AnyAsync(x =>
+                            x.DragonId == Dragons.Midgardsormr
+                        )
+                    )
                     {
                         // The game doesn't handle it well if you send the Chapter 1 Midgardsormr to the gift box.
                         // You will later be forced to give him a gift in the dragon's roost tutorial, which will fail
