@@ -28,10 +28,19 @@ services and then run the API directly on your machine. Either remove the profil
 run `docker-compose -f docker-compose.yaml up -d` from the command line without any `--profile` arguments to start Redis
 and Postgres, and then launch the main project. You will need to configure the environment variables that it is run with
 to match what is set in `docker-compose.yaml`, and also to adjust the hostnames of Redis and Postgres now that it is not
-running in the container network. An example configuration for this which hopefully should work with Rider and with
-Visual Studio, as well as the `dotnet` cli, is included in
-[launchSettings.json](./DragaliaAPI/Properties/launchSettings.json). You will need to populate the credentials with the
-values that the Docker containers are using from `.env`.
+running in the container network. 
+
+An example configuration for running outside a container which is supported by Rider, Visual Studio, and the `dotnet` 
+cli, is included in [launchSettings.json](./DragaliaAPI/Properties/launchSettings.json). It does not include credentials
+as it is in source control. The recommended way to set the credentials is using user secrets. See the [Microsoft Learn](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets#secret-manager) documentation on user secrets for 
+more information. 
+
+You will need to set the following values corresponding to the values being used by Docker in `.env`:
+
+- `PostgresOptions:Username`
+- `PostgresOptions:Password` 
+- `PostgresOptions:Database` 
+
 
 ### Set up a client
 
