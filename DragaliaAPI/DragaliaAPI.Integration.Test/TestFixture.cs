@@ -182,7 +182,10 @@ public class TestFixture
             .CreateClient(
                 new WebApplicationFactoryClientOptions()
                 {
-                    BaseAddress = new Uri("http://localhost/api/", UriKind.Absolute),
+                    BaseAddress = new Uri(
+                        "http://localhost/2.19.0_20220714193707/",
+                        UriKind.Absolute
+                    ),
                 }
             );
 
