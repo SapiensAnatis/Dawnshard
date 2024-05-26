@@ -13,5 +13,5 @@ Pull requests to add new features or fix issues are welcome. Check the issues pa
 
 ### Development environment
 
-To set up a development environment to work on DragaliaAPI, the main server component, see the guidance README file in the component folder: [README.md](./DragaliaAPI/README.MD)
+To set up a development environment to work on DragaliaAPI, the main server component, see the guidance README file in the component folder: [README.md](./DragaliaAPI/README.md)
 
