@@ -7,39 +7,38 @@ import globals from 'globals';
 
 /** @type { import("eslint").Linter.Config } */
 export default [
-	js.configs.recommended,
-	...tsEslint.configs.recommended,
-	...eslintPluginSvelte.configs['flat/recommended'],
-	eslintConfigPrettier,
-	...eslintPluginSvelte.configs['flat/prettier'],
-	{
-		files: ['**/*.svelte'],
-		languageOptions: {
-			ecmaVersion: 2022,
-			sourceType: 'module',
-			globals: { ...globals.node, ...globals.browser },
-			parser: svelteParser,
-			parserOptions: {
-				parser: tsEslint.parser,
-				extraFileExtensions: ['.svelte']
-			}
-		}
-	},
-	{
-		ignores: [
-			'.DS_Store',
-			'node_modules',
-			'build',
-			'.svelte-kit',
-			'package',
-			'.env',
-			'.env.*',
-			'!.env.example',
-			'pnpm-lock.yaml',
-			'package-lock.json',
-			'postcss.config.cjs',
-			'yarn.lock',
-			'src/lib/shadcn'
-		]
-	}
+  js.configs.recommended,
+  ...tsEslint.configs.recommended,
+  ...eslintPluginSvelte.configs['flat/recommended'],
+  eslintConfigPrettier,
+  ...eslintPluginSvelte.configs['flat/prettier'],
+  {
+    files: ['**/*.svelte'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: { ...globals.node, ...globals.browser },
+      parser: svelteParser,
+      parserOptions: {
+        parser: tsEslint.parser,
+        extraFileExtensions: ['.svelte']
+      }
+    }
+  },
+  {
+    ignores: [
+      '.DS_Store',
+      'node_modules',
+      'build',
+      '.svelte-kit',
+      'package',
+      '.env',
+      '.env.*',
+      'pnpm-lock.yaml',
+      'package-lock.json',
+      'postcss.config.cjs',
+      'yarn.lock',
+      'src/lib/shadcn'
+    ]
+  }
 ];

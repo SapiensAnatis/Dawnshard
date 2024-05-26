@@ -3,8 +3,10 @@ using System.Runtime.CompilerServices;
 using DragaliaAPI.Database.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 [assembly: InternalsVisibleTo("DragaliaAPI.Database.Test")]
 [assembly: InternalsVisibleTo("DragaliaAPI.Test")]
@@ -18,14 +20,22 @@ public static class DatabaseConfiguration
 
     public static IServiceCollection ConfigureDatabaseServices(
         this IServiceCollection services,
-        PostgresOptions postgresOptions
+        IConfiguration config
     )
     {
-        services = services
-            .AddDbContext<ApiContext>(options =>
-                options
-                    .UseNpgsql(postgresOptions.GetConnectionString("ApiContext"))
-                    .EnableDetailedErrors()
+        services.Configure<PostgresOptions>(config.GetRequiredSection(nameof(PostgresOptions)));
+
+        services
+            .AddDbContext<ApiContext>(
+                (serviceProvider, options) =>
+                {
+                    PostgresOptions postgresOptions = serviceProvider
+                        .GetRequiredService<IOptions<PostgresOptions>>()
+                        .Value;
+                    options
+                        .UseNpgsql(postgresOptions.GetConnectionString("ApiContext"))
+                        .EnableDetailedErrors();
+                }
             )
 #pragma warning disable CS0618 // Type or member is obsolete
             .AddScoped<IDeviceAccountRepository, DeviceAccountRepository>()

@@ -18,6 +18,8 @@
         <PackageReference Include="Hangfire.AspNetCore" />
         <PackageReference Include="Hangfire.Core" />
         <PackageReference Include="Hangfire.Postgresql" />
+        <PackageReference Include="Immediate.Apis" />
+        <PackageReference Include="Immediate.Handlers" />
         <PackageReference Include="JetBrains.Annotations" />
         <PackageReference Include="MessagePack" />
         <PackageReference Include="MessagePack.AspNetCoreMvcFormatter" />
@@ -25,6 +27,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
         <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
