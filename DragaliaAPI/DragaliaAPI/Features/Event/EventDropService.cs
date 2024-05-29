@@ -183,13 +183,13 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
 
             // Typically, there are two challenge battle quests - an easier one and a harder one. We want to give more
             // rewards for the harder one. This previously used questData.VariationType, but that is inconsistent
-            // between events; see https://github.com/SapiensAnatis/Dawnshard/issues/507. 
+            // between events; see https://github.com/SapiensAnatis/Dawnshard/issues/507.
             // This hack instead relies on the fact that the quest IDs for wave quests are always organized like:
             //     208170501  Season's Beatings: Expert
             //     208170502  Season's Beatings: Master
             // It therefore provides a multiplier of 1 for the hard quest, and 0.5 for the easy quest.
             double t3Multiplier = quest.Id % 10 / 2d;
-            
+
             int t3Quantity = GenerateDropAmount(
                 10 * record.Wave * t3Multiplier * buildDropMultiplier
             );
