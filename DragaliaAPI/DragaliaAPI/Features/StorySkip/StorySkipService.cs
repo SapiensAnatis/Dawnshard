@@ -3,11 +3,13 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Story;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.StorySkip;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using Microsoft.EntityFrameworkCore;
 using static DragaliaAPI.Shared.Features.StorySkip.StorySkipRewards;
@@ -20,17 +22,17 @@ public class StorySkipService(
     ILogger<StorySkipService> logger,
     IQuestRepository questRepository,
     IStoryRepository storyRepository,
-    IUserDataRepository userDataRepository
+    IUserDataRepository userDataRepository,
+    IMissionProgressionService missionProgressionService,
+    FortDataService fortDataService
 )
 {
-    private static readonly FrozenSet<QuestData> questDatas = MasterAsset
-        .QuestData.Enumerable.Where(x =>
-            x.Gid < 10011 && x.Id > 100000000 && x.Id.ToString().Substring(6, 1) == "1"
-        )
+    private static readonly FrozenSet<QuestData> QuestDatas = MasterAsset
+        .QuestData.Enumerable.Where(x => x.Gid < 10011 && IsNormalModeQuest(x.Id))
         .ToFrozenSet();
 
-    private static readonly FrozenSet<QuestStory> questStories = MasterAsset
-        .QuestStory.Enumerable.Where(x => x.GroupId is < 10011)
+    private static readonly FrozenSet<QuestStory> QuestStories = MasterAsset
+        .QuestStory.Enumerable.Where(x => x.GroupId < 10011)
         .ToFrozenSet();
 
     public async Task IncreaseFortLevels(long viewerId)
@@ -40,6 +42,8 @@ public class StorySkipService(
         List<DbFortBuild> userForts = await fortRepository
             .Builds.Where(x => x.ViewerId == viewerId)
             .ToListAsync();
+
+        int currentFortLevel = await fortDataService.GetTotalFortLevel();
 
         List<DbFortBuild> newUserForts = new();
 
@@ -51,10 +55,24 @@ public class StorySkipService(
             {
                 if (fortToUpdate.Level < fortConfig.Level)
                 {
+                    currentFortLevel += fortConfig.Level - fortToUpdate.Level;
+
                     logger.LogDebug("Updating fort at BuildId {buildId}", fortToUpdate.BuildId);
                     fortToUpdate.Level = fortConfig.Level;
                     fortToUpdate.BuildStartDate = DateTimeOffset.UnixEpoch;
                     fortToUpdate.BuildEndDate = DateTimeOffset.UnixEpoch;
+
+                    missionProgressionService.EnqueueEvent(
+                        MissionCompleteType.FortPlantLevelUp,
+                        total: fortConfig.Level,
+                        parameter: (int)fortToUpdate.PlantId
+                    );
+
+                    missionProgressionService.EnqueueEvent(
+                        MissionCompleteType.FortLevelUp,
+                        1,
+                        currentFortLevel
+                    );
                 }
             }
 
@@ -75,6 +93,27 @@ public class StorySkipService(
                         LastIncomeDate = DateTimeOffset.UnixEpoch
                     };
                 newUserForts.Add(newUserFort);
+
+                currentFortLevel += 1;
+
+                missionProgressionService.EnqueueEvent(
+                    MissionCompleteType.FortPlantBuilt,
+                    1,
+                    fortsToUpdate.Count + 1,
+                    (int)fortPlant
+                );
+                
+                missionProgressionService.EnqueueEvent(
+                    MissionCompleteType.FortPlantLevelUp,
+                    total: fortConfig.Level,
+                    parameter: (int)fortPlant
+                );
+
+                missionProgressionService.EnqueueEvent(
+                    MissionCompleteType.FortLevelUp,
+                    1,
+                    currentFortLevel
+                );
             }
         }
 
@@ -93,7 +132,7 @@ public class StorySkipService(
             .ToListAsync();
 
         List<DbQuest> newUserQuests = new();
-        foreach (QuestData questData in questDatas)
+        foreach (QuestData questData in QuestDatas)
         {
             bool questExists = userQuests.Where(x => x.QuestId == questData.Id).Any();
             if (questExists == false)
@@ -117,13 +156,32 @@ public class StorySkipService(
                         LastDailyResetTime = DateTimeOffset.UnixEpoch
                     };
                 newUserQuests.Add(userQuest);
+                
+                missionProgressionService.OnQuestCleared(
+                    questData.Id,
+                    questData.Gid,
+                    questData.QuestPlayModeType,
+                    1,
+                    1
+                );
             }
             else
             {
                 DbQuest userQuest = userQuests.Where(x => x.QuestId == questData.Id).First();
                 bool isFirstClear = userQuest.State < 3;
                 if (isFirstClear)
+                {
                     wyrmite += 10;
+                    
+                    missionProgressionService.OnQuestCleared(
+                        questData.Id,
+                        questData.Gid,
+                        questData.QuestPlayModeType,
+                        1,
+                        1
+                    );
+                }
+
                 if (!userQuest.IsMissionClear1)
                 {
                     userQuest.IsMissionClear1 = true;
@@ -142,7 +200,7 @@ public class StorySkipService(
                     wyrmite += 5;
                 }
 
-                if (userQuest.BestClearTime == -1)
+                if (userQuest.BestClearTime < 0)
                 {
                     userQuest.BestClearTime = 36000;
                 }
@@ -171,10 +229,11 @@ public class StorySkipService(
             .ToListAsync();
 
         List<DbPlayerStoryState> newUserStories = new();
-        foreach (QuestStory questStory in questStories)
+        foreach (QuestStory questStory in QuestStories)
         {
-            bool storyExists = userStories.Where(x => x.StoryId == questStory.Id).Any();
-            if (storyExists == false)
+            DbPlayerStoryState? storyState = userStories.FirstOrDefault(x => x.StoryId == questStory.Id);
+            
+            if (storyState is null)
             {
                 wyrmite += 25;
                 DbPlayerStoryState userStory =
@@ -186,6 +245,14 @@ public class StorySkipService(
                         State = StoryState.Read
                     };
                 newUserStories.Add(userStory);
+                
+                missionProgressionService.OnQuestStoryCleared(questStory.Id);
+            }
+            else if (storyState.State != StoryState.Read)
+            {
+                storyState.State = StoryState.Read;
+                
+                missionProgressionService.OnQuestStoryCleared(questStory.Id);
             }
         }
 
@@ -291,8 +358,8 @@ public class StorySkipService(
 
     public async Task UpdateUserData(int wyrmite)
     {
-        const int MaxLevel = 60;
-        const int MaxExp = 69990;
+        const int maxLevel = 60;
+        const int maxExp = 69990;
         DbPlayerUserData data = await userDataRepository.GetUserDataAsync();
         data.TutorialFlag = 16640603;
         data.TutorialStatus = 60999;
@@ -300,14 +367,21 @@ public class StorySkipService(
         data.StaminaMulti = 99;
         data.Crystal += wyrmite;
 
-        if (data.Exp < MaxExp)
+        if (data.Exp < maxExp)
         {
-            data.Exp = MaxExp;
+            data.Exp = maxExp;
         }
 
-        if (data.Level < MaxLevel)
+        if (data.Level < maxLevel)
         {
-            data.Level = MaxLevel;
+            data.Level = maxLevel;
         }
+    }
+
+    private static bool IsNormalModeQuest(int questId)
+    {
+        // Select quest with a subgroup like 100010|107| instead of 100010|207| (the latter is hard mode)
+        int subgroup = questId % 1000;
+        return subgroup is > 100 and < 200;
     }
 }

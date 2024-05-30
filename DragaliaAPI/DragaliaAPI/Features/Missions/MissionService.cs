@@ -515,7 +515,7 @@ public class MissionService(
         {
             DbPlayerMission? activeMission = allMissions
                 .OrderBy(x => x.Id)
-                .FirstOrDefault(x => x.State < MissionState.Claimed);
+                .FirstOrDefault(x => x.State < MissionState.Completed);
 
             if (activeMission != null)
             {

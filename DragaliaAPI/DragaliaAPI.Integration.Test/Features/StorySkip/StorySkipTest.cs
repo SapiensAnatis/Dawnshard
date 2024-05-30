@@ -1,6 +1,8 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.StorySkip;
 using DragaliaAPI.Shared.Features.StorySkip;
+using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;
 using static DragaliaAPI.Shared.Features.StorySkip.StorySkipRewards;
 
@@ -57,6 +59,8 @@ public class StorySkipTest : TestFixture
             .ApiContext.PlayerFortBuilds.Where(x => x.ViewerId == this.ViewerId)
             .ExecuteDeleteAsync();
 
+        await this.Client.PostMsgpack("mission/unlock_drill_mission_group", new MissionUnlockDrillMissionGroupRequest(1));
+
         StorySkipSkipResponse data = (
             await this.Client.PostMsgpack<StorySkipSkipResponse>("story_skip/skip")
         ).Data;
@@ -98,5 +102,13 @@ public class StorySkipTest : TestFixture
                 fort.Level.Should().Be(fortConfig.Level);
             }
         }
+        
+        int clearCh1Quest23Mission = 100200;
+        this.ApiContext.PlayerMissions.Should().Contain(x => x.Id == clearCh1Quest23Mission).Which.State.Should()
+            .Be(MissionState.Completed);
+
+        int upgradeHalidomToLv3Mission = 105500;
+        this.ApiContext.PlayerMissions.Should().Contain(x => x.Id == upgradeHalidomToLv3Mission).Which.State.Should()
+            .Be(MissionState.Completed);
     }
 }
