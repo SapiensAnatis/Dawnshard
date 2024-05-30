@@ -7,7 +7,6 @@ on:
     paths:
       - DragaliaAPI/**
       - Shared/**
-      - Directory.Build.props
       - Directory.Packages.props
 
 env:

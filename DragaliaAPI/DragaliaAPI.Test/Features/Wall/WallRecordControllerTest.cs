@@ -15,7 +15,6 @@ namespace DragaliaAPI.Test.Features.Wall;
 public class WallRecordControllerTest
 {
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
-    private readonly Mock<IWallRepository> mockWallRepository;
     private readonly Mock<IWallService> mockWallService;
     private readonly Mock<IRewardService> mockRewardService;
     private readonly Mock<IDungeonService> mockDungeonService;
@@ -28,7 +27,6 @@ public class WallRecordControllerTest
     public WallRecordControllerTest()
     {
         mockUpdateDataService = new(MockBehavior.Strict);
-        mockWallRepository = new(MockBehavior.Strict);
         mockWallService = new(MockBehavior.Strict);
         mockRewardService = new(MockBehavior.Strict);
         mockDungeonService = new(MockBehavior.Strict);
@@ -38,7 +36,6 @@ public class WallRecordControllerTest
 
         wallRecordController = new(
             mockUpdateDataService.Object,
-            mockWallRepository.Object,
             mockWallService.Object,
             mockRewardService.Object,
             mockDungeonService.Object,
@@ -80,8 +77,7 @@ public class WallRecordControllerTest
 
         mockDungeonService.Setup(x => x.FinishDungeon(dungeonKey)).ReturnsAsync(session);
 
-        mockWallRepository.Setup(x => x.GetQuestWall(wallId)).ReturnsAsync(playerQuestWall);
-
+        mockWallService.Setup(x => x.GetQuestWall(wallId)).ReturnsAsync(playerQuestWall);
         mockWallService.Setup(x => x.LevelupQuestWall(wallId)).Returns(Task.CompletedTask);
 
         mockDungeonRecordHelperService

@@ -1,11 +1,12 @@
 ﻿using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
-using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Trade;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ public class TradeService(
     IRewardService rewardService,
     ILogger<TradeService> logger,
     IPaymentService paymentService,
+    IPresentService presentService,
     IMissionProgressionService missionProgressionService
 ) : ITradeService
 {
@@ -162,14 +164,54 @@ public class TradeService(
             );
         }
 
-        await rewardService.GrantReward(
-            new(
-                trade.DestinationEntityType,
-                trade.DestinationEntityId,
-                trade.DestinationEntityQuantity * count,
-                trade.DestinationLimitBreakCount
-            )
+        Dictionary<int, Entity> entities;
+
+        if (trade.DestinationEntityType == EntityTypes.Dragon)
+        {
+            // We must flatten dragons out into multiple entities, since each grant could have a different result
+            entities = Enumerable
+                .Repeat(
+                    new Entity(
+                        trade.DestinationEntityType,
+                        trade.DestinationEntityId,
+                        1,
+                        trade.DestinationLimitBreakCount
+                    ),
+                    trade.DestinationEntityQuantity * count
+                )
+                .Select((x, index) => KeyValuePair.Create(index, x))
+                .ToDictionary();
+        }
+        else
+        {
+            entities = new()
+            {
+                [1] = new Entity(
+                    trade.DestinationEntityType,
+                    trade.DestinationEntityId,
+                    trade.DestinationEntityQuantity * count,
+                    trade.DestinationLimitBreakCount
+                )
+            };
+        }
+
+        IDictionary<int, RewardGrantResult> batchResult = await rewardService.BatchGrantRewards(
+            entities
         );
+
+        foreach ((_, RewardGrantResult result) in batchResult)
+        {
+            if (result == RewardGrantResult.Limit)
+            {
+                presentService.AddPresent(
+                    new Present.Present(
+                        PresentMessage.TreasureTrade,
+                        trade.DestinationEntityType,
+                        trade.DestinationEntityId
+                    )
+                );
+            }
+        }
 
         await tradeRepository.AddTrade(tradeType, tradeId, count, DateTimeOffset.UtcNow);
 
@@ -198,10 +240,23 @@ public class TradeService(
             expectedPrice: trade.NeedDewPoint
         );
 
-        await rewardService.GrantReward(
+        // The client is unlikely to trade for an ability crest which it cannot hold more of, so it is unlikely we would
+        // get anything other than RewardGrantResult.Added here.
+        // TODO: this should be validated
+        _ = await rewardService.GrantReward(
             new Entity(EntityTypes.Wyrmprint, (int)trade.AbilityCrestId)
         );
 
         await tradeRepository.AddTrade(TradeType.AbilityCrest, id, count);
+    }
+
+    public EntityResult GetEntityResult()
+    {
+        EntityResult result = rewardService.GetEntityResult();
+        result.OverPresentEntityList = presentService.AddedPresents.Select(x =>
+            x.ToBuildEventRewardList()
+        );
+
+        return result;
     }
 }

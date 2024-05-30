@@ -13,3 +13,18 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      microsoft-extensions:
+        patterns:
+          - "Microsoft.Extensions*"
+      microsoft-entityframeworkcore:
+        patterns:
+          - "Microsoft.EntityFrameworkCore*"
+  - package-ecosystem: "docker"
+    directory: "/DragaliaAPI"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "docker"
+    directory: "/PhotonStateManager"
+    schedule:
+      interval: "weekly"

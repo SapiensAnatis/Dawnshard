@@ -10210,7 +10210,7 @@ public partial class PresentHistoryList
     public int EntityStatusPlusCount { get; set; }
 
     [Key("message_id")]
-    public int MessageId { get; set; }
+    public PresentMessage MessageId { get; set; }
 
     [Key("message_param_value_1")]
     public int MessageParamValue1 { get; set; }
@@ -10235,7 +10235,7 @@ public partial class PresentHistoryList
         int entityLevel,
         int entityLimitBreakCount,
         int entityStatusPlusCount,
-        int messageId,
+        PresentMessage messageId,
         int messageParamValue1,
         int messageParamValue2,
         int messageParamValue3,

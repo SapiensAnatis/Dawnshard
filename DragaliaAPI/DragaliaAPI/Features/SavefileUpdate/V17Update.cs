@@ -47,7 +47,7 @@ public class V17Update(
             );
 
             this.apiContext.PlayerDragonReliability.Add(
-                DbPlayerDragonReliabilityFactory.Create(
+                new DbPlayerDragonReliability(
                     this.playerIdentityService.ViewerId,
                     missingReliability
                 )

@@ -7,6 +7,8 @@ namespace DragaliaAPI.Features.Present;
 /// </summary>
 public interface IPresentService
 {
+    public IReadOnlyList<Present> AddedPresents { get; }
+
     Task<PresentNotice> GetPresentNotice();
 
     void AddPresent(Present present);

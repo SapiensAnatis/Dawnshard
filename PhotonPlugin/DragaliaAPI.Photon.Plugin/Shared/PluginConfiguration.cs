@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using DragaliaAPI.Photon.Plugin.Shared.Helpers;
 
 namespace DragaliaAPI.Photon.Plugin.Shared

@@ -7,7 +7,6 @@ on:
     paths:
       - PhotonStateManager/**
       - Shared/**
-      - Directory.Build.props
       - Directory.Packages.props
 
 env:

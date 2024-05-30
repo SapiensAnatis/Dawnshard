@@ -4,9 +4,6 @@
 @using DragaliaAPI.Shared.MasterAsset;
 @using DragaliaAPI.Shared.MasterAsset.Models;
 @using Microsoft.EntityFrameworkCore;
-@using MudBlazor;
-@using MudBlazor.Components;
-@using System.Collections.Immutable;
 @using System.Diagnostics;
 @using System.Diagnostics.CodeAnalysis;
 @using DragaliaAPI.Authentication
@@ -119,11 +116,11 @@
         Stopwatch stopwatch = Stopwatch.StartNew();
         Logger.LogDebug("Fetching data for quest {quest}", this.QuestId);
 
-
         if (this.QuestId is null)
-            return new TableData<Clear>() { Items = Enumerable.Empty<Clear>(), TotalItems = 0 };
+            return new TableData<Clear>() { Items = [], TotalItems = 0 };
 
         IQueryable<DbTimeAttackClear> clearQuery = this.ApiContext.TimeAttackClears
+            .IgnoreQueryFilters()
             .Include(x => x.Players)
             .ThenInclude(x => x.Units)
             .Include(x => x.Players)
@@ -153,13 +150,13 @@
         }
 
         List<Clear> filteredList = filteredEnumerable.ToList();
-        IEnumerable<Clear> pagedEnumerable = filteredList.Skip(state.PageSize * state.Page).Take(state.PageSize);
+        List<Clear> currentPage = filteredList.Skip(state.PageSize * state.Page).Take(state.PageSize).ToList();
 
         stopwatch.Stop();
         Logger.LogDebug("Fetched data in {t} ms", stopwatch.ElapsedMilliseconds);
 
-        this.data = pagedEnumerable;
-        return new TableData<Clear>() { Items = pagedEnumerable, TotalItems = filteredList.Count };
+        this.data = currentPage;
+        return new TableData<Clear>() { Items = currentPage, TotalItems = filteredList.Count };
     }
 
 

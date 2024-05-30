@@ -1,9 +1,11 @@
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.Quest;
+using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Story;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
-using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace DragaliaAPI.Test.Controllers;
 
@@ -37,6 +39,16 @@ public class QuestControllerTest
     [Fact]
     public async Task ReadStory_ProducesExpectedResponse()
     {
+        EntityResult entityResult =
+            new()
+            {
+                NewGetEntityList = new List<AtgenDuplicateEntityList>()
+                {
+                    new() { EntityType = EntityTypes.Dragon, EntityId = (int)Dragons.BronzeFafnir },
+                    new() { EntityType = EntityTypes.Chara, EntityId = (int)Charas.Ilia }
+                }
+            };
+
         this.mockStoryService.Setup(x => x.ReadStory(StoryTypes.Quest, 1))
             .ReturnsAsync(
                 new List<AtgenBuildEventRewardEntityList>()
@@ -56,6 +68,7 @@ public class QuestControllerTest
                     }
                 }
             );
+        this.mockStoryService.Setup(x => x.GetEntityResult()).Returns(entityResult);
 
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
             .ReturnsAsync(new UpdateDataList());
@@ -71,18 +84,7 @@ public class QuestControllerTest
             .BeEquivalentTo(
                 new QuestReadStoryResponse()
                 {
-                    EntityResult = new()
-                    {
-                        NewGetEntityList = new List<AtgenDuplicateEntityList>()
-                        {
-                            new()
-                            {
-                                EntityType = EntityTypes.Dragon,
-                                EntityId = (int)Dragons.BronzeFafnir
-                            },
-                            new() { EntityType = EntityTypes.Chara, EntityId = (int)Charas.Ilia }
-                        }
-                    },
+                    EntityResult = entityResult,
                     UpdateDataList = new(),
                     QuestStoryRewardList = new List<AtgenQuestStoryRewardList>()
                     {

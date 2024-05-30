@@ -5,7 +5,6 @@ PhotonRealtimeDotnetSdk/**/*
 .run
 .env
 test_coverage.json
-launchSettings.json
 appsettings.Development.json
 test_coverage.json
 .run

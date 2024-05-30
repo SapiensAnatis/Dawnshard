@@ -1,7 +1,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using DragaliaAPI.Shared.Features.Presents;
-using DragaliaAPI.Shared.MasterAsset.Models.Summon;
+using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Present;
@@ -81,7 +81,7 @@ public class PresentTest : TestFixture
                 }
             );
 
-        response.Data.PresentList.Should().BeInAscendingOrder(x => x.PresentId);
+        response.Data.PresentList.Should().BeInDescendingOrder(x => x.PresentId);
     }
 
     [Fact]
@@ -139,7 +139,7 @@ public class PresentTest : TestFixture
                 }
             );
 
-        response.Data.PresentLimitList.Should().BeInAscendingOrder(x => x.PresentId);
+        response.Data.PresentLimitList.Should().BeInDescendingOrder(x => x.PresentId);
     }
 
     [Fact]
@@ -174,7 +174,7 @@ public class PresentTest : TestFixture
                 new PresentGetPresentListRequest()
                 {
                     IsLimit = false,
-                    PresentId = (ulong)presents[0].PresentId
+                    PresentId = firstResponse.Data.PresentList.Last().PresentId
                 }
             );
 
@@ -455,6 +455,52 @@ public class PresentTest : TestFixture
             .Data.UpdateDataList.CharaList.Should()
             .ContainSingle()
             .And.Contain(x => x.CharaId == Charas.Addis);
+        response
+            .Data.UpdateDataList.UnitStoryList.Should()
+            .ContainSingle()
+            .And.Contain(x =>
+                x.UnitStoryId == MasterAsset.CharaStories[(int)Charas.Addis].StoryIds[0]
+            );
+    }
+
+    [Fact]
+    public async Task Receive_DuplicateDragon_GrantsBoth()
+    {
+        List<DbPlayerPresent> presents =
+            new()
+            {
+                new()
+                {
+                    ViewerId = ViewerId,
+                    EntityType = EntityTypes.Dragon,
+                    EntityId = (int)Dragons.Homura,
+                },
+                new()
+                {
+                    ViewerId = ViewerId,
+                    EntityType = EntityTypes.Dragon,
+                    EntityId = (int)Dragons.Homura,
+                },
+            };
+
+        await this.AddRangeToDatabase(presents);
+
+        IEnumerable<ulong> presentIdList = presents.Select(x => (ulong)x.PresentId).ToList();
+
+        DragaliaResponse<PresentReceiveResponse> response =
+            await this.Client.PostMsgpack<PresentReceiveResponse>(
+                $"{Controller}/receive",
+                new PresentReceiveRequest() { PresentIdList = presentIdList }
+            );
+
+        response.Data.ReceivePresentIdList.Should().BeEquivalentTo(presentIdList);
+
+        response.Data.UpdateDataList.DragonList.Should().HaveCount(2);
+
+        response
+            .Data.UpdateDataList.DragonReliabilityList.Should()
+            .ContainSingle()
+            .And.Contain(x => x.DragonId == Dragons.Homura);
     }
 
     [Fact]
@@ -610,7 +656,7 @@ public class PresentTest : TestFixture
                 $"{Controller}/get_history_list",
                 new PresentGetHistoryListRequest()
                 {
-                    PresentHistoryId = (ulong)presentHistories[0].Id
+                    PresentHistoryId = (ulong)presentHistories[99].Id
                 }
             );
 

@@ -1,4 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Dungeon;
@@ -267,5 +269,46 @@ public class DungeonSkipTest : TestFixture
                     QuestBonusStackTime = DateTimeOffset.UnixEpoch
                 }
             );
+    }
+
+    [Fact]
+    public async Task DungeonSkipStart_CompletesDailyMissions()
+    {
+        int questId = 100010201; // Save the Paladyn (Hard)
+        int playCount = 5;
+        int clear5QuestsMission = 15070501;
+
+        await this.AddRangeToDatabase(
+            [
+                new DbQuest()
+                {
+                    ViewerId = ViewerId,
+                    QuestId = questId,
+                    State = 3
+                },
+                new DbPlayerMission()
+                {
+                    Id = clear5QuestsMission,
+                    Type = MissionType.Daily,
+                    State = MissionState.InProgress,
+                }
+            ]
+        );
+
+        DragaliaResponse<DungeonSkipStartResponse> response =
+            await this.Client.PostMsgpack<DungeonSkipStartResponse>(
+                $"{Endpoint}/start",
+                new DungeonSkipStartRequest()
+                {
+                    PartyNo = 1,
+                    PlayCount = playCount,
+                    SupportViewerId = 1000,
+                    QuestId = questId
+                }
+            );
+
+        response
+            .Data.UpdateDataList.MissionNotice.DailyMissionNotice.NewCompleteMissionIdList.Should()
+            .Contain(clear5QuestsMission);
     }
 }

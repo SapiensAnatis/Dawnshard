@@ -18,7 +18,6 @@ public class GenericRewardHandler(
     ILogger<RewardService> logger,
     IInventoryRepository inventoryRepository,
     IUserDataRepository userDataRepository,
-    IUnitRepository unitRepository,
     IFortRepository fortRepository,
     IEventRepository eventRepository,
     IDmodeRepository dmodeRepository,
@@ -28,9 +27,7 @@ public class GenericRewardHandler(
 {
     public IReadOnlyList<EntityTypes> SupportedTypes { get; } =
         ImmutableArray.Create(
-            EntityTypes.Chara,
             EntityTypes.Item,
-            EntityTypes.Dragon,
             EntityTypes.Dew,
             EntityTypes.HustleHammer,
             EntityTypes.Rupies,
@@ -57,14 +54,8 @@ public class GenericRewardHandler(
     {
         switch (entity.Type)
         {
-            case EntityTypes.Chara:
-                return await this.RewardCharacter(entity);
             case EntityTypes.Item:
                 await itemRepository.AddItemQuantityAsync((UseItem)entity.Id, entity.Quantity);
-                break;
-            case EntityTypes.Dragon:
-                for (int i = 0; i < entity.Quantity; i++)
-                    await unitRepository.AddDragons((Dragons)entity.Id);
                 break;
             case EntityTypes.Dew:
                 await userDataRepository.UpdateDewpoint(entity.Quantity);
@@ -120,28 +111,6 @@ public class GenericRewardHandler(
                 return new(RewardGrantResult.FailError);
         }
 
-        return new(RewardGrantResult.Added);
-    }
-
-    private async Task<GrantReturn> RewardCharacter(Entity entity)
-    {
-        if (entity.Type != EntityTypes.Chara)
-            throw new ArgumentException("Entity was not a character", nameof(entity));
-
-        Charas chara = (Charas)entity.Id;
-
-        if (await unitRepository.FindCharaAsync(chara) is not null)
-        {
-            // Is it the correct behaviour to discard gifted characters?
-            // Not sure -- never had characters in my gift box
-            logger.LogDebug("Discarded character entity: {@entity}.", entity);
-            return new(RewardGrantResult.Discarded);
-        }
-
-        // TODO: Support EntityLevel/LimitBreak/etc here
-
-        logger.LogDebug("Granted new character entity: {@entity}", entity);
-        await unitRepository.AddCharas(chara);
         return new(RewardGrantResult.Added);
     }
 }
