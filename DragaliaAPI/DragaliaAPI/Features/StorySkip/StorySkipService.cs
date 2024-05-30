@@ -102,7 +102,7 @@ public class StorySkipService(
                     fortsToUpdate.Count + 1,
                     (int)fortPlant
                 );
-                
+
                 missionProgressionService.EnqueueEvent(
                     MissionCompleteType.FortPlantLevelUp,
                     total: fortConfig.Level,
@@ -156,7 +156,7 @@ public class StorySkipService(
                         LastDailyResetTime = DateTimeOffset.UnixEpoch
                     };
                 newUserQuests.Add(userQuest);
-                
+
                 missionProgressionService.OnQuestCleared(
                     questData.Id,
                     questData.Gid,
@@ -172,7 +172,7 @@ public class StorySkipService(
                 if (isFirstClear)
                 {
                     wyrmite += 10;
-                    
+
                     missionProgressionService.OnQuestCleared(
                         questData.Id,
                         questData.Gid,
@@ -231,8 +231,10 @@ public class StorySkipService(
         List<DbPlayerStoryState> newUserStories = new();
         foreach (QuestStory questStory in QuestStories)
         {
-            DbPlayerStoryState? storyState = userStories.FirstOrDefault(x => x.StoryId == questStory.Id);
-            
+            DbPlayerStoryState? storyState = userStories.FirstOrDefault(x =>
+                x.StoryId == questStory.Id
+            );
+
             if (storyState is null)
             {
                 wyrmite += 25;
@@ -245,13 +247,13 @@ public class StorySkipService(
                         State = StoryState.Read
                     };
                 newUserStories.Add(userStory);
-                
+
                 missionProgressionService.OnQuestStoryCleared(questStory.Id);
             }
             else if (storyState.State != StoryState.Read)
             {
                 storyState.State = StoryState.Read;
-                
+
                 missionProgressionService.OnQuestStoryCleared(questStory.Id);
             }
         }
