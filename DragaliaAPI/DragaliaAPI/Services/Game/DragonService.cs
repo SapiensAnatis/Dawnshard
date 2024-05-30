@@ -3,11 +3,10 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
-using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
-using DragaliaAPI.Helpers;
+using DragaliaAPI.Features.Story;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -27,17 +26,17 @@ public partial class DragonService(
     IPaymentService paymentService,
     IRewardService rewardService,
     IMissionProgressionService missionProgressionService,
-    IResetHelper resetHelper,
+    TimeProvider timeProvider,
     ApiContext apiContext
 ) : IDragonService
 {
     public async Task<DragonGetContactDataResponse> DoDragonGetContactData()
     {
-        DateTimeOffset reset = resetHelper.LastDailyReset;
+        DateTimeOffset reset = timeProvider.GetLastDailyReset();
         DayOfWeek dayOfWeek = reset.DayOfWeek;
 
         DragonGifts rotatingGift = DragonConstants.RotatingGifts[
-            (int)resetHelper.LastDailyReset.DayOfWeek
+            (int)timeProvider.GetLastDailyReset().DayOfWeek
         ];
 
         Log.CurrentRotatingGift(logger, reset, dayOfWeek, rotatingGift);
@@ -89,7 +88,7 @@ public partial class DragonService(
                 ? DragonConstants.BondXpLimitsPuppy
                 : DragonConstants.BondXpLimits;
 
-        dragonReliability.LastContactTime = resetHelper.UtcNow;
+        dragonReliability.LastContactTime = timeProvider.GetUtcNow();
 
         while (enumerator.MoveNext() && dragonReliability.Exp < bondXpLimits[^1])
         {

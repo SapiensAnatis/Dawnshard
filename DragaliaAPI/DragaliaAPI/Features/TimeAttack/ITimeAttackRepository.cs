@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 
 namespace DragaliaAPI.Features.TimeAttack;
 

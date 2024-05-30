@@ -1,10 +1,12 @@
 ﻿@using DragaliaAPI.Authentication
 @{
-    string? darkModeCookie = this.HttpContext?.Request.Cookies.FirstOrDefault(x => x.Key == "darkMode").Value;
-    bool? isDarkMode = null;
+    string? darkModeCookie = this.HttpContext?.Request.Cookies.FirstOrDefault(x => x.Key == Cookies.DarkMode).Value;
 
-    if (bool.TryParse(darkModeCookie, out bool darkModeParsed))
-        isDarkMode = darkModeParsed;
+    bool? isDarkMode = null;
+    if (bool.TryParse(darkModeCookie, out bool isDarkModeParsed))
+    {
+        isDarkMode = isDarkModeParsed;
+    }
 
     HttpRequestState httpRequestState = new() 
     {
@@ -50,14 +52,14 @@
 <script>
     window.blazorExtensions = {
         writeCookie: function (name, value) {
-            document.cookie = `${name}=${value}; SameSite=Lax`;
+            document.cookie = `${name}=${value}; SameSite=Lax; path=/`;
         },
         scrollToTop: function () {
             document.documentElement.scrollTop = 0;
         },
         getHash: function () {
             return window.location.hash
-        }    
+        }
     }
 </script>
 

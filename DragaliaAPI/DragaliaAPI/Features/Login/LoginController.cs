@@ -1,8 +1,9 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Login.Actions;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Helpers;
+using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -13,30 +14,18 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Features.Login;
 
 [Route("login")]
-[Consumes("application/octet-stream")]
-[Produces("application/octet-stream")]
-[ApiController]
 [BypassDailyReset]
 public class LoginController(
     IUserDataRepository userDataRepository,
     IUpdateDataService updateDataService,
     IEnumerable<IDailyResetAction> resetActions,
-    IResetHelper resetHelper,
     ILogger<LoginController> logger,
-    ILoginBonusService loginBonusService,
+    ILoginService loginService,
     IRewardService rewardService,
-    TimeProvider dateTimeProvider
+    TimeProvider dateTimeProvider,
+    IDragonService dragonService
 ) : DragaliaControllerBase
 {
-    private readonly IUserDataRepository userDataRepository = userDataRepository;
-    private readonly IUpdateDataService updateDataService = updateDataService;
-    private readonly IEnumerable<IDailyResetAction> resetActions = resetActions;
-    private readonly IResetHelper resetHelper = resetHelper;
-    private readonly ILogger<LoginController> logger = logger;
-    private readonly ILoginBonusService loginBonusService = loginBonusService;
-    private readonly IRewardService rewardService = rewardService;
-    private readonly TimeProvider dateTimeProvider = dateTimeProvider;
-
     [HttpPost]
     public IActionResult Login()
     {
@@ -56,30 +45,30 @@ public class LoginController(
             await userDataRepository.UserData.FirstOrDefaultAsync(cancellationToken)
             ?? throw new DragaliaException(ResultCode.CommonDataNotFoundError);
 
-        if (userData.LastLoginTime < resetHelper.LastDailyReset)
+        if (userData.LastLoginTime < dateTimeProvider.GetLastDailyReset())
         {
             foreach (IDailyResetAction action in resetActions)
             {
-                this.logger.LogDebug("Applying daily reset action: {$action}", action);
+                logger.LogInformation("Applying daily reset action: {$action}", action);
                 await action.Apply();
             }
 
-            resp.LoginBonusList = await this.loginBonusService.RewardLoginBonus();
+            resp.LoginBonusList = await loginService.RewardLoginBonus();
         }
 
-        userData.LastLoginTime = this.dateTimeProvider.GetUtcNow();
+        userData.LastLoginTime = dateTimeProvider.GetUtcNow();
+
+        resp.MonthlyWallReceiveList = await loginService.GetWallMonthlyReceiveList();
+        resp.DragonContactFreeGiftCount = await dragonService.GetFreeGiftCount();
 
         resp.PenaltyData = new AtgenPenaltyData();
-        resp.DragonContactFreeGiftCount = 1;
-        resp.LoginLotteryRewardList = Enumerable.Empty<AtgenLoginLotteryRewardList>();
-        resp.ExchangeSummomPointList = Enumerable.Empty<AtgenExchangeSummomPointList>();
-        resp.MonthlyWallReceiveList = Enumerable.Empty<AtgenMonthlyWallReceiveList>();
 
-        // NOTE: This may cause issues on debug builds but should be fine on the actual server.
-        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
+        // NOTE: Cancelling the request + savefile updates may cause issues with request loops on debug builds,
+        // but it should be fine on the actual server.
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
-        resp.EntityResult = this.rewardService.GetEntityResult();
-        resp.ServerTime = this.dateTimeProvider.GetUtcNow();
+        resp.EntityResult = rewardService.GetEntityResult();
+        resp.ServerTime = dateTimeProvider.GetUtcNow();
 
         return this.Ok(resp);
     }

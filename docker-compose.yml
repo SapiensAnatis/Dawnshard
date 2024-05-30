@@ -17,15 +17,15 @@ services:
       - PostgresOptions__Database=$POSTGRES_DB
     ports:
       - "80:8080"
-      - "5000:8080"
     links:
       - postgres
     env_file:
       - .env
+    profiles: ["dragaliaapi"]
 
   photonstatemanager:
     hostname: photonstatemanager
-    image: ${DOCKER_REGISTRY-}photonstatemanager
+    image: photonstatemanager
     build:
         context: .
         dockerfile: PhotonStateManager/DragaliaAPI.Photon.StateManager/Dockerfile
@@ -33,8 +33,7 @@ services:
       - "5001:8080"
     env_file:
       - .env
-    profiles:
-      - photon
+    profiles: ["photonstatemanager"]
 
   postgres:
     hostname: postgres
@@ -52,13 +51,3 @@ services:
     ports:
       - "6379:6379"
       - "8001:8001"
-
-  #seq:
-  #  image: datalust/seq:latest
-  #  ports:
-  #    - 5340:80
-  #    - 5341:5341
-  #  environment:
-  #    ACCEPT_EULA: "Y"
-  #  volumes:
-  #    - logs:/data

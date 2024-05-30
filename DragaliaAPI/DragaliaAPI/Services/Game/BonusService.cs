@@ -53,14 +53,14 @@ public class BonusService(
             DragonTimeBonus = new()
             {
 #if CHEATING
-                dragon_time_bonus = 20
+                DragonTimeBonus = 20
 #endif
             },
             AllBonus = new()
             {
 #if CHEATING
-                attack = 100,
-                hp = 100
+                Attack = 100,
+                Hp = 100
 #endif
             },
         };
@@ -118,7 +118,7 @@ public class BonusService(
             result[(UnitElement)d.EffType1].Hp += d.EffArgs1;
             result[(UnitElement)d.EffType1].Attack += d.EffArgs2;
 #if CHEATING
-            result[(UnitElement)d.EffType1].attack += 100;
+            result[(UnitElement)d.EffType1].Attack += 100;
 #endif
 
             if (d.EffType2 != 0)
@@ -127,7 +127,7 @@ public class BonusService(
                 result[(UnitElement)d.EffType2].Attack += d.EffArgs2;
 
 #if CHEATING
-                result[(UnitElement)d.EffType2].attack += 100;
+                result[(UnitElement)d.EffType2].Attack += 100;
 #endif
             }
         }
@@ -156,7 +156,7 @@ public class BonusService(
             result[(WeaponTypes)d.EffType1].Hp += d.EffArgs1;
             result[(WeaponTypes)d.EffType1].Attack += d.EffArgs2;
 #if CHEATING
-            result[(WeaponTypes)d.EffType1].attack += 100;
+            result[(WeaponTypes)d.EffType1].Attack += 100;
 #endif
 
             if (d.EffType2 != 0)
@@ -164,7 +164,7 @@ public class BonusService(
                 result[(WeaponTypes)d.EffType2].Hp += d.EffArgs1;
                 result[(WeaponTypes)d.EffType2].Attack += d.EffArgs2;
 #if CHEATING
-                result[(WeaponTypes)d.EffType2].attack += 100;
+                result[(WeaponTypes)d.EffType2].Attack += 100;
 #endif
             }
         }
@@ -193,7 +193,7 @@ public class BonusService(
                 result[(UnitElement)d.EffType1].Hp += d.EffArgs1;
                 result[(UnitElement)d.EffType1].Attack += d.EffArgs2;
 #if CHEATING
-                result[(UnitElement)d.EffType1].attack += 100;
+                result[(UnitElement)d.EffType1].Attack += 100;
 #endif
 
                 if (d.EffType2 != 0)
@@ -201,7 +201,7 @@ public class BonusService(
                     result[(UnitElement)d.EffType2].Hp += d.EffArgs1;
                     result[(UnitElement)d.EffType2].Attack += d.EffArgs2;
 #if CHEATING
-                    result[(UnitElement)d.EffType2].attack += 100;
+                    result[(UnitElement)d.EffType2].Attack += 100;
 #endif
                 }
             }
@@ -209,7 +209,7 @@ public class BonusService(
             {
                 result[(UnitElement)d.EffType1].DragonBonus += d.EffArgs1;
 #if CHEATING
-                result[(UnitElement)d.EffType1].dragon_bonus += 100;
+                result[(UnitElement)d.EffType1].DragonBonus += 100;
 #endif
                 // No facility gives dragon bonus to two elemental types
             }
@@ -238,7 +238,7 @@ public class BonusService(
             result[w.WeaponType].Hp += w.WeaponPassiveEffHp;
             result[w.WeaponType].Attack += w.WeaponPassiveEffAtk;
 #if CHEATING
-            result[w.WeaponType].attack += 100;
+            result[w.WeaponType].Attack += 100;
 #endif
         }
 

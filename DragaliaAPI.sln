@@ -7,15 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI", "DragaliaAPI\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Test", "DragaliaAPI\DragaliaAPI.Test\DragaliaAPI.Test.csproj", "{A1E6C76A-4D4F-427D-80AF-CF289CBBAF00}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{6E4BCC4D-1998-4135-A474-681EC6E6AF57}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BC72B633-A158-4169-9B47-3CB9C689A57E}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		.env = .env
-		.env.default = .env.default
 		.gitignore = .gitignore
-		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 		.config\dotnet-tools.json = .config\dotnet-tools.json
 		global.json = global.json
@@ -33,18 +28,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Database.Test",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{1A23D473-87C4-40FB-8DF0-43F4B0FE7414}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-manual.yaml = .github\workflows\build-manual.yaml
 		.github\workflows\build.yaml = .github\workflows\build.yaml
 		.github\workflows\deploy.yaml = .github\workflows\deploy.yaml
 		.github\workflows\integration-test.yaml = .github\workflows\integration-test.yaml
 		.github\workflows\lint.yaml = .github\workflows\lint.yaml
-		.github\workflows\missiondesigner.yaml = .github\workflows\missiondesigner.yaml
 		.github\workflows\publish-api.yaml = .github\workflows\publish-api.yaml
 		.github\workflows\publish-statemanager.yaml = .github\workflows\publish-statemanager.yaml
 		.github\workflows\test-api.yaml = .github\workflows\test-api.yaml
 		.github\workflows\test-report.yaml = .github\workflows\test-report.yaml
 		.github\workflows\test-statemanager.yaml = .github\workflows\test-statemanager.yaml
 		.github\workflows\test.yaml = .github\workflows\test.yaml
-		.github\workflows\build-manual.yaml = .github\workflows\build-manual.yaml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Test.Utils", "DragaliaAPI\DragaliaAPI.Test.Utils\DragaliaAPI.Test.Utils.csproj", "{41916B7C-6304-4504-99C0-B24D23982F7E}"
@@ -54,6 +48,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Photon.Plugin", "PhotonPlugin\DragaliaAPI.Photon.Plugin\DragaliaAPI.Photon.Plugin.csproj", "{D9AC51A5-38F6-4DD1-8839-9FE881396A6B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PhotonStateManager", "PhotonStateManager", "{8B4B2FE9-B1FC-44FC-BC49-0E277731A68A}"
+	ProjectSection(SolutionItems) = preProject
+		PhotonStateManager\Directory.Build.props = PhotonStateManager\Directory.Build.props
+		PhotonStateManager\README.md = PhotonStateManager\README.md
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Integration.Test", "DragaliaAPI\DragaliaAPI.Integration.Test\DragaliaAPI.Integration.Test.csproj", "{CA0AE7C5-2742-4FC9-B668-BC7459E4BCE5}"
 EndProject
@@ -63,7 +61,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Photon.StateMan
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".husky", ".husky", "{7D333F35-F74C-4A63-AB6E-5F0EE4590ADB}"
 	ProjectSection(SolutionItems) = preProject
-		.husky\pre-commit = .husky\pre-commit
 		.husky\task-runner.json = .husky\task-runner.json
 	EndProjectSection
 EndProject
@@ -74,10 +71,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{F6545B66-0303-4E4C-B872-7E89091885A8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PhotonPlugin", "PhotonPlugin", "{5A97773C-C23E-4CFE-8B1F-15D8244D2134}"
+	ProjectSection(SolutionItems) = preProject
+		PhotonPlugin\Directory.Build.props = PhotonPlugin\Directory.Build.props
+		PhotonPlugin\README.md = PhotonPlugin\README.md
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DragaliaAPI", "DragaliaAPI", "{F0C76530-C14A-4601-829B-EE0F4C7E24E6}"
 	ProjectSection(SolutionItems) = preProject
 		DragaliaAPI\Directory.Build.props = DragaliaAPI\Directory.Build.props
+		DragaliaAPI\README.md = DragaliaAPI\README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.MasterAssetConverter", "DragaliaAPI\DragaliaAPI.MasterAssetConverter\DragaliaAPI.MasterAssetConverter.csproj", "{F0DFB899-ADC2-407E-AB32-647BA1C4122C}"
@@ -86,7 +88,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{18AB580B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Shared.SourceGenerator", "DragaliaAPI\DragaliaAPI.Shared.SourceGenerator\DragaliaAPI.Shared.SourceGenerator.csproj", "{FD0F2BDF-715C-417D-9059-1F2EF8FA8901}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragaliaAPI.Shared.SourceGenerator.Test", "DragaliaAPI\DragaliaAPI.Shared.SourceGenerator.Test\DragaliaAPI.Shared.SourceGenerator.Test.csproj", "{517FBE68-58A1-48DB-A798-13D6BDECF623}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Shared.SourceGenerator.Test", "DragaliaAPI\DragaliaAPI.Shared.SourceGenerator.Test\DragaliaAPI.Shared.SourceGenerator.Test.csproj", "{517FBE68-58A1-48DB-A798-13D6BDECF623}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{AB163A1E-1339-4CFC-82AD-E59ECFADA3C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -102,10 +106,6 @@ Global
 		{A1E6C76A-4D4F-427D-80AF-CF289CBBAF00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1E6C76A-4D4F-427D-80AF-CF289CBBAF00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1E6C76A-4D4F-427D-80AF-CF289CBBAF00}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6E4BCC4D-1998-4135-A474-681EC6E6AF57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6E4BCC4D-1998-4135-A474-681EC6E6AF57}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6E4BCC4D-1998-4135-A474-681EC6E6AF57}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{6E4BCC4D-1998-4135-A474-681EC6E6AF57}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{3B1A86CE-A656-453B-BC3F-EA42DF9E3FC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3B1A86CE-A656-453B-BC3F-EA42DF9E3FC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B1A86CE-A656-453B-BC3F-EA42DF9E3FC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -166,6 +166,10 @@ Global
 		{517FBE68-58A1-48DB-A798-13D6BDECF623}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{517FBE68-58A1-48DB-A798-13D6BDECF623}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{517FBE68-58A1-48DB-A798-13D6BDECF623}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB163A1E-1339-4CFC-82AD-E59ECFADA3C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB163A1E-1339-4CFC-82AD-E59ECFADA3C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB163A1E-1339-4CFC-82AD-E59ECFADA3C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB163A1E-1339-4CFC-82AD-E59ECFADA3C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using JetBrains.Annotations;
 
 namespace DragaliaAPI.Features.Reward;
 
@@ -13,6 +14,7 @@ public interface IRewardService
     /// <returns>
     /// An enum indicating the result of the add operation.
     /// </returns>
+    [MustUseReturnValue]
     Task<RewardGrantResult> GrantReward(Entity entity);
 
     /// <summary>
@@ -22,6 +24,7 @@ public interface IRewardService
     /// <returns>The task.</returns>
     Task GrantRewards(IEnumerable<Entity> entities);
 
+    [MustUseReturnValue]
     Task<(RewardGrantResult Result, DbTalisman? Talisman)> GrantTalisman(
         Talismans id,
         int abilityId1,
@@ -32,5 +35,11 @@ public interface IRewardService
     );
 
     EntityResult GetEntityResult();
+
     IEnumerable<ConvertedEntity> GetConvertedEntityList();
+
+    Task<IDictionary<TKey, RewardGrantResult>> BatchGrantRewards<TKey>(
+        IDictionary<TKey, Entity> entities
+    )
+        where TKey : struct;
 }

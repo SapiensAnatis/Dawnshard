@@ -78,6 +78,9 @@ public class SavefileImportTest : TestFixture
             await this.Client.PostMsgpack<LoadIndexResponse>("load/index")
         ).Data;
 
+        storedSavefile.UserData.Exp.Should().Be(savefile.UserData.Exp + 69990); // Exp rewarded from V22Update
+        storedSavefile.UserData.Level.Should().Be(savefile.UserData.Level + 1); // Level diffenece due to exp rewarded from V22Update
+
         storedSavefile
             .Should()
             .BeEquivalentTo(
@@ -107,6 +110,9 @@ public class SavefileImportTest : TestFixture
                     );
                     opts.Excluding(x => x.UserData!.Level);
                     opts.Excluding(x => x.UserData!.Crystal);
+                    opts.Excluding(x => x.UserData!.Exp);
+                    opts.Excluding(x => x.UserData!.LastStaminaSingleUpdateTime);
+                    opts.Excluding(x => x.UserData!.LastStaminaMultiUpdateTime);
                     opts.Excluding(x => x.TreasureTradeAllList);
                     opts.Excluding(x => x.MultiServer);
                     opts.Excluding(x => x.MissionNotice);
@@ -152,7 +158,7 @@ public class SavefileImportTest : TestFixture
     [Fact]
     public async Task Import_PropertiesMappedCorrectly()
     {
-        HttpContent content = PrepareSavefileRequest();
+        HttpContent content = PrepareSavefileRequest("endgame_savefile.json");
         await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
 
         this.ApiContext.PlayerStoryState.Single(x =>
@@ -177,7 +183,7 @@ public class SavefileImportTest : TestFixture
 
         this.ApiContext.ChangeTracker.Clear();
 
-        HttpContent content = PrepareSavefileRequest();
+        HttpContent content = PrepareSavefileRequest("endgame_savefile.json");
         await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
 
         this.ApiContext.Emblems.AsNoTracking()
@@ -195,7 +201,7 @@ public class SavefileImportTest : TestFixture
                 x.ViewerId == this.ViewerId && x.DragonGiftId == DragonGifts.CompellingBook
             );
 
-        HttpContent content = PrepareSavefileRequest();
+        HttpContent content = PrepareSavefileRequest("endgame_savefile.json");
         await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
 
         this.ApiContext.PlayerDragonGifts.Should()
@@ -211,7 +217,7 @@ public class SavefileImportTest : TestFixture
             new() { ViewerId = this.ViewerId, Progress = 1, }
         );
 
-        HttpContent content = PrepareSavefileRequest();
+        HttpContent content = PrepareSavefileRequest("endgame_savefile.json");
         await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
 
         this.ApiContext.CompletedDailyMissions.Should()
@@ -221,33 +227,42 @@ public class SavefileImportTest : TestFixture
     [Fact]
     public async Task Import_IsIdempotent()
     {
-        long viewerId = this.ApiContext.PlayerUserData.Single(x => x.ViewerId == ViewerId).ViewerId;
-
-        HttpContent content = PrepareSavefileRequest();
+        HttpContent content = PrepareSavefileRequest("endgame_savefile.json");
 
         HttpResponseMessage importResponse = await this.Client.PostAsync(
-            $"savefile/import/{viewerId}",
+            $"savefile/import/{this.ViewerId}",
             content
         );
         importResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         HttpResponseMessage importResponse2 = await this.Client.PostAsync(
-            $"savefile/import/{viewerId}",
+            $"savefile/import/{this.ViewerId}",
             content
         );
         importResponse2.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
 
-    private static HttpContent PrepareSavefileRequest()
+    [Fact]
+    public async Task Import_ExcessDragonCount_LimitsToPlayerDragonStorage()
     {
-        string savefileJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
+        // Savefile has 556 dragons and a (manipulated) max storage of 2000. Tests hard cap of 500.
+        HttpContent content = PrepareSavefileRequest("savefile_excess_dragons.json");
 
-        LoadIndexResponse savefile = JsonSerializer
-            .Deserialize<DragaliaResponse<LoadIndexResponse>>(
-                savefileJson,
-                ApiJsonOptions.Instance
-            )!
-            .Data;
+        HttpResponseMessage importResponse = await this.Client.PostAsync(
+            $"savefile/import/{this.ViewerId}",
+            content
+        );
+        importResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        this.ApiContext.PlayerDragonData.Count(x => x.ViewerId == this.ViewerId).Should().Be(500);
+        this.ApiContext.PlayerUserData.First(x => x.ViewerId == this.ViewerId)
+            .MaxDragonQuantity.Should()
+            .Be(500);
+    }
+
+    private static HttpContent PrepareSavefileRequest(string path)
+    {
+        string savefileJson = File.ReadAllText(Path.Join("Data", path));
 
         HttpContent content = new StringContent(savefileJson);
         content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");

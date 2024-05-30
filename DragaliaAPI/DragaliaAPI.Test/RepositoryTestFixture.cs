@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
@@ -47,8 +46,7 @@ public class RepositoryTestFixture : IDisposable
                 ).CreateMapper(),
                 mockLogger.Object,
                 IdentityTestUtils.MockPlayerDetailsService.Object,
-                Enumerable.Empty<ISavefileUpdate>(),
-                mockUnitRepository.Object
+                []
             );
         savefileService.Create().Wait();
 

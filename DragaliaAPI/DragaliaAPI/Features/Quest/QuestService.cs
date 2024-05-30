@@ -3,7 +3,6 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
@@ -18,7 +17,6 @@ public class QuestService(
     ILogger<QuestService> logger,
     IQuestRepository questRepository,
     TimeProvider timeProvider,
-    IResetHelper resetHelper,
     IQuestCacheService questCacheService,
     IRewardService rewardService,
     IMissionProgressionService missionProgressionService
@@ -45,7 +43,7 @@ public class QuestService(
 
         quest.PlayCount += session.PlayCount;
 
-        if (resetHelper.LastDailyReset > quest.LastDailyResetTime)
+        if (timeProvider.GetLastDailyReset() > quest.LastDailyResetTime)
         {
             logger.LogTrace("Resetting daily play count for quest {questId}", questId);
 
@@ -55,7 +53,7 @@ public class QuestService(
 
         quest.DailyPlayCount += playCount;
 
-        if (resetHelper.LastWeeklyReset > quest.LastWeeklyResetTime)
+        if (timeProvider.GetLastWeeklyReset() > quest.LastWeeklyResetTime)
         {
             logger.LogTrace("Resetting weekly play count for quest {questId}", questId);
 
@@ -73,7 +71,7 @@ public class QuestService(
             questId,
             questData.Gid,
             questData.QuestPlayModeType,
-            1,
+            session.PlayCount,
             quest.PlayCount
         );
 
@@ -138,7 +136,7 @@ public class QuestService(
         DbQuestEvent questEvent = await questRepository.GetQuestEventAsync(eventGroupId);
         QuestEvent questEventData = MasterAsset.QuestEvent[eventGroupId];
 
-        if (resetHelper.LastDailyReset > questEvent.LastDailyResetTime)
+        if (timeProvider.GetLastDailyReset() > questEvent.LastDailyResetTime)
         {
             if (questEventData.QuestBonusType == QuestResetIntervalType.Daily)
             {
@@ -151,7 +149,7 @@ public class QuestService(
 
         questEvent.DailyPlayCount += playCount;
 
-        if (resetHelper.LastWeeklyReset > questEvent.LastWeeklyResetTime)
+        if (timeProvider.GetLastWeeklyReset() > questEvent.LastWeeklyResetTime)
         {
             if (questEventData.QuestBonusType == QuestResetIntervalType.Weekly)
             {

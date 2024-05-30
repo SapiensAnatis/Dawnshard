@@ -1,5 +1,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Login;
+using DragaliaAPI.Features.Login.Actions;
+using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -446,6 +448,79 @@ public class LoginTest : TestFixture
         this.ApiContext.PlayerMissions.AsNoTracking()
             .Should()
             .NotContain(x => x.GroupId == starryDragonyuleEventId);
+    }
+
+    [Fact]
+    public async Task LoginIndex_WallNotInitialized_SendsEmptyWallRewardList()
+    {
+        LoginIndexResponse response = (
+            await this.Client.PostMsgpack<LoginIndexResponse>(
+                "login/index",
+                new LoginIndexRequest() { JwsResult = string.Empty }
+            )
+        ).Data;
+
+        response.MonthlyWallReceiveList.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task LoginIndex_WallInitialized_Eligible_SendsRewardAvailable()
+    {
+        await this.AddRangeToDatabase(
+            [
+                new DbPlayerQuestWall() { WallId = WallService.FlameWallId, WallLevel = 10, },
+                new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UnixEpoch }
+            ]
+        );
+
+        LoginIndexResponse response = (
+            await this.Client.PostMsgpack<LoginIndexResponse>(
+                "login/index",
+                new LoginIndexRequest() { JwsResult = string.Empty }
+            )
+        ).Data;
+
+        response
+            .MonthlyWallReceiveList.Should()
+            .ContainSingle()
+            .Which.Should()
+            .BeEquivalentTo(
+                new AtgenMonthlyWallReceiveList()
+                {
+                    QuestGroupId = WallService.WallQuestGroupId,
+                    IsReceiveReward = RewardStatus.Available,
+                }
+            );
+    }
+
+    [Fact]
+    public async Task LoginIndex_WallInitialized_Claimed_SendsRewardReceived()
+    {
+        await this.AddRangeToDatabase(
+            [
+                new DbPlayerQuestWall() { WallId = WallService.FlameWallId, WallLevel = 10, },
+                new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UtcNow }
+            ]
+        );
+
+        LoginIndexResponse response = (
+            await this.Client.PostMsgpack<LoginIndexResponse>(
+                "login/index",
+                new LoginIndexRequest() { JwsResult = string.Empty }
+            )
+        ).Data;
+
+        response
+            .MonthlyWallReceiveList.Should()
+            .ContainSingle()
+            .Which.Should()
+            .BeEquivalentTo(
+                new AtgenMonthlyWallReceiveList()
+                {
+                    QuestGroupId = WallService.WallQuestGroupId,
+                    IsReceiveReward = RewardStatus.Received,
+                }
+            );
     }
 
     [Fact]

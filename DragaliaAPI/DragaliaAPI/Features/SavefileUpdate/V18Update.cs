@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Story;
 using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;

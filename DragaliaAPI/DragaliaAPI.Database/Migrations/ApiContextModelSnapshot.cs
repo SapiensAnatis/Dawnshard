@@ -1854,6 +1854,19 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("TimeAttackPlayers");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWallRewardDate", b =>
+                {
+                    b.Property<long>("ViewerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("LastClaimDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("ViewerId");
+
+                    b.ToTable("WallRewardDates");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWeaponBody", b =>
                 {
                     b.Property<long>("ViewerId")
@@ -2477,6 +2490,17 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("Player");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWallRewardDate", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithOne("WallRewardDate")
+                        .HasForeignKey("DragaliaAPI.Database.Entities.DbWallRewardDate", "ViewerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWeaponBody", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
@@ -2582,6 +2606,8 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("UnitSets");
 
                     b.Navigation("UserData");
+
+                    b.Navigation("WallRewardDate");
 
                     b.Navigation("WeaponBodyList");
 

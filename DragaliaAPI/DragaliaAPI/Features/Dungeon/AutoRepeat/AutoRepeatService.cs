@@ -1,4 +1,3 @@
-using DragaliaAPI.Extensions;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.Definitions.Enums.Dungeon;

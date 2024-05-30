@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Story;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -13,8 +14,8 @@ namespace DragaliaAPI.Features.Summoning;
 public class RedoableSummonController(
     SummonService summonService,
     SummonOddsService summonOddsService,
+    UnitService unitService,
     IStoryRepository storyRepository,
-    IUnitRepository unitRepository,
     ITutorialService tutorialService,
     IUpdateDataService updateDataService,
     IDistributedCache cache
@@ -99,16 +100,23 @@ public class RedoableSummonController(
         );
         prologueStory.State = StoryState.Read;
 
-        IEnumerable<(Charas id, bool isNew)> repositoryCharaOuput = await unitRepository.AddCharas(
-            cachedResult.Where(x => x.EntityType == EntityTypes.Chara).Select(x => (Charas)x.Id)
+        List<Dragons> dragonList = cachedResult
+            .Where(x => x.EntityType == EntityTypes.Dragon)
+            .Select(x => (Dragons)x.Id)
+            .ToList();
+
+        List<Charas> charaList = cachedResult
+            .Where(x => x.EntityType == EntityTypes.Chara)
+            .Select(x => (Charas)x.Id)
+            .ToList();
+
+        IEnumerable<(Charas id, bool isNew)> repositoryCharaOuput = await unitService.AddCharas(
+            charaList
         );
 
-        IEnumerable<(Dragons Id, bool IsNew)> repositoryDragonOutput =
-            await unitRepository.AddDragons(
-                cachedResult
-                    .Where(x => x.EntityType == EntityTypes.Dragon)
-                    .Select(x => (Dragons)x.Id)
-            );
+        IEnumerable<(Dragons Id, bool IsNew)> repositoryDragonOutput = await unitService.AddDragons(
+            dragonList
+        );
 
         UpdateDataList updateData = await updateDataService.SaveChangesAsync(cancellationToken);
 

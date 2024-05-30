@@ -1,6 +1,5 @@
 ﻿using DragaliaAPI.Authentication;
 using DragaliaAPI.Database;
-using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Blazor;
 using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.ClearParty;
@@ -14,27 +13,24 @@ using DragaliaAPI.Features.Emblem;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Item;
-using DragaliaAPI.Features.Login;
+using DragaliaAPI.Features.Login.Actions;
 using DragaliaAPI.Features.Maintenance;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Quest;
-using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Reward.Handlers;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Stamp;
+using DragaliaAPI.Features.Story;
 using DragaliaAPI.Features.StorySkip;
 using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Features.Version;
-using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Features.Zena;
-using DragaliaAPI.Helpers;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
@@ -46,6 +42,7 @@ using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
 using MudBlazor;
 using MudBlazor.Services;
 
@@ -70,7 +67,6 @@ public static class ServiceConfiguration
             .AddScoped<IAuthService, AuthService>()
             .AddScoped<IBonusService, BonusService>()
             .AddScoped<IWeaponService, WeaponService>()
-            .AddScoped<IStoryService, StoryService>()
             .AddScoped<IMatchingService, MatchingService>()
             .AddScoped<IAbilityCrestService, AbilityCrestService>()
             .AddScoped<IHeroParamService, HeroParamService>()
@@ -81,30 +77,29 @@ public static class ServiceConfiguration
             .AddScoped<ISavefileUpdateService, SavefileUpdateService>()
             .AddTransient<PlayerIdentityLoggingMiddleware>();
 
-        services.AddSummoningFeature();
+        services
+            .AddSummoningFeature()
+            .AddRewardFeature()
+            .AddLoginFeature()
+            .AddWallFeature()
+            .AddPresentFeature()
+            .AddQuestFeature()
+            .AddStoryFeature()
+            .AddWebFeature();
 
         services
-            .AddScoped<IRewardService, RewardService>()
             .RegisterMissionServices()
             // Shop Feature
             .AddScoped<IShopRepository, ShopRepository>()
             .AddScoped<IItemSummonService, ItemSummonService>()
             .AddScoped<IPaymentService, PaymentService>()
             .AddScoped<IShopService, ShopService>()
-            // Present feature
-            .AddScoped<IPresentService, PresentService>()
-            .AddScoped<IPresentControllerService, PresentControllerService>()
-            .AddScoped<IPresentRepository, PresentRepository>()
             // Treasure Trade Feature
             .AddScoped<ITradeRepository, TradeRepository>()
             .AddScoped<ITradeService, TradeService>()
             // Fort Feature
             .AddScoped<IFortService, FortService>()
             .AddScoped<IFortRepository, FortRepository>()
-            // Login feature
-            .AddScoped<IResetHelper, ResetHelper>()
-            .AddScoped<ILoginBonusService, LoginBonusService>()
-            .AddScoped<ILoginBonusRepository, LoginBonusRepository>()
             // Dungeon Feature
             .AddScoped<IDungeonService, DungeonService>()
             .AddScoped<IDungeonStartService, DungeonStartService>()
@@ -143,9 +138,6 @@ public static class ServiceConfiguration
             // Emblem feature
             .AddScoped<IEmblemRepository, EmblemRepository>()
             // Quest feature
-            .AddScoped<IQuestService, QuestService>()
-            .AddScoped<IQuestCacheService, QuestCacheService>()
-            .AddScoped<IQuestTreasureService, QuestTreasureService>()
             // Party power feature
             .AddScoped<IPartyPowerService, PartyPowerService>()
             .AddScoped<IPartyPowerRepository, PartyPowerRepository>()
@@ -153,9 +145,6 @@ public static class ServiceConfiguration
             .AddScoped<ICharaService, CharaService>()
             .AddScoped<IResourceVersionService, ResourceVersionService>()
             .AddScoped<ICharaService, CharaService>()
-            // Wall feature
-            .AddScoped<IWallService, WallService>()
-            .AddScoped<IWallRepository, WallRepository>()
             // Zena feature
             .AddScoped<IZenaService, ZenaService>()
             // Story skip feature
@@ -163,11 +152,11 @@ public static class ServiceConfiguration
             // Maintenance feature
             .AddScoped<MaintenanceService>();
 
+        services.AddHandlers();
+
         services.AddScoped<IBlazorIdentityService, BlazorIdentityService>();
 
         services.AddAllOfType<ISavefileUpdate>();
-        services.AddAllOfType<IDailyResetAction>();
-        services.AddAllOfType<IRewardHandler>();
 
         services.AddHttpClient<IBaasApi, BaasApi>();
 
@@ -274,18 +263,22 @@ public static class ServiceConfiguration
         return services;
     }
 
-    public static IServiceCollection ConfigureHangfire(
-        this IServiceCollection serviceCollection,
-        PostgresOptions postgresOptions
-    )
+    public static IServiceCollection ConfigureHangfire(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddHangfire(cfg =>
-            cfg.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-                .UseSimpleAssemblyNameTypeSerializer()
-                .UseRecommendedSerializerSettings()
-                .UsePostgreSqlStorage(pgCfg =>
-                    pgCfg.UseNpgsqlConnection(postgresOptions.GetConnectionString("Hangfire"))
-                )
+        serviceCollection.AddHangfire(
+            (serviceProvider, cfg) =>
+            {
+                PostgresOptions postgresOptions = serviceProvider
+                    .GetRequiredService<IOptions<PostgresOptions>>()
+                    .Value;
+
+                cfg.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                    .UseSimpleAssemblyNameTypeSerializer()
+                    .UseRecommendedSerializerSettings()
+                    .UsePostgreSqlStorage(pgCfg =>
+                        pgCfg.UseNpgsqlConnection(postgresOptions.GetConnectionString("Hangfire"))
+                    );
+            }
         );
 
         serviceCollection.AddHangfireServer();

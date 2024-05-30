@@ -1,19 +1,25 @@
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Database.Test;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Player;
+using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Features.Story;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Logging;
 using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Services;
 
-public class StoryServiceTest
+public class StoryServiceTest : IClassFixture<DbTestFixture>
 {
     private readonly Mock<IStoryRepository> mockStoryRepository;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
@@ -24,31 +30,42 @@ public class StoryServiceTest
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
     private readonly Mock<IRewardService> mockRewardService;
     private readonly Mock<IPaymentService> mockPaymentService;
+    private readonly Mock<IPresentService> mockPresentService;
+    private readonly Mock<IUserService> mockUserService;
+    private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
 
     private readonly IStoryService storyService;
 
-    public StoryServiceTest()
+    public StoryServiceTest(DbTestFixture fixture)
     {
         this.mockStoryRepository = new(MockBehavior.Strict);
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockInventoryRepository = new(MockBehavior.Strict);
         this.mockLogger = new();
         this.mockTutorialService = new(MockBehavior.Strict);
+        this.mockPresentService = new(MockBehavior.Strict);
         this.mockFortRepository = new(MockBehavior.Strict);
         this.mockMissionProgressionService = new(MockBehavior.Strict);
         this.mockRewardService = new(MockBehavior.Strict);
         this.mockPaymentService = new(MockBehavior.Strict);
+        this.mockPresentService = new(MockBehavior.Strict);
+        this.mockPlayerIdentityService = new(MockBehavior.Strict);
+        this.mockUserService = new(MockBehavior.Strict);
 
         this.storyService = new StoryService(
             mockStoryRepository.Object,
             mockLogger.Object,
             mockUserDataRepository.Object,
             mockInventoryRepository.Object,
+            mockPresentService.Object,
             mockTutorialService.Object,
             mockFortRepository.Object,
             mockMissionProgressionService.Object,
             mockRewardService.Object,
-            mockPaymentService.Object
+            mockPaymentService.Object,
+            mockUserService.Object,
+            fixture.ApiContext,
+            mockPlayerIdentityService.Object
         );
     }
 

@@ -1,18 +1,13 @@
-ARG BASE_DOTNET_IMAGE=mcr.microsoft.com/dotnet/aspnet:8.0.3
-
-FROM $BASE_DOTNET_IMAGE AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0.5-jammy-chiseled AS base
+USER app
+EXPOSE 8080
 WORKDIR /app
 
-EXPOSE 8080
-
-FROM mcr.microsoft.com/dotnet/sdk:8.0.203 AS build
-
-ARG CI
-
+FROM mcr.microsoft.com/dotnet/sdk:8.0.300 AS build
 WORKDIR /src
 COPY ["DragaliaAPI/DragaliaAPI.MissionDesigner/DragaliaAPI.MissionDesigner.csproj", "DragaliaAPI/DragaliaAPI.MissionDesigner/"]
 COPY ["DragaliaAPI/DragaliaAPI.MasterAssetConverter/DragaliaAPI.MasterAssetConverter.csproj", "DragaliaAPI/DragaliaAPI.MasterAssetConverter/"]
-COPY ["Directory.Build.props", "."]
+COPY ["DragaliaAPI/Directory.Build.props", "."]
 COPY ["Directory.Packages.props", "."]
 COPY ["nuget.config", "."]
 RUN dotnet restore "DragaliaAPI/DragaliaAPI.MissionDesigner/DragaliaAPI.MissionDesigner.csproj"
@@ -26,6 +21,5 @@ WORKDIR "/src/DragaliaAPI/DragaliaAPI"
 RUN dotnet publish "DragaliaAPI.csproj" -c Release -o /app/publish/ /p:UseAppHost=false
 
 FROM base AS final
-WORKDIR /app
 COPY --from=build /app/publish/ .
 ENTRYPOINT ["dotnet", "DragaliaAPI.dll"]

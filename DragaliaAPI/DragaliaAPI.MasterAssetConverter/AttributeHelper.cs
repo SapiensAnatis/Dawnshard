@@ -1,7 +1,7 @@
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 
-namespace DragaliaAPI.MemoryPack;
+namespace DragaliaAPI.MasterAssetConverter;
 
 public static class AttributeHelper
 {

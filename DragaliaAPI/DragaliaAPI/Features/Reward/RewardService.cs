@@ -10,14 +10,13 @@ namespace DragaliaAPI.Features.Reward;
 public class RewardService(
     ILogger<RewardService> logger,
     IUnitRepository unitRepository,
-    IEnumerable<IRewardHandler> rewardHandlers
+    IEnumerable<IRewardHandler> rewardHandlers,
+    IEnumerable<IBatchRewardHandler> batchRewardHandlers
 ) : IRewardService
 {
-    private readonly List<Entity> discardedEntities = new();
-    private readonly List<Entity> presentEntites = new();
-    private readonly List<Entity> presentLimitEntities = new();
-    private readonly List<Entity> newEntities = new();
-    private readonly List<ConvertedEntity> convertedEntities = new();
+    private readonly List<Entity> newEntities = [];
+    private readonly List<ConvertedEntity> convertedEntities = [];
+    private readonly List<Entity> discardedEntities = [];
 
     public async Task<RewardGrantResult> GrantReward(Entity entity)
     {
@@ -29,43 +28,87 @@ public class RewardService(
 
         logger.LogTrace("Granting reward {@rewardEntity}", entity);
 
-        RewardGrantResult result = await GrantRewardInternal(entity);
+        IRewardHandler handler = this.GetHandler(entity.Type);
 
-        logger.LogTrace("Result: {result}", result);
+        GrantReturn grantReturn = await handler.Grant(entity);
+        await ProcessGrantResult(grantReturn, entity);
 
-        return result;
+        logger.LogTrace("Result: {result}", grantReturn.Result);
+
+        return grantReturn.Result;
     }
 
     public async Task GrantRewards(IEnumerable<Entity> entities)
     {
-        entities = entities.ToList();
-        logger.LogTrace("Granting rewards: {@rewards}", entities);
-
-        if (!entities.TryGetNonEnumeratedCount(out int count))
-            count = 0;
-
-        List<RewardGrantResult> results = new(count);
         foreach (Entity entity in entities)
         {
-            RewardGrantResult result = await GrantRewardInternal(entity);
-            results.Add(result);
-        }
+            IRewardHandler handler = this.GetHandler(entity.Type);
 
-        logger.LogTrace("Results: {@results}", results);
+            GrantReturn grantReturn = await handler.Grant(entity);
+            await ProcessGrantResult(grantReturn, entity);
+        }
     }
 
-    private async Task<RewardGrantResult> GrantRewardInternal(Entity entity)
+    public async Task<IDictionary<TKey, RewardGrantResult>> BatchGrantRewards<TKey>(
+        IDictionary<TKey, Entity> entities
+    )
+        where TKey : struct
     {
-        IRewardHandler handler = this.GetHandler(entity.Type);
-        GrantReturn grantReturn = await handler.Grant(entity);
+        Dictionary<TKey, RewardGrantResult> result = [];
 
+        IEnumerable<(EntityTypes type, Dictionary<TKey, Entity>)> grouping = entities.GroupBy(
+            x => x.Value.Type,
+            (type, group) => (type, group.ToDictionary())
+        );
+
+        foreach ((EntityTypes type, Dictionary<TKey, Entity> dictionary) in grouping)
+        {
+            if (
+                batchRewardHandlers.FirstOrDefault(x => x.SupportedTypes.Contains(type)) is
+                { } batchRewardHandler
+            )
+            {
+                IDictionary<TKey, GrantReturn> batchResult = await batchRewardHandler.GrantRange(
+                    dictionary
+                );
+
+                foreach ((TKey key, GrantReturn grantReturn) in batchResult)
+                {
+                    await ProcessGrantResult(grantReturn, dictionary[key]);
+                    result.Add(key, grantReturn.Result);
+                }
+            }
+            else
+            {
+                IRewardHandler handler = this.GetHandler(type);
+
+                foreach ((TKey key, Entity entity) in dictionary)
+                {
+                    GrantReturn grantReturn = await handler.Grant(entity);
+                    await ProcessGrantResult(grantReturn, entity);
+                    result.Add(key, grantReturn.Result);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private async Task ProcessGrantResult(GrantReturn grantReturn, Entity entity)
+    {
         switch (grantReturn.Result)
         {
             case RewardGrantResult.Added:
                 this.newEntities.Add(entity);
                 break;
             case RewardGrantResult.Converted:
-                ArgumentNullException.ThrowIfNull(grantReturn.ConvertedEntity);
+            {
+                if (grantReturn.ConvertedEntity is null)
+                {
+                    throw new InvalidOperationException(
+                        "RewardGrantResult.Converted was returned, but converted entity was null!"
+                    );
+                }
 
                 this.convertedEntities.Add(
                     new ConvertedEntity(entity, grantReturn.ConvertedEntity)
@@ -74,14 +117,9 @@ public class RewardService(
                     .Grant(grantReturn.ConvertedEntity);
 
                 break;
+            }
             case RewardGrantResult.Discarded:
                 this.discardedEntities.Add(entity);
-                break;
-            case RewardGrantResult.GiftBoxDiscarded:
-                this.presentLimitEntities.Add(entity);
-                break;
-            case RewardGrantResult.GiftBox:
-                this.presentEntites.Add(entity);
                 break;
             case RewardGrantResult.Limit:
                 break;
@@ -89,18 +127,15 @@ public class RewardService(
                 logger.LogError("Granting of entity {@entity} failed.", entity);
                 throw new InvalidOperationException("Failed to grant reward");
             default:
-                throw new ArgumentOutOfRangeException(
-                    string.Empty,
-                    "RewardGrantResult out of range"
+                throw new InvalidOperationException(
+                    $"RewardGrantResult {grantReturn.Result} out of range"
                 );
         }
-
-        return grantReturn.Result;
     }
 
     private IRewardHandler GetHandler(EntityTypes type)
     {
-        IRewardHandler? handler = rewardHandlers.SingleOrDefault(x =>
+        IRewardHandler? handler = rewardHandlers.FirstOrDefault(x =>
             x.SupportedTypes.Contains(type)
         );
 
@@ -156,13 +191,9 @@ public class RewardService(
         {
             NewGetEntityList = newEntities.Select(x => x.ToDuplicateEntityList()),
             ConvertedEntityList = convertedEntities.Select(x => x.ToConvertedEntityList()),
-            OverDiscardEntityList = discardedEntities.Select(x => x.ToBuildEventRewardEntityList()),
-            OverPresentEntityList = this.presentEntites.Select(x =>
+            OverDiscardEntityList = this.discardedEntities.Select(x =>
                 x.ToBuildEventRewardEntityList()
-            ),
-            OverPresentLimitEntityList = this.presentLimitEntities.Select(x =>
-                x.ToBuildEventRewardEntityList()
-            ),
+            )
         };
     }
 

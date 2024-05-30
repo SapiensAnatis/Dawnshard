@@ -1,14 +1,12 @@
-ARG BASE_DOTNET_IMAGE=mcr.microsoft.com/dotnet/aspnet:8.0.3
-
-FROM $BASE_DOTNET_IMAGE AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0.5-jammy-chiseled AS base
+USER app
+EXPOSE 8080
 WORKDIR /app
 
-EXPOSE 8080
-
-FROM mcr.microsoft.com/dotnet/sdk:8.0.203 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0.300 AS build
 WORKDIR /src
 COPY ["PhotonStateManager/DragaliaAPI.Photon.StateManager/DragaliaAPI.Photon.StateManager.csproj", "PhotonStateManager/DragaliaAPI.Photon.StateManager/"]
-COPY ["Directory.Build.props", "."]
+COPY ["PhotonStateManager/Directory.Build.props", "."]
 COPY ["Directory.Packages.props", "."]
 COPY ["nuget.config", "."]
 RUN dotnet restore "PhotonStateManager/DragaliaAPI.Photon.StateManager/DragaliaAPI.Photon.StateManager.csproj"
@@ -19,6 +17,5 @@ WORKDIR "/src/PhotonStateManager/DragaliaAPI.Photon.StateManager"
 RUN dotnet publish "DragaliaAPI.Photon.StateManager.csproj" -c Release -o /app/publish/ /p:UseAppHost=false
 
 FROM base AS final
-WORKDIR /app
 COPY --from=build /app/publish/ .
 ENTRYPOINT ["dotnet", "DragaliaAPI.Photon.StateManager.dll"]
