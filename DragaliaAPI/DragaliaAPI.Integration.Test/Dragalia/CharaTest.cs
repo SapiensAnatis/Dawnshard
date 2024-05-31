@@ -328,9 +328,11 @@ public class CharaTest : TestFixture
             .Be(manaPointNum - 2800 - 3400 - 5200 - 3400 - 2800);
 
         response
-            .UpdateDataList.MaterialList.Should()
-            .ContainEquivalentOf(new MaterialList(Materials.WaterOrb, mat1Quantity - 15 - 25))
-            .And.ContainEquivalentOf(new MaterialList(Materials.StreamOrb, mat2Quantity - 4 - 5))
+            .UpdateDataList.MaterialList.Should() // - LimitBreak1 - LimitBreak2 - ManaCircleOrbs
+            .ContainEquivalentOf(new MaterialList(Materials.WaterOrb, mat1Quantity - 8 - 15 - 25))
+            .And.ContainEquivalentOf(
+                new MaterialList(Materials.StreamOrb, mat2Quantity - 1 - 4 - 5)
+            )
             .And.ContainEquivalentOf(new MaterialList(Materials.DelugeOrb, mat3Quantity - 1 - 1));
     }
 
