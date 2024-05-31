@@ -32,13 +32,18 @@ public class RedoableSummonController(
 
     [HttpPost]
     [Route("get_data")]
-    public async Task<DragaliaResult<RedoableSummonGetDataResponse>> GetData()
+    public DragaliaResult<RedoableSummonGetDataResponse> GetData()
     {
-        OddsRate normalOddsRate = await summonOddsService.GetNormalOddsRate(
-            SummonConstants.RedoableSummonBannerId
+        // The reroll banner does not have a pity mechanic.
+        const int summonCountSinceLastFiveStar = 0;
+
+        OddsRate normalOddsRate = summonOddsService.GetNormalOddsRate(
+            SummonConstants.RedoableSummonBannerId,
+            summonCountSinceLastFiveStar
         );
-        OddsRate? guaranteeRate = await summonOddsService.GetGuaranteeOddsRate(
-            SummonConstants.RedoableSummonBannerId
+        OddsRate? guaranteeRate = summonOddsService.GetGuaranteeOddsRate(
+            SummonConstants.RedoableSummonBannerId,
+            summonCountSinceLastFiveStar
         );
 
         return new RedoableSummonGetDataResponse()
