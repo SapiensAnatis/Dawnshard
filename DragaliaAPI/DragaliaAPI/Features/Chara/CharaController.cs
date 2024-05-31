@@ -448,46 +448,50 @@ public class CharaController(
         CharaData data = MasterAsset.CharaData[charaData.CharaId];
 
         logger.LogDebug(
-            "Limit-breaking chara {charaId} to {limitBreakNum}",
+            "Limit-breaking chara {charaId} from {currentLimitBreak} to {limitBreakNum}",
             data.Id,
+            charaData.LimitBreakCount,
             limitBreakNum
         );
 
         CharaLimitBreak limitBreak = MasterAsset.CharaLimitBreak[data.CharaLimitBreak];
 
-        (
-            (Materials Id, int Quantity)[] orbs,
-            int uniqueGrowMaterial1,
-            int uniqueGrowMaterial2,
-            int growMaterial
-        ) = limitBreak.NeededMaterials[limitBreakNum - 1];
-
-        if (useGrowMaterial && data.GrowMaterialId != 0)
+        for (int i = charaData.LimitBreakCount; i < limitBreakNum; i++)
         {
-            await paymentService.ProcessPayment(data.GrowMaterialId, growMaterial);
-        }
-        else
-        {
-            foreach ((Materials id, int quantity) in orbs)
-            {
-                if (id != Materials.Empty)
-                    await paymentService.ProcessPayment(id, quantity);
-            }
+            (
+                (Materials Id, int Quantity)[] orbs,
+                int uniqueGrowMaterial1,
+                int uniqueGrowMaterial2,
+                int growMaterial
+            ) = limitBreak.NeededMaterials[i];
 
-            if (uniqueGrowMaterial1 > 0)
+            if (useGrowMaterial && data.GrowMaterialId != 0)
             {
-                await paymentService.ProcessPayment(
-                    data.UniqueGrowMaterialId1,
-                    uniqueGrowMaterial1
-                );
+                await paymentService.ProcessPayment(data.GrowMaterialId, growMaterial);
             }
-
-            if (uniqueGrowMaterial2 > 0)
+            else
             {
-                await paymentService.ProcessPayment(
-                    data.UniqueGrowMaterialId2,
-                    uniqueGrowMaterial2
-                );
+                foreach ((Materials id, int quantity) in orbs)
+                {
+                    if (id != Materials.Empty)
+                        await paymentService.ProcessPayment(id, quantity);
+                }
+
+                if (uniqueGrowMaterial1 > 0)
+                {
+                    await paymentService.ProcessPayment(
+                        data.UniqueGrowMaterialId1,
+                        uniqueGrowMaterial1
+                    );
+                }
+
+                if (uniqueGrowMaterial2 > 0)
+                {
+                    await paymentService.ProcessPayment(
+                        data.UniqueGrowMaterialId2,
+                        uniqueGrowMaterial2
+                    );
+                }
             }
         }
 
