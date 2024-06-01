@@ -1,13 +1,9 @@
 using System.Diagnostics;
 using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
-using DragaliaAPI.Shared.Features.Summoning;
-using DragaliaAPI.Shared.MasterAsset;
-using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -30,8 +26,8 @@ public class SummonOddsService(
     public OddsRate? GetGuaranteeOddsRate(int bannerId, int summonCountSinceLastFiveStar)
     {
         if (
-            optionsMonitor.CurrentValue.Banners.FirstOrDefault(x => x.Id == bannerId) is
-            { SummonType: not SummonTypes.Normal }
+            optionsMonitor.CurrentValue.BannerDict.TryGetValue(bannerId, out Banner? banner)
+            && banner.SummonType != SummonTypes.Normal
         )
         {
             // Certain special banners, like the 5* summon voucher ones, have no concept
@@ -51,9 +47,7 @@ public class SummonOddsService(
 
     public UnitRateCollection GetUnitRates(int bannerId, int summonCountSinceLastFiveStar)
     {
-        Banner? banner = optionsMonitor.CurrentValue.Banners.SingleOrDefault(x => x.Id == bannerId);
-
-        if (banner is null)
+        if (!optionsMonitor.CurrentValue.BannerDict.TryGetValue(bannerId, out Banner? banner))
         {
             throw new DragaliaException(
                 ResultCode.CommonInvalidArgument,
@@ -66,9 +60,7 @@ public class SummonOddsService(
 
     public UnitRateCollection GetGuaranteeUnitRates(int bannerId, int summonCountSinceLastFiveStar)
     {
-        Banner? banner = optionsMonitor.CurrentValue.Banners.SingleOrDefault(x => x.Id == bannerId);
-
-        if (banner is null)
+        if (!optionsMonitor.CurrentValue.BannerDict.TryGetValue(bannerId, out Banner? banner))
         {
             throw new DragaliaException(
                 ResultCode.CommonInvalidArgument,

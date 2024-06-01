@@ -11,6 +11,7 @@ namespace DragaliaAPI.Features.Summoning;
 public class SummonBannerOptions
 {
     private readonly List<Banner> banners = [];
+    private Dictionary<int, Banner>? bannerDict;
 
     /// <summary>
     /// Gets a list of active summoning banners.
@@ -20,6 +21,14 @@ public class SummonBannerOptions
         get => this.banners;
         init => this.banners = value as List<Banner> ?? value.ToList();
     }
+
+    /// <summary>
+    /// Gets a dictionary of <see cref="Banner"/> objects, keyed by each banner's <see cref="Banner.Id"/>.
+    /// </summary>
+    /// <exception cref="InvalidOperationException"><see cref="PostConfigure"/> has not yet been called on this instance.</exception>
+    public IReadOnlyDictionary<int, Banner> BannerDict =>
+        this.bannerDict
+        ?? throw new InvalidOperationException("SummonBannerOptions not yet initialized!");
 
     /// <summary>
     /// Initializes the instance, intended for use with <see cref="Microsoft.Extensions.Options.OptionsBuilder{T}.PostConfigure"/>.
@@ -36,6 +45,8 @@ public class SummonBannerOptions
         {
             banner.PostConfigure();
         }
+
+        this.bannerDict = this.banners.ToDictionary(x => x.Id, x => x);
     }
 }
 
