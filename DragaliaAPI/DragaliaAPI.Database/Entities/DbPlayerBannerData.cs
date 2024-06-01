@@ -14,13 +14,11 @@ public class DbPlayerBannerData : DbPlayerData
     [Required]
     public int SummonBannerId { get; set; }
 
-    [Column("Pity")]
-    [Required]
-    public byte PityRate { get; set; }
-
     [Column("SummonCount")]
     [Required]
     public int SummonCount { get; set; }
+
+    public int SummonCountSinceLastFiveStar { get; set; }
 
     [Column("DailyLimitedSummons")]
     [Required]

@@ -550,8 +550,12 @@ public sealed partial class SummonService(
         int numSummons
     )
     {
+        int numSummonsSinceLastFiveStar = await summonOddsService.GetSummonCountSinceLastFiveStar(
+            bannerId
+        );
+
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rateData =
-            await summonOddsService.GetUnitRates(bannerId);
+            summonOddsService.GetUnitRates(bannerId, numSummonsSinceLastFiveStar);
 
         List<UnitRate> allRates = [.. rateData.PickupRates, .. rateData.NormalRates];
 
@@ -563,7 +567,9 @@ public sealed partial class SummonService(
         List<AtgenRedoableSummonResultUnitList> result = new(numSummons);
 
         for (int i = 0; i < numSummons; i++)
+        {
             result.Add(picker.PickOne());
+        }
 
         return result;
     }
@@ -573,10 +579,14 @@ public sealed partial class SummonService(
         int numTenfolds
     )
     {
+        int numSummonsSinceLastFiveStar = await summonOddsService.GetSummonCountSinceLastFiveStar(
+            bannerId
+        );
+
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) normalRateData =
-            await summonOddsService.GetUnitRates(bannerId);
+            summonOddsService.GetUnitRates(bannerId, numSummonsSinceLastFiveStar);
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) guaranteeRateData =
-            await summonOddsService.GetGuaranteeUnitRates(bannerId);
+            summonOddsService.GetGuaranteeUnitRates(bannerId, numSummonsSinceLastFiveStar);
 
         List<UnitRate> allNormalRates =
         [
@@ -604,7 +614,9 @@ public sealed partial class SummonService(
         for (int tenfold = 0; tenfold < numTenfolds; tenfold++)
         {
             for (int i = 0; i < 9; i++)
+            {
                 result.Add(normalPicker.PickOne());
+            }
 
             result.Add(guaranteePicker.PickOne());
         }
