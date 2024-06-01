@@ -3,6 +3,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Summon;
 
 namespace DragaliaAPI.Features.Summoning;
@@ -42,6 +43,9 @@ public class Banner
 {
     private SummonTypes summonType;
 
+    private List<CharaData>? pickupCharaData = null;
+    private List<DragonData>? pickupDragonData = null;
+
     /// <summary>
     /// Gets the ID of the banner, as well as its associated summon point trade.
     /// </summary>
@@ -73,9 +77,23 @@ public class Banner
     public IReadOnlyList<Charas> PickupCharas { get; init; } = [];
 
     /// <summary>
+    /// Gets a list of <see cref="CharaData"/> objects for the rate up adventurers.
+    /// </summary>
+    /// <exception cref="InvalidOperationException"><see cref="PostConfigure"/> has not yet been called.</exception>
+    public IReadOnlyList<CharaData> PickupCharaData =>
+        this.pickupCharaData ?? throw new InvalidOperationException("Banner not yet initialized!");
+
+    /// <summary>
     /// Gets a list of dragons on rate up.
     /// </summary>
     public IReadOnlyList<Dragons> PickupDragons { get; init; } = [];
+
+    /// <summary>
+    /// Gets a list of <see cref="DragonData"/> objects for the rate up dragons.
+    /// </summary>
+    /// <exception cref="InvalidOperationException"><see cref="PostConfigure"/> has not yet been called.</exception>
+    public IReadOnlyList<DragonData> PickupDragonData =>
+        this.pickupDragonData ?? throw new InvalidOperationException("Banner not yet initialized!");
 
     /// <summary>
     /// Gets a list of limited characters that are available, but not on rate up.
@@ -171,5 +189,8 @@ public class Banner
         {
             this.summonType = summonData.SummonType;
         }
+
+        this.pickupCharaData = this.PickupCharas.Select(MasterAsset.CharaData.Get).ToList();
+        this.pickupDragonData = this.PickupDragons.Select(MasterAsset.DragonData.Get).ToList();
     }
 }
