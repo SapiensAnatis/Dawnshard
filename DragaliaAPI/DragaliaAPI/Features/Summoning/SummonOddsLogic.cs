@@ -49,10 +49,10 @@ public static class SummonOddsLogic
         );
 
         List<CharaData> charaPool = MasterAsset
-            .CharaData.Enumerable.Where(x => IsCharaInBannerRegularPool(x.Id, banner))
+            .CharaData.Enumerable.Where(x => IsCharaInBannerRegularPool(x, banner))
             .ToList();
         List<DragonData> dragonPool = MasterAsset
-            .DragonData.Enumerable.Where(x => IsDragonInBannerRegularPool(x.Id, banner))
+            .DragonData.Enumerable.Where(x => IsDragonInBannerRegularPool(x, banner))
             .ToList();
 
         return (
@@ -89,11 +89,11 @@ public static class SummonOddsLogic
         );
 
         List<CharaData> charaPool = MasterAsset
-            .CharaData.Enumerable.Where(x => IsCharaInBannerRegularPool(x.Id, banner))
+            .CharaData.Enumerable.Where(x => IsCharaInBannerRegularPool(x, banner))
             .Where(x => x.Rarity >= 4)
             .ToList();
         List<DragonData> dragonPool = MasterAsset
-            .DragonData.Enumerable.Where(x => IsDragonInBannerRegularPool(x.Id, banner))
+            .DragonData.Enumerable.Where(x => IsDragonInBannerRegularPool(x, banner))
             .Where(x => x.Rarity >= 4)
             .ToList();
 
@@ -392,39 +392,49 @@ public static class SummonOddsLogic
         return new(fiveStarPoolSize, fourStarPoolSize, threeStarPoolSize);
     }
 
-    private static bool IsCharaInBannerRegularPool(Charas chara, Banner banner)
+    private static bool IsCharaInBannerRegularPool(CharaData charaData, Banner banner)
     {
-        if (banner.PickupCharas.Contains(chara))
+        if (!charaData.IsPlayable)
+        {
+            return false;
+        }
+
+        if (banner.PickupCharas.Contains(charaData.Id))
         {
             // They are in the pickup pool instead.
             return false;
         }
 
-        UnitAvailability availability = chara.GetAvailability();
+        UnitAvailability availability = charaData.GetAvailability();
 
         return availability switch
         {
             UnitAvailability.Permanent => true,
             UnitAvailability.Gala => banner.IsGala,
-            UnitAvailability.Limited => banner.LimitedCharas.Contains(chara),
+            UnitAvailability.Limited => banner.LimitedCharas.Contains(charaData.Id),
             _ => false
         };
     }
 
-    private static bool IsDragonInBannerRegularPool(Dragons dragon, Banner banner)
+    private static bool IsDragonInBannerRegularPool(DragonData dragonData, Banner banner)
     {
-        if (banner.PickupDragons.Contains(dragon))
+        if (!dragonData.IsPlayable)
         {
             return false;
         }
 
-        UnitAvailability availability = dragon.GetAvailability();
+        if (banner.PickupDragons.Contains(dragonData.Id))
+        {
+            return false;
+        }
+
+        UnitAvailability availability = dragonData.GetAvailability();
 
         return availability switch
         {
             UnitAvailability.Permanent => true,
             UnitAvailability.Gala => banner.IsGala,
-            UnitAvailability.Limited => banner.LimitedDragons.Contains(dragon),
+            UnitAvailability.Limited => banner.LimitedDragons.Contains(dragonData.Id),
             _ => false
         };
     }
