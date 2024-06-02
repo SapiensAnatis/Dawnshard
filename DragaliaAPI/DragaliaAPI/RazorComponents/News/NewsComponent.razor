@@ -73,6 +73,7 @@
         }
 
         this.allNewsItems = await this.ApiContext.NewsItems
+            .Where(x => !x.Hidden)
             .OrderByDescending(x => x.Date)
             .Select(x => new NewsItem(x))
             .ToListAsync();
