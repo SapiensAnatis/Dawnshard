@@ -152,8 +152,6 @@ public static class ServiceConfiguration
             // Maintenance feature
             .AddScoped<MaintenanceService>();
 
-        services.AddHandlers();
-
         services.AddScoped<IBlazorIdentityService, BlazorIdentityService>();
 
         services.AddAllOfType<ISavefileUpdate>();
@@ -193,7 +191,7 @@ public static class ServiceConfiguration
             .Configure<ResourceVersionOptions>(
                 config.GetRequiredSection(nameof(ResourceVersionOptions))
             )
-            .Configure<BlazorOptions>(config.GetRequiredSection(nameof(BlazorOptions)))
+            .Configure<WebOptions>(config.GetRequiredSection(nameof(WebOptions)))
             .Configure<EventOptions>(config.GetRequiredSection(nameof(EventOptions)))
             .Configure<MaintenanceOptions>(config.GetRequiredSection(nameof(MaintenanceOptions)));
 

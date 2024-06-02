@@ -1,4 +1,5 @@
 using DragaliaAPI.Features.Web;
+using DragaliaAPI.Features.Web.News;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 
@@ -11,7 +12,8 @@ public static partial class FeatureExtensions
     {
         serviceCollection
             .AddTransient<IConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>()
-            .AddScoped<UserService>();
+            .AddScoped<UserService>()
+            .AddScoped<NewsService>();
 
         serviceCollection
             .AddAuthentication()
