@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Routes from '$lib/components/routes.svelte';
+  import Routes from '$lib/routes/routes.svelte';
 </script>
 
 <div id="navigation" class="hidden flex-col gap-4 py-2 md:flex">

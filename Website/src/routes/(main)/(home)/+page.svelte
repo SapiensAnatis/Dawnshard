@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import * as Card from '$shadcn/components/ui/card/index';
   import GitHub from './icons/github.svelte';
   import Discord from './icons/discord.svelte';
@@ -20,11 +20,10 @@
 
 <div
   id="banner"
-  class="background-image dark:testClass grid grid-cols-12 gap-4 bg-[url('/src/lib/assets/story.webp')] dark:bg-[url('/src/lib/assets/storyDark.webp')]"
->
+  class="background-image dark:testClass grid grid-cols-12 gap-4 bg-[url('/src/lib/assets/story.webp')] dark:bg-[url('/src/lib/assets/storyDark.webp')]">
   <Card.Root class="col-span-12 lg:col-span-7">
     <Card.Header>
-      <Card.Title class="text-3xl">Welcome to Dawnshard</Card.Title>
+      <Card.Title tag="h2" class="text-3xl">Welcome to Dawnshard</Card.Title>
     </Card.Header>
     <Card.Content>
       <p class="text-lg font-semibold" style:margin-bottom="0.5rem">
@@ -42,8 +41,7 @@
       <LinkButton href="https://discord.gg/j9zSttjjWj" icon={Discord}>Discord</LinkButton>
       <LinkButton href="https://patreon.com/dawnshard" icon={Patreon}>Patreon</LinkButton>
       <LinkButton href="https://buymeacoffee.com/dawnshard" icon={BuyMeACoffee}
-        >Buy me a coffee</LinkButton
-      >
+        >Buy me a coffee</LinkButton>
     </Card.Footer>
   </Card.Root>
 </div>
@@ -58,8 +56,8 @@
       possible to progress largely as normal.
     </p>
   </div>
-  <div class="grid grid-cols-3 gap-4">
-    <div class="col-span-3">
+  <div class="grid grid-cols-12 gap-4">
+    <div class="col-span-12">
       <Typography typography="h2">How to play</Typography>
       <p>
         Setting up access to the server involves configuring a modified version of the original
@@ -72,7 +70,7 @@
         <a class="link" href="https://discord.gg/j9zSttjjWj">community Discord server</a>.
       </p>
     </div>
-    <div class="col-span-3 md:col-span-2">
+    <div class="col-span-12 md:col-span-6 lg:col-span-8">
       <Typography typography="h3">Android</Typography>
       <ol class="list-inside list-decimal px-4">
         <li>
@@ -100,20 +98,18 @@
         </li>
       </ol>
     </div>
-    <aside class="col-span-3 flex flex-col items-center md:col-span-1">
+    <aside class="col-span-12 flex flex-col items-center px-5 md:col-span-6 lg:col-span-4">
       <enhanced:img
         src="$lib/assets/dragalipatch.png"
-        class="block max-w-xs align-middle dark:hidden"
-        alt="Example inputs of Dawnshard server address in Dragalipatch interface"
-      />
+        class="block w-full max-w-80 align-middle dark:hidden"
+        alt="Example inputs of Dawnshard server address in Dragalipatch interface" />
       <enhanced:img
         src="$lib/assets/dragalipatchDark.png"
-        class="hidden max-w-xs align-middle dark:block"
-        alt="Example inputs of Dawnshard server address in Dragalipatch interface"
-      />
+        class="hidden w-full max-w-80 align-middle dark:block"
+        alt="Example inputs of Dawnshard server address in Dragalipatch interface" />
       <p class="mt-1 italic">Example Dragalipatch inputs</p>
     </aside>
-    <div class="col-span-3">
+    <div class="col-span-12">
       <Typography typography="h3">iOS</Typography>
       <p>
         For information on how to play on iOS, please see{' '}
@@ -130,8 +126,7 @@
     <Typography typography="h2">Frequently asked questions</Typography>
     <div>
       <Typography typography="h3"
-        >Can I link an account to save my progress across devices?</Typography
-      >
+        >Can I link an account to save my progress across devices?</Typography>
       <p>
         Yes, if you follow the prompts to link an account in-game, you will be taken to the <a
           class="link"
@@ -150,8 +145,7 @@
         such as this{' '}
         <a
           href="https://drive.google.com/drive/folders/17pR_hZtjIZ7NKBMUjtiY355FCM_-TqgO?usp=sharing"
-          class="link"
-        >
+          class="link">
           maxed out save file</a
         >, to skip parts of the game you do not want to play again.
       </p>

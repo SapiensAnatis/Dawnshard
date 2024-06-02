@@ -73,7 +73,7 @@
         }
 
         this.allNewsItems = await this.ApiContext.NewsItems
-            .OrderByDescending(x => x.Time)
+            .OrderByDescending(x => x.Date)
             .Select(x => new NewsItem(x))
             .ToListAsync();
 
@@ -91,8 +91,8 @@
         public NewsItem(DbNewsItem dbNewsItem)
         {
             this.Headline = dbNewsItem.Headline;
-            this.Time = dbNewsItem.Time;
-            this.TimeString = $"{dbNewsItem.Time:dd/MM/yyyy HH:mm} UTC";
+            this.Time = dbNewsItem.Date;
+            this.TimeString = $"{dbNewsItem.Date:dd/MM/yyyy HH:mm} UTC";
             this.Description = new((builder) => builder.AddMarkupContent(0, dbNewsItem.Description));
         }
 

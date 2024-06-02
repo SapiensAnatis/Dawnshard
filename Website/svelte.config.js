@@ -14,7 +14,8 @@ const config = {
     adapter: adapter(),
     alias: {
       $shadcn: './src/lib/shadcn',
-      $static: './static'
+      $static: './static',
+      $main: './src/routes/(main)'
     }
   }
 };

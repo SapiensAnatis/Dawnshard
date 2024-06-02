@@ -261,22 +261,44 @@ namespace DragaliaAPI.Database.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("BodyImagePath")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
+
+                    b.Property<DateTimeOffset>("Date")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(4096)
                         .HasColumnType("character varying(4096)");
+
+                    b.Property<string>("HeaderImagePath")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
 
                     b.Property<string>("Headline")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<DateTimeOffset>("Time")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<bool>("Hidden")
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
                     b.ToTable("NewsItems");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 20000,
+                            BodyImagePath = "/dawnshard/news/mg-endeavours.webp",
+                            Date = new DateTimeOffset(new DateTime(2024, 6, 2, 16, 7, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 1, 0, 0, 0)),
+                            Description = "The below infographic shows the endeavour rewards available for the progressing the Mercurial Gauntlet.",
+                            Headline = "Mercurial Gauntlet Endeavour Rewards",
+                            Hidden = true
+                        });
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbParty", b =>

@@ -1,25 +1,10 @@
 import type { LayoutServerLoad } from './$types';
-import getJwtMetadata from '$lib/jwt';
-import Cookies from '$lib/cookies';
+import Cookies from '$lib/auth/cookies.ts';
 
-export const load: LayoutServerLoad = ({ cookies, depends }) => {
+export const load: LayoutServerLoad = ({ locals, depends }) => {
   depends(`cookie:${Cookies.IdToken}`);
 
-  const idToken = cookies.get(Cookies.IdToken);
-  if (!idToken) {
-    return {
-      hasValidJwt: false
-    };
-  }
-
-  const jwtMetadata = getJwtMetadata(idToken);
-  if (!jwtMetadata.valid || Date.now() > jwtMetadata.expiryTimestampMs) {
-    return {
-      hasValidJwt: false
-    };
-  }
-
   return {
-    hasValidJwt: true
+    hasValidJwt: locals.hasValidJwt
   };
 };

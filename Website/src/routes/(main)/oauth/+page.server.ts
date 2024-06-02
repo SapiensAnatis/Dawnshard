@@ -1,8 +1,8 @@
 import type { PageServerLoad } from './$types';
 import { PUBLIC_BAAS_URL, PUBLIC_BAAS_CLIENT_ID } from '$env/static/public';
-import Cookies from '$lib/cookies';
+import Cookies from '$lib/auth/cookies.ts';
 import { redirect } from '@sveltejs/kit';
-import getJwtMetadata from '$lib/jwt';
+import getJwtMetadata from '$lib/auth/jwt.ts';
 
 const sessionTokenUrl = new URL('/connect/1.0.0/api/session_token', PUBLIC_BAAS_URL);
 const sdkTokenUrl = new URL('/1.0.0/gateway/sdk/token', PUBLIC_BAAS_URL);

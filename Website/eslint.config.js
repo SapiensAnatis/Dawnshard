@@ -17,12 +17,31 @@ export default [
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
-      globals: { ...globals.node, ...globals.browser },
+      globals: { ...globals.browser },
       parser: svelteParser,
       parserOptions: {
         parser: tsEslint.parser,
         extraFileExtensions: ['.svelte']
       }
+    },
+    rules: {
+      'svelte/block-lang': [
+        'error',
+        {
+          enforceScriptPresent: false,
+          enforceStylePresent: false,
+          script: ['ts']
+        }
+      ],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_'
+        }
+      ],
+      'no-console': ['error']
     }
   },
   {

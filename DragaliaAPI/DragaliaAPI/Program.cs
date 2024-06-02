@@ -193,7 +193,7 @@ app.MapWhen(
         applicationBuilder.UseMiddleware<PlayerIdentityLoggingMiddleware>();
         applicationBuilder.UseEndpoints(endpoints =>
         {
-            endpoints.MapDragaliaAPIEndpoints();
+            endpoints.MapControllers();
         });
     }
 );

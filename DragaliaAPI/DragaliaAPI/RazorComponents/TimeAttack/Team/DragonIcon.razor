@@ -5,7 +5,7 @@
 @using DragaliaAPI.Shared.MasterAsset.Models;
 @using Microsoft.Extensions.Options;
 
-@inject IOptionsMonitor<BlazorOptions> Options;
+@inject IOptionsMonitor<WebOptions> Options;
 
 <MudTooltip tabindex="0" RootStyle="max-width: min(50px, 100%);" ShowOnFocus=true Text="@this.text" Placement="Placement.Bottom" Arrow=true>
     <MudImage Fluid=true Src="@this.imageSrc" />
