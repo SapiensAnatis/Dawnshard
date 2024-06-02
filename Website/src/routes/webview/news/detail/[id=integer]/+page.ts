@@ -20,6 +20,6 @@ export const load: PageLoad = async ({ fetch, params }) => {
     });
 
   return {
-    newsPromise
+    newsPromise: new Promise(() => {})
   };
 };

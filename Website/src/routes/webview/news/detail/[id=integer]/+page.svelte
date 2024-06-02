@@ -16,20 +16,30 @@
 </script>
 
 <div class="p-4">
-  <Button variant="ghost" href={previousPage}>
+  <Button variant="outline" href={previousPage}>
     <ChevronLeft size="16" class="mr-2" />
     Back to news
   </Button>
   <div class="mt-4">
     {#await data.newsPromise}
-      <Skeleton />
+      <Skeleton class="h-[200px] w-full" />
+      <br />
+      <Skeleton class="mb-2 h-6 w-[80%]" />
+      <Skeleton class="h-4 w-[50%]" />
+      <br />
+      <div class="flex flex-col gap-1">
+        <Skeleton class="h-4 w-[90%]" />
+        <Skeleton class="h-4 w-[95%]" />
+        <Skeleton class="h-4 w-[80%]" />
+        <Skeleton class="h-4 w-[86%]" />
+      </div>
     {:then item}
       {#if !item}
         <p>Failed to load news item!</p>
       {:else}
         {#if item.headerImageSrc}
           <div class="mt-4 flex flex-row items-center justify-center">
-            <Image src={item.headerImageSrc} layout="fullWidth" height={200} />
+            <Image class="rounded-md" src={item.headerImageSrc} layout="fullWidth" height={200} />
           </div>
           <br />
         {/if}
