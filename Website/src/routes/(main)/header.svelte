@@ -1,7 +1,8 @@
 <script lang="ts">
   import { Button } from '$shadcn/components/ui/button';
   import * as Drawer from '$shadcn/components/ui/drawer';
-  import { Menu, Close } from '$lib/icons.ts';
+  import Menu from 'lucide-svelte/icons/menu';
+  import Close from 'lucide-svelte/icons/x';
   import Routes from '$lib/routes/routes.svelte';
   import { onMount } from 'svelte';
   import HeaderContents from './headerContents.svelte';

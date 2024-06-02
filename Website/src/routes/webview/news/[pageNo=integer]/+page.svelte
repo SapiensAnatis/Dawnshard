@@ -23,10 +23,9 @@
 
   onMount(() => {
     // Required for showing the Mercurial Gauntlet rewards page, which unconditionally routes to
-    // the URL we provide for the news page, with #detail/20000 in the hash.
+    // the URL we provide for the news page, plus #detail/20000 in the hash.
     // Hash-based routing is not really supported by SvelteKit, so we will just rewrite to an actual route.
     const openedNewsId = Number.parseInt($page.url.hash.replace('#detail/', '')) || null;
-    console.log({ openedNewsId, hash: $page.url.hash });
 
     if (openedNewsId) {
       onOpenNewsItem(openedNewsId);
