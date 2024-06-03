@@ -12,6 +12,7 @@ namespace DragaliaAPI.Integration.Test.Features.Summoning;
 public class SummonTest : TestFixture
 {
     private const int TestBannerId = 1020121;
+    private const int TestGalaBannerId = 1020183;
 
     public SummonTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
@@ -196,6 +197,47 @@ public class SummonTest : TestFixture
     }
 
     [Fact]
+    public async Task SummonGetOddsData_IncludesPityRate()
+    {
+        await this.AddToDatabase(
+            new DbPlayerBannerData()
+            {
+                SummonBannerId = TestBannerId,
+                SummonCountSinceLastFiveStar = 20,
+            }
+        );
+
+        SummonGetOddsDataResponse response = (
+            await this.Client.PostMsgpack<SummonGetOddsDataResponse>(
+                "summon/get_odds_data",
+                new SummonGetOddsDataRequest(TestBannerId)
+            )
+        ).Data;
+
+        OddsRate normalOdds = response.OddsRateList.Normal;
+        OddsRate guaranteeOdds = response.OddsRateList.Guarantee;
+
+        normalOdds
+            .RarityList.Should()
+            .BeEquivalentTo(
+                [
+                    new AtgenRarityList { Rarity = 5, TotalRate = "5.00%" },
+                    new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
+                    new AtgenRarityList { Rarity = 3, TotalRate = "79.00%" },
+                ]
+            );
+
+        guaranteeOdds
+            .RarityList.Should()
+            .BeEquivalentTo(
+                [
+                    new AtgenRarityList { Rarity = 5, TotalRate = "5.00%" },
+                    new AtgenRarityList { Rarity = 4, TotalRate = "95.00%" },
+                ]
+            );
+    }
+
+    [Fact]
     public async Task SummonGetSummonHistory_ReturnsAnyData()
     {
         DbPlayerSummonHistory historyEntry =
@@ -287,7 +329,8 @@ public class SummonTest : TestFixture
 
         response
             .SummonList.Should()
-            .ContainSingle()
+            .HaveCount(2)
+            .And.Contain(x => x.SummonId == TestBannerId)
             .Which.Should()
             .BeEquivalentTo(
                 new SummonList()
@@ -731,6 +774,164 @@ public class SummonTest : TestFixture
 
         response.ResultSummonPoint.Should().Be(0);
         response.ResultUnitList.Should().ContainSingle().Which.Rarity.Should().Be(5);
+    }
+
+    [Fact]
+    public async Task SummonRequest_MaxPity_GrantsGuaranteedFiveStar()
+    {
+        await this.AddToDatabase(
+            new DbPlayerBannerData()
+            {
+                SummonBannerId = TestBannerId,
+                SummonCountSinceLastFiveStar = 100,
+            }
+        );
+
+        SummonGetOddsDataResponse oddsResponse = (
+            await this.Client.PostMsgpack<SummonGetOddsDataResponse>(
+                "summon/get_odds_data",
+                new SummonGetOddsDataRequest(TestBannerId)
+            )
+        ).Data;
+
+        oddsResponse
+            .OddsRateList.Normal.RarityList.Should()
+            .BeEquivalentTo(
+                [
+                    new AtgenRarityList { Rarity = 5, TotalRate = "9.00%" },
+                    new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
+                    new AtgenRarityList { Rarity = 3, TotalRate = "75.00%" },
+                ]
+            );
+
+        DbPlayerUserData userData = await this
+            .ApiContext.PlayerUserData.AsNoTracking()
+            .SingleAsync(x => x.ViewerId == this.ViewerId);
+
+        DragaliaResponse<SummonRequestResponse> response =
+            await this.Client.PostMsgpack<SummonRequestResponse>(
+                "summon/request",
+                new SummonRequestRequest(
+                    TestBannerId,
+                    SummonExecTypes.Single,
+                    1,
+                    PaymentTypes.Wyrmite,
+                    new PaymentTarget(userData.Crystal, 120)
+                )
+            );
+
+        response.Data.ResultUnitList.Should().Contain(x => x.Rarity == 5);
+
+        oddsResponse = (
+            await this.Client.PostMsgpack<SummonGetOddsDataResponse>(
+                "summon/get_odds_data",
+                new SummonGetOddsDataRequest(TestBannerId)
+            )
+        ).Data;
+
+        oddsResponse
+            .OddsRateList.Normal.RarityList.Should()
+            .BeEquivalentTo(
+                [
+                    new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
+                    new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
+                    new AtgenRarityList { Rarity = 3, TotalRate = "80.00%" },
+                ]
+            );
+    }
+
+    [Fact]
+    public async Task SummonRequest_MaxPity_Gala_GrantsGuaranteedFiveStar()
+    {
+        await this.AddToDatabase(
+            new DbPlayerBannerData()
+            {
+                SummonBannerId = TestGalaBannerId,
+                SummonCountSinceLastFiveStar = 60,
+            }
+        );
+
+        DbPlayerUserData userData = await this
+            .ApiContext.PlayerUserData.AsNoTracking()
+            .SingleAsync(x => x.ViewerId == this.ViewerId);
+
+        DragaliaResponse<SummonRequestResponse> response =
+            await this.Client.PostMsgpack<SummonRequestResponse>(
+                "summon/request",
+                new SummonRequestRequest(
+                    TestGalaBannerId,
+                    SummonExecTypes.Single,
+                    1,
+                    PaymentTypes.Wyrmite,
+                    new PaymentTarget(userData.Crystal, 120)
+                )
+            );
+
+        response.Data.ResultUnitList.Should().Contain(x => x.Rarity == 5);
+
+        this.ApiContext.PlayerBannerData.AsNoTracking()
+            .First(x => x.SummonBannerId == TestGalaBannerId)
+            .SummonCountSinceLastFiveStar.Should()
+            .Be(0);
+    }
+
+    [Fact]
+    public async Task SummonRequest_NoFiveStars_IncrementsPityRate()
+    {
+        SummonGetOddsDataResponse oddsResponse = (
+            await this.Client.PostMsgpack<SummonGetOddsDataResponse>(
+                "summon/get_odds_data",
+                new SummonGetOddsDataRequest(TestBannerId)
+            )
+        ).Data;
+
+        oddsResponse
+            .OddsRateList.Normal.RarityList.Should()
+            .BeEquivalentTo(
+                [
+                    new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
+                    new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
+                    new AtgenRarityList { Rarity = 3, TotalRate = "80.00%" },
+                ]
+            );
+
+        IEnumerable<AtgenResultUnitList> result;
+
+        do
+        {
+            DbPlayerUserData userData = await this
+                .ApiContext.PlayerUserData.AsNoTracking()
+                .SingleAsync(x => x.ViewerId == this.ViewerId);
+
+            DragaliaResponse<SummonRequestResponse> response =
+                await this.Client.PostMsgpack<SummonRequestResponse>(
+                    "summon/request",
+                    new SummonRequestRequest(
+                        TestBannerId,
+                        SummonExecTypes.Tenfold,
+                        1,
+                        PaymentTypes.Wyrmite,
+                        new PaymentTarget(userData.Crystal, 1200)
+                    )
+                );
+
+            result = response.Data.ResultUnitList;
+        } while (result.Any(x => x.Rarity == 5));
+
+        oddsResponse = (
+            await this.Client.PostMsgpack<SummonGetOddsDataResponse>(
+                "summon/get_odds_data",
+                new SummonGetOddsDataRequest(TestBannerId)
+            )
+        ).Data;
+
+        double fiveStarRate = double.Parse(
+            oddsResponse
+                .OddsRateList.Normal.RarityList.First(x => x.Rarity == 5)
+                .TotalRate.TrimEnd('%')
+        );
+
+        fiveStarRate.Should().BeGreaterOrEqualTo(4.5d);
     }
 
     [Fact]

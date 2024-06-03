@@ -21,12 +21,12 @@ public static partial class FeatureExtensions
         serviceCollection
             .Configure<SummonBannerOptions>(config.GetRequiredSection(nameof(SummonBannerOptions)))
             .AddOptions<SummonBannerOptions>()
-            .PostConfigure(opts => opts.PostConfigure())
             .Validate(
                 opts => opts.Banners.DistinctBy(x => x.Id).Count() == opts.Banners.Count,
                 "bannerConfig.json IDs must be unique!"
             )
-            .ValidateOnStart();
+            .ValidateOnStart()
+            .PostConfigure(opts => opts.PostConfigure());
 
         return serviceCollection;
     }
