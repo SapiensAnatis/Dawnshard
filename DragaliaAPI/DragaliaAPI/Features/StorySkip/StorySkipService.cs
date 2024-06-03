@@ -37,7 +37,7 @@ public class StorySkipService(
 
     public async Task IncreaseFortLevels(long viewerId)
     {
-        Dictionary<FortPlants, FortConfig> fortConfigs = StorySkipRewards.FortConfigs;
+        FrozenDictionary<FortPlants, FortConfig> fortConfigs = StorySkipRewards.FortConfigs;
 
         List<DbFortBuild> userForts = await fortRepository
             .Builds.Where(x => x.ViewerId == viewerId)
@@ -268,7 +268,7 @@ public class StorySkipService(
 
     public async Task RewardCharas(long viewerId)
     {
-        List<Charas> charas = StorySkipRewards.CharasList;
+        FrozenSet<Charas> charas = StorySkipRewards.CharasList;
         List<DbPlayerCharaData> userCharas = await apiContext
             .PlayerCharaData.Where(x => x.ViewerId == viewerId && charas.Contains(x.CharaId))
             .ToListAsync();
@@ -320,7 +320,7 @@ public class StorySkipService(
 
     public async Task RewardDragons(long viewerId)
     {
-        List<Dragons> dragons = StorySkipRewards.DragonList;
+        FrozenSet<Dragons> dragons = StorySkipRewards.DragonList;
         List<DbPlayerDragonData> userDragons = await apiContext
             .PlayerDragonData.Where(x => x.ViewerId == viewerId && dragons.Contains(x.DragonId))
             .ToListAsync();

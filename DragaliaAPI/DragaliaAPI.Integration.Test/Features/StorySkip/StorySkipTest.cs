@@ -1,3 +1,4 @@
+using System.Collections.Frozen;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.StorySkip;
@@ -21,7 +22,7 @@ public class StorySkipTest : TestFixture
     {
         int questId = 100_100_107;
         int storyId = 1_001_009;
-        Dictionary<FortPlants, FortConfig> fortConfigs = StorySkipRewards.FortConfigs;
+        FrozenDictionary<FortPlants, FortConfig> fortConfigs = StorySkipRewards.FortConfigs;
         List<FortPlants> uniqueFortPlants = new(fortConfigs.Keys);
 
         await this
