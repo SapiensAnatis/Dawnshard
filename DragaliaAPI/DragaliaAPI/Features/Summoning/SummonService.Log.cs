@@ -30,5 +30,8 @@ public partial class SummonService
             ILogger logger,
             AtgenSummonPointTradeList trade
         );
+
+        [LoggerMessage(LogLevel.Information, "Granting guaranteed 5* reward for banner {BannerId}")]
+        public static partial void GrantingGuaranteedFiveStar(ILogger logger, int bannerId);
     }
 }

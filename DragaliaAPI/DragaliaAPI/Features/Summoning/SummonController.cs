@@ -180,7 +180,8 @@ public class SummonController(
 
         UserSummonList userSummonList = await summonService.UpdateUserSummonInformation(
             summonList,
-            summonCount
+            summonCount,
+            metaInfo
         );
 
         SummonEffect effect = SummonEffectHelper.CalculateEffect(metaInfo);

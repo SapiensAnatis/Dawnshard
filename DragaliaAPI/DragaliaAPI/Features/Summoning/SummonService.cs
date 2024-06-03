@@ -187,10 +187,7 @@ public sealed partial class SummonService(
 
     public async Task<DbPlayerBannerData?> GetPlayerBannerData(int bannerId)
     {
-        if (
-            optionsMonitor.CurrentValue.Banners.FirstOrDefault(x => x.Id == bannerId)
-            is not { } banner
-        )
+        if (!optionsMonitor.CurrentValue.BannerDict.TryGetValue(bannerId, out Banner? banner))
         {
             return null;
         }
@@ -217,10 +214,7 @@ public sealed partial class SummonService(
 
     public IEnumerable<AtgenSummonPointTradeList>? GetSummonPointTradeList(int bannerId)
     {
-        if (
-            optionsMonitor.CurrentValue.Banners.FirstOrDefault(x => x.Id == bannerId)
-            is not { } banner
-        )
+        if (!optionsMonitor.CurrentValue.BannerDict.TryGetValue(bannerId, out Banner? banner))
         {
             return null;
         }
@@ -266,10 +260,7 @@ public sealed partial class SummonService(
 
     public async Task<AtgenBuildEventRewardEntityList> DoSummonPointTrade(int summonId, int tradeId)
     {
-        if (
-            optionsMonitor.CurrentValue.Banners.FirstOrDefault(x => x.Id == summonId)
-            is not { } banner
-        )
+        if (!optionsMonitor.CurrentValue.BannerDict.TryGetValue(summonId, out Banner? banner))
         {
             throw new DragaliaException(
                 ResultCode.SummonNotFound,
@@ -355,7 +346,7 @@ public sealed partial class SummonService(
         if (summonRequest.PaymentType == PaymentTypes.Ticket)
         {
             if (
-                optionsMonitor.CurrentValue.Banners.First(x => x.Id == summonRequest.SummonId) is
+                optionsMonitor.CurrentValue.BannerDict[summonRequest.SummonId] is
                 { RequiredTicketId: { } requiredTicket }
             )
             {
@@ -510,7 +501,8 @@ public sealed partial class SummonService(
 
     public async Task<UserSummonList> UpdateUserSummonInformation(
         SummonList summonList,
-        int summonCount
+        int summonCount,
+        SummonResultMetaInfo metaInfo
     )
     {
         DbPlayerBannerData? playerBannerData = await this.GetPlayerBannerData(summonList.SummonId);
@@ -525,6 +517,15 @@ public sealed partial class SummonService(
         int gainedSummonPoints = summonCount * summonList.AddSummonPoint;
         playerBannerData.SummonPoints += gainedSummonPoints;
         playerBannerData.SummonCount += summonCount;
+
+        if (metaInfo is { CountOfRare5Char: 0, CountOfRare5Dragon: 0 })
+        {
+            playerBannerData.SummonCountSinceLastFiveStar += summonCount;
+        }
+        else
+        {
+            playerBannerData.SummonCountSinceLastFiveStar = 0;
+        }
 
         return new UserSummonList()
         {
@@ -566,7 +567,18 @@ public sealed partial class SummonService(
 
         List<AtgenRedoableSummonResultUnitList> result = new(numSummons);
 
-        for (int i = 0; i < numSummons; i++)
+        int resultCounter = 0;
+
+        if (
+            this.GetGuaranteedFiveStar(bannerId, numSummonsSinceLastFiveStar, allRates) is
+            { } guaranteedFiveStar
+        )
+        {
+            result.Add(guaranteedFiveStar);
+            resultCounter++;
+        }
+
+        for (; resultCounter < numSummons; resultCounter++)
         {
             result.Add(picker.PickOne());
         }
@@ -613,15 +625,60 @@ public sealed partial class SummonService(
 
         for (int tenfold = 0; tenfold < numTenfolds; tenfold++)
         {
-            for (int i = 0; i < 9; i++)
+            int resultCounter = 0;
+            if (
+                this.GetGuaranteedFiveStar(bannerId, numSummonsSinceLastFiveStar, allNormalRates) is
+                { } guaranteedFiveStar
+            )
+            {
+                result.Add(guaranteedFiveStar);
+                resultCounter++;
+                numSummonsSinceLastFiveStar = 0;
+            }
+
+            for (; resultCounter < 9; resultCounter++)
             {
                 result.Add(normalPicker.PickOne());
             }
 
             result.Add(guaranteePicker.PickOne());
+
+            // The only case where multiple tenfolds are performed is the reroll summon, which doesn't apply pity rates.
+            // numSummonsSinceLastFiveStar += 10;
         }
 
         return result;
+    }
+
+    private AtgenRedoableSummonResultUnitList? GetGuaranteedFiveStar(
+        int bannerId,
+        int numSummonsSinceLastFiveStar,
+        IEnumerable<UnitRate> rates
+    )
+    {
+        if (bannerId == SummonConstants.RedoableSummonBannerId)
+        {
+            return null;
+        }
+
+        Banner banner = optionsMonitor.CurrentValue.BannerDict[bannerId];
+        int guaranteedFiveStarSummonCount = banner.IsGala ? 60 : 100;
+
+        if (numSummonsSinceLastFiveStar < guaranteedFiveStarSummonCount)
+        {
+            return null;
+        }
+
+        Log.GrantingGuaranteedFiveStar(logger, bannerId);
+
+        IEnumerable<UnitRate> fiveStarRates = rates.Where(x => x.Rarity == 5);
+
+        IPick<AtgenRedoableSummonResultUnitList> fiveStarPicker = Out.Of()
+            .PrioritizedElements(fiveStarRates)
+            .WithValueSelector(ToSummonResult)
+            .AndWeightSelector(x => x.Weighting);
+
+        return fiveStarPicker.PickOne();
     }
 
     private static AtgenRedoableSummonResultUnitList ToSummonResult(UnitRate rate) =>
