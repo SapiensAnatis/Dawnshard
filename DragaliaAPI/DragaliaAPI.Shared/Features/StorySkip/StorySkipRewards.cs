@@ -1,40 +1,45 @@
+using System.Collections.Frozen;
 using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Shared.Features.StorySkip;
 
 public static class StorySkipRewards
 {
-    public struct FortConfig
+    public readonly struct FortConfig(
+        int level,
+        int buildCount,
+        int positionX = -1,
+        int positionZ = -1
+    )
     {
-        public int BuildCount { get; }
-        public int Level { get; }
-        public int PositionX { get; }
-        public int PositionZ { get; }
-
-        public FortConfig(int level, int buildCount, int positionX = -1, int positionZ = -1)
-        {
-            BuildCount = buildCount;
-            Level = level;
-            PositionX = positionX;
-            PositionZ = positionZ;
-        }
+        public int BuildCount { get; } = buildCount;
+        public int Level { get; } = level;
+        public int PositionX { get; } = positionX;
+        public int PositionZ { get; } = positionZ;
     }
 
-    public static readonly List<Charas> CharasList =
-        new() { Charas.Elisanne, Charas.Ranzal, Charas.Cleo, Charas.Luca, Charas.Alex };
+    public static FrozenSet<Charas> CharasList { get; } =
+        new List<Charas>()
+        {
+            Charas.Elisanne,
+            Charas.Ranzal,
+            Charas.Cleo,
+            Charas.Luca,
+            Charas.Alex
+        }.ToFrozenSet();
 
-    public static readonly List<Dragons> DragonList =
-        new()
+    public static FrozenSet<Dragons> DragonList { get; } =
+        new List<Dragons>()
         {
             Dragons.Brunhilda,
             Dragons.Mercury,
             Dragons.Midgardsormr,
             Dragons.Jupiter,
             Dragons.Zodiark,
-        };
+        }.ToFrozenSet();
 
-    public static readonly Dictionary<FortPlants, FortConfig> FortConfigs =
-        new()
+    public static FrozenDictionary<FortPlants, FortConfig> FortConfigs { get; } =
+        new Dictionary<FortPlants, FortConfig>()
         {
             [FortPlants.TheHalidom] = new FortConfig(6, 1, 16, 17),
             [FortPlants.Smithy] = new FortConfig(6, 1, 21, 3),
@@ -53,6 +58,11 @@ public static class StorySkipRewards
             [FortPlants.BowDojo] = new FortConfig(10, 2),
             [FortPlants.WandDojo] = new FortConfig(10, 2),
             [FortPlants.StaffDojo] = new FortConfig(10, 2),
-            [FortPlants.ManacasterDojo] = new FortConfig(10, 2)
-        };
+            [FortPlants.ManacasterDojo] = new FortConfig(10, 2),
+            [FortPlants.WindDracolith] = new FortConfig(1, 1),
+            [FortPlants.WaterDracolith] = new FortConfig(1, 1),
+            [FortPlants.FlameDracolith] = new FortConfig(1, 1),
+            [FortPlants.LightDracolith] = new FortConfig(1, 1),
+            [FortPlants.ShadowDracolith] = new FortConfig(1, 1),
+        }.ToFrozenDictionary();
 }
