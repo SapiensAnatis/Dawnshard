@@ -36,7 +36,9 @@ public class DungeonStartController(
         );
 
         if (!await dungeonStartService.ValidateStamina(request.QuestId, StaminaType.Single))
+        {
             return this.Code(ResultCode.QuestStaminaSingleShort);
+        }
 
         IngameData ingameData = await dungeonStartService.GetIngameData(
             request.QuestId,
@@ -51,6 +53,8 @@ public class DungeonStartController(
             cancellationToken
         );
 
+        await dungeonService.WriteSession(cancellationToken);
+
         return Ok(response);
     }
 
@@ -61,7 +65,9 @@ public class DungeonStartController(
     )
     {
         if (!await dungeonStartService.ValidateStamina(request.QuestId, StaminaType.Multi))
+        {
             return this.Code(ResultCode.QuestStaminaMultiShort);
+        }
 
         IngameData ingameData = await dungeonStartService.GetIngameData(
             request.QuestId,
@@ -87,7 +93,8 @@ public class DungeonStartController(
             {
                 session.IsHost = ingameData.IsHost;
                 session.IsMulti = true;
-            }
+            },
+            cancellationToken
         );
 
         DungeonStartStartResponse response = await BuildResponse(
@@ -95,6 +102,8 @@ public class DungeonStartController(
             ingameData,
             cancellationToken
         );
+
+        await dungeonService.WriteSession(cancellationToken);
 
         return Ok(response);
     }
@@ -122,6 +131,8 @@ public class DungeonStartController(
         );
 
         response.IngameData.RepeatState = request.RepeatState;
+
+        await dungeonService.WriteSession(cancellationToken);
 
         return Ok(response);
     }
@@ -162,7 +173,8 @@ public class DungeonStartController(
             {
                 session.IsHost = ingameData.IsHost;
                 session.IsMulti = true;
-            }
+            },
+            cancellationToken
         );
 
         DungeonStartStartResponse response = await BuildResponse(
@@ -170,6 +182,8 @@ public class DungeonStartController(
             ingameData,
             cancellationToken
         );
+
+        await dungeonService.WriteSession(cancellationToken);
 
         return Ok(response);
     }
@@ -182,14 +196,15 @@ public class DungeonStartController(
     {
         logger.LogDebug("Starting dungeon for quest id {questId}", questId);
 
-        IngameQuestData ingameQuestData = await dungeonStartService.InitiateQuest(questId);
-
+        IngameQuestData ingameQuestData = await dungeonStartService.UpdateDbQuest(questId);
         UpdateDataList updateData = await updateDataService.SaveChangesAsync(cancellationToken);
 
         OddsInfo oddsInfo = oddsInfoService.GetOddsInfo(questId, 0);
+
         await dungeonService.ModifySession(
             ingameData.DungeonKey,
-            session => session.EnemyList[0] = oddsInfo.Enemy
+            session => session.EnemyList[0] = oddsInfo.Enemy,
+            cancellationToken
         );
 
         if (questId == 204270302)

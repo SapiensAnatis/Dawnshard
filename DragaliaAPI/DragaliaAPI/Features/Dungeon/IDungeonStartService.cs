@@ -19,7 +19,7 @@ public interface IDungeonStartService
         RepeatSetting? repeatSetting = null
     );
 
-    Task<IngameQuestData> InitiateQuest(int questId);
+    Task<IngameQuestData> UpdateDbQuest(int questId);
     Task<bool> ValidateStamina(int questId, StaminaType staminaType);
     Task<IngameData> GetWallIngameData(
         int wallId,

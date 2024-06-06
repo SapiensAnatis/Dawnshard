@@ -75,7 +75,9 @@ public class WallRecordControllerTest
                 WallLevel = wallLevel
             };
 
-        mockDungeonService.Setup(x => x.FinishDungeon(dungeonKey)).ReturnsAsync(session);
+        mockDungeonService
+            .Setup(x => x.RemoveSession(dungeonKey, CancellationToken.None))
+            .Returns(Task.CompletedTask);
 
         mockWallService.Setup(x => x.GetQuestWall(wallId)).ReturnsAsync(playerQuestWall);
         mockWallService.Setup(x => x.LevelupQuestWall(wallId)).Returns(Task.CompletedTask);

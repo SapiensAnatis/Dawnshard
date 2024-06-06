@@ -92,7 +92,7 @@ public partial class DungeonStartService(
         QuestData questInfo = MasterAsset.QuestData.Get(questId);
 
         result.PartyInfo.PartyUnitList = await ProcessDetailedUnitList(detailedPartyUnits);
-        result.DungeonKey = await dungeonService.StartDungeon(
+        result.DungeonKey = dungeonService.CreateSession(
             new()
             {
                 QuestData = questInfo,
@@ -153,7 +153,7 @@ public partial class DungeonStartService(
         QuestData questInfo = MasterAsset.QuestData.Get(questId);
 
         result.PartyInfo.PartyUnitList = await ProcessDetailedUnitList(detailedPartyUnits);
-        result.DungeonKey = await dungeonService.StartDungeon(
+        result.DungeonKey = dungeonService.CreateSession(
             new()
             {
                 QuestData = questInfo,
@@ -185,7 +185,7 @@ public partial class DungeonStartService(
             .ToListAsync();
 
         result.PartyInfo.PartyUnitList = await ProcessDetailedUnitList(detailedPartyUnits);
-        result.DungeonKey = await dungeonService.StartDungeon(
+        result.DungeonKey = dungeonService.CreateSession(
             new()
             {
                 Party = party.Where(x => x.CharaId != 0),
@@ -224,7 +224,7 @@ public partial class DungeonStartService(
         }
 
         result.PartyInfo.PartyUnitList = await ProcessDetailedUnitList(detailedPartyUnits);
-        result.DungeonKey = await dungeonService.StartDungeon(
+        result.DungeonKey = dungeonService.CreateSession(
             new()
             {
                 Party = party.Where(x => x.CharaId != 0),
@@ -237,7 +237,7 @@ public partial class DungeonStartService(
         return result;
     }
 
-    public async Task<IngameQuestData> InitiateQuest(int questId)
+    public async Task<IngameQuestData> UpdateDbQuest(int questId)
     {
         DbQuest? quest = await questRepository.Quests.FirstOrDefaultAsync(x =>
             x.QuestId == questId
