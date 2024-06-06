@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Dungeon.Record;
+using DragaliaAPI.Features.Dungeon.Start;
 using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
@@ -8,6 +9,7 @@ using DragaliaAPI.Services;
 using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace DragaliaAPI.Test.Controllers;
 
@@ -40,7 +42,8 @@ public class DungeonControllerTest
             this.mockUpdateDataService.Object,
             this.mockRewardService.Object,
             this.mockMatchingService.Object,
-            this.mockDungeonRecordHelperService.Object
+            this.mockDungeonRecordHelperService.Object,
+            NullLogger<DungeonController>.Instance
         );
     }
 
