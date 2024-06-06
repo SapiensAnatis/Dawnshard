@@ -39,7 +39,7 @@ public class RepeatController(
                     OverPresentLimitEntityList = [],
                     OverPresentEntityList = []
                 },
-                RepeatData = new(info.Key.ToString(), info.CurrentCount, 1)
+                RepeatData = null,
             };
 
         return response;
