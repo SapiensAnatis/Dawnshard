@@ -29,6 +29,12 @@ public class DungeonStartController(
         CancellationToken cancellationToken
     )
     {
+        logger.LogDebug(
+            "Attempting to start quest {QuestId} with helper {SupportViewerId}",
+            request.QuestId,
+            request.SupportViewerId
+        );
+
         if (!await dungeonStartService.ValidateStamina(request.QuestId, StaminaType.Single))
             return this.Code(ResultCode.QuestStaminaSingleShort);
 
