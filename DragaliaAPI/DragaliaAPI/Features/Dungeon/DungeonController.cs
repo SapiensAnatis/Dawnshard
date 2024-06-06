@@ -5,6 +5,7 @@ using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Game;
 using DragaliaAPI.Services.Photon;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +19,8 @@ public class DungeonController(
     IUpdateDataService updateDataService,
     IRewardService rewardService,
     IMatchingService matchingService,
-    IDungeonRecordHelperService dungeonRecordHelperService
+    IDungeonRecordHelperService dungeonRecordHelperService,
+    ILogger<DungeonController> logger
 ) : DragaliaControllerBase
 {
     [HttpPost("get_area_odds")]
@@ -43,12 +45,12 @@ public class DungeonController(
     {
         DungeonSession session = await dungeonService.FinishDungeon(request.DungeonKey);
 
+        logger.LogDebug("Processing fail request for quest {QuestId}", session.QuestId);
+
         DungeonFailResponse response =
             new()
             {
                 Result = 1,
-                FailHelperList = new List<UserSupportList>(),
-                FailHelperDetailList = new List<AtgenHelperDetailList>(),
                 FailQuestDetail = new()
                 {
                     QuestId = session.QuestId,
@@ -57,6 +59,8 @@ public class DungeonController(
                     IsHost = true,
                 }
             };
+
+        logger.LogDebug("Session is multiplayer: {IsMulti}", session.IsMulti);
 
         if (session.IsMulti)
         {
@@ -69,6 +73,8 @@ public class DungeonController(
             (response.FailHelperList, response.FailHelperDetailList) =
                 await dungeonRecordHelperService.ProcessHelperDataSolo(session.SupportViewerId);
         }
+
+        logger.LogDebug("Final response: {@Response}", response);
 
         return this.Ok(response);
     }
