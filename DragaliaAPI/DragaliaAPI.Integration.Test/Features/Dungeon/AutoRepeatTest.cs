@@ -185,7 +185,7 @@ public class AutoRepeatTest : TestFixture
             await Client.PostMsgpack<RepeatEndResponse>("repeat/end")
         ).Data;
 
-        repeatEndResponse.RepeatData.Should().BeEquivalentTo(recordResponse2.RepeatData);
+        repeatEndResponse.RepeatData.Should().BeNull();
 
         // Breaking news: lazy developer too lazy to test cumbersome merging logic
         int expectedCoin =

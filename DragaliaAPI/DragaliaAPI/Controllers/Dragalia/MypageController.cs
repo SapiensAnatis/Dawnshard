@@ -47,7 +47,9 @@ public class MypageController(
         RepeatInfo? repeatInfo = await autoRepeatService.GetRepeatInfo();
 
         if (repeatInfo != null)
+        {
             resp.RepeatData = new(repeatInfo.Key.ToString(), repeatInfo.CurrentCount, 1);
+        }
 
         return Ok(resp);
     }

@@ -2,6 +2,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.Definitions.Enums.Dungeon;
 using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 
@@ -56,9 +57,6 @@ public class AutoRepeatService(
          *
          * In the former case, we need to retrieve the pre-configured settings from the start request,
          * and in the latter case we need to create default settings.
-         *
-         * Additionally, the client may also send a stale repeat key on the first iteration instead of a null value.
-         * This then fails to find any data. We treat this the same as not having provided a key in the first place.
          */
 
         if (repeatKey != null)
@@ -70,7 +68,11 @@ public class AutoRepeatService(
         if (info == null)
         {
             info = await this.GetRepeatInfo();
-            logger.LogTrace("Repeat key lookup failed. Viewer ID lookup found: {@Info}", info);
+            logger.LogTrace(
+                "Repeat key lookup for key {Key} failed. Viewer ID lookup found: {@Info}",
+                repeatKey,
+                info
+            );
         }
 
         if (info == null)
