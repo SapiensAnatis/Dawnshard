@@ -75,9 +75,12 @@
         return;
       }
 
-      console.log(dateElement.textContent);
+      const timestamp = dateElement.getAttribute("data-timestamp");
+      if (!timestamp) {
+        return;
+      }
 
-      const dateObj = new Date(dateElement.textContent);
+      const dateObj = new Date(timestamp * 1000);
       document.getElementById("date").textContent = dateObj.toLocaleString(undefined, {
         dateStyle: "medium",
         timeStyle: "medium"
@@ -94,8 +97,7 @@
     <br />
     <div class="end-time">
       <h2>Expected end time:</h2>
-      <p id="date" class="text">{{ end_date }}</p>
-      <p id="date-placeholder"></p>
+      <p id="date" class="text" data-timestamp="{{ timestamp }}">{{ end_date }}</p>
     </div>
   </div>
 </body>
