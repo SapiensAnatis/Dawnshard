@@ -8,22 +8,24 @@
       font-family: sans-serif;
       font-weight: 500;
       font-size: 2rem;
-      color: whitesmoke;
     }
 
     h2 {
       font-family: sans-serif;
       font-weight: 400;
       font-size: 1.5rem;
-      color: whitesmoke;
     }
 
     p {
       font-family: sans-serif;
       font-weight: 300;
       font-size: 1rem;
-      color: whitesmoke;
       margin: 0;
+    }
+
+    .end-time {
+      text-align: center;
+      height: 300px;
     }
 
     .emoji {
@@ -45,6 +47,7 @@
     }
 
     body {
+      color: whitesmoke;
       background-color: #1a264c;
       display: flex;
       align-items: center;
@@ -54,7 +57,33 @@
     br {
       margin: 1rem auto;
     }
+
+    .loading #date {
+      visibility: hidden;
+    }
   </style>
+  <script>
+    document.documentElement.className += "loading";
+    window.onload = () => {
+      localizeTime();
+      document.documentElement.className = document.documentElement.className.replace("loading", "");
+    };
+
+    function localizeTime() {
+      const dateElement = document.getElementById("date");
+      if (!dateElement) {
+        return;
+      }
+
+      console.log(dateElement.textContent);
+
+      const dateObj = new Date(dateElement.textContent);
+      document.getElementById("date").textContent = dateObj.toLocaleString(undefined, {
+        dateStyle: "medium",
+        timeStyle: "medium"
+      });
+    }
+  </script>
 </head>
 
 <body>
@@ -63,9 +92,11 @@
     <h1 class="title">{{ title }}</h1>
     <p class="text">{{ body }}</p>
     <br />
-
-    <h2>Expected end time:</h2>
-    <p class="text">{{ end_date }}</p>
+    <div class="end-time">
+      <h2>Expected end time:</h2>
+      <p id="date" class="text">{{ end_date }}</p>
+      <p id="date-placeholder"></p>
+    </div>
   </div>
 </body>
 

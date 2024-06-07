@@ -1,11 +1,11 @@
 use crate::shared::CloudflareVariables;
-use time::macros::format_description;
+use time::{format_description::well_known::Iso8601, macros::format_description};
 use worker::*;
 
 static PAGE_HTML: &str = include_str!("page.html");
 
 pub fn get_html(
-    _req: Request,
+    req: Request,
     _ctx: RouteContext<()>,
     vars: CloudflareVariables,
 ) -> Result<Response> {
@@ -21,9 +21,7 @@ pub fn get_html(
 }
 
 fn format_html_with_date(vars: CloudflareVariables) -> std::result::Result<String, &'static str> {
-    let Ok(formatted_date) = vars.end_date.format(format_description!(
-        "[day]/[month]/[year] [hour]:[minute]:[second] +[offset_hour]:[offset_minute]"
-    )) else {
+    let Ok(formatted_date) = vars.end_date.format(&Iso8601::DEFAULT) else {
         return Err("Failed to format parsed end date");
     };
 
