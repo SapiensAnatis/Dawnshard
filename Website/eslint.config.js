@@ -1,9 +1,10 @@
 import js from '@eslint/js';
 import eslintConfigPrettier from 'eslint-config-prettier';
-import tsEslint from 'typescript-eslint';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import eslintPluginSvelte from 'eslint-plugin-svelte';
-import svelteParser from 'svelte-eslint-parser';
 import globals from 'globals';
+import svelteParser from 'svelte-eslint-parser';
+import tsEslint from 'typescript-eslint';
 
 /** @type { import("eslint").Linter.Config } */
 export default [
@@ -59,5 +60,14 @@ export default [
       'yarn.lock',
       'src/lib/shadcn'
     ]
+  },
+  {
+    plugins: {
+      'simple-import-sort': simpleImportSort
+    },
+    rules: {
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error'
+    }
   }
 ];

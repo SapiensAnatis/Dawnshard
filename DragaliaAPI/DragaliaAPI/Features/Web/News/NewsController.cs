@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Features.Web.News;
 
 [Route("/api/news")]
+[ApiController]
 [AllowAnonymous]
 public sealed class NewsController(NewsService newsService) : ControllerBase
 {

@@ -1,9 +1,11 @@
 <script lang="ts">
   import { Image } from '@unpic/svelte';
-  import type { PageData } from './$types';
+  import ChevronLeft from 'lucide-svelte/icons/chevron-left';
+
   import { afterNavigate } from '$app/navigation';
   import { Button } from '$shadcn/components/ui/button';
-  import ChevronLeft from 'lucide-svelte/icons/chevron-left';
+
+  import type { PageData } from './$types';
 
   let previousPage: string = '/webview/news/1';
 

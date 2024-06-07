@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Routes from '$lib/routes/routes.svelte';
+  import Routes from '$main/routes.svelte';
 </script>
 
 <nav class="flex flex-col justify-center gap-1 p-3">

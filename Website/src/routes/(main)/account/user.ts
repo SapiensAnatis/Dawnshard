@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const userSchema = z.object({
-  viewerId: z.number().int(),
+  viewerId: z.number().positive(),
   name: z.string()
 });
 

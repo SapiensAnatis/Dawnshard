@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Skeleton } from '$shadcn/components/ui/skeleton/index.js';
   import { Card, CardContent, CardHeader } from '$shadcn/components/ui/card/index.js';
+  import { Skeleton } from '$shadcn/components/ui/skeleton/index.js';
 
   export let description: boolean = true;
 </script>

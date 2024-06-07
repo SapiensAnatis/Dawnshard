@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { ComponentType } from 'svelte';
+
   import { Button } from '$shadcn/components/ui/button';
 
   export let href: string;
