@@ -5,26 +5,21 @@
   <title>Dawnshard</title>
   <style>
     h1 {
-      font-family: sans-serif;
-      font-weight: 500;
-      font-size: 2rem;
+      font-weight: bolder;
+      font-size: 3rem;
     }
 
     h2 {
-      font-family: sans-serif;
-      font-weight: 400;
-      font-size: 1.5rem;
+      font-weight: bold;
+      font-size: 2rem;
     }
 
     p {
-      font-family: sans-serif;
-      font-weight: 300;
-      font-size: 1rem;
+      font-size: 1.25rem;
       margin: 0;
     }
 
     .end-time {
-      text-align: center;
       height: 300px;
     }
 
@@ -47,11 +42,13 @@
     }
 
     body {
+      font-family: sans-serif;
       color: whitesmoke;
       background-color: #1a264c;
       display: flex;
       align-items: center;
       justify-content: center;
+      text-align: center;
     }
 
     br {
@@ -83,7 +80,7 @@
       const dateObj = new Date(timestamp * 1000);
       document.getElementById("date").textContent = dateObj.toLocaleString(undefined, {
         dateStyle: "medium",
-        timeStyle: "medium"
+        timeStyle: "short"
       });
     }
   </script>
