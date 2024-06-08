@@ -13,15 +13,16 @@ public class MaintenanceActionFilter(
     ILogger<MaintenanceActionFilter> logger
 ) : IActionFilter
 {
-    private readonly IOptionsMonitor<MaintenanceOptions> options = options;
-    private readonly ILogger<MaintenanceActionFilter> logger = logger;
+    public void OnActionExecuting(ActionExecutingContext context) { }
 
-    public void OnActionExecuting(ActionExecutingContext context)
+    public void OnActionExecuted(ActionExecutedContext context)
     {
-        if (!this.options.CurrentValue.Enabled)
+        if (!options.CurrentValue.Enabled)
+        {
             return;
+        }
 
-        this.logger.LogInformation("Aborting request due to active maintenance.");
+        logger.LogInformation("Rewriting response due to active maintenance.");
 
         context.Result = new OkObjectResult(
             new DragaliaResponse<object>(
@@ -30,6 +31,4 @@ public class MaintenanceActionFilter(
             )
         );
     }
-
-    public void OnActionExecuted(ActionExecutedContext context) { }
 }
