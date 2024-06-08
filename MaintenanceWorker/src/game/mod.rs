@@ -1,4 +1,4 @@
-use crate::helper::{util::load_end_date, vars};
+use crate::shared::{CloudflareVariables, INTERNAL_SERVER_ERROR};
 use serde::Serialize;
 use time::macros::{format_description, offset};
 use worker::*;
@@ -25,6 +25,7 @@ static RESULT_CODE_OK: u16 = 1;
 pub fn handle_generic(
     _req: Request,
     _ctx: RouteContext<()>,
+    _vars: CloudflareVariables,
 ) -> std::result::Result<Response, Error> {
     let resp = DragaliaResponse::<DataHeaders> {
         data_headers: DataHeaders {
@@ -35,22 +36,19 @@ pub fn handle_generic(
         },
     };
 
-    let Ok(bytes) = rmp_serde::encode::to_vec_named(&resp) else {
-        return Err("Failed to serialize response".into());
-    };
-
-    Response::from_bytes(bytes)
+    serialize(resp)
 }
 
 pub fn handle_get_text(
     _req: Request,
-    ctx: RouteContext<()>,
-) -> std::result::Result<Response, Error> {
-    let xml = match generate_xml(ctx) {
+    _ctx: RouteContext<()>,
+    vars: CloudflareVariables,
+) -> Result<Response> {
+    let xml = match generate_xml(vars) {
         Ok(xml) => xml,
-        Err(e) => {
-            console_error!("Failed to format XML response: {}", e);
-            return Err("Failed to format XML response".into());
+        Err(err) => {
+            console_error!("Failed to format XML response: {}", err);
+            return Response::error(INTERNAL_SERVER_ERROR, 500);
         }
     };
 
@@ -63,24 +61,13 @@ pub fn handle_get_text(
         },
     };
 
-    let Ok(bytes) = rmp_serde::encode::to_vec_named(&resp) else {
-        return Err("Failed to serialize response".into());
-    };
-
-    Response::from_bytes(bytes)
+    serialize(resp)
 }
 
-fn generate_xml(ctx: RouteContext<()>) -> std::result::Result<String, &'static str> {
-    let parsed_date = match load_end_date(&ctx) {
-        Ok(date) => date,
-        Err(e) => {
-            console_error!("Failed to load parsed end date: {}", e);
-            return Err("Failed to load parsed end date");
-        }
-    };
-
+fn generate_xml(vars: CloudflareVariables) -> std::result::Result<String, &'static str> {
     // Convert to JST; the game expects all dates to be formatted without timezone and in JST
-    let Ok(formatted_jst_date) = parsed_date
+    let Ok(formatted_jst_date) = vars
+        .end_date
         .to_offset(offset!(+9))
         .format(format_description!(
             "[year]-[month]-[day]T[hour]:[minute]:[second]"
@@ -89,21 +76,21 @@ fn generate_xml(ctx: RouteContext<()>) -> std::result::Result<String, &'static s
         return Err("Failed to format parsed end date");
     };
 
-    let Ok(maintenance_title) = ctx.var(vars::TITLE) else {
-        return Err("Failed to load maintenance title");
-    };
-
-    let Ok(maintenance_body) = ctx.var(vars::BODY) else {
-        return Err("Failed to load maintenance body");
-    };
-
     Ok(format!(
         "<title>{}</title>
 <body>{}</body>
 <schedule>Check back at:</schedule>
 <date>{}</date>",
-        maintenance_title.to_string(),
-        maintenance_body.to_string(),
-        formatted_jst_date
+        vars.title, vars.body, formatted_jst_date
     ))
+}
+
+fn serialize<T: Serialize>(resp: T) -> Result<Response> {
+    match rmp_serde::encode::to_vec_named(&resp) {
+        Ok(bytes) => Response::from_bytes(bytes),
+        Err(err) => {
+            console_error!("Failed to serialize msgpack response: {}", err);
+            return Response::error(INTERNAL_SERVER_ERROR, 500);
+        }
+    }
 }

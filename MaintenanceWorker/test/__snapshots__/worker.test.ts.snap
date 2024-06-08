@@ -1,4 +1,7 @@
-<!DOCTYPE html>
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`web > renders webpage 1`] = `
+"<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -89,14 +92,17 @@
 <body>
   <div class="message">
     <span class="emoji">🚧</span>
-    <h1 class="title">{{ title }}</h1>
-    <p class="text">{{ body }}</p>
+    <h1 class="title">Maintenance</h1>
+    <p class="text">Dawnshard is currently under maintenance so
+dreadfullydistinct can fix his
+Consul install.</p>
     <br />
     <div class="end-time">
       <h2>Expected end time:</h2>
-      <p id="date" class="text" data-timestamp="{{ timestamp }}">{{ end_date }}</p>
+      <p id="date" class="text" data-timestamp="1716238800">20/05/2024 22:00:00 +01:00</p>
     </div>
   </div>
 </body>
 
-</html>
+</html>"
+`;
