@@ -10,22 +10,28 @@ public class ResourceVersionActionFilter(
     ILogger<ResourceVersionActionFilter> logger
 ) : IActionFilter
 {
-    public void OnActionExecuting(ActionExecutingContext context)
+    public void OnActionExecuting(ActionExecutingContext context) { }
+
+    public void OnActionExecuted(ActionExecutedContext context)
     {
         string? clientResourceVer = context.HttpContext.Request.Headers["Res-Ver"].FirstOrDefault();
         if (clientResourceVer is null)
+        {
             return;
+        }
 
         string? platformString = context.HttpContext.Request.Headers["Platform"].FirstOrDefault();
         if (!Enum.TryParse(platformString, out Platform platform) && Enum.IsDefined(platform))
+        {
             return;
+        }
 
         string serverResourceVer = resourceVersionService.GetResourceVersion(platform);
 
         if (clientResourceVer != serverResourceVer)
         {
             logger.LogInformation(
-                "Request blocked due to resource version mismatch: client: {clientVer}, server: {serverVer}",
+                "Response rewritten due to resource version mismatch: client: {clientVer}, server: {serverVer}",
                 clientResourceVer,
                 serverResourceVer
             );
@@ -38,6 +44,4 @@ public class ResourceVersionActionFilter(
             );
         }
     }
-
-    public void OnActionExecuted(ActionExecutedContext context) { }
 }
