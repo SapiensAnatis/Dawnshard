@@ -1,15 +1,20 @@
 ﻿using DragaliaAPI.Models;
 using DragaliaAPI.Models.Options;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Features.Dungeon;
 
-public class DungeonService : IDungeonService
+public class DungeonService(
+    IDistributedCache cache,
+    IOptionsMonitor<RedisCachingOptions> options,
+    IPlayerIdentityService playerIdentityService,
+    ILogger<DungeonService> logger
+) : IDungeonService
 {
-    private readonly IDistributedCache cache;
-    private readonly IOptionsMonitor<RedisCachingOptions> options;
-    private readonly ILogger<DungeonService> logger;
+    private DungeonSession? currentSession;
+    private string? currentKey;
 
     private DistributedCacheEntryOptions CacheOptions =>
         new()
@@ -19,77 +24,75 @@ public class DungeonService : IDungeonService
 
     private static class Schema
     {
-        public static string DungeonKey_DungeonData(string dungeonKey) => $":dungeon:{dungeonKey}";
+        public static string DungeonKey_DungeonData(long viewerId, string dungeonKey) =>
+            $":dungeon:{viewerId}:{dungeonKey}";
     }
 
-    public DungeonService(
-        IDistributedCache cache,
-        IOptionsMonitor<RedisCachingOptions> options,
-        ILogger<DungeonService> logger
+    public string CreateSession(DungeonSession dungeonSession)
+    {
+        this.currentKey = Guid.NewGuid().ToString();
+        this.currentSession = dungeonSession;
+
+        logger.LogDebug("Created dungeon session with key {Key}", currentKey);
+
+        return currentKey;
+    }
+
+    public async Task<DungeonSession> GetSession(
+        string dungeonKey,
+        CancellationToken cancellationToken
     )
     {
-        this.cache = cache;
-        this.options = options;
-        this.logger = logger;
+        DungeonSession session =
+            await cache.GetJsonAsync<DungeonSession>(
+                Schema.DungeonKey_DungeonData(playerIdentityService.ViewerId, dungeonKey),
+                cancellationToken
+            ) ?? throw new DungeonException(dungeonKey);
+
+        this.currentSession = session;
+        this.currentKey = dungeonKey;
+
+        return session;
     }
 
-    public async Task<string> StartDungeon(DungeonSession dungeonSession)
+    public async Task SaveSession(CancellationToken cancellationToken)
     {
-        string dungeonKey = Guid.NewGuid().ToString();
-        await WriteDungeon(dungeonKey, dungeonSession);
+        if (this.currentSession == null || this.currentKey == null)
+        {
+            throw new InvalidOperationException(
+                "Cannot perform WriteSession when no dungeon session is being tracked. "
+                    + "A session must be loaded either via CreateSession or GetSession before one can be saved."
+            );
+        }
 
-        this.logger.LogDebug("Issued dungeon key {key}", dungeonKey);
-
-        return dungeonKey;
-    }
-
-    public async Task<DungeonSession> GetDungeon(string dungeonKey)
-    {
-        string json =
-            await cache.GetStringAsync(Schema.DungeonKey_DungeonData(dungeonKey))
-            ?? throw new DungeonException(dungeonKey);
-
-        return JsonSerializer.Deserialize<DungeonSession>(json)
-            ?? throw new JsonException("Could not deserialize dungeon session.");
-    }
-
-    private async Task WriteDungeon(string dungeonKey, DungeonSession session)
-    {
-        await cache.SetStringAsync(
-            Schema.DungeonKey_DungeonData(dungeonKey),
-            JsonSerializer.Serialize(session),
-            CacheOptions
+        await cache.SetJsonAsync(
+            Schema.DungeonKey_DungeonData(playerIdentityService.ViewerId, this.currentKey),
+            this.currentSession,
+            CacheOptions,
+            cancellationToken
         );
     }
 
-    /// <summary>
-    /// Update a session already in the cache.
-    /// </summary>
-    /// <remarks>
-    /// This method should not exist. The dungeon_start code could be better structured to avoid its use.
-    /// TODO: Remove all usages
-    /// </remarks>
-    /// <param name="dungeonKey">The dungeon key.</param>
-    /// <param name="update">The action to update with.</param>
-    /// <returns>A task.</returns>
-    public async Task ModifySession(string dungeonKey, Action<DungeonSession> update)
+    public async Task ModifySession(
+        string dungeonKey,
+        Action<DungeonSession> update,
+        CancellationToken cancellationToken
+    )
     {
-        DungeonSession session = await this.GetDungeon(dungeonKey);
-
-        update.Invoke(session);
-
-        await WriteDungeon(dungeonKey, session);
+        this.currentSession ??= await this.GetSession(dungeonKey, cancellationToken);
+        update.Invoke(this.currentSession);
     }
 
-    public async Task<DungeonSession> FinishDungeon(string dungeonKey)
+    public async Task RemoveSession(string dungeonKey, CancellationToken cancellationToken)
     {
-        DungeonSession session = await GetDungeon(dungeonKey);
+        logger.LogDebug("Removing dungeon session with key {Key}", dungeonKey);
 
-        this.logger.LogDebug("Completed dungeon with key {key}", dungeonKey);
+        await cache.RemoveAsync(
+            Schema.DungeonKey_DungeonData(playerIdentityService.ViewerId, dungeonKey),
+            cancellationToken
+        );
 
-        // Don't remove in case the client re-calls due to timeout
-        // await cache.RemoveAsync(Schema.DungeonKey_DungeonData(dungeonKey));
-
-        return session;
+        this.currentSession = null;
+        this.currentKey = null;
     }
 }

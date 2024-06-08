@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon.AutoRepeat;
@@ -30,7 +29,6 @@ public partial class DungeonStartService(
     IBonusService bonusService,
     IHelperService helperService,
     IUserService userService,
-    IMapper mapper,
     ILogger<DungeonStartService> logger,
     IPaymentService paymentService,
     IEventService eventService,
@@ -92,7 +90,7 @@ public partial class DungeonStartService(
         QuestData questInfo = MasterAsset.QuestData.Get(questId);
 
         result.PartyInfo.PartyUnitList = await ProcessDetailedUnitList(detailedPartyUnits);
-        result.DungeonKey = await dungeonService.StartDungeon(
+        result.DungeonKey = dungeonService.CreateSession(
             new()
             {
                 QuestData = questInfo,
@@ -153,7 +151,7 @@ public partial class DungeonStartService(
         QuestData questInfo = MasterAsset.QuestData.Get(questId);
 
         result.PartyInfo.PartyUnitList = await ProcessDetailedUnitList(detailedPartyUnits);
-        result.DungeonKey = await dungeonService.StartDungeon(
+        result.DungeonKey = dungeonService.CreateSession(
             new()
             {
                 QuestData = questInfo,
@@ -169,7 +167,7 @@ public partial class DungeonStartService(
         int wallId,
         int wallLevel,
         int partyNo,
-        ulong? supportViewerId = null
+        ulong? supportViewerId
     )
     {
         Log.LoadingFromPartyNumber(logger, partyNo);
@@ -185,7 +183,7 @@ public partial class DungeonStartService(
             .ToListAsync();
 
         result.PartyInfo.PartyUnitList = await ProcessDetailedUnitList(detailedPartyUnits);
-        result.DungeonKey = await dungeonService.StartDungeon(
+        result.DungeonKey = dungeonService.CreateSession(
             new()
             {
                 Party = party.Where(x => x.CharaId != 0),
@@ -202,7 +200,7 @@ public partial class DungeonStartService(
         int wallId,
         int wallLevel,
         IList<PartySettingList> party,
-        ulong? supportViewerId = null
+        ulong? supportViewerId
     )
     {
         IngameData result = await InitializeIngameData(0, supportViewerId);
@@ -224,7 +222,7 @@ public partial class DungeonStartService(
         }
 
         result.PartyInfo.PartyUnitList = await ProcessDetailedUnitList(detailedPartyUnits);
-        result.DungeonKey = await dungeonService.StartDungeon(
+        result.DungeonKey = dungeonService.CreateSession(
             new()
             {
                 Party = party.Where(x => x.CharaId != 0),
@@ -237,7 +235,7 @@ public partial class DungeonStartService(
         return result;
     }
 
-    public async Task<IngameQuestData> InitiateQuest(int questId)
+    public async Task<IngameQuestData> UpdateDbQuest(int questId)
     {
         DbQuest? quest = await questRepository.Quests.FirstOrDefaultAsync(x =>
             x.QuestId == questId
@@ -258,6 +256,9 @@ public partial class DungeonStartService(
             IsMissionClear3 = quest?.IsMissionClear3 ?? false,
         };
     }
+
+    public Task SaveSession(CancellationToken cancellationToken) =>
+        dungeonService.SaveSession(cancellationToken);
 
     private async Task<AtgenSupportData> GetSupportData(ulong supportViewerId)
     {
@@ -305,7 +306,7 @@ public partial class DungeonStartService(
 
         List<PartyUnitList> units = detailedPartyUnits
             .OrderBy(x => x.Position)
-            .Select(mapper.Map<PartyUnitList>)
+            .MapToPartyUnitList()
             .ToList();
 
         if (units.Count != 4)
@@ -334,15 +335,20 @@ public partial class DungeonStartService(
         return units;
     }
 
-    private List<PartySettingList> ProcessUnitList(List<DbPartyUnit> partyUnits, int firstPartyNo)
+    private static List<PartySettingList> ProcessUnitList(
+        List<DbPartyUnit> partyUnits,
+        int firstPartyNo
+    )
     {
         foreach (DbPartyUnit unit in partyUnits)
         {
             if (unit.PartyNo != firstPartyNo)
+            {
                 unit.UnitNo += 4;
+            }
         }
 
-        return partyUnits.Select(mapper.Map<PartySettingList>).OrderBy(x => x.UnitNo).ToList();
+        return partyUnits.MapToPartySettingList().OrderBy(x => x.UnitNo).ToList();
     }
 
     private async Task<IngameData> InitializeIngameData(int questId, ulong? supportViewerId = null)
@@ -372,7 +378,7 @@ public partial class DungeonStartService(
             );
         }
 
-        result.AreaInfoList = questInfo.AreaInfo.Select(mapper.Map<AreaInfoList>);
+        result.AreaInfoList = questInfo.AreaInfo.MapToAreaInfoList();
         result.DungeonType = questInfo.DungeonType;
         result.RebornLimit = questInfo.RebornLimit;
         result.ContinueLimit = questInfo.ContinueLimit;

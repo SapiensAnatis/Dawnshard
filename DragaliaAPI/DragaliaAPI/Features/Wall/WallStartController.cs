@@ -11,19 +11,12 @@ namespace DragaliaAPI.Features.Wall;
 
 [Route("wall_start")]
 public class WallStartController(
-    IMapper mapper,
     IUpdateDataService updateDataService,
     IOddsInfoService oddsInfoService,
     IWallService wallService,
     IDungeonStartService dungeonStartService
 ) : DragaliaControllerBase
 {
-    private readonly IMapper mapper = mapper;
-    private readonly IUpdateDataService updateDataService = updateDataService;
-    private readonly IOddsInfoService oddsInfoService = oddsInfoService;
-    private readonly IWallService wallService = wallService;
-    private readonly IDungeonStartService dungeonStartService = dungeonStartService;
-
     // Called when starting a Mercurial Gauntlet quest
     [HttpPost("start")]
     public async Task<DragaliaResult> Start(
@@ -38,19 +31,21 @@ public class WallStartController(
             request.WallLevel
         );
 
-        IngameData ingameData = await this.dungeonStartService.GetWallIngameData(
+        IngameData ingameData = await dungeonStartService.GetWallIngameData(
             request.WallId,
             request.WallLevel,
             request.PartyNo,
             request.SupportViewerId
         );
 
-        ingameData.AreaInfoList = questWallDetail.AreaInfo.Select(mapper.Map<AreaInfoList>);
+        await dungeonStartService.SaveSession(cancellationToken);
+
+        ingameData.AreaInfoList = questWallDetail.AreaInfo.MapToAreaInfoList();
 
         IngameWallData ingameWallData =
             new() { WallId = request.WallId, WallLevel = request.WallLevel };
 
-        OddsInfo oddsInfo = this.oddsInfoService.GetWallOddsInfo(request.WallId, request.WallLevel);
+        OddsInfo oddsInfo = oddsInfoService.GetWallOddsInfo(request.WallId, request.WallLevel);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
@@ -78,19 +73,21 @@ public class WallStartController(
             request.WallLevel
         );
 
-        IngameData ingameData = await this.dungeonStartService.GetWallIngameData(
+        IngameData ingameData = await dungeonStartService.GetWallIngameData(
             request.WallId,
             request.WallLevel,
             request.RequestPartySettingList,
             request.SupportViewerId
         );
 
-        ingameData.AreaInfoList = questWallDetail.AreaInfo.Select(mapper.Map<AreaInfoList>);
+        await dungeonStartService.SaveSession(cancellationToken);
+
+        ingameData.AreaInfoList = questWallDetail.AreaInfo.MapToAreaInfoList();
 
         IngameWallData ingameWallData =
             new() { WallId = request.WallId, WallLevel = request.WallLevel };
 
-        OddsInfo oddsInfo = this.oddsInfoService.GetWallOddsInfo(request.WallId, request.WallLevel);
+        OddsInfo oddsInfo = oddsInfoService.GetWallOddsInfo(request.WallId, request.WallLevel);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 

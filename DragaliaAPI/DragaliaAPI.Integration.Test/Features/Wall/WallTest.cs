@@ -38,7 +38,7 @@ public class WallTest : TestFixture
                 WallLevel = expectedWallLevel
             };
 
-        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
+        string key = await this.StartDungeon(mockSession);
 
         WallFailResponse response = (
             await Client.PostMsgpack<WallFailResponse>(
@@ -255,5 +255,13 @@ public class WallTest : TestFixture
         );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
+    }
+
+    private async Task<string> StartDungeon(DungeonSession session)
+    {
+        string key = this.DungeonService.CreateSession(session);
+        await this.DungeonService.SaveSession(CancellationToken.None);
+
+        return key;
     }
 }

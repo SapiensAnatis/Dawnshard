@@ -869,10 +869,22 @@ public class SummonTest : TestFixture
 
         response.Data.ResultUnitList.Should().Contain(x => x.Rarity == 5);
 
-        this.ApiContext.PlayerBannerData.AsNoTracking()
-            .First(x => x.SummonBannerId == TestGalaBannerId)
-            .SummonCountSinceLastFiveStar.Should()
-            .Be(0);
+        SummonGetOddsDataResponse oddsResponse = (
+            await this.Client.PostMsgpack<SummonGetOddsDataResponse>(
+                "summon/get_odds_data",
+                new SummonGetOddsDataRequest(TestBannerId)
+            )
+        ).Data;
+
+        oddsResponse
+            .OddsRateList.Normal.RarityList.Should()
+            .BeEquivalentTo(
+                [
+                    new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
+                    new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
+                    new AtgenRarityList { Rarity = 3, TotalRate = "80.00%" },
+                ]
+            );
     }
 
     [Fact]

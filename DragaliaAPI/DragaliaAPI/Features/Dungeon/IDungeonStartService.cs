@@ -19,18 +19,23 @@ public interface IDungeonStartService
         RepeatSetting? repeatSetting = null
     );
 
-    Task<IngameQuestData> InitiateQuest(int questId);
+    Task<IngameQuestData> UpdateDbQuest(int questId);
+
     Task<bool> ValidateStamina(int questId, StaminaType staminaType);
+
     Task<IngameData> GetWallIngameData(
         int wallId,
         int wallLevel,
         int partyNo,
-        ulong? supportViewerId = null
+        ulong? supportViewerId
     );
+
     Task<IngameData> GetWallIngameData(
         int wallId,
         int wallLevel,
         IList<PartySettingList> party,
-        ulong? supportViewerId = null
+        ulong? supportViewerId
     );
+
+    Task SaveSession(CancellationToken cancellationToken);
 }
