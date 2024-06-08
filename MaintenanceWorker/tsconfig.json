@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "types": [
+      "@cloudflare/workers-types",
+      "vitest-environment-miniflare/globals",
+      "jest"
+    ]
+  },
+  "include": ["./**/*.ts", "../src/env.d.ts"]
+}
