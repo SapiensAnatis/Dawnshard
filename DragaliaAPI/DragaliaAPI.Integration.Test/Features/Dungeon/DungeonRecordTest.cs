@@ -1211,9 +1211,8 @@ public class DungeonRecordTest : TestFixture
 
     private async Task<string> StartDungeon(DungeonSession session)
     {
-        IDungeonService service = this.Services.GetRequiredService<IDungeonService>();
-        string key = service.CreateSession(session);
-        await service.WriteSession(CancellationToken.None);
+        string key = this.DungeonService.CreateSession(session);
+        await this.DungeonService.SaveSession(CancellationToken.None);
 
         return key;
     }

@@ -20,17 +20,24 @@ public interface IDungeonStartService
     );
 
     Task<IngameQuestData> UpdateDbQuest(int questId);
+
     Task<bool> ValidateStamina(int questId, StaminaType staminaType);
+
     Task<IngameData> GetWallIngameData(
         int wallId,
         int wallLevel,
         int partyNo,
-        ulong? supportViewerId = null
+        ulong? supportViewerId,
+        CancellationToken cancellationToken
     );
+
     Task<IngameData> GetWallIngameData(
         int wallId,
         int wallLevel,
         IList<PartySettingList> party,
-        ulong? supportViewerId = null
+        ulong? supportViewerId,
+        CancellationToken cancellationToken
     );
+
+    Task SaveSession(CancellationToken cancellationToken = default);
 }

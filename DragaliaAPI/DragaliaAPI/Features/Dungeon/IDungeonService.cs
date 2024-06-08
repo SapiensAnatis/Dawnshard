@@ -12,5 +12,5 @@ public interface IDungeonService
         CancellationToken cancellationToken
     );
     string CreateSession(DungeonSession dungeonSession);
-    Task WriteSession(CancellationToken cancellationToken);
+    Task SaveSession(CancellationToken cancellationToken);
 }

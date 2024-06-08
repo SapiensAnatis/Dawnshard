@@ -53,7 +53,7 @@ public class DungeonServiceTest
             };
 
         string key = dungeonService.CreateSession(session);
-        await dungeonService.WriteSession(CancellationToken.None);
+        await dungeonService.SaveSession(CancellationToken.None);
 
         (await dungeonService.GetSession(key, CancellationToken.None))
             .Should()

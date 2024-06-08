@@ -49,11 +49,17 @@ public class DungeonService(
                 cancellationToken
             ) ?? throw new DungeonException(dungeonKey);
 
-        return JsonSerializer.Deserialize<DungeonSession>(json)
+        DungeonSession session =
+            JsonSerializer.Deserialize<DungeonSession>(json)
             ?? throw new JsonException("Could not deserialize dungeon session.");
+
+        this.currentSession = session;
+        this.currentKey = dungeonKey;
+
+        return session;
     }
 
-    public async Task WriteSession(CancellationToken cancellationToken)
+    public async Task SaveSession(CancellationToken cancellationToken)
     {
         if (this.currentSession == null || this.currentKey == null)
         {

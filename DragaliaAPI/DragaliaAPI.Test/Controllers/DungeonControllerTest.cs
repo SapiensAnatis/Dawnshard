@@ -66,6 +66,17 @@ public class DungeonControllerTest
                 }
             };
 
+        this.mockDungeonService.Setup(x => x.GetSession("my key", CancellationToken.None))
+            .ReturnsAsync(
+                new DungeonSession()
+                {
+                    Party = [],
+                    IsMulti = false,
+                    SupportViewerId = 4,
+                    QuestData = MasterAsset.QuestData[questId]
+                }
+            );
+
         this.mockDungeonService.Setup(x => x.RemoveSession("my key", CancellationToken.None))
             .Returns(Task.CompletedTask);
 
@@ -120,6 +131,16 @@ public class DungeonControllerTest
                     GetManaPoint = 50,
                 }
             };
+
+        this.mockDungeonService.Setup(x => x.GetSession("my key", CancellationToken.None))
+            .ReturnsAsync(
+                new DungeonSession()
+                {
+                    Party = [],
+                    IsMulti = true,
+                    QuestData = MasterAsset.QuestData[questId]
+                }
+            );
 
         this.mockDungeonService.Setup(x => x.RemoveSession("my key", CancellationToken.None))
             .Returns(Task.CompletedTask);

@@ -44,7 +44,7 @@ public class DungeonController(
             cancellationToken
         );
 
-        await dungeonService.WriteSession(cancellationToken);
+        await dungeonService.SaveSession(cancellationToken);
 
         return Ok(new DungeonGetAreaOddsResponse() { OddsInfo = oddsInfo });
     }
