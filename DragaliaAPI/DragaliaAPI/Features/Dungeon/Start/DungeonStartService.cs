@@ -163,19 +163,18 @@ public partial class DungeonStartService(
         return result;
     }
 
-    public async Task<IngameData> GetWallIngameData(int wallId,
+    public async Task<IngameData> GetWallIngameData(
+        int wallId,
         int wallLevel,
         int partyNo,
-        ulong? supportViewerId)
+        ulong? supportViewerId
+    )
     {
         Log.LoadingFromPartyNumber(logger, partyNo);
 
         IQueryable<DbPartyUnit> partyQuery = partyRepository.GetPartyUnits(partyNo).AsNoTracking();
 
-        List<PartySettingList> party = ProcessUnitList(
-            await partyQuery.ToListAsync(),
-            partyNo
-        );
+        List<PartySettingList> party = ProcessUnitList(await partyQuery.ToListAsync(), partyNo);
 
         IngameData result = await InitializeIngameData(0, supportViewerId);
 
@@ -197,10 +196,12 @@ public partial class DungeonStartService(
         return result;
     }
 
-    public async Task<IngameData> GetWallIngameData(int wallId,
+    public async Task<IngameData> GetWallIngameData(
+        int wallId,
         int wallLevel,
         IList<PartySettingList> party,
-        ulong? supportViewerId)
+        ulong? supportViewerId
+    )
     {
         IngameData result = await InitializeIngameData(0, supportViewerId);
 

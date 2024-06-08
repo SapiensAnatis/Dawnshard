@@ -23,15 +23,19 @@ public interface IDungeonStartService
 
     Task<bool> ValidateStamina(int questId, StaminaType staminaType);
 
-    Task<IngameData> GetWallIngameData(int wallId,
+    Task<IngameData> GetWallIngameData(
+        int wallId,
         int wallLevel,
         int partyNo,
-        ulong? supportViewerId);
+        ulong? supportViewerId
+    );
 
-    Task<IngameData> GetWallIngameData(int wallId,
+    Task<IngameData> GetWallIngameData(
+        int wallId,
         int wallLevel,
         IList<PartySettingList> party,
-        ulong? supportViewerId);
+        ulong? supportViewerId
+    );
 
     Task SaveSession(CancellationToken cancellationToken = default);
 }
