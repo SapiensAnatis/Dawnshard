@@ -4,8 +4,13 @@ namespace DragaliaAPI.Features.Dungeon;
 
 public interface IDungeonService
 {
-    Task<DungeonSession> FinishDungeon(string dungeonKey);
-    Task<DungeonSession> GetDungeon(string dungeonKey);
-    Task ModifySession(string dungeonKey, Action<DungeonSession> update);
-    Task<string> StartDungeon(DungeonSession dungeonSession);
+    Task RemoveSession(string dungeonKey, CancellationToken cancellationToken);
+    Task<DungeonSession> GetSession(string dungeonKey, CancellationToken cancellationToken);
+    Task ModifySession(
+        string dungeonKey,
+        Action<DungeonSession> update,
+        CancellationToken cancellationToken
+    );
+    string CreateSession(DungeonSession dungeonSession);
+    Task SaveSession(CancellationToken cancellationToken);
 }

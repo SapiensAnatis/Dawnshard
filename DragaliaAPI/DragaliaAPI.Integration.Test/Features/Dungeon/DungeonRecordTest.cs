@@ -103,7 +103,7 @@ public class DungeonRecordTest : TestFixture
                 }
             };
 
-        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
+        string key = await this.StartDungeon(mockSession);
 
         DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
@@ -229,7 +229,7 @@ public class DungeonRecordTest : TestFixture
                 }
             };
 
-        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
+        string key = await this.StartDungeon(mockSession);
 
         DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
@@ -280,7 +280,7 @@ public class DungeonRecordTest : TestFixture
                 }
             };
 
-        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
+        string key = await this.StartDungeon(mockSession);
 
         DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
@@ -864,7 +864,7 @@ public class DungeonRecordTest : TestFixture
                 }
             };
 
-        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
+        string key = await this.StartDungeon(mockSession);
 
         DragaliaResponse<DungeonRecordRecordResponse> response =
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
@@ -988,7 +988,7 @@ public class DungeonRecordTest : TestFixture
                 EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
             };
 
-        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
+        string key = await this.StartDungeon(mockSession);
 
         (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
@@ -1043,7 +1043,7 @@ public class DungeonRecordTest : TestFixture
                 EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
             };
 
-        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
+        string key = await this.StartDungeon(mockSession);
 
         (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
@@ -1209,8 +1209,13 @@ public class DungeonRecordTest : TestFixture
         response.UpdateDataList.UserData.TutorialStatus.Should().Be(20501);
     }
 
-    private async Task<string> StartDungeon(DungeonSession session) =>
-        await Services.GetRequiredService<IDungeonService>().StartDungeon(session);
+    private async Task<string> StartDungeon(DungeonSession session)
+    {
+        string key = this.DungeonService.CreateSession(session);
+        await this.DungeonService.SaveSession(CancellationToken.None);
+
+        return key;
+    }
 
     private void SetupPhotonAuthentication()
     {

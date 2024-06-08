@@ -23,9 +23,16 @@ public partial class WallController(
 ) : DragaliaControllerBase
 {
     [HttpPost("fail")]
-    public async Task<DragaliaResult> Fail(WallFailRequest request)
+    public async Task<DragaliaResult> Fail(
+        WallFailRequest request,
+        CancellationToken cancellationToken
+    )
     {
-        DungeonSession session = await dungeonService.FinishDungeon(request.DungeonKey);
+        DungeonSession session = await dungeonService.GetSession(
+            request.DungeonKey,
+            cancellationToken
+        );
+        await dungeonService.RemoveSession(request.DungeonKey, cancellationToken);
 
         return Ok(
             new WallFailResponse()

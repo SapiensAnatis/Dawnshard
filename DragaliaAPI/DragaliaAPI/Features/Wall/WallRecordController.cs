@@ -50,7 +50,11 @@ public class WallRecordController : DragaliaControllerBase
         CancellationToken cancellationToken
     )
     {
-        DungeonSession dungeonSession = await dungeonService.FinishDungeon(request.DungeonKey);
+        DungeonSession dungeonSession = await this.dungeonService.GetSession(
+            request.DungeonKey,
+            cancellationToken
+        );
+
         DbPlayerQuestWall questWall = await this.wallService.GetQuestWall(request.WallId);
 
         int finishedLevel = dungeonSession.WallLevel; // ex: if you finish level 2, this value should be 2
@@ -127,6 +131,9 @@ public class WallRecordController : DragaliaControllerBase
                 WallDropReward = wallDropReward,
                 WallUnitInfo = wallUnitInfo
             };
+
+        await dungeonService.RemoveSession(request.DungeonKey, cancellationToken);
+
         return Ok(data);
     }
 

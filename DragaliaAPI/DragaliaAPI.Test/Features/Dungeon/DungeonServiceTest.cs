@@ -3,6 +3,7 @@ using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Test.Utils;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -33,6 +34,7 @@ public class DungeonServiceTest
         dungeonService = new DungeonService(
             testCache,
             this.mockOptions.Object,
+            IdentityTestUtils.MockPlayerDetailsService.Object,
             this.mockLogger.Object
         );
     }
@@ -50,8 +52,11 @@ public class DungeonServiceTest
                 }
             };
 
-        string key = await dungeonService.StartDungeon(session);
+        string key = dungeonService.CreateSession(session);
+        await dungeonService.SaveSession(CancellationToken.None);
 
-        (await dungeonService.GetDungeon(key)).Should().BeEquivalentTo(session);
+        (await dungeonService.GetSession(key, CancellationToken.None))
+            .Should()
+            .BeEquivalentTo(session);
     }
 }

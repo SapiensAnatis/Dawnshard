@@ -62,7 +62,7 @@ public class WallRecordTest : TestFixture
                 WallLevel = wallLevel + 1 // Client passes (db wall level + 1)
             };
 
-        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
+        string key = await this.StartDungeon(mockSession);
 
         WallRecordRecordResponse response = (
             await Client.PostMsgpack<WallRecordRecordResponse>(
@@ -160,7 +160,7 @@ public class WallRecordTest : TestFixture
                 WallLevel = wallLevel
             };
 
-        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
+        string key = await this.StartDungeon(mockSession);
 
         WallRecordRecordResponse response = (
             await Client.PostMsgpack<WallRecordRecordResponse>(
@@ -239,7 +239,7 @@ public class WallRecordTest : TestFixture
                 WallLevel = 6
             };
 
-        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
+        string key = await this.StartDungeon(mockSession);
 
         WallRecordRecordResponse response = (
             await Client.PostMsgpack<WallRecordRecordResponse>(
@@ -309,7 +309,7 @@ public class WallRecordTest : TestFixture
                 WallLevel = 80
             };
 
-        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
+        string key = await this.StartDungeon(mockSession);
 
         WallRecordRecordResponse response = (
             await Client.PostMsgpack<WallRecordRecordResponse>(
@@ -328,5 +328,13 @@ public class WallRecordTest : TestFixture
             ?.NormalMissionNotice;
 
         missionNotice.Should().BeNull();
+    }
+
+    private async Task<string> StartDungeon(DungeonSession session)
+    {
+        string key = this.DungeonService.CreateSession(session);
+        await this.DungeonService.SaveSession(CancellationToken.None);
+
+        return key;
     }
 }

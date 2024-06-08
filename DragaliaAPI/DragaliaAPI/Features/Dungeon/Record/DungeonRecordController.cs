@@ -28,7 +28,10 @@ public class DungeonRecordController(
         CancellationToken cancellationToken
     )
     {
-        DungeonSession session = await dungeonService.FinishDungeon(request.DungeonKey);
+        DungeonSession session = await dungeonService.GetSession(
+            request.DungeonKey,
+            cancellationToken
+        );
 
         IngameResultData ingameResultData = await dungeonRecordService.GenerateIngameResultData(
             request.DungeonKey,
@@ -66,17 +69,22 @@ public class DungeonRecordController(
             );
         }
 
+        await dungeonService.RemoveSession(request.DungeonKey, cancellationToken);
+
         return response;
     }
 
     [HttpPost("record_multi")]
     [Authorize(AuthenticationSchemes = nameof(PhotonAuthenticationHandler))]
-    public async Task<DragaliaResult> RecordMulti(
+    public async Task<DragaliaResult<DungeonRecordRecordMultiResponse>> RecordMulti(
         DungeonRecordRecordMultiRequest request,
         CancellationToken cancellationToken
     )
     {
-        DungeonSession session = await dungeonService.FinishDungeon(request.DungeonKey);
+        DungeonSession session = await dungeonService.GetSession(
+            request.DungeonKey,
+            cancellationToken
+        );
 
         IngameResultData ingameResultData = await dungeonRecordService.GenerateIngameResultData(
             request.DungeonKey,
@@ -95,7 +103,7 @@ public class DungeonRecordController(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
-        DungeonRecordRecordResponse response =
+        DungeonRecordRecordMultiResponse response =
             new() { IngameResultData = ingameResultData, UpdateDataList = updateDataList, };
 
         if (session.QuestData?.IsSumUpTotalDamage ?? false)
@@ -106,7 +114,9 @@ public class DungeonRecordController(
             );
         }
 
-        return Ok(response);
+        await dungeonService.RemoveSession(request.DungeonKey, cancellationToken);
+
+        return response;
     }
 
     [HttpPost("record_time_attack")]

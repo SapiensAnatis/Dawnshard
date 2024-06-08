@@ -3,8 +3,10 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Extensions;
+using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Models;
+using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Api;
 using DragaliaAPI.Shared.PlayerDetails;
@@ -13,8 +15,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Time.Testing;
 using Npgsql;
 
@@ -34,10 +39,12 @@ public class TestFixture
     protected const string SessionId = "session_id";
 
     private readonly CustomWebApplicationFactory factory;
+    private readonly IPlayerIdentityService stubPlayerIdentityService;
 
     protected TestFixture(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
     {
         this.factory = factory;
+
         this.TestOutputHelper = testOutputHelper;
 
         this.Client = this.CreateClient();
@@ -52,11 +59,20 @@ public class TestFixture
         this.SeedDatabase().Wait();
         this.SeedCache().Wait();
 
+        this.stubPlayerIdentityService = new StubPlayerIdentityService(this.ViewerId);
+
         DbContextOptions<ApiContext> options = this.Services.GetRequiredService<
             DbContextOptions<ApiContext>
         >();
-        this.ApiContext = new ApiContext(options, new StubPlayerIdentityService(this.ViewerId));
+        this.ApiContext = new ApiContext(options, this.stubPlayerIdentityService);
         this.ApiContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
+        this.DungeonService = new DungeonService(
+            this.Services.GetRequiredService<IDistributedCache>(),
+            this.Services.GetRequiredService<IOptionsMonitor<RedisCachingOptions>>(),
+            this.stubPlayerIdentityService,
+            NullLogger<DungeonService>.Instance
+        );
     }
 
     protected DateTimeOffset LastDailyReset { get; }
@@ -83,6 +99,8 @@ public class TestFixture
     protected HttpClient Client { get; set; }
 
     protected IMapper Mapper { get; }
+
+    protected IDungeonService DungeonService { get; }
 
     /// <summary>
     /// Instance of <see cref="ApiContext"/> to use for setting up / interrogating the database in tests.
