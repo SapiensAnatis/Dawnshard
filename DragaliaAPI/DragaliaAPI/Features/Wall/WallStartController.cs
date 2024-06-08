@@ -35,10 +35,11 @@ public class WallStartController(
             request.WallId,
             request.WallLevel,
             request.PartyNo,
-            request.SupportViewerId,
-            cancellationToken
+            request.SupportViewerId
         );
-
+        
+        await dungeonStartService.SaveSession(cancellationToken);
+        
         ingameData.AreaInfoList = questWallDetail.AreaInfo.MapToAreaInfoList();
 
         IngameWallData ingameWallData =
@@ -76,9 +77,10 @@ public class WallStartController(
             request.WallId,
             request.WallLevel,
             request.RequestPartySettingList,
-            request.SupportViewerId,
-            cancellationToken
+            request.SupportViewerId
         );
+
+        await dungeonStartService.SaveSession(cancellationToken);
 
         ingameData.AreaInfoList = questWallDetail.AreaInfo.MapToAreaInfoList();
 

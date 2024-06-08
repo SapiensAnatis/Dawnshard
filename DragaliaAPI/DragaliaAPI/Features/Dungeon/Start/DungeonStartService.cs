@@ -163,20 +163,17 @@ public partial class DungeonStartService(
         return result;
     }
 
-    public async Task<IngameData> GetWallIngameData(
-        int wallId,
+    public async Task<IngameData> GetWallIngameData(int wallId,
         int wallLevel,
         int partyNo,
-        ulong? supportViewerId,
-        CancellationToken cancellationToken
-    )
+        ulong? supportViewerId)
     {
         Log.LoadingFromPartyNumber(logger, partyNo);
 
         IQueryable<DbPartyUnit> partyQuery = partyRepository.GetPartyUnits(partyNo).AsNoTracking();
 
         List<PartySettingList> party = ProcessUnitList(
-            await partyQuery.ToListAsync(cancellationToken),
+            await partyQuery.ToListAsync(),
             partyNo
         );
 
@@ -184,7 +181,7 @@ public partial class DungeonStartService(
 
         List<DbDetailedPartyUnit> detailedPartyUnits = await dungeonRepository
             .BuildDetailedPartyUnit(partyQuery, partyNo)
-            .ToListAsync(cancellationToken);
+            .ToListAsync();
 
         result.PartyInfo.PartyUnitList = await ProcessDetailedUnitList(detailedPartyUnits);
         result.DungeonKey = dungeonService.CreateSession(
@@ -197,18 +194,13 @@ public partial class DungeonStartService(
             }
         );
 
-        await dungeonService.SaveSession(cancellationToken);
-
         return result;
     }
 
-    public async Task<IngameData> GetWallIngameData(
-        int wallId,
+    public async Task<IngameData> GetWallIngameData(int wallId,
         int wallLevel,
         IList<PartySettingList> party,
-        ulong? supportViewerId,
-        CancellationToken cancellationToken
-    )
+        ulong? supportViewerId)
     {
         IngameData result = await InitializeIngameData(0, supportViewerId);
 
@@ -221,7 +213,7 @@ public partial class DungeonStartService(
         )
         {
             detailedPartyUnits.Add(
-                await detailQuery.AsNoTracking().FirstOrDefaultAsync(cancellationToken)
+                await detailQuery.AsNoTracking().FirstOrDefaultAsync()
                     ?? throw new InvalidOperationException(
                         "Detailed party query returned no results"
                     )
@@ -238,8 +230,6 @@ public partial class DungeonStartService(
                 SupportViewerId = supportViewerId
             }
         );
-
-        await dungeonService.SaveSession(cancellationToken);
 
         return result;
     }

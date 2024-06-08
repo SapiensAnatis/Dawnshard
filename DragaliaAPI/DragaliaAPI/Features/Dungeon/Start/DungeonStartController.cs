@@ -103,7 +103,7 @@ public class DungeonStartController(
             cancellationToken
         );
 
-        await dungeonService.SaveSession(cancellationToken);
+        await dungeonStartService.SaveSession(cancellationToken);
 
         return Ok(response);
     }
@@ -132,7 +132,7 @@ public class DungeonStartController(
 
         response.IngameData.RepeatState = request.RepeatState;
 
-        await dungeonService.SaveSession(cancellationToken);
+        await dungeonStartService.SaveSession(cancellationToken);
 
         return Ok(response);
     }
@@ -183,7 +183,7 @@ public class DungeonStartController(
             cancellationToken
         );
 
-        await dungeonService.SaveSession(cancellationToken);
+        await dungeonStartService.SaveSession(cancellationToken);
 
         return Ok(response);
     }
