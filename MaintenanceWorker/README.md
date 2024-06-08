@@ -21,10 +21,17 @@ MAINTENANCE_BODY = "Dawnshard is currently under maintenance\nto upgrade the ser
 pnpm i
 ```
 
-## Deployment to production
-
 2. Start the worker in development:
 
 ```bash
 pnpm run
 ```
+
+## Deployment 
+
+Follow the Cloudflare documentation for guides on how to deploy the worker:
+
+- https://developers.cloudflare.com/workers/
+- https://developers.cloudflare.com/workers/get-started/guide/#4-deploy-your-project
+
+You will need a Cloudflare account. The worker is fairly lightweight and can most likely run within [the free plan](https://developers.cloudflare.com/workers/platform/pricing/#workers).
