@@ -43,15 +43,11 @@ public class DungeonService(
         CancellationToken cancellationToken
     )
     {
-        string json =
-            await cache.GetStringAsync(
+        DungeonSession session =
+            await cache.GetJsonAsync<DungeonSession>(
                 Schema.DungeonKey_DungeonData(playerIdentityService.ViewerId, dungeonKey),
                 cancellationToken
             ) ?? throw new DungeonException(dungeonKey);
-
-        DungeonSession session =
-            JsonSerializer.Deserialize<DungeonSession>(json)
-            ?? throw new JsonException("Could not deserialize dungeon session.");
 
         this.currentSession = session;
         this.currentKey = dungeonKey;
@@ -69,9 +65,9 @@ public class DungeonService(
             );
         }
 
-        await cache.SetStringAsync(
+        await cache.SetJsonAsync(
             Schema.DungeonKey_DungeonData(playerIdentityService.ViewerId, this.currentKey),
-            JsonSerializer.Serialize(this.currentSession),
+            this.currentSession,
             CacheOptions,
             cancellationToken
         );

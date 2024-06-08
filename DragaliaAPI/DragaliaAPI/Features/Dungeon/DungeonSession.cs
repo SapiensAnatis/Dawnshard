@@ -2,9 +2,9 @@
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models;
 
-namespace DragaliaAPI.Models;
+namespace DragaliaAPI.Features.Dungeon;
 
-public record DungeonSession
+public class DungeonSession
 {
     public required IEnumerable<PartySettingList> Party { get; init; }
 
@@ -26,9 +26,9 @@ public record DungeonSession
 
     public int WallLevel { get; init; }
 
-    public int QuestId => QuestData?.Id ?? 0;
+    public int QuestId => this.QuestData?.Id ?? 0;
 
-    public int QuestGid => QuestData?.Gid ?? 0;
+    public int QuestGid => this.QuestData?.Gid ?? 0;
 
-    public VariationTypes QuestVariation => QuestData?.VariationType ?? VariationTypes.Normal;
+    public VariationTypes QuestVariation => this.QuestData?.VariationType ?? VariationTypes.None;
 }

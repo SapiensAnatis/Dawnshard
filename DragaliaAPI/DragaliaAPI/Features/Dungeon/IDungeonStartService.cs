@@ -37,5 +37,5 @@ public interface IDungeonStartService
         ulong? supportViewerId
     );
 
-    Task SaveSession(CancellationToken cancellationToken = default);
+    Task SaveSession(CancellationToken cancellationToken);
 }
