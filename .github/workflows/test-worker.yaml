@@ -27,7 +27,7 @@ jobs:
 
       - name: Build
         working-directory: MaintenanceWorker
-        run: wrangler deploy --dry-run
+        run: pnpm exec wrangler deploy --dry-run
 
       - name: Test
         working-directory: MaintenanceWorker
