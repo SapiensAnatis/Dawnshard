@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Text.Encodings.Web;
 using DragaliaAPI.Database;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
@@ -8,6 +9,7 @@ using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
+using static DragaliaAPI.Infrastructure.DragaliaHttpConstants;
 
 namespace DragaliaAPI.Middleware;
 
@@ -39,7 +41,7 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
 
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        if (!this.Request.Headers.TryGetValue("SID", out StringValues value))
+        if (!this.Request.Headers.TryGetValue(Headers.SessionId, out StringValues value))
         {
             this.Logger.LogDebug("SID header was missing.");
             return AuthenticateResult.NoResult();

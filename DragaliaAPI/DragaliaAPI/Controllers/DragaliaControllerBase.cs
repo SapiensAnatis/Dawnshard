@@ -34,6 +34,8 @@ public abstract class DragaliaControllerBaseCore : ControllerBase
 
     public override OkObjectResult Ok(object? value)
     {
+        this.HttpContext.Items.Add(nameof(ResultCode), ResultCode.Success);
+
         return base.Ok(
             new DragaliaResponse<object>(
                 value ?? throw new ArgumentNullException(nameof(value)),
@@ -44,6 +46,8 @@ public abstract class DragaliaControllerBaseCore : ControllerBase
 
     public OkObjectResult Code(ResultCode code, string message)
     {
+        this.HttpContext.Items.Add(nameof(ResultCode), code);
+
         return base.Ok(
             new DragaliaResponse<object>(
                 dataHeaders: new DataHeaders(code),
