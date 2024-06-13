@@ -16,3 +16,7 @@ The private endpoints are secured by bearer token authentication set by an envir
 - `/get/byid/{roomId}`: Searches for a room by its numeric passcode. This can include private rooms as well. If found, returns 200 OK, otherwise 404 Not Found.
 - `/get/ishost/{viewerId}`: Returns a scalar boolean indicating whether a user with the provided player ID is a host in any room.
 - `/get/byviewerid/{viewerId}`: Returns the room that a player is in, or 404 if they could not be found in a room.
+
+## HTTPS
+
+To configure the container to accept requests over HTTPS, follow the instructions in the [Microsoft documentation](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel/endpoints?view=aspnetcore-8.0#configure-https-in-appsettingsjson). 
