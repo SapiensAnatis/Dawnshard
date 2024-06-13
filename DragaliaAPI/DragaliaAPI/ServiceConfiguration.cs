@@ -161,8 +161,11 @@ public static class ServiceConfiguration
         services.AddHttpClient<IPhotonStateApi, PhotonStateApi>(
             (sp, client) =>
             {
-                IOptions<PhotonOptions> options = sp.GetRequiredService<IOptions<PhotonOptions>>();
-                client.BaseAddress = new(options.Value.StateManagerUrl);
+                IOptionsMonitor<PhotonOptions> options = sp.GetRequiredService<
+                    IOptionsMonitor<PhotonOptions>
+                >();
+
+                client.BaseAddress = new(options.CurrentValue.StateManagerUrl);
             }
         );
         services.AddScoped<IMatchingService, MatchingService>();
