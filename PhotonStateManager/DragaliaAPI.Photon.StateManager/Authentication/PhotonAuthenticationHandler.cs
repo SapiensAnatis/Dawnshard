@@ -1,20 +1,19 @@
 ﻿using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
+using DragaliaAPI.Photon.StateManager.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Photon.StateManager.Authentication;
 
-public class PhotonAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+public class PhotonAuthenticationHandler(
+    IOptionsMonitor<AuthenticationSchemeOptions> authOptions,
+    IOptionsMonitor<PhotonOptions> photonOptions,
+    ILoggerFactory logger,
+    UrlEncoder encoder
+) : AuthenticationHandler<AuthenticationSchemeOptions>(authOptions, logger, encoder)
 {
-    public PhotonAuthenticationHandler(
-        IOptionsMonitor<AuthenticationSchemeOptions> options,
-        ILoggerFactory logger,
-        UrlEncoder encoder
-    )
-        : base(options, logger, encoder) { }
-
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         if (
@@ -34,11 +33,7 @@ public class PhotonAuthenticationHandler : AuthenticationHandler<AuthenticationS
             return Task.FromResult(AuthenticateResult.NoResult());
         }
 
-        string configuredToken =
-            Environment.GetEnvironmentVariable("PHOTON_TOKEN")
-            ?? throw new InvalidOperationException("PHOTON_TOKEN environment variable not set!");
-
-        if (authenticationHeader.Parameter != configuredToken)
+        if (authenticationHeader.Parameter != photonOptions.CurrentValue.Token)
         {
             this.Logger.LogInformation(
                 "AuthenticationHeader.Parameter value {param} did not match configured token.",

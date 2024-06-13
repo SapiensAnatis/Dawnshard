@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using DragaliaAPI.Database;
+using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +12,12 @@ using Microsoft.Extensions.Primitives;
 namespace DragaliaAPI.Middleware;
 
 public class PhotonAuthenticationHandler(
-    IOptionsMonitor<AuthenticationSchemeOptions> options,
+    IOptionsMonitor<AuthenticationSchemeOptions> authOptions,
+    IOptionsMonitor<PhotonOptions> photonOptions,
     ILoggerFactory logger,
     UrlEncoder encoder,
     ApiContext apiContext
-) : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
+) : AuthenticationHandler<AuthenticationSchemeOptions>(authOptions, logger, encoder)
 {
     public const string Role = "Photon";
 
@@ -40,11 +42,7 @@ public class PhotonAuthenticationHandler(
             return AuthenticateResult.NoResult();
         }
 
-        string configuredToken =
-            Environment.GetEnvironmentVariable("PHOTON_TOKEN")
-            ?? throw new InvalidOperationException("PHOTON_TOKEN environment variable not set!");
-
-        if (authenticationHeader.Parameter != configuredToken)
+        if (authenticationHeader.Parameter != photonOptions.CurrentValue.Token)
         {
             Logger.LogInformation(
                 "AuthenticationHeader.Parameter value {param} did not match configured token.",

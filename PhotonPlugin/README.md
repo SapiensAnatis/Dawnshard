@@ -119,7 +119,7 @@ The state manager application should be comparitively easy to deploy. It is a Do
 deployed alongside a `redis/redis-stack` image. See the `docker-compose.yml` file in the repository for reference. It
 does not need to be on the same server as Photon.
 
-It expects an environment variable, `PHOTON_TOKEN`, to match that which is configured in `plugin.config` above, so as to
+It expects an environment variable, `PhotonOptions__Token`, to match that which is configured in `plugin.config` above, so as to
 authenticate requests from the Photon server. A sample Docker compose file could look like:
 
 ```yaml
@@ -132,7 +132,7 @@ services:
     ports:
       - "3000:80"
     environment:
-      PHOTON_TOKEN: yourtoken
+      PhotonOptions__Token: yourtoken
 
   redis:
     hostname: redis
@@ -154,9 +154,9 @@ In the main API `appsettings.json`, configure the following values in `$.PhotonO
 - `ServerUrl`: the Photon server URL. Must end with :5055 due to Dragalia using a legacy client.
 - `StateManagerUrl` the Photon state manager URL.
 
-Configure the following environment variables:
+Configure the following environment variables (or other source of `IConfiguration`):
 
-- `PHOTON_TOKEN`: the same photon token as the plugin and state manager use. Used to authenticate requests from Photon.
+- `PhotonOptions__Token`: the same photon token as the plugin and state manager use. Used to authenticate requests from Photon.
 
 #### Other servers
 

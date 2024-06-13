@@ -11,27 +11,22 @@ namespace DragaliaAPI.Photon.StateManager.Test;
 [Collection(TestCollection.Name)]
 public class TestFixture : IAsyncLifetime
 {
-    private const string PhotonToken = "photontoken";
-
     public TestFixture(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
     {
         this.Client = factory
-            .WithWebHostBuilder(
-                (builder) =>
-                    builder.ConfigureLogging(logging =>
-                    {
-                        logging.ClearProviders();
-                        logging.AddXUnit(outputHelper);
-                    })
+            .WithWebHostBuilder(builder =>
+                builder.ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddXUnit(outputHelper);
+                })
             )
             .CreateClient();
 
         this.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
             "Bearer",
-            PhotonToken
+            "photontoken"
         );
-
-        Environment.SetEnvironmentVariable("PHOTON_TOKEN", PhotonToken);
 
         this.RedisConnectionProvider =
             factory.Services.GetRequiredService<IRedisConnectionProvider>();

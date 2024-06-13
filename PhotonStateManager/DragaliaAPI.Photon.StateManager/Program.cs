@@ -1,23 +1,14 @@
-using System.Security.Cryptography.X509Certificates;
 using DragaliaAPI.Photon.StateManager;
 using DragaliaAPI.Photon.StateManager.Authentication;
 using DragaliaAPI.Photon.StateManager.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Options;
 using Redis.OM;
 using Redis.OM.Contracts;
 using Serilog;
 using StackExchange.Redis;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-
-if (Environment.GetEnvironmentVariable("ENABLE_HTTPS") != null)
-{
-    X509Certificate2 certificate = X509Certificate2.CreateFromPemFile("cert.pem", "cert.key");
-
-    builder.WebHost.ConfigureKestrel(serverOptions =>
-        serverOptions.ConfigureHttpsDefaults(options => options.ServerCertificate = certificate)
-    );
-}
 
 builder.Services.AddControllers();
 
@@ -39,8 +30,19 @@ builder.Host.UseSerilog(
 builder
     .Services.AddOptions<RedisCachingOptions>()
     .BindConfiguration(nameof(RedisCachingOptions))
-    .Validate(x => x.KeyExpiryTimeMins > 0)
+    .Validate(
+        x => x.KeyExpiryTimeMins > 0,
+        "RedisCachingOptions.KeyExpiryTime must be greater than 0!"
+    )
     .ValidateOnStart();
+
+builder
+    .Services.AddOptions<PhotonOptions>()
+    .BindConfiguration(nameof(PhotonOptions))
+    .Validate(x => !string.IsNullOrEmpty(x.Token), "Must specify a value for PhotonOptions.Token!")
+    .ValidateOnStart();
+
+builder.Services.AddOptions<RedisOptions>().BindConfiguration(nameof(RedisOptions));
 
 builder
     .Services.AddAuthentication()
@@ -65,29 +67,33 @@ builder.Services.AddSwaggerGen(config =>
     );
 });
 
-RedisOptions redisOptions =
-    builder.Configuration.GetRequiredSection(nameof(RedisOptions)).Get<RedisOptions>()
-    ?? throw new InvalidOperationException("Failed to deserialize Redis configuration");
+builder.Services.AddSingleton<IRedisConnectionProvider, RedisConnectionProvider>(sp =>
+{
+    RedisOptions redisOptions = sp.GetRequiredService<IOptions<RedisOptions>>().Value;
 
-Log.Logger.Information(
+    IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(
+        new ConfigurationOptions()
+        {
+            EndPoints = new() { { redisOptions.Hostname, redisOptions.Port } },
+            Password = redisOptions.Password,
+            AbortOnConnectFail = false,
+        }
+    );
+
+    return new RedisConnectionProvider(multiplexer);
+});
+
+WebApplication app = builder.Build();
+
+RedisOptions redisOptions = app.Services.GetRequiredService<IOptions<RedisOptions>>().Value;
+
+app.Logger.LogInformation(
     "Connecting to Redis at {Hostname}:{Port}",
     redisOptions.Hostname,
     redisOptions.Port
 );
 
-IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(
-    new ConfigurationOptions()
-    {
-        EndPoints = new() { { redisOptions.Hostname, redisOptions.Port } },
-        Password = redisOptions.Password,
-        AbortOnConnectFail = false,
-    }
-);
-
-RedisConnectionProvider provider = new(multiplexer);
-builder.Services.AddSingleton<IRedisConnectionProvider>(provider);
-
-WebApplication app = builder.Build();
+IRedisConnectionProvider provider = app.Services.GetRequiredService<IRedisConnectionProvider>();
 
 bool created = await provider.Connection.CreateIndexAsync(typeof(RedisGame));
 RedisIndexInfo? info = await provider.Connection.GetIndexInfoAsync(typeof(RedisGame));

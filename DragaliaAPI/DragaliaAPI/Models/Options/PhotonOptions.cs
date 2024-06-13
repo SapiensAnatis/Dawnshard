@@ -2,7 +2,9 @@
 
 public class PhotonOptions
 {
-    public required string ServerUrl { get; set; }
+    public required string ServerUrl { get; init; }
 
-    public required string StateManagerUrl { get; set; }
+    public required string StateManagerUrl { get; init; }
+
+    public required string Token { get; init; }
 }

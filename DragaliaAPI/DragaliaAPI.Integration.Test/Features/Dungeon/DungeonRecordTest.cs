@@ -1219,7 +1219,6 @@ public class DungeonRecordTest : TestFixture
 
     private void SetupPhotonAuthentication()
     {
-        Environment.SetEnvironmentVariable("PHOTON_TOKEN", "supersecrettoken");
         this.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
             "Bearer",
             "supersecrettoken"
