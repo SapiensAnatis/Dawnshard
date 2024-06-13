@@ -42,6 +42,10 @@ builder
         reloadOnChange: true
     );
 
+string kpfPath = Path.Combine(Directory.GetCurrentDirectory(), "config");
+
+builder.Configuration.AddKeyPerFile(directoryPath: kpfPath, optional: true, reloadOnChange: true);
+
 builder.WebHost.UseStaticWebAssets();
 
 builder.Logging.ClearProviders();
@@ -104,6 +108,8 @@ builder
     .ConfigureBlazorFrontend();
 
 WebApplication app = builder.Build();
+
+app.Logger.LogDebug("Using key-per-file configuration from path {KpfPath}", kpfPath);
 
 Stopwatch watch = new();
 app.Logger.LogInformation("Loading MasterAsset data.");

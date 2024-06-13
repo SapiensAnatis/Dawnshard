@@ -158,15 +158,13 @@ public static class ServiceConfiguration
 
         services.AddHttpClient<IBaasApi, BaasApi>();
 
-        services.AddHttpClient<IPhotonStateApi, PhotonStateApi>(client =>
-        {
-            PhotonOptions? options = configuration
-                .GetRequiredSection(nameof(PhotonOptions))
-                .Get<PhotonOptions>();
-            ArgumentNullException.ThrowIfNull(options);
-
-            client.BaseAddress = new(options.StateManagerUrl);
-        });
+        services.AddHttpClient<IPhotonStateApi, PhotonStateApi>(
+            (sp, client) =>
+            {
+                IOptions<PhotonOptions> options = sp.GetRequiredService<IOptions<PhotonOptions>>();
+                client.BaseAddress = new(options.Value.StateManagerUrl);
+            }
+        );
         services.AddScoped<IMatchingService, MatchingService>();
 
         services.AddScoped<ResourceVersionActionFilter>().AddScoped<MaintenanceActionFilter>();
