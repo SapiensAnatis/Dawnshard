@@ -1,7 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using DragaliaAPI.Photon.StateManager.Models;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Redis.OM.Contracts;
@@ -16,13 +15,12 @@ public class TestFixture : IAsyncLifetime
     {
         this.Client = factory
             .WithWebHostBuilder(builder =>
-            {
                 builder.ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();
                     logging.AddXUnit(outputHelper);
-                });
-            })
+                })
+            )
             .CreateClient();
 
         this.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
