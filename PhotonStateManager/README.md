@@ -8,7 +8,7 @@ It operates by receiving webhook events from the Photon server, which trigger ro
 
 PhotonStateManager exposes a very simple REST API that is divided into two halves: 'private' endpoints designed for consumption by the Photon server, and 'public' endpoints that are designed to be consumed by the main Dragalia Lost API server. The private endpoints are under the /event/ route group, and the public endpoints are under the /get/ route group.
 
-The private endpoints are secured by bearer token authentication set by an environment variable `PHOTON_TOKEN`.
+The private endpoints are secured by bearer token authentication set by an IConfiguration property `PhotonOptions.Token`. The simplest way to configure this is by setting the environment variable `PhotonOptions__Token`.
 
 ### /get/ endpoints
 
