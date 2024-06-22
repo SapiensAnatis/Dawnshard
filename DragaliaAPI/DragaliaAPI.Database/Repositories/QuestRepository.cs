@@ -15,8 +15,8 @@ public class QuestRepository : IQuestRepository
         this.playerIdentityService = playerIdentityService;
     }
 
-    public IQueryable<DbQuest> Quests =>
-        this.apiContext.PlayerQuests.Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
+    [Obsolete("This entity has a global query filter, use ApiContext.PlayerQuests instead.")]
+    public IQueryable<DbQuest> Quests => this.apiContext.PlayerQuests;
 
     public IQueryable<DbQuestEvent> QuestEvents =>
         this.apiContext.QuestEvents.Where(x => x.ViewerId == this.playerIdentityService.ViewerId);

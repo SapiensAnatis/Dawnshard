@@ -26,10 +26,8 @@ public class FortRepository : IFortRepository
         this.logger = logger;
     }
 
-    public IQueryable<DbFortBuild> Builds =>
-        this.apiContext.PlayerFortBuilds.Where(x =>
-            x.ViewerId == this.playerIdentityService.ViewerId
-        );
+    [Obsolete("This entity has a global query filter, use ApiContext.PlayerFortBuilds instead.")]
+    public IQueryable<DbFortBuild> Builds => this.apiContext.PlayerFortBuilds;
 
     public async Task InitializeFort()
     {
