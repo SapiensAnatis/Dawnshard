@@ -194,5 +194,13 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
         modelBuilder
             .Entity<DbPlayerPresentHistory>()
             .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
+
+        modelBuilder
+            .Entity<DbQuest>()
+            .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
+
+        modelBuilder
+            .Entity<DbFortBuild>()
+            .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
     }
 }

@@ -97,6 +97,13 @@ public class GlobalQueryFilterTest : TestFixture
             .Be(this.ViewerId);
     }
 
+    [Fact]
+    public async Task DbQuest_HasGlobalQueryFilter() => await TestGlobalQueryFilter<DbQuest>();
+
+    [Fact]
+    public async Task DbFortBuild_HasGlobalQueryFilter() =>
+        await TestGlobalQueryFilter<DbFortBuild>();
+
     private async Task TestGlobalQueryFilter<TEntity>()
         where TEntity : class, IDbPlayerData
     {

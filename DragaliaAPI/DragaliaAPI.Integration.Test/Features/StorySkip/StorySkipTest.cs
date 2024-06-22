@@ -118,5 +118,7 @@ public class StorySkipTest : TestFixture
             .Contain(x => x.Id == upgradeHalidomToLv3Mission)
             .Which.State.Should()
             .Be(MissionState.Completed);
+
+        this.ApiContext.PlayerQuestWalls.Should().Contain(x => x.ViewerId == this.ViewerId);
     }
 }
