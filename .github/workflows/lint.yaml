@@ -2,9 +2,15 @@ name: Lint
 
 on:
   pull_request:
+    paths:
+      - "**.cs"
+      - ".config/dotnet-tools.json"  
   push:
     branches:
       - main
+    paths:
+      - "**.cs"
+      - ".config/dotnet-tools.json"
 
 env:
   HUSKY: 0
