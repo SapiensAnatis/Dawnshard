@@ -34,7 +34,9 @@ public abstract class DragaliaControllerBaseCore : ControllerBase
 
     public override OkObjectResult Ok(object? value)
     {
-        this.HttpContext.Items.Add(nameof(ResultCode), ResultCode.Success);
+        // Controller unit tests will not set the HttpContext properly
+        // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
+        this.HttpContext?.Items.Add(nameof(ResultCode), ResultCode.Success);
 
         return base.Ok(
             new DragaliaResponse<object>(
@@ -46,7 +48,9 @@ public abstract class DragaliaControllerBaseCore : ControllerBase
 
     public OkObjectResult Code(ResultCode code, string message)
     {
-        this.HttpContext.Items.Add(nameof(ResultCode), code);
+        // Controller unit tests will not set the HttpContext properly
+        // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
+        this.HttpContext?.Items.Add(nameof(ResultCode), code);
 
         return base.Ok(
             new DragaliaResponse<object>(
