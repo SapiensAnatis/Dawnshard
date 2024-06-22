@@ -1,10 +1,11 @@
 using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.Extensions.Primitives;
 using Serilog.Context;
+using static DragaliaAPI.Infrastructure.DragaliaHttpConstants;
 
 namespace DragaliaAPI.Middleware;
 
-public class PlayerIdentityLoggingMiddleware(IPlayerIdentityService playerIdentityService)
-    : IMiddleware
+public class LogContextMiddleware(IPlayerIdentityService playerIdentityService) : IMiddleware
 {
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
@@ -15,6 +16,13 @@ public class PlayerIdentityLoggingMiddleware(IPlayerIdentityService playerIdenti
         {
             LogContext.PushProperty("AccountId", playerIdentityService.AccountId);
             LogContext.PushProperty("ViewerId", playerIdentityService.ViewerId);
+        }
+
+        if (
+            context.Request.Headers.TryGetValue(Headers.RequestToken, out StringValues requestToken)
+        )
+        {
+            LogContext.PushProperty("RequestToken", requestToken.ToString());
         }
 
         return next.Invoke(context);

@@ -75,7 +75,7 @@ public static class ServiceConfiguration
             .AddScoped<IStampService, StampService>()
             .AddScoped<IStampRepository, StampRepository>()
             .AddScoped<ISavefileUpdateService, SavefileUpdateService>()
-            .AddTransient<PlayerIdentityLoggingMiddleware>();
+            .AddTransient<LogContextMiddleware>();
 
         services
             .AddSummoningFeature()

@@ -7,6 +7,7 @@ using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
+using static DragaliaAPI.Infrastructure.DragaliaHttpConstants;
 
 namespace DragaliaAPI.Features.Summoning;
 
@@ -59,7 +60,9 @@ public class RedoableSummonController(
 
     [HttpPost]
     [Route("pre_exec")]
-    public async Task<DragaliaResult> PreExec([FromHeader(Name = "SID")] string sessionId)
+    public async Task<DragaliaResult> PreExec(
+        [FromHeader(Name = Headers.SessionId)] string sessionId
+    )
     {
         IEnumerable<AtgenRedoableSummonResultUnitList> summonResult =
             await summonService.GenerateRedoableSummonResult();
@@ -81,7 +84,7 @@ public class RedoableSummonController(
     [HttpPost]
     [Route("fix_exec")]
     public async Task<DragaliaResult> FixExec(
-        [FromHeader(Name = "SID")] string sessionId,
+        [FromHeader(Name = Headers.SessionId)] string sessionId,
         CancellationToken cancellationToken
     )
     {
