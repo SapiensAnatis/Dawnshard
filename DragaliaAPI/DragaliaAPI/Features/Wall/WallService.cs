@@ -80,7 +80,9 @@ public partial class WallService(
     public async Task InitializeWall()
     {
         if (await this.CheckWallInitialized())
+        {
             return;
+        }
 
         logger.LogInformation("Initializing wall.");
 
