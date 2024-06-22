@@ -31,7 +31,7 @@ updates:
     directory: "/MaintenanceWorker"
     schedule:
       interval: "weekly"
-  - package-ecosystem: "npm"
-    directory: "/Website"
-    schedule:
-      interval: "weekly"
+#  - package-ecosystem: "npm"
+#    directory: "/Website"
+#    schedule:
+#      interval: "weekly"
