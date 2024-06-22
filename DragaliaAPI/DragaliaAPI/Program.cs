@@ -5,6 +5,7 @@ using DragaliaAPI;
 using DragaliaAPI.Authentication;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.GraphQL;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Infrastructure.Hangfire;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
@@ -76,6 +77,7 @@ HangfireOptions hangfireOptions =
     ?? new() { Enabled = false };
 
 builder.Services.ConfigureDatabaseServices(builder.Configuration);
+
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.ConfigurationOptions = new()
@@ -137,31 +139,30 @@ app.Logger.LogDebug(
 );
 
 if (!postgresOptions.DisableAutoMigration)
+{
     app.MigrateDatabase();
+}
 
 app.UseStaticFiles();
 app.UseAuthentication();
 app.UseResponseCompression();
 
-#pragma warning disable CA1861 // Avoid constant arrays as arguments. Only created once as top-level statement.
-FrozenSet<string> apiRoutePrefixes = new[]
-{
-    "/2.19.0_20220714193707",
-    "/2.19.0_20220719103923"
-}.ToFrozenSet();
-#pragma warning restore CA1861
-
 // Game endpoints
 app.MapWhen(
-    ctx => apiRoutePrefixes.Any(prefix => ctx.Request.Path.StartsWithSegments(prefix)),
+    ctx =>
+        DragaliaHttpConstants.RoutePrefixes.List.Any(prefix =>
+            ctx.Request.Path.StartsWithSegments(prefix)
+        ),
     applicationBuilder =>
     {
-        foreach (string prefix in apiRoutePrefixes)
+        foreach (string prefix in DragaliaHttpConstants.RoutePrefixes.List)
+        {
             applicationBuilder.UsePathBase(prefix);
+        }
 
         applicationBuilder.UseRouting();
         applicationBuilder.UseAuthorization();
-        applicationBuilder.UseMiddleware<PlayerIdentityLoggingMiddleware>();
+        applicationBuilder.UseMiddleware<LogContextMiddleware>();
         applicationBuilder.UseSerilogRequestLogging();
         applicationBuilder.UseMiddleware<NotFoundHandlerMiddleware>();
         applicationBuilder.UseMiddleware<ExceptionHandlerMiddleware>();
@@ -196,7 +197,7 @@ app.MapWhen(
         applicationBuilder.UseAuthorization();
 #pragma warning restore ASP0001
         applicationBuilder.UseAntiforgery();
-        applicationBuilder.UseMiddleware<PlayerIdentityLoggingMiddleware>();
+        applicationBuilder.UseMiddleware<LogContextMiddleware>();
         applicationBuilder.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
@@ -215,7 +216,7 @@ app.MapWhen(
             applicationBuilder.UseAuthorization();
 #pragma warning restore ASP0001
             applicationBuilder.UseAntiforgery();
-            applicationBuilder.UseMiddleware<PlayerIdentityLoggingMiddleware>();
+            applicationBuilder.UseMiddleware<LogContextMiddleware>();
             applicationBuilder.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
