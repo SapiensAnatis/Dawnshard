@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0.5-jammy-chiseled AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0.6-jammy-chiseled AS base
 USER app
 EXPOSE 8080
 WORKDIR /app
