@@ -57,7 +57,7 @@ public partial class WallService(
 
     public async Task<int> GetTotalWallLevel()
     {
-        int levelTotal = await apiContext.PlayerQuestWalls.Take(5).SumAsync(x => x.WallLevel);
+        int levelTotal = await apiContext.PlayerQuestWalls.SumAsync(x => x.WallLevel);
 
         if (levelTotal > MaximumQuestWallTotalLevel)
         {
