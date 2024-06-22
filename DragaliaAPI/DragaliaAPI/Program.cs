@@ -5,6 +5,7 @@ using DragaliaAPI;
 using DragaliaAPI.Authentication;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.GraphQL;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Infrastructure.Hangfire;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
