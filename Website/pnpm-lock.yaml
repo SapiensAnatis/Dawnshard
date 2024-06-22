@@ -24,8 +24,8 @@ dependencies:
     specifier: 0.378.0
     version: 0.378.0(svelte@4.2.16)
   mode-watcher:
-    specifier: 0.3.0
-    version: 0.3.0(svelte@4.2.16)
+    specifier: 0.3.1
+    version: 0.3.1(svelte@4.2.16)
   tailwind-merge:
     specifier: 2.3.0
     version: 2.3.0
@@ -2095,10 +2095,10 @@ packages:
       minimist: 1.2.8
     dev: true
 
-  /mode-watcher@0.3.0(svelte@4.2.16):
-    resolution: {integrity: sha512-k8jjuTx94HaaRKWO6JDf8wL761hFatrTIHJKl+E+3JWcnv+GnMBH062zcLsy0lbCI3n7RZxxHaWi66auFnUO4g==}
+  /mode-watcher@0.3.1(svelte@4.2.16):
+    resolution: {integrity: sha512-inghSVSXpEENV0SHM98+AvjDmTOjh9EJIrJXMScK42GNkDm5QJL7a/nZQ8M8i8RK7loFHqsQKBKdlXfw5e5C4w==}
     peerDependencies:
-      svelte: ^4.0.0
+      svelte: ^4.0.0 || ^5.0.0-next.1
     dependencies:
       svelte: 4.2.16
     dev: false
