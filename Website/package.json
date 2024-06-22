@@ -44,7 +44,7 @@
   "type": "module",
   "dependencies": {
     "@unpic/svelte": "0.0.53",
-    "bits-ui": "0.21.7",
+    "bits-ui": "0.21.10",
     "buffer": "6.0.3",
     "clsx": "2.1.1",
     "globals": "15.1.0",
