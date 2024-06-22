@@ -7,6 +7,7 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Features.GraphQL;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Infrastructure.Hangfire;
+using DragaliaAPI.Infrastructure.OutputCaching;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
@@ -19,6 +20,7 @@ using Hangfire;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
 using Microsoft.IdentityModel.Tokens;
@@ -100,6 +102,7 @@ builder
     .Services.AddAuthorization()
     .ConfigureAuthentication()
     .AddResponseCompression()
+    .AddOutputCache()
     .ConfigureHealthchecks()
     .AddAutoMapper(Assembly.GetExecutingAssembly());
 
@@ -109,6 +112,14 @@ builder
     .ConfigureSharedServices()
     .ConfigureGraphQLSchema()
     .ConfigureBlazorFrontend();
+
+builder.Services.AddOutputCache(opts =>
+{
+    opts.AddBasePolicy(
+        b => b.AddPolicy<RepeatedRequestPolicy>().Expire(TimeSpan.FromMinutes(1)),
+        true
+    );
+});
 
 builder.Services.AddFeatureManagement();
 
@@ -166,6 +177,7 @@ app.MapWhen(
         applicationBuilder.UseRouting();
         applicationBuilder.UseAuthorization();
         applicationBuilder.UseMiddleware<LogContextMiddleware>();
+        applicationBuilder.UseOutputCache();
         applicationBuilder.UseSerilogRequestLogging();
         applicationBuilder.UseMiddleware<NotFoundHandlerMiddleware>();
         applicationBuilder.UseMiddleware<ExceptionHandlerMiddleware>();
