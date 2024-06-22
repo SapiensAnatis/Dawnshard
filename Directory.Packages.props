@@ -36,7 +36,7 @@
         <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.6" />
         <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0" />
         <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
-        <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="7.6.0" />
+        <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="7.6.2" />
         <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
         <PackageVersion Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
         <PackageVersion Include="MudBlazor" Version="6.19.1" />
