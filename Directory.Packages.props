@@ -43,7 +43,7 @@
         <PackageVersion Include="PolySharp" Version="1.14.1" />
         <PackageVersion Include="Riok.Mapperly" Version="3.5.1" />
         <PackageVersion Include="Serilog.Exceptions" Version="8.4.0" />
-        <PackageVersion Include="Serilog.Expressions" Version="4.0.0" />
+        <PackageVersion Include="Serilog.Expressions" Version="5.0.0" />
         <PackageVersion Include="Serilog.Settings.Configuration" Version="8.0.0" />
         <PackageVersion Include="Serilog.Sinks.Async" Version="1.5.0" />
         <PackageVersion Include="Serilog.Sinks.Seq" Version="8.0.0" />
