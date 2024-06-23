@@ -60,10 +60,7 @@
         <PackageVersion Include="Verify.SourceGenerators" Version="2.2.0" />
         <PackageVersion Include="Verify.XUnit" Version="25.0.3" />
         <PackageVersion Include="xunit" Version="2.8.1" />
-        <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.1">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageVersion>
+        <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.1" />
         <PackageVersion Include="GraphQL.Client" Version="6.1.0" />
         <PackageVersion Include="GraphQL.Client.Serializer.SystemTextJson" Version="6.1.0" />
         <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.4.0" />
