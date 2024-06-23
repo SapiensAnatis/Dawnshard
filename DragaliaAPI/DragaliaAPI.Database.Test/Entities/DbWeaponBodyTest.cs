@@ -1,19 +1,10 @@
-using AutoMapper;
-using DragaliaAPI.AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 
-namespace DragaliaAPI.Test.AutoMapper;
+namespace DragaliaAPI.Database.Test.Entities;
 
-public class GameWeaponBodyResolversTest
+public class DbWeaponBodyTest
 {
-    private readonly Mock<ResolutionContext> mockResolutionContext;
-
-    public GameWeaponBodyResolversTest()
-    {
-        this.mockResolutionContext = new(MockBehavior.Loose);
-    }
-
     [Theory]
     [InlineData(WeaponBodies.Nothung, 0, 0)]
     [InlineData(WeaponBodies.Nothung, 1, 2)]
@@ -30,22 +21,9 @@ public class GameWeaponBodyResolversTest
         int expectedLevel
     )
     {
-        GameWeaponBodyResolvers.AbilityOneResolver resolver = new();
+        DbWeaponBody weapon = new() { WeaponBodyId = id, LimitOverCount = limitOverCount, };
 
-        resolver
-            .Resolve(
-                new DbWeaponBody()
-                {
-                    ViewerId = 1,
-                    WeaponBodyId = id,
-                    LimitOverCount = limitOverCount
-                },
-                new(),
-                0,
-                null!
-            )
-            .Should()
-            .Be(expectedLevel);
+        weapon.Ability1Level.Should().Be(expectedLevel);
     }
 
     [Theory]
@@ -64,22 +42,9 @@ public class GameWeaponBodyResolversTest
         int expectedLevel
     )
     {
-        GameWeaponBodyResolvers.AbilityTwoResolver resolver = new();
+        DbWeaponBody weapon = new() { WeaponBodyId = id, LimitOverCount = limitOverCount, };
 
-        resolver
-            .Resolve(
-                new DbWeaponBody()
-                {
-                    ViewerId = 1,
-                    WeaponBodyId = id,
-                    LimitOverCount = limitOverCount
-                },
-                new(),
-                0,
-                null!
-            )
-            .Should()
-            .Be(expectedLevel);
+        weapon.Ability2Level.Should().Be(expectedLevel);
     }
 
     [Theory]
@@ -103,22 +68,14 @@ public class GameWeaponBodyResolversTest
         int expectedLevel
     )
     {
-        GameWeaponBodyResolvers.SkillLevelResolver resolver = new();
+        DbWeaponBody weapon =
+            new()
+            {
+                WeaponBodyId = id,
+                LimitBreakCount = limitBreakCount,
+                LimitOverCount = limitOverCount,
+            };
 
-        resolver
-            .Resolve(
-                new DbWeaponBody()
-                {
-                    ViewerId = 1,
-                    WeaponBodyId = id,
-                    LimitOverCount = limitOverCount,
-                    LimitBreakCount = limitBreakCount
-                },
-                new(),
-                0,
-                null!
-            )
-            .Should()
-            .Be(expectedLevel);
+        weapon.SkillLevel.Should().Be(expectedLevel);
     }
 }

@@ -10,7 +10,6 @@
 
     <ItemGroup>
         <PackageReference Include="AutoMapper" />
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
         <PackageReference Include="EntityGraphQL" />
         <PackageReference Include="EntityGraphQL.AspNet" />
         <PackageReference Include="FluentRandomPicker" />
