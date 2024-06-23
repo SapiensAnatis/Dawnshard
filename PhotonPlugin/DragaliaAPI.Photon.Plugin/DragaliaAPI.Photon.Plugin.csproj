@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-        <AssemblyVersion>3.2.5</AssemblyVersion>
+        <AssemblyVersion>3.2.6</AssemblyVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Exec Command="xcopy /Y /Q &quot;$(TargetDir)*.*&quot; &quot;$(SolutionDir)PhotonServer\deploy\Plugins\GluonPlugin\bin\&quot;" />
+        <Exec Command="xcopy /Y /Q &quot;$(TargetDir)*.*&quot; &quot;$(MSBuildThisFileDirectory)..\..\PhotonServer\deploy\Plugins\GluonPlugin\bin\&quot;" />
     </Target>
 
 </Project>

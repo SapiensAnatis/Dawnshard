@@ -316,11 +316,6 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.StateManager
                 CustomHeaders = new Dictionary<string, string>()
                 {
                     { "Authorization", $"Bearer {this.BearerToken}" },
-                    { "RoomName", this.PluginHost.GameId },
-                    {
-                        "RoomId",
-                        this.PluginHost.GameProperties.GetInt(GamePropertyKeys.RoomId).ToString()
-                    }
                 }
             };
         }

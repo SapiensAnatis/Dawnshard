@@ -1,0 +1,9 @@
+{
+    "profiles": {
+        "PhotonServer": {
+            "commandName": "Executable",
+            "executablePath": "$(ProjectDir)..\\..\\PhotonServer\\deploy\\bin_Win64\\PhotonSocketServer.exe",
+            "commandLineArgs": "/run LoadBalancing /configPath \"$(ProjectDir)..\\..\\PhotonServer\\deploy\\bin_Win64\""
+        }
+    }
+}
