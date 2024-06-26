@@ -1,7 +1,9 @@
 import { redirect } from '@sveltejs/kit';
 import { Buffer } from 'buffer';
+
+import { PUBLIC_BAAS_CLIENT_ID, PUBLIC_BAAS_URL, PUBLIC_DAWNSHARD_URL } from '$env/static/public';
+
 import type { PageServerLoad } from './$types';
-import { PUBLIC_BAAS_URL, PUBLIC_BAAS_CLIENT_ID, PUBLIC_DAWNSHARD_URL } from '$env/static/public';
 
 const redirectUri = new URL('oauth', PUBLIC_DAWNSHARD_URL);
 

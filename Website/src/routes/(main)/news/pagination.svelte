@@ -1,8 +1,9 @@
 <script lang="ts">
   import ChevronLeft from 'lucide-svelte/icons/chevron-left';
   import ChevronRight from 'lucide-svelte/icons/chevron-right';
-  import { Button } from '$shadcn/components/ui/button';
+
   import { page } from '$app/stores';
+  import { Button } from '$shadcn/components/ui/button';
 
   export let currentPage: number;
   export let numPages: number;

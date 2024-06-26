@@ -1,9 +1,12 @@
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Api;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +18,6 @@ namespace DragaliaAPI.Features.Web;
 
 public static class WebAuthenticationHelper
 {
-    public const string SchemeName = "WebScheme";
-
-    public const string PolicyName = "WebPolicy";
-
     public static Task OnMessageReceived(MessageReceivedContext context)
     {
         if (context.Request.Cookies.TryGetValue("idToken", out string? idToken))
@@ -33,27 +32,37 @@ public static class WebAuthenticationHelper
     {
         if (context.SecurityToken is not JsonWebToken jsonWebToken)
         {
-            throw new UnreachableException("What the fuck?");
+            throw new UnreachableException(
+                "TokenValidatedContext.SecurityToken was not a JsonWebToken"
+            );
         }
 
         string accountId = jsonWebToken.Subject;
 
         ApiContext dbContext = context.HttpContext.RequestServices.GetRequiredService<ApiContext>();
 
+        // TODO: Cache this query in Redis
         var playerInfo = await dbContext
             .Players.IgnoreQueryFilters()
             .Where(x => x.AccountId == accountId)
-            .Select(x => new
-            {
-                x.ViewerId,
-                x.UserData!.LastSaveImportTime,
-                x.UserData.Name,
-            })
+            .Select(x => new { x.ViewerId, x.UserData!.Name, })
             .FirstOrDefaultAsync();
 
-        if (playerInfo is null)
+        if (playerInfo is not null)
         {
-            context.Fail("Unknown player");
+            ClaimsIdentity playerIdentity =
+                new(
+                    [
+                        new Claim(CustomClaimType.AccountId, accountId),
+                        new Claim(CustomClaimType.ViewerId, playerInfo.ViewerId.ToString()),
+                        new Claim(CustomClaimType.PlayerName, playerInfo.Name),
+                    ]
+                )
+                {
+                    Label = AuthConstants.IdentityLabels.Dawnshard,
+                };
+
+            context.Principal?.AddIdentity(playerIdentity);
         }
     }
 }

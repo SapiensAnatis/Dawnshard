@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { PUBLIC_DAWNSHARD_API_URL } from '$env/static/public';
 
 export type NewsItem = z.infer<typeof newsSchema>['data'][0];

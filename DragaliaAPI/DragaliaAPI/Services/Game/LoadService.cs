@@ -33,7 +33,9 @@ public class LoadService(
     private static readonly DateTimeOffset QuestBonusStackBaseTime =
         new(2021, 04, 07, 06, 00, 00, TimeSpan.Zero);
 
-    public async Task<LoadIndexResponse> BuildIndexData()
+    public async Task<LoadIndexResponse> BuildIndexData(
+        CancellationToken cancellationToken = default
+    )
     {
         Stopwatch stopwatch = Stopwatch.StartNew();
 
@@ -42,7 +44,7 @@ public class LoadService(
             .ProjectToSavefile()
             .AsSplitQuery()
             .AsNoTracking()
-            .FirstAsync();
+            .FirstAsync(cancellationToken);
 
         logger.LogInformation("{Time} ms: Load query complete", stopwatch.ElapsedMilliseconds);
         // TODO/NOTE: special shop purchase list is not set here. maybe change once that fully works?
