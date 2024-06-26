@@ -1,6 +1,7 @@
 import { PUBLIC_DAWNSHARD_API_URL } from '$env/static/public';
-import type { PageLoad } from './$types';
 import { newsItemSchema } from '$main/news/news.ts';
+
+import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ fetch, params }) => {
   const id = Number.parseInt(params.id) || 1;

@@ -1,21 +1,21 @@
 <script lang="ts">
-  import * as Card from '$shadcn/components/ui/card/index';
-  import GitHub from './icons/github.svelte';
-  import Discord from './icons/discord.svelte';
-  import Patreon from './icons/patreon.svelte';
-  import BuyMeACoffee from './icons/buyMeACoffee.svelte';
-  import LinkButton from './linkButton.svelte';
-  import Acknowledgement from './acknowledgement.svelte';
-  import Typography from '$lib/components/typography.svelte';
-
-  import LukeFZ from '$lib/assets/acknowledgement/lukefz.webp';
   import Ceris from '$lib/assets/acknowledgement/ceris.webp';
+  import FatesTimelines1337 from '$lib/assets/acknowledgement/fatestimelines1337.webp';
+  import Lati from '$lib/assets/acknowledgement/lati.webp';
+  import LukeFZ from '$lib/assets/acknowledgement/lukefz.webp';
   import Nano from '$lib/assets/acknowledgement/nano.webp';
   import Nightmerp from '$lib/assets/acknowledgement/nightmerp.webp';
   import Skazord from '$lib/assets/acknowledgement/skazord.webp';
-  import Lati from '$lib/assets/acknowledgement/lati.webp';
   import Sockperson from '$lib/assets/acknowledgement/sockperson.webp';
-  import FatesTimelines1337 from '$lib/assets/acknowledgement/fatestimelines1337.webp';
+  import Typography from '$lib/components/typography.svelte';
+  import * as Card from '$shadcn/components/ui/card/index';
+
+  import Acknowledgement from './acknowledgement.svelte';
+  import BuyMeACoffee from './icons/buyMeACoffee.svelte';
+  import Discord from './icons/discord.svelte';
+  import GitHub from './icons/github.svelte';
+  import Patreon from './icons/patreon.svelte';
+  import LinkButton from './linkButton.svelte';
 </script>
 
 <div

@@ -9,13 +9,17 @@ public class LogContextMiddleware(IPlayerIdentityService playerIdentityService) 
 {
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        if (
-            (context.User.Identity?.IsAuthenticated ?? false)
-            && context.User.HasClaim(x => x.Type == CustomClaimType.AccountId)
-        )
+        if (context.User.Identity is { IsAuthenticated: true })
         {
-            LogContext.PushProperty("AccountId", playerIdentityService.AccountId);
-            LogContext.PushProperty("ViewerId", playerIdentityService.ViewerId);
+            if (context.User.HasClaim(x => x.Type == CustomClaimType.AccountId))
+            {
+                LogContext.PushProperty("AccountId", playerIdentityService.AccountId);
+            }
+
+            if (context.User.HasClaim(x => x.Type == CustomClaimType.ViewerId))
+            {
+                LogContext.PushProperty("ViewerId", playerIdentityService.ViewerId);
+            }
         }
 
         if (

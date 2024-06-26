@@ -1,11 +1,14 @@
 <script lang="ts">
-  import type { PageData } from './$types';
+  import { onMount } from 'svelte';
+
+  import { navigating, page } from '$app/stores';
+  import Page from '$lib/components/page.svelte';
+
+  import NewsItem from '../item.svelte';
   import { lastReadKey, pageSize } from '../news.ts';
-  import { page, navigating } from '$app/stores';
   import NewsPagination from '../pagination.svelte';
   import NewsSkeleton from '../skeleton.svelte';
-  import NewsItem from '../item.svelte';
-  import { onMount } from 'svelte';
+  import type { PageData } from './$types';
 
   export let data: PageData;
 
@@ -26,10 +29,8 @@
   });
 </script>
 
-<div class="px-6 pt-4">
-  <h1 class="text-4xl font-bold tracking-tight">News</h1>
-  <hr class="mb-1 mt-2" />
-  <div class="flex flex-col gap-3 p-3">
+<Page title="News">
+  <div class="mb-4 flex flex-col gap-3 px-3">
     {#if loading}
       {#each { length: pageSize } as _}
         <NewsSkeleton />
@@ -43,4 +44,4 @@
       {currentPage}
       numPages={Math.ceil(data.newsItems.pagination.totalCount / pageSize)} />
   </div>
-</div>
+</Page>

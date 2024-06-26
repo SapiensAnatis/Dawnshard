@@ -1,19 +1,19 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
+  import { goto } from '$app/navigation';
   import { page } from '$app/stores';
-  import type { PageData } from './$types';
-
+  import BuyMeACoffee from '$main/(home)/icons/buyMeACoffee.svelte';
+  import Discord from '$main/(home)/icons/discord.svelte';
+  import GitHub from '$main/(home)/icons/github.svelte';
+  import Patreon from '$main/(home)/icons/patreon.svelte';
+  import NewsItem from '$main/news/item.svelte';
   import { lastReadKey, pageSize } from '$main/news/news.ts';
   import NewsPagination from '$main/news/pagination.svelte';
   import NewsSkeleton from '$main/news/skeleton.svelte';
-  import GitHub from '$main/(home)/icons/github.svelte';
-  import Discord from '$main/(home)/icons/discord.svelte';
-  import Patreon from '$main/(home)/icons/patreon.svelte';
-  import BuyMeACoffee from '$main/(home)/icons/buyMeACoffee.svelte';
+
   import IconButton from '../iconButton.svelte';
-  import { goto } from '$app/navigation';
-  import NewsItem from '$main/news/item.svelte';
+  import type { PageData } from './$types';
 
   let lastRead: Date;
 

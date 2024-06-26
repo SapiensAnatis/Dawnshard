@@ -1,9 +1,11 @@
 <script lang="ts">
-  import { Card, CardContent } from '$shadcn/components/ui/card/index.js';
   import { Image } from '@unpic/svelte';
-  import type { NewsItem } from '$main/news/news.ts';
-  import Header from './header.svelte';
   import { Newspaper } from 'lucide-svelte';
+
+  import type { NewsItem } from '$main/news/news.ts';
+  import { Card, CardContent } from '$shadcn/components/ui/card/index.js';
+
+  import Header from './header.svelte';
 
   export let item: NewsItem;
   export let lastRead: Date;

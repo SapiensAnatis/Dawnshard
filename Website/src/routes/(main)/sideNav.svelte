@@ -1,10 +1,12 @@
 <script lang="ts">
-  import Routes from '$lib/routes/routes.svelte';
+  import Routes from '$main/routes.svelte';
+
+  export let hasValidJwt: boolean;
 </script>
 
 <div id="navigation" class="hidden flex-col gap-4 py-2 md:flex">
   <nav class="grid gap-1 px-2">
-    <Routes />
+    <Routes {hasValidJwt} />
   </nav>
 </div>
 

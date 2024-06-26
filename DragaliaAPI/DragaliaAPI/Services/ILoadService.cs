@@ -4,5 +4,5 @@ namespace DragaliaAPI.Services;
 
 public interface ILoadService
 {
-    public Task<LoadIndexResponse> BuildIndexData();
+    public Task<LoadIndexResponse> BuildIndexData(CancellationToken cancellationToken = default);
 }

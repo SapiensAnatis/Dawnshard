@@ -1,5 +1,5 @@
-import type { PageLoad } from './$types';
 import { makeRequestUrl, newsSchema } from '../news.ts';
+import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ fetch, params }) => {
   const pageNo = Number.parseInt(params.pageNo) || 1;

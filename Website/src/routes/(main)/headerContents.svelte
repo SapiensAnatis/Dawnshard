@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { toggleMode } from 'mode-watcher';
   import Moon from 'lucide-svelte/icons/moon';
   import Sun from 'lucide-svelte/icons/sun';
-  import { Button } from '$shadcn/components/ui/button';
+  import { toggleMode } from 'mode-watcher';
+
   import { page } from '$app/stores';
+  import { Button } from '$shadcn/components/ui/button';
 
   export let hasValidJwt: boolean;
 </script>

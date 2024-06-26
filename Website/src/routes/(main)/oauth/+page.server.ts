@@ -1,8 +1,10 @@
-import type { PageServerLoad } from './$types';
-import { PUBLIC_BAAS_URL, PUBLIC_BAAS_CLIENT_ID } from '$env/static/public';
-import Cookies from '$lib/auth/cookies.ts';
 import { redirect } from '@sveltejs/kit';
+
+import { PUBLIC_BAAS_CLIENT_ID, PUBLIC_BAAS_URL } from '$env/static/public';
+import Cookies from '$lib/auth/cookies.ts';
 import getJwtMetadata from '$lib/auth/jwt.ts';
+
+import type { PageServerLoad } from './$types';
 
 const sessionTokenUrl = new URL('/connect/1.0.0/api/session_token', PUBLIC_BAAS_URL);
 const sdkTokenUrl = new URL('/1.0.0/gateway/sdk/token', PUBLIC_BAAS_URL);
@@ -111,5 +113,10 @@ export const load: PageServerLoad = async ({ cookies, url, fetch }) => {
   });
 
   const destination = getOriginalPage(url) ?? '/';
+
+  if (destination.includes('unauthorized')) {
+    redirect(302, '/');
+  }
+
   redirect(302, destination);
 };

@@ -1,10 +1,12 @@
 <script lang="ts">
-  import { Button } from '$shadcn/components/ui/button';
-  import * as Drawer from '$shadcn/components/ui/drawer';
   import Menu from 'lucide-svelte/icons/menu';
   import Close from 'lucide-svelte/icons/x';
-  import Routes from '$lib/routes/routes.svelte';
   import { onMount } from 'svelte';
+
+  import Routes from '$main/routes.svelte';
+  import { Button } from '$shadcn/components/ui/button';
+  import * as Drawer from '$shadcn/components/ui/drawer';
+
   import HeaderContents from './headerContents.svelte';
 
   let enhance = false;
@@ -36,7 +38,7 @@
                 Close <Close class="ml-2 mt-0.5 h-5 w-5" />
               </Button>
             </Drawer.Close>
-            <Routes />
+            <Routes {hasValidJwt} />
           </div>
         </Drawer.Content>
       </Drawer.Portal>
