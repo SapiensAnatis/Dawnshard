@@ -1,5 +1,5 @@
 import type { Icon } from 'lucide-svelte';
-import Home from 'lucide-svelte/icons/home';
+import Home from 'lucide-svelte/icons/house';
 import Newspaper from 'lucide-svelte/icons/newspaper';
 import User from 'lucide-svelte/icons/user';
 import type { ComponentType } from 'svelte';
@@ -20,18 +20,13 @@ export const routeGroups: RouteGroup[] = [
   {
     title: 'Information',
     routes: [
-      // @ts-expect-error https://github.com/lucide-icons/lucide/issues/2114
       { title: 'Home', href: '/', icon: Home },
-      // @ts-expect-error https://github.com/lucide-icons/lucide/issues/2114
       { title: 'News', href: '/news/1', icon: Newspaper }
     ]
   },
   {
     title: 'Account',
     requireAuth: true,
-    routes: [
-      // @ts-expect-error https://github.com/lucide-icons/lucide/issues/2114
-      { title: 'Profile', href: '/account/profile', icon: User }
-    ]
+    routes: [{ title: 'Profile', href: '/account/profile', icon: User }]
   }
 ];
