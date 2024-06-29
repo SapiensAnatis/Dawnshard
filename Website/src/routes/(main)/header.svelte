@@ -27,7 +27,7 @@
         class="md:hidden"
         aria-label="Open navigation"
         on:click={() => (drawerOpen = true)}>
-        <Menu />
+        <Menu class="h-[1.2rem] w-[1.2rem]" />
       </Button>
       <HeaderContents {hasValidJwt} />
 
@@ -36,7 +36,7 @@
           id="drawer-content"
           class="fixed bottom-0 left-0 top-0 mt-0 w-[75%] bg-background pl-6 pr-2 pt-2">
           <div id="my-content" class="flex flex-col">
-            <Button variant="ghost" on:click={() => (drawerOpen = false)}>
+            <Button variant="ghost" class="w-[7rem] self-end" on:click={() => (drawerOpen = false)}>
               Close <Close class="ml-2 mt-0.5 h-5 w-5" />
             </Button>
             <Routes {hasValidJwt} on:navigate={() => (drawerOpen = false)} />
