@@ -1,0 +1,56 @@
+name: Website
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - Website/**
+  pull_request:
+    paths:
+      - Website/**
+
+jobs:
+  playwright:
+    name: Playwright Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Website/
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: pnpm exec playwright test
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 3
+
+      - name: Upload snapshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: snapshots
+          path: test/__screenshots__/
+          retention-days: 3
