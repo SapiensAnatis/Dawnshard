@@ -5,9 +5,9 @@ import {
   type PathParams
 } from 'msw';
 
-import handleNews from './news.ts';
-import { handleUser, handleUserProfile } from './user.ts';
+import { handleNews, handleNewsItem } from './news.ts';
 import handleSavefileExport from './savefile.ts';
+import { handleUser, handleUserProfile } from './user.ts';
 
 const createHttpHandler = <
   Params extends PathParams<keyof Params> = PathParams,
@@ -34,6 +34,7 @@ const http = {
 
 export const handlers = [
   http.get('/api/news', handleNews),
+  http.get('/api/news/:itemId', handleNewsItem),
 
   http.head('/api/user/me', handleUser),
   http.get('/api/user/me', handleUser),

@@ -61,7 +61,7 @@ There really is a Linux, and these people are using it, but it is just a part of
   }
 ];
 
-const handleNews: HttpResponseResolver = ({ request }) => {
+export const handleNews: HttpResponseResolver = ({ request }) => {
   const url = new URL(request.url);
 
   const offset = Number.parseInt(url.searchParams.get('offset') ?? '');
@@ -79,4 +79,18 @@ const handleNews: HttpResponseResolver = ({ request }) => {
   });
 };
 
-export default handleNews;
+export const handleNewsItem: HttpResponseResolver = ({ params }) => {
+  const itemId = Number.parseInt(params.itemId as string);
+
+  if (isNaN(itemId)) {
+    throw new Error('Invalid itemId path parameter');
+  }
+
+  const item = newsItems.find((x) => x.id === itemId);
+
+  if (!item) {
+    return HttpResponse.text('', { status: 404 });
+  }
+
+  return HttpResponse.json(item);
+};

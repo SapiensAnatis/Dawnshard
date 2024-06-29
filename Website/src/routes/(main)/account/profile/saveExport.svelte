@@ -2,8 +2,8 @@
   import TriangleAlert from 'lucide-svelte/icons/triangle-alert';
   import Upload from 'lucide-svelte/icons/upload';
   import { onMount } from 'svelte';
-  import { PUBLIC_DAWNSHARD_API_URL } from '$env/static/public';
 
+  import { PUBLIC_DAWNSHARD_API_URL } from '$env/static/public';
   import LoadingSpinner from '$lib/components/loadingSpinner.svelte';
   import { Button } from '$shadcn/components/ui/button';
   import * as Card from '$shadcn/components/ui/card';
