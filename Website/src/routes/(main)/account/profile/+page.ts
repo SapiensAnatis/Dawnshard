@@ -1,5 +1,6 @@
-import type { PageLoad } from './$types';
 import { PUBLIC_DAWNSHARD_API_URL } from '$env/static/public';
+
+import type { PageLoad } from './$types';
 import { userProfileSchema } from './userProfile.ts';
 
 export const load: PageLoad = async ({ fetch }) => {

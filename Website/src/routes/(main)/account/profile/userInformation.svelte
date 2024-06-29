@@ -4,6 +4,7 @@
   import * as Card from '$shadcn/components/ui/card';
 
   import type { User } from '../user.ts';
+  import type { UserProfile } from './userProfile.ts';
 
   const chunkString = (s: string, chunkSize: number) => {
     const chunks = [];
