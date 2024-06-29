@@ -1,5 +1,5 @@
 import type { Icon } from 'lucide-svelte';
-import Home from 'lucide-svelte/icons/house';
+import House from 'lucide-svelte/icons/house';
 import Newspaper from 'lucide-svelte/icons/newspaper';
 import User from 'lucide-svelte/icons/user';
 import type { ComponentType } from 'svelte';
@@ -20,7 +20,7 @@ export const routeGroups: RouteGroup[] = [
   {
     title: 'Information',
     routes: [
-      { title: 'Home', href: '/', icon: Home },
+      { title: 'Home', href: '/', icon: House },
       { title: 'News', href: '/news/1', icon: Newspaper }
     ]
   },
