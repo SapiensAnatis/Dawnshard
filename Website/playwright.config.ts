@@ -1,4 +1,4 @@
-import type { PlaywrightTestConfig } from '@playwright/test';
+import { devices, type PlaywrightTestConfig } from '@playwright/test';
 
 const url = process.env.CI ? 'http://localhost:4173' : 'http://localhost:3001';
 
@@ -18,7 +18,13 @@ const config: PlaywrightTestConfig = {
   testDir: 'tests',
   snapshotPathTemplate: '{testDir}/__screenshots__/{testFilePath}/{arg}{ext}',
   testMatch: /(.+\.)?(test|spec)\.[jt]s/,
-  timeout: 600000
+  timeout: 600000,
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] }
+    }
+  ]
 };
 
 export default config;
