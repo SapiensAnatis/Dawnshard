@@ -3,6 +3,7 @@
   import Upload from 'lucide-svelte/icons/upload';
   import { onMount } from 'svelte';
 
+  import { PUBLIC_DAWNSHARD_API_URL } from '$env/static/public';
   import LoadingSpinner from '$lib/components/loadingSpinner.svelte';
   import { Button } from '$shadcn/components/ui/button';
   import * as Card from '$shadcn/components/ui/card';
@@ -10,8 +11,10 @@
   let enhance = false;
   let savefileExportPromise: Promise<void> | null = null;
 
+  const savefileExportUrl = new URL('savefile/export', PUBLIC_DAWNSHARD_API_URL);
+
   const getSavefile = async () => {
-    const response = await fetch('/api/user/me/savefile');
+    const response = await fetch(savefileExportUrl);
     if (!response.ok) {
       throw new Error(`Savefile export failed with status ${response.status}`);
     }
@@ -68,7 +71,7 @@
         {/await}
       </div>
     {:else}
-      <Button variant="secondary" href="/api/user/me/savefile" download="/api/user/me/savefile">
+      <Button variant="secondary" href={savefileExportUrl.href} download={savefileExportUrl}>
         Export Save
       </Button>
     {/if}

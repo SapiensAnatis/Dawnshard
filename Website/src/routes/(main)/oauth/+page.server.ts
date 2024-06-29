@@ -1,7 +1,13 @@
-import { redirect } from '@sveltejs/kit';
+import { type Cookies, redirect } from '@sveltejs/kit';
+import { z } from 'zod';
 
-import { PUBLIC_BAAS_CLIENT_ID, PUBLIC_BAAS_URL } from '$env/static/public';
-import Cookies from '$lib/auth/cookies.ts';
+import { dev } from '$app/environment';
+import {
+  PUBLIC_BAAS_CLIENT_ID,
+  PUBLIC_BAAS_URL,
+  PUBLIC_DAWNSHARD_API_URL
+} from '$env/static/public';
+import CookieNames from '$lib/auth/cookies.ts';
 import getJwtMetadata from '$lib/auth/jwt.ts';
 
 import type { PageServerLoad } from './$types';
@@ -9,28 +15,58 @@ import type { PageServerLoad } from './$types';
 const sessionTokenUrl = new URL('/connect/1.0.0/api/session_token', PUBLIC_BAAS_URL);
 const sdkTokenUrl = new URL('/1.0.0/gateway/sdk/token', PUBLIC_BAAS_URL);
 
-const getOriginalPage = (url: URL) => {
-  const stateJson = url.searchParams.get('state');
-  if (!stateJson) {
-    return null;
-  }
+const sessionTokenResponseSchema = z.object({
+  session_token: z.string()
+});
 
-  let stateObject;
-  try {
-    stateObject = JSON.parse(stateJson);
-  } catch {
-    return null;
-  }
-
-  if (!stateObject.originalPage) {
-    return null;
-  }
-
-  return stateObject.originalPage;
-};
+const sdkTokenResponseSchema = z.object({
+  idToken: z.string()
+});
 
 export const load: PageServerLoad = async ({ cookies, url, fetch }) => {
-  const challengeString = cookies.get(Cookies.ChallengeString);
+  const idToken = await getBaasToken(cookies, url, fetch);
+
+  const jwtMetadata = getJwtMetadata(idToken);
+  if (!jwtMetadata.valid) {
+    throw Error('Invalid JWT returned');
+  }
+
+  const maxAge = (jwtMetadata.expiryTimestampMs - Date.now()) / 1000;
+
+  if (!(await checkUserExists(idToken, fetch))) {
+    redirect(302, '/login/unauthorized/404');
+  }
+
+  cookies.set(CookieNames.IdToken, idToken, {
+    path: '/',
+    maxAge,
+    httpOnly: false,
+    ...(!dev && {
+      sameSite: 'lax',
+      httpOnly: true,
+      secure: true
+    })
+  });
+
+  cookies.delete('challengeString', {
+    path: '/'
+  });
+
+  const destination = getOriginalPage(url) ?? '/';
+
+  if (destination.includes('unauthorized')) {
+    redirect(302, '/');
+  }
+
+  redirect(302, destination);
+};
+
+const getBaasToken = async (
+  cookies: Cookies,
+  url: URL,
+  fetch: (url: URL, req: RequestInit) => Promise<Response>
+) => {
+  const challengeString = cookies.get(CookieNames.ChallengeString);
 
   if (!challengeString) {
     throw new Error('Failed to get challenge string');
@@ -57,12 +93,9 @@ export const load: PageServerLoad = async ({ cookies, url, fetch }) => {
     throw new Error('Session token request failed');
   }
 
-  const sessionTokenResponseBody = await sessionTokenResponse.json();
-  const sessionToken = sessionTokenResponseBody.session_token;
-
-  if (!sessionToken) {
-    throw new Error('Failed to parse session token response');
-  }
+  const { session_token: sessionToken } = sessionTokenResponseSchema.parse(
+    await sessionTokenResponse.json()
+  );
 
   const sdkTokenRequest = {
     client_id: PUBLIC_BAAS_CLIENT_ID,
@@ -82,41 +115,46 @@ export const load: PageServerLoad = async ({ cookies, url, fetch }) => {
     throw new Error('SDK token request failed');
   }
 
-  const sdkTokenResponseBody = await sdkTokenResponse.json();
-  const idToken = sdkTokenResponseBody.idToken;
+  const { idToken } = sdkTokenResponseSchema.parse(await sdkTokenResponse.json());
+  return idToken;
+};
 
-  if (!idToken) {
-    throw new Error('Failed to parse SDK token response');
-  }
-
-  const jwtMetadata = getJwtMetadata(idToken);
-  if (!jwtMetadata.valid) {
-    throw Error('Invalid JWT returned');
-  }
-
-  console.log(jwtMetadata);
-
-  const maxAge = (jwtMetadata.expiryTimestampMs - Date.now()) / 1000;
-
-  cookies.set(Cookies.IdToken, idToken, {
-    path: '/',
-    sameSite: 'lax',
-    httpOnly: true,
-    maxAge,
-    ...(import.meta.env.MODE !== 'development' && {
-      secure: true
-    })
+const checkUserExists = async (
+  idToken: string,
+  fetch: (url: URL, req: RequestInit) => Promise<Response>
+) => {
+  const userMeResponse = await fetch(new URL('user/me', PUBLIC_DAWNSHARD_API_URL), {
+    method: 'HEAD',
+    headers: {
+      Authorization: `Bearer ${idToken}`
+    }
   });
 
-  cookies.delete('challengeString', {
-    path: '/'
-  });
+  if (userMeResponse.ok) {
+    return true;
+  } else if (userMeResponse.status === 404) {
+    return false;
+  } else {
+    throw new Error(`Unexpected /user/me response in OAuth callback: ${userMeResponse.status}`);
+  }
+};
 
-  const destination = getOriginalPage(url) ?? '/';
-
-  if (destination.includes('unauthorized')) {
-    redirect(302, '/');
+const getOriginalPage = (url: URL) => {
+  const stateJson = url.searchParams.get('state');
+  if (!stateJson) {
+    return null;
   }
 
-  redirect(302, destination);
+  let stateObject;
+  try {
+    stateObject = JSON.parse(stateJson);
+  } catch {
+    return null;
+  }
+
+  if (!stateObject.originalPage) {
+    return null;
+  }
+
+  return stateObject.originalPage;
 };

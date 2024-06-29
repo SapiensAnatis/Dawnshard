@@ -20,7 +20,7 @@
 
 <div
   id="banner"
-  class="background-image dark:testClass grid grid-cols-12 gap-4 bg-[url('/src/lib/assets/story.webp')] dark:bg-[url('/src/lib/assets/storyDark.webp')]">
+  class="background-image grid grid-cols-12 gap-4 bg-[url('/src/lib/assets/story.webp')] dark:bg-[url('/src/lib/assets/storyDark.webp')]">
   <Card.Root class="col-span-12 lg:col-span-7">
     <Card.Header>
       <Card.Title tag="h2" class="text-3xl">Welcome to Dawnshard</Card.Title>

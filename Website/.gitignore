@@ -8,3 +8,4 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .pnpm-store
 .idea
+test-results
