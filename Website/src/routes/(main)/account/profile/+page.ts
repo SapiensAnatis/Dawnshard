@@ -12,9 +12,7 @@ export const load: PageLoad = async ({ fetch }) => {
     throw new Error(`/user/me/profile error: HTTP ${response.status}`);
   }
 
-  const json = await response.json();
-  console.log(json);
   return {
-    userProfile: userProfileSchema.parse(json)
+    userProfile: userProfileSchema.parse(await response.json())
   };
 };

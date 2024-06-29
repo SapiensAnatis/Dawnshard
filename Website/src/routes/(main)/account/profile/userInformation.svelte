@@ -26,7 +26,10 @@
       return 'Never!';
     }
 
-    return date.toLocaleDateString();
+    return date.toLocaleString(undefined, {
+      dateStyle: 'medium',
+      timeStyle: 'short'
+    });
   };
 
   export let user: User;

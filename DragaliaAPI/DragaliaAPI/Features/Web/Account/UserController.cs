@@ -33,19 +33,6 @@ public class UserController(UserService userService) : ControllerBase
     public async Task<ActionResult<UserProfile>> GetSelfProfile(
         CancellationToken cancellationToken
     ) => await userService.GetUserProfile(cancellationToken);
-
-    [HttpGet("me/savefile")]
-    [Authorize(Policy = PolicyNames.RequireDawnshardIdentity)]
-    public async Task<FileResult> GetSavefile(CancellationToken cancellationToken)
-    {
-        LoadIndexResponse savefile = await userService.GetSavefile(cancellationToken);
-
-        return this.File(
-            JsonSerializer.SerializeToUtf8Bytes(savefile, ApiJsonOptions.Instance),
-            "application/json",
-            "savedata.txt"
-        );
-    }
 }
 
 file static class ClaimsPrincipalExtensions

@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using DragaliaAPI.Database;
@@ -23,6 +24,16 @@ public static class WebAuthenticationHelper
         if (context.Request.Cookies.TryGetValue("idToken", out string? idToken))
         {
             context.Token = idToken;
+        }
+
+        if (
+            AuthenticationHeaderValue.TryParse(
+                context.Request.Headers.Authorization,
+                out AuthenticationHeaderValue? authHeader
+            ) && authHeader is { Scheme: "Bearer", Parameter: not null }
+        )
+        {
+            context.Token = authHeader.Parameter;
         }
 
         return Task.CompletedTask;

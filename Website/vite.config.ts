@@ -8,18 +8,12 @@ export default defineConfig({
     sveltekit(),
     enhancedImages(),
     checker({
-      overlay: false, // Doesn't work
+      overlay: true, // Doesn't work
       typescript: true,
       eslint: { lintCommand: 'eslint ./src/**/*.{ts,svelte}', useFlatConfig: true }
     })
   ],
   server: {
-    port: 3001,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:5000',
-        changeOrigin: true
-      }
-    }
+    port: 3001
   }
 });
