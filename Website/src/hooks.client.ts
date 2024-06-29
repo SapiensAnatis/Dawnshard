@@ -1,6 +1,6 @@
-import { dev } from '$app/environment';
+import { PUBLIC_ENABLE_MSW } from '$env/static/public';
 
-if (dev) {
+if (PUBLIC_ENABLE_MSW === 'true') {
   const { worker } = await import('./mocks/browser');
 
   await worker.start({
