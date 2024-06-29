@@ -1,6 +1,6 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 
-const url = process.env.CI ? 'http://localhost:4713' : 'http://localhost:3001';
+const url = process.env.CI ? 'http://localhost:4173' : 'http://localhost:3001';
 
 const config: PlaywrightTestConfig = {
   webServer: {
@@ -8,7 +8,7 @@ const config: PlaywrightTestConfig = {
     url,
     stdout: 'pipe',
     reuseExistingServer: !process.env.CI,
-    timeout: 600000
+    timeout: 120000
   },
   use: {
     baseURL: url
