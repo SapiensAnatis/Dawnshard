@@ -1,15 +1,15 @@
 import type { Handle, HandleFetch } from '@sveltejs/kit';
 
-import { dev } from '$app/environment';
 import { DAWNSHARD_API_URL_SSR } from '$env/static/private';
 import { PUBLIC_DAWNSHARD_API_URL } from '$env/static/public';
+import { PUBLIC_ENABLE_MSW } from '$env/static/public';
 import Cookies from '$lib/auth/cookies.ts';
 import getJwtMetadata from '$lib/auth/jwt.ts';
 
 const publicApiUrl = new URL(PUBLIC_DAWNSHARD_API_URL);
 const internalApiUrl = new URL(DAWNSHARD_API_URL_SSR);
 
-if (dev) {
+if (PUBLIC_ENABLE_MSW === 'true') {
   const { server } = await import('./mocks/node');
   server.listen();
 }

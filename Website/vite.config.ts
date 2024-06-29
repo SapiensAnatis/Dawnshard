@@ -3,7 +3,7 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 import checker from 'vite-plugin-checker';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     sveltekit(),
     enhancedImages(),
@@ -15,5 +15,12 @@ export default defineConfig({
   ],
   server: {
     port: 3001
+  },
+  build: {
+    // Hack to get top-level await support required by Mock Service Worker for Playwright
+    target: mode === 'development' ? 'es2022' : 'modules'
+  },
+  preview: {
+    port: 3001
   }
-});
+}));

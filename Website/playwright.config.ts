@@ -4,7 +4,7 @@ const url = process.env.CI ? 'http://localhost:4173' : 'http://localhost:3001';
 
 const config: PlaywrightTestConfig = {
   webServer: {
-    command: 'pnpm run build && pnpm run preview -- --mode dev',
+    command: 'pnpm run build:dev && pnpm run preview',
     url,
     stdout: 'pipe',
     reuseExistingServer: !process.env.CI,
