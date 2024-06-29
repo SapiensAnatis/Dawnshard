@@ -1,11 +1,11 @@
 import { type Cookies, redirect } from '@sveltejs/kit';
 import { z } from 'zod';
 
-import { dev } from '$app/environment';
 import {
   PUBLIC_BAAS_CLIENT_ID,
   PUBLIC_BAAS_URL,
-  PUBLIC_DAWNSHARD_API_URL
+  PUBLIC_DAWNSHARD_API_URL,
+  PUBLIC_ENABLE_MSW
 } from '$env/static/public';
 import CookieNames from '$lib/auth/cookies.ts';
 import getJwtMetadata from '$lib/auth/jwt.ts';
@@ -41,7 +41,7 @@ export const load: PageServerLoad = async ({ cookies, url, fetch }) => {
     path: '/',
     maxAge,
     httpOnly: false,
-    ...(!dev && {
+    ...(!PUBLIC_ENABLE_MSW && {
       sameSite: 'lax',
       httpOnly: true,
       secure: true
