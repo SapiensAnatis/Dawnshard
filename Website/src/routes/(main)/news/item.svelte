@@ -13,7 +13,7 @@
 </script>
 
 <Card
-  class="grid grid-flow-row grid-cols-1 justify-start gap-0 overflow-hidden lg:grid-flow-col lg:grid-cols-none lg:grid-rows-[min-content_min-content]">
+  class="grid grid-flow-row grid-cols-1 justify-start gap-0 overflow-hidden lg:grid-flow-col lg:grid-cols-none lg:grid-rows-[min-content_max-content] ">
   <div
     class="flex h-full w-full items-center justify-center md:row-span-1 md:h-[200px] lg:row-span-2 lg:h-full lg:w-[13rem]">
     {#if item.headerImageSrc}
