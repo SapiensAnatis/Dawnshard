@@ -63,3 +63,39 @@ jobs:
           name: snapshots
           path: Website/tests/__screenshots__/
           retention-days: 3
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: "Website"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "pnpm"
+          cache-dependency-path: "Website/pnpm-lock.yaml"
+
+      - name: Install dependencies
+        working-directory: Website/
+        run: pnpm install
+
+      - name: Prettier
+        working-directory: Website/
+        run: pnpm run lint:prettier
+
+      - name: ESLint
+        working-directory: Website/
+        run: pnpm run lint:eslint
+
+      - name: svelte-check
+        working-directory: Website/
+        run: pnpm run check
