@@ -10,7 +10,6 @@
   import NewsItem from '$main/news/item.svelte';
   import { lastReadKey, pageSize } from '$main/news/news.ts';
   import NewsPagination from '$main/news/pagination.svelte';
-  import NewsSkeleton from '$main/news/skeleton.svelte';
 
   import IconButton from '../iconButton.svelte';
   import type { PageData } from './$types';
@@ -60,23 +59,13 @@
   </div>
   <hr class="mb-1 mt-4" />
   <div class="flex flex-col gap-3 p-3">
-    {#await data.newsPromise}
-      {#each { length: pageSize } as _}
-        <NewsSkeleton description={false} />
-      {/each}
-    {:then response}
-      {#if !response}
-        <p>Failed to load news!</p>
-      {:else}
-        {#each response.data as item}
-          <a tabindex="0" href={`/webview/news/detail/${item.id}`}>
-            <NewsItem {item} description={false} {lastRead} />
-          </a>
-        {/each}
-        <NewsPagination
-          {currentPage}
-          numPages={Math.ceil(response.pagination.totalCount / pageSize)} />
-      {/if}
-    {/await}
+    {#each data.news.data as item}
+      <a tabindex="0" href={`/webview/news/detail/${item.id}`}>
+        <NewsItem {item} description={false} {lastRead} />
+      </a>
+    {/each}
+    <NewsPagination
+      {currentPage}
+      numPages={Math.ceil(data.news.pagination.totalCount / pageSize)} />
   </div>
 </div>
