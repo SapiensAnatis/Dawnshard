@@ -1,21 +1,6 @@
-import {
-  HttpResponse,
-  type HttpResponseResolver,
-  type PathParams,
-  type DefaultBodyType,
-  type JsonBodyType
-} from 'msw';
+import { HttpResponse, type HttpResponseResolver } from 'msw';
 
-export const handleUser: HttpResponseResolver<PathParams, DefaultBodyType, undefined> = ({
-  request,
-  cookies
-}) => {
-  console.log({ h: request.headers, cookies });
-  if (!request.headers.has('Authorization') && !cookies.idToken) {
-    console.log('returning 401');
-    return new HttpResponse(null, { status: 401 });
-  }
-
+export const handleUser: HttpResponseResolver = () => {
   return HttpResponse.json({
     viewerId: 1,
     name: 'Euden'

@@ -7,6 +7,7 @@ import {
 
 import handleNews from './news.ts';
 import { handleUser, handleUserProfile } from './user.ts';
+import handleSavefileExport from './savefile.ts';
 
 const createHttpHandler = <
   Params extends PathParams<keyof Params> = PathParams,
@@ -33,7 +34,10 @@ const http = {
 
 export const handlers = [
   http.get('/api/news', handleNews),
+
   http.head('/api/user/me', handleUser),
   http.get('/api/user/me', handleUser),
-  http.get('/api/user/me/profile', handleUserProfile)
+  http.get('/api/user/me/profile', handleUserProfile),
+
+  http.get('/api/savefile/export', handleSavefileExport)
 ].flatMap((x) => x);

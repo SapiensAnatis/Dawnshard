@@ -26,7 +26,4 @@ public class UserService(
                 LastLoginTime = x.LastLoginTime
             })
             .FirstAsync(cancellationToken);
-
-    public Task<LoadIndexResponse> GetSavefile(CancellationToken cancellationToken) =>
-        loadService.BuildIndexData(cancellationToken);
 }
