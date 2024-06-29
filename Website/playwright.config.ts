@@ -1,17 +1,22 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 
+const url = process.env.CI ? 'http://localhost:4713' : 'http://localhost:3001';
+
 const config: PlaywrightTestConfig = {
   webServer: {
-    command: 'pnpm run build && pnpm run preview',
-    url: "http://host.docker.internal:3001",
+    command: 'pnpm run build && pnpm run preview -- --mode dev',
+    url,
     stdout: 'pipe',
     reuseExistingServer: !process.env.CI,
     timeout: 600000
   },
   use: {
-    "baseURL": "http://host.docker.internal:3001"
+    baseURL: url
   },
+  updateSnapshots: process.env.UPDATE_SNAPSHOTS ? 'all' : 'missing',
+  ignoreSnapshots: !process.env.CI,
   testDir: 'tests',
+  snapshotPathTemplate: '{testDir}/__screenshots__/{testFilePath}/{arg}{ext}',
   testMatch: /(.+\.)?(test|spec)\.[jt]s/,
   timeout: 600000
 };

@@ -2,9 +2,9 @@ import { expect, test } from '@playwright/test';
 
 test('index page has expected h1', async ({ page }) => {
   await page.goto('/');
-  
+
   await expect(page.getByRole('heading', { name: 'Dawnshard', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Welcome to Dawnshard' })).toBeVisible();
 
-  await expect(page).toHaveScreenshot();
+  await expect(page).toHaveScreenshot({ fullPage: true });
 });
