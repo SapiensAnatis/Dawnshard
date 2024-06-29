@@ -15,7 +15,7 @@ const config = {
       $static: './static',
       $main: './src/routes/(main)'
     }
-  },
+  }
 };
 
 export default config;

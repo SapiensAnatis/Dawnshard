@@ -2,5 +2,10 @@
 pnpm-lock.yaml
 package-lock.json
 yarn.lock
-src/lib/shadcn/**/*
+
+# SvelteKit artefacts
 .svelte-
+
+# Third party code
+src/lib/shadcn/**/*
+static/mockServiceWorker.js

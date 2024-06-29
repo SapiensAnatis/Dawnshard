@@ -2,7 +2,7 @@
   import { cn } from '$shadcn/utils.js';
 
   export let size: number = 24;
-  let className: string = undefined;
+  let className: string | undefined = undefined;
 
   export { className as class };
 </script>
