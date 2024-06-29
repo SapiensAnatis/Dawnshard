@@ -10,6 +10,7 @@
   import HeaderContents from './headerContents.svelte';
 
   let enhance = false;
+  let drawerOpen = false;
 
   export let hasValidJwt: boolean;
 
@@ -19,13 +20,15 @@
 </script>
 
 {#if enhance}
-  <Drawer.Root direction="left">
-    <header id="header" class="z-50 gap-1 bg-background px-1 md:gap-2 md:px-3">
-      <Drawer.Trigger class="md:hidden">
-        <Button variant="ghost" class="md:hidden">
-          <Menu />
-        </Button>
-      </Drawer.Trigger>
+  <Drawer.Root direction="left" bind:open={drawerOpen}>
+    <header id="header" class="top-0 z-50 gap-1 bg-background px-1 md:gap-2 md:px-3">
+      <Button
+        variant="ghost"
+        class="md:hidden"
+        aria-label="Open navigation"
+        on:click={() => (drawerOpen = true)}>
+        <Menu />
+      </Button>
       <HeaderContents {hasValidJwt} />
 
       <Drawer.Portal class="md:hidden">
@@ -33,12 +36,10 @@
           id="drawer-content"
           class="fixed bottom-0 left-0 top-0 mt-0 w-[75%] bg-background pl-6 pr-2 pt-2">
           <div id="my-content" class="flex flex-col">
-            <Drawer.Close class="self-end">
-              <Button variant="ghost">
-                Close <Close class="ml-2 mt-0.5 h-5 w-5" />
-              </Button>
-            </Drawer.Close>
-            <Routes {hasValidJwt} />
+            <Button variant="ghost" on:click={() => (drawerOpen = false)}>
+              Close <Close class="ml-2 mt-0.5 h-5 w-5" />
+            </Button>
+            <Routes {hasValidJwt} on:navigate={() => (drawerOpen = false)} />
           </div>
         </Drawer.Content>
       </Drawer.Portal>
