@@ -14,11 +14,10 @@ jobs:
   playwright:
     name: Playwright Test
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: Website/
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: "Website"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -32,12 +31,15 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
+        working-directory: Website/
         run: pnpm install
 
       - name: Install Playwright browsers
+        working-directory: Website/
         run: pnpm exec playwright install --with-deps
 
       - name: Run Playwright tests
+        working-directory: Website/
         run: pnpm exec playwright test
 
       - name: Upload report
@@ -45,12 +47,12 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
-          path: playwright-report/
+          path: Website/playwright-report/
           retention-days: 3
 
       - name: Upload snapshots
         uses: actions/upload-artifact@v4
         with:
           name: snapshots
-          path: test/__screenshots__/
+          path: Website/test/__screenshots__/
           retention-days: 3
