@@ -18,7 +18,7 @@ const config: PlaywrightTestConfig = {
   testDir: 'tests',
   snapshotPathTemplate: '{testDir}/__screenshots__/{testFilePath}/{arg}{ext}',
   testMatch: /(.+\.)?(test|spec)\.[jt]s/,
-  timeout: 600000,
+  timeout: 60000,
   projects: [
     {
       name: 'chromium',

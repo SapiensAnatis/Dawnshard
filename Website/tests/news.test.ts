@@ -9,7 +9,7 @@ test('displays correctly', async ({ page }) => {
 
   await expect(page.getByRole('heading', { name: 'News' })).toBeVisible();
 
-  await expect(page).toHaveScreenshot({ fullPage: true });
+  await expect(page).toHaveScreenshot();
 });
 
 test('displays correctly on mobile', async ({ page }) => {
@@ -21,6 +21,21 @@ test('displays correctly on mobile', async ({ page }) => {
   await page.getByRole('link', { name: 'News' }).click();
 
   await expect(page.getByRole('heading', { name: 'News' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Game updated!' })).toBeVisible();
 
-  await expect(page).toHaveScreenshot({ fullPage: true });
+  await expect(page).toHaveScreenshot();
+});
+
+test('change page', async ({ page }) => {
+  await page.goto('/news/1');
+
+  await page.getByRole('link', { name: 'Next' }).click();
+
+  await expect(page.getByRole('heading', { name: 'News' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Paging works' })).toBeVisible();
+
+  await page.getByRole('link', { name: 'Previous' }).click();
+
+  await expect(page.getByRole('heading', { name: 'News' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Game updated!' })).toBeVisible();
 });
