@@ -17,7 +17,11 @@
   <div
     class="flex h-full w-full items-center justify-center md:row-span-1 md:h-[200px] lg:row-span-2 lg:h-full lg:w-[13rem]">
     {#if item.headerImageSrc}
-      <Image src={item.headerImageSrc} layout="fullWidth" height={200} />
+      <Image
+        src={item.headerImageSrc}
+        layout="fullWidth"
+        class="hidden h-[100%] max-w-[13rem] lg:block" />
+      <Image src={item.headerImageSrc} height={200} class="block lg:hidden" layout="fullWidth" />
     {:else}
       <Newspaper class="h-[10rem] w-[10rem] p-4" strokeWidth={1} />
     {/if}
