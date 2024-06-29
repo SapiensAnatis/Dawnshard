@@ -9,6 +9,15 @@ test('displays correctly', async ({ page }) => {
   await expect(page).toHaveScreenshot({ fullPage: true });
 });
 
+test('displays correctly in dark mode', async ({ page }) => {
+  await page.goto('/');
+
+  await expect(page.getByRole('heading', { name: 'Dawnshard', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Toggle theme' }).click();
+
+  await expect(page).toHaveScreenshot();
+});
+
 test('displays correctly on mobile', async ({ page }) => {
   await page.setViewportSize(devices['iPhone 13'].viewport);
 
