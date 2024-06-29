@@ -5,6 +5,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "vite dev",
+    "dev:test": "vite dev --mode test",
     "api": "dotnet run --project ../DragaliaAPI/DragaliaAPI",
     "build": "vite build",
     "preview": "vite preview",
@@ -23,6 +24,7 @@
     "@sveltejs/kit": "2.5.17",
     "@sveltejs/vite-plugin-svelte": "3.1.1",
     "@types/eslint": "8.56.10",
+    "@types/node": "20.14.9",
     "@typescript-eslint/eslint-plugin": "8.0.0-alpha.14",
     "@typescript-eslint/parser": "8.0.0-alpha.30",
     "autoprefixer": "10.4.19",
@@ -30,6 +32,7 @@
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-simple-import-sort": "12.1.0",
     "eslint-plugin-svelte": "2.41.0",
+    "msw": "2.3.1",
     "postcss": "8.4.38",
     "postcss-load-config": "5.1.0",
     "prettier": "3.3.2",

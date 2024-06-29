@@ -1,0 +1,13 @@
+{
+  "name": "playwright",
+  "image": "mcr.microsoft.com/playwright:v1.45.0-jammy",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "workspaceFolder": "/workspace",
+  "containerEnv": {
+      "SHELL": "/bin/bash"
+  },
+  "postCreateCommand": "bash -c \"(curl -fsSL https://get.pnpm.io/install.sh | sh -)\"",
+  "mounts": [
+    "source=${localWorkspaceFolder}/.devcontainer/node_modules,target=/workspace/node_modules,type=bind"
+  ]
+}
