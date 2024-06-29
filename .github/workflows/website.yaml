@@ -56,5 +56,5 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: snapshots
-          path: Website/test/__screenshots__/
+          path: Website/tests/__screenshots__/
           retention-days: 3
