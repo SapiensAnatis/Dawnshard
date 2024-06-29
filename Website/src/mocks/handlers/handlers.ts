@@ -1,6 +1,7 @@
 import {
   type DefaultBodyType,
   http as mswHttp,
+  HttpResponse,
   type HttpResponseResolver,
   type PathParams
 } from 'msw';
@@ -23,6 +24,7 @@ const createHttpHandler = <
 };
 
 const http = {
+  all: createHttpHandler('all'),
   head: createHttpHandler('head'),
   get: createHttpHandler('get'),
   post: createHttpHandler('post'),
@@ -32,13 +34,32 @@ const http = {
   options: createHttpHandler('options')
 };
 
+const withAuth = <
+  Params extends PathParams,
+  RequestBodyType extends DefaultBodyType,
+  ResponseBodyType extends DefaultBodyType
+>(
+  resolver: HttpResponseResolver
+):
+  | HttpResponseResolver<Params, RequestBodyType, ResponseBodyType>
+  | HttpResponseResolver<Params, RequestBodyType, undefined> => {
+  return (input) => {
+    const { cookies, request } = input;
+    if (!cookies['idToken'] && !request.headers.get('Authorization')) {
+      return new HttpResponse(null, { status: 401 });
+    }
+
+    return resolver(input);
+  };
+};
+
 export const handlers = [
   http.get('/api/news', handleNews),
   http.get('/api/news/:itemId', handleNewsItem),
 
-  http.head('/api/user/me', handleUser),
-  http.get('/api/user/me', handleUser),
-  http.get('/api/user/me/profile', handleUserProfile),
+  http.head('/api/user/me', withAuth(handleUser)),
+  http.get('/api/user/me', withAuth(handleUser)),
+  http.get('/api/user/me/profile', withAuth(handleUserProfile)),
 
-  http.get('/api/savefile/export', handleSavefileExport)
+  http.get('/api/savefile/export', withAuth(handleSavefileExport))
 ].flatMap((x) => x);

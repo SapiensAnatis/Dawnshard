@@ -1,8 +1,7 @@
 import { HttpResponse, type HttpResponseResolver } from 'msw';
 
-// For some reason the client-side MSW won't receive any cookies, so we don't do auth checks here.
-
-export const handleUser: HttpResponseResolver = () => {
+export const handleUser: HttpResponseResolver = ({ cookies }) => {
+  console.log(cookies.idToken);
   return HttpResponse.json({
     viewerId: 1,
     name: 'Euden'

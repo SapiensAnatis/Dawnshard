@@ -28,7 +28,7 @@
   </div>
   <Header {item} {lastRead} />
   {#if description}
-    <CardContent class="">
+    <CardContent class="min-h-32">
       <!-- Trusted input from API server - XSS is unlikely without server being compromised -->
       <!-- eslint-disable-next-line svelte/no-at-html-tags -->
       {@html item.description}

@@ -1,6 +1,7 @@
 import { type Cookies, redirect } from '@sveltejs/kit';
 import { z } from 'zod';
 
+import { dev } from '$app/environment';
 import {
   PUBLIC_BAAS_CLIENT_ID,
   PUBLIC_BAAS_URL,
@@ -38,10 +39,11 @@ export const load: PageServerLoad = async ({ cookies, url, fetch }) => {
 
   cookies.set(CookieNames.IdToken, idToken, {
     path: '/',
-    sameSite: 'lax',
-    httpOnly: true,
     maxAge,
-    ...(import.meta.env.MODE !== 'development' && {
+    httpOnly: false,
+    ...(!dev && {
+      sameSite: 'lax',
+      httpOnly: true,
       secure: true
     })
   });
