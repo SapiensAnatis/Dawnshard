@@ -13,6 +13,8 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check . && eslint .",
+    "lint:prettier": "prettier --check .",
+    "lint:eslint": "eslint .",
     "format": "prettier --write .",
     "shadcn": "pnpm dlx shadcn-svelte@latest add"
   },

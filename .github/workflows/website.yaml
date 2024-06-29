@@ -85,3 +85,15 @@ jobs:
       - name: Install dependencies
         working-directory: Website/
         run: pnpm install
+
+      - name: Prettier
+        working-directory: Website/
+        run: pnpm run lint:prettier
+
+      - name: ESLint
+        working-directory: Website/
+        run: pnpm run lint:eslint
+
+      - name: svelte-check
+        working-directory: Website/
+        run: pnpm run check
