@@ -14,7 +14,8 @@ namespace DragaliaAPI.Features.Web.Account;
 
 [Route("/api/user")]
 [ApiController]
-public class UserController(UserService userService) : ControllerBase
+public class UserController(UserService userService, ILogger<UserController> logger)
+    : ControllerBase
 {
     [HttpGet("me")]
     [Authorize(Policy = PolicyNames.RequireValidJwt)]
@@ -22,6 +23,7 @@ public class UserController(UserService userService) : ControllerBase
     {
         if (!this.User.HasDawnshardIdentity())
         {
+            logger.LogInformation("User does not have a Dawnshard identity.");
             return this.NotFound();
         }
 
