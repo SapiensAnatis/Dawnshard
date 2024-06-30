@@ -11,6 +11,7 @@ using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
@@ -48,32 +49,18 @@ public static class WebAuthenticationHelper
             );
         }
 
-        string accountId = jsonWebToken.Subject;
-
-        ApiContext dbContext = context.HttpContext.RequestServices.GetRequiredService<ApiContext>();
         ILogger logger = context
             .HttpContext.RequestServices.GetRequiredService<ILoggerFactory>()
             .CreateLogger("DragaliaAPI.Features.Web.WebAuthenticationHelper");
 
-        // TODO: Cache this query in Redis
-        var playerInfo = await dbContext
-            .Players.IgnoreQueryFilters()
-            .Where(x => x.AccountId == accountId)
-            .Select(x => new { x.ViewerId, x.UserData!.Name, })
-            .FirstOrDefaultAsync();
-
-        logger.LogDebug(
-            "Player info for account {AccountId}: {@PlayerInfo}",
-            accountId,
-            playerInfo
-        );
+        PlayerInfo? playerInfo = await GetPlayerInfo(context, jsonWebToken, logger);
 
         if (playerInfo is not null)
         {
             ClaimsIdentity playerIdentity =
                 new(
                     [
-                        new Claim(CustomClaimType.AccountId, accountId),
+                        new Claim(CustomClaimType.AccountId, playerInfo.AccountId),
                         new Claim(CustomClaimType.ViewerId, playerInfo.ViewerId.ToString()),
                         new Claim(CustomClaimType.PlayerName, playerInfo.Name),
                     ]
@@ -84,5 +71,88 @@ public static class WebAuthenticationHelper
 
             context.Principal?.AddIdentity(playerIdentity);
         }
+    }
+
+    private static async Task<PlayerInfo?> GetPlayerInfo(
+        TokenValidatedContext context,
+        JsonWebToken jwt,
+        ILogger logger
+    )
+    {
+        // TODO: Rewrite using HybridCache when .NET 9 releases
+        IDistributedCache cache =
+            context.HttpContext.RequestServices.GetRequiredService<IDistributedCache>();
+
+        string cacheKey = $":playerinfo:${jwt.Subject}";
+
+        if (await cache.GetJsonAsync<PlayerInfo>(cacheKey) is { } cachedPlayerInfo)
+        {
+            logger.LogDebug("Using cached player info: {@PlayerInfo}", cachedPlayerInfo);
+            return cachedPlayerInfo;
+        }
+
+        IBaasApi baasApi = context.HttpContext.RequestServices.GetRequiredService<IBaasApi>();
+        string? gameAccountId = await baasApi.GetUserId(jwt.EncodedToken);
+
+        logger.LogDebug(
+            "Retrieved game account {GameAccountId} from BaaS for web account {WebAccountId}",
+            gameAccountId,
+            jwt.Subject
+        );
+
+        if (gameAccountId is null)
+        {
+            return null;
+        }
+
+        ApiContext dbContext = context.HttpContext.RequestServices.GetRequiredService<ApiContext>();
+
+        var dbPlayerInfo = await dbContext
+            .Players.IgnoreQueryFilters()
+            .Where(x => x.AccountId == gameAccountId)
+            .Select(x => new { x.ViewerId, x.UserData!.Name, })
+            .FirstOrDefaultAsync();
+
+        logger.LogDebug(
+            "PlayerInfo for game account {GameAccountId}: {@PlayerInfo}",
+            gameAccountId,
+            dbPlayerInfo
+        );
+
+        if (dbPlayerInfo is null)
+        {
+            return null;
+        }
+
+        PlayerInfo playerInfo =
+            new()
+            {
+                AccountId = gameAccountId,
+                Name = dbPlayerInfo.Name,
+                ViewerId = dbPlayerInfo.ViewerId,
+            };
+
+        await cache.SetJsonAsync(
+            cacheKey,
+            playerInfo,
+            new DistributedCacheEntryOptions()
+            {
+                // The ID token lasts for one hour. We may retain cached data past the expiry of the ID token, but
+                // that should be okay, since the JWT authentication will return an unauthorized result before reaching
+                // this code.
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1)
+            }
+        );
+
+        return playerInfo;
+    }
+
+    private class PlayerInfo
+    {
+        public required string AccountId { get; init; }
+
+        public long ViewerId { get; init; }
+
+        public required string Name { get; init; }
     }
 }

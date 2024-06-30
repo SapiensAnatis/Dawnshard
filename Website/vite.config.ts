@@ -21,6 +21,12 @@ export default defineConfig(({ mode }) => ({
     target: mode === 'development' ? 'es2022' : 'modules'
   },
   preview: {
-    port: 3001
+    port: 3001,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true
+      }
+    }
   }
 }));

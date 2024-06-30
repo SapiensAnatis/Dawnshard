@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.Web.Savefile;
 
+[Route("/api/savefile")]
 public class SavefileController(ILoadService loadService) : ControllerBase
 {
     [HttpGet("export")]

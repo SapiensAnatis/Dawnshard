@@ -1,4 +1,6 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using System.Net;
+using System.Net.Http.Headers;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Serialization;
@@ -84,5 +86,33 @@ public class BaasApi : IBaasApi
                     DragaliaResponse<LoadIndexResponse>
                 >(ApiJsonOptions.Instance)
             )?.Data ?? throw new JsonException("Deserialized savefile was null");
+    }
+
+    public async Task<string?> GetUserId(string idToken)
+    {
+        HttpRequestMessage request =
+            new(HttpMethod.Get, "/gameplay/v1/user")
+            {
+                Headers = { Authorization = new AuthenticationHeaderValue("Bearer", idToken) }
+            };
+
+        HttpResponseMessage response = await client.SendAsync(request);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            this.logger.LogError(
+                "Received non-200 status code in GetUserId: {Status}",
+                response.StatusCode
+            );
+
+            return null;
+        }
+
+        return (await response.Content.ReadFromJsonAsync<UserIdResponse>())?.UserId;
+    }
+
+    private class UserIdResponse
+    {
+        public required string UserId { get; set; }
     }
 }
