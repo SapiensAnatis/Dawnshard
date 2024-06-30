@@ -16,3 +16,11 @@ jobs:
       dockerfile: "Website/Dockerfile"
       image-name: "dawnshard-website"
     secrets: inherit
+
+  deploy:
+    name: Deploy
+    needs: build
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      github-environment: "Website"
+    secrets: inherit
