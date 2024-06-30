@@ -1,10 +1,8 @@
-import { PUBLIC_DAWNSHARD_API_URL } from '$env/static/public';
-
 import type { PageLoad } from './$types';
 import { userProfileSchema } from './userProfile.ts';
 
-export const load: PageLoad = async ({ fetch }) => {
-  const userRequest = new URL('user/me/profile', PUBLIC_DAWNSHARD_API_URL);
+export const load: PageLoad = async ({ fetch, url }) => {
+  const userRequest = new URL('/api/user/me/profile', url.origin);
 
   const response = await fetch(userRequest);
 

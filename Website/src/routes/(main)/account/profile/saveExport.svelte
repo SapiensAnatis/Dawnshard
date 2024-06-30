@@ -3,7 +3,7 @@
   import Upload from 'lucide-svelte/icons/upload';
   import { onMount } from 'svelte';
 
-  import { PUBLIC_DAWNSHARD_API_URL } from '$env/static/public';
+  import { page } from '$app/stores';
   import LoadingSpinner from '$lib/components/loadingSpinner.svelte';
   import { Button } from '$shadcn/components/ui/button';
   import * as Card from '$shadcn/components/ui/card';
@@ -11,7 +11,7 @@
   let enhance = false;
   let savefileExportPromise: Promise<void> | null = null;
 
-  const savefileExportUrl = new URL('savefile/export', PUBLIC_DAWNSHARD_API_URL);
+  const savefileExportUrl = new URL('/api/savefile/export', $page.url.origin);
 
   const getSavefile = async () => {
     const response = await fetch(savefileExportUrl);

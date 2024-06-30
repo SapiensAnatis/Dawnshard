@@ -1,12 +1,7 @@
 import { type Cookies, redirect } from '@sveltejs/kit';
 import { z } from 'zod';
 
-import {
-  PUBLIC_BAAS_CLIENT_ID,
-  PUBLIC_BAAS_URL,
-  PUBLIC_DAWNSHARD_API_URL,
-  PUBLIC_ENABLE_MSW
-} from '$env/static/public';
+import { PUBLIC_BAAS_CLIENT_ID, PUBLIC_BAAS_URL, PUBLIC_ENABLE_MSW } from '$env/static/public';
 import CookieNames from '$lib/auth/cookies.ts';
 import getJwtMetadata from '$lib/auth/jwt.ts';
 
@@ -33,7 +28,7 @@ export const load: PageServerLoad = async ({ cookies, url, fetch }) => {
 
   const maxAge = (jwtMetadata.expiryTimestampMs - Date.now()) / 1000;
 
-  if (!(await checkUserExists(idToken, fetch))) {
+  if (!(await checkUserExists(idToken, url, fetch))) {
     redirect(302, '/login/unauthorized/404');
   }
 
@@ -121,9 +116,10 @@ const getBaasToken = async (
 
 const checkUserExists = async (
   idToken: string,
+  url: URL,
   fetch: (url: URL, req: RequestInit) => Promise<Response>
 ) => {
-  const userMeResponse = await fetch(new URL('user/me', PUBLIC_DAWNSHARD_API_URL), {
+  const userMeResponse = await fetch(new URL('/api/user/me', url.origin), {
     headers: {
       Authorization: `Bearer ${idToken}`
     }

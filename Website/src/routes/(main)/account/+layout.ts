@@ -1,12 +1,11 @@
 import { redirect } from '@sveltejs/kit';
 
-import { PUBLIC_DAWNSHARD_API_URL } from '$env/static/public';
 import { userSchema } from '$main/account/user.ts';
 
 import type { LayoutLoad } from './$types';
 
-export const load: LayoutLoad = async ({ fetch }) => {
-  const userRequest = new URL('user/me', PUBLIC_DAWNSHARD_API_URL);
+export const load: LayoutLoad = async ({ fetch, url }) => {
+  const userRequest = new URL('/api/user/me', url.origin);
 
   const response = await fetch(userRequest);
 

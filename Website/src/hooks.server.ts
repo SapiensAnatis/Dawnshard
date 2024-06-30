@@ -1,12 +1,10 @@
 import type { Handle, HandleFetch } from '@sveltejs/kit';
 
 import { env } from '$env/dynamic/private';
-import { PUBLIC_DAWNSHARD_API_URL } from '$env/static/public';
 import { PUBLIC_ENABLE_MSW } from '$env/static/public';
 import Cookies from '$lib/auth/cookies.ts';
 import getJwtMetadata from '$lib/auth/jwt.ts';
 
-const publicApiUrl = new URL(PUBLIC_DAWNSHARD_API_URL);
 const internalApiUrl = new URL(env.DAWNSHARD_API_URL_SSR);
 
 if (PUBLIC_ENABLE_MSW === 'true') {
@@ -20,12 +18,12 @@ if (PUBLIC_ENABLE_MSW === 'true') {
   });
 }
 
-export const handleFetch: HandleFetch = ({ request, fetch }) => {
+export const handleFetch: HandleFetch = ({ request, fetch, event }) => {
   const requestUrl = new URL(request.url);
 
-  if (requestUrl.origin === publicApiUrl.origin) {
+  if (event.url.origin === requestUrl.origin && requestUrl.pathname.startsWith('/api')) {
     // Rewrite URL to internal
-    const newUrl = request.url.replace(publicApiUrl.origin, internalApiUrl.origin);
+    const newUrl = request.url.replace(requestUrl.origin, internalApiUrl.origin);
     console.log(`Rewriting request: from ${requestUrl.href} to ${newUrl}`);
     return fetch(new Request(newUrl, request));
   }

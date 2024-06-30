@@ -1,11 +1,10 @@
-import { PUBLIC_DAWNSHARD_API_URL } from '$env/static/public';
 import { newsItemSchema } from '$main/news/news.ts';
 
 import type { PageLoad } from './$types';
 
-export const load: PageLoad = async ({ fetch, params }) => {
+export const load: PageLoad = async ({ fetch, params, url }) => {
   const id = Number.parseInt(params.id) || 1;
-  const requestUrl = new URL(`news/${id}`, PUBLIC_DAWNSHARD_API_URL);
+  const requestUrl = new URL(`/api/news/${id}`, url.origin);
 
   const response = await fetch(requestUrl);
 
