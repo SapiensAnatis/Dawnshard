@@ -1,6 +1,6 @@
 import { HttpResponse, type HttpResponseResolver } from 'msw';
 
-export const handleUser: HttpResponseResolver = ({ cookies }) => {
+export const handleUser: HttpResponseResolver = () => {
   return HttpResponse.json({
     viewerId: 1,
     name: 'Euden'
