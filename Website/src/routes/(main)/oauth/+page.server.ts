@@ -124,7 +124,6 @@ const checkUserExists = async (
   fetch: (url: URL, req: RequestInit) => Promise<Response>
 ) => {
   const userMeResponse = await fetch(new URL('user/me', PUBLIC_DAWNSHARD_API_URL), {
-    method: 'HEAD',
     headers: {
       Authorization: `Bearer ${idToken}`
     }

@@ -16,9 +16,7 @@ namespace DragaliaAPI.Features.Web.Account;
 [ApiController]
 public class UserController(UserService userService) : ControllerBase
 {
-    [Route("me")]
-    [HttpGet]
-    [HttpHead]
+    [HttpGet("me")]
     [Authorize(Policy = PolicyNames.RequireValidJwt)]
     public async Task<ActionResult<User>> GetSelf(CancellationToken cancellationToken)
     {
