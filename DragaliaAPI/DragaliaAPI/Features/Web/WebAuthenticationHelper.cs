@@ -63,7 +63,7 @@ public static class WebAuthenticationHelper
             .FirstOrDefaultAsync();
 
         logger.LogDebug(
-            "Player info for account {@AccountId}: {@PlayerInfo}",
+            "Player info for account {AccountId}: {@PlayerInfo}",
             accountId,
             playerInfo
         );
