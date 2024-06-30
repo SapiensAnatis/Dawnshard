@@ -60,7 +60,7 @@ jobs:
 
       - name: Upload snapshots
         uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+        if: ${{ failure() }}
         with:
           name: snapshots
           path: Website/tests/__screenshots__/

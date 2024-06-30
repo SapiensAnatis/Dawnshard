@@ -47,7 +47,7 @@
 
 <div class="px-6 pt-4">
   <div class="flex flex-col items-center gap-4">
-    <h1 class="text-nowrap text-3xl font-bold tracking-tight">Welcome to Dawnshard</h1>
+    <h1 class="text-nowrap text-2xl font-bold tracking-tight">Welcome to Dawnshard</h1>
     <div class="flex flex-wrap gap-2">
       <IconButton href="https://github.com/sapiensanatis/dawnshard" icon={GitHub} />
       <IconButton href="https://discord.gg/j9zSttjjWj" icon={Discord} />
