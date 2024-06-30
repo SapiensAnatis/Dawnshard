@@ -191,11 +191,11 @@ app.MapWhen(
             cors.WithOrigins(allowedOrigins).AllowCredentials().AllowAnyHeader().AllowAnyMethod()
         );
         applicationBuilder.UseRouting();
+        applicationBuilder.UseSerilogRequestLogging();
 #pragma warning disable ASP0001
         applicationBuilder.UseAuthorization();
 #pragma warning restore ASP0001
         applicationBuilder.UseMiddleware<LogContextMiddleware>();
-        applicationBuilder.UseSerilogRequestLogging();
         applicationBuilder.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
