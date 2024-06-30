@@ -1,11 +1,9 @@
 import { redirect } from '@sveltejs/kit';
 import { Buffer } from 'buffer';
 
-import { PUBLIC_BAAS_CLIENT_ID, PUBLIC_BAAS_URL, PUBLIC_DAWNSHARD_URL } from '$env/static/public';
+import { PUBLIC_BAAS_CLIENT_ID, PUBLIC_BAAS_URL } from '$env/static/public';
 
 import type { PageServerLoad } from './$types';
-
-const redirectUri = new URL('oauth', PUBLIC_DAWNSHARD_URL);
 
 const getChallengeString = () => {
   const buffer = new Uint8Array(8);
@@ -21,6 +19,8 @@ const getUrlSafeBase64Hash = async (input: string) => {
 };
 
 export const load: PageServerLoad = async ({ cookies, url }) => {
+  const redirectUri = new URL('oauth', url.origin);
+
   const originalPage = url.searchParams.get('originalPage') ?? '/';
 
   const challengeStringValue = getChallengeString();
