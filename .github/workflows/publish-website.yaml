@@ -1,0 +1,18 @@
+name: Publish website
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - Website/**
+
+jobs:
+  build:
+    name: Build
+    uses: ./.github/workflows/build.yaml
+    with:
+      ref: main
+      dockerfile: "Website/Dockerfile"
+      image-name: "dawnshard-website"
+    secrets: inherit

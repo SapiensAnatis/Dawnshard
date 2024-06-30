@@ -1,6 +1,6 @@
 **/.classpath
 **/.dockerignore
-**/.env
+**/.env*
 **/.git
 **/.gitignore
 **/.project
@@ -28,3 +28,11 @@ README.md
 PhotonPlugin/
 **/*.Test/
 **/logs
+**/.pnpm-store
+**/build
+**/mockServiceWorker.js
+**/test-results
+**/tests
+**/dist
+!Website/.env
+!Website/.env.production

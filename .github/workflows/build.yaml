@@ -39,13 +39,13 @@ jobs:
           TAG_REGEX="[\w]+?@v(.*)"
           echo "Ref: ${{ inputs.ref }}"
           echo "Tag: ${{ inputs.image-tag }}"
-          
+
           if [ ${{ inputs.image-tag }} != "undefined" ]
           then
             echo "tag=${{ inputs.image-tag }}" >> "$GITHUB_OUTPUT"
             exit 0;
           fi
-          
+
           if [ ${{ inputs.ref }} = "main" ]
           then
              echo "tag=latest" >> "$GITHUB_OUTPUT"
@@ -56,22 +56,17 @@ jobs:
             echo "No image-tag provided and failed to derive image tag from ref"
             exit 1;
           fi
-          
+
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.ref }}
-          
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-          
+
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-        
-      - name: Setup .NET Core SDK
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.x
-          
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
@@ -80,4 +75,4 @@ jobs:
           file: ${{ inputs.dockerfile }}
           tags: ghcr.io/sapiensanatis/${{ inputs.image-name }}:${{ steps.derive-tag.outputs.tag }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max    
+          cache-to: type=gha,mode=max
