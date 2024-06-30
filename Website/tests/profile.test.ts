@@ -46,7 +46,7 @@ const login = async (page: Page) => {
   await page.getByRole('link', { name: 'Login' }).click();
 
   // Begin baas.lukefz.xyz
-  await page.waitForTimeout(1000); // If removed, buttons don't work. Maybe need to wait for Blazor to initialize?
+  await page.waitForTimeout(3000); // If removed, buttons don't work. Maybe need to wait for Blazor to initialize?
   await page.getByText('Login', { exact: true }).click();
 
   await page.locator('css=#username').fill(process.env.BAAS_USERNAME);
