@@ -29,7 +29,7 @@ public class WebviewVersionController(
 
         // TODO: Remove hardcoding. Consider making URLs configurable?
         AtgenWebviewUrlList news =
-            new("information", "https://test.dawnshard.co.uk/news/webview/1");
+            new("information", "https://test.dawnshard.co.uk/webview/news/1");
 
         return this.Ok(
             new WebviewVersionUrlListResponse(
