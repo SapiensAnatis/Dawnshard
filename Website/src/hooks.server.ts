@@ -18,10 +18,10 @@ if (PUBLIC_ENABLE_MSW === 'true') {
   });
 }
 
-export const handleFetch: HandleFetch = ({ request, fetch }) => {
+export const handleFetch: HandleFetch = ({ request, fetch, event }) => {
   const requestUrl = new URL(request.url);
 
-  if (requestUrl.pathname.includes('/api')) {
+  if (event.url.origin === requestUrl.origin && requestUrl.pathname.startsWith('/api')) {
     // Rewrite URL to internal
     const newUrl = request.url.replace(requestUrl.origin, internalApiUrl.origin);
     console.log(`Rewriting request: from ${requestUrl.href} to ${newUrl}`);
