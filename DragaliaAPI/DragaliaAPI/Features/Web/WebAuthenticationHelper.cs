@@ -51,6 +51,9 @@ public static class WebAuthenticationHelper
         string accountId = jsonWebToken.Subject;
 
         ApiContext dbContext = context.HttpContext.RequestServices.GetRequiredService<ApiContext>();
+        ILogger logger = context
+            .HttpContext.RequestServices.GetRequiredService<ILoggerFactory>()
+            .CreateLogger("DragaliaAPI.Features.Web.WebAuthenticationHelper");
 
         // TODO: Cache this query in Redis
         var playerInfo = await dbContext
@@ -58,6 +61,12 @@ public static class WebAuthenticationHelper
             .Where(x => x.AccountId == accountId)
             .Select(x => new { x.ViewerId, x.UserData!.Name, })
             .FirstOrDefaultAsync();
+
+        logger.LogDebug(
+            "Player info for account {AccountId}: {@PlayerInfo}",
+            accountId,
+            playerInfo
+        );
 
         if (playerInfo is not null)
         {

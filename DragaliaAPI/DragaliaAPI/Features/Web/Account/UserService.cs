@@ -6,11 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Web.Account;
 
-public class UserService(
-    IPlayerIdentityService playerIdentityService,
-    ILoadService loadService,
-    ApiContext apiContext
-)
+public class UserService(IPlayerIdentityService playerIdentityService, ApiContext apiContext)
 {
     public Task<User> GetUser(CancellationToken cancellationToken) =>
         apiContext
