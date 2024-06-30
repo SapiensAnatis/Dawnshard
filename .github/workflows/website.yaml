@@ -18,6 +18,9 @@ jobs:
   playwright:
     name: Playwright test
     runs-on: ubuntu-latest
+    env:
+      BAAS_USERNAME: ${{ secrets.BAAS_USERNAME }}
+      BAAS_PASSWORD: ${{ secrets.BAAS_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -53,7 +56,7 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
-          path: Website/playwright-report/
+          path: Website/test-results/
           retention-days: 3
 
       - name: Upload snapshots

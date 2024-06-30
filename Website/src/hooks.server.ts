@@ -11,7 +11,13 @@ const internalApiUrl = new URL(DAWNSHARD_API_URL_SSR);
 
 if (PUBLIC_ENABLE_MSW === 'true') {
   const { server } = await import('./mocks/node');
-  server.listen();
+  server.listen({
+    onUnhandledRequest: (request, print) => {
+      if (!request.url.includes('baas.lukefz.xyz')) {
+        print.warning();
+      }
+    }
+  });
 }
 
 export const handleFetch: HandleFetch = ({ request, fetch }) => {

@@ -14,9 +14,10 @@ const config: PlaywrightTestConfig = {
   updateSnapshots: process.env.UPDATE_SNAPSHOTS ? 'all' : 'missing',
   ignoreSnapshots: !process.env.CI,
   testDir: 'tests',
+  globalSetup: 'tests/globalSetup.ts',
   snapshotPathTemplate: '{testDir}/__screenshots__/{testFilePath}/{arg}{ext}',
   testMatch: /(.+\.)?(test|spec)\.[jt]s/,
-  timeout: 60000,
+  timeout: 15000,
   projects: [
     {
       name: 'chromium',
