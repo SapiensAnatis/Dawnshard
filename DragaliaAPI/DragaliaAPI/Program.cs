@@ -187,7 +187,6 @@ app.MapWhen(
     static ctx => ctx.Request.Path.StartsWithSegments("/api"),
     applicationBuilder =>
     {
-        // todo unfuck cors
         applicationBuilder.UseCors(cors =>
             cors.WithOrigins(allowedOrigins).AllowCredentials().AllowAnyHeader().AllowAnyMethod()
         );
