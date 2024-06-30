@@ -39,3 +39,13 @@ test('change page', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'News' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Game updated!' })).toBeVisible();
 });
+
+test('displays correctly for webview', async ({ page }) => {
+  await page.setViewportSize(devices['iPhone 13'].viewport);
+
+  await page.goto('/webview/news/1');
+
+  await expect(page.getByRole('heading', { name: 'Welcome to Dawnshard' })).toBeVisible();
+
+  await expect(page).toHaveScreenshot();
+});
