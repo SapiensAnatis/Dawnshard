@@ -25,6 +25,7 @@ export const handleFetch: HandleFetch = ({ request, fetch, event }) => {
     // Rewrite URL to internal
     const newUrl = request.url.replace(requestUrl.origin, internalApiUrl.origin);
     console.log(`Rewriting request: from ${requestUrl.href} to ${newUrl}`);
+    console.log({ cookies: event.cookies.getAll() });
     return fetch(new Request(newUrl, request));
   }
 
