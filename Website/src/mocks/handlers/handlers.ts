@@ -57,7 +57,6 @@ export const handlers = [
   ...http.get('/api/news', handleNews),
   ...http.get('/api/news/:itemId', handleNewsItem),
 
-  ...http.head('/api/user/me', withAuth(handleUser)),
   ...http.get('/api/user/me', withAuth(handleUser)),
   ...http.get('/api/user/me/profile', withAuth(handleUserProfile)),
 
