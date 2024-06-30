@@ -30,7 +30,7 @@ BAAS_PASSWORD=your_password_here
 ```
 
 These must be a valid login to the real https://baas.lukefz.xyz/ website. It is not required for them to have any Dawnshard save data.
+
 ## Authentication
 
 The website uses OAuth with [`DragaliaBaas`](https://github.com/DragaliaLostRevival/DragaliaBaasServer) as an identity provider. When a user logs in, they are redirected to the BaaS to authorize their linked account, and given an JSON web token as a cookie which can be used to authenticate against the main server.
-
