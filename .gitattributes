@@ -46,5 +46,3 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
-*.png filter=lfs diff=lfs merge=lfs -text
-*.png !text !filter !merge !diff
