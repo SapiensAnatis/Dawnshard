@@ -26,6 +26,7 @@ export const handleFetch: HandleFetch = ({ request, fetch }) => {
   if (requestUrl.origin === publicApiUrl.origin) {
     // Rewrite URL to internal
     const newUrl = request.url.replace(publicApiUrl.origin, internalApiUrl.origin);
+    console.log(`Rewriting request: from ${requestUrl.href} to ${newUrl}`);
     return fetch(new Request(newUrl, request));
   }
 

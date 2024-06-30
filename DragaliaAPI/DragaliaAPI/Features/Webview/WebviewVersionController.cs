@@ -1,10 +1,11 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Controllers;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
-namespace DragaliaAPI.Controllers.Dragalia;
+namespace DragaliaAPI.Features.Webview;
 
 [Route("webview_version")]
 [AllowAnonymous]
@@ -26,7 +27,9 @@ public class WebviewVersionController(
         AtgenWebviewUrlList timeAttackReward =
             new("time_attack_reward", this.GetUrl("timeattack/rewards/webview"));
 
-        AtgenWebviewUrlList news = new("information", this.GetUrl("news/webview"));
+        // TODO: Remove hardcoding. Consider making URLs configurable?
+        AtgenWebviewUrlList news =
+            new("information", "https://test.dawnshard.co.uk/webview/news/1");
 
         return this.Ok(
             new WebviewVersionUrlListResponse(

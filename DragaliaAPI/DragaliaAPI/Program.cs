@@ -179,17 +179,16 @@ app.MapWhen(
     }
 );
 
+string[] allowedOrigins =
+    builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+
 // Svelte website API
 app.MapWhen(
     static ctx => ctx.Request.Path.StartsWithSegments("/api"),
     applicationBuilder =>
     {
-        // todo unfuck cors
         applicationBuilder.UseCors(cors =>
-            cors.WithOrigins("http://localhost:3001")
-                .AllowCredentials()
-                .AllowAnyHeader()
-                .AllowAnyMethod()
+            cors.WithOrigins(allowedOrigins).AllowCredentials().AllowAnyHeader().AllowAnyMethod()
         );
         applicationBuilder.UseRouting();
 #pragma warning disable ASP0001
