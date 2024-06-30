@@ -54,12 +54,13 @@ const withAuth = <
 };
 
 export const handlers = [
-  http.get('/api/news', handleNews),
-  http.get('/api/news/:itemId', handleNewsItem),
+  ...http.get('/api/news', handleNews),
+  ...http.get('/api/news/:itemId', handleNewsItem),
 
-  http.head('/api/user/me', withAuth(handleUser)),
-  http.get('/api/user/me', withAuth(handleUser)),
-  http.get('/api/user/me/profile', withAuth(handleUserProfile)),
+  ...http.head('/api/user/me', withAuth(handleUser)),
+  ...http.get('/api/user/me', withAuth(handleUser)),
+  ...http.get('/api/user/me/profile', withAuth(handleUserProfile)),
 
-  http.get('/api/savefile/export', withAuth(handleSavefileExport))
-].flatMap((x) => x);
+  ...http.get('/api/savefile/export', withAuth(handleSavefileExport)),
+  mswHttp.get('http://localhost:5000/ping', () => new Response(null, { status: 200 }))
+];

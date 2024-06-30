@@ -418,3 +418,6 @@ __mismatch__/
 #sln startup
 DragaliaAPI.sln.startup.json
 
+!Website/.env
+!Website/tests/.env
+.env*local
