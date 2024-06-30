@@ -18,6 +18,9 @@ jobs:
   playwright:
     name: Playwright test
     runs-on: ubuntu-latest
+    env:
+      BAAS_USERNAME: ${{ secrets.BAAS_USERNAME }}
+      BAAS_PASSWORD: ${{ secrets.BAAS_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
         with:
