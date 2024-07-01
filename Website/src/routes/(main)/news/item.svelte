@@ -13,25 +13,23 @@
 </script>
 
 <Card
-  class="grid grid-flow-row grid-cols-1 justify-start gap-0 overflow-hidden lg:grid-flow-col lg:grid-cols-none lg:grid-rows-[min-content_max-content] ">
-  <div
-    class="flex h-full w-full items-center justify-center md:row-span-1 md:h-[200px] lg:row-span-2 lg:h-full lg:w-[13rem]">
+  class="flex flex-col overflow-hidden lg:grid lg:grid-flow-col lg:grid-cols-none lg:grid-rows-1 lg:justify-start">
+  <div class="flex items-center justify-center md:h-[200px] lg:h-full lg:w-[13rem]">
     {#if item.headerImageSrc}
-      <Image
-        src={item.headerImageSrc}
-        layout="fullWidth"
-        class="hidden h-[100%] max-w-[13rem] lg:block" />
+      <Image src={item.headerImageSrc} layout="fullWidth" class="hidden h-[100%] lg:block" />
       <Image src={item.headerImageSrc} height={200} class="block lg:hidden" layout="fullWidth" />
     {:else}
-      <Newspaper class="h-[10rem] w-[10rem] p-4" strokeWidth={1} />
+      <Newspaper class="h-[12rem] w-[12rem] p-4" strokeWidth={1} />
     {/if}
   </div>
-  <Header {item} {lastRead} />
-  {#if description}
-    <CardContent class="min-h-32">
-      <!-- Trusted input from API server - XSS is unlikely without server being compromised -->
-      <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-      {@html item.description}
-    </CardContent>
-  {/if}
+  <div>
+    <Header {item} {lastRead} />
+    {#if description}
+      <CardContent class="min-h-32">
+        <!-- Trusted input from API server - XSS is unlikely without server being compromised -->
+        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+        {@html item.description}
+      </CardContent>
+    {/if}
+  </div>
 </Card>
