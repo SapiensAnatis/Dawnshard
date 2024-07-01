@@ -18,7 +18,7 @@
       <Image src={item.headerImageSrc} class="hidden h-full lg:block" layout="fullWidth" />
       <Image src={item.headerImageSrc} height={208} class="block lg:hidden" layout="fullWidth" />
     {:else}
-      <Newspaper class="h-[12rem] w-[12rem] p-4" strokeWidth={1} />
+      <Newspaper class="size-[12rem] p-4" strokeWidth={1} />
     {/if}
   </div>
   <div>
