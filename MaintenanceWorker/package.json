@@ -6,7 +6,7 @@
   "devDependencies": {
     "@msgpack/msgpack": "3.0.0-beta2",
     "@types/jest": "29.5.12",
-    "miniflare": "3.20240610.1",
+    "miniflare": "3.20240620.0",
     "vitest": "1.6.0",
     "vitest-environment-miniflare": "2.14.2",
     "wrangler": "3.61.0"
