@@ -2,7 +2,6 @@
   import { createEventDispatcher } from 'svelte';
 
   import { Button } from '$shadcn/components/ui/button';
-  import { cn } from '$shadcn/utils.js.ts';
 
   import { routeGroups } from './routes.ts';
 
@@ -17,17 +16,24 @@
 
 {#each routeGroups as routeGroup}
   {#if !routeGroup.requireAuth || (routeGroup.requireAuth && hasValidJwt)}
-    <h2 class="text-m scroll-m-20 font-semibold tracking-tight">{routeGroup.title}</h2>
-    {#each routeGroup.routes as route}
-      <Button
-        href={route.href}
-        variant="ghost"
-        size="sm"
-        class={cn('justify-start', 'w-[90%]')}
-        on:click={onClick}>
-        <svelte:component this={route.icon} class="mr-2 size-4" aria-hidden="true" />
-        {route.title}
-      </Button>
-    {/each}
+    <div>
+      <h2 class="mb-1 scroll-m-20 text-lg font-semibold tracking-tight">{routeGroup.title}</h2>
+      {#each routeGroup.routes as route}
+        <Button
+          href={route.href}
+          variant="ghost"
+          class="h-11 w-[90%] justify-start"
+          on:click={onClick}>
+          <svelte:component this={route.icon} class="mr-2 size-6" aria-hidden="true" />
+          {route.title}
+        </Button>
+      {/each}
+    </div>
   {/if}
 {/each}
+
+<style>
+  div + div {
+    margin-top: 1rem;
+  }
+</style>

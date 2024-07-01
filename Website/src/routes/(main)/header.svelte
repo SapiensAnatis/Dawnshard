@@ -27,7 +27,7 @@
         class="md:hidden"
         aria-label="Open navigation"
         on:click={() => (drawerOpen = true)}>
-        <Menu class="h-[1.2rem] w-[1.2rem]" />
+        <Menu class="size-6" />
       </Button>
       <HeaderContents {hasValidJwt} />
 

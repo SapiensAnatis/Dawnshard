@@ -14,7 +14,8 @@ export default defineConfig(({ mode }) => ({
     })
   ],
   server: {
-    port: 3001
+    port: 3001,
+    host: true
   },
   build: {
     // Hack to get top-level await support required by Mock Service Worker for Playwright
