@@ -8,17 +8,6 @@ on:
         default: false
         description: "Whether or not to update snapshots"
       ref:
-        required: false
-        default: ${{ github.ref }}
-        type: string
-        description: Ref to checkout
-  workflow_dispatch:
-    inputs:
-      update-snapshots:
-        type: boolean
-        default: true
-        description: "Whether or not to update snapshots"
-      ref:
         required: true
         type: string
         description: Ref to checkout

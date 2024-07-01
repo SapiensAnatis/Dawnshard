@@ -18,6 +18,8 @@ jobs:
   playwright:
     uses: ./.github/workflows/playwright-test.yaml
     secrets: inherit
+    with:
+      ref: ${{ github.ref }}
 
   lint:
     name: Lint

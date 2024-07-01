@@ -1,0 +1,17 @@
+name: "Update snapshots"
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Ref to checkout"
+        type: string
+        required: true
+
+jobs:
+  playwright:
+    uses: ./.github/workflows/playwright-test.yaml
+    secrets: inherit
+    with:
+      ref: ${{ inputs.ref }}
+      update-snapshots: true
