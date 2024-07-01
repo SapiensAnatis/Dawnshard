@@ -16,55 +16,8 @@ concurrency:
 
 jobs:
   playwright:
-    name: Playwright test
-    runs-on: ubuntu-latest
-    env:
-      BAAS_USERNAME: ${{ secrets.BAAS_USERNAME }}
-      BAAS_PASSWORD: ${{ secrets.BAAS_PASSWORD }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          sparse-checkout: "Website"
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - name: Setup node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: "pnpm"
-          cache-dependency-path: "Website/pnpm-lock.yaml"
-
-      - name: Install dependencies
-        working-directory: Website/
-        run: pnpm install
-
-      - name: Install Playwright browsers
-        working-directory: Website/
-        run: pnpm exec playwright install --with-deps chromium
-
-      - name: Run Playwright tests
-        working-directory: Website/
-        run: pnpm exec playwright test
-
-      - name: Upload report
-        uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: playwright-report
-          path: Website/test-results/
-          retention-days: 3
-
-      - name: Upload snapshots
-        uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: snapshots
-          path: Website/tests/__screenshots__/
-          retention-days: 3
+    uses: ./.github/workflows/playwright-test.yaml
+    secrets: inherit
 
   lint:
     name: Lint
