@@ -12,12 +12,11 @@
   export let description: boolean = true;
 </script>
 
-<Card
-  class="flex flex-col overflow-hidden lg:grid lg:grid-flow-col lg:grid-cols-none lg:grid-rows-1 lg:justify-start">
-  <div class="flex items-center justify-center md:h-[200px] lg:h-full lg:w-[13rem]">
+<Card class="flex flex-col overflow-hidden lg:flex-row">
+  <div class="flex shrink-0 grow-0 basis-52 items-center justify-center">
     {#if item.headerImageSrc}
-      <Image src={item.headerImageSrc} layout="fullWidth" class="hidden h-[100%] lg:block" />
-      <Image src={item.headerImageSrc} height={200} class="block lg:hidden" layout="fullWidth" />
+      <Image src={item.headerImageSrc} class="hidden h-full lg:block" layout="fullWidth" />
+      <Image src={item.headerImageSrc} height={208} class="block lg:hidden" layout="fullWidth" />
     {:else}
       <Newspaper class="h-[12rem] w-[12rem] p-4" strokeWidth={1} />
     {/if}
