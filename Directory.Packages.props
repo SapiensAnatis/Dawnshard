@@ -58,7 +58,7 @@
         <PackageVersion Include="MockQueryable.Moq" Version="7.0.1" />
         <PackageVersion Include="Moq" Version="4.20.70" />
         <PackageVersion Include="Verify.SourceGenerators" Version="2.2.0" />
-        <PackageVersion Include="Verify.XUnit" Version="25.0.4" />
+        <PackageVersion Include="Verify.XUnit" Version="25.2.0" />
         <PackageVersion Include="xunit" Version="2.8.1" />
         <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.1" />
         <PackageVersion Include="GraphQL.Client" Version="6.1.0" />
