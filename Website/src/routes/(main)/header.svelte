@@ -23,7 +23,7 @@
   <Drawer.Root direction="left">
     <header id="header" class="top-0 z-50 gap-1 bg-background px-2 md:gap-2 md:px-3">
       <Drawer.Trigger
-        class={cn(buttonVariants({ variant: 'ghost', size: 'default', className: 'md:hidden' }))}
+        class={cn(buttonVariants({ variant: 'ghost', size: 'sm', className: 'md:hidden' }))}
         aria-label="Open navigation">
         <Menu class="size-6" />
       </Drawer.Trigger>
