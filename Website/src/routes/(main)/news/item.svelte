@@ -15,8 +15,7 @@
 <Card class="flex flex-col overflow-hidden lg:flex-row">
   <div class="flex shrink-0 grow-0 basis-52 items-center justify-center">
     {#if item.headerImageSrc}
-      <Image src={item.headerImageSrc} class="hidden h-full lg:block" layout="fullWidth" />
-      <Image src={item.headerImageSrc} height={208} class="block lg:hidden" layout="fullWidth" />
+      <Image src={item.headerImageSrc} class="h-[208px] lg:h-full" layout="fullWidth" />
     {:else}
       <Newspaper class="size-[12rem] p-4" strokeWidth={1} />
     {/if}
