@@ -8,6 +8,10 @@
   export let data: LayoutData;
 </script>
 
+<svelte:head>
+  <meta property="og:url" content={data.urlOrigin} />
+</svelte:head>
+
 <ModeWatcher />
 <Header hasValidJwt={data.hasValidJwt} />
 <SideNav hasValidJwt={data.hasValidJwt} />
