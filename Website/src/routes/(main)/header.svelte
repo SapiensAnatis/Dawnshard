@@ -22,10 +22,7 @@
   <Drawer.Root direction="left">
     <header id="header" class="top-0 z-50 gap-1 bg-background px-2 md:gap-2 md:px-3">
       <Drawer.Trigger>
-        <Button
-          variant="ghost"
-          class="md:hidden"
-          aria-label="Open navigation">
+        <Button variant="ghost" class="md:hidden" aria-label="Open navigation">
           <Menu class="size-6" />
         </Button></Drawer.Trigger>
       <HeaderContents {hasValidJwt} />
@@ -35,9 +32,7 @@
           class="fixed bottom-0 left-0 top-0 mt-0 w-[75%] bg-background pl-4 pr-2 pt-2">
           <div id="my-content">
             <Drawer.Close class="flex w-full flex-col pl-0">
-              <Button
-                variant="ghost"
-                class="w-[7rem] self-end">
+              <Button variant="ghost" class="w-[7rem] self-end">
                 Close <Close class="ml-2 mt-0.5 h-5 w-5" />
               </Button>
             </Drawer.Close>

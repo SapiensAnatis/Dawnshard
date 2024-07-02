@@ -13,7 +13,7 @@
     <div>
       <h2 class="mb-1 scroll-m-20 text-lg font-semibold tracking-tight">{routeGroup.title}</h2>
       {#if drawer}
-        <Close class="w-full flex flex-col">
+        <Close class="flex w-full flex-col">
           {#each routeGroup.routes as route}
             <RouteButton {route} />
           {/each}
