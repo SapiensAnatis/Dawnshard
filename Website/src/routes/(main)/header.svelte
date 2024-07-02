@@ -4,8 +4,9 @@
   import { onMount } from 'svelte';
 
   import Routes from '$main/routes.svelte';
-  import { Button } from '$shadcn/components/ui/button';
+  import { Button, buttonVariants } from '$shadcn/components/ui/button';
   import * as Drawer from '$shadcn/components/ui/drawer';
+  import { cn } from '$shadcn/utils.js.ts';
 
   import HeaderContents from './headerContents.svelte';
 
@@ -21,10 +22,11 @@
 {#if enhance}
   <Drawer.Root direction="left">
     <header id="header" class="top-0 z-50 gap-1 bg-background px-2 md:gap-2 md:px-3">
-      <Drawer.Trigger>
-        <Button variant="ghost" class="md:hidden" aria-label="Open navigation">
-          <Menu class="size-6" />
-        </Button></Drawer.Trigger>
+      <Drawer.Trigger
+        class={cn(buttonVariants({ variant: 'ghost', size: 'default', className: 'md:hidden' }))}
+        aria-label="Open navigation">
+        <Menu class="size-6" />
+      </Drawer.Trigger>
       <HeaderContents {hasValidJwt} />
       <Drawer.Portal class="md:hidden">
         <Drawer.Content
@@ -43,7 +45,7 @@
     </header>
   </Drawer.Root>
 {:else}
-  <header id="header" class="z-50 gap-1 bg-background px-1 md:gap-2 md:px-3">
+  <header id="header" class="z-50 gap-1 bg-background px-2 md:gap-2 md:px-3">
     <Button variant="ghost" class="md:hidden" href="/navigation">
       <Menu />
     </Button>
