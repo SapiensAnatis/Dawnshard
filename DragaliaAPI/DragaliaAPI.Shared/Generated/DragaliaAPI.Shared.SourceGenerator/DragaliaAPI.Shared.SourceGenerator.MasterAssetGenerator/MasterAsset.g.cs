@@ -339,12 +339,13 @@ public static partial class MasterAsset
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Summon.SummonData>? summonData;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Summon.SummonData> SummonData => summonData ?? throw new InvalidOperationException(ErrorUninitialized);
-    public static async Task LoadAsync()
+    public static async Task LoadAsync(global::Microsoft.FeatureManagement.IFeatureManager featureManager)
     {
         if (loaded)
         {
             return;
         }
+        
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>> charaDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>(
                 "CharaData.msgpack",

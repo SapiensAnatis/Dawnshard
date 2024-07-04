@@ -45,7 +45,7 @@ public class MasterAssetGenerator : IIncrementalGenerator
             
             public string MasterAssetName { get; }
             
-            public string? FeatureFlag { get; }
+            public string? FeatureFlag { get; set; }
         }
         """;
 
@@ -67,7 +67,7 @@ public class MasterAssetGenerator : IIncrementalGenerator
             .SelectMany(static (list, _) => list.AsEnumerable());
 
         IncrementalValueProvider<
-            ImmutableArray<MasterAssetExtensionDeclaration>
+            ImmutableArray<MasterAssetExtensionDeclaration?>
         > extensionProvider = context
             .SyntaxProvider.ForAttributeWithMetadataName(
                 $"{Namespace}.{ExtendAttributeName}",
@@ -76,24 +76,21 @@ public class MasterAssetGenerator : IIncrementalGenerator
             )
             .Collect();
 
-        IncrementalValuesProvider<(
-            MasterAssetDeclaration Left,
-            MasterAssetExtensionDeclaration? Right
-        )> joined = declarationProvider
-            .Combine(extensionProvider)
-            .Select(
-                (tuple, _) =>
-                {
-                    return (
-                        tuple.Left,
-                        tuple.Right.FirstOrDefault(extension =>
-                            extension.MasterAssetName == tuple.Left.PropertyName
-                        )
-                    );
-                }
-            );
+        var combine = declarationProvider.Combine(extensionProvider);
 
-        context.RegisterSourceOutput(joined.Collect(), GenerateCode);
+        var join = combine.Select(
+            static (tuple, _) =>
+            {
+                return (
+                    tuple.Left,
+                    tuple.Right.FirstOrDefault(extension =>
+                        extension?.MasterAssetName == tuple.Left.PropertyName
+                    )
+                );
+            }
+        );
+
+        context.RegisterSourceOutput(join.Collect(), GenerateCode);
     }
 
     private static void GenerateCode(
@@ -156,7 +153,7 @@ public class MasterAssetGenerator : IIncrementalGenerator
 
         codeBuilder.AppendLine(
             $$"""
-            public static async Task LoadAsync()
+            public static async Task LoadAsync(global::Microsoft.FeatureManagement.IFeatureManager featureManager)
             {
             """
         );
@@ -169,6 +166,7 @@ public class MasterAssetGenerator : IIncrementalGenerator
             {
                 return;
             }
+
             """
         );
 
@@ -208,7 +206,20 @@ public class MasterAssetGenerator : IIncrementalGenerator
 
             if (!declaration.IsGroup)
             {
-                codeBuilder.AppendLine(extension is not null ? extension.DataPath : "null");
+                if (extension is { FeatureFlag: not null })
+                {
+                    string extensionSyntax =
+                        $"await featureManager.IsEnabledAsync(\"{extension.FeatureFlag}\") ? {extension.DataPath} : null";
+                    codeBuilder.AppendLine(extensionSyntax);
+                }
+                else if (extension is not null)
+                {
+                    codeBuilder.AppendLine(extension.DataPath);
+                }
+                else
+                {
+                    codeBuilder.AppendLine("null");
+                }
             }
 
             codeBuilder.DecreaseIndent();

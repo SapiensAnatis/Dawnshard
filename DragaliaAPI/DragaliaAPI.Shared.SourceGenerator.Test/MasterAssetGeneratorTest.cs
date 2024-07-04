@@ -20,14 +20,19 @@ public class MasterAssetGeneratorTest
             [GenerateMasterAsset<CharaData>("CharaData.json")]
             [GenerateMasterAsset<RankingData>("TimeAttack/RankingData.json", Key = nameof(Models.TimeAttack.RankingData.QuestId))]
             [GenerateMasterAsset<BuildEventReward>("Event/BuildEventReward.json", Group = true)]
+            [GenerateMasterAsset<EventData>("Event/EventData.json")]
+            [GenerateMasterAsset<DragonData>("DragonData.json")]
             public static partial class MasterAsset
             {
             }
 
             public static class MasterAssetExtensions
             {
-                [ExtendMasterAsset(nameof(MasterAsset.CharaData))]
-                public static Dictionary<Charas, CharaData> NewCharacters = new();
+                [ExtendMasterAsset(nameof(MasterAsset.EventData))]
+                public static Dictionary<int, EventData> EventDataFixes { get; } = new();
+                
+                [ExtendMasterAsset(nameof(MasterAsset.DragonData), FeatureFlag = "ModdedDragons")]
+                public static Dictionary<Dragons, DragonData> NewDragons { get; } = new();
             }
             """;
 

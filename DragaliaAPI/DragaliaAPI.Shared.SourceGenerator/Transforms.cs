@@ -66,7 +66,7 @@ public static class Transforms
         }
     }
 
-    public static MasterAssetExtensionDeclaration TransformExtensionDeclarations(
+    public static MasterAssetExtensionDeclaration? TransformExtensionDeclarations(
         GeneratorAttributeSyntaxContext context,
         CancellationToken cancellationToken
     )
