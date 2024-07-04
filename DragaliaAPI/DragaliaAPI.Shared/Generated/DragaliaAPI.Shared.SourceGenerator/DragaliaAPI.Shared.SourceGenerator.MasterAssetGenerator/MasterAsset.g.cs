@@ -348,552 +348,660 @@ public static partial class MasterAsset
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>> charaDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>(
                 "CharaData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.CharaData x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>> dragonDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>(
                 "DragonData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.DragonData x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.DragonRarity>> dragonRarityTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.DragonRarity>(
                 "DragonRarity.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.DragonRarity x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestData>> questDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestData>(
                 "QuestData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.QuestData x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Materials, global::DragaliaAPI.Shared.MasterAsset.Models.MaterialData>> materialDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.Materials, global::DragaliaAPI.Shared.MasterAsset.Models.MaterialData>(
                 "MaterialData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.MaterialData x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.FortPlantDetail>> fortPlantDetailTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.FortPlantDetail>(
                 "FortPlantDetail.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.FortPlantDetail x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.WeaponBodies, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBody>> weaponBodyTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.WeaponBodies, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBody>(
                 "WeaponBody.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBody x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyBuildupGroup>> weaponBodyBuildupGroupTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyBuildupGroup>(
                 "WeaponBodyBuildupGroup.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyBuildupGroup x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyBuildupLevel>> weaponBodyBuildupLevelTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyBuildupLevel>(
                 "WeaponBodyBuildupLevel.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyBuildupLevel x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponPassiveAbility>> weaponPassiveAbilityTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponPassiveAbility>(
                 "WeaponPassiveAbility.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.WeaponPassiveAbility x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyRarity>> weaponBodyRarityTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyRarity>(
                 "WeaponBodyRarity.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.WeaponBodyRarity x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponSkin>> weaponSkinTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.WeaponSkin>(
                 "WeaponSkin.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.WeaponSkin x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestBuildupGroup>> abilityCrestBuildupGroupTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestBuildupGroup>(
                 "AbilityCrestBuildupGroup.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestBuildupGroup x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestBuildupLevel>> abilityCrestBuildupLevelTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestBuildupLevel>(
                 "AbilityCrestBuildupLevel.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestBuildupLevel x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestRarity>> abilityCrestRarityTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestRarity>(
                 "AbilityCrestRarity.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestRarity x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.AbilityCrests, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest>> abilityCrestTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.AbilityCrests, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest>(
                 "AbilityCrest.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestEventGroup>> questEventGroupTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestEventGroup>(
                 "QuestEventGroup.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.QuestEventGroup x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestEvent>> questEventTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestEvent>(
                 "QuestEvent.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.QuestEvent x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestTreasureData>> questTreasureDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestTreasureData>(
                 "QuestTreasureData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.QuestTreasureData x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityData>> abilityDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityData>(
                 "AbilityData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.AbilityData x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityLimitedGroup>> abilityLimitedGroupTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityLimitedGroup>(
                 "AbilityLimitedGroup.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.AbilityLimitedGroup x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ExAbilityData>> exAbilityDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.ExAbilityData>(
                 "ExAbilityData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.ExAbilityData x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.UnionAbility>> unionAbilityTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.UnionAbility>(
                 "UnionAbility.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.UnionAbility x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.SkillData>> skillDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.SkillData>(
                 "SkillData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.SkillData x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.StampData>> stampDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.StampData>(
                 "StampData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.StampData x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData>> useItemTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.UseItem, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData>(
                 "UseItem.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Trade.UseItemData x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Emblems, global::DragaliaAPI.Shared.MasterAsset.Models.EmblemData>> emblemDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.Emblems, global::DragaliaAPI.Shared.MasterAsset.Models.EmblemData>(
                 "EmblemData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.EmblemData x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.AlbumMission>> missionAlbumDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.AlbumMission>(
                 "Missions/MissionAlbumData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Missions.AlbumMission x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.NormalMission>> missionBeginnerDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.NormalMission>(
                 "Missions/MissionBeginnerData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Missions.NormalMission x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DailyMission>> missionDailyDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DailyMission>(
                 "Missions/MissionDailyData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DailyMission x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DrillMission>> missionDrillDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DrillMission>(
                 "Missions/MissionDrillData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DrillMission x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DrillMissionGroup>> missionDrillGroupTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DrillMissionGroup>(
                 "Missions/MissionDrillGroup.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DrillMissionGroup x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MainStoryMission>> missionMainStoryDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MainStoryMission>(
                 "Missions/MissionMainStoryData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MainStoryMission x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MainStoryMissionGroup>> missionMainStoryGroupTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MainStoryMissionGroup>(
                 "Missions/MissionMainStoryGroup.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MainStoryMissionGroup x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MemoryEventMission>> missionMemoryEventDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MemoryEventMission>(
                 "Missions/MissionMemoryEventData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MemoryEventMission x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.NormalMission>> missionNormalDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.NormalMission>(
                 "Missions/MissionNormalData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Missions.NormalMission x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.PeriodMission>> missionPeriodDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.PeriodMission>(
                 "Missions/MissionPeriodData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Missions.PeriodMission x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.SpecialMission>> missionSpecialDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.SpecialMission>(
                 "Missions/MissionSpecialData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Missions.SpecialMission x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.SpecialMissionGroup>> missionSpecialGroupTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.SpecialMissionGroup>(
                 "Missions/MissionSpecialGroup.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Missions.SpecialMissionGroup x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MissionProgressionInfo>> missionProgressionInfoTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MissionProgressionInfo>(
                 "Missions/MissionProgressionInfo.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MissionProgressionInfo x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MainStoryMissionGroupRewards>> mainStoryMissionGroupRewardsTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MainStoryMissionGroupRewards>(
                 "Missions/MainStoryMissionGroupRewards.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Missions.MainStoryMissionGroupRewards x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.NormalShop>> normalShopTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.NormalShop>(
                 "Shop/NormalShop.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Shop.NormalShop x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.SpecialShop>> specialShopTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.SpecialShop>(
                 "Shop/SpecialShop.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Shop.SpecialShop x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop>> materialShopDailyTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop>(
                 "Shop/MaterialShopDaily.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop>> materialShopWeeklyTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop>(
                 "Shop/MaterialShopWeekly.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop>> materialShopMonthlyTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop>(
                 "Shop/MaterialShopMonthly.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Shop.MaterialShop x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.AbilityCrestTrade>> abilityCrestTradeTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.AbilityCrestTrade>(
                 "Trade/AbilityCrestTrade.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Trade.AbilityCrestTrade x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.TreasureTrade>> treasureTradeTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.TreasureTrade>(
                 "Trade/TreasureTrade.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Trade.TreasureTrade x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.TreasureTrade>> eventTreasureTradeInfoTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Trade.TreasureTrade>(
                 "Trade/EventTreasureTradeInfo.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Trade.TreasureTrade x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Login.LoginBonusData>> loginBonusDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Login.LoginBonusData>(
                 "Login/LoginBonusData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Login.LoginBonusData x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Login.LoginBonusReward>> loginBonusRewardTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Login.LoginBonusReward>(
                 "Login/LoginBonusReward.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Login.LoginBonusReward x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaNode>> mCTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaNode>(
                 "ManaCircle/MC.msgpack",
-                x => x.MC_0
+                (global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaNode x) => x.MC_0,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceMaterial>> manaPieceMaterialTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceMaterial>(
                 "ManaCircle/ManaPieceMaterial.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceMaterial x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.ManaNodeTypes, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceType>> manaPieceTypeTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.ManaNodeTypes, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceType>(
                 "ManaCircle/ManaPieceType.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.ManaPieceType x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.CharaLimitBreak>> charaLimitBreakTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.CharaLimitBreak>(
                 "ManaCircle/CharaLimitBreak.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.ManaCircle.CharaLimitBreak x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.StoryData>> dragonStoriesTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.StoryData>(
                 "Story/DragonStories.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Story.StoryData x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.StoryData>> charaStoriesTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.StoryData>(
                 "Story/CharaStories.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Story.StoryData x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.UnitStory>> unitStoryTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.UnitStory>(
                 "Story/UnitStory.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Story.UnitStory x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.QuestStory>> questStoryTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.QuestStory>(
                 "Story/QuestStory.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Story.QuestStory x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.EventStory>> eventStoryTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.EventStory>(
                 "Story/EventStory.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Story.EventStory x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.QuestStoryRewardInfo>> questStoryRewardInfoTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Story.QuestStoryRewardInfo>(
                 "Story/QuestStoryRewardInfo.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Story.QuestStoryRewardInfo x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<string, global::DragaliaAPI.Shared.MasterAsset.Models.Enemy.QuestEnemies>> questEnemiesTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<string, global::DragaliaAPI.Shared.MasterAsset.Models.Enemy.QuestEnemies>(
                 "Enemy/QuestEnemies.msgpack",
-                x => x.AreaName
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Enemy.QuestEnemies x) => x.AreaName,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Enemy.EnemyParam>> enemyParamTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Enemy.EnemyParam>(
                 "Enemy/EnemyParam.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Enemy.EnemyParam x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Enemy.EnemyData>> enemyDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Enemy.EnemyData>(
                 "Enemy/EnemyData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Enemy.EnemyData x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestDrops.QuestDropInfo>> questDropInfoTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestDrops.QuestDropInfo>(
                 "QuestDrops/QuestDropInfo.msgpack",
-                x => x.QuestId
+                (global::DragaliaAPI.Shared.MasterAsset.Models.QuestDrops.QuestDropInfo x) => x.QuestId,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestDrops.QuestBonusReward>> questBonusRewardInfoTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestDrops.QuestBonusReward>(
                 "QuestDrops/QuestBonusRewardInfo.msgpack",
-                x => x.QuestId
+                (global::DragaliaAPI.Shared.MasterAsset.Models.QuestDrops.QuestBonusReward x) => x.QuestId,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestRewards.QuestRewardData>> questRewardDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestRewards.QuestRewardData>(
                 "QuestRewards/QuestRewardData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.QuestRewards.QuestRewardData x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestRewards.QuestScoreMissionRewardInfo>> questScoreMissionRewardInfoTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestRewards.QuestScoreMissionRewardInfo>(
                 "QuestRewards/QuestScoreMissionRewardInfo.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.QuestRewards.QuestScoreMissionRewardInfo x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestRewards.QuestScoreMissionData>> questScoreMissionDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestRewards.QuestScoreMissionData>(
                 "QuestRewards/QuestScoreMissionData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.QuestRewards.QuestScoreMissionData x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventData>> eventDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventData>(
                 "Event/EventData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventData x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventTradeGroup>> eventTradeGroupTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventTradeGroup>(
                 "Event/EventTradeGroup.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventTradeGroup x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetGroup<int, int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.BuildEventReward>> buildEventRewardTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetGroup.LoadAsync<int, int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.BuildEventReward>(
                 "Event/BuildEventReward.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.BuildEventReward x) => x.Id
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetGroup<int, int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.RaidEventReward>> raidEventRewardTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetGroup.LoadAsync<int, int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.RaidEventReward>(
                 "Event/RaidEventReward.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.RaidEventReward x) => x.Id
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.CombatEventLocation>> combatEventLocationTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.CombatEventLocation>(
                 "Event/CombatEventLocation.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.CombatEventLocation x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.CombatEventLocationReward>> combatEventLocationRewardTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.CombatEventLocationReward>(
                 "Event/CombatEventLocationReward.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.CombatEventLocationReward x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BuildEventItemType>>> buildEventItemTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BuildEventItemType>>(
                 "Event/BuildEventItem.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BuildEventItemType> x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CombatEventItemType>>> combatEventItemTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CombatEventItemType>>(
                 "Event/CombatEventItem.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CombatEventItemType> x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.RaidEventItem>> raidEventItemTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.RaidEventItem>(
                 "Event/RaidEventItem.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.RaidEventItem x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.SimpleEventItemType>>> simpleEventItemTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.SimpleEventItemType>>(
                 "Event/SimpleEventItem.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.SimpleEventItemType> x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExRushEventItemType>>> exRushEventItemTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExRushEventItemType>>(
                 "Event/ExRushEventItem.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExRushEventItemType> x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExHunterEventItemType>>> exHunterEventItemTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExHunterEventItemType>>(
                 "Event/ExHunterEventItem.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.ExHunterEventItemType> x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.EarnEventItemType>>> earnEventItemTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.EarnEventItemType>>(
                 "Event/EarnEventItem.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.EarnEventItemType> x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CollectEventItemType>>> collectEventItemTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CollectEventItemType>>(
                 "Event/CollectEventItem.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.CollectEventItemType> x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.Clb01EventItemType>>> clb01EventItemTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.Clb01EventItemType>>(
                 "Event/Clb01EventItem.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.Clb01EventItemType> x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BattleRoyalEventItemType>>> battleRoyalEventItemTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BattleRoyalEventItemType>>(
                 "Event/BattleRoyalEventItem.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventItem<global::DragaliaAPI.Shared.Definitions.Enums.EventItemTypes.BattleRoyalEventItemType> x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventPassive>> eventPassiveTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventPassive>(
                 "Event/EventPassive.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventPassive x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.QuestScoringEnemy>> questScoringEnemyTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.QuestScoringEnemy>(
                 "Event/QuestScoringEnemy.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.QuestScoringEnemy x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeQuestFloor>> dmodeQuestFloorTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeQuestFloor>(
                 "Dmode/DmodeQuestFloor.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeQuestFloor x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeDungeonArea>> dmodeDungeonAreaTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeDungeonArea>(
                 "Dmode/DmodeDungeonArea.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeDungeonArea x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeDungeonTheme>> dmodeDungeonThemeTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeDungeonTheme>(
                 "Dmode/DmodeDungeonTheme.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeDungeonTheme x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeEnemyTheme>> dmodeEnemyThemeTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeEnemyTheme>(
                 "Dmode/DmodeEnemyTheme.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeEnemyTheme x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<string, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeAreaInfo>> dmodeAreaInfoTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<string, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeAreaInfo>(
                 "Dmode/DmodeAreaInfo.msgpack",
-                x => x.AreaName
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeAreaInfo x) => x.AreaName,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeEnemyParam>> dmodeEnemyParamTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeEnemyParam>(
                 "Dmode/DmodeEnemyParam.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeEnemyParam x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeCharaLevel>> dmodeCharaLevelTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeCharaLevel>(
                 "Dmode/DmodeCharaLevel.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeCharaLevel x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeWeapon>> dmodeWeaponTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeWeapon>(
                 "Dmode/DmodeWeapon.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeWeapon x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeAbilityCrest>> dmodeAbilityCrestTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeAbilityCrest>(
                 "Dmode/DmodeAbilityCrest.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeAbilityCrest x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeStrengthParam>> dmodeStrengthParamTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeStrengthParam>(
                 "Dmode/DmodeStrengthParam.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeStrengthParam x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeStrengthSkill>> dmodeStrengthSkillTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeStrengthSkill>(
                 "Dmode/DmodeStrengthSkill.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeStrengthSkill x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeStrengthAbility>> dmodeStrengthAbilityTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeStrengthAbility>(
                 "Dmode/DmodeStrengthAbility.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeStrengthAbility x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeDungeonItemData>> dmodeDungeonItemDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeDungeonItemData>(
                 "Dmode/DmodeDungeonItemData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeDungeonItemData x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeServitorPassiveLevel>> dmodeServitorPassiveLevelTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeServitorPassiveLevel>(
                 "Dmode/DmodeServitorPassiveLevel.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeServitorPassiveLevel x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeExpeditionFloor>> dmodeExpeditionFloorTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeExpeditionFloor>(
                 "Dmode/DmodeExpeditionFloor.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeExpeditionFloor x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.User.UserLevel>> userLevelTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.User.UserLevel>(
                 "User/UserLevel.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.User.UserLevel x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestSchedule.QuestScheduleInfo>> questScheduleInfoTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestSchedule.QuestScheduleInfo>(
                 "QuestSchedule/QuestScheduleInfo.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.QuestSchedule.QuestScheduleInfo x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.TimeAttack.RankingData>> rankingDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.TimeAttack.RankingData>(
                 "TimeAttack/RankingData.msgpack",
-                x => x.QuestId
+                (global::DragaliaAPI.Shared.MasterAsset.Models.TimeAttack.RankingData x) => x.QuestId,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.TimeAttack.RankingTierReward>> rankingTierRewardTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.TimeAttack.RankingTierReward>(
                 "TimeAttack/RankingTierReward.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.TimeAttack.RankingTierReward x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Wall.QuestWallDetail>> questWallDetailTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Wall.QuestWallDetail>(
                 "Wall/QuestWallDetail.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Wall.QuestWallDetail x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Wall.QuestWallMonthlyReward>> questWallMonthlyRewardTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Wall.QuestWallMonthlyReward>(
                 "Wall/QuestWallMonthlyReward.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Wall.QuestWallMonthlyReward x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Summon.SummonTickets, global::DragaliaAPI.Shared.MasterAsset.Models.Summon.SummonTicket>> summonTicketTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.Summon.SummonTickets, global::DragaliaAPI.Shared.MasterAsset.Models.Summon.SummonTicket>(
                 "Summon/SummonTicket.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Summon.SummonTicket x) => x.Id,
+                null
             );
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Summon.SummonData>> summonDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Summon.SummonData>(
                 "Summon/SummonData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Summon.SummonData x) => x.Id,
+                null
             );
 
         charaData = await charaDataTask;

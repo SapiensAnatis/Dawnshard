@@ -23,6 +23,12 @@ public class MasterAssetGeneratorTest
             public static partial class MasterAsset
             {
             }
+
+            public static class MasterAssetExtensions
+            {
+                [ExtendMasterAsset(nameof(MasterAsset.CharaData))]
+                public static Dictionary<Charas, CharaData> NewCharacters = new();
+            }
             """;
 
         await Verify(source);

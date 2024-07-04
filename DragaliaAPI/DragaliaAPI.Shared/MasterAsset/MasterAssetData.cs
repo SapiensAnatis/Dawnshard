@@ -89,8 +89,9 @@ public static class MasterAssetData
     private const string DataFolder = "Resources";
 
     public static async ValueTask<MasterAssetData<TKey, TItem>> LoadAsync<TKey, TItem>(
-        string jsonFilename,
-        Func<TItem, TKey> keySelector
+        string msgpackFilename,
+        Func<TItem, TKey> keySelector,
+        IDictionary<TKey, TItem>? overrideData
     )
         where TItem : class
         where TKey : notnull
@@ -98,7 +99,7 @@ public static class MasterAssetData
         string path = Path.Join(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
             DataFolder,
-            jsonFilename
+            msgpackFilename
         );
 
         await using FileStream fs = File.OpenRead(path);
@@ -109,10 +110,16 @@ public static class MasterAssetData
                 MasterAssetMessagePackOptions.Instance
             ) ?? throw new MessagePackSerializationException("Deserialized MasterAsset was null");
 
-        FrozenDictionary<TKey, TItem> frozenDict = items
-            .ToDictionary(keySelector, x => x)
-            .ToFrozenDictionary();
+        Dictionary<TKey, TItem> dict = items.ToDictionary(keySelector, x => x);
 
-        return new MasterAssetData<TKey, TItem>(frozenDict);
+        if (overrideData is not null)
+        {
+            foreach ((TKey key, TItem value) in overrideData)
+            {
+                dict[key] = value;
+            }
+        }
+
+        return new MasterAssetData<TKey, TItem>(dict.ToFrozenDictionary());
     }
 }
