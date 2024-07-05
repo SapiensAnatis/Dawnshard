@@ -26,13 +26,14 @@ public class MasterAssetGeneratorTest
             {
             }
 
-            public static class MasterAssetExtensions
+            [ExtendMasterAsset(nameof(MasterAsset.EventData), "Event/BuildEventReward.extension.json")]
+            public static class EventDataExtensions
             {
-                [ExtendMasterAsset(nameof(MasterAsset.EventData))]
-                public static Dictionary<int, EventData> EventDataFixes { get; } = new();
-                
-                [ExtendMasterAsset(nameof(MasterAsset.DragonData), FeatureFlag = "ModdedDragons")]
-                public static Dictionary<Dragons, DragonData> NewDragons { get; } = new();
+            }
+
+            [ExtendMasterAsset(nameof(MasterAsset.DragonData), "DragonData.modded.json", FeatureFlag = "ModdedDragons")]
+            public static class DragonDataExtensions
+            {
             }
             """;
 
@@ -51,7 +52,7 @@ public class MasterAssetGeneratorTest
 
         CSharpCompilation compilation = CSharpCompilation.Create(
             assemblyName: "Tests",
-            syntaxTrees: new[] { syntaxTree },
+            syntaxTrees: [syntaxTree],
             references
         );
 

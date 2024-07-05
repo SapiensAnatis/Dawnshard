@@ -66,40 +66,24 @@ public static class Transforms
         }
     }
 
-    public static MasterAssetExtensionDeclaration? TransformExtensionDeclarations(
+    public static MasterAssetExtensionDeclaration TransformExtensionDeclarations(
         GeneratorAttributeSyntaxContext context,
         CancellationToken cancellationToken
     )
     {
         AttributeData attribute = context.Attributes[0];
 
-        if (attribute.ConstructorArguments is not [{ Value: string masterAssetName }])
+        if (
+            attribute.ConstructorArguments
+            is not [{ Value: string masterAssetName }, { Value: string jsonPath }]
+        )
         {
-            return default;
+            return MasterAssetExtensionDeclaration.Default;
         }
 
         attribute.TryGetNamedArgument("FeatureFlag", out string? featureFlag);
 
-        if (context.TargetNode is not PropertyDeclarationSyntax propertyDeclarationSyntax)
-        {
-            return default;
-        }
-
-        ISymbol? propSymbol = context.SemanticModel.GetDeclaredSymbol(
-            propertyDeclarationSyntax,
-            cancellationToken
-        );
-
-        if (propSymbol is null)
-        {
-            return default;
-        }
-
-        return new MasterAssetExtensionDeclaration(
-            masterAssetName,
-            featureFlag,
-            propSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
-        );
+        return new MasterAssetExtensionDeclaration(masterAssetName, jsonPath, featureFlag);
     }
 }
 

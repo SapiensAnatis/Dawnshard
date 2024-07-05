@@ -11,6 +11,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj"/>
+        <ProjectReference Include="..\DragaliaAPI.Test.Utils\DragaliaAPI.Test.Utils.csproj" />
         <!-- No symbols from DragaliaAPI.csproj are required, but we need the msgpack generation targets -->
         <ProjectReference Include="..\DragaliaAPI\DragaliaAPI.csproj"/>
     </ItemGroup>

@@ -21,15 +21,18 @@ public sealed class GenerateMasterAssetAttribute<TItem> : System.Attribute
     public bool Group { get; set; }
 }
 
-[global::System.AttributeUsage(global::System.AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
+[global::System.AttributeUsage(global::System.AttributeTargets.Assembly, AllowMultiple = true, Inherited = false)]
 public sealed class ExtendMasterAssetAttribute : System.Attribute
 {
-    public ExtendMasterAssetAttribute(string masterAssetName)
+    public ExtendMasterAssetAttribute(string masterAssetName, string filepath)
     {
         this.MasterAssetName = masterAssetName;
+        this.Filepath = filepath;
     }
     
     public string MasterAssetName { get; }
+    
+    public string Filepath { get; }
     
     public string? FeatureFlag { get; set; }
 }

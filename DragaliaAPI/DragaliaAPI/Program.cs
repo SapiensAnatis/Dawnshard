@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.FeatureManagement;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.JSInterop;
 using Serilog;
@@ -109,6 +110,8 @@ builder
     .ConfigureGraphQLSchema()
     .ConfigureBlazorFrontend();
 
+builder.Services.AddFeatureManagement();
+
 WebApplication app = builder.Build();
 
 app.Logger.LogDebug("Using key-per-file configuration from path {KpfPath}", kpfPath);
@@ -117,7 +120,7 @@ Stopwatch watch = new();
 app.Logger.LogInformation("Loading MasterAsset data.");
 
 watch.Start();
-await MasterAsset.LoadAsync();
+await MasterAsset.LoadAsync(app.Services.GetRequiredService<IFeatureManager>());
 watch.Stop();
 
 app.Logger.LogInformation("Loaded MasterAsset in {Time} ms.", watch.ElapsedMilliseconds);

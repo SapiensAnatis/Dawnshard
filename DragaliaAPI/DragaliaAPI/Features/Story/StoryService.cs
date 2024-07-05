@@ -290,7 +290,7 @@ public class StoryService(
         if (
             MasterAsset.EventData.TryGetValue(story.GroupId, out EventData? eventData)
             && eventData.IsMemoryEvent // Real events need to set is_temporary and do friendship points
-            && eventData.GetActualGuestJoinStoryId() == storyId
+            && eventData.GuestJoinStoryId == storyId
         )
         {
             logger.LogDebug("Granting memory event character {chara}", eventData.EventCharaId);

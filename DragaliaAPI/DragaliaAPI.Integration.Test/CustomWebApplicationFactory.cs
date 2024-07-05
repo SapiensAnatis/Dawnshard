@@ -38,8 +38,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
 
     public async Task InitializeAsync()
     {
-        await MasterAsset.LoadAsync();
-
         await this.testContainersHelper.StartAsync();
 
         using IServiceScope scope = this.Services.CreateScope();

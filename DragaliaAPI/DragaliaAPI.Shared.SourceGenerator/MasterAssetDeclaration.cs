@@ -1,8 +1,8 @@
 namespace DragaliaAPI.Shared.SourceGenerator;
 
 public readonly record struct MasterAssetDeclaration(
-    string FullyQualifiedKeyTypeName,
-    string FullyQualifiedItemTypeName,
+    string KeyTypeName,
+    string ItemTypeName,
     string JsonPath,
     string KeyName,
     bool IsGroup,
@@ -12,15 +12,15 @@ public readonly record struct MasterAssetDeclaration(
 )
 {
     public MasterAssetDeclaration(
-        string FullyQualifiedKeyTypeName,
-        string FullyQualifiedItemTypeName,
+        string KeyTypeName,
+        string ItemTypeName,
         string JsonPath,
         string KeyName,
         bool IsGroup
     )
         : this(
-            FullyQualifiedKeyTypeName,
-            FullyQualifiedItemTypeName,
+            KeyTypeName,
+            ItemTypeName,
             JsonPath,
             KeyName,
             IsGroup,

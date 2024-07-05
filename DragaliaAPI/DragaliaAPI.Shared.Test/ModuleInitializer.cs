@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using DragaliaAPI.Test.Utils;
 
 namespace DragaliaAPI.Shared.Test;
 
@@ -15,7 +16,9 @@ public static class ModuleInitializer
     public static void InitializeMasterAsset()
     {
         TaskFactory
-            .StartNew(MasterAsset.MasterAsset.LoadAsync)
+            .StartNew(
+                () => MasterAsset.MasterAsset.LoadAsync(FeatureFlagUtils.AllEnabledFeatureManager)
+            )
             .Unwrap()
             .ConfigureAwait(false)
             .GetAwaiter()
