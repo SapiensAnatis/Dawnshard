@@ -21,7 +21,6 @@
         <ItemGroup>
             <MasterAssetMsgpackFiles Include="$(ApiOutputDirectory)Resources\**\*.msgpack" />
         </ItemGroup>
-        <Message Importance="high" Text="Copying messagepack @(MasterAssetMsgpackFiles)"/>
         <Copy SourceFiles="@(MasterAssetMsgpackFiles)" DestinationFolder="$(OutDir)Resources\%(RecursiveDir)" />
     </Target>
 

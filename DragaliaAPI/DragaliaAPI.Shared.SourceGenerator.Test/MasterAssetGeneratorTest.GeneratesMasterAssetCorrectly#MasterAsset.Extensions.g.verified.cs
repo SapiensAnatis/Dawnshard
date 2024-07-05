@@ -7,8 +7,14 @@ namespace DragaliaAPI.Shared.MasterAsset;
 
 public static partial class MasterAsset
 {
-    private static async Task<List<TItem>> LoadFile<TItem>(string path)
+    private static async Task<List<TItem>> LoadFile<TItem>(string msgpackPath)
     {
+        string path = Path.Join(
+           global::System.IO.Path.GetDirectoryName(global::System.Reflection.Assembly.GetExecutingAssembly().Location),
+            "Resources",
+            msgpackPath
+        );
+    
         await using FileStream fs = File.OpenRead(path);
     
         return await global::MessagePack.MessagePackSerializer.DeserializeAsync<List<TItem>>(

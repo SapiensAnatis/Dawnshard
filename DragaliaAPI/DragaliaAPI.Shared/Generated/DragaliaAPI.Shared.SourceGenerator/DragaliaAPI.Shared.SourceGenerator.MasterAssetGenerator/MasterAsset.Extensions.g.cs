@@ -9,6 +9,7 @@ public static partial class MasterAsset
     private static async Task<List<TItem>> LoadFile<TItem>(string msgpackPath)
     {
         string path = Path.Join(
+           global::System.IO.Path.GetDirectoryName(global::System.Reflection.Assembly.GetExecutingAssembly().Location),
             "Resources",
             msgpackPath
         );
