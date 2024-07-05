@@ -2,7 +2,7 @@ name: Test report
 
 on:
   workflow_run:
-    workflows: ["Test API", "Test PhotonStateManager"]
+    workflows: ["Test DragaliaAPI", "Test PhotonStateManager"]
     types:
       - completed
 
