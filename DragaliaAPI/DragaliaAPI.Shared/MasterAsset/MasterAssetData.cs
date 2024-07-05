@@ -9,13 +9,12 @@ namespace DragaliaAPI.Shared.MasterAsset;
 
 /// <summary>
 /// Class that is composed of a <see cref="KeyedCollection{TKey,TItem}"/> implementation and populates it based on
-/// supplied JSON data and a key selector argument. Exposes read-only methods of the <see cref="KeyedCollection{TKey,TItem}"/>
-/// implementation.
+/// supplied data and a key selector argument.
 /// </summary>
 /// <remarks>
-/// The population of the data via deserialization is lazy-loaded, and only performed on first access via one
-/// of the public methods or properties.
-/// JSON is deserialized using <see cref="MasterAssetJsonOptions"/> which notably includes the <see cref="MasterAssetNamingPolicy"/>.
+/// The data must be initialized using <see cref="MasterAsset.LoadAsync"/> before it can be used in a program. It makes
+/// use of a source generator and a CLI tool to parse the provided JSON files into MessagePack format, which is what
+/// is actually read at runtime, so that the file size of the deployed application can be reduced.
 /// </remarks>
 /// <typeparam name="TKey">The type of the data's unique key.</typeparam>
 /// <typeparam name="TItem">The type of the data models that will be returned. Should be a record or immutable class.</typeparam>
@@ -89,8 +88,9 @@ public static class MasterAssetData
     private const string DataFolder = "Resources";
 
     public static async ValueTask<MasterAssetData<TKey, TItem>> LoadAsync<TKey, TItem>(
-        string jsonFilename,
-        Func<TItem, TKey> keySelector
+        string msgpackPath,
+        Func<TItem, TKey> keySelector,
+        IEnumerable<TItem>? additionalData
     )
         where TItem : class
         where TKey : notnull
@@ -98,7 +98,7 @@ public static class MasterAssetData
         string path = Path.Join(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
             DataFolder,
-            jsonFilename
+            msgpackPath
         );
 
         await using FileStream fs = File.OpenRead(path);
@@ -109,10 +109,13 @@ public static class MasterAssetData
                 MasterAssetMessagePackOptions.Instance
             ) ?? throw new MessagePackSerializationException("Deserialized MasterAsset was null");
 
-        FrozenDictionary<TKey, TItem> frozenDict = items
-            .ToDictionary(keySelector, x => x)
-            .ToFrozenDictionary();
+        Dictionary<TKey, TItem> dict = items.ToDictionary(keySelector, x => x);
 
-        return new MasterAssetData<TKey, TItem>(frozenDict);
+        foreach (TItem value in additionalData ?? [])
+        {
+            dict[keySelector(value)] = value;
+        }
+
+        return new MasterAssetData<TKey, TItem>(dict.ToFrozenDictionary());
     }
 }

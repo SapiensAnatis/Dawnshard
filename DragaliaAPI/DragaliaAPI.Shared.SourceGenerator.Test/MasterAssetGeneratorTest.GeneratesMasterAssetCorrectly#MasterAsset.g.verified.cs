@@ -19,31 +19,58 @@ public static partial class MasterAsset
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetGroup<int, int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.BuildEventReward>? buildEventReward;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetGroup<int, int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.BuildEventReward> BuildEventReward => buildEventReward ?? throw new InvalidOperationException(ErrorUninitialized);
-    public static async Task LoadAsync()
+
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventData>? eventData;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventData> EventData => eventData ?? throw new InvalidOperationException(ErrorUninitialized);
+
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>? dragonData;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData> DragonData => dragonData ?? throw new InvalidOperationException(ErrorUninitialized);
+    public static async Task LoadAsync(global::Microsoft.FeatureManagement.IFeatureManager featureManager)
     {
         if (loaded)
         {
             return;
         }
+        
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>> charaDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>(
                 "CharaData.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.CharaData x) => x.Id,
+                null
             );
+        
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.TimeAttack.RankingData>> rankingDataTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.TimeAttack.RankingData>(
                 "TimeAttack/RankingData.msgpack",
-                x => x.QuestId
+                (global::DragaliaAPI.Shared.MasterAsset.Models.TimeAttack.RankingData x) => x.QuestId,
+                null
             );
+        
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetGroup<int, int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.BuildEventReward>> buildEventRewardTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetGroup.LoadAsync<int, int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.BuildEventReward>(
                 "Event/BuildEventReward.msgpack",
-                x => x.Id
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.BuildEventReward x) => x.Id
+            );
+        
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventData>> eventDataTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventData>(
+                "Event/EventData.msgpack",
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventData x) => x.Id,
+                await LoadEventDataExtension(featureManager)
+            );
+        
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>> dragonDataTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>(
+                "DragonData.msgpack",
+                (global::DragaliaAPI.Shared.MasterAsset.Models.DragonData x) => x.Id,
+                await LoadDragonDataExtension(featureManager)
             );
 
         charaData = await charaDataTask;
         rankingData = await rankingDataTask;
         buildEventReward = await buildEventRewardTask;
+        eventData = await eventDataTask;
+        dragonData = await dragonDataTask;
         loaded = true;
     }
 }

@@ -38,7 +38,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
 
     public async Task InitializeAsync()
     {
-        await MasterAsset.LoadAsync();
+        await MasterAsset.LoadAsync(FeatureFlagUtils.AllEnabledFeatureManager);
 
         await this.testContainersHelper.StartAsync();
 

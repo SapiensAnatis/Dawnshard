@@ -10,6 +10,7 @@
         <PackageReference Include="FluentAssertions"/>
         <PackageReference Include="Microsoft.IdentityModel.Tokens"/>
         <PackageReference Include="Moq"/>
+        <PackageReference Include="NSubstitute" />
     </ItemGroup>
 
     <ItemGroup>

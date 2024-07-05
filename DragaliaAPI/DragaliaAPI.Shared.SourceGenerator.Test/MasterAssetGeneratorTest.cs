@@ -20,7 +20,19 @@ public class MasterAssetGeneratorTest
             [GenerateMasterAsset<CharaData>("CharaData.json")]
             [GenerateMasterAsset<RankingData>("TimeAttack/RankingData.json", Key = nameof(Models.TimeAttack.RankingData.QuestId))]
             [GenerateMasterAsset<BuildEventReward>("Event/BuildEventReward.json", Group = true)]
+            [GenerateMasterAsset<EventData>("Event/EventData.json")]
+            [GenerateMasterAsset<DragonData>("DragonData.json")]
             public static partial class MasterAsset
+            {
+            }
+
+            [ExtendMasterAsset(nameof(MasterAsset.EventData), "Event/BuildEventReward.extension.json")]
+            public static class EventDataExtensions
+            {
+            }
+
+            [ExtendMasterAsset(nameof(MasterAsset.DragonData), "DragonData.modded.json", FeatureFlag = "ModdedDragons")]
+            public static class DragonDataExtensions
             {
             }
             """;
@@ -40,7 +52,7 @@ public class MasterAssetGeneratorTest
 
         CSharpCompilation compilation = CSharpCompilation.Create(
             assemblyName: "Tests",
-            syntaxTrees: new[] { syntaxTree },
+            syntaxTrees: [syntaxTree],
             references
         );
 

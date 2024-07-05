@@ -6,17 +6,36 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.Serialization;
 using MessagePack;
 
-string resourcesPath = args[^2];
 string outputDir = args[^1];
+string resourcesPath = args[^2];
 
-List<AttributeInstance> attributeInstances = typeof(MasterAsset)
+List<GenerateMasterAssetAttributeInstance> attributeInstances = typeof(MasterAsset)
     .GetCustomAttributes(typeof(GenerateMasterAssetAttribute<>))
-    .Select(AttributeHelper.ParseAttribute)
+    .Select(AttributeHelper.ParseGenerateMasterAssetAttribute)
     .ToList();
 
-foreach (AttributeInstance instance in attributeInstances)
+Dictionary<string, ExtendMasterAssetAttribute> extensionAttributes = typeof(MasterAsset)
+    .Assembly.GetCustomAttributes<ExtendMasterAssetAttribute>()
+    .ToDictionary(x => x.MasterAssetName, x => x);
+
+foreach (GenerateMasterAssetAttributeInstance instance in attributeInstances)
 {
-    string fullJsonPath = Path.Combine(resourcesPath, instance.JsonPath);
+    await Convert(instance.JsonPath, instance);
+
+    if (
+        extensionAttributes.TryGetValue(
+            instance.PropertyName,
+            out ExtendMasterAssetAttribute? extensionAttribute
+        )
+    )
+    {
+        await Convert(extensionAttribute.Filepath, instance);
+    }
+}
+
+async Task Convert(string inputPath, GenerateMasterAssetAttributeInstance instance)
+{
+    string fullJsonPath = Path.Combine(resourcesPath, inputPath);
     string relativePath = Path.GetRelativePath(resourcesPath, fullJsonPath);
     string outputPath = Path.Combine(outputDir, relativePath.Replace(".json", ".msgpack"));
 
@@ -28,7 +47,7 @@ foreach (AttributeInstance instance in attributeInstances)
         Console.WriteLine(
             $"Skipping conversion of {relativePath} - binary converted file is newer"
         );
-        continue;
+        return;
     }
 
     Type listType = typeof(IList<>).MakeGenericType(instance.ItemType);

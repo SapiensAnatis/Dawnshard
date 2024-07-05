@@ -5,53 +5,58 @@ namespace DragaliaAPI.MasterAssetConverter;
 
 public static class AttributeHelper
 {
-    public static AttributeInstance ParseAttribute(Attribute attribute)
+    public static GenerateMasterAssetAttributeInstance ParseGenerateMasterAssetAttribute(
+        Attribute attribute
+    )
     {
         Type attributeType = attribute.GetType();
         Type itemType = attributeType.GetGenericArguments()[0];
 
-        if (
-            attributeType
-                .GetProperty(nameof(GenerateMasterAssetAttribute<CharaData>.Filepath))
-                ?.GetValue(attribute)
-            is not string jsonPath
-        )
-        {
-            throw new InvalidOperationException("Failed to get file path");
-        }
+        string jsonPath = attribute.GetPropertyValue<string>(
+            nameof(GenerateMasterAssetAttribute<CharaData>.Filepath)
+        );
 
-        if (
-            attributeType
-                .GetProperty(nameof(GenerateMasterAssetAttribute<CharaData>.Key))
-                ?.GetValue(attribute)
-            is not string key
-        )
-        {
-            throw new InvalidOperationException("Failed to get key");
-        }
+        string key = attribute.GetPropertyValue<string>(
+            nameof(GenerateMasterAssetAttribute<CharaData>.Key)
+        );
 
-        if (
-            attributeType
-                .GetProperty(nameof(GenerateMasterAssetAttribute<CharaData>.Group))
-                ?.GetValue(attribute)
-            is not bool group
-        )
-        {
-            throw new InvalidOperationException("Failed to get group");
-        }
+        bool group = attribute.GetPropertyValue<bool>(
+            nameof(GenerateMasterAssetAttribute<CharaData>.Group)
+        );
 
         Type keyType =
             itemType.GetProperty(key)?.PropertyType
             ?? throw new InvalidOperationException("Failed to get key type");
 
-        return new AttributeInstance(itemType, keyType, jsonPath, key, group);
+        return new GenerateMasterAssetAttributeInstance(itemType, keyType, jsonPath, group);
     }
 }
 
-public record AttributeInstance(
+file static class AttributeExtensions
+{
+    public static TValue GetPropertyValue<TValue>(this Attribute attribute, string propertyName)
+    {
+        object value =
+            attribute.GetType().GetProperty(propertyName)?.GetValue(attribute)
+            ?? throw new InvalidOperationException($"Failed to get property value: {propertyName}");
+
+        return (TValue)value;
+    }
+}
+
+public record GenerateMasterAssetAttributeInstance(
     Type ItemType,
     Type KeyType,
     string JsonPath,
-    string Key,
     bool Group
-);
+)
+{
+    public string PropertyName
+    {
+        get
+        {
+            string rawPath = this.JsonPath.Replace(".json", "");
+            return rawPath.Split('/')[^1];
+        }
+    }
+}
