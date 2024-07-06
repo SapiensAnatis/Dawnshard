@@ -22,6 +22,18 @@ public static partial class MasterAsset
         ) ?? throw new global::MessagePack.MessagePackSerializationException($"Deserialized MasterAsset extension for {path} was null");
     }
     
+    public static async global::System.Threading.Tasks.Task<global::System.Collections.Generic.IEnumerable<global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DailyMission>> LoadMissionDailyDataExtension(global::Microsoft.FeatureManagement.IFeatureManager featureManager)
+    {
+        global::System.Collections.Generic.List<global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DailyMission> extendedData = [];
+        
+        if (await featureManager.IsEnabledAsync("BoostedDailyEndeavourRewards"))
+        {
+            extendedData.AddRange(await LoadFile<global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DailyMission>("Missions/MissionDailyData.rewards.msgpack"));
+        }
+
+        return extendedData;
+    }
+    
     public static async global::System.Threading.Tasks.Task<global::System.Collections.Generic.IEnumerable<global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventData>> LoadEventDataExtension(global::Microsoft.FeatureManagement.IFeatureManager featureManager)
     {
         global::System.Collections.Generic.List<global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventData> extendedData = [];

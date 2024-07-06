@@ -21,7 +21,7 @@ public sealed class GenerateMasterAssetAttribute<TItem> : System.Attribute
     public bool Group { get; set; }
 }
 
-[global::System.AttributeUsage(global::System.AttributeTargets.Assembly, AllowMultiple = true, Inherited = false)]
+[global::System.AttributeUsage(global::System.AttributeTargets.Class | global::System.AttributeTargets.Assembly, AllowMultiple = true, Inherited = false)]
 public sealed class ExtendMasterAssetAttribute : System.Attribute
 {
     public ExtendMasterAssetAttribute(string masterAssetName, string filepath)
