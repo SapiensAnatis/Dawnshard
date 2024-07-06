@@ -66,24 +66,41 @@ public static class Transforms
         }
     }
 
-    public static MasterAssetExtensionDeclaration TransformExtensionDeclarations(
+    public static EquatableReadOnlyList<MasterAssetExtensionDeclaration> TransformExtensionDeclarations(
         GeneratorAttributeSyntaxContext context,
         CancellationToken cancellationToken
     )
     {
-        AttributeData attribute = context.Attributes[0];
+        cancellationToken.ThrowIfCancellationRequested();
 
-        if (
-            attribute.ConstructorArguments
-            is not [{ Value: string masterAssetName }, { Value: string jsonPath }]
+        return ProcessDeclarations(context, cancellationToken).ToEquatableReadOnlyList();
+
+        static IEnumerable<MasterAssetExtensionDeclaration> ProcessDeclarations(
+            GeneratorAttributeSyntaxContext context,
+            CancellationToken cancellationToken
         )
         {
-            return MasterAssetExtensionDeclaration.Default;
+            foreach (AttributeData? attribute in context.Attributes)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                if (
+                    attribute.ConstructorArguments
+                    is not [{ Value: string masterAssetName }, { Value: string jsonPath }]
+                )
+                {
+                    continue;
+                }
+
+                attribute.TryGetNamedArgument("FeatureFlag", out string? featureFlag);
+
+                yield return new MasterAssetExtensionDeclaration(
+                    masterAssetName,
+                    jsonPath,
+                    featureFlag
+                );
+            }
         }
-
-        attribute.TryGetNamedArgument("FeatureFlag", out string? featureFlag);
-
-        return new MasterAssetExtensionDeclaration(masterAssetName, jsonPath, featureFlag);
     }
 }
 

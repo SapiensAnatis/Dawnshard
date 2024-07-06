@@ -11,6 +11,7 @@
 
     <ItemGroup>
         <PackageReference Include="Basic.Reference.Assemblies" />
+        <PackageReference Include="FluentAssertions" />
         <PackageReference Include="Microsoft.CodeAnalysis.Analyzers">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
@@ -29,7 +30,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\DragaliaAPI.Shared.SourceGenerator\DragaliaAPI.Shared.SourceGenerator.csproj" />
-      <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj" />
     </ItemGroup>
 
 </Project>

@@ -92,6 +92,7 @@ public class MasterAssetGenerator : IIncrementalGenerator
                 static (_, _) => true,
                 Transforms.TransformExtensionDeclarations
             )
+            .SelectMany(static (list, _) => list.AsEnumerable())
             .Collect();
 
         IncrementalValuesProvider<MasterAssetDeclaration> declarationProvider = context

@@ -553,7 +553,7 @@ public static partial class MasterAsset
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DailyMission>(
                 "Missions/MissionDailyData.msgpack",
                 (global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DailyMission x) => x.Id,
-                null
+                await LoadMissionDailyDataExtension(featureManager)
             );
         
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.DrillMission>> missionDrillDataTask =

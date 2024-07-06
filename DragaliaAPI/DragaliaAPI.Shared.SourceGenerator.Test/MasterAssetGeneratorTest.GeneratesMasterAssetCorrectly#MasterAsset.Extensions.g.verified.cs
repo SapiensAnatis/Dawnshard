@@ -23,22 +23,22 @@ public static partial class MasterAsset
         ) ?? throw new global::MessagePack.MessagePackSerializationException($"Deserialized MasterAsset extension for {path} was null");
     }
     
-    public static async global::System.Threading.Tasks.Task<global::System.Collections.Generic.IEnumerable<global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventData>> LoadEventDataExtension(global::Microsoft.FeatureManagement.IFeatureManager featureManager)
+    public static async global::System.Threading.Tasks.Task<global::System.Collections.Generic.IEnumerable<global::DragaliaAPI.Shared.MasterAsset.EventData>> LoadEventDataExtension(global::Microsoft.FeatureManagement.IFeatureManager featureManager)
     {
-        global::System.Collections.Generic.List<global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventData> extendedData = [];
+        global::System.Collections.Generic.List<global::DragaliaAPI.Shared.MasterAsset.EventData> extendedData = [];
         
-        extendedData.AddRange(await LoadFile<global::DragaliaAPI.Shared.MasterAsset.Models.Event.EventData>("Event/BuildEventReward.extension.msgpack"));
+        extendedData.AddRange(await LoadFile<global::DragaliaAPI.Shared.MasterAsset.EventData>("Event/BuildEventReward.extension.msgpack"));
 
         return extendedData;
     }
     
-    public static async global::System.Threading.Tasks.Task<global::System.Collections.Generic.IEnumerable<global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>> LoadDragonDataExtension(global::Microsoft.FeatureManagement.IFeatureManager featureManager)
+    public static async global::System.Threading.Tasks.Task<global::System.Collections.Generic.IEnumerable<global::DragaliaAPI.Shared.MasterAsset.DragonData>> LoadDragonDataExtension(global::Microsoft.FeatureManagement.IFeatureManager featureManager)
     {
-        global::System.Collections.Generic.List<global::DragaliaAPI.Shared.MasterAsset.Models.DragonData> extendedData = [];
+        global::System.Collections.Generic.List<global::DragaliaAPI.Shared.MasterAsset.DragonData> extendedData = [];
         
         if (await featureManager.IsEnabledAsync("ModdedDragons"))
         {
-            extendedData.AddRange(await LoadFile<global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>("DragonData.modded.msgpack"));
+            extendedData.AddRange(await LoadFile<global::DragaliaAPI.Shared.MasterAsset.DragonData>("DragonData.modded.msgpack"));
         }
 
         return extendedData;

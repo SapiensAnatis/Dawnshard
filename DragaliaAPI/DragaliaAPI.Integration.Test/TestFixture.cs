@@ -290,6 +290,7 @@ public class TestFixture
         )!;
 
         userData.Coin = 100_000_000;
+        userData.Crystal = 1_200_000;
         userData.DewPoint = 100_000_000;
         userData.ManaPoint = 100_000_000;
         userData.Level = 250;
