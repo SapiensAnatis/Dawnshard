@@ -1,3 +1,4 @@
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Serialization;
@@ -13,11 +14,15 @@ public class SavefileController(ILoadService loadService) : ControllerBase
     [Authorize(Policy = AuthConstants.PolicyNames.RequireDawnshardIdentity)]
     public async Task<FileResult> GetSavefile(CancellationToken cancellationToken)
     {
-        LoadIndexResponse savefile = await loadService.BuildIndexData(cancellationToken);
+        DragaliaResponse<LoadIndexResponse> savefile =
+            new(
+                new DataHeaders(ResultCode.Success),
+                await loadService.BuildIndexData(cancellationToken)
+            );
 
         return this.File(
             JsonSerializer.SerializeToUtf8Bytes(savefile, ApiJsonOptions.Instance),
-            "application/json",
+            "text/plain",
             "savedata.txt"
         );
     }
