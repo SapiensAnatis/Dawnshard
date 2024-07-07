@@ -15,7 +15,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
         private readonly PluginStateService pluginStateService;
         private readonly GameLogicPlugin gameLogicPlugin;
         private readonly StateManagerPlugin stateManagerPlugin;
-        private readonly DiscordPlugin discordPlugin;
+        private readonly DiscordPlugin? discordPlugin;
 
         public override string Name => nameof(GluonPlugin);
 
@@ -23,7 +23,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
             PluginStateService pluginStateService,
             GameLogicPlugin gameLogicPlugin,
             StateManagerPlugin stateManagerPlugin,
-            DiscordPlugin discordPlugin
+            DiscordPlugin? discordPlugin
         )
         {
             this.pluginStateService = pluginStateService;
@@ -40,9 +40,23 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
         {
             this.PluginHost = host;
 
-            return this.stateManagerPlugin.SetupInstance(host, config, out errorMsg)
-                && this.gameLogicPlugin.SetupInstance(host, config, out errorMsg)
-                && this.discordPlugin.SetupInstance(host, config, out errorMsg);
+            if (!this.stateManagerPlugin.SetupInstance(host, config, out errorMsg))
+            {
+                return false;
+            }
+            if (!this.gameLogicPlugin.SetupInstance(host, config, out errorMsg))
+            {
+                return false;
+            }
+            if (
+                this.discordPlugin is not null
+                && !this.discordPlugin.SetupInstance(host, config, out errorMsg)
+            )
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public override void OnCreateGame(ICreateGameCallInfo info)
@@ -52,11 +66,13 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
 
             if (this.pluginStateService.IsPubliclyVisible)
             {
-                this.discordPlugin.OnCreateGame(info);
+                this.discordPlugin?.OnCreateGame(info);
             }
 
             if (!info.IsProcessed)
+            {
                 info.Continue();
+            }
         }
 
         public override void OnJoin(IJoinGameCallInfo info)
@@ -65,7 +81,9 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
             this.stateManagerPlugin.OnJoin(info);
 
             if (!info.IsProcessed)
+            {
                 info.Continue();
+            }
         }
 
         public override void OnLeave(ILeaveGameCallInfo info)
@@ -74,7 +92,9 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
             this.stateManagerPlugin.OnLeave(info);
 
             if (!info.IsProcessed)
+            {
                 base.OnLeave(info);
+            }
         }
 
         public override void BeforeCloseGame(IBeforeCloseGameCallInfo info)
@@ -84,11 +104,13 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
 
             if (this.pluginStateService.IsPubliclyVisible)
             {
-                this.discordPlugin.BeforeCloseGame(info);
+                this.discordPlugin?.BeforeCloseGame(info);
             }
 
             if (!info.IsProcessed)
+            {
                 info.Continue();
+            }
         }
 
         public override void OnCloseGame(ICloseGameCallInfo info)
@@ -97,7 +119,9 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
             this.stateManagerPlugin.OnCloseGame(info);
 
             if (!info.IsProcessed)
+            {
                 info.Continue();
+            }
         }
 
         public override void OnRaiseEvent(IRaiseEventCallInfo info)
@@ -106,7 +130,9 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
             this.stateManagerPlugin.OnRaiseEvent(info);
 
             if (!info.IsProcessed)
+            {
                 info.Continue();
+            }
         }
 
         public override void BeforeSetProperties(IBeforeSetPropertiesCallInfo info)
@@ -114,7 +140,9 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
             this.gameLogicPlugin.BeforeSetProperties(info);
 
             if (!info.IsProcessed)
+            {
                 info.Continue();
+            }
         }
 
         public override void OnSetProperties(ISetPropertiesCallInfo info)
@@ -124,11 +152,13 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
 
             if (this.pluginStateService.IsPubliclyVisible)
             {
-                this.discordPlugin.OnSetProperties(info);
+                this.discordPlugin?.OnSetProperties(info);
             }
 
             if (!info.IsProcessed)
+            {
                 info.Continue();
+            }
         }
     }
 }

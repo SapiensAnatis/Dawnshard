@@ -1295,16 +1295,13 @@ public partial class DungeonRecordRecordMultiRequest
     [Key("dungeon_key")]
     public string DungeonKey { get; set; }
 
-    [Key("connecting_viewer_id_list")]
-    public IEnumerable<ulong> ConnectingViewerIdList { get; set; } = [];
-
     [Key("no_play_flg")]
     public int NoPlayFlg { get; set; }
 
     public DungeonRecordRecordMultiRequest(
         PlayRecord playRecord,
         string dungeonKey,
-        IEnumerable<ulong> connectingViewerIdList,
+        IList<ulong> connectingViewerIdList,
         int noPlayFlg
     )
     {

@@ -10,7 +10,7 @@
 
         public bool IsRandomMatching { get; set; }
 
-        public object RandomMatchingStartTimer { get; set; }
+        public object? RandomMatchingStartTimer { get; set; }
 
         public RoomState() { }
 

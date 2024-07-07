@@ -9,7 +9,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
 {
     public class GluonPluginFactory : IPluginFactory
     {
-        public IGamePlugin Create(
+        public IGamePlugin? Create(
             IPluginHost gameHost,
             string pluginName,
             Dictionary<string, string> config,
@@ -20,11 +20,15 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
             PluginStateService stateService = new PluginStateService();
 
             GameLogicPlugin gameLogicPlugin = new GameLogicPlugin(stateService, configuration);
+
             StateManagerPlugin stateManagerPlugin = new StateManagerPlugin(
                 stateService,
                 configuration
             );
-            DiscordPlugin discordPlugin = new DiscordPlugin(configuration);
+
+            DiscordPlugin? discordPlugin = configuration.EnableDiscordIntegration
+                ? new DiscordPlugin(configuration)
+                : null;
 
             GluonPlugin gluonPlugin = new GluonPlugin(
                 stateService,
@@ -34,7 +38,9 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
             );
 
             if (gluonPlugin.SetupInstance(gameHost, config, out errorMsg))
+            {
                 return gluonPlugin;
+            }
 
             return null;
         }

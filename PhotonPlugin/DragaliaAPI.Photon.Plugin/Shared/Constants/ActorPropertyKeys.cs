@@ -12,5 +12,7 @@
         public const string UsePartySlot = "UsePartySlot";
 
         public const string GoToIngameState = "GoToIngameState";
+
+        public const string AstralBetCount = "AstralBetCount";
     }
 }
