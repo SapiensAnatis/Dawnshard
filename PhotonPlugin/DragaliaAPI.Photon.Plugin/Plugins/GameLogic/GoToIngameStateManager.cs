@@ -106,6 +106,11 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             this.OnMinStateChange(info);
         }
 
+        public int GetUsedMemberCount(int actorNr)
+        {
+            return this.heroParamStorage[actorNr].UsedMemberCount;
+        }
+
         /// <summary>
         /// Handler to perform various operations when the minimum GoToIngameState of a room is increased.
         /// </summary>

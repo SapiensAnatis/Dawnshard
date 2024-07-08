@@ -2998,12 +2998,12 @@ public partial class AtgenFirstMeeting
     public int Id { get; set; }
 
     [Key("type")]
-    public int Type { get; set; }
+    public EntityTypes Type { get; set; }
 
     [Key("total_quantity")]
     public int TotalQuantity { get; set; }
 
-    public AtgenFirstMeeting(int headcount, int id, int type, int totalQuantity)
+    public AtgenFirstMeeting(int headcount, int id, EntityTypes type, int totalQuantity)
     {
         this.Headcount = headcount;
         this.Id = id;

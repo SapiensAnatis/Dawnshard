@@ -9,6 +9,7 @@ using DragaliaAPI.Photon.Plugin.Shared;
 using DragaliaAPI.Photon.Plugin.Shared.Constants;
 using DragaliaAPI.Photon.Plugin.Shared.Helpers;
 using DragaliaAPI.Photon.Shared.Enums;
+using MessagePack;
 using Photon.Hive.Plugin;
 
 namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
@@ -18,9 +19,9 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
     /// </summary>
     public class GameLogicPlugin : PluginBase
     {
-        private IPluginLogger logger;
         private RoomState roomState;
-        private GoToIngameStateManager goToIngameStateManager;
+        private IPluginLogger logger = null!;
+        private GoToIngameStateManager goToIngameStateManager = null!;
 
         private readonly PluginConfiguration configuration;
         private readonly PluginStateService pluginStateService;
@@ -79,6 +80,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             // https://doc.photonengine.com/server/current/plugins/plugins-faq#how_to_get_the_actor_number_in_plugin_callbacks_
             // This is only invalid if the room is recreated from an inactive state, which Dragalia doesn't do (hopefully!)
             const int actorNr = 1;
+
             this.actorState[actorNr] = new ActorState();
 
             long viewerId = info.Request.ActorProperties.GetLong(ActorPropertyKeys.PlayerId);
@@ -228,7 +230,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
         public override void OnLeave(ILeaveGameCallInfo info)
         {
             // Get actor before continuing
-            IActor actor = this.PluginHost.GameActors.FirstOrDefault(x =>
+            IActor? actor = this.PluginHost.GameActors.FirstOrDefault(x =>
                 x.ActorNr == info.ActorNr
             );
 
@@ -500,11 +502,14 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
 
             this.actorState[info.ActorNr] = new ActorState();
 
-            ClearQuestRequest evt = info.DeserializeEvent<ClearQuestRequest>();
+            byte[] augmentedRequest = AugmentQuestClearRequest(
+                info.DeserializeEvent<ClearQuestRequest>().RecordMultiRequest,
+                info.ActorNr
+            );
 
             this.PostApiRequest(
                 this.configuration.DungeonRecordMultiEndpoint,
-                evt.RecordMultiRequest,
+                augmentedRequest,
                 info,
                 this.ClearQuestRequestCallback,
                 callAsync: false
@@ -516,7 +521,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
 
                 this.PostApiRequest(
                     this.configuration.TimeAttackEndpoint,
-                    evt.RecordMultiRequest,
+                    augmentedRequest,
                     info,
                     this.PluginHost.LogIfFailedCallback,
                     callAsync: true
@@ -557,7 +562,9 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             this.PluginHost.LogIfFailedCallback(response, userState);
 
             if (response.Status != HttpRequestQueueResult.Success)
+            {
                 return;
+            }
 
             HttpRequestUserState typedUserState = (HttpRequestUserState)userState;
 
@@ -630,5 +637,32 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
         }
 
         private int GenerateRoomId() => this.random.Next(100_0000, 1_000_0000);
+
+        private byte[] AugmentQuestClearRequest(byte[] original, int actorNr)
+        {
+            Dictionary<string, object?> deserialized = MessagePackSerializer.Deserialize<
+                Dictionary<string, object?>
+            >(original);
+
+            deserialized["connecting_viewer_id_list"] = this
+                .PluginHost.GameActors.Where(x => x.ActorNr != actorNr)
+                .Select(x => x.GetViewerId())
+                .ToArray();
+
+            deserialized["is_host"] = actorNr == 1;
+
+            deserialized["member_count"] = this.goToIngameStateManager.GetUsedMemberCount(actorNr);
+
+            IActor actor = this.PluginHost.GameActors.First(x => x.ActorNr == actorNr);
+
+            if (
+                actor.Properties.TryGetInt(ActorPropertyKeys.AstralBetCount, out int astralBetCount)
+            )
+            {
+                deserialized["astral_bet_count"] = astralBetCount;
+            }
+
+            return MessagePackSerializer.Serialize(deserialized);
+        }
     }
 }
