@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <AssemblyVersion>3.2.6</AssemblyVersion>
+    <AssemblyVersion>3.3.0</AssemblyVersion>
     <LangVersion>12</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
