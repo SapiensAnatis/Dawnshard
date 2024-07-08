@@ -1,46 +1,46 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <ItemGroup>
-        <PackageReference Include="FluentAssertions"/>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing"/>
-        <PackageReference Include="Microsoft.AspNetCore.TestHost"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
-        <PackageReference Include="MockQueryable.Moq"/>
-        <PackageReference Include="Moq"/>
-        <PackageReference Include="Moq.EntityFrameworkCore"/>
-        <PackageReference Include="xunit"/>
-        <PackageReference Include="xunit.runner.visualstudio">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="NSubstitute"/>
-        <PackageReference Include="NSubstitute.Analyzers.CSharp">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="MockQueryable.Moq" />
+    <PackageReference Include="Moq" />
+    <PackageReference Include="Moq.EntityFrameworkCore" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="NSubstitute" />
+    <PackageReference Include="NSubstitute.Analyzers.CSharp">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\DragaliaAPI.Database.Test\DragaliaAPI.Database.Test.csproj"/>
-        <ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj"/>
-        <ProjectReference Include="..\DragaliaAPI\DragaliaAPI.csproj"/>
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DragaliaAPI.Database.Test\DragaliaAPI.Database.Test.csproj" />
+    <ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj" />
+    <ProjectReference Include="..\DragaliaAPI\DragaliaAPI.csproj" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <EditorConfigFiles Remove="C:\Users\jay0\Documents\Programming\dragalia\DragaliaAPI\DragaliaAPI.Test\.editorconfig"/>
-    </ItemGroup>
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\jay0\Documents\Programming\dragalia\DragaliaAPI\DragaliaAPI.Test\.editorconfig" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <None Update="Data\endgame_savefile.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
-    
-    <PropertyGroup>
-        <DependsOnApiMsgpackFiles>true</DependsOnApiMsgpackFiles>
-    </PropertyGroup>
+  <ItemGroup>
+    <None Update="Data\endgame_savefile.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <DependsOnApiMsgpackFiles>true</DependsOnApiMsgpackFiles>
+  </PropertyGroup>
 </Project>
