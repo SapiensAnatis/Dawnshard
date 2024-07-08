@@ -9,6 +9,11 @@ test('displays correctly', async ({ page }) => {
 
   await expect(page.getByRole('heading', { name: 'News' })).toBeVisible();
 
+  await page.waitForFunction(() => {
+    const images = Array.from(document.querySelectorAll('img'));
+    return images.every((img) => img.complete);
+  });
+
   await expect(page).toHaveScreenshot();
 });
 
@@ -22,6 +27,11 @@ test('displays correctly on mobile', async ({ page }) => {
 
   await expect(page.getByRole('heading', { name: 'News' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Game updated!' })).toBeVisible();
+
+  await page.waitForFunction(() => {
+    const images = Array.from(document.querySelectorAll('img'));
+    return images.every((img) => img.complete);
+  });
 
   await expect(page).toHaveScreenshot();
 });
@@ -46,6 +56,11 @@ test('displays correctly for webview', async ({ page }) => {
   await page.goto('/webview/news/1');
 
   await expect(page.getByRole('heading', { name: 'Welcome to Dawnshard' })).toBeVisible();
+
+  await page.waitForFunction(() => {
+    const images = Array.from(document.querySelectorAll('img'));
+    return images.every((img) => img.complete);
+  });
 
   await expect(page).toHaveScreenshot();
 });
