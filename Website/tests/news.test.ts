@@ -11,7 +11,7 @@ test('displays correctly', async ({ page }) => {
 
   await page.waitForFunction(() => {
     const images = Array.from(document.querySelectorAll('img'));
-    return images.every(img => img.complete);
+    return images.every((img) => img.complete);
   });
 
   await expect(page).toHaveScreenshot();
@@ -30,7 +30,7 @@ test('displays correctly on mobile', async ({ page }) => {
 
   await page.waitForFunction(() => {
     const images = Array.from(document.querySelectorAll('img'));
-    return images.every(img => img.complete);
+    return images.every((img) => img.complete);
   });
 
   await expect(page).toHaveScreenshot();
@@ -59,7 +59,7 @@ test('displays correctly for webview', async ({ page }) => {
 
   await page.waitForFunction(() => {
     const images = Array.from(document.querySelectorAll('img'));
-    return images.every(img => img.complete);
+    return images.every((img) => img.complete);
   });
 
   await expect(page).toHaveScreenshot();
