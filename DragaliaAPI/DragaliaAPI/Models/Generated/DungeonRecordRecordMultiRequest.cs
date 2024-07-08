@@ -5,7 +5,7 @@ namespace DragaliaAPI.Models.Generated;
 public partial class DungeonRecordRecordMultiRequest
 {
     /// <summary>
-    /// Gets the list of viewer IDs of other players in the room.
+    /// Gets the list of viewer IDs of the players in the room, excluding the ID of the player making the request.
     /// </summary>
     /// <remarks>
     /// This property is added by the Photon server while proxying the request.
@@ -30,4 +30,13 @@ public partial class DungeonRecordRecordMultiRequest
     /// </remarks>
     [Key("member_count")]
     public int MemberCount { get; set; }
+
+    /// <summary>
+    /// Gets a value indicating whether the player sending this request was the host of the room.
+    /// </summary>
+    /// <remarks>
+    /// This property is added by the Photon server while proxying the request.
+    /// </remarks>
+    [Key("is_host")]
+    public bool IsHost { get; set; }
 }

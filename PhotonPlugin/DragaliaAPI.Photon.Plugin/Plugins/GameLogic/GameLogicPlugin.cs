@@ -502,10 +502,8 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
 
             this.actorState[info.ActorNr] = new ActorState();
 
-            ClearQuestRequest evt = info.DeserializeEvent<ClearQuestRequest>();
-
             byte[] augmentedRequest = AugmentQuestClearRequest(
-                evt.RecordMultiRequest,
+                info.DeserializeEvent<ClearQuestRequest>().RecordMultiRequest,
                 info.ActorNr
             );
 
@@ -523,7 +521,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
 
                 this.PostApiRequest(
                     this.configuration.TimeAttackEndpoint,
-                    evt.RecordMultiRequest,
+                    augmentedRequest,
                     info,
                     this.PluginHost.LogIfFailedCallback,
                     callAsync: true
@@ -647,8 +645,11 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             >(original);
 
             deserialized["connecting_viewer_id_list"] = this
-                .PluginHost.GameActors.Select(x => x.GetViewerId())
+                .PluginHost.GameActors.Where(x => x.ActorNr != actorNr)
+                .Select(x => x.GetViewerId())
                 .ToArray();
+
+            deserialized["is_host"] = actorNr == 1;
 
             deserialized["member_count"] = this.goToIngameStateManager.GetUsedMemberCount(actorNr);
 
