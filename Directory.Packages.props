@@ -14,7 +14,7 @@
         <PackageVersion Include="Hangfire.Postgresql" Version="1.20.9" />
         <PackageVersion Include="Immediate.Apis" Version="1.1.0" />
         <PackageVersion Include="Immediate.Handlers" Version="1.4.0" />
-        <PackageVersion Include="JetBrains.Annotations" Version="2023.3.0" />
+        <PackageVersion Include="JetBrains.Annotations" Version="2024.2.0" />
         <PackageVersion Include="MessagePack" Version="2.5.168" />
         <PackageVersion Include="MessagePack.AspNetCoreMvcFormatter" Version="2.5.168" />
         <PackageVersion Include="MessagePackAnalyzer" Version="2.5.168" />
