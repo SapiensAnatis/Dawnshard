@@ -12,5 +12,10 @@ public interface IDungeonRecordHelperService
     Task<(
         IEnumerable<UserSupportList> HelperList,
         IEnumerable<AtgenHelperDetailList> HelperDetailList
+    )> ProcessHelperDataMulti(IList<long> connectingViewerIdList);
+
+    Task<(
+        IEnumerable<UserSupportList> HelperList,
+        IEnumerable<AtgenHelperDetailList> HelperDetailList
     )> ProcessHelperDataMulti();
 }

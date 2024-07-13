@@ -11,7 +11,7 @@ public partial class DungeonRecordRecordMultiRequest
     /// This property is added by the Photon server while proxying the request.
     /// </remarks>
     [Key("connecting_viewer_id_list")]
-    public IList<ulong> ConnectingViewerIdList { get; set; } = [];
+    public IList<long> ConnectingViewerIdList { get; set; } = [];
 
     /// <summary>
     /// Gets the astral raid multiplier used when joining or creating the room.
