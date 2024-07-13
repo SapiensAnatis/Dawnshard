@@ -911,9 +911,6 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        this.MockPhotonStateApi.Setup(x => x.GetGameByViewerId(this.ViewerId))
-            .ReturnsAsync(new Photon.Shared.Models.ApiGame() { Name = roomName });
-
         DungeonStartStartMultiResponse startResponse = (
             await this.Client.PostMsgpack<DungeonStartStartMultiResponse>(
                 "/dungeon_start/start_multi",

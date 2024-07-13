@@ -13,7 +13,6 @@ namespace DragaliaAPI.Services.Photon;
 public class MatchingService : IMatchingService
 {
     private readonly IPhotonStateApi photonStateApi;
-    private readonly IUnitRepository unitRepository;
     private readonly IPartyRepository partyRepository;
     private readonly IUserDataRepository userDataRepository;
     private readonly ILogger<MatchingService> logger;
@@ -22,7 +21,6 @@ public class MatchingService : IMatchingService
 
     public MatchingService(
         IPhotonStateApi photonStateApi,
-        IUnitRepository unitRepository,
         IPartyRepository partyRepository,
         IUserDataRepository userDataRepository,
         ILogger<MatchingService> logger,
@@ -31,7 +29,6 @@ public class MatchingService : IMatchingService
     )
     {
         this.photonStateApi = photonStateApi;
-        this.unitRepository = unitRepository;
         this.partyRepository = partyRepository;
         this.userDataRepository = userDataRepository;
         this.logger = logger;
@@ -107,6 +104,7 @@ public class MatchingService : IMatchingService
 
         return game.Players.Where(x => x.ViewerId != viewerId);
     }
+
     public async Task<bool> GetIsHost()
     {
         long viewerId = this.playerIdentityService.ViewerId;
