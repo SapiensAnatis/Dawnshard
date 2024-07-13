@@ -947,6 +947,85 @@ public class SummonTest : TestFixture
     }
 
     [Fact]
+    public async Task SummonRequest_TenfoldDiamantium_GrantsDoublePoints()
+    {
+        this.ApiContext.PlayerDiamondData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdate(e =>
+                e.SetProperty(p => p.FreeDiamond, 1000).SetProperty(p => p.PaidDiamond, 210)
+            );
+
+        DragaliaResponse<SummonRequestResponse> response =
+            await this.Client.PostMsgpack<SummonRequestResponse>(
+                "summon/request",
+                new SummonRequestRequest(
+                    TestGalaBannerId,
+                    SummonExecTypes.Tenfold,
+                    1,
+                    PaymentTypes.Diamantium,
+                    new PaymentTarget(1210, 1200)
+                )
+            );
+
+        response.Data.ResultSummonPoint.Should().Be(20);
+        response.Data.UpdateDataList.DiamondData?.FreeDiamond.Should().Be(0);
+        response.Data.UpdateDataList.DiamondData?.PaidDiamond.Should().Be(10);
+    }
+
+    [Fact]
+    public async Task SummonRequest_DailyDeal_Success_LimitedToOnePerDay()
+    {
+        this.ApiContext.PlayerDiamondData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdate(e =>
+                e.SetProperty(p => p.FreeDiamond, 30).SetProperty(p => p.PaidDiamond, 0)
+            );
+
+        DragaliaResponse<SummonRequestResponse> response =
+            await this.Client.PostMsgpack<SummonRequestResponse>(
+                "summon/request",
+                new SummonRequestRequest(
+                    TestGalaBannerId,
+                    SummonExecTypes.DailyDeal,
+                    1,
+                    PaymentTypes.Diamantium,
+                    new PaymentTarget(30, 30)
+                )
+            );
+
+        response.Data.ResultSummonPoint.Should().Be(2);
+        response.Data.UpdateDataList.DiamondData?.FreeDiamond.Should().Be(0);
+        response.Data.UpdateDataList.DiamondData?.PaidDiamond.Should().Be(0);
+
+        /* The client calls /summon/get_summon_list after finishing a summon, and this response appears to influence
+         whether the Daily Deal button is disabled. */
+
+        DragaliaResponse<SummonGetSummonListResponse> summonListResponse =
+            await this.Client.PostMsgpack<SummonGetSummonListResponse>("/summon/get_summon_list");
+
+        SummonList summonList = summonListResponse.Data.SummonList.First(x =>
+            x.SummonId == TestGalaBannerId
+        );
+
+        summonList.DailyCount.Should().Be(1);
+        summonList.DailyLimit.Should().Be(1);
+
+        (
+            await this.Client.PostMsgpack<SummonRequestResponse>(
+                "summon/request",
+                new SummonRequestRequest(
+                    TestGalaBannerId,
+                    SummonExecTypes.DailyDeal,
+                    1,
+                    PaymentTypes.Diamantium,
+                    new PaymentTarget(30, 30)
+                ),
+                ensureSuccessHeader: false
+            )
+        )
+            .DataHeaders.ResultCode.Should()
+            .Be(ResultCode.SummonDrawLimit);
+    }
+
+    [Fact]
     public async Task SummonPointTrade_Chara_Success_ReturnsData()
     {
         int monaTradeId = int.Parse($"{TestBannerId}100");

@@ -158,6 +158,15 @@ public class Banner
     /// <remarks>Only one override pool can be used. <see cref="OverrideCharaPool"/> takes precedence if both are specified.</remarks>
     public IReadOnlyList<Dragons>? OverrideDragonPool { get; init; }
 
+    public bool GetIsCurrentlyActive() => this.GetIsCurrentlyActive(TimeProvider.System);
+
+    public bool GetIsCurrentlyActive(TimeProvider timeProvider)
+    {
+        DateTimeOffset now = timeProvider.GetUtcNow();
+
+        return this.Start < now && this.End > now;
+    }
+
     /// <summary>
     /// Initializes the instance, intended for use with <see cref="Microsoft.Extensions.Options.OptionsBuilder{T}.PostConfigure"/>.
     /// </summary>

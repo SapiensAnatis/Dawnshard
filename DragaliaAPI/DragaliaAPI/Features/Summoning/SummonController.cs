@@ -145,12 +145,9 @@ public class SummonController(
         CancellationToken cancellationToken
     )
     {
-        int execCount = summonRequest.ExecCount > 0 ? summonRequest.ExecCount : 1;
-        int summonCount = summonRequest.ExecType == SummonExecTypes.Tenfold ? 10 : execCount;
-
         SummonList? summonList = await summonService.GetSummonList(summonRequest.SummonId);
 
-        if (summonList == null)
+        if (summonList is null)
         {
             throw new DragaliaException(
                 ResultCode.SummonNotFound,
@@ -158,14 +155,15 @@ public class SummonController(
             );
         }
 
-        await summonService.ProcessSummonPayment(summonRequest, summonList);
+        SummonRequestInfo requestInfo = SummonRequestInfo.FromSummonRequest(
+            summonRequest,
+            summonList
+        );
+
+        await summonService.ProcessSummonPayment(requestInfo, summonList);
 
         List<AtgenRedoableSummonResultUnitList> summonResult =
-            await summonService.GenerateSummonResult(
-                execCount,
-                summonRequest.SummonId,
-                summonRequest.ExecType
-            );
+            await summonService.GenerateSummonResult(requestInfo);
 
         (
             IList<AtgenResultUnitList> resultUnitList,
@@ -180,7 +178,7 @@ public class SummonController(
 
         UserSummonList userSummonList = await summonService.UpdateUserSummonInformation(
             summonList,
-            summonCount,
+            requestInfo,
             metaInfo
         );
 
@@ -197,7 +195,7 @@ public class SummonController(
                 updateDataList: updateDataList,
                 entityResult: entityResult,
                 summonTicketList: await summonService.GetSummonTicketList(),
-                resultSummonPoint: summonList.AddSummonPoint * summonCount,
+                resultSummonPoint: requestInfo.ResultSummonPoint,
                 userSummonList: [userSummonList]
             );
 

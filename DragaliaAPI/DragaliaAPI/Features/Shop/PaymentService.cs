@@ -142,8 +142,8 @@ public class PaymentService(
                     }
                     else
                     {
-                        diamondData.FreeDiamond = 0;
                         diamondData.PaidDiamond -= price - diamondData.FreeDiamond;
+                        diamondData.FreeDiamond = 0;
                     }
                 };
 

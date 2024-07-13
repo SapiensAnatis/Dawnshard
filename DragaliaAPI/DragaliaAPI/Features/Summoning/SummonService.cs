@@ -34,17 +34,20 @@ public sealed partial class SummonService(
 )
 {
     public Task<List<AtgenRedoableSummonResultUnitList>> GenerateSummonResult(
-        int numSummons,
-        int bannerId,
-        SummonExecTypes execType
+        SummonRequestInfo requestInfo
     ) =>
-        execType switch
+        requestInfo.ExecType switch
         {
             SummonExecTypes.Single
             or SummonExecTypes.DailyDeal
-                => this.GenerateSummonResultInternal(bannerId, numSummons),
-            SummonExecTypes.Tenfold => this.GenerateTenfoldResultInternal(bannerId, numTenfolds: 1),
-            _ => throw new ArgumentException($"Invalid summon type {execType}", nameof(execType)),
+                => this.GenerateSummonResultInternal(requestInfo.SummonId, requestInfo.SummonCount),
+            SummonExecTypes.Tenfold
+                => this.GenerateTenfoldResultInternal(requestInfo.SummonId, numTenfolds: 1),
+            _
+                => throw new ArgumentException(
+                    $"Invalid summon exec type {requestInfo.ExecType}",
+                    nameof(requestInfo)
+                ),
         };
 
     public Task<List<AtgenRedoableSummonResultUnitList>> GenerateRedoableSummonResult() =>
@@ -72,6 +75,13 @@ public sealed partial class SummonService(
 
         foreach (Banner banner in optionsMonitor.CurrentValue.Banners)
         {
+            DateTimeOffset now = DateTimeOffset.UtcNow;
+
+            if (!banner.GetIsCurrentlyActive())
+            {
+                continue;
+            }
+
             if (banner.Id == SummonConstants.RedoableSummonBannerId)
             {
                 continue;
@@ -317,37 +327,44 @@ public sealed partial class SummonService(
         return entity.ToBuildEventRewardEntityList();
     }
 
-    public async Task ProcessSummonPayment(
-        SummonRequestRequest summonRequest,
-        SummonList summonList
-    )
+    public async Task ProcessSummonPayment(SummonRequestInfo requestInfo, SummonList summonList)
     {
-        int execCount = summonRequest.ExecCount > 0 ? summonRequest.ExecCount : 1;
+        if (
+            requestInfo.ExecType == SummonExecTypes.DailyDeal
+            && summonList.DailyCount >= summonList.DailyLimit
+        )
+        {
+            throw new DragaliaException(
+                ResultCode.SummonDrawLimit,
+                "Unable to perform summon with SummonExecTypes.DailyDeal: limit exceeded"
+            );
+        }
 
-        int paymentCost = (summonRequest.PaymentType, summonRequest.ExecType) switch
+        int paymentCost = (requestInfo.PaymentType, requestInfo.ExecType) switch
         {
             (PaymentTypes.Diamantium, SummonExecTypes.Tenfold) => summonList.MultiDiamond,
             (PaymentTypes.Diamantium, SummonExecTypes.Single)
-                => summonList.SingleDiamond * execCount,
+                => summonList.SingleDiamond * requestInfo.ExecCount,
             (PaymentTypes.Wyrmite, SummonExecTypes.Tenfold) => summonList.MultiCrystal,
-            (PaymentTypes.Wyrmite, SummonExecTypes.Single) => summonList.SingleCrystal * execCount,
+            (PaymentTypes.Wyrmite, SummonExecTypes.Single)
+                => summonList.SingleCrystal * requestInfo.ExecCount,
             (PaymentTypes.Ticket, SummonExecTypes.Tenfold) => 1,
-            (PaymentTypes.Ticket, SummonExecTypes.Single) => execCount,
+            (PaymentTypes.Ticket, SummonExecTypes.Single) => requestInfo.ExecCount,
             (PaymentTypes.FreeDailyTenfold, SummonExecTypes.Tenfold) => 0,
             (PaymentTypes.Diamantium, SummonExecTypes.DailyDeal) => 30,
             _
                 => throw new DragaliaException(
                     ResultCode.SummonTypeUnexpected,
-                    $"Failed to calculate summon cost for payment type {summonRequest.PaymentType} and exec type {summonRequest.ExecType}"
+                    $"Failed to calculate summon cost for payment type {requestInfo.PaymentType} and exec type {requestInfo.ExecType}"
                 )
         };
 
         int entityId = 0;
 
-        if (summonRequest.PaymentType == PaymentTypes.Ticket)
+        if (requestInfo.PaymentType == PaymentTypes.Ticket)
         {
             if (
-                optionsMonitor.CurrentValue.BannerDict[summonRequest.SummonId] is
+                optionsMonitor.CurrentValue.BannerDict[requestInfo.SummonId] is
                 { RequiredTicketId: { } requiredTicket }
             )
             {
@@ -355,14 +372,14 @@ public sealed partial class SummonService(
             }
             else
             {
-                SummonTickets genericTicketId = summonRequest.ExecType switch
+                SummonTickets genericTicketId = requestInfo.ExecType switch
                 {
                     SummonExecTypes.Single => SummonTickets.SingleSummon,
                     SummonExecTypes.Tenfold => SummonTickets.TenfoldSummon,
                     _
                         => throw new DragaliaException(
                             ResultCode.CommonInvalidArgument,
-                            $"Invalid exec type {summonRequest.ExecType} for ticket summon"
+                            $"Invalid exec type {requestInfo.ExecType} for ticket summon"
                         )
                 };
 
@@ -371,8 +388,8 @@ public sealed partial class SummonService(
         }
 
         await paymentService.ProcessPayment(
-            new Entity(summonRequest.PaymentType.ToEntityType(), entityId, paymentCost),
-            summonRequest.PaymentTarget
+            new Entity(requestInfo.PaymentType.ToEntityType(), entityId, paymentCost),
+            requestInfo.PaymentTarget
         );
     }
 
@@ -502,7 +519,7 @@ public sealed partial class SummonService(
 
     public async Task<UserSummonList> UpdateUserSummonInformation(
         SummonList summonList,
-        int summonCount,
+        SummonRequestInfo requestInfo,
         SummonResultMetaInfo metaInfo
     )
     {
@@ -515,17 +532,21 @@ public sealed partial class SummonService(
             );
         }
 
-        int gainedSummonPoints = summonCount * summonList.AddSummonPoint;
-        playerBannerData.SummonPoints += gainedSummonPoints;
-        playerBannerData.SummonCount += summonCount;
+        playerBannerData.SummonPoints += requestInfo.ResultSummonPoint;
+        playerBannerData.SummonCount += requestInfo.SummonCount;
 
         if (metaInfo is { CountOfRare5Char: 0, CountOfRare5Dragon: 0 })
         {
-            playerBannerData.SummonCountSinceLastFiveStar += summonCount;
+            playerBannerData.SummonCountSinceLastFiveStar += requestInfo.SummonCount;
         }
         else
         {
             playerBannerData.SummonCountSinceLastFiveStar = 0;
+        }
+
+        if (requestInfo.ExecType == SummonExecTypes.DailyDeal)
+        {
+            playerBannerData.DailyLimitedSummonCount += requestInfo.SummonCount;
         }
 
         return new UserSummonList()
@@ -536,7 +557,7 @@ public sealed partial class SummonService(
             FreeCountRest = summonList.FreeCountRest,
             IsBeginnerCampaign = summonList.IsBeginnerCampaign,
             BeginnerCampaignCountRest = summonList.BeginnerCampaignCountRest,
-            ConsecutionCampaignCountRest = summonList.ConsecutionCampaignCountRest
+            ConsecutionCampaignCountRest = summonList.ConsecutionCampaignCountRest,
         };
     }
 
