@@ -17,7 +17,7 @@ public class LoginTest : TestFixture
     public void IDailyResetAction_HasExpectedCount()
     {
         // Update this test when adding a new reset action
-        this.Services.GetServices<IDailyResetAction>().Should().HaveCount(5);
+        this.Services.GetServices<IDailyResetAction>().Should().HaveCount(6);
     }
 
     [Fact]
@@ -521,6 +521,29 @@ public class LoginTest : TestFixture
                     IsReceiveReward = RewardStatus.Received,
                 }
             );
+    }
+
+    [Fact]
+    public async Task LoginIndex_ResetsDailySummonCount()
+    {
+        await this.AddToDatabase(
+            new DbPlayerBannerData()
+            {
+                ViewerId = this.ViewerId,
+                SummonBannerId = 1020121,
+                DailyLimitedSummonCount = 1
+            }
+        );
+
+        await this.Client.PostMsgpack<LoginIndexResponse>(
+            "login/index",
+            new LoginIndexRequest() { JwsResult = string.Empty }
+        );
+
+        this.ApiContext.PlayerBannerData.AsNoTracking()
+            .First(x => x.SummonBannerId == 1020121)
+            .DailyLimitedSummonCount.Should()
+            .Be(0);
     }
 
     [Fact]
