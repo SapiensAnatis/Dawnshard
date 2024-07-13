@@ -53,7 +53,7 @@ public class GetController : ControllerBase
         }
 
         IEnumerable<ApiGame> games = (await query.ToListAsync())
-            .Select(x => new ApiGame(x))
+            .Select(x => x.ToApiGame())
             .ToList();
 
         this.logger.LogDebug("Found {n} games", games.Count());
@@ -80,7 +80,7 @@ public class GetController : ControllerBase
         }
 
         this.logger.LogDebug("Found game: {@game}", game);
-        return this.Ok(new ApiGame(game));
+        return this.Ok(game.ToApiGame());
     }
 
     /// <summary>
@@ -93,13 +93,20 @@ public class GetController : ControllerBase
     {
         this.logger.LogDebug("Checking whether player {viewerId} is a host in any game", viewerId);
 
-        bool result = (await this.Games.ToListAsync()).Any(x =>
-            x.Players.Any(y => y.ViewerId == viewerId && y.ActorNr == 1)
-        );
+        RedisGame? game = await this.GetPlayerGame(viewerId);
 
-        this.logger.LogDebug("Result: {result}", result);
+        if (game is null)
+        {
+            this.logger.LogDebug("Game not found.");
+            return false;
+        }
 
-        return this.Ok(result);
+        // Cannot do this query as part of the expression: https://github.com/redis/redis-om-dotnet/issues/461
+        bool isHost = game.Players.FirstOrDefault(x => x.ViewerId == viewerId)?.ActorNr == 1;
+
+        this.logger.LogDebug("Result: {result}", isHost);
+
+        return this.Ok(isHost);
     }
 
     /// <summary>
@@ -112,9 +119,7 @@ public class GetController : ControllerBase
     {
         this.logger.LogDebug("Searching for game containing player {viewerId}", viewerId);
 
-        RedisGame? game = (
-            await this.Games.OrderByDescending(x => x.StartEntryTimestamp).ToListAsync()
-        ).FirstOrDefault(x => x.Players.Any(x => x.ViewerId == viewerId));
+        RedisGame? game = await this.GetPlayerGame(viewerId);
 
         if (game is null)
         {
@@ -123,6 +128,9 @@ public class GetController : ControllerBase
         }
 
         this.logger.LogDebug("Found player in game {@game}", game);
-        return new ApiGame(game);
+        return game.ToApiGame();
     }
+
+    private Task<RedisGame?> GetPlayerGame(long viewerId) =>
+        this.Games.Where(x => x.Players.Any(y => y.ViewerId == viewerId)).FirstOrDefaultAsync();
 }

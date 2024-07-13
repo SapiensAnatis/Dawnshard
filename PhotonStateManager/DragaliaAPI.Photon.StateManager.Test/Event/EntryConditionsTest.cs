@@ -43,25 +43,18 @@ public class EntryConditionsTest : TestFixture
                 StartEntryTime = DateTimeOffset.UtcNow,
                 EntryConditions = new()
                 {
-                    UnacceptedElementTypeList = new List<int>() { 2, 3, 4, 5 },
-                    UnacceptedWeaponTypeList = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 },
+                    UnacceptedElementTypeList = [2, 3, 4, 5],
+                    UnacceptedWeaponTypeList = [1, 2, 3, 4, 5, 6, 7, 8],
                     RequiredPartyPower = 11700,
                     ObjectiveTextId = 1,
                 },
-                Players = new List<Player>()
-                {
-                    new()
-                    {
-                        ViewerId = 2,
-                        PartyNoList = new List<int>() { 40 }
-                    }
-                }
+                Players = [new() { ViewerId = 2, PartyNoList = [40] }]
             };
         EntryConditions newConditions =
             new()
             {
-                UnacceptedElementTypeList = new List<int>() { 1 },
-                UnacceptedWeaponTypeList = new List<int>() { 9 },
+                UnacceptedElementTypeList = [1],
+                UnacceptedWeaponTypeList = [9],
                 RequiredPartyPower = 12000,
                 ObjectiveTextId = 2,
             };

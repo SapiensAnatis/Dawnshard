@@ -40,24 +40,16 @@ public class GameLeaveTest : TestFixture
                 StartEntryTime = DateTimeOffset.UtcNow,
                 EntryConditions = new()
                 {
-                    UnacceptedElementTypeList = new List<int>() { 2, 3, 4, 5 },
-                    UnacceptedWeaponTypeList = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 },
+                    UnacceptedElementTypeList = [2, 3, 4, 5],
+                    UnacceptedWeaponTypeList = [1, 2, 3, 4, 5, 6, 7, 8],
                     RequiredPartyPower = 11700,
                     ObjectiveTextId = 1,
                 },
-                Players = new List<Player>()
-                {
-                    new()
-                    {
-                        ViewerId = 2,
-                        PartyNoList = new List<int>() { 40 }
-                    },
-                    new()
-                    {
-                        ViewerId = 5,
-                        PartyNoList = new List<int>() { 20 }
-                    }
-                }
+                Players =
+                [
+                    new() { ViewerId = 2, PartyNoList = [40] },
+                    new() { ViewerId = 5, PartyNoList = [20] }
+                ]
             };
 
         await this.RedisConnectionProvider.RedisCollection<RedisGame>().InsertAsync(game);
@@ -78,11 +70,7 @@ public class GameLeaveTest : TestFixture
             .BeEquivalentTo(
                 new List<Player>()
                 {
-                    new()
-                    {
-                        ViewerId = 2,
-                        PartyNoList = new List<int>() { 40 }
-                    }
+                    new() { ViewerId = 2, PartyNoList = [40] }
                 }
             );
         storedGame!.MatchingType.Should().Be(MatchingTypes.Anyone);
@@ -102,19 +90,12 @@ public class GameLeaveTest : TestFixture
                 StartEntryTime = DateTimeOffset.UtcNow,
                 EntryConditions = new()
                 {
-                    UnacceptedElementTypeList = new List<int>() { 2, 3, 4, 5 },
-                    UnacceptedWeaponTypeList = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 },
+                    UnacceptedElementTypeList = [2, 3, 4, 5],
+                    UnacceptedWeaponTypeList = [1, 2, 3, 4, 5, 6, 7, 8],
                     RequiredPartyPower = 11700,
                     ObjectiveTextId = 1,
                 },
-                Players = new List<Player>()
-                {
-                    new()
-                    {
-                        ViewerId = 5,
-                        PartyNoList = new List<int>() { 20 }
-                    }
-                }
+                Players = [new() { ViewerId = 5, PartyNoList = [20] }]
             };
 
         await this.RedisConnectionProvider.RedisCollection<RedisGame>().InsertAsync(game);

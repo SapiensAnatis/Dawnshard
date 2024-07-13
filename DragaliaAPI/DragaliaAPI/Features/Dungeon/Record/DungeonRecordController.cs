@@ -95,7 +95,7 @@ public class DungeonRecordController(
         (
             IEnumerable<UserSupportList> helperList,
             IEnumerable<AtgenHelperDetailList> helperDetailList
-        ) = await dungeonRecordHelperService.ProcessHelperDataMulti();
+        ) = await dungeonRecordHelperService.ProcessHelperDataMulti(request.ConnectingViewerIdList);
 
         ingameResultData.HelperList = helperList;
         ingameResultData.HelperDetailList = helperDetailList;

@@ -646,6 +646,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
 
             deserialized["connecting_viewer_id_list"] = this
                 .PluginHost.GameActors.Where(x => x.ActorNr != actorNr)
+                .OrderBy(x => x.ActorNr)
                 .Select(x => x.GetViewerId())
                 .ToArray();
 

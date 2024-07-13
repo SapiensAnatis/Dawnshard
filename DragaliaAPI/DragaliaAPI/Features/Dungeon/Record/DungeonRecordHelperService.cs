@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -11,7 +12,7 @@ namespace DragaliaAPI.Features.Dungeon.Record;
 
 public class DungeonRecordHelperService(
     IPlayerIdentityService playerIdentityService,
-    IUserDataRepository userDataRepository,
+    ApiContext apiContext,
     IHelperService helperService,
     IMatchingService matchingService,
     ILogger<DungeonRecordHelperService> logger
@@ -49,26 +50,36 @@ public class DungeonRecordHelperService(
         return (helperList, helperDetailList);
     }
 
-    // TODO: test with empty weapon / dragon / print slots / etc
     public async Task<(
         IEnumerable<UserSupportList> HelperList,
         IEnumerable<AtgenHelperDetailList> HelperDetailList
     )> ProcessHelperDataMulti()
     {
-        IEnumerable<PhotonPlayer> teammates = await matchingService.GetTeammates();
+        List<long> connectingViewerIdList = (await matchingService.GetTeammates())
+            .Select(x => x.ViewerId)
+            .ToList();
 
+        return await this.ProcessHelperDataMulti(connectingViewerIdList);
+    }
+
+    // TODO: test with empty weapon / dragon / print slots / etc
+    public async Task<(
+        IEnumerable<UserSupportList> HelperList,
+        IEnumerable<AtgenHelperDetailList> HelperDetailList
+    )> ProcessHelperDataMulti(IList<long> connectingViewerIdList)
+    {
         IEnumerable<UserSupportList> teammateSupportLists = await this.GetTeammateSupportList(
-            teammates
+            connectingViewerIdList
         );
 
         logger.LogDebug("Retrieved teammate support list {@supportList}", teammateSupportLists);
 
         // TODO: Replace with friend system once implemented
-        IEnumerable<AtgenHelperDetailList> teammateDetailLists = teammates.Select(
+        IEnumerable<AtgenHelperDetailList> teammateDetailLists = connectingViewerIdList.Select(
             x => new AtgenHelperDetailList()
             {
                 IsFriend = true,
-                ViewerId = (ulong)x.ViewerId,
+                ViewerId = (ulong)x,
                 GetManaPoint = 50,
                 ApplySendStatus = 0,
             }
@@ -77,21 +88,22 @@ public class DungeonRecordHelperService(
         return (teammateSupportLists, teammateDetailLists);
     }
 
-    private async Task<IEnumerable<UserSupportList>> GetTeammateSupportList(
-        IEnumerable<PhotonPlayer> teammates
+    private async Task<List<UserSupportList>> GetTeammateSupportList(
+        IList<long> connectingViewerIdList
     )
     {
-        List<UserSupportList> helperList = new();
+        List<UserSupportList> helperList = [];
 
-        Dictionary<long, DbPlayerUserData> userDetails = await userDataRepository
-            .GetMultipleViewerData(teammates.Select(x => x.ViewerId))
-            .ToDictionaryAsync(x => x.ViewerId, x => x);
+        var userDetails = await apiContext
+            .PlayerUserData.IgnoreQueryFilters()
+            .Where(x => connectingViewerIdList.Contains(x.ViewerId))
+            .ToDictionaryAsync(x => x.ViewerId, x => new { x.ViewerId, x.MainPartyNo });
 
-        foreach (PhotonPlayer player in teammates)
+        foreach (long viewerId in connectingViewerIdList)
         {
-            if (!userDetails.TryGetValue(player.ViewerId, out DbPlayerUserData? userData))
+            if (!userDetails.TryGetValue(viewerId, out var userData))
             {
-                logger.LogWarning("No user details returned for player {@player}", player);
+                logger.LogWarning("No user details returned for viewer ID {ViewerId}", viewerId);
                 continue;
             }
 
@@ -101,18 +113,15 @@ public class DungeonRecordHelperService(
 
             try
             {
-                UserSupportList leadUnit = await helperService.GetLeadUnit(
-                    player.PartyNoList.First()
-                );
-
+                UserSupportList leadUnit = await helperService.GetLeadUnit(userData.MainPartyNo);
                 helperList.Add(leadUnit);
             }
             catch (Exception e)
             {
                 logger.LogWarning(
                     e,
-                    "Failed to populate multiplayer support info for player {@player}",
-                    player
+                    "Failed to populate multiplayer support info for viewer ID {ViewerId}",
+                    viewerId
                 );
             }
         }

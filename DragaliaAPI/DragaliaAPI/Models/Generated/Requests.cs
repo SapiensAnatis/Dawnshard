@@ -1301,7 +1301,7 @@ public partial class DungeonRecordRecordMultiRequest
     public DungeonRecordRecordMultiRequest(
         PlayRecord playRecord,
         string dungeonKey,
-        IList<ulong> connectingViewerIdList,
+        IList<long> connectingViewerIdList,
         int noPlayFlg
     )
     {

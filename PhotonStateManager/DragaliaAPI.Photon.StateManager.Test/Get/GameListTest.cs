@@ -18,86 +18,65 @@ public class GameListTest : TestFixture
     public async Task GameList_GetsVisibleAndOpenGames()
     {
         List<RedisGame> games =
+        [
             new()
             {
-                // Should be returned
-                new()
+                RoomId = 12345,
+                Name = "639d263a-e05a-4432-952f-fa941e7f7f40",
+                MatchingCompatibleId = 36,
+                MatchingType = MatchingTypes.Anyone,
+                QuestId = 301010103,
+                StartEntryTime = DateTimeOffset.UtcNow,
+                EntryConditions = new()
                 {
-                    RoomId = 12345,
-                    Name = "639d263a-e05a-4432-952f-fa941e7f7f40",
-                    MatchingCompatibleId = 36,
-                    MatchingType = MatchingTypes.Anyone,
-                    QuestId = 301010103,
-                    StartEntryTime = DateTimeOffset.UtcNow,
-                    EntryConditions = new()
-                    {
-                        UnacceptedElementTypeList = new List<int>() { 2, 3, 4, 5 },
-                        UnacceptedWeaponTypeList = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 },
-                        RequiredPartyPower = 11700,
-                        ObjectiveTextId = 1,
-                    },
-                    Players = new List<Player>()
-                    {
-                        new()
-                        {
-                            ViewerId = 2,
-                            PartyNoList = new List<int>() { 40 }
-                        }
-                    }
+                    UnacceptedElementTypeList = [2, 3, 4, 5],
+                    UnacceptedWeaponTypeList = [1, 2, 3, 4, 5, 6, 7, 8],
+                    RequiredPartyPower = 11700,
+                    ObjectiveTextId = 1,
                 },
-                // Non-public matching
-                new()
-                {
-                    RoomId = 12345,
-                    Name = "0023679c-c449-45bd-881d-3e29a9d982ac",
-                    MatchingCompatibleId = 36,
-                    MatchingType = MatchingTypes.ById,
-                    QuestId = 301010103,
-                    StartEntryTime = DateTimeOffset.UtcNow,
-                    EntryConditions = new()
-                    {
-                        UnacceptedElementTypeList = new List<int>() { 2, 3, 4, 5 },
-                        UnacceptedWeaponTypeList = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 },
-                        RequiredPartyPower = 11700,
-                        ObjectiveTextId = 1,
-                    },
-                    Players = new List<Player>()
-                    {
-                        new()
-                        {
-                            ViewerId = 3,
-                            PartyNoList = new List<int>() { 40 }
-                        }
-                    }
-                },
-                // Visible = false
+                Players = (List<RedisPlayer>)[new() { ViewerId = 2, PartyNoList = [40] }]
+            },
+            // Non-public matching
 
-                new()
+            new()
+            {
+                RoomId = 12345,
+                Name = "0023679c-c449-45bd-881d-3e29a9d982ac",
+                MatchingCompatibleId = 36,
+                MatchingType = MatchingTypes.ById,
+                QuestId = 301010103,
+                StartEntryTime = DateTimeOffset.UtcNow,
+                EntryConditions = new()
                 {
-                    RoomId = 12345,
-                    Name = "04e2c5dd-055c-4c3b-85d0-29b4ea90b03e",
-                    MatchingCompatibleId = 36,
-                    MatchingType = MatchingTypes.Anyone,
-                    QuestId = 301010103,
-                    StartEntryTime = DateTimeOffset.UtcNow,
-                    EntryConditions = new()
-                    {
-                        UnacceptedElementTypeList = new List<int>() { 2, 3, 4, 5 },
-                        UnacceptedWeaponTypeList = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 },
-                        RequiredPartyPower = 11700,
-                        ObjectiveTextId = 1,
-                    },
-                    Players = new List<Player>()
-                    {
-                        new()
-                        {
-                            ViewerId = 3,
-                            PartyNoList = new List<int>() { 40 }
-                        }
-                    },
-                    Visible = false,
+                    UnacceptedElementTypeList = [2, 3, 4, 5],
+                    UnacceptedWeaponTypeList = [1, 2, 3, 4, 5, 6, 7, 8],
+                    RequiredPartyPower = 11700,
+                    ObjectiveTextId = 1,
                 },
-            };
+                Players = [new() { ViewerId = 3, PartyNoList = [40] }]
+            },
+            // Visible = false
+
+
+            new()
+            {
+                RoomId = 12345,
+                Name = "04e2c5dd-055c-4c3b-85d0-29b4ea90b03e",
+                MatchingCompatibleId = 36,
+                MatchingType = MatchingTypes.Anyone,
+                QuestId = 301010103,
+                StartEntryTime = DateTimeOffset.UtcNow,
+                EntryConditions = new()
+                {
+                    UnacceptedElementTypeList = [2, 3, 4, 5],
+                    UnacceptedWeaponTypeList = [1, 2, 3, 4, 5, 6, 7, 8],
+                    RequiredPartyPower = 11700,
+                    ObjectiveTextId = 1,
+                },
+                Players = (List<RedisPlayer>)[new() { ViewerId = 3, PartyNoList = [40] }],
+                Visible = false,
+            }
+        ];
 
         await this.RedisConnectionProvider.RedisCollection<RedisGame>().InsertAsync(games);
 
@@ -107,64 +86,49 @@ public class GameListTest : TestFixture
         (await response.Content.ReadFromJsonAsync<IEnumerable<ApiGame>>())
             .Should()
             .HaveCount(1)
-            .And.BeEquivalentTo(new List<ApiGame>() { new(games[0]) });
+            .And.BeEquivalentTo([games[0].ToApiGame()]);
     }
 
     [Fact]
     public async Task GameList_QuestIdSpecified_FiltersByQuest()
     {
         List<RedisGame> games =
+        [
             new()
             {
-                new()
+                RoomId = 12345,
+                Name = "d4592641-6f07-46d9-8b45-21059b27d1e2",
+                MatchingCompatibleId = 36,
+                MatchingType = MatchingTypes.Anyone,
+                QuestId = 301010103,
+                StartEntryTime = DateTimeOffset.UtcNow,
+                EntryConditions = new()
                 {
-                    RoomId = 12345,
-                    Name = "d4592641-6f07-46d9-8b45-21059b27d1e2",
-                    MatchingCompatibleId = 36,
-                    MatchingType = MatchingTypes.Anyone,
-                    QuestId = 301010103,
-                    StartEntryTime = DateTimeOffset.UtcNow,
-                    EntryConditions = new()
-                    {
-                        UnacceptedElementTypeList = new List<int>() { 2, 3, 4, 5 },
-                        UnacceptedWeaponTypeList = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 },
-                        RequiredPartyPower = 11700,
-                        ObjectiveTextId = 1,
-                    },
-                    Players = new List<Player>()
-                    {
-                        new()
-                        {
-                            ViewerId = 2,
-                            PartyNoList = new List<int>() { 40 }
-                        }
-                    }
+                    UnacceptedElementTypeList = [2, 3, 4, 5],
+                    UnacceptedWeaponTypeList = [1, 2, 3, 4, 5, 6, 7, 8],
+                    RequiredPartyPower = 11700,
+                    ObjectiveTextId = 1,
                 },
-                new()
+                Players = [new() { ViewerId = 2, PartyNoList = [40] }]
+            },
+            new()
+            {
+                RoomId = 12345,
+                Name = "c7c494cc-0ffc-46d6-a19b-cbfcad903225",
+                MatchingCompatibleId = 36,
+                MatchingType = MatchingTypes.Anyone,
+                QuestId = 219010102,
+                StartEntryTime = DateTimeOffset.UtcNow,
+                EntryConditions = new()
                 {
-                    RoomId = 12345,
-                    Name = "c7c494cc-0ffc-46d6-a19b-cbfcad903225",
-                    MatchingCompatibleId = 36,
-                    MatchingType = MatchingTypes.Anyone,
-                    QuestId = 219010102,
-                    StartEntryTime = DateTimeOffset.UtcNow,
-                    EntryConditions = new()
-                    {
-                        UnacceptedElementTypeList = new List<int>() { 2, 3, 4, 5 },
-                        UnacceptedWeaponTypeList = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 },
-                        RequiredPartyPower = 11700,
-                        ObjectiveTextId = 1,
-                    },
-                    Players = new List<Player>()
-                    {
-                        new()
-                        {
-                            ViewerId = 3,
-                            PartyNoList = new List<int>() { 40 }
-                        }
-                    }
+                    UnacceptedElementTypeList = [2, 3, 4, 5],
+                    UnacceptedWeaponTypeList = [1, 2, 3, 4, 5, 6, 7, 8],
+                    RequiredPartyPower = 11700,
+                    ObjectiveTextId = 1,
                 },
-            };
+                Players = [new() { ViewerId = 3, PartyNoList = [40] }]
+            }
+        ];
 
         await this.RedisConnectionProvider.RedisCollection<RedisGame>().InsertAsync(games);
 
@@ -176,6 +140,6 @@ public class GameListTest : TestFixture
         (await response.Content.ReadFromJsonAsync<IEnumerable<ApiGame>>())
             .Should()
             .HaveCount(1)
-            .And.BeEquivalentTo(new List<ApiGame>() { new(games[1]) });
+            .And.BeEquivalentTo(new List<ApiGame>() { games[1].ToApiGame() });
     }
 }
