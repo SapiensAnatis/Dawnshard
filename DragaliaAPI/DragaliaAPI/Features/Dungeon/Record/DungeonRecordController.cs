@@ -92,13 +92,24 @@ public class DungeonRecordController(
             session
         );
 
-        (
-            IEnumerable<UserSupportList> helperList,
-            IEnumerable<AtgenHelperDetailList> helperDetailList
-        ) = await dungeonRecordHelperService.ProcessHelperDataMulti(request.ConnectingViewerIdList);
+        if (request.ConnectingViewerIdList is not null)
+        {
+            ingameResultData.RewardRecord.FirstMeeting =
+                dungeonRecordRewardService.ProcessFirstMeetingRewards(
+                    request.ConnectingViewerIdList
+                );
 
-        ingameResultData.HelperList = helperList;
-        ingameResultData.HelperDetailList = helperDetailList;
+            (ingameResultData.HelperList, ingameResultData.HelperDetailList) =
+                await dungeonRecordHelperService.ProcessHelperDataMulti(
+                    request.ConnectingViewerIdList
+                );
+        }
+        else
+        {
+            (ingameResultData.HelperList, ingameResultData.HelperDetailList) =
+                await dungeonRecordHelperService.ProcessHelperDataMulti();
+        }
+
         ingameResultData.PlayType = QuestPlayType.Multi;
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
@@ -113,9 +124,6 @@ public class DungeonRecordController(
                 session.QuestData.Gid
             );
         }
-
-        response.IngameResultData.RewardRecord.FirstMeeting =
-            dungeonRecordRewardService.ProcessFirstMeetingRewards(request.ConnectingViewerIdList);
 
         await dungeonService.RemoveSession(request.DungeonKey, cancellationToken);
 
