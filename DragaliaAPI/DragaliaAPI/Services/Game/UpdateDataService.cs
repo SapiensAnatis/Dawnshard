@@ -157,6 +157,13 @@ public class UpdateDataService(
                     list.SummonPointList ??= [];
                     list.SummonPointList.Add(bannerData.MapToSummonPointList());
                     break;
+                case DbPlayerDiamondData diamondData:
+                    list.DiamondData = new()
+                    {
+                        FreeDiamond = diamondData.FreeDiamond,
+                        PaidDiamond = diamondData.PaidDiamond,
+                    };
+                    break;
                 default:
                     continue;
             }

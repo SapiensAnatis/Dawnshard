@@ -1,9 +1,11 @@
 ﻿using DragaliaAPI.Controllers;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Login.Actions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Wall;
+using DragaliaAPI.Mapping;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -16,7 +18,7 @@ namespace DragaliaAPI.Features.Login;
 [Route("login")]
 [BypassDailyReset]
 public class LoginController(
-    IUserDataRepository userDataRepository,
+    ApiContext apiContext,
     IUpdateDataService updateDataService,
     IEnumerable<IDailyResetAction> resetActions,
     ILogger<LoginController> logger,
@@ -42,8 +44,11 @@ public class LoginController(
 
         // TODO: Implement daily login bonuses/notifications/resets (status: daily login bonus done)
         DbPlayerUserData userData =
-            await userDataRepository.UserData.FirstOrDefaultAsync(cancellationToken)
-            ?? throw new DragaliaException(ResultCode.CommonDataNotFoundError);
+            await apiContext.PlayerUserData.FirstOrDefaultAsync(cancellationToken)
+            ?? throw new DragaliaException(
+                ResultCode.CommonDataNotFoundError,
+                "No player user data found"
+            );
 
         if (userData.LastLoginTime < dateTimeProvider.GetLastDailyReset())
         {
@@ -66,6 +71,17 @@ public class LoginController(
         // NOTE: Cancelling the request + savefile updates may cause issues with request loops on debug builds,
         // but it should be fine on the actual server.
         resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+
+        // Hack to show diamantium on login. This is normally returned by a BaaS endpoint which we don't control, but
+        // you can set it via the update_data_list.
+        resp.UpdateDataList.DiamondData =
+            await apiContext
+                .PlayerDiamondData.ProjectToDiamondData()
+                .FirstOrDefaultAsync(cancellationToken)
+            ?? throw new DragaliaException(
+                ResultCode.CommonDataNotFoundError,
+                "No diamond data found"
+            );
 
         resp.EntityResult = rewardService.GetEntityResult();
         resp.ServerTime = dateTimeProvider.GetUtcNow();

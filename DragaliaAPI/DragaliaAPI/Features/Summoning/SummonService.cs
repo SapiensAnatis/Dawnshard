@@ -334,6 +334,7 @@ public sealed partial class SummonService(
             (PaymentTypes.Ticket, SummonExecTypes.Tenfold) => 1,
             (PaymentTypes.Ticket, SummonExecTypes.Single) => execCount,
             (PaymentTypes.FreeDailyTenfold, SummonExecTypes.Tenfold) => 0,
+            (PaymentTypes.Diamantium, SummonExecTypes.DailyDeal) => 30,
             _
                 => throw new DragaliaException(
                     ResultCode.SummonTypeUnexpected,

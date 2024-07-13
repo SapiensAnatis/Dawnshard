@@ -2,7 +2,6 @@
 using DragaliaAPI.Features.Dungeon.AutoRepeat;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Middleware;
-using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -16,6 +15,7 @@ public class DungeonRecordController(
     IDungeonRecordService dungeonRecordService,
     IDungeonRecordDamageService dungeonRecordDamageService,
     IDungeonRecordHelperService dungeonRecordHelperService,
+    IDungeonRecordRewardService dungeonRecordRewardService,
     IDungeonService dungeonService,
     ITimeAttackService timeAttackService,
     IAutoRepeatService autoRepeatService,
@@ -113,6 +113,9 @@ public class DungeonRecordController(
                 session.QuestData.Gid
             );
         }
+
+        response.IngameResultData.RewardRecord.FirstMeeting =
+            dungeonRecordRewardService.ProcessFirstMeetingRewards(request.ConnectingViewerIdList);
 
         await dungeonService.RemoveSession(request.DungeonKey, cancellationToken);
 

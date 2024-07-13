@@ -92,4 +92,6 @@ public class DbPlayer
     public List<DbEmblem> Emblems { get; set; } = [];
 
     public DbWallRewardDate? WallRewardDate { get; set; }
+
+    public DbPlayerDiamondData? DiamondData { get; set; }
 }

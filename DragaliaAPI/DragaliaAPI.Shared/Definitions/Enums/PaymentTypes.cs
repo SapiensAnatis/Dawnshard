@@ -38,6 +38,7 @@ public static class PaymentTypesExtensions
             PaymentTypes.DewPoint => EntityTypes.Dew,
             PaymentTypes.Ticket => EntityTypes.SummonTicket,
             PaymentTypes.HalidomHustleHammer => EntityTypes.HustleHammer,
+            PaymentTypes.Diamantium => EntityTypes.FreeDiamantium,
             _ => EntityTypes.None
         };
     }
