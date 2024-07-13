@@ -107,6 +107,8 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
 
     public DbSet<DbPlayerUseItem> PlayerUseItems { get; set; } = null!;
 
+    public DbSet<DbPlayerDiamondData> PlayerDiamondData { get; set; } = null!;
+
     public DbSet<DbLoginBonus> LoginBonuses { get; set; } = null!;
 
     public DbSet<DbSummonTicket> PlayerSummonTickets { get; set; } = null!;
@@ -201,6 +203,10 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
 
         modelBuilder
             .Entity<DbFortBuild>()
+            .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
+
+        modelBuilder
+            .Entity<DbPlayerDiamondData>()
             .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
     }
 }

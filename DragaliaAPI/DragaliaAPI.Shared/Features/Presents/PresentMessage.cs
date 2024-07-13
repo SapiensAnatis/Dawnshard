@@ -91,6 +91,13 @@ public enum PresentMessage
     FirstViewReward = 2010005,
 
     /// <summary>
+    /// Title: Social Reward
+    /// <br/>
+    /// Description: For playing co-op with {0} new player(s).
+    /// </summary>
+    SocialReward = 2010006,
+
+    /// <summary>
     /// Title: Daily Bonus
     /// <br/>
     /// Description: A daily bonus reward from {0}.

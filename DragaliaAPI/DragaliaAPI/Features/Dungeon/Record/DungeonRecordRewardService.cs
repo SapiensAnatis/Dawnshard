@@ -2,16 +2,18 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Features.Presents;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
 public class DungeonRecordRewardService(
     IQuestCompletionService questCompletionService,
     IRewardService rewardService,
+    IPresentService presentService,
     IAbilityCrestMultiplierService abilityCrestMultiplierService,
     IEventDropService eventDropService,
     IMissionProgressionService missionProgressionService,
@@ -168,6 +170,34 @@ public class DungeonRecordRewardService(
             PassiveUpList: passiveUpList,
             EventDrops: eventDrops
         );
+    }
+
+    public AtgenFirstMeeting ProcessFirstMeetingRewards(IList<long> connectingViewerIdList)
+    {
+        // TODO: Replace with social reward check, including limited total quantity and actual checks that
+        // it is the first meeting: https://dragalialost.wiki/w/Co-op#Co-op_Social_Rewards
+        // This is just a stub implementation to encourage co-op play.
+        int quantity = 100 * connectingViewerIdList.Count;
+
+        presentService.AddPresent(
+            new Present.Present(
+                MessageId: PresentMessage.SocialReward,
+                EntityType: EntityTypes.FreeDiamantium,
+                EntityId: 0,
+                EntityQuantity: quantity
+            )
+            {
+                MessageParamValues = [connectingViewerIdList.Count]
+            }
+        );
+
+        return new AtgenFirstMeeting()
+        {
+            Id = 0,
+            Type = EntityTypes.FreeDiamantium,
+            Headcount = connectingViewerIdList.Count,
+            TotalQuantity = quantity,
+        };
     }
 
     public record EventRewardData(

@@ -2,7 +2,6 @@
 using DragaliaAPI.Features.Dungeon.AutoRepeat;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Middleware;
-using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -16,6 +15,7 @@ public class DungeonRecordController(
     IDungeonRecordService dungeonRecordService,
     IDungeonRecordDamageService dungeonRecordDamageService,
     IDungeonRecordHelperService dungeonRecordHelperService,
+    IDungeonRecordRewardService dungeonRecordRewardService,
     IDungeonService dungeonService,
     ITimeAttackService timeAttackService,
     IAutoRepeatService autoRepeatService,
@@ -92,13 +92,24 @@ public class DungeonRecordController(
             session
         );
 
-        (
-            IEnumerable<UserSupportList> helperList,
-            IEnumerable<AtgenHelperDetailList> helperDetailList
-        ) = await dungeonRecordHelperService.ProcessHelperDataMulti(request.ConnectingViewerIdList);
+        if (request.ConnectingViewerIdList is not null)
+        {
+            ingameResultData.RewardRecord.FirstMeeting =
+                dungeonRecordRewardService.ProcessFirstMeetingRewards(
+                    request.ConnectingViewerIdList
+                );
 
-        ingameResultData.HelperList = helperList;
-        ingameResultData.HelperDetailList = helperDetailList;
+            (ingameResultData.HelperList, ingameResultData.HelperDetailList) =
+                await dungeonRecordHelperService.ProcessHelperDataMulti(
+                    request.ConnectingViewerIdList
+                );
+        }
+        else
+        {
+            (ingameResultData.HelperList, ingameResultData.HelperDetailList) =
+                await dungeonRecordHelperService.ProcessHelperDataMulti();
+        }
+
         ingameResultData.PlayType = QuestPlayType.Multi;
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);

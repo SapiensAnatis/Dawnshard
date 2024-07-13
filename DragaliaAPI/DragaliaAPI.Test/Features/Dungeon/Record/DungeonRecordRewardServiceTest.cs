@@ -4,6 +4,7 @@ using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -17,6 +18,7 @@ public class DungeonRecordRewardServiceTest
 {
     private readonly Mock<IQuestCompletionService> mockQuestCompletionService;
     private readonly Mock<IRewardService> mockRewardService;
+    private readonly Mock<IPresentService> mockPresentService;
     private readonly Mock<IAbilityCrestMultiplierService> mockAbilityCrestMultiplierService;
     private readonly Mock<IEventDropService> mockEventDropService;
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
@@ -29,6 +31,7 @@ public class DungeonRecordRewardServiceTest
     {
         this.mockQuestCompletionService = new(MockBehavior.Strict);
         this.mockRewardService = new(MockBehavior.Strict);
+        this.mockPresentService = new(MockBehavior.Strict);
         this.mockAbilityCrestMultiplierService = new(MockBehavior.Strict);
         this.mockEventDropService = new(MockBehavior.Strict);
         this.mockMissionProgressionService = new(MockBehavior.Strict);
@@ -38,6 +41,7 @@ public class DungeonRecordRewardServiceTest
         this.dungeonRecordRewardService = new DungeonRecordRewardService(
             this.mockQuestCompletionService.Object,
             this.mockRewardService.Object,
+            this.mockPresentService.Object,
             this.mockAbilityCrestMultiplierService.Object,
             this.mockEventDropService.Object,
             this.mockMissionProgressionService.Object,

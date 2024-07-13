@@ -19,4 +19,6 @@ public interface IDungeonRecordRewardService
         PlayRecord playRecord,
         DungeonSession session
     );
+
+    AtgenFirstMeeting ProcessFirstMeetingRewards(IList<long> connectingViewerIdList);
 }

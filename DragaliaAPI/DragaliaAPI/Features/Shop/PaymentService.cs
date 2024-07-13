@@ -131,11 +131,23 @@ public class PaymentService(
                 break;
             case EntityTypes.FreeDiamantium:
             case EntityTypes.PaidDiamantium:
-                logger.LogDebug("Tried to pay with diamantium -- this is not supported.");
-                throw new DragaliaException(
-                    ResultCode.ShopPaymentTypeInvalid,
-                    "Diamantium is not supported."
-                );
+                DbPlayerDiamondData diamondData = await apiContext.PlayerDiamondData.FirstAsync();
+
+                quantity = diamondData.FreeDiamond + diamondData.PaidDiamond;
+                updater = () =>
+                {
+                    if (diamondData.FreeDiamond >= price)
+                    {
+                        diamondData.FreeDiamond -= price;
+                    }
+                    else
+                    {
+                        diamondData.FreeDiamond = 0;
+                        diamondData.PaidDiamond -= price - diamondData.FreeDiamond;
+                    }
+                };
+
+                break;
             default:
                 logger.LogWarning("Unknown/invalid entity type for payment.");
                 throw new DragaliaException(

@@ -575,7 +575,8 @@ public class SavefileService : ISavefileService
             {
                 AccountId = deviceAccountId,
                 SavefileVersion = this.maxSavefileVersion,
-                UserData = new()
+                UserData = new(),
+                DiamondData = new(),
             };
 
         this.apiContext.Players.Add(player);

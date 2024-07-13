@@ -104,6 +104,19 @@ public class GlobalQueryFilterTest : TestFixture
     public async Task DbFortBuild_HasGlobalQueryFilter() =>
         await TestGlobalQueryFilter<DbFortBuild>();
 
+    [Fact]
+    public async Task DbPlayerDiamondData_HasGlobalQueryFilter()
+    {
+        this.ApiContext.Players.Add(new() { ViewerId = this.ViewerId + 1, AccountId = "other" });
+        this.ApiContext.PlayerDiamondData.Add(new() { ViewerId = this.ViewerId + 1 });
+        await this.ApiContext.SaveChangesAsync();
+
+        (await this.ApiContext.PlayerDiamondData.AsNoTracking().ToListAsync())
+            .Should()
+            .HaveCount(1)
+            .And.AllSatisfy(x => x.ViewerId.Should().Be(this.ViewerId));
+    }
+
     private async Task TestGlobalQueryFilter<TEntity>()
         where TEntity : class, IDbPlayerData
     {
