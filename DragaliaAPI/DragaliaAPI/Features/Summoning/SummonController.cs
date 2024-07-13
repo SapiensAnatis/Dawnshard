@@ -163,11 +163,7 @@ public class SummonController(
         await summonService.ProcessSummonPayment(requestInfo, summonList);
 
         List<AtgenRedoableSummonResultUnitList> summonResult =
-            await summonService.GenerateSummonResult(
-                requestInfo.SummonCount,
-                requestInfo.SummonId,
-                requestInfo.ExecType
-            );
+            await summonService.GenerateSummonResult(requestInfo);
 
         (
             IList<AtgenResultUnitList> resultUnitList,

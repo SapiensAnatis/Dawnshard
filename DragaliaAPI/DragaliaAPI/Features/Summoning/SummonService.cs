@@ -34,17 +34,20 @@ public sealed partial class SummonService(
 )
 {
     public Task<List<AtgenRedoableSummonResultUnitList>> GenerateSummonResult(
-        int numSummons,
-        int bannerId,
-        SummonExecTypes execType
+        SummonRequestInfo requestInfo
     ) =>
-        execType switch
+        requestInfo.ExecType switch
         {
             SummonExecTypes.Single
             or SummonExecTypes.DailyDeal
-                => this.GenerateSummonResultInternal(bannerId, numSummons),
-            SummonExecTypes.Tenfold => this.GenerateTenfoldResultInternal(bannerId, numTenfolds: 1),
-            _ => throw new ArgumentException($"Invalid summon type {execType}", nameof(execType)),
+                => this.GenerateSummonResultInternal(requestInfo.SummonId, requestInfo.SummonCount),
+            SummonExecTypes.Tenfold
+                => this.GenerateTenfoldResultInternal(requestInfo.SummonId, numTenfolds: 1),
+            _
+                => throw new ArgumentException(
+                    $"Invalid summon exec type {requestInfo.ExecType}",
+                    nameof(requestInfo)
+                ),
         };
 
     public Task<List<AtgenRedoableSummonResultUnitList>> GenerateRedoableSummonResult() =>
@@ -74,7 +77,7 @@ public sealed partial class SummonService(
         {
             DateTimeOffset now = DateTimeOffset.UtcNow;
 
-            if (banner.Start > now || banner.End < now)
+            if (!banner.GetIsCurrentlyActive())
             {
                 continue;
             }
