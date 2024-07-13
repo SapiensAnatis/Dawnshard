@@ -1,5 +1,4 @@
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
