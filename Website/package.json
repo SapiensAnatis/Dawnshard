@@ -29,7 +29,7 @@
     "@types/eslint": "8.56.10",
     "@types/node": "20.14.10",
     "@typescript-eslint/eslint-plugin": "8.0.0-alpha.41",
-    "@typescript-eslint/parser": "8.0.0-alpha.41",
+    "@typescript-eslint/parser": "8.0.0-alpha.44",
     "autoprefixer": "10.4.19",
     "dotenv": "16.4.5",
     "eslint": "9.6.0",
