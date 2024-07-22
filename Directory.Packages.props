@@ -39,10 +39,7 @@
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
     <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="8.0.0" />
     <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
-    <PackageVersion Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageVersion>
+    <PackageVersion Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.3" />
     <PackageVersion Include="MudBlazor" Version="6.20.0" />
     <PackageVersion Include="PolySharp" Version="1.14.1" />
     <PackageVersion Include="Riok.Mapperly" Version="3.6.0" />
