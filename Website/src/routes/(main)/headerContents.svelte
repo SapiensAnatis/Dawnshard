@@ -2,10 +2,10 @@
   import Moon from 'lucide-svelte/icons/moon';
   import Sun from 'lucide-svelte/icons/sun';
   import { toggleMode } from 'mode-watcher';
+  import { onMount } from 'svelte';
 
   import { page } from '$app/stores';
   import { Button } from '$shadcn/components/ui/button';
-  import { onMount } from 'svelte';
 
   let jsLoaded = false;
 
