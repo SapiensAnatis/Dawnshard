@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.Security.Claims;
 using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
@@ -12,6 +12,7 @@ using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Serilog.Context;
 
@@ -40,7 +41,7 @@ public class AuthService(
     private readonly IOptionsMonitor<BaasOptions> baasOptions = baasOptions;
     private readonly ILogger<AuthService> logger = logger;
     private readonly TimeProvider dateTimeProvider = dateTimeProvider;
-    private readonly JwtSecurityTokenHandler tokenHandler = new();
+    private readonly JsonWebTokenHandler tokenHandler = new();
 
     public async Task<(long viewerId, string sessionId)> DoAuth(string idToken)
     {
@@ -74,7 +75,7 @@ public class AuthService(
     private async Task<(long viewerId, string sessionId)> DoBaasAuth(string idToken)
     {
         TokenValidationResult result = await this.ValidateToken(idToken);
-        JwtSecurityToken jwt = (JwtSecurityToken)result.SecurityToken;
+        JsonWebToken jwt = (JsonWebToken)result.SecurityToken;
 
         using IDisposable accIdLog = LogContext.PushProperty(
             CustomClaimType.AccountId,
@@ -148,7 +149,7 @@ public class AuthService(
         if (!validationResult.IsValid)
         {
             string idTokenTrace = idToken[^5..];
-            string? accountId = (validationResult.SecurityToken as JwtSecurityToken)?.Subject;
+            string? accountId = (validationResult.SecurityToken as JsonWebToken)?.Subject;
 
             LogContext.PushProperty(CustomClaimType.AccountId, accountId);
 
@@ -181,15 +182,14 @@ public class AuthService(
         return validationResult;
     }
 
-    private bool GetPendingSaveImport(JwtSecurityToken token, DbPlayerUserData? userData)
+    private bool GetPendingSaveImport(JsonWebToken token, DbPlayerUserData? userData)
     {
         this.logger.LogInformation("Polling save import for user {id}...", token.Subject);
 
-        if (!token.Payload.TryGetValue("sav:a", out object? saveAvailableObj))
+        if (!token.TryGetClaim("sav:a", out Claim? savefileAvailable))
             return false;
 
-        bool? saveAvailable = saveAvailableObj as bool?;
-        if (saveAvailable != true)
+        if (savefileAvailable.Value != "true")
         {
             this.logger.LogInformation("No savefile was available to import.");
             return false;

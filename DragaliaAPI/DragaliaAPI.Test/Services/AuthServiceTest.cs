@@ -130,14 +130,12 @@ public class AuthServiceTest
             .Returns(new LoginOptions() { UseBaasLogin = true });
         this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
 
-        string token = TokenHelper
-            .GetToken(
-                this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
-                this.mockBaasOptions.Object.CurrentValue.TokenAudience,
-                fixedTime.AddHours(1),
-                AccountId
-            )
-            .AsString();
+        string token = TokenHelper.GetToken(
+            AccountId,
+            fixedTime.AddHours(1),
+            this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
+            this.mockBaasOptions.Object.CurrentValue.TokenAudience
+        );
 
         this.mockSessionService.Setup(x => x.CreateSession(token, AccountId, 1, fixedTime))
             .ReturnsAsync("session id");
@@ -165,14 +163,12 @@ public class AuthServiceTest
             .Returns(new LoginOptions() { UseBaasLogin = true });
         this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
 
-        string token = TokenHelper
-            .GetToken(
-                this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
-                this.mockBaasOptions.Object.CurrentValue.TokenAudience,
-                fixedTime.AddHours(-1),
-                AccountId
-            )
-            .AsString();
+        string token = TokenHelper.GetToken(
+            AccountId,
+            fixedTime.AddHours(-1),
+            this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
+            this.mockBaasOptions.Object.CurrentValue.TokenAudience
+        );
 
         await this
             .authService.Invoking(x => x.DoAuth(token))
@@ -226,16 +222,14 @@ public class AuthServiceTest
         this.mockBaasOptions.Setup(x => x.CurrentValue)
             .Returns(new BaasOptions() { TokenAudience = "audience", TokenIssuer = "issuer" });
 
-        string token = TokenHelper
-            .GetToken(
-                this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
-                this.mockBaasOptions.Object.CurrentValue.TokenAudience,
-                fixedTime.AddHours(1),
-                AccountId,
-                savefileAvailable: true,
-                savefileTime: fixedTime
-            )
-            .AsString();
+        string token = TokenHelper.GetToken(
+            AccountId,
+            fixedTime.AddHours(1),
+            this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
+            this.mockBaasOptions.Object.CurrentValue.TokenAudience,
+            savefileAvailable: true,
+            savefileTime: fixedTime
+        );
 
         LoadIndexResponse importSavefile =
             new()
@@ -290,16 +284,14 @@ public class AuthServiceTest
         this.mockBaasOptions.Setup(x => x.CurrentValue)
             .Returns(new BaasOptions() { TokenAudience = "audience", TokenIssuer = "issuer" });
 
-        string token = TokenHelper
-            .GetToken(
-                this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
-                this.mockBaasOptions.Object.CurrentValue.TokenAudience,
-                fixedTime.AddHours(1),
-                AccountId,
-                savefileAvailable: true,
-                savefileTime: fixedTime
-            )
-            .AsString();
+        string token = TokenHelper.GetToken(
+            AccountId,
+            fixedTime.AddHours(1),
+            this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
+            this.mockBaasOptions.Object.CurrentValue.TokenAudience,
+            savefileAvailable: true,
+            savefileTime: fixedTime
+        );
 
         LoadIndexResponse importSavefile =
             new()
@@ -353,16 +345,14 @@ public class AuthServiceTest
         this.mockBaasOptions.Setup(x => x.CurrentValue)
             .Returns(new BaasOptions() { TokenAudience = "audience", TokenIssuer = "issuer" });
 
-        string token = TokenHelper
-            .GetToken(
-                this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
-                this.mockBaasOptions.Object.CurrentValue.TokenAudience,
-                fixedTime.AddHours(1),
-                AccountId,
-                savefileAvailable: true,
-                savefileTime: fixedTime - TimeSpan.FromMinutes(5)
-            )
-            .AsString();
+        string token = TokenHelper.GetToken(
+            AccountId,
+            fixedTime.AddHours(1),
+            this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
+            this.mockBaasOptions.Object.CurrentValue.TokenAudience,
+            savefileAvailable: true,
+            savefileTime: fixedTime - TimeSpan.FromMinutes(5)
+        );
 
         this.mockLoginOptions.Setup(x => x.CurrentValue)
             .Returns(new LoginOptions() { UseBaasLogin = true });
@@ -407,16 +397,14 @@ public class AuthServiceTest
         this.mockBaasOptions.Setup(x => x.CurrentValue)
             .Returns(new BaasOptions() { TokenAudience = "audience", TokenIssuer = "issuer" });
 
-        string token = TokenHelper
-            .GetToken(
-                this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
-                this.mockBaasOptions.Object.CurrentValue.TokenAudience,
-                fixedTime.AddHours(1),
-                AccountId,
-                savefileAvailable: false,
-                savefileTime: fixedTime
-            )
-            .AsString();
+        string token = TokenHelper.GetToken(
+            AccountId,
+            fixedTime.AddHours(1),
+            this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
+            this.mockBaasOptions.Object.CurrentValue.TokenAudience,
+            savefileAvailable: false,
+            savefileTime: fixedTime
+        );
 
         this.mockLoginOptions.Setup(x => x.CurrentValue)
             .Returns(new LoginOptions() { UseBaasLogin = true });

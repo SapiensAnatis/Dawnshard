@@ -33,9 +33,10 @@ public class ToolTest : TestFixture
     [InlineData("/tool/reauth")]
     public async Task Auth_CorrectIdToken_ReturnsOKResponse(string endpoint)
     {
-        string token = TokenHelper
-            .GetToken(DateTime.UtcNow + TimeSpan.FromMinutes(5), DeviceAccountId)
-            .AsString();
+        string token = TokenHelper.GetToken(
+            DeviceAccountId,
+            DateTime.UtcNow + TimeSpan.FromMinutes(5)
+        );
         this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
 
         ToolAuthResponse response = (
@@ -52,14 +53,13 @@ public class ToolTest : TestFixture
             p.SetProperty(e => e.LastSaveImportTime, DateTimeOffset.UnixEpoch)
         );
 
-        string token = TokenHelper
-            .GetToken(
-                DateTimeOffset.MaxValue,
-                DeviceAccountId,
-                savefileAvailable: true,
-                savefileTime: DateTimeOffset.UtcNow
-            )
-            .AsString();
+        string token = TokenHelper.GetToken(
+            DeviceAccountId,
+            DateTimeOffset.MaxValue,
+            savefileAvailable: true,
+            savefileTime: DateTimeOffset.UtcNow
+        );
+
         this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
 
         await this.Client.PostMsgpack<ToolAuthResponse>("tool/auth", new ToolAuthRequest() { });
@@ -78,9 +78,11 @@ public class ToolTest : TestFixture
     [Fact]
     public async Task Auth_ExpiredIdToken_ReturnsRefreshRequest()
     {
-        string token = TokenHelper
-            .GetToken(DateTime.UtcNow - TimeSpan.FromHours(5), DeviceAccountId)
-            .AsString();
+        string token = TokenHelper.GetToken(
+            DeviceAccountId,
+            DateTime.UtcNow - TimeSpan.FromHours(5)
+        );
+
         this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
         this.Client.DefaultRequestHeaders.Add("DeviceId", "id");
 
