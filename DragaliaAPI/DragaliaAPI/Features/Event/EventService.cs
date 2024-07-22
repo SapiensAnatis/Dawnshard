@@ -10,12 +10,15 @@ using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Event;
 
 public class EventService(
     ILogger<EventService> logger,
+    ApiContext apiContext,
+    IPlayerIdentityService playerIdentityService,
     IEventRepository eventRepository,
     IRewardService rewardService,
     ApiContext apiContext,
@@ -217,63 +220,80 @@ public class EventService(
             .ToList();
 
         if (neededEventPassiveIds.Count > 0)
+        {
             eventRepository.CreateEventPassives(eventId, neededEventPassiveIds);
+        }
 
         // Doing this at the end so that everything should've been created
         if (data.EventKindType == EventKindType.Combat && firstEventEnter)
         {
-            HashSet<int> relevantQuestIds = CombatEventQuestLookup[data.Id]
-                .Select(x => x.Id)
-                .ToHashSet();
-
-            List<int> completedQuestIds = await apiContext
-                .PlayerQuests.Where(x => x.State == 3 && relevantQuestIds.Contains(x.QuestId))
-                .Select(x => x.QuestId)
-                .ToListAsync();
-
-            foreach (
-                (int entityId, int entityQuantity) in CombatEventQuestLookup[data.Id]
-                    .Where(x =>
-                        completedQuestIds.Contains(x.Id)
-                        && x
-                            is {
-                                HoldEntityType: EntityTypes.CombatEventItem,
-                                HoldEntityQuantity: > 0
-                            }
-                    )
-                    .ToLookup(x => x.HoldEntityId, x => x.HoldEntityQuantity)
-                    .ToDictionary(x => x.Key, x => x.Max())
-            )
-            {
-                logger.LogDebug(
-                    "Granting {quantity}x {itemId} ({eventId}) due to completed quests",
-                    entityQuantity,
-                    entityId,
-                    eventId
-                );
-
-                await rewardService.GrantReward(
-                    new Entity(EntityTypes.CombatEventItem, entityId, entityQuantity)
-                );
-            }
-
-            foreach (
-                int locationId in MasterAsset
-                    .CombatEventLocation.Enumerable.Where(x =>
-                        x.EventId == eventId && completedQuestIds.Contains(x.ClearQuestId)
-                    )
-                    .Select(x => x.Id)
-            )
-            {
-                logger.LogDebug(
-                    "Completing location reward {rewardId} ({eventId}) due to completed quests",
-                    locationId,
-                    eventId
-                );
-
-                eventRepository.CreateEventReward(eventId, locationId);
-            }
+            await GrantAlreadyEarnedLocationRewards(eventId);
         }
+
+        if (firstEventEnter && MasterAsset.BoxSummonData.Enumerable.Any(x => x.EventId == eventId))
+        {
+            InitializeEventSummon(eventId);
+        }
+    }
+
+    private async Task GrantAlreadyEarnedLocationRewards(int eventId)
+    {
+        HashSet<int> relevantQuestIds = CombatEventQuestLookup[eventId]
+            .Select(x => x.Id)
+            .ToHashSet();
+
+        List<int> completedQuestIds = await apiContext
+            .PlayerQuests.Where(x => x.State == 3 && relevantQuestIds.Contains(x.QuestId))
+            .Select(x => x.QuestId)
+            .ToListAsync();
+
+        foreach (
+            (int entityId, int entityQuantity) in CombatEventQuestLookup[eventId]
+                .Where(x =>
+                    completedQuestIds.Contains(x.Id)
+                    && x is { HoldEntityType: EntityTypes.CombatEventItem, HoldEntityQuantity: > 0 }
+                )
+                .ToLookup(x => x.HoldEntityId, x => x.HoldEntityQuantity)
+                .ToDictionary(x => x.Key, x => x.Max())
+        )
+        {
+            logger.LogDebug(
+                "Granting {quantity}x {itemId} ({eventId}) due to completed quests",
+                entityQuantity,
+                entityId,
+                eventId
+            );
+
+            await rewardService.GrantReward(
+                new Entity(EntityTypes.CombatEventItem, entityId, entityQuantity)
+            );
+        }
+
+        foreach (
+            int locationId in MasterAsset
+                .CombatEventLocation.Enumerable.Where(x =>
+                    x.EventId == eventId && completedQuestIds.Contains(x.ClearQuestId)
+                )
+                .Select(x => x.Id)
+        )
+        {
+            logger.LogDebug(
+                "Completing location reward {rewardId} ({eventId}) due to completed quests",
+                locationId,
+                eventId
+            );
+
+            eventRepository.CreateEventReward(eventId, locationId);
+        }
+    }
+
+    private void InitializeEventSummon(int eventId)
+    {
+        logger.LogDebug("Creating event summon data for event ID {EventId}", eventId);
+
+        apiContext.PlayerEventSummonData.Add(
+            new() { ViewerId = playerIdentityService.ViewerId, EventId = eventId }
+        );
     }
 
     private async Task<DbPlayerEventData> GetEventData(int eventId)

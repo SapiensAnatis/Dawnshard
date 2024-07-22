@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Features.Event;
 
 [Route("raid_event")]
+[ServiceFilter<EventValidationFilter>]
 public class RaidEventController(
     IUpdateDataService updateDataService,
     IRewardService rewardService,
@@ -23,17 +24,20 @@ public class RaidEventController(
     {
         RaidEventGetEventDataResponse resp = new();
 
-        resp.IsReceiveEventDamageReward = await eventService.GetCustomEventFlag(
-            request.RaidEventId
-        );
         resp.RaidEventUserData = await eventService.GetRaidEventUserData(request.RaidEventId);
-        resp.RaidEventRewardList = await eventService.GetEventRewardList<RaidEventRewardList>(
-            request.RaidEventId
-        );
-        resp.EventPassiveList = new List<EventPassiveList>
+
+        if (resp.RaidEventUserData is not null)
         {
-            await eventService.GetEventPassiveList(request.RaidEventId),
-        };
+            resp.IsReceiveEventDamageReward = await eventService.GetCustomEventFlag(
+                request.RaidEventId
+            );
+
+            resp.RaidEventRewardList = await eventService.GetEventRewardList<RaidEventRewardList>(
+                request.RaidEventId
+            );
+
+            resp.EventPassiveList = [await eventService.GetEventPassiveList(request.RaidEventId)];
+        }
 
         if (
             MasterAsset
@@ -56,6 +60,8 @@ public class RaidEventController(
     {
         RaidEventEntryResponse resp = new();
 
+        await eventService.CreateEventData(request.RaidEventId);
+
         resp.RaidEventUserData = await eventService.GetRaidEventUserData(request.RaidEventId);
         resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
@@ -65,7 +71,7 @@ public class RaidEventController(
 
     [HttpPost("receive_raid_point_reward")]
     public async Task<DragaliaResult> ReceiveRaidPointReward(
-        RaidEventReceiveRaidPointRewardRequest request,
+        EventOverrides request,
         CancellationToken cancellationToken
     )
     {

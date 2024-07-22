@@ -6,9 +6,12 @@ namespace DragaliaAPI.Infrastructure.Results;
 public class DragaliaResult<TValue> : IConvertToActionResult
     where TValue : class
 {
-    public DragaliaResult(TValue value)
+    private readonly ResultCode resultCode = ResultCode.Success;
+
+    public DragaliaResult(TValue value, ResultCode resultCode = ResultCode.Success)
     {
         this.Value = value;
+        this.resultCode = resultCode;
     }
 
     public DragaliaResult(ActionResult result)
@@ -33,7 +36,7 @@ public class DragaliaResult<TValue> : IConvertToActionResult
 
         ArgumentNullException.ThrowIfNull(this.Value);
 
-        return new ObjectResult(new DragaliaResponse<TValue>(this.Value))
+        return new ObjectResult(new DragaliaResponse<TValue>(this.Value, this.resultCode))
         {
             DeclaredType = typeof(DragaliaResponse<TValue>),
             StatusCode = StatusCodes.Status200OK,

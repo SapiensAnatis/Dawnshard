@@ -111,6 +111,7 @@ namespace DragaliaAPI.Shared.MasterAsset;
 [GenerateMasterAsset<EventItem<BattleRoyalEventItemType>>("Event/BattleRoyalEventItem.json")]
 [GenerateMasterAsset<EventPassive>("Event/EventPassive.json")]
 [GenerateMasterAsset<QuestScoringEnemy>("Event/QuestScoringEnemy.json")]
+[GenerateMasterAsset<BoxSummonData>("Event/BoxSummonData.json")]
 [GenerateMasterAsset<DmodeQuestFloor>("Dmode/DmodeQuestFloor.json")]
 [GenerateMasterAsset<DmodeDungeonArea>("Dmode/DmodeDungeonArea.json")]
 [GenerateMasterAsset<DmodeDungeonTheme>("Dmode/DmodeDungeonTheme.json")]

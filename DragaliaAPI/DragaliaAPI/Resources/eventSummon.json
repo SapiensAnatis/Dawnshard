@@ -1,0 +1,172 @@
+{
+    "$schema": "../Resources/eventSummon.schema.json",
+    "EventSummons": [
+        {
+            "$comment": "Dawn of Dragalia",
+            "EventId": 20457,
+            "Items": {
+                "1": {
+                    "$comment": "Humanoid Midgardsormr's Conviction",
+                    "EntityType": "Material",
+                    "EntityId": 205001007,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 1,
+                    "ResetItemFlag": true,
+                    "TotalCounts": {
+                        "Box1Count": 4,
+                        "Box2Count": 4,
+                        "Box3Count": 4,
+                        "Box4Count": 4,
+                        "FinalCount": 0
+                    }
+                },
+                "2": {
+                    "$comment": "Twinkling Sand",
+                    "EntityType": "Material",
+                    "EntityId": 202004004,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 2,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 1,
+                        "Box2Count": 1,
+                        "Box3Count": 1,
+                        "Box4Count": 1,
+                        "FinalCount": 0
+                    }
+                },
+                "3": {
+                    "EntityType": "Wyrmite",
+                    "EntityId": 0,
+                    "EntityQuantity": 25,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 1,
+                        "Box2Count": 1,
+                        "Box3Count": 1,
+                        "Box4Count": 1,
+                        "FinalCount": 0
+                    }
+                },
+                "4": {
+                    "EntityType": "Mana",
+                    "EntityId": 0,
+                    "EntityQuantity": 5000,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 5,
+                        "Box2Count": 5,
+                        "Box3Count": 5,
+                        "Box4Count": 5,
+                        "FinalCount": 5
+                    }
+                },
+                "5": {
+                    "EntityType": "Mana",
+                    "EntityId": 0,
+                    "EntityQuantity": 5000,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 5,
+                        "Box2Count": 5,
+                        "Box3Count": 5,
+                        "Box4Count": 5,
+                        "FinalCount": 5
+                    }
+                },
+                "6": {
+                    "EntityType": "Mana",
+                    "EntityId": 0,
+                    "EntityQuantity": 200,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 50,
+                        "Box2Count": 60,
+                        "Box3Count": 70,
+                        "Box4Count": 80,
+                        "FinalCount": 120
+                    }
+                },
+                "7": {
+                    "EntityType": "Rupies",
+                    "EntityId": 0,
+                    "EntityQuantity": 10000,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 50,
+                        "Box2Count": 60,
+                        "Box3Count": 70,
+                        "Box4Count": 80,
+                        "FinalCount": 120
+                    }
+                },
+                "8": {
+                    "$comment": "Crimson Core",
+                    "EntityType": "Material",
+                    "EntityId": 202004003,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 8,
+                        "Box2Count": 8,
+                        "Box3Count": 9,
+                        "Box4Count": 10,
+                        "FinalCount": 10
+                    }
+                },
+                "9": {
+                    "$comment": "Meteorite",
+                    "EntityType": "Material",
+                    "EntityId": 202001003,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 9,
+                        "Box2Count": 10,
+                        "Box3Count": 14,
+                        "Box4Count": 17,
+                        "FinalCount": 19
+                    }
+                },
+                "10": {
+                    "$comment": "Fiend's Eye",
+                    "EntityType": "Material",
+                    "EntityId": 202002003,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 9,
+                        "Box2Count": 10,
+                        "Box3Count": 14,
+                        "Box4Count": 17,
+                        "FinalCount": 19
+                    }
+                },
+                "11": {
+                    "$comment": "Bewitching Wings",
+                    "EntityType": "Material",
+                    "EntityId": 202003003,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 9,
+                        "Box2Count": 10,
+                        "Box3Count": 14,
+                        "Box4Count": 17,
+                        "FinalCount": 19
+                    }
+                }
+                // todo: the rest
+            }
+        }
+    ]
+}

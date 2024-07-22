@@ -271,6 +271,9 @@ public static partial class MasterAsset
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.QuestScoringEnemy>? questScoringEnemy;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.QuestScoringEnemy> QuestScoringEnemy => questScoringEnemy ?? throw new InvalidOperationException(ErrorUninitialized);
 
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.BoxSummonData>? boxSummonData;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.BoxSummonData> BoxSummonData => boxSummonData ?? throw new InvalidOperationException(ErrorUninitialized);
+
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeQuestFloor>? dmodeQuestFloor;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeQuestFloor> DmodeQuestFloor => dmodeQuestFloor ?? throw new InvalidOperationException(ErrorUninitialized);
 
@@ -953,6 +956,13 @@ public static partial class MasterAsset
                 null
             );
         
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.BoxSummonData>> boxSummonDataTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Event.BoxSummonData>(
+                "Event/BoxSummonData.msgpack",
+                (global::DragaliaAPI.Shared.MasterAsset.Models.Event.BoxSummonData x) => x.Id,
+                null
+            );
+        
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeQuestFloor>> dmodeQuestFloorTask =
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.Dmode.DmodeQuestFloor>(
                 "Dmode/DmodeQuestFloor.msgpack",
@@ -1201,6 +1211,7 @@ public static partial class MasterAsset
         battleRoyalEventItem = await battleRoyalEventItemTask;
         eventPassive = await eventPassiveTask;
         questScoringEnemy = await questScoringEnemyTask;
+        boxSummonData = await boxSummonDataTask;
         dmodeQuestFloor = await dmodeQuestFloorTask;
         dmodeDungeonArea = await dmodeDungeonAreaTask;
         dmodeDungeonTheme = await dmodeDungeonThemeTask;

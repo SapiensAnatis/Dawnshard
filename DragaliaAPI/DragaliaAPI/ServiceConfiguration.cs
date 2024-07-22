@@ -84,6 +84,7 @@ public static class ServiceConfiguration
             .AddQuestFeature()
             .AddStoryFeature()
             .AddWebFeature()
+            .AddEventFeature()
             .AddAbilityCrestFeature()
             .AddTutorialFeature()
             .AddZenaFeature()
