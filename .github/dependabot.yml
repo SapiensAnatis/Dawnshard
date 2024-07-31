@@ -9,29 +9,46 @@ updates:
     schedule:
       interval: "daily"
     groups:
-      microsoft-extensions:
+      nuget:
         patterns:
-          - "Microsoft.Extensions*"
-      microsoft-entityframeworkcore:
-        patterns:
-          - "Microsoft.EntityFrameworkCore*"
+          - "*"
   - package-ecosystem: "docker"
     directory: "/DragaliaAPI/DragaliaAPI"
     schedule:
       interval: "weekly"
+    groups:
+      docker:
+        patterns:
+          - "*"
   - package-ecosystem: "docker"
     directory: "/PhotonStateManager/DragaliaAPI.Photon.StateManager"
     schedule:
       interval: "weekly"
+    groups:
+      docker:
+        patterns:
+          - "*"
   - package-ecosystem: "cargo"
     directory: "/MaintenanceWorker"
     schedule:
       interval: "weekly"
+    groups:
+      cargo:
+        patterns:
+          - "*"
   - package-ecosystem: "npm"
     directory: "/MaintenanceWorker"
     schedule:
       interval: "weekly"
+    groups:
+      npm:
+        patterns:
+          - "*"
   - package-ecosystem: "npm"
     directory: "/Website"
     schedule:
       interval: "weekly"
+    groups:
+      npm:
+        patterns:
+          - "*"
