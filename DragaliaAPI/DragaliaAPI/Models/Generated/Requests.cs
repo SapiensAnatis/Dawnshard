@@ -3933,7 +3933,7 @@ public partial class RaidEventGetEventDataRequest
 }
 
 [MessagePackObject]
-public partial class RaidEventReceiveRaidPointRewardRequest
+public partial class EventOverrides
 {
     [Key("raid_event_id")]
     public int RaidEventId { get; set; }
@@ -3941,7 +3941,7 @@ public partial class RaidEventReceiveRaidPointRewardRequest
     [Key("raid_event_reward_id_list")]
     public IEnumerable<int> RaidEventRewardIdList { get; set; } = [];
 
-    public RaidEventReceiveRaidPointRewardRequest(
+    public EventOverrides(
         int raidEventId,
         IEnumerable<int> raidEventRewardIdList
     )
@@ -3950,7 +3950,7 @@ public partial class RaidEventReceiveRaidPointRewardRequest
         this.RaidEventRewardIdList = raidEventRewardIdList;
     }
 
-    public RaidEventReceiveRaidPointRewardRequest() { }
+    public EventOverrides() { }
 }
 
 [MessagePackObject]

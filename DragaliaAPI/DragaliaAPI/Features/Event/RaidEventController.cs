@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Features.Event;
 
 [Route("raid_event")]
+[ServiceFilter<EventValidationFilter>]
 public class RaidEventController(
     IUpdateDataService updateDataService,
     IRewardService rewardService,
@@ -70,7 +71,7 @@ public class RaidEventController(
 
     [HttpPost("receive_raid_point_reward")]
     public async Task<DragaliaResult> ReceiveRaidPointReward(
-        RaidEventReceiveRaidPointRewardRequest request,
+        EventOverrides request,
         CancellationToken cancellationToken
     )
     {
