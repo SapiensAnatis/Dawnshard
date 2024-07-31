@@ -54,7 +54,7 @@ public class RaidEventTest : TestFixture
         DragaliaResponse<RaidEventReceiveRaidPointRewardResponse> evtResp =
             await Client.PostMsgpack<RaidEventReceiveRaidPointRewardResponse>(
                 $"{Prefix}/receive_raid_point_reward",
-                new RaidEventReceiveRaidPointRewardRequest(EventId, new[] { 1001 })
+                new EventOverrides(EventId, new[] { 1001 })
             );
 
         evtResp.Data.RaidEventRewardList.Should().HaveCount(1);

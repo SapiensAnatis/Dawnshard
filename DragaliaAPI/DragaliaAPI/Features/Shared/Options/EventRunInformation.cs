@@ -7,4 +7,8 @@ public class EventRunInformation
     public DateTimeOffset Start { get; init; }
 
     public DateTimeOffset End { get; init; }
+
+    public bool IsActive(TimeProvider timeProvider) =>
+        timeProvider.GetLastDailyReset() > this.Start
+        && timeProvider.GetLastDailyReset() < this.End;
 }

@@ -79,6 +79,7 @@ public static class ServiceConfiguration
             .AddQuestFeature()
             .AddStoryFeature()
             .AddWebFeature()
+            .AddEventFeature()
             .AddAbilityCrestFeature()
             .AddTutorialFeature();
 
@@ -109,9 +110,6 @@ public static class ServiceConfiguration
             .AddScoped<IAbilityCrestMultiplierService, AbilityCrestMultiplierService>()
             .AddScoped<IAutoRepeatService, AutoRepeatService>()
             // Event Feature
-            .AddScoped<IEventRepository, EventRepository>()
-            .AddScoped<IEventService, EventService>()
-            .AddScoped<IEventDropService, EventDropService>()
             .AddScoped<ITimeAttackService, TimeAttackService>()
             .AddScoped<ITimeAttackRepository, TimeAttackRepository>()
             .AddScoped<ITimeAttackCacheService, TimeAttackCacheService>()
