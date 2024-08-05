@@ -137,6 +137,10 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
 
     public DbSet<DbWallRewardDate> WallRewardDates { get; set; } = null!;
 
+    public DbSet<DbPlayerEventSummonData> PlayerEventSummonData { get; set; }
+
+    public DbSet<DbPlayerEventSummonItem> PlayerEventSummonItems { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApiContext).Assembly);
@@ -211,6 +215,13 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
 
         modelBuilder
             .Entity<DbPlayerDmodeInfo>()
+        
+        modelBuilder
+            .Entity<DbPlayerEventSummonData>()
+            .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
+
+        modelBuilder
+            .Entity<DbPlayerEventSummonItem>()
             .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
     }
 }
