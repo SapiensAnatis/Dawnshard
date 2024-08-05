@@ -1,5 +1,6 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Event;
+using DragaliaAPI.MessagePack;
 using MessagePack;
 
 namespace DragaliaAPI.Models.Generated;
@@ -51,4 +52,18 @@ public partial class UserEventLocationRewardList : IEventRewardList<UserEventLoc
 {
     public static UserEventLocationRewardList FromDatabase(DbPlayerEventReward reward) =>
         new(reward.EventId, reward.RewardId);
+}
+
+public partial class AtgenBoxSummonDetail
+{
+    [Key("reset_item_flag")]
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool ResetItemFlag { get; set; }
+}
+
+public partial class AtgenBoxSummonData
+{
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [Key("reset_possible")]
+    public bool ResetPossible { get; set; }
 }
