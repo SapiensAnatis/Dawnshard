@@ -144,7 +144,7 @@ public class DbPlayerCharaData : DbPlayerData
     public ushort ManaNodeUnlockCount { get; private set; }
 
     [Column("ListViewFlag")]
-    public bool ListViewFlag { get; set; }
+    public bool ListViewFlag { get; set; } = true;
 
     [Column("GetTime")]
     public DateTimeOffset GetTime { get; set; } = DateTimeOffset.UtcNow;

@@ -299,7 +299,6 @@ public class StorySkipService(
                         ExAbilityLevel = 1,
                         ExAbility2Level = 1,
                         IsTemporary = false,
-                        ListViewFlag = false
                     };
                 newUserCharas.Add(newUserChara);
             }
