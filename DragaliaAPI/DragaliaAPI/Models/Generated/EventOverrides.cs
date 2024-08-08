@@ -7,6 +7,8 @@ namespace DragaliaAPI.Models.Generated;
 
 public partial class EventSummonGetDataRequest : IEventRequest;
 
+public partial class EventSummonExecRequest : IEventRequest;
+
 public partial class EventTradeGetListResponse
 {
     // This can't be initialized as [] or else the game will delete all your materials
@@ -62,6 +64,13 @@ public partial class AtgenBoxSummonDetail
 }
 
 public partial class AtgenBoxSummonData
+{
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [Key("reset_possible")]
+    public bool ResetPossible { get; set; }
+}
+
+public partial class AtgenBoxSummonResult
 {
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
     [Key("reset_possible")]
