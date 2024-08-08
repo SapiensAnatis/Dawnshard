@@ -964,9 +964,6 @@ public partial class AtgenBoxSummonResult
     [Key("box_summon_seq")]
     public int BoxSummonSeq { get; set; }
 
-    [Key("reset_possible")]
-    public int ResetPossible { get; set; }
-
     [Key("remaining_quantity")]
     public int RemainingQuantity { get; set; }
 
@@ -989,7 +986,7 @@ public partial class AtgenBoxSummonResult
     public AtgenBoxSummonResult(
         int eventId,
         int boxSummonSeq,
-        int resetPossible,
+        bool resetPossible,
         int remainingQuantity,
         int maxExecCount,
         bool isStoppedByTarget,
