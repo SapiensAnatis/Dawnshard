@@ -8,7 +8,7 @@ namespace DragaliaAPI.Features.Event.Summon;
 
 [Route("event_summon")]
 [ServiceFilter<EventValidationFilter>]
-public class EventSummonController(
+internal class EventSummonController(
     EventSummonService eventSummonService,
     IRewardService rewardService,
     IUpdateDataService updateDataService
@@ -38,7 +38,8 @@ public class EventSummonController(
         AtgenBoxSummonResult boxResult = await eventSummonService.ExecuteBoxSummon(
             request.EventId,
             request.Count,
-            request.IsEnableStopByTarget
+            request.IsEnableStopByTarget,
+            cancellationToken
         );
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
@@ -50,6 +51,24 @@ public class EventSummonController(
             BoxSummonResult = boxResult,
             EntityResult = entityResult,
             UpdateDataList = updateDataList,
+        };
+    }
+
+    [HttpPost("reset")]
+    public async Task<DragaliaResult<EventSummonResetResponse>> Reset(
+        EventSummonResetRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        await eventSummonService.ResetBoxSummon(request.EventId, cancellationToken);
+        await updateDataService.SaveChangesAsync(cancellationToken);
+
+        return new EventSummonResetResponse()
+        {
+            BoxSummonData = await eventSummonService.GetBoxSummonData(
+                request.EventId,
+                cancellationToken
+            )
         };
     }
 }

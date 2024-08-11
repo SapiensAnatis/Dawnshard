@@ -2,19 +2,19 @@ using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Features.Event.Summon;
 
-public class EventSummonOptions
+internal class EventSummonOptions
 {
     public required IReadOnlyList<EventSummonConfiguration> EventSummons { get; init; }
 }
 
-public class EventSummonConfiguration
+internal class EventSummonConfiguration
 {
     public int EventId { get; init; }
 
     public required IReadOnlyDictionary<int, EventSummonItemConfiguration> Items { get; init; }
 }
 
-public class EventSummonItemCount
+internal class EventSummonItemCount
 {
     public int Box1Count { get; init; }
 
@@ -27,7 +27,7 @@ public class EventSummonItemCount
     public int FinalCount { get; init; }
 }
 
-public class EventSummonItemConfiguration
+internal class EventSummonItemConfiguration
 {
     public EntityTypes EntityType { get; init; }
 

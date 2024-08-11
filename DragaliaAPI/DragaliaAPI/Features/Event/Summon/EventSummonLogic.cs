@@ -2,14 +2,14 @@ using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Features.Event.Summon;
 
+internal readonly record struct BoxSummonInfo(
+    int RemainingQuantity,
+    bool ResetPossible,
+    List<AtgenBoxSummonDetail> DetailList
+);
+
 internal static class EventSummonLogic
 {
-    public readonly record struct BoxSummonInfo(
-        int RemainingQuantity,
-        bool ResetPossible,
-        List<AtgenBoxSummonDetail> DetailList
-    );
-
     public static BoxSummonInfo GetBoxSummonInfo(
         int boxNum,
         Dictionary<int, int> idSummonQuantityDict,
@@ -51,6 +51,12 @@ internal static class EventSummonLogic
                     Limit = remainingItemCount
                 }
             );
+        }
+
+        // Early resets are not possible on box 5 and up
+        if (boxNum > 4 && totalRemainingItemCount > 0)
+        {
+            resetPossible = false;
         }
 
         return new BoxSummonInfo(totalRemainingItemCount, resetPossible, detailList);

@@ -12,14 +12,14 @@ using ArgumentException = System.ArgumentException;
 
 namespace DragaliaAPI.Features.Event.Summon;
 
-public class EventSummonService(
+internal class EventSummonService(
     ApiContext apiContext,
     IOptionsMonitor<EventSummonOptions> eventSummonOptionsMonitor,
     IRewardService rewardService,
     IPresentService presentService
 )
 {
-    private const int MaxExecCount = 10;
+    private const int MaxExecCount = 100;
 
     private readonly EventSummonOptions eventSummonOptions = eventSummonOptionsMonitor.CurrentValue;
 
@@ -47,7 +47,7 @@ public class EventSummonService(
             eventId
         ).Items;
 
-        EventSummonLogic.BoxSummonInfo data = EventSummonLogic.GetBoxSummonInfo(
+        BoxSummonInfo data = EventSummonLogic.GetBoxSummonInfo(
             userData.BoxNumber,
             userData.Items.ToDictionary(x => x.ItemId, x => x.TimesSummoned),
             itemDict
@@ -68,7 +68,8 @@ public class EventSummonService(
     public async Task<AtgenBoxSummonResult> ExecuteBoxSummon(
         int eventId,
         int numSummons,
-        bool isEnableStopByTarget
+        bool isEnableStopByTarget,
+        CancellationToken cancellationToken
     )
     {
         if (
@@ -83,7 +84,7 @@ public class EventSummonService(
             await apiContext
                 .PlayerEventSummonData.Include(x => x.Items)
                 .AsTracking()
-                .FirstOrDefaultAsync()
+                .FirstOrDefaultAsync(x => x.EventId == eventId, cancellationToken)
             ?? throw new DragaliaException(
                 ResultCode.EntityRaidEventDataNotFound,
                 "No event summon data found"
@@ -115,7 +116,9 @@ public class EventSummonService(
             idPool.AddRange(Enumerable.Repeat(id, remainingQuantity));
         }
 
-        for (int i = 0; i < numSummons; i++)
+        bool stoppedByTarget = false;
+
+        for (int i = 0; ; i++)
         {
             int selectedIdIndex = Random.Shared.Next(idPool.Count);
             int selectedId = idPool[selectedIdIndex];
@@ -145,7 +148,29 @@ public class EventSummonService(
                     ViewRarity = 0,
                 }
             );
+
+            if (idPool.Count == 0)
+            {
+                break;
+            }
+
+            if (userData.Points < boxSummonData.CostNum)
+            {
+                break;
+            }
+
+            if (isEnableStopByTarget && config.ResetItemFlag)
+            {
+                stoppedByTarget = true;
+                break;
+            }
+
+            if (!isEnableStopByTarget && i + 1 >= numSummons)
+            {
+                break;
+            }
         }
+        //todo random void items
 
         IDictionary<int, RewardGrantResult> resultDict = await rewardService.BatchGrantRewards(
             rewards
@@ -161,7 +186,7 @@ public class EventSummonService(
             }
         }
 
-        EventSummonLogic.BoxSummonInfo data = EventSummonLogic.GetBoxSummonInfo(
+        BoxSummonInfo newBoxSummonInfo = EventSummonLogic.GetBoxSummonInfo(
             userData.BoxNumber,
             userData.Items.ToDictionary(x => x.ItemId, x => x.TimesSummoned),
             itemDict
@@ -172,13 +197,47 @@ public class EventSummonService(
             EventId = eventId,
             EventPoint = userData.Points,
             MaxExecCount = MaxExecCount,
-            RemainingQuantity = data.RemainingQuantity,
-            ResetPossible = data.ResetPossible,
-            BoxSummonDetail = data.DetailList,
+            RemainingQuantity = newBoxSummonInfo.RemainingQuantity,
+            ResetPossible = newBoxSummonInfo.ResetPossible,
+            BoxSummonDetail = newBoxSummonInfo.DetailList,
             BoxSummonSeq = userData.BoxNumber,
-            IsStoppedByTarget = false,
+            IsStoppedByTarget = stoppedByTarget,
             DrawDetails = drawDetails
         };
+    }
+
+    public async Task ResetBoxSummon(int eventId, CancellationToken cancellationToken)
+    {
+        DbPlayerEventSummonData userData =
+            await apiContext
+                .PlayerEventSummonData.Include(x => x.Items)
+                .AsTracking()
+                .FirstOrDefaultAsync(x => x.EventId == eventId, cancellationToken)
+            ?? throw new DragaliaException(
+                ResultCode.EntityRaidEventDataNotFound,
+                "No event summon data found"
+            );
+
+        IReadOnlyDictionary<int, EventSummonItemConfiguration> itemDict = GetEventConfig(
+            eventId
+        ).Items;
+
+        (_, bool resetPossible, _) = EventSummonLogic.GetBoxSummonInfo(
+            userData.BoxNumber,
+            userData.Items.ToDictionary(x => x.ItemId, x => x.TimesSummoned),
+            itemDict
+        );
+
+        if (!resetPossible)
+        {
+            throw new DragaliaException(
+                ResultCode.CommonInvalidArgument,
+                "Box reset request is invalid"
+            );
+        }
+
+        userData.BoxNumber += 1;
+        userData.Items.Clear();
     }
 
     private EventSummonConfiguration GetEventConfig(int eventId) =>
