@@ -5,15 +5,10 @@ namespace DragaliaAPI.Infrastructure.Middleware;
 internal partial class ResultCodeLoggingMiddleware(ILogger<ResultCodeLoggingMiddleware> logger)
     : IMiddleware
 {
-    private static readonly FrozenSet<ResultCode> NonErrorResultCodes = new[]
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        ResultCode.Success,
-        ResultCode.CommonChangeDate,
-        ResultCode.CommonMaintenance,
-    }.ToFrozenSet();
+        await next(context);
 
-    public Task InvokeAsync(HttpContext context, RequestDelegate next)
-    {
         ResultCode? resultCode = null;
 
         if (
@@ -25,14 +20,15 @@ internal partial class ResultCodeLoggingMiddleware(ILogger<ResultCodeLoggingMidd
         }
 
         LogLevel logLevel =
-            resultCode is null || NonErrorResultCodes.Contains(resultCode.Value)
+            resultCode is null || IsSuccessResultCode(resultCode.Value)
                 ? LogLevel.Information
                 : LogLevel.Error;
 
         Log.EndpointResponded(logger, logLevel, context.Request.Path.ToString(), resultCode);
-
-        return next(context);
     }
+
+    private static bool IsSuccessResultCode(ResultCode code) =>
+        code is ResultCode.Success or ResultCode.CommonChangeDate or ResultCode.CommonMaintenance;
 
     private static partial class Log
     {

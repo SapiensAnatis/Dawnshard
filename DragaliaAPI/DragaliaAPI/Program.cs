@@ -116,8 +116,9 @@ builder
 builder.Services.AddOutputCache(opts =>
 {
     opts.AddBasePolicy(
-        b => b.AddPolicy<RepeatedRequestPolicy>().Expire(TimeSpan.FromMinutes(1)),
-        true
+        static cachePolicyBuilder =>
+            cachePolicyBuilder.AddPolicy<RepeatedRequestPolicy>().Expire(TimeSpan.FromMinutes(1)),
+        excludeDefaultPolicy: true
     );
 });
 
@@ -194,14 +195,17 @@ app.MapWhen(
     }
 );
 
-string[] allowedOrigins =
-    builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
-
 // Svelte website API
 app.MapWhen(
     static ctx => ctx.Request.Path.StartsWithSegments("/api"),
-    applicationBuilder =>
+    static applicationBuilder =>
     {
+        string[] allowedOrigins =
+            applicationBuilder
+                .ApplicationServices.GetRequiredService<IConfiguration>()
+                .GetSection("Cors:AllowedOrigins")
+                .Get<string[]>() ?? [];
+
         applicationBuilder.UseCors(cors =>
             cors.WithOrigins(allowedOrigins).AllowCredentials().AllowAnyHeader().AllowAnyMethod()
         );
