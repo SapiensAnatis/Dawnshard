@@ -1,7 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Text.Encodings.Web;
 using DragaliaAPI.Database;
-using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
@@ -11,7 +10,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using static DragaliaAPI.Infrastructure.DragaliaHttpConstants;
 
-namespace DragaliaAPI.Middleware;
+namespace DragaliaAPI.Infrastructure.Middleware;
 
 public class SessionAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {

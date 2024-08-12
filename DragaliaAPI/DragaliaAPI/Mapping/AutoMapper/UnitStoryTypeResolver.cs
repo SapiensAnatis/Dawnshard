@@ -3,7 +3,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 
-namespace DragaliaAPI.AutoMapper;
+namespace DragaliaAPI.Mapping.AutoMapper;
 
 public class UnitStoryTypeResolver : IValueResolver<UnitStoryList, DbPlayerStoryState, StoryTypes>
 {

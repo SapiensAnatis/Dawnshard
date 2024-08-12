@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Models.Generated;
 
-namespace DragaliaAPI.AutoMapper.Profiles;
+namespace DragaliaAPI.Mapping.AutoMapper;
 
 public class HelperMapProfile : Profile
 {

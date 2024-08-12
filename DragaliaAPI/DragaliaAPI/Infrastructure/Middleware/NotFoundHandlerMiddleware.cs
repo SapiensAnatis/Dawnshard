@@ -3,7 +3,7 @@ using DragaliaAPI.MessagePack;
 using DragaliaAPI.Models;
 using MessagePack;
 
-namespace DragaliaAPI.Middleware;
+namespace DragaliaAPI.Infrastructure.Middleware;
 
 public class NotFoundHandlerMiddleware
 {
@@ -20,7 +20,7 @@ public class NotFoundHandlerMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        await next(context);
+        await this.next(context);
 
         if (context.Response.StatusCode != (int)HttpStatusCode.NotFound)
             return;

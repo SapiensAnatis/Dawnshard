@@ -3,7 +3,7 @@ using Microsoft.Extensions.Primitives;
 using Serilog.Context;
 using static DragaliaAPI.Infrastructure.DragaliaHttpConstants;
 
-namespace DragaliaAPI.Middleware;
+namespace DragaliaAPI.Infrastructure.Middleware;
 
 public class LogContextMiddleware(IPlayerIdentityService playerIdentityService) : IMiddleware
 {

@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Middleware;
+﻿namespace DragaliaAPI.Infrastructure.Middleware;
 
 /// <summary>
 /// Constant names for authentication schemes.

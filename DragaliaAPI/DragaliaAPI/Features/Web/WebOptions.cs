@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace DragaliaAPI.Features.Blazor;
+namespace DragaliaAPI.Features.Web;
 
 public class WebOptions
 {

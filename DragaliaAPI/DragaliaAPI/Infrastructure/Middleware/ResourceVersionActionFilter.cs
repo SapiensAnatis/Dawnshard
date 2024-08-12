@@ -3,7 +3,7 @@ using DragaliaAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace DragaliaAPI.Middleware;
+namespace DragaliaAPI.Infrastructure.Middleware;
 
 public class ResourceVersionActionFilter(
     IResourceVersionService resourceVersionService,
