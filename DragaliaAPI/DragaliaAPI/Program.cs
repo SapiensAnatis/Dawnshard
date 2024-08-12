@@ -1,4 +1,3 @@
-using System.Collections.Frozen;
 using System.Diagnostics;
 using System.Reflection;
 using DragaliaAPI;
@@ -20,10 +19,8 @@ using Hangfire;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.JSInterop;
 using Serilog;
 
@@ -55,7 +52,7 @@ builder.WebHost.UseStaticWebAssets();
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 builder.Host.UseSerilog(
-    (context, services, loggerConfig) =>
+    static (context, services, loggerConfig) =>
         loggerConfig
             .ReadFrom.Configuration(context.Configuration)
             .ReadFrom.Services(services)
@@ -66,7 +63,7 @@ builder.Host.UseSerilog(
 
 builder
     .Services.AddControllers()
-    .AddMvcOptions(option =>
+    .AddMvcOptions(static option =>
     {
         option.OutputFormatters.Add(new CustomMessagePackOutputFormatter(CustomResolver.Options));
         option.InputFormatters.Add(new CustomMessagePackInputFormatter(CustomResolver.Options));
@@ -102,9 +99,19 @@ builder
     .Services.AddAuthorization()
     .ConfigureAuthentication()
     .AddResponseCompression()
-    .AddOutputCache()
+    .AddOutputCache(static opts =>
+    {
+        opts.AddBasePolicy(
+            static cachePolicyBuilder =>
+                cachePolicyBuilder
+                    .AddPolicy<RepeatedRequestPolicy>()
+                    .Expire(TimeSpan.FromMinutes(1)),
+            excludeDefaultPolicy: true
+        );
+    })
     .ConfigureHealthchecks()
-    .AddAutoMapper(Assembly.GetExecutingAssembly());
+    .AddAutoMapper(Assembly.GetExecutingAssembly())
+    .AddFeatureManagement();
 
 builder
     .Services.ConfigureGameServices(builder.Configuration)
@@ -112,17 +119,6 @@ builder
     .ConfigureSharedServices()
     .ConfigureGraphQLSchema()
     .ConfigureBlazorFrontend();
-
-builder.Services.AddOutputCache(opts =>
-{
-    opts.AddBasePolicy(
-        static cachePolicyBuilder =>
-            cachePolicyBuilder.AddPolicy<RepeatedRequestPolicy>().Expire(TimeSpan.FromMinutes(1)),
-        excludeDefaultPolicy: true
-    );
-});
-
-builder.Services.AddFeatureManagement();
 
 WebApplication app = builder.Build();
 
@@ -200,15 +196,6 @@ app.MapWhen(
     static ctx => ctx.Request.Path.StartsWithSegments("/api"),
     static applicationBuilder =>
     {
-        string[] allowedOrigins =
-            applicationBuilder
-                .ApplicationServices.GetRequiredService<IConfiguration>()
-                .GetSection("Cors:AllowedOrigins")
-                .Get<string[]>() ?? [];
-
-        applicationBuilder.UseCors(cors =>
-            cors.WithOrigins(allowedOrigins).AllowCredentials().AllowAnyHeader().AllowAnyMethod()
-        );
         applicationBuilder.UseRouting();
         applicationBuilder.UseSerilogRequestLogging();
 #pragma warning disable ASP0001

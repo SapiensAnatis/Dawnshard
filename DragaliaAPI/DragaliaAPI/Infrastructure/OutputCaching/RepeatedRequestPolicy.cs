@@ -4,7 +4,7 @@ using static DragaliaAPI.Infrastructure.DragaliaHttpConstants;
 
 namespace DragaliaAPI.Infrastructure.OutputCaching;
 
-public class RepeatedRequestPolicy(ILogger<RepeatedRequestPolicy> logger) : IOutputCachePolicy
+internal class RepeatedRequestPolicy(ILogger<RepeatedRequestPolicy> logger) : IOutputCachePolicy
 {
     public ValueTask CacheRequestAsync(OutputCacheContext context, CancellationToken cancellation)
     {
@@ -33,6 +33,9 @@ public class RepeatedRequestPolicy(ILogger<RepeatedRequestPolicy> logger) : IOut
             "Serving cached output for request token {RequestToken}",
             requestTokenValues.FirstOrDefault()
         );
+
+        // All cached responses are successes
+        context.HttpContext.Items[nameof(ResultCode)] = ResultCode.Success;
 
         return ValueTask.CompletedTask;
     }
@@ -67,7 +70,7 @@ public class RepeatedRequestPolicy(ILogger<RepeatedRequestPolicy> logger) : IOut
             return false;
         }
 
-        if (!RoutePrefixes.List.Any(x => request.Path.StartsWithSegments(x)))
+        if (!RoutePrefixes.List.Any(x => request.PathBase == x))
         {
             return false;
         }
