@@ -105,7 +105,7 @@ builder
             static cachePolicyBuilder =>
                 cachePolicyBuilder
                     .AddPolicy<RepeatedRequestPolicy>()
-                    .Expire(TimeSpan.FromMinutes(1)),
+                    .Expire(TimeSpan.FromMinutes(2)),
             excludeDefaultPolicy: true
         );
     })
@@ -166,11 +166,10 @@ app.MapWhen(
         {
             applicationBuilder.UsePathBase(prefix);
         }
-
         applicationBuilder.UseMiddleware<HeaderLogContextMiddleware>();
         applicationBuilder.UseSerilogRequestLogging();
-        applicationBuilder.UseAuthentication();
         applicationBuilder.UseResponseCompression();
+        applicationBuilder.UseAuthentication();
         applicationBuilder.UseRouting();
         applicationBuilder.UseAuthorization();
         applicationBuilder.UseMiddleware<IdentityLogContextMiddleware>();
@@ -198,6 +197,7 @@ app.MapWhen(
     {
         applicationBuilder.UseRouting();
         applicationBuilder.UseSerilogRequestLogging();
+        applicationBuilder.UseResponseCompression();
 #pragma warning disable ASP0001
         applicationBuilder.UseAuthorization();
 #pragma warning restore ASP0001
@@ -217,6 +217,7 @@ app.MapWhen(
         {
             applicationBuilder.UseStaticFiles();
             applicationBuilder.UseSerilogRequestLogging();
+            applicationBuilder.UseResponseCompression();
             applicationBuilder.UseRouting();
 #pragma warning disable ASP0001
             applicationBuilder.UseAuthorization();

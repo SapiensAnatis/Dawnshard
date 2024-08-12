@@ -24,15 +24,7 @@ internal class RepeatedRequestPolicy(ILogger<RepeatedRequestPolicy> logger) : IO
 
     public ValueTask ServeFromCacheAsync(OutputCacheContext context, CancellationToken cancellation)
     {
-        context.HttpContext.Request.Headers.TryGetValue(
-            Headers.RequestToken,
-            out StringValues requestTokenValues
-        );
-
-        logger.LogInformation(
-            "Serving cached output for request token {RequestToken}",
-            requestTokenValues.FirstOrDefault()
-        );
+        logger.LogInformation("Detected repeated Request-Token. Serving cached output.");
 
         // All cached responses are successes
         context.HttpContext.Items[nameof(ResultCode)] = ResultCode.Success;
@@ -70,10 +62,13 @@ internal class RepeatedRequestPolicy(ILogger<RepeatedRequestPolicy> logger) : IO
             return false;
         }
 
-        if (!RoutePrefixes.List.Any(x => request.PathBase == x))
-        {
-            return false;
-        }
+        // This will always be true (and the request will always be a game request) because of how the middleware
+        // branching is done in Program.cs.
+        //
+        // if (!RoutePrefixes.List.Any(x => request.PathBase == x))
+        // {
+        //     return false;
+        // }
 
         return true;
     }
