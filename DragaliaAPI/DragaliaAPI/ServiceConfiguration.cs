@@ -76,7 +76,9 @@ public static class ServiceConfiguration
             .AddScoped<IStampService, StampService>()
             .AddScoped<IStampRepository, StampRepository>()
             .AddScoped<ISavefileUpdateService, SavefileUpdateService>()
-            .AddTransient<LogContextMiddleware>();
+            .AddTransient<IdentityLogContextMiddleware>()
+            .AddTransient<ResultCodeLoggingMiddleware>()
+            .AddTransient<ResultCodeLoggingMiddleware>();
 
         services
             .AddSummoningFeature()

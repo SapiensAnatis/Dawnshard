@@ -19,5 +19,7 @@ public static class DragaliaHttpConstants
         public const string SessionId = "SID";
 
         public const string RequestToken = "Request-Token";
+
+        public const string DeviceId = "DeviceId";
     }
 }

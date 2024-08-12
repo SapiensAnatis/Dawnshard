@@ -157,28 +157,28 @@ if (!postgresOptions.DisableAutoMigration)
     app.MigrateDatabase();
 }
 
-app.UseStaticFiles();
-app.UseAuthentication();
-app.UseResponseCompression();
-
 // Game endpoints
 app.MapWhen(
-    ctx =>
+    static ctx =>
         DragaliaHttpConstants.RoutePrefixes.List.Any(prefix =>
             ctx.Request.Path.StartsWithSegments(prefix)
         ),
-    applicationBuilder =>
+    static applicationBuilder =>
     {
         foreach (string prefix in DragaliaHttpConstants.RoutePrefixes.List)
         {
             applicationBuilder.UsePathBase(prefix);
         }
 
+        applicationBuilder.UseMiddleware<HeaderLogContextMiddleware>();
+        applicationBuilder.UseSerilogRequestLogging();
+        applicationBuilder.UseAuthentication();
+        applicationBuilder.UseResponseCompression();
         applicationBuilder.UseRouting();
         applicationBuilder.UseAuthorization();
-        applicationBuilder.UseMiddleware<LogContextMiddleware>();
+        applicationBuilder.UseMiddleware<IdentityLogContextMiddleware>();
+        applicationBuilder.UseMiddleware<ResultCodeLoggingMiddleware>();
         applicationBuilder.UseOutputCache();
-        applicationBuilder.UseSerilogRequestLogging();
         applicationBuilder.UseMiddleware<NotFoundHandlerMiddleware>();
         applicationBuilder.UseMiddleware<ExceptionHandlerMiddleware>();
         applicationBuilder.UseMiddleware<DailyResetMiddleware>();
@@ -210,7 +210,7 @@ app.MapWhen(
 #pragma warning disable ASP0001
         applicationBuilder.UseAuthorization();
 #pragma warning restore ASP0001
-        applicationBuilder.UseMiddleware<LogContextMiddleware>();
+        applicationBuilder.UseMiddleware<IdentityLogContextMiddleware>();
         applicationBuilder.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
@@ -221,15 +221,17 @@ app.MapWhen(
 // Blazor website
 app.MapWhen(
     static ctx => !ctx.Request.Path.StartsWithSegments("/api"),
-    applicationBuilder =>
+    static applicationBuilder =>
     {
         {
+            applicationBuilder.UseStaticFiles();
+            applicationBuilder.UseSerilogRequestLogging();
             applicationBuilder.UseRouting();
 #pragma warning disable ASP0001
             applicationBuilder.UseAuthorization();
 #pragma warning restore ASP0001
             applicationBuilder.UseAntiforgery();
-            applicationBuilder.UseMiddleware<LogContextMiddleware>();
+            applicationBuilder.UseMiddleware<IdentityLogContextMiddleware>();
             applicationBuilder.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();

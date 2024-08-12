@@ -81,7 +81,7 @@ public class ExceptionHandlerMiddleware(RequestDelegate next)
     {
         context.Response.ContentType = CustomMessagePackOutputFormatter.ContentType;
         context.Response.StatusCode = StatusCodes.Status200OK;
-        context.Items.Add(nameof(ResultCode), code);
+        context.Items[nameof(ResultCode)] = code;
 
         DragaliaResponse<DataHeaders> gameResponse = new(new DataHeaders(code), code);
 

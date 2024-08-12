@@ -13,6 +13,8 @@ public class MaintenanceActionFilter(
     ILogger<MaintenanceActionFilter> logger
 ) : IActionFilter
 {
+    private const ResultCode MaintenanceCode = ResultCode.CommonMaintenance;
+
     public void OnActionExecuting(ActionExecutingContext context) { }
 
     public void OnActionExecuted(ActionExecutedContext context)
@@ -24,10 +26,12 @@ public class MaintenanceActionFilter(
 
         logger.LogInformation("Rewriting response due to active maintenance.");
 
+        context.HttpContext.Items[nameof(ResultCode)] = MaintenanceCode;
+
         context.Result = new OkObjectResult(
             new DragaliaResponse<object>(
-                dataHeaders: new DataHeaders(ResultCode.CommonMaintenance),
-                new ResultCodeResponse(ResultCode.CommonMaintenance)
+                dataHeaders: new DataHeaders(MaintenanceCode),
+                new ResultCodeResponse(MaintenanceCode)
             )
         );
     }
