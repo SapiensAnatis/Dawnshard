@@ -168,7 +168,6 @@ app.MapWhen(
         }
         applicationBuilder.UseMiddleware<HeaderLogContextMiddleware>();
         applicationBuilder.UseSerilogRequestLogging();
-        applicationBuilder.UseResponseCompression();
         applicationBuilder.UseAuthentication();
         applicationBuilder.UseRouting();
         applicationBuilder.UseAuthorization();
@@ -197,7 +196,6 @@ app.MapWhen(
     {
         applicationBuilder.UseRouting();
         applicationBuilder.UseSerilogRequestLogging();
-        applicationBuilder.UseResponseCompression();
 #pragma warning disable ASP0001
         applicationBuilder.UseAuthorization();
 #pragma warning restore ASP0001
@@ -217,7 +215,6 @@ app.MapWhen(
         {
             applicationBuilder.UseStaticFiles();
             applicationBuilder.UseSerilogRequestLogging();
-            applicationBuilder.UseResponseCompression();
             applicationBuilder.UseRouting();
 #pragma warning disable ASP0001
             applicationBuilder.UseAuthorization();
