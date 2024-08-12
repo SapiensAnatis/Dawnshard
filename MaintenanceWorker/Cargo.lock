@@ -490,9 +490,9 @@ checksum = "f3cb5ba0dc43242ce17de99c180e96db90b235b8a9fdc9543c96d2209116bd9f"
 
 [[package]]
 name = "serde"
-version = "1.0.204"
+version = "1.0.206"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc76f558e0cbb2a839d37354c575f1dc3fdc6546b5be373ba43d95f231bf7c12"
+checksum = "5b3e4cd94123dd520a128bcd11e34d9e9e423e7e3e50425cb1b4b1e3549d0284"
 dependencies = [
  "serde_derive",
 ]
@@ -521,9 +521,9 @@ dependencies = [
 
 [[package]]
 name = "serde_derive"
-version = "1.0.204"
+version = "1.0.206"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e0cd7e117be63d3c3678776753929474f3b04a43a080c744d6b0ae2a8c28e222"
+checksum = "fabfb6138d2383ea8208cf98ccf69cdfb1aff4088460681d84189aa259762f97"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -810,9 +810,9 @@ dependencies = [
 
 [[package]]
 name = "worker"
-version = "0.3.2"
+version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c0a229b4d95f00cda5b229afe91b733714b79558c6b02830bb5c5bb1d32922f7"
+checksum = "3cda58fc54ac88c54387c3a48f46fa066ccb48f2d81f7514dc6c240a2a13bf4e"
 dependencies = [
  "async-trait",
  "axum",
@@ -857,9 +857,9 @@ dependencies = [
 
 [[package]]
 name = "worker-macros"
-version = "0.3.2"
+version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b7ed257c9a7ebb524d03e109ac5c5ad0168e2ea79e647e0aaad90a9b0b90fb30"
+checksum = "cc9b615cb8673627508ceab81cd3a6080ff53d8de696bd5f5a08ac8bb1491a9c"
 dependencies = [
  "async-trait",
  "proc-macro2",
@@ -873,9 +873,9 @@ dependencies = [
 
 [[package]]
 name = "worker-sys"
-version = "0.3.2"
+version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ac736bbe32f34a9299a1d094dbc06733a7e68844e224f34580574e5b1c432d46"
+checksum = "3ef1e184943d021cf4511d29ddf411a8e75ee511d4fc587f207b60ddcb9698a2"
 dependencies = [
  "cfg-if",
  "js-sys",
