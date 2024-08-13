@@ -69,6 +69,16 @@ internal class RepeatedRequestPolicy(ILogger<RepeatedRequestPolicy> logger) : IO
         // {
         //     return false;
         // }
+        
+#if DEBUG || TEST 
+        // Integration test workaround. It's not easy to vary the Request-Token automatically using
+        // WebApplicationFactory - or at least I can't see a good way. So, they set this header to override the
+        // caching policy.
+        if (request.Headers.ContainsKey(Headers.DisableOutputCaching))
+        {
+            return false;
+        }
+#endif
 
         return true;
     }

@@ -15,13 +15,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Time.Testing;
 using Npgsql;
+using static DragaliaAPI.Infrastructure.DragaliaHttpConstants;
 
 namespace DragaliaAPI.Integration.Test;
 
@@ -207,7 +207,9 @@ public class TestFixture
                 }
             );
 
-        client.DefaultRequestHeaders.Add("SID", SessionId);
+        client.DefaultRequestHeaders.Add(Headers.SessionId, SessionId);
+        client.DefaultRequestHeaders.Add(Headers.DisableOutputCaching, "true");
+
         client.DefaultRequestHeaders.Add("Platform", "2");
         client.DefaultRequestHeaders.Add("Res-Ver", "y2XM6giU6zz56wCm");
 
