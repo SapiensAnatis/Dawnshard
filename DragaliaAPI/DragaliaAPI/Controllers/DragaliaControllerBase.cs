@@ -20,6 +20,7 @@ namespace DragaliaAPI.Controllers;
 [Authorize(AuthenticationSchemes = SchemeName.Session)]
 [Consumes("application/octet-stream")]
 [Produces("application/x-msgpack")]
+[ServiceFilter<SetResultCodeActionFilter>(Order = 2)]
 public abstract class DragaliaControllerBaseCore : ControllerBase
 {
     protected string DeviceAccountId =>
@@ -34,10 +35,6 @@ public abstract class DragaliaControllerBaseCore : ControllerBase
 
     public override OkObjectResult Ok(object? value)
     {
-        // Controller unit tests will not set the HttpContext properly
-        // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
-        this.HttpContext?.Items.Add(nameof(ResultCode), ResultCode.Success);
-
         return base.Ok(
             new DragaliaResponse<object>(
                 value ?? throw new ArgumentNullException(nameof(value)),
@@ -48,14 +45,10 @@ public abstract class DragaliaControllerBaseCore : ControllerBase
 
     public OkObjectResult Code(ResultCode code, string message)
     {
-        // Controller unit tests will not set the HttpContext properly
-        // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
-        this.HttpContext?.Items.Add(nameof(ResultCode), code);
-
         return base.Ok(
             new DragaliaResponse<object>(
-                dataHeaders: new DataHeaders(code),
-                new ResultCodeResponse(code, message)
+                new ResultCodeResponse(code, message),
+                dataHeaders: new DataHeaders(code)
             )
         );
     }
@@ -73,6 +66,6 @@ public abstract class DragaliaControllerBaseCore : ControllerBase
 /// <remarks>
 /// Not to be used for endpoints that make up the title screen (/tool/*, /version/*, etc.) to prevent infinite loops.
 /// </remarks>
-[ServiceFilter<ResourceVersionActionFilter>]
-[ServiceFilter<MaintenanceActionFilter>]
+[ServiceFilter<ResourceVersionActionFilter>(Order = 1)]
+[ServiceFilter<MaintenanceActionFilter>(Order = 1)]
 public abstract class DragaliaControllerBase : DragaliaControllerBaseCore { }

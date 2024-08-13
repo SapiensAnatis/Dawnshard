@@ -119,8 +119,8 @@ public class ToolTest : TestFixture
             .Should()
             .BeEquivalentTo(
                 new DragaliaResponse<ResultCodeResponse>(
-                    new DataHeaders(ResultCode.IdTokenError),
-                    new(ResultCode.IdTokenError)
+                    new(ResultCode.IdTokenError),
+                    new DataHeaders(ResultCode.IdTokenError)
                 )
             );
     }

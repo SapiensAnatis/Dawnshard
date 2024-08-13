@@ -38,8 +38,8 @@ public class ResourceVersionActionFilter(
 
             context.Result = new OkObjectResult(
                 new DragaliaResponse<object>(
-                    dataHeaders: new DataHeaders(ResultCode.CommonResourceVersionError),
-                    new ResultCodeResponse(ResultCode.CommonResourceVersionError)
+                    new ResultCodeResponse(ResultCode.CommonResourceVersionError),
+                    dataHeaders: new DataHeaders(ResultCode.CommonResourceVersionError)
                 )
             );
         }
