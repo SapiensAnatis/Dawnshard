@@ -1,4 +1,3 @@
-using System.Collections.Frozen;
 using System.Diagnostics;
 using System.Reflection;
 using DragaliaAPI;
@@ -7,8 +6,9 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Features.GraphQL;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Infrastructure.Hangfire;
+using DragaliaAPI.Infrastructure.Middleware;
+using DragaliaAPI.Infrastructure.OutputCaching;
 using DragaliaAPI.MessagePack;
-using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Health;
@@ -21,7 +21,6 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.JSInterop;
 using Serilog;
 
@@ -53,7 +52,7 @@ builder.WebHost.UseStaticWebAssets();
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 builder.Host.UseSerilog(
-    (context, services, loggerConfig) =>
+    static (context, services, loggerConfig) =>
         loggerConfig
             .ReadFrom.Configuration(context.Configuration)
             .ReadFrom.Services(services)
@@ -64,7 +63,7 @@ builder.Host.UseSerilog(
 
 builder
     .Services.AddControllers()
-    .AddMvcOptions(option =>
+    .AddMvcOptions(static option =>
     {
         option.OutputFormatters.Add(new CustomMessagePackOutputFormatter(CustomResolver.Options));
         option.InputFormatters.Add(new CustomMessagePackInputFormatter(CustomResolver.Options));
@@ -100,8 +99,19 @@ builder
     .Services.AddAuthorization()
     .ConfigureAuthentication()
     .AddResponseCompression()
+    .AddOutputCache(static opts =>
+    {
+        opts.AddBasePolicy(
+            static cachePolicyBuilder =>
+                cachePolicyBuilder
+                    .AddPolicy<RepeatedRequestPolicy>()
+                    .Expire(TimeSpan.FromMinutes(2)),
+            excludeDefaultPolicy: true
+        );
+    })
     .ConfigureHealthchecks()
-    .AddAutoMapper(Assembly.GetExecutingAssembly());
+    .AddAutoMapper(Assembly.GetExecutingAssembly())
+    .AddFeatureManagement();
 
 builder
     .Services.ConfigureGameServices(builder.Configuration)
@@ -109,8 +119,6 @@ builder
     .ConfigureSharedServices()
     .ConfigureGraphQLSchema()
     .ConfigureBlazorFrontend();
-
-builder.Services.AddFeatureManagement();
 
 WebApplication app = builder.Build();
 
@@ -146,27 +154,26 @@ if (!postgresOptions.DisableAutoMigration)
     app.MigrateDatabase();
 }
 
-app.UseStaticFiles();
-app.UseAuthentication();
-app.UseResponseCompression();
-
 // Game endpoints
 app.MapWhen(
-    ctx =>
+    static ctx =>
         DragaliaHttpConstants.RoutePrefixes.List.Any(prefix =>
             ctx.Request.Path.StartsWithSegments(prefix)
         ),
-    applicationBuilder =>
+    static applicationBuilder =>
     {
         foreach (string prefix in DragaliaHttpConstants.RoutePrefixes.List)
         {
             applicationBuilder.UsePathBase(prefix);
         }
-
+        applicationBuilder.UseMiddleware<HeaderLogContextMiddleware>();
+        applicationBuilder.UseSerilogRequestLogging();
+        applicationBuilder.UseAuthentication();
         applicationBuilder.UseRouting();
         applicationBuilder.UseAuthorization();
-        applicationBuilder.UseMiddleware<LogContextMiddleware>();
-        applicationBuilder.UseSerilogRequestLogging();
+        applicationBuilder.UseMiddleware<IdentityLogContextMiddleware>();
+        applicationBuilder.UseMiddleware<ResultCodeLoggingMiddleware>();
+        applicationBuilder.UseOutputCache();
         applicationBuilder.UseMiddleware<NotFoundHandlerMiddleware>();
         applicationBuilder.UseMiddleware<ExceptionHandlerMiddleware>();
         applicationBuilder.UseMiddleware<DailyResetMiddleware>();
@@ -182,23 +189,17 @@ app.MapWhen(
     }
 );
 
-string[] allowedOrigins =
-    builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
-
 // Svelte website API
 app.MapWhen(
     static ctx => ctx.Request.Path.StartsWithSegments("/api"),
-    applicationBuilder =>
+    static applicationBuilder =>
     {
-        applicationBuilder.UseCors(cors =>
-            cors.WithOrigins(allowedOrigins).AllowCredentials().AllowAnyHeader().AllowAnyMethod()
-        );
         applicationBuilder.UseRouting();
         applicationBuilder.UseSerilogRequestLogging();
 #pragma warning disable ASP0001
         applicationBuilder.UseAuthorization();
 #pragma warning restore ASP0001
-        applicationBuilder.UseMiddleware<LogContextMiddleware>();
+        applicationBuilder.UseMiddleware<IdentityLogContextMiddleware>();
         applicationBuilder.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
@@ -209,15 +210,17 @@ app.MapWhen(
 // Blazor website
 app.MapWhen(
     static ctx => !ctx.Request.Path.StartsWithSegments("/api"),
-    applicationBuilder =>
+    static applicationBuilder =>
     {
         {
+            applicationBuilder.UseStaticFiles();
+            applicationBuilder.UseSerilogRequestLogging();
             applicationBuilder.UseRouting();
 #pragma warning disable ASP0001
             applicationBuilder.UseAuthorization();
 #pragma warning restore ASP0001
             applicationBuilder.UseAntiforgery();
-            applicationBuilder.UseMiddleware<LogContextMiddleware>();
+            applicationBuilder.UseMiddleware<IdentityLogContextMiddleware>();
             applicationBuilder.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();

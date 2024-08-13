@@ -4,7 +4,7 @@ using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 
-namespace DragaliaAPI.Middleware;
+namespace DragaliaAPI.Infrastructure.Middleware;
 
 public class DeveloperAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
@@ -25,7 +25,7 @@ public class DeveloperAuthenticationHandler : AuthenticationHandler<Authenticati
     {
         if (this.environment.IsDevelopment())
         {
-            return Task.FromResult(GetSuccessResult());
+            return Task.FromResult(this.GetSuccessResult());
         }
 
         string? tokenVar =
@@ -60,7 +60,7 @@ public class DeveloperAuthenticationHandler : AuthenticationHandler<Authenticati
             authHeader.Parameter[..3] + "..."
         );
 
-        return Task.FromResult(GetSuccessResult());
+        return Task.FromResult(this.GetSuccessResult());
     }
 
     private AuthenticateResult GetSuccessResult()

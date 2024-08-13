@@ -2,7 +2,7 @@ using DragaliaAPI.MissionDesigner.Models;
 using DragaliaAPI.MissionDesigner.Models.Attributes;
 using DragaliaAPI.MissionDesigner.Models.EventMission;
 
-namespace DragaliaAPI.MissionDesigner.Missions;
+namespace DragaliaAPI.MissionDesigner.Missions.MemoryEvent;
 
 [ContainsMissionList]
 public static class TollOfTheDeep

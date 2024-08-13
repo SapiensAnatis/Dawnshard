@@ -3,7 +3,7 @@ using DragaliaAPI.MessagePack;
 using DragaliaAPI.Models;
 using MessagePack;
 
-namespace DragaliaAPI.Middleware;
+namespace DragaliaAPI.Infrastructure.Middleware;
 
 public class NotFoundHandlerMiddleware
 {
@@ -20,17 +20,23 @@ public class NotFoundHandlerMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        await next(context);
+        await this.next(context);
 
         if (context.Response.StatusCode != (int)HttpStatusCode.NotFound)
+        {
             return;
+        }
 
+        // Exclude controllers where we return this.NotFound() explicitly
         if (context.GetEndpoint() is not null)
-            // Exclude controllers where we return this.NotFound() explicitly
+        {
             return;
+        }
 
         this.logger.LogInformation("HTTP 404 on {RequestPath}", context.Request.Path);
         context.Response.StatusCode = (int)HttpStatusCode.OK;
+
+        context.Items[nameof(ResultCode)] = NotFoundCode;
 
         DragaliaResponse<ResultCodeResponse> gameResponse =
             new(new DataHeaders(NotFoundCode), new(NotFoundCode));

@@ -30,8 +30,9 @@ using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Features.Version;
+using DragaliaAPI.Features.Web;
 using DragaliaAPI.Features.Zena;
-using DragaliaAPI.Middleware;
+using DragaliaAPI.Infrastructure.Middleware;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Api;
@@ -75,7 +76,9 @@ public static class ServiceConfiguration
             .AddScoped<IStampService, StampService>()
             .AddScoped<IStampRepository, StampRepository>()
             .AddScoped<ISavefileUpdateService, SavefileUpdateService>()
-            .AddTransient<LogContextMiddleware>();
+            .AddTransient<IdentityLogContextMiddleware>()
+            .AddTransient<HeaderLogContextMiddleware>()
+            .AddTransient<ResultCodeLoggingMiddleware>();
 
         services
             .AddSummoningFeature()

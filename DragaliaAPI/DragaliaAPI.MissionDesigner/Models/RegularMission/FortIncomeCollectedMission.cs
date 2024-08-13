@@ -1,4 +1,4 @@
-namespace DragaliaAPI.MissionDesigner.Models;
+namespace DragaliaAPI.MissionDesigner.Models.RegularMission;
 
 public class FortIncomeCollectedMission : Mission
 {

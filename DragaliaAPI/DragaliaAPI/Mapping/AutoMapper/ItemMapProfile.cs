@@ -2,12 +2,12 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 
-namespace DragaliaAPI.AutoMapper.Profiles;
+namespace DragaliaAPI.Mapping.AutoMapper;
 
 public class ItemMapProfile : Profile
 {
     public ItemMapProfile()
     {
-        CreateMap<DbPlayerUseItem, ItemList>();
+        this.CreateMap<DbPlayerUseItem, ItemList>();
     }
 }

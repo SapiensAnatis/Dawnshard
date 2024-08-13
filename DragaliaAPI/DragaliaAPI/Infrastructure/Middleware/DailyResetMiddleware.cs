@@ -3,7 +3,7 @@ using DragaliaAPI.Models;
 using MessagePack;
 using Microsoft.AspNetCore.Authorization;
 
-namespace DragaliaAPI.Middleware;
+namespace DragaliaAPI.Infrastructure.Middleware;
 
 public class DailyResetMiddleware
 {

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 
-namespace DragaliaAPI.Middleware;
+namespace DragaliaAPI.Infrastructure.Middleware;
 
 public class ExceptionHandlerMiddleware(RequestDelegate next)
 {
@@ -81,7 +81,7 @@ public class ExceptionHandlerMiddleware(RequestDelegate next)
     {
         context.Response.ContentType = CustomMessagePackOutputFormatter.ContentType;
         context.Response.StatusCode = StatusCodes.Status200OK;
-        context.Items.Add(nameof(ResultCode), code);
+        context.Items[nameof(ResultCode)] = code;
 
         DragaliaResponse<DataHeaders> gameResponse = new(new DataHeaders(code), code);
 

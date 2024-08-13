@@ -1,5 +1,5 @@
 ﻿using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Middleware;
+using DragaliaAPI.Infrastructure.Middleware;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authorization;

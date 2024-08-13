@@ -2,7 +2,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 
-namespace DragaliaAPI.AutoMapper.Profiles;
+namespace DragaliaAPI.Mapping.AutoMapper;
 
 public class QuestWallMapProfile : Profile
 {

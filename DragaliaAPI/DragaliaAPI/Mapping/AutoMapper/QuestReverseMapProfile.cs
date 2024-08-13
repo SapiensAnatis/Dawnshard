@@ -3,7 +3,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 
-namespace DragaliaAPI.AutoMapper.Profiles;
+namespace DragaliaAPI.Mapping.AutoMapper;
 
 public class QuestReverseMapProfile : Profile
 {

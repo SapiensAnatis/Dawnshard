@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Features.Dungeon.AutoRepeat;
 using DragaliaAPI.Features.TimeAttack;
-using DragaliaAPI.Middleware;
+using DragaliaAPI.Infrastructure.Middleware;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
