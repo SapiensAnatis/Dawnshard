@@ -8,6 +8,7 @@ on:
       - PhotonStateManager/**
       - Shared/**
       - Directory.Packages.props
+      - .github/workflows/publish-statemanager.yaml
 
 env:
   HUSKY: 0

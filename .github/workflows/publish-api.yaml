@@ -8,6 +8,7 @@ on:
       - DragaliaAPI/**
       - Shared/**
       - Directory.Packages.props
+      - .github/workflows/publish-api.yaml
 
 env:
   HUSKY: 0
