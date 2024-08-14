@@ -16,8 +16,9 @@ on:
         type: string
         description: Docker image name
     outputs:
-      tag: ${{ jobs.build.outputs.tag }}
-      description: The tag applied to the container image
+      tag:
+        description: The tag applied to the container image
+        value: ${{ jobs.build.outputs.tag }}
 
 env:
   HUSKY: 0

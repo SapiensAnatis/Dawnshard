@@ -9,6 +9,7 @@ on:
       - Shared/**
       - Directory.Packages.props
       - .github/workflows/publish-statemanager.yaml
+      - .github/workflows/build.yaml
 
 env:
   HUSKY: 0
