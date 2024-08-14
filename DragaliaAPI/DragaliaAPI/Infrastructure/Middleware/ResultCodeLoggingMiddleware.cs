@@ -19,16 +19,22 @@ internal partial class ResultCodeLoggingMiddleware(ILogger<ResultCodeLoggingMidd
             resultCode = resultCodeValue;
         }
 
-        LogLevel logLevel =
-            resultCode is null || IsSuccessResultCode(resultCode.Value)
-                ? LogLevel.Information
-                : LogLevel.Error;
+        LogLevel logLevel = GetLogLevelFromResultCode(resultCode);
 
         Log.EndpointResponded(logger, logLevel, context.Request.Path.ToString(), resultCode);
     }
 
-    private static bool IsSuccessResultCode(ResultCode code) =>
-        code is ResultCode.Success or ResultCode.CommonChangeDate or ResultCode.CommonMaintenance;
+    private static LogLevel GetLogLevelFromResultCode(ResultCode? code) =>
+        code switch
+        {
+            null
+            or ResultCode.Success
+            or ResultCode.CommonChangeDate
+            or ResultCode.CommonMaintenance
+            or ResultCode.CommonTimeout
+                => LogLevel.Information,
+            _ => LogLevel.Error
+        };
 
     private static partial class Log
     {
