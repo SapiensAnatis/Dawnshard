@@ -37,7 +37,7 @@ jobs:
         uses: dotnet/nbgv@v0.4.2
         id: nbgv
         with:
-          path: ${{ inputs.dockerfile }}
+          path: ${{ inputs.dockerfile }}/../../
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
