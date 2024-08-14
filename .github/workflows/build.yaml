@@ -27,6 +27,8 @@ jobs:
     permissions:
       contents: read
       packages: write
+    outputs:
+      tag: ${{ steps.output-tag.tag }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -55,3 +57,7 @@ jobs:
           tags: ghcr.io/sapiensanatis/${{ inputs.image-name }}:${{ steps.nbgv.outputs.SemVer2 }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          
+      - name: Output tag
+        id: output-tag
+        run: echo "tag=${{ steps.nbgv.outputs.SemVer2 }}" >> "$GITHUB_OUTPUT"
