@@ -35,6 +35,6 @@ jobs:
             export NOMAD_ADDR="https://10.0.0.2:4646"
             export NOMAD_CACERT="/srv/certs/cluster-agent-ca.pem"
             export NOMAD_TOKEN="${{ secrets.NOMAD_TOKEN }}"
-            nomad var put nomad/jobs/${{ vars.JOB_NAME }}/ version="${{ inputs.version }}"
+            nomad var get nomad/jobs/${{ vars.JOB_NAME }}/ | nomad var put -out json - version="${{ inputs.version }}"
             cd "${{ vars.JOB_DIRECTORY }}"
             nomad job run "${{ vars.JOB_FILE_NAME }}"

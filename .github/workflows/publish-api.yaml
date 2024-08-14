@@ -9,6 +9,7 @@ on:
       - Shared/**
       - Directory.Packages.props
       - .github/workflows/publish-api.yaml
+      - .github/workflows/deploy.yaml
       - .github/workflows/build.yaml
 
 env:
