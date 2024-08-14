@@ -15,6 +15,9 @@ on:
         required: true
         type: string
         description: Docker image name
+    outputs:
+      tag: ${{ jobs.build.outputs.tag }}
+      description: The tag applied to the container image
 
 env:
   HUSKY: 0
