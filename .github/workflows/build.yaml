@@ -32,7 +32,7 @@ jobs:
       contents: read
       packages: write
     outputs:
-      tag: ${{ steps.output-tag.tag }}
+      tag: ${{ steps.output-tag.outputs.tag }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -64,4 +64,4 @@ jobs:
           
       - name: Output tag
         id: output-tag
-        run: echo "tag=${{ steps.nbgv.outputs.SemVer2 }}" >> "$GITHUB_OUTPUT"
+        run: echo "tag=${{ steps.nbgv.outputs.SemVer2 }}" >> $GITHUB_OUTPUT
