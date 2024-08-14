@@ -33,30 +33,12 @@ jobs:
       contents: read
       packages: write
     steps:
-      - name: Derive image tag
-        id: derive-tag
-        run: |
-          TAG_REGEX="[\w]+?@v(.*)"
-          echo "Ref: ${{ inputs.ref }}"
-          echo "Tag: ${{ inputs.image-tag }}"
-
-          if [ ${{ inputs.image-tag }} != "undefined" ]
-          then
-            echo "tag=${{ inputs.image-tag }}" >> "$GITHUB_OUTPUT"
-            exit 0;
-          fi
-
-          if [ ${{ inputs.ref }} = "main" ]
-          then
-             echo "tag=latest" >> "$GITHUB_OUTPUT"
-          elif [[ ${{ inputs.ref }} =~ $TAG_REGEX ]]
-          then
-             echo "tag=${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
-          else
-            echo "No image-tag provided and failed to derive image tag from ref"
-            exit 1;
-          fi
-
+      - name: Get NerdBank version
+        uses: dotnet/nbgv@v0.4.2
+        id: nbgv
+        with:
+          path: ${{ inputs.dockerfile }}
+        
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.ref }}
@@ -73,6 +55,6 @@ jobs:
           context: .
           push: true
           file: ${{ inputs.dockerfile }}
-          tags: ghcr.io/sapiensanatis/${{ inputs.image-name }}:${{ steps.derive-tag.outputs.tag }}
+          tags: ghcr.io/sapiensanatis/${{ inputs.image-name }}:${{ steps.nbgv.outputs.SemVer2 }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

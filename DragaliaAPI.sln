@@ -52,6 +52,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PhotonStateManager", "Photo
 	ProjectSection(SolutionItems) = preProject
 		PhotonStateManager\Directory.Build.props = PhotonStateManager\Directory.Build.props
 		PhotonStateManager\README.md = PhotonStateManager\README.md
+		PhotonStateManager\version.json = PhotonStateManager\version.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Integration.Test", "DragaliaAPI\DragaliaAPI.Integration.Test\DragaliaAPI.Integration.Test.csproj", "{CA0AE7C5-2742-4FC9-B668-BC7459E4BCE5}"
@@ -81,6 +82,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DragaliaAPI", "DragaliaAPI"
 	ProjectSection(SolutionItems) = preProject
 		DragaliaAPI\Directory.Build.props = DragaliaAPI\Directory.Build.props
 		DragaliaAPI\README.md = DragaliaAPI\README.md
+		DragaliaAPI\version.json = DragaliaAPI\version.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.MasterAssetConverter", "DragaliaAPI\DragaliaAPI.MasterAssetConverter\DragaliaAPI.MasterAssetConverter.csproj", "{F0DFB899-ADC2-407E-AB32-647BA1C4122C}"
