@@ -5,4 +5,9 @@
     <Nullable>enable</Nullable>
     <AnalysisLevel>latest-minimum</AnalysisLevel>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" Condition="!Exists('packages.config')">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>

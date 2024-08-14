@@ -67,6 +67,7 @@
     <PackageVersion Include="GraphQL.Client.Serializer.SystemTextJson" Version="6.1.0" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.4.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.8" />
+    <PackageVersion Include="Nerdbank.GitVersioning" Version="3.6.141" />
     <PackageVersion Include="Respawn" Version="6.2.1" />
     <PackageVersion Include="Snapshooter.Xunit" Version="0.14.1" />
     <PackageVersion Include="Testcontainers" Version="3.9.0" />

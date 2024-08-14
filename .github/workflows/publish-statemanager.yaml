@@ -27,4 +27,5 @@ jobs:
     uses: ./.github/workflows/deploy.yaml
     with:
       github-environment: "PhotonStateManager"
+      version: ${{ needs.build.outputs.tag }}
     secrets: inherit
