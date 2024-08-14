@@ -39,7 +39,7 @@ public class NotFoundHandlerMiddleware
         context.Items[nameof(ResultCode)] = NotFoundCode;
 
         DragaliaResponse<ResultCodeResponse> gameResponse =
-            new(new DataHeaders(NotFoundCode), new(NotFoundCode));
+            new(new(NotFoundCode), new DataHeaders(NotFoundCode));
 
         await context.Response.Body.WriteAsync(
             MessagePackSerializer.Serialize(gameResponse, CustomResolver.Options)

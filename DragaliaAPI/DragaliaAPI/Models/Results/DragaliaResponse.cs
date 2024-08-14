@@ -1,29 +1,35 @@
 ﻿using System.Text.Json.Serialization;
+using DragaliaAPI.Infrastructure;
 using MessagePack;
 
 namespace DragaliaAPI.Models.Results;
 
-[MessagePackObject]
-public class DragaliaResponse<TData>
-    where TData : class
+public abstract class DragaliaResponse
 {
     [Key("data_headers")]
-    public DataHeaders DataHeaders { get; init; }
+    public DataHeaders DataHeaders { get; }
 
+    protected DragaliaResponse(DataHeaders dataHeaders)
+    {
+        this.DataHeaders = dataHeaders;
+    }
+}
+
+[MessagePackObject]
+public class DragaliaResponse<TData> : DragaliaResponse
+    where TData : class
+{
     [Key("data")]
-    public TData Data { get; init; }
+    public TData Data { get; }
 
     public DragaliaResponse(TData data, ResultCode resultCode = ResultCode.Success)
-    {
-        this.Data = data;
-        this.DataHeaders = new(resultCode);
-    }
+        : this(data, new DataHeaders(resultCode)) { }
 
     [JsonConstructor]
     [SerializationConstructor]
-    public DragaliaResponse(DataHeaders dataHeaders, TData data)
+    public DragaliaResponse(TData data, DataHeaders dataHeaders)
+        : base(dataHeaders)
     {
-        this.DataHeaders = dataHeaders;
         this.Data = data;
     }
 }

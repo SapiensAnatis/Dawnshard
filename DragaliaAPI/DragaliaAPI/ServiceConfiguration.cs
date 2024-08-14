@@ -173,7 +173,10 @@ public static class ServiceConfiguration
         );
         services.AddScoped<IMatchingService, MatchingService>();
 
-        services.AddScoped<ResourceVersionActionFilter>().AddScoped<MaintenanceActionFilter>();
+        services
+            .AddScoped<ResourceVersionActionFilter>()
+            .AddScoped<MaintenanceActionFilter>()
+            .AddScoped<SetResultCodeActionFilter>();
 
         return services;
     }

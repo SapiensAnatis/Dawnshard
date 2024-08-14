@@ -16,8 +16,8 @@ public class SavefileController(ILoadService loadService) : ControllerBase
     {
         DragaliaResponse<LoadIndexResponse> savefile =
             new(
-                new DataHeaders(ResultCode.Success),
-                await loadService.BuildIndexData(cancellationToken)
+                await loadService.BuildIndexData(cancellationToken),
+                new DataHeaders(ResultCode.Success)
             );
 
         return this.File(

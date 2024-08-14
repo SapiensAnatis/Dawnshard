@@ -34,8 +34,8 @@ public class ExceptionHandlerMiddlewareTest : TestFixture
         data.Should()
             .BeEquivalentTo(
                 new DragaliaResponse<ResultCodeResponse>(
-                    new DataHeaders(ResultCode.AbilityCrestBuildupPieceShortLevel),
-                    new ResultCodeResponse(ResultCode.AbilityCrestBuildupPieceShortLevel)
+                    new ResultCodeResponse(ResultCode.AbilityCrestBuildupPieceShortLevel),
+                    new DataHeaders(ResultCode.AbilityCrestBuildupPieceShortLevel)
                 )
             );
     }
@@ -72,8 +72,8 @@ public class ExceptionHandlerMiddlewareTest : TestFixture
             .Should()
             .BeEquivalentTo(
                 new DragaliaResponse<ResultCodeResponse>(
-                    new DataHeaders(ResultCode.CommonAuthError),
-                    new ResultCodeResponse(ResultCode.CommonAuthError)
+                    new ResultCodeResponse(ResultCode.CommonAuthError),
+                    new DataHeaders(ResultCode.CommonAuthError)
                 )
             );
     }

@@ -153,8 +153,8 @@ public class PartyTest : TestFixture
             .Should()
             .BeEquivalentTo(
                 new DragaliaResponse<ResultCodeResponse>(
-                    new DataHeaders(ResultCode.PartySwitchSettingCharaShort),
-                    new ResultCodeResponse(ResultCode.PartySwitchSettingCharaShort)
+                    new ResultCodeResponse(ResultCode.PartySwitchSettingCharaShort),
+                    new DataHeaders(ResultCode.PartySwitchSettingCharaShort)
                 )
             );
     }
@@ -184,8 +184,8 @@ public class PartyTest : TestFixture
             .Should()
             .BeEquivalentTo(
                 new DragaliaResponse<ResultCodeResponse>(
-                    new DataHeaders(ResultCode.PartySwitchSettingCharaShort),
-                    new ResultCodeResponse(ResultCode.PartySwitchSettingCharaShort)
+                    new ResultCodeResponse(ResultCode.PartySwitchSettingCharaShort),
+                    new DataHeaders(ResultCode.PartySwitchSettingCharaShort)
                 )
             );
     }
