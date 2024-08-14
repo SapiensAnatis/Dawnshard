@@ -15,11 +15,6 @@ on:
         required: true
         type: string
         description: Docker image name
-      image-tag:
-        required: false
-        default: "undefined"
-        type: string
-        description: Docker image tag
 
 env:
   HUSKY: 0
@@ -33,15 +28,16 @@ jobs:
       contents: read
       packages: write
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
       - name: Get NerdBank version
         uses: dotnet/nbgv@v0.4.2
         id: nbgv
         with:
           path: ${{ inputs.dockerfile }}
-        
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.ref }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3

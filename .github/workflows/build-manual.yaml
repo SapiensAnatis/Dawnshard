@@ -15,10 +15,6 @@ on:
         required: true
         type: string
         description: Docker image name
-      image-tag:
-        required: true
-        type: string
-        description: Docker image tag
 
 env:
   HUSKY: 0
@@ -30,5 +26,4 @@ jobs:
       ref: ${{ inputs.ref }}
       dockerfile: ${{ inputs.dockerfile }}
       image-name: ${{ inputs.image-name }}
-      image-tag: ${{ inputs.image-tag }}
     secrets: inherit
