@@ -4,7 +4,7 @@ import nbgv from 'nerdbank-gitversioning';
 import { defineConfig } from 'vite';
 import checker from 'vite-plugin-checker';
 
-let version = "0.0.0";
+let version = '0.0.0';
 
 try {
   version = (await nbgv.getVersion()).semVer2;
