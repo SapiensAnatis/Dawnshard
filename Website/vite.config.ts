@@ -4,15 +4,7 @@ import nbgv from 'nerdbank-gitversioning';
 import { defineConfig } from 'vite';
 import checker from 'vite-plugin-checker';
 
-let version = '0.0.0';
 
-try {
-  version = (await nbgv.getVersion()).semVer2;
-} catch (error) {
-  console.error('Failed to get version', error);
-}
-
-console.log('version', version);
 
 export default defineConfig(({ mode }) => ({
   plugins: [
@@ -40,8 +32,5 @@ export default defineConfig(({ mode }) => ({
         changeOrigin: true
       }
     }
-  },
-  define: {
-    __APP_VERSION__: JSON.stringify(version)
   }
 }));
