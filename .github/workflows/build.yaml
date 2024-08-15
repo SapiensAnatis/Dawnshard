@@ -40,14 +40,15 @@ jobs:
           ref: ${{ inputs.ref }}
           fetch-depth: 0
           
-      - name: Get version.json path
+      - name: Get version.json directory
         run: |
           dockerfile_dir=$(dirname ${{ inputs.dockerfile }}) 
           for path in "$dockerfile_dir/../version.json" "$dockerfile_dir/../../version.json"; do
             echo Checking $path
             if test -f $path; then
               echo Found version.json at $path
-              echo "VERSION_JSON_PATH=$path" >> "$GITHUB_ENV"
+              json_dir=$(dirname $path)
+              echo "VERSION_JSON_PATH=$json_dir" >> "$GITHUB_ENV"
               exit 0
             fi
           done
