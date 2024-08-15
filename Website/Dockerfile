@@ -18,7 +18,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-l
 FROM base AS build
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 COPY ["Website/", "./"]
-RUN echo "PUBLIC_ENABLE_MSW=false" >> ./.env.production 
+RUN echo "PUBLIC_ENABLE_MSW=false" >> ./.env.production
 RUN pnpm run build
 
 FROM base
@@ -28,4 +28,4 @@ COPY --from=build ["/app/build", "./"]
 ENV NODE_ENV="production"
 
 USER node
-CMD ["node", "./index.js"]
+ENTRYPOINT ["node", "./index.js"]

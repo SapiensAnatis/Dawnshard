@@ -61,7 +61,11 @@ jobs:
           tags: ghcr.io/sapiensanatis/${{ inputs.image-name }}:${{ steps.nbgv.outputs.SemVer2 }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          
+          labels: |
+            org.opencontainers.image.source=${{ github.repositoryUrl }} 
+            org.opencontainers.image.revision=${{ github.sha }} 
+            org.opencontainers.image.authors=github.com/${{ github.repository_owner }}
+      
       - name: Output tag
         id: output-tag
         run: echo "tag=${{ steps.nbgv.outputs.SemVer2 }}" >> $GITHUB_OUTPUT
