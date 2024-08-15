@@ -43,7 +43,7 @@ jobs:
       - name: Get version.json directory
         run: |
           dockerfile_dir=$(dirname ${{ inputs.dockerfile }}) 
-          for path in "$dockerfile_dir/version.json" "$dockerfile_dir/../../version.json"; do
+          for path in "$dockerfile_dir/version.json" "$dockerfile_dir/../version.json"; do
             echo Checking $path
             if test -f $path; then
               echo Found version.json at $path
