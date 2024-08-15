@@ -24,6 +24,7 @@ jobs:
         with:
           sparse-checkout: "Website"
           ref: ${{ inputs.ref }}
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
