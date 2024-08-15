@@ -61,9 +61,9 @@ jobs:
           tags: ghcr.io/sapiensanatis/${{ inputs.image-name }}:${{ steps.nbgv.outputs.SemVer2 }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          build-args: |
-            GIT_COMMIT_SHA=${{ env.GITHUB_SHA }}
-            AUTHOR=github.com/${{ env.GITHUB_REPOSITORY_OWNER }}
+          labels: |
+            io.dawnshard.commit-sha=${{ env.GITHUB_SHA }}
+            org.opencontainers.image.authors=github.com/${{ env.GITHUB_REPOSITORY_OWNER }}
       
       - name: Output tag
         id: output-tag

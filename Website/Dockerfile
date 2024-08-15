@@ -29,9 +29,3 @@ ENV NODE_ENV="production"
 
 USER node
 ENTRYPOINT ["node", "./index.js"]
-
-ARG GIT_COMMIT_SHA
-ARG AUTHOR
-
-LABEL io.dawnshard.commit-sha=${GIT_COMMIT_SHA}
-LABEL org.opencontainers.image.authors=${AUTHOR}

@@ -19,9 +19,3 @@ RUN dotnet publish "DragaliaAPI.Photon.StateManager.csproj" -c Release -o /app/p
 FROM base AS final
 COPY --from=build /app/publish/ .
 ENTRYPOINT ["dotnet", "DragaliaAPI.Photon.StateManager.dll"]
-
-ARG GIT_COMMIT_SHA
-ARG AUTHOR
-
-LABEL io.dawnshard.commit-sha=${GIT_COMMIT_SHA}
-LABEL org.opencontainers.image.authors=${AUTHOR}
