@@ -208,8 +208,6 @@ public class TestFixture
             );
 
         client.DefaultRequestHeaders.Add(Headers.SessionId, SessionId);
-        client.DefaultRequestHeaders.Add(Headers.DisableOutputCaching, "true");
-
         client.DefaultRequestHeaders.Add("Platform", "2");
         client.DefaultRequestHeaders.Add("Res-Ver", "y2XM6giU6zz56wCm");
 

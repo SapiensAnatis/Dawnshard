@@ -27,7 +27,6 @@ public class OutputCachingTest : TestFixture
 
         await this.AddToDatabase(build);
 
-        this.Client.DefaultRequestHeaders.Remove(Headers.DisableOutputCaching);
         this.Client.DefaultRequestHeaders.Add(Headers.RequestToken, "1234");
 
         DragaliaResponse<FortBuildEndResponse> response =
