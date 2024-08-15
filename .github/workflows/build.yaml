@@ -62,8 +62,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           labels: |
-            io.dawnshard.commit-sha=${{ env.GITHUB_SHA }}
-            org.opencontainers.image.authors=github.com/${{ env.GITHUB_REPOSITORY_OWNER }}
+            org.opencontainers.image.source=${{ github.repositoryUrl }} 
+            org.opencontainers.image.revision=${{ github.sha }} 
+            org.opencontainers.image.authors=github.com/${{ github.repository_owner }}
       
       - name: Output tag
         id: output-tag
