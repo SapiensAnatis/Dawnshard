@@ -4,8 +4,6 @@ import nbgv from 'nerdbank-gitversioning';
 import { defineConfig } from 'vite';
 import checker from 'vite-plugin-checker';
 
-
-
 export default defineConfig(({ mode }) => ({
   plugins: [
     sveltekit(),
