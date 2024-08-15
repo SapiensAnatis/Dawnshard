@@ -1,6 +1,5 @@
 import { enhancedImages } from '@sveltejs/enhanced-img';
 import { sveltekit } from '@sveltejs/kit/vite';
-import nbgv from 'nerdbank-gitversioning';
 import { defineConfig } from 'vite';
 import checker from 'vite-plugin-checker';
 
