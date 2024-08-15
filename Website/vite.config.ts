@@ -1,7 +1,10 @@
 import { enhancedImages } from '@sveltejs/enhanced-img';
 import { sveltekit } from '@sveltejs/kit/vite';
+import nbgv from 'nerdbank-gitversioning'
 import { defineConfig } from 'vite';
 import checker from 'vite-plugin-checker';
+
+const version = (await nbgv.getVersion()).semVer2;
 
 export default defineConfig(({ mode }) => ({
   plugins: [
@@ -29,5 +32,8 @@ export default defineConfig(({ mode }) => ({
         changeOrigin: true
       }
     }
+  },
+  define: {
+    __APP_VERSION__: JSON.stringify(version)
   }
 }));

@@ -1,6 +1,5 @@
 {
   "name": "dawnshard",
-  "version": "0.0.1",
   "private": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
@@ -38,6 +37,7 @@
     "eslint-plugin-svelte": "2.43.0",
     "globals": "15.9.0",
     "msw": "2.3.5",
+    "nerdbank-gitversioning": "3.6.141",
     "postcss": "8.4.41",
     "postcss-load-config": "6.0.1",
     "prettier": "3.3.3",
