@@ -23,3 +23,9 @@ RUN dotnet publish "DragaliaAPI.csproj" -c Release -o /app/publish/ /p:UseAppHos
 FROM base AS final
 COPY --from=build /app/publish/ .
 ENTRYPOINT ["dotnet", "DragaliaAPI.dll"]
+
+ARG GIT_COMMIT_SHA
+ARG AUTHOR
+
+LABEL io.dawnshard.commit-sha=${GIT_COMMIT_SHA}
+LABEL org.opencontainers.image.authors=${AUTHOR}

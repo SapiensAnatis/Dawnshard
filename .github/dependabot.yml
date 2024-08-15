@@ -7,7 +7,7 @@ updates:
   - package-ecosystem: "nuget"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     groups:
       nuget:
         patterns:
@@ -22,6 +22,14 @@ updates:
           - "*"
   - package-ecosystem: "docker"
     directory: "/PhotonStateManager/DragaliaAPI.Photon.StateManager"
+    schedule:
+      interval: "weekly"
+    groups:
+      docker:
+        patterns:
+          - "*"
+  - package-ecosystem: "docker"
+    directory: "/Website"
     schedule:
       interval: "weekly"
     groups:
