@@ -39,12 +39,22 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
           fetch-depth: 0
+          
+      - name: Get version.json path
+        run: |
+          for path in "${{ inputs.dockerfile }}/../version.json" "${{ inputs.dockerfile }}/../../version.json"; do
+            echo Checking $path
+            if test -f $path; then
+              echo Found version.json at $path
+              echo "VERSION_JSON_PATH=$path" >> "$GITHUB_ENV"
+            fi
+          done
 
       - name: Get NerdBank version
         uses: dotnet/nbgv@v0.4.2
         id: nbgv
         with:
-          path: ${{ inputs.dockerfile }}/../../
+          path: ${{ env.VERSION_JSON_PATH }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
