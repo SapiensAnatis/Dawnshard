@@ -16,7 +16,7 @@ const config = {
   // for more information about preprocessors
   preprocess: [
     sveltePreprocess({
-      replace: [['__APP_VERSION__', JSON.stringify(version)]]
+      replace: [[/__APP_VERSION__/g, JSON.stringify(version)]]
     })
   ],
 
