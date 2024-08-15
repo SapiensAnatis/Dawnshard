@@ -30,13 +30,5 @@ public static class DragaliaHttpConstants
         /// Header containing a unique device identifier.
         /// </summary>
         public const string DeviceId = "DeviceId";
-
-        /// <summary>
-        /// Header to disable output caching.
-        /// </summary>
-        /// <remarks>
-        /// Not used by the game client, but used by the integration tests to avoid being served cached data.
-        /// </remarks>
-        public const string DisableOutputCaching = "Disable-OutputCaching";
     }
 }
