@@ -42,13 +42,18 @@ jobs:
           
       - name: Get version.json path
         run: |
-          for path in "${{ inputs.dockerfile }}/../version.json" "${{ inputs.dockerfile }}/../../version.json"; do
+          dockerfile_dir=$(dirname ${{ inputs.dockerfile }}) 
+          for path in "$dockerfile_dir/../version.json" "$dockerfile_dir/../../version.json"; do
             echo Checking $path
             if test -f $path; then
               echo Found version.json at $path
               echo "VERSION_JSON_PATH=$path" >> "$GITHUB_ENV"
+              exit 0
             fi
           done
+          
+          echo Failed to find version.json
+          exit 1
 
       - name: Get NerdBank version
         uses: dotnet/nbgv@v0.4.2
