@@ -5,6 +5,7 @@ declare global {
     // interface Error {}
     interface Locals {
       hasValidJwt: boolean;
+      nonce: string;
     }
     // interface PageData {}
     // interface PageState {}

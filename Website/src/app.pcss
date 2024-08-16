@@ -56,7 +56,7 @@
   * {
     @apply border-border;
     --header-height: 3.5rem;
-    --navigation-width: min(25%, 300px);
+    --navigation-width: 17rem;
   }
   body {
     @apply bg-background text-foreground;
@@ -64,5 +64,11 @@
   .link {
     @apply text-sky-400;
     @apply underline;
+  }
+  select {
+    height: 2.5rem;
+    background-color: hsl(var(--background));
+    padding: 0.5rem;
+    @apply rounded-md border border-input text-sm disabled:cursor-not-allowed disabled:opacity-50
   }
 }

@@ -19,8 +19,6 @@
 
   export let widgetData: PresentWidgetData;
 
-  const keyPrefix = 'saveEditor.present';
-
   let disableQuantity = false;
 
   let typeValue: EntityType | '';
@@ -35,7 +33,7 @@
   $: types = widgetData.types
     .map(({ type }) => ({
       value: type,
-      label: $t(`${keyPrefix}.type.${type}.label`)
+      label: $t(`entity.${formatTypeKey(type)}.label`)
     }))
     .sort((a, b) => a.label.localeCompare(b.label));
 
@@ -55,7 +53,7 @@
     return itemList
       .map(({ id }) => ({
         value: id,
-        label: $t(`${keyPrefix}.type.${typeValue}.item.${id}`)
+        label: $t(`entity.${formatTypeKey(typeValue)}.item.${id}`)
       }))
       .sort((a, b) => a.label.localeCompare(b.label));
   };
@@ -83,6 +81,8 @@
 
     itemValue = '';
   };
+
+  const formatTypeKey = (type: string) => type.charAt(0).toLowerCase() + type.slice(1);
 </script>
 
 <Card.Root>

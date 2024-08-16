@@ -14,6 +14,12 @@ const config = {
       $static: './static',
       $main: './src/routes/(main)'
     }
+    // Blocked by https://github.com/svecosystem/mode-watcher/issues/92
+    // csp: {
+    //   directives: {
+    //     'script-src': ['self']
+    //   }
+    // }
   }
 };
 

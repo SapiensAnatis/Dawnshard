@@ -59,6 +59,7 @@
     "lucide-svelte": "0.436.0",
     "mode-watcher": "0.4.1",
     "svelte-form-helper": "0.4.1",
+    "svelte-headless-table": "0.18.2",
     "svelte-sonner": "0.3.27",
     "sveltekit-i18n": "2.4.2",
     "tailwind-merge": "2.5.2",
