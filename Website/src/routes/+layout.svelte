@@ -1,13 +1,11 @@
 <script lang="ts">
   import '../app.pcss';
 
-  // @ts-expect-error __APP_VERSION__ is replaced by svelte-preprocess
-  // eslint-disable-next-line no-undef
-  const version = __APP_VERSION__;
+  import { PUBLIC_VERSION } from '$env/static/public';
 </script>
 
 <svelte:head>
-  <meta property="version" content={version} />
+  <meta property="version" content={PUBLIC_VERSION} />
 </svelte:head>
 
 <slot />
