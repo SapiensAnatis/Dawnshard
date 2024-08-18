@@ -29,7 +29,7 @@ export const load: PageServerLoad = async ({ cookies, url, fetch }) => {
   const maxAge = (jwtMetadata.expiryTimestampMs - Date.now()) / 1000;
 
   if (!(await checkUserExists(idToken, url, fetch))) {
-    redirect(302, '/login/unauthorized/404');
+    redirect(302, '/unauthorized/404');
   }
 
   cookies.set(CookieNames.IdToken, idToken, {

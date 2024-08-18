@@ -9,6 +9,7 @@ import {
 import { handleNews, handleNewsItem } from './news.ts';
 import handleSavefileExport from './savefile.ts';
 import { handleUser, handleUserProfile } from './user.ts';
+import { handlePresentData } from './widgets.ts';
 
 const createHttpHandler = <
   Params extends PathParams<keyof Params> = PathParams,
@@ -61,5 +62,6 @@ export const handlers = [
   ...http.get('/api/user/me/profile', withAuth(handleUserProfile)),
 
   ...http.get('/api/savefile/export', withAuth(handleSavefileExport)),
+  ...http.get('/api/widgets/present', handlePresentData),
   mswHttp.get('http://localhost:5000/ping', () => new Response(null, { status: 200 }))
 ];
