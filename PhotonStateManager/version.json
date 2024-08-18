@@ -5,8 +5,9 @@
     "^refs/heads/statemanager@v\\d+(?:\\.\\d+)?$"
   ],
   "cloudBuild": {
-    "buildNumber": {
-      "enabled": true
-    }
-  }
+    "setVersionVariables": false
+  },
+  "pathFilters": [
+    "."
+  ]
 }

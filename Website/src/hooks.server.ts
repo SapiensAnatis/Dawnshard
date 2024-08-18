@@ -5,6 +5,10 @@ import { PUBLIC_ENABLE_MSW } from '$env/static/public';
 import Cookies from '$lib/auth/cookies.ts';
 import getJwtMetadata from '$lib/auth/jwt.ts';
 
+if (!env.DAWNSHARD_API_URL_SSR) {
+  throw new Error('Failed to load environment variable DAWNSHARD_API_URL_SSR!');
+}
+
 const internalApiUrl = new URL(env.DAWNSHARD_API_URL_SSR);
 
 if (PUBLIC_ENABLE_MSW === 'true') {

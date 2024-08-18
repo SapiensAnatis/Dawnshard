@@ -39,7 +39,7 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
           fetch-depth: 0
-          
+
       - name: Get version.json directory
         run: |
           dockerfile_dir=$(dirname ${{ inputs.dockerfile }}) 
@@ -52,7 +52,7 @@ jobs:
               exit 0
             fi
           done
-          
+
           echo Failed to find version.json
           exit 1
 
@@ -81,7 +81,9 @@ jobs:
             org.opencontainers.image.source=${{ github.repositoryUrl }} 
             org.opencontainers.image.revision=${{ github.sha }} 
             org.opencontainers.image.authors=github.com/${{ github.repository_owner }}
-      
+          build-args: |
+            NERDBANK_VERSION=${{ steps.nbgv.outputs.SemVer2 }}
+
       - name: Output tag
         id: output-tag
         run: echo "tag=${{ steps.nbgv.outputs.SemVer2 }}" >> $GITHUB_OUTPUT
