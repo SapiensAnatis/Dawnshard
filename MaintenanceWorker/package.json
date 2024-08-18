@@ -9,7 +9,7 @@
     "miniflare": "3.20240806.0",
     "vitest": "2.0.5",
     "vitest-environment-miniflare": "2.14.2",
-    "wrangler": "3.70.0"
+    "wrangler": "3.71.0"
   },
   "type": "module",
   "scripts": {
