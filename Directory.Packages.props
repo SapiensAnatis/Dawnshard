@@ -4,7 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="AutoMapper" Version="13.0.1" />
-    <PackageVersion Include="Basic.Reference.Assemblies" Version="1.7.3" />
+    <PackageVersion Include="Basic.Reference.Assemblies" Version="1.7.4" />
     <PackageVersion Include="EntityGraphQL" Version="5.4.1" />
     <PackageVersion Include="EntityGraphQL.AspNet" Version="5.4.1" />
     <PackageVersion Include="FluentRandomPicker" Version="3.5.1" />
@@ -78,7 +78,7 @@
     <PackageVersion Include="NSubstitute.Analyzers.CSharp" Version="1.0.17" />
     <PackageVersion Include="Redis.OM" Version="0.7.4" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.7.0" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.7.1" />
     <PackageVersion Include="Serilog.Extensions.Hosting" Version="8.0.0" />
   </ItemGroup>
 </Project>
