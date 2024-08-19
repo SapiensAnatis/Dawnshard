@@ -40,6 +40,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces">
+      <!-- Rooted by Microsoft.VisualStudio.Web.CodeGeneration.Design. Remove when removing that -->
+    </PackageReference>
     <PackageReference Include="MudBlazor" />
     <PackageReference Include="Riok.Mapperly" />
     <PackageReference Include="Serilog.Exceptions" />
