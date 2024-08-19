@@ -14,9 +14,6 @@ const config = {
       $static: './static',
       $main: './src/routes/(main)'
     }
-  },
-  compilerOptions: {
-    immutable: true
   }
 };
 

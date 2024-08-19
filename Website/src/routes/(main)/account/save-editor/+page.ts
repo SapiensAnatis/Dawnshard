@@ -1,8 +1,3 @@
-import { superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
-
-import { presentFormSchema } from '$main/account/save-editor/presentFormSchema.ts';
-
 import type { PageLoad } from './$types';
 import { presentWidgetDataSchema } from './presentFormSchema.ts';
 
@@ -16,7 +11,6 @@ export const load: PageLoad = async ({ fetch, url }) => {
   }
 
   return {
-    presentWidgetData: presentWidgetDataSchema.parse(await response.json()),
-    form: await superValidate(zod(presentFormSchema))
+    presentWidgetData: presentWidgetDataSchema.parse(await response.json())
   };
 };

@@ -23,6 +23,9 @@ importers:
       mode-watcher:
         specifier: 0.4.1
         version: 0.4.1(svelte@4.2.18)
+      svelte-form-helper:
+        specifier: 0.4.1
+        version: 0.4.1(svelte@4.2.18)
       tailwind-merge:
         specifier: 2.5.2
         version: 2.5.2
@@ -1293,6 +1296,10 @@ packages:
   headers-polyfill@4.0.3:
     resolution: {integrity: sha512-IScLbePpkvO846sIwOtOTDjutRMWdXdJmXdMvk6gCBHxFO8d+QKOQedyZSxFTTFYRSmlgSTDtXqqq4pcenBXLQ==}
 
+  highlight.js@11.10.0:
+    resolution: {integrity: sha512-SYVnVFswQER+zu1laSya563s+F8VDGt7o35d4utbamowvUNLLMovFqwCLSocpZTz3MgaSRA1IbqRWZv97dtErQ==}
+    engines: {node: '>=12.0.0'}
+
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
     engines: {node: '>= 4'}
@@ -1949,6 +1956,11 @@ packages:
     peerDependenciesMeta:
       svelte:
         optional: true
+
+  svelte-form-helper@0.4.1:
+    resolution: {integrity: sha512-kQ3LTp9CNnb+7hRvUMH+5+4MbIcMddJji3qUztLOJh/NDBJWqkiU9oO5Tdj3P3+Fkj0//GFVleH16Ij/sP0zWg==}
+    peerDependencies:
+      svelte: ^3.54.0 || ^4.0.0 || ^5.0.0
 
   svelte-hmr@0.16.0:
     resolution: {integrity: sha512-Gyc7cOS3VJzLlfj7wKS0ZnzDVdv3Pn2IuVeJPk9m2skfhcu5bq3wtIZyQGggr7/Iim5rH5cncyQft/kRLupcnA==}
@@ -3391,6 +3403,8 @@ snapshots:
 
   headers-polyfill@4.0.3: {}
 
+  highlight.js@11.10.0: {}
+
   ignore@5.3.2: {}
 
   imagetools-core@7.0.1: {}
@@ -3963,6 +3977,11 @@ snapshots:
       postcss: 8.4.41
       postcss-scss: 4.0.9(postcss@8.4.41)
     optionalDependencies:
+      svelte: 4.2.18
+
+  svelte-form-helper@0.4.1(svelte@4.2.18):
+    dependencies:
+      highlight.js: 11.10.0
       svelte: 4.2.18
 
   svelte-hmr@0.16.0(svelte@4.2.18):

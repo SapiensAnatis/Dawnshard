@@ -1,6 +1,7 @@
 <script lang="ts" generics="T">
-  import type { SelectItem } from './types.ts';
   import { cn } from '$shadcn/utils.js.ts';
+
+  import type { SelectItem } from './types.ts';
   // eslint-disable-next-line no-undef
   export let items: SelectItem<T>[];
   export let id: string;
@@ -9,12 +10,14 @@
   // eslint-disable-next-line no-undef
   export let value: T | undefined = undefined;
 
+  export let action;
+
   let className: string | undefined = undefined;
   export { className as class };
 
   $: {
     if (value && !items.some((x) => x.value === value)) {
-      value = '';
+      value = undefined;
     }
   }
 </script>
@@ -27,6 +30,7 @@
   class:placeholder-selected={!value}
   {id}
   bind:value
+  use:action
   {...$$restProps}>
   <option value={undefined} disabled selected hidden>{placeholder}</option>
   {#each items as item}
@@ -46,6 +50,6 @@
   }
 
   .placeholder-selected {
-    color: grey;
+    color: hsl(var(--muted-foreground));
   }
 </style>

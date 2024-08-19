@@ -1,42 +1,35 @@
 <script lang="ts">
-  import * as Form from '$shadcn/components/ui/form';
-  import { Input } from '$shadcn/components/ui/input';
-  import { presentFormSchema, type PresentFormSchema } from './presentFormSchema.ts';
-  import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
-  import { zodClient } from 'sveltekit-superforms/adapters';
-
   import Gift from 'lucide-svelte/icons/gift';
+  import { createForm } from 'svelte-form-helper';
 
-  import { Select, type SelectItem } from '$lib/components/select';
+  import { Select } from '$lib/components/select';
   import { Button } from '$shadcn/components/ui/button/index.js';
   import * as Card from '$shadcn/components/ui/card';
-
-  import { type EntityType, type PresentWidgetData } from './presentFormSchema.ts';
   import { Input } from '$shadcn/components/ui/input';
   import { Label } from '$shadcn/components/ui/label';
 
+  import { type EntityType, type PresentWidgetData } from './presentFormSchema.ts';
+
   export let widgetData: PresentWidgetData;
-  export let data: SuperValidated<Infer<PresentFormSchema>>;
 
-  const form = superForm(data, {
-    validators: zodClient(presentFormSchema)
-  });
+  $: availableItems = widgetData.availableItems['Material'] ?? [];
 
-  const { form: formData, enhance } = form;
+  const form = createForm();
+  const type = form.field();
+  const item = form.field();
+  const quantity = form.field();
 
-  $: availableItems = $formData.type ? (widgetData.availableItems[$formData.type] ?? []) : [];
-  $: selectedTypeObject = $formData.type
-    ? widgetData.types.find((type) => type.value === $formData.type)
-    : null;
-  $: quantityInputDisabled = !selectedTypeObject?.hasQuantity;
+  let typeValue: EntityType | undefined;
+  let itemValue: number | undefined;
+  let quantityValue: number | undefined;
 
-  $: {
-    if (quantityInputDisabled && $formData.quantity !== 1) {
-      $formData.quantity = 1;
-    }
+  function onSubmit(evt) {
+    console.log(typeValue, itemValue, quantityValue);
   }
 
-  // todo : use https://www.npmjs.com/package/svelte-form-helper
+  $: {
+    console.log(typeValue, $form.valid);
+  }
 </script>
 
 <Card.Root>
@@ -49,26 +42,46 @@
     </Card.Title>
   </Card.Header>
   <Card.Content>
-    <form use:enhance>
+    <form use:form on:submit|preventDefault={onSubmit}>
       <p class="mb-5">Use this widget to add presents to your gift box.</p>
       <div class="flex flex-row gap-4">
-        <Form.Field {form} name="type">
-          <Form.Control></Form.Control>
-          <Form.Label>Type</Form.Label>
-          <Select items={widgetData.types} {...attrs} bind:value={$formData.type} />
-        </Form.Field>
-        <Form.Control let:attrs>
-          <Form.Label>Item</Form.Label>
-          <Select items={availableItems} {...attrs} bind:value={$formData.item} />
-        </Form.Control>
-        <Form.Control let:attrs>
-          <Form.Label>Quantity</Form.Label>
-          <Select items={availableItems} {...attrs} bind:value={$formData.quantity} />
-        </Form.Control>
-        <Form.FieldErrors />
+        <div class="labelled-input">
+          <Label for="type">Type</Label>
+          <Select
+            id="type"
+            placeholder="Select an item type"
+            items={widgetData.types}
+            action={type}
+            class="
+              touched:invalid:text-red-700
+              touched:invalid:border-red-700
+            "
+            required
+            bind:value={typeValue} />
+        </div>
+        <div class="labelled-input">
+          <Label for="item">Item</Label>
+          <Select
+            id="item"
+            placeholder="Select an item"
+            items={availableItems}
+            action={item}
+            required
+            bind:value={itemValue} />
+        </div>
+        <div class="labelled-input">
+          <Label>Quantity</Label>
+          <Input
+            id="quantity"
+            placeholder="Enter a quantity"
+            type="number"
+            action={quantity}
+            required
+            bind:value={quantityValue} />
+        </div>
       </div>
       <br />
-      <Button>Add</Button>
+      <Button type="submit" disabled={!$form.valid}>Add</Button>
     </form>
   </Card.Content>
 </Card.Root>

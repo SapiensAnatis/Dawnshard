@@ -1,4 +1,5 @@
 import { fontFamily } from 'tailwindcss/defaultTheme';
+import plugin from 'tailwindcss/plugin';
 
 /** @type {import('tailwindcss').Config} */
 const config = {
@@ -63,7 +64,12 @@ const config = {
     extend: {
       backgroundImage: ['dark']
     }
-  }
+  },
+  plugins: [
+    plugin((props) => {
+      props.addVariant('touched', '&[data-touched]');
+    })
+  ]
 };
 
 export default config;

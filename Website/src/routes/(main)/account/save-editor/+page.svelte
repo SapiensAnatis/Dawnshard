@@ -1,3 +1,5 @@
+<svelte:options immutable={true} />
+
 <script lang="ts">
   import Page from '$lib/components/page.svelte';
   import Typography from '$lib/components/typography.svelte';
