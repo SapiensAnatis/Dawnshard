@@ -12,23 +12,34 @@
 
   export let widgetData: PresentWidgetData;
 
-  $: availableItems = widgetData.availableItems['Material'] ?? [];
-
-  const form = createForm();
-  const type = form.field();
-  const item = form.field();
-  const quantity = form.field();
-
-  let typeValue: EntityType | undefined;
-  let itemValue: number | undefined;
-  let quantityValue: number | undefined;
+  $: availableItems = (typeValue && widgetData.availableItems[typeValue]) || [];
+  $: disableQuantity =
+    (typeValue && !widgetData.types.find((t) => t.value === typeValue)?.hasQuantity) || false;
 
   function onSubmit(evt) {
     console.log(typeValue, itemValue, quantityValue);
   }
 
+  const validateQuantity = async (value: string) => {
+    console.log(value, disableQuantity);
+    if (disableQuantity) {
+      return null;
+    }
+
+    return value ? null : 'value is required';
+  };
+
+  let typeValue: EntityType | undefined;
+  let itemValue: number | undefined;
+  let quantityValue: number = 1;
+
+  const form = createForm();
+  const type = form.field();
+  const item = form.field();
+  const quantity = form.field({ validator: validateQuantity, onDirty: true });
+
   $: {
-    console.log(typeValue, $form.valid);
+    console.log($quantity);
   }
 </script>
 
@@ -75,8 +86,8 @@
             id="quantity"
             placeholder="Enter a quantity"
             type="number"
+            disabled={disableQuantity}
             action={quantity}
-            required
             bind:value={quantityValue} />
         </div>
       </div>
