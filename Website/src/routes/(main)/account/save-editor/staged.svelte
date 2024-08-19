@@ -49,7 +49,7 @@
   };
 </script>
 
-<Card.Root class="w-full">
+<Card.Root class="h-full w-full overflow-hidden">
   <Card.Header>
     <Card.Title>
       <div class="flex flex-row items-center justify-items-start gap-2">
@@ -58,13 +58,13 @@
       </div>
     </Card.Title>
   </Card.Header>
-  <Card.Content class={anyModifications ? '' : 'pb-0'}>
+  <Card.Content class={anyModifications ? 'h-full' : 'pb-0'}>
     <div class="flex gap-3">
       <Button disabled={!anyModifications} variant="outline" on:click={onClickReset}>Reset</Button>
       <Button disabled={!anyModifications} {loading} on:click={onClickSave}>Save changes</Button>
     </div>
     <br />
-    <div class="flex max-h-[35vh] flex-col gap-2 overflow-y-auto">
+    <div class="flex h-[75%] flex-col gap-2 overflow-y-auto">
       {#if anyModifications}
         {#each $presents as present}
           <StagedPresent {present} />

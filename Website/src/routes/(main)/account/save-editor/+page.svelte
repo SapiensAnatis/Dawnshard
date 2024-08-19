@@ -12,7 +12,7 @@
 </script>
 
 <Page title="Save Editor">
-  <div id="about" class="max-h-[100vh] max-w-7xl">
+  <div id="about" class="max-w-7xl">
     <Typography typography="h2">About</Typography>
     <p>
       On this page, you can make modifications to your account without having to go through the save
@@ -27,21 +27,13 @@
       </a> by sockperson is recommended, but it requires access to a desktop computer.
     </p>
   </div>
-
-  <br class="my-2" />
-
-  <div id="editor" class="flex w-full flex-col gap-3 md:flex-row">
-    <div id="widgets" class="basis-[65%]">
+  <br />
+  <div class="flex flex-col gap-2 md:h-[67.5vh] md:flex-row">
+    <div class="w-full">
       <PresentWidget widgetData={data.presentWidgetData} />
     </div>
-    <div class=" basis-[35%]">
+    <div class="h-full w-full overflow-hidden md:w-[35rem]">
       <Staged />
     </div>
   </div>
 </Page>
-
-<style>
-  p + p {
-    margin-top: 0.5rem;
-  }
-</style>

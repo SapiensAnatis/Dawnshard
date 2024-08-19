@@ -16,6 +16,7 @@
     border-radius: 10px;
     padding: 1rem;
     display: flex;
-    gap: 0.5rem;
+    gap: 1rem;
+    align-items: center;
   }
 </style>
