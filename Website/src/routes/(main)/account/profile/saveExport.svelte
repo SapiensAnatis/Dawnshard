@@ -4,7 +4,6 @@
   import { onMount } from 'svelte';
 
   import { page } from '$app/stores';
-  import LoadingSpinner from '$lib/components/loadingSpinner.svelte';
   import { Button } from '$shadcn/components/ui/button';
   import * as Card from '$shadcn/components/ui/card';
 

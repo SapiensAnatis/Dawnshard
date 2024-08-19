@@ -44,10 +44,6 @@
   const type = form.field();
   const item = form.field();
   const quantity = form.field();
-
-  $: {
-    console.log($presents);
-  }
 </script>
 
 <Card.Root>

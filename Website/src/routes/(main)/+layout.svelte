@@ -1,10 +1,11 @@
 <script lang="ts">
   import { ModeWatcher } from 'mode-watcher';
 
+  import { Toaster } from '$shadcn/components/ui/sonner';
+
   import type { LayoutData } from './$types';
   import Header from './header.svelte';
   import SideNav from './sideNav.svelte';
-  import { Toaster } from '$shadcn/components/ui/sonner';
 
   export let data: LayoutData;
 </script>

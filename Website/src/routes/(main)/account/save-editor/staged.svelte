@@ -1,14 +1,13 @@
 <script lang="ts">
   import NotebookPen from 'lucide-svelte/icons/notebook-pen';
+  import { toast } from 'svelte-sonner';
 
-  import LoadingSpinner from '$lib/components/loadingSpinner.svelte';
   import type { SaveChangesRequest } from '$main/account/save-editor/presentTypes.ts';
   import { Button } from '$shadcn/components/ui/button';
   import * as Card from '$shadcn/components/ui/card';
 
   import StagedPresent from './stagedPresent.svelte';
   import { presents } from './stores';
-  import { toast } from 'svelte-sonner';
 
   $: anyModifications = $presents.length > 0;
 
