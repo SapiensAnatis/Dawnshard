@@ -8,12 +8,18 @@
   import * as Card from '$shadcn/components/ui/card';
 
   let enhance = false;
+  let loading = false;
   let savefileExportPromise: Promise<void> | null = null;
 
   const savefileExportUrl = new URL('/api/savefile/export', $page.url.origin);
 
   const getSavefile = async () => {
+    loading = true;
+
     const response = await fetch(savefileExportUrl);
+
+    loading = false;
+
     if (!response.ok) {
       throw new Error(`Savefile export failed with status ${response.status}`);
     }
@@ -58,13 +64,13 @@
   <Card.Footer>
     {#if enhance}
       <div class="flex items-center gap-2">
-        {#await savefileExportPromise}
-          <Button variant="secondary" loading>Export save</Button>
-        {:then _}
-          <Button variant="secondary" on:click={() => (savefileExportPromise = getSavefile())}>
-            Export save
-          </Button>
-        {:catch _}
+        <Button
+          variant="secondary"
+          on:click={() => (savefileExportPromise = getSavefile())}
+          {loading}>
+          Export save
+        </Button>
+        {#await savefileExportPromise catch _}
           <span class="error flex items-center gap-1">
             <TriangleAlert /> Failed to export save!
           </span>

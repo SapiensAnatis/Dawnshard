@@ -11,7 +11,7 @@
 
   $: anyModifications = $presents.length > 0;
 
-  let saveChangesPromise: Promise<void> | null = null;
+  let loading = false;
 
   const onClickReset = () => {
     presents.set([]);
@@ -23,10 +23,12 @@
       presents: $presents
     };
 
-    saveChangesPromise = saveChanges(requestBody);
+    saveChanges(requestBody);
   };
 
   const saveChanges = async (requestBody: SaveChangesRequest) => {
+    loading = true;
+
     const request = new Request('/api/savefile/edit', {
       method: 'POST',
       body: JSON.stringify(requestBody)
@@ -34,11 +36,15 @@
 
     const response = await fetch(request);
 
+    loading = false;
+
     if (response.ok) {
-      toast.success('Successfully edited save!');
+      toast.success('Successfully edited save');
       onClickReset();
     } else {
-      throw new Error(`Savefile edit request failed with status ${response.status}`);
+      toast.error('Failed to edit save');
+      // eslint-disable-next-line no-console
+      console.error('Savefile edit request failed with status', response.status);
     }
   };
 </script>
@@ -52,21 +58,18 @@
       </div>
     </Card.Title>
   </Card.Header>
-  <Card.Content class="flex flex-col gap-2">
-    {#if anyModifications}
-      {#each $presents as present}
-        <StagedPresent {present} />
-      {/each}
-    {:else}
-      <p>Any changes you make will show up here.</p>
-    {/if}
+  <Card.Content class={anyModifications ? '' : 'pb-0'}>
+    <div class="flex gap-3">
+      <Button disabled={!anyModifications} variant="outline" on:click={onClickReset}>Reset</Button>
+      <Button disabled={!anyModifications} {loading} on:click={onClickSave}>Save changes</Button>
+    </div>
+    <br />
+    <div class="flex max-h-[35vh] flex-col gap-2 overflow-y-auto">
+      {#if anyModifications}
+        {#each $presents as present}
+          <StagedPresent {present} />
+        {/each}
+      {/if}
+    </div>
   </Card.Content>
-  <Card.Footer class="gap-2">
-    <Button disabled={!anyModifications} variant="outline" on:click={onClickReset}>Reset</Button>
-    {#await saveChangesPromise}
-      <Button loading={true}>Save changes</Button>
-    {:then _}
-      <Button disabled={!anyModifications} on:click={onClickSave}>Save changes</Button>
-    {/await}
-  </Card.Footer>
 </Card.Root>
