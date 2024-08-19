@@ -6,6 +6,7 @@
 
   import type { PageData } from './$types';
   import PresentWidget from './presentWidget.svelte';
+  import Staged from './staged.svelte';
 
   export let data: PageData;
 </script>
@@ -14,8 +15,8 @@
   <div id="about" class="max-w-7xl">
     <Typography typography="h2">About</Typography>
     <p>
-      On this page, you can make basic modifications to your account without having to go through
-      the save import and export process.
+      On this page, you can make modifications to your account without having to go through the save
+      export and import process.
     </p>
     <p>
       The functionality is basic for now, but may be expanded in the future. For more extensive
@@ -29,8 +30,11 @@
 
   <br class="my-2" />
 
-  <div id="editor" class="flex">
-    <PresentWidget widgetData={data.presentWidgetData} formData={data.form} />
+  <div id="editor" class="flex flex-col gap-2 md:flex-row">
+    <div id="widgets">
+      <PresentWidget widgetData={data.presentWidgetData} />
+    </div>
+    <Staged />
   </div>
 </Page>
 

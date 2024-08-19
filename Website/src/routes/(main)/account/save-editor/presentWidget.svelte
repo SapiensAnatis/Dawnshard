@@ -8,7 +8,12 @@
   import { Input } from '$shadcn/components/ui/input';
   import { Label } from '$shadcn/components/ui/label';
 
-  import { type EntityType, type PresentWidgetData } from './presentFormSchema.ts';
+  import {
+    type EntityType,
+    type PresentFormSubmission,
+    type PresentWidgetData
+  } from './presentTypes.ts';
+  import { presents } from './stores.ts';
 
   export let widgetData: PresentWidgetData;
 
@@ -16,17 +21,19 @@
   $: disableQuantity =
     (typeValue && !widgetData.types.find((t) => t.value === typeValue)?.hasQuantity) || false;
 
-  function onSubmit(evt) {
-    console.log(typeValue, itemValue, quantityValue);
-  }
+  const onSubmit = () => {
+    const itemLabel = availableItems.find((i) => i.value === itemValue)?.label;
 
-  const validateQuantity = async (value: string) => {
-    console.log(value, disableQuantity);
-    if (disableQuantity) {
-      return null;
-    }
+    if (!typeValue || !itemValue || !itemLabel) return;
 
-    return value ? null : 'value is required';
+    const submission: PresentFormSubmission = {
+      type: typeValue,
+      item: itemValue,
+      itemLabel,
+      quantity: quantityValue
+    };
+
+    presents.update((existing) => [...existing, submission]);
   };
 
   let typeValue: EntityType | undefined;
@@ -36,10 +43,10 @@
   const form = createForm();
   const type = form.field();
   const item = form.field();
-  const quantity = form.field({ validator: validateQuantity, onDirty: true });
+  const quantity = form.field();
 
   $: {
-    console.log($quantity);
+    console.log($presents);
   }
 </script>
 
@@ -53,9 +60,9 @@
     </Card.Title>
   </Card.Header>
   <Card.Content>
+    <p class="mb-5">Use this widget to add presents to your gift box.</p>
     <form use:form on:submit|preventDefault={onSubmit}>
-      <p class="mb-5">Use this widget to add presents to your gift box.</p>
-      <div class="flex flex-row gap-4">
+      <div class="flex flex-row flex-wrap gap-4">
         <div class="labelled-input">
           <Label for="type">Type</Label>
           <Select
@@ -64,11 +71,14 @@
             items={widgetData.types}
             action={type}
             class="
-              touched:invalid:text-red-700
               touched:invalid:border-red-700
+              touched:invalid:text-red-700
             "
             required
             bind:value={typeValue} />
+          {#if $type.show}
+            <p class="helper">{$type.message}</p>
+          {/if}
         </div>
         <div class="labelled-input">
           <Label for="item">Item</Label>
@@ -78,17 +88,34 @@
             items={availableItems}
             action={item}
             required
+            class="
+              touched:invalid:border-red-700
+              touched:invalid:text-red-700
+            "
             bind:value={itemValue} />
+          {#if $item.show}
+            <p class="helper">{$item.message}</p>
+          {/if}
         </div>
         <div class="labelled-input">
-          <Label>Quantity</Label>
+          <Label for="quantity">Quantity</Label>
           <Input
             id="quantity"
             placeholder="Enter a quantity"
             type="number"
             disabled={disableQuantity}
             action={quantity}
+            min={1}
+            max={2147483647}
+            required
+            class="
+              touched:invalid:border-red-700
+              touched:invalid:text-red-700
+            "
             bind:value={quantityValue} />
+          {#if $quantity.show}
+            <p class="helper">{$quantity.message}</p>
+          {/if}
         </div>
       </div>
       <br />
@@ -99,9 +126,14 @@
 
 <style>
   .labelled-input {
-    width: 15rem;
+    width: 12.5rem;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+  }
+
+  .helper {
+    font-size: 0.75rem;
+    color: hsl(var(--muted-foreground));
   }
 </style>

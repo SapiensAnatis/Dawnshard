@@ -59,11 +59,12 @@
   <Card.Footer>
     {#if enhance}
       <div class="flex items-center gap-2">
-        <Button variant="secondary" on:click={() => (savefileExportPromise = getSavefile())}>
-          Export Save
-        </Button>
         {#await savefileExportPromise}
-          <LoadingSpinner />
+          <Button variant="secondary" loading>Export save</Button>
+        {:then _}
+          <Button variant="secondary" on:click={() => (savefileExportPromise = getSavefile())}>
+            Export save
+          </Button>
         {:catch _}
           <span class="error flex items-center gap-1">
             <TriangleAlert /> Failed to export save!

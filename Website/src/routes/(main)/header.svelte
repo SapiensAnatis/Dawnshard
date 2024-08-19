@@ -25,7 +25,7 @@
       <Drawer.Trigger
         class={cn(buttonVariants({ variant: 'ghost', size: 'sm', className: 'md:hidden' }))}
         aria-label="Open navigation">
-        <Menu class="size-6" />
+        <Menu aria-hidden={true} class="size-6" />
       </Drawer.Trigger>
       <HeaderContents {hasValidJwt} />
       <Drawer.Portal class="md:hidden">

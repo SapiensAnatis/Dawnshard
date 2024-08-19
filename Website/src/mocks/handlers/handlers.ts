@@ -7,7 +7,7 @@ import {
 } from 'msw';
 
 import { handleNews, handleNewsItem } from './news.ts';
-import handleSavefileExport from './savefile.ts';
+import { handleSavefileEdit, handleSavefileExport } from './savefile.ts';
 import { handleUser, handleUserProfile } from './user.ts';
 import { handlePresentData } from './widgets.ts';
 
@@ -40,7 +40,9 @@ const withAuth = <
   RequestBodyType extends DefaultBodyType,
   ResponseBodyType extends DefaultBodyType
 >(
-  resolver: HttpResponseResolver
+  resolver:
+    | HttpResponseResolver<Params, RequestBodyType, ResponseBodyType>
+    | HttpResponseResolver<Params, RequestBodyType, undefined>
 ):
   | HttpResponseResolver<Params, RequestBodyType, ResponseBodyType>
   | HttpResponseResolver<Params, RequestBodyType, undefined> => {
@@ -62,6 +64,7 @@ export const handlers = [
   ...http.get('/api/user/me/profile', withAuth(handleUserProfile)),
 
   ...http.get('/api/savefile/export', withAuth(handleSavefileExport)),
-  ...http.get('/api/widgets/present', handlePresentData),
+  ...http.get('/api/widgets/present', withAuth(handlePresentData)),
+  ...http.post('/api/savefile/edit', withAuth(handleSavefileEdit)),
   mswHttp.get('http://localhost:5000/ping', () => new Response(null, { status: 200 }))
 ];

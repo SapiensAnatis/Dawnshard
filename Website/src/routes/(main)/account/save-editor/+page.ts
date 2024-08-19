@@ -1,5 +1,5 @@
 import type { PageLoad } from './$types';
-import { presentWidgetDataSchema } from './presentFormSchema.ts';
+import { presentWidgetDataSchema } from './presentTypes.ts';
 
 export const load: PageLoad = async ({ fetch, url }) => {
   const presentRequest = new URL('/api/widgets/present', url.origin);

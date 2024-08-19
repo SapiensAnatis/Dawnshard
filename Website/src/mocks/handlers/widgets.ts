@@ -1,6 +1,6 @@
 import { HttpResponse, type HttpResponseResolver } from 'msw';
 
-import type { PresentWidgetData } from '$main/account/save-editor/presentFormSchema.ts';
+import type { PresentWidgetData } from '$main/account/save-editor/presentTypes.ts';
 
 export const handlePresentData: HttpResponseResolver = () => {
   return HttpResponse.json<PresentWidgetData>({

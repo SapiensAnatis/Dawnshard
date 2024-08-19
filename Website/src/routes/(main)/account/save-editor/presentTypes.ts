@@ -20,12 +20,15 @@ export const presentWidgetDataSchema = z.object({
   availableItems: z.record(EntityType, item.array())
 });
 
+export type PresentFormSubmission = {
+  type: EntityType;
+  item: number;
+  itemLabel: string;
+  quantity: number;
+};
+
+export type SaveChangesRequest = {
+  presents: PresentFormSubmission[];
+};
+
 export type PresentWidgetData = z.infer<typeof presentWidgetDataSchema>;
-
-export const presentFormSchema = z.object({
-  type: EntityType,
-  item: z.number().int(),
-  quantity: z.number().int().min(1).max(2147483647)
-});
-
-export type PresentFormSchema = typeof presentFormSchema;
