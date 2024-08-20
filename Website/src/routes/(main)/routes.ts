@@ -1,3 +1,4 @@
+import { PUBLIC_ENABLE_SAVE_EDITOR } from '$env/static/public';
 import type { Icon } from 'lucide-svelte';
 import House from 'lucide-svelte/icons/house';
 import Newspaper from 'lucide-svelte/icons/newspaper';
@@ -30,7 +31,15 @@ export const routeGroups: RouteGroup[] = [
     requireAuth: true,
     routes: [
       { title: 'Profile', href: '/account/profile', icon: User },
-      { title: 'Save Editor', href: '/account/save-editor', icon: Pencil }
+      ...(PUBLIC_ENABLE_SAVE_EDITOR === 'true'
+        ? [
+            {
+              title: 'Save Editor',
+              href: '/account/save-editor',
+              icon: Pencil
+            }
+          ]
+        : [])
     ]
   }
 ];
