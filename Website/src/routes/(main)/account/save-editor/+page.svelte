@@ -3,6 +3,7 @@
 <script lang="ts">
   import Page from '$lib/components/page.svelte';
   import Typography from '$lib/components/typography.svelte';
+  import { Separator } from '$shadcn/components/ui/separator';
 
   import type { PageData } from './$types';
   import PresentWidget from './presentWidget.svelte';
@@ -32,6 +33,8 @@
     <div class="w-full">
       <PresentWidget widgetData={data.presentWidgetData} />
     </div>
+    <Separator class="mx-3 hidden md:block" orientation="vertical" />
+    <Separator class="visible my-2 px-4 md:hidden" orientation="horizontal" />
     <div class="h-full w-full overflow-hidden md:w-[35rem]">
       <Staged />
     </div>
