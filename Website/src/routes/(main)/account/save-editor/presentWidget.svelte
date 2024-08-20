@@ -36,8 +36,8 @@
     presents.update((existing) => [...existing, submission]);
   };
 
-  let typeValue: EntityType | undefined;
-  let itemValue: number | undefined;
+  let typeValue: EntityType | '';
+  let itemValue: number | '';
   let quantityValue: number = 1;
 
   const form = createForm();
@@ -51,13 +51,13 @@
     <Card.Title>
       <div class="flex flex-row items-center justify-items-start gap-2">
         <Gift aria-hidden={true} size={25} />
-        <h2 class="m-0 text-xl font-bold">Gift box</h2>
+        <h2 id="gift-box-title" class="m-0 text-xl font-bold">Gift box</h2>
       </div>
     </Card.Title>
   </Card.Header>
   <Card.Content>
     <p class="mb-5">Use this widget to add presents to your gift box.</p>
-    <form use:form on:submit|preventDefault={onSubmit}>
+    <form use:form on:submit|preventDefault={onSubmit} aria-labelledby="gift-box-title">
       <div class="flex flex-row flex-wrap gap-4">
         <div class="labelled-input">
           <Label for="type">Type</Label>
@@ -115,7 +115,7 @@
         </div>
       </div>
       <br />
-      <Button type="submit" disabled={!$form.valid}>Add</Button>
+      <Button type="submit" disabled={!$form.valid || !$form.touched}>Add</Button>
     </form>
   </Card.Content>
 </Card.Root>

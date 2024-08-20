@@ -5,13 +5,13 @@
   export let present: PresentFormSubmission;
 </script>
 
-<div class="present">
+<li class="present">
   <Gift aria-hidden={true} />
   <p>Add {present.quantity}x <strong>{present.itemLabel}</strong> to the gift box</p>
-</div>
+</li>
 
 <style>
-  div {
+  .present {
     background: hsl(var(--background-surface));
     border-radius: 10px;
     padding: 1rem;

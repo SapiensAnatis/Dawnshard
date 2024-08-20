@@ -1,4 +1,4 @@
-import { expect, type Page, test } from '@playwright/test';
+import { devices, expect, type Page, test } from '@playwright/test';
 
 test('displays correctly', async ({ page }) => {
   await page.goto('/');
@@ -6,6 +6,19 @@ test('displays correctly', async ({ page }) => {
   const profileLink = page.getByRole('link', { name: 'Profile' });
   await expect(profileLink).toBeVisible();
   await profileLink.click();
+
+  await expect(page.getByRole('heading', { name: 'Profile' })).toBeVisible();
+
+  await expect(page).toHaveScreenshot();
+});
+
+test('displays correctly on mobile', async ({ page }) => {
+  await page.setViewportSize(devices['iPhone 13'].viewport);
+
+  await page.goto('/');
+
+  await page.getByRole('button', { name: 'Open navigation' }).click();
+  await page.getByRole('link', { name: 'Profile' }).click();
 
   await expect(page.getByRole('heading', { name: 'Profile' })).toBeVisible();
 

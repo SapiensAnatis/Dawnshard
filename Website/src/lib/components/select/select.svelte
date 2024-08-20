@@ -8,7 +8,7 @@
   export let placeholder: string | undefined = undefined;
 
   // eslint-disable-next-line no-undef
-  export let value: T | undefined = undefined;
+  export let value: T | '' = '';
 
   export let action;
 
@@ -17,7 +17,7 @@
 
   $: {
     if (value && !items.some((x) => x.value === value)) {
-      value = undefined;
+      value = '';
     }
   }
 </script>
@@ -27,12 +27,12 @@
     className,
     'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
   )}
-  class:placeholder-selected={value === undefined}
+  class:placeholder-selected={value === ''}
   {id}
   bind:value
   use:action
   {...$$restProps}>
-  <option value={undefined} disabled selected hidden>{placeholder}</option>
+  <option value="" hidden disabled selected>{placeholder}</option>
   {#each items as item}
     <option value={item.value}>{item.label}</option>
   {/each}

@@ -54,7 +54,7 @@
     <Card.Title>
       <div class="flex flex-row items-center justify-items-start gap-2">
         <NotebookPen aria-hidden={true} size={25} />
-        <h2 class="m-0 text-xl font-bold">Staged changes</h2>
+        <h2 id="staged-changes-title" class="m-0 text-xl font-bold">Staged changes</h2>
       </div>
     </Card.Title>
   </Card.Header>
@@ -64,12 +64,12 @@
       <Button disabled={!anyModifications} {loading} on:click={onClickSave}>Save changes</Button>
     </div>
     <br />
-    <div class="flex h-[75%] flex-col gap-2 overflow-y-auto">
+    <ul class="flex h-[75%] flex-col gap-2 overflow-y-auto" aria-labelledby="staged-changes-title">
       {#if anyModifications}
         {#each $presents as present}
           <StagedPresent {present} />
         {/each}
       {/if}
-    </div>
+    </ul>
   </Card.Content>
 </Card.Root>
