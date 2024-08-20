@@ -1,16 +1,20 @@
 <script lang="ts" generics="T">
+  import type { Action } from 'svelte/action';
+
   import { cn } from '$shadcn/utils.js.ts';
 
   import type { SelectItem } from './types.ts';
-  // eslint-disable-next-line no-undef
+
+  // svelte eslint plugin doesn't appear to be compatible with generic syntax
+  /* eslint-disable no-undef */
   export let items: SelectItem<T>[];
+  export let value: T | '' = '';
+  /* eslint-enable no-undef */
+
   export let id: string;
   export let placeholder: string | undefined = undefined;
 
-  // eslint-disable-next-line no-undef
-  export let value: T | '' = '';
-
-  export let action;
+  export let action: Action;
 
   let className: string | undefined = undefined;
   export { className as class };
