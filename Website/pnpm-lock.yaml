@@ -23,6 +23,12 @@ importers:
       mode-watcher:
         specifier: 0.4.1
         version: 0.4.1(svelte@4.2.18)
+      svelte-form-helper:
+        specifier: 0.4.1
+        version: 0.4.1(svelte@4.2.18)
+      svelte-sonner:
+        specifier: 0.3.27
+        version: 0.3.27(svelte@4.2.18)
       tailwind-merge:
         specifier: 2.5.2
         version: 2.5.2
@@ -1293,6 +1299,10 @@ packages:
   headers-polyfill@4.0.3:
     resolution: {integrity: sha512-IScLbePpkvO846sIwOtOTDjutRMWdXdJmXdMvk6gCBHxFO8d+QKOQedyZSxFTTFYRSmlgSTDtXqqq4pcenBXLQ==}
 
+  highlight.js@11.10.0:
+    resolution: {integrity: sha512-SYVnVFswQER+zu1laSya563s+F8VDGt7o35d4utbamowvUNLLMovFqwCLSocpZTz3MgaSRA1IbqRWZv97dtErQ==}
+    engines: {node: '>=12.0.0'}
+
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
     engines: {node: '>= 4'}
@@ -1950,6 +1960,11 @@ packages:
       svelte:
         optional: true
 
+  svelte-form-helper@0.4.1:
+    resolution: {integrity: sha512-kQ3LTp9CNnb+7hRvUMH+5+4MbIcMddJji3qUztLOJh/NDBJWqkiU9oO5Tdj3P3+Fkj0//GFVleH16Ij/sP0zWg==}
+    peerDependencies:
+      svelte: ^3.54.0 || ^4.0.0 || ^5.0.0
+
   svelte-hmr@0.16.0:
     resolution: {integrity: sha512-Gyc7cOS3VJzLlfj7wKS0ZnzDVdv3Pn2IuVeJPk9m2skfhcu5bq3wtIZyQGggr7/Iim5rH5cncyQft/kRLupcnA==}
     engines: {node: ^12.20 || ^14.13.1 || >= 16}
@@ -1997,6 +2012,11 @@ packages:
         optional: true
       typescript:
         optional: true
+
+  svelte-sonner@0.3.27:
+    resolution: {integrity: sha512-+PvbuePNTyTNCepCWqKcFeu+Lo27yYuwfSc7zJvrWjCRMJrWAmccPg3j7jO1W13QoN3TySXU5Trb956VBQiM5Q==}
+    peerDependencies:
+      svelte: ^3.0.0 || ^4.0.0 || ^5.0.0-next.1
 
   svelte@4.2.18:
     resolution: {integrity: sha512-d0FdzYIiAePqRJEb90WlJDkjUEx42xhivxN8muUBmfZnP+tzUgz12DJ2hRJi8sIHCME7jeK1PTMgKPSfTd8JrA==}
@@ -3391,6 +3411,8 @@ snapshots:
 
   headers-polyfill@4.0.3: {}
 
+  highlight.js@11.10.0: {}
+
   ignore@5.3.2: {}
 
   imagetools-core@7.0.1: {}
@@ -3965,6 +3987,11 @@ snapshots:
     optionalDependencies:
       svelte: 4.2.18
 
+  svelte-form-helper@0.4.1(svelte@4.2.18):
+    dependencies:
+      highlight.js: 11.10.0
+      svelte: 4.2.18
+
   svelte-hmr@0.16.0(svelte@4.2.18):
     dependencies:
       svelte: 4.2.18
@@ -3985,6 +4012,10 @@ snapshots:
       postcss: 8.4.41
       postcss-load-config: 6.0.1(jiti@1.21.6)(postcss@8.4.41)(yaml@2.5.0)
       typescript: 5.5.4
+
+  svelte-sonner@0.3.27(svelte@4.2.18):
+    dependencies:
+      svelte: 4.2.18
 
   svelte@4.2.18:
     dependencies:

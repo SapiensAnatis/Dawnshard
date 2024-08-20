@@ -58,6 +58,8 @@
     "clsx": "2.1.1",
     "lucide-svelte": "0.428.0",
     "mode-watcher": "0.4.1",
+    "svelte-form-helper": "0.4.1",
+    "svelte-sonner": "0.3.27",
     "tailwind-merge": "2.5.2",
     "tailwind-variants": "0.2.1",
     "vaul-svelte": "0.3.2",

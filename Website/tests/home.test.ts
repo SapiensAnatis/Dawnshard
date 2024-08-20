@@ -33,3 +33,16 @@ test('displays correctly on mobile', async ({ page }) => {
 
   await expect(page).toHaveScreenshot();
 });
+
+test('logout', async ({ page }) => {
+  await page.goto('/');
+
+  const logoutLink = page.getByRole('link', { name: 'Log out' });
+
+  await expect(logoutLink).toBeVisible();
+  await logoutLink.click();
+
+  await expect(page.getByRole('heading', { name: 'Dawnshard', exact: true })).toBeVisible();
+
+  await expect(page.getByRole('link', { name: 'Login' })).toBeVisible();
+});

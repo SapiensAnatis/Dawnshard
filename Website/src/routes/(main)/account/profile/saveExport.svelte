@@ -4,17 +4,22 @@
   import { onMount } from 'svelte';
 
   import { page } from '$app/stores';
-  import LoadingSpinner from '$lib/components/loadingSpinner.svelte';
   import { Button } from '$shadcn/components/ui/button';
   import * as Card from '$shadcn/components/ui/card';
 
   let enhance = false;
+  let loading = false;
   let savefileExportPromise: Promise<void> | null = null;
 
   const savefileExportUrl = new URL('/api/savefile/export', $page.url.origin);
 
   const getSavefile = async () => {
+    loading = true;
+
     const response = await fetch(savefileExportUrl);
+
+    loading = false;
+
     if (!response.ok) {
       throw new Error(`Savefile export failed with status ${response.status}`);
     }
@@ -37,7 +42,7 @@
   <Card.Header>
     <Card.Title>
       <div class="flex flex-row items-center justify-items-start gap-2">
-        <Upload size={25} />
+        <Upload aria-hidden={true} size={25} />
         <h2 class="m-0 text-xl font-bold">Save export</h2>
       </div>
     </Card.Title>
@@ -59,12 +64,13 @@
   <Card.Footer>
     {#if enhance}
       <div class="flex items-center gap-2">
-        <Button variant="secondary" on:click={() => (savefileExportPromise = getSavefile())}>
-          Export Save
+        <Button
+          variant="secondary"
+          on:click={() => (savefileExportPromise = getSavefile())}
+          {loading}>
+          Export save
         </Button>
-        {#await savefileExportPromise}
-          <LoadingSpinner />
-        {:catch _}
+        {#await savefileExportPromise catch _}
           <span class="error flex items-center gap-1">
             <TriangleAlert /> Failed to export save!
           </span>

@@ -9,3 +9,4 @@ vite.config.ts.timestamp-*
 .pnpm-store
 .idea
 test-results
+playwright/.auth

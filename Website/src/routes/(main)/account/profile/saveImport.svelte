@@ -23,7 +23,7 @@
   <Card.Header>
     <Card.Title>
       <div class="flex flex-row items-center justify-items-start gap-2">
-        <Download size={25} />
+        <Download aria-hidden={true} size={25} />
         <h2 class="m-0 text-xl font-bold">Save import</h2>
       </div>
     </Card.Title>
