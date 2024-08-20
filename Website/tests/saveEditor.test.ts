@@ -1,5 +1,4 @@
 import { devices, expect, test } from '@playwright/test';
-import { list } from 'postcss';
 
 test('displays correctly', async ({ page }) => {
   await page.goto('/');

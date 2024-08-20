@@ -2,8 +2,9 @@
 	import type { HTMLInputAttributes } from "svelte/elements";
 	import type { InputEvents } from "./index.js";
 	import { cn } from "$lib/shadcn/utils.js.js";
+	import type { Field } from 'svelte-form-helper';
 
-	type $$Props = HTMLInputAttributes & {action: any};
+	type $$Props = HTMLInputAttributes & {field: Field};
 	type $$Events = InputEvents;
 
 	let className: $$Props["class"] = undefined;
@@ -14,7 +15,7 @@
 	// Fixed in Svelte 5, but not backported to 4.x.
 	export let readonly: $$Props["readonly"] = undefined;
 
-	export let action: $$Props['action'] = undefined;
+	export let field: $$Props['field'];
 </script>
 
 <input
@@ -40,6 +41,6 @@
 	on:paste
 	on:input
 	on:wheel|passive
-	use:action
+	use:field
 	{...$$restProps}
 />

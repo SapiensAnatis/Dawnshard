@@ -18,8 +18,7 @@
   export let widgetData: PresentWidgetData;
 
   $: availableItems = (typeValue && widgetData.availableItems[typeValue]) || [];
-  $: disableQuantity =
-    (typeValue && !widgetData.types.find((t) => t.value === typeValue)?.hasQuantity) || false;
+  let disableQuantity = false;
 
   const onSubmit = () => {
     const itemLabel = availableItems.find((i) => i.value === itemValue)?.label;
@@ -34,6 +33,16 @@
     };
 
     presents.update((existing) => [...existing, submission]);
+  };
+
+  const onTypeChange = () => {
+    if (!typeValue) return;
+
+    disableQuantity = !widgetData.types.find((t) => t.value === typeValue)?.hasQuantity;
+
+    if (disableQuantity) {
+      quantityValue = 1;
+    }
   };
 
   let typeValue: EntityType | '';
@@ -65,7 +74,8 @@
             id="type"
             placeholder="Select an item type"
             items={widgetData.types}
-            action={type}
+            field={type}
+            on:change={onTypeChange}
             class="
               touched:invalid:border-red-700
               touched:invalid:text-red-700
@@ -82,7 +92,7 @@
             id="item"
             placeholder="Select an item"
             items={availableItems}
-            action={item}
+            field={item}
             required
             class="
               touched:invalid:border-red-700
@@ -100,7 +110,7 @@
             placeholder="Enter a quantity"
             type="number"
             disabled={disableQuantity}
-            action={quantity}
+            field={quantity}
             min={1}
             max={2147483647}
             required

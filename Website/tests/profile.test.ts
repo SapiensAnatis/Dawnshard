@@ -1,4 +1,4 @@
-import { devices, expect, type Page, test } from '@playwright/test';
+import { devices, expect, test } from '@playwright/test';
 
 test('displays correctly', async ({ page }) => {
   await page.goto('/');

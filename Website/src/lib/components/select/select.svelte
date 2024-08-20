@@ -1,5 +1,5 @@
 <script lang="ts" generics="T">
-  import type { Action } from 'svelte/action';
+  import type { Field } from 'svelte-form-helper';
 
   import { cn } from '$shadcn/utils.js.ts';
 
@@ -14,7 +14,7 @@
   export let id: string;
   export let placeholder: string | undefined = undefined;
 
-  export let action: Action;
+  export let field: Field;
 
   let className: string | undefined = undefined;
   export { className as class };
@@ -34,7 +34,8 @@
   class:placeholder-selected={value === ''}
   {id}
   bind:value
-  use:action
+  use:field
+  on:change
   {...$$restProps}>
   <option value="" hidden disabled selected>{placeholder}</option>
   {#each items as item}

@@ -21,7 +21,6 @@ export const handlePresentData: HttpResponseResolver = () => {
         hasQuantity: true
       }
     ],
-    //{ Material: 'Material', Chara: 'Adventurer', DmodePoint: 'Kaleidoscape points' },
     availableItems: {
       Material: [
         {
