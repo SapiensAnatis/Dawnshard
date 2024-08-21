@@ -6,9 +6,6 @@ on:
       - main
     paths:
       - Website/**
-      - .github/workflows/publish-website.yaml
-      - .github/workflows/deploy.yaml
-      - .github/workflows/build.yaml
 
 jobs:
   build:
@@ -26,5 +23,4 @@ jobs:
     uses: ./.github/workflows/deploy.yaml
     with:
       github-environment: "Website"
-      version: ${{ needs.build.outputs.tag }}
     secrets: inherit

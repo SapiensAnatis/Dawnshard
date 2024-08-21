@@ -8,9 +8,6 @@ on:
       - DragaliaAPI/**
       - Shared/**
       - Directory.Packages.props
-      - .github/workflows/publish-api.yaml
-      - .github/workflows/deploy.yaml
-      - .github/workflows/build.yaml
 
 env:
   HUSKY: 0
@@ -30,5 +27,4 @@ jobs:
     uses: ./.github/workflows/deploy.yaml
     with:
       github-environment: "Dawnshard"
-      version: ${{ needs.build.outputs.tag }}
     secrets: inherit

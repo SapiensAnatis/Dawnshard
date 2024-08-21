@@ -1,69 +1,69 @@
 ﻿@page "/"
 
-<PageTitle>Dawnshard</PageTitle>
+<PageTitle>失落的龙约</PageTitle>
 
-<MudText Typo="Typo.h3" GutterBottom="true">Welcome to Dawnshard</MudText>
-<MudText Typo=Typo.h5 Class="mb-4">Dawnshard is a server emulator project aimed at enabling continued play of Dragalia Lost.</MudText>
-<MudText Class="mb-6">Ever since the official servers were discontinued in November 2022, Dawnshard has been in development as a fan-led reimplementation of the game.</MudText>
+<MudText Typo="Typo.h3" GutterBottom="true">欢迎来到《失落的龙约》模拟服务端</MudText>
+<MudText Typo=Typo.h5 Class="mb-4">这是一个服务器模拟器项目，以使失落的龙约能继续游玩。</MudText>
+<MudText Class="mb-6">基本功能都已开发测试完毕，多人组队功能还在研发当中。</MudText>
 <MudText Typo="Typo.body1"></MudText>
 
-<MudContainer Class="d-flex pl-1 gap-4 flex-wrap">
+@* <MudContainer Class="d-flex pl-1 gap-4 flex-wrap">
     <MudButton Variant="Variant.Filled" Color=Color.Primary StartIcon="@Icons.Custom.Brands.Discord" Href="https://discord.gg/j9zSttjjWj">Discord server</MudButton>
     <MudButton Variant="Variant.Filled" Color=Color.Surface StartIcon="@Icons.Custom.Brands.GitHub" Href="https://github.com/SapiensAnatis/Dawnshard">Source code</MudButton>
     <MudButton Variant="Variant.Filled" Color=Color.Surface StartIcon="@CustomIcons.Patreon" Href="https://www.patreon.com/dawnshard">Patreon</MudButton>
     <MudButton Variant="Variant.Filled" Color=Color.Surface StartIcon="@CustomIcons.BuyMeACoffee" Href="https://www.buymeacoffee.com/dawnshard">Buy me a coffee</MudButton>
-</MudContainer>
+</MudContainer> *@
 
 <MudDivider Class="my-10"/>
 
-<MudText Typo="Typo.h4" GutterBottom=true>Frequently asked questions</MudText>
+<MudText Typo="Typo.h4" GutterBottom=true>使用说明</MudText>
 
 <MudGrid Spacing="5" Class="pa-2">
     <MudItem lg="6" sm="12" Class="faq">
         <FaqItem>
-            <Question>How can I play on Android?</Question>
-            <Answer>On an Android device, it is easiest to play using the Dragalipatch app by LukeFZ. This creates a modified app you can use to play Dawnshard by patching to <MudLink Href="https://dawnshard.co.uk" Typo="Typo.body2">https://dawnshard.co.uk</MudLink>.</Answer>
-            <Action>
+            <Question>安卓运行</Question>
+            <Answer>直接安装apk文件，如果你准备在多个设备上游玩，请选择恢复账号数据，登录账号以保存数据到服务器，如果您只在当前一个设备上游玩，可以不登录账户，然后会进行热更资源，视网络速度花费不等时间进行资源在线更新。</Answer>
+            @* <Action>
                 <MudButton Color="Color.Secondary" Href="https://github.com/LukeFZ/DragaliPatch/releases/latest">Download Dragalipatch</MudButton>
-            </Action>
+            </Action> *@
         </FaqItem>
     </MudItem>
     <MudItem lg="6" sm="12" Class="faq">
         <FaqItem>
-            <Question>How can I play on iOS?</Question>
-            <Answer>The iOS setup process is a little more involved. The steps are outlined in this <MudLink Typo="Typo.body2" Href="https://docs.google.com/document/d/1EaioDIddITTX8NrE8dTTDLfDrq2iVEK_5omw7T7kCKs/edit">Google Docs guide</MudLink>, but if you get stuck, please see the <code>#ios-setup-support</code> channel on the Discord server.</Answer>
-            <Action>
+            <Question>IOS运行</Question>
+            <Answer>可通过巨魔商店安装ipa，实现永久免签，无巨魔，可使用pc端爱思助手自签ipa安装，爱思自签，需要定期连接pc进行签名续期，安装后可自行选择是否登录账户，然后会热更新资源，后方可游玩。</Answer>
+           @*  <Action>
                 <MudButton Color="Color.Secondary" Href="https://discord.gg/j9zSttjjWj">Join Discord</MudButton>
-            </Action>
+            </Action> *@
         </FaqItem>
     </MudItem>
     <MudItem lg="12" sm="12" Class="faq">
         <FaqItem>
-            <Question>Do I have to start over?</Question>
-            <Answer>You can start over, or you can create an account on the BaaS server, which is a replacement for the Nintendo account mechanism from the original game. You can attach a savefile to this and have that uploaded onto a server.</Answer>
-            <Action>
+            <Question>PC模拟器游玩</Question>
+            <Answer>使用自由模拟器，直接安装apk即可，也会提供直接解压就可运行的绿色模拟器，运行后已安装并已热更资源。</Answer>
+           @*  <Action>
                 <MudButton Color="Color.Secondary" Href="https://baas.lukefz.xyz/">Visit Baas.LukeFZ.xyz</MudButton>
-            </Action>
+            </Action> *@
         </FaqItem>
     </MudItem>
 </MudGrid>
 
 <MudDivider Class="my-10"/>
 
-<MudText Typo="Typo.h4" GutterBottom=true>Special thanks</MudText>
-<MudText>Thanks to the following people, who have contributed to the server source code or its development in general:</MudText>
+<MudText Typo="Typo.h4" GutterBottom=true>打赏名单</MudText>
+<MudText>感谢以下人员：</MudText>
 
 <MudContainer Class="mt-2">
-    <Acknowledgement Name="LukeFZ" ImageSrc="img/lukefz.webp">
-        for developing the BaaS account system, DragaliPatch, and implementing features including the event compendium, endeavours, and more.
+    <Acknowledgement Name="at031018" ImageSrc="img/lukefz.webp">
+        真诚的买家，并提出了很多宝贵的建议。
     </Acknowledgement>
-    <Acknowledgement Name="Ceris" ImageSrc="img/ceris.webp">
-        for developing <MudLink Href="https://orchis.cherrymint.live">Orchis</MudLink>, another server revival project for Dragalia Lost.
+    <Acknowledgement Name="tb356741776" ImageSrc="img/ceris.webp">
+        感谢您的打赏，这是一种鼓舞，这是一种支持，这是一种动力，这是一种榜样！
     </Acknowledgement>
-    <Acknowledgement Name="Nano" ImageSrc="img/nano.png">for contributing character, summoning and dragon functionality to the server.</Acknowledgement>
+    @* <Acknowledgement Name="Nano" ImageSrc="img/nano.png">for contributing character, summoning and dragon functionality to the server.</Acknowledgement>
     <Acknowledgement Name="Nightmerp" ImageSrc="img/nightmerp.webp">for developing helper, wyrmprint, and quest-related features.</Acknowledgement>
     <Acknowledgement Name="Skazord" ImageSrc="img/skazord.webp">for working on the Halidom.</Acknowledgement>
     <Acknowledgement Name="sockperson" ImageSrc="img/sockperson.webp">for implementing the Mercurial Gauntlet.</Acknowledgement>
     <Acknowledgement Name="LatiWednesday" ImageSrc="img/lati.jpg">for working on character story epithets.</Acknowledgement>
-    <Acknowledgement Name="FatesTimelines1337" ImageSrc="img/fatestimelines1337.webp">for adding treasure chests to the main campaign.</Acknowledgement>
+    <Acknowledgement Name="FatesTimelines1337" ImageSrc="img/fatestimelines1337.webp">for adding treasure chests to the main campaign.</Acknowledgement> *@
 </MudContainer>

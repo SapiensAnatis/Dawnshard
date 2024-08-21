@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          sparse-checkout: "Website"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
