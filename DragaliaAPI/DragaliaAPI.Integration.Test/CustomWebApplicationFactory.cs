@@ -1,8 +1,10 @@
 using DragaliaAPI.Database;
+using DragaliaAPI.Features.Web;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Api;
 using DragaliaAPI.Shared.MasterAsset;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +12,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Npgsql;
 using Respawn;
 using Respawn.Graph;
@@ -105,6 +108,17 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
                     }
                 };
                 options.InstanceName = "RedisInstance";
+            });
+
+            services.PostConfigureAll<JwtBearerOptions>(opts =>
+            {
+                opts.Authority = null;
+                opts.TokenValidationParameters = new()
+                {
+                    ValidIssuer = "LukeFZ",
+                    ValidAudience = "baas-Id",
+                    IssuerSigningKeys = TokenHelper.SecurityKeys,
+                };
             });
         });
 

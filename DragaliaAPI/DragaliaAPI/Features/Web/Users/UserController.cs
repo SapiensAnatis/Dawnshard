@@ -1,16 +1,9 @@
-﻿using System.Diagnostics;
-using System.Security.Claims;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
-using DragaliaAPI.Shared.PlayerDetails;
-using DragaliaAPI.Shared.Serialization;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using static DragaliaAPI.Features.Web.AuthConstants;
 
-namespace DragaliaAPI.Features.Web.Account;
+namespace DragaliaAPI.Features.Web.Users;
 
 [Route("/api/user")]
 [ApiController]
