@@ -1,10 +1,8 @@
 ﻿using DragaliaAPI.Database;
-using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Features.Web.Account;
+namespace DragaliaAPI.Features.Web.Users;
 
 public class UserService(IPlayerIdentityService playerIdentityService, ApiContext apiContext)
 {

@@ -1,6 +1,7 @@
+using System.Diagnostics;
 using DragaliaAPI.Features.Web;
-using DragaliaAPI.Features.Web.Account;
 using DragaliaAPI.Features.Web.News;
+using DragaliaAPI.Features.Web.Users;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
@@ -27,7 +28,7 @@ public static partial class FeatureExtensions
                     opts.Events = new()
                     {
                         OnMessageReceived = WebAuthenticationHelper.OnMessageReceived,
-                        OnTokenValidated = WebAuthenticationHelper.OnTokenValidated
+                        OnTokenValidated = WebAuthenticationHelper.OnTokenValidated,
                     };
                     // The rest is configured in ConfigureJwtBearerOptions.cs after the ServiceProvider is built.
                 }
