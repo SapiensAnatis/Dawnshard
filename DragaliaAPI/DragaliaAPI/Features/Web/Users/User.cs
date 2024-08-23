@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Features.Web.Account;
+﻿namespace DragaliaAPI.Features.Web.Users;
 
 public class User
 {
