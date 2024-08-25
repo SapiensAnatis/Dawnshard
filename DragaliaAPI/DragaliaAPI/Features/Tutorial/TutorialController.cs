@@ -1,8 +1,9 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Controllers;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DragaliaAPI.Controllers.Dragalia;
+namespace DragaliaAPI.Features.Tutorial;
 
 [Route("/tutorial")]
 public class TutorialController(
@@ -10,9 +11,6 @@ public class TutorialController(
     IUpdateDataService updateDataService
 ) : DragaliaControllerBase
 {
-    private readonly ITutorialService tutorialService = tutorialService;
-    private readonly IUpdateDataService updateDataService = updateDataService;
-
     [HttpPost]
     [Route("update_step")]
     public async Task<DragaliaResult> UpdateStep(
@@ -22,9 +20,7 @@ public class TutorialController(
     {
         int currentStep = await tutorialService.UpdateTutorialStatus(request.Step);
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
-            cancellationToken
-        );
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         return this.Ok(new TutorialUpdateStepResponse(currentStep, updateDataList, new()));
     }
@@ -36,11 +32,9 @@ public class TutorialController(
         CancellationToken cancellationToken
     )
     {
-        List<int> currentFlags = await this.tutorialService.AddTutorialFlag(flagRequest.FlagId);
+        List<int> currentFlags = await tutorialService.AddTutorialFlag(flagRequest.FlagId);
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
-            cancellationToken
-        );
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         return this.Ok(new TutorialUpdateFlagsResponse(currentFlags, updateDataList, new()));
     }

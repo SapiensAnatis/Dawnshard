@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
+using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
-using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Controllers.Dragalia;
+namespace DragaliaAPI.Features.AbilityCrest;
 
 [Route("ability_crest")]
 public class AbilityCrestController(
@@ -20,12 +19,6 @@ public class AbilityCrestController(
     IMapper mapper
 ) : DragaliaControllerBase
 {
-    private readonly IAbilityCrestRepository abilityCrestRepository = abilityCrestRepository;
-    private readonly IUpdateDataService updateDataService = updateDataService;
-    private readonly IAbilityCrestService abilityCrestService = abilityCrestService;
-    private readonly ILogger<AbilityCrestController> logger = logger;
-    private readonly IMapper mapper = mapper;
-
     [Route("set_favorite")]
     [HttpPost]
     public async Task<DragaliaResult> SetFavorite(
@@ -39,16 +32,14 @@ public class AbilityCrestController(
 
         if (abilityCrest == null)
         {
-            this.logger.LogError("Player does not own ability crest {id}", request.AbilityCrestId);
+            logger.LogError("Player does not own ability crest {id}", request.AbilityCrestId);
             return this.Code(ResultCode.CommonInvalidArgument);
         }
 
         abilityCrest.IsFavorite = request.IsFavorite;
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
-            cancellationToken
-        );
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
-        return Ok(new AbilityCrestSetFavoriteResponse() { UpdateDataList = updateDataList });
+        return this.Ok(new AbilityCrestSetFavoriteResponse() { UpdateDataList = updateDataList });
     }
 
     [Route("buildup_piece")]
@@ -61,14 +52,11 @@ public class AbilityCrestController(
         if (
             !MasterAsset.AbilityCrest.TryGetValue(
                 request.AbilityCrestId,
-                out AbilityCrest? abilityCrest
+                out DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest? abilityCrest
             )
         )
         {
-            this.logger.LogError(
-                "Ability crest {id} had no MasterAsset entry",
-                request.AbilityCrestId
-            );
+            logger.LogError("Ability crest {id} had no MasterAsset entry", request.AbilityCrestId);
             return this.Code(ResultCode.AbilityCrestIsNotPlayable);
         }
 
@@ -78,21 +66,19 @@ public class AbilityCrestController(
                 .ThenBy(x => x.Step)
         )
         {
-            ResultCode resultCode = await this.abilityCrestService.TryBuildup(
+            ResultCode resultCode = await abilityCrestService.TryBuildup(
                 abilityCrest,
                 buildupPiece
             );
 
             if (resultCode != ResultCode.Success)
             {
-                this.logger.LogError("Buildup piece {@piece} invalid", buildupPiece);
+                logger.LogError("Buildup piece {@piece} invalid", buildupPiece);
                 return this.Code(resultCode);
             }
         }
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
-            cancellationToken
-        );
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         return this.Ok(new AbilityCrestBuildupPieceResponse() { UpdateDataList = updateDataList });
     }
 
@@ -106,35 +92,32 @@ public class AbilityCrestController(
         if (
             !MasterAsset.AbilityCrest.TryGetValue(
                 request.AbilityCrestId,
-                out AbilityCrest? abilityCrest
+                out DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest? abilityCrest
             )
         )
         {
-            this.logger.LogError(
-                "Ability crest {id} had no MasterAsset entry",
-                request.AbilityCrestId
-            );
+            logger.LogError("Ability crest {id} had no MasterAsset entry", request.AbilityCrestId);
             return this.Code(ResultCode.AbilityCrestIsNotPlayable);
         }
 
         foreach (AtgenPlusCountParamsList buildup in request.PlusCountParamsList)
         {
-            ResultCode resultCode = await this.abilityCrestService.TryBuildupAugments(
+            ResultCode resultCode = await abilityCrestService.TryBuildupAugments(
                 abilityCrest,
                 buildup
             );
 
             if (resultCode != ResultCode.Success)
             {
-                this.logger.LogError("Buildup plus count param {piece} invalid", buildup);
+                logger.LogError("Buildup plus count param {piece} invalid", buildup);
                 return this.Code(resultCode);
             }
         }
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
-            cancellationToken
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+        return this.Ok(
+            new AbilityCrestBuildupPlusCountResponse() { UpdateDataList = updateDataList }
         );
-        return Ok(new AbilityCrestBuildupPlusCountResponse() { UpdateDataList = updateDataList });
     }
 
     [Route("reset_plus_count")]
@@ -146,22 +129,22 @@ public class AbilityCrestController(
     {
         foreach (PlusCountType augmentType in request.PlusCountTypeList)
         {
-            ResultCode resultCode = await this.abilityCrestService.TryResetAugments(
+            ResultCode resultCode = await abilityCrestService.TryResetAugments(
                 request.AbilityCrestId,
                 augmentType
             );
 
             if (resultCode != ResultCode.Success)
             {
-                this.logger.LogError("Resetting augment type {type} invalid", augmentType);
+                logger.LogError("Resetting augment type {type} invalid", augmentType);
                 return this.Code(resultCode);
             }
         }
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
-            cancellationToken
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+        return this.Ok(
+            new AbilityCrestResetPlusCountResponse() { UpdateDataList = updateDataList }
         );
-        return Ok(new AbilityCrestResetPlusCountResponse() { UpdateDataList = updateDataList });
     }
 
     [Route("get_ability_crest_set_list")]
@@ -184,7 +167,7 @@ public class AbilityCrestController(
             .Select(mapper.Map<AbilityCrestSetList>)
             .ToArray();
 
-        return Ok(
+        return this.Ok(
             new AbilityCrestGetAbilityCrestSetListResponse()
             {
                 AbilityCrestSetList = abilityCrestSetList
@@ -201,17 +184,17 @@ public class AbilityCrestController(
     {
         if (request.AbilityCrestSetNo is <= 0 or > 54)
         {
-            this.logger.LogError("Invalid ability crest no {no}", request.AbilityCrestSetNo);
+            logger.LogError("Invalid ability crest no {no}", request.AbilityCrestSetNo);
             return this.Code(ResultCode.CommonInvalidArgument);
         }
 
         DbAbilityCrestSet newAbilityCrestSet = mapper.Map<DbAbilityCrestSet>(request);
-        await this.abilityCrestRepository.AddOrUpdateSet(newAbilityCrestSet);
+        await abilityCrestRepository.AddOrUpdateSet(newAbilityCrestSet);
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
-            cancellationToken
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+        return this.Ok(
+            new AbilityCrestSetAbilityCrestSetResponse() { UpdateDataList = updateDataList }
         );
-        return Ok(new AbilityCrestSetAbilityCrestSetResponse() { UpdateDataList = updateDataList });
     }
 
     [Route("update_ability_crest_set_name")]
@@ -240,10 +223,8 @@ public class AbilityCrestController(
             dbAbilityCrestSet.AbilityCrestSetName = request.AbilityCrestSetName;
         }
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
-            cancellationToken
-        );
-        return Ok(
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+        return this.Ok(
             new AbilityCrestUpdateAbilityCrestSetNameResponse() { UpdateDataList = updateDataList }
         );
     }

@@ -1,101 +1,65 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using static DragaliaAPI.Features.Tutorial.TutorialService.TutorialStatusIds;
 
-namespace DragaliaAPI.Services.Game;
+namespace DragaliaAPI.Features.AbilityCrest;
 
-public class AbilityCrestService : IAbilityCrestService
+public class AbilityCrestService(
+    IAbilityCrestRepository abilityCrestRepository,
+    IInventoryRepository inventoryRepository,
+    IUserDataRepository userDataRepository,
+    ILogger<AbilityCrestService> logger,
+    IMissionProgressionService missionProgressionService,
+    ITutorialService tutorialService
+) : IAbilityCrestService
 {
-    private readonly IAbilityCrestRepository abilityCrestRepository;
-    private readonly IInventoryRepository inventoryRepository;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly ILogger<AbilityCrestService> logger;
-    private readonly IMissionProgressionService missionProgressionService;
-
-    public AbilityCrestService(
-        IAbilityCrestRepository abilityCrestRepository,
-        IInventoryRepository inventoryRepository,
-        IUserDataRepository userDataRepository,
-        ILogger<AbilityCrestService> logger,
-        IMissionProgressionService missionProgressionService
-    )
-    {
-        this.abilityCrestRepository = abilityCrestRepository;
-        this.inventoryRepository = inventoryRepository;
-        this.userDataRepository = userDataRepository;
-        this.logger = logger;
-        this.missionProgressionService = missionProgressionService;
-    }
-
-    public async Task AddOrRefund(AbilityCrests abilityCrestId)
-    {
-        // for if wyrmprints get added to quest drops in future
-
-        DbAbilityCrest? abilityCrest = await this.abilityCrestRepository.FindAsync(abilityCrestId);
-
-        if (abilityCrest is null)
-        {
-            await this.abilityCrestRepository.Add(abilityCrestId);
-        }
-        else
-        {
-            this.logger.LogDebug("Ability crest already owned, refunding materials instead");
-            AbilityCrest abilityCrestInfo = MasterAsset.AbilityCrest.Get(abilityCrestId);
-
-            switch (abilityCrestInfo.DuplicateEntityType)
-            {
-                case EntityTypes.Material:
-                    await this.inventoryRepository.UpdateQuantity(
-                        abilityCrestInfo.DuplicateMaterialMap
-                    );
-                    break;
-                case EntityTypes.Dew:
-                    await this.userDataRepository.UpdateDewpoint(
-                        abilityCrestInfo.DuplicateEntityQuantity
-                    );
-                    break;
-                case EntityTypes.Rupies:
-                    await this.userDataRepository.UpdateCoin(
-                        abilityCrestInfo.DuplicateEntityQuantity
-                    );
-                    break;
-                default:
-                    throw new DragaliaException(
-                        ResultCode.CommonInvalidArgument,
-                        $"DuplicateEntityType {abilityCrestInfo.DuplicateEntityType} invalid"
-                    );
-            }
-        }
-    }
-
     public async Task<ResultCode> TryBuildup(
-        AbilityCrest abilityCrest,
+        DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest abilityCrest,
         AtgenBuildupAbilityCrestPieceList buildup
     )
     {
-        switch (buildup.BuildupPieceType)
+        ResultCode result = buildup.BuildupPieceType switch
         {
-            case BuildupPieceTypes.Unbind
-            or BuildupPieceTypes.Copies:
-                return await TryBuildupGeneric(abilityCrest, buildup);
-            case BuildupPieceTypes.Stats:
-                return await TryBuildupLevel(abilityCrest, buildup);
-            default:
-                this.logger.LogWarning(
-                    "Buildup piece type {type} invalid",
-                    buildup.BuildupPieceType
-                );
-                return ResultCode.CommonInvalidArgument;
+            BuildupPieceTypes.Unbind
+            or BuildupPieceTypes.Copies
+                => await this.TryBuildupGeneric(abilityCrest, buildup),
+            BuildupPieceTypes.Stats => await this.TryBuildupLevel(abilityCrest, buildup),
+            _
+                => throw new DragaliaException(
+                    ResultCode.CommonInvalidArgument,
+                    "Invalid buildip piece type"
+                )
+        };
+
+        if (result == ResultCode.Success)
+        {
+            if (buildup.BuildupPieceType == BuildupPieceTypes.Stats)
+            {
+                await tutorialService.AddTutorialFlag((int)TutorialFlags.AbilityCrestGrowTutorial);
+                await tutorialService.UpdateTutorialStatus(AbilityCrestStatsTutorial);
+            }
+
+            if (buildup.BuildupPieceType == BuildupPieceTypes.Unbind)
+            {
+                await tutorialService.AddTutorialFlag((int)TutorialFlags.AbilityCrestGrowTutorial);
+                await tutorialService.UpdateTutorialStatus(AbilityCrestUnbindTutorial);
+            }
         }
+
+        return result;
     }
 
     private async Task<ResultCode> TryBuildupGeneric(
-        AbilityCrest abilityCrest,
+        DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest abilityCrest,
         AtgenBuildupAbilityCrestPieceList buildup
     )
     {
@@ -108,7 +72,7 @@ public class AbilityCrestService : IAbilityCrestService
             )
         )
         {
-            this.logger.LogWarning("BuildupGroupId {id} invalid", buildupId);
+            logger.LogWarning("BuildupGroupId {id} invalid", buildupId);
             return ResultCode.AbilityCrestBuildupPieceUnablePiece;
         }
 
@@ -123,16 +87,16 @@ public class AbilityCrestService : IAbilityCrestService
 
         SetMaterialMapSpecial(abilityCrest.Rarity, buildup, ref materialMap, ref dewpoint);
 
-        if (!(await ValidateCost(materialMap) && await ValidateCost(dewpoint)))
+        if (!(await this.ValidateCost(materialMap) && await this.ValidateCost(dewpoint)))
         {
             return ResultCode.AbilityCrestBuildupPieceStepError;
         }
 
-        DbAbilityCrest dbAbilityCrest = await TryFindAsync(abilityCrest.Id);
+        DbAbilityCrest dbAbilityCrest = await this.TryFindAsync(abilityCrest.Id);
 
         if (buildup.BuildupPieceType == BuildupPieceTypes.Unbind)
         {
-            if (!ValidateStep(dbAbilityCrest.LimitBreakCount, buildup.Step))
+            if (!this.ValidateStep(dbAbilityCrest.LimitBreakCount, buildup.Step))
             {
                 return ResultCode.AbilityCrestBuildupPieceStepError;
             }
@@ -141,7 +105,7 @@ public class AbilityCrestService : IAbilityCrestService
         }
         else
         {
-            if (!ValidateStep(dbAbilityCrest.EquipableCount, buildup.Step))
+            if (!this.ValidateStep(dbAbilityCrest.EquipableCount, buildup.Step))
             {
                 return ResultCode.AbilityCrestBuildupPieceStepError;
             }
@@ -149,14 +113,14 @@ public class AbilityCrestService : IAbilityCrestService
             dbAbilityCrest.EquipableCount = buildup.Step;
         }
 
-        await this.inventoryRepository.UpdateQuantity(materialMap.Invert());
-        await this.userDataRepository.UpdateDewpoint(-dewpoint);
+        await inventoryRepository.UpdateQuantity(materialMap.Invert());
+        await userDataRepository.UpdateDewpoint(-dewpoint);
 
         return ResultCode.Success;
     }
 
     private async Task<ResultCode> TryBuildupLevel(
-        AbilityCrest abilityCrest,
+        DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest abilityCrest,
         AtgenBuildupAbilityCrestPieceList buildup
     )
     {
@@ -169,7 +133,7 @@ public class AbilityCrestService : IAbilityCrestService
             )
         )
         {
-            this.logger.LogWarning("BuildupLevelId {id} invalid", levelId);
+            logger.LogWarning("BuildupLevelId {id} invalid", levelId);
             return ResultCode.AbilityCrestBuildupPieceUnablePiece;
         }
 
@@ -184,14 +148,14 @@ public class AbilityCrestService : IAbilityCrestService
             );
         }
 
-        if (!await ValidateCost(materialMap))
+        if (!await this.ValidateCost(materialMap))
         {
             return ResultCode.AbilityCrestBuildupPieceStepError;
         }
 
-        DbAbilityCrest dbAbilityCrest = await TryFindAsync(abilityCrest.Id);
+        DbAbilityCrest dbAbilityCrest = await this.TryFindAsync(abilityCrest.Id);
 
-        if (!ValidateStep(dbAbilityCrest.BuildupCount, buildup.Step))
+        if (!this.ValidateStep(dbAbilityCrest.BuildupCount, buildup.Step))
         {
             return ResultCode.AbilityCrestBuildupPieceStepError;
         }
@@ -210,13 +174,13 @@ public class AbilityCrestService : IAbilityCrestService
         );
 
         dbAbilityCrest.BuildupCount = buildup.Step;
-        await this.inventoryRepository.UpdateQuantity(materialMap.Invert());
+        await inventoryRepository.UpdateQuantity(materialMap.Invert());
 
         return ResultCode.Success;
     }
 
     public async Task<ResultCode> TryBuildupAugments(
-        AbilityCrest abilityCrest,
+        DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest abilityCrest,
         AtgenPlusCountParamsList buildup
     )
     {
@@ -227,7 +191,7 @@ public class AbilityCrestService : IAbilityCrestService
             return ResultCode.AbilityCrestBuildupPlusCountCountError;
         }
 
-        DbAbilityCrest dbAbilityCrest = await TryFindAsync(abilityCrest.Id);
+        DbAbilityCrest dbAbilityCrest = await this.TryFindAsync(abilityCrest.Id);
         int usedAugments;
         Dictionary<Materials, int> materialMap;
 
@@ -242,7 +206,7 @@ public class AbilityCrestService : IAbilityCrestService
             materialMap = new() { { Materials.AmplifyingGemstone, usedAugments } };
         }
 
-        if (usedAugments < 0 || !await ValidateCost(materialMap))
+        if (usedAugments < 0 || !await this.ValidateCost(materialMap))
         {
             return ResultCode.AbilityCrestBuildupPlusCountCountError;
         }
@@ -256,29 +220,29 @@ public class AbilityCrestService : IAbilityCrestService
             dbAbilityCrest.AttackPlusCount = buildup.PlusCount;
         }
 
-        this.missionProgressionService.OnAbilityCrestBuildupPlusCount(
+        missionProgressionService.OnAbilityCrestBuildupPlusCount(
             dbAbilityCrest.AbilityCrestId,
             buildup.PlusCountType,
             usedAugments,
             buildup.PlusCount
         );
 
-        this.missionProgressionService.OnAbilityCrestTotalPlusCountUp(
+        missionProgressionService.OnAbilityCrestTotalPlusCountUp(
             dbAbilityCrest.AbilityCrestId,
             0,
             Math.Min(dbAbilityCrest.HpPlusCount, dbAbilityCrest.AttackPlusCount)
         );
 
-        await this.inventoryRepository.UpdateQuantity(materialMap.Invert());
+        await inventoryRepository.UpdateQuantity(materialMap.Invert());
         return ResultCode.Success;
     }
 
     public async Task<ResultCode> TryResetAugments(
-        AbilityCrests abilityCrestId,
+        DragaliaAPI.Shared.Definitions.Enums.AbilityCrests abilityCrestId,
         PlusCountType augmentType
     )
     {
-        DbAbilityCrest dbAbilityCrest = await TryFindAsync(abilityCrestId);
+        DbAbilityCrest dbAbilityCrest = await this.TryFindAsync(abilityCrestId);
 
         int augmentTotal = augmentType switch
         {
@@ -291,7 +255,7 @@ public class AbilityCrestService : IAbilityCrestService
                 )
         };
 
-        if (!await this.userDataRepository.CheckCoin(augmentTotal * 20_000))
+        if (!await userDataRepository.CheckCoin(augmentTotal * 20_000))
         {
             return ResultCode.CommonMaterialShort;
         }
@@ -314,8 +278,8 @@ public class AbilityCrestService : IAbilityCrestService
             dbAbilityCrest.AttackPlusCount = 0;
         }
 
-        await this.userDataRepository.UpdateCoin(-augmentTotal * 20_000);
-        await this.inventoryRepository.UpdateQuantity(returnedAugments);
+        await userDataRepository.UpdateCoin(-augmentTotal * 20_000);
+        await inventoryRepository.UpdateQuantity(returnedAugments);
         return ResultCode.Success;
     }
 
@@ -375,11 +339,11 @@ public class AbilityCrestService : IAbilityCrestService
         return true;
     }
 
-    private async Task<DbAbilityCrest> TryFindAsync(AbilityCrests abilityCrestId)
+    private async Task<DbAbilityCrest> TryFindAsync(
+        DragaliaAPI.Shared.Definitions.Enums.AbilityCrests abilityCrestId
+    )
     {
-        DbAbilityCrest? dbAbilityCrest = await this.abilityCrestRepository.FindAsync(
-            abilityCrestId
-        );
+        DbAbilityCrest? dbAbilityCrest = await abilityCrestRepository.FindAsync(abilityCrestId);
 
         if (dbAbilityCrest is null)
         {
@@ -394,9 +358,9 @@ public class AbilityCrestService : IAbilityCrestService
 
     private async Task<bool> ValidateCost(Dictionary<Materials, int> materialMap)
     {
-        if (!await this.inventoryRepository.CheckQuantity(materialMap))
+        if (!await inventoryRepository.CheckQuantity(materialMap))
         {
-            this.logger.LogWarning("Player doesn't have enough materials to perform action");
+            logger.LogWarning("Player doesn't have enough materials to perform action");
             return false;
         }
 
@@ -405,9 +369,9 @@ public class AbilityCrestService : IAbilityCrestService
 
     private async Task<bool> ValidateCost(int dewpoint)
     {
-        if (!await this.userDataRepository.CheckDewpoint(dewpoint))
+        if (!await userDataRepository.CheckDewpoint(dewpoint))
         {
-            this.logger.LogWarning("Player doesn't have enough dewpoint to perform action");
+            logger.LogWarning("Player doesn't have enough dewpoint to perform action");
             return false;
         }
 
@@ -418,7 +382,7 @@ public class AbilityCrestService : IAbilityCrestService
     {
         if (step != currLevel + 1)
         {
-            this.logger.LogWarning("Cannot upgrade in increments greater than 1");
+            logger.LogWarning("Cannot upgrade in increments greater than 1");
             return false;
         }
 

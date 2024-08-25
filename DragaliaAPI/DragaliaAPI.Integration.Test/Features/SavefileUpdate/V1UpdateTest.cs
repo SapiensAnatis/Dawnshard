@@ -1,4 +1,5 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Services.Game;
 using Microsoft.EntityFrameworkCore;
 

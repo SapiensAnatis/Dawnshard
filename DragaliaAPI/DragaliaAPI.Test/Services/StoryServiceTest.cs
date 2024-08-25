@@ -9,6 +9,7 @@ using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Story;
+using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;

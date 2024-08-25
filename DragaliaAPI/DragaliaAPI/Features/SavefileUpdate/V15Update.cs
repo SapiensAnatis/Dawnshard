@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Story;
+using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Services.Game;
 

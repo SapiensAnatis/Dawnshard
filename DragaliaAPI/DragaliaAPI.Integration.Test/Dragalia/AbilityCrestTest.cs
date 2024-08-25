@@ -1,10 +1,11 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.AbilityCrest;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
-/// Tests <see cref="Controllers.Dragalia.AbilityCrestController"/>
+/// Tests <see cref="AbilityCrestController"/>
 /// </summary>
 public class AbilityCrestTest : TestFixture
 {

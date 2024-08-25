@@ -1,6 +1,8 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.AbilityCrest;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Services.Game;
@@ -19,6 +21,7 @@ public class AbilityCrestServiceTest
     private readonly Mock<IInventoryRepository> mockInventoryRepository;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
+    private readonly Mock<ITutorialService> mockTutorialService;
     private readonly AbilityCrestService abilityCrestService;
 
     private static readonly Dictionary<Materials, int> EmptyMap = new();
@@ -174,94 +177,16 @@ public class AbilityCrestServiceTest
         this.mockInventoryRepository = new(MockBehavior.Strict);
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockMissionProgressionService = new(MockBehavior.Strict);
+        this.mockTutorialService = new(MockBehavior.Loose);
 
         this.abilityCrestService = new AbilityCrestService(
             this.mockAbilityCrestRepository.Object,
             this.mockInventoryRepository.Object,
             this.mockUserDataRepository.Object,
             LoggerTestUtils.Create<AbilityCrestService>(),
-            this.mockMissionProgressionService.Object
+            this.mockMissionProgressionService.Object,
+            this.mockTutorialService.Object
         );
-    }
-
-    [Fact]
-    public async Task AddOrRefund_AbilityCrestNotFoundAddsAbilityCrest()
-    {
-        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrests.WorthyRivals))
-            .ReturnsAsync(() => null);
-        this.mockAbilityCrestRepository.Setup(x =>
-                x.Add(AbilityCrests.WorthyRivals, null, null, null)
-            )
-            .Returns(Task.CompletedTask);
-
-        await this.abilityCrestService.AddOrRefund(AbilityCrests.WorthyRivals);
-
-        this.mockAbilityCrestRepository.VerifyAll();
-    }
-
-    [Fact]
-    public async Task AddOrRefund_TwoStarAbilityCrestRefundsCoin()
-    {
-        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrests.ManaFount))
-            .ReturnsAsync(
-                new DbAbilityCrest() { ViewerId = 1, AbilityCrestId = AbilityCrests.ManaFount }
-            );
-        this.mockUserDataRepository.Setup(x => x.UpdateCoin(50)).Returns(Task.CompletedTask);
-
-        await this.abilityCrestService.AddOrRefund(AbilityCrests.ManaFount);
-
-        this.mockAbilityCrestRepository.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
-    }
-
-    [Theory]
-    [InlineData(AbilityCrests.TheOrdersMessengerOwl, 10)]
-    [InlineData(AbilityCrests.DragonsNest, 150)]
-    [InlineData(AbilityCrests.TheBewitchingMagician, 100)]
-    [InlineData(AbilityCrests.HisCleverBrother, 1_000)]
-    [InlineData(AbilityCrests.UnitedbyOneVision, 300)]
-    [InlineData(AbilityCrests.BondsBetweenWorlds, 1_500)]
-    [InlineData(AbilityCrests.WorthyRivals, 3_000)]
-    public async Task AddOrRefund_AbilityCrestsRefundExpectedDewpoint(
-        AbilityCrests abilityCrestId,
-        int dewpoint
-    )
-    {
-        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(abilityCrestId))
-            .ReturnsAsync(new DbAbilityCrest() { ViewerId = 1, AbilityCrestId = abilityCrestId });
-        this.mockUserDataRepository.Setup(x => x.UpdateDewpoint(dewpoint))
-            .Returns(Task.CompletedTask);
-
-        await this.abilityCrestService.AddOrRefund(abilityCrestId);
-
-        this.mockAbilityCrestRepository.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
-    }
-
-    [Fact]
-    public async Task AddOrRefund_NineStarAbilityCrestRefundsExpectedMaterials()
-    {
-        this.mockAbilityCrestRepository.Setup(x =>
-                x.FindAsync(AbilityCrests.TutelarysDestinyWolfsBoon)
-            )
-            .ReturnsAsync(
-                new DbAbilityCrest()
-                {
-                    ViewerId = 1,
-                    AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon
-                }
-            );
-        this.mockInventoryRepository.Setup(x =>
-                x.UpdateQuantity(
-                    new Dictionary<Materials, int>() { { Materials.TutelarySuccessorsMemory, 6 } }
-                )
-            )
-            .Returns(Task.CompletedTask);
-
-        await this.abilityCrestService.AddOrRefund(AbilityCrests.TutelarysDestinyWolfsBoon);
-
-        this.mockAbilityCrestRepository.VerifyAll();
-        this.mockInventoryRepository.VerifyAll();
     }
 
     [Fact]

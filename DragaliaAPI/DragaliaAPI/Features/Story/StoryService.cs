@@ -7,6 +7,7 @@ using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
