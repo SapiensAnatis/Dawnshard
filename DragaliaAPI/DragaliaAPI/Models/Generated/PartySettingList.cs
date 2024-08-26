@@ -21,8 +21,8 @@ public partial class PartySettingList
     [Key("equip_amulet_2_key_id")]
     public ulong EquipAmulet2KeyId { get; set; }
 
-    public IEnumerable<AbilityCrests> GetAbilityCrestList() =>
-        new List<AbilityCrests>()
+    public IEnumerable<AbilityCrestId> GetAbilityCrestList() =>
+        new List<AbilityCrestId>()
         {
             this.EquipCrestSlotType1CrestId1,
             this.EquipCrestSlotType1CrestId2,

@@ -34,7 +34,7 @@ public class PartyTest : TestFixture
                         UnitNo = 1,
                         CharaId = Charas.Ilia,
                         EquipWeaponBodyId = WeaponBodies.DivineTrigger,
-                        EquipCrestSlotType1CrestId1 = AbilityCrests.ADragonyuleforIlia
+                        EquipCrestSlotType1CrestId1 = AbilityCrestId.ADragonyuleforIlia
                     }
                 },
                 "My New Party",
@@ -72,7 +72,7 @@ public class PartyTest : TestFixture
                         PartyNo = 1,
                         ViewerId = ViewerId,
                         CharaId = Charas.Ilia,
-                        EquipCrestSlotType1CrestId1 = AbilityCrests.ADragonyuleforIlia,
+                        EquipCrestSlotType1CrestId1 = AbilityCrestId.ADragonyuleforIlia,
                         EquipWeaponBodyId = WeaponBodies.DivineTrigger,
                         Party = dbparty,
                     },

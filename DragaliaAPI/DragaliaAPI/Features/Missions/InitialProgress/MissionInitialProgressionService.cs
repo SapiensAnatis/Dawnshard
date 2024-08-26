@@ -3,6 +3,7 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Features.AbilityCrests;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Features.Story;
@@ -121,7 +122,7 @@ public class MissionInitialProgressionService(
                     ),
                 MissionCompleteType.AbilityCrestBuildupPlusCount
                     => await this.GetWyrmprintBuildupCount(
-                        (AbilityCrests?)progressionInfo.Parameter,
+                        (AbilityCrestId?)progressionInfo.Parameter,
                         (PlusCountType?)progressionInfo.Parameter2
                     ),
                 MissionCompleteType.CharacterBuildupPlusCount
@@ -137,7 +138,7 @@ public class MissionInitialProgressionService(
                         await abilityCrestRepository
                             .AbilityCrests.Where(x =>
                                 progressionInfo.Parameter == null
-                                || x.AbilityCrestId == (AbilityCrests)progressionInfo.Parameter
+                                || x.AbilityCrestId == (AbilityCrestId)progressionInfo.Parameter
                             )
                             .Select(x => new { x.AttackPlusCount, x.HpPlusCount })
                             .ToListAsync()
@@ -149,7 +150,7 @@ public class MissionInitialProgressionService(
                         await abilityCrestRepository
                             .AbilityCrests.Where(x =>
                                 progressionInfo.Parameter == null
-                                || x.AbilityCrestId == (AbilityCrests)progressionInfo.Parameter
+                                || x.AbilityCrestId == (AbilityCrestId)progressionInfo.Parameter
                             )
                             .Select(x => (int?)x.BuildupCount)
                             .ToListAsync()
@@ -267,7 +268,7 @@ public class MissionInitialProgressionService(
              * is owned. (These trades were reworked and given new IDs in 2.0).
             */
             treasureTradeCount += await abilityCrestRepository.AbilityCrests.CountAsync(x =>
-                x.AbilityCrestId == (AbilityCrests?)id
+                x.AbilityCrestId == (AbilityCrestId?)id
             );
         }
 
@@ -451,7 +452,7 @@ public class MissionInitialProgressionService(
         };
     }
 
-    private async Task<int> GetWyrmprintBuildupCount(AbilityCrests? crestId, PlusCountType? type)
+    private async Task<int> GetWyrmprintBuildupCount(AbilityCrestId? crestId, PlusCountType? type)
     {
         Debug.Assert(type != null, "type != null");
 

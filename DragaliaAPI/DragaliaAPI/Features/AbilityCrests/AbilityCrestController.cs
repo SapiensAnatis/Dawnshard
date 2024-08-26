@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -9,7 +9,7 @@ using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Controllers.Dragalia;
+namespace DragaliaAPI.Features.AbilityCrests;
 
 [Route("ability_crest")]
 public class AbilityCrestController(
@@ -33,7 +33,7 @@ public class AbilityCrestController(
         CancellationToken cancellationToken
     )
     {
-        DbAbilityCrest? abilityCrest = await abilityCrestRepository.FindAsync(
+        DbAbilityCrest? abilityCrest = await this.abilityCrestRepository.FindAsync(
             request.AbilityCrestId
         );
 
@@ -48,7 +48,7 @@ public class AbilityCrestController(
             cancellationToken
         );
 
-        return Ok(new AbilityCrestSetFavoriteResponse() { UpdateDataList = updateDataList });
+        return this.Ok(new AbilityCrestSetFavoriteResponse() { UpdateDataList = updateDataList });
     }
 
     [Route("buildup_piece")]
@@ -134,7 +134,9 @@ public class AbilityCrestController(
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
             cancellationToken
         );
-        return Ok(new AbilityCrestBuildupPlusCountResponse() { UpdateDataList = updateDataList });
+        return this.Ok(
+            new AbilityCrestBuildupPlusCountResponse() { UpdateDataList = updateDataList }
+        );
     }
 
     [Route("reset_plus_count")]
@@ -161,15 +163,17 @@ public class AbilityCrestController(
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
             cancellationToken
         );
-        return Ok(new AbilityCrestResetPlusCountResponse() { UpdateDataList = updateDataList });
+        return this.Ok(
+            new AbilityCrestResetPlusCountResponse() { UpdateDataList = updateDataList }
+        );
     }
 
     [Route("get_ability_crest_set_list")]
     [HttpPost]
     public async Task<DragaliaResult> GetAbilityCrestSetList(CancellationToken cancellationToken)
     {
-        List<DbAbilityCrestSet> dbAbilityCrestSets = await abilityCrestRepository
-            .AbilityCrestSets.OrderBy(x => x.AbilityCrestSetNo)
+        List<DbAbilityCrestSet> dbAbilityCrestSets = await this
+            .abilityCrestRepository.AbilityCrestSets.OrderBy(x => x.AbilityCrestSetNo)
             .ToListAsync(cancellationToken);
 
         int index = 0;
@@ -181,10 +185,10 @@ public class AbilityCrestController(
                     ? dbAbilityCrestSets[index++]
                     : new DbAbilityCrestSet() { ViewerId = this.ViewerId, AbilityCrestSetNo = x }
             )
-            .Select(mapper.Map<AbilityCrestSetList>)
+            .Select(this.mapper.Map<AbilityCrestSetList>)
             .ToArray();
 
-        return Ok(
+        return this.Ok(
             new AbilityCrestGetAbilityCrestSetListResponse()
             {
                 AbilityCrestSetList = abilityCrestSetList
@@ -205,13 +209,15 @@ public class AbilityCrestController(
             return this.Code(ResultCode.CommonInvalidArgument);
         }
 
-        DbAbilityCrestSet newAbilityCrestSet = mapper.Map<DbAbilityCrestSet>(request);
+        DbAbilityCrestSet newAbilityCrestSet = this.mapper.Map<DbAbilityCrestSet>(request);
         await this.abilityCrestRepository.AddOrUpdateSet(newAbilityCrestSet);
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
             cancellationToken
         );
-        return Ok(new AbilityCrestSetAbilityCrestSetResponse() { UpdateDataList = updateDataList });
+        return this.Ok(
+            new AbilityCrestSetAbilityCrestSetResponse() { UpdateDataList = updateDataList }
+        );
     }
 
     [Route("update_ability_crest_set_name")]
@@ -221,13 +227,13 @@ public class AbilityCrestController(
         CancellationToken cancellationToken
     )
     {
-        DbAbilityCrestSet? dbAbilityCrestSet = await abilityCrestRepository.FindSetAsync(
+        DbAbilityCrestSet? dbAbilityCrestSet = await this.abilityCrestRepository.FindSetAsync(
             request.AbilityCrestSetNo
         );
 
         if (dbAbilityCrestSet is null)
         {
-            await abilityCrestRepository.AddOrUpdateSet(
+            await this.abilityCrestRepository.AddOrUpdateSet(
                 new DbAbilityCrestSet()
                 {
                     AbilityCrestSetNo = request.AbilityCrestSetNo,
@@ -243,7 +249,7 @@ public class AbilityCrestController(
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
             cancellationToken
         );
-        return Ok(
+        return this.Ok(
             new AbilityCrestUpdateAbilityCrestSetNameResponse() { UpdateDataList = updateDataList }
         );
     }

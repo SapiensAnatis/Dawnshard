@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.AbilityCrests;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -22,7 +23,7 @@ public class AbilityCrestMultiplierService(
         double materialBoost = 0;
         double pointBoost = 0;
 
-        IEnumerable<AbilityCrests> equippedCrestIds = partySettingList.SelectMany(y =>
+        IEnumerable<AbilityCrestId> equippedCrestIds = partySettingList.SelectMany(y =>
             y.GetAbilityCrestList()
         );
 

@@ -203,7 +203,7 @@ public class DungeonRecordTest : TestFixture
             new DbAbilityCrest()
             {
                 ViewerId = ViewerId,
-                AbilityCrestId = AbilityCrests.SistersDayOut,
+                AbilityCrestId = AbilityCrestId.SistersDayOut,
             }
         );
 
@@ -220,7 +220,7 @@ public class DungeonRecordTest : TestFixture
                     new()
                     {
                         CharaId = Charas.ThePrince,
-                        EquipCrestSlotType1CrestId1 = AbilityCrests.SistersDayOut
+                        EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut
                     }
                 },
                 QuestData = MasterAsset.QuestData.Get(questId),
@@ -314,8 +314,8 @@ public class DungeonRecordTest : TestFixture
 
         await this.AddRangeToDatabase(
             [
-                new DbAbilityCrest() { AbilityCrestId = AbilityCrests.HavingaSummerBall },
-                new DbAbilityCrest() { AbilityCrestId = AbilityCrests.SuperSoakingAndroids }
+                new DbAbilityCrest() { AbilityCrestId = AbilityCrestId.HavingaSummerBall },
+                new DbAbilityCrest() { AbilityCrestId = AbilityCrestId.SuperSoakingAndroids }
             ]
         );
 
@@ -332,8 +332,8 @@ public class DungeonRecordTest : TestFixture
                     new()
                     {
                         CharaId = Charas.ThePrince,
-                        EquipCrestSlotType1CrestId1 = AbilityCrests.SuperSoakingAndroids,
-                        EquipCrestSlotType2CrestId1 = AbilityCrests.HavingaSummerBall,
+                        EquipCrestSlotType1CrestId1 = AbilityCrestId.SuperSoakingAndroids,
+                        EquipCrestSlotType2CrestId1 = AbilityCrestId.HavingaSummerBall,
                     }
                 },
                 QuestData = MasterAsset.QuestData.Get(questId),

@@ -28,7 +28,7 @@ public static class MiracleOfDragonyule
             new EventQuestClearWithCrestMission()
             {
                 MissionId = 10020201,
-                Crest = AbilityCrests.ASliceofDragonyule
+                Crest = AbilityCrestId.ASliceofDragonyule
             },
             // Collect 500 Holiday Cheer in One Go
             new EventPointCollectionRecordMission() { MissionId = 10020302 },

@@ -55,8 +55,8 @@ public static partial class MasterAsset
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestRarity>? abilityCrestRarity;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrestRarity> AbilityCrestRarity => abilityCrestRarity ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.AbilityCrests, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest>? abilityCrest;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.AbilityCrests, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest> AbilityCrest => abilityCrest ?? throw new InvalidOperationException(ErrorUninitialized);
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.AbilityCrestId, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest>? abilityCrest;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.AbilityCrestId, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest> AbilityCrest => abilityCrest ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestEventGroup>? questEventGroup;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestEventGroup> QuestEventGroup => questEventGroup ?? throw new InvalidOperationException(ErrorUninitialized);
@@ -451,8 +451,8 @@ public static partial class MasterAsset
                 null
             );
         
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.AbilityCrests, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest>> abilityCrestTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.AbilityCrests, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.AbilityCrestId, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest>> abilityCrestTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.AbilityCrestId, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest>(
                 "AbilityCrest.msgpack",
                 (global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest x) => x.Id,
                 null

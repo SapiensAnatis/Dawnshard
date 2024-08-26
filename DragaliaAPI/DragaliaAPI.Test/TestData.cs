@@ -38,13 +38,13 @@ public static class TestData
             SupportTalisman = new() { TalismanId = Talismans.ThePrince },
             SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
             {
-                new() { AbilityCrestId = AbilityCrests.TheGreatestGift },
+                new() { AbilityCrestId = AbilityCrestId.TheGreatestGift },
                 new() { AbilityCrestId = 0 },
                 new() { AbilityCrestId = 0 },
             },
             SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
             {
-                new() { AbilityCrestId = AbilityCrests.ManaFount },
+                new() { AbilityCrestId = AbilityCrestId.ManaFount },
                 new() { AbilityCrestId = 0 },
             },
             SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()

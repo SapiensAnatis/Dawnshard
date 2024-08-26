@@ -1,16 +1,17 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.AbilityCrests;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
-using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Test.Utils;
 using Xunit.Abstractions;
 
-namespace DragaliaAPI.Test.Services;
+namespace DragaliaAPI.Test.Features.AbilityCrests;
 
 public class AbilityCrestServiceTest
 {
@@ -19,6 +20,7 @@ public class AbilityCrestServiceTest
     private readonly Mock<IInventoryRepository> mockInventoryRepository;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
+    private readonly Mock<ITutorialService> mockTutorialService;
     private readonly AbilityCrestService abilityCrestService;
 
     private static readonly Dictionary<Materials, int> EmptyMap = new();
@@ -47,66 +49,66 @@ public class AbilityCrestServiceTest
     public static IEnumerable<object[]> SuccessfulUnbindData =>
         new List<object[]>
         {
-            new object[] { AbilityCrests.ManaFount, 1, false, EmptyMap, 10 },
-            new object[] { AbilityCrests.TheOrdersMessengerOwl, 1, false, EmptyMap, 30 },
-            new object[] { AbilityCrests.DragonsNest, 1, false, EmptyMap, 300 },
-            new object[] { AbilityCrests.TheBewitchingMagician, 1, false, EmptyMap, 150 },
-            new object[] { AbilityCrests.HisCleverBrother, 1, false, EmptyMap, 3_000 },
+            new object[] { AbilityCrestId.ManaFount, 1, false, EmptyMap, 10 },
+            new object[] { AbilityCrestId.TheOrdersMessengerOwl, 1, false, EmptyMap, 30 },
+            new object[] { AbilityCrestId.DragonsNest, 1, false, EmptyMap, 300 },
+            new object[] { AbilityCrestId.TheBewitchingMagician, 1, false, EmptyMap, 150 },
+            new object[] { AbilityCrestId.HisCleverBrother, 1, false, EmptyMap, 3_000 },
             new object[]
             {
-                AbilityCrests.GreatwyrmMidgardsormr,
+                AbilityCrestId.GreatwyrmMidgardsormr,
                 1,
                 false,
                 GreatwyrmMidgardsormrUnbind1Map,
                 0
             },
-            new object[] { AbilityCrests.UnitedbyOneVision, 1, false, EmptyMap, 300 },
-            new object[] { AbilityCrests.WorthyRivals, 1, false, EmptyMap, 6_000 },
-            new object[] { AbilityCrests.GloriousTempest, 1, false, GloriousTempestUnbind1Map, 0 },
+            new object[] { AbilityCrestId.UnitedbyOneVision, 1, false, EmptyMap, 300 },
+            new object[] { AbilityCrestId.WorthyRivals, 1, false, EmptyMap, 6_000 },
+            new object[] { AbilityCrestId.GloriousTempest, 1, false, GloriousTempestUnbind1Map, 0 },
             new object[]
             {
-                AbilityCrests.TutelarysDestinyWolfsBoon,
+                AbilityCrestId.TutelarysDestinyWolfsBoon,
                 1,
                 false,
                 TutelaryUnbind1Map,
                 0
             },
-            new object[] { AbilityCrests.TheBewitchingMagician, 1, true, SilverKey, 0 },
-            new object[] { AbilityCrests.HisCleverBrother, 1, true, SilverKey, 0 },
-            new object[] { AbilityCrests.GreatwyrmMidgardsormr, 1, true, SilverKey, 0 },
-            new object[] { AbilityCrests.UnitedbyOneVision, 1, true, GoldenKey, 0 },
-            new object[] { AbilityCrests.WorthyRivals, 1, true, GoldenKey, 0 },
-            new object[] { AbilityCrests.GloriousTempest, 1, true, GoldenKey, 0 },
-            new object[] { AbilityCrests.ManaFount, 4, false, EmptyMap, 10 },
-            new object[] { AbilityCrests.TheOrdersMessengerOwl, 4, false, EmptyMap, 40 },
-            new object[] { AbilityCrests.DragonsNest, 4, false, EmptyMap, 400 },
-            new object[] { AbilityCrests.TheBewitchingMagician, 4, false, EmptyMap, 200 },
-            new object[] { AbilityCrests.HisCleverBrother, 4, false, EmptyMap, 4_000 },
+            new object[] { AbilityCrestId.TheBewitchingMagician, 1, true, SilverKey, 0 },
+            new object[] { AbilityCrestId.HisCleverBrother, 1, true, SilverKey, 0 },
+            new object[] { AbilityCrestId.GreatwyrmMidgardsormr, 1, true, SilverKey, 0 },
+            new object[] { AbilityCrestId.UnitedbyOneVision, 1, true, GoldenKey, 0 },
+            new object[] { AbilityCrestId.WorthyRivals, 1, true, GoldenKey, 0 },
+            new object[] { AbilityCrestId.GloriousTempest, 1, true, GoldenKey, 0 },
+            new object[] { AbilityCrestId.ManaFount, 4, false, EmptyMap, 10 },
+            new object[] { AbilityCrestId.TheOrdersMessengerOwl, 4, false, EmptyMap, 40 },
+            new object[] { AbilityCrestId.DragonsNest, 4, false, EmptyMap, 400 },
+            new object[] { AbilityCrestId.TheBewitchingMagician, 4, false, EmptyMap, 200 },
+            new object[] { AbilityCrestId.HisCleverBrother, 4, false, EmptyMap, 4_000 },
             new object[]
             {
-                AbilityCrests.GreatwyrmMidgardsormr,
+                AbilityCrestId.GreatwyrmMidgardsormr,
                 4,
                 false,
                 GreatwyrmMidgardsormrUnbind4Map,
                 0
             },
-            new object[] { AbilityCrests.UnitedbyOneVision, 4, false, EmptyMap, 400 },
-            new object[] { AbilityCrests.WorthyRivals, 4, false, EmptyMap, 9_000 },
-            new object[] { AbilityCrests.GloriousTempest, 4, false, GloriousTempestUnbind4Map, 0 },
+            new object[] { AbilityCrestId.UnitedbyOneVision, 4, false, EmptyMap, 400 },
+            new object[] { AbilityCrestId.WorthyRivals, 4, false, EmptyMap, 9_000 },
+            new object[] { AbilityCrestId.GloriousTempest, 4, false, GloriousTempestUnbind4Map, 0 },
             new object[]
             {
-                AbilityCrests.TutelarysDestinyWolfsBoon,
+                AbilityCrestId.TutelarysDestinyWolfsBoon,
                 4,
                 false,
                 TutelaryUnbind4Map,
                 0
             },
-            new object[] { AbilityCrests.TheBewitchingMagician, 4, true, SilverKey, 0 },
-            new object[] { AbilityCrests.HisCleverBrother, 4, true, SilverKey, 0 },
-            new object[] { AbilityCrests.GreatwyrmMidgardsormr, 4, true, SilverKey, 0 },
-            new object[] { AbilityCrests.UnitedbyOneVision, 4, true, GoldenKey, 0 },
-            new object[] { AbilityCrests.WorthyRivals, 4, true, GoldenKey, 0 },
-            new object[] { AbilityCrests.GloriousTempest, 4, true, GoldenKey, 0 }
+            new object[] { AbilityCrestId.TheBewitchingMagician, 4, true, SilverKey, 0 },
+            new object[] { AbilityCrestId.HisCleverBrother, 4, true, SilverKey, 0 },
+            new object[] { AbilityCrestId.GreatwyrmMidgardsormr, 4, true, SilverKey, 0 },
+            new object[] { AbilityCrestId.UnitedbyOneVision, 4, true, GoldenKey, 0 },
+            new object[] { AbilityCrestId.WorthyRivals, 4, true, GoldenKey, 0 },
+            new object[] { AbilityCrestId.GloriousTempest, 4, true, GoldenKey, 0 }
         };
 
     private static readonly Dictionary<Materials, int> GreatwyrmMidgardsormrCopyMap =
@@ -124,16 +126,16 @@ public class AbilityCrestServiceTest
     public static IEnumerable<object[]> SuccessfulCopiesData =>
         new List<object[]>
         {
-            new object[] { AbilityCrests.ManaFount, EmptyMap, 10 },
-            new object[] { AbilityCrests.TheOrdersMessengerOwl, EmptyMap, 170 },
-            new object[] { AbilityCrests.DragonsNest, EmptyMap, 1_700 },
-            new object[] { AbilityCrests.TheBewitchingMagician, EmptyMap, 850 },
-            new object[] { AbilityCrests.HisCleverBrother, EmptyMap, 17_000 },
-            new object[] { AbilityCrests.GreatwyrmMidgardsormr, GreatwyrmMidgardsormrCopyMap, 0 },
-            new object[] { AbilityCrests.UnitedbyOneVision, EmptyMap, 1_700 },
-            new object[] { AbilityCrests.WorthyRivals, EmptyMap, 37_000 },
-            new object[] { AbilityCrests.GloriousTempest, GloriousTempestCopyMap, 0 },
-            new object[] { AbilityCrests.TutelarysDestinyWolfsBoon, TutelarysDestinyCopyMap, 0 }
+            new object[] { AbilityCrestId.ManaFount, EmptyMap, 10 },
+            new object[] { AbilityCrestId.TheOrdersMessengerOwl, EmptyMap, 170 },
+            new object[] { AbilityCrestId.DragonsNest, EmptyMap, 1_700 },
+            new object[] { AbilityCrestId.TheBewitchingMagician, EmptyMap, 850 },
+            new object[] { AbilityCrestId.HisCleverBrother, EmptyMap, 17_000 },
+            new object[] { AbilityCrestId.GreatwyrmMidgardsormr, GreatwyrmMidgardsormrCopyMap, 0 },
+            new object[] { AbilityCrestId.UnitedbyOneVision, EmptyMap, 1_700 },
+            new object[] { AbilityCrestId.WorthyRivals, EmptyMap, 37_000 },
+            new object[] { AbilityCrestId.GloriousTempest, GloriousTempestCopyMap, 0 },
+            new object[] { AbilityCrestId.TutelarysDestinyWolfsBoon, TutelarysDestinyCopyMap, 0 }
         };
 
     private static readonly Dictionary<Materials, int> Rarity2LevelMap =
@@ -155,16 +157,16 @@ public class AbilityCrestServiceTest
     public static IEnumerable<object[]> SuccessfulLevelData =>
         new List<object[]>
         {
-            new object[] { AbilityCrests.ManaFount, Rarity2LevelMap, 0, 6 },
-            new object[] { AbilityCrests.ManaFount, Rarity2LevelMap, 4, 10 },
-            new object[] { AbilityCrests.DragonsNest, Rarity3LevelMap, 0, 12 },
-            new object[] { AbilityCrests.DragonsNest, Rarity3LevelMap, 4, 20 },
-            new object[] { AbilityCrests.HisCleverBrother, Rarity4LevelMap, 0, 20 },
-            new object[] { AbilityCrests.HisCleverBrother, Rarity4LevelMap, 4, 40 },
-            new object[] { AbilityCrests.WorthyRivals, Rarity5LevelMap, 0, 30 },
-            new object[] { AbilityCrests.WorthyRivals, Rarity5LevelMap, 4, 50 },
-            new object[] { AbilityCrests.TutelarysDestinyWolfsBoon, Rarity9LevelMap, 0, 10 },
-            new object[] { AbilityCrests.TutelarysDestinyWolfsBoon, Rarity9LevelMap, 4, 30 }
+            new object[] { AbilityCrestId.ManaFount, Rarity2LevelMap, 0, 6 },
+            new object[] { AbilityCrestId.ManaFount, Rarity2LevelMap, 4, 10 },
+            new object[] { AbilityCrestId.DragonsNest, Rarity3LevelMap, 0, 12 },
+            new object[] { AbilityCrestId.DragonsNest, Rarity3LevelMap, 4, 20 },
+            new object[] { AbilityCrestId.HisCleverBrother, Rarity4LevelMap, 0, 20 },
+            new object[] { AbilityCrestId.HisCleverBrother, Rarity4LevelMap, 4, 40 },
+            new object[] { AbilityCrestId.WorthyRivals, Rarity5LevelMap, 0, 30 },
+            new object[] { AbilityCrestId.WorthyRivals, Rarity5LevelMap, 4, 50 },
+            new object[] { AbilityCrestId.TutelarysDestinyWolfsBoon, Rarity9LevelMap, 0, 10 },
+            new object[] { AbilityCrestId.TutelarysDestinyWolfsBoon, Rarity9LevelMap, 4, 30 }
         };
 
     public AbilityCrestServiceTest(ITestOutputHelper testOutputHelper)
@@ -174,100 +176,22 @@ public class AbilityCrestServiceTest
         this.mockInventoryRepository = new(MockBehavior.Strict);
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockMissionProgressionService = new(MockBehavior.Strict);
+        this.mockTutorialService = new(MockBehavior.Loose);
 
         this.abilityCrestService = new AbilityCrestService(
             this.mockAbilityCrestRepository.Object,
             this.mockInventoryRepository.Object,
             this.mockUserDataRepository.Object,
-            LoggerTestUtils.Create<AbilityCrestService>(),
-            this.mockMissionProgressionService.Object
+            this.mockMissionProgressionService.Object,
+            this.mockTutorialService.Object,
+            LoggerTestUtils.Create<AbilityCrestService>()
         );
-    }
-
-    [Fact]
-    public async Task AddOrRefund_AbilityCrestNotFoundAddsAbilityCrest()
-    {
-        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrests.WorthyRivals))
-            .ReturnsAsync(() => null);
-        this.mockAbilityCrestRepository.Setup(x =>
-                x.Add(AbilityCrests.WorthyRivals, null, null, null)
-            )
-            .Returns(Task.CompletedTask);
-
-        await this.abilityCrestService.AddOrRefund(AbilityCrests.WorthyRivals);
-
-        this.mockAbilityCrestRepository.VerifyAll();
-    }
-
-    [Fact]
-    public async Task AddOrRefund_TwoStarAbilityCrestRefundsCoin()
-    {
-        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrests.ManaFount))
-            .ReturnsAsync(
-                new DbAbilityCrest() { ViewerId = 1, AbilityCrestId = AbilityCrests.ManaFount }
-            );
-        this.mockUserDataRepository.Setup(x => x.UpdateCoin(50)).Returns(Task.CompletedTask);
-
-        await this.abilityCrestService.AddOrRefund(AbilityCrests.ManaFount);
-
-        this.mockAbilityCrestRepository.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
-    }
-
-    [Theory]
-    [InlineData(AbilityCrests.TheOrdersMessengerOwl, 10)]
-    [InlineData(AbilityCrests.DragonsNest, 150)]
-    [InlineData(AbilityCrests.TheBewitchingMagician, 100)]
-    [InlineData(AbilityCrests.HisCleverBrother, 1_000)]
-    [InlineData(AbilityCrests.UnitedbyOneVision, 300)]
-    [InlineData(AbilityCrests.BondsBetweenWorlds, 1_500)]
-    [InlineData(AbilityCrests.WorthyRivals, 3_000)]
-    public async Task AddOrRefund_AbilityCrestsRefundExpectedDewpoint(
-        AbilityCrests abilityCrestId,
-        int dewpoint
-    )
-    {
-        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(abilityCrestId))
-            .ReturnsAsync(new DbAbilityCrest() { ViewerId = 1, AbilityCrestId = abilityCrestId });
-        this.mockUserDataRepository.Setup(x => x.UpdateDewpoint(dewpoint))
-            .Returns(Task.CompletedTask);
-
-        await this.abilityCrestService.AddOrRefund(abilityCrestId);
-
-        this.mockAbilityCrestRepository.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
-    }
-
-    [Fact]
-    public async Task AddOrRefund_NineStarAbilityCrestRefundsExpectedMaterials()
-    {
-        this.mockAbilityCrestRepository.Setup(x =>
-                x.FindAsync(AbilityCrests.TutelarysDestinyWolfsBoon)
-            )
-            .ReturnsAsync(
-                new DbAbilityCrest()
-                {
-                    ViewerId = 1,
-                    AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon
-                }
-            );
-        this.mockInventoryRepository.Setup(x =>
-                x.UpdateQuantity(
-                    new Dictionary<Materials, int>() { { Materials.TutelarySuccessorsMemory, 6 } }
-                )
-            )
-            .Returns(Task.CompletedTask);
-
-        await this.abilityCrestService.AddOrRefund(AbilityCrests.TutelarysDestinyWolfsBoon);
-
-        this.mockAbilityCrestRepository.VerifyAll();
-        this.mockInventoryRepository.VerifyAll();
     }
 
     [Fact]
     public async Task TryBuildup_WithInvalidBuildupPieceIdReturnsInvalidResultCode()
     {
-        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount);
+        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.ManaFount);
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
@@ -276,9 +200,11 @@ public class AbilityCrestServiceTest
                 Step = 1
             };
 
-        (await this.abilityCrestService.TryBuildup(abilityCrest, pieceList))
+        await this
+            .abilityCrestService.Invoking(x => x.TryBuildup(abilityCrest, pieceList))
             .Should()
-            .Be(ResultCode.CommonInvalidArgument);
+            .ThrowExactlyAsync<DragaliaException>()
+            .Where(e => e.Code == ResultCode.CommonInvalidArgument);
     }
 
     [Theory]
@@ -288,7 +214,7 @@ public class AbilityCrestServiceTest
         BuildupPieceTypes buildupType
     )
     {
-        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount);
+        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.ManaFount);
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
@@ -349,7 +275,7 @@ public class AbilityCrestServiceTest
     [Fact]
     public async Task TryBuildup_Copies_WithDedicatedUnbindMaterialThrowsError()
     {
-        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrests.WorthyRivals);
+        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.WorthyRivals);
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
@@ -370,11 +296,11 @@ public class AbilityCrestServiceTest
     }
 
     [Theory]
-    [InlineData(AbilityCrests.ManaFount)]
-    [InlineData(AbilityCrests.DragonsNest)]
-    [InlineData(AbilityCrests.TutelarysDestinyWolfsBoon)]
+    [InlineData(AbilityCrestId.ManaFount)]
+    [InlineData(AbilityCrestId.DragonsNest)]
+    [InlineData(AbilityCrestId.TutelarysDestinyWolfsBoon)]
     public async Task TryBuildup_Unbind_WithDedicatedUnbindMaterialOnInvalidRarityThrowsError(
-        AbilityCrests abilityCrestId
+        AbilityCrestId abilityCrestId
     )
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(abilityCrestId);
@@ -398,10 +324,10 @@ public class AbilityCrestServiceTest
     }
 
     [Theory]
-    [InlineData(AbilityCrests.FromWhenceHeComes, Materials.SilverKey)]
-    [InlineData(AbilityCrests.WorthyRivals, Materials.GoldenKey)]
+    [InlineData(AbilityCrestId.FromWhenceHeComes, Materials.SilverKey)]
+    [InlineData(AbilityCrestId.WorthyRivals, Materials.GoldenKey)]
     public async Task TryBuildup_Unbind_WithDedicatedUnbindMaterialWithoutMaterialReturnsInvalidResultCode(
-        AbilityCrests abilityCrestId,
+        AbilityCrestId abilityCrestId,
         Materials materialId
     )
     {
@@ -430,7 +356,7 @@ public class AbilityCrestServiceTest
     public async Task TryBuildup_Unbind_WithoutDedicatedMaterialWithoutMaterialReturnsInvalidResultCode()
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
-            AbilityCrests.GreatwyrmMidgardsormr
+            AbilityCrestId.GreatwyrmMidgardsormr
         );
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
@@ -462,7 +388,7 @@ public class AbilityCrestServiceTest
     public async Task TryBuildup_Copies_WithoutMaterialReturnsInvalidResultCode()
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
-            AbilityCrests.TutelarysDestinyWolfsBoon
+            AbilityCrestId.TutelarysDestinyWolfsBoon
         );
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
@@ -494,7 +420,7 @@ public class AbilityCrestServiceTest
     [Fact]
     public async Task TryBuildup_Unbind_WithoutDedicatedMaterialWithoutDewpointReturnsInvalidResultCode()
     {
-        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount);
+        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.ManaFount);
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
@@ -518,7 +444,7 @@ public class AbilityCrestServiceTest
     [Fact]
     public async Task TryBuildup_Copies_WithoutDedicatedMaterialWithoutDewpointReturnsInvalidResultCode()
     {
-        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrests.DragonsNest);
+        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.DragonsNest);
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
@@ -546,7 +472,7 @@ public class AbilityCrestServiceTest
         BuildupPieceTypes buildupType
     )
     {
-        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount);
+        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.ManaFount);
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
@@ -558,7 +484,7 @@ public class AbilityCrestServiceTest
         this.mockInventoryRepository.Setup(x => x.CheckQuantity(new Dictionary<Materials, int>()))
             .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckDewpoint(10)).ReturnsAsync(true);
-        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrests.ManaFount))
+        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrestId.ManaFount))
             .ReturnsAsync(() => null);
 
         try
@@ -587,7 +513,7 @@ public class AbilityCrestServiceTest
         int currLevel
     )
     {
-        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount);
+        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.ManaFount);
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
@@ -599,12 +525,12 @@ public class AbilityCrestServiceTest
         this.mockInventoryRepository.Setup(x => x.CheckQuantity(new Dictionary<Materials, int>()))
             .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckDewpoint(10)).ReturnsAsync(true);
-        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrests.ManaFount))
+        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrestId.ManaFount))
             .ReturnsAsync(
                 new DbAbilityCrest()
                 {
                     ViewerId = 1,
-                    AbilityCrestId = AbilityCrests.ManaFount,
+                    AbilityCrestId = AbilityCrestId.ManaFount,
                     LimitBreakCount = currLevel
                 }
             );
@@ -621,7 +547,7 @@ public class AbilityCrestServiceTest
     [Theory]
     [MemberData(nameof(SuccessfulUnbindData))]
     public async Task TryBuildup_Unbind_SuccessfulReturnsSuccessfulResultCode(
-        AbilityCrests abilityCrestId,
+        AbilityCrestId abilityCrestId,
         int step,
         bool isDedicated,
         Dictionary<Materials, int> materialMap,
@@ -678,7 +604,7 @@ public class AbilityCrestServiceTest
     [Theory]
     [MemberData(nameof(SuccessfulCopiesData))]
     public async Task TryBuildup_Copies_SuccessfulReturnsSuccessfulResultCode(
-        AbilityCrests abilityCrestId,
+        AbilityCrestId abilityCrestId,
         Dictionary<Materials, int> materialMap,
         int dewpoint
     )
@@ -773,7 +699,7 @@ public class AbilityCrestServiceTest
     [Fact]
     public async Task TryBuildup_Level_WithDedicatedUnbindMaterialThrowsError()
     {
-        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrests.WorthyRivals);
+        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.WorthyRivals);
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
@@ -797,7 +723,7 @@ public class AbilityCrestServiceTest
     public async Task TryBuildup_Level_WithoutMaterialsReturnsInvalidResultCode()
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
-            AbilityCrests.TheOrdersMessengerOwl
+            AbilityCrestId.TheOrdersMessengerOwl
         );
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
@@ -828,7 +754,7 @@ public class AbilityCrestServiceTest
     [Fact]
     public async Task TryBuildup_Level_CantFindAbilityCrestInDbThrowsError()
     {
-        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrests.DragonsNest);
+        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.DragonsNest);
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
@@ -847,7 +773,7 @@ public class AbilityCrestServiceTest
                 )
             )
             .ReturnsAsync(true);
-        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrests.DragonsNest))
+        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrestId.DragonsNest))
             .ReturnsAsync(() => null);
 
         try
@@ -875,7 +801,7 @@ public class AbilityCrestServiceTest
     [InlineData(9)]
     public async Task TryBuildup_Level_StepNotSequentialReturnsInvalidResultCode(int currLevel)
     {
-        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount);
+        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.ManaFount);
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
@@ -888,12 +814,12 @@ public class AbilityCrestServiceTest
                 x.CheckQuantity(new Dictionary<Materials, int> { { Materials.HolyWater, 7 } })
             )
             .ReturnsAsync(true);
-        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrests.ManaFount))
+        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrestId.ManaFount))
             .ReturnsAsync(
                 new DbAbilityCrest()
                 {
                     ViewerId = 1,
-                    AbilityCrestId = AbilityCrests.ManaFount,
+                    AbilityCrestId = AbilityCrestId.ManaFount,
                     BuildupCount = currLevel
                 }
             );
@@ -916,7 +842,7 @@ public class AbilityCrestServiceTest
         int step
     )
     {
-        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount);
+        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.ManaFount);
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
@@ -929,12 +855,12 @@ public class AbilityCrestServiceTest
                 x.CheckQuantity(new Dictionary<Materials, int> { { Materials.HolyWater, 7 } })
             )
             .ReturnsAsync(true);
-        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrests.ManaFount))
+        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrestId.ManaFount))
             .ReturnsAsync(
                 new DbAbilityCrest()
                 {
                     ViewerId = 1,
-                    AbilityCrestId = AbilityCrests.ManaFount,
+                    AbilityCrestId = AbilityCrestId.ManaFount,
                     LimitBreakCount = limitBreak,
                     BuildupCount = step - 1
                 }
@@ -951,7 +877,7 @@ public class AbilityCrestServiceTest
     [Theory]
     [MemberData(nameof(SuccessfulLevelData))]
     public async Task TryBuildup_Level_SuccessfulReturnsSuccessfulResultCode(
-        AbilityCrests abilityCrestId,
+        AbilityCrestId abilityCrestId,
         Dictionary<Materials, int> materialMap,
         int limitBreak,
         int step
@@ -997,7 +923,7 @@ public class AbilityCrestServiceTest
     public async Task TryBuildupAugments_InvalidAugmentNumberReturnsInvalidResultCode()
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
-            AbilityCrests.TutelarysDestinyWolfsBoon
+            AbilityCrestId.TutelarysDestinyWolfsBoon
         );
         AtgenPlusCountParamsList augmentParams =
             new() { PlusCount = 41, PlusCountType = PlusCountType.Hp };
@@ -1011,7 +937,7 @@ public class AbilityCrestServiceTest
     public async Task TryBuildupAugments_InvalidAugmentTypeThrowsError()
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
-            AbilityCrests.TutelarysDestinyWolfsBoon
+            AbilityCrestId.TutelarysDestinyWolfsBoon
         );
         AtgenPlusCountParamsList augmentParams = new() { PlusCount = 40, PlusCountType = 0 };
 
@@ -1030,13 +956,13 @@ public class AbilityCrestServiceTest
     public async Task TryBuildupAugments_AbilityCrestNotFoundInDbThrowsError()
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
-            AbilityCrests.TutelarysDestinyWolfsBoon
+            AbilityCrestId.TutelarysDestinyWolfsBoon
         );
         AtgenPlusCountParamsList augmentParams =
             new() { PlusCount = 40, PlusCountType = PlusCountType.Atk };
 
         this.mockAbilityCrestRepository.Setup(x =>
-                x.FindAsync(AbilityCrests.TutelarysDestinyWolfsBoon)
+                x.FindAsync(AbilityCrestId.TutelarysDestinyWolfsBoon)
             )
             .ReturnsAsync(() => null);
 
@@ -1057,18 +983,18 @@ public class AbilityCrestServiceTest
     public async Task TryBuildupAugments_DecreaseInAugmentsReturnsInvalidResultCode()
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
-            AbilityCrests.TutelarysDestinyWolfsBoon
+            AbilityCrestId.TutelarysDestinyWolfsBoon
         );
         AtgenPlusCountParamsList augmentParams =
             new() { PlusCount = 39, PlusCountType = PlusCountType.Hp };
 
         this.mockAbilityCrestRepository.Setup(x =>
-                x.FindAsync(AbilityCrests.TutelarysDestinyWolfsBoon)
+                x.FindAsync(AbilityCrestId.TutelarysDestinyWolfsBoon)
             )
             .ReturnsAsync(
                 new DbAbilityCrest()
                 {
-                    AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                    AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                     ViewerId = 1,
                     HpPlusCount = 40,
                     AttackPlusCount = 38
@@ -1086,18 +1012,18 @@ public class AbilityCrestServiceTest
     public async Task TryBuildupAugments_NotEnoughMaterialsReturnsInvalidResultCode()
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
-            AbilityCrests.TutelarysDestinyWolfsBoon
+            AbilityCrestId.TutelarysDestinyWolfsBoon
         );
         AtgenPlusCountParamsList augmentParams =
             new() { PlusCount = 38, PlusCountType = PlusCountType.Atk };
 
         this.mockAbilityCrestRepository.Setup(x =>
-                x.FindAsync(AbilityCrests.TutelarysDestinyWolfsBoon)
+                x.FindAsync(AbilityCrestId.TutelarysDestinyWolfsBoon)
             )
             .ReturnsAsync(
                 new DbAbilityCrest()
                 {
-                    AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                    AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                     ViewerId = 1,
                     HpPlusCount = 40,
                     AttackPlusCount = 31
@@ -1120,16 +1046,16 @@ public class AbilityCrestServiceTest
     }
 
     [Theory]
-    [InlineData(AbilityCrests.WorthyRivals, PlusCountType.Hp, 50)]
-    [InlineData(AbilityCrests.WorthyRivals, PlusCountType.Atk, 1)]
-    [InlineData(AbilityCrests.ManaFount, PlusCountType.Hp, 1)]
-    [InlineData(AbilityCrests.ManaFount, PlusCountType.Atk, 50)]
-    [InlineData(AbilityCrests.TutelarysDestinyWolfsBoon, PlusCountType.Hp, 40)]
-    [InlineData(AbilityCrests.TutelarysDestinyWolfsBoon, PlusCountType.Atk, 1)]
-    [InlineData(AbilityCrests.TheGeniusTacticianBowsBoon, PlusCountType.Hp, 1)]
-    [InlineData(AbilityCrests.TheGeniusTacticianBowsBoon, PlusCountType.Atk, 40)]
+    [InlineData(AbilityCrestId.WorthyRivals, PlusCountType.Hp, 50)]
+    [InlineData(AbilityCrestId.WorthyRivals, PlusCountType.Atk, 1)]
+    [InlineData(AbilityCrestId.ManaFount, PlusCountType.Hp, 1)]
+    [InlineData(AbilityCrestId.ManaFount, PlusCountType.Atk, 50)]
+    [InlineData(AbilityCrestId.TutelarysDestinyWolfsBoon, PlusCountType.Hp, 40)]
+    [InlineData(AbilityCrestId.TutelarysDestinyWolfsBoon, PlusCountType.Atk, 1)]
+    [InlineData(AbilityCrestId.TheGeniusTacticianBowsBoon, PlusCountType.Hp, 1)]
+    [InlineData(AbilityCrestId.TheGeniusTacticianBowsBoon, PlusCountType.Atk, 40)]
     public async Task TryBuildupAugments_SuccessfulReturnsSuccessfulResultCode(
-        AbilityCrests abilityCrestId,
+        AbilityCrestId abilityCrestId,
         PlusCountType augmentType,
         int amount
     )
@@ -1176,13 +1102,13 @@ public class AbilityCrestServiceTest
     [Fact]
     public async Task TryResetAugments_AbilityCrestNotFoundInDbThrowsError()
     {
-        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrests.WorthyRivals))
+        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrestId.WorthyRivals))
             .ReturnsAsync(() => null);
 
         try
         {
             await this.abilityCrestService.TryResetAugments(
-                AbilityCrests.WorthyRivals,
+                AbilityCrestId.WorthyRivals,
                 PlusCountType.Hp
             );
             Assert.Fail("Should have been unable to find ability crest in db and thrown error");
@@ -1198,14 +1124,14 @@ public class AbilityCrestServiceTest
     [Fact]
     public async Task TryResetAugments_InvalidAugmentTypeReturnsInvalidResultCode()
     {
-        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrests.WorthyRivals))
+        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrestId.WorthyRivals))
             .ReturnsAsync(
-                new DbAbilityCrest() { AbilityCrestId = AbilityCrests.WorthyRivals, ViewerId = 1 }
+                new DbAbilityCrest() { AbilityCrestId = AbilityCrestId.WorthyRivals, ViewerId = 1 }
             );
 
         try
         {
-            await this.abilityCrestService.TryResetAugments(AbilityCrests.WorthyRivals, 0);
+            await this.abilityCrestService.TryResetAugments(AbilityCrestId.WorthyRivals, 0);
             Assert.Fail("Should have thrown error when augment type invalid");
         }
         catch (DragaliaException e)
@@ -1219,11 +1145,11 @@ public class AbilityCrestServiceTest
     [Fact]
     public async Task TryResetAugments_NotEnoughCoinReturnsInvalidResultCode()
     {
-        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrests.WorthyRivals))
+        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrestId.WorthyRivals))
             .ReturnsAsync(
                 new DbAbilityCrest()
                 {
-                    AbilityCrestId = AbilityCrests.WorthyRivals,
+                    AbilityCrestId = AbilityCrestId.WorthyRivals,
                     ViewerId = 1,
                     HpPlusCount = 35,
                     AttackPlusCount = 50
@@ -1234,7 +1160,7 @@ public class AbilityCrestServiceTest
 
         (
             await this.abilityCrestService.TryResetAugments(
-                AbilityCrests.WorthyRivals,
+                AbilityCrestId.WorthyRivals,
                 PlusCountType.Hp
             )
         )
@@ -1246,12 +1172,12 @@ public class AbilityCrestServiceTest
     }
 
     [Theory]
-    [InlineData(AbilityCrests.WorthyRivals, 1)]
-    [InlineData(AbilityCrests.HisCleverBrother, 50)]
-    [InlineData(AbilityCrests.TutelarysDestinyWolfsBoon, 1)]
-    [InlineData(AbilityCrests.TutelarysDestinyWolfsBoon, 40)]
+    [InlineData(AbilityCrestId.WorthyRivals, 1)]
+    [InlineData(AbilityCrestId.HisCleverBrother, 50)]
+    [InlineData(AbilityCrestId.TutelarysDestinyWolfsBoon, 1)]
+    [InlineData(AbilityCrestId.TutelarysDestinyWolfsBoon, 40)]
     public async Task TryResetAugments_SuccessfulReturnsSuccessfulResultCodeForHpAugmentsAndRefundsMaterials(
-        AbilityCrests abilityCrestId,
+        AbilityCrestId abilityCrestId,
         int amount
     )
     {
@@ -1285,12 +1211,12 @@ public class AbilityCrestServiceTest
     }
 
     [Theory]
-    [InlineData(AbilityCrests.DragonsNest, 1)]
-    [InlineData(AbilityCrests.ManaFount, 50)]
-    [InlineData(AbilityCrests.TheGeniusTacticianBowsBoon, 1)]
-    [InlineData(AbilityCrests.TheGeniusTacticianBowsBoon, 40)]
+    [InlineData(AbilityCrestId.DragonsNest, 1)]
+    [InlineData(AbilityCrestId.ManaFount, 50)]
+    [InlineData(AbilityCrestId.TheGeniusTacticianBowsBoon, 1)]
+    [InlineData(AbilityCrestId.TheGeniusTacticianBowsBoon, 40)]
     public async Task TryResetAugments_SuccessfulReturnsSuccessfulResultCodeForAttackAugmentsAndRefundsMaterials(
-        AbilityCrests abilityCrestId,
+        AbilityCrestId abilityCrestId,
         int amount
     )
     {

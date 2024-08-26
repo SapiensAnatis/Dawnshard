@@ -1,14 +1,14 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 
-namespace DragaliaAPI.Database.Repositories;
+namespace DragaliaAPI.Features.AbilityCrests;
 
 public interface IAbilityCrestRepository
 {
     IQueryable<DbAbilityCrest> AbilityCrests { get; }
     IQueryable<DbAbilityCrestSet> AbilityCrestSets { get; }
 
-    Task<DbAbilityCrest?> FindAsync(AbilityCrests abilityCrestId);
+    Task<DbAbilityCrest?> FindAsync(AbilityCrestId abilityCrestId);
 
     Task AddOrUpdateSet(DbAbilityCrestSet abilityCrestSet);
     Task<DbAbilityCrestSet?> FindSetAsync(int abilityCrestSetNo);
@@ -23,7 +23,7 @@ public interface IAbilityCrestRepository
     /// <returns>The task.</returns>
     /// <remarks>Issues a warning if a duplicate is attempted to be added.</remarks>
     Task Add(
-        AbilityCrests abilityCrestId,
+        AbilityCrestId abilityCrestId,
         int? limitBreakCount = null,
         int? buildupCount = null,
         int? equipableCount = null

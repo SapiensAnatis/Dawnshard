@@ -7,7 +7,7 @@ public class EventQuestClearWithCrestMission : Mission
 
     public int EventId { get; set; }
 
-    public required AbilityCrests Crest { get; init; }
+    public required AbilityCrestId Crest { get; init; }
 
     protected override int? Parameter => this.EventId;
 

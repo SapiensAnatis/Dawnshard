@@ -23,7 +23,7 @@ public static class AccursedArchives
             new EventQuestClearWithCrestMission()
             {
                 MissionId = 10100401,
-                Crest = AbilityCrests.HittingtheBooks
+                Crest = AbilityCrestId.HittingtheBooks
             },
             // Collect 100 Forbidden Knowledge in One Go
             new EventPointCollectionRecordMission() { MissionId = 10100501 },

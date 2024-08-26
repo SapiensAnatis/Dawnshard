@@ -5,7 +5,7 @@ namespace DragaliaAPI.Shared.Definitions.Enums;
 /// <summary>
 /// The AbilityCrests (wyrmprints) enum type.
 /// </summary>
-public enum AbilityCrests
+public enum AbilityCrestId
 {
     Empty = 0,
 
