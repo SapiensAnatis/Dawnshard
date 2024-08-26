@@ -102,11 +102,9 @@ public class TutorialService : ITutorialService
                 await AddTutorialFlag(1014);
                 await AddTutorialFlag(1016);
                 break;
-            case TutorialStoryIds.Sindom:
+            case TutorialStoryIds.Ch16Done:
                 await AddTutorialFlag(1028);
                 await AddTutorialFlag(1006);
-                break;
-            case TutorialStoryIds.Ch16Done:
                 await AddTutorialFlag(1030);
                 break;
             // TODO: Maybe more that I've missed
@@ -153,8 +151,7 @@ public class TutorialService : ITutorialService
         public const int ImperialOnslaught = 1000607;
         public const int Ch9Done = 1000909;
         public const int Ch10Done = 1001009;
-        public const int Sindom = 1001610;
-        public const int Ch16Done = 1001613;
+        public const int Ch16Done = 1001610;
     }
 
     public static class TutorialQuestIds
