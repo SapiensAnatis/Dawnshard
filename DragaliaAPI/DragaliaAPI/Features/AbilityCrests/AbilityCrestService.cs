@@ -2,13 +2,14 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
-using static DragaliaAPI.Services.Game.TutorialService.TutorialStatusIds;
+using static DragaliaAPI.Features.Tutorial.TutorialService.TutorialStatusIds;
 
 namespace DragaliaAPI.Features.AbilityCrests;
 

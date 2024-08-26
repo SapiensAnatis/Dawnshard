@@ -2,13 +2,12 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.AbilityCrests;
 using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Features.Wall;
-using DragaliaAPI.Services;
-using DragaliaAPI.Services.Game;
 using Microsoft.Extensions.Logging;
 using MockQueryable.Moq;
 
-namespace DragaliaAPI.Test.Services;
+namespace DragaliaAPI.Test.Features.Tutorial;
 
 public class TutorialServiceTest
 {
@@ -23,19 +22,19 @@ public class TutorialServiceTest
 
     public TutorialServiceTest()
     {
-        mockLogger = new(MockBehavior.Loose);
-        mockInventoryRepository = new(MockBehavior.Strict);
-        mockAbilityCrestRepository = new(MockBehavior.Strict);
-        mockUserDataRepository = new(MockBehavior.Strict);
-        mockFortRepository = new(MockBehavior.Strict);
+        this.mockLogger = new(MockBehavior.Loose);
+        this.mockInventoryRepository = new(MockBehavior.Strict);
+        this.mockAbilityCrestRepository = new(MockBehavior.Strict);
+        this.mockUserDataRepository = new(MockBehavior.Strict);
+        this.mockFortRepository = new(MockBehavior.Strict);
         this.mockWallService = new(MockBehavior.Strict);
 
-        tutorialService = new TutorialService(
-            mockLogger.Object,
-            mockInventoryRepository.Object,
-            mockAbilityCrestRepository.Object,
-            mockUserDataRepository.Object,
-            mockFortRepository.Object,
+        this.tutorialService = new TutorialService(
+            this.mockLogger.Object,
+            this.mockInventoryRepository.Object,
+            this.mockAbilityCrestRepository.Object,
+            this.mockUserDataRepository.Object,
+            this.mockFortRepository.Object,
             this.mockWallService.Object
         );
     }

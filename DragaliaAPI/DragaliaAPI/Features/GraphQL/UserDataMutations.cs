@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.PlayerDetails;
 using EntityGraphQL.Schema;

@@ -1,8 +1,9 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Controllers;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DragaliaAPI.Controllers.Dragalia;
+namespace DragaliaAPI.Features.Tutorial;
 
 [Route("/tutorial")]
 public class TutorialController(
@@ -20,7 +21,7 @@ public class TutorialController(
         CancellationToken cancellationToken
     )
     {
-        int currentStep = await tutorialService.UpdateTutorialStatus(request.Step);
+        int currentStep = await this.tutorialService.UpdateTutorialStatus(request.Step);
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(
             cancellationToken

@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Services;
+﻿namespace DragaliaAPI.Features.Tutorial;
 
 public interface ITutorialService
 {

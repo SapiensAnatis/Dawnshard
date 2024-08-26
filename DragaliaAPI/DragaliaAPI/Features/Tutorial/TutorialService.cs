@@ -7,7 +7,7 @@ using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Services.Game;
+namespace DragaliaAPI.Features.Tutorial;
 
 public class TutorialService : ITutorialService
 {
@@ -40,27 +40,27 @@ public class TutorialService : ITutorialService
 
     public async Task<int> UpdateTutorialStatus(int newStatus)
     {
-        DbPlayerUserData userData = await userDataRepository.UserData.SingleAsync();
+        DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync();
 
         if (newStatus > userData.TutorialStatus)
         {
-            logger.LogDebug("New tutorial status: {status}", newStatus);
+            this.logger.LogDebug("New tutorial status: {status}", newStatus);
             userData.TutorialStatus = newStatus;
-            await OnTutorialStatusChange(newStatus);
+            await this.OnTutorialStatusChange(newStatus);
         }
         return userData.TutorialStatus;
     }
 
     public async Task<List<int>> AddTutorialFlag(int flag)
     {
-        DbPlayerUserData userData = await userDataRepository.UserData.SingleAsync();
+        DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync();
 
         ISet<int> flags = TutorialFlagUtil.ConvertIntToFlagIntList(userData.TutorialFlag);
         if (flags.Add(flag))
         {
             userData.TutorialFlag = TutorialFlagUtil.ConvertFlagIntListToInt(flags);
-            logger.LogDebug("Added tutorial flag: {flag} ({@flags})", flag, flags);
-            await OnTutorialFlagAdded(flag);
+            this.logger.LogDebug("Added tutorial flag: {flag} ({@flags})", flag, flags);
+            await this.OnTutorialFlagAdded(flag);
         }
 
         return flags.ToList();
@@ -71,16 +71,16 @@ public class TutorialService : ITutorialService
         switch (storyId)
         {
             case TutorialStoryIds.Upgrading:
-                await UpdateTutorialStatus(10600);
+                await this.UpdateTutorialStatus(10600);
                 break;
             case TutorialStoryIds.Wyrmprints:
-                await SetupWyrmprintTutorial();
+                await this.SetupWyrmprintTutorial();
                 break;
             case TutorialStoryIds.Halidom:
                 await this.fortRepository.InitializeFort();
                 DbPlayerUserData userData = await this.userDataRepository.GetUserDataAsync();
                 userData.FortOpenTime = DateTimeOffset.UtcNow;
-                await UpdateTutorialStatus(11001);
+                await this.UpdateTutorialStatus(11001);
                 break;
             case TutorialStoryIds.MercurialGauntlet:
                 await this.wallService.InitializeWall();
@@ -89,25 +89,23 @@ public class TutorialService : ITutorialService
                 await this.fortRepository.InitializeSmithy();
                 break;
             case TutorialStoryIds.DragonTrials:
-                await UpdateTutorialStatus(30102);
-                await AddTutorialFlag(1005);
+                await this.UpdateTutorialStatus(30102);
+                await this.AddTutorialFlag(1005);
                 break;
             case TutorialStoryIds.ImperialOnslaught:
-                await UpdateTutorialStatus(60999);
+                await this.UpdateTutorialStatus(60999);
                 break;
             case TutorialStoryIds.Ch9Done:
-                await AddTutorialFlag(1010);
+                await this.AddTutorialFlag(1010);
                 break;
             case TutorialStoryIds.Ch10Done:
-                await AddTutorialFlag(1014);
-                await AddTutorialFlag(1016);
-                break;
-            case TutorialStoryIds.Sindom:
-                await AddTutorialFlag(1028);
-                await AddTutorialFlag(1006);
+                await this.AddTutorialFlag(1014);
+                await this.AddTutorialFlag(1016);
                 break;
             case TutorialStoryIds.Ch16Done:
-                await AddTutorialFlag(1030);
+                await this.AddTutorialFlag(1028);
+                await this.AddTutorialFlag(1006);
+                await this.AddTutorialFlag(1030);
                 break;
             // TODO: Maybe more that I've missed
         }
@@ -139,7 +137,7 @@ public class TutorialService : ITutorialService
         await this.inventoryRepository.UpdateQuantity(Materials.HolyWater, 10);
         if (await this.abilityCrestRepository.FindAsync(AbilityCrestId.ManaFount) == null)
             await this.abilityCrestRepository.Add(AbilityCrestId.ManaFount);
-        logger.LogDebug("Added materials for the wyrmprint tutorial");
+        this.logger.LogDebug("Added materials for the wyrmprint tutorial");
     }
 
     public static class TutorialStoryIds
@@ -153,8 +151,7 @@ public class TutorialService : ITutorialService
         public const int ImperialOnslaught = 1000607;
         public const int Ch9Done = 1000909;
         public const int Ch10Done = 1001009;
-        public const int Sindom = 1001610;
-        public const int Ch16Done = 1001613;
+        public const int Ch16Done = 1001610;
     }
 
     public static class TutorialQuestIds

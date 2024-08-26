@@ -30,6 +30,7 @@ using DragaliaAPI.Features.StorySkip;
 using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Features.Trade;
+using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Features.Version;
 using DragaliaAPI.Features.Web;
 using DragaliaAPI.Features.Zena;
@@ -71,7 +72,6 @@ public static class ServiceConfiguration
             .AddScoped<IWeaponService, WeaponService>()
             .AddScoped<IMatchingService, MatchingService>()
             .AddScoped<IHeroParamService, HeroParamService>()
-            .AddScoped<ITutorialService, TutorialService>()
             .AddScoped<ILoadService, LoadService>()
             .AddScoped<IStampService, StampService>()
             .AddScoped<IStampRepository, StampRepository>()
@@ -89,7 +89,8 @@ public static class ServiceConfiguration
             .AddQuestFeature()
             .AddStoryFeature()
             .AddWebFeature()
-            .AddAbilityCrestFeature();
+            .AddAbilityCrestFeature()
+            .AddTutorialFeature();
 
         services
             .RegisterMissionServices()
