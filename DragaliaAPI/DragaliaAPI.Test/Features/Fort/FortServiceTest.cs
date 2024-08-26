@@ -157,7 +157,7 @@ public class FortServiceTest
     [Theory]
     [InlineData(2, 250)]
     [InlineData(3, 400)]
-    [InlineData(4, 750)]
+    [InlineData(4, 700)]
     public async Task AddCarpenter_Success_AddsCarpenterWithExpectedCost(
         int existingCarpenters,
         int expectedCost

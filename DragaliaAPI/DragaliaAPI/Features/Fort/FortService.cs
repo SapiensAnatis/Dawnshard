@@ -53,7 +53,7 @@ public class FortService(
             < 2 => 0,
             2 => 250,
             3 => 400,
-            4 => 750,
+            4 => 700,
             _
                 => throw new DragaliaException(
                     ResultCode.FortExtendCarpenterLimit,
