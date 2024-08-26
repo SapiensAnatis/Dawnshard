@@ -1,11 +1,12 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Features.Tutorial;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Integration.Test.Features.Tutorial;
 
 /// <summary>
-/// Tests <see cref="Controllers.Dragalia.TutorialController"/>
+/// Tests <see cref="TutorialController"/>
 /// </summary>
 public class TutorialTest : TestFixture
 {

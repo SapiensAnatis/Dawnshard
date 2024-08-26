@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.AbilityCrests;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
