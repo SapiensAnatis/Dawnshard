@@ -63,9 +63,9 @@ public class DungeonRecordServiceTest
             {
                 QuestData = MasterAsset.QuestData[lSurtrSoloId],
                 Party = new List<PartySettingList>(),
-                StartTime = DateTimeOffset.UtcNow
+                StartTime = DateTimeOffset.UtcNow,
             };
-        PlayRecord playRecord = new() { Time = 10, };
+        PlayRecord playRecord = new() { Time = 10 };
 
         DbQuest mockQuest =
             new()
@@ -73,7 +73,7 @@ public class DungeonRecordServiceTest
                 ViewerId = 1,
                 QuestId = lSurtrSoloId,
                 State = 0,
-                BestClearTime = 999
+                BestClearTime = 999,
             };
 
         List<AtgenDropAll> dropList =
@@ -83,8 +83,8 @@ public class DungeonRecordServiceTest
                 {
                     Id = (int)Materials.FirestormRuby,
                     Quantity = 10,
-                    Type = EntityTypes.Material
-                }
+                    Type = EntityTypes.Material,
+                },
             };
 
         List<AtgenDropAll> eventDrops =
@@ -94,8 +94,8 @@ public class DungeonRecordServiceTest
                 {
                     Id = (int)Materials.WoodlandHerbs,
                     Quantity = 20,
-                    Type = EntityTypes.Material
-                }
+                    Type = EntityTypes.Material,
+                },
             };
 
         List<AtgenScoreMissionSuccessList> scoreMissionSuccessLists =
@@ -105,13 +105,13 @@ public class DungeonRecordServiceTest
                 {
                     ScoreMissionCompleteType = QuestCompleteType.LimitFall,
                     ScoreTargetValue = 100,
-                }
+                },
             };
 
         List<AtgenEventPassiveUpList> passiveUpLists =
             new()
             {
-                new() { PassiveId = 1, Progress = 2 }
+                new() { PassiveId = 1, Progress = 2 },
             };
 
         List<AtgenMissionsClearSet> missionsClearSets = new List<AtgenMissionsClearSet>()
@@ -120,8 +120,8 @@ public class DungeonRecordServiceTest
             {
                 Type = EntityTypes.CollectEventItem,
                 Id = 1,
-                Quantity = 2
-            }
+                Quantity = 2,
+            },
         };
 
         List<AtgenFirstClearSet> missionCompleteSets =
@@ -131,8 +131,8 @@ public class DungeonRecordServiceTest
                 {
                     Type = EntityTypes.ExchangeTicket,
                     Id = 2,
-                    Quantity = 3
-                }
+                    Quantity = 3,
+                },
             };
 
         List<AtgenFirstClearSet> firstClearSets =
@@ -142,8 +142,8 @@ public class DungeonRecordServiceTest
                 {
                     Type = EntityTypes.RaidEventItem,
                     Id = 4,
-                    Quantity = 5
-                }
+                    Quantity = 5,
+                },
             };
 
         List<AtgenScoringEnemyPointList> enemyScoring =
@@ -152,8 +152,8 @@ public class DungeonRecordServiceTest
             {
                 ScoringEnemyId = 100,
                 Point = 1,
-                SmashCount = 2
-            }
+                SmashCount = 2,
+            },
         ];
 
         QuestMissionStatus missionStatus = new([], missionsClearSets, missionCompleteSets);
@@ -237,14 +237,14 @@ public class DungeonRecordServiceTest
                         TakeCharaExp = 0,
                         BonusFactor = 1,
                         ManaBonusFactor = 1,
-                        CharaGrowRecord = new List<AtgenCharaGrowRecord>()
+                        CharaGrowRecord = new List<AtgenCharaGrowRecord>(),
                     },
                     EventPassiveUpList = passiveUpLists,
                     ScoreMissionSuccessList = scoreMissionSuccessLists,
                     ScoringEnemyPointList = enemyScoring,
                     IsBestClearTime = true,
                     ClearTime = playRecord.Time,
-                    ConvertedEntityList = new List<ConvertedEntityList>()
+                    ConvertedEntityList = new List<ConvertedEntityList>(),
                 }
             );
 

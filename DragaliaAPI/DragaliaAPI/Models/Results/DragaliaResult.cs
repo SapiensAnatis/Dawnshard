@@ -36,7 +36,7 @@ public class DragaliaResult<TValue> : IConvertToActionResult
         return new ObjectResult(new DragaliaResponse<TValue>(this.Value))
         {
             DeclaredType = typeof(DragaliaResponse<TValue>),
-            StatusCode = StatusCodes.Status200OK
+            StatusCode = StatusCodes.Status200OK,
         };
     }
 }

@@ -5,5 +5,5 @@ public enum QuestResetIntervalType
     None,
     Daily,
     Weekly,
-    Total
+    Total,
 }

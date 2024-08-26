@@ -8,5 +8,5 @@ public enum SummonPrizeRanks
     Silver = 3,
     Bronze = 4,
     Fifth = 5,
-    Sixth = 6
+    Sixth = 6,
 }

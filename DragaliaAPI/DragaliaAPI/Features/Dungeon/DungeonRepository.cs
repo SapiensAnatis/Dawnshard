@@ -120,7 +120,7 @@ public class DungeonRepository : IDungeonRepository
                 {
                     crests11,
                     crests12,
-                    crests13
+                    crests13,
                 },
                 CrestSlotType2CrestList = new List<DbAbilityCrest>() { crests21, crests22 },
                 CrestSlotType3CrestList = new List<DbAbilityCrest>() { crests31, crests32 },
@@ -141,7 +141,7 @@ public class DungeonRepository : IDungeonRepository
                             charaEs2.Skill2Level
                         ),
                 TalismanData = talisman,
-                WeaponSkinData = skin
+                WeaponSkinData = skin,
             }
         ).AsNoTracking();
     }
@@ -248,7 +248,7 @@ public class DungeonRepository : IDungeonRepository
                 {
                     crests11,
                     crests12,
-                    crests13
+                    crests13,
                 },
                 CrestSlotType2CrestList = new List<DbAbilityCrest>() { crests21, crests22 },
                 CrestSlotType3CrestList = new List<DbAbilityCrest>() { crests31, crests32 },
@@ -269,7 +269,7 @@ public class DungeonRepository : IDungeonRepository
                             charaEs2.Skill2Level
                         ),
                 TalismanData = talisman,
-                WeaponSkinData = skin
+                WeaponSkinData = skin,
             }
         ).AsNoTracking();
     }
@@ -394,7 +394,7 @@ public class DungeonRepository : IDungeonRepository
                     {
                         crests11,
                         crests12,
-                        crests13
+                        crests13,
                     },
                     CrestSlotType2CrestList = new List<DbAbilityCrest>() { crests21, crests22 },
                     CrestSlotType3CrestList = new List<DbAbilityCrest>() { crests31, crests32 },
@@ -415,7 +415,7 @@ public class DungeonRepository : IDungeonRepository
                                 charaEs2.Skill2Level
                             ),
                     TalismanData = talisman,
-                    WeaponSkinData = skin
+                    WeaponSkinData = skin,
                 }
             ).AsNoTracking();
 
@@ -440,11 +440,10 @@ public class DungeonRepository : IDungeonRepository
             {
                 1 => skill1Level,
                 2 => skill2Level,
-                _
-                    => throw new UnreachableException(
-                        $"Invalid EditSkillLevelNum for character {charaId}"
-                    )
-            }
+                _ => throw new UnreachableException(
+                    $"Invalid EditSkillLevelNum for character {charaId}"
+                ),
+            },
         };
     }
 }

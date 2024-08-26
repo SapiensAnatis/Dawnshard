@@ -30,7 +30,7 @@ public class TransitionController : DragaliaControllerBase
                 {
                     AbolishedViewerId = 0,
                     LinkedViewerId = (ulong)viewerId,
-                }
+                },
             }
         );
     }

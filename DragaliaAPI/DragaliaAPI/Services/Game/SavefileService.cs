@@ -59,7 +59,7 @@ public class SavefileService : ISavefileService
         new()
         {
             // Keys should be automatically removed, but just in case
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(LockFailsafeExpiryMin)
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(LockFailsafeExpiryMin),
         };
 
     /// <summary>
@@ -369,7 +369,7 @@ public class SavefileService : ISavefileService
                     {
                         EmblemId = savefile.UserData.EmblemId,
                         GetTime = DateTimeOffset.UnixEpoch,
-                        IsNew = false
+                        IsNew = false,
                     }
                 );
             }
@@ -615,27 +615,27 @@ public class SavefileService : ISavefileService
                         {
                             PartyNo = x,
                             UnitNo = 1,
-                            CharaId = Charas.ThePrince
+                            CharaId = Charas.ThePrince,
                         },
                         new()
                         {
                             PartyNo = x,
                             UnitNo = 2,
-                            CharaId = Charas.Empty
+                            CharaId = Charas.Empty,
                         },
                         new()
                         {
                             PartyNo = x,
                             UnitNo = 3,
-                            CharaId = Charas.Empty
+                            CharaId = Charas.Empty,
                         },
                         new()
                         {
                             PartyNo = x,
                             UnitNo = 4,
-                            CharaId = Charas.Empty
-                        }
-                    }
+                            CharaId = Charas.Empty,
+                        },
+                    },
                 })
         );
     }
@@ -654,7 +654,7 @@ public class SavefileService : ISavefileService
                         ViewerId = player.ViewerId,
                         StoryType = StoryTypes.Chara,
                         StoryId = story.StoryIds[0],
-                        State = 0
+                        State = 0,
                     }
                 );
             }
@@ -682,7 +682,7 @@ public class SavefileService : ISavefileService
             {
                 EmblemId = DefaultSavefileData.DefaultEmblem,
                 GetTime = DateTimeOffset.UnixEpoch,
-                IsNew = false
+                IsNew = false,
             }
         );
     }

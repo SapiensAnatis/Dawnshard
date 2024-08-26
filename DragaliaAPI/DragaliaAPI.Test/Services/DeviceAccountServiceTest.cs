@@ -27,7 +27,7 @@ public class DeviceAccountServiceTest
         this.mockSavefileService = new(MockBehavior.Strict);
         this.mockPlayerIdentityService = new(MockBehavior.Strict);
 
-        Dictionary<string, string?> inMemoryConfiguration = new() { { "HashSalt", "dragalia" }, };
+        Dictionary<string, string?> inMemoryConfiguration = new() { { "HashSalt", "dragalia" } };
 
         IConfiguration configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(inMemoryConfiguration)

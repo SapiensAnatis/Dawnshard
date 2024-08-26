@@ -19,7 +19,7 @@ public class AbilityCrestTest : TestFixture
             new DbAbilityCrest()
             {
                 ViewerId = ViewerId,
-                AbilityCrestId = AbilityCrestId.FromWhenceHeComes
+                AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
             }
         );
 
@@ -31,7 +31,7 @@ public class AbilityCrestTest : TestFixture
                 new AbilityCrestSetFavoriteRequest()
                 {
                     AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
-                    IsFavorite = true
+                    IsFavorite = true,
                 }
             )
         ).Data;
@@ -58,7 +58,7 @@ public class AbilityCrestTest : TestFixture
                 new AbilityCrestSetFavoriteRequest()
                 {
                     AbilityCrestId = AbilityCrestId.SweetSurprise,
-                    IsFavorite = true
+                    IsFavorite = true,
                 },
                 ensureSuccessHeader: false
             )
@@ -82,9 +82,9 @@ public class AbilityCrestTest : TestFixture
                         {
                             BuildupPieceType = BuildupPieceTypes.Unbind,
                             IsUseDedicatedMaterial = true,
-                            Step = 1
-                        }
-                    }
+                            Step = 1,
+                        },
+                    },
                 },
                 ensureSuccessHeader: false
             )
@@ -102,7 +102,7 @@ public class AbilityCrestTest : TestFixture
             new DbAbilityCrest()
             {
                 ViewerId = ViewerId,
-                AbilityCrestId = AbilityCrestId.HappyNewYear
+                AbilityCrestId = AbilityCrestId.HappyNewYear,
             }
         );
 
@@ -120,15 +120,15 @@ public class AbilityCrestTest : TestFixture
                         {
                             BuildupPieceType = BuildupPieceTypes.Unbind,
                             IsUseDedicatedMaterial = true,
-                            Step = 1
+                            Step = 1,
                         },
                         new()
                         {
                             BuildupPieceType = BuildupPieceTypes.Unbind,
                             IsUseDedicatedMaterial = true,
-                            Step = 4
-                        }
-                    }
+                            Step = 4,
+                        },
+                    },
                 },
                 ensureSuccessHeader: false
             )
@@ -154,7 +154,7 @@ public class AbilityCrestTest : TestFixture
             new DbAbilityCrest()
             {
                 ViewerId = ViewerId,
-                AbilityCrestId = AbilityCrestId.WorthyRivals
+                AbilityCrestId = AbilityCrestId.WorthyRivals,
             }
         );
 
@@ -177,33 +177,33 @@ public class AbilityCrestTest : TestFixture
                         {
                             BuildupPieceType = BuildupPieceTypes.Unbind,
                             IsUseDedicatedMaterial = true,
-                            Step = 2
+                            Step = 2,
                         },
                         new()
                         {
                             BuildupPieceType = BuildupPieceTypes.Unbind,
                             IsUseDedicatedMaterial = false,
-                            Step = 1
+                            Step = 1,
                         },
                         new()
                         {
                             BuildupPieceType = BuildupPieceTypes.Stats,
                             IsUseDedicatedMaterial = false,
-                            Step = 3
+                            Step = 3,
                         },
                         new()
                         {
                             BuildupPieceType = BuildupPieceTypes.Stats,
                             IsUseDedicatedMaterial = false,
-                            Step = 2
+                            Step = 2,
                         },
                         new()
                         {
                             BuildupPieceType = BuildupPieceTypes.Copies,
                             IsUseDedicatedMaterial = false,
-                            Step = 2
-                        }
-                    }
+                            Step = 2,
+                        },
+                    },
                 }
             );
 
@@ -241,7 +241,7 @@ public class AbilityCrestTest : TestFixture
             new DbAbilityCrest()
             {
                 ViewerId = ViewerId,
-                AbilityCrestId = AbilityCrestId.MaskofDeterminationLancesBoon
+                AbilityCrestId = AbilityCrestId.MaskofDeterminationLancesBoon,
             }
         );
 
@@ -258,9 +258,9 @@ public class AbilityCrestTest : TestFixture
                     {
                         BuildupPieceType = BuildupPieceTypes.Stats,
                         IsUseDedicatedMaterial = false,
-                        Step = 2
+                        Step = 2,
                     },
-                ]
+                ],
             }
         );
 
@@ -280,9 +280,9 @@ public class AbilityCrestTest : TestFixture
                     {
                         BuildupPieceType = BuildupPieceTypes.Stats,
                         IsUseDedicatedMaterial = false,
-                        Step = 2
+                        Step = 2,
                     },
-                ]
+                ],
             }
         );
     }
@@ -298,8 +298,8 @@ public class AbilityCrestTest : TestFixture
                     AbilityCrestId = AbilityCrestId.InanUnendingWorld,
                     PlusCountParamsList = new List<AtgenPlusCountParamsList>()
                     {
-                        new() { PlusCount = 50, PlusCountType = PlusCountType.Hp, }
-                    }
+                        new() { PlusCount = 50, PlusCountType = PlusCountType.Hp },
+                    },
                 },
                 ensureSuccessHeader: false
             )
@@ -319,7 +319,7 @@ public class AbilityCrestTest : TestFixture
             {
                 ViewerId = ViewerId,
                 AbilityCrestId = AbilityCrestId.TwinfoldBonds,
-                AttackPlusCount = 26
+                AttackPlusCount = 26,
             }
         );
 
@@ -334,8 +334,8 @@ public class AbilityCrestTest : TestFixture
                     PlusCountParamsList = new List<AtgenPlusCountParamsList>()
                     {
                         new() { PlusCount = 50, PlusCountType = PlusCountType.Hp },
-                        new() { PlusCount = 25, PlusCountType = PlusCountType.Atk }
-                    }
+                        new() { PlusCount = 25, PlusCountType = PlusCountType.Atk },
+                    },
                 },
                 ensureSuccessHeader: false
             )
@@ -367,7 +367,7 @@ public class AbilityCrestTest : TestFixture
             {
                 ViewerId = ViewerId,
                 AbilityCrestId = AbilityCrestId.EndlessWaltz,
-                AttackPlusCount = 26
+                AttackPlusCount = 26,
             }
         );
 
@@ -381,8 +381,8 @@ public class AbilityCrestTest : TestFixture
                 PlusCountParamsList = new List<AtgenPlusCountParamsList>()
                 {
                     new() { PlusCount = 1, PlusCountType = PlusCountType.Hp },
-                    new() { PlusCount = 50, PlusCountType = PlusCountType.Atk, }
-                }
+                    new() { PlusCount = 50, PlusCountType = PlusCountType.Atk },
+                },
             }
         );
 
@@ -412,8 +412,8 @@ public class AbilityCrestTest : TestFixture
                     PlusCountTypeList = new List<PlusCountType>()
                     {
                         PlusCountType.Hp,
-                        PlusCountType.Atk
-                    }
+                        PlusCountType.Atk,
+                    },
                 },
                 ensureSuccessHeader: false
             )
@@ -432,7 +432,7 @@ public class AbilityCrestTest : TestFixture
             {
                 ViewerId = ViewerId,
                 AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
-                HpPlusCount = 40
+                HpPlusCount = 40,
             }
         );
 
@@ -444,7 +444,7 @@ public class AbilityCrestTest : TestFixture
                 new AbilityCrestResetPlusCountRequest()
                 {
                     AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
-                    PlusCountTypeList = new List<PlusCountType>() { PlusCountType.Hp, 0 }
+                    PlusCountTypeList = new List<PlusCountType>() { PlusCountType.Hp, 0 },
                 },
                 ensureSuccessHeader: false
             )
@@ -477,7 +477,7 @@ public class AbilityCrestTest : TestFixture
                 ViewerId = ViewerId,
                 AbilityCrestId = AbilityCrestId.TheGeniusTacticianBowsBoon,
                 HpPlusCount = 40,
-                AttackPlusCount = 1
+                AttackPlusCount = 1,
             }
         );
 
@@ -491,8 +491,8 @@ public class AbilityCrestTest : TestFixture
                 PlusCountTypeList = new List<PlusCountType>()
                 {
                     PlusCountType.Hp,
-                    PlusCountType.Atk
-                }
+                    PlusCountType.Atk,
+                },
             }
         );
 
@@ -526,7 +526,7 @@ public class AbilityCrestTest : TestFixture
                 ViewerId = ViewerId,
                 AbilityCrestSetNo = setNo,
                 AbilityCrestSetName = "test",
-                CrestSlotType1CrestId1 = AbilityCrestId.WorthyRivals
+                CrestSlotType1CrestId1 = AbilityCrestId.WorthyRivals,
             }
         );
 
@@ -553,7 +553,7 @@ public class AbilityCrestTest : TestFixture
                                 ViewerId = ViewerId,
                                 AbilityCrestSetNo = setNo,
                                 AbilityCrestSetName = "test",
-                                CrestSlotType1CrestId1 = AbilityCrestId.WorthyRivals
+                                CrestSlotType1CrestId1 = AbilityCrestId.WorthyRivals,
                             }
                         )
                     );
@@ -605,7 +605,7 @@ public class AbilityCrestTest : TestFixture
             {
                 AbilityCrestSetNo = setNo,
                 AbilityCrestSetName = "",
-                RequestAbilityCrestSetData = new() { TalismanKeyId = 1 }
+                RequestAbilityCrestSetData = new() { TalismanKeyId = 1 },
             }
         );
 
@@ -638,8 +638,8 @@ public class AbilityCrestTest : TestFixture
                 AbilityCrestSetName = "",
                 RequestAbilityCrestSetData = new()
                 {
-                    CrestSlotType2CrestId2 = AbilityCrestId.DragonsNest
-                }
+                    CrestSlotType2CrestId2 = AbilityCrestId.DragonsNest,
+                },
             }
         );
 
@@ -659,7 +659,7 @@ public class AbilityCrestTest : TestFixture
             new AbilityCrestUpdateAbilityCrestSetNameRequest()
             {
                 AbilityCrestSetNo = setNo,
-                AbilityCrestSetName = "test"
+                AbilityCrestSetName = "test",
             }
         );
 
@@ -689,7 +689,7 @@ public class AbilityCrestTest : TestFixture
             new AbilityCrestUpdateAbilityCrestSetNameRequest()
             {
                 AbilityCrestSetNo = setNo,
-                AbilityCrestSetName = "test"
+                AbilityCrestSetName = "test",
             }
         );
 

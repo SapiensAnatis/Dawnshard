@@ -11,7 +11,7 @@ public class V17UpdateTest : SavefileUpdateTestFixture
     [Fact]
     public async Task V17Update_AddsMissingReliabilities()
     {
-        await this.AddToDatabase(new DbPlayerDragonData() { DragonId = Dragons.Arsene, });
+        await this.AddToDatabase(new DbPlayerDragonData() { DragonId = Dragons.Arsene });
 
         this.ApiContext.PlayerDragonReliability.AsNoTracking()
             .Should()

@@ -50,7 +50,7 @@ public class UserTests : WebTestFixture
 
         (await resp.Content.ReadFromJsonAsync<User>())
             .Should()
-            .BeEquivalentTo(new User() { Name = "Euden", ViewerId = this.ViewerId, });
+            .BeEquivalentTo(new User() { Name = "Euden", ViewerId = this.ViewerId });
     }
 
     [Fact]

@@ -183,7 +183,7 @@ public class PartyPowerService(
             crestType2No1,
             crestType2No2,
             crestType3No1,
-            crestType3No2
+            crestType3No2,
         };
 
         HashSet<AbilityCrestId> uniqueCrests = crests.Where(x => x != 0).ToHashSet();
@@ -562,7 +562,7 @@ public class PartyPowerService(
                 : weaponData.GetAbility(1, dbWeapon.Ability1Level),
             dbWeapon == null || weaponData == null
                 ? 0
-                : weaponData.GetAbility(2, dbWeapon.Ability2Level)
+                : weaponData.GetAbility(2, dbWeapon.Ability2Level),
         };
 
         abilityIdList.AddRange(abilityIds);

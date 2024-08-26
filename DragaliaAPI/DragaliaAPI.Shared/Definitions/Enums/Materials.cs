@@ -519,13 +519,13 @@ public enum Materials
     ZenaSkin = 10750504,
     ZephyrRune = 204004002,
     ZephyrsEssence = 206003001,
-    Zest = 2081501
+    Zest = 2081501,
 }
 
 public enum UpgradeEnhanceTypes
 {
     AtkPlus = 0,
-    HpPlus = 1
+    HpPlus = 1,
 }
 
 public static class UpgradeMaterials
@@ -540,7 +540,7 @@ public static class UpgradeMaterials
         { Materials.GoldCrystal, 3500 },
         { Materials.Dragonfruit, 150 },
         { Materials.RipeDragonfruit, 1000 },
-        { Materials.SucculentDragonfruit, 3500 }
+        { Materials.SucculentDragonfruit, 3500 },
     };
 
     public static readonly Dictionary<int, int> dragonBuildupXp = new Dictionary<int, int>()
@@ -559,7 +559,7 @@ public static class UpgradeMaterials
         { UnitElement.Fire, Materials.FlameOrb },
         { UnitElement.Wind, Materials.WindOrb },
         { UnitElement.Light, Materials.LightOrb },
-        { UnitElement.Dark, Materials.ShadowOrb }
+        { UnitElement.Dark, Materials.ShadowOrb },
     };
 
     public static readonly Dictionary<UnitElement, Materials> t2Orbs = new Dictionary<
@@ -571,7 +571,7 @@ public static class UpgradeMaterials
         { UnitElement.Fire, Materials.BlazeOrb },
         { UnitElement.Wind, Materials.StormOrb },
         { UnitElement.Light, Materials.RadianceOrb },
-        { UnitElement.Dark, Materials.NightfallOrb }
+        { UnitElement.Dark, Materials.NightfallOrb },
     };
 
     public static readonly Dictionary<UnitElement, Materials> t3Orbs = new Dictionary<
@@ -583,7 +583,7 @@ public static class UpgradeMaterials
         { UnitElement.Fire, Materials.InfernoOrb },
         { UnitElement.Wind, Materials.MaelstromOrb },
         { UnitElement.Light, Materials.RefulgenceOrb },
-        { UnitElement.Dark, Materials.NetherOrb }
+        { UnitElement.Dark, Materials.NetherOrb },
     };
 
     public static readonly Dictionary<UnitElement, Materials> t4Orbs = new Dictionary<
@@ -595,7 +595,7 @@ public static class UpgradeMaterials
         { UnitElement.Fire, Materials.IncandescenceOrb },
         { UnitElement.Wind, Materials.TempestOrb },
         { UnitElement.Light, Materials.ResplendenceOrb },
-        { UnitElement.Dark, Materials.AbaddonOrb }
+        { UnitElement.Dark, Materials.AbaddonOrb },
     };
 
     /*

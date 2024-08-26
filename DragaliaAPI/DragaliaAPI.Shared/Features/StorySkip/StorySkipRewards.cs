@@ -25,7 +25,7 @@ public static class StorySkipRewards
             Charas.Ranzal,
             Charas.Cleo,
             Charas.Luca,
-            Charas.Alex
+            Charas.Alex,
         }.ToFrozenSet();
 
     public static FrozenSet<Dragons> DragonList { get; } =

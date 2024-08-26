@@ -28,5 +28,5 @@ public enum QuestEventType
     Subdue,
     Walker,
     Dmode,
-    Saga
+    Saga,
 }

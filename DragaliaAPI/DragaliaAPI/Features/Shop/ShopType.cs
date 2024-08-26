@@ -10,7 +10,7 @@ public enum ShopType
     MaterialDaily,
     MaterialWeekly,
     MaterialMonthly,
-    Normal
+    Normal,
 }
 
 public static class ShopTypeExtensions
@@ -24,7 +24,7 @@ public static class ShopTypeExtensions
             ShopType.MaterialDaily => PurchaseShopType.Material,
             ShopType.MaterialWeekly => PurchaseShopType.Material,
             ShopType.MaterialMonthly => PurchaseShopType.Material,
-            _ => throw new UnreachableException("Invalid ShopType in repo")
+            _ => throw new UnreachableException("Invalid ShopType in repo"),
         };
     }
 }

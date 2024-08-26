@@ -63,7 +63,7 @@ public class BonusServiceTest
                     {
                         ViewerId = ViewerId,
                         PlantId = x.PlantId,
-                        Level = x.Level
+                        Level = x.Level,
                     })
                     .AsQueryable()
                     .BuildMock()
@@ -76,7 +76,7 @@ public class BonusServiceTest
                     {
                         ViewerId = ViewerId,
                         WeaponBodyId = x.WeaponBodyId,
-                        FortPassiveCharaWeaponBuildupCount = x.FortPassiveCharaWeaponBuildupCount
+                        FortPassiveCharaWeaponBuildupCount = x.FortPassiveCharaWeaponBuildupCount,
                     })
                     .AsQueryable()
                     .BuildMock()
@@ -107,7 +107,7 @@ public class BonusServiceTest
                         ViewerId = ViewerId,
                         PlantId = FortPlants.ArctosMonument,
                         Level = 10,
-                    }
+                    },
                 }
                     .AsQueryable()
                     .BuildMock()
@@ -119,7 +119,7 @@ public class BonusServiceTest
                 new AtgenEventBoost()
                 {
                     EventEffect = EventEffectTypes.EventDamageBoost,
-                    EffectValue = 50
+                    EffectValue = 50,
                 }
             );
     }

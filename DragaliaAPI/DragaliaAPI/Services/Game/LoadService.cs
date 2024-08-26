@@ -214,7 +214,7 @@ public static partial class LoadMapper
     public static partial IQueryable<Savefile> ProjectToSavefile(this IQueryable<DbPlayer> query);
 
     public static UnitStoryList MapToUnitStoryList(this GenericStory story) =>
-        new() { UnitStoryId = story.StoryId, IsRead = story.State == StoryState.Read, };
+        new() { UnitStoryId = story.StoryId, IsRead = story.State == StoryState.Read };
 
     public static QuestStoryList MapToQuestStoryList(this GenericStory story) =>
         new() { QuestStoryId = story.StoryId, State = story.State };
@@ -227,11 +227,11 @@ public static partial class LoadMapper
         {
             TreasureTradeId = trade.Id,
             TradeCount = trade.Count,
-            LastResetTime = trade.LastTradeTime
+            LastResetTime = trade.LastTradeTime,
         };
 
     public static UserSummonList MapToUserSummonList(this BannerData bannerData) =>
-        new() { SummonId = bannerData.SummonBannerId, SummonCount = bannerData.SummonCount, };
+        new() { SummonId = bannerData.SummonBannerId, SummonCount = bannerData.SummonCount };
 
     [MapProperty(nameof(DbPlayerDragonData.Level), nameof(DragonReliabilityList.ReliabilityLevel))]
     [MapProperty(nameof(DbPlayerDragonData.Exp), nameof(DragonReliabilityList.ReliabilityTotalExp))]

@@ -146,7 +146,7 @@ public class LoginService(
             {
                 QuestGroupId = WallService.WallQuestGroupId,
                 IsReceiveReward = wallRewardStatus,
-            }
+            },
         ];
     }
 }

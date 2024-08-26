@@ -59,8 +59,8 @@ public class PartyControllerTest : RepositoryTestFixture
             {
                 PartyList = new List<PartyList>()
                 {
-                    new() { PartyName = "Z Team", PartyNo = 1, }
-                }
+                    new() { PartyName = "Z Team", PartyNo = 1 },
+                },
             };
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
             .ReturnsAsync(updateDataList);

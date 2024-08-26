@@ -23,7 +23,7 @@ public class AutoRepeatService(
         {
             SlidingExpiration = TimeSpan.FromMinutes(
                 options.CurrentValue.AutoRepeatExpiryTimeMinutes
-            )
+            ),
         };
 
     public async Task SetRepeatSetting(RepeatSetting repeatSetting)
@@ -35,7 +35,7 @@ public class AutoRepeatService(
                 Type = repeatSetting.RepeatType,
                 UseItemList = repeatSetting.UseItemList,
                 MaxCount = repeatSetting.RepeatCount,
-                CurrentCount = 0
+                CurrentCount = 0,
             };
 
         logger.LogDebug("Saving auto-repeat setting: {@info}", info);

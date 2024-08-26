@@ -30,7 +30,7 @@ namespace DragaliaAPI.Photon.Plugin.Test
                         { 1, 1 },
                         { 2, 1 },
                         { 3, 1 },
-                        { 4, 1 }
+                        { 4, 1 },
                     }
                 );
 
@@ -55,7 +55,7 @@ namespace DragaliaAPI.Photon.Plugin.Test
                     {
                         { 1, 1 },
                         { 2, 1 },
-                        { 3, 2 }
+                        { 3, 2 },
                     }
                 );
 
@@ -70,7 +70,7 @@ namespace DragaliaAPI.Photon.Plugin.Test
                     {
                         { 1, 1 },
                         { 2, 1 },
-                        { 3, 1 }
+                        { 3, 1 },
                     }
                 );
             }

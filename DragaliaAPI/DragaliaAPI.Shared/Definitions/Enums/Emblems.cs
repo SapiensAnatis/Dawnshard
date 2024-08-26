@@ -1298,5 +1298,5 @@ public enum Emblems
     BerserkSkipperTier3 = 51090111,
     SociallyDistancedTier1 = 51090112,
     SociallyDistancedTier2 = 51090113,
-    SociallyDistancedTier3 = 51090114
+    SociallyDistancedTier3 = 51090114,
 }

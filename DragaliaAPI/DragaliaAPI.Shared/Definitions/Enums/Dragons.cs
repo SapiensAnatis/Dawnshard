@@ -412,7 +412,7 @@ public enum Dragons
 public enum DragonLimitBreakTypes
 {
     Normal = 10000,
-    Special = 10001
+    Special = 10001,
 }
 
 public enum DragonLimitBreakMatTypes
@@ -420,7 +420,7 @@ public enum DragonLimitBreakMatTypes
     Dupe = 1,
     Stone = 2,
     Spheres = 3,
-    SpheresLB5 = 4
+    SpheresLB5 = 4,
 }
 
 public enum DragonGifts
@@ -438,5 +438,5 @@ public enum DragonGifts
     FourLeafClover = 30001,
     DragonyuleCake = 30002,
     ValentinesCard = 30003,
-    PupGrub = 40001
+    PupGrub = 40001,
 }

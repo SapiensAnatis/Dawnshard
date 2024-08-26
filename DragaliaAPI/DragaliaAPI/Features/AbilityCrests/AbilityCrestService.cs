@@ -46,15 +46,15 @@ public class AbilityCrestService : IAbilityCrestService
     {
         ResultCode result = buildup.BuildupPieceType switch
         {
-            BuildupPieceTypes.Unbind
-            or BuildupPieceTypes.Copies
-                => await this.TryBuildupGeneric(abilityCrest, buildup),
+            BuildupPieceTypes.Unbind or BuildupPieceTypes.Copies => await this.TryBuildupGeneric(
+                abilityCrest,
+                buildup
+            ),
             BuildupPieceTypes.Stats => await this.TryBuildupLevel(abilityCrest, buildup),
-            _
-                => throw new DragaliaException(
-                    ResultCode.CommonInvalidArgument,
-                    "Invalid buildip piece type"
-                )
+            _ => throw new DragaliaException(
+                ResultCode.CommonInvalidArgument,
+                "Invalid buildip piece type"
+            ),
         };
 
         if (result == ResultCode.Success)
@@ -273,11 +273,10 @@ public class AbilityCrestService : IAbilityCrestService
         {
             PlusCountType.Hp => dbAbilityCrest.HpPlusCount,
             PlusCountType.Atk => dbAbilityCrest.AttackPlusCount,
-            _
-                => throw new DragaliaException(
-                    ResultCode.CommonInvalidArgument,
-                    "Invalid augment type"
-                )
+            _ => throw new DragaliaException(
+                ResultCode.CommonInvalidArgument,
+                "Invalid augment type"
+            ),
         };
 
         if (!await this.userDataRepository.CheckCoin(augmentTotal * 20_000))
@@ -290,7 +289,7 @@ public class AbilityCrestService : IAbilityCrestService
         {
             returnedAugments = new()
             {
-                { Materials.FortifyingGemstone, dbAbilityCrest.HpPlusCount }
+                { Materials.FortifyingGemstone, dbAbilityCrest.HpPlusCount },
             };
             dbAbilityCrest.HpPlusCount = 0;
         }
@@ -298,7 +297,7 @@ public class AbilityCrestService : IAbilityCrestService
         {
             returnedAugments = new()
             {
-                { Materials.AmplifyingGemstone, dbAbilityCrest.AttackPlusCount }
+                { Materials.AmplifyingGemstone, dbAbilityCrest.AttackPlusCount },
             };
             dbAbilityCrest.AttackPlusCount = 0;
         }
@@ -423,11 +422,10 @@ public class AbilityCrestService : IAbilityCrestService
             2 => rarityInfo.MaxLimitLevelByLimitBreak2,
             3 => rarityInfo.MaxLimitLevelByLimitBreak3,
             4 => rarityInfo.MaxLimitLevelByLimitBreak4,
-            _
-                => throw new DragaliaException(
-                    ResultCode.AbilityCrestBuildupPieceUnablePiece,
-                    "Limit break count invalid"
-                )
+            _ => throw new DragaliaException(
+                ResultCode.AbilityCrestBuildupPieceUnablePiece,
+                "Limit break count invalid"
+            ),
         };
 
         return step <= levelLimit;
@@ -443,11 +441,10 @@ public class AbilityCrestService : IAbilityCrestService
         {
             PlusCountType.Hp => rarityInfo.MaxHpPlusCount,
             PlusCountType.Atk => rarityInfo.MaxAtkPlusCount,
-            _
-                => throw new DragaliaException(
-                    ResultCode.CommonInvalidArgument,
-                    "Invalid augment type"
-                )
+            _ => throw new DragaliaException(
+                ResultCode.CommonInvalidArgument,
+                "Invalid augment type"
+            ),
         };
 
         return amount <= augmentLimit;

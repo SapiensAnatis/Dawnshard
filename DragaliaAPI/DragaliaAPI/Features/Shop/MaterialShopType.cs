@@ -7,7 +7,7 @@ public enum MaterialShopType
     None,
     Daily,
     Weekly,
-    Monthly
+    Monthly,
 }
 
 public static class MaterialShopTypeExtensions
@@ -20,7 +20,7 @@ public static class MaterialShopTypeExtensions
             MaterialShopType.Daily => ShopType.MaterialDaily,
             MaterialShopType.Weekly => ShopType.MaterialWeekly,
             MaterialShopType.Monthly => ShopType.MaterialMonthly,
-            _ => throw new UnreachableException("Invalid MaterialShopType")
+            _ => throw new UnreachableException("Invalid MaterialShopType"),
         };
     }
 }

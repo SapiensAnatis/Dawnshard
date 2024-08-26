@@ -37,7 +37,7 @@ public static class TokenHelper
                     SecurityAlgorithms.RsaSha256
                 ),
                 Claims = new Dictionary<string, object>() { ["sub"] = accountId },
-                Expires = expiryTime.UtcDateTime
+                Expires = expiryTime.UtcDateTime,
             };
 
         if (savefileAvailable && savefileTime is not null)

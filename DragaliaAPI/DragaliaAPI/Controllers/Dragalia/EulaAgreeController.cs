@@ -18,8 +18,8 @@ public class EulaAgreeController : DragaliaControllerBase
                     Region = request.Region,
                     Lang = request.Lang,
                     EulaVersion = request.EulaVersion,
-                    PrivacyPolicyVersion = request.PrivacyPolicyVersion
-                }
+                    PrivacyPolicyVersion = request.PrivacyPolicyVersion,
+                },
             }
         );
     }

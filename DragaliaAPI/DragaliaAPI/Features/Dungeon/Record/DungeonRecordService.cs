@@ -132,11 +132,9 @@ public class DungeonRecordService(
 
         // Constant for quests with no stamina usage, wip?
         int experience =
-            session.QuestData.PayStaminaSingle != 0
-                ? session.QuestData.PayStaminaSingle * 10
-                : session.QuestData.PayStaminaMulti != 0
-                    ? session.QuestData.PayStaminaMulti * 100
-                    : 150;
+            session.QuestData.PayStaminaSingle != 0 ? session.QuestData.PayStaminaSingle * 10
+            : session.QuestData.PayStaminaMulti != 0 ? session.QuestData.PayStaminaMulti * 100
+            : 150;
 
         experience *= session.PlayCount;
 

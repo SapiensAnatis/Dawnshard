@@ -46,7 +46,7 @@ public class TutorialServiceTest
             .Returns(
                 new List<DbPlayerUserData>
                 {
-                    new() { ViewerId = 1, TutorialStatus = 1 }
+                    new() { ViewerId = 1, TutorialStatus = 1 },
                 }
                     .AsQueryable()
                     .BuildMock()
@@ -64,7 +64,7 @@ public class TutorialServiceTest
             .Returns(
                 new List<DbPlayerUserData>
                 {
-                    new() { ViewerId = 1, TutorialStatus = 99999 }
+                    new() { ViewerId = 1, TutorialStatus = 99999 },
                 }
                     .AsQueryable()
                     .BuildMock()
@@ -82,7 +82,7 @@ public class TutorialServiceTest
             .Returns(
                 new List<DbPlayerUserData>
                 {
-                    new() { ViewerId = 1, TutorialStatus = 1 }
+                    new() { ViewerId = 1, TutorialStatus = 1 },
                 }
                     .AsQueryable()
                     .BuildMock()

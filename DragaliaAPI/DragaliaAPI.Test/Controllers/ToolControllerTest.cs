@@ -29,7 +29,7 @@ public class ToolControllerTest
                 {
                     SessionId = "session_id",
                     ViewerId = 1,
-                    Nonce = "placeholder nonce"
+                    Nonce = "placeholder nonce",
                 }
             );
     }
@@ -43,7 +43,7 @@ public class ToolControllerTest
             .GetData<ToolSignupResponse>()
             .Should()
             .BeEquivalentTo(
-                new ToolSignupResponse() { ViewerId = 1, },
+                new ToolSignupResponse() { ViewerId = 1 },
                 opts => opts.Excluding(x => x.ServerTime)
             );
     }

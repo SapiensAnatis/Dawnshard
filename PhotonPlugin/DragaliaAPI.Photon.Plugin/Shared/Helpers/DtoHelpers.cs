@@ -18,7 +18,7 @@ namespace DragaliaAPI.Photon.Plugin.Shared.Helpers
             {
                 ActorNr = actorNr,
                 ViewerId = actorProperties.GetInt(ActorPropertyKeys.PlayerId),
-                PartyNoList = (int[])actorProperties[ActorPropertyKeys.UsePartySlot]
+                PartyNoList = (int[])actorProperties[ActorPropertyKeys.UsePartySlot],
             };
         }
 
@@ -72,7 +72,7 @@ namespace DragaliaAPI.Photon.Plugin.Shared.Helpers
                 UnacceptedElementTypeList = deserialized.UnacceptedElementals,
                 UnacceptedWeaponTypeList = deserialized.UnacceptedWeapons,
                 ObjectiveTextId = deserialized.Objective.TextId,
-                RequiredPartyPower = deserialized.RequiredPower
+                RequiredPartyPower = deserialized.RequiredPower,
             };
         }
     }

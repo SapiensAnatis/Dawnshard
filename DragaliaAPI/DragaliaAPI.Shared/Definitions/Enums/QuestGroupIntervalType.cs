@@ -32,5 +32,5 @@ public enum QuestGroupIntervalType
     MonWedSatSun,
     WedFriSatSun,
     TueThuSatSun,
-    SatAndSun
+    SatAndSun,
 }

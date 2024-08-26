@@ -7,5 +7,7 @@ public enum CombatEventItemType
     EventPoint = 10201,
     AdventItem = 10301, // Stratagem
     QuestUnlock = 10401, // Battle Chart
-    StoryUnlock = 10501 // War Chronicle
+    StoryUnlock =
+        10501 // War Chronicle
+    ,
 }

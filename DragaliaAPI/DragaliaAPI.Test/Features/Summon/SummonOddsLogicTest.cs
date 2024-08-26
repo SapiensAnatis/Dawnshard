@@ -37,7 +37,7 @@ public class SummonOddsLogicTest
             .BeEquivalentTo(
                 [
                     new UnitRate(Charas.FaeblessedTobias, 0.005m),
-                    new UnitRate(Dragons.Simurgh, 0.008m)
+                    new UnitRate(Dragons.Simurgh, 0.008m),
                 ]
             );
 
@@ -99,7 +99,7 @@ public class SummonOddsLogicTest
                 [
                     new UnitRate(Charas.GalaNedrick, 0.005m),
                     new UnitRate(Charas.Akasha, 0.005m),
-                    new UnitRate(Charas.Eirene, 0.005m)
+                    new UnitRate(Charas.Eirene, 0.005m),
                 ]
             );
 
@@ -125,7 +125,7 @@ public class SummonOddsLogicTest
                         Id = 1,
                         IsGala = true,
                         PickupCharas = [Charas.GalaZena, Charas.GalaRanzal],
-                        PickupDragons = [Dragons.GalaBeastCiella]
+                        PickupDragons = [Dragons.GalaBeastCiella],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 0
@@ -144,7 +144,7 @@ public class SummonOddsLogicTest
                 [
                     new UnitRate(Charas.GalaZena, 0.005m),
                     new UnitRate(Charas.GalaRanzal, 0.005m),
-                    new UnitRate(Dragons.GalaBeastCiella, 0.008m)
+                    new UnitRate(Dragons.GalaBeastCiella, 0.008m),
                 ]
             );
 
@@ -180,7 +180,7 @@ public class SummonOddsLogicTest
                         Id = 1,
                         IsGala = true,
                         PickupCharas = [Charas.GalaZena, Charas.GalaRanzal],
-                        PickupDragons = [Dragons.GalaBeastCiella]
+                        PickupDragons = [Dragons.GalaBeastCiella],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 0
@@ -195,7 +195,7 @@ public class SummonOddsLogicTest
                 [
                     new UnitRate(Charas.GalaZena, 0.005m),
                     new UnitRate(Charas.GalaRanzal, 0.005m),
-                    new UnitRate(Dragons.GalaBeastCiella, 0.008m)
+                    new UnitRate(Dragons.GalaBeastCiella, 0.008m),
                 ]
             );
 
@@ -250,9 +250,7 @@ public class SummonOddsLogicTest
     {
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
-                InitializeBanner(
-                    new Banner() { Id = 1, PickupCharas = [Charas.BeauticianZardin], }
-                ),
+                InitializeBanner(new Banner() { Id = 1, PickupCharas = [Charas.BeauticianZardin] }),
                 numSummonsSinceLastFiveStar: 0
             );
 
@@ -361,7 +359,7 @@ public class SummonOddsLogicTest
             Charas.Mona,
             Charas.SophiePersona,
             Charas.Joker,
-            Charas.Panther
+            Charas.Panther,
         ];
 
         foreach (Charas c in unexpectedCharas)
@@ -375,9 +373,7 @@ public class SummonOddsLogicTest
     {
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
-                InitializeBanner(
-                    new Banner() { Id = 1, PickupCharas = [Charas.BeauticianZardin], }
-                ),
+                InitializeBanner(new Banner() { Id = 1, PickupCharas = [Charas.BeauticianZardin] }),
                 numSummonsSinceLastFiveStar: 0
             );
 
@@ -433,7 +429,7 @@ public class SummonOddsLogicTest
             Dragons.MiniZodi,
             Dragons.MiniHildy,
             Dragons.MiniMercs,
-            Dragons.MiniJupi
+            Dragons.MiniJupi,
         ];
 
         foreach (Dragons d in unexpectedDragons)
@@ -447,7 +443,7 @@ public class SummonOddsLogicTest
     {
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
-                InitializeBanner(new Banner() { Id = 1, LimitedCharas = [Charas.Joker], }),
+                InitializeBanner(new Banner() { Id = 1, LimitedCharas = [Charas.Joker] }),
                 numSummonsSinceLastFiveStar: 0
             );
 
@@ -530,7 +526,7 @@ public class SummonOddsLogicTest
                     new UnitRate(Charas.KuHai, 0.035m),
                     new UnitRate(Charas.GalaAudric, 0.005m),
                     new UnitRate(Dragons.Roc, 0.035m),
-                    new UnitRate(Dragons.GalaBahamut, 0.008m)
+                    new UnitRate(Dragons.GalaBahamut, 0.008m),
                 ]
             );
 
@@ -603,7 +599,7 @@ public class SummonOddsLogicTest
         pickupRates
             .Should()
             .BeEquivalentTo(
-                [new UnitRate(Charas.Joe, 0.04m), new UnitRate(Dragons.PallidImp, 0.04m),]
+                [new UnitRate(Charas.Joe, 0.04m), new UnitRate(Dragons.PallidImp, 0.04m)]
             );
 
         combined.SumOfRatesForRarity(5).Should().BeApproximately(0.04m, AssertionPrecision);
@@ -679,7 +675,7 @@ public class SummonOddsLogicTest
                     new UnitRate(Charas.Joe, 0.04m),
                     new UnitRate(Charas.GalaZethia, 0.005m),
                     new UnitRate(Dragons.PallidImp, 0.04m),
-                    new UnitRate(Dragons.GalaRebornJeanne, 0.008m)
+                    new UnitRate(Dragons.GalaRebornJeanne, 0.008m),
                 ]
             );
 
@@ -978,7 +974,7 @@ public class SummonOddsLogicTest
             .BeEquivalentTo(
                 [
                     new UnitRate(Charas.GalaLeif, 0.005m),
-                    new UnitRate(Dragons.GalaRebornAgni, 0.008m)
+                    new UnitRate(Dragons.GalaRebornAgni, 0.008m),
                 ]
             );
 
@@ -1094,7 +1090,7 @@ public class SummonOddsLogicTest
                     new UnitRate(Charas.KuHai, 0.205625m),
                     new UnitRate(Charas.GalaCleo, 0.005m),
                     new UnitRate(Dragons.Roc, 0.205625m),
-                    new UnitRate(Dragons.GalaChronosNyx, 0.008m)
+                    new UnitRate(Dragons.GalaChronosNyx, 0.008m),
                 ]
             );
 
@@ -1204,7 +1200,7 @@ public class SummonOddsLogicTest
             .BeEquivalentTo(
                 [
                     new UnitRate(Charas.GalaZethia, 0.005m),
-                    new UnitRate(Dragons.GalaRebornJeanne, 0.008m)
+                    new UnitRate(Dragons.GalaRebornJeanne, 0.008m),
                 ]
             );
 

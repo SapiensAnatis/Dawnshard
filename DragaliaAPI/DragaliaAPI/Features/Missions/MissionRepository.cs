@@ -103,7 +103,7 @@ public class MissionRepository(
                     End = endTime ?? DateTimeOffset.UnixEpoch,
                     State = state,
                     GroupId = groupId,
-                    Progress = progress
+                    Progress = progress,
                 }
             )
             .Entity;
@@ -126,7 +126,7 @@ public class MissionRepository(
                 Date = date,
                 StartDate = originalMission.Start,
                 EndDate = originalMission.End,
-                Progress = originalMission.Progress
+                Progress = originalMission.Progress,
             }
         );
     }

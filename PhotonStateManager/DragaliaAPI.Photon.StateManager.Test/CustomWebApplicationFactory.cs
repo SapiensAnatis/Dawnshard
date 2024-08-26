@@ -20,7 +20,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
                 {
                     ["PhotonOptions:Token"] = "photontoken",
                     ["RedisOptions:Hostname"] = this.testContainersHelper.RedisHost,
-                    ["RedisOptions:Port"] = this.testContainersHelper.RedisPort.ToString()
+                    ["RedisOptions:Port"] = this.testContainersHelper.RedisPort.ToString(),
                 }
             )
         );

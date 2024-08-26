@@ -63,7 +63,7 @@ public class DungeonControllerTest
                     IsFriend = false,
                     ViewerId = 1,
                     GetManaPoint = 50,
-                }
+                },
             };
 
         this.mockDungeonService.Setup(x => x.GetSession("my key", CancellationToken.None))
@@ -73,7 +73,7 @@ public class DungeonControllerTest
                     Party = [],
                     IsMulti = false,
                     SupportViewerId = 4,
-                    QuestData = MasterAsset.QuestData[questId]
+                    QuestData = MasterAsset.QuestData[questId],
                 }
             );
 
@@ -104,8 +104,8 @@ public class DungeonControllerTest
                         WallId = 0,
                         WallLevel = 0,
                         IsHost = true,
-                        QuestId = questId
-                    }
+                        QuestId = questId,
+                    },
                 }
             );
 
@@ -129,7 +129,7 @@ public class DungeonControllerTest
                     IsFriend = false,
                     ViewerId = 1,
                     GetManaPoint = 50,
-                }
+                },
             };
 
         this.mockDungeonService.Setup(x => x.GetSession("my key", CancellationToken.None))
@@ -138,7 +138,7 @@ public class DungeonControllerTest
                 {
                     Party = [],
                     IsMulti = true,
-                    QuestData = MasterAsset.QuestData[questId]
+                    QuestData = MasterAsset.QuestData[questId],
                 }
             );
 
@@ -171,8 +171,8 @@ public class DungeonControllerTest
                         WallId = 0,
                         WallLevel = 0,
                         IsHost = false,
-                        QuestId = questId
-                    }
+                        QuestId = questId,
+                    },
                 }
             );
 

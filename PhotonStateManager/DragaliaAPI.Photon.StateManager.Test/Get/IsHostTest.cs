@@ -28,15 +28,15 @@ public class IsHostTest : TestFixture
                     {
                         ViewerId = 2,
                         ActorNr = 1,
-                        PartyNoList = [40]
+                        PartyNoList = [40],
                     },
                     new()
                     {
                         ViewerId = 3,
                         ActorNr = 2,
-                        PartyNoList = [40]
-                    }
-                ]
+                        PartyNoList = [40],
+                    },
+                ],
             };
 
         this.RedisConnectionProvider.RedisCollection<RedisGame>().Insert(game);
@@ -62,15 +62,15 @@ public class IsHostTest : TestFixture
                     {
                         ViewerId = 2,
                         ActorNr = 1,
-                        PartyNoList = [40]
+                        PartyNoList = [40],
                     },
                     new()
                     {
                         ViewerId = 3,
                         ActorNr = 2,
-                        PartyNoList = [40]
-                    }
-                ]
+                        PartyNoList = [40],
+                    },
+                ],
             };
 
         this.RedisConnectionProvider.RedisCollection<RedisGame>().Insert(game);
@@ -100,9 +100,9 @@ public class IsHostTest : TestFixture
                     {
                         ViewerId = 2,
                         ActorNr = 1,
-                        PartyNoList = [40]
-                    }
-                ]
+                        PartyNoList = [40],
+                    },
+                ],
             };
 
         this.RedisConnectionProvider.RedisCollection<RedisGame>().Insert(game);

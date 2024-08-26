@@ -48,7 +48,7 @@ public class DmodeTest : TestFixture
                     {
                         EntityType = EntityTypes.Wyrmite,
                         EntityId = 0,
-                        EntityQuantity = 25
+                        EntityQuantity = 25,
                     },
                     new()
                     {
@@ -61,7 +61,7 @@ public class DmodeTest : TestFixture
                         EntityType = EntityTypes.DmodePoint,
                         EntityId = (int)DmodePoint.Point2,
                         EntityQuantity = 1000,
-                    }
+                    },
                 }
             );
         resp.Data.UpdateDataList.UserData.Crystal.Should().Be(oldWyrmite + 25);
@@ -82,19 +82,19 @@ public class DmodeTest : TestFixture
                         new()
                         {
                             PassiveNo = DmodeServitorPassiveType.BurstDamage,
-                            PassiveLevel = 2
+                            PassiveLevel = 2,
                         },
                         new()
                         {
                             PassiveNo = DmodeServitorPassiveType.ResistUndead,
-                            PassiveLevel = 10
+                            PassiveLevel = 10,
                         },
                         new()
                         {
                             PassiveNo = DmodeServitorPassiveType.ResistNatural,
-                            PassiveLevel = 2
-                        }
-                    }
+                            PassiveLevel = 2,
+                        },
+                    },
                 }
             );
 
@@ -119,7 +119,7 @@ public class DmodeTest : TestFixture
                 {
                     ViewerId = ViewerId,
                     PassiveId = DmodeServitorPassiveType.ResistNatural,
-                    Level = 2
+                    Level = 2,
                 }
             );
         ApiContext
@@ -130,7 +130,7 @@ public class DmodeTest : TestFixture
                 {
                     ViewerId = ViewerId,
                     PassiveId = DmodeServitorPassiveType.ResistUndead,
-                    Level = 10
+                    Level = 10,
                 }
             );
         ApiContext
@@ -141,7 +141,7 @@ public class DmodeTest : TestFixture
                 {
                     ViewerId = ViewerId,
                     PassiveId = DmodeServitorPassiveType.BurstDamage,
-                    Level = 2
+                    Level = 2,
                 }
             );
     }
@@ -159,9 +159,9 @@ public class DmodeTest : TestFixture
                         Charas.HunterBerserker,
                         Charas.Empty,
                         Charas.Empty,
-                        Charas.Empty
+                        Charas.Empty,
                     },
-                    TargetFloorNum = 30
+                    TargetFloorNum = 30,
                 }
             );
 
@@ -175,7 +175,7 @@ public class DmodeTest : TestFixture
                     CharaId4 = Charas.Empty,
                     TargetFloorNum = 30,
                     State = ExpeditionState.Playing,
-                    StartTime = DateTimeOffset.UtcNow
+                    StartTime = DateTimeOffset.UtcNow,
                 }
             );
 
@@ -195,7 +195,7 @@ public class DmodeTest : TestFixture
                     CharaId4 = Charas.Empty,
                     TargetFloorNum = 30,
                     State = ExpeditionState.Waiting,
-                    StartTime = resp.Data.DmodeExpedition.StartTime
+                    StartTime = resp.Data.DmodeExpedition.StartTime,
                 }
             );
         finishResp
@@ -223,9 +223,9 @@ public class DmodeTest : TestFixture
                         Charas.HunterBerserker,
                         Charas.Chrom,
                         Charas.Cassandra,
-                        Charas.GalaMym
+                        Charas.GalaMym,
                     },
-                    TargetFloorNum = 30
+                    TargetFloorNum = 30,
                 }
             );
 
@@ -239,7 +239,7 @@ public class DmodeTest : TestFixture
                     CharaId4 = Charas.GalaMym,
                     TargetFloorNum = 30,
                     State = ExpeditionState.Playing,
-                    StartTime = startTime
+                    StartTime = startTime,
                 }
             );
 
@@ -259,7 +259,7 @@ public class DmodeTest : TestFixture
                     CharaId4 = Charas.GalaMym,
                     TargetFloorNum = 30,
                     State = ExpeditionState.Waiting,
-                    StartTime = startTime
+                    StartTime = startTime,
                 }
             );
 

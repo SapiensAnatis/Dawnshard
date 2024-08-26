@@ -15,7 +15,7 @@ public class CustomResolver : IFormatterResolver
 
     private static readonly IFormatterResolver[] Resolvers = new IFormatterResolver[]
     {
-        StandardResolver.Instance
+        StandardResolver.Instance,
     };
 
     private CustomResolver() { }

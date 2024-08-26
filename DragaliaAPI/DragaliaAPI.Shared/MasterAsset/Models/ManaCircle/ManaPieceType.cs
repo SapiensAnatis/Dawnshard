@@ -19,6 +19,6 @@ public record ManaPieceType(
     {
         (EntityType1, EntityId1, EntityQuantity1),
         (EntityType2, EntityId2, EntityQuantity2),
-        (EntityType3, EntityId3, EntityQuantity3)
+        (EntityType3, EntityId3, EntityQuantity3),
     };
 };

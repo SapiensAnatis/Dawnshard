@@ -35,7 +35,7 @@ public class RoomIdTest : TestFixture
                     RequiredPartyPower = 11700,
                     ObjectiveTextId = 1,
                 },
-                Players = [new() { ViewerId = 2, PartyNoList = [40] }]
+                Players = [new() { ViewerId = 2, PartyNoList = [40] }],
             };
 
         await this.RedisConnectionProvider.RedisCollection<RedisGame>().InsertAsync(game);

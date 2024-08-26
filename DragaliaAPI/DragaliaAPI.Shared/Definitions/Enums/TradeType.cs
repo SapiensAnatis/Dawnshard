@@ -5,5 +5,5 @@ public enum TradeType
     None,
     Treasure,
     AbilityCrest,
-    Event
+    Event,
 }

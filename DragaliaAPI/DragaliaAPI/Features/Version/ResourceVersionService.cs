@@ -10,10 +10,9 @@ public class ResourceVersionService(IOptionsMonitor<ResourceVersionOptions> opti
         {
             Platform.Ios => options.CurrentValue.Ios,
             Platform.Android => options.CurrentValue.Android,
-            _
-                => throw new ArgumentOutOfRangeException(
-                    nameof(platform),
-                    "Invalid platform identifier"
-                )
+            _ => throw new ArgumentOutOfRangeException(
+                nameof(platform),
+                "Invalid platform identifier"
+            ),
         };
 }

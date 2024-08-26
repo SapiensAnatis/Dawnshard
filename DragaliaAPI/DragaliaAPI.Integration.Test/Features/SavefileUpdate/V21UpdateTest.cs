@@ -43,7 +43,7 @@ public class V21UpdateTest : SavefileUpdateTestFixture
         await this.AddRangeToDatabase(
             [
                 new DbPlayerQuestWall() { WallId = WallService.FlameWallId, WallLevel = 2 },
-                new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UnixEpoch.AddDays(1) }
+                new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UnixEpoch.AddDays(1) },
             ]
         );
 

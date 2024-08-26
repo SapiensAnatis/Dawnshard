@@ -214,7 +214,7 @@ public class SavefileImportTest : TestFixture
     public async Task Import_DeletesDailyMissions()
     {
         this.ApiContext.CompletedDailyMissions.Add(
-            new() { ViewerId = this.ViewerId, Progress = 1, }
+            new() { ViewerId = this.ViewerId, Progress = 1 }
         );
 
         HttpContent content = PrepareSavefileRequest("endgame_savefile.json");

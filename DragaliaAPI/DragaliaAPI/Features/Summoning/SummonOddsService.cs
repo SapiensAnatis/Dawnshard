@@ -96,7 +96,7 @@ public class SummonOddsService(
         List<RarityList> combined =
         [
             .. pickupRarityLists.Values.Where(x => !x.IsEmpty),
-            .. rarityLists.Values
+            .. rarityLists.Values,
         ];
 
         return new OddsRate()
@@ -106,14 +106,14 @@ public class SummonOddsService(
                 .Select(x => new AtgenRarityList()
                 {
                     Rarity = x.Key,
-                    TotalRate = x.Sum(y => y.CharaRate + y.DragonRate).ToPercentageString2Dp()
+                    TotalRate = x.Sum(y => y.CharaRate + y.DragonRate).ToPercentageString2Dp(),
                 }),
             RarityGroupList = combined.Select(x => x.ToRarityGroupList()),
             Unit = new()
             {
                 CharaOddsList = combined.Select(x => x.ToAdvOddsUnitDetail()),
                 DragonOddsList = combined.Select(x => x.ToDragonOddsUnitDetail()),
-            }
+            },
         };
 
         static void PopulateRarityDict(UnitRate rate, Dictionary<int, RarityList> dict)
@@ -167,7 +167,7 @@ public class SummonOddsService(
                 Pickup = this.Pickup,
                 TotalRate = (this.CharaRate + this.DragonRate).ToPercentageString2Dp(),
                 DragonRate = this.DragonRate.ToPercentageString2Dp(),
-                CharaRate = this.CharaRate.ToPercentageString2Dp()
+                CharaRate = this.CharaRate.ToPercentageString2Dp(),
             };
 
         public OddsUnitDetail ToAdvOddsUnitDetail() =>
@@ -175,7 +175,7 @@ public class SummonOddsService(
             {
                 Pickup = this.Pickup,
                 Rarity = this.Rarity,
-                UnitList = this.CharaList.Select(x => x.ToAtgenUnitList())
+                UnitList = this.CharaList.Select(x => x.ToAtgenUnitList()),
             };
 
         public OddsUnitDetail ToDragonOddsUnitDetail() =>
@@ -183,7 +183,7 @@ public class SummonOddsService(
             {
                 Pickup = this.Pickup,
                 Rarity = this.Rarity,
-                UnitList = this.DragonList.Select(x => x.ToAtgenUnitList())
+                UnitList = this.DragonList.Select(x => x.ToAtgenUnitList()),
             };
     }
 }

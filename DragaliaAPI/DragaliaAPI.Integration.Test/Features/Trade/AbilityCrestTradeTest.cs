@@ -28,7 +28,7 @@ public class AbilityCrestTradeTest : TestFixture
                 new AbilityCrestTradeTradeRequest()
                 {
                     AbilityCrestTradeId = tradeId,
-                    TradeCount = 1
+                    TradeCount = 1,
                 }
             )
         ).Data;

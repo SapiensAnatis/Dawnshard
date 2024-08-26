@@ -30,8 +30,8 @@ public class MatchingTest : TestFixture
                             {
                                 ActorNr = 1,
                                 ViewerId = ViewerId,
-                                PartyNoList = new List<int>() { 1 }
-                            }
+                                PartyNoList = new List<int>() { 1 },
+                            },
                         },
                         StartEntryTime = DateTimeOffset.FromUnixTimeSeconds(1662160789),
                         EntryConditions = new()
@@ -42,7 +42,7 @@ public class MatchingTest : TestFixture
                             ObjectiveTextId = 2,
                         },
                         MatchingCompatibleId = 36,
-                    }
+                    },
                 }
             );
 
@@ -79,7 +79,7 @@ public class MatchingTest : TestFixture
                             QuestType = QuestTypes.Dungeon,
                             RoomMemberList = new List<AtgenRoomMemberList>()
                             {
-                                new() { ViewerId = (ulong)ViewerId, }
+                                new() { ViewerId = (ulong)ViewerId },
                             },
                             StartEntryTime = DateTimeOffset.FromUnixTimeSeconds(1662160789),
                             EntryConditions = new()
@@ -87,12 +87,12 @@ public class MatchingTest : TestFixture
                                 UnacceptedElementTypeList = new List<int>() { 1, 2, 3, 4, 5 },
                                 UnacceptedWeaponTypeList = new List<int>() { 1, 2 },
                                 RequiredPartyPower = 100,
-                                ObjectiveTextId = 2
+                                ObjectiveTextId = 2,
                             },
                             CompatibleId = 36,
                             MemberNum = 1,
-                        }
-                    }
+                        },
+                    },
                 }
             );
     }
@@ -115,8 +115,8 @@ public class MatchingTest : TestFixture
                             {
                                 ActorNr = 1,
                                 ViewerId = ViewerId,
-                                PartyNoList = new List<int>() { 1 }
-                            }
+                                PartyNoList = new List<int>() { 1 },
+                            },
                         },
                         StartEntryTime = DateTimeOffset.FromUnixTimeSeconds(1662160789),
                         EntryConditions = new()
@@ -127,7 +127,7 @@ public class MatchingTest : TestFixture
                             ObjectiveTextId = 2,
                         },
                         MatchingCompatibleId = 36,
-                    }
+                    },
                 }
             );
 
@@ -164,7 +164,7 @@ public class MatchingTest : TestFixture
                             QuestType = QuestTypes.Dungeon,
                             RoomMemberList = new List<AtgenRoomMemberList>()
                             {
-                                new() { ViewerId = (ulong)ViewerId, }
+                                new() { ViewerId = (ulong)ViewerId },
                             },
                             StartEntryTime = DateTimeOffset.FromUnixTimeSeconds(1662160789),
                             EntryConditions = new()
@@ -172,12 +172,12 @@ public class MatchingTest : TestFixture
                                 UnacceptedElementTypeList = new List<int>() { 1, 2, 3, 4, 5 },
                                 UnacceptedWeaponTypeList = new List<int>() { 1, 2 },
                                 RequiredPartyPower = 100,
-                                ObjectiveTextId = 2
+                                ObjectiveTextId = 2,
                             },
                             CompatibleId = 36,
                             MemberNum = 1,
-                        }
-                    }
+                        },
+                    },
                 }
             );
     }
@@ -198,8 +198,8 @@ public class MatchingTest : TestFixture
                         {
                             ActorNr = 1,
                             ViewerId = ViewerId,
-                            PartyNoList = new List<int>() { 1 }
-                        }
+                            PartyNoList = new List<int>() { 1 },
+                        },
                     },
                     StartEntryTime = DateTimeOffset.FromUnixTimeSeconds(1662160789),
                     EntryConditions = new()
@@ -244,7 +244,7 @@ public class MatchingTest : TestFixture
                         QuestType = QuestTypes.Dungeon,
                         RoomMemberList = new List<AtgenRoomMemberList>()
                         {
-                            new() { ViewerId = (ulong)ViewerId, }
+                            new() { ViewerId = (ulong)ViewerId },
                         },
                         StartEntryTime = DateTimeOffset.FromUnixTimeSeconds(1662160789),
                         EntryConditions = new()
@@ -252,7 +252,7 @@ public class MatchingTest : TestFixture
                             UnacceptedElementTypeList = new List<int>() { 1, 2, 3, 4, 5 },
                             UnacceptedWeaponTypeList = new List<int>() { 1, 2 },
                             RequiredPartyPower = 100,
-                            ObjectiveTextId = 2
+                            ObjectiveTextId = 2,
                         },
                         CompatibleId = 36,
                         MemberNum = 1,
@@ -260,7 +260,7 @@ public class MatchingTest : TestFixture
                     ClusterName = "jp",
                     IsFriend = false,
                     QuestId = 204550501,
-                    RoomName = "7942ce2a-c0ac-4e41-8472-0cf5918f3953"
+                    RoomName = "7942ce2a-c0ac-4e41-8472-0cf5918f3953",
                 }
             );
     }
@@ -281,8 +281,8 @@ public class MatchingTest : TestFixture
                         {
                             ActorNr = 1,
                             ViewerId = 40000,
-                            PartyNoList = new List<int>() { 1 }
-                        }
+                            PartyNoList = new List<int>() { 1 },
+                        },
                     },
                     StartEntryTime = DateTimeOffset.FromUnixTimeSeconds(1662160789),
                     EntryConditions = new()
@@ -327,7 +327,7 @@ public class MatchingTest : TestFixture
                         QuestType = QuestTypes.Dungeon,
                         RoomMemberList = new List<AtgenRoomMemberList>()
                         {
-                            new() { ViewerId = 40000, }
+                            new() { ViewerId = 40000 },
                         },
                         StartEntryTime = DateTimeOffset.FromUnixTimeSeconds(1662160789),
                         EntryConditions = new()
@@ -335,7 +335,7 @@ public class MatchingTest : TestFixture
                             UnacceptedElementTypeList = new List<int>() { 1, 2, 3, 4, 5 },
                             UnacceptedWeaponTypeList = new List<int>() { 1, 2 },
                             RequiredPartyPower = 100,
-                            ObjectiveTextId = 2
+                            ObjectiveTextId = 2,
                         },
                         CompatibleId = 36,
                         MemberNum = 1,
@@ -343,7 +343,7 @@ public class MatchingTest : TestFixture
                     ClusterName = "jp",
                     IsFriend = false,
                     QuestId = 204550501,
-                    RoomName = "7942ce2a-c0ac-4e41-8472-0cf5918f3953"
+                    RoomName = "7942ce2a-c0ac-4e41-8472-0cf5918f3953",
                 }
             );
     }

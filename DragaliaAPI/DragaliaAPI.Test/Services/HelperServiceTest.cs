@@ -126,13 +126,13 @@ public class HelperServiceTest
                 SupportUserList = new List<UserSupportList>()
                 {
                     TestData.SupportListEuden,
-                    TestData.SupportListElisanne
+                    TestData.SupportListElisanne,
                 },
                 SupportUserDetailList = new List<AtgenSupportUserDetailList>()
                 {
                     new() { ViewerId = 1000, IsFriend = true },
-                    new() { ViewerId = 1001, IsFriend = false }
-                }
+                    new() { ViewerId = 1001, IsFriend = false },
+                },
             };
     }
 }

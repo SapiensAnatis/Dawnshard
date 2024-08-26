@@ -9,5 +9,5 @@ public enum DmodeDungeonItemState
     Bag = 11,
     EquipWeapon,
     EquipCrest,
-    SkillBag
+    SkillBag,
 }

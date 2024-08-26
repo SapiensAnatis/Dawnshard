@@ -112,5 +112,5 @@ public enum AbilityTypes
     Reserved_107,
     Reserved_108,
     Reserved_109,
-    Reserved_110
+    Reserved_110,
 };

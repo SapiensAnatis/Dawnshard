@@ -30,6 +30,6 @@ public partial class PartySettingList
             this.EquipCrestSlotType2CrestId1,
             this.EquipCrestSlotType2CrestId2,
             this.EquipCrestSlotType3CrestId1,
-            this.EquipCrestSlotType3CrestId2
+            this.EquipCrestSlotType3CrestId2,
         };
 }

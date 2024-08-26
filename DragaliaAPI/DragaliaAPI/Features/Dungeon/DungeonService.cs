@@ -19,7 +19,7 @@ public class DungeonService(
     private DistributedCacheEntryOptions CacheOptions =>
         new()
         {
-            SlidingExpiration = TimeSpan.FromMinutes(options.CurrentValue.DungeonExpiryTimeMinutes)
+            SlidingExpiration = TimeSpan.FromMinutes(options.CurrentValue.DungeonExpiryTimeMinutes),
         };
 
     private static class Schema

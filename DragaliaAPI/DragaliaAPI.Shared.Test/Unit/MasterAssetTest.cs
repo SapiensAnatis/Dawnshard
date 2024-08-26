@@ -292,7 +292,7 @@ public class MasterAssetTest
                 new List<AreaInfo>()
                 {
                     new("Main/01/MAIN_01_0101_01", "MAIN_01_0101_01"),
-                    new("Boss/BG001_5001_00/BG001_5001_00_00", "MAIN_01_0101_02")
+                    new("Boss/BG001_5001_00/BG001_5001_00_00", "MAIN_01_0101_02"),
                 }
             );
     }
@@ -563,7 +563,7 @@ public class MasterAssetTest
                     Id = 5101,
                     AbilityCrestId = AbilityCrestId.SweetSurprise,
                     NeedDewPoint = 4000,
-                    Priority = 5199
+                    Priority = 5199,
                 }
             );
     }
@@ -606,7 +606,7 @@ public class MasterAssetTest
                 new Dictionary<Materials, int>()
                 {
                     { Materials.AzureInsignia, 200 },
-                    { Materials.DyrenellAureus, 25 }
+                    { Materials.DyrenellAureus, 25 },
                 }
             );
     }
@@ -670,7 +670,7 @@ public class MasterAssetTest
                 new Dictionary<Materials, int>()
                 {
                     { Materials.HolyWater, 2 },
-                    { Materials.ConsecratedWater, 14 }
+                    { Materials.ConsecratedWater, 14 },
                 }
             );
     }

@@ -10,7 +10,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic.Events
             VerifySessionError,
             HostDisconnected,
             TimeExpired,
-            FailedToRegisterRanking
+            FailedToRegisterRanking,
         }
 
         [Key(1)]

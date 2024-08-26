@@ -34,7 +34,7 @@ public class StampService : IStampService
             MasterAsset.StampData.Enumerable.Select(x => new StampList()
             {
                 StampId = x.Id,
-                IsNew = false
+                IsNew = false,
             })
         );
     }

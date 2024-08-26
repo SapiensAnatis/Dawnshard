@@ -37,7 +37,7 @@ public class TimeAttackRankingTest : TestFixture
             {
                 ViewerId = ViewerId,
                 BestClearTime = 200f,
-                QuestId = questId
+                QuestId = questId,
             }
         );
 
@@ -59,7 +59,7 @@ public class TimeAttackRankingTest : TestFixture
                 {
                     EntityId = 0,
                     EntityType = EntityTypes.Dew,
-                    EntityQuantity = 7000
+                    EntityQuantity = 7000,
                 }
             );
 

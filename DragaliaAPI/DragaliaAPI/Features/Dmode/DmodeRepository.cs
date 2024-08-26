@@ -73,7 +73,7 @@ public class DmodeRepository(ApiContext apiContext, IPlayerIdentityService playe
     public DbPlayerDmodeChara AddChara(Charas charaId)
     {
         DbPlayerDmodeChara dmodeChara =
-            new() { ViewerId = playerIdentityService.ViewerId, CharaId = charaId, };
+            new() { ViewerId = playerIdentityService.ViewerId, CharaId = charaId };
 
         return apiContext.PlayerDmodeCharas.Add(dmodeChara).Entity;
     }
@@ -89,7 +89,7 @@ public class DmodeRepository(ApiContext apiContext, IPlayerIdentityService playe
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     PassiveId = passiveId,
-                    Level = level
+                    Level = level,
                 }
             )
             .Entity;

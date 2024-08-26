@@ -47,7 +47,7 @@ public record QuestRewardData(
     {
         (MissionCompleteType1, MissionCompleteValues1),
         (MissionCompleteType2, MissionCompleteValues2),
-        (MissionCompleteType3, MissionCompleteValues3)
+        (MissionCompleteType3, MissionCompleteValues3),
     };
 
     [IgnoreMember]
@@ -55,7 +55,7 @@ public record QuestRewardData(
     {
         (MissionsClearSetEntityType1, MissionsClearSetEntityId1, MissionsClearSetEntityQuantity1),
         (MissionsClearSetEntityType2, MissionsClearSetEntityId2, MissionsClearSetEntityQuantity2),
-        (MissionsClearSetEntityType3, MissionsClearSetEntityId3, MissionsClearSetEntityQuantity3)
+        (MissionsClearSetEntityType3, MissionsClearSetEntityId3, MissionsClearSetEntityQuantity3),
     };
 
     [IgnoreMember]

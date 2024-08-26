@@ -283,7 +283,7 @@ public class DmodeService(
             expedition.CharaId1,
             expedition.CharaId2,
             expedition.CharaId3,
-            expedition.CharaId4
+            expedition.CharaId4,
         };
 
         List<AtgenRewardTalismanList> talismans = new();

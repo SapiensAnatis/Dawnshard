@@ -34,9 +34,9 @@ public class TimeAttackRepositoryTest : RepositoryTestFixture
                     {
                         GameId = gameId,
                         ViewerId = 1,
-                        PartyInfo = "{}"
-                    }
-                }
+                        PartyInfo = "{}",
+                    },
+                },
             };
 
         await this.timeAttackRepository.CreateOrUpdateClear(clear);
@@ -61,9 +61,9 @@ public class TimeAttackRepositoryTest : RepositoryTestFixture
                     {
                         GameId = gameId,
                         ViewerId = 2,
-                        PartyInfo = "{}"
-                    }
-                }
+                        PartyInfo = "{}",
+                    },
+                },
             }
         );
 
@@ -80,9 +80,9 @@ public class TimeAttackRepositoryTest : RepositoryTestFixture
                     {
                         GameId = gameId,
                         ViewerId = 3,
-                        PartyInfo = "{}"
-                    }
-                }
+                        PartyInfo = "{}",
+                    },
+                },
             }
         );
 
@@ -98,14 +98,14 @@ public class TimeAttackRepositoryTest : RepositoryTestFixture
                     {
                         GameId = gameId,
                         ViewerId = 2,
-                        PartyInfo = "{}"
+                        PartyInfo = "{}",
                     },
                     new()
                     {
                         GameId = gameId,
                         ViewerId = 3,
-                        PartyInfo = "{}"
-                    }
+                        PartyInfo = "{}",
+                    },
                 },
                 opts => opts.Excluding(x => x.Clear).Excluding(x => x.Player)
             );

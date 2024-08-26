@@ -29,8 +29,8 @@ public class CastleStoryTest : TestFixture
                     {
                         EntityType = EntityTypes.Wyrmite,
                         EntityQuantity = 50,
-                        EntityId = 0
-                    }
+                        EntityId = 0,
+                    },
                 }
             );
 
@@ -39,7 +39,7 @@ public class CastleStoryTest : TestFixture
             .BeEquivalentTo(
                 new List<CastleStoryList>()
                 {
-                    new() { CastleStoryId = 1, IsRead = true, }
+                    new() { CastleStoryId = 1, IsRead = true },
                 }
             );
     }
@@ -53,7 +53,7 @@ public class CastleStoryTest : TestFixture
                 ViewerId = ViewerId,
                 State = StoryState.Read,
                 StoryId = 2,
-                StoryType = StoryTypes.Castle
+                StoryType = StoryTypes.Castle,
             }
         );
         await this.ApiContext.SaveChangesAsync();
@@ -107,7 +107,7 @@ public class CastleStoryTest : TestFixture
                     ViewerId = ViewerId,
                     State = StoryState.Read,
                     StoryId = 3,
-                    StoryType = StoryTypes.Castle
+                    StoryType = StoryTypes.Castle,
                 }
             );
     }

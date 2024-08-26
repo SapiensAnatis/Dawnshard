@@ -8,7 +8,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic.Events
         public enum ResultTypes
         {
             Timeup,
-            Clear
+            Clear,
         }
 
         [Key(1)]

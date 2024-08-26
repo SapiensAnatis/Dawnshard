@@ -78,7 +78,7 @@ public class UserService(
             {
                 StaminaType.Single => ResultCode.QuestStaminaSingleShort,
                 StaminaType.Multi => ResultCode.QuestStaminaMultiShort,
-                _ => throw new UnreachableException()
+                _ => throw new UnreachableException(),
             };
 
             logger.LogError("Player did not have enough Stamina ({currentAmount})", currentStamina);

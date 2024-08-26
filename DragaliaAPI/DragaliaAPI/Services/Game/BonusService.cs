@@ -93,7 +93,7 @@ public class BonusService(
         return new AtgenEventBoost()
         {
             EventEffect = detail.EventEffectType,
-            EffectValue = detail.EventEffectArgs
+            EffectValue = detail.EventEffectArgs,
         };
     }
 
@@ -104,7 +104,7 @@ public class BonusService(
             {
                 ElementalType = x,
                 Hp = 0,
-                Attack = 0
+                Attack = 0,
             })
             .ToDictionary(x => x.ElementalType, x => x);
 
@@ -142,7 +142,7 @@ public class BonusService(
             {
                 WeaponType = x,
                 Hp = 0,
-                Attack = 0
+                Attack = 0,
             })
             .ToDictionary(x => x.WeaponType, x => x);
 
@@ -227,7 +227,7 @@ public class BonusService(
             {
                 WeaponType = x,
                 Hp = 0,
-                Attack = 0
+                Attack = 0,
             })
             .ToDictionary(x => x.WeaponType, x => x);
 
@@ -260,36 +260,32 @@ public class BonusService(
                             * 100
 #endif
                         ,
-                        Attack = 14.1f
-#if CHEATING
-                            * 100
-#endif
-                        ,
+                        Attack = 14.1f,
                     },
                     new()
                     {
                         ElementalType = UnitElement.Water,
                         Hp = 13.8f,
-                        Attack = 13.8f
+                        Attack = 13.8f,
                     },
                     new()
                     {
                         ElementalType = UnitElement.Wind,
                         Hp = 13.9f,
-                        Attack = 13.9f
+                        Attack = 13.9f,
                     },
                     new()
                     {
                         ElementalType = UnitElement.Light,
                         Hp = 14.5f,
-                        Attack = 14.5f
+                        Attack = 14.5f,
                     },
                     new()
                     {
                         ElementalType = UnitElement.Dark,
                         Hp = 13.3f,
-                        Attack = 13.3f
-                    }
+                        Attack = 13.3f,
+                    },
                 }
             );
 
@@ -306,36 +302,32 @@ public class BonusService(
                             * 100
 #endif
                         ,
-                        Attack = 5f
-#if CHEATING
-                            * 100
-#endif
-                        ,
+                        Attack = 5f,
                     },
                     new()
                     {
                         ElementalType = UnitElement.Water,
                         Hp = 5.4f,
-                        Attack = 4.6f
+                        Attack = 4.6f,
                     },
                     new()
                     {
                         ElementalType = UnitElement.Wind,
                         Hp = 6.3f,
-                        Attack = 5.4f
+                        Attack = 5.4f,
                     },
                     new()
                     {
                         ElementalType = UnitElement.Light,
                         Hp = 6.0f,
-                        Attack = 5.2f
+                        Attack = 5.2f,
                     },
                     new()
                     {
                         ElementalType = UnitElement.Dark,
                         Hp = 7.3f,
-                        Attack = 6.4f
-                    }
+                        Attack = 6.4f,
+                    },
                 }
             );
     }

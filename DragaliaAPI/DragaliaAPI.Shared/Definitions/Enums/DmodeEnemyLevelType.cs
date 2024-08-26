@@ -4,5 +4,5 @@ public enum DmodeEnemyLevelType
 {
     None,
     Enemy,
-    BossEnemy
+    BossEnemy,
 }

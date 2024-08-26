@@ -17,7 +17,7 @@ public class AlbumController : DragaliaControllerBase
                 AlbumQuestPlayRecordList = Enumerable.Empty<AtgenAlbumQuestPlayRecordList>(),
                 CharaHonorList = Enumerable.Empty<AtgenCharaHonorList>(),
                 AlbumPassiveUpdateResult = new(),
-                UpdateDataList = new()
+                UpdateDataList = new(),
             };
 
         return this.Ok(stubResponse);

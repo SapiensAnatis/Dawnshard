@@ -19,7 +19,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
                 ViewerId = ViewerId,
                 StoryType = StoryTypes.Quest,
                 State = StoryState.Read,
-                StoryId = TutorialService.TutorialStoryIds.Halidom
+                StoryId = TutorialService.TutorialStoryIds.Halidom,
             }
         );
 
@@ -44,7 +44,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
                 ViewerId = ViewerId,
                 StoryType = StoryTypes.Quest,
                 State = StoryState.Read,
-                StoryId = TutorialService.TutorialStoryIds.Smithy
+                StoryId = TutorialService.TutorialStoryIds.Smithy,
             }
         );
 
@@ -69,7 +69,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
                 ViewerId = ViewerId,
                 StoryType = StoryTypes.Quest,
                 State = StoryState.Read,
-                StoryId = 1000808
+                StoryId = 1000808,
             }
         );
 

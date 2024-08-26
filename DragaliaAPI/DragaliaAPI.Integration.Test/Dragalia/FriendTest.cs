@@ -50,7 +50,7 @@ public class FriendTest : TestFixture
                         ExAbility2Level = 5,
                         Skill1Level = 3,
                         Skill2Level = 2,
-                        IsUnlockEditSkill = true
+                        IsUnlockEditSkill = true,
                     },
                     SupportDragon = new()
                     {
@@ -64,7 +64,7 @@ public class FriendTest : TestFixture
                         Ability2Level = 5,
                         HpPlusCount = 50,
                         AttackPlusCount = 50,
-                        LimitBreakCount = 4
+                        LimitBreakCount = 4,
                     },
                     SupportWeaponBody = new()
                     {
@@ -75,14 +75,14 @@ public class FriendTest : TestFixture
                         EquipableCount = 4,
                         AdditionalCrestSlotType1Count = 1,
                         AdditionalCrestSlotType2Count = 0,
-                        AdditionalCrestSlotType3Count = 2
+                        AdditionalCrestSlotType3Count = 2,
                     },
                     SupportTalisman = new()
                     {
                         TalismanKeyId = 0,
                         TalismanId = Talismans.GalaEmile,
                         AdditionalAttack = 100,
-                        AdditionalHp = 100
+                        AdditionalHp = 100,
                     },
                     SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                     {
@@ -93,7 +93,7 @@ public class FriendTest : TestFixture
                             LimitBreakCount = 4,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            EquipableCount = 4
+                            EquipableCount = 4,
                         },
                         new()
                         {
@@ -102,7 +102,7 @@ public class FriendTest : TestFixture
                             LimitBreakCount = 4,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            EquipableCount = 4
+                            EquipableCount = 4,
                         },
                         new()
                         {
@@ -111,7 +111,7 @@ public class FriendTest : TestFixture
                             LimitBreakCount = 4,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            EquipableCount = 4
+                            EquipableCount = 4,
                         },
                     },
                     SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
@@ -123,7 +123,7 @@ public class FriendTest : TestFixture
                             LimitBreakCount = 4,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            EquipableCount = 4
+                            EquipableCount = 4,
                         },
                         new()
                         {
@@ -132,7 +132,7 @@ public class FriendTest : TestFixture
                             LimitBreakCount = 4,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            EquipableCount = 4
+                            EquipableCount = 4,
                         },
                     },
                     SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
@@ -144,7 +144,7 @@ public class FriendTest : TestFixture
                             LimitBreakCount = 4,
                             HpPlusCount = 40,
                             AttackPlusCount = 40,
-                            EquipableCount = 4
+                            EquipableCount = 4,
                         },
                         new()
                         {
@@ -153,10 +153,10 @@ public class FriendTest : TestFixture
                             LimitBreakCount = 4,
                             HpPlusCount = 40,
                             AttackPlusCount = 40,
-                            EquipableCount = 4
-                        }
+                            EquipableCount = 4,
+                        },
                     },
-                    Guild = new() { GuildId = 0, GuildName = "Guild" }
+                    Guild = new() { GuildId = 0, GuildName = "Guild" },
                 },
                 o => o.Excluding(x => x.LastLoginDate)
             );

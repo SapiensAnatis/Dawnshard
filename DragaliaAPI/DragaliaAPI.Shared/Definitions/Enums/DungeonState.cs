@@ -9,5 +9,5 @@ public enum DungeonState
     WaitingSkipEnd,
     Playing,
     Halting,
-    RestartEnd
+    RestartEnd,
 }

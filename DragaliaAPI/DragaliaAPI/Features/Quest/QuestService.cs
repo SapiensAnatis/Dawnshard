@@ -120,9 +120,8 @@ public class QuestService(
             StaminaType.Single => questData.PayStaminaSingle,
             // Want to encourage co-op play.
             // Also, `type` here is inferred from endpoint e.g. start_multi, but that doesn't work for time attack.
-            StaminaType.Multi
-                => 0,
-            _ => throw new ArgumentOutOfRangeException(nameof(type))
+            StaminaType.Multi => 0,
+            _ => throw new ArgumentOutOfRangeException(nameof(type)),
         };
     }
 

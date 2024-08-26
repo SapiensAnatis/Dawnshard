@@ -45,7 +45,7 @@ public class GameJoinTest : TestFixture
                     RequiredPartyPower = 11700,
                     ObjectiveTextId = 1,
                 },
-                Players = [new() { ViewerId = 2, PartyNoList = [40] }]
+                Players = [new() { ViewerId = 2, PartyNoList = [40] }],
             };
 
         await this.RedisConnectionProvider.RedisCollection<RedisGame>().InsertAsync(game);
@@ -55,7 +55,7 @@ public class GameJoinTest : TestFixture
             new()
             {
                 GameName = game.Name,
-                Player = new() { ViewerId = 22, PartyNoList = [1, 2] }
+                Player = new() { ViewerId = 22, PartyNoList = [1, 2] },
             }
         );
 
@@ -69,7 +69,7 @@ public class GameJoinTest : TestFixture
                 new List<Player>()
                 {
                     new() { ViewerId = 2, PartyNoList = [40] },
-                    new() { ViewerId = 22, PartyNoList = [1, 2] }
+                    new() { ViewerId = 22, PartyNoList = [1, 2] },
                 }
             );
     }

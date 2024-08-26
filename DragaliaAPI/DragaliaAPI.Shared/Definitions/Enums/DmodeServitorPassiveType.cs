@@ -19,5 +19,5 @@ public enum DmodeServitorPassiveType
     ResistBeast,
     ResistUndead,
     ResistDemon,
-    ResistDragon
+    ResistDragon,
 }

@@ -46,7 +46,7 @@ public record AbilityCrest(
             1 => new[] { Abilities11, Abilities21 },
             2 => new[] { Abilities12, Abilities22 },
             3 => new[] { Abilities13, Abilities23 },
-            _ => Enumerable.Empty<int>()
+            _ => Enumerable.Empty<int>(),
         };
     }
 };

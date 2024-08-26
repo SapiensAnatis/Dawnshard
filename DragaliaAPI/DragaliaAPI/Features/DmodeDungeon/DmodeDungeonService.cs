@@ -189,7 +189,7 @@ public class DmodeDungeonService(
             {
                 < 50 => rdm.Next(1, 3),
                 < 60 => rdm.Next(3, 5),
-                _ => 6
+                _ => 6,
             };
 
             for (int i = 0; i < talismanAmount; i++)
@@ -240,7 +240,7 @@ public class DmodeDungeonService(
             {
                 FloorNum = floorNum,
                 IsRecordFloorNum = floorNum > await dmodeRepository.GetTotalMaxFloorAsync(),
-                CharaIdList = new List<Charas> { ingameData.UnitData.CharaId, },
+                CharaIdList = new List<Charas> { ingameData.UnitData.CharaId },
                 QuestTime = floorData.DmodeAreaInfo.QuestTime,
                 IsViewQuestTime = ingameData.StartFloorNum == 1,
                 DmodeScore = floorData.DmodeAreaInfo.DmodeScore,
@@ -251,7 +251,7 @@ public class DmodeDungeonService(
                     Math.Ceiling(floorData.DmodeUnitInfo.TakeDmodePoint2 * pointMultiplier2),
                 TakePlayerExp = 0,
                 PlayerLevelUpFstone = 0,
-                ClearState = isGameOver ? 0 : 1
+                ClearState = isGameOver ? 0 : 1,
             };
 
         DbPlayerDmodeChara chara = await dmodeRepository.Charas.SingleAsync(x =>
@@ -342,7 +342,7 @@ public class DmodeDungeonService(
                 IsViewAreaStartEquipment = ingameData.StartFloorNum != 1, // For the first floor of skip runs
                 DmodeAreaInfo = null,
                 DmodeUnitInfo = null,
-                DmodeDungeonOdds = null
+                DmodeDungeonOdds = null,
             };
 
         DmodeQuestFloor floor = MasterAsset.DmodeQuestFloor[ingameData.StartFloorNum];
@@ -375,7 +375,7 @@ public class DmodeDungeonService(
             SkillBagItemNoSortList = new int[8],
             DmodeHoldDragonList = Enumerable.Empty<AtgenDmodeHoldDragonList>(),
             TakeDmodePoint1 = 0,
-            TakeDmodePoint2 = 0
+            TakeDmodePoint2 = 0,
         };
 
         floorData.DmodeDungeonOdds = GenerateOddsInfo(
@@ -607,7 +607,7 @@ public class DmodeDungeonService(
                 IsViewAreaStartEquipment = false, // This can never be true as it only applies to the first floor after skipping
                 DmodeAreaInfo = areaInfo,
                 DmodeUnitInfo = unitInfo,
-                DmodeDungeonOdds = odds
+                DmodeDungeonOdds = odds,
             };
 
         return floorData;
@@ -676,7 +676,7 @@ public class DmodeDungeonService(
                     > 93 => 4,
                     > 85 => 3,
                     > 75 => 2,
-                    _ => 1
+                    _ => 1,
                 };
 
                 rarity = ClampRarityByFloor(dmodeAreaInfo.FloorNum, rarity);
@@ -704,7 +704,7 @@ public class DmodeDungeonService(
                     > 93 when remainingPool >= 2 => 4,
                     > 85 when remainingPool >= 2 => 3,
                     > 75 when remainingPool >= 2 => 2,
-                    _ => 1
+                    _ => 1,
                 };
 
                 rarity = ClampRarityByFloor(dmodeAreaInfo.FloorNum, rarity);
@@ -958,7 +958,7 @@ public class DmodeDungeonService(
                             1 => 1,
                             < 5 => 2,
                             5 => 3,
-                            _ => 1
+                            _ => 1,
                         };
                     }
 
@@ -1097,11 +1097,15 @@ public class DmodeDungeonService(
             return paramData.DmodeEnemyLevelType switch
             {
                 DmodeEnemyLevelType.None => 1,
-                DmodeEnemyLevelType.Enemy
-                    => rdm.Next(baseEnemyLevel + plusMin, baseEnemyLevel + plusMax + 1),
-                DmodeEnemyLevelType.BossEnemy
-                    => rdm.Next(baseBossLevel + plusMin, baseBossLevel + plusMax + 1),
-                _ => 1
+                DmodeEnemyLevelType.Enemy => rdm.Next(
+                    baseEnemyLevel + plusMin,
+                    baseEnemyLevel + plusMax + 1
+                ),
+                DmodeEnemyLevelType.BossEnemy => rdm.Next(
+                    baseBossLevel + plusMin,
+                    baseBossLevel + plusMax + 1
+                ),
+                _ => 1,
             };
         }
 

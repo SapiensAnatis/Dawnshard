@@ -34,7 +34,7 @@ public class DragonTest : TestFixture
             #region GarudaDragonSacrifice
             List<DbPlayerDragonData> setupDragons = new List<DbPlayerDragonData>
             {
-                new DbPlayerDragonData(0, Dragons.Garuda)
+                new DbPlayerDragonData(0, Dragons.Garuda),
             };
             DbPlayerDragonData dragon = new DbPlayerDragonData(0, Dragons.Garuda);
             dragon.AttackPlusCount = 25;
@@ -83,9 +83,9 @@ public class DragonTest : TestFixture
                         testCase.MatType == EntityTypes.Dragon
                             ? (int)dbDragonSacrifice.DragonKeyId
                             : testCase.UpgradeMat,
-                    Quantity = testCase.UsedQuantity
-                }
-            }
+                    Quantity = testCase.UsedQuantity,
+                },
+            },
         };
 
         DragonBuildupResponse response = (
@@ -125,9 +125,9 @@ public class DragonTest : TestFixture
                 {
                     Type = EntityTypes.Material,
                     Id = (int)Materials.AmplifyingDragonscale,
-                    Quantity = 25
-                }
-            }
+                    Quantity = 25,
+                },
+            },
         };
 
         DragonBuildupResponse? response = (
@@ -169,7 +169,7 @@ public class DragonTest : TestFixture
         DragonResetPlusCountRequest request = new DragonResetPlusCountRequest()
         {
             DragonKeyId = (ulong)dragon.DragonKeyId,
-            PlusCountType = PlusCountType.Atk
+            PlusCountType = PlusCountType.Atk,
         };
 
         DragonSetLockResponse? response = (
@@ -228,8 +228,8 @@ public class DragonTest : TestFixture
             DragonGiftIdList = new List<DragonGifts>()
             {
                 DragonGifts.FreshBread,
-                DragonGifts.TastyMilk
-            }
+                DragonGifts.TastyMilk,
+            },
         };
 
         DragonBuyGiftToSendMultipleResponse? response = (
@@ -270,7 +270,7 @@ public class DragonTest : TestFixture
         DragonBuyGiftToSendRequest request = new DragonBuyGiftToSendRequest()
         {
             DragonId = Dragons.HighJupiter,
-            DragonGiftId = DragonGifts.HeartyStew
+            DragonGiftId = DragonGifts.HeartyStew,
         };
 
         DragonBuyGiftToSendResponse? response = (
@@ -307,7 +307,7 @@ public class DragonTest : TestFixture
         {
             DragonId = Dragons.HighMercury,
             DragonGiftId = DragonGifts.FourLeafClover,
-            Quantity = 10
+            Quantity = 10,
         };
 
         DragonSendGiftMultipleResponse? response = (
@@ -335,7 +335,7 @@ public class DragonTest : TestFixture
         {
             DragonId = Dragons.HighMercury,
             DragonGiftId = DragonGifts.FourLeafClover,
-            Quantity = 1
+            Quantity = 1,
         };
 
         DragonSendGiftMultipleResponse? response = (
@@ -354,8 +354,8 @@ public class DragonTest : TestFixture
                     {
                         Level = 5,
                         IsReleaseStory = true,
-                        LevelupEntityList = []
-                    }
+                        LevelupEntityList = [],
+                    },
                 }
             );
     }
@@ -370,14 +370,14 @@ public class DragonTest : TestFixture
             {
                 Type = MissionType.Drill,
                 Id = missionId,
-                State = MissionState.InProgress
+                State = MissionState.InProgress,
             }
         );
 
         await this.AddRangeToDatabase(
             [
-                new DbPlayerDragonReliability() { DragonId = Dragons.Apollo, },
-                new DbPlayerDragonReliability() { DragonId = Dragons.Kagutsuchi }
+                new DbPlayerDragonReliability() { DragonId = Dragons.Apollo },
+                new DbPlayerDragonReliability() { DragonId = Dragons.Kagutsuchi },
             ]
         );
 
@@ -437,7 +437,7 @@ public class DragonTest : TestFixture
                     Id = missionId,
                     Type = MissionType.Drill,
                     Progress = 30,
-                    State = MissionState.Completed
+                    State = MissionState.Completed,
                 }
             );
     }
@@ -450,7 +450,7 @@ public class DragonTest : TestFixture
         DragonSendGiftRequest request = new DragonSendGiftRequest()
         {
             DragonId = Dragons.Puppy,
-            DragonGiftId = DragonGifts.PupGrub
+            DragonGiftId = DragonGifts.PupGrub,
         };
 
         DragonSendGiftResponse? response = (
@@ -478,7 +478,7 @@ public class DragonTest : TestFixture
                     ViewerId = ViewerId,
                     StoryId = storyId,
                     State = StoryState.Read,
-                    StoryType = StoryTypes.Dragon
+                    StoryType = StoryTypes.Dragon,
                 }
             );
         }
@@ -488,7 +488,7 @@ public class DragonTest : TestFixture
             {
                 DragonId = Dragons.MidgardsormrZero,
                 DragonGiftId = DragonGifts.FourLeafClover,
-                Quantity = 100
+                Quantity = 100,
             };
 
         DragaliaResponse<DragonSendGiftMultipleResponse>? response = (
@@ -517,7 +517,7 @@ public class DragonTest : TestFixture
                     new List<DbPlayerDragonData>()
                     {
                         new DbPlayerDragonData(0, Dragons.Juggernaut),
-                        new DbPlayerDragonData(0, Dragons.Juggernaut)
+                        new DbPlayerDragonData(0, Dragons.Juggernaut),
                     },
                     1,
                     DragonLimitBreakMatTypes.Dupe
@@ -529,7 +529,7 @@ public class DragonTest : TestFixture
                 new DragonLimitBreakTestCase(
                     new List<DbPlayerDragonData>()
                     {
-                        new DbPlayerDragonData(0, Dragons.Midgardsormr)
+                        new DbPlayerDragonData(0, Dragons.Midgardsormr),
                     },
                     1,
                     DragonLimitBreakMatTypes.Stone
@@ -550,7 +550,7 @@ public class DragonTest : TestFixture
                 new DragonLimitBreakTestCase(
                     new List<DbPlayerDragonData>()
                     {
-                        new DbPlayerDragonData(0, Dragons.HighBrunhilda)
+                        new DbPlayerDragonData(0, Dragons.HighBrunhilda),
                     },
                     5,
                     DragonLimitBreakMatTypes.SpheresLB5
@@ -584,9 +584,9 @@ public class DragonTest : TestFixture
                     TargetId =
                         testCase.LbMatType == DragonLimitBreakMatTypes.Dupe
                             ? (ulong)dbDragonSacrifice!.DragonKeyId
-                            : 0
-                }
-            }
+                            : 0,
+                },
+            },
         };
 
         DragonBuildupResponse? response = (
@@ -624,7 +624,7 @@ public class DragonTest : TestFixture
         DragonSetLockRequest request = new DragonSetLockRequest()
         {
             DragonKeyId = (ulong)dragon.DragonKeyId,
-            IsLock = true
+            IsLock = true,
         };
 
         DragonSetLockResponse? response = (
@@ -659,7 +659,7 @@ public class DragonTest : TestFixture
 
         DragonSellRequest request = new DragonSellRequest()
         {
-            DragonKeyIdList = new List<ulong>() { (ulong)dragon.DragonKeyId }
+            DragonKeyIdList = new List<ulong>() { (ulong)dragon.DragonKeyId },
         };
 
         DragonSellResponse? response = (
@@ -705,8 +705,8 @@ public class DragonTest : TestFixture
             DragonKeyIdList = new List<ulong>()
             {
                 (ulong)dragonSimurgh.DragonKeyId,
-                (ulong)dragonStribog.DragonKeyId
-            }
+                (ulong)dragonStribog.DragonKeyId,
+            },
         };
 
         DragonSellResponse? response = (

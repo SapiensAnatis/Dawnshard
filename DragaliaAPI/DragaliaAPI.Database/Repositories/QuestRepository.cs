@@ -55,7 +55,7 @@ public class QuestRepository : IQuestRepository
                     new DbQuestEvent
                     {
                         ViewerId = playerIdentityService.ViewerId,
-                        QuestEventId = questEventId
+                        QuestEventId = questEventId,
                     }
                 )
                 .Entity;

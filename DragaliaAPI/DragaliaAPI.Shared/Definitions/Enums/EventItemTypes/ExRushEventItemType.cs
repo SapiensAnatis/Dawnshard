@@ -4,5 +4,5 @@ public enum ExRushEventItemType
 {
     None,
     ExRushPoint1 = 10101,
-    ExRushPoint2
+    ExRushPoint2,
 }

@@ -45,14 +45,14 @@ public class GameCloseTest : TestFixture
                     RequiredPartyPower = 11700,
                     ObjectiveTextId = 1,
                 },
-                Players = [new() { ViewerId = 2, PartyNoList = [40] }]
+                Players = [new() { ViewerId = 2, PartyNoList = [40] }],
             };
 
         await this.RedisConnectionProvider.RedisCollection<RedisGame>().InsertAsync(game);
 
         HttpResponseMessage response = await this.Client.PostAsJsonAsync<GameModifyRequest>(
             Endpoint,
-            new() { GameName = game.Name, }
+            new() { GameName = game.Name }
         );
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);

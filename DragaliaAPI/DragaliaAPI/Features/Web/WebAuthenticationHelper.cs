@@ -109,7 +109,7 @@ public static class WebAuthenticationHelper
         var dbPlayerInfo = await dbContext
             .Players.IgnoreQueryFilters()
             .Where(x => x.AccountId == gameAccountId)
-            .Select(x => new { x.ViewerId, x.UserData!.Name, })
+            .Select(x => new { x.ViewerId, x.UserData!.Name })
             .FirstOrDefaultAsync();
 
         logger.LogDebug(
@@ -139,7 +139,7 @@ public static class WebAuthenticationHelper
                 // The ID token lasts for one hour. We may retain cached data past the expiry of the ID token, but
                 // that should be okay, since the JWT authentication will return an unauthorized result before reaching
                 // this code.
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1)
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1),
             }
         );
 

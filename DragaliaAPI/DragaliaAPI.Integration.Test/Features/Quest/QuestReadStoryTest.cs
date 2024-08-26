@@ -164,7 +164,7 @@ public class QuestReadStoryTest : TestFixture
                 new QuestStoryList()
                 {
                     QuestStoryId = theLonePaladynStoryId,
-                    State = StoryState.Read
+                    State = StoryState.Read,
                 }
             );
 
@@ -192,7 +192,7 @@ public class QuestReadStoryTest : TestFixture
             .BeEquivalentTo(
                 new List<QuestStoryList>()
                 {
-                    new() { QuestStoryId = 1001009, State = StoryState.Read }
+                    new() { QuestStoryId = 1001009, State = StoryState.Read },
                 }
             );
         data.UpdateDataList.UserData.Exp.Should().BeGreaterThanOrEqualTo(88980);

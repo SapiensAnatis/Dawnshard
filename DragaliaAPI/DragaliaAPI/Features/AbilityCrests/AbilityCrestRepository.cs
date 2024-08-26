@@ -50,7 +50,7 @@ public class AbilityCrestRepository : IAbilityCrestRepository
         DbAbilityCrest entity = new DbAbilityCrest()
         {
             ViewerId = this.playerIdentityService.ViewerId,
-            AbilityCrestId = abilityCrestId
+            AbilityCrestId = abilityCrestId,
         };
 
         if (limitBreakCount is not null)

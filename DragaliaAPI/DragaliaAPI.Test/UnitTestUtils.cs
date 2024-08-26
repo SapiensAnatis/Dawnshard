@@ -58,11 +58,11 @@ public static class UnitTestUtils
                         new List<Claim>()
                         {
                             new Claim(CustomClaimType.AccountId, AccountId),
-                            new Claim(CustomClaimType.ViewerId, ViewerId.ToString())
+                            new Claim(CustomClaimType.ViewerId, ViewerId.ToString()),
                         }
                     )
-                )
-            }
+                ),
+            },
         };
     }
 

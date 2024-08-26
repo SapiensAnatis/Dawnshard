@@ -42,7 +42,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
             {
                 ViewerId = DbTestFixture.ViewerId,
                 PlantId = FortPlants.Dragonata,
-                Level = 10
+                Level = 10,
             }
         );
 
@@ -57,7 +57,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
             {
                 ViewerId = DbTestFixture.ViewerId,
                 PlantId = FortPlants.BroadleafTree,
-                Level = 3
+                Level = 3,
             }
         );
 
@@ -124,7 +124,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
                 BuildStartDate = DateTimeOffset.MinValue,
                 LastIncomeDate = DateTimeOffset.UnixEpoch,
                 PositionX = 3,
-                PositionZ = 4
+                PositionZ = 4,
             };
 
         await this.fixture.AddToDatabase(build);
@@ -147,7 +147,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
                 BuildStartDate = DateTimeOffset.MinValue,
                 LastIncomeDate = DateTimeOffset.UnixEpoch,
                 PositionX = 3,
-                PositionZ = 4
+                PositionZ = 4,
             };
 
         await this.fixture.AddToDatabase(build);
@@ -199,36 +199,36 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
                     ViewerId = DbTestFixture.ViewerId,
                     PlantId = FortPlants.PalmTree,
                     BuildStartDate = DateTimeOffset.MinValue,
-                    BuildEndDate = DateTimeOffset.MaxValue
+                    BuildEndDate = DateTimeOffset.MaxValue,
                 },
                 new()
                 {
                     ViewerId = DbTestFixture.ViewerId,
                     PlantId = FortPlants.Lectern,
                     BuildStartDate = DateTimeOffset.MinValue,
-                    BuildEndDate = DateTimeOffset.MaxValue
+                    BuildEndDate = DateTimeOffset.MaxValue,
                 },
                 new()
                 {
                     ViewerId = DbTestFixture.ViewerId,
                     PlantId = FortPlants.Snowdrake,
                     BuildStartDate = DateTimeOffset.MinValue,
-                    BuildEndDate = DateTimeOffset.UtcNow - TimeSpan.FromSeconds(22)
+                    BuildEndDate = DateTimeOffset.UtcNow - TimeSpan.FromSeconds(22),
                 },
                 new()
                 {
                     ViewerId = DbTestFixture.ViewerId,
                     PlantId = FortPlants.Wishmill,
                     BuildStartDate = DateTimeOffset.UnixEpoch,
-                    BuildEndDate = DateTimeOffset.UnixEpoch
+                    BuildEndDate = DateTimeOffset.UnixEpoch,
                 },
                 new()
                 {
                     ViewerId = DbTestFixture.ViewerId + 1,
                     PlantId = FortPlants.FafnirStatueFlame,
                     BuildStartDate = DateTimeOffset.UnixEpoch,
-                    BuildEndDate = DateTimeOffset.MaxValue
-                }
+                    BuildEndDate = DateTimeOffset.MaxValue,
+                },
             }
         );
 
@@ -281,7 +281,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
             FortPlants.LanceDojo,
             FortPlants.ManacasterDojo,
             FortPlants.StaffDojo,
-            FortPlants.WandDojo
+            FortPlants.WandDojo,
         };
 
         foreach (FortPlants plant in plants)
@@ -309,7 +309,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
                 {
                     ViewerId = DbTestFixture.ViewerId + 1,
                     PlantId = FortPlants.FlameDracolith,
-                }
+                },
             }
         );
         await this.fixture.ApiContext.SaveChangesAsync();
@@ -337,7 +337,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         this.fixture.ApiContext.PlayerFortBuilds.AddRange(
             new List<DbFortBuild>()
             {
-                new() { ViewerId = DbTestFixture.ViewerId, PlantId = FortPlants.WindDracolith, }
+                new() { ViewerId = DbTestFixture.ViewerId, PlantId = FortPlants.WindDracolith },
             }
         );
         await this.fixture.ApiContext.SaveChangesAsync();

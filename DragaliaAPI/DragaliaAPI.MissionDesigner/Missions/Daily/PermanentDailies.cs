@@ -16,38 +16,38 @@ public static class PermanentDailies
             new ItemSummonMission()
             {
                 MissionId = 15070101,
-                ProgressionGroupId = ProgressionGroupId
+                ProgressionGroupId = ProgressionGroupId,
             },
             // Collect Rupies from a Facility
             new FortIncomeCollectedMission()
             {
                 MissionId = 15070201,
                 EntityType = EntityTypes.Rupies,
-                ProgressionGroupId = ProgressionGroupId
+                ProgressionGroupId = ProgressionGroupId,
             },
             // Clear a Quest
             new ClearQuestMission()
             {
                 MissionId = 15070301,
-                ProgressionGroupId = ProgressionGroupId
+                ProgressionGroupId = ProgressionGroupId,
             },
             // Clear Three Quests
             new ClearQuestMission()
             {
                 MissionId = 15070401,
-                ProgressionGroupId = ProgressionGroupId
+                ProgressionGroupId = ProgressionGroupId,
             },
             // Clear Five Quests
             new ClearQuestMission()
             {
                 MissionId = 15070501,
-                ProgressionGroupId = ProgressionGroupId
+                ProgressionGroupId = ProgressionGroupId,
             },
             // Clear All Standard Daily Endeavors
             new ClearProgressionGroupMission()
             {
                 MissionId = 15070601,
-                ProgressionGroupToClear = ProgressionGroupId
-            }
+                ProgressionGroupToClear = ProgressionGroupId,
+            },
         ];
 }

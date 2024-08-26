@@ -15,7 +15,7 @@ public class EulaController : DragaliaControllerBaseCore
             new("gb", "en_us", 1, 1),
             new("gb", "en_eu", 1, 1),
             new("us", "en_us", 1, 6),
-            new("us", "en_eu", 1, 6)
+            new("us", "en_eu", 1, 6),
         };
 
     [HttpPost("get_version")]

@@ -41,7 +41,7 @@ JsonSerializerOptions options =
     new(MasterAssetJsonOptions.Instance)
     {
         WriteIndented = true,
-        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     };
 #pragma warning restore CA1869
 
@@ -71,7 +71,11 @@ foreach ((_, MissionProgressionInfo progInfo) in missions)
 
     missions[requiredMissionId] = missions[requiredMissionId] with
     {
-        UnlockedOnComplete = [.. missions[requiredMissionId].UnlockedOnComplete, progInfo.MissionId]
+        UnlockedOnComplete =
+        [
+            .. missions[requiredMissionId].UnlockedOnComplete,
+            progInfo.MissionId,
+        ],
     };
 }
 

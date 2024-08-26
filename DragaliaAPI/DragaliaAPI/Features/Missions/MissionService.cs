@@ -455,7 +455,7 @@ public class MissionService(
                 {
                     MainStoryMissionId = x.Id,
                     State = (int)x.State,
-                })
+                }),
         };
     }
 
@@ -540,7 +540,7 @@ public class MissionService(
             ReceivableRewardCount = receivableRewardCount,
             NewCompleteMissionIdList = newCompletedMissionList,
             PickupMissionCount = type == MissionType.Daily ? allMissions.Count(x => x.Pickup) : 0,
-            CurrentMissionId = currentMissionId
+            CurrentMissionId = currentMissionId,
         };
     }
 
@@ -641,7 +641,7 @@ public class MissionService(
                 State = x.State,
                 StartDate = x.Start,
                 EndDate = x.End,
-                DayNo = DateOnly.FromDateTime(this.timeProvider.GetLastDailyReset().UtcDateTime)
+                DayNo = DateOnly.FromDateTime(this.timeProvider.GetLastDailyReset().UtcDateTime),
             });
 
         response.DailyMissionList = currentDailyMissions.UnionBy(
@@ -661,7 +661,7 @@ public class MissionService(
                 State = MissionState.Completed,
                 StartDate = x.StartDate,
                 EndDate = x.EndDate,
-                DayNo = x.Date
+                DayNo = x.Date,
             })
             .ToListAsync();
 }

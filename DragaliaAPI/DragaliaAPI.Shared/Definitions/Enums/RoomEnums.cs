@@ -6,7 +6,7 @@ public enum QuestTypes
     Dungeon,
     Story,
     Treasure,
-    Wall
+    Wall,
 }
 
 public enum RoomStatuses
@@ -16,5 +16,5 @@ public enum RoomStatuses
     Available,
     Full,
     InvalidCompatibleId,
-    Error
+    Error,
 }

@@ -39,7 +39,7 @@ public class WallRecordTest : TestFixture
             new()
             {
                 MaterialId = Materials.GoldCrystal,
-                Quantity = oldPlayerGoldCrystals.Quantity + expectedGoldCrystalsAmount
+                Quantity = oldPlayerGoldCrystals.Quantity + expectedGoldCrystalsAmount,
             };
 
         await this.AddRangeToDatabase(
@@ -49,8 +49,8 @@ public class WallRecordTest : TestFixture
                 {
                     ViewerId = ViewerId,
                     WallId = wallId,
-                    WallLevel = wallLevel
-                }
+                    WallLevel = wallLevel,
+                },
             }
         );
 
@@ -59,7 +59,10 @@ public class WallRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 WallId = wallId,
-                WallLevel = wallLevel + 1 // Client passes (db wall level + 1)
+                WallLevel =
+                    wallLevel
+                    + 1 // Client passes (db wall level + 1)
+                ,
             };
 
         string key = await this.StartDungeon(mockSession);
@@ -86,7 +89,7 @@ public class WallRecordTest : TestFixture
                 {
                     WallId = wallId,
                     BeforeWallLevel = wallLevel,
-                    AfterWallLevel = wallLevel + 1
+                    AfterWallLevel = wallLevel + 1,
                 }
             );
 
@@ -97,7 +100,7 @@ public class WallRecordTest : TestFixture
                 {
                     EntityType = EntityTypes.Wyrmite,
                     EntityId = 0,
-                    EntityQuantity = expectedWyrmites
+                    EntityQuantity = expectedWyrmites,
                 }
             );
 
@@ -112,11 +115,11 @@ public class WallRecordTest : TestFixture
                         {
                             EntityType = EntityTypes.Material,
                             EntityId = (int)Materials.GoldCrystal,
-                            EntityQuantity = expectedGoldCrystalsAmount
-                        }
+                            EntityQuantity = expectedGoldCrystalsAmount,
+                        },
                     },
                     TakeCoin = expectedCoin,
-                    TakeMana = expectedMana
+                    TakeMana = expectedMana,
                 }
             );
 
@@ -127,7 +130,7 @@ public class WallRecordTest : TestFixture
                 {
                     QuestPartySettingList = mockSession.Party,
                     HelperList = new List<UserSupportList>(),
-                    HelperDetailList = new List<AtgenHelperDetailList>()
+                    HelperDetailList = new List<AtgenHelperDetailList>(),
                 }
             );
     }
@@ -147,8 +150,8 @@ public class WallRecordTest : TestFixture
                 {
                     ViewerId = ViewerId,
                     WallId = wallId,
-                    WallLevel = wallLevel
-                }
+                    WallLevel = wallLevel,
+                },
             }
         );
 
@@ -157,7 +160,7 @@ public class WallRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 WallId = wallId,
-                WallLevel = wallLevel
+                WallLevel = wallLevel,
             };
 
         string key = await this.StartDungeon(mockSession);
@@ -176,7 +179,7 @@ public class WallRecordTest : TestFixture
                 {
                     EntityType = EntityTypes.Wyrmite,
                     EntityId = 0,
-                    EntityQuantity = notExpectedWyrmites
+                    EntityQuantity = notExpectedWyrmites,
                 }
             );
 
@@ -188,7 +191,7 @@ public class WallRecordTest : TestFixture
                 {
                     WallId = wallId,
                     BeforeWallLevel = wallLevel,
-                    AfterWallLevel = wallLevel
+                    AfterWallLevel = wallLevel,
                 }
             );
     }
@@ -204,11 +207,11 @@ public class WallRecordTest : TestFixture
         await this.AddRangeToDatabase(
             new List<DbPlayerQuestWall>()
             {
-                new() { WallId = (int)QuestWallTypes.Flame, WallLevel = 5, },
-                new() { WallId = (int)QuestWallTypes.Water, WallLevel = 6, },
-                new() { WallId = (int)QuestWallTypes.Wind, WallLevel = 6, },
-                new() { WallId = (int)QuestWallTypes.Light, WallLevel = 6, },
-                new() { WallId = (int)QuestWallTypes.Shadow, WallLevel = 6, }
+                new() { WallId = (int)QuestWallTypes.Flame, WallLevel = 5 },
+                new() { WallId = (int)QuestWallTypes.Water, WallLevel = 6 },
+                new() { WallId = (int)QuestWallTypes.Wind, WallLevel = 6 },
+                new() { WallId = (int)QuestWallTypes.Light, WallLevel = 6 },
+                new() { WallId = (int)QuestWallTypes.Shadow, WallLevel = 6 },
             }
         );
 
@@ -219,7 +222,7 @@ public class WallRecordTest : TestFixture
                 {
                     Id = flameLv6MissionId,
                     State = MissionState.InProgress,
-                    Type = MissionType.Normal
+                    Type = MissionType.Normal,
                 },
                 new()
                 {
@@ -236,7 +239,7 @@ public class WallRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 WallId = (int)QuestWallTypes.Flame,
-                WallLevel = 6
+                WallLevel = 6,
             };
 
         string key = await this.StartDungeon(mockSession);
@@ -247,7 +250,7 @@ public class WallRecordTest : TestFixture
                 new WallRecordRecordRequest()
                 {
                     WallId = (int)QuestWallTypes.Flame,
-                    DungeonKey = key
+                    DungeonKey = key,
                 }
             )
         ).Data;
@@ -280,11 +283,11 @@ public class WallRecordTest : TestFixture
         await this.AddRangeToDatabase(
             new List<DbPlayerQuestWall>()
             {
-                new() { WallId = (int)QuestWallTypes.Flame, WallLevel = 80, },
-                new() { WallId = (int)QuestWallTypes.Water, WallLevel = 80, },
-                new() { WallId = (int)QuestWallTypes.Wind, WallLevel = 80, },
-                new() { WallId = (int)QuestWallTypes.Light, WallLevel = 80, },
-                new() { WallId = (int)QuestWallTypes.Shadow, WallLevel = 79, }
+                new() { WallId = (int)QuestWallTypes.Flame, WallLevel = 80 },
+                new() { WallId = (int)QuestWallTypes.Water, WallLevel = 80 },
+                new() { WallId = (int)QuestWallTypes.Wind, WallLevel = 80 },
+                new() { WallId = (int)QuestWallTypes.Light, WallLevel = 80 },
+                new() { WallId = (int)QuestWallTypes.Shadow, WallLevel = 79 },
             }
         );
 
@@ -306,7 +309,7 @@ public class WallRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 WallId = (int)QuestWallTypes.Flame,
-                WallLevel = 80
+                WallLevel = 80,
             };
 
         string key = await this.StartDungeon(mockSession);
@@ -317,7 +320,7 @@ public class WallRecordTest : TestFixture
                 new WallRecordRecordRequest()
                 {
                     WallId = (int)QuestWallTypes.Flame,
-                    DungeonKey = key
+                    DungeonKey = key,
                 }
             )
         ).Data;

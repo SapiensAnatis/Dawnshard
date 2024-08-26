@@ -145,7 +145,7 @@ public record WeaponBody(
     public readonly int[][] Abilities =
     {
         new[] { Abilities11, Abilities12, Abilities13 },
-        new[] { Abilities21, Abilities22, Abilities23 }
+        new[] { Abilities21, Abilities22, Abilities23 },
     };
 
     public int GetAbility(int abilityNo, int level)

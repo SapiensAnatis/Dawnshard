@@ -17,7 +17,7 @@ public class V23Update(
         if (!await apiContext.PlayerDiamondData.AnyAsync())
         {
             logger.LogInformation("PlayerDiamondData not found: adding new row");
-            apiContext.PlayerDiamondData.Add(new() { ViewerId = playerIdentityService.ViewerId, });
+            apiContext.PlayerDiamondData.Add(new() { ViewerId = playerIdentityService.ViewerId });
         }
     }
 }

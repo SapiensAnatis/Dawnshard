@@ -59,7 +59,7 @@ public class QuestTreasureService(
             new DbQuestTreasureList()
             {
                 ViewerId = playerIdentityService.ViewerId,
-                QuestTreasureId = questTreasureData.Id
+                QuestTreasureId = questTreasureData.Id,
             }
         );
 
@@ -79,7 +79,7 @@ public class QuestTreasureService(
             DuplicateEntityList = duplicateEntityList,
             AddMaxDragonQuantity = questTreasureData.AddMaxDragonStorage,
             AddMaxWeaponQuantity = 0,
-            AddMaxAmuletQuantity = 0
+            AddMaxAmuletQuantity = 0,
         };
     }
 }

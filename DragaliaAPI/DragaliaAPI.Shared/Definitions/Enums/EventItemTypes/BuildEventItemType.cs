@@ -5,5 +5,5 @@ public enum BuildEventItemType
     None,
     BuildEventPoint = 10001,
     ExchangeItem1,
-    ExchangeItem2
+    ExchangeItem2,
 }

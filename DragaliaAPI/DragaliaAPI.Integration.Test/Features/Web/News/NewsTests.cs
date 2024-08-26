@@ -37,7 +37,7 @@ public class NewsTests : WebTestFixture
             .BeEquivalentTo(
                 new OffsetPagedResponse<NewsItem>()
                 {
-                    Pagination = new() { TotalCount = 6, },
+                    Pagination = new() { TotalCount = 6 },
                     Data = Enumerable
                         .Range(1, 5)
                         .Select(x => new NewsItem()
@@ -45,7 +45,7 @@ public class NewsTests : WebTestFixture
                             Headline = $"News Item {x}",
                             Description = $"News Item Description {x}",
                         })
-                        .ToList()
+                        .ToList(),
                 },
                 opts => opts.For(x => x.Data).Exclude(x => x.Id)
             );
@@ -61,15 +61,15 @@ public class NewsTests : WebTestFixture
             .BeEquivalentTo(
                 new OffsetPagedResponse<NewsItem>()
                 {
-                    Pagination = new() { TotalCount = 6, },
+                    Pagination = new() { TotalCount = 6 },
                     Data =
                     [
                         new()
                         {
                             Headline = $"News Item 6",
                             Description = $"News Item Description 6",
-                        }
-                    ]
+                        },
+                    ],
                 },
                 opts => opts.For(x => x.Data).Exclude(x => x.Id)
             );
@@ -83,7 +83,7 @@ public class NewsTests : WebTestFixture
             {
                 Hidden = true,
                 Headline = "hidden",
-                Description = "hidden"
+                Description = "hidden",
             };
 
         this.ApiContext.NewsItems.Add(hiddenItem);
@@ -106,7 +106,7 @@ public class NewsTests : WebTestFixture
             {
                 Hidden = true,
                 Headline = "hidden",
-                Description = "hidden"
+                Description = "hidden",
             };
 
         this.ApiContext.NewsItems.Add(hiddenItem);

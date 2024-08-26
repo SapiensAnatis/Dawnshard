@@ -38,7 +38,7 @@ public class DungeonRecordRewardService(
         {
             questData.IsMissionClear1,
             questData.IsMissionClear2,
-            questData.IsMissionClear3
+            questData.IsMissionClear3,
         };
 
         QuestMissionStatus status = await questCompletionService.CompleteQuestMissions(
@@ -187,7 +187,7 @@ public class DungeonRecordRewardService(
                 EntityQuantity: quantity
             )
             {
-                MessageParamValues = [connectingViewerIdList.Count]
+                MessageParamValues = [connectingViewerIdList.Count],
             }
         );
 

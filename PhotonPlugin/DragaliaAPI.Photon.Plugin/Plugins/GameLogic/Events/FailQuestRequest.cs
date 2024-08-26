@@ -8,7 +8,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic.Events
         public enum FailTypes
         {
             Timeup,
-            AllDead
+            AllDead,
         }
 
         [Key(1)]

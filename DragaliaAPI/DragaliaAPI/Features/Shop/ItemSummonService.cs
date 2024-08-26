@@ -77,7 +77,10 @@ public class ItemSummonService : IItemSummonService
             3 => 100,
             4 => 200,
             5 => 300,
-            _ => throw new DragaliaException(ResultCode.ItemSummonExecCountOver, "Too many summons")
+            _ => throw new DragaliaException(
+                ResultCode.ItemSummonExecCountOver,
+                "Too many summons"
+            ),
         };
 
         await this.paymentService.ProcessPayment(

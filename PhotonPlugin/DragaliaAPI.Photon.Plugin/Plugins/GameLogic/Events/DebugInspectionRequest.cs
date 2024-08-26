@@ -12,7 +12,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic.Events
             AutoFailTimeout,
             PlayQuestStartProcTime,
             ChangedCharaOwner,
-            AiCheckReport
+            AiCheckReport,
         }
 
         [Key(1)]

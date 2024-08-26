@@ -44,7 +44,7 @@ public record DragonData(
     public readonly int[][] Abilities =
     {
         new[] { Abilities11, Abilities12, Abilities13, Abilities14, Abilities15, Abilities16 },
-        new[] { Abilities21, Abilities22, Abilities23, Abilities24, Abilities25, Abilities26 }
+        new[] { Abilities21, Abilities22, Abilities23, Abilities24, Abilities25, Abilities26 },
     };
 
     public int GetAbility(int abilityNo, int level)

@@ -5,5 +5,5 @@ public enum PurchaseShopType
     None,
     Normal,
     Special,
-    Material
+    Material,
 }

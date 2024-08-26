@@ -58,7 +58,7 @@ public class PresentController : DragaliaControllerBase
 
         data.UpdateDataList = new()
         {
-            PresentNotice = await this.presentService.GetPresentNotice()
+            PresentNotice = await this.presentService.GetPresentNotice(),
         };
 
         return Ok(data);
@@ -116,6 +116,6 @@ public class PresentController : DragaliaControllerBase
             request.PresentHistoryId
         );
 
-        return Ok(new PresentGetHistoryListResponse() { PresentHistoryList = list, });
+        return Ok(new PresentGetHistoryListResponse() { PresentHistoryList = list });
     }
 }

@@ -11,5 +11,5 @@ public enum ExHunterEventItemType
     AdventItem2,
     UltimateItem = 10401,
     ExchangeItem01 = 10501,
-    ExchangeItem02
+    ExchangeItem02,
 }

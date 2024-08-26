@@ -62,7 +62,7 @@ public class QuestCompletionService(
 
             if (!results.TryGetValue(questScoringEnemy.Id, out AtgenScoringEnemyPointList? value))
             {
-                value = new() { ScoringEnemyId = questScoringEnemy.Id, };
+                value = new() { ScoringEnemyId = questScoringEnemy.Id };
                 results.Add(questScoringEnemy.Id, value);
             }
 
@@ -240,98 +240,99 @@ public class QuestCompletionService(
         {
             QuestCompleteType.None => false,
             QuestCompleteType.LimitFall => record.DownCount <= completionValue,
-            QuestCompleteType.DefeatAllEnemies
-                => record.TreasureRecord.All(x =>
-                    x.Enemy == null
-                    || !session.EnemyList[x.AreaIdx].Select(y => y.EnemyIdx).Except(x.Enemy).Any()
-                ), // (Maybe)TODO
+            QuestCompleteType.DefeatAllEnemies => record.TreasureRecord.All(x =>
+                x.Enemy == null
+                || !session.EnemyList[x.AreaIdx].Select(y => y.EnemyIdx).Except(x.Enemy).Any()
+            ), // (Maybe)TODO
             QuestCompleteType.MaxTeamSize => party.Count() <= completionValue,
-            QuestCompleteType.AdventurerElementRequired
-                => party.All(x =>
-                    MasterAsset.CharaData[x.CharaId].ElementalType == (UnitElement)completionValue
-                ),
-            QuestCompleteType.AdventurerElementNeeded
-                => party.Any(x =>
-                    MasterAsset.CharaData[x.CharaId].ElementalType == (UnitElement)completionValue
-                ),
-            QuestCompleteType.AdventurerElementLocked
-                => party.All(x =>
-                    MasterAsset.CharaData[x.CharaId].ElementalType != (UnitElement)completionValue
-                ),
-            QuestCompleteType.DragonElementRequired
-                => await IsDragonConditionMet(type, completionValue, party),
-            QuestCompleteType.DragonElementNeeded
-                => await IsDragonConditionMet(type, completionValue, party),
-            QuestCompleteType.DragonElementLocked
-                => await IsDragonConditionMet(type, completionValue, party),
-            QuestCompleteType.WeaponRequired
-                => party.All(x => x.EquipWeaponBodyId == (WeaponBodies)completionValue),
+            QuestCompleteType.AdventurerElementRequired => party.All(x =>
+                MasterAsset.CharaData[x.CharaId].ElementalType == (UnitElement)completionValue
+            ),
+            QuestCompleteType.AdventurerElementNeeded => party.Any(x =>
+                MasterAsset.CharaData[x.CharaId].ElementalType == (UnitElement)completionValue
+            ),
+            QuestCompleteType.AdventurerElementLocked => party.All(x =>
+                MasterAsset.CharaData[x.CharaId].ElementalType != (UnitElement)completionValue
+            ),
+            QuestCompleteType.DragonElementRequired => await IsDragonConditionMet(
+                type,
+                completionValue,
+                party
+            ),
+            QuestCompleteType.DragonElementNeeded => await IsDragonConditionMet(
+                type,
+                completionValue,
+                party
+            ),
+            QuestCompleteType.DragonElementLocked => await IsDragonConditionMet(
+                type,
+                completionValue,
+                party
+            ),
+            QuestCompleteType.WeaponRequired => party.All(x =>
+                x.EquipWeaponBodyId == (WeaponBodies)completionValue
+            ),
             QuestCompleteType.MaxTraps => record.TrapCount <= completionValue,
             QuestCompleteType.MaxAfflicted => record.BadStatus <= completionValue,
-            QuestCompleteType.TreasureChestCount
-                => record.TreasureRecord.Count() >= completionValue,
+            QuestCompleteType.TreasureChestCount => record.TreasureRecord.Count()
+                >= completionValue,
             QuestCompleteType.AllTreasureChestsOpened => true, // TODO
             QuestCompleteType.NoContinues => record.PlayContinueCount == 0,
-            QuestCompleteType.AdventurerRequired
-                => party.Any(x => x.CharaId == (Charas)completionValue),
+            QuestCompleteType.AdventurerRequired => party.Any(x =>
+                x.CharaId == (Charas)completionValue
+            ),
             QuestCompleteType.AllEnemyParts => true, // TODO
             QuestCompleteType.MaxTime => record.Time < completionValue,
             QuestCompleteType.MaxDamageTimes => record.DamageCount <= completionValue,
             QuestCompleteType.MinShapeshift => record.DragonTransformCount >= completionValue,
-            QuestCompleteType.DefeatImperialCommander
-                => record.TreasureRecord.Any(x =>
-                    x.Enemy.Any(y =>
-                        y == 500200001 /* Imperial Commander */
-                    )
-                ),
-            QuestCompleteType.DefeatMinBandits
-                => record.TreasureRecord.Sum(x =>
-                    x.Enemy.Count(y =>
-                        y == 500210001 /* Bandit */
-                    )
-                ) >= completionValue,
-            QuestCompleteType.DefeatShadowKnight
-                => record.TreasureRecord.Any(x =>
-                    x.Enemy.Any(y =>
-                        y == 500170001 /* Shadow Knight */
-                    )
-                ),
+            QuestCompleteType.DefeatImperialCommander => record.TreasureRecord.Any(x =>
+                x.Enemy.Any(y =>
+                    y == 500200001 /* Imperial Commander */
+                )
+            ),
+            QuestCompleteType.DefeatMinBandits => record.TreasureRecord.Sum(x =>
+                x.Enemy.Count(y =>
+                    y == 500210001 /* Bandit */
+                )
+            ) >= completionValue,
+            QuestCompleteType.DefeatShadowKnight => record.TreasureRecord.Any(x =>
+                x.Enemy.Any(y =>
+                    y == 500170001 /* Shadow Knight */
+                )
+            ),
             QuestCompleteType.SaveMinHouses => record.VisitPrivateHouse >= completionValue,
             QuestCompleteType.MinGateHp => record.ProtectionDamage >= completionValue,
             QuestCompleteType.MinTimeRemaining => record.RemainingTime >= completionValue,
-            QuestCompleteType.MinDrawbridgesLowered
-                => record.LowerDrawbridgeCount >= completionValue,
-            QuestCompleteType.FireEmblemAdventurerNeeded
-                => party.Any(x =>
-                    x.CharaId
-                        is Charas.Alfonse
-                            or Charas.Veronica
-                            or Charas.Fjorm
-                            or Charas.Marth
-                            or Charas.Sharena
-                            or Charas.Peony
-                            or Charas.Tiki
-                            or Charas.Chrom
-                ),
-            QuestCompleteType.MinStarsAdventurerNeeded
-                => party.Any(x => MasterAsset.CharaData[x.CharaId].Rarity == completionValue),
-            QuestCompleteType.MinAdventurersWithSameWeapon
-                => party
-                    .ToLookup(x => MasterAsset.CharaData[x.CharaId].WeaponType)
-                    .Any(x => x.Count() >= completionValue),
+            QuestCompleteType.MinDrawbridgesLowered => record.LowerDrawbridgeCount
+                >= completionValue,
+            QuestCompleteType.FireEmblemAdventurerNeeded => party.Any(x =>
+                x.CharaId
+                    is Charas.Alfonse
+                        or Charas.Veronica
+                        or Charas.Fjorm
+                        or Charas.Marth
+                        or Charas.Sharena
+                        or Charas.Peony
+                        or Charas.Tiki
+                        or Charas.Chrom
+            ),
+            QuestCompleteType.MinStarsAdventurerNeeded => party.Any(x =>
+                MasterAsset.CharaData[x.CharaId].Rarity == completionValue
+            ),
+            QuestCompleteType.MinAdventurersWithSameWeapon => party
+                .ToLookup(x => MasterAsset.CharaData[x.CharaId].WeaponType)
+                .Any(x => x.Count() >= completionValue),
             QuestCompleteType.MaxShapeshift => record.DragonTransformCount <= completionValue,
             QuestCompleteType.NoRevives => record.RebornCount == 0,
-            QuestCompleteType.DefeatFormaChrom
-                => record.TreasureRecord.Any(x =>
-                    x.Enemy.Any(y =>
-                        y == 601500002 /* Forma Chrom */
-                    )
-                ),
-            _
-                => throw new DragaliaException(
-                    ResultCode.CommonInvalidArgument,
-                    "Invalid QuestCompleteType"
+            QuestCompleteType.DefeatFormaChrom => record.TreasureRecord.Any(x =>
+                x.Enemy.Any(y =>
+                    y == 601500002 /* Forma Chrom */
                 )
+            ),
+            _ => throw new DragaliaException(
+                ResultCode.CommonInvalidArgument,
+                "Invalid QuestCompleteType"
+            ),
         };
     }
 
@@ -350,12 +351,15 @@ public class QuestCompletionService(
 
         return type switch
         {
-            QuestCompleteType.DragonElementRequired
-                => dragons.Any(x => MasterAsset.DragonData[x].ElementalType == (UnitElement)value),
-            QuestCompleteType.DragonElementNeeded
-                => dragons.All(x => MasterAsset.DragonData[x].ElementalType == (UnitElement)value),
-            QuestCompleteType.DragonElementLocked
-                => dragons.All(x => MasterAsset.DragonData[x].ElementalType != (UnitElement)value),
+            QuestCompleteType.DragonElementRequired => dragons.Any(x =>
+                MasterAsset.DragonData[x].ElementalType == (UnitElement)value
+            ),
+            QuestCompleteType.DragonElementNeeded => dragons.All(x =>
+                MasterAsset.DragonData[x].ElementalType == (UnitElement)value
+            ),
+            QuestCompleteType.DragonElementLocked => dragons.All(x =>
+                MasterAsset.DragonData[x].ElementalType != (UnitElement)value
+            ),
             _ => throw new NotImplementedException(),
         };
     }

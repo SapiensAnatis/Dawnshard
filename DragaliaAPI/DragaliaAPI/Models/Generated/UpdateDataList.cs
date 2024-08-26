@@ -182,7 +182,7 @@ public partial class UpdateDataList
                 {
                     PartyName = x.PartyName,
                     PartyNo = x.PartyNo,
-                    PartySettingList = x.PartySettingList.OrderBy(y => y.UnitNo)
+                    PartySettingList = x.PartySettingList.OrderBy(y => y.UnitNo),
                 })
                 .ToList();
         }

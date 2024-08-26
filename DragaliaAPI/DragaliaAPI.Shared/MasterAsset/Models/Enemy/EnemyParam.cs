@@ -33,7 +33,7 @@ public record EnemyParam(
     {
         (Child01Param, Child01Num),
         (Child02Param, Child02Num),
-        (Child03Param, Child03Num)
+        (Child03Param, Child03Num),
     };
 
     [IgnoreMember]
@@ -41,7 +41,7 @@ public record EnemyParam(
     {
         (WeakA, WeakANum),
         (WeakB, WeakBNum),
-        (WeakC, WeakCNum)
+        (WeakC, WeakCNum),
     };
 
     [IgnoreMember]

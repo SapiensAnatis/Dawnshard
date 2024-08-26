@@ -15,14 +15,14 @@ public static class TollOfTheDeep
         new()
         {
             // Participate In The Event
-            new EventParticipationMission { MissionId = 10220101, },
+            new EventParticipationMission { MissionId = 10220101 },
             // Clear a Boss Battle
             new EventRegularBattleClearMission { MissionId = 10220201 },
             // Clear a "Toll of the Deep" Quest with Having a Summer Ball Equipped
             new EventQuestClearWithCrestMission()
             {
                 MissionId = 10220401,
-                Crest = AbilityCrestId.HavingaSummerBall
+                Crest = AbilityCrestId.HavingaSummerBall,
             },
             // Collect 100 Oceanic Resonance in One Go
             new EventPointCollectionRecordMission() { MissionId = 10220501 },

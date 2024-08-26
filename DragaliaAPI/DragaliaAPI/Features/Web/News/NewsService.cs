@@ -48,6 +48,6 @@ public class NewsService(ApiContext apiContext, IOptions<WebOptions> webOptions)
             Description = x.Description,
             Date = x.Date,
             HeaderImageSrc = webOptions.Value.GetImageSrc(x.HeaderImagePath),
-            BodyImageSrc = webOptions.Value.GetImageSrc(x.BodyImagePath)
+            BodyImageSrc = webOptions.Value.GetImageSrc(x.BodyImagePath),
         };
 }

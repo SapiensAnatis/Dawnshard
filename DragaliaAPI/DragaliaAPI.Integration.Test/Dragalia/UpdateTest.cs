@@ -46,8 +46,8 @@ public class UpdateTest : TestFixture
                 {
                     TargetList = new List<AtgenTargetList>()
                     {
-                        new AtgenTargetList() { TargetName = "emblem", TargetIdList = null, }
-                    }
+                        new AtgenTargetList() { TargetName = "emblem", TargetIdList = null },
+                    },
                 }
             )
         );

@@ -53,7 +53,7 @@ public class WallControllerTest
                 QuestGroupId = questGroupId,
                 SumWallLevel = totalLevel,
                 LastRewardDate = lastRewardDate,
-                RewardStatus = rewardStatus
+                RewardStatus = rewardStatus,
             };
 
         mockWallService.Setup(x => x.CheckWallInitialized()).ReturnsAsync(true);
@@ -82,18 +82,18 @@ public class WallControllerTest
                 QuestGroupId = questGroupId,
                 SumWallLevel = totalLevel,
                 LastRewardDate = lastRewardDate,
-                RewardStatus = rewardStatus
+                RewardStatus = rewardStatus,
             };
 
         AtgenMonthlyWallReceiveList monthlyWallReceiveList =
             new()
             {
                 QuestGroupId = WallService.WallQuestGroupId,
-                IsReceiveReward = RewardStatus.Received
+                IsReceiveReward = RewardStatus.Received,
             };
         IEnumerable<AtgenMonthlyWallReceiveList> monthlyWallReceiveListList = new[]
         {
-            monthlyWallReceiveList
+            monthlyWallReceiveList,
         };
 
         List<AtgenBuildEventRewardEntityList> buildEventRewardEntityList =
@@ -103,14 +103,14 @@ public class WallControllerTest
                 {
                     EntityType = EntityTypes.Mana,
                     EntityId = 0,
-                    EntityQuantity = 2500
+                    EntityQuantity = 2500,
                 },
                 new AtgenBuildEventRewardEntityList()
                 {
                     EntityType = EntityTypes.Rupies,
                     EntityId = 0,
-                    EntityQuantity = 10000
-                }
+                    EntityQuantity = 10000,
+                },
             };
 
         DateTimeOffset lastClaimDate = DateTimeOffset.UtcNow.AddDays(-62);

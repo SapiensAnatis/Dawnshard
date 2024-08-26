@@ -74,7 +74,7 @@ public class DragonController : DragaliaControllerBase
                 new DragonBuyGiftToSendMultipleRequest()
                 {
                     DragonId = request.DragonId,
-                    DragonGiftIdList = new List<DragonGifts>() { request.DragonGiftId }
+                    DragonGiftIdList = new List<DragonGifts>() { request.DragonGiftId },
                 },
                 cancellationToken
             );
@@ -89,7 +89,7 @@ public class DragonController : DragaliaControllerBase
                     .DragonGiftRewardList.First()
                     .RewardReliabilityList,
                 ShopGiftList = resultData.ShopGiftList,
-                UpdateDataList = resultData.UpdateDataList
+                UpdateDataList = resultData.UpdateDataList,
             }
         );
     }
@@ -116,7 +116,7 @@ public class DragonController : DragaliaControllerBase
             {
                 DragonId = request.DragonId,
                 DragonGiftId = request.DragonGiftId,
-                Quantity = 1
+                Quantity = 1,
             },
             cancellationToken
         );
@@ -126,7 +126,7 @@ public class DragonController : DragaliaControllerBase
                 IsFavorite = resultData.IsFavorite,
                 ReturnGiftList = resultData.ReturnGiftList,
                 RewardReliabilityList = resultData.RewardReliabilityList,
-                UpdateDataList = resultData.UpdateDataList
+                UpdateDataList = resultData.UpdateDataList,
             }
         );
     }

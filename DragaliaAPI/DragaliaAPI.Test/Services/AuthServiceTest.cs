@@ -93,7 +93,7 @@ public class AuthServiceTest
             );
         this.mockUserDataRepository.SetupGet(x => x.UserData)
             .Returns(
-                new List<DbPlayerUserData>() { new() { ViewerId = 1, } }
+                new List<DbPlayerUserData>() { new() { ViewerId = 1 } }
                     .AsQueryable()
                     .BuildMock()
             );
@@ -119,7 +119,7 @@ public class AuthServiceTest
             {
                 AccountId = AccountId,
                 ViewerId = ViewerId,
-                UserData = new() { Name = "Euden", }
+                UserData = new() { Name = "Euden" },
             }
         );
         this.apiContext.SaveChanges();
@@ -213,8 +213,8 @@ public class AuthServiceTest
                 UserData = new()
                 {
                     Name = "Euden",
-                    LastSaveImportTime = fixedTime - TimeSpan.FromSeconds(15)
-                }
+                    LastSaveImportTime = fixedTime - TimeSpan.FromSeconds(15),
+                },
             }
         );
         this.apiContext.SaveChanges();
@@ -235,7 +235,7 @@ public class AuthServiceTest
             new()
             {
                 UserData = new() { Name = "Euden 2" },
-                FortBonusList = null!
+                FortBonusList = null!,
             };
 
         this.mockLoginOptions.Setup(x => x.CurrentValue)
@@ -275,8 +275,8 @@ public class AuthServiceTest
                 UserData = new()
                 {
                     Name = "Euden",
-                    LastSaveImportTime = fixedTime - TimeSpan.FromSeconds(1)
-                }
+                    LastSaveImportTime = fixedTime - TimeSpan.FromSeconds(1),
+                },
             }
         );
         this.apiContext.SaveChanges();
@@ -297,7 +297,7 @@ public class AuthServiceTest
             new()
             {
                 UserData = new() { Name = "Euden 2" },
-                FortBonusList = null!
+                FortBonusList = null!,
             };
 
         this.mockLoginOptions.Setup(x => x.CurrentValue)
@@ -337,7 +337,7 @@ public class AuthServiceTest
                     ViewerId = ViewerId,
                     Name = "Euden",
                     LastSaveImportTime = fixedTime - TimeSpan.FromMinutes(2),
-                }
+                },
             }
         );
         this.apiContext.SaveChanges();
@@ -389,7 +389,7 @@ public class AuthServiceTest
                 {
                     Name = "Euden",
                     LastSaveImportTime = fixedTime - TimeSpan.FromMinutes(2),
-                }
+                },
             }
         );
         this.apiContext.SaveChanges();

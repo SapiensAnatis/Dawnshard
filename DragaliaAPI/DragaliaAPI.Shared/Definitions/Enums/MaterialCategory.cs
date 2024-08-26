@@ -27,5 +27,5 @@ public enum MaterialCategory
     SummonTrade,
     PlatinumCharacter,
     Treasure = 201,
-    LimitBreakSphereDragon = 206
+    LimitBreakSphereDragon = 206,
 }

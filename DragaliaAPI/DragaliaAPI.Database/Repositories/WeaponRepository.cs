@@ -73,7 +73,7 @@ public class WeaponRepository : IWeaponRepository
             new DbWeaponBody()
             {
                 ViewerId = this.playerIdentityService.ViewerId,
-                WeaponBodyId = weaponBodyId
+                WeaponBodyId = weaponBodyId,
             }
         );
     }
@@ -99,7 +99,7 @@ public class WeaponRepository : IWeaponRepository
             {
                 ViewerId = this.playerIdentityService.ViewerId,
                 WeaponSkinId = weaponSkinId,
-                GetTime = DateTimeOffset.UtcNow
+                GetTime = DateTimeOffset.UtcNow,
             }
         );
     }
@@ -142,7 +142,7 @@ public class WeaponRepository : IWeaponRepository
             new()
             {
                 ViewerId = this.playerIdentityService.ViewerId,
-                WeaponPassiveAbilityId = passiveAbility.Id
+                WeaponPassiveAbilityId = passiveAbility.Id,
             }
         );
     }

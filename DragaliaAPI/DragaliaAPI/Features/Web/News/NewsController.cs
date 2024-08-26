@@ -24,8 +24,8 @@ public sealed class NewsController(NewsService newsService) : ControllerBase
 
         return new()
         {
-            Pagination = new() { TotalCount = totalCount, },
-            Data = data
+            Pagination = new() { TotalCount = totalCount },
+            Data = data,
         };
     }
 

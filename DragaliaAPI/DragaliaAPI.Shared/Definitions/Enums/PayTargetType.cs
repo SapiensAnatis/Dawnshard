@@ -5,5 +5,5 @@ public enum PayTargetType
     None,
     All,
     HostOnly,
-    AllPlusMultiItem
+    AllPlusMultiItem,
 }

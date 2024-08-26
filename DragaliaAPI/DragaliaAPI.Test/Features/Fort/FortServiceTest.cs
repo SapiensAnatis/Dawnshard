@@ -65,7 +65,7 @@ public class FortServiceTest
                             {
                                 Normal = 100,
                                 Ripe = 0,
-                                Succulent = 0
+                                Succulent = 0,
                             }
                         },
                         {
@@ -74,7 +74,7 @@ public class FortServiceTest
                             {
                                 Normal = 0,
                                 Ripe = 100,
-                                Succulent = 0
+                                Succulent = 0,
                             }
                         },
                         {
@@ -83,10 +83,10 @@ public class FortServiceTest
                             {
                                 Normal = 0,
                                 Ripe = 0,
-                                Succulent = 100
+                                Succulent = 100,
                             }
-                        }
-                    }
+                        },
+                    },
                 }
             );
 
@@ -126,7 +126,7 @@ public class FortServiceTest
                         BuildStartDate = new(2023, 04, 18, 18, 32, 34, TimeSpan.Zero),
                         Level = 5,
                         PlantId = FortPlants.Dragontree,
-                    }
+                    },
                 }
                     .AsQueryable()
                     .BuildMock()
@@ -231,7 +231,7 @@ public class FortServiceTest
                 ViewerId = 1,
                 Level = 2,
                 BuildStartDate = FixedTime,
-                BuildEndDate = FixedTime + TimeSpan.FromSeconds(5)
+                BuildEndDate = FixedTime + TimeSpan.FromSeconds(5),
             };
 
         mockFortMissionProgressionService
@@ -400,7 +400,7 @@ public class FortServiceTest
                                 BuildStartDate = DateTimeOffset.UnixEpoch,
                                 BuildEndDate = DateTimeOffset.UnixEpoch,
                                 IsNew = true,
-                                LastIncomeDate = DateTimeOffset.UnixEpoch
+                                LastIncomeDate = DateTimeOffset.UnixEpoch,
                             }
                         )
             );
@@ -448,7 +448,7 @@ public class FortServiceTest
             {
                 ViewerId = 1,
                 Level = 20,
-                PlantId = FortPlants.Dragonata
+                PlantId = FortPlants.Dragonata,
             };
 
         mockUserDataRepository
@@ -498,7 +498,7 @@ public class FortServiceTest
             {
                 ViewerId = 1,
                 Level = 20,
-                PlantId = FortPlants.Dragonata
+                PlantId = FortPlants.Dragonata,
             };
 
         mockFortRepository
@@ -555,7 +555,7 @@ public class FortServiceTest
                 Level = 5,
                 PlantId = FortPlants.Smithy,
                 BuildStartDate = FixedTime,
-                BuildEndDate = FixedTime + TimeSpan.FromDays(7)
+                BuildEndDate = FixedTime + TimeSpan.FromDays(7),
             };
 
         mockFortRepository.Setup(x => x.GetBuilding(444)).ReturnsAsync(build);
@@ -591,7 +591,7 @@ public class FortServiceTest
                 Level = 5,
                 PlantId = FortPlants.Smithy,
                 BuildStartDate = FixedTime - TimeSpan.FromDays(1),
-                BuildEndDate = FixedTime + TimeSpan.FromDays(6)
+                BuildEndDate = FixedTime + TimeSpan.FromDays(6),
             };
 
         const int wyrmiteDifference = 24 * 60 / 12;
@@ -629,7 +629,7 @@ public class FortServiceTest
                 Level = 5,
                 PlantId = FortPlants.Smithy,
                 BuildStartDate = FixedTime,
-                BuildEndDate = FixedTime + TimeSpan.FromDays(7)
+                BuildEndDate = FixedTime + TimeSpan.FromDays(7),
             };
 
         mockFortRepository.Setup(x => x.GetBuilding(446)).ReturnsAsync(build);

@@ -2,5 +2,5 @@
 
 public enum CurrencyEntityIds
 {
-    Wyrmite = 0
+    Wyrmite = 0,
 }

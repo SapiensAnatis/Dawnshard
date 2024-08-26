@@ -72,8 +72,8 @@ public class DungeonRecordRewardServiceTest
                 {
                     Id = 0,
                     Quantity = 2,
-                    Type = EntityTypes.Wyrmite
-                }
+                    Type = EntityTypes.Wyrmite,
+                },
             };
 
         PlayRecord playRecord = new();
@@ -115,14 +115,14 @@ public class DungeonRecordRewardServiceTest
                     new()
                     {
                         AreaIdx = 0,
-                        Enemy = new List<int>() { 1, 0, 1 }
+                        Enemy = new List<int>() { 1, 0, 1 },
                     },
                     new()
                     {
                         AreaIdx = 1,
-                        Enemy = new List<int>() { 0, 1, 0 }
-                    }
-                }
+                        Enemy = new List<int>() { 0, 1, 0 },
+                    },
+                },
             };
 
         DungeonSession session =
@@ -147,10 +147,14 @@ public class DungeonRecordRewardServiceTest
                                         DropList = new List<AtgenDropList>()
                                         {
                                             new() { Type = EntityTypes.Dew, Quantity = 10 },
-                                            new() { Type = EntityTypes.HustleHammer, Quantity = 10 }
-                                        }
+                                            new()
+                                            {
+                                                Type = EntityTypes.HustleHammer,
+                                                Quantity = 10,
+                                            },
+                                        },
                                     },
-                                }
+                                },
                             },
                             new()
                             {
@@ -162,10 +166,10 @@ public class DungeonRecordRewardServiceTest
                                         Coin = 10,
                                         DropList = new List<AtgenDropList>()
                                         {
-                                            new() { Type = EntityTypes.AstralItem, Quantity = 10 }
-                                        }
+                                            new() { Type = EntityTypes.AstralItem, Quantity = 10 },
+                                        },
                                     },
-                                }
+                                },
                             },
                             new()
                             {
@@ -177,8 +181,8 @@ public class DungeonRecordRewardServiceTest
                                         Coin = 10,
                                         DropList = new List<AtgenDropList>()
                                         {
-                                            new() { Type = EntityTypes.Wyrmite, Quantity = 10 }
-                                        }
+                                            new() { Type = EntityTypes.Wyrmite, Quantity = 10 },
+                                        },
                                     },
                                     new()
                                     {
@@ -186,11 +190,11 @@ public class DungeonRecordRewardServiceTest
                                         Coin = 10,
                                         DropList = new List<AtgenDropList>()
                                         {
-                                            new() { Type = EntityTypes.FafnirMedal, Quantity = 10 }
-                                        }
+                                            new() { Type = EntityTypes.FafnirMedal, Quantity = 10 },
+                                        },
                                     },
-                                }
-                            }
+                                },
+                            },
                         }
                     },
                     {
@@ -202,12 +206,12 @@ public class DungeonRecordRewardServiceTest
                             {
                                 EnemyDropList = new List<EnemyDropList>()
                                 {
-                                    new() { Coin = 10, Mana = 10, }
-                                }
-                            }
+                                    new() { Coin = 10, Mana = 10 },
+                                },
+                            },
                         }
-                    }
-                }
+                    },
+                },
             };
 
         this.mockRewardService.Setup(x => x.GrantRewards(It.IsAny<List<Entity>>()))
@@ -230,7 +234,7 @@ public class DungeonRecordRewardServiceTest
                         new() { Type = EntityTypes.Dew, Quantity = 10 },
                         new() { Type = EntityTypes.HustleHammer, Quantity = 10 },
                         new() { Type = EntityTypes.FafnirMedal, Quantity = 10 },
-                        new() { Type = EntityTypes.Wyrmite, Quantity = 10 }
+                        new() { Type = EntityTypes.Wyrmite, Quantity = 10 },
                     },
                     40,
                     40
@@ -245,7 +249,7 @@ public class DungeonRecordRewardServiceTest
     {
         List<PartySettingList> party = new();
         DungeonSession session =
-            new() { QuestData = MasterAsset.QuestData[100010101], Party = party, };
+            new() { QuestData = MasterAsset.QuestData[100010101], Party = party };
         PlayRecord playRecord = new();
 
         List<AtgenScoreMissionSuccessList> scoreMissionSuccessLists =
@@ -255,19 +259,19 @@ public class DungeonRecordRewardServiceTest
                 {
                     ScoreMissionCompleteType = QuestCompleteType.DragonElementLocked,
                     ScoreTargetValue = 2,
-                }
+                },
             };
 
         List<AtgenEventPassiveUpList> passiveUpLists =
             new()
             {
-                new() { PassiveId = 3, Progress = 10 }
+                new() { PassiveId = 3, Progress = 10 },
             };
 
         List<AtgenDropAll> eventDrops =
             new()
             {
-                new() { Type = EntityTypes.Clb01EventItem, Quantity = 100 }
+                new() { Type = EntityTypes.Clb01EventItem, Quantity = 100 },
             };
 
         List<AtgenScoringEnemyPointList> enemyScoring =
@@ -276,8 +280,8 @@ public class DungeonRecordRewardServiceTest
             {
                 ScoringEnemyId = 100,
                 Point = 1,
-                SmashCount = 2
-            }
+                SmashCount = 2,
+            },
         ];
 
         int materialMultiplier = 2;

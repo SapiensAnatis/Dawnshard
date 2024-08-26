@@ -9,5 +9,5 @@ public enum BuildupPieceTypes
     Copies = 6,
     Stats = 7,
     Passive = 8,
-    CrestSlotType3 = 9
+    CrestSlotType3 = 9,
 }

@@ -32,7 +32,7 @@ public class RaidEventController(
         );
         resp.EventPassiveList = new List<EventPassiveList>
         {
-            await eventService.GetEventPassiveList(request.RaidEventId)
+            await eventService.GetEventPassiveList(request.RaidEventId),
         };
 
         if (

@@ -110,7 +110,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.StateManager
                         this.PluginHost.GameId,
                         info.Request.GameProperties
                     ),
-                    Player = DtoHelpers.CreatePlayer(actorNr, info.Request.ActorProperties)
+                    Player = DtoHelpers.CreatePlayer(actorNr, info.Request.ActorProperties),
                 }
             );
 
@@ -124,7 +124,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.StateManager
                 new GameModifyRequest
                 {
                     GameName = this.PluginHost.GameId,
-                    Player = DtoHelpers.CreatePlayer(info.ActorNr, info.Request.ActorProperties)
+                    Player = DtoHelpers.CreatePlayer(info.ActorNr, info.Request.ActorProperties),
                 }
             );
 
@@ -157,7 +157,10 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.StateManager
                 new GameModifyRequest
                 {
                     GameName = this.PluginHost.GameId,
-                    Player = DtoHelpers.CreatePlayer(info.ActorNr, actor.Properties.GetProperties())
+                    Player = DtoHelpers.CreatePlayer(
+                        info.ActorNr,
+                        actor.Properties.GetProperties()
+                    ),
                 }
             );
 
@@ -205,7 +208,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.StateManager
                 {
                     NewVisibility = true,
                     GameName = this.PluginHost.GameId,
-                    Player = null
+                    Player = null,
                 }
             );
 
@@ -225,7 +228,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.StateManager
                 {
                     GameName = this.PluginHost.GameId,
                     NewMatchingType = newType,
-                    Player = null
+                    Player = null,
                 }
             );
 
@@ -247,7 +250,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.StateManager
                 {
                     GameName = this.PluginHost.GameId,
                     NewEntryConditions = newEntryConditions,
-                    Player = null
+                    Player = null,
                 }
             );
 
@@ -271,7 +274,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.StateManager
                 {
                     NewVisibility = false,
                     GameName = this.PluginHost.GameId,
-                    Player = null
+                    Player = null,
                 }
             );
 
@@ -290,7 +293,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.StateManager
                 {
                     NewRoomId = roomId,
                     GameName = this.PluginHost.GameId,
-                    Player = null
+                    Player = null,
                 }
             );
 
@@ -316,7 +319,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.StateManager
                 CustomHeaders = new Dictionary<string, string>()
                 {
                     { "Authorization", $"Bearer {this.BearerToken}" },
-                }
+                },
             };
         }
     }

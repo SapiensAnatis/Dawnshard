@@ -23,15 +23,15 @@ public class V20UpdateTest : SavefileUpdateTestFixture
                     ViewerId = this.ViewerId,
                     StoryId = HarleStoryId,
                     StoryType = StoryTypes.Quest,
-                    State = StoryState.Read
+                    State = StoryState.Read,
                 },
                 new DbPlayerStoryState()
                 {
                     ViewerId = this.ViewerId,
                     StoryId = OrigaStoryId,
                     StoryType = StoryTypes.Quest,
-                    State = StoryState.Read
-                }
+                    State = StoryState.Read,
+                },
             ]
         );
 
@@ -55,15 +55,15 @@ public class V20UpdateTest : SavefileUpdateTestFixture
                     Owner = new DbPlayer() { AccountId = "other player" },
                     StoryId = HarleStoryId,
                     StoryType = StoryTypes.Quest,
-                    State = StoryState.Read
+                    State = StoryState.Read,
                 },
                 new DbPlayerStoryState()
                 {
                     ViewerId = this.ViewerId,
                     StoryId = OrigaStoryId,
                     StoryType = StoryTypes.Quest,
-                    State = StoryState.Unlocked
-                }
+                    State = StoryState.Unlocked,
+                },
             ]
         );
         await this.ApiContext.SaveChangesAsync();
@@ -87,14 +87,14 @@ public class V20UpdateTest : SavefileUpdateTestFixture
                     ViewerId = this.ViewerId,
                     StoryId = HarleStoryId,
                     StoryType = StoryTypes.Quest,
-                    State = StoryState.Read
+                    State = StoryState.Read,
                 },
                 new DbPlayerStoryState()
                 {
                     ViewerId = this.ViewerId,
                     StoryId = OrigaStoryId,
                     StoryType = StoryTypes.Quest,
-                    State = StoryState.Read
+                    State = StoryState.Read,
                 },
                 new DbPlayerCharaData(this.ViewerId, Charas.Harle),
                 new DbPlayerCharaData(this.ViewerId, Charas.Origa),

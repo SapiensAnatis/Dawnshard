@@ -37,7 +37,7 @@ public class RepeatController(
                     NewGetEntityList = [],
                     OverDiscardEntityList = [],
                     OverPresentLimitEntityList = [],
-                    OverPresentEntityList = []
+                    OverPresentEntityList = [],
                 },
                 RepeatData = null,
             };

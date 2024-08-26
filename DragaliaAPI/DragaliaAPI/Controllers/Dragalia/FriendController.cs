@@ -89,7 +89,7 @@ public class FriendController : DragaliaControllerBase
                     DragonReliabilityLevel = 30,
                     IsFriend = helperDetail.IsFriend,
                     ApplySendStatus = 0,
-                }
+                },
             };
 
         return Ok(response);
@@ -101,7 +101,7 @@ public class FriendController : DragaliaControllerBase
         {
             FriendCount = 0,
             EntityResult = new(),
-            UpdateDataList = new()
+            UpdateDataList = new(),
         };
 
     [HttpPost("friend_list")]
@@ -110,7 +110,7 @@ public class FriendController : DragaliaControllerBase
 
     [HttpPost("auto_search")]
     public DragaliaResult<FriendAutoSearchResponse> AutoSearch() =>
-        new FriendAutoSearchResponse() { Result = 1, SearchList = [], };
+        new FriendAutoSearchResponse() { Result = 1, SearchList = [] };
 
     [HttpPost("request_list")]
     public DragaliaResult<FriendRequestListResponse> RequestList() =>
@@ -122,7 +122,7 @@ public class FriendController : DragaliaControllerBase
         {
             Result = 1,
             NewApplyViewerIdList = [],
-            FriendApply = []
+            FriendApply = [],
         };
 
     [HttpPost("set_support_chara")]

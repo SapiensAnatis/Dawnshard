@@ -54,11 +54,10 @@ public class FortService(
             2 => 250,
             3 => 400,
             4 => 700,
-            _
-                => throw new DragaliaException(
-                    ResultCode.FortExtendCarpenterLimit,
-                    $"User has reached maximum carpenter."
-                )
+            _ => throw new DragaliaException(
+                ResultCode.FortExtendCarpenterLimit,
+                $"User has reached maximum carpenter."
+            ),
         };
 
         if (paymentType is not (PaymentTypes.Diamantium or PaymentTypes.Wyrmite))
@@ -237,7 +236,7 @@ public class FortService(
         {
             MaxCarpenterCount = MaximumCarpenterNum,
             WorkingCarpenterNum = activeCarpenters,
-            CarpenterNum = dbDetail.CarpenterNum
+            CarpenterNum = dbDetail.CarpenterNum,
         };
     }
 
@@ -389,7 +388,7 @@ public class FortService(
                 PositionX = positionX,
                 PositionZ = positionZ,
                 IsNew = true,
-                LastIncomeDate = DateTimeOffset.UnixEpoch
+                LastIncomeDate = DateTimeOffset.UnixEpoch,
             };
 
         await SetBuildTime(build, plantDetail);

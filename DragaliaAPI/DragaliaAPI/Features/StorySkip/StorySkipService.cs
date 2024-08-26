@@ -84,7 +84,7 @@ public class StorySkipService(
                         BuildStartDate = DateTimeOffset.UnixEpoch,
                         BuildEndDate = DateTimeOffset.UnixEpoch,
                         IsNew = true,
-                        LastIncomeDate = DateTimeOffset.UnixEpoch
+                        LastIncomeDate = DateTimeOffset.UnixEpoch,
                     };
                 newUserForts.Add(newUserFort);
 
@@ -145,7 +145,7 @@ public class StorySkipService(
                         IsAppear = true,
                         BestClearTime = 36000,
                         LastWeeklyResetTime = DateTimeOffset.UnixEpoch,
-                        LastDailyResetTime = DateTimeOffset.UnixEpoch
+                        LastDailyResetTime = DateTimeOffset.UnixEpoch,
                     };
                 newUserQuests.Add(userQuest);
 
@@ -236,7 +236,7 @@ public class StorySkipService(
                         ViewerId = playerIdentityService.ViewerId,
                         StoryType = StoryTypes.Quest,
                         StoryId = questStory.Id,
-                        State = StoryState.Read
+                        State = StoryState.Read,
                     };
                 newUserStories.Add(userStory);
 
@@ -337,7 +337,7 @@ public class StorySkipService(
                         IsNew = true,
                         Skill1Level = 1,
                         Ability1Level = 1,
-                        Ability2Level = 1
+                        Ability2Level = 1,
                     };
                 newUserDragons.Add(newUserDragon);
             }

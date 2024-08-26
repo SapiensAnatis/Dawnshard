@@ -34,7 +34,7 @@ public class HeroParamService(
             { WeaponTypes.Bow, WeaponBodies.BattlewornBow },
             { WeaponTypes.Rod, WeaponBodies.BattlewornWand },
             { WeaponTypes.Cane, WeaponBodies.BattlewornStaff },
-            { WeaponTypes.Gun, WeaponBodies.BattlewornManacaster }
+            { WeaponTypes.Gun, WeaponBodies.BattlewornManacaster },
         }.ToImmutableDictionary();
 
     public async Task<List<HeroParam>> GetHeroParam(long viewerId, int partySlot)

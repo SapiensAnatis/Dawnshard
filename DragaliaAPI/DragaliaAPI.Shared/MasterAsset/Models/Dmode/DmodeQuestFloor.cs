@@ -26,6 +26,6 @@ public record DmodeQuestFloor(
         DrawDungeonThemeId2,
         DrawDungeonThemeId3,
         DrawDungeonThemeId4,
-        DrawDungeonThemeId5
+        DrawDungeonThemeId5,
     };
 };

@@ -28,7 +28,7 @@ public class DungeonSkipTest : TestFixture
             {
                 ViewerId = ViewerId,
                 QuestId = questId,
-                State = 3
+                State = 3,
             }
         );
 
@@ -44,7 +44,7 @@ public class DungeonSkipTest : TestFixture
                     PartyNo = 1,
                     PlayCount = playCount,
                     SupportViewerId = 1000,
-                    QuestId = questId
+                    QuestId = questId,
                 }
             );
 
@@ -89,7 +89,7 @@ public class DungeonSkipTest : TestFixture
             {
                 ViewerId = ViewerId,
                 QuestId = questId,
-                State = 3
+                State = 3,
             }
         );
 
@@ -107,8 +107,8 @@ public class DungeonSkipTest : TestFixture
                     QuestId = questId,
                     RequestPartySettingList = new List<PartySettingList>()
                     {
-                        new() { CharaId = Shared.Definitions.Enums.Charas.ThePrince, }
-                    }
+                        new() { CharaId = Shared.Definitions.Enums.Charas.ThePrince },
+                    },
                 }
             );
 
@@ -165,12 +165,12 @@ public class DungeonSkipTest : TestFixture
                     PartyNo = 1,
                     RequestQuestMultipleList = new List<AtgenRequestQuestMultipleList>
                     {
-                        new() { QuestId = atpMaster, PlayCount = 1, },
-                        new() { QuestId = flameRuinsExpert, PlayCount = 1, },
-                        new() { QuestId = atfMaster, PlayCount = 1, },
-                        new() { QuestId = brunhildaMaster, PlayCount = 1, },
-                        new() { QuestId = flameIoStandard, PlayCount = 1, },
-                    }
+                        new() { QuestId = atpMaster, PlayCount = 1 },
+                        new() { QuestId = flameRuinsExpert, PlayCount = 1 },
+                        new() { QuestId = atfMaster, PlayCount = 1 },
+                        new() { QuestId = brunhildaMaster, PlayCount = 1 },
+                        new() { QuestId = flameIoStandard, PlayCount = 1 },
+                    },
                 }
             );
 
@@ -197,7 +197,7 @@ public class DungeonSkipTest : TestFixture
                     flameRuinsExpert,
                     atfMaster,
                     brunhildaMaster,
-                    flameIoStandard
+                    flameIoStandard,
                 }
             );
         response
@@ -248,7 +248,7 @@ public class DungeonSkipTest : TestFixture
                     PartyNo = 1,
                     PlayCount = playCount,
                     SupportViewerId = 1000,
-                    QuestId = questId
+                    QuestId = questId,
                 }
             );
 
@@ -266,7 +266,7 @@ public class DungeonSkipTest : TestFixture
                     QuestBonusReserveCount = 3,
                     QuestBonusReserveTime = response.Data.IngameResultData.EndTime,
                     QuestBonusStackCount = 0,
-                    QuestBonusStackTime = DateTimeOffset.UnixEpoch
+                    QuestBonusStackTime = DateTimeOffset.UnixEpoch,
                 }
             );
     }
@@ -284,14 +284,14 @@ public class DungeonSkipTest : TestFixture
                 {
                     ViewerId = ViewerId,
                     QuestId = questId,
-                    State = 3
+                    State = 3,
                 },
                 new DbPlayerMission()
                 {
                     Id = clear5QuestsMission,
                     Type = MissionType.Daily,
                     State = MissionState.InProgress,
-                }
+                },
             ]
         );
 
@@ -303,7 +303,7 @@ public class DungeonSkipTest : TestFixture
                     PartyNo = 1,
                     PlayCount = playCount,
                     SupportViewerId = 1000,
-                    QuestId = questId
+                    QuestId = questId,
                 }
             );
 

@@ -126,7 +126,7 @@ public class DbWeaponBody : DbPlayerData
                 {
                     weaponData.ChangeSkillId1,
                     weaponData.ChangeSkillId2,
-                    weaponData.ChangeSkillId3
+                    weaponData.ChangeSkillId3,
                 };
 
             return GetCurrentSkillNo(skillIds);

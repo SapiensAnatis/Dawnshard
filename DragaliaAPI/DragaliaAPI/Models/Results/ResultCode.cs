@@ -586,5 +586,5 @@ public enum ResultCode
     MaintenanceDmodeExpedition,
     MaintenanceDmodeQuest,
     MaintenanceDmodeStory,
-    SystemError = 99999
+    SystemError = 99999,
 }

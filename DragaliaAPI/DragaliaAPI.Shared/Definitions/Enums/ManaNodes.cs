@@ -20,7 +20,7 @@ public enum ManaNodes : ushort
     Circle4 = 0b_0001_0000_0000_0000,
     Circle5 = 0b_0001_0100_0000_0000,
     Circle6 = 0b_0001_1000_0000_0000,
-    Circle7 = 0b_0001_1100_0000_0000
+    Circle7 = 0b_0001_1100_0000_0000,
 }
 
 public static class ManaNodesUtil

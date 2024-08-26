@@ -51,7 +51,7 @@ public class TradeRepository : ITradeRepository
                     Type = type,
                     Id = id,
                     Count = count,
-                    LastTradeTime = actualTime
+                    LastTradeTime = actualTime,
                 }
             );
 
