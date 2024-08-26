@@ -23,7 +23,7 @@ public class SummonHistoryJobTest : TestFixture
         await this.AddRangeToDatabase(
             [
                 new DbPlayerSummonHistory() { ExecDate = DateTimeOffset.UtcNow },
-                new DbPlayerSummonHistory() { ExecDate = DateTimeOffset.UtcNow.AddDays(-20) }
+                new DbPlayerSummonHistory() { ExecDate = DateTimeOffset.UtcNow.AddDays(-20) },
             ]
         );
 

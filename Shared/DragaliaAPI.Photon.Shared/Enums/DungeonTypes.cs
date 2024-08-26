@@ -20,5 +20,5 @@ public enum DungeonTypes
     Walker,
     Scoring,
     RaidSixteen,
-    Dmode
+    Dmode,
 }

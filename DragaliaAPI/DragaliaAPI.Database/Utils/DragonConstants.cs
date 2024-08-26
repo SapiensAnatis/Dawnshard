@@ -158,7 +158,7 @@ public static class DragonConstants
         2732280,
         2925060,
         3135840,
-        3365620
+        3365620,
     }.ToImmutableArray();
 
     public const int MaxRelLevel = 30;
@@ -171,7 +171,7 @@ public static class DragonConstants
         DragonGifts.FloralCirclet,
         DragonGifts.CompellingBook,
         DragonGifts.ManaEssence,
-        DragonGifts.GoldenChalice
+        DragonGifts.GoldenChalice,
     }.ToImmutableArray();
 
     public static readonly ImmutableDictionary<DragonGifts, int> FavorVals = new Dictionary<
@@ -192,7 +192,7 @@ public static class DragonConstants
         { DragonGifts.FourLeafClover, 1000 },
         { DragonGifts.DragonyuleCake, 1000 },
         { DragonGifts.ValentinesCard, 1000 },
-        { DragonGifts.PupGrub, 200 }
+        { DragonGifts.PupGrub, 200 },
     }.ToImmutableDictionary();
 
     public static readonly ImmutableDictionary<DragonGifts, int> BuyGiftPrices = new Dictionary<
@@ -209,7 +209,7 @@ public static class DragonConstants
         { DragonGifts.FloralCirclet, 12000 },
         { DragonGifts.CompellingBook, 12000 },
         { DragonGifts.ManaEssence, 12000 },
-        { DragonGifts.GoldenChalice, 15000 }
+        { DragonGifts.GoldenChalice, 15000 },
     }.ToImmutableDictionary();
 
     public const float FavMulti = 1.5f;
@@ -245,7 +245,7 @@ public static class DragonConstants
         27300,
         30100,
         33100,
-        36300
+        36300,
     }.ToImmutableArray();
 
     public static readonly ImmutableArray<int> BondXpLimitsPuppy = new[]
@@ -279,7 +279,7 @@ public static class DragonConstants
         2600,
         2700,
         2800,
-        2900
+        2900,
     }.ToImmutableArray();
 
     public static readonly IImmutableSet<Dragons> UnsummonableDragons = new HashSet<Dragons>
@@ -297,6 +297,6 @@ public static class DragonConstants
         Dragons.MiniMercs,
         Dragons.MiniJupi,
         Dragons.MiniZodi,
-        Dragons.Puppy
+        Dragons.Puppy,
     }.ToImmutableHashSet();
 }

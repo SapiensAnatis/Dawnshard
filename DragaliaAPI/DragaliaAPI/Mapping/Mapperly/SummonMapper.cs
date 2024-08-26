@@ -8,7 +8,7 @@ namespace DragaliaAPI.Mapping.Mapperly;
 public static partial class SummonMapper
 {
     public static UserSummonList MapToUserSummonList(this DbPlayerBannerData bannerData) =>
-        new() { SummonId = bannerData.SummonBannerId, SummonCount = bannerData.SummonCount, };
+        new() { SummonId = bannerData.SummonBannerId, SummonCount = bannerData.SummonCount };
 
     public static SummonPointList MapToSummonPointList(this DbPlayerBannerData bannerData) =>
         new()
@@ -17,7 +17,7 @@ public static partial class SummonMapper
             SummonPoint = bannerData.SummonPoints,
             CsSummonPoint = bannerData.ConsecutionSummonPoints,
             CsPointTermMinDate = bannerData.ConsecutionSummonPointsMinDate,
-            CsPointTermMaxDate = bannerData.ConsecutionSummonPointsMaxDate
+            CsPointTermMaxDate = bannerData.ConsecutionSummonPointsMaxDate,
         };
 
     [MapperRequiredMapping(RequiredMappingStrategy.Target)]

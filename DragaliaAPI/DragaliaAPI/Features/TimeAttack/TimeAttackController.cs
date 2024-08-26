@@ -47,7 +47,7 @@ public class TimeAttackController(
                 UpdateDataList = updateDataList,
                 EntityResult = entityResult,
                 RankingTierRewardList = rewardList.Select(ToRankingTierRewardList),
-                RankingTierRewardEntityList = receivedRewards.Select(ToRewardEntityList)
+                RankingTierRewardEntityList = receivedRewards.Select(ToRewardEntityList),
             }
         );
     }

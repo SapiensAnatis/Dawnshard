@@ -21,7 +21,7 @@ public class DbWeaponBodyTest
         int expectedLevel
     )
     {
-        DbWeaponBody weapon = new() { WeaponBodyId = id, LimitOverCount = limitOverCount, };
+        DbWeaponBody weapon = new() { WeaponBodyId = id, LimitOverCount = limitOverCount };
 
         weapon.Ability1Level.Should().Be(expectedLevel);
     }
@@ -42,7 +42,7 @@ public class DbWeaponBodyTest
         int expectedLevel
     )
     {
-        DbWeaponBody weapon = new() { WeaponBodyId = id, LimitOverCount = limitOverCount, };
+        DbWeaponBody weapon = new() { WeaponBodyId = id, LimitOverCount = limitOverCount };
 
         weapon.Ability2Level.Should().Be(expectedLevel);
     }

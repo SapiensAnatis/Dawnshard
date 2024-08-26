@@ -6,12 +6,12 @@ public enum SummonEffectsSage
     SingleDove = 2,
     MultiDoves = 3,
     GoldFafnirs = 4,
-    RainbowCrystal = 5
+    RainbowCrystal = 5,
 }
 
 public enum SummonEffectsSky
 {
     Blue = 1,
     Yellow = 2,
-    Rainbow = 3
+    Rainbow = 3,
 }

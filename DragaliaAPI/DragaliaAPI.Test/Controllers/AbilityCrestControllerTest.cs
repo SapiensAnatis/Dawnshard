@@ -8,6 +8,7 @@ using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Test.Utils;
+using MockQueryable.EntityFrameworkCore;
 using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Controllers;
@@ -90,8 +91,8 @@ public class AbilityCrestControllerTest
                     {
                         new(),
                         new(),
-                        new()
-                    }
+                        new(),
+                    },
                 },
                 default
             )
@@ -124,8 +125,8 @@ public class AbilityCrestControllerTest
                     {
                         new(),
                         new(),
-                        new()
-                    }
+                        new(),
+                    },
                 },
                 default
             )
@@ -166,7 +167,7 @@ public class AbilityCrestControllerTest
                 new AbilityCrestBuildupPlusCountRequest()
                 {
                     AbilityCrestId = AbilityCrestId.ManaFount,
-                    PlusCountParamsList = new List<AtgenPlusCountParamsList>() { new(), new() }
+                    PlusCountParamsList = new List<AtgenPlusCountParamsList>() { new(), new() },
                 },
                 default
             )
@@ -196,7 +197,7 @@ public class AbilityCrestControllerTest
                 new AbilityCrestBuildupPlusCountRequest()
                 {
                     AbilityCrestId = AbilityCrestId.ManaFount,
-                    PlusCountParamsList = new List<AtgenPlusCountParamsList>() { new(), new() }
+                    PlusCountParamsList = new List<AtgenPlusCountParamsList>() { new(), new() },
                 },
                 default
             )
@@ -221,7 +222,7 @@ public class AbilityCrestControllerTest
                 new AbilityCrestResetPlusCountRequest()
                 {
                     AbilityCrestId = AbilityCrestId.ManaFount,
-                    PlusCountTypeList = new List<PlusCountType>() { PlusCountType.Hp, 0 }
+                    PlusCountTypeList = new List<PlusCountType>() { PlusCountType.Hp, 0 },
                 },
                 default
             )
@@ -251,8 +252,8 @@ public class AbilityCrestControllerTest
                     PlusCountTypeList = new List<PlusCountType>()
                     {
                         PlusCountType.Hp,
-                        PlusCountType.Atk
-                    }
+                        PlusCountType.Atk,
+                    },
                 },
                 default
             )
@@ -284,7 +285,7 @@ public class AbilityCrestControllerTest
                         new DbAbilityCrestSet()
                         {
                             ViewerId = IdentityTestUtils.ViewerId,
-                            AbilityCrestSetNo = setNo
+                            AbilityCrestSetNo = setNo,
                         }
                     )
                 );
@@ -318,7 +319,7 @@ public class AbilityCrestControllerTest
                         CrestSlotType2CrestId2 = AbilityCrestId.DragonsNest,
                         CrestSlotType3CrestId1 = AbilityCrestId.CrownofLightSerpentsBoon,
                         CrestSlotType3CrestId2 = AbilityCrestId.TutelarysDestinyWolfsBoon,
-                        TalismanKeyId = 1
+                        TalismanKeyId = 1,
                     },
                 }
                     .AsQueryable()
@@ -351,7 +352,7 @@ public class AbilityCrestControllerTest
                                 CrestSlotType2CrestId2 = AbilityCrestId.DragonsNest,
                                 CrestSlotType3CrestId1 = AbilityCrestId.CrownofLightSerpentsBoon,
                                 CrestSlotType3CrestId2 = AbilityCrestId.TutelarysDestinyWolfsBoon,
-                                TalismanKeyId = 1
+                                TalismanKeyId = 1,
                             }
                         )
                     );
@@ -365,7 +366,7 @@ public class AbilityCrestControllerTest
                             new DbAbilityCrestSet()
                             {
                                 ViewerId = IdentityTestUtils.ViewerId,
-                                AbilityCrestSetNo = setNo
+                                AbilityCrestSetNo = setNo,
                             }
                         )
                     );
@@ -412,7 +413,7 @@ public class AbilityCrestControllerTest
                 {
                     AbilityCrestSetName = "",
                     AbilityCrestSetNo = setNo,
-                    RequestAbilityCrestSetData = new() { }
+                    RequestAbilityCrestSetData = new() { },
                 },
                 default
             )
@@ -448,7 +449,7 @@ public class AbilityCrestControllerTest
                 new AbilityCrestUpdateAbilityCrestSetNameRequest()
                 {
                     AbilityCrestSetNo = setNo,
-                    AbilityCrestSetName = newName
+                    AbilityCrestSetName = newName,
                 },
                 default
             )
@@ -470,7 +471,7 @@ public class AbilityCrestControllerTest
                 new DbAbilityCrestSet()
                 {
                     ViewerId = IdentityTestUtils.ViewerId,
-                    AbilityCrestSetNo = setNo
+                    AbilityCrestSetNo = setNo,
                 }
             );
 
@@ -482,7 +483,7 @@ public class AbilityCrestControllerTest
                 new AbilityCrestUpdateAbilityCrestSetNameRequest()
                 {
                     AbilityCrestSetNo = setNo,
-                    AbilityCrestSetName = newName
+                    AbilityCrestSetName = newName,
                 },
                 default
             )

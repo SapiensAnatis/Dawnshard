@@ -121,6 +121,6 @@ public static class CharaConstants
         6961950,
         7551950,
         8186950,
-        8866950
+        8866950,
     }.ToImmutableList();
 }

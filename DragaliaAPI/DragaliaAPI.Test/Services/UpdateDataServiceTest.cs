@@ -81,8 +81,8 @@ public class UpdateDataServiceTest : RepositoryTestFixture
                 PartyNo = 1,
                 Units = new List<DbPartyUnit>()
                 {
-                    new() { CharaId = Charas.GalaAlex, UnitNo = 1 }
-                }
+                    new() { CharaId = Charas.GalaAlex, UnitNo = 1 },
+                },
             };
 
         DbPlayerStoryState questStoryState =
@@ -91,7 +91,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
                 ViewerId = viewerId,
                 State = StoryState.Read,
                 StoryId = 2,
-                StoryType = StoryTypes.Quest
+                StoryType = StoryTypes.Quest,
             };
         DbPlayerStoryState charaStoryState =
             new()
@@ -124,7 +124,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
             {
                 ViewerId = viewerId,
                 MaterialId = Materials.AlmightyOnesMaskFragment,
-                Quantity = 10
+                Quantity = 10,
             };
 
         DbQuest questData =
@@ -135,7 +135,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
                 IsMissionClear1 = true,
                 IsMissionClear2 = true,
                 IsMissionClear3 = true,
-                State = 3
+                State = 3,
             };
 
         DbFortBuild buildData =
@@ -150,7 +150,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
                 IsNew = true,
                 LastIncomeDate = DateTimeOffset.FromUnixTimeSeconds(5),
                 BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(10),
-                BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(15)
+                BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(15),
             };
 
         this.ApiContext.AddRange(
@@ -167,7 +167,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
                 dragonStoryState,
                 materialData,
                 questData,
-                buildData
+                buildData,
             }
         );
 
@@ -220,7 +220,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
             {
                 new DbPlayerDragonData(ViewerId, Dragons.Arsene),
                 new DbPlayerDragonData(ViewerId, Dragons.GalaBeastVolk),
-                new DbPlayerDragonData(ViewerId, Dragons.HighZodiark)
+                new DbPlayerDragonData(ViewerId, Dragons.HighZodiark),
             }
         );
 

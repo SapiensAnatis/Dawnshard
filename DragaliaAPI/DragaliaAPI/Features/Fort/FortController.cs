@@ -51,7 +51,7 @@ public class FortController : DragaliaControllerBase
                 ProductionSt = await this.fortService.GetStaminaProduction(),
                 ProductionDf = await this.fortService.GetDragonfruitProduction(),
                 FortDetail = fortDetail,
-                CurrentServerTime = DateTimeOffset.UtcNow
+                CurrentServerTime = DateTimeOffset.UtcNow,
             };
 
         await updateDataService.SaveChangesAsync(cancellationToken);
@@ -74,7 +74,7 @@ public class FortController : DragaliaControllerBase
             {
                 Result = 1,
                 FortDetail = await fortService.GetFortDetail(),
-                UpdateDataList = updateDataList
+                UpdateDataList = updateDataList,
             };
         return Ok(data);
     }
@@ -124,7 +124,7 @@ public class FortController : DragaliaControllerBase
                 Result = 1,
                 BuildId = cancelledBuild.BuildId,
                 FortDetail = fortDetail,
-                UpdateDataList = updateDataList
+                UpdateDataList = updateDataList,
             };
         return Ok(data);
     }
@@ -182,7 +182,9 @@ public class FortController : DragaliaControllerBase
                 RemainTime = build.RemainTime,
                 FortDetail = fortDetail,
                 UpdateDataList = updateDataList,
-                EntityResult = new EntityResult() // What does it do?
+                EntityResult =
+                    new EntityResult() // What does it do?
+                ,
             };
         return Ok(data);
     }
@@ -236,7 +238,7 @@ public class FortController : DragaliaControllerBase
                 Result = 1,
                 BuildId = cancelledBuild.BuildId,
                 FortDetail = fortDetail,
-                UpdateDataList = updateDataList
+                UpdateDataList = updateDataList,
             };
         return Ok(data);
     }
@@ -294,7 +296,7 @@ public class FortController : DragaliaControllerBase
                 RemainTime = build.BuildEndDate - build.BuildStartDate,
                 FortDetail = fortDetail,
                 UpdateDataList = updateDataList,
-                EntityResult = this.rewardService.GetEntityResult()
+                EntityResult = this.rewardService.GetEntityResult(),
             };
         return Ok(data);
     }
@@ -323,7 +325,7 @@ public class FortController : DragaliaControllerBase
                 ProductionRp = await this.fortService.GetRupieProduction(),
                 ProductionSt = await this.fortService.GetStaminaProduction(),
                 ProductionDf = await this.fortService.GetDragonfruitProduction(),
-                UpdateDataList = updateDataList
+                UpdateDataList = updateDataList,
             };
         return Ok(data);
     }

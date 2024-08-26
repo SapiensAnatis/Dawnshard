@@ -38,16 +38,16 @@ public sealed partial class SummonService(
     ) =>
         requestInfo.ExecType switch
         {
-            SummonExecTypes.Single
-            or SummonExecTypes.DailyDeal
-                => this.GenerateSummonResultInternal(requestInfo.SummonId, requestInfo.SummonCount),
-            SummonExecTypes.Tenfold
-                => this.GenerateTenfoldResultInternal(requestInfo.SummonId, numTenfolds: 1),
-            _
-                => throw new ArgumentException(
-                    $"Invalid summon exec type {requestInfo.ExecType}",
-                    nameof(requestInfo)
-                ),
+            SummonExecTypes.Single or SummonExecTypes.DailyDeal =>
+                this.GenerateSummonResultInternal(requestInfo.SummonId, requestInfo.SummonCount),
+            SummonExecTypes.Tenfold => this.GenerateTenfoldResultInternal(
+                requestInfo.SummonId,
+                numTenfolds: 1
+            ),
+            _ => throw new ArgumentException(
+                $"Invalid summon exec type {requestInfo.ExecType}",
+                nameof(requestInfo)
+            ),
         };
 
     public Task<List<AtgenRedoableSummonResultUnitList>> GenerateRedoableSummonResult() =>
@@ -171,7 +171,7 @@ public sealed partial class SummonService(
                 SummonPoint = x.SummonPoints,
                 CsSummonPoint = x.ConsecutionSummonPoints,
                 CsPointTermMinDate = x.ConsecutionSummonPointsMinDate,
-                CsPointTermMaxDate = x.ConsecutionSummonPointsMaxDate
+                CsPointTermMaxDate = x.ConsecutionSummonPointsMaxDate,
             })
             .ToListAsync();
     }
@@ -191,7 +191,7 @@ public sealed partial class SummonService(
             SummonPoint = bannerData.SummonPoints,
             CsSummonPoint = bannerData.ConsecutionSummonPoints,
             CsPointTermMinDate = bannerData.ConsecutionSummonPointsMinDate,
-            CsPointTermMaxDate = bannerData.ConsecutionSummonPointsMaxDate
+            CsPointTermMaxDate = bannerData.ConsecutionSummonPointsMaxDate,
         };
     }
 
@@ -344,20 +344,19 @@ public sealed partial class SummonService(
         int paymentCost = (requestInfo.PaymentType, requestInfo.ExecType) switch
         {
             (PaymentTypes.Diamantium, SummonExecTypes.Tenfold) => summonList.MultiDiamond,
-            (PaymentTypes.Diamantium, SummonExecTypes.Single)
-                => summonList.SingleDiamond * requestInfo.ExecCount,
+            (PaymentTypes.Diamantium, SummonExecTypes.Single) => summonList.SingleDiamond
+                * requestInfo.ExecCount,
             (PaymentTypes.Wyrmite, SummonExecTypes.Tenfold) => summonList.MultiCrystal,
-            (PaymentTypes.Wyrmite, SummonExecTypes.Single)
-                => summonList.SingleCrystal * requestInfo.ExecCount,
+            (PaymentTypes.Wyrmite, SummonExecTypes.Single) => summonList.SingleCrystal
+                * requestInfo.ExecCount,
             (PaymentTypes.Ticket, SummonExecTypes.Tenfold) => 1,
             (PaymentTypes.Ticket, SummonExecTypes.Single) => requestInfo.ExecCount,
             (PaymentTypes.FreeDailyTenfold, SummonExecTypes.Tenfold) => 0,
             (PaymentTypes.Diamantium, SummonExecTypes.DailyDeal) => 30,
-            _
-                => throw new DragaliaException(
-                    ResultCode.SummonTypeUnexpected,
-                    $"Failed to calculate summon cost for payment type {requestInfo.PaymentType} and exec type {requestInfo.ExecType}"
-                )
+            _ => throw new DragaliaException(
+                ResultCode.SummonTypeUnexpected,
+                $"Failed to calculate summon cost for payment type {requestInfo.PaymentType} and exec type {requestInfo.ExecType}"
+            ),
         };
 
         int entityId = 0;
@@ -377,11 +376,10 @@ public sealed partial class SummonService(
                 {
                     SummonExecTypes.Single => SummonTickets.SingleSummon,
                     SummonExecTypes.Tenfold => SummonTickets.TenfoldSummon,
-                    _
-                        => throw new DragaliaException(
-                            ResultCode.CommonInvalidArgument,
-                            $"Invalid exec type {requestInfo.ExecType} for ticket summon"
-                        )
+                    _ => throw new DragaliaException(
+                        ResultCode.CommonInvalidArgument,
+                        $"Invalid exec type {requestInfo.ExecType} for ticket summon"
+                    ),
                 };
 
                 entityId = (int)genericTicketId;
@@ -455,7 +453,7 @@ public sealed partial class SummonService(
                     new AtgenDuplicateEntityList
                     {
                         EntityType = result.EntityType,
-                        EntityId = result.Id
+                        EntityId = result.Id,
                     }
                 );
             }
@@ -626,12 +624,12 @@ public sealed partial class SummonService(
         List<UnitRate> allNormalRates =
         [
             .. normalRateData.PickupRates,
-            .. normalRateData.NormalRates
+            .. normalRateData.NormalRates,
         ];
         List<UnitRate> allGuaranteeRates =
         [
             .. guaranteeRateData.PickupRates,
-            .. guaranteeRateData.NormalRates
+            .. guaranteeRateData.NormalRates,
         ];
 
         IPick<AtgenRedoableSummonResultUnitList> normalPicker = Out.Of()

@@ -24,13 +24,13 @@ public class RewardServiceTest : TestFixture
         SummonTickets ticketType
     )
     {
-        DbSummonTicket ticket = new() { SummonTicketId = ticketType, Quantity = 1, };
+        DbSummonTicket ticket = new() { SummonTicketId = ticketType, Quantity = 1 };
         DbPlayerPresent present =
             new()
             {
                 EntityType = EntityTypes.SummonTicket,
                 EntityQuantity = 5,
-                EntityId = (int)ticketType
+                EntityId = (int)ticketType,
             };
 
         await this.AddRangeToDatabase([ticket, present]);
@@ -49,7 +49,7 @@ public class RewardServiceTest : TestFixture
                         ViewerId = this.ViewerId,
                         SummonTicketId = ticketType,
                         Quantity = 6,
-                    }
+                    },
                 ]
             );
     }
@@ -68,7 +68,7 @@ public class RewardServiceTest : TestFixture
             {
                 EntityType = EntityTypes.SummonTicket,
                 EntityQuantity = 5,
-                EntityId = (int)ticketType
+                EntityId = (int)ticketType,
             };
 
         await this.AddToDatabase(present);
@@ -86,7 +86,7 @@ public class RewardServiceTest : TestFixture
                         ViewerId = this.ViewerId,
                         SummonTicketId = ticketType,
                         Quantity = 5,
-                    }
+                    },
                 ],
                 opts => opts.Excluding(x => x.KeyId)
             );

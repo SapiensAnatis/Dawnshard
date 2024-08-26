@@ -72,7 +72,7 @@ public class DungeonController(
                     WallId = 0,
                     WallLevel = 0,
                     IsHost = true,
-                }
+                },
             };
 
         logger.LogDebug("Session is multiplayer: {IsMulti}", session.IsMulti);

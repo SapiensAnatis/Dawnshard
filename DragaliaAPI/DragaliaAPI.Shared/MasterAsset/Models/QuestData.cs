@@ -66,7 +66,7 @@ public record QuestData(
             EventKindType.Build => this.IdSuffix is 301 or 302 or 303 or 401, // Boss battle (or EX boss battle)
             EventKindType.Raid => this.IdSuffix is 201 or 202 or 203, // Boss battle
             EventKindType.Earn => this.IdSuffix is 201 or 202 or 203 or 401, // Invasion quest
-            _ => false
+            _ => false,
         };
 
     [IgnoreMember]
@@ -74,7 +74,7 @@ public record QuestData(
         this.EventKindType switch
         {
             EventKindType.Build => this.IdSuffix is 501 or 502,
-            _ => false
+            _ => false,
         };
 
     [IgnoreMember]
@@ -83,7 +83,7 @@ public record QuestData(
         {
             EventKindType.Build => this.IdSuffix is 701 or 702,
             EventKindType.Earn => this.IdSuffix is 301 or 302 or 303,
-            _ => false
+            _ => false,
         };
 
     [IgnoreMember]

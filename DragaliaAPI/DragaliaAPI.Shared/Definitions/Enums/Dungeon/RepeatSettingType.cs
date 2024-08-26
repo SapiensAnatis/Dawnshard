@@ -4,5 +4,5 @@ public enum RepeatSettingType
 {
     None,
     UseAllStamina,
-    Specified
+    Specified,
 }

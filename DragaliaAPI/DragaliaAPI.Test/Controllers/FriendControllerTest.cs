@@ -36,8 +36,8 @@ public class FriendControllerTest
                     SupportUserList = new List<UserSupportList>() { TestData.SupportListEuden },
                     SupportUserDetailList = new List<AtgenSupportUserDetailList>()
                     {
-                        new() { ViewerId = 1000, IsFriend = true, },
-                    }
+                        new() { ViewerId = 1000, IsFriend = true },
+                    },
                 }
             );
 
@@ -69,7 +69,7 @@ public class FriendControllerTest
                     SupportUserDetailList = new List<AtgenSupportUserDetailList>()
                     {
                         new() { ViewerId = 1000, IsFriend = true },
-                    }
+                    },
                 }
             );
 

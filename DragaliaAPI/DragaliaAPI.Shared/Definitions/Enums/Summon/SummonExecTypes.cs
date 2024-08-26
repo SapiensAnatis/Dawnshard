@@ -11,5 +11,5 @@ public enum SummonExecTypes : byte
     Invalid = 0,
     Single = 1,
     Tenfold = 2,
-    DailyDeal = 3
+    DailyDeal = 3,
 }

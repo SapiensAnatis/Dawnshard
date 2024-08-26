@@ -35,7 +35,7 @@ public class TreasureTradeTest : TestFixture
                 Id = 1000,
                 Count = 1,
                 Type = TradeType.Treasure,
-                LastTradeTime = DateTimeOffset.UnixEpoch
+                LastTradeTime = DateTimeOffset.UnixEpoch,
             }
         );
 

@@ -29,5 +29,5 @@ public enum WeaponTypes
     Cane = 8,
 
     [TextLabel("Manacaster")]
-    Gun = 9
+    Gun = 9,
 }

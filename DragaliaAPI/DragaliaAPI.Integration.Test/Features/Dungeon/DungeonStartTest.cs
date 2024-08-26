@@ -29,7 +29,7 @@ public class DungeonStartTest : TestFixture
                 new DungeonStartStartRequest()
                 {
                     PartyNoList = new List<int>() { 1 },
-                    QuestId = 100010103
+                    QuestId = 100010103,
                 }
             )
         ).Data;
@@ -51,7 +51,7 @@ public class DungeonStartTest : TestFixture
                 new DungeonStartStartRequest()
                 {
                     PartyNoList = new List<int>() { 37, 38 },
-                    QuestId = 100010103
+                    QuestId = 100010103,
                 }
             )
         ).Data;
@@ -73,7 +73,7 @@ public class DungeonStartTest : TestFixture
                 new DungeonStartStartRequest()
                 {
                     PartyNoList = new List<int>() { 38 },
-                    QuestId = 100010103
+                    QuestId = 100010103,
                 }
             )
         ).Data;
@@ -126,8 +126,8 @@ public class DungeonStartTest : TestFixture
                         EquipTalismanKeyId = (ulong)GetTalismanKeyId(Talismans.GalaMym),
                         EquipCrestSlotType3CrestId1 = AbilityCrestId.TutelarysDestinyWolfsBoon,
                         EquipCrestSlotType3CrestId2 = AbilityCrestId.TestamentofEternityFishsBoon,
-                    }
-                }
+                    },
+                },
             };
 
         DungeonStartStartAssignUnitResponse response = (
@@ -255,7 +255,7 @@ public class DungeonStartTest : TestFixture
                 new DungeonStartStartRequest()
                 {
                     QuestId = TutorialService.TutorialQuestIds.AvenueToPowerBeginner,
-                    PartyNoList = [1]
+                    PartyNoList = [1],
                 }
             );
 
@@ -280,7 +280,7 @@ public class DungeonStartTest : TestFixture
                 new DungeonStartStartRequest()
                 {
                     QuestId = TutorialService.TutorialQuestIds.AvenueToPowerBeginner,
-                    PartyNoList = [1]
+                    PartyNoList = [1],
                 }
             );
 
@@ -312,7 +312,7 @@ public class DungeonStartTest : TestFixture
                 new DungeonStartStartRequest()
                 {
                     QuestId = TutorialService.TutorialQuestIds.AvenueToPowerBeginner,
-                    PartyNoList = [1]
+                    PartyNoList = [1],
                 }
             );
 

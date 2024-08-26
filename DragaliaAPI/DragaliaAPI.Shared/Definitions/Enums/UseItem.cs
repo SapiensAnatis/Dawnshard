@@ -12,5 +12,5 @@ public enum UseItem
     StaminaPotion,
     OtherworldlyLeblancCurry,
     EthonAshes = 100701,
-    BlessedEthonAshes
+    BlessedEthonAshes,
 }

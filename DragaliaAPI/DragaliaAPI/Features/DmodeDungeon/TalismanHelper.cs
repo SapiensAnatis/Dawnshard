@@ -28,7 +28,11 @@ public static class TalismanHelper
         (100, 1), // Element + Weapon specific dragon damage
         (111, 7), // Dragon Haste
         (118, 2), // Element-specific dragon haste
-        (120, 1) // Element + Weapon specific dragon haste
+        (
+            120,
+            1
+        ) // Element + Weapon specific dragon haste
+        ,
     };
 
     private static readonly (int StartId, int Amount)[] Ability2Pool =
@@ -54,7 +58,7 @@ public static class TalismanHelper
         (130, 1), // Element + Weapon specific dragon time
         (131, 4), // Tradeoffs (Steady|Easy|Lucky|Hasty) Hitter I
         (131, 4),
-        (131, 4)
+        (131, 4),
     };
 
     private const int TalismanIdDifference = 40_000_000;

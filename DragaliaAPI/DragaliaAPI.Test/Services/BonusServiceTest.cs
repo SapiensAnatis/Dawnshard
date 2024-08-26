@@ -8,6 +8,7 @@ using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Serialization;
 using Microsoft.Extensions.Logging;
+using MockQueryable.EntityFrameworkCore;
 using MockQueryable.Moq;
 using static DragaliaAPI.Test.Utils.IdentityTestUtils;
 
@@ -63,7 +64,7 @@ public class BonusServiceTest
                     {
                         ViewerId = ViewerId,
                         PlantId = x.PlantId,
-                        Level = x.Level
+                        Level = x.Level,
                     })
                     .AsQueryable()
                     .BuildMock()
@@ -76,7 +77,7 @@ public class BonusServiceTest
                     {
                         ViewerId = ViewerId,
                         WeaponBodyId = x.WeaponBodyId,
-                        FortPassiveCharaWeaponBuildupCount = x.FortPassiveCharaWeaponBuildupCount
+                        FortPassiveCharaWeaponBuildupCount = x.FortPassiveCharaWeaponBuildupCount,
                     })
                     .AsQueryable()
                     .BuildMock()
@@ -107,7 +108,7 @@ public class BonusServiceTest
                         ViewerId = ViewerId,
                         PlantId = FortPlants.ArctosMonument,
                         Level = 10,
-                    }
+                    },
                 }
                     .AsQueryable()
                     .BuildMock()
@@ -119,7 +120,7 @@ public class BonusServiceTest
                 new AtgenEventBoost()
                 {
                     EventEffect = EventEffectTypes.EventDamageBoost,
-                    EffectValue = 50
+                    EffectValue = 50,
                 }
             );
     }

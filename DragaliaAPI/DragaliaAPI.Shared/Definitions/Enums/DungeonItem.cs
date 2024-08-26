@@ -8,5 +8,5 @@ public enum DungeonItem
     HpAndDamage = 3001,
     Dp25 = 4001,
     Dp50,
-    Dp100
+    Dp100,
 }

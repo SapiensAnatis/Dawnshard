@@ -27,7 +27,7 @@ public class WeaponServiceTest
             { Materials.OldCloth, 30 },
             { Materials.FloatingYellowCloth, 7 },
             { Materials.UnearthlyLantern, 1 },
-            { Materials.BlazeOrb, 8 }
+            { Materials.BlazeOrb, 8 },
         };
 
     private static Dictionary<Materials, int> MjolnirBuildup40Map =
@@ -39,7 +39,7 @@ public class WeaponServiceTest
             { Materials.PrimalShadowwyrmsSphere, 8 },
             { Materials.PrimalShadowwyrmsGreatsphere, 5 },
             { Materials.PrimalShadowwyrmsAmethyst, 7 },
-            { Materials.Orichalcum, 1 }
+            { Materials.Orichalcum, 1 },
         };
 
     private static Dictionary<Materials, int> PrimalHexWeaponBonusMap =
@@ -48,7 +48,7 @@ public class WeaponServiceTest
             { Materials.PrimalShadowwyrmsSphere, 25 },
             { Materials.PrimalShadowwyrmsGreatsphere, 25 },
             { Materials.PrimalShadowwyrmsAmethyst, 14 },
-            { Materials.Orichalcum, 15 }
+            { Materials.Orichalcum, 15 },
         };
 
     private static Dictionary<Materials, int> AmeNoMurakumoRefineMap =
@@ -58,7 +58,7 @@ public class WeaponServiceTest
             { Materials.LiberatedOnesMaskFragment, 30 },
             { Materials.RebelliousOnesCruelty, 10 },
             { Materials.RebelliousButterfliesSearingFire, 10 },
-            { Materials.Orichalcum, 10 }
+            { Materials.Orichalcum, 10 },
         };
 
     private readonly WeaponService weaponService;
@@ -306,7 +306,7 @@ public class WeaponServiceTest
                 {
                     BuildupPieceType = BuildupPieceTypes.Passive,
                     BuildupPieceNo = 4000,
-                    Step = 1
+                    Step = 1,
                 }
             )
         ).Should().Be(ResultCode.WeaponBodyBuildupPieceUnablePiece);
@@ -333,7 +333,7 @@ public class WeaponServiceTest
                 {
                     BuildupPieceType = BuildupPieceTypes.Passive,
                     BuildupPieceNo = 1,
-                    Step = 1
+                    Step = 1,
                 }
             )
         ).Should().Be(ResultCode.CommonMaterialShort);
@@ -363,7 +363,7 @@ public class WeaponServiceTest
                 {
                     BuildupPieceType = BuildupPieceTypes.Passive,
                     BuildupPieceNo = 1,
-                    Step = 1
+                    Step = 1,
                 }
             )
         ).Should().Be(ResultCode.CommonMaterialShort);
@@ -387,7 +387,7 @@ public class WeaponServiceTest
             .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckCoin(80_000)).ReturnsAsync(true);
         this.mockWeaponRepository.Setup(x => x.FindAsync(WeaponBodies.InfernoApogee))
-            .ReturnsAsync(new DbWeaponBody() { ViewerId = 1, LimitBreakCount = 0, });
+            .ReturnsAsync(new DbWeaponBody() { ViewerId = 1, LimitBreakCount = 0 });
 
         (
             await this.weaponService.TryBuildup(
@@ -396,7 +396,7 @@ public class WeaponServiceTest
                 {
                     BuildupPieceType = BuildupPieceTypes.Passive,
                     BuildupPieceNo = 1,
-                    Step = 1
+                    Step = 1,
                 }
             )
         ).Should().Be(ResultCode.WeaponBodyBuildupPieceShortLimitBreakCount);
@@ -426,7 +426,7 @@ public class WeaponServiceTest
                 {
                     ViewerId = 1,
                     LimitBreakCount = 8,
-                    WeaponBodyId = WeaponBodies.InfernoApogee
+                    WeaponBodyId = WeaponBodies.InfernoApogee,
                 }
             );
         this.mockWeaponRepository.Setup(x =>
@@ -454,7 +454,7 @@ public class WeaponServiceTest
                 {
                     BuildupPieceType = BuildupPieceTypes.Passive,
                     BuildupPieceNo = 1,
-                    Step = 1
+                    Step = 1,
                 }
             )
         ).Should().Be(ResultCode.Success);
@@ -480,7 +480,7 @@ public class WeaponServiceTest
                 {
                     BuildupPieceType = BuildupPieceTypes.Stats,
                     BuildupPieceNo = 1,
-                    Step = 222
+                    Step = 222,
                 }
             )
         ).Should().Be(ResultCode.WeaponBodyBuildupPieceUnablePiece);
@@ -510,7 +510,7 @@ public class WeaponServiceTest
                 {
                     BuildupPieceType = BuildupPieceTypes.Stats,
                     BuildupPieceNo = 1,
-                    Step = 40
+                    Step = 40,
                 }
             )
         ).Should().Be(ResultCode.CommonMaterialShort);
@@ -542,7 +542,7 @@ public class WeaponServiceTest
                 {
                     BuildupPieceType = BuildupPieceTypes.Stats,
                     BuildupPieceNo = 1,
-                    Step = 40
+                    Step = 40,
                 }
             )
         ).Should().Be(ResultCode.WeaponBodyBuildupPieceStepError);
@@ -582,7 +582,7 @@ public class WeaponServiceTest
                 {
                     BuildupPieceType = BuildupPieceTypes.Stats,
                     BuildupPieceNo = 1,
-                    Step = 40
+                    Step = 40,
                 }
             )
         ).Should().Be(ResultCode.Success);
@@ -605,7 +605,7 @@ public class WeaponServiceTest
                 {
                     BuildupPieceType = BuildupPieceTypes.Unbind,
                     BuildupPieceNo = 1,
-                    Step = 4000
+                    Step = 4000,
                 }
             )
         ).Should().Be(ResultCode.WeaponBodyBuildupPieceUnablePiece);
@@ -632,7 +632,7 @@ public class WeaponServiceTest
                 {
                     BuildupPieceType = BuildupPieceTypes.Unbind,
                     BuildupPieceNo = 1,
-                    Step = 5
+                    Step = 5,
                 }
             )
         ).Should().Be(ResultCode.CommonMaterialShort);
@@ -662,7 +662,7 @@ public class WeaponServiceTest
                 {
                     BuildupPieceType = BuildupPieceTypes.Unbind,
                     BuildupPieceNo = 1,
-                    Step = 5
+                    Step = 5,
                 }
             )
         ).Should().Be(ResultCode.CommonMaterialShort);
@@ -686,7 +686,7 @@ public class WeaponServiceTest
             .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckCoin(5_000_000)).ReturnsAsync(true);
         this.mockWeaponRepository.Setup(x => x.FindAsync(WeaponBodies.PrimalHex))
-            .ReturnsAsync(new DbWeaponBody() { ViewerId = 1, LimitBreakCount = 0, });
+            .ReturnsAsync(new DbWeaponBody() { ViewerId = 1, LimitBreakCount = 0 });
 
         (
             await this.weaponService.TryBuildup(
@@ -695,7 +695,7 @@ public class WeaponServiceTest
                 {
                     BuildupPieceType = BuildupPieceTypes.WeaponBonus,
                     BuildupPieceNo = 1,
-                    Step = 1
+                    Step = 1,
                 }
             )
         ).Should().Be(ResultCode.WeaponBodyBuildupPieceShortLimitBreakCount);
@@ -731,7 +731,7 @@ public class WeaponServiceTest
             {
                 ViewerId = 1,
                 WeaponBodyId = WeaponBodies.PrimalHex,
-                LimitBreakCount = 8
+                LimitBreakCount = 8,
             };
         Type type = mockEntity.GetType();
         PropertyInfo prop = type.GetProperty(propName)!;
@@ -747,7 +747,7 @@ public class WeaponServiceTest
                 {
                     BuildupPieceType = pieceType,
                     BuildupPieceNo = 1,
-                    Step = step
+                    Step = step,
                 }
             )
         ).Should().Be(ResultCode.WeaponBodyBuildupPieceStepError);
@@ -777,7 +777,7 @@ public class WeaponServiceTest
                 {
                     ViewerId = 1,
                     LimitBreakCount = 4,
-                    WeaponBodyId = WeaponBodies.PrimalHex
+                    WeaponBodyId = WeaponBodies.PrimalHex,
                 }
             );
         this.mockInventoryRepository.Setup(x =>
@@ -798,7 +798,7 @@ public class WeaponServiceTest
                 {
                     BuildupPieceType = BuildupPieceTypes.Unbind,
                     BuildupPieceNo = 1,
-                    Step = 5
+                    Step = 5,
                 }
             )
         ).Should().Be(ResultCode.Success);
@@ -833,7 +833,7 @@ public class WeaponServiceTest
             {
                 ViewerId = 1,
                 LimitBreakCount = 2,
-                WeaponBodyId = id
+                WeaponBodyId = id,
             };
         this.mockWeaponRepository.Setup(x => x.FindAsync(id)).ReturnsAsync(mockEntity);
 
@@ -855,7 +855,7 @@ public class WeaponServiceTest
                     BuildupPieceType = BuildupPieceTypes.Unbind,
                     BuildupPieceNo = 1,
                     Step = 3,
-                    IsUseDedicatedMaterial = true
+                    IsUseDedicatedMaterial = true,
                 }
             )
         ).Should().Be(ResultCode.Success);
@@ -905,7 +905,7 @@ public class WeaponServiceTest
                 ViewerId = 1,
                 LimitBreakCount = 8,
                 LimitOverCount = 1,
-                WeaponBodyId = WeaponBodies.PrimalHex
+                WeaponBodyId = WeaponBodies.PrimalHex,
             };
         Type type = mockEntity.GetType();
         PropertyInfo prop = type.GetProperty(propName)!;
@@ -928,7 +928,7 @@ public class WeaponServiceTest
                 {
                     BuildupPieceType = pieceType,
                     BuildupPieceNo = 1,
-                    Step = step
+                    Step = step,
                 }
             )
         ).Should().Be(ResultCode.Success);
@@ -961,7 +961,7 @@ public class WeaponServiceTest
                     ViewerId = 1,
                     LimitBreakCount = 8,
                     LimitOverCount = 1,
-                    WeaponBodyId = WeaponBodies.AmenoMurakumo
+                    WeaponBodyId = WeaponBodies.AmenoMurakumo,
                 }
             );
         this.mockInventoryRepository.Setup(x =>
@@ -995,7 +995,7 @@ public class WeaponServiceTest
                     BuildupPieceType = BuildupPieceTypes.Refine,
                     BuildupPieceNo = 1,
                     Step = 2,
-                    IsUseDedicatedMaterial = true
+                    IsUseDedicatedMaterial = true,
                 }
             )
         ).Should().Be(ResultCode.Success);

@@ -95,16 +95,20 @@ public class DungeonRepositoryTest : RepositoryTestFixture
                 new()
                 {
                     ViewerId = ViewerId,
-                    AbilityCrestId = AbilityCrestId.ThePrinceofDragonyule
+                    AbilityCrestId = AbilityCrestId.ThePrinceofDragonyule,
                 },
                 new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrestId.TaikoTandem },
                 new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrestId.AChoiceBlend },
                 new()
                 {
                     ViewerId = ViewerId,
-                    AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon
+                    AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                 },
-                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrestId.AKingsPrideSwordsBoon }
+                new()
+                {
+                    ViewerId = ViewerId,
+                    AbilityCrestId = AbilityCrestId.AKingsPrideSwordsBoon,
+                },
             };
 
         DbTalisman talisman =
@@ -112,7 +116,7 @@ public class DungeonRepositoryTest : RepositoryTestFixture
             {
                 ViewerId = ViewerId,
                 TalismanId = Talismans.GalaNedrick,
-                TalismanKeyId = 44444
+                TalismanKeyId = 44444,
             };
 
         DbPartyUnit unit =
@@ -171,8 +175,8 @@ public class DungeonRepositoryTest : RepositoryTestFixture
             CrestSlotType2CrestList = crests.GetRange(3, 2),
             CrestSlotType3CrestList = crests.GetRange(5, 2),
             DragonReliabilityLevel = 15,
-            EditSkill1CharaData = new() { CharaId = Charas.GalaMym, EditSkillLevel = 3, },
-            EditSkill2CharaData = new() { CharaId = Charas.SummerCleo, EditSkillLevel = 2, }
+            EditSkill1CharaData = new() { CharaId = Charas.GalaMym, EditSkillLevel = 3 },
+            EditSkill2CharaData = new() { CharaId = Charas.SummerCleo, EditSkillLevel = 2 },
         };
     }
 }

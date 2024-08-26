@@ -57,7 +57,7 @@ public class StoryRepository : IStoryRepository
                         ViewerId = this.playerIdentityService.ViewerId,
                         StoryId = storyId,
                         StoryType = storyType,
-                        State = 0
+                        State = 0,
                     }
                 )
                 .Entity;

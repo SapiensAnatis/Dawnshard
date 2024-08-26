@@ -4,5 +4,5 @@ public enum ExpeditionState
 {
     None,
     Waiting,
-    Playing
+    Playing,
 }

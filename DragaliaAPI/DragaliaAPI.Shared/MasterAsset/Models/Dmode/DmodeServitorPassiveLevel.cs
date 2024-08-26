@@ -20,6 +20,6 @@ public record DmodeServitorPassiveLevel(
     public readonly (EntityTypes Type, int Id, int Quantity)[] NeededMaterials =
     {
         (ReleaseEntityType1, ReleaseEntityId1, ReleaseEntityQuantity1),
-        (ReleaseEntityType2, ReleaseEntityId2, ReleaseEntityQuantity2)
+        (ReleaseEntityType2, ReleaseEntityId2, ReleaseEntityQuantity2),
     };
 };

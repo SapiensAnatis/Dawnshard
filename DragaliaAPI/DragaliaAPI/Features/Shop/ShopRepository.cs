@@ -35,7 +35,7 @@ public class ShopRepository : IShopRepository
     public void InitializeShopInfo()
     {
         this.apiContext.PlayerShopInfos.Add(
-            new DbPlayerShopInfo() { ViewerId = this.playerIdentityService.ViewerId, }
+            new DbPlayerShopInfo() { ViewerId = this.playerIdentityService.ViewerId }
         );
     }
 
@@ -80,7 +80,7 @@ public class ShopRepository : IShopRepository
                     BuyCount = quantity,
                     LastBuyTime = buyTime,
                     EffectStartTime = effectStart,
-                    EffectEndTime = effectEnd
+                    EffectEndTime = effectEnd,
                 }
             );
 

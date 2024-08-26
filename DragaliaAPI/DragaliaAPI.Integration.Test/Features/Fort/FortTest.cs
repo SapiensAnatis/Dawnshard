@@ -53,7 +53,7 @@ public class FortTest : TestFixture
                     BuildEndDate = end,
                     FortPlantDetailId = 10050411,
                     BuildStatus = FortBuildStatus.LevelUp,
-                    IsNew = false
+                    IsNew = false,
                 },
                 opts =>
                     opts.Excluding(x => x.BuildId)
@@ -121,7 +121,7 @@ public class FortTest : TestFixture
                     BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
                     BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1888924543),
                     IsNew = true,
-                    LastIncomeDate = DateTimeOffset.UnixEpoch
+                    LastIncomeDate = DateTimeOffset.UnixEpoch,
                 }
             )
             .Entity;
@@ -157,7 +157,7 @@ public class FortTest : TestFixture
                     BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
                     BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1888924543),
                     IsNew = true,
-                    LastIncomeDate = DateTimeOffset.UnixEpoch
+                    LastIncomeDate = DateTimeOffset.UnixEpoch,
                 }
             )
             .Entity;
@@ -187,7 +187,7 @@ public class FortTest : TestFixture
                 BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1682110410),
                 BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1682110411),
                 IsNew = true,
-                LastIncomeDate = DateTimeOffset.UnixEpoch
+                LastIncomeDate = DateTimeOffset.UnixEpoch,
             };
 
         await this.AddToDatabase(build);
@@ -248,7 +248,7 @@ public class FortTest : TestFixture
                     BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
                     BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1888924543),
                     IsNew = true,
-                    LastIncomeDate = DateTimeOffset.UnixEpoch
+                    LastIncomeDate = DateTimeOffset.UnixEpoch,
                 }
             )
             .Entity;
@@ -330,7 +330,7 @@ public class FortTest : TestFixture
                     BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
                     BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1888924543),
                     IsNew = true,
-                    LastIncomeDate = DateTimeOffset.UnixEpoch
+                    LastIncomeDate = DateTimeOffset.UnixEpoch,
                 }
             )
             .Entity;
@@ -366,7 +366,7 @@ public class FortTest : TestFixture
                     BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1287924543),
                     BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1388924543),
                     IsNew = true,
-                    LastIncomeDate = DateTimeOffset.UnixEpoch
+                    LastIncomeDate = DateTimeOffset.UnixEpoch,
                 }
             )
             .Entity;
@@ -448,7 +448,7 @@ public class FortTest : TestFixture
                     BuildStartDate = DateTimeOffset.UnixEpoch,
                     BuildEndDate = DateTimeOffset.UnixEpoch,
                     IsNew = true,
-                    LastIncomeDate = DateTimeOffset.UnixEpoch
+                    LastIncomeDate = DateTimeOffset.UnixEpoch,
                 }
             )
             .Entity;
@@ -485,7 +485,7 @@ public class FortTest : TestFixture
                     BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
                     BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1888924543),
                     IsNew = true,
-                    LastIncomeDate = DateTimeOffset.UnixEpoch
+                    LastIncomeDate = DateTimeOffset.UnixEpoch,
                 }
             )
             .Entity;
@@ -522,7 +522,7 @@ public class FortTest : TestFixture
                 ViewerId = ViewerId,
                 PlantId = FortPlants.RupieMine,
                 LastIncomeDate = lastIncome,
-                Level = 10
+                Level = 10,
             };
         DbFortBuild dragonTree =
             new()
@@ -530,7 +530,7 @@ public class FortTest : TestFixture
                 ViewerId = ViewerId,
                 PlantId = FortPlants.Dragontree,
                 LastIncomeDate = lastIncome,
-                Level = 13
+                Level = 13,
             };
 
         this.ApiContext.PlayerFortBuilds.Add(rupieMine);
@@ -548,7 +548,7 @@ public class FortTest : TestFixture
                 "/fort/get_multi_income",
                 new FortGetMultiIncomeRequest()
                 {
-                    BuildIdList = new[] { rupieMine.BuildId, dragonTree.BuildId, halidom.BuildId }
+                    BuildIdList = new[] { rupieMine.BuildId, dragonTree.BuildId, halidom.BuildId },
                 }
             );
 
@@ -580,7 +580,7 @@ public class FortTest : TestFixture
                 ViewerId = ViewerId,
                 PlantId = FortPlants.RupieMine,
                 LastIncomeDate = DateTimeOffset.UnixEpoch,
-                Level = 10
+                Level = 10,
             }
         );
 

@@ -14,7 +14,7 @@ public class DungeonTest : TestFixture
                 new DungeonStartStartRequest()
                 {
                     PartyNoList = new List<int>() { 2 },
-                    QuestId = 100010306
+                    QuestId = 100010306,
                 }
             )
         ).Data.IngameData.DungeonKey;
@@ -39,7 +39,7 @@ public class DungeonTest : TestFixture
                 new DungeonStartStartRequest()
                 {
                     PartyNoList = new List<int>() { 1 },
-                    QuestId = 100010207
+                    QuestId = 100010207,
                 }
             )
         ).Data.IngameData.DungeonKey;
@@ -59,7 +59,7 @@ public class DungeonTest : TestFixture
                     IsHost = true,
                     QuestId = 100010207,
                     WallId = 0,
-                    WallLevel = 0
+                    WallLevel = 0,
                 }
             );
     }

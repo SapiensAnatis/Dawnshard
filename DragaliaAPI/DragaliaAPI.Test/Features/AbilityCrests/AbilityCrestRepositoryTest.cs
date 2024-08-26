@@ -44,7 +44,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
                 new DbAbilityCrest()
                 {
                     ViewerId = IdentityTestUtils.ViewerId,
-                    AbilityCrestId = AbilityCrestId.ADogsDay
+                    AbilityCrestId = AbilityCrestId.ADogsDay,
                 }
             );
     }
@@ -88,7 +88,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
                 new DbAbilityCrest()
                 {
                     ViewerId = IdentityTestUtils.ViewerId,
-                    AbilityCrestId = AbilityCrestId.FlashofGenius
+                    AbilityCrestId = AbilityCrestId.FlashofGenius,
                 }
             );
 
@@ -116,7 +116,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
             {
                 ViewerId = IdentityTestUtils.ViewerId,
                 AbilityCrestSetNo = 54,
-                CrestSlotType1CrestId1 = AbilityCrestId.WorthyRivals
+                CrestSlotType1CrestId1 = AbilityCrestId.WorthyRivals,
             }
         );
         await this.fixture.ApiContext.SaveChangesAsync();
@@ -130,7 +130,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
                 {
                     ViewerId = IdentityTestUtils.ViewerId,
                     AbilityCrestSetNo = 54,
-                    CrestSlotType1CrestId1 = AbilityCrestId.WorthyRivals
+                    CrestSlotType1CrestId1 = AbilityCrestId.WorthyRivals,
                 }
             );
     }

@@ -6,5 +6,5 @@ public enum DmodeDungeonItemType
     Dragon,
     Weapon,
     AbilityCrest,
-    Skill
+    Skill,
 }

@@ -4,5 +4,5 @@ public enum FortBuildStatus
 {
     Neutral,
     Building,
-    LevelUp
+    LevelUp,
 }

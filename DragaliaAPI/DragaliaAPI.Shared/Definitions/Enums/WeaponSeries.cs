@@ -9,5 +9,5 @@ public enum WeaponSeries
     Agito,
     Chimeratech,
     Other,
-    PrimalDragon
+    PrimalDragon,
 }

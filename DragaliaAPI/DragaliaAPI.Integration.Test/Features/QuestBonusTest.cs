@@ -41,7 +41,7 @@ public class QuestBonusTest : TestFixture
                     LastDailyResetTime = response.Data.IngameResultData.EndTime,
                     LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
-                    WeeklyPlayCount = 1
+                    WeeklyPlayCount = 1,
                 }
             );
 
@@ -52,7 +52,7 @@ public class QuestBonusTest : TestFixture
                 {
                     QuestEventId = questEventId,
                     IsReceive = true,
-                    ReceiveBonusCount = 1
+                    ReceiveBonusCount = 1,
                 }
             );
 
@@ -89,7 +89,7 @@ public class QuestBonusTest : TestFixture
                     {
                         EntityType = EntityTypes.Material,
                         EntityId = (int)Materials.TwinklingSand,
-                    }
+                    },
                 },
                 opts => opts.Excluding(x => x.EntityQuantity)
             );
@@ -109,7 +109,7 @@ public class QuestBonusTest : TestFixture
                     LastDailyResetTime = response.Data.IngameResultData.EndTime,
                     LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
-                    WeeklyPlayCount = 1
+                    WeeklyPlayCount = 1,
                 }
             );
     }
@@ -151,7 +151,7 @@ public class QuestBonusTest : TestFixture
                     LastDailyResetTime = resetTime,
                     LastWeeklyResetTime = resetTime,
                     DailyPlayCount = 11,
-                    WeeklyPlayCount = 21
+                    WeeklyPlayCount = 21,
                 }
             );
     }
@@ -190,7 +190,7 @@ public class QuestBonusTest : TestFixture
                     LastDailyResetTime = response.Data.IngameResultData.EndTime,
                     LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
-                    WeeklyPlayCount = 1
+                    WeeklyPlayCount = 1,
                 }
             );
 
@@ -201,7 +201,7 @@ public class QuestBonusTest : TestFixture
                 {
                     QuestEventId = questEventId,
                     IsReceive = true,
-                    ReceiveBonusCount = 1
+                    ReceiveBonusCount = 1,
                 }
             );
 
@@ -235,7 +235,7 @@ public class QuestBonusTest : TestFixture
                     LastDailyResetTime = response.Data.IngameResultData.EndTime,
                     LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
-                    WeeklyPlayCount = 1
+                    WeeklyPlayCount = 1,
                 }
             );
 
@@ -246,7 +246,7 @@ public class QuestBonusTest : TestFixture
                 {
                     QuestEventId = questEventId,
                     IsReceive = false,
-                    ReceiveBonusCount = 0
+                    ReceiveBonusCount = 0,
                 }
             );
 
@@ -268,7 +268,7 @@ public class QuestBonusTest : TestFixture
                     LastDailyResetTime = response.Data.IngameResultData.EndTime,
                     LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
-                    WeeklyPlayCount = 1
+                    WeeklyPlayCount = 1,
                 }
             );
     }
@@ -295,7 +295,7 @@ public class QuestBonusTest : TestFixture
                     LastDailyResetTime = response.Data.IngameResultData.EndTime,
                     LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
-                    WeeklyPlayCount = 1
+                    WeeklyPlayCount = 1,
                 }
             );
 
@@ -306,7 +306,7 @@ public class QuestBonusTest : TestFixture
                 {
                     QuestEventId = questEventId,
                     IsReceive = false,
-                    ReceiveBonusCount = 1
+                    ReceiveBonusCount = 1,
                 }
             );
 
@@ -328,7 +328,7 @@ public class QuestBonusTest : TestFixture
                     LastDailyResetTime = response.Data.IngameResultData.EndTime,
                     LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
-                    WeeklyPlayCount = 1
+                    WeeklyPlayCount = 1,
                 }
             );
     }
@@ -354,8 +354,8 @@ public class QuestBonusTest : TestFixture
                         LiveUnitNoList = new List<int>(),
                         DamageRecord = new List<AtgenDamageRecord>(),
                         DragonDamageRecord = new List<AtgenDamageRecord>(),
-                        BattleRoyalRecord = new AtgenBattleRoyalRecord()
-                    }
+                        BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                    },
                 }
             );
 

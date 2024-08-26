@@ -24,7 +24,7 @@ public class UserTest : TestFixture
             .BeEquivalentTo(
                 new UserLinkedNAccountResponse()
                 {
-                    UpdateDataList = new() { UserData = expectedUserData }
+                    UpdateDataList = new() { UserData = expectedUserData },
                 },
                 opts => opts.Excluding(x => x.UpdateDataList.UserData.Crystal)
             );
@@ -41,9 +41,9 @@ public class UserTest : TestFixture
                     NAccountInfo = new()
                     {
                         Email = "placeholder@email.com",
-                        Nickname = "placeholder nickname"
+                        Nickname = "placeholder nickname",
                     },
-                    UpdateDataList = new()
+                    UpdateDataList = new(),
                 },
                 opts => opts.Excluding(x => x.UpdateDataList.UserData.Crystal)
             );

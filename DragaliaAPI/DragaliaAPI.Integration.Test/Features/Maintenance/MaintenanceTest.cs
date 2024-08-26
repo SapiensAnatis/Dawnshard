@@ -52,7 +52,7 @@ public class MaintenanceTest : TestFixture
                 Enabled = true,
                 Title = "Title",
                 Body = "Body",
-                End = DateTimeOffset.UnixEpoch
+                End = DateTimeOffset.UnixEpoch,
             }
         );
 

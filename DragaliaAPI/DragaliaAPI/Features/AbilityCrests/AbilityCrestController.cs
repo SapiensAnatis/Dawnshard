@@ -191,7 +191,7 @@ public class AbilityCrestController(
         return this.Ok(
             new AbilityCrestGetAbilityCrestSetListResponse()
             {
-                AbilityCrestSetList = abilityCrestSetList
+                AbilityCrestSetList = abilityCrestSetList,
             }
         );
     }
@@ -237,7 +237,7 @@ public class AbilityCrestController(
                 new DbAbilityCrestSet()
                 {
                     AbilityCrestSetNo = request.AbilityCrestSetNo,
-                    AbilityCrestSetName = request.AbilityCrestSetName
+                    AbilityCrestSetName = request.AbilityCrestSetName,
                 }
             );
         }

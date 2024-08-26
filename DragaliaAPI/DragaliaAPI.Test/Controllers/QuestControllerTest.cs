@@ -45,8 +45,8 @@ public class QuestControllerTest
                 NewGetEntityList = new List<AtgenDuplicateEntityList>()
                 {
                     new() { EntityType = EntityTypes.Dragon, EntityId = (int)Dragons.BronzeFafnir },
-                    new() { EntityType = EntityTypes.Chara, EntityId = (int)Charas.Ilia }
-                }
+                    new() { EntityType = EntityTypes.Chara, EntityId = (int)Charas.Ilia },
+                },
             };
 
         this.mockStoryService.Setup(x => x.ReadStory(StoryTypes.Quest, 1))
@@ -64,8 +64,8 @@ public class QuestControllerTest
                     {
                         EntityType = EntityTypes.Dragon,
                         EntityId = (int)Dragons.BronzeFafnir,
-                        EntityQuantity = 2
-                    }
+                        EntityQuantity = 2,
+                    },
                 }
             );
         this.mockStoryService.Setup(x => x.GetEntityResult()).Returns(entityResult);
@@ -88,14 +88,14 @@ public class QuestControllerTest
                     UpdateDataList = new(),
                     QuestStoryRewardList = new List<AtgenQuestStoryRewardList>()
                     {
-                        new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = 25, },
+                        new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = 25 },
                         new()
                         {
                             EntityType = EntityTypes.Dragon,
                             EntityId = (int)Dragons.BronzeFafnir,
                             EntityQuantity = 2,
                             EntityLevel = 1,
-                            EntityLimitBreakCount = 0
+                            EntityLimitBreakCount = 0,
                         },
                         new()
                         {
@@ -103,9 +103,9 @@ public class QuestControllerTest
                             EntityId = (int)Charas.Ilia,
                             EntityQuantity = 1,
                             EntityLevel = 1,
-                            EntityLimitBreakCount = 0
-                        }
-                    }
+                            EntityLimitBreakCount = 0,
+                        },
+                    },
                 }
             );
 

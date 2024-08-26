@@ -26,7 +26,7 @@ public class WallTest : TestFixture
             {
                 QuestId = questId,
                 State = 0,
-                ViewerId = ViewerId
+                ViewerId = ViewerId,
             }
         );
 
@@ -35,7 +35,7 @@ public class WallTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 WallId = expectedWallId,
-                WallLevel = expectedWallLevel
+                WallLevel = expectedWallLevel,
             };
 
         string key = await this.StartDungeon(mockSession);
@@ -54,7 +54,7 @@ public class WallTest : TestFixture
                 {
                     WallId = expectedWallId,
                     WallLevel = expectedWallLevel,
-                    IsHost = true
+                    IsHost = true,
                 }
             );
     }
@@ -64,7 +64,7 @@ public class WallTest : TestFixture
     {
         await this.AddRangeToDatabase(
             [
-                new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UnixEpoch, },
+                new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UnixEpoch },
                 new DbPlayerQuestWall()
                 {
                     ViewerId = ViewerId,
@@ -94,7 +94,7 @@ public class WallTest : TestFixture
                     ViewerId = ViewerId,
                     WallId = 216010005,
                     WallLevel = 5,
-                }
+                },
             ]
         );
 
@@ -113,7 +113,7 @@ public class WallTest : TestFixture
                     QuestGroupId = 21601,
                     SumWallLevel = 1 + 2 + 3 + 4 + 5,
                     LastRewardDate = DateTimeOffset.UnixEpoch,
-                    RewardStatus = RewardStatus.Available
+                    RewardStatus = RewardStatus.Available,
                 }
             );
     }
@@ -171,7 +171,7 @@ public class WallTest : TestFixture
                     ViewerId = ViewerId,
                     WallId = 216010005,
                     WallLevel = 5,
-                }
+                },
             }
         );
 
@@ -190,7 +190,7 @@ public class WallTest : TestFixture
                     QuestGroupId = 21601,
                     SumWallLevel = 5 * 5,
                     LastRewardDate = DateTimeOffset.UnixEpoch,
-                    RewardStatus = RewardStatus.Available
+                    RewardStatus = RewardStatus.Available,
                 }
             );
 
@@ -212,7 +212,7 @@ public class WallTest : TestFixture
                 new MaterialList()
                 {
                     MaterialId = Materials.TwinklingSand,
-                    Quantity = oldTwinklingSand + expectedTwinklingSand
+                    Quantity = oldTwinklingSand + expectedTwinklingSand,
                 }
             );
     }

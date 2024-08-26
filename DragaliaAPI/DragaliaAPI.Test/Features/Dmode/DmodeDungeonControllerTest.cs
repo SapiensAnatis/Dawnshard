@@ -94,8 +94,8 @@ public class DmodeDungeonControllerTest
                 {
                     FloorNum = 50,
                     CurrentAreaId = 10,
-                    CurrentAreaThemeId = 100
-                }
+                    CurrentAreaThemeId = 100,
+                },
             };
 
         DmodePlayRecord playRecord = new();

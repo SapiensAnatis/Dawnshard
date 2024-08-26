@@ -44,7 +44,7 @@ public class GraphQlTest : GraphQlTestFixture
                         }
                     }
                 }
-                """
+                """,
             }
         );
 
@@ -73,7 +73,7 @@ public class GraphQlTest : GraphQlTestFixture
                         level
                     }
                 }
-                """
+                """,
             }
         );
 
@@ -101,7 +101,7 @@ public class GraphQlTest : GraphQlTestFixture
                             presentId
                         }
                     }
-                    """
+                    """,
                 }
             );
 
@@ -143,7 +143,7 @@ public class GraphQlTest : GraphQlTestFixture
                             tutorialStatus
                         }
                     }
-                    """
+                    """,
                 }
             );
 

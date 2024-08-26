@@ -260,7 +260,7 @@ app.MapGet(
             Mode = patchOptions.CurrentValue.Mode,
             ConeshellKey = patchOptions.CurrentValue.ConeshellKey,
             CdnUrl = patchOptions.CurrentValue.CdnUrl,
-            UseUnifiedLogin = loginOptions.CurrentValue.UseBaasLogin
+            UseUnifiedLogin = loginOptions.CurrentValue.UseBaasLogin,
         }
 );
 

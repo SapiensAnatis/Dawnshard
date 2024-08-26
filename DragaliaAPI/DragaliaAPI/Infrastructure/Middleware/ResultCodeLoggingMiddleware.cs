@@ -31,9 +31,8 @@ internal partial class ResultCodeLoggingMiddleware(ILogger<ResultCodeLoggingMidd
             or ResultCode.Success
             or ResultCode.CommonChangeDate
             or ResultCode.CommonMaintenance
-            or ResultCode.CommonTimeout
-                => LogLevel.Information,
-            _ => LogLevel.Error
+            or ResultCode.CommonTimeout => LogLevel.Information,
+            _ => LogLevel.Error,
         };
 
     private static partial class Log

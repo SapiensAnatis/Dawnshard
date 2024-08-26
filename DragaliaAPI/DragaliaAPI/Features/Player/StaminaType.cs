@@ -4,5 +4,5 @@ public enum StaminaType
 {
     None,
     Single,
-    Multi
+    Multi,
 }

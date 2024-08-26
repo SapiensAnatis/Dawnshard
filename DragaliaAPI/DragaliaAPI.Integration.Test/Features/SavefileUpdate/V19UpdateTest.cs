@@ -22,7 +22,7 @@ public class V19UpdateTest : SavefileUpdateTestFixture
                 new DbSummonTicket() { SummonTicketId = SummonTickets.TenfoldSummon, Quantity = 1 },
                 new DbSummonTicket() { SummonTicketId = SummonTickets.TenfoldSummon, Quantity = 1 },
                 new DbSummonTicket() { SummonTicketId = SummonTickets.DragonSummon, Quantity = 1 },
-                new DbSummonTicket() { SummonTicketId = SummonTickets.DragonSummon, Quantity = 1 }
+                new DbSummonTicket() { SummonTicketId = SummonTickets.DragonSummon, Quantity = 1 },
             ]
         );
 
@@ -35,20 +35,20 @@ public class V19UpdateTest : SavefileUpdateTestFixture
                     {
                         ViewerId = this.ViewerId,
                         SummonTicketId = SummonTickets.SingleSummon,
-                        Quantity = 8
+                        Quantity = 8,
                     },
                     new()
                     {
                         ViewerId = this.ViewerId,
                         SummonTicketId = SummonTickets.TenfoldSummon,
-                        Quantity = 9
+                        Quantity = 9,
                     },
                     new()
                     {
                         ViewerId = this.ViewerId,
                         SummonTicketId = SummonTickets.DragonSummon,
-                        Quantity = 2
-                    }
+                        Quantity = 2,
+                    },
                 ],
                 opts => opts.Excluding(x => x.KeyId)
             );
@@ -75,14 +75,14 @@ public class V19UpdateTest : SavefileUpdateTestFixture
                         KeyId = tickets[0].KeyId,
                         ViewerId = this.ViewerId,
                         SummonTicketId = SummonTickets.SingleSummon,
-                        Quantity = 5
+                        Quantity = 5,
                     },
                     new()
                     {
                         KeyId = tickets[1].KeyId,
                         ViewerId = this.ViewerId,
                         SummonTicketId = SummonTickets.TenfoldSummon,
-                        Quantity = 7
+                        Quantity = 7,
                     },
                 ]
             );

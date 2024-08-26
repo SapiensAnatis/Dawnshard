@@ -35,7 +35,7 @@ public class ResetTimeProviderExtensionsTest
             {
                 new DateTimeOffset(2023, 06, 25, 05, 01, 13, TimeSpan.Zero),
                 new DateTimeOffset(2023, 06, 24, 06, 00, 00, TimeSpan.Zero)
-            }
+            },
         };
 
     /// <summary>
@@ -61,7 +61,7 @@ public class ResetTimeProviderExtensionsTest
             {
                 new DateTimeOffset(2023, 06, 25, 05, 01, 13, TimeSpan.Zero),
                 DayOfWeek.Saturday // 2023-06-24
-            }
+            },
         };
 
     public static ResetTheoryData WeeklyResetData { get; } =

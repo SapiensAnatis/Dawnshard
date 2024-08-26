@@ -48,8 +48,8 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
                 PartyNo = 3,
                 Units = new List<DbPartyUnit>()
                 {
-                    new() { UnitNo = 1, CharaId = Charas.Ieyasu }
-                }
+                    new() { UnitNo = 1, CharaId = Charas.Ieyasu },
+                },
             };
 
         await this.partyRepository.SetParty(toAdd);
@@ -84,7 +84,7 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
                     new() { UnitNo = 3, CharaId = Charas.Nobunaga },
                     new() { UnitNo = 4, CharaId = Charas.Chitose },
                     new() { UnitNo = 4, CharaId = Charas.Hanabusa },
-                }
+                },
             };
 
         await this.partyRepository.SetParty(toAdd);
@@ -104,7 +104,7 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
                     new(1, Charas.Ieyasu),
                     new(2, Charas.Botan),
                     new(3, Charas.Mitsuhide),
-                    new(4, Charas.Chitose)
+                    new(4, Charas.Chitose),
                 }
             );
     }

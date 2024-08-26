@@ -63,7 +63,7 @@ public class QuestClearPartyTest : TestFixture
             new QuestSetQuestClearPartyRequest()
             {
                 QuestId = questId,
-                RequestPartySettingList = this.MultiPartySettingLists
+                RequestPartySettingList = this.MultiPartySettingLists,
             }
         );
 
@@ -118,20 +118,20 @@ public class QuestClearPartyTest : TestFixture
                     {
                         UnitNo = 4,
                         EntityType = EntityTypes.WeaponSkin,
-                        EntityId = 1000
+                        EntityId = 1000,
                     },
                     new()
                     {
                         UnitNo = 5,
                         EntityType = EntityTypes.Dragon,
-                        EntityId = (int)Dragons.Ifrit
+                        EntityId = (int)Dragons.Ifrit,
                     },
                     new()
                     {
                         UnitNo = 6,
                         EntityType = EntityTypes.Talisman,
-                        EntityId = (int)Talismans.Raemond
-                    }
+                        EntityId = (int)Talismans.Raemond,
+                    },
                 }
             );
 
@@ -158,7 +158,7 @@ public class QuestClearPartyTest : TestFixture
                 new QuestSetQuestClearPartyRequest()
                 {
                     QuestId = 3,
-                    RequestPartySettingList = this.SoloPartySettingLists
+                    RequestPartySettingList = this.SoloPartySettingLists,
                 }
             );
 
@@ -187,7 +187,7 @@ public class QuestClearPartyTest : TestFixture
                 new QuestSetQuestClearPartyRequest()
                 {
                     QuestId = 4,
-                    RequestPartySettingList = this.MultiPartySettingLists
+                    RequestPartySettingList = this.MultiPartySettingLists,
                 }
             );
 
@@ -252,8 +252,8 @@ public class QuestClearPartyTest : TestFixture
                 EditSkill1CharaId = Charas.TemplarHope,
                 EditSkill2CharaId = Charas.Zena,
                 EquippedDragonEntityId = Dragons.Pazuzu,
-                EquippedTalismanEntityId = Talismans.GalaMym
-            }
+                EquippedTalismanEntityId = Talismans.GalaMym,
+            },
         };
 
     private List<PartySettingList> SoloPartySettingLists =>
@@ -294,7 +294,7 @@ public class QuestClearPartyTest : TestFixture
                 EquipWeaponSkinId = 30129901,
                 EditSkill1CharaId = Charas.TemplarHope,
                 EditSkill2CharaId = Charas.Zena,
-            }
+            },
         };
 
     private List<DbQuestClearPartyUnit> MultiDbEntities =>
@@ -321,7 +321,7 @@ public class QuestClearPartyTest : TestFixture
                 EditSkill1CharaId = Charas.Empty,
                 EditSkill2CharaId = Charas.GalaMym,
                 EquippedDragonEntityId = Dragons.Leviathan,
-                EquippedTalismanEntityId = Talismans.GalaMym
+                EquippedTalismanEntityId = Talismans.GalaMym,
             },
             new()
             {
@@ -344,8 +344,8 @@ public class QuestClearPartyTest : TestFixture
                 EditSkill1CharaId = Charas.ShaWujing,
                 EditSkill2CharaId = Charas.Ranzal,
                 EquippedDragonEntityId = Dragons.Phoenix,
-                EquippedTalismanEntityId = Talismans.GalaMym
-            }
+                EquippedTalismanEntityId = Talismans.GalaMym,
+            },
         };
 
     private List<PartySettingList> MultiPartySettingLists =>
@@ -386,7 +386,7 @@ public class QuestClearPartyTest : TestFixture
                 EquipWeaponSkinId = 0,
                 EditSkill1CharaId = Charas.ShaWujing,
                 EditSkill2CharaId = Charas.Ranzal,
-            }
+            },
         };
 
     private List<DbQuestClearPartyUnit> MissingItemDbEntities =>
@@ -407,7 +407,7 @@ public class QuestClearPartyTest : TestFixture
                 QuestId = 6,
                 IsMulti = false,
                 CharaId = Charas.Cecile,
-                EquipCrestSlotType1CrestId1 = AbilityCrestId.InanUnendingWorld
+                EquipCrestSlotType1CrestId1 = AbilityCrestId.InanUnendingWorld,
             },
             new()
             {
@@ -445,7 +445,7 @@ public class QuestClearPartyTest : TestFixture
                 IsMulti = false,
                 EquipTalismanKeyId = 3000,
                 CharaId = Charas.Raemond,
-                EquippedTalismanEntityId = Talismans.Raemond
+                EquippedTalismanEntityId = Talismans.Raemond,
             },
             new()
             {
@@ -455,7 +455,7 @@ public class QuestClearPartyTest : TestFixture
                 IsMulti = false,
                 CharaId = Charas.Edward,
                 EditSkill1CharaId = Charas.Yue,
-                EditSkill2CharaId = Charas.Marty
-            }
+                EditSkill2CharaId = Charas.Marty,
+            },
         };
 }

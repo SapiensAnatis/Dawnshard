@@ -91,6 +91,6 @@ public interface IShop
                 DestinationEntityId8,
                 DestinationEntityQuantity8,
                 DestinationLimitBreakCount8
-            )
+            ),
         };
 }

@@ -29,7 +29,7 @@ public record QuestScoreMissionData(
         BaseScore7,
         BaseScore8,
         BaseScore9,
-        BaseScore10
+        BaseScore10,
     };
 
     public int GetScore(int wave, VariationTypes variationType)

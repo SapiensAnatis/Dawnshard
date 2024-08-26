@@ -382,7 +382,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
 
             this.PluginHost.SetProperties(
                 info.ActorNr,
-                new Hashtable() { { ActorPropertyKeys.GoToIngameState, 0 }, },
+                new Hashtable() { { ActorPropertyKeys.GoToIngameState, 0 } },
                 null,
                 false
             );
@@ -399,7 +399,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                 ResultType =
                     request.FailType == FailQuestRequest.FailTypes.Timeup
                         ? FailQuestResponse.ResultTypes.Timeup
-                        : FailQuestResponse.ResultTypes.Clear
+                        : FailQuestResponse.ResultTypes.Clear,
             };
 
             this.PluginHost.RaiseEvent(Event.FailQuestResponse, response, info.ActorNr);
@@ -418,7 +418,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                     new Hashtable()
                     {
                         { GamePropertyKeys.GoToIngameInfo, null },
-                        { GamePropertyKeys.RoomId, -1 }
+                        { GamePropertyKeys.RoomId, -1 },
                     },
                     null,
                     true
@@ -493,7 +493,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                     new Hashtable()
                     {
                         { GamePropertyKeys.GoToIngameInfo, null },
-                        { GamePropertyKeys.RoomId, -this.GenerateRoomId() }
+                        { GamePropertyKeys.RoomId, -this.GenerateRoomId() },
                     },
                     null,
                     true
@@ -629,8 +629,8 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                     {
                         "RoomId",
                         this.PluginHost.GameProperties.GetInt(GamePropertyKeys.RoomId).ToString()
-                    }
-                }
+                    },
+                },
             };
 
             this.PluginHost.HttpRequest(req, info);

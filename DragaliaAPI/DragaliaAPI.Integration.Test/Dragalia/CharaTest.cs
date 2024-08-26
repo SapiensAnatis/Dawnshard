@@ -86,7 +86,7 @@ public class CharaTest : TestFixture
                     Charas.Celliera,
                     new List<AtgenEnemyPiece>()
                     {
-                        new AtgenEnemyPiece() { Id = Materials.GoldCrystal, Quantity = 300 }
+                        new AtgenEnemyPiece() { Id = Materials.GoldCrystal, Quantity = 300 },
                     }
                 )
             )
@@ -199,7 +199,7 @@ public class CharaTest : TestFixture
                     ViewerId = ViewerId,
                     StoryId = storyId,
                     State = StoryState.Read,
-                    StoryType = StoryTypes.Chara
+                    StoryType = StoryTypes.Chara,
                 }
             );
         }

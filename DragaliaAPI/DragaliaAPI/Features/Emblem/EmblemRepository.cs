@@ -29,7 +29,7 @@ public class EmblemRepository(
                     ViewerId = playerIdentityService.ViewerId,
                     EmblemId = emblem,
                     GetTime = dateTimeProvider.GetUtcNow(),
-                    IsNew = true
+                    IsNew = true,
                 }
             )
             .Entity;

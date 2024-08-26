@@ -59,7 +59,7 @@ public class QuestEnemyService : IQuestEnemyService
                     {
                         Coin = 0,
                         Mana = 0,
-                        DropList = new List<AtgenDropList>()
+                        DropList = new List<AtgenDropList>(),
                     }
                 );
             }
@@ -74,7 +74,7 @@ public class QuestEnemyService : IQuestEnemyService
                     {
                         Id = drop.Id,
                         Type = drop.EntityType,
-                        Quantity = 1
+                        Quantity = 1,
                     }
                 );
         }
@@ -208,7 +208,7 @@ public class QuestEnemyService : IQuestEnemyService
                         IsPop = true,
                         IsRare = false,
                         ParamId = x.Id,
-                        EnemyDropList = []
+                        EnemyDropList = [],
                     }
             )
             .ToArray();
@@ -226,8 +226,8 @@ public class QuestEnemyService : IQuestEnemyService
                 IsPop = true,
                 IsRare = false,
                 ParamId = questWallDetail.BossEnemyParamId,
-                EnemyDropList = new List<EnemyDropList>()
-            }
+                EnemyDropList = new List<EnemyDropList>(),
+            },
         };
     }
 

@@ -83,7 +83,7 @@ public class WallRecordController : DragaliaControllerBase
             {
                 QuestPartySettingList = dungeonSession.Party,
                 HelperList = helperList,
-                HelperDetailList = helperDetailList
+                HelperDetailList = helperDetailList,
             };
 
         AtgenWallDropReward wallDropReward =
@@ -91,7 +91,7 @@ public class WallRecordController : DragaliaControllerBase
             {
                 RewardEntityList = new[] { GoldCrystals.ToBuildEventRewardEntityList() },
                 TakeCoin = Rupies.Quantity,
-                TakeMana = Mana.Quantity
+                TakeMana = Mana.Quantity,
             };
 
         AtgenPlayWallDetail playWallDetail =
@@ -99,7 +99,7 @@ public class WallRecordController : DragaliaControllerBase
             {
                 WallId = request.WallId,
                 BeforeWallLevel = previousLevel,
-                AfterWallLevel = finishedLevel
+                AfterWallLevel = finishedLevel,
             };
 
         // Grant Rewards
@@ -129,7 +129,7 @@ public class WallRecordController : DragaliaControllerBase
                 PlayWallDetail = playWallDetail,
                 WallClearRewardList = wallClearRewardList,
                 WallDropReward = wallDropReward,
-                WallUnitInfo = wallUnitInfo
+                WallUnitInfo = wallUnitInfo,
             };
 
         await dungeonService.RemoveSession(request.DungeonKey, cancellationToken);

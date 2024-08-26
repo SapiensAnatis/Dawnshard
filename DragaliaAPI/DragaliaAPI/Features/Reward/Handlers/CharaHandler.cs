@@ -49,7 +49,7 @@ public partial class CharaHandler(
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     StoryType = StoryTypes.Chara,
-                    StoryId = storyData.StoryIds[0]
+                    StoryId = storyData.StoryIds[0],
                 }
             );
         }
@@ -114,7 +114,7 @@ public partial class CharaHandler(
                     {
                         ViewerId = playerIdentityService.ViewerId,
                         StoryType = StoryTypes.Chara,
-                        StoryId = storyData.StoryIds[0]
+                        StoryId = storyData.StoryIds[0],
                     }
                 );
             }

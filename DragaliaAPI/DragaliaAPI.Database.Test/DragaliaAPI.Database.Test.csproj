@@ -5,6 +5,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="MockQueryable.EntityFrameworkCore" />
     <PackageReference Include="MockQueryable.Moq" />
     <PackageReference Include="Moq" />
     <PackageReference Include="xunit" />

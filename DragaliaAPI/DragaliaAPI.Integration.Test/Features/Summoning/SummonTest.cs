@@ -75,7 +75,7 @@ public class SummonTest : TestFixture
                         CharaRate = "1.00%",
                         DragonRate = "0.80%",
                         Pickup = true,
-                        TotalRate = "1.80%"
+                        TotalRate = "1.80%",
                     },
                     new AtgenRarityGroupList
                     {
@@ -83,7 +83,7 @@ public class SummonTest : TestFixture
                         CharaRate = "1.10%",
                         DragonRate = "1.10%",
                         Pickup = false,
-                        TotalRate = "2.20%"
+                        TotalRate = "2.20%",
                     },
                     new AtgenRarityGroupList
                     {
@@ -91,7 +91,7 @@ public class SummonTest : TestFixture
                         CharaRate = "8.55%",
                         DragonRate = "7.45%",
                         Pickup = false,
-                        TotalRate = "16.00%"
+                        TotalRate = "16.00%",
                     },
                     new AtgenRarityGroupList
                     {
@@ -99,8 +99,8 @@ public class SummonTest : TestFixture
                         CharaRate = "48.00%",
                         DragonRate = "32.00%",
                         Pickup = false,
-                        TotalRate = "80.00%"
-                    }
+                        TotalRate = "80.00%",
+                    },
                 ]
             );
 
@@ -114,7 +114,7 @@ public class SummonTest : TestFixture
                         CharaRate = "1.00%",
                         DragonRate = "0.80%",
                         Pickup = true,
-                        TotalRate = "1.80%"
+                        TotalRate = "1.80%",
                     },
                     new AtgenRarityGroupList
                     {
@@ -122,7 +122,7 @@ public class SummonTest : TestFixture
                         CharaRate = "1.10%",
                         DragonRate = "1.10%",
                         Pickup = false,
-                        TotalRate = "2.20%"
+                        TotalRate = "2.20%",
                     },
                     new AtgenRarityGroupList
                     {
@@ -130,8 +130,8 @@ public class SummonTest : TestFixture
                         CharaRate = "51.30%",
                         DragonRate = "44.70%",
                         Pickup = false,
-                        TotalRate = "96.00%"
-                    }
+                        TotalRate = "96.00%",
+                    },
                 ]
             );
 
@@ -143,7 +143,7 @@ public class SummonTest : TestFixture
             .BeEquivalentTo(
                 [
                     new AtgenUnitList { Id = (int)Charas.Joker, Rate = "0.500%" },
-                    new AtgenUnitList { Id = (int)Charas.Mona, Rate = "0.500%" }
+                    new AtgenUnitList { Id = (int)Charas.Mona, Rate = "0.500%" },
                 ]
             );
         normalOdds
@@ -187,11 +187,11 @@ public class SummonTest : TestFixture
                             Charas.Julietta,
                             Charas.Lucretia,
                             Charas.Hildegarde,
-                            Charas.Nefaria
-                        }.Select(x => new AtgenUnitList() { Id = (int)x, Rate = "7.692%" })
+                            Charas.Nefaria,
+                        }.Select(x => new AtgenUnitList() { Id = (int)x, Rate = "7.692%" }),
                     },
-                    new() { Rarity = 4, UnitList = [], },
-                    new() { Rarity = 3, UnitList = [], }
+                    new() { Rarity = 4, UnitList = [] },
+                    new() { Rarity = 3, UnitList = [] },
                 }
             );
     }
@@ -309,7 +309,7 @@ public class SummonTest : TestFixture
             {
                 SummonBannerId = TestBannerId,
                 DailyLimitedSummonCount = dailyCount,
-                SummonCount = summonCount
+                SummonCount = summonCount,
             }
         );
 
@@ -319,7 +319,7 @@ public class SummonTest : TestFixture
                 SummonTicketId = SummonTickets.SingleSummon,
                 KeyId = 2,
                 Quantity = 1,
-                UseLimitTime = DateTimeOffset.UnixEpoch
+                UseLimitTime = DateTimeOffset.UnixEpoch,
             }
         );
 
@@ -372,7 +372,7 @@ public class SummonTest : TestFixture
                     SummonTicketId = SummonTickets.SingleSummon,
                     KeyId = 2,
                     Quantity = 1,
-                    UseLimitTime = DateTimeOffset.UnixEpoch
+                    UseLimitTime = DateTimeOffset.UnixEpoch,
                 }
             );
     }
@@ -469,19 +469,19 @@ public class SummonTest : TestFixture
                         {
                             TradeId = int.Parse($"{TestBannerId}100"),
                             EntityId = (int)Charas.Mona,
-                            EntityType = EntityTypes.Chara
+                            EntityType = EntityTypes.Chara,
                         },
                         new()
                         {
                             TradeId = int.Parse($"{TestBannerId}700"),
                             EntityId = (int)Dragons.Arsene,
-                            EntityType = EntityTypes.Dragon
-                        }
+                            EntityType = EntityTypes.Dragon,
+                        },
                     ],
-                    SummonPointList = [new() { SummonPointId = TestBannerId, SummonPoint = 0, }],
+                    SummonPointList = [new() { SummonPointId = TestBannerId, SummonPoint = 0 }],
                     UpdateDataList = new()
                     {
-                        SummonPointList = [new() { SummonPointId = TestBannerId, SummonPoint = 0, }]
+                        SummonPointList = [new() { SummonPointId = TestBannerId, SummonPoint = 0 }],
                     },
                     EntityResult = new(),
                 },
@@ -496,7 +496,7 @@ public class SummonTest : TestFixture
     public async Task SummonGetSummonPointTrade_ExistingBannerData_ReturnsData()
     {
         await this.AddToDatabase(
-            new DbPlayerBannerData() { SummonBannerId = TestBannerId, SummonPoints = 400, }
+            new DbPlayerBannerData() { SummonBannerId = TestBannerId, SummonPoints = 400 }
         );
 
         SummonGetSummonPointTradeResponse response = (
@@ -517,16 +517,16 @@ public class SummonTest : TestFixture
                         {
                             TradeId = int.Parse($"{TestBannerId}100"),
                             EntityId = (int)Charas.Mona,
-                            EntityType = EntityTypes.Chara
+                            EntityType = EntityTypes.Chara,
                         },
                         new()
                         {
                             TradeId = int.Parse($"{TestBannerId}700"),
                             EntityId = (int)Dragons.Arsene,
-                            EntityType = EntityTypes.Dragon
-                        }
+                            EntityType = EntityTypes.Dragon,
+                        },
                     ],
-                    SummonPointList = [new() { SummonPointId = TestBannerId, SummonPoint = 400, }],
+                    SummonPointList = [new() { SummonPointId = TestBannerId, SummonPoint = 400 }],
                     UpdateDataList = new(),
                     EntityResult = new(),
                 },
@@ -597,13 +597,13 @@ public class SummonTest : TestFixture
             {
                 SummonTicketId = SummonTickets.SingleSummon,
                 KeyId = 1,
-                Quantity = 1
+                Quantity = 1,
             },
             new DbSummonTicket()
             {
                 SummonTicketId = SummonTickets.SingleSummon,
                 KeyId = 2,
-                Quantity = 1
+                Quantity = 1,
             }
         );
 
@@ -631,7 +631,7 @@ public class SummonTest : TestFixture
             {
                 SummonTicketId = SummonTickets.SingleSummon,
                 KeyId = 1,
-                Quantity = 5
+                Quantity = 5,
             }
         );
 
@@ -731,7 +731,7 @@ public class SummonTest : TestFixture
     )
     {
         await this.AddToDatabase(
-            new DbSummonTicket() { SummonTicketId = SummonTickets.TenfoldSummon, KeyId = 1, }
+            new DbSummonTicket() { SummonTicketId = SummonTickets.TenfoldSummon, KeyId = 1 }
         );
 
         DragaliaResponse<SummonRequestResponse> response =
@@ -757,7 +757,7 @@ public class SummonTest : TestFixture
     [InlineData(SummonTickets.DragonSummonPlus, SummonConstants.DragonSummonPlusBannerId)]
     public async Task SummonRequest_SpecialTicket_Success(SummonTickets ticket, int bannerId)
     {
-        await this.AddToDatabase(new DbSummonTicket() { SummonTicketId = ticket, Quantity = 1, });
+        await this.AddToDatabase(new DbSummonTicket() { SummonTicketId = ticket, Quantity = 1 });
 
         SummonRequestResponse response = (
             await this.Client.PostMsgpack<SummonRequestResponse>(
@@ -1031,7 +1031,7 @@ public class SummonTest : TestFixture
         int monaTradeId = int.Parse($"{TestBannerId}100");
 
         await this.AddToDatabase(
-            new DbPlayerBannerData() { SummonBannerId = TestBannerId, SummonPoints = 400, }
+            new DbPlayerBannerData() { SummonBannerId = TestBannerId, SummonPoints = 400 }
         );
 
         SummonSummonPointTradeResponse response = (
@@ -1064,7 +1064,7 @@ public class SummonTest : TestFixture
         int arseneTradeId = int.Parse($"{TestBannerId}700");
 
         await this.AddToDatabase(
-            new DbPlayerBannerData() { SummonBannerId = TestBannerId, SummonPoints = 400, }
+            new DbPlayerBannerData() { SummonBannerId = TestBannerId, SummonPoints = 400 }
         );
 
         SummonSummonPointTradeResponse response = (

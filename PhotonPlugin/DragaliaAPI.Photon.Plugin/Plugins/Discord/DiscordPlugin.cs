@@ -19,7 +19,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Discord
 
         private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions()
         {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         };
 
         private readonly PluginConfiguration configuration;
@@ -42,7 +42,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Discord
                         this.PluginHost.GameId,
                         info.Request.GameProperties
                     ),
-                    Player = DtoHelpers.CreatePlayer(actorNr, info.Request.ActorProperties)
+                    Player = DtoHelpers.CreatePlayer(actorNr, info.Request.ActorProperties),
                 }
             );
 
@@ -60,7 +60,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Discord
                 {
                     GameName = this.PluginHost.GameId,
                     NewEntryConditions = DtoHelpers.CreateEntryConditions(info.Request.Properties),
-                    Player = null
+                    Player = null,
                 }
             );
 
@@ -98,7 +98,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Discord
                 CustomHeaders = new Dictionary<string, string>()
                 {
                     { "Authorization", $"Bearer {this.configuration.DiscordBearerToken}" },
-                }
+                },
             };
         }
     }

@@ -261,7 +261,7 @@ public class TestFixture
                 {
                     ViewerId = newPlayer.ViewerId,
                     MaterialId = x,
-                    Quantity = 99999999
+                    Quantity = 99999999,
                 })
         );
 
@@ -271,7 +271,7 @@ public class TestFixture
                 {
                     ViewerId = newPlayer.ViewerId,
                     DragonGiftId = x,
-                    Quantity = x < DragonGifts.FourLeafClover ? 1 : 999
+                    Quantity = x < DragonGifts.FourLeafClover ? 1 : 999,
                 })
         );
 
@@ -283,7 +283,7 @@ public class TestFixture
             {
                 ViewerId = newPlayer.ViewerId,
                 PlantId = FortPlants.Smithy,
-                Level = 9
+                Level = 9,
             }
         );
 
@@ -305,7 +305,7 @@ public class TestFixture
             {
                 ViewerId = newPlayer.ViewerId,
                 Point1Quantity = 100_000_000,
-                Point2Quantity = 100_000_000
+                Point2Quantity = 100_000_000,
             }
         );
 

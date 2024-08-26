@@ -21,7 +21,7 @@ public class OptionController : DragaliaControllerBase
                     IsAutoLockWeaponSr = false,
                     IsAutoLockWeaponSsr = false,
                     IsAutoLockWeaponSssr = false,
-                }
+                },
             };
     }
 

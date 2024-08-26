@@ -48,8 +48,8 @@ public class GameLeaveTest : TestFixture
                 Players =
                 [
                     new() { ViewerId = 2, PartyNoList = [40] },
-                    new() { ViewerId = 5, PartyNoList = [20] }
-                ]
+                    new() { ViewerId = 5, PartyNoList = [20] },
+                ],
             };
 
         await this.RedisConnectionProvider.RedisCollection<RedisGame>().InsertAsync(game);
@@ -59,7 +59,7 @@ public class GameLeaveTest : TestFixture
             new()
             {
                 GameName = game.Name,
-                Player = new() { ViewerId = 5 }
+                Player = new() { ViewerId = 5 },
             }
         );
 
@@ -70,7 +70,7 @@ public class GameLeaveTest : TestFixture
             .BeEquivalentTo(
                 new List<Player>()
                 {
-                    new() { ViewerId = 2, PartyNoList = [40] }
+                    new() { ViewerId = 2, PartyNoList = [40] },
                 }
             );
         storedGame!.MatchingType.Should().Be(MatchingTypes.Anyone);
@@ -95,7 +95,7 @@ public class GameLeaveTest : TestFixture
                     RequiredPartyPower = 11700,
                     ObjectiveTextId = 1,
                 },
-                Players = [new() { ViewerId = 5, PartyNoList = [20] }]
+                Players = [new() { ViewerId = 5, PartyNoList = [20] }],
             };
 
         await this.RedisConnectionProvider.RedisCollection<RedisGame>().InsertAsync(game);
@@ -105,7 +105,7 @@ public class GameLeaveTest : TestFixture
             new()
             {
                 GameName = game.Name,
-                Player = new() { ViewerId = 5 }
+                Player = new() { ViewerId = 5 },
             }
         );
 

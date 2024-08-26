@@ -44,7 +44,7 @@ public class TalismanService(
 
         return new DeleteDataList
         {
-            DeleteTalismanList = deletedTalismanIds.Select(x => new AtgenDeleteTalismanList(x))
+            DeleteTalismanList = deletedTalismanIds.Select(x => new AtgenDeleteTalismanList(x)),
         };
     }
 

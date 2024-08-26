@@ -35,6 +35,6 @@ public class RedisPlayer
         {
             ViewerId = this.ViewerId,
             ActorNr = this.ActorNr,
-            PartyNoList = this.PartyNoList
+            PartyNoList = this.PartyNoList,
         };
 }

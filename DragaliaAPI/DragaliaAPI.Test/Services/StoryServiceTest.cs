@@ -16,6 +16,7 @@ using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Logging;
+using MockQueryable.EntityFrameworkCore;
 using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Services;
@@ -126,8 +127,8 @@ public class StoryServiceTest : IClassFixture<DbTestFixture>
                         ViewerId = 1,
                         StoryId = 110013012,
                         State = StoryState.Read,
-                        StoryType = StoryTypes.Chara
-                    }
+                        StoryType = StoryTypes.Chara,
+                    },
                 }
                     .AsQueryable()
                     .BuildMock()
@@ -158,7 +159,7 @@ public class StoryServiceTest : IClassFixture<DbTestFixture>
             .BeEquivalentTo(
                 new List<AtgenBuildEventRewardEntityList>()
                 {
-                    new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = expectedWyrmite }
+                    new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = expectedWyrmite },
                 }
             );
 
@@ -214,8 +215,8 @@ public class StoryServiceTest : IClassFixture<DbTestFixture>
                     {
                         EntityType = EntityTypes.Title,
                         EntityId = expectedEmblemId,
-                        EntityQuantity = 1
-                    }
+                        EntityQuantity = 1,
+                    },
                 }
             );
 
@@ -264,7 +265,7 @@ public class StoryServiceTest : IClassFixture<DbTestFixture>
                         EntityType = EntityTypes.Dragon,
                         EntityId = (int)Dragons.Brunhilda,
                         EntityQuantity = 1,
-                    }
+                    },
                 }
             );
 
@@ -328,7 +329,7 @@ public class StoryServiceTest : IClassFixture<DbTestFixture>
             .BeEquivalentTo(
                 new List<AtgenBuildEventRewardEntityList>()
                 {
-                    new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = 50 }
+                    new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = 50 },
                 }
             );
 
@@ -362,7 +363,7 @@ public class StoryServiceTest : IClassFixture<DbTestFixture>
                         EntityType = EntityTypes.FortPlant,
                         EntityId = (int)FortPlants.WindDracolith,
                         EntityQuantity = 1,
-                    }
+                    },
                 }
             );
 
@@ -403,7 +404,7 @@ public class StoryServiceTest : IClassFixture<DbTestFixture>
                         EntityType = EntityTypes.Chara,
                         EntityId = (int)Charas.Audric,
                         EntityQuantity = 1,
-                    }
+                    },
                 }
             );
 
@@ -433,7 +434,7 @@ public class StoryServiceTest : IClassFixture<DbTestFixture>
                     ViewerId = 1,
                     StoryId = 100004012,
                     StoryType = StoryTypes.Chara,
-                    State = StoryState.Unlocked
+                    State = StoryState.Unlocked,
                 },
                 10
             );
@@ -444,7 +445,7 @@ public class StoryServiceTest : IClassFixture<DbTestFixture>
                     ViewerId = 1,
                     StoryId = 210143011,
                     StoryType = StoryTypes.Dragon,
-                    State = StoryState.Unlocked
+                    State = StoryState.Unlocked,
                 },
                 25
             );
@@ -455,7 +456,7 @@ public class StoryServiceTest : IClassFixture<DbTestFixture>
                     ViewerId = 1,
                     StoryId = 210143011,
                     StoryType = StoryTypes.Dragon,
-                    State = StoryState.Unlocked
+                    State = StoryState.Unlocked,
                 },
                 25
             );
@@ -466,7 +467,7 @@ public class StoryServiceTest : IClassFixture<DbTestFixture>
                     ViewerId = 1,
                     StoryId = 210143012,
                     StoryType = StoryTypes.Dragon,
-                    State = StoryState.Unlocked
+                    State = StoryState.Unlocked,
                 },
                 25
             );

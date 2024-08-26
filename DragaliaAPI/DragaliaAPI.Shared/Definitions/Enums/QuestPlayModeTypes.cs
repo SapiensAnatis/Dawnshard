@@ -7,7 +7,7 @@ public enum QuestPlayModeTypes
     Solo,
     Multi,
     RandomMatching,
-    RandomMatchingSixteen
+    RandomMatchingSixteen,
 }
 
 public enum QuestPlayType

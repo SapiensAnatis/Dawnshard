@@ -44,7 +44,7 @@ public class AbilityCrestServiceTest
         {
             { Materials.TwilightShard, 150 },
             { Materials.TwilightPrism, 150 },
-            { Materials.TutelarySuccessorsMemory, 40 }
+            { Materials.TutelarySuccessorsMemory, 40 },
         };
 
     public static IEnumerable<object[]> SuccessfulUnbindData =>
@@ -61,7 +61,7 @@ public class AbilityCrestServiceTest
                 1,
                 false,
                 GreatwyrmMidgardsormrUnbind1Map,
-                0
+                0,
             },
             new object[] { AbilityCrestId.UnitedbyOneVision, 1, false, EmptyMap, 300 },
             new object[] { AbilityCrestId.WorthyRivals, 1, false, EmptyMap, 6_000 },
@@ -72,7 +72,7 @@ public class AbilityCrestServiceTest
                 1,
                 false,
                 TutelaryUnbind1Map,
-                0
+                0,
             },
             new object[] { AbilityCrestId.TheBewitchingMagician, 1, true, SilverKey, 0 },
             new object[] { AbilityCrestId.HisCleverBrother, 1, true, SilverKey, 0 },
@@ -91,7 +91,7 @@ public class AbilityCrestServiceTest
                 4,
                 false,
                 GreatwyrmMidgardsormrUnbind4Map,
-                0
+                0,
             },
             new object[] { AbilityCrestId.UnitedbyOneVision, 4, false, EmptyMap, 400 },
             new object[] { AbilityCrestId.WorthyRivals, 4, false, EmptyMap, 9_000 },
@@ -102,14 +102,14 @@ public class AbilityCrestServiceTest
                 4,
                 false,
                 TutelaryUnbind4Map,
-                0
+                0,
             },
             new object[] { AbilityCrestId.TheBewitchingMagician, 4, true, SilverKey, 0 },
             new object[] { AbilityCrestId.HisCleverBrother, 4, true, SilverKey, 0 },
             new object[] { AbilityCrestId.GreatwyrmMidgardsormr, 4, true, SilverKey, 0 },
             new object[] { AbilityCrestId.UnitedbyOneVision, 4, true, GoldenKey, 0 },
             new object[] { AbilityCrestId.WorthyRivals, 4, true, GoldenKey, 0 },
-            new object[] { AbilityCrestId.GloriousTempest, 4, true, GoldenKey, 0 }
+            new object[] { AbilityCrestId.GloriousTempest, 4, true, GoldenKey, 0 },
         };
 
     private static readonly Dictionary<Materials, int> GreatwyrmMidgardsormrCopyMap =
@@ -121,7 +121,7 @@ public class AbilityCrestServiceTest
         {
             { Materials.TwilightShard, 200 },
             { Materials.TwilightPrism, 150 },
-            { Materials.TutelarySuccessorsMemory, 120 }
+            { Materials.TutelarySuccessorsMemory, 120 },
         };
 
     public static IEnumerable<object[]> SuccessfulCopiesData =>
@@ -136,7 +136,7 @@ public class AbilityCrestServiceTest
             new object[] { AbilityCrestId.UnitedbyOneVision, EmptyMap, 1_700 },
             new object[] { AbilityCrestId.WorthyRivals, EmptyMap, 37_000 },
             new object[] { AbilityCrestId.GloriousTempest, GloriousTempestCopyMap, 0 },
-            new object[] { AbilityCrestId.TutelarysDestinyWolfsBoon, TutelarysDestinyCopyMap, 0 }
+            new object[] { AbilityCrestId.TutelarysDestinyWolfsBoon, TutelarysDestinyCopyMap, 0 },
         };
 
     private static readonly Dictionary<Materials, int> Rarity2LevelMap =
@@ -152,7 +152,7 @@ public class AbilityCrestServiceTest
         {
             { Materials.HolyWater, 2 },
             { Materials.ConsecratedWater, 14 },
-            { Materials.TutelarySuccessorsMemory, 2 }
+            { Materials.TutelarySuccessorsMemory, 2 },
         };
 
     public static IEnumerable<object[]> SuccessfulLevelData =>
@@ -167,7 +167,7 @@ public class AbilityCrestServiceTest
             new object[] { AbilityCrestId.WorthyRivals, Rarity5LevelMap, 0, 30 },
             new object[] { AbilityCrestId.WorthyRivals, Rarity5LevelMap, 4, 50 },
             new object[] { AbilityCrestId.TutelarysDestinyWolfsBoon, Rarity9LevelMap, 0, 10 },
-            new object[] { AbilityCrestId.TutelarysDestinyWolfsBoon, Rarity9LevelMap, 4, 30 }
+            new object[] { AbilityCrestId.TutelarysDestinyWolfsBoon, Rarity9LevelMap, 4, 30 },
         };
 
     public AbilityCrestServiceTest(ITestOutputHelper testOutputHelper)
@@ -198,7 +198,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = BuildupPieceTypes.Refine,
                 IsUseDedicatedMaterial = false,
-                Step = 1
+                Step = 1,
             };
 
         await this
@@ -221,7 +221,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = buildupType,
                 IsUseDedicatedMaterial = false,
-                Step = 0
+                Step = 0,
             };
 
         (await this.abilityCrestService.TryBuildup(abilityCrest, pieceList))
@@ -265,7 +265,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = buildupType,
                 IsUseDedicatedMaterial = false,
-                Step = 1
+                Step = 1,
             };
 
         (await this.abilityCrestService.TryBuildup(abilityCrest, pieceList))
@@ -282,7 +282,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = BuildupPieceTypes.Copies,
                 IsUseDedicatedMaterial = true,
-                Step = 2
+                Step = 2,
             };
 
         try
@@ -310,7 +310,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = BuildupPieceTypes.Unbind,
                 IsUseDedicatedMaterial = true,
-                Step = 1
+                Step = 1,
             };
 
         try
@@ -338,7 +338,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = BuildupPieceTypes.Unbind,
                 IsUseDedicatedMaterial = true,
-                Step = 1
+                Step = 1,
             };
 
         this.mockInventoryRepository.Setup(x =>
@@ -364,7 +364,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = BuildupPieceTypes.Unbind,
                 IsUseDedicatedMaterial = false,
-                Step = 2
+                Step = 2,
             };
 
         Dictionary<Materials, int> expectedMap =
@@ -396,7 +396,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = BuildupPieceTypes.Copies,
                 IsUseDedicatedMaterial = false,
-                Step = 3
+                Step = 3,
             };
 
         this.mockInventoryRepository.Setup(x =>
@@ -405,7 +405,7 @@ public class AbilityCrestServiceTest
                     {
                         { Materials.TwilightShard, 200 },
                         { Materials.TwilightPrism, 150 },
-                        { Materials.TutelarySuccessorsMemory, 120 }
+                        { Materials.TutelarySuccessorsMemory, 120 },
                     }
                 )
             )
@@ -427,7 +427,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = BuildupPieceTypes.Unbind,
                 IsUseDedicatedMaterial = false,
-                Step = 1
+                Step = 1,
             };
 
         this.mockInventoryRepository.Setup(x => x.CheckQuantity(new Dictionary<Materials, int>()))
@@ -451,7 +451,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = BuildupPieceTypes.Copies,
                 IsUseDedicatedMaterial = false,
-                Step = 2
+                Step = 2,
             };
 
         this.mockInventoryRepository.Setup(x => x.CheckQuantity(new Dictionary<Materials, int>()))
@@ -479,7 +479,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = buildupType,
                 IsUseDedicatedMaterial = false,
-                Step = 2
+                Step = 2,
             };
 
         this.mockInventoryRepository.Setup(x => x.CheckQuantity(new Dictionary<Materials, int>()))
@@ -520,7 +520,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = buildupType,
                 IsUseDedicatedMaterial = false,
-                Step = 3
+                Step = 3,
             };
 
         this.mockInventoryRepository.Setup(x => x.CheckQuantity(new Dictionary<Materials, int>()))
@@ -532,7 +532,7 @@ public class AbilityCrestServiceTest
                 {
                     ViewerId = 1,
                     AbilityCrestId = AbilityCrestId.ManaFount,
-                    LimitBreakCount = currLevel
+                    LimitBreakCount = currLevel,
                 }
             );
 
@@ -561,7 +561,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = BuildupPieceTypes.Unbind,
                 IsUseDedicatedMaterial = isDedicated,
-                Step = step
+                Step = step,
             };
 
         this.mockInventoryRepository.Setup(x =>
@@ -579,7 +579,7 @@ public class AbilityCrestServiceTest
                 {
                     ViewerId = 1,
                     AbilityCrestId = abilityCrestId,
-                    LimitBreakCount = step - 1
+                    LimitBreakCount = step - 1,
                 }
             );
         this.mockInventoryRepository.Setup(x =>
@@ -616,7 +616,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = BuildupPieceTypes.Copies,
                 IsUseDedicatedMaterial = false,
-                Step = 2
+                Step = 2,
             };
 
         this.mockInventoryRepository.Setup(x =>
@@ -634,7 +634,7 @@ public class AbilityCrestServiceTest
                 {
                     ViewerId = 1,
                     AbilityCrestId = abilityCrestId,
-                    EquipableCount = 1
+                    EquipableCount = 1,
                 }
             );
         this.mockInventoryRepository.Setup(x =>
@@ -689,7 +689,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = BuildupPieceTypes.Stats,
                 IsUseDedicatedMaterial = false,
-                Step = 1
+                Step = 1,
             };
 
         (await this.abilityCrestService.TryBuildup(abilityCrest, pieceList))
@@ -706,7 +706,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = BuildupPieceTypes.Stats,
                 IsUseDedicatedMaterial = true,
-                Step = 15
+                Step = 15,
             };
 
         try
@@ -731,7 +731,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = BuildupPieceTypes.Stats,
                 IsUseDedicatedMaterial = false,
-                Step = 15
+                Step = 15,
             };
 
         this.mockInventoryRepository.Setup(x =>
@@ -739,7 +739,7 @@ public class AbilityCrestServiceTest
                     new Dictionary<Materials, int>
                     {
                         { Materials.HolyWater, 7 },
-                        { Materials.ConsecratedWater, 2 }
+                        { Materials.ConsecratedWater, 2 },
                     }
                 )
             )
@@ -761,7 +761,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = BuildupPieceTypes.Stats,
                 IsUseDedicatedMaterial = false,
-                Step = 12
+                Step = 12,
             };
 
         this.mockInventoryRepository.Setup(x =>
@@ -769,7 +769,7 @@ public class AbilityCrestServiceTest
                     new Dictionary<Materials, int>
                     {
                         { Materials.HolyWater, 7 },
-                        { Materials.ConsecratedWater, 2 }
+                        { Materials.ConsecratedWater, 2 },
                     }
                 )
             )
@@ -808,7 +808,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = BuildupPieceTypes.Stats,
                 IsUseDedicatedMaterial = false,
-                Step = 5
+                Step = 5,
             };
 
         this.mockInventoryRepository.Setup(x =>
@@ -821,7 +821,7 @@ public class AbilityCrestServiceTest
                 {
                     ViewerId = 1,
                     AbilityCrestId = AbilityCrestId.ManaFount,
-                    BuildupCount = currLevel
+                    BuildupCount = currLevel,
                 }
             );
 
@@ -849,7 +849,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = BuildupPieceTypes.Stats,
                 IsUseDedicatedMaterial = false,
-                Step = step
+                Step = step,
             };
 
         this.mockInventoryRepository.Setup(x =>
@@ -863,7 +863,7 @@ public class AbilityCrestServiceTest
                     ViewerId = 1,
                     AbilityCrestId = AbilityCrestId.ManaFount,
                     LimitBreakCount = limitBreak,
-                    BuildupCount = step - 1
+                    BuildupCount = step - 1,
                 }
             );
 
@@ -890,7 +890,7 @@ public class AbilityCrestServiceTest
             {
                 BuildupPieceType = BuildupPieceTypes.Stats,
                 IsUseDedicatedMaterial = false,
-                Step = step
+                Step = step,
             };
 
         this.mockInventoryRepository.Setup(x => x.CheckQuantity(materialMap)).ReturnsAsync(true);
@@ -901,7 +901,7 @@ public class AbilityCrestServiceTest
                     ViewerId = 1,
                     AbilityCrestId = abilityCrestId,
                     LimitBreakCount = limitBreak,
-                    BuildupCount = step - 1
+                    BuildupCount = step - 1,
                 }
             );
         this.mockInventoryRepository.Setup(x => x.UpdateQuantity(materialMap.Invert()))
@@ -998,7 +998,7 @@ public class AbilityCrestServiceTest
                     AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                     ViewerId = 1,
                     HpPlusCount = 40,
-                    AttackPlusCount = 38
+                    AttackPlusCount = 38,
                 }
             );
 
@@ -1027,7 +1027,7 @@ public class AbilityCrestServiceTest
                     AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                     ViewerId = 1,
                     HpPlusCount = 40,
-                    AttackPlusCount = 31
+                    AttackPlusCount = 31,
                 }
             );
 
@@ -1153,7 +1153,7 @@ public class AbilityCrestServiceTest
                     AbilityCrestId = AbilityCrestId.WorthyRivals,
                     ViewerId = 1,
                     HpPlusCount = 35,
-                    AttackPlusCount = 50
+                    AttackPlusCount = 50,
                 }
             );
 
@@ -1189,7 +1189,7 @@ public class AbilityCrestServiceTest
                     AbilityCrestId = abilityCrestId,
                     ViewerId = 1,
                     HpPlusCount = amount,
-                    AttackPlusCount = 30
+                    AttackPlusCount = 30,
                 }
             );
 
@@ -1228,7 +1228,7 @@ public class AbilityCrestServiceTest
                     AbilityCrestId = abilityCrestId,
                     ViewerId = 1,
                     HpPlusCount = 25,
-                    AttackPlusCount = amount
+                    AttackPlusCount = amount,
                 }
             );
 

@@ -16,5 +16,5 @@ public enum FortEffectTypes
     Weapon = 1,
     Element = 2,
     DragonDamage = 4,
-    DragonStats = 6
+    DragonStats = 6,
 }

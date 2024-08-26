@@ -115,7 +115,7 @@ public class DungeonRecordController(
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         DungeonRecordRecordMultiResponse response =
-            new() { IngameResultData = ingameResultData, UpdateDataList = updateDataList, };
+            new() { IngameResultData = ingameResultData, UpdateDataList = updateDataList };
 
         if (session.QuestData?.IsSumUpTotalDamage ?? false)
         {

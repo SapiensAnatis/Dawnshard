@@ -48,7 +48,7 @@ public class ToolController(IAuthService authService) : DragaliaControllerBaseCo
             {
                 SessionId = sessionId,
                 ViewerId = (ulong)viewerId,
-                Nonce = "placeholder nonce"
+                Nonce = "placeholder nonce",
             }
         );
     }
@@ -63,7 +63,7 @@ public class ToolController(IAuthService authService) : DragaliaControllerBaseCo
             {
                 SessionId = sessionId,
                 ViewerId = (ulong)viewerId,
-                Nonce = "placeholder nonce"
+                Nonce = "placeholder nonce",
             }
         );
     }

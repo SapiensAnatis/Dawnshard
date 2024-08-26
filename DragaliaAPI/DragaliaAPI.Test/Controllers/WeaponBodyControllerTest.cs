@@ -40,8 +40,8 @@ public class WeaponBodyControllerTest
                 {
                     WeaponBodyList = new List<WeaponBodyList>()
                     {
-                        new() { WeaponBodyId = WeaponBodies.Areadbhar }
-                    }
+                        new() { WeaponBodyId = WeaponBodies.Areadbhar },
+                    },
                 }
             );
 
@@ -129,7 +129,7 @@ public class WeaponBodyControllerTest
                         new(),
                         new(),
                         new(),
-                    }
+                    },
                 },
                 default
             )
@@ -156,8 +156,8 @@ public class WeaponBodyControllerTest
             {
                 WeaponBodyList = new List<WeaponBodyList>()
                 {
-                    new() { WeaponBodyId = WeaponBodies.Caduceus }
-                }
+                    new() { WeaponBodyId = WeaponBodies.Caduceus },
+                },
             };
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(udl);
 
@@ -170,8 +170,8 @@ public class WeaponBodyControllerTest
                     {
                         new(),
                         new(),
-                        new()
-                    }
+                        new(),
+                    },
                 },
                 default
             )

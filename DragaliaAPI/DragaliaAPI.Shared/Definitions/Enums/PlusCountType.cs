@@ -6,5 +6,5 @@
 public enum PlusCountType
 {
     Hp = 1,
-    Atk = 2
+    Atk = 2,
 }

@@ -13,7 +13,7 @@ public record ConvertedEntity(Entity Before, Entity After)
             BeforeEntityQuantity = Before.Quantity,
             AfterEntityType = After.Type,
             AfterEntityId = After.Id,
-            AfterEntityQuantity = After.Quantity
+            AfterEntityQuantity = After.Quantity,
         };
     }
 };

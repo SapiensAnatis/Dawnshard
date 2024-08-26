@@ -219,7 +219,7 @@ public class DungeonStartController(
             IngameData = ingameData,
             IngameQuestData = ingameQuestData,
             OddsInfo = oddsInfo,
-            UpdateDataList = updateData
+            UpdateDataList = updateData,
         };
     }
 }

@@ -24,8 +24,8 @@ public class DmodeDungeonTest : TestFixture
                     BringEditSkillCharaIdList = new List<Charas>()
                     {
                         Charas.Ranzal,
-                        Charas.GalaCleo
-                    }
+                        Charas.GalaCleo,
+                    },
                 }
             );
 
@@ -59,7 +59,7 @@ public class DmodeDungeonTest : TestFixture
                 CharaId = Charas.Shingen,
                 StartFloorNum = 30,
                 ServitorId = 1,
-                BringEditSkillCharaIdList = new List<Charas>() { Charas.Ranzal, Charas.GalaCleo }
+                BringEditSkillCharaIdList = new List<Charas>() { Charas.Ranzal, Charas.GalaCleo },
             }
         );
 
@@ -107,7 +107,7 @@ public class DmodeDungeonTest : TestFixture
                 CharaId = Charas.Shingen,
                 StartFloorNum = 1,
                 ServitorId = 1,
-                BringEditSkillCharaIdList = new List<Charas>() { Charas.Ranzal, Charas.GalaCleo }
+                BringEditSkillCharaIdList = new List<Charas>() { Charas.Ranzal, Charas.GalaCleo },
             }
         );
 

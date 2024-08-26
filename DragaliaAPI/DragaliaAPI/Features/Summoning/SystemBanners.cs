@@ -52,8 +52,8 @@ public static class SystemBanners
                 Charas.Julietta,
                 Charas.Lucretia,
                 Charas.Hildegarde,
-                Charas.Nefaria
-            ]
+                Charas.Nefaria,
+            ],
         };
 
     /// <summary>
@@ -95,8 +95,8 @@ public static class SystemBanners
                 Dragons.PopStarSiren,
                 Dragons.Nidhogg,
                 Dragons.Nyarlathotep,
-                Dragons.Shinobi
-            ]
+                Dragons.Shinobi,
+            ],
         };
 
     /// <summary>
@@ -121,7 +121,7 @@ public static class SystemBanners
                     return charaData.Rarity == 5
                         && charaData.GetAvailability() == UnitAvailability.Permanent;
                 })
-                .ToList()
+                .ToList(),
         };
 
     /// <summary>
@@ -146,6 +146,6 @@ public static class SystemBanners
                     return dragonData.Rarity == 5
                         && dragonData.GetAvailability() == UnitAvailability.Permanent;
                 })
-                .ToList()
+                .ToList(),
         };
 }

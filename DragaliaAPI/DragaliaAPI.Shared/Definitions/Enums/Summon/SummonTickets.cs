@@ -9,5 +9,5 @@ public enum SummonTickets
     AdventurerSummon = 10301,
     DragonSummon,
     AdventurerSummonPlus = 10501,
-    DragonSummonPlus
+    DragonSummonPlus,
 }

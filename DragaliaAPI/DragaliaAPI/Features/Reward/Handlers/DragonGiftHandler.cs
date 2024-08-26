@@ -38,7 +38,7 @@ public class DragonGiftHandler(ApiContext apiContext, IPlayerIdentityService pla
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     DragonGiftId = gift,
-                    Quantity = reward.Quantity
+                    Quantity = reward.Quantity,
                 };
 
             apiContext.PlayerDragonGifts.Add(dragonGift);

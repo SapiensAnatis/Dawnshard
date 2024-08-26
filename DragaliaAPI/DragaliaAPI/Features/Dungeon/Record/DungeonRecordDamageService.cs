@@ -19,8 +19,8 @@ public class DungeonRecordDamageService : IDungeonRecordDamageService
                         Rank = 0,
                         DamageValue = playRecord?.TotalPlayDamage ?? 0,
                         IsNew = false,
-                    }
-                }
+                    },
+                },
             };
 
         return Task.FromResult(damageRanking);

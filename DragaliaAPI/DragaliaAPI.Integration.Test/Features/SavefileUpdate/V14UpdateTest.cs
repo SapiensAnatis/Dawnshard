@@ -25,7 +25,7 @@ public class V14UpdateTest : SavefileUpdateTestFixture
             {
                 StoryId = cellieraCh5,
                 StoryType = StoryTypes.Chara,
-                State = StoryState.Read
+                State = StoryState.Read,
             }
         );
 

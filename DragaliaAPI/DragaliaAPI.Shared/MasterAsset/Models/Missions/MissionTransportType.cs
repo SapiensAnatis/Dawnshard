@@ -29,5 +29,5 @@ public enum MissionTransportType
     MenuEtcAccount,
     MenuGuildTop,
     MenuAlbumTop,
-    EtcDreamAdventure = 10701
+    EtcDreamAdventure = 10701,
 }

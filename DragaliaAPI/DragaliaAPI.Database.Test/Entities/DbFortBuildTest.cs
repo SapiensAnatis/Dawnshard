@@ -20,7 +20,7 @@ public class DbFortBuildTest
             {
                 ViewerId = 1,
                 PlantId = plantId,
-                Level = level
+                Level = level,
             };
 
         entity.FortPlantDetailId.Should().Be(expectedDetailId);
@@ -34,7 +34,7 @@ public class DbFortBuildTest
             {
                 ViewerId = 1,
                 BuildStartDate = DateTimeOffset.UnixEpoch,
-                BuildEndDate = DateTimeOffset.UnixEpoch
+                BuildEndDate = DateTimeOffset.UnixEpoch,
             };
 
         entity.BuildStatus.Should().Be(FortBuildStatus.Neutral);
@@ -56,7 +56,7 @@ public class DbFortBuildTest
                 ViewerId = 1,
                 Level = level,
                 BuildStartDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(startOffsetSec),
-                BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(endOffsetSec)
+                BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(endOffsetSec),
             };
 
         entity.BuildStatus.Should().Be(expected);
@@ -73,7 +73,7 @@ public class DbFortBuildTest
             new()
             {
                 ViewerId = 1,
-                BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(endOffsetSec)
+                BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(endOffsetSec),
             };
 
         entity.RemainTime.Should().BeCloseTo(TimeSpan.FromSeconds(expectedSec), AssertionTolerance);
@@ -89,7 +89,7 @@ public class DbFortBuildTest
             new()
             {
                 ViewerId = 1,
-                LastIncomeDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(incomeOffsetSec)
+                LastIncomeDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(incomeOffsetSec),
             };
 
         entity

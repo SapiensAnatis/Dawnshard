@@ -34,7 +34,7 @@ public class GameListTest : TestFixture
                     RequiredPartyPower = 11700,
                     ObjectiveTextId = 1,
                 },
-                Players = (List<RedisPlayer>)[new() { ViewerId = 2, PartyNoList = [40] }]
+                Players = (List<RedisPlayer>)[new() { ViewerId = 2, PartyNoList = [40] }],
             },
             // Non-public matching
 
@@ -53,7 +53,7 @@ public class GameListTest : TestFixture
                     RequiredPartyPower = 11700,
                     ObjectiveTextId = 1,
                 },
-                Players = [new() { ViewerId = 3, PartyNoList = [40] }]
+                Players = [new() { ViewerId = 3, PartyNoList = [40] }],
             },
             // Visible = false
 
@@ -75,7 +75,7 @@ public class GameListTest : TestFixture
                 },
                 Players = (List<RedisPlayer>)[new() { ViewerId = 3, PartyNoList = [40] }],
                 Visible = false,
-            }
+            },
         ];
 
         await this.RedisConnectionProvider.RedisCollection<RedisGame>().InsertAsync(games);
@@ -109,7 +109,7 @@ public class GameListTest : TestFixture
                     RequiredPartyPower = 11700,
                     ObjectiveTextId = 1,
                 },
-                Players = [new() { ViewerId = 2, PartyNoList = [40] }]
+                Players = [new() { ViewerId = 2, PartyNoList = [40] }],
             },
             new()
             {
@@ -126,8 +126,8 @@ public class GameListTest : TestFixture
                     RequiredPartyPower = 11700,
                     ObjectiveTextId = 1,
                 },
-                Players = [new() { ViewerId = 3, PartyNoList = [40] }]
-            }
+                Players = [new() { ViewerId = 3, PartyNoList = [40] }],
+            },
         ];
 
         await this.RedisConnectionProvider.RedisCollection<RedisGame>().InsertAsync(games);

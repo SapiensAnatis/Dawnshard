@@ -107,39 +107,27 @@ public record CharaData(
 
     [IgnoreMember]
     public int MaxAbility1Level =
-        Abilities14 != 0
-            ? 4
-            : Abilities13 != 0
-                ? 3
-                : Abilities12 != 0
-                    ? 2
-                    : Abilities11 != 0
-                        ? 1
-                        : 0;
+        Abilities14 != 0 ? 4
+        : Abilities13 != 0 ? 3
+        : Abilities12 != 0 ? 2
+        : Abilities11 != 0 ? 1
+        : 0;
 
     [IgnoreMember]
     public int MaxAbility2Level =
-        Abilities24 != 0
-            ? 4
-            : Abilities23 != 0
-                ? 3
-                : Abilities22 != 0
-                    ? 2
-                    : Abilities21 != 0
-                        ? 1
-                        : 0;
+        Abilities24 != 0 ? 4
+        : Abilities23 != 0 ? 3
+        : Abilities22 != 0 ? 2
+        : Abilities21 != 0 ? 1
+        : 0;
 
     [IgnoreMember]
     public int MaxAbility3Level =
-        Abilities34 != 0
-            ? 4
-            : Abilities33 != 0
-                ? 3
-                : Abilities32 != 0
-                    ? 2
-                    : Abilities31 != 0
-                        ? 1
-                        : 0;
+        Abilities34 != 0 ? 4
+        : Abilities33 != 0 ? 3
+        : Abilities32 != 0 ? 2
+        : Abilities31 != 0 ? 1
+        : 0;
 
     public ManaNode GetManaNode(int num)
     {
@@ -166,7 +154,7 @@ public record CharaData(
         ExAbilityData2,
         ExAbilityData3,
         ExAbilityData4,
-        ExAbilityData5
+        ExAbilityData5,
     };
 
     [IgnoreMember]
@@ -176,7 +164,7 @@ public record CharaData(
         ExAbility2Data2,
         ExAbility2Data3,
         ExAbility2Data4,
-        ExAbility2Data5
+        ExAbility2Data5,
     };
 
     [IgnoreMember]
@@ -184,7 +172,7 @@ public record CharaData(
     {
         new[] { Abilities11, Abilities12, Abilities13, Abilities14 },
         new[] { Abilities21, Abilities22, Abilities23, Abilities24 },
-        new[] { Abilities31, Abilities32, Abilities33, Abilities34 }
+        new[] { Abilities31, Abilities32, Abilities33, Abilities34 },
     };
 
     public int GetAbility(int abilityNo, int level)

@@ -108,7 +108,7 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
                 new List<int>()
                 {
                     MasterAsset.CharaStories[(int)Charas.Addis].StoryIds[0],
-                    MasterAsset.CharaStories[(int)Charas.Aeleen].StoryIds[0]
+                    MasterAsset.CharaStories[(int)Charas.Aeleen].StoryIds[0],
                 }
             );
     }
@@ -140,7 +140,7 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
                     StoryType = StoryTypes.Chara,
                     StoryId = catherineStoryId,
                     State = 0,
-                }
+                },
             ]
         );
 
@@ -214,7 +214,7 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
 
         this.fixture.ApiContext.PlayerDragonReliability.Should()
             .ContainEquivalentOf(
-                new DbPlayerDragonReliability() { ViewerId = ViewerId, DragonId = Dragons.Agni, },
+                new DbPlayerDragonReliability() { ViewerId = ViewerId, DragonId = Dragons.Agni },
                 opts => opts.Including(x => x.ViewerId).Including(x => x.DragonId)
             );
     }
@@ -245,7 +245,7 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
                     Dragons.KonohanaSakuya,
                     Dragons.KonohanaSakuya,
                     Dragons.Michael,
-                    Dragons.Michael
+                    Dragons.Michael,
                 }
             );
 
@@ -256,6 +256,6 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
                 .ToListAsync()
         )
             .Should()
-            .Contain(new List<Dragons>() { Dragons.KonohanaSakuya, Dragons.Michael, });
+            .Contain(new List<Dragons>() { Dragons.KonohanaSakuya, Dragons.Michael });
     }
 }

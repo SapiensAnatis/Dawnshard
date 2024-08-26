@@ -14,7 +14,7 @@ public enum EventKindType
     Simple,
     Combat,
     BattleRoyal,
-    Earn
+    Earn,
 }
 
 public static class EventKindTypeExtensions
@@ -34,7 +34,7 @@ public static class EventKindTypeExtensions
             EventKindType.Combat => EntityTypes.CombatEventItem,
             EventKindType.BattleRoyal => EntityTypes.BattleRoyalEventItem,
             EventKindType.Earn => EntityTypes.EarnEventItem,
-            _ => EntityTypes.None
+            _ => EntityTypes.None,
         };
     }
 }

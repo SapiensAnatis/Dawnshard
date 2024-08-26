@@ -5,6 +5,7 @@ using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.Extensions.Logging.Abstractions;
+using MockQueryable.EntityFrameworkCore;
 using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Features.Dungeon;
@@ -37,14 +38,14 @@ public class AbilityCrestMultiplierServiceTest
                     {
                         ViewerId = 1,
                         AbilityCrestId = AbilityCrestId.SistersDayOut,
-                        LimitBreakCount = 4
+                        LimitBreakCount = 4,
                     },
                     new()
                     {
                         ViewerId = 1,
                         AbilityCrestId = AbilityCrestId.TheDragonSmiths,
-                        LimitBreakCount = 4
-                    }
+                        LimitBreakCount = 4,
+                    },
                 }
                     .AsQueryable()
                     .BuildMock()
@@ -56,22 +57,22 @@ public class AbilityCrestMultiplierServiceTest
                 new()
                 {
                     EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut,
-                    EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths
+                    EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths,
                 },
                 new()
                 {
                     EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut,
-                    EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths
+                    EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths,
                 },
                 new()
                 {
                     EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut,
-                    EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths
+                    EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths,
                 },
                 new()
                 {
                     EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut,
-                    EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths
+                    EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths,
                 },
             };
 
@@ -99,14 +100,14 @@ public class AbilityCrestMultiplierServiceTest
                     {
                         ViewerId = 1,
                         AbilityCrestId = AbilityCrestId.SistersDayOut,
-                        LimitBreakCount = 4
+                        LimitBreakCount = 4,
                     },
                     new()
                     {
                         ViewerId = 1,
                         AbilityCrestId = AbilityCrestId.TotheExtreme,
-                        LimitBreakCount = 4
-                    }
+                        LimitBreakCount = 4,
+                    },
                 }
                     .AsQueryable()
                     .BuildMock()
@@ -118,7 +119,9 @@ public class AbilityCrestMultiplierServiceTest
                 new()
                 {
                     EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut, // +150%
-                    EquipCrestSlotType2CrestId1 = AbilityCrestId.TotheExtreme // +100%
+                    EquipCrestSlotType2CrestId1 =
+                        AbilityCrestId.TotheExtreme // +100%
+                    ,
                 },
             };
 
@@ -146,14 +149,14 @@ public class AbilityCrestMultiplierServiceTest
                     {
                         ViewerId = 1,
                         AbilityCrestId = AbilityCrestId.SistersDayOut,
-                        LimitBreakCount = 4
+                        LimitBreakCount = 4,
                     },
                     new()
                     {
                         ViewerId = 1,
                         AbilityCrestId = AbilityCrestId.TotheExtreme,
-                        LimitBreakCount = 4
-                    }
+                        LimitBreakCount = 4,
+                    },
                 }
                     .AsQueryable()
                     .BuildMock()
@@ -165,12 +168,16 @@ public class AbilityCrestMultiplierServiceTest
                 new()
                 {
                     EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut, // +150%
-                    EquipCrestSlotType2CrestId1 = AbilityCrestId.TotheExtreme // +100%
+                    EquipCrestSlotType2CrestId1 =
+                        AbilityCrestId.TotheExtreme // +100%
+                    ,
                 },
                 new()
                 {
                     EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut, // +150%
-                    EquipCrestSlotType2CrestId1 = AbilityCrestId.TotheExtreme // +100%
+                    EquipCrestSlotType2CrestId1 =
+                        AbilityCrestId.TotheExtreme // +100%
+                    ,
                 },
             };
 
@@ -198,13 +205,13 @@ public class AbilityCrestMultiplierServiceTest
                     {
                         ViewerId = 1,
                         AbilityCrestId = AbilityCrestId.SistersDayOut,
-                        LimitBreakCount = 0
+                        LimitBreakCount = 0,
                     },
                     new()
                     {
                         ViewerId = 1,
                         AbilityCrestId = AbilityCrestId.TheDragonSmiths,
-                        LimitBreakCount = 0
+                        LimitBreakCount = 0,
                     },
                 }
                     .AsQueryable()
@@ -245,8 +252,8 @@ public class AbilityCrestMultiplierServiceTest
                     {
                         ViewerId = 1,
                         AbilityCrestId = AbilityCrestId.SistersDayOut,
-                        LimitBreakCount = 4
-                    }
+                        LimitBreakCount = 4,
+                    },
                 }
                     .AsQueryable()
                     .BuildMock()
@@ -255,10 +262,10 @@ public class AbilityCrestMultiplierServiceTest
         List<PartySettingList> party =
             new()
             {
-                new() { EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut, },
-                new() { EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut, },
-                new() { EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut, },
-                new() { EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut, },
+                new() { EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut },
+                new() { EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut },
+                new() { EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut },
+                new() { EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut },
             };
 
         (double material, double point) = (

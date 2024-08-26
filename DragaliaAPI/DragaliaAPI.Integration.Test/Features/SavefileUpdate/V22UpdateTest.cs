@@ -32,7 +32,7 @@ public class V22UpdateTest : SavefileUpdateTestFixture
                 ViewerId = this.ViewerId,
                 StoryId = Chapter10LastStoryId,
                 StoryType = StoryTypes.Quest,
-                State = StoryState.Read
+                State = StoryState.Read,
             }
         );
 
