@@ -165,7 +165,7 @@ public class TimeAttackService(
             unit.TalismanAbility2 = x.TalismanData.TalismanAbilityId2;
         }
 
-        List<AbilityCrests> crests = x
+        List<AbilityCrestId> crests = x
             .CrestSlotType1CrestList.Concat(x.CrestSlotType2CrestList)
             .Concat(x.CrestSlotType3CrestList)
             .Select(x => x.AbilityCrestId)

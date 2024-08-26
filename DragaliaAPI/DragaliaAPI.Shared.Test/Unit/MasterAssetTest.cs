@@ -561,7 +561,7 @@ public class MasterAssetTest
                 new
                 {
                     Id = 5101,
-                    AbilityCrestId = AbilityCrests.SweetSurprise,
+                    AbilityCrestId = AbilityCrestId.SweetSurprise,
                     NeedDewPoint = 4000,
                     Priority = 5199
                 }
@@ -713,14 +713,14 @@ public class MasterAssetTest
     public void AbilityCrest_Get_ReturnsExpectedProperties()
     {
         AbilityCrest abilityCrest = MasterAsset.MasterAsset.AbilityCrest.Get(
-            AbilityCrests.TheGeniusTacticianBowsBoon
+            AbilityCrestId.TheGeniusTacticianBowsBoon
         );
 
         abilityCrest
             .Should()
             .BeEquivalentTo(
                 new AbilityCrest(
-                    Id: AbilityCrests.TheGeniusTacticianBowsBoon,
+                    Id: AbilityCrestId.TheGeniusTacticianBowsBoon,
                     AbilityCrestBuildupGroupId: 1101,
                     AbilityCrestLevelRarityGroupId: 901,
                     Rarity: 9,
@@ -749,7 +749,7 @@ public class MasterAssetTest
     public void AbilityCrest_GetBuildupGroupId_ReturnsExpectedId()
     {
         AbilityCrest abilityCrest = MasterAsset.MasterAsset.AbilityCrest.Get(
-            AbilityCrests.TheGeniusTacticianBowsBoon
+            AbilityCrestId.TheGeniusTacticianBowsBoon
         );
 
         int buildupGroupId = abilityCrest.GetBuildupGroupId(BuildupPieceTypes.Copies, 4);
@@ -760,7 +760,7 @@ public class MasterAssetTest
     public void AbilityCrest_GetBuildupLevelId_ReturnsExpectedId()
     {
         AbilityCrest abilityCrest = MasterAsset.MasterAsset.AbilityCrest.Get(
-            AbilityCrests.TheGeniusTacticianBowsBoon
+            AbilityCrestId.TheGeniusTacticianBowsBoon
         );
 
         int buildupLevelId = abilityCrest.GetBuildupLevelId(9);
@@ -771,7 +771,7 @@ public class MasterAssetTest
     public void AbilityCrest_DuplicateMaterialMap_ReturnsExpectedDictionary()
     {
         FrozenDictionary<Materials, int> map = MasterAsset
-            .MasterAsset.AbilityCrest.Get(AbilityCrests.TheGeniusTacticianBowsBoon)
+            .MasterAsset.AbilityCrest.Get(AbilityCrestId.TheGeniusTacticianBowsBoon)
             .DuplicateMaterialMap;
 
         map.Should()
@@ -783,7 +783,7 @@ public class MasterAssetTest
     [Fact]
     public void AbilityCrest_GetAbilities_ReturnsExpected()
     {
-        AbilityCrest crest = MasterAsset.MasterAsset.AbilityCrest[AbilityCrests.TotheExtreme];
+        AbilityCrest crest = MasterAsset.MasterAsset.AbilityCrest[AbilityCrestId.TotheExtreme];
 
         crest
             .GetAbilities(1)

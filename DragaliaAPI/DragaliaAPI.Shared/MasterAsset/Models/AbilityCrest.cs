@@ -5,7 +5,7 @@ using MessagePack;
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
 public record AbilityCrest(
-    AbilityCrests Id,
+    AbilityCrestId Id,
     int AbilityCrestBuildupGroupId,
     int AbilityCrestLevelRarityGroupId,
     int Rarity,

@@ -88,7 +88,7 @@ public class FriendTest : TestFixture
                     {
                         new()
                         {
-                            AbilityCrestId = AbilityCrests.ARoyalTeaParty,
+                            AbilityCrestId = AbilityCrestId.ARoyalTeaParty,
                             BuildupCount = 50,
                             LimitBreakCount = 4,
                             HpPlusCount = 50,
@@ -97,7 +97,7 @@ public class FriendTest : TestFixture
                         },
                         new()
                         {
-                            AbilityCrestId = AbilityCrests.QueenoftheBlueSeas,
+                            AbilityCrestId = AbilityCrestId.QueenoftheBlueSeas,
                             BuildupCount = 50,
                             LimitBreakCount = 4,
                             HpPlusCount = 50,
@@ -106,7 +106,7 @@ public class FriendTest : TestFixture
                         },
                         new()
                         {
-                            AbilityCrestId = AbilityCrests.PeacefulWaterfront,
+                            AbilityCrestId = AbilityCrestId.PeacefulWaterfront,
                             BuildupCount = 50,
                             LimitBreakCount = 4,
                             HpPlusCount = 50,
@@ -118,7 +118,7 @@ public class FriendTest : TestFixture
                     {
                         new()
                         {
-                            AbilityCrestId = AbilityCrests.HisCleverBrother,
+                            AbilityCrestId = AbilityCrestId.HisCleverBrother,
                             BuildupCount = 40,
                             LimitBreakCount = 4,
                             HpPlusCount = 50,
@@ -127,7 +127,7 @@ public class FriendTest : TestFixture
                         },
                         new()
                         {
-                            AbilityCrestId = AbilityCrests.DragonsNest,
+                            AbilityCrestId = AbilityCrestId.DragonsNest,
                             BuildupCount = 20,
                             LimitBreakCount = 4,
                             HpPlusCount = 50,
@@ -139,7 +139,7 @@ public class FriendTest : TestFixture
                     {
                         new()
                         {
-                            AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                            AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                             BuildupCount = 30,
                             LimitBreakCount = 4,
                             HpPlusCount = 40,
@@ -148,7 +148,7 @@ public class FriendTest : TestFixture
                         },
                         new()
                         {
-                            AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                            AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                             BuildupCount = 30,
                             LimitBreakCount = 4,
                             HpPlusCount = 40,

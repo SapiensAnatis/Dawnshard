@@ -231,7 +231,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ARoyalTeaParty,
+                                AbilityCrestId = AbilityCrestId.ARoyalTeaParty,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -240,7 +240,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.QueenoftheBlueSeas,
+                                AbilityCrestId = AbilityCrestId.QueenoftheBlueSeas,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -249,7 +249,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PeacefulWaterfront,
+                                AbilityCrestId = AbilityCrestId.PeacefulWaterfront,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -261,7 +261,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.HisCleverBrother,
+                                AbilityCrestId = AbilityCrestId.HisCleverBrother,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -270,7 +270,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -282,7 +282,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -291,7 +291,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -364,7 +364,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WelcometotheOpera,
+                                AbilityCrestId = AbilityCrestId.WelcometotheOpera,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -373,7 +373,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.AManUnchanging,
+                                AbilityCrestId = AbilityCrestId.AManUnchanging,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -382,7 +382,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PrayersUntoHim,
+                                AbilityCrestId = AbilityCrestId.PrayersUntoHim,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -394,7 +394,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                AbilityCrestId = AbilityCrestId.ChariotDrift,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -403,7 +403,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -415,7 +415,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -424,7 +424,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -497,7 +497,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.GentleWinds,
+                                AbilityCrestId = AbilityCrestId.GentleWinds,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -506,7 +506,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TheChocolatiers,
+                                AbilityCrestId = AbilityCrestId.TheChocolatiers,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -515,7 +515,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -527,7 +527,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.AWidowsLament,
+                                AbilityCrestId = AbilityCrestId.AWidowsLament,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -536,7 +536,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -548,7 +548,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -557,7 +557,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -630,7 +630,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                AbilityCrestId = AbilityCrestId.CastleCheerCorps,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -639,7 +639,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                AbilityCrestId = AbilityCrestId.StudyRabbits,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -648,7 +648,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -660,7 +660,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -669,7 +669,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -681,7 +681,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -690,7 +690,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -763,7 +763,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                AbilityCrestId = AbilityCrestId.CastleCheerCorps,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -772,7 +772,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                AbilityCrestId = AbilityCrestId.StudyRabbits,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -781,7 +781,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -793,7 +793,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -802,7 +802,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -814,7 +814,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -823,7 +823,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -896,7 +896,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                AbilityCrestId = AbilityCrestId.CastleCheerCorps,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -905,7 +905,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                AbilityCrestId = AbilityCrestId.StudyRabbits,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -914,7 +914,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -926,7 +926,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -935,7 +935,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -947,7 +947,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -956,7 +956,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -1029,7 +1029,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                AbilityCrestId = AbilityCrestId.CastleCheerCorps,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1038,7 +1038,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                AbilityCrestId = AbilityCrestId.StudyRabbits,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1047,7 +1047,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1059,7 +1059,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1068,7 +1068,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1080,7 +1080,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -1089,7 +1089,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -1162,7 +1162,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                AbilityCrestId = AbilityCrestId.CastleCheerCorps,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1171,7 +1171,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                AbilityCrestId = AbilityCrestId.StudyRabbits,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1180,7 +1180,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1192,7 +1192,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1201,7 +1201,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1213,7 +1213,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -1222,7 +1222,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -1295,7 +1295,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                AbilityCrestId = AbilityCrestId.CastleCheerCorps,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1304,7 +1304,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                AbilityCrestId = AbilityCrestId.StudyRabbits,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1313,7 +1313,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1325,7 +1325,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1334,7 +1334,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1346,7 +1346,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -1355,7 +1355,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -1428,7 +1428,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WelcometotheOpera,
+                                AbilityCrestId = AbilityCrestId.WelcometotheOpera,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1437,7 +1437,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.AManUnchanging,
+                                AbilityCrestId = AbilityCrestId.AManUnchanging,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1446,7 +1446,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                AbilityCrestId = AbilityCrestId.WorthyRivals,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1458,7 +1458,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                AbilityCrestId = AbilityCrestId.ChariotDrift,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1467,7 +1467,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1479,7 +1479,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -1488,7 +1488,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -1561,7 +1561,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WingsofRebellionatRest,
+                                AbilityCrestId = AbilityCrestId.WingsofRebellionatRest,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1570,7 +1570,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                AbilityCrestId = AbilityCrestId.WorthyRivals,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1579,7 +1579,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.SeasidePrincess,
+                                AbilityCrestId = AbilityCrestId.SeasidePrincess,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1591,7 +1591,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                AbilityCrestId = AbilityCrestId.ChariotDrift,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1600,7 +1600,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1612,7 +1612,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -1621,7 +1621,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -1694,7 +1694,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.AManUnchanging,
+                                AbilityCrestId = AbilityCrestId.AManUnchanging,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1703,7 +1703,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.GoingUndercover,
+                                AbilityCrestId = AbilityCrestId.GoingUndercover,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1712,7 +1712,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                AbilityCrestId = AbilityCrestId.WorthyRivals,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1724,7 +1724,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                AbilityCrestId = AbilityCrestId.ChariotDrift,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1733,7 +1733,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1745,7 +1745,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -1754,7 +1754,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -1827,7 +1827,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WelcometotheOpera,
+                                AbilityCrestId = AbilityCrestId.WelcometotheOpera,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1836,7 +1836,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.AManUnchanging,
+                                AbilityCrestId = AbilityCrestId.AManUnchanging,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1845,7 +1845,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                AbilityCrestId = AbilityCrestId.WorthyRivals,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1857,7 +1857,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                AbilityCrestId = AbilityCrestId.ChariotDrift,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1866,7 +1866,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1878,7 +1878,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -1887,7 +1887,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -1960,7 +1960,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                AbilityCrestId = AbilityCrestId.CastleCheerCorps,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1969,7 +1969,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                AbilityCrestId = AbilityCrestId.StudyRabbits,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1978,7 +1978,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1990,7 +1990,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -1999,7 +1999,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2011,7 +2011,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -2020,7 +2020,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -2093,7 +2093,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                AbilityCrestId = AbilityCrestId.CastleCheerCorps,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2102,7 +2102,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                AbilityCrestId = AbilityCrestId.StudyRabbits,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2111,7 +2111,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2123,7 +2123,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2132,7 +2132,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2144,7 +2144,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -2153,7 +2153,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -2226,7 +2226,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.GoingUndercover,
+                                AbilityCrestId = AbilityCrestId.GoingUndercover,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2235,7 +2235,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.AManUnchanging,
+                                AbilityCrestId = AbilityCrestId.AManUnchanging,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2244,7 +2244,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                AbilityCrestId = AbilityCrestId.WorthyRivals,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2256,7 +2256,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                AbilityCrestId = AbilityCrestId.ChariotDrift,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2265,7 +2265,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2277,7 +2277,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -2286,7 +2286,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -2359,7 +2359,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.MeandMyBestie,
+                                AbilityCrestId = AbilityCrestId.MeandMyBestie,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2368,7 +2368,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TheCutieCompetition,
+                                AbilityCrestId = AbilityCrestId.TheCutieCompetition,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2377,7 +2377,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                AbilityCrestId = AbilityCrestId.WorthyRivals,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2389,7 +2389,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                AbilityCrestId = AbilityCrestId.ChariotDrift,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2398,7 +2398,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2410,7 +2410,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -2419,7 +2419,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -2493,7 +2493,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TheHeroesArrive,
+                                AbilityCrestId = AbilityCrestId.TheHeroesArrive,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2502,7 +2502,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ANewLook,
+                                AbilityCrestId = AbilityCrestId.ANewLook,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2511,7 +2511,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.UnconditionalLove,
+                                AbilityCrestId = AbilityCrestId.UnconditionalLove,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2523,7 +2523,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.BeautifulGunman,
+                                AbilityCrestId = AbilityCrestId.BeautifulGunman,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2532,7 +2532,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2544,7 +2544,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -2553,7 +2553,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -2626,7 +2626,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                AbilityCrestId = AbilityCrestId.CastleCheerCorps,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2635,7 +2635,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                AbilityCrestId = AbilityCrestId.StudyRabbits,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2644,7 +2644,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2656,7 +2656,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2665,7 +2665,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2677,7 +2677,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -2686,7 +2686,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -2759,7 +2759,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.AManUnchanging,
+                                AbilityCrestId = AbilityCrestId.AManUnchanging,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2768,7 +2768,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WelcometotheOpera,
+                                AbilityCrestId = AbilityCrestId.WelcometotheOpera,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2777,7 +2777,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                AbilityCrestId = AbilityCrestId.WorthyRivals,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2789,7 +2789,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                AbilityCrestId = AbilityCrestId.ChariotDrift,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2798,7 +2798,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2810,7 +2810,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -2819,7 +2819,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -2892,7 +2892,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.AWonderfulValentines,
+                                AbilityCrestId = AbilityCrestId.AWonderfulValentines,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2901,7 +2901,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ARainyDay,
+                                AbilityCrestId = AbilityCrestId.ARainyDay,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2910,7 +2910,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ExtremeTeamwork,
+                                AbilityCrestId = AbilityCrestId.ExtremeTeamwork,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2922,7 +2922,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                AbilityCrestId = AbilityCrestId.ChariotDrift,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2931,7 +2931,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.BeautifulGunman,
+                                AbilityCrestId = AbilityCrestId.BeautifulGunman,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
@@ -2943,7 +2943,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
@@ -2952,7 +2952,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.AKnightsDreamAxesBoon,
+                                AbilityCrestId = AbilityCrestId.AKnightsDreamAxesBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,

@@ -317,7 +317,7 @@ public class QuestService(
         if (questData.EventKindType is EventKindType.Build or EventKindType.Clb01)
         {
             foreach (
-                AbilityCrests crest in session
+                AbilityCrestId crest in session
                     .Party.SelectMany(x => x.GetAbilityCrestList())
                     .Distinct()
             )

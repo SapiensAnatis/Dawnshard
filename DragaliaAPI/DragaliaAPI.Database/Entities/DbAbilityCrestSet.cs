@@ -35,37 +35,37 @@ public class DbAbilityCrestSet : DbPlayerData
     /// <summary>
     /// Gets or sets a value indicating the wyrmprint set's first 5* wyrmprint slot.
     /// </summary>
-    public AbilityCrests CrestSlotType1CrestId1 { get; set; } = 0;
+    public AbilityCrestId CrestSlotType1CrestId1 { get; set; } = 0;
 
     /// <summary>
     /// Gets or sets a value indicating the wyrmprint set's second 5* wyrmprint slot.
     /// </summary>
-    public AbilityCrests CrestSlotType1CrestId2 { get; set; } = 0;
+    public AbilityCrestId CrestSlotType1CrestId2 { get; set; } = 0;
 
     /// <summary>
     /// Gets or sets a value indicating the wyrmprint set's third 5* wyrmprint slot.
     /// </summary>
-    public AbilityCrests CrestSlotType1CrestId3 { get; set; } = 0;
+    public AbilityCrestId CrestSlotType1CrestId3 { get; set; } = 0;
 
     /// <summary>
     /// Gets or sets a value indicating the wyrmprint set's first 3*/4* wyrmprint slot.
     /// </summary>
-    public AbilityCrests CrestSlotType2CrestId1 { get; set; } = 0;
+    public AbilityCrestId CrestSlotType2CrestId1 { get; set; } = 0;
 
     /// <summary>
     /// Gets or sets a value indicating the wyrmprint set's second 3*/4* wyrmprint slot.
     /// </summary>
-    public AbilityCrests CrestSlotType2CrestId2 { get; set; } = 0;
+    public AbilityCrestId CrestSlotType2CrestId2 { get; set; } = 0;
 
     /// <summary>
     /// Gets or sets a value indicating the wyrmprint set's first sindom wyrmprint slot.
     /// </summary>
-    public AbilityCrests CrestSlotType3CrestId1 { get; set; } = 0;
+    public AbilityCrestId CrestSlotType3CrestId1 { get; set; } = 0;
 
     /// <summary>
     /// Gets or sets a value indicating the wyrmprint set's second sindom wyrmprint slot.
     /// </summary>
-    public AbilityCrests CrestSlotType3CrestId2 { get; set; } = 0;
+    public AbilityCrestId CrestSlotType3CrestId2 { get; set; } = 0;
 
     /// <summary>
     /// Gets or sets a value indicating the wyrmprint set's kaleidoscape print slot.

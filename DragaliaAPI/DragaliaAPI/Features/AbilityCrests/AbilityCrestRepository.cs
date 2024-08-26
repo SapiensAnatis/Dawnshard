@@ -1,9 +1,9 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
-using Microsoft.Extensions.Logging;
 
-namespace DragaliaAPI.Database.Repositories;
+namespace DragaliaAPI.Features.AbilityCrests;
 
 public class AbilityCrestRepository : IAbilityCrestRepository
 {
@@ -33,7 +33,7 @@ public class AbilityCrestRepository : IAbilityCrestRepository
         );
 
     public async Task Add(
-        AbilityCrests abilityCrestId,
+        AbilityCrestId abilityCrestId,
         int? limitBreakCount = null,
         int? buildupCount = null,
         int? equipableCount = null
@@ -63,7 +63,7 @@ public class AbilityCrestRepository : IAbilityCrestRepository
         this.apiContext.PlayerAbilityCrests.Add(entity);
     }
 
-    public async Task<DbAbilityCrest?> FindAsync(AbilityCrests abilityCrestId) =>
+    public async Task<DbAbilityCrest?> FindAsync(AbilityCrestId abilityCrestId) =>
         await this.apiContext.PlayerAbilityCrests.FindAsync(
             this.playerIdentityService.ViewerId,
             abilityCrestId

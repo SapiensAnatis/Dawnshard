@@ -22,7 +22,7 @@ public static class TollOfTheDeep
             new EventQuestClearWithCrestMission()
             {
                 MissionId = 10220401,
-                Crest = AbilityCrests.HavingaSummerBall
+                Crest = AbilityCrestId.HavingaSummerBall
             },
             // Collect 100 Oceanic Resonance in One Go
             new EventPointCollectionRecordMission() { MissionId = 10220501 },

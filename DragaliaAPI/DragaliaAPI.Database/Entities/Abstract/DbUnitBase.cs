@@ -13,19 +13,19 @@ public abstract class DbUnitBase
 
     public WeaponBodies EquipWeaponBodyId { get; set; }
 
-    public AbilityCrests EquipCrestSlotType1CrestId1 { get; set; }
+    public AbilityCrestId EquipCrestSlotType1CrestId1 { get; set; }
 
-    public AbilityCrests EquipCrestSlotType1CrestId2 { get; set; }
+    public AbilityCrestId EquipCrestSlotType1CrestId2 { get; set; }
 
-    public AbilityCrests EquipCrestSlotType1CrestId3 { get; set; }
+    public AbilityCrestId EquipCrestSlotType1CrestId3 { get; set; }
 
-    public AbilityCrests EquipCrestSlotType2CrestId1 { get; set; }
+    public AbilityCrestId EquipCrestSlotType2CrestId1 { get; set; }
 
-    public AbilityCrests EquipCrestSlotType2CrestId2 { get; set; }
+    public AbilityCrestId EquipCrestSlotType2CrestId2 { get; set; }
 
-    public AbilityCrests EquipCrestSlotType3CrestId1 { get; set; }
+    public AbilityCrestId EquipCrestSlotType3CrestId1 { get; set; }
 
-    public AbilityCrests EquipCrestSlotType3CrestId2 { get; set; }
+    public AbilityCrestId EquipCrestSlotType3CrestId2 { get; set; }
 
     public long EquipTalismanKeyId { get; set; }
 }

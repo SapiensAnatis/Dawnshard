@@ -4,7 +4,7 @@ namespace DragaliaAPI.Shared.MasterAsset.Models.Trade;
 
 public record AbilityCrestTrade(
     int Id,
-    AbilityCrests AbilityCrestId,
+    AbilityCrestId AbilityCrestId,
     int NeedDewPoint,
     int Priority,
     DateTimeOffset CompleteDate,

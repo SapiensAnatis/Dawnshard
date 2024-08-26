@@ -114,7 +114,7 @@ public class MissionTest : TestFixture
             new DbAbilityCrest()
             {
                 ViewerId = ViewerId,
-                AbilityCrestId = AbilityCrests.Aromatherapy,
+                AbilityCrestId = AbilityCrestId.Aromatherapy,
                 LimitBreakCount = 4,
             }
         );
@@ -129,7 +129,7 @@ public class MissionTest : TestFixture
                 "/ability_crest/buildup_piece",
                 new AbilityCrestBuildupPieceRequest()
                 {
-                    AbilityCrestId = AbilityCrests.Aromatherapy,
+                    AbilityCrestId = AbilityCrestId.Aromatherapy,
                     BuildupAbilityCrestPieceList = Enumerable
                         .Range(2, 15)
                         .Select(x => new AtgenBuildupAbilityCrestPieceList()
@@ -175,7 +175,7 @@ public class MissionTest : TestFixture
         response
             .UpdateDataList.AbilityCrestList.Should()
             .Contain(x =>
-                x.AbilityCrestId == AbilityCrests.HavingaSummerBall && x.EquipableCount == 1
+                x.AbilityCrestId == AbilityCrestId.HavingaSummerBall && x.EquipableCount == 1
             );
     }
 

@@ -222,7 +222,7 @@ public class PresentTest : TestFixture
                 {
                     ViewerId = ViewerId,
                     EntityType = EntityTypes.Wyrmprint,
-                    EntityId = (int)AbilityCrests.ADogsDay,
+                    EntityId = (int)AbilityCrestId.ADogsDay,
                 },
                 new()
                 {
@@ -298,7 +298,7 @@ public class PresentTest : TestFixture
 
         response
             .Data.UpdateDataList.AbilityCrestList.Should()
-            .Contain(x => x.AbilityCrestId == AbilityCrests.ADogsDay);
+            .Contain(x => x.AbilityCrestId == AbilityCrestId.ADogsDay);
 
         response
             .Data.UpdateDataList.PresentNotice.Should()
@@ -374,13 +374,13 @@ public class PresentTest : TestFixture
                 {
                     ViewerId = ViewerId,
                     EntityType = EntityTypes.Wyrmprint,
-                    EntityId = (int)AbilityCrests.DearDiary,
+                    EntityId = (int)AbilityCrestId.DearDiary,
                 },
                 new()
                 {
                     ViewerId = ViewerId,
                     EntityType = EntityTypes.Wyrmprint,
-                    EntityId = (int)AbilityCrests.DearDiary,
+                    EntityId = (int)AbilityCrestId.DearDiary,
                 },
             };
 
@@ -399,7 +399,7 @@ public class PresentTest : TestFixture
         response
             .Data.UpdateDataList.AbilityCrestList.Should()
             .ContainSingle()
-            .And.Contain(x => x.AbilityCrestId == AbilityCrests.DearDiary);
+            .And.Contain(x => x.AbilityCrestId == AbilityCrestId.DearDiary);
         response.Data.UpdateDataList.UserData.DewPoint.Should().Be(oldUserData.DewPoint + 3000);
 
         response
@@ -409,7 +409,7 @@ public class PresentTest : TestFixture
                 new ConvertedEntityList()
                 {
                     BeforeEntityType = EntityTypes.Wyrmprint,
-                    BeforeEntityId = (int)AbilityCrests.DearDiary,
+                    BeforeEntityId = (int)AbilityCrestId.DearDiary,
                     BeforeEntityQuantity = 1,
                     AfterEntityType = EntityTypes.Dew,
                     AfterEntityId = 0,

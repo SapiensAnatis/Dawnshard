@@ -21,7 +21,7 @@ public static class DivineDeception
             new EventQuestClearWithCrestMission()
             {
                 MissionId = 10210401,
-                Crest = AbilityCrests.ExtremeTeamwork
+                Crest = AbilityCrestId.ExtremeTeamwork
             },
             // Collect 100 Intelligence in One Go
             new EventPointCollectionRecordMission() { MissionId = 10210501 },

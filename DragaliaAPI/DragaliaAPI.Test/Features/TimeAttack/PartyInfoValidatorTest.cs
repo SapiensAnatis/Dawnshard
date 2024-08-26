@@ -101,11 +101,11 @@ public class PartyInfoValidatorTest
                         CharaData = new() { CharaId = Charas.GalaGatov },
                         CrestSlotType1CrestList = new List<GameAbilityCrest>()
                         {
-                            new() { AbilityCrestId = AbilityCrests.CastleCheerCorps },
+                            new() { AbilityCrestId = AbilityCrestId.CastleCheerCorps },
                         },
                         CrestSlotType2CrestList = new List<GameAbilityCrest>()
                         {
-                            new() { AbilityCrestId = AbilityCrests.CastleCheerCorps }
+                            new() { AbilityCrestId = AbilityCrestId.CastleCheerCorps }
                         }
                     }
                 }
@@ -260,7 +260,7 @@ public class PartyInfoValidatorTest
                     {
                         CrestSlotType1CrestList = new List<GameAbilityCrest>()
                         {
-                            new() { AbilityCrestId = (AbilityCrests)1234 }
+                            new() { AbilityCrestId = (AbilityCrestId)1234 }
                         },
                     }
                 }

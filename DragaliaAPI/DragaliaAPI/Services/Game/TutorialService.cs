@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Features.AbilityCrests;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -136,8 +137,8 @@ public class TutorialService : ITutorialService
     {
         await this.userDataRepository.UpdateDewpoint(100);
         await this.inventoryRepository.UpdateQuantity(Materials.HolyWater, 10);
-        if (await this.abilityCrestRepository.FindAsync(AbilityCrests.ManaFount) == null)
-            await this.abilityCrestRepository.Add(AbilityCrests.ManaFount);
+        if (await this.abilityCrestRepository.FindAsync(AbilityCrestId.ManaFount) == null)
+            await this.abilityCrestRepository.Add(AbilityCrestId.ManaFount);
         logger.LogDebug("Added materials for the wyrmprint tutorial");
     }
 

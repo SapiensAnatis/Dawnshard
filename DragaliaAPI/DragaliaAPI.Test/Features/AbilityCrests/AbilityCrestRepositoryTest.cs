@@ -1,10 +1,11 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Database.Test;
+using DragaliaAPI.Features.AbilityCrests;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Test.Utils;
 using Microsoft.Extensions.Logging;
 
-namespace DragaliaAPI.Database.Test.Repositories;
+namespace DragaliaAPI.Test.Features.AbilityCrests;
 
 [Collection("RepositoryTest")]
 public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
@@ -31,11 +32,11 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task Add_AddsToDatabase()
     {
-        await this.abilityCrestRepository.Add(AbilityCrests.ADogsDay);
+        await this.abilityCrestRepository.Add(AbilityCrestId.ADogsDay);
         await this.fixture.ApiContext.SaveChangesAsync();
 
         this.fixture.ApiContext.PlayerAbilityCrests.Single(x =>
-                x.AbilityCrestId == AbilityCrests.ADogsDay
+                x.AbilityCrestId == AbilityCrestId.ADogsDay
                 && x.ViewerId == IdentityTestUtils.ViewerId
             )
             .Should()
@@ -43,7 +44,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
                 new DbAbilityCrest()
                 {
                     ViewerId = IdentityTestUtils.ViewerId,
-                    AbilityCrestId = AbilityCrests.ADogsDay
+                    AbilityCrestId = AbilityCrestId.ADogsDay
                 }
             );
     }
@@ -51,10 +52,10 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task Add_AbilityCrestAlreadyExistsWarnsLogger()
     {
-        await this.abilityCrestRepository.Add(AbilityCrests.ADragonyuleforIlia);
+        await this.abilityCrestRepository.Add(AbilityCrestId.ADragonyuleforIlia);
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        await this.abilityCrestRepository.Add(AbilityCrests.ADragonyuleforIlia);
+        await this.abilityCrestRepository.Add(AbilityCrestId.ADragonyuleforIlia);
         this.logger.Verify(
             x =>
                 x.Log(
@@ -78,20 +79,20 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task FindAsync_FindsAbilityCrestAsExpected()
     {
-        await this.abilityCrestRepository.Add(AbilityCrests.FlashofGenius);
+        await this.abilityCrestRepository.Add(AbilityCrestId.FlashofGenius);
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        (await this.abilityCrestRepository.FindAsync(AbilityCrests.FlashofGenius))
+        (await this.abilityCrestRepository.FindAsync(AbilityCrestId.FlashofGenius))
             .Should()
             .BeEquivalentTo(
                 new DbAbilityCrest()
                 {
                     ViewerId = IdentityTestUtils.ViewerId,
-                    AbilityCrestId = AbilityCrests.FlashofGenius
+                    AbilityCrestId = AbilityCrestId.FlashofGenius
                 }
             );
 
-        (await this.abilityCrestRepository.FindAsync(AbilityCrests.TheBridalDragon))
+        (await this.abilityCrestRepository.FindAsync(AbilityCrestId.TheBridalDragon))
             .Should()
             .BeNull();
     }
@@ -115,7 +116,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
             {
                 ViewerId = IdentityTestUtils.ViewerId,
                 AbilityCrestSetNo = 54,
-                CrestSlotType1CrestId1 = AbilityCrests.WorthyRivals
+                CrestSlotType1CrestId1 = AbilityCrestId.WorthyRivals
             }
         );
         await this.fixture.ApiContext.SaveChangesAsync();
@@ -129,7 +130,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
                 {
                     ViewerId = IdentityTestUtils.ViewerId,
                     AbilityCrestSetNo = 54,
-                    CrestSlotType1CrestId1 = AbilityCrests.WorthyRivals
+                    CrestSlotType1CrestId1 = AbilityCrestId.WorthyRivals
                 }
             );
     }

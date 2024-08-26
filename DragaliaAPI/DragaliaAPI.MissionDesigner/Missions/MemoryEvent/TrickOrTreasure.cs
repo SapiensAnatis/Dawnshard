@@ -23,7 +23,7 @@ public static class TrickOrTreasure
             new EventQuestClearWithCrestMission()
             {
                 MissionId = 10060201,
-                Crest = AbilityCrests.PlunderPals
+                Crest = AbilityCrestId.PlunderPals
             },
             // Collect 100 Tricker Treats in One Go
             new EventPointCollectionRecordMission() { MissionId = 10060301 },

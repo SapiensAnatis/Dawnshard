@@ -15,7 +15,7 @@ public class DbAbilityCrest : DbPlayerData
     /// <summary>
     /// Gets or sets a value that dictates the wyrmprint's identity.
     /// </summary>
-    public required AbilityCrests AbilityCrestId { get; set; }
+    public required AbilityCrestId AbilityCrestId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating the wyrmprint's level.
