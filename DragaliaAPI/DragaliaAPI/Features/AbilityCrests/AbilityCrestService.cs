@@ -63,7 +63,9 @@ public class AbilityCrestService : IAbilityCrestService
                 await this.tutorialService.AddTutorialFlag(
                     (int)TutorialFlags.AbilityCrestGrowTutorial
                 );
-                await this.tutorialService.UpdateTutorialStatus(AbilityCrestStatsTutorial);
+
+                // Go to the unbind tutorial, which is the next step after upgrading stats
+                await this.tutorialService.UpdateTutorialStatus(AbilityCrestUnbindTutorial);
             }
 
             if (buildup.BuildupPieceType == BuildupPieceTypes.Unbind)
@@ -71,7 +73,9 @@ public class AbilityCrestService : IAbilityCrestService
                 await this.tutorialService.AddTutorialFlag(
                     (int)TutorialFlags.AbilityCrestGrowTutorial
                 );
-                await this.tutorialService.UpdateTutorialStatus(AbilityCrestUnbindTutorial);
+
+                // Finish the ability crest tutorial
+                await this.tutorialService.UpdateTutorialStatus(AbilityCrestTutorialDone);
             }
         }
 

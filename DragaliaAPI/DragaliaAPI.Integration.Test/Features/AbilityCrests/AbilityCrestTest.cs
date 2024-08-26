@@ -165,46 +165,47 @@ public class AbilityCrestTest : TestFixture
         int oldHolyWater = this.GetMaterial(Materials.HolyWater);
         int oldConsecratedWater = this.GetMaterial(Materials.ConsecratedWater);
 
-        await this.Client.PostMsgpack<AbilityCrestBuildupPieceResponse>(
-            "ability_crest/buildup_piece",
-            new AbilityCrestBuildupPieceRequest()
-            {
-                AbilityCrestId = AbilityCrestId.WorthyRivals,
-                BuildupAbilityCrestPieceList = new List<AtgenBuildupAbilityCrestPieceList>()
+        DragaliaResponse<AbilityCrestBuildupPieceResponse> resp =
+            await this.Client.PostMsgpack<AbilityCrestBuildupPieceResponse>(
+                "ability_crest/buildup_piece",
+                new AbilityCrestBuildupPieceRequest()
                 {
-                    new()
+                    AbilityCrestId = AbilityCrestId.WorthyRivals,
+                    BuildupAbilityCrestPieceList = new List<AtgenBuildupAbilityCrestPieceList>()
                     {
-                        BuildupPieceType = BuildupPieceTypes.Unbind,
-                        IsUseDedicatedMaterial = true,
-                        Step = 2
-                    },
-                    new()
-                    {
-                        BuildupPieceType = BuildupPieceTypes.Unbind,
-                        IsUseDedicatedMaterial = false,
-                        Step = 1
-                    },
-                    new()
-                    {
-                        BuildupPieceType = BuildupPieceTypes.Stats,
-                        IsUseDedicatedMaterial = false,
-                        Step = 3
-                    },
-                    new()
-                    {
-                        BuildupPieceType = BuildupPieceTypes.Stats,
-                        IsUseDedicatedMaterial = false,
-                        Step = 2
-                    },
-                    new()
-                    {
-                        BuildupPieceType = BuildupPieceTypes.Copies,
-                        IsUseDedicatedMaterial = false,
-                        Step = 2
+                        new()
+                        {
+                            BuildupPieceType = BuildupPieceTypes.Unbind,
+                            IsUseDedicatedMaterial = true,
+                            Step = 2
+                        },
+                        new()
+                        {
+                            BuildupPieceType = BuildupPieceTypes.Unbind,
+                            IsUseDedicatedMaterial = false,
+                            Step = 1
+                        },
+                        new()
+                        {
+                            BuildupPieceType = BuildupPieceTypes.Stats,
+                            IsUseDedicatedMaterial = false,
+                            Step = 3
+                        },
+                        new()
+                        {
+                            BuildupPieceType = BuildupPieceTypes.Stats,
+                            IsUseDedicatedMaterial = false,
+                            Step = 2
+                        },
+                        new()
+                        {
+                            BuildupPieceType = BuildupPieceTypes.Copies,
+                            IsUseDedicatedMaterial = false,
+                            Step = 2
+                        }
                     }
                 }
-            }
-        );
+            );
 
         this.GetDewpoint().Should().Be(oldDewpoint - 43_000);
         this.GetMaterial(Materials.GoldenKey).Should().Be(oldGoldenKey - 1);
@@ -223,6 +224,9 @@ public class AbilityCrestTest : TestFixture
         ability_crest.AbilityLevel.Should().Be(2);
         ability_crest.BuildupCount.Should().Be(3);
         ability_crest.EquipableCount.Should().Be(2);
+
+        resp.Data.UpdateDataList.UserData?.TutorialFlagList.Should().Contain(1023);
+        resp.Data.UpdateDataList.UserData?.TutorialStatus.Should().Be(10711);
     }
 
     [Fact]

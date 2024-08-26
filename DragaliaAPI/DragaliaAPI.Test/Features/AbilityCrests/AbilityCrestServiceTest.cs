@@ -200,9 +200,11 @@ public class AbilityCrestServiceTest
                 Step = 1
             };
 
-        (await this.abilityCrestService.TryBuildup(abilityCrest, pieceList))
+        await this
+            .abilityCrestService.Invoking(x => x.TryBuildup(abilityCrest, pieceList))
             .Should()
-            .Be(ResultCode.CommonInvalidArgument);
+            .ThrowExactlyAsync<DragaliaException>()
+            .Where(e => e.Code == ResultCode.CommonInvalidArgument);
     }
 
     [Theory]
