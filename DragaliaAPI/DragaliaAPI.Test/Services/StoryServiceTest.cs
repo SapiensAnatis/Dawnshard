@@ -16,6 +16,7 @@ using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Logging;
+using MockQueryable.EntityFrameworkCore;
 using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Services;

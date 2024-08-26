@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Time.Testing;
 using Microsoft.IdentityModel.Tokens;
+using MockQueryable.EntityFrameworkCore;
 using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Services;

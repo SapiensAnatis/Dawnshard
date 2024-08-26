@@ -6,6 +6,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MockQueryable.EntityFrameworkCore;
 using MockQueryable.Moq;
 using Moq.Language.Flow;
 using Xunit.Abstractions;

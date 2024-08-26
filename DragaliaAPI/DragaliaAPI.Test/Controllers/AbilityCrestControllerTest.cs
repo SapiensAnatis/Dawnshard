@@ -8,6 +8,7 @@ using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Test.Utils;
+using MockQueryable.EntityFrameworkCore;
 using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Controllers;

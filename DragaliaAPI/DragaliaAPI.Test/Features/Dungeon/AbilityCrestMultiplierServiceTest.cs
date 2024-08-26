@@ -5,6 +5,7 @@ using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.Extensions.Logging.Abstractions;
+using MockQueryable.EntityFrameworkCore;
 using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Features.Dungeon;

@@ -13,6 +13,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Test.Utils;
 using Microsoft.Extensions.Time.Testing;
+using MockQueryable.EntityFrameworkCore;
 using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Services;
