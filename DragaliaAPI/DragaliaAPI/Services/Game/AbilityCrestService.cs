@@ -1,11 +1,13 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using static DragaliaAPI.Services.Game.TutorialService.TutorialStatusIds;
 
 namespace DragaliaAPI.Services.Game;
 
@@ -14,22 +16,25 @@ public class AbilityCrestService : IAbilityCrestService
     private readonly IAbilityCrestRepository abilityCrestRepository;
     private readonly IInventoryRepository inventoryRepository;
     private readonly IUserDataRepository userDataRepository;
-    private readonly ILogger<AbilityCrestService> logger;
     private readonly IMissionProgressionService missionProgressionService;
+    private readonly ITutorialService tutorialService;
+    private readonly ILogger<AbilityCrestService> logger;
 
     public AbilityCrestService(
         IAbilityCrestRepository abilityCrestRepository,
         IInventoryRepository inventoryRepository,
         IUserDataRepository userDataRepository,
-        ILogger<AbilityCrestService> logger,
-        IMissionProgressionService missionProgressionService
+        IMissionProgressionService missionProgressionService,
+        ITutorialService tutorialService,
+        ILogger<AbilityCrestService> logger
     )
     {
         this.abilityCrestRepository = abilityCrestRepository;
         this.inventoryRepository = inventoryRepository;
         this.userDataRepository = userDataRepository;
-        this.logger = logger;
         this.missionProgressionService = missionProgressionService;
+        this.tutorialService = tutorialService;
+        this.logger = logger;
     }
 
     public async Task AddOrRefund(AbilityCrests abilityCrestId)
@@ -78,20 +83,35 @@ public class AbilityCrestService : IAbilityCrestService
         AtgenBuildupAbilityCrestPieceList buildup
     )
     {
-        switch (buildup.BuildupPieceType)
+        ResultCode result = buildup.BuildupPieceType switch
         {
-            case BuildupPieceTypes.Unbind
-            or BuildupPieceTypes.Copies:
-                return await TryBuildupGeneric(abilityCrest, buildup);
-            case BuildupPieceTypes.Stats:
-                return await TryBuildupLevel(abilityCrest, buildup);
-            default:
-                this.logger.LogWarning(
-                    "Buildup piece type {type} invalid",
-                    buildup.BuildupPieceType
-                );
-                return ResultCode.CommonInvalidArgument;
+            BuildupPieceTypes.Unbind
+            or BuildupPieceTypes.Copies
+                => await this.TryBuildupGeneric(abilityCrest, buildup),
+            BuildupPieceTypes.Stats => await this.TryBuildupLevel(abilityCrest, buildup),
+            _
+                => throw new DragaliaException(
+                    ResultCode.CommonInvalidArgument,
+                    "Invalid buildip piece type"
+                )
+        };
+
+        if (result == ResultCode.Success)
+        {
+            if (buildup.BuildupPieceType == BuildupPieceTypes.Stats)
+            {
+                await tutorialService.AddTutorialFlag((int)TutorialFlags.AbilityCrestGrowTutorial);
+                await tutorialService.UpdateTutorialStatus(AbilityCrestStatsTutorial);
+            }
+
+            if (buildup.BuildupPieceType == BuildupPieceTypes.Unbind)
+            {
+                await tutorialService.AddTutorialFlag((int)TutorialFlags.AbilityCrestGrowTutorial);
+                await tutorialService.UpdateTutorialStatus(AbilityCrestUnbindTutorial);
+            }
         }
+
+        return result;
     }
 
     private async Task<ResultCode> TryBuildupGeneric(

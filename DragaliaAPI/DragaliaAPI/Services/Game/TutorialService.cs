@@ -163,6 +163,8 @@ public class TutorialService : ITutorialService
 
     internal static class TutorialStatusIds
     {
+        public const int AbilityCrestStatsTutorial = 10702;
+        public const int AbilityCrestUnbindTutorial = 10704;
         public const int CoopTutorial = 20402;
         public const int Dojos = 60999;
     }

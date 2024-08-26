@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -19,6 +20,7 @@ public class AbilityCrestServiceTest
     private readonly Mock<IInventoryRepository> mockInventoryRepository;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
+    private readonly Mock<ITutorialService> mockTutorialService;
     private readonly AbilityCrestService abilityCrestService;
 
     private static readonly Dictionary<Materials, int> EmptyMap = new();
@@ -174,13 +176,15 @@ public class AbilityCrestServiceTest
         this.mockInventoryRepository = new(MockBehavior.Strict);
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockMissionProgressionService = new(MockBehavior.Strict);
+        this.mockTutorialService = new(MockBehavior.Loose);
 
         this.abilityCrestService = new AbilityCrestService(
             this.mockAbilityCrestRepository.Object,
             this.mockInventoryRepository.Object,
             this.mockUserDataRepository.Object,
-            LoggerTestUtils.Create<AbilityCrestService>(),
-            this.mockMissionProgressionService.Object
+            this.mockMissionProgressionService.Object,
+            this.mockTutorialService.Object,
+            LoggerTestUtils.Create<AbilityCrestService>()
         );
     }
 
