@@ -1,13 +1,17 @@
 <script lang="ts">
   import Gift from 'lucide-svelte/icons/gift';
 
+  import { t } from '$lib/translations';
+
   import type { PresentFormSubmission } from './presentTypes.ts';
   export let present: PresentFormSubmission;
+
+  $: presentLabel = $t(`saveEditor.present.type.${present.type}.item.${present.item}`);
 </script>
 
 <li class="present">
   <Gift aria-hidden={true} />
-  <p>Add {present.quantity}x <strong>{present.itemLabel}</strong> to the gift box</p>
+  <p>Add {present.quantity}x <strong>{presentLabel}</strong> to the gift box</p>
 </li>
 
 <style>

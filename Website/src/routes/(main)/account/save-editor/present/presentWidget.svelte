@@ -3,32 +3,54 @@
   import { createForm } from 'svelte-form-helper';
 
   import { Select } from '$lib/components/select';
+  import { t } from '$lib/translations';
   import { Button } from '$shadcn/components/ui/button/index.js';
   import * as Card from '$shadcn/components/ui/card';
   import { Input } from '$shadcn/components/ui/input';
   import { Label } from '$shadcn/components/ui/label';
 
+  import { changesCount } from '../stores.ts';
+  import { presents } from '../stores.ts';
   import {
     type EntityType,
     type PresentFormSubmission,
     type PresentWidgetData
   } from './presentTypes.ts';
-  import { presents } from './stores.ts';
 
   export let widgetData: PresentWidgetData;
 
-  $: availableItems = (typeValue && widgetData.availableItems[typeValue]) || [];
+  const keyPrefix = 'saveEditor.present';
+
+  $: types = widgetData.types.map(({ type }) => ({
+    value: type,
+    label: $t(`${keyPrefix}.type.${type}.label`)
+  }));
+  $: availableItems = getAvailableItems(typeValue);
   let disableQuantity = false;
 
-  const onSubmit = () => {
-    const itemLabel = availableItems.find((i) => i.value === itemValue)?.label;
+  const getAvailableItems = (type: EntityType | '') => {
+    if (!type) {
+      return [];
+    }
 
-    if (!typeValue || !itemValue || !itemLabel) return;
+    const itemList = widgetData.availableItems[type];
+
+    if (!itemList) {
+      return [];
+    }
+
+    return itemList.map(({ id }) => ({
+      value: id,
+      label: $t(`${keyPrefix}.type.${typeValue}.item.${id}`)
+    }));
+  };
+
+  const onSubmit = () => {
+    if (typeValue === '' || itemValue === '') return;
 
     const submission: PresentFormSubmission = {
       type: typeValue,
       item: itemValue,
-      itemLabel,
       quantity: quantityValue
     };
 
@@ -38,11 +60,13 @@
   const onTypeChange = () => {
     if (!typeValue) return;
 
-    disableQuantity = !widgetData.types.find((t) => t.value === typeValue)?.hasQuantity;
+    disableQuantity = !widgetData.types.find((t) => t.type === typeValue)?.hasQuantity;
 
     if (disableQuantity) {
       quantityValue = 1;
     }
+
+    itemValue = '';
   };
 
   let typeValue: EntityType | '';
@@ -73,7 +97,7 @@
           <Select
             id="type"
             placeholder="Select an item type"
-            items={widgetData.types}
+            items={types}
             field={type}
             on:change={onTypeChange}
             class="
@@ -125,7 +149,9 @@
         </div>
       </div>
       <br />
-      <Button type="submit" disabled={!$form.valid || !$form.touched}>Add</Button>
+      <Button type="submit" disabled={!$form.valid || !$form.touched || $changesCount >= 100}>
+        Add
+      </Button>
     </form>
   </Card.Content>
 </Card.Root>

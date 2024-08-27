@@ -64,7 +64,7 @@ export const handlers = [
   ...http.get('/api/user/me/profile', withAuth(handleUserProfile)),
 
   ...http.get('/api/savefile/export', withAuth(handleSavefileExport)),
-  ...http.get('/api/widgets/present', withAuth(handlePresentData)),
   ...http.post('/api/savefile/edit', withAuth(handleSavefileEdit)),
+  ...http.get('/api/savefile/edit/widgets/present', withAuth(handlePresentData)),
   mswHttp.get('http://localhost:5000/ping', () => new Response(null, { status: 200 }))
 ];

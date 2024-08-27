@@ -16,10 +16,8 @@ export const handleSavefileEdit: HttpResponseResolver<
   PathParams,
   DefaultBodyType,
   undefined
-> = async ({ request }) => {
+> = async () => {
   await delay(2000);
-
-  console.log(request);
 
   return new HttpResponse(null, { status: 200 });
 };

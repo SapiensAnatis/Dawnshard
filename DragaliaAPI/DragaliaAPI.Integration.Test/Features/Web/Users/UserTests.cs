@@ -7,7 +7,10 @@ namespace DragaliaAPI.Integration.Test.Features.Web.Users;
 public class UserTests : WebTestFixture
 {
     public UserTests(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
-        : base(factory, testOutputHelper) { }
+        : base(factory, testOutputHelper)
+    {
+        this.SetupMockBaas();
+    }
 
     [Fact]
     public async Task UserMe_NotAuthenticated_Returns401()

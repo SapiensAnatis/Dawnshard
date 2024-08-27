@@ -15,7 +15,13 @@ export default defineConfig(({ mode }) => ({
   ],
   server: {
     port: 3001,
-    host: true
+    host: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true
+      }
+    }
   },
   build: {
     // Hack to get top-level await support required by Mock Service Worker for Playwright

@@ -1,47 +1,40 @@
 import { HttpResponse, type HttpResponseResolver } from 'msw';
 
-import type { PresentWidgetData } from '$main/account/save-editor/presentTypes.ts';
+import type { PresentWidgetData } from '$main/account/save-editor/present/presentTypes.ts';
 
 export const handlePresentData: HttpResponseResolver = () => {
   return HttpResponse.json<PresentWidgetData>({
     types: [
       {
-        value: 'Material',
-        label: 'Material',
+        type: 'Material',
         hasQuantity: true
       },
       {
-        value: 'Chara',
-        label: 'Adventurer',
+        type: 'Chara',
         hasQuantity: false
       },
       {
-        value: 'DmodePoint',
-        label: 'Kaleidoscape Points',
+        type: 'DmodePoint',
         hasQuantity: true
       }
     ],
     availableItems: {
       Material: [
         {
-          value: 101001003,
-          label: 'Gold Crystal'
+          id: 101001003
         }
       ],
       Chara: [
         {
-          value: 10150202,
-          label: 'Summer Celliera'
+          id: 10150202
         }
       ],
       DmodePoint: [
         {
-          value: 10001,
-          label: 'Dawn Amber'
+          id: 10001
         },
         {
-          value: 10002,
-          label: 'Dusk Amber'
+          id: 10002
         }
       ]
     }

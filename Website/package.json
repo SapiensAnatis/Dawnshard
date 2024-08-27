@@ -60,6 +60,7 @@
     "mode-watcher": "0.4.1",
     "svelte-form-helper": "0.4.1",
     "svelte-sonner": "0.3.27",
+    "sveltekit-i18n": "2.4.2",
     "tailwind-merge": "2.5.2",
     "tailwind-variants": "0.2.1",
     "vaul-svelte": "0.3.2",
