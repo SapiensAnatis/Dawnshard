@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.Web.Savefile;
 
+[ApiController]
 [Route("/api/savefile")]
 [Authorize(Policy = AuthConstants.PolicyNames.RequireDawnshardIdentity)]
 internal sealed class SavefileController(ILoadService loadService) : ControllerBase
