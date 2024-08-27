@@ -7,9 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Features.Present;
 
 [Route("present")]
-[Consumes("application/octet-stream")]
-[Produces("application/octet-stream")]
-[ApiController]
 public class PresentController : DragaliaControllerBase
 {
     private readonly IPresentControllerService presentControllerService;

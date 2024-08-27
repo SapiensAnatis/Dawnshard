@@ -31,7 +31,10 @@
 
     const request = new Request('/api/savefile/edit', {
       method: 'POST',
-      body: JSON.stringify(requestBody)
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
 
     const response = await fetch(request);

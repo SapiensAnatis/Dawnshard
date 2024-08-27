@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.Web.Savefile;
 
+[ApiController]
 [Route("/api/savefile/edit")]
 [Authorize(Policy = AuthConstants.PolicyNames.RequireDawnshardIdentity)]
-internal sealed class SavefileEditController : ControllerBase
+internal sealed class SavefileEditController(SavefileEditService savefileEditService)
+    : ControllerBase
 {
     [SuppressMessage(
         "Performance",
@@ -16,4 +18,17 @@ internal sealed class SavefileEditController : ControllerBase
     [HttpGet("widgets/present")]
     public ActionResult<PresentWidgetData> GetPresentWidgetData() =>
         EditorWidgetsService.GetPresentWidgetData();
+
+    [HttpPost]
+    public async Task<ActionResult> DoEdit(SavefileEditRequest request)
+    {
+        if (!savefileEditService.ValidateEdits(request))
+        {
+            return this.BadRequest();
+        }
+
+        await savefileEditService.PerformEdits(request);
+
+        return this.Ok();
+    }
 }

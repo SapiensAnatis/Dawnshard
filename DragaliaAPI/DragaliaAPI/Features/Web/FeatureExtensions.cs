@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using DragaliaAPI.Features.Web;
 using DragaliaAPI.Features.Web.News;
+using DragaliaAPI.Features.Web.Savefile;
 using DragaliaAPI.Features.Web.Users;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,7 +18,8 @@ public static partial class FeatureExtensions
         serviceCollection
             .AddTransient<IConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>()
             .AddScoped<UserService>()
-            .AddScoped<NewsService>();
+            .AddScoped<NewsService>()
+            .AddScoped<SavefileEditService>();
 
         serviceCollection
             .AddAuthentication()

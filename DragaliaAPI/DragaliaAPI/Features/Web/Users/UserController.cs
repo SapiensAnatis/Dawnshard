@@ -5,8 +5,8 @@ using static DragaliaAPI.Features.Web.AuthConstants;
 
 namespace DragaliaAPI.Features.Web.Users;
 
-[Route("/api/user")]
 [ApiController]
+[Route("/api/user")]
 public class UserController(UserService userService, ILogger<UserController> logger)
     : ControllerBase
 {
