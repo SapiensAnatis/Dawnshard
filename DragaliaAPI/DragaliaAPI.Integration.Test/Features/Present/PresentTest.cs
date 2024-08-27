@@ -623,6 +623,52 @@ public class PresentTest : TestFixture
     }
 
     [Fact]
+    public async Task Receive_StackedDragonEntities_HandlesCorrectly()
+    {
+        List<DbPlayerPresent> presents =
+        [
+            new DbPlayerPresent()
+            {
+                EntityType = EntityTypes.Dragon,
+                EntityId = (int)Dragons.Andromeda,
+                EntityQuantity = 2,
+            },
+        ];
+
+        await this.AddRangeToDatabase(presents);
+
+        IEnumerable<ulong> presentIdList = presents.Select(x => (ulong)x.PresentId);
+
+        DragaliaResponse<PresentReceiveResponse> response =
+            await this.Client.PostMsgpack<PresentReceiveResponse>(
+                $"{Controller}/receive",
+                new PresentReceiveRequest() { PresentIdList = presentIdList }
+            );
+
+        response
+            .Data.UpdateDataList.DragonList.Should()
+            .HaveCount(2)
+            .And.AllSatisfy(x => x.DragonId.Should().Be(Dragons.Andromeda));
+
+        this.ApiContext.PlayerDragonData.Should()
+            .BeEquivalentTo(
+                [
+                    new DbPlayerDragonData()
+                    {
+                        ViewerId = this.ViewerId,
+                        DragonId = Dragons.Andromeda,
+                    },
+                    new DbPlayerDragonData()
+                    {
+                        ViewerId = this.ViewerId,
+                        DragonId = Dragons.Andromeda,
+                    },
+                ],
+                opts => opts.Including(x => x.ViewerId).Including(x => x.DragonId)
+            );
+    }
+
+    [Fact]
     public async Task GetPresentHistoryList_IsPagedCorrectly()
     {
         List<DbPlayerPresentHistory> presentHistories = Enumerable
