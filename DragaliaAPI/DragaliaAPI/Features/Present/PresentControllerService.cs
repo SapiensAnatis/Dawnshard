@@ -123,7 +123,12 @@ public class PresentControllerService(
 
             logger.LogDebug("Claimed present {@present}", present);
 
-            if (grantResult is RewardGrantResult.Added or RewardGrantResult.Converted)
+            if (
+                grantResult
+                is RewardGrantResult.Added
+                    or RewardGrantResult.Converted
+                    or RewardGrantResult.Discarded
+            )
             {
                 apiContext.PlayerPresents.Remove(present);
                 apiContext.PlayerPresentHistory.Add(present.MapToPresentHistory());
