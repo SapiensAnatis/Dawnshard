@@ -7,7 +7,7 @@
   import * as Card from '$shadcn/components/ui/card';
 
   import StagedPresent from './present/stagedPresent.svelte';
-  import { changesCount,presents } from './stores';
+  import { changesCount, presents } from './stores';
 
   $: anyModifications = $changesCount > 0;
 
