@@ -21,12 +21,25 @@
 
   const keyPrefix = 'saveEditor.present';
 
-  $: types = widgetData.types.map(({ type }) => ({
-    value: type,
-    label: $t(`${keyPrefix}.type.${type}.label`)
-  }));
-  $: availableItems = getAvailableItems(typeValue);
   let disableQuantity = false;
+
+  let typeValue: EntityType | '';
+  let itemValue: number | '';
+  let quantityValue: number = 1;
+
+  const form = createForm();
+  const type = form.field();
+  const item = form.field();
+  const quantity = form.field();
+
+  $: types = widgetData.types
+    .map(({ type }) => ({
+      value: type,
+      label: $t(`${keyPrefix}.type.${type}.label`)
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+
+  $: availableItems = getAvailableItems(typeValue);
 
   const getAvailableItems = (type: EntityType | '') => {
     if (!type) {
@@ -39,10 +52,12 @@
       return [];
     }
 
-    return itemList.map(({ id }) => ({
-      value: id,
-      label: $t(`${keyPrefix}.type.${typeValue}.item.${id}`)
-    }));
+    return itemList
+      .map(({ id }) => ({
+        value: id,
+        label: $t(`${keyPrefix}.type.${typeValue}.item.${id}`)
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label));
   };
 
   const onSubmit = () => {
@@ -68,15 +83,6 @@
 
     itemValue = '';
   };
-
-  let typeValue: EntityType | '';
-  let itemValue: number | '';
-  let quantityValue: number = 1;
-
-  const form = createForm();
-  const type = form.field();
-  const item = form.field();
-  const quantity = form.field();
 </script>
 
 <Card.Root>
