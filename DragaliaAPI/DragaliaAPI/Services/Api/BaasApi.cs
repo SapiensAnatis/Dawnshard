@@ -98,6 +98,12 @@ public class BaasApi : IBaasApi
 
         HttpResponseMessage response = await client.SendAsync(request);
 
+        if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            this.logger.LogDebug("GetUserId returned 404 Not Found.");
+            return null;
+        }
+
         if (!response.IsSuccessStatusCode)
         {
             this.logger.LogError(
