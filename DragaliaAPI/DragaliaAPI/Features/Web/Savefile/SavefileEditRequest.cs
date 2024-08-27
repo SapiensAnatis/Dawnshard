@@ -5,7 +5,6 @@ namespace DragaliaAPI.Features.Web.Savefile;
 
 public class SavefileEditRequest
 {
-    [JsonPropertyName("presents")]
     public required List<PresentFormSubmission> Presents { get; init; }
 }
 
