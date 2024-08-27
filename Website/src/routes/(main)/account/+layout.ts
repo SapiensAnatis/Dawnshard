@@ -11,7 +11,7 @@ export const load: LayoutLoad = async ({ fetch, url }) => {
 
   if (!response.ok) {
     if (response.status >= 400 && response.status <= 499) {
-      console.log(`/user/me response was not successful: ${response.status}`);
+      console.error(`/user/me response was not successful: ${response.status}`);
       redirect(303, `/unauthorized/${response.status}`);
     } else {
       throw new Error(`/user/me error: HTTP ${response.status}`);

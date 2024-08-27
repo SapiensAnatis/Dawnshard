@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -8,10 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Features.Web.Savefile;
 
 [Route("/api/savefile")]
-public class SavefileController(ILoadService loadService) : ControllerBase
+[Authorize(Policy = AuthConstants.PolicyNames.RequireDawnshardIdentity)]
+internal sealed class SavefileController(ILoadService loadService) : ControllerBase
 {
     [HttpGet("export")]
-    [Authorize(Policy = AuthConstants.PolicyNames.RequireDawnshardIdentity)]
     public async Task<FileResult> GetSavefile(CancellationToken cancellationToken)
     {
         DragaliaResponse<LoadIndexResponse> savefile =

@@ -63,6 +63,9 @@ builder.Host.UseSerilog(
 
 builder
     .Services.AddControllers()
+    .ConfigureApplicationPartManager(static manager =>
+        manager.FeatureProviders.Add(new CustomControllerFeatureProvider())
+    )
     .AddMvcOptions(static option =>
     {
         option.OutputFormatters.Add(new CustomMessagePackOutputFormatter(CustomResolver.Options));

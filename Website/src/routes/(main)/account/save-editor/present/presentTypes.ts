@@ -1,19 +1,25 @@
 import { z } from 'zod';
 
-export const EntityType = z.enum(['Material', 'Chara', 'DmodePoint']);
+export const EntityType = z.enum([
+  'Chara',
+  'Dragon',
+  'Item',
+  'Material',
+  'DmodePoint',
+  'SkipTicket',
+  'DragonGift'
+]);
 
 export type EntityType = z.infer<typeof EntityType>;
 
 const item = z.object({
-  value: z.number().int(),
-  label: z.string()
+  id: z.number().int()
 });
 
 export const presentWidgetDataSchema = z.object({
   types: z
     .object({
-      value: EntityType,
-      label: z.string(),
+      type: EntityType,
       hasQuantity: z.boolean()
     })
     .array(),
@@ -23,7 +29,6 @@ export const presentWidgetDataSchema = z.object({
 export type PresentFormSubmission = {
   type: EntityType;
   item: number;
-  itemLabel: string;
   quantity: number;
 };
 

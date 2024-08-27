@@ -6,7 +6,7 @@
   import { Separator } from '$shadcn/components/ui/separator';
 
   import type { PageData } from './$types';
-  import PresentWidget from './presentWidget.svelte';
+  import PresentWidget from './present/presentWidget.svelte';
   import Staged from './staged.svelte';
 
   export let data: PageData;
