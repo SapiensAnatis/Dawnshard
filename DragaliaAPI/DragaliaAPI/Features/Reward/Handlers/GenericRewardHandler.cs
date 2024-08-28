@@ -29,10 +29,8 @@ public class GenericRewardHandler(
         ImmutableArray.Create(
             EntityTypes.Item,
             EntityTypes.Dew,
-            EntityTypes.HustleHammer,
             EntityTypes.Rupies,
             EntityTypes.SkipTicket,
-            EntityTypes.Wyrmite,
             EntityTypes.Material,
             EntityTypes.Mana,
             EntityTypes.FortPlant,
@@ -60,17 +58,11 @@ public class GenericRewardHandler(
             case EntityTypes.Dew:
                 await userDataRepository.UpdateDewpoint(entity.Quantity);
                 break;
-            case EntityTypes.HustleHammer:
-                (await userDataRepository.UserData.SingleAsync()).BuildTimePoint += entity.Quantity;
-                break;
             case EntityTypes.Rupies:
                 await userDataRepository.UpdateCoin(entity.Quantity);
                 break;
             case EntityTypes.SkipTicket:
                 await userService.AddQuestSkipPoint(entity.Quantity);
-                break;
-            case EntityTypes.Wyrmite:
-                await userDataRepository.GiveWyrmite(entity.Quantity);
                 break;
             case EntityTypes.Material:
                 (

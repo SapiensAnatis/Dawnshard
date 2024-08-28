@@ -7,7 +7,10 @@ export const EntityType = z.enum([
   'Material',
   'DmodePoint',
   'SkipTicket',
-  'DragonGift'
+  'DragonGift',
+  'FreeDiamantium',
+  'Wyrmite',
+  'HustleHammer'
 ]);
 
 export type EntityType = z.infer<typeof EntityType>;

@@ -926,6 +926,24 @@
           "30003": "Valentine's Card",
           "40001": "Pup Grub"
         }
+      },
+      "FreeDiamantium": {
+        "label": "Diamantium",
+        "item": {
+          "0": "Diamantium"
+        }
+      },
+      "Wyrmite": {
+        "label": "Wyrmite",
+        "item": {
+          "0": "Wyrmite"
+        }
+      },
+      "HustleHammer": {
+        "label": "Hustle Hammer",
+        "item": {
+          "0": "Hustle Hammer"
+        }
       }
     }
   }
