@@ -76,6 +76,12 @@ internal class RepeatedRequestPolicy(ILogger<RepeatedRequestPolicy> logger) : IO
             return false;
         }
 
+        // We do not want to cache requests globally - make sure this request can be keyed to a particular user.
+        if (!request.Headers.ContainsKey(Headers.SessionId))
+        {
+            return false;
+        }
+
         return true;
     }
 }
