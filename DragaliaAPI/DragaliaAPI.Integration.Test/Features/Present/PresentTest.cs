@@ -204,7 +204,13 @@ public class PresentTest : TestFixture
                 {
                     ViewerId = ViewerId,
                     EntityType = EntityTypes.Wyrmite,
-                    EntityQuantity = 100,
+                    EntityQuantity = 50,
+                },
+                new()
+                {
+                    ViewerId = ViewerId,
+                    EntityType = EntityTypes.Wyrmite,
+                    EntityQuantity = 50,
                 },
                 new()
                 {
@@ -241,7 +247,13 @@ public class PresentTest : TestFixture
                 {
                     ViewerId = ViewerId,
                     EntityType = EntityTypes.HustleHammer,
-                    EntityQuantity = 100,
+                    EntityQuantity = 50,
+                },
+                new()
+                {
+                    ViewerId = ViewerId,
+                    EntityType = EntityTypes.HustleHammer,
+                    EntityQuantity = 50,
                 },
                 new()
                 {
@@ -255,6 +267,20 @@ public class PresentTest : TestFixture
                     EntityType = EntityTypes.Title,
                     EntityId = (int)Emblems.SupremeBogfish,
                     EntityQuantity = 1,
+                },
+                new()
+                {
+                    ViewerId = ViewerId,
+                    EntityType = EntityTypes.FreeDiamantium,
+                    EntityId = 0,
+                    EntityQuantity = 50,
+                },
+                new()
+                {
+                    ViewerId = ViewerId,
+                    EntityType = EntityTypes.FreeDiamantium,
+                    EntityId = 0,
+                    EntityQuantity = 50,
                 },
             };
 
@@ -303,6 +329,10 @@ public class PresentTest : TestFixture
         response
             .Data.UpdateDataList.PresentNotice.Should()
             .BeEquivalentTo(new PresentNotice() { PresentCount = 0, PresentLimitCount = 0 });
+
+        response
+            .Data.UpdateDataList.DiamondData.Should()
+            .BeEquivalentTo(new DiamondData() { FreeDiamond = 100, PaidDiamond = 0 });
 
         // Not sure if entity_result is correct so won't test that
     }

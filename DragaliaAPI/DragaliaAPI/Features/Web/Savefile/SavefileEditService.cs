@@ -58,8 +58,11 @@ internal sealed partial class SavefileEditService(
                 EntityTypes.Item => ValidateItemPresent(present),
                 EntityTypes.Material => ValidateMaterialPresent(present),
                 EntityTypes.DmodePoint => ValidateDmodePointPresent(present),
-                EntityTypes.SkipTicket => ValidateSkipTicketPresent(present),
+                EntityTypes.SkipTicket => ValidateId0Present(present),
                 EntityTypes.DragonGift => ValidateDragonGiftPresent(present),
+                EntityTypes.FreeDiamantium => ValidateId0Present(present),
+                EntityTypes.Wyrmite => ValidateId0Present(present),
+                EntityTypes.HustleHammer => ValidateId0Present(present),
                 _ => false,
             };
 
@@ -88,8 +91,7 @@ internal sealed partial class SavefileEditService(
     private static bool ValidateDmodePointPresent(PresentFormSubmission present) =>
         (DmodePoint)present.Item is DmodePoint.Point1 or DmodePoint.Point2;
 
-    private static bool ValidateSkipTicketPresent(PresentFormSubmission present) =>
-        present.Item == 0;
+    private static bool ValidateId0Present(PresentFormSubmission present) => present.Item == 0;
 
     private static bool ValidateDragonGiftPresent(PresentFormSubmission present) =>
         Enum.IsDefined((DragonGifts)present.Item);

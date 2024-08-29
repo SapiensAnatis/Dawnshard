@@ -18,6 +18,9 @@ internal sealed class EditorWidgetsService
             new() { Type = EntityTypes.DmodePoint, HasQuantity = true },
             new() { Type = EntityTypes.SkipTicket, HasQuantity = true },
             new() { Type = EntityTypes.DragonGift, HasQuantity = true },
+            new() { Type = EntityTypes.FreeDiamantium, HasQuantity = true },
+            new() { Type = EntityTypes.Wyrmite, HasQuantity = true },
+            new() { Type = EntityTypes.HustleHammer, HasQuantity = true },
         ];
 
         Dictionary<EntityTypes, List<EntityTypeItem>> availableItems =
@@ -28,8 +31,11 @@ internal sealed class EditorWidgetsService
                 [EntityTypes.Dragon] = GetDragonList(),
                 [EntityTypes.Material] = GetMaterialList(),
                 [EntityTypes.DmodePoint] = GetDmodePointList(),
-                [EntityTypes.SkipTicket] = GetSkipTicketList(),
+                [EntityTypes.SkipTicket] = GetId0List(),
                 [EntityTypes.DragonGift] = GetDragonGiftList(),
+                [EntityTypes.FreeDiamantium] = GetId0List(),
+                [EntityTypes.Wyrmite] = GetId0List(),
+                [EntityTypes.HustleHammer] = GetId0List(),
             };
 
         return new() { Types = typeInfo, AvailableItems = availableItems };
@@ -61,7 +67,7 @@ internal sealed class EditorWidgetsService
             new EntityTypeItem { Id = (int)DmodePoint.Point2 },
         ];
 
-    private static List<EntityTypeItem> GetSkipTicketList() => [new EntityTypeItem { Id = 0 }];
+    private static List<EntityTypeItem> GetId0List() => [new EntityTypeItem { Id = 0 }];
 
     private static List<EntityTypeItem> GetDragonGiftList() =>
         Enum.GetValues<DragonGifts>().Select(x => new EntityTypeItem() { Id = (int)x }).ToList();
