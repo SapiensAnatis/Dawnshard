@@ -925,6 +925,24 @@
       "40001": "Pup Grub"
     }
   },
+  "freeDiamantium": {
+    "label": "Diamantium",
+    "item": {
+      "0": "Diamantium"
+    }
+  },
+  "wyrmite": {
+    "label": "Wyrmite",
+    "item": {
+      "0": "Wyrmite"
+    }
+  },
+  "hustleHammer": {
+    "label": "Hustle Hammer",
+    "item": {
+      "0": "Hustle Hammer"
+    }
+  },
   "weaponBody": {
     "label": "Weapon",
     "item": {
