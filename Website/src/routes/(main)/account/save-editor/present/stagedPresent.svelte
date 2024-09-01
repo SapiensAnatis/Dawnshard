@@ -2,11 +2,12 @@
   import Gift from 'lucide-svelte/icons/gift';
 
   import { t } from '$lib/translations';
+  import { formatTypeKey } from '$main/account/save-editor/present/util.ts';
 
   import type { PresentFormSubmission } from './presentTypes.ts';
   export let present: PresentFormSubmission;
 
-  $: presentLabel = $t(`saveEditor.present.type.${present.type}.item.${present.item}`);
+  $: presentLabel = $t(`entity.${formatTypeKey(present.type)}.item.${present.item}`);
 </script>
 
 <li class="present">

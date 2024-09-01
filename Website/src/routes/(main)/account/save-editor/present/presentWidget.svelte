@@ -4,6 +4,7 @@
 
   import { Select } from '$lib/components/select';
   import { t } from '$lib/translations';
+  import { formatTypeKey } from '$main/account/save-editor/present/util.ts';
   import { Button } from '$shadcn/components/ui/button/index.js';
   import * as Card from '$shadcn/components/ui/card';
   import { Input } from '$shadcn/components/ui/input';
@@ -81,8 +82,6 @@
 
     itemValue = '';
   };
-
-  const formatTypeKey = (type: string) => type.charAt(0).toLowerCase() + type.slice(1);
 </script>
 
 <Card.Root>
