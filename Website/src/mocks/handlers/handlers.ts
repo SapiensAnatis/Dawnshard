@@ -8,6 +8,7 @@ import {
 
 import { handleNews, handleNewsItem } from './news.ts';
 import { handleSavefileEdit, handleSavefileExport } from './savefile.ts';
+import { handleQuestList, handleRankings } from './timeAttack.ts';
 import { handleUser, handleUserProfile } from './user.ts';
 import { handlePresentData } from './widgets.ts';
 
@@ -57,6 +58,8 @@ const withAuth = <
 };
 
 export const handlers = [
+  mswHttp.get('http://localhost:5000/ping', () => new Response(null, { status: 200 })),
+
   ...http.get('/api/news', handleNews),
   ...http.get('/api/news/:itemId', handleNewsItem),
 
@@ -66,5 +69,7 @@ export const handlers = [
   ...http.get('/api/savefile/export', withAuth(handleSavefileExport)),
   ...http.post('/api/savefile/edit', withAuth(handleSavefileEdit)),
   ...http.get('/api/savefile/edit/widgets/present', withAuth(handlePresentData)),
-  mswHttp.get('http://localhost:5000/ping', () => new Response(null, { status: 200 }))
+
+  ...http.get('/api/time_attack/quests', handleQuestList),
+  ...http.get('/api/time_attack/rankings/*', handleRankings)
 ];

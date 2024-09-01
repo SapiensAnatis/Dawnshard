@@ -4,6 +4,7 @@
 
   import { Select } from '$lib/components/select';
   import { t } from '$lib/translations';
+  import { formatTypeKey } from '$main/account/save-editor/present/util.ts';
   import { Button } from '$shadcn/components/ui/button/index.js';
   import * as Card from '$shadcn/components/ui/card';
   import { Input } from '$shadcn/components/ui/input';
@@ -19,8 +20,6 @@
 
   export let widgetData: PresentWidgetData;
 
-  const keyPrefix = 'saveEditor.present';
-
   let disableQuantity = false;
 
   let typeValue: EntityType | '';
@@ -35,7 +34,7 @@
   $: types = widgetData.types
     .map(({ type }) => ({
       value: type,
-      label: $t(`${keyPrefix}.type.${type}.label`)
+      label: $t(`entity.${formatTypeKey(type)}.label`)
     }))
     .sort((a, b) => a.label.localeCompare(b.label));
 
@@ -55,7 +54,7 @@
     return itemList
       .map(({ id }) => ({
         value: id,
-        label: $t(`${keyPrefix}.type.${typeValue}.item.${id}`)
+        label: $t(`entity.${formatTypeKey(typeValue)}.item.${id}`)
       }))
       .sort((a, b) => a.label.localeCompare(b.label));
   };
