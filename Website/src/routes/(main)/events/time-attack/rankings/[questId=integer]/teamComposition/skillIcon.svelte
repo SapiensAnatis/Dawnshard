@@ -16,7 +16,7 @@
   const getSkillImagePath = (skill: Skill) =>
     new URL(`images/icon/skill/m/${skill.skillLv4IconName}.webp`, PUBLIC_CDN_URL).href;
 
-  const skillName = $t(`skill.id.${skill.id}`);
+  const skillName = $t(`timeAttack.skill.${skill.id}`);
 </script>
 
 <Popover.Root>

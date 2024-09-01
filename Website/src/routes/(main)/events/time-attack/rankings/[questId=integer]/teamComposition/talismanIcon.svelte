@@ -17,9 +17,9 @@
   const getTalismanName = (talisman: Talisman) => $t(`entity.talisman.item.${talisman.id}`);
 
   const getAbilityName = (abilityId: number, talisman: Talisman) => {
-    const element = $t(`common.element.${talisman.element}`);
-    const weaponType = $t(`common.weaponType.${talisman.weaponType}`);
-    return $t(`ability.name.${abilityId}`, { element, weaponType });
+    const element = $t(`timeAttack.element.${talisman.element}`);
+    const weaponType = $t(`timeAttack.weaponType.${talisman.weaponType}`);
+    return $t(`timeAttack.ability.${abilityId}`, { element, weaponType });
   };
 </script>
 
