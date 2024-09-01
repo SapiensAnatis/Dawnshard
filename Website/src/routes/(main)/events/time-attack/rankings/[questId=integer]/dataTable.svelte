@@ -4,7 +4,10 @@
   import { createRender, createTable, Render, Subscribe } from 'svelte-headless-table';
   import { addExpandedRows } from 'svelte-headless-table/plugins';
 
-  import { getTeam } from '$main/events/time-attack/rankings/[questId=integer]/util.ts';
+  import {
+    getTeam,
+    getTeamKeys
+  } from '$main/events/time-attack/rankings/[questId=integer]/util.ts';
   import type { TimeAttackClear } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
   import * as Table from '$shadcn/components/ui/table';
 
@@ -92,7 +95,9 @@
             <tr class="border-b">
               <td colspan="4">
                 <div transition:slide={{ duration: 500 }} class="p-4">
-                  <TeamComposition units={getTeam(coop, row.original.players)} />
+                  <TeamComposition
+                    units={getTeam(coop, row.original.players)}
+                    unitKeys={getTeamKeys(coop, row.original.players)} />
                 </div>
               </td>
             </tr>

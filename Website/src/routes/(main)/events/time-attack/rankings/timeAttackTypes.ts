@@ -1,6 +1,10 @@
 import { z } from 'zod';
 
-export const questListSchema = z.number().int().array();
+const questSchema = z.object({ id: z.number().int(), isCoop: z.boolean() });
+
+export const questArraySchema = questSchema.array();
+
+export type TimeAttackQuest = z.infer<typeof questSchema>;
 
 const talisman = z.object({
   id: z.number().int(),

@@ -1,5 +1,5 @@
 import type { LayoutLoad } from './$types';
-import { questListSchema } from './timeAttackTypes.ts';
+import { questArraySchema } from './timeAttackTypes.ts';
 
 const endpoint = '/api/time_attack/quests';
 
@@ -13,6 +13,6 @@ export const load: LayoutLoad = async ({ fetch, url }) => {
   }
 
   return {
-    questList: questListSchema.parse(await response.json())
+    questList: questArraySchema.parse(await response.json())
   };
 };

@@ -1,9 +1,15 @@
 import { HttpResponse, type HttpResponseResolver } from 'msw';
 
-import type { TimeAttackClear } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
+import type {
+  TimeAttackClear,
+  TimeAttackQuest
+} from '$main/events/time-attack/rankings/timeAttackTypes.ts';
 
 export const handleQuestList: HttpResponseResolver = () => {
-  return HttpResponse.json([227010104, 227010105]);
+  return HttpResponse.json<TimeAttackQuest[]>([
+    { id: 227010104, isCoop: false },
+    { id: 227010105, isCoop: true }
+  ]);
 };
 
 export const handleRankings: HttpResponseResolver = () => {
