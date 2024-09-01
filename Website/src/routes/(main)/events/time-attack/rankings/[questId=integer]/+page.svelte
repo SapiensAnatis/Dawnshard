@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import Page from '$lib/components/page.svelte';
+  import Typography from '$lib/components/typography.svelte';
   import { t } from '$lib/translations';
 
   import type { PageData } from './$types';
@@ -33,7 +34,7 @@
       src="$lib/assets/timeAttack/volk.png"
       alt="Promotional banner for selected time attack quest" />
   </div>
-  <br />
+  <Typography typography="h2">Clears</Typography>
   <DataTable data={data.clearData} />
 </Page>
 
