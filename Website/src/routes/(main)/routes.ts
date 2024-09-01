@@ -28,7 +28,7 @@ export const routeGroups: RouteGroup[] = [
       { title: 'News', href: '/news/1', icon: Newspaper }
     ]
   },
-  ...(PUBLIC_ENABLE_TIME_ATTACK
+  ...(PUBLIC_ENABLE_TIME_ATTACK === 'true'
     ? [
         {
           title: 'Events',
