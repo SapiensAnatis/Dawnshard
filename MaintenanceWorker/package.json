@@ -8,8 +8,8 @@
     "@types/jest": "29.5.12",
     "miniflare": "3.20240821.0",
     "vitest": "2.0.5",
-    "vitest-environment-miniflare": "2.14.2",
-    "wrangler": "3.72.2"
+    "vitest-environment-miniflare": "2.14.3",
+    "wrangler": "3.73.0"
   },
   "type": "module",
   "scripts": {
