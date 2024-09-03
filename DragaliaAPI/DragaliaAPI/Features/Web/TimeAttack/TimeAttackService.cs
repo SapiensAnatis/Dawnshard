@@ -4,6 +4,7 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Features.Web.TimeAttack.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.Serialization;
 using LinqToDB;
 using LinqToDB.Common;
 using LinqToDB.Data;
@@ -50,23 +51,25 @@ internal sealed class TimeAttackService(ApiContext apiContext)
                             .ToValue(),
                     }
             )
-            .AsCte();
+            .AsCte("clears_with_players");
 
         var uniqueClears = clears
             .Select(x => new
             {
                 x.GameId,
                 x.Time,
-                IsPersonalBest = Sql.Ext.Rank()
+                PersonalRank = Sql
+                    .Ext.Rank()
                     .Over()
                     .PartitionBy(x.Players)
                     .OrderBy(x.Time)
-                    .ToValue() == 1,
+                    .ToValue(),
             })
-            .Where(x => x.IsPersonalBest)
+            .Where(x => x.PersonalRank == 1)
             .OrderBy(x => x.Time)
             .Select(x => new { x.GameId, x.Time })
-            .Distinct();
+            .Distinct()
+            .AsCte("clears_unique_by_players");
 
         var playerInfo = uniqueClears.GroupJoin(
             apiContext.TimeAttackPlayers,
@@ -75,9 +78,10 @@ internal sealed class TimeAttackService(ApiContext apiContext)
             (arg1, players) =>
                 new
                 {
+                    Rank = Sql.Ext.RowNumber().Over().ToValue(),
                     arg1.GameId,
                     arg1.Time,
-                    players = players.Select(y => new
+                    Players = players.Select(y => new
                     {
                         y.ViewerId,
                         PartyInfo = Json.Value(y.PartyInfo, "party_unit_list"),
@@ -85,7 +89,34 @@ internal sealed class TimeAttackService(ApiContext apiContext)
                 }
         );
 
-        var list = await playerInfo.ToListAsyncLinqToDB();
+        List<object> list = new(5);
+
+        foreach (var row in await playerInfo.Take(5).ToListAsyncLinqToDB())
+        {
+            var type = new
+            {
+                row.Rank,
+                row.Time,
+                Players = new List<object>(),
+            };
+
+            foreach (var player in row.Players)
+            {
+                var opts = new JsonSerializerOptions()
+                {
+                    PropertyNamingPolicy = CustomSnakeCaseNamingPolicy.Instance,
+                };
+                opts.Converters.Add(new BoolIntJsonConverter());
+
+                var partyList = JsonSerializer.Deserialize<List<PartyUnitList>>(
+                    player.PartyInfo,
+                    opts
+                );
+                type.Players.Add(new { Party = partyList });
+            }
+
+            list.Add(type);
+        }
 
         return list.Cast<object>().ToList();
     }
@@ -104,30 +135,23 @@ public static class Json
                 throw new InvalidOperationException("Invalid property.");
             }
 
-            Expression memberName = builder.Arguments[1];
+            List<ISqlExpression> parameters = [propExpression];
 
-            List<ISqlExpression> parameters = new List<ISqlExpression>();
+            Expression propertyName = builder.Arguments[1];
 
-            string expressionStr = "{0}->>" + memberName.ToString().Replace('\"', '\'');
+            string expressionStr = "{0}->>" + propertyName.ToString().Replace('\"', '\'');
 
-            parameters.Insert(0, propExpression);
+            ISqlExpression valueExpression = new SqlExpression(
+                typeof(string),
+                expressionStr,
+                Precedence.Primary,
+                parameters.ToArray()
+            );
 
-            ISqlExpression valueExpression = (ISqlExpression)
-                new SqlExpression(
-                    typeof(string),
-                    expressionStr,
-                    Precedence.Primary,
-                    parameters.ToArray()
-                );
-
-            Type returnType = ((MethodInfo)builder.Member).ReturnType;
-
-            if (returnType != typeof(string))
+            if (((MethodInfo)builder.Member).ReturnType != typeof(string))
             {
-                valueExpression = PseudoFunctions.MakeConvert(
-                    new SqlDataType(new DbDataType(returnType)),
-                    new SqlDataType(new DbDataType(typeof(string), DataType.Text)),
-                    valueExpression
+                throw new NotSupportedException(
+                    "Cannot convert JSON value expression to non-string result"
                 );
             }
 
