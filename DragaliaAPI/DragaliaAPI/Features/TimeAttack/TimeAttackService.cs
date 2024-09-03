@@ -77,7 +77,7 @@ public class TimeAttackService(
                     {
                         GameId = gameId,
                         ViewerId = playerIdentityService.ViewerId,
-                        PartyInfo = new JsonElement(), //JsonSerializer.Serialize(entry.PartyInfo),
+                        PartyInfo = JsonSerializer.Serialize(entry.PartyInfo),
                         Units = clearUnits,
                     },
                 },

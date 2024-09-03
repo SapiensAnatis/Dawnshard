@@ -18,6 +18,7 @@
     <PackageReference Include="Hangfire.Core" />
     <PackageReference Include="Hangfire.Postgresql" />
     <PackageReference Include="JetBrains.Annotations" />
+    <PackageReference Include="linq2db.EntityFrameworkCore" />
     <PackageReference Include="MessagePack" />
     <PackageReference Include="MessagePack.AspNetCoreMvcFormatter" />
     <PackageReference Include="MessagePackAnalyzer">

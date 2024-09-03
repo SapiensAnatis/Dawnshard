@@ -34,6 +34,7 @@ public static class DatabaseConfiguration
                         .Value;
                     options
                         .UseNpgsql(postgresOptions.GetConnectionString("ApiContext"))
+                        .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
                         .EnableDetailedErrors();
                 }
             )

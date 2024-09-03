@@ -23,7 +23,7 @@ public class DbTimeAttackPlayer
     /// </remarks>
     [Column(TypeName = "jsonb")]
     // ReSharper disable once EntityFramework.ModelValidation.UnlimitedStringLength
-    public required JsonElement PartyInfo { get; set; }
+    public required string PartyInfo { get; set; }
 
     public List<DbTimeAttackClearUnit> Units { get; set; } = new();
 

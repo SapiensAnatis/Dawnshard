@@ -16,6 +16,8 @@ using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.MasterAsset;
 using EntityGraphQL.AspNet;
 using Hangfire;
+using LinqToDB.Data;
+using LinqToDB.EntityFrameworkCore;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
@@ -266,6 +268,9 @@ app.MapGet(
             UseUnifiedLogin = loginOptions.CurrentValue.UseBaasLogin,
         }
 );
+
+LinqToDBForEFTools.Initialize();
+DataConnection.TurnTraceSwitchOn();
 
 app.Run();
 
