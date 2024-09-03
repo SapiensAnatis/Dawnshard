@@ -1,8 +1,8 @@
 import { HttpResponse, type HttpResponseResolver } from 'msw';
 
 import type {
-  TimeAttackClear,
-  TimeAttackQuest
+  TimeAttackQuest,
+  TimeAttackRanking
 } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
 
 export const handleQuestList: HttpResponseResolver = () => {
@@ -13,7 +13,7 @@ export const handleQuestList: HttpResponseResolver = () => {
 };
 
 export const handleRankings: HttpResponseResolver = () => {
-  const soloData: TimeAttackClear[] = [
+  const soloData: TimeAttackRanking[] = [
     {
       rank: 1,
       time: 28.911001,

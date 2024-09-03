@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
@@ -22,7 +23,7 @@ public class DbTimeAttackPlayer
     /// </remarks>
     [Column(TypeName = "jsonb")]
     // ReSharper disable once EntityFramework.ModelValidation.UnlimitedStringLength
-    public required string PartyInfo { get; set; }
+    public required JsonElement PartyInfo { get; set; }
 
     public List<DbTimeAttackClearUnit> Units { get; set; } = new();
 

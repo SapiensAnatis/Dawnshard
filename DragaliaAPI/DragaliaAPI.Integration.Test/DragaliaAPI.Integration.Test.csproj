@@ -40,6 +40,7 @@
     <Folder Include="Features\Dmode\" />
     <Folder Include="Features\Item\" />
     <Folder Include="Features\Shop\" />
+    <Folder Include="Features\Web\TimeAttack\" />
   </ItemGroup>
 
   <PropertyGroup>

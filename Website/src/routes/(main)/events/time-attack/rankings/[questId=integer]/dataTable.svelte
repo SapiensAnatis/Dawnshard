@@ -8,13 +8,13 @@
     getTeam,
     getTeamKeys
   } from '$main/events/time-attack/rankings/[questId=integer]/util.ts';
-  import type { TimeAttackClear } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
+  import type { TimeAttackRanking } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
   import * as Table from '$shadcn/components/ui/table';
 
   import TeamCell from './teamCell.svelte';
   import TeamComposition from './teamComposition/teamComposition.svelte';
 
-  export let data: TimeAttackClear[];
+  export let data: TimeAttackRanking[];
   export let coop: boolean = false;
 
   const table = createTable(readable(data), {
@@ -54,7 +54,7 @@
   const { headerRows, pageRows, tableAttrs, tableBodyAttrs, tableHeadAttrs, pluginStates } =
     table.createViewModel(columns);
 
-  const expandedIds = pluginStates.expand.expandedIds;
+  let expandedIds = pluginStates.expand.expandedIds;
 </script>
 
 <div class="rounded-md border">
