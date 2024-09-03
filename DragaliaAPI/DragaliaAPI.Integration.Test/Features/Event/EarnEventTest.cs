@@ -105,7 +105,7 @@ public class EarnEventTest : TestFixture
                     EventPoint = 0,
                     ExchangeItem01 = 0,
                     ExchangeItem02 = 0,
-                    AdventItemQuantity01 = 0
+                    AdventItemQuantity01 = 0,
                 }
             );
         evtData.Data.EventRewardList.Should().BeEmpty();

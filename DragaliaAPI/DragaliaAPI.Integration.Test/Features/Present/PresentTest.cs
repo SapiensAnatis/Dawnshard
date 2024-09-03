@@ -39,8 +39,8 @@ public class PresentTest : TestFixture
                     ViewerId = ViewerId,
                     EntityType = EntityTypes.Dew,
                     EntityQuantity = 200,
-                    MessageId = PresentMessage.Chapter10Clear
-                }
+                    MessageId = PresentMessage.Chapter10Clear,
+                },
             }
         );
 
@@ -72,12 +72,12 @@ public class PresentTest : TestFixture
                             MessageId = PresentMessage.Chapter10Clear,
                             CreateTime = DateTimeOffset.UtcNow,
                             ReceiveLimitTime = DateTimeOffset.UnixEpoch,
-                        }
+                        },
                     },
                     UpdateDataList = new UpdateDataList()
                     {
-                        PresentNotice = new() { PresentCount = 2, PresentLimitCount = 0 }
-                    }
+                        PresentNotice = new() { PresentCount = 2, PresentLimitCount = 0 },
+                    },
                 }
             );
 
@@ -105,8 +105,8 @@ public class PresentTest : TestFixture
                     ViewerId = ViewerId,
                     EntityType = EntityTypes.Dew,
                     EntityQuantity = 200,
-                    MessageId = PresentMessage.Chapter10Clear
-                }
+                    MessageId = PresentMessage.Chapter10Clear,
+                },
             }
         );
 
@@ -130,12 +130,12 @@ public class PresentTest : TestFixture
                             MessageId = PresentMessage.Maintenance,
                             CreateTime = DateTimeOffset.UtcNow,
                             ReceiveLimitTime = expireDate,
-                        }
+                        },
                     },
                     UpdateDataList = new UpdateDataList()
                     {
-                        PresentNotice = new() { PresentCount = 1, PresentLimitCount = 1 }
-                    }
+                        PresentNotice = new() { PresentCount = 1, PresentLimitCount = 1 },
+                    },
                 }
             );
 
@@ -174,7 +174,7 @@ public class PresentTest : TestFixture
                 new PresentGetPresentListRequest()
                 {
                     IsLimit = false,
-                    PresentId = firstResponse.Data.PresentList.Last().PresentId
+                    PresentId = firstResponse.Data.PresentList.Last().PresentId,
                 }
             );
 
@@ -204,7 +204,13 @@ public class PresentTest : TestFixture
                 {
                     ViewerId = ViewerId,
                     EntityType = EntityTypes.Wyrmite,
-                    EntityQuantity = 100,
+                    EntityQuantity = 50,
+                },
+                new()
+                {
+                    ViewerId = ViewerId,
+                    EntityType = EntityTypes.Wyrmite,
+                    EntityQuantity = 50,
                 },
                 new()
                 {
@@ -222,7 +228,7 @@ public class PresentTest : TestFixture
                 {
                     ViewerId = ViewerId,
                     EntityType = EntityTypes.Wyrmprint,
-                    EntityId = (int)AbilityCrests.ADogsDay,
+                    EntityId = (int)AbilityCrestId.ADogsDay,
                 },
                 new()
                 {
@@ -241,7 +247,13 @@ public class PresentTest : TestFixture
                 {
                     ViewerId = ViewerId,
                     EntityType = EntityTypes.HustleHammer,
-                    EntityQuantity = 100,
+                    EntityQuantity = 50,
+                },
+                new()
+                {
+                    ViewerId = ViewerId,
+                    EntityType = EntityTypes.HustleHammer,
+                    EntityQuantity = 50,
                 },
                 new()
                 {
@@ -255,7 +267,21 @@ public class PresentTest : TestFixture
                     EntityType = EntityTypes.Title,
                     EntityId = (int)Emblems.SupremeBogfish,
                     EntityQuantity = 1,
-                }
+                },
+                new()
+                {
+                    ViewerId = ViewerId,
+                    EntityType = EntityTypes.FreeDiamantium,
+                    EntityId = 0,
+                    EntityQuantity = 50,
+                },
+                new()
+                {
+                    ViewerId = ViewerId,
+                    EntityType = EntityTypes.FreeDiamantium,
+                    EntityId = 0,
+                    EntityQuantity = 50,
+                },
             };
 
         await this.AddRangeToDatabase(presents);
@@ -285,7 +311,7 @@ public class PresentTest : TestFixture
                 new MaterialList()
                 {
                     MaterialId = Materials.Squishums,
-                    Quantity = oldSquishums.Quantity + 100
+                    Quantity = oldSquishums.Quantity + 100,
                 }
             );
 
@@ -298,11 +324,15 @@ public class PresentTest : TestFixture
 
         response
             .Data.UpdateDataList.AbilityCrestList.Should()
-            .Contain(x => x.AbilityCrestId == AbilityCrests.ADogsDay);
+            .Contain(x => x.AbilityCrestId == AbilityCrestId.ADogsDay);
 
         response
             .Data.UpdateDataList.PresentNotice.Should()
-            .BeEquivalentTo(new PresentNotice() { PresentCount = 0, PresentLimitCount = 0, });
+            .BeEquivalentTo(new PresentNotice() { PresentCount = 0, PresentLimitCount = 0 });
+
+        response
+            .Data.UpdateDataList.DiamondData.Should()
+            .BeEquivalentTo(new DiamondData() { FreeDiamond = 100, PaidDiamond = 0 });
 
         // Not sure if entity_result is correct so won't test that
     }
@@ -324,7 +354,7 @@ public class PresentTest : TestFixture
                     ViewerId = ViewerId,
                     EntityType = EntityTypes.Wyrmite,
                     EntityQuantity = 100,
-                    ReceiveLimitTime = DateTimeOffset.UtcNow + TimeSpan.FromDays(1)
+                    ReceiveLimitTime = DateTimeOffset.UtcNow + TimeSpan.FromDays(1),
                 },
                 new()
                 {
@@ -357,7 +387,7 @@ public class PresentTest : TestFixture
 
         response
             .Data.UpdateDataList.PresentNotice.Should()
-            .BeEquivalentTo(new PresentNotice() { PresentCount = 1, PresentLimitCount = 1, });
+            .BeEquivalentTo(new PresentNotice() { PresentCount = 1, PresentLimitCount = 1 });
     }
 
     [Fact]
@@ -374,13 +404,13 @@ public class PresentTest : TestFixture
                 {
                     ViewerId = ViewerId,
                     EntityType = EntityTypes.Wyrmprint,
-                    EntityId = (int)AbilityCrests.DearDiary,
+                    EntityId = (int)AbilityCrestId.DearDiary,
                 },
                 new()
                 {
                     ViewerId = ViewerId,
                     EntityType = EntityTypes.Wyrmprint,
-                    EntityId = (int)AbilityCrests.DearDiary,
+                    EntityId = (int)AbilityCrestId.DearDiary,
                 },
             };
 
@@ -399,7 +429,7 @@ public class PresentTest : TestFixture
         response
             .Data.UpdateDataList.AbilityCrestList.Should()
             .ContainSingle()
-            .And.Contain(x => x.AbilityCrestId == AbilityCrests.DearDiary);
+            .And.Contain(x => x.AbilityCrestId == AbilityCrestId.DearDiary);
         response.Data.UpdateDataList.UserData.DewPoint.Should().Be(oldUserData.DewPoint + 3000);
 
         response
@@ -409,7 +439,7 @@ public class PresentTest : TestFixture
                 new ConvertedEntityList()
                 {
                     BeforeEntityType = EntityTypes.Wyrmprint,
-                    BeforeEntityId = (int)AbilityCrests.DearDiary,
+                    BeforeEntityId = (int)AbilityCrestId.DearDiary,
                     BeforeEntityQuantity = 1,
                     AfterEntityType = EntityTypes.Dew,
                     AfterEntityId = 0,
@@ -519,7 +549,7 @@ public class PresentTest : TestFixture
                 EntityType = EntityTypes.SummonTicket,
                 EntityId = (int)SummonTickets.AdventurerSummon,
                 EntityQuantity = 2,
-            }
+            },
         ];
 
         await this.AddRangeToDatabase(presents);
@@ -541,7 +571,7 @@ public class PresentTest : TestFixture
                     {
                         ViewerId = this.ViewerId,
                         SummonTicketId = SummonTickets.AdventurerSummon,
-                        Quantity = 4
+                        Quantity = 4,
                     },
                 ],
                 opts => opts.Excluding(x => x.KeyId)
@@ -570,7 +600,7 @@ public class PresentTest : TestFixture
                 EntityType = EntityTypes.DragonGift,
                 EntityId = (int)DragonGifts.DragonyuleCake,
                 EntityQuantity = 1,
-            }
+            },
         ];
 
         await this.ApiContext.PlayerDragonGifts.ExecuteDeleteAsync();
@@ -580,9 +610,9 @@ public class PresentTest : TestFixture
                 new DbPlayerDragonGift()
                 {
                     DragonGiftId = DragonGifts.FourLeafClover,
-                    Quantity = 4
+                    Quantity = 4,
                 },
-                .. presents
+                .. presents,
             ]
         );
 
@@ -598,8 +628,8 @@ public class PresentTest : TestFixture
             .Data.UpdateDataList.DragonGiftList.Should()
             .BeEquivalentTo<DragonGiftList>(
                 [
-                    new() { DragonGiftId = DragonGifts.FourLeafClover, Quantity = 6, },
-                    new() { DragonGiftId = DragonGifts.DragonyuleCake, Quantity = 2, },
+                    new() { DragonGiftId = DragonGifts.FourLeafClover, Quantity = 6 },
+                    new() { DragonGiftId = DragonGifts.DragonyuleCake, Quantity = 2 },
                 ]
             );
 
@@ -610,15 +640,61 @@ public class PresentTest : TestFixture
                     {
                         ViewerId = this.ViewerId,
                         DragonGiftId = DragonGifts.FourLeafClover,
-                        Quantity = 6
+                        Quantity = 6,
                     },
                     new DbPlayerDragonGift()
                     {
                         ViewerId = this.ViewerId,
                         DragonGiftId = DragonGifts.DragonyuleCake,
-                        Quantity = 2
+                        Quantity = 2,
                     },
                 ]
+            );
+    }
+
+    [Fact]
+    public async Task Receive_StackedDragonEntities_HandlesCorrectly()
+    {
+        List<DbPlayerPresent> presents =
+        [
+            new DbPlayerPresent()
+            {
+                EntityType = EntityTypes.Dragon,
+                EntityId = (int)Dragons.Andromeda,
+                EntityQuantity = 2,
+            },
+        ];
+
+        await this.AddRangeToDatabase(presents);
+
+        IEnumerable<ulong> presentIdList = presents.Select(x => (ulong)x.PresentId);
+
+        DragaliaResponse<PresentReceiveResponse> response =
+            await this.Client.PostMsgpack<PresentReceiveResponse>(
+                $"{Controller}/receive",
+                new PresentReceiveRequest() { PresentIdList = presentIdList }
+            );
+
+        response
+            .Data.UpdateDataList.DragonList.Should()
+            .HaveCount(2)
+            .And.AllSatisfy(x => x.DragonId.Should().Be(Dragons.Andromeda));
+
+        this.ApiContext.PlayerDragonData.Should()
+            .BeEquivalentTo(
+                [
+                    new DbPlayerDragonData()
+                    {
+                        ViewerId = this.ViewerId,
+                        DragonId = Dragons.Andromeda,
+                    },
+                    new DbPlayerDragonData()
+                    {
+                        ViewerId = this.ViewerId,
+                        DragonId = Dragons.Andromeda,
+                    },
+                ],
+                opts => opts.Including(x => x.ViewerId).Including(x => x.DragonId)
             );
     }
 
@@ -656,7 +732,7 @@ public class PresentTest : TestFixture
                 $"{Controller}/get_history_list",
                 new PresentGetHistoryListRequest()
                 {
-                    PresentHistoryId = (ulong)presentHistories[99].Id
+                    PresentHistoryId = (ulong)presentHistories[99].Id,
                 }
             );
 

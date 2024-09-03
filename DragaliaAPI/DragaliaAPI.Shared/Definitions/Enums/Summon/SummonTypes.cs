@@ -13,5 +13,5 @@ public enum SummonTypes
     CampaignSsr,
     CharaSsrUpdate,
     DragonSsrUpdate,
-    Exclude
+    Exclude,
 }

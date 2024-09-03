@@ -178,7 +178,7 @@ public class MatchingService : IMatchingService
             Status = game.MemberNum >= 4 ? RoomStatuses.Full : RoomStatuses.Available,
             RoomMemberList = game.Players.Select(x => new AtgenRoomMemberList()
             {
-                ViewerId = (ulong)x.ViewerId
+                ViewerId = (ulong)x.ViewerId,
             }),
             EntryType = 1,
             StartEntryTime = game.StartEntryTime,

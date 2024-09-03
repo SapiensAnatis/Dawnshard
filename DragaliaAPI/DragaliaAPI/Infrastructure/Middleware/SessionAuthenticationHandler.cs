@@ -87,7 +87,7 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
             new()
             {
                 new(CustomClaimType.AccountId, deviceAccountId),
-                new(CustomClaimType.ViewerId, viewerId)
+                new(CustomClaimType.ViewerId, viewerId),
             };
 
         ClaimsIdentity identity = new(claims, this.Scheme.Name);

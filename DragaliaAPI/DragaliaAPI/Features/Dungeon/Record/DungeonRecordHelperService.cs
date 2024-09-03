@@ -42,7 +42,7 @@ public class DungeonRecordHelperService(
                     ViewerId = supportList.ViewerId,
                     IsFriend = true,
                     ApplySendStatus = 1,
-                    GetManaPoint = 50
+                    GetManaPoint = 50,
                 }
             );
         }

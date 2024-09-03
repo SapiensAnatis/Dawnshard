@@ -7,9 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Features.Present;
 
 [Route("present")]
-[Consumes("application/octet-stream")]
-[Produces("application/octet-stream")]
-[ApiController]
 public class PresentController : DragaliaControllerBase
 {
     private readonly IPresentControllerService presentControllerService;
@@ -58,7 +55,7 @@ public class PresentController : DragaliaControllerBase
 
         data.UpdateDataList = new()
         {
-            PresentNotice = await this.presentService.GetPresentNotice()
+            PresentNotice = await this.presentService.GetPresentNotice(),
         };
 
         return Ok(data);
@@ -116,6 +113,6 @@ public class PresentController : DragaliaControllerBase
             request.PresentHistoryId
         );
 
-        return Ok(new PresentGetHistoryListResponse() { PresentHistoryList = list, });
+        return Ok(new PresentGetHistoryListResponse() { PresentHistoryList = list });
     }
 }

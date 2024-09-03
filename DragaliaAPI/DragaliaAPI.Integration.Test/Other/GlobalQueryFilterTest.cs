@@ -81,12 +81,12 @@ public class GlobalQueryFilterTest : TestFixture
         // This entity uses a non-auto-incrementing integer primary key :/
         this.ApiContext.PlayerPresentHistory.AddRange(
             [
-                new() { Id = 1, ViewerId = this.ViewerId, },
+                new() { Id = 1, ViewerId = this.ViewerId },
                 new()
                 {
                     Id = 2,
-                    Owner = new() { ViewerId = this.ViewerId + 1, AccountId = "otherhist" }
-                }
+                    Owner = new() { ViewerId = this.ViewerId + 1, AccountId = "otherhist" },
+                },
             ]
         );
         await this.ApiContext.SaveChangesAsync();

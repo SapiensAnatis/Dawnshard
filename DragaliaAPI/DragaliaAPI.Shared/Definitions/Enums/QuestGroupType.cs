@@ -4,5 +4,5 @@ public enum QuestGroupType
 {
     None,
     MainStory,
-    Event
+    Event,
 }

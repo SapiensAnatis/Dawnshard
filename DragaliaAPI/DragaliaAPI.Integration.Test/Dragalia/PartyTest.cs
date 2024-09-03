@@ -34,8 +34,8 @@ public class PartyTest : TestFixture
                         UnitNo = 1,
                         CharaId = Charas.Ilia,
                         EquipWeaponBodyId = WeaponBodies.DivineTrigger,
-                        EquipCrestSlotType1CrestId1 = AbilityCrests.ADragonyuleforIlia
-                    }
+                        EquipCrestSlotType1CrestId1 = AbilityCrestId.ADragonyuleforIlia,
+                    },
                 },
                 "My New Party",
                 false,
@@ -72,7 +72,7 @@ public class PartyTest : TestFixture
                         PartyNo = 1,
                         ViewerId = ViewerId,
                         CharaId = Charas.Ilia,
-                        EquipCrestSlotType1CrestId1 = AbilityCrests.ADragonyuleforIlia,
+                        EquipCrestSlotType1CrestId1 = AbilityCrestId.ADragonyuleforIlia,
                         EquipWeaponBodyId = WeaponBodies.DivineTrigger,
                         Party = dbparty,
                     },
@@ -118,7 +118,7 @@ public class PartyTest : TestFixture
                     1,
                     new List<PartySettingList>()
                     {
-                        new() { UnitNo = 1, CharaId = storyZethia, }
+                        new() { UnitNo = 1, CharaId = storyZethia },
                     },
                     "My New Party",
                     false,
@@ -136,7 +136,7 @@ public class PartyTest : TestFixture
                 1,
                 new List<PartySettingList>()
                 {
-                    new(1, Charas.GalaGatov, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                    new(1, Charas.GalaGatov, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
                 },
                 "My New Party",
                 false,
@@ -167,7 +167,7 @@ public class PartyTest : TestFixture
                 1,
                 new List<PartySettingList>()
                 {
-                    new(1, Charas.ThePrince, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                    new(1, Charas.ThePrince, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
                 },
                 "My New Party",
                 false,

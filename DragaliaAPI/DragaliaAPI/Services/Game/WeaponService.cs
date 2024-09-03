@@ -136,7 +136,7 @@ public class WeaponService : IWeaponService
         {
             BuildupPieceTypes.Passive => await this.TryBuildupPassive(body, buildup),
             BuildupPieceTypes.Stats => await this.TryBuildupStats(body, buildup),
-            _ => await this.TryBuildupGeneric(body, buildup)
+            _ => await this.TryBuildupGeneric(body, buildup),
         };
     }
 
@@ -424,11 +424,10 @@ public class WeaponService : IWeaponService
             6 => Materials.AdamantiteIngot,
             5 => Materials.DamascusIngot,
             4 => Materials.SteelBrick,
-            _
-                => throw new DragaliaException(
-                    ResultCode.CommonInvalidArgument,
-                    "Invalid dedicated material rarity"
-                )
+            _ => throw new DragaliaException(
+                ResultCode.CommonInvalidArgument,
+                "Invalid dedicated material rarity"
+            ),
         };
 
         materialMap = new Dictionary<Materials, int>() { { mat, 1 } };

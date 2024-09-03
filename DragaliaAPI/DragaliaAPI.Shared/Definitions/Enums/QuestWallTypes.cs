@@ -6,5 +6,5 @@ public enum QuestWallTypes
     Water = 216010002,
     Wind = 216010003,
     Light = 216010004,
-    Shadow = 216010005
+    Shadow = 216010005,
 }

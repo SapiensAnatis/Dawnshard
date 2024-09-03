@@ -15,5 +15,5 @@ public enum VariationTypes
     Hell = 5,
     Variation6 = 6,
     Variation7 = 7,
-    Variation8 = 8
+    Variation8 = 8,
 }

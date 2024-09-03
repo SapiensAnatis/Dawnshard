@@ -9,7 +9,7 @@ public class UserService(IPlayerIdentityService playerIdentityService, ApiContex
     public Task<User> GetUser(CancellationToken cancellationToken) =>
         apiContext
             .Players.Where(x => x.ViewerId == playerIdentityService.ViewerId)
-            .Select(x => new User() { Name = x.UserData!.Name, ViewerId = x.ViewerId, })
+            .Select(x => new User() { Name = x.UserData!.Name, ViewerId = x.ViewerId })
             .FirstAsync(cancellationToken);
 
     public Task<UserProfile> GetUserProfile(CancellationToken cancellationToken) =>
@@ -17,7 +17,7 @@ public class UserService(IPlayerIdentityService playerIdentityService, ApiContex
             .PlayerUserData.Select(x => new UserProfile()
             {
                 LastSaveImportTime = x.LastSaveImportTime,
-                LastLoginTime = x.LastLoginTime
+                LastLoginTime = x.LastLoginTime,
             })
             .FirstAsync(cancellationToken);
 }

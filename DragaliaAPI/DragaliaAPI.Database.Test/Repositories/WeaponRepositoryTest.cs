@@ -34,7 +34,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
             new List<DbWeaponBody>()
             {
                 new() { ViewerId = 2, WeaponBodyId = WeaponBodies.SoldiersBrand },
-                new() { ViewerId = 1, WeaponBodyId = WeaponBodies.AbsoluteAqua }
+                new() { ViewerId = 1, WeaponBodyId = WeaponBodies.AbsoluteAqua },
             }
         );
 
@@ -50,7 +50,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
             new List<DbWeaponPassiveAbility>()
             {
                 new() { ViewerId = 1, WeaponPassiveAbilityId = 1010107 },
-                new() { ViewerId = 1, WeaponPassiveAbilityId = 1010108 }
+                new() { ViewerId = 1, WeaponPassiveAbilityId = 1010108 },
             }
         );
 
@@ -73,7 +73,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
                 new DbWeaponBody()
                 {
                     ViewerId = IdentityTestUtils.ViewerId,
-                    WeaponBodyId = WeaponBodies.Arondight
+                    WeaponBodyId = WeaponBodies.Arondight,
                 }
             );
     }
@@ -86,11 +86,11 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
             {
                 WeaponBodies.Abyssbringer,
                 WeaponBodies.Blitzfang,
-                WeaponBodies.Camelot
+                WeaponBodies.Camelot,
             }.Select(x => new DbWeaponBody()
             {
                 ViewerId = IdentityTestUtils.ViewerId,
-                WeaponBodyId = x
+                WeaponBodyId = x,
             })
         );
 
@@ -112,7 +112,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
             new DbWeaponBody()
             {
                 ViewerId = IdentityTestUtils.ViewerId,
-                WeaponBodyId = WeaponBodies.Nothung
+                WeaponBodyId = WeaponBodies.Nothung,
             }
         );
 
@@ -134,7 +134,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
             new DbWeaponBody()
             {
                 ViewerId = IdentityTestUtils.ViewerId,
-                WeaponBodyId = WeaponBodies.InfernoApogee
+                WeaponBodyId = WeaponBodies.InfernoApogee,
             }
         );
 
@@ -156,7 +156,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
                 new DbWeaponPassiveAbility()
                 {
                     ViewerId = IdentityTestUtils.ViewerId,
-                    WeaponPassiveAbilityId = passiveId
+                    WeaponPassiveAbilityId = passiveId,
                 }
             );
     }
@@ -168,7 +168,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
             new DbWeaponBody()
             {
                 ViewerId = IdentityTestUtils.ViewerId,
-                WeaponBodyId = WeaponBodies.RoaringWeald
+                WeaponBodyId = WeaponBodies.RoaringWeald,
             }
         );
 
@@ -198,7 +198,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
                     ViewerId = IdentityTestUtils.ViewerId,
                     WeaponSkinId = 4,
                     IsNew = false,
-                    GetTime = DateTimeOffset.UtcNow
+                    GetTime = DateTimeOffset.UtcNow,
                 }
             );
     }

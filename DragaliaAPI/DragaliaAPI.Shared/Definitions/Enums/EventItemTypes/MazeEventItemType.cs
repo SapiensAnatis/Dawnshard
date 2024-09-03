@@ -7,5 +7,5 @@ public enum MazeEventItemType
     ExchangeItem1 = 10201,
     ExchangeItem2,
     ExchangeItem3,
-    ExchangeItem4
+    ExchangeItem4,
 }

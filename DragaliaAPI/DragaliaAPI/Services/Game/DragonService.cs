@@ -56,7 +56,7 @@ public partial class DragonService(
             {
                 DragonGiftId = (int)x.DragonGiftId,
                 Price = DragonConstants.BuyGiftPrices.GetValueOrDefault(x.DragonGiftId, 0),
-                IsBuy = x.Quantity > 0
+                IsBuy = x.Quantity > 0,
             })
             .ToList();
         return new DragonGetContactDataResponse(giftList);
@@ -64,7 +64,7 @@ public partial class DragonService(
 
     public Task<int> GetFreeGiftCount()
     {
-        DragonGifts[] notificationGifts = [DragonGifts.FreshBread,];
+        DragonGifts[] notificationGifts = [DragonGifts.FreshBread];
 
         return apiContext.PlayerDragonGifts.CountAsync(x =>
             notificationGifts.Contains(x.DragonGiftId) && x.Quantity > 0
@@ -166,14 +166,14 @@ public partial class DragonService(
         Materials.Omnicite,
         Materials.SucculentDragonfruit,
         Materials.Talonstone,
-        Materials.SunlightOre
+        Materials.SunlightOre,
     }.ToImmutableArray();
 
     private static readonly int[][] DragonLevelRewardQuantity = new int[][]
     {
         new int[] { 999999, 3, 999999, 2, 5, 1 },
         new int[] { 999999, 4, 999999, 3, 7, 1 },
-        new int[] { 999999, 5, 999999, 4, 10, 1 }
+        new int[] { 999999, 5, 999999, 4, 10, 1 },
     };
 
     private static readonly ImmutableArray<Materials> PuppyLevelReward = new Materials[]
@@ -183,7 +183,7 @@ public partial class DragonService(
         Materials.HalfEatenBread,
         Materials.HalfEatenBread,
         Materials.HalfEatenBread,
-        Materials.ImitationSquish
+        Materials.ImitationSquish,
     }.ToImmutableArray();
 
     private static readonly int[] PuppyLevelRewardQuantity = new int[] { 1, 21, 28, 34, 40, 1 };
@@ -263,7 +263,7 @@ public partial class DragonService(
             Materials.FiendsEye,
             Materials.Granite,
             Materials.OldCloth,
-            Materials.SolidFungus
+            Materials.SolidFungus,
         };
         int rewardQuantity = 5;
         foreach (DragonGifts gift in gifts)
@@ -296,19 +296,19 @@ public partial class DragonService(
         {
             UpgradeMaterials.t1Orbs,
             UpgradeMaterials.t2Orbs,
-            UpgradeMaterials.t3Orbs
+            UpgradeMaterials.t3Orbs,
         };
         int[][] rarityQuantities = new int[][]
         {
             new int[] { 3, 4, 5 },
             new int[] { 1, 2, 3 },
-            new int[] { 1 }
+            new int[] { 1 },
         };
         Materials[] fruits = new Materials[]
         {
             Materials.Dragonfruit,
             Materials.RipeDragonfruit,
-            Materials.SucculentDragonfruit
+            Materials.SucculentDragonfruit,
         };
         List<Tuple<DragonGifts, List<DragonRewardEntityList>>> giftsPerGift =
             new List<Tuple<DragonGifts, List<DragonRewardEntityList>>>();
@@ -441,7 +441,7 @@ public partial class DragonService(
                         DragonConstants.RotatingGifts[(int)dragonData.FavoriteType] == gift,
                     RewardReliabilityList =
                         levelGifts.FirstOrDefault(x => x.Item1 == gift)?.Item2
-                        ?? Enumerable.Empty<RewardReliabilityList>()
+                        ?? Enumerable.Empty<RewardReliabilityList>(),
                 }
             );
 
@@ -471,7 +471,7 @@ public partial class DragonService(
             DragonGiftRewardList = rewardObjList,
             EntityResult = null,
             ShopGiftList = (await DoDragonGetContactData()).ShopGiftList,
-            UpdateDataList = updateDataList
+            UpdateDataList = updateDataList,
         };
     }
 
@@ -506,7 +506,7 @@ public partial class DragonService(
 
         List<Tuple<DragonGifts, int>> requestGift = new List<Tuple<DragonGifts, int>>()
         {
-            Tuple.Create(request.DragonGiftId, request.Quantity)
+            Tuple.Create(request.DragonGiftId, request.Quantity),
         };
 
         DragonData dragonData = MasterAsset.DragonData.Get(dragonReliability.DragonId);
@@ -547,7 +547,7 @@ public partial class DragonService(
             RewardReliabilityList =
                 levelGifts.FirstOrDefault()?.Item2 ?? Enumerable.Empty<RewardReliabilityList>(),
             ReturnGiftList = rewards.First().Item2,
-            UpdateDataList = updateDataList
+            UpdateDataList = updateDataList,
         };
     }
 
@@ -896,11 +896,11 @@ public partial class DragonService(
             {
                 DeleteDragonList = deleteDragons.Select(x => new AtgenDeleteDragonList()
                 {
-                    DragonKeyId = x.TargetId
-                })
+                    DragonKeyId = x.TargetId,
+                }),
             },
             UpdateDataList = udl,
-            EntityResult = null
+            EntityResult = null,
         };
     }
 
@@ -994,7 +994,7 @@ public partial class DragonService(
             new DeleteDataList(
                 request.DragonKeyIdList.Select(x => new AtgenDeleteDragonList()
                 {
-                    DragonKeyId = x
+                    DragonKeyId = x,
                 }),
                 new List<AtgenDeleteTalismanList>(),
                 new List<AtgenDeleteWeaponList>(),

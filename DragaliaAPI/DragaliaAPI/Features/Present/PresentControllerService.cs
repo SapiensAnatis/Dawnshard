@@ -77,26 +77,35 @@ public class PresentControllerService(
             ? presentsQuery.Where(x => x.ReceiveLimitTime != null)
             : presentsQuery.Where(x => x.ReceiveLimitTime == null);
 
-        List<DbPlayerPresent> presents = await presentsQuery.ToListAsync();
+        Dictionary<long, DbPlayerPresent> presents = await presentsQuery.ToDictionaryAsync(
+            x => x.PresentId,
+            x => x
+        );
+        Dictionary<long, Entity> presentEntities = presents.ToDictionary(
+            x => x.Key,
+            x => new Entity(
+                x.Value.EntityType,
+                x.Value.EntityId,
+                x.Value.EntityQuantity,
+                x.Value.EntityLimitBreakCount,
+                BuildupCount: 0,
+                EquipableCount: 1
+            )
+        );
 
         List<long> receivedIds = [];
         List<long> notReceivedIds = [];
         List<long> removedIds = [];
 
-        foreach (DbPlayerPresent present in presents)
-        {
-            RewardGrantResult result = await rewardService.GrantReward(
-                new(
-                    present.EntityType,
-                    present.EntityId,
-                    present.EntityQuantity,
-                    present.EntityLimitBreakCount,
-                    0,
-                    1
-                )
-            );
+        IDictionary<long, RewardGrantResult> result = await rewardService.BatchGrantRewards(
+            presentEntities
+        );
 
-            switch (result)
+        foreach ((long presentId, RewardGrantResult grantResult) in result)
+        {
+            DbPlayerPresent present = presents[presentId];
+
+            switch (grantResult)
             {
                 case RewardGrantResult.Added:
                     receivedIds.Add(present.PresentId);
@@ -114,7 +123,12 @@ public class PresentControllerService(
 
             logger.LogDebug("Claimed present {@present}", present);
 
-            if (result is RewardGrantResult.Added or RewardGrantResult.Converted)
+            if (
+                grantResult
+                is RewardGrantResult.Added
+                    or RewardGrantResult.Converted
+                    or RewardGrantResult.Discarded
+            )
             {
                 apiContext.PlayerPresents.Remove(present);
                 apiContext.PlayerPresentHistory.Add(present.MapToPresentHistory());

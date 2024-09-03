@@ -30,8 +30,8 @@ public class StoryTest : TestFixture
                     {
                         EntityType = EntityTypes.Wyrmite,
                         EntityQuantity = 25,
-                        EntityId = 0
-                    }
+                        EntityId = 0,
+                    },
                 }
             );
 
@@ -40,7 +40,7 @@ public class StoryTest : TestFixture
             .BeEquivalentTo(
                 new List<UnitStoryList>()
                 {
-                    new() { UnitStoryId = 100001141, IsRead = true, }
+                    new() { UnitStoryId = 100001141, IsRead = true },
                 }
             );
     }
@@ -54,14 +54,14 @@ public class StoryTest : TestFixture
                 ViewerId = this.ViewerId,
                 State = StoryState.Read,
                 StoryId = 100001121,
-                StoryType = StoryTypes.Chara
+                StoryType = StoryTypes.Chara,
             },
             new DbPlayerStoryState()
             {
                 ViewerId = this.ViewerId,
                 State = StoryState.Read,
                 StoryId = 100001122,
-                StoryType = StoryTypes.Chara
+                StoryType = StoryTypes.Chara,
             }
         );
         await this.ApiContext.SaveChangesAsync();
@@ -115,7 +115,7 @@ public class StoryTest : TestFixture
                     ViewerId = this.ViewerId,
                     State = StoryState.Read,
                     StoryId = 100002011,
-                    StoryType = StoryTypes.Chara
+                    StoryType = StoryTypes.Chara,
                 }
             );
     }

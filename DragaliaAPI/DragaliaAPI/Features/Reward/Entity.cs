@@ -20,7 +20,7 @@ public record Entity(
         {
             EntityId = this.Id,
             EntityType = this.Type,
-            EntityQuantity = this.Quantity
+            EntityQuantity = this.Quantity,
         };
     }
 

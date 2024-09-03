@@ -33,7 +33,7 @@ public enum TutorialFlags
     AlbumTutorial = 1027,
     ServerMostDefinitelyDiabolos = 1028,
     SagaTutorial = 1029,
-    ServerClearSixteenthChapter = 1030
+    ServerClearSixteenthChapter = 1030,
 }
 
 public static class TutorialFlagUtil

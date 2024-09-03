@@ -31,7 +31,7 @@ public static class CharaUtils
                 3 => adventurer.MinHp3,
                 4 => adventurer.MinHp4,
                 5 => adventurer.MinHp5,
-                _ => throw new ArgumentException("Invalid rarity!")
+                _ => throw new ArgumentException("Invalid rarity!"),
             };
             lvlBase = MinLevel;
         }
@@ -59,7 +59,7 @@ public static class CharaUtils
                 3 => adventurer.MinAtk3,
                 4 => adventurer.MinAtk4,
                 5 => adventurer.MinAtk5,
-                _ => throw new ArgumentException("Invalid rarity!")
+                _ => throw new ArgumentException("Invalid rarity!"),
             };
             lvlBase = MinLevel;
         }

@@ -6,5 +6,5 @@ public enum QuestBonusReceiveType
     SelectReceive,
     StackReceive,
     StackSelectReceive,
-    Max
+    Max,
 }

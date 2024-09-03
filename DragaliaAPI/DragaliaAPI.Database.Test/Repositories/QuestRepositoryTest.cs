@@ -30,7 +30,7 @@ public class QuestRepositoryTest : IClassFixture<DbTestFixture>
             new List<DbQuest>()
             {
                 new() { ViewerId = ViewerId, QuestId = 1 },
-                new() { ViewerId = ViewerId + 1, QuestId = 2 }
+                new() { ViewerId = ViewerId + 1, QuestId = 2 },
             }
         );
 

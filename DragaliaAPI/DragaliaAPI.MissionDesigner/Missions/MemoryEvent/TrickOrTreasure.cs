@@ -23,7 +23,7 @@ public static class TrickOrTreasure
             new EventQuestClearWithCrestMission()
             {
                 MissionId = 10060201,
-                Crest = AbilityCrests.PlunderPals
+                Crest = AbilityCrestId.PlunderPals,
             },
             // Collect 100 Tricker Treats in One Go
             new EventPointCollectionRecordMission() { MissionId = 10060301 },
@@ -52,13 +52,13 @@ public static class TrickOrTreasure
             // Clear 15 Extra Boss Battles
             new ClearQuestMission() { MissionId = 10060504, QuestId = ExBossBattleQuestId },
             // Clear Three Challenge Battles
-            new EventChallengeBattleClearMission() { MissionId = 10060601, },
+            new EventChallengeBattleClearMission() { MissionId = 10060601 },
             // Clear Six Challenge Battles
-            new EventChallengeBattleClearMission() { MissionId = 10060602, },
+            new EventChallengeBattleClearMission() { MissionId = 10060602 },
             // Clear 10 Challenge Battles
-            new EventChallengeBattleClearMission() { MissionId = 10060603, },
+            new EventChallengeBattleClearMission() { MissionId = 10060603 },
             // Clear 15 Challenge Battles
-            new EventChallengeBattleClearMission() { MissionId = 10060604, },
+            new EventChallengeBattleClearMission() { MissionId = 10060604 },
             // Completely Clear a Challenge Battle on Expert
             new EventChallengeBattleClearMission()
             {

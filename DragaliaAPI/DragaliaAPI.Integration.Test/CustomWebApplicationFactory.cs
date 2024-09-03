@@ -67,8 +67,8 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
             {
                 EndPoints = new EndPointCollection
                 {
-                    { this.testContainersHelper.RedisHost, this.testContainersHelper.RedisPort }
-                }
+                    { this.testContainersHelper.RedisHost, this.testContainersHelper.RedisPort },
+                },
             }
         );
     }
@@ -104,8 +104,11 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
                 {
                     EndPoints = new()
                     {
-                        { this.testContainersHelper.RedisHost, this.testContainersHelper.RedisPort }
-                    }
+                        {
+                            this.testContainersHelper.RedisHost,
+                            this.testContainersHelper.RedisPort
+                        },
+                    },
                 };
                 options.InstanceName = "RedisInstance";
             });

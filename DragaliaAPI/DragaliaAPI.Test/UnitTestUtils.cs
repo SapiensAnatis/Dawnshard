@@ -6,6 +6,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MockQueryable.EntityFrameworkCore;
 using MockQueryable.Moq;
 using Moq.Language.Flow;
 using Xunit.Abstractions;
@@ -58,11 +59,11 @@ public static class UnitTestUtils
                         new List<Claim>()
                         {
                             new Claim(CustomClaimType.AccountId, AccountId),
-                            new Claim(CustomClaimType.ViewerId, ViewerId.ToString())
+                            new Claim(CustomClaimType.ViewerId, ViewerId.ToString()),
                         }
                     )
-                )
-            }
+                ),
+            },
         };
     }
 

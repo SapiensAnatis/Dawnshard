@@ -23,8 +23,8 @@ public class AutoRepeatTest : TestFixture
                     {
                         RepeatCount = 45,
                         RepeatType = RepeatSettingType.Specified,
-                        UseItemList = [UseItem.Honey]
-                    }
+                        UseItemList = [UseItem.Honey],
+                    },
                 }
             )
         ).Data;
@@ -93,8 +93,8 @@ public class AutoRepeatTest : TestFixture
                     {
                         RepeatCount = 45,
                         RepeatType = RepeatSettingType.Specified,
-                        UseItemList = [UseItem.Honey]
-                    }
+                        UseItemList = [UseItem.Honey],
+                    },
                 }
             )
         ).Data;
@@ -138,8 +138,8 @@ public class AutoRepeatTest : TestFixture
                     {
                         RepeatCount = 45,
                         RepeatType = RepeatSettingType.Specified,
-                        UseItemList = [UseItem.Honey]
-                    }
+                        UseItemList = [UseItem.Honey],
+                    },
                 }
             )
         ).Data;
@@ -216,7 +216,7 @@ public class AutoRepeatTest : TestFixture
             {
                 QuestId = questId,
                 State = 0,
-                ViewerId = ViewerId
+                ViewerId = ViewerId,
             }
         );
 
@@ -235,8 +235,8 @@ public class AutoRepeatTest : TestFixture
                     {
                         RepeatCount = 45,
                         RepeatType = RepeatSettingType.Specified,
-                        UseItemList = [UseItem.Honey]
-                    }
+                        UseItemList = [UseItem.Honey],
+                    },
                 }
             )
         ).Data;
@@ -308,7 +308,7 @@ public class AutoRepeatTest : TestFixture
                 new AtgenUserBuildEventItemList()
                 {
                     UserBuildEventItem = (int)BuildEventItemType.BuildEventPoint,
-                    EventItemValue = expectedPoints + expectedBoostPoints
+                    EventItemValue = expectedPoints + expectedBoostPoints,
                 }
             );
     }
@@ -327,8 +327,8 @@ public class AutoRepeatTest : TestFixture
                     {
                         RepeatCount = 45,
                         RepeatType = RepeatSettingType.Specified,
-                        UseItemList = [UseItem.Honey]
-                    }
+                        UseItemList = [UseItem.Honey],
+                    },
                 }
             )
         ).Data;

@@ -31,20 +31,20 @@ public static class TestData
                 ExAbility2Level = 1,
                 Skill1Level = 1,
                 Skill2Level = 0,
-                IsUnlockEditSkill = true
+                IsUnlockEditSkill = true,
             },
             SupportDragon = new() { DragonId = Dragons.Midgardsormr },
             SupportWeaponBody = new() { WeaponBodyId = WeaponBodies.SoldiersBrand },
             SupportTalisman = new() { TalismanId = Talismans.ThePrince },
             SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
             {
-                new() { AbilityCrestId = AbilityCrests.TheGreatestGift },
+                new() { AbilityCrestId = AbilityCrestId.TheGreatestGift },
                 new() { AbilityCrestId = 0 },
                 new() { AbilityCrestId = 0 },
             },
             SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
             {
-                new() { AbilityCrestId = AbilityCrests.ManaFount },
+                new() { AbilityCrestId = AbilityCrestId.ManaFount },
                 new() { AbilityCrestId = 0 },
             },
             SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
@@ -52,7 +52,7 @@ public static class TestData
                 new() { AbilityCrestId = 0 },
                 new() { AbilityCrestId = 0 },
             },
-            Guild = new() { GuildId = 0, GuildName = "Guild" }
+            Guild = new() { GuildId = 0, GuildName = "Guild" },
         };
 
     public static readonly UserSupportList SupportListElisanne =
@@ -81,11 +81,11 @@ public static class TestData
                 ExAbility2Level = 1,
                 Skill1Level = 1,
                 Skill2Level = 0,
-                IsUnlockEditSkill = true
+                IsUnlockEditSkill = true,
             },
-            SupportDragon = new() { DragonKeyId = 0, },
-            SupportWeaponBody = new() { WeaponBodyId = 0, },
-            SupportTalisman = new() { TalismanKeyId = 0, },
+            SupportDragon = new() { DragonKeyId = 0 },
+            SupportWeaponBody = new() { WeaponBodyId = 0 },
+            SupportTalisman = new() { TalismanKeyId = 0 },
             SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
             {
                 new() { AbilityCrestId = 0 },
@@ -102,6 +102,6 @@ public static class TestData
                 new() { AbilityCrestId = 0 },
                 new() { AbilityCrestId = 0 },
             },
-            Guild = new() { GuildId = 0, GuildName = "Guild" }
+            Guild = new() { GuildId = 0, GuildName = "Guild" },
         };
 }

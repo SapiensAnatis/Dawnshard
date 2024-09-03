@@ -99,7 +99,7 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     EventId = eventId,
-                    CustomEventFlag = customEventFlag
+                    CustomEventFlag = customEventFlag,
                 }
             )
             .Entity;
@@ -113,7 +113,7 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     EventId = eventId,
-                    RewardId = rewardId
+                    RewardId = rewardId,
                 }
             )
             .Entity;
@@ -136,7 +136,7 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
                             ViewerId = playerIdentityService.ViewerId,
                             EventId = eventId,
                             Id = itemId,
-                            Type = itemType
+                            Type = itemType,
                         }
                     )
                     .Entity
@@ -164,7 +164,7 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
                         {
                             ViewerId = playerIdentityService.ViewerId,
                             EventId = eventId,
-                            PassiveId = passiveId
+                            PassiveId = passiveId,
                         }
                     )
                     .Entity

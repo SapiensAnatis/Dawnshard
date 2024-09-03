@@ -35,5 +35,5 @@ public enum QuestCompleteType
     MinAdventurersWithSameWeapon,
     MaxShapeshift,
     NoRevives,
-    DefeatFormaChrom
+    DefeatFormaChrom,
 }

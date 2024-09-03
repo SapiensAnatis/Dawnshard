@@ -51,7 +51,7 @@ public class MasterAssetGeneratorTest
     {
         SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(source);
 
-        List<PortableExecutableReference> references = [.. ReferenceAssemblies.Net80,];
+        List<PortableExecutableReference> references = [.. ReferenceAssemblies.Net80];
 
         CSharpCompilation compilation = CSharpCompilation.Create(
             assemblyName: "Tests",

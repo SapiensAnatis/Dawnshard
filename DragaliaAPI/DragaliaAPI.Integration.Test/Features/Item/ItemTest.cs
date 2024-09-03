@@ -13,7 +13,7 @@ public class ItemTest : TestFixture
                 {
                     ViewerId = ViewerId,
                     ItemId = UseItem.Honey,
-                    Quantity = 50
+                    Quantity = 50,
                 }
             )
             .Wait();

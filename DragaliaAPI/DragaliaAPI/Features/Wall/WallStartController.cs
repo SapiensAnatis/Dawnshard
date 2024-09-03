@@ -55,7 +55,7 @@ public class WallStartController(
                 IngameData = ingameData,
                 IngameWallData = ingameWallData,
                 OddsInfo = oddsInfo,
-                UpdateDataList = updateDataList
+                UpdateDataList = updateDataList,
             };
 
         return Ok(data);
@@ -97,7 +97,7 @@ public class WallStartController(
                 IngameData = ingameData,
                 IngameWallData = ingameWallData,
                 OddsInfo = oddsInfo,
-                UpdateDataList = updateDataList
+                UpdateDataList = updateDataList,
             };
 
         return Ok(data);

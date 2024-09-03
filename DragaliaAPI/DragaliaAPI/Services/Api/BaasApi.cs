@@ -93,10 +93,16 @@ public class BaasApi : IBaasApi
         HttpRequestMessage request =
             new(HttpMethod.Get, "/gameplay/v1/user")
             {
-                Headers = { Authorization = new AuthenticationHeaderValue("Bearer", idToken) }
+                Headers = { Authorization = new AuthenticationHeaderValue("Bearer", idToken) },
             };
 
         HttpResponseMessage response = await client.SendAsync(request);
+
+        if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            this.logger.LogDebug("GetUserId returned 404 Not Found.");
+            return null;
+        }
 
         if (!response.IsSuccessStatusCode)
         {

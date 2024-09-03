@@ -5,5 +5,5 @@ public enum BattleRoyalEventItemType
     None,
     EventPoint = 10101,
     UnitUnlock = 10201,
-    Skin = 10301
+    Skin = 10301,
 }

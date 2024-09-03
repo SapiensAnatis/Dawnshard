@@ -73,7 +73,7 @@ public class OAuthCallbackModel(
             {
                 { "client_id", options.CurrentValue.ClientId },
                 { "session_token_code", sessionTokenCode },
-                { "session_token_code_verifier", options.CurrentValue.ChallengeString }
+                { "session_token_code_verifier", options.CurrentValue.ChallengeString },
             };
 
         HttpResponseMessage sessionTokenResponse = await httpClient.PostAsync(

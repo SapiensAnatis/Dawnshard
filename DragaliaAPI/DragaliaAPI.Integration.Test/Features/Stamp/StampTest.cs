@@ -56,7 +56,7 @@ public class StampTest : TestFixture
                 new() { Slot = 29, StampId = 10029 },
                 new() { Slot = 30, StampId = 10030 },
                 new() { Slot = 31, StampId = 10031 },
-                new() { Slot = 32, StampId = 10201 }
+                new() { Slot = 32, StampId = 10201 },
             };
 
         await this.Client.PostMsgpack<StampSetEquipStampResponse>(
@@ -114,7 +114,7 @@ public class StampTest : TestFixture
                 new() { Slot = 29, StampId = 10029 },
                 new() { Slot = 30, StampId = 10030 },
                 new() { Slot = 31, StampId = 10031 },
-                new() { Slot = 32, StampId = 10201 }
+                new() { Slot = 32, StampId = 10201 },
             };
 
         StampSetEquipStampResponse data = (

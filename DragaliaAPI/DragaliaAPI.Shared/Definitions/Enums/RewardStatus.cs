@@ -7,5 +7,5 @@ public enum RewardStatus
 {
     None = 0,
     Available = 1,
-    Received = 2
+    Received = 2,
 }

@@ -90,17 +90,25 @@ public class DungeonRepositoryTest : RepositoryTestFixture
         List<DbAbilityCrest> crests =
             new()
             {
-                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrests.ADogsDay },
-                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrests.TheRedImpulse },
-                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrests.ThePrinceofDragonyule },
-                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrests.TaikoTandem },
-                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrests.AChoiceBlend },
+                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrestId.ADogsDay },
+                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrestId.TheRedImpulse },
                 new()
                 {
                     ViewerId = ViewerId,
-                    AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon
+                    AbilityCrestId = AbilityCrestId.ThePrinceofDragonyule,
                 },
-                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrests.AKingsPrideSwordsBoon }
+                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrestId.TaikoTandem },
+                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrestId.AChoiceBlend },
+                new()
+                {
+                    ViewerId = ViewerId,
+                    AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
+                },
+                new()
+                {
+                    ViewerId = ViewerId,
+                    AbilityCrestId = AbilityCrestId.AKingsPrideSwordsBoon,
+                },
             };
 
         DbTalisman talisman =
@@ -108,7 +116,7 @@ public class DungeonRepositoryTest : RepositoryTestFixture
             {
                 ViewerId = ViewerId,
                 TalismanId = Talismans.GalaNedrick,
-                TalismanKeyId = 44444
+                TalismanKeyId = 44444,
             };
 
         DbPartyUnit unit =
@@ -122,13 +130,13 @@ public class DungeonRepositoryTest : RepositoryTestFixture
                 EquipWeaponSkinId = 1,
                 EquipDragonKeyId = 400,
                 EquipTalismanKeyId = 44444,
-                EquipCrestSlotType1CrestId1 = AbilityCrests.ADogsDay,
-                EquipCrestSlotType1CrestId2 = AbilityCrests.TheRedImpulse,
-                EquipCrestSlotType1CrestId3 = AbilityCrests.ThePrinceofDragonyule,
-                EquipCrestSlotType2CrestId1 = AbilityCrests.TaikoTandem,
-                EquipCrestSlotType2CrestId2 = AbilityCrests.AChoiceBlend,
-                EquipCrestSlotType3CrestId1 = AbilityCrests.CrownofLightSerpentsBoon,
-                EquipCrestSlotType3CrestId2 = AbilityCrests.AKingsPrideSwordsBoon,
+                EquipCrestSlotType1CrestId1 = AbilityCrestId.ADogsDay,
+                EquipCrestSlotType1CrestId2 = AbilityCrestId.TheRedImpulse,
+                EquipCrestSlotType1CrestId3 = AbilityCrestId.ThePrinceofDragonyule,
+                EquipCrestSlotType2CrestId1 = AbilityCrestId.TaikoTandem,
+                EquipCrestSlotType2CrestId2 = AbilityCrestId.AChoiceBlend,
+                EquipCrestSlotType3CrestId1 = AbilityCrestId.CrownofLightSerpentsBoon,
+                EquipCrestSlotType3CrestId2 = AbilityCrestId.AKingsPrideSwordsBoon,
                 EditSkill1CharaId = Charas.GalaMym,
                 EditSkill2CharaId = Charas.SummerCleo,
             };
@@ -167,8 +175,8 @@ public class DungeonRepositoryTest : RepositoryTestFixture
             CrestSlotType2CrestList = crests.GetRange(3, 2),
             CrestSlotType3CrestList = crests.GetRange(5, 2),
             DragonReliabilityLevel = 15,
-            EditSkill1CharaData = new() { CharaId = Charas.GalaMym, EditSkillLevel = 3, },
-            EditSkill2CharaData = new() { CharaId = Charas.SummerCleo, EditSkillLevel = 2, }
+            EditSkill1CharaData = new() { CharaId = Charas.GalaMym, EditSkillLevel = 3 },
+            EditSkill2CharaData = new() { CharaId = Charas.SummerCleo, EditSkillLevel = 2 },
         };
     }
 }

@@ -7,5 +7,5 @@ public enum StoryTypes
     Quest = 3,
     Castle = 4,
     DungeonMode = 5,
-    Event = 6
+    Event = 6,
 }

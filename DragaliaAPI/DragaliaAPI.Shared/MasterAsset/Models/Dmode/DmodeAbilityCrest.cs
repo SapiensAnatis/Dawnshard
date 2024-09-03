@@ -4,7 +4,7 @@ namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 
 public record DmodeAbilityCrest(
     int Id,
-    AbilityCrests AbilityCrestId,
+    AbilityCrestId AbilityCrestId,
     int StrengthParamGroupId,
     int StrengthAbilityGroupId
 );

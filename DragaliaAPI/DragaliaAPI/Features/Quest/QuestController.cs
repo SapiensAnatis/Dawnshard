@@ -47,7 +47,7 @@ public class QuestController(
             {
                 QuestStoryRewardList = questRewardList,
                 EntityResult = entityResult,
-                UpdateDataList = updateDataList
+                UpdateDataList = updateDataList,
             }
         );
     }
@@ -76,7 +76,7 @@ public class QuestController(
             new QuestGetQuestClearPartyResponse()
             {
                 QuestClearPartySettingList = clearParty,
-                LostUnitList = lostUnitList
+                LostUnitList = lostUnitList,
             }
         );
     }
@@ -96,7 +96,7 @@ public class QuestController(
             new QuestGetQuestClearPartyMultiResponse()
             {
                 QuestMultiClearPartySettingList = clearParty,
-                LostUnitList = lostUnitList
+                LostUnitList = lostUnitList,
             }
         );
     }
@@ -164,8 +164,8 @@ public class QuestController(
                     {
                         EntityId = x.Id,
                         EntityType = x.EntityType,
-                    })
-                }
+                    }),
+                },
             }
         );
     }

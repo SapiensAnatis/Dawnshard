@@ -36,7 +36,7 @@ public class V19Update(ApiContext context, IPlayerIdentityService playerIdentity
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     SummonTicketId = ticketType,
-                    Quantity = ticketsOfType.Sum(x => x.Quantity)
+                    Quantity = ticketsOfType.Sum(x => x.Quantity),
                 }
             );
             context.RemoveRange(ticketsOfType);

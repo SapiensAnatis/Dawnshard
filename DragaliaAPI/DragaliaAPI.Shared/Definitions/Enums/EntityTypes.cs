@@ -50,7 +50,7 @@ public enum EntityTypes
     EarnEventItem,
     Talisman,
     DmodePoint,
-    DmodeDungeonItem
+    DmodeDungeonItem,
 }
 
 public static class EntityTypesExtensions
@@ -63,7 +63,7 @@ public static class EntityTypesExtensions
             EntityTypes.Dew => PaymentTypes.DewPoint,
             EntityTypes.Mana => PaymentTypes.ManaPoint,
             EntityTypes.Wyrmite => PaymentTypes.Wyrmite,
-            _ => throw new UnreachableException("Invalid EntityType for PaymentType conversion")
+            _ => throw new UnreachableException("Invalid EntityType for PaymentType conversion"),
         };
     }
 }
@@ -75,5 +75,5 @@ public enum CurrencyTypes
     PaidDiamantium = EntityTypes.PaidDiamantium,
     Dew = EntityTypes.Dew,
     Mana = EntityTypes.Mana,
-    Wyrmite = EntityTypes.Wyrmite
+    Wyrmite = EntityTypes.Wyrmite,
 }

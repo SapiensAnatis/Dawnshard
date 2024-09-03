@@ -78,9 +78,9 @@ public class TimeAttackService(
                         GameId = gameId,
                         ViewerId = playerIdentityService.ViewerId,
                         PartyInfo = JsonSerializer.Serialize(entry.PartyInfo),
-                        Units = clearUnits
+                        Units = clearUnits,
                     },
-                }
+                },
             }
         );
 
@@ -126,7 +126,7 @@ public class TimeAttackService(
             {
                 ViewerId = playerIdentityService.ViewerId,
                 QuestId = questId,
-                RewardId = x.Id
+                RewardId = x.Id,
             })
         );
 
@@ -140,7 +140,7 @@ public class TimeAttackService(
             {
                 UnitNo = x.Position,
                 ViewerId = playerIdentityService.ViewerId,
-                GameId = roomId
+                GameId = roomId,
             };
 
         if (x.CharaData is not null)
@@ -165,7 +165,7 @@ public class TimeAttackService(
             unit.TalismanAbility2 = x.TalismanData.TalismanAbilityId2;
         }
 
-        List<AbilityCrests> crests = x
+        List<AbilityCrestId> crests = x
             .CrestSlotType1CrestList.Concat(x.CrestSlotType2CrestList)
             .Concat(x.CrestSlotType3CrestList)
             .Select(x => x.AbilityCrestId)

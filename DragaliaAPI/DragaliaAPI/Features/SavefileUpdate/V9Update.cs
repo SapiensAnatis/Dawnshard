@@ -112,7 +112,7 @@ public class V9Update(
                 ViewerId = playerIdentityService.ViewerId,
                 StoryId = storyId,
                 State = 0,
-                StoryType = StoryTypes.Chara
+                StoryType = StoryTypes.Chara,
             }
         );
     }

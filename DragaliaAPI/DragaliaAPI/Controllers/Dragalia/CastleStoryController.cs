@@ -47,7 +47,7 @@ public class CastleStoryController(
             new CastleStoryReadResponse()
             {
                 CastleStoryRewardList = rewardList,
-                UpdateDataList = updateDataList
+                UpdateDataList = updateDataList,
             }
         );
     }

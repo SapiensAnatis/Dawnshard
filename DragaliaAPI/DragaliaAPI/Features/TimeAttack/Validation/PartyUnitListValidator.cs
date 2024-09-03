@@ -16,7 +16,7 @@ public class PartyUnitListValidator : AbstractValidator<PartyUnitList>
                 RuleFor(x => new
                     {
                         edit_skill_1_chara_data = x.EditSkill1CharaData,
-                        edit_skill_2_chara_data = x.EditSkill2CharaData
+                        edit_skill_2_chara_data = x.EditSkill2CharaData,
                     })
                     .Must(x =>
                         x.edit_skill_1_chara_data!.CharaId != x.edit_skill_2_chara_data!.CharaId

@@ -48,7 +48,7 @@ public class GameCreateTest : TestFixture
                     RequiredPartyPower = 11700,
                     ObjectiveTextId = 1,
                 },
-                Players = []
+                Players = [],
             };
 
         RedisGame expectedGame =
@@ -67,7 +67,7 @@ public class GameCreateTest : TestFixture
                     RequiredPartyPower = 11700,
                     ObjectiveTextId = 1,
                 },
-                Players = [new() { ViewerId = 2, PartyNoList = [40] }]
+                Players = [new() { ViewerId = 2, PartyNoList = [40] }],
             };
 
         HttpResponseMessage response = await this.Client.PostAsJsonAsync<GameCreateRequest>(
@@ -75,7 +75,7 @@ public class GameCreateTest : TestFixture
             new()
             {
                 Game = game,
-                Player = new() { ViewerId = 2, PartyNoList = [40] }
+                Player = new() { ViewerId = 2, PartyNoList = [40] },
             }
         );
 

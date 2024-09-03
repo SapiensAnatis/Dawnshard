@@ -16,7 +16,7 @@ public static class Shop
             ShopType.MaterialDaily => MasterAsset.MaterialShopDaily[goodsId],
             ShopType.MaterialWeekly => MasterAsset.MaterialShopWeekly[goodsId],
             ShopType.MaterialMonthly => MasterAsset.MaterialShopMonthly[goodsId],
-            _ => throw new UnreachableException("Invalid ShopType")
+            _ => throw new UnreachableException("Invalid ShopType"),
         };
     }
 }

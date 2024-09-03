@@ -9,5 +9,5 @@ public enum BannerTypes
     //UNKNOWN: Presumably normal, this is from a gala banner
     Normal = 2,
 
-    DiamantiumMulti = 11
+    DiamantiumMulti = 11,
 }

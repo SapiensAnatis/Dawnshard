@@ -21,7 +21,7 @@ public static class DivineDeception
             new EventQuestClearWithCrestMission()
             {
                 MissionId = 10210401,
-                Crest = AbilityCrests.ExtremeTeamwork
+                Crest = AbilityCrestId.ExtremeTeamwork,
             },
             // Collect 100 Intelligence in One Go
             new EventPointCollectionRecordMission() { MissionId = 10210501 },
@@ -62,26 +62,26 @@ public static class DivineDeception
             {
                 MissionId = 10210901,
                 FullClear = true,
-                VariationType = VariationTypes.VeryHard
+                VariationType = VariationTypes.VeryHard,
             },
             // Completely Clear a Challenge Battle on Master
             new EventChallengeBattleClearMission()
             {
                 MissionId = 10211001,
                 FullClear = true,
-                VariationType = VariationTypes.Extreme
+                VariationType = VariationTypes.Extreme,
             },
             // Clear a "Divine Deception" Trial on Standard
             new EventTrialClearMission()
             {
                 MissionId = 10211101,
-                VariationType = VariationTypes.Hell
+                VariationType = VariationTypes.Hell,
             },
             // Clear a "Divine Deception" Trial on Expert
             new EventTrialClearMission()
             {
                 MissionId = 10211201,
-                VariationType = VariationTypes.Variation6
+                VariationType = VariationTypes.Variation6,
             },
             // Earn the "Fate Fighter" Epithet
             // Earned from "Completely Clear a Challenge Battle on Master"
@@ -89,7 +89,7 @@ public static class DivineDeception
             {
                 MissionId = 10211301,
                 FullClear = true,
-                VariationType = VariationTypes.Extreme
+                VariationType = VariationTypes.Extreme,
             },
         ];
 }

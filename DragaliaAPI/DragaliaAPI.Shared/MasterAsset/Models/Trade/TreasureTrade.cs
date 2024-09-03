@@ -47,6 +47,6 @@ public record TreasureTrade(
             (NeedEntityType2, NeedEntityId2, NeedEntityQuantity2, NeedLimitBreakCount2),
             (NeedEntityType3, NeedEntityId3, NeedEntityQuantity3, NeedLimitBreakCount3),
             (NeedEntityType4, NeedEntityId4, NeedEntityQuantity4, NeedLimitBreakCount4),
-            (NeedEntityType5, NeedEntityId5, NeedEntityQuantity5, NeedLimitBreakCount5)
+            (NeedEntityType5, NeedEntityId5, NeedEntityQuantity5, NeedLimitBreakCount5),
         };
 };

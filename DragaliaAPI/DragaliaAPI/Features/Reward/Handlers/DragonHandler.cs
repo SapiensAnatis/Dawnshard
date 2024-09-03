@@ -88,15 +88,18 @@ public partial class DragonHandler(
                 continue;
             }
 
-            if (dragonCount >= storageSpace)
+            if (dragonCount + entity.Quantity > storageSpace)
             {
                 resultDict.Add(key, GrantReturn.Limit());
                 continue;
             }
 
-            apiContext.PlayerDragonData.Add(
-                new DbPlayerDragonData(playerIdentityService.ViewerId, dragon)
-            );
+            for (int i = 0; i < entity.Quantity; i++)
+            {
+                apiContext.PlayerDragonData.Add(
+                    new DbPlayerDragonData(playerIdentityService.ViewerId, dragon)
+                );
+            }
 
             if (
                 !ownedReliabilities.Contains(dragon)

@@ -44,7 +44,7 @@ public class FortRepository : IFortRepository
                 new DbFortDetail()
                 {
                     ViewerId = this.playerIdentityService.ViewerId,
-                    CarpenterNum = DefaultCarpenters
+                    CarpenterNum = DefaultCarpenters,
                 }
             );
         }
@@ -59,7 +59,7 @@ public class FortRepository : IFortRepository
                     PlantId = FortPlants.TheHalidom,
                     PositionX = 16, // Default Halidom position
                     PositionZ = 17,
-                    LastIncomeDate = DateTimeOffset.UtcNow
+                    LastIncomeDate = DateTimeOffset.UtcNow,
                 }
             );
         }
@@ -79,7 +79,7 @@ public class FortRepository : IFortRepository
                     PlantId = FortPlants.Smithy,
                     PositionX = 21,
                     PositionZ = 3,
-                    Level = 1
+                    Level = 1,
                 }
             );
         }
@@ -97,7 +97,7 @@ public class FortRepository : IFortRepository
             FortPlants.LanceDojo,
             FortPlants.ManacasterDojo,
             FortPlants.StaffDojo,
-            FortPlants.WandDojo
+            FortPlants.WandDojo,
         };
 
         this.logger.LogDebug("Granting dojos.");
@@ -132,7 +132,7 @@ public class FortRepository : IFortRepository
                     new()
                     {
                         ViewerId = this.playerIdentityService.ViewerId,
-                        CarpenterNum = DefaultCarpenters
+                        CarpenterNum = DefaultCarpenters,
                     }
                 )
             ).Entity;
@@ -227,7 +227,7 @@ public class FortRepository : IFortRepository
                     PositionZ = -1,
                     BuildStartDate = DateTimeOffset.UnixEpoch,
                     BuildEndDate = DateTimeOffset.UnixEpoch,
-                    LastIncomeDate = DateTimeOffset.UnixEpoch
+                    LastIncomeDate = DateTimeOffset.UnixEpoch,
                 }
             );
         }

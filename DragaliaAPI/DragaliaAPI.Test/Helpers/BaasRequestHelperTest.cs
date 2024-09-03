@@ -75,7 +75,7 @@ public class BaasRequestHelperTest
                           ]
                         }
                         """
-                    )
+                    ),
                 }
             );
 
@@ -124,7 +124,7 @@ public class BaasRequestHelperTest
                 ItExpr.IsAny<CancellationToken>()
             )
             .ReturnsAsync(
-                new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.NotFound, }
+                new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.NotFound }
             );
 
         await this
@@ -155,7 +155,7 @@ public class BaasRequestHelperTest
                 new HttpResponseMessage()
                 {
                     StatusCode = System.Net.HttpStatusCode.OK,
-                    Content = new StringContent(sampleSaveJson)
+                    Content = new StringContent(sampleSaveJson),
                 }
             );
 
@@ -181,7 +181,7 @@ public class BaasRequestHelperTest
                 ItExpr.IsAny<CancellationToken>()
             )
             .ReturnsAsync(
-                new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.BadRequest, }
+                new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.BadRequest }
             );
 
         await this

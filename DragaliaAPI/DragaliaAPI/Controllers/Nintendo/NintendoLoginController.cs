@@ -82,7 +82,7 @@ public class NintendoLoginController : ControllerBase
         LoginResponse response =
             new(token, deviceAccount, (int)reloginTime.TotalSeconds)
             {
-                createdDeviceAccount = createdDeviceAccount
+                createdDeviceAccount = createdDeviceAccount,
             };
 
         return Ok(response);

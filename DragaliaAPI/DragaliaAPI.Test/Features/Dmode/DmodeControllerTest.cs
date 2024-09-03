@@ -7,6 +7,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.Extensions.Time.Testing;
+using MockQueryable.EntityFrameworkCore;
 using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Features.Dmode;
@@ -61,7 +62,7 @@ public class DmodeControllerTest
         List<DmodeCharaList> charaList =
             new()
             {
-                new DmodeCharaList(Charas.ThePrince, 50, 1, Charas.Nadine, Charas.Nadine, 0, 1000)
+                new DmodeCharaList(Charas.ThePrince, 50, 1, Charas.Nadine, Charas.Nadine, 0, 1000),
             };
         mockDmodeService.Setup(x => x.GetCharaList()).ReturnsAsync(charaList);
 
@@ -83,8 +84,8 @@ public class DmodeControllerTest
                         ViewerId = UnitTestUtils.ViewerId,
                         StoryId = 1000,
                         StoryType = StoryTypes.DungeonMode,
-                        State = StoryState.Read
-                    }
+                        State = StoryState.Read,
+                    },
                 }
                     .AsQueryable()
                     .BuildMock()
@@ -128,7 +129,7 @@ public class DmodeControllerTest
         List<DmodeCharaList> charaList =
             new()
             {
-                new DmodeCharaList(Charas.ThePrince, 50, 1, Charas.Nadine, Charas.Nadine, 0, 1000)
+                new DmodeCharaList(Charas.ThePrince, 50, 1, Charas.Nadine, Charas.Nadine, 0, 1000),
             };
         mockDmodeService.Setup(x => x.GetCharaList()).ReturnsAsync(charaList);
 
@@ -150,8 +151,8 @@ public class DmodeControllerTest
                         ViewerId = UnitTestUtils.ViewerId,
                         StoryId = 1000,
                         StoryType = StoryTypes.DungeonMode,
-                        State = StoryState.Read
-                    }
+                        State = StoryState.Read,
+                    },
                 }
                     .AsQueryable()
                     .BuildMock()

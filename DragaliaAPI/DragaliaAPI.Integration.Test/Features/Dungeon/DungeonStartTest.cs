@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -28,7 +29,7 @@ public class DungeonStartTest : TestFixture
                 new DungeonStartStartRequest()
                 {
                     PartyNoList = new List<int>() { 1 },
-                    QuestId = 100010103
+                    QuestId = 100010103,
                 }
             )
         ).Data;
@@ -50,7 +51,7 @@ public class DungeonStartTest : TestFixture
                 new DungeonStartStartRequest()
                 {
                     PartyNoList = new List<int>() { 37, 38 },
-                    QuestId = 100010103
+                    QuestId = 100010103,
                 }
             )
         ).Data;
@@ -72,7 +73,7 @@ public class DungeonStartTest : TestFixture
                 new DungeonStartStartRequest()
                 {
                     PartyNoList = new List<int>() { 38 },
-                    QuestId = 100010103
+                    QuestId = 100010103,
                 }
             )
         ).Data;
@@ -100,14 +101,14 @@ public class DungeonStartTest : TestFixture
                         CharaId = Charas.GalaLeonidas,
                         EquipWeaponBodyId = WeaponBodies.Draupnir,
                         EquipDragonKeyId = (ulong)GetDragonKeyId(Dragons.Horus),
-                        EquipCrestSlotType1CrestId1 = AbilityCrests.PrimalCrisis,
-                        EquipCrestSlotType1CrestId2 = AbilityCrests.TheCutieCompetition,
-                        EquipCrestSlotType1CrestId3 = AbilityCrests.AnIndelibleDate,
-                        EquipCrestSlotType2CrestId1 = AbilityCrests.BeautifulGunman,
-                        EquipCrestSlotType2CrestId2 = AbilityCrests.DragonArcanum,
+                        EquipCrestSlotType1CrestId1 = AbilityCrestId.PrimalCrisis,
+                        EquipCrestSlotType1CrestId2 = AbilityCrestId.TheCutieCompetition,
+                        EquipCrestSlotType1CrestId3 = AbilityCrestId.AnIndelibleDate,
+                        EquipCrestSlotType2CrestId1 = AbilityCrestId.BeautifulGunman,
+                        EquipCrestSlotType2CrestId2 = AbilityCrestId.DragonArcanum,
                         EquipTalismanKeyId = (ulong)GetTalismanKeyId(Talismans.GalaLeonidas),
-                        EquipCrestSlotType3CrestId1 = AbilityCrests.AKnightsDreamAxesBoon,
-                        EquipCrestSlotType3CrestId2 = AbilityCrests.CrownofLightSerpentsBoon,
+                        EquipCrestSlotType3CrestId1 = AbilityCrestId.AKnightsDreamAxesBoon,
+                        EquipCrestSlotType3CrestId2 = AbilityCrestId.CrownofLightSerpentsBoon,
                         EditSkill1CharaId = Charas.GalaZethia,
                         EditSkill2CharaId = Charas.GalaMascula,
                     },
@@ -117,16 +118,16 @@ public class DungeonStartTest : TestFixture
                         CharaId = Charas.GalaGatov,
                         EquipWeaponBodyId = WeaponBodies.Mjoelnir,
                         EquipDragonKeyId = (ulong)GetDragonKeyId(Dragons.GalaMars),
-                        EquipCrestSlotType1CrestId1 = AbilityCrests.TheCutieCompetition,
-                        EquipCrestSlotType1CrestId2 = AbilityCrests.KungFuMasters,
-                        EquipCrestSlotType1CrestId3 = AbilityCrests.BondsBetweenWorlds,
-                        EquipCrestSlotType2CrestId1 = AbilityCrests.DragonArcanum,
-                        EquipCrestSlotType2CrestId2 = AbilityCrests.BeautifulNothingness,
+                        EquipCrestSlotType1CrestId1 = AbilityCrestId.TheCutieCompetition,
+                        EquipCrestSlotType1CrestId2 = AbilityCrestId.KungFuMasters,
+                        EquipCrestSlotType1CrestId3 = AbilityCrestId.BondsBetweenWorlds,
+                        EquipCrestSlotType2CrestId1 = AbilityCrestId.DragonArcanum,
+                        EquipCrestSlotType2CrestId2 = AbilityCrestId.BeautifulNothingness,
                         EquipTalismanKeyId = (ulong)GetTalismanKeyId(Talismans.GalaMym),
-                        EquipCrestSlotType3CrestId1 = AbilityCrests.TutelarysDestinyWolfsBoon,
-                        EquipCrestSlotType3CrestId2 = AbilityCrests.TestamentofEternityFishsBoon,
-                    }
-                }
+                        EquipCrestSlotType3CrestId1 = AbilityCrestId.TutelarysDestinyWolfsBoon,
+                        EquipCrestSlotType3CrestId2 = AbilityCrestId.TestamentofEternityFishsBoon,
+                    },
+                },
             };
 
         DungeonStartStartAssignUnitResponse response = (
@@ -254,7 +255,7 @@ public class DungeonStartTest : TestFixture
                 new DungeonStartStartRequest()
                 {
                     QuestId = TutorialService.TutorialQuestIds.AvenueToPowerBeginner,
-                    PartyNoList = [1]
+                    PartyNoList = [1],
                 }
             );
 
@@ -279,7 +280,7 @@ public class DungeonStartTest : TestFixture
                 new DungeonStartStartRequest()
                 {
                     QuestId = TutorialService.TutorialQuestIds.AvenueToPowerBeginner,
-                    PartyNoList = [1]
+                    PartyNoList = [1],
                 }
             );
 
@@ -311,7 +312,7 @@ public class DungeonStartTest : TestFixture
                 new DungeonStartStartRequest()
                 {
                     QuestId = TutorialService.TutorialQuestIds.AvenueToPowerBeginner,
-                    PartyNoList = [1]
+                    PartyNoList = [1],
                 }
             );
 

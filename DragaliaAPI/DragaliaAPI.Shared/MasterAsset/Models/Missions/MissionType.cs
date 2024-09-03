@@ -11,5 +11,5 @@ public enum MissionType
     MainStory,
     MemoryEvent,
     Album,
-    Drill
+    Drill,
 }

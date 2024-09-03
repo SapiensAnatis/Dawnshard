@@ -28,13 +28,15 @@ public class Mission
             MissionType.Daily => new Mission(MasterAsset.MissionDailyData.Get(id), type),
             MissionType.Drill => new Mission(MasterAsset.MissionDrillData.Get(id), type),
             MissionType.MainStory => new Mission(MasterAsset.MissionMainStoryData.Get(id), type),
-            MissionType.MemoryEvent
-                => new Mission(MasterAsset.MissionMemoryEventData.Get(id), type),
+            MissionType.MemoryEvent => new Mission(
+                MasterAsset.MissionMemoryEventData.Get(id),
+                type
+            ),
             MissionType.Normal => new Mission(MasterAsset.MissionNormalData.Get(id), type),
             MissionType.Period => new Mission(MasterAsset.MissionPeriodData.Get(id), type),
             MissionType.Special => new Mission(MasterAsset.MissionSpecialData.Get(id), type),
             MissionType.Invalid => throw new InvalidOperationException("Invalid MissionType"),
-            _ => throw new UnreachableException("Unknown MissionType")
+            _ => throw new UnreachableException("Unknown MissionType"),
         };
     }
 

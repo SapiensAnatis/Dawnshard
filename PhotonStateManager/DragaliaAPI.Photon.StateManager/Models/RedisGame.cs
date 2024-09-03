@@ -101,6 +101,6 @@ public class RedisGame
             QuestId = this.QuestId,
             StartEntryTime = this.StartEntryTime,
             EntryConditions = this.EntryConditions,
-            Players = this.Players.Select(x => x.ToPlayer()).ToList()
+            Players = this.Players.Select(x => x.ToPlayer()).ToList(),
         };
 }

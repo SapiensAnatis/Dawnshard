@@ -28,6 +28,6 @@ public record UnionAbility(
         (CrestGroup1Count2, AbilityId2, PartyPower2),
         (CrestGroup1Count3, AbilityId3, PartyPower3),
         (CrestGroup1Count4, AbilityId4, PartyPower4),
-        (CrestGroup1Count5, AbilityId5, PartyPower5)
+        (CrestGroup1Count5, AbilityId5, PartyPower5),
     };
 };

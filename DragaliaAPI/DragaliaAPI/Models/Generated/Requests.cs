@@ -13,14 +13,14 @@ namespace DragaliaAPI.Models.Generated;
 public partial class AbilityCrestBuildupPieceRequest
 {
     [Key("ability_crest_id")]
-    public AbilityCrests AbilityCrestId { get; set; }
+    public AbilityCrestId AbilityCrestId { get; set; }
 
     [Key("buildup_ability_crest_piece_list")]
     public IEnumerable<AtgenBuildupAbilityCrestPieceList> BuildupAbilityCrestPieceList { get; set; } =
         [];
 
     public AbilityCrestBuildupPieceRequest(
-        AbilityCrests abilityCrestId,
+        AbilityCrestId abilityCrestId,
         IEnumerable<AtgenBuildupAbilityCrestPieceList> buildupAbilityCrestPieceList
     )
     {
@@ -35,13 +35,13 @@ public partial class AbilityCrestBuildupPieceRequest
 public partial class AbilityCrestBuildupPlusCountRequest
 {
     [Key("ability_crest_id")]
-    public AbilityCrests AbilityCrestId { get; set; }
+    public AbilityCrestId AbilityCrestId { get; set; }
 
     [Key("plus_count_params_list")]
     public IEnumerable<AtgenPlusCountParamsList> PlusCountParamsList { get; set; } = [];
 
     public AbilityCrestBuildupPlusCountRequest(
-        AbilityCrests abilityCrestId,
+        AbilityCrestId abilityCrestId,
         IEnumerable<AtgenPlusCountParamsList> plusCountParamsList
     )
     {
@@ -56,13 +56,13 @@ public partial class AbilityCrestBuildupPlusCountRequest
 public partial class AbilityCrestResetPlusCountRequest
 {
     [Key("ability_crest_id")]
-    public AbilityCrests AbilityCrestId { get; set; }
+    public AbilityCrestId AbilityCrestId { get; set; }
 
     [Key("plus_count_type_list")]
     public IEnumerable<PlusCountType> PlusCountTypeList { get; set; } = [];
 
     public AbilityCrestResetPlusCountRequest(
-        AbilityCrests abilityCrestId,
+        AbilityCrestId abilityCrestId,
         IEnumerable<PlusCountType> plusCountTypeList
     )
     {
@@ -103,13 +103,13 @@ public partial class AbilityCrestSetAbilityCrestSetRequest
 public partial class AbilityCrestSetFavoriteRequest
 {
     [Key("ability_crest_id")]
-    public AbilityCrests AbilityCrestId { get; set; }
+    public AbilityCrestId AbilityCrestId { get; set; }
 
     [Key("is_favorite")]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
     public bool IsFavorite { get; set; }
 
-    public AbilityCrestSetFavoriteRequest(AbilityCrests abilityCrestId, bool isFavorite)
+    public AbilityCrestSetFavoriteRequest(AbilityCrestId abilityCrestId, bool isFavorite)
     {
         this.AbilityCrestId = abilityCrestId;
         this.IsFavorite = isFavorite;
@@ -2276,25 +2276,25 @@ public partial class FriendSetSupportCharaRequest
     public WeaponBodies WeaponBodyId { get; set; }
 
     [Key("crest_slot_type_1_crest_id_1")]
-    public AbilityCrests CrestSlotType1CrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType1CrestId1 { get; set; }
 
     [Key("crest_slot_type_1_crest_id_2")]
-    public AbilityCrests CrestSlotType1CrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType1CrestId2 { get; set; }
 
     [Key("crest_slot_type_1_crest_id_3")]
-    public AbilityCrests CrestSlotType1CrestId3 { get; set; }
+    public AbilityCrestId CrestSlotType1CrestId3 { get; set; }
 
     [Key("crest_slot_type_2_crest_id_1")]
-    public AbilityCrests CrestSlotType2CrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType2CrestId1 { get; set; }
 
     [Key("crest_slot_type_2_crest_id_2")]
-    public AbilityCrests CrestSlotType2CrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType2CrestId2 { get; set; }
 
     [Key("crest_slot_type_3_crest_id_1")]
-    public AbilityCrests CrestSlotType3CrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType3CrestId1 { get; set; }
 
     [Key("crest_slot_type_3_crest_id_2")]
-    public AbilityCrests CrestSlotType3CrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType3CrestId2 { get; set; }
 
     [Key("talisman_key_id")]
     public ulong TalismanKeyId { get; set; }
@@ -2306,13 +2306,13 @@ public partial class FriendSetSupportCharaRequest
         ulong amuletKeyId,
         ulong amulet2KeyId,
         WeaponBodies weaponBodyId,
-        AbilityCrests crestSlotType1CrestId1,
-        AbilityCrests crestSlotType1CrestId2,
-        AbilityCrests crestSlotType1CrestId3,
-        AbilityCrests crestSlotType2CrestId1,
-        AbilityCrests crestSlotType2CrestId2,
-        AbilityCrests crestSlotType3CrestId1,
-        AbilityCrests crestSlotType3CrestId2,
+        AbilityCrestId crestSlotType1CrestId1,
+        AbilityCrestId crestSlotType1CrestId2,
+        AbilityCrestId crestSlotType1CrestId3,
+        AbilityCrestId crestSlotType2CrestId1,
+        AbilityCrestId crestSlotType2CrestId2,
+        AbilityCrestId crestSlotType3CrestId1,
+        AbilityCrestId crestSlotType3CrestId2,
         ulong talismanKeyId
     )
     {

@@ -60,7 +60,7 @@ public class DungeonSkipController(
             {
                 IngameResultData = ingameData,
                 UpdateDataList = updateDataList,
-                EntityResult = entityResult
+                EntityResult = entityResult,
             }
         );
     }
@@ -90,7 +90,7 @@ public class DungeonSkipController(
             {
                 IngameResultData = ingameData,
                 UpdateDataList = updateDataList,
-                EntityResult = entityResult
+                EntityResult = entityResult,
             }
         );
     }
@@ -226,8 +226,10 @@ public class DungeonSkipController(
                     AreaIdx = x.Key,
                     Enemy = x.Value.Select(_ => 1),
                     DropObj = new List<int>(), // TODO
-                    EnemySmash = new List<AtgenEnemySmash>() // TODO
-                })
+                    EnemySmash =
+                        new List<AtgenEnemySmash>() // TODO
+                    ,
+                }),
             };
 
         IngameResultData ingameResultData = await dungeonRecordService.GenerateIngameResultData(

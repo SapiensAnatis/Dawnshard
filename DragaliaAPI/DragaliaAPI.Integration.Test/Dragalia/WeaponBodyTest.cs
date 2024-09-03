@@ -54,7 +54,7 @@ public class WeaponBodyTest : TestFixture
                         UnlockWeaponPassiveAbilityNoList = Enumerable.Repeat(0, 15),
                         IsNew = false,
                         GetTime = DateTimeOffset.UtcNow,
-                    }
+                    },
                 }
             );
 
@@ -114,7 +114,7 @@ public class WeaponBodyTest : TestFixture
             new()
             {
                 WeaponBodyId = testCase.InitialState.WeaponBodyId,
-                BuildupWeaponBodyPieceList = testCase.StepList
+                BuildupWeaponBodyPieceList = testCase.StepList,
             };
 
         WeaponBodyBuildupPieceResponse response = (
@@ -225,7 +225,7 @@ public class WeaponBodyTest : TestFixture
             {
                 ViewerId = 0,
                 WeaponBodyId = WeaponBodies.ChanzelianCaster,
-                BuildupCount = 4
+                BuildupCount = 4,
             }
         );
 
@@ -237,8 +237,8 @@ public class WeaponBodyTest : TestFixture
                     WeaponBodyId = WeaponBodies.ChanzelianCaster,
                     BuildupWeaponBodyPieceList = new List<AtgenBuildupWeaponBodyPieceList>()
                     {
-                        new() { BuildupPieceType = BuildupPieceTypes.Stats, Step = 40 }
-                    }
+                        new() { BuildupPieceType = BuildupPieceTypes.Stats, Step = 40 },
+                    },
                 },
                 ensureSuccessHeader: false
             )
@@ -279,7 +279,7 @@ public class WeaponBodyTest : TestFixture
                     {
                         { Materials.PrimalWaterwyrmsSphere, 40 },
                         { Materials.PrimalWaterwyrmsGreatsphere, 30 },
-                        { Materials.TwinklingSand, 2 }
+                        { Materials.TwinklingSand, 2 },
                     },
                     4_000_000,
                     new()
@@ -307,16 +307,16 @@ public class WeaponBodyTest : TestFixture
                         {
                             BuildupPieceType = BuildupPieceTypes.Unbind,
                             Step = 1,
-                            IsUseDedicatedMaterial = true
+                            IsUseDedicatedMaterial = true,
                         },
                         new()
                         {
                             BuildupPieceType = BuildupPieceTypes.Unbind,
                             Step = 2,
-                            IsUseDedicatedMaterial = true
+                            IsUseDedicatedMaterial = true,
                         },
                     },
-                    new() { { Materials.AdamantiteIngot, 2 }, },
+                    new() { { Materials.AdamantiteIngot, 2 } },
                     0,
                     new()
                     {
@@ -335,14 +335,14 @@ public class WeaponBodyTest : TestFixture
                     {
                         ViewerId = 0,
                         WeaponBodyId = WeaponBodies.ChimeratechAnomalocaris,
-                        BuildupCount = 0
+                        BuildupCount = 0,
                     },
                     Enumerable
                         .Range(1, 55)
                         .Select(x => new AtgenBuildupWeaponBodyPieceList()
                         {
                             BuildupPieceType = BuildupPieceTypes.Stats,
-                            Step = x
+                            Step = x,
                         })
                         .ToList(),
                     new() { { Materials.BronzeWhetstone, 275 }, { Materials.GoldWhetstone, 5 } },
@@ -390,7 +390,7 @@ public class WeaponBodyTest : TestFixture
                         { Materials.StreamOrb, 16 },
                         { Materials.OldCloth, 30 },
                         { Materials.FloatingYellowCloth, 7 },
-                        { Materials.UnearthlyLantern, 1 }
+                        { Materials.UnearthlyLantern, 1 },
                     },
                     160_000,
                     new DbWeaponBody()
@@ -415,16 +415,16 @@ public class WeaponBodyTest : TestFixture
                             0,
                             0,
                             0,
-                        }
+                        },
                     },
                     ExpPassiveAbilities: new List<DbWeaponPassiveAbility>()
                     {
                         new() { ViewerId = 0, WeaponPassiveAbilityId = 1060203 },
-                        new() { ViewerId = 0, WeaponPassiveAbilityId = 1060204 }
+                        new() { ViewerId = 0, WeaponPassiveAbilityId = 1060204 },
                     },
                     ExpNewSkins: new List<DbWeaponSkin>()
                     {
-                        new() { ViewerId = 0, WeaponSkinId = 30640203 }
+                        new() { ViewerId = 0, WeaponSkinId = 30640203 },
                     }
                 )
             );
@@ -437,11 +437,11 @@ public class WeaponBodyTest : TestFixture
                     {
                         ViewerId = 0,
                         WeaponBodyId = WeaponBodies.Ydalir,
-                        LimitOverCount = 1
+                        LimitOverCount = 1,
                     },
                     new()
                     {
-                        new() { BuildupPieceType = BuildupPieceTypes.Refine, Step = 2, }
+                        new() { BuildupPieceType = BuildupPieceTypes.Refine, Step = 2 },
                     },
                     new()
                     {
@@ -449,7 +449,7 @@ public class WeaponBodyTest : TestFixture
                         { Materials.PlaguedOnesMaskFragment, 30 },
                         { Materials.RebelliousOnesInsanity, 10 },
                         { Materials.RebelliousWolfsGale, 10 },
-                        { Materials.Orichalcum, 10 }
+                        { Materials.Orichalcum, 10 },
                     },
                     2_500_000,
                     new()
@@ -460,7 +460,7 @@ public class WeaponBodyTest : TestFixture
                     },
                     ExpNewSkins: new()
                     {
-                        new() { ViewerId = 0, WeaponSkinId = 30660103 }
+                        new() { ViewerId = 0, WeaponSkinId = 30660103 },
                     }
                 )
             );
@@ -475,7 +475,7 @@ public class WeaponBodyTest : TestFixture
                         WeaponBodyId = WeaponBodies.ChimeratechProcyon,
                         EquipableCount = 1,
                         LimitBreakCount = 8,
-                        LimitOverCount = 1
+                        LimitOverCount = 1,
                     },
                     new()
                     {
@@ -489,7 +489,7 @@ public class WeaponBodyTest : TestFixture
                         { Materials.BewitchingWings, 30 },
                         { Materials.LuminousMane, 750 },
                         { Materials.LuminousClaw, 200 },
-                        { Materials.LuminousHorn, 30 }
+                        { Materials.LuminousHorn, 30 },
                     },
                     10_000_000,
                     new()
@@ -498,7 +498,7 @@ public class WeaponBodyTest : TestFixture
                         WeaponBodyId = WeaponBodies.ChimeratechProcyon,
                         EquipableCount = 3,
                         LimitBreakCount = 8,
-                        LimitOverCount = 1
+                        LimitOverCount = 1,
                     }
                 )
             );
@@ -525,7 +525,7 @@ public class WeaponBodyTest : TestFixture
                         { Materials.UprootingOnesMaskFragment, 10 },
                         { Materials.Orichalcum, 1 },
                         { Materials.BlindingShard, 50 },
-                        { Materials.BlindingPrism, 30 }
+                        { Materials.BlindingPrism, 30 },
                     },
                     4_500_000,
                     new()
@@ -534,7 +534,7 @@ public class WeaponBodyTest : TestFixture
                         WeaponBodyId = WeaponBodies.QinghongJian,
                         LimitBreakCount = 8,
                         AdditionalCrestSlotType1Count = 1,
-                        AdditionalCrestSlotType3Count = 2
+                        AdditionalCrestSlotType3Count = 2,
                     }
                 )
             );
@@ -559,7 +559,7 @@ public class WeaponBodyTest : TestFixture
                         { Materials.PrimalWindwyrmsSphere, 25 },
                         { Materials.PrimalWindwyrmsGreatsphere, 25 },
                         { Materials.PrimalWindwyrmsEmerald, 14 },
-                        { Materials.Orichalcum, 15 }
+                        { Materials.Orichalcum, 15 },
                     },
                     5_000_000,
                     new()
@@ -568,7 +568,7 @@ public class WeaponBodyTest : TestFixture
                         WeaponBodyId = WeaponBodies.WindrulersFang,
                         LimitBreakCount = 8,
                         LimitOverCount = 1,
-                        FortPassiveCharaWeaponBuildupCount = 1
+                        FortPassiveCharaWeaponBuildupCount = 1,
                     }
                 )
             );

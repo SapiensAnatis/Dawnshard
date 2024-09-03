@@ -62,7 +62,7 @@ builder.Services.AddSwaggerGen(config =>
         {
             Version = "v1",
             Title = "Photon State Manager",
-            Description = "API for storing room state received from Photon webhooks."
+            Description = "API for storing room state received from Photon webhooks.",
         }
     );
 });

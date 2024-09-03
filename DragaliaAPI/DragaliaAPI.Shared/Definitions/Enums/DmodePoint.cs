@@ -3,5 +3,5 @@
 public enum DmodePoint
 {
     Point1 = 10001,
-    Point2
+    Point2,
 }

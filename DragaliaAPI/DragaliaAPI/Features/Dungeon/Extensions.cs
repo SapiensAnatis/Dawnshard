@@ -79,7 +79,7 @@ public static class Extensions
                 before_entity_id = x.BeforeEntityId,
                 before_entity_type = x.BeforeEntityType,
                 after_entity_id = x.AfterEntityId,
-                after_entity_type = x.AfterEntityType
+                after_entity_type = x.AfterEntityType,
             })
             .Select(group =>
                 group.Aggregate(
@@ -88,7 +88,7 @@ public static class Extensions
                         BeforeEntityId = group.Key.before_entity_id,
                         BeforeEntityType = group.Key.before_entity_type,
                         AfterEntityId = group.Key.after_entity_id,
-                        AfterEntityType = group.Key.after_entity_type
+                        AfterEntityType = group.Key.after_entity_type,
                     },
                     (acc, current) =>
                     {
@@ -101,10 +101,10 @@ public static class Extensions
 
     private static IEnumerable<AtgenDropAll> Merge(this IEnumerable<AtgenDropAll> source) =>
         source
-            .GroupBy(x => new { type = x.Type, id = x.Id, })
+            .GroupBy(x => new { type = x.Type, id = x.Id })
             .Select(group =>
                 group.Aggregate(
-                    new AtgenDropAll { Id = group.Key.id, Type = group.Key.type, },
+                    new AtgenDropAll { Id = group.Key.id, Type = group.Key.type },
                     (acc, current) =>
                     {
                         acc.Quantity += current.Quantity;

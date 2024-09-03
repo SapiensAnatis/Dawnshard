@@ -30,7 +30,7 @@ public class WallTimeProviderExtensionsTests
             {
                 DateTimeOffset.Parse("2024-05-15T06:00:00Z"),
                 DateTimeOffset.Parse("2024-05-15T06:00:00Z")
-            }
+            },
         };
 
     [Theory]

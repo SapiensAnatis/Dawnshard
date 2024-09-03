@@ -7,6 +7,7 @@ using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Test.Utils;
+using MockQueryable.EntityFrameworkCore;
 using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Features.Missions;
@@ -45,8 +46,8 @@ public class MissionControllerTest
                 NormalMissionNotice = new AtgenNormalMissionNotice()
                 {
                     IsUpdate = true,
-                    AllMissionCount = 420
-                }
+                    AllMissionCount = 420,
+                },
             };
 
         CurrentMainStoryMission mainStoryMission =
@@ -62,7 +63,7 @@ public class MissionControllerTest
                 {
                     NormalMissionList = [],
                     MissionNotice = notice,
-                    CurrentMainStoryMission = mainStoryMission
+                    CurrentMainStoryMission = mainStoryMission,
                 }
             );
 
@@ -89,8 +90,8 @@ public class MissionControllerTest
                 NormalMissionNotice = new AtgenNormalMissionNotice()
                 {
                     IsUpdate = true,
-                    AllMissionCount = 420
-                }
+                    AllMissionCount = 420,
+                },
             };
 
         this.mockMissionService.Setup(x => x.GetMissionNotice(null)).ReturnsAsync(notice);
@@ -108,8 +109,8 @@ public class MissionControllerTest
                         Id = 500,
                         State = MissionState.InProgress,
                         Start = DateTimeOffset.UnixEpoch,
-                        End = DateTimeOffset.UnixEpoch
-                    }
+                        End = DateTimeOffset.UnixEpoch,
+                    },
                 }
                     .AsQueryable()
                     .BuildMock()
@@ -148,8 +149,8 @@ public class MissionControllerTest
                         State = MissionState.Completed,
                         Type = MissionType.Drill,
                         Start = DateTimeOffset.UnixEpoch,
-                        End = DateTimeOffset.UnixEpoch
-                    }
+                        End = DateTimeOffset.UnixEpoch,
+                    },
                 }
             );
 
@@ -185,7 +186,7 @@ public class MissionControllerTest
                 State = MissionState.Completed,
                 Type = MissionType.MainStory,
                 Start = DateTimeOffset.UnixEpoch,
-                End = DateTimeOffset.UnixEpoch
+                End = DateTimeOffset.UnixEpoch,
             };
 
         MainStoryMissionGroupReward fakeReward = new(EntityTypes.FortPlant, 10, 500);

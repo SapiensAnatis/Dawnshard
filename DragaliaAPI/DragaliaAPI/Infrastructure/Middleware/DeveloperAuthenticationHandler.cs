@@ -65,7 +65,7 @@ public class DeveloperAuthenticationHandler : AuthenticationHandler<Authenticati
 
     private AuthenticateResult GetSuccessResult()
     {
-        Claim[] claims = { new(ClaimTypes.Role, "Developer"), };
+        Claim[] claims = { new(ClaimTypes.Role, "Developer") };
         ClaimsIdentity identity = new(claims, this.Scheme.Name);
         ClaimsPrincipal principal = new(identity);
         AuthenticationTicket ticket = new(principal, this.Scheme.Name);

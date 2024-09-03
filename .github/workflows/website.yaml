@@ -51,8 +51,10 @@ jobs:
 
       - name: ESLint
         working-directory: Website/
+        if: success() || failure()
         run: pnpm run lint:eslint
 
       - name: svelte-check
         working-directory: Website/
+        if: success() || failure()
         run: pnpm run check

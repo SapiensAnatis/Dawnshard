@@ -45,7 +45,7 @@ public partial class WallController(
                     WallId = session.WallId,
                     WallLevel = session.WallLevel,
                     IsHost = true,
-                }
+                },
             }
         );
     }
@@ -131,7 +131,7 @@ public partial class WallController(
             new()
             {
                 QuestGroupId = WallService.WallQuestGroupId,
-                IsReceiveReward = RewardStatus.Received
+                IsReceiveReward = RewardStatus.Received,
             };
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
@@ -143,7 +143,7 @@ public partial class WallController(
                 EntityResult = entityResult,
                 WallMonthlyRewardList = rewardEntityList,
                 UserWallRewardList = [userWallRewardList],
-                MonthlyWallReceiveList = [monthlyWallReceiveList]
+                MonthlyWallReceiveList = [monthlyWallReceiveList],
             };
 
         return Ok(data);

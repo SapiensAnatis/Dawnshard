@@ -7,6 +7,7 @@ using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -61,7 +62,7 @@ public class StoryService(
             StoryTypes.Castle => await this.CheckCastleStoryEligibility(storyId),
             StoryTypes.Quest => true,
             StoryTypes.Event => true,
-            _ => throw new NotImplementedException($"Stories of type {type} are not implemented")
+            _ => throw new NotImplementedException($"Stories of type {type} are not implemented"),
         };
     }
 
@@ -135,7 +136,7 @@ public class StoryService(
             StoryTypes.Quest => await this.ReadQuestStory(storyId),
             StoryTypes.Event => await this.ReadEventStory(storyId),
             StoryTypes.DungeonMode => await this.ReadDmodeStory(storyId),
-            _ => throw new NotImplementedException($"Stories of type {type} are not implemented")
+            _ => throw new NotImplementedException($"Stories of type {type} are not implemented"),
         };
 
         logger.LogDebug("Player earned story rewards: {@rewards}", rewards);
@@ -187,8 +188,8 @@ public class StoryService(
                 {
                     EntityType = EntityTypes.Wyrmite,
                     EntityId = 0,
-                    EntityQuantity = CastleStoryWyrmite
-                }
+                    EntityQuantity = CastleStoryWyrmite,
+                },
             };
 
         return rewardList;
@@ -211,7 +212,7 @@ public class StoryService(
         List<AtgenBuildEventRewardEntityList> rewardList =
             new()
             {
-                new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = QuestStoryWyrmite }
+                new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = QuestStoryWyrmite },
             };
 
         if (
@@ -303,7 +304,7 @@ public class StoryService(
                 {
                     EntityId = (int)eventData.EventCharaId,
                     EntityQuantity = 1,
-                    EntityType = EntityTypes.Chara
+                    EntityType = EntityTypes.Chara,
                 }
             );
         }
@@ -331,7 +332,7 @@ public class StoryService(
         List<AtgenBuildEventRewardEntityList> rewardList =
             new()
             {
-                new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = QuestStoryWyrmite }
+                new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = QuestStoryWyrmite },
             };
 
         // TODO(Events): ??? This is not used for compendium (maybe for collect events)
@@ -358,10 +359,10 @@ public class StoryService(
                 {
                     EntityType = EntityTypes.Wyrmite,
                     EntityId = 0,
-                    EntityQuantity = DmodeStoryWyrmite
+                    EntityQuantity = DmodeStoryWyrmite,
                 },
                 dmodePoint1Entity.ToBuildEventRewardEntityList(),
-                dmodePoint2Entity.ToBuildEventRewardEntityList()
+                dmodePoint2Entity.ToBuildEventRewardEntityList(),
             };
 
         return rewardList;
@@ -379,7 +380,7 @@ public class StoryService(
             {
                 EntityId = reward.EntityId,
                 EntityType = reward.EntityType,
-                EntityQuantity = reward.EntityQuantity
+                EntityQuantity = reward.EntityQuantity,
             };
 
         if (reward.EntityType is EntityTypes.Chara or EntityTypes.Dragon)

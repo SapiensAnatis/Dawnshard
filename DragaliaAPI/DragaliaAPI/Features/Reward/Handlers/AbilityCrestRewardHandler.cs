@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.AbilityCrests;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -18,7 +19,7 @@ public class AbilityCrestRewardHandler(
 
     public async Task<GrantReturn> Grant(Entity entity)
     {
-        AbilityCrests crest = (AbilityCrests)entity.Id;
+        AbilityCrestId crest = (AbilityCrestId)entity.Id;
         if (!Enum.IsDefined(crest))
             throw new ArgumentException("Entity ID was not a valid ability crest", nameof(entity));
 

@@ -379,7 +379,7 @@ public class CharaController(
         resp.CharaUnitSetList = setUnitData.Select(x => new CharaUnitSetList
         {
             CharaId = x.Key,
-            CharaUnitSetDetailList = x.Value.Select(ToAtgenCharaUnitSetDetailList)
+            CharaUnitSetDetailList = x.Value.Select(ToAtgenCharaUnitSetDetailList),
         });
 
         return Ok(resp);
@@ -429,7 +429,7 @@ public class CharaController(
                 CharaId = request.CharaId,
                 CharaUnitSetDetailList = unitRepository
                     .GetCharaSets(request.CharaId)
-                    .Select(ToAtgenCharaUnitSetDetailList)
+                    .Select(ToAtgenCharaUnitSetDetailList),
             };
 
         resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
@@ -558,7 +558,7 @@ public class CharaController(
             charaData.PlusHp2,
             charaData.PlusHp3,
             charaData.PlusHp4,
-            charaData.PlusHp5
+            charaData.PlusHp5,
         };
 
         int[] atkPerCircleTotals =
@@ -568,7 +568,7 @@ public class CharaController(
             charaData.PlusAtk2,
             charaData.PlusAtk3,
             charaData.PlusAtk4,
-            charaData.PlusAtk5
+            charaData.PlusAtk5,
         };
 
         SortedSet<int> nodes = playerCharData.ManaCirclePieceIdList;
@@ -832,7 +832,7 @@ public class CharaController(
             CrestSlotType2CrestId2 = unit.EquipCrestSlotType2CrestId2,
             CrestSlotType3CrestId1 = unit.EquipCrestSlotType3CrestId1,
             CrestSlotType3CrestId2 = unit.EquipCrestSlotType3CrestId2,
-            TalismanKeyId = unit.EquipTalismanKeyId
+            TalismanKeyId = unit.EquipTalismanKeyId,
         };
     }
 }

@@ -164,7 +164,9 @@ public class LoginTest : TestFixture
             {
                 ViewerId = ViewerId,
                 CurrentDay = 4,
-                Id = 17 // Standard daily login bonus
+                Id =
+                    17 // Standard daily login bonus
+                ,
             }
         );
 
@@ -202,7 +204,9 @@ public class LoginTest : TestFixture
             {
                 ViewerId = ViewerId,
                 CurrentDay = 10,
-                Id = 17 // Standard daily login bonus
+                Id =
+                    17 // Standard daily login bonus
+                ,
             }
         );
 
@@ -238,7 +242,9 @@ public class LoginTest : TestFixture
             {
                 ViewerId = ViewerId,
                 CurrentDay = 6,
-                Id = 2 // Launch Celebration Daily Bonus
+                Id =
+                    2 // Launch Celebration Daily Bonus
+                ,
             }
         );
 
@@ -318,7 +324,7 @@ public class LoginTest : TestFixture
                     EntityLimitBreakCount = 0,
                     LoginBonusId = 17,
                     RewardDay = 8,
-                    TotalLoginDay = 8
+                    TotalLoginDay = 8,
                 }
             );
 
@@ -342,7 +348,7 @@ public class LoginTest : TestFixture
             {
                 ViewerId = this.ViewerId,
                 Id = oldMissionId,
-                Type = MissionType.Daily
+                Type = MissionType.Daily,
             }
         );
         await this.AddToDatabase(
@@ -416,7 +422,7 @@ public class LoginTest : TestFixture
             {
                 ViewerId = this.ViewerId,
                 Id = oldMissionId,
-                Type = MissionType.Daily
+                Type = MissionType.Daily,
             }
         );
 
@@ -468,8 +474,8 @@ public class LoginTest : TestFixture
     {
         await this.AddRangeToDatabase(
             [
-                new DbPlayerQuestWall() { WallId = WallService.FlameWallId, WallLevel = 10, },
-                new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UnixEpoch }
+                new DbPlayerQuestWall() { WallId = WallService.FlameWallId, WallLevel = 10 },
+                new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UnixEpoch },
             ]
         );
 
@@ -498,8 +504,8 @@ public class LoginTest : TestFixture
     {
         await this.AddRangeToDatabase(
             [
-                new DbPlayerQuestWall() { WallId = WallService.FlameWallId, WallLevel = 10, },
-                new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UtcNow }
+                new DbPlayerQuestWall() { WallId = WallService.FlameWallId, WallLevel = 10 },
+                new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UtcNow },
             ]
         );
 
@@ -531,7 +537,7 @@ public class LoginTest : TestFixture
             {
                 ViewerId = this.ViewerId,
                 SummonBannerId = 1020121,
-                DailyLimitedSummonCount = 1
+                DailyLimitedSummonCount = 1,
             }
         );
 

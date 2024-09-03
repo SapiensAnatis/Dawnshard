@@ -69,7 +69,7 @@ public class HelperService : IHelperService
                 Level = userData.Level,
                 EmblemId = userData.EmblemId,
                 MaxPartyPower = 1000,
-                Guild = new() { GuildId = 0, }
+                Guild = new() { GuildId = 0 },
             };
 
         this.mapper.Map(detailedUnit, supportList);
@@ -109,7 +109,7 @@ public class HelperService : IHelperService
             CrestSlotType3CrestList = helperInfo.SupportCrestSlotType3List.Select(
                 this.mapper.Map<GameAbilityCrest>
             ),
-            TalismanData = this.mapper.Map<TalismanList>(helperInfo.SupportTalisman)
+            TalismanData = this.mapper.Map<TalismanList>(helperInfo.SupportTalisman),
         };
     }
 
@@ -145,11 +145,11 @@ public class HelperService : IHelperService
                             ExAbility2Level = 1,
                             Skill1Level = 1,
                             Skill2Level = 0,
-                            IsUnlockEditSkill = true
+                            IsUnlockEditSkill = true,
                         },
-                        SupportDragon = new() { DragonKeyId = 0, },
-                        SupportWeaponBody = new() { WeaponBodyId = 0, },
-                        SupportTalisman = new() { TalismanKeyId = 0, },
+                        SupportDragon = new() { DragonKeyId = 0 },
+                        SupportWeaponBody = new() { WeaponBodyId = 0 },
+                        SupportTalisman = new() { TalismanKeyId = 0 },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new() { AbilityCrestId = 0 },
@@ -166,7 +166,7 @@ public class HelperService : IHelperService
                             new() { AbilityCrestId = 0 },
                             new() { AbilityCrestId = 0 },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -193,7 +193,7 @@ public class HelperService : IHelperService
                             ExAbility2Level = 5,
                             Skill1Level = 3,
                             Skill2Level = 2,
-                            IsUnlockEditSkill = true
+                            IsUnlockEditSkill = true,
                         },
                         SupportDragon = new()
                         {
@@ -207,7 +207,7 @@ public class HelperService : IHelperService
                             Ability2Level = 5,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 4
+                            LimitBreakCount = 4,
                         },
                         SupportWeaponBody = new()
                         {
@@ -218,88 +218,88 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.GalaEmile,
                             AdditionalAttack = 100,
-                            AdditionalHp = 100
+                            AdditionalHp = 100,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ARoyalTeaParty,
+                                AbilityCrestId = AbilityCrestId.ARoyalTeaParty,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.QueenoftheBlueSeas,
+                                AbilityCrestId = AbilityCrestId.QueenoftheBlueSeas,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PeacefulWaterfront,
+                                AbilityCrestId = AbilityCrestId.PeacefulWaterfront,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.HisCleverBrother,
+                                AbilityCrestId = AbilityCrestId.HisCleverBrother,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -326,7 +326,7 @@ public class HelperService : IHelperService
                             ExAbility2Level = 5,
                             Skill1Level = 3,
                             Skill2Level = 2,
-                            IsUnlockEditSkill = true
+                            IsUnlockEditSkill = true,
                         },
                         SupportDragon = new()
                         {
@@ -340,7 +340,7 @@ public class HelperService : IHelperService
                             Ability2Level = 6,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 5
+                            LimitBreakCount = 5,
                         },
                         SupportWeaponBody = new()
                         {
@@ -351,88 +351,88 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.Alberius,
                             TalismanAbilityId1 = 340000030,
-                            TalismanAbilityId2 = 340000132
+                            TalismanAbilityId2 = 340000132,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WelcometotheOpera,
+                                AbilityCrestId = AbilityCrestId.WelcometotheOpera,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.AManUnchanging,
+                                AbilityCrestId = AbilityCrestId.AManUnchanging,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PrayersUntoHim,
+                                AbilityCrestId = AbilityCrestId.PrayersUntoHim,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                AbilityCrestId = AbilityCrestId.ChariotDrift,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -459,7 +459,7 @@ public class HelperService : IHelperService
                             ExAbility2Level = 5,
                             Skill1Level = 3,
                             Skill2Level = 2,
-                            IsUnlockEditSkill = true
+                            IsUnlockEditSkill = true,
                         },
                         SupportDragon = new()
                         {
@@ -473,7 +473,7 @@ public class HelperService : IHelperService
                             Ability2Level = 6,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 5
+                            LimitBreakCount = 5,
                         },
                         SupportWeaponBody = new()
                         {
@@ -484,88 +484,88 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.Grace,
                             TalismanAbilityId1 = 340000070,
-                            TalismanAbilityId2 = 340000134
+                            TalismanAbilityId2 = 340000134,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.GentleWinds,
+                                AbilityCrestId = AbilityCrestId.GentleWinds,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TheChocolatiers,
+                                AbilityCrestId = AbilityCrestId.TheChocolatiers,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.AWidowsLament,
+                                AbilityCrestId = AbilityCrestId.AWidowsLament,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -592,7 +592,7 @@ public class HelperService : IHelperService
                             ExAbility2Level = 5,
                             Skill1Level = 4,
                             Skill2Level = 3,
-                            IsUnlockEditSkill = true
+                            IsUnlockEditSkill = true,
                         },
                         SupportDragon = new()
                         {
@@ -606,7 +606,7 @@ public class HelperService : IHelperService
                             Ability2Level = 6,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 5
+                            LimitBreakCount = 5,
                         },
                         SupportWeaponBody = new()
                         {
@@ -617,88 +617,88 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.SummerVerica,
                             TalismanAbilityId1 = 340000010,
-                            TalismanAbilityId2 = 340000134
+                            TalismanAbilityId2 = 340000134,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                AbilityCrestId = AbilityCrestId.CastleCheerCorps,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                AbilityCrestId = AbilityCrestId.StudyRabbits,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -725,7 +725,7 @@ public class HelperService : IHelperService
                             ExAbility2Level = 5,
                             Skill1Level = 3,
                             Skill2Level = 2,
-                            IsUnlockEditSkill = true
+                            IsUnlockEditSkill = true,
                         },
                         SupportDragon = new()
                         {
@@ -739,7 +739,7 @@ public class HelperService : IHelperService
                             Ability2Level = 0,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 4
+                            LimitBreakCount = 4,
                         },
                         SupportWeaponBody = new()
                         {
@@ -750,88 +750,88 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.KimonoElisanne,
                             TalismanAbilityId1 = 340000010,
-                            TalismanAbilityId2 = 340000134
+                            TalismanAbilityId2 = 340000134,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                AbilityCrestId = AbilityCrestId.CastleCheerCorps,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                AbilityCrestId = AbilityCrestId.StudyRabbits,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -858,7 +858,7 @@ public class HelperService : IHelperService
                             ExAbility2Level = 5,
                             Skill1Level = 4,
                             Skill2Level = 3,
-                            IsUnlockEditSkill = true
+                            IsUnlockEditSkill = true,
                         },
                         SupportDragon = new()
                         {
@@ -872,7 +872,7 @@ public class HelperService : IHelperService
                             Ability2Level = 5,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 4
+                            LimitBreakCount = 4,
                         },
                         SupportWeaponBody = new()
                         {
@@ -883,88 +883,88 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.Elisanne,
                             TalismanAbilityId1 = 340000010,
-                            TalismanAbilityId2 = 340000134
+                            TalismanAbilityId2 = 340000134,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                AbilityCrestId = AbilityCrestId.CastleCheerCorps,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                AbilityCrestId = AbilityCrestId.StudyRabbits,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -991,7 +991,7 @@ public class HelperService : IHelperService
                             ExAbility2Level = 5,
                             Skill1Level = 3,
                             Skill2Level = 2,
-                            IsUnlockEditSkill = true
+                            IsUnlockEditSkill = true,
                         },
                         SupportDragon = new()
                         {
@@ -1005,7 +1005,7 @@ public class HelperService : IHelperService
                             Ability2Level = 5,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 4
+                            LimitBreakCount = 4,
                         },
                         SupportWeaponBody = new()
                         {
@@ -1016,88 +1016,88 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.Tobias,
                             TalismanAbilityId1 = 340000010,
-                            TalismanAbilityId2 = 340000134
+                            TalismanAbilityId2 = 340000134,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                AbilityCrestId = AbilityCrestId.CastleCheerCorps,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                AbilityCrestId = AbilityCrestId.StudyRabbits,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -1124,7 +1124,7 @@ public class HelperService : IHelperService
                             ExAbility2Level = 5,
                             Skill1Level = 4,
                             Skill2Level = 3,
-                            IsUnlockEditSkill = true
+                            IsUnlockEditSkill = true,
                         },
                         SupportDragon = new()
                         {
@@ -1138,7 +1138,7 @@ public class HelperService : IHelperService
                             Ability2Level = 5,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 4
+                            LimitBreakCount = 4,
                         },
                         SupportWeaponBody = new()
                         {
@@ -1149,88 +1149,88 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.Akasha,
                             TalismanAbilityId1 = 340000010,
-                            TalismanAbilityId2 = 340000134
+                            TalismanAbilityId2 = 340000134,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                AbilityCrestId = AbilityCrestId.CastleCheerCorps,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                AbilityCrestId = AbilityCrestId.StudyRabbits,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -1257,7 +1257,7 @@ public class HelperService : IHelperService
                             ExAbility2Level = 5,
                             Skill1Level = 4,
                             Skill2Level = 3,
-                            IsUnlockEditSkill = true
+                            IsUnlockEditSkill = true,
                         },
                         SupportDragon = new()
                         {
@@ -1271,7 +1271,7 @@ public class HelperService : IHelperService
                             Ability2Level = 6,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 5
+                            LimitBreakCount = 5,
                         },
                         SupportWeaponBody = new()
                         {
@@ -1282,88 +1282,88 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.Patia,
                             TalismanAbilityId1 = 340000010,
-                            TalismanAbilityId2 = 340000134
+                            TalismanAbilityId2 = 340000134,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                AbilityCrestId = AbilityCrestId.CastleCheerCorps,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                AbilityCrestId = AbilityCrestId.StudyRabbits,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -1390,7 +1390,7 @@ public class HelperService : IHelperService
                             ExAbility2Level = 5,
                             Skill1Level = 4,
                             Skill2Level = 3,
-                            IsUnlockEditSkill = true
+                            IsUnlockEditSkill = true,
                         },
                         SupportDragon = new()
                         {
@@ -1404,7 +1404,7 @@ public class HelperService : IHelperService
                             Ability2Level = 6,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 5
+                            LimitBreakCount = 5,
                         },
                         SupportWeaponBody = new()
                         {
@@ -1415,88 +1415,88 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.Delphi,
                             TalismanAbilityId1 = 340000030,
-                            TalismanAbilityId2 = 340000132
+                            TalismanAbilityId2 = 340000132,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WelcometotheOpera,
+                                AbilityCrestId = AbilityCrestId.WelcometotheOpera,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.AManUnchanging,
+                                AbilityCrestId = AbilityCrestId.AManUnchanging,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                AbilityCrestId = AbilityCrestId.WorthyRivals,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                AbilityCrestId = AbilityCrestId.ChariotDrift,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -1523,7 +1523,7 @@ public class HelperService : IHelperService
                             ExAbility2Level = 5,
                             Skill1Level = 4,
                             Skill2Level = 3,
-                            IsUnlockEditSkill = true
+                            IsUnlockEditSkill = true,
                         },
                         SupportDragon = new()
                         {
@@ -1537,7 +1537,7 @@ public class HelperService : IHelperService
                             Ability2Level = 5,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 4
+                            LimitBreakCount = 4,
                         },
                         SupportWeaponBody = new()
                         {
@@ -1548,88 +1548,88 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.Lily,
                             TalismanAbilityId1 = 340000030,
-                            TalismanAbilityId2 = 340000132
+                            TalismanAbilityId2 = 340000132,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WingsofRebellionatRest,
+                                AbilityCrestId = AbilityCrestId.WingsofRebellionatRest,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                AbilityCrestId = AbilityCrestId.WorthyRivals,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.SeasidePrincess,
+                                AbilityCrestId = AbilityCrestId.SeasidePrincess,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                AbilityCrestId = AbilityCrestId.ChariotDrift,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -1656,7 +1656,7 @@ public class HelperService : IHelperService
                             ExAbility2Level = 5,
                             Skill1Level = 4,
                             Skill2Level = 3,
-                            IsUnlockEditSkill = true
+                            IsUnlockEditSkill = true,
                         },
                         SupportDragon = new()
                         {
@@ -1670,7 +1670,7 @@ public class HelperService : IHelperService
                             Ability2Level = 5,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 4
+                            LimitBreakCount = 4,
                         },
                         SupportWeaponBody = new()
                         {
@@ -1681,88 +1681,88 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.GalaLeif,
                             TalismanAbilityId1 = 340000030,
-                            TalismanAbilityId2 = 340000132
+                            TalismanAbilityId2 = 340000132,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.AManUnchanging,
+                                AbilityCrestId = AbilityCrestId.AManUnchanging,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.GoingUndercover,
+                                AbilityCrestId = AbilityCrestId.GoingUndercover,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                AbilityCrestId = AbilityCrestId.WorthyRivals,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                AbilityCrestId = AbilityCrestId.ChariotDrift,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -1789,7 +1789,7 @@ public class HelperService : IHelperService
                             ExAbility2Level = 5,
                             Skill1Level = 4,
                             Skill2Level = 3,
-                            IsUnlockEditSkill = true
+                            IsUnlockEditSkill = true,
                         },
                         SupportDragon = new()
                         {
@@ -1803,7 +1803,7 @@ public class HelperService : IHelperService
                             Ability2Level = 6,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 5
+                            LimitBreakCount = 5,
                         },
                         SupportWeaponBody = new()
                         {
@@ -1814,88 +1814,88 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.Delphi,
                             TalismanAbilityId1 = 340000030,
-                            TalismanAbilityId2 = 340000132
+                            TalismanAbilityId2 = 340000132,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WelcometotheOpera,
+                                AbilityCrestId = AbilityCrestId.WelcometotheOpera,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.AManUnchanging,
+                                AbilityCrestId = AbilityCrestId.AManUnchanging,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                AbilityCrestId = AbilityCrestId.WorthyRivals,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                AbilityCrestId = AbilityCrestId.ChariotDrift,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -1922,7 +1922,7 @@ public class HelperService : IHelperService
                             ExAbility2Level = 5,
                             Skill1Level = 4,
                             Skill2Level = 3,
-                            IsUnlockEditSkill = true
+                            IsUnlockEditSkill = true,
                         },
                         SupportDragon = new()
                         {
@@ -1936,7 +1936,7 @@ public class HelperService : IHelperService
                             Ability2Level = 5,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 4
+                            LimitBreakCount = 4,
                         },
                         SupportWeaponBody = new()
                         {
@@ -1947,88 +1947,88 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.Vixel,
                             TalismanAbilityId1 = 340000010,
-                            TalismanAbilityId2 = 340000134
+                            TalismanAbilityId2 = 340000134,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                AbilityCrestId = AbilityCrestId.CastleCheerCorps,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                AbilityCrestId = AbilityCrestId.StudyRabbits,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -2055,7 +2055,7 @@ public class HelperService : IHelperService
                             ExAbility2Level = 5,
                             Skill1Level = 4,
                             Skill2Level = 3,
-                            IsUnlockEditSkill = true
+                            IsUnlockEditSkill = true,
                         },
                         SupportDragon = new()
                         {
@@ -2069,7 +2069,7 @@ public class HelperService : IHelperService
                             Ability2Level = 5,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 4
+                            LimitBreakCount = 4,
                         },
                         SupportWeaponBody = new()
                         {
@@ -2080,88 +2080,88 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.GalaZena,
                             TalismanAbilityId1 = 340000010,
-                            TalismanAbilityId2 = 340000134
+                            TalismanAbilityId2 = 340000134,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                AbilityCrestId = AbilityCrestId.CastleCheerCorps,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                AbilityCrestId = AbilityCrestId.StudyRabbits,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -2188,7 +2188,7 @@ public class HelperService : IHelperService
                             ExAbility2Level = 5,
                             Skill1Level = 3,
                             Skill2Level = 2,
-                            IsUnlockEditSkill = true
+                            IsUnlockEditSkill = true,
                         },
                         SupportDragon = new()
                         {
@@ -2202,7 +2202,7 @@ public class HelperService : IHelperService
                             Ability2Level = 5,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 4
+                            LimitBreakCount = 4,
                         },
                         SupportWeaponBody = new()
                         {
@@ -2213,88 +2213,88 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.GalaNotte,
                             TalismanAbilityId1 = 340000030,
-                            TalismanAbilityId2 = 340000132
+                            TalismanAbilityId2 = 340000132,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.GoingUndercover,
+                                AbilityCrestId = AbilityCrestId.GoingUndercover,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.AManUnchanging,
+                                AbilityCrestId = AbilityCrestId.AManUnchanging,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                AbilityCrestId = AbilityCrestId.WorthyRivals,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                AbilityCrestId = AbilityCrestId.ChariotDrift,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -2335,7 +2335,7 @@ public class HelperService : IHelperService
                             Ability2Level = 5,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 4
+                            LimitBreakCount = 4,
                         },
                         SupportWeaponBody = new()
                         {
@@ -2346,88 +2346,88 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.GalaMym,
                             TalismanAbilityId1 = 340000030,
-                            TalismanAbilityId2 = 340000132
+                            TalismanAbilityId2 = 340000132,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.MeandMyBestie,
+                                AbilityCrestId = AbilityCrestId.MeandMyBestie,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TheCutieCompetition,
+                                AbilityCrestId = AbilityCrestId.TheCutieCompetition,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                AbilityCrestId = AbilityCrestId.WorthyRivals,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                AbilityCrestId = AbilityCrestId.ChariotDrift,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -2468,7 +2468,7 @@ public class HelperService : IHelperService
                             Ability2Level = 6,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 5
+                            LimitBreakCount = 5,
                         },
                         SupportWeaponBody = new()
                         {
@@ -2479,7 +2479,7 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
@@ -2487,81 +2487,81 @@ public class HelperService : IHelperService
                             TalismanId = Talismans.HumanoidZodiark,
                             // Crit easy
                             TalismanAbilityId1 = 340000030,
-                            TalismanAbilityId2 = 340000132
+                            TalismanAbilityId2 = 340000132,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TheHeroesArrive,
+                                AbilityCrestId = AbilityCrestId.TheHeroesArrive,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ANewLook,
+                                AbilityCrestId = AbilityCrestId.ANewLook,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.UnconditionalLove,
+                                AbilityCrestId = AbilityCrestId.UnconditionalLove,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.BeautifulGunman,
+                                AbilityCrestId = AbilityCrestId.BeautifulGunman,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon,
+                                AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -2602,7 +2602,7 @@ public class HelperService : IHelperService
                             Ability2Level = 5,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 4
+                            LimitBreakCount = 4,
                         },
                         SupportWeaponBody = new()
                         {
@@ -2613,88 +2613,90 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.GalaMym,
                             TalismanAbilityId1 = 340000030, // Critical Rate +15%
-                            TalismanAbilityId2 = 340000132 // Easy Hitter I
+                            TalismanAbilityId2 =
+                                340000132 // Easy Hitter I
+                            ,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.CastleCheerCorps,
+                                AbilityCrestId = AbilityCrestId.CastleCheerCorps,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.StudyRabbits,
+                                AbilityCrestId = AbilityCrestId.StudyRabbits,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ProperMaintenance,
+                                AbilityCrestId = AbilityCrestId.ProperMaintenance,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                                AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -2721,7 +2723,7 @@ public class HelperService : IHelperService
                             ExAbility2Level = 5,
                             Skill1Level = 3,
                             Skill2Level = 2,
-                            IsUnlockEditSkill = true
+                            IsUnlockEditSkill = true,
                         },
                         SupportDragon = new()
                         {
@@ -2735,7 +2737,7 @@ public class HelperService : IHelperService
                             Ability2Level = 5,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 4
+                            LimitBreakCount = 4,
                         },
                         SupportWeaponBody = new()
                         {
@@ -2746,88 +2748,90 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.GalaMym,
                             TalismanAbilityId1 = 340000030, // Critical Rate +15%
-                            TalismanAbilityId2 = 340000132 // Easy Hitter I
+                            TalismanAbilityId2 =
+                                340000132 // Easy Hitter I
+                            ,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.AManUnchanging,
+                                AbilityCrestId = AbilityCrestId.AManUnchanging,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WelcometotheOpera,
+                                AbilityCrestId = AbilityCrestId.WelcometotheOpera,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.WorthyRivals,
+                                AbilityCrestId = AbilityCrestId.WorthyRivals,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                AbilityCrestId = AbilityCrestId.ChariotDrift,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.DragonsNest,
+                                AbilityCrestId = AbilityCrestId.DragonsNest,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.RavenousFireCrownsBoon,
+                                AbilityCrestId = AbilityCrestId.RavenousFireCrownsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.PromisedPietyStaffsBoon,
+                                AbilityCrestId = AbilityCrestId.PromisedPietyStaffsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                     new()
                     {
@@ -2854,7 +2858,7 @@ public class HelperService : IHelperService
                             ExAbility2Level = 5,
                             Skill1Level = 3,
                             Skill2Level = 2,
-                            IsUnlockEditSkill = true
+                            IsUnlockEditSkill = true,
                         },
                         SupportDragon = new()
                         {
@@ -2868,7 +2872,7 @@ public class HelperService : IHelperService
                             Ability2Level = 5,
                             HpPlusCount = 50,
                             AttackPlusCount = 50,
-                            LimitBreakCount = 4
+                            LimitBreakCount = 4,
                         },
                         SupportWeaponBody = new()
                         {
@@ -2879,88 +2883,90 @@ public class HelperService : IHelperService
                             EquipableCount = 4,
                             AdditionalCrestSlotType1Count = 1,
                             AdditionalCrestSlotType2Count = 0,
-                            AdditionalCrestSlotType3Count = 2
+                            AdditionalCrestSlotType3Count = 2,
                         },
                         SupportTalisman = new()
                         {
                             TalismanKeyId = 0,
                             TalismanId = Talismans.GalaMym,
                             TalismanAbilityId1 = 340000030, // Critical Rate +15%
-                            TalismanAbilityId2 = 340000132 // Easy Hitter I
+                            TalismanAbilityId2 =
+                                340000132 // Easy Hitter I
+                            ,
                         },
                         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.AWonderfulValentines,
+                                AbilityCrestId = AbilityCrestId.AWonderfulValentines,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ARainyDay,
+                                AbilityCrestId = AbilityCrestId.ARainyDay,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ExtremeTeamwork,
+                                AbilityCrestId = AbilityCrestId.ExtremeTeamwork,
                                 BuildupCount = 50,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.ChariotDrift,
+                                AbilityCrestId = AbilityCrestId.ChariotDrift,
                                 BuildupCount = 40,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.BeautifulGunman,
+                                AbilityCrestId = AbilityCrestId.BeautifulGunman,
                                 BuildupCount = 20,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 50,
                                 AttackPlusCount = 50,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                         },
                         SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
                         {
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                                AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
+                                EquipableCount = 4,
                             },
                             new()
                             {
-                                AbilityCrestId = AbilityCrests.AKnightsDreamAxesBoon,
+                                AbilityCrestId = AbilityCrestId.AKnightsDreamAxesBoon,
                                 BuildupCount = 30,
                                 LimitBreakCount = 4,
                                 HpPlusCount = 40,
                                 AttackPlusCount = 40,
-                                EquipableCount = 4
-                            }
+                                EquipableCount = 4,
+                            },
                         },
-                        Guild = new() { GuildId = 0, GuildName = "Guild" }
+                        Guild = new() { GuildId = 0, GuildName = "Guild" },
                     },
                 },
                 SupportUserDetailList = new List<AtgenSupportUserDetailList>()
@@ -2969,135 +2975,135 @@ public class HelperService : IHelperService
                     {
                         ViewerId = 1000,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1001,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1002,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1003,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1004,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1005,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1006,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1007,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1008,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1009,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1010,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1011,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1012,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1013,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1014,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1015,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1016,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1017,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1018,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1019,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1020,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
                     new()
                     {
                         ViewerId = 1021,
                         GettableManaPoint = 50,
-                        IsFriend = true
+                        IsFriend = true,
                     },
-                }
+                },
             };
     }
 }

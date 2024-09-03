@@ -22,7 +22,7 @@ public class MatchingController : DragaliaControllerBase
         return this.Ok(
             new MatchingGetRoomListResponse()
             {
-                RoomList = await this.matchingService.GetRoomList()
+                RoomList = await this.matchingService.GetRoomList(),
             }
         );
     }
@@ -50,7 +50,7 @@ public class MatchingController : DragaliaControllerBase
         return this.Ok(
             new MatchingGetRoomListByQuestIdResponse()
             {
-                RoomList = await this.matchingService.GetRoomList(request.QuestId)
+                RoomList = await this.matchingService.GetRoomList(request.QuestId),
             }
         );
     }

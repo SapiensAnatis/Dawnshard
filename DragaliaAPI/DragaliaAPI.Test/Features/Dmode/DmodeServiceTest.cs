@@ -10,6 +10,7 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Time.Testing;
+using MockQueryable.EntityFrameworkCore;
 using MockQueryable.Moq;
 using DbPlayerDmodeDungeon = DragaliaAPI.Database.Entities.DbPlayerDmodeDungeon;
 
@@ -74,8 +75,8 @@ public class DmodeServiceTest
                         Point1Quantity = point1Quantity,
                         Point2Quantity = point2Quantity,
                         RecoveryCount = recoveryCount,
-                        RecoveryTime = this.fixedTime
-                    }
+                        RecoveryTime = this.fixedTime,
+                    },
                 }
                     .AsQueryable()
                     .BuildMock()
@@ -133,7 +134,7 @@ public class DmodeServiceTest
                 Floor = floor,
                 QuestTime = 0,
                 DungeonScore = dungeonScore,
-                IsPlayEnd = isPlayEnd
+                IsPlayEnd = isPlayEnd,
             };
 
         mockDmodeRepository
@@ -189,8 +190,8 @@ public class DmodeServiceTest
                     {
                         ViewerId = UnitTestUtils.ViewerId,
                         PassiveId = DmodeServitorPassiveType.Exp,
-                        Level = 5
-                    }
+                        Level = 5,
+                    },
                 }
                     .AsQueryable()
                     .BuildMock()
@@ -219,7 +220,7 @@ public class DmodeServiceTest
                 CharaId4 = 0,
                 StartTime = this.fixedTime,
                 State = ExpeditionState.Playing,
-                TargetFloor = 30
+                TargetFloor = 30,
             };
 
         mockDmodeRepository
@@ -257,7 +258,7 @@ public class DmodeServiceTest
                 SelectEditSkillCharaId1 = Charas.Tobias,
                 SelectEditSkillCharaId2 = 0,
                 SelectEditSkillCharaId3 = 0,
-                SelectedServitorId = 2
+                SelectedServitorId = 2,
             };
 
         mockDmodeRepository
@@ -292,7 +293,7 @@ public class DmodeServiceTest
             {
                 ViewerId = UnitTestUtils.ViewerId,
                 RecoveryCount = 0,
-                RecoveryTime = DateTimeOffset.UnixEpoch
+                RecoveryTime = DateTimeOffset.UnixEpoch,
             };
 
         mockDmodeRepository.Setup(x => x.GetInfoAsync()).ReturnsAsync(dbInfo);
@@ -313,7 +314,7 @@ public class DmodeServiceTest
             {
                 ViewerId = UnitTestUtils.ViewerId,
                 RecoveryCount = 10,
-                RecoveryTime = DateTimeOffset.UnixEpoch
+                RecoveryTime = DateTimeOffset.UnixEpoch,
             };
 
         mockDmodeRepository.Setup(x => x.GetInfoAsync()).ReturnsAsync(dbInfo);
@@ -331,7 +332,7 @@ public class DmodeServiceTest
             {
                 ViewerId = UnitTestUtils.ViewerId,
                 FloorSkipCount = 0,
-                FloorSkipTime = DateTimeOffset.UnixEpoch
+                FloorSkipTime = DateTimeOffset.UnixEpoch,
             };
 
         mockDmodeRepository.Setup(x => x.GetInfoAsync()).ReturnsAsync(dbInfo);
@@ -352,7 +353,7 @@ public class DmodeServiceTest
             {
                 ViewerId = UnitTestUtils.ViewerId,
                 FloorSkipCount = 3,
-                FloorSkipTime = DateTimeOffset.UnixEpoch
+                FloorSkipTime = DateTimeOffset.UnixEpoch,
             };
 
         mockDmodeRepository.Setup(x => x.GetInfoAsync()).ReturnsAsync(dbInfo);
@@ -374,8 +375,8 @@ public class DmodeServiceTest
                 {
                     ViewerId = UnitTestUtils.ViewerId,
                     PassiveId = DmodeServitorPassiveType.Exp,
-                    Level = 1
-                }
+                    Level = 1,
+                },
             };
 
         mockDmodeRepository
@@ -410,7 +411,7 @@ public class DmodeServiceTest
             {
                 ViewerId = UnitTestUtils.ViewerId,
                 PassiveId = DmodeServitorPassiveType.Exp,
-                Level = 0
+                Level = 0,
             };
 
         mockDmodeRepository
@@ -448,8 +449,8 @@ public class DmodeServiceTest
                 {
                     ViewerId = UnitTestUtils.ViewerId,
                     PassiveId = DmodeServitorPassiveType.Exp,
-                    Level = 1
-                }
+                    Level = 1,
+                },
             };
 
         List<DmodeServitorPassiveList> inputList = new();
@@ -491,7 +492,7 @@ public class DmodeServiceTest
                 CharaId4 = 0,
                 State = ExpeditionState.Waiting,
                 StartTime = DateTimeOffset.UnixEpoch,
-                TargetFloor = 0
+                TargetFloor = 0,
             };
 
         mockDmodeRepository.Setup(x => x.GetExpeditionAsync()).ReturnsAsync(dbExpedition);
@@ -524,7 +525,7 @@ public class DmodeServiceTest
                 CharaId4 = 0,
                 State = ExpeditionState.Playing,
                 StartTime = DateTimeOffset.UnixEpoch,
-                TargetFloor = 30
+                TargetFloor = 30,
             };
 
         mockDmodeRepository.Setup(x => x.GetExpeditionAsync()).ReturnsAsync(dbExpedition);
@@ -549,7 +550,7 @@ public class DmodeServiceTest
                     new DbTalisman()
                     {
                         ViewerId = UnitTestUtils.ViewerId,
-                        TalismanId = Talismans.ThePrince
+                        TalismanId = Talismans.ThePrince,
                     }
                 )
             );
@@ -592,7 +593,7 @@ public class DmodeServiceTest
                 CharaId4 = 0,
                 State = ExpeditionState.Playing,
                 StartTime = this.fixedTime,
-                TargetFloor = 30
+                TargetFloor = 30,
             };
 
         mockDmodeRepository.Setup(x => x.GetExpeditionAsync()).ReturnsAsync(dbExpedition);
@@ -618,7 +619,7 @@ public class DmodeServiceTest
                 CharaId4 = 0,
                 State = ExpeditionState.Playing,
                 StartTime = this.fixedTime,
-                TargetFloor = 30
+                TargetFloor = 30,
             };
 
         mockDmodeRepository.Setup(x => x.GetExpeditionAsync()).ReturnsAsync(dbExpedition);

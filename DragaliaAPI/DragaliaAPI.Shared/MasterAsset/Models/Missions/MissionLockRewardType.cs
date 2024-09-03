@@ -3,5 +3,5 @@
 public enum MissionLockRewardType
 {
     None,
-    CharacterFriendshipPoint
+    CharacterFriendshipPoint,
 }

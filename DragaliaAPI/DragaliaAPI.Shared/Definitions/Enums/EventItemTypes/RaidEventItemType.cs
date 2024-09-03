@@ -12,4 +12,5 @@ public enum RaidEventItemType
     UltimateItem1 = 10401, // Omega Key
     ExchangeItem1 = 10501, // Weapon exchange
     ExchangeItem2 // ??? Exchange
+    ,
 }

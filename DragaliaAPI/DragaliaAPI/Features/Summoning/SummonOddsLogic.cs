@@ -168,7 +168,7 @@ public static class SummonOddsLogic
             FourStarAdvRate = fourStarAdvRate,
             FourStarDragonRate = fourStarDragonRate,
             ThreeStarAdvRate = threeStarAdvRate,
-            ThreeStarDragonRate = threeStarDragonRate
+            ThreeStarDragonRate = threeStarDragonRate,
         };
     }
 
@@ -275,7 +275,7 @@ public static class SummonOddsLogic
             FourStarAdvRate = fourStarAdvRate,
             FourStarDragonRate = fourStarDragonRate,
             ThreeStarAdvRate = 0m,
-            ThreeStarDragonRate = 0m
+            ThreeStarDragonRate = 0m,
         };
     }
 
@@ -341,10 +341,9 @@ public static class SummonOddsLogic
                 5 => rateData.FiveStarAdvRate / charaPoolData.FiveStarPoolSize,
                 4 => rateData.FourStarAdvRate / charaPoolData.FourStarPoolSize,
                 3 => rateData.ThreeStarAdvRate / charaPoolData.ThreeStarPoolSize,
-                _
-                    => throw new UnreachableException(
-                        $"Invalid rarity {chara.Rarity} for character {chara.Id}"
-                    )
+                _ => throw new UnreachableException(
+                    $"Invalid rarity {chara.Rarity} for character {chara.Id}"
+                ),
             };
 
             yield return new UnitRate(chara.Id, rate);
@@ -357,10 +356,9 @@ public static class SummonOddsLogic
                 5 => rateData.FiveStarDragonRate / dragonPoolData.FiveStarPoolSize,
                 4 => rateData.FourStarDragonRate / dragonPoolData.FourStarPoolSize,
                 3 => rateData.ThreeStarDragonRate / dragonPoolData.ThreeStarPoolSize,
-                _
-                    => throw new UnreachableException(
-                        $"Invalid rarity {dragon.Rarity} for dragon {dragon.Id}"
-                    )
+                _ => throw new UnreachableException(
+                    $"Invalid rarity {dragon.Rarity} for dragon {dragon.Id}"
+                ),
             };
 
             yield return new UnitRate(dragon.Id, rate);
@@ -412,7 +410,7 @@ public static class SummonOddsLogic
             UnitAvailability.Permanent => true,
             UnitAvailability.Gala => banner.IsGala,
             UnitAvailability.Limited => banner.LimitedCharas.Contains(charaData.Id),
-            _ => false
+            _ => false,
         };
     }
 
@@ -435,7 +433,7 @@ public static class SummonOddsLogic
             UnitAvailability.Permanent => true,
             UnitAvailability.Gala => banner.IsGala,
             UnitAvailability.Limited => banner.LimitedDragons.Contains(dragonData.Id),
-            _ => false
+            _ => false,
         };
     }
 
@@ -488,7 +486,7 @@ public static class SummonOddsLogic
                 newPickupRateData = pickupRateData with
                 {
                     FiveStarAdvRate =
-                        pickupRateData.FiveStarAdvRate + (pickupCharaProportion * fiveStarIncrease)
+                        pickupRateData.FiveStarAdvRate + (pickupCharaProportion * fiveStarIncrease),
                 };
 
                 // Can't work out how the remaining increase is split between characters and dragons.
@@ -498,7 +496,7 @@ public static class SummonOddsLogic
                     FiveStarAdvRate =
                         rateData.FiveStarAdvRate + (regularProportion * fiveStarIncrease * 0.2m),
                     FiveStarDragonRate =
-                        rateData.FiveStarDragonRate + (regularProportion * fiveStarIncrease * 0.8m)
+                        rateData.FiveStarDragonRate + (regularProportion * fiveStarIncrease * 0.8m),
                 };
                 break;
             }
@@ -515,7 +513,7 @@ public static class SummonOddsLogic
                 {
                     FiveStarDragonRate =
                         pickupRateData.FiveStarDragonRate
-                        + (pickupDragonProportion * fiveStarIncrease)
+                        + (pickupDragonProportion * fiveStarIncrease),
                 };
 
                 // Same as above empirical distribution, but inverted
@@ -524,7 +522,7 @@ public static class SummonOddsLogic
                     FiveStarAdvRate =
                         rateData.FiveStarAdvRate + (regularProportion * fiveStarIncrease * 0.8m),
                     FiveStarDragonRate =
-                        rateData.FiveStarDragonRate + (regularProportion * fiveStarIncrease * 0.2m)
+                        rateData.FiveStarDragonRate + (regularProportion * fiveStarIncrease * 0.2m),
                 };
                 break;
             }
@@ -534,7 +532,7 @@ public static class SummonOddsLogic
                 newRateData = rateData with
                 {
                     FiveStarAdvRate = rateData.FiveStarAdvRate + (fiveStarIncrease / 2),
-                    FiveStarDragonRate = rateData.FiveStarDragonRate + (fiveStarIncrease / 2)
+                    FiveStarDragonRate = rateData.FiveStarDragonRate + (fiveStarIncrease / 2),
                 };
                 break;
             }

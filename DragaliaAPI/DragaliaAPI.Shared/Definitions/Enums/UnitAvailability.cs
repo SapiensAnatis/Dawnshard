@@ -28,5 +28,5 @@ public enum UnitAvailability
     /// <summary>
     /// The unit can never be summoned.
     /// </summary>
-    Other
+    Other,
 }

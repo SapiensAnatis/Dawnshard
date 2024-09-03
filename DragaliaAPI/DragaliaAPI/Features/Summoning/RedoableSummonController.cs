@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Story;
+using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -53,8 +54,8 @@ public class RedoableSummonController(
             RedoableSummonOddsRateList = new RedoableSummonOddsRateList()
             {
                 Normal = normalOddsRate,
-                Guarantee = guaranteeRate
-            }
+                Guarantee = guaranteeRate,
+            },
         };
     }
 
@@ -72,7 +73,7 @@ public class RedoableSummonController(
             JsonSerializer.Serialize(summonResult),
             new DistributedCacheEntryOptions()
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60)
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60),
             }
         );
 
@@ -133,14 +134,14 @@ public class RedoableSummonController(
             .Select(x => new AtgenDuplicateEntityList()
             {
                 EntityType = EntityTypes.Chara,
-                EntityId = (int)x.id
+                EntityId = (int)x.id,
             });
         IEnumerable<AtgenDuplicateEntityList> newDragons = repositoryDragonOutput
             .Where(x => x.IsNew)
             .Select(x => new AtgenDuplicateEntityList()
             {
                 EntityType = EntityTypes.Dragon,
-                EntityId = (int)x.Id
+                EntityId = (int)x.Id,
             });
 
         return this.Ok(
@@ -149,13 +150,13 @@ public class RedoableSummonController(
                 UserRedoableSummonData = new UserRedoableSummonData()
                 {
                     IsFixedResult = true,
-                    RedoableSummonResultUnitList = cachedResult
+                    RedoableSummonResultUnitList = cachedResult,
                 },
                 UpdateDataList = updateData,
                 EntityResult = new EntityResult()
                 {
-                    NewGetEntityList = newCharas.Concat(newDragons)
-                }
+                    NewGetEntityList = newCharas.Concat(newDragons),
+                },
             }
         );
     }

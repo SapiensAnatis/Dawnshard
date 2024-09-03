@@ -52,9 +52,9 @@ public class UserController : DragaliaControllerBase
                 NAccountInfo = new()
                 {
                     Email = "placeholder@email.com",
-                    Nickname = "placeholder nickname"
+                    Nickname = "placeholder nickname",
                 },
-                UpdateDataList = new()
+                UpdateDataList = new(),
             }
         );
     }

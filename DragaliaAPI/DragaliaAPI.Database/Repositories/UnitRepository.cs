@@ -83,7 +83,7 @@ public class UnitRepository : IUnitRepository
                     ViewerId = this.playerIdentityService.ViewerId,
                     CharaId = charaId,
                     UnitSetNo = setNo,
-                    UnitSetName = $"Set {setNo}"
+                    UnitSetName = $"Set {setNo}",
                 }
             )
             .Entity;
@@ -128,7 +128,7 @@ public class UnitRepository : IUnitRepository
                     TalismanAbilityId3 = abilityId3,
                     AdditionalHp = additionalHp,
                     AdditionalAttack = additionalAttack,
-                    GetTime = DateTimeOffset.UtcNow
+                    GetTime = DateTimeOffset.UtcNow,
                 }
             )
             .Entity;

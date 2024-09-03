@@ -164,7 +164,7 @@ public class QuestReadStoryTest : TestFixture
                 new QuestStoryList()
                 {
                     QuestStoryId = theLonePaladynStoryId,
-                    State = StoryState.Read
+                    State = StoryState.Read,
                 }
             );
 
@@ -192,7 +192,7 @@ public class QuestReadStoryTest : TestFixture
             .BeEquivalentTo(
                 new List<QuestStoryList>()
                 {
-                    new() { QuestStoryId = 1001009, State = StoryState.Read }
+                    new() { QuestStoryId = 1001009, State = StoryState.Read },
                 }
             );
         data.UpdateDataList.UserData.Exp.Should().BeGreaterThanOrEqualTo(88980);
@@ -219,5 +219,20 @@ public class QuestReadStoryTest : TestFixture
         ).Data;
 
         response.UpdateDataList.CharaList.Should().Contain(x => x.CharaId == expectedChara);
+    }
+
+    [Fact]
+    public async Task ReadStory_Chapter16Completion_AddsTutorialFlags()
+    {
+        QuestReadStoryResponse response = (
+            await this.Client.PostMsgpack<QuestReadStoryResponse>(
+                "/quest/read_story",
+                new QuestReadStoryRequest() { QuestStoryId = 1001610 }
+            )
+        ).Data;
+
+        response
+            .UpdateDataList.UserData?.TutorialFlagList.Should()
+            .BeEquivalentTo([1028, 1006, 1030]);
     }
 }

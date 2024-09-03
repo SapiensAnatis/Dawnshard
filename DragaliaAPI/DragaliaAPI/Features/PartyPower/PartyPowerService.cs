@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.AbilityCrests;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
@@ -109,13 +110,13 @@ public class PartyPowerService(
         long talismanId,
         Charas editSkill1,
         Charas editSkill2,
-        AbilityCrests crestType1No1,
-        AbilityCrests crestType1No2,
-        AbilityCrests crestType1No3,
-        AbilityCrests crestType2No1,
-        AbilityCrests crestType2No2,
-        AbilityCrests crestType3No1,
-        AbilityCrests crestType3No2,
+        AbilityCrestId crestType1No1,
+        AbilityCrestId crestType1No2,
+        AbilityCrestId crestType1No3,
+        AbilityCrestId crestType2No1,
+        AbilityCrestId crestType2No2,
+        AbilityCrestId crestType3No1,
+        AbilityCrestId crestType3No2,
         bool shouldAddSkillBonus = true,
         FortBonusList? bonus = null
     )
@@ -174,7 +175,7 @@ public class PartyPowerService(
         DbTalisman? talisman =
             talismanId == 0 ? null : await unitRepository.FindTalismanAsync(talismanId);
 
-        AbilityCrests[] crests =
+        AbilityCrestId[] crests =
         {
             crestType1No1,
             crestType1No2,
@@ -182,10 +183,10 @@ public class PartyPowerService(
             crestType2No1,
             crestType2No2,
             crestType3No1,
-            crestType3No2
+            crestType3No2,
         };
 
-        HashSet<AbilityCrests> uniqueCrests = crests.Where(x => x != 0).ToHashSet();
+        HashSet<AbilityCrestId> uniqueCrests = crests.Where(x => x != 0).ToHashSet();
 
         List<DbAbilityCrest> dbCrests = abilityCrestRepository
             .AbilityCrests.Where(x => uniqueCrests.Contains(x.AbilityCrestId))
@@ -561,7 +562,7 @@ public class PartyPowerService(
                 : weaponData.GetAbility(1, dbWeapon.Ability1Level),
             dbWeapon == null || weaponData == null
                 ? 0
-                : weaponData.GetAbility(2, dbWeapon.Ability2Level)
+                : weaponData.GetAbility(2, dbWeapon.Ability2Level),
         };
 
         abilityIdList.AddRange(abilityIds);
@@ -590,7 +591,7 @@ public class PartyPowerService(
     }
 
     private static (int Atk, int Hp) GetAbilityCrest(
-        AbilityCrests id,
+        AbilityCrestId id,
         int buildup,
         int atkPlus,
         int hpPlus

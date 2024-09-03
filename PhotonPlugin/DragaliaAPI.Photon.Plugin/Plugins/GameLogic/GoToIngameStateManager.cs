@@ -22,7 +22,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
 
         private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions()
         {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         };
 
         private readonly IPluginHost pluginHost;
@@ -154,7 +154,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             GoToIngameState data = new GoToIngameState()
             {
                 elements = actorData,
-                brInitData = null
+                brInitData = null,
             };
 
             byte[] msgpack = MessagePackSerializer.Serialize(data, MessagePackOptions);
@@ -178,7 +178,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                 {
                     ActorNr = x.ActorNr,
                     ViewerId = x.GetViewerId(),
-                    PartySlots = x.GetPartySlots()
+                    PartySlots = x.GetPartySlots(),
                 }
             );
 
@@ -305,10 +305,10 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                             .Select(x => new HeroParamExData()
                             {
                                 limitOverCount = x.ExAbilityLv,
-                                sequenceNumber = x.Position
+                                sequenceNumber = x.Position,
                             })
                             .ToArray(),
-                        heroParams = heroParams.Take(state.UsedMemberCount).ToArray()
+                        heroParams = heroParams.Take(state.UsedMemberCount).ToArray(),
                     };
 
                     this.pluginHost.RaiseEvent(Event.CharacterData, evt);

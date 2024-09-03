@@ -34,8 +34,8 @@ public class PartyInfoValidatorTest
                 PartyUnitList = new List<PartyUnitList>()
                 {
                     new() { CharaData = new() { CharaId = Charas.GalaGatov } },
-                    new() { CharaData = new() { CharaId = Charas.GalaGatov } }
-                }
+                    new() { CharaData = new() { CharaId = Charas.GalaGatov } },
+                },
             }
         );
 
@@ -55,9 +55,9 @@ public class PartyInfoValidatorTest
                     {
                         CharaData = new() { CharaId = Charas.GalaGatov },
                         EditSkill1CharaData = new() { CharaId = Charas.ShaWujing },
-                        EditSkill2CharaData = new() { CharaId = Charas.ShaWujing }
-                    }
-                }
+                        EditSkill2CharaData = new() { CharaId = Charas.ShaWujing },
+                    },
+                },
             }
         );
 
@@ -79,8 +79,8 @@ public class PartyInfoValidatorTest
                     {
                         CharaData = new() { CharaId = Charas.GalaGatov },
                         DragonReliabilityLevel = 31,
-                    }
-                }
+                    },
+                },
             }
         );
 
@@ -101,14 +101,14 @@ public class PartyInfoValidatorTest
                         CharaData = new() { CharaId = Charas.GalaGatov },
                         CrestSlotType1CrestList = new List<GameAbilityCrest>()
                         {
-                            new() { AbilityCrestId = AbilityCrests.CastleCheerCorps },
+                            new() { AbilityCrestId = AbilityCrestId.CastleCheerCorps },
                         },
                         CrestSlotType2CrestList = new List<GameAbilityCrest>()
                         {
-                            new() { AbilityCrestId = AbilityCrests.CastleCheerCorps }
-                        }
-                    }
-                }
+                            new() { AbilityCrestId = AbilityCrestId.CastleCheerCorps },
+                        },
+                    },
+                },
             }
         );
 
@@ -126,8 +126,8 @@ public class PartyInfoValidatorTest
             {
                 PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { CharaData = new() { CharaId = (Charas)1234, }, }
-                }
+                    new() { CharaData = new() { CharaId = (Charas)1234 } },
+                },
             }
         );
 
@@ -152,10 +152,10 @@ public class PartyInfoValidatorTest
                         {
                             CharaId = Charas.GalaGatov,
                             AttackPlusCount = 101,
-                            HpPlusCount = 101
+                            HpPlusCount = 101,
                         },
-                    }
-                }
+                    },
+                },
             }
         );
 
@@ -172,8 +172,8 @@ public class PartyInfoValidatorTest
             {
                 PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { CharaData = new() { CharaId = Charas.SummerIeyasu }, }
-                }
+                    new() { CharaData = new() { CharaId = Charas.SummerIeyasu } },
+                },
             }
         );
 
@@ -191,8 +191,8 @@ public class PartyInfoValidatorTest
             {
                 PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { DragonData = new() { DragonId = (Dragons)1234, }, }
-                }
+                    new() { DragonData = new() { DragonId = (Dragons)1234 } },
+                },
             }
         );
 
@@ -217,10 +217,10 @@ public class PartyInfoValidatorTest
                         {
                             DragonId = Dragons.GalaRebornAgni,
                             AttackPlusCount = 101,
-                            HpPlusCount = 101
+                            HpPlusCount = 101,
                         },
-                    }
-                }
+                    },
+                },
             }
         );
 
@@ -237,8 +237,8 @@ public class PartyInfoValidatorTest
             {
                 PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { DragonData = new() { DragonId = Dragons.SummerMarishiten }, }
-                }
+                    new() { DragonData = new() { DragonId = Dragons.SummerMarishiten } },
+                },
             }
         );
 
@@ -260,10 +260,10 @@ public class PartyInfoValidatorTest
                     {
                         CrestSlotType1CrestList = new List<GameAbilityCrest>()
                         {
-                            new() { AbilityCrestId = (AbilityCrests)1234 }
+                            new() { AbilityCrestId = (AbilityCrestId)1234 },
                         },
-                    }
-                }
+                    },
+                },
             }
         );
 
@@ -283,10 +283,10 @@ public class PartyInfoValidatorTest
                     {
                         CrestSlotType1CrestList = new List<GameAbilityCrest>()
                         {
-                            new() { AttackPlusCount = 101, HpPlusCount = 101 }
+                            new() { AttackPlusCount = 101, HpPlusCount = 101 },
                         },
-                    }
-                }
+                    },
+                },
             }
         );
 
@@ -303,8 +303,8 @@ public class PartyInfoValidatorTest
             {
                 PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { WeaponBodyData = new() { WeaponBodyId = (WeaponBodies)1234 } }
-                }
+                    new() { WeaponBodyData = new() { WeaponBodyId = (WeaponBodies)1234 } },
+                },
             }
         );
 
@@ -326,10 +326,10 @@ public class PartyInfoValidatorTest
                         {
                             TalismanId = Talismans.GalaLuca,
                             AdditionalAttack = 101,
-                            AdditionalHp = 101
-                        }
-                    }
-                }
+                            AdditionalHp = 101,
+                        },
+                    },
+                },
             }
         );
 
@@ -346,8 +346,8 @@ public class PartyInfoValidatorTest
             {
                 PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { TalismanData = new() { TalismanId = (Talismans)1234, } }
-                }
+                    new() { TalismanData = new() { TalismanId = (Talismans)1234 } },
+                },
             }
         );
 
@@ -369,10 +369,10 @@ public class PartyInfoValidatorTest
                         {
                             TalismanId = Talismans.GalaLuca,
                             TalismanAbilityId1 = 330000569,
-                            TalismanAbilityId2 = 3004
-                        }
-                    }
-                }
+                            TalismanAbilityId2 = 3004,
+                        },
+                    },
+                },
             }
         );
 
@@ -395,10 +395,10 @@ public class PartyInfoValidatorTest
                         {
                             TalismanId = Talismans.GalaLuca,
                             TalismanAbilityId1 = 340000029,
-                            TalismanAbilityId2 = 340000029
-                        }
-                    }
-                }
+                            TalismanAbilityId2 = 340000029,
+                        },
+                    },
+                },
             }
         );
 
@@ -424,9 +424,9 @@ public class PartyInfoValidatorTest
                             TalismanAbilityId1 = 340000029,
                             TalismanAbilityId2 = 340000077,
                             TalismanAbilityId3 = 340000118,
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             }
         );
 

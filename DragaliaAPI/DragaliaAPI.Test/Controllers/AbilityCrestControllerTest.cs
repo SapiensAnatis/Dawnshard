@@ -2,11 +2,13 @@
 using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.AbilityCrests;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Test.Utils;
+using MockQueryable.EntityFrameworkCore;
 using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Controllers;
@@ -43,12 +45,12 @@ public class AbilityCrestControllerTest
     [Fact]
     public async Task SetFavorite_AbilityCrestNotFoundReturnsError()
     {
-        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrests.ManaFount))
+        this.mockAbilityCrestRepository.Setup(x => x.FindAsync(AbilityCrestId.ManaFount))
             .ReturnsAsync(() => null);
 
         ResultCodeResponse response = (
             await this.abilityCrestController.SetFavorite(
-                new() { AbilityCrestId = AbilityCrests.ManaFount, IsFavorite = true },
+                new() { AbilityCrestId = AbilityCrestId.ManaFount, IsFavorite = true },
                 default
             )
         ).GetData<ResultCodeResponse>()!;
@@ -72,7 +74,7 @@ public class AbilityCrestControllerTest
     {
         this.mockAbilityCrestService.SetupSequence(x =>
                 x.TryBuildup(
-                    MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount),
+                    MasterAsset.AbilityCrest.Get(AbilityCrestId.ManaFount),
                     It.IsAny<AtgenBuildupAbilityCrestPieceList>()
                 )
             )
@@ -84,13 +86,13 @@ public class AbilityCrestControllerTest
             await this.abilityCrestController.BuildupPiece(
                 new AbilityCrestBuildupPieceRequest()
                 {
-                    AbilityCrestId = AbilityCrests.ManaFount,
+                    AbilityCrestId = AbilityCrestId.ManaFount,
                     BuildupAbilityCrestPieceList = new List<AtgenBuildupAbilityCrestPieceList>()
                     {
                         new(),
                         new(),
-                        new()
-                    }
+                        new(),
+                    },
                 },
                 default
             )
@@ -105,7 +107,7 @@ public class AbilityCrestControllerTest
     {
         this.mockAbilityCrestService.Setup(x =>
                 x.TryBuildup(
-                    MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount),
+                    MasterAsset.AbilityCrest.Get(AbilityCrestId.ManaFount),
                     It.IsAny<AtgenBuildupAbilityCrestPieceList>()
                 )
             )
@@ -118,13 +120,13 @@ public class AbilityCrestControllerTest
             await this.abilityCrestController.BuildupPiece(
                 new AbilityCrestBuildupPieceRequest()
                 {
-                    AbilityCrestId = AbilityCrests.ManaFount,
+                    AbilityCrestId = AbilityCrestId.ManaFount,
                     BuildupAbilityCrestPieceList = new List<AtgenBuildupAbilityCrestPieceList>()
                     {
                         new(),
                         new(),
-                        new()
-                    }
+                        new(),
+                    },
                 },
                 default
             )
@@ -153,7 +155,7 @@ public class AbilityCrestControllerTest
     {
         this.mockAbilityCrestService.SetupSequence(x =>
                 x.TryBuildupAugments(
-                    MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount),
+                    MasterAsset.AbilityCrest.Get(AbilityCrestId.ManaFount),
                     It.IsAny<AtgenPlusCountParamsList>()
                 )
             )
@@ -164,8 +166,8 @@ public class AbilityCrestControllerTest
             await this.abilityCrestController.BuildupPlusCount(
                 new AbilityCrestBuildupPlusCountRequest()
                 {
-                    AbilityCrestId = AbilityCrests.ManaFount,
-                    PlusCountParamsList = new List<AtgenPlusCountParamsList>() { new(), new() }
+                    AbilityCrestId = AbilityCrestId.ManaFount,
+                    PlusCountParamsList = new List<AtgenPlusCountParamsList>() { new(), new() },
                 },
                 default
             )
@@ -180,7 +182,7 @@ public class AbilityCrestControllerTest
     {
         this.mockAbilityCrestService.SetupSequence(x =>
                 x.TryBuildupAugments(
-                    MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount),
+                    MasterAsset.AbilityCrest.Get(AbilityCrestId.ManaFount),
                     It.IsAny<AtgenPlusCountParamsList>()
                 )
             )
@@ -194,8 +196,8 @@ public class AbilityCrestControllerTest
             await this.abilityCrestController.BuildupPlusCount(
                 new AbilityCrestBuildupPlusCountRequest()
                 {
-                    AbilityCrestId = AbilityCrests.ManaFount,
-                    PlusCountParamsList = new List<AtgenPlusCountParamsList>() { new(), new() }
+                    AbilityCrestId = AbilityCrestId.ManaFount,
+                    PlusCountParamsList = new List<AtgenPlusCountParamsList>() { new(), new() },
                 },
                 default
             )
@@ -210,7 +212,7 @@ public class AbilityCrestControllerTest
     public async Task ResetPlusCount_OnePieceUnsuccessfulReturnsError()
     {
         this.mockAbilityCrestService.SetupSequence(x =>
-                x.TryResetAugments(AbilityCrests.ManaFount, It.IsAny<PlusCountType>())
+                x.TryResetAugments(AbilityCrestId.ManaFount, It.IsAny<PlusCountType>())
             )
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.CommonInvalidArgument);
@@ -219,8 +221,8 @@ public class AbilityCrestControllerTest
             await this.abilityCrestController.ResetPlusCount(
                 new AbilityCrestResetPlusCountRequest()
                 {
-                    AbilityCrestId = AbilityCrests.ManaFount,
-                    PlusCountTypeList = new List<PlusCountType>() { PlusCountType.Hp, 0 }
+                    AbilityCrestId = AbilityCrestId.ManaFount,
+                    PlusCountTypeList = new List<PlusCountType>() { PlusCountType.Hp, 0 },
                 },
                 default
             )
@@ -234,7 +236,7 @@ public class AbilityCrestControllerTest
     public async Task ResetPlusCount_AllPiecesSuccessfulReturnsSuccess()
     {
         this.mockAbilityCrestService.SetupSequence(x =>
-                x.TryResetAugments(AbilityCrests.ManaFount, It.IsAny<PlusCountType>())
+                x.TryResetAugments(AbilityCrestId.ManaFount, It.IsAny<PlusCountType>())
             )
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.Success);
@@ -246,12 +248,12 @@ public class AbilityCrestControllerTest
             await this.abilityCrestController.ResetPlusCount(
                 new AbilityCrestResetPlusCountRequest()
                 {
-                    AbilityCrestId = AbilityCrests.ManaFount,
+                    AbilityCrestId = AbilityCrestId.ManaFount,
                     PlusCountTypeList = new List<PlusCountType>()
                     {
                         PlusCountType.Hp,
-                        PlusCountType.Atk
-                    }
+                        PlusCountType.Atk,
+                    },
                 },
                 default
             )
@@ -283,7 +285,7 @@ public class AbilityCrestControllerTest
                         new DbAbilityCrestSet()
                         {
                             ViewerId = IdentityTestUtils.ViewerId,
-                            AbilityCrestSetNo = setNo
+                            AbilityCrestSetNo = setNo,
                         }
                     )
                 );
@@ -310,14 +312,14 @@ public class AbilityCrestControllerTest
                         ViewerId = IdentityTestUtils.ViewerId,
                         AbilityCrestSetNo = mappedSet,
                         AbilityCrestSetName = "test",
-                        CrestSlotType1CrestId1 = AbilityCrests.WorthyRivals,
-                        CrestSlotType1CrestId2 = AbilityCrests.WhatDreamsMayCome,
-                        CrestSlotType1CrestId3 = AbilityCrests.InanUnendingWorld,
-                        CrestSlotType2CrestId1 = AbilityCrests.HisCleverBrother,
-                        CrestSlotType2CrestId2 = AbilityCrests.DragonsNest,
-                        CrestSlotType3CrestId1 = AbilityCrests.CrownofLightSerpentsBoon,
-                        CrestSlotType3CrestId2 = AbilityCrests.TutelarysDestinyWolfsBoon,
-                        TalismanKeyId = 1
+                        CrestSlotType1CrestId1 = AbilityCrestId.WorthyRivals,
+                        CrestSlotType1CrestId2 = AbilityCrestId.WhatDreamsMayCome,
+                        CrestSlotType1CrestId3 = AbilityCrestId.InanUnendingWorld,
+                        CrestSlotType2CrestId1 = AbilityCrestId.HisCleverBrother,
+                        CrestSlotType2CrestId2 = AbilityCrestId.DragonsNest,
+                        CrestSlotType3CrestId1 = AbilityCrestId.CrownofLightSerpentsBoon,
+                        CrestSlotType3CrestId2 = AbilityCrestId.TutelarysDestinyWolfsBoon,
+                        TalismanKeyId = 1,
                     },
                 }
                     .AsQueryable()
@@ -343,14 +345,14 @@ public class AbilityCrestControllerTest
                                 ViewerId = IdentityTestUtils.ViewerId,
                                 AbilityCrestSetNo = mappedSet,
                                 AbilityCrestSetName = "test",
-                                CrestSlotType1CrestId1 = AbilityCrests.WorthyRivals,
-                                CrestSlotType1CrestId2 = AbilityCrests.WhatDreamsMayCome,
-                                CrestSlotType1CrestId3 = AbilityCrests.InanUnendingWorld,
-                                CrestSlotType2CrestId1 = AbilityCrests.HisCleverBrother,
-                                CrestSlotType2CrestId2 = AbilityCrests.DragonsNest,
-                                CrestSlotType3CrestId1 = AbilityCrests.CrownofLightSerpentsBoon,
-                                CrestSlotType3CrestId2 = AbilityCrests.TutelarysDestinyWolfsBoon,
-                                TalismanKeyId = 1
+                                CrestSlotType1CrestId1 = AbilityCrestId.WorthyRivals,
+                                CrestSlotType1CrestId2 = AbilityCrestId.WhatDreamsMayCome,
+                                CrestSlotType1CrestId3 = AbilityCrestId.InanUnendingWorld,
+                                CrestSlotType2CrestId1 = AbilityCrestId.HisCleverBrother,
+                                CrestSlotType2CrestId2 = AbilityCrestId.DragonsNest,
+                                CrestSlotType3CrestId1 = AbilityCrestId.CrownofLightSerpentsBoon,
+                                CrestSlotType3CrestId2 = AbilityCrestId.TutelarysDestinyWolfsBoon,
+                                TalismanKeyId = 1,
                             }
                         )
                     );
@@ -364,7 +366,7 @@ public class AbilityCrestControllerTest
                             new DbAbilityCrestSet()
                             {
                                 ViewerId = IdentityTestUtils.ViewerId,
-                                AbilityCrestSetNo = setNo
+                                AbilityCrestSetNo = setNo,
                             }
                         )
                     );
@@ -411,7 +413,7 @@ public class AbilityCrestControllerTest
                 {
                     AbilityCrestSetName = "",
                     AbilityCrestSetNo = setNo,
-                    RequestAbilityCrestSetData = new() { }
+                    RequestAbilityCrestSetData = new() { },
                 },
                 default
             )
@@ -447,7 +449,7 @@ public class AbilityCrestControllerTest
                 new AbilityCrestUpdateAbilityCrestSetNameRequest()
                 {
                     AbilityCrestSetNo = setNo,
-                    AbilityCrestSetName = newName
+                    AbilityCrestSetName = newName,
                 },
                 default
             )
@@ -469,7 +471,7 @@ public class AbilityCrestControllerTest
                 new DbAbilityCrestSet()
                 {
                     ViewerId = IdentityTestUtils.ViewerId,
-                    AbilityCrestSetNo = setNo
+                    AbilityCrestSetNo = setNo,
                 }
             );
 
@@ -481,7 +483,7 @@ public class AbilityCrestControllerTest
                 new AbilityCrestUpdateAbilityCrestSetNameRequest()
                 {
                     AbilityCrestSetNo = setNo,
-                    AbilityCrestSetName = newName
+                    AbilityCrestSetName = newName,
                 },
                 default
             )

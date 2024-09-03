@@ -193,7 +193,7 @@ public class RewardService(
             ConvertedEntityList = convertedEntities.Select(x => x.ToConvertedEntityList()),
             OverDiscardEntityList = this.discardedEntities.Select(x =>
                 x.ToBuildEventRewardEntityList()
-            )
+            ),
         };
     }
 

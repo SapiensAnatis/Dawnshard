@@ -225,6 +225,6 @@ public static class UnitAvailabilityExtensions
 
             // Not playable
             [Dragons.Puppy] = UnitAvailability.Other,
-            [Dragons.Empty] = UnitAvailability.Other
+            [Dragons.Empty] = UnitAvailability.Other,
         }.ToFrozenDictionary();
 }

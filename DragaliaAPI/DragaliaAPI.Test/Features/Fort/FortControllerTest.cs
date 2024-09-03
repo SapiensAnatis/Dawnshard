@@ -42,7 +42,7 @@ public class FortControllerTest
             {
                 CarpenterNum = 1,
                 MaxCarpenterCount = 2,
-                WorkingCarpenterNum = 3
+                WorkingCarpenterNum = 3,
             };
         List<BuildList> buildList = new() { new() { FortPlantDetailId = 4 } };
         FortBonusList bonusList = new() { AllBonus = new(2, 3) };
@@ -144,7 +144,7 @@ public class FortControllerTest
                 new FortBuildAtOnceRequest()
                 {
                     PaymentType = PaymentTypes.HalidomHustleHammer,
-                    BuildId = 8
+                    BuildId = 8,
                 },
                 default
             )
@@ -255,7 +255,7 @@ public class FortControllerTest
                 {
                     FortPlantId = FortPlants.BroadleafTree,
                     PositionX = 2,
-                    PositionZ = 3
+                    PositionZ = 3,
                 },
                 default
             )
@@ -307,7 +307,7 @@ public class FortControllerTest
                 new FortLevelupAtOnceRequest()
                 {
                     PaymentType = PaymentTypes.HalidomHustleHammer,
-                    BuildId = 8
+                    BuildId = 8,
                 },
                 default
             )
@@ -471,7 +471,7 @@ public class FortControllerTest
                 {
                     BuildId = 1,
                     AfterPositionX = 2,
-                    AfterPositionZ = 3
+                    AfterPositionZ = 3,
                 },
                 default
             )

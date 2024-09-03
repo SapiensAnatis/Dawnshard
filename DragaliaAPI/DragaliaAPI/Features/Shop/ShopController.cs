@@ -49,7 +49,7 @@ public class ShopController : DragaliaControllerBase
                 QuestBonus = new List<AtgenQuestBonus>(),
                 ProductLockList = new List<AtgenProductLockList>(),
                 ProductList = new List<ProductList>(),
-                InfancyPaidDiamondLimit = 4800
+                InfancyPaidDiamondLimit = 4800,
             };
 
         response.UserItemSummon = await this.itemSummonService.GetItemSummon();

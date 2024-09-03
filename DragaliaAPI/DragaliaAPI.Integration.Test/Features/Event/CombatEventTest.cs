@@ -86,7 +86,7 @@ public class CombatEventTest : TestFixture
             {
                 ViewerId = ViewerId,
                 QuestId = 222130103,
-                State = 3
+                State = 3,
             }
         );
 

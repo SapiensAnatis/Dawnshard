@@ -189,7 +189,7 @@ public partial class WallService(
                 {
                     EntityType = reward.RewardEntityType,
                     EntityId = reward.RewardEntityId,
-                    EntityQuantity = reward.RewardEntityQuantity
+                    EntityQuantity = reward.RewardEntityQuantity,
                 }
             );
         }

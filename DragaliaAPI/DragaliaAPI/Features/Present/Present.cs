@@ -45,7 +45,7 @@ public record Present(
             MessageParamValue3 = this.MessageParamValues.ElementAtOrDefault(2),
             MessageParamValue4 = this.MessageParamValues.ElementAtOrDefault(3),
             CreateTime = this.CreateTime,
-            ReceiveLimitTime = CreateTime + ExpiryTime
+            ReceiveLimitTime = CreateTime + ExpiryTime,
         };
     }
 
@@ -55,7 +55,7 @@ public record Present(
         {
             EntityId = this.EntityId,
             EntityType = this.EntityType,
-            EntityQuantity = this.EntityQuantity
+            EntityQuantity = this.EntityQuantity,
         };
     }
 }

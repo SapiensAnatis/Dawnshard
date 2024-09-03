@@ -28,7 +28,7 @@ public class StampController : DragaliaControllerBase
     {
         IEnumerable<StampList> list = (await this.stampService.GetStampList()).ToList();
 
-        return this.Ok(new StampGetStampResponse() { StampList = list, });
+        return this.Ok(new StampGetStampResponse() { StampList = list });
     }
 
     [HttpPost("set_equip_stamp")]

@@ -11,12 +11,12 @@ public class AbilityCrestTradeTest : TestFixture
         : base(factory, output) { }
 
     [Theory]
-    [InlineData(104, AbilityCrests.WorthyRivals, 4000)]
-    [InlineData(2902, AbilityCrests.HisCleverBrother, 2000)]
-    [InlineData(167, AbilityCrests.DragonsNest, 200)]
+    [InlineData(104, AbilityCrestId.WorthyRivals, 4000)]
+    [InlineData(2902, AbilityCrestId.HisCleverBrother, 2000)]
+    [InlineData(167, AbilityCrestId.DragonsNest, 200)]
     public async Task Trade_AddsAbilityCrestAndDecreasesDewpoint(
         int tradeId,
-        AbilityCrests expectedCrestId,
+        AbilityCrestId expectedCrestId,
         int expectedDewpointCost
     )
     {
@@ -28,12 +28,12 @@ public class AbilityCrestTradeTest : TestFixture
                 new AbilityCrestTradeTradeRequest()
                 {
                     AbilityCrestTradeId = tradeId,
-                    TradeCount = 1
+                    TradeCount = 1,
                 }
             )
         ).Data;
 
-        AbilityCrests abilityCrestId;
+        AbilityCrestId abilityCrestId;
         abilityCrestId = data.UpdateDataList.AbilityCrestList!.First().AbilityCrestId;
         int dewpoint = data.UpdateDataList.UserData.DewPoint;
 

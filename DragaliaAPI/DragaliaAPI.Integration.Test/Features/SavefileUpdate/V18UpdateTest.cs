@@ -1,5 +1,6 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
@@ -16,11 +17,11 @@ public class V18UpdateTest : SavefileUpdateTestFixture
         await this.AddRangeToDatabase(
             new List<DbPlayerQuestWall>()
             {
-                new() { WallId = (int)QuestWallTypes.Flame, WallLevel = 2, },
-                new() { WallId = (int)QuestWallTypes.Water, WallLevel = 2, },
-                new() { WallId = (int)QuestWallTypes.Wind, WallLevel = 3, },
-                new() { WallId = (int)QuestWallTypes.Light, WallLevel = 4, },
-                new() { WallId = (int)QuestWallTypes.Shadow, WallLevel = 3, },
+                new() { WallId = (int)QuestWallTypes.Flame, WallLevel = 2 },
+                new() { WallId = (int)QuestWallTypes.Water, WallLevel = 2 },
+                new() { WallId = (int)QuestWallTypes.Wind, WallLevel = 3 },
+                new() { WallId = (int)QuestWallTypes.Light, WallLevel = 4 },
+                new() { WallId = (int)QuestWallTypes.Shadow, WallLevel = 3 },
             }
         );
 
@@ -143,11 +144,11 @@ public class V18UpdateTest : SavefileUpdateTestFixture
         await this.AddRangeToDatabase(
             new List<DbPlayerQuestWall>()
             {
-                new() { WallId = (int)QuestWallTypes.Flame, WallLevel = 80, },
-                new() { WallId = (int)QuestWallTypes.Water, WallLevel = 0, },
-                new() { WallId = (int)QuestWallTypes.Wind, WallLevel = 0, },
-                new() { WallId = (int)QuestWallTypes.Light, WallLevel = 0, },
-                new() { WallId = (int)QuestWallTypes.Shadow, WallLevel = 0, },
+                new() { WallId = (int)QuestWallTypes.Flame, WallLevel = 80 },
+                new() { WallId = (int)QuestWallTypes.Water, WallLevel = 0 },
+                new() { WallId = (int)QuestWallTypes.Wind, WallLevel = 0 },
+                new() { WallId = (int)QuestWallTypes.Light, WallLevel = 0 },
+                new() { WallId = (int)QuestWallTypes.Shadow, WallLevel = 0 },
             }
         );
 
@@ -217,11 +218,11 @@ public class V18UpdateTest : SavefileUpdateTestFixture
         await this.AddRangeToDatabase(
             new List<DbPlayerQuestWall>()
             {
-                new() { WallId = (int)QuestWallTypes.Flame, WallLevel = 80, },
-                new() { WallId = (int)QuestWallTypes.Water, WallLevel = 80, },
-                new() { WallId = (int)QuestWallTypes.Wind, WallLevel = 80, },
-                new() { WallId = (int)QuestWallTypes.Light, WallLevel = 80, },
-                new() { WallId = (int)QuestWallTypes.Shadow, WallLevel = 80, },
+                new() { WallId = (int)QuestWallTypes.Flame, WallLevel = 80 },
+                new() { WallId = (int)QuestWallTypes.Water, WallLevel = 80 },
+                new() { WallId = (int)QuestWallTypes.Wind, WallLevel = 80 },
+                new() { WallId = (int)QuestWallTypes.Light, WallLevel = 80 },
+                new() { WallId = (int)QuestWallTypes.Shadow, WallLevel = 80 },
             }
         );
 
@@ -247,11 +248,11 @@ public class V18UpdateTest : SavefileUpdateTestFixture
         await this.AddRangeToDatabase(
             new List<DbPlayerQuestWall>()
             {
-                new() { WallId = (int)QuestWallTypes.Flame, WallLevel = 0, },
-                new() { WallId = (int)QuestWallTypes.Water, WallLevel = 0, },
-                new() { WallId = (int)QuestWallTypes.Wind, WallLevel = 0, },
-                new() { WallId = (int)QuestWallTypes.Light, WallLevel = 0, },
-                new() { WallId = (int)QuestWallTypes.Shadow, WallLevel = 0, },
+                new() { WallId = (int)QuestWallTypes.Flame, WallLevel = 0 },
+                new() { WallId = (int)QuestWallTypes.Water, WallLevel = 0 },
+                new() { WallId = (int)QuestWallTypes.Wind, WallLevel = 0 },
+                new() { WallId = (int)QuestWallTypes.Light, WallLevel = 0 },
+                new() { WallId = (int)QuestWallTypes.Shadow, WallLevel = 0 },
             }
         );
 
@@ -311,7 +312,7 @@ public class V18UpdateTest : SavefileUpdateTestFixture
                         Id = 10010601, // Clear The Mercurial Gauntlet (Shadow): Lv. 1
                         Type = MissionType.Normal,
                         State = MissionState.InProgress,
-                    }
+                    },
                 ],
                 opts => opts.Excluding(x => x.ViewerId).Excluding(x => x.GroupId)
             );

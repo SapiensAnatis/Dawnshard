@@ -84,7 +84,7 @@ public class PartyRepository : BaseRepository, IPartyRepository
                         ViewerId = original.First().ViewerId,
                         PartyNo = original.First().PartyNo,
                         UnitNo = i,
-                        CharaId = 0
+                        CharaId = 0,
                     }
             );
         }

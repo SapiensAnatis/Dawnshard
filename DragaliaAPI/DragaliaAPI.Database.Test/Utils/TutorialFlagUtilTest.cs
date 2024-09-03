@@ -17,7 +17,7 @@ public class TutorialFlagUtilTest
                 {
                     (int)TutorialFlags.GrowthDragon,
                     (int)TutorialFlags.GuildTutorial,
-                    (int)TutorialFlags.SagaTutorial
+                    (int)TutorialFlags.SagaTutorial,
                 }
             );
     }
@@ -31,7 +31,7 @@ public class TutorialFlagUtilTest
                 {
                     (int)TutorialFlags.GrowthDragon,
                     (int)TutorialFlags.GuildTutorial,
-                    (int)TutorialFlags.SagaTutorial
+                    (int)TutorialFlags.SagaTutorial,
                 }
             )
             .Should()
@@ -47,7 +47,7 @@ public class TutorialFlagUtilTest
                 {
                     (int)TutorialFlags.GrowthDragon,
                     (int)TutorialFlags.GuildTutorial,
-                    (int)TutorialFlags.SagaTutorial
+                    (int)TutorialFlags.SagaTutorial,
                 },
                 1 << 3
             )

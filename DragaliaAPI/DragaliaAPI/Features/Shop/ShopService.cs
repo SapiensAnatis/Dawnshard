@@ -34,7 +34,7 @@ public class ShopService(
                 Type = shopType,
                 Payment = paymentType,
                 Id = goodsId,
-                Quantity = goodsQuantity
+                Quantity = goodsQuantity,
             }
         );
 
@@ -170,25 +170,23 @@ public class ShopService(
     {
         return type switch
         {
-            ShopType.MaterialDaily
-                => (
-                    timeProvider.GetLastDailyReset(),
-                    timeProvider.GetLastDailyReset().AddDays(1).AddSeconds(-1)
-                ),
-            ShopType.MaterialWeekly
-                => (
-                    timeProvider.GetLastWeeklyReset(),
-                    timeProvider.GetLastWeeklyReset().AddDays(7).AddSeconds(-1)
-                ),
-            ShopType.MaterialMonthly
-                => (
-                    timeProvider.GetLastMonthlyReset(),
-                    timeProvider.GetLastMonthlyReset().AddMonths(1).AddSeconds(-1)
-                ),
-            ShopType.Normal
-            or ShopType.Special
-                => (DateTimeOffset.UnixEpoch, DateTimeOffset.UnixEpoch),
-            _ => throw new DragaliaException(ResultCode.CommonInvalidArgument, "Invalid ShopType")
+            ShopType.MaterialDaily => (
+                timeProvider.GetLastDailyReset(),
+                timeProvider.GetLastDailyReset().AddDays(1).AddSeconds(-1)
+            ),
+            ShopType.MaterialWeekly => (
+                timeProvider.GetLastWeeklyReset(),
+                timeProvider.GetLastWeeklyReset().AddDays(7).AddSeconds(-1)
+            ),
+            ShopType.MaterialMonthly => (
+                timeProvider.GetLastMonthlyReset(),
+                timeProvider.GetLastMonthlyReset().AddMonths(1).AddSeconds(-1)
+            ),
+            ShopType.Normal or ShopType.Special => (
+                DateTimeOffset.UnixEpoch,
+                DateTimeOffset.UnixEpoch
+            ),
+            _ => throw new DragaliaException(ResultCode.CommonInvalidArgument, "Invalid ShopType"),
         };
     }
 }

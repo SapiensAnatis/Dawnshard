@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Story;
+using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,7 +36,7 @@ public class V4Update : ISavefileUpdate
         (1000311, 30202),
         (1000412, 40101),
         (1000509, 50201),
-        (1000607, 60999)
+        (1000607, 60999),
     };
 
     public async Task Apply()

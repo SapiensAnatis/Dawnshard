@@ -114,7 +114,7 @@ public class MissionTest : TestFixture
             new DbAbilityCrest()
             {
                 ViewerId = ViewerId,
-                AbilityCrestId = AbilityCrests.Aromatherapy,
+                AbilityCrestId = AbilityCrestId.Aromatherapy,
                 LimitBreakCount = 4,
             }
         );
@@ -129,14 +129,14 @@ public class MissionTest : TestFixture
                 "/ability_crest/buildup_piece",
                 new AbilityCrestBuildupPieceRequest()
                 {
-                    AbilityCrestId = AbilityCrests.Aromatherapy,
+                    AbilityCrestId = AbilityCrestId.Aromatherapy,
                     BuildupAbilityCrestPieceList = Enumerable
                         .Range(2, 15)
                         .Select(x => new AtgenBuildupAbilityCrestPieceList()
                         {
                             BuildupPieceType = BuildupPieceTypes.Stats,
-                            Step = x
-                        })
+                            Step = x,
+                        }),
                 }
             );
 
@@ -175,7 +175,7 @@ public class MissionTest : TestFixture
         response
             .UpdateDataList.AbilityCrestList.Should()
             .Contain(x =>
-                x.AbilityCrestId == AbilityCrests.HavingaSummerBall && x.EquipableCount == 1
+                x.AbilityCrestId == AbilityCrestId.HavingaSummerBall && x.EquipableCount == 1
             );
     }
 
@@ -215,7 +215,7 @@ public class MissionTest : TestFixture
                     ViewerId = this.ViewerId,
                     Id = missionId2,
                     Date = yesterday,
-                }
+                },
             ]
         );
 
@@ -228,7 +228,7 @@ public class MissionTest : TestFixture
                     Type = MissionType.Daily,
                     State = MissionState.Completed,
                     Start = timeProvider.GetLastDailyReset(),
-                    End = timeProvider.GetLastDailyReset().AddDays(1)
+                    End = timeProvider.GetLastDailyReset().AddDays(1),
                 },
                 new DbPlayerMission()
                 {
@@ -237,8 +237,8 @@ public class MissionTest : TestFixture
                     Type = MissionType.Daily,
                     State = MissionState.Completed,
                     Start = timeProvider.GetLastDailyReset(),
-                    End = timeProvider.GetLastDailyReset().AddDays(1)
-                }
+                    End = timeProvider.GetLastDailyReset().AddDays(1),
+                },
             ]
         );
 
@@ -249,10 +249,10 @@ public class MissionTest : TestFixture
                 {
                     MissionParamsList =
                     [
-                        new() { DailyMissionId = missionId1, DayNo = today, },
-                        new() { DailyMissionId = missionId2, DayNo = today, },
-                        new() { DailyMissionId = missionId1, DayNo = yesterday, },
-                    ]
+                        new() { DailyMissionId = missionId1, DayNo = today },
+                        new() { DailyMissionId = missionId2, DayNo = today },
+                        new() { DailyMissionId = missionId1, DayNo = yesterday },
+                    ],
                 }
             );
 
@@ -302,7 +302,7 @@ public class MissionTest : TestFixture
                 Id = missionId,
                 Type = MissionType.MemoryEvent,
                 State = MissionState.Completed,
-                Progress = 5
+                Progress = 5,
             }
         );
 
@@ -366,14 +366,14 @@ public class MissionTest : TestFixture
                     {
                         DailyMissionId = missionId,
                         DayNo = today,
-                        State = MissionState.Completed
+                        State = MissionState.Completed,
                     },
                     new DailyMissionList()
                     {
                         DailyMissionId = missionId,
                         DayNo = yesterday,
-                        State = MissionState.Completed
-                    }
+                        State = MissionState.Completed,
+                    },
                 ],
                 opts =>
                     opts.Including(x => x.DailyMissionId)
@@ -429,7 +429,7 @@ public class MissionTest : TestFixture
                 ViewerId = this.ViewerId,
                 Id = mission.Id,
                 State = MissionState.Claimed,
-                Type = MissionType.Drill
+                Type = MissionType.Drill,
             };
         }
 
@@ -489,7 +489,7 @@ public class MissionTest : TestFixture
                 [
                     new DrillMissionGroupList(1),
                     new DrillMissionGroupList(2),
-                    new DrillMissionGroupList(3)
+                    new DrillMissionGroupList(3),
                 ]
             );
     }
@@ -505,7 +505,7 @@ public class MissionTest : TestFixture
                     ViewerId = this.ViewerId,
                     Id = x.Id,
                     State = MissionState.Claimed,
-                    Type = MissionType.Drill
+                    Type = MissionType.Drill,
                 })
         );
 
@@ -584,7 +584,7 @@ public class MissionTest : TestFixture
                 GroupId = 1,
                 ViewerId = this.ViewerId,
                 Type = MissionType.MainStory,
-                State = MissionState.Claimed
+                State = MissionState.Claimed,
             });
 
         await this.AddRangeToDatabase(completedMissions);
@@ -632,7 +632,7 @@ public class MissionTest : TestFixture
                         {
                             MainStoryMissionId = x.Id,
                             State = (int)MissionState.InProgress,
-                        })
+                        }),
                 }
             );
     }

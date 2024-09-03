@@ -15,5 +15,5 @@ public enum ManaNodeTypes
     Ex = 10501,
     Mat = 10601,
     StdAtkUp = 10701,
-    MaxLvUp = 10801
+    MaxLvUp = 10801,
 }

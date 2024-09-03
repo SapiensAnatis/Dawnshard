@@ -28,7 +28,7 @@ public class TalismanValidator : AbstractValidator<TalismanList>
                 RuleFor(x => new
                     {
                         talisman_ability_id_1 = x.TalismanAbilityId1,
-                        talisman_ability_id_2 = x.TalismanAbilityId2
+                        talisman_ability_id_2 = x.TalismanAbilityId2,
                     })
                     .Must(x => x.talisman_ability_id_1 != x.talisman_ability_id_2)
                     .WithMessage("Duplicate talisman abilities")

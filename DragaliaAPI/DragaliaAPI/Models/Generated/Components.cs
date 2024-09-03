@@ -16,7 +16,7 @@ namespace DragaliaAPI.Models.Generated;
 public partial class AbilityCrestList
 {
     [Key("ability_crest_id")]
-    public AbilityCrests AbilityCrestId { get; set; }
+    public AbilityCrestId AbilityCrestId { get; set; }
 
     [Key("buildup_count")]
     public int BuildupCount { get; set; }
@@ -51,7 +51,7 @@ public partial class AbilityCrestList
     public int Ability2Level { get; set; }
 
     public AbilityCrestList(
-        AbilityCrests abilityCrestId,
+        AbilityCrestId abilityCrestId,
         int buildupCount,
         int limitBreakCount,
         int equipableCount,
@@ -90,25 +90,25 @@ public partial class AbilityCrestSetList
     public string AbilityCrestSetName { get; set; }
 
     [Key("crest_slot_type_1_crest_id_1")]
-    public AbilityCrests CrestSlotType1CrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType1CrestId1 { get; set; }
 
     [Key("crest_slot_type_1_crest_id_2")]
-    public AbilityCrests CrestSlotType1CrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType1CrestId2 { get; set; }
 
     [Key("crest_slot_type_1_crest_id_3")]
-    public AbilityCrests CrestSlotType1CrestId3 { get; set; }
+    public AbilityCrestId CrestSlotType1CrestId3 { get; set; }
 
     [Key("crest_slot_type_2_crest_id_1")]
-    public AbilityCrests CrestSlotType2CrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType2CrestId1 { get; set; }
 
     [Key("crest_slot_type_2_crest_id_2")]
-    public AbilityCrests CrestSlotType2CrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType2CrestId2 { get; set; }
 
     [Key("crest_slot_type_3_crest_id_1")]
-    public AbilityCrests CrestSlotType3CrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType3CrestId1 { get; set; }
 
     [Key("crest_slot_type_3_crest_id_2")]
-    public AbilityCrests CrestSlotType3CrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType3CrestId2 { get; set; }
 
     [Key("talisman_key_id")]
     public ulong TalismanKeyId { get; set; }
@@ -116,13 +116,13 @@ public partial class AbilityCrestSetList
     public AbilityCrestSetList(
         int abilityCrestSetNo,
         string abilityCrestSetName,
-        AbilityCrests crestSlotType1CrestId1,
-        AbilityCrests crestSlotType1CrestId2,
-        AbilityCrests crestSlotType1CrestId3,
-        AbilityCrests crestSlotType2CrestId1,
-        AbilityCrests crestSlotType2CrestId2,
-        AbilityCrests crestSlotType3CrestId1,
-        AbilityCrests crestSlotType3CrestId2,
+        AbilityCrestId crestSlotType1CrestId1,
+        AbilityCrestId crestSlotType1CrestId2,
+        AbilityCrestId crestSlotType1CrestId3,
+        AbilityCrestId crestSlotType2CrestId1,
+        AbilityCrestId crestSlotType2CrestId2,
+        AbilityCrestId crestSlotType3CrestId1,
+        AbilityCrestId crestSlotType3CrestId2,
         ulong talismanKeyId
     )
     {
@@ -148,7 +148,7 @@ public partial class AbilityCrestTradeList
     public int AbilityCrestTradeId { get; set; }
 
     [Key("ability_crest_id")]
-    public AbilityCrests AbilityCrestId { get; set; }
+    public AbilityCrestId AbilityCrestId { get; set; }
 
     [Key("need_dew_point")]
     public int NeedDewPoint { get; set; }
@@ -167,7 +167,7 @@ public partial class AbilityCrestTradeList
 
     public AbilityCrestTradeList(
         int abilityCrestTradeId,
-        AbilityCrests abilityCrestId,
+        AbilityCrestId abilityCrestId,
         int needDewPoint,
         int priority,
         DateTimeOffset completeDate,
@@ -622,25 +622,25 @@ public partial class AtgenArchivePartyUnitList
     public WeaponBodies EquipWeaponBodyId { get; set; }
 
     [Key("equip_crest_slot_type_1_crest_id_1")]
-    public AbilityCrests EquipCrestSlotType1CrestId1 { get; set; }
+    public AbilityCrestId EquipCrestSlotType1CrestId1 { get; set; }
 
     [Key("equip_crest_slot_type_1_crest_id_2")]
-    public AbilityCrests EquipCrestSlotType1CrestId2 { get; set; }
+    public AbilityCrestId EquipCrestSlotType1CrestId2 { get; set; }
 
     [Key("equip_crest_slot_type_1_crest_id_3")]
-    public AbilityCrests EquipCrestSlotType1CrestId3 { get; set; }
+    public AbilityCrestId EquipCrestSlotType1CrestId3 { get; set; }
 
     [Key("equip_crest_slot_type_2_crest_id_1")]
-    public AbilityCrests EquipCrestSlotType2CrestId1 { get; set; }
+    public AbilityCrestId EquipCrestSlotType2CrestId1 { get; set; }
 
     [Key("equip_crest_slot_type_2_crest_id_2")]
-    public AbilityCrests EquipCrestSlotType2CrestId2 { get; set; }
+    public AbilityCrestId EquipCrestSlotType2CrestId2 { get; set; }
 
     [Key("equip_crest_slot_type_3_crest_id_1")]
-    public AbilityCrests EquipCrestSlotType3CrestId1 { get; set; }
+    public AbilityCrestId EquipCrestSlotType3CrestId1 { get; set; }
 
     [Key("equip_crest_slot_type_3_crest_id_2")]
-    public AbilityCrests EquipCrestSlotType3CrestId2 { get; set; }
+    public AbilityCrestId EquipCrestSlotType3CrestId2 { get; set; }
 
     [Key("equip_talisman_id")]
     public Talismans EquipTalismanId { get; set; }
@@ -677,13 +677,13 @@ public partial class AtgenArchivePartyUnitList
         Charas charaId,
         Dragons equipDragonId,
         WeaponBodies equipWeaponBodyId,
-        AbilityCrests equipCrestSlotType1CrestId1,
-        AbilityCrests equipCrestSlotType1CrestId2,
-        AbilityCrests equipCrestSlotType1CrestId3,
-        AbilityCrests equipCrestSlotType2CrestId1,
-        AbilityCrests equipCrestSlotType2CrestId2,
-        AbilityCrests equipCrestSlotType3CrestId1,
-        AbilityCrests equipCrestSlotType3CrestId2,
+        AbilityCrestId equipCrestSlotType1CrestId1,
+        AbilityCrestId equipCrestSlotType1CrestId2,
+        AbilityCrestId equipCrestSlotType1CrestId3,
+        AbilityCrestId equipCrestSlotType2CrestId1,
+        AbilityCrestId equipCrestSlotType2CrestId2,
+        AbilityCrestId equipCrestSlotType3CrestId1,
+        AbilityCrestId equipCrestSlotType3CrestId2,
         Talismans equipTalismanId,
         int equipTalismanAbilityId1,
         int equipTalismanAbilityId2,
@@ -1169,25 +1169,25 @@ public partial class AtgenCharaUnitSetDetailList
     public WeaponBodies WeaponBodyId { get; set; }
 
     [Key("crest_slot_type_1_crest_id_1")]
-    public AbilityCrests CrestSlotType1CrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType1CrestId1 { get; set; }
 
     [Key("crest_slot_type_1_crest_id_2")]
-    public AbilityCrests CrestSlotType1CrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType1CrestId2 { get; set; }
 
     [Key("crest_slot_type_1_crest_id_3")]
-    public AbilityCrests CrestSlotType1CrestId3 { get; set; }
+    public AbilityCrestId CrestSlotType1CrestId3 { get; set; }
 
     [Key("crest_slot_type_2_crest_id_1")]
-    public AbilityCrests CrestSlotType2CrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType2CrestId1 { get; set; }
 
     [Key("crest_slot_type_2_crest_id_2")]
-    public AbilityCrests CrestSlotType2CrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType2CrestId2 { get; set; }
 
     [Key("crest_slot_type_3_crest_id_1")]
-    public AbilityCrests CrestSlotType3CrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType3CrestId1 { get; set; }
 
     [Key("crest_slot_type_3_crest_id_2")]
-    public AbilityCrests CrestSlotType3CrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType3CrestId2 { get; set; }
 
     [Key("talisman_key_id")]
     public long TalismanKeyId { get; set; }
@@ -1197,13 +1197,13 @@ public partial class AtgenCharaUnitSetDetailList
         string unitSetName,
         long dragonKeyId,
         WeaponBodies weaponBodyId,
-        AbilityCrests crestSlotType1CrestId1,
-        AbilityCrests crestSlotType1CrestId2,
-        AbilityCrests crestSlotType1CrestId3,
-        AbilityCrests crestSlotType2CrestId1,
-        AbilityCrests crestSlotType2CrestId2,
-        AbilityCrests crestSlotType3CrestId1,
-        AbilityCrests crestSlotType3CrestId2,
+        AbilityCrestId crestSlotType1CrestId1,
+        AbilityCrestId crestSlotType1CrestId2,
+        AbilityCrestId crestSlotType1CrestId3,
+        AbilityCrestId crestSlotType2CrestId1,
+        AbilityCrestId crestSlotType2CrestId2,
+        AbilityCrestId crestSlotType3CrestId1,
+        AbilityCrestId crestSlotType3CrestId2,
         long talismanKeyId
     )
     {
@@ -1546,7 +1546,7 @@ public partial class AtgenDebugDebugPartyList
     public WeaponBodies WeaponBodyLimitOverCount { get; set; }
 
     [Key("crest_slot_type_1_ability_crest_id_1")]
-    public AbilityCrests CrestSlotType1AbilityCrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType1AbilityCrestId1 { get; set; }
 
     [Key("crest_slot_type_1_ability_crest_buildup_count_1")]
     public int CrestSlotType1AbilityCrestBuildupCount1 { get; set; }
@@ -1561,7 +1561,7 @@ public partial class AtgenDebugDebugPartyList
     public int CrestSlotType1AbilityCrestAttackPlusCount1 { get; set; }
 
     [Key("crest_slot_type_1_ability_crest_id_2")]
-    public AbilityCrests CrestSlotType1AbilityCrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType1AbilityCrestId2 { get; set; }
 
     [Key("crest_slot_type_1_ability_crest_buildup_count_2")]
     public int CrestSlotType1AbilityCrestBuildupCount2 { get; set; }
@@ -1576,7 +1576,7 @@ public partial class AtgenDebugDebugPartyList
     public int CrestSlotType1AbilityCrestAttackPlusCount2 { get; set; }
 
     [Key("crest_slot_type_1_ability_crest_id_3")]
-    public AbilityCrests CrestSlotType1AbilityCrestId3 { get; set; }
+    public AbilityCrestId CrestSlotType1AbilityCrestId3 { get; set; }
 
     [Key("crest_slot_type_1_ability_crest_buildup_count_3")]
     public int CrestSlotType1AbilityCrestBuildupCount3 { get; set; }
@@ -1591,7 +1591,7 @@ public partial class AtgenDebugDebugPartyList
     public int CrestSlotType1AbilityCrestAttackPlusCount3 { get; set; }
 
     [Key("crest_slot_type_2_ability_crest_id_1")]
-    public AbilityCrests CrestSlotType2AbilityCrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType2AbilityCrestId1 { get; set; }
 
     [Key("crest_slot_type_2_ability_crest_buildup_count_1")]
     public int CrestSlotType2AbilityCrestBuildupCount1 { get; set; }
@@ -1606,7 +1606,7 @@ public partial class AtgenDebugDebugPartyList
     public int CrestSlotType2AbilityCrestAttackPlusCount1 { get; set; }
 
     [Key("crest_slot_type_2_ability_crest_id_2")]
-    public AbilityCrests CrestSlotType2AbilityCrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType2AbilityCrestId2 { get; set; }
 
     [Key("crest_slot_type_2_ability_crest_buildup_count_2")]
     public int CrestSlotType2AbilityCrestBuildupCount2 { get; set; }
@@ -1621,7 +1621,7 @@ public partial class AtgenDebugDebugPartyList
     public int CrestSlotType2AbilityCrestAttackPlusCount2 { get; set; }
 
     [Key("crest_slot_type_3_ability_crest_id_1")]
-    public AbilityCrests CrestSlotType3AbilityCrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType3AbilityCrestId1 { get; set; }
 
     [Key("crest_slot_type_3_ability_crest_buildup_count_1")]
     public int CrestSlotType3AbilityCrestBuildupCount1 { get; set; }
@@ -1636,7 +1636,7 @@ public partial class AtgenDebugDebugPartyList
     public int CrestSlotType3AbilityCrestAttackPlusCount1 { get; set; }
 
     [Key("crest_slot_type_3_ability_crest_id_2")]
-    public AbilityCrests CrestSlotType3AbilityCrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType3AbilityCrestId2 { get; set; }
 
     [Key("crest_slot_type_3_ability_crest_buildup_count_2")]
     public int CrestSlotType3AbilityCrestBuildupCount2 { get; set; }
@@ -1672,37 +1672,37 @@ public partial class AtgenDebugDebugPartyList
         WeaponBodies weaponBodyBuildupCount,
         WeaponBodies weaponBodyLimitBreakCount,
         WeaponBodies weaponBodyLimitOverCount,
-        AbilityCrests crestSlotType1AbilityCrestId1,
+        AbilityCrestId crestSlotType1AbilityCrestId1,
         int crestSlotType1AbilityCrestBuildupCount1,
         int crestSlotType1AbilityCrestLimitBreakCount1,
         int crestSlotType1AbilityCrestHpPlusCount1,
         int crestSlotType1AbilityCrestAttackPlusCount1,
-        AbilityCrests crestSlotType1AbilityCrestId2,
+        AbilityCrestId crestSlotType1AbilityCrestId2,
         int crestSlotType1AbilityCrestBuildupCount2,
         int crestSlotType1AbilityCrestLimitBreakCount2,
         int crestSlotType1AbilityCrestHpPlusCount2,
         int crestSlotType1AbilityCrestAttackPlusCount2,
-        AbilityCrests crestSlotType1AbilityCrestId3,
+        AbilityCrestId crestSlotType1AbilityCrestId3,
         int crestSlotType1AbilityCrestBuildupCount3,
         int crestSlotType1AbilityCrestLimitBreakCount3,
         int crestSlotType1AbilityCrestHpPlusCount3,
         int crestSlotType1AbilityCrestAttackPlusCount3,
-        AbilityCrests crestSlotType2AbilityCrestId1,
+        AbilityCrestId crestSlotType2AbilityCrestId1,
         int crestSlotType2AbilityCrestBuildupCount1,
         int crestSlotType2AbilityCrestLimitBreakCount1,
         int crestSlotType2AbilityCrestHpPlusCount1,
         int crestSlotType2AbilityCrestAttackPlusCount1,
-        AbilityCrests crestSlotType2AbilityCrestId2,
+        AbilityCrestId crestSlotType2AbilityCrestId2,
         int crestSlotType2AbilityCrestBuildupCount2,
         int crestSlotType2AbilityCrestLimitBreakCount2,
         int crestSlotType2AbilityCrestHpPlusCount2,
         int crestSlotType2AbilityCrestAttackPlusCount2,
-        AbilityCrests crestSlotType3AbilityCrestId1,
+        AbilityCrestId crestSlotType3AbilityCrestId1,
         int crestSlotType3AbilityCrestBuildupCount1,
         int crestSlotType3AbilityCrestLimitBreakCount1,
         int crestSlotType3AbilityCrestHpPlusCount1,
         int crestSlotType3AbilityCrestAttackPlusCount1,
-        AbilityCrests crestSlotType3AbilityCrestId2,
+        AbilityCrestId crestSlotType3AbilityCrestId2,
         int crestSlotType3AbilityCrestBuildupCount2,
         int crestSlotType3AbilityCrestLimitBreakCount2,
         int crestSlotType3AbilityCrestHpPlusCount2,
@@ -1835,7 +1835,7 @@ public partial class AtgenDebugUnitDataList
     public int DragonReliabilityLevel { get; set; }
 
     [Key("crest_slot_type_1_ability_crest_id_1")]
-    public AbilityCrests CrestSlotType1AbilityCrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType1AbilityCrestId1 { get; set; }
 
     [Key("crest_slot_type_1_ability_crest_buildup_count_1")]
     public int CrestSlotType1AbilityCrestBuildupCount1 { get; set; }
@@ -1850,7 +1850,7 @@ public partial class AtgenDebugUnitDataList
     public int CrestSlotType1AbilityCrestAttackPlusCount1 { get; set; }
 
     [Key("crest_slot_type_1_ability_crest_id_2")]
-    public AbilityCrests CrestSlotType1AbilityCrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType1AbilityCrestId2 { get; set; }
 
     [Key("crest_slot_type_1_ability_crest_buildup_count_2")]
     public int CrestSlotType1AbilityCrestBuildupCount2 { get; set; }
@@ -1865,7 +1865,7 @@ public partial class AtgenDebugUnitDataList
     public int CrestSlotType1AbilityCrestAttackPlusCount2 { get; set; }
 
     [Key("crest_slot_type_1_ability_crest_id_3")]
-    public AbilityCrests CrestSlotType1AbilityCrestId3 { get; set; }
+    public AbilityCrestId CrestSlotType1AbilityCrestId3 { get; set; }
 
     [Key("crest_slot_type_1_ability_crest_buildup_count_3")]
     public int CrestSlotType1AbilityCrestBuildupCount3 { get; set; }
@@ -1880,7 +1880,7 @@ public partial class AtgenDebugUnitDataList
     public int CrestSlotType1AbilityCrestAttackPlusCount3 { get; set; }
 
     [Key("crest_slot_type_2_ability_crest_id_1")]
-    public AbilityCrests CrestSlotType2AbilityCrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType2AbilityCrestId1 { get; set; }
 
     [Key("crest_slot_type_2_ability_crest_buildup_count_1")]
     public int CrestSlotType2AbilityCrestBuildupCount1 { get; set; }
@@ -1895,7 +1895,7 @@ public partial class AtgenDebugUnitDataList
     public int CrestSlotType2AbilityCrestAttackPlusCount1 { get; set; }
 
     [Key("crest_slot_type_2_ability_crest_id_2")]
-    public AbilityCrests CrestSlotType2AbilityCrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType2AbilityCrestId2 { get; set; }
 
     [Key("crest_slot_type_2_ability_crest_buildup_count_2")]
     public int CrestSlotType2AbilityCrestBuildupCount2 { get; set; }
@@ -1910,7 +1910,7 @@ public partial class AtgenDebugUnitDataList
     public int CrestSlotType2AbilityCrestAttackPlusCount2 { get; set; }
 
     [Key("crest_slot_type_3_ability_crest_id_1")]
-    public AbilityCrests CrestSlotType3AbilityCrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType3AbilityCrestId1 { get; set; }
 
     [Key("crest_slot_type_3_ability_crest_buildup_count_1")]
     public int CrestSlotType3AbilityCrestBuildupCount1 { get; set; }
@@ -1925,7 +1925,7 @@ public partial class AtgenDebugUnitDataList
     public int CrestSlotType3AbilityCrestAttackPlusCount1 { get; set; }
 
     [Key("crest_slot_type_3_ability_crest_id_2")]
-    public AbilityCrests CrestSlotType3AbilityCrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType3AbilityCrestId2 { get; set; }
 
     [Key("crest_slot_type_3_ability_crest_buildup_count_2")]
     public int CrestSlotType3AbilityCrestBuildupCount2 { get; set; }
@@ -1956,37 +1956,37 @@ public partial class AtgenDebugUnitDataList
         int dragonAttackPlusCount,
         int dragonLimit,
         int dragonReliabilityLevel,
-        AbilityCrests crestSlotType1AbilityCrestId1,
+        AbilityCrestId crestSlotType1AbilityCrestId1,
         int crestSlotType1AbilityCrestBuildupCount1,
         int crestSlotType1AbilityCrestLimitBreakCount1,
         int crestSlotType1AbilityCrestHpPlusCount1,
         int crestSlotType1AbilityCrestAttackPlusCount1,
-        AbilityCrests crestSlotType1AbilityCrestId2,
+        AbilityCrestId crestSlotType1AbilityCrestId2,
         int crestSlotType1AbilityCrestBuildupCount2,
         int crestSlotType1AbilityCrestLimitBreakCount2,
         int crestSlotType1AbilityCrestHpPlusCount2,
         int crestSlotType1AbilityCrestAttackPlusCount2,
-        AbilityCrests crestSlotType1AbilityCrestId3,
+        AbilityCrestId crestSlotType1AbilityCrestId3,
         int crestSlotType1AbilityCrestBuildupCount3,
         int crestSlotType1AbilityCrestLimitBreakCount3,
         int crestSlotType1AbilityCrestHpPlusCount3,
         int crestSlotType1AbilityCrestAttackPlusCount3,
-        AbilityCrests crestSlotType2AbilityCrestId1,
+        AbilityCrestId crestSlotType2AbilityCrestId1,
         int crestSlotType2AbilityCrestBuildupCount1,
         int crestSlotType2AbilityCrestLimitBreakCount1,
         int crestSlotType2AbilityCrestHpPlusCount1,
         int crestSlotType2AbilityCrestAttackPlusCount1,
-        AbilityCrests crestSlotType2AbilityCrestId2,
+        AbilityCrestId crestSlotType2AbilityCrestId2,
         int crestSlotType2AbilityCrestBuildupCount2,
         int crestSlotType2AbilityCrestLimitBreakCount2,
         int crestSlotType2AbilityCrestHpPlusCount2,
         int crestSlotType2AbilityCrestAttackPlusCount2,
-        AbilityCrests crestSlotType3AbilityCrestId1,
+        AbilityCrestId crestSlotType3AbilityCrestId1,
         int crestSlotType3AbilityCrestBuildupCount1,
         int crestSlotType3AbilityCrestLimitBreakCount1,
         int crestSlotType3AbilityCrestHpPlusCount1,
         int crestSlotType3AbilityCrestAttackPlusCount1,
-        AbilityCrests crestSlotType3AbilityCrestId2,
+        AbilityCrestId crestSlotType3AbilityCrestId2,
         int crestSlotType3AbilityCrestBuildupCount2,
         int crestSlotType3AbilityCrestLimitBreakCount2,
         int crestSlotType3AbilityCrestHpPlusCount2,
@@ -4313,37 +4313,37 @@ public partial class AtgenRedoableSummonResultUnitList
 public partial class AtgenRequestAbilityCrestSetData
 {
     [Key("crest_slot_type_1_crest_id_1")]
-    public AbilityCrests CrestSlotType1CrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType1CrestId1 { get; set; }
 
     [Key("crest_slot_type_1_crest_id_2")]
-    public AbilityCrests CrestSlotType1CrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType1CrestId2 { get; set; }
 
     [Key("crest_slot_type_1_crest_id_3")]
-    public AbilityCrests CrestSlotType1CrestId3 { get; set; }
+    public AbilityCrestId CrestSlotType1CrestId3 { get; set; }
 
     [Key("crest_slot_type_2_crest_id_1")]
-    public AbilityCrests CrestSlotType2CrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType2CrestId1 { get; set; }
 
     [Key("crest_slot_type_2_crest_id_2")]
-    public AbilityCrests CrestSlotType2CrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType2CrestId2 { get; set; }
 
     [Key("crest_slot_type_3_crest_id_1")]
-    public AbilityCrests CrestSlotType3CrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType3CrestId1 { get; set; }
 
     [Key("crest_slot_type_3_crest_id_2")]
-    public AbilityCrests CrestSlotType3CrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType3CrestId2 { get; set; }
 
     [Key("talisman_key_id")]
     public ulong TalismanKeyId { get; set; }
 
     public AtgenRequestAbilityCrestSetData(
-        AbilityCrests crestSlotType1CrestId1,
-        AbilityCrests crestSlotType1CrestId2,
-        AbilityCrests crestSlotType1CrestId3,
-        AbilityCrests crestSlotType2CrestId1,
-        AbilityCrests crestSlotType2CrestId2,
-        AbilityCrests crestSlotType3CrestId1,
-        AbilityCrests crestSlotType3CrestId2,
+        AbilityCrestId crestSlotType1CrestId1,
+        AbilityCrestId crestSlotType1CrestId2,
+        AbilityCrestId crestSlotType1CrestId3,
+        AbilityCrestId crestSlotType2CrestId1,
+        AbilityCrestId crestSlotType2CrestId2,
+        AbilityCrestId crestSlotType3CrestId1,
+        AbilityCrestId crestSlotType3CrestId2,
         ulong talismanKeyId
     )
     {
@@ -4370,25 +4370,25 @@ public partial class AtgenRequestCharaUnitSetData
     public WeaponBodies WeaponBodyId { get; set; }
 
     [Key("crest_slot_type_1_crest_id_1")]
-    public AbilityCrests CrestSlotType1CrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType1CrestId1 { get; set; }
 
     [Key("crest_slot_type_1_crest_id_2")]
-    public AbilityCrests CrestSlotType1CrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType1CrestId2 { get; set; }
 
     [Key("crest_slot_type_1_crest_id_3")]
-    public AbilityCrests CrestSlotType1CrestId3 { get; set; }
+    public AbilityCrestId CrestSlotType1CrestId3 { get; set; }
 
     [Key("crest_slot_type_2_crest_id_1")]
-    public AbilityCrests CrestSlotType2CrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType2CrestId1 { get; set; }
 
     [Key("crest_slot_type_2_crest_id_2")]
-    public AbilityCrests CrestSlotType2CrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType2CrestId2 { get; set; }
 
     [Key("crest_slot_type_3_crest_id_1")]
-    public AbilityCrests CrestSlotType3CrestId1 { get; set; }
+    public AbilityCrestId CrestSlotType3CrestId1 { get; set; }
 
     [Key("crest_slot_type_3_crest_id_2")]
-    public AbilityCrests CrestSlotType3CrestId2 { get; set; }
+    public AbilityCrestId CrestSlotType3CrestId2 { get; set; }
 
     [Key("talisman_key_id")]
     public long TalismanKeyId { get; set; }
@@ -4396,13 +4396,13 @@ public partial class AtgenRequestCharaUnitSetData
     public AtgenRequestCharaUnitSetData(
         long dragonKeyId,
         WeaponBodies weaponBodyId,
-        AbilityCrests crestSlotType1CrestId1,
-        AbilityCrests crestSlotType1CrestId2,
-        AbilityCrests crestSlotType1CrestId3,
-        AbilityCrests crestSlotType2CrestId1,
-        AbilityCrests crestSlotType2CrestId2,
-        AbilityCrests crestSlotType3CrestId1,
-        AbilityCrests crestSlotType3CrestId2,
+        AbilityCrestId crestSlotType1CrestId1,
+        AbilityCrestId crestSlotType1CrestId2,
+        AbilityCrestId crestSlotType1CrestId3,
+        AbilityCrestId crestSlotType2CrestId1,
+        AbilityCrestId crestSlotType2CrestId2,
+        AbilityCrestId crestSlotType3CrestId1,
+        AbilityCrestId crestSlotType3CrestId2,
         long talismanKeyId
     )
     {
@@ -4917,7 +4917,7 @@ public partial class AtgenSupportChara
 public partial class AtgenSupportCrestSlotType1List
 {
     [Key("ability_crest_id")]
-    public AbilityCrests AbilityCrestId { get; set; }
+    public AbilityCrestId AbilityCrestId { get; set; }
 
     [Key("buildup_count")]
     public int BuildupCount { get; set; }
@@ -4935,7 +4935,7 @@ public partial class AtgenSupportCrestSlotType1List
     public int EquipableCount { get; set; }
 
     public AtgenSupportCrestSlotType1List(
-        AbilityCrests abilityCrestId,
+        AbilityCrestId abilityCrestId,
         int buildupCount,
         int limitBreakCount,
         int hpPlusCount,
@@ -8103,7 +8103,7 @@ public partial class FunctionalMaintenanceList
 public partial class GameAbilityCrest
 {
     [Key("ability_crest_id")]
-    public AbilityCrests AbilityCrestId { get; set; }
+    public AbilityCrestId AbilityCrestId { get; set; }
 
     [Key("buildup_count")]
     public int BuildupCount { get; set; }
@@ -8127,7 +8127,7 @@ public partial class GameAbilityCrest
     public int AttackPlusCount { get; set; }
 
     public GameAbilityCrest(
-        AbilityCrests abilityCrestId,
+        AbilityCrestId abilityCrestId,
         int buildupCount,
         int limitBreakCount,
         int equipableCount,
@@ -9717,25 +9717,25 @@ public partial class PartySettingList
     public int EquipWeaponSkinId { get; set; }
 
     [Key("equip_crest_slot_type_1_crest_id_1")]
-    public AbilityCrests EquipCrestSlotType1CrestId1 { get; set; }
+    public AbilityCrestId EquipCrestSlotType1CrestId1 { get; set; }
 
     [Key("equip_crest_slot_type_1_crest_id_2")]
-    public AbilityCrests EquipCrestSlotType1CrestId2 { get; set; }
+    public AbilityCrestId EquipCrestSlotType1CrestId2 { get; set; }
 
     [Key("equip_crest_slot_type_1_crest_id_3")]
-    public AbilityCrests EquipCrestSlotType1CrestId3 { get; set; }
+    public AbilityCrestId EquipCrestSlotType1CrestId3 { get; set; }
 
     [Key("equip_crest_slot_type_2_crest_id_1")]
-    public AbilityCrests EquipCrestSlotType2CrestId1 { get; set; }
+    public AbilityCrestId EquipCrestSlotType2CrestId1 { get; set; }
 
     [Key("equip_crest_slot_type_2_crest_id_2")]
-    public AbilityCrests EquipCrestSlotType2CrestId2 { get; set; }
+    public AbilityCrestId EquipCrestSlotType2CrestId2 { get; set; }
 
     [Key("equip_crest_slot_type_3_crest_id_1")]
-    public AbilityCrests EquipCrestSlotType3CrestId1 { get; set; }
+    public AbilityCrestId EquipCrestSlotType3CrestId1 { get; set; }
 
     [Key("equip_crest_slot_type_3_crest_id_2")]
-    public AbilityCrests EquipCrestSlotType3CrestId2 { get; set; }
+    public AbilityCrestId EquipCrestSlotType3CrestId2 { get; set; }
 
     [Key("equip_talisman_key_id")]
     public ulong EquipTalismanKeyId { get; set; }
@@ -9756,13 +9756,13 @@ public partial class PartySettingList
         int equipSkinWeaponId,
         WeaponBodies equipWeaponBodyId,
         int equipWeaponSkinId,
-        AbilityCrests equipCrestSlotType1CrestId1,
-        AbilityCrests equipCrestSlotType1CrestId2,
-        AbilityCrests equipCrestSlotType1CrestId3,
-        AbilityCrests equipCrestSlotType2CrestId1,
-        AbilityCrests equipCrestSlotType2CrestId2,
-        AbilityCrests equipCrestSlotType3CrestId1,
-        AbilityCrests equipCrestSlotType3CrestId2,
+        AbilityCrestId equipCrestSlotType1CrestId1,
+        AbilityCrestId equipCrestSlotType1CrestId2,
+        AbilityCrestId equipCrestSlotType1CrestId3,
+        AbilityCrestId equipCrestSlotType2CrestId1,
+        AbilityCrestId equipCrestSlotType2CrestId2,
+        AbilityCrestId equipCrestSlotType3CrestId1,
+        AbilityCrestId equipCrestSlotType3CrestId2,
         ulong equipTalismanKeyId,
         Charas editSkill1CharaId,
         Charas editSkill2CharaId
@@ -11128,25 +11128,25 @@ public partial class SettingSupport
     public WeaponBodies EquipWeaponBodyId { get; set; }
 
     [Key("equip_crest_slot_type_1_crest_id_1")]
-    public AbilityCrests EquipCrestSlotType1CrestId1 { get; set; }
+    public AbilityCrestId EquipCrestSlotType1CrestId1 { get; set; }
 
     [Key("equip_crest_slot_type_1_crest_id_2")]
-    public AbilityCrests EquipCrestSlotType1CrestId2 { get; set; }
+    public AbilityCrestId EquipCrestSlotType1CrestId2 { get; set; }
 
     [Key("equip_crest_slot_type_1_crest_id_3")]
-    public AbilityCrests EquipCrestSlotType1CrestId3 { get; set; }
+    public AbilityCrestId EquipCrestSlotType1CrestId3 { get; set; }
 
     [Key("equip_crest_slot_type_2_crest_id_1")]
-    public AbilityCrests EquipCrestSlotType2CrestId1 { get; set; }
+    public AbilityCrestId EquipCrestSlotType2CrestId1 { get; set; }
 
     [Key("equip_crest_slot_type_2_crest_id_2")]
-    public AbilityCrests EquipCrestSlotType2CrestId2 { get; set; }
+    public AbilityCrestId EquipCrestSlotType2CrestId2 { get; set; }
 
     [Key("equip_crest_slot_type_3_crest_id_1")]
-    public AbilityCrests EquipCrestSlotType3CrestId1 { get; set; }
+    public AbilityCrestId EquipCrestSlotType3CrestId1 { get; set; }
 
     [Key("equip_crest_slot_type_3_crest_id_2")]
-    public AbilityCrests EquipCrestSlotType3CrestId2 { get; set; }
+    public AbilityCrestId EquipCrestSlotType3CrestId2 { get; set; }
 
     [Key("equip_talisman_key_id")]
     public ulong EquipTalismanKeyId { get; set; }
@@ -11158,13 +11158,13 @@ public partial class SettingSupport
         ulong equipAmuletKeyId,
         ulong equipAmulet2KeyId,
         WeaponBodies equipWeaponBodyId,
-        AbilityCrests equipCrestSlotType1CrestId1,
-        AbilityCrests equipCrestSlotType1CrestId2,
-        AbilityCrests equipCrestSlotType1CrestId3,
-        AbilityCrests equipCrestSlotType2CrestId1,
-        AbilityCrests equipCrestSlotType2CrestId2,
-        AbilityCrests equipCrestSlotType3CrestId1,
-        AbilityCrests equipCrestSlotType3CrestId2,
+        AbilityCrestId equipCrestSlotType1CrestId1,
+        AbilityCrestId equipCrestSlotType1CrestId2,
+        AbilityCrestId equipCrestSlotType1CrestId3,
+        AbilityCrestId equipCrestSlotType2CrestId1,
+        AbilityCrestId equipCrestSlotType2CrestId2,
+        AbilityCrestId equipCrestSlotType3CrestId1,
+        AbilityCrestId equipCrestSlotType3CrestId2,
         ulong equipTalismanKeyId
     )
     {

@@ -13,6 +13,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Test.Utils;
 using Microsoft.Extensions.Time.Testing;
+using MockQueryable.EntityFrameworkCore;
 using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Services;
@@ -100,7 +101,7 @@ public class DragonServiceTest : RepositoryTestFixture
                     ViewerId = 1,
                     DragonGiftId = DragonGifts.CompellingBook,
                     Quantity = 1,
-                }
+                },
             }
         );
 
@@ -165,8 +166,8 @@ public class DragonServiceTest : RepositoryTestFixture
                     DragonGiftIdList = new List<DragonGifts>()
                     {
                         DragonGifts.StrawberryTart,
-                        DragonGifts.CompellingBook
-                    }
+                        DragonGifts.CompellingBook,
+                    },
                 },
                 default
             );
@@ -225,7 +226,7 @@ public class DragonServiceTest : RepositoryTestFixture
                 new DragonBuyGiftToSendMultipleRequest()
                 {
                     DragonId = Dragons.Garuda,
-                    DragonGiftIdList = new List<DragonGifts>() { DragonGifts.FreshBread }
+                    DragonGiftIdList = new List<DragonGifts>() { DragonGifts.FreshBread },
                 },
                 default
             );
@@ -287,7 +288,7 @@ public class DragonServiceTest : RepositoryTestFixture
             {
                 DragonId = dragon,
                 DragonGiftId = gift,
-                Quantity = usedQuantity
+                Quantity = usedQuantity,
             },
             default
         );
@@ -321,7 +322,7 @@ public class DragonServiceTest : RepositoryTestFixture
         {
             ViewerId = ViewerId,
             MaterialId = Materials.AmplifyingDragonscale,
-            Quantity = 100
+            Quantity = 100,
         };
         mockInventoryRepository
             .SetupGet(x => x.Materials)
@@ -341,9 +342,9 @@ public class DragonServiceTest : RepositoryTestFixture
                     {
                         Type = EntityTypes.Material,
                         Id = (int)Materials.AmplifyingDragonscale,
-                        Quantity = 50
-                    }
-                }
+                        Quantity = 50,
+                    },
+                },
             },
             default
         );
@@ -385,7 +386,7 @@ public class DragonServiceTest : RepositoryTestFixture
         {
             ViewerId = ViewerId,
             MaterialId = upgradeMat,
-            Quantity = usedQuantity
+            Quantity = usedQuantity,
         };
         mockInventoryRepository
             .SetupGet(x => x.Materials)
@@ -405,9 +406,9 @@ public class DragonServiceTest : RepositoryTestFixture
                     {
                         Type = EntityTypes.Material,
                         Id = (int)upgradeMat,
-                        Quantity = usedQuantity
-                    }
-                }
+                        Quantity = usedQuantity,
+                    },
+                },
             },
             default
         );
@@ -437,7 +438,7 @@ public class DragonServiceTest : RepositoryTestFixture
         {
             ViewerId = ViewerId,
             MaterialId = Materials.AmplifyingDragonscale,
-            Quantity = 0
+            Quantity = 0,
         };
 
         mockPaymentService
@@ -471,7 +472,7 @@ public class DragonServiceTest : RepositoryTestFixture
             new DragonResetPlusCountRequest()
             {
                 DragonKeyId = 1,
-                PlusCountType = PlusCountType.Atk
+                PlusCountType = PlusCountType.Atk,
             },
             default
         );
@@ -512,7 +513,7 @@ public class DragonServiceTest : RepositoryTestFixture
         List<DbPlayerDragonData> dragonDataList = new List<DbPlayerDragonData>()
         {
             dragonData,
-            dragonDataSacrifice
+            dragonDataSacrifice,
         };
 
         mockUnitRepository
@@ -526,7 +527,7 @@ public class DragonServiceTest : RepositoryTestFixture
         {
             ViewerId = ViewerId,
             MaterialId = targetMat,
-            Quantity = 500
+            Quantity = 500,
         };
 
         mockInventoryRepository.Setup(x => x.GetMaterial(targetMat)).ReturnsAsync(mat);
@@ -541,9 +542,9 @@ public class DragonServiceTest : RepositoryTestFixture
                     {
                         LimitBreakItemType = (int)lbMatType,
                         LimitBreakCount = limitBreakNr,
-                        TargetId = (ulong)(lbMatType == DragonLimitBreakMatTypes.Dupe ? 2 : 0)
-                    }
-                }
+                        TargetId = (ulong)(lbMatType == DragonLimitBreakMatTypes.Dupe ? 2 : 0),
+                    },
+                },
             },
             default
         );
@@ -596,7 +597,7 @@ public class DragonServiceTest : RepositoryTestFixture
         {
             ViewerId = ViewerId,
             Coin = 0,
-            DewPoint = 0
+            DewPoint = 0,
         };
 
         IQueryable<DbPlayerUserData> userDataList = new List<DbPlayerUserData>() { userData }
@@ -647,7 +648,7 @@ public class DragonServiceTest : RepositoryTestFixture
                 {
                     ViewerId = ViewerId,
                     DragonGiftId = gift,
-                    Quantity = quantity
+                    Quantity = quantity,
                 }
             );
         }
@@ -658,7 +659,7 @@ public class DragonServiceTest : RepositoryTestFixture
         {
             ViewerId = ViewerId,
             MaterialId = Materials.GarudasEssence,
-            Quantity = 0
+            Quantity = 0,
         };
 
         mockInventoryRepository
@@ -694,7 +695,7 @@ public class DragonServiceTest : RepositoryTestFixture
                     ViewerId = ViewerId,
                     State = 0,
                     StoryId = MasterAsset.DragonStories.Get((int)Dragons.Garuda).StoryIds[0],
-                    StoryType = StoryTypes.Dragon
+                    StoryType = StoryTypes.Dragon,
                 }
             );
     }

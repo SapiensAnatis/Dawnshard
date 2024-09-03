@@ -63,7 +63,7 @@ public class WallRecordControllerTest
                 Party = party,
                 WallId = wallId,
                 WallLevel = wallLevel + 1, // Client passes (db wall level + 1)
-                SupportViewerId = supportViewerId
+                SupportViewerId = supportViewerId,
             };
 
         DbPlayerQuestWall playerQuestWall =
@@ -72,7 +72,7 @@ public class WallRecordControllerTest
                 ViewerId = 1,
                 IsStartNextLevel = true,
                 WallId = wallId,
-                WallLevel = wallLevel
+                WallLevel = wallLevel,
             };
 
         this.mockDungeonService.Setup(x => x.GetSession(dungeonKey, CancellationToken.None))
@@ -121,7 +121,7 @@ public class WallRecordControllerTest
             {
                 WallId = wallId,
                 AfterWallLevel = wallLevel + 1,
-                BeforeWallLevel = wallLevel
+                BeforeWallLevel = wallLevel,
             };
 
         AtgenWallDropReward dataWallDropReward =
@@ -129,15 +129,15 @@ public class WallRecordControllerTest
             {
                 RewardEntityList = new[]
                 {
-                    WallRecordController.GoldCrystals.ToBuildEventRewardEntityList()
+                    WallRecordController.GoldCrystals.ToBuildEventRewardEntityList(),
                 },
                 TakeCoin = WallRecordController.Rupies.Quantity,
-                TakeMana = WallRecordController.Mana.Quantity
+                TakeMana = WallRecordController.Mana.Quantity,
             };
 
         IEnumerable<AtgenBuildEventRewardEntityList> dataWallClearRewardList = new[]
         {
-            WallRecordController.Wyrmites.ToBuildEventRewardEntityList()
+            WallRecordController.Wyrmites.ToBuildEventRewardEntityList(),
         };
 
         data.PlayWallDetail.Should().BeEquivalentTo(dataPlayWallDetail);

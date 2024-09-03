@@ -26,8 +26,8 @@ public class WallStartTest : TestFixture
                 {
                     ViewerId = ViewerId,
                     WallId = wallId,
-                    WallLevel = wallLevel
-                }
+                    WallLevel = wallLevel,
+                },
             }
         );
 
@@ -38,7 +38,7 @@ public class WallStartTest : TestFixture
                 {
                     WallId = wallId,
                     WallLevel = wallLevel,
-                    PartyNo = 1
+                    PartyNo = 1,
                 }
             )
         ).Data;
@@ -66,8 +66,8 @@ public class WallStartTest : TestFixture
                 {
                     ViewerId = ViewerId,
                     WallId = wallId,
-                    WallLevel = wallLevel
-                }
+                    WallLevel = wallLevel,
+                },
             }
         );
 
@@ -78,7 +78,7 @@ public class WallStartTest : TestFixture
                 {
                     WallId = wallId,
                     WallLevel = wallLevel,
-                    RequestPartySettingList = new List<PartySettingList>()
+                    RequestPartySettingList = new List<PartySettingList>(),
                 }
             )
         ).Data;

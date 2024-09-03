@@ -3,7 +3,7 @@
 public enum CharaPromoteValues
 {
     ToRarity4 = 2500,
-    ToRarity5 = 25000
+    ToRarity5 = 25000,
 }
 
 public enum DupeReturnBaseValues
@@ -12,7 +12,7 @@ public enum DupeReturnBaseValues
     Rarity3 = 150,
     Rarity5Story = 300,
     Rarity4 = 2200,
-    Rarity5 = 8500
+    Rarity5 = 8500,
 }
 
 public static class DewValueData
@@ -26,7 +26,7 @@ public static class DewValueData
         {
             { 3, (int)DupeReturnBaseValues.Rarity3 },
             { 4, (int)DupeReturnBaseValues.Rarity4 },
-            { 5, (int)DupeReturnBaseValues.Rarity5 }
+            { 5, (int)DupeReturnBaseValues.Rarity5 },
         };
 
     /// <summary>
@@ -37,7 +37,7 @@ public static class DewValueData
         new()
         {
             { 4, (int)DupeReturnBaseValues.Rarity4Story },
-            { 5, (int)DupeReturnBaseValues.Rarity5Story }
+            { 5, (int)DupeReturnBaseValues.Rarity5Story },
         };
 }
 
@@ -48,5 +48,5 @@ public enum AmuletReturnBaseValues
     Rarity3 = 150,
     Rarity5Story = 300,
     Rarity4 = 1000,
-    Rarity5 = 3000
+    Rarity5 = 3000,
 }

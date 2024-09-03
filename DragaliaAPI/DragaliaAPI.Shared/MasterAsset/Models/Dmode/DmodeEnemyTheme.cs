@@ -69,6 +69,6 @@ public record DmodeEnemyTheme(
         Param27,
         Param28,
         Param29,
-        Param30
+        Param30,
     };
 };

@@ -7,6 +7,7 @@ using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -14,7 +15,7 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
-using static DragaliaAPI.Services.Game.TutorialService;
+using static DragaliaAPI.Features.Tutorial.TutorialService;
 
 namespace DragaliaAPI.Features.Dungeon.Start;
 
@@ -95,7 +96,7 @@ public partial class DungeonStartService(
             {
                 QuestData = questInfo,
                 Party = party.Where(x => x.CharaId != 0),
-                SupportViewerId = supportViewerId
+                SupportViewerId = supportViewerId,
             }
         );
 
@@ -156,7 +157,7 @@ public partial class DungeonStartService(
             {
                 QuestData = questInfo,
                 Party = party.Where(x => x.CharaId != 0),
-                SupportViewerId = supportViewerId
+                SupportViewerId = supportViewerId,
             }
         );
 
@@ -189,7 +190,7 @@ public partial class DungeonStartService(
                 Party = party.Where(x => x.CharaId != 0),
                 WallId = wallId,
                 WallLevel = wallLevel,
-                SupportViewerId = supportViewerId
+                SupportViewerId = supportViewerId,
             }
         );
 
@@ -228,7 +229,7 @@ public partial class DungeonStartService(
                 Party = party.Where(x => x.CharaId != 0),
                 WallId = wallId,
                 WallLevel = wallLevel,
-                SupportViewerId = supportViewerId
+                SupportViewerId = supportViewerId,
             }
         );
 

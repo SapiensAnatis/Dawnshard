@@ -342,9 +342,9 @@ public class ClearPartyService : IClearPartyService
 
 file static class Extensions
 {
-    public static bool IsMissingCrest(this IEnumerable<DbAbilityCrest?> source, AbilityCrests id)
+    public static bool IsMissingCrest(this IEnumerable<DbAbilityCrest?> source, AbilityCrestId id)
     {
-        if (id == AbilityCrests.Empty)
+        if (id == AbilityCrestId.Empty)
             return false;
 
         // ReSharper disable once SimplifyLinqExpressionUseAll

@@ -97,7 +97,7 @@ public class MissionProgressionService(
     }
 
     public void OnAbilityCrestBuildupPlusCount(
-        AbilityCrests crest,
+        AbilityCrestId crest,
         PlusCountType type,
         int count,
         int total
@@ -112,12 +112,12 @@ public class MissionProgressionService(
         );
     }
 
-    public void OnAbilityCrestTotalPlusCountUp(AbilityCrests crest, int count, int total)
+    public void OnAbilityCrestTotalPlusCountUp(AbilityCrestId crest, int count, int total)
     {
         EnqueueEvent(MissionCompleteType.AbilityCrestTotalPlusCountUp, count, total, (int)crest);
     }
 
-    public void OnAbilityCrestLevelUp(AbilityCrests crest, int count, int totalLevel)
+    public void OnAbilityCrestLevelUp(AbilityCrestId crest, int count, int totalLevel)
     {
         EnqueueEvent(MissionCompleteType.AbilityCrestLevelUp, count, totalLevel, (int)crest);
     }
@@ -241,7 +241,7 @@ public class MissionProgressionService(
             (int)variationType
         );
 
-    public void OnEventQuestClearedWithCrest(int eventId, AbilityCrests crest) =>
+    public void OnEventQuestClearedWithCrest(int eventId, AbilityCrestId crest) =>
         EnqueueEvent(MissionCompleteType.EventQuestClearWithCrest, 1, 1, eventId, (int)crest);
 
     public void OnEventPointCollected(int eventId, VariationTypes variationType, int quantity) =>

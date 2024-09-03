@@ -32,7 +32,7 @@ public class V2Update : ISavefileUpdate
                     {
                         ViewerId = this.playerIdentityService.ViewerId,
                         StampId = 0,
-                        Slot = x
+                        Slot = x,
                     })
             );
         }
