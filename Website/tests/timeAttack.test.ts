@@ -1,0 +1,68 @@
+import { devices, expect, test } from '@playwright/test';
+
+import { waitForImagesToLoad } from './util.ts';
+
+test('displays correctly', async ({ page }) => {
+  await page.goto('/');
+
+  await page.getByRole('link', { name: 'Time Attack Rankings' }).click();
+
+  await expect(page.getByRole('heading', { name: 'Time Attack Rankings' })).toBeVisible();
+
+  await waitForImagesToLoad(page);
+
+  await expect(page).toHaveScreenshot();
+});
+
+test('displays correctly on mobile', async ({ page }) => {
+  await page.setViewportSize(devices['iPhone 13'].viewport);
+
+  await page.goto('/');
+
+  await page.getByRole('button', { name: 'Open navigation' }).click();
+  await page.getByRole('link', { name: 'Time Attack Rankings' }).click();
+
+  await expect(page.getByRole('heading', { name: 'Time Attack Rankings' })).toBeVisible();
+
+  await waitForImagesToLoad(page);
+
+  await expect(page).toHaveScreenshot({ fullPage: true });
+});
+
+test('expand team composition', async ({ page }) => {
+  await page.goto('/events/time-attack/rankings/227010105');
+
+  const topRow = page.getByRole('row', { name: /1 Qwerby/ });
+  await topRow.getByRole('button', { name: 'View detailed team information' }).click();
+
+  await waitForImagesToLoad(page);
+
+  await expect(page).toHaveScreenshot({ fullPage: true });
+});
+
+test('clicking icons shows info popovers', async ({ page }) => {
+  await page.goto('/events/time-attack/rankings/227010105');
+
+  await waitForImagesToLoad(page);
+
+  const topRow = page.getByRole('row', { name: /1 Qwerby/ });
+
+  await topRow.getByRole('button', { name: 'Expand character details' }).first().click();
+  await expect(page.getByText('Sheila')).toBeVisible();
+  const charaWikiLink = page.getByText('Dragalia Lost Wiki');
+  await expect(charaWikiLink).toBeVisible();
+  await expect(charaWikiLink).toHaveAttribute('href', 'https://dragalialost.wiki/w/Sheila');
+  await topRow.click(); // dismiss popup
+
+  await topRow.getByRole('button', { name: 'View detailed team information' }).click();
+  await waitForImagesToLoad(page);
+
+  await page.getByRole('button', { name: 'Expand dragon details' }).first().click();
+  await expect(page.getByText('Primal Brunhilda')).toBeVisible();
+  const dragonWikiLink = page.getByText('Dragalia Lost Wiki');
+  await expect(dragonWikiLink).toBeVisible();
+  await expect(dragonWikiLink).toHaveAttribute(
+    'href',
+    'https://dragalialost.wiki/w/Primal_Brunhilda'
+  );
+});

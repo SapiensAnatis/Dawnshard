@@ -61,7 +61,7 @@
 </script>
 
 <div class="rounded-md border">
-  <Table.Root {...$tableAttrs} id="time-attack-table">
+  <Table.Root {...$tableAttrs} id="time-attack-table" aria-labelledby="time-attack-table-title">
     <Table.Header {...$tableHeadAttrs} id="header" class="hidden md:[display:revert]">
       {#each $headerRows as headerRow}
         <Subscribe rowAttrs={headerRow.attrs()}>

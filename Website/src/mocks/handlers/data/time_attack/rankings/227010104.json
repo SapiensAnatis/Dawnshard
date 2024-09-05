@@ -1,0 +1,3072 @@
+[
+  {
+    "rank": 1,
+    "time": 28.911001205444336,
+    "players": [
+      {
+        "name": "Shiny ☆",
+        "units": [
+          {
+            "position": 1,
+            "chara": {
+              "id": 10650101,
+              "baseId": 100029,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30660104,
+              "baseId": 306146,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 306601041
+            },
+            "talisman": {
+              "id": 50650103,
+              "element": 1,
+              "weaponType": 6,
+              "ability1Id": 340000030,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050039,
+                "baseId": 400092,
+                "imageNum": 2
+              },
+              {
+                "id": 40050070,
+                "baseId": 400380,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40040068,
+                "baseId": 400410,
+                "imageNum": 2
+              },
+              {
+                "id": 40090001,
+                "baseId": 400177,
+                "imageNum": 1
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 109503014,
+                "skillLv4IconName": "Icon_Skill_156"
+              },
+              {
+                "id": 101502021,
+                "skillLv4IconName": "Icon_Skill_055"
+              }
+            ]
+          },
+          {
+            "position": 2,
+            "chara": {
+              "id": 10350104,
+              "baseId": 100044,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30360101,
+              "baseId": 303128,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 303601011
+            },
+            "talisman": {
+              "id": 50350103,
+              "element": 1,
+              "weaponType": 3,
+              "ability1Id": 340000010,
+              "ability2Id": 340000060
+            },
+            "crests": [
+              {
+                "id": 40050121,
+                "baseId": 400459,
+                "imageNum": 2
+              },
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050146,
+                "baseId": 400490,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40040083,
+                "baseId": 400446,
+                "imageNum": 2
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              },
+              {
+                "id": 40090001,
+                "baseId": 400177,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          },
+          {
+            "position": 3,
+            "chara": {
+              "id": 10750103,
+              "baseId": 110053,
+              "variationId": 3
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30760101,
+              "baseId": 307135,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 307601011
+            },
+            "talisman": {
+              "id": 50750104,
+              "element": 1,
+              "weaponType": 7,
+              "ability1Id": 340000020,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050050,
+                "baseId": 400146,
+                "imageNum": 1
+              },
+              {
+                "id": 40050121,
+                "baseId": 400459,
+                "imageNum": 2
+              },
+              {
+                "id": 40050128,
+                "baseId": 400466,
+                "imageNum": 2
+              },
+              {
+                "id": 40040014,
+                "baseId": 400046,
+                "imageNum": 2
+              },
+              {
+                "id": 40040037,
+                "baseId": 400126,
+                "imageNum": 2
+              },
+              {
+                "id": 40090013,
+                "baseId": 400179,
+                "imageNum": 1
+              },
+              {
+                "id": 40090017,
+                "baseId": 400301,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          },
+          {
+            "position": 4,
+            "chara": {
+              "id": 10450102,
+              "baseId": 100010,
+              "variationId": 7
+            },
+            "dragon": {
+              "id": 20050110,
+              "baseId": 210107,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30460101,
+              "baseId": 304127,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 304601011
+            },
+            "talisman": {
+              "id": 50450104,
+              "element": 1,
+              "weaponType": 4,
+              "ability1Id": 340000010,
+              "ability2Id": 340000060
+            },
+            "crests": [
+              {
+                "id": 40050097,
+                "baseId": 400342,
+                "imageNum": 2
+              },
+              {
+                "id": 40050070,
+                "baseId": 400380,
+                "imageNum": 2
+              },
+              {
+                "id": 40050039,
+                "baseId": 400092,
+                "imageNum": 2
+              },
+              {
+                "id": 40040062,
+                "baseId": 400390,
+                "imageNum": 2
+              },
+              {
+                "id": 40040092,
+                "baseId": 400464,
+                "imageNum": 2
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              },
+              {
+                "id": 40090001,
+                "baseId": 400177,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 109503014,
+                "skillLv4IconName": "Icon_Skill_156"
+              },
+              {
+                "id": 101502021,
+                "skillLv4IconName": "Icon_Skill_055"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "rank": 2,
+    "time": 33.659000396728516,
+    "players": [
+      {
+        "name": "g.",
+        "units": [
+          {
+            "position": 1,
+            "chara": {
+              "id": 10450102,
+              "baseId": 100010,
+              "variationId": 7
+            },
+            "dragon": {
+              "id": 20050114,
+              "baseId": 210124,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30460104,
+              "baseId": 304144,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 304601041
+            },
+            "talisman": {
+              "id": 50450104,
+              "element": 1,
+              "weaponType": 4,
+              "ability1Id": 340000070,
+              "ability2Id": 340000134
+            },
+            "crests": [
+              {
+                "id": 40050100,
+                "baseId": 400423,
+                "imageNum": 2
+              },
+              {
+                "id": 40050070,
+                "baseId": 400380,
+                "imageNum": 2
+              },
+              {
+                "id": 40050039,
+                "baseId": 400092,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40040092,
+                "baseId": 400464,
+                "imageNum": 2
+              },
+              {
+                "id": 40090018,
+                "baseId": 400226,
+                "imageNum": 1
+              },
+              {
+                "id": 40090029,
+                "baseId": 400191,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 107503046,
+                "skillLv4IconName": "Icon_Skill_283"
+              },
+              {
+                "id": 101502021,
+                "skillLv4IconName": "Icon_Skill_055"
+              }
+            ]
+          },
+          {
+            "position": 2,
+            "chara": {
+              "id": 10350104,
+              "baseId": 100044,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30360101,
+              "baseId": 303128,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 303601011
+            },
+            "talisman": {
+              "id": 50350103,
+              "element": 1,
+              "weaponType": 3,
+              "ability1Id": 340000030,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050050,
+                "baseId": 400146,
+                "imageNum": 1
+              },
+              {
+                "id": 40050039,
+                "baseId": 400092,
+                "imageNum": 2
+              },
+              {
+                "id": 40050128,
+                "baseId": 400466,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40040105,
+                "baseId": 400498,
+                "imageNum": 2
+              },
+              {
+                "id": 40090013,
+                "baseId": 400179,
+                "imageNum": 1
+              },
+              {
+                "id": 40090019,
+                "baseId": 400180,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 106504012,
+                "skillLv4IconName": "Icon_Skill_032"
+              },
+              {
+                "id": 101502011,
+                "skillLv4IconName": "Icon_Skill_008"
+              }
+            ]
+          },
+          {
+            "position": 3,
+            "chara": {
+              "id": 10250101,
+              "baseId": 110010,
+              "variationId": 1
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30260101,
+              "baseId": 302129,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 302601011
+            },
+            "talisman": {
+              "id": 50250103,
+              "element": 1,
+              "weaponType": 2,
+              "ability1Id": 340000030,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050128,
+                "baseId": 400466,
+                "imageNum": 2
+              },
+              {
+                "id": 40050050,
+                "baseId": 400146,
+                "imageNum": 1
+              },
+              {
+                "id": 40050041,
+                "baseId": 400142,
+                "imageNum": 2
+              },
+              {
+                "id": 40040105,
+                "baseId": 400498,
+                "imageNum": 2
+              },
+              {
+                "id": 40040003,
+                "baseId": 400035,
+                "imageNum": 2
+              },
+              {
+                "id": 40090013,
+                "baseId": 400179,
+                "imageNum": 1
+              },
+              {
+                "id": 40090019,
+                "baseId": 400180,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          },
+          {
+            "position": 4,
+            "chara": {
+              "id": 10650101,
+              "baseId": 100029,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30660101,
+              "baseId": 306127,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 306601011
+            },
+            "talisman": {
+              "id": 50650103,
+              "element": 1,
+              "weaponType": 6,
+              "ability1Id": 340000010,
+              "ability2Id": 340000060
+            },
+            "crests": [
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050070,
+                "baseId": 400380,
+                "imageNum": 2
+              },
+              {
+                "id": 40050128,
+                "baseId": 400466,
+                "imageNum": 2
+              },
+              {
+                "id": 40040105,
+                "baseId": 400498,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40090019,
+                "baseId": 400180,
+                "imageNum": 1
+              },
+              {
+                "id": 40090013,
+                "baseId": 400179,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "rank": 3,
+    "time": 43.163002014160156,
+    "players": [
+      {
+        "name": "OzpinXD",
+        "units": [
+          {
+            "position": 1,
+            "chara": {
+              "id": 10650101,
+              "baseId": 100029,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30660101,
+              "baseId": 306127,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 306601011
+            },
+            "talisman": {
+              "id": 50650103,
+              "element": 1,
+              "weaponType": 6,
+              "ability1Id": 340000020,
+              "ability2Id": 340000060
+            },
+            "crests": [
+              {
+                "id": 40050040,
+                "baseId": 400139,
+                "imageNum": 2
+              },
+              {
+                "id": 40050020,
+                "baseId": 400099,
+                "imageNum": 2
+              },
+              {
+                "id": 40050070,
+                "baseId": 400380,
+                "imageNum": 2
+              },
+              {
+                "id": 40040082,
+                "baseId": 400444,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40090029,
+                "baseId": 400191,
+                "imageNum": 1
+              },
+              {
+                "id": 40090018,
+                "baseId": 400226,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108505021,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 101502021,
+                "skillLv4IconName": "Icon_Skill_055"
+              }
+            ]
+          },
+          {
+            "position": 2,
+            "chara": {
+              "id": 10350102,
+              "baseId": 100032,
+              "variationId": 4
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30360101,
+              "baseId": 303128,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 303601011
+            },
+            "talisman": {
+              "id": 50350104,
+              "element": 1,
+              "weaponType": 3,
+              "ability1Id": 340000010,
+              "ability2Id": 340000090
+            },
+            "crests": [
+              {
+                "id": 40050050,
+                "baseId": 400146,
+                "imageNum": 1
+              },
+              {
+                "id": 40050125,
+                "baseId": 400465,
+                "imageNum": 2
+              },
+              {
+                "id": 40050136,
+                "baseId": 400475,
+                "imageNum": 2
+              },
+              {
+                "id": 40040042,
+                "baseId": 400140,
+                "imageNum": 2
+              },
+              {
+                "id": 40040003,
+                "baseId": 400035,
+                "imageNum": 2
+              },
+              {
+                "id": 40090013,
+                "baseId": 400179,
+                "imageNum": 1
+              },
+              {
+                "id": 40090021,
+                "baseId": 400247,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          },
+          {
+            "position": 3,
+            "chara": {
+              "id": 10350104,
+              "baseId": 100044,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30360101,
+              "baseId": 303128,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 303601011
+            },
+            "talisman": {
+              "id": 50350104,
+              "element": 1,
+              "weaponType": 3,
+              "ability1Id": 340000010,
+              "ability2Id": 340000060
+            },
+            "crests": [
+              {
+                "id": 40050125,
+                "baseId": 400465,
+                "imageNum": 2
+              },
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050022,
+                "baseId": 400104,
+                "imageNum": 2
+              },
+              {
+                "id": 40040083,
+                "baseId": 400446,
+                "imageNum": 2
+              },
+              {
+                "id": 40040063,
+                "baseId": 400392,
+                "imageNum": 2
+              },
+              {
+                "id": 40090013,
+                "baseId": 400179,
+                "imageNum": 1
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          },
+          {
+            "position": 4,
+            "chara": {
+              "id": 10550103,
+              "baseId": 100002,
+              "variationId": 15
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30560101,
+              "baseId": 305135,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 305601011
+            },
+            "talisman": {
+              "id": 50550101,
+              "element": 1,
+              "weaponType": 5,
+              "ability1Id": 340000049,
+              "ability2Id": 340000089
+            },
+            "crests": [
+              {
+                "id": 40050070,
+                "baseId": 400380,
+                "imageNum": 2
+              },
+              {
+                "id": 40050125,
+                "baseId": 400465,
+                "imageNum": 2
+              },
+              {
+                "id": 40050050,
+                "baseId": 400146,
+                "imageNum": 1
+              },
+              {
+                "id": 40040096,
+                "baseId": 400164,
+                "imageNum": 2
+              },
+              {
+                "id": 40040003,
+                "baseId": 400035,
+                "imageNum": 2
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              },
+              {
+                "id": 40090007,
+                "baseId": 400178,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "rank": 4,
+    "time": 46.32100296020508,
+    "players": [
+      {
+        "name": "Nightmerp",
+        "units": [
+          {
+            "position": 1,
+            "chara": {
+              "id": 10450102,
+              "baseId": 100010,
+              "variationId": 7
+            },
+            "dragon": {
+              "id": 20050114,
+              "baseId": 210124,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30460104,
+              "baseId": 304144,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 304601041
+            },
+            "talisman": {
+              "id": 50450104,
+              "element": 1,
+              "weaponType": 4,
+              "ability1Id": 340000070,
+              "ability2Id": 340000134
+            },
+            "crests": [
+              {
+                "id": 40050100,
+                "baseId": 400423,
+                "imageNum": 2
+              },
+              {
+                "id": 40050039,
+                "baseId": 400092,
+                "imageNum": 2
+              },
+              {
+                "id": 40050070,
+                "baseId": 400380,
+                "imageNum": 2
+              },
+              {
+                "id": 40040092,
+                "baseId": 400464,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40090018,
+                "baseId": 400226,
+                "imageNum": 1
+              },
+              {
+                "id": 40090029,
+                "baseId": 400191,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 107503046,
+                "skillLv4IconName": "Icon_Skill_283"
+              },
+              {
+                "id": 101502021,
+                "skillLv4IconName": "Icon_Skill_055"
+              }
+            ]
+          },
+          {
+            "position": 2,
+            "chara": {
+              "id": 10350104,
+              "baseId": 100044,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30360101,
+              "baseId": 303128,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 303601011
+            },
+            "talisman": {
+              "id": 50350103,
+              "element": 1,
+              "weaponType": 3,
+              "ability1Id": 340000030,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050146,
+                "baseId": 400490,
+                "imageNum": 2
+              },
+              {
+                "id": 40050039,
+                "baseId": 400092,
+                "imageNum": 2
+              },
+              {
+                "id": 40040105,
+                "baseId": 400498,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              },
+              {
+                "id": 40090001,
+                "baseId": 400177,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          },
+          {
+            "position": 3,
+            "chara": {
+              "id": 10750105,
+              "baseId": 100004,
+              "variationId": 19
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30760101,
+              "baseId": 307135,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 307601011
+            },
+            "talisman": {
+              "id": 50750104,
+              "element": 1,
+              "weaponType": 7,
+              "ability1Id": 340000030,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050146,
+                "baseId": 400490,
+                "imageNum": 2
+              },
+              {
+                "id": 40050039,
+                "baseId": 400092,
+                "imageNum": 2
+              },
+              {
+                "id": 40040105,
+                "baseId": 400498,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              },
+              {
+                "id": 40090001,
+                "baseId": 400177,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          },
+          {
+            "position": 4,
+            "chara": {
+              "id": 10630101,
+              "baseId": 110003,
+              "variationId": 1
+            },
+            "dragon": {
+              "id": 20050117,
+              "baseId": 210147,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30660101,
+              "baseId": 306127,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 306601011
+            },
+            "talisman": {
+              "id": 50650103,
+              "element": 1,
+              "weaponType": 6,
+              "ability1Id": 340000030,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050146,
+                "baseId": 400490,
+                "imageNum": 2
+              },
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050070,
+                "baseId": 400380,
+                "imageNum": 2
+              },
+              {
+                "id": 40040105,
+                "baseId": 400498,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              },
+              {
+                "id": 40090001,
+                "baseId": 400177,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 101304011,
+                "skillLv4IconName": "Icon_Skill_011"
+              },
+              {
+                "id": 101502021,
+                "skillLv4IconName": "Icon_Skill_055"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "rank": 5,
+    "time": 46.439002990722656,
+    "players": [
+      {
+        "name": "Fuhrohdah",
+        "units": [
+          {
+            "position": 1,
+            "chara": {
+              "id": 10850104,
+              "baseId": 110399,
+              "variationId": 1
+            },
+            "dragon": {
+              "id": 20050113,
+              "baseId": 200009,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30860101,
+              "baseId": 308128,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 308601011
+            },
+            "talisman": {
+              "id": 50850104,
+              "element": 1,
+              "weaponType": 8,
+              "ability1Id": 340000030,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050101,
+                "baseId": 400088,
+                "imageNum": 2
+              },
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050125,
+                "baseId": 400465,
+                "imageNum": 2
+              },
+              {
+                "id": 40040042,
+                "baseId": 400140,
+                "imageNum": 2
+              },
+              {
+                "id": 40040003,
+                "baseId": 400035,
+                "imageNum": 2
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              },
+              {
+                "id": 40090001,
+                "baseId": 400177,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 308601011,
+                "skillLv4IconName": "Icon_Skill_030"
+              },
+              {
+                "id": 101502021,
+                "skillLv4IconName": "Icon_Skill_055"
+              }
+            ]
+          },
+          {
+            "position": 2,
+            "chara": {
+              "id": 10350104,
+              "baseId": 100044,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30360101,
+              "baseId": 303128,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 303601011
+            },
+            "talisman": {
+              "id": 50350102,
+              "element": 1,
+              "weaponType": 3,
+              "ability1Id": 340000010,
+              "ability2Id": 340000133
+            },
+            "crests": [
+              {
+                "id": 40050115,
+                "baseId": 400448,
+                "imageNum": 2
+              },
+              {
+                "id": 40050070,
+                "baseId": 400380,
+                "imageNum": 2
+              },
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40040105,
+                "baseId": 400498,
+                "imageNum": 2
+              },
+              {
+                "id": 40040003,
+                "baseId": 400035,
+                "imageNum": 2
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              },
+              {
+                "id": 40090001,
+                "baseId": 400177,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          },
+          {
+            "position": 3,
+            "chara": {
+              "id": 10450104,
+              "baseId": 100042,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30460101,
+              "baseId": 304127,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 304601011
+            },
+            "talisman": {
+              "id": 50450104,
+              "element": 1,
+              "weaponType": 4,
+              "ability1Id": 340000030,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050125,
+                "baseId": 400465,
+                "imageNum": 2
+              },
+              {
+                "id": 40050039,
+                "baseId": 400092,
+                "imageNum": 2
+              },
+              {
+                "id": 40040003,
+                "baseId": 400035,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              },
+              {
+                "id": 40090001,
+                "baseId": 400177,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          },
+          {
+            "position": 4,
+            "chara": {
+              "id": 10650101,
+              "baseId": 100029,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30660101,
+              "baseId": 306127,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 306601011
+            },
+            "talisman": {
+              "id": 50650103,
+              "element": 1,
+              "weaponType": 6,
+              "ability1Id": 340000010,
+              "ability2Id": 340000133
+            },
+            "crests": [
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050125,
+                "baseId": 400465,
+                "imageNum": 2
+              },
+              {
+                "id": 40050039,
+                "baseId": 400092,
+                "imageNum": 2
+              },
+              {
+                "id": 40040003,
+                "baseId": 400035,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              },
+              {
+                "id": 40090001,
+                "baseId": 400177,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "rank": 6,
+    "time": 46.68800354003906,
+    "players": [
+      {
+        "name": "Leom",
+        "units": [
+          {
+            "position": 1,
+            "chara": {
+              "id": 10450102,
+              "baseId": 100010,
+              "variationId": 7
+            },
+            "dragon": {
+              "id": 20050110,
+              "baseId": 210107,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30460104,
+              "baseId": 304144,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 304601041
+            },
+            "talisman": {
+              "id": 50450104,
+              "element": 1,
+              "weaponType": 4,
+              "ability1Id": 340000070,
+              "ability2Id": 340000134
+            },
+            "crests": [
+              {
+                "id": 40050138,
+                "baseId": 400479,
+                "imageNum": 2
+              },
+              {
+                "id": 40050070,
+                "baseId": 400380,
+                "imageNum": 2
+              },
+              {
+                "id": 40050040,
+                "baseId": 400139,
+                "imageNum": 2
+              },
+              {
+                "id": 40040092,
+                "baseId": 400464,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40090018,
+                "baseId": 400226,
+                "imageNum": 1
+              },
+              {
+                "id": 40090029,
+                "baseId": 400191,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108504021,
+                "skillLv4IconName": "Icon_Skill_166"
+              },
+              {
+                "id": 104502011,
+                "skillLv4IconName": "Icon_Skill_054"
+              }
+            ]
+          },
+          {
+            "position": 2,
+            "chara": {
+              "id": 10350104,
+              "baseId": 100044,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30360101,
+              "baseId": 303128,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 303601011
+            },
+            "talisman": {
+              "id": 50350103,
+              "element": 1,
+              "weaponType": 3,
+              "ability1Id": 340000030,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050050,
+                "baseId": 400146,
+                "imageNum": 1
+              },
+              {
+                "id": 40050125,
+                "baseId": 400465,
+                "imageNum": 2
+              },
+              {
+                "id": 40050141,
+                "baseId": 400484,
+                "imageNum": 2
+              },
+              {
+                "id": 40040003,
+                "baseId": 400035,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40090007,
+                "baseId": 400178,
+                "imageNum": 1
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          },
+          {
+            "position": 3,
+            "chara": {
+              "id": 10350101,
+              "baseId": 110011,
+              "variationId": 1
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30360101,
+              "baseId": 303128,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 303601011
+            },
+            "talisman": {
+              "id": 50350103,
+              "element": 1,
+              "weaponType": 3,
+              "ability1Id": 340000020,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050050,
+                "baseId": 400146,
+                "imageNum": 1
+              },
+              {
+                "id": 40050125,
+                "baseId": 400465,
+                "imageNum": 2
+              },
+              {
+                "id": 40050070,
+                "baseId": 400380,
+                "imageNum": 2
+              },
+              {
+                "id": 40040052,
+                "baseId": 400335,
+                "imageNum": 2
+              },
+              {
+                "id": 40040003,
+                "baseId": 400035,
+                "imageNum": 2
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              },
+              {
+                "id": 40090015,
+                "baseId": 400301,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          },
+          {
+            "position": 4,
+            "chara": {
+              "id": 10650101,
+              "baseId": 100029,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050117,
+              "baseId": 210147,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30660101,
+              "baseId": 306127,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 306601011
+            },
+            "talisman": {
+              "id": 50650103,
+              "element": 1,
+              "weaponType": 6,
+              "ability1Id": 340000030,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050050,
+                "baseId": 400146,
+                "imageNum": 1
+              },
+              {
+                "id": 40050125,
+                "baseId": 400465,
+                "imageNum": 2
+              },
+              {
+                "id": 40050070,
+                "baseId": 400380,
+                "imageNum": 2
+              },
+              {
+                "id": 40040003,
+                "baseId": 400035,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40090007,
+                "baseId": 400178,
+                "imageNum": 1
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "rank": 7,
+    "time": 46.762001037597656,
+    "players": [
+      {
+        "name": "Euden",
+        "units": [
+          {
+            "position": 1,
+            "chara": {
+              "id": 10850104,
+              "baseId": 110399,
+              "variationId": 1
+            },
+            "dragon": {
+              "id": 20050113,
+              "baseId": 200009,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30860101,
+              "baseId": 308128,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 308601011
+            },
+            "talisman": {
+              "id": 50850104,
+              "element": 1,
+              "weaponType": 8,
+              "ability1Id": 340000100,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050022,
+                "baseId": 400104,
+                "imageNum": 2
+              },
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050101,
+                "baseId": 400088,
+                "imageNum": 2
+              },
+              {
+                "id": 40040105,
+                "baseId": 400498,
+                "imageNum": 2
+              },
+              {
+                "id": 40040018,
+                "baseId": 400050,
+                "imageNum": 2
+              },
+              {
+                "id": 40090019,
+                "baseId": 400180,
+                "imageNum": 1
+              },
+              {
+                "id": 40090021,
+                "baseId": 400247,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 308601011,
+                "skillLv4IconName": "Icon_Skill_030"
+              },
+              {
+                "id": 104502011,
+                "skillLv4IconName": "Icon_Skill_054"
+              }
+            ]
+          },
+          {
+            "position": 2,
+            "chara": {
+              "id": 10350104,
+              "baseId": 100044,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30360101,
+              "baseId": 303128,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 303601011
+            },
+            "talisman": {
+              "id": 50350103,
+              "element": 1,
+              "weaponType": 3,
+              "ability1Id": 340000010,
+              "ability2Id": 340000060
+            },
+            "crests": [
+              {
+                "id": 40050139,
+                "baseId": 400405,
+                "imageNum": 2
+              },
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050070,
+                "baseId": 400380,
+                "imageNum": 2
+              },
+              {
+                "id": 40040083,
+                "baseId": 400446,
+                "imageNum": 2
+              },
+              {
+                "id": 40040003,
+                "baseId": 400035,
+                "imageNum": 2
+              },
+              {
+                "id": 40090013,
+                "baseId": 400179,
+                "imageNum": 1
+              },
+              {
+                "id": 40090019,
+                "baseId": 400180,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          },
+          {
+            "position": 3,
+            "chara": {
+              "id": 10650101,
+              "baseId": 100029,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30660101,
+              "baseId": 306127,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 306601011
+            },
+            "talisman": {
+              "id": 50650103,
+              "element": 1,
+              "weaponType": 6,
+              "ability1Id": 340000010,
+              "ability2Id": 340000060
+            },
+            "crests": [
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050076,
+                "baseId": 400391,
+                "imageNum": 2
+              },
+              {
+                "id": 40050070,
+                "baseId": 400380,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40040105,
+                "baseId": 400498,
+                "imageNum": 2
+              },
+              {
+                "id": 40090019,
+                "baseId": 400180,
+                "imageNum": 1
+              },
+              {
+                "id": 40090021,
+                "baseId": 400247,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          },
+          {
+            "position": 4,
+            "chara": {
+              "id": 10450102,
+              "baseId": 100010,
+              "variationId": 7
+            },
+            "dragon": {
+              "id": 20050114,
+              "baseId": 210124,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30460101,
+              "baseId": 304127,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 304601011
+            },
+            "talisman": {
+              "id": 50450104,
+              "element": 1,
+              "weaponType": 4,
+              "ability1Id": 340000010,
+              "ability2Id": 340000060
+            },
+            "crests": [
+              {
+                "id": 40050066,
+                "baseId": 400098,
+                "imageNum": 2
+              },
+              {
+                "id": 40050070,
+                "baseId": 400380,
+                "imageNum": 2
+              },
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40040105,
+                "baseId": 400498,
+                "imageNum": 2
+              },
+              {
+                "id": 40090018,
+                "baseId": 400226,
+                "imageNum": 1
+              },
+              {
+                "id": 40090029,
+                "baseId": 400191,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "rank": 8,
+    "time": 46.80600357055664,
+    "players": [
+      {
+        "name": "雪姫",
+        "units": [
+          {
+            "position": 1,
+            "chara": {
+              "id": 10450102,
+              "baseId": 100010,
+              "variationId": 7
+            },
+            "dragon": {
+              "id": 20050110,
+              "baseId": 210107,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30460104,
+              "baseId": 304144,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 304601041
+            },
+            "talisman": {
+              "id": 50450104,
+              "element": 1,
+              "weaponType": 4,
+              "ability1Id": 340000070,
+              "ability2Id": 340000134
+            },
+            "crests": [
+              {
+                "id": 40050070,
+                "baseId": 400380,
+                "imageNum": 2
+              },
+              {
+                "id": 40050039,
+                "baseId": 400092,
+                "imageNum": 2
+              },
+              {
+                "id": 40050021,
+                "baseId": 400103,
+                "imageNum": 2
+              },
+              {
+                "id": 40040062,
+                "baseId": 400390,
+                "imageNum": 2
+              },
+              {
+                "id": 40030004,
+                "baseId": 400009,
+                "imageNum": 2
+              },
+              {
+                "id": 40090018,
+                "baseId": 400226,
+                "imageNum": 1
+              },
+              {
+                "id": 40090029,
+                "baseId": 400191,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 109503014,
+                "skillLv4IconName": "Icon_Skill_156"
+              },
+              {
+                "id": 101502021,
+                "skillLv4IconName": "Icon_Skill_055"
+              }
+            ]
+          },
+          {
+            "position": 2,
+            "chara": {
+              "id": 10350104,
+              "baseId": 100044,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30360101,
+              "baseId": 303128,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 303601011
+            },
+            "talisman": {
+              "id": 50350103,
+              "element": 1,
+              "weaponType": 3,
+              "ability1Id": 340000030,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050128,
+                "baseId": 400466,
+                "imageNum": 2
+              },
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050039,
+                "baseId": 400092,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40040105,
+                "baseId": 400498,
+                "imageNum": 2
+              },
+              {
+                "id": 40090013,
+                "baseId": 400179,
+                "imageNum": 1
+              },
+              {
+                "id": 40090007,
+                "baseId": 400178,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          },
+          {
+            "position": 3,
+            "chara": {
+              "id": 10750105,
+              "baseId": 100004,
+              "variationId": 19
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30760101,
+              "baseId": 307135,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 307601011
+            },
+            "talisman": {
+              "id": 50750104,
+              "element": 1,
+              "weaponType": 7,
+              "ability1Id": 340000030,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050039,
+                "baseId": 400092,
+                "imageNum": 2
+              },
+              {
+                "id": 40050128,
+                "baseId": 400466,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40040068,
+                "baseId": 400410,
+                "imageNum": 2
+              },
+              {
+                "id": 40090013,
+                "baseId": 400179,
+                "imageNum": 1
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          },
+          {
+            "position": 4,
+            "chara": {
+              "id": 10450104,
+              "baseId": 100042,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30460101,
+              "baseId": 304127,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 304601011
+            },
+            "talisman": {
+              "id": 50450104,
+              "element": 1,
+              "weaponType": 4,
+              "ability1Id": 340000030,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050121,
+                "baseId": 400459,
+                "imageNum": 2
+              },
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050128,
+                "baseId": 400466,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40040105,
+                "baseId": 400498,
+                "imageNum": 2
+              },
+              {
+                "id": 40090013,
+                "baseId": 400179,
+                "imageNum": 1
+              },
+              {
+                "id": 40090007,
+                "baseId": 400178,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "rank": 9,
+    "time": 47.73500061035156,
+    "players": [
+      {
+        "name": "Nega",
+        "units": [
+          {
+            "position": 1,
+            "chara": {
+              "id": 10650101,
+              "baseId": 100029,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050104,
+              "baseId": 210024,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30660101,
+              "baseId": 306127,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 306601011
+            },
+            "talisman": {
+              "id": 50650103,
+              "element": 1,
+              "weaponType": 6,
+              "ability1Id": 340000030,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050070,
+                "baseId": 400380,
+                "imageNum": 2
+              },
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050021,
+                "baseId": 400103,
+                "imageNum": 2
+              },
+              {
+                "id": 40040105,
+                "baseId": 400498,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              },
+              {
+                "id": 40090001,
+                "baseId": 400177,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 101502021,
+                "skillLv4IconName": "Icon_Skill_055"
+              },
+              {
+                "id": 108504021,
+                "skillLv4IconName": "Icon_Skill_166"
+              }
+            ]
+          },
+          {
+            "position": 2,
+            "chara": {
+              "id": 10450104,
+              "baseId": 100042,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050117,
+              "baseId": 210147,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30460101,
+              "baseId": 304127,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 304601011
+            },
+            "talisman": {
+              "id": 50450104,
+              "element": 1,
+              "weaponType": 4,
+              "ability1Id": 340000010,
+              "ability2Id": 340000090
+            },
+            "crests": [
+              {
+                "id": 40050150,
+                "baseId": 400496,
+                "imageNum": 2
+              },
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050125,
+                "baseId": 400465,
+                "imageNum": 2
+              },
+              {
+                "id": 40040096,
+                "baseId": 400164,
+                "imageNum": 2
+              },
+              {
+                "id": 40040028,
+                "baseId": 400060,
+                "imageNum": 2
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              },
+              {
+                "id": 40090001,
+                "baseId": 400177,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          },
+          {
+            "position": 3,
+            "chara": {
+              "id": 10350102,
+              "baseId": 100032,
+              "variationId": 4
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30360101,
+              "baseId": 303128,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 303601011
+            },
+            "talisman": {
+              "id": 50350103,
+              "element": 1,
+              "weaponType": 3,
+              "ability1Id": 340000030,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050131,
+                "baseId": 400079,
+                "imageNum": 2
+              },
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050125,
+                "baseId": 400465,
+                "imageNum": 2
+              },
+              {
+                "id": 40040097,
+                "baseId": 400477,
+                "imageNum": 2
+              },
+              {
+                "id": 40040003,
+                "baseId": 400035,
+                "imageNum": 2
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              },
+              {
+                "id": 40090001,
+                "baseId": 400177,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          },
+          {
+            "position": 4,
+            "chara": {
+              "id": 10350104,
+              "baseId": 100044,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050117,
+              "baseId": 210147,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30360101,
+              "baseId": 303128,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 303601011
+            },
+            "talisman": {
+              "id": 50350103,
+              "element": 1,
+              "weaponType": 3,
+              "ability1Id": 340000030,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050150,
+                "baseId": 400496,
+                "imageNum": 2
+              },
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050040,
+                "baseId": 400139,
+                "imageNum": 2
+              },
+              {
+                "id": 40040097,
+                "baseId": 400477,
+                "imageNum": 2
+              },
+              {
+                "id": 40040105,
+                "baseId": 400498,
+                "imageNum": 2
+              },
+              {
+                "id": 40090025,
+                "baseId": 400181,
+                "imageNum": 1
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "rank": 10,
+    "time": 49.452003479003906,
+    "players": [
+      {
+        "name": "Duosion",
+        "units": [
+          {
+            "position": 1,
+            "chara": {
+              "id": 10450102,
+              "baseId": 100010,
+              "variationId": 7
+            },
+            "dragon": {
+              "id": 20050114,
+              "baseId": 210124,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30460104,
+              "baseId": 304144,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 304601041
+            },
+            "talisman": {
+              "id": 50450104,
+              "element": 1,
+              "weaponType": 4,
+              "ability1Id": 340000010,
+              "ability2Id": 340000060
+            },
+            "crests": [
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050125,
+                "baseId": 400465,
+                "imageNum": 2
+              },
+              {
+                "id": 40050020,
+                "baseId": 400099,
+                "imageNum": 2
+              },
+              {
+                "id": 40040089,
+                "baseId": 400132,
+                "imageNum": 2
+              },
+              {
+                "id": 40040062,
+                "baseId": 400390,
+                "imageNum": 2
+              },
+              {
+                "id": 40090018,
+                "baseId": 400226,
+                "imageNum": 1
+              },
+              {
+                "id": 40090007,
+                "baseId": 400178,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 101502021,
+                "skillLv4IconName": "Icon_Skill_055"
+              },
+              {
+                "id": 101302011,
+                "skillLv4IconName": "Icon_Skill_011"
+              }
+            ]
+          },
+          {
+            "position": 2,
+            "chara": {
+              "id": 10850104,
+              "baseId": 110399,
+              "variationId": 1
+            },
+            "dragon": {
+              "id": 20050113,
+              "baseId": 200009,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30860104,
+              "baseId": 308145,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 308601041
+            },
+            "talisman": {
+              "id": 50850104,
+              "element": 1,
+              "weaponType": 8,
+              "ability1Id": 340000100,
+              "ability2Id": 340000132
+            },
+            "crests": [
+              {
+                "id": 40050125,
+                "baseId": 400465,
+                "imageNum": 2
+              },
+              {
+                "id": 40050101,
+                "baseId": 400088,
+                "imageNum": 2
+              },
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40040048,
+                "baseId": 400169,
+                "imageNum": 2
+              },
+              {
+                "id": 40040080,
+                "baseId": 400440,
+                "imageNum": 2
+              },
+              {
+                "id": 40090021,
+                "baseId": 400247,
+                "imageNum": 1
+              },
+              {
+                "id": 40090002,
+                "baseId": 400359,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 101502021,
+                "skillLv4IconName": "Icon_Skill_055"
+              },
+              {
+                "id": 101502011,
+                "skillLv4IconName": "Icon_Skill_008"
+              }
+            ]
+          },
+          {
+            "position": 3,
+            "chara": {
+              "id": 10350104,
+              "baseId": 100044,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050117,
+              "baseId": 210147,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30360104,
+              "baseId": 303147,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 303601041
+            },
+            "talisman": {
+              "id": 50350103,
+              "element": 1,
+              "weaponType": 3,
+              "ability1Id": 340000010,
+              "ability2Id": 340000060
+            },
+            "crests": [
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40050004,
+                "baseId": 400065,
+                "imageNum": 2
+              },
+              {
+                "id": 40050125,
+                "baseId": 400465,
+                "imageNum": 2
+              },
+              {
+                "id": 40040083,
+                "baseId": 400446,
+                "imageNum": 2
+              },
+              {
+                "id": 40040048,
+                "baseId": 400169,
+                "imageNum": 2
+              },
+              {
+                "id": 40090021,
+                "baseId": 400247,
+                "imageNum": 1
+              },
+              {
+                "id": 40090007,
+                "baseId": 400178,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          },
+          {
+            "position": 4,
+            "chara": {
+              "id": 10650101,
+              "baseId": 100029,
+              "variationId": 2
+            },
+            "dragon": {
+              "id": 20050119,
+              "baseId": 210177,
+              "variationId": 1
+            },
+            "weapon": {
+              "id": 30660104,
+              "baseId": 306146,
+              "variationId": 1,
+              "formId": 60101,
+              "changeSkillId1": 306601041
+            },
+            "talisman": {
+              "id": 50650103,
+              "element": 1,
+              "weaponType": 6,
+              "ability1Id": 340000010,
+              "ability2Id": 340000060
+            },
+            "crests": [
+              {
+                "id": 40050125,
+                "baseId": 400465,
+                "imageNum": 2
+              },
+              {
+                "id": 40050076,
+                "baseId": 400391,
+                "imageNum": 2
+              },
+              {
+                "id": 40050107,
+                "baseId": 400435,
+                "imageNum": 2
+              },
+              {
+                "id": 40040048,
+                "baseId": 400169,
+                "imageNum": 2
+              },
+              {
+                "id": 40040058,
+                "baseId": 400381,
+                "imageNum": 2
+              },
+              {
+                "id": 40090013,
+                "baseId": 400179,
+                "imageNum": 1
+              },
+              {
+                "id": 40090001,
+                "baseId": 400177,
+                "imageNum": 1
+              }
+            ],
+            "sharedSkills": [
+              {
+                "id": 108405011,
+                "skillLv4IconName": "Icon_Skill_029"
+              },
+              {
+                "id": 104403011,
+                "skillLv4IconName": "Icon_Skill_004"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
