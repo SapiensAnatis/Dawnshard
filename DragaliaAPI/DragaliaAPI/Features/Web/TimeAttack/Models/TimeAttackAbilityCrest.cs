@@ -1,9 +1,8 @@
-
 using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Features.Web.TimeAttack.Models;
 
-internal sealed record TimeAttackAbilityCrest
+internal sealed class TimeAttackAbilityCrest
 {
     public AbilityCrestId Id { get; init; }
 

@@ -58,10 +58,6 @@
 </div>
 
 <style>
-  .spacer {
-    flex-grow: 1;
-  }
-
   #unit div {
     height: 45px;
   }

@@ -35,6 +35,7 @@ test('expand team composition', async ({ page }) => {
   const topRow = page.getByRole('row', { name: /1 Qwerby/ });
   await topRow.getByRole('button', { name: 'View detailed team information' }).click();
 
+  await expect(page.getByRole('button', { name: 'Expand dragon details' }).first()).toBeVisible();
   await waitForImagesToLoad(page);
 
   await expect(page).toHaveScreenshot({ fullPage: true });

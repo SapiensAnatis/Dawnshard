@@ -57,7 +57,7 @@
   const { headerRows, pageRows, tableAttrs, tableBodyAttrs, tableHeadAttrs, pluginStates } =
     table.createViewModel(columns);
 
-  let expandedIds = pluginStates.expand.expandedIds;
+  const expandedIds = pluginStates.expand.expandedIds;
 </script>
 
 <div class="rounded-md border">

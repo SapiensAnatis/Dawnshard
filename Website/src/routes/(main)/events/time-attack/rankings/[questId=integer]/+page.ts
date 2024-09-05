@@ -11,9 +11,7 @@ export const load: PageLoad = async ({ fetch, params, url }) => {
     throw new Error(`${endpoint} call failed with status ${response.status}`);
   }
 
-  const json = await response.json();
-
   return {
-    clearData: timeAttackClearArraySchema.parse(json)
+    clearData: timeAttackClearArraySchema.parse(await response.json())
   };
 };

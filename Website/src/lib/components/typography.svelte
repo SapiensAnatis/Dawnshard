@@ -2,7 +2,7 @@
   import { cn } from '$shadcn/utils.js';
 
   export let typography: 'h1' | 'h2' | 'h3' | 'h4';
-  export let id: string | undefined;
+  export let id: string | undefined = undefined;
 
   let className = '';
   export { className as class };

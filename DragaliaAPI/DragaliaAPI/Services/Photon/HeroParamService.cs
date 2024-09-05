@@ -24,7 +24,6 @@ public class HeroParamService(
     IPlayerIdentityService playerIdentityService
 ) : IHeroParamService
 {
-
     public async Task<List<HeroParam>> GetHeroParam(long viewerId, int partySlot)
     {
         logger.LogDebug("Fetching HeroParam for slot {partySlots}", partySlot);
