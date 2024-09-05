@@ -66,6 +66,8 @@ test('pagination', async ({ page }) => {
     page.getByRole('row', { name: /1 Qwerby, koromaru, Shiny ☆, Leom 00:22.8/ })
   ).toBeVisible();
 
+  await page.waitForTimeout(500); // ???
+
   await expect(page.getByRole('button', { name: 'Previous' })).toBeDisabled();
   await page.getByRole('button', { name: 'Next' }).click();
 
