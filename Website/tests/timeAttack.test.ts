@@ -50,14 +50,14 @@ test('clicking icons shows info popovers', async ({ page }) => {
 
   const topRow = page.getByRole('row', { name: /1 Qwerby/ });
 
+  await page.waitForTimeout(500);
+
   await topRow.getByRole('button', { name: 'Expand character details' }).first().click();
   await expect(page.getByText('Sheila')).toBeVisible();
   const charaWikiLink = page.getByText('Dragalia Lost Wiki');
   await expect(charaWikiLink).toBeVisible();
   await expect(charaWikiLink).toHaveAttribute('href', 'https://dragalialost.wiki/w/Sheila');
   await topRow.click(); // dismiss popup
-
-  await page.waitForTimeout(500);
 
   await topRow.getByRole('button', { name: 'View detailed team information' }).click();
   await waitForImagesToLoad(page);
