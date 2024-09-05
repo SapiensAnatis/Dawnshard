@@ -26,7 +26,7 @@ test('displays correctly on mobile', async ({ page }) => {
 
   await waitForImagesToLoad(page);
 
-  await expect(page).toHaveScreenshot({ fullPage: true });
+  await expect(page).toHaveScreenshot();
 });
 
 test('expand team composition', async ({ page }) => {
