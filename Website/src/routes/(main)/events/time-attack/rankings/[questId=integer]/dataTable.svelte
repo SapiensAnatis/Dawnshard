@@ -2,7 +2,7 @@
   import { readable } from 'svelte/store';
   import { slide } from 'svelte/transition';
   import { createRender, createTable, Render, Subscribe } from 'svelte-headless-table';
-  import { addExpandedRows } from 'svelte-headless-table/plugins';
+  import { addExpandedRows, addPagination } from 'svelte-headless-table/plugins';
 
   import {
     getTeam,
@@ -14,11 +14,15 @@
   import TeamCell from './teamCell.svelte';
   import TeamComposition from './teamComposition/teamComposition.svelte';
 
+  export let itemCount: number;
   export let data: TimeAttackRanking[];
   export let coop: boolean = false;
 
+  const itemCountStore = readable(itemCount);
+
   const table = createTable(readable(data), {
-    expand: addExpandedRows()
+    expand: addExpandedRows(),
+    page: addPagination({ serverSide: true, serverItemCount: itemCountStore })
   });
 
   const columns = table.createColumns([
@@ -58,6 +62,7 @@
     table.createViewModel(columns);
 
   const expandedIds = pluginStates.expand.expandedIds;
+  const { pageIndex, pageCount } = pluginStates.page;
 </script>
 
 <div class="rounded-md border">
