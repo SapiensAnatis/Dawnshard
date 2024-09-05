@@ -1,14 +1,17 @@
 <script lang="ts">
-  import { readable } from 'svelte/store';
+  import { readable, writable } from 'svelte/store';
   import { slide } from 'svelte/transition';
   import { createRender, createTable, Render, Subscribe } from 'svelte-headless-table';
   import { addExpandedRows, addPagination } from 'svelte-headless-table/plugins';
 
+  import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
   import {
     getTeam,
     getTeamKeys
   } from '$main/events/time-attack/rankings/[questId=integer]/util.ts';
   import type { TimeAttackRanking } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
+  import { Button } from '$shadcn/components/ui/button';
   import * as Table from '$shadcn/components/ui/table';
 
   import TeamCell from './teamCell.svelte';
@@ -18,9 +21,15 @@
   export let data: TimeAttackRanking[];
   export let coop: boolean = false;
 
+  const tableData = writable(data);
+
+  $: {
+    tableData.set(data);
+  }
+
   const itemCountStore = readable(itemCount);
 
-  const table = createTable(readable(data), {
+  const table = createTable(tableData, {
     expand: addExpandedRows(),
     page: addPagination({ serverSide: true, serverItemCount: itemCountStore })
   });
@@ -62,7 +71,15 @@
     table.createViewModel(columns);
 
   const expandedIds = pluginStates.expand.expandedIds;
-  const { pageIndex, pageCount } = pluginStates.page;
+  const { pageIndex, hasPreviousPage, hasNextPage } = pluginStates.page;
+
+  const changePage = (newPage: number) => {
+    expandedIds.clear();
+    $pageIndex = newPage;
+    const params = new URLSearchParams($page.url.searchParams);
+    params.set('page', ($pageIndex + 1).toString());
+    goto(`?${params.toString()}`);
+  };
 </script>
 
 <div class="rounded-md border">
@@ -82,38 +99,52 @@
         </Subscribe>
       {/each}
     </Table.Header>
-    <Table.Body {...$tableBodyAttrs}>
-      {#each $pageRows as row (row.id)}
-        <Subscribe rowAttrs={row.attrs()} let:rowAttrs>
-          <Table.Row {...rowAttrs} class="flex flex-col md:[display:revert]">
-            {#each $headerRows[0].cells.map( (header, i) => ({ header, cell: row.cells[i] }) ) as { cell, header }}
-              <Subscribe attrs={cell.attrs()} let:attrs>
-                <Table.Cell {...attrs} class="px-4 py-3">
-                  <div class="text-muted-foreground md:hidden">
-                    <Render of={header.render()} />
+    {#key pageIndex}
+      <Table.Body {...$tableBodyAttrs}>
+        {#each $pageRows as row (row.id)}
+          <Subscribe rowAttrs={row.attrs()} let:rowAttrs>
+            <Table.Row {...rowAttrs} class="flex flex-col md:[display:revert]">
+              {#each $headerRows[0].cells.map( (header, i) => ({ header, cell: row.cells[i] }) ) as { cell, header }}
+                <Subscribe attrs={cell.attrs()} let:attrs>
+                  <Table.Cell {...attrs} class="px-4 py-3">
+                    <div class="text-muted-foreground md:hidden">
+                      <Render of={header.render()} />
+                    </div>
+                    <div>
+                      <Render of={cell.render()} />
+                    </div>
+                  </Table.Cell>
+                </Subscribe>
+              {/each}
+            </Table.Row>
+            {#if $expandedIds[row.id] && row.isData()}
+              <tr class="border-b">
+                <td colspan="4">
+                  <div transition:slide={{ duration: 500 }} class="p-4">
+                    <TeamComposition
+                      units={getTeam(coop, row.original.players)}
+                      unitKeys={getTeamKeys(coop, row.original.players)}
+                      key={row.original.rank}
+                      {coop} />
                   </div>
-                  <div>
-                    <Render of={cell.render()} />
-                  </div>
-                </Table.Cell>
-              </Subscribe>
-            {/each}
-          </Table.Row>
-          {#if $expandedIds[row.id] && row.isData()}
-            <tr class="border-b">
-              <td colspan="4">
-                <div transition:slide={{ duration: 500 }} class="p-4">
-                  <TeamComposition
-                    units={getTeam(coop, row.original.players)}
-                    unitKeys={getTeamKeys(coop, row.original.players)}
-                    key={row.original.rank}
-                    {coop} />
-                </div>
-              </td>
-            </tr>
-          {/if}
-        </Subscribe>
-      {/each}
-    </Table.Body>
+                </td>
+              </tr>
+            {/if}
+          </Subscribe>
+        {/each}
+      </Table.Body>
+    {/key}
   </Table.Root>
+  <div class="flex items-center justify-center space-x-4 border-t py-4">
+    <Button
+      variant="outline"
+      size="sm"
+      on:click={() => changePage($pageIndex - 1)}
+      disabled={!$hasPreviousPage}>Previous</Button>
+    <Button
+      variant="outline"
+      size="sm"
+      disabled={!$hasNextPage}
+      on:click={() => changePage($pageIndex + 1)}>Next</Button>
+  </div>
 </div>

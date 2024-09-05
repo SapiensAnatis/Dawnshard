@@ -59,3 +59,4 @@ export const timeAttackClearArraySchema = z.object({
 });
 
 export type TimeAttackRanking = z.infer<typeof timeAttackRankingSchema>;
+export type TimeAttackRankingResponse = z.infer<typeof timeAttackClearArraySchema>;
