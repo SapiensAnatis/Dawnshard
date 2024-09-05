@@ -12422,15 +12422,7 @@
               "changeSkillId1": 305601011
             },
             "talisman": null,
-            "crests": [
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null
-            ],
+            "crests": [null, null, null, null, null, null, null],
             "sharedSkills": [
               {
                 "id": 108405011,
@@ -13645,15 +13637,7 @@
               "changeSkillId1": 303601041
             },
             "talisman": null,
-            "crests": [
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null
-            ],
+            "crests": [null, null, null, null, null, null, null],
             "sharedSkills": [
               {
                 "id": 108405011,

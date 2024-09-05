@@ -73,8 +73,6 @@
   const expandedIds = pluginStates.expand.expandedIds;
   const { pageIndex, hasPreviousPage, hasNextPage } = pluginStates.page;
 
-  let tableHeader: Element | undefined = undefined;
-
   const changePage = (newPage: number) => {
     expandedIds.clear();
 
@@ -96,8 +94,7 @@
     <Table.Header
       {...$tableHeadAttrs}
       id="time-attack-table-header"
-      class="hidden md:[display:revert]"
-      bind:this={tableHeader}>
+      class="hidden md:[display:revert]">
       {#each $headerRows as headerRow}
         <Subscribe rowAttrs={headerRow.attrs()}>
           <Table.Row>
@@ -157,7 +154,7 @@
     <Button
       variant="outline"
       size="sm"
-      disabled={!$hasNextPage}
-      on:click={() => changePage($pageIndex + 1)}>Next</Button>
+      on:click={() => changePage($pageIndex + 1)}
+      disabled={!$hasNextPage}>Next</Button>
   </div>
 </div>
