@@ -16,6 +16,7 @@
 
   import TeamCell from './teamCell.svelte';
   import TeamComposition from './teamComposition/teamComposition.svelte';
+  import { onMount } from 'svelte';
 
   export let itemCount: number;
   export let data: TimeAttackRanking[];
@@ -87,6 +88,19 @@
 
     goto(`?${params.toString()}`, { noScroll: true });
   };
+
+  let initialized = false;
+
+  onMount(() => {
+    const params = new URLSearchParams($page.url.searchParams);
+    const pageNumber = Number(params.get('page'));
+
+    if (pageNumber) {
+      $pageIndex = pageNumber - 1;
+    }
+
+    initialized = true;
+  });
 </script>
 
 <div class="rounded-md border">
@@ -130,7 +144,7 @@
             {#if $expandedIds[row.id] && row.isData()}
               <tr class="border-b">
                 <td colspan="4">
-                  <div transition:slide={{ duration: 500 }} class="p-4">
+                  <div in:slide={{ duration: 500 }} class="p-4">
                     <TeamComposition
                       units={getTeam(coop, row.original.players)}
                       unitKeys={getTeamKeys(coop, row.original.players)}
@@ -150,11 +164,11 @@
       variant="outline"
       size="sm"
       on:click={() => changePage($pageIndex - 1)}
-      disabled={!$hasPreviousPage}>Previous</Button>
+      disabled={!initialized || !$hasPreviousPage}>Previous</Button>
     <Button
       variant="outline"
       size="sm"
       on:click={() => changePage($pageIndex + 1)}
-      disabled={!$hasNextPage}>Next</Button>
+      disabled={!initialized || !$hasNextPage}>Next</Button>
   </div>
 </div>
