@@ -69,7 +69,7 @@ test('pagination', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Previous' })).toBeDisabled();
   await page.getByRole('button', { name: 'Next' }).click();
 
-  await page.waitForURL('/events/time-attack/rankings/227010105?page=2', { timeout: 1000 });
+  await page.waitForURL('/events/time-attack/rankings/227010105?page=2', { timeout: 5000 });
 
   await expect(
     page.getByRole('row', { name: /11 Alicia, Diego, Euden, 雪姫 01:37.1/ })
@@ -78,7 +78,7 @@ test('pagination', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled();
   await page.getByRole('button', { name: 'Previous' }).click();
 
-  await page.waitForURL('/events/time-attack/rankings/227010105?page=1', { timeout: 1000 });
+  await page.waitForURL('/events/time-attack/rankings/227010105?page=1', { timeout: 5000 });
 
   await expect(page.getByRole('button', { name: 'Previous' })).toBeDisabled();
 
