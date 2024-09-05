@@ -1,7 +1,6 @@
 using System.Net.Http.Json;
 using DragaliaAPI.Features.Web;
 using DragaliaAPI.Features.Web.TimeAttack.Models;
-using NSubstitute.Extensions;
 
 namespace DragaliaAPI.Integration.Test.Features.Web.TimeAttack;
 
@@ -23,9 +22,10 @@ public partial class TimeAttackTest : TestFixture
             .Should()
             .BeEquivalentTo(
                 [
-                    new() { Id = 227010105, IsCoop = true },
                     new TimeAttackQuest() { Id = 227010104, IsCoop = false },
-                ]
+                    new TimeAttackQuest() { Id = 227010105, IsCoop = true },
+                ],
+                opts => opts.WithStrictOrdering()
             );
     }
 
