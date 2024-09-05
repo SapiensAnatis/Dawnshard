@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { readable, writable } from 'svelte/store';
   import { slide } from 'svelte/transition';
   import { createRender, createTable, Render, Subscribe } from 'svelte-headless-table';
@@ -16,7 +17,6 @@
 
   import TeamCell from './teamCell.svelte';
   import TeamComposition from './teamComposition/teamComposition.svelte';
-  import { onMount } from 'svelte';
 
   export let itemCount: number;
   export let data: TimeAttackRanking[];
