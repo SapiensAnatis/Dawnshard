@@ -1,5 +1,7 @@
 using System.Net.Http.Json;
+using DragaliaAPI.Features.Web;
 using DragaliaAPI.Features.Web.TimeAttack.Models;
+using NSubstitute.Extensions;
 
 namespace DragaliaAPI.Integration.Test.Features.Web.TimeAttack;
 
@@ -32,12 +34,14 @@ public partial class TimeAttackTest : TestFixture
     {
         await this.SeedTimeAttackData();
 
-        List<TimeAttackRanking>? rankings = await this.Client.GetFromJsonAsync<
-            List<TimeAttackRanking>
+        OffsetPagedResponse<TimeAttackRanking>? rankings = await this.Client.GetFromJsonAsync<
+            OffsetPagedResponse<TimeAttackRanking>
         >("/api/time_attack/rankings/227010105");
 
+        rankings?.Pagination.TotalCount.Should().Be(2);
+
         rankings
-            .Should()
+            ?.Data.Should()
             .BeEquivalentTo(
                 [
                     new()
@@ -77,12 +81,12 @@ public partial class TimeAttackTest : TestFixture
 
         AssertionOptions.FormattingOptions.MaxLines = 10000;
 
-        List<TimeAttackRanking>? rankings = await this.Client.GetFromJsonAsync<
-            List<TimeAttackRanking>
+        OffsetPagedResponse<TimeAttackRanking>? rankings = await this.Client.GetFromJsonAsync<
+            OffsetPagedResponse<TimeAttackRanking>
         >("/api/time_attack/rankings/227010104");
 
         rankings
-            .Should()
+            ?.Data.Should()
             .BeEquivalentTo(
                 [
                     new TimeAttackRanking()

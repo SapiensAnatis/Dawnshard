@@ -44,7 +44,11 @@ internal sealed class TimeAttackService(ApiContext apiContext)
             .ToList();
     }
 
-    public async Task<List<TimeAttackRanking>> GetRankings(int questId, int offset, int pageSize)
+    public async Task<OffsetPagedResponse<TimeAttackRanking>> GetRankings(
+        int questId,
+        int offset,
+        int pageSize
+    )
     {
         var clears = LinqExtensions
             .InnerJoin(
@@ -84,6 +88,8 @@ internal sealed class TimeAttackService(ApiContext apiContext)
             .Distinct()
             .AsCte("clears_unique_by_players");
 
+        int totalCount = await uniqueClears.CountAsyncLinqToDB();
+
         var playerInfo = uniqueClears.GroupJoin(
             apiContext.TimeAttackPlayers,
             arg => arg.GameId,
@@ -113,23 +119,25 @@ internal sealed class TimeAttackService(ApiContext apiContext)
 
         var results = await playerInfo.Skip(offset).Take(pageSize).ToListAsyncLinqToDB();
 
-        IEnumerable<TimeAttackRanking> mappedResults = results.Select(x =>
-        {
-            return new TimeAttackRanking()
+        List<TimeAttackRanking> mappedResults = results
+            .Select(x =>
             {
-                Rank = (int)x.Rank,
-                Time = x.Time,
-                Players = x
-                    .Players.Select(y => new TimeAttackPlayer()
-                    {
-                        Name = y.Name,
-                        Units = MapUnits(y.PartyInfo),
-                    })
-                    .ToList(),
-            };
-        });
+                return new TimeAttackRanking()
+                {
+                    Rank = (int)x.Rank,
+                    Time = x.Time,
+                    Players = x
+                        .Players.Select(y => new TimeAttackPlayer()
+                        {
+                            Name = y.Name,
+                            Units = MapUnits(y.PartyInfo),
+                        })
+                        .ToList(),
+                };
+            })
+            .ToList();
 
-        return mappedResults.ToList();
+        return new OffsetPagedResponse<TimeAttackRanking>(totalCount, mappedResults);
     }
 
     private static List<TimeAttackUnit> MapUnits(string partyInfoJson)
