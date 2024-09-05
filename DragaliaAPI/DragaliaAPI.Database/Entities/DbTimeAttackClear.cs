@@ -24,5 +24,6 @@ public class DbTimeAttackClear
     /// Used to only allow 1 displayed leaderboard entry per set of players.
     /// </remarks>
     [NotMapped]
-    public int PlayersHash => 1;
+    public int PlayersHash =>
+        string.Join(string.Empty, this.Players.Select(x => x.ViewerId).Order()).GetHashCode();
 }

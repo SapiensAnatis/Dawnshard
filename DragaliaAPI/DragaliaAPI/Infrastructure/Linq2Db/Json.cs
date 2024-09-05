@@ -5,9 +5,15 @@ using LinqToDB.SqlQuery;
 
 namespace DragaliaAPI.Infrastructure.Linq2Db;
 
+/// <summary>
+/// Helper class for using JSON columns with Linq2DB.
+/// </summary>
+/// <remarks>
+/// Adapted from https://github.com/linq2db/linq2db/issues/4343#issuecomment-1816460380
+/// </remarks>
 internal static class Json
 {
-    sealed class JsonValuePathBuilder : Sql.IExtensionCallBuilder
+    private sealed class JsonValuePathBuilder : Sql.IExtensionCallBuilder
     {
         public void Build(Sql.ISqExtensionBuilder builder)
         {
@@ -42,6 +48,12 @@ internal static class Json
         }
     }
 
+    /// <summary>
+    /// Access the JSON object property named by <paramref name="name"/> inside the JSON column <paramref name="prop" />
+    /// </summary>
+    /// <param name="prop">The JSON column to index.</param>
+    /// <param name="name">The property name of the object to access.</param>
+    /// <returns>The indexed value.</returns>
     [Sql.Extension(
         ProviderName.PostgreSQL,
         Precedence = Precedence.Primary,

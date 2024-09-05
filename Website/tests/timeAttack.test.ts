@@ -48,6 +48,8 @@ test('clicking icons shows info popovers', async ({ page }) => {
 
   await waitForImagesToLoad(page);
 
+  await page.waitForTimeout(500); // ???
+
   const topRow = page.getByRole('row', { name: /1 Qwerby/ });
 
   await topRow.getByRole('button', { name: 'Expand character details' }).first().click();

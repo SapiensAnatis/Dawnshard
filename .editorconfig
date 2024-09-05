@@ -231,6 +231,9 @@ csharp_style_allow_blank_line_after_token_in_arrow_expression_clause_experimenta
 dotnet_diagnostic.RMG012.severity = error # Unmapped target member
 dotnet_diagnostic.RMG020.severity = error # Unmapped source member
 
+# BannedApiAnalyzers
+dotnet_diagnostic.RS0030.severity = error # Banned symbol
+
 [DragaliaAPI/DragaliaAPI.Database/Migrations/*.cs]
 generated_code = true
 
