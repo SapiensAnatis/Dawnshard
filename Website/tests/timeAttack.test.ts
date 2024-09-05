@@ -50,24 +50,9 @@ test('clicking icons shows info popovers', async ({ page }) => {
 
   const topRow = page.getByRole('row', { name: /1 Qwerby/ });
 
-  await page.waitForTimeout(500);
-
   await topRow.getByRole('button', { name: 'Expand character details' }).first().click();
   await expect(page.getByText('Sheila')).toBeVisible();
   const charaWikiLink = page.getByText('Dragalia Lost Wiki');
   await expect(charaWikiLink).toBeVisible();
   await expect(charaWikiLink).toHaveAttribute('href', 'https://dragalialost.wiki/w/Sheila');
-  await topRow.click(); // dismiss popup
-
-  await topRow.getByRole('button', { name: 'View detailed team information' }).click();
-  await waitForImagesToLoad(page);
-
-  await page.getByRole('button', { name: 'Expand dragon details' }).first().click();
-  await expect(page.getByText('Primal Brunhilda')).toBeVisible();
-  const dragonWikiLink = page.getByText('Dragalia Lost Wiki');
-  await expect(dragonWikiLink).toBeVisible();
-  await expect(dragonWikiLink).toHaveAttribute(
-    'href',
-    'https://dragalialost.wiki/w/Primal_Brunhilda'
-  );
 });

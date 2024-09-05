@@ -101,6 +101,7 @@
                   <TeamComposition
                     units={getTeam(coop, row.original.players)}
                     unitKeys={getTeamKeys(coop, row.original.players)}
+                    key={row.original.rank}
                     {coop} />
                 </div>
               </td>

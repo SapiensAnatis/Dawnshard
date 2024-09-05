@@ -4,8 +4,6 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "vite dev",
-    "dev:test": "vite dev --mode test",
-    "api": "dotnet run --project ../DragaliaAPI/DragaliaAPI",
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",

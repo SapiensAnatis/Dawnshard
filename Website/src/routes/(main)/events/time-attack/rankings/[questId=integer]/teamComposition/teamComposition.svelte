@@ -10,15 +10,18 @@
   export let units: TimeAttackUnit[];
   export let unitKeys: string[];
   export let coop: boolean;
+  export let key;
+
+  const id = `team-composition-${key}`;
 
   const spacerClass = 'max-w-0 flex-grow sm:max-w-0.5 md:max-w-2';
 </script>
 
-<h3 class="font-md mb-2 font-semibold">Team composition</h3>
+<h3 class="font-md mb-2 font-semibold" id={`${id}-header`}>Team composition</h3>
 
-<div class="flex flex-col gap-3">
+<ul class="flex flex-col gap-3" aria-labelledby={`${id}-header`}>
   {#each units.map((unit, i) => ({ unit, key: unitKeys[i] })) as { unit, key }}
-    <div>
+    <li aria-label={key}>
       <p class="mb-1 text-muted-foreground">{key}</p>
       <div id="unit" class="flex flex-wrap">
         <div>
@@ -53,9 +56,9 @@
           </div>
         {/if}
       </div>
-    </div>
+    </li>
   {/each}
-</div>
+</ul>
 
 <style>
   #unit div {
