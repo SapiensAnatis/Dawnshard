@@ -9,19 +9,19 @@
 
   export let data: PageData;
 
-  $: currentQuestId = parseInt($page.params.questId);
+  $: currentQuest = data.questList.find((q) => q.id === parseInt($page.params.questId));
 </script>
 
 <Page title="Time Attack Rankings">
-  <div class="flex w-full flex-wrap items-start justify-between gap-4">
+  <div class="mb-4 flex w-full flex-wrap items-start justify-between gap-4">
     <div>
       <p class="mb-2">Select a quest to view rankings:</p>
       <ul class="pl-4">
-        {#each data.questList as questId}
+        {#each data.questList as { id: questId }}
           <li>
             <a
               class="hover:underline"
-              aria-current={questId === currentQuestId ? 'page' : undefined}
+              aria-current={questId === currentQuest?.id ? 'page' : undefined}
               href="/events/time-attack/rankings/{questId}">
               {$t(`timeAttack.quest.${questId}`)}
             </a>
@@ -34,8 +34,10 @@
       src="$lib/assets/timeAttack/volk.png"
       alt="Promotional banner for selected time attack quest" />
   </div>
-  <Typography typography="h2">Clears</Typography>
-  <DataTable data={data.clearData} />
+  <Typography typography="h2" id="time-attack-table-title">Clears</Typography>
+  {#key currentQuest}
+    <DataTable data={data.clearData} coop={currentQuest?.isCoop} />
+  {/key}
 </Page>
 
 <style>

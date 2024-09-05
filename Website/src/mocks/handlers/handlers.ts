@@ -8,7 +8,7 @@ import {
 
 import { handleNews, handleNewsItem } from './news.ts';
 import { handleSavefileEdit, handleSavefileExport } from './savefile.ts';
-import { handleQuestList, handleRankings } from './timeAttack.ts';
+import { handleQuests, handleRankings } from './timeAttack.ts';
 import { handleUser, handleUserProfile } from './user.ts';
 import { handlePresentData } from './widgets.ts';
 
@@ -70,6 +70,6 @@ export const handlers = [
   ...http.post('/api/savefile/edit', withAuth(handleSavefileEdit)),
   ...http.get('/api/savefile/edit/widgets/present', withAuth(handlePresentData)),
 
-  ...http.get('/api/time_attack/quests', handleQuestList),
+  ...http.get('/api/time_attack/quests', handleQuests),
   ...http.get('/api/time_attack/rankings/*', handleRankings)
 ];

@@ -33,13 +33,9 @@
     <None Update="Data\savefile_excess_dragons.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\Missions\" />
-    <Folder Include="Features\Dmode\" />
-    <Folder Include="Features\Item\" />
-    <Folder Include="Features\Shop\" />
+    <None Update="Data\time_attack_party_info.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <PropertyGroup>

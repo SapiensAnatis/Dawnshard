@@ -4,14 +4,17 @@
   import { createRender, createTable, Render, Subscribe } from 'svelte-headless-table';
   import { addExpandedRows } from 'svelte-headless-table/plugins';
 
-  import { getTeam } from '$main/events/time-attack/rankings/[questId=integer]/util.ts';
-  import type { TimeAttackClear } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
+  import {
+    getTeam,
+    getTeamKeys
+  } from '$main/events/time-attack/rankings/[questId=integer]/util.ts';
+  import type { TimeAttackRanking } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
   import * as Table from '$shadcn/components/ui/table';
 
   import TeamCell from './teamCell.svelte';
   import TeamComposition from './teamComposition/teamComposition.svelte';
 
-  export let data: TimeAttackClear[];
+  export let data: TimeAttackRanking[];
   export let coop: boolean = false;
 
   const table = createTable(readable(data), {
@@ -24,8 +27,11 @@
       header: 'Rank'
     }),
     table.column({
-      accessor: ({ players }) => players.map((p) => p.name).join(', '),
-      header: coop ? 'Players' : 'Player'
+      accessor: ({ players }) => players,
+      header: coop ? 'Players' : 'Player',
+      cell: ({ value: players }) => {
+        return players.map((p) => p.name).join(', ');
+      }
     }),
     table.column({
       accessor: ({ time }) => time,
@@ -55,7 +61,7 @@
 </script>
 
 <div class="rounded-md border">
-  <Table.Root {...$tableAttrs} id="time-attack-table">
+  <Table.Root {...$tableAttrs} id="time-attack-table" aria-labelledby="time-attack-table-title">
     <Table.Header {...$tableHeadAttrs} id="header" class="hidden md:[display:revert]">
       {#each $headerRows as headerRow}
         <Subscribe rowAttrs={headerRow.attrs()}>
@@ -92,7 +98,11 @@
             <tr class="border-b">
               <td colspan="4">
                 <div transition:slide={{ duration: 500 }} class="p-4">
-                  <TeamComposition units={getTeam(coop, row.original.players)} />
+                  <TeamComposition
+                    units={getTeam(coop, row.original.players)}
+                    unitKeys={getTeamKeys(coop, row.original.players)}
+                    key={row.original.rank}
+                    {coop} />
                 </div>
               </td>
             </tr>

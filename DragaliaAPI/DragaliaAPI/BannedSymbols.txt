@@ -1,0 +1,1 @@
+T:LinqToDB.AsyncExtensions;Don't use Linq2DB methods that conflict with Entity Framework, use e.g. ToListAsyncLinq2DB instead.

@@ -1,5 +1,7 @@
 import { devices, expect, test } from '@playwright/test';
 
+import { waitForImagesToLoad } from './util.ts';
+
 test('displays correctly', async ({ page }) => {
   await page.goto('/');
 
@@ -9,10 +11,7 @@ test('displays correctly', async ({ page }) => {
 
   await expect(page.getByRole('heading', { name: 'News' })).toBeVisible();
 
-  await page.waitForFunction(() => {
-    const images = Array.from(document.querySelectorAll('img'));
-    return images.every((img) => img.complete);
-  });
+  await waitForImagesToLoad(page);
 
   await expect(page).toHaveScreenshot();
 });
