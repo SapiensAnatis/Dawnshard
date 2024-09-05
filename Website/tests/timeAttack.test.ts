@@ -33,8 +33,10 @@ test('expand team composition', async ({ page }) => {
   await page.goto('/events/time-attack/rankings/227010105');
 
   const topRow = page.getByRole('row', { name: /1 Qwerby/ });
-  await topRow.getByRole('button', { name: 'View detailed team information' }).click();
 
+  await page.waitForTimeout(500); // evil random wait otherwise expanding row doesn't work in CI?
+
+  await topRow.getByRole('button', { name: 'View detailed team information' }).click();
   await expect(page.getByRole('button', { name: 'Expand dragon details' }).first()).toBeVisible();
   await waitForImagesToLoad(page);
 
