@@ -1,24 +1,38 @@
 <script lang="ts">
-  import { readable } from 'svelte/store';
+  import { onMount } from 'svelte';
+  import { readable, writable } from 'svelte/store';
   import { slide } from 'svelte/transition';
   import { createRender, createTable, Render, Subscribe } from 'svelte-headless-table';
-  import { addExpandedRows } from 'svelte-headless-table/plugins';
+  import { addExpandedRows, addPagination } from 'svelte-headless-table/plugins';
 
+  import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
   import {
     getTeam,
     getTeamKeys
   } from '$main/events/time-attack/rankings/[questId=integer]/util.ts';
   import type { TimeAttackRanking } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
+  import { Button } from '$shadcn/components/ui/button';
   import * as Table from '$shadcn/components/ui/table';
 
   import TeamCell from './teamCell.svelte';
   import TeamComposition from './teamComposition/teamComposition.svelte';
 
+  export let itemCount: number;
   export let data: TimeAttackRanking[];
   export let coop: boolean = false;
 
-  const table = createTable(readable(data), {
-    expand: addExpandedRows()
+  const tableData = writable(data);
+
+  $: {
+    tableData.set(data);
+  }
+
+  const itemCountStore = readable(itemCount);
+
+  const table = createTable(tableData, {
+    expand: addExpandedRows(),
+    page: addPagination({ serverSide: true, serverItemCount: itemCountStore })
   });
 
   const columns = table.createColumns([
@@ -58,11 +72,43 @@
     table.createViewModel(columns);
 
   const expandedIds = pluginStates.expand.expandedIds;
+  const { pageIndex, hasPreviousPage, hasNextPage } = pluginStates.page;
+
+  const changePage = (newPage: number) => {
+    expandedIds.clear();
+
+    $pageIndex = newPage;
+    const params = new URLSearchParams($page.url.searchParams);
+    params.set('page', ($pageIndex + 1).toString());
+
+    const el = document.querySelector('#time-attack-table-title');
+    if (el) {
+      el.scrollIntoView({ block: 'start' });
+    }
+
+    goto(`?${params.toString()}`, { noScroll: true });
+  };
+
+  let initialized = false;
+
+  onMount(() => {
+    const params = new URLSearchParams($page.url.searchParams);
+    const pageNumber = Number(params.get('page'));
+
+    if (pageNumber) {
+      $pageIndex = pageNumber - 1;
+    }
+
+    initialized = true;
+  });
 </script>
 
 <div class="rounded-md border">
   <Table.Root {...$tableAttrs} id="time-attack-table" aria-labelledby="time-attack-table-title">
-    <Table.Header {...$tableHeadAttrs} id="header" class="hidden md:[display:revert]">
+    <Table.Header
+      {...$tableHeadAttrs}
+      id="time-attack-table-header"
+      class="hidden md:[display:revert]">
       {#each $headerRows as headerRow}
         <Subscribe rowAttrs={headerRow.attrs()}>
           <Table.Row>
@@ -94,21 +140,35 @@
               </Subscribe>
             {/each}
           </Table.Row>
-          {#if $expandedIds[row.id] && row.isData()}
-            <tr class="border-b">
-              <td colspan="4">
-                <div transition:slide={{ duration: 500 }} class="p-4">
-                  <TeamComposition
-                    units={getTeam(coop, row.original.players)}
-                    unitKeys={getTeamKeys(coop, row.original.players)}
-                    key={row.original.rank}
-                    {coop} />
-                </div>
-              </td>
-            </tr>
-          {/if}
+          {#key pageIndex}
+            {#if $expandedIds[row.id] && row.isData()}
+              <tr class="border-b">
+                <td colspan="4">
+                  <div in:slide={{ duration: 500 }} class="p-4">
+                    <TeamComposition
+                      units={getTeam(coop, row.original.players)}
+                      unitKeys={getTeamKeys(coop, row.original.players)}
+                      key={row.original.rank}
+                      {coop} />
+                  </div>
+                </td>
+              </tr>
+            {/if}
+          {/key}
         </Subscribe>
       {/each}
     </Table.Body>
   </Table.Root>
+  <div class="flex items-center justify-center space-x-4 border-t py-2.5">
+    <Button
+      variant="outline"
+      size="sm"
+      on:click={() => changePage($pageIndex - 1)}
+      disabled={!initialized || !$hasPreviousPage}>Previous</Button>
+    <Button
+      variant="outline"
+      size="sm"
+      on:click={() => changePage($pageIndex + 1)}
+      disabled={!initialized || !$hasNextPage}>Next</Button>
+  </div>
 </div>

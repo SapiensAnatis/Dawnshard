@@ -26,7 +26,7 @@ test('displays correctly on mobile', async ({ page }) => {
 
   await waitForImagesToLoad(page);
 
-  await expect(page).toHaveScreenshot({ fullPage: true });
+  await expect(page).toHaveScreenshot();
 });
 
 test('expand team composition', async ({ page }) => {
@@ -57,4 +57,32 @@ test('clicking icons shows info popovers', async ({ page }) => {
   const charaWikiLink = page.getByText('Dragalia Lost Wiki');
   await expect(charaWikiLink).toBeVisible();
   await expect(charaWikiLink).toHaveAttribute('href', 'https://dragalialost.wiki/w/Sheila');
+});
+
+test('pagination', async ({ page }) => {
+  await page.goto('/events/time-attack/rankings/227010105');
+
+  await expect(
+    page.getByRole('row', { name: /1 Qwerby, koromaru, Shiny ☆, Leom 00:22.8/ })
+  ).toBeVisible();
+
+  await expect(page.getByRole('button', { name: 'Previous' })).toBeDisabled();
+  await page.getByRole('button', { name: 'Next' }).click();
+
+  await page.waitForURL('/events/time-attack/rankings/227010105?page=2', { timeout: 5000 });
+
+  await expect(
+    page.getByRole('row', { name: /11 Alicia, Diego, Euden, 雪姫 01:37.1/ })
+  ).toBeVisible();
+
+  await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled();
+  await page.getByRole('button', { name: 'Previous' }).click();
+
+  await page.waitForURL('/events/time-attack/rankings/227010105?page=1', { timeout: 5000 });
+
+  await expect(page.getByRole('button', { name: 'Previous' })).toBeDisabled();
+
+  await expect(
+    page.getByRole('row', { name: /1 Qwerby, koromaru, Shiny ☆, Leom 00:22.8/ })
+  ).toBeVisible();
 });

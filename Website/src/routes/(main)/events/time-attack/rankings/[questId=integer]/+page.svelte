@@ -35,8 +35,11 @@
       alt="Promotional banner for selected time attack quest" />
   </div>
   <Typography typography="h2" id="time-attack-table-title">Clears</Typography>
-  {#key currentQuest}
-    <DataTable data={data.clearData} coop={currentQuest?.isCoop} />
+  {#key currentQuest?.id}
+    <DataTable
+      data={data.clearData.data}
+      itemCount={data.clearData.pagination.totalCount}
+      coop={currentQuest?.isCoop} />
   {/key}
 </Page>
 
@@ -51,5 +54,9 @@
 
   li + li {
     margin-top: 0.4rem;
+  }
+
+  :global(#time-attack-table-title) {
+    scroll-margin-top: var(--header-height);
   }
 </style>

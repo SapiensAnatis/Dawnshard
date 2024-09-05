@@ -1,13 +1,24 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace DragaliaAPI.Features.Web;
 
-public class OffsetPagedResponse<TData>
+internal sealed class OffsetPagedResponse<TData>
 {
-    public required OffsetPagingMetadata Pagination { get; set; }
+    public OffsetPagedResponse() { }
 
-    public required IList<TData> Data { get; set; }
+    [SetsRequiredMembers]
+    public OffsetPagedResponse(int totalCount, IList<TData> data)
+    {
+        this.Pagination = new() { TotalCount = totalCount };
+        this.Data = data;
+    }
+
+    public required OffsetPagingMetadata Pagination { get; init; }
+
+    public required IList<TData> Data { get; init; }
 }
 
-public class OffsetPagingMetadata
+internal sealed class OffsetPagingMetadata
 {
     public required int TotalCount { get; init; }
 }

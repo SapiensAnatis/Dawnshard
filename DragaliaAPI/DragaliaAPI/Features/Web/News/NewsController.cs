@@ -6,7 +6,7 @@ namespace DragaliaAPI.Features.Web.News;
 [ApiController]
 [Route("/api/news")]
 [AllowAnonymous]
-public sealed class NewsController(NewsService newsService) : ControllerBase
+internal sealed class NewsController(NewsService newsService) : ControllerBase
 {
     [HttpGet]
     public async Task<OffsetPagedResponse<NewsItem>> GetNews(

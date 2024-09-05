@@ -51,6 +51,12 @@ const timeAttackRankingSchema = z.object({
   players: playerSchema.array()
 });
 
-export const timeAttackClearArraySchema = timeAttackRankingSchema.array();
+export const timeAttackClearArraySchema = z.object({
+  pagination: z.object({
+    totalCount: z.number()
+  }),
+  data: timeAttackRankingSchema.array()
+});
 
 export type TimeAttackRanking = z.infer<typeof timeAttackRankingSchema>;
+export type TimeAttackRankingResponse = z.infer<typeof timeAttackClearArraySchema>;
