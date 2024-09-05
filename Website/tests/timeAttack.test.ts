@@ -57,6 +57,8 @@ test('clicking icons shows info popovers', async ({ page }) => {
   await expect(charaWikiLink).toHaveAttribute('href', 'https://dragalialost.wiki/w/Sheila');
   await topRow.click(); // dismiss popup
 
+  await page.waitForTimeout(500);
+
   await topRow.getByRole('button', { name: 'View detailed team information' }).click();
   await waitForImagesToLoad(page);
 
