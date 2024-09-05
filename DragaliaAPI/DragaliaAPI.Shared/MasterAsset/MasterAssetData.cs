@@ -59,7 +59,27 @@ public sealed class MasterAssetData<TKey, TItem>
     /// <param name="key">The key to index with.</param>
     /// <returns>The returned value.</returns>
     /// <exception cref="KeyNotFoundException">The given key was not present in the collection.</exception>
+#if DEBUG
+    public TItem this[TKey key]
+    {
+        get
+        {
+            try
+            {
+                return this.internalKeyCollection[key];
+            }
+            catch (KeyNotFoundException keyNotFoundException)
+            {
+                throw new KeyNotFoundException(
+                    $"Failed to find an instance of {typeof(TItem).Name} using the key {key}",
+                    keyNotFoundException
+                );
+            }
+        }
+    }
+#else
     public TItem this[TKey key] => this.internalKeyCollection[key];
+#endif
 
     /// <summary>
     /// Attempts to get a <typeparam name="TItem"> instance corresponding to the given <typeparam name="TKey"/> key.</typeparam>

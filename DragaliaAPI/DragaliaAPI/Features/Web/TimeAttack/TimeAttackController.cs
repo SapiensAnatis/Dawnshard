@@ -14,6 +14,9 @@ internal sealed class TimeAttackController(TimeAttackService timeAttackService) 
         await timeAttackService.GetQuests();
 
     [HttpGet("rankings/{questId:int}")]
-    public async Task<List<object>> GetRankings(int questId) =>
-        await timeAttackService.GetRankings(questId);
+    public async Task<List<TimeAttackRanking>> GetRankings(
+        int questId,
+        [FromQuery] int offset = 0,
+        [FromQuery] int pageSize = 10
+    ) => await timeAttackService.GetRankings(questId, offset, pageSize);
 }

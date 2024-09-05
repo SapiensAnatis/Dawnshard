@@ -5,6 +5,7 @@
   import type { TimeAttackUnit } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
 
   export let abilityCrest: TimeAttackUnit['crests'][0];
+  export let rarity: number;
 
   import { t } from '$lib/translations';
   import * as Popover from '$shadcn/components/ui/popover';
@@ -21,6 +22,12 @@
 
   const getAbilityCrestName = (abilityCrest: AbilityCrest) =>
     $t(`entity.abilityCrest.item.${abilityCrest.id}`);
+
+  const emptyIconRarityLookup: Partial<Record<number, string>> = {
+    5: 'Icon_Blank_07_A.webp',
+    4: 'Icon_Blank_07_B.webp',
+    6: 'Icon_Blank_07_C.webp' // sindom
+  };
 </script>
 
 {#if abilityCrest}
@@ -43,7 +50,7 @@
   </Popover.Root>
 {:else}
   <Image
-    src={new URL(`images/icon/others/Icon_Blank_07_A.webp`, PUBLIC_CDN_URL).href}
+    src={new URL(`images/icon/others/${emptyIconRarityLookup[rarity]}`, PUBLIC_CDN_URL).href}
     alt="Empty wyrmprint slot"
     layout="constrained"
     width={45}

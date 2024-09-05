@@ -4,7 +4,7 @@ namespace DragaliaAPI.Features.Web.TimeAttack.Models;
 
 internal sealed class TimeAttackTalisman
 {
-    public int Id { get; init; }
+    public Talismans Id { get; init; }
 
     public UnitElement Element { get; init; }
 

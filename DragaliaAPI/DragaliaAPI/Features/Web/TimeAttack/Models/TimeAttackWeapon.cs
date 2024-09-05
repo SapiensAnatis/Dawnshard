@@ -1,8 +1,10 @@
+using DragaliaAPI.Shared.Definitions.Enums;
+
 namespace DragaliaAPI.Features.Web.TimeAttack.Models;
 
 internal sealed class TimeAttackWeapon
 {
-    public int Id { get; init; }
+    public WeaponBodies Id { get; init; }
 
     public int BaseId { get; init; }
 

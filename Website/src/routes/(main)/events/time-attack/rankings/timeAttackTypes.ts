@@ -27,12 +27,13 @@ const baseIdEntity = z.object({ id: z.number(), baseId: z.number(), variationId:
 const weapon = baseIdEntity.extend({ formId: z.number().int(), changeSkillId1: z.number().int() }); // send wooden weapons instead of null
 
 const playerUnitSchema = z.object({
+  position: z.number().int(),
   chara: baseIdEntity,
   dragon: baseIdEntity.nullable(),
   weapon: weapon,
   talisman: talisman.nullable(),
   crests: abilityCrest.nullable().array(),
-  sharedSkills: sharedSkill.nullable().array()
+  sharedSkills: sharedSkill.array()
 });
 
 export type TimeAttackUnit = z.infer<typeof playerUnitSchema>;

@@ -1,22 +1,34 @@
-using System.Linq.Expressions;
-using System.Reflection;
 using DragaliaAPI.Database;
+using DragaliaAPI.Features.Weapon;
 using DragaliaAPI.Features.Web.TimeAttack.Models;
+using DragaliaAPI.Infrastructure.Linq2Db;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.Serialization;
 using LinqToDB;
-using LinqToDB.Common;
-using LinqToDB.Data;
 using LinqToDB.DataProvider.PostgreSQL;
 using LinqToDB.EntityFrameworkCore;
-using LinqToDB.SqlQuery;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Web.TimeAttack;
 
 internal sealed class TimeAttackService(ApiContext apiContext)
 {
+    // Cannot use ApiJsonOptions.Instance as the data appears to contain ISO 8601 timestamps instead of Unix epoch
+    // offsets, so DateTimeUnixJsonConverter encounters issues.
+    private static readonly JsonSerializerOptions DeserializePartyInfoOptions;
+
+    static TimeAttackService()
+    {
+        DeserializePartyInfoOptions = new JsonSerializerOptions()
+        {
+            PropertyNamingPolicy = CustomSnakeCaseNamingPolicy.Instance,
+        };
+        DeserializePartyInfoOptions.Converters.Add(new BoolIntJsonConverter());
+    }
+
     public async Task<List<TimeAttackQuest>> GetQuests()
     {
         List<int> uniqueQuestIds = await EntityFrameworkQueryableExtensions.ToListAsync(
@@ -32,7 +44,7 @@ internal sealed class TimeAttackService(ApiContext apiContext)
             .ToList();
     }
 
-    public async Task<List<object>> GetRankings(int questId)
+    public async Task<List<TimeAttackRanking>> GetRankings(int questId, int offset, int pageSize)
     {
         var clears = LinqExtensions
             .InnerJoin(
@@ -44,6 +56,7 @@ internal sealed class TimeAttackService(ApiContext apiContext)
                     {
                         clear.GameId,
                         clear.Time,
+                        // ReSharper disable once EntityFramework.UnsupportedServerSideFunctionCall
                         Players = Sql
                             .Ext.ArrayAggregate(player.ViewerId)
                             .Over()
@@ -81,93 +94,178 @@ internal sealed class TimeAttackService(ApiContext apiContext)
                     Rank = Sql.Ext.RowNumber().Over().ToValue(),
                     arg1.GameId,
                     arg1.Time,
-                    Players = players.Select(y => new
-                    {
-                        y.ViewerId,
-                        PartyInfo = Json.Value(y.PartyInfo, "party_unit_list"),
-                    }),
+                    Players = players
+                        .AsQueryable()
+                        .InnerJoin(
+                            // ReSharper disable once EntityFramework.UnsupportedServerSideFunctionCall
+                            apiContext.PlayerUserData.IgnoreFilters(),
+                            (taPlayer, userData) => taPlayer.ViewerId == userData.ViewerId,
+                            (taPlayer, userData) =>
+                                new
+                                {
+                                    userData.Name,
+                                    // ReSharper disable once EntityFramework.UnsupportedServerSideFunctionCall
+                                    PartyInfo = Json.Value(taPlayer.PartyInfo, "party_unit_list"),
+                                }
+                        ),
                 }
         );
 
-        List<object> list = new(5);
+        var results = await playerInfo.Skip(offset).Take(pageSize).ToListAsyncLinqToDB();
 
-        foreach (var row in await playerInfo.Take(5).ToListAsyncLinqToDB())
+        IEnumerable<TimeAttackRanking> mappedResults = results.Select(x =>
         {
-            var type = new
+            return new TimeAttackRanking()
             {
-                row.Rank,
-                row.Time,
-                Players = new List<object>(),
+                Rank = (int)x.Rank,
+                Time = x.Time,
+                Players = x
+                    .Players.Select(y => new TimeAttackPlayer()
+                    {
+                        Name = y.Name,
+                        Units = MapUnits(y.PartyInfo),
+                    })
+                    .ToList(),
+            };
+        });
+
+        return mappedResults.ToList();
+    }
+
+    private static List<TimeAttackUnit> MapUnits(string partyInfoJson)
+    {
+        List<PartyUnitList> deserialized =
+            JsonSerializer.Deserialize<List<PartyUnitList>>(
+                partyInfoJson,
+                DeserializePartyInfoOptions
+            ) ?? [];
+
+        return deserialized
+            .Where(x => x.CharaData.CharaId != Charas.Empty)
+            .Select(MapUnit)
+            .ToList();
+    }
+
+    private static TimeAttackUnit MapUnit(PartyUnitList deserializedUnit)
+    {
+        CharaData masterAssetChara = MasterAsset.CharaData[deserializedUnit.CharaData.CharaId];
+
+        TimeAttackBaseIdEntity chara =
+            new()
+            {
+                Id = (int)masterAssetChara.Id,
+                BaseId = masterAssetChara.BaseId,
+                VariationId = masterAssetChara.VariationId,
             };
 
-            foreach (var player in row.Players)
-            {
-                var opts = new JsonSerializerOptions()
-                {
-                    PropertyNamingPolicy = CustomSnakeCaseNamingPolicy.Instance,
-                };
-                opts.Converters.Add(new BoolIntJsonConverter());
+        TimeAttackBaseIdEntity? dragon = null;
 
-                var partyList = JsonSerializer.Deserialize<List<PartyUnitList>>(
-                    player.PartyInfo,
-                    opts
-                );
-                type.Players.Add(new { Party = partyList });
-            }
-
-            list.Add(type);
-        }
-
-        return list.Cast<object>().ToList();
-    }
-}
-
-public static class Json
-{
-    sealed class JsonValuePathBuilder : Sql.IExtensionCallBuilder
-    {
-        public void Build(Sql.ISqExtensionBuilder builder)
+        if (deserializedUnit.DragonData.DragonId != 0)
         {
-            ISqlExpression? propExpression = builder.GetExpression(0);
+            DragonData masterAssetDragon = MasterAsset.DragonData[
+                deserializedUnit.DragonData.DragonId
+            ];
 
-            if (propExpression == null)
+            dragon = new()
             {
-                throw new InvalidOperationException("Invalid property.");
-            }
-
-            List<ISqlExpression> parameters = [propExpression];
-
-            Expression propertyName = builder.Arguments[1];
-
-            string expressionStr = "{0}->>" + propertyName.ToString().Replace('\"', '\'');
-
-            ISqlExpression valueExpression = new SqlExpression(
-                typeof(string),
-                expressionStr,
-                Precedence.Primary,
-                parameters.ToArray()
-            );
-
-            if (((MethodInfo)builder.Member).ReturnType != typeof(string))
-            {
-                throw new NotSupportedException(
-                    "Cannot convert JSON value expression to non-string result"
-                );
-            }
-
-            builder.ResultExpression = valueExpression;
+                Id = (int)masterAssetDragon.Id,
+                BaseId = masterAssetDragon.BaseId,
+                VariationId = masterAssetDragon.VariationId,
+            };
         }
+
+        WeaponBodies weaponId =
+            deserializedUnit.WeaponBodyData.WeaponBodyId != 0
+                ? deserializedUnit.WeaponBodyData.WeaponBodyId
+                : WeaponHelper.GetDefaultWeaponId(masterAssetChara.WeaponType);
+
+        WeaponBody masterAssetWeaponBody = MasterAsset.WeaponBody[weaponId];
+        WeaponSkin masterAssetWeaponSkin = MasterAsset.WeaponSkin[(int)weaponId];
+
+        TimeAttackWeapon weapon =
+            new()
+            {
+                Id = masterAssetWeaponBody.Id,
+                BaseId = masterAssetWeaponSkin.BaseId,
+                VariationId = masterAssetWeaponSkin.VariationId,
+                FormId = masterAssetWeaponSkin.FormId,
+                ChangeSkillId1 = masterAssetWeaponBody.ChangeSkillId1,
+            };
+
+        TimeAttackTalisman? talisman = null;
+
+        if (deserializedUnit.TalismanData.TalismanId != 0)
+        {
+            talisman = new()
+            {
+                Id = deserializedUnit.TalismanData.TalismanId,
+                Ability1Id = deserializedUnit.TalismanData.TalismanAbilityId1,
+                Ability2Id = deserializedUnit.TalismanData.TalismanAbilityId2,
+                Element = masterAssetChara.ElementalType,
+                WeaponType = masterAssetChara.WeaponType,
+            };
+        }
+
+        List<GameAbilityCrest?> gameCrestList =
+        [
+            .. deserializedUnit.CrestSlotType1CrestList.Pad(3),
+            .. deserializedUnit.CrestSlotType2CrestList.Pad(2),
+            .. deserializedUnit.CrestSlotType3CrestList.Pad(2),
+        ];
+
+        List<TimeAttackAbilityCrest?> crests = gameCrestList.Select(MapCrest).ToList();
+
+        int sharedSkillId1 =
+            deserializedUnit.EditSkill1CharaData.CharaId != 0
+                ? MasterAsset.CharaData[deserializedUnit.EditSkill1CharaData.CharaId].EditSkillId
+                : masterAssetWeaponBody.ChangeSkillId1;
+        int sharedSkillId2 = MasterAsset
+            .CharaData[deserializedUnit.EditSkill2CharaData.CharaId]
+            .EditSkillId;
+
+        List<TimeAttackSharedSkill> sharedSkills =
+        [
+            MapSharedSkill(sharedSkillId1),
+            MapSharedSkill(sharedSkillId2),
+        ];
+
+        return new TimeAttackUnit()
+        {
+            Position = deserializedUnit.Position,
+            Chara = chara,
+            Dragon = dragon,
+            Weapon = weapon,
+            Talisman = talisman,
+            Crests = crests,
+            SharedSkills = sharedSkills,
+        };
     }
 
-    [Sql.Extension(
-        ProviderName.PostgreSQL,
-        Precedence = Precedence.Primary,
-        BuilderType = typeof(JsonValuePathBuilder),
-        ServerSideOnly = true,
-        CanBeNull = true
-    )]
-    public static string Value(string prop, string name)
+    private static TimeAttackAbilityCrest? MapCrest(GameAbilityCrest? gameCrest)
     {
-        throw new NotImplementedException();
+        if (gameCrest is null)
+        {
+            return null;
+        }
+
+        AbilityCrest masterAssetAbilityCrest = MasterAsset.AbilityCrest[gameCrest.AbilityCrestId];
+
+        return new TimeAttackAbilityCrest()
+        {
+            Id = gameCrest.AbilityCrestId,
+            BaseId = masterAssetAbilityCrest.BaseId,
+            ImageNum = masterAssetAbilityCrest.IsHideChangeImage ? 1 : 2,
+        };
+    }
+
+    private static TimeAttackSharedSkill MapSharedSkill(int skillId)
+    {
+        SkillData skillData = MasterAsset.SkillData[skillId];
+
+        return new TimeAttackSharedSkill()
+        {
+            Id = skillId,
+            SkillLv4IconName = skillData.SkillLv4IconName,
+        };
     }
 }

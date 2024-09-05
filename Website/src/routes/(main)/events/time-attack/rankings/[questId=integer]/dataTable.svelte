@@ -27,8 +27,11 @@
       header: 'Rank'
     }),
     table.column({
-      accessor: ({ players }) => players.map((p) => p.name).join(', '),
-      header: coop ? 'Players' : 'Player'
+      accessor: ({ players }) => players,
+      header: coop ? 'Players' : 'Player',
+      cell: ({ value: players }) => {
+        return players.map((p) => p.name).join(', ');
+      }
     }),
     table.column({
       accessor: ({ time }) => time,
@@ -97,7 +100,8 @@
                 <div transition:slide={{ duration: 500 }} class="p-4">
                   <TeamComposition
                     units={getTeam(coop, row.original.players)}
-                    unitKeys={getTeamKeys(coop, row.original.players)} />
+                    unitKeys={getTeamKeys(coop, row.original.players)}
+                    {coop} />
                 </div>
               </td>
             </tr>

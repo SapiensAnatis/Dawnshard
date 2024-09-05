@@ -4,6 +4,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Weapon;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -23,19 +24,6 @@ public class HeroParamService(
     IPlayerIdentityService playerIdentityService
 ) : IHeroParamService
 {
-    private static readonly ImmutableDictionary<WeaponTypes, WeaponBodies> DefaultWeapons =
-        new Dictionary<WeaponTypes, WeaponBodies>()
-        {
-            { WeaponTypes.Sword, WeaponBodies.BattlewornSword },
-            { WeaponTypes.Katana, WeaponBodies.BattlewornBlade },
-            { WeaponTypes.Dagger, WeaponBodies.BattlewornDagger },
-            { WeaponTypes.Axe, WeaponBodies.BattlewornAxe },
-            { WeaponTypes.Lance, WeaponBodies.BattlewornLance },
-            { WeaponTypes.Bow, WeaponBodies.BattlewornBow },
-            { WeaponTypes.Rod, WeaponBodies.BattlewornWand },
-            { WeaponTypes.Cane, WeaponBodies.BattlewornStaff },
-            { WeaponTypes.Gun, WeaponBodies.BattlewornManacaster },
-        }.ToImmutableDictionary();
 
     public async Task<List<HeroParam>> GetHeroParam(long viewerId, int partySlot)
     {
@@ -125,7 +113,7 @@ public class HeroParamService(
         }
         else
         {
-            result.WeaponBodyId = (int)DefaultWeapons[charaData.WeaponType];
+            result.WeaponBodyId = (int)WeaponHelper.GetDefaultWeaponId(charaData.WeaponType);
         }
 
         if (unit.TalismanData is not null)

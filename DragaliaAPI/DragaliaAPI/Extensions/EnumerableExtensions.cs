@@ -54,4 +54,31 @@ public static class EnumerableExtensions
 
         return set;
     }
+
+    /// <summary>
+    /// Pads a sequence to a length equal to or greater than the provided <paramref name="desiredLength"/>, by filling
+    /// any short-fall with the default value for <typeparamref name="TElement"/>.
+    /// </summary>
+    /// <param name="enumerable">The input sequence.</param>
+    /// <param name="desiredLength">The desired minimum length.</param>
+    /// <typeparam name="TElement">The type of the elements of the input sequence.</typeparam>
+    /// <returns>A new sequence with the padding applied.</returns>
+    public static IEnumerable<TElement?> Pad<TElement>(
+        this IEnumerable<TElement> enumerable,
+        int desiredLength
+    )
+    {
+        int count = 0;
+        foreach (TElement item in enumerable)
+        {
+            yield return item;
+            count++;
+        }
+
+        while (count < desiredLength)
+        {
+            yield return default;
+            count++;
+        }
+    }
 }

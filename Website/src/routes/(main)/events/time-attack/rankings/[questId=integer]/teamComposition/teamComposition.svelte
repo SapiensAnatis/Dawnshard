@@ -8,7 +8,8 @@
   import WeaponIcon from './weaponIcon.svelte';
 
   export let units: TimeAttackUnit[];
-  export let unitKeys: string[] = ['Player 1', 'Player 2', 'Player 3', 'Player 4'];
+  export let unitKeys: string[];
+  export let coop: boolean;
 
   const spacerClass = 'max-w-0 flex-grow sm:max-w-0.5 md:max-w-2';
 </script>
@@ -31,21 +32,26 @@
         </div>
         <span class={spacerClass} />
         <div class="flex items-start">
-          {#each unit.crests.slice(0, -2) as abilityCrest}
-            <AbilityCrestIcon {abilityCrest} />
+          {#each unit.crests.slice(0, 3) as abilityCrest}
+            <AbilityCrestIcon {abilityCrest} rarity={5} />
+          {/each}
+          {#each unit.crests.slice(3, -2) as abilityCrest}
+            <AbilityCrestIcon {abilityCrest} rarity={4} />
           {/each}
         </div>
         <div class="flex items-start">
           {#each unit.crests.slice(-2) as sindomAbilityCrest}
-            <AbilityCrestIcon abilityCrest={sindomAbilityCrest} />
+            <AbilityCrestIcon abilityCrest={sindomAbilityCrest} rarity={6} />
           {/each}
         </div>
         <span class={spacerClass} />
-        <div class="flex items-start">
-          {#each unit.sharedSkills as skill}
-            <SkillIcon {skill} />
-          {/each}
-        </div>
+        {#if unit.position === 1 || coop}
+          <div class="flex items-start">
+            {#each unit.sharedSkills as skill}
+              <SkillIcon {skill} />
+            {/each}
+          </div>
+        {/if}
       </div>
     </div>
   {/each}

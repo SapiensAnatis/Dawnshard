@@ -2,6 +2,8 @@ namespace DragaliaAPI.Features.Web.TimeAttack.Models;
 
 internal sealed class TimeAttackUnit
 {
+    public required int Position { get; init; }
+
     public required TimeAttackBaseIdEntity Chara { get; init; }
 
     public required TimeAttackBaseIdEntity? Dragon { get; init; }
