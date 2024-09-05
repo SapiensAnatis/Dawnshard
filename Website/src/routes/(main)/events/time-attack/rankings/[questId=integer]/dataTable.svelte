@@ -73,18 +73,31 @@
   const expandedIds = pluginStates.expand.expandedIds;
   const { pageIndex, hasPreviousPage, hasNextPage } = pluginStates.page;
 
+  let tableHeader: Element | undefined = undefined;
+
   const changePage = (newPage: number) => {
     expandedIds.clear();
+
     $pageIndex = newPage;
     const params = new URLSearchParams($page.url.searchParams);
     params.set('page', ($pageIndex + 1).toString());
-    goto(`?${params.toString()}`);
+
+    const el = document.querySelector('#time-attack-table-title');
+    if (el) {
+      el.scrollIntoView({ block: 'start' });
+    }
+
+    goto(`?${params.toString()}`, { noScroll: true });
   };
 </script>
 
 <div class="rounded-md border">
   <Table.Root {...$tableAttrs} id="time-attack-table" aria-labelledby="time-attack-table-title">
-    <Table.Header {...$tableHeadAttrs} id="header" class="hidden md:[display:revert]">
+    <Table.Header
+      {...$tableHeadAttrs}
+      id="time-attack-table-header"
+      class="hidden md:[display:revert]"
+      bind:this={tableHeader}>
       {#each $headerRows as headerRow}
         <Subscribe rowAttrs={headerRow.attrs()}>
           <Table.Row>
@@ -99,24 +112,24 @@
         </Subscribe>
       {/each}
     </Table.Header>
-    {#key pageIndex}
-      <Table.Body {...$tableBodyAttrs}>
-        {#each $pageRows as row (row.id)}
-          <Subscribe rowAttrs={row.attrs()} let:rowAttrs>
-            <Table.Row {...rowAttrs} class="flex flex-col md:[display:revert]">
-              {#each $headerRows[0].cells.map( (header, i) => ({ header, cell: row.cells[i] }) ) as { cell, header }}
-                <Subscribe attrs={cell.attrs()} let:attrs>
-                  <Table.Cell {...attrs} class="px-4 py-3">
-                    <div class="text-muted-foreground md:hidden">
-                      <Render of={header.render()} />
-                    </div>
-                    <div>
-                      <Render of={cell.render()} />
-                    </div>
-                  </Table.Cell>
-                </Subscribe>
-              {/each}
-            </Table.Row>
+    <Table.Body {...$tableBodyAttrs}>
+      {#each $pageRows as row (row.id)}
+        <Subscribe rowAttrs={row.attrs()} let:rowAttrs>
+          <Table.Row {...rowAttrs} class="flex flex-col md:[display:revert]">
+            {#each $headerRows[0].cells.map( (header, i) => ({ header, cell: row.cells[i] }) ) as { cell, header }}
+              <Subscribe attrs={cell.attrs()} let:attrs>
+                <Table.Cell {...attrs} class="px-4 py-3">
+                  <div class="text-muted-foreground md:hidden">
+                    <Render of={header.render()} />
+                  </div>
+                  <div>
+                    <Render of={cell.render()} />
+                  </div>
+                </Table.Cell>
+              </Subscribe>
+            {/each}
+          </Table.Row>
+          {#key pageIndex}
             {#if $expandedIds[row.id] && row.isData()}
               <tr class="border-b">
                 <td colspan="4">
@@ -130,12 +143,12 @@
                 </td>
               </tr>
             {/if}
-          </Subscribe>
-        {/each}
-      </Table.Body>
-    {/key}
+          {/key}
+        </Subscribe>
+      {/each}
+    </Table.Body>
   </Table.Root>
-  <div class="flex items-center justify-center space-x-4 border-t py-4">
+  <div class="flex items-center justify-center space-x-4 border-t py-2.5">
     <Button
       variant="outline"
       size="sm"

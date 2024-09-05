@@ -55,4 +55,8 @@
   li + li {
     margin-top: 0.4rem;
   }
+
+  :global(#time-attack-table-title) {
+    scroll-margin-top: var(--header-height);
+  }
 </style>
