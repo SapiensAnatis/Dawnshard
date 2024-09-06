@@ -50,9 +50,8 @@
     table.column({
       accessor: ({ time }) => time,
       cell: ({ value: time }) => {
-        const minutes = `${Math.floor(time / 60)}`.padStart(2, '0');
-        const seconds = `${time % 60}`.padStart(2, '0').slice(0, 4);
-        return `${minutes}:${seconds}`;
+        const date = new Date(time * 1000);
+        return date.toISOString().slice(14, -3);
       },
       header: 'Clear Time'
     }),
