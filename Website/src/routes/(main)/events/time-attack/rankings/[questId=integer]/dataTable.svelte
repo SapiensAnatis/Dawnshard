@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import { readable, writable } from 'svelte/store';
   import { slide } from 'svelte/transition';
   import { createRender, createTable, Render, Subscribe } from 'svelte-headless-table';
@@ -50,9 +50,8 @@
     table.column({
       accessor: ({ time }) => time,
       cell: ({ value: time }) => {
-        const minutes = `${Math.floor(time / 60)}`.padStart(2, '0');
-        const seconds = `${time % 60}`.padStart(2, '0').slice(0, 4);
-        return `${minutes}:${seconds}`;
+        const date = new Date(time * 1000);
+        return date.toISOString().slice(14, -3);
       },
       header: 'Clear Time'
     }),
@@ -74,22 +73,30 @@
   const expandedIds = pluginStates.expand.expandedIds;
   const { pageIndex, hasPreviousPage, hasNextPage } = pluginStates.page;
 
-  const changePage = (newPage: number) => {
+  let initialized = false;
+  let showExpanded = true;
+
+  const changePage = async (newPage: number) => {
+    // Unmount the 'grandparent' block of the team-comp to skip the slide out transition
+    showExpanded = false;
+    await tick();
+
+    // Reset the expanded IDs which would have otherwise caused a transition
     expandedIds.clear();
 
     $pageIndex = newPage;
     const params = new URLSearchParams($page.url.searchParams);
     params.set('page', ($pageIndex + 1).toString());
 
+    await goto(`?${params.toString()}`, { noScroll: true });
+
     const el = document.querySelector('#time-attack-table-title');
     if (el) {
-      el.scrollIntoView({ block: 'start' });
+      el.scrollIntoView({ block: 'nearest' });
     }
 
-    goto(`?${params.toString()}`, { noScroll: true });
+    showExpanded = true;
   };
-
-  let initialized = false;
 
   onMount(() => {
     const params = new URLSearchParams($page.url.searchParams);
@@ -140,11 +147,16 @@
               </Subscribe>
             {/each}
           </Table.Row>
-          {#key pageIndex}
-            {#if $expandedIds[row.id] && row.isData()}
-              <tr class="border-b">
+          <!--
+          iOS Safari doesn't like it if you expand and close this section and starts rendering
+          the rows side-by-side... avoiding the unmount of the extra <tr/> seems to fix this.
+          The Blazor site used this kind of markup and that works fine. How mysterious!
+           --->
+          <tr aria-hidden={!$expandedIds[row.id]}>
+            {#if showExpanded}
+              {#if $expandedIds[row.id] && row.isData()}
                 <td colspan="4">
-                  <div in:slide={{ duration: 500 }} class="p-4">
+                  <div transition:slide={{ duration: 500 }} class="border-b p-4">
                     <TeamComposition
                       units={getTeam(coop, row.original.players)}
                       unitKeys={getTeamKeys(coop, row.original.players)}
@@ -152,9 +164,9 @@
                       {coop} />
                   </div>
                 </td>
-              </tr>
+              {/if}
             {/if}
-          {/key}
+          </tr>
         </Subscribe>
       {/each}
     </Table.Body>

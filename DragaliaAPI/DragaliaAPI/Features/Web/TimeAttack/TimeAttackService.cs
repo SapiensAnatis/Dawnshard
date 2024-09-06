@@ -31,9 +31,11 @@ internal sealed class TimeAttackService(ApiContext apiContext)
 
     public async Task<List<TimeAttackQuest>> GetQuests()
     {
-        List<int> uniqueQuestIds = await EntityFrameworkQueryableExtensions.ToListAsync(
-            apiContext.TimeAttackClears.Select(x => x.QuestId).Distinct()
-        );
+        List<int> uniqueQuestIds = await apiContext
+            .TimeAttackClears.Select(x => x.QuestId)
+            .Distinct()
+            .OrderBy(x => x)
+            .ToListAsyncEF();
 
         return uniqueQuestIds
             .Select(questId => new TimeAttackQuest()
