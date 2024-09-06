@@ -147,11 +147,16 @@
               </Subscribe>
             {/each}
           </Table.Row>
-          {#if showExpanded}
-            {#if $expandedIds[row.id] && row.isData()}
-              <tr class="border-b">
+          <!--
+          iOS Safari doesn't like it if you expand and close this section and starts rendering
+          the rows side-by-side... avoiding the unmount of the extra <tr/> seems to fix this.
+          The Blazor site used this kind of markup and that works fine. How mysterious!
+           --->
+          <tr aria-hidden={!$expandedIds[row.id]}>
+            {#if showExpanded}
+              {#if $expandedIds[row.id] && row.isData()}
                 <td colspan="4">
-                  <div transition:slide={{ duration: 500 }} class="p-4">
+                  <div transition:slide={{ duration: 500 }} class="border-b p-4">
                     <TeamComposition
                       units={getTeam(coop, row.original.players)}
                       unitKeys={getTeamKeys(coop, row.original.players)}
@@ -159,9 +164,9 @@
                       {coop} />
                   </div>
                 </td>
-              </tr>
+              {/if}
             {/if}
-          {/if}
+          </tr>
         </Subscribe>
       {/each}
     </Table.Body>
