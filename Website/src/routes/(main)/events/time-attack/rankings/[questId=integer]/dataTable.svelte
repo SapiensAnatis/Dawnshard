@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import { readable, writable } from 'svelte/store';
   import { slide } from 'svelte/transition';
   import { createRender, createTable, Render, Subscribe } from 'svelte-headless-table';
@@ -73,22 +73,30 @@
   const expandedIds = pluginStates.expand.expandedIds;
   const { pageIndex, hasPreviousPage, hasNextPage } = pluginStates.page;
 
-  const changePage = (newPage: number) => {
+  let initialized = false;
+  let showExpanded = true;
+
+  const changePage = async (newPage: number) => {
+    // Unmount the 'grandparent' block of the team-comp to skip the slide out transition
+    showExpanded = false;
+    await tick();
+
+    // Reset the expanded IDs which would have otherwise caused a transition
     expandedIds.clear();
 
     $pageIndex = newPage;
     const params = new URLSearchParams($page.url.searchParams);
     params.set('page', ($pageIndex + 1).toString());
 
+    await goto(`?${params.toString()}`, { noScroll: true });
+
     const el = document.querySelector('#time-attack-table-title');
     if (el) {
-      el.scrollIntoView({ block: 'start' });
+      el.scrollIntoView({ block: 'nearest' });
     }
 
-    goto(`?${params.toString()}`, { noScroll: true });
+    showExpanded = true;
   };
-
-  let initialized = false;
 
   onMount(() => {
     const params = new URLSearchParams($page.url.searchParams);
@@ -139,11 +147,11 @@
               </Subscribe>
             {/each}
           </Table.Row>
-          {#key pageIndex}
+          {#if showExpanded}
             {#if $expandedIds[row.id] && row.isData()}
               <tr class="border-b">
                 <td colspan="4">
-                  <div in:slide={{ duration: 500 }} class="p-4">
+                  <div transition:slide={{ duration: 500 }} class="p-4">
                     <TeamComposition
                       units={getTeam(coop, row.original.players)}
                       unitKeys={getTeamKeys(coop, row.original.players)}
@@ -153,7 +161,7 @@
                 </td>
               </tr>
             {/if}
-          {/key}
+          {/if}
         </Subscribe>
       {/each}
     </Table.Body>
