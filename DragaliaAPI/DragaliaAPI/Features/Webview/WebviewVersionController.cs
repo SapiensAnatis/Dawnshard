@@ -15,29 +15,28 @@ public class WebviewVersionController(
 ) : DragaliaControllerBase
 {
     private const string PlaceholderUrl = "localhost";
-    private string photonTestUrl =
+    private readonly string photonTestUrl =
         $"http://{photonOptions.CurrentValue.ServerUrl.Split(':').FirstOrDefault()}";
 
     [HttpPost("url_list")]
     public DragaliaResult UrlList()
     {
-        AtgenWebviewUrlList timeAttackRanking =
-            new("time_attack_ranking", this.GetUrl("timeattack/rankings/webview"));
-
-        AtgenWebviewUrlList timeAttackReward =
-            new("time_attack_reward", this.GetUrl("timeattack/rewards/webview"));
+        // Not yet reimplemented for new website
+        // AtgenWebviewUrlList timeAttackRanking =
+        //     new("time_attack_ranking", this.GetUrl("timeattack/rankings/webview"));
+        //
+        // AtgenWebviewUrlList timeAttackReward =
+        //     new("time_attack_reward", this.GetUrl("timeattack/rewards/webview"));
 
         // TODO: Remove hardcoding. Consider making URLs configurable?
-        AtgenWebviewUrlList news =
-            new("information", "https://test.dawnshard.co.uk/webview/news/1");
+        AtgenWebviewUrlList news = new("information", this.GetUrl("webview/news/1"));
 
         return this.Ok(
             new WebviewVersionUrlListResponse(
-                new List<AtgenWebviewUrlList>()
-                {
+                [
                     news,
-                    timeAttackRanking,
-                    timeAttackReward,
+                    new("time_attack_ranking", PlaceholderUrl),
+                    new("time_attack_reward", PlaceholderUrl),
                     new("ability_crest_advice", PlaceholderUrl),
                     new("battle_royal_how_to", PlaceholderUrl),
                     new("comic", PlaceholderUrl),
@@ -55,7 +54,7 @@ public class WebviewVersionController(
                     new("specified_commercial_transactions_law", PlaceholderUrl),
                     new("user_policy", PlaceholderUrl),
                     new("summon_info", PlaceholderUrl),
-                }
+                ]
             )
         );
     }
