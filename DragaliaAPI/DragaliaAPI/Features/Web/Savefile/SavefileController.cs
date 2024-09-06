@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;

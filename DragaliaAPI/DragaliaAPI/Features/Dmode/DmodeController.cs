@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Controllers;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Story;
 using DragaliaAPI.Models.Generated;

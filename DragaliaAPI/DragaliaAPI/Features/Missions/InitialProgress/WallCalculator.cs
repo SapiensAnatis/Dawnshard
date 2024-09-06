@@ -1,5 +1,4 @@
 using DragaliaAPI.Database;
-using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using JetBrains.Annotations;

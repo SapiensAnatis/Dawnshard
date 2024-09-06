@@ -5,8 +5,7 @@ using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Features.Wall;
 using Microsoft.Extensions.Logging;
-using MockQueryable.EntityFrameworkCore;
-using MockQueryable.Moq;
+using MockQueryable;
 
 namespace DragaliaAPI.Test.Features.Tutorial;
 

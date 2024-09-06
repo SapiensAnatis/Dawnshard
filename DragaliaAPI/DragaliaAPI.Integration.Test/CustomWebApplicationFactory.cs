@@ -1,5 +1,4 @@
 using DragaliaAPI.Database;
-using DragaliaAPI.Features.Web;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Api;
 using DragaliaAPI.Shared.MasterAsset;
@@ -12,7 +11,6 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
 using Npgsql;
 using Respawn;
 using Respawn.Graph;

@@ -1,10 +1,8 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Login.Actions;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Mapping;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;

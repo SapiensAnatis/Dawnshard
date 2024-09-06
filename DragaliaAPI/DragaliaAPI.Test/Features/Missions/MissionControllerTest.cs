@@ -7,8 +7,7 @@ using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Test.Utils;
-using MockQueryable.EntityFrameworkCore;
-using MockQueryable.Moq;
+using MockQueryable;
 
 namespace DragaliaAPI.Test.Features.Missions;
 

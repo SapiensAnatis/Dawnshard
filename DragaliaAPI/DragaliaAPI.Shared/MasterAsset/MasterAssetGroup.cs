@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json;
-using DragaliaAPI.Shared.Serialization;
 using MessagePack;
 using MessagePack.Resolvers;
 

@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using DragaliaAPI.Infrastructure;
 using MessagePack;
 
 namespace DragaliaAPI.Models.Results;

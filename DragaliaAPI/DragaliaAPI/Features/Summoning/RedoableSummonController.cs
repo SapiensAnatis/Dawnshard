@@ -1,6 +1,5 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Story;
 using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Models.Generated;

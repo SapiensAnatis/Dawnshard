@@ -1,5 +1,3 @@
-using System.Collections.Frozen;
-using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 
