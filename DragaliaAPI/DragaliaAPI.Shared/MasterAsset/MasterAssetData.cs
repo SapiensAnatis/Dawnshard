@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using DragaliaAPI.Shared.Serialization;
 using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset;

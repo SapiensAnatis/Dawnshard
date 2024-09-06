@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
@@ -7,7 +6,6 @@ using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Weapon;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Photon.Shared.Models;
-using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;

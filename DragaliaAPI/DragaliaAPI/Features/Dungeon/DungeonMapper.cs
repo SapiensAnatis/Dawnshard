@@ -1,4 +1,3 @@
-using System.Collections;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Models.Generated;

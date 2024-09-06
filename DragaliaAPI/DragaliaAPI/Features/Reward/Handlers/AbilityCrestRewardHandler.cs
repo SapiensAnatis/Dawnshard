@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.AbilityCrests;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;

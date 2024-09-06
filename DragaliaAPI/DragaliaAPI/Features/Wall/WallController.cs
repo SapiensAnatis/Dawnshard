@@ -3,7 +3,6 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;

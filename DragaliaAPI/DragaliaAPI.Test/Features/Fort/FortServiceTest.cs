@@ -14,8 +14,7 @@ using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Time.Testing;
-using MockQueryable.EntityFrameworkCore;
-using MockQueryable.Moq;
+using MockQueryable;
 using Range = Moq.Range;
 
 namespace DragaliaAPI.Test.Features.Fort;

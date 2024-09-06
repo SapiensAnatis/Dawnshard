@@ -10,8 +10,7 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Time.Testing;
-using MockQueryable.EntityFrameworkCore;
-using MockQueryable.Moq;
+using MockQueryable;
 using DbPlayerDmodeDungeon = DragaliaAPI.Database.Entities.DbPlayerDmodeDungeon;
 
 namespace DragaliaAPI.Test.Features.Dmode;

@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Features.Dungeon;
-using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.MasterAsset;

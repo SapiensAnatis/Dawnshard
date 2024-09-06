@@ -1,5 +1,3 @@
-using System.Collections.Frozen;
-
 namespace DragaliaAPI.Infrastructure.Middleware;
 
 internal partial class ResultCodeLoggingMiddleware(ILogger<ResultCodeLoggingMiddleware> logger)

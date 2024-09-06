@@ -1,4 +1,3 @@
-using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Features.Dungeon.Record;

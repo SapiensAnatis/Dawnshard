@@ -10,7 +10,6 @@ using DragaliaAPI.Shared.Serialization;
 using LinqToDB;
 using LinqToDB.DataProvider.PostgreSQL;
 using LinqToDB.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Web.TimeAttack;
 
