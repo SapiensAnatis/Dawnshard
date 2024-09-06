@@ -49,8 +49,6 @@ string kpfPath = Path.Combine(Directory.GetCurrentDirectory(), "config");
 
 builder.Configuration.AddKeyPerFile(directoryPath: kpfPath, optional: true, reloadOnChange: true);
 
-builder.WebHost.UseStaticWebAssets();
-
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 builder.Host.UseSerilog(
@@ -59,8 +57,6 @@ builder.Host.UseSerilog(
             .ReadFrom.Configuration(context.Configuration)
             .ReadFrom.Services(services)
             .Enrich.FromLogContext()
-            // Blazor keeps throwing these errors from MudBlazor internals; there is nothing we can do about them
-            .Filter.ByExcluding(evt => evt.Exception is JSDisconnectedException)
 );
 
 builder
@@ -103,7 +99,6 @@ builder.Services.AddDataProtection().PersistKeysToDbContext<ApiContext>();
 builder
     .Services.AddAuthorization()
     .ConfigureAuthentication()
-    .AddResponseCompression()
     .AddOutputCache(static opts =>
     {
         opts.AddBasePolicy(
@@ -122,8 +117,7 @@ builder
     .Services.ConfigureGameServices(builder.Configuration)
     .ConfigureGameOptions(builder.Configuration)
     .ConfigureSharedServices()
-    .ConfigureGraphQLSchema()
-    .ConfigureBlazorFrontend();
+    .ConfigureGraphQLSchema();
 
 WebApplication app = builder.Build();
 
@@ -209,29 +203,6 @@ app.MapWhen(
         {
             endpoints.MapControllers();
         });
-    }
-);
-
-// Blazor website
-app.MapWhen(
-    static ctx => !ctx.Request.Path.StartsWithSegments("/api"),
-    static applicationBuilder =>
-    {
-        {
-            applicationBuilder.UseStaticFiles();
-            applicationBuilder.UseSerilogRequestLogging();
-            applicationBuilder.UseRouting();
-#pragma warning disable ASP0001
-            applicationBuilder.UseAuthorization();
-#pragma warning restore ASP0001
-            applicationBuilder.UseAntiforgery();
-            applicationBuilder.UseMiddleware<IdentityLogContextMiddleware>();
-            applicationBuilder.UseEndpoints(endpoints =>
-            {
-                endpoints.MapRazorPages();
-                endpoints.MapRazorComponents<App>().AddInteractiveServerRenderMode();
-            });
-        }
     }
 );
 
