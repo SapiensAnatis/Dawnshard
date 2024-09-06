@@ -220,17 +220,13 @@ public static class ServiceConfiguration
 
     public static IServiceCollection ConfigureAuthentication(this IServiceCollection services)
     {
-        services
-            .AddAuthentication(opts =>
-            {
-                opts.AddScheme<SessionAuthenticationHandler>(SchemeName.Session, null);
-                opts.AddScheme<DeveloperAuthenticationHandler>(SchemeName.Developer, null);
-                opts.AddScheme<PhotonAuthenticationHandler>(
-                    nameof(PhotonAuthenticationHandler),
-                    null
-                );
-                opts.AddScheme<ZenaAuthenticationHandler>(SchemeName.Zena, null);
-            });
+        services.AddAuthentication(opts =>
+        {
+            opts.AddScheme<SessionAuthenticationHandler>(SchemeName.Session, null);
+            opts.AddScheme<DeveloperAuthenticationHandler>(SchemeName.Developer, null);
+            opts.AddScheme<PhotonAuthenticationHandler>(nameof(PhotonAuthenticationHandler), null);
+            opts.AddScheme<ZenaAuthenticationHandler>(SchemeName.Zena, null);
+        });
 
         return services;
     }

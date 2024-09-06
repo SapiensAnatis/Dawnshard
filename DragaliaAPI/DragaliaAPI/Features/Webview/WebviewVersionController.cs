@@ -29,8 +29,7 @@ public class WebviewVersionController(
         //     new("time_attack_reward", this.GetUrl("timeattack/rewards/webview"));
 
         // TODO: Remove hardcoding. Consider making URLs configurable?
-        AtgenWebviewUrlList news =
-            new("information", this.GetUrl("webview/news/1");
+        AtgenWebviewUrlList news = new("information", this.GetUrl("webview/news/1"));
 
         return this.Ok(
             new WebviewVersionUrlListResponse(
@@ -54,7 +53,7 @@ public class WebviewVersionController(
                     new("privacy_policy", PlaceholderUrl),
                     new("specified_commercial_transactions_law", PlaceholderUrl),
                     new("user_policy", PlaceholderUrl),
-                    new("summon_info", PlaceholderUrl)
+                    new("summon_info", PlaceholderUrl),
                 ]
             )
         );
