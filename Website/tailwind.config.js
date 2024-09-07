@@ -60,11 +60,6 @@ const config = {
       }
     }
   },
-  variants: {
-    extend: {
-      backgroundImage: ['dark']
-    }
-  },
   plugins: [
     plugin((props) => {
       props.addVariant('touched', '&[data-touched]');
