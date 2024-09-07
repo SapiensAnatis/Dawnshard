@@ -9,8 +9,7 @@ namespace DragaliaAPI.Features.Dmode;
 public class DmodeRepository(ApiContext apiContext, IPlayerIdentityService playerIdentityService)
     : IDmodeRepository
 {
-    public IQueryable<DbPlayerDmodeInfo> Info =>
-        apiContext.PlayerDmodeInfos.Where(x => x.ViewerId == playerIdentityService.ViewerId);
+    public IQueryable<DbPlayerDmodeInfo> Info => apiContext.PlayerDmodeInfos;
 
     public IQueryable<DbPlayerDmodeChara> Charas =>
         apiContext.PlayerDmodeCharas.Where(x => x.ViewerId == playerIdentityService.ViewerId);

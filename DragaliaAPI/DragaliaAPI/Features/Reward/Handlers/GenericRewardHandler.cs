@@ -44,8 +44,7 @@ public class GenericRewardHandler(
             EntityTypes.ExHunterEventItem,
             EntityTypes.BattleRoyalEventItem,
             EntityTypes.EarnEventItem,
-            EntityTypes.CombatEventItem,
-            EntityTypes.DmodePoint
+            EntityTypes.CombatEventItem
         );
 
     public async Task<GrantReturn> Grant(Entity entity)

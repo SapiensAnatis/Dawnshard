@@ -12,8 +12,14 @@ public static class ServiceCollectionExtensions
     {
         foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
         {
-            if (type.GetInterfaces().Contains(typeof(TInterface)))
+            if (
+                type.GetInterfaces().Contains(typeof(TInterface))
+                && !type.IsInterface
+                && !type.IsAbstract
+            )
+            {
                 serviceCollection.Add(new ServiceDescriptor(typeof(TInterface), type, lifetime));
+            }
         }
 
         return serviceCollection;
