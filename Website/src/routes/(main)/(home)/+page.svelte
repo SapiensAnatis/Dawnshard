@@ -18,10 +18,8 @@
   import LinkButton from './linkButton.svelte';
 </script>
 
-<div
-  id="banner"
-  class="background-image grid grid-cols-12 gap-4 bg-[url('/src/lib/assets/story.webp')] dark:bg-[url('/src/lib/assets/storyDark.webp')]">
-  <Card.Root class="col-span-12 lg:col-span-7">
+<div id="banner">
+  <Card.Root class="w-full max-w-[55rem]">
     <Card.Header>
       <Card.Title tag="h2" class="text-3xl">Welcome to Dawnshard</Card.Title>
     </Card.Header>
@@ -214,10 +212,31 @@
     padding: 3rem;
     object-position: 100% 50%;
     background-size: cover;
-    background-position: 10% 10%;
     background-repeat: no-repeat;
     border-bottom: 1px solid;
     border-color: var(--divider);
+  }
+
+  @media (min-width: 1080px) {
+    #banner {
+      background-position: 10% 20%;
+      background-image: url('/src/lib/assets/bannerLight-wide.webp');
+    }
+
+    :global(.dark #banner) {
+      background-image: url('/src/lib/assets/bannerDark-wide.webp');
+    }
+  }
+
+  @media (max-width: 1080px) {
+    #banner {
+      background-position: 10% 10%;
+      background-image: url('/src/lib/assets/bannerLight-narrow.webp');
+    }
+
+    :global(.dark #banner) {
+      background-image: url('/src/lib/assets/bannerDark-narrow.webp');
+    }
   }
 
   li {
