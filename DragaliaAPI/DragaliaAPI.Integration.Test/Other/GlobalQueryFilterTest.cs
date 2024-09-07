@@ -105,6 +105,13 @@ public class GlobalQueryFilterTest : TestFixture
         await TestGlobalQueryFilter<DbFortBuild>();
 
     [Fact]
+    public async Task DbPlayerDmodeInfo_HasGlobalQueryFilter()
+    {
+        await this.ApiContext.PlayerDmodeInfos.ExecuteDeleteAsync();
+        await TestGlobalQueryFilter<DbPlayerDmodeInfo>();
+    }
+
+    [Fact]
     public async Task DbPlayerDiamondData_HasGlobalQueryFilter()
     {
         this.ApiContext.Players.Add(new() { ViewerId = this.ViewerId + 1, AccountId = "other" });

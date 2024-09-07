@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Diagnostics;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Reward.Handlers;
 using DragaliaAPI.Features.Talisman;
@@ -70,6 +71,11 @@ public class RewardService(
             {
                 IDictionary<TKey, GrantReturn> batchResult = await batchRewardHandler.GrantRange(
                     dictionary
+                );
+
+                Debug.Assert(
+                    batchResult.Count == dictionary.Count,
+                    "Batch reward handler returned incorrect number of results"
                 );
 
                 foreach ((TKey key, GrantReturn grantReturn) in batchResult)

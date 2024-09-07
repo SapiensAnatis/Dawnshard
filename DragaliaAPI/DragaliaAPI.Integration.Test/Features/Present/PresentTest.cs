@@ -699,6 +699,49 @@ public class PresentTest : TestFixture
     }
 
     [Fact]
+    public async Task Receive_DmodePoint_InitializesKaleidoscapeData()
+    {
+        this.ApiContext.PlayerDmodeInfos.ExecuteDelete();
+        this.ApiContext.PlayerDmodeDungeons.ExecuteDelete();
+        this.ApiContext.PlayerDmodeExpeditions.ExecuteDelete();
+
+        List<DbPlayerPresent> presents =
+        [
+            new DbPlayerPresent()
+            {
+                EntityType = EntityTypes.DmodePoint,
+                EntityId = (int)DmodePoint.Point1,
+                EntityQuantity = 100,
+            },
+            new DbPlayerPresent()
+            {
+                EntityType = EntityTypes.DmodePoint,
+                EntityId = (int)DmodePoint.Point1,
+                EntityQuantity = 100,
+            },
+            new DbPlayerPresent()
+            {
+                EntityType = EntityTypes.DmodePoint,
+                EntityId = (int)DmodePoint.Point2,
+                EntityQuantity = 200,
+            },
+        ];
+
+        await this.AddRangeToDatabase(presents);
+
+        IEnumerable<ulong> presentIdList = presents.Select(x => (ulong)x.PresentId);
+
+        DragaliaResponse<PresentReceiveResponse> response =
+            await this.Client.PostMsgpack<PresentReceiveResponse>(
+                $"{Controller}/receive",
+                new PresentReceiveRequest() { PresentIdList = presentIdList }
+            );
+
+        response.Data.UpdateDataList.DmodeInfo.DmodePoint1.Should().Be(200);
+        response.Data.UpdateDataList.DmodeInfo.DmodePoint2.Should().Be(200);
+    }
+
+    [Fact]
     public async Task GetPresentHistoryList_IsPagedCorrectly()
     {
         List<DbPlayerPresentHistory> presentHistories = Enumerable
