@@ -34,6 +34,7 @@ internal sealed class DmodePointRewardHandler(
                 }
 
                 info.Point1Quantity += entity.Quantity;
+                result.Add(key, GrantReturn.Added());
             }
             else if (entity.Id == (int)DmodePoint.Point2)
             {
@@ -44,6 +45,7 @@ internal sealed class DmodePointRewardHandler(
                 }
 
                 info.Point2Quantity += entity.Quantity;
+                result.Add(key, GrantReturn.Added());
             }
             else
             {
