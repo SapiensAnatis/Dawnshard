@@ -57,6 +57,11 @@ builder.Host.UseSerilog(
             .ReadFrom.Configuration(context.Configuration)
             .ReadFrom.Services(services)
             .Enrich.FromLogContext()
+            .WriteTo.OpenTelemetry(options =>
+            {
+                options.Endpoint = context.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
+                options.ResourceAttributes.Add("service.name", "dragaliaapi");
+            })
 );
 
 builder
@@ -81,11 +86,7 @@ builder.Services.ConfigureDatabaseServices(builder.Configuration);
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.ConfigurationOptions = new()
-    {
-        EndPoints = new() { { redisOptions.Hostname, redisOptions.Port } },
-        Password = redisOptions.Password,
-    };
+    options.Configuration = builder.Configuration.GetConnectionString("redis");
     options.InstanceName = "RedisInstance";
 });
 
@@ -137,17 +138,14 @@ PostgresOptions postgresOptions = app
     .Value;
 
 app.Logger.LogDebug(
-    "Using PostgreSQL connection {Host}:{Port}",
-    postgresOptions.Hostname,
-    postgresOptions.Port
+    "Using PostgreSQL connection {ConnectionString}",
+    builder.Configuration.GetConnectionString("postgres")
 );
 
 app.Logger.LogDebug(
-    "Using Redis connection {Host}:{Port}",
-    redisOptions.Hostname,
-    redisOptions.Port
+    "Using PostgreSQL connection {ConnectionString}",
+    builder.Configuration.GetConnectionString("postgres")
 );
-
 if (!postgresOptions.DisableAutoMigration)
 {
     app.MigrateDatabase();

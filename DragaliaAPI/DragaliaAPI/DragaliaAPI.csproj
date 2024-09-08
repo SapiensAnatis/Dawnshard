@@ -45,6 +45,7 @@
     <PackageReference Include="Serilog.Expressions" />
     <PackageReference Include="Serilog.Settings.Configuration" />
     <PackageReference Include="Serilog.Sinks.Async" />
+    <PackageReference Include="Serilog.Sinks.OpenTelemetry" />
     <PackageReference Include="Serilog.Sinks.Seq" />
     <PackageReference Include="System.Text.Json" />
     <PackageReference Include="Serilog" />

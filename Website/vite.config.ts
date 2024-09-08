@@ -17,7 +17,7 @@ export default defineConfig(({ mode }) => ({
     host: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: process.env.DAWNSHARD_API_URL_SSR ?? 'http://localhost:5000',
         changeOrigin: true
       }
     }
