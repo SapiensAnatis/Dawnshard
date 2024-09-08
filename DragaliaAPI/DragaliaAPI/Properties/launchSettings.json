@@ -8,7 +8,7 @@
                 "RedisOptions__Hostname": "localhost",
                 "PostgresOptions__Hostname": "localhost"
             },
-            "applicationUrl": "http://*:80;http://*:5000"
+            "applicationUrl": "http://0.0.0.0:80"
         }
     }
 }

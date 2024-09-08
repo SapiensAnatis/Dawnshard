@@ -32,8 +32,12 @@ public static class DatabaseConfiguration
                     PostgresOptions postgresOptions = serviceProvider
                         .GetRequiredService<IOptions<PostgresOptions>>()
                         .Value;
+
+                    IConfiguration configuration =
+                        serviceProvider.GetRequiredService<IConfiguration>();
+
                     options
-                        .UseNpgsql(postgresOptions.GetConnectionString("ApiContext"))
+                        .UseNpgsql(configuration.GetConnectionString("postgres"))
                         .UseLoggerFactory(serviceProvider.GetRequiredService<ILoggerFactory>())
                         .EnableDetailedErrors();
                 }

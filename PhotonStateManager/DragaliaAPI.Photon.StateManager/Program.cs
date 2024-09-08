@@ -72,12 +72,7 @@ builder.Services.AddSingleton<IRedisConnectionProvider, RedisConnectionProvider>
     RedisOptions redisOptions = sp.GetRequiredService<IOptions<RedisOptions>>().Value;
 
     IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(
-        new ConfigurationOptions()
-        {
-            EndPoints = new() { { redisOptions.Hostname, redisOptions.Port } },
-            Password = redisOptions.Password,
-            AbortOnConnectFail = false,
-        }
+        builder.Configuration.GetConnectionString("redis")
     );
 
     return new RedisConnectionProvider(multiplexer);
