@@ -100,11 +100,13 @@
       <enhanced:img
         src="$lib/assets/dragalipatch.png"
         class="block w-full max-w-80 align-middle dark:hidden"
-        alt="Example inputs of Dawnshard server address in Dragalipatch interface" />
+        alt="Example inputs of Dawnshard server address in Dragalipatch interface"
+        loading="lazy" />
       <enhanced:img
         src="$lib/assets/dragalipatchDark.png"
         class="hidden w-full max-w-80 align-middle dark:block"
-        alt="Example inputs of Dawnshard server address in Dragalipatch interface" />
+        alt="Example inputs of Dawnshard server address in Dragalipatch interface"
+        loading="lazy" />
       <p class="mt-1 italic">Example Dragalipatch inputs</p>
     </aside>
     <div class="col-span-12">

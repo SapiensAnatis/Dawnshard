@@ -7,7 +7,7 @@
 
 <li class="my-2 flex items-center gap-3">
   <Avatar>
-    <AvatarImage src={avatarSrc} alt={`${name} avatar image`} />
+    <AvatarImage src={avatarSrc} alt={`${name} avatar image`} loading="lazy" />
   </Avatar>
   <p><strong>{name}</strong>, <slot /></p>
 </li>
