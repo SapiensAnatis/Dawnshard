@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { ModeWatcher } from 'mode-watcher';
-
   import { Toaster } from '$shadcn/components/ui/sonner';
 
   import type { LayoutData } from './$types';
@@ -14,7 +12,6 @@
   <meta property="og:url" content={data.urlOrigin} />
 </svelte:head>
 
-<ModeWatcher />
 <Header hasValidJwt={data.hasValidJwt} />
 <SideNav hasValidJwt={data.hasValidJwt} />
 <Toaster richColors />

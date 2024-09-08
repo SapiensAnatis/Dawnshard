@@ -3,9 +3,8 @@ import plugin from 'tailwindcss/plugin';
 
 /** @type {import('tailwindcss').Config} */
 const config = {
-  darkMode: 'selector',
+  darkMode: 'media',
   content: ['./src/**/*.{html,js,svelte,ts}'],
-  safelist: ['dark'],
   theme: {
     container: {
       center: true,

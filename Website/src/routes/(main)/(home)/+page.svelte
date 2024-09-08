@@ -11,6 +11,7 @@
   import * as Card from '$shadcn/components/ui/card/index';
 
   import Acknowledgement from './acknowledgement.svelte';
+  import BannerImage from './bannerImage.svelte';
   import BuyMeACoffee from './icons/buyMeACoffee.svelte';
   import Discord from './icons/discord.svelte';
   import GitHub from './icons/github.svelte';
@@ -18,30 +19,33 @@
   import LinkButton from './linkButton.svelte';
 </script>
 
-<div id="banner">
-  <Card.Root class="w-full max-w-[55rem]">
-    <Card.Header>
-      <Card.Title tag="h2" class="text-3xl">Welcome to Dawnshard</Card.Title>
-    </Card.Header>
-    <Card.Content>
-      <p class="text-lg font-semibold" style:margin-bottom="0.5rem">
-        Dawnshard is a server emulator project aimed at enabling continued play of Dragalia Lost.
-      </p>
-      <p>
-        Ever since the official servers were discontinued in November 2022, Dawnshard has been in
-        development as a fan-led reimplementation of the game&apos;s web backend.
-      </p>
-    </Card.Content>
-    <Card.Footer class="flex-row flex-wrap gap-2">
-      <LinkButton href="https://github.com/sapiensanatis/dawnshard" icon={GitHub}>
-        Source code
-      </LinkButton>
-      <LinkButton href="https://discord.gg/j9zSttjjWj" icon={Discord}>Discord</LinkButton>
-      <LinkButton href="https://patreon.com/dawnshard" icon={Patreon}>Patreon</LinkButton>
-      <LinkButton href="https://buymeacoffee.com/dawnshard" icon={BuyMeACoffee}
-        >Buy me a coffee</LinkButton>
-    </Card.Footer>
-  </Card.Root>
+<div id="banner" class="">
+  <BannerImage />
+  <div class="card">
+    <Card.Root class="w-full max-w-[55rem]">
+      <Card.Header>
+        <Card.Title tag="h2" class="text-3xl">Welcome to Dawnshard</Card.Title>
+      </Card.Header>
+      <Card.Content>
+        <p class="text-lg font-semibold" style:margin-bottom="0.5rem">
+          Dawnshard is a server emulator project aimed at enabling continued play of Dragalia Lost.
+        </p>
+        <p>
+          Ever since the official servers were discontinued in November 2022, Dawnshard has been in
+          development as a fan-led reimplementation of the game&apos;s web backend.
+        </p>
+      </Card.Content>
+      <Card.Footer class="flex-row flex-wrap gap-2">
+        <LinkButton href="https://github.com/sapiensanatis/dawnshard" icon={GitHub}>
+          Source code
+        </LinkButton>
+        <LinkButton href="https://discord.gg/j9zSttjjWj" icon={Discord}>Discord</LinkButton>
+        <LinkButton href="https://patreon.com/dawnshard" icon={Patreon}>Patreon</LinkButton>
+        <LinkButton href="https://buymeacoffee.com/dawnshard" icon={BuyMeACoffee}
+          >Buy me a coffee</LinkButton>
+      </Card.Footer>
+    </Card.Root>
+  </div>
 </div>
 
 <div class="flex flex-col gap-5 p-5 md:w-[75%]">
@@ -100,10 +104,12 @@
       <enhanced:img
         src="$lib/assets/dragalipatch.png"
         class="block w-full max-w-80 align-middle dark:hidden"
+        loading="lazy"
         alt="Example inputs of Dawnshard server address in Dragalipatch interface" />
       <enhanced:img
         src="$lib/assets/dragalipatchDark.png"
         class="hidden w-full max-w-80 align-middle dark:block"
+        loading="lazy"
         alt="Example inputs of Dawnshard server address in Dragalipatch interface" />
       <p class="mt-1 italic">Example Dragalipatch inputs</p>
     </aside>
@@ -209,34 +215,16 @@
 
 <style>
   #banner {
-    padding: 3rem;
-    object-position: 100% 50%;
-    background-size: cover;
-    background-repeat: no-repeat;
+    display: inline-block;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
     border-bottom: 1px solid;
     border-color: var(--divider);
   }
 
-  @media (min-width: 1080px) {
-    #banner {
-      background-position: 10% 20%;
-      background-image: url('/src/lib/assets/bannerLight-wide.webp');
-    }
-
-    :global(.dark #banner) {
-      background-image: url('/src/lib/assets/bannerDark-wide.webp');
-    }
-  }
-
-  @media (max-width: 1080px) {
-    #banner {
-      background-position: 10% 10%;
-      background-image: url('/src/lib/assets/bannerLight-narrow.webp');
-    }
-
-    :global(.dark #banner) {
-      background-image: url('/src/lib/assets/bannerDark-narrow.webp');
-    }
+  .card {
+    padding: 3rem;
   }
 
   li {
