@@ -8,7 +8,6 @@ export default defineConfig(({ mode }) => ({
     sveltekit(),
     enhancedImages(),
     checker({
-      overlay: true, // Doesn't work
       typescript: true,
       eslint: { lintCommand: 'eslint ./src/**/*.{ts,svelte}', useFlatConfig: true }
     })
