@@ -141,7 +141,7 @@
             disabled={disableQuantity}
             field={quantity}
             min={1}
-            max={2147483647}
+            max={999999}
             required
             class="
               touched:invalid:border-red-700
