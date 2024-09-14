@@ -46,7 +46,7 @@
   </Drawer.Root>
 {:else}
   <header id="header" class="z-50 gap-1 bg-background px-2 md:gap-2 md:px-3">
-    <Button variant="ghost" class="md:hidden" href="/navigation">
+    <Button variant="ghost" size="sm" class="md:hidden" href="/navigation">
       <Menu />
     </Button>
     <HeaderContents {hasValidJwt} />

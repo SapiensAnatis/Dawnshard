@@ -7,6 +7,10 @@
   import Nightmerp from '$lib/assets/acknowledgement/nightmerp.webp';
   import Skazord from '$lib/assets/acknowledgement/skazord.webp';
   import Sockperson from '$lib/assets/acknowledgement/sockperson.webp';
+  import bannerDarkNarrow from '$lib/assets/bannerDark-narrow.webp';
+  import bannerDarkWide from '$lib/assets/bannerDark-wide.webp';
+  import bannerLightNarrow from '$lib/assets/bannerLight-narrow.webp';
+  import bannerLightWide from '$lib/assets/bannerLight-wide.webp';
   import Typography from '$lib/components/typography.svelte';
   import * as Card from '$shadcn/components/ui/card/index';
 
@@ -208,6 +212,30 @@
     </ul>
   </div>
 </div>
+
+<svelte:head>
+  <link
+    rel="preload"
+    as="image"
+    href={bannerDarkWide}
+    media="(min-width: 1080px) and (prefers-color-scheme: dark)" />
+  <link
+    rel="preload"
+    as="image"
+    href={bannerLightWide}
+    media="(min-width: 1080px) and (prefers-color-scheme: light)" />
+
+  <link
+    rel="preload"
+    as="image"
+    href={bannerDarkNarrow}
+    media="(max-width: 1080px) and (prefers-color-scheme: dark)" />
+  <link
+    rel="preload"
+    as="image"
+    href={bannerLightNarrow}
+    media="(max-width: 1080px) and (prefers-color-scheme: light)" />
+</svelte:head>
 
 <style>
   #banner {
