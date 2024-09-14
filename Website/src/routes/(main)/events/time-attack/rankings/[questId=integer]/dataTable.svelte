@@ -25,7 +25,7 @@
   const tableData = writable(data);
 
   $: {
-    tableData.set(data);
+    $tableData = data;
   }
 
   const itemCountStore = readable(itemCount);
