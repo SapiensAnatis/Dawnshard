@@ -1,4 +1,4 @@
-FROM node:22.8.0-bookworm-slim AS base
+FROM node:22.9.0-bookworm-slim AS base
 
 EXPOSE 3000
 
