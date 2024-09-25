@@ -3,6 +3,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
@@ -16,12 +17,16 @@ internal class EventSummonService(
     ApiContext apiContext,
     IOptionsMonitor<EventSummonOptions> eventSummonOptionsMonitor,
     IRewardService rewardService,
-    IPresentService presentService
+    IPresentService presentService,
+    IEnumerable<TwoStepItemGenerator> itemGenerators
 )
 {
     private const int MaxExecCount = 100;
 
     private readonly EventSummonOptions eventSummonOptions = eventSummonOptionsMonitor.CurrentValue;
+
+    private readonly Dictionary<int, TwoStepItemGenerator> itemGeneratorLookup =
+        itemGenerators.ToDictionary(x => x.Id, x => x);
 
     public async Task<AtgenBoxSummonData> GetBoxSummonData(
         int eventId,
@@ -35,7 +40,7 @@ internal class EventSummonService(
                 {
                     x.BoxNumber,
                     x.Points,
-                    Items = x.Items.Select(y => new { y.ItemId, y.TimesSummoned })
+                    Items = x.Items.Select(y => new { y.ItemId, y.TimesSummoned }),
                 })
                 .FirstOrDefaultAsync(cancellationToken)
             ?? throw new DragaliaException(
@@ -135,15 +140,16 @@ internal class EventSummonService(
             idPool.RemoveAt(selectedIdIndex);
 
             EventSummonItemConfiguration config = itemDict[selectedId];
-            rewards.Add(i, new Entity(config.EntityType, config.EntityId, config.EntityQuantity));
+            Entity configEntity = GenerateEntityFromPull(config);
+            rewards.Add(i, configEntity);
 
             drawDetails.Add(
                 new()
                 {
                     Id = selectedId,
-                    EntityId = config.EntityId,
-                    EntityQuantity = config.EntityQuantity,
-                    EntityType = config.EntityType,
+                    EntityId = configEntity.Id,
+                    EntityQuantity = configEntity.Quantity,
+                    EntityType = configEntity.Type,
                     IsNew = false,
                     ViewRarity = 0,
                 }
@@ -170,7 +176,6 @@ internal class EventSummonService(
                 break;
             }
         }
-        //todo random void items
 
         IDictionary<int, RewardGrantResult> resultDict = await rewardService.BatchGrantRewards(
             rewards
@@ -202,7 +207,7 @@ internal class EventSummonService(
             BoxSummonDetail = newBoxSummonInfo.DetailList,
             BoxSummonSeq = userData.BoxNumber,
             IsStoppedByTarget = stoppedByTarget,
-            DrawDetails = drawDetails
+            DrawDetails = drawDetails,
         };
     }
 
@@ -245,4 +250,26 @@ internal class EventSummonService(
         ?? throw new InvalidOperationException(
             $"No item summon table configured for event {eventId}!"
         );
+
+    private Entity GenerateEntityFromPull(EventSummonItemConfiguration config)
+    {
+        if (config.TwoStepId is null)
+        {
+            return new Entity(config.EntityType, config.EntityId, config.EntityQuantity);
+        }
+
+        if (
+            !this.itemGeneratorLookup.TryGetValue(
+                config.TwoStepId.Value,
+                out TwoStepItemGenerator? generator
+            )
+        )
+        {
+            throw new InvalidOperationException(
+                $"TwoStepId {config.TwoStepId.Value} had no registered item generator"
+            );
+        }
+
+        return generator.GenerateRandomEntity();
+    }
 }

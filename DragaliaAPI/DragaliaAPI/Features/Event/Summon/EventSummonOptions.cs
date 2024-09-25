@@ -43,9 +43,7 @@ internal class EventSummonItemConfiguration
     public bool ResetItemFlag { get; init; }
 
     public required EventSummonItemCount TotalCounts { get; init; }
-
-    // Relates to void material reward and MasterAsset BoxTwoStepData
-    public int TwoStepId { get; init; }
+    public int? TwoStepId { get; init; }
 
     public int GetTotalCountInBox(int boxNumber) =>
         boxNumber switch

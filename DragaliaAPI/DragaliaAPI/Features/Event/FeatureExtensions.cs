@@ -13,7 +13,8 @@ public static partial class FeatureExtensions
             .AddScoped<IEventRepository, EventRepository>()
             .AddScoped<IEventService, EventService>()
             .AddScoped<EventSummonService>()
-            .AddScoped<EventValidationFilter>();
+            .AddScoped<EventValidationFilter>()
+            .AddSingleton<TwoStepItemGenerator, VoidBattleItemGenerator>();
 
         serviceCollection.AddOptions<EventSummonOptions>().BindConfiguration(string.Empty);
 
