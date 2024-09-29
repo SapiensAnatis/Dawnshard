@@ -100,14 +100,14 @@ public class BaasApi : IBaasApi
 
         if (response.StatusCode == HttpStatusCode.NotFound)
         {
-            this.logger.LogDebug("GetUserId returned 404 Not Found.");
+            this.logger.LogDebug("/gameplay/v1/user returned 404 Not Found.");
             return null;
         }
 
         if (!response.IsSuccessStatusCode)
         {
             this.logger.LogError(
-                "Received non-200 status code in GetUserId: {Status}",
+                "Received non-200 status code from /gameplay/v1/user: {Status}",
                 response.StatusCode
             );
 
@@ -117,8 +117,42 @@ public class BaasApi : IBaasApi
         return (await response.Content.ReadFromJsonAsync<UserIdResponse>())?.UserId;
     }
 
+    public async Task<string?> GetUsername(string idToken)
+    {
+        HttpRequestMessage request =
+            new(HttpMethod.Get, "/gameplay/v1/webUser")
+            {
+                Headers = { Authorization = new AuthenticationHeaderValue("Bearer", idToken) },
+            };
+
+        HttpResponseMessage response = await client.SendAsync(request);
+
+        if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            this.logger.LogDebug("/gameplay/v1/webUser returned 404 Not Found.");
+            return null;
+        }
+
+        if (!response.IsSuccessStatusCode)
+        {
+            this.logger.LogError(
+                "Received non-200 status code from /gameplay/v1/webUser: {Status}",
+                response.StatusCode
+            );
+
+            return null;
+        }
+
+        return (await response.Content.ReadFromJsonAsync<WebUserResponse>())?.Username;
+    }
+
     private class UserIdResponse
     {
-        public required string UserId { get; set; }
+        public required string UserId { get; init; }
+    }
+
+    private class WebUserResponse
+    {
+        public required string Username { get; init; }
     }
 }

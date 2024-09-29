@@ -8,4 +8,5 @@ public interface IBaasApi
     Task<IList<SecurityKey>> GetKeys();
     Task<LoadIndexResponse> GetSavefile(string idToken);
     Task<string?> GetUserId(string idToken);
+    Task<string?> GetUsername(string idToken);
 }
