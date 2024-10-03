@@ -7,6 +7,7 @@ using DragaliaAPI.Shared.Serialization;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Moq.Protected;
 
@@ -15,19 +16,12 @@ namespace DragaliaAPI.Test.Helpers;
 public class BaasRequestHelperTest
 {
     private readonly IBaasApi baasRequestHelper;
-    private readonly Mock<IOptionsMonitor<BaasOptions>> mockOptions;
     private readonly Mock<HttpMessageHandler> mockHttpMessageHandler;
-    private readonly Mock<ILogger<BaasApi>> mockLogger;
-    private IDistributedCache cache;
+    private readonly IDistributedCache cache;
 
     public BaasRequestHelperTest()
     {
-        this.mockOptions = new(MockBehavior.Strict);
         this.mockHttpMessageHandler = new(MockBehavior.Strict);
-        this.mockLogger = new(MockBehavior.Loose);
-
-        this.mockOptions.SetupGet(x => x.CurrentValue)
-            .Returns(new BaasOptions() { BaasUrl = "https://www.taylorswift.com/" });
 
         IOptions<MemoryDistributedCacheOptions> opts = Options.Create(
             new MemoryDistributedCacheOptions()
@@ -35,10 +29,12 @@ public class BaasRequestHelperTest
         this.cache = new MemoryDistributedCache(opts);
 
         this.baasRequestHelper = new BaasApi(
-            mockOptions.Object,
-            new HttpClient(mockHttpMessageHandler.Object),
+            new HttpClient(mockHttpMessageHandler.Object)
+            {
+                BaseAddress = new Uri("https://www.taylorswift.com"),
+            },
             this.cache,
-            mockLogger.Object
+            NullLogger<BaasApi>.Instance
         );
     }
 
@@ -81,7 +77,6 @@ public class BaasRequestHelperTest
 
         (await this.baasRequestHelper.GetKeys()).Should().ContainSingle();
 
-        this.mockOptions.VerifyAll();
         this.mockHttpMessageHandler.VerifyAll();
     }
 
@@ -110,7 +105,6 @@ public class BaasRequestHelperTest
 
         (await this.baasRequestHelper.GetKeys()).Should().ContainSingle();
 
-        this.mockOptions.VerifyAll();
         this.mockHttpMessageHandler.VerifyAll();
     }
 
@@ -133,7 +127,6 @@ public class BaasRequestHelperTest
             .ThrowExactlyAsync<DragaliaException>()
             .Where(x => x.Code == ResultCode.CommonAuthError);
 
-        this.mockOptions.VerifyAll();
         this.mockHttpMessageHandler.VerifyAll();
     }
 

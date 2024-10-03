@@ -165,6 +165,7 @@ app.MapWhen(
         {
             applicationBuilder.UsePathBase(prefix);
         }
+
         applicationBuilder.UseMiddleware<HeaderLogContextMiddleware>();
         applicationBuilder.UseSerilogRequestLogging();
         applicationBuilder.UseAuthentication();
