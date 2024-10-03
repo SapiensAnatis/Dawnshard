@@ -33,19 +33,16 @@ public class UserTest : TestFixture
     [Fact]
     public async Task GetNAccountInfo_ReturnsExpectedResponse()
     {
+        this.MockBaasApi.Setup(x => x.GetUsername(It.IsAny<string>())).ReturnsAsync("okada");
+
         (await this.Client.PostMsgpack<UserGetNAccountInfoResponse>("/user/get_n_account_info"))
             .Data.Should()
             .BeEquivalentTo(
                 new UserGetNAccountInfoResponse()
                 {
-                    NAccountInfo = new()
-                    {
-                        Email = "placeholder@email.com",
-                        Nickname = "placeholder nickname",
-                    },
+                    NAccountInfo = new() { Email = "", Nickname = "okada" },
                     UpdateDataList = new(),
-                },
-                opts => opts.Excluding(x => x.UpdateDataList.UserData.Crystal)
+                }
             );
     }
 }
