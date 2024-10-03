@@ -149,7 +149,16 @@ public static class ServiceConfiguration
 
         services.AddAllOfType<ISavefileUpdate>();
 
-        services.AddHttpClient<IBaasApi, BaasApi>();
+        services.AddHttpClient<IBaasApi, BaasApi>(
+            (sp, client) =>
+            {
+                IOptionsMonitor<BaasOptions> options = sp.GetRequiredService<
+                    IOptionsMonitor<BaasOptions>
+                >();
+
+                client.BaseAddress = options.CurrentValue.BaasUrlParsed;
+            }
+        );
 
         services.AddHttpClient<IPhotonStateApi, PhotonStateApi>(
             (sp, client) =>

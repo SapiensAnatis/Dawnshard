@@ -10,9 +10,8 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace DragaliaAPI.Services.Api;
 
-public class BaasApi : IBaasApi
+internal sealed partial class BaasApi : IBaasApi
 {
-    private readonly IOptionsMonitor<BaasOptions> options;
     private readonly HttpClient client;
     private readonly IDistributedCache cache;
     private readonly ILogger<BaasApi> logger;
@@ -21,19 +20,11 @@ public class BaasApi : IBaasApi
     private const string SavefileEndpoint = "/gameplay/v1/savefile";
     private const string RedisKey = ":jwks:baas";
 
-    public BaasApi(
-        IOptionsMonitor<BaasOptions> options,
-        HttpClient client,
-        IDistributedCache cache,
-        ILogger<BaasApi> logger
-    )
+    public BaasApi(HttpClient client, IDistributedCache cache, ILogger<BaasApi> logger)
     {
-        this.options = options;
         this.client = client;
         this.cache = cache;
         this.logger = logger;
-
-        this.client.BaseAddress = this.options.CurrentValue.BaasUrlParsed;
     }
 
     public async Task<IList<SecurityKey>> GetKeys()
@@ -49,7 +40,7 @@ public class BaasApi : IBaasApi
 
         if (!keySetResponse.IsSuccessStatusCode)
         {
-            logger.LogError("Received failure response from BaaS: {@response}", keySetResponse);
+            Log.ReceivedNon200Response(this.logger, KeySetEndpoint, keySetResponse.StatusCode);
 
             throw new DragaliaException(
                 ResultCode.CommonAuthError,
@@ -64,16 +55,16 @@ public class BaasApi : IBaasApi
         return jwks.GetSigningKeys();
     }
 
-    public async Task<LoadIndexResponse> GetSavefile(string idToken)
+    public async Task<LoadIndexResponse> GetSavefile(string gameIdToken)
     {
         HttpResponseMessage savefileResponse = await client.PostAsJsonAsync<object>(
             SavefileEndpoint,
-            new { idToken }
+            new { idToken = gameIdToken }
         );
 
         if (!savefileResponse.IsSuccessStatusCode)
         {
-            logger.LogError("Received failure response from BaaS: {@response}", savefileResponse);
+            Log.ReceivedNon200Response(this.logger, SavefileEndpoint, savefileResponse.StatusCode);
 
             throw new DragaliaException(
                 ResultCode.TransitionLinkedDataNotFound,
@@ -88,62 +79,53 @@ public class BaasApi : IBaasApi
             )?.Data ?? throw new JsonException("Deserialized savefile was null");
     }
 
-    public async Task<string?> GetUserId(string idToken)
+    public async Task<string?> GetUserId(string webIdToken)
     {
-        HttpRequestMessage request =
-            new(HttpMethod.Get, "/gameplay/v1/user")
-            {
-                Headers = { Authorization = new AuthenticationHeaderValue("Bearer", idToken) },
-            };
+        UserIdResponse? userInfo = await this.GetUserInformation<UserIdResponse>(
+            "/gameplay/v1/user",
+            webIdToken
+        );
 
-        HttpResponseMessage response = await client.SendAsync(request);
-
-        if (response.StatusCode == HttpStatusCode.NotFound)
-        {
-            this.logger.LogDebug("/gameplay/v1/user returned 404 Not Found.");
-            return null;
-        }
-
-        if (!response.IsSuccessStatusCode)
-        {
-            this.logger.LogError(
-                "Received non-200 status code from /gameplay/v1/user: {Status}",
-                response.StatusCode
-            );
-
-            return null;
-        }
-
-        return (await response.Content.ReadFromJsonAsync<UserIdResponse>())?.UserId;
+        return userInfo?.UserId;
     }
 
-    public async Task<string?> GetUsername(string idToken)
+    public async Task<string?> GetUsername(string gameIdToken)
+    {
+        WebUserResponse? webUserInfo = await this.GetUserInformation<WebUserResponse>(
+            "/gameplay/v1/webUser",
+            gameIdToken
+        );
+
+        return webUserInfo?.Username;
+    }
+
+    private async Task<TResponse?> GetUserInformation<TResponse>(
+        string endpoint,
+        string bearerToken
+    )
+        where TResponse : class
     {
         HttpRequestMessage request =
-            new(HttpMethod.Get, "/gameplay/v1/webUser")
+            new(HttpMethod.Get, endpoint)
             {
-                Headers = { Authorization = new AuthenticationHeaderValue("Bearer", idToken) },
+                Headers = { Authorization = new AuthenticationHeaderValue("Bearer", bearerToken) },
             };
 
         HttpResponseMessage response = await client.SendAsync(request);
 
         if (response.StatusCode == HttpStatusCode.NotFound)
         {
-            this.logger.LogDebug("/gameplay/v1/webUser returned 404 Not Found.");
+            Log.ReceivedUserInfo404Response(this.logger, endpoint);
             return null;
         }
 
         if (!response.IsSuccessStatusCode)
         {
-            this.logger.LogError(
-                "Received non-200 status code from /gameplay/v1/webUser: {Status}",
-                response.StatusCode
-            );
-
+            Log.ReceivedNon200Response(this.logger, endpoint, response.StatusCode);
             return null;
         }
 
-        return (await response.Content.ReadFromJsonAsync<WebUserResponse>())?.Username;
+        return await response.Content.ReadFromJsonAsync<TResponse>();
     }
 
     private class UserIdResponse
@@ -154,5 +136,21 @@ public class BaasApi : IBaasApi
     private class WebUserResponse
     {
         public required string Username { get; init; }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Error, "Received non-200 status code from {Endpoint}: {Status}")]
+        public static partial void ReceivedNon200Response(
+            ILogger logger,
+            string endpoint,
+            HttpStatusCode status
+        );
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Failed to get user information from {Endpoint}: BaaS returned 404 Not Found"
+        )]
+        public static partial void ReceivedUserInfo404Response(ILogger logger, string endpoint);
     }
 }
