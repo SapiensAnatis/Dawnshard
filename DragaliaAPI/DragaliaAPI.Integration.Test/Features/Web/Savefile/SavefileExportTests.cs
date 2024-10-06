@@ -37,7 +37,7 @@ public class SavefileExportTests : WebTestFixture
     [Fact]
     public async Task Export_DoesNotExportCustomAbilityCrests()
     {
-        AbilityCrestId customCrest = (AbilityCrestId)40050159;
+        AbilityCrestId customCrest = (AbilityCrestId)50000001;
 
         this.AddTokenCookie();
 
