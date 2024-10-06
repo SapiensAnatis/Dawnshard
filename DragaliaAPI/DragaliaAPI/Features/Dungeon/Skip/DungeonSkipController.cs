@@ -211,9 +211,23 @@ public class DungeonSkipController(
                 PlayCount = playCount,
             };
 
-        session.EnemyList = questData
-            .AreaInfo.Select((_, index) => oddsInfoService.GetOddsInfo(questData.Id, index))
-            .ToDictionary(x => x.AreaIndex, x => x.Enemy.Repeat(playCount));
+        Dictionary<int, IEnumerable<AtgenEnemy>> enemyList = new(questData.AreaInfo.Count);
+
+        for (int areaIndex = 0; areaIndex < questData.AreaInfo.Count; areaIndex++)
+        {
+            List<AtgenEnemy> enemies = [];
+
+            for (int i = 0; i < playCount; i++)
+            {
+                // TODO: chests and drop_obj
+                OddsInfo oddsInfo = oddsInfoService.GetOddsInfo(questId, areaIndex);
+                enemies.AddRange(oddsInfo.Enemy);
+            }
+
+            enemyList[areaIndex] = enemies;
+        }
+
+        session.EnemyList = enemyList;
 
         PlayRecord playRecord =
             new()

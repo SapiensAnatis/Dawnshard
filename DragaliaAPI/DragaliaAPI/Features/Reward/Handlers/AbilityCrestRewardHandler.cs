@@ -19,8 +19,11 @@ public class AbilityCrestRewardHandler(
     public async Task<GrantReturn> Grant(Entity entity)
     {
         AbilityCrestId crest = (AbilityCrestId)entity.Id;
-        if (!Enum.IsDefined(crest))
+
+        if (!MasterAsset.AbilityCrest.ContainsKey(crest))
+        {
             throw new ArgumentException("Entity ID was not a valid ability crest", nameof(entity));
+        }
 
         if (await abilityCrestRepository.FindAsync(crest) is not null)
         {
@@ -33,8 +36,8 @@ public class AbilityCrestRewardHandler(
                     Quantity: crestData.DuplicateEntityQuantity * entity.Quantity
                 );
 
-            logger.LogDebug(
-                "Converted ability crest entity: {@entity} to {@duplicateEntity}.",
+            logger.LogTrace(
+                "Converted ability crest entity: {@Entity} to {@DuplicateEntity}.",
                 entity,
                 duplicateEntity
             );
@@ -42,7 +45,8 @@ public class AbilityCrestRewardHandler(
             return new(RewardGrantResult.Converted, duplicateEntity);
         }
 
-        logger.LogDebug("Granted new ability crest entity: {@entity}", entity);
+        logger.LogTrace("Granted new ability crest entity: {@Entity}", entity);
+
         await abilityCrestRepository.Add(
             crest,
             entity.LimitBreakCount,

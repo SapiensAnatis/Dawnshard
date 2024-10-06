@@ -48,16 +48,19 @@ public record QuestData(
     private int IdSuffix => this.Id % 1000;
 
     [IgnoreMember]
-    public IEnumerable<AreaInfo> AreaInfo =>
+    public IReadOnlyList<AreaInfo> AreaInfo { get; } =
         new List<AreaInfo>()
         {
-            new(this.Scene01, this.AreaName01),
-            new(this.Scene02, this.AreaName02),
-            new(this.Scene03, this.AreaName03),
-            new(this.Scene04, this.AreaName04),
-            new(this.Scene05, this.AreaName05),
-            new(this.Scene06, this.AreaName06),
-        }.Where(x => !string.IsNullOrEmpty(x.ScenePath) && !string.IsNullOrEmpty(x.AreaName));
+            new(Scene01, AreaName01),
+            new(Scene02, AreaName02),
+            new(Scene03, AreaName03),
+            new(Scene04, AreaName04),
+            new(Scene05, AreaName05),
+            new(Scene06, AreaName06),
+        }
+            .Where(x => !string.IsNullOrEmpty(x.ScenePath) && !string.IsNullOrEmpty(x.AreaName))
+            .ToList()
+            .AsReadOnly();
 
     [IgnoreMember]
     public bool IsEventRegularBattle =>
