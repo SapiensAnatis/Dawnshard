@@ -6,3 +6,13 @@ using DragaliaAPI.Shared.MasterAsset;
     "Missions/MissionDailyData.rewards.json",
     FeatureFlag = "BoostedDailyEndeavourRewards"
 )]
+[assembly: ExtendMasterAsset(
+    nameof(MasterAsset.AbilityCrest),
+    "AbilityCrest.custom.json",
+    FeatureFlag = "CustomAbilityCrests"
+)]
+[assembly: ExtendMasterAsset(
+    nameof(MasterAsset.QuestDropInfo),
+    "QuestDrops/QuestDropInfo.customabilitycrests.json",
+    FeatureFlag = "CustomAbilityCrests"
+)]

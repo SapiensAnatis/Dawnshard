@@ -117,6 +117,16 @@ public class LoadService(
         logger.LogInformation("{Time} ms: Processing complete", stopwatch.ElapsedMilliseconds);
         return data;
     }
+
+    public LoadIndexResponse SanitizeIndexData(LoadIndexResponse original)
+    {
+        // Remove custom wyrmprints
+        original.AbilityCrestList = original
+            .AbilityCrestList.Where(x => (int)x.AbilityCrestId <= 40050158)
+            .ToList();
+
+        return original;
+    }
 }
 
 public class Savefile
