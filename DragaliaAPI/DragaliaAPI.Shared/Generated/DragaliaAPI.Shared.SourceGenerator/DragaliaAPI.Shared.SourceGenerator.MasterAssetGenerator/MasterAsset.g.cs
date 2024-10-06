@@ -455,7 +455,7 @@ public static partial class MasterAsset
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.AbilityCrestId, global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest>(
                 "AbilityCrest.msgpack",
                 (global::DragaliaAPI.Shared.MasterAsset.Models.AbilityCrest x) => x.Id,
-                null
+                await LoadAbilityCrestExtension(featureManager)
             );
         
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestEventGroup>> questEventGroupTask =
@@ -798,7 +798,7 @@ public static partial class MasterAsset
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestDrops.QuestDropInfo>(
                 "QuestDrops/QuestDropInfo.msgpack",
                 (global::DragaliaAPI.Shared.MasterAsset.Models.QuestDrops.QuestDropInfo x) => x.QuestId,
-                null
+                await LoadQuestDropInfoExtension(featureManager)
             );
         
         global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestDrops.QuestBonusReward>> questBonusRewardInfoTask =

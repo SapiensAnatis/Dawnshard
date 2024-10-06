@@ -1,0 +1,234 @@
+[
+    {
+        "_Comment": "Avenue to Fortune: Master",
+        "_QuestId": 202060104,
+        "_Rupies": 1000000,
+        "_Mana": 10000,
+        "_Drops": [
+            {
+                "_Id": 104001041,
+                "_EntityType": "Material",
+                "_Comment": "Light Orb",
+                "_Quantity": 50
+            },
+            {
+                "_Id": 40030004,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Bellathorna",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030005,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Alberian Banner",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030006,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Cry of the Horn",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030013,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Ironside Shield",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030014,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Winds of Saint Lotier",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030015,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Aromatherapy",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030018,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Unfulfilled Visions",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030023,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Potiongrass",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030026,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Nevermelt Ice",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030034,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Blossoms Ablaze",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030036,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "The Davian Wetlands",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40040002,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Destiny's Hand",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40040014,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Warlust",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40040034,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Kicking Back",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40050002,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Flash of Genius",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40050159,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "The Chicken Man",
+                "_Quantity": 0.05
+            }
+        ]
+    },
+    {
+        "_Comment": "Avenue to Power: Master",
+        "_QuestId": 201010104,
+        "_Rupies": 250000,
+        "_Mana": 10000,
+        "_Drops": [
+            {
+                "_Id": 101001003,
+                "_EntityType": "Material",
+                "_Comment": "Gold Crystal",
+                "_Quantity": 50
+            },
+            {
+                "_Id": 102001003,
+                "_EntityType": "Material",
+                "_Comment": "Succulent Dragonfruit",
+                "_Quantity": 50
+            },
+            {
+                "_Id": 103001003,
+                "_EntityType": "Material",
+                "_Comment": "Gold Whetstone",
+                "_Quantity": 50
+            },
+            {
+                "_Id": 40030004,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Bellathorna",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030005,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Alberian Banner",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030006,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Cry of the Horn",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030013,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Ironside Shield",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030014,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Winds of Saint Lotier",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030015,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Aromatherapy",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030018,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Unfulfilled Visions",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030023,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Potiongrass",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030026,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Nevermelt Ice",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030034,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Blossoms Ablaze",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40030036,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "The Davian Wetlands",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40040002,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Destiny's Hand",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40040014,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Warlust",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40040034,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Kicking Back",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40050002,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "Flash of Genius",
+                "_Quantity": 0.1
+            },
+            {
+                "_Id": 40050159,
+                "_EntityType": "Wyrmprint",
+                "_Comment": "The Chicken Man",
+                "_Quantity": 0.05
+            }
+        ]
+    }
+]

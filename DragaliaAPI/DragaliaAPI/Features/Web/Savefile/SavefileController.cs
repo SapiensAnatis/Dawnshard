@@ -15,11 +15,11 @@ internal sealed class SavefileController(ILoadService loadService) : ControllerB
     [HttpGet("export")]
     public async Task<FileResult> GetSavefile(CancellationToken cancellationToken)
     {
+        LoadIndexResponse loadIndexResponse = await loadService.BuildIndexData(cancellationToken);
+        LoadIndexResponse sanitizedResponse = loadService.SanitizeIndexData(loadIndexResponse);
+
         DragaliaResponse<LoadIndexResponse> savefile =
-            new(
-                await loadService.BuildIndexData(cancellationToken),
-                new DataHeaders(ResultCode.Success)
-            );
+            new(sanitizedResponse, new DataHeaders(ResultCode.Success));
 
         return this.File(
             JsonSerializer.SerializeToUtf8Bytes(savefile, ApiJsonOptions.Instance),
