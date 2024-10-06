@@ -139,11 +139,11 @@ public class LoadService(
             }
             if (partySettingList.EquipCrestSlotType1CrestId2 >= maxVanilllaId)
             {
-                partySettingList.EquipCrestSlotType1CrestId1 = 0;
+                partySettingList.EquipCrestSlotType1CrestId2 = 0;
             }
             if (partySettingList.EquipCrestSlotType1CrestId3 >= maxVanilllaId)
             {
-                partySettingList.EquipCrestSlotType1CrestId1 = 0;
+                partySettingList.EquipCrestSlotType1CrestId3 = 0;
             }
         }
 

@@ -47,7 +47,11 @@ public class SavefileExportTests : WebTestFixture
         );
 
         this.ApiContext.PlayerPartyUnits.Where(x => x.PartyNo == 1)
-            .ExecuteUpdate(e => e.SetProperty(x => x.EquipCrestSlotType1CrestId1, customCrest));
+            .ExecuteUpdate(e =>
+                e.SetProperty(x => x.EquipCrestSlotType1CrestId1, customCrest)
+                    .SetProperty(x => x.EquipCrestSlotType1CrestId2, customCrest)
+                    .SetProperty(x => x.EquipCrestSlotType1CrestId3, customCrest)
+            );
 
         HttpResponseMessage resp = await this.Client.GetAsync("/api/savefile/export");
 
@@ -65,6 +69,8 @@ public class SavefileExportTests : WebTestFixture
 
         firstParty
             .PartySettingList.Should()
-            .NotContain(x => x.EquipCrestSlotType1CrestId1 == customCrest);
+            .NotContain(x => x.EquipCrestSlotType1CrestId1 == customCrest)
+            .And.NotContain(x => x.EquipCrestSlotType1CrestId2 == customCrest)
+            .And.NotContain(x => x.EquipCrestSlotType1CrestId3 == customCrest);
     }
 }
