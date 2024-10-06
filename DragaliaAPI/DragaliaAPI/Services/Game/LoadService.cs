@@ -122,7 +122,7 @@ public class LoadService(
     {
         // Remove custom wyrmprints
         original.AbilityCrestList = original
-            .AbilityCrestList.Where(x => (int)x.AbilityCrestId <= 40050158)
+            .AbilityCrestList.Where(x => (int)x.AbilityCrestId < 50000000)
             .ToList();
 
         return original;
