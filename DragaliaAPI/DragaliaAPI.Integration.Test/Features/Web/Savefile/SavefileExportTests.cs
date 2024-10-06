@@ -1,4 +1,7 @@
 using System.Net;
+using System.Net.Http.Json;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Shared.Serialization;
 
 namespace DragaliaAPI.Integration.Test.Features.Web.Savefile;
 
@@ -29,5 +32,29 @@ public class SavefileExportTests : WebTestFixture
 
         string content = await resp.Content.ReadAsStringAsync();
         content.Should().StartWith("{");
+    }
+
+    [Fact]
+    public async Task Export_DoesNotExportCustomAbilityCrests()
+    {
+        AbilityCrestId customCrest = (AbilityCrestId)40050159;
+
+        this.AddTokenCookie();
+
+        await this.AddToDatabase(
+            new DbAbilityCrest() { ViewerId = this.ViewerId, AbilityCrestId = customCrest }
+        );
+
+        HttpResponseMessage resp = await this.Client.GetAsync("/api/savefile/export");
+
+        DragaliaResponse<LoadIndexResponse>? deserialized = await resp.Content.ReadFromJsonAsync<
+            DragaliaResponse<LoadIndexResponse>
+        >(ApiJsonOptions.Instance);
+
+        deserialized.Should().NotBeNull();
+
+        deserialized!
+            .Data.AbilityCrestList.Should()
+            .NotContain(x => x.AbilityCrestId == customCrest);
     }
 }
