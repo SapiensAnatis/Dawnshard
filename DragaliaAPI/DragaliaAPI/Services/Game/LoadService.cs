@@ -120,10 +120,32 @@ public class LoadService(
 
     public LoadIndexResponse SanitizeIndexData(LoadIndexResponse original)
     {
+        AbilityCrestId maxVanilllaId = (AbilityCrestId)50000000;
+
         // Remove custom wyrmprints
         original.AbilityCrestList = original
-            .AbilityCrestList.Where(x => (int)x.AbilityCrestId < 50000000)
+            .AbilityCrestList.Where(x => x.AbilityCrestId < maxVanilllaId)
             .ToList();
+
+        foreach (
+            PartySettingList partySettingList in original.PartyList.SelectMany(x =>
+                x.PartySettingList
+            )
+        )
+        {
+            if (partySettingList.EquipCrestSlotType1CrestId1 >= maxVanilllaId)
+            {
+                partySettingList.EquipCrestSlotType1CrestId1 = 0;
+            }
+            if (partySettingList.EquipCrestSlotType1CrestId2 >= maxVanilllaId)
+            {
+                partySettingList.EquipCrestSlotType1CrestId2 = 0;
+            }
+            if (partySettingList.EquipCrestSlotType1CrestId3 >= maxVanilllaId)
+            {
+                partySettingList.EquipCrestSlotType1CrestId3 = 0;
+            }
+        }
 
         return original;
     }
