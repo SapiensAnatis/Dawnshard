@@ -49,7 +49,7 @@ public class DungeonRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>()
                 {
                     {
                         1,
@@ -222,10 +222,7 @@ public class DungeonRecordTest : TestFixture
                     },
                 },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
-                {
-                    { 1, Enumerable.Empty<AtgenEnemy>() },
-                },
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
             };
 
         string key = await this.StartDungeon(mockSession);
@@ -273,10 +270,7 @@ public class DungeonRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
-                {
-                    { 1, Enumerable.Empty<AtgenEnemy>() },
-                },
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
             };
 
         string key = await this.StartDungeon(mockSession);
@@ -335,10 +329,7 @@ public class DungeonRecordTest : TestFixture
                     },
                 },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
-                {
-                    { 1, Enumerable.Empty<AtgenEnemy>() },
-                },
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
             };
 
         string key = await this.StartDungeon(mockSession);
@@ -399,10 +390,7 @@ public class DungeonRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
-                {
-                    { 1, Enumerable.Empty<AtgenEnemy>() },
-                },
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
             };
 
         string key = await this.StartDungeon(mockSession);
@@ -454,10 +442,7 @@ public class DungeonRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
-                {
-                    { 1, Enumerable.Empty<AtgenEnemy>() },
-                },
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
             };
 
         string key = await this.StartDungeon(mockSession);
@@ -501,10 +486,7 @@ public class DungeonRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(exQuestId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
-                {
-                    { 1, Enumerable.Empty<AtgenEnemy>() },
-                },
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
             };
 
         string key = await this.StartDungeon(mockSession);
@@ -553,10 +535,7 @@ public class DungeonRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
-                {
-                    { 1, Enumerable.Empty<AtgenEnemy>() },
-                },
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
             };
 
         string key = await this.StartDungeon(mockSession);
@@ -608,10 +587,7 @@ public class DungeonRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
-                {
-                    { 1, Enumerable.Empty<AtgenEnemy>() },
-                },
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
             };
 
         string key = await this.StartDungeon(mockSession);
@@ -669,10 +645,7 @@ public class DungeonRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
-                {
-                    { 1, Enumerable.Empty<AtgenEnemy>() },
-                },
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
             };
 
         string key = await this.StartDungeon(mockSession);
@@ -718,10 +691,7 @@ public class DungeonRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
-                {
-                    { 1, Enumerable.Empty<AtgenEnemy>() },
-                },
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
             };
 
         string key = await this.StartDungeon(mockSession);
@@ -780,7 +750,7 @@ public class DungeonRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>()
                 {
                     {
                         1,
@@ -859,10 +829,7 @@ public class DungeonRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
-                {
-                    { 1, Enumerable.Empty<AtgenEnemy>() },
-                },
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
             };
 
         string key = await this.StartDungeon(mockSession);
@@ -983,7 +950,7 @@ public class DungeonRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>(),
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>(),
             };
 
         string key = await this.StartDungeon(mockSession);
@@ -1038,7 +1005,7 @@ public class DungeonRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>(),
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>(),
             };
 
         string key = await this.StartDungeon(mockSession);
@@ -1090,7 +1057,7 @@ public class DungeonRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>(),
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>(),
             }
         );
 
@@ -1141,7 +1108,7 @@ public class DungeonRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>(),
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>(),
             }
         );
 
@@ -1177,7 +1144,7 @@ public class DungeonRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>(),
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>(),
             }
         );
 
@@ -1226,7 +1193,7 @@ public class DungeonRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>(),
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>(),
             }
         );
 
@@ -1279,6 +1246,185 @@ public class DungeonRecordTest : TestFixture
         presentResponse
             .PresentList.Should()
             .Contain(x => x.MessageId == PresentMessage.SocialReward && x.MessageParamValue1 == 2);
+    }
+
+    [Fact]
+    public async Task Record_DragonEssencesAvailable_GrantsEssences()
+    {
+        // Ch. 5 / 4-3 Dark Terminus (Hard)
+        int questId = 100050209;
+        int existingEssenceQuantity = this
+            .ApiContext.PlayerMaterials.First(x => x.MaterialId == Materials.ChthoniussEssence)
+            .Quantity;
+
+        await this.AddToDatabase(new DbQuest() { QuestId = questId, DailyPlayCount = 0 });
+
+        string dungeonKey = await this.StartDungeon(
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>(),
+            }
+        );
+
+        DungeonRecordRecordRequest request =
+            new()
+            {
+                DungeonKey = dungeonKey,
+                PlayRecord = new PlayRecord
+                {
+                    Time = 10,
+                    TreasureRecord = new List<AtgenTreasureRecord>()
+                    {
+                        new() { AreaIdx = 1, Enemy = [] },
+                    },
+                    LiveUnitNoList = new List<int>(),
+                    DamageRecord = [],
+                    DragonDamageRecord = [],
+                    BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                },
+            };
+
+        DungeonRecordRecordResponse response = (
+            await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
+        ).Data;
+
+        response.UpdateDataList.MaterialList.Should().NotBeNull();
+        response
+            .UpdateDataList.MaterialList.Should()
+            .Contain(x => x.MaterialId == Materials.ChthoniussEssence)
+            .Which.Quantity.Should()
+            .Be(existingEssenceQuantity + 1);
+    }
+
+    [Fact]
+    public async Task Record_DragonEssencesNotAvailable_StopsGivingEssence()
+    {
+        // Ch. 5 / 4-3 Dark Terminus (Hard)
+        int questId = 100050209;
+        int existingEssenceQuantity = this
+            .ApiContext.PlayerMaterials.First(x => x.MaterialId == Materials.ChthoniussEssence)
+            .Quantity;
+
+        await this.AddToDatabase(
+            new DbQuest()
+            {
+                QuestId = questId,
+                DailyPlayCount = 2,
+                LastDailyResetTime = DateTimeOffset.UtcNow,
+            }
+        );
+
+        string dungeonKey = await this.StartDungeon(
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>(),
+            }
+        );
+
+        DungeonRecordRecordRequest request =
+            new()
+            {
+                DungeonKey = dungeonKey,
+                PlayRecord = new PlayRecord
+                {
+                    Time = 10,
+                    TreasureRecord = new List<AtgenTreasureRecord>()
+                    {
+                        new() { AreaIdx = 1, Enemy = [] },
+                    },
+                    LiveUnitNoList = new List<int>(),
+                    DamageRecord = [],
+                    DragonDamageRecord = [],
+                    BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                },
+            };
+
+        DungeonRecordRecordResponse response = (
+            await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
+        ).Data;
+
+        response.UpdateDataList.MaterialList.Should().NotBeNull();
+        response
+            .UpdateDataList.MaterialList.Should()
+            .Contain(x => x.MaterialId == Materials.ChthoniussEssence)
+            .Which.Quantity.Should()
+            .Be(existingEssenceQuantity + 1);
+
+        request.DungeonKey = await this.StartDungeon(
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>(),
+            }
+        );
+
+        DungeonRecordRecordResponse secondResponse = (
+            await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
+        ).Data;
+
+        secondResponse.UpdateDataList.MaterialList.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task Record_DragonEssencesEarnedBeforeReset_ResetsAndGrantsEssence()
+    {
+        // Ch. 5 / 4-3 Dark Terminus (Hard)
+        int questId = 100050209;
+        int existingEssenceQuantity = this
+            .ApiContext.PlayerMaterials.First(x => x.MaterialId == Materials.ChthoniussEssence)
+            .Quantity;
+
+        await this.AddToDatabase(
+            new DbQuest()
+            {
+                QuestId = questId,
+                DailyPlayCount = 3,
+                LastDailyResetTime = DateTimeOffset.UtcNow.AddDays(-2),
+            }
+        );
+
+        string dungeonKey = await this.StartDungeon(
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>(),
+            }
+        );
+
+        DungeonRecordRecordRequest request =
+            new()
+            {
+                DungeonKey = dungeonKey,
+                PlayRecord = new PlayRecord
+                {
+                    Time = 10,
+                    TreasureRecord = new List<AtgenTreasureRecord>()
+                    {
+                        new() { AreaIdx = 1, Enemy = [] },
+                    },
+                    LiveUnitNoList = new List<int>(),
+                    DamageRecord = [],
+                    DragonDamageRecord = [],
+                    BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                },
+            };
+
+        DungeonRecordRecordResponse response = (
+            await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
+        ).Data;
+
+        response.UpdateDataList.MaterialList.Should().NotBeNull();
+        response
+            .UpdateDataList.MaterialList.Should()
+            .Contain(x => x.MaterialId == Materials.ChthoniussEssence)
+            .Which.Quantity.Should()
+            .Be(existingEssenceQuantity + 1);
     }
 
     private async Task<string> StartDungeon(DungeonSession session)

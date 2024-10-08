@@ -1,4 +1,5 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.Presents;
@@ -23,6 +24,16 @@ public record Present(
     int EntityLimitBreakCount = 0
 )
 {
+    public Present(PresentMessage messageId, Entity entity)
+        : this(
+            messageId,
+            entity.Type,
+            entity.Id,
+            entity.Quantity,
+            entity.BuildupCount ?? 0,
+            entity.LimitBreakCount ?? 0
+        ) { }
+
     public DateTimeOffset CreateTime { get; } = DateTimeOffset.UtcNow;
 
     public TimeSpan? ExpiryTime { get; init; }

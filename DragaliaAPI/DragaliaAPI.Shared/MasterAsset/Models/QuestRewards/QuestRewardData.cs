@@ -39,7 +39,8 @@ public record QuestRewardData(
     int FirstClearSetEntityQuantity4,
     EntityTypes FirstClearSetEntityType5,
     int FirstClearSetEntityId5,
-    int FirstClearSetEntityQuantity5
+    int FirstClearSetEntityQuantity5,
+    Materials DropLimitBreakMaterialId
 )
 {
     [IgnoreMember]

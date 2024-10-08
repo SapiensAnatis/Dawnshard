@@ -211,7 +211,7 @@ public class DungeonSkipController(
                 PlayCount = playCount,
             };
 
-        Dictionary<int, IEnumerable<AtgenEnemy>> enemyList = new(questData.AreaInfo.Count);
+        Dictionary<int, IList<AtgenEnemy>> enemyList = new(questData.AreaInfo.Count);
 
         for (int areaIndex = 0; areaIndex < questData.AreaInfo.Count; areaIndex++)
         {

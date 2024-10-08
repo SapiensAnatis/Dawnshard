@@ -9473,9 +9473,6 @@ public partial class OddsInfo
     [Key("drop_obj")]
     public IEnumerable<AtgenDropObj> DropObj { get; set; } = [];
 
-    [Key("enemy")]
-    public IEnumerable<AtgenEnemy> Enemy { get; set; } = [];
-
     [Key("grade")]
     public IEnumerable<AtgenGrade> Grade { get; set; } = [];
 
@@ -9483,7 +9480,7 @@ public partial class OddsInfo
         int areaIndex,
         int reactionObjCount,
         IEnumerable<AtgenDropObj> dropObj,
-        IEnumerable<AtgenEnemy> enemy,
+        IList<AtgenEnemy> enemy,
         IEnumerable<AtgenGrade> grade
     )
     {
