@@ -18,7 +18,7 @@ public class DungeonSession
 
     public DateTimeOffset StartTime { get; init; }
 
-    public Dictionary<int, IEnumerable<AtgenEnemy>> EnemyList { get; set; } = new();
+    public Dictionary<int, IList<AtgenEnemy>> EnemyList { get; set; } = new();
 
     public int PlayCount { get; init; } = 1;
 

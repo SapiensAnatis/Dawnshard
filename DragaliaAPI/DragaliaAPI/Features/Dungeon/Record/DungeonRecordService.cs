@@ -68,12 +68,16 @@ public class DungeonRecordService(
         ingameResultData.RewardRecord.MissionsClearSet = missionStatus.MissionsClearSet;
         ingameResultData.RewardRecord.MissionComplete = missionStatus.MissionCompleteSet;
 
+        IList<AtgenDropAll> essenceDrops =
+            await dungeonRecordRewardService.ProcessDraconicEssenceDrops(session);
+
         (IEnumerable<AtgenDropAll> dropList, int manaDrop, int coinDrop) =
             await dungeonRecordRewardService.ProcessEnemyDrops(playRecord, session);
 
         ingameResultData.RewardRecord.TakeCoin = coinDrop;
         ingameResultData.GrowRecord.TakeMana = manaDrop;
         ingameResultData.RewardRecord.DropAll.AddRange(dropList);
+        ingameResultData.RewardRecord.DropAll.AddRange(essenceDrops);
 
         (
             IEnumerable<AtgenScoreMissionSuccessList> scoreMissionSuccessList,

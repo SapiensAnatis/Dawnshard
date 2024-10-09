@@ -19,7 +19,7 @@ public class QuestEnemyService : IQuestEnemyService
         this.logger = logger;
     }
 
-    public IEnumerable<AtgenEnemy> BuildQuestEnemyList(int questId, int areaNum)
+    public IList<AtgenEnemy> BuildQuestEnemyList(int questId, int areaNum)
     {
         AtgenEnemy[] enemyList = this.GetEnemyList(questId, areaNum);
 
@@ -34,7 +34,7 @@ public class QuestEnemyService : IQuestEnemyService
             return enemyList;
         }
 
-        int areaCount = MasterAsset.QuestData[questId].AreaInfo.Count();
+        int areaCount = MasterAsset.QuestData[questId].AreaInfo.Count;
         int totalQuantity = (int)Math.Round(questDropInfo.Drops.Sum(x => x.Quantity) / areaCount);
 
         int totalRupies = AddVariance(questDropInfo.Rupies) / areaCount;
@@ -105,7 +105,7 @@ public class QuestEnemyService : IQuestEnemyService
     }
 
     // Mercurial Gauntlet
-    public IEnumerable<AtgenEnemy> BuildQuestWallEnemyList(int wallId, int wallLevel)
+    public IList<AtgenEnemy> BuildQuestWallEnemyList(int wallId, int wallLevel)
     {
         List<AtgenEnemy> enemyList = GetWallEnemyList(wallId, wallLevel).ToList();
         // should handle enemy drops but eh

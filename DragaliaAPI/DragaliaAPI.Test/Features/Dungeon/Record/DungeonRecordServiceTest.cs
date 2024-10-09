@@ -186,6 +186,8 @@ public class DungeonRecordServiceTest
                     eventDrops
                 )
             );
+        this.mockDungeonRewardService.Setup(x => x.ProcessDraconicEssenceDrops(session))
+            .ReturnsAsync([]);
 
         this.mockQuestService.Setup(x => x.GetQuestStamina(lSurtrSoloId, StaminaType.Single))
             .ReturnsAsync(40);

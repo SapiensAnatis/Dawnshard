@@ -129,7 +129,7 @@ public class DungeonRecordRewardServiceTest
             {
                 QuestData = null!,
                 Party = null!,
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
+                EnemyList = new Dictionary<int, IList<AtgenEnemy>>()
                 {
                     {
                         0,

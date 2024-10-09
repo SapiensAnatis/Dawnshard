@@ -272,6 +272,38 @@ public class DungeonSkipTest : TestFixture
     }
 
     [Fact]
+    public async Task DungeonSkipStart_RewardsCorrectDragonEssences()
+    {
+        // Ch. 5 / 4-3 Dark Terminus (Hard)
+        int questId = 100050209;
+        int existingEssenceQuantity = this
+            .ApiContext.PlayerMaterials.First(x => x.MaterialId == Materials.ChthoniussEssence)
+            .Quantity;
+
+        await this.AddToDatabase(new DbQuest() { QuestId = questId, DailyPlayCount = 0 });
+
+        DungeonSkipStartResponse response = (
+            await this.Client.PostMsgpack<DungeonSkipStartResponse>(
+                $"{Endpoint}/start",
+                new DungeonSkipStartRequest()
+                {
+                    PartyNo = 1,
+                    PlayCount = 4,
+                    SupportViewerId = 1000,
+                    QuestId = questId,
+                }
+            )
+        ).Data;
+
+        response.UpdateDataList.MaterialList.Should().NotBeNull();
+        response
+            .UpdateDataList.MaterialList.Should()
+            .Contain(x => x.MaterialId == Materials.ChthoniussEssence)
+            .Which.Quantity.Should()
+            .Be(existingEssenceQuantity + 3);
+    }
+
+    [Fact]
     public async Task DungeonSkipStart_CompletesDailyMissions()
     {
         int questId = 100010201; // Save the Paladyn (Hard)
