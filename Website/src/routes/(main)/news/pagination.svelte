@@ -8,22 +8,21 @@
   export let currentPage: number;
   export let numPages: number;
 
-  $: previousPagePath = $page.url.pathname.replace(
-    currentPage.toString(),
-    (currentPage - 1).toString()
-  );
-  $: nextPagePath = $page.url.pathname.replace(
-    currentPage.toString(),
-    (currentPage + 1).toString()
-  );
+  const getPagePath = (pageNo: number) => {
+    const params = new URLSearchParams($page.url.searchParams);
+    params.set('page', pageNo.toString());
 
-  const scrollToTop = () => window.scrollTo(0, 0);
+    return `?${params}`;
+  };
+
+  $: previousPagePath = getPagePath(currentPage - 1);
+  $: nextPagePath = getPagePath(currentPage + 1);
 </script>
 
 <div class="flex flex-col">
   <div class="grid w-[20rem] grid-cols-5 items-center gap-3 self-center">
     {#if currentPage > 1}
-      <Button variant="ghost" href={previousPagePath} class="col-span-2" on:click={scrollToTop}>
+      <Button variant="ghost" href={previousPagePath} class="col-span-2">
         <ChevronLeft size="16" class="mr-2" />
         Previous
       </Button>
@@ -34,7 +33,7 @@
       {currentPage} / {numPages}
     </p>
     {#if currentPage < numPages}
-      <Button variant="ghost" href={nextPagePath} class="col-span-2" on:click={scrollToTop}>
+      <Button variant="ghost" href={nextPagePath} class="col-span-2">
         Next
         <ChevronRight size="16" class="ml-2" />
       </Button>

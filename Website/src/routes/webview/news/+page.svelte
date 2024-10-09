@@ -8,17 +8,17 @@
   import GitHub from '$main/(home)/icons/github.svelte';
   import Patreon from '$main/(home)/icons/patreon.svelte';
   import NewsItem from '$main/news/item.svelte';
-  import { lastReadKey, pageSize } from '$main/news/news.ts';
+  import { getPageNoFromParams, lastReadKey, pageSize } from '$main/news/news.ts';
   import NewsPagination from '$main/news/pagination.svelte';
 
-  import IconButton from '../iconButton.svelte';
   import type { PageData } from './$types';
+  import IconButton from './iconButton.svelte';
 
   let lastRead: Date;
 
   export let data: PageData;
 
-  $: currentPage = Number.parseInt($page.params.pageNo) || 1;
+  $: currentPage = getPageNoFromParams($page.url.searchParams);
 
   onMount(() => {
     // Required for showing the Mercurial Gauntlet rewards page, which unconditionally routes to

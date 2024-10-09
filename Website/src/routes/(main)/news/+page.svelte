@@ -4,18 +4,18 @@
   import { navigating, page } from '$app/stores';
   import Page from '$lib/components/page.svelte';
 
-  import NewsItem from '../item.svelte';
-  import { lastReadKey, pageSize } from '../news.ts';
-  import NewsPagination from '../pagination.svelte';
-  import NewsSkeleton from '../skeleton.svelte';
   import type { PageData } from './$types';
+  import NewsItem from './item.svelte';
+  import { getPageNoFromParams, lastReadKey, pageSize } from './news.ts';
+  import NewsPagination from './pagination.svelte';
+  import NewsSkeleton from './skeleton.svelte';
 
   export let data: PageData;
 
   let lastRead: Date;
 
   $: loading = $navigating?.to && $navigating.to.url.pathname.startsWith('/news');
-  $: currentPage = Number.parseInt($page.params.pageNo) || 1;
+  $: currentPage = getPageNoFromParams($page.url.searchParams);
 
   onMount(() => {
     const lastReadStorageItem = localStorage.getItem(lastReadKey);

@@ -197,7 +197,6 @@ public static class ServiceConfiguration
             .Configure<ResourceVersionOptions>(
                 config.GetRequiredSection(nameof(ResourceVersionOptions))
             )
-            .Configure<WebOptions>(config.GetRequiredSection(nameof(WebOptions)))
             .Configure<EventOptions>(config.GetRequiredSection(nameof(EventOptions)))
             .Configure<MaintenanceOptions>(config.GetRequiredSection(nameof(MaintenanceOptions)));
 

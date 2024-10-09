@@ -10,7 +10,11 @@ public record NewsItem
 
     public DateTimeOffset Date { get; init; }
 
-    public string? HeaderImageSrc { get; init; }
+    public string? HeaderImagePath { get; init; }
 
-    public string? BodyImageSrc { get; init; }
+    public string? HeaderImageAltText { get; init; }
+
+    public string? BodyImagePath { get; init; }
+
+    public string? BodyImageAltText { get; init; }
 }

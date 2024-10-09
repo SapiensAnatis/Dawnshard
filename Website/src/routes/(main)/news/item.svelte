@@ -2,22 +2,28 @@
   import { Image } from '@unpic/svelte';
   import { Newspaper } from 'lucide-svelte';
 
-  import type { NewsItem } from '$main/news/news.ts';
   import { Card, CardContent } from '$shadcn/components/ui/card/index.js';
 
   import Header from './header.svelte';
+  import { getImageSrc, type NewsItem } from './news.ts';
 
   export let item: NewsItem;
   export let lastRead: Date;
   export let description: boolean = true;
+
+  $: headerImageSrc = getImageSrc(item.headerImagePath);
 </script>
 
 <Card class="flex flex-col overflow-hidden lg:flex-row">
   <div class="flex shrink-0 grow-0 basis-52 items-center justify-center">
-    {#if item.headerImageSrc}
-      <Image src={item.headerImageSrc} class="h-[208px] lg:h-full" layout="fullWidth" />
+    {#if headerImageSrc}
+      <Image
+        src={headerImageSrc}
+        class="h-[208px] lg:h-full"
+        layout="fullWidth"
+        alt={item.headerImageAltText} />
     {:else}
-      <Newspaper class="size-[12rem] p-4" strokeWidth={1} />
+      <Newspaper class="size-[12rem] p-4" strokeWidth={1} aria-label="Newspaper vector icon" />
     {/if}
   </div>
   <div>
