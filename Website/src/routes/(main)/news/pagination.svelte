@@ -23,7 +23,7 @@
   <div class="grid w-[20rem] grid-cols-5 items-center gap-3 self-center">
     {#if currentPage > 1}
       <Button variant="ghost" href={previousPagePath} class="col-span-2">
-        <ChevronLeft size="16" class="mr-2" />
+        <ChevronLeft size="16" class="mr-2" aria-hidden="true" />
         Previous
       </Button>
     {:else}
@@ -35,7 +35,7 @@
     {#if currentPage < numPages}
       <Button variant="ghost" href={nextPagePath} class="col-span-2">
         Next
-        <ChevronRight size="16" class="ml-2" />
+        <ChevronRight size="16" class="ml-2" aria-hidden="true" />
       </Button>
     {:else}
       <span class="grid-cols-2" aria-hidden="true" />
