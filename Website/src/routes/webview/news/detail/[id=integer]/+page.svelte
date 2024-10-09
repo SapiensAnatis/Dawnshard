@@ -3,19 +3,23 @@
   import ChevronLeft from 'lucide-svelte/icons/chevron-left';
 
   import { afterNavigate } from '$app/navigation';
+  import { getImageSrc } from '$main/news/news.ts';
   import { Button } from '$shadcn/components/ui/button';
 
   import type { PageData } from './$types';
 
-  let previousPage: string = '/webview/news/1';
+  let previousPage: string = '/webview/news';
 
   afterNavigate(({ from }) => {
-    previousPage = from?.url.pathname || previousPage;
+    previousPage = from ? from.url.pathname + from.url.search : previousPage;
   });
 
   export let data: PageData;
 
   let item = data.newsItem;
+
+  $: headerImageSrc = getImageSrc(item.headerImagePath);
+  $: bodyImageSrc = getImageSrc(item.bodyImagePath);
 </script>
 
 <div class="p-4">
@@ -24,9 +28,14 @@
     Back to news
   </Button>
   <div class="mt-4">
-    {#if item.headerImageSrc}
+    {#if headerImageSrc}
       <div class="mt-4 flex flex-row items-center justify-center">
-        <Image class="rounded-md" src={item.headerImageSrc} layout="fullWidth" height={200} />
+        <Image
+          class="rounded-md"
+          src={headerImageSrc}
+          layout="fullWidth"
+          height={200}
+          alt={item.headerImageAltText} />
       </div>
       <br />
     {/if}
@@ -45,8 +54,8 @@
       <!-- eslint-disable-next-line svelte/no-at-html-tags -->
       <p>{@html item.description}</p>
       <br />
-      {#if item.bodyImageSrc}
-        <Image src={item.bodyImageSrc} layout="fullWidth" class="w-full" />
+      {#if bodyImageSrc}
+        <Image src={bodyImageSrc} layout="fullWidth" class="w-full" alt={item.bodyImageAltText} />
       {/if}
     </div>
   </div>

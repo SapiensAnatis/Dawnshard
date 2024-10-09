@@ -23,7 +23,7 @@ export const routeGroups: RouteGroup[] = [
     title: 'Information',
     routes: [
       { title: 'Home', href: '/', icon: House },
-      { title: 'News', href: '/news/1', icon: Newspaper }
+      { title: 'News', href: '/news', icon: Newspaper }
     ]
   },
 

@@ -1,11 +1,10 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Features.Web.News;
 
-public class NewsService(ApiContext apiContext, IOptions<WebOptions> webOptions)
+internal sealed class NewsService(ApiContext apiContext)
 {
     public Task<int> GetNewsItemCountAsync(CancellationToken cancellationToken) =>
         apiContext.NewsItems.CountAsync(cancellationToken);
@@ -16,37 +15,34 @@ public class NewsService(ApiContext apiContext, IOptions<WebOptions> webOptions)
         CancellationToken cancellationToken
     )
     {
-        IQueryable<DbNewsItem> query = apiContext
+        IQueryable<NewsItem> query = apiContext
             .NewsItems.Where(x => !x.Hidden)
+            .ProjectToNewsItem()
             .OrderByDescending(x => x.Date)
             .Skip(offset)
             .Take(pageSize);
 
-        List<DbNewsItem> list = await query.ToListAsync(cancellationToken);
-
-        return list.Select(MapNewsItem).ToList();
+        return await query.ToListAsync(cancellationToken);
     }
 
     public async Task<NewsItem?> GetNewsItem(int id)
     {
-        DbNewsItem? item = await apiContext.NewsItems.FirstOrDefaultAsync(x => x.Id == id);
-
-        if (item is null)
-        {
-            return null;
-        }
-
-        return MapNewsItem(item);
+        return await apiContext.NewsItems.ProjectToNewsItem().FirstOrDefaultAsync(x => x.Id == id);
     }
+}
 
-    private NewsItem MapNewsItem(DbNewsItem x) =>
-        new()
+internal static class NewsMappingExtensions
+{
+    public static IQueryable<NewsItem> ProjectToNewsItem(this IQueryable<DbNewsItem> newsItems) =>
+        newsItems.Select(x => new NewsItem()
         {
             Id = x.Id,
             Headline = x.Headline,
             Description = x.Description,
             Date = x.Date,
-            HeaderImageSrc = webOptions.Value.GetImageSrc(x.HeaderImagePath),
-            BodyImageSrc = webOptions.Value.GetImageSrc(x.BodyImagePath),
-        };
+            HeaderImagePath = x.HeaderImagePath,
+            HeaderImageAltText = x.HeaderImageAltText,
+            BodyImagePath = x.BodyImagePath,
+            BodyImageAltText = x.BodyImageAltText,
+        });
 }

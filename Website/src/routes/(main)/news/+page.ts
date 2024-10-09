@@ -1,8 +1,8 @@
-import { makeRequestUrl, newsSchema } from '../news.ts';
 import type { PageLoad } from './$types';
+import { getPageNoFromParams, makeRequestUrl, newsSchema } from './news.ts';
 
-export const load: PageLoad = async ({ fetch, params, url }) => {
-  const pageNo = Number.parseInt(params.pageNo) || 1;
+export const load: PageLoad = async ({ fetch, url }) => {
+  const pageNo = getPageNoFromParams(url.searchParams);
   const requestUrl = makeRequestUrl(pageNo, url.origin);
 
   const response = await fetch(requestUrl);
