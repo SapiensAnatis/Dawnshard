@@ -36,7 +36,7 @@ test('displays correctly on mobile', async ({ page }) => {
 });
 
 test('change page', async ({ page }) => {
-  await page.goto('/news/1');
+  await page.goto('/news');
 
   await page.getByRole('link', { name: 'Next' }).click();
 
@@ -49,17 +49,50 @@ test('change page', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Game updated!' })).toBeVisible();
 });
 
-test('displays correctly for webview', async ({ page }) => {
-  await page.setViewportSize(devices['iPhone 13'].viewport);
+test.describe('webview', () => {
+  test('displays correctly', async ({ page }) => {
+    await page.setViewportSize(devices['iPhone 13'].viewport);
 
-  await page.goto('/webview/news/1');
+    await page.goto('/webview/news');
 
-  await expect(page.getByRole('heading', { name: 'Welcome to Dawnshard' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Welcome to Dawnshard' })).toBeVisible();
 
-  await page.waitForFunction(() => {
-    const images = Array.from(document.querySelectorAll('img'));
-    return images.every((img) => img.complete);
+    await page.waitForFunction(() => {
+      const images = Array.from(document.querySelectorAll('img'));
+      return images.every((img) => img.complete);
+    });
+
+    await expect(page).toHaveScreenshot();
   });
 
-  await expect(page).toHaveScreenshot();
+  test('change page', async ({ page }) => {
+    await page.goto('/webview/news');
+
+    await page.getByRole('link', { name: 'Next' }).click();
+
+    await expect(page.getByRole('heading', { name: 'Paging works' })).toBeVisible();
+
+    await page.getByRole('link', { name: 'Previous' }).click();
+
+    await expect(page.getByRole('heading', { name: 'Game updated!' })).toBeVisible();
+  });
+
+  test('open details', async ({ page }) => {
+    await page.goto('/webview/news');
+
+    await expect(page.getByRole('heading', { name: 'Game updated!' })).toBeVisible();
+
+    await page.getByRole('link', { name: 'Game updated!' }).click();
+
+    await expect(page).toHaveURL(/.*webview\/news\/detail\/6/);
+
+    await expect(page.getByRole('heading', { name: 'Game updated!' })).toBeVisible();
+    await expect(page.getByText('We have done a very large update!')).toBeVisible();
+
+    await page.getByRole('link', { name: 'Back to news' }).click();
+
+    expect(page).toHaveURL(/.*webview\/news/);
+
+    await expect(page.getByRole('heading', { name: 'Really long story' })).toBeVisible();
+  });
 });

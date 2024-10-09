@@ -23,7 +23,7 @@
         layout="fullWidth"
         alt={item.headerImageAltText} />
     {:else}
-      <Newspaper class="size-[12rem] p-4" strokeWidth={1} />
+      <Newspaper class="size-[12rem] p-4" strokeWidth={1} aria-label="Newspaper vector icon" />
     {/if}
   </div>
   <div>

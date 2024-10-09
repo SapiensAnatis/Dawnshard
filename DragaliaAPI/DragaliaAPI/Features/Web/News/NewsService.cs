@@ -7,7 +7,7 @@ namespace DragaliaAPI.Features.Web.News;
 internal sealed class NewsService(ApiContext apiContext)
 {
     public Task<int> GetNewsItemCountAsync(CancellationToken cancellationToken) =>
-        apiContext.NewsItems.CountAsync(cancellationToken);
+        apiContext.NewsItems.CountAsync(x => !x.Hidden, cancellationToken);
 
     public async Task<IList<NewsItem>> GetNewsItemsAsync(
         int offset,
