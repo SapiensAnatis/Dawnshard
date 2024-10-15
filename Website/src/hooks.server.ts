@@ -1,9 +1,10 @@
-import type { Handle, HandleFetch } from '@sveltejs/kit';
+import type { Handle, HandleFetch, HandleServerError } from '@sveltejs/kit';
 
 import { env } from '$env/dynamic/private';
 import { PUBLIC_ENABLE_MSW } from '$env/static/public';
 import Cookies from '$lib/auth/cookies.ts';
 import getJwtMetadata from '$lib/auth/jwt.ts';
+import createLogger from '$lib/server/logger.ts';
 
 if (!env.DAWNSHARD_API_URL_SSR) {
   throw new Error('Failed to load environment variable DAWNSHARD_API_URL_SSR!');
@@ -23,12 +24,16 @@ if (PUBLIC_ENABLE_MSW === 'true') {
 }
 
 export const handleFetch: HandleFetch = ({ request, fetch, event }) => {
+  const logger = createLogger('handleFetch');
   const requestUrl = new URL(request.url);
 
   if (event.url.origin === requestUrl.origin && requestUrl.pathname.startsWith('/api')) {
     // Rewrite URL to internal
     const newUrl = request.url.replace(requestUrl.origin, internalApiUrl.origin);
-    console.log(`Rewriting request: from ${requestUrl.href} to ${newUrl}`);
+    logger.debug(
+      { oldUrl: requestUrl.href, newUrl },
+      'Rewriting request: from {oldUrl} to {newUrl}'
+    );
 
     // We need to explicitly add the JWT back in, because SvelteKit seems to refuse to forward cookies here; it's
     // possible it views the request as changing origins and no longer internal.
@@ -61,4 +66,9 @@ export const handle: Handle = ({ event, resolve }) => {
   }
 
   return resolve(event);
+};
+
+export const handleError: HandleServerError = ({ error, status, message }) => {
+  const logger = createLogger('handleError');
+  logger.error({ error, status, message }, 'Unhandled error occurred: {message}');
 };

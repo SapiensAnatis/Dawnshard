@@ -1,9 +1,11 @@
 import { type Cookies, redirect } from '@sveltejs/kit';
+import type Logger from 'bunyan';
 import { z } from 'zod';
 
 import { PUBLIC_BAAS_CLIENT_ID, PUBLIC_BAAS_URL, PUBLIC_ENABLE_MSW } from '$env/static/public';
 import CookieNames from '$lib/auth/cookies.ts';
 import getJwtMetadata from '$lib/auth/jwt.ts';
+import createLogger from '$lib/server/logger.ts';
 
 import type { PageServerLoad } from './$types';
 
@@ -19,7 +21,8 @@ const sdkTokenResponseSchema = z.object({
 });
 
 export const load: PageServerLoad = async ({ cookies, url, fetch }) => {
-  const idToken = await getBaasToken(cookies, url, fetch);
+  const logger = createLogger('oauth');
+  const idToken = await getBaasToken(cookies, url, fetch, logger);
 
   const jwtMetadata = getJwtMetadata(idToken);
   if (!jwtMetadata.valid) {
@@ -59,7 +62,8 @@ export const load: PageServerLoad = async ({ cookies, url, fetch }) => {
 const getBaasToken = async (
   cookies: Cookies,
   url: URL,
-  fetch: (url: URL, req: RequestInit) => Promise<Response>
+  fetch: (url: URL, req: RequestInit) => Promise<Response>,
+  logger: Logger
 ) => {
   const challengeString = cookies.get(CookieNames.ChallengeString);
 
@@ -85,6 +89,11 @@ const getBaasToken = async (
   });
 
   if (!sessionTokenResponse.ok) {
+    logger.error(
+      { status: sessionTokenResponse.status },
+      'Session token request failed with status {status}'
+    );
+
     throw new Error('Session token request failed');
   }
 
@@ -107,6 +116,11 @@ const getBaasToken = async (
   });
 
   if (!sdkTokenResponse.ok) {
+    logger.error(
+      { status: sdkTokenResponse.status },
+      'SDK token request failed with status {status}'
+    );
+
     throw new Error('SDK token request failed');
   }
 
