@@ -5,7 +5,6 @@ import { z } from 'zod';
 import { PUBLIC_BAAS_CLIENT_ID, PUBLIC_BAAS_URL, PUBLIC_ENABLE_MSW } from '$env/static/public';
 import CookieNames from '$lib/auth/cookies.ts';
 import getJwtMetadata from '$lib/auth/jwt.ts';
-import createLogger from '$lib/server/logger.ts';
 
 import type { PageServerLoad } from './$types';
 
@@ -20,8 +19,8 @@ const sdkTokenResponseSchema = z.object({
   idToken: z.string()
 });
 
-export const load: PageServerLoad = async ({ cookies, url, fetch }) => {
-  const logger = createLogger('oauth');
+export const load: PageServerLoad = async ({ cookies, locals, url, fetch }) => {
+  const { logger } = locals;
   const idToken = await getBaasToken(cookies, url, fetch, logger);
 
   const jwtMetadata = getJwtMetadata(idToken);
