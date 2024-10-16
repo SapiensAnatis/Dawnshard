@@ -6,7 +6,7 @@ import { env } from '$env/dynamic/private';
 const loggingStreams: Stream[] = [
   {
     stream: process.stdout,
-    level: 'error'
+    level: 'debug'
   },
   ...(env.SEQ_URL
     ? [
