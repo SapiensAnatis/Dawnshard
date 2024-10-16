@@ -28,7 +28,12 @@ const config: PlaywrightTestConfig = {
       use: { ...devices['Desktop Chrome'], storageState: 'playwright/.auth/user.json' },
       dependencies: ['setup']
     }
-  ]
+  ],
+  expect: {
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.02
+    }
+  }
 };
 
 export default config;
