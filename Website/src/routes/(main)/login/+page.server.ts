@@ -18,13 +18,21 @@ const getUrlSafeBase64Hash = async (input: string) => {
   return base64.replace('+', '-').replace('/', '_').replace('=', '');
 };
 
-export const load: PageServerLoad = async ({ cookies, url }) => {
+export const load: PageServerLoad = async ({ cookies, locals, url }) => {
+  const { logger } = locals;
+
   const redirectUri = new URL('oauth', url.origin);
 
   const originalPage = url.searchParams.get('originalPage') ?? '/';
 
   const challengeStringValue = getChallengeString();
+  const challengeStringHash = await getUrlSafeBase64Hash(challengeStringValue);
   cookies.set('challengeString', challengeStringValue, { path: '/' });
+
+  logger.debug(
+    { challengeStringValue, challengeStringHash },
+    'Generated challenge string {challengeStringValue} with hash {challengeStringHash}'
+  );
 
   const queryParams = new URLSearchParams({
     client_id: PUBLIC_BAAS_CLIENT_ID,
@@ -32,7 +40,7 @@ export const load: PageServerLoad = async ({ cookies, url }) => {
     response_type: 'session_token_code',
     scope: 'user user.birthday openid',
     language: 'en-US',
-    session_token_code_challenge: await getUrlSafeBase64Hash(challengeStringValue),
+    session_token_code_challenge: challengeStringHash,
     session_token_code_challenge_method: 'S256',
     state: JSON.stringify({ originalPage })
   });

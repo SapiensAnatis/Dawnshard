@@ -24,6 +24,6 @@ const logger = bunyan.createLogger({
   streams: loggingStreams
 });
 
-const createLogger = (sourceContext: string) => logger.child({ sourceContext });
+const createLogger = (options: object) => logger.child(options);
 
 export default createLogger;

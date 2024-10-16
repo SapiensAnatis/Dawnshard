@@ -3,6 +3,7 @@ export type JwtMetadata =
   | {
       valid: true;
       expiryTimestampMs: number;
+      subject: string;
       originalPayload: Record<string, unknown>;
     };
 
@@ -31,6 +32,11 @@ const getJwtMetadata = (jwt: string): JwtMetadata => {
     return { valid: false };
   }
 
+  const subject = payloadObject.sub;
+  if (!subject || typeof subject !== 'string') {
+    return { valid: false };
+  }
+
   const expDate = new Date(exp * 1000);
   if (!Number.isInteger(expDate.valueOf())) {
     return { valid: false };
@@ -38,6 +44,7 @@ const getJwtMetadata = (jwt: string): JwtMetadata => {
 
   return {
     valid: true,
+    subject: subject,
     expiryTimestampMs: exp * 1000,
     originalPayload: payloadObject
   };

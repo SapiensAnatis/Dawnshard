@@ -1,3 +1,5 @@
+import { randomUUID } from 'node:crypto';
+
 import type { Handle, HandleFetch, HandleServerError } from '@sveltejs/kit';
 
 import { env } from '$env/dynamic/private';
@@ -23,8 +25,8 @@ if (PUBLIC_ENABLE_MSW === 'true') {
   });
 }
 
-export const handleFetch: HandleFetch = ({ request, fetch, event }) => {
-  const logger = createLogger('handleFetch');
+export const handleFetch: HandleFetch = ({ request, event, fetch }) => {
+  const { logger } = event.locals;
   const requestUrl = new URL(request.url);
 
   if (event.url.origin === requestUrl.origin && requestUrl.pathname.startsWith('/api')) {
@@ -49,6 +51,11 @@ export const handleFetch: HandleFetch = ({ request, fetch, event }) => {
 };
 
 export const handle: Handle = ({ event, resolve }) => {
+  event.locals.logger = createLogger({
+    requestPath: new URL(event.request.url).pathname,
+    requestId: randomUUID()
+  });
+
   const idToken = event.cookies.get(Cookies.IdToken);
 
   if (!idToken) {
@@ -63,12 +70,13 @@ export const handle: Handle = ({ event, resolve }) => {
 
   if (!valid) {
     event.cookies.delete(Cookies.IdToken, { path: '/' });
+  } else {
+    event.locals.logger.fields['jwtSubject'] = jwtMetadata.subject;
   }
 
   return resolve(event);
 };
 
-export const handleError: HandleServerError = ({ error, status, message }) => {
-  const logger = createLogger('handleError');
-  logger.error({ error, status, message }, 'Unhandled error occurred: {message}');
+export const handleError: HandleServerError = ({ error, event, status, message }) => {
+  event.locals.logger.error({ error, status, message }, 'Unhandled error occurred: {message}');
 };
