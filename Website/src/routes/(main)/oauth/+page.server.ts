@@ -71,11 +71,20 @@ const getBaasToken = async (
     throw new Error('Failed to get challenge string');
   }
 
+  logger.debug({ challengeString }, 'Retrieved challenge string: {challengeString}');
+
   const sessionTokenCode = url.searchParams.get('session_token_code');
 
   if (!sessionTokenCode) {
     throw new Error('Failed to get session token code');
   }
+
+  logger.debug(
+    { stcMetadata: getJwtMetadata(sessionTokenCode) },
+    'Retrieved session token code with metadata {stcMetadata}'
+  );
+
+  logger.debug({ currentTimestamp: Date.now() }, 'Current timestamp: {currentTimestamp}');
 
   const sessionTokenCodeParams = new URLSearchParams({
     client_id: PUBLIC_BAAS_CLIENT_ID,
