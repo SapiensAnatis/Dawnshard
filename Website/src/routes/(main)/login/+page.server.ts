@@ -2,6 +2,7 @@ import { redirect } from '@sveltejs/kit';
 import { Buffer } from 'buffer';
 
 import { PUBLIC_BAAS_CLIENT_ID, PUBLIC_BAAS_URL } from '$env/static/public';
+import Cookies from '$lib/auth/cookies.ts';
 
 import type { PageServerLoad } from './$types';
 
@@ -25,9 +26,16 @@ export const load: PageServerLoad = async ({ cookies, locals, url }) => {
 
   const originalPage = url.searchParams.get('originalPage') ?? '/';
 
-  const challengeStringValue = getChallengeString();
+  // For reasons not fully understood, going back to /oauth can sometimes run this code.
+  // We don't want to overwrite the challenge string if we are about to send it to BaaS, because
+  // that will mean the hashes won't match.
+  let challengeStringValue = cookies.get(Cookies.ChallengeString);
+  if (!challengeStringValue) {
+    challengeStringValue = getChallengeString();
+    cookies.set(Cookies.ChallengeString, challengeStringValue, { path: '/' });
+  }
+
   const challengeStringHash = await getUrlSafeBase64Hash(challengeStringValue);
-  cookies.set('challengeString', challengeStringValue, { path: '/' });
 
   logger.debug(
     { challengeStringValue, challengeStringHash },
