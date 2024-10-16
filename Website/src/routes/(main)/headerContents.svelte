@@ -33,5 +33,7 @@
 {#if hasValidJwt}
   <Button href="/logout" variant="secondary" data-sveltekit-reload>Log out</Button>
 {:else}
-  <Button href={`/login?originalPage=${$page.url.pathname}`}>Login</Button>
+  <Button href={`/login?originalPage=${$page.url.pathname}`} data-sveltekit-preload-data="off">
+    Login
+  </Button>
 {/if}
