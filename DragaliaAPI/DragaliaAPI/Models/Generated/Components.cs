@@ -2566,12 +2566,6 @@ public partial class AtgenDropAll
     [Key("quantity")]
     public int Quantity { get; set; }
 
-    [Key("place")]
-    public int Place { get; set; }
-
-    [Key("factor")]
-    public float Factor { get; set; }
-
     public AtgenDropAll(int id, EntityTypes type, int quantity, int place, float factor)
     {
         this.Id = id;

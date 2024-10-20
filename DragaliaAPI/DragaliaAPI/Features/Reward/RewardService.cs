@@ -105,8 +105,17 @@ public class RewardService(
         switch (grantReturn.Result)
         {
             case RewardGrantResult.Added:
-                this.newEntities.Add(entity);
+            {
+                if (entity.Type != EntityTypes.Material)
+                {
+                    // Material exception stops every material showing as 'New!' in quest drops.
+                    // I think new_get_entity_list is intended for entities that have never been seen before.
+                    // TODO: We probably want a different RewardGrantResult so that materials that were unowned can show this.
+                    this.newEntities.Add(entity);
+                }
+
                 break;
+            }
             case RewardGrantResult.Converted:
             {
                 if (grantReturn.ConvertedEntity is null)
@@ -125,17 +134,25 @@ public class RewardService(
                 break;
             }
             case RewardGrantResult.Discarded:
+            {
                 this.discardedEntities.Add(entity);
                 break;
+            }
             case RewardGrantResult.Limit:
+            {
                 break;
+            }
             case RewardGrantResult.FailError:
+            {
                 logger.LogError("Granting of entity {@entity} failed.", entity);
                 throw new InvalidOperationException("Failed to grant reward");
+            }
             default:
+            {
                 throw new InvalidOperationException(
                     $"RewardGrantResult {grantReturn.Result} out of range"
                 );
+            }
         }
     }
 
