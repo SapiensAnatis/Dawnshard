@@ -27,13 +27,13 @@
         <div>
           <CharaIcon chara={unit.chara} />
         </div>
-        <span class={spacerClass} />
+        <span class={spacerClass}></span>
         <div class="flex items-start">
           <DragonIcon dragon={unit.dragon} />
           <WeaponIcon weapon={unit.weapon} />
           <TalismanIcon talisman={unit.talisman} />
         </div>
-        <span class={spacerClass} />
+        <span class={spacerClass}></span>
         <div class="flex items-start">
           {#each unit.crests.slice(0, 3) as abilityCrest}
             <AbilityCrestIcon {abilityCrest} rarity={5} />
@@ -47,7 +47,7 @@
             <AbilityCrestIcon abilityCrest={sindomAbilityCrest} rarity={6} />
           {/each}
         </div>
-        <span class={spacerClass} />
+        <span class={spacerClass}></span>
         {#if unit.position === 1 || coop}
           <div class="flex items-start">
             {#each unit.sharedSkills as skill}

@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { ComponentType } from 'svelte';
+  import type { Component } from 'svelte';
 
   import { Button } from '$shadcn/components/ui/button/index.js';
 
   export let href: string;
-  export let icon: ComponentType;
+  export let icon: Component;
 </script>
 
 <Button variant="secondary" {href}>

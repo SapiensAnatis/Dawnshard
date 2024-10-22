@@ -19,7 +19,7 @@
 </script>
 
 <h1 class="scroll-m-20 text-2xl font-bold tracking-tight md:text-3xl">Dawnshard</h1>
-<div class="flex-grow" />
+<div class="flex-grow"></div>
 <Button on:click={toggleMode} variant="outline" size="icon" data-loaded={jsLoaded}>
   <Sun
     class="absolute size-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
