@@ -31,12 +31,14 @@
   const item = form.field();
   const quantity = form.field();
 
-  const types = $derived(widgetData.types
-    .map(({ type }) => ({
-      value: type,
-      label: $t(`entity.${formatTypeKey(type)}.label`)
-    }))
-    .sort((a, b) => a.label.localeCompare(b.label)));
+  const types = $derived(
+    widgetData.types
+      .map(({ type }) => ({
+        value: type,
+        label: $t(`entity.${formatTypeKey(type)}.label`)
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label))
+  );
 
   const availableItems = $derived.by(() => {
     if (!typeValue) {
@@ -57,7 +59,7 @@
       .sort((a, b) => a.label.localeCompare(b.label));
   });
 
-  const disableItem = $derived(availableItems.length > 0 ? undefined : "true")
+  const disableItem = $derived(availableItems.length > 0 ? undefined : 'true');
 
   const onSubmit = (evt: SubmitEvent) => {
     evt.preventDefault();
