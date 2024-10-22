@@ -88,8 +88,6 @@
   };
 </script>
 
-{@debug disableItem}
-
 <Card.Root>
   <Card.Header>
     <Card.Title>
