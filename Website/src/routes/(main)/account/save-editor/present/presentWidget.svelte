@@ -18,34 +18,32 @@
     type PresentWidgetData
   } from './presentTypes.ts';
 
-  export let widgetData: PresentWidgetData;
+  let { widgetData }: { widgetData: PresentWidgetData } = $props();
 
-  let disableQuantity = false;
+  let disableQuantity = $state(false);
 
-  let typeValue: EntityType | '';
-  let itemValue: number | '';
-  let quantityValue: number = 1;
+  let typeValue: EntityType | '' = $state('');
+  let itemValue: number | '' = $state('');
+  let quantityValue: number = $state(1);
 
   const form = createForm();
   const type = form.field();
   const item = form.field();
   const quantity = form.field();
 
-  $: types = widgetData.types
+  const types = $derived(widgetData.types
     .map(({ type }) => ({
       value: type,
       label: $t(`entity.${formatTypeKey(type)}.label`)
     }))
-    .sort((a, b) => a.label.localeCompare(b.label));
+    .sort((a, b) => a.label.localeCompare(b.label)));
 
-  $: availableItems = getAvailableItems(typeValue);
-
-  const getAvailableItems = (type: EntityType | '') => {
-    if (!type) {
+  const availableItems = $derived.by(() => {
+    if (!typeValue) {
       return [];
     }
 
-    const itemList = widgetData.availableItems[type];
+    const itemList = widgetData.availableItems[typeValue];
 
     if (!itemList) {
       return [];
@@ -57,9 +55,13 @@
         label: $t(`entity.${formatTypeKey(typeValue)}.item.${id}`)
       }))
       .sort((a, b) => a.label.localeCompare(b.label));
-  };
+  });
 
-  const onSubmit = () => {
+  const disableItem = $derived(availableItems.length > 0 ? undefined : "true")
+
+  const onSubmit = (evt: SubmitEvent) => {
+    evt.preventDefault();
+
     if (typeValue === '' || itemValue === '') return;
 
     const submission: PresentFormSubmission = {
@@ -84,6 +86,8 @@
   };
 </script>
 
+{@debug disableItem}
+
 <Card.Root>
   <Card.Header>
     <Card.Title>
@@ -95,7 +99,7 @@
   </Card.Header>
   <Card.Content>
     <p class="mb-5">Use this widget to add presents to your gift box.</p>
-    <form use:form on:submit|preventDefault={onSubmit} aria-labelledby="gift-box-title">
+    <form use:form onsubmit={onSubmit} aria-labelledby="gift-box-title">
       <div class="flex flex-row flex-wrap gap-4">
         <div class="labelled-input">
           <Label for="type">Type</Label>
@@ -121,6 +125,7 @@
             id="item"
             placeholder="Select an item"
             items={availableItems}
+            disabled={disableItem}
             field={item}
             required
             class="
