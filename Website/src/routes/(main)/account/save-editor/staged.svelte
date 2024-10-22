@@ -59,7 +59,7 @@
         <NotebookPen aria-hidden={true} size={25} />
         <h2 id="staged-changes-title" class="m-0 text-xl font-bold">Staged changes</h2>
         {#if $changesCount > 90}
-          <div class="flex-grow" />
+          <div class="flex-grow"></div>
           <p class="text-sm font-normal text-muted-foreground">{$changesCount} / 100</p>
         {/if}
       </div>

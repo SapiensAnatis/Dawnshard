@@ -27,7 +27,7 @@
         Previous
       </Button>
     {:else}
-      <span class="col-span-2" aria-hidden="true" />
+      <span class="col-span-2" aria-hidden="true"></span>
     {/if}
     <p class="col-span-1 text-center text-sm">
       {currentPage} / {numPages}
@@ -38,7 +38,7 @@
         <ChevronRight size="16" class="ml-2" aria-hidden="true" />
       </Button>
     {:else}
-      <span class="grid-cols-2" aria-hidden="true" />
+      <span class="grid-cols-2" aria-hidden="true"></span>
     {/if}
   </div>
 </div>
