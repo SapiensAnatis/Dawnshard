@@ -26,6 +26,7 @@ using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Features.Version;
 using DragaliaAPI.Features.Web;
 using DragaliaAPI.Features.Zena;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Infrastructure.Middleware;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
@@ -38,6 +39,9 @@ using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 namespace DragaliaAPI;
 
@@ -258,5 +262,48 @@ public static class ServiceConfiguration
         serviceCollection.AddHangfireServer();
 
         return serviceCollection;
+    }
+
+    public static WebApplicationBuilder ConfigureObservability(this WebApplicationBuilder builder)
+    {
+        builder
+            .Services.AddOpenTelemetry()
+            .ConfigureResource(cfg =>
+            {
+                cfg.AddService(serviceName: "dragalia-api");
+            })
+            .WithMetrics(metrics =>
+            {
+                metrics
+                    .AddAspNetCoreInstrumentation()
+                    .AddRuntimeInstrumentation()
+                    .AddProcessInstrumentation()
+                    .AddPrometheusExporter();
+            });
+
+        bool useOtlpExporter =
+            !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"])
+            || !string.IsNullOrWhiteSpace(
+                builder.Configuration["OTEL_EXPORTER_OTLP_TRACES_ENDPOINT"]
+            );
+
+        if (useOtlpExporter)
+        {
+            builder
+                .Services.AddOpenTelemetry()
+                .WithTracing(tracing =>
+                    tracing
+                        .AddProcessor<FilteringProcessor>()
+                        .AddAspNetCoreInstrumentation()
+                        .AddHttpClientInstrumentation()
+                        .AddRedisInstrumentation()
+                        .AddEntityFrameworkCoreInstrumentation(options =>
+                            options.SetDbStatementForText = true
+                        )
+                        .AddOtlpExporter()
+                );
+        }
+
+        return builder;
     }
 }

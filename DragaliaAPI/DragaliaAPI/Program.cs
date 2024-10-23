@@ -59,16 +59,21 @@ builder.Host.UseSerilog(
             .ReadFrom.Services(services)
             .Enrich.FromLogContext();
 
-        if (!string.IsNullOrEmpty(context.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]))
+        bool useOtlpExporter = !string.IsNullOrWhiteSpace(
+            context.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]
+        );
+
+        if (useOtlpExporter)
         {
             loggerConfig.WriteTo.OpenTelemetry(options =>
             {
-                options.Endpoint = context.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
                 options.ResourceAttributes.Add("service.name", "dragalia-api");
             });
         }
     }
 );
+
+builder.ConfigureObservability();
 
 builder
     .Services.AddControllers()
@@ -228,6 +233,9 @@ app.MapHealthChecks(
     new HealthCheckOptions() { ResponseWriter = HealthCheckWriter.WriteResponse }
 );
 app.MapGet("/ping", () => Results.Ok());
+
+app.MapPrometheusScrapingEndpoint();
+
 app.MapGet(
     "/dragalipatch/config",
     (
