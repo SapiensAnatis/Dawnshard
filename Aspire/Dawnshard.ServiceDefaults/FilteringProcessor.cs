@@ -1,8 +1,11 @@
 using System.Diagnostics;
 using OpenTelemetry;
 
-namespace DragaliaAPI.Infrastructure;
+namespace Dawnshard.ServiceDefaults;
 
+/// <summary>
+/// Custom processor to silence traces resulting from uninteresting activities such as metric scraping and healthchecks.
+/// </summary>
 internal sealed class FilteringProcessor : BaseProcessor<Activity>
 {
     public override void OnEnd(Activity data)

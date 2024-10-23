@@ -4,6 +4,7 @@ IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(ar
 
 IResourceBuilder<PostgresServerResource> postgres = builder
     .AddPostgres("postgres")
+    .WithImage("postgres", "16.4")
     .WithDataVolume("dragalia-api-pgdata");
 
 IResourceBuilder<RedisResource> redis = builder
@@ -16,29 +17,15 @@ IResourceBuilder<ProjectResource> dragaliaApi = builder
     .WithReference(redis)
     .WithExternalHttpEndpoints();
 
-if (builder.Configuration.GetValue<bool>("EnableGrafana"))
-{
-    builder
-        .AddContainer("grafana", "grafana/grafana")
-        .WithBindMount("./grafana/config", "/etc/grafana", isReadOnly: true)
-        .WithBindMount("./grafana/dashboards", "/var/lib/grafana/dashboards", isReadOnly: true)
-        .WithHttpEndpoint(targetPort: 3000, name: "http");
-
-    builder
-        .AddContainer("prometheus", "prom/prometheus")
-        .WithBindMount("./prometheus", "/etc/prometheus", isReadOnly: true)
-        .WithHttpEndpoint( /* This port is fixed as it's referenced from the Grafana config */
-            port: 9090,
-            targetPort: 9090
-        );
-}
-
 if (builder.Configuration.GetValue<bool>("EnableStateManager"))
 {
-    builder
+    IResourceBuilder<ProjectResource> stateManager = builder
         .AddProject<Projects.DragaliaAPI_Photon_StateManager>("photon-state-manager")
         .WithReference(redis)
+        .WithEndpoint("http", http => http.TargetHost = "0.0.0.0")
         .WithExternalHttpEndpoints();
+
+    dragaliaApi.WithEnvironment("PhotonOptions__StateManagerUrl", stateManager.GetEndpoint("http"));
 }
 
 if (builder.Configuration.GetValue<bool>("EnableWebsite"))

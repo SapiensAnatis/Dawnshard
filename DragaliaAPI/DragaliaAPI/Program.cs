@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Reflection;
+using Dawnshard.ServiceDefaults;
 using DragaliaAPI;
 using DragaliaAPI.Authentication;
 using DragaliaAPI.Database;
@@ -49,30 +50,7 @@ string kpfPath = Path.Combine(Directory.GetCurrentDirectory(), "config");
 
 builder.Configuration.AddKeyPerFile(directoryPath: kpfPath, optional: true, reloadOnChange: true);
 
-builder.Logging.ClearProviders();
-builder.Logging.AddSerilog();
-builder.Host.UseSerilog(
-    static (context, services, loggerConfig) =>
-    {
-        loggerConfig
-            .ReadFrom.Configuration(context.Configuration)
-            .ReadFrom.Services(services)
-            .Enrich.FromLogContext();
-
-        bool useOtlpExporter = !string.IsNullOrWhiteSpace(
-            context.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]
-        );
-
-        if (useOtlpExporter)
-        {
-            loggerConfig.WriteTo.OpenTelemetry(options =>
-            {
-                options.ResourceAttributes.Add("service.name", "dragalia-api");
-            });
-        }
-    }
-);
-
+builder.AddServiceDefaults();
 builder.ConfigureObservability();
 
 builder
@@ -228,13 +206,7 @@ if (hangfireOptions is { Enabled: true })
         });
 }
 
-app.MapHealthChecks(
-    "/health",
-    new HealthCheckOptions() { ResponseWriter = HealthCheckWriter.WriteResponse }
-);
-app.MapGet("/ping", () => Results.Ok());
-
-app.MapPrometheusScrapingEndpoint();
+app.MapDefaultEndpoints();
 
 app.MapGet(
     "/dragalipatch/config",

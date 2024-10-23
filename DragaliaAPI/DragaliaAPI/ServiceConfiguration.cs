@@ -266,43 +266,21 @@ public static class ServiceConfiguration
 
     public static WebApplicationBuilder ConfigureObservability(this WebApplicationBuilder builder)
     {
+        // Custom config on top of ServiceDefaults
+
         builder
             .Services.AddOpenTelemetry()
             .ConfigureResource(cfg =>
             {
-                cfg.AddService(serviceName: "dragalia-api");
+                cfg.AddService(serviceName: "dragalia-api", autoGenerateServiceInstanceId: false);
             })
-            .WithMetrics(metrics =>
-            {
-                metrics
-                    .AddAspNetCoreInstrumentation()
-                    .AddRuntimeInstrumentation()
-                    .AddProcessInstrumentation()
-                    .AddPrometheusExporter();
-            });
-
-        bool useOtlpExporter =
-            !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"])
-            || !string.IsNullOrWhiteSpace(
-                builder.Configuration["OTEL_EXPORTER_OTLP_TRACES_ENDPOINT"]
+            .WithTracing(tracing =>
+                tracing
+                    .AddRedisInstrumentation()
+                    .AddEntityFrameworkCoreInstrumentation(options =>
+                        options.SetDbStatementForText = true
+                    )
             );
-
-        if (useOtlpExporter)
-        {
-            builder
-                .Services.AddOpenTelemetry()
-                .WithTracing(tracing =>
-                    tracing
-                        .AddProcessor<FilteringProcessor>()
-                        .AddAspNetCoreInstrumentation()
-                        .AddHttpClientInstrumentation()
-                        .AddRedisInstrumentation()
-                        .AddEntityFrameworkCoreInstrumentation(options =>
-                            options.SetDbStatementForText = true
-                        )
-                        .AddOtlpExporter()
-                );
-        }
 
         return builder;
     }

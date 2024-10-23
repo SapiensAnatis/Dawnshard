@@ -1,7 +1,9 @@
 using System.Text;
+using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace DragaliaAPI.Services.Health;
+namespace Dawnshard.ServiceDefaults;
 
 public class HealthCheckWriter
 {

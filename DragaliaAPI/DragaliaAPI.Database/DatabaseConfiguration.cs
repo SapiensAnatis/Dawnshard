@@ -29,10 +29,6 @@ public static class DatabaseConfiguration
             .AddDbContext<ApiContext>(
                 (serviceProvider, options) =>
                 {
-                    PostgresOptions postgresOptions = serviceProvider
-                        .GetRequiredService<IOptions<PostgresOptions>>()
-                        .Value;
-
                     IConfiguration configuration =
                         serviceProvider.GetRequiredService<IConfiguration>();
 
