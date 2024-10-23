@@ -39,20 +39,15 @@ internal static class ServiceConfiguration
             );
         });
 
-        builder.Services.AddSingleton<IRedisConnectionProvider, RedisConnectionProvider>(
-            static sp =>
-            {
-                string connectionString =
-                    sp.GetRequiredService<IConfiguration>().GetConnectionString("redis")
-                    ?? throw new InvalidOperationException("Missing Redis connection string!");
+        builder.Services.AddSingleton<IConnectionMultiplexer>(serviceProvider =>
+        {
+            string connectionString =
+                serviceProvider.GetRequiredService<IConfiguration>().GetConnectionString("redis")
+                ?? throw new InvalidOperationException("Missing Redis connection string!");
 
-                IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(
-                    connectionString
-                );
-
-                return new RedisConnectionProvider(multiplexer);
-            }
-        );
+            return ConnectionMultiplexer.Connect(connectionString);
+        });
+        builder.Services.AddSingleton<IRedisConnectionProvider, RedisConnectionProvider>();
 
         return builder;
     }
