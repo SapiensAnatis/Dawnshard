@@ -53,15 +53,21 @@ builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 builder.Host.UseSerilog(
     static (context, services, loggerConfig) =>
+    {
         loggerConfig
             .ReadFrom.Configuration(context.Configuration)
             .ReadFrom.Services(services)
-            .Enrich.FromLogContext()
-            .WriteTo.OpenTelemetry(options =>
+            .Enrich.FromLogContext();
+
+        if (!string.IsNullOrEmpty(context.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]))
+        {
+            loggerConfig.WriteTo.OpenTelemetry(options =>
             {
                 options.Endpoint = context.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
-                options.ResourceAttributes.Add("service.name", "dragaliaapi");
-            })
+                options.ResourceAttributes.Add("service.name", "dragalia-api");
+            });
+        }
+    }
 );
 
 builder
@@ -75,12 +81,9 @@ builder
         option.InputFormatters.Add(new CustomMessagePackInputFormatter(CustomResolver.Options));
     });
 
-RedisOptions redisOptions =
-    builder.Configuration.GetSection(nameof(RedisOptions)).Get<RedisOptions>()
-    ?? throw new InvalidOperationException("Failed to get Redis config");
-HangfireOptions hangfireOptions =
-    builder.Configuration.GetSection(nameof(HangfireOptions)).Get<HangfireOptions>()
-    ?? new() { Enabled = false };
+HangfireOptions? hangfireOptions = builder
+    .Configuration.GetSection(nameof(HangfireOptions))
+    .Get<HangfireOptions>();
 
 builder.Services.ConfigureDatabaseServices(builder.Configuration);
 
@@ -90,7 +93,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
     options.InstanceName = "RedisInstance";
 });
 
-if (hangfireOptions.Enabled)
+if (hangfireOptions is { Enabled: true })
 {
     builder.Services.ConfigureHangfire();
 }
@@ -133,19 +136,20 @@ watch.Stop();
 
 app.Logger.LogInformation("Loaded MasterAsset in {Time} ms.", watch.ElapsedMilliseconds);
 
+app.Logger.LogDebug(
+    "Using PostgreSQL connection {ConnectionString}",
+    builder.Configuration.GetConnectionString("postgres")
+);
+
+app.Logger.LogDebug(
+    "Using PostgreSQL connection {ConnectionString}",
+    builder.Configuration.GetConnectionString("postgres")
+);
+
 PostgresOptions postgresOptions = app
     .Services.GetRequiredService<IOptions<PostgresOptions>>()
     .Value;
 
-app.Logger.LogDebug(
-    "Using PostgreSQL connection {ConnectionString}",
-    builder.Configuration.GetConnectionString("postgres")
-);
-
-app.Logger.LogDebug(
-    "Using PostgreSQL connection {ConnectionString}",
-    builder.Configuration.GetConnectionString("postgres")
-);
 if (!postgresOptions.DisableAutoMigration)
 {
     app.MigrateDatabase();
@@ -205,7 +209,7 @@ app.MapWhen(
     }
 );
 
-if (hangfireOptions.Enabled)
+if (hangfireOptions is { Enabled: true })
 {
     app.AddHangfireJobs();
     app.UseHangfireDashboard();

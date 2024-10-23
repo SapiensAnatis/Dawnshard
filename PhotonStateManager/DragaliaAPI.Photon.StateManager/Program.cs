@@ -67,13 +67,13 @@ builder.Services.AddSwaggerGen(config =>
     );
 });
 
-builder.Services.AddSingleton<IRedisConnectionProvider, RedisConnectionProvider>(sp =>
+builder.Services.AddSingleton<IRedisConnectionProvider, RedisConnectionProvider>(static sp =>
 {
-    RedisOptions redisOptions = sp.GetRequiredService<IOptions<RedisOptions>>().Value;
+    string connectionString =
+        sp.GetRequiredService<IConfiguration>().GetConnectionString("redis")
+        ?? throw new InvalidOperationException("Missing Redis connection string!");
 
-    IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(
-        builder.Configuration.GetConnectionString("redis")
-    );
+    IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(connectionString);
 
     return new RedisConnectionProvider(multiplexer);
 });

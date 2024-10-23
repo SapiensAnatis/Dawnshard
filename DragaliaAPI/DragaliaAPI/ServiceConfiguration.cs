@@ -244,15 +244,13 @@ public static class ServiceConfiguration
         serviceCollection.AddHangfire(
             (serviceProvider, cfg) =>
             {
-                PostgresOptions postgresOptions = serviceProvider
-                    .GetRequiredService<IOptions<PostgresOptions>>()
-                    .Value;
+                IConfiguration configuration = serviceProvider.GetRequiredService<IConfiguration>();
 
                 cfg.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
                     .UseSimpleAssemblyNameTypeSerializer()
                     .UseRecommendedSerializerSettings()
                     .UsePostgreSqlStorage(pgCfg =>
-                        pgCfg.UseNpgsqlConnection(postgresOptions.GetConnectionString("Hangfire"))
+                        pgCfg.UseNpgsqlConnection(configuration.GetConnectionString("postgres"))
                     );
             }
         );

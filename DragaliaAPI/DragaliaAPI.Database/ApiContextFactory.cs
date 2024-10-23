@@ -16,12 +16,8 @@ public class ApiContextFactory : IDesignTimeDbContextFactory<ApiContext>
             .AddCommandLine(args)
             .Build();
 
-        PostgresOptions? postgresOptions = configuration
-            .GetSection(nameof(PostgresOptions))
-            ?.Get<PostgresOptions>();
-
         DbContextOptions<ApiContext> contextOptions = new DbContextOptionsBuilder<ApiContext>()
-            .UseNpgsql(postgresOptions?.GetConnectionString("IDesignTimeDbContextFactory"))
+            .UseNpgsql(configuration.GetConnectionString("IDesignTimeDbContextFactory"))
             .Options;
 
         return new ApiContext(contextOptions, new StubPlayerIdentityService());

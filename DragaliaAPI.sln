@@ -99,7 +99,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Shared.SourceGe
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{AB163A1E-1339-4CFC-82AD-E59ECFADA3C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppHost", "AppHost\AppHost.csproj", "{C38638A3-1644-48FD-B403-0CA34F1F5F15}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dawnshard.AppHost", "Dawnshard.AppHost\Dawnshard.AppHost.csproj", "{C38638A3-1644-48FD-B403-0CA34F1F5F15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
