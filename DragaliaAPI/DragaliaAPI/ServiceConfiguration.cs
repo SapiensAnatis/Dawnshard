@@ -268,6 +268,8 @@ public static class ServiceConfiguration
     {
         // Custom config on top of ServiceDefaults
 
+        bool isDevelopment = builder.Environment.IsDevelopment();
+
         builder
             .Services.AddOpenTelemetry()
             .ConfigureResource(cfg =>
@@ -276,7 +278,7 @@ public static class ServiceConfiguration
             })
             .WithTracing(tracing =>
                 tracing.AddEntityFrameworkCoreInstrumentation(options =>
-                    options.SetDbStatementForText = true
+                    options.SetDbStatementForText = isDevelopment
                 )
             //  Not compatible with IDistributedCache as requires IConnectionMultiplexer
             // .AddRedisInstrumentation()
