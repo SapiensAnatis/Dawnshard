@@ -26,6 +26,7 @@ using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Features.Version;
 using DragaliaAPI.Features.Web;
 using DragaliaAPI.Features.Zena;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Infrastructure.Middleware;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
@@ -38,6 +39,9 @@ using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 namespace DragaliaAPI;
 
@@ -244,15 +248,13 @@ public static class ServiceConfiguration
         serviceCollection.AddHangfire(
             (serviceProvider, cfg) =>
             {
-                PostgresOptions postgresOptions = serviceProvider
-                    .GetRequiredService<IOptions<PostgresOptions>>()
-                    .Value;
+                IConfiguration configuration = serviceProvider.GetRequiredService<IConfiguration>();
 
                 cfg.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
                     .UseSimpleAssemblyNameTypeSerializer()
                     .UseRecommendedSerializerSettings()
                     .UsePostgreSqlStorage(pgCfg =>
-                        pgCfg.UseNpgsqlConnection(postgresOptions.GetConnectionString("Hangfire"))
+                        pgCfg.UseNpgsqlConnection(configuration.GetConnectionString("postgres"))
                     );
             }
         );
@@ -260,5 +262,34 @@ public static class ServiceConfiguration
         serviceCollection.AddHangfireServer();
 
         return serviceCollection;
+    }
+
+    public static WebApplicationBuilder ConfigureObservability(this WebApplicationBuilder builder)
+    {
+        // Custom config on top of ServiceDefaults
+
+        bool isDevelopment = builder.Environment.IsDevelopment();
+
+        builder
+            .Services.AddOpenTelemetry()
+            .ConfigureResource(cfg =>
+            {
+                cfg.AddService(serviceName: "dragalia-api", autoGenerateServiceInstanceId: false);
+            });
+
+        if (builder.HasOtlpTracesEndpoint())
+        {
+            builder
+                .Services.AddOpenTelemetry()
+                .WithTracing(tracing =>
+                    tracing.AddEntityFrameworkCoreInstrumentation(options =>
+                        options.SetDbStatementForText = isDevelopment
+                    )
+                //  Not compatible with IDistributedCache as requires IConnectionMultiplexer
+                // .AddRedisInstrumentation()
+                );
+        }
+
+        return builder;
     }
 }

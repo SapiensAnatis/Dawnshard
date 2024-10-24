@@ -19,8 +19,8 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
                 new Dictionary<string, string?>
                 {
                     ["PhotonOptions:Token"] = "photontoken",
-                    ["RedisOptions:Hostname"] = this.testContainersHelper.RedisHost,
-                    ["RedisOptions:Port"] = this.testContainersHelper.RedisPort.ToString(),
+                    ["ConnectionStrings:Redis"] =
+                        this.testContainersHelper.GetRedisConnectionString(),
                 }
             )
         );

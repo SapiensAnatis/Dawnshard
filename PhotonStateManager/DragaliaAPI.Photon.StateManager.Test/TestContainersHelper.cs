@@ -1,4 +1,5 @@
-﻿using DotNet.Testcontainers.Builders;
+﻿using System.Diagnostics.CodeAnalysis;
+using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 
 namespace DragaliaAPI.Photon.StateManager.Test;
@@ -9,30 +10,21 @@ public class TestContainersHelper
 
     private readonly IContainer? redisContainer;
 
-    public string RedisHost { get; private set; }
-
-    public int RedisPort
-    {
-        get
-        {
-            if (IsGithubActions)
-                return RedisContainerPort;
-
-            ArgumentNullException.ThrowIfNull(this.redisContainer);
-            return this.redisContainer.GetMappedPublicPort(RedisContainerPort);
-        }
-    }
-
-    private static bool IsGithubActions =>
-        Environment.GetEnvironmentVariable("GITHUB_ACTIONS") is not null;
-
-    public TestContainersHelper()
+    public string GetRedisConnectionString()
     {
         if (IsGithubActions)
         {
-            RedisHost = "localhost";
+            return $"localhost:{RedisContainerPort}";
         }
-        else
+
+        this.ThrowIfRedisContainerNull();
+
+        return $"{this.redisContainer.Hostname}:{this.redisContainer.GetMappedPublicPort(RedisContainerPort)}";
+    }
+
+    public TestContainersHelper()
+    {
+        if (!IsGithubActions)
         {
             redisContainer = new ContainerBuilder()
                 .WithImage("redis/redis-stack")
@@ -40,26 +32,42 @@ public class TestContainersHelper
                 .WithPortBinding(RedisContainerPort, true)
                 .WithPortBinding(8001, true)
                 .Build();
-
-            RedisHost = redisContainer.Hostname;
         }
     }
 
     public async Task StartAsync()
     {
         if (IsGithubActions)
+        {
             return;
+        }
 
-        ArgumentNullException.ThrowIfNull(this.redisContainer);
+        this.ThrowIfRedisContainerNull();
+
         await this.redisContainer.StartAsync();
     }
 
     public async Task StopAsync()
     {
         if (IsGithubActions)
+        {
             return;
+        }
 
-        ArgumentNullException.ThrowIfNull(this.redisContainer);
+        this.ThrowIfRedisContainerNull();
+
         await this.redisContainer.StopAsync();
     }
+
+    [MemberNotNull(nameof(this.redisContainer))]
+    private void ThrowIfRedisContainerNull()
+    {
+        if (this.redisContainer is null)
+        {
+            throw new InvalidOperationException("Redis container not initialized!");
+        }
+    }
+
+    private static bool IsGithubActions =>
+        Environment.GetEnvironmentVariable("GITHUB_ACTIONS") is not null;
 }

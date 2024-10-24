@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Reflection;
+using Dawnshard.ServiceDefaults;
 using DragaliaAPI;
 using DragaliaAPI.Authentication;
 using DragaliaAPI.Database;
@@ -49,15 +50,8 @@ string kpfPath = Path.Combine(Directory.GetCurrentDirectory(), "config");
 
 builder.Configuration.AddKeyPerFile(directoryPath: kpfPath, optional: true, reloadOnChange: true);
 
-builder.Logging.ClearProviders();
-builder.Logging.AddSerilog();
-builder.Host.UseSerilog(
-    static (context, services, loggerConfig) =>
-        loggerConfig
-            .ReadFrom.Configuration(context.Configuration)
-            .ReadFrom.Services(services)
-            .Enrich.FromLogContext()
-);
+builder.AddServiceDefaults();
+builder.ConfigureObservability();
 
 builder
     .Services.AddControllers()
@@ -70,26 +64,19 @@ builder
         option.InputFormatters.Add(new CustomMessagePackInputFormatter(CustomResolver.Options));
     });
 
-RedisOptions redisOptions =
-    builder.Configuration.GetSection(nameof(RedisOptions)).Get<RedisOptions>()
-    ?? throw new InvalidOperationException("Failed to get Redis config");
-HangfireOptions hangfireOptions =
-    builder.Configuration.GetSection(nameof(HangfireOptions)).Get<HangfireOptions>()
-    ?? new() { Enabled = false };
+HangfireOptions? hangfireOptions = builder
+    .Configuration.GetSection(nameof(HangfireOptions))
+    .Get<HangfireOptions>();
 
 builder.Services.ConfigureDatabaseServices(builder.Configuration);
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.ConfigurationOptions = new()
-    {
-        EndPoints = new() { { redisOptions.Hostname, redisOptions.Port } },
-        Password = redisOptions.Password,
-    };
+    options.Configuration = builder.Configuration.GetConnectionString("redis");
     options.InstanceName = "RedisInstance";
 });
 
-if (hangfireOptions.Enabled)
+if (hangfireOptions is { Enabled: true })
 {
     builder.Services.ConfigureHangfire();
 }
@@ -132,21 +119,19 @@ watch.Stop();
 
 app.Logger.LogInformation("Loaded MasterAsset in {Time} ms.", watch.ElapsedMilliseconds);
 
+app.Logger.LogDebug(
+    "Using PostgreSQL connection {ConnectionString}",
+    builder.Configuration.GetConnectionString("postgres")
+);
+
+app.Logger.LogDebug(
+    "Using PostgreSQL connection {ConnectionString}",
+    builder.Configuration.GetConnectionString("postgres")
+);
+
 PostgresOptions postgresOptions = app
     .Services.GetRequiredService<IOptions<PostgresOptions>>()
     .Value;
-
-app.Logger.LogDebug(
-    "Using PostgreSQL connection {Host}:{Port}",
-    postgresOptions.Hostname,
-    postgresOptions.Port
-);
-
-app.Logger.LogDebug(
-    "Using Redis connection {Host}:{Port}",
-    redisOptions.Hostname,
-    redisOptions.Port
-);
 
 if (!postgresOptions.DisableAutoMigration)
 {
@@ -207,7 +192,7 @@ app.MapWhen(
     }
 );
 
-if (hangfireOptions.Enabled)
+if (hangfireOptions is { Enabled: true })
 {
     app.AddHangfireJobs();
     app.UseHangfireDashboard();
@@ -221,11 +206,8 @@ if (hangfireOptions.Enabled)
         });
 }
 
-app.MapHealthChecks(
-    "/health",
-    new HealthCheckOptions() { ResponseWriter = HealthCheckWriter.WriteResponse }
-);
-app.MapGet("/ping", () => Results.Ok());
+app.MapDefaultEndpoints();
+
 app.MapGet(
     "/dragalipatch/config",
     (

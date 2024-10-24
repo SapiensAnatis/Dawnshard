@@ -12,6 +12,7 @@ COPY ["nuget.config", "."]
 RUN dotnet restore "PhotonStateManager/DragaliaAPI.Photon.StateManager/DragaliaAPI.Photon.StateManager.csproj"
 COPY [".editorconfig", ".editorconfig"]
 COPY ["PhotonStateManager/", "PhotonStateManager/"]
+COPY ["Aspire/", "Aspire/"]
 COPY ["Shared/", "Shared/"]
 WORKDIR "/src/PhotonStateManager/DragaliaAPI.Photon.StateManager"
 RUN dotnet publish "DragaliaAPI.Photon.StateManager.csproj" -c Release -o /app/publish/ /p:UseAppHost=false

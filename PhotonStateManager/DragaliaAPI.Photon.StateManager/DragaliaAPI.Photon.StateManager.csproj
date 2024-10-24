@@ -16,6 +16,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" />
     <PackageReference Include="Redis.OM" />
     <PackageReference Include="Serilog" />
     <PackageReference Include="Serilog.AspNetCore" />
@@ -30,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Aspire\Dawnshard.ServiceDefaults\Dawnshard.ServiceDefaults.csproj" />
     <ProjectReference Include="..\..\Shared\DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj" />
   </ItemGroup>
 

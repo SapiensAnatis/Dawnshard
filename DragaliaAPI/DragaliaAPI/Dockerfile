@@ -16,6 +16,7 @@ COPY ["DragaliaAPI/DragaliaAPI/DragaliaAPI.csproj", "DragaliaAPI/DragaliaAPI/"]
 RUN dotnet restore "DragaliaAPI/DragaliaAPI/DragaliaAPI.csproj"
 COPY [".editorconfig", ".editorconfig"]
 COPY ["DragaliaAPI/", "DragaliaAPI/"]
+COPY ["Aspire/", "Aspire/"]
 COPY ["Shared/", "Shared/"]
 WORKDIR "/src/DragaliaAPI/DragaliaAPI"
 RUN dotnet publish "DragaliaAPI.csproj" -c Release -o /app/publish/ /p:UseAppHost=false
