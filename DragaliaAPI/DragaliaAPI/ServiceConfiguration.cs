@@ -275,14 +275,20 @@ public static class ServiceConfiguration
             .ConfigureResource(cfg =>
             {
                 cfg.AddService(serviceName: "dragalia-api", autoGenerateServiceInstanceId: false);
-            })
-            .WithTracing(tracing =>
-                tracing.AddEntityFrameworkCoreInstrumentation(options =>
-                    options.SetDbStatementForText = isDevelopment
-                )
-            //  Not compatible with IDistributedCache as requires IConnectionMultiplexer
-            // .AddRedisInstrumentation()
-            );
+            });
+
+        if (builder.HasOtlpTracesEndpoint())
+        {
+            builder
+                .Services.AddOpenTelemetry()
+                .WithTracing(tracing =>
+                    tracing.AddEntityFrameworkCoreInstrumentation(options =>
+                        options.SetDbStatementForText = isDevelopment
+                    )
+                //  Not compatible with IDistributedCache as requires IConnectionMultiplexer
+                // .AddRedisInstrumentation()
+                );
+        }
 
         return builder;
     }

@@ -1,6 +1,7 @@
 using Dawnshard.ServiceDefaults;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using OpenTelemetry.Logs;
@@ -49,7 +50,7 @@ public static class Extensions
     private static WebApplicationBuilder ConfigureLogging(this WebApplicationBuilder builder)
     {
         builder.Host.UseSerilog(
-            (context, config) =>
+            static (context, config) =>
             {
                 config.ReadFrom.Configuration(context.Configuration);
                 config.Enrich.FromLogContext();
@@ -64,11 +65,7 @@ public static class Extensions
                     "EndsWith(RequestPath, '/metrics') and @l in ['verbose', 'debug', 'information'] ci"
                 );
 
-                if (
-                    !string.IsNullOrWhiteSpace(
-                        context.GetOtlpEndpoint("OTEL_EXPORTER_OTLP_LOGS_ENDPOINT")
-                    )
-                )
+                if (context.HasOtlpLogsEndpoint())
                 {
                     config.WriteTo.OpenTelemetry();
                 }
@@ -91,7 +88,12 @@ public static class Extensions
                     .AddHttpClientInstrumentation()
                     .AddRuntimeInstrumentation()
                     .AddPrometheusExporter();
-            })
+            });
+
+        if (builder.HasOtlpTracesEndpoint()) { }
+
+        builder
+            .Services.AddOpenTelemetry()
             .WithTracing(tracing =>
             {
                 tracing
@@ -109,29 +111,21 @@ public static class Extensions
         this IHostApplicationBuilder builder
     )
     {
-        if (
-            !string.IsNullOrWhiteSpace(
-                builder.GetOtlpEndpoint("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT")
-            )
-        )
+        if (builder.HasOtlpTracesEndpoint())
         {
             builder.Services.ConfigureOpenTelemetryTracerProvider(tracing =>
                 tracing.AddOtlpExporter()
             );
         }
 
-        if (
-            !string.IsNullOrWhiteSpace(
-                builder.GetOtlpEndpoint("OTEL_EXPORTER_OTLP_METRICS_ENDPOINT")
-            )
-        )
+        if (builder.HasOtlpMetricsEndpoint())
         {
             builder.Services.ConfigureOpenTelemetryMeterProvider(metrics =>
                 metrics.AddOtlpExporter()
             );
         }
 
-        if (!string.IsNullOrWhiteSpace(builder.GetOtlpEndpoint("OTEL_EXPORTER_OTLP_LOGS_ENDPOINT")))
+        if (builder.HasOtlpLogsEndpoint())
         {
             builder.Services.ConfigureOpenTelemetryLoggerProvider(logging =>
                 logging.AddOtlpExporter()
@@ -152,11 +146,26 @@ public static class Extensions
         return builder;
     }
 
-    private static string? GetOtlpEndpoint(
-        this IHostApplicationBuilder builder,
-        string envVarName
-    ) => builder.Configuration[envVarName] ?? builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
+    public static bool HasOtlpTracesEndpoint(this IHostApplicationBuilder builder) =>
+        !string.IsNullOrWhiteSpace(
+            builder.Configuration.GetOtlpEndpoint("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT")
+        );
 
-    private static string? GetOtlpEndpoint(this HostBuilderContext context, string envVarName) =>
-        context.Configuration[envVarName] ?? context.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
+    private static bool HasOtlpMetricsEndpoint(this IHostApplicationBuilder builder) =>
+        !string.IsNullOrWhiteSpace(
+            builder.Configuration.GetOtlpEndpoint("OTEL_EXPORTER_OTLP_METRICS_ENDPOINT")
+        );
+
+    private static bool HasOtlpLogsEndpoint(this IHostApplicationBuilder builder) =>
+        !string.IsNullOrWhiteSpace(
+            builder.Configuration.GetOtlpEndpoint("OTEL_EXPORTER_OTLP_LOGS_ENDPOINT")
+        );
+
+    private static bool HasOtlpLogsEndpoint(this HostBuilderContext context) =>
+        !string.IsNullOrWhiteSpace(
+            context.Configuration.GetOtlpEndpoint("OTEL_EXPORTER_OTLP_LOGS_ENDPOINT")
+        );
+
+    private static string? GetOtlpEndpoint(this IConfiguration configuration, string envVarName) =>
+        configuration[envVarName] ?? configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
 }

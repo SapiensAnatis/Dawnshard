@@ -87,8 +87,14 @@ internal static class ServiceConfiguration
                     serviceName: "photon-state-manager",
                     autoGenerateServiceInstanceId: false
                 );
-            })
-            .WithTracing(tracing => tracing.AddRedisInstrumentation());
+            });
+
+        if (builder.HasOtlpTracesEndpoint())
+        {
+            builder
+                .Services.AddOpenTelemetry()
+                .WithTracing(tracing => tracing.AddRedisInstrumentation());
+        }
 
         return builder;
     }
