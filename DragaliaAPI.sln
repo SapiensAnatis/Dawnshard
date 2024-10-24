@@ -100,6 +100,9 @@ EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{AB163A1E-1339-4CFC-82AD-E59ECFADA3C2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aspire", "Aspire", "{AB081B46-316E-4C34-8CBB-E5A0E42E1E66}"
+	ProjectSection(SolutionItems) = preProject
+		Aspire\Directory.Build.props = Aspire\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dawnshard.AppHost", "Aspire\Dawnshard.AppHost\Dawnshard.AppHost.csproj", "{2BC007E8-E319-4FDE-AFFA-629111FB6D69}"
 EndProject

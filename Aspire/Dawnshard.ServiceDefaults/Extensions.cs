@@ -90,17 +90,18 @@ public static class Extensions
                     .AddPrometheusExporter();
             });
 
-        if (builder.HasOtlpTracesEndpoint()) { }
-
-        builder
-            .Services.AddOpenTelemetry()
-            .WithTracing(tracing =>
-            {
-                tracing
-                    .AddAspNetCoreInstrumentation()
-                    .AddHttpClientInstrumentation()
-                    .AddProcessor<FilteringProcessor>();
-            });
+        if (builder.HasOtlpTracesEndpoint())
+        {
+            builder
+                .Services.AddOpenTelemetry()
+                .WithTracing(tracing =>
+                {
+                    tracing
+                        .AddAspNetCoreInstrumentation()
+                        .AddHttpClientInstrumentation()
+                        .AddProcessor<FilteringProcessor>();
+                });
+        }
 
         builder.AddOpenTelemetryExporters();
 
@@ -122,13 +123,6 @@ public static class Extensions
         {
             builder.Services.ConfigureOpenTelemetryMeterProvider(metrics =>
                 metrics.AddOtlpExporter()
-            );
-        }
-
-        if (builder.HasOtlpLogsEndpoint())
-        {
-            builder.Services.ConfigureOpenTelemetryLoggerProvider(logging =>
-                logging.AddOtlpExporter()
             );
         }
 
@@ -154,11 +148,6 @@ public static class Extensions
     private static bool HasOtlpMetricsEndpoint(this IHostApplicationBuilder builder) =>
         !string.IsNullOrWhiteSpace(
             builder.Configuration.GetOtlpEndpoint("OTEL_EXPORTER_OTLP_METRICS_ENDPOINT")
-        );
-
-    private static bool HasOtlpLogsEndpoint(this IHostApplicationBuilder builder) =>
-        !string.IsNullOrWhiteSpace(
-            builder.Configuration.GetOtlpEndpoint("OTEL_EXPORTER_OTLP_LOGS_ENDPOINT")
         );
 
     private static bool HasOtlpLogsEndpoint(this HostBuilderContext context) =>
