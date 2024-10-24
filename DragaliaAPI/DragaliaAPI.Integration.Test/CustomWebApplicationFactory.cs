@@ -80,23 +80,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        IConfiguration configuration = new ConfigurationBuilder()
-            .AddUserSecrets<Program>()
-            .AddEnvironmentVariables()
-            .AddJsonFile("appsettings.json")
-            .AddJsonFile("appsettings.Development.json", optional: true)
-            .AddJsonFile("appsettings.Testing.json")
-            .AddInMemoryCollection(
-                new Dictionary<string, string?>
-                {
-                    ["ConnectionStrings:Redis"] =
-                        $"{this.testContainersHelper.RedisHost}:{this.testContainersHelper.RedisPort}",
-                }
-            )
-            .Build();
-
-        builder.UseConfiguration(configuration);
-
         builder.ConfigureTestServices(services =>
         {
             services.AddScoped(x => this.MockBaasApi.Object);
@@ -141,5 +124,8 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         });
 
         builder.UseEnvironment("Testing");
+
+        // Ensure we override any supplemental config
+        builder.ConfigureAppConfiguration(cfg => cfg.AddJsonFile("appsettings.Testing.json"));
     }
 }
