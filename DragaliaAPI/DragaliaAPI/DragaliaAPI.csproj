@@ -48,6 +48,7 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Process" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" />
     <PackageReference Include="Riok.Mapperly" />
     <PackageReference Include="Serilog.Exceptions" />
     <PackageReference Include="Serilog.Expressions" />

@@ -275,11 +275,11 @@ public static class ServiceConfiguration
                 cfg.AddService(serviceName: "dragalia-api", autoGenerateServiceInstanceId: false);
             })
             .WithTracing(tracing =>
-                tracing.AddEntityFrameworkCoreInstrumentation(options =>
-                    options.SetDbStatementForText = true
-                )
-            //  Not compatible with IDistributedCache as requires IConnectionMultiplexer
-            // .AddRedisInstrumentation()
+                tracing
+                    .AddEntityFrameworkCoreInstrumentation(options =>
+                        options.SetDbStatementForText = true
+                    )
+                    .AddRedisInstrumentation()
             );
 
         return builder;

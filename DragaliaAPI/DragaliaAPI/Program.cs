@@ -26,6 +26,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
 using Microsoft.JSInterop;
 using Serilog;
+using StackExchange.Redis;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -70,9 +71,14 @@ HangfireOptions? hangfireOptions = builder
 
 builder.Services.ConfigureDatabaseServices(builder.Configuration);
 
+IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(
+    builder.Configuration.GetConnectionString("redis")
+        ?? throw new InvalidOperationException("Missing redis connection string!")
+);
+builder.Services.AddSingleton(multiplexer);
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = builder.Configuration.GetConnectionString("redis");
+    options.ConnectionMultiplexerFactory = () => Task.FromResult(multiplexer);
     options.InstanceName = "RedisInstance";
 });
 
