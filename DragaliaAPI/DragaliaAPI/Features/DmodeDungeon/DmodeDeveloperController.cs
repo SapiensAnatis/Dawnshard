@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Infrastructure.Middleware;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.PlayerDetails;
@@ -8,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.DmodeDungeon;
 
-[Authorize(AuthenticationSchemes = SchemeName.Developer)]
+[Authorize(AuthenticationSchemes = AuthConstants.SchemeNames.Developer)]
 [Route("dmode_dev")]
 public class DmodeDeveloperController(
     IPlayerIdentityService playerIdentityService,

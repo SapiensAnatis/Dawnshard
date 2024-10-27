@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Features.Tool;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

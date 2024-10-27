@@ -6,7 +6,7 @@ using DragaliaAPI.Features.Web.Users;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
-using static DragaliaAPI.Features.Web.AuthConstants;
+using static DragaliaAPI.Infrastructure.Authentication.AuthConstants;
 
 // ReSharper disable once CheckNamespace
 namespace DragaliaAPI;
@@ -25,7 +25,7 @@ public static partial class FeatureExtensions
         serviceCollection
             .AddAuthentication()
             .AddJwtBearer(
-                SchemeNames.WebJwtScheme,
+                SchemeNames.WebJwt,
                 opts =>
                 {
                     opts.Events = new()
@@ -42,16 +42,14 @@ public static partial class FeatureExtensions
             .AddPolicy(
                 PolicyNames.RequireValidJwt,
                 builder =>
-                    builder
-                        .RequireAuthenticatedUser()
-                        .AddAuthenticationSchemes(SchemeNames.WebJwtScheme)
+                    builder.RequireAuthenticatedUser().AddAuthenticationSchemes(SchemeNames.WebJwt)
             )
             .AddPolicy(
                 PolicyNames.RequireDawnshardIdentity,
                 builder =>
                     builder
                         .RequireAuthenticatedUser()
-                        .AddAuthenticationSchemes(SchemeNames.WebJwtScheme)
+                        .AddAuthenticationSchemes(SchemeNames.WebJwt)
                         .RequireAssertion(ctx =>
                             ctx.User.Identities.Any(x => x.Label == IdentityLabels.Dawnshard)
                         )

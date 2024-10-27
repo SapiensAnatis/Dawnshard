@@ -22,11 +22,13 @@ using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Features.StorySkip;
 using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Features.TimeAttack;
+using DragaliaAPI.Features.Tool;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Features.Version;
 using DragaliaAPI.Features.Web;
 using DragaliaAPI.Features.Zena;
 using DragaliaAPI.Infrastructure;
+using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Infrastructure.Middleware;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
@@ -84,7 +86,9 @@ public static class ServiceConfiguration
             .AddStoryFeature()
             .AddWebFeature()
             .AddAbilityCrestFeature()
-            .AddTutorialFeature();
+            .AddTutorialFeature()
+            .AddZenaFeature()
+            .AddToolFeature();
 
         services
             .RegisterMissionServices()
@@ -136,7 +140,6 @@ public static class ServiceConfiguration
             .AddScoped<ITalismanService, TalismanService>()
             // Emblem feature
             .AddScoped<IEmblemRepository, EmblemRepository>()
-            // Quest feature
             // Party power feature
             .AddScoped<IPartyPowerService, PartyPowerService>()
             .AddScoped<IPartyPowerRepository, PartyPowerRepository>()
@@ -144,8 +147,6 @@ public static class ServiceConfiguration
             .AddScoped<ICharaService, CharaService>()
             .AddScoped<IResourceVersionService, ResourceVersionService>()
             .AddScoped<ICharaService, CharaService>()
-            // Zena feature
-            .AddScoped<IZenaService, ZenaService>()
             // Story skip feature
             .AddScoped<StorySkipService>()
             // Maintenance feature
@@ -234,10 +235,12 @@ public static class ServiceConfiguration
     {
         services.AddAuthentication(opts =>
         {
-            opts.AddScheme<SessionAuthenticationHandler>(SchemeName.Session, null);
-            opts.AddScheme<DeveloperAuthenticationHandler>(SchemeName.Developer, null);
+            opts.AddScheme<SessionAuthenticationHandler>(AuthConstants.SchemeNames.Session, null);
+            opts.AddScheme<DeveloperAuthenticationHandler>(
+                AuthConstants.SchemeNames.Developer,
+                null
+            );
             opts.AddScheme<PhotonAuthenticationHandler>(nameof(PhotonAuthenticationHandler), null);
-            opts.AddScheme<ZenaAuthenticationHandler>(SchemeName.Zena, null);
         });
 
         return services;

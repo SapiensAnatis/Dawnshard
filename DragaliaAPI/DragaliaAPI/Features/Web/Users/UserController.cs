@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using static DragaliaAPI.Features.Web.AuthConstants;
+using static DragaliaAPI.Infrastructure.Authentication.AuthConstants;
 
 namespace DragaliaAPI.Features.Web.Users;
 

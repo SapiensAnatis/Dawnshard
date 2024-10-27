@@ -1,8 +1,7 @@
-﻿using DragaliaAPI.Controllers.Dragalia;
+﻿using DragaliaAPI.Features.Tool;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
 
-namespace DragaliaAPI.Test.Controllers;
+namespace DragaliaAPI.Test.Features.Tool;
 
 public class ToolControllerTest
 {

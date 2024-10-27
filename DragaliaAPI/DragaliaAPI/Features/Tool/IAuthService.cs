@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Services;
+﻿namespace DragaliaAPI.Features.Tool;
 
 public interface IAuthService
 {

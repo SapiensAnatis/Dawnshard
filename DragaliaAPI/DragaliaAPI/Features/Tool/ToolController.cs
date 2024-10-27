@@ -1,9 +1,9 @@
-﻿using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
+﻿using DragaliaAPI.Controllers;
+using DragaliaAPI.Models.Generated;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DragaliaAPI.Controllers.Dragalia;
+namespace DragaliaAPI.Features.Tool;
 
 [Route("tool")]
 [AllowAnonymous]

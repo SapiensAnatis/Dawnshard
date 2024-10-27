@@ -10,33 +10,19 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using static DragaliaAPI.Infrastructure.DragaliaHttpConstants;
 
-namespace DragaliaAPI.Infrastructure.Middleware;
+namespace DragaliaAPI.Infrastructure.Authentication;
 
-public class SessionAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+public class SessionAuthenticationHandler(
+    IOptionsMonitor<AuthenticationSchemeOptions> options,
+    ILoggerFactory logger,
+    UrlEncoder encoder,
+    ISessionService sessionService
+) : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
 {
-    private readonly ISessionService sessionService;
-    private readonly IWebHostEnvironment webHostEnvironment;
-    private readonly ApiContext apiContext;
-
     private const string SessionExpired = "Session-Expired";
     private const string True = "true";
 
     public const string LastLoginTime = "LastLoginTime";
-
-    public SessionAuthenticationHandler(
-        IOptionsMonitor<AuthenticationSchemeOptions> options,
-        ILoggerFactory logger,
-        UrlEncoder encoder,
-        ISessionService sessionService,
-        IWebHostEnvironment webHostEnvironment,
-        ApiContext apiContext
-    )
-        : base(options, logger, encoder)
-    {
-        this.sessionService = sessionService;
-        this.webHostEnvironment = webHostEnvironment;
-        this.apiContext = apiContext;
-    }
 
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
@@ -56,7 +42,7 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
 
         try
         {
-            Session session = await this.sessionService.LoadSessionSessionId(sid);
+            Session session = await sessionService.LoadSessionSessionId(sid);
 
             deviceAccountId = session.DeviceAccountId;
             viewerId = session.ViewerId.ToString();
@@ -68,7 +54,7 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
             return AuthenticateResult.Fail($"Failed to look up SID {sid}");
         }
 
-        Session? impersonatedSession = await this.sessionService.LoadImpersonationSession(
+        Session? impersonatedSession = await sessionService.LoadImpersonationSession(
             deviceAccountId
         );
 

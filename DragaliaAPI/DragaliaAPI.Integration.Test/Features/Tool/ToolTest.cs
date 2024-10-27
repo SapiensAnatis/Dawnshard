@@ -1,10 +1,11 @@
-﻿using DragaliaAPI.Models;
+﻿using DragaliaAPI.Features.Tool;
+using DragaliaAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Integration.Test.Features.Tool;
 
 /// <summary>
-/// Tests <see cref="Controllers.Dragalia.ToolController"/>
+/// Tests <see cref="ToolController"/>
 /// </summary>
 public class ToolTest : TestFixture
 {
@@ -43,7 +44,7 @@ public class ToolTest : TestFixture
             await this.Client.PostMsgpack<ToolAuthResponse>(endpoint, new ToolAuthRequest() { })
         ).Data;
 
-        response.ViewerId.Should().Be((ulong)ViewerId);
+        response.ViewerId.Should().Be((ulong)this.ViewerId);
     }
 
     [Fact]
