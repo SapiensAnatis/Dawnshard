@@ -16,7 +16,6 @@ namespace DragaliaAPI.Controllers;
 /// should be used.
 /// </remarks>
 [ApiController]
-[SerializeException]
 [Authorize(AuthenticationSchemes = SchemeName.Session)]
 [Consumes("application/octet-stream")]
 [Produces("application/x-msgpack")]

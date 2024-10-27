@@ -3,36 +3,38 @@ using DragaliaAPI.MessagePack;
 using DragaliaAPI.Models;
 using DragaliaAPI.Services.Exceptions;
 using MessagePack;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DragaliaAPI.Infrastructure.Middleware;
 
-public class ExceptionHandlerMiddleware(RequestDelegate next)
+public static class ExceptionHandlerMiddleware
 {
     private static readonly DistributedCacheEntryOptions CacheOptions =
         new() { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5) };
 
-    public async Task InvokeAsync(
-        HttpContext context,
-        ILogger<ExceptionHandlerMiddleware> logger,
-        IDistributedCache cache
-    )
+    public static async Task HandleAsync(HttpContext context)
     {
-        Endpoint? endpoint = context.GetEndpoint();
-        bool serializeException =
-            endpoint?.Metadata.GetMetadata<SerializeExceptionAttribute>() is not null;
-
         string? deviceId = null;
         if (context.Request.Headers.TryGetValue("DeviceId", out StringValues values))
-            deviceId = values.FirstOrDefault();
-
-        try
         {
-            await next(context);
+            deviceId = values.FirstOrDefault();
         }
-        catch (SecurityTokenExpiredException ex) when (serializeException && deviceId is not null)
+
+        IExceptionHandlerPathFeature? exceptionHandlerPathFeature =
+            context.Features.Get<IExceptionHandlerPathFeature>();
+
+        Exception? exception = exceptionHandlerPathFeature?.Error;
+
+        ILogger logger = context
+            .RequestServices.GetRequiredService<ILoggerFactory>()
+            .CreateLogger(typeof(ExceptionHandlerMiddleware));
+
+        IDistributedCache cache = context.RequestServices.GetRequiredService<IDistributedCache>();
+
+        if (exception is SecurityTokenExpiredException ex && deviceId is not null)
         {
             logger.LogDebug("ID token was expired. Expiry: {expiry}", ex.Expires);
 
@@ -55,20 +57,19 @@ public class ExceptionHandlerMiddleware(RequestDelegate next)
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             context.Response.Headers.Append("Is-Required-Refresh-Id-Token", "true");
         }
-        catch (Exception ex)
-            when (serializeException && context.RequestAborted.IsCancellationRequested)
+        else if (context.RequestAborted.IsCancellationRequested)
         {
-            logger.LogWarning(ex, "Client cancelled request.");
+            logger.LogWarning(exception, "Client cancelled request.");
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
         }
-        catch (Exception ex) when (serializeException)
+        else
         {
-            ResultCode code = ex is DragaliaException dragaliaException
+            ResultCode code = exception is DragaliaException dragaliaException
                 ? dragaliaException.Code
                 : ResultCode.CommonServerError;
 
             logger.LogError(
-                ex,
+                exception,
                 "Encountered unhandled exception. Returning result_code {code}",
                 code
             );
