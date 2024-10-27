@@ -160,7 +160,9 @@ app.MapWhen(
         applicationBuilder.UseMiddleware<ResultCodeLoggingMiddleware>();
         applicationBuilder.UseOutputCache();
         applicationBuilder.UseMiddleware<NotFoundHandlerMiddleware>();
-        applicationBuilder.UseMiddleware<ExceptionHandlerMiddleware>();
+        applicationBuilder.UseExceptionHandler(cfg =>
+            cfg.Run(ExceptionHandlerMiddleware.HandleAsync)
+        );
         applicationBuilder.UseMiddleware<DailyResetMiddleware>();
         applicationBuilder.UseEndpoints(endpoints =>
         {
