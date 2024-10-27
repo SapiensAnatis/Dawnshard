@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Infrastructure.Middleware;
 using DragaliaAPI.Models;
 using DragaliaAPI.Shared.PlayerDetails;
@@ -16,7 +17,7 @@ namespace DragaliaAPI.Controllers;
 /// should be used.
 /// </remarks>
 [ApiController]
-[Authorize(AuthenticationSchemes = SchemeName.Session)]
+[Authorize(AuthenticationSchemes = AuthConstants.SchemeNames.Session)]
 [Consumes("application/octet-stream")]
 [Produces("application/x-msgpack")]
 [ServiceFilter<SetResultCodeActionFilter>(Order = 2)]

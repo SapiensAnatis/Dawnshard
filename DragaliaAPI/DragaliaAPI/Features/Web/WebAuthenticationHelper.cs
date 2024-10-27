@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using DragaliaAPI.Database;
+using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Services.Api;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -44,7 +45,7 @@ public static class WebAuthenticationHelper
 
         ILogger logger = context
             .HttpContext.RequestServices.GetRequiredService<ILoggerFactory>()
-            .CreateLogger("DragaliaAPI.Features.Web.WebAuthenticationHelper");
+            .CreateLogger(typeof(WebAuthenticationHelper));
 
         PlayerInfo? playerInfo = await GetPlayerInfo(context, jsonWebToken, logger);
 

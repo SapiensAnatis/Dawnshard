@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Infrastructure.Middleware;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -11,7 +12,7 @@ namespace DragaliaAPI.Controllers.Other;
 
 [Route("savefile")]
 [Consumes("application/json")]
-[Authorize(AuthenticationSchemes = SchemeName.Developer)]
+[Authorize(AuthenticationSchemes = AuthConstants.SchemeNames.Developer)]
 [ApiController]
 [ApiJsonOutput]
 public class SavefileController : ControllerBase

@@ -1,3 +1,4 @@
+using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;

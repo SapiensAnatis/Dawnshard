@@ -1,18 +1,17 @@
 using System.Diagnostics;
 using System.Reflection;
-using Dawnshard.ServiceDefaults;
 using DragaliaAPI;
 using DragaliaAPI.Authentication;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.GraphQL;
 using DragaliaAPI.Infrastructure;
+using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Infrastructure.Hangfire;
 using DragaliaAPI.Infrastructure.Middleware;
 using DragaliaAPI.Infrastructure.OutputCaching;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Options;
-using DragaliaAPI.Services.Health;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.MasterAsset;
 using EntityGraphQL.AspNet;
@@ -20,11 +19,9 @@ using Hangfire;
 using LinqToDB.Data;
 using LinqToDB.EntityFrameworkCore;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
-using Microsoft.JSInterop;
 using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -169,7 +166,9 @@ app.MapWhen(
             endpoints.MapControllers();
             endpoints.MapGraphQL<ApiContext>(configureEndpoint: endpoint =>
                 endpoint.RequireAuthorization(policy =>
-                    policy.RequireAuthenticatedUser().AddAuthenticationSchemes(SchemeName.Developer)
+                    policy
+                        .RequireAuthenticatedUser()
+                        .AddAuthenticationSchemes(AuthConstants.SchemeNames.Developer)
                 )
             );
         });
@@ -204,7 +203,7 @@ if (hangfireOptions is { Enabled: true })
             policy
                 .RequireAuthenticatedUser()
                 .RequireRole(Constants.Roles.Developer)
-                .AddAuthenticationSchemes(SchemeName.Developer);
+                .AddAuthenticationSchemes(AuthConstants.SchemeNames.Developer);
         });
 }
 

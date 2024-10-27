@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using DragaliaAPI.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
