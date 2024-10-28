@@ -1,27 +1,10 @@
 ﻿using DragaliaAPI.Models;
-using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Shared;
 
 namespace DragaliaAPI.Services;
 
 public interface ISessionService
 {
-    /// <summary>
-    /// Pre-register a session and associate it with the idToken in-memory.
-    /// </summary>
-    /// <param name="deviceAccount">The device account to associate with the new session.</param>
-    /// <param name="idToken">The id token to use as the key in the database.</param>
-    [Obsolete(ObsoleteReasons.BaaS)]
-    Task PrepareSession(DeviceAccount deviceAccount, string idToken);
-
-    /// <summary>
-    /// Complete registration of a session and issue its ID to a client.
-    /// </summary>
-    /// <param name="idToken">The ID token to use to look up the pre-registered session</param>
-    /// <returns>The session id.</returns>
-    [Obsolete(ObsoleteReasons.BaaS)]
-    Task<string> ActivateSession(string idToken);
-
     /// <summary>
     /// Create a new session.
     /// </summary>

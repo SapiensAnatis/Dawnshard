@@ -18,7 +18,7 @@ public class ToolControllerTest
     [Fact]
     public async Task Auth_CallsAuthService()
     {
-        this.mockAuthService.Setup(x => x.DoAuth("id token")).ReturnsAsync((1, "session_id"));
+        this.mockAuthService.Setup(x => x.DoLogin("id token")).ReturnsAsync((1, "session_id"));
 
         (await this.toolController.Auth("id token"))
             .GetData<ToolAuthResponse>()
@@ -36,7 +36,7 @@ public class ToolControllerTest
     [Fact]
     public async Task Signup_CallsAuthService()
     {
-        this.mockAuthService.Setup(x => x.DoAuth("id token")).ReturnsAsync((1, "session_id"));
+        this.mockAuthService.Setup(x => x.DoLogin("id token")).ReturnsAsync((1, "session_id"));
 
         (await this.toolController.Signup("id token"))
             .GetData<ToolSignupResponse>()

@@ -11,7 +11,7 @@ public static class CustomClaimType
     public const string AccountId = "AccountId";
 
     /// <summary>
-    /// Viewer ID; publically facing 'friend request' ID
+    /// Viewer ID; publicly facing 'friend request' ID
     /// </summary>
     public const string ViewerId = "ViewerId";
 

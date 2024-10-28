@@ -1,15 +1,14 @@
-﻿using System.Security.Claims;
+﻿using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.Tool;
-using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
+using DragaliaAPI.Services;
 using DragaliaAPI.Services.Api;
-using DragaliaAPI.Services.Exceptions;
-using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -17,211 +16,181 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Serilog.Context;
 
-namespace DragaliaAPI.Services.Game;
+namespace DragaliaAPI.Features.Tool;
 
-public class AuthService(
+internal sealed partial class AuthService(
     IBaasApi baasRequestHelper,
     ISessionService sessionService,
     ISavefileService savefileService,
     IPlayerIdentityService playerIdentityService,
-    IUserDataRepository userDataRepository,
     ApiContext apiContext,
-    IOptionsMonitor<LoginOptions> loginOptions,
-    IOptionsMonitor<BaasOptions> baasOptions,
     ILogger<AuthService> logger,
     TimeProvider dateTimeProvider
 ) : IAuthService
 {
-    private readonly IBaasApi baasRequestHelper = baasRequestHelper;
-    private readonly ISessionService sessionService = sessionService;
-    private readonly ISavefileService savefileService = savefileService;
-    private readonly IPlayerIdentityService playerIdentityService = playerIdentityService;
-    private readonly IUserDataRepository userDataRepository = userDataRepository;
-    private readonly ApiContext apiContext = apiContext;
-    private readonly IOptionsMonitor<LoginOptions> loginOptions = loginOptions;
-    private readonly IOptionsMonitor<BaasOptions> baasOptions = baasOptions;
-    private readonly ILogger<AuthService> logger = logger;
-    private readonly TimeProvider dateTimeProvider = dateTimeProvider;
-    private readonly JsonWebTokenHandler tokenHandler = new();
-
-    public async Task<(long viewerId, string sessionId)> DoAuth(string idToken)
+    public async Task<long> DoSignup()
     {
-        (long viewerId, string sessionId) result = this.loginOptions.CurrentValue.UseBaasLogin
-            ? await this.DoBaasAuth(idToken)
-#pragma warning disable CS0618 // Type or member is obsolete
-            : await this.DoLegacyAuth(idToken);
-#pragma warning restore CS0618 // Type or member is obsolete
-
-        return result;
+        throw new NotImplementedException();
     }
 
-    [Obsolete(ObsoleteReasons.BaaS)]
-    private async Task<(long viewerId, string sessionId)> DoLegacyAuth(string idToken)
+    public async Task<AuthResult> DoLogin(ClaimsPrincipal claimsPrincipal)
     {
-        string sessionId = await this.sessionService.ActivateSession(idToken);
-        Session session = await this.sessionService.LoadSessionSessionId(sessionId);
-        string deviceAccountId = session.DeviceAccountId;
-        long viewerId = session.ViewerId;
-
-        IQueryable<DbPlayerUserData> playerInfo;
-
-        using (this.playerIdentityService.StartUserImpersonation(viewerId, deviceAccountId))
+        string? subject = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (subject is null)
         {
-            playerInfo = this.userDataRepository.UserData;
+            throw new UnreachableException("Unable to retrieve subject");
         }
 
-        return (await playerInfo.Select(x => x.ViewerId).SingleAsync(), sessionId);
-    }
+        using IDisposable accIdLog = LogContext.PushProperty(CustomClaimType.AccountId, subject);
 
-    private async Task<(long viewerId, string sessionId)> DoBaasAuth(string idToken)
-    {
-        TokenValidationResult result = await this.ValidateToken(idToken);
-        JsonWebToken jwt = (JsonWebToken)result.SecurityToken;
+        CaseSensitiveClaimsIdentity jwtIdentity = claimsPrincipal
+            .Identities.OfType<CaseSensitiveClaimsIdentity>()
+            .First();
 
-        using IDisposable accIdLog = LogContext.PushProperty(
-            CustomClaimType.AccountId,
-            jwt.Subject
-        );
+        JsonWebToken token = (JsonWebToken)jwtIdentity.SecurityToken;
 
-        DbPlayer? player = await this
-            .apiContext.Players.IgnoreQueryFilters()
+        var player = await apiContext
+            .Players.IgnoreQueryFilters()
             .AsNoTracking()
-            .Include(x => x.UserData)
-            .FirstOrDefaultAsync(x => x.AccountId == jwt.Subject);
+            .Where(x => x.AccountId == subject)
+            .Select(x => new { x.AccountId, x.ViewerId })
+            .FirstAsync();
 
-        player ??= await this.savefileService.Create(jwt.Subject);
-
-        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
+        using IDisposable ctx = playerIdentityService.StartUserImpersonation(
             player.ViewerId,
             player.AccountId
         );
 
-        if (GetPendingSaveImport(jwt, player.UserData))
-            await this.ImportSave(idToken);
-
-        string sessionId = await this.sessionService.CreateSession(
-            idToken,
+        string sessionId = await sessionService.CreateSession(
+            token.EncodedToken,
             player.AccountId,
             player.ViewerId,
-            this.dateTimeProvider.GetUtcNow()
+            dateTimeProvider.GetUtcNow()
         );
 
-        this.logger.LogInformation(
-            "Authenticated user with viewer ID {id} and issued session ID {sid}",
-            player.ViewerId,
-            sessionId
-        );
+        Log.SuccessfullyAuthenticated(logger, player.ViewerId, sessionId);
 
-        return new(player.ViewerId, sessionId);
+        return new AuthResult { ViewerId = player.ViewerId, SessionId = sessionId };
     }
 
-    private async Task ImportSave(string idToken)
+    public async Task ImportSaveIfPending(ClaimsPrincipal claimsPrincipal)
     {
+        string? subject = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (subject is null)
+        {
+            throw new UnreachableException("Unable to retrieve subject");
+        }
+
+        CaseSensitiveClaimsIdentity jwtIdentity = claimsPrincipal
+            .Identities.OfType<CaseSensitiveClaimsIdentity>()
+            .First();
+
+        JsonWebToken token = (JsonWebToken)jwtIdentity.SecurityToken;
+
+        Log.PollingSaveImport(logger, subject);
+
+        DateTimeOffset? remoteSavefileDate = GetRemoteSavefileDate(subject, claimsPrincipal);
+
+        if (remoteSavefileDate is null)
+        {
+            Log.NoSaveAvailable(logger);
+            return;
+        }
+
+        Log.FoundRemoteSavefile(logger, remoteSavefileDate.Value);
+
+        DateTimeOffset localSavefileDate = await apiContext
+            .Players.IgnoreQueryFilters()
+            .AsNoTracking()
+            .Where(x => x.AccountId == subject)
+            .Select(x => x.UserData!.LastSaveImportTime)
+            .FirstAsync();
+
+        if (localSavefileDate >= remoteSavefileDate)
+        {
+            Log.LocalSavefileWasNewer(
+                logger,
+                remoteSavefileDate: remoteSavefileDate.Value,
+                localSavefileDate: localSavefileDate
+            );
+            return;
+        }
+
         try
         {
-            LoadIndexResponse pendingSave = await this.baasRequestHelper.GetSavefile(idToken);
-
-            this.logger.LogDebug("UserData: {@userData}", pendingSave.UserData);
-            await this.savefileService.ThreadSafeImport(pendingSave);
+            LoadIndexResponse pendingSave = await baasRequestHelper.GetSavefile(token.EncodedToken);
+            await savefileService.ThreadSafeImport(pendingSave);
         }
         catch (Exception e) when (e is JsonException or AutoMapperMappingException)
         {
-            this.logger.LogInformation(e, "Savefile was invalid.");
+            Log.SavefileInvalid(logger, e);
         }
         catch (Exception e)
         {
-            this.logger.LogWarning(e, "Error importing save");
+            Log.UnknwonSavefileImportError(logger, e);
             // Let them log in regardless
         }
     }
 
-    private async Task<TokenValidationResult> ValidateToken(string idToken)
+    private static DateTimeOffset? GetRemoteSavefileDate(
+        string subject,
+        ClaimsPrincipal claimsPrincipal
+    )
     {
-        TokenValidationResult validationResult = await this.tokenHandler.ValidateTokenAsync(
-            idToken,
-            new()
-            {
-                IssuerSigningKeys = await this.baasRequestHelper.GetKeys(),
-                ValidAudience = this.baasOptions.CurrentValue.TokenAudience,
-                ValidIssuer = this.baasOptions.CurrentValue.TokenIssuer,
-            }
-        );
-
-        if (!validationResult.IsValid)
+        if (claimsPrincipal.FindFirstValue("sav:a") != "true")
         {
-            string idTokenTrace = idToken[^5..];
-            string? accountId = (validationResult.SecurityToken as JsonWebToken)?.Subject;
-
-            LogContext.PushProperty(CustomClaimType.AccountId, accountId);
-
-            if (validationResult.Exception is SecurityTokenExpiredException)
-            {
-                // Go to ExceptionHandlerMiddleware to make the client receive a 400 and login again
-                logger.LogInformation(
-                    "ID token ..{token} was expired: {@validationResult}. Sending client to request a new one.",
-                    idTokenTrace,
-                    validationResult
-                );
-
-                throw validationResult.Exception;
-            }
-            else
-            {
-                logger.LogDebug(
-                    "ID token ..{token} was invalid: {@validationResult}",
-                    idTokenTrace,
-                    validationResult
-                );
-                throw new DragaliaException(
-                    ResultCode.IdTokenError,
-                    "Failed to validate BaaS token!",
-                    validationResult.Exception
-                );
-            }
+            return null;
         }
 
-        return validationResult;
+        string? saveTimestampStr = claimsPrincipal.FindFirstValue("sav:ts");
+        if (!long.TryParse(saveTimestampStr, out long saveUnixTimestamp))
+        {
+            throw new InvalidOperationException(
+                $"Failed to parse sav:ts value: {saveTimestampStr}"
+            );
+        }
+
+        return DateTimeOffset.FromUnixTimeSeconds(saveUnixTimestamp);
     }
 
-    private bool GetPendingSaveImport(JsonWebToken token, DbPlayerUserData? userData)
+    private static partial class Log
     {
-        this.logger.LogInformation("Polling save import for user {id}...", token.Subject);
+        [LoggerMessage(LogLevel.Debug, "Polling save import for user {AccountId}...")]
+        public static partial void PollingSaveImport(ILogger logger, string accountId);
 
-        if (!token.TryGetClaim("sav:a", out Claim? savefileAvailable))
-            return false;
+        [LoggerMessage(LogLevel.Information, "No savefile was available to import.")]
+        public static partial void NoSaveAvailable(ILogger logger);
 
-        if (savefileAvailable.Value != "true")
-        {
-            this.logger.LogInformation("No savefile was available to import.");
-            return false;
-        }
-
-        string? saveTimestampStr = token.Claims.FirstOrDefault(x => x.Type == "sav:ts")?.Value;
-        if (saveTimestampStr == null)
-            return false;
-
-        DateTimeOffset saveDateTime = DateTimeOffset.FromUnixTimeSeconds(
-            long.Parse(saveTimestampStr)
+        [LoggerMessage(LogLevel.Debug, "Found remote savefile with date {RemoteSavefileDate}.")]
+        public static partial void FoundRemoteSavefile(
+            ILogger logger,
+            DateTimeOffset remoteSavefileDate
         );
 
-        DateTimeOffset lastImportTime = userData?.LastSaveImportTime ?? DateTimeOffset.MinValue;
-        if (lastImportTime >= saveDateTime)
-        {
-            this.logger.LogInformation(
-                "The remote savefile was older. (stored: {t1}, remote: {t2})",
-                lastImportTime,
-                saveDateTime
-            );
-
-            return false;
-        }
-
-        this.logger.LogInformation(
-            "Detected pending save import for user {id} (stored: {t1}, remote: {t2})",
-            token.Subject,
-            lastImportTime,
-            saveDateTime
+        [LoggerMessage(
+            LogLevel.Information,
+            "The remote savefile ({RemoteSavefileDate}) was older than the local savefile ({LocalSavefileDate})."
+        )]
+        public static partial void LocalSavefileWasNewer(
+            ILogger logger,
+            DateTimeOffset remoteSavefileDate,
+            DateTimeOffset localSavefileDate
         );
-        return true;
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Authenticated user with viewer ID {ViewerId} and issued session ID {SessionId}."
+        )]
+        public static partial void SuccessfullyAuthenticated(
+            ILogger logger,
+            long viewerId,
+            string sessionId
+        );
+
+        [LoggerMessage(LogLevel.Information, "Savefile was invalid")]
+        public static partial void SavefileInvalid(ILogger logger, Exception ex);
+
+        [LoggerMessage(LogLevel.Warning, "Error importing save")]
+        public static partial void UnknwonSavefileImportError(ILogger logger, Exception ex);
     }
 }

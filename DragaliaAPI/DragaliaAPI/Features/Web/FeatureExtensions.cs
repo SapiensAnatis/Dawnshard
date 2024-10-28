@@ -3,6 +3,7 @@ using DragaliaAPI.Features.Web.News;
 using DragaliaAPI.Features.Web.Savefile;
 using DragaliaAPI.Features.Web.TimeAttack;
 using DragaliaAPI.Features.Web.Users;
+using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
@@ -16,7 +17,6 @@ public static partial class FeatureExtensions
     public static IServiceCollection AddWebFeature(this IServiceCollection serviceCollection)
     {
         serviceCollection
-            .AddTransient<IConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>()
             .AddScoped<UserService>()
             .AddScoped<NewsService>()
             .AddScoped<SavefileEditService>()

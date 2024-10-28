@@ -10,12 +10,12 @@ public class DragalipatchResponse : DragalipatchOptions
 {
     public bool UseUnifiedLogin { get; set; }
 
-    public DragalipatchResponse(LoginOptions loginOptions, DragalipatchOptions baseOptions)
+    public DragalipatchResponse(DragalipatchOptions baseOptions)
     {
         this.Mode = baseOptions.Mode;
         this.ConeshellKey = baseOptions.ConeshellKey;
         this.CdnUrl = baseOptions.CdnUrl;
-        this.UseUnifiedLogin = loginOptions.UseBaasLogin;
+        this.UseUnifiedLogin = true;
     }
 
     public DragalipatchResponse() { }

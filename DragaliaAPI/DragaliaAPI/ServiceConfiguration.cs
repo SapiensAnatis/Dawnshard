@@ -39,11 +39,13 @@ using DragaliaAPI.Services.Photon;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using AuthService = DragaliaAPI.Features.Tool.AuthService;
 
 namespace DragaliaAPI;
 
@@ -192,7 +194,6 @@ public static class ServiceConfiguration
     {
         services
             .Configure<BaasOptions>(config.GetRequiredSection("Baas"))
-            .Configure<LoginOptions>(config.GetRequiredSection("Login"))
             .Configure<DragalipatchOptions>(config.GetRequiredSection("Dragalipatch"))
             .Configure<RedisCachingOptions>(config.GetRequiredSection(nameof(RedisCachingOptions)))
             .Configure<PhotonOptions>(config.GetRequiredSection(nameof(PhotonOptions)))
@@ -204,6 +205,8 @@ public static class ServiceConfiguration
             )
             .Configure<EventOptions>(config.GetRequiredSection(nameof(EventOptions)))
             .Configure<MaintenanceOptions>(config.GetRequiredSection(nameof(MaintenanceOptions)));
+
+        services.AddTransient<IConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>();
 
         services.AddSummoningOptions(config);
 

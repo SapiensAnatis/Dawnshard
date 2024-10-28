@@ -1,22 +1,27 @@
 ﻿using DragaliaAPI.Controllers;
+using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Models.Generated;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.Tool;
 
-[Route("tool")]
 [AllowAnonymous]
-public class ToolController(IAuthService authService) : DragaliaControllerBaseCore
+[Route("tool")]
+internal sealed class ToolController(IAuthService authService) : DragaliaControllerBaseCore
 {
-    private const int OkServiceStatus = 1;
-    private const int MaintenanceServiceStatus = 2;
-
     [HttpPost]
-    [Route("signup")]
-    public async Task<DragaliaResult> Signup([FromHeader(Name = "ID-TOKEN")] string idToken)
+    [Route("get_service_status")]
+    public ActionResult<DragaliaResult> GetServiceStatus()
     {
-        (long viewerId, _) = await authService.DoAuth(idToken);
+        return this.Ok(new ToolGetServiceStatusResponse(1));
+    }
+
+    [HttpPost("signup")]
+    [Authorize(AuthenticationSchemes = AuthConstants.SchemeNames.GameJwt)]
+    public async Task<DragaliaResult> Signup()
+    {
+        long viewerId = await authService.DoSignup();
 
         return this.Ok(
             new ToolSignupResponse()
@@ -27,21 +32,21 @@ public class ToolController(IAuthService authService) : DragaliaControllerBaseCo
         );
     }
 
-    [HttpPost]
-    [Route("get_service_status")]
-    public ActionResult<DragaliaResult> GetServiceStatus()
+    [HttpPost("auth")]
+    [Authorize(AuthenticationSchemes = AuthConstants.SchemeNames.GameJwt)]
+    public async Task<DragaliaResult> Auth()
     {
-        return this.Ok(new ToolGetServiceStatusResponse(1));
-    }
+        if (!this.User.HasDawnshardIdentity())
+        {
+            return this.RedirectToRoute("tool/signup");
+        }
 
-    [HttpPost]
-    [Route("auth")]
-    public async Task<DragaliaResult> Auth([FromHeader(Name = "ID-TOKEN")] string idToken)
-    {
         // For some reason, the id_token in the ToolAuthRequest does not update with refreshes,
         // but the one in the header does.
 
-        (long viewerId, string sessionId) = await authService.DoAuth(idToken);
+        (long viewerId, string sessionId) = await authService.DoLogin(this.User);
+
+        await authService.ImportSaveIfPending(this.User);
 
         return this.Ok(
             new ToolAuthResponse()
@@ -54,9 +59,10 @@ public class ToolController(IAuthService authService) : DragaliaControllerBaseCo
     }
 
     [HttpPost("reauth")]
-    public async Task<DragaliaResult> Reauth([FromHeader(Name = "ID-TOKEN")] string idToken)
+    [Authorize(AuthenticationSchemes = AuthConstants.SchemeNames.GameJwt)]
+    public async Task<DragaliaResult> Reauth()
     {
-        (long viewerId, string sessionId) = await authService.DoAuth(idToken);
+        (long viewerId, string sessionId) = await authService.DoLogin(this.User);
 
         return this.Ok(
             new ToolReauthResponse()

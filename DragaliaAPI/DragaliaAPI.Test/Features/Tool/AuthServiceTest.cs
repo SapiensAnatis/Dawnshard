@@ -18,6 +18,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Time.Testing;
 using Microsoft.IdentityModel.Tokens;
 using MockQueryable;
+using AuthService = DragaliaAPI.Features.Tool.AuthService;
 
 namespace DragaliaAPI.Test.Services;
 
@@ -31,7 +32,6 @@ public class AuthServiceTest
     private readonly Mock<ISavefileService> mockSavefileService;
     private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
-    private readonly Mock<IOptionsMonitor<LoginOptions>> mockLoginOptions;
     private readonly Mock<IOptionsMonitor<BaasOptions>> mockBaasOptions;
     private readonly FakeTimeProvider mockDateTimeProvider;
     private readonly Mock<ILogger<AuthService>> mockLogger;
@@ -103,7 +103,7 @@ public class AuthServiceTest
 
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("device account id");
 
-        (await this.authService.DoAuth("id token")).Should().BeEquivalentTo((1, "session id"));
+        (await this.authService.DoLogin("id token")).Should().BeEquivalentTo((1, "session id"));
 
         this.mockSessionService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
@@ -145,7 +145,7 @@ public class AuthServiceTest
 
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(AccountId);
 
-        (await this.authService.DoAuth(token)).Should().BeEquivalentTo((1, "session id"));
+        (await this.authService.DoLogin(token)).Should().BeEquivalentTo((1, "session id"));
 
         this.mockBaasOptions.VerifyAll();
         this.mockLoginOptions.VerifyAll();
@@ -171,7 +171,7 @@ public class AuthServiceTest
         );
 
         await this
-            .authService.Invoking(x => x.DoAuth(token))
+            .authService.Invoking(x => x.DoLogin(token))
             .Should()
             .ThrowExactlyAsync<SecurityTokenExpiredException>();
 
@@ -189,7 +189,7 @@ public class AuthServiceTest
             .Returns(new LoginOptions() { UseBaasLogin = true });
         await this
             .authService.Invoking(x =>
-                x.DoAuth(
+                x.DoLogin(
                     "We cry tears of mascara in the bathroom / Honey life is just a classroom / Ah-ah-ah-ah"
                 )
             )
@@ -255,7 +255,7 @@ public class AuthServiceTest
         this.mockSavefileService.Setup(x => x.ThreadSafeImport(It.IsAny<LoadIndexResponse>()))
             .Returns(Task.CompletedTask);
 
-        await this.authService.DoAuth(token);
+        await this.authService.DoLogin(token);
 
         this.mockBaasOptions.VerifyAll();
         this.mockLoginOptions.VerifyAll();
@@ -315,7 +315,7 @@ public class AuthServiceTest
         this.mockSessionService.Setup(x => x.CreateSession(token, AccountId, 1, fixedTime))
             .ReturnsAsync("session id");
 
-        await this.authService.Invoking(x => x.DoAuth(token)).Should().NotThrowAsync();
+        await this.authService.Invoking(x => x.DoLogin(token)).Should().NotThrowAsync();
 
         this.mockBaasOptions.VerifyAll();
         this.mockLoginOptions.VerifyAll();
@@ -367,7 +367,7 @@ public class AuthServiceTest
 
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("account id");
 
-        await this.authService.DoAuth(token);
+        await this.authService.DoLogin(token);
 
         this.mockBaasOptions.VerifyAll();
         this.mockLoginOptions.VerifyAll();
@@ -421,7 +421,7 @@ public class AuthServiceTest
         this.mockSessionService.Setup(x => x.CreateSession(token, AccountId, 1, fixedTime))
             .ReturnsAsync("session id");
 
-        await this.authService.DoAuth(token);
+        await this.authService.DoLogin(token);
 
         this.mockBaasOptions.VerifyAll();
         this.mockLoginOptions.VerifyAll();

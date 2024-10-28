@@ -1,6 +1,10 @@
-﻿namespace DragaliaAPI.Features.Tool;
+﻿using System.Security.Claims;
 
-public interface IAuthService
+namespace DragaliaAPI.Features.Tool;
+
+internal interface IAuthService
 {
-    Task<(long viewerId, string sessionId)> DoAuth(string idToken);
+    Task<AuthResult> DoLogin(ClaimsPrincipal claimsPrincipal);
+    Task<long> DoSignup();
+    Task ImportSaveIfPending(ClaimsPrincipal claimsPrincipal);
 }
