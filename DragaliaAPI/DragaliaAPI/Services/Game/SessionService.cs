@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Models;
-using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared;
@@ -60,85 +59,6 @@ public class SessionService : ISessionService
 
         public static string ImpersonatedSession_DeviceAccountId(string deviceAccountId) =>
             $":impersonated_session:device_account_id:{deviceAccountId}";
-    }
-
-    [Obsolete(ObsoleteReasons.BaaS)]
-    public async Task PrepareSession(DeviceAccount deviceAccount, string idToken)
-    {
-        // Check if there is an existing session, and if so, remove it
-        string? existingSessionId = await cache.GetStringAsync(
-            Schema.SessionId_DeviceAccountId(deviceAccount.id)
-        );
-
-        if (!string.IsNullOrEmpty(existingSessionId))
-        {
-            await cache.RemoveAsync(Schema.Session_SessionId(existingSessionId));
-            await cache.RemoveAsync(Schema.SessionId_DeviceAccountId(deviceAccount.id));
-        }
-
-        string sessionId = Guid.NewGuid().ToString();
-
-        // Filler viewerid for session as this flow is deprecated
-        Session session =
-            new(sessionId, idToken, deviceAccount.id, 47337, this.dateTimeProvider.GetUtcNow());
-        await cache.SetStringAsync(
-            Schema.Session_IdToken(idToken),
-            JsonSerializer.Serialize(session),
-            CacheOptions
-        );
-
-        logger.LogInformation(
-            "Preparing session: DeviceAccount '{id}', id-token '{id_token}'",
-            deviceAccount.id,
-            idToken
-        );
-    }
-
-    [Obsolete(ObsoleteReasons.BaaS)]
-    public async Task<string> ActivateSession(string idToken)
-    {
-        Session session = await LoadSession(Schema.Session_IdToken(idToken));
-
-        // Move key to sessionId
-        // Don't remove -- sometimes /tool/auth is called multiple times consecutively?
-        // await _cache.RemoveAsync(Schema.Session_IdToken(idToken));
-        string? sessionJson = await cache.GetStringAsync(
-            Schema.Session_SessionId(session.SessionId)
-        );
-
-        if (!string.IsNullOrEmpty(sessionJson))
-        {
-            // Issue existing session ID if session has already been activated
-            Session existingSession =
-                JsonSerializer.Deserialize<Session>(sessionJson)
-                ?? throw new JsonException(
-                    $"Loaded session JSON {sessionJson} could not be deserialized."
-                );
-
-            return existingSession.SessionId;
-        }
-
-        // Register in sessions
-        await cache.SetStringAsync(
-            Schema.Session_SessionId(session.SessionId),
-            JsonSerializer.Serialize(session),
-            CacheOptions
-        );
-
-        // Register in existent sessions
-        await cache.SetStringAsync(
-            Schema.SessionId_DeviceAccountId(session.DeviceAccountId),
-            session.SessionId,
-            CacheOptions
-        );
-
-        this.logger.LogInformation(
-            "Activated session: id-token '{id_token}', issued session id '{session_id}'",
-            idToken,
-            session.SessionId
-        );
-
-        return session.SessionId;
     }
 
     public async Task<string> CreateSession(

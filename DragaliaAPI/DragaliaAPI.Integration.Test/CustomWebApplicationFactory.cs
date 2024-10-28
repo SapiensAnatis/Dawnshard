@@ -84,7 +84,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         {
             services.AddScoped(x => this.MockBaasApi.Object);
             services.AddScoped(x => this.MockPhotonStateApi.Object);
-            services.Configure<LoginOptions>(x => x.UseBaasLogin = true);
 
             services.RemoveAll<DbContextOptions<ApiContext>>();
             services.RemoveAll<IDistributedCache>();

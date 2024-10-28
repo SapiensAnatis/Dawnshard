@@ -211,17 +211,8 @@ app.MapDefaultEndpoints();
 
 app.MapGet(
     "/dragalipatch/config",
-    (
-        [FromServices] IOptionsMonitor<LoginOptions> loginOptions,
-        [FromServices] IOptionsMonitor<DragalipatchOptions> patchOptions
-    ) =>
-        new DragalipatchResponse()
-        {
-            Mode = patchOptions.CurrentValue.Mode,
-            ConeshellKey = patchOptions.CurrentValue.ConeshellKey,
-            CdnUrl = patchOptions.CurrentValue.CdnUrl,
-            UseUnifiedLogin = loginOptions.CurrentValue.UseBaasLogin,
-        }
+    ([FromServices] IOptionsMonitor<DragalipatchOptions> patchOptions) =>
+        new DragalipatchResponse(patchOptions.CurrentValue)
 );
 
 LinqToDBForEFTools.Initialize();

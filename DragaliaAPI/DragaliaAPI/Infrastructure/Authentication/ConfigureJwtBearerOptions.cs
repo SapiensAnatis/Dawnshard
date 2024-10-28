@@ -2,7 +2,7 @@ using DragaliaAPI.Models.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 
-namespace DragaliaAPI.Features.Web;
+namespace DragaliaAPI.Infrastructure.Authentication;
 
 /// <summary>
 /// Allows setting additional properties on <see cref="JwtBearerOptions"/> using DI.
