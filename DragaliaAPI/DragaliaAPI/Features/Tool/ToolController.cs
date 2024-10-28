@@ -17,11 +17,11 @@ internal sealed class ToolController(IAuthService authService) : DragaliaControl
         return this.Ok(new ToolGetServiceStatusResponse(1));
     }
 
-    [HttpPost("signup")]
+    [HttpPost("signup", Name = "Signup")]
     [Authorize(AuthenticationSchemes = AuthConstants.SchemeNames.GameJwt)]
     public async Task<DragaliaResult> Signup()
     {
-        long viewerId = await authService.DoSignup();
+        long viewerId = await authService.DoSignup(this.User);
 
         return this.Ok(
             new ToolSignupResponse()
@@ -38,11 +38,10 @@ internal sealed class ToolController(IAuthService authService) : DragaliaControl
     {
         if (!this.User.HasDawnshardIdentity())
         {
-            return this.RedirectToRoute("tool/signup");
+            // We can't rely on /tool/signup always being called for new users - as they may
+            // have just switched from a different server with an initialized client
+            await authService.DoSignup(this.User);
         }
-
-        // For some reason, the id_token in the ToolAuthRequest does not update with refreshes,
-        // but the one in the header does.
 
         (long viewerId, string sessionId) = await authService.DoLogin(this.User);
 

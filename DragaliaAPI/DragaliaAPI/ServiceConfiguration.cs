@@ -58,9 +58,6 @@ public static class ServiceConfiguration
     {
         services
             .AddScoped<ISessionService, SessionService>()
-#pragma warning disable CS0618 // Type or member is obsolete
-            .AddScoped<IDeviceAccountService, DeviceAccountService>()
-#pragma warning restore CS0618 // Type or member is obsolete
             .AddScoped<IUpdateDataService, UpdateDataService>()
             .AddScoped<IDragonService, DragonService>()
             .AddScoped<ISavefileService, SavefileService>()
