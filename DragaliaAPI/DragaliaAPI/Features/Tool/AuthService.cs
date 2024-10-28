@@ -28,7 +28,7 @@ internal sealed partial class AuthService(
     TimeProvider dateTimeProvider
 ) : IAuthService
 {
-    public async Task<long> DoSignup()
+    public async Task<long> DoSignup(ClaimsPrincipal user)
     {
         throw new NotImplementedException();
     }

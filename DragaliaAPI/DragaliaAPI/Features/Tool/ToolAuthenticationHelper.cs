@@ -14,6 +14,8 @@ internal static partial class ToolAuthenticationHelper
 {
     public static Task OnMessageReceived(MessageReceivedContext context)
     {
+        // Use ID-TOKEN from header rather than /tool/auth body - the header is updated
+        // on refreshes and generally seems to be the more accurate source of truth
         if (context.Request.Headers.TryGetValue("ID-TOKEN", out StringValues idToken))
         {
             context.Token = idToken.FirstOrDefault();
