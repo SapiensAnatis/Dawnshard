@@ -44,18 +44,7 @@ internal sealed class ToolController(IAuthService authService) : DragaliaControl
             // We can't rely on /tool/signup always being called for new users - as they may
             // have just switched from a different server with an initialized client
             DbPlayer player = await authService.DoSignup(this.User);
-
-            this.User.AddIdentity(
-                new ClaimsIdentity(
-                    [
-                        new Claim(CustomClaimType.AccountId, player.AccountId),
-                        new Claim(CustomClaimType.ViewerId, player.ViewerId.ToString()),
-                    ]
-                )
-                {
-                    Label = AuthConstants.IdentityLabels.Dawnshard,
-                }
-            );
+            this.User.InitializeDawnshardIdentity(player.AccountId, player.ViewerId);
         }
 
         (long viewerId, string sessionId) = await authService.DoLogin(this.User);
