@@ -50,19 +50,11 @@ internal static partial class ToolAuthenticationHelper
 
         if (playerInfo is not null)
         {
-            ClaimsIdentity playerIdentity =
-                new(
-                    [
-                        new Claim(CustomClaimType.AccountId, jsonWebToken.Subject),
-                        new Claim(CustomClaimType.ViewerId, playerInfo.ViewerId.ToString()),
-                        new Claim(CustomClaimType.PlayerName, playerInfo.Name),
-                    ]
-                )
-                {
-                    Label = AuthConstants.IdentityLabels.Dawnshard,
-                };
-
-            context.Principal?.AddIdentity(playerIdentity);
+            context.Principal?.InitializeDawnshardIdentity(
+                jsonWebToken.Subject,
+                playerInfo.ViewerId,
+                playerInfo.Name
+            );
         }
     }
 

@@ -51,19 +51,11 @@ public static class WebAuthenticationHelper
 
         if (playerInfo is not null)
         {
-            ClaimsIdentity playerIdentity =
-                new(
-                    [
-                        new Claim(CustomClaimType.AccountId, playerInfo.AccountId),
-                        new Claim(CustomClaimType.ViewerId, playerInfo.ViewerId.ToString()),
-                        new Claim(CustomClaimType.PlayerName, playerInfo.Name),
-                    ]
-                )
-                {
-                    Label = AuthConstants.IdentityLabels.Dawnshard,
-                };
-
-            context.Principal?.AddIdentity(playerIdentity);
+            context.Principal?.InitializeDawnshardIdentity(
+                playerInfo.AccountId,
+                playerInfo.ViewerId,
+                playerInfo.Name
+            );
         }
     }
 
