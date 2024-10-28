@@ -1,17 +1,13 @@
 ﻿using System.Diagnostics;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Api;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Serilog.Context;
@@ -28,18 +24,22 @@ internal sealed partial class AuthService(
     TimeProvider dateTimeProvider
 ) : IAuthService
 {
-    public async Task<long> DoSignup(ClaimsPrincipal user)
+    public async Task<DbPlayer> DoSignup(ClaimsPrincipal claimsPrincipal)
     {
-        throw new NotImplementedException();
+        string subject =
+            claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier)
+            ?? throw new UnreachableException("Unable to retrieve subject");
+
+        DbPlayer newPlayer = await savefileService.Create(subject);
+
+        return newPlayer;
     }
 
     public async Task<AuthResult> DoLogin(ClaimsPrincipal claimsPrincipal)
     {
-        string? subject = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (subject is null)
-        {
-            throw new UnreachableException("Unable to retrieve subject");
-        }
+        string subject =
+            claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier)
+            ?? throw new UnreachableException("Unable to retrieve subject");
 
         using IDisposable accIdLog = LogContext.PushProperty(CustomClaimType.AccountId, subject);
 
@@ -75,11 +75,9 @@ internal sealed partial class AuthService(
 
     public async Task ImportSaveIfPending(ClaimsPrincipal claimsPrincipal)
     {
-        string? subject = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (subject is null)
-        {
-            throw new UnreachableException("Unable to retrieve subject");
-        }
+        string subject =
+            claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier)
+            ?? throw new UnreachableException("Unable to retrieve subject");
 
         CaseSensitiveClaimsIdentity jwtIdentity = claimsPrincipal
             .Identities.OfType<CaseSensitiveClaimsIdentity>()
