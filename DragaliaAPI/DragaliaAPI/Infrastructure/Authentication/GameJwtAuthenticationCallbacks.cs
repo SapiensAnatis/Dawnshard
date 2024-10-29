@@ -1,20 +1,17 @@
 using System.Diagnostics;
-using System.Security.Claims;
 using DragaliaAPI.Database;
-using DragaliaAPI.Infrastructure.Authentication;
-using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.JsonWebTokens;
 
-namespace DragaliaAPI.Features.Tool;
+namespace DragaliaAPI.Infrastructure.Authentication;
 
-internal static partial class ToolAuthenticationHelper
+internal static partial class GameJwtAuthenticationCallbacks
 {
     public static Task OnMessageReceived(MessageReceivedContext context)
     {
-        // Use ID-TOKEN from header rather than /tool/auth body - the header is updated
+        // Use ID-TOKEN from header rather than id_token in body - the header is updated
         // on refreshes and generally seems to be the more accurate source of truth
         if (context.Request.Headers.TryGetValue("ID-TOKEN", out StringValues idToken))
         {
@@ -38,7 +35,7 @@ internal static partial class ToolAuthenticationHelper
 
         ILogger logger = context
             .HttpContext.RequestServices.GetRequiredService<ILoggerFactory>()
-            .CreateLogger(typeof(ToolAuthenticationHelper));
+            .CreateLogger(typeof(GameJwtAuthenticationCallbacks));
 
         var playerInfo = await apiContext
             .Players.IgnoreQueryFilters()
@@ -58,6 +55,11 @@ internal static partial class ToolAuthenticationHelper
         }
     }
 
+    public static Task OnChallenge(JwtBearerChallengeContext context)
+    {
+        return Task.CompletedTask;
+    }
+    
     private static partial class Log
     {
         [LoggerMessage(LogLevel.Debug, "PlayerInfo for game account {AccountId}: {@PlayerInfo}")]
