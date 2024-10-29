@@ -241,7 +241,19 @@ public static class ServiceConfiguration
                 null
             );
             opts.AddScheme<PhotonAuthenticationHandler>(nameof(PhotonAuthenticationHandler), null);
-        });
+        }).AddJwtBearer(
+            AuthConstants.SchemeNames.GameJwt,
+            options =>
+            {
+                options.Events = new()
+                {
+                    OnMessageReceived = GameJwtAuthenticationCallbacks.OnMessageReceived,
+                    OnTokenValidated = GameJwtAuthenticationCallbacks.OnTokenValidated,
+                    OnChallenge = GameJwtAuthenticationCallbacks.OnChallenge,
+                };
+                // Other options configured in ConfigureJwtBearerOptions.cs after the ServiceProvider is built.
+            }
+        );
 
         return services;
     }

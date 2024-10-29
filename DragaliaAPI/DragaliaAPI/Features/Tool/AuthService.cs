@@ -28,7 +28,7 @@ internal sealed partial class AuthService(
     {
         string subject =
             claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier)
-            ?? throw new UnreachableException("Unable to retrieve subject");
+            ?? throw new InvalidOperationException("Unable to retrieve subject");
 
         DbPlayer newPlayer = await savefileService.Create(subject);
 
@@ -39,7 +39,7 @@ internal sealed partial class AuthService(
     {
         string subject =
             claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier)
-            ?? throw new UnreachableException("Unable to retrieve subject");
+            ?? throw new InvalidOperationException("Unable to retrieve subject");
 
         using IDisposable accIdLog = LogContext.PushProperty(CustomClaimType.AccountId, subject);
 
