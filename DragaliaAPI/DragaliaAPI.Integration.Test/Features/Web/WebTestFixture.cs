@@ -2,11 +2,13 @@ namespace DragaliaAPI.Integration.Test.Features.Web;
 
 public class WebTestFixture : TestFixture
 {
+    private readonly HttpClient httpClient;
+    
     protected WebTestFixture(
         CustomWebApplicationFactory factory,
         ITestOutputHelper testOutputHelper
     )
-        : base(factory, testOutputHelper) { }
+        : base(factory, testOutputHelper) {this.httpClient = this.CreateClient(); }
 
     protected void SetupMockBaas()
     {
@@ -20,6 +22,6 @@ public class WebTestFixture : TestFixture
             DateTime.UtcNow + TimeSpan.FromMinutes(5)
         );
 
-        this.Client.DefaultRequestHeaders.Add("Cookie", $"idToken={token}");
+        this.httpClient.DefaultRequestHeaders.Add("Cookie", $"idToken={token}");
     }
 }

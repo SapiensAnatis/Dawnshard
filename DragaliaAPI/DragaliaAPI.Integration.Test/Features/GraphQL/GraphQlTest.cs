@@ -9,21 +9,24 @@ namespace DragaliaAPI.Integration.Test.Features.GraphQL;
 
 public class GraphQlTest : GraphQlTestFixture
 {
+    private readonly HttpClient httpClient;
     private const string Endpoint = "graphql";
 
     public GraphQlTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
+        this.httpClient = this.CreateClient();
+        
         Environment.SetEnvironmentVariable("DEVELOPER_TOKEN", "supersecrettoken");
-        this.Client.DefaultRequestHeaders.Add("Authorization", $"Bearer supersecrettoken");
+        this.httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer supersecrettoken");
     }
 
     [Fact]
     public async Task Endpoint_Unauthenticated_Returns401()
     {
-        this.Client.DefaultRequestHeaders.Clear();
+        this.httpClient.DefaultRequestHeaders.Clear();
 
-        (await this.Client.PostAsync(Endpoint, new StringContent(string.Empty)))
+        (await this.httpClient.PostAsync(Endpoint, new StringContent(string.Empty)))
             .StatusCode.Should()
             .Be(HttpStatusCode.Unauthorized);
     }

@@ -7,8 +7,10 @@ namespace DragaliaAPI.Integration.Test.Features.Version;
 /// </summary>
 public class VersionTest : TestFixture
 {
+    private readonly HttpClient httpClient;
+    
     public VersionTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper) { this.httpClient = this.CreateClient(); }
 
     [Theory]
     [InlineData(Platform.Ios, "b1HyoeTFegeTexC0")]
@@ -31,8 +33,8 @@ public class VersionTest : TestFixture
     [Fact]
     public async Task ResourceVersionMismatch_ReturnsError()
     {
-        this.Client.DefaultRequestHeaders.Remove("Res-Ver");
-        this.Client.DefaultRequestHeaders.Add("Res-Ver", "aaaaaaa");
+        this.httpClient.DefaultRequestHeaders.Remove("Res-Ver");
+        this.httpClient.DefaultRequestHeaders.Add("Res-Ver", "aaaaaaa");
 
         (
             await this.Client.PostMsgpack<ResultCodeResponse>(
@@ -47,8 +49,8 @@ public class VersionTest : TestFixture
     [Fact]
     public async Task ResourceVersionMismatch_ExemptController_ReturnsSuccess()
     {
-        this.Client.DefaultRequestHeaders.Remove("Res-Ver");
-        this.Client.DefaultRequestHeaders.Add("Res-Ver", "aaaaaaa");
+        this.httpClient.DefaultRequestHeaders.Remove("Res-Ver");
+        this.httpClient.DefaultRequestHeaders.Add("Res-Ver", "aaaaaaa");
 
         (
             await this.Client.PostMsgpack<ResultCodeResponse>(

@@ -11,12 +11,14 @@ namespace DragaliaAPI.Integration.Test.Features.Tool;
 /// </summary>
 public class ToolTest : TestFixture
 {
+    private readonly HttpClient httpClient;
     private const string IdTokenHeader = "ID-TOKEN";
 
     public ToolTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
-    {
-        this.Client.DefaultRequestHeaders.Remove("SID");
+   {
+       this.httpClient = this.CreateClient();
+        this.httpClient.DefaultRequestHeaders.Remove("SID");
         this.SetupSaveImport();
     }
 
@@ -41,7 +43,7 @@ public class ToolTest : TestFixture
             DeviceAccountId,
             DateTime.UtcNow + TimeSpan.FromMinutes(5)
         );
-        this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
+        this.httpClient.DefaultRequestHeaders.Add(IdTokenHeader, token);
 
         ToolAuthResponse response = (
             await this.Client.PostMsgpack<ToolAuthResponse>(endpoint)
@@ -82,7 +84,7 @@ public class ToolTest : TestFixture
             savefileTime: DateTimeOffset.UtcNow
         );
 
-        this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
+        this.httpClient.DefaultRequestHeaders.Add(IdTokenHeader, token);
 
         await this.Client.PostMsgpack<ToolAuthResponse>("tool/auth");
 
@@ -105,8 +107,8 @@ public class ToolTest : TestFixture
             DateTime.UtcNow - TimeSpan.FromHours(5)
         );
 
-        this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
-        this.Client.DefaultRequestHeaders.Add("DeviceId", "id");
+        this.httpClient.DefaultRequestHeaders.Add(IdTokenHeader, token);
+        this.httpClient.DefaultRequestHeaders.Add("DeviceId", "id");
 
         HttpResponseMessage response = await this.Client.PostMsgpackBasic(
             "/tool/auth",
@@ -162,7 +164,7 @@ public class ToolTest : TestFixture
     public async Task Auth_InvalidIdToken_ReturnsIdTokenError(string endpoint)
     {
         string token = "im blue dabba dee dabba doo";
-        this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
+        this.httpClient.DefaultRequestHeaders.Add(IdTokenHeader, token);
 
         DragaliaResponse<ResultCodeResponse> response =
             await this.Client.PostMsgpack<ResultCodeResponse>(

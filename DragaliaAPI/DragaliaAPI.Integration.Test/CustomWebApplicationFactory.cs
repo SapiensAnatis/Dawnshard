@@ -1,4 +1,5 @@
 using DragaliaAPI.Database;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Api;
 using DragaliaAPI.Shared.MasterAsset;
@@ -11,6 +12,8 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Time.Testing;
 using Npgsql;
 using Respawn;
 using Respawn.Graph;
@@ -22,6 +25,7 @@ namespace DragaliaAPI.Integration.Test;
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly TestContainersHelper testContainersHelper;
+    private HttpClient? client;
     private ConnectionMultiplexer? connectionMultiplexer;
 
     public CustomWebApplicationFactory()
@@ -36,6 +40,10 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
     public Mock<IPhotonStateApi> MockPhotonStateApi { get; } = new();
 
     public Respawner? Respawner { get; private set; }
+    
+    public HttpClient Client => client ?? throw new InvalidOperationException("Client cannot be accessed before InitializeAsync.");
+    
+    public FakeTimeProvider MockTimeProvider { get; } = new();
 
     public async Task InitializeAsync()
     {
@@ -69,6 +77,18 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
                 },
             }
         );
+        
+        this.client = this.CreateClient(new WebApplicationFactoryClientOptions()
+        {
+            BaseAddress = new Uri(
+                "http://localhost/2.19.0_20220714193707/",
+                UriKind.Absolute
+            ),
+        });
+        
+        client.DefaultRequestHeaders.Add(DragaliaHttpConstants.Headers.SessionId, "session_id");
+        client.DefaultRequestHeaders.Add("Platform", "2");
+        client.DefaultRequestHeaders.Add("Res-Ver", "y2XM6giU6zz56wCm");
     }
 
     public void ResetCache()
@@ -120,11 +140,14 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
                     IssuerSigningKeys = TokenHelper.SecurityKeys,
                 };
             });
+
+            services.AddSingleton(this.MockTimeProvider);
         });
 
         builder.UseEnvironment("Testing");
 
         // Ensure we override any supplemental config
         builder.ConfigureAppConfiguration(cfg => cfg.AddJsonFile("appsettings.Testing.json"));
+        
     }
 }

@@ -6,9 +6,12 @@ namespace DragaliaAPI.Integration.Test.Features.Web.Users;
 
 public class UserTests : WebTestFixture
 {
+    private HttpClient httpClient;
+
     public UserTests(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
         : base(factory, testOutputHelper)
     {
+        this.httpClient = this.CreateClient();
         this.SetupMockBaas();
     }
 
@@ -30,7 +33,7 @@ public class UserTests : WebTestFixture
 
         this.MockBaasApi.Setup(x => x.GetUserId(token)).ReturnsAsync((string?)null);
 
-        this.Client.DefaultRequestHeaders.Add("Cookie", $"idToken={token}");
+        this.httpClient.DefaultRequestHeaders.Add("Cookie", $"idToken={token}");
 
         HttpResponseMessage resp = await this.Client.GetAsync("/api/user/me");
 
@@ -45,7 +48,7 @@ public class UserTests : WebTestFixture
             DateTime.UtcNow + TimeSpan.FromMinutes(5)
         );
 
-        this.Client.DefaultRequestHeaders.Add("Cookie", $"idToken={token}");
+        this.httpClient.DefaultRequestHeaders.Add("Cookie", $"idToken={token}");
 
         HttpResponseMessage resp = await this.Client.GetAsync("/api/user/me");
 
@@ -72,7 +75,7 @@ public class UserTests : WebTestFixture
             DateTime.UtcNow + TimeSpan.FromMinutes(5)
         );
 
-        this.Client.DefaultRequestHeaders.Add("Cookie", $"idToken={token}");
+        this.httpClient.DefaultRequestHeaders.Add("Cookie", $"idToken={token}");
 
         HttpResponseMessage resp = await this.Client.GetAsync("/api/user/me/profile");
 

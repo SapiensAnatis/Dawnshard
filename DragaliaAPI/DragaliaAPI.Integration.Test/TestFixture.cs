@@ -47,7 +47,7 @@ public class TestFixture
 
         this.TestOutputHelper = testOutputHelper;
 
-        this.Client = this.CreateClient();
+        this.Client = factory.Client;
 
         this.Services = factory.Services.CreateScope().ServiceProvider;
 
@@ -71,6 +71,8 @@ public class TestFixture
             this.stubPlayerIdentityService,
             NullLogger<DungeonService>.Instance
         );
+        
+        this.factory.MockTimeProvider.
     }
 
     protected DateTimeOffset LastDailyReset { get; }
@@ -78,8 +80,8 @@ public class TestFixture
     protected Mock<IBaasApi> MockBaasApi => this.factory.MockBaasApi;
 
     protected Mock<IPhotonStateApi> MockPhotonStateApi => this.factory.MockPhotonStateApi;
-
-    protected FakeTimeProvider MockTimeProvider { get; } = new();
+    
+    protected FakeTimeProvider MockTimeProvider => this.factory.MockTimeProvider;
 
     protected ITestOutputHelper TestOutputHelper { get; }
 
@@ -181,20 +183,9 @@ public class TestFixture
 
     protected HttpClient CreateClient(Action<IWebHostBuilder>? extraBuilderConfig = null)
     {
+        // todo: make this an ext method on factory
         HttpClient client = factory
-            .WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.AddXUnit(this.TestOutputHelper);
-                });
-                builder.ConfigureTestServices(services =>
-                {
-                    services.AddSingleton<TimeProvider>(this.MockTimeProvider);
-                });
-                extraBuilderConfig?.Invoke(builder);
-            })
+            .WithWebHostBuilder(builder => extraBuilderConfig?.Invoke(builder))
             .CreateClient(
                 new WebApplicationFactoryClientOptions()
                 {

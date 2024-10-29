@@ -7,12 +7,15 @@ namespace DragaliaAPI.Integration.Test.Features.Zena;
 
 public class ZenaTest : TestFixture
 {
+    private readonly  HttpClient httpClient;
+    
     public ZenaTest(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
         : base(factory, testOutputHelper)
     {
         Environment.SetEnvironmentVariable("ZENA_TOKEN", "token");
 
-        this.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+        this.httpClient = this.CreateClient(); 
+        this.httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
             "Bearer",
             "token"
         );

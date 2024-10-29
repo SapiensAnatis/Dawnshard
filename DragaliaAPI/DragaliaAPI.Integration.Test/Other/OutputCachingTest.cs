@@ -5,11 +5,13 @@ namespace DragaliaAPI.Integration.Test.Other;
 
 public class OutputCachingTest : TestFixture
 {
+    private readonly HttpClient httpClient;
+    
     public OutputCachingTest(
         CustomWebApplicationFactory factory,
         ITestOutputHelper testOutputHelper
     )
-        : base(factory, testOutputHelper) { }
+        : base(factory, testOutputHelper) { this.httpClient = this.CreateClient(); }
 
     [Fact]
     public async Task RepeatedRequestPolicy_HandlesRepeatedUnsafeRequests()
@@ -27,10 +29,10 @@ public class OutputCachingTest : TestFixture
 
         await this.AddToDatabase(build);
 
-        this.Client.DefaultRequestHeaders.Add(Headers.RequestToken, "1234");
+        this.httpClient.DefaultRequestHeaders.Add(Headers.RequestToken, "1234");
 
         DragaliaResponse<FortBuildEndResponse> response =
-            await this.Client.PostMsgpack<FortBuildEndResponse>(
+            await this.httpClient.PostMsgpack<FortBuildEndResponse>(
                 "/fort/levelup_end",
                 new FortBuildEndRequest(build.BuildId),
                 ensureSuccessHeader: false
@@ -39,7 +41,7 @@ public class OutputCachingTest : TestFixture
         response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
 
         DragaliaResponse<FortBuildEndResponse> repeatedResponse =
-            await this.Client.PostMsgpack<FortBuildEndResponse>(
+            await this.httpClient.PostMsgpack<FortBuildEndResponse>(
                 "/fort/levelup_end",
                 new FortBuildEndRequest(build.BuildId),
                 ensureSuccessHeader: false

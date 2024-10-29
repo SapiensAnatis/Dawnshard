@@ -5,17 +5,20 @@ namespace DragaliaAPI.Integration.Test.Other;
 
 public class DragalipatchTest : TestFixture
 {
+    private HttpClient dragalipatchClient;
+    
     public DragalipatchTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         // Don't use /api prefix
-        this.Client.BaseAddress = new Uri("http://localhost/");
+        this.dragalipatchClient = this.CreateClient();
+        this.dragalipatchClient.BaseAddress = new Uri("http://localhost/");
     }
 
     [Fact]
     public async Task Config_ReturnsExpectedJson()
     {
-        HttpResponseMessage response = await this.Client.GetAsync("dragalipatch/config");
+        HttpResponseMessage response = await this.dragalipatchClient.GetAsync("dragalipatch/config");
 
         response.IsSuccessStatusCode.Should().BeTrue();
 

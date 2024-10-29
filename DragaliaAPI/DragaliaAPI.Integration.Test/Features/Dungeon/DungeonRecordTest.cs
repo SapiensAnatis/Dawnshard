@@ -12,6 +12,8 @@ namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 [SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments")]
 public class DungeonRecordTest : TestFixture
 {
+    private readonly HttpClient httpClient;
+    
     public DungeonRecordTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
@@ -25,6 +27,8 @@ public class DungeonRecordTest : TestFixture
         );
 
         this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
+        
+        this.httpClient = this.CreateClient(); 
     }
 
     [Fact]
@@ -867,8 +871,8 @@ public class DungeonRecordTest : TestFixture
         string roomId = "1234";
         string gameId = $"{roomName}_{roomId}";
 
-        this.Client.DefaultRequestHeaders.Add("RoomName", roomName);
-        this.Client.DefaultRequestHeaders.Add("RoomId", roomId);
+        this.httpClient.DefaultRequestHeaders.Add("RoomName", roomName);
+        this.httpClient.DefaultRequestHeaders.Add("RoomId", roomId);
 
         await this.AddToDatabase(
             new DbQuest()
@@ -1437,10 +1441,10 @@ public class DungeonRecordTest : TestFixture
 
     private void SetupPhotonAuthentication()
     {
-        this.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+        this.httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
             "Bearer",
             "supersecrettoken"
         );
-        this.Client.DefaultRequestHeaders.Add("Auth-ViewerId", this.ViewerId.ToString());
+        this.httpClient.DefaultRequestHeaders.Add("Auth-ViewerId", this.ViewerId.ToString());
     }
 }

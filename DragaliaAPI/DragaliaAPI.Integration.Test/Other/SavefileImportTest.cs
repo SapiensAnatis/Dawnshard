@@ -12,11 +12,16 @@ namespace DragaliaAPI.Integration.Test.Other;
 /// </summary>
 public class SavefileImportTest : TestFixture
 {
+    private readonly HttpClient httpClient;
+    
     public SavefileImportTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
+        
+        this.httpClient = this.CreateClient();
+        this.httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer supersecrettoken");
+        
         Environment.SetEnvironmentVariable("DEVELOPER_TOKEN", "supersecrettoken");
-        this.Client.DefaultRequestHeaders.Add("Authorization", $"Bearer supersecrettoken");
 
         CommonAssertionOptions.ApplyTimeOptions();
     }
@@ -24,7 +29,7 @@ public class SavefileImportTest : TestFixture
     [Fact]
     public async Task Import_NoDeveloperToken_Returns401()
     {
-        this.Client.DefaultRequestHeaders.Remove("Authorization");
+        this.httpClient.DefaultRequestHeaders.Remove("Authorization");
 
         HttpResponseMessage importResponse = await this.Client.PostAsync(
             $"savefile/import/1",
@@ -37,8 +42,8 @@ public class SavefileImportTest : TestFixture
     [Fact]
     public async Task Import_WrongDeveloperToken_Returns401()
     {
-        this.Client.DefaultRequestHeaders.Remove("Authorization");
-        this.Client.DefaultRequestHeaders.Add("Authorization", "blub blub blub");
+        this.httpClient.DefaultRequestHeaders.Remove("Authorization");
+        this.httpClient.DefaultRequestHeaders.Add("Authorization", "blub blub blub");
 
         HttpResponseMessage importResponse = await this.Client.PostAsync(
             $"savefile/import/1",
