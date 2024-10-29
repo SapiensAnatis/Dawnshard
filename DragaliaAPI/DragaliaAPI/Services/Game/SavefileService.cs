@@ -121,8 +121,6 @@ public class SavefileService : ISavefileService
 
         try
         {
-
-            
             await using IDbContextTransaction transaction =
                 await this.apiContext.Database.BeginTransactionAsync();
 

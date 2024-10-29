@@ -23,12 +23,7 @@ internal static partial class GameJwtAuthenticationCallbacks
 
     public static async Task OnTokenValidated(TokenValidatedContext context)
     {
-        if (context.SecurityToken is not JsonWebToken jsonWebToken)
-        {
-            throw new UnreachableException(
-                "TokenValidatedContext.SecurityToken was not a JsonWebToken"
-            );
-        }
+        JsonWebToken jsonWebToken = (JsonWebToken)context.SecurityToken;
 
         ApiContext apiContext =
             context.HttpContext.RequestServices.GetRequiredService<ApiContext>();
