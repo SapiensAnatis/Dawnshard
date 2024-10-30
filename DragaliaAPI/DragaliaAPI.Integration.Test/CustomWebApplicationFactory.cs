@@ -141,7 +141,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
                 };
             });
 
-            services.AddSingleton(this.MockTimeProvider);
+            services.AddSingleton<TimeProvider>(this.MockTimeProvider);
         });
 
         builder.UseEnvironment("Testing");

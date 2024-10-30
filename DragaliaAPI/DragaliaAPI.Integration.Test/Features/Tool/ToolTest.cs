@@ -25,10 +25,10 @@ public class ToolTest : TestFixture
     [Fact]
     public async Task ServiceStatus_ReturnsCorrectResponse()
     {
-        this.Client.DefaultRequestHeaders.Clear();
+        this.httpClient.DefaultRequestHeaders.Clear();
 
         ToolGetServiceStatusResponse response = (
-            await this.Client.PostMsgpack<ToolGetServiceStatusResponse>("tool/get_service_status")
+            await this.httpClient.PostMsgpack<ToolGetServiceStatusResponse>("tool/get_service_status")
         ).Data;
 
         response.ServiceStatus.Should().Be(1);

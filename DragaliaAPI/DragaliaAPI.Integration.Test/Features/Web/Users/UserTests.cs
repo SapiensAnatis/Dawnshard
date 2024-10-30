@@ -6,19 +6,17 @@ namespace DragaliaAPI.Integration.Test.Features.Web.Users;
 
 public class UserTests : WebTestFixture
 {
-    private HttpClient httpClient;
 
     public UserTests(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
         : base(factory, testOutputHelper)
     {
-        this.httpClient = this.CreateClient();
         this.SetupMockBaas();
     }
 
     [Fact]
     public async Task UserMe_NotAuthenticated_Returns401()
     {
-        HttpResponseMessage resp = await this.Client.GetAsync("/api/user/me");
+        HttpResponseMessage resp = await this.HttpClient.GetAsync("/api/user/me");
 
         resp.Should().HaveStatusCode(HttpStatusCode.Unauthorized);
     }
@@ -33,9 +31,9 @@ public class UserTests : WebTestFixture
 
         this.MockBaasApi.Setup(x => x.GetUserId(token)).ReturnsAsync((string?)null);
 
-        this.httpClient.DefaultRequestHeaders.Add("Cookie", $"idToken={token}");
+        this.HttpClient.DefaultRequestHeaders.Add("Cookie", $"idToken={token}");
 
-        HttpResponseMessage resp = await this.Client.GetAsync("/api/user/me");
+        HttpResponseMessage resp = await this.HttpClient.GetAsync("/api/user/me");
 
         resp.Should().HaveStatusCode(HttpStatusCode.NotFound);
     }
@@ -48,9 +46,9 @@ public class UserTests : WebTestFixture
             DateTime.UtcNow + TimeSpan.FromMinutes(5)
         );
 
-        this.httpClient.DefaultRequestHeaders.Add("Cookie", $"idToken={token}");
+        this.HttpClient.DefaultRequestHeaders.Add("Cookie", $"idToken={token}");
 
-        HttpResponseMessage resp = await this.Client.GetAsync("/api/user/me");
+        HttpResponseMessage resp = await this.HttpClient.GetAsync("/api/user/me");
 
         resp.Should().HaveStatusCode(HttpStatusCode.OK);
 
@@ -62,7 +60,7 @@ public class UserTests : WebTestFixture
     [Fact]
     public async Task UserMeProfile_Unauthenticated_Returns401()
     {
-        HttpResponseMessage resp = await this.Client.GetAsync("/api/user/me/profile");
+        HttpResponseMessage resp = await this.HttpClient.GetAsync("/api/user/me/profile");
 
         resp.Should().HaveStatusCode(HttpStatusCode.Unauthorized);
     }
@@ -75,9 +73,9 @@ public class UserTests : WebTestFixture
             DateTime.UtcNow + TimeSpan.FromMinutes(5)
         );
 
-        this.httpClient.DefaultRequestHeaders.Add("Cookie", $"idToken={token}");
+        this.HttpClient.DefaultRequestHeaders.Add("Cookie", $"idToken={token}");
 
-        HttpResponseMessage resp = await this.Client.GetAsync("/api/user/me/profile");
+        HttpResponseMessage resp = await this.HttpClient.GetAsync("/api/user/me/profile");
 
         resp.Should().HaveStatusCode(HttpStatusCode.OK);
 

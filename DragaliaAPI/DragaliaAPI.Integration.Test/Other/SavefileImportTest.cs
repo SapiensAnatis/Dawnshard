@@ -31,7 +31,7 @@ public class SavefileImportTest : TestFixture
     {
         this.httpClient.DefaultRequestHeaders.Remove("Authorization");
 
-        HttpResponseMessage importResponse = await this.Client.PostAsync(
+        HttpResponseMessage importResponse = await this.httpClient.PostAsync(
             $"savefile/import/1",
             JsonContent.Create(new { })
         );
@@ -45,7 +45,7 @@ public class SavefileImportTest : TestFixture
         this.httpClient.DefaultRequestHeaders.Remove("Authorization");
         this.httpClient.DefaultRequestHeaders.Add("Authorization", "blub blub blub");
 
-        HttpResponseMessage importResponse = await this.Client.PostAsync(
+        HttpResponseMessage importResponse = await this.httpClient.PostAsync(
             $"savefile/import/1",
             JsonContent.Create(new { })
         );
@@ -68,7 +68,7 @@ public class SavefileImportTest : TestFixture
         HttpContent content = new StringContent(savefileJson);
         content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
-        HttpResponseMessage importResponse = await this.Client.PostAsync(
+        HttpResponseMessage importResponse = await this.httpClient.PostAsync(
             $"savefile/import/{this.ViewerId}",
             content
         );
@@ -80,7 +80,7 @@ public class SavefileImportTest : TestFixture
             .BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMinutes(1));
 
         LoadIndexResponse storedSavefile = (
-            await this.Client.PostMsgpack<LoadIndexResponse>("load/index")
+            await this.httpClient.PostMsgpack<LoadIndexResponse>("load/index")
         ).Data;
 
         storedSavefile.UserData.Exp.Should().Be(savefile.UserData.Exp + 69990); // Exp rewarded from V22Update
@@ -164,7 +164,7 @@ public class SavefileImportTest : TestFixture
     public async Task Import_PropertiesMappedCorrectly()
     {
         HttpContent content = PrepareSavefileRequest("endgame_savefile.json");
-        await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
+        await this.httpClient.PostAsync($"savefile/import/{this.ViewerId}", content);
 
         this.ApiContext.PlayerStoryState.Single(x =>
                 x.ViewerId == this.ViewerId && x.StoryId == 110313011
@@ -189,7 +189,7 @@ public class SavefileImportTest : TestFixture
         this.ApiContext.ChangeTracker.Clear();
 
         HttpContent content = PrepareSavefileRequest("endgame_savefile.json");
-        await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
+        await this.httpClient.PostAsync($"savefile/import/{this.ViewerId}", content);
 
         this.ApiContext.Emblems.AsNoTracking()
             .Should()
@@ -207,7 +207,7 @@ public class SavefileImportTest : TestFixture
             );
 
         HttpContent content = PrepareSavefileRequest("endgame_savefile.json");
-        await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
+        await this.httpClient.PostAsync($"savefile/import/{this.ViewerId}", content);
 
         this.ApiContext.PlayerDragonGifts.Should()
             .Contain(x =>
@@ -223,7 +223,7 @@ public class SavefileImportTest : TestFixture
         );
 
         HttpContent content = PrepareSavefileRequest("endgame_savefile.json");
-        await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
+        await this.httpClient.PostAsync($"savefile/import/{this.ViewerId}", content);
 
         this.ApiContext.CompletedDailyMissions.Should()
             .NotContain(x => x.ViewerId == this.ViewerId);
@@ -234,13 +234,13 @@ public class SavefileImportTest : TestFixture
     {
         HttpContent content = PrepareSavefileRequest("endgame_savefile.json");
 
-        HttpResponseMessage importResponse = await this.Client.PostAsync(
+        HttpResponseMessage importResponse = await this.httpClient.PostAsync(
             $"savefile/import/{this.ViewerId}",
             content
         );
         importResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        HttpResponseMessage importResponse2 = await this.Client.PostAsync(
+        HttpResponseMessage importResponse2 = await this.httpClient.PostAsync(
             $"savefile/import/{this.ViewerId}",
             content
         );
@@ -253,7 +253,7 @@ public class SavefileImportTest : TestFixture
         // Savefile has 556 dragons and a (manipulated) max storage of 2000. Tests hard cap of 500.
         HttpContent content = PrepareSavefileRequest("savefile_excess_dragons.json");
 
-        HttpResponseMessage importResponse = await this.Client.PostAsync(
+        HttpResponseMessage importResponse = await this.httpClient.PostAsync(
             $"savefile/import/{this.ViewerId}",
             content
         );

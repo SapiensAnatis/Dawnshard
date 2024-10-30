@@ -18,7 +18,7 @@ public class SavefileEditTests : WebTestFixture
 
     [Fact]
     public async Task PresentWidgetData_Unauthenticated_Returns401() =>
-        (await this.Client.GetAsync("/api/savefile/edit/widgets/present"))
+        (await this.HttpClient.GetAsync("/api/savefile/edit/widgets/present"))
             .Should()
             .HaveStatusCode(HttpStatusCode.Unauthorized);
 
@@ -27,7 +27,7 @@ public class SavefileEditTests : WebTestFixture
     {
         this.AddTokenCookie();
 
-        HttpResponseMessage resp = await this.Client.GetAsync("/api/savefile/edit/widgets/present");
+        HttpResponseMessage resp = await this.HttpClient.GetAsync("/api/savefile/edit/widgets/present");
         resp.Should().HaveStatusCode(HttpStatusCode.OK);
 
         PresentWidgetData? data = await resp.Content.ReadFromJsonAsync<PresentWidgetData>();
@@ -51,7 +51,7 @@ public class SavefileEditTests : WebTestFixture
 
     [Fact]
     public async Task Edit_Unauthenticated_Returns401() =>
-        (await this.Client.PostAsync("/api/savefile/edit", null))
+        (await this.HttpClient.PostAsync("/api/savefile/edit", null))
             .Should()
             .HaveStatusCode(HttpStatusCode.Unauthorized);
 
@@ -74,7 +74,7 @@ public class SavefileEditTests : WebTestFixture
                 ],
             };
 
-        (await this.Client.PostAsJsonAsync("/api/savefile/edit", invalidRequest))
+        (await this.HttpClient.PostAsJsonAsync("/api/savefile/edit", invalidRequest))
             .Should()
             .HaveStatusCode(HttpStatusCode.BadRequest);
     }
@@ -98,12 +98,12 @@ public class SavefileEditTests : WebTestFixture
                 ],
             };
 
-        (await this.Client.PostAsJsonAsync("/api/savefile/edit", request))
+        (await this.HttpClient.PostAsJsonAsync("/api/savefile/edit", request))
             .Should()
             .HaveStatusCode(HttpStatusCode.OK);
 
         DragaliaResponse<PresentGetPresentListResponse> presentList =
-            await this.Client.PostMsgpack<PresentGetPresentListResponse>(
+            await this.HttpClient.PostMsgpack<PresentGetPresentListResponse>(
                 "/present/get_present_list",
                 new PresentGetPresentListRequest { PresentId = 0 }
             );

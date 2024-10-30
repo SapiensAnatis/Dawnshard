@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -5,16 +6,17 @@ using DragaliaAPI.Features.Zena;
 
 namespace DragaliaAPI.Integration.Test.Features.Zena;
 
-public class ZenaTest : TestFixture
+public class ZenaTest : TestFixture, IDisposable
 {
-    private readonly  HttpClient httpClient;
+    private readonly HttpClient httpClient;
     
     public ZenaTest(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
         : base(factory, testOutputHelper)
     {
         Environment.SetEnvironmentVariable("ZENA_TOKEN", "token");
 
-        this.httpClient = this.CreateClient(); 
+        this.httpClient = this.CreateClient();
+        
         this.httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
             "Bearer",
             "token"
@@ -24,7 +26,7 @@ public class ZenaTest : TestFixture
     [Fact]
     public async Task GetTeamData_ValidId_ReturnsTeamData()
     {
-        HttpResponseMessage zenaResponse = await this.Client.GetAsync(
+        HttpResponseMessage zenaResponse = await this.httpClient.GetAsync(
             $"zena/get_team_data?id={this.ViewerId}&teamnum=1"
         );
 
@@ -50,7 +52,7 @@ public class ZenaTest : TestFixture
     [Fact]
     public async Task GetTeamData_ValidId_MultiTeam_ReturnsTeamData()
     {
-        HttpResponseMessage zenaResponse = await this.Client.GetAsync(
+        HttpResponseMessage zenaResponse = await this.httpClient.GetAsync(
             $"zena/get_team_data?id={this.ViewerId}&teamnum=1&teamnum2=2"
         );
 
@@ -80,10 +82,16 @@ public class ZenaTest : TestFixture
     [Fact]
     public async Task GetTeamData_InvalidId_Returns404()
     {
-        HttpResponseMessage zenaResponse = await this.Client.GetAsync(
+        HttpResponseMessage zenaResponse = await this.httpClient.GetAsync(
             "zena/get_team_data?id=9999&teamnum=1&teamnum2=2"
         );
 
         zenaResponse.Should().HaveStatusCode(HttpStatusCode.NotFound);
+    }
+
+    [SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize")]
+    public void Dispose()
+    {
+        
     }
 }
