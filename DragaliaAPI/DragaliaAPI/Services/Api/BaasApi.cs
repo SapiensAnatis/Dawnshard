@@ -27,34 +27,6 @@ internal sealed partial class BaasApi : IBaasApi
         this.logger = logger;
     }
 
-    public async Task<IList<SecurityKey>> GetKeys()
-    {
-        string? cachedKeys = await cache.GetStringAsync(RedisKey);
-        if (!string.IsNullOrEmpty(cachedKeys))
-        {
-            JsonWebKeySet cachedJwks = new(cachedKeys);
-            return cachedJwks.GetSigningKeys();
-        }
-
-        HttpResponseMessage keySetResponse = await client.GetAsync(KeySetEndpoint);
-
-        if (!keySetResponse.IsSuccessStatusCode)
-        {
-            Log.ReceivedNon200Response(this.logger, KeySetEndpoint, keySetResponse.StatusCode);
-
-            throw new DragaliaException(
-                ResultCode.CommonAuthError,
-                "Received failure response from BaaS"
-            );
-        }
-
-        string response = await keySetResponse.Content.ReadAsStringAsync();
-        await cache.SetStringAsync(RedisKey, response);
-
-        JsonWebKeySet jwks = new(response);
-        return jwks.GetSigningKeys();
-    }
-
     public async Task<LoadIndexResponse> GetSavefile(string gameIdToken)
     {
         HttpResponseMessage savefileResponse = await client.PostAsJsonAsync<object>(

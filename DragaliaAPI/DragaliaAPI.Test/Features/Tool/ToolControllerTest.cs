@@ -62,6 +62,18 @@ public class ToolControllerTest
     [Fact]
     public async Task Signup_CallsAuthService()
     {
+        this.toolController.ControllerContext = new()
+        {
+            HttpContext = new DefaultHttpContext()
+            {
+                User = new(
+                    new ClaimsIdentity(
+                        []
+                    )
+                ),
+            },
+        };
+        
         this.mockAuthService.DoSignup(Arg.Any<ClaimsPrincipal>())
             .Returns(new DbPlayer() { ViewerId = 1, AccountId = "id" });
 

@@ -17,7 +17,7 @@ namespace DragaliaAPI.Database.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -124,20 +124,6 @@ namespace DragaliaAPI.Database.Migrations
                     b.HasKey("ViewerId", "Id", "Date");
 
                     b.ToTable("CompletedDailyMissions");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbDeviceAccount", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("HashedPassword")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DeviceAccounts");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbEmblem", b =>

@@ -49,8 +49,6 @@ public class TestFixture
 
         this.Client = this.CreateClient();
 
-        this.MockBaasApi.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
-
         this.Services = factory.Services.CreateScope().ServiceProvider;
 
         this.Mapper = this.Services.GetRequiredService<IMapper>();
