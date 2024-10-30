@@ -45,7 +45,7 @@ internal sealed partial class AuthService(
 
         CaseSensitiveClaimsIdentity jwtIdentity = claimsPrincipal
             .Identities.OfType<CaseSensitiveClaimsIdentity>()
-            .First();
+            .Single();
 
         JsonWebToken token = (JsonWebToken)jwtIdentity.SecurityToken;
 
@@ -81,7 +81,7 @@ internal sealed partial class AuthService(
 
         CaseSensitiveClaimsIdentity jwtIdentity = claimsPrincipal
             .Identities.OfType<CaseSensitiveClaimsIdentity>()
-            .First();
+            .Single();
 
         JsonWebToken token = (JsonWebToken)jwtIdentity.SecurityToken;
 

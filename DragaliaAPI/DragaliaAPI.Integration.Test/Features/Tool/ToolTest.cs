@@ -1,5 +1,7 @@
-﻿using DragaliaAPI.Features.Tool;
+﻿using System.Net;
+using DragaliaAPI.Features.Tool;
 using DragaliaAPI.Models;
+using MessagePack;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Tool;
@@ -112,11 +114,45 @@ public class ToolTest : TestFixture
         );
 
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
-        response.Headers.Should().ContainKey("Is-Required-Refresh-Id-Token");
         response
-            .Headers.GetValues("Is-Required-Refresh-Id-Token")
+            .Headers.Should()
+            .ContainKey("Is-Required-Refresh-Id-Token")
+            .WhoseValue.Should()
+            .BeEquivalentTo("true");
+    }
+
+    [Fact]
+    public async Task Auth_RepeatedExpiredIdToken_ReturnsAuthError()
+    {
+        string token = TokenHelper.GetToken(
+            DeviceAccountId,
+            DateTime.UtcNow - TimeSpan.FromHours(5)
+        );
+
+        this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
+        this.Client.DefaultRequestHeaders.Add("DeviceId", "id");
+
+        await this.Client.PostMsgpackBasic("/tool/auth", new ToolAuthRequest() { });
+
+        HttpResponseMessage secondResponse = await this.Client.PostMsgpackBasic(
+            $"/tool/auth",
+            new { }
+        );
+
+        secondResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        DragaliaResponse<ResultCodeResponse> responseBody = MessagePackSerializer.Deserialize<
+            DragaliaResponse<ResultCodeResponse>
+        >(await secondResponse.Content.ReadAsByteArrayAsync());
+
+        responseBody
             .Should()
-            .BeEquivalentTo(new List<string>() { "true" });
+            .BeEquivalentTo(
+                new DragaliaResponse<ResultCodeResponse>(
+                    new ResultCodeResponse(ResultCode.CommonAuthError),
+                    new DataHeaders(ResultCode.CommonAuthError)
+                )
+            );
     }
 
     [Theory]
