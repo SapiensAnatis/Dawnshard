@@ -34,7 +34,7 @@ public class NotFoundHandlerMiddleware
         }
 
         this.logger.LogInformation("HTTP 404 on {RequestPath}", context.Request.Path);
-        
+
         await context.WriteResultCodeResponse(NotFoundCode);
     }
 }
