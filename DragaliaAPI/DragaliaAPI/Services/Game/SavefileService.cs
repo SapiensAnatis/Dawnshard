@@ -442,7 +442,7 @@ public class SavefileService : ISavefileService
         // Since nothing in the tracker is going to be relevant in the face of total deletion, clear the
         // tracker entirely.
         this.apiContext.ChangeTracker.Clear();
-        
+
         // Options commented out have been excluded from save import deletion process.
         // They will still be deleted by cascade delete when a player is actually deleted
         // without being re-added as they are in save imports.

@@ -3,17 +3,18 @@ using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.Tool;
 
-[AllowAnonymous]
 [Route("tool")]
 internal sealed class ToolController(IAuthService authService) : DragaliaControllerBaseCore
 {
     [HttpPost]
+    [AllowAnonymous]
     [Route("get_service_status")]
     public ActionResult<DragaliaResult> GetServiceStatus()
     {
@@ -24,6 +25,14 @@ internal sealed class ToolController(IAuthService authService) : DragaliaControl
     [Authorize(AuthenticationSchemes = AuthConstants.SchemeNames.GameJwt)]
     public async Task<DragaliaResult> Signup()
     {
+        if (this.User.HasDawnshardIdentity())
+        {
+            throw new DragaliaException(
+                ResultCode.CommonAuthError,
+                "Unable to perform signup: user already has an account"
+            );
+        }
+
         DbPlayer player = await authService.DoSignup(this.User);
 
         return this.Ok(

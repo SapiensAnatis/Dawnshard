@@ -38,9 +38,6 @@ public static class DatabaseConfiguration
                         .EnableDetailedErrors();
                 }
             )
-#pragma warning disable CS0618 // Type or member is obsolete
-            .AddScoped<IDeviceAccountRepository, DeviceAccountRepository>()
-#pragma warning restore CS0618 // Type or member is obsolete
             .AddScoped<IUserDataRepository, UserDataRepository>()
             .AddScoped<IUnitRepository, UnitRepository>()
             .AddScoped<IInventoryRepository, InventoryRepository>()

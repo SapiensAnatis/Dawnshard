@@ -1,26 +1,52 @@
-﻿using DragaliaAPI.Features.Tool;
+﻿using System.Security.Claims;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Tool;
+using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.AspNetCore.Http;
+using NSubstitute;
 
 namespace DragaliaAPI.Test.Features.Tool;
 
 public class ToolControllerTest
 {
-    private readonly Mock<IAuthService> mockAuthService;
+    private readonly IAuthService mockAuthService;
     private readonly ToolController toolController;
 
     public ToolControllerTest()
     {
-        this.mockAuthService = new Mock<IAuthService>();
+        this.mockAuthService = Substitute.For<IAuthService>();
 
-        this.toolController = new(this.mockAuthService.Object);
+        this.toolController = new(this.mockAuthService);
+
+        this.toolController.ControllerContext = new()
+        {
+            HttpContext = new DefaultHttpContext()
+            {
+                User = new(
+                    new ClaimsIdentity(
+                        new List<Claim>()
+                        {
+                            new Claim(CustomClaimType.AccountId, "AccountId"),
+                            new Claim(CustomClaimType.ViewerId, "1"),
+                        }
+                    )
+                    {
+                        Label = AuthConstants.IdentityLabels.Dawnshard,
+                    }
+                ),
+            },
+        };
     }
 
     [Fact]
     public async Task Auth_CallsAuthService()
     {
-        this.mockAuthService.Setup(x => x.DoLogin("id token")).ReturnsAsync((1, "session_id"));
+        this.mockAuthService.DoLogin(Arg.Any<ClaimsPrincipal>())
+            .Returns(new AuthResult(1, "session_id"));
 
-        (await this.toolController.Auth("id token"))
+        (await this.toolController.Auth())
             .GetData<ToolAuthResponse>()
             .Should()
             .BeEquivalentTo(
@@ -36,9 +62,10 @@ public class ToolControllerTest
     [Fact]
     public async Task Signup_CallsAuthService()
     {
-        this.mockAuthService.Setup(x => x.DoLogin("id token")).ReturnsAsync((1, "session_id"));
+        this.mockAuthService.DoSignup(Arg.Any<ClaimsPrincipal>())
+            .Returns(new DbPlayer() { ViewerId = 1, AccountId = "id" });
 
-        (await this.toolController.Signup("id token"))
+        (await this.toolController.Signup())
             .GetData<ToolSignupResponse>()
             .Should()
             .BeEquivalentTo(
