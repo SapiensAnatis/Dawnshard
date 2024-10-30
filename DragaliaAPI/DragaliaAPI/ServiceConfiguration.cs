@@ -233,27 +233,35 @@ public static class ServiceConfiguration
 
     public static IServiceCollection ConfigureAuthentication(this IServiceCollection services)
     {
-        services.AddAuthentication(opts =>
-        {
-            opts.AddScheme<SessionAuthenticationHandler>(AuthConstants.SchemeNames.Session, null);
-            opts.AddScheme<DeveloperAuthenticationHandler>(
-                AuthConstants.SchemeNames.Developer,
-                null
-            );
-            opts.AddScheme<PhotonAuthenticationHandler>(nameof(PhotonAuthenticationHandler), null);
-        }).AddJwtBearer(
-            AuthConstants.SchemeNames.GameJwt,
-            options =>
+        services
+            .AddAuthentication(opts =>
             {
-                options.Events = new()
+                opts.AddScheme<SessionAuthenticationHandler>(
+                    AuthConstants.SchemeNames.Session,
+                    null
+                );
+                opts.AddScheme<DeveloperAuthenticationHandler>(
+                    AuthConstants.SchemeNames.Developer,
+                    null
+                );
+                opts.AddScheme<PhotonAuthenticationHandler>(
+                    nameof(PhotonAuthenticationHandler),
+                    null
+                );
+            })
+            .AddJwtBearer(
+                AuthConstants.SchemeNames.GameJwt,
+                options =>
                 {
-                    OnMessageReceived = GameJwtAuthenticationCallbacks.OnMessageReceived,
-                    OnTokenValidated = GameJwtAuthenticationCallbacks.OnTokenValidated,
-                    OnChallenge = GameJwtAuthenticationCallbacks.OnChallenge,
-                };
-                // Other options configured in ConfigureJwtBearerOptions.cs after the ServiceProvider is built.
-            }
-        );
+                    options.Events = new()
+                    {
+                        OnMessageReceived = GameJwtAuthenticationCallbacks.OnMessageReceived,
+                        OnTokenValidated = GameJwtAuthenticationCallbacks.OnTokenValidated,
+                        OnChallenge = GameJwtAuthenticationCallbacks.OnChallenge,
+                    };
+                    // Other options configured in ConfigureJwtBearerOptions.cs after the ServiceProvider is built.
+                }
+            );
 
         return services;
     }

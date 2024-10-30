@@ -21,10 +21,6 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
         this.playerIdentityService = playerIdentityService;
     }
 
-#pragma warning disable CS0618 // Type or member is obsolete
-    public DbSet<DbDeviceAccount> DeviceAccounts { get; set; } = null!;
-#pragma warning restore CS0618 // Type or member is obsolete
-
     public DbSet<DbPlayer> Players { get; set; } = null!;
 
     public DbSet<DbPlayerUserData> PlayerUserData { get; set; } = null!;

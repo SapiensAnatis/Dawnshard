@@ -50,11 +50,5 @@ public class TestController : DragaliaControllerBase
     {
         throw new DragaliaException(ResultCode.AbilityCrestBuildupPieceShortLevel);
     }
-
-    [HttpPost("securitytokenexpired")]
-    public IActionResult SecurityTokenExpired()
-    {
-        throw new SecurityTokenExpiredException();
-    }
 }
 #endif

@@ -21,6 +21,8 @@ public class ToolTest : TestFixture
     [Fact]
     public async Task ServiceStatus_ReturnsCorrectResponse()
     {
+        this.Client.DefaultRequestHeaders.Clear();
+
         ToolGetServiceStatusResponse response = (
             await this.Client.PostMsgpack<ToolGetServiceStatusResponse>("tool/get_service_status")
         ).Data;
@@ -29,7 +31,6 @@ public class ToolTest : TestFixture
     }
 
     [Theory]
-    [InlineData("/tool/signup")]
     [InlineData("/tool/auth")]
     [InlineData("/tool/reauth")]
     public async Task Auth_CorrectIdToken_ReturnsOKResponse(string endpoint)
@@ -41,10 +42,28 @@ public class ToolTest : TestFixture
         this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
 
         ToolAuthResponse response = (
-            await this.Client.PostMsgpack<ToolAuthResponse>(endpoint, new ToolAuthRequest() { })
+            await this.Client.PostMsgpack<ToolAuthResponse>(endpoint)
         ).Data;
 
         response.ViewerId.Should().Be((ulong)this.ViewerId);
+    }
+
+    [Theory]
+    [InlineData("/tool/signup")]
+    [InlineData("/tool/auth")]
+    public async Task Auth_NoAccount_CreatesNewUser(string endpoint)
+    {
+        string token = TokenHelper.GetToken(
+            $"new account {Guid.NewGuid()}",
+            DateTime.UtcNow + TimeSpan.FromMinutes(5)
+        );
+        this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
+
+        ToolAuthResponse response = (
+            await this.Client.PostMsgpack<ToolAuthResponse>(endpoint)
+        ).Data;
+
+        response.ViewerId.Should().Be((ulong)this.ViewerId + 1);
     }
 
     [Fact]
@@ -63,7 +82,7 @@ public class ToolTest : TestFixture
 
         this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
 
-        await this.Client.PostMsgpack<ToolAuthResponse>("tool/auth", new ToolAuthRequest() { });
+        await this.Client.PostMsgpack<ToolAuthResponse>("tool/auth");
 
         this.ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == this.ViewerId)
