@@ -64,16 +64,9 @@ public class ToolControllerTest
     {
         this.toolController.ControllerContext = new()
         {
-            HttpContext = new DefaultHttpContext()
-            {
-                User = new(
-                    new ClaimsIdentity(
-                        []
-                    )
-                ),
-            },
+            HttpContext = new DefaultHttpContext() { User = new(new ClaimsIdentity([])) },
         };
-        
+
         this.mockAuthService.DoSignup(Arg.Any<ClaimsPrincipal>())
             .Returns(new DbPlayer() { ViewerId = 1, AccountId = "id" });
 
