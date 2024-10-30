@@ -6,7 +6,7 @@ namespace DragaliaAPI.Integration.Test.Other;
 public class DragalipatchTest : TestFixture
 {
     private HttpClient dragalipatchClient;
-    
+
     public DragalipatchTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
@@ -18,7 +18,9 @@ public class DragalipatchTest : TestFixture
     [Fact]
     public async Task Config_ReturnsExpectedJson()
     {
-        HttpResponseMessage response = await this.dragalipatchClient.GetAsync("dragalipatch/config");
+        HttpResponseMessage response = await this.dragalipatchClient.GetAsync(
+            "dragalipatch/config"
+        );
 
         response.IsSuccessStatusCode.Should().BeTrue();
 

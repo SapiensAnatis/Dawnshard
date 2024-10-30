@@ -6,12 +6,15 @@ namespace DragaliaAPI.Integration.Test.Other;
 public class OutputCachingTest : TestFixture
 {
     private readonly HttpClient httpClient;
-    
+
     public OutputCachingTest(
         CustomWebApplicationFactory factory,
         ITestOutputHelper testOutputHelper
     )
-        : base(factory, testOutputHelper) { this.httpClient = this.CreateClient(); }
+        : base(factory, testOutputHelper)
+    {
+        this.httpClient = this.CreateClient();
+    }
 
     [Fact]
     public async Task RepeatedRequestPolicy_HandlesRepeatedUnsafeRequests()

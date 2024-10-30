@@ -78,7 +78,7 @@ public class TestFixture
     protected Mock<IBaasApi> MockBaasApi => this.factory.MockBaasApi;
 
     protected Mock<IPhotonStateApi> MockPhotonStateApi => this.factory.MockPhotonStateApi;
-    
+
     protected FakeTimeProvider MockTimeProvider => this.factory.MockTimeProvider;
 
     protected ITestOutputHelper TestOutputHelper { get; }

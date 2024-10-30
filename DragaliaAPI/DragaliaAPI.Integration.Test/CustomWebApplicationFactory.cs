@@ -40,9 +40,11 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
     public Mock<IPhotonStateApi> MockPhotonStateApi { get; } = new();
 
     public Respawner? Respawner { get; private set; }
-    
-    public HttpClient Client => client ?? throw new InvalidOperationException("Client cannot be accessed before InitializeAsync.");
-    
+
+    public HttpClient Client =>
+        client
+        ?? throw new InvalidOperationException("Client cannot be accessed before InitializeAsync.");
+
     public FakeTimeProvider MockTimeProvider { get; } = new();
 
     public async Task InitializeAsync()
@@ -77,15 +79,14 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
                 },
             }
         );
-        
-        this.client = this.CreateClient(new WebApplicationFactoryClientOptions()
-        {
-            BaseAddress = new Uri(
-                "http://localhost/2.19.0_20220714193707/",
-                UriKind.Absolute
-            ),
-        });
-        
+
+        this.client = this.CreateClient(
+            new WebApplicationFactoryClientOptions()
+            {
+                BaseAddress = new Uri("http://localhost/2.19.0_20220714193707/", UriKind.Absolute),
+            }
+        );
+
         client.DefaultRequestHeaders.Add(DragaliaHttpConstants.Headers.SessionId, "session_id");
         client.DefaultRequestHeaders.Add("Platform", "2");
         client.DefaultRequestHeaders.Add("Res-Ver", "y2XM6giU6zz56wCm");
@@ -148,6 +149,5 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
 
         // Ensure we override any supplemental config
         builder.ConfigureAppConfiguration(cfg => cfg.AddJsonFile("appsettings.Testing.json"));
-        
     }
 }

@@ -10,10 +10,10 @@ namespace DragaliaAPI.Integration.Test.Features.Login;
 public class LoginTest : TestFixture
 {
     public LoginTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) {  
-        this.MockTimeProvider.AdjustTime(
-        DateTimeOffset.UtcNow.AddHours(-1)
-    ); }
+        : base(factory, outputHelper)
+    {
+        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow.AddHours(-1));
+    }
 
     [Fact]
     public void IDailyResetAction_HasExpectedCount()

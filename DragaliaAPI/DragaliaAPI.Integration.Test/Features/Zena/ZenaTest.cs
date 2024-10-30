@@ -9,14 +9,14 @@ namespace DragaliaAPI.Integration.Test.Features.Zena;
 public class ZenaTest : TestFixture, IDisposable
 {
     private readonly HttpClient httpClient;
-    
+
     public ZenaTest(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
         : base(factory, testOutputHelper)
     {
         Environment.SetEnvironmentVariable("ZENA_TOKEN", "token");
 
         this.httpClient = this.CreateClient();
-        
+
         this.httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
             "Bearer",
             "token"
@@ -90,8 +90,5 @@ public class ZenaTest : TestFixture, IDisposable
     }
 
     [SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize")]
-    public void Dispose()
-    {
-        
-    }
+    public void Dispose() { }
 }

@@ -3,12 +3,15 @@ namespace DragaliaAPI.Integration.Test.Features.Web;
 public class WebTestFixture : TestFixture
 {
     protected HttpClient HttpClient { get; private set; }
-    
+
     protected WebTestFixture(
         CustomWebApplicationFactory factory,
         ITestOutputHelper testOutputHelper
     )
-        : base(factory, testOutputHelper) {this.HttpClient = this.CreateClient(); }
+        : base(factory, testOutputHelper)
+    {
+        this.HttpClient = this.CreateClient();
+    }
 
     protected void SetupMockBaas()
     {

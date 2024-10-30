@@ -8,9 +8,12 @@ namespace DragaliaAPI.Integration.Test.Features.Version;
 public class VersionTest : TestFixture
 {
     private readonly HttpClient httpClient;
-    
+
     public VersionTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { this.httpClient = this.CreateClient(); }
+        : base(factory, outputHelper)
+    {
+        this.httpClient = this.CreateClient();
+    }
 
     [Theory]
     [InlineData(Platform.Ios, "b1HyoeTFegeTexC0")]

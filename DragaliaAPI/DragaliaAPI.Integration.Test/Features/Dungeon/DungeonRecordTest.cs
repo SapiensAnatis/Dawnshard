@@ -13,7 +13,7 @@ namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 public class DungeonRecordTest : TestFixture
 {
     private readonly HttpClient httpClient;
-    
+
     public DungeonRecordTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
@@ -27,8 +27,8 @@ public class DungeonRecordTest : TestFixture
         );
 
         this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
-        
-        this.httpClient = this.CreateClient(); 
+
+        this.httpClient = this.CreateClient();
     }
 
     [Fact]

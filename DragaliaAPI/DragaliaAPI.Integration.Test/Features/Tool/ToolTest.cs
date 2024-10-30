@@ -16,8 +16,8 @@ public class ToolTest : TestFixture
 
     public ToolTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
-   {
-       this.httpClient = this.CreateClient();
+    {
+        this.httpClient = this.CreateClient();
         this.httpClient.DefaultRequestHeaders.Remove("SID");
         this.SetupSaveImport();
     }
@@ -28,7 +28,9 @@ public class ToolTest : TestFixture
         this.httpClient.DefaultRequestHeaders.Clear();
 
         ToolGetServiceStatusResponse response = (
-            await this.httpClient.PostMsgpack<ToolGetServiceStatusResponse>("tool/get_service_status")
+            await this.httpClient.PostMsgpack<ToolGetServiceStatusResponse>(
+                "tool/get_service_status"
+            )
         ).Data;
 
         response.ServiceStatus.Should().Be(1);

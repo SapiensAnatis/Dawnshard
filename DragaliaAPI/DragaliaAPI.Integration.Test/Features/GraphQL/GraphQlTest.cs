@@ -19,7 +19,7 @@ public class GraphQlTest : TestFixture
         : base(factory, outputHelper)
     {
         this.httpClient = this.CreateClient();
-        
+
         Uri endpoint = new(this.httpClient.BaseAddress!, "graphql");
 
         this.graphQLClient = new(
@@ -27,7 +27,7 @@ public class GraphQlTest : TestFixture
             new SystemTextJsonSerializer(),
             this.httpClient
         );
-        
+
         Environment.SetEnvironmentVariable("DEVELOPER_TOKEN", "supersecrettoken");
         this.httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer supersecrettoken");
     }

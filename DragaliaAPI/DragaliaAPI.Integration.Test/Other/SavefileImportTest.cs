@@ -13,14 +13,13 @@ namespace DragaliaAPI.Integration.Test.Other;
 public class SavefileImportTest : TestFixture
 {
     private readonly HttpClient httpClient;
-    
+
     public SavefileImportTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        
         this.httpClient = this.CreateClient();
         this.httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer supersecrettoken");
-        
+
         Environment.SetEnvironmentVariable("DEVELOPER_TOKEN", "supersecrettoken");
 
         CommonAssertionOptions.ApplyTimeOptions();

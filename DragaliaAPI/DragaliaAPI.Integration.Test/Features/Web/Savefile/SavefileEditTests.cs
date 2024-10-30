@@ -27,7 +27,9 @@ public class SavefileEditTests : WebTestFixture
     {
         this.AddTokenCookie();
 
-        HttpResponseMessage resp = await this.HttpClient.GetAsync("/api/savefile/edit/widgets/present");
+        HttpResponseMessage resp = await this.HttpClient.GetAsync(
+            "/api/savefile/edit/widgets/present"
+        );
         resp.Should().HaveStatusCode(HttpStatusCode.OK);
 
         PresentWidgetData? data = await resp.Content.ReadFromJsonAsync<PresentWidgetData>();
