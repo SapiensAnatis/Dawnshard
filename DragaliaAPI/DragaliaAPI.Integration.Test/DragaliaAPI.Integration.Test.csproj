@@ -40,6 +40,8 @@
 
   <PropertyGroup>
     <DependsOnApiMsgpackFiles>true</DependsOnApiMsgpackFiles>
+    <!-- Use of experimental FakeTimeProvider.AdjustTime API -->
+    <NoWarn>$(NoWarn);EXTEXP0004</NoWarn>
   </PropertyGroup>
 
 </Project>

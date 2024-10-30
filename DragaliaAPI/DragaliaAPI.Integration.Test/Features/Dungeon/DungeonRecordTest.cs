@@ -26,7 +26,7 @@ public class DungeonRecordTest : TestFixture
             p.SetProperty(e => e.StaminaMulti, e => 100)
         );
 
-        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
+        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
         
         this.httpClient = this.CreateClient(); 
     }
@@ -897,7 +897,7 @@ public class DungeonRecordTest : TestFixture
         string dungeonKey = startResponse.IngameData.DungeonKey;
         float clearTime = 10.4f;
 
-        await this.Client.PostMsgpack(
+        await this.httpClient.PostMsgpack(
             "/dungeon_record/record_time_attack",
             new DungeonRecordRecordMultiRequest()
             {

@@ -16,7 +16,7 @@ public class QuestBonusTest : TestFixture
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions();
-        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
+        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
     }
 
     [Fact]

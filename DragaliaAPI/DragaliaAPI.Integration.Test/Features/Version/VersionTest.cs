@@ -37,7 +37,7 @@ public class VersionTest : TestFixture
         this.httpClient.DefaultRequestHeaders.Add("Res-Ver", "aaaaaaa");
 
         (
-            await this.Client.PostMsgpack<ResultCodeResponse>(
+            await this.httpClient.PostMsgpack<ResultCodeResponse>(
                 "fort/get_data",
                 ensureSuccessHeader: false
             )
@@ -53,7 +53,7 @@ public class VersionTest : TestFixture
         this.httpClient.DefaultRequestHeaders.Add("Res-Ver", "aaaaaaa");
 
         (
-            await this.Client.PostMsgpack<ResultCodeResponse>(
+            await this.httpClient.PostMsgpack<ResultCodeResponse>(
                 "tool/get_service_status",
                 ensureSuccessHeader: false
             )

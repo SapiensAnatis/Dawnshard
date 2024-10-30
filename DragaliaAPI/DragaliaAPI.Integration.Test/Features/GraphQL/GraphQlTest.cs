@@ -3,19 +3,30 @@ using System.Text.Json.Serialization;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Features.Presents;
 using GraphQL;
+using GraphQL.Client.Http;
+using GraphQL.Client.Serializer.SystemTextJson;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.GraphQL;
 
-public class GraphQlTest : GraphQlTestFixture
+public class GraphQlTest : TestFixture
 {
-    private readonly HttpClient httpClient;
+    private readonly GraphQLHttpClient graphQLClient;
+    private HttpClient httpClient;
     private const string Endpoint = "graphql";
 
     public GraphQlTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         this.httpClient = this.CreateClient();
+        
+        Uri endpoint = new(this.httpClient.BaseAddress!, "graphql");
+
+        this.graphQLClient = new(
+            new GraphQLHttpClientOptions { EndPoint = endpoint },
+            new SystemTextJsonSerializer(),
+            this.httpClient
+        );
         
         Environment.SetEnvironmentVariable("DEVELOPER_TOKEN", "supersecrettoken");
         this.httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer supersecrettoken");
@@ -36,7 +47,7 @@ public class GraphQlTest : GraphQlTestFixture
     {
         this.AddCharacter(Charas.SummerMikoto);
 
-        GraphQLResponse<Response> response = await this.GraphQlHttpClient.SendQueryAsync<Response>(
+        GraphQLResponse<Response> response = await this.graphQLClient.SendQueryAsync<Response>(
             new GraphQLRequest
             {
                 Query = $$"""
@@ -67,7 +78,7 @@ public class GraphQlTest : GraphQlTestFixture
         ).Level = 100;
         await this.ApiContext.SaveChangesAsync();
 
-        GraphQLResponse<object> response = await this.GraphQlHttpClient.SendQueryAsync<object>(
+        GraphQLResponse<object> response = await this.graphQLClient.SendQueryAsync<object>(
             new GraphQLRequest
             {
                 Query = $$"""
@@ -95,7 +106,7 @@ public class GraphQlTest : GraphQlTestFixture
     public async Task Mutation_GivePresent_AddsPresent()
     {
         GraphQLResponse<JsonDocument> response =
-            await this.GraphQlHttpClient.SendQueryAsync<JsonDocument>(
+            await this.graphQLClient.SendQueryAsync<JsonDocument>(
                 new GraphQLRequest
                 {
                     Query = $$"""
@@ -137,7 +148,7 @@ public class GraphQlTest : GraphQlTestFixture
     public async Task Mutation_SetTutorialStatus_SetsTutorialStatus()
     {
         GraphQLResponse<JsonDocument> response =
-            await this.GraphQlHttpClient.SendQueryAsync<JsonDocument>(
+            await this.graphQLClient.SendQueryAsync<JsonDocument>(
                 new GraphQLRequest
                 {
                     Query = $$"""

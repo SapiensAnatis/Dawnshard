@@ -71,8 +71,6 @@ public class TestFixture
             this.stubPlayerIdentityService,
             NullLogger<DungeonService>.Instance
         );
-        
-        this.factory.MockTimeProvider.
     }
 
     protected DateTimeOffset LastDailyReset { get; }

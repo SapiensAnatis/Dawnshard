@@ -46,7 +46,7 @@ public class ToolTest : TestFixture
         this.httpClient.DefaultRequestHeaders.Add(IdTokenHeader, token);
 
         ToolAuthResponse response = (
-            await this.Client.PostMsgpack<ToolAuthResponse>(endpoint)
+            await this.httpClient.PostMsgpack<ToolAuthResponse>(endpoint, new ToolAuthRequest() { })
         ).Data;
 
         response.ViewerId.Should().Be((ulong)this.ViewerId);
@@ -86,7 +86,7 @@ public class ToolTest : TestFixture
 
         this.httpClient.DefaultRequestHeaders.Add(IdTokenHeader, token);
 
-        await this.Client.PostMsgpack<ToolAuthResponse>("tool/auth");
+        await this.httpClient.PostMsgpack<ToolAuthResponse>("tool/auth", new ToolAuthRequest() { });
 
         this.ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == this.ViewerId)
@@ -110,7 +110,7 @@ public class ToolTest : TestFixture
         this.httpClient.DefaultRequestHeaders.Add(IdTokenHeader, token);
         this.httpClient.DefaultRequestHeaders.Add("DeviceId", "id");
 
-        HttpResponseMessage response = await this.Client.PostMsgpackBasic(
+        HttpResponseMessage response = await this.httpClient.PostMsgpackBasic(
             "/tool/auth",
             new ToolAuthRequest() { }
         );
@@ -167,7 +167,7 @@ public class ToolTest : TestFixture
         this.httpClient.DefaultRequestHeaders.Add(IdTokenHeader, token);
 
         DragaliaResponse<ResultCodeResponse> response =
-            await this.Client.PostMsgpack<ResultCodeResponse>(
+            await this.httpClient.PostMsgpack<ResultCodeResponse>(
                 endpoint,
                 new ToolAuthRequest() { },
                 ensureSuccessHeader: false

@@ -15,7 +15,7 @@ public class DragonTest : TestFixture
     public DragonTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
+        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
     }
 
     public record DragonBuildUpTestCase(

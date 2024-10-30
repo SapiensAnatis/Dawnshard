@@ -11,7 +11,7 @@ public class FortTest : TestFixture
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions();
-        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
+        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
     }
 
     [Fact]
