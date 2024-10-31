@@ -4,14 +4,14 @@ public static class AuthConstants
 {
     public static class PolicyNames
     {
-        public const string RequireValidJwt = nameof(RequireValidJwt);
+        public const string RequireValidWebJwt = "RequireValidWebJwt";
 
-        public const string RequireDawnshardIdentity = nameof(RequireDawnshardIdentity);
+        public const string RequireDawnshardIdentity = "RequireDawnshardIdentity";
     }
 
     public static class IdentityLabels
     {
-        public const string Dawnshard = nameof(Dawnshard);
+        public const string Dawnshard = "Dawnshard";
     }
 
     public static class SchemeNames

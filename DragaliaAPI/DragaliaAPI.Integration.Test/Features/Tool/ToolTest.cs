@@ -16,7 +16,6 @@ public class ToolTest : TestFixture
     public ToolTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        this.Client.DefaultRequestHeaders.Remove("SID");
         this.SetupSaveImport();
     }
 

@@ -17,7 +17,6 @@ namespace DragaliaAPI.Controllers;
 /// should be used.
 /// </remarks>
 [ApiController]
-[Authorize(AuthenticationSchemes = AuthConstants.SchemeNames.Session)]
 [Consumes("application/octet-stream")]
 [Produces("application/x-msgpack")]
 [ServiceFilter<SetResultCodeActionFilter>(Order = 2)]
@@ -66,6 +65,7 @@ public abstract class DragaliaControllerBaseCore : ControllerBase
 /// <remarks>
 /// Not to be used for endpoints that make up the title screen (/tool/*, /version/*, etc.) to prevent infinite loops.
 /// </remarks>
+[Authorize(AuthenticationSchemes = AuthConstants.SchemeNames.Session)]
 [ServiceFilter<ResourceVersionActionFilter>(Order = 1)]
 [ServiceFilter<MaintenanceActionFilter>(Order = 1)]
 public abstract class DragaliaControllerBase : DragaliaControllerBaseCore { }

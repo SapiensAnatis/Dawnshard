@@ -40,7 +40,7 @@ public static partial class FeatureExtensions
         serviceCollection
             .AddAuthorizationBuilder()
             .AddPolicy(
-                PolicyNames.RequireValidJwt,
+                PolicyNames.RequireValidWebJwt,
                 builder =>
                     builder.RequireAuthenticatedUser().AddAuthenticationSchemes(SchemeNames.WebJwt)
             )
