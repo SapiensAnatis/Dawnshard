@@ -503,9 +503,20 @@ public class FortService(
         // Check Carpenter available
         if (fortDetail.WorkingCarpenterNum >= fortDetail.CarpenterNum)
         {
+            List<DbFortBuild> builds = await fortRepository
+                .Builds.Where(x => x.BuildEndDate != DateTimeOffset.UnixEpoch)
+                .ToListAsync();
+
+            logger.LogDebug(
+                "Failed to perform upgrade {@PlantDetail} - carpenters busy",
+                plantDetail
+            );
+            logger.LogDebug("FortDetail: {@FortDetail}", fortDetail);
+            logger.LogDebug("Currently in progress builds: {@Builds}", builds);
+
             throw new DragaliaException(
                 ResultCode.FortBuildCarpenterBusy,
-                $"All carpenters are currently busy"
+                "All carpenters are currently busy"
             );
         }
 
