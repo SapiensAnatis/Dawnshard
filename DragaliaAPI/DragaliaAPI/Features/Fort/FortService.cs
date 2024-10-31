@@ -357,7 +357,14 @@ public class FortService(
         {
             logger.LogDebug(
                 "Building {@Build} has not finished levelling up. Current time: {Time}",
-                build,
+                new
+                {
+                    build.BuildId,
+                    build.PlantId,
+                    build.Level,
+                    build.BuildStartDate,
+                    build.BuildEndDate,
+                },
                 time
             );
             throw new InvalidOperationException($"This building has not completed levelling up.");
@@ -509,8 +516,16 @@ public class FortService(
         // Check Carpenter available
         if (fortDetail.WorkingCarpenterNum >= fortDetail.CarpenterNum)
         {
-            List<DbFortBuild> builds = await fortRepository
+            var builds = await fortRepository
                 .Builds.Where(x => x.BuildEndDate != DateTimeOffset.UnixEpoch)
+                .Select(x => new
+                {
+                    x.BuildId,
+                    x.PlantId,
+                    x.Level,
+                    x.BuildStartDate,
+                    x.BuildEndDate,
+                })
                 .ToListAsync();
 
             logger.LogDebug(
