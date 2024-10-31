@@ -352,13 +352,14 @@ public class FortService(
         DbFortBuild build = await fortRepository.GetBuilding(buildId);
 
         DateTimeOffset time = dateTimeProvider.GetUtcNow();
-        
-        if (
-            build.BuildStatus is not FortBuildStatus.LevelUp
-            || time < build.BuildEndDate
-        )
+
+        if (build.BuildStatus is not FortBuildStatus.LevelUp || time < build.BuildEndDate)
         {
-            logger.LogDebug("Building {@Build} has not finished levelling up. Current time: {Time}", build, time);
+            logger.LogDebug(
+                "Building {@Build} has not finished levelling up. Current time: {Time}",
+                build,
+                time
+            );
             throw new InvalidOperationException($"This building has not completed levelling up.");
         }
 
