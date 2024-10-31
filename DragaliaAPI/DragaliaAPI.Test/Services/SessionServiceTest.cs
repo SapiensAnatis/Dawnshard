@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Models;
-using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared;
@@ -19,12 +18,6 @@ public class SessionServiceTest
     private readonly Mock<TimeProvider> mockTimeProvider;
     private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
     private readonly SessionService sessionService;
-
-    [Obsolete(ObsoleteReasons.BaaS)]
-    private readonly DeviceAccount deviceAccount = new("id", "password");
-
-    [Obsolete(ObsoleteReasons.BaaS)]
-    private readonly DeviceAccount deviceAccountTwo = new("id 2", "password 2");
 
     private readonly IDistributedCache testCache;
 
@@ -85,50 +78,5 @@ public class SessionServiceTest
 
         this.testCache.GetString($":session:session_id:{sessionId}").Should().NotBeNull();
         this.testCache.GetString($":session:id_token:token").Should().NotBeNull();
-    }
-
-    [Obsolete(ObsoleteReasons.BaaS)]
-    [Fact]
-    public async Task NewSession_CreatesValidSession()
-    {
-        string sessionId = await PrepareAndRegisterSession("id_token", deviceAccount);
-
-        this.testCache.GetString($":session:session_id:{sessionId}").Should().NotBeNull();
-    }
-
-    [Obsolete(ObsoleteReasons.BaaS)]
-    [Fact]
-    public async Task NewSession_ExistingSession_ReplacesOldSession()
-    {
-        string firstSessionId = await PrepareAndRegisterSession("id_token", deviceAccount);
-        string secondSessionId = await PrepareAndRegisterSession("id_token", deviceAccount);
-
-        this.testCache.GetString($":session:session_id:{firstSessionId}").Should().BeNull();
-        this.testCache.GetString($":session:session_id:{secondSessionId}").Should().NotBeNull();
-
-        secondSessionId.Should().NotBeEquivalentTo(firstSessionId);
-    }
-
-    [Obsolete(ObsoleteReasons.BaaS)]
-    [Fact]
-    public async Task NewSession_TwoCreated_BothValid()
-    {
-        string firstSessionId = await PrepareAndRegisterSession("id_token_1", deviceAccount);
-        string secondSessionId = await PrepareAndRegisterSession("id_token_2", deviceAccountTwo);
-
-        this.testCache.GetString($":session:session_id:{firstSessionId}").Should().NotBeNull();
-        this.testCache.GetString($":session:session_id:{secondSessionId}").Should().NotBeNull();
-
-        secondSessionId.Should().NotBeEquivalentTo(firstSessionId);
-    }
-
-    [Obsolete(ObsoleteReasons.BaaS)]
-    private async Task<string> PrepareAndRegisterSession(
-        string idToken,
-        DeviceAccount deviceAccountId
-    )
-    {
-        await sessionService.PrepareSession(deviceAccountId, idToken);
-        return await sessionService.ActivateSession(idToken);
     }
 }

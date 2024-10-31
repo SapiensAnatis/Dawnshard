@@ -1,7 +1,7 @@
-﻿using System.Security.Claims;
+﻿using DragaliaAPI.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using static DragaliaAPI.Features.Web.AuthConstants;
+using static DragaliaAPI.Infrastructure.Authentication.AuthConstants;
 
 namespace DragaliaAPI.Features.Web.Users;
 
@@ -28,10 +28,4 @@ public class UserController(UserService userService, ILogger<UserController> log
     public async Task<ActionResult<UserProfile>> GetSelfProfile(
         CancellationToken cancellationToken
     ) => await userService.GetUserProfile(cancellationToken);
-}
-
-file static class ClaimsPrincipalExtensions
-{
-    public static bool HasDawnshardIdentity(this ClaimsPrincipal claimsPrincipal) =>
-        claimsPrincipal.Identities.Any(x => x.Label == IdentityLabels.Dawnshard);
 }

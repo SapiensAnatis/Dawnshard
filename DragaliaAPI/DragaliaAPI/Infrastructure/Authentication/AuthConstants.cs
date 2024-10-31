@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Features.Web;
+﻿namespace DragaliaAPI.Infrastructure.Authentication;
 
 public static class AuthConstants
 {
@@ -16,6 +16,14 @@ public static class AuthConstants
 
     public static class SchemeNames
     {
-        public const string WebJwtScheme = nameof(WebJwtScheme);
+        public const string WebJwt = "WebJwt";
+
+        public const string GameJwt = "GameJwt";
+
+        public const string Session = "SessionAuthentication";
+
+        public const string Developer = "DeveloperAuthentication";
+
+        public const string Zena = "ZenaAuthentication";
     }
 }

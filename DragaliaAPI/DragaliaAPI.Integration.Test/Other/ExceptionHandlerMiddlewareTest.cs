@@ -39,42 +39,4 @@ public class ExceptionHandlerMiddlewareTest : TestFixture
                 )
             );
     }
-
-    [Fact]
-    public async Task SecurityTokenExpiredException_ReturnsRefreshRequest_ThenSerializedException()
-    {
-        this.Client.DefaultRequestHeaders.Add("DeviceId", "id 2");
-
-        HttpResponseMessage response = await this.Client.PostMsgpackBasic(
-            $"{Controller}/securitytokenexpired",
-            new { }
-        );
-
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        response
-            .Headers.Should()
-            .ContainKey("Is-Required-Refresh-Id-Token")
-            .WhoseValue.Should()
-            .Contain("true");
-
-        HttpResponseMessage secondResponse = await this.Client.PostMsgpackBasic(
-            $"{Controller}/securitytokenexpired",
-            new { }
-        );
-
-        secondResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-
-        DragaliaResponse<ResultCodeResponse> responseBody = MessagePackSerializer.Deserialize<
-            DragaliaResponse<ResultCodeResponse>
-        >(await secondResponse.Content.ReadAsByteArrayAsync());
-
-        responseBody
-            .Should()
-            .BeEquivalentTo(
-                new DragaliaResponse<ResultCodeResponse>(
-                    new ResultCodeResponse(ResultCode.CommonAuthError),
-                    new DataHeaders(ResultCode.CommonAuthError)
-                )
-            );
-    }
 }

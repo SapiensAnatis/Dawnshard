@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using DragaliaAPI.Database;
+using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Services.Api;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -44,25 +45,17 @@ public static class WebAuthenticationHelper
 
         ILogger logger = context
             .HttpContext.RequestServices.GetRequiredService<ILoggerFactory>()
-            .CreateLogger("DragaliaAPI.Features.Web.WebAuthenticationHelper");
+            .CreateLogger(typeof(WebAuthenticationHelper));
 
         PlayerInfo? playerInfo = await GetPlayerInfo(context, jsonWebToken, logger);
 
         if (playerInfo is not null)
         {
-            ClaimsIdentity playerIdentity =
-                new(
-                    [
-                        new Claim(CustomClaimType.AccountId, playerInfo.AccountId),
-                        new Claim(CustomClaimType.ViewerId, playerInfo.ViewerId.ToString()),
-                        new Claim(CustomClaimType.PlayerName, playerInfo.Name),
-                    ]
-                )
-                {
-                    Label = AuthConstants.IdentityLabels.Dawnshard,
-                };
-
-            context.Principal?.AddIdentity(playerIdentity);
+            context.Principal?.InitializeDawnshardIdentity(
+                playerInfo.AccountId,
+                playerInfo.ViewerId,
+                playerInfo.Name
+            );
         }
     }
 

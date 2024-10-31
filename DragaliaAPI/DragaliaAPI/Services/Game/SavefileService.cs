@@ -436,6 +436,13 @@ public class SavefileService : ISavefileService
     {
         long viewerId = this.playerIdentityService.ViewerId;
 
+        // The usage of ExecuteDelete can leave the change tracker in a corrupted state where it attempts to
+        // track rows that no longer exist. This can cause an error if you attempt to import a save on first
+        // login, for example.
+        // Since nothing in the tracker is going to be relevant in the face of total deletion, clear the
+        // tracker entirely.
+        this.apiContext.ChangeTracker.Clear();
+
         // Options commented out have been excluded from save import deletion process.
         // They will still be deleted by cascade delete when a player is actually deleted
         // without being re-added as they are in save imports.

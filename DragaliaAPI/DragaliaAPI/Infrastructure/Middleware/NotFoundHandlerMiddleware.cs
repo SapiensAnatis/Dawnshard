@@ -34,15 +34,7 @@ public class NotFoundHandlerMiddleware
         }
 
         this.logger.LogInformation("HTTP 404 on {RequestPath}", context.Request.Path);
-        context.Response.StatusCode = (int)HttpStatusCode.OK;
 
-        context.Items[nameof(ResultCode)] = NotFoundCode;
-
-        DragaliaResponse<ResultCodeResponse> gameResponse =
-            new(new(NotFoundCode), new DataHeaders(NotFoundCode));
-
-        await context.Response.Body.WriteAsync(
-            MessagePackSerializer.Serialize(gameResponse, CustomResolver.Options)
-        );
+        await context.WriteResultCodeResponse(NotFoundCode);
     }
 }

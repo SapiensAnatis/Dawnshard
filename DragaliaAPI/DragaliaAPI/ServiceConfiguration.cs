@@ -22,11 +22,13 @@ using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Features.StorySkip;
 using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Features.TimeAttack;
+using DragaliaAPI.Features.Tool;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Features.Version;
 using DragaliaAPI.Features.Web;
 using DragaliaAPI.Features.Zena;
 using DragaliaAPI.Infrastructure;
+using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Infrastructure.Middleware;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
@@ -37,11 +39,13 @@ using DragaliaAPI.Services.Photon;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using AuthService = DragaliaAPI.Features.Tool.AuthService;
 
 namespace DragaliaAPI;
 
@@ -54,9 +58,6 @@ public static class ServiceConfiguration
     {
         services
             .AddScoped<ISessionService, SessionService>()
-#pragma warning disable CS0618 // Type or member is obsolete
-            .AddScoped<IDeviceAccountService, DeviceAccountService>()
-#pragma warning restore CS0618 // Type or member is obsolete
             .AddScoped<IUpdateDataService, UpdateDataService>()
             .AddScoped<IDragonService, DragonService>()
             .AddScoped<ISavefileService, SavefileService>()
@@ -84,7 +85,9 @@ public static class ServiceConfiguration
             .AddStoryFeature()
             .AddWebFeature()
             .AddAbilityCrestFeature()
-            .AddTutorialFeature();
+            .AddTutorialFeature()
+            .AddZenaFeature()
+            .AddToolFeature();
 
         services
             .RegisterMissionServices()
@@ -136,7 +139,6 @@ public static class ServiceConfiguration
             .AddScoped<ITalismanService, TalismanService>()
             // Emblem feature
             .AddScoped<IEmblemRepository, EmblemRepository>()
-            // Quest feature
             // Party power feature
             .AddScoped<IPartyPowerService, PartyPowerService>()
             .AddScoped<IPartyPowerRepository, PartyPowerRepository>()
@@ -144,8 +146,6 @@ public static class ServiceConfiguration
             .AddScoped<ICharaService, CharaService>()
             .AddScoped<IResourceVersionService, ResourceVersionService>()
             .AddScoped<ICharaService, CharaService>()
-            // Zena feature
-            .AddScoped<IZenaService, ZenaService>()
             // Story skip feature
             .AddScoped<StorySkipService>()
             // Maintenance feature
@@ -191,7 +191,6 @@ public static class ServiceConfiguration
     {
         services
             .Configure<BaasOptions>(config.GetRequiredSection("Baas"))
-            .Configure<LoginOptions>(config.GetRequiredSection("Login"))
             .Configure<DragalipatchOptions>(config.GetRequiredSection("Dragalipatch"))
             .Configure<RedisCachingOptions>(config.GetRequiredSection(nameof(RedisCachingOptions)))
             .Configure<PhotonOptions>(config.GetRequiredSection(nameof(PhotonOptions)))
@@ -203,6 +202,8 @@ public static class ServiceConfiguration
             )
             .Configure<EventOptions>(config.GetRequiredSection(nameof(EventOptions)))
             .Configure<MaintenanceOptions>(config.GetRequiredSection(nameof(MaintenanceOptions)));
+
+        services.AddTransient<IConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>();
 
         services.AddSummoningOptions(config);
 
@@ -232,13 +233,35 @@ public static class ServiceConfiguration
 
     public static IServiceCollection ConfigureAuthentication(this IServiceCollection services)
     {
-        services.AddAuthentication(opts =>
-        {
-            opts.AddScheme<SessionAuthenticationHandler>(SchemeName.Session, null);
-            opts.AddScheme<DeveloperAuthenticationHandler>(SchemeName.Developer, null);
-            opts.AddScheme<PhotonAuthenticationHandler>(nameof(PhotonAuthenticationHandler), null);
-            opts.AddScheme<ZenaAuthenticationHandler>(SchemeName.Zena, null);
-        });
+        services
+            .AddAuthentication(opts =>
+            {
+                opts.AddScheme<SessionAuthenticationHandler>(
+                    AuthConstants.SchemeNames.Session,
+                    null
+                );
+                opts.AddScheme<DeveloperAuthenticationHandler>(
+                    AuthConstants.SchemeNames.Developer,
+                    null
+                );
+                opts.AddScheme<PhotonAuthenticationHandler>(
+                    nameof(PhotonAuthenticationHandler),
+                    null
+                );
+            })
+            .AddJwtBearer(
+                AuthConstants.SchemeNames.GameJwt,
+                options =>
+                {
+                    options.Events = new()
+                    {
+                        OnMessageReceived = GameJwtAuthenticationCallbacks.OnMessageReceived,
+                        OnTokenValidated = GameJwtAuthenticationCallbacks.OnTokenValidated,
+                        OnChallenge = GameJwtAuthenticationCallbacks.OnChallenge,
+                    };
+                    // Other options configured in ConfigureJwtBearerOptions.cs after the ServiceProvider is built.
+                }
+            );
 
         return services;
     }

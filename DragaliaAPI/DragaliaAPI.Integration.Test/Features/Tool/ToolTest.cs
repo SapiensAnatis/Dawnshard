@@ -1,10 +1,13 @@
-﻿using DragaliaAPI.Models;
+﻿using System.Net;
+using DragaliaAPI.Features.Tool;
+using DragaliaAPI.Models;
+using MessagePack;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Integration.Test.Features.Tool;
 
 /// <summary>
-/// Tests <see cref="Controllers.Dragalia.ToolController"/>
+/// Tests <see cref="ToolController"/>
 /// </summary>
 public class ToolTest : TestFixture
 {
@@ -20,6 +23,8 @@ public class ToolTest : TestFixture
     [Fact]
     public async Task ServiceStatus_ReturnsCorrectResponse()
     {
+        this.Client.DefaultRequestHeaders.Clear();
+
         ToolGetServiceStatusResponse response = (
             await this.Client.PostMsgpack<ToolGetServiceStatusResponse>("tool/get_service_status")
         ).Data;
@@ -28,7 +33,6 @@ public class ToolTest : TestFixture
     }
 
     [Theory]
-    [InlineData("/tool/signup")]
     [InlineData("/tool/auth")]
     [InlineData("/tool/reauth")]
     public async Task Auth_CorrectIdToken_ReturnsOKResponse(string endpoint)
@@ -40,10 +44,28 @@ public class ToolTest : TestFixture
         this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
 
         ToolAuthResponse response = (
-            await this.Client.PostMsgpack<ToolAuthResponse>(endpoint, new ToolAuthRequest() { })
+            await this.Client.PostMsgpack<ToolAuthResponse>(endpoint)
         ).Data;
 
-        response.ViewerId.Should().Be((ulong)ViewerId);
+        response.ViewerId.Should().Be((ulong)this.ViewerId);
+    }
+
+    [Theory]
+    [InlineData("/tool/signup")]
+    [InlineData("/tool/auth")]
+    public async Task Auth_NoAccount_CreatesNewUser(string endpoint)
+    {
+        string token = TokenHelper.GetToken(
+            $"new account {Guid.NewGuid()}",
+            DateTime.UtcNow + TimeSpan.FromMinutes(5)
+        );
+        this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
+
+        ToolAuthResponse response = (
+            await this.Client.PostMsgpack<ToolAuthResponse>(endpoint)
+        ).Data;
+
+        response.ViewerId.Should().Be((ulong)this.ViewerId + 1);
     }
 
     [Fact]
@@ -62,7 +84,7 @@ public class ToolTest : TestFixture
 
         this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
 
-        await this.Client.PostMsgpack<ToolAuthResponse>("tool/auth", new ToolAuthRequest() { });
+        await this.Client.PostMsgpack<ToolAuthResponse>("tool/auth");
 
         this.ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == this.ViewerId)
@@ -92,11 +114,45 @@ public class ToolTest : TestFixture
         );
 
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
-        response.Headers.Should().ContainKey("Is-Required-Refresh-Id-Token");
         response
-            .Headers.GetValues("Is-Required-Refresh-Id-Token")
+            .Headers.Should()
+            .ContainKey("Is-Required-Refresh-Id-Token")
+            .WhoseValue.Should()
+            .BeEquivalentTo("true");
+    }
+
+    [Fact]
+    public async Task Auth_RepeatedExpiredIdToken_ReturnsAuthError()
+    {
+        string token = TokenHelper.GetToken(
+            DeviceAccountId,
+            DateTime.UtcNow - TimeSpan.FromHours(5)
+        );
+
+        this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
+        this.Client.DefaultRequestHeaders.Add("DeviceId", "id");
+
+        await this.Client.PostMsgpackBasic("/tool/auth", new ToolAuthRequest() { });
+
+        HttpResponseMessage secondResponse = await this.Client.PostMsgpackBasic(
+            $"/tool/auth",
+            new { }
+        );
+
+        secondResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        DragaliaResponse<ResultCodeResponse> responseBody = MessagePackSerializer.Deserialize<
+            DragaliaResponse<ResultCodeResponse>
+        >(await secondResponse.Content.ReadAsByteArrayAsync());
+
+        responseBody
             .Should()
-            .BeEquivalentTo(new List<string>() { "true" });
+            .BeEquivalentTo(
+                new DragaliaResponse<ResultCodeResponse>(
+                    new ResultCodeResponse(ResultCode.CommonAuthError),
+                    new DataHeaders(ResultCode.CommonAuthError)
+                )
+            );
     }
 
     [Theory]
