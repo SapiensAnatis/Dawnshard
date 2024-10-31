@@ -351,11 +351,24 @@ public class FortService(
 
         DbFortBuild build = await fortRepository.GetBuilding(buildId);
 
-        if (
-            build.BuildStatus is not FortBuildStatus.LevelUp
-            || dateTimeProvider.GetUtcNow() < build.BuildEndDate
-        )
+        DateTimeOffset time = dateTimeProvider.GetUtcNow();
+
+        if (build.BuildStatus is not FortBuildStatus.LevelUp || time < build.BuildEndDate)
+        {
+            logger.LogDebug(
+                "Building {@Build} has not finished levelling up. Current time: {Time}",
+                new
+                {
+                    build.BuildId,
+                    build.PlantId,
+                    build.Level,
+                    build.BuildStartDate,
+                    build.BuildEndDate,
+                },
+                time
+            );
             throw new InvalidOperationException($"This building has not completed levelling up.");
+        }
 
         await FinishUpgrade(build, true);
     }
@@ -503,9 +516,28 @@ public class FortService(
         // Check Carpenter available
         if (fortDetail.WorkingCarpenterNum >= fortDetail.CarpenterNum)
         {
+            var builds = await fortRepository
+                .Builds.Where(x => x.BuildEndDate != DateTimeOffset.UnixEpoch)
+                .Select(x => new
+                {
+                    x.BuildId,
+                    x.PlantId,
+                    x.Level,
+                    x.BuildStartDate,
+                    x.BuildEndDate,
+                })
+                .ToListAsync();
+
+            logger.LogDebug(
+                "Failed to perform upgrade {@PlantDetail} - carpenters busy",
+                plantDetail
+            );
+            logger.LogDebug("FortDetail: {@FortDetail}", fortDetail);
+            logger.LogDebug("Currently in progress builds: {@Builds}", builds);
+
             throw new DragaliaException(
                 ResultCode.FortBuildCarpenterBusy,
-                $"All carpenters are currently busy"
+                "All carpenters are currently busy"
             );
         }
 
