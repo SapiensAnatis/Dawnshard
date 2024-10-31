@@ -8,8 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("transition")]
-[AllowAnonymous]
-internal sealed class TransitionController : DragaliaControllerBase
+internal sealed class TransitionController : DragaliaControllerBaseCore
 {
     private readonly IAuthService authService;
 

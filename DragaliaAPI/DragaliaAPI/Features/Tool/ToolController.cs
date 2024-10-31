@@ -7,6 +7,7 @@ using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static DragaliaAPI.Infrastructure.Authentication.AuthConstants;
 
 namespace DragaliaAPI.Features.Tool;
 
@@ -22,7 +23,7 @@ internal sealed class ToolController(IAuthService authService) : DragaliaControl
     }
 
     [HttpPost("signup")]
-    [Authorize(AuthenticationSchemes = AuthConstants.SchemeNames.GameJwt)]
+    [Authorize(AuthenticationSchemes = SchemeNames.GameJwt)]
     public async Task<DragaliaResult> Signup()
     {
         if (this.User.HasDawnshardIdentity())
@@ -45,7 +46,7 @@ internal sealed class ToolController(IAuthService authService) : DragaliaControl
     }
 
     [HttpPost("auth")]
-    [Authorize(AuthenticationSchemes = AuthConstants.SchemeNames.GameJwt)]
+    [Authorize(AuthenticationSchemes = SchemeNames.GameJwt)]
     public async Task<DragaliaResult> Auth()
     {
         if (!this.User.HasDawnshardIdentity())
@@ -71,7 +72,7 @@ internal sealed class ToolController(IAuthService authService) : DragaliaControl
     }
 
     [HttpPost("reauth")]
-    [Authorize(AuthenticationSchemes = AuthConstants.SchemeNames.GameJwt)]
+    [Authorize(AuthenticationSchemes = SchemeNames.GameJwt)]
     public async Task<DragaliaResult> Reauth()
     {
         (long viewerId, string sessionId) = await authService.DoLogin(this.User);

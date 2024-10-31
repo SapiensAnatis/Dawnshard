@@ -11,7 +11,7 @@ public class UserController(UserService userService, ILogger<UserController> log
     : ControllerBase
 {
     [HttpGet("me")]
-    [Authorize(Policy = PolicyNames.RequireValidJwt)]
+    [Authorize(Policy = PolicyNames.RequireValidWebJwt)]
     public async Task<ActionResult<User>> GetSelf(CancellationToken cancellationToken)
     {
         if (!this.User.HasDawnshardIdentity())

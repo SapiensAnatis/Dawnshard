@@ -25,9 +25,6 @@ using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Features.Tool;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Features.Version;
-using DragaliaAPI.Features.Web;
-using DragaliaAPI.Features.Zena;
-using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Infrastructure.Middleware;
 using DragaliaAPI.Models.Options;
@@ -38,14 +35,12 @@ using DragaliaAPI.Services.Health;
 using DragaliaAPI.Services.Photon;
 using Hangfire;
 using Hangfire.PostgreSql;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using AuthService = DragaliaAPI.Features.Tool.AuthService;
+using static DragaliaAPI.Infrastructure.Authentication.AuthConstants;
 
 namespace DragaliaAPI;
 
@@ -236,21 +231,15 @@ public static class ServiceConfiguration
         services
             .AddAuthentication(opts =>
             {
-                opts.AddScheme<SessionAuthenticationHandler>(
-                    AuthConstants.SchemeNames.Session,
-                    null
-                );
-                opts.AddScheme<DeveloperAuthenticationHandler>(
-                    AuthConstants.SchemeNames.Developer,
-                    null
-                );
+                opts.AddScheme<SessionAuthenticationHandler>(SchemeNames.Session, null);
+                opts.AddScheme<DeveloperAuthenticationHandler>(SchemeNames.Developer, null);
                 opts.AddScheme<PhotonAuthenticationHandler>(
                     nameof(PhotonAuthenticationHandler),
                     null
                 );
             })
             .AddJwtBearer(
-                AuthConstants.SchemeNames.GameJwt,
+                SchemeNames.GameJwt,
                 options =>
                 {
                     options.Events = new()
