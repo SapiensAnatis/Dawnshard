@@ -1,12 +1,11 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Features.Tool;
 using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Models.Generated;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DragaliaAPI.Features.Transition;
+namespace DragaliaAPI.Features.Tool;
 
 [Route("transition")]
 internal sealed class TransitionController : DragaliaControllerBaseCore
