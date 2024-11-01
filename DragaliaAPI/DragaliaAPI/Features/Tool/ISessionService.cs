@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Models;
-using DragaliaAPI.Shared;
+using DragaliaAPI.Services.Exceptions;
 
-namespace DragaliaAPI.Services;
+namespace DragaliaAPI.Features.Tool;
 
 public interface ISessionService
 {
@@ -25,7 +25,7 @@ public interface ISessionService
     /// </summary>
     /// <param name="sessionId">The session id.</param>
     /// <returns>The session object.</returns>
-    /// <exception cref="Exceptions.SessionException">A matching key was not found in the cache.</exception>
+    /// <exception cref="SessionException">A matching key was not found in the cache.</exception>
     Task<Session> LoadSessionSessionId(string sessionId);
 
     /// <summary>
@@ -33,7 +33,7 @@ public interface ISessionService
     /// </summary>
     /// <param name="idToken">The ID token.</param>
     /// <returns>The session object.</returns>
-    /// <exception cref="Exceptions.SessionException">A matching key was not found in the cache.</exception>
+    /// <exception cref="SessionException">A matching key was not found in the cache.</exception>
     Task<Session> LoadSessionIdToken(string idToken);
     Task StartUserImpersonation(string targetAccountId, long targetViewerId);
     Task ClearUserImpersonation();

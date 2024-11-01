@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Text.Encodings.Web;
 using DragaliaAPI.Database;
+using DragaliaAPI.Features.Tool;
 using DragaliaAPI.Models;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;

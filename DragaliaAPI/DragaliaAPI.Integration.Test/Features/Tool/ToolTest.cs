@@ -3,6 +3,7 @@ using DragaliaAPI.Features.Tool;
 using DragaliaAPI.Models;
 using MessagePack;
 using Microsoft.EntityFrameworkCore;
+using static DragaliaAPI.Infrastructure.DragaliaHttpConstants;
 
 namespace DragaliaAPI.Integration.Test.Features.Tool;
 
@@ -11,8 +12,6 @@ namespace DragaliaAPI.Integration.Test.Features.Tool;
 /// </summary>
 public class ToolTest : TestFixture
 {
-    private const string IdTokenHeader = "ID-TOKEN";
-
     public ToolTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
@@ -40,7 +39,7 @@ public class ToolTest : TestFixture
             DeviceAccountId,
             DateTime.UtcNow + TimeSpan.FromMinutes(5)
         );
-        this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
+        this.Client.DefaultRequestHeaders.Add(Headers.IdToken, token);
 
         ToolAuthResponse response = (
             await this.Client.PostMsgpack<ToolAuthResponse>(endpoint)
@@ -58,7 +57,7 @@ public class ToolTest : TestFixture
             $"new account {Guid.NewGuid()}",
             DateTime.UtcNow + TimeSpan.FromMinutes(5)
         );
-        this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
+        this.Client.DefaultRequestHeaders.Add(Headers.IdToken, token);
 
         ToolAuthResponse response = (
             await this.Client.PostMsgpack<ToolAuthResponse>(endpoint)
@@ -81,7 +80,7 @@ public class ToolTest : TestFixture
             savefileTime: DateTimeOffset.UtcNow
         );
 
-        this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
+        this.Client.DefaultRequestHeaders.Add(Headers.IdToken, token);
 
         await this.Client.PostMsgpack<ToolAuthResponse>("tool/auth");
 
@@ -104,7 +103,7 @@ public class ToolTest : TestFixture
             DateTime.UtcNow - TimeSpan.FromHours(5)
         );
 
-        this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
+        this.Client.DefaultRequestHeaders.Add(Headers.IdToken, token);
         this.Client.DefaultRequestHeaders.Add("DeviceId", "id");
 
         HttpResponseMessage response = await this.Client.PostMsgpackBasic(
@@ -128,7 +127,7 @@ public class ToolTest : TestFixture
             DateTime.UtcNow - TimeSpan.FromHours(5)
         );
 
-        this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
+        this.Client.DefaultRequestHeaders.Add(Headers.IdToken, token);
         this.Client.DefaultRequestHeaders.Add("DeviceId", "id");
 
         await this.Client.PostMsgpackBasic("/tool/auth", new ToolAuthRequest() { });
@@ -161,7 +160,7 @@ public class ToolTest : TestFixture
     public async Task Auth_InvalidIdToken_ReturnsIdTokenError(string endpoint)
     {
         string token = "im blue dabba dee dabba doo";
-        this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
+        this.Client.DefaultRequestHeaders.Add(Headers.IdToken, token);
 
         DragaliaResponse<ResultCodeResponse> response =
             await this.Client.PostMsgpack<ResultCodeResponse>(

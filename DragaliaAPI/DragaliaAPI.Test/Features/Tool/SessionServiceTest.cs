@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models;
+﻿using DragaliaAPI.Features.Tool;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared;

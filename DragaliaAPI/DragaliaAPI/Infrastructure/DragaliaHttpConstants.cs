@@ -17,6 +17,11 @@ public static class DragaliaHttpConstants
     public static class Headers
     {
         /// <summary>
+        /// Header containing the JWT from BaaS.
+        /// </summary>
+        public const string IdToken = "ID-TOKEN";
+        
+        /// <summary>
         /// Header containing the current session ID.
         /// </summary>
         public const string SessionId = "SID";
