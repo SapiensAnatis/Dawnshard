@@ -29,7 +29,9 @@ public class SessionService : ISessionService
     private DistributedCacheEntryOptions CacheOptions =>
         new()
         {
-            SlidingExpiration = TimeSpan.FromMinutes(this.options.CurrentValue.SessionExpiryTimeMinutes),
+            SlidingExpiration = TimeSpan.FromMinutes(
+                this.options.CurrentValue.SessionExpiryTimeMinutes
+            ),
         };
 
     public SessionService(
