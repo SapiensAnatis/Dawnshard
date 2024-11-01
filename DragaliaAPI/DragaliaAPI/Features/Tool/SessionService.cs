@@ -1,12 +1,12 @@
 ﻿using DragaliaAPI.Models;
 using DragaliaAPI.Models.Options;
+using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
-using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 
-namespace DragaliaAPI.Services.Game;
+namespace DragaliaAPI.Features.Tool;
 
 /// <summary>
 /// SessionService interfaces with Redis to store the information about current sessions in-memory.
@@ -29,7 +29,9 @@ public class SessionService : ISessionService
     private DistributedCacheEntryOptions CacheOptions =>
         new()
         {
-            SlidingExpiration = TimeSpan.FromMinutes(options.CurrentValue.SessionExpiryTimeMinutes),
+            SlidingExpiration = TimeSpan.FromMinutes(
+                this.options.CurrentValue.SessionExpiryTimeMinutes
+            ),
         };
 
     public SessionService(
@@ -81,17 +83,17 @@ public class SessionService : ISessionService
         }
 
         // Register in sessions by id token (for reauth)
-        await cache.SetStringAsync(
+        await this.cache.SetStringAsync(
             Schema.Session_IdToken(idToken),
             JsonSerializer.Serialize(session),
-            CacheOptions
+            this.CacheOptions
         );
 
         // Register in sessions by session id (for all other endpoints)
-        await cache.SetStringAsync(
+        await this.cache.SetStringAsync(
             Schema.Session_SessionId(session.SessionId),
             JsonSerializer.Serialize(session),
-            CacheOptions
+            this.CacheOptions
         );
 
         return session.SessionId;

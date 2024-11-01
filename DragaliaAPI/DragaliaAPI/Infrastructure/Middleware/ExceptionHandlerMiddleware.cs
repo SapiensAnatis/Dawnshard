@@ -34,12 +34,6 @@ public static class ExceptionHandlerMiddleware
                 ? dragaliaException.Code
                 : ResultCode.CommonServerError;
 
-            logger.LogError(
-                exception,
-                "Encountered unhandled exception. Returning result_code {Code}",
-                code
-            );
-
             await context.WriteResultCodeResponse(code);
         }
     }

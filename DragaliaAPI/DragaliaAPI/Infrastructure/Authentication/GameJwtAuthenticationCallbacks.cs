@@ -17,7 +17,12 @@ internal static partial class GameJwtAuthenticationCallbacks
     {
         // Use ID-TOKEN from header rather than id_token in body - the header is updated
         // on refreshes and generally seems to be the more accurate source of truth
-        if (context.Request.Headers.TryGetValue("ID-TOKEN", out StringValues idToken))
+        if (
+            context.Request.Headers.TryGetValue(
+                DragaliaHttpConstants.Headers.IdToken,
+                out StringValues idToken
+            )
+        )
         {
             context.Token = idToken.FirstOrDefault();
         }
