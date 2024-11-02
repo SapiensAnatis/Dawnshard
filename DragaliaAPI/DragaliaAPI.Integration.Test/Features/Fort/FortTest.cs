@@ -605,7 +605,7 @@ public class FortTest : TestFixture
             .Data.UpdateDataList.MissionNotice.DailyMissionNotice.NewCompleteMissionIdList.Should()
             .Contain(15070201);
     }
-    
+
     [Fact]
     public async Task BuildStart_NoBuildersAvailable_ReturnsError()
     {
@@ -620,22 +620,18 @@ public class FortTest : TestFixture
                     BuildEndDate = DateTimeOffset.UtcNow.AddDays(1),
                 })
         );
-        
-       DragaliaResponse<FortBuildStartResponse> response = (
+
+        DragaliaResponse<FortBuildStartResponse> response = (
             await this.Client.PostMsgpack<FortBuildStartResponse>(
                 "/fort/build_start",
-                new FortBuildStartRequest(
-                    FortPlants.FlameAltar,
-                    1,
-                    1
-               ),
+                new FortBuildStartRequest(FortPlants.FlameAltar, 1, 1),
                 ensureSuccessHeader: false
             )
         );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.FortBuildCarpenterBusy);
     }
-    
+
     [Fact]
     public async Task BuildStart_OtherCompletedBuildings_DoesNotErrorOnTooFewBuilders()
     {
@@ -650,15 +646,11 @@ public class FortTest : TestFixture
                     BuildEndDate = DateTimeOffset.UtcNow.AddDays(-1),
                 })
         );
-        
+
         DragaliaResponse<FortBuildStartResponse> response = (
             await this.Client.PostMsgpack<FortBuildStartResponse>(
                 "/fort/build_start",
-                new FortBuildStartRequest(
-                    FortPlants.FlameAltar,
-                    1,
-                    1
-                )
+                new FortBuildStartRequest(FortPlants.FlameAltar, 1, 1)
             )
         );
 
