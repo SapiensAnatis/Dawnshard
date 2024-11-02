@@ -3,6 +3,7 @@ using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
+using Microsoft.Extensions.Time.Testing;
 
 namespace DragaliaAPI.Database.Test.Repositories;
 
@@ -12,12 +13,15 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     private readonly DbTestFixture fixture;
     private readonly FortRepository fortRepository;
     private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
+    private readonly FakeTimeProvider fakeTimeProvider;
 
     public FortRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
         this.mockPlayerIdentityService = new(MockBehavior.Strict);
         this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(DbTestFixture.ViewerId);
+
+        this.fakeTimeProvider = new();
 
         this.fixture.ApiContext.Database.EnsureDeleted();
         this.fixture.ApiContext.Database.EnsureCreated();
@@ -26,6 +30,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         this.fortRepository = new FortRepository(
             this.fixture.ApiContext,
             this.mockPlayerIdentityService.Object,
+            this.fakeTimeProvider,
             LoggerTestUtils.Create<FortRepository>()
         );
 
@@ -232,6 +237,34 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         );
 
         (await this.fortRepository.GetActiveCarpenters()).Should().Be(3);
+    }
+
+    [Fact]
+    public async Task GetActiveCarpenters_ExcludesFinishedBuildings()
+    {
+        this.fakeTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
+
+        await this.fixture.AddRangeToDatabase(
+            new List<DbFortBuild>()
+            {
+                new()
+                {
+                    ViewerId = DbTestFixture.ViewerId,
+                    PlantId = FortPlants.PalmTree,
+                    BuildStartDate = DateTimeOffset.MinValue,
+                    BuildEndDate = DateTimeOffset.UtcNow.AddDays(-1),
+                },
+                new()
+                {
+                    ViewerId = DbTestFixture.ViewerId,
+                    PlantId = FortPlants.Lectern,
+                    BuildStartDate = DateTimeOffset.MinValue,
+                    BuildEndDate = DateTimeOffset.UtcNow.AddDays(-1),
+                },
+            }
+        );
+
+        (await this.fortRepository.GetActiveCarpenters()).Should().Be(0);
     }
 
     [Fact]

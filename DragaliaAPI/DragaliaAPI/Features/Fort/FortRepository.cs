@@ -7,55 +7,45 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Fort;
 
-public class FortRepository : IFortRepository
+public class FortRepository(
+    ApiContext apiContext,
+    IPlayerIdentityService playerIdentityService,
+    TimeProvider timeProvider,
+    ILogger<FortRepository> logger
+) : IFortRepository
 {
-    private readonly ApiContext apiContext;
-    private readonly IPlayerIdentityService playerIdentityService;
-    private readonly ILogger<FortRepository> logger;
-
     private const int DefaultCarpenters = 2;
 
-    public FortRepository(
-        ApiContext apiContext,
-        IPlayerIdentityService playerIdentityService,
-        ILogger<FortRepository> logger
-    )
-    {
-        this.apiContext = apiContext;
-        this.playerIdentityService = playerIdentityService;
-        this.logger = logger;
-    }
-
     [Obsolete("This entity has a global query filter, use ApiContext.PlayerFortBuilds instead.")]
-    public IQueryable<DbFortBuild> Builds => this.apiContext.PlayerFortBuilds;
+    public IQueryable<DbFortBuild> Builds => apiContext.PlayerFortBuilds;
 
     public async Task InitializeFort()
     {
-        this.logger.LogInformation("Initializing fort.");
+        logger.LogInformation("Initializing fort.");
 
         if (
-            !await this.apiContext.PlayerFortDetails.AnyAsync(x =>
-                x.ViewerId == this.playerIdentityService.ViewerId
+            !await apiContext.PlayerFortDetails.AnyAsync(x =>
+                x.ViewerId == playerIdentityService.ViewerId
             )
         )
         {
-            this.logger.LogDebug("Initializing PlayerFortDetail.");
-            await this.apiContext.PlayerFortDetails.AddAsync(
+            logger.LogDebug("Initializing PlayerFortDetail.");
+            await apiContext.PlayerFortDetails.AddAsync(
                 new DbFortDetail()
                 {
-                    ViewerId = this.playerIdentityService.ViewerId,
+                    ViewerId = playerIdentityService.ViewerId,
                     CarpenterNum = DefaultCarpenters,
                 }
             );
         }
 
-        if (!await this.Builds.AnyAsync(x => x.PlantId == FortPlants.TheHalidom))
+        if (!await apiContext.PlayerFortBuilds.AnyAsync(x => x.PlantId == FortPlants.TheHalidom))
         {
-            this.logger.LogDebug("Initializing Halidom.");
+            logger.LogDebug("Initializing Halidom.");
             await apiContext.PlayerFortBuilds.AddAsync(
                 new DbFortBuild()
                 {
-                    ViewerId = this.playerIdentityService.ViewerId,
+                    ViewerId = playerIdentityService.ViewerId,
                     PlantId = FortPlants.TheHalidom,
                     PositionX = 16, // Default Halidom position
                     PositionZ = 17,
@@ -67,15 +57,15 @@ public class FortRepository : IFortRepository
 
     public async Task InitializeSmithy()
     {
-        this.logger.LogInformation("Adding smithy to halidom.");
+        logger.LogInformation("Adding smithy to halidom.");
 
-        if (!await this.Builds.AnyAsync(x => x.PlantId == FortPlants.Smithy))
+        if (!await apiContext.PlayerFortBuilds.AnyAsync(x => x.PlantId == FortPlants.Smithy))
         {
-            this.logger.LogDebug("Initializing Smithy.");
-            await this.apiContext.PlayerFortBuilds.AddAsync(
+            logger.LogDebug("Initializing Smithy.");
+            await apiContext.PlayerFortBuilds.AddAsync(
                 new DbFortBuild
                 {
-                    ViewerId = this.playerIdentityService.ViewerId,
+                    ViewerId = playerIdentityService.ViewerId,
                     PlantId = FortPlants.Smithy,
                     PositionX = 21,
                     PositionZ = 3,
@@ -100,7 +90,7 @@ public class FortRepository : IFortRepository
             FortPlants.WandDojo,
         };
 
-        this.logger.LogDebug("Granting dojos.");
+        logger.LogDebug("Granting dojos.");
 
         foreach (FortPlants plant in plants)
         {
@@ -110,28 +100,28 @@ public class FortRepository : IFortRepository
 
     public async Task AddDragontree()
     {
-        if (!await this.Builds.AnyAsync(x => x.PlantId == FortPlants.Dragontree))
+        if (!await apiContext.PlayerFortBuilds.AnyAsync(x => x.PlantId == FortPlants.Dragontree))
         {
-            this.logger.LogDebug("Adding dragontree to storage.");
+            logger.LogDebug("Adding dragontree to storage.");
             await this.AddToStorage(FortPlants.Dragontree);
         }
     }
 
     public async Task<DbFortDetail> GetFortDetail()
     {
-        DbFortDetail? details = await this.apiContext.PlayerFortDetails.FindAsync(
-            this.playerIdentityService.ViewerId
+        DbFortDetail? details = await apiContext.PlayerFortDetails.FindAsync(
+            playerIdentityService.ViewerId
         );
 
         if (details == null)
         {
-            this.logger.LogInformation("Could not find details for player, creating anew...");
+            logger.LogInformation("Could not find details for player, creating anew...");
 
             details = (
-                await this.apiContext.PlayerFortDetails.AddAsync(
+                await apiContext.PlayerFortDetails.AddAsync(
                     new()
                     {
-                        ViewerId = this.playerIdentityService.ViewerId,
+                        ViewerId = playerIdentityService.ViewerId,
                         CarpenterNum = DefaultCarpenters,
                     }
                 )
@@ -143,15 +133,15 @@ public class FortRepository : IFortRepository
 
     public async Task<bool> CheckPlantLevel(FortPlants plant, int requiredLevel)
     {
-        int level = await this
-            .Builds.Where(x => x.PlantId == plant)
+        int level = await apiContext
+            .PlayerFortBuilds.Where(x => x.PlantId == plant)
             .Select(x => x.Level)
             .FirstOrDefaultAsync();
         bool result = level >= requiredLevel;
 
         if (!result)
         {
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Failed build level check: requested plant {plant} at level {requestLevel}, but had level {actualLevel}",
                 plant,
                 requiredLevel,
@@ -165,7 +155,7 @@ public class FortRepository : IFortRepository
     public async Task UpdateFortMaximumCarpenter(int carpenterNum)
     {
         DbFortDetail fortDetail =
-            await apiContext.PlayerFortDetails.FindAsync(this.playerIdentityService.ViewerId)
+            await apiContext.PlayerFortDetails.FindAsync(playerIdentityService.ViewerId)
             ?? throw new InvalidOperationException("Missing FortDetails!");
 
         fortDetail.CarpenterNum = carpenterNum;
@@ -173,8 +163,8 @@ public class FortRepository : IFortRepository
 
     public async Task<DbFortBuild> GetBuilding(long buildId)
     {
-        DbFortBuild? fort = await this
-            .Builds.Where(x => x.BuildId == buildId)
+        DbFortBuild? fort = await apiContext
+            .PlayerFortBuilds.Where(x => x.BuildId == buildId)
             .FirstOrDefaultAsync();
 
         if (fort is null)
@@ -197,7 +187,7 @@ public class FortRepository : IFortRepository
         int? level = null
     )
     {
-        this.logger.LogDebug(
+        logger.LogDebug(
             "Adding {quantity} copies of {plant} to storage (isTotalQuantity: {isTotalQuantity})",
             quantity,
             plant,
@@ -205,10 +195,10 @@ public class FortRepository : IFortRepository
         );
 
         int startQuantity = isTotalQuantity
-            ? await this.Builds.Where(x => x.PlantId == plant).CountAsync()
+            ? await apiContext.PlayerFortBuilds.Where(x => x.PlantId == plant).CountAsync()
             : 0;
 
-        this.logger.LogDebug("User already owns {startQuantity} copies.", startQuantity);
+        logger.LogDebug("User already owns {startQuantity} copies.", startQuantity);
 
         if (startQuantity >= quantity)
             return;
@@ -217,10 +207,10 @@ public class FortRepository : IFortRepository
 
         for (int i = startQuantity; i < quantity; i++)
         {
-            await this.apiContext.PlayerFortBuilds.AddAsync(
+            await apiContext.PlayerFortBuilds.AddAsync(
                 new DbFortBuild
                 {
-                    ViewerId = this.playerIdentityService.ViewerId,
+                    ViewerId = playerIdentityService.ViewerId,
                     PlantId = plant,
                     Level = actualLevel,
                     PositionX = -1,
@@ -239,5 +229,7 @@ public class FortRepository : IFortRepository
     }
 
     public async Task<int> GetActiveCarpenters() =>
-        await this.Builds.CountAsync(x => x.BuildEndDate != DateTimeOffset.UnixEpoch);
+        await apiContext.PlayerFortBuilds.CountAsync(x =>
+            x.BuildEndDate > timeProvider.GetUtcNow()
+        );
 }
