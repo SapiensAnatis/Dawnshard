@@ -605,4 +605,137 @@ public class FortTest : TestFixture
             .Data.UpdateDataList.MissionNotice.DailyMissionNotice.NewCompleteMissionIdList.Should()
             .Contain(15070201);
     }
+    
+    [Fact]
+    public async Task BuildStart_NoBuildersAvailable_ReturnsError()
+    {
+        await this.AddRangeToDatabase(
+            Enumerable
+                .Range(0, 5)
+                .Select(_ => new DbFortBuild()
+                {
+                    ViewerId = ViewerId,
+                    PlantId = FortPlants.WindAltar,
+                    BuildStartDate = DateTimeOffset.UtcNow.AddDays(-2),
+                    BuildEndDate = DateTimeOffset.UtcNow.AddDays(1),
+                })
+        );
+        
+       DragaliaResponse<FortBuildStartResponse> response = (
+            await this.Client.PostMsgpack<FortBuildStartResponse>(
+                "/fort/build_start",
+                new FortBuildStartRequest(
+                    FortPlants.FlameAltar,
+                    1,
+                    1
+               ),
+                ensureSuccessHeader: false
+            )
+        );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.FortBuildCarpenterBusy);
+    }
+    
+    [Fact]
+    public async Task BuildStart_OtherCompletedBuildings_DoesNotErrorOnTooFewBuilders()
+    {
+        await this.AddRangeToDatabase(
+            Enumerable
+                .Range(0, 5)
+                .Select(_ => new DbFortBuild()
+                {
+                    ViewerId = ViewerId,
+                    PlantId = FortPlants.WindAltar,
+                    BuildStartDate = DateTimeOffset.UtcNow.AddDays(-2),
+                    BuildEndDate = DateTimeOffset.UtcNow.AddDays(-1),
+                })
+        );
+        
+        DragaliaResponse<FortBuildStartResponse> response = (
+            await this.Client.PostMsgpack<FortBuildStartResponse>(
+                "/fort/build_start",
+                new FortBuildStartRequest(
+                    FortPlants.FlameAltar,
+                    1,
+                    1
+                )
+            )
+        );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
+        response.Data.FortDetail.CarpenterNum.Should().Be(2);
+        response.Data.FortDetail.WorkingCarpenterNum.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task LevelupStart_NoBuildersAvailable_ReturnsError()
+    {
+        DbFortBuild build = await this.AddToDatabase(
+            new DbFortBuild()
+            {
+                ViewerId = ViewerId,
+                PlantId = FortPlants.RupieMine,
+                LastIncomeDate = DateTimeOffset.UnixEpoch,
+                Level = 10,
+            }
+        );
+
+        await this.AddRangeToDatabase(
+            Enumerable
+                .Range(0, 5)
+                .Select(_ => new DbFortBuild()
+                {
+                    ViewerId = ViewerId,
+                    PlantId = FortPlants.WindAltar,
+                    BuildStartDate = DateTimeOffset.UtcNow.AddDays(-2),
+                    BuildEndDate = DateTimeOffset.UtcNow.AddDays(1),
+                })
+        );
+
+        DragaliaResponse<FortLevelupStartResponse> response =
+            await this.Client.PostMsgpack<FortLevelupStartResponse>(
+                "/fort/levelup_start",
+                new FortLevelupStartRequest(build.BuildId),
+                ensureSuccessHeader: false
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.FortBuildCarpenterBusy);
+    }
+
+    [Fact]
+    public async Task LevelupStart_OtherCompletedBuildings_DoesNotErrorOnTooFewBuilders()
+    {
+        DbFortBuild build = await this.AddToDatabase(
+            new DbFortBuild()
+            {
+                ViewerId = ViewerId,
+                PlantId = FortPlants.RupieMine,
+                LastIncomeDate = DateTimeOffset.UnixEpoch,
+                Level = 10,
+            }
+        );
+
+        await this.AddRangeToDatabase(
+            Enumerable.Repeat(
+                new DbFortBuild()
+                {
+                    ViewerId = ViewerId,
+                    PlantId = FortPlants.WindAltar,
+                    BuildStartDate = DateTimeOffset.UtcNow.AddDays(-2),
+                    BuildEndDate = DateTimeOffset.UtcNow.AddDays(-1),
+                },
+                5
+            )
+        );
+
+        DragaliaResponse<FortLevelupStartResponse> response =
+            await this.Client.PostMsgpack<FortLevelupStartResponse>(
+                "/fort/levelup_start",
+                new FortLevelupStartRequest(build.BuildId)
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
+        response.Data.FortDetail.CarpenterNum.Should().Be(2);
+        response.Data.FortDetail.WorkingCarpenterNum.Should().Be(1);
+    }
 }
