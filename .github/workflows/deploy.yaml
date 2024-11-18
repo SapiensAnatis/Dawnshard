@@ -24,7 +24,7 @@ jobs:
       url: https://dawnshard.co.uk
     steps:
       - name: ssh and submit job
-        uses: appleboy/ssh-action@v1.1.0
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
