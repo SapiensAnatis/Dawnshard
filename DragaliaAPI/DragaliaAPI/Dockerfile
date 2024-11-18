@@ -1,9 +1,9 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0.10-jammy-chiseled AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0.11-jammy-chiseled AS base
 USER app
 EXPOSE 8080
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0.401 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0.100 AS build
 WORKDIR /src
 COPY ["DragaliaAPI/DragaliaAPI.MissionDesigner/DragaliaAPI.MissionDesigner.csproj", "DragaliaAPI/DragaliaAPI.MissionDesigner/"]
 COPY ["DragaliaAPI/DragaliaAPI.MasterAssetConverter/DragaliaAPI.MasterAssetConverter.csproj", "DragaliaAPI/DragaliaAPI.MasterAssetConverter/"]
