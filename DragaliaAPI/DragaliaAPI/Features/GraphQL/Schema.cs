@@ -15,7 +15,7 @@ public static class Schema
             {
                 schema.AddScalarType<TimeSpan>("TimeSpan", "time span");
             };
-            options.ConfigureSchema = (schema) =>
+            options.ConfigureSchema = (SchemaProvider<ApiContext> schema) =>
             {
                 schema
                     .Query()

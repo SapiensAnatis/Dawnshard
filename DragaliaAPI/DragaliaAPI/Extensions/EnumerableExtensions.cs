@@ -35,26 +35,6 @@ public static class EnumerableExtensions
         return Enumerable.Repeat(enumerable, count).SelectMany(x => x);
     }
 
-    public static async Task<HashSet<TElement>> ToHashSetAsync<TElement>(
-        this IQueryable<TElement> enumerable,
-        IEqualityComparer<TElement>? comparer = null,
-        CancellationToken cancellationToken = default
-    )
-        where TElement : struct
-    {
-        comparer ??= EqualityComparer<TElement>.Default;
-
-        HashSet<TElement> set = new(comparer);
-        await foreach (
-            TElement element in enumerable.AsAsyncEnumerable().WithCancellation(cancellationToken)
-        )
-        {
-            set.Add(element);
-        }
-
-        return set;
-    }
-
     /// <summary>
     /// Pads a sequence to a length equal to or greater than the provided <paramref name="desiredLength"/>, by filling
     /// any short-fall with the default value for <typeparamref name="TElement"/>.
