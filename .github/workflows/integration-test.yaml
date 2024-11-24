@@ -60,7 +60,7 @@ jobs:
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8.0.401"
+          dotnet-version: "9.0.100"
 
       - name: Load cache
         id: cache
