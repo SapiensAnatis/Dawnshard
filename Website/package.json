@@ -21,7 +21,7 @@
     "@playwright/test": "1.48.2",
     "@sveltejs/adapter-node": "5.2.9",
     "@sveltejs/enhanced-img": "0.3.10",
-    "@sveltejs/kit": "2.7.3",
+    "@sveltejs/kit": "2.8.3",
     "@sveltejs/vite-plugin-svelte": "4.0.0",
     "@types/bunyan": "1.8.11",
     "@types/eslint": "9.6.1",
