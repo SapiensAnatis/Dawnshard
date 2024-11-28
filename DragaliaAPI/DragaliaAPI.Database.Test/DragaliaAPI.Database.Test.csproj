@@ -9,7 +9,7 @@
     <PackageReference Include="MockQueryable.EntityFrameworkCore" />
     <PackageReference Include="MockQueryable.Moq" />
     <PackageReference Include="Moq" />
-    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.v3" />
     <PackageReference Include="xunit.runner.visualstudio">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
