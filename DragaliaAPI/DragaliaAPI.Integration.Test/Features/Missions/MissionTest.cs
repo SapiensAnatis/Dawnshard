@@ -152,11 +152,7 @@ public class MissionTest : TestFixture
     public async Task DrillMission_DragonOverleveling_CompletesMission()
     {
         await this.AddToDatabase(
-            new DbPlayerDragonData()
-            {
-                ViewerId = ViewerId,
-                DragonId = Dragons.Midgardsormr
-            }
+            new DbPlayerDragonData() { ViewerId = ViewerId, DragonId = Dragons.Midgardsormr }
         );
 
         await this.Client.PostMsgpack<MissionUnlockDrillMissionGroupResponse>(
@@ -164,12 +160,13 @@ public class MissionTest : TestFixture
             new MissionUnlockDrillMissionGroupRequest(1)
         );
 
-        DragaliaResponse<DragonBuildupResponse> resp = await this.Client.PostMsgpack<DragonBuildupResponse>(
-            "dragon/buildup",
-            new DragonBuildupRequest()
-            {
-                BaseDragonKeyId = (ulong)this.GetDragonKeyId(Dragons.Midgardsormr),
-                GrowMaterialList = new List<GrowMaterialList>()
+        DragaliaResponse<DragonBuildupResponse> resp =
+            await this.Client.PostMsgpack<DragonBuildupResponse>(
+                "dragon/buildup",
+                new DragonBuildupRequest()
+                {
+                    BaseDragonKeyId = (ulong)this.GetDragonKeyId(Dragons.Midgardsormr),
+                    GrowMaterialList = new List<GrowMaterialList>()
                     {
                         new GrowMaterialList()
                         {
@@ -178,8 +175,8 @@ public class MissionTest : TestFixture
                             Quantity = 1,
                         },
                     },
-            }
-        );
+                }
+            );
 
         resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
         resp.Data.UpdateDataList.MissionNotice.Should().NotBeNull();
@@ -200,16 +197,17 @@ public class MissionTest : TestFixture
             new MissionUnlockDrillMissionGroupRequest(1)
         );
 
-        DragaliaResponse<CharaBuildupResponse> resp = await this.Client.PostMsgpack<CharaBuildupResponse>(
-            "chara/buildup",
-            new CharaBuildupRequest(
-                Charas.Karina,
-                new List<AtgenEnemyPiece>()
-                {
-                    new AtgenEnemyPiece() { Id = Materials.GoldCrystal, Quantity = 15 },
-                }
-            )
-        );
+        DragaliaResponse<CharaBuildupResponse> resp =
+            await this.Client.PostMsgpack<CharaBuildupResponse>(
+                "chara/buildup",
+                new CharaBuildupRequest(
+                    Charas.Karina,
+                    new List<AtgenEnemyPiece>()
+                    {
+                        new AtgenEnemyPiece() { Id = Materials.GoldCrystal, Quantity = 15 },
+                    }
+                )
+            );
 
         resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
         resp.Data.UpdateDataList.MissionNotice.Should().NotBeNull();

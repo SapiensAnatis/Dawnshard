@@ -297,22 +297,20 @@ public class MissionInitialProgressionService(
         if (element != null)
         {
             return (
-                    await apiContext
-                        .PlayerCharaData.Select(x => new { x.CharaId, x.Level })
-                        .ToListAsync()
-                )
-                    .Where(x => MasterAsset.CharaData[x.CharaId].ElementalType == element)
-                    .Where(x => x.Level >= level)
-                    .Count();
+                await apiContext
+                    .PlayerCharaData.Select(x => new { x.CharaId, x.Level })
+                    .ToListAsync()
+            )
+                .Where(x => MasterAsset.CharaData[x.CharaId].ElementalType == element)
+                .Where(x => x.Level >= level)
+                .Count();
         }
         return (
-                    await apiContext
-                        .PlayerCharaData.Select(x => new { x.CharaId, x.Level })
-                        .ToListAsync()
-                )
-                    .Where(x => MasterAsset.CharaData[x.CharaId].ElementalType == element)
-                    .Where(x => x.Level >= level)
-                    .Count();
+            await apiContext.PlayerCharaData.Select(x => new { x.CharaId, x.Level }).ToListAsync()
+        )
+            .Where(x => MasterAsset.CharaData[x.CharaId].ElementalType == element)
+            .Where(x => x.Level >= level)
+            .Count();
     }
 
     private async Task<int> GetCharacterManaNodeCount(Charas? charaId, UnitElement? element)
@@ -368,22 +366,16 @@ public class MissionInitialProgressionService(
         if (element != null)
         {
             return (
-                    await unitRepository
-                        .Dragons.Select(x => new { x.DragonId, x.Level })
-                        .ToListAsync()
-                )
-                    .Where(x => MasterAsset.DragonData[x.DragonId].ElementalType == element)
-                    .Where(x => (int?)x.Level >= level)
-                    .Count();
-        }
-
-        return (
-                await unitRepository
-                    .Dragons.Select(x => new { x.DragonId, x.Level })
-                    .ToListAsync()
+                await unitRepository.Dragons.Select(x => new { x.DragonId, x.Level }).ToListAsync()
             )
+                .Where(x => MasterAsset.DragonData[x.DragonId].ElementalType == element)
                 .Where(x => (int?)x.Level >= level)
                 .Count();
+        }
+
+        return (await unitRepository.Dragons.Select(x => new { x.DragonId, x.Level }).ToListAsync())
+            .Where(x => (int?)x.Level >= level)
+            .Count();
     }
 
     private async Task<int> GetDragonBondLevel(Dragons? dragonId, UnitElement? element)
