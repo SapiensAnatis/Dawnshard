@@ -20,26 +20,23 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Time.Testing;
-using Npgsql;
 using static DragaliaAPI.Infrastructure.DragaliaHttpConstants;
 
 namespace DragaliaAPI.Integration.Test;
 
-[Collection(TestCollection.Name)]
 public class TestFixture
 {
     /// <summary>
     /// The device account ID which links to the seeded savefiles <see cref="SeedDatabase"/>
     /// </summary>
-    protected const string DeviceAccountId = "logged_in_id";
+    protected string DeviceAccountId { get; } = $"logged_in_id_{Guid.NewGuid()}";
 
     /// <summary>
     /// The session ID which is associated with the logged in test user.
     /// </summary>
-    protected const string SessionId = "session_id";
+    private readonly string sessionId = $"session_id_{Guid.NewGuid()}";
 
     private readonly CustomWebApplicationFactory factory;
-    private readonly IPlayerIdentityService stubPlayerIdentityService;
 
     protected TestFixture(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
     {
@@ -57,18 +54,18 @@ public class TestFixture
         this.SeedDatabase().Wait();
         this.SeedCache().Wait();
 
-        this.stubPlayerIdentityService = new StubPlayerIdentityService(this.ViewerId);
+        IPlayerIdentityService stubPlayerIdentityService = new StubPlayerIdentityService(this.ViewerId);
 
         DbContextOptions<ApiContext> options = this.Services.GetRequiredService<
             DbContextOptions<ApiContext>
         >();
-        this.ApiContext = new ApiContext(options, this.stubPlayerIdentityService);
+        this.ApiContext = new ApiContext(options, stubPlayerIdentityService);
         this.ApiContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
 
         this.DungeonService = new DungeonService(
             this.Services.GetRequiredService<IDistributedCache>(),
             this.Services.GetRequiredService<IOptionsMonitor<RedisCachingOptions>>(),
-            this.stubPlayerIdentityService,
+            stubPlayerIdentityService,
             NullLogger<DungeonService>.Instance
         );
     }
@@ -205,7 +202,7 @@ public class TestFixture
                 }
             );
 
-        client.DefaultRequestHeaders.Add(Headers.SessionId, SessionId);
+        client.DefaultRequestHeaders.Add(Headers.SessionId, sessionId);
         client.DefaultRequestHeaders.Add("Platform", "2");
         client.DefaultRequestHeaders.Add("Res-Ver", "y2XM6giU6zz56wCm");
 
@@ -231,12 +228,6 @@ public class TestFixture
 
     private async Task SeedDatabase()
     {
-        await using NpgsqlConnection connection = new(this.factory.PostgresConnectionString);
-        await connection.OpenAsync();
-
-        ArgumentNullException.ThrowIfNull(this.factory.Respawner);
-        await this.factory.Respawner.ResetAsync(connection);
-
         ISavefileService savefileService = this.Services.GetRequiredService<ISavefileService>();
         IPlayerIdentityService playerIdentityService =
             this.Services.GetRequiredService<IPlayerIdentityService>();
@@ -319,16 +310,14 @@ public class TestFixture
 
     private async Task SeedCache()
     {
-        this.factory.ResetCache();
-
         IDistributedCache cache = this.Services.GetRequiredService<IDistributedCache>();
 
         Session session =
-            new(SessionId, "id_token", DeviceAccountId, this.ViewerId, DateTimeOffset.MaxValue);
+            new(sessionId, "id_token", DeviceAccountId, this.ViewerId, DateTimeOffset.MaxValue);
         await cache.SetStringAsync(
-            ":session:session_id:session_id",
+            $":session:session_id:{this.sessionId}",
             JsonSerializer.Serialize(session)
         );
-        await cache.SetStringAsync(":session_id:device_account_id:logged_in_id", SessionId);
+        await cache.SetStringAsync($":session_id:device_account_id:{this.DeviceAccountId}", sessionId);
     }
 }

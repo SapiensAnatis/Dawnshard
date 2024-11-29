@@ -12,8 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
-using Respawn;
-using Respawn.Graph;
 using StackExchange.Redis;
 
 namespace DragaliaAPI.Integration.Test;
@@ -35,8 +33,6 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
     public Mock<IPhotonStateApi> MockPhotonStateApi { get; } = new();
 
-    public Respawner? Respawner { get; private set; }
-
     public async ValueTask InitializeAsync()
     {
         await MasterAsset.LoadAsync(FeatureFlagUtils.AllEnabledFeatureManager);
@@ -47,19 +43,6 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
         ApiContext context = scope.ServiceProvider.GetRequiredService<ApiContext>();
         await context.Database.MigrateAsync();
 
-        await using NpgsqlConnection connection = new(this.PostgresConnectionString);
-        await connection.OpenAsync();
-
-        this.Respawner = await Respawner.CreateAsync(
-            connection,
-            new RespawnerOptions()
-            {
-                DbAdapter = DbAdapter.Postgres,
-                SchemasToInclude = ["public"],
-                TablesToIgnore = [new Table("__EFMigrationsHistory")],
-            }
-        );
-
         this.connectionMultiplexer = await ConnectionMultiplexer.ConnectAsync(
             new ConfigurationOptions()
             {
@@ -69,11 +52,6 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 },
             }
         );
-    }
-
-    public void ResetCache()
-    {
-        this.connectionMultiplexer?.GetDatabase().Execute("FLUSHALL");
     }
 
     async ValueTask IAsyncDisposable.DisposeAsync() => await this.testContainersHelper.StopAsync();
