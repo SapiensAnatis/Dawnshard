@@ -40,7 +40,7 @@ public class FortTest : TestFixture
         );
         await this.ApiContext.SaveChangesAsync();
 
-        (await this.Client.PostMsgpack<FortGetDataResponse>("/fort/get_data"))
+        (await this.Client.PostMsgpack<FortGetDataResponse>("/fort/get_data", cancellationToken: TestContext.Current.CancellationToken))
             .Data.BuildList.Should()
             .ContainEquivalentOf(
                 new BuildList()
