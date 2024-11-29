@@ -141,7 +141,11 @@ public class AbilityCrestTest : TestFixture
         ).Data;
 
         DbAbilityCrest ability_crest = (
-            await this.ApiContext.PlayerAbilityCrests.FindAsync([ViewerId], TestContext.Current.CancellationToken))!;
+            await this.ApiContext.PlayerAbilityCrests.FindAsync(
+                [ViewerId],
+                TestContext.Current.CancellationToken
+            )
+        )!;
         await this
             .ApiContext.Entry(ability_crest)
             .ReloadAsync(TestContext.Current.CancellationToken);
