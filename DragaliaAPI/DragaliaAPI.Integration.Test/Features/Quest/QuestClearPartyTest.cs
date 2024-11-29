@@ -443,7 +443,7 @@ public class QuestClearPartyTest : TestFixture
                 UnitNo = 6,
                 QuestId = 6,
                 IsMulti = false,
-                EquipTalismanKeyId = 3000,
+                EquipTalismanKeyId = 12412451,
                 CharaId = Charas.Raemond,
                 EquippedTalismanEntityId = Talismans.Raemond,
             },

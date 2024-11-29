@@ -5,7 +5,6 @@ using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Photon.Shared.Requests;
 using DragaliaAPI.Photon.StateManager.Models;
 using DragaliaAPI.Photon.StateManager.Test.Helpers;
-using Xunit.Abstractions;
 
 namespace DragaliaAPI.Photon.StateManager.Test.Event;
 

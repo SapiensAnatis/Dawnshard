@@ -19,7 +19,7 @@ using StackExchange.Redis;
 namespace DragaliaAPI.Integration.Test;
 
 [UsedImplicitly]
-public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
+public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly TestContainersHelper testContainersHelper;
     private ConnectionMultiplexer? connectionMultiplexer;
@@ -37,7 +37,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
 
     public Respawner? Respawner { get; private set; }
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         await MasterAsset.LoadAsync(FeatureFlagUtils.AllEnabledFeatureManager);
 
@@ -76,7 +76,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         this.connectionMultiplexer?.GetDatabase().Execute("FLUSHALL");
     }
 
-    async Task IAsyncLifetime.DisposeAsync() => await this.testContainersHelper.StopAsync();
+    async ValueTask IAsyncDisposable.DisposeAsync() => await this.testContainersHelper.StopAsync();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
