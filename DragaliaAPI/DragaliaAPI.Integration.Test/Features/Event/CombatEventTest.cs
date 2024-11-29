@@ -27,7 +27,8 @@ public class CombatEventTest : TestFixture
         DragaliaResponse<CombatEventGetEventDataResponse> evtData =
             await Client.PostMsgpack<CombatEventGetEventDataResponse>(
                 $"{Prefix}/get_event_data",
-                new CombatEventGetEventDataRequest(EventId)
+                new CombatEventGetEventDataRequest(EventId),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         evtData.Data.CombatEventUserData.Should().NotBeNull();
@@ -41,8 +42,9 @@ public class CombatEventTest : TestFixture
     {
         DbPlayerEventItem pointItem = await ApiContext
             .PlayerEventItems.AsTracking()
-            .SingleAsync(x =>
-                x.EventId == EventId && x.Type == (int)CombatEventItemType.EventPoint
+            .SingleAsync(
+                x => x.EventId == EventId && x.Type == (int)CombatEventItemType.EventPoint,
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         pointItem.Quantity += 1000;
@@ -51,12 +53,13 @@ public class CombatEventTest : TestFixture
             ApiContext.PlayerEventRewards.Where(x => x.EventId == EventId)
         );
 
-        await ApiContext.SaveChangesAsync();
+        await ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         DragaliaResponse<CombatEventReceiveEventPointRewardResponse> evtResp =
             await Client.PostMsgpack<CombatEventReceiveEventPointRewardResponse>(
                 $"{Prefix}/receive_event_point_reward",
-                new CombatEventReceiveEventPointRewardRequest(EventId)
+                new CombatEventReceiveEventPointRewardRequest(EventId),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         evtResp.Data.EventRewardEntityList.Should().HaveCount(1);
@@ -71,8 +74,9 @@ public class CombatEventTest : TestFixture
     {
         DbPlayerEventItem pointItem = await ApiContext
             .PlayerEventItems.AsTracking()
-            .SingleAsync(x =>
-                x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint
+            .SingleAsync(
+                x => x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint,
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         pointItem.Quantity += 500;
@@ -90,12 +94,13 @@ public class CombatEventTest : TestFixture
             }
         );
 
-        await ApiContext.SaveChangesAsync();
+        await ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         DragaliaResponse<CombatEventReceiveEventLocationRewardResponse> evtResp =
             await Client.PostMsgpack<CombatEventReceiveEventLocationRewardResponse>(
                 $"{Prefix}/receive_event_location_reward",
-                new CombatEventReceiveEventLocationRewardRequest(EventId, 2221302)
+                new CombatEventReceiveEventLocationRewardRequest(EventId, 2221302),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         evtResp.Data.EventLocationRewardEntityList.Should().HaveCount(9);

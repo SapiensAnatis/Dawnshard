@@ -14,13 +14,16 @@ public class HeroParamTest : TestFixture
     {
         await this.ImportSave();
 
-        HttpResponseMessage httpResponse = await this.Client.GetAsync($"heroparam/{ViewerId}/1");
+        HttpResponseMessage httpResponse = await this.Client.GetAsync(
+            $"heroparam/{ViewerId}/1",
+            TestContext.Current.CancellationToken
+        );
 
         httpResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        List<HeroParam>? heroParams = await httpResponse.Content.ReadFromJsonAsync<
-            List<HeroParam>
-        >();
+        List<HeroParam>? heroParams = await httpResponse.Content.ReadFromJsonAsync<List<HeroParam>>(
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         Verify(heroParams);
 

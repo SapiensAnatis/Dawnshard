@@ -92,17 +92,21 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
         List<Charas> idList = new() { Charas.Addis, Charas.Aeleen };
 
         await this.unitService.AddCharas(idList);
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         (
             await this
                 .fixture.ApiContext.PlayerCharaData.Where(x => x.ViewerId == ViewerId)
                 .Select(x => x.CharaId)
-                .ToListAsync()
+                .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
         )
             .Should()
             .Contain(new List<Charas>() { Charas.Addis, Charas.Aeleen });
-        (await this.fixture.ApiContext.PlayerStoryState.Select(x => x.StoryId).ToListAsync())
+        (
+            await this
+                .fixture.ApiContext.PlayerStoryState.Select(x => x.StoryId)
+                .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
+        )
             .Should()
             .Contain(
                 new List<int>()
@@ -148,7 +152,7 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
 
         await this.unitService.AddCharas(idList);
 
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.fixture.ApiContext.PlayerStoryState.Should()
             .ContainEquivalentOf(
@@ -210,7 +214,7 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
         List<Dragons> idList = [Dragons.AC011Garland, Dragons.Agni];
 
         await this.unitService.AddDragons(idList);
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.fixture.ApiContext.PlayerDragonReliability.Should()
             .ContainEquivalentOf(
@@ -230,13 +234,13 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
         List<Dragons> idList = new() { Dragons.KonohanaSakuya, Dragons.Michael, Dragons.Michael };
 
         await this.unitService.AddDragons(idList);
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         (
             await this
                 .fixture.ApiContext.PlayerDragonData.Where(x => x.ViewerId == ViewerId)
                 .Select(x => x.DragonId)
-                .ToListAsync()
+                .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
         )
             .Should()
             .Contain(
@@ -253,7 +257,7 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
             await this
                 .fixture.ApiContext.PlayerDragonReliability.Where(x => x.ViewerId == ViewerId)
                 .Select(x => x.DragonId)
-                .ToListAsync()
+                .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
         )
             .Should()
             .Contain(new List<Dragons>() { Dragons.KonohanaSakuya, Dragons.Michael });

@@ -33,7 +33,8 @@ public class OutputCachingTest : TestFixture
             await this.Client.PostMsgpack<FortBuildEndResponse>(
                 "/fort/levelup_end",
                 new FortBuildEndRequest(build.BuildId),
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
@@ -42,7 +43,8 @@ public class OutputCachingTest : TestFixture
             await this.Client.PostMsgpack<FortBuildEndResponse>(
                 "/fort/levelup_end",
                 new FortBuildEndRequest(build.BuildId),
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         // Ordinarily this request would fail because the building is no longer being upgraded.

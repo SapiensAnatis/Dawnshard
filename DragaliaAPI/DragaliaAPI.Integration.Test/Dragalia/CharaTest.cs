@@ -46,7 +46,8 @@ public class CharaTest : TestFixture
         CharaAwakeResponse response = (
             await this.Client.PostMsgpack<CharaAwakeResponse>(
                 "chara/awake",
-                new CharaAwakeRequest(Charas.Celliera, 5)
+                new CharaAwakeRequest(Charas.Celliera, 5),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -70,7 +71,7 @@ public class CharaTest : TestFixture
         {
             charaData = await this
                 .ApiContext.PlayerCharaData.Where(x => x.CharaId == Charas.Celliera)
-                .FirstAsync();
+                .FirstAsync(cancellationToken: TestContext.Current.CancellationToken);
 
             matQuantity = (
                 await this
@@ -88,7 +89,8 @@ public class CharaTest : TestFixture
                     {
                         new AtgenEnemyPiece() { Id = Materials.GoldCrystal, Quantity = 300 },
                     }
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -126,7 +128,8 @@ public class CharaTest : TestFixture
             new CharaBuildupRequest(
                 Charas.Gauld,
                 [new AtgenEnemyPiece() { Id = Materials.GoldCrystal, Quantity = 10 }]
-            )
+            ),
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         byte currentLevel = this
@@ -139,7 +142,8 @@ public class CharaTest : TestFixture
             new CharaBuildupRequest(
                 Charas.Gauld,
                 [new AtgenEnemyPiece() { Id = Materials.BronzeCrystal, Quantity = 1 }]
-            )
+            ),
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         this.ApiContext.PlayerCharaData.AsNoTracking()
@@ -171,7 +175,8 @@ public class CharaTest : TestFixture
                     Charas.Celliera,
                     new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
                     false
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -207,7 +212,8 @@ public class CharaTest : TestFixture
         DragaliaResponse<CharaBuildupManaResponse> response = (
             await this.Client.PostMsgpack<CharaBuildupManaResponse>(
                 "chara/buildup_mana",
-                new CharaBuildupManaRequest(Charas.GalaAudric, new List<int>() { 5 }, false)
+                new CharaBuildupManaRequest(Charas.GalaAudric, new List<int>() { 5 }, false),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         );
 
@@ -235,7 +241,8 @@ public class CharaTest : TestFixture
         CharaLimitBreakResponse response = (
             await this.Client.PostMsgpack<CharaLimitBreakResponse>(
                 "chara/limit_break",
-                new CharaLimitBreakRequest(Charas.Celliera, 1, false)
+                new CharaLimitBreakRequest(Charas.Celliera, 1, false),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -284,7 +291,8 @@ public class CharaTest : TestFixture
                     2,
                     new List<int>() { 21, 22, 24, 25, 28 },
                     false
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -347,7 +355,8 @@ public class CharaTest : TestFixture
                     4,
                     Enumerable.Range(1, 50).ToList(),
                     false
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -385,13 +394,19 @@ public class CharaTest : TestFixture
 
         await this.Client.PostMsgpack<CharaLimitBreakResponse>(
             "chara/limit_break",
-            new CharaLimitBreakRequest(Charas.Delphi, 5, false)
+            new CharaLimitBreakRequest(Charas.Delphi, 5, false),
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         CharaBuildupManaResponse postSpiralResponse = (
             await this.Client.PostMsgpack<CharaBuildupManaResponse>(
                 "chara/buildup_mana",
-                new CharaBuildupManaRequest(Charas.Delphi, Enumerable.Range(51, 20).ToList(), false)
+                new CharaBuildupManaRequest(
+                    Charas.Delphi,
+                    Enumerable.Range(51, 20).ToList(),
+                    false
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -434,7 +449,8 @@ public class CharaTest : TestFixture
         CharaBuildupPlatinumResponse response = (
             await this.Client.PostMsgpack<CharaBuildupPlatinumResponse>(
                 "chara/buildup_platinum",
-                new CharaBuildupPlatinumRequest(Charas.SummerCelliera)
+                new CharaBuildupPlatinumRequest(Charas.SummerCelliera),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -466,7 +482,8 @@ public class CharaTest : TestFixture
         CharaBuildupPlatinumResponse response = (
             await this.Client.PostMsgpack<CharaBuildupPlatinumResponse>(
                 "chara/buildup_platinum",
-                new CharaBuildupPlatinumRequest(Charas.Harle)
+                new CharaBuildupPlatinumRequest(Charas.Harle),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -511,7 +528,8 @@ public class CharaTest : TestFixture
         {
             await this.Client.PostMsgpack<CharaBuildupManaResponse>(
                 "chara/buildup_mana",
-                new CharaBuildupManaRequest(id, Enumerable.Range(1, manaNodes).ToList(), false)
+                new CharaBuildupManaRequest(id, Enumerable.Range(1, manaNodes).ToList(), false),
+                cancellationToken: TestContext.Current.CancellationToken
             );
         }
         else
@@ -523,14 +541,16 @@ public class CharaTest : TestFixture
                     limitBreak,
                     Enumerable.Range(1, manaNodes).ToList(),
                     false
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             );
         }
 
         CharaBuildupPlatinumResponse response = (
             await this.Client.PostMsgpack<CharaBuildupPlatinumResponse>(
                 "chara/buildup_platinum",
-                new CharaBuildupPlatinumRequest(id)
+                new CharaBuildupPlatinumRequest(id),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -594,7 +614,8 @@ public class CharaTest : TestFixture
         {
             await this.Client.PostMsgpack<CharaBuildupManaResponse>(
                 "chara/buildup_mana",
-                new CharaBuildupManaRequest(id, Enumerable.Range(1, manaNodes).ToList(), false)
+                new CharaBuildupManaRequest(id, Enumerable.Range(1, manaNodes).ToList(), false),
+                cancellationToken: TestContext.Current.CancellationToken
             );
         }
         else
@@ -606,14 +627,16 @@ public class CharaTest : TestFixture
                     limitBreak,
                     Enumerable.Range(1, manaNodes).ToList(),
                     false
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             );
         }
 
         CharaBuildupPlatinumResponse response = (
             await this.Client.PostMsgpack<CharaBuildupPlatinumResponse>(
                 "chara/buildup_platinum",
-                new CharaBuildupPlatinumRequest(id)
+                new CharaBuildupPlatinumRequest(id),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -666,7 +689,8 @@ public class CharaTest : TestFixture
         CharaGetCharaUnitSetResponse response = (
             await this.Client.PostMsgpack<CharaGetCharaUnitSetResponse>(
                 "chara/get_chara_unit_set",
-                new CharaGetCharaUnitSetRequest(new List<Charas>() { Charas.Celliera })
+                new CharaGetCharaUnitSetRequest(new List<Charas>() { Charas.Celliera }),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -684,7 +708,8 @@ public class CharaTest : TestFixture
                     "Exercise",
                     Charas.Celliera,
                     new AtgenRequestCharaUnitSetData() { DragonKeyId = 5 }
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 

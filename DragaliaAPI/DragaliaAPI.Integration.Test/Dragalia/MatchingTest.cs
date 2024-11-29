@@ -49,7 +49,8 @@ public class MatchingTest : TestFixture
         MatchingGetRoomListResponse data = (
             await this.Client.PostMsgpack<MatchingGetRoomListResponse>(
                 $"{EndpointGroup}/get_room_list",
-                new MatchingGetRoomListRequest() { CompatibleId = 36 }
+                new MatchingGetRoomListRequest() { CompatibleId = 36 },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -134,7 +135,12 @@ public class MatchingTest : TestFixture
         MatchingGetRoomListByQuestIdResponse data = (
             await this.Client.PostMsgpack<MatchingGetRoomListByQuestIdResponse>(
                 $"{EndpointGroup}/get_room_list_by_quest_id",
-                new MatchingGetRoomListByQuestIdRequest() { CompatibleId = 36, QuestId = 204550501 }
+                new MatchingGetRoomListByQuestIdRequest()
+                {
+                    CompatibleId = 36,
+                    QuestId = 204550501,
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -216,7 +222,8 @@ public class MatchingTest : TestFixture
         MatchingGetRoomNameResponse data = (
             await this.Client.PostMsgpack<MatchingGetRoomNameResponse>(
                 $"{EndpointGroup}/get_room_name",
-                new MatchingGetRoomNameRequest() { RoomId = 911948 }
+                new MatchingGetRoomNameRequest() { RoomId = 911948 },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -299,7 +306,8 @@ public class MatchingTest : TestFixture
         MatchingGetRoomNameResponse data = (
             await this.Client.PostMsgpack<MatchingGetRoomNameResponse>(
                 $"{EndpointGroup}/get_room_name",
-                new MatchingGetRoomNameRequest() { RoomId = 911948 }
+                new MatchingGetRoomNameRequest() { RoomId = 911948 },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 

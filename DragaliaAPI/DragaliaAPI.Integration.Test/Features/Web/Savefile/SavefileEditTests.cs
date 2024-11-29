@@ -18,7 +18,12 @@ public class SavefileEditTests : WebTestFixture
 
     [Fact]
     public async Task PresentWidgetData_Unauthenticated_Returns401() =>
-        (await this.Client.GetAsync("/api/savefile/edit/widgets/present"))
+        (
+            await this.Client.GetAsync(
+                "/api/savefile/edit/widgets/present",
+                TestContext.Current.CancellationToken
+            )
+        )
             .Should()
             .HaveStatusCode(HttpStatusCode.Unauthorized);
 
@@ -27,10 +32,15 @@ public class SavefileEditTests : WebTestFixture
     {
         this.AddTokenCookie();
 
-        HttpResponseMessage resp = await this.Client.GetAsync("/api/savefile/edit/widgets/present");
+        HttpResponseMessage resp = await this.Client.GetAsync(
+            "/api/savefile/edit/widgets/present",
+            TestContext.Current.CancellationToken
+        );
         resp.Should().HaveStatusCode(HttpStatusCode.OK);
 
-        PresentWidgetData? data = await resp.Content.ReadFromJsonAsync<PresentWidgetData>();
+        PresentWidgetData? data = await resp.Content.ReadFromJsonAsync<PresentWidgetData>(
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         data.Should().NotBeNull();
         data!
@@ -51,7 +61,13 @@ public class SavefileEditTests : WebTestFixture
 
     [Fact]
     public async Task Edit_Unauthenticated_Returns401() =>
-        (await this.Client.PostAsync("/api/savefile/edit", null))
+        (
+            await this.Client.PostAsync(
+                "/api/savefile/edit",
+                null,
+                TestContext.Current.CancellationToken
+            )
+        )
             .Should()
             .HaveStatusCode(HttpStatusCode.Unauthorized);
 
@@ -74,7 +90,13 @@ public class SavefileEditTests : WebTestFixture
                 ],
             };
 
-        (await this.Client.PostAsJsonAsync("/api/savefile/edit", invalidRequest))
+        (
+            await this.Client.PostAsJsonAsync(
+                "/api/savefile/edit",
+                invalidRequest,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )
             .Should()
             .HaveStatusCode(HttpStatusCode.BadRequest);
     }
@@ -98,14 +120,21 @@ public class SavefileEditTests : WebTestFixture
                 ],
             };
 
-        (await this.Client.PostAsJsonAsync("/api/savefile/edit", request))
+        (
+            await this.Client.PostAsJsonAsync(
+                "/api/savefile/edit",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )
             .Should()
             .HaveStatusCode(HttpStatusCode.OK);
 
         DragaliaResponse<PresentGetPresentListResponse> presentList =
             await this.Client.PostMsgpack<PresentGetPresentListResponse>(
                 "/present/get_present_list",
-                new PresentGetPresentListRequest { PresentId = 0 }
+                new PresentGetPresentListRequest { PresentId = 0 },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         presentList

@@ -26,7 +26,8 @@ public class DmodeDungeonTest : TestFixture
                         Charas.Ranzal,
                         Charas.GalaCleo,
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         (await this.GetDungeonState()).Should().Be(DungeonState.WaitingInitEnd);
@@ -34,7 +35,8 @@ public class DmodeDungeonTest : TestFixture
         DragaliaResponse<DmodeDungeonFloorResponse> floorResponse =
             await this.Client.PostMsgpack<DmodeDungeonFloorResponse>(
                 "dmode_dungeon/floor",
-                new DmodeDungeonFloorRequest() { DmodePlayRecord = null }
+                new DmodeDungeonFloorRequest() { DmodePlayRecord = null },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         floorResponse.Data.DmodeFloorData.DmodeAreaInfo.FloorNum.Should().Be(1);
@@ -60,17 +62,22 @@ public class DmodeDungeonTest : TestFixture
                 StartFloorNum = 30,
                 ServitorId = 1,
                 BringEditSkillCharaIdList = new List<Charas>() { Charas.Ranzal, Charas.GalaCleo },
-            }
+            },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
-        await this.Client.PostMsgpack<DmodeDungeonFloorSkipResponse>("dmode_dungeon/floor_skip");
+        await this.Client.PostMsgpack<DmodeDungeonFloorSkipResponse>(
+            "dmode_dungeon/floor_skip",
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         (await this.GetDungeonState()).Should().Be(DungeonState.WaitingSkipEnd);
 
         DragaliaResponse<DmodeDungeonFloorResponse> floorResponse =
             await this.Client.PostMsgpack<DmodeDungeonFloorResponse>(
                 "dmode_dungeon/floor",
-                new DmodeDungeonFloorRequest() { DmodePlayRecord = null }
+                new DmodeDungeonFloorRequest() { DmodePlayRecord = null },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         floorResponse.Data.DmodeFloorData.DmodeAreaInfo.FloorNum.Should().Be(30);
@@ -108,17 +115,24 @@ public class DmodeDungeonTest : TestFixture
                 StartFloorNum = 1,
                 ServitorId = 1,
                 BringEditSkillCharaIdList = new List<Charas>() { Charas.Ranzal, Charas.GalaCleo },
-            }
+            },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
-        await this.Client.PostMsgpack<DmodeDungeonUserHaltResponse>("dmode_dungeon/user_halt");
+        await this.Client.PostMsgpack<DmodeDungeonUserHaltResponse>(
+            "dmode_dungeon/user_halt",
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         this.ApiContext.PlayerDmodeDungeons.AsNoTracking()
             .First(x => x.ViewerId == ViewerId)
             .State.Should()
             .Be(DungeonState.Halting);
 
-        await this.Client.PostMsgpack<DmodeDungeonRestartResponse>("dmode_dungeon/restart");
+        await this.Client.PostMsgpack<DmodeDungeonRestartResponse>(
+            "dmode_dungeon/restart",
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         (await this.GetDungeonState()).Should().Be(DungeonState.RestartEnd);
 
@@ -133,16 +147,19 @@ public class DmodeDungeonTest : TestFixture
     {
         await this
             .ApiContext.PlayerDmodeDungeons.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(e =>
-                e.SetProperty(d => d.Floor, 55)
-                    .SetProperty(d => d.State, DungeonState.Halting)
-                    .SetProperty(d => d.CharaId, Charas.Berserker)
+            .ExecuteUpdateAsync(
+                e =>
+                    e.SetProperty(d => d.Floor, 55)
+                        .SetProperty(d => d.State, DungeonState.Halting)
+                        .SetProperty(d => d.CharaId, Charas.Berserker),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         DmodeDungeonFinishResponse response = (
             await this.Client.PostMsgpack<DmodeDungeonFinishResponse>(
                 "dmode_dungeon/finish",
-                new DmodeDungeonFinishRequest() { IsGameOver = false }
+                new DmodeDungeonFinishRequest() { IsGameOver = false },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 

@@ -42,7 +42,9 @@ public class DungeonRepositoryTest : RepositoryTestFixture
             partySlot
         );
 
-        DbDetailedPartyUnit result = await buildQuery.FirstAsync();
+        DbDetailedPartyUnit result = await buildQuery.FirstAsync(
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         result.Should().BeEquivalentTo(expectedResult);
     }
@@ -55,13 +57,15 @@ public class DungeonRepositoryTest : RepositoryTestFixture
         IEnumerable<PartySettingList> party = (
             await this
                 .ApiContext.PlayerPartyUnits.Where(x => x.ViewerId == ViewerId && x.PartyNo == 1)
-                .ToListAsync()
+                .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
         ).Select(this.Mapper.Map<PartySettingList>);
 
         IEnumerable<IQueryable<DbDetailedPartyUnit>> buildQuery =
             this.dungeonRepository.BuildDetailedPartyUnit(party);
 
-        DbDetailedPartyUnit result = await buildQuery.First().FirstAsync();
+        DbDetailedPartyUnit result = await buildQuery
+            .First()
+            .FirstAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         result.Should().BeEquivalentTo(expectedResult);
     }

@@ -14,7 +14,8 @@ public class UpdateTest : TestFixture
 
         await this.Client.PostMsgpack<UpdateNamechangeResponse>(
             "/update/namechange",
-            new UpdateNamechangeRequest() { Name = newName }
+            new UpdateNamechangeRequest() { Name = newName },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DbPlayerUserData userData = this.ApiContext.PlayerUserData.Find(ViewerId)!;
@@ -29,7 +30,8 @@ public class UpdateTest : TestFixture
         UpdateNamechangeResponse response = (
             await this.Client.PostMsgpack<UpdateNamechangeResponse>(
                 "/update/namechange",
-                new UpdateNamechangeRequest() { Name = newName }
+                new UpdateNamechangeRequest() { Name = newName },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -48,7 +50,8 @@ public class UpdateTest : TestFixture
                     {
                         new AtgenTargetList() { TargetName = "emblem", TargetIdList = null },
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         );
 

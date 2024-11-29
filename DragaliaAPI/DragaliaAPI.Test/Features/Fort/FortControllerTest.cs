@@ -60,7 +60,7 @@ public class FortControllerTest
             .ReturnsAsync(new AtgenProductionRp(0, 0));
 
         mockUpdateDataService
-            .Setup(x => x.SaveChangesAsync(default))
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
             .ReturnsAsync(new UpdateDataList());
 
         mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
@@ -71,7 +71,7 @@ public class FortControllerTest
         this.mockDragonService.Setup(x => x.GetFreeGiftCount()).ReturnsAsync(2);
 
         FortGetDataResponse data = (
-            await fortController.GetData(default)
+            await fortController.GetData(TestContext.Current.CancellationToken)
         ).GetData<FortGetDataResponse>()!;
 
         data.BuildList.Should().BeEquivalentTo(buildList);
@@ -94,12 +94,14 @@ public class FortControllerTest
             .ReturnsAsync(new FortDetail());
         mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
 
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(updateDataList);
+        mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
+            .ReturnsAsync(updateDataList);
 
         FortAddCarpenterResponse data = (
             await fortController.AddCarpenter(
                 new FortAddCarpenterRequest() { PaymentType = PaymentTypes.Diamantium },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<FortAddCarpenterResponse>()!;
 
@@ -137,7 +139,9 @@ public class FortControllerTest
 
         mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
 
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(updateDataList);
+        mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
+            .ReturnsAsync(updateDataList);
 
         FortBuildAtOnceResponse data = (
             await fortController.BuildAtOnce(
@@ -146,7 +150,7 @@ public class FortControllerTest
                     PaymentType = PaymentTypes.HalidomHustleHammer,
                     BuildId = 8,
                 },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<FortBuildAtOnceResponse>()!;
 
@@ -172,10 +176,15 @@ public class FortControllerTest
             .ReturnsAsync(new DbFortBuild() { ViewerId = 1, BuildId = 1 });
         mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
 
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(updateDataList);
+        mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
+            .ReturnsAsync(updateDataList);
 
         FortBuildCancelResponse data = (
-            await fortController.BuildCancel(new FortBuildCancelRequest() { BuildId = 1 }, default)
+            await fortController.BuildCancel(
+                new FortBuildCancelRequest() { BuildId = 1 },
+                TestContext.Current.CancellationToken
+            )
         ).GetData<FortBuildCancelResponse>()!;
 
         data.Result.Should().Be(1);
@@ -211,10 +220,15 @@ public class FortControllerTest
 
         mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
 
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(updateDataList);
+        mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
+            .ReturnsAsync(updateDataList);
 
         FortBuildEndResponse data = (
-            await fortController.BuildEnd(new FortBuildEndRequest() { BuildId = 8 }, default)
+            await fortController.BuildEnd(
+                new FortBuildEndRequest() { BuildId = 8 },
+                TestContext.Current.CancellationToken
+            )
         ).GetData<FortBuildEndResponse>()!;
 
         data.Result.Should().Be(1);
@@ -247,7 +261,9 @@ public class FortControllerTest
             .Setup(x => x.BuildStart(FortPlants.BroadleafTree, 2, 3))
             .ReturnsAsync(build);
 
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(updateDataList);
+        mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
+            .ReturnsAsync(updateDataList);
 
         FortBuildStartResponse data = (
             await fortController.BuildStart(
@@ -257,7 +273,7 @@ public class FortControllerTest
                     PositionX = 2,
                     PositionZ = 3,
                 },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<FortBuildStartResponse>()!;
 
@@ -300,7 +316,9 @@ public class FortControllerTest
 
         mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
 
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(updateDataList);
+        mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
+            .ReturnsAsync(updateDataList);
 
         FortLevelupAtOnceResponse data = (
             await fortController.LevelupAtOnce(
@@ -309,7 +327,7 @@ public class FortControllerTest
                     PaymentType = PaymentTypes.HalidomHustleHammer,
                     BuildId = 8,
                 },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<FortLevelupAtOnceResponse>()!;
 
@@ -337,12 +355,14 @@ public class FortControllerTest
             .ReturnsAsync(new DbFortBuild() { ViewerId = 1, BuildId = 1 });
         mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
 
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(updateDataList);
+        mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
+            .ReturnsAsync(updateDataList);
 
         FortLevelupCancelResponse data = (
             await fortController.LevelupCancel(
                 new FortLevelupCancelRequest() { BuildId = 1 },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<FortLevelupCancelResponse>()!;
 
@@ -380,10 +400,15 @@ public class FortControllerTest
 
         mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
 
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(updateDataList);
+        mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
+            .ReturnsAsync(updateDataList);
 
         FortLevelupEndResponse data = (
-            await fortController.LevelupEnd(new FortLevelupEndRequest() { BuildId = 8 }, default)
+            await fortController.LevelupEnd(
+                new FortLevelupEndRequest() { BuildId = 8 },
+                TestContext.Current.CancellationToken
+            )
         ).GetData<FortLevelupEndResponse>()!;
 
         data.Result.Should().Be(1);
@@ -418,12 +443,14 @@ public class FortControllerTest
         mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
         mockFortService.Setup(x => x.LevelupStart(1)).ReturnsAsync(build);
 
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(updateDataList);
+        mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
+            .ReturnsAsync(updateDataList);
 
         FortLevelupStartResponse data = (
             await fortController.LevelupStart(
                 new FortLevelupStartRequest() { BuildId = 1 },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<FortLevelupStartResponse>()!;
 
@@ -463,7 +490,9 @@ public class FortControllerTest
 
         mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
 
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(updateDataList);
+        mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
+            .ReturnsAsync(updateDataList);
 
         FortMoveResponse data = (
             await fortController.Move(
@@ -473,7 +502,7 @@ public class FortControllerTest
                     AfterPositionX = 2,
                     AfterPositionZ = 3,
                 },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<FortMoveResponse>()!;
 

@@ -19,7 +19,11 @@ public class GameCloseTest : TestFixture
     {
         this.Client.DefaultRequestHeaders.Clear();
 
-        HttpResponseMessage response = await this.Client.PostAsync(Endpoint, null);
+        HttpResponseMessage response = await this.Client.PostAsync(
+            Endpoint,
+            null,
+            TestContext.Current.CancellationToken
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -50,7 +54,8 @@ public class GameCloseTest : TestFixture
 
         HttpResponseMessage response = await this.Client.PostAsJsonAsync<GameModifyRequest>(
             Endpoint,
-            new() { GameName = game.Name }
+            new() { GameName = game.Name },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);

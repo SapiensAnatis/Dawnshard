@@ -18,7 +18,8 @@ public class StoryTest : TestFixture
         StoryReadResponse data = (
             await this.Client.PostMsgpack<StoryReadResponse>(
                 "/story/read",
-                new StoryReadRequest() { UnitStoryId = 100001141 }
+                new StoryReadRequest() { UnitStoryId = 100001141 },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -64,12 +65,13 @@ public class StoryTest : TestFixture
                 StoryType = StoryTypes.Chara,
             }
         );
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         StoryReadResponse data = (
             await this.Client.PostMsgpack<StoryReadResponse>(
                 "/story/read",
-                new StoryReadRequest() { UnitStoryId = 100001122 }
+                new StoryReadRequest() { UnitStoryId = 100001122 },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -86,12 +88,13 @@ public class StoryTest : TestFixture
             .ApiContext.PlayerUserData.AsNoTracking()
             .Where(x => x.ViewerId == this.ViewerId)
             .Select(x => x.Crystal)
-            .SingleAsync();
+            .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         StoryReadResponse data = (
             await this.Client.PostMsgpack<StoryReadResponse>(
                 "/story/read",
-                new StoryReadRequest() { UnitStoryId = 100002011 }
+                new StoryReadRequest() { UnitStoryId = 100002011 },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -99,7 +102,7 @@ public class StoryTest : TestFixture
             .ApiContext.PlayerUserData.AsNoTracking()
             .Where(x => x.ViewerId == this.ViewerId)
             .Select(x => x.Crystal)
-            .SingleAsync();
+            .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         newCrystal.Should().Be(oldCrystal + 25);
 

@@ -26,7 +26,8 @@ public class SummonTest : TestFixture
         SummonExcludeGetListResponse response = (
             await this.Client.PostMsgpack<SummonExcludeGetListResponse>(
                 "summon_exclude/get_list",
-                new SummonExcludeGetListRequest(TestBannerId)
+                new SummonExcludeGetListRequest(TestBannerId),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -39,7 +40,8 @@ public class SummonTest : TestFixture
         SummonGetOddsDataResponse response = (
             await this.Client.PostMsgpack<SummonGetOddsDataResponse>(
                 "summon/get_odds_data",
-                new SummonGetOddsDataRequest(TestBannerId)
+                new SummonGetOddsDataRequest(TestBannerId),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -160,7 +162,8 @@ public class SummonTest : TestFixture
         SummonGetOddsDataResponse response = (
             await this.Client.PostMsgpack<SummonGetOddsDataResponse>(
                 "summon/get_odds_data",
-                new SummonGetOddsDataRequest(bannerId)
+                new SummonGetOddsDataRequest(bannerId),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -210,7 +213,8 @@ public class SummonTest : TestFixture
         SummonGetOddsDataResponse response = (
             await this.Client.PostMsgpack<SummonGetOddsDataResponse>(
                 "summon/get_odds_data",
-                new SummonGetOddsDataRequest(TestBannerId)
+                new SummonGetOddsDataRequest(TestBannerId),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -261,12 +265,16 @@ public class SummonTest : TestFixture
                 GetDewPointQuantity = 0,
             };
 
-        await this.ApiContext.PlayerSummonHistory.AddAsync(historyEntry);
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.PlayerSummonHistory.AddAsync(
+            historyEntry,
+            TestContext.Current.CancellationToken
+        );
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         SummonGetSummonHistoryResponse response = (
             await this.Client.PostMsgpack<SummonGetSummonHistoryResponse>(
-                "summon/get_summon_history"
+                "summon/get_summon_history",
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -324,7 +332,10 @@ public class SummonTest : TestFixture
         );
 
         SummonGetSummonListResponse response = (
-            await this.Client.PostMsgpack<SummonGetSummonListResponse>("summon/get_summon_list")
+            await this.Client.PostMsgpack<SummonGetSummonListResponse>(
+                "summon/get_summon_list",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response
@@ -407,7 +418,10 @@ public class SummonTest : TestFixture
         );
 
         SummonGetSummonListResponse response = (
-            await this.Client.PostMsgpack<SummonGetSummonListResponse>("summon/get_summon_list")
+            await this.Client.PostMsgpack<SummonGetSummonListResponse>(
+                "summon/get_summon_list",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response
@@ -431,12 +445,16 @@ public class SummonTest : TestFixture
             .SummonPointList.Should()
             .HaveCountLessOrEqualTo(1, "special ticket banners don't participate in wyrmsigils");
 
-        await this.ApiContext.PlayerSummonTickets.ExecuteUpdateAsync(e =>
-            e.SetProperty(p => p.Quantity, 0)
+        await this.ApiContext.PlayerSummonTickets.ExecuteUpdateAsync(
+            e => e.SetProperty(p => p.Quantity, 0),
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         response = (
-            await this.Client.PostMsgpack<SummonGetSummonListResponse>("summon/get_summon_list")
+            await this.Client.PostMsgpack<SummonGetSummonListResponse>(
+                "summon/get_summon_list",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response.CharaSsrSummonList.Should().BeEmpty();
@@ -454,7 +472,8 @@ public class SummonTest : TestFixture
         SummonGetSummonPointTradeResponse response = (
             await this.Client.PostMsgpack<SummonGetSummonPointTradeResponse>(
                 "summon/get_summon_point_trade",
-                new SummonGetSummonPointTradeRequest(TestBannerId)
+                new SummonGetSummonPointTradeRequest(TestBannerId),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -502,7 +521,8 @@ public class SummonTest : TestFixture
         SummonGetSummonPointTradeResponse response = (
             await this.Client.PostMsgpack<SummonGetSummonPointTradeResponse>(
                 "summon/get_summon_point_trade",
-                new SummonGetSummonPointTradeRequest(TestBannerId)
+                new SummonGetSummonPointTradeRequest(TestBannerId),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -537,11 +557,12 @@ public class SummonTest : TestFixture
     [Fact]
     public async Task SummonRequest_SingleSummonWyrmite_ReturnsValidResult()
     {
-        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.SingleAsync(x =>
-            x.ViewerId == this.ViewerId
+        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.SingleAsync(
+            x => x.ViewerId == this.ViewerId,
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
-        await this.ApiContext.Entry(userData).ReloadAsync();
+        await this.ApiContext.Entry(userData).ReloadAsync(TestContext.Current.CancellationToken);
 
         SummonRequestResponse response = (
             await this.Client.PostMsgpack<SummonRequestResponse>(
@@ -552,7 +573,8 @@ public class SummonTest : TestFixture
                     1,
                     PaymentTypes.Wyrmite,
                     new PaymentTarget(userData.Crystal, 120) // TODO: Change when banners are implemented otherwise this test breaks
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -564,8 +586,9 @@ public class SummonTest : TestFixture
     [Fact]
     public async Task SummonRequest_TenSummonWyrmite_ReturnsValidResult()
     {
-        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.SingleAsync(x =>
-            x.ViewerId == this.ViewerId
+        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.SingleAsync(
+            x => x.ViewerId == this.ViewerId,
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         SummonRequestResponse response = (
@@ -577,7 +600,8 @@ public class SummonTest : TestFixture
                     0,
                     PaymentTypes.Wyrmite,
                     new PaymentTarget(userData.Crystal, 1200)
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -617,7 +641,8 @@ public class SummonTest : TestFixture
                     PaymentTypes.Ticket,
                     new PaymentTarget(1, 1)
                 ),
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
@@ -645,7 +670,8 @@ public class SummonTest : TestFixture
                     PaymentTypes.Ticket,
                     new PaymentTarget(5, 5)
                 ),
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
@@ -673,7 +699,8 @@ public class SummonTest : TestFixture
                     PaymentTypes.Ticket,
                     new PaymentTarget(1, 1)
                 ),
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
@@ -682,8 +709,9 @@ public class SummonTest : TestFixture
     [Fact]
     public async Task SummonRequest_IncrementsWyrmsigilPoints()
     {
-        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.SingleAsync(x =>
-            x.ViewerId == this.ViewerId
+        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.SingleAsync(
+            x => x.ViewerId == this.ViewerId,
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         SummonRequestResponse response = (
@@ -695,7 +723,8 @@ public class SummonTest : TestFixture
                     1,
                     PaymentTypes.Wyrmite,
                     new PaymentTarget(userData.Crystal, 1200)
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -713,7 +742,8 @@ public class SummonTest : TestFixture
                     3,
                     PaymentTypes.Wyrmite,
                     new PaymentTarget(userData.Crystal - 1200, 360)
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -744,7 +774,8 @@ public class SummonTest : TestFixture
                     PaymentTypes.Ticket,
                     new PaymentTarget(0, 1)
                 ),
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.CommonMaterialShort);
@@ -768,7 +799,8 @@ public class SummonTest : TestFixture
                     0,
                     PaymentTypes.Ticket,
                     new PaymentTarget(1, 1)
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -790,7 +822,8 @@ public class SummonTest : TestFixture
         SummonGetOddsDataResponse oddsResponse = (
             await this.Client.PostMsgpack<SummonGetOddsDataResponse>(
                 "summon/get_odds_data",
-                new SummonGetOddsDataRequest(TestBannerId)
+                new SummonGetOddsDataRequest(TestBannerId),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -806,7 +839,10 @@ public class SummonTest : TestFixture
 
         DbPlayerUserData userData = await this
             .ApiContext.PlayerUserData.AsNoTracking()
-            .SingleAsync(x => x.ViewerId == this.ViewerId);
+            .SingleAsync(
+                x => x.ViewerId == this.ViewerId,
+                cancellationToken: TestContext.Current.CancellationToken
+            );
 
         DragaliaResponse<SummonRequestResponse> response =
             await this.Client.PostMsgpack<SummonRequestResponse>(
@@ -817,7 +853,8 @@ public class SummonTest : TestFixture
                     1,
                     PaymentTypes.Wyrmite,
                     new PaymentTarget(userData.Crystal, 120)
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.Data.ResultUnitList.Should().Contain(x => x.Rarity == 5);
@@ -825,7 +862,8 @@ public class SummonTest : TestFixture
         oddsResponse = (
             await this.Client.PostMsgpack<SummonGetOddsDataResponse>(
                 "summon/get_odds_data",
-                new SummonGetOddsDataRequest(TestBannerId)
+                new SummonGetOddsDataRequest(TestBannerId),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -853,7 +891,10 @@ public class SummonTest : TestFixture
 
         DbPlayerUserData userData = await this
             .ApiContext.PlayerUserData.AsNoTracking()
-            .SingleAsync(x => x.ViewerId == this.ViewerId);
+            .SingleAsync(
+                x => x.ViewerId == this.ViewerId,
+                cancellationToken: TestContext.Current.CancellationToken
+            );
 
         DragaliaResponse<SummonRequestResponse> response =
             await this.Client.PostMsgpack<SummonRequestResponse>(
@@ -864,7 +905,8 @@ public class SummonTest : TestFixture
                     1,
                     PaymentTypes.Wyrmite,
                     new PaymentTarget(userData.Crystal, 120)
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.Data.ResultUnitList.Should().Contain(x => x.Rarity == 5);
@@ -872,7 +914,8 @@ public class SummonTest : TestFixture
         SummonGetOddsDataResponse oddsResponse = (
             await this.Client.PostMsgpack<SummonGetOddsDataResponse>(
                 "summon/get_odds_data",
-                new SummonGetOddsDataRequest(TestBannerId)
+                new SummonGetOddsDataRequest(TestBannerId),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -893,7 +936,8 @@ public class SummonTest : TestFixture
         SummonGetOddsDataResponse oddsResponse = (
             await this.Client.PostMsgpack<SummonGetOddsDataResponse>(
                 "summon/get_odds_data",
-                new SummonGetOddsDataRequest(TestBannerId)
+                new SummonGetOddsDataRequest(TestBannerId),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -913,7 +957,10 @@ public class SummonTest : TestFixture
         {
             DbPlayerUserData userData = await this
                 .ApiContext.PlayerUserData.AsNoTracking()
-                .SingleAsync(x => x.ViewerId == this.ViewerId);
+                .SingleAsync(
+                    x => x.ViewerId == this.ViewerId,
+                    cancellationToken: TestContext.Current.CancellationToken
+                );
 
             DragaliaResponse<SummonRequestResponse> response =
                 await this.Client.PostMsgpack<SummonRequestResponse>(
@@ -924,7 +971,8 @@ public class SummonTest : TestFixture
                         1,
                         PaymentTypes.Wyrmite,
                         new PaymentTarget(userData.Crystal, 1200)
-                    )
+                    ),
+                    cancellationToken: TestContext.Current.CancellationToken
                 );
 
             result = response.Data.ResultUnitList;
@@ -933,7 +981,8 @@ public class SummonTest : TestFixture
         oddsResponse = (
             await this.Client.PostMsgpack<SummonGetOddsDataResponse>(
                 "summon/get_odds_data",
-                new SummonGetOddsDataRequest(TestBannerId)
+                new SummonGetOddsDataRequest(TestBannerId),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -963,7 +1012,8 @@ public class SummonTest : TestFixture
                     1,
                     PaymentTypes.Diamantium,
                     new PaymentTarget(1210, 1200)
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.Data.ResultSummonPoint.Should().Be(20);
@@ -988,7 +1038,8 @@ public class SummonTest : TestFixture
                     1,
                     PaymentTypes.Diamantium,
                     new PaymentTarget(30, 30)
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.Data.ResultSummonPoint.Should().Be(2);
@@ -999,7 +1050,10 @@ public class SummonTest : TestFixture
          whether the Daily Deal button is disabled. */
 
         DragaliaResponse<SummonGetSummonListResponse> summonListResponse =
-            await this.Client.PostMsgpack<SummonGetSummonListResponse>("/summon/get_summon_list");
+            await this.Client.PostMsgpack<SummonGetSummonListResponse>(
+                "/summon/get_summon_list",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
 
         SummonList summonList = summonListResponse.Data.SummonList.First(x =>
             x.SummonId == TestGalaBannerId
@@ -1018,7 +1072,8 @@ public class SummonTest : TestFixture
                     PaymentTypes.Diamantium,
                     new PaymentTarget(30, 30)
                 ),
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         )
             .DataHeaders.ResultCode.Should()
@@ -1037,7 +1092,8 @@ public class SummonTest : TestFixture
         SummonSummonPointTradeResponse response = (
             await this.Client.PostMsgpack<SummonSummonPointTradeResponse>(
                 "summon/summon_point_trade",
-                new SummonSummonPointTradeRequest(TestBannerId, monaTradeId)
+                new SummonSummonPointTradeRequest(TestBannerId, monaTradeId),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -1070,7 +1126,8 @@ public class SummonTest : TestFixture
         SummonSummonPointTradeResponse response = (
             await this.Client.PostMsgpack<SummonSummonPointTradeResponse>(
                 "summon/summon_point_trade",
-                new SummonSummonPointTradeRequest(TestBannerId, arseneTradeId)
+                new SummonSummonPointTradeRequest(TestBannerId, arseneTradeId),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 

@@ -66,7 +66,7 @@ public class V20UpdateTest : SavefileUpdateTestFixture
                 },
             ]
         );
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
         await this.LoadIndex();
 
         this.ApiContext.PlayerPresents.AsNoTracking()

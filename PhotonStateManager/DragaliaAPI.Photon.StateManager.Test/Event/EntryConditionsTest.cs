@@ -22,7 +22,8 @@ public class EntryConditionsTest : TestFixture
 
         HttpResponseMessage response = await this.Client.PostAsync(
             Endpoint,
-            JsonContent.Create(new GameBase())
+            JsonContent.Create(new GameBase()),
+            TestContext.Current.CancellationToken
         );
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
@@ -63,7 +64,8 @@ public class EntryConditionsTest : TestFixture
         HttpResponseMessage response =
             await this.Client.PostAsJsonAsync<GameModifyConditionsRequest>(
                 Endpoint,
-                new() { GameName = game.Name, NewEntryConditions = newConditions }
+                new() { GameName = game.Name, NewEntryConditions = newConditions },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);

@@ -29,7 +29,8 @@ public class RaidEventTest : TestFixture
         DragaliaResponse<RaidEventGetEventDataResponse> evtData =
             await Client.PostMsgpack<RaidEventGetEventDataResponse>(
                 $"{Prefix}/get_event_data",
-                new RaidEventGetEventDataRequest(EventId)
+                new RaidEventGetEventDataRequest(EventId),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         evtData.Data.RaidEventUserData.Should().NotBeNull();
@@ -41,7 +42,10 @@ public class RaidEventTest : TestFixture
     {
         DbPlayerEventItem pointItem = await ApiContext
             .PlayerEventItems.AsTracking()
-            .SingleAsync(x => x.EventId == EventId && x.Type == (int)RaidEventItemType.RaidPoint1);
+            .SingleAsync(
+                x => x.EventId == EventId && x.Type == (int)RaidEventItemType.RaidPoint1,
+                cancellationToken: TestContext.Current.CancellationToken
+            );
 
         pointItem.Quantity += 500;
 
@@ -49,12 +53,13 @@ public class RaidEventTest : TestFixture
             ApiContext.PlayerEventRewards.Where(x => x.EventId == EventId)
         );
 
-        await ApiContext.SaveChangesAsync();
+        await ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         DragaliaResponse<RaidEventReceiveRaidPointRewardResponse> evtResp =
             await Client.PostMsgpack<RaidEventReceiveRaidPointRewardResponse>(
                 $"{Prefix}/receive_raid_point_reward",
-                new RaidEventReceiveRaidPointRewardRequest(EventId, new[] { 1001 })
+                new RaidEventReceiveRaidPointRewardRequest(EventId, new[] { 1001 }),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         evtResp.Data.RaidEventRewardList.Should().HaveCount(1);
@@ -70,13 +75,15 @@ public class RaidEventTest : TestFixture
 
         await this.Client.PostMsgpack(
             "memory_event/activate",
-            new MemoryEventActivateRequest(fracturedFuturesId)
+            new MemoryEventActivateRequest(fracturedFuturesId),
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DragaliaResponse<RaidEventGetEventDataResponse> response =
             await this.Client.PostMsgpack<RaidEventGetEventDataResponse>(
                 "raid_event/get_event_data",
-                new RaidEventGetEventDataRequest(fracturedFuturesId)
+                new RaidEventGetEventDataRequest(fracturedFuturesId),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.Data.RaidEventUserData.Should().NotBeNull();

@@ -11,7 +11,10 @@ public class V2UpdateTest : SavefileUpdateTestFixture
     public async Task V2Update_AddsStampList()
     {
         LoadIndexResponse data = (
-            await this.Client.PostMsgpack<LoadIndexResponse>("/load/index")
+            await this.Client.PostMsgpack<LoadIndexResponse>(
+                "/load/index",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         List<EquipStampList> expectedStampList =
@@ -62,7 +65,7 @@ public class V2UpdateTest : SavefileUpdateTestFixture
                         .WithMapping<DbEquippedStamp>(dto => dto.Slot, db => db.Slot)
                         .WithMapping<DbEquippedStamp>(dto => dto.StampId, db => db.StampId)
             );
-        (await this.ApiContext.Players.FindAsync(ViewerId))!
+        (await this.ApiContext.Players.FindAsync(ViewerId, TestContext.Current.CancellationToken))!
             .SavefileVersion.Should()
             .Be(MaxVersion);
     }

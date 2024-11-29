@@ -11,7 +11,8 @@ public class UrlListTest : TestFixture
         WebviewVersionUrlListResponse response = (
             await this.Client.PostMsgpack<WebviewVersionUrlListResponse>(
                 "webview_version/url_list",
-                new WebviewVersionUrlListRequest("region")
+                new WebviewVersionUrlListRequest("region"),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 

@@ -14,7 +14,8 @@ public class QuestReadStoryTest : TestFixture
         QuestReadStoryResponse response = (
             await this.Client.PostMsgpack<QuestReadStoryResponse>(
                 "/quest/read_story",
-                new QuestReadStoryRequest() { QuestStoryId = 1000106 }
+                new QuestReadStoryRequest() { QuestStoryId = 1000106 },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -44,7 +45,8 @@ public class QuestReadStoryTest : TestFixture
         QuestReadStoryResponse response = (
             await this.Client.PostMsgpack<QuestReadStoryResponse>(
                 "/quest/read_story",
-                new QuestReadStoryRequest() { QuestStoryId = midgardStoryId }
+                new QuestReadStoryRequest() { QuestStoryId = midgardStoryId },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -92,7 +94,8 @@ public class QuestReadStoryTest : TestFixture
         QuestReadStoryResponse response = (
             await this.Client.PostMsgpack<QuestReadStoryResponse>(
                 "/quest/read_story",
-                new QuestReadStoryRequest() { QuestStoryId = midgardStoryId }
+                new QuestReadStoryRequest() { QuestStoryId = midgardStoryId },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -126,7 +129,8 @@ public class QuestReadStoryTest : TestFixture
         QuestReadStoryResponse response = (
             await this.Client.PostMsgpack<QuestReadStoryResponse>(
                 "/quest/read_story",
-                new QuestReadStoryRequest() { QuestStoryId = 1001410 }
+                new QuestReadStoryRequest() { QuestStoryId = 1001410 },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -138,7 +142,7 @@ public class QuestReadStoryTest : TestFixture
 
         List<DbPlayerStoryState> storyStates = await this
             .ApiContext.PlayerStoryState.Where(x => x.ViewerId == this.ViewerId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         storyStates.Should().Contain(x => x.StoryId == 1001410 && x.State == StoryState.Read);
         this.ApiContext.PlayerCharaData.Any(x => x.CharaId == Charas.Zena).Should().BeTrue();
@@ -154,7 +158,8 @@ public class QuestReadStoryTest : TestFixture
         QuestReadStoryResponse response = (
             await this.Client.PostMsgpack<QuestReadStoryResponse>(
                 "/quest/read_story",
-                new QuestReadStoryRequest() { QuestStoryId = theLonePaladynStoryId }
+                new QuestReadStoryRequest() { QuestStoryId = theLonePaladynStoryId },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -176,14 +181,16 @@ public class QuestReadStoryTest : TestFixture
     {
         await this
             .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(u =>
-                u.SetProperty(e => e.Level, 30).SetProperty(e => e.Exp, 18990)
+            .ExecuteUpdateAsync(
+                u => u.SetProperty(e => e.Level, 30).SetProperty(e => e.Exp, 18990),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         StoryReadResponse data = (
             await this.Client.PostMsgpack<StoryReadResponse>(
                 "/quest/read_story",
-                new QuestReadStoryRequest() { QuestStoryId = 1001009 }
+                new QuestReadStoryRequest() { QuestStoryId = 1001009 },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -214,7 +221,8 @@ public class QuestReadStoryTest : TestFixture
         QuestReadStoryResponse response = (
             await this.Client.PostMsgpack<QuestReadStoryResponse>(
                 "/quest/read_story",
-                new QuestReadStoryRequest() { QuestStoryId = storyId }
+                new QuestReadStoryRequest() { QuestStoryId = storyId },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -227,7 +235,8 @@ public class QuestReadStoryTest : TestFixture
         QuestReadStoryResponse response = (
             await this.Client.PostMsgpack<QuestReadStoryResponse>(
                 "/quest/read_story",
-                new QuestReadStoryRequest() { QuestStoryId = 1001610 }
+                new QuestReadStoryRequest() { QuestStoryId = 1001610 },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 

@@ -15,14 +15,16 @@ public class DungeonTest : TestFixture
                 {
                     PartyNoList = new List<int>() { 2 },
                     QuestId = 100010306,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data.IngameData.DungeonKey;
 
         DungeonGetAreaOddsResponse response = (
             await this.Client.PostMsgpack<DungeonGetAreaOddsResponse>(
                 "/dungeon/get_area_odds",
-                new DungeonGetAreaOddsRequest() { AreaIdx = 1, DungeonKey = key }
+                new DungeonGetAreaOddsRequest() { AreaIdx = 1, DungeonKey = key },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -40,14 +42,16 @@ public class DungeonTest : TestFixture
                 {
                     PartyNoList = new List<int>() { 1 },
                     QuestId = 100010207,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data.IngameData.DungeonKey;
 
         DungeonFailResponse response = (
             await this.Client.PostMsgpack<DungeonFailResponse>(
                 "/dungeon/fail",
-                new DungeonFailRequest() { DungeonKey = key }
+                new DungeonFailRequest() { DungeonKey = key },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 

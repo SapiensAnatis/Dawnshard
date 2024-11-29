@@ -48,7 +48,7 @@ public class AbilityCrestControllerTest
         ResultCodeResponse response = (
             await this.abilityCrestController.SetFavorite(
                 new() { AbilityCrestId = AbilityCrestId.ManaFount, IsFavorite = true },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<ResultCodeResponse>()!;
 
@@ -60,7 +60,10 @@ public class AbilityCrestControllerTest
     public async Task BuildupPiece_AbilityCrestNotInMasterAssetReturnsError()
     {
         ResultCodeResponse response = (
-            await this.abilityCrestController.BuildupPiece(new() { AbilityCrestId = 0 }, default)
+            await this.abilityCrestController.BuildupPiece(
+                new() { AbilityCrestId = 0 },
+                TestContext.Current.CancellationToken
+            )
         ).GetData<ResultCodeResponse>()!;
 
         response.ResultCode.Should().Be(ResultCode.AbilityCrestIsNotPlayable);
@@ -91,7 +94,7 @@ public class AbilityCrestControllerTest
                         new(),
                     },
                 },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<ResultCodeResponse>()!;
 
@@ -110,7 +113,9 @@ public class AbilityCrestControllerTest
             )
             .ReturnsAsync(ResultCode.Success);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
+        this.mockUpdateDataService.Setup(x =>
+                x.SaveChangesAsync(TestContext.Current.CancellationToken)
+            )
             .ReturnsAsync(new UpdateDataList() { });
 
         AbilityCrestBuildupPieceResponse data = (
@@ -125,7 +130,7 @@ public class AbilityCrestControllerTest
                         new(),
                     },
                 },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<AbilityCrestBuildupPieceResponse>()!;
 
@@ -140,7 +145,7 @@ public class AbilityCrestControllerTest
         ResultCodeResponse response = (
             await this.abilityCrestController.BuildupPlusCount(
                 new() { AbilityCrestId = 0 },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<ResultCodeResponse>()!;
 
@@ -166,7 +171,7 @@ public class AbilityCrestControllerTest
                     AbilityCrestId = AbilityCrestId.ManaFount,
                     PlusCountParamsList = new List<AtgenPlusCountParamsList>() { new(), new() },
                 },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<ResultCodeResponse>()!;
 
@@ -186,7 +191,9 @@ public class AbilityCrestControllerTest
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.Success);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
+        this.mockUpdateDataService.Setup(x =>
+                x.SaveChangesAsync(TestContext.Current.CancellationToken)
+            )
             .ReturnsAsync(new UpdateDataList() { });
 
         AbilityCrestBuildupPlusCountResponse data = (
@@ -196,7 +203,7 @@ public class AbilityCrestControllerTest
                     AbilityCrestId = AbilityCrestId.ManaFount,
                     PlusCountParamsList = new List<AtgenPlusCountParamsList>() { new(), new() },
                 },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<AbilityCrestBuildupPlusCountResponse>()!;
 
@@ -221,7 +228,7 @@ public class AbilityCrestControllerTest
                     AbilityCrestId = AbilityCrestId.ManaFount,
                     PlusCountTypeList = new List<PlusCountType>() { PlusCountType.Hp, 0 },
                 },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<ResultCodeResponse>()!;
 
@@ -238,7 +245,9 @@ public class AbilityCrestControllerTest
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.Success);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
+        this.mockUpdateDataService.Setup(x =>
+                x.SaveChangesAsync(TestContext.Current.CancellationToken)
+            )
             .ReturnsAsync(new UpdateDataList() { });
 
         AbilityCrestResetPlusCountResponse data = (
@@ -252,7 +261,7 @@ public class AbilityCrestControllerTest
                         PlusCountType.Atk,
                     },
                 },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<AbilityCrestResetPlusCountResponse>()!;
 
@@ -268,7 +277,9 @@ public class AbilityCrestControllerTest
             .Returns(new List<DbAbilityCrestSet>().AsQueryable().BuildMock());
 
         AbilityCrestGetAbilityCrestSetListResponse data = (
-            await this.abilityCrestController.GetAbilityCrestSetList(default)
+            await this.abilityCrestController.GetAbilityCrestSetList(
+                TestContext.Current.CancellationToken
+            )
         ).GetData<AbilityCrestGetAbilityCrestSetListResponse>()!;
 
         int setNo = 1;
@@ -324,7 +335,9 @@ public class AbilityCrestControllerTest
             );
 
         AbilityCrestGetAbilityCrestSetListResponse data = (
-            await this.abilityCrestController.GetAbilityCrestSetList(default)
+            await this.abilityCrestController.GetAbilityCrestSetList(
+                TestContext.Current.CancellationToken
+            )
         ).GetData<AbilityCrestGetAbilityCrestSetListResponse>()!;
 
         int setNo = 1;
@@ -384,7 +397,7 @@ public class AbilityCrestControllerTest
         ResultCodeResponse response = (
             await this.abilityCrestController.SetAbilityCrestSet(
                 new() { AbilityCrestSetNo = setNo },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<ResultCodeResponse>()!;
 
@@ -401,7 +414,9 @@ public class AbilityCrestControllerTest
             )
             .Returns(Task.CompletedTask);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
+        this.mockUpdateDataService.Setup(x =>
+                x.SaveChangesAsync(TestContext.Current.CancellationToken)
+            )
             .ReturnsAsync(new UpdateDataList() { });
 
         AbilityCrestSetAbilityCrestSetResponse data = (
@@ -412,7 +427,7 @@ public class AbilityCrestControllerTest
                     AbilityCrestSetNo = setNo,
                     RequestAbilityCrestSetData = new() { },
                 },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<AbilityCrestSetAbilityCrestSetResponse>()!;
 
@@ -438,7 +453,9 @@ public class AbilityCrestControllerTest
             )
             .Returns(Task.CompletedTask);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
+        this.mockUpdateDataService.Setup(x =>
+                x.SaveChangesAsync(TestContext.Current.CancellationToken)
+            )
             .ReturnsAsync(new UpdateDataList() { });
 
         AbilityCrestUpdateAbilityCrestSetNameResponse data = (
@@ -448,7 +465,7 @@ public class AbilityCrestControllerTest
                     AbilityCrestSetNo = setNo,
                     AbilityCrestSetName = newName,
                 },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<AbilityCrestUpdateAbilityCrestSetNameResponse>()!;
 
@@ -472,7 +489,9 @@ public class AbilityCrestControllerTest
                 }
             );
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
+        this.mockUpdateDataService.Setup(x =>
+                x.SaveChangesAsync(TestContext.Current.CancellationToken)
+            )
             .ReturnsAsync(new UpdateDataList() { });
 
         AbilityCrestUpdateAbilityCrestSetNameResponse data = (
@@ -482,7 +501,7 @@ public class AbilityCrestControllerTest
                     AbilityCrestSetNo = setNo,
                     AbilityCrestSetName = newName,
                 },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<AbilityCrestUpdateAbilityCrestSetNameResponse>()!;
 

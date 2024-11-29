@@ -40,14 +40,15 @@ public class PartyTest : TestFixture
                 "My New Party",
                 false,
                 0
-            )
+            ),
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         ApiContext apiContext = this.Services.GetRequiredService<ApiContext>();
         DbParty dbparty = await apiContext
             .PlayerParties.Include(x => x.Units)
             .Where(x => x.ViewerId == ViewerId && x.PartyNo == 1)
-            .SingleAsync();
+            .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         dbparty
             .Should()
@@ -123,7 +124,8 @@ public class PartyTest : TestFixture
                     "My New Party",
                     false,
                     0
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
@@ -147,7 +149,8 @@ public class PartyTest : TestFixture
             await this.Client.PostMsgpack<ResultCodeResponse>(
                 "/party/set_party_setting",
                 request,
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         )
             .Should()
@@ -178,7 +181,8 @@ public class PartyTest : TestFixture
             await this.Client.PostMsgpack<ResultCodeResponse>(
                 "/party/set_party_setting",
                 request,
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         )
             .Should()
@@ -195,12 +199,13 @@ public class PartyTest : TestFixture
     {
         await this.Client.PostMsgpack<PartySetMainPartyNoResponse>(
             "/party/set_main_party_no",
-            new PartySetMainPartyNoRequest(2)
+            new PartySetMainPartyNoRequest(2),
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DbPlayerUserData userData = await this
             .ApiContext.PlayerUserData.Where(x => x.ViewerId == ViewerId)
-            .SingleAsync();
+            .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         userData.MainPartyNo.Should().Be(2);
     }
@@ -209,15 +214,18 @@ public class PartyTest : TestFixture
     public async Task UpdatePartyName_UpdatesDatabase()
     {
         DbParty party =
-            await this.ApiContext.PlayerParties.FindAsync(ViewerId, 1)
-            ?? throw new NullReferenceException();
+            await this.ApiContext.PlayerParties.FindAsync(
+                [ViewerId, 1],
+                TestContext.Current.CancellationToken
+            ) ?? throw new NullReferenceException();
 
         await this.Client.PostMsgpack<PartyUpdatePartyNameResponse>(
             "/party/update_party_name",
-            new PartyUpdatePartyNameRequest() { PartyNo = 1, PartyName = "LIblis Full Auto" }
+            new PartyUpdatePartyNameRequest() { PartyNo = 1, PartyName = "LIblis Full Auto" },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
-        await this.ApiContext.Entry(party).ReloadAsync();
+        await this.ApiContext.Entry(party).ReloadAsync(TestContext.Current.CancellationToken);
 
         party.PartyName.Should().Be("LIblis Full Auto");
     }
@@ -228,7 +236,8 @@ public class PartyTest : TestFixture
         PartyUpdatePartyNameResponse response = (
             await this.Client.PostMsgpack<PartyUpdatePartyNameResponse>(
                 "/party/update_party_name",
-                new PartyUpdatePartyNameRequest() { PartyNo = 2, PartyName = "LIblis Full Auto" }
+                new PartyUpdatePartyNameRequest() { PartyNo = 2, PartyName = "LIblis Full Auto" },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 

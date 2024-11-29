@@ -18,7 +18,8 @@ public class TransitionTest : TestFixture
 
         TransitionTransitionByNAccountResponse response = (
             await this.Client.PostMsgpack<TransitionTransitionByNAccountResponse>(
-                "/transition/transition_by_n_account"
+                "/transition/transition_by_n_account",
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -37,7 +38,8 @@ public class TransitionTest : TestFixture
 
         TransitionTransitionByNAccountResponse response = (
             await this.Client.PostMsgpack<TransitionTransitionByNAccountResponse>(
-                "/transition/transition_by_n_account"
+                "/transition/transition_by_n_account",
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 

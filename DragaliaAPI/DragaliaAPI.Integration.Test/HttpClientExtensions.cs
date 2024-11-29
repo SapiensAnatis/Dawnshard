@@ -14,28 +14,36 @@ public static class HttpClientExtensions
     /// <param name="endpoint">Endpoint to POST to</param>
     /// <param name="request">Request object to send</param>
     /// <param name="ensureSuccessHeader">Whether to check for a success response and throw if not successful.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns></returns>
     public static async Task<DragaliaResponse<TResponse>> PostMsgpack<TResponse>(
         this HttpClient client,
         string endpoint,
         object request,
-        bool ensureSuccessHeader = true
+        bool ensureSuccessHeader = true,
+        CancellationToken cancellationToken = default
     )
         where TResponse : class
     {
         HttpContent content = CreateMsgpackContent(request);
 
-        HttpResponseMessage response = await client.PostAsync(endpoint.TrimStart('/'), content);
+        HttpResponseMessage response = await client.PostAsync(
+            endpoint.TrimStart('/'),
+            content,
+            cancellationToken
+        );
 
         response.EnsureSuccessStatusCode();
 
-        byte[] body = await response.Content.ReadAsByteArrayAsync();
+        byte[] body = await response.Content.ReadAsByteArrayAsync(cancellationToken);
         DragaliaResponse<TResponse> deserialized = MessagePackSerializer.Deserialize<
             DragaliaResponse<TResponse>
-        >(body, CustomResolver.Options);
+        >(body, CustomResolver.Options, cancellationToken);
 
         if (ensureSuccessHeader)
+        {
             deserialized.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
+        }
 
         return deserialized;
     }
@@ -43,21 +51,28 @@ public static class HttpClientExtensions
     public static async Task<DragaliaResponse<TResponse>> PostMsgpack<TResponse>(
         this HttpClient client,
         string endpoint,
-        bool ensureSuccessHeader = true
+        bool ensureSuccessHeader = true,
+        CancellationToken cancellationToken = default
     )
         where TResponse : class
     {
-        HttpResponseMessage response = await client.PostAsync(endpoint.TrimStart('/'), null);
+        HttpResponseMessage response = await client.PostAsync(
+            endpoint.TrimStart('/'),
+            null,
+            cancellationToken
+        );
 
         response.EnsureSuccessStatusCode();
 
-        byte[] body = await response.Content.ReadAsByteArrayAsync();
+        byte[] body = await response.Content.ReadAsByteArrayAsync(cancellationToken);
         DragaliaResponse<TResponse> deserialized = MessagePackSerializer.Deserialize<
             DragaliaResponse<TResponse>
-        >(body, CustomResolver.Options);
+        >(body, CustomResolver.Options, cancellationToken);
 
         if (ensureSuccessHeader)
+        {
             deserialized.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
+        }
 
         return deserialized;
     }
@@ -66,8 +81,10 @@ public static class HttpClientExtensions
         this HttpClient client,
         string endpoint,
         object request,
-        bool ensureSuccessHeader = true
-    ) => await client.PostMsgpack<object>(endpoint, request, ensureSuccessHeader);
+        bool ensureSuccessHeader = true,
+        CancellationToken cancellationToken = default
+    ) =>
+        await client.PostMsgpack<object>(endpoint, request, ensureSuccessHeader, cancellationToken);
 
     /// <summary>
     /// Post a msgpack request, but do not attempt to deserialize it.

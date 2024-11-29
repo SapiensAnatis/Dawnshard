@@ -74,11 +74,11 @@ public class WallRecordControllerTest
                 WallLevel = wallLevel,
             };
 
-        this.mockDungeonService.Setup(x => x.GetSession(dungeonKey, CancellationToken.None))
+        this.mockDungeonService.Setup(x => x.GetSession(dungeonKey, It.IsAny<CancellationToken>()))
             .ReturnsAsync(session);
 
         mockDungeonService
-            .Setup(x => x.RemoveSession(dungeonKey, CancellationToken.None))
+            .Setup(x => x.RemoveSession(dungeonKey, It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
         mockWallService.Setup(x => x.GetQuestWall(wallId)).ReturnsAsync(playerQuestWall);
@@ -105,13 +105,13 @@ public class WallRecordControllerTest
         mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());
 
         mockUpdateDataService
-            .Setup(x => x.SaveChangesAsync(default))
+            .Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(new UpdateDataList());
 
         WallRecordRecordResponse data = (
             await wallRecordController.Record(
                 new WallRecordRecordRequest(wallId, dungeonKey),
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<WallRecordRecordResponse>()!;
 

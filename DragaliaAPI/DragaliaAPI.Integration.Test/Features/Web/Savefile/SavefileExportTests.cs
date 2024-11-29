@@ -19,7 +19,7 @@ public class SavefileExportTests : WebTestFixture
 
     [Fact]
     public async Task Export_Unauthenticated_Returns401() =>
-        (await this.Client.GetAsync("/api/savefile/export"))
+        (await this.Client.GetAsync("/api/savefile/export", TestContext.Current.CancellationToken))
             .Should()
             .HaveStatusCode(HttpStatusCode.Unauthorized);
 
@@ -28,10 +28,15 @@ public class SavefileExportTests : WebTestFixture
     {
         this.AddTokenCookie();
 
-        HttpResponseMessage resp = await this.Client.GetAsync("/api/savefile/export");
+        HttpResponseMessage resp = await this.Client.GetAsync(
+            "/api/savefile/export",
+            TestContext.Current.CancellationToken
+        );
         resp.Should().HaveStatusCode(HttpStatusCode.OK);
 
-        string content = await resp.Content.ReadAsStringAsync();
+        string content = await resp.Content.ReadAsStringAsync(
+            TestContext.Current.CancellationToken
+        );
         content.Should().StartWith("{");
     }
 
@@ -53,11 +58,14 @@ public class SavefileExportTests : WebTestFixture
                     .SetProperty(x => x.EquipCrestSlotType1CrestId3, customCrest)
             );
 
-        HttpResponseMessage resp = await this.Client.GetAsync("/api/savefile/export");
+        HttpResponseMessage resp = await this.Client.GetAsync(
+            "/api/savefile/export",
+            TestContext.Current.CancellationToken
+        );
 
         DragaliaResponse<LoadIndexResponse>? deserialized = await resp.Content.ReadFromJsonAsync<
             DragaliaResponse<LoadIndexResponse>
-        >(ApiJsonOptions.Instance);
+        >(ApiJsonOptions.Instance, cancellationToken: TestContext.Current.CancellationToken);
 
         deserialized.Should().NotBeNull();
 

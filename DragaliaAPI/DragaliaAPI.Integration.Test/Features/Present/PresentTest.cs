@@ -47,7 +47,8 @@ public class PresentTest : TestFixture
         DragaliaResponse<PresentGetPresentListResponse> response =
             await this.Client.PostMsgpack<PresentGetPresentListResponse>(
                 $"{Controller}/get_present_list",
-                new PresentGetPresentListRequest() { IsLimit = false, PresentId = 0 }
+                new PresentGetPresentListRequest() { IsLimit = false, PresentId = 0 },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response
@@ -113,7 +114,8 @@ public class PresentTest : TestFixture
         DragaliaResponse<PresentGetPresentListResponse> response =
             await this.Client.PostMsgpack<PresentGetPresentListResponse>(
                 $"{Controller}/get_present_list",
-                new PresentGetPresentListRequest() { IsLimit = true, PresentId = 0 }
+                new PresentGetPresentListRequest() { IsLimit = true, PresentId = 0 },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response
@@ -163,7 +165,8 @@ public class PresentTest : TestFixture
         DragaliaResponse<PresentGetPresentListResponse> firstResponse =
             await this.Client.PostMsgpack<PresentGetPresentListResponse>(
                 $"{Controller}/get_present_list",
-                new PresentGetPresentListRequest() { IsLimit = false, PresentId = 0 }
+                new PresentGetPresentListRequest() { IsLimit = false, PresentId = 0 },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         firstResponse.Data.PresentList.Should().HaveCount(100);
@@ -175,7 +178,8 @@ public class PresentTest : TestFixture
                 {
                     IsLimit = false,
                     PresentId = firstResponse.Data.PresentList.Last().PresentId,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         secondResponse.Data.PresentList.Should().HaveCount(20);
@@ -291,7 +295,8 @@ public class PresentTest : TestFixture
         DragaliaResponse<PresentReceiveResponse> response =
             await this.Client.PostMsgpack<PresentReceiveResponse>(
                 $"{Controller}/receive",
-                new PresentReceiveRequest() { PresentIdList = presentIdList }
+                new PresentReceiveRequest() { PresentIdList = presentIdList },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.Data.ReceivePresentIdList.Should().BeEquivalentTo(presentIdList);
@@ -371,7 +376,8 @@ public class PresentTest : TestFixture
         DragaliaResponse<PresentReceiveResponse> response =
             await this.Client.PostMsgpack<PresentReceiveResponse>(
                 $"{Controller}/receive",
-                new PresentReceiveRequest() { PresentIdList = presentIdList }
+                new PresentReceiveRequest() { PresentIdList = presentIdList },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.Data.ReceivePresentIdList.Should().BeEquivalentTo(presentIdList);
@@ -421,7 +427,8 @@ public class PresentTest : TestFixture
         DragaliaResponse<PresentReceiveResponse> response =
             await this.Client.PostMsgpack<PresentReceiveResponse>(
                 $"{Controller}/receive",
-                new PresentReceiveRequest() { PresentIdList = presentIdList }
+                new PresentReceiveRequest() { PresentIdList = presentIdList },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.Data.ReceivePresentIdList.Should().BeEquivalentTo(presentIdList);
@@ -475,7 +482,8 @@ public class PresentTest : TestFixture
         DragaliaResponse<PresentReceiveResponse> response =
             await this.Client.PostMsgpack<PresentReceiveResponse>(
                 $"{Controller}/receive",
-                new PresentReceiveRequest() { PresentIdList = presentIdList }
+                new PresentReceiveRequest() { PresentIdList = presentIdList },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.Data.ReceivePresentIdList.Should().Contain((ulong)presents.First().PresentId);
@@ -520,7 +528,8 @@ public class PresentTest : TestFixture
         DragaliaResponse<PresentReceiveResponse> response =
             await this.Client.PostMsgpack<PresentReceiveResponse>(
                 $"{Controller}/receive",
-                new PresentReceiveRequest() { PresentIdList = presentIdList }
+                new PresentReceiveRequest() { PresentIdList = presentIdList },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.Data.ReceivePresentIdList.Should().BeEquivalentTo(presentIdList);
@@ -554,13 +563,16 @@ public class PresentTest : TestFixture
 
         await this.AddRangeToDatabase(presents);
 
-        await this.ApiContext.PlayerSummonTickets.ExecuteDeleteAsync();
+        await this.ApiContext.PlayerSummonTickets.ExecuteDeleteAsync(
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         IEnumerable<ulong> presentIdList = presents.Select(x => (ulong)x.PresentId);
 
         await this.Client.PostMsgpack<PresentReceiveResponse>(
             $"{Controller}/receive",
-            new PresentReceiveRequest() { PresentIdList = presentIdList }
+            new PresentReceiveRequest() { PresentIdList = presentIdList },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         this.ApiContext.PlayerSummonTickets.AsNoTracking()
@@ -603,7 +615,9 @@ public class PresentTest : TestFixture
             },
         ];
 
-        await this.ApiContext.PlayerDragonGifts.ExecuteDeleteAsync();
+        await this.ApiContext.PlayerDragonGifts.ExecuteDeleteAsync(
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         await this.AddRangeToDatabase(
             [
@@ -621,7 +635,8 @@ public class PresentTest : TestFixture
         DragaliaResponse<PresentReceiveResponse> response =
             await this.Client.PostMsgpack<PresentReceiveResponse>(
                 $"{Controller}/receive",
-                new PresentReceiveRequest() { PresentIdList = presentIdList }
+                new PresentReceiveRequest() { PresentIdList = presentIdList },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response
@@ -672,7 +687,8 @@ public class PresentTest : TestFixture
         DragaliaResponse<PresentReceiveResponse> response =
             await this.Client.PostMsgpack<PresentReceiveResponse>(
                 $"{Controller}/receive",
-                new PresentReceiveRequest() { PresentIdList = presentIdList }
+                new PresentReceiveRequest() { PresentIdList = presentIdList },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response
@@ -734,7 +750,8 @@ public class PresentTest : TestFixture
         DragaliaResponse<PresentReceiveResponse> response =
             await this.Client.PostMsgpack<PresentReceiveResponse>(
                 $"{Controller}/receive",
-                new PresentReceiveRequest() { PresentIdList = presentIdList }
+                new PresentReceiveRequest() { PresentIdList = presentIdList },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.Data.UpdateDataList.DmodeInfo.DmodePoint1.Should().Be(200);
@@ -762,7 +779,8 @@ public class PresentTest : TestFixture
         DragaliaResponse<PresentGetHistoryListResponse> firstResponse =
             await this.Client.PostMsgpack<PresentGetHistoryListResponse>(
                 $"{Controller}/get_history_list",
-                new PresentGetHistoryListRequest() { PresentHistoryId = 0 }
+                new PresentGetHistoryListRequest() { PresentHistoryId = 0 },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         firstResponse
@@ -776,7 +794,8 @@ public class PresentTest : TestFixture
                 new PresentGetHistoryListRequest()
                 {
                     PresentHistoryId = (ulong)presentHistories[99].Id,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         secondResponse.Data.PresentHistoryList.Should().HaveCount(20);

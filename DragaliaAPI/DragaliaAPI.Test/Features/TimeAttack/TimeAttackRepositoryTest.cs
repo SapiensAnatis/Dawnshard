@@ -40,7 +40,7 @@ public class TimeAttackRepositoryTest : RepositoryTestFixture
             };
 
         await this.timeAttackRepository.CreateOrUpdateClear(clear);
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.ApiContext.TimeAttackClears.Should().ContainEquivalentOf(clear);
     }
@@ -67,7 +67,7 @@ public class TimeAttackRepositoryTest : RepositoryTestFixture
             }
         );
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         await this.timeAttackRepository.CreateOrUpdateClear(
             new()
@@ -86,7 +86,7 @@ public class TimeAttackRepositoryTest : RepositoryTestFixture
             }
         );
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.ApiContext.TimeAttackClears.Should().Contain(x => x.GameId == gameId);
         this.ApiContext.TimeAttackClears.First(x => x.GameId == gameId)

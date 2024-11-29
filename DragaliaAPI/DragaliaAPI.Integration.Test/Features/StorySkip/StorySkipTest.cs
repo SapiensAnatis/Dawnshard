@@ -26,16 +26,18 @@ public class StorySkipTest : TestFixture
 
         await this
             .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(u =>
-                u.SetProperty(e => e.Level, 5)
-                    .SetProperty(e => e.Exp, 1)
-                    .SetProperty(e => e.StaminaSingle, 10)
-                    .SetProperty(e => e.StaminaMulti, 10)
+            .ExecuteUpdateAsync(
+                u =>
+                    u.SetProperty(e => e.Level, 5)
+                        .SetProperty(e => e.Exp, 1)
+                        .SetProperty(e => e.StaminaSingle, 10)
+                        .SetProperty(e => e.StaminaMulti, 10),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         await this
             .ApiContext.PlayerQuests.Where(x => x.ViewerId == this.ViewerId && x.QuestId <= questId)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         await this
             .ApiContext.PlayerStoryState.Where(x =>
@@ -43,33 +45,38 @@ public class StorySkipTest : TestFixture
                 && x.StoryType == StoryTypes.Quest
                 && x.StoryId <= storyId
             )
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         await this
             .ApiContext.PlayerCharaData.Where(x =>
                 x.ViewerId == this.ViewerId && x.CharaId != Charas.ThePrince
             )
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         await this
             .ApiContext.PlayerDragonData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         await this
             .ApiContext.PlayerFortBuilds.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         await this.Client.PostMsgpack(
             "mission/unlock_drill_mission_group",
-            new MissionUnlockDrillMissionGroupRequest(1)
+            new MissionUnlockDrillMissionGroupRequest(1),
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         StorySkipSkipResponse data = (
-            await this.Client.PostMsgpack<StorySkipSkipResponse>("story_skip/skip")
+            await this.Client.PostMsgpack<StorySkipSkipResponse>(
+                "story_skip/skip",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
-        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.SingleAsync(x =>
-            x.ViewerId == this.ViewerId
+        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.SingleAsync(
+            x => x.ViewerId == this.ViewerId,
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         data.Should().BeEquivalentTo(new StorySkipSkipResponse() { ResultState = 1 });
@@ -96,7 +103,7 @@ public class StorySkipTest : TestFixture
                 .ApiContext.PlayerFortBuilds.Where(x =>
                     x.ViewerId == this.ViewerId && x.PlantId == fortPlant
                 )
-                .ToListAsync();
+                .ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
             forts.Count.Should().Be(fortConfig.BuildCount);
 

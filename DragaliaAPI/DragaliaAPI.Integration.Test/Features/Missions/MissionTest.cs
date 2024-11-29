@@ -22,7 +22,8 @@ public class MissionTest : TestFixture
         DragaliaResponse<MissionUnlockDrillMissionGroupResponse> resp =
             await this.Client.PostMsgpack<MissionUnlockDrillMissionGroupResponse>(
                 "mission/unlock_drill_mission_group",
-                new MissionUnlockDrillMissionGroupRequest(1)
+                new MissionUnlockDrillMissionGroupRequest(1),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
@@ -45,7 +46,8 @@ public class MissionTest : TestFixture
         DragaliaResponse<MissionUnlockMainStoryGroupResponse> resp =
             await this.Client.PostMsgpack<MissionUnlockMainStoryGroupResponse>(
                 "mission/unlock_main_story_group",
-                new MissionUnlockMainStoryGroupRequest(1)
+                new MissionUnlockMainStoryGroupRequest(1),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
@@ -58,13 +60,15 @@ public class MissionTest : TestFixture
     {
         await this.Client.PostMsgpack<MissionUnlockDrillMissionGroupResponse>(
             "mission/unlock_drill_mission_group",
-            new MissionUnlockDrillMissionGroupRequest(1)
+            new MissionUnlockDrillMissionGroupRequest(1),
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DragaliaResponse<QuestReadStoryResponse> resp =
             await this.Client.PostMsgpack<QuestReadStoryResponse>(
                 "/quest/read_story",
-                new QuestReadStoryRequest() { QuestStoryId = 1000106 }
+                new QuestReadStoryRequest() { QuestStoryId = 1000106 },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
@@ -77,7 +81,8 @@ public class MissionTest : TestFixture
         DragaliaResponse<MissionReceiveDrillRewardResponse> rewardResp =
             await this.Client.PostMsgpack<MissionReceiveDrillRewardResponse>(
                 "/mission/receive_drill_reward",
-                new MissionReceiveDrillRewardRequest(new[] { 100200 }, Enumerable.Empty<int>())
+                new MissionReceiveDrillRewardRequest(new[] { 100200 }, Enumerable.Empty<int>()),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         rewardResp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
@@ -90,13 +95,15 @@ public class MissionTest : TestFixture
     {
         await this.Client.PostMsgpack<MissionUnlockDrillMissionGroupResponse>(
             "mission/unlock_drill_mission_group",
-            new MissionUnlockDrillMissionGroupRequest(3)
+            new MissionUnlockDrillMissionGroupRequest(3),
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DragaliaResponse<TreasureTradeTradeResponse> resp =
             await this.Client.PostMsgpack<TreasureTradeTradeResponse>(
                 "/treasure_trade/trade",
-                new TreasureTradeTradeRequest() { TreasureTradeId = 10020101, TradeCount = 1 }
+                new TreasureTradeTradeRequest() { TreasureTradeId = 10020101, TradeCount = 1 },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
@@ -121,7 +128,8 @@ public class MissionTest : TestFixture
 
         await this.Client.PostMsgpack<MissionUnlockDrillMissionGroupResponse>(
             "mission/unlock_drill_mission_group",
-            new MissionUnlockDrillMissionGroupRequest(3)
+            new MissionUnlockDrillMissionGroupRequest(3),
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DragaliaResponse<AbilityCrestBuildupPieceResponse> resp =
@@ -137,7 +145,8 @@ public class MissionTest : TestFixture
                             BuildupPieceType = BuildupPieceTypes.Stats,
                             Step = x,
                         }),
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
@@ -168,7 +177,8 @@ public class MissionTest : TestFixture
                 new MissionReceiveMemoryEventRewardRequest()
                 {
                     MemoryEventMissionIdList = new[] { 10220101 }, // Participate in the Event (Toll of the Deep)
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -253,7 +263,8 @@ public class MissionTest : TestFixture
                         new() { DailyMissionId = missionId2, DayNo = today },
                         new() { DailyMissionId = missionId1, DayNo = yesterday },
                     ],
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response
@@ -312,7 +323,8 @@ public class MissionTest : TestFixture
                 new MissionReceiveMemoryEventRewardRequest()
                 {
                     MemoryEventMissionIdList = [missionId],
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -355,7 +367,8 @@ public class MissionTest : TestFixture
 
         DragaliaResponse<MissionGetMissionListResponse> response =
             await this.Client.PostMsgpack<MissionGetMissionListResponse>(
-                "mission/get_mission_list"
+                "mission/get_mission_list",
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response
@@ -413,7 +426,8 @@ public class MissionTest : TestFixture
             await this.Client.PostMsgpack<ShopItemSummonExecResponse>(
                 "shop/item_summon_exec",
                 new ShopItemSummonExecRequest() { PaymentType = PaymentTypes.Wyrmite },
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
@@ -435,7 +449,8 @@ public class MissionTest : TestFixture
 
         MissionGetDrillMissionListResponse response = (
             await this.Client.PostMsgpack<MissionGetDrillMissionListResponse>(
-                "mission/get_drill_mission_list"
+                "mission/get_drill_mission_list",
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -449,7 +464,8 @@ public class MissionTest : TestFixture
 
         response = (
             await this.Client.PostMsgpack<MissionGetDrillMissionListResponse>(
-                "mission/get_drill_mission_list"
+                "mission/get_drill_mission_list",
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -463,7 +479,8 @@ public class MissionTest : TestFixture
 
         response = (
             await this.Client.PostMsgpack<MissionGetDrillMissionListResponse>(
-                "mission/get_drill_mission_list"
+                "mission/get_drill_mission_list",
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -479,7 +496,8 @@ public class MissionTest : TestFixture
 
         response = (
             await this.Client.PostMsgpack<MissionGetDrillMissionListResponse>(
-                "mission/get_drill_mission_list"
+                "mission/get_drill_mission_list",
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -510,7 +528,10 @@ public class MissionTest : TestFixture
         );
 
         MissionGetMissionListResponse response = (
-            await this.Client.PostMsgpack<MissionGetMissionListResponse>("mission/get_mission_list")
+            await this.Client.PostMsgpack<MissionGetMissionListResponse>(
+                "mission/get_mission_list",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response
@@ -563,7 +584,10 @@ public class MissionTest : TestFixture
         );
 
         MissionGetMissionListResponse response = (
-            await this.Client.PostMsgpack<MissionGetMissionListResponse>("mission/get_mission_list")
+            await this.Client.PostMsgpack<MissionGetMissionListResponse>(
+                "mission/get_mission_list",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response
@@ -591,7 +615,8 @@ public class MissionTest : TestFixture
 
         DragaliaResponse<MissionGetMissionListResponse> response =
             await this.Client.PostMsgpack<MissionGetMissionListResponse>(
-                "mission/get_mission_list"
+                "mission/get_mission_list",
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response
@@ -617,7 +642,8 @@ public class MissionTest : TestFixture
 
         DragaliaResponse<MissionGetMissionListResponse> response =
             await this.Client.PostMsgpack<MissionGetMissionListResponse>(
-                "mission/get_mission_list"
+                "mission/get_mission_list",
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response

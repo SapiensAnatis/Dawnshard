@@ -27,12 +27,17 @@ public class NewsTests : WebTestFixture
     public async Task GetNewsItems_Returns200PagedResponse()
     {
         HttpResponseMessage page1Response = await this.Client.GetAsync(
-            "/api/news?offset=0&pageSize=5"
+            "/api/news?offset=0&pageSize=5",
+            TestContext.Current.CancellationToken
         );
 
         page1Response.Should().HaveStatusCode(HttpStatusCode.OK);
 
-        (await page1Response.Content.ReadFromJsonAsync<OffsetPagedResponse<NewsItem>>())
+        (
+            await page1Response.Content.ReadFromJsonAsync<OffsetPagedResponse<NewsItem>>(
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )
             .Should()
             .BeEquivalentTo(
                 new OffsetPagedResponse<NewsItem>()
@@ -51,12 +56,17 @@ public class NewsTests : WebTestFixture
             );
 
         HttpResponseMessage page2Response = await this.Client.GetAsync(
-            "/api/news?offset=5&pageSize=5"
+            "/api/news?offset=5&pageSize=5",
+            TestContext.Current.CancellationToken
         );
 
         page2Response.Should().HaveStatusCode(HttpStatusCode.OK);
 
-        (await page2Response.Content.ReadFromJsonAsync<OffsetPagedResponse<NewsItem>>())
+        (
+            await page2Response.Content.ReadFromJsonAsync<OffsetPagedResponse<NewsItem>>(
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )
             .Should()
             .BeEquivalentTo(
                 new OffsetPagedResponse<NewsItem>()
@@ -90,10 +100,15 @@ public class NewsTests : WebTestFixture
         this.ApiContext.SaveChanges();
 
         HttpResponseMessage allItems = await this.Client.GetAsync(
-            "/api/news?offset=0&pageSize=100"
+            "/api/news?offset=0&pageSize=100",
+            TestContext.Current.CancellationToken
         );
 
-        (await allItems.Content.ReadFromJsonAsync<OffsetPagedResponse<NewsItem>>())!
+        (
+            await allItems.Content.ReadFromJsonAsync<OffsetPagedResponse<NewsItem>>(
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )!
             .Data.Should()
             .NotContain(x => x.Id == hiddenItem.Id);
     }
@@ -113,10 +128,15 @@ public class NewsTests : WebTestFixture
         this.ApiContext.SaveChanges();
 
         HttpResponseMessage specificItemResponse = await this.Client.GetAsync(
-            $"/api/news/{hiddenItem.Id}"
+            $"/api/news/{hiddenItem.Id}",
+            TestContext.Current.CancellationToken
         );
 
-        (await specificItemResponse.Content.ReadFromJsonAsync<NewsItem>())
+        (
+            await specificItemResponse.Content.ReadFromJsonAsync<NewsItem>(
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )
             .Should()
             .BeEquivalentTo(
                 new NewsItem()

@@ -68,13 +68,15 @@ public class QuestControllerTest
             );
         this.mockStoryService.Setup(x => x.GetEntityResult()).Returns(entityResult);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
+        this.mockUpdateDataService.Setup(x =>
+                x.SaveChangesAsync(TestContext.Current.CancellationToken)
+            )
             .ReturnsAsync(new UpdateDataList());
 
         (
             await this.questController.ReadStory(
                 new QuestReadStoryRequest() { QuestStoryId = 1 },
-                default
+                TestContext.Current.CancellationToken
             )
         )
             .GetData<QuestReadStoryResponse>()

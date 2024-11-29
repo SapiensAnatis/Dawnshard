@@ -26,7 +26,8 @@ public class ItemTest : TestFixture
     public async Task GetList_ReturnsItemList()
     {
         DragaliaResponse<ItemGetListResponse> resp = await Client.PostMsgpack<ItemGetListResponse>(
-            "item/get_list"
+            "item/get_list",
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         resp.Data.ItemList.Should()
@@ -42,7 +43,8 @@ public class ItemTest : TestFixture
                 "item/use_recovery_stamina",
                 new ItemUseRecoveryStaminaRequest(
                     new List<AtgenUseItemList> { new(UseItem.Honey, 1) }
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         resp.Data.RecoverData.RecoverStaminaType.Should().Be(UseItemEffect.RecoverStamina);
@@ -62,7 +64,7 @@ public class ItemTest : TestFixture
             .First(x => x.ViewerId == this.ViewerId);
         userData.StaminaSingle = 0;
         userData.LastStaminaSingleUpdateTime = DateTimeOffset.UtcNow - TimeSpan.FromHours(6);
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         int expectedPassiveRegen = (int)TimeSpan.FromHours(6).TotalSeconds / 360; // 6 minutes per stamina point
 
@@ -71,7 +73,8 @@ public class ItemTest : TestFixture
                 "item/use_recovery_stamina",
                 new ItemUseRecoveryStaminaRequest(
                     new List<AtgenUseItemList> { new(UseItem.Honey, 1) }
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         resp.Data.RecoverData.RecoverStaminaType.Should().Be(UseItemEffect.RecoverStamina);
@@ -87,7 +90,8 @@ public class ItemTest : TestFixture
                 "item/use_recovery_stamina",
                 new ItemUseRecoveryStaminaRequest(
                     new List<AtgenUseItemList> { new(UseItem.Honey, 5) }
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         resp.Data.RecoverData.RecoverStaminaType.Should().Be(UseItemEffect.RecoverStamina);

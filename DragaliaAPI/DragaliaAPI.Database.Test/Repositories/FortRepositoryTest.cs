@@ -106,7 +106,12 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
 
         await this.fortRepository.UpdateFortMaximumCarpenter(4);
 
-        (await this.fixture.ApiContext.PlayerFortDetails.FindAsync(DbTestFixture.ViewerId))!
+        (
+            await this.fixture.ApiContext.PlayerFortDetails.FindAsync(
+                DbTestFixture.ViewerId,
+                TestContext.Current.CancellationToken
+            )
+        )!
             .CarpenterNum.Should()
             .Be(4);
 
@@ -169,7 +174,14 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
             new() { ViewerId = DbTestFixture.ViewerId, BuildId = 12 }
         );
 
-        (await this.fixture.ApiContext.PlayerFortBuilds.FindAsync(12L)).Should().NotBeNull();
+        (
+            await this.fixture.ApiContext.PlayerFortBuilds.FindAsync(
+                12L,
+                TestContext.Current.CancellationToken
+            )
+        )
+            .Should()
+            .NotBeNull();
     }
 
     [Fact]
@@ -187,9 +199,16 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddToDatabase(build);
 
         this.fortRepository.DeleteBuild(build);
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
-        (await this.fixture.ApiContext.PlayerFortBuilds.FindAsync(44L)).Should().BeNull();
+        (
+            await this.fixture.ApiContext.PlayerFortBuilds.FindAsync(
+                44L,
+                TestContext.Current.CancellationToken
+            )
+        )
+            .Should()
+            .BeNull();
     }
 
     [Fact]
@@ -271,7 +290,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     public async Task InitializeFort_InitializesFort()
     {
         await this.fortRepository.InitializeFort();
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.fixture.ApiContext.PlayerFortDetails.Should()
             .ContainEquivalentOf(
@@ -290,7 +309,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     public async Task InitializeFort_DataExists_DoesNotThrow()
     {
         await this.fortRepository.InitializeFort();
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         await this.fortRepository.Invoking(x => x.InitializeFort()).Should().NotThrowAsync();
 
@@ -301,7 +320,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     public async Task AddDojos_AddsDojos()
     {
         await this.fortRepository.AddDojos();
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         FortPlants[] plants =
         {
@@ -344,7 +363,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
                 },
             }
         );
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         await this.fortRepository.AddToStorage(
             FortPlants.FlameDracolith,
@@ -352,7 +371,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
             isTotalQuantity: true,
             level: 4
         );
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.fixture.ApiContext.PlayerFortBuilds.Should()
             .Contain(x =>
@@ -372,7 +391,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
                 new() { ViewerId = DbTestFixture.ViewerId, PlantId = FortPlants.WindDracolith },
             }
         );
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         await this.fortRepository.AddToStorage(
             FortPlants.WindDracolith,
@@ -380,7 +399,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
             isTotalQuantity: true,
             level: 4
         );
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.fixture.ApiContext.PlayerFortBuilds.Should()
             .ContainSingle(x => x.PlantId == FortPlants.WindDracolith);

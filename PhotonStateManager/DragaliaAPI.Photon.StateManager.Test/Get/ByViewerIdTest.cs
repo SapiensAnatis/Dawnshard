@@ -37,10 +37,17 @@ public class ByViewerIdTest : TestFixture
 
         this.RedisConnectionProvider.RedisCollection<RedisGame>().Insert(game);
 
-        HttpResponseMessage response = await this.Client.GetAsync($"{Endpoint}/2");
+        HttpResponseMessage response = await this.Client.GetAsync(
+            $"{Endpoint}/2",
+            TestContext.Current.CancellationToken
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        (await response.Content.ReadFromJsonAsync<ApiGame>())
+        (
+            await response.Content.ReadFromJsonAsync<ApiGame>(
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )
             .Should()
             .BeEquivalentTo(game.ToApiGame());
     }
@@ -69,7 +76,10 @@ public class ByViewerIdTest : TestFixture
 
         this.RedisConnectionProvider.RedisCollection<RedisGame>().Insert(game);
 
-        HttpResponseMessage response = await this.Client.GetAsync($"{Endpoint}/88888");
+        HttpResponseMessage response = await this.Client.GetAsync(
+            $"{Endpoint}/88888",
+            TestContext.Current.CancellationToken
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }

@@ -69,7 +69,7 @@ public class DragonTest : TestFixture
             dbDragonSacrifice = await this.AddToDatabase(testCase.SetupDragons[1]);
         }
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         DragonBuildupRequest request = new DragonBuildupRequest()
         {
@@ -89,7 +89,11 @@ public class DragonTest : TestFixture
         };
 
         DragonBuildupResponse response = (
-            await this.Client.PostMsgpack<DragonBuildupResponse>("dragon/buildup", request)
+            await this.Client.PostMsgpack<DragonBuildupResponse>(
+                "dragon/buildup",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response.Should().NotBeNull();
@@ -114,7 +118,7 @@ public class DragonTest : TestFixture
             .ApiContext.PlayerDragonData.Add(new DbPlayerDragonData(ViewerId, Dragons.Liger))
             .Entity;
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         DragonBuildupRequest request = new DragonBuildupRequest()
         {
@@ -131,7 +135,11 @@ public class DragonTest : TestFixture
         };
 
         DragonBuildupResponse? response = (
-            await this.Client.PostMsgpack<DragonBuildupResponse>("dragon/buildup", request)
+            await this.Client.PostMsgpack<DragonBuildupResponse>(
+                "dragon/buildup",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response.Should().NotBeNull();
@@ -150,19 +158,19 @@ public class DragonTest : TestFixture
         dragon.AttackPlusCount = 50;
         dragon = this.ApiContext.PlayerDragonData.Add(dragon).Entity;
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.ApiContext.ChangeTracker.Clear();
         DbPlayerUserData userData = await this
             .ApiContext.PlayerUserData.Where(x => x.ViewerId == ViewerId)
-            .FirstAsync();
+            .FirstAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         long startCoin = userData.Coin;
 
         int augmentCount = (
             await this.ApiContext.PlayerMaterials.FindAsync(
-                ViewerId,
-                Materials.AmplifyingDragonscale
+                [ViewerId, Materials.AmplifyingDragonscale],
+                TestContext.Current.CancellationToken
             )
         )!.Quantity;
 
@@ -173,7 +181,11 @@ public class DragonTest : TestFixture
         };
 
         DragonSetLockResponse? response = (
-            await this.Client.PostMsgpack<DragonSetLockResponse>("dragon/reset_plus_count", request)
+            await this.Client.PostMsgpack<DragonSetLockResponse>(
+                "dragon/reset_plus_count",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response.Should().NotBeNull();
@@ -198,7 +210,10 @@ public class DragonTest : TestFixture
     public async Task DragonGetContactData_ReturnsValidData()
     {
         DragonGetContactDataResponse? response = (
-            await this.Client.PostMsgpack<DragonGetContactDataResponse>("dragon/get_contact_data")
+            await this.Client.PostMsgpack<DragonGetContactDataResponse>(
+                "dragon/get_contact_data",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response.Should().NotBeNull();
@@ -213,12 +228,12 @@ public class DragonTest : TestFixture
             new DbPlayerDragonReliability(ViewerId, Dragons.HighChthonius)
         );
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.ApiContext.ChangeTracker.Clear();
         DbPlayerUserData userData = await this
             .ApiContext.PlayerUserData.Where(x => x.ViewerId == ViewerId)
-            .FirstAsync();
+            .FirstAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         long startCoin = userData.Coin;
 
@@ -235,7 +250,8 @@ public class DragonTest : TestFixture
         DragonBuyGiftToSendMultipleResponse? response = (
             await this.Client.PostMsgpack<DragonBuyGiftToSendMultipleResponse>(
                 "dragon/buy_gift_to_send_multiple",
-                request
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -276,7 +292,8 @@ public class DragonTest : TestFixture
         DragonBuyGiftToSendResponse? response = (
             await this.Client.PostMsgpack<DragonBuyGiftToSendResponse>(
                 "dragon/buy_gift_to_send",
-                request
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -313,7 +330,8 @@ public class DragonTest : TestFixture
         DragonSendGiftMultipleResponse? response = (
             await this.Client.PostMsgpack<DragonSendGiftMultipleResponse>(
                 "dragon/send_gift_multiple",
-                request
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -341,7 +359,8 @@ public class DragonTest : TestFixture
         DragonSendGiftMultipleResponse? response = (
             await this.Client.PostMsgpack<DragonSendGiftMultipleResponse>(
                 "dragon/send_gift_multiple",
-                request
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -388,7 +407,8 @@ public class DragonTest : TestFixture
                 DragonId = Dragons.Apollo,
                 DragonGiftId = DragonGifts.FourLeafClover,
                 Quantity = 2,
-            }
+            },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         this.ApiContext.PlayerMissions.AsNoTracking()
@@ -403,7 +423,8 @@ public class DragonTest : TestFixture
                 DragonId = Dragons.Kagutsuchi,
                 DragonGiftId = DragonGifts.FourLeafClover,
                 Quantity = 1,
-            }
+            },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         this.ApiContext.PlayerMissions.AsNoTracking()
@@ -419,7 +440,8 @@ public class DragonTest : TestFixture
                     DragonId = Dragons.Kagutsuchi,
                     DragonGiftId = DragonGifts.FourLeafClover,
                     Quantity = 200,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -454,7 +476,11 @@ public class DragonTest : TestFixture
         };
 
         DragonSendGiftResponse? response = (
-            await this.Client.PostMsgpack<DragonSendGiftResponse>("dragon/send_gift", request)
+            await this.Client.PostMsgpack<DragonSendGiftResponse>(
+                "dragon/send_gift",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response.Should().NotBeNull();
@@ -494,7 +520,8 @@ public class DragonTest : TestFixture
         DragaliaResponse<DragonSendGiftMultipleResponse>? response = (
             await this.Client.PostMsgpack<DragonSendGiftMultipleResponse>(
                 "dragon/send_gift_multiple",
-                request
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         );
 
@@ -590,7 +617,11 @@ public class DragonTest : TestFixture
         };
 
         DragonBuildupResponse? response = (
-            await this.Client.PostMsgpack<DragonBuildupResponse>("dragon/limit_break", request)
+            await this.Client.PostMsgpack<DragonBuildupResponse>(
+                "dragon/limit_break",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response.Should().NotBeNull();
@@ -628,7 +659,11 @@ public class DragonTest : TestFixture
         };
 
         DragonSetLockResponse? response = (
-            await this.Client.PostMsgpack<DragonSetLockResponse>("dragon/set_lock", request)
+            await this.Client.PostMsgpack<DragonSetLockResponse>(
+                "dragon/set_lock",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response.Should().NotBeNull();
@@ -652,7 +687,7 @@ public class DragonTest : TestFixture
         DbPlayerUserData uData = await this
             .ApiContext.PlayerUserData.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)
-            .FirstAsync();
+            .FirstAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         long startCoin = uData.Coin;
         long startDew = uData.DewPoint;
@@ -663,7 +698,11 @@ public class DragonTest : TestFixture
         };
 
         DragonSellResponse? response = (
-            await this.Client.PostMsgpack<DragonSellResponse>("dragon/sell", request)
+            await this.Client.PostMsgpack<DragonSellResponse>(
+                "dragon/sell",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response.Should().NotBeNull();
@@ -688,14 +727,14 @@ public class DragonTest : TestFixture
 
         dragonStribog.LimitBreakCount = 4;
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
         DragonData dragonDataSimurgh = MasterAsset.DragonData.Get(Dragons.Simurgh);
         DragonData dragonDataStribog = MasterAsset.DragonData.Get(Dragons.Stribog);
 
         this.ApiContext.ChangeTracker.Clear();
         DbPlayerUserData uData = await this
             .ApiContext.PlayerUserData.Where(x => x.ViewerId == ViewerId)
-            .FirstAsync();
+            .FirstAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         long startCoin = uData.Coin;
         long startDew = uData.DewPoint;
@@ -710,7 +749,11 @@ public class DragonTest : TestFixture
         };
 
         DragonSellResponse? response = (
-            await this.Client.PostMsgpack<DragonSellResponse>("dragon/sell", request)
+            await this.Client.PostMsgpack<DragonSellResponse>(
+                "dragon/sell",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response.Should().NotBeNull();

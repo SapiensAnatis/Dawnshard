@@ -19,7 +19,12 @@ public class UserTest : TestFixture
 
         UserData expectedUserData = this.Mapper.Map<UserData>(dbUserData);
 
-        (await this.Client.PostMsgpack<UserLinkedNAccountResponse>("/user/linked_n_account"))
+        (
+            await this.Client.PostMsgpack<UserLinkedNAccountResponse>(
+                "/user/linked_n_account",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )
             .Data.Should()
             .BeEquivalentTo(
                 new UserLinkedNAccountResponse()
@@ -35,7 +40,12 @@ public class UserTest : TestFixture
     {
         this.MockBaasApi.Setup(x => x.GetUsername(It.IsAny<string>())).ReturnsAsync("okada");
 
-        (await this.Client.PostMsgpack<UserGetNAccountInfoResponse>("/user/get_n_account_info"))
+        (
+            await this.Client.PostMsgpack<UserGetNAccountInfoResponse>(
+                "/user/get_n_account_info",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )
             .Data.Should()
             .BeEquivalentTo(
                 new UserGetNAccountInfoResponse()

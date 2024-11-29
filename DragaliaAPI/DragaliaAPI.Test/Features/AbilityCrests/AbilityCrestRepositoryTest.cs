@@ -33,7 +33,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
     public async Task Add_AddsToDatabase()
     {
         await this.abilityCrestRepository.Add(AbilityCrestId.ADogsDay);
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.fixture.ApiContext.PlayerAbilityCrests.Single(x =>
                 x.AbilityCrestId == AbilityCrestId.ADogsDay
@@ -53,7 +53,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
     public async Task Add_AbilityCrestAlreadyExistsWarnsLogger()
     {
         await this.abilityCrestRepository.Add(AbilityCrestId.ADragonyuleforIlia);
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         await this.abilityCrestRepository.Add(AbilityCrestId.ADragonyuleforIlia);
         this.logger.Verify(
@@ -80,7 +80,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
     public async Task FindAsync_FindsAbilityCrestAsExpected()
     {
         await this.abilityCrestRepository.Add(AbilityCrestId.FlashofGenius);
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         (await this.abilityCrestRepository.FindAsync(AbilityCrestId.FlashofGenius))
             .Should()
@@ -103,7 +103,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
         await this.abilityCrestRepository.AddOrUpdateSet(
             new DbAbilityCrestSet(IdentityTestUtils.ViewerId, 54)
         );
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.fixture.ApiContext.PlayerAbilityCrestSets.Single(x =>
                 x.ViewerId == IdentityTestUtils.ViewerId && x.AbilityCrestSetNo == 54
@@ -119,7 +119,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
                 CrestSlotType1CrestId1 = AbilityCrestId.WorthyRivals,
             }
         );
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.fixture.ApiContext.PlayerAbilityCrestSets.Single(x =>
                 x.ViewerId == IdentityTestUtils.ViewerId && x.AbilityCrestSetNo == 54
@@ -141,7 +141,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
         await this.abilityCrestRepository.AddOrUpdateSet(
             new DbAbilityCrestSet(IdentityTestUtils.ViewerId, 1)
         );
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         (await this.abilityCrestRepository.FindSetAsync(1))
             .Should()

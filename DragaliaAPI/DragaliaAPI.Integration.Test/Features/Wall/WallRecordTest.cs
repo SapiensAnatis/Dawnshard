@@ -68,7 +68,8 @@ public class WallRecordTest : TestFixture
         WallRecordRecordResponse response = (
             await Client.PostMsgpack<WallRecordRecordResponse>(
                 "/wall_record/record",
-                new WallRecordRecordRequest() { WallId = wallId, DungeonKey = key }
+                new WallRecordRecordRequest() { WallId = wallId, DungeonKey = key },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -166,7 +167,8 @@ public class WallRecordTest : TestFixture
         WallRecordRecordResponse response = (
             await Client.PostMsgpack<WallRecordRecordResponse>(
                 "/wall_record/record",
-                new WallRecordRecordRequest() { WallId = wallId, DungeonKey = key }
+                new WallRecordRecordRequest() { WallId = wallId, DungeonKey = key },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -249,7 +251,8 @@ public class WallRecordTest : TestFixture
                 {
                     WallId = (int)QuestWallTypes.Flame,
                     DungeonKey = key,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -264,7 +267,10 @@ public class WallRecordTest : TestFixture
             .BeEquivalentTo([flameLv6MissionId, clearAllLv6MissionId]);
 
         MissionGetMissionListResponse missionList = (
-            await this.Client.PostMsgpack<MissionGetMissionListResponse>("mission/get_mission_list")
+            await this.Client.PostMsgpack<MissionGetMissionListResponse>(
+                "mission/get_mission_list",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         missionList.NormalMissionList.Should().Contain(x => x.NormalMissionId == flameLv7MissionId);
@@ -319,7 +325,8 @@ public class WallRecordTest : TestFixture
                 {
                     WallId = (int)QuestWallTypes.Flame,
                     DungeonKey = key,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 

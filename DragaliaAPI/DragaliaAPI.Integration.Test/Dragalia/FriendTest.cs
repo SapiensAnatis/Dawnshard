@@ -19,7 +19,8 @@ public class FriendTest : TestFixture
         FriendGetSupportCharaDetailResponse response = (
             await this.Client.PostMsgpack<FriendGetSupportCharaDetailResponse>(
                 "/friend/get_support_chara_detail",
-                new FriendGetSupportCharaDetailRequest() { SupportViewerId = 1001 }
+                new FriendGetSupportCharaDetailRequest() { SupportViewerId = 1001 },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -170,7 +171,8 @@ public class FriendTest : TestFixture
         FriendGetSupportCharaDetailResponse response = (
             await this.Client.PostMsgpack<FriendGetSupportCharaDetailResponse>(
                 "/friend/get_support_chara_detail",
-                new FriendGetSupportCharaDetailRequest() { SupportViewerId = 0 }
+                new FriendGetSupportCharaDetailRequest() { SupportViewerId = 0 },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 

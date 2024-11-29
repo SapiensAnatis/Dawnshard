@@ -268,7 +268,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
         this.mockMissionProgressionService.Setup(x => x.ProcessMissionEvents(cts.Token))
             .Returns(Task.CompletedTask);
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         (await this.updateDataService.SaveChangesAsync(cts.Token)).CharaList.Should().BeNull();
     }

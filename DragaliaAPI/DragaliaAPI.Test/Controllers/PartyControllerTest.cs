@@ -62,13 +62,15 @@ public class PartyControllerTest : RepositoryTestFixture
                     new() { PartyName = "Z Team", PartyNo = 1 },
                 },
             };
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync(default))
+        this.mockUpdateDataService.Setup(x =>
+                x.SaveChangesAsync(TestContext.Current.CancellationToken)
+            )
             .ReturnsAsync(updateDataList);
 
         PartyUpdatePartyNameResponse? response = (
             await this.partyController.UpdatePartyName(
                 new PartyUpdatePartyNameRequest() { PartyName = "Z Team", PartyNo = 1 },
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<PartyUpdatePartyNameResponse>();
 

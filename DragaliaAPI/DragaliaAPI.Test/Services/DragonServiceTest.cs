@@ -168,7 +168,7 @@ public class DragonServiceTest : RepositoryTestFixture
                         DragonGifts.CompellingBook,
                     },
                 },
-                default
+                TestContext.Current.CancellationToken
             );
 
         responseData.Should().NotBeNull();
@@ -227,7 +227,7 @@ public class DragonServiceTest : RepositoryTestFixture
                     DragonId = Dragons.Garuda,
                     DragonGiftIdList = new List<DragonGifts>() { DragonGifts.FreshBread },
                 },
-                default
+                TestContext.Current.CancellationToken
             );
 
         responseData.Should().NotBeNull();
@@ -289,7 +289,7 @@ public class DragonServiceTest : RepositoryTestFixture
                 DragonGiftId = gift,
                 Quantity = usedQuantity,
             },
-            default
+            TestContext.Current.CancellationToken
         );
 
         responseData.Should().NotBeNull();
@@ -345,7 +345,7 @@ public class DragonServiceTest : RepositoryTestFixture
                     },
                 },
             },
-            default
+            TestContext.Current.CancellationToken
         );
 
         dragonData.AttackPlusCount.Should().Be(50);
@@ -409,7 +409,7 @@ public class DragonServiceTest : RepositoryTestFixture
                     },
                 },
             },
-            default
+            TestContext.Current.CancellationToken
         );
         dragonData.Exp.Should().Be(expectedXp);
         dragonData.Level.Should().Be(expectedLvl);
@@ -473,7 +473,7 @@ public class DragonServiceTest : RepositoryTestFixture
                 DragonKeyId = 1,
                 PlusCountType = PlusCountType.Atk,
             },
-            default
+            TestContext.Current.CancellationToken
         );
 
         mockRewardService.VerifyAll();
@@ -545,7 +545,7 @@ public class DragonServiceTest : RepositoryTestFixture
                     },
                 },
             },
-            default
+            TestContext.Current.CancellationToken
         );
 
         dragonData.LimitBreakCount.Should().Be(limitBreakNr);
@@ -581,7 +581,7 @@ public class DragonServiceTest : RepositoryTestFixture
 
         await dragonService.DoDragonSetLock(
             new DragonSetLockRequest() { DragonKeyId = 1, IsLock = true },
-            default
+            TestContext.Current.CancellationToken
         );
 
         dragonData.IsLock.Should().BeTrue();
@@ -619,7 +619,7 @@ public class DragonServiceTest : RepositoryTestFixture
 
         DragonSellResponse response = await dragonService.DoDragonSell(
             new DragonSellRequest() { DragonKeyIdList = new List<ulong>() { 1 } },
-            default
+            TestContext.Current.CancellationToken
         );
 
         dragonDataList.Count.Should().Be(0);

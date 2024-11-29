@@ -22,7 +22,8 @@ public class GameCreateTest : TestFixture
 
         HttpResponseMessage response = await this.Client.PostAsync(
             Endpoint,
-            JsonContent.Create(new GameBase())
+            JsonContent.Create(new GameBase()),
+            TestContext.Current.CancellationToken
         );
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
@@ -75,7 +76,8 @@ public class GameCreateTest : TestFixture
             {
                 Game = game,
                 Player = new() { ViewerId = 2, PartyNoList = [40] },
-            }
+            },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);

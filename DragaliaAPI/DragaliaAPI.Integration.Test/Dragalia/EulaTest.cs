@@ -12,7 +12,10 @@ public class EulaTest : TestFixture
     public async Task EulaGetVersionList_ReturnsAllVersions()
     {
         EulaGetVersionListResponse response = (
-            await this.Client.PostMsgpack<EulaGetVersionListResponse>("eula/get_version_list")
+            await this.Client.PostMsgpack<EulaGetVersionListResponse>(
+                "eula/get_version_list",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response
@@ -34,7 +37,8 @@ public class EulaTest : TestFixture
         EulaGetVersionResponse response = (
             await this.Client.PostMsgpack<EulaGetVersionResponse>(
                 "eula/get_version",
-                new EulaGetVersionRequest("id_token", "gb", "en_eu")
+                new EulaGetVersionRequest("id_token", "gb", "en_eu"),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -51,7 +55,8 @@ public class EulaTest : TestFixture
         EulaGetVersionResponse response = (
             await this.Client.PostMsgpack<EulaGetVersionResponse>(
                 "eula/get_version",
-                new EulaGetVersionRequest("id_token", "not even a country", "c#")
+                new EulaGetVersionRequest("id_token", "not even a country", "c#"),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 

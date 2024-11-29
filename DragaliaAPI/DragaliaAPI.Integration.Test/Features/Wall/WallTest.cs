@@ -41,7 +41,8 @@ public class WallTest : TestFixture
         WallFailResponse response = (
             await Client.PostMsgpack<WallFailResponse>(
                 "/wall/fail",
-                new WallFailRequest() { DungeonKey = key, FailState = 0 }
+                new WallFailRequest() { DungeonKey = key, FailState = 0 },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -99,7 +100,8 @@ public class WallTest : TestFixture
         WallGetMonthlyRewardResponse response = (
             await this.Client.PostMsgpack<WallGetMonthlyRewardResponse>(
                 "wall/get_monthly_reward",
-                new WallGetMonthlyRewardResponse() { }
+                new WallGetMonthlyRewardResponse() { },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -176,7 +178,8 @@ public class WallTest : TestFixture
         WallReceiveMonthlyRewardResponse response = (
             await this.Client.PostMsgpack<WallReceiveMonthlyRewardResponse>(
                 "wall/receive_monthly_reward",
-                new WallGetMonthlyRewardRequest() { QuestGroupId = 21601 }
+                new WallGetMonthlyRewardRequest() { QuestGroupId = 21601 },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -222,7 +225,8 @@ public class WallTest : TestFixture
             await this.Client.PostMsgpack<ResultCodeResponse>(
                 "wall/receive_monthly_reward",
                 new WallGetMonthlyRewardRequest() { QuestGroupId = 21601 },
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         );
 
@@ -248,7 +252,8 @@ public class WallTest : TestFixture
             await this.Client.PostMsgpack<ResultCodeResponse>(
                 "wall/receive_monthly_reward",
                 new WallGetMonthlyRewardRequest() { QuestGroupId = 21601 },
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         );
 

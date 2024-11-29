@@ -14,7 +14,10 @@ public class RedoableSummonTest : TestFixture
     public async Task RedoableSummonGetData_ReturnsData()
     {
         RedoableSummonGetDataResponse response = (
-            await this.Client.PostMsgpack<RedoableSummonGetDataResponse>("redoable_summon/get_data")
+            await this.Client.PostMsgpack<RedoableSummonGetDataResponse>(
+                "redoable_summon/get_data",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response.Should().NotBeNull();
@@ -26,7 +29,8 @@ public class RedoableSummonTest : TestFixture
         RedoableSummonPreExecResponse response = (
             await this.Client.PostMsgpack<RedoableSummonPreExecResponse>(
                 "redoable_summon/pre_exec",
-                new RedoableSummonPreExecRequest(0)
+                new RedoableSummonPreExecRequest(0),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -39,11 +43,15 @@ public class RedoableSummonTest : TestFixture
         // Set up cached summon result
         await this.Client.PostMsgpack<RedoableSummonPreExecResponse>(
             "redoable_summon/pre_exec",
-            new RedoableSummonPreExecRequest()
+            new RedoableSummonPreExecRequest(),
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         RedoableSummonFixExecResponse response = (
-            await this.Client.PostMsgpack<RedoableSummonFixExecResponse>("redoable_summon/fix_exec")
+            await this.Client.PostMsgpack<RedoableSummonFixExecResponse>(
+                "redoable_summon/fix_exec",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         IEnumerable<int> newCharaIds = response

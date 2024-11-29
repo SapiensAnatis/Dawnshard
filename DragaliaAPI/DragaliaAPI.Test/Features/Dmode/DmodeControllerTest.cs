@@ -51,7 +51,9 @@ public class DmodeControllerTest
     public async Task GetData_ReturnsData()
     {
         UpdateDataList updateDataList = new();
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(updateDataList);
+        mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
+            .ReturnsAsync(updateDataList);
 
         DmodeInfo info =
             new(50, 0, DateTimeOffset.UnixEpoch, 0, DateTimeOffset.UnixEpoch, 100, 50, true);
@@ -94,7 +96,7 @@ public class DmodeControllerTest
         mockDmodeService.Setup(x => x.GetServitorPassiveList()).ReturnsAsync(passiveList);
 
         DmodeGetDataResponse? resp = (
-            await dmodeController.GetData(default)
+            await dmodeController.GetData(TestContext.Current.CancellationToken)
         ).GetData<DmodeGetDataResponse>();
 
         resp.Should().NotBeNull();
@@ -116,7 +118,9 @@ public class DmodeControllerTest
     public async Task Entry_InitializesData()
     {
         UpdateDataList updateDataList = new();
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(updateDataList);
+        mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
+            .ReturnsAsync(updateDataList);
 
         mockDmodeRepository.Setup(x => x.InitializeForPlayer());
 
@@ -161,7 +165,7 @@ public class DmodeControllerTest
         mockDmodeService.Setup(x => x.GetServitorPassiveList()).ReturnsAsync(passiveList);
 
         DmodeGetDataResponse? resp = (
-            await dmodeController.Entry(default)
+            await dmodeController.Entry(TestContext.Current.CancellationToken)
         ).GetData<DmodeGetDataResponse>();
 
         resp.Should().NotBeNull();
@@ -194,10 +198,15 @@ public class DmodeControllerTest
         mockRewardService.Setup(x => x.GetEntityResult()).Returns(entityResult);
 
         UpdateDataList updateDataList = new();
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(updateDataList);
+        mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
+            .ReturnsAsync(updateDataList);
 
         DmodeReadStoryResponse? resp = (
-            await dmodeController.ReadStory(new DmodeReadStoryRequest(1000), default)
+            await dmodeController.ReadStory(
+                new DmodeReadStoryRequest(1000),
+                TestContext.Current.CancellationToken
+            )
         ).GetData<DmodeReadStoryResponse>();
 
         resp.Should().NotBeNull();
@@ -215,7 +224,9 @@ public class DmodeControllerTest
     public async Task BuildupServitorPassive_BuildsupServitor()
     {
         UpdateDataList updateDataList = new();
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(updateDataList);
+        mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
+            .ReturnsAsync(updateDataList);
 
         List<DmodeServitorPassiveList> passiveList =
             new() { new DmodeServitorPassiveList(DmodeServitorPassiveType.Exp, 5) };
@@ -227,7 +238,7 @@ public class DmodeControllerTest
         DmodeBuildupServitorPassiveResponse? resp = (
             await dmodeController.BuildupServitorPassive(
                 new DmodeBuildupServitorPassiveRequest(passiveList),
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<DmodeBuildupServitorPassiveResponse>();
 
@@ -243,7 +254,9 @@ public class DmodeControllerTest
     public async Task ExpeditionStart_StartsExpedition()
     {
         UpdateDataList updateDataList = new();
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(updateDataList);
+        mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
+            .ReturnsAsync(updateDataList);
 
         List<Charas> charaIdList = new() { Charas.ThePrince, 0, 0, 0 };
 
@@ -256,7 +269,7 @@ public class DmodeControllerTest
         DmodeExpeditionStartResponse? resp = (
             await dmodeController.ExpeditionStart(
                 new DmodeExpeditionStartRequest(10, charaIdList),
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<DmodeExpeditionStartResponse>();
 
@@ -268,7 +281,9 @@ public class DmodeControllerTest
     public async Task ExpeditionFinish_FinishesExpedition()
     {
         UpdateDataList updateDataList = new();
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(updateDataList);
+        mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
+            .ReturnsAsync(updateDataList);
 
         EntityResult entityResult = new();
         mockRewardService.Setup(x => x.GetEntityResult()).Returns(entityResult);
@@ -283,7 +298,7 @@ public class DmodeControllerTest
             .ReturnsAsync((expedition, ingameResult));
 
         DmodeExpeditionFinishResponse? resp = (
-            await dmodeController.ExpeditionFinish(default)
+            await dmodeController.ExpeditionFinish(TestContext.Current.CancellationToken)
         ).GetData<DmodeExpeditionFinishResponse>();
 
         resp.Should().NotBeNull();
@@ -300,7 +315,9 @@ public class DmodeControllerTest
     public async Task ExpeditionForceFinish_FinishesExpeditionForced()
     {
         UpdateDataList updateDataList = new();
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(updateDataList);
+        mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
+            .ReturnsAsync(updateDataList);
 
         EntityResult entityResult = new();
         mockRewardService.Setup(x => x.GetEntityResult()).Returns(entityResult);
@@ -315,7 +332,7 @@ public class DmodeControllerTest
             .ReturnsAsync((expedition, ingameResult));
 
         DmodeExpeditionForceFinishResponse? resp = (
-            await dmodeController.ExpeditionForceFinish(default)
+            await dmodeController.ExpeditionForceFinish(TestContext.Current.CancellationToken)
         ).GetData<DmodeExpeditionForceFinishResponse>();
 
         resp.Should().NotBeNull();

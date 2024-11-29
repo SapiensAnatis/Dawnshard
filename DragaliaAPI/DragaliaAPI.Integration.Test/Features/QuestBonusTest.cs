@@ -53,7 +53,8 @@ public class QuestBonusTest : TestFixture
                     QuestEventId = questEventId,
                     IsReceive = true,
                     ReceiveBonusCount = 1,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         bonusResponse.Data.ReceiveQuestBonus.TargetQuestId.Should().Be(questId);
@@ -202,7 +203,8 @@ public class QuestBonusTest : TestFixture
                     QuestEventId = questEventId,
                     IsReceive = true,
                     ReceiveBonusCount = 1,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         bonusResponse.Data.ReceiveQuestBonus.TargetQuestId.Should().Be(questId);
@@ -247,7 +249,8 @@ public class QuestBonusTest : TestFixture
                     QuestEventId = questEventId,
                     IsReceive = false,
                     ReceiveBonusCount = 0,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         bonusResponse.Data.ReceiveQuestBonus.TargetQuestId.Should().Be(questId);
@@ -307,7 +310,8 @@ public class QuestBonusTest : TestFixture
                     QuestEventId = questEventId,
                     IsReceive = false,
                     ReceiveBonusCount = 1,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         bonusResponse.Data.ReceiveQuestBonus.TargetQuestId.Should().Be(questId);

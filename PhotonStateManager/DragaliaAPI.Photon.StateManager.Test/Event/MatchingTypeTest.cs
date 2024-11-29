@@ -19,7 +19,11 @@ public class MatchingTypeTest : TestFixture
     {
         this.Client.DefaultRequestHeaders.Clear();
 
-        HttpResponseMessage response = await this.Client.PostAsync(Endpoint, null);
+        HttpResponseMessage response = await this.Client.PostAsync(
+            Endpoint,
+            null,
+            TestContext.Current.CancellationToken
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -52,7 +56,8 @@ public class MatchingTypeTest : TestFixture
         HttpResponseMessage response =
             await this.Client.PostAsJsonAsync<GameModifyMatchingTypeRequest>(
                 Endpoint,
-                new() { GameName = game.Name, NewMatchingType = newMatchingType }
+                new() { GameName = game.Name, NewMatchingType = newMatchingType },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);

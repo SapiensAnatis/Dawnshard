@@ -79,10 +79,17 @@ public class GameListTest : TestFixture
 
         await this.RedisConnectionProvider.RedisCollection<RedisGame>().InsertAsync(games);
 
-        HttpResponseMessage response = await this.Client.GetAsync(Endpoint);
+        HttpResponseMessage response = await this.Client.GetAsync(
+            Endpoint,
+            TestContext.Current.CancellationToken
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        (await response.Content.ReadFromJsonAsync<IEnumerable<ApiGame>>())
+        (
+            await response.Content.ReadFromJsonAsync<IEnumerable<ApiGame>>(
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )
             .Should()
             .HaveCount(1)
             .And.BeEquivalentTo([games[0].ToApiGame()]);
@@ -132,11 +139,16 @@ public class GameListTest : TestFixture
         await this.RedisConnectionProvider.RedisCollection<RedisGame>().InsertAsync(games);
 
         HttpResponseMessage response = await this.Client.GetAsync(
-            $"{Endpoint}?questId={219010102}"
+            $"{Endpoint}?questId={219010102}",
+            TestContext.Current.CancellationToken
         );
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        (await response.Content.ReadFromJsonAsync<IEnumerable<ApiGame>>())
+        (
+            await response.Content.ReadFromJsonAsync<IEnumerable<ApiGame>>(
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )
             .Should()
             .HaveCount(1)
             .And.BeEquivalentTo(new List<ApiGame>() { games[1].ToApiGame() });

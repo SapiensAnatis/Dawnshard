@@ -20,7 +20,11 @@ public class GameLeaveTest : TestFixture
     {
         this.Client.DefaultRequestHeaders.Clear();
 
-        HttpResponseMessage response = await this.Client.PostAsync(Endpoint, null);
+        HttpResponseMessage response = await this.Client.PostAsync(
+            Endpoint,
+            null,
+            TestContext.Current.CancellationToken
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -59,7 +63,8 @@ public class GameLeaveTest : TestFixture
             {
                 GameName = game.Name,
                 Player = new() { ViewerId = 5 },
-            }
+            },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         RedisGame? storedGame = await this.RedisConnectionProvider.GetGame(game.Name);
@@ -105,7 +110,8 @@ public class GameLeaveTest : TestFixture
             {
                 GameName = game.Name,
                 Player = new() { ViewerId = 5 },
-            }
+            },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         RedisGame? storedGame = await this.RedisConnectionProvider.GetGame(game.Name);

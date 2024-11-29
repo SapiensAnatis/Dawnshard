@@ -23,7 +23,13 @@ public class GraphQlTest : GraphQlTestFixture
     {
         this.Client.DefaultRequestHeaders.Clear();
 
-        (await this.Client.PostAsync(Endpoint, new StringContent(string.Empty)))
+        (
+            await this.Client.PostAsync(
+                Endpoint,
+                new StringContent(string.Empty),
+                TestContext.Current.CancellationToken
+            )
+        )
             .StatusCode.Should()
             .Be(HttpStatusCode.Unauthorized);
     }
@@ -45,7 +51,8 @@ public class GraphQlTest : GraphQlTestFixture
                     }
                 }
                 """,
-            }
+            },
+            TestContext.Current.CancellationToken
         );
 
         response.Errors.Should().BeNullOrEmpty();
@@ -60,9 +67,12 @@ public class GraphQlTest : GraphQlTestFixture
         (
             await this
                 .ApiContext.PlayerCharaData.AsNoTracking()
-                .SingleAsync(x => x.ViewerId == ViewerId && x.CharaId == Charas.ThePrince)
+                .SingleAsync(
+                    x => x.ViewerId == ViewerId && x.CharaId == Charas.ThePrince,
+                    cancellationToken: TestContext.Current.CancellationToken
+                )
         ).Level = 100;
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         GraphQLResponse<object> response = await this.GraphQlHttpClient.SendQueryAsync<object>(
             new GraphQLRequest
@@ -74,7 +84,8 @@ public class GraphQlTest : GraphQlTestFixture
                     }
                 }
                 """,
-            }
+            },
+            TestContext.Current.CancellationToken
         );
 
         response.Errors.Should().BeNullOrEmpty();
@@ -82,7 +93,10 @@ public class GraphQlTest : GraphQlTestFixture
         (
             await this
                 .ApiContext.PlayerCharaData.AsNoTracking()
-                .SingleAsync(x => x.ViewerId == ViewerId && x.CharaId == Charas.ThePrince)
+                .SingleAsync(
+                    x => x.ViewerId == ViewerId && x.CharaId == Charas.ThePrince,
+                    cancellationToken: TestContext.Current.CancellationToken
+                )
         )
             .Level.Should()
             .Be(1);
@@ -102,7 +116,8 @@ public class GraphQlTest : GraphQlTestFixture
                         }
                     }
                     """,
-                }
+                },
+                TestContext.Current.CancellationToken
             );
 
         response.Errors.Should().BeNullOrEmpty();
@@ -112,7 +127,12 @@ public class GraphQlTest : GraphQlTestFixture
             .GetProperty("presentId")
             .GetInt32();
 
-        (await this.ApiContext.PlayerPresents.FirstAsync(x => x.PresentId == presentId))
+        (
+            await this.ApiContext.PlayerPresents.FirstAsync(
+                x => x.PresentId == presentId,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )
             .Should()
             .BeEquivalentTo(
                 new DbPlayerPresent()
@@ -144,7 +164,8 @@ public class GraphQlTest : GraphQlTestFixture
                         }
                     }
                     """,
-                }
+                },
+                TestContext.Current.CancellationToken
             );
 
         response.Errors.Should().BeNullOrEmpty();
@@ -152,7 +173,10 @@ public class GraphQlTest : GraphQlTestFixture
         (
             await this
                 .ApiContext.PlayerUserData.AsNoTracking()
-                .FirstAsync(x => x.ViewerId == ViewerId)
+                .FirstAsync(
+                    x => x.ViewerId == ViewerId,
+                    cancellationToken: TestContext.Current.CancellationToken
+                )
         )
             .TutorialStatus.Should()
             .Be(60999);
