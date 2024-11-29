@@ -130,7 +130,7 @@ public class WeaponBodyTest : TestFixture
         // Check coin
         DbPlayerUserData userData = (
             await this.ApiContext.PlayerUserData.FindAsync(
-                ViewerId,
+                [ViewerId],
                 TestContext.Current.CancellationToken
             )
         )!;
@@ -146,7 +146,7 @@ public class WeaponBodyTest : TestFixture
         // Check weapon
         DbWeaponBody weaponBody = (
             await this.ApiContext.PlayerWeapons.FindAsync(
-                ViewerId,
+                [ViewerId],
                 TestContext.Current.CancellationToken
             )
         )!;
@@ -174,7 +174,7 @@ public class WeaponBodyTest : TestFixture
 
             DbPlayerMaterial dbEntry = (
                 await this.ApiContext.PlayerMaterials.FindAsync(
-                    ViewerId,
+                    [ViewerId],
                     TestContext.Current.CancellationToken
                 )
             )!;

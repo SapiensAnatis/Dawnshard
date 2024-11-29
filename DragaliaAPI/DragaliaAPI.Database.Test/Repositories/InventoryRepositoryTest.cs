@@ -32,8 +32,8 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 
         (
             await this.fixture.ApiContext.PlayerMaterials.FindAsync(
-                ViewerId,
-                TestContext.Current.CancellationToken
+                [ViewerId],
+                cancellationToken: TestContext.Current.CancellationToken
             )
         )!
             .Quantity.Should()
@@ -59,7 +59,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 
         (
             await this.fixture.ApiContext.PlayerMaterials.FindAsync(
-                ViewerId,
+                [ViewerId],
                 TestContext.Current.CancellationToken
             )
         )!
@@ -77,7 +77,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 
         (
             await this.fixture.ApiContext.PlayerMaterials.FindAsync(
-                ViewerId,
+                [ViewerId],
                 TestContext.Current.CancellationToken
             )
         )!
@@ -86,7 +86,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 
         (
             await this.fixture.ApiContext.PlayerMaterials.FindAsync(
-                ViewerId,
+                [ViewerId],
                 TestContext.Current.CancellationToken
             )
         )!

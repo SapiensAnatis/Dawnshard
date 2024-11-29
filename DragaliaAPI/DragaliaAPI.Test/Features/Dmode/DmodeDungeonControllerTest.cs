@@ -29,7 +29,7 @@ public class DmodeDungeonControllerTest
             mockRewardService.Object
         );
 
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync(default)).ReturnsAsync(updateDataList);
+        mockUpdateDataService.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(updateDataList);
     }
 
     [Fact]

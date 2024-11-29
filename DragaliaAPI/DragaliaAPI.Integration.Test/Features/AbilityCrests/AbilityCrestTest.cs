@@ -41,7 +41,7 @@ public class AbilityCrestTest : TestFixture
 
         DbAbilityCrest abilityCrest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
-                ViewerId,
+                [ViewerId],
                 TestContext.Current.CancellationToken
             )
         )!;
@@ -141,11 +141,7 @@ public class AbilityCrestTest : TestFixture
         ).Data;
 
         DbAbilityCrest ability_crest = (
-            await this.ApiContext.PlayerAbilityCrests.FindAsync(
-                ViewerId,
-                TestContext.Current.CancellationToken
-            )
-        )!;
+            await this.ApiContext.PlayerAbilityCrests.FindAsync([ViewerId], TestContext.Current.CancellationToken))!;
         await this
             .ApiContext.Entry(ability_crest)
             .ReloadAsync(TestContext.Current.CancellationToken);
@@ -223,7 +219,7 @@ public class AbilityCrestTest : TestFixture
 
         DbAbilityCrest ability_crest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
-                ViewerId,
+                [ViewerId],
                 TestContext.Current.CancellationToken
             )
         )!;
@@ -358,7 +354,7 @@ public class AbilityCrestTest : TestFixture
 
         DbAbilityCrest ability_crest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
-                ViewerId,
+                [ViewerId],
                 TestContext.Current.CancellationToken
             )
         )!;
@@ -406,7 +402,7 @@ public class AbilityCrestTest : TestFixture
 
         DbAbilityCrest ability_crest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
-                ViewerId,
+                [ViewerId],
                 TestContext.Current.CancellationToken
             )
         )!;
@@ -474,7 +470,7 @@ public class AbilityCrestTest : TestFixture
 
         DbAbilityCrest ability_crest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
-                ViewerId,
+                [ViewerId],
                 TestContext.Current.CancellationToken
             )
         )!;
@@ -523,7 +519,7 @@ public class AbilityCrestTest : TestFixture
 
         DbAbilityCrest ability_crest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
-                ViewerId,
+                [ViewerId],
                 TestContext.Current.CancellationToken
             )
         )!;
@@ -619,7 +615,7 @@ public class AbilityCrestTest : TestFixture
 
         (
             await this.ApiContext.PlayerAbilityCrestSets.FindAsync(
-                ViewerId,
+                [ViewerId],
                 TestContext.Current.CancellationToken
             )
         )
@@ -635,7 +631,7 @@ public class AbilityCrestTest : TestFixture
 
         (
             await this.ApiContext.PlayerAbilityCrestSets.FindAsync(
-                ViewerId,
+                [ViewerId],
                 TestContext.Current.CancellationToken
             )
         )
@@ -657,7 +653,7 @@ public class AbilityCrestTest : TestFixture
 
         DbAbilityCrestSet? dbAbilityCrestSet =
             await this.ApiContext.PlayerAbilityCrestSets.FindAsync(
-                ViewerId,
+                [ViewerId],
                 TestContext.Current.CancellationToken
             );
         dbAbilityCrestSet.Should().NotBeNull();
@@ -674,7 +670,7 @@ public class AbilityCrestTest : TestFixture
 
         DbAbilityCrestSet dbAbilityCrestSet = (
             await this.ApiContext.PlayerAbilityCrestSets.FindAsync(
-                ViewerId,
+                [ViewerId],
                 TestContext.Current.CancellationToken
             )
         )!;
@@ -707,7 +703,7 @@ public class AbilityCrestTest : TestFixture
 
         (
             await this.ApiContext.PlayerAbilityCrestSets.FindAsync(
-                ViewerId,
+                [ViewerId],
                 TestContext.Current.CancellationToken
             )
         )
@@ -728,7 +724,7 @@ public class AbilityCrestTest : TestFixture
 
         DbAbilityCrestSet? dbAbilityCrestSet =
             await this.ApiContext.PlayerAbilityCrestSets.FindAsync(
-                ViewerId,
+                [ViewerId],
                 TestContext.Current.CancellationToken
             );
         dbAbilityCrestSet.Should().NotBeNull();
@@ -745,7 +741,7 @@ public class AbilityCrestTest : TestFixture
 
         DbAbilityCrestSet dbAbilityCrestSet = (
             await this.ApiContext.PlayerAbilityCrestSets.FindAsync(
-                ViewerId,
+                [ViewerId],
                 TestContext.Current.CancellationToken
             )
         )!;
