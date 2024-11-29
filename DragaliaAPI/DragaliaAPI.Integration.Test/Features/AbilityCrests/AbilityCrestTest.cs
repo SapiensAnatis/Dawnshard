@@ -635,7 +635,7 @@ public class AbilityCrestTest : TestFixture
 
         (
             await this.ApiContext.PlayerAbilityCrestSets.FindAsync(
-                [ViewerId],
+                [ViewerId, 37],
                 TestContext.Current.CancellationToken
             )
         )
