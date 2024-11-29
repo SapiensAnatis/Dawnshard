@@ -15,7 +15,8 @@ public partial class TimeAttackTest : TestFixture
         await this.SeedTimeAttackData();
 
         List<TimeAttackQuest>? quests = await this.Client.GetFromJsonAsync<List<TimeAttackQuest>>(
-            "/api/time_attack/quests"
+            "/api/time_attack/quests",
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         quests
@@ -36,7 +37,10 @@ public partial class TimeAttackTest : TestFixture
 
         OffsetPagedResponse<TimeAttackRanking>? rankings = await this.Client.GetFromJsonAsync<
             OffsetPagedResponse<TimeAttackRanking>
-        >("/api/time_attack/rankings/227010105");
+        >(
+            "/api/time_attack/rankings/227010105",
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         rankings?.Pagination.TotalCount.Should().Be(2);
 
@@ -83,7 +87,10 @@ public partial class TimeAttackTest : TestFixture
 
         OffsetPagedResponse<TimeAttackRanking>? rankings = await this.Client.GetFromJsonAsync<
             OffsetPagedResponse<TimeAttackRanking>
-        >("/api/time_attack/rankings/227010104");
+        >(
+            "/api/time_attack/rankings/227010104",
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         rankings
             ?.Data.Should()

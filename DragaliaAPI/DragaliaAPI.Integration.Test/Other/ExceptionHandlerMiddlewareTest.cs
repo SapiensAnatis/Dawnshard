@@ -28,7 +28,8 @@ public class ExceptionHandlerMiddlewareTest : TestFixture
             await this.Client.PostMsgpack<ResultCodeResponse>(
                 $"{Controller}/dragalia",
                 new { },
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         data.Should()

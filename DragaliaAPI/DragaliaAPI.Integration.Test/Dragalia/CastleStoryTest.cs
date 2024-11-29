@@ -17,7 +17,8 @@ public class CastleStoryTest : TestFixture
         CastleStoryReadResponse data = (
             await this.Client.PostMsgpack<CastleStoryReadResponse>(
                 "/castle_story/read",
-                new CastleStoryReadRequest() { CastleStoryId = 1 }
+                new CastleStoryReadRequest() { CastleStoryId = 1 },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -56,12 +57,13 @@ public class CastleStoryTest : TestFixture
                 StoryType = StoryTypes.Castle,
             }
         );
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         CastleStoryReadResponse data = (
             await this.Client.PostMsgpack<CastleStoryReadResponse>(
                 "/castle_story/read",
-                new CastleStoryReadRequest() { CastleStoryId = 2 }
+                new CastleStoryReadRequest() { CastleStoryId = 2 },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -78,12 +80,13 @@ public class CastleStoryTest : TestFixture
             .ApiContext.PlayerUserData.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)
             .Select(x => x.Crystal)
-            .SingleAsync();
+            .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         CastleStoryReadResponse data = (
             await this.Client.PostMsgpack<CastleStoryReadResponse>(
                 "/castle_story/read",
-                new CastleStoryReadRequest() { CastleStoryId = 3 }
+                new CastleStoryReadRequest() { CastleStoryId = 3 },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -91,7 +94,7 @@ public class CastleStoryTest : TestFixture
             .ApiContext.PlayerUserData.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)
             .Select(x => x.Crystal)
-            .SingleAsync();
+            .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         newCrystal.Should().Be(oldCrystal + 50);
 

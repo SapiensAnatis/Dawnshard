@@ -37,10 +37,17 @@ public class ByIdTest : TestFixture
 
         this.RedisConnectionProvider.RedisCollection<RedisGame>().Insert(game);
 
-        HttpResponseMessage response = await this.Client.GetAsync($"{Endpoint}/12345");
+        HttpResponseMessage response = await this.Client.GetAsync(
+            $"{Endpoint}/12345",
+            TestContext.Current.CancellationToken
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        (await response.Content.ReadFromJsonAsync<ApiGame>())
+        (
+            await response.Content.ReadFromJsonAsync<ApiGame>(
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )
             .Should()
             .BeEquivalentTo(game.ToApiGame());
     }
@@ -48,7 +55,10 @@ public class ByIdTest : TestFixture
     [Fact]
     public async Task ById_NotFound_Returns404()
     {
-        HttpResponseMessage response = await this.Client.GetAsync($"{Endpoint}/56789");
+        HttpResponseMessage response = await this.Client.GetAsync(
+            $"{Endpoint}/56789",
+            TestContext.Current.CancellationToken
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }

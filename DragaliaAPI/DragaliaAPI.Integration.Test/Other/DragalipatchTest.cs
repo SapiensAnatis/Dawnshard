@@ -15,12 +15,17 @@ public class DragalipatchTest : TestFixture
     [Fact]
     public async Task Config_ReturnsExpectedJson()
     {
-        HttpResponseMessage response = await this.Client.GetAsync("dragalipatch/config");
+        HttpResponseMessage response = await this.Client.GetAsync(
+            "dragalipatch/config",
+            TestContext.Current.CancellationToken
+        );
 
         response.IsSuccessStatusCode.Should().BeTrue();
 
         DragalipatchResponse? config =
-            await response.Content.ReadFromJsonAsync<DragalipatchResponse>();
+            await response.Content.ReadFromJsonAsync<DragalipatchResponse>(
+                cancellationToken: TestContext.Current.CancellationToken
+            );
 
         config.Should().NotBeNull();
         config

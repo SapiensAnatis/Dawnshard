@@ -23,7 +23,7 @@ public class AbilityCrestTest : TestFixture
             }
         );
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         AbilityCrestSetFavoriteResponse data = (
             await this.Client.PostMsgpack<AbilityCrestSetFavoriteResponse>(
@@ -32,7 +32,8 @@ public class AbilityCrestTest : TestFixture
                 {
                     AbilityCrestId = AbilityCrestId.FromWhenceHeComes,
                     IsFavorite = true,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -41,10 +42,12 @@ public class AbilityCrestTest : TestFixture
         DbAbilityCrest abilityCrest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
                 ViewerId,
-                AbilityCrestId.FromWhenceHeComes
+                TestContext.Current.CancellationToken
             )
         )!;
-        await this.ApiContext.Entry(abilityCrest).ReloadAsync();
+        await this
+            .ApiContext.Entry(abilityCrest)
+            .ReloadAsync(TestContext.Current.CancellationToken);
 
         abilityCrest.IsFavorite.Should().BeTrue();
     }
@@ -60,7 +63,8 @@ public class AbilityCrestTest : TestFixture
                     AbilityCrestId = AbilityCrestId.SweetSurprise,
                     IsFavorite = true,
                 },
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -86,7 +90,8 @@ public class AbilityCrestTest : TestFixture
                         },
                     },
                 },
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -106,7 +111,7 @@ public class AbilityCrestTest : TestFixture
             }
         );
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         ResultCodeResponse response = (
             await this.Client.PostMsgpack<ResultCodeResponse>(
@@ -130,17 +135,20 @@ public class AbilityCrestTest : TestFixture
                         },
                     },
                 },
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
         DbAbilityCrest ability_crest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
                 ViewerId,
-                AbilityCrestId.HappyNewYear
+                TestContext.Current.CancellationToken
             )
         )!;
-        await this.ApiContext.Entry(ability_crest).ReloadAsync();
+        await this
+            .ApiContext.Entry(ability_crest)
+            .ReloadAsync(TestContext.Current.CancellationToken);
 
         response.ResultCode.Should().Be(ResultCode.AbilityCrestBuildupPieceStepError);
         ability_crest.LimitBreakCount.Should().Be(0);
@@ -158,7 +166,7 @@ public class AbilityCrestTest : TestFixture
             }
         );
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         int oldDewpoint = this.GetDewpoint();
         int oldGoldenKey = this.GetMaterial(Materials.GoldenKey);
@@ -204,7 +212,8 @@ public class AbilityCrestTest : TestFixture
                             Step = 2,
                         },
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         this.GetDewpoint().Should().Be(oldDewpoint - 43_000);
@@ -215,10 +224,12 @@ public class AbilityCrestTest : TestFixture
         DbAbilityCrest ability_crest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
                 ViewerId,
-                AbilityCrestId.WorthyRivals
+                TestContext.Current.CancellationToken
             )
         )!;
-        await this.ApiContext.Entry(ability_crest).ReloadAsync();
+        await this
+            .ApiContext.Entry(ability_crest)
+            .ReloadAsync(TestContext.Current.CancellationToken);
 
         ability_crest.LimitBreakCount.Should().Be(2);
         ability_crest.AbilityLevel.Should().Be(2);
@@ -245,7 +256,7 @@ public class AbilityCrestTest : TestFixture
             }
         );
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         await this.Client.PostMsgpack<AbilityCrestBuildupPieceResponse>(
             "ability_crest/buildup_piece",
@@ -261,7 +272,8 @@ public class AbilityCrestTest : TestFixture
                         Step = 2,
                     },
                 ],
-            }
+            },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         // Reset
@@ -283,7 +295,8 @@ public class AbilityCrestTest : TestFixture
                         Step = 2,
                     },
                 ],
-            }
+            },
+            cancellationToken: TestContext.Current.CancellationToken
         );
     }
 
@@ -301,7 +314,8 @@ public class AbilityCrestTest : TestFixture
                         new() { PlusCount = 50, PlusCountType = PlusCountType.Hp },
                     },
                 },
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -323,7 +337,7 @@ public class AbilityCrestTest : TestFixture
             }
         );
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         ResultCodeResponse response = (
             await this.Client.PostMsgpack<ResultCodeResponse>(
@@ -337,17 +351,20 @@ public class AbilityCrestTest : TestFixture
                         new() { PlusCount = 25, PlusCountType = PlusCountType.Atk },
                     },
                 },
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
         DbAbilityCrest ability_crest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
                 ViewerId,
-                AbilityCrestId.TwinfoldBonds
+                TestContext.Current.CancellationToken
             )
         )!;
-        await this.ApiContext.Entry(ability_crest).ReloadAsync();
+        await this
+            .ApiContext.Entry(ability_crest)
+            .ReloadAsync(TestContext.Current.CancellationToken);
 
         response.ResultCode.Should().Be(ResultCode.AbilityCrestBuildupPlusCountCountError);
         ability_crest.HpPlusCount.Should().Be(0);
@@ -371,7 +388,7 @@ public class AbilityCrestTest : TestFixture
             }
         );
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         await this.Client.PostMsgpack<ResultCodeResponse>(
             "ability_crest/buildup_plus_count",
@@ -383,16 +400,19 @@ public class AbilityCrestTest : TestFixture
                     new() { PlusCount = 1, PlusCountType = PlusCountType.Hp },
                     new() { PlusCount = 50, PlusCountType = PlusCountType.Atk },
                 },
-            }
+            },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DbAbilityCrest ability_crest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
                 ViewerId,
-                AbilityCrestId.EndlessWaltz
+                TestContext.Current.CancellationToken
             )
         )!;
-        await this.ApiContext.Entry(ability_crest).ReloadAsync();
+        await this
+            .ApiContext.Entry(ability_crest)
+            .ReloadAsync(TestContext.Current.CancellationToken);
 
         ability_crest.HpPlusCount.Should().Be(1);
         ability_crest.AttackPlusCount.Should().Be(50);
@@ -415,7 +435,8 @@ public class AbilityCrestTest : TestFixture
                         PlusCountType.Atk,
                     },
                 },
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -436,7 +457,7 @@ public class AbilityCrestTest : TestFixture
             }
         );
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         ResultCodeResponse response = (
             await this.Client.PostMsgpack<ResultCodeResponse>(
@@ -446,17 +467,20 @@ public class AbilityCrestTest : TestFixture
                     AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
                     PlusCountTypeList = new List<PlusCountType>() { PlusCountType.Hp, 0 },
                 },
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
         DbAbilityCrest ability_crest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
                 ViewerId,
-                AbilityCrestId.TutelarysDestinyWolfsBoon
+                TestContext.Current.CancellationToken
             )
         )!;
-        await this.ApiContext.Entry(ability_crest).ReloadAsync();
+        await this
+            .ApiContext.Entry(ability_crest)
+            .ReloadAsync(TestContext.Current.CancellationToken);
 
         response.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
         ability_crest.HpPlusCount.Should().Be(40);
@@ -481,7 +505,7 @@ public class AbilityCrestTest : TestFixture
             }
         );
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         await this.Client.PostMsgpack<ResultCodeResponse>(
             "ability_crest/reset_plus_count",
@@ -493,16 +517,19 @@ public class AbilityCrestTest : TestFixture
                     PlusCountType.Hp,
                     PlusCountType.Atk,
                 },
-            }
+            },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DbAbilityCrest ability_crest = (
             await this.ApiContext.PlayerAbilityCrests.FindAsync(
                 ViewerId,
-                AbilityCrestId.TheGeniusTacticianBowsBoon
+                TestContext.Current.CancellationToken
             )
         )!;
-        await this.ApiContext.Entry(ability_crest).ReloadAsync();
+        await this
+            .ApiContext.Entry(ability_crest)
+            .ReloadAsync(TestContext.Current.CancellationToken);
 
         ability_crest.HpPlusCount.Should().Be(0);
         ability_crest.AttackPlusCount.Should().Be(0);
@@ -530,11 +557,12 @@ public class AbilityCrestTest : TestFixture
             }
         );
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         AbilityCrestGetAbilityCrestSetListResponse data = (
             await this.Client.PostMsgpack<AbilityCrestGetAbilityCrestSetListResponse>(
-                "ability_crest/get_ability_crest_set_list"
+                "ability_crest/get_ability_crest_set_list",
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data!;
 
@@ -582,13 +610,21 @@ public class AbilityCrestTest : TestFixture
             await this.Client.PostMsgpack<ResultCodeResponse>(
                 "ability_crest/set_ability_crest_set",
                 new AbilityCrestSetAbilityCrestSetRequest() { AbilityCrestSetNo = setNo },
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
-        (await this.ApiContext.PlayerAbilityCrestSets.FindAsync(ViewerId, setNo)).Should().BeNull();
+        (
+            await this.ApiContext.PlayerAbilityCrestSets.FindAsync(
+                ViewerId,
+                TestContext.Current.CancellationToken
+            )
+        )
+            .Should()
+            .BeNull();
         response.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
     }
 
@@ -597,7 +633,14 @@ public class AbilityCrestTest : TestFixture
     {
         int setNo = 37;
 
-        (await this.ApiContext.PlayerAbilityCrestSets.FindAsync(ViewerId, setNo)).Should().BeNull();
+        (
+            await this.ApiContext.PlayerAbilityCrestSets.FindAsync(
+                ViewerId,
+                TestContext.Current.CancellationToken
+            )
+        )
+            .Should()
+            .BeNull();
 
         await this.Client.PostMsgpack<ResultCodeResponse>(
             "ability_crest/set_ability_crest_set",
@@ -606,13 +649,17 @@ public class AbilityCrestTest : TestFixture
                 AbilityCrestSetNo = setNo,
                 AbilityCrestSetName = "",
                 RequestAbilityCrestSetData = new() { TalismanKeyId = 1 },
-            }
+            },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         DbAbilityCrestSet? dbAbilityCrestSet =
-            await this.ApiContext.PlayerAbilityCrestSets.FindAsync(ViewerId, setNo);
+            await this.ApiContext.PlayerAbilityCrestSets.FindAsync(
+                ViewerId,
+                TestContext.Current.CancellationToken
+            );
         dbAbilityCrestSet.Should().NotBeNull();
         dbAbilityCrestSet!.TalismanKeyId.Should().Be(1);
     }
@@ -623,10 +670,13 @@ public class AbilityCrestTest : TestFixture
         int setNo = 24;
 
         this.ApiContext.PlayerAbilityCrestSets.Add(new DbAbilityCrestSet(ViewerId, setNo));
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         DbAbilityCrestSet dbAbilityCrestSet = (
-            await this.ApiContext.PlayerAbilityCrestSets.FindAsync(ViewerId, setNo)
+            await this.ApiContext.PlayerAbilityCrestSets.FindAsync(
+                ViewerId,
+                TestContext.Current.CancellationToken
+            )
         )!;
         dbAbilityCrestSet.CrestSlotType2CrestId2.Should().Be(0);
 
@@ -640,10 +690,13 @@ public class AbilityCrestTest : TestFixture
                 {
                     CrestSlotType2CrestId2 = AbilityCrestId.DragonsNest,
                 },
-            }
+            },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
-        await this.ApiContext.Entry(dbAbilityCrestSet).ReloadAsync();
+        await this
+            .ApiContext.Entry(dbAbilityCrestSet)
+            .ReloadAsync(TestContext.Current.CancellationToken);
         dbAbilityCrestSet.CrestSlotType2CrestId2.Should().Be(AbilityCrestId.DragonsNest);
     }
 
@@ -652,7 +705,14 @@ public class AbilityCrestTest : TestFixture
     {
         int setNo = 12;
 
-        (await this.ApiContext.PlayerAbilityCrestSets.FindAsync(ViewerId, setNo)).Should().BeNull();
+        (
+            await this.ApiContext.PlayerAbilityCrestSets.FindAsync(
+                ViewerId,
+                TestContext.Current.CancellationToken
+            )
+        )
+            .Should()
+            .BeNull();
 
         await this.Client.PostMsgpack<ResultCodeResponse>(
             "ability_crest/update_ability_crest_set_name",
@@ -660,13 +720,17 @@ public class AbilityCrestTest : TestFixture
             {
                 AbilityCrestSetNo = setNo,
                 AbilityCrestSetName = "test",
-            }
+            },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         DbAbilityCrestSet? dbAbilityCrestSet =
-            await this.ApiContext.PlayerAbilityCrestSets.FindAsync(ViewerId, setNo);
+            await this.ApiContext.PlayerAbilityCrestSets.FindAsync(
+                ViewerId,
+                TestContext.Current.CancellationToken
+            );
         dbAbilityCrestSet.Should().NotBeNull();
         dbAbilityCrestSet!.AbilityCrestSetName.Should().Be("test");
     }
@@ -677,10 +741,13 @@ public class AbilityCrestTest : TestFixture
         int setNo = 46;
 
         this.ApiContext.PlayerAbilityCrestSets.Add(new DbAbilityCrestSet(ViewerId, setNo));
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         DbAbilityCrestSet dbAbilityCrestSet = (
-            await this.ApiContext.PlayerAbilityCrestSets.FindAsync(ViewerId, setNo)
+            await this.ApiContext.PlayerAbilityCrestSets.FindAsync(
+                ViewerId,
+                TestContext.Current.CancellationToken
+            )
         )!;
         dbAbilityCrestSet.AbilityCrestSetName.Should().Be("");
 
@@ -690,10 +757,13 @@ public class AbilityCrestTest : TestFixture
             {
                 AbilityCrestSetNo = setNo,
                 AbilityCrestSetName = "test",
-            }
+            },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
-        await this.ApiContext.Entry(dbAbilityCrestSet).ReloadAsync();
+        await this
+            .ApiContext.Entry(dbAbilityCrestSet)
+            .ReloadAsync(TestContext.Current.CancellationToken);
         dbAbilityCrestSet.AbilityCrestSetName.Should().Be("test");
     }
 

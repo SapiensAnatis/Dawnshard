@@ -14,10 +14,13 @@ public class ShopTest : TestFixture
             this.ApiContext.PlayerPurchases.Where(x => x.ViewerId == ViewerId)
         );
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         DragaliaResponse<ShopGetListResponse> resp =
-            await this.Client.PostMsgpack<ShopGetListResponse>("shop/get_list");
+            await this.Client.PostMsgpack<ShopGetListResponse>(
+                "shop/get_list",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
 
         resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
         resp.Data.MaterialShopPurchase.Should().BeEmpty();
@@ -35,7 +38,8 @@ public class ShopTest : TestFixture
                     MaterialShopType.Daily,
                     PaymentTypes.Coin,
                     1
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
@@ -57,7 +61,8 @@ public class ShopTest : TestFixture
                     (PaymentTypes)100,
                     1
                 ),
-                false
+                false,
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         resp.DataHeaders.ResultCode.Should().Be(ResultCode.ShopPaymentTypeInvalid);

@@ -23,7 +23,10 @@ public class V1UpdateTest : SavefileUpdateTestFixture
         );
 
         LoadIndexResponse data = (
-            await this.Client.PostMsgpack<LoadIndexResponse>("/load/index")
+            await this.Client.PostMsgpack<LoadIndexResponse>(
+                "/load/index",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         data.BuildList.Should().Contain(x => x.PlantId == FortPlants.TheHalidom);
@@ -48,7 +51,10 @@ public class V1UpdateTest : SavefileUpdateTestFixture
         );
 
         LoadIndexResponse data = (
-            await this.Client.PostMsgpack<LoadIndexResponse>("/load/index")
+            await this.Client.PostMsgpack<LoadIndexResponse>(
+                "/load/index",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         data.BuildList.Should().Contain(x => x.PlantId == FortPlants.Smithy);
@@ -73,7 +79,10 @@ public class V1UpdateTest : SavefileUpdateTestFixture
         );
 
         LoadIndexResponse data = (
-            await this.Client.PostMsgpack<LoadIndexResponse>("/load/index")
+            await this.Client.PostMsgpack<LoadIndexResponse>(
+                "/load/index",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         data.BuildList.Should().Contain(x => x.PlantId == FortPlants.FlameDracolith);
@@ -87,12 +96,16 @@ public class V1UpdateTest : SavefileUpdateTestFixture
     [Fact]
     public async Task V1Update_NoDojos_TutorialComplete_Adds()
     {
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(u =>
-            u.SetProperty(e => e.TutorialStatus, TutorialService.TutorialStatusIds.Dojos)
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            u => u.SetProperty(e => e.TutorialStatus, TutorialService.TutorialStatusIds.Dojos),
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         LoadIndexResponse data = (
-            await this.Client.PostMsgpack<LoadIndexResponse>("/load/index")
+            await this.Client.PostMsgpack<LoadIndexResponse>(
+                "/load/index",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         data.BuildList.Should().Contain(x => x.PlantId == FortPlants.SwordDojo);
@@ -101,19 +114,27 @@ public class V1UpdateTest : SavefileUpdateTestFixture
 
         this.GetSavefileVersion().Should().Be(this.MaxVersion);
 
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(u =>
-            u.SetProperty(e => e.TutorialStatus, 0)
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            u => u.SetProperty(e => e.TutorialStatus, 0),
+            cancellationToken: TestContext.Current.CancellationToken
         );
     }
 
     [Fact]
     public async Task V1Update_StoryAndTutorialIncomplete_DoesNothing()
     {
-        await this.ApiContext.PlayerFortBuilds.ExecuteDeleteAsync();
-        await this.ApiContext.PlayerStoryState.ExecuteDeleteAsync();
+        await this.ApiContext.PlayerFortBuilds.ExecuteDeleteAsync(
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+        await this.ApiContext.PlayerStoryState.ExecuteDeleteAsync(
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         LoadIndexResponse data = (
-            await this.Client.PostMsgpack<LoadIndexResponse>("/load/index")
+            await this.Client.PostMsgpack<LoadIndexResponse>(
+                "/load/index",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         data.BuildList.Should().BeEmpty();

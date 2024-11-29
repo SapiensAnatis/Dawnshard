@@ -24,7 +24,10 @@ public class ToolTest : TestFixture
         this.Client.DefaultRequestHeaders.Clear();
 
         ToolGetServiceStatusResponse response = (
-            await this.Client.PostMsgpack<ToolGetServiceStatusResponse>("tool/get_service_status")
+            await this.Client.PostMsgpack<ToolGetServiceStatusResponse>(
+                "tool/get_service_status",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response.ServiceStatus.Should().Be(1);
@@ -42,7 +45,10 @@ public class ToolTest : TestFixture
         this.Client.DefaultRequestHeaders.Add(Headers.IdToken, token);
 
         ToolAuthResponse response = (
-            await this.Client.PostMsgpack<ToolAuthResponse>(endpoint)
+            await this.Client.PostMsgpack<ToolAuthResponse>(
+                endpoint,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response.ViewerId.Should().Be((ulong)this.ViewerId);
@@ -60,7 +66,10 @@ public class ToolTest : TestFixture
         this.Client.DefaultRequestHeaders.Add(Headers.IdToken, token);
 
         ToolAuthResponse response = (
-            await this.Client.PostMsgpack<ToolAuthResponse>(endpoint)
+            await this.Client.PostMsgpack<ToolAuthResponse>(
+                endpoint,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response.ViewerId.Should().Be((ulong)this.ViewerId + 1);
@@ -82,7 +91,10 @@ public class ToolTest : TestFixture
 
         this.Client.DefaultRequestHeaders.Add(Headers.IdToken, token);
 
-        await this.Client.PostMsgpack<ToolAuthResponse>("tool/auth");
+        await this.Client.PostMsgpack<ToolAuthResponse>(
+            "tool/auth",
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         this.ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == this.ViewerId)
@@ -141,7 +153,12 @@ public class ToolTest : TestFixture
 
         DragaliaResponse<ResultCodeResponse> responseBody = MessagePackSerializer.Deserialize<
             DragaliaResponse<ResultCodeResponse>
-        >(await secondResponse.Content.ReadAsByteArrayAsync());
+        >(
+            await secondResponse.Content.ReadAsByteArrayAsync(
+                TestContext.Current.CancellationToken
+            ),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         responseBody
             .Should()
@@ -166,7 +183,8 @@ public class ToolTest : TestFixture
             await this.Client.PostMsgpack<ResultCodeResponse>(
                 endpoint,
                 new ToolAuthRequest() { },
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response

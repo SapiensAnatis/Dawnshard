@@ -29,7 +29,9 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetParties_Returns54Entries_AndPartyUnitsAreOrdered()
     {
-        IEnumerable<DbParty> result = await this.partyRepository.Parties.ToListAsync();
+        IEnumerable<DbParty> result = await this.partyRepository.Parties.ToListAsync(
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         result.Should().HaveCount(54);
 
@@ -58,7 +60,7 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
         DbParty dbEntry = await this
             .fixture.ApiContext.PlayerParties.Where(x => x.ViewerId == ViewerId && x.PartyNo == 3)
             .Include(x => x.Units)
-            .SingleAsync();
+            .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Units list will be filled with default values
         dbEntry.Should().BeEquivalentTo(toAdd, options => options.Excluding(x => x.Units));
@@ -93,7 +95,7 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
         DbParty dbEntry = await this
             .fixture.ApiContext.PlayerParties.Where(x => x.ViewerId == ViewerId && x.PartyNo == 5)
             .Include(x => x.Units)
-            .SingleAsync();
+            .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         dbEntry
             .Units.Select(x => (x.UnitNo, x.CharaId))

@@ -16,7 +16,10 @@ public class DmodeTest : TestFixture
     public async Task GetData_ReturnsData()
     {
         DragaliaResponse<DmodeGetDataResponse> resp =
-            await Client.PostMsgpack<DmodeGetDataResponse>("dmode/get_data");
+            await Client.PostMsgpack<DmodeGetDataResponse>(
+                "dmode/get_data",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
 
         resp.Data.DmodeInfo.IsEntry.Should().BeTrue();
         resp.Data.DmodeCharaList.Should().NotBeNull();
@@ -37,7 +40,8 @@ public class DmodeTest : TestFixture
         DragaliaResponse<DmodeReadStoryResponse> resp =
             await Client.PostMsgpack<DmodeReadStoryResponse>(
                 "dmode/read_story",
-                new DmodeReadStoryRequest() { DmodeStoryId = 1 }
+                new DmodeReadStoryRequest() { DmodeStoryId = 1 },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         resp.Data.DmodeStoryRewardList.Should()
@@ -95,7 +99,8 @@ public class DmodeTest : TestFixture
                             PassiveLevel = 2,
                         },
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         resp.Data.DmodeServitorPassiveList.Should()
@@ -162,7 +167,8 @@ public class DmodeTest : TestFixture
                         Charas.Empty,
                     },
                     TargetFloorNum = 30,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         resp.Data.DmodeExpedition.Should()
@@ -181,7 +187,8 @@ public class DmodeTest : TestFixture
 
         DragaliaResponse<DmodeExpeditionForceFinishResponse> finishResp =
             await this.Client.PostMsgpack<DmodeExpeditionForceFinishResponse>(
-                "dmode/expedition_force_finish"
+                "dmode/expedition_force_finish",
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         finishResp
@@ -226,7 +233,8 @@ public class DmodeTest : TestFixture
                         Charas.GalaMym,
                     },
                     TargetFloorNum = 30,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         resp.Data.DmodeExpedition.Should()
@@ -246,7 +254,10 @@ public class DmodeTest : TestFixture
         this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow.AddDays(1));
 
         DragaliaResponse<DmodeExpeditionFinishResponse> finishResp =
-            await this.Client.PostMsgpack<DmodeExpeditionFinishResponse>("dmode/expedition_finish");
+            await this.Client.PostMsgpack<DmodeExpeditionFinishResponse>(
+                "dmode/expedition_finish",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
 
         finishResp
             .Data.DmodeExpedition.Should()

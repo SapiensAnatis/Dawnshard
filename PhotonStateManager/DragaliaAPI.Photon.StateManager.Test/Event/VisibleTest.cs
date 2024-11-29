@@ -42,7 +42,8 @@ public class VisibleTest : TestFixture
 
         HttpResponseMessage response = await this.Client.PostAsJsonAsync<GameModifyVisibleRequest>(
             Endpoint,
-            new() { GameName = game.Name, NewVisibility = visibility }
+            new() { GameName = game.Name, NewVisibility = visibility },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);

@@ -24,7 +24,8 @@ public class TutorialTest : TestFixture
         TutorialUpdateStepResponse response = (
             await this.Client.PostMsgpack<TutorialUpdateStepResponse>(
                 "/tutorial/update_step",
-                new TutorialUpdateStepRequest(step, false, 0, 0)
+                new TutorialUpdateStepRequest(step, false, 0, 0),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -40,7 +41,10 @@ public class TutorialTest : TestFixture
         int step = 20000;
 
         DbPlayerUserData dbUserData = (
-            await this.ApiContext.PlayerUserData.FindAsync(this.ViewerId)
+            await this.ApiContext.PlayerUserData.FindAsync(
+                this.ViewerId,
+                TestContext.Current.CancellationToken
+            )
         )!;
 
         UserData expUserData = this.Mapper.Map<UserData>(dbUserData);
@@ -50,7 +54,8 @@ public class TutorialTest : TestFixture
         TutorialUpdateStepResponse response = (
             await this.Client.PostMsgpack<TutorialUpdateStepResponse>(
                 "/tutorial/update_step",
-                new TutorialUpdateStepRequest(step, false, 0, 0)
+                new TutorialUpdateStepRequest(step, false, 0, 0),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -65,7 +70,8 @@ public class TutorialTest : TestFixture
         TutorialUpdateFlagsResponse response = (
             await this.Client.PostMsgpack<TutorialUpdateFlagsResponse>(
                 "/tutorial/update_flags",
-                new TutorialUpdateFlagsRequest() { FlagId = flag }
+                new TutorialUpdateFlagsRequest() { FlagId = flag },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 

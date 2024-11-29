@@ -11,7 +11,8 @@ public class EventTradeTest : TestFixture
         DragaliaResponse<EventTradeGetListResponse> response =
             await this.Client.PostMsgpack<EventTradeGetListResponse>(
                 "event_trade/get_list",
-                new EventTradeGetListRequest() { TradeGroupId = 10803 }
+                new EventTradeGetListRequest() { TradeGroupId = 10803 },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.Data.EventTradeList.Should().NotBeEmpty();

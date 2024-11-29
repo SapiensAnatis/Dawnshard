@@ -22,13 +22,16 @@ public class ZenaTest : TestFixture
     public async Task GetTeamData_ValidId_ReturnsTeamData()
     {
         HttpResponseMessage zenaResponse = await this.Client.GetAsync(
-            $"zena/get_team_data?id={this.ViewerId}&teamnum=1"
+            $"zena/get_team_data?id={this.ViewerId}&teamnum=1",
+            TestContext.Current.CancellationToken
         );
 
         zenaResponse.Should().BeSuccessful();
 
         GetTeamDataResponse? deserialized =
-            await zenaResponse.Content.ReadFromJsonAsync<GetTeamDataResponse>();
+            await zenaResponse.Content.ReadFromJsonAsync<GetTeamDataResponse>(
+                cancellationToken: TestContext.Current.CancellationToken
+            );
 
         deserialized
             .Should()
@@ -48,13 +51,16 @@ public class ZenaTest : TestFixture
     public async Task GetTeamData_ValidId_MultiTeam_ReturnsTeamData()
     {
         HttpResponseMessage zenaResponse = await this.Client.GetAsync(
-            $"zena/get_team_data?id={this.ViewerId}&teamnum=1&teamnum2=2"
+            $"zena/get_team_data?id={this.ViewerId}&teamnum=1&teamnum2=2",
+            TestContext.Current.CancellationToken
         );
 
         zenaResponse.Should().BeSuccessful();
 
         GetTeamDataResponse? deserialized =
-            await zenaResponse.Content.ReadFromJsonAsync<GetTeamDataResponse>();
+            await zenaResponse.Content.ReadFromJsonAsync<GetTeamDataResponse>(
+                cancellationToken: TestContext.Current.CancellationToken
+            );
 
         deserialized
             .Should()
@@ -78,7 +84,8 @@ public class ZenaTest : TestFixture
     public async Task GetTeamData_InvalidId_Returns404()
     {
         HttpResponseMessage zenaResponse = await this.Client.GetAsync(
-            "zena/get_team_data?id=9999&teamnum=1&teamnum2=2"
+            "zena/get_team_data?id=9999&teamnum=1&teamnum2=2",
+            TestContext.Current.CancellationToken
         );
 
         zenaResponse.Should().HaveStatusCode(HttpStatusCode.NotFound);

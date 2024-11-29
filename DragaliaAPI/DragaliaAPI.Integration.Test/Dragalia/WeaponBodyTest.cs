@@ -31,7 +31,8 @@ public class WeaponBodyTest : TestFixture
         UpdateDataList list = (
             await this.Client.PostMsgpack<WeaponBodyCraftResponse>(
                 $"{EndpointGroup}/craft",
-                new WeaponBodyCraftRequest() { WeaponBodyId = WeaponBodies.AquaticSpiral }
+                new WeaponBodyCraftRequest() { WeaponBodyId = WeaponBodies.AquaticSpiral },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         )
             .Data
@@ -70,7 +71,7 @@ public class WeaponBodyTest : TestFixture
             new DbWeaponBody() { ViewerId = 0, WeaponBodyId = WeaponBodies.AbsoluteCrimson }
         );
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         int oldMatCount1 = GetMaterialCount(Materials.PrimalFlamewyrmsSphere);
         int oldMatCount2 = GetMaterialCount(Materials.PrimalFlamewyrmsGreatsphere);
@@ -79,7 +80,8 @@ public class WeaponBodyTest : TestFixture
 
         await this.Client.PostMsgpack<WeaponBodyCraftResponse>(
             $"{EndpointGroup}/craft",
-            new WeaponBodyCraftRequest() { WeaponBodyId = WeaponBodies.PrimalCrimson }
+            new WeaponBodyCraftRequest() { WeaponBodyId = WeaponBodies.PrimalCrimson },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         this.ApiContext.PlayerWeapons.SingleOrDefault(x =>
@@ -120,13 +122,19 @@ public class WeaponBodyTest : TestFixture
         WeaponBodyBuildupPieceResponse response = (
             await this.Client.PostMsgpack<WeaponBodyBuildupPieceResponse>(
                 $"{EndpointGroup}/buildup_piece",
-                request
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
         // Check coin
-        DbPlayerUserData userData = (await this.ApiContext.PlayerUserData.FindAsync(ViewerId))!;
-        await this.ApiContext.Entry(userData).ReloadAsync();
+        DbPlayerUserData userData = (
+            await this.ApiContext.PlayerUserData.FindAsync(
+                ViewerId,
+                TestContext.Current.CancellationToken
+            )
+        )!;
+        await this.ApiContext.Entry(userData).ReloadAsync(TestContext.Current.CancellationToken);
 
         if (testCase.ExpCoinLoss != 0)
             response.UpdateDataList.UserData.Coin.Should().Be(oldCoin - testCase.ExpCoinLoss);
@@ -139,10 +147,10 @@ public class WeaponBodyTest : TestFixture
         DbWeaponBody weaponBody = (
             await this.ApiContext.PlayerWeapons.FindAsync(
                 ViewerId,
-                testCase.InitialState.WeaponBodyId
+                TestContext.Current.CancellationToken
             )
         )!;
-        await this.ApiContext.Entry(weaponBody).ReloadAsync();
+        await this.ApiContext.Entry(weaponBody).ReloadAsync(TestContext.Current.CancellationToken);
 
         weaponBody
             .Should()
@@ -165,7 +173,10 @@ public class WeaponBodyTest : TestFixture
                 );
 
             DbPlayerMaterial dbEntry = (
-                await this.ApiContext.PlayerMaterials.FindAsync(ViewerId, material)
+                await this.ApiContext.PlayerMaterials.FindAsync(
+                    ViewerId,
+                    TestContext.Current.CancellationToken
+                )
             )!;
 
             dbEntry.Quantity.Should().Be(expQuantity);
@@ -210,7 +221,8 @@ public class WeaponBodyTest : TestFixture
             await this.Client.PostMsgpack<ResultCodeResponse>(
                 $"{EndpointGroup}/buildup_piece",
                 new WeaponBodyBuildupPieceRequest() { WeaponBodyId = WeaponBodies.Carnwennan },
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -240,7 +252,8 @@ public class WeaponBodyTest : TestFixture
                         new() { BuildupPieceType = BuildupPieceTypes.Stats, Step = 40 },
                     },
                 },
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 

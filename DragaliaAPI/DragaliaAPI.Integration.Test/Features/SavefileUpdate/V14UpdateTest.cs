@@ -14,8 +14,9 @@ public class V14UpdateTest : SavefileUpdateTestFixture
     {
         await this
             .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(entity =>
-                entity.SetProperty(e => e.EmblemId, Emblems.HotBloodedInstructor)
+            .ExecuteUpdateAsync(
+                entity => entity.SetProperty(e => e.EmblemId, Emblems.HotBloodedInstructor),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         int cellieraCh5 = MasterAsset.CharaStories[(int)Charas.Celliera].StoryIds[^1];

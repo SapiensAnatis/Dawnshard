@@ -28,7 +28,8 @@ public class SavefileImportTest : TestFixture
 
         HttpResponseMessage importResponse = await this.Client.PostAsync(
             $"savefile/import/1",
-            JsonContent.Create(new { })
+            JsonContent.Create(new { }),
+            TestContext.Current.CancellationToken
         );
 
         importResponse.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
@@ -42,7 +43,8 @@ public class SavefileImportTest : TestFixture
 
         HttpResponseMessage importResponse = await this.Client.PostAsync(
             $"savefile/import/1",
-            JsonContent.Create(new { })
+            JsonContent.Create(new { }),
+            TestContext.Current.CancellationToken
         );
 
         importResponse.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
@@ -65,7 +67,8 @@ public class SavefileImportTest : TestFixture
 
         HttpResponseMessage importResponse = await this.Client.PostAsync(
             $"savefile/import/{this.ViewerId}",
-            content
+            content,
+            TestContext.Current.CancellationToken
         );
         importResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -75,7 +78,10 @@ public class SavefileImportTest : TestFixture
             .BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMinutes(1));
 
         LoadIndexResponse storedSavefile = (
-            await this.Client.PostMsgpack<LoadIndexResponse>("load/index")
+            await this.Client.PostMsgpack<LoadIndexResponse>(
+                "load/index",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         storedSavefile.UserData.Exp.Should().Be(savefile.UserData.Exp + 69990); // Exp rewarded from V22Update
@@ -159,7 +165,11 @@ public class SavefileImportTest : TestFixture
     public async Task Import_PropertiesMappedCorrectly()
     {
         HttpContent content = PrepareSavefileRequest("endgame_savefile.json");
-        await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
+        await this.Client.PostAsync(
+            $"savefile/import/{this.ViewerId}",
+            content,
+            TestContext.Current.CancellationToken
+        );
 
         this.ApiContext.PlayerStoryState.Single(x =>
                 x.ViewerId == this.ViewerId && x.StoryId == 110313011
@@ -184,7 +194,11 @@ public class SavefileImportTest : TestFixture
         this.ApiContext.ChangeTracker.Clear();
 
         HttpContent content = PrepareSavefileRequest("endgame_savefile.json");
-        await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
+        await this.Client.PostAsync(
+            $"savefile/import/{this.ViewerId}",
+            content,
+            TestContext.Current.CancellationToken
+        );
 
         this.ApiContext.Emblems.AsNoTracking()
             .Should()
@@ -202,7 +216,11 @@ public class SavefileImportTest : TestFixture
             );
 
         HttpContent content = PrepareSavefileRequest("endgame_savefile.json");
-        await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
+        await this.Client.PostAsync(
+            $"savefile/import/{this.ViewerId}",
+            content,
+            TestContext.Current.CancellationToken
+        );
 
         this.ApiContext.PlayerDragonGifts.Should()
             .Contain(x =>
@@ -218,7 +236,11 @@ public class SavefileImportTest : TestFixture
         );
 
         HttpContent content = PrepareSavefileRequest("endgame_savefile.json");
-        await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
+        await this.Client.PostAsync(
+            $"savefile/import/{this.ViewerId}",
+            content,
+            TestContext.Current.CancellationToken
+        );
 
         this.ApiContext.CompletedDailyMissions.Should()
             .NotContain(x => x.ViewerId == this.ViewerId);
@@ -231,13 +253,15 @@ public class SavefileImportTest : TestFixture
 
         HttpResponseMessage importResponse = await this.Client.PostAsync(
             $"savefile/import/{this.ViewerId}",
-            content
+            content,
+            TestContext.Current.CancellationToken
         );
         importResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         HttpResponseMessage importResponse2 = await this.Client.PostAsync(
             $"savefile/import/{this.ViewerId}",
-            content
+            content,
+            TestContext.Current.CancellationToken
         );
         importResponse2.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
@@ -250,7 +274,8 @@ public class SavefileImportTest : TestFixture
 
         HttpResponseMessage importResponse = await this.Client.PostAsync(
             $"savefile/import/{this.ViewerId}",
-            content
+            content,
+            TestContext.Current.CancellationToken
         );
         importResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 

@@ -14,10 +14,13 @@ public class TreasureTradeTest : TestFixture
     [Fact]
     public async Task GetListAll_NoTrades_ReturnsEmpty()
     {
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         TreasureTradeGetListAllResponse response = (
-            await Client.PostMsgpack<TreasureTradeGetListAllResponse>("treasure_trade/get_list_all")
+            await Client.PostMsgpack<TreasureTradeGetListAllResponse>(
+                "treasure_trade/get_list_all",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response.UserTreasureTradeList.Should().BeEmpty();
@@ -40,7 +43,10 @@ public class TreasureTradeTest : TestFixture
         );
 
         TreasureTradeGetListAllResponse response = (
-            await Client.PostMsgpack<TreasureTradeGetListAllResponse>("treasure_trade/get_list_all")
+            await Client.PostMsgpack<TreasureTradeGetListAllResponse>(
+                "treasure_trade/get_list_all",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response
@@ -73,7 +79,8 @@ public class TreasureTradeTest : TestFixture
         TreasureTradeTradeResponse response = (
             await Client.PostMsgpack<TreasureTradeTradeResponse>(
                 "treasure_trade/trade",
-                new TreasureTradeTradeRequest(1001, 10010101, null, 1)
+                new TreasureTradeTradeRequest(1001, 10010101, null, 1),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -100,7 +107,8 @@ public class TreasureTradeTest : TestFixture
         TreasureTradeTradeResponse response = (
             await Client.PostMsgpack<TreasureTradeTradeResponse>(
                 "treasure_trade/trade",
-                new TreasureTradeTradeRequest(1012, 10124101, null, 1)
+                new TreasureTradeTradeRequest(1012, 10124101, null, 1),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -127,7 +135,8 @@ public class TreasureTradeTest : TestFixture
         TreasureTradeTradeResponse response = (
             await Client.PostMsgpack<TreasureTradeTradeResponse>(
                 "treasure_trade/trade",
-                new TreasureTradeTradeRequest(1003, highBrunhildaTrade, null, 4)
+                new TreasureTradeTradeRequest(1003, highBrunhildaTrade, null, 4),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 

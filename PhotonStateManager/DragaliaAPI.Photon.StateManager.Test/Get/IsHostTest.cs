@@ -40,10 +40,19 @@ public class IsHostTest : TestFixture
 
         this.RedisConnectionProvider.RedisCollection<RedisGame>().Insert(game);
 
-        HttpResponseMessage response = await this.Client.GetAsync($"{Endpoint}/2");
+        HttpResponseMessage response = await this.Client.GetAsync(
+            $"{Endpoint}/2",
+            TestContext.Current.CancellationToken
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        (await response.Content.ReadFromJsonAsync<bool>()).Should().Be(true);
+        (
+            await response.Content.ReadFromJsonAsync<bool>(
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )
+            .Should()
+            .Be(true);
     }
 
     [Fact]
@@ -74,10 +83,19 @@ public class IsHostTest : TestFixture
 
         this.RedisConnectionProvider.RedisCollection<RedisGame>().Insert(game);
 
-        HttpResponseMessage response = await this.Client.GetAsync($"{Endpoint}/3");
+        HttpResponseMessage response = await this.Client.GetAsync(
+            $"{Endpoint}/3",
+            TestContext.Current.CancellationToken
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        (await response.Content.ReadFromJsonAsync<bool>()).Should().Be(false);
+        (
+            await response.Content.ReadFromJsonAsync<bool>(
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )
+            .Should()
+            .Be(false);
     }
 
     [Fact]
@@ -106,9 +124,18 @@ public class IsHostTest : TestFixture
 
         this.RedisConnectionProvider.RedisCollection<RedisGame>().Insert(game);
 
-        HttpResponseMessage response = await this.Client.GetAsync($"{Endpoint}/8888");
+        HttpResponseMessage response = await this.Client.GetAsync(
+            $"{Endpoint}/8888",
+            TestContext.Current.CancellationToken
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        (await response.Content.ReadFromJsonAsync<bool>()).Should().Be(false);
+        (
+            await response.Content.ReadFromJsonAsync<bool>(
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )
+            .Should()
+            .Be(false);
     }
 }

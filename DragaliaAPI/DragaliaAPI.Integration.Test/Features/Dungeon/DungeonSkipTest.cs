@@ -45,7 +45,8 @@ public class DungeonSkipTest : TestFixture
                     PlayCount = playCount,
                     SupportViewerId = 1000,
                     QuestId = questId,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.Data.IngameResultData.RewardRecord.DropAll.Should().NotBeEmpty();
@@ -109,7 +110,8 @@ public class DungeonSkipTest : TestFixture
                     {
                         new() { CharaId = Shared.Definitions.Enums.Charas.ThePrince },
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.Data.IngameResultData.RewardRecord.DropAll.Should().NotBeEmpty();
@@ -171,7 +173,8 @@ public class DungeonSkipTest : TestFixture
                         new() { QuestId = brunhildaMaster, PlayCount = 1 },
                         new() { QuestId = flameIoStandard, PlayCount = 1 },
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.Data.IngameResultData.RewardRecord.DropAll.Should().NotBeEmpty();
@@ -249,7 +252,8 @@ public class DungeonSkipTest : TestFixture
                     PlayCount = playCount,
                     SupportViewerId = 1000,
                     QuestId = questId,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response
@@ -291,7 +295,8 @@ public class DungeonSkipTest : TestFixture
                     PlayCount = 4,
                     SupportViewerId = 1000,
                     QuestId = questId,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -336,7 +341,8 @@ public class DungeonSkipTest : TestFixture
                     PlayCount = playCount,
                     SupportViewerId = 1000,
                     QuestId = questId,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response

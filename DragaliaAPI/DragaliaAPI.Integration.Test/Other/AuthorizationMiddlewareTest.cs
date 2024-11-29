@@ -23,10 +23,15 @@ public class AuthorizationMiddlewareTest : TestFixture
         this.Client.DefaultRequestHeaders.Clear();
         this.Client.DefaultRequestHeaders.Add("SID", "session_id");
 
-        HttpResponseMessage response = await this.Client.GetAsync(Endpoint);
+        HttpResponseMessage response = await this.Client.GetAsync(
+            Endpoint,
+            TestContext.Current.CancellationToken
+        );
 
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-        (await response.Content.ReadAsStringAsync()).Should().Be("OK");
+        (await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken))
+            .Should()
+            .Be("OK");
     }
 
     [Fact]
@@ -35,7 +40,10 @@ public class AuthorizationMiddlewareTest : TestFixture
         this.Client.DefaultRequestHeaders.Clear();
         this.Client.DefaultRequestHeaders.Add("SID", "invalid");
 
-        HttpResponseMessage response = await this.Client.GetAsync(Endpoint);
+        HttpResponseMessage response = await this.Client.GetAsync(
+            Endpoint,
+            TestContext.Current.CancellationToken
+        );
 
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
         response.Headers.Should().ContainKey("Session-Expired");

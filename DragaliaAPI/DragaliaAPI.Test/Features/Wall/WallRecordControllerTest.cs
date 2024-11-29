@@ -105,13 +105,13 @@ public class WallRecordControllerTest
         mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());
 
         mockUpdateDataService
-            .Setup(x => x.SaveChangesAsync(default))
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
             .ReturnsAsync(new UpdateDataList());
 
         WallRecordRecordResponse data = (
             await wallRecordController.Record(
                 new WallRecordRecordRequest(wallId, dungeonKey),
-                default
+                TestContext.Current.CancellationToken
             )
         ).GetData<WallRecordRecordResponse>()!;
 

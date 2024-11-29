@@ -27,7 +27,11 @@ public static class HttpClientExtensions
     {
         HttpContent content = CreateMsgpackContent(request);
 
-        HttpResponseMessage response = await client.PostAsync(endpoint.TrimStart('/'), content, cancellationToken);
+        HttpResponseMessage response = await client.PostAsync(
+            endpoint.TrimStart('/'),
+            content,
+            cancellationToken
+        );
 
         response.EnsureSuccessStatusCode();
 
@@ -52,7 +56,11 @@ public static class HttpClientExtensions
     )
         where TResponse : class
     {
-        HttpResponseMessage response = await client.PostAsync(endpoint.TrimStart('/'), null, cancellationToken);
+        HttpResponseMessage response = await client.PostAsync(
+            endpoint.TrimStart('/'),
+            null,
+            cancellationToken
+        );
 
         response.EnsureSuccessStatusCode();
 
@@ -75,7 +83,8 @@ public static class HttpClientExtensions
         object request,
         bool ensureSuccessHeader = true,
         CancellationToken cancellationToken = default
-    ) => await client.PostMsgpack<object>(endpoint, request, ensureSuccessHeader, cancellationToken);
+    ) =>
+        await client.PostMsgpack<object>(endpoint, request, ensureSuccessHeader, cancellationToken);
 
     /// <summary>
     /// Post a msgpack request, but do not attempt to deserialize it.

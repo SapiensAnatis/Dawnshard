@@ -225,7 +225,7 @@ public class MasterAssetGenerator : IIncrementalGenerator
                     {loadMethodName}(
                         "{msgpackPath}",
                         ({declaration.ItemTypeName} x) => x.{declaration.KeyName}{(
-                    declaration.IsGroup ? "": ","
+                    declaration.IsGroup ? "" : ","
                 )}
                 """
             );

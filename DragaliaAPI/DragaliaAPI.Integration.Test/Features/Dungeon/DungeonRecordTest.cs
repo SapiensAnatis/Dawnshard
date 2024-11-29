@@ -42,7 +42,10 @@ public class DungeonRecordTest : TestFixture
 
         DbPlayerUserData oldUserData = await ApiContext
             .PlayerUserData.AsNoTracking()
-            .SingleAsync(x => x.ViewerId == ViewerId);
+            .SingleAsync(
+                x => x.ViewerId == ViewerId,
+                cancellationToken: TestContext.Current.CancellationToken
+            );
 
         DungeonSession mockSession =
             new()
@@ -126,7 +129,8 @@ public class DungeonRecordTest : TestFixture
                         DragonDamageRecord = new List<AtgenDamageRecord>(),
                         BattleRoyalRecord = new AtgenBattleRoyalRecord(),
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -207,7 +211,8 @@ public class DungeonRecordTest : TestFixture
 
         await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/memory_event/activate",
-            new MemoryEventActivateRequest() { EventId = eventId }
+            new MemoryEventActivateRequest() { EventId = eventId },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DungeonSession mockSession =
@@ -243,7 +248,8 @@ public class DungeonRecordTest : TestFixture
                         BattleRoyalRecord = new AtgenBattleRoyalRecord(),
                         Wave = 3,
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -262,7 +268,8 @@ public class DungeonRecordTest : TestFixture
 
         await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/memory_event/activate",
-            new MemoryEventActivateRequest() { EventId = eventId }
+            new MemoryEventActivateRequest() { EventId = eventId },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DungeonSession mockSession =
@@ -290,7 +297,8 @@ public class DungeonRecordTest : TestFixture
                         DragonDamageRecord = [],
                         Wave = wave,
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -313,7 +321,8 @@ public class DungeonRecordTest : TestFixture
 
         await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/memory_event/activate",
-            new MemoryEventActivateRequest() { EventId = eventId }
+            new MemoryEventActivateRequest() { EventId = eventId },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DungeonSession mockSession =
@@ -350,7 +359,8 @@ public class DungeonRecordTest : TestFixture
                         BattleRoyalRecord = new AtgenBattleRoyalRecord(),
                         Wave = 3,
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -382,7 +392,8 @@ public class DungeonRecordTest : TestFixture
 
         await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/memory_event/activate",
-            new MemoryEventActivateRequest() { EventId = eventId }
+            new MemoryEventActivateRequest() { EventId = eventId },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DungeonSession mockSession =
@@ -411,7 +422,8 @@ public class DungeonRecordTest : TestFixture
                         BattleRoyalRecord = new AtgenBattleRoyalRecord(),
                         Wave = 3,
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -434,7 +446,8 @@ public class DungeonRecordTest : TestFixture
 
         await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/memory_event/activate",
-            new MemoryEventActivateRequest() { EventId = eventId }
+            new MemoryEventActivateRequest() { EventId = eventId },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DungeonSession mockSession =
@@ -463,7 +476,8 @@ public class DungeonRecordTest : TestFixture
                         BattleRoyalRecord = new AtgenBattleRoyalRecord(),
                         Wave = 3,
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -478,7 +492,8 @@ public class DungeonRecordTest : TestFixture
 
         await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/memory_event/activate",
-            new MemoryEventActivateRequest() { EventId = eventId }
+            new MemoryEventActivateRequest() { EventId = eventId },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DungeonSession mockSession =
@@ -507,7 +522,8 @@ public class DungeonRecordTest : TestFixture
                         BattleRoyalRecord = new AtgenBattleRoyalRecord(),
                         Wave = 3,
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -527,7 +543,8 @@ public class DungeonRecordTest : TestFixture
 
         await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/memory_event/activate",
-            new MemoryEventActivateRequest() { EventId = eventId }
+            new MemoryEventActivateRequest() { EventId = eventId },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DungeonSession mockSession =
@@ -558,7 +575,8 @@ public class DungeonRecordTest : TestFixture
                             5 // Final wave
                         ,
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -579,7 +597,8 @@ public class DungeonRecordTest : TestFixture
 
         await Client.PostMsgpack(
             "/earn_event/entry",
-            new EarnEventEntryRequest() { EventId = eventId }
+            new EarnEventEntryRequest() { EventId = eventId },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DungeonSession mockSession =
@@ -616,7 +635,8 @@ public class DungeonRecordTest : TestFixture
                         BattleRoyalRecord = new AtgenBattleRoyalRecord(),
                         Wave = 2,
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -637,7 +657,8 @@ public class DungeonRecordTest : TestFixture
 
         await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/memory_event/activate",
-            new MemoryEventActivateRequest() { EventId = eventId }
+            new MemoryEventActivateRequest() { EventId = eventId },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DungeonSession mockSession =
@@ -666,7 +687,8 @@ public class DungeonRecordTest : TestFixture
                         BattleRoyalRecord = new AtgenBattleRoyalRecord(),
                         Wave = 3,
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -683,7 +705,8 @@ public class DungeonRecordTest : TestFixture
 
         await Client.PostMsgpack<EarnEventEntryResponse>(
             "/earn_event/entry",
-            new EarnEventEntryRequest() { EventId = eventId }
+            new EarnEventEntryRequest() { EventId = eventId },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DungeonSession mockSession =
@@ -721,7 +744,8 @@ public class DungeonRecordTest : TestFixture
                         BattleRoyalRecord = new AtgenBattleRoyalRecord(),
                         Wave = 3,
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -742,7 +766,8 @@ public class DungeonRecordTest : TestFixture
 
         await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/earn_event/entry",
-            new EarnEventEntryRequest() { EventId = eventId }
+            new EarnEventEntryRequest() { EventId = eventId },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DungeonSession mockSession =
@@ -809,7 +834,8 @@ public class DungeonRecordTest : TestFixture
                         BattleRoyalRecord = new AtgenBattleRoyalRecord(),
                         Wave = 3,
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -850,7 +876,8 @@ public class DungeonRecordTest : TestFixture
                         BattleRoyalRecord = new AtgenBattleRoyalRecord(),
                         Wave = 3,
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
@@ -886,7 +913,8 @@ public class DungeonRecordTest : TestFixture
                 {
                     PartyNoList = new[] { 4 }, // Flame team
                     QuestId = questId,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -908,7 +936,8 @@ public class DungeonRecordTest : TestFixture
                     BattleRoyalRecord = new AtgenBattleRoyalRecord(),
                     Wave = 3,
                 },
-            }
+            },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         this.ApiContext.TimeAttackClears.Should().ContainSingle(x => x.GameId == gameId);
@@ -916,7 +945,10 @@ public class DungeonRecordTest : TestFixture
         DbTimeAttackClear recordedClear = await this
             .ApiContext.TimeAttackClears.Include(x => x.Players)
             .ThenInclude(x => x.Units)
-            .FirstAsync(x => x.GameId == gameId);
+            .FirstAsync(
+                x => x.GameId == gameId,
+                cancellationToken: TestContext.Current.CancellationToken
+            );
 
         recordedClear.Time.Should().Be(clearTime);
         recordedClear.QuestId.Should().Be(questId);
@@ -978,7 +1010,8 @@ public class DungeonRecordTest : TestFixture
                         BattleRoyalRecord = new AtgenBattleRoyalRecord(),
                     },
                 },
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).DataHeaders.ResultCode.Should().Be(ResultCode.QuestStaminaSingleShort);
     }
@@ -1033,7 +1066,8 @@ public class DungeonRecordTest : TestFixture
                         BattleRoyalRecord = new AtgenBattleRoyalRecord(),
                     },
                 },
-                ensureSuccessHeader: false
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
@@ -1080,7 +1114,11 @@ public class DungeonRecordTest : TestFixture
             };
 
         DungeonRecordRecordResponse response = (
-            await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
+                "/dungeon_record/record",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response
@@ -1113,7 +1151,11 @@ public class DungeonRecordTest : TestFixture
         );
 
         DungeonRecordRecordResponse response2 = (
-            await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
+                "/dungeon_record/record",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response2.IngameResultData.RewardRecord.FirstClearSet.Should().BeEmpty();
@@ -1124,8 +1166,13 @@ public class DungeonRecordTest : TestFixture
     {
         await this
             .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(e =>
-                e.SetProperty(p => p.TutorialStatus, TutorialService.TutorialStatusIds.CoopTutorial)
+            .ExecuteUpdateAsync(
+                e =>
+                    e.SetProperty(
+                        p => p.TutorialStatus,
+                        TutorialService.TutorialStatusIds.CoopTutorial
+                    ),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         int questId = TutorialService.TutorialQuestIds.AvenueToPowerBeginner;
@@ -1167,7 +1214,11 @@ public class DungeonRecordTest : TestFixture
             };
 
         DungeonRecordRecordResponse response = (
-            await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
+                "/dungeon_record/record",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response.UpdateDataList.UserData.Should().NotBeNull();
@@ -1219,7 +1270,8 @@ public class DungeonRecordTest : TestFixture
         DungeonRecordRecordMultiResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordMultiResponse>(
                 "/dungeon_record/record_multi",
-                request
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -1239,7 +1291,8 @@ public class DungeonRecordTest : TestFixture
         PresentGetPresentListResponse presentResponse = (
             await this.Client.PostMsgpack<PresentGetPresentListResponse>(
                 "present/get_present_list",
-                new PresentGetPresentListRequest()
+                new PresentGetPresentListRequest(),
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -1287,7 +1340,11 @@ public class DungeonRecordTest : TestFixture
             };
 
         DungeonRecordRecordResponse response = (
-            await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
+                "/dungeon_record/record",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response.UpdateDataList.MaterialList.Should().NotBeNull();
@@ -1344,7 +1401,11 @@ public class DungeonRecordTest : TestFixture
             };
 
         DungeonRecordRecordResponse response = (
-            await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
+                "/dungeon_record/record",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response.UpdateDataList.MaterialList.Should().NotBeNull();
@@ -1364,7 +1425,11 @@ public class DungeonRecordTest : TestFixture
         );
 
         DungeonRecordRecordResponse secondResponse = (
-            await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
+                "/dungeon_record/record",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         secondResponse.UpdateDataList.MaterialList.Should().BeNull();
@@ -1416,7 +1481,11 @@ public class DungeonRecordTest : TestFixture
             };
 
         DungeonRecordRecordResponse response = (
-            await Client.PostMsgpack<DungeonRecordRecordResponse>("/dungeon_record/record", request)
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
+                "/dungeon_record/record",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         response.UpdateDataList.MaterialList.Should().NotBeNull();

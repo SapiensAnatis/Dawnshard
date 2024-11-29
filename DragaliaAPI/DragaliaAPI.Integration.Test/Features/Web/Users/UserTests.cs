@@ -15,7 +15,10 @@ public class UserTests : WebTestFixture
     [Fact]
     public async Task UserMe_NotAuthenticated_Returns401()
     {
-        HttpResponseMessage resp = await this.Client.GetAsync("/api/user/me");
+        HttpResponseMessage resp = await this.Client.GetAsync(
+            "/api/user/me",
+            TestContext.Current.CancellationToken
+        );
 
         resp.Should().HaveStatusCode(HttpStatusCode.Unauthorized);
     }
@@ -32,7 +35,10 @@ public class UserTests : WebTestFixture
 
         this.Client.DefaultRequestHeaders.Add("Cookie", $"idToken={token}");
 
-        HttpResponseMessage resp = await this.Client.GetAsync("/api/user/me");
+        HttpResponseMessage resp = await this.Client.GetAsync(
+            "/api/user/me",
+            TestContext.Current.CancellationToken
+        );
 
         resp.Should().HaveStatusCode(HttpStatusCode.NotFound);
     }
@@ -47,11 +53,18 @@ public class UserTests : WebTestFixture
 
         this.Client.DefaultRequestHeaders.Add("Cookie", $"idToken={token}");
 
-        HttpResponseMessage resp = await this.Client.GetAsync("/api/user/me");
+        HttpResponseMessage resp = await this.Client.GetAsync(
+            "/api/user/me",
+            TestContext.Current.CancellationToken
+        );
 
         resp.Should().HaveStatusCode(HttpStatusCode.OK);
 
-        (await resp.Content.ReadFromJsonAsync<User>())
+        (
+            await resp.Content.ReadFromJsonAsync<User>(
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )
             .Should()
             .BeEquivalentTo(new User() { Name = "Euden", ViewerId = this.ViewerId });
     }
@@ -59,7 +72,10 @@ public class UserTests : WebTestFixture
     [Fact]
     public async Task UserMeProfile_Unauthenticated_Returns401()
     {
-        HttpResponseMessage resp = await this.Client.GetAsync("/api/user/me/profile");
+        HttpResponseMessage resp = await this.Client.GetAsync(
+            "/api/user/me/profile",
+            TestContext.Current.CancellationToken
+        );
 
         resp.Should().HaveStatusCode(HttpStatusCode.Unauthorized);
     }
@@ -74,11 +90,18 @@ public class UserTests : WebTestFixture
 
         this.Client.DefaultRequestHeaders.Add("Cookie", $"idToken={token}");
 
-        HttpResponseMessage resp = await this.Client.GetAsync("/api/user/me/profile");
+        HttpResponseMessage resp = await this.Client.GetAsync(
+            "/api/user/me/profile",
+            TestContext.Current.CancellationToken
+        );
 
         resp.Should().HaveStatusCode(HttpStatusCode.OK);
 
-        (await resp.Content.ReadFromJsonAsync<UserProfile>())
+        (
+            await resp.Content.ReadFromJsonAsync<UserProfile>(
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )
             .Should()
             .BeEquivalentTo(
                 new UserProfile()

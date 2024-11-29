@@ -17,7 +17,8 @@ public class QuestOpenTreasureTest : TestFixture
         QuestOpenTreasureResponse response = (
             await this.Client.PostMsgpack<QuestOpenTreasureResponse>(
                 "/quest/open_treasure",
-                new QuestOpenTreasureRequest() { QuestTreasureId = 104101 }
+                new QuestOpenTreasureRequest() { QuestTreasureId = 104101 },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -32,13 +33,14 @@ public class QuestOpenTreasureTest : TestFixture
         QuestOpenTreasureResponse response = (
             await this.Client.PostMsgpack<QuestOpenTreasureResponse>(
                 "/quest/open_treasure",
-                new QuestOpenTreasureRequest() { QuestTreasureId = 126201 }
+                new QuestOpenTreasureRequest() { QuestTreasureId = 126201 },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
         List<DbQuestTreasureList> questTreasureList = await this
             .ApiContext.QuestTreasureList.Where(x => x.ViewerId == this.ViewerId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         questTreasureList.Should().Contain(x => x.QuestTreasureId == 126201);
     }

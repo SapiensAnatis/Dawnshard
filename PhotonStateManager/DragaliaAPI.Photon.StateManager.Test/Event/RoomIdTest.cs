@@ -40,7 +40,8 @@ public class RoomIdTest : TestFixture
 
         HttpResponseMessage response = await this.Client.PostAsJsonAsync<GameModifyRoomIdRequest>(
             Endpoint,
-            new() { GameName = game.Name, NewRoomId = 56789 }
+            new() { GameName = game.Name, NewRoomId = 56789 },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);

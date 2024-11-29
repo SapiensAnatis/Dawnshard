@@ -13,7 +13,10 @@ public class StampTest : TestFixture
     public async Task GetStamp_ReturnsStamps()
     {
         StampGetStampResponse data = (
-            await this.Client.PostMsgpack<StampGetStampResponse>($"{Controller}/get_stamp")
+            await this.Client.PostMsgpack<StampGetStampResponse>(
+                $"{Controller}/get_stamp",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         data.StampList.Should().HaveCount(123);
@@ -61,7 +64,8 @@ public class StampTest : TestFixture
 
         await this.Client.PostMsgpack<StampSetEquipStampResponse>(
             $"{Controller}/set_equip_stamp",
-            new StampSetEquipStampRequest() { StampList = requestList }
+            new StampSetEquipStampRequest() { StampList = requestList },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         this.ApiContext.ChangeTracker.Clear();
@@ -120,7 +124,8 @@ public class StampTest : TestFixture
         StampSetEquipStampResponse data = (
             await this.Client.PostMsgpack<StampSetEquipStampResponse>(
                 $"{Controller}/set_equip_stamp",
-                new StampSetEquipStampRequest() { StampList = requestList }
+                new StampSetEquipStampRequest() { StampList = requestList },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 

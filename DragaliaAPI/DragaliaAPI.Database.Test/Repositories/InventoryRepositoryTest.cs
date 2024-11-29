@@ -33,7 +33,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
         (
             await this.fixture.ApiContext.PlayerMaterials.FindAsync(
                 ViewerId,
-                Materials.WaterwyrmsGreatsphere
+                TestContext.Current.CancellationToken
             )
         )!
             .Quantity.Should()
@@ -49,17 +49,18 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
                 ViewerId = ViewerId,
                 MaterialId = Materials.FirestormPrism,
                 Quantity = 0,
-            }
+            },
+            TestContext.Current.CancellationToken
         );
 
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         await this.inventoryRepository.UpdateQuantity(Materials.FirestormPrism, 10);
 
         (
             await this.fixture.ApiContext.PlayerMaterials.FindAsync(
                 ViewerId,
-                Materials.FirestormPrism
+                TestContext.Current.CancellationToken
             )
         )!
             .Quantity.Should()
@@ -74,14 +75,19 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             5
         );
 
-        (await this.fixture.ApiContext.PlayerMaterials.FindAsync(ViewerId, Materials.SunlightOre))!
+        (
+            await this.fixture.ApiContext.PlayerMaterials.FindAsync(
+                ViewerId,
+                TestContext.Current.CancellationToken
+            )
+        )!
             .Quantity.Should()
             .Be(5);
 
         (
             await this.fixture.ApiContext.PlayerMaterials.FindAsync(
                 ViewerId,
-                Materials.SunlightStone
+                TestContext.Current.CancellationToken
             )
         )!
             .Quantity.Should()
@@ -106,10 +112,11 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
                     MaterialId = Materials.AbaddonOrb,
                     Quantity = 50,
                 },
-            }
+            },
+            TestContext.Current.CancellationToken
         );
 
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         (await this.inventoryRepository.GetMaterial(Materials.AbaddonOrb))
             .Should()
@@ -149,12 +156,17 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
                     MaterialId = Materials.InfernoOrb,
                     Quantity = 50,
                 },
-            }
+            },
+            TestContext.Current.CancellationToken
         );
 
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
-        (await this.inventoryRepository.Materials.ToListAsync())
+        (
+            await this.inventoryRepository.Materials.ToListAsync(
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )
             .Should()
             .ContainEquivalentOf( // Savefile creation adds materials
                 new DbPlayerMaterial()
@@ -202,7 +214,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             new Dictionary<Materials, int>() { { Materials.Valor, 1 }, { Materials.Acclaim, 3 } }
         );
 
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.fixture.ApiContext.PlayerMaterials.Single(x =>
                 x.ViewerId == IdentityTestUtils.ViewerId && x.MaterialId == Materials.Valor
@@ -241,7 +253,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             .Should()
             .ThrowAsync<InvalidOperationException>();
 
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.fixture.ApiContext.PlayerMaterials.Single(x =>
                 x.ViewerId == IdentityTestUtils.ViewerId

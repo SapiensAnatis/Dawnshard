@@ -25,7 +25,8 @@ public class QuestClearPartyTest : TestFixture
         DragaliaResponse<QuestGetQuestClearPartyResponse> response =
             await this.Client.PostMsgpack<QuestGetQuestClearPartyResponse>(
                 "/quest/get_quest_clear_party",
-                new QuestGetQuestClearPartyRequest() { QuestId = 1 }
+                new QuestGetQuestClearPartyRequest() { QuestId = 1 },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response
@@ -44,7 +45,8 @@ public class QuestClearPartyTest : TestFixture
         DragaliaResponse<QuestGetQuestClearPartyMultiResponse> response =
             await this.Client.PostMsgpack<QuestGetQuestClearPartyMultiResponse>(
                 "/quest/get_quest_clear_party_multi",
-                new QuestGetQuestClearPartyRequest() { QuestId = 2 }
+                new QuestGetQuestClearPartyRequest() { QuestId = 2 },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response
@@ -64,13 +66,15 @@ public class QuestClearPartyTest : TestFixture
             {
                 QuestId = questId,
                 RequestPartySettingList = this.MultiPartySettingLists,
-            }
+            },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DragaliaResponse<QuestGetQuestClearPartyResponse> response =
             await this.Client.PostMsgpack<QuestGetQuestClearPartyResponse>(
                 "/quest/get_quest_clear_party",
-                new QuestGetQuestClearPartyRequest() { QuestId = questId }
+                new QuestGetQuestClearPartyRequest() { QuestId = questId },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.Data.QuestClearPartySettingList.Should().BeEmpty();
@@ -88,7 +92,8 @@ public class QuestClearPartyTest : TestFixture
         DragaliaResponse<QuestGetQuestClearPartyResponse> response =
             await this.Client.PostMsgpack<QuestGetQuestClearPartyResponse>(
                 "/quest/get_quest_clear_party",
-                new QuestGetQuestClearPartyRequest() { QuestId = questId }
+                new QuestGetQuestClearPartyRequest() { QuestId = questId },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response
@@ -159,7 +164,8 @@ public class QuestClearPartyTest : TestFixture
                 {
                     QuestId = 3,
                     RequestPartySettingList = this.SoloPartySettingLists,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.Data.Result.Should().Be(1);
@@ -168,7 +174,7 @@ public class QuestClearPartyTest : TestFixture
             .ApiContext.QuestClearPartyUnits.Where(x =>
                 x.QuestId == 3 && x.ViewerId == this.ViewerId && x.IsMulti == false
             )
-            .ToListAsync();
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         storedList
             .Should()
@@ -188,7 +194,8 @@ public class QuestClearPartyTest : TestFixture
                 {
                     QuestId = 4,
                     RequestPartySettingList = this.MultiPartySettingLists,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         response.Data.Result.Should().Be(1);
@@ -197,7 +204,7 @@ public class QuestClearPartyTest : TestFixture
             .ApiContext.QuestClearPartyUnits.Where(x =>
                 x.QuestId == 4 && x.ViewerId == this.ViewerId && x.IsMulti == true
             )
-            .ToListAsync();
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         storedList
             .Should()

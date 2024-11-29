@@ -20,7 +20,11 @@ public class GameJoinTest : TestFixture
     {
         this.Client.DefaultRequestHeaders.Clear();
 
-        HttpResponseMessage response = await this.Client.PostAsync(Endpoint, null);
+        HttpResponseMessage response = await this.Client.PostAsync(
+            Endpoint,
+            null,
+            TestContext.Current.CancellationToken
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -55,7 +59,8 @@ public class GameJoinTest : TestFixture
             {
                 GameName = game.Name,
                 Player = new() { ViewerId = 22, PartyNoList = [1, 2] },
-            }
+            },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);

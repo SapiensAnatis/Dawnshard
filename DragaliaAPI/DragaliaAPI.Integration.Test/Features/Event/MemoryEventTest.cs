@@ -13,7 +13,8 @@ public class MemoryEventTest : TestFixture
         MemoryEventActivateResponse result = (
             await this.Client.PostMsgpack<MemoryEventActivateResponse>(
                 "memory_event/activate",
-                new MemoryEventActivateRequest() { EventId = eventId }
+                new MemoryEventActivateRequest() { EventId = eventId },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 
@@ -32,11 +33,15 @@ public class MemoryEventTest : TestFixture
 
         await this.Client.PostMsgpack<MemoryEventActivateResponse>(
             "memory_event/activate",
-            new MemoryEventActivateRequest() { EventId = eventId }
+            new MemoryEventActivateRequest() { EventId = eventId },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         MissionGetMissionListResponse missionListResponse = (
-            await this.Client.PostMsgpack<MissionGetMissionListResponse>("mission/get_mission_list")
+            await this.Client.PostMsgpack<MissionGetMissionListResponse>(
+                "mission/get_mission_list",
+                cancellationToken: TestContext.Current.CancellationToken
+            )
         ).Data;
 
         missionListResponse

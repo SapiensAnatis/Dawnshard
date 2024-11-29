@@ -9,7 +9,8 @@ public class LoadIndexTest : TestFixture
     public async Task LoadIndex_ReturnsPartyUnitsInSortedOrder()
     {
         DragaliaResponse<LoadIndexResponse> resp = await this.Client.PostMsgpack<LoadIndexResponse>(
-            "/load/index"
+            "/load/index",
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         resp.Data.PartyList.Should()

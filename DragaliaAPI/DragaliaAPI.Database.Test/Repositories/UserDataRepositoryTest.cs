@@ -44,10 +44,13 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
     public async Task CheckCoin_ReturnsExpectedResult(long checkValue, bool expectedResult)
     {
         DbPlayerUserData userData = (
-            await this.fixture.ApiContext.PlayerUserData.FindAsync(IdentityTestUtils.ViewerId)
+            await this.fixture.ApiContext.PlayerUserData.FindAsync(
+                IdentityTestUtils.ViewerId,
+                TestContext.Current.CancellationToken
+            )
         )!;
         userData.Coin = 200;
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         (await this.userDataRepository.CheckCoin(checkValue)).Should().Be(expectedResult);
     }
@@ -58,15 +61,15 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
         long oldCoin = await this
             .fixture.ApiContext.PlayerUserData.Where(x => x.ViewerId == IdentityTestUtils.ViewerId)
             .Select(x => x.Coin)
-            .SingleAsync();
+            .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         await this.userDataRepository.UpdateCoin(2000);
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         long newCoin = await this
             .fixture.ApiContext.PlayerUserData.Where(x => x.ViewerId == IdentityTestUtils.ViewerId)
             .Select(x => x.Coin)
-            .SingleAsync();
+            .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         newCoin.Should().Be(oldCoin + 2000);
     }
@@ -77,15 +80,15 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
         int oldDewpoint = await this
             .fixture.ApiContext.PlayerUserData.Where(x => x.ViewerId == IdentityTestUtils.ViewerId)
             .Select(x => x.DewPoint)
-            .SingleAsync();
+            .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         await this.userDataRepository.UpdateDewpoint(4000);
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         int newDewpoint = await this
             .fixture.ApiContext.PlayerUserData.Where(x => x.ViewerId == IdentityTestUtils.ViewerId)
             .Select(x => x.DewPoint)
-            .SingleAsync();
+            .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         newDewpoint.Should().Be(oldDewpoint + 4000);
     }
@@ -94,19 +97,19 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
     public async Task UpdateDewpoint_ThrowsExceptionWhenNegativeDewpoint()
     {
         await this.userDataRepository.SetDewpoint(1000);
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(
             () => this.userDataRepository.UpdateDewpoint(-1500)
         );
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         exception.Message.Should().Be("Player cannot have negative eldwater");
 
         int dewpoint = await this
             .fixture.ApiContext.PlayerUserData.Where(x => x.ViewerId == IdentityTestUtils.ViewerId)
             .Select(x => x.DewPoint)
-            .SingleAsync();
+            .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         dewpoint.Should().Be(1000);
     }
@@ -118,7 +121,7 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
     public async Task CheckDewpoint_ReturnsExpectedBool(int quantity, bool expectedValue)
     {
         await this.userDataRepository.SetDewpoint(1000);
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         bool output = await this.userDataRepository.CheckDewpoint(quantity);
         output.Should().Be(expectedValue);
@@ -128,12 +131,12 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
     public async Task SetDewpoint_SetsDewpointValue()
     {
         await this.userDataRepository.SetDewpoint(10001);
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         int dewpoint = await this
             .fixture.ApiContext.PlayerUserData.Where(x => x.ViewerId == IdentityTestUtils.ViewerId)
             .Select(x => x.DewPoint)
-            .SingleAsync();
+            .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         dewpoint.Should().Be(10001);
     }
@@ -144,19 +147,19 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
         int oldDewpoint = await this
             .fixture.ApiContext.PlayerUserData.Where(x => x.ViewerId == IdentityTestUtils.ViewerId)
             .Select(x => x.DewPoint)
-            .SingleAsync();
+            .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(
             () => this.userDataRepository.SetDewpoint(-1)
         );
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         exception.Message.Should().Be("Player cannot have negative eldwater");
 
         int newDewpoint = await this
             .fixture.ApiContext.PlayerUserData.Where(x => x.ViewerId == IdentityTestUtils.ViewerId)
             .Select(x => x.DewPoint)
-            .SingleAsync();
+            .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         newDewpoint.Should().Be(oldDewpoint);
     }

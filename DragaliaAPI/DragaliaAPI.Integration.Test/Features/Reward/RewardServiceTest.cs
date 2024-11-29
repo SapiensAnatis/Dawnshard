@@ -37,7 +37,8 @@ public class RewardServiceTest : TestFixture
 
         await this.Client.PostMsgpack(
             "/present/receive",
-            new PresentReceiveRequest() { PresentIdList = [(ulong)present.PresentId] }
+            new PresentReceiveRequest() { PresentIdList = [(ulong)present.PresentId] },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         this.ApiContext.PlayerSummonTickets.Should()
@@ -75,7 +76,8 @@ public class RewardServiceTest : TestFixture
 
         await this.Client.PostMsgpack(
             "/present/receive",
-            new PresentReceiveRequest() { PresentIdList = [(ulong)present.PresentId] }
+            new PresentReceiveRequest() { PresentIdList = [(ulong)present.PresentId] },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         this.ApiContext.PlayerSummonTickets.Should()

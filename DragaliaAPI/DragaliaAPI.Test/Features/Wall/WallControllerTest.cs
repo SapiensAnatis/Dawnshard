@@ -131,11 +131,11 @@ public class WallControllerTest
         mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());
 
         mockUpdateDataService
-            .Setup(x => x.SaveChangesAsync(default))
+            .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
             .ReturnsAsync(new UpdateDataList());
 
         WallReceiveMonthlyRewardResponse data = (
-            await wallController.ReceiveMonthlyReward(default)
+            await wallController.ReceiveMonthlyReward(TestContext.Current.CancellationToken)
         ).GetData<WallReceiveMonthlyRewardResponse>()!;
 
         data.UserWallRewardList.Should().ContainSingle().Which.Should().BeEquivalentTo(rewardList);

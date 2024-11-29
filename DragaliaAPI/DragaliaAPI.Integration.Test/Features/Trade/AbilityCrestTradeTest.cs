@@ -29,7 +29,8 @@ public class AbilityCrestTradeTest : TestFixture
                 {
                     AbilityCrestTradeId = tradeId,
                     TradeCount = 1,
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 

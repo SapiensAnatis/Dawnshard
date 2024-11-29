@@ -10,7 +10,8 @@ public class GetDeployVersionTest : TestFixture
     {
         DeployGetDeployVersionResponse response = (
             await this.Client.PostMsgpack<DeployGetDeployVersionResponse>(
-                "deploy/get_deploy_version"
+                "deploy/get_deploy_version",
+                cancellationToken: TestContext.Current.CancellationToken
             )
         ).Data;
 

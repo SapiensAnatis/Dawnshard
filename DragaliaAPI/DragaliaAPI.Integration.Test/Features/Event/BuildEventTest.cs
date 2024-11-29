@@ -24,7 +24,8 @@ public class BuildEventTest : TestFixture
         DragaliaResponse<BuildEventGetEventDataResponse> evtData =
             await Client.PostMsgpack<BuildEventGetEventDataResponse>(
                 "build_event/get_event_data",
-                new BuildEventGetEventDataRequest(EventId)
+                new BuildEventGetEventDataRequest(EventId),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         evtData.Data.BuildEventRewardList.Should().NotBeNull();
@@ -39,8 +40,9 @@ public class BuildEventTest : TestFixture
     {
         DbPlayerEventItem pointItem = await ApiContext
             .PlayerEventItems.AsTracking()
-            .SingleAsync(x =>
-                x.EventId == EventId && x.Type == (int)BuildEventItemType.BuildEventPoint
+            .SingleAsync(
+                x => x.EventId == EventId && x.Type == (int)BuildEventItemType.BuildEventPoint,
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         pointItem.Quantity += 10;
@@ -49,12 +51,13 @@ public class BuildEventTest : TestFixture
             ApiContext.PlayerEventRewards.Where(x => x.EventId == EventId)
         );
 
-        await ApiContext.SaveChangesAsync();
+        await ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         DragaliaResponse<BuildEventReceiveBuildPointRewardResponse> evtResp =
             await Client.PostMsgpack<BuildEventReceiveBuildPointRewardResponse>(
                 "build_event/receive_build_point_reward",
-                new BuildEventReceiveBuildPointRewardRequest(EventId)
+                new BuildEventReceiveBuildPointRewardRequest(EventId),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         evtResp

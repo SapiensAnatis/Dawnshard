@@ -27,7 +27,8 @@ public class Clb01EventTest : TestFixture
         DragaliaResponse<Clb01EventGetEventDataResponse> evtData =
             await Client.PostMsgpack<Clb01EventGetEventDataResponse>(
                 $"{Prefix}/get_event_data",
-                new Clb01EventGetEventDataRequest(EventId)
+                new Clb01EventGetEventDataRequest(EventId),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         evtData.Data.Clb01EventUserData.Should().NotBeNull();
@@ -39,8 +40,9 @@ public class Clb01EventTest : TestFixture
     {
         DbPlayerEventItem pointItem = await ApiContext
             .PlayerEventItems.AsTracking()
-            .SingleAsync(x =>
-                x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint
+            .SingleAsync(
+                x => x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint,
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         pointItem.Quantity += 20;
@@ -49,12 +51,13 @@ public class Clb01EventTest : TestFixture
             ApiContext.PlayerEventRewards.Where(x => x.EventId == EventId)
         );
 
-        await ApiContext.SaveChangesAsync();
+        await ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         DragaliaResponse<Clb01EventReceiveClb01PointRewardResponse> evtResp =
             await Client.PostMsgpack<Clb01EventReceiveClb01PointRewardResponse>(
                 $"{Prefix}/receive_clb01_point_reward",
-                new Clb01EventReceiveClb01PointRewardRequest(EventId)
+                new Clb01EventReceiveClb01PointRewardRequest(EventId),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         evtResp

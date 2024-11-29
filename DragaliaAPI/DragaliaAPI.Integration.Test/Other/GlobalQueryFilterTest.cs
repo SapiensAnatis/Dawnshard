@@ -39,9 +39,13 @@ public class GlobalQueryFilterTest : TestFixture
         // We will already have an instance for our own Viewer ID thanks to TestFixture
         this.ApiContext.Players.Add(new() { ViewerId = this.ViewerId + 1, AccountId = "other" });
         this.ApiContext.PlayerUserData.Add(new() { ViewerId = this.ViewerId + 1 });
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
-        (await this.ApiContext.PlayerUserData.AsNoTracking().ToListAsync())
+        (
+            await this
+                .ApiContext.PlayerUserData.AsNoTracking()
+                .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
+        )
             .Should()
             .HaveCount(1)
             .And.AllSatisfy(x => x.ViewerId.Should().Be(this.ViewerId));
@@ -89,7 +93,7 @@ public class GlobalQueryFilterTest : TestFixture
                 },
             ]
         );
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.ApiContext.PlayerPresentHistory.Should()
             .ContainSingle()
@@ -107,7 +111,9 @@ public class GlobalQueryFilterTest : TestFixture
     [Fact]
     public async Task DbPlayerDmodeInfo_HasGlobalQueryFilter()
     {
-        await this.ApiContext.PlayerDmodeInfos.ExecuteDeleteAsync();
+        await this.ApiContext.PlayerDmodeInfos.ExecuteDeleteAsync(
+            cancellationToken: TestContext.Current.CancellationToken
+        );
         await TestGlobalQueryFilter<DbPlayerDmodeInfo>();
     }
 
@@ -116,9 +122,13 @@ public class GlobalQueryFilterTest : TestFixture
     {
         this.ApiContext.Players.Add(new() { ViewerId = this.ViewerId + 1, AccountId = "other" });
         this.ApiContext.PlayerDiamondData.Add(new() { ViewerId = this.ViewerId + 1 });
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
-        (await this.ApiContext.PlayerDiamondData.AsNoTracking().ToListAsync())
+        (
+            await this
+                .ApiContext.PlayerDiamondData.AsNoTracking()
+                .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
+        )
             .Should()
             .HaveCount(1)
             .And.AllSatisfy(x => x.ViewerId.Should().Be(this.ViewerId));
