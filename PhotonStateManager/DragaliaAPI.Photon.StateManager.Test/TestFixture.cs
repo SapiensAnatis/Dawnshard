@@ -1,10 +1,11 @@
 ﻿using System.Net.Http.Headers;
 using DragaliaAPI.Photon.StateManager.Models;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Redis.OM.Contracts;
-using Xunit.Abstractions;
+
 
 namespace DragaliaAPI.Photon.StateManager.Test;
 
@@ -18,7 +19,6 @@ public class TestFixture : IAsyncLifetime
                 builder.ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();
-                    logging.AddXUnit(outputHelper);
                 })
             )
             .CreateClient();
@@ -36,10 +36,12 @@ public class TestFixture : IAsyncLifetime
 
     protected IRedisConnectionProvider RedisConnectionProvider { get; }
 
-    public Task InitializeAsync() => Task.CompletedTask;
+    public ValueTask InitializeAsync() => ValueTask.CompletedTask;
 
-    public async Task DisposeAsync() =>
+#pragma warning disable CA1816 // Call GC.SuppressFinalize correctly
+    public async ValueTask DisposeAsync() =>
         await this
             .RedisConnectionProvider.RedisCollection<RedisGame>()
             .DeleteAsync(this.RedisConnectionProvider.RedisCollection<RedisGame>());
+#pragma warning restore CA1816
 }

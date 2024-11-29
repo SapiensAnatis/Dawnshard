@@ -3,8 +3,6 @@ using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.EntityFrameworkCore;
-using Snapshooter;
-using Snapshooter.Xunit;
 
 namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 
@@ -13,6 +11,17 @@ namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 /// </summary>
 public class DungeonStartTest : TestFixture
 {
+    private static VerifySettings VerifySettings
+    {
+        get
+        {
+            VerifySettings settings = new();
+            settings.IgnoreMember<DragonList>(x => x.DragonKeyId);
+            settings.IgnoreMember<TalismanList>(x => x.TalismanKeyId);
+            return settings;
+        }
+    }
+    
     public DungeonStartTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
@@ -33,7 +42,7 @@ public class DungeonStartTest : TestFixture
             )
         ).Data;
 
-        Snapshot.Match(response.IngameData.PartyInfo.PartyUnitList, SnapshotOptions);
+        Verify(response.IngameData.PartyInfo.PartyUnitList, VerifySettings);
 
         response.IngameData.PartyInfo.PartyUnitList.Should().HaveCount(4);
         response.IngameData.PartyInfo.PartyUnitList.Should().BeInAscendingOrder(x => x.Position);
@@ -56,7 +65,7 @@ public class DungeonStartTest : TestFixture
         ).Data;
 
         // Abuse of snapshots here is lazy, but the resulting JSON is thousands of lines long...
-        Snapshot.Match(response.IngameData.PartyInfo.PartyUnitList, SnapshotOptions);
+        Verify(response.IngameData.PartyInfo.PartyUnitList, VerifySettings);
 
         response.IngameData.PartyInfo.PartyUnitList.Should().HaveCount(8);
         response.IngameData.PartyInfo.PartyUnitList.Should().BeInAscendingOrder(x => x.Position);
@@ -137,7 +146,7 @@ public class DungeonStartTest : TestFixture
         ).Data;
 
         // Only test the first two since the others are empty
-        Snapshot.Match(response.IngameData.PartyInfo.PartyUnitList.Take(2), SnapshotOptions);
+        Verify(response.IngameData.PartyInfo.PartyUnitList.Take(2), VerifySettings);
 
         response.IngameData.PartyInfo.PartyUnitList.Should().HaveCount(4);
         response
@@ -320,8 +329,4 @@ public class DungeonStartTest : TestFixture
             .GameWeaponPassiveAbilityList.Should()
             .Contain(x => x.WeaponPassiveAbilityId == flameDullRes);
     }
-
-    private static readonly Func<MatchOptions, MatchOptions> SnapshotOptions = opts =>
-        opts.IgnoreField<long>("$..DragonData.DragonKeyId")
-            .IgnoreField<long>("$..TalismanData.TalismanKeyId");
 }

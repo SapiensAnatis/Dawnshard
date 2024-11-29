@@ -263,7 +263,7 @@ public class WeaponBodyTest : TestFixture
         {
             #region Unbind twice
             this.Add(
-                new(
+                new WeaponUpgradeTestCase(
                     new()
                     {
                         ViewerId = 0,
@@ -294,7 +294,7 @@ public class WeaponBodyTest : TestFixture
 
             #region Unbind with special material
             this.Add(
-                new(
+                new WeaponUpgradeTestCase(
                     new()
                     {
                         ViewerId = 0,
@@ -330,7 +330,7 @@ public class WeaponBodyTest : TestFixture
 
             #region Increase stats
             this.Add(
-                new(
+                new WeaponUpgradeTestCase(
                     new()
                     {
                         ViewerId = 0,
@@ -359,7 +359,7 @@ public class WeaponBodyTest : TestFixture
 
             #region Add passive ability and get skins
             this.Add(
-                new(
+                new WeaponUpgradeTestCase(
                     new()
                     {
                         ViewerId = 0,
@@ -432,7 +432,7 @@ public class WeaponBodyTest : TestFixture
 
             #region Unlock legend refine
             this.Add(
-                new(
+                new WeaponUpgradeTestCase(
                     new()
                     {
                         ViewerId = 0,
@@ -468,7 +468,7 @@ public class WeaponBodyTest : TestFixture
 
             #region Add copies
             this.Add(
-                new(
+                new WeaponUpgradeTestCase(
                     new()
                     {
                         ViewerId = 0,
@@ -506,7 +506,7 @@ public class WeaponBodyTest : TestFixture
 
             #region Add slots
             this.Add(
-                new(
+                new WeaponUpgradeTestCase(
                     new()
                     {
                         ViewerId = 0,
@@ -542,7 +542,7 @@ public class WeaponBodyTest : TestFixture
 
             #region Unlock weapon bonus
             this.Add(
-                new(
+                new WeaponUpgradeTestCase( 
                     new()
                     {
                         ViewerId = 0,

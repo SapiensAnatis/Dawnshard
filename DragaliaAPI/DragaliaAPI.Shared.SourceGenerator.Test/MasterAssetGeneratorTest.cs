@@ -1,3 +1,4 @@
+using System.Xml.XPath;
 using Basic.Reference.Assemblies;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
