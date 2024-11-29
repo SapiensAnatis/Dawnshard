@@ -13,7 +13,6 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
 
-
 namespace DragaliaAPI.Test.Services;
 
 public class UpdateDataServiceTest : RepositoryTestFixture

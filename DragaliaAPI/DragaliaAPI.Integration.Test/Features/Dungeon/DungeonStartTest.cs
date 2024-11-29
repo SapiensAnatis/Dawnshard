@@ -21,7 +21,7 @@ public class DungeonStartTest : TestFixture
             return settings;
         }
     }
-    
+
     public DungeonStartTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {

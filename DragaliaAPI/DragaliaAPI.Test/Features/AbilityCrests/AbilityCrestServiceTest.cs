@@ -10,7 +10,6 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Test.Utils;
 
-
 namespace DragaliaAPI.Test.Features.AbilityCrests;
 
 public class AbilityCrestServiceTest

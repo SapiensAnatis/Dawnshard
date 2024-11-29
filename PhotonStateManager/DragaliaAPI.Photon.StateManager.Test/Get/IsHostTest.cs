@@ -3,7 +3,6 @@ using System.Net.Http.Json;
 using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Photon.StateManager.Models;
 
-
 namespace DragaliaAPI.Photon.StateManager.Test.Get;
 
 public class IsHostTest : TestFixture

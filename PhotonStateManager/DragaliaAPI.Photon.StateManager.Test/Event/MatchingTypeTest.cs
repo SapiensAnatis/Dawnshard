@@ -5,7 +5,6 @@ using DragaliaAPI.Photon.Shared.Requests;
 using DragaliaAPI.Photon.StateManager.Models;
 using DragaliaAPI.Photon.StateManager.Test.Helpers;
 
-
 namespace DragaliaAPI.Photon.StateManager.Test.Event;
 
 public class MatchingTypeTest : TestFixture

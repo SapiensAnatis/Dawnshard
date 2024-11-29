@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using MockQueryable;
 using Moq.Language.Flow;
 
-
 namespace DragaliaAPI.Test;
 
 public static class UnitTestUtils

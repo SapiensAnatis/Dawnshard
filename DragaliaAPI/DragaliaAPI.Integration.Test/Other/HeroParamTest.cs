@@ -21,7 +21,7 @@ public class HeroParamTest : TestFixture
         List<HeroParam>? heroParams = await httpResponse.Content.ReadFromJsonAsync<
             List<HeroParam>
         >();
-        
+
         Verify(heroParams);
 
         // AI should not have shared skills

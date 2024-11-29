@@ -542,7 +542,7 @@ public class WeaponBodyTest : TestFixture
 
             #region Unlock weapon bonus
             this.Add(
-                new WeaponUpgradeTestCase( 
+                new WeaponUpgradeTestCase(
                     new()
                     {
                         ViewerId = 0,

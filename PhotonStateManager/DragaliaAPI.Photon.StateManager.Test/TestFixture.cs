@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Redis.OM.Contracts;
 
-
 namespace DragaliaAPI.Photon.StateManager.Test;
 
 [Collection(TestCollection.Name)]
