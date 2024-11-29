@@ -6,10 +6,10 @@
   "devDependencies": {
     "@msgpack/msgpack": "3.0.0-beta2",
     "@types/jest": "29.5.14",
-    "miniflare": "3.20241022.0",
-    "vitest": "2.1.4",
+    "miniflare": "3.20241106.1",
+    "vitest": "2.1.5",
     "vitest-environment-miniflare": "2.14.4",
-    "wrangler": "3.83.0"
+    "wrangler": "3.90.0"
   },
   "type": "module",
   "scripts": {
