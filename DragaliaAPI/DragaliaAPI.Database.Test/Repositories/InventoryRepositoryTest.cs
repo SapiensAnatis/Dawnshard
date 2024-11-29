@@ -32,7 +32,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 
         (
             await this.fixture.ApiContext.PlayerMaterials.FindAsync(
-                [ViewerId],
+                [ViewerId, Materials.WaterwyrmsGreatsphere],
                 cancellationToken: TestContext.Current.CancellationToken
             )
         )!
@@ -59,7 +59,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 
         (
             await this.fixture.ApiContext.PlayerMaterials.FindAsync(
-                [ViewerId],
+                [ViewerId, Materials.FirestormPrism],
                 TestContext.Current.CancellationToken
             )
         )!
@@ -77,7 +77,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 
         (
             await this.fixture.ApiContext.PlayerMaterials.FindAsync(
-                [ViewerId],
+                [ViewerId, Materials.SunlightOre],
                 TestContext.Current.CancellationToken
             )
         )!
@@ -86,7 +86,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 
         (
             await this.fixture.ApiContext.PlayerMaterials.FindAsync(
-                [ViewerId],
+                [ViewerId, Materials.SunlightStone],
                 TestContext.Current.CancellationToken
             )
         )!
