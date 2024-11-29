@@ -169,7 +169,7 @@ public class DragonTest : TestFixture
 
         int augmentCount = (
             await this.ApiContext.PlayerMaterials.FindAsync(
-                [ViewerId],
+                [ViewerId, Materials.AmplifyingDragonscale],
                 TestContext.Current.CancellationToken
             )
         )!.Quantity;

@@ -215,7 +215,7 @@ public class PartyTest : TestFixture
     {
         DbParty party =
             await this.ApiContext.PlayerParties.FindAsync(
-                [ViewerId],
+                [ViewerId, 1],
                 TestContext.Current.CancellationToken
             ) ?? throw new NullReferenceException();
 
