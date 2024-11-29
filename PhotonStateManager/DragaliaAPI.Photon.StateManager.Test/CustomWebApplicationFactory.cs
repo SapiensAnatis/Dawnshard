@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace DragaliaAPI.Photon.StateManager.Test;
 
-public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
+public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly TestContainersHelper testContainersHelper;
 
@@ -25,7 +25,13 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
             )
         );
 
-    public Task InitializeAsync() => this.testContainersHelper.StartAsync();
+    public async ValueTask InitializeAsync()
+    {
+        await this.testContainersHelper.StartAsync();
+    }
 
-    Task IAsyncLifetime.DisposeAsync() => this.testContainersHelper.StopAsync();
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        await this.testContainersHelper.StopAsync();
+    }
 }

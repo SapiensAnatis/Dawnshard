@@ -12,7 +12,6 @@ using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
-using Xunit.Abstractions;
 
 namespace DragaliaAPI.Test.Services;
 

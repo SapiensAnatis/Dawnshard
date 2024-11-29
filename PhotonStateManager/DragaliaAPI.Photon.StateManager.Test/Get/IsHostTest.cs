@@ -2,7 +2,6 @@ using System.Net;
 using System.Net.Http.Json;
 using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Photon.StateManager.Models;
-using Xunit.Abstractions;
 
 namespace DragaliaAPI.Photon.StateManager.Test.Get;
 

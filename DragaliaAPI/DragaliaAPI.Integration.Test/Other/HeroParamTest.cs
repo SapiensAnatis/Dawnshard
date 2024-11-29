@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using DragaliaAPI.Photon.Shared.Models;
-using Snapshooter.Xunit;
 
 namespace DragaliaAPI.Integration.Test.Other;
 
@@ -22,7 +21,8 @@ public class HeroParamTest : TestFixture
         List<HeroParam>? heroParams = await httpResponse.Content.ReadFromJsonAsync<
             List<HeroParam>
         >();
-        Snapshot.Match(heroParams);
+
+        Verify(heroParams);
 
         // AI should not have shared skills
         heroParams!

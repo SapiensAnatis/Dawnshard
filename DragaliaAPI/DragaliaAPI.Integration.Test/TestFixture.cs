@@ -187,7 +187,7 @@ public class TestFixture
                 builder.ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();
-                    logging.AddXUnit(this.TestOutputHelper);
+                    logging.AddConsole();
                 });
                 builder.ConfigureTestServices(services =>
                 {
