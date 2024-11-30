@@ -481,9 +481,10 @@
     "_Id": 10200008,
     "_MissionType": "Drill",
     "_MissionId": 102000,
-    "_CompleteType": "DragonLevelUp",
+    "_CompleteType": "DragonLevelUpCount",
     "_UseTotalValue": 1,
-    "_Parameter2": 3
+    "_Parameter": 3,
+    "_Parameter2": 5
   },
   {
     "_Id": 10210008,
@@ -520,9 +521,10 @@
     "_Id": 10250008,
     "_MissionType": "Drill",
     "_MissionId": 102500,
-    "_CompleteType": "CharacterLevelUp",
+    "_CompleteType": "CharacterLevelUpCount",
     "_UseTotalValue": 1,
-    "_Parameter2": 2
+    "_Parameter": 2,
+    "_Parameter2": 30
   },
   {
     "_Id": 10260008,
@@ -536,9 +538,10 @@
     "_Id": 10270008,
     "_MissionType": "Drill",
     "_MissionId": 102700,
-    "_CompleteType": "DragonLevelUp",
+    "_CompleteType": "DragonLevelUpCount",
     "_UseTotalValue": 1,
-    "_Parameter2": 2
+    "_Parameter": 2,
+    "_Parameter2": 5
   },
   {
     "_Id": 10280008,
@@ -584,9 +587,10 @@
     "_Id": 10330008,
     "_MissionType": "Drill",
     "_MissionId": 103300,
-    "_CompleteType": "DragonLevelUp",
+    "_CompleteType": "DragonLevelUpCount",
     "_UseTotalValue": 1,
-    "_Parameter2": 1
+    "_Parameter": 1,
+    "_Parameter2": 10
   },
   {
     "_Id": 10340008,
@@ -617,9 +621,10 @@
     "_Id": 10370008,
     "_MissionType": "Drill",
     "_MissionId": 103700,
-    "_CompleteType": "CharacterLevelUp",
+    "_CompleteType": "CharacterLevelUpCount",
     "_UseTotalValue": 1,
-    "_Parameter2": 5
+    "_Parameter": 5,
+    "_Parameter2": 40
   },
   {
     "_Id": 10380008,
@@ -657,9 +662,10 @@
     "_Id": 10420008,
     "_MissionType": "Drill",
     "_MissionId": 104200,
-    "_CompleteType": "CharacterLevelUp",
+    "_CompleteType": "CharacterLevelUpCount",
     "_UseTotalValue": 1,
-    "_Parameter2": 4
+    "_Parameter": 4,
+    "_Parameter2": 50
   },
   {
     "_Id": 10430008,
@@ -673,9 +679,10 @@
     "_Id": 10440008,
     "_MissionType": "Drill",
     "_MissionId": 104400,
-    "_CompleteType": "DragonLevelUp",
+    "_CompleteType": "DragonLevelUpCount",
     "_UseTotalValue": 1,
-    "_Parameter2": 4
+    "_Parameter": 4,
+    "_Parameter2": 30
   },
   {
     "_Id": 10450008,
@@ -721,9 +728,10 @@
     "_Id": 10500008,
     "_MissionType": "Drill",
     "_MissionId": 105000,
-    "_CompleteType": "DragonLevelUp",
+    "_CompleteType": "DragonLevelUpCount",
     "_UseTotalValue": 1,
-    "_Parameter2": 5
+    "_Parameter": 5,
+    "_Parameter2": 30
   },
   {
     "_Id": 10510008,
@@ -777,9 +785,10 @@
     "_Id": 20020008,
     "_MissionType": "Drill",
     "_MissionId": 200200,
-    "_CompleteType": "CharacterLevelUp",
+    "_CompleteType": "CharacterLevelUpCount",
     "_UseTotalValue": 1,
-    "_Parameter2": 1
+    "_Parameter": 1,
+    "_Parameter2": 70
   },
   {
     "_Id": 20030008,
@@ -801,9 +810,10 @@
     "_Id": 20050008,
     "_MissionType": "Drill",
     "_MissionId": 200500,
-    "_CompleteType": "CharacterLevelUp",
+    "_CompleteType": "CharacterLevelUpCount",
     "_UseTotalValue": 1,
-    "_Parameter2": 5
+    "_Parameter": 5,
+    "_Parameter2": 70
   },
   {
     "_Id": 20060008,
@@ -865,9 +875,10 @@
     "_Id": 20130008,
     "_MissionType": "Drill",
     "_MissionId": 201300,
-    "_CompleteType": "CharacterLevelUp",
+    "_CompleteType": "CharacterLevelUpCount",
     "_UseTotalValue": 1,
-    "_Parameter2": 3
+    "_Parameter": 3,
+    "_Parameter2": 70
   },
   {
     "_Id": 20140008,
@@ -897,9 +908,10 @@
     "_Id": 20170008,
     "_MissionType": "Drill",
     "_MissionId": 201700,
-    "_CompleteType": "CharacterLevelUp",
+    "_CompleteType": "CharacterLevelUpCount",
     "_UseTotalValue": 1,
-    "_Parameter2": 2
+    "_Parameter": 2,
+    "_Parameter2": 70
   },
   {
     "_Id": 20180008,
@@ -913,9 +925,10 @@
     "_Id": 20190008,
     "_MissionType": "Drill",
     "_MissionId": 201900,
-    "_CompleteType": "CharacterLevelUp",
+    "_CompleteType": "CharacterLevelUpCount",
     "_UseTotalValue": 1,
-    "_Parameter2": 4
+    "_Parameter": 4,
+    "_Parameter2": 70
   },
   {
     "_Id": 20200008,

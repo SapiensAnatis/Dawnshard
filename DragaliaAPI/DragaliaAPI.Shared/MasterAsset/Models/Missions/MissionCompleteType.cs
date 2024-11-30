@@ -82,6 +82,11 @@ public enum MissionCompleteType
     CharacterLevelUp,
 
     /// <summary>
+    /// UnitElement element, int count
+    /// </summary>
+    CharacterLevelUpCount,
+
+    /// <summary>
     /// Charas chara, UnitElement element
     /// </summary>
     CharacterManaNodeUnlock,
@@ -91,6 +96,11 @@ public enum MissionCompleteType
     /// Dragons dragon, UnitElement element
     /// </summary>
     DragonLevelUp,
+
+    /// <summary>
+    /// UnitElement element, int count
+    /// </summary>
+    DragonLevelUpCount,
 
     /// <summary>
     /// Dragons dragon, DragonGifts gift, UnitElement element
