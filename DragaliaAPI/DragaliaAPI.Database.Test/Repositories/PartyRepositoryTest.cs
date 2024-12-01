@@ -42,17 +42,16 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task SetParty_UpdatesDatabase()
     {
-        DbParty toAdd =
-            new()
+        DbParty toAdd = new()
+        {
+            ViewerId = ViewerId,
+            PartyName = "New Name",
+            PartyNo = 3,
+            Units = new List<DbPartyUnit>()
             {
-                ViewerId = ViewerId,
-                PartyName = "New Name",
-                PartyNo = 3,
-                Units = new List<DbPartyUnit>()
-                {
-                    new() { UnitNo = 1, CharaId = Charas.Ieyasu },
-                },
-            };
+                new() { UnitNo = 1, CharaId = Charas.Ieyasu },
+            },
+        };
 
         await this.partyRepository.SetParty(toAdd);
         await this.partyRepository.SaveChangesAsync();
@@ -70,24 +69,23 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task SetParty_HandlesOverfilledUnitList()
     {
-        DbParty toAdd =
-            new()
+        DbParty toAdd = new()
+        {
+            ViewerId = ViewerId,
+            PartyName = "New Name",
+            PartyNo = 5,
+            Units = new List<DbPartyUnit>()
             {
-                ViewerId = ViewerId,
-                PartyName = "New Name",
-                PartyNo = 5,
-                Units = new List<DbPartyUnit>()
-                {
-                    new() { UnitNo = 1, CharaId = Charas.Ieyasu },
-                    new() { UnitNo = 1, CharaId = Charas.Addis },
-                    new() { UnitNo = 2, CharaId = Charas.Botan },
-                    new() { UnitNo = 2, CharaId = Charas.Sazanka },
-                    new() { UnitNo = 3, CharaId = Charas.Mitsuhide },
-                    new() { UnitNo = 3, CharaId = Charas.Nobunaga },
-                    new() { UnitNo = 4, CharaId = Charas.Chitose },
-                    new() { UnitNo = 4, CharaId = Charas.Hanabusa },
-                },
-            };
+                new() { UnitNo = 1, CharaId = Charas.Ieyasu },
+                new() { UnitNo = 1, CharaId = Charas.Addis },
+                new() { UnitNo = 2, CharaId = Charas.Botan },
+                new() { UnitNo = 2, CharaId = Charas.Sazanka },
+                new() { UnitNo = 3, CharaId = Charas.Mitsuhide },
+                new() { UnitNo = 3, CharaId = Charas.Nobunaga },
+                new() { UnitNo = 4, CharaId = Charas.Chitose },
+                new() { UnitNo = 4, CharaId = Charas.Hanabusa },
+            },
+        };
 
         await this.partyRepository.SetParty(toAdd);
         await this.partyRepository.SaveChangesAsync();

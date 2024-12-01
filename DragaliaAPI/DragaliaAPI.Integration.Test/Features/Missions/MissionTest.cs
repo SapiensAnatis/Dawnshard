@@ -612,42 +612,38 @@ public class MissionTest : TestFixture
     [Fact]
     public async Task GetMissionList_DoesNotReturnOutOfDateMissions()
     {
-        DbPlayerMission expiredMission =
-            new()
-            {
-                Id = 11650101,
-                Type = MissionType.Period,
-                State = MissionState.InProgress,
-                Start = DateTimeOffset.UtcNow.AddDays(-2),
-                End = DateTimeOffset.UtcNow.AddDays(-1),
-            };
-        DbPlayerMission notStartedMission =
-            new()
-            {
-                Id = 11650201,
-                Type = MissionType.Period,
-                State = MissionState.InProgress,
-                Start = DateTimeOffset.UtcNow.AddDays(+1),
-                End = DateTimeOffset.UtcNow.AddDays(+2),
-            };
-        DbPlayerMission expectedMission =
-            new()
-            {
-                Id = 11650301,
-                Type = MissionType.Period,
-                State = MissionState.InProgress,
-                Start = DateTimeOffset.UtcNow.AddDays(-1),
-                End = DateTimeOffset.UtcNow.AddDays(+1),
-            };
-        DbPlayerMission otherExpectedMission =
-            new()
-            {
-                Id = 11650302,
-                Type = MissionType.Period,
-                State = MissionState.InProgress,
-                Start = DateTimeOffset.UnixEpoch,
-                End = DateTimeOffset.UnixEpoch,
-            };
+        DbPlayerMission expiredMission = new()
+        {
+            Id = 11650101,
+            Type = MissionType.Period,
+            State = MissionState.InProgress,
+            Start = DateTimeOffset.UtcNow.AddDays(-2),
+            End = DateTimeOffset.UtcNow.AddDays(-1),
+        };
+        DbPlayerMission notStartedMission = new()
+        {
+            Id = 11650201,
+            Type = MissionType.Period,
+            State = MissionState.InProgress,
+            Start = DateTimeOffset.UtcNow.AddDays(+1),
+            End = DateTimeOffset.UtcNow.AddDays(+2),
+        };
+        DbPlayerMission expectedMission = new()
+        {
+            Id = 11650301,
+            Type = MissionType.Period,
+            State = MissionState.InProgress,
+            Start = DateTimeOffset.UtcNow.AddDays(-1),
+            End = DateTimeOffset.UtcNow.AddDays(+1),
+        };
+        DbPlayerMission otherExpectedMission = new()
+        {
+            Id = 11650302,
+            Type = MissionType.Period,
+            State = MissionState.InProgress,
+            Start = DateTimeOffset.UnixEpoch,
+            End = DateTimeOffset.UnixEpoch,
+        };
 
         await this.AddRangeToDatabase(
             [expiredMission, notStartedMission, expectedMission, otherExpectedMission]

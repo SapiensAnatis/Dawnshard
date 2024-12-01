@@ -26,21 +26,20 @@ public class RepeatController(
             );
         }
 
-        RepeatEndResponse response =
-            new()
+        RepeatEndResponse response = new()
+        {
+            IngameResultData = info.IngameResultData,
+            UpdateDataList = info.UpdateDataList,
+            EntityResult = new()
             {
-                IngameResultData = info.IngameResultData,
-                UpdateDataList = info.UpdateDataList,
-                EntityResult = new()
-                {
-                    ConvertedEntityList = [],
-                    NewGetEntityList = [],
-                    OverDiscardEntityList = [],
-                    OverPresentLimitEntityList = [],
-                    OverPresentEntityList = [],
-                },
-                RepeatData = null,
-            };
+                ConvertedEntityList = [],
+                NewGetEntityList = [],
+                OverDiscardEntityList = [],
+                OverPresentLimitEntityList = [],
+                OverPresentEntityList = [],
+            },
+            RepeatData = null,
+        };
 
         return response;
     }

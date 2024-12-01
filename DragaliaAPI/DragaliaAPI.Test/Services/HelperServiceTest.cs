@@ -120,19 +120,18 @@ public class HelperServiceTest
 
     private static class StubData
     {
-        public static readonly QuestGetSupportUserListResponse HelperList =
-            new()
+        public static readonly QuestGetSupportUserListResponse HelperList = new()
+        {
+            SupportUserList = new List<UserSupportList>()
             {
-                SupportUserList = new List<UserSupportList>()
-                {
-                    TestData.SupportListEuden,
-                    TestData.SupportListElisanne,
-                },
-                SupportUserDetailList = new List<AtgenSupportUserDetailList>()
-                {
-                    new() { ViewerId = 1000, IsFriend = true },
-                    new() { ViewerId = 1001, IsFriend = false },
-                },
-            };
+                TestData.SupportListEuden,
+                TestData.SupportListElisanne,
+            },
+            SupportUserDetailList = new List<AtgenSupportUserDetailList>()
+            {
+                new() { ViewerId = 1000, IsFriend = true },
+                new() { ViewerId = 1001, IsFriend = false },
+            },
+        };
     }
 }

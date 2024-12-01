@@ -29,12 +29,11 @@ public class AbilityCrestRewardHandler(
         {
             AbilityCrest crestData = MasterAsset.AbilityCrest[crest];
 
-            Entity duplicateEntity =
-                new(
-                    crestData.DuplicateEntityType,
-                    Id: (int)crestData.DuplicateEntityId,
-                    Quantity: crestData.DuplicateEntityQuantity * entity.Quantity
-                );
+            Entity duplicateEntity = new(
+                crestData.DuplicateEntityType,
+                Id: (int)crestData.DuplicateEntityId,
+                Quantity: crestData.DuplicateEntityQuantity * entity.Quantity
+            );
 
             logger.LogTrace(
                 "Converted ability crest entity: {@Entity} to {@DuplicateEntity}.",

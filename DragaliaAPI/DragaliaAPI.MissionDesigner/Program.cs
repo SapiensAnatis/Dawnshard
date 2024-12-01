@@ -36,12 +36,11 @@ foreach (Type type in types)
 }
 
 #pragma warning disable CA1869 // Avoid creating a new 'JsonSerializerOptions' instance for every serialization operation
-JsonSerializerOptions options =
-    new(MasterAssetJsonOptions.Instance)
-    {
-        WriteIndented = true,
-        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-    };
+JsonSerializerOptions options = new(MasterAssetJsonOptions.Instance)
+{
+    WriteIndented = true,
+    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+};
 #pragma warning restore CA1869
 
 await using FileStream readNormalMissionFs = File.OpenRead(

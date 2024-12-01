@@ -109,17 +109,16 @@ public sealed partial class SummonService(
                 totalCount = bannerData.TotalCount;
             }
 
-            SummonList item =
-                new()
-                {
-                    SummonId = banner.Id,
-                    SummonType = banner.SummonType,
-                    Status = 1,
-                    CommenceDate = banner.Start,
-                    CompleteDate = banner.End,
-                    DailyCount = dailyCount,
-                    TotalCount = totalCount,
-                };
+            SummonList item = new()
+            {
+                SummonId = banner.Id,
+                SummonType = banner.SummonType,
+                Status = 1,
+                CommenceDate = banner.Start,
+                CompleteDate = banner.End,
+                DailyCount = dailyCount,
+                TotalCount = totalCount,
+            };
 
             if (banner.SummonType == SummonTypes.Normal)
             {
@@ -474,15 +473,14 @@ public sealed partial class SummonService(
                     break;
             }
 
-            AtgenResultUnitList processedResult =
-                new()
-                {
-                    EntityType = result.EntityType,
-                    Id = result.Id,
-                    IsNew = isNew,
-                    Rarity = result.Rarity,
-                    DewPoint = dewPoint,
-                };
+            AtgenResultUnitList processedResult = new()
+            {
+                EntityType = result.EntityType,
+                Id = result.Id,
+                IsNew = isNew,
+                Rarity = result.Rarity,
+                DewPoint = dewPoint,
+            };
 
             returnedResult.Add(processedResult);
         }

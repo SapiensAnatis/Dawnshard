@@ -23,27 +23,44 @@ public class AbilityCrestServiceTest
     private readonly AbilityCrestService abilityCrestService;
 
     private static readonly Dictionary<Materials, int> EmptyMap = new();
-    private static readonly Dictionary<Materials, int> SilverKey =
-        new() { { Materials.SilverKey, 1 } };
-    private static readonly Dictionary<Materials, int> GoldenKey =
-        new() { { Materials.GoldenKey, 1 } };
-    private static readonly Dictionary<Materials, int> GreatwyrmMidgardsormrUnbind1Map =
-        new() { { Materials.JadeInsignia, 20 } };
-    private static readonly Dictionary<Materials, int> GloriousTempestUnbind1Map =
-        new() { { Materials.JadeInsignia, 100 }, { Materials.RoyalJadeInsignia, 40 } };
-    private static readonly Dictionary<Materials, int> TutelaryUnbind1Map =
-        new() { { Materials.TwilightShard, 50 }, { Materials.TutelarySuccessorsMemory, 20 } };
-    private static readonly Dictionary<Materials, int> GreatwyrmMidgardsormrUnbind4Map =
-        new() { { Materials.JadeInsignia, 40 }, { Materials.DyrenellAureus, 5 } };
-    private static readonly Dictionary<Materials, int> GloriousTempestUnbind4Map =
-        new() { { Materials.JadeInsignia, 100 }, { Materials.RoyalJadeInsignia, 40 } };
-    private static readonly Dictionary<Materials, int> TutelaryUnbind4Map =
-        new()
-        {
-            { Materials.TwilightShard, 150 },
-            { Materials.TwilightPrism, 150 },
-            { Materials.TutelarySuccessorsMemory, 40 },
-        };
+    private static readonly Dictionary<Materials, int> SilverKey = new()
+    {
+        { Materials.SilverKey, 1 },
+    };
+    private static readonly Dictionary<Materials, int> GoldenKey = new()
+    {
+        { Materials.GoldenKey, 1 },
+    };
+    private static readonly Dictionary<Materials, int> GreatwyrmMidgardsormrUnbind1Map = new()
+    {
+        { Materials.JadeInsignia, 20 },
+    };
+    private static readonly Dictionary<Materials, int> GloriousTempestUnbind1Map = new()
+    {
+        { Materials.JadeInsignia, 100 },
+        { Materials.RoyalJadeInsignia, 40 },
+    };
+    private static readonly Dictionary<Materials, int> TutelaryUnbind1Map = new()
+    {
+        { Materials.TwilightShard, 50 },
+        { Materials.TutelarySuccessorsMemory, 20 },
+    };
+    private static readonly Dictionary<Materials, int> GreatwyrmMidgardsormrUnbind4Map = new()
+    {
+        { Materials.JadeInsignia, 40 },
+        { Materials.DyrenellAureus, 5 },
+    };
+    private static readonly Dictionary<Materials, int> GloriousTempestUnbind4Map = new()
+    {
+        { Materials.JadeInsignia, 100 },
+        { Materials.RoyalJadeInsignia, 40 },
+    };
+    private static readonly Dictionary<Materials, int> TutelaryUnbind4Map = new()
+    {
+        { Materials.TwilightShard, 150 },
+        { Materials.TwilightPrism, 150 },
+        { Materials.TutelarySuccessorsMemory, 40 },
+    };
 
     public static IEnumerable<object[]> SuccessfulUnbindData =>
         new List<object[]>
@@ -110,17 +127,22 @@ public class AbilityCrestServiceTest
             new object[] { AbilityCrestId.GloriousTempest, 4, true, GoldenKey, 0 },
         };
 
-    private static readonly Dictionary<Materials, int> GreatwyrmMidgardsormrCopyMap =
-        new() { { Materials.JadeInsignia, 200 }, { Materials.DyrenellAureus, 25 } };
-    private static readonly Dictionary<Materials, int> GloriousTempestCopyMap =
-        new() { { Materials.JadeInsignia, 500 }, { Materials.RoyalJadeInsignia, 200 } };
-    private static readonly Dictionary<Materials, int> TutelarysDestinyCopyMap =
-        new()
-        {
-            { Materials.TwilightShard, 200 },
-            { Materials.TwilightPrism, 150 },
-            { Materials.TutelarySuccessorsMemory, 120 },
-        };
+    private static readonly Dictionary<Materials, int> GreatwyrmMidgardsormrCopyMap = new()
+    {
+        { Materials.JadeInsignia, 200 },
+        { Materials.DyrenellAureus, 25 },
+    };
+    private static readonly Dictionary<Materials, int> GloriousTempestCopyMap = new()
+    {
+        { Materials.JadeInsignia, 500 },
+        { Materials.RoyalJadeInsignia, 200 },
+    };
+    private static readonly Dictionary<Materials, int> TutelarysDestinyCopyMap = new()
+    {
+        { Materials.TwilightShard, 200 },
+        { Materials.TwilightPrism, 150 },
+        { Materials.TutelarySuccessorsMemory, 120 },
+    };
 
     public static IEnumerable<object[]> SuccessfulCopiesData =>
         new List<object[]>
@@ -137,21 +159,31 @@ public class AbilityCrestServiceTest
             new object[] { AbilityCrestId.TutelarysDestinyWolfsBoon, TutelarysDestinyCopyMap, 0 },
         };
 
-    private static readonly Dictionary<Materials, int> Rarity2LevelMap =
-        new() { { Materials.HolyWater, 7 } };
-    private static readonly Dictionary<Materials, int> Rarity3LevelMap =
-        new() { { Materials.HolyWater, 7 }, { Materials.ConsecratedWater, 2 } };
-    private static readonly Dictionary<Materials, int> Rarity4LevelMap =
-        new() { { Materials.HolyWater, 3 }, { Materials.ConsecratedWater, 3 } };
-    private static readonly Dictionary<Materials, int> Rarity5LevelMap =
-        new() { { Materials.HolyWater, 3 }, { Materials.ConsecratedWater, 5 } };
-    private static readonly Dictionary<Materials, int> Rarity9LevelMap =
-        new()
-        {
-            { Materials.HolyWater, 2 },
-            { Materials.ConsecratedWater, 14 },
-            { Materials.TutelarySuccessorsMemory, 2 },
-        };
+    private static readonly Dictionary<Materials, int> Rarity2LevelMap = new()
+    {
+        { Materials.HolyWater, 7 },
+    };
+    private static readonly Dictionary<Materials, int> Rarity3LevelMap = new()
+    {
+        { Materials.HolyWater, 7 },
+        { Materials.ConsecratedWater, 2 },
+    };
+    private static readonly Dictionary<Materials, int> Rarity4LevelMap = new()
+    {
+        { Materials.HolyWater, 3 },
+        { Materials.ConsecratedWater, 3 },
+    };
+    private static readonly Dictionary<Materials, int> Rarity5LevelMap = new()
+    {
+        { Materials.HolyWater, 3 },
+        { Materials.ConsecratedWater, 5 },
+    };
+    private static readonly Dictionary<Materials, int> Rarity9LevelMap = new()
+    {
+        { Materials.HolyWater, 2 },
+        { Materials.ConsecratedWater, 14 },
+        { Materials.TutelarySuccessorsMemory, 2 },
+    };
 
     public static IEnumerable<object[]> SuccessfulLevelData =>
         new List<object[]>
@@ -191,13 +223,12 @@ public class AbilityCrestServiceTest
     public async Task TryBuildup_WithInvalidBuildupPieceIdReturnsInvalidResultCode()
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.ManaFount);
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = BuildupPieceTypes.Refine,
-                IsUseDedicatedMaterial = false,
-                Step = 1,
-            };
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = BuildupPieceTypes.Refine,
+            IsUseDedicatedMaterial = false,
+            Step = 1,
+        };
 
         await this
             .abilityCrestService.Invoking(x => x.TryBuildup(abilityCrest, pieceList))
@@ -214,13 +245,12 @@ public class AbilityCrestServiceTest
     )
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.ManaFount);
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = buildupType,
-                IsUseDedicatedMaterial = false,
-                Step = 0,
-            };
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = buildupType,
+            IsUseDedicatedMaterial = false,
+            Step = 0,
+        };
 
         (await this.abilityCrestService.TryBuildup(abilityCrest, pieceList))
             .Should()
@@ -234,37 +264,35 @@ public class AbilityCrestServiceTest
         BuildupPieceTypes buildupType
     )
     {
-        AbilityCrest abilityCrest =
-            new(
-                0,
-                0,
-                0,
-                0,
-                Materials.Empty,
-                Materials.Empty,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                false
-            );
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = buildupType,
-                IsUseDedicatedMaterial = false,
-                Step = 1,
-            };
+        AbilityCrest abilityCrest = new(
+            0,
+            0,
+            0,
+            0,
+            Materials.Empty,
+            Materials.Empty,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            false
+        );
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = buildupType,
+            IsUseDedicatedMaterial = false,
+            Step = 1,
+        };
 
         (await this.abilityCrestService.TryBuildup(abilityCrest, pieceList))
             .Should()
@@ -275,13 +303,12 @@ public class AbilityCrestServiceTest
     public async Task TryBuildup_Copies_WithDedicatedUnbindMaterialThrowsError()
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.WorthyRivals);
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = BuildupPieceTypes.Copies,
-                IsUseDedicatedMaterial = true,
-                Step = 2,
-            };
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = BuildupPieceTypes.Copies,
+            IsUseDedicatedMaterial = true,
+            Step = 2,
+        };
 
         try
         {
@@ -303,13 +330,12 @@ public class AbilityCrestServiceTest
     )
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(abilityCrestId);
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = BuildupPieceTypes.Unbind,
-                IsUseDedicatedMaterial = true,
-                Step = 1,
-            };
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = BuildupPieceTypes.Unbind,
+            IsUseDedicatedMaterial = true,
+            Step = 1,
+        };
 
         try
         {
@@ -331,13 +357,12 @@ public class AbilityCrestServiceTest
     )
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(abilityCrestId);
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = BuildupPieceTypes.Unbind,
-                IsUseDedicatedMaterial = true,
-                Step = 1,
-            };
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = BuildupPieceTypes.Unbind,
+            IsUseDedicatedMaterial = true,
+            Step = 1,
+        };
 
         this.mockInventoryRepository.Setup(x =>
                 x.CheckQuantity(new Dictionary<Materials, int>() { { materialId, 1 } })
@@ -357,16 +382,18 @@ public class AbilityCrestServiceTest
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
             AbilityCrestId.GreatwyrmMidgardsormr
         );
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = BuildupPieceTypes.Unbind,
-                IsUseDedicatedMaterial = false,
-                Step = 2,
-            };
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = BuildupPieceTypes.Unbind,
+            IsUseDedicatedMaterial = false,
+            Step = 2,
+        };
 
-        Dictionary<Materials, int> expectedMap =
-            new() { { Materials.JadeInsignia, 40 }, { Materials.DyrenellAureus, 5 } };
+        Dictionary<Materials, int> expectedMap = new()
+        {
+            { Materials.JadeInsignia, 40 },
+            { Materials.DyrenellAureus, 5 },
+        };
         this.mockInventoryRepository.Setup(x =>
                 x.CheckQuantity(
                     It.Is<IEnumerable<KeyValuePair<Materials, int>>>(y =>
@@ -389,13 +416,12 @@ public class AbilityCrestServiceTest
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
             AbilityCrestId.TutelarysDestinyWolfsBoon
         );
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = BuildupPieceTypes.Copies,
-                IsUseDedicatedMaterial = false,
-                Step = 3,
-            };
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = BuildupPieceTypes.Copies,
+            IsUseDedicatedMaterial = false,
+            Step = 3,
+        };
 
         this.mockInventoryRepository.Setup(x =>
                 x.CheckQuantity(
@@ -420,13 +446,12 @@ public class AbilityCrestServiceTest
     public async Task TryBuildup_Unbind_WithoutDedicatedMaterialWithoutDewpointReturnsInvalidResultCode()
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.ManaFount);
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = BuildupPieceTypes.Unbind,
-                IsUseDedicatedMaterial = false,
-                Step = 1,
-            };
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = BuildupPieceTypes.Unbind,
+            IsUseDedicatedMaterial = false,
+            Step = 1,
+        };
 
         this.mockInventoryRepository.Setup(x => x.CheckQuantity(new Dictionary<Materials, int>()))
             .ReturnsAsync(true);
@@ -444,13 +469,12 @@ public class AbilityCrestServiceTest
     public async Task TryBuildup_Copies_WithoutDedicatedMaterialWithoutDewpointReturnsInvalidResultCode()
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.DragonsNest);
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = BuildupPieceTypes.Copies,
-                IsUseDedicatedMaterial = false,
-                Step = 2,
-            };
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = BuildupPieceTypes.Copies,
+            IsUseDedicatedMaterial = false,
+            Step = 2,
+        };
 
         this.mockInventoryRepository.Setup(x => x.CheckQuantity(new Dictionary<Materials, int>()))
             .ReturnsAsync(true);
@@ -472,13 +496,12 @@ public class AbilityCrestServiceTest
     )
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.ManaFount);
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = buildupType,
-                IsUseDedicatedMaterial = false,
-                Step = 2,
-            };
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = buildupType,
+            IsUseDedicatedMaterial = false,
+            Step = 2,
+        };
 
         this.mockInventoryRepository.Setup(x => x.CheckQuantity(new Dictionary<Materials, int>()))
             .ReturnsAsync(true);
@@ -513,13 +536,12 @@ public class AbilityCrestServiceTest
     )
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.ManaFount);
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = buildupType,
-                IsUseDedicatedMaterial = false,
-                Step = 3,
-            };
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = buildupType,
+            IsUseDedicatedMaterial = false,
+            Step = 3,
+        };
 
         this.mockInventoryRepository.Setup(x => x.CheckQuantity(new Dictionary<Materials, int>()))
             .ReturnsAsync(true);
@@ -554,13 +576,12 @@ public class AbilityCrestServiceTest
     )
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(abilityCrestId);
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = BuildupPieceTypes.Unbind,
-                IsUseDedicatedMaterial = isDedicated,
-                Step = step,
-            };
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = BuildupPieceTypes.Unbind,
+            IsUseDedicatedMaterial = isDedicated,
+            Step = step,
+        };
 
         this.mockInventoryRepository.Setup(x =>
                 x.CheckQuantity(
@@ -609,13 +630,12 @@ public class AbilityCrestServiceTest
     )
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(abilityCrestId);
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = BuildupPieceTypes.Copies,
-                IsUseDedicatedMaterial = false,
-                Step = 2,
-            };
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = BuildupPieceTypes.Copies,
+            IsUseDedicatedMaterial = false,
+            Step = 2,
+        };
 
         this.mockInventoryRepository.Setup(x =>
                 x.CheckQuantity(
@@ -658,37 +678,35 @@ public class AbilityCrestServiceTest
     [Fact]
     public async Task TryBuildup_Level_WithInvalidBuildupLevelIdReturnsInvalidResultCode()
     {
-        AbilityCrest abilityCrest =
-            new(
-                0,
-                0,
-                0,
-                0,
-                Materials.Empty,
-                Materials.Empty,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                false
-            );
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = BuildupPieceTypes.Stats,
-                IsUseDedicatedMaterial = false,
-                Step = 1,
-            };
+        AbilityCrest abilityCrest = new(
+            0,
+            0,
+            0,
+            0,
+            Materials.Empty,
+            Materials.Empty,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            false
+        );
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = BuildupPieceTypes.Stats,
+            IsUseDedicatedMaterial = false,
+            Step = 1,
+        };
 
         (await this.abilityCrestService.TryBuildup(abilityCrest, pieceList))
             .Should()
@@ -699,13 +717,12 @@ public class AbilityCrestServiceTest
     public async Task TryBuildup_Level_WithDedicatedUnbindMaterialThrowsError()
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.WorthyRivals);
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = BuildupPieceTypes.Stats,
-                IsUseDedicatedMaterial = true,
-                Step = 15,
-            };
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = BuildupPieceTypes.Stats,
+            IsUseDedicatedMaterial = true,
+            Step = 15,
+        };
 
         try
         {
@@ -724,13 +741,12 @@ public class AbilityCrestServiceTest
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
             AbilityCrestId.TheOrdersMessengerOwl
         );
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = BuildupPieceTypes.Stats,
-                IsUseDedicatedMaterial = false,
-                Step = 15,
-            };
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = BuildupPieceTypes.Stats,
+            IsUseDedicatedMaterial = false,
+            Step = 15,
+        };
 
         this.mockInventoryRepository.Setup(x =>
                 x.CheckQuantity(
@@ -754,13 +770,12 @@ public class AbilityCrestServiceTest
     public async Task TryBuildup_Level_CantFindAbilityCrestInDbThrowsError()
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.DragonsNest);
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = BuildupPieceTypes.Stats,
-                IsUseDedicatedMaterial = false,
-                Step = 12,
-            };
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = BuildupPieceTypes.Stats,
+            IsUseDedicatedMaterial = false,
+            Step = 12,
+        };
 
         this.mockInventoryRepository.Setup(x =>
                 x.CheckQuantity(
@@ -801,13 +816,12 @@ public class AbilityCrestServiceTest
     public async Task TryBuildup_Level_StepNotSequentialReturnsInvalidResultCode(int currLevel)
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.ManaFount);
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = BuildupPieceTypes.Stats,
-                IsUseDedicatedMaterial = false,
-                Step = 5,
-            };
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = BuildupPieceTypes.Stats,
+            IsUseDedicatedMaterial = false,
+            Step = 5,
+        };
 
         this.mockInventoryRepository.Setup(x =>
                 x.CheckQuantity(new Dictionary<Materials, int> { { Materials.HolyWater, 7 } })
@@ -842,13 +856,12 @@ public class AbilityCrestServiceTest
     )
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(AbilityCrestId.ManaFount);
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = BuildupPieceTypes.Stats,
-                IsUseDedicatedMaterial = false,
-                Step = step,
-            };
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = BuildupPieceTypes.Stats,
+            IsUseDedicatedMaterial = false,
+            Step = step,
+        };
 
         this.mockInventoryRepository.Setup(x =>
                 x.CheckQuantity(new Dictionary<Materials, int> { { Materials.HolyWater, 7 } })
@@ -883,13 +896,12 @@ public class AbilityCrestServiceTest
     )
     {
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(abilityCrestId);
-        AtgenBuildupAbilityCrestPieceList pieceList =
-            new()
-            {
-                BuildupPieceType = BuildupPieceTypes.Stats,
-                IsUseDedicatedMaterial = false,
-                Step = step,
-            };
+        AtgenBuildupAbilityCrestPieceList pieceList = new()
+        {
+            BuildupPieceType = BuildupPieceTypes.Stats,
+            IsUseDedicatedMaterial = false,
+            Step = step,
+        };
 
         this.mockInventoryRepository.Setup(x => x.CheckQuantity(materialMap)).ReturnsAsync(true);
         this.mockAbilityCrestRepository.Setup(x => x.FindAsync(abilityCrestId))
@@ -924,8 +936,11 @@ public class AbilityCrestServiceTest
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
             AbilityCrestId.TutelarysDestinyWolfsBoon
         );
-        AtgenPlusCountParamsList augmentParams =
-            new() { PlusCount = 41, PlusCountType = PlusCountType.Hp };
+        AtgenPlusCountParamsList augmentParams = new()
+        {
+            PlusCount = 41,
+            PlusCountType = PlusCountType.Hp,
+        };
 
         (await this.abilityCrestService.TryBuildupAugments(abilityCrest, augmentParams))
             .Should()
@@ -957,8 +972,11 @@ public class AbilityCrestServiceTest
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
             AbilityCrestId.TutelarysDestinyWolfsBoon
         );
-        AtgenPlusCountParamsList augmentParams =
-            new() { PlusCount = 40, PlusCountType = PlusCountType.Atk };
+        AtgenPlusCountParamsList augmentParams = new()
+        {
+            PlusCount = 40,
+            PlusCountType = PlusCountType.Atk,
+        };
 
         this.mockAbilityCrestRepository.Setup(x =>
                 x.FindAsync(AbilityCrestId.TutelarysDestinyWolfsBoon)
@@ -984,8 +1002,11 @@ public class AbilityCrestServiceTest
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
             AbilityCrestId.TutelarysDestinyWolfsBoon
         );
-        AtgenPlusCountParamsList augmentParams =
-            new() { PlusCount = 39, PlusCountType = PlusCountType.Hp };
+        AtgenPlusCountParamsList augmentParams = new()
+        {
+            PlusCount = 39,
+            PlusCountType = PlusCountType.Hp,
+        };
 
         this.mockAbilityCrestRepository.Setup(x =>
                 x.FindAsync(AbilityCrestId.TutelarysDestinyWolfsBoon)
@@ -1013,8 +1034,11 @@ public class AbilityCrestServiceTest
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
             AbilityCrestId.TutelarysDestinyWolfsBoon
         );
-        AtgenPlusCountParamsList augmentParams =
-            new() { PlusCount = 38, PlusCountType = PlusCountType.Atk };
+        AtgenPlusCountParamsList augmentParams = new()
+        {
+            PlusCount = 38,
+            PlusCountType = PlusCountType.Atk,
+        };
 
         this.mockAbilityCrestRepository.Setup(x =>
                 x.FindAsync(AbilityCrestId.TutelarysDestinyWolfsBoon)
@@ -1069,8 +1093,11 @@ public class AbilityCrestServiceTest
         );
 
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(abilityCrestId);
-        AtgenPlusCountParamsList augmentParams =
-            new() { PlusCount = amount, PlusCountType = augmentType };
+        AtgenPlusCountParamsList augmentParams = new()
+        {
+            PlusCount = amount,
+            PlusCountType = augmentType,
+        };
         Materials material =
             augmentType == PlusCountType.Hp
                 ? Materials.FortifyingGemstone

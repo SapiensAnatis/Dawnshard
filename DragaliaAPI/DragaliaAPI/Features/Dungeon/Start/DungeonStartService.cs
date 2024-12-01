@@ -354,16 +354,15 @@ public partial class DungeonStartService(
 
     private async Task<IngameData> InitializeIngameData(int questId, ulong? supportViewerId = null)
     {
-        IngameData result =
-            new()
-            {
-                QuestId = questId,
-                ViewerId = (ulong)playerIdentityService.ViewerId,
-                PlayType = QuestPlayType.Default,
-                PartyInfo = new() { SupportData = new() },
-                StartTime = DateTimeOffset.UtcNow,
-                IsHost = true,
-            };
+        IngameData result = new()
+        {
+            QuestId = questId,
+            ViewerId = (ulong)playerIdentityService.ViewerId,
+            PlayType = QuestPlayType.Default,
+            PartyInfo = new() { SupportData = new() },
+            StartTime = DateTimeOffset.UtcNow,
+            IsHost = true,
+        };
 
         QuestData questInfo = MasterAsset.QuestData.Get(questId);
 

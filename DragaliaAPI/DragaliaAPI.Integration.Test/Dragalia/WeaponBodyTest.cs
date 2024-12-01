@@ -109,12 +109,11 @@ public class WeaponBodyTest : TestFixture
             x => GetMaterialCount(x.Key)
         );
 
-        WeaponBodyBuildupPieceRequest request =
-            new()
-            {
-                WeaponBodyId = testCase.InitialState.WeaponBodyId,
-                BuildupWeaponBodyPieceList = testCase.StepList,
-            };
+        WeaponBodyBuildupPieceRequest request = new()
+        {
+            WeaponBodyId = testCase.InitialState.WeaponBodyId,
+            BuildupWeaponBodyPieceList = testCase.StepList,
+        };
 
         WeaponBodyBuildupPieceResponse response = (
             await this.Client.PostMsgpack<WeaponBodyBuildupPieceResponse>(

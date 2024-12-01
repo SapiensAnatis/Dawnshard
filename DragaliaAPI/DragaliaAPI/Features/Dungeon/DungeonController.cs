@@ -60,18 +60,17 @@ public class DungeonController(
 
         logger.LogDebug("Processing fail request for quest {QuestId}", session.QuestId);
 
-        DungeonFailResponse response =
-            new()
+        DungeonFailResponse response = new()
+        {
+            Result = 1,
+            FailQuestDetail = new()
             {
-                Result = 1,
-                FailQuestDetail = new()
-                {
-                    QuestId = session.QuestId,
-                    WallId = 0,
-                    WallLevel = 0,
-                    IsHost = true,
-                },
-            };
+                QuestId = session.QuestId,
+                WallId = 0,
+                WallLevel = 0,
+                IsHost = true,
+            },
+        };
 
         logger.LogDebug("Session is multiplayer: {IsMulti}", session.IsMulti);
 

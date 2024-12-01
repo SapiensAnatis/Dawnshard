@@ -59,28 +59,27 @@ public class HeroParamService(
 
         CharaData charaData = MasterAsset.CharaData[unit.CharaData.CharaId];
 
-        HeroParam result =
-            new()
-            {
-                CharacterId = (int)unit.CharaData.CharaId,
-                Hp = unit.CharaData.Hp,
-                Attack = unit.CharaData.Attack,
-                Defence = 0, // Apparently meant to be zero
-                Ability1Lv = unit.CharaData.Ability1Level,
-                Ability2Lv = unit.CharaData.Ability2Level,
-                Ability3Lv = unit.CharaData.Ability3Level,
-                Skill1Lv = unit.CharaData.Skill1Level,
-                Skill2Lv = unit.CharaData.Skill2Level,
-                Level = unit.CharaData.Level,
-                BurstAttackLv = unit.CharaData.BurstAttackLevel,
-                AttackPlusCount = unit.CharaData.AttackPlusCount,
-                HpPlusCount = unit.CharaData.HpPlusCount,
-                ExAbilityLv = unit.CharaData.ExAbilityLevel,
-                ExAbility2Lv = unit.CharaData.ExAbility2Level,
-                ComboBuildupCount = unit.CharaData.ComboBuildupCount,
-                Position = unit.Position,
-                IsEnemyTarget = true,
-            };
+        HeroParam result = new()
+        {
+            CharacterId = (int)unit.CharaData.CharaId,
+            Hp = unit.CharaData.Hp,
+            Attack = unit.CharaData.Attack,
+            Defence = 0, // Apparently meant to be zero
+            Ability1Lv = unit.CharaData.Ability1Level,
+            Ability2Lv = unit.CharaData.Ability2Level,
+            Ability3Lv = unit.CharaData.Ability3Level,
+            Skill1Lv = unit.CharaData.Skill1Level,
+            Skill2Lv = unit.CharaData.Skill2Level,
+            Level = unit.CharaData.Level,
+            BurstAttackLv = unit.CharaData.BurstAttackLevel,
+            AttackPlusCount = unit.CharaData.AttackPlusCount,
+            HpPlusCount = unit.CharaData.HpPlusCount,
+            ExAbilityLv = unit.CharaData.ExAbilityLevel,
+            ExAbility2Lv = unit.CharaData.ExAbility2Level,
+            ComboBuildupCount = unit.CharaData.ComboBuildupCount,
+            Position = unit.Position,
+            IsEnemyTarget = true,
+        };
 
         if (unit.DragonData is not null)
         {

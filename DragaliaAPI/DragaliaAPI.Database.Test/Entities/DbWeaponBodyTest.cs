@@ -68,13 +68,12 @@ public class DbWeaponBodyTest
         int expectedLevel
     )
     {
-        DbWeaponBody weapon =
-            new()
-            {
-                WeaponBodyId = id,
-                LimitBreakCount = limitBreakCount,
-                LimitOverCount = limitOverCount,
-            };
+        DbWeaponBody weapon = new()
+        {
+            WeaponBodyId = id,
+            LimitBreakCount = limitBreakCount,
+            LimitOverCount = limitOverCount,
+        };
 
         weapon.SkillLevel.Should().Be(expectedLevel);
     }

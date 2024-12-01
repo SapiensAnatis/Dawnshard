@@ -21,20 +21,19 @@ internal sealed class EditorWidgetsService
             new() { Type = EntityTypes.HustleHammer, HasQuantity = true },
         ];
 
-        Dictionary<EntityTypes, List<EntityTypeItem>> availableItems =
-            new()
-            {
-                [EntityTypes.Chara] = GetCharaList(),
-                [EntityTypes.Item] = GetItemList(),
-                [EntityTypes.Dragon] = GetDragonList(),
-                [EntityTypes.Material] = GetMaterialList(),
-                [EntityTypes.DmodePoint] = GetDmodePointList(),
-                [EntityTypes.SkipTicket] = GetId0List(),
-                [EntityTypes.DragonGift] = GetDragonGiftList(),
-                [EntityTypes.FreeDiamantium] = GetId0List(),
-                [EntityTypes.Wyrmite] = GetId0List(),
-                [EntityTypes.HustleHammer] = GetId0List(),
-            };
+        Dictionary<EntityTypes, List<EntityTypeItem>> availableItems = new()
+        {
+            [EntityTypes.Chara] = GetCharaList(),
+            [EntityTypes.Item] = GetItemList(),
+            [EntityTypes.Dragon] = GetDragonList(),
+            [EntityTypes.Material] = GetMaterialList(),
+            [EntityTypes.DmodePoint] = GetDmodePointList(),
+            [EntityTypes.SkipTicket] = GetId0List(),
+            [EntityTypes.DragonGift] = GetDragonGiftList(),
+            [EntityTypes.FreeDiamantium] = GetId0List(),
+            [EntityTypes.Wyrmite] = GetId0List(),
+            [EntityTypes.HustleHammer] = GetId0List(),
+        };
 
         return new() { Types = typeInfo, AvailableItems = availableItems };
     }

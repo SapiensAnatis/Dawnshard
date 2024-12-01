@@ -16,14 +16,13 @@ public class OutputCachingTest : TestFixture
     {
         this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
 
-        DbFortBuild build =
-            new()
-            {
-                PlantId = FortPlants.WindAltar,
-                BuildStartDate = DateTimeOffset.UtcNow.AddDays(-2),
-                BuildEndDate = DateTimeOffset.UtcNow.AddDays(-1),
-                Level = 5,
-            };
+        DbFortBuild build = new()
+        {
+            PlantId = FortPlants.WindAltar,
+            BuildStartDate = DateTimeOffset.UtcNow.AddDays(-2),
+            BuildEndDate = DateTimeOffset.UtcNow.AddDays(-1),
+            Level = 5,
+        };
 
         await this.AddToDatabase(build);
 

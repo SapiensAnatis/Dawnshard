@@ -27,16 +27,15 @@ public class TestContainersHelper
     {
         get
         {
-            NpgsqlConnectionStringBuilder builder =
-                new()
-                {
-                    Host = this.postgresHost,
-                    Port = this.postgresPort,
-                    Username = this.postgresUser,
-                    Password = this.postgresPassword,
-                    Database = this.postgresDatabase,
-                    IncludeErrorDetail = true,
-                };
+            NpgsqlConnectionStringBuilder builder = new()
+            {
+                Host = this.postgresHost,
+                Port = this.postgresPort,
+                Username = this.postgresUser,
+                Password = this.postgresPassword,
+                Database = this.postgresDatabase,
+                IncludeErrorDetail = true,
+            };
 
             return builder.ConnectionString;
         }

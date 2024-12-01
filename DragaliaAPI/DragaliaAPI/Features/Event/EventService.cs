@@ -105,8 +105,11 @@ public class EventService(
 
         foreach (IEventReward reward in availableRewards)
         {
-            Entity entity =
-                new(reward.RewardEntityType, reward.RewardEntityId, reward.RewardEntityQuantity);
+            Entity entity = new(
+                reward.RewardEntityType,
+                reward.RewardEntityId,
+                reward.RewardEntityQuantity
+            );
             await rewardService.GrantReward(entity);
 
             eventRepository.CreateEventReward(eventId, reward.Id);

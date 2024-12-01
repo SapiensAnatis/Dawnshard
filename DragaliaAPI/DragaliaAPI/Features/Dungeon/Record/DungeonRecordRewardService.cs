@@ -135,12 +135,11 @@ public class DungeonRecordRewardService(
 
         int rewardQuantity = Math.Min(session.PlayCount, availableEssences);
 
-        Entity essence =
-            new(
-                EntityTypes.Material,
-                (int)questRewardData.DropLimitBreakMaterialId,
-                rewardQuantity
-            );
+        Entity essence = new(
+            EntityTypes.Material,
+            (int)questRewardData.DropLimitBreakMaterialId,
+            rewardQuantity
+        );
 
         RewardGrantResult result = await rewardService.GrantReward(essence);
 

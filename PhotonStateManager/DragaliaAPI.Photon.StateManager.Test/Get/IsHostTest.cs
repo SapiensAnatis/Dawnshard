@@ -15,28 +15,27 @@ public class IsHostTest : TestFixture
     [Fact]
     public async Task IsHost_HostFound_ReturnsTrue()
     {
-        RedisGame game =
-            new()
-            {
-                RoomId = 12345,
-                Name = "151de85a-200a-4952-8757-e0f868bbf28b",
-                EntryConditions = new(),
-                Players =
-                [
-                    new()
-                    {
-                        ViewerId = 2,
-                        ActorNr = 1,
-                        PartyNoList = [40],
-                    },
-                    new()
-                    {
-                        ViewerId = 3,
-                        ActorNr = 2,
-                        PartyNoList = [40],
-                    },
-                ],
-            };
+        RedisGame game = new()
+        {
+            RoomId = 12345,
+            Name = "151de85a-200a-4952-8757-e0f868bbf28b",
+            EntryConditions = new(),
+            Players =
+            [
+                new()
+                {
+                    ViewerId = 2,
+                    ActorNr = 1,
+                    PartyNoList = [40],
+                },
+                new()
+                {
+                    ViewerId = 3,
+                    ActorNr = 2,
+                    PartyNoList = [40],
+                },
+            ],
+        };
 
         this.RedisConnectionProvider.RedisCollection<RedisGame>().Insert(game);
 
@@ -58,28 +57,27 @@ public class IsHostTest : TestFixture
     [Fact]
     public async Task IsHost_IngameButNotHost_ReturnsFalse()
     {
-        RedisGame game =
-            new()
-            {
-                RoomId = 12345,
-                Name = "151de85a-200a-4952-8757-e0f868bbf28b",
-                EntryConditions = new(),
-                Players =
-                [
-                    new()
-                    {
-                        ViewerId = 2,
-                        ActorNr = 1,
-                        PartyNoList = [40],
-                    },
-                    new()
-                    {
-                        ViewerId = 3,
-                        ActorNr = 2,
-                        PartyNoList = [40],
-                    },
-                ],
-            };
+        RedisGame game = new()
+        {
+            RoomId = 12345,
+            Name = "151de85a-200a-4952-8757-e0f868bbf28b",
+            EntryConditions = new(),
+            Players =
+            [
+                new()
+                {
+                    ViewerId = 2,
+                    ActorNr = 1,
+                    PartyNoList = [40],
+                },
+                new()
+                {
+                    ViewerId = 3,
+                    ActorNr = 2,
+                    PartyNoList = [40],
+                },
+            ],
+        };
 
         this.RedisConnectionProvider.RedisCollection<RedisGame>().Insert(game);
 
@@ -101,26 +99,25 @@ public class IsHostTest : TestFixture
     [Fact]
     public async Task IsHost_NotInGame_ReturnsFalse()
     {
-        RedisGame game =
-            new()
-            {
-                RoomId = 12345,
-                Name = "151de85a-200a-4952-8757-e0f868bbf28b",
-                MatchingCompatibleId = 36,
-                MatchingType = MatchingTypes.Anyone,
-                QuestId = 301010103,
-                StartEntryTime = DateTimeOffset.UtcNow,
-                EntryConditions = new() { },
-                Players =
-                [
-                    new()
-                    {
-                        ViewerId = 2,
-                        ActorNr = 1,
-                        PartyNoList = [40],
-                    },
-                ],
-            };
+        RedisGame game = new()
+        {
+            RoomId = 12345,
+            Name = "151de85a-200a-4952-8757-e0f868bbf28b",
+            MatchingCompatibleId = 36,
+            MatchingType = MatchingTypes.Anyone,
+            QuestId = 301010103,
+            StartEntryTime = DateTimeOffset.UtcNow,
+            EntryConditions = new() { },
+            Players =
+            [
+                new()
+                {
+                    ViewerId = 2,
+                    ActorNr = 1,
+                    PartyNoList = [40],
+                },
+            ],
+        };
 
         this.RedisConnectionProvider.RedisCollection<RedisGame>().Insert(game);
 

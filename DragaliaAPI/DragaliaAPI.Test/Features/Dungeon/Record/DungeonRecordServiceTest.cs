@@ -54,61 +54,55 @@ public class DungeonRecordServiceTest
     {
         int lSurtrSoloId = 232031101;
 
-        DungeonSession session =
-            new()
-            {
-                QuestData = MasterAsset.QuestData[lSurtrSoloId],
-                Party = new List<PartySettingList>(),
-                StartTime = DateTimeOffset.UtcNow,
-            };
+        DungeonSession session = new()
+        {
+            QuestData = MasterAsset.QuestData[lSurtrSoloId],
+            Party = new List<PartySettingList>(),
+            StartTime = DateTimeOffset.UtcNow,
+        };
         PlayRecord playRecord = new() { Time = 10 };
 
-        DbQuest mockQuest =
-            new()
-            {
-                ViewerId = 1,
-                QuestId = lSurtrSoloId,
-                State = 0,
-                BestClearTime = 999,
-            };
+        DbQuest mockQuest = new()
+        {
+            ViewerId = 1,
+            QuestId = lSurtrSoloId,
+            State = 0,
+            BestClearTime = 999,
+        };
 
-        List<AtgenDropAll> dropList =
+        List<AtgenDropAll> dropList = new()
+        {
             new()
             {
-                new()
-                {
-                    Id = (int)Materials.FirestormRuby,
-                    Quantity = 10,
-                    Type = EntityTypes.Material,
-                },
-            };
+                Id = (int)Materials.FirestormRuby,
+                Quantity = 10,
+                Type = EntityTypes.Material,
+            },
+        };
 
-        List<AtgenDropAll> eventDrops =
+        List<AtgenDropAll> eventDrops = new()
+        {
             new()
             {
-                new()
-                {
-                    Id = (int)Materials.WoodlandHerbs,
-                    Quantity = 20,
-                    Type = EntityTypes.Material,
-                },
-            };
+                Id = (int)Materials.WoodlandHerbs,
+                Quantity = 20,
+                Type = EntityTypes.Material,
+            },
+        };
 
-        List<AtgenScoreMissionSuccessList> scoreMissionSuccessLists =
+        List<AtgenScoreMissionSuccessList> scoreMissionSuccessLists = new()
+        {
             new()
             {
-                new()
-                {
-                    ScoreMissionCompleteType = QuestCompleteType.LimitFall,
-                    ScoreTargetValue = 100,
-                },
-            };
+                ScoreMissionCompleteType = QuestCompleteType.LimitFall,
+                ScoreTargetValue = 100,
+            },
+        };
 
-        List<AtgenEventPassiveUpList> passiveUpLists =
-            new()
-            {
-                new() { PassiveId = 1, Progress = 2 },
-            };
+        List<AtgenEventPassiveUpList> passiveUpLists = new()
+        {
+            new() { PassiveId = 1, Progress = 2 },
+        };
 
         List<AtgenMissionsClearSet> missionsClearSets = new List<AtgenMissionsClearSet>()
         {
@@ -120,27 +114,25 @@ public class DungeonRecordServiceTest
             },
         };
 
-        List<AtgenFirstClearSet> missionCompleteSets =
+        List<AtgenFirstClearSet> missionCompleteSets = new()
+        {
             new()
             {
-                new()
-                {
-                    Type = EntityTypes.ExchangeTicket,
-                    Id = 2,
-                    Quantity = 3,
-                },
-            };
+                Type = EntityTypes.ExchangeTicket,
+                Id = 2,
+                Quantity = 3,
+            },
+        };
 
-        List<AtgenFirstClearSet> firstClearSets =
+        List<AtgenFirstClearSet> firstClearSets = new()
+        {
             new()
             {
-                new()
-                {
-                    Type = EntityTypes.RaidEventItem,
-                    Id = 4,
-                    Quantity = 5,
-                },
-            };
+                Type = EntityTypes.RaidEventItem,
+                Id = 4,
+                Quantity = 5,
+            },
+        };
 
         List<AtgenScoringEnemyPointList> enemyScoring =
         [

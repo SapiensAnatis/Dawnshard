@@ -76,19 +76,18 @@ public class SavefileEditTests : WebTestFixture
     {
         this.AddTokenCookie();
 
-        SavefileEditRequest invalidRequest =
-            new()
-            {
-                Presents =
-                [
-                    new()
-                    {
-                        Type = EntityTypes.Chara,
-                        Item = -4,
-                        Quantity = -2,
-                    },
-                ],
-            };
+        SavefileEditRequest invalidRequest = new()
+        {
+            Presents =
+            [
+                new()
+                {
+                    Type = EntityTypes.Chara,
+                    Item = -4,
+                    Quantity = -2,
+                },
+            ],
+        };
 
         (
             await this.Client.PostAsJsonAsync(
@@ -106,19 +105,18 @@ public class SavefileEditTests : WebTestFixture
     {
         this.AddTokenCookie();
 
-        SavefileEditRequest request =
-            new()
-            {
-                Presents =
-                [
-                    new()
-                    {
-                        Type = EntityTypes.Chara,
-                        Item = (int)Charas.SummerCelliera,
-                        Quantity = 1,
-                    },
-                ],
-            };
+        SavefileEditRequest request = new()
+        {
+            Presents =
+            [
+                new()
+                {
+                    Type = EntityTypes.Chara,
+                    Item = (int)Charas.SummerCelliera,
+                    Quantity = 1,
+                },
+            ],
+        };
 
         (
             await this.Client.PostAsJsonAsync(

@@ -100,46 +100,45 @@ public class DungeonStartTest : TestFixture
     [Fact]
     public async Task StartAssignUnit_HasExpectedPartyList()
     {
-        DungeonSkipStartAssignUnitRequest request =
-            new()
+        DungeonSkipStartAssignUnitRequest request = new()
+        {
+            QuestId = 100010103,
+            RequestPartySettingList = new List<PartySettingList>()
             {
-                QuestId = 100010103,
-                RequestPartySettingList = new List<PartySettingList>()
+                new()
                 {
-                    new()
-                    {
-                        UnitNo = 1,
-                        CharaId = Charas.GalaLeonidas,
-                        EquipWeaponBodyId = WeaponBodies.Draupnir,
-                        EquipDragonKeyId = (ulong)GetDragonKeyId(Dragons.Horus),
-                        EquipCrestSlotType1CrestId1 = AbilityCrestId.PrimalCrisis,
-                        EquipCrestSlotType1CrestId2 = AbilityCrestId.TheCutieCompetition,
-                        EquipCrestSlotType1CrestId3 = AbilityCrestId.AnIndelibleDate,
-                        EquipCrestSlotType2CrestId1 = AbilityCrestId.BeautifulGunman,
-                        EquipCrestSlotType2CrestId2 = AbilityCrestId.DragonArcanum,
-                        EquipTalismanKeyId = (ulong)GetTalismanKeyId(Talismans.GalaLeonidas),
-                        EquipCrestSlotType3CrestId1 = AbilityCrestId.AKnightsDreamAxesBoon,
-                        EquipCrestSlotType3CrestId2 = AbilityCrestId.CrownofLightSerpentsBoon,
-                        EditSkill1CharaId = Charas.GalaZethia,
-                        EditSkill2CharaId = Charas.GalaMascula,
-                    },
-                    new()
-                    {
-                        UnitNo = 2,
-                        CharaId = Charas.GalaGatov,
-                        EquipWeaponBodyId = WeaponBodies.Mjoelnir,
-                        EquipDragonKeyId = (ulong)GetDragonKeyId(Dragons.GalaMars),
-                        EquipCrestSlotType1CrestId1 = AbilityCrestId.TheCutieCompetition,
-                        EquipCrestSlotType1CrestId2 = AbilityCrestId.KungFuMasters,
-                        EquipCrestSlotType1CrestId3 = AbilityCrestId.BondsBetweenWorlds,
-                        EquipCrestSlotType2CrestId1 = AbilityCrestId.DragonArcanum,
-                        EquipCrestSlotType2CrestId2 = AbilityCrestId.BeautifulNothingness,
-                        EquipTalismanKeyId = (ulong)GetTalismanKeyId(Talismans.GalaMym),
-                        EquipCrestSlotType3CrestId1 = AbilityCrestId.TutelarysDestinyWolfsBoon,
-                        EquipCrestSlotType3CrestId2 = AbilityCrestId.TestamentofEternityFishsBoon,
-                    },
+                    UnitNo = 1,
+                    CharaId = Charas.GalaLeonidas,
+                    EquipWeaponBodyId = WeaponBodies.Draupnir,
+                    EquipDragonKeyId = (ulong)GetDragonKeyId(Dragons.Horus),
+                    EquipCrestSlotType1CrestId1 = AbilityCrestId.PrimalCrisis,
+                    EquipCrestSlotType1CrestId2 = AbilityCrestId.TheCutieCompetition,
+                    EquipCrestSlotType1CrestId3 = AbilityCrestId.AnIndelibleDate,
+                    EquipCrestSlotType2CrestId1 = AbilityCrestId.BeautifulGunman,
+                    EquipCrestSlotType2CrestId2 = AbilityCrestId.DragonArcanum,
+                    EquipTalismanKeyId = (ulong)GetTalismanKeyId(Talismans.GalaLeonidas),
+                    EquipCrestSlotType3CrestId1 = AbilityCrestId.AKnightsDreamAxesBoon,
+                    EquipCrestSlotType3CrestId2 = AbilityCrestId.CrownofLightSerpentsBoon,
+                    EditSkill1CharaId = Charas.GalaZethia,
+                    EditSkill2CharaId = Charas.GalaMascula,
                 },
-            };
+                new()
+                {
+                    UnitNo = 2,
+                    CharaId = Charas.GalaGatov,
+                    EquipWeaponBodyId = WeaponBodies.Mjoelnir,
+                    EquipDragonKeyId = (ulong)GetDragonKeyId(Dragons.GalaMars),
+                    EquipCrestSlotType1CrestId1 = AbilityCrestId.TheCutieCompetition,
+                    EquipCrestSlotType1CrestId2 = AbilityCrestId.KungFuMasters,
+                    EquipCrestSlotType1CrestId3 = AbilityCrestId.BondsBetweenWorlds,
+                    EquipCrestSlotType2CrestId1 = AbilityCrestId.DragonArcanum,
+                    EquipCrestSlotType2CrestId2 = AbilityCrestId.BeautifulNothingness,
+                    EquipTalismanKeyId = (ulong)GetTalismanKeyId(Talismans.GalaMym),
+                    EquipCrestSlotType3CrestId1 = AbilityCrestId.TutelarysDestinyWolfsBoon,
+                    EquipCrestSlotType3CrestId2 = AbilityCrestId.TestamentofEternityFishsBoon,
+                },
+            },
+        };
 
         DungeonStartStartAssignUnitResponse response = (
             await Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(

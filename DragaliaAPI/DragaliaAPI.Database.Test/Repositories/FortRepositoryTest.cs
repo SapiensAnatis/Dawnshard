@@ -120,20 +120,19 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetBuilding_GetsBuilding()
     {
-        DbFortBuild build =
-            new()
-            {
-                ViewerId = DbTestFixture.ViewerId,
-                PlantId = FortPlants.DaggerDojo,
-                Level = 1,
-                BuildId = 8,
-                IsNew = true,
-                BuildEndDate = DateTimeOffset.MaxValue,
-                BuildStartDate = DateTimeOffset.MinValue,
-                LastIncomeDate = DateTimeOffset.UnixEpoch,
-                PositionX = 3,
-                PositionZ = 4,
-            };
+        DbFortBuild build = new()
+        {
+            ViewerId = DbTestFixture.ViewerId,
+            PlantId = FortPlants.DaggerDojo,
+            Level = 1,
+            BuildId = 8,
+            IsNew = true,
+            BuildEndDate = DateTimeOffset.MaxValue,
+            BuildStartDate = DateTimeOffset.MinValue,
+            LastIncomeDate = DateTimeOffset.UnixEpoch,
+            PositionX = 3,
+            PositionZ = 4,
+        };
 
         await this.fixture.AddToDatabase(build);
 
@@ -148,20 +147,19 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetBuilding_NotFound_Throws()
     {
-        DbFortBuild build =
-            new()
-            {
-                ViewerId = DbTestFixture.ViewerId + 1,
-                PlantId = FortPlants.DaggerDojo,
-                Level = 1,
-                BuildId = 9,
-                IsNew = true,
-                BuildEndDate = DateTimeOffset.MaxValue,
-                BuildStartDate = DateTimeOffset.MinValue,
-                LastIncomeDate = DateTimeOffset.UnixEpoch,
-                PositionX = 3,
-                PositionZ = 4,
-            };
+        DbFortBuild build = new()
+        {
+            ViewerId = DbTestFixture.ViewerId + 1,
+            PlantId = FortPlants.DaggerDojo,
+            Level = 1,
+            BuildId = 9,
+            IsNew = true,
+            BuildEndDate = DateTimeOffset.MaxValue,
+            BuildStartDate = DateTimeOffset.MinValue,
+            LastIncomeDate = DateTimeOffset.UnixEpoch,
+            PositionX = 3,
+            PositionZ = 4,
+        };
 
         await this.fixture.AddToDatabase(build);
 
@@ -191,14 +189,13 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task DeleteBuild_Deletes()
     {
-        DbFortBuild build =
-            new()
-            {
-                ViewerId = DbTestFixture.ViewerId,
-                PlantId = FortPlants.DaggerDojo,
-                Level = 1,
-                BuildId = 15,
-            };
+        DbFortBuild build = new()
+        {
+            ViewerId = DbTestFixture.ViewerId,
+            PlantId = FortPlants.DaggerDojo,
+            Level = 1,
+            BuildId = 15,
+        };
 
         await this.fixture.AddToDatabase(build);
 

@@ -58,34 +58,32 @@ public class DmodeDungeonService(
 
         CharaData charaData = MasterAsset.CharaData[charaId];
 
-        AtgenUnitData unitData =
-            new(
-                chara.CharaId,
-                charaData.HasManaSpiral ? 4 : 3,
-                charaData.HasManaSpiral ? 3 : 2,
-                charaData.MaxAbility1Level,
-                charaData.MaxAbility2Level,
-                charaData.MaxAbility3Level,
-                5,
-                5,
-                2,
-                charaData.HasManaSpiral ? 1 : 0
-            );
+        AtgenUnitData unitData = new(
+            chara.CharaId,
+            charaData.HasManaSpiral ? 4 : 3,
+            charaData.HasManaSpiral ? 3 : 2,
+            charaData.MaxAbility1Level,
+            charaData.MaxAbility2Level,
+            charaData.MaxAbility3Level,
+            5,
+            5,
+            2,
+            charaData.HasManaSpiral ? 1 : 0
+        );
 
         const int dmodeLevelGroupId = 1; // Everyone has 1 /* MasterAsset.CharaData[chara.CharaId].DmodeLevelGroupId; */
 
-        DmodeIngameData ingame =
-            new(
-                string.Empty,
-                startFloor,
-                MaxFloor,
-                info.RecoveryCount,
-                info.RecoveryTime,
-                servitorId,
-                dmodeLevelGroupId,
-                unitData,
-                await dmodeService.GetServitorPassiveList()
-            );
+        DmodeIngameData ingame = new(
+            string.Empty,
+            startFloor,
+            MaxFloor,
+            info.RecoveryCount,
+            info.RecoveryTime,
+            servitorId,
+            dmodeLevelGroupId,
+            unitData,
+            await dmodeService.GetServitorPassiveList()
+        );
 
         // sets unique_key
         await dmodeCacheService.StoreIngameInfo(ingame);
@@ -98,8 +96,11 @@ public class DmodeDungeonService(
 
         await dmodeCacheService.StoreFloorInfo(firstFloor);
 
-        DmodePlayRecord firstPlayRecord =
-            new() { UniqueKey = ingame.UniqueKey, FloorKey = firstFloor.FloorKey };
+        DmodePlayRecord firstPlayRecord = new()
+        {
+            UniqueKey = ingame.UniqueKey,
+            FloorKey = firstFloor.FloorKey,
+        };
 
         await dmodeCacheService.StorePlayRecord(firstPlayRecord);
 
@@ -235,24 +236,23 @@ public class DmodeDungeonService(
             pointMultiplier2 += level.UpValue / 100;
         }
 
-        DmodeIngameResult ingameResult =
-            new()
-            {
-                FloorNum = floorNum,
-                IsRecordFloorNum = floorNum > await dmodeRepository.GetTotalMaxFloorAsync(),
-                CharaIdList = new List<Charas> { ingameData.UnitData.CharaId },
-                QuestTime = floorData.DmodeAreaInfo.QuestTime,
-                IsViewQuestTime = ingameData.StartFloorNum == 1,
-                DmodeScore = floorData.DmodeAreaInfo.DmodeScore,
-                RewardTalismanList = talismans,
-                TakeDmodePoint1 = (int)
-                    Math.Ceiling(floorData.DmodeUnitInfo.TakeDmodePoint1 * pointMultiplier1),
-                TakeDmodePoint2 = (int)
-                    Math.Ceiling(floorData.DmodeUnitInfo.TakeDmodePoint2 * pointMultiplier2),
-                TakePlayerExp = 0,
-                PlayerLevelUpFstone = 0,
-                ClearState = isGameOver ? 0 : 1,
-            };
+        DmodeIngameResult ingameResult = new()
+        {
+            FloorNum = floorNum,
+            IsRecordFloorNum = floorNum > await dmodeRepository.GetTotalMaxFloorAsync(),
+            CharaIdList = new List<Charas> { ingameData.UnitData.CharaId },
+            QuestTime = floorData.DmodeAreaInfo.QuestTime,
+            IsViewQuestTime = ingameData.StartFloorNum == 1,
+            DmodeScore = floorData.DmodeAreaInfo.DmodeScore,
+            RewardTalismanList = talismans,
+            TakeDmodePoint1 = (int)
+                Math.Ceiling(floorData.DmodeUnitInfo.TakeDmodePoint1 * pointMultiplier1),
+            TakeDmodePoint2 = (int)
+                Math.Ceiling(floorData.DmodeUnitInfo.TakeDmodePoint2 * pointMultiplier2),
+            TakePlayerExp = 0,
+            PlayerLevelUpFstone = 0,
+            ClearState = isGameOver ? 0 : 1,
+        };
 
         DbPlayerDmodeChara chara = await dmodeRepository.Charas.SingleAsync(x =>
             x.CharaId == charaId
@@ -332,18 +332,17 @@ public class DmodeDungeonService(
         IEnumerable<Charas> editSkillCharaIds
     )
     {
-        DmodeFloorData floorData =
-            new()
-            {
-                UniqueKey = ingameData.UniqueKey,
-                FloorKey = string.Empty, // Will be set by cache service
-                IsEnd = ingameData.StartFloorNum == ingameData.TargetFloorNum,
-                IsPlayEnd = false,
-                IsViewAreaStartEquipment = ingameData.StartFloorNum != 1, // For the first floor of skip runs
-                DmodeAreaInfo = null,
-                DmodeUnitInfo = null,
-                DmodeDungeonOdds = null,
-            };
+        DmodeFloorData floorData = new()
+        {
+            UniqueKey = ingameData.UniqueKey,
+            FloorKey = string.Empty, // Will be set by cache service
+            IsEnd = ingameData.StartFloorNum == ingameData.TargetFloorNum,
+            IsPlayEnd = false,
+            IsViewAreaStartEquipment = ingameData.StartFloorNum != 1, // For the first floor of skip runs
+            DmodeAreaInfo = null,
+            DmodeUnitInfo = null,
+            DmodeDungeonOdds = null,
+        };
 
         DmodeQuestFloor floor = MasterAsset.DmodeQuestFloor[ingameData.StartFloorNum];
 
@@ -597,18 +596,17 @@ public class DmodeDungeonService(
             ingameData.UnitData.CharaId
         );
 
-        DmodeFloorData floorData =
-            new()
-            {
-                UniqueKey = previousFloor.UniqueKey,
-                FloorKey = previousFloor.FloorKey, // Done so we can always reference the current floor
-                IsEnd = playRecord.FloorNum == ingameData.TargetFloorNum, // Game ignores this
-                IsPlayEnd = playRecord.IsFloorIncomplete, // Game ignores this (it only checks the one in DmodeIngameData)
-                IsViewAreaStartEquipment = false, // This can never be true as it only applies to the first floor after skipping
-                DmodeAreaInfo = areaInfo,
-                DmodeUnitInfo = unitInfo,
-                DmodeDungeonOdds = odds,
-            };
+        DmodeFloorData floorData = new()
+        {
+            UniqueKey = previousFloor.UniqueKey,
+            FloorKey = previousFloor.FloorKey, // Done so we can always reference the current floor
+            IsEnd = playRecord.FloorNum == ingameData.TargetFloorNum, // Game ignores this
+            IsPlayEnd = playRecord.IsFloorIncomplete, // Game ignores this (it only checks the one in DmodeIngameData)
+            IsViewAreaStartEquipment = false, // This can never be true as it only applies to the first floor after skipping
+            DmodeAreaInfo = areaInfo,
+            DmodeUnitInfo = unitInfo,
+            DmodeDungeonOdds = odds,
+        };
 
         return floorData;
     }
@@ -816,8 +814,12 @@ public class DmodeDungeonService(
                 .ToArray()
         );
 
-        DmodeDungeonItemList item =
-            new(0, itemData.Id, DmodeDungeonItemState.None, new AtgenOption());
+        DmodeDungeonItemList item = new(
+            0,
+            itemData.Id,
+            DmodeDungeonItemState.None,
+            new AtgenOption()
+        );
 
         return item;
     }
@@ -834,8 +836,12 @@ public class DmodeDungeonService(
                 .ToArray()
         );
 
-        DmodeDungeonItemList item =
-            new(0, weapon.Id, DmodeDungeonItemState.None, new AtgenOption());
+        DmodeDungeonItemList item = new(
+            0,
+            weapon.Id,
+            DmodeDungeonItemState.None,
+            new AtgenOption()
+        );
 
         item = CalculateAbilities(
             item,
@@ -858,8 +864,12 @@ public class DmodeDungeonService(
                 .ToArray()
         );
 
-        DmodeDungeonItemList item =
-            new(0, itemData.Id, DmodeDungeonItemState.None, new AtgenOption());
+        DmodeDungeonItemList item = new(
+            0,
+            itemData.Id,
+            DmodeDungeonItemState.None,
+            new AtgenOption()
+        );
 
         DmodeAbilityCrest crest = MasterAsset.DmodeAbilityCrest[item.ItemId];
 

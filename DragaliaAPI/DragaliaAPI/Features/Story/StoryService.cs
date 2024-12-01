@@ -180,16 +180,15 @@ public class StoryService(
         await inventoryRepository.UpdateQuantity(Materials.LookingGlass, -1);
         await userDataRepository.GiveWyrmite(CastleStoryWyrmite);
 
-        List<AtgenBuildEventRewardEntityList> rewardList =
+        List<AtgenBuildEventRewardEntityList> rewardList = new()
+        {
             new()
             {
-                new()
-                {
-                    EntityType = EntityTypes.Wyrmite,
-                    EntityId = 0,
-                    EntityQuantity = CastleStoryWyrmite,
-                },
-            };
+                EntityType = EntityTypes.Wyrmite,
+                EntityId = 0,
+                EntityQuantity = CastleStoryWyrmite,
+            },
+        };
 
         return rewardList;
     }
@@ -208,11 +207,10 @@ public class StoryService(
         missionProgressionService.OnQuestStoryCleared(storyId);
 
         await userDataRepository.GiveWyrmite(QuestStoryWyrmite);
-        List<AtgenBuildEventRewardEntityList> rewardList =
-            new()
-            {
-                new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = QuestStoryWyrmite },
-            };
+        List<AtgenBuildEventRewardEntityList> rewardList = new()
+        {
+            new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = QuestStoryWyrmite },
+        };
 
         if (
             MasterAsset.QuestStoryRewardInfo.TryGetValue(
@@ -328,11 +326,10 @@ public class StoryService(
         }
 
         await userDataRepository.GiveWyrmite(QuestStoryWyrmite);
-        List<AtgenBuildEventRewardEntityList> rewardList =
-            new()
-            {
-                new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = QuestStoryWyrmite },
-            };
+        List<AtgenBuildEventRewardEntityList> rewardList = new()
+        {
+            new() { EntityType = EntityTypes.Wyrmite, EntityQuantity = QuestStoryWyrmite },
+        };
 
         // TODO(Events): ??? This is not used for compendium (maybe for collect events)
 
@@ -344,25 +341,30 @@ public class StoryService(
         await userDataRepository.GiveWyrmite(DmodeStoryWyrmite);
 
         // Temporary measure to make fafnir upgrades more obtainable until endeavours are added
-        Entity dmodePoint1Entity =
-            new(EntityTypes.DmodePoint, Id: (int)DmodePoint.Point1, Quantity: 5_000);
-        Entity dmodePoint2Entity =
-            new(EntityTypes.DmodePoint, Id: (int)DmodePoint.Point2, Quantity: 1_000);
+        Entity dmodePoint1Entity = new(
+            EntityTypes.DmodePoint,
+            Id: (int)DmodePoint.Point1,
+            Quantity: 5_000
+        );
+        Entity dmodePoint2Entity = new(
+            EntityTypes.DmodePoint,
+            Id: (int)DmodePoint.Point2,
+            Quantity: 1_000
+        );
         await rewardService.GrantReward(dmodePoint1Entity);
         await rewardService.GrantReward(dmodePoint2Entity);
 
-        List<AtgenBuildEventRewardEntityList> rewardList =
+        List<AtgenBuildEventRewardEntityList> rewardList = new()
+        {
             new()
             {
-                new()
-                {
-                    EntityType = EntityTypes.Wyrmite,
-                    EntityId = 0,
-                    EntityQuantity = DmodeStoryWyrmite,
-                },
-                dmodePoint1Entity.ToBuildEventRewardEntityList(),
-                dmodePoint2Entity.ToBuildEventRewardEntityList(),
-            };
+                EntityType = EntityTypes.Wyrmite,
+                EntityId = 0,
+                EntityQuantity = DmodeStoryWyrmite,
+            },
+            dmodePoint1Entity.ToBuildEventRewardEntityList(),
+            dmodePoint2Entity.ToBuildEventRewardEntityList(),
+        };
 
         return rewardList;
     }
@@ -374,13 +376,12 @@ public class StoryService(
         AtgenBuildEventRewardEntityList reward
     )
     {
-        AtgenQuestStoryRewardList questReward =
-            new()
-            {
-                EntityId = reward.EntityId,
-                EntityType = reward.EntityType,
-                EntityQuantity = reward.EntityQuantity,
-            };
+        AtgenQuestStoryRewardList questReward = new()
+        {
+            EntityId = reward.EntityId,
+            EntityType = reward.EntityType,
+            EntityQuantity = reward.EntityQuantity,
+        };
 
         if (reward.EntityType is EntityTypes.Chara or EntityTypes.Dragon)
             questReward.EntityLevel = 1;

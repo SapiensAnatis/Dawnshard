@@ -73,19 +73,18 @@ public class StorySkipService(
             for (int x = fortsToUpdate.Count; x < fortConfig.BuildCount; x++)
             {
                 logger.LogDebug("Adding fort {plantId}", fortPlant);
-                DbFortBuild newUserFort =
-                    new()
-                    {
-                        ViewerId = playerIdentityService.ViewerId,
-                        PlantId = fortPlant,
-                        Level = fortConfig.Level,
-                        PositionX = fortConfig.PositionX,
-                        PositionZ = fortConfig.PositionZ,
-                        BuildStartDate = DateTimeOffset.UnixEpoch,
-                        BuildEndDate = DateTimeOffset.UnixEpoch,
-                        IsNew = true,
-                        LastIncomeDate = DateTimeOffset.UnixEpoch,
-                    };
+                DbFortBuild newUserFort = new()
+                {
+                    ViewerId = playerIdentityService.ViewerId,
+                    PlantId = fortPlant,
+                    Level = fortConfig.Level,
+                    PositionX = fortConfig.PositionX,
+                    PositionZ = fortConfig.PositionZ,
+                    BuildStartDate = DateTimeOffset.UnixEpoch,
+                    BuildEndDate = DateTimeOffset.UnixEpoch,
+                    IsNew = true,
+                    LastIncomeDate = DateTimeOffset.UnixEpoch,
+                };
                 newUserForts.Add(newUserFort);
 
                 currentFortLevel += 1;
@@ -130,23 +129,22 @@ public class StorySkipService(
             if (questExists == false)
             {
                 wyrmite += 25;
-                DbQuest userQuest =
-                    new()
-                    {
-                        ViewerId = playerIdentityService.ViewerId,
-                        QuestId = questData.Id,
-                        State = 3,
-                        IsMissionClear1 = true,
-                        IsMissionClear2 = true,
-                        IsMissionClear3 = true,
-                        PlayCount = 1,
-                        DailyPlayCount = 1,
-                        WeeklyPlayCount = 1,
-                        IsAppear = true,
-                        BestClearTime = 36000,
-                        LastWeeklyResetTime = DateTimeOffset.UnixEpoch,
-                        LastDailyResetTime = DateTimeOffset.UnixEpoch,
-                    };
+                DbQuest userQuest = new()
+                {
+                    ViewerId = playerIdentityService.ViewerId,
+                    QuestId = questData.Id,
+                    State = 3,
+                    IsMissionClear1 = true,
+                    IsMissionClear2 = true,
+                    IsMissionClear3 = true,
+                    PlayCount = 1,
+                    DailyPlayCount = 1,
+                    WeeklyPlayCount = 1,
+                    IsAppear = true,
+                    BestClearTime = 36000,
+                    LastWeeklyResetTime = DateTimeOffset.UnixEpoch,
+                    LastDailyResetTime = DateTimeOffset.UnixEpoch,
+                };
                 newUserQuests.Add(userQuest);
 
                 missionProgressionService.OnQuestCleared(
@@ -230,14 +228,13 @@ public class StorySkipService(
             if (storyState is null)
             {
                 wyrmite += 25;
-                DbPlayerStoryState userStory =
-                    new()
-                    {
-                        ViewerId = playerIdentityService.ViewerId,
-                        StoryType = StoryTypes.Quest,
-                        StoryId = questStory.Id,
-                        State = StoryState.Read,
-                    };
+                DbPlayerStoryState userStory = new()
+                {
+                    ViewerId = playerIdentityService.ViewerId,
+                    StoryType = StoryTypes.Quest,
+                    StoryId = questStory.Id,
+                    State = StoryState.Read,
+                };
                 newUserStories.Add(userStory);
 
                 missionProgressionService.OnQuestStoryCleared(questStory.Id);
@@ -274,32 +271,31 @@ public class StorySkipService(
             {
                 logger.LogDebug("Rewarding character {chara}", chara);
                 CharaData charaData = MasterAsset.CharaData[chara];
-                DbPlayerCharaData newUserChara =
-                    new()
-                    {
-                        ViewerId = playerIdentityService.ViewerId,
-                        CharaId = chara,
-                        Rarity = 4,
-                        Exp = 0,
-                        Level = 1,
-                        HpPlusCount = 0,
-                        AttackPlusCount = 0,
-                        IsNew = true,
-                        Skill1Level = 1,
-                        Skill2Level = 0,
-                        Ability1Level = 1,
-                        Ability2Level = 0,
-                        Ability3Level = 0,
-                        BurstAttackLevel = 0,
-                        ComboBuildupCount = 0,
-                        HpBase = (ushort)charaData.MinHp4,
-                        HpNode = 0,
-                        AttackBase = (ushort)charaData.MinAtk4,
-                        AttackNode = 0,
-                        ExAbilityLevel = 1,
-                        ExAbility2Level = 1,
-                        IsTemporary = false,
-                    };
+                DbPlayerCharaData newUserChara = new()
+                {
+                    ViewerId = playerIdentityService.ViewerId,
+                    CharaId = chara,
+                    Rarity = 4,
+                    Exp = 0,
+                    Level = 1,
+                    HpPlusCount = 0,
+                    AttackPlusCount = 0,
+                    IsNew = true,
+                    Skill1Level = 1,
+                    Skill2Level = 0,
+                    Ability1Level = 1,
+                    Ability2Level = 0,
+                    Ability3Level = 0,
+                    BurstAttackLevel = 0,
+                    ComboBuildupCount = 0,
+                    HpBase = (ushort)charaData.MinHp4,
+                    HpNode = 0,
+                    AttackBase = (ushort)charaData.MinAtk4,
+                    AttackNode = 0,
+                    ExAbilityLevel = 1,
+                    ExAbility2Level = 1,
+                    IsTemporary = false,
+                };
                 newUserCharas.Add(newUserChara);
             }
         }
@@ -323,22 +319,21 @@ public class StorySkipService(
             if (dragonExists == false)
             {
                 logger.LogDebug("Rewarding dragon {dragon}", dragon);
-                DbPlayerDragonData newUserDragon =
-                    new()
-                    {
-                        ViewerId = playerIdentityService.ViewerId,
-                        DragonId = dragon,
-                        Exp = 0,
-                        Level = 1,
-                        HpPlusCount = 0,
-                        AttackPlusCount = 0,
-                        LimitBreakCount = 0,
-                        IsLock = false,
-                        IsNew = true,
-                        Skill1Level = 1,
-                        Ability1Level = 1,
-                        Ability2Level = 1,
-                    };
+                DbPlayerDragonData newUserDragon = new()
+                {
+                    ViewerId = playerIdentityService.ViewerId,
+                    DragonId = dragon,
+                    Exp = 0,
+                    Level = 1,
+                    HpPlusCount = 0,
+                    AttackPlusCount = 0,
+                    LimitBreakCount = 0,
+                    IsLock = false,
+                    IsNew = true,
+                    Skill1Level = 1,
+                    Ability1Level = 1,
+                    Ability2Level = 1,
+                };
                 newUserDragons.Add(newUserDragon);
             }
         }

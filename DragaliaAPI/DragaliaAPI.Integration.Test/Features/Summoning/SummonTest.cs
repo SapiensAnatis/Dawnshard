@@ -241,26 +241,25 @@ public class SummonTest : TestFixture
     [Fact]
     public async Task SummonGetSummonHistory_ReturnsAnyData()
     {
-        DbPlayerSummonHistory historyEntry =
-            new()
-            {
-                ViewerId = this.ViewerId,
-                SummonId = 1,
-                SummonExecType = SummonExecTypes.DailyDeal,
-                ExecDate = DateTimeOffset.UtcNow,
-                PaymentType = PaymentTypes.Diamantium,
-                EntityType = EntityTypes.Dragon,
-                EntityId = (int)Dragons.GalaRebornNidhogg,
-                EntityQuantity = 1,
-                EntityLevel = 1,
-                EntityRarity = 5,
-                EntityLimitBreakCount = 0,
-                EntityHpPlusCount = 0,
-                EntityAttackPlusCount = 0,
-                SummonPrizeRank = SummonPrizeRanks.None,
-                SummonPoint = 10,
-                GetDewPointQuantity = 0,
-            };
+        DbPlayerSummonHistory historyEntry = new()
+        {
+            ViewerId = this.ViewerId,
+            SummonId = 1,
+            SummonExecType = SummonExecTypes.DailyDeal,
+            ExecDate = DateTimeOffset.UtcNow,
+            PaymentType = PaymentTypes.Diamantium,
+            EntityType = EntityTypes.Dragon,
+            EntityId = (int)Dragons.GalaRebornNidhogg,
+            EntityQuantity = 1,
+            EntityLevel = 1,
+            EntityRarity = 5,
+            EntityLimitBreakCount = 0,
+            EntityHpPlusCount = 0,
+            EntityAttackPlusCount = 0,
+            SummonPrizeRank = SummonPrizeRanks.None,
+            SummonPoint = 10,
+            GetDewPointQuantity = 0,
+        };
 
         await this.ApiContext.PlayerSummonHistory.AddAsync(
             historyEntry,

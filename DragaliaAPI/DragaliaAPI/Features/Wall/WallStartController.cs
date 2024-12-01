@@ -41,21 +41,23 @@ public class WallStartController(
 
         ingameData.AreaInfoList = questWallDetail.AreaInfo.MapToAreaInfoList();
 
-        IngameWallData ingameWallData =
-            new() { WallId = request.WallId, WallLevel = request.WallLevel };
+        IngameWallData ingameWallData = new()
+        {
+            WallId = request.WallId,
+            WallLevel = request.WallLevel,
+        };
 
         OddsInfo oddsInfo = oddsInfoService.GetWallOddsInfo(request.WallId, request.WallLevel);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
-        WallStartStartResponse data =
-            new()
-            {
-                IngameData = ingameData,
-                IngameWallData = ingameWallData,
-                OddsInfo = oddsInfo,
-                UpdateDataList = updateDataList,
-            };
+        WallStartStartResponse data = new()
+        {
+            IngameData = ingameData,
+            IngameWallData = ingameWallData,
+            OddsInfo = oddsInfo,
+            UpdateDataList = updateDataList,
+        };
 
         return Ok(data);
     }
@@ -83,21 +85,23 @@ public class WallStartController(
 
         ingameData.AreaInfoList = questWallDetail.AreaInfo.MapToAreaInfoList();
 
-        IngameWallData ingameWallData =
-            new() { WallId = request.WallId, WallLevel = request.WallLevel };
+        IngameWallData ingameWallData = new()
+        {
+            WallId = request.WallId,
+            WallLevel = request.WallLevel,
+        };
 
         OddsInfo oddsInfo = oddsInfoService.GetWallOddsInfo(request.WallId, request.WallLevel);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
-        WallStartStartAssignUnitResponse data =
-            new()
-            {
-                IngameData = ingameData,
-                IngameWallData = ingameWallData,
-                OddsInfo = oddsInfo,
-                UpdateDataList = updateDataList,
-            };
+        WallStartStartAssignUnitResponse data = new()
+        {
+            IngameData = ingameData,
+            IngameWallData = ingameWallData,
+            OddsInfo = oddsInfo,
+            UpdateDataList = updateDataList,
+        };
 
         return Ok(data);
     }

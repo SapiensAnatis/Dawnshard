@@ -19,8 +19,10 @@ internal sealed class SavefileController(ILoadService loadService) : ControllerB
         LoadIndexResponse loadIndexResponse = await loadService.BuildIndexData(cancellationToken);
         LoadIndexResponse sanitizedResponse = loadService.SanitizeIndexData(loadIndexResponse);
 
-        DragaliaResponse<LoadIndexResponse> savefile =
-            new(sanitizedResponse, new DataHeaders(ResultCode.Success));
+        DragaliaResponse<LoadIndexResponse> savefile = new(
+            sanitizedResponse,
+            new DataHeaders(ResultCode.Success)
+        );
 
         return this.File(
             JsonSerializer.SerializeToUtf8Bytes(savefile, ApiJsonOptions.Instance),

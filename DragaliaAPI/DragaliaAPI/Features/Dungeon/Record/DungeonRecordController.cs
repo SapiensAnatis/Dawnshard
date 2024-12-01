@@ -49,8 +49,11 @@ public class DungeonRecordController(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
-        DungeonRecordRecordResponse response =
-            new() { IngameResultData = ingameResultData, UpdateDataList = updateDataList };
+        DungeonRecordRecordResponse response = new()
+        {
+            IngameResultData = ingameResultData,
+            UpdateDataList = updateDataList,
+        };
 
         if (session.QuestData?.IsSumUpTotalDamage ?? false)
         {
@@ -114,8 +117,11 @@ public class DungeonRecordController(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
-        DungeonRecordRecordMultiResponse response =
-            new() { IngameResultData = ingameResultData, UpdateDataList = updateDataList };
+        DungeonRecordRecordMultiResponse response = new()
+        {
+            IngameResultData = ingameResultData,
+            UpdateDataList = updateDataList,
+        };
 
         if (session.QuestData?.IsSumUpTotalDamage ?? false)
         {

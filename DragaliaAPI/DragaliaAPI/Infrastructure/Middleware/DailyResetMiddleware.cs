@@ -32,8 +32,10 @@ public class DailyResetMiddleware
                 context.Response.ContentType = CustomMessagePackOutputFormatter.ContentType;
                 context.Response.StatusCode = 200;
 
-                DragaliaResponse<DataHeaders> gameResponse =
-                    new(new DataHeaders(ResultCode.CommonChangeDate), ResultCode.CommonChangeDate);
+                DragaliaResponse<DataHeaders> gameResponse = new(
+                    new DataHeaders(ResultCode.CommonChangeDate),
+                    ResultCode.CommonChangeDate
+                );
 
                 await context.Response.Body.WriteAsync(
                     MessagePackSerializer.Serialize(gameResponse, CustomResolver.Options)

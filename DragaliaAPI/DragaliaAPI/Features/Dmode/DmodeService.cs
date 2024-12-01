@@ -260,16 +260,15 @@ public class DmodeService(
 
         expedition.State = ExpeditionState.Waiting;
 
-        DmodeExpedition dmodeExpedition =
-            new(
-                expedition.CharaId1,
-                expedition.CharaId2,
-                expedition.CharaId3,
-                expedition.CharaId4,
-                expedition.StartTime,
-                expedition.TargetFloor,
-                expedition.State
-            );
+        DmodeExpedition dmodeExpedition = new(
+            expedition.CharaId1,
+            expedition.CharaId2,
+            expedition.CharaId3,
+            expedition.CharaId4,
+            expedition.StartTime,
+            expedition.TargetFloor,
+            expedition.State
+        );
 
         logger.LogDebug(
             "Finishing expedition {@expedition}. Force-finished: {isForceFinish}",

@@ -153,14 +153,13 @@ public class WeaponBodyControllerTest
             )
             .ReturnsAsync(ResultCode.Success);
 
-        UpdateDataList udl =
-            new()
+        UpdateDataList udl = new()
+        {
+            WeaponBodyList = new List<WeaponBodyList>()
             {
-                WeaponBodyList = new List<WeaponBodyList>()
-                {
-                    new() { WeaponBodyId = WeaponBodies.Caduceus },
-                },
-            };
+                new() { WeaponBodyId = WeaponBodies.Caduceus },
+            },
+        };
         this.mockUpdateDataService.Setup(x =>
                 x.SaveChangesAsync(TestContext.Current.CancellationToken)
             )

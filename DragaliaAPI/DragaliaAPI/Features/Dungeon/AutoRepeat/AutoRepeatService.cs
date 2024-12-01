@@ -17,25 +17,21 @@ public class AutoRepeatService(
     private readonly IDistributedCache distributedCache = distributedCache;
     private readonly IPlayerIdentityService playerIdentityService = playerIdentityService;
 
-    private readonly DistributedCacheEntryOptions cacheOptions =
-        new()
-        {
-            SlidingExpiration = TimeSpan.FromMinutes(
-                options.CurrentValue.AutoRepeatExpiryTimeMinutes
-            ),
-        };
+    private readonly DistributedCacheEntryOptions cacheOptions = new()
+    {
+        SlidingExpiration = TimeSpan.FromMinutes(options.CurrentValue.AutoRepeatExpiryTimeMinutes),
+    };
 
     public async Task SetRepeatSetting(RepeatSetting repeatSetting)
     {
-        RepeatInfo info =
-            new()
-            {
-                Key = Guid.NewGuid(),
-                Type = repeatSetting.RepeatType,
-                UseItemList = repeatSetting.UseItemList,
-                MaxCount = repeatSetting.RepeatCount,
-                CurrentCount = 0,
-            };
+        RepeatInfo info = new()
+        {
+            Key = Guid.NewGuid(),
+            Type = repeatSetting.RepeatType,
+            UseItemList = repeatSetting.UseItemList,
+            MaxCount = repeatSetting.RepeatCount,
+            CurrentCount = 0,
+        };
 
         logger.LogDebug("Saving auto-repeat setting: {@info}", info);
 

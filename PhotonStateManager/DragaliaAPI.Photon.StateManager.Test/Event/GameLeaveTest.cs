@@ -32,28 +32,27 @@ public class GameLeaveTest : TestFixture
     [Fact]
     public async Task GameLeave_RemovesPlayerFromGame()
     {
-        RedisGame game =
-            new()
+        RedisGame game = new()
+        {
+            RoomId = 12345,
+            Name = "affa751f-b3ce-4dd7-9b07-bbeaa1783acc",
+            MatchingCompatibleId = 36,
+            MatchingType = MatchingTypes.Anyone,
+            QuestId = 301010103,
+            StartEntryTime = DateTimeOffset.UtcNow,
+            EntryConditions = new()
             {
-                RoomId = 12345,
-                Name = "affa751f-b3ce-4dd7-9b07-bbeaa1783acc",
-                MatchingCompatibleId = 36,
-                MatchingType = MatchingTypes.Anyone,
-                QuestId = 301010103,
-                StartEntryTime = DateTimeOffset.UtcNow,
-                EntryConditions = new()
-                {
-                    UnacceptedElementTypeList = [2, 3, 4, 5],
-                    UnacceptedWeaponTypeList = [1, 2, 3, 4, 5, 6, 7, 8],
-                    RequiredPartyPower = 11700,
-                    ObjectiveTextId = 1,
-                },
-                Players =
-                [
-                    new() { ViewerId = 2, PartyNoList = [40] },
-                    new() { ViewerId = 5, PartyNoList = [20] },
-                ],
-            };
+                UnacceptedElementTypeList = [2, 3, 4, 5],
+                UnacceptedWeaponTypeList = [1, 2, 3, 4, 5, 6, 7, 8],
+                RequiredPartyPower = 11700,
+                ObjectiveTextId = 1,
+            },
+            Players =
+            [
+                new() { ViewerId = 2, PartyNoList = [40] },
+                new() { ViewerId = 5, PartyNoList = [20] },
+            ],
+        };
 
         await this.RedisConnectionProvider.RedisCollection<RedisGame>().InsertAsync(game);
 
@@ -83,24 +82,23 @@ public class GameLeaveTest : TestFixture
     [Fact]
     public async Task GameLeave_LastPlayer_RemovesPlayerFromGame_SetsVisibleFalse()
     {
-        RedisGame game =
-            new()
+        RedisGame game = new()
+        {
+            RoomId = 12345,
+            Name = "5ff0c20c-b1b6-4377-81d4-a201038faf01",
+            MatchingCompatibleId = 36,
+            MatchingType = MatchingTypes.Anyone,
+            QuestId = 301010103,
+            StartEntryTime = DateTimeOffset.UtcNow,
+            EntryConditions = new()
             {
-                RoomId = 12345,
-                Name = "5ff0c20c-b1b6-4377-81d4-a201038faf01",
-                MatchingCompatibleId = 36,
-                MatchingType = MatchingTypes.Anyone,
-                QuestId = 301010103,
-                StartEntryTime = DateTimeOffset.UtcNow,
-                EntryConditions = new()
-                {
-                    UnacceptedElementTypeList = [2, 3, 4, 5],
-                    UnacceptedWeaponTypeList = [1, 2, 3, 4, 5, 6, 7, 8],
-                    RequiredPartyPower = 11700,
-                    ObjectiveTextId = 1,
-                },
-                Players = [new() { ViewerId = 5, PartyNoList = [20] }],
-            };
+                UnacceptedElementTypeList = [2, 3, 4, 5],
+                UnacceptedWeaponTypeList = [1, 2, 3, 4, 5, 6, 7, 8],
+                RequiredPartyPower = 11700,
+                ObjectiveTextId = 1,
+            },
+            Players = [new() { ViewerId = 5, PartyNoList = [20] }],
+        };
 
         await this.RedisConnectionProvider.RedisCollection<RedisGame>().InsertAsync(game);
 

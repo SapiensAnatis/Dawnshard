@@ -33,22 +33,21 @@ public class DungeonRecordService(
             session.IsHost
         );
 
-        IngameResultData ingameResultData =
-            new()
-            {
-                DungeonKey = dungeonKey,
-                PlayType = QuestPlayType.Default,
-                QuestId = session.QuestId,
-                IsHost = session.IsHost,
-                QuestPartySettingList = session.Party,
-                StartTime = session.StartTime,
-                EndTime = DateTimeOffset.UtcNow,
-                CurrentPlayCount = 1,
-                RebornCount = playRecord.RebornCount,
-                TotalPlayDamage = playRecord.TotalPlayDamage,
-                ClearTime = playRecord.Time,
-                IsClear = true,
-            };
+        IngameResultData ingameResultData = new()
+        {
+            DungeonKey = dungeonKey,
+            PlayType = QuestPlayType.Default,
+            QuestId = session.QuestId,
+            IsHost = session.IsHost,
+            QuestPartySettingList = session.Party,
+            StartTime = session.StartTime,
+            EndTime = DateTimeOffset.UtcNow,
+            CurrentPlayCount = 1,
+            RebornCount = playRecord.RebornCount,
+            TotalPlayDamage = playRecord.TotalPlayDamage,
+            ClearTime = playRecord.Time,
+            IsClear = true,
+        };
 
         await this.ProcessStaminaConsumption(session);
 

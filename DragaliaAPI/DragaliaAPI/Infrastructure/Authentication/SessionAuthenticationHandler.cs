@@ -70,12 +70,11 @@ public class SessionAuthenticationHandler(
             viewerId = impersonatedSession.ViewerId.ToString();
         }
 
-        List<Claim> claims =
-            new()
-            {
-                new(CustomClaimType.AccountId, deviceAccountId),
-                new(CustomClaimType.ViewerId, viewerId),
-            };
+        List<Claim> claims = new()
+        {
+            new(CustomClaimType.AccountId, deviceAccountId),
+            new(CustomClaimType.ViewerId, viewerId),
+        };
 
         ClaimsIdentity identity = new(claims, this.Scheme.Name);
         ClaimsPrincipal principal = new(identity);

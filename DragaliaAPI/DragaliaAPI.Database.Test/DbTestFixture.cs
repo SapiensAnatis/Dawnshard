@@ -27,17 +27,14 @@ public class DbTestFixture : IDisposable
         Mock<ILogger<SavefileService>> mockLogger = new(MockBehavior.Loose);
         Mock<IDistributedCache> mockCache = new(MockBehavior.Loose);
 
-        SavefileService savefileService =
-            new(
-                this.ApiContext,
-                mockCache.Object,
-                new MapperConfiguration(opts =>
-                    opts.AddMaps(typeof(Program).Assembly)
-                ).CreateMapper(),
-                mockLogger.Object,
-                IdentityTestUtils.MockPlayerDetailsService.Object,
-                []
-            );
+        SavefileService savefileService = new(
+            this.ApiContext,
+            mockCache.Object,
+            new MapperConfiguration(opts => opts.AddMaps(typeof(Program).Assembly)).CreateMapper(),
+            mockLogger.Object,
+            IdentityTestUtils.MockPlayerDetailsService.Object,
+            []
+        );
         savefileService.Create().Wait();
     }
 

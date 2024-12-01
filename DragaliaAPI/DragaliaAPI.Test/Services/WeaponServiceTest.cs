@@ -20,46 +20,45 @@ public class WeaponServiceTest
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
 
-    private static Dictionary<Materials, int> InfernoApogeePassive1Map =
-        new()
-        {
-            { Materials.Granite, 80 },
-            { Materials.OldCloth, 30 },
-            { Materials.FloatingYellowCloth, 7 },
-            { Materials.UnearthlyLantern, 1 },
-            { Materials.BlazeOrb, 8 },
-        };
+    private static Dictionary<Materials, int> InfernoApogeePassive1Map = new()
+    {
+        { Materials.Granite, 80 },
+        { Materials.OldCloth, 30 },
+        { Materials.FloatingYellowCloth, 7 },
+        { Materials.UnearthlyLantern, 1 },
+        { Materials.BlazeOrb, 8 },
+    };
 
-    private static Dictionary<Materials, int> MjolnirBuildup40Map =
-        new() { { Materials.BronzeWhetstone, 5 }, { Materials.GoldWhetstone, 5 } };
+    private static Dictionary<Materials, int> MjolnirBuildup40Map = new()
+    {
+        { Materials.BronzeWhetstone, 5 },
+        { Materials.GoldWhetstone, 5 },
+    };
 
-    private static Dictionary<Materials, int> PrimalHexUnbind5Map =
-        new()
-        {
-            { Materials.PrimalShadowwyrmsSphere, 8 },
-            { Materials.PrimalShadowwyrmsGreatsphere, 5 },
-            { Materials.PrimalShadowwyrmsAmethyst, 7 },
-            { Materials.Orichalcum, 1 },
-        };
+    private static Dictionary<Materials, int> PrimalHexUnbind5Map = new()
+    {
+        { Materials.PrimalShadowwyrmsSphere, 8 },
+        { Materials.PrimalShadowwyrmsGreatsphere, 5 },
+        { Materials.PrimalShadowwyrmsAmethyst, 7 },
+        { Materials.Orichalcum, 1 },
+    };
 
-    private static Dictionary<Materials, int> PrimalHexWeaponBonusMap =
-        new()
-        {
-            { Materials.PrimalShadowwyrmsSphere, 25 },
-            { Materials.PrimalShadowwyrmsGreatsphere, 25 },
-            { Materials.PrimalShadowwyrmsAmethyst, 14 },
-            { Materials.Orichalcum, 15 },
-        };
+    private static Dictionary<Materials, int> PrimalHexWeaponBonusMap = new()
+    {
+        { Materials.PrimalShadowwyrmsSphere, 25 },
+        { Materials.PrimalShadowwyrmsGreatsphere, 25 },
+        { Materials.PrimalShadowwyrmsAmethyst, 14 },
+        { Materials.Orichalcum, 15 },
+    };
 
-    private static Dictionary<Materials, int> AmeNoMurakumoRefineMap =
-        new()
-        {
-            { Materials.SoaringOnesMaskFragment, 40 },
-            { Materials.LiberatedOnesMaskFragment, 30 },
-            { Materials.RebelliousOnesCruelty, 10 },
-            { Materials.RebelliousButterfliesSearingFire, 10 },
-            { Materials.Orichalcum, 10 },
-        };
+    private static Dictionary<Materials, int> AmeNoMurakumoRefineMap = new()
+    {
+        { Materials.SoaringOnesMaskFragment, 40 },
+        { Materials.LiberatedOnesMaskFragment, 30 },
+        { Materials.RebelliousOnesCruelty, 10 },
+        { Materials.RebelliousButterfliesSearingFire, 10 },
+        { Materials.Orichalcum, 10 },
+    };
 
     private readonly WeaponService weaponService;
 
@@ -726,13 +725,12 @@ public class WeaponServiceTest
             .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckCoin(It.IsAny<long>())).ReturnsAsync(true);
 
-        DbWeaponBody mockEntity =
-            new()
-            {
-                ViewerId = 1,
-                WeaponBodyId = WeaponBodies.PrimalHex,
-                LimitBreakCount = 8,
-            };
+        DbWeaponBody mockEntity = new()
+        {
+            ViewerId = 1,
+            WeaponBodyId = WeaponBodies.PrimalHex,
+            LimitBreakCount = 8,
+        };
         Type type = mockEntity.GetType();
         PropertyInfo prop = type.GetProperty(propName)!;
         prop.SetValue(mockEntity, step - 2, null);
@@ -828,13 +826,12 @@ public class WeaponServiceTest
             .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckCoin(0)).ReturnsAsync(true);
 
-        DbWeaponBody mockEntity =
-            new()
-            {
-                ViewerId = 1,
-                LimitBreakCount = 2,
-                WeaponBodyId = id,
-            };
+        DbWeaponBody mockEntity = new()
+        {
+            ViewerId = 1,
+            LimitBreakCount = 2,
+            WeaponBodyId = id,
+        };
         this.mockWeaponRepository.Setup(x => x.FindAsync(id)).ReturnsAsync(mockEntity);
 
         this.mockInventoryRepository.Setup(x =>
@@ -899,14 +896,13 @@ public class WeaponServiceTest
             .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckCoin(It.IsAny<long>())).ReturnsAsync(true);
 
-        DbWeaponBody mockEntity =
-            new()
-            {
-                ViewerId = 1,
-                LimitBreakCount = 8,
-                LimitOverCount = 1,
-                WeaponBodyId = WeaponBodies.PrimalHex,
-            };
+        DbWeaponBody mockEntity = new()
+        {
+            ViewerId = 1,
+            LimitBreakCount = 8,
+            LimitOverCount = 1,
+            WeaponBodyId = WeaponBodies.PrimalHex,
+        };
         Type type = mockEntity.GetType();
         PropertyInfo prop = type.GetProperty(propName)!;
         prop.SetValue(mockEntity, step - 1, null);

@@ -32,43 +32,41 @@ public class GameCreateTest : TestFixture
     [Fact]
     public async Task GameCreate_AddsHostAndStoresInRedis()
     {
-        GameBase game =
-            new()
+        GameBase game = new()
+        {
+            RoomId = 12345,
+            Name = "639d263a-e05a-4432-952f-fa941e7f7f40",
+            MatchingCompatibleId = 36,
+            MatchingType = MatchingTypes.Anyone,
+            QuestId = 301010103,
+            StartEntryTime = DateTimeOffset.UtcNow,
+            EntryConditions = new()
             {
-                RoomId = 12345,
-                Name = "639d263a-e05a-4432-952f-fa941e7f7f40",
-                MatchingCompatibleId = 36,
-                MatchingType = MatchingTypes.Anyone,
-                QuestId = 301010103,
-                StartEntryTime = DateTimeOffset.UtcNow,
-                EntryConditions = new()
-                {
-                    UnacceptedElementTypeList = [2, 3, 4, 5],
-                    UnacceptedWeaponTypeList = [1, 2, 3, 4, 5, 6, 7, 8],
-                    RequiredPartyPower = 11700,
-                    ObjectiveTextId = 1,
-                },
-                Players = [],
-            };
+                UnacceptedElementTypeList = [2, 3, 4, 5],
+                UnacceptedWeaponTypeList = [1, 2, 3, 4, 5, 6, 7, 8],
+                RequiredPartyPower = 11700,
+                ObjectiveTextId = 1,
+            },
+            Players = [],
+        };
 
-        RedisGame expectedGame =
-            new()
+        RedisGame expectedGame = new()
+        {
+            RoomId = 12345,
+            Name = "639d263a-e05a-4432-952f-fa941e7f7f40",
+            MatchingCompatibleId = 36,
+            MatchingType = MatchingTypes.Anyone,
+            QuestId = 301010103,
+            StartEntryTime = game.StartEntryTime,
+            EntryConditions = new()
             {
-                RoomId = 12345,
-                Name = "639d263a-e05a-4432-952f-fa941e7f7f40",
-                MatchingCompatibleId = 36,
-                MatchingType = MatchingTypes.Anyone,
-                QuestId = 301010103,
-                StartEntryTime = game.StartEntryTime,
-                EntryConditions = new()
-                {
-                    UnacceptedElementTypeList = [2, 3, 4, 5],
-                    UnacceptedWeaponTypeList = [1, 2, 3, 4, 5, 6, 7, 8],
-                    RequiredPartyPower = 11700,
-                    ObjectiveTextId = 1,
-                },
-                Players = [new() { ViewerId = 2, PartyNoList = [40] }],
-            };
+                UnacceptedElementTypeList = [2, 3, 4, 5],
+                UnacceptedWeaponTypeList = [1, 2, 3, 4, 5, 6, 7, 8],
+                RequiredPartyPower = 11700,
+                ObjectiveTextId = 1,
+            },
+            Players = [new() { ViewerId = 2, PartyNoList = [40] }],
+        };
 
         HttpResponseMessage response = await this.Client.PostAsJsonAsync<GameCreateRequest>(
             Endpoint,

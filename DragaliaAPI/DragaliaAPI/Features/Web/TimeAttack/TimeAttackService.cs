@@ -159,13 +159,12 @@ internal sealed class TimeAttackService(ApiContext apiContext)
     {
         CharaData masterAssetChara = MasterAsset.CharaData[deserializedUnit.CharaData.CharaId];
 
-        TimeAttackBaseIdEntity chara =
-            new()
-            {
-                Id = (int)masterAssetChara.Id,
-                BaseId = masterAssetChara.BaseId,
-                VariationId = masterAssetChara.VariationId,
-            };
+        TimeAttackBaseIdEntity chara = new()
+        {
+            Id = (int)masterAssetChara.Id,
+            BaseId = masterAssetChara.BaseId,
+            VariationId = masterAssetChara.VariationId,
+        };
 
         TimeAttackBaseIdEntity? dragon = null;
 
@@ -191,15 +190,14 @@ internal sealed class TimeAttackService(ApiContext apiContext)
         WeaponBody masterAssetWeaponBody = MasterAsset.WeaponBody[weaponId];
         WeaponSkin masterAssetWeaponSkin = MasterAsset.WeaponSkin[(int)weaponId];
 
-        TimeAttackWeapon weapon =
-            new()
-            {
-                Id = masterAssetWeaponBody.Id,
-                BaseId = masterAssetWeaponSkin.BaseId,
-                VariationId = masterAssetWeaponSkin.VariationId,
-                FormId = masterAssetWeaponSkin.FormId,
-                ChangeSkillId1 = masterAssetWeaponBody.ChangeSkillId1,
-            };
+        TimeAttackWeapon weapon = new()
+        {
+            Id = masterAssetWeaponBody.Id,
+            BaseId = masterAssetWeaponSkin.BaseId,
+            VariationId = masterAssetWeaponSkin.VariationId,
+            FormId = masterAssetWeaponSkin.FormId,
+            ChangeSkillId1 = masterAssetWeaponBody.ChangeSkillId1,
+        };
 
         TimeAttackTalisman? talisman = null;
 

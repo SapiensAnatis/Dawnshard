@@ -570,67 +570,48 @@ public class MissionService(
             .userDataRepository.UserData.Select(x => x.ActiveMemoryEventId)
             .FirstAsync();
 
-        TResponse response =
-            new()
-            {
-                AlbumMissionList = allMissions[MissionType.Album]
-                    .Select(x => new AlbumMissionList(
-                        x.Id,
-                        x.Progress,
-                        (int)x.State,
-                        x.End,
-                        x.Start
-                    )),
-                BeginnerMissionList = allMissions[MissionType.Beginner]
-                    .Select(x => new BeginnerMissionList(
-                        x.Id,
-                        x.Progress,
-                        (int)x.State,
-                        x.End,
-                        x.Start
-                    )),
-                MainStoryMissionList = allMissions[MissionType.MainStory]
-                    .Select(x => new MainStoryMissionList(
-                        x.Id,
-                        x.Progress,
-                        (int)x.State,
-                        x.End,
-                        x.Start
-                    )),
-                NormalMissionList = allMissions[MissionType.Normal]
-                    .Select(x => new NormalMissionList(
-                        x.Id,
-                        x.Progress,
-                        (int)x.State,
-                        x.End,
-                        x.Start
-                    )),
-                PeriodMissionList = allMissions[MissionType.Period]
-                    .Select(x => new PeriodMissionList(
-                        x.Id,
-                        x.Progress,
-                        (int)x.State,
-                        x.End,
-                        x.Start
-                    )),
-                SpecialMissionList = allMissions[MissionType.Special]
-                    .Select(x => new SpecialMissionList(
-                        x.Id,
-                        x.Progress,
-                        (int)x.State,
-                        x.End,
-                        x.Start
-                    )),
-                MemoryEventMissionList = allMissions[MissionType.MemoryEvent]
-                    .Where(x => x.GroupId == activeEventId)
-                    .Select(x => new MemoryEventMissionList(
-                        x.Id,
-                        x.Progress,
-                        (int)x.State,
-                        x.End,
-                        x.Start
-                    )),
-            };
+        TResponse response = new()
+        {
+            AlbumMissionList = allMissions[MissionType.Album]
+                .Select(x => new AlbumMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)),
+            BeginnerMissionList = allMissions[MissionType.Beginner]
+                .Select(x => new BeginnerMissionList(
+                    x.Id,
+                    x.Progress,
+                    (int)x.State,
+                    x.End,
+                    x.Start
+                )),
+            MainStoryMissionList = allMissions[MissionType.MainStory]
+                .Select(x => new MainStoryMissionList(
+                    x.Id,
+                    x.Progress,
+                    (int)x.State,
+                    x.End,
+                    x.Start
+                )),
+            NormalMissionList = allMissions[MissionType.Normal]
+                .Select(x => new NormalMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)),
+            PeriodMissionList = allMissions[MissionType.Period]
+                .Select(x => new PeriodMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)),
+            SpecialMissionList = allMissions[MissionType.Special]
+                .Select(x => new SpecialMissionList(
+                    x.Id,
+                    x.Progress,
+                    (int)x.State,
+                    x.End,
+                    x.Start
+                )),
+            MemoryEventMissionList = allMissions[MissionType.MemoryEvent]
+                .Where(x => x.GroupId == activeEventId)
+                .Select(x => new MemoryEventMissionList(
+                    x.Id,
+                    x.Progress,
+                    (int)x.State,
+                    x.End,
+                    x.Start
+                )),
+        };
 
         List<DailyMissionList> historicalDailyMissions = await this.GetHistoricalDailyMissions();
         IEnumerable<DailyMissionList> currentDailyMissions = allMissions[MissionType.Daily]

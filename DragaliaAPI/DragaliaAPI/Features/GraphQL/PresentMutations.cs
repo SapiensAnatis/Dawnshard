@@ -35,16 +35,15 @@ public class PresentMutations : MutationBase
             query => query.Include(x => x.Presents)
         );
 
-        DbPlayerPresent present =
-            new()
-            {
-                ViewerId = this.Player.ViewerId,
-                EntityId = args.EntityId,
-                EntityType = args.EntityType,
-                EntityQuantity = args.EntityQuantity ?? 1,
-                EntityLevel = args.EntityLevel ?? 1,
-                MessageId = PresentMessage.DragaliaLostTeamMessage,
-            };
+        DbPlayerPresent present = new()
+        {
+            ViewerId = this.Player.ViewerId,
+            EntityId = args.EntityId,
+            EntityType = args.EntityType,
+            EntityQuantity = args.EntityQuantity ?? 1,
+            EntityLevel = args.EntityLevel ?? 1,
+            MessageId = PresentMessage.DragaliaLostTeamMessage,
+        };
 
         this.logger.LogInformation("Granting present {@present}", present);
         this.Player.Presents.Add(present);

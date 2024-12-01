@@ -49,30 +49,29 @@ public class AbilityCrestMultiplierServiceTest
                     .BuildMock()
             );
 
-        List<PartySettingList> party =
+        List<PartySettingList> party = new()
+        {
             new()
             {
-                new()
-                {
-                    EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut,
-                    EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths,
-                },
-                new()
-                {
-                    EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut,
-                    EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths,
-                },
-                new()
-                {
-                    EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut,
-                    EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths,
-                },
-                new()
-                {
-                    EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut,
-                    EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths,
-                },
-            };
+                EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut,
+                EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths,
+            },
+            new()
+            {
+                EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut,
+                EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths,
+            },
+            new()
+            {
+                EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut,
+                EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths,
+            },
+            new()
+            {
+                EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut,
+                EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths,
+            },
+        };
 
         (double material, double point) = (
             await this.abilityCrestMultiplierService.GetEventMultiplier(
@@ -111,17 +110,16 @@ public class AbilityCrestMultiplierServiceTest
                     .BuildMock()
             );
 
-        List<PartySettingList> party =
+        List<PartySettingList> party = new()
+        {
             new()
             {
-                new()
-                {
-                    EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut, // +150%
-                    EquipCrestSlotType2CrestId1 =
-                        AbilityCrestId.TotheExtreme // +100%
-                    ,
-                },
-            };
+                EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut, // +150%
+                EquipCrestSlotType2CrestId1 =
+                    AbilityCrestId.TotheExtreme // +100%
+                ,
+            },
+        };
 
         (double material, double point) = (
             await this.abilityCrestMultiplierService.GetEventMultiplier(
@@ -160,24 +158,23 @@ public class AbilityCrestMultiplierServiceTest
                     .BuildMock()
             );
 
-        List<PartySettingList> party =
+        List<PartySettingList> party = new()
+        {
             new()
             {
-                new()
-                {
-                    EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut, // +150%
-                    EquipCrestSlotType2CrestId1 =
-                        AbilityCrestId.TotheExtreme // +100%
-                    ,
-                },
-                new()
-                {
-                    EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut, // +150%
-                    EquipCrestSlotType2CrestId1 =
-                        AbilityCrestId.TotheExtreme // +100%
-                    ,
-                },
-            };
+                EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut, // +150%
+                EquipCrestSlotType2CrestId1 =
+                    AbilityCrestId.TotheExtreme // +100%
+                ,
+            },
+            new()
+            {
+                EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut, // +150%
+                EquipCrestSlotType2CrestId1 =
+                    AbilityCrestId.TotheExtreme // +100%
+                ,
+            },
+        };
 
         (double material, double point) = (
             await this.abilityCrestMultiplierService.GetEventMultiplier(
@@ -216,15 +213,14 @@ public class AbilityCrestMultiplierServiceTest
                     .BuildMock()
             );
 
-        List<PartySettingList> party =
+        List<PartySettingList> party = new()
+        {
             new()
             {
-                new()
-                {
-                    EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut, // +100%
-                    EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths, // +50%
-                },
-            };
+                EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut, // +100%
+                EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths, // +50%
+            },
+        };
 
         (double material, double point) = (
             await this.abilityCrestMultiplierService.GetEventMultiplier(
@@ -257,14 +253,13 @@ public class AbilityCrestMultiplierServiceTest
                     .BuildMock()
             );
 
-        List<PartySettingList> party =
-            new()
-            {
-                new() { EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut },
-                new() { EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut },
-                new() { EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut },
-                new() { EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut },
-            };
+        List<PartySettingList> party = new()
+        {
+            new() { EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut },
+            new() { EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut },
+            new() { EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut },
+            new() { EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut },
+        };
 
         (double material, double point) = (
             await this.abilityCrestMultiplierService.GetEventMultiplier(

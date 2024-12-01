@@ -77,11 +77,10 @@ internal sealed partial class BaasApi : IBaasApi
     )
         where TResponse : class
     {
-        HttpRequestMessage request =
-            new(HttpMethod.Get, endpoint)
-            {
-                Headers = { Authorization = new AuthenticationHeaderValue("Bearer", bearerToken) },
-            };
+        HttpRequestMessage request = new(HttpMethod.Get, endpoint)
+        {
+            Headers = { Authorization = new AuthenticationHeaderValue("Bearer", bearerToken) },
+        };
 
         HttpResponseMessage response = await client.SendAsync(request);
 

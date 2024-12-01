@@ -27,18 +27,17 @@ public static class TokenHelper
         DateTimeOffset? savefileTime = null
     )
     {
-        SecurityTokenDescriptor descriptor =
-            new()
-            {
-                Issuer = issuer,
-                Audience = audience,
-                SigningCredentials = new SigningCredentials(
-                    SecurityKeys.First(),
-                    SecurityAlgorithms.RsaSha256
-                ),
-                Claims = new Dictionary<string, object>() { ["sub"] = accountId },
-                Expires = expiryTime.UtcDateTime,
-            };
+        SecurityTokenDescriptor descriptor = new()
+        {
+            Issuer = issuer,
+            Audience = audience,
+            SigningCredentials = new SigningCredentials(
+                SecurityKeys.First(),
+                SecurityAlgorithms.RsaSha256
+            ),
+            Claims = new Dictionary<string, object>() { ["sub"] = accountId },
+            Expires = expiryTime.UtcDateTime,
+        };
 
         if (savefileAvailable && savefileTime is not null)
         {

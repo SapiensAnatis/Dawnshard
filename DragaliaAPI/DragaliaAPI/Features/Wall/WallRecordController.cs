@@ -77,29 +77,26 @@ public class WallRecordController : DragaliaControllerBase
         ) = await dungeonRecordHelperService.ProcessHelperDataSolo(dungeonSession.SupportViewerId);
 
         // Response data
-        AtgenWallUnitInfo wallUnitInfo =
-            new()
-            {
-                QuestPartySettingList = dungeonSession.Party,
-                HelperList = helperList,
-                HelperDetailList = helperDetailList,
-            };
+        AtgenWallUnitInfo wallUnitInfo = new()
+        {
+            QuestPartySettingList = dungeonSession.Party,
+            HelperList = helperList,
+            HelperDetailList = helperDetailList,
+        };
 
-        AtgenWallDropReward wallDropReward =
-            new()
-            {
-                RewardEntityList = new[] { GoldCrystals.ToBuildEventRewardEntityList() },
-                TakeCoin = Rupies.Quantity,
-                TakeMana = Mana.Quantity,
-            };
+        AtgenWallDropReward wallDropReward = new()
+        {
+            RewardEntityList = new[] { GoldCrystals.ToBuildEventRewardEntityList() },
+            TakeCoin = Rupies.Quantity,
+            TakeMana = Mana.Quantity,
+        };
 
-        AtgenPlayWallDetail playWallDetail =
-            new()
-            {
-                WallId = request.WallId,
-                BeforeWallLevel = previousLevel,
-                AfterWallLevel = finishedLevel,
-            };
+        AtgenPlayWallDetail playWallDetail = new()
+        {
+            WallId = request.WallId,
+            BeforeWallLevel = previousLevel,
+            AfterWallLevel = finishedLevel,
+        };
 
         // Grant Rewards
         _ = await rewardService.GrantReward(GoldCrystals);
@@ -120,24 +117,26 @@ public class WallRecordController : DragaliaControllerBase
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
-        WallRecordRecordResponse data =
-            new()
-            {
-                UpdateDataList = updateDataList,
-                EntityResult = entityResult,
-                PlayWallDetail = playWallDetail,
-                WallClearRewardList = wallClearRewardList,
-                WallDropReward = wallDropReward,
-                WallUnitInfo = wallUnitInfo,
-            };
+        WallRecordRecordResponse data = new()
+        {
+            UpdateDataList = updateDataList,
+            EntityResult = entityResult,
+            PlayWallDetail = playWallDetail,
+            WallClearRewardList = wallClearRewardList,
+            WallDropReward = wallDropReward,
+            WallUnitInfo = wallUnitInfo,
+        };
 
         await dungeonService.RemoveSession(request.DungeonKey, cancellationToken);
 
         return Ok(data);
     }
 
-    public static readonly Entity GoldCrystals =
-        new(EntityTypes.Material, (int)Materials.GoldCrystal, 3);
+    public static readonly Entity GoldCrystals = new(
+        EntityTypes.Material,
+        (int)Materials.GoldCrystal,
+        3
+    );
 
     public static readonly Entity Rupies = new(EntityTypes.Rupies, 1, 500);
 
@@ -145,6 +144,10 @@ public class WallRecordController : DragaliaControllerBase
 
     public static readonly Entity Wyrmites = new(EntityTypes.Wyrmite, 0, 10);
 
-    public static readonly Present.Present WyrmitesPresent =
-        new(PresentMessage.FirstClear, Wyrmites.Type, Wyrmites.Id, Wyrmites.Quantity);
+    public static readonly Present.Present WyrmitesPresent = new(
+        PresentMessage.FirstClear,
+        Wyrmites.Type,
+        Wyrmites.Id,
+        Wyrmites.Quantity
+    );
 }

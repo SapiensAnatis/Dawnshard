@@ -135,13 +135,12 @@ public class TimeAttackService(
 
     private DbTimeAttackClearUnit MapTimeAttackUnit(PartyUnitList x, string roomId)
     {
-        DbTimeAttackClearUnit unit =
-            new()
-            {
-                UnitNo = x.Position,
-                ViewerId = playerIdentityService.ViewerId,
-                GameId = roomId,
-            };
+        DbTimeAttackClearUnit unit = new()
+        {
+            UnitNo = x.Position,
+            ViewerId = playerIdentityService.ViewerId,
+            GameId = roomId,
+        };
 
         if (x.CharaData is not null)
             unit.CharaId = x.CharaData.CharaId;
