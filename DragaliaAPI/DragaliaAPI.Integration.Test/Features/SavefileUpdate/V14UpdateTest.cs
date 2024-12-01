@@ -12,12 +12,10 @@ public class V14UpdateTest : SavefileUpdateTestFixture
     [Fact]
     public async Task V14Update_DoesNotConflictWithV10Update()
     {
-        await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(
-                entity => entity.SetProperty(e => e.EmblemId, Emblems.HotBloodedInstructor),
-                cancellationToken: TestContext.Current.CancellationToken
-            );
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            entity => entity.SetProperty(e => e.EmblemId, Emblems.HotBloodedInstructor),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         int cellieraCh5 = MasterAsset.CharaStories[(int)Charas.Celliera].StoryIds[^1];
 

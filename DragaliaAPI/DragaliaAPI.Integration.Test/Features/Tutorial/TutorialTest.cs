@@ -11,10 +11,7 @@ namespace DragaliaAPI.Integration.Test.Features.Tutorial;
 public class TutorialTest : TestFixture
 {
     public TutorialTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        CommonAssertionOptions.ApplyTimeOptions();
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task TutorialUpdateStep_UpdatesDB()
@@ -59,7 +56,9 @@ public class TutorialTest : TestFixture
             )
         ).Data;
 
-        response.UpdateDataList.Should().BeEquivalentTo(expUpdateData);
+        response
+            .UpdateDataList.Should()
+            .BeEquivalentTo(expUpdateData, opts => opts.WithDateTimeTolerance());
     }
 
     [Fact]

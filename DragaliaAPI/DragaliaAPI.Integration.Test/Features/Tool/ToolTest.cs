@@ -72,7 +72,7 @@ public class ToolTest : TestFixture
             )
         ).Data;
 
-        response.ViewerId.Should().Be((ulong)this.ViewerId + 1);
+        response.ViewerId.Should().BeGreaterThan((ulong)this.ViewerId);
     }
 
     [Fact]
@@ -115,8 +115,9 @@ public class ToolTest : TestFixture
             DateTime.UtcNow - TimeSpan.FromHours(5)
         );
 
+        this.Client.DefaultRequestHeaders.Clear();
         this.Client.DefaultRequestHeaders.Add(Headers.IdToken, token);
-        this.Client.DefaultRequestHeaders.Add("DeviceId", "id");
+        this.Client.DefaultRequestHeaders.Add("DeviceId", "expired_device_id");
 
         HttpResponseMessage response = await this.Client.PostMsgpackBasic(
             "/tool/auth",

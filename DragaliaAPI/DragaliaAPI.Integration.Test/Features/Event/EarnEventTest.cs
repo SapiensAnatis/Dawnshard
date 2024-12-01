@@ -54,15 +54,18 @@ public class EarnEventTest : TestFixture
                 opts => opts.Excluding(x => x.Owner)
             );
 
-        this.ApiContext.PlayerMissions.Should()
+        this.ApiContext.PlayerMissions.Where(x => x.ViewerId == this.ViewerId)
+            .Should()
             .HaveCount(8 + 25, because: "the event has 8 daily missions and 25 limited missions");
-        this.ApiContext.PlayerMissions.ToList()
+        this.ApiContext.PlayerMissions.Where(x => x.ViewerId == this.ViewerId)
+            .ToList()
             .Should()
             .AllSatisfy(x =>
             {
                 x.GroupId.Should().Be(EventId);
             });
-        this.ApiContext.PlayerMissions.Should()
+        this.ApiContext.PlayerMissions.Where(x => x.ViewerId == this.ViewerId)
+            .Should()
             .Contain(
                 x => x.Id == 11650101 && x.State == MissionState.Completed,
                 "this is the event participation mission"
@@ -128,7 +131,10 @@ public class EarnEventTest : TestFixture
         DbPlayerEventItem pointItem = await ApiContext
             .PlayerEventItems.AsTracking()
             .SingleAsync(
-                x => x.EventId == EventId && x.Type == (int)BuildEventItemType.BuildEventPoint,
+                x =>
+                    x.ViewerId == this.ViewerId
+                    && x.EventId == EventId
+                    && x.Type == (int)BuildEventItemType.BuildEventPoint,
                 cancellationToken: TestContext.Current.CancellationToken
             );
 

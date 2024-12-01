@@ -37,8 +37,11 @@ public class GlobalQueryFilterTest : TestFixture
     public async Task DbPlayerUserData_HasGlobalQueryFilter()
     {
         // We will already have an instance for our own Viewer ID thanks to TestFixture
-        this.ApiContext.Players.Add(new() { ViewerId = this.ViewerId + 1, AccountId = "other" });
-        this.ApiContext.PlayerUserData.Add(new() { ViewerId = this.ViewerId + 1 });
+        DbPlayer otherPlayer = new() { AccountId = "other_userdata" };
+        this.ApiContext.Players.Add(otherPlayer);
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        this.ApiContext.PlayerUserData.Add(new() { ViewerId = otherPlayer.ViewerId });
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         (
@@ -82,15 +85,17 @@ public class GlobalQueryFilterTest : TestFixture
     [Fact]
     public async Task DbPlayerPresentHistory_HasGlobalQueryFilter()
     {
-        // This entity uses a non-auto-incrementing integer primary key :/
+        // Acquire valid ID values from the Presents table
+        DbPlayerPresent present = new() { ViewerId = this.ViewerId };
+        DbPlayerPresent otherPresent = new() { Owner = new() { AccountId = "otherhist" } };
+        this.ApiContext.PlayerPresents.Add(present);
+        this.ApiContext.PlayerPresents.Add(otherPresent);
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
         this.ApiContext.PlayerPresentHistory.AddRange(
             [
-                new() { Id = 1, ViewerId = this.ViewerId },
-                new()
-                {
-                    Id = 2,
-                    Owner = new() { ViewerId = this.ViewerId + 1, AccountId = "otherhist" },
-                },
+                new() { Id = present.PresentId, ViewerId = this.ViewerId },
+                new() { Id = otherPresent.PresentId, ViewerId = otherPresent.ViewerId },
             ]
         );
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -118,10 +123,35 @@ public class GlobalQueryFilterTest : TestFixture
     }
 
     [Fact]
+    public async Task DbPlayerMaterial_hasGlobalQueryFilter()
+    {
+        // All materials are added by the test fixture, so can't use generic method due to conflicts
+        this.ApiContext.PlayerMaterials.Add(
+            new()
+            {
+                MaterialId = Materials.Squishums,
+                Owner = new() { AccountId = "other_material" },
+            }
+        );
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        (
+            await this
+                .ApiContext.PlayerMaterials.AsNoTracking()
+                .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
+        )
+            .Should()
+            .AllSatisfy(x => x.ViewerId.Should().Be(this.ViewerId));
+    }
+
+    [Fact]
     public async Task DbPlayerDiamondData_HasGlobalQueryFilter()
     {
-        this.ApiContext.Players.Add(new() { ViewerId = this.ViewerId + 1, AccountId = "other" });
-        this.ApiContext.PlayerDiamondData.Add(new() { ViewerId = this.ViewerId + 1 });
+        DbPlayer otherPlayer = new() { AccountId = "other_diamantium" };
+        this.ApiContext.Players.Add(otherPlayer);
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        this.ApiContext.PlayerDiamondData.Add(new() { ViewerId = otherPlayer.ViewerId });
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         (
@@ -137,18 +167,20 @@ public class GlobalQueryFilterTest : TestFixture
     private async Task TestGlobalQueryFilter<TEntity>()
         where TEntity : class, IDbPlayerData
     {
-        DbPlayer otherPlayer = new DbPlayer() { ViewerId = this.ViewerId + 1, AccountId = "other" };
+        DbPlayer otherPlayer = new DbPlayer() { AccountId = "other" };
+
+        this.ApiContext.Players.Add(otherPlayer);
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         TEntity visible = CreateEntityInstance<TEntity>();
         visible.ViewerId = this.ViewerId;
 
         TEntity invisible = CreateEntityInstance<TEntity>();
-        invisible.ViewerId = this.ViewerId + 1;
+        invisible.ViewerId = otherPlayer.ViewerId;
 
-        this.ApiContext.Players.Add(otherPlayer);
         this.ApiContext.Set<TEntity>().Add(visible);
         this.ApiContext.Set<TEntity>().Add(invisible);
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.ApiContext.ChangeTracker.Clear();
 

@@ -15,8 +15,6 @@ public class DungeonRecordTest : TestFixture
     public DungeonRecordTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        CommonAssertionOptions.ApplyTimeOptions(2);
-
         this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
             p.SetProperty(e => e.StaminaSingle, e => 100)
         );
@@ -180,7 +178,8 @@ public class DungeonRecordTest : TestFixture
                     BestClearTime = 10,
                     LastDailyResetTime = DateTimeOffset.UtcNow,
                     LastWeeklyResetTime = DateTimeOffset.UtcNow,
-                }
+                },
+                opts => opts.WithDateTimeTolerance()
             );
 
         response.RepeatData.Should().BeNull();
@@ -586,7 +585,10 @@ public class DungeonRecordTest : TestFixture
             .And.Contain(10221301); // Earn the "Light of the Deep" Epithet
 
         // Clear Three Challenge Battles
-        this.ApiContext.PlayerMissions.First(x => x.Id == 10220801).Progress.Should().Be(1);
+        this.ApiContext.PlayerMissions.Where(x => x.ViewerId == this.ViewerId)
+            .First(x => x.Id == 10220801)
+            .Progress.Should()
+            .Be(1);
     }
 
     [Fact]
@@ -889,7 +891,7 @@ public class DungeonRecordTest : TestFixture
         await this.ImportSave();
         this.SetupPhotonAuthentication();
 
-        int questId = 227010104; // Volk's Wrath TA Solo
+        int questId = 227080106; // Asura's Blinding Light (Ranked)
         string roomName = Guid.NewGuid().ToString();
         string roomId = "1234";
         string gameId = $"{roomName}_{roomId}";
@@ -897,21 +899,12 @@ public class DungeonRecordTest : TestFixture
         this.Client.DefaultRequestHeaders.Add("RoomName", roomName);
         this.Client.DefaultRequestHeaders.Add("RoomId", roomId);
 
-        await this.AddToDatabase(
-            new DbQuest()
-            {
-                QuestId = questId,
-                State = 0,
-                ViewerId = ViewerId,
-            }
-        );
-
         DungeonStartStartMultiResponse startResponse = (
             await this.Client.PostMsgpack<DungeonStartStartMultiResponse>(
                 "/dungeon_start/start_multi",
                 new DungeonStartStartMultiRequest()
                 {
-                    PartyNoList = new[] { 4 }, // Flame team
+                    PartyNoList = [2], // Shadow team
                     QuestId = questId,
                 },
                 cancellationToken: TestContext.Current.CancellationToken
@@ -1164,16 +1157,14 @@ public class DungeonRecordTest : TestFixture
     [Fact]
     public async Task Record_IsCoopTutorial_AdvancesTutorialStatus()
     {
-        await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(
-                e =>
-                    e.SetProperty(
-                        p => p.TutorialStatus,
-                        TutorialService.TutorialStatusIds.CoopTutorial
-                    ),
-                cancellationToken: TestContext.Current.CancellationToken
-            );
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            e =>
+                e.SetProperty(
+                    p => p.TutorialStatus,
+                    TutorialService.TutorialStatusIds.CoopTutorial
+                ),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         int questId = TutorialService.TutorialQuestIds.AvenueToPowerBeginner;
 
@@ -1307,7 +1298,8 @@ public class DungeonRecordTest : TestFixture
         // Ch. 5 / 4-3 Dark Terminus (Hard)
         int questId = 100050209;
         int existingEssenceQuantity = this
-            .ApiContext.PlayerMaterials.First(x => x.MaterialId == Materials.ChthoniussEssence)
+            .ApiContext.PlayerMaterials.Where(x => x.ViewerId == this.ViewerId)
+            .First(x => x.MaterialId == Materials.ChthoniussEssence)
             .Quantity;
 
         await this.AddToDatabase(new DbQuest() { QuestId = questId, DailyPlayCount = 0 });
@@ -1361,7 +1353,8 @@ public class DungeonRecordTest : TestFixture
         // Ch. 5 / 4-3 Dark Terminus (Hard)
         int questId = 100050209;
         int existingEssenceQuantity = this
-            .ApiContext.PlayerMaterials.First(x => x.MaterialId == Materials.ChthoniussEssence)
+            .ApiContext.PlayerMaterials.Where(x => x.ViewerId == this.ViewerId)
+            .First(x => x.MaterialId == Materials.ChthoniussEssence)
             .Quantity;
 
         await this.AddToDatabase(
@@ -1441,7 +1434,8 @@ public class DungeonRecordTest : TestFixture
         // Ch. 5 / 4-3 Dark Terminus (Hard)
         int questId = 100050209;
         int existingEssenceQuantity = this
-            .ApiContext.PlayerMaterials.First(x => x.MaterialId == Materials.ChthoniussEssence)
+            .ApiContext.PlayerMaterials.Where(x => x.ViewerId == this.ViewerId)
+            .First(x => x.MaterialId == Materials.ChthoniussEssence)
             .Quantity;
 
         await this.AddToDatabase(

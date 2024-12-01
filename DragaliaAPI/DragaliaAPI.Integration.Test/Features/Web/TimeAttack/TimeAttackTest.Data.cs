@@ -1,4 +1,5 @@
 using DragaliaAPI.Database.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Web.TimeAttack;
 
@@ -6,7 +7,65 @@ public partial class TimeAttackTest
 {
     private async Task SeedTimeAttackData()
     {
+        await this.ApiContext.TimeAttackClears.ExecuteDeleteAsync(
+            TestContext.Current.CancellationToken
+        );
+
         string teamJson = File.ReadAllText("Data/time_attack_party_info.json");
+
+        DbPlayer player1 =
+            new()
+            {
+                AccountId = Guid.NewGuid().ToString(),
+                UserData = new() { Name = "Qwerby" },
+            };
+
+        DbPlayer player2 =
+            new()
+            {
+                AccountId = Guid.NewGuid().ToString(),
+                UserData = new() { Name = "Leom" },
+            };
+
+        DbPlayer player3 =
+            new()
+            {
+                AccountId = Guid.NewGuid().ToString(),
+                UserData = new() { Name = "Shiny" },
+            };
+
+        DbPlayer player4 =
+            new()
+            {
+                AccountId = Guid.NewGuid().ToString(),
+                UserData = new() { Name = "poopnut" },
+            };
+        DbPlayer player5 =
+            new()
+            {
+                AccountId = Guid.NewGuid().ToString(),
+                UserData = new() { Name = "Alicia" },
+            };
+
+        DbPlayer player6 =
+            new()
+            {
+                AccountId = Guid.NewGuid().ToString(),
+                UserData = new() { Name = "eze" },
+            };
+
+        DbPlayer player7 =
+            new()
+            {
+                AccountId = Guid.NewGuid().ToString(),
+                UserData = new() { Name = "OzpinXD" },
+            };
+        DbPlayer player8 =
+            new()
+            {
+                AccountId = Guid.NewGuid().ToString(),
+                UserData = new() { Name = "Euden" },
+            };
 
         DbTimeAttackClear[] clears =
         [
@@ -21,48 +80,28 @@ public partial class TimeAttackTest
                     {
                         GameId = null!,
                         ViewerId = default,
-                        Player = new()
-                        {
-                            ViewerId = 1530,
-                            AccountId = Guid.NewGuid().ToString(),
-                            UserData = new() { Name = "Qwerby" },
-                        },
+                        Player = player1,
                         PartyInfo = teamJson,
                     },
                     new()
                     {
                         GameId = null!,
                         ViewerId = default,
-                        Player = new()
-                        {
-                            ViewerId = 3108,
-                            AccountId = Guid.NewGuid().ToString(),
-                            UserData = new() { Name = "Leom" },
-                        },
+                        Player = player2,
                         PartyInfo = teamJson,
                     },
                     new()
                     {
                         GameId = null!,
                         ViewerId = default,
-                        Player = new()
-                        {
-                            ViewerId = 2104,
-                            AccountId = Guid.NewGuid().ToString(),
-                            UserData = new() { Name = "Shiny" },
-                        },
+                        Player = player3,
                         PartyInfo = teamJson,
                     },
                     new()
                     {
                         GameId = null!,
                         ViewerId = default,
-                        Player = new()
-                        {
-                            ViewerId = 1718,
-                            AccountId = Guid.NewGuid().ToString(),
-                            UserData = new() { Name = "poopnut" },
-                        },
+                        Player = player4,
                         PartyInfo = teamJson,
                     },
                 ],
@@ -78,25 +117,29 @@ public partial class TimeAttackTest
                     new()
                     {
                         GameId = null!,
-                        ViewerId = 1530,
+                        ViewerId = default,
+                        Player = player1,
                         PartyInfo = teamJson,
                     },
                     new()
                     {
                         GameId = null!,
-                        ViewerId = 3108,
+                        ViewerId = default,
+                        Player = player2,
                         PartyInfo = teamJson,
                     },
                     new()
                     {
                         GameId = null!,
-                        ViewerId = 2104,
+                        ViewerId = default,
+                        Player = player3,
                         PartyInfo = teamJson,
                     },
                     new()
                     {
                         GameId = null!,
-                        ViewerId = 1718,
+                        ViewerId = default,
+                        Player = player4,
                         PartyInfo = teamJson,
                     },
                 ],
@@ -113,48 +156,28 @@ public partial class TimeAttackTest
                     {
                         GameId = null!,
                         ViewerId = default,
-                        Player = new()
-                        {
-                            ViewerId = 55,
-                            AccountId = Guid.NewGuid().ToString(),
-                            UserData = new() { Name = "Alicia" },
-                        },
+                        Player = player5,
                         PartyInfo = teamJson,
                     },
                     new()
                     {
                         GameId = null!,
                         ViewerId = default,
-                        Player = new()
-                        {
-                            ViewerId = 2119,
-                            AccountId = Guid.NewGuid().ToString(),
-                            UserData = new() { Name = "eze" },
-                        },
+                        Player = player6,
                         PartyInfo = teamJson,
                     },
                     new()
                     {
                         GameId = null!,
                         ViewerId = default,
-                        Player = new()
-                        {
-                            ViewerId = 2348,
-                            AccountId = Guid.NewGuid().ToString(),
-                            UserData = new() { Name = "OzpinXD" },
-                        },
+                        Player = player7,
                         PartyInfo = teamJson,
                     },
                     new()
                     {
                         GameId = null!,
                         ViewerId = default,
-                        Player = new()
-                        {
-                            ViewerId = 609,
-                            AccountId = Guid.NewGuid().ToString(),
-                            UserData = new() { Name = "Euden" },
-                        },
+                        Player = player8,
                         PartyInfo = teamJson,
                     },
                 ],
@@ -170,7 +193,8 @@ public partial class TimeAttackTest
                     new()
                     {
                         GameId = null!,
-                        ViewerId = 1530,
+                        ViewerId = default,
+                        Player = player1,
                         PartyInfo = teamJson,
                     },
                 ],

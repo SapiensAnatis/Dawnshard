@@ -269,16 +269,14 @@ public class DungeonStartTest : TestFixture
     [Fact]
     public async Task Start_CoopTutorial_SetsIsBotTutorialTrue()
     {
-        await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(
-                e =>
-                    e.SetProperty(
-                        p => p.TutorialStatus,
-                        TutorialService.TutorialStatusIds.CoopTutorial
-                    ),
-                cancellationToken: TestContext.Current.CancellationToken
-            );
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            e =>
+                e.SetProperty(
+                    p => p.TutorialStatus,
+                    TutorialService.TutorialStatusIds.CoopTutorial
+                ),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         DragaliaResponse<DungeonStartStartResponse> response =
             await this.Client.PostMsgpack<DungeonStartStartResponse>(
@@ -297,16 +295,14 @@ public class DungeonStartTest : TestFixture
     [Fact]
     public async Task Start_AtpBeginner_NotCoopTutorial_SetsIsBotTutorialFalse()
     {
-        await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(
-                e =>
-                    e.SetProperty(
-                        p => p.TutorialStatus,
-                        TutorialService.TutorialStatusIds.CoopTutorial + 1
-                    ),
-                cancellationToken: TestContext.Current.CancellationToken
-            );
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            e =>
+                e.SetProperty(
+                    p => p.TutorialStatus,
+                    TutorialService.TutorialStatusIds.CoopTutorial + 1
+                ),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         DragaliaResponse<DungeonStartStartResponse> response =
             await this.Client.PostMsgpack<DungeonStartStartResponse>(

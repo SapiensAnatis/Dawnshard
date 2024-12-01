@@ -24,9 +24,6 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
             IdentityTestUtils.MockPlayerDetailsService.Object,
             this.logger.Object
         );
-
-        CommonAssertionOptions.ApplyTimeOptions();
-        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
     }
 
     [Fact]
@@ -45,7 +42,8 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
                 {
                     ViewerId = IdentityTestUtils.ViewerId,
                     AbilityCrestId = AbilityCrestId.ADogsDay,
-                }
+                },
+                opts => opts.ExcludingOwner().WithDateTimeTolerance()
             );
     }
 
@@ -89,7 +87,8 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
                 {
                     ViewerId = IdentityTestUtils.ViewerId,
                     AbilityCrestId = AbilityCrestId.FlashofGenius,
-                }
+                },
+                opts => opts.ExcludingOwner().WithDateTimeTolerance()
             );
 
         (await this.abilityCrestRepository.FindAsync(AbilityCrestId.TheBridalDragon))
@@ -109,7 +108,10 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
                 x.ViewerId == IdentityTestUtils.ViewerId && x.AbilityCrestSetNo == 54
             )
             .Should()
-            .BeEquivalentTo(new DbAbilityCrestSet(IdentityTestUtils.ViewerId, 54));
+            .BeEquivalentTo(
+                new DbAbilityCrestSet(IdentityTestUtils.ViewerId, 54),
+                opts => opts.ExcludingOwner()
+            );
 
         await this.abilityCrestRepository.AddOrUpdateSet(
             new DbAbilityCrestSet()
@@ -131,7 +133,8 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
                     ViewerId = IdentityTestUtils.ViewerId,
                     AbilityCrestSetNo = 54,
                     CrestSlotType1CrestId1 = AbilityCrestId.WorthyRivals,
-                }
+                },
+                opts => opts.ExcludingOwner()
             );
     }
 
@@ -145,7 +148,10 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
 
         (await this.abilityCrestRepository.FindSetAsync(1))
             .Should()
-            .BeEquivalentTo(new DbAbilityCrestSet(IdentityTestUtils.ViewerId, 1));
+            .BeEquivalentTo(
+                new DbAbilityCrestSet(IdentityTestUtils.ViewerId, 1),
+                opts => opts.ExcludingOwner()
+            );
 
         (await this.abilityCrestRepository.FindSetAsync(2)).Should().BeNull();
     }

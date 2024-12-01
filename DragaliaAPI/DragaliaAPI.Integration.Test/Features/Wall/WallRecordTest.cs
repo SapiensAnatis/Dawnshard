@@ -9,10 +9,7 @@ namespace DragaliaAPI.Integration.Test.Features.Wall;
 public class WallRecordTest : TestFixture
 {
     public WallRecordTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        CommonAssertionOptions.ApplyTimeOptions(toleranceSec: 2);
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task Record_ReceivesRewards()

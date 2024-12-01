@@ -15,10 +15,7 @@ public class SummonTest : TestFixture
     private const int TestGalaBannerId = 1020183;
 
     public SummonTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        CommonAssertionOptions.ApplyTimeOptions(toleranceSec: 2);
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task SummonExcludeGetList_ReturnsAnyData()
@@ -302,7 +299,7 @@ public class SummonTest : TestFixture
                     SummonPoint = 10,
                     GetDewPointQuantity = 0,
                 },
-                o => o.Excluding(x => x.KeyId)
+                o => o.Excluding(x => x.KeyId).WithDateTimeTolerance()
             );
     }
 
@@ -325,7 +322,6 @@ public class SummonTest : TestFixture
             new DbSummonTicket()
             {
                 SummonTicketId = SummonTickets.SingleSummon,
-                KeyId = 2,
                 Quantity = 1,
                 UseLimitTime = DateTimeOffset.UnixEpoch,
             }
@@ -381,10 +377,10 @@ public class SummonTest : TestFixture
                 new SummonTicketList()
                 {
                     SummonTicketId = SummonTickets.SingleSummon,
-                    KeyId = 2,
                     Quantity = 1,
                     UseLimitTime = DateTimeOffset.UnixEpoch,
-                }
+                },
+                opts => opts.Excluding(x => x.KeyId)
             );
     }
 
@@ -617,18 +613,8 @@ public class SummonTest : TestFixture
     public async Task SummonRequest_SingleSummonTicket_ReturnsValidResult()
     {
         await this.AddToDatabase(
-            new DbSummonTicket()
-            {
-                SummonTicketId = SummonTickets.SingleSummon,
-                KeyId = 1,
-                Quantity = 1,
-            },
-            new DbSummonTicket()
-            {
-                SummonTicketId = SummonTickets.SingleSummon,
-                KeyId = 2,
-                Quantity = 1,
-            }
+            new DbSummonTicket() { SummonTicketId = SummonTickets.SingleSummon, Quantity = 1 },
+            new DbSummonTicket() { SummonTicketId = SummonTickets.SingleSummon, Quantity = 1 }
         );
 
         DragaliaResponse<SummonRequestResponse> response =
@@ -652,12 +638,7 @@ public class SummonTest : TestFixture
     public async Task SummonRequest_MultiSingleSummonTicket_ReturnsValidResult()
     {
         await this.AddToDatabase(
-            new DbSummonTicket()
-            {
-                SummonTicketId = SummonTickets.SingleSummon,
-                KeyId = 1,
-                Quantity = 5,
-            }
+            new DbSummonTicket() { SummonTicketId = SummonTickets.SingleSummon, Quantity = 5 }
         );
 
         DragaliaResponse<SummonRequestResponse> response =
@@ -681,12 +662,7 @@ public class SummonTest : TestFixture
     public async Task SummonRequest_TenfoldSummonTicket_ReturnsValidResult()
     {
         await this.AddToDatabase(
-            new DbSummonTicket()
-            {
-                SummonTicketId = SummonTickets.TenfoldSummon,
-                KeyId = 1,
-                Quantity = 1,
-            }
+            new DbSummonTicket() { SummonTicketId = SummonTickets.TenfoldSummon, Quantity = 1 }
         );
 
         DragaliaResponse<SummonRequestResponse> response =
@@ -761,7 +737,7 @@ public class SummonTest : TestFixture
     )
     {
         await this.AddToDatabase(
-            new DbSummonTicket() { SummonTicketId = SummonTickets.TenfoldSummon, KeyId = 1 }
+            new DbSummonTicket() { SummonTicketId = SummonTickets.TenfoldSummon }
         );
 
         DragaliaResponse<SummonRequestResponse> response =

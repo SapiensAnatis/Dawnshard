@@ -12,7 +12,6 @@ public class DungeonSkipTest : TestFixture
     public DungeonSkipTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        CommonAssertionOptions.ApplyTimeOptions();
         this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
     }
 
@@ -271,7 +270,8 @@ public class DungeonSkipTest : TestFixture
                     QuestBonusReserveTime = response.Data.IngameResultData.EndTime,
                     QuestBonusStackCount = 0,
                     QuestBonusStackTime = DateTimeOffset.UnixEpoch,
-                }
+                },
+                opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(10))
             );
     }
 
@@ -281,7 +281,8 @@ public class DungeonSkipTest : TestFixture
         // Ch. 5 / 4-3 Dark Terminus (Hard)
         int questId = 100050209;
         int existingEssenceQuantity = this
-            .ApiContext.PlayerMaterials.First(x => x.MaterialId == Materials.ChthoniussEssence)
+            .ApiContext.PlayerMaterials.Where(x => x.ViewerId == this.ViewerId)
+            .First(x => x.MaterialId == Materials.ChthoniussEssence)
             .Quantity;
 
         await this.AddToDatabase(new DbQuest() { QuestId = questId, DailyPlayCount = 0 });

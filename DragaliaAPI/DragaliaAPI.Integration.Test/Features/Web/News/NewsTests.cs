@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Web;
 using DragaliaAPI.Features.Web.News;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Web.News;
 
@@ -11,6 +12,8 @@ public class NewsTests : WebTestFixture
     public NewsTests(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
         : base(factory, testOutputHelper)
     {
+        this.ApiContext.NewsItems.ExecuteDelete();
+
         this.ApiContext.NewsItems.AddRange(
             Enumerable
                 .Range(1, 6)

@@ -19,8 +19,6 @@ public class QuestRepositoryTest : IClassFixture<DbTestFixture>
             fixture.ApiContext,
             IdentityTestUtils.MockPlayerDetailsService.Object
         );
-
-        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
     }
 
     [Fact]

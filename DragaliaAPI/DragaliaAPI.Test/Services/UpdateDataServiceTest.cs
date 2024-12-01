@@ -48,8 +48,6 @@ public class UpdateDataServiceTest : RepositoryTestFixture
             this.mockEventService.Object,
             this.mockDmodeService.Object
         );
-
-        CommonAssertionOptions.ApplyTimeOptions();
     }
 
     [Fact]

@@ -17,8 +17,6 @@ public class SavefileImportTest : TestFixture
     {
         Environment.SetEnvironmentVariable("DEVELOPER_TOKEN", "supersecrettoken");
         this.Client.DefaultRequestHeaders.Add("Authorization", $"Bearer supersecrettoken");
-
-        CommonAssertionOptions.ApplyTimeOptions();
     }
 
     [Fact]

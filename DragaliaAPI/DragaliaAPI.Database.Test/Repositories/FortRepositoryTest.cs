@@ -33,9 +33,6 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
             this.fakeTimeProvider,
             LoggerTestUtils.Create<FortRepository>()
         );
-
-        CommonAssertionOptions.ApplyTimeOptions();
-        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
     }
 
     [Fact]
@@ -80,7 +77,9 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         };
         await this.fixture.AddToDatabase(detail);
 
-        (await this.fortRepository.GetFortDetail()).Should().BeEquivalentTo(detail);
+        (await this.fortRepository.GetFortDetail())
+            .Should()
+            .BeEquivalentTo(detail, opts => opts.WithDateTimeTolerance());
 
         this.mockPlayerIdentityService.VerifyAll();
     }
@@ -138,7 +137,12 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
 
         await this.fixture.AddToDatabase(build);
 
-        (await this.fortRepository.GetBuilding(8)).Should().BeEquivalentTo(build);
+        (await this.fortRepository.GetBuilding(8))
+            .Should()
+            .BeEquivalentTo(
+                build,
+                opts => opts.WithDateTimeTolerance().WithTimeSpanTolerance(TimeSpan.FromSeconds(1))
+            );
     }
 
     [Fact]

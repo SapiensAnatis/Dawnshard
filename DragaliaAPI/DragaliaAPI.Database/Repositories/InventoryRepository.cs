@@ -23,10 +23,7 @@ public class InventoryRepository : IInventoryRepository
         this.logger = logger;
     }
 
-    public IQueryable<DbPlayerMaterial> Materials =>
-        this.apiContext.PlayerMaterials.Where(storage =>
-            storage.ViewerId == this.playerIdentityService.ViewerId
-        );
+    public IQueryable<DbPlayerMaterial> Materials => this.apiContext.PlayerMaterials;
 
     public DbPlayerMaterial AddMaterial(Materials type)
     {

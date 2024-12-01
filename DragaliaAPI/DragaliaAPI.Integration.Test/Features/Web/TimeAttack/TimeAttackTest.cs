@@ -83,8 +83,6 @@ public partial class TimeAttackTest : TestFixture
     {
         await this.SeedTimeAttackData();
 
-        AssertionOptions.FormattingOptions.MaxLines = 10000;
-
         OffsetPagedResponse<TimeAttackRanking>? rankings = await this.Client.GetFromJsonAsync<
             OffsetPagedResponse<TimeAttackRanking>
         >(

@@ -5,10 +5,7 @@ namespace DragaliaAPI.Integration.Test.Features.Wall;
 public class WallStartTest : TestFixture
 {
     public WallStartTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        CommonAssertionOptions.ApplyTimeOptions(toleranceSec: 2);
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task Start_ReturnsExpectedResponse()

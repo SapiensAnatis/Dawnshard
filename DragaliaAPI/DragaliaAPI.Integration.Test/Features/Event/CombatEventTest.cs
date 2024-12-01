@@ -41,7 +41,8 @@ public class CombatEventTest : TestFixture
     public async Task ReceiveEventRewards_ReturnsEventRewards()
     {
         DbPlayerEventItem pointItem = await ApiContext
-            .PlayerEventItems.AsTracking()
+            .PlayerEventItems.Where(x => x.ViewerId == this.ViewerId)
+            .AsTracking()
             .SingleAsync(
                 x => x.EventId == EventId && x.Type == (int)CombatEventItemType.EventPoint,
                 cancellationToken: TestContext.Current.CancellationToken
@@ -74,6 +75,7 @@ public class CombatEventTest : TestFixture
     {
         DbPlayerEventItem pointItem = await ApiContext
             .PlayerEventItems.AsTracking()
+            .Where(x => x.ViewerId == this.ViewerId)
             .SingleAsync(
                 x => x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint,
                 cancellationToken: TestContext.Current.CancellationToken

@@ -161,9 +161,9 @@ public class DragonTest : TestFixture
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.ApiContext.ChangeTracker.Clear();
-        DbPlayerUserData userData = await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == ViewerId)
-            .FirstAsync(cancellationToken: TestContext.Current.CancellationToken);
+        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.FirstAsync(
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         long startCoin = userData.Coin;
 
@@ -231,9 +231,9 @@ public class DragonTest : TestFixture
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.ApiContext.ChangeTracker.Clear();
-        DbPlayerUserData userData = await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == ViewerId)
-            .FirstAsync(cancellationToken: TestContext.Current.CancellationToken);
+        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.FirstAsync(
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         long startCoin = userData.Coin;
 
@@ -412,6 +412,7 @@ public class DragonTest : TestFixture
         );
 
         this.ApiContext.PlayerMissions.AsNoTracking()
+            .Where(x => x.ViewerId == this.ViewerId)
             .First(x => x.Id == missionId)
             .Progress.Should()
             .Be(9);
@@ -428,6 +429,7 @@ public class DragonTest : TestFixture
         );
 
         this.ApiContext.PlayerMissions.AsNoTracking()
+            .Where(x => x.ViewerId == this.ViewerId)
             .First(x => x.Id == missionId)
             .Progress.Should()
             .Be(9, "the progress is based on the highest level reached");
@@ -450,6 +452,7 @@ public class DragonTest : TestFixture
             .Contain(missionId);
 
         this.ApiContext.PlayerMissions.AsNoTracking()
+            .Where(x => x.ViewerId == this.ViewerId)
             .First(x => x.Id == missionId)
             .Should()
             .BeEquivalentTo(
@@ -732,9 +735,9 @@ public class DragonTest : TestFixture
         DragonData dragonDataStribog = MasterAsset.DragonData.Get(Dragons.Stribog);
 
         this.ApiContext.ChangeTracker.Clear();
-        DbPlayerUserData uData = await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == ViewerId)
-            .FirstAsync(cancellationToken: TestContext.Current.CancellationToken);
+        DbPlayerUserData uData = await this.ApiContext.PlayerUserData.FirstAsync(
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         long startCoin = uData.Coin;
         long startDew = uData.DewPoint;

@@ -21,7 +21,7 @@ public class AuthorizationMiddlewareTest : TestFixture
     public async Task ValidSidHeader_ReturnsExpectedResponse()
     {
         this.Client.DefaultRequestHeaders.Clear();
-        this.Client.DefaultRequestHeaders.Add("SID", "session_id");
+        this.Client.DefaultRequestHeaders.Add("SID", this.SessionId);
 
         HttpResponseMessage response = await this.Client.GetAsync(
             Endpoint,

@@ -6,11 +6,7 @@ namespace DragaliaAPI.Integration.Test.Features.Story;
 public class StoryTest : TestFixture
 {
     public StoryTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        CommonAssertionOptions.ApplyTimeOptions();
-        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task ReadStory_StoryNotRead_ResponseHasRewards()

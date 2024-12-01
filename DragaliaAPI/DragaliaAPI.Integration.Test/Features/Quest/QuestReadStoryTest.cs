@@ -179,12 +179,10 @@ public class QuestReadStoryTest : TestFixture
     [Fact]
     public async Task ReadStory_Chapter10Completion_GrantsRewards()
     {
-        await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(
-                u => u.SetProperty(e => e.Level, 30).SetProperty(e => e.Exp, 18990),
-                cancellationToken: TestContext.Current.CancellationToken
-            );
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            u => u.SetProperty(e => e.Level, 30).SetProperty(e => e.Exp, 18990),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         StoryReadResponse data = (
             await this.Client.PostMsgpack<StoryReadResponse>(

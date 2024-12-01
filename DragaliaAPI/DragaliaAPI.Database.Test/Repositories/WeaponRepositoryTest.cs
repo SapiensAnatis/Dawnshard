@@ -22,9 +22,6 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
             IdentityTestUtils.MockPlayerDetailsService.Object,
             LoggerTestUtils.Create<WeaponRepository>()
         );
-
-        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
-        CommonAssertionOptions.ApplyTimeOptions();
     }
 
     [Fact]
@@ -78,7 +75,8 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
                 {
                     ViewerId = IdentityTestUtils.ViewerId,
                     WeaponBodyId = WeaponBodies.Arondight,
-                }
+                },
+                opts => opts.WithDateTimeTolerance()
             );
     }
 
@@ -203,7 +201,8 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
                     WeaponSkinId = 4,
                     IsNew = false,
                     GetTime = DateTimeOffset.UtcNow,
-                }
+                },
+                opts => opts.WithDateTimeTolerance()
             );
     }
 

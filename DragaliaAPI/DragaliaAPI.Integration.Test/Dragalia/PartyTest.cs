@@ -203,9 +203,9 @@ public class PartyTest : TestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        DbPlayerUserData userData = await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == ViewerId)
-            .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
+        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.SingleAsync(
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         userData.MainPartyNo.Should().Be(2);
     }

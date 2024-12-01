@@ -11,11 +11,7 @@ public class WeaponBodyTest : TestFixture
     private const string EndpointGroup = "/weapon_body";
 
     public WeaponBodyTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        CommonAssertionOptions.ApplyTimeOptions(toleranceSec: 5);
-        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task Craft_Success_ReturnsExpectedResponse()
@@ -56,7 +52,8 @@ public class WeaponBodyTest : TestFixture
                         IsNew = false,
                         GetTime = DateTimeOffset.UtcNow,
                     },
-                }
+                },
+                opts => opts.WithDateTimeTolerance()
             );
 
         list.UserData.Should().NotBeNull();
@@ -154,11 +151,15 @@ public class WeaponBodyTest : TestFixture
 
         weaponBody
             .Should()
-            .BeEquivalentTo(testCase.ExpFinalState, opts => opts.Excluding(x => x.ViewerId));
+            .BeEquivalentTo(
+                testCase.ExpFinalState,
+                opts => opts.Excluding(x => x.ViewerId).WithDateTimeTolerance()
+            );
         response
             .UpdateDataList.WeaponBodyList.Should()
             .BeEquivalentTo(
-                new List<WeaponBodyList>() { testCase.ExpFinalState.ToWeaponBodyList() }
+                new List<WeaponBodyList>() { testCase.ExpFinalState.ToWeaponBodyList() },
+                opts => opts.WithDateTimeTolerance()
             );
 
         // Check materials

@@ -5,10 +5,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 public class UserTest : TestFixture
 {
     public UserTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        CommonAssertionOptions.ApplyTimeOptions();
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task LinkedNAccount_ReturnsExpectedResponse()
@@ -31,7 +28,8 @@ public class UserTest : TestFixture
                 {
                     UpdateDataList = new() { UserData = expectedUserData },
                 },
-                opts => opts.Excluding(x => x.UpdateDataList.UserData.Crystal)
+                opts =>
+                    opts.Excluding(x => x.UpdateDataList.UserData.Crystal).WithDateTimeTolerance()
             );
     }
 

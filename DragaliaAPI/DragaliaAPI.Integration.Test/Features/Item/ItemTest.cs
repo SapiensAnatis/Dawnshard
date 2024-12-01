@@ -18,8 +18,7 @@ public class ItemTest : TestFixture
             )
             .Wait();
 
-        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdate(e => e.SetProperty(p => p.StaminaSingle, 5));
+        this.ApiContext.PlayerUserData.ExecuteUpdate(e => e.SetProperty(p => p.StaminaSingle, 5));
     }
 
     [Fact]

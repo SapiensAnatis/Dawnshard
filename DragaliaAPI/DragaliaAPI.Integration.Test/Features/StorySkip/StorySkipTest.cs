@@ -24,16 +24,14 @@ public class StorySkipTest : TestFixture
         FrozenDictionary<FortPlants, FortConfig> fortConfigs = StorySkipRewards.FortConfigs;
         List<FortPlants> uniqueFortPlants = new(fortConfigs.Keys);
 
-        await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(
-                u =>
-                    u.SetProperty(e => e.Level, 5)
-                        .SetProperty(e => e.Exp, 1)
-                        .SetProperty(e => e.StaminaSingle, 10)
-                        .SetProperty(e => e.StaminaMulti, 10),
-                cancellationToken: TestContext.Current.CancellationToken
-            );
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            u =>
+                u.SetProperty(e => e.Level, 5)
+                    .SetProperty(e => e.Exp, 1)
+                    .SetProperty(e => e.StaminaSingle, 10)
+                    .SetProperty(e => e.StaminaMulti, 10),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         await this
             .ApiContext.PlayerQuests.Where(x => x.ViewerId == this.ViewerId && x.QuestId <= questId)
@@ -114,13 +112,15 @@ public class StorySkipTest : TestFixture
         }
 
         int clearCh1Quest23Mission = 100200;
-        this.ApiContext.PlayerMissions.Should()
+        this.ApiContext.PlayerMissions.Where(x => x.ViewerId == this.ViewerId)
+            .Should()
             .Contain(x => x.Id == clearCh1Quest23Mission)
             .Which.State.Should()
             .Be(MissionState.Completed);
 
         int upgradeHalidomToLv3Mission = 105500;
-        this.ApiContext.PlayerMissions.Should()
+        this.ApiContext.PlayerMissions.Where(x => x.ViewerId == this.ViewerId)
+            .Should()
             .Contain(x => x.Id == upgradeHalidomToLv3Mission)
             .Which.State.Should()
             .Be(MissionState.Completed);
