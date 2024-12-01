@@ -11,9 +11,7 @@ public class WeaponBodyTest : TestFixture
     private const string EndpointGroup = "/weapon_body";
 
     public WeaponBodyTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task Craft_Success_ReturnsExpectedResponse()
@@ -153,7 +151,10 @@ public class WeaponBodyTest : TestFixture
 
         weaponBody
             .Should()
-            .BeEquivalentTo(testCase.ExpFinalState, opts => opts.Excluding(x => x.ViewerId).WithDateTimeTolerance());
+            .BeEquivalentTo(
+                testCase.ExpFinalState,
+                opts => opts.Excluding(x => x.ViewerId).WithDateTimeTolerance()
+            );
         response
             .UpdateDataList.WeaponBodyList.Should()
             .BeEquivalentTo(

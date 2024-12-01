@@ -8,9 +8,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 public class FriendTest : TestFixture
 {
     public FriendTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task GetSupportCharaDetail_GetsCorrectCharacter()
@@ -177,8 +175,10 @@ public class FriendTest : TestFixture
 
         response
             .SupportUserDataDetail.UserSupportData.Should()
-            .BeEquivalentTo(HelperService.StubData.SupportListData.SupportUserList.First(),
-                opts => opts.WithDateTimeTolerance());
+            .BeEquivalentTo(
+                HelperService.StubData.SupportListData.SupportUserList.First(),
+                opts => opts.WithDateTimeTolerance()
+            );
 
         response.SupportUserDataDetail.IsFriend.Should().BeFalse();
     }

@@ -5,9 +5,7 @@ namespace DragaliaAPI.Integration.Test.Features.Wall;
 public class WallStartTest : TestFixture
 {
     public WallStartTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task Start_ReturnsExpectedResponse()

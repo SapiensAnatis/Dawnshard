@@ -11,9 +11,7 @@ public class PresentTest : TestFixture
     private const string Controller = "/present";
 
     public PresentTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task GetPresentList_ReturnsPresentList()
@@ -73,9 +71,11 @@ public class PresentTest : TestFixture
                     {
                         PresentNotice = new() { PresentCount = 2, PresentLimitCount = 0 },
                     },
-                    
-                },     opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(3)).For(x => x.PresentList).Exclude(x => x.PresentId)
-
+                },
+                opts =>
+                    opts.WithDateTimeTolerance(TimeSpan.FromSeconds(3))
+                        .For(x => x.PresentList)
+                        .Exclude(x => x.PresentId)
             );
 
         response.Data.PresentList.Should().BeInDescendingOrder(x => x.PresentId);
@@ -135,7 +135,10 @@ public class PresentTest : TestFixture
                         PresentNotice = new() { PresentCount = 1, PresentLimitCount = 1 },
                     },
                 },
-                opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(3)).For(x => x.PresentLimitList).Exclude(x => x.PresentId)
+                opts =>
+                    opts.WithDateTimeTolerance(TimeSpan.FromSeconds(3))
+                        .For(x => x.PresentLimitList)
+                        .Exclude(x => x.PresentId)
             );
 
         response.Data.PresentLimitList.Should().BeInDescendingOrder(x => x.PresentId);

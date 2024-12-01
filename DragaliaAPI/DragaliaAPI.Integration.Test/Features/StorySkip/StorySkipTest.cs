@@ -114,7 +114,8 @@ public class StorySkipTest : TestFixture
         }
 
         int clearCh1Quest23Mission = 100200;
-        this.ApiContext.PlayerMissions.Where(x => x.ViewerId == this.ViewerId).Should()
+        this.ApiContext.PlayerMissions.Where(x => x.ViewerId == this.ViewerId)
+            .Should()
             .Contain(x => x.Id == clearCh1Quest23Mission)
             .Which.State.Should()
             .Be(MissionState.Completed);

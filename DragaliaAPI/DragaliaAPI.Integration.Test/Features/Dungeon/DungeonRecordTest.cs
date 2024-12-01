@@ -16,7 +16,6 @@ public class DungeonRecordTest : TestFixture
     public DungeonRecordTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-
         this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
             p.SetProperty(e => e.StaminaSingle, e => 100)
         );
@@ -587,7 +586,10 @@ public class DungeonRecordTest : TestFixture
             .And.Contain(10221301); // Earn the "Light of the Deep" Epithet
 
         // Clear Three Challenge Battles
-        this.ApiContext.PlayerMissions.Where(x => x.ViewerId == this.ViewerId).First(x => x.Id == 10220801).Progress.Should().Be(1);
+        this.ApiContext.PlayerMissions.Where(x => x.ViewerId == this.ViewerId)
+            .First(x => x.Id == 10220801)
+            .Progress.Should()
+            .Be(1);
     }
 
     [Fact]

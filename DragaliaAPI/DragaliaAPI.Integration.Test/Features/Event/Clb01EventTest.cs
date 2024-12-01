@@ -39,7 +39,8 @@ public class Clb01EventTest : TestFixture
     public async Task ReceiveEventRewards_ReturnsEventRewards()
     {
         DbPlayerEventItem pointItem = await ApiContext
-            .PlayerEventItems.AsTracking().Where(x => x.ViewerId == this.ViewerId)
+            .PlayerEventItems.AsTracking()
+            .Where(x => x.ViewerId == this.ViewerId)
             .SingleAsync(
                 x => x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint,
                 cancellationToken: TestContext.Current.CancellationToken

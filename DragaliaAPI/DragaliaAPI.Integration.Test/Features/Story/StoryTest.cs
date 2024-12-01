@@ -6,9 +6,7 @@ namespace DragaliaAPI.Integration.Test.Features.Story;
 public class StoryTest : TestFixture
 {
     public StoryTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task ReadStory_StoryNotRead_ResponseHasRewards()

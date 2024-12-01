@@ -54,7 +54,9 @@ public class TestFixture
         this.SeedDatabase().Wait();
         this.SeedCache().Wait();
 
-        IPlayerIdentityService stubPlayerIdentityService = new StubPlayerIdentityService(this.ViewerId);
+        IPlayerIdentityService stubPlayerIdentityService = new StubPlayerIdentityService(
+            this.ViewerId
+        );
 
         DbContextOptions<ApiContext> options = this.Services.GetRequiredService<
             DbContextOptions<ApiContext>
@@ -212,7 +214,9 @@ public class TestFixture
     protected long GetTalismanKeyId(Talismans talisman)
     {
         return this
-            .ApiContext.PlayerTalismans.Where(x => x.ViewerId == this.ViewerId && x.TalismanId == talisman)
+            .ApiContext.PlayerTalismans.Where(x =>
+                x.ViewerId == this.ViewerId && x.TalismanId == talisman
+            )
             .Select(x => x.TalismanKeyId)
             .DefaultIfEmpty()
             .First();
@@ -318,6 +322,9 @@ public class TestFixture
             $":session:session_id:{this.sessionId}",
             JsonSerializer.Serialize(session)
         );
-        await cache.SetStringAsync($":session_id:device_account_id:{this.DeviceAccountId}", sessionId);
+        await cache.SetStringAsync(
+            $":session_id:device_account_id:{this.DeviceAccountId}",
+            sessionId
+        );
     }
 }

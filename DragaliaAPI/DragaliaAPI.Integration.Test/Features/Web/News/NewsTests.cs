@@ -13,7 +13,7 @@ public class NewsTests : WebTestFixture
         : base(factory, testOutputHelper)
     {
         this.ApiContext.NewsItems.ExecuteDelete();
-        
+
         this.ApiContext.NewsItems.AddRange(
             Enumerable
                 .Range(1, 6)

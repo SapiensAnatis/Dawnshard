@@ -15,9 +15,7 @@ public class SummonTest : TestFixture
     private const int TestGalaBannerId = 1020183;
 
     public SummonTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task SummonExcludeGetList_ReturnsAnyData()
@@ -615,16 +613,8 @@ public class SummonTest : TestFixture
     public async Task SummonRequest_SingleSummonTicket_ReturnsValidResult()
     {
         await this.AddToDatabase(
-            new DbSummonTicket()
-            {
-                SummonTicketId = SummonTickets.SingleSummon,
-                Quantity = 1,
-            },
-            new DbSummonTicket()
-            {
-                SummonTicketId = SummonTickets.SingleSummon,
-                Quantity = 1,
-            }
+            new DbSummonTicket() { SummonTicketId = SummonTickets.SingleSummon, Quantity = 1 },
+            new DbSummonTicket() { SummonTicketId = SummonTickets.SingleSummon, Quantity = 1 }
         );
 
         DragaliaResponse<SummonRequestResponse> response =
@@ -648,11 +638,7 @@ public class SummonTest : TestFixture
     public async Task SummonRequest_MultiSingleSummonTicket_ReturnsValidResult()
     {
         await this.AddToDatabase(
-            new DbSummonTicket()
-            {
-                SummonTicketId = SummonTickets.SingleSummon,
-                Quantity = 5,
-            }
+            new DbSummonTicket() { SummonTicketId = SummonTickets.SingleSummon, Quantity = 5 }
         );
 
         DragaliaResponse<SummonRequestResponse> response =
@@ -676,11 +662,7 @@ public class SummonTest : TestFixture
     public async Task SummonRequest_TenfoldSummonTicket_ReturnsValidResult()
     {
         await this.AddToDatabase(
-            new DbSummonTicket()
-            {
-                SummonTicketId = SummonTickets.TenfoldSummon,
-                Quantity = 1,
-            }
+            new DbSummonTicket() { SummonTicketId = SummonTickets.TenfoldSummon, Quantity = 1 }
         );
 
         DragaliaResponse<SummonRequestResponse> response =

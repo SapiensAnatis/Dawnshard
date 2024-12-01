@@ -37,10 +37,10 @@ public class GlobalQueryFilterTest : TestFixture
     public async Task DbPlayerUserData_HasGlobalQueryFilter()
     {
         // We will already have an instance for our own Viewer ID thanks to TestFixture
-        DbPlayer otherPlayer = new() {  AccountId = "other_userdata" };
+        DbPlayer otherPlayer = new() { AccountId = "other_userdata" };
         this.ApiContext.Players.Add(otherPlayer);
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
-        
+
         this.ApiContext.PlayerUserData.Add(new() { ViewerId = otherPlayer.ViewerId });
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
@@ -126,7 +126,7 @@ public class GlobalQueryFilterTest : TestFixture
         DbPlayer otherPlayer = new() { AccountId = "other_diamantium" };
         this.ApiContext.Players.Add(otherPlayer);
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
-        
+
         this.ApiContext.PlayerDiamondData.Add(new() { ViewerId = otherPlayer.ViewerId });
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
@@ -147,13 +147,13 @@ public class GlobalQueryFilterTest : TestFixture
 
         this.ApiContext.Players.Add(otherPlayer);
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
-        
+
         TEntity visible = CreateEntityInstance<TEntity>();
         visible.ViewerId = this.ViewerId;
 
         TEntity invisible = CreateEntityInstance<TEntity>();
         invisible.ViewerId = otherPlayer.ViewerId;
-        
+
         this.ApiContext.Set<TEntity>().Add(visible);
         this.ApiContext.Set<TEntity>().Add(invisible);
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);

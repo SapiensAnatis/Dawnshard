@@ -6,9 +6,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 public class CastleStoryTest : TestFixture
 {
     public CastleStoryTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task ReadStory_StoryNotRead_ResponseHasRewards()

@@ -181,7 +181,8 @@ public class DmodeTest : TestFixture
                     TargetFloorNum = 30,
                     State = ExpeditionState.Playing,
                     StartTime = DateTimeOffset.UtcNow,
-                }, opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(2))
+                },
+                opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(2))
             );
 
         DragaliaResponse<DmodeExpeditionForceFinishResponse> finishResp =
