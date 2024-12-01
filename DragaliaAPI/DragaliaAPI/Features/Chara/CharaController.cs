@@ -423,14 +423,13 @@ public class CharaController(
             .CrestSlotType3CrestId2;
         setUnitData.EquipTalismanKeyId = request.RequestCharaUnitSetData.TalismanKeyId;
 
-        CharaUnitSetList setList =
-            new()
-            {
-                CharaId = request.CharaId,
-                CharaUnitSetDetailList = unitRepository
-                    .GetCharaSets(request.CharaId)
-                    .Select(ToAtgenCharaUnitSetDetailList),
-            };
+        CharaUnitSetList setList = new()
+        {
+            CharaId = request.CharaId,
+            CharaUnitSetDetailList = unitRepository
+                .GetCharaSets(request.CharaId)
+                .Select(ToAtgenCharaUnitSetDetailList),
+        };
 
         resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.UpdateDataList.CharaUnitSetList = new List<CharaUnitSetList> { setList };

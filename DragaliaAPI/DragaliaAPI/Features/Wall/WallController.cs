@@ -81,8 +81,11 @@ public partial class WallController(
 
         await updateDataService.SaveChangesAsync(cancellationToken); // Updated lost entities
 
-        WallGetWallClearPartyResponse data =
-            new() { WallClearPartySettingList = clearParty, LostUnitList = lostUnitList };
+        WallGetWallClearPartyResponse data = new()
+        {
+            WallClearPartySettingList = clearParty,
+            LostUnitList = lostUnitList,
+        };
         return Ok(data);
     }
 
@@ -126,24 +129,22 @@ public partial class WallController(
 
         EntityResult entityResult = rewardService.GetEntityResult();
 
-        AtgenMonthlyWallReceiveList monthlyWallReceiveList =
-            new()
-            {
-                QuestGroupId = WallService.WallQuestGroupId,
-                IsReceiveReward = RewardStatus.Received,
-            };
+        AtgenMonthlyWallReceiveList monthlyWallReceiveList = new()
+        {
+            QuestGroupId = WallService.WallQuestGroupId,
+            IsReceiveReward = RewardStatus.Received,
+        };
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
-        WallReceiveMonthlyRewardResponse data =
-            new()
-            {
-                UpdateDataList = updateDataList,
-                EntityResult = entityResult,
-                WallMonthlyRewardList = rewardEntityList,
-                UserWallRewardList = [userWallRewardList],
-                MonthlyWallReceiveList = [monthlyWallReceiveList],
-            };
+        WallReceiveMonthlyRewardResponse data = new()
+        {
+            UpdateDataList = updateDataList,
+            EntityResult = entityResult,
+            WallMonthlyRewardList = rewardEntityList,
+            UserWallRewardList = [userWallRewardList],
+            MonthlyWallReceiveList = [monthlyWallReceiveList],
+        };
 
         return Ok(data);
     }

@@ -91,8 +91,12 @@ public class DbWeaponBody : DbPlayerData
             if (!MasterAsset.WeaponBody.TryGetValue(this.WeaponBodyId, out WeaponBody? weaponData))
                 throw new InvalidOperationException("Invalid weapon ID!");
 
-            List<int> abilityIds =
-                new() { weaponData.Abilities11, weaponData.Abilities12, weaponData.Abilities13 };
+            List<int> abilityIds = new()
+            {
+                weaponData.Abilities11,
+                weaponData.Abilities12,
+                weaponData.Abilities13,
+            };
 
             return GetAbilityLevel(abilityIds);
         }
@@ -106,8 +110,12 @@ public class DbWeaponBody : DbPlayerData
             if (!MasterAsset.WeaponBody.TryGetValue(this.WeaponBodyId, out WeaponBody? weaponData))
                 throw new InvalidOperationException("Invalid weapon ID!");
 
-            List<int> abilityIds =
-                new() { weaponData.Abilities21, weaponData.Abilities22, weaponData.Abilities23 };
+            List<int> abilityIds = new()
+            {
+                weaponData.Abilities21,
+                weaponData.Abilities22,
+                weaponData.Abilities23,
+            };
 
             return GetAbilityLevel(abilityIds);
         }
@@ -121,13 +129,12 @@ public class DbWeaponBody : DbPlayerData
             if (!MasterAsset.WeaponBody.TryGetValue(this.WeaponBodyId, out WeaponBody? weaponData))
                 throw new InvalidOperationException("Invalid weapon ID!");
 
-            List<int> skillIds =
-                new()
-                {
-                    weaponData.ChangeSkillId1,
-                    weaponData.ChangeSkillId2,
-                    weaponData.ChangeSkillId3,
-                };
+            List<int> skillIds = new()
+            {
+                weaponData.ChangeSkillId1,
+                weaponData.ChangeSkillId2,
+                weaponData.ChangeSkillId3,
+            };
 
             return GetCurrentSkillNo(skillIds);
         }

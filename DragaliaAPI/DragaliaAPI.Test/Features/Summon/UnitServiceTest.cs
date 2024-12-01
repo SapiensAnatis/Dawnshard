@@ -30,25 +30,22 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
         this.mockPlayerIdentityService.Setup(x => x.ViewerId).Returns(ViewerId);
         this.mockPresentService = new(MockBehavior.Loose);
 
-        CharaHandler charaHandler =
-            new(
-                this.fixture.ApiContext,
-                this.mockPlayerIdentityService.Object,
-                NullLogger<CharaHandler>.Instance
-            );
-        DragonHandler dragonHandler =
-            new(
-                this.fixture.ApiContext,
-                this.mockPlayerIdentityService.Object,
-                NullLogger<DragonHandler>.Instance
-            );
-        RewardService rewardService =
-            new(
-                NullLogger<RewardService>.Instance,
-                new Mock<IUnitRepository>().Object,
-                [],
-                [charaHandler, dragonHandler]
-            );
+        CharaHandler charaHandler = new(
+            this.fixture.ApiContext,
+            this.mockPlayerIdentityService.Object,
+            NullLogger<CharaHandler>.Instance
+        );
+        DragonHandler dragonHandler = new(
+            this.fixture.ApiContext,
+            this.mockPlayerIdentityService.Object,
+            NullLogger<DragonHandler>.Instance
+        );
+        RewardService rewardService = new(
+            NullLogger<RewardService>.Instance,
+            new Mock<IUnitRepository>().Object,
+            [],
+            [charaHandler, dragonHandler]
+        );
 
         this.unitService = new UnitService(
             this.mockPresentService.Object,
@@ -76,8 +73,14 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task AddCharas_CorrectlyMarksDuplicates()
     {
-        List<Charas> idList =
-            new() { Charas.Chrom, Charas.Chrom, Charas.Panther, Charas.Izumo, Charas.Izumo };
+        List<Charas> idList = new()
+        {
+            Charas.Chrom,
+            Charas.Chrom,
+            Charas.Panther,
+            Charas.Izumo,
+            Charas.Izumo,
+        };
 
         (await this.unitService.AddCharas(idList))
             .Where(x => x.IsNew)

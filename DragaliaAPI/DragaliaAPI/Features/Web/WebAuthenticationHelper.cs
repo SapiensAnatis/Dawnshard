@@ -110,13 +110,12 @@ public static class WebAuthenticationHelper
             return null;
         }
 
-        PlayerInfo playerInfo =
-            new()
-            {
-                AccountId = gameAccountId,
-                Name = dbPlayerInfo.Name,
-                ViewerId = dbPlayerInfo.ViewerId,
-            };
+        PlayerInfo playerInfo = new()
+        {
+            AccountId = gameAccountId,
+            Name = dbPlayerInfo.Name,
+            ViewerId = dbPlayerInfo.ViewerId,
+        };
 
         await cache.SetJsonAsync(
             cacheKey,

@@ -27,8 +27,11 @@ public class HeroParamController : ControllerBase
 
         foreach (ActorInfo actorInfo in request)
         {
-            HeroParamData data =
-                new() { ActorNr = actorInfo.ActorNr, ViewerId = actorInfo.ViewerId };
+            HeroParamData data = new()
+            {
+                ActorNr = actorInfo.ActorNr,
+                ViewerId = actorInfo.ViewerId,
+            };
 
             foreach (int partySlot in actorInfo.PartySlots)
             {

@@ -41,15 +41,14 @@ public class DungeonServiceTest
     [Fact]
     public async Task StartDungeon_CanGetAfterwards()
     {
-        DungeonSession session =
-            new()
+        DungeonSession session = new()
+        {
+            QuestData = MasterAsset.QuestData.Get(100010303),
+            Party = new List<PartySettingList>()
             {
-                QuestData = MasterAsset.QuestData.Get(100010303),
-                Party = new List<PartySettingList>()
-                {
-                    new() { CharaId = Shared.Definitions.Enums.Charas.Addis },
-                },
-            };
+                new() { CharaId = Shared.Definitions.Enums.Charas.Addis },
+            },
+        };
 
         string key = dungeonService.CreateSession(session);
         await dungeonService.SaveSession(CancellationToken.None);

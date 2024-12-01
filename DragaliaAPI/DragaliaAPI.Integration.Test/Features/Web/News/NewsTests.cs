@@ -91,13 +91,12 @@ public class NewsTests : WebTestFixture
     [Fact]
     public async Task GetNewsItems_DoesNotShowHiddenItem()
     {
-        DbNewsItem hiddenItem =
-            new()
-            {
-                Hidden = true,
-                Headline = "hidden",
-                Description = "hidden",
-            };
+        DbNewsItem hiddenItem = new()
+        {
+            Hidden = true,
+            Headline = "hidden",
+            Description = "hidden",
+        };
 
         this.ApiContext.NewsItems.Add(hiddenItem);
         this.ApiContext.SaveChanges();
@@ -119,13 +118,12 @@ public class NewsTests : WebTestFixture
     [Fact]
     public async Task GetNewsItem_CanViewHiddenItem()
     {
-        DbNewsItem hiddenItem =
-            new()
-            {
-                Hidden = true,
-                Headline = "hidden",
-                Description = "hidden",
-            };
+        DbNewsItem hiddenItem = new()
+        {
+            Hidden = true,
+            Headline = "hidden",
+            Description = "hidden",
+        };
 
         this.ApiContext.NewsItems.Add(hiddenItem);
         this.ApiContext.SaveChanges();

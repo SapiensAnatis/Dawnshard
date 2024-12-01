@@ -14,8 +14,10 @@ public class DmodeDungeonControllerTest
 
     private readonly DmodeDungeonController dmodeDungeonController;
 
-    private readonly UpdateDataList updateDataList =
-        new() { MaterialList = new List<MaterialList>() { new(Materials.Squishums, 5000) } };
+    private readonly UpdateDataList updateDataList = new()
+    {
+        MaterialList = new List<MaterialList>() { new(Materials.Squishums, 5000) },
+    };
 
     public DmodeDungeonControllerTest()
     {
@@ -89,16 +91,15 @@ public class DmodeDungeonControllerTest
     public async Task Floor_GeneratesFloor()
     {
         DungeonState state = DungeonState.Playing;
-        DmodeFloorData floorData =
-            new()
+        DmodeFloorData floorData = new()
+        {
+            DmodeAreaInfo = new AtgenDmodeAreaInfo()
             {
-                DmodeAreaInfo = new AtgenDmodeAreaInfo()
-                {
-                    FloorNum = 50,
-                    CurrentAreaId = 10,
-                    CurrentAreaThemeId = 100,
-                },
-            };
+                FloorNum = 50,
+                CurrentAreaId = 10,
+                CurrentAreaThemeId = 100,
+            },
+        };
 
         DmodePlayRecord playRecord = new();
 

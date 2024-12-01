@@ -37,15 +37,14 @@ public class QuestControllerTest
     [Fact]
     public async Task ReadStory_ProducesExpectedResponse()
     {
-        EntityResult entityResult =
-            new()
+        EntityResult entityResult = new()
+        {
+            NewGetEntityList = new List<AtgenDuplicateEntityList>()
             {
-                NewGetEntityList = new List<AtgenDuplicateEntityList>()
-                {
-                    new() { EntityType = EntityTypes.Dragon, EntityId = (int)Dragons.BronzeFafnir },
-                    new() { EntityType = EntityTypes.Chara, EntityId = (int)Charas.Ilia },
-                },
-            };
+                new() { EntityType = EntityTypes.Dragon, EntityId = (int)Dragons.BronzeFafnir },
+                new() { EntityType = EntityTypes.Chara, EntityId = (int)Charas.Ilia },
+            },
+        };
 
         this.mockStoryService.Setup(x => x.ReadStory(StoryTypes.Quest, 1))
             .ReturnsAsync(

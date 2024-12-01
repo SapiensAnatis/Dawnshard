@@ -31,24 +31,23 @@ public class GameCloseTest : TestFixture
     [Fact]
     public async Task GameClose_RemovesGame()
     {
-        RedisGame game =
-            new()
+        RedisGame game = new()
+        {
+            RoomId = 12345,
+            Name = "7e2ae7ce-50c6-47e3-90b4-817a048627ef",
+            MatchingCompatibleId = 36,
+            MatchingType = MatchingTypes.Anyone,
+            QuestId = 301010103,
+            StartEntryTime = DateTimeOffset.UtcNow,
+            EntryConditions = new()
             {
-                RoomId = 12345,
-                Name = "7e2ae7ce-50c6-47e3-90b4-817a048627ef",
-                MatchingCompatibleId = 36,
-                MatchingType = MatchingTypes.Anyone,
-                QuestId = 301010103,
-                StartEntryTime = DateTimeOffset.UtcNow,
-                EntryConditions = new()
-                {
-                    UnacceptedElementTypeList = [2, 3, 4, 5],
-                    UnacceptedWeaponTypeList = [1, 2, 3, 4, 5, 6, 7, 8],
-                    RequiredPartyPower = 11700,
-                    ObjectiveTextId = 1,
-                },
-                Players = [new() { ViewerId = 2, PartyNoList = [40] }],
-            };
+                UnacceptedElementTypeList = [2, 3, 4, 5],
+                UnacceptedWeaponTypeList = [1, 2, 3, 4, 5, 6, 7, 8],
+                RequiredPartyPower = 11700,
+                ObjectiveTextId = 1,
+            },
+            Players = [new() { ViewerId = 2, PartyNoList = [40] }],
+        };
 
         await this.RedisConnectionProvider.RedisCollection<RedisGame>().InsertAsync(game);
 

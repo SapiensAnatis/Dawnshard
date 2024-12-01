@@ -46,14 +46,13 @@ public class WallControllerTest
         DateTimeOffset lastRewardDate = DateTimeOffset.UtcNow;
         RewardStatus rewardStatus = RewardStatus.Received;
 
-        AtgenUserWallRewardList rewardList =
-            new()
-            {
-                QuestGroupId = questGroupId,
-                SumWallLevel = totalLevel,
-                LastRewardDate = lastRewardDate,
-                RewardStatus = rewardStatus,
-            };
+        AtgenUserWallRewardList rewardList = new()
+        {
+            QuestGroupId = questGroupId,
+            SumWallLevel = totalLevel,
+            LastRewardDate = lastRewardDate,
+            RewardStatus = rewardStatus,
+        };
 
         mockWallService.Setup(x => x.CheckWallInitialized()).ReturnsAsync(true);
         mockWallService.Setup(x => x.GetUserWallRewardList()).ReturnsAsync(rewardList);
@@ -75,42 +74,39 @@ public class WallControllerTest
         DateTimeOffset lastRewardDate = DateTimeOffset.UtcNow;
         RewardStatus rewardStatus = RewardStatus.Received;
 
-        AtgenUserWallRewardList rewardList =
-            new()
-            {
-                QuestGroupId = questGroupId,
-                SumWallLevel = totalLevel,
-                LastRewardDate = lastRewardDate,
-                RewardStatus = rewardStatus,
-            };
+        AtgenUserWallRewardList rewardList = new()
+        {
+            QuestGroupId = questGroupId,
+            SumWallLevel = totalLevel,
+            LastRewardDate = lastRewardDate,
+            RewardStatus = rewardStatus,
+        };
 
-        AtgenMonthlyWallReceiveList monthlyWallReceiveList =
-            new()
-            {
-                QuestGroupId = WallService.WallQuestGroupId,
-                IsReceiveReward = RewardStatus.Received,
-            };
+        AtgenMonthlyWallReceiveList monthlyWallReceiveList = new()
+        {
+            QuestGroupId = WallService.WallQuestGroupId,
+            IsReceiveReward = RewardStatus.Received,
+        };
         IEnumerable<AtgenMonthlyWallReceiveList> monthlyWallReceiveListList = new[]
         {
             monthlyWallReceiveList,
         };
 
-        List<AtgenBuildEventRewardEntityList> buildEventRewardEntityList =
-            new()
+        List<AtgenBuildEventRewardEntityList> buildEventRewardEntityList = new()
+        {
+            new AtgenBuildEventRewardEntityList()
             {
-                new AtgenBuildEventRewardEntityList()
-                {
-                    EntityType = EntityTypes.Mana,
-                    EntityId = 0,
-                    EntityQuantity = 2500,
-                },
-                new AtgenBuildEventRewardEntityList()
-                {
-                    EntityType = EntityTypes.Rupies,
-                    EntityId = 0,
-                    EntityQuantity = 10000,
-                },
-            };
+                EntityType = EntityTypes.Mana,
+                EntityId = 0,
+                EntityQuantity = 2500,
+            },
+            new AtgenBuildEventRewardEntityList()
+            {
+                EntityType = EntityTypes.Rupies,
+                EntityId = 0,
+                EntityQuantity = 10000,
+            },
+        };
 
         DateTimeOffset lastClaimDate = DateTimeOffset.UtcNow.AddDays(-62);
 

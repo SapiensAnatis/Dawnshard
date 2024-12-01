@@ -55,12 +55,11 @@ public class SavefileService : ISavefileService
             $":pending_save_import:{deviceAccountId}";
     }
 
-    private static readonly DistributedCacheEntryOptions RedisOptions =
-        new()
-        {
-            // Keys should be automatically removed, but just in case
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(LockFailsafeExpiryMin),
-        };
+    private static readonly DistributedCacheEntryOptions RedisOptions = new()
+    {
+        // Keys should be automatically removed, but just in case
+        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(LockFailsafeExpiryMin),
+    };
 
     /// <summary>
     /// Thread safe version of <see cref="Import(LoadIndexResponse)"/>.
@@ -577,14 +576,13 @@ public class SavefileService : ISavefileService
         await using IDbContextTransaction transaction =
             await this.apiContext.Database.BeginTransactionAsync();
 
-        DbPlayer player =
-            new()
-            {
-                AccountId = deviceAccountId,
-                SavefileVersion = this.maxSavefileVersion,
-                UserData = new(),
-                DiamondData = new(),
-            };
+        DbPlayer player = new()
+        {
+            AccountId = deviceAccountId,
+            SavefileVersion = this.maxSavefileVersion,
+            UserData = new(),
+            DiamondData = new(),
+        };
 
         this.apiContext.Players.Add(player);
         await this.apiContext.SaveChangesAsync();

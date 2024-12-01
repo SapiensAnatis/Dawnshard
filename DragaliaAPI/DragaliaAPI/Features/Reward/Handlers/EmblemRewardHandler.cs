@@ -31,8 +31,11 @@ public class EmblemRewardHandler(IEmblemRepository repository) : IRewardHandler
             && data is { DuplicateEntityType: not 0, DuplicateEntityQuantity: not 0 }
         )
         {
-            Entity convertedEntity =
-                new(data.DuplicateEntityType, data.DuplicateEntityId, data.DuplicateEntityQuantity);
+            Entity convertedEntity = new(
+                data.DuplicateEntityType,
+                data.DuplicateEntityId,
+                data.DuplicateEntityQuantity
+            );
 
             return GrantReturn.Converted(convertedEntity);
         }

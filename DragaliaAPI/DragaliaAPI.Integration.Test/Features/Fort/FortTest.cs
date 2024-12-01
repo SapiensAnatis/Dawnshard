@@ -199,19 +199,18 @@ public class FortTest : TestFixture
     [Fact]
     public async Task BuildEnd_ReturnsValidResult()
     {
-        DbFortBuild build =
-            new()
-            {
-                ViewerId = ViewerId,
-                PlantId = FortPlants.StaffDojo,
-                Level = 0,
-                PositionX = 2,
-                PositionZ = 2,
-                BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1682110410),
-                BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1682110411),
-                IsNew = true,
-                LastIncomeDate = DateTimeOffset.UnixEpoch,
-            };
+        DbFortBuild build = new()
+        {
+            ViewerId = ViewerId,
+            PlantId = FortPlants.StaffDojo,
+            Level = 0,
+            PositionX = 2,
+            PositionZ = 2,
+            BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1682110410),
+            BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1682110411),
+            IsNew = true,
+            LastIncomeDate = DateTimeOffset.UnixEpoch,
+        };
 
         await this.AddToDatabase(build);
 
@@ -562,22 +561,20 @@ public class FortTest : TestFixture
             .First(x => x.ViewerId == ViewerId)
             .Coin;
 
-        DbFortBuild rupieMine =
-            new()
-            {
-                ViewerId = ViewerId,
-                PlantId = FortPlants.RupieMine,
-                LastIncomeDate = lastIncome,
-                Level = 10,
-            };
-        DbFortBuild dragonTree =
-            new()
-            {
-                ViewerId = ViewerId,
-                PlantId = FortPlants.Dragontree,
-                LastIncomeDate = lastIncome,
-                Level = 13,
-            };
+        DbFortBuild rupieMine = new()
+        {
+            ViewerId = ViewerId,
+            PlantId = FortPlants.RupieMine,
+            LastIncomeDate = lastIncome,
+            Level = 10,
+        };
+        DbFortBuild dragonTree = new()
+        {
+            ViewerId = ViewerId,
+            PlantId = FortPlants.Dragontree,
+            LastIncomeDate = lastIncome,
+            Level = 13,
+        };
 
         this.ApiContext.PlayerFortBuilds.Add(rupieMine);
         this.ApiContext.PlayerFortBuilds.Add(dragonTree);

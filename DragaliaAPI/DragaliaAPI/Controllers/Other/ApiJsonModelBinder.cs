@@ -21,8 +21,10 @@ public class ApiJsonModelBinder : IModelBinder
         JsonOptions jsonOptions = new();
         ApiJsonOptions.Action.Invoke(jsonOptions.JsonSerializerOptions);
 
-        SystemTextJsonInputFormatter inputFormatter =
-            new(jsonOptions, loggerFactory.CreateLogger<SystemTextJsonInputFormatter>());
+        SystemTextJsonInputFormatter inputFormatter = new(
+            jsonOptions,
+            loggerFactory.CreateLogger<SystemTextJsonInputFormatter>()
+        );
 
         this.bodyModelBinder = new([inputFormatter], readerFactory, loggerFactory, options.Value);
     }

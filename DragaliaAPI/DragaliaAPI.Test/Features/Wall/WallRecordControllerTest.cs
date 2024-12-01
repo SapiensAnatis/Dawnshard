@@ -55,24 +55,22 @@ public class WallRecordControllerTest
         List<UserSupportList> helperList = new();
         List<AtgenHelperDetailList> helperDetailList = new();
 
-        DungeonSession session =
-            new()
-            {
-                QuestData = MasterAsset.QuestData[0],
-                Party = party,
-                WallId = wallId,
-                WallLevel = wallLevel + 1, // Client passes (db wall level + 1)
-                SupportViewerId = supportViewerId,
-            };
+        DungeonSession session = new()
+        {
+            QuestData = MasterAsset.QuestData[0],
+            Party = party,
+            WallId = wallId,
+            WallLevel = wallLevel + 1, // Client passes (db wall level + 1)
+            SupportViewerId = supportViewerId,
+        };
 
-        DbPlayerQuestWall playerQuestWall =
-            new()
-            {
-                ViewerId = 1,
-                IsStartNextLevel = true,
-                WallId = wallId,
-                WallLevel = wallLevel,
-            };
+        DbPlayerQuestWall playerQuestWall = new()
+        {
+            ViewerId = 1,
+            IsStartNextLevel = true,
+            WallId = wallId,
+            WallLevel = wallLevel,
+        };
 
         this.mockDungeonService.Setup(x => x.GetSession(dungeonKey, It.IsAny<CancellationToken>()))
             .ReturnsAsync(session);
@@ -115,24 +113,22 @@ public class WallRecordControllerTest
             )
         ).GetData<WallRecordRecordResponse>()!;
 
-        AtgenPlayWallDetail dataPlayWallDetail =
-            new()
-            {
-                WallId = wallId,
-                AfterWallLevel = wallLevel + 1,
-                BeforeWallLevel = wallLevel,
-            };
+        AtgenPlayWallDetail dataPlayWallDetail = new()
+        {
+            WallId = wallId,
+            AfterWallLevel = wallLevel + 1,
+            BeforeWallLevel = wallLevel,
+        };
 
-        AtgenWallDropReward dataWallDropReward =
-            new()
+        AtgenWallDropReward dataWallDropReward = new()
+        {
+            RewardEntityList = new[]
             {
-                RewardEntityList = new[]
-                {
-                    WallRecordController.GoldCrystals.ToBuildEventRewardEntityList(),
-                },
-                TakeCoin = WallRecordController.Rupies.Quantity,
-                TakeMana = WallRecordController.Mana.Quantity,
-            };
+                WallRecordController.GoldCrystals.ToBuildEventRewardEntityList(),
+            },
+            TakeCoin = WallRecordController.Rupies.Quantity,
+            TakeMana = WallRecordController.Mana.Quantity,
+        };
 
         IEnumerable<AtgenBuildEventRewardEntityList> dataWallClearRewardList = new[]
         {

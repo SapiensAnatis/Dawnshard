@@ -37,17 +37,14 @@ public class RepositoryTestFixture : IDisposable
         // Used but we probably don't want it to actually add characters?
         Mock<IUnitRepository> mockUnitRepository = new(MockBehavior.Loose);
 
-        SavefileService savefileService =
-            new(
-                this.ApiContext,
-                mockCache.Object,
-                new MapperConfiguration(opts =>
-                    opts.AddMaps(typeof(Program).Assembly)
-                ).CreateMapper(),
-                mockLogger.Object,
-                IdentityTestUtils.MockPlayerDetailsService.Object,
-                []
-            );
+        SavefileService savefileService = new(
+            this.ApiContext,
+            mockCache.Object,
+            new MapperConfiguration(opts => opts.AddMaps(typeof(Program).Assembly)).CreateMapper(),
+            mockLogger.Object,
+            IdentityTestUtils.MockPlayerDetailsService.Object,
+            []
+        );
         savefileService.Create().Wait();
 
         this.Mapper = UnitTestUtils.CreateMapper();

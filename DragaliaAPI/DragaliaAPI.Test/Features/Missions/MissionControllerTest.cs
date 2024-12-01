@@ -39,18 +39,19 @@ public class MissionControllerTest
     [Fact]
     public async Task GetMissionList_ReturnsMissionList()
     {
-        MissionNotice notice =
-            new()
+        MissionNotice notice = new()
+        {
+            NormalMissionNotice = new AtgenNormalMissionNotice()
             {
-                NormalMissionNotice = new AtgenNormalMissionNotice()
-                {
-                    IsUpdate = true,
-                    AllMissionCount = 420,
-                },
-            };
+                IsUpdate = true,
+                AllMissionCount = 420,
+            },
+        };
 
-        CurrentMainStoryMission mainStoryMission =
-            new(1337, new List<AtgenMainStoryMissionStateList>());
+        CurrentMainStoryMission mainStoryMission = new(
+            1337,
+            new List<AtgenMainStoryMissionStateList>()
+        );
 
         this.mockMissionService.Setup(x => x.GetMissionNotice(null)).ReturnsAsync(notice);
 
@@ -83,15 +84,14 @@ public class MissionControllerTest
     [Fact]
     public async Task GetDrillMissionList_ReturnsDrillMissionList()
     {
-        MissionNotice notice =
-            new()
+        MissionNotice notice = new()
+        {
+            NormalMissionNotice = new AtgenNormalMissionNotice()
             {
-                NormalMissionNotice = new AtgenNormalMissionNotice()
-                {
-                    IsUpdate = true,
-                    AllMissionCount = 420,
-                },
-            };
+                IsUpdate = true,
+                AllMissionCount = 420,
+            },
+        };
 
         this.mockMissionService.Setup(x => x.GetMissionNotice(null)).ReturnsAsync(notice);
         this.mockMissionService.Setup(x => x.GetCompletedDrillGroups())
@@ -179,16 +179,15 @@ public class MissionControllerTest
     [Fact]
     public async Task UnlockMainMissionGroup_UnlocksGroupAndRewards()
     {
-        DbPlayerMission fakeMission =
-            new()
-            {
-                ViewerId = IdentityTestUtils.ViewerId,
-                Id = 5000,
-                State = MissionState.Completed,
-                Type = MissionType.MainStory,
-                Start = DateTimeOffset.UnixEpoch,
-                End = DateTimeOffset.UnixEpoch,
-            };
+        DbPlayerMission fakeMission = new()
+        {
+            ViewerId = IdentityTestUtils.ViewerId,
+            Id = 5000,
+            State = MissionState.Completed,
+            Type = MissionType.MainStory,
+            Start = DateTimeOffset.UnixEpoch,
+            End = DateTimeOffset.UnixEpoch,
+        };
 
         MainStoryMissionGroupReward fakeReward = new(EntityTypes.FortPlant, 10, 500);
 

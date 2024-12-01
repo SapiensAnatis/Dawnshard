@@ -200,16 +200,15 @@ public class DungeonSkipController(
             );
         }
 
-        DungeonSession session =
-            new()
-            {
-                Party = party.Where(x => x.CharaId != 0),
-                QuestData = questData,
-                SupportViewerId = supportViewerId,
-                IsHost = true,
-                IsMulti = false,
-                PlayCount = playCount,
-            };
+        DungeonSession session = new()
+        {
+            Party = party.Where(x => x.CharaId != 0),
+            QuestData = questData,
+            SupportViewerId = supportViewerId,
+            IsHost = true,
+            IsMulti = false,
+            PlayCount = playCount,
+        };
 
         Dictionary<int, IList<AtgenEnemy>> enemyList = new(questData.AreaInfo.Count);
 
@@ -229,21 +228,20 @@ public class DungeonSkipController(
 
         session.EnemyList = enemyList;
 
-        PlayRecord playRecord =
-            new()
+        PlayRecord playRecord = new()
+        {
+            IsClear = true,
+            Time = -1,
+            TreasureRecord = session.EnemyList.Select(x => new AtgenTreasureRecord()
             {
-                IsClear = true,
-                Time = -1,
-                TreasureRecord = session.EnemyList.Select(x => new AtgenTreasureRecord()
-                {
-                    AreaIdx = x.Key,
-                    Enemy = x.Value.Select(_ => 1),
-                    DropObj = new List<int>(), // TODO
-                    EnemySmash =
-                        new List<AtgenEnemySmash>() // TODO
-                    ,
-                }),
-            };
+                AreaIdx = x.Key,
+                Enemy = x.Value.Select(_ => 1),
+                DropObj = new List<int>(), // TODO
+                EnemySmash =
+                    new List<AtgenEnemySmash>() // TODO
+                ,
+            }),
+        };
 
         IngameResultData ingameResultData = await dungeonRecordService.GenerateIngameResultData(
             string.Empty,

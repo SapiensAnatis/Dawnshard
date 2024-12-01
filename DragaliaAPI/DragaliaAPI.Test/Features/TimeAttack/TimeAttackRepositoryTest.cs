@@ -23,21 +23,20 @@ public class TimeAttackRepositoryTest : RepositoryTestFixture
     {
         string gameId = Guid.NewGuid().ToString();
 
-        DbTimeAttackClear clear =
-            new()
+        DbTimeAttackClear clear = new()
+        {
+            GameId = gameId,
+            QuestId = 1,
+            Players = new List<DbTimeAttackPlayer>()
             {
-                GameId = gameId,
-                QuestId = 1,
-                Players = new List<DbTimeAttackPlayer>()
+                new()
                 {
-                    new()
-                    {
-                        GameId = gameId,
-                        ViewerId = 1,
-                        PartyInfo = "{}",
-                    },
+                    GameId = gameId,
+                    ViewerId = 1,
+                    PartyInfo = "{}",
                 },
-            };
+            },
+        };
 
         await this.timeAttackRepository.CreateOrUpdateClear(clear);
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);

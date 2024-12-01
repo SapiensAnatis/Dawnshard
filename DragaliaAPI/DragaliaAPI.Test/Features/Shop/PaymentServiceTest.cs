@@ -50,15 +50,14 @@ public class PaymentServiceTest : RepositoryTestFixture
         int total
     )
     {
-        DbPlayerUserData userData =
-            new()
-            {
-                ViewerId = IdentityTestUtils.ViewerId,
-                BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
-                Coin = type == PaymentTypes.Coin ? total : 0,
-                Crystal = type == PaymentTypes.Wyrmite ? total : 0,
-                ManaPoint = type == PaymentTypes.ManaPoint ? total : 0,
-            };
+        DbPlayerUserData userData = new()
+        {
+            ViewerId = IdentityTestUtils.ViewerId,
+            BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
+            Coin = type == PaymentTypes.Coin ? total : 0,
+            Crystal = type == PaymentTypes.Wyrmite ? total : 0,
+            ManaPoint = type == PaymentTypes.ManaPoint ? total : 0,
+        };
 
         this.mockUserDataRepository.SetupUserData(userData);
 
@@ -85,15 +84,14 @@ public class PaymentServiceTest : RepositoryTestFixture
         int total
     )
     {
-        DbPlayerUserData userData =
-            new()
-            {
-                ViewerId = IdentityTestUtils.ViewerId,
-                BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
-                Coin = type == PaymentTypes.Coin ? total : 0,
-                Crystal = type == PaymentTypes.Wyrmite ? total : 0,
-                ManaPoint = type == PaymentTypes.ManaPoint ? total : 0,
-            };
+        DbPlayerUserData userData = new()
+        {
+            ViewerId = IdentityTestUtils.ViewerId,
+            BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
+            Coin = type == PaymentTypes.Coin ? total : 0,
+            Crystal = type == PaymentTypes.Wyrmite ? total : 0,
+            ManaPoint = type == PaymentTypes.ManaPoint ? total : 0,
+        };
 
         this.mockUserDataRepository.SetupUserData(userData);
 
@@ -120,15 +118,14 @@ public class PaymentServiceTest : RepositoryTestFixture
         int total
     )
     {
-        DbPlayerUserData userData =
-            new()
-            {
-                ViewerId = IdentityTestUtils.ViewerId,
-                BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
-                Coin = type == PaymentTypes.Coin ? total : 0,
-                Crystal = type == PaymentTypes.Wyrmite ? total : 0,
-                ManaPoint = type == PaymentTypes.ManaPoint ? total : 0,
-            };
+        DbPlayerUserData userData = new()
+        {
+            ViewerId = IdentityTestUtils.ViewerId,
+            BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
+            Coin = type == PaymentTypes.Coin ? total : 0,
+            Crystal = type == PaymentTypes.Wyrmite ? total : 0,
+            ManaPoint = type == PaymentTypes.ManaPoint ? total : 0,
+        };
 
         this.mockUserDataRepository.SetupUserData(userData);
 
@@ -152,15 +149,14 @@ public class PaymentServiceTest : RepositoryTestFixture
         int total
     )
     {
-        DbPlayerUserData userData =
-            new()
-            {
-                ViewerId = IdentityTestUtils.ViewerId,
-                BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
-                Coin = type == PaymentTypes.Coin ? total : 0,
-                Crystal = type == PaymentTypes.Wyrmite ? total : 0,
-                ManaPoint = type == PaymentTypes.ManaPoint ? total : 0,
-            };
+        DbPlayerUserData userData = new()
+        {
+            ViewerId = IdentityTestUtils.ViewerId,
+            BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
+            Coin = type == PaymentTypes.Coin ? total : 0,
+            Crystal = type == PaymentTypes.Wyrmite ? total : 0,
+            ManaPoint = type == PaymentTypes.ManaPoint ? total : 0,
+        };
 
         this.mockUserDataRepository.SetupUserData(userData);
 

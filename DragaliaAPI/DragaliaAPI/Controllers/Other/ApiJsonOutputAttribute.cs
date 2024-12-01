@@ -10,8 +10,10 @@ public class ApiJsonOutputAttribute : ResultFilterAttribute
 {
     static ApiJsonOutputAttribute()
     {
-        JsonSerializerOptions jsonOptions =
-            new(ApiJsonOptions.Instance) { TypeInfoResolver = new DefaultJsonTypeInfoResolver() };
+        JsonSerializerOptions jsonOptions = new(ApiJsonOptions.Instance)
+        {
+            TypeInfoResolver = new DefaultJsonTypeInfoResolver(),
+        };
 
         OutputFormatter = new(jsonOptions);
     }

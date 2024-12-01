@@ -124,17 +124,16 @@ public class DmodeServiceTest
         int dungeonScore = 0;
         bool isPlayEnd = false;
 
-        DbPlayerDmodeDungeon dbDungeon =
-            new()
-            {
-                ViewerId = UnitTestUtils.ViewerId,
-                State = DungeonState.Waiting,
-                CharaId = charaId,
-                Floor = floor,
-                QuestTime = 0,
-                DungeonScore = dungeonScore,
-                IsPlayEnd = isPlayEnd,
-            };
+        DbPlayerDmodeDungeon dbDungeon = new()
+        {
+            ViewerId = UnitTestUtils.ViewerId,
+            State = DungeonState.Waiting,
+            CharaId = charaId,
+            Floor = floor,
+            QuestTime = 0,
+            DungeonScore = dungeonScore,
+            IsPlayEnd = isPlayEnd,
+        };
 
         mockDmodeRepository
             .SetupGet(x => x.Dungeon)
@@ -177,8 +176,10 @@ public class DmodeServiceTest
     [Fact]
     public async Task GetServitorPassiveList_ReturnsList()
     {
-        List<DmodeServitorPassiveList> expected =
-            new() { new DmodeServitorPassiveList(DmodeServitorPassiveType.Exp, 5) };
+        List<DmodeServitorPassiveList> expected = new()
+        {
+            new DmodeServitorPassiveList(DmodeServitorPassiveType.Exp, 5),
+        };
 
         mockDmodeRepository
             .Setup(x => x.ServitorPassives)
@@ -209,18 +210,17 @@ public class DmodeServiceTest
     [Fact]
     public async Task GetExpedition_ReturnsExpedition()
     {
-        DbPlayerDmodeExpedition dbExpedition =
-            new()
-            {
-                ViewerId = UnitTestUtils.ViewerId,
-                CharaId1 = Charas.ThePrince,
-                CharaId2 = 0,
-                CharaId3 = 0,
-                CharaId4 = 0,
-                StartTime = this.fixedTime,
-                State = ExpeditionState.Playing,
-                TargetFloor = 30,
-            };
+        DbPlayerDmodeExpedition dbExpedition = new()
+        {
+            ViewerId = UnitTestUtils.ViewerId,
+            CharaId1 = Charas.ThePrince,
+            CharaId2 = 0,
+            CharaId3 = 0,
+            CharaId4 = 0,
+            StartTime = this.fixedTime,
+            State = ExpeditionState.Playing,
+            TargetFloor = 30,
+        };
 
         mockDmodeRepository
             .SetupGet(x => x.Expedition)
@@ -247,18 +247,17 @@ public class DmodeServiceTest
     [Fact]
     public async Task GetCharaList_ReturnsList()
     {
-        DbPlayerDmodeChara dbChara =
-            new()
-            {
-                ViewerId = UnitTestUtils.ViewerId,
-                CharaId = Charas.ThePrince,
-                MaxFloor = 50,
-                MaxScore = 5000,
-                SelectEditSkillCharaId1 = Charas.Tobias,
-                SelectEditSkillCharaId2 = 0,
-                SelectEditSkillCharaId3 = 0,
-                SelectedServitorId = 2,
-            };
+        DbPlayerDmodeChara dbChara = new()
+        {
+            ViewerId = UnitTestUtils.ViewerId,
+            CharaId = Charas.ThePrince,
+            MaxFloor = 50,
+            MaxScore = 5000,
+            SelectEditSkillCharaId1 = Charas.Tobias,
+            SelectEditSkillCharaId2 = 0,
+            SelectEditSkillCharaId3 = 0,
+            SelectedServitorId = 2,
+        };
 
         mockDmodeRepository
             .Setup(x => x.GetCharasAsync())
@@ -287,13 +286,12 @@ public class DmodeServiceTest
     [Fact]
     public async Task UseRecovery_UsesRecovery()
     {
-        DbPlayerDmodeInfo dbInfo =
-            new()
-            {
-                ViewerId = UnitTestUtils.ViewerId,
-                RecoveryCount = 0,
-                RecoveryTime = DateTimeOffset.UnixEpoch,
-            };
+        DbPlayerDmodeInfo dbInfo = new()
+        {
+            ViewerId = UnitTestUtils.ViewerId,
+            RecoveryCount = 0,
+            RecoveryTime = DateTimeOffset.UnixEpoch,
+        };
 
         mockDmodeRepository.Setup(x => x.GetInfoAsync()).ReturnsAsync(dbInfo);
 
@@ -308,13 +306,12 @@ public class DmodeServiceTest
     [Fact]
     public async Task UseRecovery_MaxAmount_Throws()
     {
-        DbPlayerDmodeInfo dbInfo =
-            new()
-            {
-                ViewerId = UnitTestUtils.ViewerId,
-                RecoveryCount = 10,
-                RecoveryTime = DateTimeOffset.UnixEpoch,
-            };
+        DbPlayerDmodeInfo dbInfo = new()
+        {
+            ViewerId = UnitTestUtils.ViewerId,
+            RecoveryCount = 10,
+            RecoveryTime = DateTimeOffset.UnixEpoch,
+        };
 
         mockDmodeRepository.Setup(x => x.GetInfoAsync()).ReturnsAsync(dbInfo);
 
@@ -326,13 +323,12 @@ public class DmodeServiceTest
     [Fact]
     public async Task UseSkip_UsesSkip()
     {
-        DbPlayerDmodeInfo dbInfo =
-            new()
-            {
-                ViewerId = UnitTestUtils.ViewerId,
-                FloorSkipCount = 0,
-                FloorSkipTime = DateTimeOffset.UnixEpoch,
-            };
+        DbPlayerDmodeInfo dbInfo = new()
+        {
+            ViewerId = UnitTestUtils.ViewerId,
+            FloorSkipCount = 0,
+            FloorSkipTime = DateTimeOffset.UnixEpoch,
+        };
 
         mockDmodeRepository.Setup(x => x.GetInfoAsync()).ReturnsAsync(dbInfo);
 
@@ -347,13 +343,12 @@ public class DmodeServiceTest
     [Fact]
     public async Task UseSkip_MaxAmount_Throws()
     {
-        DbPlayerDmodeInfo dbInfo =
-            new()
-            {
-                ViewerId = UnitTestUtils.ViewerId,
-                FloorSkipCount = 3,
-                FloorSkipTime = DateTimeOffset.UnixEpoch,
-            };
+        DbPlayerDmodeInfo dbInfo = new()
+        {
+            ViewerId = UnitTestUtils.ViewerId,
+            FloorSkipCount = 3,
+            FloorSkipTime = DateTimeOffset.UnixEpoch,
+        };
 
         mockDmodeRepository.Setup(x => x.GetInfoAsync()).ReturnsAsync(dbInfo);
 
@@ -367,16 +362,15 @@ public class DmodeServiceTest
     {
         DmodeServitorPassiveList expected = new(DmodeServitorPassiveType.Exp, 2);
 
-        List<DbPlayerDmodeServitorPassive> dbServitors =
-            new()
+        List<DbPlayerDmodeServitorPassive> dbServitors = new()
+        {
+            new DbPlayerDmodeServitorPassive
             {
-                new DbPlayerDmodeServitorPassive
-                {
-                    ViewerId = UnitTestUtils.ViewerId,
-                    PassiveId = DmodeServitorPassiveType.Exp,
-                    Level = 1,
-                },
-            };
+                ViewerId = UnitTestUtils.ViewerId,
+                PassiveId = DmodeServitorPassiveType.Exp,
+                Level = 1,
+            },
+        };
 
         mockDmodeRepository
             .SetupGet(x => x.ServitorPassives)
@@ -405,13 +399,12 @@ public class DmodeServiceTest
 
         List<DbPlayerDmodeServitorPassive> dbServitors = new();
 
-        DbPlayerDmodeServitorPassive expServitor =
-            new()
-            {
-                ViewerId = UnitTestUtils.ViewerId,
-                PassiveId = DmodeServitorPassiveType.Exp,
-                Level = 0,
-            };
+        DbPlayerDmodeServitorPassive expServitor = new()
+        {
+            ViewerId = UnitTestUtils.ViewerId,
+            PassiveId = DmodeServitorPassiveType.Exp,
+            Level = 0,
+        };
 
         mockDmodeRepository
             .SetupGet(x => x.ServitorPassives)
@@ -441,16 +434,15 @@ public class DmodeServiceTest
     {
         DmodeServitorPassiveList expected = new(DmodeServitorPassiveType.Exp, 5);
 
-        List<DbPlayerDmodeServitorPassive> dbServitors =
-            new()
+        List<DbPlayerDmodeServitorPassive> dbServitors = new()
+        {
+            new DbPlayerDmodeServitorPassive
             {
-                new DbPlayerDmodeServitorPassive
-                {
-                    ViewerId = UnitTestUtils.ViewerId,
-                    PassiveId = DmodeServitorPassiveType.Exp,
-                    Level = 1,
-                },
-            };
+                ViewerId = UnitTestUtils.ViewerId,
+                PassiveId = DmodeServitorPassiveType.Exp,
+                Level = 1,
+            },
+        };
 
         List<DmodeServitorPassiveList> inputList = new();
         for (int i = 2; i <= 5; i++)
@@ -481,18 +473,17 @@ public class DmodeServiceTest
     [Fact]
     public async Task StartExpedition_StartsExpedition()
     {
-        DbPlayerDmodeExpedition dbExpedition =
-            new()
-            {
-                ViewerId = UnitTestUtils.ViewerId,
-                CharaId1 = 0,
-                CharaId2 = 0,
-                CharaId3 = 0,
-                CharaId4 = 0,
-                State = ExpeditionState.Waiting,
-                StartTime = DateTimeOffset.UnixEpoch,
-                TargetFloor = 0,
-            };
+        DbPlayerDmodeExpedition dbExpedition = new()
+        {
+            ViewerId = UnitTestUtils.ViewerId,
+            CharaId1 = 0,
+            CharaId2 = 0,
+            CharaId3 = 0,
+            CharaId4 = 0,
+            State = ExpeditionState.Waiting,
+            StartTime = DateTimeOffset.UnixEpoch,
+            TargetFloor = 0,
+        };
 
         mockDmodeRepository.Setup(x => x.GetExpeditionAsync()).ReturnsAsync(dbExpedition);
 
@@ -514,18 +505,17 @@ public class DmodeServiceTest
     [Fact]
     public async Task FinishExpedition_FinishesExpedition()
     {
-        DbPlayerDmodeExpedition dbExpedition =
-            new()
-            {
-                ViewerId = UnitTestUtils.ViewerId,
-                CharaId1 = Charas.ThePrince,
-                CharaId2 = 0,
-                CharaId3 = 0,
-                CharaId4 = 0,
-                State = ExpeditionState.Playing,
-                StartTime = DateTimeOffset.UnixEpoch,
-                TargetFloor = 30,
-            };
+        DbPlayerDmodeExpedition dbExpedition = new()
+        {
+            ViewerId = UnitTestUtils.ViewerId,
+            CharaId1 = Charas.ThePrince,
+            CharaId2 = 0,
+            CharaId3 = 0,
+            CharaId4 = 0,
+            State = ExpeditionState.Playing,
+            StartTime = DateTimeOffset.UnixEpoch,
+            TargetFloor = 30,
+        };
 
         mockDmodeRepository.Setup(x => x.GetExpeditionAsync()).ReturnsAsync(dbExpedition);
 
@@ -582,18 +572,17 @@ public class DmodeServiceTest
     [Fact]
     public async Task FinishExpedition_NotEnoughTimePassed_Throws()
     {
-        DbPlayerDmodeExpedition dbExpedition =
-            new()
-            {
-                ViewerId = UnitTestUtils.ViewerId,
-                CharaId1 = Charas.ThePrince,
-                CharaId2 = 0,
-                CharaId3 = 0,
-                CharaId4 = 0,
-                State = ExpeditionState.Playing,
-                StartTime = this.fixedTime,
-                TargetFloor = 30,
-            };
+        DbPlayerDmodeExpedition dbExpedition = new()
+        {
+            ViewerId = UnitTestUtils.ViewerId,
+            CharaId1 = Charas.ThePrince,
+            CharaId2 = 0,
+            CharaId3 = 0,
+            CharaId4 = 0,
+            State = ExpeditionState.Playing,
+            StartTime = this.fixedTime,
+            TargetFloor = 30,
+        };
 
         mockDmodeRepository.Setup(x => x.GetExpeditionAsync()).ReturnsAsync(dbExpedition);
 
@@ -608,18 +597,17 @@ public class DmodeServiceTest
     [Fact]
     public async Task FinishExpedition_ForceFinish_FinishesWithoutRewards()
     {
-        DbPlayerDmodeExpedition dbExpedition =
-            new()
-            {
-                ViewerId = UnitTestUtils.ViewerId,
-                CharaId1 = Charas.ThePrince,
-                CharaId2 = 0,
-                CharaId3 = 0,
-                CharaId4 = 0,
-                State = ExpeditionState.Playing,
-                StartTime = this.fixedTime,
-                TargetFloor = 30,
-            };
+        DbPlayerDmodeExpedition dbExpedition = new()
+        {
+            ViewerId = UnitTestUtils.ViewerId,
+            CharaId1 = Charas.ThePrince,
+            CharaId2 = 0,
+            CharaId3 = 0,
+            CharaId4 = 0,
+            State = ExpeditionState.Playing,
+            StartTime = this.fixedTime,
+            TargetFloor = 30,
+        };
 
         mockDmodeRepository.Setup(x => x.GetExpeditionAsync()).ReturnsAsync(dbExpedition);
 

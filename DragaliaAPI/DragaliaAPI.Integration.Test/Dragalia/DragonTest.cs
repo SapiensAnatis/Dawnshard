@@ -512,13 +512,12 @@ public class DragonTest : TestFixture
             );
         }
 
-        DragonSendGiftMultipleRequest request =
-            new()
-            {
-                DragonId = Dragons.MidgardsormrZero,
-                DragonGiftId = DragonGifts.FourLeafClover,
-                Quantity = 100,
-            };
+        DragonSendGiftMultipleRequest request = new()
+        {
+            DragonId = Dragons.MidgardsormrZero,
+            DragonGiftId = DragonGifts.FourLeafClover,
+            Quantity = 100,
+        };
 
         DragaliaResponse<DragonSendGiftMultipleResponse>? response = (
             await this.Client.PostMsgpack<DragonSendGiftMultipleResponse>(

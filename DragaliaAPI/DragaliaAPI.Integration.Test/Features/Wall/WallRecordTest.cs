@@ -30,12 +30,11 @@ public class WallRecordTest : TestFixture
         int expectedWyrmites = 10;
         int expectedGoldCrystalsAmount = 3;
 
-        MaterialList expectedGoldCrystals =
-            new()
-            {
-                MaterialId = Materials.GoldCrystal,
-                Quantity = oldPlayerGoldCrystals.Quantity + expectedGoldCrystalsAmount,
-            };
+        MaterialList expectedGoldCrystals = new()
+        {
+            MaterialId = Materials.GoldCrystal,
+            Quantity = oldPlayerGoldCrystals.Quantity + expectedGoldCrystalsAmount,
+        };
 
         await this.AddRangeToDatabase(
             new List<DbPlayerQuestWall>()
@@ -49,16 +48,15 @@ public class WallRecordTest : TestFixture
             }
         );
 
-        DungeonSession mockSession =
-            new()
-            {
-                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
-                WallId = wallId,
-                WallLevel =
-                    wallLevel
-                    + 1 // Client passes (db wall level + 1)
-                ,
-            };
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            WallId = wallId,
+            WallLevel =
+                wallLevel
+                + 1 // Client passes (db wall level + 1)
+            ,
+        };
 
         string key = await this.StartDungeon(mockSession);
 
@@ -151,13 +149,12 @@ public class WallRecordTest : TestFixture
             }
         );
 
-        DungeonSession mockSession =
-            new()
-            {
-                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
-                WallId = wallId,
-                WallLevel = wallLevel,
-            };
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            WallId = wallId,
+            WallLevel = wallLevel,
+        };
 
         string key = await this.StartDungeon(mockSession);
 
@@ -231,13 +228,12 @@ public class WallRecordTest : TestFixture
             }
         );
 
-        DungeonSession mockSession =
-            new()
-            {
-                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
-                WallId = (int)QuestWallTypes.Flame,
-                WallLevel = 6,
-            };
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            WallId = (int)QuestWallTypes.Flame,
+            WallLevel = 6,
+        };
 
         string key = await this.StartDungeon(mockSession);
 
@@ -305,13 +301,12 @@ public class WallRecordTest : TestFixture
             }
         );
 
-        DungeonSession mockSession =
-            new()
-            {
-                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
-                WallId = (int)QuestWallTypes.Flame,
-                WallLevel = 80,
-            };
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            WallId = (int)QuestWallTypes.Flame,
+            WallLevel = 80,
+        };
 
         string key = await this.StartDungeon(mockSession);
 

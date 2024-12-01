@@ -83,11 +83,17 @@ public class DungeonRepositoryTest : RepositoryTestFixture
     {
         DbPlayerCharaData chara = new(ViewerId, Charas.BondforgedPrince);
 
-        DbPlayerCharaData chara1 =
-            new(ViewerId, Charas.GalaMym) { IsUnlockEditSkill = true, Skill1Level = 3 };
+        DbPlayerCharaData chara1 = new(ViewerId, Charas.GalaMym)
+        {
+            IsUnlockEditSkill = true,
+            Skill1Level = 3,
+        };
 
-        DbPlayerCharaData chara2 =
-            new(ViewerId, Charas.SummerCleo) { IsUnlockEditSkill = true, Skill2Level = 2 };
+        DbPlayerCharaData chara2 = new(ViewerId, Charas.SummerCleo)
+        {
+            IsUnlockEditSkill = true,
+            Skill2Level = 2,
+        };
 
         DbPlayerDragonData dragon = new DbPlayerDragonData(ViewerId, Dragons.MidgardsormrZero);
         dragon.DragonKeyId = 400;
@@ -100,59 +106,44 @@ public class DungeonRepositoryTest : RepositoryTestFixture
 
         DbWeaponBody weapon = new() { ViewerId = ViewerId, WeaponBodyId = WeaponBodies.Excalibur };
 
-        List<DbAbilityCrest> crests =
-            new()
-            {
-                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrestId.ADogsDay },
-                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrestId.TheRedImpulse },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    AbilityCrestId = AbilityCrestId.ThePrinceofDragonyule,
-                },
-                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrestId.TaikoTandem },
-                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrestId.AChoiceBlend },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
-                },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    AbilityCrestId = AbilityCrestId.AKingsPrideSwordsBoon,
-                },
-            };
+        List<DbAbilityCrest> crests = new()
+        {
+            new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrestId.ADogsDay },
+            new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrestId.TheRedImpulse },
+            new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrestId.ThePrinceofDragonyule },
+            new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrestId.TaikoTandem },
+            new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrestId.AChoiceBlend },
+            new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon },
+            new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrestId.AKingsPrideSwordsBoon },
+        };
 
-        DbTalisman talisman =
-            new()
-            {
-                ViewerId = ViewerId,
-                TalismanId = Talismans.GalaNedrick,
-                TalismanKeyId = 44444,
-            };
+        DbTalisman talisman = new()
+        {
+            ViewerId = ViewerId,
+            TalismanId = Talismans.GalaNedrick,
+            TalismanKeyId = 44444,
+        };
 
-        DbPartyUnit unit =
-            new()
-            {
-                ViewerId = ViewerId,
-                UnitNo = 1,
-                PartyNo = 1,
-                CharaId = Charas.BondforgedPrince,
-                EquipWeaponBodyId = WeaponBodies.Excalibur,
-                EquipWeaponSkinId = 1,
-                EquipDragonKeyId = 400,
-                EquipTalismanKeyId = 44444,
-                EquipCrestSlotType1CrestId1 = AbilityCrestId.ADogsDay,
-                EquipCrestSlotType1CrestId2 = AbilityCrestId.TheRedImpulse,
-                EquipCrestSlotType1CrestId3 = AbilityCrestId.ThePrinceofDragonyule,
-                EquipCrestSlotType2CrestId1 = AbilityCrestId.TaikoTandem,
-                EquipCrestSlotType2CrestId2 = AbilityCrestId.AChoiceBlend,
-                EquipCrestSlotType3CrestId1 = AbilityCrestId.CrownofLightSerpentsBoon,
-                EquipCrestSlotType3CrestId2 = AbilityCrestId.AKingsPrideSwordsBoon,
-                EditSkill1CharaId = Charas.GalaMym,
-                EditSkill2CharaId = Charas.SummerCleo,
-            };
+        DbPartyUnit unit = new()
+        {
+            ViewerId = ViewerId,
+            UnitNo = 1,
+            PartyNo = 1,
+            CharaId = Charas.BondforgedPrince,
+            EquipWeaponBodyId = WeaponBodies.Excalibur,
+            EquipWeaponSkinId = 1,
+            EquipDragonKeyId = 400,
+            EquipTalismanKeyId = 44444,
+            EquipCrestSlotType1CrestId1 = AbilityCrestId.ADogsDay,
+            EquipCrestSlotType1CrestId2 = AbilityCrestId.TheRedImpulse,
+            EquipCrestSlotType1CrestId3 = AbilityCrestId.ThePrinceofDragonyule,
+            EquipCrestSlotType2CrestId1 = AbilityCrestId.TaikoTandem,
+            EquipCrestSlotType2CrestId2 = AbilityCrestId.AChoiceBlend,
+            EquipCrestSlotType3CrestId1 = AbilityCrestId.CrownofLightSerpentsBoon,
+            EquipCrestSlotType3CrestId2 = AbilityCrestId.AKingsPrideSwordsBoon,
+            EditSkill1CharaId = Charas.GalaMym,
+            EditSkill2CharaId = Charas.SummerCleo,
+        };
 
         DbWeaponSkin skin = new() { ViewerId = ViewerId, WeaponSkinId = 1 };
 

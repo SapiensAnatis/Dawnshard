@@ -75,22 +75,21 @@ public class FriendController : DragaliaControllerBase
         // TODO: when helpers are converted to use other account ids, get the bonuses of that account id
         FortBonusList bonusList = await bonusService.GetBonusList();
 
-        FriendGetSupportCharaDetailResponse response =
-            new()
+        FriendGetSupportCharaDetailResponse response = new()
+        {
+            SupportUserDataDetail = new()
             {
-                SupportUserDataDetail = new()
-                {
-                    UserSupportData = helperInfo,
-                    FortBonusList = bonusList,
-                    ManaCirclePieceIdList = Enumerable.Range(
-                        1,
-                        helperInfo.SupportChara.AdditionalMaxLevel == 20 ? 70 : 50
-                    ),
-                    DragonReliabilityLevel = 30,
-                    IsFriend = helperDetail.IsFriend,
-                    ApplySendStatus = 0,
-                },
-            };
+                UserSupportData = helperInfo,
+                FortBonusList = bonusList,
+                ManaCirclePieceIdList = Enumerable.Range(
+                    1,
+                    helperInfo.SupportChara.AdditionalMaxLevel == 20 ? 70 : 50
+                ),
+                DragonReliabilityLevel = 30,
+                IsFriend = helperDetail.IsFriend,
+                ApplySendStatus = 0,
+            },
+        };
 
         return Ok(response);
     }

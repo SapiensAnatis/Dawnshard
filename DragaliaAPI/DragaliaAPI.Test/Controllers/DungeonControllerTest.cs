@@ -50,19 +50,20 @@ public class DungeonControllerTest
     {
         int questId = 227060105;
 
-        List<UserSupportList> userSupportList =
-            new() { new() { SupportChara = new() { CharaId = Charas.HalloweenLowen } } };
+        List<UserSupportList> userSupportList = new()
+        {
+            new() { SupportChara = new() { CharaId = Charas.HalloweenLowen } },
+        };
 
-        List<AtgenHelperDetailList> supportDetailList =
+        List<AtgenHelperDetailList> supportDetailList = new()
+        {
             new()
             {
-                new()
-                {
-                    IsFriend = false,
-                    ViewerId = 1,
-                    GetManaPoint = 50,
-                },
-            };
+                IsFriend = false,
+                ViewerId = 1,
+                GetManaPoint = 50,
+            },
+        };
 
         this.mockDungeonService.Setup(x => x.GetSession("my key", CancellationToken.None))
             .ReturnsAsync(
@@ -116,19 +117,20 @@ public class DungeonControllerTest
     {
         int questId = 227060105;
 
-        List<UserSupportList> userSupportList =
-            new() { new() { SupportChara = new() { CharaId = Charas.HalloweenLowen } } };
+        List<UserSupportList> userSupportList = new()
+        {
+            new() { SupportChara = new() { CharaId = Charas.HalloweenLowen } },
+        };
 
-        List<AtgenHelperDetailList> supportDetailList =
+        List<AtgenHelperDetailList> supportDetailList = new()
+        {
             new()
             {
-                new()
-                {
-                    IsFriend = false,
-                    ViewerId = 1,
-                    GetManaPoint = 50,
-                },
-            };
+                IsFriend = false,
+                ViewerId = 1,
+                GetManaPoint = 50,
+            },
+        };
 
         this.mockDungeonService.Setup(x => x.GetSession("my key", CancellationToken.None))
             .ReturnsAsync(

@@ -21,24 +21,22 @@ public static class DewValueData
     /// Key: Rarity
     /// Value: Eldwater given for duplicate character summon of that rarity
     /// </summary>
-    public static readonly Dictionary<int, int> DupeSummon =
-        new()
-        {
-            { 3, (int)DupeReturnBaseValues.Rarity3 },
-            { 4, (int)DupeReturnBaseValues.Rarity4 },
-            { 5, (int)DupeReturnBaseValues.Rarity5 },
-        };
+    public static readonly Dictionary<int, int> DupeSummon = new()
+    {
+        { 3, (int)DupeReturnBaseValues.Rarity3 },
+        { 4, (int)DupeReturnBaseValues.Rarity4 },
+        { 5, (int)DupeReturnBaseValues.Rarity5 },
+    };
 
     /// <summary>
     /// Key: Rarity
     /// Value: Eldwater given for duplicate character summon of that rarity
     /// </summary>
-    public static readonly Dictionary<int, int> DupeStorySummon =
-        new()
-        {
-            { 4, (int)DupeReturnBaseValues.Rarity4Story },
-            { 5, (int)DupeReturnBaseValues.Rarity5Story },
-        };
+    public static readonly Dictionary<int, int> DupeStorySummon = new()
+    {
+        { 4, (int)DupeReturnBaseValues.Rarity4Story },
+        { 5, (int)DupeReturnBaseValues.Rarity5Story },
+    };
 }
 
 public enum AmuletReturnBaseValues

@@ -13,59 +13,51 @@ public partial class TimeAttackTest
 
         string teamJson = File.ReadAllText("Data/time_attack_party_info.json");
 
-        DbPlayer player1 =
-            new()
-            {
-                AccountId = Guid.NewGuid().ToString(),
-                UserData = new() { Name = "Qwerby" },
-            };
+        DbPlayer player1 = new()
+        {
+            AccountId = Guid.NewGuid().ToString(),
+            UserData = new() { Name = "Qwerby" },
+        };
 
-        DbPlayer player2 =
-            new()
-            {
-                AccountId = Guid.NewGuid().ToString(),
-                UserData = new() { Name = "Leom" },
-            };
+        DbPlayer player2 = new()
+        {
+            AccountId = Guid.NewGuid().ToString(),
+            UserData = new() { Name = "Leom" },
+        };
 
-        DbPlayer player3 =
-            new()
-            {
-                AccountId = Guid.NewGuid().ToString(),
-                UserData = new() { Name = "Shiny" },
-            };
+        DbPlayer player3 = new()
+        {
+            AccountId = Guid.NewGuid().ToString(),
+            UserData = new() { Name = "Shiny" },
+        };
 
-        DbPlayer player4 =
-            new()
-            {
-                AccountId = Guid.NewGuid().ToString(),
-                UserData = new() { Name = "poopnut" },
-            };
-        DbPlayer player5 =
-            new()
-            {
-                AccountId = Guid.NewGuid().ToString(),
-                UserData = new() { Name = "Alicia" },
-            };
+        DbPlayer player4 = new()
+        {
+            AccountId = Guid.NewGuid().ToString(),
+            UserData = new() { Name = "poopnut" },
+        };
+        DbPlayer player5 = new()
+        {
+            AccountId = Guid.NewGuid().ToString(),
+            UserData = new() { Name = "Alicia" },
+        };
 
-        DbPlayer player6 =
-            new()
-            {
-                AccountId = Guid.NewGuid().ToString(),
-                UserData = new() { Name = "eze" },
-            };
+        DbPlayer player6 = new()
+        {
+            AccountId = Guid.NewGuid().ToString(),
+            UserData = new() { Name = "eze" },
+        };
 
-        DbPlayer player7 =
-            new()
-            {
-                AccountId = Guid.NewGuid().ToString(),
-                UserData = new() { Name = "OzpinXD" },
-            };
-        DbPlayer player8 =
-            new()
-            {
-                AccountId = Guid.NewGuid().ToString(),
-                UserData = new() { Name = "Euden" },
-            };
+        DbPlayer player7 = new()
+        {
+            AccountId = Guid.NewGuid().ToString(),
+            UserData = new() { Name = "OzpinXD" },
+        };
+        DbPlayer player8 = new()
+        {
+            AccountId = Guid.NewGuid().ToString(),
+            UserData = new() { Name = "Euden" },
+        };
 
         DbTimeAttackClear[] clears =
         [

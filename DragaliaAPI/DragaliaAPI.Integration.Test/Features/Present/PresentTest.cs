@@ -199,92 +199,91 @@ public class PresentTest : TestFixture
             x.ViewerId == ViewerId && x.MaterialId == Materials.Squishums
         );
 
-        List<DbPlayerPresent> presents =
+        List<DbPlayerPresent> presents = new()
+        {
             new()
             {
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.Wyrmite,
-                    EntityQuantity = 50,
-                },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.Wyrmite,
-                    EntityQuantity = 50,
-                },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.Dew,
-                    EntityQuantity = 200,
-                },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.Chara,
-                    EntityId = (int)Charas.Akasha,
-                },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.Wyrmprint,
-                    EntityId = (int)AbilityCrestId.ADogsDay,
-                },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.Material,
-                    EntityId = (int)Materials.Squishums,
-                    EntityQuantity = 100,
-                },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.Dragon,
-                    EntityId = (int)Dragons.Arsene,
-                },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.HustleHammer,
-                    EntityQuantity = 50,
-                },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.HustleHammer,
-                    EntityQuantity = 50,
-                },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.Rupies,
-                    EntityQuantity = 100_000,
-                },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.Title,
-                    EntityId = (int)Emblems.SupremeBogfish,
-                    EntityQuantity = 1,
-                },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.FreeDiamantium,
-                    EntityId = 0,
-                    EntityQuantity = 50,
-                },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.FreeDiamantium,
-                    EntityId = 0,
-                    EntityQuantity = 50,
-                },
-            };
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Wyrmite,
+                EntityQuantity = 50,
+            },
+            new()
+            {
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Wyrmite,
+                EntityQuantity = 50,
+            },
+            new()
+            {
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Dew,
+                EntityQuantity = 200,
+            },
+            new()
+            {
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Chara,
+                EntityId = (int)Charas.Akasha,
+            },
+            new()
+            {
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Wyrmprint,
+                EntityId = (int)AbilityCrestId.ADogsDay,
+            },
+            new()
+            {
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Material,
+                EntityId = (int)Materials.Squishums,
+                EntityQuantity = 100,
+            },
+            new()
+            {
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Dragon,
+                EntityId = (int)Dragons.Arsene,
+            },
+            new()
+            {
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.HustleHammer,
+                EntityQuantity = 50,
+            },
+            new()
+            {
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.HustleHammer,
+                EntityQuantity = 50,
+            },
+            new()
+            {
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Rupies,
+                EntityQuantity = 100_000,
+            },
+            new()
+            {
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Title,
+                EntityId = (int)Emblems.SupremeBogfish,
+                EntityQuantity = 1,
+            },
+            new()
+            {
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.FreeDiamantium,
+                EntityId = 0,
+                EntityQuantity = 50,
+            },
+            new()
+            {
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.FreeDiamantium,
+                EntityId = 0,
+                EntityQuantity = 50,
+            },
+        };
 
         await this.AddRangeToDatabase(presents);
 
@@ -343,29 +342,28 @@ public class PresentTest : TestFixture
     [Fact]
     public async Task Receive_ReceiveSinglePresent_ClaimsOne()
     {
-        List<DbPlayerPresent> presents =
+        List<DbPlayerPresent> presents = new()
+        {
             new()
             {
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.Dragon,
-                    EntityId = (int)Dragons.Raphael,
-                },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.Wyrmite,
-                    EntityQuantity = 100,
-                    ReceiveLimitTime = DateTimeOffset.UtcNow + TimeSpan.FromDays(1),
-                },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.Rupies,
-                    EntityQuantity = 100_000,
-                },
-            };
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Dragon,
+                EntityId = (int)Dragons.Raphael,
+            },
+            new()
+            {
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Wyrmite,
+                EntityQuantity = 100,
+                ReceiveLimitTime = DateTimeOffset.UtcNow + TimeSpan.FromDays(1),
+            },
+            new()
+            {
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Rupies,
+                EntityQuantity = 100_000,
+            },
+        };
 
         await this.AddRangeToDatabase(presents);
 
@@ -401,22 +399,21 @@ public class PresentTest : TestFixture
             .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
-        List<DbPlayerPresent> presents =
+        List<DbPlayerPresent> presents = new()
+        {
             new()
             {
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.Wyrmprint,
-                    EntityId = (int)AbilityCrestId.DearDiary,
-                },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.Wyrmprint,
-                    EntityId = (int)AbilityCrestId.DearDiary,
-                },
-            };
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Wyrmprint,
+                EntityId = (int)AbilityCrestId.DearDiary,
+            },
+            new()
+            {
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Wyrmprint,
+                EntityId = (int)AbilityCrestId.DearDiary,
+            },
+        };
 
         await this.AddRangeToDatabase(presents);
 
@@ -456,22 +453,21 @@ public class PresentTest : TestFixture
     [Fact]
     public async Task Receive_DuplicateCharacter_DiscardsSecond()
     {
-        List<DbPlayerPresent> presents =
+        List<DbPlayerPresent> presents = new()
+        {
             new()
             {
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.Chara,
-                    EntityId = (int)Charas.Addis,
-                },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.Chara,
-                    EntityId = (int)Charas.Addis,
-                },
-            };
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Chara,
+                EntityId = (int)Charas.Addis,
+            },
+            new()
+            {
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Chara,
+                EntityId = (int)Charas.Addis,
+            },
+        };
 
         await this.AddRangeToDatabase(presents);
 
@@ -502,22 +498,21 @@ public class PresentTest : TestFixture
     [Fact]
     public async Task Receive_DuplicateDragon_GrantsBoth()
     {
-        List<DbPlayerPresent> presents =
+        List<DbPlayerPresent> presents = new()
+        {
             new()
             {
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.Dragon,
-                    EntityId = (int)Dragons.Homura,
-                },
-                new()
-                {
-                    ViewerId = ViewerId,
-                    EntityType = EntityTypes.Dragon,
-                    EntityId = (int)Dragons.Homura,
-                },
-            };
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Dragon,
+                EntityId = (int)Dragons.Homura,
+            },
+            new()
+            {
+                ViewerId = ViewerId,
+                EntityType = EntityTypes.Dragon,
+                EntityId = (int)Dragons.Homura,
+            },
+        };
 
         await this.AddRangeToDatabase(presents);
 

@@ -54,14 +54,13 @@ public class PartyControllerTest : RepositoryTestFixture
         this.mockPartyRepository.Setup(x => x.UpdatePartyName(1, "Z Team"))
             .Returns(Task.CompletedTask);
 
-        UpdateDataList updateDataList =
-            new()
+        UpdateDataList updateDataList = new()
+        {
+            PartyList = new List<PartyList>()
             {
-                PartyList = new List<PartyList>()
-                {
-                    new() { PartyName = "Z Team", PartyNo = 1 },
-                },
-            };
+                new() { PartyName = "Z Team", PartyNo = 1 },
+            },
+        };
         this.mockUpdateDataService.Setup(x =>
                 x.SaveChangesAsync(TestContext.Current.CancellationToken)
             )

@@ -30,8 +30,15 @@ public class LoadService(
     ILogger<LoadService> logger
 ) : ILoadService
 {
-    private static readonly DateTimeOffset QuestBonusStackBaseTime =
-        new(2021, 04, 07, 06, 00, 00, TimeSpan.Zero);
+    private static readonly DateTimeOffset QuestBonusStackBaseTime = new(
+        2021,
+        04,
+        07,
+        06,
+        00,
+        00,
+        TimeSpan.Zero
+    );
 
     public async Task<LoadIndexResponse> BuildIndexData(
         CancellationToken cancellationToken = default

@@ -34,8 +34,10 @@ public class PhotonStateApi : IPhotonStateApi
     public async Task<IEnumerable<ApiGame>> GetByQuestId(int questId)
     {
         Dictionary<string, string?> queryParams = new() { { nameof(questId), questId.ToString() } };
-        Uri requestUri =
-            new(QueryHelpers.AddQueryString(GameListEndpoint, queryParams), UriKind.Relative);
+        Uri requestUri = new(
+            QueryHelpers.AddQueryString(GameListEndpoint, queryParams),
+            UriKind.Relative
+        );
 
         HttpResponseMessage response = await this.client.GetAsync(requestUri);
 

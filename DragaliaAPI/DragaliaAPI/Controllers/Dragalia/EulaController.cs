@@ -8,15 +8,14 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [AllowAnonymous]
 public class EulaController : DragaliaControllerBaseCore
 {
-    private static readonly List<AtgenVersionHash> AllEulaVersions =
-        new()
-        {
-            // TODO: Add the complete list of versions
-            new("gb", "en_us", 1, 1),
-            new("gb", "en_eu", 1, 1),
-            new("us", "en_us", 1, 6),
-            new("us", "en_eu", 1, 6),
-        };
+    private static readonly List<AtgenVersionHash> AllEulaVersions = new()
+    {
+        // TODO: Add the complete list of versions
+        new("gb", "en_us", 1, 1),
+        new("gb", "en_eu", 1, 1),
+        new("us", "en_us", 1, 6),
+        new("us", "en_eu", 1, 6),
+    };
 
     [HttpPost("get_version")]
     public DragaliaResult GetVersion(EulaGetVersionRequest request)

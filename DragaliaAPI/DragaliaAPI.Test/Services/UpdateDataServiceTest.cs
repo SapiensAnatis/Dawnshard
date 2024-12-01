@@ -70,85 +70,77 @@ public class UpdateDataServiceTest : RepositoryTestFixture
             Dragons.DreadkingRathalos
         );
 
-        DbParty partyData =
-            new()
+        DbParty partyData = new()
+        {
+            ViewerId = viewerId,
+            PartyName = "name",
+            PartyNo = 1,
+            Units = new List<DbPartyUnit>()
             {
-                ViewerId = viewerId,
-                PartyName = "name",
-                PartyNo = 1,
-                Units = new List<DbPartyUnit>()
-                {
-                    new() { CharaId = Charas.GalaAlex, UnitNo = 1 },
-                },
-            };
+                new() { CharaId = Charas.GalaAlex, UnitNo = 1 },
+            },
+        };
 
-        DbPlayerStoryState questStoryState =
-            new()
-            {
-                ViewerId = viewerId,
-                State = StoryState.Read,
-                StoryId = 2,
-                StoryType = StoryTypes.Quest,
-            };
-        DbPlayerStoryState charaStoryState =
-            new()
-            {
-                ViewerId = viewerId,
-                State = StoryState.Read,
-                StoryId = 4,
-                StoryType = StoryTypes.Chara,
-            };
-        DbPlayerStoryState castleStoryState =
-            new()
-            {
-                ViewerId = viewerId,
-                State = StoryState.Unlocked,
-                StoryId = 6,
-                StoryType = StoryTypes.Castle,
-            };
+        DbPlayerStoryState questStoryState = new()
+        {
+            ViewerId = viewerId,
+            State = StoryState.Read,
+            StoryId = 2,
+            StoryType = StoryTypes.Quest,
+        };
+        DbPlayerStoryState charaStoryState = new()
+        {
+            ViewerId = viewerId,
+            State = StoryState.Read,
+            StoryId = 4,
+            StoryType = StoryTypes.Chara,
+        };
+        DbPlayerStoryState castleStoryState = new()
+        {
+            ViewerId = viewerId,
+            State = StoryState.Unlocked,
+            StoryId = 6,
+            StoryType = StoryTypes.Castle,
+        };
 
-        DbPlayerStoryState dragonStoryState =
-            new()
-            {
-                ViewerId = viewerId,
-                State = StoryState.Unlocked,
-                StoryId = 8,
-                StoryType = StoryTypes.Dragon,
-            };
+        DbPlayerStoryState dragonStoryState = new()
+        {
+            ViewerId = viewerId,
+            State = StoryState.Unlocked,
+            StoryId = 8,
+            StoryType = StoryTypes.Dragon,
+        };
 
-        DbPlayerMaterial materialData =
-            new()
-            {
-                ViewerId = viewerId,
-                MaterialId = Materials.AlmightyOnesMaskFragment,
-                Quantity = 10,
-            };
+        DbPlayerMaterial materialData = new()
+        {
+            ViewerId = viewerId,
+            MaterialId = Materials.AlmightyOnesMaskFragment,
+            Quantity = 10,
+        };
 
-        DbQuest questData =
-            new()
-            {
-                ViewerId = viewerId,
-                QuestId = 100010104,
-                IsMissionClear1 = true,
-                IsMissionClear2 = true,
-                IsMissionClear3 = true,
-                State = 3,
-            };
+        DbQuest questData = new()
+        {
+            ViewerId = viewerId,
+            QuestId = 100010104,
+            IsMissionClear1 = true,
+            IsMissionClear2 = true,
+            IsMissionClear3 = true,
+            State = 3,
+        };
 
-        DbFortBuild buildData =
-            new()
-            {
-                ViewerId = viewerId,
-                BuildId = 4000,
-                Level = 2,
-                PositionX = 3,
-                PositionZ = 4,
-                PlantId = FortPlants.IronWeatherVane,
-                IsNew = true,
-                LastIncomeDate = DateTimeOffset.FromUnixTimeSeconds(5),
-                BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(10),
-                BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(15),
-            };
+        DbFortBuild buildData = new()
+        {
+            ViewerId = viewerId,
+            BuildId = 4000,
+            Level = 2,
+            PositionX = 3,
+            PositionZ = 4,
+            PlantId = FortPlants.IronWeatherVane,
+            IsNew = true,
+            LastIncomeDate = DateTimeOffset.FromUnixTimeSeconds(5),
+            BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(10),
+            BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(15),
+        };
 
         this.ApiContext.AddRange(
             new List<IDbPlayerData>()

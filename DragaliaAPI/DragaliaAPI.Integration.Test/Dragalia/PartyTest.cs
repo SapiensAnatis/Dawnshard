@@ -133,17 +133,16 @@ public class PartyTest : TestFixture
     [Fact]
     public async Task SetPartySetting_InvalidRequest_NotOwnedCharacter_ReturnsResultCode()
     {
-        PartySetPartySettingRequest request =
-            new(
-                1,
-                new List<PartySettingList>()
-                {
-                    new(1, Charas.GalaGatov, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-                },
-                "My New Party",
-                false,
-                0
-            );
+        PartySetPartySettingRequest request = new(
+            1,
+            new List<PartySettingList>()
+            {
+                new(1, Charas.GalaGatov, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+            },
+            "My New Party",
+            false,
+            0
+        );
 
         (
             await this.Client.PostMsgpack<ResultCodeResponse>(
@@ -165,17 +164,16 @@ public class PartyTest : TestFixture
     [Fact]
     public async Task SetPartySetting_InvalidRequest_NotOwnedDragonKeyId_ReturnsResultCode()
     {
-        PartySetPartySettingRequest request =
-            new(
-                1,
-                new List<PartySettingList>()
-                {
-                    new(1, Charas.ThePrince, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-                },
-                "My New Party",
-                false,
-                0
-            );
+        PartySetPartySettingRequest request = new(
+            1,
+            new List<PartySettingList>()
+            {
+                new(1, Charas.ThePrince, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+            },
+            "My New Party",
+            false,
+            0
+        );
 
         (
             await this.Client.PostMsgpack<ResultCodeResponse>(

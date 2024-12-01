@@ -33,13 +33,12 @@ public class DragonGiftHandler(ApiContext apiContext, IPlayerIdentityService pla
         }
         else
         {
-            DbPlayerDragonGift dragonGift =
-                new()
-                {
-                    ViewerId = playerIdentityService.ViewerId,
-                    DragonGiftId = gift,
-                    Quantity = reward.Quantity,
-                };
+            DbPlayerDragonGift dragonGift = new()
+            {
+                ViewerId = playerIdentityService.ViewerId,
+                DragonGiftId = gift,
+                Quantity = reward.Quantity,
+            };
 
             apiContext.PlayerDragonGifts.Add(dragonGift);
             this.dragonGiftCache[gift] = dragonGift;

@@ -37,13 +37,12 @@ public class FortControllerTest
     [Fact]
     public async Task GetData_ReturnsData()
     {
-        FortDetail detail =
-            new()
-            {
-                CarpenterNum = 1,
-                MaxCarpenterCount = 2,
-                WorkingCarpenterNum = 3,
-            };
+        FortDetail detail = new()
+        {
+            CarpenterNum = 1,
+            MaxCarpenterCount = 2,
+            WorkingCarpenterNum = 3,
+        };
         List<BuildList> buildList = new() { new() { FortPlantDetailId = 4 } };
         FortBonusList bonusList = new() { AllBonus = new(2, 3) };
 
@@ -247,14 +246,13 @@ public class FortControllerTest
     {
         UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
         FortDetail detail = new() { WorkingCarpenterNum = 4 };
-        DbFortBuild build =
-            new()
-            {
-                ViewerId = 1,
-                BuildId = 10,
-                BuildStartDate = DateTimeOffset.UtcNow,
-                BuildEndDate = DateTimeOffset.UtcNow,
-            };
+        DbFortBuild build = new()
+        {
+            ViewerId = 1,
+            BuildId = 10,
+            BuildStartDate = DateTimeOffset.UtcNow,
+            BuildEndDate = DateTimeOffset.UtcNow,
+        };
 
         mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
         mockFortService
@@ -429,14 +427,13 @@ public class FortControllerTest
     {
         UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
         FortDetail detail = new() { WorkingCarpenterNum = 4 };
-        DbFortBuild build =
-            new()
-            {
-                ViewerId = 1,
-                BuildId = 10,
-                BuildStartDate = DateTimeOffset.UtcNow,
-                BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromHours(2),
-            };
+        DbFortBuild build = new()
+        {
+            ViewerId = 1,
+            BuildId = 10,
+            BuildStartDate = DateTimeOffset.UtcNow,
+            BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromHours(2),
+        };
 
         mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());
 

@@ -71,8 +71,11 @@ public class DmodeRepository(ApiContext apiContext, IPlayerIdentityService playe
 
     public DbPlayerDmodeChara AddChara(Charas charaId)
     {
-        DbPlayerDmodeChara dmodeChara =
-            new() { ViewerId = playerIdentityService.ViewerId, CharaId = charaId };
+        DbPlayerDmodeChara dmodeChara = new()
+        {
+            ViewerId = playerIdentityService.ViewerId,
+            CharaId = charaId,
+        };
 
         return apiContext.PlayerDmodeCharas.Add(dmodeChara).Entity;
     }

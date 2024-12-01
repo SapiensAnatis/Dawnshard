@@ -10,8 +10,10 @@ namespace DragaliaAPI.Infrastructure.Authentication;
 
 internal static partial class GameJwtAuthenticationCallbacks
 {
-    private static readonly DistributedCacheEntryOptions CacheOptions =
-        new() { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5) };
+    private static readonly DistributedCacheEntryOptions CacheOptions = new()
+    {
+        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
+    };
 
     public static Task OnMessageReceived(MessageReceivedContext context)
     {

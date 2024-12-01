@@ -186,18 +186,17 @@ public class SummonController(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
-        SummonRequestResponse response =
-            new(
-                resultUnitList: resultUnitList,
-                resultPrizeList: [],
-                presageEffectList: [effect.SageEffect, effect.CircleEffect],
-                reversalEffectIndex: effect.ReversalIndex,
-                updateDataList: updateDataList,
-                entityResult: entityResult,
-                summonTicketList: await summonService.GetSummonTicketList(),
-                resultSummonPoint: requestInfo.ResultSummonPoint,
-                userSummonList: [userSummonList]
-            );
+        SummonRequestResponse response = new(
+            resultUnitList: resultUnitList,
+            resultPrizeList: [],
+            presageEffectList: [effect.SageEffect, effect.CircleEffect],
+            reversalEffectIndex: effect.ReversalIndex,
+            updateDataList: updateDataList,
+            entityResult: entityResult,
+            summonTicketList: await summonService.GetSummonTicketList(),
+            resultSummonPoint: requestInfo.ResultSummonPoint,
+            userSummonList: [userSummonList]
+        );
 
         return this.Ok(response);
     }

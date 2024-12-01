@@ -392,17 +392,16 @@ public class FortService(
 
         await Upgrade(plantDetail);
 
-        DbFortBuild build =
-            new()
-            {
-                ViewerId = playerIdentityService.ViewerId,
-                PlantId = fortPlantId,
-                Level = 0,
-                PositionX = positionX,
-                PositionZ = positionZ,
-                IsNew = true,
-                LastIncomeDate = DateTimeOffset.UnixEpoch,
-            };
+        DbFortBuild build = new()
+        {
+            ViewerId = playerIdentityService.ViewerId,
+            PlantId = fortPlantId,
+            Level = 0,
+            PositionX = positionX,
+            PositionZ = positionZ,
+            IsNew = true,
+            LastIncomeDate = DateTimeOffset.UnixEpoch,
+        };
 
         await SetBuildTime(build, plantDetail);
 

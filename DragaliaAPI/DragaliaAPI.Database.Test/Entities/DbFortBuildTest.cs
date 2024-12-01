@@ -15,13 +15,12 @@ public class DbFortBuildTest
     [InlineData(FortPlants.WaterAltar, 15, 10040215)]
     public void FortPlantDetailId_IsCorrect(FortPlants plantId, int level, int expectedDetailId)
     {
-        DbFortBuild entity =
-            new()
-            {
-                ViewerId = 1,
-                PlantId = plantId,
-                Level = level,
-            };
+        DbFortBuild entity = new()
+        {
+            ViewerId = 1,
+            PlantId = plantId,
+            Level = level,
+        };
 
         entity.FortPlantDetailId.Should().Be(expectedDetailId);
     }
@@ -29,13 +28,12 @@ public class DbFortBuildTest
     [Fact]
     public void BuildStatus_BothDatesEpoch_IsNeutral()
     {
-        DbFortBuild entity =
-            new()
-            {
-                ViewerId = 1,
-                BuildStartDate = DateTimeOffset.UnixEpoch,
-                BuildEndDate = DateTimeOffset.UnixEpoch,
-            };
+        DbFortBuild entity = new()
+        {
+            ViewerId = 1,
+            BuildStartDate = DateTimeOffset.UnixEpoch,
+            BuildEndDate = DateTimeOffset.UnixEpoch,
+        };
 
         entity.BuildStatus.Should().Be(FortBuildStatus.Neutral);
     }
@@ -50,14 +48,13 @@ public class DbFortBuildTest
         FortBuildStatus expected
     )
     {
-        DbFortBuild entity =
-            new()
-            {
-                ViewerId = 1,
-                Level = level,
-                BuildStartDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(startOffsetSec),
-                BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(endOffsetSec),
-            };
+        DbFortBuild entity = new()
+        {
+            ViewerId = 1,
+            Level = level,
+            BuildStartDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(startOffsetSec),
+            BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(endOffsetSec),
+        };
 
         entity.BuildStatus.Should().Be(expected);
     }
@@ -69,12 +66,11 @@ public class DbFortBuildTest
     [InlineData(-100, 0)]
     public void RemainTime_CalculatedCorrectly(int endOffsetSec, int expectedSec)
     {
-        DbFortBuild entity =
-            new()
-            {
-                ViewerId = 1,
-                BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(endOffsetSec),
-            };
+        DbFortBuild entity = new()
+        {
+            ViewerId = 1,
+            BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(endOffsetSec),
+        };
 
         entity.RemainTime.Should().BeCloseTo(TimeSpan.FromSeconds(expectedSec), AssertionTolerance);
     }
@@ -85,12 +81,11 @@ public class DbFortBuildTest
     [InlineData(-100)]
     public void LastIncomeTime_CalculatedCorrectly(int incomeOffsetSec)
     {
-        DbFortBuild entity =
-            new()
-            {
-                ViewerId = 1,
-                LastIncomeDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(incomeOffsetSec),
-            };
+        DbFortBuild entity = new()
+        {
+            ViewerId = 1,
+            LastIncomeDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(incomeOffsetSec),
+        };
 
         entity
             .LastIncomeTime.Should()

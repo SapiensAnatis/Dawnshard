@@ -45,63 +45,62 @@ public class DungeonRecordTest : TestFixture
                 cancellationToken: TestContext.Current.CancellationToken
             );
 
-        DungeonSession mockSession =
-            new()
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            QuestData = MasterAsset.QuestData.Get(questId),
+            EnemyList = new Dictionary<int, IList<AtgenEnemy>>()
             {
-                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
-                QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IList<AtgenEnemy>>()
                 {
+                    1,
+                    new List<AtgenEnemy>()
                     {
-                        1,
-                        new List<AtgenEnemy>()
+                        new()
                         {
-                            new()
+                            EnemyIdx = 0,
+                            EnemyDropList = new List<EnemyDropList>()
                             {
-                                EnemyIdx = 0,
-                                EnemyDropList = new List<EnemyDropList>()
+                                new()
                                 {
-                                    new()
+                                    Coin = 10,
+                                    Mana = 10,
+                                    DropList = new List<AtgenDropList>()
                                     {
-                                        Coin = 10,
-                                        Mana = 10,
-                                        DropList = new List<AtgenDropList>()
+                                        new()
                                         {
-                                            new()
-                                            {
-                                                Type = EntityTypes.Material,
-                                                Id = (int)Materials.Squishums,
-                                                Quantity = 1,
-                                            },
+                                            Type = EntityTypes.Material,
+                                            Id = (int)Materials.Squishums,
+                                            Quantity = 1,
                                         },
                                     },
                                 },
                             },
-                            new()
+                        },
+                        new()
+                        {
+                            EnemyIdx = 0,
+                            EnemyDropList = new List<EnemyDropList>()
                             {
-                                EnemyIdx = 0,
-                                EnemyDropList = new List<EnemyDropList>()
+                                new()
                                 {
-                                    new()
+                                    Coin = 10,
+                                    Mana = 10,
+                                    DropList = new List<AtgenDropList>()
                                     {
-                                        Coin = 10,
-                                        Mana = 10,
-                                        DropList = new List<AtgenDropList>()
+                                        new()
                                         {
-                                            new()
-                                            {
-                                                Type = EntityTypes.Material,
-                                                Id = (int)Materials.ImitationSquish,
-                                                Quantity = 1,
-                                            },
+                                            Type = EntityTypes.Material,
+                                            Id = (int)Materials.ImitationSquish,
+                                            Quantity = 1,
                                         },
                                     },
                                 },
                             },
-                        }
-                    },
+                        },
+                    }
                 },
-            };
+            },
+        };
 
         string key = await this.StartDungeon(mockSession);
 
@@ -214,20 +213,19 @@ public class DungeonRecordTest : TestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        DungeonSession mockSession =
-            new()
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>()
             {
-                Party = new List<PartySettingList>()
+                new()
                 {
-                    new()
-                    {
-                        CharaId = Charas.ThePrince,
-                        EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut,
-                    },
+                    CharaId = Charas.ThePrince,
+                    EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut,
                 },
-                QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
-            };
+            },
+            QuestData = MasterAsset.QuestData.Get(questId),
+            EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
+        };
 
         string key = await this.StartDungeon(mockSession);
 
@@ -271,13 +269,12 @@ public class DungeonRecordTest : TestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        DungeonSession mockSession =
-            new()
-            {
-                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
-                QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
-            };
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            QuestData = MasterAsset.QuestData.Get(questId),
+            EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
+        };
 
         string key = await this.StartDungeon(mockSession);
 
@@ -324,21 +321,20 @@ public class DungeonRecordTest : TestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        DungeonSession mockSession =
-            new()
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>()
             {
-                Party = new List<PartySettingList>()
+                new()
                 {
-                    new()
-                    {
-                        CharaId = Charas.ThePrince,
-                        EquipCrestSlotType1CrestId1 = AbilityCrestId.SuperSoakingAndroids,
-                        EquipCrestSlotType2CrestId1 = AbilityCrestId.HavingaSummerBall,
-                    },
+                    CharaId = Charas.ThePrince,
+                    EquipCrestSlotType1CrestId1 = AbilityCrestId.SuperSoakingAndroids,
+                    EquipCrestSlotType2CrestId1 = AbilityCrestId.HavingaSummerBall,
                 },
-                QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
-            };
+            },
+            QuestData = MasterAsset.QuestData.Get(questId),
+            EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
+        };
 
         string key = await this.StartDungeon(mockSession);
 
@@ -395,13 +391,12 @@ public class DungeonRecordTest : TestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        DungeonSession mockSession =
-            new()
-            {
-                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
-                QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
-            };
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            QuestData = MasterAsset.QuestData.Get(questId),
+            EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
+        };
 
         string key = await this.StartDungeon(mockSession);
 
@@ -449,13 +444,12 @@ public class DungeonRecordTest : TestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        DungeonSession mockSession =
-            new()
-            {
-                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
-                QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
-            };
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            QuestData = MasterAsset.QuestData.Get(questId),
+            EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
+        };
 
         string key = await this.StartDungeon(mockSession);
 
@@ -495,13 +489,12 @@ public class DungeonRecordTest : TestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        DungeonSession mockSession =
-            new()
-            {
-                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
-                QuestData = MasterAsset.QuestData.Get(exQuestId),
-                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
-            };
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            QuestData = MasterAsset.QuestData.Get(exQuestId),
+            EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
+        };
 
         string key = await this.StartDungeon(mockSession);
 
@@ -546,13 +539,12 @@ public class DungeonRecordTest : TestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        DungeonSession mockSession =
-            new()
-            {
-                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
-                QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
-            };
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            QuestData = MasterAsset.QuestData.Get(questId),
+            EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
+        };
 
         string key = await this.StartDungeon(mockSession);
 
@@ -603,13 +595,12 @@ public class DungeonRecordTest : TestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        DungeonSession mockSession =
-            new()
-            {
-                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
-                QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
-            };
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            QuestData = MasterAsset.QuestData.Get(questId),
+            EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
+        };
 
         string key = await this.StartDungeon(mockSession);
 
@@ -663,13 +654,12 @@ public class DungeonRecordTest : TestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        DungeonSession mockSession =
-            new()
-            {
-                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
-                QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
-            };
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            QuestData = MasterAsset.QuestData.Get(questId),
+            EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
+        };
 
         string key = await this.StartDungeon(mockSession);
 
@@ -711,13 +701,12 @@ public class DungeonRecordTest : TestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        DungeonSession mockSession =
-            new()
-            {
-                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
-                QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
-            };
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            QuestData = MasterAsset.QuestData.Get(questId),
+            EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
+        };
 
         string key = await this.StartDungeon(mockSession);
 
@@ -772,39 +761,37 @@ public class DungeonRecordTest : TestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        DungeonSession mockSession =
-            new()
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            QuestData = MasterAsset.QuestData.Get(questId),
+            EnemyList = new Dictionary<int, IList<AtgenEnemy>>()
             {
-                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
-                QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IList<AtgenEnemy>>()
                 {
-                    {
-                        1,
-
-                        [
-                            new()
-                            {
-                                ParamId = 229030211,
-                                EnemyIdx = 0, // Meadow Rat (10 points)
-                                EnemyDropList = [],
-                            },
-                            new()
-                            {
-                                ParamId = 229030217,
-                                EnemyIdx = 1, // Wind Manticore (200 points)
-                                EnemyDropList = [],
-                            },
-                            new()
-                            {
-                                ParamId = 229030215,
-                                EnemyIdx = 2, // Arrow Raptor (40 points)
-                                EnemyDropList = [],
-                            },
-                        ]
-                    },
+                    1,
+                    [
+                        new()
+                        {
+                            ParamId = 229030211,
+                            EnemyIdx = 0, // Meadow Rat (10 points)
+                            EnemyDropList = [],
+                        },
+                        new()
+                        {
+                            ParamId = 229030217,
+                            EnemyIdx = 1, // Wind Manticore (200 points)
+                            EnemyDropList = [],
+                        },
+                        new()
+                        {
+                            ParamId = 229030215,
+                            EnemyIdx = 2, // Arrow Raptor (40 points)
+                            EnemyDropList = [],
+                        },
+                    ]
                 },
-            };
+            },
+        };
 
         string key = await this.StartDungeon(mockSession);
 
@@ -852,13 +839,12 @@ public class DungeonRecordTest : TestFixture
     {
         int questId = 219031102;
 
-        DungeonSession mockSession =
-            new()
-            {
-                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
-                QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
-            };
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            QuestData = MasterAsset.QuestData.Get(questId),
+            EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
+        };
 
         string key = await this.StartDungeon(mockSession);
 
@@ -970,13 +956,12 @@ public class DungeonRecordTest : TestFixture
             p.SetProperty(e => e.StaminaSingle, e => 0)
         );
 
-        DungeonSession mockSession =
-            new()
-            {
-                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
-                QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IList<AtgenEnemy>>(),
-            };
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            QuestData = MasterAsset.QuestData.Get(questId),
+            EnemyList = new Dictionary<int, IList<AtgenEnemy>>(),
+        };
 
         string key = await this.StartDungeon(mockSession);
 
@@ -1026,13 +1011,12 @@ public class DungeonRecordTest : TestFixture
             p.SetProperty(e => e.StaminaSingle, e => 0)
         );
 
-        DungeonSession mockSession =
-            new()
-            {
-                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
-                QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IList<AtgenEnemy>>(),
-            };
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            QuestData = MasterAsset.QuestData.Get(questId),
+            EnemyList = new Dictionary<int, IList<AtgenEnemy>>(),
+        };
 
         string key = await this.StartDungeon(mockSession);
 
@@ -1088,23 +1072,22 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        DungeonRecordRecordRequest request =
-            new()
+        DungeonRecordRecordRequest request = new()
+        {
+            DungeonKey = dungeonKey,
+            PlayRecord = new PlayRecord
             {
-                DungeonKey = dungeonKey,
-                PlayRecord = new PlayRecord
+                Time = 10,
+                TreasureRecord = new List<AtgenTreasureRecord>()
                 {
-                    Time = 10,
-                    TreasureRecord = new List<AtgenTreasureRecord>()
-                    {
-                        new() { AreaIdx = 1, Enemy = [] },
-                    },
-                    LiveUnitNoList = new List<int>(),
-                    DamageRecord = [],
-                    DragonDamageRecord = [],
-                    BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                    new() { AreaIdx = 1, Enemy = [] },
                 },
-            };
+                LiveUnitNoList = new List<int>(),
+                DamageRecord = [],
+                DragonDamageRecord = [],
+                BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+            },
+        };
 
         DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
@@ -1186,23 +1169,22 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        DungeonRecordRecordRequest request =
-            new()
+        DungeonRecordRecordRequest request = new()
+        {
+            DungeonKey = dungeonKey,
+            PlayRecord = new PlayRecord
             {
-                DungeonKey = dungeonKey,
-                PlayRecord = new PlayRecord
+                Time = 10,
+                TreasureRecord = new List<AtgenTreasureRecord>()
                 {
-                    Time = 10,
-                    TreasureRecord = new List<AtgenTreasureRecord>()
-                    {
-                        new() { AreaIdx = 1, Enemy = [] },
-                    },
-                    LiveUnitNoList = new List<int>(),
-                    DamageRecord = [],
-                    DragonDamageRecord = [],
-                    BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                    new() { AreaIdx = 1, Enemy = [] },
                 },
-            };
+                LiveUnitNoList = new List<int>(),
+                DamageRecord = [],
+                DragonDamageRecord = [],
+                BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+            },
+        };
 
         DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
@@ -1239,24 +1221,23 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        DungeonRecordRecordMultiRequest request =
-            new()
+        DungeonRecordRecordMultiRequest request = new()
+        {
+            DungeonKey = dungeonKey,
+            PlayRecord = new PlayRecord
             {
-                DungeonKey = dungeonKey,
-                PlayRecord = new PlayRecord
+                Time = 10,
+                TreasureRecord = new List<AtgenTreasureRecord>()
                 {
-                    Time = 10,
-                    TreasureRecord = new List<AtgenTreasureRecord>()
-                    {
-                        new() { AreaIdx = 1, Enemy = [] },
-                    },
-                    LiveUnitNoList = new List<int>(),
-                    DamageRecord = [],
-                    DragonDamageRecord = [],
-                    BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                    new() { AreaIdx = 1, Enemy = [] },
                 },
-                ConnectingViewerIdList = [1, 2],
-            };
+                LiveUnitNoList = new List<int>(),
+                DamageRecord = [],
+                DragonDamageRecord = [],
+                BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+            },
+            ConnectingViewerIdList = [1, 2],
+        };
 
         DungeonRecordRecordMultiResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordMultiResponse>(
@@ -1313,23 +1294,22 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        DungeonRecordRecordRequest request =
-            new()
+        DungeonRecordRecordRequest request = new()
+        {
+            DungeonKey = dungeonKey,
+            PlayRecord = new PlayRecord
             {
-                DungeonKey = dungeonKey,
-                PlayRecord = new PlayRecord
+                Time = 10,
+                TreasureRecord = new List<AtgenTreasureRecord>()
                 {
-                    Time = 10,
-                    TreasureRecord = new List<AtgenTreasureRecord>()
-                    {
-                        new() { AreaIdx = 1, Enemy = [] },
-                    },
-                    LiveUnitNoList = new List<int>(),
-                    DamageRecord = [],
-                    DragonDamageRecord = [],
-                    BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                    new() { AreaIdx = 1, Enemy = [] },
                 },
-            };
+                LiveUnitNoList = new List<int>(),
+                DamageRecord = [],
+                DragonDamageRecord = [],
+                BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+            },
+        };
 
         DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
@@ -1375,23 +1355,22 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        DungeonRecordRecordRequest request =
-            new()
+        DungeonRecordRecordRequest request = new()
+        {
+            DungeonKey = dungeonKey,
+            PlayRecord = new PlayRecord
             {
-                DungeonKey = dungeonKey,
-                PlayRecord = new PlayRecord
+                Time = 10,
+                TreasureRecord = new List<AtgenTreasureRecord>()
                 {
-                    Time = 10,
-                    TreasureRecord = new List<AtgenTreasureRecord>()
-                    {
-                        new() { AreaIdx = 1, Enemy = [] },
-                    },
-                    LiveUnitNoList = new List<int>(),
-                    DamageRecord = [],
-                    DragonDamageRecord = [],
-                    BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                    new() { AreaIdx = 1, Enemy = [] },
                 },
-            };
+                LiveUnitNoList = new List<int>(),
+                DamageRecord = [],
+                DragonDamageRecord = [],
+                BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+            },
+        };
 
         DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
@@ -1456,23 +1435,22 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        DungeonRecordRecordRequest request =
-            new()
+        DungeonRecordRecordRequest request = new()
+        {
+            DungeonKey = dungeonKey,
+            PlayRecord = new PlayRecord
             {
-                DungeonKey = dungeonKey,
-                PlayRecord = new PlayRecord
+                Time = 10,
+                TreasureRecord = new List<AtgenTreasureRecord>()
                 {
-                    Time = 10,
-                    TreasureRecord = new List<AtgenTreasureRecord>()
-                    {
-                        new() { AreaIdx = 1, Enemy = [] },
-                    },
-                    LiveUnitNoList = new List<int>(),
-                    DamageRecord = [],
-                    DragonDamageRecord = [],
-                    BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                    new() { AreaIdx = 1, Enemy = [] },
                 },
-            };
+                LiveUnitNoList = new List<int>(),
+                DamageRecord = [],
+                DragonDamageRecord = [],
+                BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+            },
+        };
 
         DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(

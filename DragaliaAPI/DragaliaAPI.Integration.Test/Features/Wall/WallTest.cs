@@ -25,13 +25,12 @@ public class WallTest : TestFixture
             }
         );
 
-        DungeonSession mockSession =
-            new()
-            {
-                Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
-                WallId = expectedWallId,
-                WallLevel = expectedWallLevel,
-            };
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            WallId = expectedWallId,
+            WallLevel = expectedWallLevel,
+        };
 
         string key = await this.StartDungeon(mockSession);
 

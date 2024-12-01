@@ -34,23 +34,22 @@ public class ShopController : DragaliaControllerBase
         ILookup<PurchaseShopType, ShopPurchaseList> purchases =
             await this.shopService.GetPurchases();
 
-        ShopGetListResponse response =
-            new()
-            {
-                // i don't know what like half of these are for lmao
-                IsQuestBonus = false,
-                IsStoneBonus = false,
-                IsStaminaBonus = false,
-                MaterialShopPurchase = purchases[PurchaseShopType.Material],
-                NormalShopPurchase = purchases[PurchaseShopType.Normal],
-                SpecialShopPurchase = purchases[PurchaseShopType.Special],
-                StoneBonus = new List<AtgenStoneBonus>(),
-                StaminaBonus = new List<AtgenStaminaBonus>(),
-                QuestBonus = new List<AtgenQuestBonus>(),
-                ProductLockList = new List<AtgenProductLockList>(),
-                ProductList = new List<ProductList>(),
-                InfancyPaidDiamondLimit = 4800,
-            };
+        ShopGetListResponse response = new()
+        {
+            // i don't know what like half of these are for lmao
+            IsQuestBonus = false,
+            IsStoneBonus = false,
+            IsStaminaBonus = false,
+            MaterialShopPurchase = purchases[PurchaseShopType.Material],
+            NormalShopPurchase = purchases[PurchaseShopType.Normal],
+            SpecialShopPurchase = purchases[PurchaseShopType.Special],
+            StoneBonus = new List<AtgenStoneBonus>(),
+            StaminaBonus = new List<AtgenStaminaBonus>(),
+            QuestBonus = new List<AtgenQuestBonus>(),
+            ProductLockList = new List<AtgenProductLockList>(),
+            ProductList = new List<ProductList>(),
+            InfancyPaidDiamondLimit = 4800,
+        };
 
         response.UserItemSummon = await this.itemSummonService.GetItemSummon();
         response.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
