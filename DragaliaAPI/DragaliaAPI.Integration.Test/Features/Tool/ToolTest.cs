@@ -78,7 +78,7 @@ public class ToolTest : TestFixture
     [Fact]
     public async Task Auth_PendingImport_ImportsSave()
     {
-        this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
+        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdate(p =>
             p.SetProperty(e => e.LastSaveImportTime, DateTimeOffset.UnixEpoch)
         );
 
@@ -115,6 +115,7 @@ public class ToolTest : TestFixture
             DateTime.UtcNow - TimeSpan.FromHours(5)
         );
 
+        this.Client.DefaultRequestHeaders.Clear();
         this.Client.DefaultRequestHeaders.Add(Headers.IdToken, token);
         this.Client.DefaultRequestHeaders.Add("DeviceId", "id");
 

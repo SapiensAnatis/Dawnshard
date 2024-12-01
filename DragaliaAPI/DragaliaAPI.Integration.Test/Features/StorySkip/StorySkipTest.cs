@@ -121,7 +121,7 @@ public class StorySkipTest : TestFixture
             .Be(MissionState.Completed);
 
         int upgradeHalidomToLv3Mission = 105500;
-        this.ApiContext.PlayerMissions.Should()
+        this.ApiContext.PlayerMissions.Where(x => x.ViewerId == this.ViewerId).Should()
             .Contain(x => x.Id == upgradeHalidomToLv3Mission)
             .Which.State.Should()
             .Be(MissionState.Completed);

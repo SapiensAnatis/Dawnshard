@@ -164,19 +164,19 @@ public class DungeonStartTest : TestFixture
     [InlineData("start_assign_unit")]
     public async Task Start_InsufficientStamina_ReturnsError(string endpoint)
     {
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+        await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdateAsync(
             p => p.SetProperty(e => e.StaminaSingle, e => 0),
             cancellationToken: TestContext.Current.CancellationToken
         );
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+        await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdateAsync(
             p => p.SetProperty(e => e.StaminaMulti, e => 0),
             cancellationToken: TestContext.Current.CancellationToken
         );
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+        await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdateAsync(
             p => p.SetProperty(e => e.LastStaminaSingleUpdateTime, e => DateTimeOffset.UtcNow),
             cancellationToken: TestContext.Current.CancellationToken
         );
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+        await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdateAsync(
             p => p.SetProperty(e => e.LastStaminaMultiUpdateTime, e => DateTimeOffset.UtcNow),
             cancellationToken: TestContext.Current.CancellationToken
         );
@@ -200,19 +200,19 @@ public class DungeonStartTest : TestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+        await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdateAsync(
             p => p.SetProperty(e => e.StaminaSingle, e => 0),
             cancellationToken: TestContext.Current.CancellationToken
         );
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+        await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdateAsync(
             p => p.SetProperty(e => e.StaminaMulti, e => 0),
             cancellationToken: TestContext.Current.CancellationToken
         );
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+        await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdateAsync(
             p => p.SetProperty(e => e.LastStaminaSingleUpdateTime, e => DateTimeOffset.UtcNow),
             cancellationToken: TestContext.Current.CancellationToken
         );
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+        await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdateAsync(
             p => p.SetProperty(e => e.LastStaminaMultiUpdateTime, e => DateTimeOffset.UtcNow),
             cancellationToken: TestContext.Current.CancellationToken
         );

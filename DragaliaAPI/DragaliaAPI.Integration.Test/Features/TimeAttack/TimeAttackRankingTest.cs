@@ -34,7 +34,7 @@ public class TimeAttackRankingTest : TestFixture
                 cancellationToken: TestContext.Current.CancellationToken
             );
 
-        int questId = 227010101; // First Volk TA quest
+        int questId = 227080101; // Battle in the Dornith Mountains: Beginner
 
         this.ApiContext.PlayerQuests.Add(
             new DbQuest()

@@ -429,6 +429,7 @@ public class DragonTest : TestFixture
         );
 
         this.ApiContext.PlayerMissions.AsNoTracking()
+            .Where(x => x.ViewerId == this.ViewerId)
             .First(x => x.Id == missionId)
             .Progress.Should()
             .Be(9, "the progress is based on the highest level reached");
@@ -451,6 +452,7 @@ public class DragonTest : TestFixture
             .Contain(missionId);
 
         this.ApiContext.PlayerMissions.AsNoTracking()
+            .Where(x => x.ViewerId == this.ViewerId)
             .First(x => x.Id == missionId)
             .Should()
             .BeEquivalentTo(

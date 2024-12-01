@@ -299,7 +299,7 @@ public class SummonTest : TestFixture
                     SummonPoint = 10,
                     GetDewPointQuantity = 0,
                 },
-                o => o.Excluding(x => x.KeyId).WithDateTimeTolerance()
+                o => o.Excluding(x => x.KeyId).WithDateTimeTolerance(TimeSpan.FromSeconds(2))
             );
     }
 

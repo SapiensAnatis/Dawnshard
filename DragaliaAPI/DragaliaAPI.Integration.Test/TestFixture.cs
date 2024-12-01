@@ -34,7 +34,7 @@ public class TestFixture
     /// <summary>
     /// The session ID which is associated with the logged in test user.
     /// </summary>
-    private readonly string sessionId = $"session_id_{Guid.NewGuid()}";
+    protected string SessionId { get; } = $"session_id_{Guid.NewGuid()}";
 
     private readonly CustomWebApplicationFactory factory;
 
@@ -204,7 +204,7 @@ public class TestFixture
                 }
             );
 
-        client.DefaultRequestHeaders.Add(Headers.SessionId, sessionId);
+        client.DefaultRequestHeaders.Add(Headers.SessionId, this.SessionId);
         client.DefaultRequestHeaders.Add("Platform", "2");
         client.DefaultRequestHeaders.Add("Res-Ver", "y2XM6giU6zz56wCm");
 
@@ -317,14 +317,14 @@ public class TestFixture
         IDistributedCache cache = this.Services.GetRequiredService<IDistributedCache>();
 
         Session session =
-            new(sessionId, "id_token", DeviceAccountId, this.ViewerId, DateTimeOffset.MaxValue);
+            new(this.SessionId, "id_token", this.DeviceAccountId, this.ViewerId, DateTimeOffset.MaxValue);
         await cache.SetStringAsync(
-            $":session:session_id:{this.sessionId}",
+            $":session:session_id:{this.SessionId}",
             JsonSerializer.Serialize(session)
         );
         await cache.SetStringAsync(
             $":session_id:device_account_id:{this.DeviceAccountId}",
-            sessionId
+            this.SessionId
         );
     }
 }

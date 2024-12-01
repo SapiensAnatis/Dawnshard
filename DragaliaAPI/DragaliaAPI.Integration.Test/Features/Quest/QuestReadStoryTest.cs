@@ -38,7 +38,7 @@ public class QuestReadStoryTest : TestFixture
     public async Task ReadStory_GrantsReward_InventoryFull_SendsToGiftBox()
     {
         int midgardStoryId = 1000109;
-        this.ApiContext.PlayerUserData.ExecuteUpdate(x =>
+        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdate(x =>
             x.SetProperty(e => e.MaxDragonQuantity, 0)
         );
 
@@ -83,7 +83,7 @@ public class QuestReadStoryTest : TestFixture
     public async Task ReadStory_Midgardsormr_DoesNotAddReliabilityIfOwned()
     {
         int midgardStoryId = 1000109;
-        this.ApiContext.PlayerUserData.ExecuteUpdate(x =>
+        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdate(x =>
             x.SetProperty(e => e.MaxDragonQuantity, 0)
         );
 

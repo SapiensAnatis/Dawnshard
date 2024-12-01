@@ -16,10 +16,10 @@ public class DungeonRecordTest : TestFixture
     public DungeonRecordTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
+        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdate(p =>
             p.SetProperty(e => e.StaminaSingle, e => 100)
         );
-        this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
+        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdate(p =>
             p.SetProperty(e => e.StaminaMulti, e => 100)
         );
 
@@ -892,7 +892,7 @@ public class DungeonRecordTest : TestFixture
         await this.ImportSave();
         this.SetupPhotonAuthentication();
 
-        int questId = 219020101; // Kai Yan's Wrath Standard (not a TA quest but who cares)
+        int questId = 227080106; // Asura's Blinding Light (Ranked)
         string roomName = Guid.NewGuid().ToString();
         string roomId = "1234";
         string gameId = $"{roomName}_{roomId}";
@@ -900,21 +900,12 @@ public class DungeonRecordTest : TestFixture
         this.Client.DefaultRequestHeaders.Add("RoomName", roomName);
         this.Client.DefaultRequestHeaders.Add("RoomId", roomId);
 
-        await this.AddToDatabase(
-            new DbQuest()
-            {
-                QuestId = questId,
-                State = 0,
-                ViewerId = ViewerId,
-            }
-        );
-
         DungeonStartStartMultiResponse startResponse = (
             await this.Client.PostMsgpack<DungeonStartStartMultiResponse>(
                 "/dungeon_start/start_multi",
                 new DungeonStartStartMultiRequest()
                 {
-                    PartyNoList = new[] { 4 }, // Flame team
+                    PartyNoList = [2], // Shadow team
                     QuestId = questId,
                 },
                 cancellationToken: TestContext.Current.CancellationToken
@@ -976,7 +967,7 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
+        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdate(p =>
             p.SetProperty(e => e.StaminaSingle, e => 0)
         );
 
@@ -1032,7 +1023,7 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
+        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdate(p =>
             p.SetProperty(e => e.StaminaSingle, e => 0)
         );
 

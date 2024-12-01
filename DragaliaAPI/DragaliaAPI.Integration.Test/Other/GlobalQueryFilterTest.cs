@@ -85,14 +85,20 @@ public class GlobalQueryFilterTest : TestFixture
     [Fact]
     public async Task DbPlayerPresentHistory_HasGlobalQueryFilter()
     {
-        // This entity uses a non-auto-incrementing integer primary key :/
+        // Acquire valid ID values from the Presents table
+        DbPlayerPresent present = new() { ViewerId = this.ViewerId };
+        DbPlayerPresent otherPresent = new() { Owner = new() { AccountId = "otherhist" } };
+        this.ApiContext.PlayerPresents.Add(present);
+        this.ApiContext.PlayerPresents.Add(otherPresent);
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        
         this.ApiContext.PlayerPresentHistory.AddRange(
             [
-                new() { Id = 1, ViewerId = this.ViewerId },
+                new() { Id = present.PresentId, ViewerId = this.ViewerId },
                 new()
                 {
-                    Id = 2,
-                    Owner = new() { AccountId = "otherhist" },
+                    Id = otherPresent.PresentId,
+                    ViewerId = otherPresent.ViewerId,
                 },
             ]
         );
