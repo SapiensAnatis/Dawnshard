@@ -7,7 +7,6 @@ public class UserTest : TestFixture
     public UserTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        CommonAssertionOptions.ApplyTimeOptions();
     }
 
     [Fact]
@@ -31,7 +30,7 @@ public class UserTest : TestFixture
                 {
                     UpdateDataList = new() { UserData = expectedUserData },
                 },
-                opts => opts.Excluding(x => x.UpdateDataList.UserData.Crystal)
+                opts => opts.Excluding(x => x.UpdateDataList.UserData.Crystal).WithDateTimeTolerance()
             );
     }
 

@@ -12,7 +12,6 @@ public class DungeonSkipTest : TestFixture
     public DungeonSkipTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        CommonAssertionOptions.ApplyTimeOptions();
         this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
     }
 
@@ -271,7 +270,8 @@ public class DungeonSkipTest : TestFixture
                     QuestBonusReserveTime = response.Data.IngameResultData.EndTime,
                     QuestBonusStackCount = 0,
                     QuestBonusStackTime = DateTimeOffset.UnixEpoch,
-                }
+                },
+                opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(10))
             );
     }
 

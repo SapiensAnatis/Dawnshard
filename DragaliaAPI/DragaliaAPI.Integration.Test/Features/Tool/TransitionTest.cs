@@ -43,7 +43,7 @@ public class TransitionTest : TestFixture
             )
         ).Data;
 
-        response.TransitionResultData.LinkedViewerId.Should().Be((ulong)this.ViewerId + 1);
+        response.TransitionResultData.LinkedViewerId.Should().BeGreaterThan((ulong)this.ViewerId);
         response.TransitionResultData.AbolishedViewerId.Should().Be(0);
     }
 }

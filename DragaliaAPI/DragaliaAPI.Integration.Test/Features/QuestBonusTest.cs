@@ -15,7 +15,6 @@ public class QuestBonusTest : TestFixture
     public QuestBonusTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        CommonAssertionOptions.ApplyTimeOptions();
         this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
     }
 
@@ -42,7 +41,7 @@ public class QuestBonusTest : TestFixture
                     LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
                     WeeklyPlayCount = 1,
-                }
+                }, opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(2))
             );
 
         DragaliaResponse<DungeonReceiveQuestBonusResponse> bonusResponse =
@@ -111,7 +110,7 @@ public class QuestBonusTest : TestFixture
                     LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
                     WeeklyPlayCount = 1,
-                }
+                },  opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(2))
             );
     }
 
@@ -153,7 +152,7 @@ public class QuestBonusTest : TestFixture
                     LastWeeklyResetTime = resetTime,
                     DailyPlayCount = 11,
                     WeeklyPlayCount = 21,
-                }
+                }, opts => opts.WithDateTimeTolerance()
             );
     }
 
@@ -192,7 +191,7 @@ public class QuestBonusTest : TestFixture
                     LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
                     WeeklyPlayCount = 1,
-                }
+                }, opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(2))
             );
 
         DragaliaResponse<DungeonReceiveQuestBonusResponse> bonusResponse =
@@ -299,7 +298,7 @@ public class QuestBonusTest : TestFixture
                     LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
                     WeeklyPlayCount = 1,
-                }
+                }, opts => opts.WithDateTimeTolerance()
             );
 
         DragaliaResponse<DungeonReceiveQuestBonusResponse> bonusResponse =
@@ -333,7 +332,7 @@ public class QuestBonusTest : TestFixture
                     LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
                     WeeklyPlayCount = 1,
-                }
+                }, opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(2))
             );
     }
 

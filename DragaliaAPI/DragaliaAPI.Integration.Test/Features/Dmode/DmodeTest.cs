@@ -8,7 +8,6 @@ public class DmodeTest : TestFixture
     public DmodeTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        CommonAssertionOptions.ApplyTimeOptions(toleranceSec: 2);
         this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
     }
 
@@ -182,7 +181,7 @@ public class DmodeTest : TestFixture
                     TargetFloorNum = 30,
                     State = ExpeditionState.Playing,
                     StartTime = DateTimeOffset.UtcNow,
-                }
+                }, opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(2))
             );
 
         DragaliaResponse<DmodeExpeditionForceFinishResponse> finishResp =
@@ -248,7 +247,8 @@ public class DmodeTest : TestFixture
                     TargetFloorNum = 30,
                     State = ExpeditionState.Playing,
                     StartTime = startTime,
-                }
+                },
+                opts => opts.WithDateTimeTolerance()
             );
 
         this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow.AddDays(1));
@@ -271,7 +271,8 @@ public class DmodeTest : TestFixture
                     TargetFloorNum = 30,
                     State = ExpeditionState.Waiting,
                     StartTime = startTime,
-                }
+                },
+                opts => opts.WithDateTimeTolerance()
             );
 
         finishResp.Data.DmodeIngameResult.TakeDmodePoint1.Should().BeGreaterThan(0);

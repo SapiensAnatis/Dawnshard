@@ -13,12 +13,6 @@ public class PresentTest : TestFixture
     public PresentTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        CommonAssertionOptions.ApplyTimeOptions(toleranceSec: 3);
-
-        // Ignore auto-generated PK
-        AssertionOptions.AssertEquivalencyUsing(opts =>
-            opts.Excluding(member => member.Name == nameof(PresentDetailList.PresentId))
-        );
     }
 
     [Fact]
@@ -79,7 +73,9 @@ public class PresentTest : TestFixture
                     {
                         PresentNotice = new() { PresentCount = 2, PresentLimitCount = 0 },
                     },
-                }
+                    
+                },     opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(3)).For(x => x.PresentList).Exclude(x => x.PresentId)
+
             );
 
         response.Data.PresentList.Should().BeInDescendingOrder(x => x.PresentId);
@@ -138,7 +134,8 @@ public class PresentTest : TestFixture
                     {
                         PresentNotice = new() { PresentCount = 1, PresentLimitCount = 1 },
                     },
-                }
+                },
+                opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(3)).For(x => x.PresentLimitList).Exclude(x => x.PresentId)
             );
 
         response.Data.PresentLimitList.Should().BeInDescendingOrder(x => x.PresentId);

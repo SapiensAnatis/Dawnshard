@@ -12,7 +12,6 @@ public class QuestClearPartyTest : TestFixture
     public QuestClearPartyTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
     }
 
     [Fact]
@@ -31,7 +30,7 @@ public class QuestClearPartyTest : TestFixture
 
         response
             .Data.QuestClearPartySettingList.Should()
-            .BeEquivalentTo(this.SoloPartySettingLists);
+            .BeEquivalentTo(this.SoloPartySettingLists, opts => opts.Excluding(x => x.EquipTalismanKeyId));
         response.Data.LostUnitList.Should().BeEmpty();
     }
 
@@ -51,7 +50,7 @@ public class QuestClearPartyTest : TestFixture
 
         response
             .Data.QuestMultiClearPartySettingList.Should()
-            .BeEquivalentTo(this.MultiPartySettingLists);
+            .BeEquivalentTo(this.MultiPartySettingLists,opts => opts.Excluding(x => x.EquipTalismanKeyId));
         response.Data.LostUnitList.Should().BeEmpty();
     }
 
@@ -178,7 +177,7 @@ public class QuestClearPartyTest : TestFixture
 
         storedList
             .Should()
-            .BeEquivalentTo(this.SoloDbEntities, opts => opts.Excluding(x => x.QuestId));
+            .BeEquivalentTo(this.SoloDbEntities, opts => opts.Excluding(x => x.QuestId).Excluding(x => x.EquipTalismanKeyId));
         storedList.Should().AllSatisfy(x => x.QuestId.Should().Be(3));
     }
 
@@ -208,7 +207,7 @@ public class QuestClearPartyTest : TestFixture
 
         storedList
             .Should()
-            .BeEquivalentTo(this.MultiDbEntities, opts => opts.Excluding(x => x.QuestId));
+            .BeEquivalentTo(this.MultiDbEntities, opts => opts.Excluding(x => x.QuestId).Excluding(x => x.EquipTalismanKeyId));
         storedList.Should().AllSatisfy(x => x.QuestId.Should().Be(4));
     }
 

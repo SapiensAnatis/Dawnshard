@@ -1,35 +1,35 @@
 using DragaliaAPI.Database.Entities;
 using FluentAssertions;
+using FluentAssertions.Equivalency;
 
 namespace DragaliaAPI.Test.Utils;
 
 public static class CommonAssertionOptions
 {
-    public static void ApplyTimeOptions(int toleranceSec = 1)
+    public static EquivalencyAssertionOptions<T> WithDateTimeTolerance<T>(this EquivalencyAssertionOptions<T> options) => WithDateTimeTolerance(options, TimeSpan.FromSeconds(1));
+    
+    public static EquivalencyAssertionOptions<T> WithDateTimeTolerance<T>(this EquivalencyAssertionOptions<T> options, TimeSpan tolerance)
     {
-        AssertionOptions.AssertEquivalencyUsing(options =>
-            options
-                .Using<DateTimeOffset>(ctx =>
-                    ctx.Subject.Should()
-                        .BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(toleranceSec))
-                )
-                .WhenTypeIs<DateTimeOffset>()
-        );
 
-        AssertionOptions.AssertEquivalencyUsing(options =>
-            options
-                .Using<TimeSpan>(ctx =>
-                    ctx.Subject.Should()
-                        .BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(toleranceSec))
-                )
-                .WhenTypeIs<TimeSpan>()
-        );
+        options
+            .Using<DateTimeOffset>(ctx =>
+                ctx.Subject.Should()
+                    .BeCloseTo(ctx.Expectation, tolerance)
+            )
+            .WhenTypeIs<DateTimeOffset>();
+
+        return options;
+
+
+        // AssertionOptions.AssertEquivalencyUsing(options =>
+        //     options
+        //         .Using<TimeSpan>(ctx =>
+        //             ctx.Subject.Should()
+        //                 .BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(toleranceSec))
+        //         )
+        //         .WhenTypeIs<TimeSpan>()
+        // );
     }
 
-    public static void ApplyIgnoreOwnerOptions()
-    {
-        AssertionOptions.AssertEquivalencyUsing(options =>
-            options.Excluding(x => x.Type == typeof(DbPlayer))
-        );
-    }
+
 }

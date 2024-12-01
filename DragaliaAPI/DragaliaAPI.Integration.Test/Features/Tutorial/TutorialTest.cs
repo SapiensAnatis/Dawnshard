@@ -13,7 +13,6 @@ public class TutorialTest : TestFixture
     public TutorialTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        CommonAssertionOptions.ApplyTimeOptions();
     }
 
     [Fact]
@@ -59,7 +58,7 @@ public class TutorialTest : TestFixture
             )
         ).Data;
 
-        response.UpdateDataList.Should().BeEquivalentTo(expUpdateData);
+        response.UpdateDataList.Should().BeEquivalentTo(expUpdateData, opts => opts.WithDateTimeTolerance());
     }
 
     [Fact]

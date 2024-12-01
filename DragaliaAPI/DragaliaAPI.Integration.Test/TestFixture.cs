@@ -212,7 +212,7 @@ public class TestFixture
     protected long GetTalismanKeyId(Talismans talisman)
     {
         return this
-            .ApiContext.PlayerTalismans.Where(x => x.TalismanId == talisman)
+            .ApiContext.PlayerTalismans.Where(x => x.ViewerId == this.ViewerId && x.TalismanId == talisman)
             .Select(x => x.TalismanKeyId)
             .DefaultIfEmpty()
             .First();

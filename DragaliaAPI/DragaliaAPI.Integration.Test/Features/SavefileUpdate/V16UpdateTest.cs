@@ -35,7 +35,7 @@ public class V16UpdateTest : SavefileUpdateTestFixture
 
         await this.LoadIndex();
 
-        this.ApiContext.PlayerEventItems.Should()
+        this.ApiContext.PlayerEventItems.Where(x => x.ViewerId == this.ViewerId).Should()
             .BeEquivalentTo(
                 [
                     new DbPlayerEventItem()

@@ -28,7 +28,7 @@ public abstract class SavefileUpdateTestFixture : TestFixture
 
     protected int GetSavefileVersion()
     {
-        return this.ApiContext.Players.Find(ViewerId)!.SavefileVersion;
+        return this.ApiContext.Players.AsNoTracking().First( x=> x.ViewerId == this.ViewerId).SavefileVersion;
     }
 
     protected async Task LoadIndex()

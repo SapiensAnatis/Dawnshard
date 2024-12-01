@@ -10,12 +10,12 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 
 [SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments")]
+[Collection("TimeAttack")]
 public class DungeonRecordTest : TestFixture
 {
     public DungeonRecordTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        CommonAssertionOptions.ApplyTimeOptions(2);
 
         this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
             p.SetProperty(e => e.StaminaSingle, e => 100)
@@ -180,7 +180,8 @@ public class DungeonRecordTest : TestFixture
                     BestClearTime = 10,
                     LastDailyResetTime = DateTimeOffset.UtcNow,
                     LastWeeklyResetTime = DateTimeOffset.UtcNow,
-                }
+                },
+                opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(2))
             );
 
         response.RepeatData.Should().BeNull();
@@ -586,7 +587,7 @@ public class DungeonRecordTest : TestFixture
             .And.Contain(10221301); // Earn the "Light of the Deep" Epithet
 
         // Clear Three Challenge Battles
-        this.ApiContext.PlayerMissions.First(x => x.Id == 10220801).Progress.Should().Be(1);
+        this.ApiContext.PlayerMissions.Where(x => x.ViewerId == this.ViewerId).First(x => x.Id == 10220801).Progress.Should().Be(1);
     }
 
     [Fact]
@@ -889,7 +890,7 @@ public class DungeonRecordTest : TestFixture
         await this.ImportSave();
         this.SetupPhotonAuthentication();
 
-        int questId = 227010104; // Volk's Wrath TA Solo
+        int questId = 219020101; // Kai Yan's Wrath Standard (not a TA quest but who cares)
         string roomName = Guid.NewGuid().ToString();
         string roomId = "1234";
         string gameId = $"{roomName}_{roomId}";

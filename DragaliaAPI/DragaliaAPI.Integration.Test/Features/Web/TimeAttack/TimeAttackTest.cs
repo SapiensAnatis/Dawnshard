@@ -4,6 +4,7 @@ using DragaliaAPI.Features.Web.TimeAttack.Models;
 
 namespace DragaliaAPI.Integration.Test.Features.Web.TimeAttack;
 
+[Collection("TimeAttack")]
 public partial class TimeAttackTest : TestFixture
 {
     public TimeAttackTest(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
@@ -82,8 +83,6 @@ public partial class TimeAttackTest : TestFixture
     public async Task GetRankings_ParsesTeamDataFromJson()
     {
         await this.SeedTimeAttackData();
-
-        AssertionOptions.FormattingOptions.MaxLines = 10000;
 
         OffsetPagedResponse<TimeAttackRanking>? rankings = await this.Client.GetFromJsonAsync<
             OffsetPagedResponse<TimeAttackRanking>

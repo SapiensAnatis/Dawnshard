@@ -401,6 +401,7 @@ public class LoginTest : TestFixture
             .NotContain(x => x.Id == oldMissionId);
 
         this.ApiContext.PlayerMissions.AsNoTracking()
+            .Where(x => x.ViewerId == this.ViewerId)
             .Where(x => x.GroupId == 0)
             .Should()
             .BeEquivalentTo(
@@ -417,6 +418,7 @@ public class LoginTest : TestFixture
             );
 
         this.ApiContext.PlayerMissions.AsNoTracking()
+            .Where(x => x.ViewerId == this.ViewerId)
             .Where(x => x.GroupId == starryDragonyuleEventId)
             .Should()
             .BeEquivalentTo(
@@ -435,6 +437,7 @@ public class LoginTest : TestFixture
             );
 
         this.ApiContext.PlayerMissions.AsNoTracking()
+            .Where(x => x.ViewerId == this.ViewerId)
             .ToList()
             .Should()
             .AllSatisfy(x =>
@@ -469,10 +472,12 @@ public class LoginTest : TestFixture
         );
 
         this.ApiContext.PlayerMissions.AsNoTracking()
+            .Where(x => x.ViewerId == this.ViewerId)
             .Should()
             .NotContain(x => x.Id == oldMissionId);
 
         this.ApiContext.PlayerMissions.AsNoTracking()
+            .Where(x => x.ViewerId == this.ViewerId)
             .Where(x => x.GroupId == 0)
             .Should()
             .BeEquivalentTo(
@@ -489,6 +494,7 @@ public class LoginTest : TestFixture
             );
 
         this.ApiContext.PlayerMissions.AsNoTracking()
+            .Where(x => x.ViewerId == this.ViewerId)
             .Should()
             .NotContain(x => x.GroupId == starryDragonyuleEventId);
     }

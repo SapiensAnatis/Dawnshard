@@ -39,7 +39,7 @@ public class BuildEventTest : TestFixture
     public async Task ReceiveEventRewards_ReturnsEventRewards()
     {
         DbPlayerEventItem pointItem = await ApiContext
-            .PlayerEventItems.AsTracking()
+            .PlayerEventItems.Where(x => x.ViewerId == this.ViewerId).AsTracking()
             .SingleAsync(
                 x => x.EventId == EventId && x.Type == (int)BuildEventItemType.BuildEventPoint,
                 cancellationToken: TestContext.Current.CancellationToken

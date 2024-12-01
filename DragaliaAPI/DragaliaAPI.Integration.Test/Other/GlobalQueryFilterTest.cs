@@ -37,8 +37,11 @@ public class GlobalQueryFilterTest : TestFixture
     public async Task DbPlayerUserData_HasGlobalQueryFilter()
     {
         // We will already have an instance for our own Viewer ID thanks to TestFixture
-        this.ApiContext.Players.Add(new() { ViewerId = this.ViewerId + 1, AccountId = "other" });
-        this.ApiContext.PlayerUserData.Add(new() { ViewerId = this.ViewerId + 1 });
+        DbPlayer otherPlayer = new() {  AccountId = "other_userdata" };
+        this.ApiContext.Players.Add(otherPlayer);
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        
+        this.ApiContext.PlayerUserData.Add(new() { ViewerId = otherPlayer.ViewerId });
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         (
@@ -89,7 +92,7 @@ public class GlobalQueryFilterTest : TestFixture
                 new()
                 {
                     Id = 2,
-                    Owner = new() { ViewerId = this.ViewerId + 1, AccountId = "otherhist" },
+                    Owner = new() { AccountId = "otherhist" },
                 },
             ]
         );
@@ -120,8 +123,11 @@ public class GlobalQueryFilterTest : TestFixture
     [Fact]
     public async Task DbPlayerDiamondData_HasGlobalQueryFilter()
     {
-        this.ApiContext.Players.Add(new() { ViewerId = this.ViewerId + 1, AccountId = "other" });
-        this.ApiContext.PlayerDiamondData.Add(new() { ViewerId = this.ViewerId + 1 });
+        DbPlayer otherPlayer = new() { AccountId = "other_diamantium" };
+        this.ApiContext.Players.Add(otherPlayer);
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        
+        this.ApiContext.PlayerDiamondData.Add(new() { ViewerId = otherPlayer.ViewerId });
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         (
@@ -137,18 +143,20 @@ public class GlobalQueryFilterTest : TestFixture
     private async Task TestGlobalQueryFilter<TEntity>()
         where TEntity : class, IDbPlayerData
     {
-        DbPlayer otherPlayer = new DbPlayer() { ViewerId = this.ViewerId + 1, AccountId = "other" };
+        DbPlayer otherPlayer = new DbPlayer() { AccountId = "other" };
 
+        this.ApiContext.Players.Add(otherPlayer);
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        
         TEntity visible = CreateEntityInstance<TEntity>();
         visible.ViewerId = this.ViewerId;
 
         TEntity invisible = CreateEntityInstance<TEntity>();
-        invisible.ViewerId = this.ViewerId + 1;
-
-        this.ApiContext.Players.Add(otherPlayer);
+        invisible.ViewerId = otherPlayer.ViewerId;
+        
         this.ApiContext.Set<TEntity>().Add(visible);
         this.ApiContext.Set<TEntity>().Add(invisible);
-        await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.ApiContext.ChangeTracker.Clear();
 

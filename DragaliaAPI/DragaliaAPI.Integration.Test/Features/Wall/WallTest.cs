@@ -9,7 +9,6 @@ public class WallTest : TestFixture
     public WallTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        CommonAssertionOptions.ApplyTimeOptions(toleranceSec: 2);
     }
 
     [Fact]

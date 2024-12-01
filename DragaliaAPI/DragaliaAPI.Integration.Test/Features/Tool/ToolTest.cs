@@ -72,7 +72,7 @@ public class ToolTest : TestFixture
             )
         ).Data;
 
-        response.ViewerId.Should().Be((ulong)this.ViewerId + 1);
+        response.ViewerId.Should().BeGreaterThan((ulong)this.ViewerId);
     }
 
     [Fact]

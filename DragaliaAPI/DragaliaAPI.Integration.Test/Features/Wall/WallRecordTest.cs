@@ -11,7 +11,6 @@ public class WallRecordTest : TestFixture
     public WallRecordTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        CommonAssertionOptions.ApplyTimeOptions(toleranceSec: 2);
     }
 
     [Fact]

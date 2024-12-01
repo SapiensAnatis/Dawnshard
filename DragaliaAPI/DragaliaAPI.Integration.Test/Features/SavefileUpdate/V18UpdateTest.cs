@@ -35,7 +35,7 @@ public class V18UpdateTest : SavefileUpdateTestFixture
 
         await this.LoadIndex();
 
-        this.ApiContext.PlayerMissions.Should()
+        this.ApiContext.PlayerMissions.Where(x => x.ViewerId == this.ViewerId).Should()
             .ContainEquivalentOf(
                 new DbPlayerMission()
                 {
@@ -200,7 +200,7 @@ public class V18UpdateTest : SavefileUpdateTestFixture
                 );
         }
 
-        this.ApiContext.PlayerMissions.Should()
+        this.ApiContext.PlayerMissions.Where(x => x.ViewerId == this.ViewerId).Should()
             .NotContain(
                 x =>
                     x.Id > 10010200
@@ -236,7 +236,7 @@ public class V18UpdateTest : SavefileUpdateTestFixture
 
         await this.LoadIndex();
 
-        this.ApiContext.PlayerMissions.ToList()
+        this.ApiContext.PlayerMissions.Where(x => x.ViewerId == this.ViewerId).ToList()
             .Should()
             .AllSatisfy(x => x.State.Should().Be(MissionState.Completed));
     }
@@ -266,7 +266,7 @@ public class V18UpdateTest : SavefileUpdateTestFixture
 
         await this.LoadIndex();
 
-        this.ApiContext.PlayerMissions.ToList()
+        this.ApiContext.PlayerMissions.Where(x => x.ViewerId == this.ViewerId).ToList()
             .Should()
             .BeEquivalentTo<DbPlayerMission>(
                 [

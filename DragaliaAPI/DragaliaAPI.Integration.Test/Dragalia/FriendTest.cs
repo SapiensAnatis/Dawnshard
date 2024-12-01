@@ -10,7 +10,6 @@ public class FriendTest : TestFixture
     public FriendTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        CommonAssertionOptions.ApplyTimeOptions();
     }
 
     [Fact]
@@ -178,7 +177,8 @@ public class FriendTest : TestFixture
 
         response
             .SupportUserDataDetail.UserSupportData.Should()
-            .BeEquivalentTo(HelperService.StubData.SupportListData.SupportUserList.First());
+            .BeEquivalentTo(HelperService.StubData.SupportListData.SupportUserList.First(),
+                opts => opts.WithDateTimeTolerance());
 
         response.SupportUserDataDetail.IsFriend.Should().BeFalse();
     }

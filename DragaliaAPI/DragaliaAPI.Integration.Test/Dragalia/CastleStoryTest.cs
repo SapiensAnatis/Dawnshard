@@ -8,7 +8,6 @@ public class CastleStoryTest : TestFixture
     public CastleStoryTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
     }
 
     [Fact]

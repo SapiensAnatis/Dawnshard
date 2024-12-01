@@ -8,8 +8,6 @@ public class StoryTest : TestFixture
     public StoryTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        CommonAssertionOptions.ApplyTimeOptions();
-        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
     }
 
     [Fact]
