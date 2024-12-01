@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
 using StackExchange.Redis;
+using Xunit.Sdk;
 
 namespace DragaliaAPI.Integration.Test;
 

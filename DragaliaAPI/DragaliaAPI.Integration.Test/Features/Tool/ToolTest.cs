@@ -117,7 +117,7 @@ public class ToolTest : TestFixture
 
         this.Client.DefaultRequestHeaders.Clear();
         this.Client.DefaultRequestHeaders.Add(Headers.IdToken, token);
-        this.Client.DefaultRequestHeaders.Add("DeviceId", "id");
+        this.Client.DefaultRequestHeaders.Add("DeviceId", "expired_device_id");
 
         HttpResponseMessage response = await this.Client.PostMsgpackBasic(
             "/tool/auth",

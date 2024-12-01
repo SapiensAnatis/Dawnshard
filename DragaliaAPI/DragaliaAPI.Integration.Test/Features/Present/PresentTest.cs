@@ -73,7 +73,7 @@ public class PresentTest : TestFixture
                     },
                 },
                 opts =>
-                    opts.WithDateTimeTolerance(TimeSpan.FromSeconds(3))
+                    opts.WithDateTimeTolerance()
                         .For(x => x.PresentList)
                         .Exclude(x => x.PresentId)
             );
@@ -136,7 +136,7 @@ public class PresentTest : TestFixture
                     },
                 },
                 opts =>
-                    opts.WithDateTimeTolerance(TimeSpan.FromSeconds(3))
+                    opts.WithDateTimeTolerance()
                         .For(x => x.PresentLimitList)
                         .Exclude(x => x.PresentId)
             );

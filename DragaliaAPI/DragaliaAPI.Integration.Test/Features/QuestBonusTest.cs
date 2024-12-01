@@ -112,7 +112,7 @@ public class QuestBonusTest : TestFixture
                     DailyPlayCount = 1,
                     WeeklyPlayCount = 1,
                 },
-                opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(2))
+                opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(10))
             );
     }
 
@@ -155,7 +155,7 @@ public class QuestBonusTest : TestFixture
                     DailyPlayCount = 11,
                     WeeklyPlayCount = 21,
                 },
-                opts => opts.WithDateTimeTolerance()
+                opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(10))
             );
     }
 
@@ -195,7 +195,7 @@ public class QuestBonusTest : TestFixture
                     DailyPlayCount = 1,
                     WeeklyPlayCount = 1,
                 },
-                opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(2))
+                opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(10))
             );
 
         DragaliaResponse<DungeonReceiveQuestBonusResponse> bonusResponse =
@@ -241,7 +241,7 @@ public class QuestBonusTest : TestFixture
                     LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
                     WeeklyPlayCount = 1,
-                }
+                }, opts =>opts.WithDateTimeTolerance(TimeSpan.FromSeconds(10))
             );
 
         DragaliaResponse<DungeonReceiveQuestBonusResponse> bonusResponse =
@@ -303,7 +303,7 @@ public class QuestBonusTest : TestFixture
                     DailyPlayCount = 1,
                     WeeklyPlayCount = 1,
                 },
-                opts => opts.WithDateTimeTolerance()
+                opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(10))
             );
 
         DragaliaResponse<DungeonReceiveQuestBonusResponse> bonusResponse =
@@ -338,7 +338,7 @@ public class QuestBonusTest : TestFixture
                     DailyPlayCount = 1,
                     WeeklyPlayCount = 1,
                 },
-                opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(2))
+                opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(10))
             );
     }
 

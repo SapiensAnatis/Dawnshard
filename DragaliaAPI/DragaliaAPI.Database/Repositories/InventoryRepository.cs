@@ -24,9 +24,7 @@ public class InventoryRepository : IInventoryRepository
     }
 
     public IQueryable<DbPlayerMaterial> Materials =>
-        this.apiContext.PlayerMaterials.Where(storage =>
-            storage.ViewerId == this.playerIdentityService.ViewerId
-        );
+        this.apiContext.PlayerMaterials;
 
     public DbPlayerMaterial AddMaterial(Materials type)
     {

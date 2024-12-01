@@ -87,10 +87,6 @@ public class TestFixture
     /// <summary>
     /// The viewer ID associated with the logged in user.
     /// </summary>
-    /// <remarks>
-    /// This is not a constant -- although the database is cleared in <see cref="SeedDatabase"/> between each test,
-    /// the seeding of the identity column is not reset, so each test increments the viewer ID by 1.
-    /// </remarks>
     protected long ViewerId { get; private set; }
 
     protected HttpClient Client { get; set; }

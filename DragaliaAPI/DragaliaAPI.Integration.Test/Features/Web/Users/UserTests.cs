@@ -47,7 +47,7 @@ public class UserTests : WebTestFixture
     public async Task UserMe_Authenticated_Returns200()
     {
         string token = TokenHelper.GetToken(
-            DeviceAccountId,
+            this.WebAccountId,
             DateTime.UtcNow + TimeSpan.FromMinutes(5)
         );
 
@@ -84,7 +84,7 @@ public class UserTests : WebTestFixture
     public async Task UserMeProfile_Authenticated_Returns()
     {
         string token = TokenHelper.GetToken(
-            DeviceAccountId,
+            this.WebAccountId,
             DateTime.UtcNow + TimeSpan.FromMinutes(5)
         );
 

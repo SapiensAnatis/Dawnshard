@@ -104,8 +104,8 @@ public class TestContainersHelper
         if (!this.ContainersAvailable)
             return;
 
-        await postgresContainer.StartAsync();
-        await redisContainer.StartAsync();
+        await Task.WhenAll(postgresContainer.StartAsync(),
+            redisContainer.StartAsync());
 
         this.postgresPort = this.postgresPort = this.postgresContainer.GetMappedPublicPort(
             PostgresContainerPort
