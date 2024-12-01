@@ -161,9 +161,9 @@ public class DragonTest : TestFixture
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.ApiContext.ChangeTracker.Clear();
-        DbPlayerUserData userData = await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == ViewerId)
-            .FirstAsync(cancellationToken: TestContext.Current.CancellationToken);
+        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.FirstAsync(
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         long startCoin = userData.Coin;
 
@@ -231,9 +231,9 @@ public class DragonTest : TestFixture
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.ApiContext.ChangeTracker.Clear();
-        DbPlayerUserData userData = await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == ViewerId)
-            .FirstAsync(cancellationToken: TestContext.Current.CancellationToken);
+        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.FirstAsync(
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         long startCoin = userData.Coin;
 
@@ -735,9 +735,9 @@ public class DragonTest : TestFixture
         DragonData dragonDataStribog = MasterAsset.DragonData.Get(Dragons.Stribog);
 
         this.ApiContext.ChangeTracker.Clear();
-        DbPlayerUserData uData = await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == ViewerId)
-            .FirstAsync(cancellationToken: TestContext.Current.CancellationToken);
+        DbPlayerUserData uData = await this.ApiContext.PlayerUserData.FirstAsync(
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         long startCoin = uData.Coin;
         long startDew = uData.DewPoint;

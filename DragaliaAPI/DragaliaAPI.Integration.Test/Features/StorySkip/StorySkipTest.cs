@@ -24,16 +24,14 @@ public class StorySkipTest : TestFixture
         FrozenDictionary<FortPlants, FortConfig> fortConfigs = StorySkipRewards.FortConfigs;
         List<FortPlants> uniqueFortPlants = new(fortConfigs.Keys);
 
-        await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(
-                u =>
-                    u.SetProperty(e => e.Level, 5)
-                        .SetProperty(e => e.Exp, 1)
-                        .SetProperty(e => e.StaminaSingle, 10)
-                        .SetProperty(e => e.StaminaMulti, 10),
-                cancellationToken: TestContext.Current.CancellationToken
-            );
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            u =>
+                u.SetProperty(e => e.Level, 5)
+                    .SetProperty(e => e.Exp, 1)
+                    .SetProperty(e => e.StaminaSingle, 10)
+                    .SetProperty(e => e.StaminaMulti, 10),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         await this
             .ApiContext.PlayerQuests.Where(x => x.ViewerId == this.ViewerId && x.QuestId <= questId)

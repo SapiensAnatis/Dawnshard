@@ -4,7 +4,6 @@ using DragaliaAPI.Features.Web.TimeAttack.Models;
 
 namespace DragaliaAPI.Integration.Test.Features.Web.TimeAttack;
 
-[Collection("TimeAttack")]
 public partial class TimeAttackTest : TestFixture
 {
     public TimeAttackTest(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)

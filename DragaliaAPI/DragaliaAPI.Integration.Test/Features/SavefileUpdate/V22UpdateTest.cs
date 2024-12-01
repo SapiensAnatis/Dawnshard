@@ -16,12 +16,10 @@ public class V22UpdateTest : SavefileUpdateTestFixture
     [Fact]
     public async Task V22Update_Chapter10Completed_GrantsRewards()
     {
-        await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(
-                u => u.SetProperty(e => e.Level, 30).SetProperty(e => e.Exp, 18990),
-                cancellationToken: TestContext.Current.CancellationToken
-            );
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            u => u.SetProperty(e => e.Level, 30).SetProperty(e => e.Exp, 18990),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         await this
             .ApiContext.PlayerPresents.Where(x => x.ViewerId == this.ViewerId)
@@ -69,12 +67,10 @@ public class V22UpdateTest : SavefileUpdateTestFixture
     [Fact]
     public async Task V22Update_Chapter10NotCompleted_DoesNotGrantRewards()
     {
-        await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(
-                u => u.SetProperty(e => e.Level, 30).SetProperty(e => e.Exp, 18990),
-                cancellationToken: TestContext.Current.CancellationToken
-            );
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            u => u.SetProperty(e => e.Level, 30).SetProperty(e => e.Exp, 18990),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         await this
             .ApiContext.PlayerStoryState.Where(x =>

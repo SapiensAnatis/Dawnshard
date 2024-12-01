@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Models.Generated;
@@ -23,8 +24,6 @@ public class DungeonRepositoryTest : RepositoryTestFixture
             this.ApiContext,
             this.mockPlayerIdentityService.Object
         );
-
-        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
     }
 
     [Fact]
@@ -46,7 +45,12 @@ public class DungeonRepositoryTest : RepositoryTestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        result.Should().BeEquivalentTo(expectedResult);
+        result
+            .Should()
+            .BeEquivalentTo(
+                expectedResult,
+                opts => opts.Excluding(member => member.Name == nameof(DbPlayerData.Owner))
+            );
     }
 
     [Fact]
@@ -67,7 +71,12 @@ public class DungeonRepositoryTest : RepositoryTestFixture
             .First()
             .FirstAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        result.Should().BeEquivalentTo(expectedResult);
+        result
+            .Should()
+            .BeEquivalentTo(
+                expectedResult,
+                opts => opts.Excluding(member => member.Name == nameof(DbPlayerData.Owner))
+            );
     }
 
     private async Task<DbDetailedPartyUnit> SeedDatabase()

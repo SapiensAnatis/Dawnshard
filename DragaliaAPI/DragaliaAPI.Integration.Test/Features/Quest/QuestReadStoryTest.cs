@@ -38,8 +38,9 @@ public class QuestReadStoryTest : TestFixture
     public async Task ReadStory_GrantsReward_InventoryFull_SendsToGiftBox()
     {
         int midgardStoryId = 1000109;
-        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdate(x => x.SetProperty(e => e.MaxDragonQuantity, 0));
+        this.ApiContext.PlayerUserData.ExecuteUpdate(x =>
+            x.SetProperty(e => e.MaxDragonQuantity, 0)
+        );
 
         QuestReadStoryResponse response = (
             await this.Client.PostMsgpack<QuestReadStoryResponse>(
@@ -82,8 +83,9 @@ public class QuestReadStoryTest : TestFixture
     public async Task ReadStory_Midgardsormr_DoesNotAddReliabilityIfOwned()
     {
         int midgardStoryId = 1000109;
-        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdate(x => x.SetProperty(e => e.MaxDragonQuantity, 0));
+        this.ApiContext.PlayerUserData.ExecuteUpdate(x =>
+            x.SetProperty(e => e.MaxDragonQuantity, 0)
+        );
 
         await this.AddToDatabase(
             new DbPlayerDragonReliability() { DragonId = Dragons.Midgardsormr }
@@ -177,12 +179,10 @@ public class QuestReadStoryTest : TestFixture
     [Fact]
     public async Task ReadStory_Chapter10Completion_GrantsRewards()
     {
-        await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(
-                u => u.SetProperty(e => e.Level, 30).SetProperty(e => e.Exp, 18990),
-                cancellationToken: TestContext.Current.CancellationToken
-            );
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            u => u.SetProperty(e => e.Level, 30).SetProperty(e => e.Exp, 18990),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         StoryReadResponse data = (
             await this.Client.PostMsgpack<StoryReadResponse>(

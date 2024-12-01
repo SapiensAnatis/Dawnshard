@@ -47,8 +47,6 @@ public class DungeonRecordServiceTest
         );
 
         this.mockTutorialService.Setup(x => x.AddTutorialFlag(1022)).ReturnsAsync(new List<int>());
-
-        CommonAssertionOptions.ApplyTimeOptions();
     }
 
     [Fact]
@@ -245,7 +243,8 @@ public class DungeonRecordServiceTest
                     IsBestClearTime = true,
                     ClearTime = playRecord.Time,
                     ConvertedEntityList = new List<ConvertedEntityList>(),
-                }
+                },
+                opts => opts.WithDateTimeTolerance()
             );
 
         this.mockDungeonRewardService.VerifyAll();

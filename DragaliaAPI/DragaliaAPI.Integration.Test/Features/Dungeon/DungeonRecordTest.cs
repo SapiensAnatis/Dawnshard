@@ -10,16 +10,17 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 
 [SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments")]
-[Collection("TimeAttack")]
 public class DungeonRecordTest : TestFixture
 {
     public DungeonRecordTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdate(p => p.SetProperty(e => e.StaminaSingle, e => 100));
-        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdate(p => p.SetProperty(e => e.StaminaMulti, e => 100));
+        this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
+            p.SetProperty(e => e.StaminaSingle, e => 100)
+        );
+        this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
+            p.SetProperty(e => e.StaminaMulti, e => 100)
+        );
 
         this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
     }
@@ -965,8 +966,9 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdate(p => p.SetProperty(e => e.StaminaSingle, e => 0));
+        this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
+            p.SetProperty(e => e.StaminaSingle, e => 0)
+        );
 
         DungeonSession mockSession =
             new()
@@ -1020,8 +1022,9 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdate(p => p.SetProperty(e => e.StaminaSingle, e => 0));
+        this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
+            p.SetProperty(e => e.StaminaSingle, e => 0)
+        );
 
         DungeonSession mockSession =
             new()
@@ -1154,16 +1157,14 @@ public class DungeonRecordTest : TestFixture
     [Fact]
     public async Task Record_IsCoopTutorial_AdvancesTutorialStatus()
     {
-        await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
-            .ExecuteUpdateAsync(
-                e =>
-                    e.SetProperty(
-                        p => p.TutorialStatus,
-                        TutorialService.TutorialStatusIds.CoopTutorial
-                    ),
-                cancellationToken: TestContext.Current.CancellationToken
-            );
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            e =>
+                e.SetProperty(
+                    p => p.TutorialStatus,
+                    TutorialService.TutorialStatusIds.CoopTutorial
+                ),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         int questId = TutorialService.TutorialQuestIds.AvenueToPowerBeginner;
 
