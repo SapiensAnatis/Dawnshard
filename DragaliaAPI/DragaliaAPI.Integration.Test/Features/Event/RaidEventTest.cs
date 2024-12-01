@@ -41,7 +41,7 @@ public class RaidEventTest : TestFixture
     public async Task ReceiveEventRewards_ReturnsEventRewards()
     {
         DbPlayerEventItem pointItem = await ApiContext
-            .PlayerEventItems.AsTracking()
+            .PlayerEventItems.Where(x => x.ViewerId == this.ViewerId).AsTracking()
             .SingleAsync(
                 x => x.EventId == EventId && x.Type == (int)RaidEventItemType.RaidPoint1,
                 cancellationToken: TestContext.Current.CancellationToken
