@@ -10,7 +10,7 @@ public class WebTestFixture : TestFixture
     /// The web account ID.
     /// </summary>
     protected string WebAccountId { get; } = $"web_account_id_{Guid.NewGuid()}";
-    
+
     protected WebTestFixture(
         CustomWebApplicationFactory factory,
         ITestOutputHelper testOutputHelper
@@ -19,7 +19,10 @@ public class WebTestFixture : TestFixture
 
     protected void SetupMockBaas()
     {
-        this.MockBaasApi.Setup(x => x.GetUserId(It.Is<string>(token => GetSubject(token) == WebAccountId))).ReturnsAsync(DeviceAccountId);
+        this.MockBaasApi.Setup(x =>
+                x.GetUserId(It.Is<string>(token => GetSubject(token) == WebAccountId))
+            )
+            .ReturnsAsync(DeviceAccountId);
     }
 
     protected void AddTokenCookie()
@@ -37,6 +40,7 @@ public class WebTestFixture : TestFixture
         string[] segments = token.Split('.');
         string dataJson = Base64UrlEncoder.Decode(segments[1]);
         JsonDocument document = JsonDocument.Parse(dataJson);
-        return document.RootElement.GetProperty("sub").GetString() ?? throw new InvalidOperationException("Failed to parse token");
+        return document.RootElement.GetProperty("sub").GetString()
+            ?? throw new InvalidOperationException("Failed to parse token");
     }
 }

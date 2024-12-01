@@ -281,8 +281,7 @@ public class DungeonSkipTest : TestFixture
         // Ch. 5 / 4-3 Dark Terminus (Hard)
         int questId = 100050209;
         int existingEssenceQuantity = this
-            .ApiContext.PlayerMaterials
-            .Where(x => x.ViewerId == this.ViewerId)
+            .ApiContext.PlayerMaterials.Where(x => x.ViewerId == this.ViewerId)
             .First(x => x.MaterialId == Materials.ChthoniussEssence)
             .Quantity;
 

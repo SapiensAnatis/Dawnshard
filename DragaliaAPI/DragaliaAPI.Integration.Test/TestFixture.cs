@@ -313,7 +313,13 @@ public class TestFixture
         IDistributedCache cache = this.Services.GetRequiredService<IDistributedCache>();
 
         Session session =
-            new(this.SessionId, "id_token", this.DeviceAccountId, this.ViewerId, DateTimeOffset.MaxValue);
+            new(
+                this.SessionId,
+                "id_token",
+                this.DeviceAccountId,
+                this.ViewerId,
+                DateTimeOffset.MaxValue
+            );
         await cache.SetStringAsync(
             $":session:session_id:{this.SessionId}",
             JsonSerializer.Serialize(session)

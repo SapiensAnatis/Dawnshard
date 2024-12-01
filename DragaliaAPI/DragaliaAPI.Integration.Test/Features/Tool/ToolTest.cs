@@ -78,9 +78,8 @@ public class ToolTest : TestFixture
     [Fact]
     public async Task Auth_PendingImport_ImportsSave()
     {
-        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdate(p =>
-            p.SetProperty(e => e.LastSaveImportTime, DateTimeOffset.UnixEpoch)
-        );
+        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdate(p => p.SetProperty(e => e.LastSaveImportTime, DateTimeOffset.UnixEpoch));
 
         string token = TokenHelper.GetToken(
             DeviceAccountId,

@@ -16,12 +16,10 @@ public class DungeonRecordTest : TestFixture
     public DungeonRecordTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdate(p =>
-            p.SetProperty(e => e.StaminaSingle, e => 100)
-        );
-        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdate(p =>
-            p.SetProperty(e => e.StaminaMulti, e => 100)
-        );
+        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdate(p => p.SetProperty(e => e.StaminaSingle, e => 100));
+        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdate(p => p.SetProperty(e => e.StaminaMulti, e => 100));
 
         this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
     }
@@ -967,9 +965,8 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdate(p =>
-            p.SetProperty(e => e.StaminaSingle, e => 0)
-        );
+        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdate(p => p.SetProperty(e => e.StaminaSingle, e => 0));
 
         DungeonSession mockSession =
             new()
@@ -1023,9 +1020,8 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdate(p =>
-            p.SetProperty(e => e.StaminaSingle, e => 0)
-        );
+        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdate(p => p.SetProperty(e => e.StaminaSingle, e => 0));
 
         DungeonSession mockSession =
             new()
@@ -1301,8 +1297,7 @@ public class DungeonRecordTest : TestFixture
         // Ch. 5 / 4-3 Dark Terminus (Hard)
         int questId = 100050209;
         int existingEssenceQuantity = this
-            .ApiContext.PlayerMaterials
-            .Where(x => x.ViewerId == this.ViewerId)
+            .ApiContext.PlayerMaterials.Where(x => x.ViewerId == this.ViewerId)
             .First(x => x.MaterialId == Materials.ChthoniussEssence)
             .Quantity;
 
@@ -1357,8 +1352,7 @@ public class DungeonRecordTest : TestFixture
         // Ch. 5 / 4-3 Dark Terminus (Hard)
         int questId = 100050209;
         int existingEssenceQuantity = this
-            .ApiContext.PlayerMaterials
-            .Where(x => x.ViewerId == this.ViewerId)
+            .ApiContext.PlayerMaterials.Where(x => x.ViewerId == this.ViewerId)
             .First(x => x.MaterialId == Materials.ChthoniussEssence)
             .Quantity;
 
@@ -1439,8 +1433,7 @@ public class DungeonRecordTest : TestFixture
         // Ch. 5 / 4-3 Dark Terminus (Hard)
         int questId = 100050209;
         int existingEssenceQuantity = this
-            .ApiContext.PlayerMaterials
-            .Where(x => x.ViewerId == this.ViewerId)
+            .ApiContext.PlayerMaterials.Where(x => x.ViewerId == this.ViewerId)
             .First(x => x.MaterialId == Materials.ChthoniussEssence)
             .Quantity;
 

@@ -38,9 +38,8 @@ public class QuestReadStoryTest : TestFixture
     public async Task ReadStory_GrantsReward_InventoryFull_SendsToGiftBox()
     {
         int midgardStoryId = 1000109;
-        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdate(x =>
-            x.SetProperty(e => e.MaxDragonQuantity, 0)
-        );
+        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdate(x => x.SetProperty(e => e.MaxDragonQuantity, 0));
 
         QuestReadStoryResponse response = (
             await this.Client.PostMsgpack<QuestReadStoryResponse>(
@@ -83,9 +82,8 @@ public class QuestReadStoryTest : TestFixture
     public async Task ReadStory_Midgardsormr_DoesNotAddReliabilityIfOwned()
     {
         int midgardStoryId = 1000109;
-        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdate(x =>
-            x.SetProperty(e => e.MaxDragonQuantity, 0)
-        );
+        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdate(x => x.SetProperty(e => e.MaxDragonQuantity, 0));
 
         await this.AddToDatabase(
             new DbPlayerDragonReliability() { DragonId = Dragons.Midgardsormr }

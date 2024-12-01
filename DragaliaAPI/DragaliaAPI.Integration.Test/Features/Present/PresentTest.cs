@@ -73,9 +73,7 @@ public class PresentTest : TestFixture
                     },
                 },
                 opts =>
-                    opts.WithDateTimeTolerance()
-                        .For(x => x.PresentList)
-                        .Exclude(x => x.PresentId)
+                    opts.WithDateTimeTolerance().For(x => x.PresentList).Exclude(x => x.PresentId)
             );
 
         response.Data.PresentList.Should().BeInDescendingOrder(x => x.PresentId);

@@ -126,9 +126,8 @@ public class TreasureTradeTest : TestFixture
     public async Task Trade_MultiDragon_AlmostFull_Trades()
     {
         this.ApiContext.PlayerDragonData.ExecuteDelete();
-        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdate(e =>
-            e.SetProperty(x => x.MaxDragonQuantity, 2)
-        );
+        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdate(e => e.SetProperty(x => x.MaxDragonQuantity, 2));
 
         int highBrunhildaTrade = 10030302;
 

@@ -91,15 +91,11 @@ public class GlobalQueryFilterTest : TestFixture
         this.ApiContext.PlayerPresents.Add(present);
         this.ApiContext.PlayerPresents.Add(otherPresent);
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
-        
+
         this.ApiContext.PlayerPresentHistory.AddRange(
             [
                 new() { Id = present.PresentId, ViewerId = this.ViewerId },
-                new()
-                {
-                    Id = otherPresent.PresentId,
-                    ViewerId = otherPresent.ViewerId,
-                },
+                new() { Id = otherPresent.PresentId, ViewerId = otherPresent.ViewerId },
             ]
         );
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -130,14 +126,20 @@ public class GlobalQueryFilterTest : TestFixture
     public async Task DbPlayerMaterial_hasGlobalQueryFilter()
     {
         // All materials are added by the test fixture, so can't use generic method due to conflicts
-        this.ApiContext.PlayerMaterials.Add(new() { MaterialId = Materials.Squishums, Owner = new() { AccountId = "other_material"}});
+        this.ApiContext.PlayerMaterials.Add(
+            new()
+            {
+                MaterialId = Materials.Squishums,
+                Owner = new() { AccountId = "other_material" },
+            }
+        );
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         (
-                await this
-                    .ApiContext.PlayerMaterials.AsNoTracking()
-                    .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
-            )
+            await this
+                .ApiContext.PlayerMaterials.AsNoTracking()
+                .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
+        )
             .Should()
             .AllSatisfy(x => x.ViewerId.Should().Be(this.ViewerId));
     }

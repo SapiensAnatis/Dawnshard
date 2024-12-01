@@ -21,9 +21,8 @@ public abstract class SavefileUpdateTestFixture : TestFixture
             .MaxBy(x => x.SavefileVersion)!
             .SavefileVersion;
 
-        this.ApiContext.Players.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdate(u =>
-            u.SetProperty(e => e.SavefileVersion, StartingVersion)
-        );
+        this.ApiContext.Players.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdate(u => u.SetProperty(e => e.SavefileVersion, StartingVersion));
     }
 
     protected int GetSavefileVersion()

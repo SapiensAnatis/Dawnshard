@@ -96,10 +96,12 @@ public class V1UpdateTest : SavefileUpdateTestFixture
     [Fact]
     public async Task V1Update_NoDojos_TutorialComplete_Adds()
     {
-        await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdateAsync(
-            u => u.SetProperty(e => e.TutorialStatus, TutorialService.TutorialStatusIds.Dojos),
-            cancellationToken: TestContext.Current.CancellationToken
-        );
+        await this
+            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdateAsync(
+                u => u.SetProperty(e => e.TutorialStatus, TutorialService.TutorialStatusIds.Dojos),
+                cancellationToken: TestContext.Current.CancellationToken
+            );
 
         LoadIndexResponse data = (
             await this.Client.PostMsgpack<LoadIndexResponse>(
@@ -114,10 +116,12 @@ public class V1UpdateTest : SavefileUpdateTestFixture
 
         this.GetSavefileVersion().Should().Be(this.MaxVersion);
 
-        await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId).ExecuteUpdateAsync(
-            u => u.SetProperty(e => e.TutorialStatus, 0),
-            cancellationToken: TestContext.Current.CancellationToken
-        );
+        await this
+            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdateAsync(
+                u => u.SetProperty(e => e.TutorialStatus, 0),
+                cancellationToken: TestContext.Current.CancellationToken
+            );
     }
 
     [Fact]
