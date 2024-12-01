@@ -1,7 +1,4 @@
 #!/bin/sh
-which dotnet
-ls -la /usr/bin | grep dotnet
-/usr/bin/dotnet --info
 . "$(dirname "$0")/_/husky.sh"
 
 ## husky task runner examples -------------------
