@@ -3,7 +3,7 @@ USER app
 EXPOSE 8080
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0.100 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0.101 AS build
 WORKDIR /src
 COPY ["PhotonStateManager/DragaliaAPI.Photon.StateManager/DragaliaAPI.Photon.StateManager.csproj", "PhotonStateManager/DragaliaAPI.Photon.StateManager/"]
 COPY ["PhotonStateManager/Directory.Build.props", "."]
