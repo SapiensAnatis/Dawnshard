@@ -149,7 +149,7 @@ public class MissionProgressionService(
             (int)chara,
             (int)element
         );
-        for (int i = totalLevel - count; i < totalLevel; i++)
+        for (int i = totalLevel - count; i <= totalLevel; i++)
         {
             EnqueueEvent(MissionCompleteType.CharacterLevelUpCount, 1, i, (int)element, (int)i);
         }
@@ -169,7 +169,7 @@ public class MissionProgressionService(
     public void OnDragonLevelUp(Dragons dragon, UnitElement element, int count, int total)
     {
         EnqueueEvent(MissionCompleteType.DragonLevelUp, count, total, (int)dragon, (int)element);
-        for (int i = total - count; i < total; i++)
+        for (int i = total - count; i <= total; i++)
         {
             EnqueueEvent(MissionCompleteType.DragonLevelUpCount, 1, i, (int)element, (int)i);
         }

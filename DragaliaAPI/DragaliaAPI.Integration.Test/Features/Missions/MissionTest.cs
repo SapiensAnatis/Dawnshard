@@ -158,6 +158,47 @@ public class MissionTest : TestFixture
     }
 
     [Fact]
+    public async Task DrillMission_DragonExactLeveling_CompletesMission()
+    {
+        await this.AddToDatabase(
+            new DbPlayerDragonData() { ViewerId = ViewerId, DragonId = Dragons.Midgardsormr }
+        );
+
+        await this.Client.PostMsgpack<MissionUnlockDrillMissionGroupResponse>(
+            "mission/unlock_drill_mission_group",
+            new MissionUnlockDrillMissionGroupRequest(1),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        DragaliaResponse<DragonBuildupResponse> resp =
+            await this.Client.PostMsgpack<DragonBuildupResponse>(
+                "dragon/buildup",
+                new DragonBuildupRequest()
+                {
+                    BaseDragonKeyId = (ulong)this.GetDragonKeyId(Dragons.Midgardsormr),
+                    GrowMaterialList = new List<GrowMaterialList>()
+                    {
+                        new GrowMaterialList()
+                        {
+                            Type = EntityTypes.Material,
+                            Id = (int)Materials.Dragonfruit,
+                            Quantity = 10,
+                        },
+                    },
+                },
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
+        resp.Data.UpdateDataList.MissionNotice.Should().NotBeNull();
+        resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.IsUpdate.Should().BeTrue();
+        resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.CompletedMissionCount.Should()
+            .BeGreaterThan(1);
+        resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.NewCompleteMissionIdList.Should()
+            .Contain(102000);
+    }
+
+    [Fact]
     public async Task DrillMission_DragonOverleveling_CompletesMission()
     {
         await this.AddToDatabase(
@@ -166,7 +207,8 @@ public class MissionTest : TestFixture
 
         await this.Client.PostMsgpack<MissionUnlockDrillMissionGroupResponse>(
             "mission/unlock_drill_mission_group",
-            new MissionUnlockDrillMissionGroupRequest(1)
+            new MissionUnlockDrillMissionGroupRequest(1),
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DragaliaResponse<DragonBuildupResponse> resp =
@@ -184,7 +226,8 @@ public class MissionTest : TestFixture
                             Quantity = 1,
                         },
                     },
-                }
+                },
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
@@ -197,13 +240,47 @@ public class MissionTest : TestFixture
     }
 
     [Fact]
+    public async Task DrillMission_CharacterExactLeveling_CompletesMission()
+    {
+        this.AddCharacter(Charas.Karina);
+
+        await this.Client.PostMsgpack<MissionUnlockDrillMissionGroupResponse>(
+            "mission/unlock_drill_mission_group",
+            new MissionUnlockDrillMissionGroupRequest(1),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        DragaliaResponse<CharaBuildupResponse> resp =
+            await this.Client.PostMsgpack<CharaBuildupResponse>(
+                "chara/buildup",
+                new CharaBuildupRequest(
+                    Charas.Karina,
+                    new List<AtgenEnemyPiece>()
+                    {
+                        new AtgenEnemyPiece() { Id = Materials.GoldCrystal, Quantity = 10 },
+                    }
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
+        resp.Data.UpdateDataList.MissionNotice.Should().NotBeNull();
+        resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.IsUpdate.Should().BeTrue();
+        resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.CompletedMissionCount.Should()
+            .BeGreaterThan(1);
+        resp.Data.UpdateDataList.MissionNotice.DrillMissionNotice.NewCompleteMissionIdList.Should()
+            .Contain(102500);
+    }
+
+    [Fact]
     public async Task DrillMission_CharacterOverleveling_CompletesMission()
     {
         this.AddCharacter(Charas.Karina);
 
         await this.Client.PostMsgpack<MissionUnlockDrillMissionGroupResponse>(
             "mission/unlock_drill_mission_group",
-            new MissionUnlockDrillMissionGroupRequest(1)
+            new MissionUnlockDrillMissionGroupRequest(1),
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         DragaliaResponse<CharaBuildupResponse> resp =
@@ -215,7 +292,8 @@ public class MissionTest : TestFixture
                     {
                         new AtgenEnemyPiece() { Id = Materials.GoldCrystal, Quantity = 15 },
                     }
-                )
+                ),
+                cancellationToken: TestContext.Current.CancellationToken
             );
 
         resp.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
