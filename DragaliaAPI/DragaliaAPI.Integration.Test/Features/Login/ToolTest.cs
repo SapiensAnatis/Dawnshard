@@ -1,11 +1,11 @@
 ﻿using System.Net;
-using DragaliaAPI.Features.Tool;
+using DragaliaAPI.Features.Login.Auth;
 using DragaliaAPI.Models;
 using MessagePack;
 using Microsoft.EntityFrameworkCore;
 using static DragaliaAPI.Infrastructure.DragaliaHttpConstants;
 
-namespace DragaliaAPI.Integration.Test.Features.Tool;
+namespace DragaliaAPI.Integration.Test.Features.Login;
 
 /// <summary>
 /// Tests <see cref="ToolController"/>

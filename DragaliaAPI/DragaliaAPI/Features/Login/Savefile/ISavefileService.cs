@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 
-namespace DragaliaAPI.Services;
+namespace DragaliaAPI.Features.Login.Savefile;
 
 public interface ISavefileService
 {

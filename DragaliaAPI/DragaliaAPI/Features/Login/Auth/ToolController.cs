@@ -1,15 +1,13 @@
-﻿using System.Security.Claims;
-using DragaliaAPI.Controllers;
+﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
-using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static DragaliaAPI.Infrastructure.Authentication.AuthConstants;
 
-namespace DragaliaAPI.Features.Tool;
+namespace DragaliaAPI.Features.Login.Auth;
 
 [Route("tool")]
 internal sealed class ToolController(IAuthService authService) : DragaliaControllerBaseCore

@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Caching.Distributed;
 
-namespace DragaliaAPI.Services.Game;
+namespace DragaliaAPI.Features.Login.Savefile;
 
 public class SavefileService : ISavefileService
 {

@@ -8,13 +8,14 @@ using DragaliaAPI.Features.Summoning;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
+using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Riok.Mapperly.Abstractions;
 
-namespace DragaliaAPI.Services.Game;
+namespace DragaliaAPI.Features.Login.Savefile;
 
 public class LoadService(
     ApiContext apiContext,

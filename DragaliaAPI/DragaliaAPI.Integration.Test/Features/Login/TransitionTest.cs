@@ -1,6 +1,6 @@
 using DragaliaAPI.Infrastructure;
 
-namespace DragaliaAPI.Integration.Test.Features.Tool;
+namespace DragaliaAPI.Integration.Test.Features.Login;
 
 public class TransitionTest : TestFixture
 {

@@ -1,12 +1,10 @@
 ﻿using DragaliaAPI.Models;
 using DragaliaAPI.Models.Options;
-using DragaliaAPI.Services;
-using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 
-namespace DragaliaAPI.Features.Tool;
+namespace DragaliaAPI.Features.Login.Auth;
 
 /// <summary>
 /// SessionService interfaces with Redis to store the information about current sessions in-memory.

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.Tool;
+using DragaliaAPI.Features.Login.Auth;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;

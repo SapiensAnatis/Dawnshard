@@ -1,7 +1,6 @@
 ﻿using DragaliaAPI.Models;
-using DragaliaAPI.Services.Exceptions;
 
-namespace DragaliaAPI.Features.Tool;
+namespace DragaliaAPI.Features.Login.Auth;
 
 public interface ISessionService
 {

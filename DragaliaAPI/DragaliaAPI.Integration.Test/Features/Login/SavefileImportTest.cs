@@ -5,7 +5,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Serialization;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Integration.Test.Other;
+namespace DragaliaAPI.Integration.Test.Features.Login;
 
 /// <summary>
 /// Tests <see cref="Controllers.Other.SavefileController"/>

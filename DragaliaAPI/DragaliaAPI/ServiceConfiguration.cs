@@ -11,6 +11,8 @@ using DragaliaAPI.Features.Emblem;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Item;
+using DragaliaAPI.Features.Login.Auth;
+using DragaliaAPI.Features.Login.Savefile;
 using DragaliaAPI.Features.Maintenance;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.PartyPower;
@@ -22,7 +24,6 @@ using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Features.StorySkip;
 using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Features.TimeAttack;
-using DragaliaAPI.Features.Tool;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Features.Version;
 using DragaliaAPI.Infrastructure.Authentication;
@@ -41,6 +42,7 @@ using Microsoft.Extensions.Options;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using static DragaliaAPI.Infrastructure.Authentication.AuthConstants;
+using AuthService = DragaliaAPI.Features.Login.Auth.AuthService;
 
 namespace DragaliaAPI;
 
@@ -81,8 +83,7 @@ public static class ServiceConfiguration
             .AddWebFeature()
             .AddAbilityCrestFeature()
             .AddTutorialFeature()
-            .AddZenaFeature()
-            .AddToolFeature();
+            .AddZenaFeature();
 
         services
             .RegisterMissionServices()

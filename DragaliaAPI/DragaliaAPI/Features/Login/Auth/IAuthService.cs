@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using DragaliaAPI.Database.Entities;
 
-namespace DragaliaAPI.Features.Tool;
+namespace DragaliaAPI.Features.Login.Auth;
 
 internal interface IAuthService
 {

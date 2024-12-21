@@ -3,8 +3,8 @@ using System.Security.Claims;
 using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Login.Savefile;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
 using DragaliaAPI.Services.Api;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +12,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Serilog.Context;
 
-namespace DragaliaAPI.Features.Tool;
+namespace DragaliaAPI.Features.Login.Auth;
 
 internal sealed partial class AuthService(
     IBaasApi baasRequestHelper,

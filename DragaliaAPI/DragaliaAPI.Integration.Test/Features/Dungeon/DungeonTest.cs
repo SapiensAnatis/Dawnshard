@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Integration.Test.Dragalia;
+﻿namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 
 public class DungeonTest : TestFixture
 {

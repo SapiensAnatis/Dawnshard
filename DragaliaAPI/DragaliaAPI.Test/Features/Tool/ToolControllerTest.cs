@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Features.Tool;
+using DragaliaAPI.Features.Login.Auth;
 using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.PlayerDetails;

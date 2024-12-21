@@ -5,6 +5,7 @@ using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Features.Login.Savefile;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
