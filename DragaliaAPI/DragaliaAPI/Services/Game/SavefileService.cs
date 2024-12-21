@@ -145,7 +145,8 @@ public class SavefileService : ISavefileService
             // This has JsonRequired so this should never be triggered
             ArgumentNullException.ThrowIfNull(savefile.UserData);
 
-            player.UserData = mapper.Map<DbPlayerUserData>(savefile.UserData);
+            player.UserData = this.mapper.Map<DbPlayerUserData>(savefile.UserData);
+            player.UserData.ViewerId = this.playerIdentityService.ViewerId;
 
             // TODO: What was the actual maximum dragon storage you could get?
             int cappedDragonStorage = Math.Min(savefile.UserData.MaxDragonQuantity, 500);
@@ -156,7 +157,7 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.CharaList = savefile.CharaList.Map<DbPlayerCharaData>(mapper);
+            player.CharaList = savefile.CharaList.Map<DbPlayerCharaData>(this.mapper);
 
             this.logger.LogDebug(
                 "Mapping DbPlayerCharaData step done after {t} ms",
@@ -164,7 +165,7 @@ public class SavefileService : ISavefileService
             );
 
             player.DragonReliabilityList =
-                savefile.DragonReliabilityList.Map<DbPlayerDragonReliability>(mapper);
+                savefile.DragonReliabilityList.Map<DbPlayerDragonReliability>(this.mapper);
 
             this.logger.LogDebug(
                 "Mapping DbPlayerDragonReliability step done after {t} ms",
@@ -177,7 +178,7 @@ public class SavefileService : ISavefileService
             foreach (DragonList d in savefile.DragonList?.Take(cappedDragonStorage) ?? [])
             {
                 ulong oldKeyId = d.DragonKeyId;
-                DbPlayerDragonData dbEntry = d.Map<DbPlayerDragonData>(mapper);
+                DbPlayerDragonData dbEntry = d.Map<DbPlayerDragonData>(this.mapper);
                 player.DragonList.Add(dbEntry);
 
                 dragonKeyIds.TryAdd((long)oldKeyId, dbEntry);
@@ -193,7 +194,7 @@ public class SavefileService : ISavefileService
             foreach (TalismanList t in savefile.TalismanList ?? new List<TalismanList>())
             {
                 ulong oldKeyId = t.TalismanKeyId;
-                DbTalisman dbEntry = t.Map<DbTalisman>(mapper);
+                DbTalisman dbEntry = t.Map<DbTalisman>(this.mapper);
                 player.TalismanList.Add(dbEntry);
 
                 talismanKeyIds.TryAdd((long)oldKeyId, dbEntry);
@@ -222,7 +223,7 @@ public class SavefileService : ISavefileService
             if (savefile.PartyList is not null)
             {
                 // Update key ids in parties
-                List<DbParty> parties = savefile.PartyList.Map<DbParty>(mapper);
+                List<DbParty> parties = savefile.PartyList.Map<DbParty>(this.mapper);
 
                 foreach (DbParty party in parties)
                 {
@@ -256,63 +257,71 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.AbilityCrestList.AddRange(savefile.AbilityCrestList.Map<DbAbilityCrest>(mapper));
+            player.AbilityCrestList.AddRange(
+                savefile.AbilityCrestList.Map<DbAbilityCrest>(this.mapper)
+            );
 
             this.logger.LogDebug(
                 "Mapping DbAbilityCrest step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.WeaponBodyList.AddRange(savefile.WeaponBodyList.Map<DbWeaponBody>(mapper));
+            player.WeaponBodyList.AddRange(savefile.WeaponBodyList.Map<DbWeaponBody>(this.mapper));
 
             this.logger.LogDebug(
                 "Mapping DbWeaponBody step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.QuestList.AddRange(savefile.QuestList.Map<DbQuest>(mapper));
+            player.QuestList.AddRange(savefile.QuestList.Map<DbQuest>(this.mapper));
 
             this.logger.LogDebug(
                 "Mapping DbQuest step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.StoryStates.AddRange(savefile.QuestStoryList.Map<DbPlayerStoryState>(mapper));
+            player.StoryStates.AddRange(
+                savefile.QuestStoryList.Map<DbPlayerStoryState>(this.mapper)
+            );
 
             this.logger.LogDebug(
                 "Mapping DbPlayerStoryState (QuestStoryList) step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.StoryStates.AddRange(savefile.UnitStoryList.Map<DbPlayerStoryState>(mapper));
+            player.StoryStates.AddRange(
+                savefile.UnitStoryList.Map<DbPlayerStoryState>(this.mapper)
+            );
 
             this.logger.LogDebug(
                 "Mapping DbPlayerStoryState (UnitStoryList) step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.StoryStates.AddRange(savefile.CastleStoryList.Map<DbPlayerStoryState>(mapper));
+            player.StoryStates.AddRange(
+                savefile.CastleStoryList.Map<DbPlayerStoryState>(this.mapper)
+            );
 
             this.logger.LogDebug(
                 "Mapping DbPlayerStoryState (CastleStoryList) step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.MaterialList.AddRange(savefile.MaterialList.Map<DbPlayerMaterial>(mapper));
+            player.MaterialList.AddRange(savefile.MaterialList.Map<DbPlayerMaterial>(this.mapper));
 
             this.logger.LogDebug(
                 "Mapping DbPlayerMaterial step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.BuildList.AddRange(savefile.BuildList.Map<DbFortBuild>(mapper));
+            player.BuildList.AddRange(savefile.BuildList.Map<DbFortBuild>(this.mapper));
 
             this.logger.LogDebug(
                 "Mapping DbFortBuild step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.WeaponSkinList.AddRange(savefile.WeaponSkinList.Map<DbWeaponSkin>(mapper));
+            player.WeaponSkinList.AddRange(savefile.WeaponSkinList.Map<DbWeaponSkin>(this.mapper));
 
             this.logger.LogDebug(
                 "Mapping DbWeaponSkin step done after {t} ms",
@@ -320,7 +329,7 @@ public class SavefileService : ISavefileService
             );
 
             player.WeaponPassiveAbilityList.AddRange(
-                savefile.WeaponPassiveAbilityList.Map<DbWeaponPassiveAbility>(mapper)
+                savefile.WeaponPassiveAbilityList.Map<DbWeaponPassiveAbility>(this.mapper)
             );
 
             this.logger.LogDebug(
@@ -328,28 +337,34 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.DragonGiftList.AddRange(savefile.DragonGiftList.Map<DbPlayerDragonGift>(mapper));
+            player.DragonGiftList.AddRange(
+                savefile.DragonGiftList.Map<DbPlayerDragonGift>(this.mapper)
+            );
 
             this.logger.LogDebug(
                 "Mapping DbPlayerDragonGift step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.EquippedStampList.AddRange(savefile.EquipStampList.Map<DbEquippedStamp>(mapper));
+            player.EquippedStampList.AddRange(
+                savefile.EquipStampList.Map<DbEquippedStamp>(this.mapper)
+            );
 
             this.logger.LogDebug(
                 "Mapping DbEquippedStamp step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.Trades.AddRange(savefile.UserTreasureTradeList.Map<DbPlayerTrade>(mapper));
+            player.Trades.AddRange(savefile.UserTreasureTradeList.Map<DbPlayerTrade>(this.mapper));
 
             this.logger.LogDebug(
                 "Mapping DbPlayerTrade step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.SummonTickets.AddRange(savefile.SummonTicketList.Map<DbSummonTicket>(mapper));
+            player.SummonTickets.AddRange(
+                savefile.SummonTicketList.Map<DbSummonTicket>(this.mapper)
+            );
 
             this.logger.LogDebug(
                 "Mapping DbSummonTicket step done after {t} ms",
@@ -379,28 +394,30 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.PartyPower = savefile.PartyPowerData.Map<DbPartyPower>(mapper);
+            player.PartyPower = savefile.PartyPowerData.Map<DbPartyPower>(this.mapper);
 
             this.logger.LogDebug(
                 "Mapping DbPartyPower step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.QuestEvents = savefile.QuestEventList.Map<DbQuestEvent>(mapper);
+            player.QuestEvents = savefile.QuestEventList.Map<DbQuestEvent>(this.mapper);
 
             this.logger.LogDebug(
                 "Mapping DbQuestEvent step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.QuestTreasureList = savefile.QuestTreasureList.Map<DbQuestTreasureList>(mapper);
+            player.QuestTreasureList = savefile.QuestTreasureList.Map<DbQuestTreasureList>(
+                this.mapper
+            );
 
             this.logger.LogDebug(
                 "Mapping DbQuestTreasureList step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.QuestWalls = savefile.QuestWallList.Map<DbPlayerQuestWall>(mapper);
+            player.QuestWalls = savefile.QuestWallList.Map<DbPlayerQuestWall>(this.mapper);
 
             this.logger.LogDebug(
                 "Mapping DbPlayerQuestWall step done after {t} ms",
@@ -414,7 +431,7 @@ public class SavefileService : ISavefileService
 
             player.UserData.LastSaveImportTime = DateTimeOffset.UtcNow;
 
-            await apiContext.SaveChangesAsync();
+            await this.apiContext.SaveChangesAsync();
             await transaction.CommitAsync();
 
             // Remove lock
@@ -549,9 +566,9 @@ public class SavefileService : ISavefileService
         await this
             .apiContext.CompletedDailyMissions.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this
-            .apiContext.WallRewardDates.Where(x => x.ViewerId == viewerId)
-            .ExecuteDeleteAsync();
+        // await this
+        //     .apiContext.WallRewardDates.Where(x => x.ViewerId == viewerId)
+        //     .ExecuteDeleteAsync();
         await this
             .apiContext.PlayerSummonHistory.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
