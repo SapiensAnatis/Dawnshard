@@ -1,6 +1,6 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.Present;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.Presents;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Features.Summoning;
 
 using CharaNewCheckResult = (Charas Id, bool IsNew);
-using DragonNewCheckResult = (Dragons Id, bool IsNew);
+using DragonNewCheckResult = (DragonId Id, bool IsNew);
 
 /// <summary>
 /// Service to assist with adding units after a summon result is generated.
@@ -46,7 +46,7 @@ public class UnitService(
         return result;
     }
 
-    public async Task<IList<DragonNewCheckResult>> AddDragons(List<Dragons> idList)
+    public async Task<IList<DragonNewCheckResult>> AddDragons(List<DragonId> idList)
     {
         IDictionary<int, Entity> inputRewardDict = idList
             .Select(
@@ -67,7 +67,7 @@ public class UnitService(
 
         presentService.AddPresent(presentsToAdd);
 
-        List<Dragons> ownedDragons = await apiContext
+        List<DragonId> ownedDragons = await apiContext
             .PlayerDragonData.Select(x => x.DragonId)
             .Where(x => idList.Contains(x))
             .ToListAsync();
@@ -78,12 +78,12 @@ public class UnitService(
     }
 
     private static List<DragonNewCheckResult> MarkNewDragons(
-        List<Dragons> owned,
-        List<Dragons> idList
+        List<DragonId> owned,
+        List<DragonId> idList
     )
     {
         List<DragonNewCheckResult> result = new();
-        foreach (Dragons c in idList)
+        foreach (DragonId c in idList)
         {
             bool isDragonNew = !(result.Any(x => x.Id == c) || owned.Contains(c));
             result.Add((c, isDragonNew));

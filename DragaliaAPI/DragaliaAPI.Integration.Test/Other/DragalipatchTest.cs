@@ -1,5 +1,5 @@
 ﻿using System.Net.Http.Json;
-using DragaliaAPI.Models;
+using DragaliaAPI.Features.Dragalipatch;
 
 namespace DragaliaAPI.Integration.Test.Other;
 

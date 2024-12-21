@@ -1,17 +1,16 @@
 using System.Diagnostics;
 using System.Reflection;
 using DragaliaAPI;
-using DragaliaAPI.Authentication;
 using DragaliaAPI.Database;
+using DragaliaAPI.Features.Dragalipatch;
 using DragaliaAPI.Features.GraphQL;
+using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Infrastructure.Hangfire;
 using DragaliaAPI.Infrastructure.Middleware;
 using DragaliaAPI.Infrastructure.OutputCaching;
-using DragaliaAPI.MessagePack;
-using DragaliaAPI.Models;
-using DragaliaAPI.Models.Options;
+using DragaliaAPI.Infrastructure.Serialization.MessagePack;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.MasterAsset;
 using EntityGraphQL.AspNet;
@@ -19,7 +18,6 @@ using Hangfire;
 using LinqToDB.Data;
 using LinqToDB.EntityFrameworkCore;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
 using Serilog;
@@ -202,18 +200,13 @@ if (hangfireOptions is { Enabled: true })
         {
             policy
                 .RequireAuthenticatedUser()
-                .RequireRole(Constants.Roles.Developer)
+                .RequireRole(AuthConstants.Roles.Developer)
                 .AddAuthenticationSchemes(AuthConstants.SchemeNames.Developer);
         });
 }
 
 app.MapDefaultEndpoints();
-
-app.MapGet(
-    "/dragalipatch/config",
-    ([FromServices] IOptionsMonitor<DragalipatchOptions> patchOptions) =>
-        new DragalipatchResponse(patchOptions.CurrentValue)
-);
+app.MapDragalipatchConfigEndpoint();
 
 LinqToDBForEFTools.Initialize();
 DataConnection.TurnTraceSwitchOn();

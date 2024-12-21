@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Shared.Serialization;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,15 +1,13 @@
-﻿using System.Collections;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Present;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
-using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 
 namespace DragaliaAPI.Features.Dungeon.Record;

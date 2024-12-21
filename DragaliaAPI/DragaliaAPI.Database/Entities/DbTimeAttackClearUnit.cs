@@ -14,7 +14,7 @@ public class DbTimeAttackClearUnit : DbPartyUnitBase, IDbPlayerData
 
     public required long ViewerId { get; set; }
 
-    public Dragons EquippedDragonEntityId { get; set; }
+    public DragonId EquippedDragonEntityId { get; set; }
 
     public Talismans EquippedTalismanEntityId { get; set; }
 

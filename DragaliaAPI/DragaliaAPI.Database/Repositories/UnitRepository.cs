@@ -47,7 +47,7 @@ public class UnitRepository : IUnitRepository
         return await apiContext.PlayerDragonData.FindAsync(dragonKeyId);
     }
 
-    public async Task<DbPlayerDragonReliability?> FindDragonReliabilityAsync(Dragons dragon)
+    public async Task<DbPlayerDragonReliability?> FindDragonReliabilityAsync(DragonId dragon)
     {
         return await apiContext.PlayerDragonReliability.FindAsync(
             playerIdentityService.ViewerId,

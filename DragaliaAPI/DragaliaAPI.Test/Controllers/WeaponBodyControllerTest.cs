@@ -1,6 +1,7 @@
-using DragaliaAPI.Controllers.Dragalia;
+using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Features.Weapons;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Test.Utils;

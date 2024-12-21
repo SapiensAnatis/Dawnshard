@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Services.Exceptions;
+﻿using DragaliaAPI.Infrastructure;
 
 namespace DragaliaAPI.Features.Login.Auth;
 

@@ -1,8 +1,8 @@
 ﻿using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared.Reward;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Enemy;
@@ -343,7 +343,7 @@ public class QuestCompletionService(
     {
         IEnumerable<long> dragonKeyIds = party.Select(x => (long)x.EquipDragonKeyId).ToList();
 
-        IEnumerable<Dragons> dragons = await unitRepository
+        IEnumerable<DragonId> dragons = await unitRepository
             .Dragons.Where(x => dragonKeyIds.Contains(x.DragonKeyId))
             .Select(x => x.DragonId)
             .ToListAsync();

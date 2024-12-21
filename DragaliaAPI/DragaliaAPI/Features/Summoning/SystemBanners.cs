@@ -72,30 +72,30 @@ public static class SystemBanners
             End = DateTimeOffset.MaxValue,
             OverrideDragonPool =
             [
-                Dragons.Agni,
-                Dragons.Cerberus,
-                Dragons.Prometheus,
-                Dragons.KonohanaSakuya,
-                Dragons.Arctos,
-                Dragons.Poseidon,
-                Dragons.Leviathan,
-                Dragons.Siren,
-                Dragons.Simurgh,
-                Dragons.Zephyr,
-                Dragons.Garuda,
-                Dragons.LongLong,
-                Dragons.Pazuzu,
-                Dragons.Freyja,
-                Dragons.Vayu,
-                Dragons.JeannedArc,
-                Dragons.Gilgamesh,
-                Dragons.Cupid,
-                Dragons.Liger,
-                Dragons.Takemikazuchi,
-                Dragons.PopStarSiren,
-                Dragons.Nidhogg,
-                Dragons.Nyarlathotep,
-                Dragons.Shinobi,
+                DragonId.Agni,
+                DragonId.Cerberus,
+                DragonId.Prometheus,
+                DragonId.KonohanaSakuya,
+                DragonId.Arctos,
+                DragonId.Poseidon,
+                DragonId.Leviathan,
+                DragonId.Siren,
+                DragonId.Simurgh,
+                DragonId.Zephyr,
+                DragonId.Garuda,
+                DragonId.LongLong,
+                DragonId.Pazuzu,
+                DragonId.Freyja,
+                DragonId.Vayu,
+                DragonId.JeannedArc,
+                DragonId.Gilgamesh,
+                DragonId.Cupid,
+                DragonId.Liger,
+                DragonId.Takemikazuchi,
+                DragonId.PopStarSiren,
+                DragonId.Nidhogg,
+                DragonId.Nyarlathotep,
+                DragonId.Shinobi,
             ],
         };
 
@@ -138,8 +138,8 @@ public static class SystemBanners
             SummonType = SummonTypes.DragonSsrUpdate,
             Start = DateTimeOffset.MinValue,
             End = DateTimeOffset.MaxValue,
-            OverrideDragonPool = Enum.GetValues<Dragons>()
-                .Where(x => x != Dragons.Empty)
+            OverrideDragonPool = Enum.GetValues<DragonId>()
+                .Where(x => x != DragonId.Empty)
                 .Where(x =>
                 {
                     DragonData dragonData = MasterAsset.DragonData[x];

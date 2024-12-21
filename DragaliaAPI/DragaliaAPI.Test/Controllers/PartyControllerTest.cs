@@ -1,10 +1,9 @@
 using AutoMapper;
-using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
-using DragaliaAPI.Features.PartyPower;
+using DragaliaAPI.Features.Parties;
+using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
 using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Test.Controllers;

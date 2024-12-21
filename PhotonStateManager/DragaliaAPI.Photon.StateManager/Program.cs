@@ -1,12 +1,9 @@
 using DragaliaAPI.Photon.StateManager;
-using DragaliaAPI.Photon.StateManager.Authentication;
 using DragaliaAPI.Photon.StateManager.Models;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 using Redis.OM;
 using Redis.OM.Contracts;
 using Serilog;
-using StackExchange.Redis;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

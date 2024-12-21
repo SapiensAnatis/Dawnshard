@@ -26,7 +26,7 @@ public class UnitRate
 
     public int Weighting => (int)(this.Rate * RateConversionFactor);
 
-    public UnitRate(Dragons dragon, decimal rate)
+    public UnitRate(DragonId dragon, decimal rate)
     {
         this.Id = (int)dragon;
         this.EntityType = EntityTypes.Dragon;

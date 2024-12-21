@@ -19,7 +19,7 @@ public class SummonOddsLogicTest
                     {
                         Id = 1,
                         PickupCharas = [Charas.FaeblessedTobias],
-                        PickupDragons = [Dragons.Simurgh],
+                        PickupDragons = [DragonId.Simurgh],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 0
@@ -37,12 +37,12 @@ public class SummonOddsLogicTest
             .BeEquivalentTo(
                 [
                     new UnitRate(Charas.FaeblessedTobias, 0.005m),
-                    new UnitRate(Dragons.Simurgh, 0.008m),
+                    new UnitRate(DragonId.Simurgh, 0.008m),
                 ]
             );
 
         normalRates.Should().NotContain(x => x.Id == (int)Charas.FaeblessedTobias);
-        normalRates.Should().NotContain(x => x.Id == (int)Dragons.Simurgh);
+        normalRates.Should().NotContain(x => x.Id == (int)DragonId.Simurgh);
 
         decimal expectedOffPickupRate = 0.04m - 0.005m - 0.008m;
         normalRates
@@ -125,7 +125,7 @@ public class SummonOddsLogicTest
                         Id = 1,
                         IsGala = true,
                         PickupCharas = [Charas.GalaZena, Charas.GalaRanzal],
-                        PickupDragons = [Dragons.GalaBeastCiella],
+                        PickupDragons = [DragonId.GalaBeastCiella],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 0
@@ -144,7 +144,7 @@ public class SummonOddsLogicTest
                 [
                     new UnitRate(Charas.GalaZena, 0.005m),
                     new UnitRate(Charas.GalaRanzal, 0.005m),
-                    new UnitRate(Dragons.GalaBeastCiella, 0.008m),
+                    new UnitRate(DragonId.GalaBeastCiella, 0.008m),
                 ]
             );
 
@@ -180,7 +180,7 @@ public class SummonOddsLogicTest
                         Id = 1,
                         IsGala = true,
                         PickupCharas = [Charas.GalaZena, Charas.GalaRanzal],
-                        PickupDragons = [Dragons.GalaBeastCiella],
+                        PickupDragons = [DragonId.GalaBeastCiella],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 0
@@ -195,7 +195,7 @@ public class SummonOddsLogicTest
                 [
                     new UnitRate(Charas.GalaZena, 0.005m),
                     new UnitRate(Charas.GalaRanzal, 0.005m),
-                    new UnitRate(Dragons.GalaBeastCiella, 0.008m),
+                    new UnitRate(DragonId.GalaBeastCiella, 0.008m),
                 ]
             );
 
@@ -226,23 +226,23 @@ public class SummonOddsLogicTest
         offPickupCharaIds.Should().Contain(Charas.GalaEmile);
         offPickupCharaIds.Should().Contain(Charas.GalaNedrick);
 
-        List<Dragons> offPickupDragonIds = normalRates
+        List<DragonId> offPickupDragonIds = normalRates
             .Where(x => x is { EntityType: EntityTypes.Dragon, Rarity: 5 })
-            .Select(x => (Dragons)x.Id)
+            .Select(x => (DragonId)x.Id)
             .ToList();
 
-        offPickupDragonIds.Should().NotContain(Dragons.GalaBeastCiella);
+        offPickupDragonIds.Should().NotContain(DragonId.GalaBeastCiella);
 
-        offPickupDragonIds.Should().Contain(Dragons.GalaMars);
-        offPickupDragonIds.Should().Contain(Dragons.GalaCatSith);
-        offPickupDragonIds.Should().Contain(Dragons.GalaThor);
-        offPickupDragonIds.Should().Contain(Dragons.GalaRebornPoseidon);
-        offPickupDragonIds.Should().Contain(Dragons.GalaRebornZephyr);
-        offPickupDragonIds.Should().Contain(Dragons.GalaRebornJeanne);
-        offPickupDragonIds.Should().Contain(Dragons.GalaRebornNidhogg);
-        offPickupDragonIds.Should().Contain(Dragons.GalaBeastVolk);
-        offPickupDragonIds.Should().Contain(Dragons.GalaBahamut);
-        offPickupDragonIds.Should().Contain(Dragons.GalaChronosNyx);
+        offPickupDragonIds.Should().Contain(DragonId.GalaMars);
+        offPickupDragonIds.Should().Contain(DragonId.GalaCatSith);
+        offPickupDragonIds.Should().Contain(DragonId.GalaThor);
+        offPickupDragonIds.Should().Contain(DragonId.GalaRebornPoseidon);
+        offPickupDragonIds.Should().Contain(DragonId.GalaRebornZephyr);
+        offPickupDragonIds.Should().Contain(DragonId.GalaRebornJeanne);
+        offPickupDragonIds.Should().Contain(DragonId.GalaRebornNidhogg);
+        offPickupDragonIds.Should().Contain(DragonId.GalaBeastVolk);
+        offPickupDragonIds.Should().Contain(DragonId.GalaBahamut);
+        offPickupDragonIds.Should().Contain(DragonId.GalaChronosNyx);
     }
 
     [Fact]
@@ -379,60 +379,60 @@ public class SummonOddsLogicTest
 
         List<UnitRate> combinedRates = [.. rates.PickupRates, .. rates.NormalRates];
 
-        Dragons[] unexpectedDragons =
+        DragonId[] unexpectedDragons =
         [
-            Dragons.Midgardsormr,
-            Dragons.Mercury,
-            Dragons.Brunhilda,
-            Dragons.Jupiter,
-            Dragons.Zodiark,
-            Dragons.GalaMars,
-            Dragons.GalaCatSith,
-            Dragons.GalaThor,
-            Dragons.GalaRebornPoseidon,
-            Dragons.GalaRebornZephyr,
-            Dragons.GalaRebornJeanne,
-            Dragons.GalaRebornAgni,
-            Dragons.GalaRebornNidhogg,
-            Dragons.GalaBeastVolk,
-            Dragons.GalaBahamut,
-            Dragons.GalaChronosNyx,
-            Dragons.HalloweenSilke,
-            Dragons.DragonyuleJeanne,
-            Dragons.Marishiten,
-            Dragons.HalloweenMaritimus,
-            Dragons.Daikokuten,
-            Dragons.GozuTenno,
-            Dragons.SummerMarishiten,
-            Dragons.FudoMyoo,
-            Dragons.Pele,
-            Dragons.Sylvia,
-            Dragons.Maritimus,
-            Dragons.Shishimai,
-            Dragons.PengLai,
-            Dragons.Phantom,
-            Dragons.Yulong,
-            Dragons.Erasmus,
-            Dragons.Ebisu,
-            Dragons.Rathalos,
-            Dragons.Barbatos,
-            Dragons.ParallelZodiark,
-            Dragons.HighMidgardsormr,
-            Dragons.HighMercury,
-            Dragons.HighBrunhilda,
-            Dragons.HighJupiter,
-            Dragons.HighZodiark,
-            Dragons.BronzeFafnir,
-            Dragons.SilverFafnir,
-            Dragons.GoldFafnir,
-            Dragons.MiniMids,
-            Dragons.MiniZodi,
-            Dragons.MiniHildy,
-            Dragons.MiniMercs,
-            Dragons.MiniJupi,
+            DragonId.Midgardsormr,
+            DragonId.Mercury,
+            DragonId.Brunhilda,
+            DragonId.Jupiter,
+            DragonId.Zodiark,
+            DragonId.GalaMars,
+            DragonId.GalaCatSith,
+            DragonId.GalaThor,
+            DragonId.GalaRebornPoseidon,
+            DragonId.GalaRebornZephyr,
+            DragonId.GalaRebornJeanne,
+            DragonId.GalaRebornAgni,
+            DragonId.GalaRebornNidhogg,
+            DragonId.GalaBeastVolk,
+            DragonId.GalaBahamut,
+            DragonId.GalaChronosNyx,
+            DragonId.HalloweenSilke,
+            DragonId.DragonyuleJeanne,
+            DragonId.Marishiten,
+            DragonId.HalloweenMaritimus,
+            DragonId.Daikokuten,
+            DragonId.GozuTenno,
+            DragonId.SummerMarishiten,
+            DragonId.FudoMyoo,
+            DragonId.Pele,
+            DragonId.Sylvia,
+            DragonId.Maritimus,
+            DragonId.Shishimai,
+            DragonId.PengLai,
+            DragonId.Phantom,
+            DragonId.Yulong,
+            DragonId.Erasmus,
+            DragonId.Ebisu,
+            DragonId.Rathalos,
+            DragonId.Barbatos,
+            DragonId.ParallelZodiark,
+            DragonId.HighMidgardsormr,
+            DragonId.HighMercury,
+            DragonId.HighBrunhilda,
+            DragonId.HighJupiter,
+            DragonId.HighZodiark,
+            DragonId.BronzeFafnir,
+            DragonId.SilverFafnir,
+            DragonId.GoldFafnir,
+            DragonId.MiniMids,
+            DragonId.MiniZodi,
+            DragonId.MiniHildy,
+            DragonId.MiniMercs,
+            DragonId.MiniJupi,
         ];
 
-        foreach (Dragons d in unexpectedDragons)
+        foreach (DragonId d in unexpectedDragons)
         {
             combinedRates.Should().NotContain(x => x.Id == (int)d);
         }
@@ -463,7 +463,7 @@ public class SummonOddsLogicTest
                     {
                         Id = 1,
                         PickupCharas = [Charas.KuHai],
-                        PickupDragons = [Dragons.Roc],
+                        PickupDragons = [DragonId.Roc],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 0
@@ -479,7 +479,7 @@ public class SummonOddsLogicTest
         pickupRates
             .Should()
             .BeEquivalentTo(
-                [new UnitRate(Charas.KuHai, 0.035m), new UnitRate(Dragons.Roc, 0.035m)]
+                [new UnitRate(Charas.KuHai, 0.035m), new UnitRate(DragonId.Roc, 0.035m)]
             );
 
         combined.SumOfRatesForRarity(5).Should().BeApproximately(0.04m, AssertionPrecision);
@@ -506,7 +506,7 @@ public class SummonOddsLogicTest
                         Id = 1,
                         IsGala = true,
                         PickupCharas = [Charas.KuHai, Charas.GalaAudric],
-                        PickupDragons = [Dragons.Roc, Dragons.GalaBahamut],
+                        PickupDragons = [DragonId.Roc, DragonId.GalaBahamut],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 0
@@ -525,8 +525,8 @@ public class SummonOddsLogicTest
                 [
                     new UnitRate(Charas.KuHai, 0.035m),
                     new UnitRate(Charas.GalaAudric, 0.005m),
-                    new UnitRate(Dragons.Roc, 0.035m),
-                    new UnitRate(Dragons.GalaBahamut, 0.008m),
+                    new UnitRate(DragonId.Roc, 0.035m),
+                    new UnitRate(DragonId.GalaBahamut, 0.008m),
                 ]
             );
 
@@ -555,7 +555,7 @@ public class SummonOddsLogicTest
                         Id = 1,
                         IsGala = false,
                         PickupCharas = [Charas.KuHai, Charas.GalaAudric],
-                        PickupDragons = [Dragons.Roc, Dragons.GalaBahamut],
+                        PickupDragons = [DragonId.Roc, DragonId.GalaBahamut],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 10
@@ -583,7 +583,7 @@ public class SummonOddsLogicTest
                     {
                         Id = 1,
                         PickupCharas = [Charas.Joe],
-                        PickupDragons = [Dragons.PallidImp],
+                        PickupDragons = [DragonId.PallidImp],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 0
@@ -599,7 +599,7 @@ public class SummonOddsLogicTest
         pickupRates
             .Should()
             .BeEquivalentTo(
-                [new UnitRate(Charas.Joe, 0.04m), new UnitRate(Dragons.PallidImp, 0.04m)]
+                [new UnitRate(Charas.Joe, 0.04m), new UnitRate(DragonId.PallidImp, 0.04m)]
             );
 
         combined.SumOfRatesForRarity(5).Should().BeApproximately(0.04m, AssertionPrecision);
@@ -626,7 +626,7 @@ public class SummonOddsLogicTest
                     {
                         Id = 1,
                         PickupCharas = [Charas.Joe],
-                        PickupDragons = [Dragons.PallidImp],
+                        PickupDragons = [DragonId.PallidImp],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 10
@@ -655,7 +655,7 @@ public class SummonOddsLogicTest
                         Id = 1,
                         IsGala = true,
                         PickupCharas = [Charas.Joe, Charas.GalaZethia],
-                        PickupDragons = [Dragons.PallidImp, Dragons.GalaRebornJeanne],
+                        PickupDragons = [DragonId.PallidImp, DragonId.GalaRebornJeanne],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 0
@@ -674,8 +674,8 @@ public class SummonOddsLogicTest
                 [
                     new UnitRate(Charas.Joe, 0.04m),
                     new UnitRate(Charas.GalaZethia, 0.005m),
-                    new UnitRate(Dragons.PallidImp, 0.04m),
-                    new UnitRate(Dragons.GalaRebornJeanne, 0.008m),
+                    new UnitRate(DragonId.PallidImp, 0.04m),
+                    new UnitRate(DragonId.GalaRebornJeanne, 0.008m),
                 ]
             );
 
@@ -704,7 +704,7 @@ public class SummonOddsLogicTest
                         Id = 1,
                         IsGala = false,
                         PickupCharas = [Charas.JiangZiya],
-                        PickupDragons = [Dragons.Simurgh],
+                        PickupDragons = [DragonId.Simurgh],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 10
@@ -748,7 +748,7 @@ public class SummonOddsLogicTest
                         Id = 1,
                         IsGala = false,
                         PickupCharas = [Charas.JiangZiya],
-                        PickupDragons = [Dragons.Simurgh],
+                        PickupDragons = [DragonId.Simurgh],
                     }
                 ),
                 numSummonsSinceLastFiveStar: numSummonsSinceLastFiveStar
@@ -794,7 +794,7 @@ public class SummonOddsLogicTest
                         Id = 1,
                         IsGala = true,
                         PickupCharas = [Charas.JiangZiya],
-                        PickupDragons = [Dragons.Simurgh],
+                        PickupDragons = [DragonId.Simurgh],
                     }
                 ),
                 numSummonsSinceLastFiveStar: numSummonsSinceLastFiveStar
@@ -875,7 +875,7 @@ public class SummonOddsLogicTest
                     {
                         Id = 1,
                         PickupCharas = [Charas.Eirene],
-                        PickupDragons = [Dragons.Agni],
+                        PickupDragons = [DragonId.Agni],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 0
@@ -891,7 +891,7 @@ public class SummonOddsLogicTest
         pickupRates
             .Should()
             .BeEquivalentTo(
-                [new UnitRate(Charas.Eirene, 0.005m), new UnitRate(Dragons.Agni, 0.008m)]
+                [new UnitRate(Charas.Eirene, 0.005m), new UnitRate(DragonId.Agni, 0.008m)]
             );
 
         decimal expectedOffPickupRate = 0.04m - 0.005m - 0.008m;
@@ -926,7 +926,7 @@ public class SummonOddsLogicTest
                     {
                         Id = 1,
                         PickupCharas = [Charas.Eirene],
-                        PickupDragons = [Dragons.Agni],
+                        PickupDragons = [DragonId.Agni],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 10
@@ -954,7 +954,7 @@ public class SummonOddsLogicTest
                         Id = 1,
                         IsGala = true,
                         PickupCharas = [Charas.GalaLeif],
-                        PickupDragons = [Dragons.GalaRebornAgni],
+                        PickupDragons = [DragonId.GalaRebornAgni],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 0
@@ -974,7 +974,7 @@ public class SummonOddsLogicTest
             .BeEquivalentTo(
                 [
                     new UnitRate(Charas.GalaLeif, 0.005m),
-                    new UnitRate(Dragons.GalaRebornAgni, 0.008m),
+                    new UnitRate(DragonId.GalaRebornAgni, 0.008m),
                 ]
             );
 
@@ -1007,7 +1007,7 @@ public class SummonOddsLogicTest
                     {
                         Id = 1,
                         PickupCharas = [Charas.KuHai],
-                        PickupDragons = [Dragons.Roc],
+                        PickupDragons = [DragonId.Roc],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 0
@@ -1022,7 +1022,7 @@ public class SummonOddsLogicTest
 
         pickupRates
             .Should()
-            .BeEquivalentTo([new UnitRate(Charas.KuHai, 0.21m), new UnitRate(Dragons.Roc, 0.21m)]);
+            .BeEquivalentTo([new UnitRate(Charas.KuHai, 0.21m), new UnitRate(DragonId.Roc, 0.21m)]);
 
         combined.SumOfRatesForRarity(5).Should().BeApproximately(0.04m, AssertionPrecision);
         combined.SumOfRatesForRarity(4).Should().BeApproximately(0.96m, AssertionPrecision);
@@ -1040,7 +1040,7 @@ public class SummonOddsLogicTest
                     {
                         Id = 1,
                         PickupCharas = [Charas.KuHai],
-                        PickupDragons = [Dragons.Roc],
+                        PickupDragons = [DragonId.Roc],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 10
@@ -1070,7 +1070,7 @@ public class SummonOddsLogicTest
                         Id = 1,
                         IsGala = true,
                         PickupCharas = [Charas.KuHai, Charas.GalaCleo],
-                        PickupDragons = [Dragons.Roc, Dragons.GalaChronosNyx],
+                        PickupDragons = [DragonId.Roc, DragonId.GalaChronosNyx],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 0
@@ -1089,8 +1089,8 @@ public class SummonOddsLogicTest
                 [
                     new UnitRate(Charas.KuHai, 0.205625m),
                     new UnitRate(Charas.GalaCleo, 0.005m),
-                    new UnitRate(Dragons.Roc, 0.205625m),
-                    new UnitRate(Dragons.GalaChronosNyx, 0.008m),
+                    new UnitRate(DragonId.Roc, 0.205625m),
+                    new UnitRate(DragonId.GalaChronosNyx, 0.008m),
                 ]
             );
 
@@ -1110,7 +1110,7 @@ public class SummonOddsLogicTest
                     {
                         Id = 1,
                         PickupCharas = [Charas.Joe],
-                        PickupDragons = [Dragons.PallidImp],
+                        PickupDragons = [DragonId.PallidImp],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 0
@@ -1149,7 +1149,7 @@ public class SummonOddsLogicTest
                     {
                         Id = 1,
                         PickupCharas = [Charas.Joe],
-                        PickupDragons = [Dragons.PallidImp],
+                        PickupDragons = [DragonId.PallidImp],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 10
@@ -1181,7 +1181,7 @@ public class SummonOddsLogicTest
                         Id = 1,
                         IsGala = true,
                         PickupCharas = [Charas.Joe, Charas.GalaZethia],
-                        PickupDragons = [Dragons.PallidImp, Dragons.GalaRebornJeanne],
+                        PickupDragons = [DragonId.PallidImp, DragonId.GalaRebornJeanne],
                     }
                 ),
                 numSummonsSinceLastFiveStar: 0
@@ -1200,7 +1200,7 @@ public class SummonOddsLogicTest
             .BeEquivalentTo(
                 [
                     new UnitRate(Charas.GalaZethia, 0.005m),
-                    new UnitRate(Dragons.GalaRebornJeanne, 0.008m),
+                    new UnitRate(DragonId.GalaRebornJeanne, 0.008m),
                 ]
             );
 

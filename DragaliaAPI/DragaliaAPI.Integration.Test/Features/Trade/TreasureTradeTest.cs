@@ -146,14 +146,14 @@ public class TreasureTradeTest : TestFixture
         this.ApiContext.PlayerDragonData.ToList()
             .Should()
             .HaveCount(2)
-            .And.AllSatisfy(x => x.DragonId.Should().Be(Dragons.HighBrunhilda));
+            .And.AllSatisfy(x => x.DragonId.Should().Be(DragonId.HighBrunhilda));
         this.ApiContext.PlayerPresents.ToList()
             .Should()
             .HaveCount(2)
             .And.AllSatisfy(x =>
             {
                 x.EntityType.Should().Be(EntityTypes.Dragon);
-                x.EntityId.Should().Be((int)Dragons.HighBrunhilda);
+                x.EntityId.Should().Be((int)DragonId.HighBrunhilda);
             });
     }
 }

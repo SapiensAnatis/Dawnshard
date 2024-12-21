@@ -2,9 +2,9 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Dmode;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared.Reward;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -402,7 +402,7 @@ public class DmodeDungeonService(
                 )
                 .Where(x =>
                     floorData.DmodeDungeonOdds.DmodeSelectDragonList.All(y =>
-                        y.DragonId != (Dragons)x.Id
+                        y.DragonId != (DragonId)x.Id
                     )
                 )
                 .ToArray();
@@ -416,7 +416,7 @@ public class DmodeDungeonService(
                 } while (holdDragonList.Any(x => (int)x.DragonId == dragon.Id));
 
                 holdDragonList.Add(
-                    new AtgenDmodeHoldDragonList() { Count = 0, DragonId = (Dragons)dragon.Id }
+                    new AtgenDmodeHoldDragonList() { Count = 0, DragonId = (DragonId)dragon.Id }
                 );
             }
 
@@ -528,7 +528,7 @@ public class DmodeDungeonService(
                 optionChange.AbnormalStatusInvalidCount;
         }
 
-        Dictionary<Dragons, int> dragonDict = unitInfo.DmodeHoldDragonList.ToDictionary(
+        Dictionary<DragonId, int> dragonDict = unitInfo.DmodeHoldDragonList.ToDictionary(
             x => x.DragonId,
             x => x.Count
         );
@@ -753,7 +753,7 @@ public class DmodeDungeonService(
                 AtgenDmodeSelectDragonList selectDragon = new();
 
                 selectDragon.SelectDragonNo = i + 1;
-                selectDragon.DragonId = (Dragons)dragon.DungeonItemTargetId;
+                selectDragon.DragonId = (DragonId)dragon.DungeonItemTargetId;
 
                 int dragonRarity = MasterAsset.DragonData[selectDragon.DragonId].Rarity;
 

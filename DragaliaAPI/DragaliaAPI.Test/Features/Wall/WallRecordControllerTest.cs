@@ -2,10 +2,10 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Present;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.Extensions.Logging;
 

@@ -1,9 +1,9 @@
-﻿using DragaliaAPI.Controllers;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Features.Shared.Reward;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.Event;

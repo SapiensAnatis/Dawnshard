@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Tutorial;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.EntityFrameworkCore;
@@ -43,7 +44,7 @@ public class DungeonStartTest : TestFixture
             )
         ).Data;
 
-        Verify(response.IngameData.PartyInfo.PartyUnitList, VerifySettings);
+        await Verify(response.IngameData.PartyInfo.PartyUnitList, VerifySettings);
 
         response.IngameData.PartyInfo.PartyUnitList.Should().HaveCount(4);
         response.IngameData.PartyInfo.PartyUnitList.Should().BeInAscendingOrder(x => x.Position);
@@ -67,7 +68,7 @@ public class DungeonStartTest : TestFixture
         ).Data;
 
         // Abuse of snapshots here is lazy, but the resulting JSON is thousands of lines long...
-        Verify(response.IngameData.PartyInfo.PartyUnitList, VerifySettings);
+        await Verify(response.IngameData.PartyInfo.PartyUnitList, VerifySettings);
 
         response.IngameData.PartyInfo.PartyUnitList.Should().HaveCount(8);
         response.IngameData.PartyInfo.PartyUnitList.Should().BeInAscendingOrder(x => x.Position);
@@ -110,7 +111,7 @@ public class DungeonStartTest : TestFixture
                     UnitNo = 1,
                     CharaId = Charas.GalaLeonidas,
                     EquipWeaponBodyId = WeaponBodies.Draupnir,
-                    EquipDragonKeyId = (ulong)GetDragonKeyId(Dragons.Horus),
+                    EquipDragonKeyId = (ulong)GetDragonKeyId(DragonId.Horus),
                     EquipCrestSlotType1CrestId1 = AbilityCrestId.PrimalCrisis,
                     EquipCrestSlotType1CrestId2 = AbilityCrestId.TheCutieCompetition,
                     EquipCrestSlotType1CrestId3 = AbilityCrestId.AnIndelibleDate,
@@ -127,7 +128,7 @@ public class DungeonStartTest : TestFixture
                     UnitNo = 2,
                     CharaId = Charas.GalaGatov,
                     EquipWeaponBodyId = WeaponBodies.Mjoelnir,
-                    EquipDragonKeyId = (ulong)GetDragonKeyId(Dragons.GalaMars),
+                    EquipDragonKeyId = (ulong)GetDragonKeyId(DragonId.GalaMars),
                     EquipCrestSlotType1CrestId1 = AbilityCrestId.TheCutieCompetition,
                     EquipCrestSlotType1CrestId2 = AbilityCrestId.KungFuMasters,
                     EquipCrestSlotType1CrestId3 = AbilityCrestId.BondsBetweenWorlds,
@@ -149,7 +150,7 @@ public class DungeonStartTest : TestFixture
         ).Data;
 
         // Only test the first two since the others are empty
-        Verify(response.IngameData.PartyInfo.PartyUnitList.Take(2), VerifySettings);
+        await Verify(response.IngameData.PartyInfo.PartyUnitList.Take(2), VerifySettings);
 
         response.IngameData.PartyInfo.PartyUnitList.Should().HaveCount(4);
         response

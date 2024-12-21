@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using DragaliaAPI.Database;
-using DragaliaAPI.Models.Options;
+using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;

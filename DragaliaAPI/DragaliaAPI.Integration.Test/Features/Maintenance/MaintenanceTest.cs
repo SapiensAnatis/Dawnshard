@@ -1,4 +1,5 @@
-using DragaliaAPI.Models.Options;
+using DragaliaAPI.Features.Shared.Options;
+using DragaliaAPI.Infrastructure.Results;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 

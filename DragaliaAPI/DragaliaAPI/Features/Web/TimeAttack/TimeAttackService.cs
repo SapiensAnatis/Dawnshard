@@ -1,5 +1,5 @@
 using DragaliaAPI.Database;
-using DragaliaAPI.Features.Weapon;
+using DragaliaAPI.Features.Weapons;
 using DragaliaAPI.Features.Web.TimeAttack.Models;
 using DragaliaAPI.Infrastructure.Linq2Db;
 using DragaliaAPI.Models.Generated;

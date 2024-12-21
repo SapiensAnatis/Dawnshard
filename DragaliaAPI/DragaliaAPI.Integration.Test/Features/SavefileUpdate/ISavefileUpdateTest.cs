@@ -1,4 +1,4 @@
-using DragaliaAPI.Features.SavefileUpdate;
+using DragaliaAPI.Features.Login.SavefileUpdate;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Integration.Test.Features.SavefileUpdate;

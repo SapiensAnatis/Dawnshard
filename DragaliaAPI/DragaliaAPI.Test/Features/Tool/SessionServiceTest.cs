@@ -1,13 +1,12 @@
 ﻿using DragaliaAPI.Features.Login.Auth;
-using DragaliaAPI.Models;
-using DragaliaAPI.Models.Options;
+using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace DragaliaAPI.Test.Services;
+namespace DragaliaAPI.Test.Features.Tool;
 
 public class SessionServiceTest
 {
@@ -35,7 +34,7 @@ public class SessionServiceTest
         this.mockOptions.SetupGet(x => x.CurrentValue)
             .Returns(new RedisCachingOptions() { SessionExpiryTimeMinutes = 1 });
 
-        sessionService = new(
+        this.sessionService = new(
             this.testCache,
             this.mockOptions.Object,
             this.mockLogger.Object,

@@ -1,5 +1,5 @@
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Logging;

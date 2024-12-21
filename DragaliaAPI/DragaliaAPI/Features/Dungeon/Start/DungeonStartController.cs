@@ -1,9 +1,9 @@
-﻿using DragaliaAPI.Controllers;
+﻿using DragaliaAPI.Features.CoOp;
 using DragaliaAPI.Features.Player;
+using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Features.TimeAttack;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
-using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 

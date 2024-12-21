@@ -2,7 +2,6 @@ using DragaliaAPI.Features.Login;
 using DragaliaAPI.Features.Login.Actions;
 using DragaliaAPI.Features.Login.Auth;
 using DragaliaAPI.Features.Login.Savefile;
-using DragaliaAPI.Services.Game;
 
 // ReSharper disable once CheckNamespace
 namespace DragaliaAPI;

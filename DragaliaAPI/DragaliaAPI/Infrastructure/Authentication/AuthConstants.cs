@@ -26,4 +26,9 @@ public static class AuthConstants
 
         public const string Zena = "ZenaAuthentication";
     }
+
+    public static class Roles
+    {
+        public const string Developer = "Developer";
+    }
 }

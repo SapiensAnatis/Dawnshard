@@ -2,11 +2,11 @@ using System.Diagnostics;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Present;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using DragaliaAPI.Shared.Features.Presents;
@@ -405,9 +405,9 @@ public sealed partial class SummonService(
         int countOfRare5Dragon = 0;
         int countOfRare4 = 0;
 
-        List<Dragons> dragonList = summonResult
+        List<DragonId> dragonList = summonResult
             .Where(x => x.EntityType == EntityTypes.Dragon)
-            .Select(x => (Dragons)x.Id)
+            .Select(x => (DragonId)x.Id)
             .ToList();
 
         List<Charas> charaList = summonResult
@@ -415,7 +415,7 @@ public sealed partial class SummonService(
             .Select(x => (Charas)x.Id)
             .ToList();
 
-        List<Dragons> newDragons = (await unitService.AddDragons(dragonList))
+        List<DragonId> newDragons = (await unitService.AddDragons(dragonList))
             .Where(x => x.IsNew)
             .Select(x => x.Id)
             .ToList();
@@ -435,7 +435,7 @@ public sealed partial class SummonService(
         {
             bool isNew = result.EntityType switch
             {
-                EntityTypes.Dragon => newDragons.Remove((Dragons)result.Id),
+                EntityTypes.Dragon => newDragons.Remove((DragonId)result.Id),
                 EntityTypes.Chara => newCharas.Remove((Charas)result.Id),
                 _ => throw new UnreachableException("Invalid entity type"),
             };

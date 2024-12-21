@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Features.DmodeDungeon;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Test.Features.Dmode;

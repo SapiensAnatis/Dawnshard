@@ -1,5 +1,5 @@
-﻿using DragaliaAPI.Controllers;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Models.Generated;
 using Microsoft.AspNetCore.Authorization;

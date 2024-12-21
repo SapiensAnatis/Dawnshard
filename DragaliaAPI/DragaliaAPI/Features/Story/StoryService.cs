@@ -5,7 +5,7 @@ using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Present;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Models.Generated;
@@ -267,9 +267,9 @@ public class StoryService(
                     );
 
                     if (
-                        reward is { Type: EntityTypes.Dragon, Id: (int)Dragons.Midgardsormr }
+                        reward is { Type: EntityTypes.Dragon, Id: (int)DragonId.Midgardsormr }
                         && !await apiContext.PlayerDragonReliability.AnyAsync(x =>
-                            x.DragonId == Dragons.Midgardsormr
+                            x.DragonId == DragonId.Midgardsormr
                         )
                     )
                     {
@@ -278,7 +278,7 @@ public class StoryService(
                         // if he's in the gift box. Add the reliability manually as a hack to ensure he's always
                         // available in the dragon's roost.
                         apiContext.PlayerDragonReliability.Add(
-                            new(playerIdentityService.ViewerId, Dragons.Midgardsormr)
+                            new(playerIdentityService.ViewerId, DragonId.Midgardsormr)
                         );
                     }
                 }

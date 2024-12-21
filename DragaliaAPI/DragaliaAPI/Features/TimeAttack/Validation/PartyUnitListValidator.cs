@@ -32,7 +32,7 @@ public class PartyUnitListValidator : AbstractValidator<PartyUnitList>
         );
 
         When(
-            x => x.DragonData is not null && x.DragonData.DragonId != Dragons.Empty,
+            x => x.DragonData is not null && x.DragonData.DragonId != DragonId.Empty,
             () => RuleFor(x => x.DragonData!).SetValidator(new DragonListValidator(questId))
         );
 

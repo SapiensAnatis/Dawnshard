@@ -1,5 +1,4 @@
-using DragaliaAPI.Models;
-using DragaliaAPI.Models.Options;
+using DragaliaAPI.Features.Shared.Options;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;

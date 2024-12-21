@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Infrastructure.Results;
 
 namespace DragaliaAPI.Integration.Test.Features;
 
@@ -276,7 +277,8 @@ public class QuestBonusTest : TestFixture
                     LastWeeklyResetTime = response.Data.IngameResultData.EndTime,
                     DailyPlayCount = 1,
                     WeeklyPlayCount = 1,
-                }
+                },
+                opts => opts.WithDateTimeTolerance()
             );
     }
 

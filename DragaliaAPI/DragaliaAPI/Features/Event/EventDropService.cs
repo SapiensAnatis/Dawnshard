@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Shared.Definitions.Enums;

@@ -12,7 +12,7 @@ public static class UnitAvailabilityExtensions
     public static UnitAvailability GetAvailability(this CharaData charaData) =>
         GetAvailability(charaData.Id);
 
-    public static UnitAvailability GetAvailability(this Dragons dragon) =>
+    public static UnitAvailability GetAvailability(this DragonId dragon) =>
         DragonAvailabilityMap.GetValueOrDefault(dragon, UnitAvailability.Permanent);
 
     public static UnitAvailability GetAvailability(this DragonData dragonData) =>
@@ -152,79 +152,79 @@ public static class UnitAvailabilityExtensions
             [Charas.Empty] = UnitAvailability.Other,
         }.ToFrozenDictionary();
 
-    private static readonly FrozenDictionary<Dragons, UnitAvailability> DragonAvailabilityMap =
-        new Dictionary<Dragons, UnitAvailability>()
+    private static readonly FrozenDictionary<DragonId, UnitAvailability> DragonAvailabilityMap =
+        new Dictionary<DragonId, UnitAvailability>()
         {
             // Story
-            [Dragons.Brunhilda] = UnitAvailability.Story,
-            [Dragons.Mercury] = UnitAvailability.Story,
-            [Dragons.Midgardsormr] = UnitAvailability.Story,
-            [Dragons.Jupiter] = UnitAvailability.Story,
-            [Dragons.Zodiark] = UnitAvailability.Story,
+            [DragonId.Brunhilda] = UnitAvailability.Story,
+            [DragonId.Mercury] = UnitAvailability.Story,
+            [DragonId.Midgardsormr] = UnitAvailability.Story,
+            [DragonId.Jupiter] = UnitAvailability.Story,
+            [DragonId.Zodiark] = UnitAvailability.Story,
 
             // Seasonal limited units
-            [Dragons.HalloweenSilke] = UnitAvailability.Limited,
-            [Dragons.DragonyuleJeanne] = UnitAvailability.Limited,
-            [Dragons.Marishiten] = UnitAvailability.Limited,
-            [Dragons.HalloweenMaritimus] = UnitAvailability.Limited,
-            [Dragons.Daikokuten] = UnitAvailability.Limited,
-            [Dragons.GozuTenno] = UnitAvailability.Limited,
-            [Dragons.SummerMarishiten] = UnitAvailability.Limited,
-            [Dragons.FudoMyoo] = UnitAvailability.Limited,
+            [DragonId.HalloweenSilke] = UnitAvailability.Limited,
+            [DragonId.DragonyuleJeanne] = UnitAvailability.Limited,
+            [DragonId.Marishiten] = UnitAvailability.Limited,
+            [DragonId.HalloweenMaritimus] = UnitAvailability.Limited,
+            [DragonId.Daikokuten] = UnitAvailability.Limited,
+            [DragonId.GozuTenno] = UnitAvailability.Limited,
+            [DragonId.SummerMarishiten] = UnitAvailability.Limited,
+            [DragonId.FudoMyoo] = UnitAvailability.Limited,
 
             // Gala units
-            [Dragons.GalaMars] = UnitAvailability.Gala,
-            [Dragons.GalaCatSith] = UnitAvailability.Gala,
-            [Dragons.GalaThor] = UnitAvailability.Gala,
-            [Dragons.GalaRebornPoseidon] = UnitAvailability.Gala,
-            [Dragons.GalaRebornZephyr] = UnitAvailability.Gala,
-            [Dragons.GalaRebornJeanne] = UnitAvailability.Gala,
-            [Dragons.GalaRebornAgni] = UnitAvailability.Gala,
-            [Dragons.GalaRebornNidhogg] = UnitAvailability.Gala,
-            [Dragons.GalaBeastVolk] = UnitAvailability.Gala,
-            [Dragons.GalaBahamut] = UnitAvailability.Gala,
-            [Dragons.GalaChronosNyx] = UnitAvailability.Gala,
-            [Dragons.GalaBeastCiella] = UnitAvailability.Gala,
-            [Dragons.GalaElysium] = UnitAvailability.Gala,
+            [DragonId.GalaMars] = UnitAvailability.Gala,
+            [DragonId.GalaCatSith] = UnitAvailability.Gala,
+            [DragonId.GalaThor] = UnitAvailability.Gala,
+            [DragonId.GalaRebornPoseidon] = UnitAvailability.Gala,
+            [DragonId.GalaRebornZephyr] = UnitAvailability.Gala,
+            [DragonId.GalaRebornJeanne] = UnitAvailability.Gala,
+            [DragonId.GalaRebornAgni] = UnitAvailability.Gala,
+            [DragonId.GalaRebornNidhogg] = UnitAvailability.Gala,
+            [DragonId.GalaBeastVolk] = UnitAvailability.Gala,
+            [DragonId.GalaBahamut] = UnitAvailability.Gala,
+            [DragonId.GalaChronosNyx] = UnitAvailability.Gala,
+            [DragonId.GalaBeastCiella] = UnitAvailability.Gala,
+            [DragonId.GalaElysium] = UnitAvailability.Gala,
 
             // Welfare units
-            [Dragons.Pele] = UnitAvailability.Other,
-            [Dragons.Sylvia] = UnitAvailability.Other,
-            [Dragons.Maritimus] = UnitAvailability.Other,
-            [Dragons.Shishimai] = UnitAvailability.Other,
-            [Dragons.PengLai] = UnitAvailability.Other,
-            [Dragons.Phantom] = UnitAvailability.Other,
-            [Dragons.Yulong] = UnitAvailability.Other,
-            [Dragons.Erasmus] = UnitAvailability.Other,
-            [Dragons.Ebisu] = UnitAvailability.Other,
-            [Dragons.Rathalos] = UnitAvailability.Other,
-            [Dragons.Barbatos] = UnitAvailability.Other,
-            [Dragons.ParallelZodiark] = UnitAvailability.Other,
+            [DragonId.Pele] = UnitAvailability.Other,
+            [DragonId.Sylvia] = UnitAvailability.Other,
+            [DragonId.Maritimus] = UnitAvailability.Other,
+            [DragonId.Shishimai] = UnitAvailability.Other,
+            [DragonId.PengLai] = UnitAvailability.Other,
+            [DragonId.Phantom] = UnitAvailability.Other,
+            [DragonId.Yulong] = UnitAvailability.Other,
+            [DragonId.Erasmus] = UnitAvailability.Other,
+            [DragonId.Ebisu] = UnitAvailability.Other,
+            [DragonId.Rathalos] = UnitAvailability.Other,
+            [DragonId.Barbatos] = UnitAvailability.Other,
+            [DragonId.ParallelZodiark] = UnitAvailability.Other,
 
             // Collab units
-            [Dragons.Fatalis] = UnitAvailability.Limited,
-            [Dragons.DreadkingRathalos] = UnitAvailability.Limited,
-            [Dragons.Arsene] = UnitAvailability.Limited,
+            [DragonId.Fatalis] = UnitAvailability.Limited,
+            [DragonId.DreadkingRathalos] = UnitAvailability.Limited,
+            [DragonId.Arsene] = UnitAvailability.Limited,
 
             // Treasure trade / other means
-            [Dragons.HighMidgardsormr] = UnitAvailability.Other,
-            [Dragons.HighMercury] = UnitAvailability.Other,
-            [Dragons.HighBrunhilda] = UnitAvailability.Other,
-            [Dragons.HighJupiter] = UnitAvailability.Other,
-            [Dragons.HighZodiark] = UnitAvailability.Other,
+            [DragonId.HighMidgardsormr] = UnitAvailability.Other,
+            [DragonId.HighMercury] = UnitAvailability.Other,
+            [DragonId.HighBrunhilda] = UnitAvailability.Other,
+            [DragonId.HighJupiter] = UnitAvailability.Other,
+            [DragonId.HighZodiark] = UnitAvailability.Other,
 
-            [Dragons.GoldFafnir] = UnitAvailability.Other,
-            [Dragons.SilverFafnir] = UnitAvailability.Other,
-            [Dragons.BronzeFafnir] = UnitAvailability.Other,
+            [DragonId.GoldFafnir] = UnitAvailability.Other,
+            [DragonId.SilverFafnir] = UnitAvailability.Other,
+            [DragonId.BronzeFafnir] = UnitAvailability.Other,
 
-            [Dragons.MiniMids] = UnitAvailability.Other,
-            [Dragons.MiniMercs] = UnitAvailability.Other,
-            [Dragons.MiniHildy] = UnitAvailability.Other,
-            [Dragons.MiniJupi] = UnitAvailability.Other,
-            [Dragons.MiniZodi] = UnitAvailability.Other,
+            [DragonId.MiniMids] = UnitAvailability.Other,
+            [DragonId.MiniMercs] = UnitAvailability.Other,
+            [DragonId.MiniHildy] = UnitAvailability.Other,
+            [DragonId.MiniJupi] = UnitAvailability.Other,
+            [DragonId.MiniZodi] = UnitAvailability.Other,
 
             // Not playable
-            [Dragons.Puppy] = UnitAvailability.Other,
-            [Dragons.Empty] = UnitAvailability.Other,
+            [DragonId.Puppy] = UnitAvailability.Other,
+            [DragonId.Empty] = UnitAvailability.Other,
         }.ToFrozenDictionary();
 }

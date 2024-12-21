@@ -1,12 +1,4 @@
-﻿using DragaliaAPI.Controllers;
-using DragaliaAPI.MessagePack;
-using DragaliaAPI.Models;
-using DragaliaAPI.Services.Exceptions;
-using MessagePack;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Primitives;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Diagnostics;
 
 namespace DragaliaAPI.Infrastructure.Middleware;
 

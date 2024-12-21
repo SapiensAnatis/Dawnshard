@@ -1,5 +1,3 @@
-using System.Text;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DragaliaAPI.Integration.Test.Features.Web;

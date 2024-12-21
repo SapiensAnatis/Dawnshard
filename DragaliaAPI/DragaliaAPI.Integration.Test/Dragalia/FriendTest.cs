@@ -1,9 +1,9 @@
-﻿using DragaliaAPI.Services.Game;
+﻿using DragaliaAPI.Features.Friends;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
-/// Tests <see cref="Controllers.Dragalia.FriendController"/>
+/// Tests <see cref="FriendController"/>
 /// </summary>
 public class FriendTest : TestFixture
 {
@@ -53,7 +53,7 @@ public class FriendTest : TestFixture
                     SupportDragon = new()
                     {
                         DragonKeyId = 0,
-                        DragonId = Dragons.GalaBahamut,
+                        DragonId = DragonId.GalaBahamut,
                         Level = 100,
                         Hp = 368,
                         Attack = 128,

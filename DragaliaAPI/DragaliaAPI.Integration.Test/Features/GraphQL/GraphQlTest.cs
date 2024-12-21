@@ -140,7 +140,7 @@ public class GraphQlTest : GraphQlTestFixture
                     ViewerId = ViewerId,
                     PresentId = presentId,
                     EntityType = EntityTypes.Dragon,
-                    EntityId = (int)Dragons.GalaBahamut,
+                    EntityId = (int)DragonId.GalaBahamut,
                     EntityLevel = 1,
                     EntityQuantity = 1,
                     ReceiveLimitTime = null,

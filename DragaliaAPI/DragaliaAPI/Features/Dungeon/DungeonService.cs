@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Models.Options;
+﻿using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;

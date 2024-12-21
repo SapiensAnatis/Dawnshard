@@ -1,4 +1,5 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Infrastructure.Results;
 using static DragaliaAPI.Infrastructure.DragaliaHttpConstants;
 
 namespace DragaliaAPI.Integration.Test.Other;

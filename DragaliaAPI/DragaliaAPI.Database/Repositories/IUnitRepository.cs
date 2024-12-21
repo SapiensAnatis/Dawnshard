@@ -23,7 +23,7 @@ public interface IUnitRepository
 
     Task<DbPlayerCharaData?> FindCharaAsync(Charas chara);
     Task<DbPlayerDragonData?> FindDragonAsync(long dragonKeyId);
-    Task<DbPlayerDragonReliability?> FindDragonReliabilityAsync(Dragons dragon);
+    Task<DbPlayerDragonReliability?> FindDragonReliabilityAsync(DragonId dragon);
     Task<DbTalisman?> FindTalismanAsync(long talismanKeyId);
     Task<DbWeaponBody?> FindWeaponBodyAsync(WeaponBodies weaponBody);
 

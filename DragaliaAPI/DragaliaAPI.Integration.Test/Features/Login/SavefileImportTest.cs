@@ -2,13 +2,15 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Login.Savefile;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Shared.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Login;
 
 /// <summary>
-/// Tests <see cref="Controllers.Other.SavefileController"/>
+/// Tests <see cref="SavefileController"/>
 /// </summary>
 public class SavefileImportTest : TestFixture
 {

@@ -1,4 +1,3 @@
-using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Abstract;
 using FluentAssertions;
 using FluentAssertions.Equivalency;

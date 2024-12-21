@@ -3,13 +3,14 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Extensions;
+using DragaliaAPI.Features.CoOp;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Features.Login.Auth;
 using DragaliaAPI.Features.Login.Savefile;
-using DragaliaAPI.Models;
-using DragaliaAPI.Models.Options;
-using DragaliaAPI.Services;
-using DragaliaAPI.Services.Api;
+using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Features.Shared.Options;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Shared.Serialization;
 using Microsoft.AspNetCore.Hosting;
@@ -166,7 +167,7 @@ public class TestFixture
         await savefileService.Import(GetSavefile());
     }
 
-    protected long GetDragonKeyId(Dragons dragon)
+    protected long GetDragonKeyId(DragonId dragon)
     {
         return this
             .ApiContext.PlayerDragonData.Where(x => x.DragonId == dragon)

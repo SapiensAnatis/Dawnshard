@@ -5,10 +5,10 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.AbilityCrests;
 using DragaliaAPI.Features.Event;
-using DragaliaAPI.Features.PartyPower;
+using DragaliaAPI.Features.Parties;
 using DragaliaAPI.Features.Story;
 using DragaliaAPI.Features.Trade;
-using DragaliaAPI.Services.Exceptions;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
@@ -160,7 +160,7 @@ public class MissionInitialProgressionService(
                     (UnitElement?)progressionInfo.Parameter2
                 ),
                 MissionCompleteType.DragonLevelUp => await this.GetDragonMaxLevel(
-                    (Dragons?)progressionInfo.Parameter,
+                    (DragonId?)progressionInfo.Parameter,
                     (UnitElement?)progressionInfo.Parameter2
                 ),
                 MissionCompleteType.DragonLevelUpCount => await this.GetDragonLevelCount(
@@ -173,7 +173,7 @@ public class MissionInitialProgressionService(
                     progressionInfo.Parameter3
                 ),
                 MissionCompleteType.DragonBondLevelUp => await this.GetDragonBondLevel(
-                    (Dragons?)progressionInfo.Parameter,
+                    (DragonId?)progressionInfo.Parameter,
                     (UnitElement?)progressionInfo.Parameter2
                 ),
                 MissionCompleteType.PartyPowerReached =>
@@ -333,7 +333,7 @@ public class MissionInitialProgressionService(
             ?? 0;
     }
 
-    private async Task<int> GetDragonMaxLevel(Dragons? dragonId, UnitElement? element)
+    private async Task<int> GetDragonMaxLevel(DragonId? dragonId, UnitElement? element)
     {
         if (dragonId != null)
         {
@@ -376,7 +376,7 @@ public class MissionInitialProgressionService(
             .CountAsync();
     }
 
-    private async Task<int> GetDragonBondLevel(Dragons? dragonId, UnitElement? element)
+    private async Task<int> GetDragonBondLevel(DragonId? dragonId, UnitElement? element)
     {
         if (dragonId != null)
         {

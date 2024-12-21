@@ -1,3 +1,5 @@
+using DragaliaAPI.Infrastructure.Results;
+
 namespace DragaliaAPI.Integration.Test.Features.Trade;
 
 public class EventTradeTest : TestFixture

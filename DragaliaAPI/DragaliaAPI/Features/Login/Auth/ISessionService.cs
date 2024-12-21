@@ -1,6 +1,4 @@
-﻿using DragaliaAPI.Models;
-
-namespace DragaliaAPI.Features.Login.Auth;
+﻿namespace DragaliaAPI.Features.Login.Auth;
 
 public interface ISessionService
 {

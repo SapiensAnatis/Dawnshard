@@ -1,6 +1,5 @@
 ﻿using System.Net.Http.Headers;
 using DragaliaAPI.Photon.StateManager.Models;
-using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

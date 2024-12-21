@@ -166,7 +166,7 @@ public class MissionProgressionService(
         );
     }
 
-    public void OnDragonLevelUp(Dragons dragon, UnitElement element, int count, int total)
+    public void OnDragonLevelUp(DragonId dragon, UnitElement element, int count, int total)
     {
         EnqueueEvent(MissionCompleteType.DragonLevelUp, count, total, (int)dragon, (int)element);
         for (int i = total - count; i <= total; i++)
@@ -176,7 +176,7 @@ public class MissionProgressionService(
     }
 
     public void OnDragonGiftSent(
-        Dragons dragon,
+        DragonId dragon,
         DragonGifts gift,
         UnitElement element,
         int count,
@@ -194,7 +194,7 @@ public class MissionProgressionService(
     }
 
     public void OnDragonBondLevelUp(
-        Dragons dragon,
+        DragonId dragon,
         UnitElement element,
         int levelDiff,
         int newLevel

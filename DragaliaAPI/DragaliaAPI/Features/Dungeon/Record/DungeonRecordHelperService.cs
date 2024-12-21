@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Database;
+using DragaliaAPI.Features.CoOp;
+using DragaliaAPI.Features.Friends;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
-using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 

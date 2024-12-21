@@ -1,4 +1,4 @@
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Features.Summoning;

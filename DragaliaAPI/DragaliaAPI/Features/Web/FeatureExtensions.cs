@@ -3,10 +3,7 @@ using DragaliaAPI.Features.Web.News;
 using DragaliaAPI.Features.Web.Savefile;
 using DragaliaAPI.Features.Web.TimeAttack;
 using DragaliaAPI.Features.Web.Users;
-using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Shared.PlayerDetails;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using static DragaliaAPI.Infrastructure.Authentication.AuthConstants;
 
 // ReSharper disable once CheckNamespace

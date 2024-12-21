@@ -172,13 +172,13 @@ public class MasterAssetTest
     [Fact]
     public void DragonData_Get_ReturnsExpectedProperties()
     {
-        DragonData elysium = MasterAsset.MasterAsset.DragonData.Get(Dragons.GalaElysium);
+        DragonData elysium = MasterAsset.MasterAsset.DragonData.Get(DragonId.GalaElysium);
 
         elysium
             .Should()
             .BeEquivalentTo(
                 new DragonData(
-                    Id: Dragons.GalaElysium,
+                    Id: DragonId.GalaElysium,
                     Rarity: 5,
                     ElementalType: UnitElement.Light,
                     MaxLimitBreakCount: 4,
@@ -514,9 +514,12 @@ public class MasterAssetTest
     }
 
     [Theory]
-    [InlineData(Dragons.Garuda, 210036011, 210036012)]
-    [InlineData(Dragons.Liger, 210043011, 210043012)]
-    public void DragonStories_ReturnsExpectedStoryIds(Dragons dragon, params int[] expectedStoryIds)
+    [InlineData(DragonId.Garuda, 210036011, 210036012)]
+    [InlineData(DragonId.Liger, 210043011, 210043012)]
+    public void DragonStories_ReturnsExpectedStoryIds(
+        DragonId dragon,
+        params int[] expectedStoryIds
+    )
     {
         int key = MasterAsset.MasterAsset.DragonStories[(int)dragon].Id;
 
@@ -535,7 +538,7 @@ public class MasterAssetTest
             .BeEquivalentTo(
                 new UnitStory(
                     Id: 200010011,
-                    ReleaseTriggerId: (int)Dragons.Chthonius,
+                    ReleaseTriggerId: (int)DragonId.Chthonius,
                     UnlockQuestStoryId: 0,
                     UnlockTriggerStoryId: 0
                 )

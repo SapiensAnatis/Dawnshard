@@ -2,7 +2,7 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Missions;
-using DragaliaAPI.Services.Exceptions;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;

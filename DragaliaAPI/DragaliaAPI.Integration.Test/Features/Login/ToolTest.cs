@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using DragaliaAPI.Features.Login.Auth;
-using DragaliaAPI.Models;
+using DragaliaAPI.Infrastructure.Results;
 using MessagePack;
 using Microsoft.EntityFrameworkCore;
 using static DragaliaAPI.Infrastructure.DragaliaHttpConstants;
