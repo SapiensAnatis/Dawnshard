@@ -1,4 +1,3 @@
-
 using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Features.Shared.Reward.Handlers;
 

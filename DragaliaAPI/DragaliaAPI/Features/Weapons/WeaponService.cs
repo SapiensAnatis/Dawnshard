@@ -48,7 +48,12 @@ public class WeaponService : IWeaponService
 
         WeaponBody weaponData = MasterAsset.WeaponBody.Get(weaponBodyId);
 
-        if (!await this.fortRepository.CheckPlantLevel(FortPlants.Smithy, weaponData.NeedFortCraftLevel))
+        if (
+            !await this.fortRepository.CheckPlantLevel(
+                FortPlants.Smithy,
+                weaponData.NeedFortCraftLevel
+            )
+        )
         {
             this.logger.LogWarning(
                 "Player smithy level was too low to craft weapon {weapon} (needs level {level2})",

@@ -59,7 +59,9 @@ public class DragonController : DragaliaControllerBase
         CancellationToken cancellationToken
     )
     {
-        return this.Ok(await this.dragonService.DoDragonBuyGiftToSendMultiple(request, cancellationToken));
+        return this.Ok(
+            await this.dragonService.DoDragonBuyGiftToSendMultiple(request, cancellationToken)
+        );
     }
 
     [Route("buy_gift_to_send")]
@@ -101,7 +103,9 @@ public class DragonController : DragaliaControllerBase
         CancellationToken cancellationToken
     )
     {
-        return this.Ok(await this.dragonService.DoDragonSendGiftMultiple(request, cancellationToken));
+        return this.Ok(
+            await this.dragonService.DoDragonSendGiftMultiple(request, cancellationToken)
+        );
     }
 
     [Route("send_gift")]
@@ -111,15 +115,16 @@ public class DragonController : DragaliaControllerBase
         CancellationToken cancellationToken
     )
     {
-        DragonSendGiftMultipleResponse resultData = await this.dragonService.DoDragonSendGiftMultiple(
-            new DragonSendGiftMultipleRequest()
-            {
-                DragonId = request.DragonId,
-                DragonGiftId = request.DragonGiftId,
-                Quantity = 1,
-            },
-            cancellationToken
-        );
+        DragonSendGiftMultipleResponse resultData =
+            await this.dragonService.DoDragonSendGiftMultiple(
+                new DragonSendGiftMultipleRequest()
+                {
+                    DragonId = request.DragonId,
+                    DragonGiftId = request.DragonGiftId,
+                    Quantity = 1,
+                },
+                cancellationToken
+            );
         return this.Ok(
             new DragonSendGiftResponse()
             {

@@ -62,7 +62,10 @@ public class UpdateDataServiceTest : RepositoryTestFixture
 
         DbPlayerCharaData charaData = new(viewerId, Charas.GalaLeonidas);
 
-        DbPlayerDragonData dragonData = new DbPlayerDragonData(viewerId, DragonId.DreadkingRathalos);
+        DbPlayerDragonData dragonData = new DbPlayerDragonData(
+            viewerId,
+            DragonId.DreadkingRathalos
+        );
         DbPlayerDragonReliability reliabilityData = new DbPlayerDragonReliability(
             viewerId,
             DragonId.DreadkingRathalos

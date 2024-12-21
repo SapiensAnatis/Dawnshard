@@ -125,12 +125,14 @@ public partial class DragonService(
                     RewardReliabilityList? reward = await this.GetRewardDataForLevel(
                         dragonReliability.Level,
                         dragonData.Rarity,
-                        dragonReliability.DragonId == DragaliaAPI.Shared.Definitions.Enums.DragonId.Puppy
+                        dragonReliability.DragonId
+                        == DragaliaAPI.Shared.Definitions.Enums.DragonId.Puppy
                             ? Array.Empty<int>()
                             : MasterAsset
                                 .DragonStories.Get((int)dragonReliability.DragonId)
                                 .StoryIds,
-                        dragonReliability.DragonId == DragaliaAPI.Shared.Definitions.Enums.DragonId.Puppy
+                        dragonReliability.DragonId
+                            == DragaliaAPI.Shared.Definitions.Enums.DragonId.Puppy
                     );
                     if (reward != null)
                     {
@@ -515,7 +517,9 @@ public partial class DragonService(
         IEnumerable<Tuple<DragonGifts, List<DragonRewardEntityList>>> rewards =
             dragonReliability.DragonId == DragaliaAPI.Shared.Definitions.Enums.DragonId.Puppy
                 ? (
-                    await this.RollPuppyThankYouRewards(new List<DragonGifts>() { request.DragonGiftId })
+                    await this.RollPuppyThankYouRewards(
+                        new List<DragonGifts>() { request.DragonGiftId }
+                    )
                 ).Select(x => new Tuple<DragonGifts, List<DragonRewardEntityList>>(
                     x.Item1,
                     new List<DragonRewardEntityList>() { x.Item2 }
@@ -945,7 +949,11 @@ public partial class DragonService(
             );
         }
 
-        if (selectedPlayerDragons.Where(x => x.DragonId == DragaliaAPI.Shared.Definitions.Enums.DragonId.Puppy).Any())
+        if (
+            selectedPlayerDragons
+                .Where(x => x.DragonId == DragaliaAPI.Shared.Definitions.Enums.DragonId.Puppy)
+                .Any()
+        )
         {
             throw new DragaliaException(
                 ResultCode.DragonSellLocked,

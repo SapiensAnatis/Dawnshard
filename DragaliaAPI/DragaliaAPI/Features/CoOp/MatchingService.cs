@@ -122,14 +122,16 @@ public class MatchingService : IMatchingService
 
         try
         {
-            hostUserData = await this.userDataRepository.GetViewerData(game.HostViewerId).FirstAsync();
+            hostUserData = await this
+                .userDataRepository.GetViewerData(game.HostViewerId)
+                .FirstAsync();
 
             using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
                 (int)game.HostViewerId
             );
 
-            hostCharaData = await this.partyRepository
-                .GetPartyUnits(game.HostPartyNo)
+            hostCharaData = await this
+                .partyRepository.GetPartyUnits(game.HostPartyNo)
                 .Where(x => x.UnitNo == 1)
                 .Join(
                     this.apiContext.PlayerCharaData,

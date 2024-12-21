@@ -320,7 +320,9 @@ public class DragonTest : TestFixture
     [Fact]
     public async Task DragonSendGiftMultiple_IncreasesReliabilityAndReturnsGifts()
     {
-        await this.AddToDatabase(new DbPlayerDragonReliability(this.ViewerId, DragonId.HighMercury));
+        await this.AddToDatabase(
+            new DbPlayerDragonReliability(this.ViewerId, DragonId.HighMercury)
+        );
 
         DragonSendGiftMultipleRequest request = new DragonSendGiftMultipleRequest()
         {
@@ -349,7 +351,9 @@ public class DragonTest : TestFixture
     [Fact]
     public async Task DragonGiftSendMultiple_ReachLevel5_ReturnsExpectedRewardReliabilityList()
     {
-        await this.AddToDatabase(new DbPlayerDragonReliability(this.ViewerId, DragonId.HighMercury));
+        await this.AddToDatabase(
+            new DbPlayerDragonReliability(this.ViewerId, DragonId.HighMercury)
+        );
 
         DragonSendGiftMultipleRequest request = new DragonSendGiftMultipleRequest()
         {
@@ -499,7 +503,9 @@ public class DragonTest : TestFixture
     [Fact]
     public async Task DragonSendGift_AllStoriesUnlocked_DoesNotThrow()
     {
-        await this.AddToDatabase(new DbPlayerDragonReliability(this.ViewerId, DragonId.MidgardsormrZero));
+        await this.AddToDatabase(
+            new DbPlayerDragonReliability(this.ViewerId, DragonId.MidgardsormrZero)
+        );
 
         foreach (int storyId in MasterAsset.DragonStories[(int)DragonId.MidgardsormrZero].StoryIds)
         {
@@ -722,11 +728,15 @@ public class DragonTest : TestFixture
     public async Task DragonSell_Multi_SuccessfulSale()
     {
         DbPlayerDragonData dragonSimurgh = this
-            .ApiContext.PlayerDragonData.Add(new DbPlayerDragonData(this.ViewerId, DragonId.Simurgh))
+            .ApiContext.PlayerDragonData.Add(
+                new DbPlayerDragonData(this.ViewerId, DragonId.Simurgh)
+            )
             .Entity;
 
         DbPlayerDragonData dragonStribog = this
-            .ApiContext.PlayerDragonData.Add(new DbPlayerDragonData(this.ViewerId, DragonId.Stribog))
+            .ApiContext.PlayerDragonData.Add(
+                new DbPlayerDragonData(this.ViewerId, DragonId.Stribog)
+            )
             .Entity;
 
         dragonStribog.LimitBreakCount = 4;

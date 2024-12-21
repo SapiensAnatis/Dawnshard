@@ -125,6 +125,10 @@ public partial class DragonHandler(
             LogLevel.Error,
             "Entity {Entity} is not a valid dragon entity: {DragonId} is not a dragon ID"
         )]
-        public static partial void InvalidDragonId(ILogger logger, Entity entity, DragonId dragonId);
+        public static partial void InvalidDragonId(
+            ILogger logger,
+            Entity entity,
+            DragonId dragonId
+        );
     }
 }

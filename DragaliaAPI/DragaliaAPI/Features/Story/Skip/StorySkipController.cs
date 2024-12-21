@@ -1,7 +1,6 @@
 using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
-
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.Story.Skip;
