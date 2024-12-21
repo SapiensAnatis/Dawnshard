@@ -1,8 +1,9 @@
 using DragaliaAPI.Features.ClearParty;
+using DragaliaAPI.Features.Friends;
 using DragaliaAPI.Features.Quest;
+using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Features.Story;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Test.Controllers;
@@ -41,7 +42,7 @@ public class QuestControllerTest
         {
             NewGetEntityList = new List<AtgenDuplicateEntityList>()
             {
-                new() { EntityType = EntityTypes.Dragon, EntityId = (int)Dragons.BronzeFafnir },
+                new() { EntityType = EntityTypes.Dragon, EntityId = (int)DragonId.BronzeFafnir },
                 new() { EntityType = EntityTypes.Chara, EntityId = (int)Charas.Ilia },
             },
         };
@@ -60,7 +61,7 @@ public class QuestControllerTest
                     new()
                     {
                         EntityType = EntityTypes.Dragon,
-                        EntityId = (int)Dragons.BronzeFafnir,
+                        EntityId = (int)DragonId.BronzeFafnir,
                         EntityQuantity = 2,
                     },
                 }
@@ -91,7 +92,7 @@ public class QuestControllerTest
                         new()
                         {
                             EntityType = EntityTypes.Dragon,
-                            EntityId = (int)Dragons.BronzeFafnir,
+                            EntityId = (int)DragonId.BronzeFafnir,
                             EntityQuantity = 2,
                             EntityLevel = 1,
                             EntityLimitBreakCount = 0,

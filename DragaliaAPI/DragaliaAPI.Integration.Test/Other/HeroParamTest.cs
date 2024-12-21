@@ -25,7 +25,7 @@ public class HeroParamTest : TestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        Verify(heroParams);
+        await Verify(heroParams);
 
         // AI should not have shared skills
         heroParams!

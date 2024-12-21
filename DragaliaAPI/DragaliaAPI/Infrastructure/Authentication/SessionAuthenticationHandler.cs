@@ -1,10 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Text.Encodings.Web;
-using DragaliaAPI.Database;
-using DragaliaAPI.Features.Tool;
-using DragaliaAPI.Models;
-using DragaliaAPI.Services;
-using DragaliaAPI.Services.Exceptions;
+using DragaliaAPI.Features.Login.Auth;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;

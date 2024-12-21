@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Extensions;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
@@ -161,7 +162,7 @@ public class MissionTest : TestFixture
     public async Task DrillMission_DragonExactLeveling_CompletesMission()
     {
         await this.AddToDatabase(
-            new DbPlayerDragonData() { ViewerId = ViewerId, DragonId = Dragons.Midgardsormr }
+            new DbPlayerDragonData() { ViewerId = ViewerId, DragonId = DragonId.Midgardsormr }
         );
 
         await this.Client.PostMsgpack<MissionUnlockDrillMissionGroupResponse>(
@@ -175,7 +176,7 @@ public class MissionTest : TestFixture
                 "dragon/buildup",
                 new DragonBuildupRequest()
                 {
-                    BaseDragonKeyId = (ulong)this.GetDragonKeyId(Dragons.Midgardsormr),
+                    BaseDragonKeyId = (ulong)this.GetDragonKeyId(DragonId.Midgardsormr),
                     GrowMaterialList = new List<GrowMaterialList>()
                     {
                         new GrowMaterialList()
@@ -202,7 +203,7 @@ public class MissionTest : TestFixture
     public async Task DrillMission_DragonOverleveling_CompletesMission()
     {
         await this.AddToDatabase(
-            new DbPlayerDragonData() { ViewerId = ViewerId, DragonId = Dragons.Midgardsormr }
+            new DbPlayerDragonData() { ViewerId = ViewerId, DragonId = DragonId.Midgardsormr }
         );
 
         await this.Client.PostMsgpack<MissionUnlockDrillMissionGroupResponse>(
@@ -216,7 +217,7 @@ public class MissionTest : TestFixture
                 "dragon/buildup",
                 new DragonBuildupRequest()
                 {
-                    BaseDragonKeyId = (ulong)this.GetDragonKeyId(Dragons.Midgardsormr),
+                    BaseDragonKeyId = (ulong)this.GetDragonKeyId(DragonId.Midgardsormr),
                     GrowMaterialList = new List<GrowMaterialList>()
                     {
                         new GrowMaterialList()

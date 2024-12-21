@@ -16,7 +16,7 @@ public class DbPlayerDragonReliability : DbPlayerData, IHasXp
     [Column("DragonId")]
     [Required]
     [TypeConverter(typeof(EnumConverter))]
-    public Dragons DragonId { get; set; }
+    public DragonId DragonId { get; set; }
 
     [Column("Level")]
     [Required]
@@ -37,7 +37,7 @@ public class DbPlayerDragonReliability : DbPlayerData, IHasXp
 
     public DbPlayerDragonReliability() { }
 
-    public DbPlayerDragonReliability(long viewerId, Dragons id)
+    public DbPlayerDragonReliability(long viewerId, DragonId id)
     {
         byte defaultRelLevel = (byte)MasterAsset.DragonData.Get(id).DefaultReliabilityLevel;
         defaultRelLevel = defaultRelLevel == default ? (byte)1 : defaultRelLevel;

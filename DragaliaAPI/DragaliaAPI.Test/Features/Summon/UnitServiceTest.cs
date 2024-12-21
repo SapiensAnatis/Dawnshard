@@ -2,8 +2,7 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Test;
 using DragaliaAPI.Features.Present;
-using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Reward.Handlers;
+using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Features.Summoning;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -11,6 +10,8 @@ using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using static DragaliaAPI.Database.Test.DbTestFixture;
+using CharaHandler = DragaliaAPI.Features.Shared.Reward.Handlers.CharaHandler;
+using DragonHandler = DragaliaAPI.Features.Shared.Reward.Handlers.DragonHandler;
 
 namespace DragaliaAPI.Test.Features.Summon;
 
@@ -183,17 +184,22 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task AddDragons_CorrectlyMarksDuplicates()
     {
-        await this.fixture.AddToDatabase(new DbPlayerDragonData(ViewerId, Dragons.Barbatos));
+        await this.fixture.AddToDatabase(new DbPlayerDragonData(ViewerId, DragonId.Barbatos));
 
-        List<Dragons> idList = new() { Dragons.Marishiten, Dragons.Barbatos, Dragons.Marishiten };
+        List<DragonId> idList = new()
+        {
+            DragonId.Marishiten,
+            DragonId.Barbatos,
+            DragonId.Marishiten,
+        };
 
-        IEnumerable<(Dragons Id, bool IsNew)> result = await this.unitService.AddDragons(idList);
+        IEnumerable<(DragonId Id, bool IsNew)> result = await this.unitService.AddDragons(idList);
 
         result
             .Where(x => x.IsNew)
             .Select(x => x.Id)
             .Should()
-            .BeEquivalentTo(new List<Dragons>() { Dragons.Marishiten });
+            .BeEquivalentTo(new List<DragonId>() { DragonId.Marishiten });
     }
 
     [Fact]
@@ -204,24 +210,24 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
                 new DbPlayerDragonReliability()
                 {
                     ViewerId = ViewerId,
-                    DragonId = Dragons.AC011Garland,
+                    DragonId = DragonId.AC011Garland,
                 },
                 new DbPlayerDragonReliability()
                 {
                     ViewerId = ViewerId + 1,
-                    DragonId = Dragons.Agni,
+                    DragonId = DragonId.Agni,
                 },
             ]
         );
 
-        List<Dragons> idList = [Dragons.AC011Garland, Dragons.Agni];
+        List<DragonId> idList = [DragonId.AC011Garland, DragonId.Agni];
 
         await this.unitService.AddDragons(idList);
         await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.fixture.ApiContext.PlayerDragonReliability.Should()
             .ContainEquivalentOf(
-                new DbPlayerDragonReliability() { ViewerId = ViewerId, DragonId = Dragons.Agni },
+                new DbPlayerDragonReliability() { ViewerId = ViewerId, DragonId = DragonId.Agni },
                 opts => opts.Including(x => x.ViewerId).Including(x => x.DragonId)
             );
     }
@@ -229,12 +235,17 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task AddDragons_UpdatesDatabase()
     {
-        await this.fixture.AddToDatabase(new DbPlayerDragonData(ViewerId, Dragons.KonohanaSakuya));
+        await this.fixture.AddToDatabase(new DbPlayerDragonData(ViewerId, DragonId.KonohanaSakuya));
         await this.fixture.AddToDatabase(
-            new DbPlayerDragonReliability(ViewerId, Dragons.KonohanaSakuya)
+            new DbPlayerDragonReliability(ViewerId, DragonId.KonohanaSakuya)
         );
 
-        List<Dragons> idList = new() { Dragons.KonohanaSakuya, Dragons.Michael, Dragons.Michael };
+        List<DragonId> idList = new()
+        {
+            DragonId.KonohanaSakuya,
+            DragonId.Michael,
+            DragonId.Michael,
+        };
 
         await this.unitService.AddDragons(idList);
         await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -247,12 +258,12 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
         )
             .Should()
             .Contain(
-                new List<Dragons>()
+                new List<DragonId>()
                 {
-                    Dragons.KonohanaSakuya,
-                    Dragons.KonohanaSakuya,
-                    Dragons.Michael,
-                    Dragons.Michael,
+                    DragonId.KonohanaSakuya,
+                    DragonId.KonohanaSakuya,
+                    DragonId.Michael,
+                    DragonId.Michael,
                 }
             );
 
@@ -263,6 +274,6 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
                 .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
         )
             .Should()
-            .Contain(new List<Dragons>() { Dragons.KonohanaSakuya, Dragons.Michael });
+            .Contain(new List<DragonId>() { DragonId.KonohanaSakuya, DragonId.Michael });
     }
 }

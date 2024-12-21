@@ -55,17 +55,17 @@ public interface IMissionProgressionService
 
     void OnCharacterLevelUp(Charas chara, UnitElement element, int count, int totalLevel);
     void OnCharacterManaNodeUnlock(Charas chara, UnitElement element, int count, int total);
-    void OnDragonLevelUp(Dragons dragon, UnitElement element, int count, int total);
+    void OnDragonLevelUp(DragonId dragon, UnitElement element, int count, int total);
 
     void OnDragonGiftSent(
-        Dragons dragon,
+        DragonId dragon,
         DragonGifts gift,
         UnitElement element,
         int count,
         int total
     );
 
-    void OnDragonBondLevelUp(Dragons dragon, UnitElement element, int levelDiff, int newLevel);
+    void OnDragonBondLevelUp(DragonId dragon, UnitElement element, int levelDiff, int newLevel);
     void OnItemSummon();
     void OnPartyOptimized(UnitElement element);
     void OnAbilityCrestTradeViewed();

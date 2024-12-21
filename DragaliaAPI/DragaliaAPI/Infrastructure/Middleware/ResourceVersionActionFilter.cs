@@ -1,5 +1,4 @@
 using DragaliaAPI.Features.Version;
-using DragaliaAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 

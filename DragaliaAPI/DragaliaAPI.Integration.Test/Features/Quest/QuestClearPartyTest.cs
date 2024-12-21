@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Quest;
+using DragaliaAPI.Infrastructure.Results;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Quest;
@@ -132,7 +133,7 @@ public class QuestClearPartyTest : TestFixture
                     {
                         UnitNo = 5,
                         EntityType = EntityTypes.Dragon,
-                        EntityId = (int)Dragons.Ifrit,
+                        EntityId = (int)DragonId.Ifrit,
                     },
                     new()
                     {
@@ -231,7 +232,7 @@ public class QuestClearPartyTest : TestFixture
                 QuestId = 1,
                 UnitNo = 1,
                 CharaId = Charas.GalaNedrick,
-                EquipDragonKeyId = this.GetDragonKeyId(Dragons.Cerberus),
+                EquipDragonKeyId = this.GetDragonKeyId(DragonId.Cerberus),
                 EquipWeaponBodyId = WeaponBodies.YitianJian,
                 EquipCrestSlotType1CrestId1 = AbilityCrestId.PrimalCrisis,
                 EquipCrestSlotType1CrestId2 = AbilityCrestId.WelcometotheOpera,
@@ -244,7 +245,7 @@ public class QuestClearPartyTest : TestFixture
                 EquipWeaponSkinId = 30129901,
                 EditSkill1CharaId = Charas.Empty,
                 EditSkill2CharaId = Charas.GalaMym,
-                EquippedDragonEntityId = Dragons.Cerberus,
+                EquippedDragonEntityId = DragonId.Cerberus,
                 EquippedTalismanEntityId = Talismans.GalaMym,
             },
             new()
@@ -254,7 +255,7 @@ public class QuestClearPartyTest : TestFixture
                 QuestId = 1,
                 UnitNo = 2,
                 CharaId = Charas.Patia,
-                EquipDragonKeyId = this.GetDragonKeyId(Dragons.Pazuzu),
+                EquipDragonKeyId = this.GetDragonKeyId(DragonId.Pazuzu),
                 EquipWeaponBodyId = WeaponBodies.QinglongYanyuedao,
                 EquipCrestSlotType1CrestId1 = AbilityCrestId.AHalloweenSpectacular,
                 EquipCrestSlotType1CrestId2 = AbilityCrestId.CastawaysJournal,
@@ -267,7 +268,7 @@ public class QuestClearPartyTest : TestFixture
                 EquipWeaponSkinId = 30129901,
                 EditSkill1CharaId = Charas.TemplarHope,
                 EditSkill2CharaId = Charas.Zena,
-                EquippedDragonEntityId = Dragons.Pazuzu,
+                EquippedDragonEntityId = DragonId.Pazuzu,
                 EquippedTalismanEntityId = Talismans.GalaMym,
             },
         };
@@ -279,7 +280,7 @@ public class QuestClearPartyTest : TestFixture
             {
                 UnitNo = 1,
                 CharaId = Charas.GalaNedrick,
-                EquipDragonKeyId = (ulong)this.GetDragonKeyId(Dragons.Cerberus),
+                EquipDragonKeyId = (ulong)this.GetDragonKeyId(DragonId.Cerberus),
                 EquipWeaponBodyId = WeaponBodies.YitianJian,
                 EquipCrestSlotType1CrestId1 = AbilityCrestId.PrimalCrisis,
                 EquipCrestSlotType1CrestId2 = AbilityCrestId.WelcometotheOpera,
@@ -297,7 +298,7 @@ public class QuestClearPartyTest : TestFixture
             {
                 UnitNo = 2,
                 CharaId = Charas.Patia,
-                EquipDragonKeyId = (ulong)this.GetDragonKeyId(Dragons.Pazuzu),
+                EquipDragonKeyId = (ulong)this.GetDragonKeyId(DragonId.Pazuzu),
                 EquipWeaponBodyId = WeaponBodies.QinglongYanyuedao,
                 EquipCrestSlotType1CrestId1 = AbilityCrestId.AHalloweenSpectacular,
                 EquipCrestSlotType1CrestId2 = AbilityCrestId.CastawaysJournal,
@@ -323,7 +324,7 @@ public class QuestClearPartyTest : TestFixture
                 QuestId = 2,
                 UnitNo = 1,
                 CharaId = Charas.GalaNotte,
-                EquipDragonKeyId = this.GetDragonKeyId(Dragons.Leviathan),
+                EquipDragonKeyId = this.GetDragonKeyId(DragonId.Leviathan),
                 EquipWeaponBodyId = WeaponBodies.WindrulersFang,
                 EquipCrestSlotType1CrestId1 = AbilityCrestId.BondsBetweenWorlds,
                 EquipCrestSlotType1CrestId2 = AbilityCrestId.AManUnchanging,
@@ -336,7 +337,7 @@ public class QuestClearPartyTest : TestFixture
                 EquipWeaponSkinId = 0,
                 EditSkill1CharaId = Charas.Empty,
                 EditSkill2CharaId = Charas.GalaMym,
-                EquippedDragonEntityId = Dragons.Leviathan,
+                EquippedDragonEntityId = DragonId.Leviathan,
                 EquippedTalismanEntityId = Talismans.GalaMym,
             },
             new()
@@ -346,7 +347,7 @@ public class QuestClearPartyTest : TestFixture
                 QuestId = 2,
                 UnitNo = 2,
                 CharaId = Charas.GalaLeif,
-                EquipDragonKeyId = this.GetDragonKeyId(Dragons.Phoenix),
+                EquipDragonKeyId = this.GetDragonKeyId(DragonId.Phoenix),
                 EquipWeaponBodyId = WeaponBodies.PrimalTempest,
                 EquipCrestSlotType1CrestId1 = AbilityCrestId.AdventureinthePast,
                 EquipCrestSlotType1CrestId2 = AbilityCrestId.PrimalCrisis,
@@ -359,7 +360,7 @@ public class QuestClearPartyTest : TestFixture
                 EquipWeaponSkinId = 0,
                 EditSkill1CharaId = Charas.ShaWujing,
                 EditSkill2CharaId = Charas.Ranzal,
-                EquippedDragonEntityId = Dragons.Phoenix,
+                EquippedDragonEntityId = DragonId.Phoenix,
                 EquippedTalismanEntityId = Talismans.GalaMym,
             },
         };
@@ -371,7 +372,7 @@ public class QuestClearPartyTest : TestFixture
             {
                 UnitNo = 1,
                 CharaId = Charas.GalaNotte,
-                EquipDragonKeyId = (ulong)this.GetDragonKeyId(Dragons.Leviathan),
+                EquipDragonKeyId = (ulong)this.GetDragonKeyId(DragonId.Leviathan),
                 EquipWeaponBodyId = WeaponBodies.WindrulersFang,
                 EquipCrestSlotType1CrestId1 = AbilityCrestId.BondsBetweenWorlds,
                 EquipCrestSlotType1CrestId2 = AbilityCrestId.AManUnchanging,
@@ -389,7 +390,7 @@ public class QuestClearPartyTest : TestFixture
             {
                 UnitNo = 2,
                 CharaId = Charas.GalaLeif,
-                EquipDragonKeyId = (ulong)this.GetDragonKeyId(Dragons.Phoenix),
+                EquipDragonKeyId = (ulong)this.GetDragonKeyId(DragonId.Phoenix),
                 EquipWeaponBodyId = WeaponBodies.PrimalTempest,
                 EquipCrestSlotType1CrestId1 = AbilityCrestId.AdventureinthePast,
                 EquipCrestSlotType1CrestId2 = AbilityCrestId.PrimalCrisis,
@@ -451,7 +452,7 @@ public class QuestClearPartyTest : TestFixture
                 IsMulti = false,
                 EquipDragonKeyId = long.MaxValue,
                 CharaId = Charas.Emma,
-                EquippedDragonEntityId = Dragons.Ifrit,
+                EquippedDragonEntityId = DragonId.Ifrit,
             },
             new()
             {

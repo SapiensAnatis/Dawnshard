@@ -1,7 +1,7 @@
-﻿using DragaliaAPI.Controllers.Dragalia;
+﻿using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Features.Friends;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
-using DragaliaAPI.Services.Game;
 
 namespace DragaliaAPI.Test.Controllers;
 

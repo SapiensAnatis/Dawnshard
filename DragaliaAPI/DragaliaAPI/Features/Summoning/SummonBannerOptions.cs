@@ -97,7 +97,7 @@ public class Banner
     /// <summary>
     /// Gets a list of dragons on rate up.
     /// </summary>
-    public IReadOnlyList<Dragons> PickupDragons { get; init; } = [];
+    public IReadOnlyList<DragonId> PickupDragons { get; init; } = [];
 
     /// <summary>
     /// Gets a list of <see cref="DragonData"/> objects for the rate up dragons.
@@ -114,7 +114,7 @@ public class Banner
     /// <summary>
     /// Gets a list of limited dragons that are available, but not on rate up.
     /// </summary>
-    public IReadOnlyList<Dragons> LimitedDragons { get; init; } = [];
+    public IReadOnlyList<DragonId> LimitedDragons { get; init; } = [];
 
     /// <summary>
     /// Gets a list of characters that can be purchased using wyrmsigils.
@@ -124,7 +124,7 @@ public class Banner
     /// <summary>
     /// Gets a list of dragons that can be purchased using wyrmsigils.
     /// </summary>
-    public IReadOnlyList<Dragons> TradeDragons { get; init; } = [];
+    public IReadOnlyList<DragonId> TradeDragons { get; init; } = [];
 
     /// <summary>
     /// Gets a dictionary of wyrmsigil trade ID to <see cref="AtgenSummonPointTradeList"/>.
@@ -156,7 +156,7 @@ public class Banner
     /// Gets a list of dragons that should override the default pool.
     /// </summary>
     /// <remarks>Only one override pool can be used. <see cref="OverrideCharaPool"/> takes precedence if both are specified.</remarks>
-    public IReadOnlyList<Dragons>? OverrideDragonPool { get; init; }
+    public IReadOnlyList<DragonId>? OverrideDragonPool { get; init; }
 
     public bool GetIsCurrentlyActive() => this.GetIsCurrentlyActive(TimeProvider.System);
 

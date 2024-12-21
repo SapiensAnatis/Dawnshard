@@ -80,7 +80,7 @@ internal sealed partial class SavefileEditService(
         MasterAsset.CharaData.ContainsKey((Charas)present.Item) && present.Quantity == 1;
 
     private static bool ValidateDragonPresent(PresentFormSubmission present) =>
-        MasterAsset.DragonData.ContainsKey((Dragons)present.Item);
+        MasterAsset.DragonData.ContainsKey((DragonId)present.Item);
 
     private static bool ValidateItemPresent(PresentFormSubmission present) =>
         MasterAsset.UseItem.ContainsKey((UseItem)present.Item);

@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Infrastructure.Results;
 
 namespace DragaliaAPI.Integration.Test.Features.Shop;
 

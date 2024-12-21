@@ -1,10 +1,10 @@
-﻿using DragaliaAPI.Features.Dungeon;
+﻿using DragaliaAPI.Features.CoOp;
+using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Quest;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
-using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.Extensions.Logging.Abstractions;

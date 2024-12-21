@@ -1,9 +1,9 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;

@@ -191,7 +191,7 @@ public class PartyInfoValidatorTest
             {
                 PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { DragonData = new() { DragonId = (Dragons)1234 } },
+                    new() { DragonData = new() { DragonId = (DragonId)1234 } },
                 },
             }
         );
@@ -215,7 +215,7 @@ public class PartyInfoValidatorTest
                     {
                         DragonData = new()
                         {
-                            DragonId = Dragons.GalaRebornAgni,
+                            DragonId = DragonId.GalaRebornAgni,
                             AttackPlusCount = 101,
                             HpPlusCount = 101,
                         },
@@ -237,7 +237,7 @@ public class PartyInfoValidatorTest
             {
                 PartyUnitList = new List<PartyUnitList>()
                 {
-                    new() { DragonData = new() { DragonId = Dragons.SummerMarishiten } },
+                    new() { DragonData = new() { DragonId = DragonId.SummerMarishiten } },
                 },
             }
         );

@@ -57,7 +57,7 @@ public class QuestReadStoryTest : TestFixture
             .UpdateDataList.DragonReliabilityList.Should()
             .ContainSingle()
             .Which.DragonId.Should()
-            .Be(Dragons.Midgardsormr);
+            .Be(DragonId.Midgardsormr);
 
         response
             .EntityResult.OverPresentEntityList.Should()
@@ -67,7 +67,7 @@ public class QuestReadStoryTest : TestFixture
                 new AtgenBuildEventRewardEntityList()
                 {
                     EntityType = EntityTypes.Dragon,
-                    EntityId = (int)Dragons.Midgardsormr,
+                    EntityId = (int)DragonId.Midgardsormr,
                     EntityQuantity = 1,
                 }
             );
@@ -88,7 +88,7 @@ public class QuestReadStoryTest : TestFixture
         );
 
         await this.AddToDatabase(
-            new DbPlayerDragonReliability() { DragonId = Dragons.Midgardsormr }
+            new DbPlayerDragonReliability() { DragonId = DragonId.Midgardsormr }
         );
 
         QuestReadStoryResponse response = (
@@ -111,7 +111,7 @@ public class QuestReadStoryTest : TestFixture
                 new AtgenBuildEventRewardEntityList()
                 {
                     EntityType = EntityTypes.Dragon,
-                    EntityId = (int)Dragons.Midgardsormr,
+                    EntityId = (int)DragonId.Midgardsormr,
                     EntityQuantity = 1,
                 }
             );

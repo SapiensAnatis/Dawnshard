@@ -1,9 +1,9 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Dmode;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Features.Story;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.Extensions.Time.Testing;
 using MockQueryable;

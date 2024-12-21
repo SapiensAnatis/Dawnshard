@@ -2,7 +2,7 @@
 
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Version;
-using DragaliaAPI.MessagePack;
+using DragaliaAPI.Infrastructure.Serialization.MessagePack;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using MessagePack;
@@ -1048,13 +1048,13 @@ public partial class DragonBuildupRequest
 public partial class DragonBuyGiftToSendMultipleRequest
 {
     [Key("dragon_id")]
-    public Dragons DragonId { get; set; }
+    public DragonId DragonId { get; set; }
 
     [Key("dragon_gift_id_list")]
     public IEnumerable<DragonGifts> DragonGiftIdList { get; set; } = [];
 
     public DragonBuyGiftToSendMultipleRequest(
-        Dragons dragonId,
+        DragonId dragonId,
         IEnumerable<DragonGifts> dragonGiftIdList
     )
     {
@@ -1069,12 +1069,12 @@ public partial class DragonBuyGiftToSendMultipleRequest
 public partial class DragonBuyGiftToSendRequest
 {
     [Key("dragon_id")]
-    public Dragons DragonId { get; set; }
+    public DragonId DragonId { get; set; }
 
     [Key("dragon_gift_id")]
     public DragonGifts DragonGiftId { get; set; }
 
-    public DragonBuyGiftToSendRequest(Dragons dragonId, DragonGifts dragonGiftId)
+    public DragonBuyGiftToSendRequest(DragonId dragonId, DragonGifts dragonGiftId)
     {
         this.DragonId = dragonId;
         this.DragonGiftId = dragonGiftId;
@@ -1140,7 +1140,7 @@ public partial class DragonSellRequest
 public partial class DragonSendGiftMultipleRequest
 {
     [Key("dragon_id")]
-    public Dragons DragonId { get; set; }
+    public DragonId DragonId { get; set; }
 
     [Key("dragon_gift_id")]
     public DragonGifts DragonGiftId { get; set; }
@@ -1148,7 +1148,7 @@ public partial class DragonSendGiftMultipleRequest
     [Key("quantity")]
     public int Quantity { get; set; }
 
-    public DragonSendGiftMultipleRequest(Dragons dragonId, DragonGifts dragonGiftId, int quantity)
+    public DragonSendGiftMultipleRequest(DragonId dragonId, DragonGifts dragonGiftId, int quantity)
     {
         this.DragonId = dragonId;
         this.DragonGiftId = dragonGiftId;
@@ -1162,12 +1162,12 @@ public partial class DragonSendGiftMultipleRequest
 public partial class DragonSendGiftRequest
 {
     [Key("dragon_id")]
-    public Dragons DragonId { get; set; }
+    public DragonId DragonId { get; set; }
 
     [Key("dragon_gift_id")]
     public DragonGifts DragonGiftId { get; set; }
 
-    public DragonSendGiftRequest(Dragons dragonId, DragonGifts dragonGiftId)
+    public DragonSendGiftRequest(DragonId dragonId, DragonGifts dragonGiftId)
     {
         this.DragonId = dragonId;
         this.DragonGiftId = dragonGiftId;
@@ -3793,7 +3793,7 @@ public partial class QuestSearchQuestClearPartyMultiRequest
     public Charas CharaIdList { get; set; }
 
     [Key("dragon_id_list")]
-    public Dragons DragonIdList { get; set; }
+    public DragonId DragonIdList { get; set; }
 
     [Key("weapon_body_id_list")]
     public IEnumerable<int> WeaponBodyIdList { get; set; } = [];
@@ -3805,7 +3805,7 @@ public partial class QuestSearchQuestClearPartyMultiRequest
         int questId,
         int partySwitchNo,
         Charas charaIdList,
-        Dragons dragonIdList,
+        DragonId dragonIdList,
         IEnumerable<int> weaponBodyIdList,
         IEnumerable<int> abilityCrestIdList
     )
@@ -3834,7 +3834,7 @@ public partial class QuestSearchQuestClearPartyRequest
     public Charas CharaIdList { get; set; }
 
     [Key("dragon_id_list")]
-    public Dragons DragonIdList { get; set; }
+    public DragonId DragonIdList { get; set; }
 
     [Key("weapon_body_id_list")]
     public IEnumerable<int> WeaponBodyIdList { get; set; } = [];
@@ -3846,7 +3846,7 @@ public partial class QuestSearchQuestClearPartyRequest
         int questId,
         int partySwitchNo,
         Charas charaIdList,
-        Dragons dragonIdList,
+        DragonId dragonIdList,
         IEnumerable<int> weaponBodyIdList,
         IEnumerable<int> abilityCrestIdList
     )

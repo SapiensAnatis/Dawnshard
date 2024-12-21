@@ -1,4 +1,4 @@
-using DragaliaAPI.Models.Options;
+using DragaliaAPI.Features.Shared.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 

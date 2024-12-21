@@ -1,7 +1,6 @@
-﻿using DragaliaAPI.Controllers;
+﻿using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
-using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +32,7 @@ public class SummonController(
         {
             excludableList.Add(new AtgenDuplicateEntityList(EntityTypes.Chara, (int)c));
         }
-        foreach (Dragons d in Enum.GetValues<Dragons>())
+        foreach (DragonId d in Enum.GetValues<DragonId>())
         {
             excludableList.Add(new AtgenDuplicateEntityList(EntityTypes.Dragon, (int)d));
         }

@@ -1,9 +1,9 @@
-﻿using DragaliaAPI.Controllers;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Features.Story;
 using DragaliaAPI.Features.Tutorial;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
@@ -108,9 +108,9 @@ public class RedoableSummonController(
         );
         prologueStory.State = StoryState.Read;
 
-        List<Dragons> dragonList = cachedResult
+        List<DragonId> dragonList = cachedResult
             .Where(x => x.EntityType == EntityTypes.Dragon)
-            .Select(x => (Dragons)x.Id)
+            .Select(x => (DragonId)x.Id)
             .ToList();
 
         List<Charas> charaList = cachedResult
@@ -122,9 +122,8 @@ public class RedoableSummonController(
             charaList
         );
 
-        IEnumerable<(Dragons Id, bool IsNew)> repositoryDragonOutput = await unitService.AddDragons(
-            dragonList
-        );
+        IEnumerable<(DragonId Id, bool IsNew)> repositoryDragonOutput =
+            await unitService.AddDragons(dragonList);
 
         UpdateDataList updateData = await updateDataService.SaveChangesAsync(cancellationToken);
 

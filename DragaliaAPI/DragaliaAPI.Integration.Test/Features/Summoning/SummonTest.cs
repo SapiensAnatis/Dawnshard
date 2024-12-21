@@ -1,5 +1,6 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Summoning;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.EntityFrameworkCore;
@@ -148,7 +149,7 @@ public class SummonTest : TestFixture
         normalOdds
             .Unit.DragonOddsList.ElementAt(0)
             .UnitList.Should()
-            .BeEquivalentTo([new AtgenUnitList { Id = (int)Dragons.Arsene, Rate = "0.800%" }]);
+            .BeEquivalentTo([new AtgenUnitList { Id = (int)DragonId.Arsene, Rate = "0.800%" }]);
     }
 
     [Fact]
@@ -249,7 +250,7 @@ public class SummonTest : TestFixture
             ExecDate = DateTimeOffset.UtcNow,
             PaymentType = PaymentTypes.Diamantium,
             EntityType = EntityTypes.Dragon,
-            EntityId = (int)Dragons.GalaRebornNidhogg,
+            EntityId = (int)DragonId.GalaRebornNidhogg,
             EntityQuantity = 1,
             EntityLevel = 1,
             EntityRarity = 5,
@@ -287,7 +288,7 @@ public class SummonTest : TestFixture
                     ExecDate = DateTimeOffset.UtcNow,
                     PaymentType = PaymentTypes.Diamantium,
                     EntityType = EntityTypes.Dragon,
-                    EntityId = (int)Dragons.GalaRebornNidhogg,
+                    EntityId = (int)DragonId.GalaRebornNidhogg,
                     EntityQuantity = 1,
                     EntityLevel = 1,
                     EntityRarity = 5,
@@ -488,7 +489,7 @@ public class SummonTest : TestFixture
                         new()
                         {
                             TradeId = int.Parse($"{TestBannerId}700"),
-                            EntityId = (int)Dragons.Arsene,
+                            EntityId = (int)DragonId.Arsene,
                             EntityType = EntityTypes.Dragon,
                         },
                     ],
@@ -537,7 +538,7 @@ public class SummonTest : TestFixture
                         new()
                         {
                             TradeId = int.Parse($"{TestBannerId}700"),
-                            EntityId = (int)Dragons.Arsene,
+                            EntityId = (int)DragonId.Arsene,
                             EntityType = EntityTypes.Dragon,
                         },
                     ],
@@ -1111,16 +1112,16 @@ public class SummonTest : TestFixture
             .ContainEquivalentOf(
                 new AtgenBuildEventRewardEntityList()
                 {
-                    EntityId = (int)Dragons.Arsene,
+                    EntityId = (int)DragonId.Arsene,
                     EntityType = EntityTypes.Dragon,
                     EntityQuantity = 1,
                 }
             );
 
-        response.UpdateDataList.DragonList.Should().Contain(x => x.DragonId == Dragons.Arsene);
+        response.UpdateDataList.DragonList.Should().Contain(x => x.DragonId == DragonId.Arsene);
 
         this.ApiContext.PlayerDragonData.Should()
-            .Contain(x => x.ViewerId == this.ViewerId && x.DragonId == Dragons.Arsene);
+            .Contain(x => x.ViewerId == this.ViewerId && x.DragonId == DragonId.Arsene);
     }
 
     private async Task CheckRewardInDb(AtgenResultUnitList reward)

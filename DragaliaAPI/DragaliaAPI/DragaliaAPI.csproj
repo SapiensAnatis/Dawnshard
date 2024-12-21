@@ -70,7 +70,7 @@
 
   <ItemGroup>
     <Using Include="System.Text.Json" />
-    <Using Include="DragaliaAPI.Models.Results" />
+    <Using Include="DragaliaAPI.Infrastructure.Results" />
     <Using Include="DragaliaAPI.Extensions" />
   </ItemGroup>
 

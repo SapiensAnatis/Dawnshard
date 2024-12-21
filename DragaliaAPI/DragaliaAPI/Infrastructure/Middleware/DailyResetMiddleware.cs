@@ -1,6 +1,5 @@
 ﻿using DragaliaAPI.Infrastructure.Authentication;
-using DragaliaAPI.MessagePack;
-using DragaliaAPI.Models;
+using DragaliaAPI.Infrastructure.Serialization.MessagePack;
 using MessagePack;
 using Microsoft.AspNetCore.Authorization;
 

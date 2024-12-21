@@ -11,7 +11,7 @@ public class DbPlayerDragonData : DbPlayerData, IHasXp
 {
     public DbPlayerDragonData() { }
 
-    public DbPlayerDragonData(long viewerId, Dragons id)
+    public DbPlayerDragonData(long viewerId, DragonId id)
     {
         this.ViewerId = viewerId;
         this.DragonId = id;
@@ -26,7 +26,7 @@ public class DbPlayerDragonData : DbPlayerData, IHasXp
     [Column("DragonId")]
     [Required]
     [TypeConverter(typeof(EnumConverter))]
-    public Dragons DragonId { get; set; }
+    public DragonId DragonId { get; set; }
 
     [Column("Exp")]
     public int Exp { get; set; } = 0;

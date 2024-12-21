@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Features.TimeAttack.Validation;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;

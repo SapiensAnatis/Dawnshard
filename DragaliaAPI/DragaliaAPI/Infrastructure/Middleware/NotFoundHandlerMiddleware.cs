@@ -1,7 +1,4 @@
 ﻿using System.Net;
-using DragaliaAPI.MessagePack;
-using DragaliaAPI.Models;
-using MessagePack;
 
 namespace DragaliaAPI.Infrastructure.Middleware;
 

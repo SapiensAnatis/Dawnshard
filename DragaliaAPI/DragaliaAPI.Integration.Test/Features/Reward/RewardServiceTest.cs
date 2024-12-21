@@ -1,5 +1,5 @@
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Features.Reward.Handlers;
+using DragaliaAPI.Features.Shared.Reward.Handlers;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using Microsoft.Extensions.DependencyInjection;
 

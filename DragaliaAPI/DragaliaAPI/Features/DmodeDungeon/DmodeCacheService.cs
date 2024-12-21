@@ -1,5 +1,5 @@
-﻿using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services.Exceptions;
+﻿using DragaliaAPI.Infrastructure;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Caching.Distributed;
 

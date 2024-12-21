@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using DragaliaAPI.Database;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using Microsoft.EntityFrameworkCore;

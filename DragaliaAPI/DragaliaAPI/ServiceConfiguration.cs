@@ -1,8 +1,11 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.ClearParty;
+using DragaliaAPI.Features.CoOp;
+using DragaliaAPI.Features.CoOp.Stamps;
 using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.DmodeDungeon;
+using DragaliaAPI.Features.Dragons;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Dungeon.AutoRepeat;
 using DragaliaAPI.Features.Dungeon.Record;
@@ -10,29 +13,27 @@ using DragaliaAPI.Features.Dungeon.Start;
 using DragaliaAPI.Features.Emblem;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Features.Friends;
 using DragaliaAPI.Features.Item;
+using DragaliaAPI.Features.Login.Auth;
+using DragaliaAPI.Features.Login.Savefile;
+using DragaliaAPI.Features.Login.SavefileUpdate;
 using DragaliaAPI.Features.Maintenance;
 using DragaliaAPI.Features.Missions;
-using DragaliaAPI.Features.PartyPower;
+using DragaliaAPI.Features.Parties;
 using DragaliaAPI.Features.Player;
-using DragaliaAPI.Features.SavefileUpdate;
+using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Features.Shop;
-using DragaliaAPI.Features.Stamp;
-using DragaliaAPI.Features.StorySkip;
+using DragaliaAPI.Features.Story.Skip;
 using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Features.TimeAttack;
-using DragaliaAPI.Features.Tool;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Features.Version;
+using DragaliaAPI.Features.Weapons;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Infrastructure.Middleware;
-using DragaliaAPI.Models.Options;
-using DragaliaAPI.Services;
-using DragaliaAPI.Services.Api;
-using DragaliaAPI.Services.Game;
-using DragaliaAPI.Services.Health;
-using DragaliaAPI.Services.Photon;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -41,6 +42,9 @@ using Microsoft.Extensions.Options;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using static DragaliaAPI.Infrastructure.Authentication.AuthConstants;
+using AuthService = DragaliaAPI.Features.Login.Auth.AuthService;
+using BaasApi = DragaliaAPI.Features.Shared.BaasApi;
+using DragonService = DragaliaAPI.Features.Dragons.DragonService;
 
 namespace DragaliaAPI;
 
@@ -81,8 +85,7 @@ public static class ServiceConfiguration
             .AddWebFeature()
             .AddAbilityCrestFeature()
             .AddTutorialFeature()
-            .AddZenaFeature()
-            .AddToolFeature();
+            .AddZenaFeature();
 
         services
             .RegisterMissionServices()

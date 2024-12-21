@@ -282,21 +282,21 @@ public static class DragonConstants
         2900,
     }.ToImmutableArray();
 
-    public static readonly IImmutableSet<Dragons> UnsummonableDragons = new HashSet<Dragons>
+    public static readonly IImmutableSet<DragonId> UnsummonableDragons = new HashSet<DragonId>
     {
-        Dragons.BronzeFafnir,
-        Dragons.SilverFafnir,
-        Dragons.GoldFafnir,
-        Dragons.HighMidgardsormr,
-        Dragons.HighBrunhilda,
-        Dragons.HighMercury,
-        Dragons.HighJupiter,
-        Dragons.HighZodiark,
-        Dragons.MiniMids,
-        Dragons.MiniHildy,
-        Dragons.MiniMercs,
-        Dragons.MiniJupi,
-        Dragons.MiniZodi,
-        Dragons.Puppy,
+        DragonId.BronzeFafnir,
+        DragonId.SilverFafnir,
+        DragonId.GoldFafnir,
+        DragonId.HighMidgardsormr,
+        DragonId.HighBrunhilda,
+        DragonId.HighMercury,
+        DragonId.HighJupiter,
+        DragonId.HighZodiark,
+        DragonId.MiniMids,
+        DragonId.MiniHildy,
+        DragonId.MiniMercs,
+        DragonId.MiniJupi,
+        DragonId.MiniZodi,
+        DragonId.Puppy,
     }.ToImmutableHashSet();
 }

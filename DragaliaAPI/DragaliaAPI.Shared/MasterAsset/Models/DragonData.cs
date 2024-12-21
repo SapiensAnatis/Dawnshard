@@ -4,7 +4,7 @@ using MessagePack;
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
 public record DragonData(
-    Dragons Id,
+    DragonId Id,
     int Rarity,
     UnitElement ElementalType,
     bool IsPlayable,

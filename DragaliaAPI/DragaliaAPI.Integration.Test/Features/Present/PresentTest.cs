@@ -1,4 +1,5 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
@@ -242,7 +243,7 @@ public class PresentTest : TestFixture
             {
                 ViewerId = ViewerId,
                 EntityType = EntityTypes.Dragon,
-                EntityId = (int)Dragons.Arsene,
+                EntityId = (int)DragonId.Arsene,
             },
             new()
             {
@@ -319,10 +320,12 @@ public class PresentTest : TestFixture
 
         response.Data.UpdateDataList.CharaList.Should().Contain(x => x.CharaId == Charas.Akasha);
 
-        response.Data.UpdateDataList.DragonList.Should().Contain(x => x.DragonId == Dragons.Arsene);
+        response
+            .Data.UpdateDataList.DragonList.Should()
+            .Contain(x => x.DragonId == DragonId.Arsene);
         response
             .Data.UpdateDataList.DragonReliabilityList.Should()
-            .Contain(x => x.DragonId == Dragons.Arsene);
+            .Contain(x => x.DragonId == DragonId.Arsene);
 
         response
             .Data.UpdateDataList.AbilityCrestList.Should()
@@ -348,7 +351,7 @@ public class PresentTest : TestFixture
             {
                 ViewerId = ViewerId,
                 EntityType = EntityTypes.Dragon,
-                EntityId = (int)Dragons.Raphael,
+                EntityId = (int)DragonId.Raphael,
             },
             new()
             {
@@ -382,10 +385,10 @@ public class PresentTest : TestFixture
 
         response
             .Data.UpdateDataList.DragonList.Should()
-            .Contain(x => x.DragonId == Dragons.Raphael);
+            .Contain(x => x.DragonId == DragonId.Raphael);
         response
             .Data.UpdateDataList.DragonReliabilityList.Should()
-            .Contain(x => x.DragonId == Dragons.Raphael);
+            .Contain(x => x.DragonId == DragonId.Raphael);
 
         response
             .Data.UpdateDataList.PresentNotice.Should()
@@ -504,13 +507,13 @@ public class PresentTest : TestFixture
             {
                 ViewerId = ViewerId,
                 EntityType = EntityTypes.Dragon,
-                EntityId = (int)Dragons.Homura,
+                EntityId = (int)DragonId.Homura,
             },
             new()
             {
                 ViewerId = ViewerId,
                 EntityType = EntityTypes.Dragon,
-                EntityId = (int)Dragons.Homura,
+                EntityId = (int)DragonId.Homura,
             },
         };
 
@@ -532,7 +535,7 @@ public class PresentTest : TestFixture
         response
             .Data.UpdateDataList.DragonReliabilityList.Should()
             .ContainSingle()
-            .And.Contain(x => x.DragonId == Dragons.Homura);
+            .And.Contain(x => x.DragonId == DragonId.Homura);
     }
 
     [Fact]
@@ -668,7 +671,7 @@ public class PresentTest : TestFixture
             new DbPlayerPresent()
             {
                 EntityType = EntityTypes.Dragon,
-                EntityId = (int)Dragons.Andromeda,
+                EntityId = (int)DragonId.Andromeda,
                 EntityQuantity = 2,
             },
         ];
@@ -687,7 +690,7 @@ public class PresentTest : TestFixture
         response
             .Data.UpdateDataList.DragonList.Should()
             .HaveCount(2)
-            .And.AllSatisfy(x => x.DragonId.Should().Be(Dragons.Andromeda));
+            .And.AllSatisfy(x => x.DragonId.Should().Be(DragonId.Andromeda));
 
         this.ApiContext.PlayerDragonData.Should()
             .BeEquivalentTo(
@@ -695,12 +698,12 @@ public class PresentTest : TestFixture
                     new DbPlayerDragonData()
                     {
                         ViewerId = this.ViewerId,
-                        DragonId = Dragons.Andromeda,
+                        DragonId = DragonId.Andromeda,
                     },
                     new DbPlayerDragonData()
                     {
                         ViewerId = this.ViewerId,
-                        DragonId = Dragons.Andromeda,
+                        DragonId = DragonId.Andromeda,
                     },
                 ],
                 opts => opts.Including(x => x.ViewerId).Including(x => x.DragonId)

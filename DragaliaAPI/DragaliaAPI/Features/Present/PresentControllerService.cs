@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Models.Generated;
 using Microsoft.EntityFrameworkCore;
 

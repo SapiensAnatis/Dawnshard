@@ -2,20 +2,13 @@
 
 public class AuthorizationMiddlewareTest : TestFixture
 {
-    private const string Endpoint = "test";
+    private const string Endpoint = "emblem/get_list";
 
     public AuthorizationMiddlewareTest(
         CustomWebApplicationFactory factory,
         ITestOutputHelper outputHelper
     )
-        : base(factory, outputHelper)
-    {
-#if !DEBUG && !TEST
-        throw new InvalidOperationException(
-            "These tests must be run in a debug build as they use a conditionally compiled controller"
-        );
-#endif
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task ValidSidHeader_ReturnsExpectedResponse()
@@ -23,15 +16,13 @@ public class AuthorizationMiddlewareTest : TestFixture
         this.Client.DefaultRequestHeaders.Clear();
         this.Client.DefaultRequestHeaders.Add("SID", this.SessionId);
 
-        HttpResponseMessage response = await this.Client.GetAsync(
+        HttpResponseMessage response = await this.Client.PostAsync(
             Endpoint,
+            null,
             TestContext.Current.CancellationToken
         );
 
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-        (await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken))
-            .Should()
-            .Be("OK");
     }
 
     [Fact]
@@ -40,8 +31,9 @@ public class AuthorizationMiddlewareTest : TestFixture
         this.Client.DefaultRequestHeaders.Clear();
         this.Client.DefaultRequestHeaders.Add("SID", "invalid");
 
-        HttpResponseMessage response = await this.Client.GetAsync(
+        HttpResponseMessage response = await this.Client.PostAsync(
             Endpoint,
+            null,
             TestContext.Current.CancellationToken
         );
 

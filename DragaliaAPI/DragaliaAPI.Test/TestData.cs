@@ -32,7 +32,7 @@ public static class TestData
             Skill2Level = 0,
             IsUnlockEditSkill = true,
         },
-        SupportDragon = new() { DragonId = Dragons.Midgardsormr },
+        SupportDragon = new() { DragonId = DragonId.Midgardsormr },
         SupportWeaponBody = new() { WeaponBodyId = WeaponBodies.SoldiersBrand },
         SupportTalisman = new() { TalismanId = Talismans.ThePrince },
         SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()

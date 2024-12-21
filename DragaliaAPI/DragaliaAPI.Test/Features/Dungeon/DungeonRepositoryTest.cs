@@ -5,7 +5,6 @@ using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
-using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Test.Features.Dungeon;
@@ -95,12 +94,12 @@ public class DungeonRepositoryTest : RepositoryTestFixture
             Skill2Level = 2,
         };
 
-        DbPlayerDragonData dragon = new DbPlayerDragonData(ViewerId, Dragons.MidgardsormrZero);
+        DbPlayerDragonData dragon = new DbPlayerDragonData(ViewerId, DragonId.MidgardsormrZero);
         dragon.DragonKeyId = 400;
 
         DbPlayerDragonReliability reliability = new DbPlayerDragonReliability(
             ViewerId,
-            Dragons.MidgardsormrZero
+            DragonId.MidgardsormrZero
         );
         reliability.Level = 15;
 

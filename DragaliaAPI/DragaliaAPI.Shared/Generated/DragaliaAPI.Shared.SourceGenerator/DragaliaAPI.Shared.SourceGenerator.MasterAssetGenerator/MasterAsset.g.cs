@@ -13,8 +13,8 @@ public static partial class MasterAsset
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData>? charaData;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Charas, global::DragaliaAPI.Shared.MasterAsset.Models.CharaData> CharaData => charaData ?? throw new InvalidOperationException(ErrorUninitialized);
 
-    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>? dragonData;
-    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData> DragonData => dragonData ?? throw new InvalidOperationException(ErrorUninitialized);
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.DragonId, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>? dragonData;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.DragonId, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData> DragonData => dragonData ?? throw new InvalidOperationException(ErrorUninitialized);
 
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.DragonRarity>? dragonRarity;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.DragonRarity> DragonRarity => dragonRarity ?? throw new InvalidOperationException(ErrorUninitialized);
@@ -353,8 +353,8 @@ public static partial class MasterAsset
                 null
             );
         
-        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>> dragonDataTask =
-            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.Dragons, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>(
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.DragonId, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>> dragonDataTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.DragonId, global::DragaliaAPI.Shared.MasterAsset.Models.DragonData>(
                 "DragonData.msgpack",
                 (global::DragaliaAPI.Shared.MasterAsset.Models.DragonData x) => x.Id,
                 null

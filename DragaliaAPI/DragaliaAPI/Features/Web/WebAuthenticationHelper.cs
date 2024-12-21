@@ -1,10 +1,8 @@
 using System.Diagnostics;
 using System.Net.Http.Headers;
-using System.Security.Claims;
 using DragaliaAPI.Database;
+using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Infrastructure.Authentication;
-using DragaliaAPI.Services.Api;
-using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;

@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Controllers;
+﻿using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

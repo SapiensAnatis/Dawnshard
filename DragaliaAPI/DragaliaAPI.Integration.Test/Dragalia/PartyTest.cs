@@ -1,13 +1,14 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Models;
+using DragaliaAPI.Features.Parties;
+using DragaliaAPI.Infrastructure.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
-/// Tests <see cref="Controllers.Dragalia.PartyController"/>
+/// Tests <see cref="PartyController"/>
 /// </summary>
 public class PartyTest : TestFixture
 {

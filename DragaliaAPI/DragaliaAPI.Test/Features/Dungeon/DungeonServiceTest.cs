@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Test.Utils;
 using Microsoft.Extensions.Caching.Distributed;

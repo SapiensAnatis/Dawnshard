@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Missions;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;

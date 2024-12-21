@@ -1,6 +1,6 @@
-﻿using DragaliaAPI.Controllers;
+﻿using DragaliaAPI.Features.Shared.Options;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Models.Options;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;

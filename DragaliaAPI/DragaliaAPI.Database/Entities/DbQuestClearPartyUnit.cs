@@ -17,7 +17,7 @@ public class DbQuestClearPartyUnit : DbPartyUnitBase, IDbPlayerData
 
     public required bool IsMulti { get; set; }
 
-    public Dragons EquippedDragonEntityId { get; set; }
+    public DragonId EquippedDragonEntityId { get; set; }
 
     public Talismans EquippedTalismanEntityId { get; set; }
 
@@ -33,7 +33,7 @@ public class DbQuestClearPartyUnit : DbPartyUnitBase, IDbPlayerData
 
         this.EquipDragonKeyId = 0;
         this.EquipTalismanKeyId = 0;
-        this.EquippedDragonEntityId = Dragons.Empty;
+        this.EquippedDragonEntityId = DragonId.Empty;
         this.EquippedTalismanEntityId = Talismans.Empty;
 
         this.EquipCrestSlotType1CrestId1 = AbilityCrestId.Empty;

@@ -1,6 +1,6 @@
 using DragaliaAPI.Database;
-using DragaliaAPI.Models.Options;
-using DragaliaAPI.Services.Api;
+using DragaliaAPI.Features.CoOp;
+using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Shared.MasterAsset;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,9 +11,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Npgsql;
 using StackExchange.Redis;
-using Xunit.Sdk;
 
 namespace DragaliaAPI.Integration.Test;
 

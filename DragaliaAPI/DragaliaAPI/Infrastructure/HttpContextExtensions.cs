@@ -1,5 +1,4 @@
-using DragaliaAPI.MessagePack;
-using DragaliaAPI.Models;
+using DragaliaAPI.Infrastructure.Serialization.MessagePack;
 using MessagePack;
 
 namespace DragaliaAPI.Infrastructure;
