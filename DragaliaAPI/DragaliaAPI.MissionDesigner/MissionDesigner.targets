@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+  <PropertyGroup>
+    <_InvokeMissionDesignerCommand>&quot;$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MissionDesigner&quot;</_InvokeMissionDesignerCommand>
+    <!-- For Docker builds, where we pass /p:UseAppHost=false -->
+    <_InvokeMissionDesignerCommand Condition="$(UseAppHost) == 'false'">dotnet &quot;$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MissionDesigner.dll&quot;</_InvokeMissionDesignerCommand>
+  </PropertyGroup>
+  
+  <Target Name="PrepareForMissionDesigner">
+    <PropertyGroup>
+      <MissionDesignerStampFile>$(IntermediateOutputPath).mission-designer</MissionDesignerStampFile>
+    </PropertyGroup>
+  </Target>
+  
+  <Target Name="MissionDesigner" 
+          AfterTargets="Build" DependsOnTargets="PrepareForMissionDesigner" 
+          Inputs="$(MissionDesignerStampFile)"
+          Outputs="$(MasterAssetResources)/Missions/MissionProgressionInfo.json"
+    >
+    
+    <Message Importance="high" Text="Generating MissionProgressionInfo.json into $(MasterAssetResources)"/>
+    <Exec
+      Command="$(_InvokeMissionDesignerCommand) &quot;$(MasterAssetResources)&quot;"
+      ConsoleToMSBuild="true" />
+    
+    <Touch Files="$(MissionDesignerStampFile)" AlwaysCreate="true"/>
+    
+    <ItemGroup>
+      <FileWrites Include="$(MissionDesignerStampFile)"/>
+    </ItemGroup>
+  </Target>
+</Project>  

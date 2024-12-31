@@ -5,14 +5,17 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0.101 AS build
 WORKDIR /src
-COPY ["DragaliaAPI/DragaliaAPI.MissionDesigner/DragaliaAPI.MissionDesigner.csproj", "DragaliaAPI/DragaliaAPI.MissionDesigner/"]
-COPY ["DragaliaAPI/DragaliaAPI.MasterAssetConverter/DragaliaAPI.MasterAssetConverter.csproj", "DragaliaAPI/DragaliaAPI.MasterAssetConverter/"]
 COPY ["DragaliaAPI/Directory.Build.props", "."]
 COPY ["Directory.Packages.props", "."]
 COPY ["nuget.config", "."]
-RUN dotnet restore "DragaliaAPI/DragaliaAPI.MissionDesigner/DragaliaAPI.MissionDesigner.csproj"
-RUN dotnet restore "DragaliaAPI/DragaliaAPI.MasterAssetConverter/DragaliaAPI.MasterAssetConverter.csproj"
+COPY ["Aspire/Dawnshard.ServiceDefaults/Dawnshard.ServiceDefaults.csproj", "Aspire/Dawnshard.ServiceDefaults/"]
+COPY ["Shared/DragaliaAPI.Photon.Shared/DragaliaAPI.Photon.Shared.csproj", "Shared/DragaliaAPI.Photon.Shared/"]
 COPY ["DragaliaAPI/DragaliaAPI/DragaliaAPI.csproj", "DragaliaAPI/DragaliaAPI/"]
+COPY ["DragaliaAPI/DragaliaAPI.Database/DragaliaAPI.Database.csproj", "DragaliaAPI/DragaliaAPI.Database/"]
+COPY ["DragaliaAPI/DragaliaAPI.Shared/DragaliaAPI.Shared.csproj", "DragaliaAPI/DragaliaAPI.Shared/"]
+COPY ["DragaliaAPI/DragaliaAPI.Shared.SourceGenerator/DragaliaAPI.Shared.SourceGenerator.csproj", "DragaliaAPI/DragaliaAPI.Shared.SourceGenerator/"]
+COPY ["DragaliaAPI/DragaliaAPI.MasterAssetConverter/DragaliaAPI.MasterAssetConverter.csproj", "DragaliaAPI/DragaliaAPI.MasterAssetConverter/"]
+COPY ["DragaliaAPI/DragaliaAPI.MissionDesigner/DragaliaAPI.MissionDesigner.csproj", "DragaliaAPI/DragaliaAPI.MissionDesigner/"]
 RUN dotnet restore "DragaliaAPI/DragaliaAPI/DragaliaAPI.csproj"
 COPY [".editorconfig", ".editorconfig"]
 COPY ["DragaliaAPI/", "DragaliaAPI/"]
