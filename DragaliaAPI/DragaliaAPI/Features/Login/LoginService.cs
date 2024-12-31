@@ -126,7 +126,7 @@ public class LoginService(
 
     public async Task<IList<AtgenMonthlyWallReceiveList>> GetWallMonthlyReceiveList()
     {
-        if (!await wallService.CheckWallInitialized())
+        if (!await wallService.CheckWallLevelsInitialized())
         {
             return [];
         }

@@ -21,7 +21,7 @@ public interface IWallService
     Task InitializeWall();
     Task<Dictionary<QuestWallTypes, int>> GetWallLevelMap();
     Task<DbWallRewardDate> GetLastRewardDate();
-    Task<bool> CheckWallInitialized();
+    Task<bool> CheckWallLevelsInitialized();
     bool CheckCanClaimReward(DateTimeOffset lastClaimDate);
     Task<DbPlayerQuestWall> GetQuestWall(int wallId);
 }

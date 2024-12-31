@@ -52,7 +52,7 @@ public partial class WallController(
     [HttpPost("get_monthly_reward")]
     public async Task<DragaliaResult> GetMonthlyReward()
     {
-        if (!await wallService.CheckWallInitialized())
+        if (!await wallService.CheckWallLevelsInitialized())
         {
             Log.InvalidCheckAttempt(logger);
 
@@ -94,7 +94,7 @@ public partial class WallController(
     {
         // Called when sending `monthly_wall_reward_list` from /login/index
 
-        if (!await wallService.CheckWallInitialized())
+        if (!await wallService.CheckWallLevelsInitialized())
         {
             Log.InvalidClaimAttempt(logger);
 
