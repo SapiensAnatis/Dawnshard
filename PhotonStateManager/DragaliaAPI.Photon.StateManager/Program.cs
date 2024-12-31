@@ -14,14 +14,6 @@ builder.ConfigureServices();
 
 WebApplication app = builder.Build();
 
-RedisOptions redisOptions = app.Services.GetRequiredService<IOptions<RedisOptions>>().Value;
-
-app.Logger.LogInformation(
-    "Connecting to Redis at {Hostname}:{Port}",
-    redisOptions.Hostname,
-    redisOptions.Port
-);
-
 IRedisConnectionProvider provider = app.Services.GetRequiredService<IRedisConnectionProvider>();
 
 bool created = await provider.Connection.CreateIndexAsync(typeof(RedisGame));

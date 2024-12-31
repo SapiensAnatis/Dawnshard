@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DragaliaAPI.Photon.Plugin.Plugins.Discord;
 using DragaliaAPI.Photon.Plugin.Plugins.GameLogic;
 using DragaliaAPI.Photon.Plugin.Plugins.StateManager;
@@ -16,7 +17,15 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
             out string errorMsg
         )
         {
-            PluginConfiguration configuration = new PluginConfiguration(config);
+            Dictionary<string, string> configWithEnv = new(config.Count);
+
+            foreach (KeyValuePair<string, string> kvp in config)
+            {
+                string value = Environment.GetEnvironmentVariable(kvp.Key) ?? kvp.Value;
+                configWithEnv.Add(kvp.Key, value);
+            }
+
+            PluginConfiguration configuration = new PluginConfiguration(configWithEnv);
             PluginStateService stateService = new PluginStateService();
 
             GameLogicPlugin gameLogicPlugin = new GameLogicPlugin(stateService, configuration);
@@ -37,7 +46,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.Gluon
                 discordPlugin
             );
 
-            if (gluonPlugin.SetupInstance(gameHost, config, out errorMsg))
+            if (gluonPlugin.SetupInstance(gameHost, configWithEnv, out errorMsg))
             {
                 return gluonPlugin;
             }

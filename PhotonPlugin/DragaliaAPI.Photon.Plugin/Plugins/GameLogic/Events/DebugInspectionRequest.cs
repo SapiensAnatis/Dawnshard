@@ -16,6 +16,6 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic.Events
         }
 
         [Key(1)]
-        public RequestTypes requestType;
+        public RequestTypes RequestType;
     }
 }

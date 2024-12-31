@@ -89,7 +89,9 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
         public void OnActorLeave(ILeaveGameCallInfo info)
         {
             if (this.MinGoToIngameState <= 0)
+            {
                 return;
+            }
 
             this.heroParamStorage.Remove(info.ActorNr);
 
@@ -100,7 +102,9 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                 .Min();
 
             if (this.MinGoToIngameState == newMinGoToIngameState)
+            {
                 return;
+            }
 
             this.MinGoToIngameState = newMinGoToIngameState;
             this.OnMinStateChange(info);
@@ -153,8 +157,8 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
 
             GoToIngameState data = new GoToIngameState()
             {
-                elements = actorData,
-                brInitData = null,
+                Elements = actorData,
+                BrInitData = null,
             };
 
             byte[] msgpack = MessagePackSerializer.Serialize(data, MessagePackOptions);
@@ -182,11 +186,19 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                 }
             );
 
-            Uri baseUri = this.pluginStateService.IsUseSecondaryServer
-                ? this.pluginConfiguration.SecondaryApiServerUrl
-                : this.pluginConfiguration.ApiServerUrl;
+            Uri baseUri;
+            if (this.pluginStateService.IsUseSecondaryServer)
+            {
+                baseUri =
+                    this.pluginConfiguration.SecondaryApiServerUrl
+                    ?? throw new InvalidOperationException("Failed to get SecondaryApiServerUrl");
+            }
+            else
+            {
+                baseUri = this.pluginConfiguration.ApiServerUrl;
+            }
 
-            Uri requestUri = new Uri(baseUri, "heroparam/batch");
+            Uri requestUri = new Uri(baseUri, "2.19.0_20220714193707/heroparam/batch");
 
             this.logger.DebugFormat("RequestHeroParam - {0}", requestUri.AbsoluteUri);
 
@@ -216,12 +228,13 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             this.pluginHost.LogIfFailedCallback(response, userState);
 
             if (response.Status != HttpRequestQueueResult.Success)
+            {
                 return;
+            }
 
-            List<HeroParamData> responseObject = JsonSerializer.Deserialize<List<HeroParamData>>(
-                response.ResponseText,
-                JsonOptions
-            );
+            List<HeroParamData> responseObject =
+                JsonSerializer.Deserialize<List<HeroParamData>>(response.ResponseText, JsonOptions)
+                ?? [];
 
 #if DEBUG
             this.logger.DebugFormat("Response text: {0}", response.ResponseText);
@@ -232,7 +245,9 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
 #endif
 
             foreach (HeroParamData data in responseObject)
+            {
                 this.heroParamStorage[data.ActorNr] = new HeroParamState(data);
+            }
         }
 
         /// <summary>
@@ -243,7 +258,9 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             Dictionary<int, int> memberCountTable = this.GetMemberCountTable();
 
             foreach (HeroParamState state in this.heroParamStorage.Values)
+            {
                 state.UsedMemberCount = memberCountTable[state.ActorNr];
+            }
 
             int questId = this.pluginHost.GetQuestId();
             int rankingType = QuestHelper.GetIsRanked(questId) ? 1 : 0;
@@ -300,15 +317,15 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                 {
                     CharacterData evt = new CharacterData()
                     {
-                        playerId = actorNr,
-                        heroParamExs = heroParams
+                        PlayerId = actorNr,
+                        HeroParamExs = heroParams
                             .Select(x => new HeroParamExData()
                             {
-                                limitOverCount = x.ExAbilityLv,
-                                sequenceNumber = x.Position,
+                                LimitOverCount = x.ExAbilityLv,
+                                SequenceNumber = x.Position,
                             })
                             .ToArray(),
-                        heroParams = heroParams.Take(state.UsedMemberCount).ToArray(),
+                        HeroParams = heroParams.Take(state.UsedMemberCount).ToArray(),
                     };
 
                     this.pluginHost.RaiseEvent(Event.CharacterData, evt);

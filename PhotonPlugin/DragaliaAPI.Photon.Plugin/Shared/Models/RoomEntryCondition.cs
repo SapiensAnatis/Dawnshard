@@ -14,10 +14,10 @@ namespace DragaliaAPI.Photon.Plugin.Shared.Models
         }
 
         [Key(0)]
-        public HashSet<int> UnacceptedElementals { get; set; }
+        public required HashSet<int> UnacceptedElementals { get; set; }
 
         [Key(1)]
-        public HashSet<int> UnacceptedWeapons { get; set; }
+        public required HashSet<int> UnacceptedWeapons { get; set; }
 
         [Key(2)]
         public int RequiredPower { get; set; }

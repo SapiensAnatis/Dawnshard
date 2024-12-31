@@ -48,7 +48,7 @@ namespace DragaliaAPI.Photon.Plugin.Shared.Helpers
             if (
                 !gameProperties.TryGetValue(
                     GamePropertyKeys.EntryConditions,
-                    out object entryConditionObj
+                    out object? entryConditionObj
                 )
             )
             {

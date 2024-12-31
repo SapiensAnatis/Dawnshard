@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Photon.Plugin.Shared.Helpers;
 
 namespace DragaliaAPI.Photon.Plugin.Shared
@@ -25,19 +26,19 @@ namespace DragaliaAPI.Photon.Plugin.Shared
 
         public long SecondaryViewerIdCriterion { get; }
 
-        public Uri SecondaryApiServerUrl { get; }
+        public Uri? SecondaryApiServerUrl { get; }
 
-        public Uri SecondaryStateManagerUrl { get; }
+        public Uri? SecondaryStateManagerUrl { get; }
 
-        public string SecondaryBearerToken { get; }
+        public string? SecondaryBearerToken { get; }
 
         public int RandomMatchingStartDelayMs { get; }
 
         public bool EnableDiscordIntegration { get; }
 
-        public Uri DiscordUrl { get; }
+        public Uri? DiscordUrl { get; }
 
-        public string DiscordBearerToken { get; }
+        public string? DiscordBearerToken { get; }
 
         public PluginConfiguration(IDictionary<string, string> config)
         {
