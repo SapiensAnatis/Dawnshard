@@ -1,5 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
+  <Import Project="..\DragaliaAPI.MasterAssetConverter\MasterAssetConverter.targets" />
+  <Import Project="..\DragaliaAPI.MissionDesigner\MissionDesigner.targets" />
+  
   <PropertyGroup>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
@@ -80,54 +83,11 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\Aspire\Dawnshard.ServiceDefaults\Dawnshard.ServiceDefaults.csproj" />
-    <ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj" />
     <ProjectReference Include="..\..\Shared\DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj" />
+    <ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj" />
     <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj" />
+    <ProjectReference Include="..\DragaliaAPI.MissionDesigner\DragaliaAPI.MissionDesigner.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\DragaliaAPI.MasterAssetConverter\DragaliaAPI.MasterAssetConverter.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
-
-  <ItemGroup>
-    <MasterAssetJsonFiles Visible="false" Include="$(MasterAssetResources)**\*.json" Exclude="$(MasterAssetResources)**\*.schema.json" />
-    <MissionProgressionInfoCs Visible="false" Include="../DragaliaAPI.MissionDesigner/**/*.cs" Exclude="../DragaliaAPI.MissionDesigner/obj/**/*.*" />
-  </ItemGroup>
-
-  <Target Name="MissionDesigner" BeforeTargets="MasterAssetConverter" Inputs="@(MissionProgressionInfoCs)" Outputs="$(MasterAssetResources)/Missions/MissionProgressionInfo.json">
-    <MSBuild Projects="../DragaliaAPI.MissionDesigner/DragaliaAPI.MissionDesigner.csproj">
-      <Output ItemName="DesignerOutputs" TaskParameter="TargetOutputs" />
-    </MSBuild>
-
-    <PropertyGroup>
-      <MissionDesignerDll>%(DesignerOutputs.Identity)</MissionDesignerDll>
-    </PropertyGroup>
-
-    <Exec Command="dotnet $(MissionDesignerDll) $(MasterAssetResources)" ConsoleToMSBuild="true" />
-  </Target>
-
-  <Target Name="MasterAssetConverter" AfterTargets="Build" Inputs="@(MasterAssetJsonFiles)" Outputs="@(MasterAssetJsonFiles->'$(OutDir)Resources\%(RecursiveDir)%(Filename).msgpack')">
-    <Message Text="Building MasterAssetConverter" Importance="high" />
-    <MSBuild Projects="../DragaliaAPI.MasterAssetConverter/DragaliaAPI.MasterAssetConverter.csproj">
-      <Output ItemName="ConverterOutputs" TaskParameter="TargetOutputs" />
-    </MSBuild>
-
-    <PropertyGroup>
-      <MasterAssetConverterDll>%(ConverterOutputs.Identity)</MasterAssetConverterDll>
-    </PropertyGroup>
-
-    <Exec Command="dotnet $(MasterAssetConverterDll) $(MasterAssetResources) $(OutDir)Resources\" ConsoleToMSBuild="true" />
-
-    <ItemGroup>
-      <MasterAssetMessagePackFiles Include="$(OutDir)Resources\**\*.msgpack" />
-    </ItemGroup>
-  </Target>
-
-  <Target Name="CopyMsgpackToPublish" AfterTargets="Publish" DependsOnTargets="MasterAssetConverter">
-    <Copy SourceFiles="@(MasterAssetMessagePackFiles)" DestinationFolder="$(PublishDir)Resources\%(RecursiveDir)" />
-  </Target>
-
-  <Target Name="CleanMsgpackFiles" AfterTargets="Clean">
-    <ItemGroup>
-      <FilesToDelete Include="$(OutDir)Resources\**\*.msgpack" />
-    </ItemGroup>
-    <Delete Files="@(FilesToDelete)" />
-  </Target>
 
 </Project>

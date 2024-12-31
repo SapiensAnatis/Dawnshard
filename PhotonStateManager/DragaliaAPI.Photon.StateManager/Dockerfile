@@ -5,10 +5,12 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0.101 AS build
 WORKDIR /src
-COPY ["PhotonStateManager/DragaliaAPI.Photon.StateManager/DragaliaAPI.Photon.StateManager.csproj", "PhotonStateManager/DragaliaAPI.Photon.StateManager/"]
 COPY ["PhotonStateManager/Directory.Build.props", "."]
 COPY ["Directory.Packages.props", "."]
 COPY ["nuget.config", "."]
+COPY ["PhotonStateManager/DragaliaAPI.Photon.StateManager/DragaliaAPI.Photon.StateManager.csproj", "PhotonStateManager/DragaliaAPI.Photon.StateManager/"]
+COPY ["Aspire/Dawnshard.ServiceDefaults/Dawnshard.ServiceDefaults.csproj", "Aspire/Dawnshard.ServiceDefaults/"]
+COPY ["Shared/DragaliaAPI.Photon.Shared/DragaliaAPI.Photon.Shared.csproj", "Shared/DragaliaAPI.Photon.Shared/"]
 RUN dotnet restore "PhotonStateManager/DragaliaAPI.Photon.StateManager/DragaliaAPI.Photon.StateManager.csproj"
 COPY [".editorconfig", ".editorconfig"]
 COPY ["PhotonStateManager/", "PhotonStateManager/"]

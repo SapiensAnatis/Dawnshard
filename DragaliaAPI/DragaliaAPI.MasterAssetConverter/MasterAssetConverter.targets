@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+  <PropertyGroup>
+    <_InvokeConverterCommand>&quot;$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MasterAssetConverter&quot;</_InvokeConverterCommand>
+    <!-- For Docker builds, where we pass /p:UseAppHost=false -->
+    <_InvokeConverterCommand Condition="$(UseAppHost) == 'false'">dotnet &quot;$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MasterAssetConverter.dll&quot;</_InvokeConverterCommand>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <_MasterAssetJsonFiles Visible="false" Include="$(MasterAssetResources)**/*.json" Exclude="$(MasterAssetResources)**/*.schema.json" />
+  </ItemGroup>
+  
+  <!-- Hook into build before CopyFilesToOutputDirectory so that we update FileWrites before FileListAbsolute.txt gets written -->
+  <Target Name="MasterAssetConverter"
+          BeforeTargets="CopyFilesToOutputDirectory"
+          DependsOnTargets="MissionDesigner"
+          Inputs="@(_MasterAssetJsonFiles)" Outputs="@(_MasterAssetJsonFiles->'$(OutDir)Resources/%(RecursiveDir)%(Filename).msgpack')">
+   
+    <Exec
+      Command="$(_InvokeConverterCommand) &quot;$(MasterAssetResources)&quot; &quot;$(OutDir)Resources&quot;" 
+      ConsoleToMSBuild="true" />
+
+    <ItemGroup>
+      <MasterAssetMessagePackFiles Include="$(OutDir)Resources/**/*.msgpack" />
+      <FileWrites Include="@(MasterAssetMessagePackFiles)"/>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="CopyMsgpackToPublish" AfterTargets="Publish" DependsOnTargets="MasterAssetConverter">
+    <Copy SourceFiles="@(MasterAssetMessagePackFiles)" DestinationFolder="$(PublishDir)Resources/%(RecursiveDir)" />
+  </Target>
+</Project>
