@@ -3,7 +3,7 @@ using MessagePack;
 
 namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic.Events
 {
-    [MessagePackObject(false)]
+    [MessagePackObject]
     public class CharacterData : EventBase<CharacterData>
     {
         [Key(1)]

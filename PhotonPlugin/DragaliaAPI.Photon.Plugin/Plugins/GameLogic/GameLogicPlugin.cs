@@ -611,7 +611,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                 bearerToken = this.configuration.BearerToken;
             }
 
-            Uri requestUri = new Uri(baseUri, endpoint);
+            Uri requestUri = new Uri(baseUri, $"2.19.0_20220714193707/{endpoint}");
 
             this.logger.DebugFormat("PostApiRequest: {0}", requestUri.AbsoluteUri);
 

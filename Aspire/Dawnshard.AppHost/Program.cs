@@ -31,9 +31,9 @@ if (builder.Configuration.GetValue<bool>("EnablePhoton"))
         .WithExternalHttpEndpoints()
         .WithEnvironment("PhotonOptions__Token", bearerToken);
 
-    // This can't be configured here, but you also need to edit appsettings.json to set PhotonOptions:Url to the address
-    // of your PC, port 5055, as seen from your mobile device. So if using an actual device and connecting over your
-    // local IP, set it to e.g. 192.168.1.109:5055
+    // This can't be configured with Aspire, but you also need to edit appsettings.Development.json to set
+    // PhotonOptions:Url to the address your client should use to connect to the Photon server. For a typical setup
+    // where you connect via your PC's local IP address, this should be 192.168.x.x:5055 (no http://)
     dragaliaApi = dragaliaApi
         .WithEnvironment("PhotonOptions__StateManagerUrl", stateManager.GetEndpoint("http"))
         .WithEnvironment("PhotonOptions__Token", bearerToken);

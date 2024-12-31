@@ -198,7 +198,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
                 baseUri = this.pluginConfiguration.ApiServerUrl;
             }
 
-            Uri requestUri = new Uri(baseUri, "heroparam/batch");
+            Uri requestUri = new Uri(baseUri, "2.19.0_20220714193707/heroparam/batch");
 
             this.logger.DebugFormat("RequestHeroParam - {0}", requestUri.AbsoluteUri);
 

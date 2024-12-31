@@ -3,6 +3,7 @@ using MessagePack;
 
 namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic.Events
 {
+    [MessagePackObject]
     public class PartyEvent : EventBase<PartyEvent>
     {
         [Key(1)]
