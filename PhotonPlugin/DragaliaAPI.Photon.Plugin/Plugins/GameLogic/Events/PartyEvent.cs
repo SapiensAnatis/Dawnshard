@@ -6,7 +6,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic.Events
     public class PartyEvent : EventBase<PartyEvent>
     {
         [Key(1)]
-        public Dictionary<int, int> MemberCountTable { get; set; }
+        public required Dictionary<int, int> MemberCountTable { get; set; }
 
         [Key(2)]
         public int RankingType { get; set; }

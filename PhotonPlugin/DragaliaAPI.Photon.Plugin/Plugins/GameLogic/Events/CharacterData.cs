@@ -7,15 +7,15 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic.Events
     public class CharacterData : EventBase<CharacterData>
     {
         [Key(1)]
-        public int playerId { get; set; }
+        public int PlayerId { get; set; }
 
         [Key(2)]
-        public HeroParam[] heroParams { get; set; }
+        public required HeroParam[] HeroParams { get; set; }
 
         [Key(3)]
-        public HeroParam[] unusedHeroParams { get; set; }
+        public HeroParam[] UnusedHeroParams { get; set; } = [];
 
         [Key(4)]
-        public HeroParamExData[] heroParamExs { get; set; }
+        public required HeroParamExData[] HeroParamExs { get; set; }
     }
 }

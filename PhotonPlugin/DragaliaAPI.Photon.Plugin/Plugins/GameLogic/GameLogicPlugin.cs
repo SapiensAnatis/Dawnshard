@@ -102,7 +102,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             if (
                 info.Request.GameProperties.TryGetValue(
                     GamePropertyKeys.IsSoloPlayWithPhoton,
-                    out object isSoloPlay
+                    out object? isSoloPlay
                 ) && isSoloPlay is true
             )
             {
@@ -349,7 +349,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             if (
                 info.Request.Properties.TryGetValue(
                     ActorPropertyKeys.GoToIngameState,
-                    out object objValue
+                    out object? objValue
                 ) && objValue is int value
             )
             {
@@ -598,8 +598,12 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
 
             if (this.pluginStateService.IsUseSecondaryServer)
             {
-                baseUri = this.configuration.SecondaryApiServerUrl;
-                bearerToken = this.configuration.SecondaryBearerToken;
+                baseUri =
+                    this.configuration.SecondaryApiServerUrl
+                    ?? throw new InvalidOperationException("Failed to get SecondaryApiServerUrl");
+                bearerToken =
+                    this.configuration.SecondaryBearerToken
+                    ?? throw new InvalidOperationException("Failed to get SecondaryBearerToken");
             }
             else
             {

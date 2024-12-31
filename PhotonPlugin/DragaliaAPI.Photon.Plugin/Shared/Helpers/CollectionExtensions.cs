@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Photon.Plugin.Shared.Constants;
 using Photon.Hive.Plugin;
 
@@ -89,23 +90,37 @@ namespace DragaliaAPI.Photon.Plugin.Shared.Helpers
             return value;
         }
 
-        public static bool TryGetValue(this Hashtable hashtable, string key, out object value)
+        public static bool TryGetValue(
+            this Hashtable? hashtable,
+            string key,
+            [NotNullWhen(true)] out object? value
+        )
         {
-            value = default;
+            value = null;
 
-            if (hashtable is null || !hashtable.ContainsKey(key))
+            if (hashtable is null)
+            {
                 return false;
+            }
 
             value = hashtable[key];
+
+            if (value is null)
+            {
+                return false;
+            }
+
             return true;
         }
 
         public static bool TryGetInt(this Hashtable hashtable, string key, out int value)
         {
-            value = default;
+            value = 0;
 
-            if (!hashtable.TryGetValue(key, out object objValue))
+            if (!hashtable.TryGetValue(key, out object? objValue))
+            {
                 return false;
+            }
 
             if (objValue is int intValue)
             {
@@ -123,10 +138,12 @@ namespace DragaliaAPI.Photon.Plugin.Shared.Helpers
 
         public static bool TryGetLong(this Hashtable hashtable, string key, out long value)
         {
-            value = default;
+            value = 0;
 
-            if (!hashtable.TryGetValue(key, out object objValue))
+            if (!hashtable.TryGetValue(key, out object? objValue))
+            {
                 return false;
+            }
 
             if (objValue is long longValue)
             {
@@ -142,12 +159,18 @@ namespace DragaliaAPI.Photon.Plugin.Shared.Helpers
             return false;
         }
 
-        public static bool TryGetInt(this PropertyBag<object> properties, string key, out int value)
+        public static bool TryGetInt(
+            this PropertyBag<object>? properties,
+            string key,
+            out int value
+        )
         {
-            value = default;
+            value = 0;
 
             if (properties is null || !properties.TryGetValue(key, out object objValue))
+            {
                 return false;
+            }
 
             if (objValue is int intValue)
             {
@@ -189,15 +212,17 @@ namespace DragaliaAPI.Photon.Plugin.Shared.Helpers
         }
 
         public static bool TryGetBool(
-            this PropertyBag<object> properties,
+            this PropertyBag<object>? properties,
             string key,
             out bool value
         )
         {
-            value = default;
+            value = false;
 
             if (properties is null || !properties.TryGetValue(key, out object objValue))
+            {
                 return false;
+            }
 
             if (objValue is bool boolValue)
             {

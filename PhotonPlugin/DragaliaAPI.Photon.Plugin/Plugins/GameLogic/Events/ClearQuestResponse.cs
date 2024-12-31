@@ -6,7 +6,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic.Events
     public class ClearQuestResponse : EventBase<ClearQuestResponse>
     {
         [Key(1)]
-        public byte[] RecordMultiResponse { get; set; }
+        public required byte[] RecordMultiResponse { get; set; }
 
         [Key(2)]
         public int ClearTime { get; set; }

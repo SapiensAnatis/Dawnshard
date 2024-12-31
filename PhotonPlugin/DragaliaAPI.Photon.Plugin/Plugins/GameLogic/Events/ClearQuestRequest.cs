@@ -6,6 +6,6 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic.Events
     public class ClearQuestRequest : EventBase<ClearQuestRequest>
     {
         [Key(1)]
-        public byte[] RecordMultiRequest { get; set; }
+        public required byte[] RecordMultiRequest { get; set; }
     }
 }

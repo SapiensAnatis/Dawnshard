@@ -9,23 +9,23 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
     public struct GoToIngameState
     {
         [Key(0)]
-        public IEnumerable<ActorData> elements { get; set; }
+        public IEnumerable<ActorData> Elements { get; set; }
 
         [Key(1)]
-        public BRInitData? brInitData { get; set; }
+        public BrInitData? BrInitData { get; set; }
     }
 
     [MessagePackObject(false)]
-    public struct BRInitData
+    public struct BrInitData
     {
         [Key(0)]
-        public int locationPattern { get; set; }
+        public int LocationPattern { get; set; }
 
         [Key(1)]
-        public List<int> playerPositions { get; set; }
+        public List<int> PlayerPositions { get; set; }
 
         [Key(2)]
-        public string multiPlayKey { get; set; }
+        public string MultiPlayKey { get; set; }
     }
 
     [MessagePackObject(false)]
