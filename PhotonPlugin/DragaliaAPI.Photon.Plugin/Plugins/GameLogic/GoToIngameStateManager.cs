@@ -180,6 +180,7 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
             IEnumerable<ActorInfo> heroParamRequest = this.pluginHost.GameActors.Select(
                 x => new ActorInfo()
                 {
+                    QuestId = this.pluginHost.GetQuestId(),
                     ActorNr = x.ActorNr,
                     ViewerId = x.GetViewerId(),
                     PartySlots = x.GetPartySlots(),
