@@ -19,7 +19,7 @@ public partial class V21Update(
     public async Task Apply()
     {
         if (
-            await wallService.CheckWallInitialized()
+            await wallService.CheckWallLevelsInitialized()
             && await apiContext.WallRewardDates.FindAsync(playerIdentityService.ViewerId) is null
         )
         {

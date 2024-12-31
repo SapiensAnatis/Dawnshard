@@ -54,7 +54,7 @@ public class WallControllerTest
             RewardStatus = rewardStatus,
         };
 
-        mockWallService.Setup(x => x.CheckWallInitialized()).ReturnsAsync(true);
+        mockWallService.Setup(x => x.CheckWallLevelsInitialized()).ReturnsAsync(true);
         mockWallService.Setup(x => x.GetUserWallRewardList()).ReturnsAsync(rewardList);
 
         WallGetMonthlyRewardResponse data = (
@@ -110,7 +110,7 @@ public class WallControllerTest
 
         DateTimeOffset lastClaimDate = DateTimeOffset.UtcNow.AddDays(-62);
 
-        mockWallService.Setup(x => x.CheckWallInitialized()).ReturnsAsync(true);
+        mockWallService.Setup(x => x.CheckWallLevelsInitialized()).ReturnsAsync(true);
         mockWallService
             .Setup(x => x.GetLastRewardDate())
             .ReturnsAsync(new DbWallRewardDate() { LastClaimDate = lastClaimDate });

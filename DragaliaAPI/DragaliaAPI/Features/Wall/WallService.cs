@@ -79,33 +79,34 @@ public partial class WallService(
 
     public async Task InitializeWall()
     {
-        if (await this.CheckWallInitialized())
+        if (!await this.CheckWallLevelsInitialized())
         {
-            return;
+            logger.LogInformation("Initializing wall levels.");
+
+            for (int element = 0; element < 5; element++)
+            {
+                apiContext.PlayerQuestWalls.Add(
+                    new DbPlayerQuestWall()
+                    {
+                        ViewerId = playerIdentityService.ViewerId,
+                        WallId = FlameWallId + element,
+                        WallLevel = 0, // Indicates you have not completed level 1. Goes up to 80 upon completing level 80
+                        IsStartNextLevel = false,
+                    }
+                );
+            }
         }
 
-        logger.LogInformation("Initializing wall.");
-
-        for (int element = 0; element < 5; element++)
+        if (!await apiContext.WallRewardDates.AnyAsync())
         {
-            apiContext.PlayerQuestWalls.Add(
-                new DbPlayerQuestWall()
+            apiContext.WallRewardDates.Add(
+                new DbWallRewardDate()
                 {
                     ViewerId = playerIdentityService.ViewerId,
-                    WallId = FlameWallId + element,
-                    WallLevel = 0, // Indicates you have not completed level 1. Goes up to 80 upon completing level 80
-                    IsStartNextLevel = false,
+                    LastClaimDate = DateTimeOffset.UtcNow, // Make them wait until next month to claim
                 }
             );
         }
-
-        apiContext.WallRewardDates.Add(
-            new DbWallRewardDate()
-            {
-                ViewerId = playerIdentityService.ViewerId,
-                LastClaimDate = DateTimeOffset.UtcNow, // Make them wait until next month to claim
-            }
-        );
 
         await this.InitializeWallMissions();
     }
@@ -256,7 +257,7 @@ public partial class WallService(
         return wallRewardDate;
     }
 
-    public async Task<bool> CheckWallInitialized()
+    public async Task<bool> CheckWallLevelsInitialized()
     {
         bool initialized = await apiContext.PlayerQuestWalls.AnyAsync();
 
@@ -285,7 +286,7 @@ public partial class WallService(
 
     private static partial class Log
     {
-        [LoggerMessage(LogLevel.Information, "Wall initialization check: {WallInitialized}.")]
+        [LoggerMessage(LogLevel.Information, "Wall level initialization check: {WallInitialized}.")]
         public static partial void WallInitializedStatus(ILogger logger, bool wallInitialized);
 
         [LoggerMessage(

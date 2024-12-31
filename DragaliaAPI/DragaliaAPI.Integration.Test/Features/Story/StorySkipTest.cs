@@ -127,4 +127,26 @@ public class StorySkipTest : TestFixture
 
         this.ApiContext.PlayerQuestWalls.Should().Contain(x => x.ViewerId == this.ViewerId);
     }
+
+    [Fact]
+    public async Task StorySkip_AlreadyInitializedWallReward_DoesNotThrow()
+    {
+        await this.AddToDatabase(
+            new DbWallRewardDate()
+            {
+                ViewerId = this.ViewerId,
+                LastClaimDate = DateTimeOffset.UnixEpoch,
+            }
+        );
+
+        await this
+            .Client.Invoking(x =>
+                x.PostMsgpack<StorySkipSkipResponse>(
+                    "story_skip/skip",
+                    cancellationToken: TestContext.Current.CancellationToken
+                )
+            )
+            .Should()
+            .NotThrowAsync();
+    }
 }
