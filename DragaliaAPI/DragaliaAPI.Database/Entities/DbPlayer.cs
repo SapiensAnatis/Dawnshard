@@ -17,7 +17,19 @@ public class DbPlayer
     [MaxLength(16)]
     public required string AccountId { get; set; }
 
+    public DateTimeOffset CreatedAt { get; set; }
+
     public int SavefileVersion { get; set; }
+
+    /// <summary>
+    /// The last time at which a savefile for this user was imported from BaaS.
+    /// </summary>
+    public DateTimeOffset? LastSavefileImportTime { get; set; }
+
+    [MaxLength(32)]
+    public string? SavefileOrigin { get; set; }
+
+    public bool IsAdmin { get; set; }
 
     public DbPlayerUserData? UserData { get; set; }
 

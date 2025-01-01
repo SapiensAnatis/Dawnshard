@@ -13,7 +13,6 @@ public interface IUserDataRepository : IBaseRepository
     Task GiveWyrmite(int quantity);
     Task SetMainPartyNo(int partyNo);
     Task UpdateName(string newName);
-    Task UpdateSaveImportTime();
     Task UpdateCoin(long offset);
     Task<bool> CheckCoin(long quantity);
     Task UpdateDewpoint(int quantity);

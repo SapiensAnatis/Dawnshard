@@ -8,8 +8,7 @@ namespace DragaliaAPI.Features.Login.Actions;
 
 public class DailySummoningDealResetAction(
     ApiContext apiContext,
-    IOptionsMonitor<SummonBannerOptions> bannerOptionsMonitor,
-    TimeProvider timeProvider
+    IOptionsMonitor<SummonBannerOptions> bannerOptionsMonitor
 ) : IDailyResetAction
 {
     private readonly SummonBannerOptions bannerOptions = bannerOptionsMonitor.CurrentValue;

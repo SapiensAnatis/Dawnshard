@@ -78,8 +78,8 @@ public class ToolTest : TestFixture
     [Fact]
     public async Task Auth_PendingImport_ImportsSave()
     {
-        this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
-            p.SetProperty(e => e.LastSaveImportTime, DateTimeOffset.UnixEpoch)
+        this.ApiContext.Players.ExecuteUpdate(p =>
+            p.SetProperty(e => e.LastSavefileImportTime, DateTimeOffset.UnixEpoch)
         );
 
         string token = TokenHelper.GetToken(
@@ -96,9 +96,9 @@ public class ToolTest : TestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        this.ApiContext.PlayerUserData.AsNoTracking()
+        this.ApiContext.Players.AsNoTracking()
             .First(x => x.ViewerId == this.ViewerId)
-            .LastSaveImportTime.Should()
+            .LastSavefileImportTime.Should()
             .BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMinutes(1));
 
         this.ApiContext.PlayerCharaData.AsNoTracking()

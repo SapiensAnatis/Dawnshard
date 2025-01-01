@@ -81,13 +81,6 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
         userData.MainPartyNo = partyNo;
     }
 
-    public async Task UpdateSaveImportTime()
-    {
-        DbPlayerUserData userData = await UserData.SingleAsync();
-
-        userData.LastSaveImportTime = DateTimeOffset.UtcNow;
-    }
-
     public async Task GiveWyrmite(int quantity)
     {
         DbPlayerUserData userData = await UserData.SingleAsync();

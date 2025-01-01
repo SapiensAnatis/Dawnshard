@@ -91,17 +91,17 @@ internal sealed partial class AuthService(
 
         if (remoteSavefileDate is null)
         {
-            Log.NoSaveAvailable(logger);
+            Log.NoSavefileAvailable(logger);
             return;
         }
 
         Log.FoundRemoteSavefile(logger, remoteSavefileDate.Value);
 
-        DateTimeOffset localSavefileDate = await apiContext
+        DateTimeOffset? localSavefileDate = await apiContext
             .Players.IgnoreQueryFilters()
             .AsNoTracking()
             .Where(x => x.AccountId == subject)
-            .Select(x => x.UserData!.LastSaveImportTime)
+            .Select(x => x.LastSavefileImportTime)
             .FirstAsync();
 
         if (localSavefileDate >= remoteSavefileDate)
@@ -109,7 +109,7 @@ internal sealed partial class AuthService(
             Log.LocalSavefileWasNewer(
                 logger,
                 remoteSavefileDate: remoteSavefileDate.Value,
-                localSavefileDate: localSavefileDate
+                localSavefileDate: localSavefileDate.Value
             );
             return;
         }
@@ -125,7 +125,7 @@ internal sealed partial class AuthService(
         }
         catch (Exception e)
         {
-            Log.UnknwonSavefileImportError(logger, e);
+            Log.UnknownSavefileImportError(logger, e);
             // Let them log in regardless
         }
     }
@@ -157,7 +157,7 @@ internal sealed partial class AuthService(
         public static partial void PollingSaveImport(ILogger logger, string accountId);
 
         [LoggerMessage(LogLevel.Information, "No savefile was available to import.")]
-        public static partial void NoSaveAvailable(ILogger logger);
+        public static partial void NoSavefileAvailable(ILogger logger);
 
         [LoggerMessage(LogLevel.Debug, "Found remote savefile with date {RemoteSavefileDate}.")]
         public static partial void FoundRemoteSavefile(
@@ -189,6 +189,6 @@ internal sealed partial class AuthService(
         public static partial void SavefileInvalid(ILogger logger, Exception ex);
 
         [LoggerMessage(LogLevel.Warning, "Error importing save")]
-        public static partial void UnknwonSavefileImportError(ILogger logger, Exception ex);
+        public static partial void UnknownSavefileImportError(ILogger logger, Exception ex);
     }
 }

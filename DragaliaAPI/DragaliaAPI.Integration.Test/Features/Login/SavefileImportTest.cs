@@ -72,9 +72,9 @@ public class SavefileImportTest : TestFixture
         );
         importResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        this.ApiContext.PlayerUserData.AsNoTracking()
+        this.ApiContext.Players.AsNoTracking()
             .Single(x => x.ViewerId == this.ViewerId)
-            .LastSaveImportTime.Should()
+            .LastSavefileImportTime.Should()
             .BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMinutes(1));
 
         LoadIndexResponse storedSavefile = (

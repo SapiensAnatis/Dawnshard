@@ -75,9 +75,4 @@ public class DbPlayerUserData : DbPlayerData
     public DateTimeOffset FortOpenTime { get; set; } = DateTimeOffset.UnixEpoch;
 
     public DateTimeOffset CreateTime { get; set; } = DateTimeOffset.UtcNow;
-
-    /// <summary>
-    /// The last time at which a savefile for this user was imported from BaaS.
-    /// </summary>
-    public DateTimeOffset LastSaveImportTime { get; set; }
 }
