@@ -1,6 +1,7 @@
 <script lang="ts">
   import Info from 'lucide-svelte/icons/info';
 
+  import renderDate from '$main/account/profile/renderDate.ts';
   import * as Card from '$shadcn/components/ui/card';
 
   import type { User } from '../user.ts';
@@ -19,17 +20,6 @@
     const paddedId = id.toString().padStart(11, '0');
     const chunkedId = chunkString(paddedId, 4);
     return chunkedId.join(' ');
-  };
-
-  const renderDate = (date: Date) => {
-    if (date.valueOf() < new Date(1970, 1, 1).valueOf()) {
-      return 'Never!';
-    }
-
-    return date.toLocaleString(undefined, {
-      dateStyle: 'medium',
-      timeStyle: 'short'
-    });
   };
 
   export let user: User;

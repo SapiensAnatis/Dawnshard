@@ -5,18 +5,10 @@
   import { Button } from '$shadcn/components/ui/button';
   import * as Card from '$shadcn/components/ui/card';
 
-  export let lastSaveImportTime: Date;
+  import renderDate from './renderDate.ts';
 
-  const renderDate = (date: Date) => {
-    if (date.valueOf() < new Date(1970, 1, 1).valueOf()) {
-      return 'Never!';
-    }
+  export let lastSaveImportTime: Date | null;
 
-    return date.toLocaleString(undefined, {
-      dateStyle: 'medium',
-      timeStyle: 'short'
-    });
-  };
 </script>
 
 <Card.Root>
