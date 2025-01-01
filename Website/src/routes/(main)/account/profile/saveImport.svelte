@@ -8,7 +8,6 @@
   import renderDate from './renderDate.ts';
 
   export let lastSaveImportTime: Date | null;
-
 </script>
 
 <Card.Root>

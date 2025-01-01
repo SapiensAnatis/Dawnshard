@@ -2,7 +2,7 @@
   "$schema": "https://alirezanet.github.io/Husky.Net/schema.json",
   "tasks": [
     {
-      "name": "Run csharpier",
+      "name": "csharpier",
       "command": "dotnet",
       "args": [
         "csharpier",
@@ -10,6 +10,25 @@
       ],
       "include": [
         "**/*.cs"
+      ]
+    }, 
+    {
+      "name": "prettier",
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "prettier",
+        "--ignore-unknown",
+        "--write",
+        "${staged}"
+      ],
+      "pathMode": "absolute",
+      "cwd": "Website/",
+      "include": [
+        "Website/**/*.svelte",
+        "Website/**/*.js",
+        "Website/**/*.ts",
+        "Website/**/*.json"
       ]
     }
   ]
