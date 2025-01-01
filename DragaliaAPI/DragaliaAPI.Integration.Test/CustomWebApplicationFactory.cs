@@ -19,7 +19,6 @@ namespace DragaliaAPI.Integration.Test;
 public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly TestContainersHelper testContainersHelper;
-    private ConnectionMultiplexer? connectionMultiplexer;
 
     public CustomWebApplicationFactory()
     {
@@ -41,16 +40,6 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
         using IServiceScope scope = this.Services.CreateScope();
         ApiContext context = scope.ServiceProvider.GetRequiredService<ApiContext>();
         await context.Database.MigrateAsync();
-
-        this.connectionMultiplexer = await ConnectionMultiplexer.ConnectAsync(
-            new ConfigurationOptions()
-            {
-                EndPoints = new EndPointCollection
-                {
-                    { this.testContainersHelper.RedisHost, this.testContainersHelper.RedisPort },
-                },
-            }
-        );
     }
 
     async ValueTask IAsyncDisposable.DisposeAsync() => await this.testContainersHelper.StopAsync();

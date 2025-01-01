@@ -66,7 +66,14 @@ public class UserTests : WebTestFixture
             )
         )
             .Should()
-            .BeEquivalentTo(new User() { Name = "Euden", ViewerId = this.ViewerId });
+            .BeEquivalentTo(
+                new User()
+                {
+                    Name = "Euden",
+                    ViewerId = this.ViewerId,
+                    IsAdmin = false,
+                }
+            );
     }
 
     [Fact]
@@ -107,7 +114,7 @@ public class UserTests : WebTestFixture
                 new UserProfile()
                 {
                     LastLoginTime = DateTimeOffset.UnixEpoch,
-                    LastSaveImportTime = DateTimeOffset.MinValue,
+                    LastSaveImportTime = null,
                 }
             );
     }

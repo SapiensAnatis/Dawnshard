@@ -428,7 +428,8 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.UserData.LastSaveImportTime = DateTimeOffset.UtcNow;
+            player.LastSavefileImportTime = DateTimeOffset.UtcNow;
+            player.SavefileOrigin = savefile.Origin;
 
             await this.apiContext.SaveChangesAsync();
             await transaction.CommitAsync();
@@ -599,6 +600,7 @@ public class SavefileService : ISavefileService
             SavefileVersion = this.maxSavefileVersion,
             UserData = new(),
             DiamondData = new(),
+            CreatedAt = DateTimeOffset.UtcNow,
         };
 
         this.apiContext.Players.Add(player);
