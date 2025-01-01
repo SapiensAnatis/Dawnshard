@@ -333,7 +333,9 @@ public class DungeonStartTest : TestFixture
         );
 
         await this
-            .ApiContext.PlayerPartyUnits.Where(x => x.PartyNo == 1 && x.UnitNo == 1)
+            .ApiContext.PlayerPartyUnits.Where(x =>
+                x.ViewerId == this.ViewerId && x.PartyNo == 1 && x.UnitNo == 1
+            )
             .ExecuteUpdateAsync(
                 e =>
                     e.SetProperty(u => u.EquipWeaponBodyId, waterSword)

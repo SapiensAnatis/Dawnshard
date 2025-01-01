@@ -52,7 +52,7 @@ public class SavefileExportTests : WebTestFixture
             new DbAbilityCrest() { ViewerId = this.ViewerId, AbilityCrestId = customCrest }
         );
 
-        this.ApiContext.PlayerPartyUnits.Where(x => x.PartyNo == 1)
+        this.ApiContext.PlayerPartyUnits.Where(x => x.ViewerId == this.ViewerId && x.PartyNo == 1)
             .ExecuteUpdate(e =>
                 e.SetProperty(x => x.EquipCrestSlotType1CrestId1, customCrest)
                     .SetProperty(x => x.EquipCrestSlotType1CrestId2, customCrest)
