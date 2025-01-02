@@ -6,18 +6,19 @@
     <_InvokeConverterCommand Condition="$(UseAppHost) == 'false'">dotnet &quot;$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MasterAssetConverter.dll&quot;</_InvokeConverterCommand>
   </PropertyGroup>
   
-  <ItemGroup>
-    <_MasterAssetJsonFiles Visible="false" Include="$(MasterAssetResources)**/*.json" Exclude="$(MasterAssetResources)**/*.schema.json" />
-  </ItemGroup>
-  
+  <Target Name="_PrepareForMasterAssetConverter">
+    <ItemGroup>
+      <_MasterAssetJsonFiles Visible="false" Include="$(MasterAssetResources)**/*.json" Exclude="$(MasterAssetResources)**/*.schema.json" />
+    </ItemGroup>
+  </Target>
+
   <!-- Hook into build before CopyFilesToOutputDirectory so that we update FileWrites before FileListAbsolute.txt gets written -->
   <Target Name="MasterAssetConverter"
+          DependsOnTargets="_PrepareForMasterAssetConverter"
           BeforeTargets="CopyFilesToOutputDirectory"
-          DependsOnTargets="MissionDesigner"
           Inputs="@(_MasterAssetJsonFiles)" Outputs="@(_MasterAssetJsonFiles->'$(OutDir)Resources/%(RecursiveDir)%(Filename).msgpack')">
-   
     <Exec
-      Command="$(_InvokeConverterCommand) &quot;$(MasterAssetResources)&quot; &quot;$(OutDir)Resources&quot;" 
+      Command="$(_InvokeConverterCommand) &quot;$(OutDir)Resources&quot; &quot;$(MasterAssetResources)&quot; @(_MasterAssetJsonFiles->'&quot;%(FullPath)&quot;', ' ')" 
       ConsoleToMSBuild="true" />
 
     <ItemGroup>
