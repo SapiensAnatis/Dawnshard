@@ -9,7 +9,7 @@ using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Integration.Test.Features.Chara;
 
 /// <summary>
 /// Tests <see cref="CharaController"/>
@@ -67,7 +67,7 @@ public class CharaTest : TestFixture
         using (
             IDisposable ctx = this
                 .Services.GetRequiredService<IPlayerIdentityService>()
-                .StartUserImpersonation(viewer: ViewerId)
+                .StartUserImpersonation(viewer: this.ViewerId)
         )
         {
             charaData = await this
@@ -161,7 +161,7 @@ public class CharaTest : TestFixture
         using (
             IDisposable ctx = this
                 .Services.GetRequiredService<IPlayerIdentityService>()
-                .StartUserImpersonation(viewer: ViewerId)
+                .StartUserImpersonation(viewer: this.ViewerId)
         )
         {
             manaPointNum = (
@@ -202,7 +202,7 @@ public class CharaTest : TestFixture
             await this.AddToDatabase(
                 new DbPlayerStoryState()
                 {
-                    ViewerId = ViewerId,
+                    ViewerId = this.ViewerId,
                     StoryId = storyId,
                     State = StoryState.Read,
                     StoryType = StoryTypes.Chara,
@@ -230,7 +230,7 @@ public class CharaTest : TestFixture
         using (
             IDisposable ctx = this
                 .Services.GetRequiredService<IPlayerIdentityService>()
-                .StartUserImpersonation(viewer: ViewerId)
+                .StartUserImpersonation(viewer: this.ViewerId)
         )
         {
             IInventoryRepository inventoryRepository =
@@ -270,7 +270,7 @@ public class CharaTest : TestFixture
         using (
             IDisposable ctx = this
                 .Services.GetRequiredService<IPlayerIdentityService>()
-                .StartUserImpersonation(viewer: ViewerId)
+                .StartUserImpersonation(viewer: this.ViewerId)
         )
         {
             IInventoryRepository inventoryRepository =

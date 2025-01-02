@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using MockQueryable;
 using static DragaliaAPI.Test.Utils.IdentityTestUtils;
 
-namespace DragaliaAPI.Test.Services;
+namespace DragaliaAPI.Test.Features.Fort;
 
 public class BonusServiceTest
 {

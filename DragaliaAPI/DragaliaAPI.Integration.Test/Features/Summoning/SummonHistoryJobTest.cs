@@ -2,7 +2,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Infrastructure.Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DragaliaAPI.Integration.Test.Other;
+namespace DragaliaAPI.Integration.Test.Features.Summoning;
 
 public class SummonHistoryJobTest : TestFixture
 {

@@ -11,7 +11,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 
-namespace DragaliaAPI.Test.Services;
+namespace DragaliaAPI.Test.Features.Shared;
 
 public class UpdateDataServiceTest : RepositoryTestFixture
 {
@@ -165,27 +165,27 @@ public class UpdateDataServiceTest : RepositoryTestFixture
 
         list.UserData.Should().BeEquivalentTo(this.mapper.Map<UserData>(userData));
 
-        AssertOnlyContains<CharaList>(list.CharaList, charaData);
+        this.AssertOnlyContains<CharaList>(list.CharaList, charaData);
 
-        AssertOnlyContains<DragonList>(list.DragonList, dragonData);
+        this.AssertOnlyContains<DragonList>(list.DragonList, dragonData);
 
-        AssertOnlyContains<DragonReliabilityList>(list.DragonReliabilityList, reliabilityData);
+        this.AssertOnlyContains<DragonReliabilityList>(list.DragonReliabilityList, reliabilityData);
 
-        AssertOnlyContains<PartyList>(list.PartyList, partyData);
+        this.AssertOnlyContains<PartyList>(list.PartyList, partyData);
 
-        AssertOnlyContains<QuestStoryList>(list.QuestStoryList, questStoryState);
+        this.AssertOnlyContains<QuestStoryList>(list.QuestStoryList, questStoryState);
 
         list.UnitStoryList.Should()
-            .ContainEquivalentOf(mapper.Map<UnitStoryList>(charaStoryState))
-            .And.ContainEquivalentOf(mapper.Map<UnitStoryList>(dragonStoryState));
+            .ContainEquivalentOf(this.mapper.Map<UnitStoryList>(charaStoryState))
+            .And.ContainEquivalentOf(this.mapper.Map<UnitStoryList>(dragonStoryState));
 
-        AssertOnlyContains<CastleStoryList>(list.CastleStoryList, castleStoryState);
+        this.AssertOnlyContains<CastleStoryList>(list.CastleStoryList, castleStoryState);
 
-        AssertOnlyContains<QuestList>(list.QuestList, questData);
+        this.AssertOnlyContains<QuestList>(list.QuestList, questData);
 
-        AssertOnlyContains<MaterialList>(list.MaterialList, materialData);
+        this.AssertOnlyContains<MaterialList>(list.MaterialList, materialData);
 
-        AssertOnlyContains<BuildList>(list.BuildList, buildData);
+        this.AssertOnlyContains<BuildList>(list.BuildList, buildData);
 
         list.DragonGiftList.Should().BeNull();
 

@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.Features.Friends;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Integration.Test.Features.Friends;
 
 /// <summary>
 /// Tests <see cref="FriendController"/>

@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 using Moq.Protected;
 using BaasApi = DragaliaAPI.Features.Shared.BaasApi;
 
-namespace DragaliaAPI.Test.Helpers;
+namespace DragaliaAPI.Test.Features.Shared;
 
 public class BaasRequestHelperTest
 {
@@ -29,7 +29,7 @@ public class BaasRequestHelperTest
         this.cache = new MemoryDistributedCache(opts);
 
         this.baasRequestHelper = new BaasApi(
-            new HttpClient(mockHttpMessageHandler.Object)
+            new HttpClient(this.mockHttpMessageHandler.Object)
             {
                 BaseAddress = new Uri("https://www.taylorswift.com"),
             },

@@ -5,7 +5,7 @@ using DragaliaAPI.Features.Friends;
 using DragaliaAPI.Models.Generated;
 using Microsoft.Extensions.Logging;
 
-namespace DragaliaAPI.Test.Services;
+namespace DragaliaAPI.Test.Features.Friends;
 
 public class HelperServiceTest
 {

@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Infrastructure.Results;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Integration.Test.Features.Configuration;
 
 public class UpdateTest : TestFixture
 {
@@ -19,7 +19,7 @@ public class UpdateTest : TestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        DbPlayerUserData userData = this.ApiContext.PlayerUserData.Find(ViewerId)!;
+        DbPlayerUserData userData = this.ApiContext.PlayerUserData.Find(this.ViewerId)!;
         this.ApiContext.Entry(userData).Reload();
         userData.Name.Should().Be(newName);
     }

@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
 using DragaliaAPI.Features.Dragalipatch;
 
-namespace DragaliaAPI.Integration.Test.Other;
+namespace DragaliaAPI.Integration.Test.Features.Dragalipatch;
 
 public class DragalipatchTest : TestFixture
 {

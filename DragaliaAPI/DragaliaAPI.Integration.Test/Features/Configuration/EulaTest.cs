@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.Features.Configuration;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Integration.Test.Features.Configuration;
 
 /// <summary>
 /// Tests <see cref="EulaController"/>

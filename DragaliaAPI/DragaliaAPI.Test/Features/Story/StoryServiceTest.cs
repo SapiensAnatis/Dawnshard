@@ -15,7 +15,7 @@ using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Logging;
 using MockQueryable;
 
-namespace DragaliaAPI.Test.Services;
+namespace DragaliaAPI.Test.Features.Story;
 
 public class StoryServiceTest : IClassFixture<DbTestFixture>
 {
@@ -51,19 +51,19 @@ public class StoryServiceTest : IClassFixture<DbTestFixture>
         this.mockUserService = new(MockBehavior.Strict);
 
         this.storyService = new StoryService(
-            mockStoryRepository.Object,
-            mockLogger.Object,
-            mockUserDataRepository.Object,
-            mockInventoryRepository.Object,
-            mockPresentService.Object,
-            mockTutorialService.Object,
-            mockFortRepository.Object,
-            mockMissionProgressionService.Object,
-            mockRewardService.Object,
-            mockPaymentService.Object,
-            mockUserService.Object,
+            this.mockStoryRepository.Object,
+            this.mockLogger.Object,
+            this.mockUserDataRepository.Object,
+            this.mockInventoryRepository.Object,
+            this.mockPresentService.Object,
+            this.mockTutorialService.Object,
+            this.mockFortRepository.Object,
+            this.mockMissionProgressionService.Object,
+            this.mockRewardService.Object,
+            this.mockPaymentService.Object,
+            this.mockUserService.Object,
             fixture.ApiContext,
-            mockPlayerIdentityService.Object
+            this.mockPlayerIdentityService.Object
         );
     }
 

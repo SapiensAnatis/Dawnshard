@@ -6,7 +6,7 @@ using DragaliaAPI.Shared.Features.StorySkip;
 using Microsoft.EntityFrameworkCore;
 using static DragaliaAPI.Shared.Features.StorySkip.StorySkipRewards;
 
-namespace DragaliaAPI.Integration.Test.Features.StorySkip;
+namespace DragaliaAPI.Integration.Test.Features.Story;
 
 /// <summary>
 /// Tests <see cref="StorySkipController"/>
