@@ -7,7 +7,7 @@ using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Integration.Test.Features.Dragon;
+namespace DragaliaAPI.Integration.Test.Features.Dragons;
 
 /// <summary>
 /// Tests <see cref="DragonController"/>

@@ -4,7 +4,7 @@ using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Mapping.Mapperly;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Integration.Test.Features.Weapons;
 
 [SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments")]
 public class WeaponBodyTest : TestFixture
@@ -71,10 +71,10 @@ public class WeaponBodyTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
-        int oldMatCount1 = GetMaterialCount(Materials.PrimalFlamewyrmsSphere);
-        int oldMatCount2 = GetMaterialCount(Materials.PrimalFlamewyrmsGreatsphere);
-        int oldMatCount3 = GetMaterialCount(Materials.TwinklingSand);
-        long oldRupies = GetRupies();
+        int oldMatCount1 = this.GetMaterialCount(Materials.PrimalFlamewyrmsSphere);
+        int oldMatCount2 = this.GetMaterialCount(Materials.PrimalFlamewyrmsGreatsphere);
+        int oldMatCount3 = this.GetMaterialCount(Materials.TwinklingSand);
+        long oldRupies = this.GetRupies();
 
         await this.Client.PostMsgpack<WeaponBodyCraftResponse>(
             $"{EndpointGroup}/craft",
@@ -83,15 +83,15 @@ public class WeaponBodyTest : TestFixture
         );
 
         this.ApiContext.PlayerWeapons.SingleOrDefault(x =>
-                x.ViewerId == ViewerId && x.WeaponBodyId == WeaponBodies.PrimalCrimson
+                x.ViewerId == this.ViewerId && x.WeaponBodyId == WeaponBodies.PrimalCrimson
             )
             .Should()
             .NotBeNull();
 
-        GetMaterialCount(Materials.PrimalFlamewyrmsSphere).Should().Be(oldMatCount1 - 20);
-        GetMaterialCount(Materials.PrimalFlamewyrmsGreatsphere).Should().Be(oldMatCount2 - 15);
-        GetMaterialCount(Materials.TwinklingSand).Should().Be(oldMatCount3 - 1);
-        GetRupies().Should().Be(oldRupies - 2_000_000);
+        this.GetMaterialCount(Materials.PrimalFlamewyrmsSphere).Should().Be(oldMatCount1 - 20);
+        this.GetMaterialCount(Materials.PrimalFlamewyrmsGreatsphere).Should().Be(oldMatCount2 - 15);
+        this.GetMaterialCount(Materials.TwinklingSand).Should().Be(oldMatCount3 - 1);
+        this.GetRupies().Should().Be(oldRupies - 2_000_000);
     }
 
     [Theory]
@@ -107,7 +107,7 @@ public class WeaponBodyTest : TestFixture
         long oldCoin = this.GetRupies();
         Dictionary<Materials, int> oldMaterials = testCase.ExpMaterialLoss.ToDictionary(
             x => x.Key,
-            x => GetMaterialCount(x.Key)
+            x => this.GetMaterialCount(x.Key)
         );
 
         WeaponBodyBuildupPieceRequest request = new()
@@ -127,7 +127,7 @@ public class WeaponBodyTest : TestFixture
         // Check coin
         DbPlayerUserData userData = (
             await this.ApiContext.PlayerUserData.FindAsync(
-                [ViewerId],
+                [this.ViewerId],
                 TestContext.Current.CancellationToken
             )
         )!;
@@ -143,7 +143,7 @@ public class WeaponBodyTest : TestFixture
         // Check weapon
         DbWeaponBody weaponBody = (
             await this.ApiContext.PlayerWeapons.FindAsync(
-                [ViewerId, testCase.InitialState.WeaponBodyId],
+                [this.ViewerId, testCase.InitialState.WeaponBodyId],
                 TestContext.Current.CancellationToken
             )
         )!;
@@ -175,7 +175,7 @@ public class WeaponBodyTest : TestFixture
 
             DbPlayerMaterial dbEntry = (
                 await this.ApiContext.PlayerMaterials.FindAsync(
-                    [ViewerId, material],
+                    [this.ViewerId, material],
                     TestContext.Current.CancellationToken
                 )
             )!;
@@ -593,7 +593,9 @@ public class WeaponBodyTest : TestFixture
     private int GetMaterialCount(Materials id)
     {
         return this
-            .ApiContext.PlayerMaterials.Where(x => x.ViewerId == ViewerId && x.MaterialId == id)
+            .ApiContext.PlayerMaterials.Where(x =>
+                x.ViewerId == this.ViewerId && x.MaterialId == id
+            )
             .Select(x => x.Quantity)
             .First();
     }
@@ -602,7 +604,7 @@ public class WeaponBodyTest : TestFixture
     {
         return this
             .ApiContext.PlayerUserData.AsNoTracking()
-            .Where(x => x.ViewerId == ViewerId)
+            .Where(x => x.ViewerId == this.ViewerId)
             .Select(x => x.Coin)
             .First();
     }

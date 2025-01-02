@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Integration.Test.Features.Story;
 
 public class CastleStoryTest : TestFixture
 {
@@ -48,7 +48,7 @@ public class CastleStoryTest : TestFixture
         this.ApiContext.Add(
             new DbPlayerStoryState()
             {
-                ViewerId = ViewerId,
+                ViewerId = this.ViewerId,
                 State = StoryState.Read,
                 StoryId = 2,
                 StoryType = StoryTypes.Castle,
@@ -75,7 +75,7 @@ public class CastleStoryTest : TestFixture
     {
         int oldCrystal = await this
             .ApiContext.PlayerUserData.AsNoTracking()
-            .Where(x => x.ViewerId == ViewerId)
+            .Where(x => x.ViewerId == this.ViewerId)
             .Select(x => x.Crystal)
             .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
@@ -89,14 +89,14 @@ public class CastleStoryTest : TestFixture
 
         int newCrystal = await this
             .ApiContext.PlayerUserData.AsNoTracking()
-            .Where(x => x.ViewerId == ViewerId)
+            .Where(x => x.ViewerId == this.ViewerId)
             .Select(x => x.Crystal)
             .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         newCrystal.Should().Be(oldCrystal + 50);
 
         IEnumerable<DbPlayerStoryState> stories = this.ApiContext.PlayerStoryState.Where(x =>
-            x.ViewerId == ViewerId
+            x.ViewerId == this.ViewerId
         );
 
         stories
@@ -104,7 +104,7 @@ public class CastleStoryTest : TestFixture
             .ContainEquivalentOf(
                 new DbPlayerStoryState()
                 {
-                    ViewerId = ViewerId,
+                    ViewerId = this.ViewerId,
                     State = StoryState.Read,
                     StoryId = 3,
                     StoryType = StoryTypes.Castle,

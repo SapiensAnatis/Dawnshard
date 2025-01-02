@@ -5,7 +5,7 @@ using DragaliaAPI.Infrastructure.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Integration.Test.Features.Parties;
 
 /// <summary>
 /// Tests <see cref="PartyController"/>
@@ -20,8 +20,8 @@ public class PartyTest : TestFixture
     {
         this.AddCharacter(Charas.Ilia);
 
-        await AddToDatabase(
-            new DbWeaponBody { ViewerId = ViewerId, WeaponBodyId = WeaponBodies.DivineTrigger }
+        await this.AddToDatabase(
+            new DbWeaponBody { ViewerId = this.ViewerId, WeaponBodyId = WeaponBodies.DivineTrigger }
         );
 
         await this.Client.PostMsgpack<PartySetPartySettingResponse>(
@@ -48,7 +48,7 @@ public class PartyTest : TestFixture
         ApiContext apiContext = this.Services.GetRequiredService<ApiContext>();
         DbParty dbparty = await apiContext
             .PlayerParties.Include(x => x.Units)
-            .Where(x => x.ViewerId == ViewerId && x.PartyNo == 1)
+            .Where(x => x.ViewerId == this.ViewerId && x.PartyNo == 1)
             .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         dbparty
@@ -56,7 +56,7 @@ public class PartyTest : TestFixture
             .BeEquivalentTo(
                 new DbParty()
                 {
-                    ViewerId = ViewerId,
+                    ViewerId = this.ViewerId,
                     PartyNo = 1,
                     PartyName = "My New Party",
                 },
@@ -72,7 +72,7 @@ public class PartyTest : TestFixture
                     {
                         UnitNo = 1,
                         PartyNo = 1,
-                        ViewerId = ViewerId,
+                        ViewerId = this.ViewerId,
                         CharaId = Charas.Ilia,
                         EquipCrestSlotType1CrestId1 = AbilityCrestId.ADragonyuleforIlia,
                         EquipWeaponBodyId = WeaponBodies.DivineTrigger,
@@ -82,7 +82,7 @@ public class PartyTest : TestFixture
                     {
                         UnitNo = 2,
                         PartyNo = 1,
-                        ViewerId = ViewerId,
+                        ViewerId = this.ViewerId,
                         CharaId = Charas.Empty,
                         Party = dbparty,
                     },
@@ -90,7 +90,7 @@ public class PartyTest : TestFixture
                     {
                         UnitNo = 3,
                         PartyNo = 1,
-                        ViewerId = ViewerId,
+                        ViewerId = this.ViewerId,
                         CharaId = Charas.Empty,
                         Party = dbparty,
                     },
@@ -98,7 +98,7 @@ public class PartyTest : TestFixture
                     {
                         UnitNo = 4,
                         PartyNo = 1,
-                        ViewerId = ViewerId,
+                        ViewerId = this.ViewerId,
                         CharaId = Charas.Empty,
                         Party = dbparty,
                     },
@@ -214,7 +214,7 @@ public class PartyTest : TestFixture
     {
         DbParty party =
             await this.ApiContext.PlayerParties.FindAsync(
-                [ViewerId, 1],
+                [this.ViewerId, 1],
                 TestContext.Current.CancellationToken
             ) ?? throw new NullReferenceException();
 

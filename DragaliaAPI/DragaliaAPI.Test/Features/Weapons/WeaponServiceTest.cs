@@ -11,7 +11,7 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Test.Utils;
 
-namespace DragaliaAPI.Test.Services;
+namespace DragaliaAPI.Test.Features.Weapons;
 
 public class WeaponServiceTest
 {

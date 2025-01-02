@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Integration.Test.Features.Login;
 
 public class UserTest : TestFixture
 {
@@ -11,7 +11,7 @@ public class UserTest : TestFixture
     public async Task LinkedNAccount_ReturnsExpectedResponse()
     {
         DbPlayerUserData dbUserData = this.ApiContext.PlayerUserData.Single(x =>
-            x.ViewerId == ViewerId
+            x.ViewerId == this.ViewerId
         );
 
         UserData expectedUserData = this.Mapper.Map<UserData>(dbUserData);
