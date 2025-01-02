@@ -6,30 +6,55 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.Serialization;
 using MessagePack;
 
-string outputDir = args[^1];
-string resourcesPath = args[^2];
+string outputDir = args[0];
+string resourcesPath = args[1];
 
-List<GenerateMasterAssetAttributeInstance> attributeInstances = typeof(MasterAsset)
-    .GetCustomAttributes(typeof(GenerateMasterAssetAttribute<>))
-    .Select(AttributeHelper.ParseGenerateMasterAssetAttribute)
-    .ToList();
+// MSBuild will pass us the list of JSON files that are out of date.
+// https://learn.microsoft.com/en-us/visualstudio/msbuild/incremental-builds?view=vs-2022
+// "If only some files are up-to-date, MSBuild executes the target but skips the up-to-date items,
+// and thereby brings all items up-to-date. This process is known as a partial incremental build."
+string[] jsonFiles = args[2..];
 
-Dictionary<string, ExtendMasterAssetAttribute> extensionAttributes = typeof(MasterAsset)
+Dictionary<string, GenerateMasterAssetAttributeInstance> attributeInstancesByPropertyName =
+    typeof(MasterAsset)
+        .GetCustomAttributes(typeof(GenerateMasterAssetAttribute<>))
+        .Select(AttributeHelper.ParseGenerateMasterAssetAttribute)
+        .ToDictionary(x => x.PropertyName, x => x);
+
+Dictionary<string, ExtendMasterAssetAttribute> extensionAttributesByPath = typeof(MasterAsset)
     .Assembly.GetCustomAttributes<ExtendMasterAssetAttribute>()
-    .ToDictionary(x => x.MasterAssetName, x => x);
+    .ToDictionary(x => x.Filepath, x => x);
 
-foreach (GenerateMasterAssetAttributeInstance instance in attributeInstances)
+foreach (string fullJsonPath in jsonFiles)
 {
-    await Convert(instance.JsonPath, instance);
+    string propertyName = Path.GetFileName(fullJsonPath).Replace(".json", "");
+    string relativePath = Path.GetRelativePath(resourcesPath, fullJsonPath);
 
     if (
-        extensionAttributes.TryGetValue(
-            instance.PropertyName,
+        attributeInstancesByPropertyName.TryGetValue(
+            propertyName,
+            out GenerateMasterAssetAttributeInstance? instance
+        )
+    )
+    {
+        await Convert(fullJsonPath, instance);
+    }
+    else if (
+        extensionAttributesByPath.TryGetValue(
+            relativePath,
             out ExtendMasterAssetAttribute? extensionAttribute
         )
     )
     {
-        await Convert(extensionAttribute.Filepath, instance);
+        GenerateMasterAssetAttributeInstance baseInstance = attributeInstancesByPropertyName[
+            extensionAttribute.MasterAssetName
+        ];
+
+        await Convert(fullJsonPath, baseInstance);
+    }
+    else
+    {
+        throw new ArgumentException("Unable to find attribute instance for " + fullJsonPath);
     }
 }
 
@@ -38,17 +63,6 @@ async Task Convert(string inputPath, GenerateMasterAssetAttributeInstance instan
     string fullJsonPath = Path.Combine(resourcesPath, inputPath);
     string relativePath = Path.GetRelativePath(resourcesPath, fullJsonPath);
     string outputPath = Path.Combine(outputDir, relativePath.Replace(".json", ".msgpack"));
-
-    if (
-        File.Exists(outputPath)
-        && new FileInfo(outputPath).LastWriteTime >= new FileInfo(fullJsonPath).LastWriteTime
-    )
-    {
-        Console.WriteLine(
-            $"Skipping conversion of {relativePath} - binary converted file is newer"
-        );
-        return;
-    }
 
     Type listType = typeof(IList<>).MakeGenericType(instance.ItemType);
 
