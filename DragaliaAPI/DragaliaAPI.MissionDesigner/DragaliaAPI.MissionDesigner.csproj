@@ -1,5 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="./MissionDesigner.targets" />
+  
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
