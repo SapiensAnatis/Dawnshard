@@ -9,7 +9,7 @@ namespace DragaliaAPI.Database.Test.Repositories;
 public class QuestRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
-    private readonly IQuestRepository questRepository;
+    private readonly QuestRepository questRepository;
 
     public QuestRepositoryTest(DbTestFixture fixture)
     {
