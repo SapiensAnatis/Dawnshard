@@ -58,10 +58,17 @@
 </script>
 
 {#if loading}
-  <span class="opacity-0">
-			{@render children?.()}
-		</span>
-  <LoadingSpinner class="absolute text-gray-200" />
+  <button
+    bind:this={ref}
+    class={cn(buttonVariants({ variant, size }), className)}
+    {type}
+    {...restProps}
+  >
+    <span class="opacity-0">
+      {@render children?.()}
+    </span>
+    <LoadingSpinner class="absolute text-gray-200" />
+  </button>
 {:else}
   {#if href}
     <a
