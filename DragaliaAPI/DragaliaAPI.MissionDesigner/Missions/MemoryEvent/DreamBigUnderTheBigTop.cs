@@ -6,7 +6,7 @@ using DragaliaAPI.MissionDesigner.Models.RegularMission;
 namespace DragaliaAPI.MissionDesigner.Missions.MemoryEvent;
 
 [ContainsMissionList]
-public class DreamBigUnderTheBigTop
+public static class DreamBigUnderTheBigTop
 {
     private const int EventId = 20820;
     private const int ExBossBattleQuestId = 208200401;
