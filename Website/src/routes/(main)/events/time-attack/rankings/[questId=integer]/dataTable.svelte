@@ -4,6 +4,7 @@
     type ExpandedState,
     getCoreRowModel,
     getPaginationRowModel,
+    type Header,
     type PaginationState
   } from '@tanstack/table-core';
   import { onMount, tick } from 'svelte';
@@ -142,15 +143,22 @@
   };
 
   onMount(() => {
-    // const params = new URLSearchParams($page.url.searchParams);
-    // const pageNumber = Number(params.get('page'));
-    //
-    // if (pageNumber) {
-    //   $pageIndex = pageNumber - 1;
-    // }
+    const params = new URLSearchParams(page.url.searchParams);
+    const pageNumber = Number(params.get('page'));
+
+    if (pageNumber) {
+      table.setPageIndex(pageNumber - 1);
+    }
 
     initialized = true;
   });
+
+  const headersById: Record<string, Header<TimeAttackRanking, unknown>> = table
+    .getHeaderGroups()
+    .flatMap((x) => x.headers)
+    .reduce((map, header) => {
+      return { ...map, [header.id]: header };
+    }, {});
 </script>
 
 <div class="rounded-md border">
@@ -175,6 +183,14 @@
         <Table.Row class="flex flex-col md:[display:revert]">
           {#each row.getVisibleCells() as cell (cell.id)}
             <Table.Cell class="px-4 py-3">
+              {@const header = headersById[cell.column.id]}
+              {#if header}
+                <div class="text-muted-foreground md:hidden">
+                  <FlexRender
+                    content={header.column.columnDef.header}
+                    context={header.getContext()} />
+                </div>
+              {/if}
               <div>
                 <FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
               </div>
