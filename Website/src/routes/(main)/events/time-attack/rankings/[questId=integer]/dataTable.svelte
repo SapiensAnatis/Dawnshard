@@ -62,7 +62,7 @@
     {
       id: 'team',
       accessorKey: 'players',
-      header: 'Players',
+      header: 'Team',
       cell: ({ getValue }) => {
         const players = getValue<TimeAttackPlayer[]>();
         return renderComponent(TeamCell, { team: getTeam(coop, players), expanded: false });
