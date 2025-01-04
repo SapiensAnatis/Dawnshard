@@ -28,10 +28,10 @@
 
 <Card.Root>
   <Card.Header>
-    <Card.Title>
+    <Card.Title level={2}>
       <div class="flex flex-row items-center justify-items-start gap-2">
         <Info aria-hidden={true} size={25} />
-        <h2 class="m-0 text-xl font-bold">User information</h2>
+        User information
       </div>
     </Card.Title>
   </Card.Header>

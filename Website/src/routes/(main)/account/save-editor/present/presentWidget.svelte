@@ -93,7 +93,7 @@
     <Card.Title>
       <div class="flex flex-row items-center justify-items-start gap-2">
         <Gift aria-hidden={true} size={25} />
-        <h2 id="gift-box-title" class="m-0 text-xl font-bold">Gift box</h2>
+        Gift box
       </div>
     </Card.Title>
   </Card.Header>

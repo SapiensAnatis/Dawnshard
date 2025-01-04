@@ -12,10 +12,10 @@
 
 <Card.Root>
   <Card.Header>
-    <Card.Title>
+    <Card.Title level={2}>
       <div class="flex flex-row items-center justify-items-start gap-2">
         <Download aria-hidden={true} size={25} />
-        <h2 class="m-0 text-xl font-bold">Save import</h2>
+        Save import
       </div>
     </Card.Title>
   </Card.Header>
