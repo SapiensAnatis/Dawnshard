@@ -7,10 +7,12 @@
   import TalismanIcon from './talismanIcon.svelte';
   import WeaponIcon from './weaponIcon.svelte';
 
-  export let units: TimeAttackUnit[];
-  export let unitKeys: string[];
-  export let coop: boolean;
-  export let key;
+  let {
+    units,
+    unitKeys,
+    coop,
+    key
+  }: { units: TimeAttackUnit[]; unitKeys: string[]; coop: boolean; key: unknown } = $props();
 
   const id = `team-composition-${key}`;
 

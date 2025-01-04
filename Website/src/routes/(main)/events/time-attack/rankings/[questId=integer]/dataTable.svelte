@@ -1,90 +1,135 @@
 <script lang="ts">
+  import {
+    type ColumnDef,
+    type ExpandedState,
+    getCoreRowModel,
+    getPaginationRowModel,
+    type PaginationState
+  } from '@tanstack/table-core';
   import { onMount, tick } from 'svelte';
-  import { readable, writable } from 'svelte/store';
   import { slide } from 'svelte/transition';
 
   import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
+  import {
+    createSvelteTable,
+    FlexRender,
+    renderComponent
+  } from '$lib/shadcn/components/ui/data-table/index.js';
   import {
     getTeam,
     getTeamKeys
   } from '$main/events/time-attack/rankings/[questId=integer]/util.ts';
-  import type { TimeAttackRanking } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
+  import type {
+    TimeAttackPlayer,
+    TimeAttackRanking
+  } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
   import { Button } from '$shadcn/components/ui/button';
   import * as Table from '$shadcn/components/ui/table';
 
+  import ExpandRow from './expandRow.svelte';
   import TeamCell from './teamCell.svelte';
   import TeamComposition from './teamComposition/teamComposition.svelte';
 
-  export let itemCount: number;
-  export let data: TimeAttackRanking[];
-  export let coop: boolean = false;
+  let { itemCount, data, coop }: { itemCount: number; data: TimeAttackRanking[]; coop: boolean } =
+    $props();
 
-  const tableData = writable(data);
+  let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
+  let expanded = $state<ExpandedState>({});
 
-  $: {
-    $tableData = data;
-  }
+  const columns: ColumnDef<TimeAttackRanking>[] = [
+    {
+      accessorKey: 'rank',
+      header: 'Rank'
+    },
+    {
+      accessorKey: 'players',
+      header: coop ? 'Players' : 'Player',
+      cell: ({ getValue }) => {
+        return getValue<TimeAttackPlayer[]>()
+          .map((p) => p.name)
+          .join(', ');
+      }
+    },
+    {
+      accessorKey: 'time',
+      header: 'Clear Time',
+      cell: ({ getValue }) => {
+        const date = new Date(getValue<number>() * 1000);
+        return date.toISOString().slice(14, -3);
+      }
+    },
+    {
+      id: 'team',
+      accessorKey: 'players',
+      header: 'Players',
+      cell: ({ getValue }) => {
+        const players = getValue<TimeAttackPlayer[]>();
+        return renderComponent(TeamCell, { team: getTeam(coop, players), expanded: false });
+      }
+    },
+    {
+      id: 'expand',
+      cell: ({ row }) => {
+        return renderComponent(ExpandRow, {
+          initialized,
+          isExpanded: row.getIsExpanded(),
+          toggleExpanded: row.toggleExpanded
+        });
+      }
+    }
+  ];
 
-  const itemCountStore = readable(itemCount);
+  const table = createSvelteTable({
+    get data() {
+      return data;
+    },
+    columns,
+    state: {
+      get pagination() {
+        return pagination;
+      },
+      get expanded() {
+        return expanded;
+      }
+    },
+    onPaginationChange: (updaterOrValue) => {
+      if (typeof updaterOrValue === 'function') {
+        pagination = updaterOrValue(pagination);
+      } else {
+        pagination = updaterOrValue;
+      }
 
-  const table = createTable(tableData, {
-    expand: addExpandedRows(),
-    page: addPagination({ serverSide: true, serverItemCount: itemCountStore })
+      handlePageChange(pagination.pageIndex);
+    },
+    onExpandedChange: (updaterOrValue) => {
+      if (typeof updaterOrValue === 'function') {
+        expanded = updaterOrValue(expanded);
+      } else {
+        expanded = expanded;
+      }
+    },
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true,
+    rowCount: itemCount,
+    enableExpanding: true
   });
 
-  const columns = table.createColumns([
-    table.column({
-      accessor: ({ rank }) => rank,
-      header: 'Rank'
-    }),
-    table.column({
-      accessor: ({ players }) => players,
-      header: coop ? 'Players' : 'Player',
-      cell: ({ value: players }) => {
-        return players.map((p) => p.name).join(', ');
-      }
-    }),
-    table.column({
-      accessor: ({ time }) => time,
-      cell: ({ value: time }) => {
-        const date = new Date(time * 1000);
-        return date.toISOString().slice(14, -3);
-      },
-      header: 'Clear Time'
-    }),
-    table.column({
-      accessor: ({ players }) => {
-        return getTeam(coop, players);
-      },
-      header: 'Team',
-      cell: ({ row, value }, { pluginStates }) => {
-        const { isExpanded } = pluginStates.expand.getRowState(row);
-        return createRender(TeamCell, { team: value, isExpanded });
-      }
-    })
-  ]);
+  let initialized = $state(false);
+  let showExpanded = $state(true);
 
-  const { headerRows, pageRows, tableAttrs, tableBodyAttrs, tableHeadAttrs, pluginStates } =
-    table.createViewModel(columns);
-
-  const expandedIds = pluginStates.expand.expandedIds;
-  const { pageIndex, hasPreviousPage, hasNextPage } = pluginStates.page;
-
-  let initialized = false;
-  let showExpanded = true;
-
-  const changePage = async (newPage: number) => {
+  const handlePageChange = async (newPage: number) => {
     // Unmount the 'grandparent' block of the team-comp to skip the slide out transition
     showExpanded = false;
     await tick();
 
     // Reset the expanded IDs which would have otherwise caused a transition
-    expandedIds.clear();
+    // table.toggleAllRowsExpanded doesn't seem to do anything
+    expanded = {};
 
-    $pageIndex = newPage;
-    const params = new URLSearchParams($page.url.searchParams);
-    params.set('page', ($pageIndex + 1).toString());
+    const params = new URLSearchParams(page.url.searchParams);
+    params.set('page', (newPage + 1).toString());
 
     await goto(`?${params.toString()}`, { noScroll: true });
 
@@ -97,75 +142,65 @@
   };
 
   onMount(() => {
-    const params = new URLSearchParams($page.url.searchParams);
-    const pageNumber = Number(params.get('page'));
-
-    if (pageNumber) {
-      $pageIndex = pageNumber - 1;
-    }
+    // const params = new URLSearchParams($page.url.searchParams);
+    // const pageNumber = Number(params.get('page'));
+    //
+    // if (pageNumber) {
+    //   $pageIndex = pageNumber - 1;
+    // }
 
     initialized = true;
   });
 </script>
 
 <div class="rounded-md border">
-  <Table.Root {...$tableAttrs} id="time-attack-table" aria-labelledby="time-attack-table-title">
-    <Table.Header
-      {...$tableHeadAttrs}
-      id="time-attack-table-header"
-      class="hidden md:[display:revert]">
-      {#each $headerRows as headerRow}
-        <Subscribe rowAttrs={headerRow.attrs()}>
-          <Table.Row>
-            {#each headerRow.cells as cell (cell.id)}
-              <Subscribe attrs={cell.attrs()} let:attrs props={cell.props()}>
-                <Table.Head {...attrs}>
-                  <Render of={cell.render()} />
-                </Table.Head>
-              </Subscribe>
-            {/each}
-          </Table.Row>
-        </Subscribe>
+  <Table.Root id="time-attack-table" aria-labelledby="time-attack-table-title">
+    <Table.Header id="time-attack-table-header" class="hidden md:[display:revert]">
+      {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
+        <Table.Row>
+          {#each headerGroup.headers as header (header.id)}
+            <Table.Head>
+              {#if !header.isPlaceholder}
+                <FlexRender
+                  content={header.column.columnDef.header}
+                  context={header.getContext()} />
+              {/if}
+            </Table.Head>
+          {/each}
+        </Table.Row>
       {/each}
     </Table.Header>
-    <Table.Body {...$tableBodyAttrs}>
-      {#each $pageRows as row (row.id)}
-        <Subscribe rowAttrs={row.attrs()} let:rowAttrs>
-          <Table.Row {...rowAttrs} class="flex flex-col md:[display:revert]">
-            {#each $headerRows[0].cells.map( (header, i) => ({ header, cell: row.cells[i] }) ) as { cell, header }}
-              <Subscribe attrs={cell.attrs()} let:attrs>
-                <Table.Cell {...attrs} class="px-4 py-3">
-                  <div class="text-muted-foreground md:hidden">
-                    <Render of={header.render()} />
-                  </div>
-                  <div>
-                    <Render of={cell.render()} />
-                  </div>
-                </Table.Cell>
-              </Subscribe>
-            {/each}
-          </Table.Row>
-          <!--
+    <Table.Body>
+      {#each table.getRowModel().rows as row (row.id)}
+        <Table.Row class="flex flex-col md:[display:revert]">
+          {#each row.getVisibleCells() as cell (cell.id)}
+            <Table.Cell class="px-4 py-3">
+              <div>
+                <FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
+              </div>
+            </Table.Cell>
+          {/each}
+        </Table.Row>
+        <!--
           iOS Safari doesn't like it if you expand and close this section and starts rendering
           the rows side-by-side... avoiding the unmount of the extra <tr/> seems to fix this.
           The Blazor site used this kind of markup and that works fine. How mysterious!
            --->
-          <tr aria-hidden={!$expandedIds[row.id]}>
-            {#if showExpanded}
-              {#if $expandedIds[row.id] && row.isData()}
-                <td colspan="4">
-                  <div transition:slide={{ duration: 500 }} class="border-b p-4">
-                    <TeamComposition
-                      units={getTeam(coop, row.original.players)}
-                      unitKeys={getTeamKeys(coop, row.original.players)}
-                      key={row.original.rank}
-                      {coop} />
-                  </div>
-                </td>
-              {/if}
+        <tr aria-hidden={row.getIsExpanded()}>
+          {#if showExpanded}
+            {#if row.getIsExpanded()}
+              <td colspan="5">
+                <div transition:slide={{ duration: 500 }} class="border-b p-4">
+                  <TeamComposition
+                    units={getTeam(coop, row.original.players)}
+                    unitKeys={getTeamKeys(coop, row.original.players)}
+                    key={row.original.rank}
+                    {coop} />
+                </div>
+              </td>
             {/if}
-          </tr>
-        </Subscribe>
+          {/if}
+        </tr>
       {/each}
     </Table.Body>
   </Table.Root>
@@ -173,12 +208,16 @@
     <Button
       variant="outline"
       size="sm"
-      on:click={() => changePage($pageIndex - 1)}
-      disabled={!initialized || !$hasPreviousPage}>Previous</Button>
+      onclick={() => table.previousPage()}
+      disabled={!initialized || !table.getCanPreviousPage()}>
+      Previous
+    </Button>
     <Button
       variant="outline"
       size="sm"
-      on:click={() => changePage($pageIndex + 1)}
-      disabled={!initialized || !$hasNextPage}>Next</Button>
+      onclick={() => table.nextPage()}
+      disabled={!initialized || !table.getCanNextPage()}>
+      Next
+    </Button>
   </div>
 </div>

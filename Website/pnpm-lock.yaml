@@ -11,6 +11,9 @@ importers:
 
   .:
     dependencies:
+      '@tanstack/table-core':
+        specifier: 8.20.5
+        version: 8.20.5
       '@unpic/svelte':
         specifier: 0.0.58
         version: 0.0.58(svelte@5.16.0)
@@ -29,9 +32,6 @@ importers:
       svelte-form-helper:
         specifier: 0.4.1
         version: 0.4.1(svelte@5.16.0)
-      svelte-headless-table:
-        specifier: 0.18.3
-        version: 0.18.3(svelte@5.16.0)
       sveltekit-i18n:
         specifier: 2.4.2
         version: 2.4.2(svelte@5.16.0)
@@ -85,8 +85,8 @@ importers:
         specifier: 10.4.20
         version: 10.4.20(postcss@8.4.49)
       bits-ui:
-        specifier: 1.0.0-next.76
-        version: 1.0.0-next.76(svelte@5.16.0)
+        specifier: 1.0.0-next.77
+        version: 1.0.0-next.77(svelte@5.16.0)
       bunya:
         specifier: 1.0.0
         version: 1.0.0
@@ -771,6 +771,10 @@ packages:
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
 
+  '@tanstack/table-core@8.20.5':
+    resolution: {integrity: sha512-P9dF7XbibHph2PFRz8gfBKEXEY/HJPOhym8CHmjF8y3q5mWpKx9xtZapXQUWCgkqvsK0R46Azuz+VaxD4Xl+Tg==}
+    engines: {node: '>=12'}
+
   '@types/bunyan@1.8.11':
     resolution: {integrity: sha512-758fRH7umIMk5qt5ELmRMff4mLDlN+xyYzC+dkPTdKwbSkJFvz6xwyScrytPU0QIBbRRwbiE8/BIg8bpajerNQ==}
 
@@ -937,8 +941,8 @@ packages:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
 
-  bits-ui@1.0.0-next.76:
-    resolution: {integrity: sha512-BtTBlAQgdtA7l1V2EarM2QJlD8pkH4DAKACjCy4KMIVWMXdg15BGwALoXw1IWk4Xe4nCXI5Bz+lIB6nSgrzo6Q==}
+  bits-ui@1.0.0-next.77:
+    resolution: {integrity: sha512-IV0AyVEvsRkXv4s/fl4iea5E9W2b9EBf98s9mRMKMc1xHxM9MmtM2r6MZMqftHQ/c+gHTIt3A9EKuTlh7uay8w==}
     engines: {node: '>=18', pnpm: '>=8.7.0'}
     peerDependencies:
       svelte: ^5.11.0
@@ -2049,35 +2053,15 @@ packages:
     peerDependencies:
       svelte: ^3.54.0 || ^4.0.0 || ^5.0.0
 
-  svelte-headless-table@0.18.3:
-    resolution: {integrity: sha512-1zVnqXW0dvn6ZceYa94k+ziK+w5Dj9nlWYTQGXBv2JhM0resj9w7CWpclZK1TJwAALfEeH4InPBPO87L5fr+nQ==}
-    peerDependencies:
-      svelte: ^4.0.0
-
-  svelte-keyed@2.0.0:
-    resolution: {integrity: sha512-7TeEn+QbJC2OJrHiuM0T8vMBkms3DNpTE+Ir+NtnVBnBMA78aL4f1ft9t0Hn/pBbD/TnIXi4YfjFRAgtN+DZ5g==}
-    peerDependencies:
-      svelte: ^4.0.0
-
   svelte-parse-markup@0.1.5:
     resolution: {integrity: sha512-T6mqZrySltPCDwfKXWQ6zehipVLk4GWfH1zCMGgRtLlOIFPuw58ZxVYxVvotMJgJaurKi1i14viB2GIRKXeJTQ==}
     peerDependencies:
       svelte: ^3.0.0 || ^4.0.0 || ^5.0.0-next.1
 
-  svelte-render@2.0.1:
-    resolution: {integrity: sha512-RpB0SurwXm4xhjvHHtjeqMmvd645FURb79GFOotScOSqnKK5vpqBgoBPGC0pp+E/eZgDSQ9rRAdn/+N4ys1mXQ==}
-    peerDependencies:
-      svelte: ^4.0.0
-
   svelte-sonner@0.3.28:
     resolution: {integrity: sha512-K3AmlySeFifF/cKgsYNv5uXqMVNln0NBAacOYgmkQStLa/UoU0LhfAACU6Gr+YYC8bOCHdVmFNoKuDbMEsppJg==}
     peerDependencies:
       svelte: ^3.0.0 || ^4.0.0 || ^5.0.0-next.1
-
-  svelte-subscribe@2.0.1:
-    resolution: {integrity: sha512-eKXIjLxB4C7eQWPqKEdxcGfNXm2g/qJ67zmEZK/GigCZMfrTR3m7DPY93R6MX+5uoqM1FRYxl8LZ1oy4URWi2A==}
-    peerDependencies:
-      svelte: ^4.0.0
 
   svelte-toolbelt@0.4.6:
     resolution: {integrity: sha512-k8OUvXBUifHZcAlWeY/HLg/4J0v5m2iOfOhn8fDmjt4AP8ZluaDh9eBFus9lFiLX6O5l6vKqI1dKL5wy7090NQ==}
@@ -2907,6 +2891,8 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
+  '@tanstack/table-core@8.20.5': {}
+
   '@types/bunyan@1.8.11':
     dependencies:
       '@types/node': 22.10.2
@@ -3090,7 +3076,7 @@ snapshots:
 
   binary-extensions@2.3.0: {}
 
-  bits-ui@1.0.0-next.76(svelte@5.16.0):
+  bits-ui@1.0.0-next.77(svelte@5.16.0):
     dependencies:
       '@floating-ui/core': 1.6.8
       '@floating-ui/dom': 1.6.12
@@ -4143,31 +4129,11 @@ snapshots:
       highlight.js: 11.10.0
       svelte: 5.16.0
 
-  svelte-headless-table@0.18.3(svelte@5.16.0):
-    dependencies:
-      svelte: 5.16.0
-      svelte-keyed: 2.0.0(svelte@5.16.0)
-      svelte-render: 2.0.1(svelte@5.16.0)
-      svelte-subscribe: 2.0.1(svelte@5.16.0)
-
-  svelte-keyed@2.0.0(svelte@5.16.0):
-    dependencies:
-      svelte: 5.16.0
-
   svelte-parse-markup@0.1.5(svelte@5.16.0):
     dependencies:
       svelte: 5.16.0
 
-  svelte-render@2.0.1(svelte@5.16.0):
-    dependencies:
-      svelte: 5.16.0
-      svelte-subscribe: 2.0.1(svelte@5.16.0)
-
   svelte-sonner@0.3.28(svelte@5.16.0):
-    dependencies:
-      svelte: 5.16.0
-
-  svelte-subscribe@2.0.1(svelte@5.16.0):
     dependencies:
       svelte: 5.16.0
 
@@ -4330,7 +4296,7 @@ snapshots:
 
   vaul-svelte@1.0.0-next.3(svelte@5.16.0):
     dependencies:
-      bits-ui: 1.0.0-next.76(svelte@5.16.0)
+      bits-ui: 1.0.0-next.77(svelte@5.16.0)
       svelte: 5.16.0
       svelte-toolbelt: 0.4.6(svelte@5.16.0)
 
