@@ -54,7 +54,7 @@
 
 <Card.Root class="h-full w-full overflow-hidden">
   <Card.Header>
-    <Card.Title>
+    <Card.Title id="staged-changes-title">
       <div class="flex flex-row items-center justify-items-start gap-2">
         <NotebookPen aria-hidden={true} size={25} />
         Staged changes
