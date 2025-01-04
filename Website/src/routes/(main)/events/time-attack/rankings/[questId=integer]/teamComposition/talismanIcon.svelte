@@ -33,10 +33,7 @@
         height={45}
         alt={getTalismanName(talisman)} />
     </Popover.Trigger>
-    <Popover.Content
-      transitionConfig={{ y: -8, duration: 150 }}
-      class="flex h-fit w-fit flex-col items-center pb-3 pt-2"
-      side="bottom">
+    <Popover.Content class="flex h-fit w-fit flex-col items-center pb-3 pt-2" side="bottom">
       {getTalismanName(talisman)}
       <ol>
         <li class="text-sm">

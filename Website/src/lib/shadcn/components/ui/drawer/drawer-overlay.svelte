@@ -1,18 +1,16 @@
 <script lang="ts">
-	import { Drawer as DrawerPrimitive } from 'vaul-svelte';
-	import { cn } from '$lib/shadcn/utils.js.js';
+	import { Drawer as DrawerPrimitive } from "vaul-svelte";
+	import { cn } from "$lib/shadcn/utils.js.js";
 
-	type $$Props = DrawerPrimitive.OverlayProps;
-
-	export let el: $$Props['el'] = undefined;
-	let className: $$Props['class'] = undefined;
-	export { className as class };
+	let {
+		ref = $bindable(null),
+		class: className,
+		...restProps
+	}: DrawerPrimitive.OverlayProps = $props();
 </script>
 
 <DrawerPrimitive.Overlay
-	bind:el
-	class={cn('fixed inset-0 z-50 bg-black/80', className)}
-	{...$$restProps}
->
-	<slot />
-</DrawerPrimitive.Overlay>
+	bind:ref
+	class={cn("fixed inset-0 z-50 bg-black/80", className)}
+	{...restProps}
+/>

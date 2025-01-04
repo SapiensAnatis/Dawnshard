@@ -4,12 +4,14 @@
   "tailwind": {
     "config": "tailwind.config.js",
     "css": "src/app.pcss",
-    "baseColor": "slate",
-    "cssVariables": true
+    "baseColor": "slate"
   },
   "aliases": {
     "components": "$lib/shadcn/components/",
-    "utils": "$lib/shadcn/utils.js"
+    "utils": "$lib/shadcn/utils.js",
+    "ui": "$lib/shadcn/components/ui",
+    "hooks": "$lib/shadcn/hooks"
   },
-  "typescript": true
+  "typescript": true,
+  "registry": "https://next.shadcn-svelte.com/registry"
 }

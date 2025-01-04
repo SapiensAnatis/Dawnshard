@@ -9,7 +9,7 @@
 
 <CardHeader class="">
   <div class="flex items-center gap-4">
-    <CardTitle tag="h2" class="text-2xl">
+    <CardTitle level={2} class="text-2xl">
       {item.headline}
     </CardTitle>
     {#if item.date > lastRead}

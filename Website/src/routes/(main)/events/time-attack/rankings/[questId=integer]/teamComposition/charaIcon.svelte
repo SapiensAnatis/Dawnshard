@@ -25,10 +25,7 @@
   <Popover.Trigger aria-label="Expand character details">
     <Image src={charaImagePath} layout="constrained" width={45} height={45} alt={charaName} />
   </Popover.Trigger>
-  <Popover.Content
-    transitionConfig={{ y: -8, duration: 150 }}
-    class="flex h-fit w-fit flex-col items-center pb-3 pt-2"
-    side="bottom">
+  <Popover.Content class="flex h-fit w-fit flex-col items-center pb-3 pt-2" side="bottom">
     {charaName}
     <WikiLink pageName={charaName} />
   </Popover.Content>

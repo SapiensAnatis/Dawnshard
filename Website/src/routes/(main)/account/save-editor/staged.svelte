@@ -67,8 +67,8 @@
   </Card.Header>
   <Card.Content class={anyModifications ? 'h-full' : 'pb-0'}>
     <div class="flex gap-3">
-      <Button disabled={!anyModifications} variant="outline" on:click={onClickReset}>Reset</Button>
-      <Button disabled={!anyModifications || $changesCount > 100} {loading} on:click={onClickSave}>
+      <Button disabled={!anyModifications} variant="outline" onclick={onClickReset}>Reset</Button>
+      <Button disabled={!anyModifications || $changesCount > 100} {loading} onclick={onClickSave}>
         Save changes
       </Button>
     </div>

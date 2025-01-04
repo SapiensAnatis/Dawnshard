@@ -39,7 +39,7 @@
     <DataTable
       data={data.clearData.data}
       itemCount={data.clearData.pagination.totalCount}
-      coop={currentQuest?.isCoop} />
+      coop={currentQuest?.isCoop ?? false} />
   {/key}
 </Page>
 

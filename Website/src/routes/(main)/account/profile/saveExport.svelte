@@ -66,7 +66,7 @@
       <div class="flex items-center gap-2">
         <Button
           variant="secondary"
-          on:click={() => (savefileExportPromise = getSavefile())}
+          onclick={() => (savefileExportPromise = getSavefile())}
           {loading}>
           Export save
         </Button>

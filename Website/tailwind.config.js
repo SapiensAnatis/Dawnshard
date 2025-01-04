@@ -1,5 +1,6 @@
 import { fontFamily } from 'tailwindcss/defaultTheme';
 import plugin from 'tailwindcss/plugin';
+import tailwindcssAnimate from 'tailwindcss-animate';
 
 /** @type {import('tailwindcss').Config} */
 const config = {
@@ -48,6 +49,25 @@ const config = {
         card: {
           DEFAULT: 'hsl(var(--card) / <alpha-value>)',
           foreground: 'hsl(var(--card-foreground) / <alpha-value>)'
+        },
+        keyframes: {
+          'accordion-down': {
+            from: { height: '0' },
+            to: { height: 'var(--bits-accordion-content-height)' }
+          },
+          'accordion-up': {
+            from: { height: 'var(--bits-accordion-content-height)' },
+            to: { height: '0' }
+          },
+          'caret-blink': {
+            '0%,70%,100%': { opacity: '1' },
+            '20%,50%': { opacity: '0' }
+          }
+        },
+        animation: {
+          'accordion-down': 'accordion-down 0.2s ease-out',
+          'accordion-up': 'accordion-up 0.2s ease-out',
+          'caret-blink': 'caret-blink 1.25s ease-out infinite'
         }
       },
       borderRadius: {
@@ -61,6 +81,7 @@ const config = {
     }
   },
   plugins: [
+    tailwindcssAnimate,
     plugin((props) => {
       props.addVariant('touched', '&[data-touched]');
     })
