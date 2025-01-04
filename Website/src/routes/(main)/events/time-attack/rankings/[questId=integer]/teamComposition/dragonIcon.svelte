@@ -32,10 +32,7 @@
         height={45}
         alt={getDragonName(dragon)} />
     </Popover.Trigger>
-    <Popover.Content
-      transitionConfig={{ y: -8, duration: 150 }}
-      class="flex h-fit w-fit flex-col items-center pb-3 pt-2"
-      side="bottom">
+    <Popover.Content class="flex h-fit w-fit flex-col items-center pb-3 pt-2" side="bottom">
       {getDragonName(dragon)}
       <WikiLink pageName={getDragonName(dragon)} />
     </Popover.Content>

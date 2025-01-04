@@ -152,13 +152,6 @@
 
     initialized = true;
   });
-
-  const headersById: Record<string, Header<TimeAttackRanking, unknown>> = table
-    .getHeaderGroups()
-    .flatMap((x) => x.headers)
-    .reduce((map, header) => {
-      return { ...map, [header.id]: header };
-    }, {});
 </script>
 
 <div class="rounded-md border">
@@ -183,14 +176,10 @@
         <Table.Row class="flex flex-col md:[display:revert]">
           {#each row.getVisibleCells() as cell (cell.id)}
             <Table.Cell class="px-4 py-3">
-              {@const header = headersById[cell.column.id]}
-              {#if header}
-                <div class="text-muted-foreground md:hidden">
-                  <FlexRender
-                    content={header.column.columnDef.header}
-                    context={header.getContext()} />
-                </div>
-              {/if}
+              <div class="text-muted-foreground md:hidden">
+                <!-- We can do this without FlexRender because none of our headers are custom -->
+                {cell.column.columnDef.header}
+              </div>
               <div>
                 <FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
               </div>

@@ -2,13 +2,15 @@
 	import type { HTMLInputAttributes } from "svelte/elements";
 	import type { WithElementRef } from "bits-ui";
 	import { cn } from "$lib/shadcn/utils.js.js";
+	import type { Field } from 'svelte-form-helper';
 
 	let {
 		ref = $bindable(null),
 		value = $bindable(),
+		field,
 		class: className,
 		...restProps
-	}: WithElementRef<HTMLInputAttributes> = $props();
+	}: WithElementRef<HTMLInputAttributes> & {field: Field} = $props();
 </script>
 
 <input
@@ -18,5 +20,6 @@
 		className
 	)}
 	bind:value
+	use:field
 	{...restProps}
 />

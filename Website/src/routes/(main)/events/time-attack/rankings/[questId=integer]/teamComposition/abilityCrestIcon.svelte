@@ -40,10 +40,7 @@
         height={45}
         alt={getAbilityCrestName(abilityCrest)} />
     </Popover.Trigger>
-    <Popover.Content
-      transitionConfig={{ y: -8, duration: 150 }}
-      class="flex h-fit w-fit flex-col items-center pb-3 pt-2"
-      side="bottom">
+    <Popover.Content class="flex h-fit w-fit flex-col items-center pb-3 pt-2" side="bottom">
       {getAbilityCrestName(abilityCrest)}
       <WikiLink pageName={getAbilityCrestName(abilityCrest)} />
     </Popover.Content>

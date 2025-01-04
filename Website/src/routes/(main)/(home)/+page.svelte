@@ -25,7 +25,7 @@
 <div id="banner">
   <Card.Root class="w-full max-w-[55rem]">
     <Card.Header>
-      <Card.Title tag="h2" class="text-3xl">Welcome to Dawnshard</Card.Title>
+      <Card.Title level={2} class="text-3xl">Welcome to Dawnshard</Card.Title>
     </Card.Header>
     <Card.Content>
       <p class="text-lg font-semibold" style:margin-bottom="0.5rem">

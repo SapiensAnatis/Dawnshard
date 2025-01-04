@@ -28,20 +28,22 @@
         <Menu aria-hidden={true} class="size-6" />
       </Drawer.Trigger>
       <HeaderContents {hasValidJwt} />
-      <Drawer.Portal class="md:hidden">
-        <Drawer.Content
-          id="drawer-content"
-          class="fixed bottom-0 left-0 top-0 mt-0 w-[75%] bg-background pl-4 pr-2 pt-2">
-          <div id="my-content">
-            <Drawer.Close class="flex w-full flex-col pl-0">
-              <Button variant="ghost" class="w-[7rem] self-end">
-                Close <Close class="ml-2 mt-0.5 h-5 w-5" />
-              </Button>
-            </Drawer.Close>
-            <Routes {hasValidJwt} drawer={true} />
-          </div>
-        </Drawer.Content>
-      </Drawer.Portal>
+      <div class="md:hidden">
+        <Drawer.Portal>
+          <Drawer.Content
+            id="drawer-content"
+            class="fixed bottom-0 left-0 top-0 mt-0 w-[75%] bg-background pl-4 pr-2 pt-2">
+            <div id="my-content">
+              <Drawer.Close class="flex w-full flex-col pl-0">
+                <Button variant="ghost" class="w-[7rem] self-end">
+                  Close <Close class="ml-2 mt-0.5 h-5 w-5" />
+                </Button>
+              </Drawer.Close>
+              <Routes {hasValidJwt} drawer={true} />
+            </div>
+          </Drawer.Content>
+        </Drawer.Portal>
+      </div>
     </header>
   </Drawer.Root>
 {:else}
