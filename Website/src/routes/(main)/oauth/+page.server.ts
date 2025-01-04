@@ -1,9 +1,9 @@
-import { type Cookies, redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import type Logger from 'bunyan';
 import { z } from 'zod';
 
 import { PUBLIC_BAAS_CLIENT_ID, PUBLIC_BAAS_URL, PUBLIC_ENABLE_MSW } from '$env/static/public';
-import CookieNames from '$lib/auth/cookies.ts';
+import Cookies from '$lib/auth/cookies.ts';
 import getJwtMetadata from '$lib/auth/jwt.ts';
 
 import type { PageServerLoad } from './$types';
@@ -21,7 +21,30 @@ const sdkTokenResponseSchema = z.object({
 
 export const load: PageServerLoad = async ({ cookies, locals, url, fetch }) => {
   const { logger } = locals;
-  const idToken = await getBaasToken(cookies, url, fetch, logger);
+
+  const sessionTokenCode = url.searchParams.get('session_token_code');
+
+  if (!sessionTokenCode) {
+    error(400, 'Missing session_token_code query parameter');
+  }
+
+  logger.debug(
+    { stcMetadata: getJwtMetadata(sessionTokenCode) },
+    'Retrieved session token code with metadata {stcMetadata}'
+  );
+
+  const challengeString = cookies.get(Cookies.ChallengeString);
+  logger.debug({ challengeString }, 'Retrieved challenge string: {challengeString}');
+
+  if (!challengeString) {
+    error(
+      400,
+      'Missing challengeString cookie. ' +
+        'Ensure that your browser is able to accept cookies from this website.'
+    );
+  }
+
+  const idToken = await getBaasToken(sessionTokenCode, challengeString, fetch, logger);
 
   const jwtMetadata = getJwtMetadata(idToken);
   if (!jwtMetadata.valid) {
@@ -34,7 +57,7 @@ export const load: PageServerLoad = async ({ cookies, locals, url, fetch }) => {
     redirect(302, '/unauthorized/404');
   }
 
-  cookies.set(CookieNames.IdToken, idToken, {
+  cookies.set(Cookies.IdToken, idToken, {
     path: '/',
     maxAge,
     httpOnly: false,
@@ -49,40 +72,21 @@ export const load: PageServerLoad = async ({ cookies, locals, url, fetch }) => {
     path: '/'
   });
 
-  const destination = getOriginalPage(url) ?? '/';
+  const originalPage = getOriginalPage(url) ?? '/';
 
-  if (destination.includes('unauthorized')) {
+  if (originalPage.includes('unauthorized')) {
     redirect(302, '/');
   }
 
-  redirect(302, destination);
+  redirect(302, originalPage);
 };
 
 const getBaasToken = async (
-  cookies: Cookies,
-  url: URL,
+  sessionTokenCode: string,
+  challengeString: string,
   fetch: (url: URL, req: RequestInit) => Promise<Response>,
   logger: Logger
 ) => {
-  const challengeString = cookies.get(CookieNames.ChallengeString);
-
-  if (!challengeString) {
-    throw new Error('Failed to get challenge string');
-  }
-
-  logger.debug({ challengeString }, 'Retrieved challenge string: {challengeString}');
-
-  const sessionTokenCode = url.searchParams.get('session_token_code');
-
-  if (!sessionTokenCode) {
-    throw new Error('Failed to get session token code');
-  }
-
-  logger.debug(
-    { stcMetadata: getJwtMetadata(sessionTokenCode) },
-    'Retrieved session token code with metadata {stcMetadata}'
-  );
-
   logger.debug({ currentTimestamp: Date.now() }, 'Current timestamp: {currentTimestamp}');
 
   const sessionTokenCodeParams = new URLSearchParams({
@@ -169,9 +173,9 @@ const getOriginalPage = (url: URL) => {
     return null;
   }
 
-  if (!stateObject.originalPage) {
+  if (!stateObject.originalPage || typeof stateObject.originalPage !== 'string') {
     return null;
   }
 
-  return stateObject.originalPage;
+  return decodeURIComponent(stateObject.originalPage);
 };

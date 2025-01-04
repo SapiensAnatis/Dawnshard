@@ -90,16 +90,16 @@
 
 <Card.Root>
   <Card.Header>
-    <Card.Title>
+    <Card.Title id="present-widget-title">
       <div class="flex flex-row items-center justify-items-start gap-2">
         <Gift aria-hidden={true} size={25} />
-        <h2 id="gift-box-title" class="m-0 text-xl font-bold">Gift box</h2>
+        Gift box
       </div>
     </Card.Title>
   </Card.Header>
   <Card.Content>
     <p class="mb-5">Use this widget to add presents to your gift box.</p>
-    <form use:form onsubmit={onSubmit} aria-labelledby="gift-box-title">
+    <form use:form onsubmit={onSubmit} aria-labelledby="present-widget-title">
       <div class="flex flex-row flex-wrap gap-4">
         <div class="labelled-input">
           <Label for="type">Type</Label>
