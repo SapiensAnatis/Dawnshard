@@ -2,8 +2,6 @@
   import { onMount, tick } from 'svelte';
   import { readable, writable } from 'svelte/store';
   import { slide } from 'svelte/transition';
-  import { createRender, createTable, Render, Subscribe } from 'svelte-headless-table';
-  import { addExpandedRows, addPagination } from 'svelte-headless-table/plugins';
 
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
