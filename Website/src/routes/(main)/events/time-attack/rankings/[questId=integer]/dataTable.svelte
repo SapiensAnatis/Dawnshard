@@ -4,7 +4,6 @@
     type ExpandedState,
     getCoreRowModel,
     getPaginationRowModel,
-    type Header,
     type PaginationState
   } from '@tanstack/table-core';
   import { onMount, tick } from 'svelte';
@@ -175,10 +174,12 @@
       {#each table.getRowModel().rows as row (row.id)}
         <Table.Row class="flex flex-col md:[display:revert]">
           {#each row.getVisibleCells() as cell (cell.id)}
+            {@const header = cell.column.columnDef.header}
             <Table.Cell class="px-4 py-3">
               <div class="text-muted-foreground md:hidden">
-                <!-- We can do this without FlexRender because none of our headers are custom -->
-                {cell.column.columnDef.header}
+                {#if typeof header === 'string'}
+                  {header}
+                {/if}
               </div>
               <div>
                 <FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
@@ -191,7 +192,7 @@
           the rows side-by-side... avoiding the unmount of the extra <tr/> seems to fix this.
           The Blazor site used this kind of markup and that works fine. How mysterious!
            --->
-        <tr aria-hidden={row.getIsExpanded()}>
+        <tr aria-hidden={!row.getIsExpanded()}>
           {#if showExpanded}
             {#if row.getIsExpanded()}
               <td colspan="5">
