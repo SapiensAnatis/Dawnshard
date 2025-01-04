@@ -1,6 +1,6 @@
 using DragaliaAPI.Database.Entities;
 
-namespace DragaliaAPI.Integration.Test.Features.Stamp;
+namespace DragaliaAPI.Integration.Test.Features.CoOp;
 
 public class StampTest : TestFixture
 {
@@ -69,7 +69,7 @@ public class StampTest : TestFixture
 
         this.ApiContext.ChangeTracker.Clear();
 
-        this.ApiContext.EquippedStamps.Where(x => x.ViewerId == ViewerId)
+        this.ApiContext.EquippedStamps.Where(x => x.ViewerId == this.ViewerId)
             .Should()
             .BeEquivalentTo(
                 requestList,

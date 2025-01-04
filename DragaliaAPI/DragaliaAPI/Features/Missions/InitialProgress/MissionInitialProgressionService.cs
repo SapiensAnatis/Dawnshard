@@ -599,7 +599,11 @@ public class MissionInitialProgressionService(
 
     private async Task<int> GetEventParticipationProgress(int? eventId)
     {
-        ArgumentNullException.ThrowIfNull(eventId);
+        if (!eventId.HasValue)
+        {
+            throw new ArgumentNullException(nameof(eventId));
+        }
+
         return await eventRepository.GetEventDataAsync(eventId.Value) != null ? 1 : 0;
     }
 }

@@ -29,7 +29,7 @@ public class UnitService(
     /// </returns>
     public async Task<IList<CharaNewCheckResult>> AddCharas(IList<Charas> idList)
     {
-        IDictionary<int, Entity> inputRewardDict = idList
+        Dictionary<int, Entity> inputRewardDict = idList
             .Select((x, index) => KeyValuePair.Create(index, new Entity(EntityTypes.Chara, (int)x)))
             .ToDictionary();
 
@@ -48,7 +48,7 @@ public class UnitService(
 
     public async Task<IList<DragonNewCheckResult>> AddDragons(List<DragonId> idList)
     {
-        IDictionary<int, Entity> inputRewardDict = idList
+        Dictionary<int, Entity> inputRewardDict = idList
             .Select(
                 (x, index) => KeyValuePair.Create(index, new Entity(EntityTypes.Dragon, (int)x))
             )

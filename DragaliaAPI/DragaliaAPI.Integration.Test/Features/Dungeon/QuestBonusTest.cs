@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Infrastructure.Results;
 
-namespace DragaliaAPI.Integration.Test.Features;
+namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 
 public class QuestBonusTest : TestFixture
 {
@@ -128,7 +128,7 @@ public class QuestBonusTest : TestFixture
         await this.AddToDatabase(
             new DbQuestEvent()
             {
-                ViewerId = ViewerId,
+                ViewerId = this.ViewerId,
                 QuestEventId = questEventId,
                 LastWeeklyResetTime = resetTime,
                 LastDailyResetTime = resetTime,
@@ -169,7 +169,7 @@ public class QuestBonusTest : TestFixture
         await this.AddToDatabase(
             new DbQuestEvent()
             {
-                ViewerId = ViewerId,
+                ViewerId = this.ViewerId,
                 QuestEventId = questEventId,
                 LastWeeklyResetTime = DateTimeOffset.UtcNow - TimeSpan.FromDays(7),
                 LastDailyResetTime = DateTimeOffset.UtcNow - TimeSpan.FromDays(7),

@@ -98,7 +98,7 @@ public class BonusService(
 
     private static IEnumerable<AtgenElementBonus> GetFortElementBonus(IEnumerable<int> buildIds)
     {
-        IDictionary<UnitElement, AtgenElementBonus> result = Enum.GetValues<UnitElement>()
+        Dictionary<UnitElement, AtgenElementBonus> result = Enum.GetValues<UnitElement>()
             .Select(x => new AtgenElementBonus()
             {
                 ElementalType = x,
@@ -136,7 +136,7 @@ public class BonusService(
 
     private static IEnumerable<AtgenParamBonus> GetFortParamBonus(IEnumerable<int> buildIds)
     {
-        IDictionary<WeaponTypes, AtgenParamBonus> result = Enum.GetValues<WeaponTypes>()
+        Dictionary<WeaponTypes, AtgenParamBonus> result = Enum.GetValues<WeaponTypes>()
             .Select(x => new AtgenParamBonus()
             {
                 WeaponType = x,
@@ -173,7 +173,7 @@ public class BonusService(
 
     private static IEnumerable<AtgenDragonBonus> GetFortDragonBonus(IEnumerable<int> buildIds)
     {
-        IDictionary<UnitElement, AtgenDragonBonus> result = Enum.GetValues<UnitElement>()
+        Dictionary<UnitElement, AtgenDragonBonus> result = Enum.GetValues<UnitElement>()
             .Select(x => new AtgenDragonBonus()
             {
                 ElementalType = x,
@@ -221,7 +221,7 @@ public class BonusService(
         IEnumerable<WeaponBodies> weaponBodyIds
     )
     {
-        IDictionary<WeaponTypes, AtgenParamBonus> result = Enum.GetValues<WeaponTypes>()
+        Dictionary<WeaponTypes, AtgenParamBonus> result = Enum.GetValues<WeaponTypes>()
             .Select(x => new AtgenParamBonus()
             {
                 WeaponType = x,
