@@ -5,8 +5,8 @@ namespace DragaliaAPI.Models.Generated;
 
 public partial class LoadIndexResponse
 {
-    [IgnoreMember]
-    public string Origin => "dawnshard";
+    [MessagePack.IgnoreMember]
+    public string? Origin { get; set; }
 
     [Key("spec_upgrade_time")]
     public DateTimeOffset SpecUpgradeTime { get; set; } = DateTimeOffset.UnixEpoch;

@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Features.Login.Savefile;
+using DragaliaAPI.Infrastructure.Metrics;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
+using NSubstitute;
 
 namespace DragaliaAPI.Database.Test;
 
@@ -33,7 +35,8 @@ public class DbTestFixture : IDisposable
             new MapperConfiguration(opts => opts.AddMaps(typeof(Program).Assembly)).CreateMapper(),
             mockLogger.Object,
             IdentityTestUtils.MockPlayerDetailsService.Object,
-            []
+            [],
+            Substitute.For<IDragaliaApiMetrics>()
         );
         savefileService.Create().Wait();
     }

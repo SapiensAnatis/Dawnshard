@@ -28,6 +28,9 @@ if (builder.Environment.IsDevelopment())
     await provider.RedisCollection<RedisGame>().DeleteAsync(provider.RedisCollection<RedisGame>());
 }
 
+// Force this to be instantiated as it is not injected anywhere at the moment
+app.Services.GetRequiredService<PhotonStateManagerMetrics>();
+
 app.UseSerilogRequestLogging();
 
 if (app.Environment.IsDevelopment())

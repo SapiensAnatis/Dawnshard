@@ -96,6 +96,11 @@ internal static class ServiceConfiguration
                 .WithTracing(tracing => tracing.AddRedisInstrumentation());
         }
 
+        builder.Services.AddSingleton<PhotonStateManagerMetrics>();
+        builder
+            .Services.AddOpenTelemetry()
+            .WithMetrics(metrics => metrics.AddMeter(PhotonStateManagerMetrics.MeterName));
+
         return builder;
     }
 }

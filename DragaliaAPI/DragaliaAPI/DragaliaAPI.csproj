@@ -66,6 +66,7 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="DragaliaAPI.Test" />
+    <InternalsVisibleTo Include="DragaliaAPI.Database.Test" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
     <InternalsVisibleTo Include="DragaliaAPI.Integration.Test" />
   </ItemGroup>

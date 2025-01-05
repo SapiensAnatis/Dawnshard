@@ -2,6 +2,7 @@
 using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Infrastructure;
+using DragaliaAPI.Infrastructure.Metrics;
 using DragaliaAPI.Infrastructure.Middleware;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -11,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Features.Dungeon.Record;
 
 [Route("dungeon_record")]
-public class DungeonRecordController(
+internal sealed class DungeonRecordController(
     IDungeonRecordService dungeonRecordService,
     IDungeonRecordDamageService dungeonRecordDamageService,
     IDungeonRecordHelperService dungeonRecordHelperService,
@@ -19,7 +20,8 @@ public class DungeonRecordController(
     IDungeonService dungeonService,
     ITimeAttackService timeAttackService,
     IAutoRepeatService autoRepeatService,
-    IUpdateDataService updateDataService
+    IUpdateDataService updateDataService,
+    IDragaliaApiMetrics metrics
 ) : DragaliaControllerBase
 {
     [HttpPost("record")]
@@ -73,6 +75,8 @@ public class DungeonRecordController(
         }
 
         await dungeonService.RemoveSession(request.DungeonKey, cancellationToken);
+
+        metrics.OnQuestCleared(session);
 
         return response;
     }
@@ -132,6 +136,8 @@ public class DungeonRecordController(
         }
 
         await dungeonService.RemoveSession(request.DungeonKey, cancellationToken);
+
+        metrics.OnQuestCleared(session);
 
         return response;
     }

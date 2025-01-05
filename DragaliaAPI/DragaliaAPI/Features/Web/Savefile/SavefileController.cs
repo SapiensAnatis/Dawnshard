@@ -1,5 +1,6 @@
 using DragaliaAPI.Features.Login.Savefile;
 using DragaliaAPI.Infrastructure.Authentication;
+using DragaliaAPI.Infrastructure.Metrics;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Serialization;
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +11,8 @@ namespace DragaliaAPI.Features.Web.Savefile;
 [ApiController]
 [Route("/api/savefile")]
 [Authorize(Policy = AuthConstants.PolicyNames.RequireDawnshardIdentity)]
-internal sealed class SavefileController(ILoadService loadService) : ControllerBase
+internal sealed class SavefileController(ILoadService loadService, IDragaliaApiMetrics metrics)
+    : ControllerBase
 {
     [HttpGet("export")]
     public async Task<FileResult> GetSavefile(CancellationToken cancellationToken)
@@ -22,6 +24,10 @@ internal sealed class SavefileController(ILoadService loadService) : ControllerB
             sanitizedResponse,
             new DataHeaders(ResultCode.Success)
         );
+
+        savefile.Data.Origin = "dawnshard";
+
+        metrics.OnSaveExport();
 
         return this.File(
             JsonSerializer.SerializeToUtf8Bytes(savefile, ApiJsonOptions.Instance),
