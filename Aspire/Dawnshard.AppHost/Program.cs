@@ -20,13 +20,6 @@ IResourceBuilder<ProjectResource> dragaliaApi = builder
     .WithEndpoint("http", http => http.TargetHost = "0.0.0.0")
     .WithExternalHttpEndpoints();
 
-IResourceBuilder<ProjectResource> stateManager2 = builder
-    .AddProject<Projects.DragaliaAPI_Photon_StateManager>("photon-state-manager")
-    .WithReference(redis)
-    .WithEndpoint("http", http => http.TargetHost = "0.0.0.0")
-    .WithExternalHttpEndpoints()
-    .WithEnvironment("PhotonOptions__Token", "aaaaaa");
-
 if (builder.Configuration.GetValue<bool>("EnablePhoton"))
 {
     string bearerToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
