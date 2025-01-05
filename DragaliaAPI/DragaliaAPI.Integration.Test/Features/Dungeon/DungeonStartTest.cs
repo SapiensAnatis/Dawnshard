@@ -324,9 +324,9 @@ public class DungeonStartTest : TestFixture
         int flameDullRes = 1010104;
         WeaponBodies waterSword = WeaponBodies.AbsoluteAqua;
 
-        await this.ApiContext.PlayerPassiveAbilities.ExecuteDeleteAsync(
-            cancellationToken: TestContext.Current.CancellationToken
-        );
+        await this
+            .ApiContext.PlayerPassiveAbilities.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteDeleteAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         await this.AddToDatabase(
             new DbWeaponPassiveAbility() { WeaponPassiveAbilityId = flameDullRes }

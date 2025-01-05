@@ -31,7 +31,10 @@ internal sealed class SavefileService(
     private const int RecheckLockMs = 1000;
     private const int LockFailsafeExpiryMin = 5;
 
-    private readonly int maxSavefileVersion = savefileUpdates.Select(x => x.SavefileVersion).Max();
+    private readonly int maxSavefileVersion = savefileUpdates
+        .Select(x => x.SavefileVersion)
+        .DefaultIfEmpty()
+        .Max();
 
     private static class RedisSchema
     {
