@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Infrastructure.Authentication;
+using DragaliaAPI.Infrastructure.Metrics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,8 +9,10 @@ namespace DragaliaAPI.Features.Web.Savefile;
 [ApiController]
 [Route("/api/savefile/edit")]
 [Authorize(Policy = AuthConstants.PolicyNames.RequireDawnshardIdentity)]
-internal sealed class SavefileEditController(SavefileEditService savefileEditService)
-    : ControllerBase
+internal sealed class SavefileEditController(
+    SavefileEditService savefileEditService,
+    IDragaliaApiMetrics metrics
+) : ControllerBase
 {
     [SuppressMessage(
         "Performance",
@@ -29,6 +32,8 @@ internal sealed class SavefileEditController(SavefileEditService savefileEditSer
         }
 
         await savefileEditService.PerformEdits(request);
+
+        metrics.OnSaveEdit();
 
         return this.Ok();
     }

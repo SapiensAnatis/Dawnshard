@@ -6,6 +6,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Features.CoOp.Stamps;
 using DragaliaAPI.Features.Login.SavefileUpdate;
+using DragaliaAPI.Infrastructure.Metrics;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -17,37 +18,23 @@ using Microsoft.Extensions.Caching.Distributed;
 
 namespace DragaliaAPI.Features.Login.Savefile;
 
-public class SavefileService : ISavefileService
+internal sealed class SavefileService(
+    ApiContext apiContext,
+    IDistributedCache cache,
+    IMapper mapper,
+    ILogger<SavefileService> logger,
+    IPlayerIdentityService playerIdentityService,
+    IEnumerable<ISavefileUpdate> savefileUpdates,
+    IDragaliaApiMetrics metrics
+) : ISavefileService
 {
-    private readonly ApiContext apiContext;
-    private readonly IDistributedCache cache;
-    private readonly IMapper mapper;
-    private readonly ILogger<SavefileService> logger;
-    private readonly IPlayerIdentityService playerIdentityService;
-
     private const int RecheckLockMs = 1000;
     private const int LockFailsafeExpiryMin = 5;
 
-    private readonly int maxSavefileVersion;
-
-    public SavefileService(
-        ApiContext apiContext,
-        IDistributedCache cache,
-        IMapper mapper,
-        ILogger<SavefileService> logger,
-        IPlayerIdentityService playerIdentityService,
-        IEnumerable<ISavefileUpdate> savefileUpdates
-    )
-    {
-        this.apiContext = apiContext;
-        this.cache = cache;
-        this.mapper = mapper;
-        this.logger = logger;
-        this.playerIdentityService = playerIdentityService;
-
-        this.maxSavefileVersion =
-            savefileUpdates.MaxBy(x => x.SavefileVersion)?.SavefileVersion ?? 0;
-    }
+    private readonly int maxSavefileVersion = savefileUpdates
+        .Select(x => x.SavefileVersion)
+        .DefaultIfEmpty()
+        .Max();
 
     private static class RedisSchema
     {
@@ -68,29 +55,27 @@ public class SavefileService : ISavefileService
     /// <returns>The task.</returns>
     public async Task ThreadSafeImport(LoadIndexResponse savefile)
     {
-        string key = RedisSchema.PendingImport(this.playerIdentityService.AccountId);
+        string key = RedisSchema.PendingImport(playerIdentityService.AccountId);
 
-        if (!string.IsNullOrEmpty(await this.cache.GetStringAsync(key)))
+        if (!string.IsNullOrEmpty(await cache.GetStringAsync(key)))
         {
-            while (!string.IsNullOrEmpty(await this.cache.GetStringAsync(key)))
+            while (!string.IsNullOrEmpty(await cache.GetStringAsync(key)))
             {
-                this.logger.LogInformation("Savefile import is locked, waiting...");
+                logger.LogInformation("Savefile import is locked, waiting...");
                 await Task.Delay(RecheckLockMs);
             }
 
-            this.logger.LogInformation("Savefile import lock released.");
+            logger.LogInformation("Savefile import lock released.");
             return;
         }
 
         try
         {
-            await this.Import(savefile);
+            await Import(savefile);
         }
         catch (Exception)
         {
-            await this.cache.RemoveAsync(
-                RedisSchema.PendingImport(this.playerIdentityService.AccountId)
-            );
+            await cache.RemoveAsync(RedisSchema.PendingImport(playerIdentityService.AccountId));
             throw;
         }
     }
@@ -103,40 +88,40 @@ public class SavefileService : ISavefileService
     /// <remarks>Not thread safe if called for the same account id from two different threads.</remarks>
     public async Task Import(LoadIndexResponse savefile)
     {
-        string deviceAccountId = this.playerIdentityService.AccountId;
+        string deviceAccountId = playerIdentityService.AccountId;
         Stopwatch stopwatch = Stopwatch.StartNew();
 
         // Place a lock preventing any concurrent save imports
-        await this.cache.SetStringAsync(
+        await cache.SetStringAsync(
             RedisSchema.PendingImport(deviceAccountId),
             "true",
             RedisOptions
         );
 
-        this.logger.LogInformation(
+        logger.LogInformation(
             "Beginning savefile import for account {accountId}",
-            this.playerIdentityService.AccountId
+            playerIdentityService.AccountId
         );
 
         try
         {
             await using IDbContextTransaction transaction =
-                await this.apiContext.Database.BeginTransactionAsync();
+                await apiContext.Database.BeginTransactionAsync();
 
-            await this.Delete();
+            await Delete();
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Deleting savedata step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            DbPlayer player = await this.apiContext.Players.FirstAsync(x =>
-                x.ViewerId == this.playerIdentityService.ViewerId
+            DbPlayer player = await apiContext.Players.FirstAsync(x =>
+                x.ViewerId == playerIdentityService.ViewerId
             );
 
             player.SavefileVersion = 0;
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbPlayer step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
@@ -144,29 +129,29 @@ public class SavefileService : ISavefileService
             // This has JsonRequired so this should never be triggered
             ArgumentNullException.ThrowIfNull(savefile.UserData);
 
-            player.UserData = this.mapper.Map<DbPlayerUserData>(savefile.UserData);
-            player.UserData.ViewerId = this.playerIdentityService.ViewerId;
+            player.UserData = mapper.Map<DbPlayerUserData>(savefile.UserData);
+            player.UserData.ViewerId = playerIdentityService.ViewerId;
 
             // TODO: What was the actual maximum dragon storage you could get?
             int cappedDragonStorage = Math.Min(savefile.UserData.MaxDragonQuantity, 500);
             player.UserData.MaxDragonQuantity = cappedDragonStorage;
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbPlayerUserData step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.CharaList = savefile.CharaList.Map<DbPlayerCharaData>(this.mapper);
+            player.CharaList = savefile.CharaList.Map<DbPlayerCharaData>(mapper);
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbPlayerCharaData step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
             player.DragonReliabilityList =
-                savefile.DragonReliabilityList.Map<DbPlayerDragonReliability>(this.mapper);
+                savefile.DragonReliabilityList.Map<DbPlayerDragonReliability>(mapper);
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbPlayerDragonReliability step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
@@ -177,13 +162,13 @@ public class SavefileService : ISavefileService
             foreach (DragonList d in savefile.DragonList?.Take(cappedDragonStorage) ?? [])
             {
                 ulong oldKeyId = d.DragonKeyId;
-                DbPlayerDragonData dbEntry = d.Map<DbPlayerDragonData>(this.mapper);
+                DbPlayerDragonData dbEntry = d.Map<DbPlayerDragonData>(mapper);
                 player.DragonList.Add(dbEntry);
 
                 dragonKeyIds.TryAdd((long)oldKeyId, dbEntry);
             }
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbPlayerDragonData step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
@@ -193,28 +178,28 @@ public class SavefileService : ISavefileService
             foreach (TalismanList t in savefile.TalismanList ?? new List<TalismanList>())
             {
                 ulong oldKeyId = t.TalismanKeyId;
-                DbTalisman dbEntry = t.Map<DbTalisman>(this.mapper);
+                DbTalisman dbEntry = t.Map<DbTalisman>(mapper);
                 player.TalismanList.Add(dbEntry);
 
                 talismanKeyIds.TryAdd((long)oldKeyId, dbEntry);
             }
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbTalisman step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
             // Must save changes for key ids to update
-            await this.apiContext.SaveChangesAsync();
+            await apiContext.SaveChangesAsync();
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "SaveChangesAsync() #1 step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
             AddShopInfo(player);
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Adding shop info step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
@@ -222,7 +207,7 @@ public class SavefileService : ISavefileService
             if (savefile.PartyList is not null)
             {
                 // Update key ids in parties
-                List<DbParty> parties = savefile.PartyList.Map<DbParty>(this.mapper);
+                List<DbParty> parties = savefile.PartyList.Map<DbParty>(mapper);
 
                 foreach (DbParty party in parties)
                 {
@@ -251,131 +236,115 @@ public class SavefileService : ISavefileService
                 AddDefaultParties(player);
             }
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbParty step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.AbilityCrestList.AddRange(
-                savefile.AbilityCrestList.Map<DbAbilityCrest>(this.mapper)
-            );
+            player.AbilityCrestList.AddRange(savefile.AbilityCrestList.Map<DbAbilityCrest>(mapper));
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbAbilityCrest step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.WeaponBodyList.AddRange(savefile.WeaponBodyList.Map<DbWeaponBody>(this.mapper));
+            player.WeaponBodyList.AddRange(savefile.WeaponBodyList.Map<DbWeaponBody>(mapper));
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbWeaponBody step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.QuestList.AddRange(savefile.QuestList.Map<DbQuest>(this.mapper));
+            player.QuestList.AddRange(savefile.QuestList.Map<DbQuest>(mapper));
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbQuest step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.StoryStates.AddRange(
-                savefile.QuestStoryList.Map<DbPlayerStoryState>(this.mapper)
-            );
+            player.StoryStates.AddRange(savefile.QuestStoryList.Map<DbPlayerStoryState>(mapper));
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbPlayerStoryState (QuestStoryList) step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.StoryStates.AddRange(
-                savefile.UnitStoryList.Map<DbPlayerStoryState>(this.mapper)
-            );
+            player.StoryStates.AddRange(savefile.UnitStoryList.Map<DbPlayerStoryState>(mapper));
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbPlayerStoryState (UnitStoryList) step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.StoryStates.AddRange(
-                savefile.CastleStoryList.Map<DbPlayerStoryState>(this.mapper)
-            );
+            player.StoryStates.AddRange(savefile.CastleStoryList.Map<DbPlayerStoryState>(mapper));
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbPlayerStoryState (CastleStoryList) step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.MaterialList.AddRange(savefile.MaterialList.Map<DbPlayerMaterial>(this.mapper));
+            player.MaterialList.AddRange(savefile.MaterialList.Map<DbPlayerMaterial>(mapper));
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbPlayerMaterial step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.BuildList.AddRange(savefile.BuildList.Map<DbFortBuild>(this.mapper));
+            player.BuildList.AddRange(savefile.BuildList.Map<DbFortBuild>(mapper));
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbFortBuild step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.WeaponSkinList.AddRange(savefile.WeaponSkinList.Map<DbWeaponSkin>(this.mapper));
+            player.WeaponSkinList.AddRange(savefile.WeaponSkinList.Map<DbWeaponSkin>(mapper));
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbWeaponSkin step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
             player.WeaponPassiveAbilityList.AddRange(
-                savefile.WeaponPassiveAbilityList.Map<DbWeaponPassiveAbility>(this.mapper)
+                savefile.WeaponPassiveAbilityList.Map<DbWeaponPassiveAbility>(mapper)
             );
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbWeaponPassibeAbility step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.DragonGiftList.AddRange(
-                savefile.DragonGiftList.Map<DbPlayerDragonGift>(this.mapper)
-            );
+            player.DragonGiftList.AddRange(savefile.DragonGiftList.Map<DbPlayerDragonGift>(mapper));
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbPlayerDragonGift step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.EquippedStampList.AddRange(
-                savefile.EquipStampList.Map<DbEquippedStamp>(this.mapper)
-            );
+            player.EquippedStampList.AddRange(savefile.EquipStampList.Map<DbEquippedStamp>(mapper));
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbEquippedStamp step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.Trades.AddRange(savefile.UserTreasureTradeList.Map<DbPlayerTrade>(this.mapper));
+            player.Trades.AddRange(savefile.UserTreasureTradeList.Map<DbPlayerTrade>(mapper));
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbPlayerTrade step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.SummonTickets.AddRange(
-                savefile.SummonTicketList.Map<DbSummonTicket>(this.mapper)
-            );
+            player.SummonTickets.AddRange(savefile.SummonTicketList.Map<DbSummonTicket>(mapper));
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbSummonTicket step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
             if (
                 savefile.UserData.EmblemId != Emblems.DragonbloodPrince
-                && await this.apiContext.Emblems.FindAsync(
-                    player.ViewerId,
-                    savefile.UserData.EmblemId
-                ) == null
+                && await apiContext.Emblems.FindAsync(player.ViewerId, savefile.UserData.EmblemId)
+                    == null
             )
             {
                 player.Emblems.Add(
@@ -388,42 +357,40 @@ public class SavefileService : ISavefileService
                 );
             }
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Adding DbEmblem step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.PartyPower = savefile.PartyPowerData.Map<DbPartyPower>(this.mapper);
+            player.PartyPower = savefile.PartyPowerData.Map<DbPartyPower>(mapper);
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbPartyPower step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.QuestEvents = savefile.QuestEventList.Map<DbQuestEvent>(this.mapper);
+            player.QuestEvents = savefile.QuestEventList.Map<DbQuestEvent>(mapper);
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbQuestEvent step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.QuestTreasureList = savefile.QuestTreasureList.Map<DbQuestTreasureList>(
-                this.mapper
-            );
+            player.QuestTreasureList = savefile.QuestTreasureList.Map<DbQuestTreasureList>(mapper);
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbQuestTreasureList step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            player.QuestWalls = savefile.QuestWallList.Map<DbPlayerQuestWall>(this.mapper);
+            player.QuestWalls = savefile.QuestWallList.Map<DbPlayerQuestWall>(mapper);
 
-            this.logger.LogDebug(
+            logger.LogDebug(
                 "Mapping DbPlayerQuestWall step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.logger.LogInformation(
+            logger.LogInformation(
                 "Mapping completed after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
@@ -431,182 +398,142 @@ public class SavefileService : ISavefileService
             player.LastSavefileImportTime = DateTimeOffset.UtcNow;
             player.SavefileOrigin = savefile.Origin;
 
-            await this.apiContext.SaveChangesAsync();
+            await apiContext.SaveChangesAsync();
             await transaction.CommitAsync();
 
             // Remove lock
-            await this.cache.RemoveAsync(RedisSchema.PendingImport(deviceAccountId));
+            await cache.RemoveAsync(RedisSchema.PendingImport(deviceAccountId));
 
-            this.logger.LogInformation(
+            metrics.OnSaveImport(savefile);
+
+            logger.LogInformation(
                 "Saved changes after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
         }
         catch
         {
-            this.apiContext.ChangeTracker.Clear();
+            apiContext.ChangeTracker.Clear();
             throw;
         }
     }
 
     private async Task Delete()
     {
-        long viewerId = this.playerIdentityService.ViewerId;
+        long viewerId = playerIdentityService.ViewerId;
 
         // The usage of ExecuteDelete can leave the change tracker in a corrupted state where it attempts to
         // track rows that no longer exist. This can cause an error if you attempt to import a save on first
         // login, for example.
         // Since nothing in the tracker is going to be relevant in the face of total deletion, clear the
         // tracker entirely.
-        this.apiContext.ChangeTracker.Clear();
+        apiContext.ChangeTracker.Clear();
 
         // Options commented out have been excluded from save import deletion process.
         // They will still be deleted by cascade delete when a player is actually deleted
         // without being re-added as they are in save imports.
-        await this
-            .apiContext.PlayerUserData.Where(x => x.ViewerId == viewerId)
+        await apiContext.PlayerUserData.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext.PlayerCharaData.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext
+            .PlayerDragonReliability.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerCharaData.Where(x => x.ViewerId == viewerId)
+        await apiContext.PlayerDragonData.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext
+            .PlayerAbilityCrests.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerDragonReliability.Where(x => x.ViewerId == viewerId)
+        await apiContext.PlayerStoryState.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext.PlayerQuests.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext.PlayerParties.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext.PlayerPartyUnits.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext.PlayerWeapons.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext.PlayerMaterials.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext.PlayerTalismans.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext.PlayerFortBuilds.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext.PlayerWeaponSkins.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext
+            .PlayerPassiveAbilities.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerDragonData.Where(x => x.ViewerId == viewerId)
-            .ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerAbilityCrests.Where(x => x.ViewerId == viewerId)
-            .ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerStoryState.Where(x => x.ViewerId == viewerId)
-            .ExecuteDeleteAsync();
-        await this.apiContext.PlayerQuests.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
-        await this.apiContext.PlayerParties.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerPartyUnits.Where(x => x.ViewerId == viewerId)
-            .ExecuteDeleteAsync();
-        await this.apiContext.PlayerWeapons.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerMaterials.Where(x => x.ViewerId == viewerId)
-            .ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerTalismans.Where(x => x.ViewerId == viewerId)
-            .ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerFortBuilds.Where(x => x.ViewerId == viewerId)
-            .ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerWeaponSkins.Where(x => x.ViewerId == viewerId)
-            .ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerPassiveAbilities.Where(x => x.ViewerId == viewerId)
-            .ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerDragonGifts.Where(x =>
+        await apiContext
+            .PlayerDragonGifts.Where(x =>
                 x.ViewerId == viewerId && x.DragonGiftId >= DragonGifts.FourLeafClover
             )
             .ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerMissions.Where(x => x.ViewerId == viewerId)
+        await apiContext.PlayerMissions.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext.EquippedStamps.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext.PlayerShopInfos.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext.PlayerTrades.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext.PlayerEventData.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext.PlayerEventItems.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext.PlayerEventRewards.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext
+            .PlayerEventPassives.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this
-            .apiContext.EquippedStamps.Where(x => x.ViewerId == viewerId)
-            .ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerShopInfos.Where(x => x.ViewerId == viewerId)
-            .ExecuteDeleteAsync();
-        await this.apiContext.PlayerTrades.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerEventData.Where(x => x.ViewerId == viewerId)
-            .ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerEventItems.Where(x => x.ViewerId == viewerId)
-            .ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerEventRewards.Where(x => x.ViewerId == viewerId)
-            .ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerEventPassives.Where(x => x.ViewerId == viewerId)
-            .ExecuteDeleteAsync();
-        // this.apiContext.PlayerDmodeInfos.RemoveRange(
-        //     this.apiContext.PlayerDmodeInfos.Where(x => x.ViewerId == viewerId)
+        // apiContext.PlayerDmodeInfos.RemoveRange(
+        //     apiContext.PlayerDmodeInfos.Where(x => x.ViewerId == viewerId)
         // );
-        // this.apiContext.PlayerDmodeCharas.RemoveRange(
-        //     this.apiContext.PlayerDmodeCharas.Where(x => x.ViewerId == viewerId)
+        // apiContext.PlayerDmodeCharas.RemoveRange(
+        //     apiContext.PlayerDmodeCharas.Where(x => x.ViewerId == viewerId)
         // );
-        // this.apiContext.PlayerDmodeDungeons.RemoveRange(
-        //     this.apiContext.PlayerDmodeDungeons.Where(x => x.ViewerId == viewerId)
+        // apiContext.PlayerDmodeDungeons.RemoveRange(
+        //     apiContext.PlayerDmodeDungeons.Where(x => x.ViewerId == viewerId)
         // );
-        // this.apiContext.PlayerDmodeServitorPassives.RemoveRange(
-        //     this.apiContext.PlayerDmodeServitorPassives.Where(
+        // apiContext.PlayerDmodeServitorPassives.RemoveRange(
+        //     apiContext.PlayerDmodeServitorPassives.Where(
         //         x => x.DeviceAccountId == deviceAccountId
         //     )
         // );
-        // this.apiContext.PlayerDmodeExpeditions.RemoveRange(
-        //     this.apiContext.PlayerDmodeExpeditions.Where(x => x.ViewerId == viewerId)
+        // apiContext.PlayerDmodeExpeditions.RemoveRange(
+        //     apiContext.PlayerDmodeExpeditions.Where(x => x.ViewerId == viewerId)
         // );
-        await this
-            .apiContext.PlayerUseItems.Where(x => x.ViewerId == viewerId)
+        await apiContext.PlayerUseItems.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext
+            .PlayerSummonTickets.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerSummonTickets.Where(x => x.ViewerId == viewerId)
-            .ExecuteDeleteAsync();
-        // this.apiContext.Emblems.RemoveRange(
-        //     this.apiContext.Emblems.Where(x => x.ViewerId == viewerId)
+        // apiContext.Emblems.RemoveRange(
+        //     apiContext.Emblems.Where(x => x.ViewerId == viewerId)
         // );
-        await this.apiContext.QuestEvents.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
-        await this
-            .apiContext.QuestTreasureList.Where(x => x.ViewerId == viewerId)
-            .ExecuteDeleteAsync();
-        await this.apiContext.PartyPowers.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerQuestWalls.Where(x => x.ViewerId == viewerId)
-            .ExecuteDeleteAsync();
-        await this
-            .apiContext.CompletedDailyMissions.Where(x => x.ViewerId == viewerId)
+        await apiContext.QuestEvents.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext.QuestTreasureList.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext.PartyPowers.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext.PlayerQuestWalls.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await apiContext
+            .CompletedDailyMissions.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
         // await this
         //     .apiContext.WallRewardDates.Where(x => x.ViewerId == viewerId)
         //     .ExecuteDeleteAsync();
-        await this
-            .apiContext.PlayerSummonHistory.Where(x => x.ViewerId == viewerId)
+        await apiContext
+            .PlayerSummonHistory.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-    }
-
-    public async Task Reset()
-    {
-        // Unlike importing, this will not preserve the viewer id
-        await this.Create();
     }
 
     public async Task<DbPlayer> Create()
     {
-        string deviceAccountId = this.playerIdentityService.AccountId;
+        string deviceAccountId = playerIdentityService.AccountId;
 
-        return await this.Create(deviceAccountId);
+        return await Create(deviceAccountId);
     }
 
     public async Task<DbPlayer> Create(string deviceAccountId)
     {
-        this.logger.LogInformation("Creating new savefile for account ID {id}", deviceAccountId);
+        logger.LogInformation("Creating new savefile for account ID {id}", deviceAccountId);
 
         await using IDbContextTransaction transaction =
-            await this.apiContext.Database.BeginTransactionAsync();
+            await apiContext.Database.BeginTransactionAsync();
 
         DbPlayer player = new()
         {
             AccountId = deviceAccountId,
-            SavefileVersion = this.maxSavefileVersion,
+            SavefileVersion = maxSavefileVersion,
             UserData = new(),
             DiamondData = new(),
             CreatedAt = DateTimeOffset.UtcNow,
         };
 
-        this.apiContext.Players.Add(player);
-        await this.apiContext.SaveChangesAsync();
+        apiContext.Players.Add(player);
+        await apiContext.SaveChangesAsync();
 
-        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
+        using IDisposable ctx = playerIdentityService.StartUserImpersonation(
             player.ViewerId,
             player.AccountId
         );
@@ -617,9 +544,11 @@ public class SavefileService : ISavefileService
         AddShopInfo(player);
         AddDefaultEmblem(player);
 
-        await this.apiContext.SaveChangesAsync();
+        await apiContext.SaveChangesAsync();
 
         await transaction.CommitAsync();
+
+        metrics.OnAccountCreated();
 
         return player;
     }

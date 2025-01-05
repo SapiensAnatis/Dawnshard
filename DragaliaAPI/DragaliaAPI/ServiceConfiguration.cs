@@ -33,7 +33,9 @@ using DragaliaAPI.Features.Version;
 using DragaliaAPI.Features.Weapons;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Infrastructure.Authentication;
+using DragaliaAPI.Infrastructure.Metrics;
 using DragaliaAPI.Infrastructure.Middleware;
+using DragaliaAPI.Models.Generated;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -304,6 +306,11 @@ public static class ServiceConfiguration
                 // .AddRedisInstrumentation()
                 );
         }
+
+        builder.Services.AddSingleton<IDragaliaApiMetrics, DragaliaApiMetrics>();
+        builder
+            .Services.AddOpenTelemetry()
+            .WithMetrics(metrics => metrics.AddMeter(DragaliaApiMetrics.MeterName));
 
         return builder;
     }

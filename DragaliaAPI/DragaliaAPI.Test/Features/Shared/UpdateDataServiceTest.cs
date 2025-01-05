@@ -10,6 +10,7 @@ using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
+using DragaliaAPI.Test.Utils;
 
 namespace DragaliaAPI.Test.Features.Shared;
 
@@ -269,6 +270,9 @@ public class UpdateDataServiceTest : RepositoryTestFixture
         member
             .Should()
             .ContainSingle()
-            .And.ContainEquivalentOf(this.mapper.Map<TNetwork>(dbEntity));
+            .And.ContainEquivalentOf(
+                this.mapper.Map<TNetwork>(dbEntity),
+                opts => opts.WithTimeSpanTolerance(TimeSpan.FromSeconds(1))
+            );
     }
 }

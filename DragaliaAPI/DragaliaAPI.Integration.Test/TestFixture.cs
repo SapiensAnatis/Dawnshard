@@ -38,13 +38,26 @@ public class TestFixture
     /// </summary>
     protected string SessionId { get; } = $"session_id_{Guid.NewGuid()}";
 
-    private readonly CustomWebApplicationFactory factory;
+    private readonly WebApplicationFactory<Program> factory;
 
     protected TestFixture(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
     {
-        this.factory = factory;
-
         this.TestOutputHelper = testOutputHelper;
+        this.MockBaasApi = factory.MockBaasApi;
+        this.MockPhotonStateApi = factory.MockPhotonStateApi;
+
+        this.factory = factory.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureLogging(logging =>
+            {
+                logging.ClearProviders();
+                logging.AddConsole();
+            });
+            builder.ConfigureTestServices(services =>
+            {
+                services.AddSingleton<TimeProvider>(this.MockTimeProvider);
+            });
+        });
 
         this.Client = this.CreateClient();
 
@@ -76,9 +89,9 @@ public class TestFixture
 
     protected DateTimeOffset LastDailyReset { get; }
 
-    protected Mock<IBaasApi> MockBaasApi => this.factory.MockBaasApi;
+    protected Mock<IBaasApi> MockBaasApi { get; }
 
-    protected Mock<IPhotonStateApi> MockPhotonStateApi => this.factory.MockPhotonStateApi;
+    protected Mock<IPhotonStateApi> MockPhotonStateApi { get; }
 
     protected FakeTimeProvider MockTimeProvider { get; } = new();
 
@@ -110,7 +123,9 @@ public class TestFixture
     protected void AddCharacter(Charas id)
     {
         if (this.ApiContext.PlayerCharaData.Find(ViewerId, id) is not null)
+        {
             return;
+        }
 
         this.ApiContext.PlayerCharaData.Add(new(this.ViewerId, id));
         this.ApiContext.SaveChanges();
@@ -178,29 +193,19 @@ public class TestFixture
 
     protected HttpClient CreateClient(Action<IWebHostBuilder>? extraBuilderConfig = null)
     {
-        HttpClient client = factory
-            .WithWebHostBuilder(builder =>
+        WebApplicationFactory<Program> factoryToUse = this.factory;
+
+        if (extraBuilderConfig is not null)
+        {
+            factoryToUse = this.factory.WithWebHostBuilder(extraBuilderConfig);
+        }
+
+        HttpClient client = factoryToUse.CreateClient(
+            new WebApplicationFactoryClientOptions()
             {
-                builder.ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.AddConsole();
-                });
-                builder.ConfigureTestServices(services =>
-                {
-                    services.AddSingleton<TimeProvider>(this.MockTimeProvider);
-                });
-                extraBuilderConfig?.Invoke(builder);
-            })
-            .CreateClient(
-                new WebApplicationFactoryClientOptions()
-                {
-                    BaseAddress = new Uri(
-                        "http://localhost/2.19.0_20220714193707/",
-                        UriKind.Absolute
-                    ),
-                }
-            );
+                BaseAddress = new Uri("http://localhost/2.19.0_20220714193707/", UriKind.Absolute),
+            }
+        );
 
         client.DefaultRequestHeaders.Add(Headers.SessionId, this.SessionId);
         client.DefaultRequestHeaders.Add("Platform", "2");

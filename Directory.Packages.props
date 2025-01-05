@@ -38,6 +38,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.Testing" Version="9.0.0" />
     <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="9.0.0" />
     <PackageVersion Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" />
