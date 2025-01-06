@@ -7938,6 +7938,217 @@
     "_Parameter3": 1
   },
   {
+    "_Id": 1019010106,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190101,
+    "_CompleteType": "EventParticipation",
+    "_UseTotalValue": 0,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842
+  },
+  {
+    "_Id": 1019020106,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190201,
+    "_CompleteType": "EventRegularBattleClear",
+    "_UseTotalValue": 0,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842
+  },
+  {
+    "_Id": 1019040106,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190401,
+    "_CompleteType": "EventQuestClearWithCrest",
+    "_UseTotalValue": 0,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842,
+    "_Parameter2": 40050108
+  },
+  {
+    "_Id": 1019050106,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190501,
+    "_CompleteType": "EventPointCollection",
+    "_UseTotalValue": 1,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842
+  },
+  {
+    "_Id": 1019050206,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190502,
+    "_CompleteType": "EventPointCollection",
+    "_UseTotalValue": 1,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842
+  },
+  {
+    "_Id": 1019050306,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190503,
+    "_CompleteType": "EventPointCollection",
+    "_UseTotalValue": 1,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842
+  },
+  {
+    "_Id": 1019050406,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190504,
+    "_CompleteType": "EventPointCollection",
+    "_UseTotalValue": 1,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842
+  },
+  {
+    "_Id": 1019050506,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190505,
+    "_CompleteType": "EventPointCollection",
+    "_UseTotalValue": 1,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842
+  },
+  {
+    "_Id": 1019050606,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190506,
+    "_CompleteType": "EventPointCollection",
+    "_UseTotalValue": 1,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842
+  },
+  {
+    "_Id": 1019060106,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190601,
+    "_CompleteType": "EventRegularBattleClear",
+    "_UseTotalValue": 0,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842
+  },
+  {
+    "_Id": 1019060206,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190602,
+    "_CompleteType": "EventRegularBattleClear",
+    "_UseTotalValue": 0,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842
+  },
+  {
+    "_Id": 1019060306,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190603,
+    "_CompleteType": "EventRegularBattleClear",
+    "_UseTotalValue": 0,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842
+  },
+  {
+    "_Id": 1019060406,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190604,
+    "_CompleteType": "EventRegularBattleClear",
+    "_UseTotalValue": 0,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842
+  },
+  {
+    "_Id": 1019060506,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190605,
+    "_CompleteType": "EventRegularBattleClear",
+    "_UseTotalValue": 0,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842
+  },
+  {
+    "_Id": 1019080106,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190801,
+    "_CompleteType": "EventChallengeBattleClear",
+    "_UseTotalValue": 0,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842
+  },
+  {
+    "_Id": 1019080206,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190802,
+    "_CompleteType": "EventChallengeBattleClear",
+    "_UseTotalValue": 0,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842
+  },
+  {
+    "_Id": 1019080306,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190803,
+    "_CompleteType": "EventChallengeBattleClear",
+    "_UseTotalValue": 0,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842
+  },
+  {
+    "_Id": 1019080406,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190804,
+    "_CompleteType": "EventChallengeBattleClear",
+    "_UseTotalValue": 0,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842
+  },
+  {
+    "_Id": 1019080506,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190805,
+    "_CompleteType": "EventChallengeBattleClear",
+    "_UseTotalValue": 0,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842
+  },
+  {
+    "_Id": 1019080606,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190806,
+    "_CompleteType": "EventChallengeBattleClear",
+    "_UseTotalValue": 0,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842
+  },
+  {
+    "_Id": 1019090106,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10190901,
+    "_CompleteType": "EventChallengeBattleClear",
+    "_UseTotalValue": 0,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842,
+    "_Parameter2": 3
+  },
+  {
+    "_Id": 1019100106,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10191001,
+    "_CompleteType": "EventChallengeBattleClear",
+    "_UseTotalValue": 0,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842,
+    "_Parameter2": 4
+  },
+  {
+    "_Id": 1019130106,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10191301,
+    "_CompleteType": "EventChallengeBattleClear",
+    "_UseTotalValue": 0,
+    "_UnlockedOnComplete": [],
+    "_Parameter": 20842,
+    "_Parameter2": 4
+  },
+  {
     "_Id": 1023010106,
     "_MissionType": "MemoryEvent",
     "_MissionId": 10230101,
