@@ -8,7 +8,7 @@
     <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="9.0.0" />
     <PackageVersion Include="Aspire.Hosting.Redis" Version="9.0.0" />
     <PackageVersion Include="AutoMapper" Version="13.0.1" />
-    <PackageVersion Include="Basic.Reference.Assemblies" Version="1.7.9" />
+    <PackageVersion Include="Basic.Reference.Assemblies" Version="1.8.0" />
     <PackageVersion Include="EntityGraphQL" Version="5.5.3" />
     <PackageVersion Include="EntityGraphQL.AspNet" Version="5.5.3" />
     <PackageVersion Include="FluentRandomPicker" Version="3.5.1" />
@@ -89,7 +89,7 @@
     <PackageVersion Include="MockQueryable.Moq" Version="7.0.3" />
     <PackageVersion Include="Moq" Version="4.20.72" />
     <PackageVersion Include="Verify.SourceGenerators" Version="2.5.0" />
-    <PackageVersion Include="Verify.XunitV3" Version="28.7.0" />
+    <PackageVersion Include="Verify.XunitV3" Version="28.8.1" />
     <PackageVersion Include="xunit.v3" Version="1.0.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.0.0" />
     <PackageVersion Include="GraphQL.Client" Version="6.1.0" />
