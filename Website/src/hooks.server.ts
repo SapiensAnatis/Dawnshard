@@ -1,6 +1,8 @@
 import { randomUUID } from 'node:crypto';
 
 import type { Handle, HandleFetch, HandleServerError } from '@sveltejs/kit';
+import { sequence } from '@sveltejs/kit/hooks';
+import { generateSetInitialModeExpression } from 'mode-watcher';
 
 import { env } from '$env/dynamic/private';
 import { PUBLIC_ENABLE_MSW } from '$env/static/public';
@@ -50,12 +52,24 @@ export const handleFetch: HandleFetch = ({ request, event, fetch }) => {
   return fetch(request);
 };
 
-export const handle: Handle = ({ event, resolve }) => {
+const handleHeadScript: Handle = ({ event, resolve }) => {
+  return resolve(event, {
+    transformPageChunk: ({ html }) => {
+      return html.replace('%modewatcher.snippet%', generateSetInitialModeExpression({}));
+    }
+  });
+};
+
+const handleLogger: Handle = ({ event, resolve }) => {
   event.locals.logger = createLogger({
     requestPath: new URL(event.request.url).pathname,
     requestId: randomUUID()
   });
 
+  return resolve(event);
+};
+
+const handleAuth: Handle = ({ event, resolve }) => {
   const idToken = event.cookies.get(Cookies.IdToken);
 
   if (!idToken) {
@@ -76,6 +90,8 @@ export const handle: Handle = ({ event, resolve }) => {
 
   return resolve(event);
 };
+
+export const handle = sequence(handleHeadScript, handleLogger, handleAuth);
 
 export const handleError: HandleServerError = ({ error, event, status, message }) => {
   event.locals.logger.error({ error, status, message }, 'Unhandled error occurred: {message}');

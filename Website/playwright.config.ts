@@ -9,7 +9,8 @@ const config: PlaywrightTestConfig = {
     timeout: 120000
   },
   use: {
-    baseURL: 'http://localhost:3001'
+    baseURL: 'http://localhost:3001',
+    bypassCSP: true
   },
   updateSnapshots: process.env.UPDATE_SNAPSHOTS ? 'all' : 'missing',
   ignoreSnapshots: !process.env.CI,
