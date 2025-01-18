@@ -4,6 +4,7 @@ using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Story.Skip;
 using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Shared.Features.StorySkip;
+using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.EntityFrameworkCore;
 using static DragaliaAPI.Shared.Features.StorySkip.StorySkipRewards;
 
@@ -23,7 +24,6 @@ public class StorySkipTest : TestFixture
         int questId = 100_100_107;
         int storyId = 1_001_009;
         FrozenDictionary<FortPlants, FortConfig> fortConfigs = StorySkipRewards.FortConfigs;
-        List<FortPlants> uniqueFortPlants = new(fortConfigs.Keys);
 
         await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
             u =>
@@ -172,5 +172,83 @@ public class StorySkipTest : TestFixture
             )
             .Should()
             .NotThrowAsync();
+    }
+
+    [Fact]
+    public async Task StorySkip_AddsValidDragonsWithReliability()
+    {
+        await this
+            .Client.Invoking(x =>
+                x.PostMsgpack<StorySkipSkipResponse>(
+                    "story_skip/skip",
+                    cancellationToken: TestContext.Current.CancellationToken
+                )
+            )
+            .Should()
+            .NotThrowAsync();
+
+        // Send a gift to one of our new dragons
+        await this
+            .Client.Invoking(x =>
+                x.PostMsgpack<StorySkipSkipResponse>(
+                    "story_skip/skip",
+                    cancellationToken: TestContext.Current.CancellationToken
+                )
+            )
+            .Should()
+            .NotThrowAsync();
+
+        DragonBuyGiftToSendRequest request = new()
+        {
+            DragonId = DragonId.Mercury,
+            DragonGiftId = DragonGifts.HeartyStew,
+        };
+
+        await this
+            .Client.Invoking(x =>
+                x.PostMsgpack<StorySkipSkipResponse>(
+                    "dragon/buy_gift_to_send",
+                    request,
+                    cancellationToken: TestContext.Current.CancellationToken
+                )
+            )
+            .Should()
+            .NotThrowAsync();
+    }
+
+    [Fact]
+    public async Task StorySkip_AddsEp1OfCharaStory()
+    {
+        int ranzalStoryEp1Id = MasterAsset.CharaStories[(int)Charas.Ranzal].StoryIds[0];
+
+        this.ApiContext.PlayerStoryState.Where(x => x.ViewerId == this.ViewerId)
+            .ToList()
+            .Should()
+            .NotContain(x => x.StoryId == ranzalStoryEp1Id);
+
+        await this
+            .Client.Invoking(x =>
+                x.PostMsgpack<StorySkipSkipResponse>(
+                    "story_skip/skip",
+                    cancellationToken: TestContext.Current.CancellationToken
+                )
+            )
+            .Should()
+            .NotThrowAsync();
+
+        this.ApiContext.PlayerStoryState.Where(x => x.ViewerId == this.ViewerId)
+            .ToList()
+            .Should()
+            .Contain(x => x.StoryId == ranzalStoryEp1Id)
+            .Which.Should()
+            .BeEquivalentTo(
+                new DbPlayerStoryState()
+                {
+                    ViewerId = this.ViewerId,
+                    StoryType = StoryTypes.Chara,
+                    StoryId = ranzalStoryEp1Id,
+                    State = StoryState.Unlocked,
+                }
+            );
     }
 }
