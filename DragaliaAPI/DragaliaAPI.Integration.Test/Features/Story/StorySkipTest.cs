@@ -2,6 +2,7 @@ using System.Collections.Frozen;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Story.Skip;
+using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Shared.Features.StorySkip;
 using Microsoft.EntityFrameworkCore;
 using static DragaliaAPI.Shared.Features.StorySkip.StorySkipRewards;
@@ -137,6 +138,29 @@ public class StorySkipTest : TestFixture
                 ViewerId = this.ViewerId,
                 LastClaimDate = DateTimeOffset.UnixEpoch,
             }
+        );
+
+        await this
+            .Client.Invoking(x =>
+                x.PostMsgpack<StorySkipSkipResponse>(
+                    "story_skip/skip",
+                    cancellationToken: TestContext.Current.CancellationToken
+                )
+            )
+            .Should()
+            .NotThrowAsync();
+    }
+
+    [Fact]
+    public async Task StorySkip_AlreadyInitializedWall_DoesNotThrow()
+    {
+        await this.Client.PostMsgpack(
+            "quest/read_story",
+            new QuestReadStoryRequest()
+            {
+                QuestStoryId = TutorialService.TutorialStoryIds.MercurialGauntlet,
+            },
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
         await this

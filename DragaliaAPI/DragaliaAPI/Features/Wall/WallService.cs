@@ -95,6 +95,8 @@ public partial class WallService(
                     }
                 );
             }
+
+            await this.InitializeWallMissions();
         }
 
         if (!await apiContext.WallRewardDates.AnyAsync())
@@ -107,8 +109,6 @@ public partial class WallService(
                 }
             );
         }
-
-        await this.InitializeWallMissions();
     }
 
     public async Task GrantMonthlyRewardEntityList(IList<AtgenBuildEventRewardEntityList> rewards)
