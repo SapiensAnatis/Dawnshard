@@ -1,6 +1,13 @@
 import adapter from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
+const scriptCsp = [
+  'self',
+  // https://github.com/sveltejs/svelte/issues/14014
+  'unsafe-hashes',
+  'sha256-7dQwUgLau1NFCCGjfn9FsYptB6ZtWxJin6VohGIu20I='
+];
+
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   // Consult https://kit.svelte.dev/docs/integrations#preprocessors
@@ -13,13 +20,16 @@ const config = {
       $shadcn: './src/lib/shadcn',
       $static: './static',
       $main: './src/routes/(main)'
+    },
+    csp: {
+      directives: {
+        'script-src': scriptCsp
+      },
+      reportOnly: {
+        'script-src': scriptCsp,
+        'report-uri': ['/csp']
+      }
     }
-    // Blocked by https://github.com/svecosystem/mode-watcher/issues/92
-    // csp: {
-    //   directives: {
-    //     'script-src': ['self']
-    //   }
-    // }
   }
 };
 

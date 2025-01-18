@@ -14,7 +14,7 @@
   <meta property="og:url" content={data.urlOrigin} />
 </svelte:head>
 
-<ModeWatcher />
+<ModeWatcher disableHeadScriptInjection />
 <Header hasValidJwt={data.hasValidJwt} />
 <SideNav hasValidJwt={data.hasValidJwt} />
 <Toaster richColors />
