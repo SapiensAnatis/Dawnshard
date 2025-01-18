@@ -259,18 +259,21 @@ public class StorySkipService(
 
     public async Task RewardCharas()
     {
-        List<DbPlayerCharaData> userCharas = await apiContext
-            .PlayerCharaData.Where(x => CharasList.AsEnumerable().Contains(x.CharaId))
+        List<Charas> userCharas = await apiContext
+            .PlayerCharaData.Select(x => x.CharaId)
+            .Where(x => CharasList.AsEnumerable().Contains(x))
             .ToListAsync();
 
-        List<DbPlayerCharaData> newUserCharas = [];
         foreach (Charas chara in CharasList)
         {
-            bool charaExists = userCharas.Any(x => x.CharaId == chara);
-            if (charaExists == false)
+            bool charaExists = userCharas.Contains(chara);
+
+            if (!charaExists)
             {
                 logger.LogDebug("Rewarding character {chara}", chara);
                 CharaData charaData = MasterAsset.CharaData[chara];
+                StoryData storyData = MasterAsset.CharaStories[(int)chara]; // Every character we add here has stories
+
                 DbPlayerCharaData newUserChara = new()
                 {
                     ViewerId = playerIdentityService.ViewerId,
@@ -296,30 +299,37 @@ public class StorySkipService(
                     ExAbility2Level = 1,
                     IsTemporary = false,
                 };
-                newUserCharas.Add(newUserChara);
-            }
-        }
+                DbPlayerStoryState newCharaStory = new DbPlayerStoryState()
+                {
+                    ViewerId = playerIdentityService.ViewerId,
+                    StoryType = StoryTypes.Chara,
+                    StoryId = storyData.StoryIds[0],
+                };
 
-        if (newUserCharas.Count > 0)
-        {
-            apiContext.PlayerCharaData.AddRange(newUserCharas);
+                apiContext.PlayerCharaData.Add(newUserChara);
+                apiContext.PlayerStoryState.Add(newCharaStory);
+            }
         }
     }
 
     public async Task RewardDragons()
     {
-        List<DbPlayerDragonData> userDragons = await apiContext
-            .PlayerDragonData.Where(x => DragonList.AsEnumerable().Contains(x.DragonId))
+        List<DragonId> userDragonReliabilities = await apiContext
+            .PlayerDragonReliability.Select(x => x.DragonId)
+            .Where(x => DragonList.AsEnumerable().Contains(x))
             .ToListAsync();
 
-        List<DbPlayerDragonData> newUserDragons = [];
         foreach (DragonId dragon in DragonList)
         {
-            bool dragonExists = userDragons.Any(x => x.DragonId == dragon);
-            if (dragonExists == false)
+            // We check the reliability as it's possible the user had the dragon before and sold it.
+            // If they don't have the reliability, we know it's safe to add both entities.
+            bool dragonExists = userDragonReliabilities.Contains(dragon);
+
+            if (!dragonExists)
             {
                 logger.LogDebug("Rewarding dragon {dragon}", dragon);
-                DbPlayerDragonData newUserDragon = new()
+
+                DbPlayerDragonData newDragonEntity = new()
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     DragonId = dragon,
@@ -334,13 +344,15 @@ public class StorySkipService(
                     Ability1Level = 1,
                     Ability2Level = 1,
                 };
-                newUserDragons.Add(newUserDragon);
-            }
-        }
 
-        if (newUserDragons.Count > 0)
-        {
-            apiContext.PlayerDragonData.AddRange(newUserDragons);
+                DbPlayerDragonReliability newReliability = new(
+                    playerIdentityService.ViewerId,
+                    dragon
+                );
+
+                apiContext.PlayerDragonData.Add(newDragonEntity);
+                apiContext.PlayerDragonReliability.Add(newReliability);
+            }
         }
     }
 
