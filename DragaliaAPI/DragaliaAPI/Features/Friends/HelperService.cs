@@ -2966,6 +2966,141 @@ public class HelperService : IHelperService
                     },
                     Guild = new() { GuildId = 0, GuildName = "Guild" },
                 },
+                new()
+                {
+                    ViewerId = 1022,
+                    Name = "boggers",
+                    Level = 250,
+                    LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+                    EmblemId = Emblems.SupremeBogfish,
+                    MaxPartyPower = 9999,
+                    SupportChara = new()
+                    {
+                        CharaId = Charas.SummerCelliera,
+                        Level = 100,
+                        AdditionalMaxLevel = 20,
+                        Rarity = 5,
+                        Hp = 956,
+                        Attack = 574,
+                        HpPlusCount = 100,
+                        AttackPlusCount = 100,
+                        Ability1Level = 3,
+                        Ability2Level = 3,
+                        Ability3Level = 3,
+                        ExAbilityLevel = 5,
+                        ExAbility2Level = 5,
+                        Skill1Level = 4,
+                        Skill2Level = 3,
+                        IsUnlockEditSkill = true,
+                    },
+                    SupportDragon = new()
+                    {
+                        DragonKeyId = 0,
+                        DragonId = DragonId.Leviathan,
+                        Level = 120,
+                        Hp = 390,
+                        Attack = 145,
+                        Skill1Level = 2,
+                        Ability1Level = 6,
+                        Ability2Level = 6,
+                        HpPlusCount = 50,
+                        AttackPlusCount = 50,
+                        LimitBreakCount = 5,
+                    },
+                    SupportWeaponBody = new()
+                    {
+                        WeaponBodyId = WeaponBodies.PrimalAqua,
+                        BuildupCount = 80,
+                        LimitBreakCount = 8,
+                        LimitOverCount = 1,
+                        EquipableCount = 4,
+                        AdditionalCrestSlotType1Count = 1,
+                        AdditionalCrestSlotType2Count = 0,
+                        AdditionalCrestSlotType3Count = 2,
+                    },
+                    SupportTalisman = new()
+                    {
+                        TalismanKeyId = 0,
+                        TalismanId = Talismans.GalaMym,
+                        TalismanAbilityId1 = 340000030, // Critical Rate +15%
+                        TalismanAbilityId2 =
+                            340000132 // Easy Hitter I
+                        ,
+                    },
+                    SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
+                    {
+                        new()
+                        {
+                            AbilityCrestId = AbilityCrestId.BlossomsontheWatersEdge,
+                            BuildupCount = 50,
+                            LimitBreakCount = 4,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            EquipableCount = 4,
+                        },
+                        new()
+                        {
+                            AbilityCrestId = AbilityCrestId.ThePetalQueen,
+                            BuildupCount = 50,
+                            LimitBreakCount = 4,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            EquipableCount = 4,
+                        },
+                        new()
+                        {
+                            AbilityCrestId = AbilityCrestId.MoonlightParty,
+                            BuildupCount = 50,
+                            LimitBreakCount = 4,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            EquipableCount = 4,
+                        },
+                    },
+                    SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
+                    {
+                        new()
+                        {
+                            AbilityCrestId = AbilityCrestId.ASmallCourage,
+                            BuildupCount = 40,
+                            LimitBreakCount = 4,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            EquipableCount = 4,
+                        },
+                        new()
+                        {
+                            AbilityCrestId = AbilityCrestId.DragonsNest,
+                            BuildupCount = 20,
+                            LimitBreakCount = 4,
+                            HpPlusCount = 50,
+                            AttackPlusCount = 50,
+                            EquipableCount = 4,
+                        },
+                    },
+                    SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
+                    {
+                        new()
+                        {
+                            AbilityCrestId = AbilityCrestId.MaskofDeterminationBowsBoon,
+                            BuildupCount = 30,
+                            LimitBreakCount = 4,
+                            HpPlusCount = 40,
+                            AttackPlusCount = 40,
+                            EquipableCount = 4,
+                        },
+                        new()
+                        {
+                            AbilityCrestId = AbilityCrestId.AKnightsDreamAxesBoon,
+                            BuildupCount = 30,
+                            LimitBreakCount = 4,
+                            HpPlusCount = 40,
+                            AttackPlusCount = 40,
+                            EquipableCount = 4,
+                        },
+                    },
+                    Guild = new() { GuildId = 0, GuildName = "Guild" },
+                },
             },
             SupportUserDetailList = new List<AtgenSupportUserDetailList>()
             {
@@ -3098,6 +3233,12 @@ public class HelperService : IHelperService
                 new()
                 {
                     ViewerId = 1021,
+                    GettableManaPoint = 50,
+                    IsFriend = true,
+                },
+                new()
+                {
+                    ViewerId = 1022,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
