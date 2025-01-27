@@ -8,7 +8,7 @@
 </script>
 
 <Button variant="secondary" {href}>
-  <span aria-hidden="true" class="mr-2 fill-accent-foreground">
+  <span aria-hidden="true" class="fill-accent-foreground mr-2">
     <svelte:component this={icon} />
   </span>
   <slot />
