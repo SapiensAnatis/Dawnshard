@@ -42,8 +42,9 @@
       </LinkButton>
       <LinkButton href="https://discord.gg/j9zSttjjWj" icon={Discord}>Discord</LinkButton>
       <LinkButton href="https://patreon.com/dawnshard" icon={Patreon}>Patreon</LinkButton>
-      <LinkButton href="https://buymeacoffee.com/dawnshard" icon={BuyMeACoffee}
-        >Buy me a coffee</LinkButton>
+      <LinkButton href="https://buymeacoffee.com/dawnshard" icon={BuyMeACoffee}>
+        Buy me a coffee
+      </LinkButton>
     </Card.Footer>
   </Card.Root>
 </div>
@@ -64,7 +65,7 @@
       <p>
         Setting up access to the server involves configuring a modified version of the original
         Dragalia Lost app to connect to this server at{' '}
-        <a class="link" href="https://dawnshard.co.uk">https://dawnshard.co.uk</a>. It is possible
+        <a class="link" href="https://dawnshard.co.uk/">https://dawnshard.co.uk/</a>. It is possible
         to do so on both Android and iOS without jail-breaking or rooting your device. It is also
         possible to do this on an Android emulator, even though the original game could not be
         played on emulators. If you encounter any issues during the set-up process, consider joining
@@ -129,8 +130,9 @@
   <div class="flex flex-col gap-3">
     <Typography typography="h2">Frequently asked questions</Typography>
     <div>
-      <Typography typography="h3"
-        >Can I link an account to save my progress across devices?</Typography>
+      <Typography typography="h3">
+        Can I link an account to save my progress across devices?
+      </Typography>
       <p>
         Yes, if you follow the prompts to link an account in-game, you will be taken to the <a
           class="link"
