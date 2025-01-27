@@ -11,7 +11,8 @@
     item,
     lastRead,
     description = true
-  }: { item: NewsItem; lastRead: Date; description: boolean } = $props();
+  }: { item: NewsItem; lastRead: Date; description?: boolean } = $props();
+
   const headerImageSrc = $derived(getImageSrc(item.headerImagePath));
 </script>
 
