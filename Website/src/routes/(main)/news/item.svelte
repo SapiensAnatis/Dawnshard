@@ -19,7 +19,7 @@
     {#if headerImageSrc}
       <Image
         src={headerImageSrc}
-        class="h-[208px] lg:h-full"
+        class="h-[208px] w-full object-cover lg:h-full"
         layout="fullWidth"
         alt={item.headerImageAltText} />
     {:else}
