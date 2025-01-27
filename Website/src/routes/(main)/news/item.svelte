@@ -7,8 +7,11 @@
   import Header from './header.svelte';
   import { getImageSrc, type NewsItem } from './news.ts';
 
-  const { item, lastRead, description }: { item: NewsItem; lastRead: Date; description: boolean } =
-    $props();
+  const {
+    item,
+    lastRead,
+    description = true
+  }: { item: NewsItem; lastRead: Date; description: boolean } = $props();
   const headerImageSrc = $derived(getImageSrc(item.headerImagePath));
 </script>
 
