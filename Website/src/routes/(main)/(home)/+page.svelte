@@ -42,8 +42,8 @@
       </LinkButton>
       <LinkButton href="https://discord.gg/j9zSttjjWj" icon={Discord}>Discord</LinkButton>
       <LinkButton href="https://patreon.com/dawnshard" icon={Patreon}>Patreon</LinkButton>
-      <LinkButton href="https://buymeacoffee.com/dawnshard" icon={BuyMeACoffee}
-        >Buy me a coffee
+      <LinkButton href="https://buymeacoffee.com/dawnshard" icon={BuyMeACoffee}>
+        Buy me a coffee
       </LinkButton>
     </Card.Footer>
   </Card.Root>
@@ -130,8 +130,8 @@
   <div class="flex flex-col gap-3">
     <Typography typography="h2">Frequently asked questions</Typography>
     <div>
-      <Typography typography="h3"
-        >Can I link an account to save my progress across devices?
+      <Typography typography="h3">
+        Can I link an account to save my progress across devices?
       </Typography>
       <p>
         Yes, if you follow the prompts to link an account in-game, you will be taken to the <a
