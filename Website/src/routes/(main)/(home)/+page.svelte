@@ -182,7 +182,7 @@
       Special thanks to the following people, who have contributed to the server source code or its
       development in other ways:
     </p>
-    <ul class="ml-3 mt-1">
+    <ul class="mt-1 ml-3">
       <Acknowledgement name="LukeFZ" avatarSrc={LukeFZ}>
         for developing the BaaS account system, DragaliPatch, and implementing features including
         the event compendium, endeavours, and more.

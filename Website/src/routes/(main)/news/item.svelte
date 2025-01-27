@@ -7,11 +7,13 @@
   import Header from './header.svelte';
   import { getImageSrc, type NewsItem } from './news.ts';
 
-  export let item: NewsItem;
-  export let lastRead: Date;
-  export let description: boolean = true;
+  const {
+    item,
+    lastRead,
+    description = true
+  }: { item: NewsItem; lastRead: Date; description?: boolean } = $props();
 
-  $: headerImageSrc = getImageSrc(item.headerImagePath);
+  const headerImageSrc = $derived(getImageSrc(item.headerImagePath));
 </script>
 
 <Card class="flex flex-col overflow-hidden lg:flex-row">
@@ -19,14 +21,14 @@
     {#if headerImageSrc}
       <Image
         src={headerImageSrc}
-        class="h-[208px] lg:h-full"
+        class="h-[208px] w-full object-cover lg:h-full"
         layout="fullWidth"
         alt={item.headerImageAltText} />
     {:else}
       <Newspaper class="size-[12rem] p-4" strokeWidth={1} aria-label="Newspaper vector icon" />
     {/if}
   </div>
-  <div>
+  <div class:pb-7={!description}>
     <Header {item} {lastRead} />
     {#if description}
       <CardContent class="min-h-32">

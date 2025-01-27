@@ -32,7 +32,7 @@
       height={45}
       alt={weaponName} />
   </Popover.Trigger>
-  <Popover.Content class="flex h-fit w-fit flex-col items-center pb-3 pt-2" side="bottom">
+  <Popover.Content class="flex h-fit w-fit flex-col items-center pt-2 pb-3" side="bottom">
     {weaponName}
     <WikiLink pageName={weaponName} />
   </Popover.Content>

@@ -24,7 +24,7 @@
 <ul class="flex flex-col gap-3" aria-labelledby={`${id}-header`}>
   {#each units.map((unit, i) => ({ unit, key: unitKeys[i] })) as { unit, key }}
     <li aria-label={key}>
-      <p class="mb-1 text-muted-foreground">{key}</p>
+      <p class="text-muted-foreground mb-1">{key}</p>
       <div id="unit" class="flex flex-wrap">
         <div>
           <CharaIcon chara={unit.chara} />
