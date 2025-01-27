@@ -2996,16 +2996,16 @@ public class HelperService : IHelperService
                     SupportDragon = new()
                     {
                         DragonKeyId = 0,
-                        DragonId = DragonId.Leviathan,
-                        Level = 120,
-                        Hp = 390,
-                        Attack = 145,
+                        DragonId = DragonId.GalaBahamut,
+                        Level = 100,
+                        Hp = 368,
+                        Attack = 128,
                         Skill1Level = 2,
-                        Ability1Level = 6,
-                        Ability2Level = 6,
+                        Ability1Level = 5,
+                        Ability2Level = 5,
                         HpPlusCount = 50,
                         AttackPlusCount = 50,
-                        LimitBreakCount = 5,
+                        LimitBreakCount = 4,
                     },
                     SupportWeaponBody = new()
                     {
