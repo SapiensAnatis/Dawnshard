@@ -128,10 +128,7 @@
             disabled={disableItem}
             field={item}
             required
-            class="
-              touched:invalid:border-red-700
-              touched:invalid:text-red-700
-            "
+            class="touched:invalid:border-red-700 touched:invalid:text-red-700"
             bind:value={itemValue} />
           {#if $item.show}
             <p class="helper">{$item.message}</p>
