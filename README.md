@@ -27,7 +27,3 @@ Contributions are more than welcome! Feel free to fork the repository and open a
 For guidance on contributing, including the process for setting up a development environment, please see the [GitHub Wiki](https://github.com/SapiensAnatis/Dawnshard/wiki).
 
 See also the [API documentation](https://dragalia-api-docs.readthedocs.io/en/latest/) for reference on what existing endpoints do and how to implement new ones.
-
-## Acknowledgements
-
-A big thanks to JetBrains for providing open source licenses for this project.
