@@ -10,7 +10,12 @@ export const POST: RequestHandler = async ({ locals, request }) => {
     return new Response(null, { status: 400 });
   }
 
-  locals.logger.error({ violation }, 'CSP violation reported: {violation}');
+  const userAgent = request.headers.get('User-Agent');
+
+  locals.logger.error(
+    { violation, userAgent },
+    'CSP violation reported: {violation}. User-Agent: {userAgent}'
+  );
 
   return new Response(null, { status: 200 });
 };
