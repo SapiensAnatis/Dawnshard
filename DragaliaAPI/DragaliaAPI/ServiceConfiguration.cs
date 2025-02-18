@@ -62,7 +62,6 @@ public static class ServiceConfiguration
             .AddScoped<IUpdateDataService, UpdateDataService>()
             .AddScoped<IDragonService, DragonService>()
             .AddScoped<ISavefileService, SavefileService>()
-            .AddScoped<IHelperService, HelperService>()
             .AddScoped<IAuthService, AuthService>()
             .AddScoped<IBonusService, BonusService>()
             .AddScoped<IWeaponService, WeaponService>()
@@ -87,7 +86,8 @@ public static class ServiceConfiguration
             .AddWebFeature()
             .AddAbilityCrestFeature()
             .AddTutorialFeature()
-            .AddZenaFeature();
+            .AddZenaFeature()
+            .AddFriendFeature();
 
         services
             .RegisterMissionServices()

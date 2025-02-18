@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -10,41 +11,18 @@ namespace DragaliaAPI.Features.Friends;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class FriendController : DragaliaControllerBase
+internal sealed class FriendController(
+    HelperService helperService,
+    IBonusService bonusService,
+    IUpdateDataService updateDataService
+) : DragaliaControllerBase
 {
-    private readonly IHelperService helperService;
-    private readonly IBonusService bonusService;
-
-    private static readonly SettingSupport StubSupportCharacter = new SettingSupport(
-        Charas.ThePrince,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
-    );
-
-    public FriendController(IHelperService helperService, IBonusService bonusService)
-    {
-        this.helperService = helperService;
-        this.bonusService = bonusService;
-    }
-
     [HttpPost]
     [Route("get_support_chara")]
-    public DragaliaResult GetSupportChara()
+    public async Task<DragaliaResult<FriendGetSupportCharaResponse>> GetSupportChara()
     {
-        // i think this method needs to be utilized by HelperService in the future? any friends' helpers
-        // should be retrieved from this method while the gaps are filled by other ppl in the database
-        return this.Ok(new FriendGetSupportCharaResponse(0, StubSupportCharacter));
+        SettingSupport playerSupportChara = await helperService.GetPlayerHelper();
+        return new FriendGetSupportCharaResponse(0, playerSupportChara);
     }
 
     [HttpPost]
@@ -54,7 +32,7 @@ public class FriendController : DragaliaControllerBase
     )
     {
         // this eventually needs to pull from the database from another user's account based on viewer id
-        QuestGetSupportUserListResponse helperList = await this.helperService.GetHelpers();
+        QuestGetSupportUserListResponse helperList = await helperService.GetHelpers();
 
         UserSupportList helperInfo =
             helperList
@@ -73,7 +51,7 @@ public class FriendController : DragaliaControllerBase
             };
 
         // TODO: when helpers are converted to use other account ids, get the bonuses of that account id
-        FortBonusList bonusList = await this.bonusService.GetBonusList();
+        FortBonusList bonusList = await bonusService.GetBonusList();
 
         FriendGetSupportCharaDetailResponse response = new()
         {
@@ -125,11 +103,19 @@ public class FriendController : DragaliaControllerBase
         };
 
     [HttpPost("set_support_chara")]
-    public DragaliaResult<FriendSetSupportCharaResponse> SetSupportChara() =>
-        new FriendSetSupportCharaResponse()
+    public async Task<DragaliaResult<FriendSetSupportCharaResponse>> SetSupportChara(
+        FriendSetSupportCharaRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        SettingSupport settingSupport = await helperService.SetPlayerHelper(request);
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+
+        return new FriendSetSupportCharaResponse()
         {
             Result = 1,
-            UpdateDataList = new(),
-            SettingSupport = StubSupportCharacter,
+            SettingSupport = settingSupport,
+            UpdateDataList = updateDataList,
         };
+    }
 }

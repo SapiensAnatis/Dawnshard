@@ -133,6 +133,8 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
 
     public DbSet<DbWallRewardDate> WallRewardDates { get; set; } = null!;
 
+    public DbSet<DbPlayerHelper> PlayerHelpers { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApiContext).Assembly);
@@ -212,5 +214,9 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
         modelBuilder
             .Entity<DbPlayerMaterial>()
             .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
+
+        modelBuilder
+            .Entity<DbPlayerHelper>()
+            .HasQueryFilter(e => e.ViewerId == this.playerIdentityService.ViewerId);
     }
 }

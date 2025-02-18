@@ -2,7 +2,7 @@ using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Features.Dungeon.Start;
 
-public partial class DungeonStartService
+internal sealed partial class DungeonStartService
 {
     private static partial class Log
     {

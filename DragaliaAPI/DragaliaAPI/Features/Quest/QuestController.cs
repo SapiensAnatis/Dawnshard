@@ -13,9 +13,9 @@ namespace DragaliaAPI.Features.Quest;
 
 [Route("quest")]
 [ApiController]
-public class QuestController(
+internal sealed class QuestController(
     IStoryService storyService,
-    IHelperService helperService,
+    HelperService helperService,
     IUpdateDataService updateDataService,
     IClearPartyService clearPartyService,
     IQuestTreasureService questTreasureService

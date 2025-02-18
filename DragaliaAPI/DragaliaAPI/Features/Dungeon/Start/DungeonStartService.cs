@@ -20,7 +20,7 @@ using static DragaliaAPI.Features.Tutorial.TutorialService;
 
 namespace DragaliaAPI.Features.Dungeon.Start;
 
-public partial class DungeonStartService(
+internal sealed partial class DungeonStartService(
     IPartyRepository partyRepository,
     IDungeonRepository dungeonRepository,
     IWeaponRepository weaponRepository,
@@ -29,7 +29,7 @@ public partial class DungeonStartService(
     IQuestService questService,
     IQuestRepository questRepository,
     IBonusService bonusService,
-    IHelperService helperService,
+    HelperService helperService,
     IUserService userService,
     ILogger<DungeonStartService> logger,
     IPaymentService paymentService,

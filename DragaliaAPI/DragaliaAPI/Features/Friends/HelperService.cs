@@ -1,37 +1,27 @@
 ﻿using AutoMapper;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Friends;
 
-public class HelperService : IHelperService
+internal sealed partial class HelperService(
+    IPartyRepository partyRepository,
+    IDungeonRepository dungeonRepository,
+    IUserDataRepository userDataRepository,
+    IMapper mapper,
+    ApiContext apiContext,
+    IPlayerIdentityService playerIdentityService,
+    ILogger<HelperService> logger
+)
 {
-    private readonly IPartyRepository partyRepository;
-    private readonly IDungeonRepository dungeonRepository;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IMapper mapper;
-    private readonly ILogger<HelperService> logger;
-
-    public HelperService(
-        IPartyRepository partyRepository,
-        IDungeonRepository dungeonRepository,
-        IUserDataRepository userDataRepository,
-        IMapper mapper,
-        ILogger<HelperService> logger
-    )
-    {
-        this.partyRepository = partyRepository;
-        this.dungeonRepository = dungeonRepository;
-        this.userDataRepository = userDataRepository;
-        this.mapper = mapper;
-        this.logger = logger;
-    }
-
     public async Task<QuestGetSupportUserListResponse> GetHelpers()
     {
         // TODO: Make this actually pull from database
@@ -46,18 +36,18 @@ public class HelperService : IHelperService
             x.ViewerId == viewerId
         );
 
-        this.logger.LogDebug("Retrieved support list {@helper}", helper);
+        logger.LogDebug("Retrieved support list {@helper}", helper);
 
         return helper;
     }
 
     public async Task<UserSupportList> GetLeadUnit(int partyNo)
     {
-        DbPlayerUserData userData = await this.userDataRepository.GetUserDataAsync();
+        DbPlayerUserData userData = await userDataRepository.GetUserDataAsync();
 
-        IQueryable<DbPartyUnit> leadUnitQuery = this.partyRepository.GetPartyUnits(partyNo).Take(1);
-        DbDetailedPartyUnit? detailedUnit = await this
-            .dungeonRepository.BuildDetailedPartyUnit(leadUnitQuery, 0)
+        IQueryable<DbPartyUnit> leadUnitQuery = partyRepository.GetPartyUnits(partyNo).Take(1);
+        DbDetailedPartyUnit? detailedUnit = await dungeonRepository
+            .BuildDetailedPartyUnit(leadUnitQuery, 0)
             .FirstAsync();
 
         UserSupportList supportList = new()
@@ -71,7 +61,7 @@ public class HelperService : IHelperService
             Guild = new() { GuildId = 0 },
         };
 
-        this.mapper.Map(detailedUnit, supportList);
+        mapper.Map(detailedUnit, supportList);
 
         supportList.SupportCrestSlotType1List = supportList.SupportCrestSlotType1List.Where(x =>
             x != null
@@ -96,19 +86,19 @@ public class HelperService : IHelperService
             ViewerId = helperInfo.ViewerId,
             Name = helperInfo.Name,
             IsFriend = helperDetails.IsFriend,
-            CharaData = this.mapper.Map<CharaList>(helperInfo.SupportChara),
-            DragonData = this.mapper.Map<DragonList>(helperInfo.SupportDragon),
-            WeaponBodyData = this.mapper.Map<GameWeaponBody>(helperInfo.SupportWeaponBody),
+            CharaData = mapper.Map<CharaList>(helperInfo.SupportChara),
+            DragonData = mapper.Map<DragonList>(helperInfo.SupportDragon),
+            WeaponBodyData = mapper.Map<GameWeaponBody>(helperInfo.SupportWeaponBody),
             CrestSlotType1CrestList = helperInfo.SupportCrestSlotType1List.Select(
-                this.mapper.Map<GameAbilityCrest>
+                mapper.Map<GameAbilityCrest>
             ),
             CrestSlotType2CrestList = helperInfo.SupportCrestSlotType2List.Select(
-                this.mapper.Map<GameAbilityCrest>
+                mapper.Map<GameAbilityCrest>
             ),
             CrestSlotType3CrestList = helperInfo.SupportCrestSlotType3List.Select(
-                this.mapper.Map<GameAbilityCrest>
+                mapper.Map<GameAbilityCrest>
             ),
-            TalismanData = this.mapper.Map<TalismanList>(helperInfo.SupportTalisman),
+            TalismanData = mapper.Map<TalismanList>(helperInfo.SupportTalisman),
         };
     }
 

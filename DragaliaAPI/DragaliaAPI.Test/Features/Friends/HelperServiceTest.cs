@@ -14,7 +14,7 @@ public class HelperServiceTest
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<ILogger<HelperService>> mockLogger;
 
-    private readonly IHelperService helperService;
+    private readonly HelperService helperService;
     private readonly IMapper mapper;
 
     public HelperServiceTest()
