@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Friends;
 
-internal partial class HelperService(
+internal sealed partial class HelperService(
     IPartyRepository partyRepository,
     IDungeonRepository dungeonRepository,
     IUserDataRepository userDataRepository,
