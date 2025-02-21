@@ -9,6 +9,7 @@
     "setVersionVariables": false
   },
   "pathFilters": [
-    "."
+    ".",
+    "../Directory.Packages.props"
   ]
 }
