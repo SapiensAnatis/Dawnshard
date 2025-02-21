@@ -13,7 +13,7 @@ namespace DragaliaAPI.Features.Quest;
 
 [Route("quest")]
 [ApiController]
-public class QuestController(
+internal sealed class QuestController(
     IStoryService storyService,
     IHelperService helperService,
     IUpdateDataService updateDataService,
@@ -52,10 +52,10 @@ public class QuestController(
     }
 
     [HttpPost("get_support_user_list")]
-    public async Task<DragaliaResult> GetUserSupportList()
+    public async Task<DragaliaResult> GetUserSupportList(CancellationToken cancellationToken)
     {
-        // TODO: this is actually going to be a pretty complicated system
         QuestGetSupportUserListResponse response = await helperService.GetHelpers();
+
         return Ok(response);
     }
 

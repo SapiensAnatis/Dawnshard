@@ -4,6 +4,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Shared.Serialization;
 using Microsoft.Extensions.Logging;
 using MockQueryable;
@@ -15,6 +16,7 @@ public class BonusServiceTest
 {
     private readonly Mock<IFortRepository> mockFortRepository;
     private readonly Mock<IWeaponRepository> mockWeaponBodyRepository;
+    private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
     private readonly Mock<ILogger<BonusService>> mockLogger;
     private readonly IBonusService bonusService;
 
@@ -22,11 +24,15 @@ public class BonusServiceTest
     {
         this.mockFortRepository = new(MockBehavior.Strict);
         this.mockWeaponBodyRepository = new(MockBehavior.Strict);
+        this.mockPlayerIdentityService = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
+
+        this.mockPlayerIdentityService.Setup(x => x.ViewerId).Returns(ViewerId);
 
         this.bonusService = new BonusService(
             this.mockFortRepository.Object,
             this.mockWeaponBodyRepository.Object,
+            this.mockPlayerIdentityService.Object,
             this.mockLogger.Object
         );
     }

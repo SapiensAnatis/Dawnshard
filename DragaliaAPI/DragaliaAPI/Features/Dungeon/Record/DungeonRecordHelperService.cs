@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
-public class DungeonRecordHelperService(
+internal sealed class DungeonRecordHelperService(
     IPlayerIdentityService playerIdentityService,
     ApiContext apiContext,
     IHelperService helperService,

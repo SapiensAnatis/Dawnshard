@@ -66,7 +66,7 @@ public class FortControllerTest
         mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
         mockFortService.Setup(x => x.GetBuildList()).ReturnsAsync(buildList);
 
-        mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
+        mockBonusService.Setup(x => x.GetBonusList(default)).ReturnsAsync(bonusList);
 
         this.mockDragonService.Setup(x => x.GetFreeGiftCount()).ReturnsAsync(2);
 
@@ -137,7 +137,7 @@ public class FortControllerTest
             .Setup(x => x.BuildAtOnce(PaymentTypes.HalidomHustleHammer, 8))
             .Returns(Task.CompletedTask);
 
-        mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
+        mockBonusService.Setup(x => x.GetBonusList(default)).ReturnsAsync(bonusList);
 
         mockUpdateDataService
             .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
@@ -218,7 +218,7 @@ public class FortControllerTest
         mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
         mockFortService.Setup(x => x.EndBuild(8)).Returns(Task.CompletedTask);
 
-        mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
+        mockBonusService.Setup(x => x.GetBonusList(default)).ReturnsAsync(bonusList);
 
         mockUpdateDataService
             .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
@@ -313,7 +313,7 @@ public class FortControllerTest
             .Returns(Task.CompletedTask);
         mockFortService.Setup(x => x.GetCoreLevels()).ReturnsAsync((3, 2));
 
-        mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
+        mockBonusService.Setup(x => x.GetBonusList(default)).ReturnsAsync(bonusList);
 
         mockUpdateDataService
             .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
@@ -397,7 +397,7 @@ public class FortControllerTest
         mockFortService.Setup(x => x.EndLevelup(8)).Returns(Task.CompletedTask);
         mockFortService.Setup(x => x.GetCoreLevels()).ReturnsAsync((3, 2));
 
-        mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
+        mockBonusService.Setup(x => x.GetBonusList(default)).ReturnsAsync(bonusList);
 
         mockUpdateDataService
             .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
@@ -486,7 +486,7 @@ public class FortControllerTest
             .Setup(x => x.Move(1, 2, 3))
             .ReturnsAsync(new DbFortBuild() { ViewerId = 1, BuildId = 1 });
 
-        mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
+        mockBonusService.Setup(x => x.GetBonusList(default)).ReturnsAsync(bonusList);
 
         mockUpdateDataService
             .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))

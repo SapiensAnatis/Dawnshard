@@ -43,7 +43,7 @@ public class DungeonSkipTest : TestFixture
                 {
                     PartyNo = 1,
                     PlayCount = playCount,
-                    SupportViewerId = 1000,
+                    SupportViewerId = long.MaxValue - 1,
                     QuestId = questId,
                 },
                 cancellationToken: TestContext.Current.CancellationToken
@@ -104,7 +104,7 @@ public class DungeonSkipTest : TestFixture
                 new DungeonSkipStartAssignUnitRequest()
                 {
                     PlayCount = playCount,
-                    SupportViewerId = 1000,
+                    SupportViewerId = long.MaxValue - 1,
                     QuestId = questId,
                     RequestPartySettingList = new List<PartySettingList>()
                     {
@@ -163,7 +163,7 @@ public class DungeonSkipTest : TestFixture
                 $"{Endpoint}/start_multiple_quest",
                 new DungeonSkipStartMultipleQuestRequest()
                 {
-                    SupportViewerId = 1000,
+                    SupportViewerId = long.MaxValue - 1,
                     PartyNo = 1,
                     RequestQuestMultipleList = new List<AtgenRequestQuestMultipleList>
                     {

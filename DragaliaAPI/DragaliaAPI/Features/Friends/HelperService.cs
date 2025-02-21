@@ -1,37 +1,29 @@
 ﻿using AutoMapper;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Friends;
 
-public class HelperService : IHelperService
+internal partial class HelperService(
+    IPartyRepository partyRepository,
+    IDungeonRepository dungeonRepository,
+    IUserDataRepository userDataRepository,
+    IMapper mapper,
+    IBonusService bonusService,
+    ApiContext apiContext,
+    IPlayerIdentityService playerIdentityService,
+    ILogger<HelperService> logger
+) : IHelperService
 {
-    private readonly IPartyRepository partyRepository;
-    private readonly IDungeonRepository dungeonRepository;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IMapper mapper;
-    private readonly ILogger<HelperService> logger;
-
-    public HelperService(
-        IPartyRepository partyRepository,
-        IDungeonRepository dungeonRepository,
-        IUserDataRepository userDataRepository,
-        IMapper mapper,
-        ILogger<HelperService> logger
-    )
-    {
-        this.partyRepository = partyRepository;
-        this.dungeonRepository = dungeonRepository;
-        this.userDataRepository = userDataRepository;
-        this.mapper = mapper;
-        this.logger = logger;
-    }
-
     public async Task<QuestGetSupportUserListResponse> GetHelpers()
     {
         // TODO: Make this actually pull from database
@@ -46,18 +38,18 @@ public class HelperService : IHelperService
             x.ViewerId == viewerId
         );
 
-        this.logger.LogDebug("Retrieved support list {@helper}", helper);
+        logger.LogDebug("Retrieved support list {@helper}", helper);
 
         return helper;
     }
 
     public async Task<UserSupportList> GetLeadUnit(int partyNo)
     {
-        DbPlayerUserData userData = await this.userDataRepository.GetUserDataAsync();
+        DbPlayerUserData userData = await userDataRepository.GetUserDataAsync();
 
-        IQueryable<DbPartyUnit> leadUnitQuery = this.partyRepository.GetPartyUnits(partyNo).Take(1);
-        DbDetailedPartyUnit? detailedUnit = await this
-            .dungeonRepository.BuildDetailedPartyUnit(leadUnitQuery, 0)
+        IQueryable<DbPartyUnit> leadUnitQuery = partyRepository.GetPartyUnits(partyNo).Take(1);
+        DbDetailedPartyUnit? detailedUnit = await dungeonRepository
+            .BuildDetailedPartyUnit(leadUnitQuery, 0)
             .FirstAsync();
 
         UserSupportList supportList = new()
@@ -71,7 +63,7 @@ public class HelperService : IHelperService
             Guild = new() { GuildId = 0 },
         };
 
-        this.mapper.Map(detailedUnit, supportList);
+        mapper.Map(detailedUnit, supportList);
 
         supportList.SupportCrestSlotType1List = supportList.SupportCrestSlotType1List.Where(x =>
             x != null
@@ -96,19 +88,46 @@ public class HelperService : IHelperService
             ViewerId = helperInfo.ViewerId,
             Name = helperInfo.Name,
             IsFriend = helperDetails.IsFriend,
-            CharaData = this.mapper.Map<CharaList>(helperInfo.SupportChara),
-            DragonData = this.mapper.Map<DragonList>(helperInfo.SupportDragon),
-            WeaponBodyData = this.mapper.Map<GameWeaponBody>(helperInfo.SupportWeaponBody),
+            CharaData = mapper.Map<CharaList>(helperInfo.SupportChara),
+            DragonData = mapper.Map<DragonList>(helperInfo.SupportDragon),
+            WeaponBodyData = mapper.Map<GameWeaponBody>(helperInfo.SupportWeaponBody),
             CrestSlotType1CrestList = helperInfo.SupportCrestSlotType1List.Select(
-                this.mapper.Map<GameAbilityCrest>
+                mapper.Map<GameAbilityCrest>
             ),
             CrestSlotType2CrestList = helperInfo.SupportCrestSlotType2List.Select(
-                this.mapper.Map<GameAbilityCrest>
+                mapper.Map<GameAbilityCrest>
             ),
             CrestSlotType3CrestList = helperInfo.SupportCrestSlotType3List.Select(
-                this.mapper.Map<GameAbilityCrest>
+                mapper.Map<GameAbilityCrest>
             ),
-            TalismanData = this.mapper.Map<TalismanList>(helperInfo.SupportTalisman),
+            TalismanData = mapper.Map<TalismanList>(helperInfo.SupportTalisman),
+        };
+    }
+
+    public async Task<AtgenSupportUserDataDetail> BuildStaticSupportUserDataDetail(
+        UserSupportList staticHelperInfo
+    )
+    {
+        AtgenSupportUserDetailList helperDetail = new()
+        {
+            IsFriend = true,
+            ViewerId = staticHelperInfo.ViewerId,
+            GettableManaPoint = 50,
+        };
+
+        FortBonusList bonusList = await bonusService.GetBonusList();
+
+        return new()
+        {
+            UserSupportData = staticHelperInfo,
+            FortBonusList = bonusList,
+            ManaCirclePieceIdList = Enumerable.Range(
+                1,
+                staticHelperInfo?.SupportChara.AdditionalMaxLevel == 20 ? 70 : 50
+            ),
+            DragonReliabilityLevel = 30,
+            IsFriend = helperDetail.IsFriend,
+            ApplySendStatus = 0,
         };
     }
 
@@ -120,7 +139,7 @@ public class HelperService : IHelperService
             {
                 new()
                 {
-                    ViewerId = 1000,
+                    ViewerId = long.MaxValue - 1,
                     Name = "dreadfullydistinct",
                     Level = 400,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -168,7 +187,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1001,
+                    ViewerId = long.MaxValue - 2,
                     Name = "Nightmerp",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -301,7 +320,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1002,
+                    ViewerId = long.MaxValue - 3,
                     Name = "Alicia",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -434,7 +453,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1003,
+                    ViewerId = long.MaxValue - 3,
                     Name = "alkaemist",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -567,7 +586,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1004,
+                    ViewerId = long.MaxValue - 4,
                     Name = "QwerbyKing",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -700,7 +719,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1005,
+                    ViewerId = long.MaxValue - 5,
                     Name = "Zappypants",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -833,7 +852,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1006,
+                    ViewerId = long.MaxValue - 6,
                     Name = "stairs",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -966,7 +985,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1007,
+                    ViewerId = long.MaxValue - 7,
                     Name = "no",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -1099,7 +1118,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1008,
+                    ViewerId = long.MaxValue - 8,
                     Name = "Euden",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -1232,7 +1251,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1009,
+                    ViewerId = long.MaxValue - 9,
                     Name = "Euden",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -1365,7 +1384,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1010,
+                    ViewerId = long.MaxValue - 10,
                     Name = "Leon",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -1498,7 +1517,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1011,
+                    ViewerId = long.MaxValue - 11,
                     Name = "Crown",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -1631,7 +1650,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1012,
+                    ViewerId = long.MaxValue - 12,
                     Name = "Euden",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -1764,7 +1783,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1013,
+                    ViewerId = long.MaxValue - 13,
                     Name = "sockperson",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -1897,7 +1916,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1014,
+                    ViewerId = long.MaxValue - 14,
                     Name = "Delpolo",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -2030,7 +2049,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1015,
+                    ViewerId = long.MaxValue - 15,
                     Name = "Euden",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -2163,7 +2182,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1016,
+                    ViewerId = long.MaxValue - 16,
                     Name = "Nahxela",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -2296,7 +2315,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1017,
+                    ViewerId = long.MaxValue - 17,
                     Name = "Shiny ☆",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -2429,7 +2448,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1018,
+                    ViewerId = long.MaxValue - 18,
                     Name = "hateklauster",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -2563,7 +2582,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1019,
+                    ViewerId = long.MaxValue - 19,
                     Name = "g.",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -2698,7 +2717,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1020,
+                    ViewerId = long.MaxValue - 20,
                     Name = "J. R. Oppenheimer",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -2833,7 +2852,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1021,
+                    ViewerId = long.MaxValue - 21,
                     Name = "Ms. Flashburn",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -2968,7 +2987,7 @@ public class HelperService : IHelperService
                 },
                 new()
                 {
-                    ViewerId = 1022,
+                    ViewerId = long.MaxValue - 22,
                     Name = "boggers",
                     Level = 250,
                     LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -3106,139 +3125,139 @@ public class HelperService : IHelperService
             {
                 new()
                 {
-                    ViewerId = 1000,
+                    ViewerId = long.MaxValue,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1001,
+                    ViewerId = long.MaxValue - 1,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1002,
+                    ViewerId = long.MaxValue - 2,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1003,
+                    ViewerId = long.MaxValue - 3,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1004,
+                    ViewerId = long.MaxValue - 4,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1005,
+                    ViewerId = long.MaxValue - 5,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1006,
+                    ViewerId = long.MaxValue - 6,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1007,
+                    ViewerId = long.MaxValue - 7,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1008,
+                    ViewerId = long.MaxValue - 8,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1009,
+                    ViewerId = long.MaxValue - 9,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1010,
+                    ViewerId = long.MaxValue - 10,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1011,
+                    ViewerId = long.MaxValue - 11,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1012,
+                    ViewerId = long.MaxValue - 12,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1013,
+                    ViewerId = long.MaxValue - 13,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1014,
+                    ViewerId = long.MaxValue - 14,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1015,
+                    ViewerId = long.MaxValue - 15,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1016,
+                    ViewerId = long.MaxValue - 16,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1017,
+                    ViewerId = long.MaxValue - 17,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1018,
+                    ViewerId = long.MaxValue - 18,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1019,
+                    ViewerId = long.MaxValue - 19,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1020,
+                    ViewerId = long.MaxValue - 20,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1021,
+                    ViewerId = long.MaxValue - 21,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },
                 new()
                 {
-                    ViewerId = 1022,
+                    ViewerId = long.MaxValue - 22,
                     GettableManaPoint = 50,
                     IsFriend = true,
                 },

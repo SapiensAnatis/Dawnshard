@@ -10,6 +10,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Fort;
@@ -20,24 +21,33 @@ namespace DragaliaAPI.Features.Fort;
 public class BonusService(
     IFortRepository fortRepository,
     IWeaponRepository weaponRepository,
+    IPlayerIdentityService playerIdentityService,
     ILogger<BonusService> logger
 ) : IBonusService
 {
-    public async Task<FortBonusList> GetBonusList()
-    {
-        IEnumerable<int> buildIds = (
-            await fortRepository
-                .Builds.AsNoTracking()
-                .Where(x => x.Level != 0)
-                .Select(x => new { x.PlantId, x.Level })
-                .ToListAsync()
-        ).Select(x => MasterAssetUtils.GetPlantDetailId(x.PlantId, x.Level));
+    public Task<FortBonusList> GetBonusList(CancellationToken cancellationToken = default) =>
+        this.GetBonusList(playerIdentityService.ViewerId, cancellationToken);
 
-        IEnumerable<WeaponBodies> weaponIds = await weaponRepository
-            .WeaponBodies.AsNoTracking()
-            .Where(x => x.FortPassiveCharaWeaponBuildupCount != 0)
+    public async Task<FortBonusList> GetBonusList(
+        long viewerId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        List<int> buildIds = (
+            await fortRepository
+                .Builds.IgnoreQueryFilters()
+                .Where(x => x.ViewerId == viewerId && x.Level != 0)
+                .Select(x => new { x.PlantId, x.Level })
+                .ToListAsync(cancellationToken)
+        )
+            .Select(x => MasterAssetUtils.GetPlantDetailId(x.PlantId, x.Level))
+            .ToList();
+
+        List<WeaponBodies> weaponIds = await weaponRepository
+            .WeaponBodies.IgnoreQueryFilters()
+            .Where(x => x.ViewerId == viewerId && x.FortPassiveCharaWeaponBuildupCount != 0)
             .Select(x => x.WeaponBodyId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         return new()
         {
@@ -96,7 +106,7 @@ public class BonusService(
         };
     }
 
-    private static IEnumerable<AtgenElementBonus> GetFortElementBonus(IEnumerable<int> buildIds)
+    private static IEnumerable<AtgenElementBonus> GetFortElementBonus(List<int> buildIds)
     {
         Dictionary<UnitElement, AtgenElementBonus> result = Enum.GetValues<UnitElement>()
             .Select(x => new AtgenElementBonus()
@@ -134,7 +144,7 @@ public class BonusService(
         return result.Select(x => x.Value);
     }
 
-    private static IEnumerable<AtgenParamBonus> GetFortParamBonus(IEnumerable<int> buildIds)
+    private static IEnumerable<AtgenParamBonus> GetFortParamBonus(List<int> buildIds)
     {
         Dictionary<WeaponTypes, AtgenParamBonus> result = Enum.GetValues<WeaponTypes>()
             .Select(x => new AtgenParamBonus()
@@ -171,7 +181,7 @@ public class BonusService(
         return result.Select(x => x.Value);
     }
 
-    private static IEnumerable<AtgenDragonBonus> GetFortDragonBonus(IEnumerable<int> buildIds)
+    private static IEnumerable<AtgenDragonBonus> GetFortDragonBonus(List<int> buildIds)
     {
         Dictionary<UnitElement, AtgenDragonBonus> result = Enum.GetValues<UnitElement>()
             .Select(x => new AtgenDragonBonus()
