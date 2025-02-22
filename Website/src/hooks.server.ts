@@ -53,6 +53,12 @@ export const handleFetch: HandleFetch = ({ request, event, fetch }) => {
 };
 
 const handleHeadScript: Handle = ({ event, resolve }) => {
+  if (event.request.url.includes('webview')) {
+    // Don't inject dark mode script into webview pages, otherwise a user with the storage key set
+    // from visiting the actual website will get dark mode in-game, which looks bad
+    return resolve(event);
+  }
+
   return resolve(event, {
     transformPageChunk: ({ html }) => {
       return html.replace('%modewatcher.snippet%', generateSetInitialModeExpression({}));
