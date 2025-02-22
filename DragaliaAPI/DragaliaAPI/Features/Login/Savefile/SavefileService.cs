@@ -432,6 +432,7 @@ internal sealed class SavefileService(
         // Options commented out have been excluded from save import deletion process.
         // They will still be deleted by cascade delete when a player is actually deleted
         // without being re-added as they are in save imports.
+        await apiContext.PlayerHelpers.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
         await apiContext.PlayerUserData.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
         await apiContext.PlayerCharaData.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
         await apiContext
@@ -543,6 +544,7 @@ internal sealed class SavefileService(
         AddDefaultEquippedStamps(player);
         AddShopInfo(player);
         AddDefaultEmblem(player);
+        AddDefaultHelper(player);
 
         await apiContext.SaveChangesAsync();
 
@@ -638,6 +640,11 @@ internal sealed class SavefileService(
                 IsNew = false,
             }
         );
+    }
+
+    private static void AddDefaultHelper(DbPlayer player)
+    {
+        player.Helper = new() { CharaId = Charas.ThePrince };
     }
 
     internal static class DefaultSavefileData

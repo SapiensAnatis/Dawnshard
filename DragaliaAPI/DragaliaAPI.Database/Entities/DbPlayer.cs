@@ -106,4 +106,6 @@ public class DbPlayer
     public DbWallRewardDate? WallRewardDate { get; set; }
 
     public DbPlayerDiamondData? DiamondData { get; set; }
+
+    public DbPlayerHelper? Helper { get; set; }
 }

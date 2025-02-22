@@ -54,6 +54,9 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
             fixture.ApiContext
         );
 
+        this.fixture.ApiContext.PlayerHelpers.RemoveRange(
+            this.fixture.ApiContext.PlayerHelpers.IgnoreQueryFilters()
+        );
         this.fixture.ApiContext.PlayerCharaData.RemoveRange(
             this.fixture.ApiContext.PlayerCharaData.IgnoreQueryFilters()
         );
@@ -63,6 +66,7 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
         this.fixture.ApiContext.PlayerDragonReliability.RemoveRange(
             this.fixture.ApiContext.PlayerDragonReliability.IgnoreQueryFilters()
         );
+
         this.fixture.ApiContext.PlayerStoryState.RemoveRange(
             this.fixture.ApiContext.PlayerStoryState.IgnoreQueryFilters()
         );

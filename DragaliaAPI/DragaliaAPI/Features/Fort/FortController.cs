@@ -38,7 +38,7 @@ public class FortController : DragaliaControllerBase
         FortDetail fortDetail = await fortService.GetFortDetail();
         IEnumerable<BuildList> buildList = await fortService.GetBuildList();
 
-        FortBonusList bonusList = await bonusService.GetBonusList();
+        FortBonusList bonusList = await bonusService.GetBonusList(cancellationToken);
 
         int freeGiftCount = await this.dragonService.GetFreeGiftCount();
 
@@ -84,7 +84,7 @@ public class FortController : DragaliaControllerBase
         CancellationToken cancellationToken
     )
     {
-        FortBonusList bonusList = await bonusService.GetBonusList();
+        FortBonusList bonusList = await bonusService.GetBonusList(cancellationToken);
 
         await fortService.BuildAtOnce(request.PaymentType, request.BuildId);
 
@@ -132,7 +132,7 @@ public class FortController : DragaliaControllerBase
         CancellationToken cancellationToken
     )
     {
-        FortBonusList bonusList = await bonusService.GetBonusList();
+        FortBonusList bonusList = await bonusService.GetBonusList(cancellationToken);
 
         await fortService.EndBuild(request.BuildId);
 
@@ -190,7 +190,7 @@ public class FortController : DragaliaControllerBase
         CancellationToken cancellationToken
     )
     {
-        FortBonusList bonusList = await bonusService.GetBonusList();
+        FortBonusList bonusList = await bonusService.GetBonusList(cancellationToken);
 
         await fortService.LevelupAtOnce(request.PaymentType, request.BuildId);
 
@@ -242,7 +242,7 @@ public class FortController : DragaliaControllerBase
         CancellationToken cancellationToken
     )
     {
-        FortBonusList bonusList = await bonusService.GetBonusList();
+        FortBonusList bonusList = await bonusService.GetBonusList(cancellationToken);
 
         await fortService.EndLevelup(request.BuildId);
 
@@ -305,7 +305,7 @@ public class FortController : DragaliaControllerBase
         );
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
-        FortBonusList bonusList = await bonusService.GetBonusList();
+        FortBonusList bonusList = await bonusService.GetBonusList(cancellationToken);
 
         FortMoveResponse data = new()
         {
