@@ -31,6 +31,8 @@ export const handleFetch: HandleFetch = ({ request, event, fetch }) => {
   const { logger } = event.locals;
   const requestUrl = new URL(request.url);
 
+  logger.debug({ url: requestUrl.href }, 'Sending fetch request to {url}');
+
   if (event.url.origin === requestUrl.origin && requestUrl.pathname.startsWith('/api')) {
     // Rewrite URL to internal
     const newUrl = request.url.replace(requestUrl.origin, internalApiUrl.origin);
