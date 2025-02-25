@@ -11,6 +11,7 @@ namespace DragaliaAPI.Features.Friends;
 [ApiController]
 internal sealed class FriendController(
     IHelperService helperService,
+    FriendService friendService,
     IUpdateDataService updateDataService
 ) : DragaliaControllerBase
 {
@@ -81,17 +82,31 @@ internal sealed class FriendController(
     }
 
     [HttpPost("friend_index")]
-    public DragaliaResult<FriendFriendIndexResponse> FriendIndex() =>
-        new FriendFriendIndexResponse()
+    public async Task<DragaliaResult<FriendFriendIndexResponse>> FriendIndex()
+    {
+        int friendCount = await friendService.GetFriendCount();
+
+        return new FriendFriendIndexResponse()
         {
-            FriendCount = 0,
+            FriendCount = friendCount,
             EntityResult = new(),
             UpdateDataList = new(),
         };
+    }
 
     [HttpPost("friend_list")]
-    public DragaliaResult<FriendFriendListResponse> FriendList() =>
-        new FriendFriendListResponse() { FriendList = [], NewFriendViewerIdList = [] };
+    public async Task<DragaliaResult<FriendFriendListResponse>> FriendList()
+    {
+        List<UserSupportList> friendList = await friendService.GetFriendList();
+
+        // todo: new indicator (will be annoying as fuck)
+
+        return new FriendFriendListResponse()
+        {
+            FriendList = friendList,
+            NewFriendViewerIdList = [],
+        };
+    }
 
     [HttpPost("auto_search")]
     public DragaliaResult<FriendAutoSearchResponse> AutoSearch() =>
