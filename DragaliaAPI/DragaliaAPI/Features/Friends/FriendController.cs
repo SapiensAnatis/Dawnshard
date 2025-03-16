@@ -98,13 +98,14 @@ internal sealed class FriendController(
     public async Task<DragaliaResult<FriendFriendListResponse>> FriendList()
     {
         List<UserSupportList> friendList = await friendService.GetFriendList();
+        List<long> newFriendList = await friendService.GetNewFriendViewerIdList();
 
         // todo: new indicator (will be annoying as fuck)
 
         return new FriendFriendListResponse()
         {
             FriendList = friendList,
-            NewFriendViewerIdList = friendList.Select(x => x.ViewerId),
+            NewFriendViewerIdList = newFriendList.Select(x => (ulong)x),
         };
     }
 

@@ -9,6 +9,8 @@ public class DbPlayerFriendshipPlayer
 
     public int FriendshipId { get; set; }
 
+    public bool IsNew { get; set; }
+
     public DbPlayer? Player { get; set; }
 
     public DbPlayerFriendship? Friendship { get; set; }

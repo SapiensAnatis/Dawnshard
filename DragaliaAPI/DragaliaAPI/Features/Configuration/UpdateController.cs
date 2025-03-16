@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Emblem;
 using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Features.Friends;
 using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
@@ -14,12 +15,13 @@ namespace DragaliaAPI.Features.Configuration;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class UpdateController(
+internal sealed class UpdateController(
     ILogger<UpdateController> logger,
     IUserDataRepository userDataRepository,
     IUpdateDataService updateDataService,
     IFortService fortService,
-    IEmblemRepository emblemRepository
+    IEmblemRepository emblemRepository,
+    FriendService friendService
 ) : DragaliaControllerBase
 {
     [HttpPost]
@@ -45,21 +47,28 @@ public class UpdateController(
     {
         foreach (AtgenTargetList target in request.TargetList)
         {
+            IList<long> targetList = target.TargetIdList?.ToList() ?? [];
             logger.LogDebug("reset_new target: {@target}", target);
-            target.TargetIdList ??= Enumerable.Empty<long>();
 
             switch (target.TargetName)
             {
                 case "friend":
+                {
+                    await friendService.ResetNew(targetList);
+                    break;
+                }
                 case "friend_apply":
                 case "stamp":
+                {
                     // TODO
                     logger.LogInformation(
                         "Unhandled type {resetType} in update/reset_new",
                         target.TargetName
                     );
                     break;
+                }
                 case "emblem":
+                {
                     await foreach (
                         DbEmblem emblem in emblemRepository
                             .Emblems.Where(x => x.IsNew)
@@ -71,14 +80,19 @@ public class UpdateController(
                     }
 
                     break;
+                }
                 case "fort":
-                    await fortService.ClearPlantNewStatuses(target.TargetIdList);
+                {
+                    await fortService.ClearPlantNewStatuses(targetList);
                     break;
+                }
                 default:
+                {
                     throw new DragaliaException(
                         ResultCode.ModelUpdateTargetNotFound,
                         "Invalid target_name"
                     );
+                }
             }
         }
 
