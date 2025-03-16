@@ -12,7 +12,7 @@ namespace DragaliaAPI.Database.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "DbPlayerFriendship",
+                name: "PlayerFriendships",
                 columns: table => new
                 {
                     FriendshipId = table.Column<int>(type: "integer", nullable: false)
@@ -21,29 +21,27 @@ namespace DragaliaAPI.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DbPlayerFriendship", x => x.FriendshipId);
+                    table.PrimaryKey("PK_PlayerFriendships", x => x.FriendshipId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PlayerFriendships",
+                name: "PlayerFriendshipPlayers",
                 columns: table => new
                 {
-                    FriendshipId = table.Column<int>(type: "integer", nullable: false),
                     PlayerViewerId = table.Column<long>(type: "bigint", nullable: false),
-                    PlayerId = table.Column<int>(type: "integer", nullable: false),
-                    PlayerFriendshipId = table.Column<int>(type: "integer", nullable: false)
+                    FriendshipId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayerFriendships", x => new { x.FriendshipId, x.PlayerViewerId });
+                    table.PrimaryKey("PK_PlayerFriendshipPlayers", x => new { x.FriendshipId, x.PlayerViewerId });
                     table.ForeignKey(
-                        name: "FK_PlayerFriendships_DbPlayerFriendship_FriendshipId",
+                        name: "FK_PlayerFriendshipPlayers_PlayerFriendships_FriendshipId",
                         column: x => x.FriendshipId,
-                        principalTable: "DbPlayerFriendship",
+                        principalTable: "PlayerFriendships",
                         principalColumn: "FriendshipId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PlayerFriendships_Players_PlayerViewerId",
+                        name: "FK_PlayerFriendshipPlayers_Players_PlayerViewerId",
                         column: x => x.PlayerViewerId,
                         principalTable: "Players",
                         principalColumn: "ViewerId",
@@ -51,8 +49,8 @@ namespace DragaliaAPI.Database.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PlayerFriendships_PlayerViewerId",
-                table: "PlayerFriendships",
+                name: "IX_PlayerFriendshipPlayers_PlayerViewerId",
+                table: "PlayerFriendshipPlayers",
                 column: "PlayerViewerId");
         }
 
@@ -60,10 +58,10 @@ namespace DragaliaAPI.Database.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PlayerFriendships");
+                name: "PlayerFriendshipPlayers");
 
             migrationBuilder.DropTable(
-                name: "DbPlayerFriendship");
+                name: "PlayerFriendships");
         }
     }
 }

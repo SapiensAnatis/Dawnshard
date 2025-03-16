@@ -104,7 +104,7 @@ internal sealed class FriendController(
         return new FriendFriendListResponse()
         {
             FriendList = friendList,
-            NewFriendViewerIdList = [],
+            NewFriendViewerIdList = friendList.Select(x => x.ViewerId),
         };
     }
 

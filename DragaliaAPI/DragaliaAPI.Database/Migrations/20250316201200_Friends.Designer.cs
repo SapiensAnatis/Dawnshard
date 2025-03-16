@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20250225212134_Friends")]
+    [Migration("20250316201200_Friends")]
     partial class Friends
     {
         /// <inheritdoc />
@@ -985,7 +985,7 @@ namespace DragaliaAPI.Database.Migrations
 
                     b.HasKey("FriendshipId");
 
-                    b.ToTable("DbPlayerFriendship");
+                    b.ToTable("PlayerFriendships");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerFriendshipPlayer", b =>
@@ -996,17 +996,11 @@ namespace DragaliaAPI.Database.Migrations
                     b.Property<long>("PlayerViewerId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("PlayerFriendshipId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PlayerId")
-                        .HasColumnType("integer");
-
                     b.HasKey("FriendshipId", "PlayerViewerId");
 
                     b.HasIndex("PlayerViewerId");
 
-                    b.ToTable("PlayerFriendships");
+                    b.ToTable("PlayerFriendshipPlayers");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerHelper", b =>

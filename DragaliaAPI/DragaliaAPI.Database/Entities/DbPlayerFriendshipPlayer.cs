@@ -5,9 +5,9 @@ namespace DragaliaAPI.Database.Entities;
 /// </summary>
 public class DbPlayerFriendshipPlayer
 {
-    public int PlayerId { get; set; }
+    public long PlayerViewerId { get; set; }
 
-    public int PlayerFriendshipId { get; set; }
+    public int FriendshipId { get; set; }
 
     public DbPlayer? Player { get; set; }
 
