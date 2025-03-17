@@ -4,6 +4,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.Event;
+using DragaliaAPI.Features.Friends;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Mapping.Mapperly;
@@ -23,7 +24,8 @@ public class UpdateDataService(
     IMissionProgressionService missionProgressionService,
     IPresentService presentService,
     IEventService eventService,
-    IDmodeService dmodeService
+    IDmodeService dmodeService,
+    FriendNotificationService friendNotificationService
 ) : IUpdateDataService
 {
     [Obsolete("Use the SaveChangesAsync overload that accepts a CancellationToken instead.")]
@@ -308,6 +310,18 @@ public class UpdateDataService(
             if (info.IsEntry)
                 // This is done to ensure that the change tracker does not mess anything up
                 list.DmodeInfo = info;
+        }
+
+        list.FriendNotice = new()
+        {
+            // TODO: consider caching if this will be called frequently - assess perf impact
+            ApplyNewCount = await friendNotificationService.GetNewFriendRequestCount(),
+        };
+
+        // DbPlayerFriendship does not implement IDbPlayerData (and can't do so)
+        if (apiContext.ChangeTracker.Entries<DbPlayerFriendship>().Any())
+        {
+            list.FriendNotice.FriendNewCount = await friendNotificationService.GetNewFriendCount();
         }
 
         return list;

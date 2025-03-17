@@ -19,6 +19,13 @@ internal sealed partial class FriendService(
         return await this.GetFriendsQuery().CountAsync();
     }
 
+    public async Task<int> GetNewApplyCount()
+    {
+        return await apiContext.PlayerFriendRequests.CountAsync(x =>
+            x.ToPlayerViewerId == playerIdentityService.ViewerId && x.IsNew
+        );
+    }
+
     public async Task<bool> CheckIfFriendshipExists(
         long otherPlayerId,
         CancellationToken cancellationToken = default
@@ -38,18 +45,6 @@ internal sealed partial class FriendService(
         List<HelperProjection> mergedHelpers = await helperQuery.ToListAsync();
 
         return mergedHelpers.Select(x => x.MapToUserSupportList()).ToList();
-    }
-
-    public async Task<List<long>> GetNewFriendViewerIdList()
-    {
-        return await apiContext
-            .PlayerFriendshipPlayers.IgnoreQueryFilters()
-            .Where(x => x.PlayerViewerId == playerIdentityService.ViewerId && x.IsNew)
-            .Select(x => x.Friendship)
-            .SelectMany(x => x!.Players)
-            .Select(x => x.ViewerId)
-            .Where(x => x != playerIdentityService.ViewerId)
-            .ToListAsync();
     }
 
     public async Task ResetNew(IEnumerable<long> targetIdList)
@@ -97,6 +92,7 @@ internal sealed partial class FriendService(
             {
                 FromPlayerViewerId = playerIdentityService.ViewerId,
                 ToPlayerViewerId = targetViewerId,
+                IsNew = true,
             }
         );
 
@@ -134,7 +130,7 @@ internal sealed partial class FriendService(
 
     [LoggerMessage(
         LogLevel.Information,
-        "Friend request to {ViewerId} failed: a request already exists"
+        "Friend request to {ViewerId} failed: request already exists"
     )]
     private partial void LogFriendRequestExists(long viewerId);
 

@@ -13,6 +13,7 @@ namespace DragaliaAPI.Features.Friends;
 internal sealed class FriendController(
     IHelperService helperService,
     FriendService friendService,
+    FriendNotificationService friendNotificationService,
     IPlayerIdentityService playerIdentityService,
     IUpdateDataService updateDataService
 ) : DragaliaControllerBase
@@ -103,7 +104,7 @@ internal sealed class FriendController(
     public async Task<DragaliaResult<FriendFriendListResponse>> FriendList()
     {
         List<UserSupportList> friendList = await friendService.GetFriendList();
-        List<long> newFriendList = await friendService.GetNewFriendViewerIdList();
+        List<long> newFriendList = await friendNotificationService.GetNewFriendViewerIdList();
 
         return new FriendFriendListResponse()
         {

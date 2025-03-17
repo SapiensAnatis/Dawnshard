@@ -10,6 +10,7 @@ public static partial class FeatureExtensions
     {
         return serviceCollection
             .AddScoped<IHelperService, HelperService>()
-            .AddScoped<FriendService>();
+            .AddScoped<FriendService>()
+            .AddScoped<FriendNotificationService>();
     }
 }

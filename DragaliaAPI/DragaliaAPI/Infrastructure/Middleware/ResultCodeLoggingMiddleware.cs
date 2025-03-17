@@ -1,8 +1,22 @@
+using System.Collections.Frozen;
+
 namespace DragaliaAPI.Infrastructure.Middleware;
 
 internal partial class ResultCodeLoggingMiddleware(ILogger<ResultCodeLoggingMiddleware> logger)
     : IMiddleware
 {
+    private static FrozenSet<ResultCode> NonErrorResultCodes { get; } =
+        [
+            ResultCode.Success,
+            ResultCode.CommonMaintenance,
+            ResultCode.CommonChangeDate,
+            ResultCode.CommonTimeout,
+            ResultCode.MatchingRoomIdNotFound,
+            ResultCode.FriendIdsearchError,
+            ResultCode.FriendTargetAlready,
+            ResultCode.FriendApplyExists,
+        ];
+
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         await next(context);
@@ -23,16 +37,9 @@ internal partial class ResultCodeLoggingMiddleware(ILogger<ResultCodeLoggingMidd
     }
 
     private static LogLevel GetLogLevelFromResultCode(ResultCode? code) =>
-        code switch
-        {
-            null
-            or ResultCode.Success
-            or ResultCode.CommonChangeDate
-            or ResultCode.CommonMaintenance
-            or ResultCode.MatchingRoomIdNotFound
-            or ResultCode.CommonTimeout => LogLevel.Information,
-            _ => LogLevel.Error,
-        };
+        (code is null || NonErrorResultCodes.Contains(code.Value))
+            ? LogLevel.Information
+            : LogLevel.Error;
 
     private static partial class Log
     {
