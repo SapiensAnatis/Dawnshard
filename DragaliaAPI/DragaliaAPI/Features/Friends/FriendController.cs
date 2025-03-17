@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.Friends;
@@ -12,6 +13,7 @@ namespace DragaliaAPI.Features.Friends;
 internal sealed class FriendController(
     IHelperService helperService,
     FriendService friendService,
+    IPlayerIdentityService playerIdentityService,
     IUpdateDataService updateDataService
 ) : DragaliaControllerBase
 {
@@ -21,7 +23,10 @@ internal sealed class FriendController(
         CancellationToken cancellationToken
     )
     {
-        SettingSupport playerSupportChara = await helperService.GetPlayerHelper(cancellationToken);
+        SettingSupport playerSupportChara =
+            await helperService.GetPlayerHelper(cancellationToken)
+            ?? throw new InvalidOperationException("Failed to find current player's helper");
+        ;
         return new FriendGetSupportCharaResponse(0, playerSupportChara);
     }
 
@@ -100,8 +105,6 @@ internal sealed class FriendController(
         List<UserSupportList> friendList = await friendService.GetFriendList();
         List<long> newFriendList = await friendService.GetNewFriendViewerIdList();
 
-        // todo: new indicator (will be annoying as fuck)
-
         return new FriendFriendListResponse()
         {
             FriendList = friendList,
@@ -125,4 +128,75 @@ internal sealed class FriendController(
             NewApplyViewerIdList = [],
             FriendApply = [],
         };
+
+    [HttpPost("id_search")]
+    public async Task<DragaliaResult<FriendIdSearchResponse>> IdSearch(
+        FriendIdSearchRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        long searchId = (long)request.SearchId;
+
+        if (searchId == playerIdentityService.ViewerId)
+        {
+            // Shows "You searched for your own ID" popup
+            return this.Code(ResultCode.FriendIdsearchError);
+        }
+
+        bool alreadyFriends = await friendService.CheckIfFriendshipExists(
+            searchId,
+            cancellationToken
+        );
+
+        if (alreadyFriends)
+        {
+            return this.Code(ResultCode.FriendTargetAlready);
+        }
+
+        UserSupportList? result = await helperService.GetUserSupportList(
+            searchId,
+            cancellationToken
+        );
+
+        if (result is null)
+        {
+            // Shows "Unable to locate player" popup
+            return this.Code(ResultCode.FriendTargetNone);
+        }
+
+        return new FriendIdSearchResponse() { Result = 1, SearchUser = result };
+    }
+
+    [HttpPost("request")]
+    public async Task<DragaliaResult<FriendRequestResponse>> SendRequest(
+        FriendRequestRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        long friendId = (long)request.FriendId;
+
+        if (friendId == playerIdentityService.ViewerId)
+        {
+            return this.Code(ResultCode.FriendApplyError);
+        }
+
+        bool alreadyFriends = await friendService.CheckIfFriendshipExists(
+            friendId,
+            cancellationToken
+        );
+
+        if (alreadyFriends)
+        {
+            return this.Code(ResultCode.FriendTargetAlready);
+        }
+
+        ResultCode result = await friendService.SendRequest(friendId);
+
+        if (result != ResultCode.Success)
+        {
+            return this.Code(result);
+        }
+
+        return this.Ok(new FriendRequestResponse() { Result = 1 });
+    }
 }

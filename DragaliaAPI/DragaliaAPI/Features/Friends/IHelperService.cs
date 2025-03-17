@@ -11,7 +11,7 @@ public interface IHelperService
         AtgenSupportUserDetailList helperDetails
     );
 
-    Task<UserSupportList?> GetHelper(ulong viewerId);
+    Task<UserSupportList?> GetLegacyHelper(ulong viewerId);
 
     Task<UserSupportList> GetLeadUnit(int partyNo);
 
@@ -30,4 +30,6 @@ public interface IHelperService
         long viewerId,
         CancellationToken cancellationToken
     );
+
+    Task<UserSupportList?> GetUserSupportList(long viewerId, CancellationToken cancellationToken);
 }

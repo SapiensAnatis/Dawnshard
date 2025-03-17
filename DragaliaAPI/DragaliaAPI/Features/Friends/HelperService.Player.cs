@@ -92,14 +92,14 @@ internal partial class HelperService
         }
     }
 
-    public async Task<UserSupportList> GetUserSupportList(
+    public async Task<UserSupportList?> GetUserSupportList(
         long viewerId,
         CancellationToken cancellationToken
     )
     {
-        HelperProjection helper = await GetHelperProjection(viewerId, cancellationToken);
+        HelperProjection? helper = await GetHelperProjectionOrDefault(viewerId, cancellationToken);
 
-        return helper.MapToUserSupportList();
+        return helper?.MapToUserSupportList();
     }
 
     public async Task<AtgenSupportUserDataDetail> GetSupportUserDataDetail(
@@ -134,5 +134,18 @@ internal partial class HelperService
             .Where(x => x.ViewerId == viewerId)
             .ProjectToHelperProjection()
             .FirstAsync(cancellationToken);
+    }
+
+    private async Task<HelperProjection?> GetHelperProjectionOrDefault(
+        long viewerId,
+        CancellationToken cancellationToken
+    )
+    {
+        return await apiContext
+            .PlayerHelpers.IgnoreQueryFilters()
+            .AsSplitQuery()
+            .Where(x => x.ViewerId == viewerId)
+            .ProjectToHelperProjection()
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }

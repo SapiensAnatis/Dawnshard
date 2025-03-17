@@ -8,14 +8,24 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DragaliaAPI.Features.Friends;
 
-internal sealed class FriendService(
+internal sealed partial class FriendService(
     ApiContext apiContext,
-    IPlayerIdentityService playerIdentityService
+    IPlayerIdentityService playerIdentityService,
+    ILogger<FriendService> logger
 )
 {
     public async Task<int> GetFriendCount()
     {
         return await this.GetFriendsQuery().CountAsync();
+    }
+
+    public async Task<bool> CheckIfFriendshipExists(
+        long otherPlayerId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return await this.GetFriendsQuery()
+            .AnyAsync(x => x.ViewerId == otherPlayerId, cancellationToken);
     }
 
     public async Task<List<UserSupportList>> GetFriendList()
@@ -80,6 +90,35 @@ internal sealed class FriendService(
         await transaction.CommitAsync();
     }
 
+    public async Task<ResultCode> SendRequest(long targetViewerId)
+    {
+        apiContext.PlayerFriendRequests.Add(
+            new DbPlayerFriendRequest()
+            {
+                FromPlayerViewerId = playerIdentityService.ViewerId,
+                ToPlayerViewerId = targetViewerId,
+            }
+        );
+
+        try
+        {
+            await apiContext.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex) when (ex.IsUniqueViolation())
+        {
+            this.LogFriendRequestExists(targetViewerId);
+            return ResultCode.FriendApplyExists;
+        }
+        catch (DbUpdateException ex) when (ex.IsForeignKeyViolation())
+        {
+            // Should never happen on a legitimate client
+            this.LogFriendRequestTargetDoesNotExist(targetViewerId);
+            return ResultCode.FriendApplyError;
+        }
+
+        return ResultCode.Success;
+    }
+
     private IQueryable<DbPlayer> GetFriendsQuery()
     {
         IQueryable<DbPlayer> currentPlayer = apiContext.Players.Where(x =>
@@ -88,9 +127,17 @@ internal sealed class FriendService(
 
         return currentPlayer
             .SelectMany(x => x.Friendships)
-            .Where(x => x.IsAccepted)
             .SelectMany(x => x.Players)
             .Where(x => x.ViewerId != playerIdentityService.ViewerId)
             .IgnoreQueryFilters();
     }
+
+    [LoggerMessage(
+        LogLevel.Information,
+        "Friend request to {ViewerId} failed: a request already exists"
+    )]
+    private partial void LogFriendRequestExists(long viewerId);
+
+    [LoggerMessage(LogLevel.Error, "Friend request to {ViewerId} failed: invalid viewer ID")]
+    private partial void LogFriendRequestTargetDoesNotExist(long viewerId);
 }

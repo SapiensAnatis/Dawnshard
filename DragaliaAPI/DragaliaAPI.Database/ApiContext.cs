@@ -139,6 +139,8 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
 
     public DbSet<DbPlayerFriendshipPlayer> PlayerFriendshipPlayers { get; set; }
 
+    public DbSet<DbPlayerFriendRequest> PlayerFriendRequests { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApiContext).Assembly);
