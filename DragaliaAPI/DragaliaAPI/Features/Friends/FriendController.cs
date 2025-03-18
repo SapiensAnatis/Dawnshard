@@ -96,7 +96,13 @@ internal sealed class FriendController(
         {
             FriendCount = friendCount,
             EntityResult = new(),
-            UpdateDataList = new(),
+            UpdateDataList = new()
+            {
+                FriendNotice = new()
+                {
+                    ApplyNewCount = await friendNotificationService.GetNewFriendRequestCount(),
+                },
+            },
         };
     }
 
@@ -114,8 +120,16 @@ internal sealed class FriendController(
     }
 
     [HttpPost("auto_search")]
-    public DragaliaResult<FriendAutoSearchResponse> AutoSearch() =>
-        new FriendAutoSearchResponse() { Result = 1, SearchList = [] };
+    public async Task<DragaliaResult<FriendAutoSearchResponse>> AutoSearch(
+        CancellationToken cancellationToken
+    )
+    {
+        List<UserSupportList> list = await friendService.GetRecommendedFriendsList(
+            cancellationToken
+        );
+
+        return new FriendAutoSearchResponse() { Result = 1, SearchList = list };
+    }
 
     [HttpPost("request_list")]
     public async Task<DragaliaResult<FriendRequestListResponse>> RequestList()
@@ -146,6 +160,11 @@ internal sealed class FriendController(
     )
     {
         long searchId = (long)request.SearchId;
+
+        /*
+         * The inner result fields appear unused, it seems that we have to return actual
+         * result_code values (of the data_headers variety) to get the game to do anything.
+         */
 
         if (searchId == playerIdentityService.ViewerId)
         {
@@ -200,7 +219,7 @@ internal sealed class FriendController(
             return this.Code(ResultCode.FriendTargetAlready);
         }
 
-        ResultCode result = await friendService.SendRequest(friendId);
+        ResultCode result = await friendService.SendRequest(friendId, cancellationToken);
 
         if (result != ResultCode.Success)
         {
@@ -208,5 +227,16 @@ internal sealed class FriendController(
         }
 
         return this.Ok(new FriendRequestResponse() { Result = 1 });
+    }
+
+    [HttpPost("request_cancel")]
+    public async Task<DragaliaResult<FriendRequestCancelResponse>> RequestCancel(
+        FriendRequestCancelRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        await friendService.CancelRequest((long)request.FriendId, cancellationToken);
+
+        return new FriendRequestCancelResponse() { Result = 1 };
     }
 }

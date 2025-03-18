@@ -117,7 +117,10 @@ internal sealed partial class FriendService(
         await transaction.CommitAsync(cancellationToken);
     }
 
-    public async Task<ResultCode> SendRequest(long targetViewerId)
+    public async Task<ResultCode> SendRequest(
+        long targetViewerId,
+        CancellationToken cancellationToken
+    )
     {
         apiContext.PlayerFriendRequests.Add(
             new DbPlayerFriendRequest()
@@ -130,7 +133,7 @@ internal sealed partial class FriendService(
 
         try
         {
-            await apiContext.SaveChangesAsync();
+            await apiContext.SaveChangesAsync(cancellationToken);
         }
         catch (DbUpdateException ex) when (ex.IsUniqueViolation())
         {
@@ -177,6 +180,56 @@ internal sealed partial class FriendService(
         )
             .Select(x => x.MapToUserSupportList())
             .ToList();
+    }
+
+    public async Task CancelRequest(long viewerId, CancellationToken cancellationToken)
+    {
+        int rowsAffected = await apiContext
+            .PlayerFriendRequests.Where(x =>
+                x.FromPlayerViewerId == playerIdentityService.ViewerId
+                && x.ToPlayerViewerId == viewerId
+            )
+            .ExecuteDeleteAsync(cancellationToken);
+
+        if (rowsAffected != 1)
+        {
+            throw new DragaliaException(
+                ResultCode.FriendApplyError,
+                $"Error cancelling friend request: invalid row update count {rowsAffected}"
+            );
+        }
+    }
+
+    public async Task<List<UserSupportList>> GetRecommendedFriendsList(
+        CancellationToken cancellationToken
+    )
+    {
+        // Choose a random sample from active users. Active users are more likely to accept a friend request,
+        // so it is better to suggest them as opposed to players who have not logged in for months or years.
+        List<long> activeRequests = await apiContext
+            .PlayerFriendRequests.Where(x => x.FromPlayerViewerId == playerIdentityService.ViewerId)
+            .Select(x => x.ToPlayerViewerId)
+            .ToListAsync(cancellationToken);
+
+        IQueryable<HelperProjection> activeUsers = apiContext
+            .Players.IgnoreQueryFilters()
+            .Where(x => DateTimeOffset.UtcNow - x.UserData!.LastLoginTime < TimeSpan.FromDays(5))
+            .Where(x => x.ViewerId != playerIdentityService.ViewerId)
+            .Where(x =>
+                !apiContext.PlayerFriendRequests.Any(y =>
+                    y.FromPlayerViewerId == playerIdentityService.ViewerId
+                    && y.ToPlayerViewerId == x.ViewerId
+                )
+            )
+            .Select(x => x.Helper!)
+            .ProjectToHelperProjection();
+
+        List<HelperProjection> selectedUsers = await activeUsers
+            .OrderBy(x => EF.Functions.Random())
+            .Take(10)
+            .ToListAsync(cancellationToken);
+
+        return selectedUsers.Select(x => x.MapToUserSupportList()).ToList();
     }
 
     private IQueryable<DbPlayer> GetFriendsQuery()
