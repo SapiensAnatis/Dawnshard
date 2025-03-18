@@ -47,11 +47,16 @@ internal sealed partial class FriendService(
         return mergedHelpers.Select(x => x.MapToUserSupportList()).ToList();
     }
 
-    public async Task ResetNew(IEnumerable<long> targetIdList)
+    public async Task ResetNewFriends(
+        IEnumerable<long> targetIdList,
+        CancellationToken cancellationToken
+    )
     {
         IList<long> targetIdListEnumerated = targetIdList as IList<long> ?? targetIdList.ToList();
 
-        IDbContextTransaction transaction = await apiContext.Database.BeginTransactionAsync();
+        IDbContextTransaction transaction = await apiContext.Database.BeginTransactionAsync(
+            cancellationToken
+        );
 
         IQueryable<DbPlayerFriendshipPlayer> playerFriendships =
             apiContext.PlayerFriendshipPlayers.Where(x =>
@@ -70,19 +75,46 @@ internal sealed partial class FriendService(
             (currentPlayerFriendship, otherPlayerFriendship) => currentPlayerFriendship
         );
 
-        int rowsAffected = await friendshipsToUpdate.ExecuteUpdateAsync(e =>
-            e.SetProperty(x => x.IsNew, false)
+        int rowsAffected = await friendshipsToUpdate.ExecuteUpdateAsync(
+            e => e.SetProperty(x => x.IsNew, false),
+            cancellationToken
         );
 
         if (rowsAffected != targetIdListEnumerated.Count)
         {
             throw new DragaliaException(
                 ResultCode.ModelUpdateTargetNotFound,
-                $"Invalid friendship reset new: expected {targetIdListEnumerated.Count} rows to be updated, got {rowsAffected}"
+                $"Invalid friend reset new: expected {targetIdListEnumerated.Count} rows to be updated, got {rowsAffected}"
             );
         }
 
-        await transaction.CommitAsync();
+        await transaction.CommitAsync(cancellationToken);
+    }
+
+    public async Task ResetNewRequests(CancellationToken cancellationToken)
+    {
+        IDbContextTransaction transaction = await apiContext.Database.BeginTransactionAsync(
+            cancellationToken
+        );
+
+        IQueryable<DbPlayerFriendRequest> matchingRequests = apiContext.PlayerFriendRequests.Where(
+            x => x.ToPlayerViewerId == playerIdentityService.ViewerId
+        );
+
+        int rowsAffected = await matchingRequests.ExecuteUpdateAsync(
+            e => e.SetProperty(x => x.IsNew, false),
+            cancellationToken
+        );
+
+        if (rowsAffected == 0)
+        {
+            throw new DragaliaException(
+                ResultCode.ModelUpdateTargetNotFound,
+                $"Invalid friend request reset new: expected more than zero rows to be updated"
+            );
+        }
+
+        await transaction.CommitAsync(cancellationToken);
     }
 
     public async Task<ResultCode> SendRequest(long targetViewerId)
@@ -113,6 +145,38 @@ internal sealed partial class FriendService(
         }
 
         return ResultCode.Success;
+    }
+
+    public async Task<List<UserSupportList>> GetSentRequestList()
+    {
+        return (
+            await apiContext
+                .PlayerFriendRequests.Where(x =>
+                    x.FromPlayerViewerId == playerIdentityService.ViewerId
+                )
+                .IgnoreQueryFilters()
+                .Select(x => x.ToPlayer!.Helper!)
+                .ProjectToHelperProjection()
+                .ToListAsync()
+        )
+            .Select(x => x.MapToUserSupportList())
+            .ToList();
+    }
+
+    public async Task<List<UserSupportList>> GetReceivedRequestList()
+    {
+        return (
+            await apiContext
+                .PlayerFriendRequests.Where(x =>
+                    x.ToPlayerViewerId == playerIdentityService.ViewerId
+                )
+                .IgnoreQueryFilters()
+                .Select(x => x.FromPlayer!.Helper!)
+                .ProjectToHelperProjection()
+                .ToListAsync()
+        )
+            .Select(x => x.MapToUserSupportList())
+            .ToList();
     }
 
     private IQueryable<DbPlayer> GetFriendsQuery()

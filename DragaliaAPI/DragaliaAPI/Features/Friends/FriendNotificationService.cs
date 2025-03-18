@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Features.Friends;
 
 /// <summary>
-/// Separate service for friend functionality required by <see cref="Shared.UpdateDataService"/>.
+/// Separate service for friend functionality, most of which is used by <see cref="Shared.UpdateDataService"/>.
 /// Split out from <see cref="FriendService"/> to reduce the risk of circular dependencies.
 /// </summary>
 public class FriendNotificationService(
@@ -30,6 +30,15 @@ public class FriendNotificationService(
             .PlayerFriendRequests.IgnoreQueryFilters()
             .Where(x => x.ToPlayerViewerId == playerIdentityService.ViewerId && x.IsNew)
             .CountAsync();
+    }
+
+    public async Task<List<long>> GetNewFriendRequestViewerIdList()
+    {
+        return await apiContext
+            .PlayerFriendRequests.IgnoreQueryFilters()
+            .Where(x => x.ToPlayerViewerId == playerIdentityService.ViewerId && x.IsNew)
+            .Select(x => x.FromPlayerViewerId)
+            .ToListAsync();
     }
 
     private IQueryable<DbPlayer> GetNewFriendsQuery()

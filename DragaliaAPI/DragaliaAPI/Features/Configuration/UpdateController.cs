@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Diagnostics;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Emblem;
 using DragaliaAPI.Features.Fort;
@@ -47,17 +48,23 @@ internal sealed class UpdateController(
     {
         foreach (AtgenTargetList target in request.TargetList)
         {
-            IList<long> targetList = target.TargetIdList?.ToList() ?? [];
+            IEnumerable<long> targetList = target.TargetIdList ?? [];
             logger.LogDebug("reset_new target: {@target}", target);
 
             switch (target.TargetName)
             {
                 case "friend":
                 {
-                    await friendService.ResetNew(targetList);
+                    await friendService.ResetNewFriends(targetList, cancellationToken);
                     break;
                 }
                 case "friend_apply":
+                {
+                    Debug.Assert(target.TargetIdList is null);
+
+                    await friendService.ResetNewRequests(cancellationToken);
+                    break;
+                }
                 case "stamp":
                 {
                     // TODO

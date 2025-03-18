@@ -118,17 +118,26 @@ internal sealed class FriendController(
         new FriendAutoSearchResponse() { Result = 1, SearchList = [] };
 
     [HttpPost("request_list")]
-    public DragaliaResult<FriendRequestListResponse> RequestList() =>
-        new FriendRequestListResponse() { Result = 1, RequestList = [] };
+    public async Task<DragaliaResult<FriendRequestListResponse>> RequestList()
+    {
+        List<UserSupportList> requestList = await friendService.GetSentRequestList();
+
+        return new FriendRequestListResponse() { Result = 1, RequestList = requestList };
+    }
 
     [HttpPost("apply_list")]
-    public DragaliaResult<FriendApplyListResponse> ApplyList() =>
-        new FriendApplyListResponse()
+    public async Task<DragaliaResult<FriendApplyListResponse>> ApplyList()
+    {
+        List<UserSupportList> requestList = await friendService.GetReceivedRequestList();
+        List<long> newApplyList = await friendNotificationService.GetNewFriendRequestViewerIdList();
+
+        return new FriendApplyListResponse()
         {
             Result = 1,
-            NewApplyViewerIdList = [],
-            FriendApply = [],
+            FriendApply = requestList,
+            NewApplyViewerIdList = newApplyList.Select(x => (ulong)x),
         };
+    }
 
     [HttpPost("id_search")]
     public async Task<DragaliaResult<FriendIdSearchResponse>> IdSearch(
