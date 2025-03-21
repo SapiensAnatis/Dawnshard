@@ -46,10 +46,13 @@ public class UpdateDataService(
 
         await apiContext.SaveChangesAsync(cancellationToken);
 
-        return await this.MapUpdateDataList(entities);
+        return await this.MapUpdateDataList(entities, cancellationToken);
     }
 
-    private async Task<UpdateDataList> MapUpdateDataList(List<IDbPlayerData> entities)
+    private async Task<UpdateDataList> MapUpdateDataList(
+        List<IDbPlayerData> entities,
+        CancellationToken cancellationToken
+    )
     {
         UpdateDataList list = new();
 
@@ -312,17 +315,7 @@ public class UpdateDataService(
                 list.DmodeInfo = info;
         }
 
-        list.FriendNotice = new()
-        {
-            // TODO: consider caching if this will be called frequently - assess perf impact
-            ApplyNewCount = await friendNotificationService.GetNewFriendRequestCount(),
-        };
-
-        // DbPlayerFriendship does not implement IDbPlayerData (and can't do so)
-        if (apiContext.ChangeTracker.Entries<DbPlayerFriendship>().Any())
-        {
-            list.FriendNotice.FriendNewCount = await friendNotificationService.GetNewFriendCount();
-        }
+        list.FriendNotice = await friendNotificationService.GetFriendNotice(cancellationToken);
 
         return list;
 

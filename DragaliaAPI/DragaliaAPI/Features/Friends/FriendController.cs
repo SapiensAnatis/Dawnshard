@@ -88,21 +88,18 @@ internal sealed class FriendController(
     }
 
     [HttpPost("friend_index")]
-    public async Task<DragaliaResult<FriendFriendIndexResponse>> FriendIndex()
+    public async Task<DragaliaResult<FriendFriendIndexResponse>> FriendIndex(
+        CancellationToken cancellationToken
+    )
     {
         int friendCount = await friendService.GetFriendCount();
+        FriendNotice notice = await friendNotificationService.GetFriendNotice(cancellationToken);
 
         return new FriendFriendIndexResponse()
         {
             FriendCount = friendCount,
             EntityResult = new(),
-            UpdateDataList = new()
-            {
-                FriendNotice = new()
-                {
-                    ApplyNewCount = await friendNotificationService.GetNewFriendRequestCount(),
-                },
-            },
+            UpdateDataList = new() { FriendNotice = notice },
         };
     }
 
@@ -247,5 +244,8 @@ internal sealed class FriendController(
     }
 
     [HttpPost("reply")]
-    public async Task<DragaliaResult<FriendReplyResponse>> Reply(FriendReplyRequest request) { }
+    public async Task<DragaliaResult<FriendReplyResponse>> Reply(FriendReplyRequest request)
+    {
+        return new FriendReplyResponse() { Result = 1 };
+    }
 }

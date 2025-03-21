@@ -1,5 +1,6 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,22 +15,22 @@ public class FriendNotificationService(
     IPlayerIdentityService playerIdentityService
 )
 {
-    public async Task<int> GetNewFriendCount()
+    public async Task<FriendNotice> GetFriendNotice(CancellationToken cancellationToken)
     {
-        return await this.GetNewFriendsQuery().CountAsync();
+        // TODO - consider caching this as it is called for every UpdateDataList
+
+        int newFriendCount = await this.GetNewFriendsQuery().CountAsync(cancellationToken);
+        int newFriendRequestCount = await apiContext
+            .PlayerFriendRequests.IgnoreQueryFilters()
+            .Where(x => x.ToPlayerViewerId == playerIdentityService.ViewerId && x.IsNew)
+            .CountAsync(cancellationToken);
+
+        return new() { ApplyNewCount = newFriendRequestCount, FriendNewCount = newFriendCount };
     }
 
     public async Task<List<long>> GetNewFriendViewerIdList()
     {
         return await this.GetNewFriendsQuery().Select(x => x.ViewerId).ToListAsync();
-    }
-
-    public async Task<int> GetNewFriendRequestCount()
-    {
-        return await apiContext
-            .PlayerFriendRequests.IgnoreQueryFilters()
-            .Where(x => x.ToPlayerViewerId == playerIdentityService.ViewerId && x.IsNew)
-            .CountAsync();
     }
 
     public async Task<List<long>> GetNewFriendRequestViewerIdList()
