@@ -2214,9 +2214,6 @@ public partial class FriendReplyRequest
     [Key("friend_id")]
     public ulong FriendId { get; set; }
 
-    [Key("reply")]
-    public int Reply { get; set; }
-
     public FriendReplyRequest(ulong friendId, int reply)
     {
         this.FriendId = friendId;

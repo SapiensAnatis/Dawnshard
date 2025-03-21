@@ -128,6 +128,12 @@ internal sealed class FriendController(
             cancellationToken
         );
 
+        /*
+         * Strange behaviour: sometimes the game will ignore what we send here and refuse
+         * to show users. Appears to be related to sending a friend request to a list entry:
+         * even if you subsequently cancel it, that entry will never show in the list ever again.
+         */
+
         return new FriendAutoSearchResponse() { Result = 1, SearchList = list };
     }
 
@@ -239,4 +245,7 @@ internal sealed class FriendController(
 
         return new FriendRequestCancelResponse() { Result = 1 };
     }
+
+    [HttpPost("reply")]
+    public async Task<DragaliaResult<FriendReplyResponse>> Reply(FriendReplyRequest request) { }
 }

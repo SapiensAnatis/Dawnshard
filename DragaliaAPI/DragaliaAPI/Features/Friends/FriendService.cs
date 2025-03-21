@@ -122,6 +122,21 @@ internal sealed partial class FriendService(
         CancellationToken cancellationToken
     )
     {
+        DbPlayerFriendRequest? existingReceivedRequest =
+            await apiContext.PlayerFriendRequests.FirstOrDefaultAsync(
+                x =>
+                    x.FromPlayerViewerId == targetViewerId
+                    && x.ToPlayerViewerId == playerIdentityService.ViewerId,
+                cancellationToken
+            );
+
+        if (existingReceivedRequest is not null)
+        {
+            // Treat sending two requests to each other the same as accepting the request
+            await this.AcceptRequestEntity(existingReceivedRequest, cancellationToken);
+            return ResultCode.Success;
+        }
+
         apiContext.PlayerFriendRequests.Add(
             new DbPlayerFriendRequest()
             {
@@ -204,32 +219,51 @@ internal sealed partial class FriendService(
         CancellationToken cancellationToken
     )
     {
-        // Choose a random sample from active users. Active users are more likely to accept a friend request,
-        // so it is better to suggest them as opposed to players who have not logged in for months or years.
-        List<long> activeRequests = await apiContext
-            .PlayerFriendRequests.Where(x => x.FromPlayerViewerId == playerIdentityService.ViewerId)
-            .Select(x => x.ToPlayerViewerId)
-            .ToListAsync(cancellationToken);
-
-        IQueryable<HelperProjection> activeUsers = apiContext
+        // Choose the most recently active users. This is sort of random assuming you wait
+        // long enough between checking the page.
+        // It is also a good heuristic as active players are more likely to accept a friend
+        // request.
+        IQueryable<HelperProjection> eligibleUsers = apiContext
             .Players.IgnoreQueryFilters()
-            .Where(x => DateTimeOffset.UtcNow - x.UserData!.LastLoginTime < TimeSpan.FromDays(5))
             .Where(x => x.ViewerId != playerIdentityService.ViewerId)
             .Where(x =>
+                // Don't suggest people you have already sent a friend request to
                 !apiContext.PlayerFriendRequests.Any(y =>
                     y.FromPlayerViewerId == playerIdentityService.ViewerId
                     && y.ToPlayerViewerId == x.ViewerId
                 )
             )
+            .OrderBy(x => x.UserData!.LastLoginTime)
             .Select(x => x.Helper!)
             .ProjectToHelperProjection();
 
-        List<HelperProjection> selectedUsers = await activeUsers
-            .OrderBy(x => EF.Functions.Random())
+        List<HelperProjection> selectedUsers = await eligibleUsers
             .Take(10)
             .ToListAsync(cancellationToken);
 
         return selectedUsers.Select(x => x.MapToUserSupportList()).ToList();
+    }
+
+    public async Task<ResultCode> AcceptRequest(
+        long requestViewerId,
+        CancellationToken cancellationToken
+    )
+    {
+        DbPlayerFriendRequest? requestEntity =
+            await apiContext.PlayerFriendRequests.FirstOrDefaultAsync(
+                x =>
+                    x.FromPlayerViewerId == requestViewerId
+                    && x.ToPlayerViewerId == playerIdentityService.ViewerId,
+                cancellationToken
+            );
+
+        if (requestEntity is null)
+        {
+            return ResultCode.EntityNotFoundError;
+        }
+
+        await AcceptRequestEntity(requestEntity, cancellationToken);
+        return ResultCode.Success;
     }
 
     private IQueryable<DbPlayer> GetFriendsQuery()
@@ -243,6 +277,26 @@ internal sealed partial class FriendService(
             .SelectMany(x => x.Players)
             .Where(x => x.ViewerId != playerIdentityService.ViewerId)
             .IgnoreQueryFilters();
+    }
+
+    private async Task AcceptRequestEntity(
+        DbPlayerFriendRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        apiContext.PlayerFriendRequests.Remove(request);
+        apiContext.PlayerFriendships.Add(
+            new DbPlayerFriendship()
+            {
+                PlayerFriendshipPlayers =
+                [
+                    new() { PlayerViewerId = request.ToPlayerViewerId },
+                    new() { PlayerViewerId = request.FromPlayerViewerId },
+                ],
+            }
+        );
+
+        await apiContext.SaveChangesAsync(cancellationToken);
     }
 
     [LoggerMessage(
