@@ -14,7 +14,7 @@ namespace DragaliaAPI.Features.Friends;
 internal sealed class FriendController(
     IHelperService helperService,
     FriendService friendService,
-    FriendNotificationService friendNotificationService,
+    IFriendNotificationService friendNotificationService,
     IPlayerIdentityService playerIdentityService,
     IUpdateDataService updateDataService
 ) : DragaliaControllerBase
@@ -28,7 +28,7 @@ internal sealed class FriendController(
         SettingSupport playerSupportChara =
             await helperService.GetPlayerHelper(cancellationToken)
             ?? throw new InvalidOperationException("Failed to find current player's helper");
-        ;
+
         return new FriendGetSupportCharaResponse(0, playerSupportChara);
     }
 
@@ -99,7 +99,6 @@ internal sealed class FriendController(
         return new FriendFriendIndexResponse()
         {
             FriendCount = friendCount,
-            EntityResult = new(),
             UpdateDataList = new() { FriendNotice = notice },
         };
     }

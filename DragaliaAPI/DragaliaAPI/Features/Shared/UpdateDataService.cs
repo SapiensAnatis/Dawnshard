@@ -25,7 +25,7 @@ public class UpdateDataService(
     IPresentService presentService,
     IEventService eventService,
     IDmodeService dmodeService,
-    FriendNotificationService friendNotificationService
+    IFriendNotificationService friendNotificationService
 ) : IUpdateDataService
 {
     [Obsolete("Use the SaveChangesAsync overload that accepts a CancellationToken instead.")]

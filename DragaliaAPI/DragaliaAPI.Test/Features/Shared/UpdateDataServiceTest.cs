@@ -4,6 +4,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.Event;
+using DragaliaAPI.Features.Friends;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Shared;
@@ -26,6 +27,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
     private readonly Mock<IPresentService> mockPresentService;
     private readonly Mock<IEventService> mockEventService;
     private readonly Mock<IDmodeService> mockDmodeService;
+    private readonly Mock<IFriendNotificationService> mockFriendNotificationService;
 
     public UpdateDataServiceTest(ITestOutputHelper output)
     {
@@ -36,7 +38,13 @@ public class UpdateDataServiceTest : RepositoryTestFixture
         this.mockPresentService = new(MockBehavior.Strict);
         this.mockEventService = new(MockBehavior.Strict);
         this.mockDmodeService = new(MockBehavior.Strict);
+        this.mockFriendNotificationService = new(MockBehavior.Strict);
         this.mapper = UnitTestUtils.CreateMapper();
+
+        this.mockFriendNotificationService.Setup(x =>
+                x.GetFriendNotice(It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(new FriendNotice());
 
         this.updateDataService = new UpdateDataService(
             this.ApiContext,
@@ -45,7 +53,8 @@ public class UpdateDataServiceTest : RepositoryTestFixture
             this.mockMissionProgressionService.Object,
             this.mockPresentService.Object,
             this.mockEventService.Object,
-            this.mockDmodeService.Object
+            this.mockDmodeService.Object,
+            this.mockFriendNotificationService.Object
         );
     }
 

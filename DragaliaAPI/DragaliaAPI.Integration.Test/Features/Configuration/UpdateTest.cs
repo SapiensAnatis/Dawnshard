@@ -58,4 +58,118 @@ public class UpdateTest : TestFixture
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
+
+    [Fact]
+    public async Task ResetNew_FriendRequest_Handles()
+    {
+        DbPlayer player1 = new() { AccountId = $"ResetNew_{Guid.NewGuid().ToString()}" };
+        DbPlayer player2 = new() { AccountId = $"ResetNew_{Guid.NewGuid().ToString()}" };
+
+        this.ApiContext.PlayerFriendRequests.AddRange(
+            [
+                new DbPlayerFriendRequest()
+                {
+                    FromPlayer = player1,
+                    ToPlayerViewerId = this.ViewerId,
+                    IsNew = true,
+                },
+                new DbPlayerFriendRequest()
+                {
+                    FromPlayer = player2,
+                    ToPlayerViewerId = this.ViewerId,
+                    IsNew = true,
+                },
+            ]
+        );
+
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        DragaliaResponse<FriendFriendIndexResponse> indexResponse =
+            await this.Client.PostMsgpack<FriendFriendIndexResponse>(
+                "/friend/friend_index",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        indexResponse.Data.UpdateDataList.FriendNotice.ApplyNewCount.Should().Be(2);
+
+        await this.Client.PostMsgpack<UpdateResetNewResponse>(
+            "/update/reset_new",
+            new UpdateResetNewRequest()
+            {
+                TargetList =
+                [
+                    new AtgenTargetList() { TargetName = "friend_apply", TargetIdList = null },
+                ],
+            },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        indexResponse = await this.Client.PostMsgpack<FriendFriendIndexResponse>(
+            "/friend/friend_index",
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        indexResponse.Data.UpdateDataList.FriendNotice.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task ResetNew_Friends_Handles()
+    {
+        DbPlayer player1 = new() { AccountId = $"ResetNew_{Guid.NewGuid().ToString()}" };
+        DbPlayer player2 = new() { AccountId = $"ResetNew_{Guid.NewGuid().ToString()}" };
+
+        this.ApiContext.PlayerFriendships.AddRange(
+            [
+                new DbPlayerFriendship()
+                {
+                    PlayerFriendshipPlayers =
+                    [
+                        new() { PlayerViewerId = this.ViewerId, IsNew = true },
+                        new() { Player = player1 },
+                    ],
+                },
+                new DbPlayerFriendship()
+                {
+                    PlayerFriendshipPlayers =
+                    [
+                        new() { PlayerViewerId = this.ViewerId, IsNew = true },
+                        new() { Player = player2 },
+                    ],
+                },
+            ]
+        );
+
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        DragaliaResponse<FriendFriendIndexResponse> indexResponse =
+            await this.Client.PostMsgpack<FriendFriendIndexResponse>(
+                "/friend/friend_index",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        indexResponse.Data.UpdateDataList.FriendNotice.FriendNewCount.Should().Be(2);
+
+        await this.Client.PostMsgpack<UpdateResetNewResponse>(
+            "/update/reset_new",
+            new UpdateResetNewRequest()
+            {
+                TargetList =
+                [
+                    new AtgenTargetList()
+                    {
+                        TargetName = "friend",
+                        TargetIdList = [player1.ViewerId],
+                    },
+                ],
+            },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        indexResponse = await this.Client.PostMsgpack<FriendFriendIndexResponse>(
+            "/friend/friend_index",
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        indexResponse.Data.UpdateDataList.FriendNotice.FriendNewCount.Should().Be(1);
+    }
 }

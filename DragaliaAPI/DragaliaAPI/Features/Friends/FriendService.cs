@@ -233,7 +233,8 @@ internal sealed partial class FriendService(
                     ) && y.PlayerFriendshipPlayers.Any(z => z.PlayerViewerId == x.ViewerId)
                 )
             )
-            .OrderBy(x => x.UserData!.LastLoginTime)
+            .OrderByDescending(x => x.UserData!.LastLoginTime)
+            .Where(x => x.Helper != null)
             .Select(x => x.Helper!)
             .ProjectToHelperProjection();
 

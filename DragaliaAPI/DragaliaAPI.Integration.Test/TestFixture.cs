@@ -67,7 +67,7 @@ public class TestFixture
         this.LastDailyReset = TimeProvider.System.GetLastDailyReset();
 
         this.SeedDatabase().Wait();
-        this.SeedCache().Wait();
+        this.SeedCache();
 
         IPlayerIdentityService stubPlayerIdentityService = new StubPlayerIdentityService(
             this.ViewerId
@@ -214,6 +214,23 @@ public class TestFixture
         return client;
     }
 
+    protected HttpClient CreateClientForOtherPlayer(
+        DbPlayer player,
+        Action<IWebHostBuilder>? extraBuilderConfig = null
+    )
+    {
+        HttpClient client = this.CreateClient(extraBuilderConfig);
+
+        string sessionId = $"session_id_other_player_{player.ViewerId}_{Guid.NewGuid()}";
+
+        this.CreateSession(sessionId, player.AccountId, player.ViewerId);
+
+        client.DefaultRequestHeaders.Remove(Headers.SessionId);
+        client.DefaultRequestHeaders.Add(Headers.SessionId, sessionId);
+
+        return client;
+    }
+
     protected long GetTalismanKeyId(Talismans talisman)
     {
         return this
@@ -315,24 +332,20 @@ public class TestFixture
         apiContext.ChangeTracker.Clear();
     }
 
-    private async Task SeedCache()
+    private void SeedCache() => CreateSession(this.SessionId, this.DeviceAccountId, this.ViewerId);
+
+    private void CreateSession(string sessionId, string deviceAccountId, long viewerId)
     {
         IDistributedCache cache = this.Services.GetRequiredService<IDistributedCache>();
 
         Session session = new(
-            this.SessionId,
+            sessionId,
             "id_token",
-            this.DeviceAccountId,
-            this.ViewerId,
+            deviceAccountId,
+            viewerId,
             DateTimeOffset.MaxValue
         );
-        await cache.SetStringAsync(
-            $":session:session_id:{this.SessionId}",
-            JsonSerializer.Serialize(session)
-        );
-        await cache.SetStringAsync(
-            $":session_id:device_account_id:{this.DeviceAccountId}",
-            this.SessionId
-        );
+        cache.SetString($":session:session_id:{sessionId}", JsonSerializer.Serialize(session));
+        cache.SetString($":session_id:device_account_id:{deviceAccountId}", sessionId);
     }
 }
