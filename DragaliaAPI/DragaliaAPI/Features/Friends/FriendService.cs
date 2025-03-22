@@ -225,6 +225,14 @@ internal sealed partial class FriendService(
                     && y.ToPlayerViewerId == x.ViewerId
                 )
             )
+            .Where(x =>
+                // Don't suggest people who are already your friends
+                !apiContext.PlayerFriendships.Any(y =>
+                    y.PlayerFriendshipPlayers.Any(z =>
+                        z.PlayerViewerId == playerIdentityService.ViewerId
+                    ) && y.PlayerFriendshipPlayers.Any(z => z.PlayerViewerId == x.ViewerId)
+                )
+            )
             .OrderBy(x => x.UserData!.LastLoginTime)
             .Select(x => x.Helper!)
             .ProjectToHelperProjection();
