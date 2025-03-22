@@ -3,6 +3,7 @@ using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Friends;
 
@@ -222,14 +223,32 @@ internal sealed class FriendController(
             return this.Code(ResultCode.FriendTargetAlready);
         }
 
-        ResultCode result = await friendService.SendRequest(friendId, cancellationToken);
+        await friendService.SendRequest(friendId, cancellationToken);
 
-        if (result != ResultCode.Success)
+        UpdateDataList updateDataList;
+
+        try
         {
-            return this.Code(result);
+            updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException ex) when (ex.IsUniqueViolation())
+        {
+            throw new DragaliaException(
+                ResultCode.FriendApplyExists,
+                "Cannot send friend request - one already exists",
+                ex
+            );
+        }
+        catch (DbUpdateException ex) when (ex.IsForeignKeyViolation())
+        {
+            throw new DragaliaException(
+                ResultCode.FriendApplyError,
+                "Cannot send friend request - foreign key violation",
+                ex
+            );
         }
 
-        return this.Ok(new FriendRequestResponse() { Result = 1 });
+        return this.Ok(new FriendRequestResponse() { Result = 1, UpdateDataList = updateDataList });
     }
 
     [HttpPost("request_cancel")]
@@ -244,8 +263,32 @@ internal sealed class FriendController(
     }
 
     [HttpPost("reply")]
-    public async Task<DragaliaResult<FriendReplyResponse>> Reply(FriendReplyRequest request)
+    public async Task<DragaliaResult<FriendReplyResponse>> Reply(
+        FriendReplyRequest request,
+        CancellationToken cancellationToken
+    )
     {
-        return new FriendReplyResponse() { Result = 1 };
+        await friendService.ReplyToRequest(
+            (long)request.FriendId,
+            request.Reply,
+            cancellationToken
+        );
+
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+
+        return new FriendReplyResponse() { Result = 1, UpdateDataList = updateDataList };
+    }
+
+    [HttpPost("delete")]
+    public async Task<DragaliaResult<FriendDeleteResponse>> Delete(
+        FriendDeleteRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        await friendService.DeleteFriend((long)request.FriendId, cancellationToken);
+
+        _ = await updateDataService.SaveChangesAsync(cancellationToken);
+
+        return new FriendDeleteResponse() { Result = 1 };
     }
 }

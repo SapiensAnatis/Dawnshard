@@ -117,12 +117,9 @@ internal sealed partial class FriendService(
         await transaction.CommitAsync(cancellationToken);
     }
 
-    public async Task<ResultCode> SendRequest(
-        long targetViewerId,
-        CancellationToken cancellationToken
-    )
+    public async Task SendRequest(long targetViewerId, CancellationToken cancellationToken)
     {
-        DbPlayerFriendRequest? existingReceivedRequest =
+        DbPlayerFriendRequest? existingRequest =
             await apiContext.PlayerFriendRequests.FirstOrDefaultAsync(
                 x =>
                     x.FromPlayerViewerId == targetViewerId
@@ -130,11 +127,24 @@ internal sealed partial class FriendService(
                 cancellationToken
             );
 
-        if (existingReceivedRequest is not null)
+        if (existingRequest is not null)
         {
             // Treat sending two requests to each other the same as accepting the request
-            await this.AcceptRequestEntity(existingReceivedRequest, cancellationToken);
-            return ResultCode.Success;
+            this.LogFriendRequestPair();
+
+            apiContext.PlayerFriendRequests.Remove(existingRequest);
+            apiContext.PlayerFriendships.Add(
+                new DbPlayerFriendship()
+                {
+                    PlayerFriendshipPlayers =
+                    [
+                        new() { PlayerViewerId = existingRequest.ToPlayerViewerId },
+                        new() { PlayerViewerId = existingRequest.FromPlayerViewerId },
+                    ],
+                }
+            );
+
+            return;
         }
 
         apiContext.PlayerFriendRequests.Add(
@@ -145,24 +155,6 @@ internal sealed partial class FriendService(
                 IsNew = true,
             }
         );
-
-        try
-        {
-            await apiContext.SaveChangesAsync(cancellationToken);
-        }
-        catch (DbUpdateException ex) when (ex.IsUniqueViolation())
-        {
-            this.LogFriendRequestExists(targetViewerId);
-            return ResultCode.FriendApplyExists;
-        }
-        catch (DbUpdateException ex) when (ex.IsForeignKeyViolation())
-        {
-            // Should never happen on a legitimate client
-            this.LogFriendRequestTargetDoesNotExist(targetViewerId);
-            return ResultCode.FriendApplyError;
-        }
-
-        return ResultCode.Success;
     }
 
     public async Task<List<UserSupportList>> GetSentRequestList()
@@ -210,7 +202,7 @@ internal sealed partial class FriendService(
         {
             throw new DragaliaException(
                 ResultCode.FriendApplyError,
-                $"Error cancelling friend request: invalid row update count {rowsAffected}"
+                $"Error cancelling friend request to viewer ID {viewerId}: invalid row update count {rowsAffected}"
             );
         }
     }
@@ -244,8 +236,9 @@ internal sealed partial class FriendService(
         return selectedUsers.Select(x => x.MapToUserSupportList()).ToList();
     }
 
-    public async Task<ResultCode> AcceptRequest(
+    public async Task ReplyToRequest(
         long requestViewerId,
+        FriendReplyType replyType,
         CancellationToken cancellationToken
     )
     {
@@ -259,11 +252,50 @@ internal sealed partial class FriendService(
 
         if (requestEntity is null)
         {
-            return ResultCode.EntityNotFoundError;
+            throw new DragaliaException(
+                ResultCode.CommonInvalidArgument,
+                $"Cannot reply to friend request from viewer ID {requestViewerId} - does not exist"
+            );
         }
 
-        await AcceptRequestEntity(requestEntity, cancellationToken);
-        return ResultCode.Success;
+        apiContext.PlayerFriendRequests.Remove(requestEntity);
+
+        if (replyType == FriendReplyType.Accept)
+        {
+            apiContext.PlayerFriendships.Add(
+                new DbPlayerFriendship()
+                {
+                    PlayerFriendshipPlayers =
+                    [
+                        new() { PlayerViewerId = requestEntity.ToPlayerViewerId },
+                        new() { PlayerViewerId = requestEntity.FromPlayerViewerId },
+                    ],
+                }
+            );
+        }
+    }
+
+    public async Task DeleteFriend(long viewerId, CancellationToken cancellationToken)
+    {
+        DbPlayerFriendship? friendship = await apiContext
+            .PlayerFriendships.Where(x =>
+                x.PlayerFriendshipPlayers.Any(y =>
+                    y.PlayerViewerId == playerIdentityService.ViewerId
+                ) && x.PlayerFriendshipPlayers.Any(y => y.PlayerViewerId == viewerId)
+            )
+            .Include(x => x.PlayerFriendshipPlayers)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (friendship is null)
+        {
+            throw new DragaliaException(
+                ResultCode.FriendDeleteError,
+                "Could not find friendship to delete"
+            );
+        }
+
+        apiContext.PlayerFriendshipPlayers.RemoveRange(friendship.PlayerFriendshipPlayers);
+        apiContext.PlayerFriendships.Remove(friendship);
     }
 
     private IQueryable<DbPlayer> GetFriendsQuery()
@@ -279,32 +311,6 @@ internal sealed partial class FriendService(
             .IgnoreQueryFilters();
     }
 
-    private async Task AcceptRequestEntity(
-        DbPlayerFriendRequest request,
-        CancellationToken cancellationToken
-    )
-    {
-        apiContext.PlayerFriendRequests.Remove(request);
-        apiContext.PlayerFriendships.Add(
-            new DbPlayerFriendship()
-            {
-                PlayerFriendshipPlayers =
-                [
-                    new() { PlayerViewerId = request.ToPlayerViewerId },
-                    new() { PlayerViewerId = request.FromPlayerViewerId },
-                ],
-            }
-        );
-
-        await apiContext.SaveChangesAsync(cancellationToken);
-    }
-
-    [LoggerMessage(
-        LogLevel.Information,
-        "Friend request to {ViewerId} failed: request already exists"
-    )]
-    private partial void LogFriendRequestExists(long viewerId);
-
-    [LoggerMessage(LogLevel.Error, "Friend request to {ViewerId} failed: invalid viewer ID")]
-    private partial void LogFriendRequestTargetDoesNotExist(long viewerId);
+    [LoggerMessage(LogLevel.Information, "Detected friend request pair - creating friendship")]
+    private partial void LogFriendRequestPair();
 }
