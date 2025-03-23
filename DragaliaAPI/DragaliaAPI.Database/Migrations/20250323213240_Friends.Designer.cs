@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20250316205625_FriendsIsNew")]
-    partial class FriendsIsNew
+    [Migration("20250323213240_Friends")]
+    partial class Friends
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -972,6 +972,24 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("PlayerEventRewards");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerFriendRequest", b =>
+                {
+                    b.Property<long>("FromPlayerViewerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ToPlayerViewerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsNew")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("FromPlayerViewerId", "ToPlayerViewerId");
+
+                    b.HasIndex("ToPlayerViewerId");
+
+                    b.ToTable("PlayerFriendRequests");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerFriendship", b =>
                 {
                     b.Property<int>("FriendshipId")
@@ -979,9 +997,6 @@ namespace DragaliaAPI.Database.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("FriendshipId"));
-
-                    b.Property<bool>("IsAccepted")
-                        .HasColumnType("boolean");
 
                     b.HasKey("FriendshipId");
 
@@ -2406,10 +2421,29 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerFriendRequest", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "FromPlayer")
+                        .WithMany()
+                        .HasForeignKey("FromPlayerViewerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "ToPlayer")
+                        .WithMany()
+                        .HasForeignKey("ToPlayerViewerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("FromPlayer");
+
+                    b.Navigation("ToPlayer");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerFriendshipPlayer", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayerFriendship", "Friendship")
-                        .WithMany()
+                        .WithMany("PlayerFriendshipPlayers")
                         .HasForeignKey("FriendshipId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -2898,6 +2932,11 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("WeaponPassiveAbilityList");
 
                     b.Navigation("WeaponSkinList");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerFriendship", b =>
+                {
+                    b.Navigation("PlayerFriendshipPlayers");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbTimeAttackClear", b =>
