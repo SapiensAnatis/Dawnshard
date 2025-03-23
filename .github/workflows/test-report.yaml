@@ -20,7 +20,7 @@ jobs:
           merge-multiple: true
           run-id: ${{ github.event.workflow_run.id }}
       - name: Generate report
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v2
         with:
           name: ${{ github.event.workflow_run.name }} report
           path: "*.trx"
