@@ -89,12 +89,15 @@ public class FriendTest : TestFixture
         DbPlayer suggested = await this.CreateOtherPlayer();
 
         // Set last login time to be high so suggested player always shows up in top 10
-        await this
-            .ApiContext.PlayerUserData.Where(x => x.ViewerId == suggested.ViewerId)
+        int rowsUpdated = await this
+            .ApiContext.PlayerUserData.IgnoreQueryFilters()
+            .Where(x => x.ViewerId == suggested.ViewerId)
             .ExecuteUpdateAsync(
-                e => e.SetProperty(x => x.LastLoginTime, DateTimeOffset.UtcNow.AddDays(1)),
+                e => e.SetProperty(x => x.LastLoginTime, DateTimeOffset.MaxValue),
                 TestContext.Current.CancellationToken
             );
+
+        rowsUpdated.Should().Be(1);
 
         await this.CreateFriendship(existingFriend);
         await this.CreateFriendRequestTo(pendingRequest);
