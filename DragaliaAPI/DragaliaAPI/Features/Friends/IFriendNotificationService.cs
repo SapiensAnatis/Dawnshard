@@ -5,6 +5,6 @@ namespace DragaliaAPI.Features.Friends;
 public interface IFriendNotificationService
 {
     Task<FriendNotice?> GetFriendNotice(CancellationToken cancellationToken);
-    Task<List<long>> GetNewFriendViewerIdList();
-    Task<List<long>> GetNewFriendRequestViewerIdList();
+    Task<List<ulong>> GetNewFriendViewerIdList();
+    Task<List<ulong>> GetNewFriendRequestViewerIdList();
 }

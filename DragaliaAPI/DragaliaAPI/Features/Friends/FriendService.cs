@@ -93,9 +93,8 @@ internal sealed partial class FriendService(
 
     public async Task ResetNewRequests(CancellationToken cancellationToken)
     {
-        IDbContextTransaction transaction = await apiContext.Database.BeginTransactionAsync(
-            cancellationToken
-        );
+        await using IDbContextTransaction transaction =
+            await apiContext.Database.BeginTransactionAsync(cancellationToken);
 
         IQueryable<DbPlayerFriendRequest> matchingRequests = apiContext.PlayerFriendRequests.Where(
             x => x.ToPlayerViewerId == playerIdentityService.ViewerId
@@ -191,6 +190,9 @@ internal sealed partial class FriendService(
 
     public async Task CancelRequest(long viewerId, CancellationToken cancellationToken)
     {
+        await using IDbContextTransaction transaction =
+            await apiContext.Database.BeginTransactionAsync(cancellationToken);
+
         int rowsAffected = await apiContext
             .PlayerFriendRequests.Where(x =>
                 x.FromPlayerViewerId == playerIdentityService.ViewerId
@@ -205,6 +207,8 @@ internal sealed partial class FriendService(
                 $"Error cancelling friend request to viewer ID {viewerId}: invalid row update count {rowsAffected}"
             );
         }
+
+        await transaction.CommitAsync(cancellationToken);
     }
 
     public async Task<List<UserSupportList>> GetRecommendedFriendsList(

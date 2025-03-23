@@ -94,7 +94,7 @@ internal sealed class FriendController(
     )
     {
         int friendCount = await friendService.GetFriendCount();
-        FriendNotice notice = await friendNotificationService.GetFriendNotice(cancellationToken);
+        FriendNotice? notice = await friendNotificationService.GetFriendNotice(cancellationToken);
 
         return new FriendFriendIndexResponse()
         {
@@ -107,12 +107,12 @@ internal sealed class FriendController(
     public async Task<DragaliaResult<FriendFriendListResponse>> FriendList()
     {
         List<UserSupportList> friendList = await friendService.GetFriendList();
-        List<long> newFriendList = await friendNotificationService.GetNewFriendViewerIdList();
+        List<ulong> newFriendList = await friendNotificationService.GetNewFriendViewerIdList();
 
         return new FriendFriendListResponse()
         {
             FriendList = friendList,
-            NewFriendViewerIdList = newFriendList.Select(x => (ulong)x),
+            NewFriendViewerIdList = newFriendList,
         };
     }
 
@@ -146,13 +146,14 @@ internal sealed class FriendController(
     public async Task<DragaliaResult<FriendApplyListResponse>> ApplyList()
     {
         List<UserSupportList> requestList = await friendService.GetReceivedRequestList();
-        List<long> newApplyList = await friendNotificationService.GetNewFriendRequestViewerIdList();
+        List<ulong> newApplyList =
+            await friendNotificationService.GetNewFriendRequestViewerIdList();
 
         return new FriendApplyListResponse()
         {
             Result = 1,
             FriendApply = requestList,
-            NewApplyViewerIdList = newApplyList.Select(x => (ulong)x),
+            NewApplyViewerIdList = newApplyList,
         };
     }
 

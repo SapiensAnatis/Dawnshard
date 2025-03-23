@@ -34,17 +34,17 @@ public class FriendNotificationService(
         return new() { ApplyNewCount = newFriendRequestCount, FriendNewCount = newFriendCount };
     }
 
-    public async Task<List<long>> GetNewFriendViewerIdList()
+    public async Task<List<ulong>> GetNewFriendViewerIdList()
     {
-        return await this.GetNewFriendsQuery().Select(x => x.ViewerId).ToListAsync();
+        return await this.GetNewFriendsQuery().Select(x => (ulong)x.ViewerId).ToListAsync();
     }
 
-    public async Task<List<long>> GetNewFriendRequestViewerIdList()
+    public async Task<List<ulong>> GetNewFriendRequestViewerIdList()
     {
         return await apiContext
             .PlayerFriendRequests.IgnoreQueryFilters()
             .Where(x => x.ToPlayerViewerId == playerIdentityService.ViewerId && x.IsNew)
-            .Select(x => x.FromPlayerViewerId)
+            .Select(x => (ulong)x.FromPlayerViewerId)
             .ToListAsync();
     }
 
