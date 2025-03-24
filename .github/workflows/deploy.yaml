@@ -37,7 +37,7 @@ jobs:
       - name: ssh and submit job
         shell: bash
         run: |
-          ssh -i ~/.ssh/id_rsa "${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PORT }}" <<'EOF'
+          ssh -i ~/.ssh/id_rsa -p "${{ secrets.SSH_PORT}}" "${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}" <<'EOF'
             export NOMAD_ADDR="https://10.0.0.2:4646"
             export NOMAD_CACERT="/srv/certs/cluster-agent-ca.pem"
             export NOMAD_TOKEN="${{ secrets.NOMAD_TOKEN }}"
