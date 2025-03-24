@@ -311,6 +311,19 @@ internal sealed partial class FriendService(
         apiContext.PlayerFriendships.Remove(friendship);
     }
 
+    /// <summary>
+    /// Gets a subset of the provided list of IDs representing which are friends with the current player.
+    /// </summary>
+    /// <param name="filterIds">The IDs to filter by.</param>
+    /// <returns>A subset of <param name="filterIds"/> containing friends.</returns>
+    public async Task<List<long>> CheckFriendStatus(IEnumerable<long> filterIds)
+    {
+        return await this.GetFriendsQuery()
+            .Where(x => filterIds.Contains(x.ViewerId))
+            .Select(x => x.ViewerId)
+            .ToListAsync();
+    }
+
     private IQueryable<DbPlayer> GetFriendsQuery()
     {
         IQueryable<DbPlayer> currentPlayer = apiContext.Players.Where(x =>
