@@ -25,7 +25,7 @@ jobs:
     steps:
       - name: setup ssh
         shell: bash
-        run: 
+        run: |
           mkdir -p ~/.ssh/
           echo "${SSH_KEY}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
@@ -36,7 +36,7 @@ jobs:
       
       - name: ssh and submit job
         shell: bash
-        run:
+        run: |
           ssh -i ~/.ssh/id_rsa "${{ secrets.SSH_USERNAME }}}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PORT }}" <<'EOF'
             export NOMAD_ADDR="https://10.0.0.2:4646"
             export NOMAD_CACERT="/srv/certs/cluster-agent-ca.pem"
