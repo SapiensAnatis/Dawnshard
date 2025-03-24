@@ -133,14 +133,10 @@ internal sealed partial class FriendService(
 
             apiContext.PlayerFriendRequests.Remove(existingRequest);
             apiContext.PlayerFriendships.Add(
-                new DbPlayerFriendship()
-                {
-                    PlayerFriendshipPlayers =
-                    [
-                        new() { PlayerViewerId = existingRequest.ToPlayerViewerId },
-                        new() { PlayerViewerId = existingRequest.FromPlayerViewerId },
-                    ],
-                }
+                CreateFriendship(
+                    existingRequest.FromPlayerViewerId,
+                    existingRequest.ToPlayerViewerId
+                )
             );
 
             return;
@@ -276,14 +272,7 @@ internal sealed partial class FriendService(
         if (replyType == FriendReplyType.Accept)
         {
             apiContext.PlayerFriendships.Add(
-                new DbPlayerFriendship()
-                {
-                    PlayerFriendshipPlayers =
-                    [
-                        new() { PlayerViewerId = requestEntity.ToPlayerViewerId },
-                        new() { PlayerViewerId = requestEntity.FromPlayerViewerId },
-                    ],
-                }
+                CreateFriendship(requestEntity.FromPlayerViewerId, requestEntity.ToPlayerViewerId)
             );
         }
     }
@@ -336,6 +325,16 @@ internal sealed partial class FriendService(
             .Where(x => x.ViewerId != playerIdentityService.ViewerId)
             .IgnoreQueryFilters();
     }
+
+    private static DbPlayerFriendship CreateFriendship(long player1Id, long player2Id) =>
+        new DbPlayerFriendship()
+        {
+            PlayerFriendshipPlayers =
+            [
+                new() { PlayerViewerId = player1Id, IsNew = true },
+                new() { PlayerViewerId = player2Id, IsNew = true },
+            ],
+        };
 
     [LoggerMessage(LogLevel.Information, "Detected friend request pair - creating friendship")]
     private partial void LogFriendRequestPair();
