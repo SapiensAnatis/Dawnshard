@@ -23,18 +23,24 @@ jobs:
       name: ${{ inputs.github-environment }}
       url: https://dawnshard.co.uk
     steps:
+      - name: setup ssh
+        shell: bash
+        run: 
+          mkdir -p ~/.ssh/
+          echo "${SSH_KEY}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          echo "${SSH_KNOWN_HOSTS}" > ~/.ssh/known_hosts
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+      
       - name: ssh and submit job
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script_stop: true
-          script: |
+        shell: bash
+        run:
+          ssh -i ~/.ssh/id_rsa "${{ secrets.SSH_USERNAME }}}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PORT }}" <<'EOF'
             export NOMAD_ADDR="https://10.0.0.2:4646"
             export NOMAD_CACERT="/srv/certs/cluster-agent-ca.pem"
             export NOMAD_TOKEN="${{ secrets.NOMAD_TOKEN }}"
             cd "${{ vars.JOB_DIRECTORY }}"
-            echo 'version = "${{ inputs.version }}"' > "${{ vars.JOB_FILE_NAME }}.vars"
-            nomad job run -var-file="${{ vars.JOB_FILE_NAME }}.vars" "${{ vars.JOB_FILE_NAME }}"
+            nomad job run -var="version=${{ inputs.version }}" "${{ vars.JOB_FILE_NAME }}"
+          EOF
