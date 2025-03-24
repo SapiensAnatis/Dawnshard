@@ -4,6 +4,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.Event;
+using DragaliaAPI.Features.Friends;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Mapping.Mapperly;
@@ -23,7 +24,8 @@ public class UpdateDataService(
     IMissionProgressionService missionProgressionService,
     IPresentService presentService,
     IEventService eventService,
-    IDmodeService dmodeService
+    IDmodeService dmodeService,
+    IFriendNotificationService friendNotificationService
 ) : IUpdateDataService
 {
     [Obsolete("Use the SaveChangesAsync overload that accepts a CancellationToken instead.")]
@@ -44,10 +46,13 @@ public class UpdateDataService(
 
         await apiContext.SaveChangesAsync(cancellationToken);
 
-        return await this.MapUpdateDataList(entities);
+        return await this.MapUpdateDataList(entities, cancellationToken);
     }
 
-    private async Task<UpdateDataList> MapUpdateDataList(List<IDbPlayerData> entities)
+    private async Task<UpdateDataList> MapUpdateDataList(
+        List<IDbPlayerData> entities,
+        CancellationToken cancellationToken
+    )
     {
         UpdateDataList list = new();
 
@@ -309,6 +314,8 @@ public class UpdateDataService(
                 // This is done to ensure that the change tracker does not mess anything up
                 list.DmodeInfo = info;
         }
+
+        list.FriendNotice = await friendNotificationService.GetFriendNotice(cancellationToken);
 
         return list;
 

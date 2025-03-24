@@ -8,6 +8,9 @@ public static partial class FeatureExtensions
 {
     public static IServiceCollection AddFriendFeature(this IServiceCollection serviceCollection)
     {
-        return serviceCollection.AddScoped<IHelperService, HelperService>();
+        return serviceCollection
+            .AddScoped<IHelperService, HelperService>()
+            .AddScoped<FriendService>()
+            .AddScoped<IFriendNotificationService, FriendNotificationService>();
     }
 }

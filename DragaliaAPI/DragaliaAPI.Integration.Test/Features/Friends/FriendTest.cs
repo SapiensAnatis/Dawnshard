@@ -1,664 +1,552 @@
-﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Features.Friends;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Login.Savefile;
 using DragaliaAPI.Infrastructure.Results;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Integration.Test.Features.Friends;
 
-/// <summary>
-/// Tests <see cref="FriendController"/>
-/// </summary>
 public class FriendTest : TestFixture
 {
-    public FriendTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
+    public FriendTest(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
+        : base(factory, testOutputHelper) { }
 
     [Fact]
-    public async Task SetSupportChara_ReturnsSupportChara()
+    public async Task FriendIndex_ReturnsFriendInformation()
     {
-        await this.AddSupportCharaEquipment();
+        DbPlayer other1 = await this.CreateOtherPlayer();
+        DbPlayer other2 = await this.CreateOtherPlayer();
 
-        ulong dragonKeyId = this
-            .ApiContext.PlayerDragonData.Where(x =>
-                x.ViewerId == this.ViewerId && x.DragonId == DragonId.Nimis
-            )
-            .Select(x => (ulong)x.DragonKeyId)
-            .First();
-
-        ulong talismanKeyId = this
-            .ApiContext.PlayerTalismans.Where(x =>
-                x.ViewerId == this.ViewerId && x.TalismanId == Talismans.GalaMym
-            )
-            .Select(x => (ulong)x.TalismanKeyId)
-            .First();
-
-        DragaliaResponse<FriendSetSupportCharaResponse> resp =
-            await this.Client.PostMsgpack<FriendSetSupportCharaResponse>(
-                "friend/set_support_chara",
-                new FriendSetSupportCharaRequest()
-                {
-                    CharaId = Charas.Valerio,
-                    DragonKeyId = dragonKeyId,
-                    WeaponBodyId = WeaponBodies.AmenoHabakiri,
-                    CrestSlotType1CrestId1 = AbilityCrestId.AManUnchanging,
-                    CrestSlotType1CrestId2 = AbilityCrestId.ValiantCrown,
-                    CrestSlotType1CrestId3 = AbilityCrestId.EveningofLuxury,
-                    CrestSlotType2CrestId1 = AbilityCrestId.BeautifulNothingness,
-                    CrestSlotType2CrestId2 = AbilityCrestId.TaikoTandem,
-                    CrestSlotType3CrestId1 = AbilityCrestId.TutelarysDestinyWolfsBoon,
-                    CrestSlotType3CrestId2 = AbilityCrestId.CrownofLightSerpentsBoon,
-                    TalismanKeyId = talismanKeyId,
-                },
-                cancellationToken: TestContext.Current.CancellationToken
-            );
-
-        SettingSupport expectedSettingSupport = new()
-        {
-            CharaId = Charas.Valerio,
-            EquipDragonKeyId = dragonKeyId,
-            EquipWeaponBodyId = WeaponBodies.AmenoHabakiri,
-            EquipCrestSlotType1CrestId1 = AbilityCrestId.AManUnchanging,
-            EquipCrestSlotType1CrestId2 = AbilityCrestId.ValiantCrown,
-            EquipCrestSlotType1CrestId3 = AbilityCrestId.EveningofLuxury,
-            EquipCrestSlotType2CrestId1 = AbilityCrestId.BeautifulNothingness,
-            EquipCrestSlotType2CrestId2 = AbilityCrestId.TaikoTandem,
-            EquipCrestSlotType3CrestId1 = AbilityCrestId.TutelarysDestinyWolfsBoon,
-            EquipCrestSlotType3CrestId2 = AbilityCrestId.CrownofLightSerpentsBoon,
-            EquipTalismanKeyId = talismanKeyId,
-        };
-
-        resp.Data.Result.Should().Be(1);
-        resp.Data.SettingSupport.Should().BeEquivalentTo(expectedSettingSupport);
-
-        DragaliaResponse<FriendGetSupportCharaResponse> getResponse =
-            await this.Client.PostMsgpack<FriendGetSupportCharaResponse>(
-                "friend/get_support_chara",
-                cancellationToken: TestContext.Current.CancellationToken
-            );
-
-        getResponse.Data.SettingSupport.Should().BeEquivalentTo(expectedSettingSupport);
-    }
-
-    [Fact]
-    public async Task SetSupportChara_OptionalFieldsEmpty_ReturnsSupportChara()
-    {
-        await this.AddSupportCharaEquipment();
-
-        DragaliaResponse<FriendSetSupportCharaResponse> resp =
-            await this.Client.PostMsgpack<FriendSetSupportCharaResponse>(
-                "friend/set_support_chara",
-                new FriendSetSupportCharaRequest()
-                {
-                    CharaId = Charas.Valerio,
-                    DragonKeyId = 0,
-                    WeaponBodyId = 0,
-                    CrestSlotType1CrestId1 = 0,
-                    CrestSlotType1CrestId2 = 0,
-                    CrestSlotType1CrestId3 = 0,
-                    CrestSlotType2CrestId1 = 0,
-                    CrestSlotType2CrestId2 = 0,
-                    CrestSlotType3CrestId1 = 0,
-                    CrestSlotType3CrestId2 = 0,
-                    TalismanKeyId = 0,
-                },
-                cancellationToken: TestContext.Current.CancellationToken
-            );
-
-        SettingSupport expectedSettingSupport = new()
-        {
-            CharaId = Charas.Valerio,
-            EquipDragonKeyId = 0,
-            EquipWeaponBodyId = 0,
-            EquipCrestSlotType1CrestId1 = 0,
-            EquipCrestSlotType1CrestId2 = 0,
-            EquipCrestSlotType1CrestId3 = 0,
-            EquipCrestSlotType2CrestId1 = 0,
-            EquipCrestSlotType2CrestId2 = 0,
-            EquipCrestSlotType3CrestId1 = 0,
-            EquipCrestSlotType3CrestId2 = 0,
-            EquipTalismanKeyId = 0,
-        };
-
-        resp.Data.Result.Should().Be(1);
-        resp.Data.SettingSupport.Should().BeEquivalentTo(expectedSettingSupport);
-
-        DragaliaResponse<FriendGetSupportCharaResponse> getResponse =
-            await this.Client.PostMsgpack<FriendGetSupportCharaResponse>(
-                "friend/get_support_chara",
-                cancellationToken: TestContext.Current.CancellationToken
-            );
-
-        getResponse.Data.SettingSupport.Should().BeEquivalentTo(expectedSettingSupport);
-    }
-
-    [Fact]
-    public async Task GetSupportCharaDetail_StaticCharacter_GetsCorrectCharacter()
-    {
-        FriendGetSupportCharaDetailResponse response = (
-            await this.Client.PostMsgpack<FriendGetSupportCharaDetailResponse>(
-                "/friend/get_support_chara_detail",
-                new FriendGetSupportCharaDetailRequest() { SupportViewerId = long.MaxValue - 2 },
-                cancellationToken: TestContext.Current.CancellationToken
-            )
-        ).Data;
-
-        response
-            .SupportUserDataDetail.UserSupportData.Should()
-            .BeEquivalentTo(
-                new UserSupportList()
-                {
-                    ViewerId = long.MaxValue - 2,
-                    Name = "Nightmerp",
-                    Level = 250,
-                    EmblemId = (Emblems)10250305,
-                    MaxPartyPower = 9999,
-                    SupportChara = new()
-                    {
-                        CharaId = Charas.GalaEmile,
-                        Level = 80,
-                        AdditionalMaxLevel = 0,
-                        Rarity = 5,
-                        Hp = 789,
-                        Attack = 486,
-                        HpPlusCount = 100,
-                        AttackPlusCount = 100,
-                        Ability1Level = 2,
-                        Ability2Level = 2,
-                        Ability3Level = 2,
-                        ExAbilityLevel = 5,
-                        ExAbility2Level = 5,
-                        Skill1Level = 3,
-                        Skill2Level = 2,
-                        IsUnlockEditSkill = true,
-                    },
-                    SupportDragon = new()
-                    {
-                        DragonKeyId = 0,
-                        DragonId = DragonId.GalaBahamut,
-                        Level = 100,
-                        Hp = 368,
-                        Attack = 128,
-                        Skill1Level = 2,
-                        Ability1Level = 5,
-                        Ability2Level = 5,
-                        HpPlusCount = 50,
-                        AttackPlusCount = 50,
-                        LimitBreakCount = 4,
-                    },
-                    SupportWeaponBody = new()
-                    {
-                        WeaponBodyId = WeaponBodies.AqueousPrison,
-                        BuildupCount = 80,
-                        LimitBreakCount = 8,
-                        LimitOverCount = 1,
-                        EquipableCount = 4,
-                        AdditionalCrestSlotType1Count = 1,
-                        AdditionalCrestSlotType2Count = 0,
-                        AdditionalCrestSlotType3Count = 2,
-                    },
-                    SupportTalisman = new()
-                    {
-                        TalismanKeyId = 0,
-                        TalismanId = Talismans.GalaEmile,
-                        AdditionalAttack = 100,
-                        AdditionalHp = 100,
-                    },
-                    SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
-                    {
-                        new()
-                        {
-                            AbilityCrestId = AbilityCrestId.ARoyalTeaParty,
-                            BuildupCount = 50,
-                            LimitBreakCount = 4,
-                            HpPlusCount = 50,
-                            AttackPlusCount = 50,
-                            EquipableCount = 4,
-                        },
-                        new()
-                        {
-                            AbilityCrestId = AbilityCrestId.QueenoftheBlueSeas,
-                            BuildupCount = 50,
-                            LimitBreakCount = 4,
-                            HpPlusCount = 50,
-                            AttackPlusCount = 50,
-                            EquipableCount = 4,
-                        },
-                        new()
-                        {
-                            AbilityCrestId = AbilityCrestId.PeacefulWaterfront,
-                            BuildupCount = 50,
-                            LimitBreakCount = 4,
-                            HpPlusCount = 50,
-                            AttackPlusCount = 50,
-                            EquipableCount = 4,
-                        },
-                    },
-                    SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
-                    {
-                        new()
-                        {
-                            AbilityCrestId = AbilityCrestId.HisCleverBrother,
-                            BuildupCount = 40,
-                            LimitBreakCount = 4,
-                            HpPlusCount = 50,
-                            AttackPlusCount = 50,
-                            EquipableCount = 4,
-                        },
-                        new()
-                        {
-                            AbilityCrestId = AbilityCrestId.DragonsNest,
-                            BuildupCount = 20,
-                            LimitBreakCount = 4,
-                            HpPlusCount = 50,
-                            AttackPlusCount = 50,
-                            EquipableCount = 4,
-                        },
-                    },
-                    SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
-                    {
-                        new()
-                        {
-                            AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
-                            BuildupCount = 30,
-                            LimitBreakCount = 4,
-                            HpPlusCount = 40,
-                            AttackPlusCount = 40,
-                            EquipableCount = 4,
-                        },
-                        new()
-                        {
-                            AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
-                            BuildupCount = 30,
-                            LimitBreakCount = 4,
-                            HpPlusCount = 40,
-                            AttackPlusCount = 40,
-                            EquipableCount = 4,
-                        },
-                    },
-                    Guild = new() { GuildId = 0, GuildName = "Guild" },
-                },
-                o => o.Excluding(x => x.LastLoginDate)
-            );
-
-        response.SupportUserDataDetail.IsFriend.Should().BeTrue();
-    }
-
-    [Fact]
-    public async Task GetSupportCharaDetail_RealViewerId_GetsSupportCharaDetail()
-    {
-        await this.AddSupportCharaEquipment();
-
-        ulong dragonKeyId = this
-            .ApiContext.PlayerDragonData.Where(x =>
-                x.ViewerId == this.ViewerId && x.DragonId == DragonId.Nimis
-            )
-            .Select(x => (ulong)x.DragonKeyId)
-            .First();
-
-        ulong talismanKeyId = this
-            .ApiContext.PlayerTalismans.Where(x =>
-                x.ViewerId == this.ViewerId && x.TalismanId == Talismans.GalaMym
-            )
-            .Select(x => (ulong)x.TalismanKeyId)
-            .First();
-
-        DragaliaResponse<FriendSetSupportCharaResponse> resp =
-            await this.Client.PostMsgpack<FriendSetSupportCharaResponse>(
-                "friend/set_support_chara",
-                new FriendSetSupportCharaRequest()
-                {
-                    CharaId = Charas.Valerio,
-                    DragonKeyId = dragonKeyId,
-                    WeaponBodyId = WeaponBodies.AmenoHabakiri,
-                    CrestSlotType1CrestId1 = AbilityCrestId.AManUnchanging,
-                    CrestSlotType1CrestId2 = AbilityCrestId.ValiantCrown,
-                    CrestSlotType1CrestId3 = AbilityCrestId.EveningofLuxury,
-                    CrestSlotType2CrestId1 = AbilityCrestId.BeautifulNothingness,
-                    CrestSlotType2CrestId2 = AbilityCrestId.TaikoTandem,
-                    CrestSlotType3CrestId1 = AbilityCrestId.TutelarysDestinyWolfsBoon,
-                    CrestSlotType3CrestId2 = AbilityCrestId.CrownofLightSerpentsBoon,
-                    TalismanKeyId = talismanKeyId,
-                },
-                cancellationToken: TestContext.Current.CancellationToken
-            );
-
-        FriendGetSupportCharaDetailResponse response = (
-            await this.Client.PostMsgpack<FriendGetSupportCharaDetailResponse>(
-                "/friend/get_support_chara_detail",
-                new FriendGetSupportCharaDetailRequest() { SupportViewerId = (ulong)this.ViewerId },
-                cancellationToken: TestContext.Current.CancellationToken
-            )
-        ).Data;
-
-        response
-            .SupportUserDataDetail.UserSupportData.Should()
-            .BeEquivalentTo(
-                new UserSupportList()
-                {
-                    ViewerId = (ulong)this.ViewerId,
-                    Name = "Euden",
-                    Level = 250,
-                    EmblemId = Emblems.DragonbloodPrince,
-                    MaxPartyPower = 444,
-                    SupportChara = new()
-                    {
-                        CharaId = Charas.Valerio,
-                        Level = 1,
-                        AdditionalMaxLevel = 0,
-                        Rarity = 5,
-                        Hp = 63,
-                        Attack = 44,
-                        HpPlusCount = 0,
-                        AttackPlusCount = 0,
-                        Ability1Level = 0,
-                        Ability2Level = 0,
-                        Ability3Level = 0,
-                        ExAbilityLevel = 1,
-                        ExAbility2Level = 1,
-                        Skill1Level = 1,
-                        Skill2Level = 0,
-                        IsUnlockEditSkill = false,
-                    },
-                    SupportDragon = new()
-                    {
-                        DragonKeyId = dragonKeyId,
-                        DragonId = DragonId.Nimis,
-                        Level = 1,
-                        Hp = 0,
-                        Attack = 0,
-                        Skill1Level = 1,
-                        Ability1Level = 1,
-                        Ability2Level = 1,
-                        HpPlusCount = 0,
-                        AttackPlusCount = 0,
-                        LimitBreakCount = 0,
-                    },
-                    SupportWeaponBody = new()
-                    {
-                        WeaponBodyId = WeaponBodies.AmenoHabakiri,
-                        BuildupCount = 80,
-                        LimitBreakCount = 8,
-                        LimitOverCount = 1,
-                        EquipableCount = 2,
-                        AdditionalCrestSlotType1Count = 1,
-                        AdditionalCrestSlotType2Count = 0,
-                        AdditionalCrestSlotType3Count = 0,
-                    },
-                    SupportTalisman = new()
-                    {
-                        TalismanKeyId = talismanKeyId,
-                        TalismanId = Talismans.GalaMym,
-                        AdditionalAttack = 50,
-                        AdditionalHp = 50,
-                        TalismanAbilityId1 = 340000029,
-                        TalismanAbilityId2 = 340000077,
-                    },
-                    SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
-                    {
-                        new()
-                        {
-                            AbilityCrestId = AbilityCrestId.AManUnchanging,
-                            BuildupCount = 50,
-                            LimitBreakCount = 4,
-                            HpPlusCount = 50,
-                            AttackPlusCount = 50,
-                            EquipableCount = 2,
-                        },
-                        new()
-                        {
-                            AbilityCrestId = AbilityCrestId.ValiantCrown,
-                            BuildupCount = 50,
-                            LimitBreakCount = 4,
-                            HpPlusCount = 50,
-                            AttackPlusCount = 50,
-                            EquipableCount = 2,
-                        },
-                        new()
-                        {
-                            AbilityCrestId = AbilityCrestId.EveningofLuxury,
-                            BuildupCount = 50,
-                            LimitBreakCount = 4,
-                            HpPlusCount = 50,
-                            AttackPlusCount = 50,
-                            EquipableCount = 2,
-                        },
-                    },
-                    SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
-                    {
-                        new()
-                        {
-                            AbilityCrestId = AbilityCrestId.BeautifulNothingness,
-                            BuildupCount = 40,
-                            LimitBreakCount = 4,
-                            HpPlusCount = 50,
-                            AttackPlusCount = 50,
-                            EquipableCount = 2,
-                        },
-                        new()
-                        {
-                            AbilityCrestId = AbilityCrestId.TaikoTandem,
-                            BuildupCount = 40,
-                            LimitBreakCount = 4,
-                            HpPlusCount = 50,
-                            AttackPlusCount = 50,
-                            EquipableCount = 2,
-                        },
-                    },
-                    SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
-                    {
-                        new()
-                        {
-                            AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
-                            BuildupCount = 30,
-                            LimitBreakCount = 4,
-                            HpPlusCount = 50,
-                            AttackPlusCount = 50,
-                            EquipableCount = 2,
-                        },
-                        new()
-                        {
-                            AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
-                            BuildupCount = 30,
-                            LimitBreakCount = 4,
-                            HpPlusCount = 50,
-                            AttackPlusCount = 50,
-                            EquipableCount = 2,
-                        },
-                    },
-                    Guild = new() { GuildId = 0 },
-                },
-                o => o.Excluding(x => x.LastLoginDate)
-            );
-
-        response.SupportUserDataDetail.IsFriend.Should().BeFalse();
-    }
-
-    [Fact]
-    public async Task GetSupportCharaDetail_RealViewerId_OptionalFieldsEmpty_GetsSupportCharaDetail()
-    {
-        await this.AddSupportCharaEquipment();
-
-        DragaliaResponse<FriendSetSupportCharaResponse> resp =
-            await this.Client.PostMsgpack<FriendSetSupportCharaResponse>(
-                "friend/set_support_chara",
-                new FriendSetSupportCharaRequest()
-                {
-                    CharaId = Charas.Valerio,
-                    DragonKeyId = 0,
-                    WeaponBodyId = 0,
-                    CrestSlotType1CrestId1 = 0,
-                    CrestSlotType1CrestId2 = 0,
-                    CrestSlotType1CrestId3 = 0,
-                    CrestSlotType2CrestId1 = 0,
-                    CrestSlotType2CrestId2 = 0,
-                    CrestSlotType3CrestId1 = 0,
-                    CrestSlotType3CrestId2 = 0,
-                    TalismanKeyId = 0,
-                },
-                cancellationToken: TestContext.Current.CancellationToken
-            );
-
-        FriendGetSupportCharaDetailResponse response = (
-            await this.Client.PostMsgpack<FriendGetSupportCharaDetailResponse>(
-                "/friend/get_support_chara_detail",
-                new FriendGetSupportCharaDetailRequest() { SupportViewerId = (ulong)this.ViewerId },
-                cancellationToken: TestContext.Current.CancellationToken
-            )
-        ).Data;
-
-        response
-            .SupportUserDataDetail.UserSupportData.Should()
-            .BeEquivalentTo(
-                new UserSupportList()
-                {
-                    ViewerId = (ulong)this.ViewerId,
-                    Name = "Euden",
-                    Level = 250,
-                    EmblemId = Emblems.DragonbloodPrince,
-                    MaxPartyPower = 444,
-                    SupportChara = new()
-                    {
-                        CharaId = Charas.Valerio,
-                        Level = 1,
-                        AdditionalMaxLevel = 0,
-                        Rarity = 5,
-                        Hp = 63,
-                        Attack = 44,
-                        HpPlusCount = 0,
-                        AttackPlusCount = 0,
-                        Ability1Level = 0,
-                        Ability2Level = 0,
-                        Ability3Level = 0,
-                        ExAbilityLevel = 1,
-                        ExAbility2Level = 1,
-                        Skill1Level = 1,
-                        Skill2Level = 0,
-                        IsUnlockEditSkill = false,
-                    },
-                    SupportDragon = new() { DragonKeyId = 0 },
-                    SupportWeaponBody = new() { WeaponBodyId = 0 },
-                    SupportTalisman = new() { TalismanKeyId = 0 },
-                    SupportCrestSlotType1List = new List<AtgenSupportCrestSlotType1List>()
-                    {
-                        new() { AbilityCrestId = 0 },
-                        new() { AbilityCrestId = 0 },
-                        new() { AbilityCrestId = 0 },
-                    },
-                    SupportCrestSlotType2List = new List<AtgenSupportCrestSlotType1List>()
-                    {
-                        new() { AbilityCrestId = 0 },
-                        new() { AbilityCrestId = 0 },
-                    },
-                    SupportCrestSlotType3List = new List<AtgenSupportCrestSlotType1List>()
-                    {
-                        new() { AbilityCrestId = 0 },
-                        new() { AbilityCrestId = 0 },
-                    },
-                    Guild = new() { GuildId = 0 },
-                },
-                o => o.Excluding(x => x.LastLoginDate)
-            );
-
-        response.SupportUserDataDetail.IsFriend.Should().BeFalse();
-    }
-
-    private async Task AddSupportCharaEquipment()
-    {
-        await this.AddRangeToDatabase(
+        this.ApiContext.AddRange(
             [
-                new DbPlayerCharaData(this.ViewerId, Charas.Valerio),
-                new DbPlayerDragonData(this.ViewerId, DragonId.Nimis),
-                new DbPlayerDragonReliability(this.ViewerId, DragonId.Nimis) { Level = 30 },
-                new DbPartyPower() { ViewerId = this.ViewerId, MaxPartyPower = 444 },
-                new DbWeaponBody()
+                new DbPlayerFriendRequest()
                 {
-                    ViewerId = this.ViewerId,
-                    WeaponBodyId = WeaponBodies.AmenoHabakiri,
-                    BuildupCount = 80,
-                    LimitBreakCount = 8,
-                    LimitOverCount = 1,
-                    EquipableCount = 2,
-                    AdditionalCrestSlotType1Count = 1,
-                    AdditionalCrestSlotType2Count = 0,
+                    FromPlayerViewerId = other1.ViewerId,
+                    ToPlayerViewerId = this.ViewerId,
+                    IsNew = true,
                 },
-                new DbAbilityCrest()
+                new DbPlayerFriendship()
                 {
-                    ViewerId = this.ViewerId,
-                    AbilityCrestId = AbilityCrestId.AManUnchanging,
-                    BuildupCount = 50,
-                    LimitBreakCount = 4,
-                    EquipableCount = 2,
-                    HpPlusCount = 50,
-                    AttackPlusCount = 50,
-                },
-                new DbAbilityCrest()
-                {
-                    ViewerId = this.ViewerId,
-                    AbilityCrestId = AbilityCrestId.ValiantCrown,
-                    BuildupCount = 50,
-                    LimitBreakCount = 4,
-                    EquipableCount = 2,
-                    HpPlusCount = 50,
-                    AttackPlusCount = 50,
-                },
-                new DbAbilityCrest()
-                {
-                    ViewerId = this.ViewerId,
-                    AbilityCrestId = AbilityCrestId.EveningofLuxury,
-                    BuildupCount = 50,
-                    LimitBreakCount = 4,
-                    EquipableCount = 2,
-                    HpPlusCount = 50,
-                    AttackPlusCount = 50,
-                },
-                new DbAbilityCrest()
-                {
-                    ViewerId = this.ViewerId,
-                    AbilityCrestId = AbilityCrestId.BeautifulNothingness,
-                    BuildupCount = 40,
-                    LimitBreakCount = 4,
-                    EquipableCount = 2,
-                    HpPlusCount = 50,
-                    AttackPlusCount = 50,
-                },
-                new DbAbilityCrest()
-                {
-                    ViewerId = this.ViewerId,
-                    AbilityCrestId = AbilityCrestId.TaikoTandem,
-                    BuildupCount = 40,
-                    LimitBreakCount = 4,
-                    EquipableCount = 2,
-                    HpPlusCount = 50,
-                    AttackPlusCount = 50,
-                },
-                new DbAbilityCrest()
-                {
-                    ViewerId = this.ViewerId,
-                    AbilityCrestId = AbilityCrestId.TutelarysDestinyWolfsBoon,
-                    BuildupCount = 30,
-                    LimitBreakCount = 4,
-                    EquipableCount = 2,
-                    HpPlusCount = 50,
-                    AttackPlusCount = 50,
-                },
-                new DbAbilityCrest()
-                {
-                    ViewerId = this.ViewerId,
-                    AbilityCrestId = AbilityCrestId.CrownofLightSerpentsBoon,
-                    BuildupCount = 30,
-                    LimitBreakCount = 4,
-                    EquipableCount = 2,
-                    HpPlusCount = 50,
-                    AttackPlusCount = 50,
-                },
-                new DbTalisman()
-                {
-                    TalismanId = Talismans.GalaMym,
-                    TalismanAbilityId1 = 340000029,
-                    TalismanAbilityId2 = 340000077,
-                    AdditionalAttack = 50,
-                    AdditionalHp = 50,
+                    PlayerFriendshipPlayers =
+                    [
+                        new DbPlayerFriendshipPlayer()
+                        {
+                            PlayerViewerId = this.ViewerId,
+                            IsNew = true,
+                        },
+                        new DbPlayerFriendshipPlayer() { PlayerViewerId = other2.ViewerId },
+                    ],
                 },
             ]
         );
+        this.ApiContext.SaveChanges();
+
+        DragaliaResponse<FriendFriendIndexResponse> response =
+            await this.Client.PostMsgpack<FriendFriendIndexResponse>(
+                "/friend/friend_index",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        response
+            .Data.Should()
+            .BeEquivalentTo(
+                new FriendFriendIndexResponse()
+                {
+                    FriendCount = 1,
+                    UpdateDataList = new()
+                    {
+                        FriendNotice = new() { FriendNewCount = 1, ApplyNewCount = 1 },
+                    },
+                }
+            );
+    }
+
+    [Fact]
+    public async Task FriendList_ReturnsFriendList()
+    {
+        DbPlayer otherPlayer = await this.CreateOtherPlayer();
+        await this.CreateFriendship(otherPlayer);
+
+        DragaliaResponse<FriendFriendListResponse> response =
+            await this.Client.PostMsgpack<FriendFriendListResponse>(
+                "/friend/friend_list",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        // lazy
+        response
+            .Data.FriendList.Should()
+            .ContainSingle()
+            .Which.ViewerId.Should()
+            .Be((ulong)otherPlayer.ViewerId);
+    }
+
+    [Fact]
+    public async Task AutoSearch_ReturnsSuggestedFriends()
+    {
+        DbPlayer existingFriend = await this.CreateOtherPlayer();
+        DbPlayer pendingRequest = await this.CreateOtherPlayer();
+        DbPlayer suggested = await this.CreateOtherPlayer();
+
+        // Set last login time to be high so suggested player always shows up in top 10
+        int rowsUpdated = await this
+            .ApiContext.PlayerUserData.IgnoreQueryFilters()
+            .Where(x => x.ViewerId == suggested.ViewerId)
+            .ExecuteUpdateAsync(
+                e => e.SetProperty(x => x.LastLoginTime, DateTimeOffset.MaxValue),
+                TestContext.Current.CancellationToken
+            );
+
+        rowsUpdated.Should().Be(1);
+
+        await this.CreateFriendship(existingFriend);
+        await this.CreateFriendRequestTo(pendingRequest);
+
+        DragaliaResponse<FriendAutoSearchResponse> response =
+            await this.Client.PostMsgpack<FriendAutoSearchResponse>(
+                "/friend/auto_search",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        response.Data.SearchList.Should().Contain(x => x.ViewerId == (ulong)suggested.ViewerId);
+        response
+            .Data.SearchList.Should()
+            .NotContain(x => x.ViewerId == (ulong)existingFriend.ViewerId);
+        response
+            .Data.SearchList.Should()
+            .NotContain(x => x.ViewerId == (ulong)pendingRequest.ViewerId);
+
+        // test with other players in the db that probably exist at this point
+        response.Data.SearchList.Should().BeInDescendingOrder(x => x.LastLoginDate);
+    }
+
+    [Fact]
+    public async Task RequestList_ReturnsSentRequests()
+    {
+        DbPlayer sentRequest = await this.CreateOtherPlayer();
+
+        await this.CreateFriendRequestTo(sentRequest);
+
+        DragaliaResponse<FriendRequestListResponse> response =
+            await this.Client.PostMsgpack<FriendRequestListResponse>(
+                "/friend/request_list",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        response
+            .Data.RequestList.Should()
+            .ContainSingle()
+            .Which.ViewerId.Should()
+            .Be((ulong)sentRequest.ViewerId);
+    }
+
+    [Fact]
+    public async Task ApplyList_ReturnsReceivedRequests()
+    {
+        DbPlayer receivedRequest = await this.CreateOtherPlayer();
+
+        await this.CreateFriendRequestFrom(receivedRequest);
+
+        DragaliaResponse<FriendApplyListResponse> response =
+            await this.Client.PostMsgpack<FriendApplyListResponse>(
+                "/friend/apply_list",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        response
+            .Data.FriendApply.Should()
+            .ContainSingle()
+            .Which.ViewerId.Should()
+            .Be((ulong)receivedRequest.ViewerId);
+
+        // Request is not new
+        response.Data.NewApplyViewerIdList.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task IdSearch_ReturnsUser()
+    {
+        DbPlayer otherPlayer = await this.CreateOtherPlayer();
+
+        DragaliaResponse<FriendIdSearchResponse> response =
+            await this.Client.PostMsgpack<FriendIdSearchResponse>(
+                "/friend/id_search",
+                new FriendIdSearchRequest() { SearchId = (ulong)otherPlayer.ViewerId },
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        response.Data.SearchUser.ViewerId.Should().Be((ulong)otherPlayer.ViewerId);
+    }
+
+    [Fact]
+    public async Task IdSearch_OwnId_ReturnsIdSearchError()
+    {
+        DragaliaResponse<FriendIdSearchResponse> response =
+            await this.Client.PostMsgpack<FriendIdSearchResponse>(
+                "/friend/id_search",
+                new FriendIdSearchRequest() { SearchId = (ulong)this.ViewerId },
+                cancellationToken: TestContext.Current.CancellationToken,
+                ensureSuccessHeader: false
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.FriendIdsearchError);
+    }
+
+    [Fact]
+    public async Task IdSearch_AlreadyFriends_ReturnsFriendTargetAlready()
+    {
+        DbPlayer otherPlayer = await this.CreateOtherPlayer();
+
+        await this.CreateFriendship(otherPlayer);
+
+        DragaliaResponse<FriendIdSearchResponse> response =
+            await this.Client.PostMsgpack<FriendIdSearchResponse>(
+                "/friend/id_search",
+                new FriendIdSearchRequest() { SearchId = (ulong)otherPlayer.ViewerId },
+                cancellationToken: TestContext.Current.CancellationToken,
+                ensureSuccessHeader: false
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.FriendTargetAlready);
+    }
+
+    [Fact]
+    public async Task IdSearch_NonExistentUser_ReturnsFriendTargetNone()
+    {
+        DragaliaResponse<FriendIdSearchResponse> response =
+            await this.Client.PostMsgpack<FriendIdSearchResponse>(
+                "/friend/id_search",
+                new FriendIdSearchRequest() { SearchId = ulong.MaxValue },
+                cancellationToken: TestContext.Current.CancellationToken,
+                ensureSuccessHeader: false
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.FriendTargetNone);
+    }
+
+    [Fact]
+    public async Task Request_SendsRequest_IsVisibleByOtherPlayer()
+    {
+        DbPlayer otherPlayer = await this.CreateOtherPlayer();
+
+        await this.Client.PostMsgpack<FriendRequestResponse>(
+            "/friend/request",
+            new FriendRequestRequest() { FriendId = (ulong)otherPlayer.ViewerId },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        HttpClient otherPlayerClient = this.CreateClientForOtherPlayer(otherPlayer);
+
+        DragaliaResponse<FriendFriendIndexResponse> indexResponse =
+            await otherPlayerClient.PostMsgpack<FriendFriendIndexResponse>(
+                "/friend/friend_index",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        indexResponse.Data.UpdateDataList.FriendNotice.ApplyNewCount.Should().Be(1);
+
+        DragaliaResponse<FriendApplyListResponse> applyListResponse =
+            await otherPlayerClient.PostMsgpack<FriendApplyListResponse>(
+                "/friend/apply_list",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        applyListResponse
+            .Data.FriendApply.Should()
+            .ContainSingle()
+            .Which.ViewerId.Should()
+            .Be((ulong)this.ViewerId);
+
+        applyListResponse
+            .Data.NewApplyViewerIdList.Should()
+            .ContainSingle()
+            .Which.Should()
+            .Be((ulong)this.ViewerId);
+    }
+
+    [Fact]
+    public async Task Request_ToSelf_ReturnsFriendApplyError()
+    {
+        DragaliaResponse<FriendRequestResponse> response =
+            await this.Client.PostMsgpack<FriendRequestResponse>(
+                "/friend/request",
+                new FriendRequestRequest() { FriendId = (ulong)this.ViewerId },
+                cancellationToken: TestContext.Current.CancellationToken,
+                ensureSuccessHeader: false
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.FriendApplyError);
+    }
+
+    [Fact]
+    public async Task Request_ToExistingFriend_ReturnsFriendTargetAlready()
+    {
+        DbPlayer otherPlayer = await this.CreateOtherPlayer();
+
+        await this.CreateFriendship(otherPlayer);
+
+        DragaliaResponse<FriendRequestResponse> response =
+            await this.Client.PostMsgpack<FriendRequestResponse>(
+                "/friend/request",
+                new FriendRequestRequest() { FriendId = (ulong)otherPlayer.ViewerId },
+                cancellationToken: TestContext.Current.CancellationToken,
+                ensureSuccessHeader: false
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.FriendTargetAlready);
+    }
+
+    [Fact]
+    public async Task Request_RequestAlreadyExists_ReturnsFriendApplyExists()
+    {
+        DbPlayer otherPlayer = await this.CreateOtherPlayer();
+
+        await this.CreateFriendRequestTo(otherPlayer);
+
+        DragaliaResponse<FriendRequestResponse> response =
+            await this.Client.PostMsgpack<FriendRequestResponse>(
+                "/friend/request",
+                new FriendRequestRequest() { FriendId = (ulong)otherPlayer.ViewerId },
+                cancellationToken: TestContext.Current.CancellationToken,
+                ensureSuccessHeader: false
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.FriendApplyExists);
+    }
+
+    [Fact]
+    public async Task Request_NonExistentUser_ReturnsFriendApplyError()
+    {
+        DragaliaResponse<FriendRequestResponse> response =
+            await this.Client.PostMsgpack<FriendRequestResponse>(
+                "/friend/request",
+                new FriendRequestRequest() { FriendId = ulong.MaxValue },
+                cancellationToken: TestContext.Current.CancellationToken,
+                ensureSuccessHeader: false
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.FriendApplyError);
+    }
+
+    [Fact]
+    public async Task RequestCancel_CancelsRequest()
+    {
+        DbPlayer otherPlayer = await this.CreateOtherPlayer();
+
+        await this.Client.PostMsgpack<FriendRequestResponse>(
+            "/friend/request",
+            new FriendRequestRequest() { FriendId = (ulong)otherPlayer.ViewerId },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        HttpClient otherPlayerClient = this.CreateClientForOtherPlayer(otherPlayer);
+
+        DragaliaResponse<FriendFriendIndexResponse> indexResponse =
+            await otherPlayerClient.PostMsgpack<FriendFriendIndexResponse>(
+                "/friend/friend_index",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        indexResponse.Data.UpdateDataList.FriendNotice.ApplyNewCount.Should().Be(1);
+
+        await this.Client.PostMsgpack<FriendRequestCancelResponse>(
+            "/friend/request_cancel",
+            new FriendRequestCancelRequest() { FriendId = (ulong)otherPlayer.ViewerId },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        DragaliaResponse<FriendFriendIndexResponse> secondIndexResponse =
+            await otherPlayerClient.PostMsgpack<FriendFriendIndexResponse>(
+                "/friend/friend_index",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        secondIndexResponse.Data.UpdateDataList.FriendNotice.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task RequestCancel_NonExistentRequest_ReturnsFriendApplyError()
+    {
+        DragaliaResponse<FriendRequestCancelResponse> response =
+            await this.Client.PostMsgpack<FriendRequestCancelResponse>(
+                "/friend/request_cancel",
+                new FriendRequestCancelRequest() { FriendId = ulong.MaxValue },
+                cancellationToken: TestContext.Current.CancellationToken,
+                ensureSuccessHeader: false
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.FriendApplyError);
+    }
+
+    [Fact]
+    public async Task Reply_Accept_CreatesFriendship()
+    {
+        DbPlayer otherPlayer = await this.CreateOtherPlayer();
+        await this.CreateFriendRequestFrom(otherPlayer);
+
+        await this.Client.PostMsgpack<FriendReplyResponse>(
+            "/friend/reply",
+            new FriendReplyRequest()
+            {
+                FriendId = (ulong)otherPlayer.ViewerId,
+                Reply = FriendReplyType.Accept,
+            },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        DragaliaResponse<FriendApplyListResponse> applyListResponse =
+            await this.Client.PostMsgpack<FriendApplyListResponse>(
+                "/friend/apply_list",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        applyListResponse.Data.FriendApply.Should().BeEmpty();
+
+        DragaliaResponse<FriendFriendListResponse> response =
+            await this.Client.PostMsgpack<FriendFriendListResponse>(
+                "/friend/friend_list",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        response
+            .Data.FriendList.Should()
+            .ContainSingle()
+            .Which.ViewerId.Should()
+            .Be((ulong)otherPlayer.ViewerId);
+    }
+
+    [Fact]
+    public async Task Reply_Decline_DoesNotCreateFriendship()
+    {
+        DbPlayer otherPlayer = await this.CreateOtherPlayer();
+        await this.CreateFriendRequestFrom(otherPlayer);
+
+        await this.Client.PostMsgpack<FriendReplyResponse>(
+            "/friend/reply",
+            new FriendReplyRequest()
+            {
+                FriendId = (ulong)otherPlayer.ViewerId,
+                Reply = FriendReplyType.Decline,
+            },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        DragaliaResponse<FriendApplyListResponse> applyListResponse =
+            await this.Client.PostMsgpack<FriendApplyListResponse>(
+                "/friend/apply_list",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        applyListResponse.Data.FriendApply.Should().BeEmpty();
+
+        DragaliaResponse<FriendFriendListResponse> response =
+            await this.Client.PostMsgpack<FriendFriendListResponse>(
+                "/friend/friend_list",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        response.Data.FriendList.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task Reply_NonExistentRequest_ReturnsCommonInvalidArgument()
+    {
+        DragaliaResponse<FriendReplyResponse> response =
+            await this.Client.PostMsgpack<FriendReplyResponse>(
+                "/friend/reply",
+                new FriendReplyRequest()
+                {
+                    FriendId = ulong.MaxValue,
+                    Reply = FriendReplyType.Decline,
+                },
+                cancellationToken: TestContext.Current.CancellationToken,
+                ensureSuccessHeader: false
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
+    }
+
+    [Fact]
+    public async Task Delete_DeletesFriend()
+    {
+        DbPlayer otherPlayer = await this.CreateOtherPlayer();
+        await this.CreateFriendship(otherPlayer);
+
+        await this.Client.PostMsgpack<FriendDeleteResponse>(
+            "/friend/delete",
+            new FriendDeleteRequest() { FriendId = (ulong)otherPlayer.ViewerId },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        DragaliaResponse<FriendFriendListResponse> response =
+            await this.Client.PostMsgpack<FriendFriendListResponse>(
+                "/friend/friend_list",
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        response.Data.FriendList.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task Delete_NonExistentFriend_ReturnsFriendDeleteError()
+    {
+        DragaliaResponse<FriendDeleteResponse> response =
+            await this.Client.PostMsgpack<FriendDeleteResponse>(
+                "/friend/delete",
+                new FriendDeleteRequest() { FriendId = ulong.MaxValue },
+                cancellationToken: TestContext.Current.CancellationToken,
+                ensureSuccessHeader: false
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.FriendDeleteError);
+    }
+
+    private async Task<DbPlayer> CreateOtherPlayer()
+    {
+        return await this
+            .Services.GetRequiredService<ISavefileService>()
+            .Create($"friend {Guid.NewGuid()}");
+    }
+
+    private async Task CreateFriendship(DbPlayer other)
+    {
+        this.ApiContext.PlayerFriendships.Add(
+            new DbPlayerFriendship()
+            {
+                PlayerFriendshipPlayers =
+                [
+                    new DbPlayerFriendshipPlayer() { PlayerViewerId = this.ViewerId },
+                    new DbPlayerFriendshipPlayer() { PlayerViewerId = other.ViewerId },
+                ],
+            }
+        );
+
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+    }
+
+    private async Task CreateFriendRequestTo(DbPlayer other)
+    {
+        this.ApiContext.PlayerFriendRequests.Add(
+            new DbPlayerFriendRequest()
+            {
+                FromPlayerViewerId = this.ViewerId,
+                ToPlayerViewerId = other.ViewerId,
+            }
+        );
+
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+    }
+
+    private async Task CreateFriendRequestFrom(DbPlayer other)
+    {
+        this.ApiContext.PlayerFriendRequests.Add(
+            new DbPlayerFriendRequest()
+            {
+                FromPlayerViewerId = other.ViewerId,
+                ToPlayerViewerId = this.ViewerId,
+            }
+        );
+
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
     }
 }

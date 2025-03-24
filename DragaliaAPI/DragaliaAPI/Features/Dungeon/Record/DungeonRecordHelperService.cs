@@ -12,6 +12,7 @@ internal sealed class DungeonRecordHelperService(
     ApiContext apiContext,
     IHelperService helperService,
     IMatchingService matchingService,
+    FriendService friendService,
     ILogger<DungeonRecordHelperService> logger
 ) : IDungeonRecordHelperService
 {
@@ -26,7 +27,7 @@ internal sealed class DungeonRecordHelperService(
         if (supportViewerId is null)
             return (helperList, helperDetailList);
 
-        UserSupportList? supportList = await helperService.GetHelper(supportViewerId.Value);
+        UserSupportList? supportList = await helperService.GetLegacyHelper(supportViewerId.Value);
 
         if (supportList is not null)
         {
@@ -69,13 +70,14 @@ internal sealed class DungeonRecordHelperService(
             connectingViewerIdList
         );
 
+        List<long> friendsList = await friendService.CheckFriendStatus(connectingViewerIdList);
+
         logger.LogDebug("Retrieved teammate support list {@supportList}", teammateSupportLists);
 
-        // TODO: Replace with friend system once implemented
         IEnumerable<AtgenHelperDetailList> teammateDetailLists = connectingViewerIdList.Select(
             x => new AtgenHelperDetailList()
             {
-                IsFriend = true,
+                IsFriend = friendsList.Contains(x),
                 ViewerId = (ulong)x,
                 GetManaPoint = 50,
                 ApplySendStatus = 0,

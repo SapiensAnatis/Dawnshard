@@ -32,7 +32,7 @@ internal sealed partial class HelperService(
         return StubData.SupportListData;
     }
 
-    public async Task<UserSupportList?> GetHelper(ulong viewerId)
+    public async Task<UserSupportList?> GetLegacyHelper(ulong viewerId)
     {
         UserSupportList? helper = (await this.GetHelpers()).SupportUserList.FirstOrDefault(x =>
             x.ViewerId == viewerId

@@ -1,7 +1,9 @@
 ﻿using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Friends;
 
@@ -11,6 +13,9 @@ namespace DragaliaAPI.Features.Friends;
 [ApiController]
 internal sealed class FriendController(
     IHelperService helperService,
+    FriendService friendService,
+    IFriendNotificationService friendNotificationService,
+    IPlayerIdentityService playerIdentityService,
     IUpdateDataService updateDataService
 ) : DragaliaControllerBase
 {
@@ -20,7 +25,10 @@ internal sealed class FriendController(
         CancellationToken cancellationToken
     )
     {
-        SettingSupport playerSupportChara = await helperService.GetPlayerHelper(cancellationToken);
+        SettingSupport playerSupportChara =
+            await helperService.GetPlayerHelper(cancellationToken)
+            ?? throw new InvalidOperationException("Failed to find current player's helper");
+
         return new FriendGetSupportCharaResponse(0, playerSupportChara);
     }
 
@@ -81,32 +89,206 @@ internal sealed class FriendController(
     }
 
     [HttpPost("friend_index")]
-    public DragaliaResult<FriendFriendIndexResponse> FriendIndex() =>
-        new FriendFriendIndexResponse()
+    public async Task<DragaliaResult<FriendFriendIndexResponse>> FriendIndex(
+        CancellationToken cancellationToken
+    )
+    {
+        int friendCount = await friendService.GetFriendCount();
+        FriendNotice? notice = await friendNotificationService.GetFriendNotice(cancellationToken);
+
+        return new FriendFriendIndexResponse()
         {
-            FriendCount = 0,
-            EntityResult = new(),
-            UpdateDataList = new(),
+            FriendCount = friendCount,
+            UpdateDataList = new() { FriendNotice = notice },
         };
+    }
 
     [HttpPost("friend_list")]
-    public DragaliaResult<FriendFriendListResponse> FriendList() =>
-        new FriendFriendListResponse() { FriendList = [], NewFriendViewerIdList = [] };
+    public async Task<DragaliaResult<FriendFriendListResponse>> FriendList()
+    {
+        List<UserSupportList> friendList = await friendService.GetFriendList();
+        List<ulong> newFriendList = await friendNotificationService.GetNewFriendViewerIdList();
+
+        return new FriendFriendListResponse()
+        {
+            FriendList = friendList,
+            NewFriendViewerIdList = newFriendList,
+        };
+    }
 
     [HttpPost("auto_search")]
-    public DragaliaResult<FriendAutoSearchResponse> AutoSearch() =>
-        new FriendAutoSearchResponse() { Result = 1, SearchList = [] };
+    public async Task<DragaliaResult<FriendAutoSearchResponse>> AutoSearch(
+        CancellationToken cancellationToken
+    )
+    {
+        List<UserSupportList> list = await friendService.GetRecommendedFriendsList(
+            cancellationToken
+        );
+
+        /*
+         * Strange behaviour: sometimes the game will ignore what we send here and refuse
+         * to show users. Appears to be related to sending a friend request to a list entry:
+         * even if you subsequently cancel it, that entry will never show in the list ever again.
+         */
+
+        return new FriendAutoSearchResponse() { Result = 1, SearchList = list };
+    }
 
     [HttpPost("request_list")]
-    public DragaliaResult<FriendRequestListResponse> RequestList() =>
-        new FriendRequestListResponse() { Result = 1, RequestList = [] };
+    public async Task<DragaliaResult<FriendRequestListResponse>> RequestList()
+    {
+        List<UserSupportList> requestList = await friendService.GetSentRequestList();
+
+        return new FriendRequestListResponse() { Result = 1, RequestList = requestList };
+    }
 
     [HttpPost("apply_list")]
-    public DragaliaResult<FriendApplyListResponse> ApplyList() =>
-        new FriendApplyListResponse()
+    public async Task<DragaliaResult<FriendApplyListResponse>> ApplyList()
+    {
+        List<UserSupportList> requestList = await friendService.GetReceivedRequestList();
+        List<ulong> newApplyList =
+            await friendNotificationService.GetNewFriendRequestViewerIdList();
+
+        return new FriendApplyListResponse()
         {
             Result = 1,
-            NewApplyViewerIdList = [],
-            FriendApply = [],
+            FriendApply = requestList,
+            NewApplyViewerIdList = newApplyList,
         };
+    }
+
+    [HttpPost("id_search")]
+    public async Task<DragaliaResult<FriendIdSearchResponse>> IdSearch(
+        FriendIdSearchRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        long searchId = (long)request.SearchId;
+
+        /*
+         * The inner result fields appear unused, it seems that we have to return actual
+         * result_code values (of the data_headers variety) to get the game to do anything.
+         */
+
+        if (searchId == playerIdentityService.ViewerId)
+        {
+            // Shows "You searched for your own ID" popup
+            return this.Code(ResultCode.FriendIdsearchError);
+        }
+
+        bool alreadyFriends = await friendService.CheckIfFriendshipExists(
+            searchId,
+            cancellationToken
+        );
+
+        if (alreadyFriends)
+        {
+            return this.Code(ResultCode.FriendTargetAlready);
+        }
+
+        UserSupportList? result = await helperService.GetUserSupportList(
+            searchId,
+            cancellationToken
+        );
+
+        if (result is null)
+        {
+            // Shows "Unable to locate player" popup
+            return this.Code(ResultCode.FriendTargetNone);
+        }
+
+        return new FriendIdSearchResponse() { Result = 1, SearchUser = result };
+    }
+
+    [HttpPost("request")]
+    public async Task<DragaliaResult<FriendRequestResponse>> SendRequest(
+        FriendRequestRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        long friendId = (long)request.FriendId;
+
+        if (friendId == playerIdentityService.ViewerId)
+        {
+            return this.Code(ResultCode.FriendApplyError);
+        }
+
+        bool alreadyFriends = await friendService.CheckIfFriendshipExists(
+            friendId,
+            cancellationToken
+        );
+
+        if (alreadyFriends)
+        {
+            return this.Code(ResultCode.FriendTargetAlready);
+        }
+
+        await friendService.SendRequest(friendId, cancellationToken);
+
+        UpdateDataList updateDataList;
+
+        try
+        {
+            updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException ex) when (ex.IsUniqueViolation())
+        {
+            throw new DragaliaException(
+                ResultCode.FriendApplyExists,
+                "Cannot send friend request - one already exists",
+                ex
+            );
+        }
+        catch (DbUpdateException ex) when (ex.IsForeignKeyViolation())
+        {
+            throw new DragaliaException(
+                ResultCode.FriendApplyError,
+                "Cannot send friend request - foreign key violation",
+                ex
+            );
+        }
+
+        return this.Ok(new FriendRequestResponse() { Result = 1, UpdateDataList = updateDataList });
+    }
+
+    [HttpPost("request_cancel")]
+    public async Task<DragaliaResult<FriendRequestCancelResponse>> RequestCancel(
+        FriendRequestCancelRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        await friendService.CancelRequest((long)request.FriendId, cancellationToken);
+
+        return new FriendRequestCancelResponse() { Result = 1 };
+    }
+
+    [HttpPost("reply")]
+    public async Task<DragaliaResult<FriendReplyResponse>> Reply(
+        FriendReplyRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        await friendService.ReplyToRequest(
+            (long)request.FriendId,
+            request.Reply,
+            cancellationToken
+        );
+
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+
+        return new FriendReplyResponse() { Result = 1, UpdateDataList = updateDataList };
+    }
+
+    [HttpPost("delete")]
+    public async Task<DragaliaResult<FriendDeleteResponse>> Delete(
+        FriendDeleteRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        await friendService.DeleteFriend((long)request.FriendId, cancellationToken);
+
+        _ = await updateDataService.SaveChangesAsync(cancellationToken);
+
+        return new FriendDeleteResponse() { Result = 1 };
+    }
 }
