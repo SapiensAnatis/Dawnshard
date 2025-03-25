@@ -13,6 +13,7 @@ internal partial class ResultCodeLoggingMiddleware(ILogger<ResultCodeLoggingMidd
             ResultCode.CommonTimeout,
             ResultCode.MatchingRoomIdNotFound,
             ResultCode.FriendIdsearchError,
+            ResultCode.FriendTargetNone,
             ResultCode.FriendTargetAlready,
             ResultCode.FriendApplyExists,
         ];
