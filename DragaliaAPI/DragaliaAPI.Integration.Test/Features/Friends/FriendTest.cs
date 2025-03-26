@@ -315,6 +315,108 @@ public class FriendTest : TestFixture
     }
 
     [Fact]
+    public async Task Request_OwnFriendsListFull_ReturnsFriendCountLimit()
+    {
+        DbPlayer otherPlayer = await this.CreateOtherPlayer();
+        await this.CreateFriends(this.ViewerId, 175);
+
+        DragaliaResponse<FriendRequestResponse> response =
+            await this.Client.PostMsgpack<FriendRequestResponse>(
+                "/friend/request",
+                new FriendRequestRequest() { FriendId = (ulong)otherPlayer.ViewerId },
+                cancellationToken: TestContext.Current.CancellationToken,
+                ensureSuccessHeader: false
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.FriendCountLimit);
+    }
+
+    [Fact]
+    public async Task Request_OtherFriendsListFull_ReturnsFriendCountOtherLimit()
+    {
+        DbPlayer otherPlayer = await this.CreateOtherPlayer();
+        await this.CreateFriends(otherPlayer.ViewerId, 175);
+
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        DragaliaResponse<FriendRequestResponse> response =
+            await this.Client.PostMsgpack<FriendRequestResponse>(
+                "/friend/request",
+                new FriendRequestRequest() { FriendId = (ulong)otherPlayer.ViewerId },
+                cancellationToken: TestContext.Current.CancellationToken,
+                ensureSuccessHeader: false
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.FriendCountOtherLimit);
+    }
+
+    [Fact]
+    public async Task Request_OwnFriendRequestLimitReached_ReturnsFriendApplyCountLimit()
+    {
+        DbPlayer otherPlayer = await this.CreateOtherPlayer();
+        await this.CreateFriends(this.ViewerId, 173);
+
+        this.ApiContext.PlayerFriendRequests.AddRange(
+            [
+                new()
+                {
+                    FromPlayerViewerId = this.ViewerId,
+                    ToPlayer = new DbPlayer() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
+                },
+                new()
+                {
+                    FromPlayer = new DbPlayer() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
+                    ToPlayerViewerId = this.ViewerId,
+                },
+            ]
+        );
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        DragaliaResponse<FriendRequestResponse> response =
+            await this.Client.PostMsgpack<FriendRequestResponse>(
+                "/friend/request",
+                new FriendRequestRequest() { FriendId = (ulong)otherPlayer.ViewerId },
+                cancellationToken: TestContext.Current.CancellationToken,
+                ensureSuccessHeader: false
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.FriendApplyCountLimit);
+    }
+
+    [Fact]
+    public async Task Request_OtherFriendRequestLimitReached_ReturnsFriendApplyCountOtherLimit()
+    {
+        DbPlayer otherPlayer = await this.CreateOtherPlayer();
+        await this.CreateFriends(otherPlayer.ViewerId, 23); // Fresh player has a limit of 25 friends
+
+        this.ApiContext.PlayerFriendRequests.AddRange(
+            [
+                new()
+                {
+                    FromPlayerViewerId = otherPlayer.ViewerId,
+                    ToPlayer = new DbPlayer() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
+                },
+                new()
+                {
+                    FromPlayer = new DbPlayer() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
+                    ToPlayerViewerId = otherPlayer.ViewerId,
+                },
+            ]
+        );
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        DragaliaResponse<FriendRequestResponse> response =
+            await this.Client.PostMsgpack<FriendRequestResponse>(
+                "/friend/request",
+                new FriendRequestRequest() { FriendId = (ulong)otherPlayer.ViewerId },
+                cancellationToken: TestContext.Current.CancellationToken,
+                ensureSuccessHeader: false
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.FriendApplyCountOtherLimit);
+    }
+
+    [Fact]
     public async Task Request_NonExistentUser_ReturnsFriendApplyError()
     {
         DragaliaResponse<FriendRequestResponse> response =
@@ -546,6 +648,27 @@ public class FriendTest : TestFixture
                 ToPlayerViewerId = this.ViewerId,
             }
         );
+
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+    }
+
+    private async Task CreateFriends(long viewerId, int count)
+    {
+        IEnumerable<DbPlayerFriendship> friendships = Enumerable
+            .Range(0, count)
+            .Select(x => new DbPlayerFriendship()
+            {
+                PlayerFriendshipPlayers =
+                [
+                    new DbPlayerFriendshipPlayer() { PlayerViewerId = viewerId },
+                    new DbPlayerFriendshipPlayer()
+                    {
+                        Player = new() { AccountId = $"CreateFriends_{viewerId}_{x}" },
+                    },
+                ],
+            });
+
+        this.ApiContext.PlayerFriendships.AddRange(friendships);
 
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
     }

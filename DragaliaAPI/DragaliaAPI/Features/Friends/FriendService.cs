@@ -2,6 +2,8 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models.User;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -271,6 +273,18 @@ internal sealed partial class FriendService(
 
         if (replyType == FriendReplyType.Accept)
         {
+            FriendLimitCheckResult checkResult = await this.CheckIfFriendLimitExceeded();
+
+            if (checkResult.ListLimitExceeded)
+            {
+                // Sending a request to someone whose friends list is full, or whose friends list could become full as
+                // a result of pending requests, should not be possible.
+                throw new DragaliaException(
+                    ResultCode.CommonServerError,
+                    "Can't accept request - friend list limit exceeded"
+                );
+            }
+
             apiContext.PlayerFriendships.Add(
                 CreateFriendship(requestEntity.FromPlayerViewerId, requestEntity.ToPlayerViewerId)
             );
@@ -313,6 +327,81 @@ internal sealed partial class FriendService(
             .ToListAsync();
     }
 
+    public async Task<FriendLimitCheckResult> CheckIfFriendLimitExceeded() =>
+        await CheckIfFriendLimitExceeded(playerIdentityService.ViewerId);
+
+    public async Task<FriendLimitCheckResult> CheckIfFriendLimitExceeded(long viewerId)
+    {
+        int friendLimit = await GetFriendLimit(viewerId);
+
+        int friendCount = await apiContext
+            .PlayerFriendshipPlayers.IgnoreQueryFilters()
+            .CountAsync(x => x.PlayerViewerId == viewerId);
+
+        if (friendCount >= friendLimit)
+        {
+            return new FriendLimitCheckResult
+            {
+                ListLimitExceeded = true,
+                RequestLimitExceeded = true,
+            };
+        }
+
+        int sentRequestCount = await apiContext.PlayerFriendRequests.CountAsync(x =>
+            x.FromPlayerViewerId == viewerId
+        );
+        int pendingRequestCount = await apiContext.PlayerFriendRequests.CountAsync(x =>
+            x.ToPlayerViewerId == viewerId
+        );
+
+        if (friendCount + sentRequestCount + pendingRequestCount >= friendLimit)
+        {
+            return new FriendLimitCheckResult
+            {
+                ListLimitExceeded = false,
+                RequestLimitExceeded = true,
+            };
+        }
+
+        return new FriendLimitCheckResult
+        {
+            ListLimitExceeded = false,
+            RequestLimitExceeded = false,
+        };
+    }
+
+    public async Task<bool> CheckIfPendingRequestLimitExceeded(long viewerId)
+    {
+        int friendCount = await apiContext
+            .PlayerFriendshipPlayers.IgnoreQueryFilters()
+            .CountAsync(x => x.PlayerViewerId == viewerId);
+        int sentRequestCount = await apiContext.PlayerFriendRequests.CountAsync(x =>
+            x.FromPlayerViewerId == viewerId
+        );
+
+        return false;
+    }
+
+    private async Task<int> GetFriendLimit(long viewerId)
+    {
+        int playerLevel = await apiContext
+            .PlayerUserData.IgnoreQueryFilters()
+            .Where(x => x.ViewerId == viewerId)
+            .Select(x => x.Level)
+            .FirstOrDefaultAsync();
+
+        int friendLimit = 175;
+
+        if (MasterAsset.UserLevel.TryGetValue(playerLevel, out UserLevel? userLevel))
+        {
+            // This might not be hit if someone imports a save with an out of range level (we don't validate this).
+            // If that happens, default to 175 - it is not worth throwing here for such a trivial thing.
+            friendLimit = userLevel.FriendCount;
+        }
+
+        return friendLimit;
+    }
+
     private IQueryable<DbPlayer> GetFriendsQuery()
     {
         IQueryable<DbPlayer> currentPlayer = apiContext.Players.Where(x =>
@@ -338,4 +427,18 @@ internal sealed partial class FriendService(
 
     [LoggerMessage(LogLevel.Information, "Detected friend request pair - creating friendship")]
     private partial void LogFriendRequestPair();
+
+    public readonly struct FriendLimitCheckResult
+    {
+        /// <summary>
+        /// Gets a value indicating whether the player has exceeded the limit of their friends list.
+        /// </summary>
+        public bool ListLimitExceeded { get; init; }
+
+        /// <summary>
+        /// Gets a value indicating whether the player can no longer accept or send friend requests,
+        /// because existing pending requests (in- or out-going) could fill up their friends list.
+        /// </summary>
+        public bool RequestLimitExceeded { get; init; }
+    }
 }
