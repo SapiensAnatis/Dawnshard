@@ -207,7 +207,6 @@ internal sealed class FriendController(
     )
     {
         long friendId = (long)request.FriendId;
-
         if (friendId == playerIdentityService.ViewerId)
         {
             return this.Code(ResultCode.FriendApplyError);
@@ -217,10 +216,31 @@ internal sealed class FriendController(
             friendId,
             cancellationToken
         );
-
         if (alreadyFriends)
         {
             return this.Code(ResultCode.FriendTargetAlready);
+        }
+
+        FriendService.FriendLimitCheckResult selfLimit =
+            await friendService.CheckIfFriendLimitExceeded();
+        if (selfLimit.ListLimitExceeded)
+        {
+            return this.Code(ResultCode.FriendCountLimit);
+        }
+        if (selfLimit.RequestLimitExceeded)
+        {
+            return this.Code(ResultCode.FriendApplyCountLimit);
+        }
+
+        FriendService.FriendLimitCheckResult otherLimit =
+            await friendService.CheckIfFriendLimitExceeded(friendId);
+        if (otherLimit.ListLimitExceeded)
+        {
+            return this.Code(ResultCode.FriendCountOtherLimit);
+        }
+        if (otherLimit.RequestLimitExceeded)
+        {
+            return this.Code(ResultCode.FriendApplyCountOtherLimit);
         }
 
         await friendService.SendRequest(friendId, cancellationToken);

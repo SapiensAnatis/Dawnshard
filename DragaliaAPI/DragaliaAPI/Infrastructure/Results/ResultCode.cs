@@ -146,6 +146,13 @@ public enum ResultCode
     WeaponBodyCraftOutOfPeriod,
     WeaponBodyCraftShortWeaponBody,
     WeaponBodyCraftShortAllUnlockWeaponBody,
+
+    /// <summary>
+    /// Shows an error message when attempting to find a player in the friend search:
+    /// <p><i>
+    /// Unable to locate player.
+    /// </i></p>
+    /// </summary>
     FriendTargetNone = 7001,
     FriendTargetAlready,
     FriendIdsearchError = 7004,
@@ -153,9 +160,30 @@ public enum ResultCode
     FriendCountOtherLimit,
     FriendCountLimit,
     FriendApplyCountOtherLimit,
+
+    /// <summary>
+    /// Shows an error message when attempting to send a friend request:
+    /// <p><i>
+    /// You have met the friend request limit. Request cannot be sent.
+    /// </i></p>
+    /// </summary>
     FriendApplyCountLimit,
+
+    /// <summary>
+    /// Shows an error message when attempting to send a friend request:
+    /// <p><i>
+    /// Ten days have passed since the request was made. The request has been deleted.
+    /// </i></p>
+    /// </summary>
     FriendApplyLimitError,
     FriendApplyExists,
+
+    /// <summary>
+    /// Shows an error message when attempting to send a friend request:
+    /// <p><i>
+    /// Friend request not sent.
+    /// </i></p>
+    /// </summary>
     FriendApplyError,
     MemberReinforceSameBaseAndMaterrial = 8001,
     PartyUnexpected,
