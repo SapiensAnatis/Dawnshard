@@ -64,12 +64,12 @@
       <Typography typography="h2">How to play</Typography>
       <p>
         Setting up access to the server involves configuring a modified version of the original
-        Dragalia Lost app to connect to this server at{' '}
+        Dragalia Lost app to connect to this server at
         <a class="link" href="https://dawnshard.co.uk/">https://dawnshard.co.uk/</a>. It is possible
         to do so on both Android and iOS without jail-breaking or rooting your device. It is also
         possible to do this on an Android emulator, even though the original game could not be
         played on emulators. If you encounter any issues during the set-up process, consider joining
-        the{' '}
+        the
         <a class="link" href="https://discord.gg/j9zSttjjWj">community Discord server</a>.
       </p>
     </div>
@@ -81,18 +81,18 @@
           taking the files from the original app and modifying them.
         </li>
         <li>
-          Download the Dragalipatch app by LukeFZ from the{' '}
+          Download the Dragalipatch app by LukeFZ from the
           <a class="link" href="https://github.com/lukefz/dragalipatch/releases/latest">
             GitHub releases page.
           </a>
         </li>
         <li>
-          Enter <a class="link" href="https://dawnshard.co.uk">https://dawnshard.co.uk</a>{' '}
+          Enter <a class="link" href="https://dawnshard.co.uk">https://dawnshard.co.uk</a>
           into the &apos;Server Address&apos; field.
         </li>
         <li>
-          Leave the CDN address field blank. You can try entering{' '}
-          <a href={'https://cdn.minty.sbs'}>https://cdn.minty.sbs</a> if this is not accepted.
+          Leave the CDN address field blank. You can try entering
+          <a href="https://cdn.minty.sbs">https://cdn.minty.sbs</a> if this is not accepted.
         </li>
         <li>Press the &apos;Patch App&apos; button in the lower right corner.</li>
         <li>
@@ -117,10 +117,10 @@
     <div class="col-span-12">
       <Typography typography="h3">iOS</Typography>
       <p>
-        For information on how to play on iOS, please see{' '}
+        For information on how to play on iOS, please see
         <a class="link" href="https://twitter.com/FloppyEarsRCute/status/1672549774870953985">
           this tweet, containing a guide on Google Docs</a
-        >. At a high level, you will need to use{' '}
+        >. At a high level, you will need to use
         <a class="link" href="https://sideloadly.io/">Sideloadly</a> to install a pre-patched IPA file
         that allows configuring the server address.
       </p>
@@ -148,7 +148,7 @@
         It is no longer possible to recover your progress from the original servers. However, you
         can import a save using the account linking system. You can upload a JSON file after logging
         into the BaaS with save data to be applied to the server. You can use a preset save file,
-        such as this{' '}
+        such as this
         <a
           href="https://drive.google.com/drive/folders/17pR_hZtjIZ7NKBMUjtiY355FCM_-TqgO?usp=sharing"
           class="link">

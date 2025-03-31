@@ -1,32 +1,38 @@
 <script lang="ts" generics="T">
+  import type { HTMLSelectAttributes } from 'svelte/elements';
   import type { Field } from 'svelte-form-helper';
 
   import type { SelectItem } from './types.ts';
 
-  // svelte eslint plugin doesn't appear to be compatible with generic syntax
-  /* eslint-disable no-undef */
-  export let items: SelectItem<T>[];
-  export let value: T | '' = '';
-  /* eslint-enable no-undef */
+  type SelectProps<T> = {
+    items: SelectItem<T>[];
+    value: T | '';
+    id: string;
+    placeholder?: string;
+    field: Field;
+    class?: string;
+  } & HTMLSelectAttributes;
 
-  export let id: string;
-  export let placeholder: string | undefined = undefined;
+  let {
+    items,
+    value = $bindable(),
+    id,
+    placeholder,
+    field,
+    class: className,
+    ...restProps
+  }: SelectProps<T> = $props();
 
-  export let field: Field;
-
-  let className: string | undefined = undefined;
-  export { className as class };
-
-  $: {
+  $effect(() => {
     if (value && !items.some((x) => x.value === value)) {
       value = '';
     }
-  }
+  });
 </script>
 
-<select class={className} {id} bind:value use:field on:change {...$$restProps}>
+<select class={className} {id} bind:value use:field {...restProps}>
   <option value="" hidden disabled selected>{placeholder}</option>
-  {#each items as item}
+  {#each items as item (item.value)}
     <option value={item.value}>{item.label}</option>
   {/each}
 </select>

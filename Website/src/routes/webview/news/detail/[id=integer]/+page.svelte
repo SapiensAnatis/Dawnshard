@@ -6,20 +6,20 @@
   import { getImageSrc } from '$main/news/news.ts';
   import { Button } from '$shadcn/components/ui/button';
 
-  import type { PageData } from './$types';
+  import type { PageProps } from './$types';
 
-  let previousPage: string = '/webview/news';
+  let previousPage: string = $state('/webview/news');
 
   afterNavigate(({ from }) => {
     previousPage = from ? from.url.pathname + from.url.search : previousPage;
   });
 
-  export let data: PageData;
+  let { data }: PageProps = $props();
 
-  let item = data.newsItem;
+  let item = $derived(data.newsItem);
 
-  $: headerImageSrc = getImageSrc(item.headerImagePath);
-  $: bodyImageSrc = getImageSrc(item.bodyImagePath);
+  let headerImageSrc = $derived(getImageSrc(item.headerImagePath));
+  let bodyImageSrc = $derived(getImageSrc(item.bodyImagePath));
 </script>
 
 <div class="p-4">

@@ -25,6 +25,7 @@
   let typeValue: EntityType | '' = $state('');
   let itemValue: number | '' = $state('');
   let quantityValue: number = $state(1);
+  let presentIdCounter: number = $state(0);
 
   const form = createForm();
   const type = form.field();
@@ -59,7 +60,7 @@
       .sort((a, b) => a.label.localeCompare(b.label));
   });
 
-  const disableItem = $derived(availableItems.length > 0 ? undefined : 'true');
+  const disableItem = $derived.by(() => availableItems.length == 0);
 
   const onSubmit = (evt: SubmitEvent) => {
     evt.preventDefault();
@@ -67,6 +68,7 @@
     if (typeValue === '' || itemValue === '') return;
 
     const submission: PresentFormSubmission = {
+      id: ++presentIdCounter,
       type: typeValue,
       item: itemValue,
       quantity: quantityValue
@@ -108,7 +110,7 @@
             placeholder="Select an item type"
             items={types}
             field={type}
-            on:change={onTypeChange}
+            onchange={onTypeChange}
             class="
               touched:invalid:border-red-700
               touched:invalid:text-red-700
