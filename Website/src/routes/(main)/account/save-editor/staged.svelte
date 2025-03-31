@@ -9,9 +9,9 @@
   import StagedPresent from './present/stagedPresent.svelte';
   import { changesCount, presents } from './stores';
 
-  $: anyModifications = $changesCount > 0;
+  let anyModifications = $derived($changesCount > 0);
 
-  let loading = false;
+  let loading = $state(false);
 
   const onClickReset = () => {
     presents.set([]);
@@ -75,7 +75,7 @@
     <br />
     <ul class="flex h-[75%] flex-col gap-2 overflow-y-auto" aria-labelledby="staged-changes-title">
       {#if anyModifications}
-        {#each $presents as present}
+        {#each $presents as present (present.id)}
           <StagedPresent {present} />
         {/each}
       {/if}

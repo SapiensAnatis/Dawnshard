@@ -4,22 +4,21 @@
   import RouteButton from './routeButton.svelte';
   import { routeGroups } from './routes.ts';
 
-  export let hasValidJwt: boolean;
-  export let drawer: boolean = false;
+  let { hasValidJwt, drawer }: { hasValidJwt: boolean; drawer: boolean } = $props();
 </script>
 
-{#each routeGroups as routeGroup}
+{#each routeGroups as routeGroup (routeGroup.title)}
   {#if !routeGroup.requireAuth || (routeGroup.requireAuth && hasValidJwt)}
     <div>
       <h2 class="mb-1 scroll-m-20 text-lg font-semibold tracking-tight">{routeGroup.title}</h2>
       {#if drawer}
         <Close class="flex w-full flex-col">
-          {#each routeGroup.routes as route}
+          {#each routeGroup.routes as route (route.href)}
             <RouteButton {route} />
           {/each}
         </Close>
       {:else}
-        {#each routeGroup.routes as route}
+        {#each routeGroup.routes as route (route.href)}
           <RouteButton {route} />
         {/each}
       {/if}

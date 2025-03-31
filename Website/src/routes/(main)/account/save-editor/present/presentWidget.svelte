@@ -25,6 +25,7 @@
   let typeValue: EntityType | '' = $state('');
   let itemValue: number | '' = $state('');
   let quantityValue: number = $state(1);
+  let presentIdCounter: number = $state(0);
 
   const form = createForm();
   const type = form.field();
@@ -67,6 +68,7 @@
     if (typeValue === '' || itemValue === '') return;
 
     const submission: PresentFormSubmission = {
+      id: ++presentIdCounter,
       type: typeValue,
       item: itemValue,
       quantity: quantityValue

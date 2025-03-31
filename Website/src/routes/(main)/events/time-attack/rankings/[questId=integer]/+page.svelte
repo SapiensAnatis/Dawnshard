@@ -4,12 +4,12 @@
   import Typography from '$lib/components/typography.svelte';
   import { t } from '$lib/translations';
 
-  import type { PageData } from './$types';
+  import type { PageProps } from './$types';
   import DataTable from './dataTable.svelte';
 
-  export let data: PageData;
+  let { data }: PageProps = $props();
 
-  $: currentQuest = data.questList.find((q) => q.id === parseInt($page.params.questId));
+  let currentQuest = $derived(data.questList.find((q) => q.id === parseInt($page.params.questId)));
 </script>
 
 <Page title="Time Attack Rankings">
@@ -17,7 +17,7 @@
     <div>
       <p class="mb-2">Select a quest to view rankings:</p>
       <ul class="pl-4">
-        {#each data.questList as { id: questId }}
+        {#each data.questList as { id: questId } (questId)}
           <li>
             <a
               class="hover:underline"

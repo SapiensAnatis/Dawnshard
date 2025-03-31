@@ -30,6 +30,7 @@ export const presentWidgetDataSchema = z.object({
 });
 
 export type PresentFormSubmission = {
+  id: number;
   type: EntityType;
   item: number;
   quantity: number;

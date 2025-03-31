@@ -57,7 +57,7 @@
   </div>
   <hr class="mt-4 mb-1" />
   <div class="flex flex-col gap-3 p-3">
-    {#each data.news.data as item}
+    {#each data.news.data as item (item.id)}
       <a tabindex="0" href={`/webview/news/detail/${item.id}`}>
         <NewsItem {item} description={false} {lastRead} />
       </a>
