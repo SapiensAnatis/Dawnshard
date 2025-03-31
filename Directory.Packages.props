@@ -38,7 +38,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
-    <PackageVersion Include="Microsoft.Extensions.Diagnostics.Testing" Version="9.2.0" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.Testing" Version="9.3.0" />
     <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="9.2.0" />
     <PackageVersion Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" />
@@ -51,11 +51,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
     <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.2" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.2" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.2" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.3" />
     <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="9.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.2" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.2" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.3" />
     <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="8.6.1" />
     <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.11.2" />
