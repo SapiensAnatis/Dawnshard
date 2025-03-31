@@ -60,7 +60,7 @@
       .sort((a, b) => a.label.localeCompare(b.label));
   });
 
-  const disableItem = $derived(availableItems.length > 0);
+  const disableItem = $derived.by(() => availableItems.length == 0);
 
   const onSubmit = (evt: SubmitEvent) => {
     evt.preventDefault();
