@@ -4,7 +4,7 @@
   import RouteButton from './routeButton.svelte';
   import { routeGroups } from './routes.ts';
 
-  let { hasValidJwt, drawer }: { hasValidJwt: boolean; drawer: boolean } = $props();
+  let { hasValidJwt, drawer }: { hasValidJwt: boolean; drawer?: boolean } = $props();
 </script>
 
 {#each routeGroups as routeGroup (routeGroup.title)}

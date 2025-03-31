@@ -1,26 +1,27 @@
 <script lang="ts" generics="T">
+  import type { HTMLSelectAttributes } from 'svelte/elements';
   import type { Field } from 'svelte-form-helper';
 
   import type { SelectItem } from './types.ts';
 
-  type SelectProps = {
+  type SelectProps<T> = {
     items: SelectItem<T>[];
     value: T | '';
     id: string;
     placeholder?: string;
     field: Field;
     class?: string;
-  };
+  } & HTMLSelectAttributes;
 
   let {
     items,
-    value,
+    value = $bindable(),
     id,
     placeholder,
     field,
     class: className,
     ...restProps
-  }: SelectProps = $props();
+  }: SelectProps<T> = $props();
 
   $effect(() => {
     if (value && !items.some((x) => x.value === value)) {

@@ -60,7 +60,7 @@
       .sort((a, b) => a.label.localeCompare(b.label));
   });
 
-  const disableItem = $derived(availableItems.length > 0 ? undefined : 'true');
+  const disableItem = $derived(availableItems.length > 0);
 
   const onSubmit = (evt: SubmitEvent) => {
     evt.preventDefault();
@@ -110,7 +110,7 @@
             placeholder="Select an item type"
             items={types}
             field={type}
-            on:change={onTypeChange}
+            onchange={onTypeChange}
             class="
               touched:invalid:border-red-700
               touched:invalid:text-red-700
