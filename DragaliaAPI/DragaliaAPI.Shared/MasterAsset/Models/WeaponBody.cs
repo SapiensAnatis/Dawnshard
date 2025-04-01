@@ -90,7 +90,8 @@ public record WeaponBody(
     int BaseAtk,
     int MaxAtk1,
     int MaxAtk2,
-    int MaxAtk3
+    int MaxAtk3,
+    bool IsPlayable
 )
 {
     [IgnoreMember]

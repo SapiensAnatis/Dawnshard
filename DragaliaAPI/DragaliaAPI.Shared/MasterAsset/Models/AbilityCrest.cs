@@ -25,7 +25,8 @@ public record AbilityCrest(
     int MaxHp,
     int UnionAbilityGroupId,
     int BaseId,
-    bool IsHideChangeImage
+    bool IsHideChangeImage,
+    bool IsPlayable
 )
 {
     public int GetBuildupGroupId(BuildupPieceTypes type, int step) =>
