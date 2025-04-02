@@ -80,7 +80,7 @@
   const onTypeChange = () => {
     if (!typeValue) return;
 
-    disableQuantity = !widgetData.types.find((t) => t.type === typeValue)?.hasQuantity;
+    disableQuantity = widgetData.types.find((t) => t.type === typeValue)?.maxQuantity === 1;
 
     if (disableQuantity) {
       quantityValue = 1;
@@ -89,6 +89,8 @@
     itemValue = '';
   };
 </script>
+
+{@debug availableItems}
 
 <Card.Root>
   <Card.Header>

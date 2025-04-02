@@ -30,7 +30,7 @@
 <Page title="News">
   <div class="mb-4 flex flex-col gap-3 px-3">
     {#if loading}
-      {#each { length: pageSize } as i (i)}
+      {#each { length: pageSize } as _, index (index)}
         <NewsSkeleton />
       {/each}
     {:else}

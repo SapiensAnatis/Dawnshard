@@ -398,7 +398,8 @@ public class MasterAssetTest
                     BaseAtk: 97,
                     MaxAtk1: 324,
                     MaxAtk2: 590,
-                    MaxAtk3: 0
+                    MaxAtk3: 0,
+                    IsPlayable: true
                 )
             );
     }
@@ -743,7 +744,8 @@ public class MasterAssetTest
                     MaxAtk: 25,
                     UnionAbilityGroupId: 4,
                     BaseId: 400192,
-                    IsHideChangeImage: true
+                    IsHideChangeImage: true,
+                    IsPlayable: true
                 )
             );
     }

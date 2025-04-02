@@ -47,7 +47,7 @@ public class SavefileEditTests : WebTestFixture
         data!
             .Types.Should()
             .ContainEquivalentOf(
-                new EntityTypeInformation() { Type = EntityTypes.Chara, HasQuantity = false }
+                new EntityTypeInformation() { Type = EntityTypes.Chara, MaxQuantity = 1 }
             );
         data.AvailableItems.Should()
             .ContainKey(EntityTypes.DmodePoint)
