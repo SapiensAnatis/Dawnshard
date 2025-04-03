@@ -5,9 +5,12 @@ namespace DragaliaAPI.Features.Web.Savefile;
 
 internal sealed class PresentWidgetData
 {
-    public required List<EntityTypeInformation> Types { get; init; }
+    public required IReadOnlyList<EntityTypeInformation> Types { get; init; }
 
-    public required Dictionary<EntityTypes, List<EntityTypeItem>> AvailableItems { get; init; }
+    public required IDictionary<
+        EntityTypes,
+        IReadOnlyList<EntityTypeItem>
+    > AvailableItems { get; init; }
 }
 
 internal readonly struct EntityTypeInformation
@@ -15,7 +18,7 @@ internal readonly struct EntityTypeInformation
     [JsonConverter(typeof(JsonStringEnumConverter<EntityTypes>))]
     public EntityTypes Type { get; init; }
 
-    public bool HasQuantity { get; init; }
+    public int MaxQuantity { get; init; }
 }
 
 internal readonly struct EntityTypeItem

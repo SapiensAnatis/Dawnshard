@@ -15,17 +15,19 @@
 <Page title="Save Editor">
   <div id="about" class="max-w-7xl">
     <Typography typography="h2">About</Typography>
-    <p>
+    <p class="mb-2">
       On this page, you can make modifications to your account without having to go through the save
       export and import process.
     </p>
     <p>
       The functionality is basic for now, but may be expanded in the future. For more extensive
-      modifications, using the Java-based <a
+      modifications, using the web-based <a
         class="link"
-        href="https://github.com/sockperson/DragaliaSaveEditor/releases/latest">
+        href="https://sockperson.github.io/Vite-DragaliaSaveEditor/">
         DragaliaSaveEditor
-      </a> by sockperson is recommended, but it requires access to a desktop computer.
+      </a>
+      by sockperson is recommended, but it requires importing and exporting your save file. You can do
+      this on the <a class="link" href="/account/profile">Profile</a> page.
     </p>
   </div>
   <br />

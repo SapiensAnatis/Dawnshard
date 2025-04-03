@@ -3,6 +3,7 @@ using DragaliaAPI.Features.Present;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 
 namespace DragaliaAPI.Features.Web.Savefile;
 
@@ -43,9 +44,15 @@ internal sealed partial class SavefileEditService(
             return false;
         }
 
+        PresentWidgetData presentWidgetData = EditorWidgetsService.GetPresentWidgetData();
+
         foreach (PresentFormSubmission present in presents)
         {
-            if (present.Quantity is < 1 or > 999_999)
+            int maxQuantity = presentWidgetData
+                .Types.FirstOrDefault(x => x.Type == present.Type)
+                .MaxQuantity;
+
+            if (present.Quantity < 1 || present.Quantity > maxQuantity)
             {
                 Log.InvalidSinglePresent(logger, present);
                 return false;
@@ -63,6 +70,11 @@ internal sealed partial class SavefileEditService(
                 EntityTypes.FreeDiamantium => ValidateId0Present(present),
                 EntityTypes.Wyrmite => ValidateId0Present(present),
                 EntityTypes.HustleHammer => ValidateId0Present(present),
+                EntityTypes.Dew => ValidateId0Present(present),
+                EntityTypes.Rupies => ValidateId0Present(present),
+                EntityTypes.Wyrmprint => ValidateWyrmprintPresent(present),
+                EntityTypes.WeaponBody => ValidateWeaponBodyPresent(present),
+                EntityTypes.WeaponSkin => ValidateWeaponSkinPresent(present),
                 _ => false,
             };
 
@@ -77,10 +89,12 @@ internal sealed partial class SavefileEditService(
     }
 
     private static bool ValidateCharaPresent(PresentFormSubmission present) =>
-        MasterAsset.CharaData.ContainsKey((Charas)present.Item) && present.Quantity == 1;
+        MasterAsset.CharaData.TryGetValue((Charas)present.Item, out CharaData? item)
+        && item.IsPlayable;
 
     private static bool ValidateDragonPresent(PresentFormSubmission present) =>
-        MasterAsset.DragonData.ContainsKey((DragonId)present.Item);
+        MasterAsset.DragonData.TryGetValue((DragonId)present.Item, out DragonData? item)
+        && item.IsPlayable;
 
     private static bool ValidateItemPresent(PresentFormSubmission present) =>
         MasterAsset.UseItem.ContainsKey((UseItem)present.Item);
@@ -95,6 +109,17 @@ internal sealed partial class SavefileEditService(
 
     private static bool ValidateDragonGiftPresent(PresentFormSubmission present) =>
         Enum.IsDefined((DragonGifts)present.Item);
+
+    private static bool ValidateWyrmprintPresent(PresentFormSubmission present) =>
+        MasterAsset.AbilityCrest.TryGetValue((AbilityCrestId)present.Item, out AbilityCrest? item)
+        && item.IsPlayable;
+
+    private static bool ValidateWeaponBodyPresent(PresentFormSubmission present) =>
+        MasterAsset.WeaponBody.TryGetValue((WeaponBodies)present.Item, out WeaponBody? item)
+        && item.IsPlayable;
+
+    private static bool ValidateWeaponSkinPresent(PresentFormSubmission present) =>
+        MasterAsset.WeaponSkin.TryGetValue(present.Item, out WeaponSkin? item) && item.IsPlayable;
 
     private static partial class Log
     {

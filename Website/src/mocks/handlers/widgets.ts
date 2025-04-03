@@ -7,15 +7,15 @@ export const handlePresentData: HttpResponseResolver = () => {
     types: [
       {
         type: 'Material',
-        hasQuantity: true
+        maxQuantity: 999_999
       },
       {
         type: 'Chara',
-        hasQuantity: false
+        maxQuantity: 1
       },
       {
         type: 'DmodePoint',
-        hasQuantity: true
+        maxQuantity: 999_999
       }
     ],
     availableItems: {
