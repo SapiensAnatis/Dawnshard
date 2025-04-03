@@ -26,8 +26,8 @@
         href="https://sockperson.github.io/Vite-DragaliaSaveEditor/">
         DragaliaSaveEditor
       </a>
-      by sockperson is recommended, but it requires importing and exporting your save file. You can
-      do this on the <a class="link" href="/account/profile">Profile</a> page.
+      by sockperson is recommended, but it requires importing and exporting your save file. You can do
+      this on the <a class="link" href="/account/profile">Profile</a> page.
     </p>
   </div>
   <br />
