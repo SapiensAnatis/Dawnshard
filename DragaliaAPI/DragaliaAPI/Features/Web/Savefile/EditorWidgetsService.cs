@@ -15,7 +15,7 @@ internal sealed class EditorWidgetsService
         new() { Type = EntityTypes.Item, MaxQuantity = 9_999 },
         new() { Type = EntityTypes.Material, MaxQuantity = 999_999 },
         new() { Type = EntityTypes.DmodePoint, MaxQuantity = 999_999 },
-        new() { Type = EntityTypes.SkipTicket, MaxQuantity = 300 },
+        new() { Type = EntityTypes.SkipTicket, MaxQuantity = 400 },
         new() { Type = EntityTypes.DragonGift, MaxQuantity = 999 },
         new() { Type = EntityTypes.FreeDiamantium, MaxQuantity = 999_999 },
         new() { Type = EntityTypes.Wyrmite, MaxQuantity = 999_999 },

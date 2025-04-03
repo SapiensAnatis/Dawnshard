@@ -91,7 +91,10 @@ public record WeaponBody(
     int MaxAtk1,
     int MaxAtk2,
     int MaxAtk3,
-    bool IsPlayable
+    bool IsPlayable,
+    int DuplicateEntityId,
+    EntityTypes DuplicateEntityType,
+    int DuplicateEntityQuantity
 )
 {
     [IgnoreMember]

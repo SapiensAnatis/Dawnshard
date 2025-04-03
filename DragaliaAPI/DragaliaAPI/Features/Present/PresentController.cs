@@ -100,6 +100,9 @@ public class PresentController : DragaliaControllerBase
             ConvertedEntityList = entityResult.ConvertedEntityList,
         };
 
+        // FIXME - if you claim duplicate wyrmprints and get rewarded eldwater, it works
+        // mostly fine, but the text talks about adventurers?
+
         return Ok(data);
     }
 

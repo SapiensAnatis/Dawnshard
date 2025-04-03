@@ -2,10 +2,9 @@ using System.Diagnostics;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
-using LinqToDB;
-using LinqToDB.Data;
-using LinqToDB.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Shared.Reward.Handlers;
@@ -20,47 +19,47 @@ public class WeaponBodyHandler(ApiContext apiContext, IPlayerIdentityService pla
     )
         where TKey : struct
     {
-        Dictionary<WeaponBodies, TKey> inverseKeyLookup = entities.ToDictionary(
-            x => (WeaponBodies)x.Value.Id,
-            x => x.Key
-        );
+        List<WeaponBodies> targetIds = entities.Select(x => (WeaponBodies)x.Value.Id).ToList();
 
-        List<DbWeaponBody> toAdd = entities
-            .Values.Select(x => new DbWeaponBody()
-            {
-                ViewerId = playerIdentityService.ViewerId,
-                WeaponBodyId = (WeaponBodies)x.Id,
-            })
-            .ToList();
-
-        var mergeResult = apiContext
-            .PlayerWeapons.ToLinqToDBTable()
-            .Merge()
-            .Using(entities.Values)
-            .On(
-                (dbEntry, entity) =>
-                    dbEntry.ViewerId == playerIdentityService.ViewerId
-                    && dbEntry.WeaponBodyId == (WeaponBodies)entity.Id
+        HashSet<WeaponBodies> owned = await apiContext
+            .PlayerWeapons.Where(x =>
+                x.ViewerId == playerIdentityService.ViewerId && targetIds.Contains(x.WeaponBodyId)
             )
-            .InsertWhenNotMatched(entity => new DbWeaponBody()
-            {
-                ViewerId = playerIdentityService.ViewerId,
-                WeaponBodyId = (WeaponBodies)entity.Id,
-            })
-            .MergeWithOutputAsync(
-                (string action, DbWeaponBody old, DbWeaponBody _) =>
-                    new { Action = action, Id = old.WeaponBodyId }
-            );
+            .Select(x => x.WeaponBodyId)
+            .ToHashSetAsync();
 
-        var resultDict = new Dictionary<TKey, GrantReturn>(entities.Count);
+        Dictionary<TKey, GrantReturn> resultDict = new(entities.Count);
 
-        await foreach (var result in mergeResult)
+        foreach ((TKey key, Entity entity) in entities)
         {
-            TKey key = inverseKeyLookup[result.Id];
-            resultDict[key] =
-                result.Action == "inserted" ? GrantReturn.Added() : GrantReturn.Converted(null);
+            WeaponBodies weaponId = (WeaponBodies)entity.Id;
+
+            Debug.Assert(MasterAsset.WeaponBody[weaponId].IsPlayable);
+
+            if (owned.Contains(weaponId))
+            {
+                // The WeaponBody asset contains 'duplicate entity' information, but attempting to return a
+                // converted entity result doesn't work properly - it brings up an empty window and has text
+                // about adventurers.
+                resultDict.Add(key, GrantReturn.Discarded());
+            }
+            else
+            {
+                apiContext.PlayerWeapons.Add(
+                    new DbWeaponBody()
+                    {
+                        ViewerId = playerIdentityService.ViewerId,
+                        WeaponBodyId = weaponId,
+                        LimitBreakCount = entity.LimitBreakCount ?? 0,
+                        BuildupCount = entity.BuildupCount ?? 0,
+                        EquipableCount = entity.EquipableCount ?? 0,
+                    }
+                );
+
+                resultDict.Add(key, GrantReturn.Added());
+            }
         }
 
-        return new Dictionary<TKey, GrantReturn>();
+        return resultDict;
     }
 }
