@@ -20,7 +20,7 @@
 
   let { widgetData }: { widgetData: PresentWidgetData } = $props();
 
-  let disableQuantity = $state(false);
+  let maxQuantity = $state<number | undefined>(undefined);
 
   let typeValue: EntityType | '' = $state('');
   let itemValue: number | '' = $state('');
@@ -60,8 +60,6 @@
       .sort((a, b) => a.label.localeCompare(b.label));
   });
 
-  const disableItem = $derived.by(() => availableItems.length == 0);
-
   const onSubmit = (evt: SubmitEvent) => {
     evt.preventDefault();
 
@@ -80,17 +78,15 @@
   const onTypeChange = () => {
     if (!typeValue) return;
 
-    disableQuantity = widgetData.types.find((t) => t.type === typeValue)?.maxQuantity === 1;
+    maxQuantity = widgetData.types.find((t) => t.type === typeValue)?.maxQuantity;
 
-    if (disableQuantity) {
+    if (maxQuantity === 1) {
       quantityValue = 1;
     }
 
     itemValue = '';
   };
 </script>
-
-{@debug availableItems}
 
 <Card.Root>
   <Card.Header>
@@ -129,7 +125,6 @@
             id="item"
             placeholder="Select an item"
             items={availableItems}
-            disabled={disableItem}
             field={item}
             required
             class="touched:invalid:border-red-700 touched:invalid:text-red-700"
@@ -144,10 +139,10 @@
             id="quantity"
             placeholder="Enter a quantity"
             type="number"
-            disabled={disableQuantity}
+            disabled={maxQuantity === 1}
             field={quantity}
             min={1}
-            max={999999}
+            max={maxQuantity}
             required
             class="
               touched:invalid:border-red-700
