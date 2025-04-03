@@ -72,23 +72,13 @@ public class SavefileEditTests : WebTestFixture
             .Should()
             .HaveStatusCode(HttpStatusCode.Unauthorized);
 
-    [Fact]
-    public async Task Edit_Invalid_ReturnsBadRequest()
+    [Theory]
+    [MemberData(nameof(InvalidEditRequests))]
+    public async Task Edit_Invalid_ReturnsBadRequest(PresentFormSubmission submission)
     {
         this.AddTokenCookie();
 
-        SavefileEditRequest invalidRequest = new()
-        {
-            Presents =
-            [
-                new()
-                {
-                    Type = EntityTypes.Chara,
-                    Item = -4,
-                    Quantity = -2,
-                },
-            ],
-        };
+        SavefileEditRequest invalidRequest = new() { Presents = [submission] };
 
         (
             await this.Client.PostAsJsonAsync(
@@ -114,6 +104,12 @@ public class SavefileEditTests : WebTestFixture
                 {
                     Type = EntityTypes.Chara,
                     Item = (int)Charas.SummerCelliera,
+                    Quantity = 1,
+                },
+                new()
+                {
+                    Type = EntityTypes.WeaponBody,
+                    Item = (int)WeaponBodies.QinglongYanyuedao,
                     Quantity = 1,
                 },
             ],
@@ -149,8 +145,39 @@ public class SavefileEditTests : WebTestFixture
                         ReceiveLimitTime = DateTimeOffset.UnixEpoch,
                         MessageId = PresentMessage.DragaliaLostTeamGift,
                     },
+                    new PresentDetailList()
+                    {
+                        EntityType = EntityTypes.WeaponBody,
+                        EntityId = (int)WeaponBodies.QinglongYanyuedao,
+                        EntityQuantity = 1,
+                        EntityLevel = 1,
+                        ReceiveLimitTime = DateTimeOffset.UnixEpoch,
+                        MessageId = PresentMessage.DragaliaLostTeamGift,
+                    },
                 ],
                 opts => opts.Excluding(x => x.PresentId).Excluding(x => x.CreateTime)
             );
     }
+
+    public static TheoryData<PresentFormSubmission> InvalidEditRequests { get; } =
+        [
+            new PresentFormSubmission()
+            {
+                Type = EntityTypes.Chara,
+                Item = -4,
+                Quantity = -2,
+            },
+            new PresentFormSubmission()
+            {
+                Type = EntityTypes.Chara,
+                Item = (int)Charas.SummerAlex,
+                Quantity = 23,
+            },
+            new PresentFormSubmission()
+            {
+                Type = EntityTypes.SkipTicket,
+                Item = 0,
+                Quantity = 9_999_999,
+            },
+        ];
 }
