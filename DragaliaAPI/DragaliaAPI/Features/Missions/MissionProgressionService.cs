@@ -12,7 +12,8 @@ namespace DragaliaAPI.Features.Missions;
 public class MissionProgressionService(
     IMissionRepository missionRepository,
     IMissionInitialProgressionService missionInitialProgressionService,
-    ILogger<MissionProgressionService> logger
+    ILogger<MissionProgressionService> logger,
+    ActivitySource activitySource
 ) : IMissionProgressionService
 {
     private readonly Queue<MissionEvent> eventQueue = new();
@@ -297,6 +298,8 @@ public class MissionProgressionService(
 
     public async Task ProcessMissionEvents(CancellationToken cancellationToken)
     {
+        using Activity? activity = activitySource.StartActivity();
+
         if (this.eventQueue.Count == 0)
             return;
 

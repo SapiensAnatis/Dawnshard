@@ -25,7 +25,8 @@ public class UpdateDataService(
     IPresentService presentService,
     IEventService eventService,
     IDmodeService dmodeService,
-    IFriendNotificationService friendNotificationService
+    IFriendNotificationService friendNotificationService,
+    ActivitySource activitySource
 ) : IUpdateDataService
 {
     [Obsolete("Use the SaveChangesAsync overload that accepts a CancellationToken instead.")]
@@ -33,6 +34,9 @@ public class UpdateDataService(
 
     public async Task<UpdateDataList> SaveChangesAsync(CancellationToken cancellationToken)
     {
+        // ReSharper disable once ExplicitCallerInfoArgument
+        using Activity? activity = activitySource.StartActivity("GenerateUpdateDataList");
+
         await missionProgressionService.ProcessMissionEvents(cancellationToken);
 
         List<IDbPlayerData> entities = apiContext
