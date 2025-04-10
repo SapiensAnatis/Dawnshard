@@ -1875,7 +1875,7 @@
       "40090004": "Mask of Determination (Lance's Boon)",
       "40090005": "Her Beloved (Crown's Boon)",
       "40090006": "Mask of Determination (Bow's Boon)",
-      "40090007": "&quot;A Knight's Dream&quot; (Axe's Boon)",
+      "40090007": "\"A Knight's Dream\" (Axe's Boon)",
       "40090008": "Wind of Oaths (Eagle's Boon)",
       "40090009": "Beneath the Boughs (Wolf's Boon)",
       "40090010": "Savage Hawk (Bow's Boon)",
@@ -1898,7 +1898,8 @@
       "40090027": "Ravenous Fire (Deer's Boon)",
       "40090028": "The Genius Tactician (Bow's Boon)",
       "40090029": "Ravenous Fire (Crown's Boon)",
-      "40090030": "The Genius Tactician (Spider's Boon)"
+      "40090030": "The Genius Tactician (Spider's Boon)",
+      "50000001": "The Chicken Man"
     }
   },
   "dew": {
