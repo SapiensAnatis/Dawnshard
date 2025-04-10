@@ -22,7 +22,7 @@ const createHttpHandler = <
   return (
     path: string,
     resolver: HttpResponseResolver<Params, RequestBodyType, ResponseBodyType>
-  ) => [mswHttp[method](path, resolver), mswHttp[method](`http://localhost:5000${path}`, resolver)];
+  ) => [mswHttp[method](path, resolver), mswHttp[method](`http://localhost*${path}`, resolver)];
 };
 
 const http = {

@@ -10,7 +10,7 @@
   export let lastSaveImportTime: Date | null;
 </script>
 
-<Card.Root>
+<Card.Root class="flex flex-col">
   <Card.Header>
     <Card.Title level={2}>
       <div class="flex flex-row items-center justify-items-start gap-2">
@@ -21,12 +21,14 @@
   </Card.Header>
   <Card.Content>
     <div>
-      <p>You can import your save by visiting the BaaS and uploading a file.</p>
+      <p>You can import a save file by visiting the BaaS and uploading a file.</p>
       <p class="mt-2 font-semibold">Last save import time</p>
       <p>{renderDate(lastSaveImportTime)}</p>
     </div>
   </Card.Content>
+  <!-- Spacer to align 'visit BaaS' and 'export save' buttons when horizontal -->
+  <div class="grow"></div>
   <Card.Footer>
-    <Button variant="secondary" href={PUBLIC_BAAS_URL}>Visit the BaaS</Button>
+    <Button href={PUBLIC_BAAS_URL}>Visit the BaaS</Button>
   </Card.Footer>
 </Card.Root>
