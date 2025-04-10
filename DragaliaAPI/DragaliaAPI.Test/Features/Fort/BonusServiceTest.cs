@@ -86,7 +86,9 @@ public class BonusServiceTest
                     .BuildMock()
             );
 
-        FortBonusList bonusList = await this.bonusService.GetBonusList();
+        FortBonusList bonusList = await this.bonusService.GetBonusList(
+            TestContext.Current.CancellationToken
+        );
 
         bonusList
             .Should()

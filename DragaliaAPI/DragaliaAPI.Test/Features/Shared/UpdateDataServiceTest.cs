@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Abstract;
@@ -28,6 +29,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
     private readonly Mock<IEventService> mockEventService;
     private readonly Mock<IDmodeService> mockDmodeService;
     private readonly Mock<IFriendNotificationService> mockFriendNotificationService;
+    private readonly ActivitySource mockActivitySource;
 
     public UpdateDataServiceTest(ITestOutputHelper output)
     {
@@ -39,6 +41,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
         this.mockEventService = new(MockBehavior.Strict);
         this.mockDmodeService = new(MockBehavior.Strict);
         this.mockFriendNotificationService = new(MockBehavior.Strict);
+        this.mockActivitySource = new ActivitySource("TestSource");
         this.mapper = UnitTestUtils.CreateMapper();
 
         this.mockFriendNotificationService.Setup(x =>
@@ -54,7 +57,8 @@ public class UpdateDataServiceTest : RepositoryTestFixture
             this.mockPresentService.Object,
             this.mockEventService.Object,
             this.mockDmodeService.Object,
-            this.mockFriendNotificationService.Object
+            this.mockFriendNotificationService.Object,
+            this.mockActivitySource
         );
     }
 

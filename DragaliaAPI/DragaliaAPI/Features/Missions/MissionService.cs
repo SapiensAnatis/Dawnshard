@@ -1,4 +1,5 @@
 ﻿using System.Collections.Frozen;
+using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
@@ -21,7 +22,8 @@ public class MissionService(
     IMissionInitialProgressionService missionInitialProgressionService,
     IUserDataRepository userDataRepository,
     TimeProvider timeProvider,
-    IOptionsMonitor<EventOptions> eventOptionsMonitor
+    IOptionsMonitor<EventOptions> eventOptionsMonitor,
+    ActivitySource activitySource
 ) : IMissionService
 {
     private static readonly FrozenSet<int> ObsoleteMemoryEventMissions = new[]
@@ -463,6 +465,8 @@ public class MissionService(
         ILookup<MissionType, DbPlayerMission>? updatedLookup
     )
     {
+        using Activity? activity = activitySource.StartActivity();
+
         MissionNotice notice = new();
 
         async Task<AtgenNormalMissionNotice> BuildNotice(MissionType type)

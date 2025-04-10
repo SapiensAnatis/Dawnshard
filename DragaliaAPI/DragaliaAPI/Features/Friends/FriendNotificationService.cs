@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
@@ -12,12 +13,14 @@ namespace DragaliaAPI.Features.Friends;
 /// </summary>
 public class FriendNotificationService(
     ApiContext apiContext,
-    IPlayerIdentityService playerIdentityService
+    IPlayerIdentityService playerIdentityService,
+    ActivitySource activitySource
 ) : IFriendNotificationService
 {
     public async Task<FriendNotice?> GetFriendNotice(CancellationToken cancellationToken)
     {
         // TODO - consider caching this as it is called for every UpdateDataList
+        using Activity? activity = activitySource.StartActivity();
 
         int newFriendCount = await this.GetNewFriendsQuery().CountAsync(cancellationToken);
         int newFriendRequestCount = await apiContext
