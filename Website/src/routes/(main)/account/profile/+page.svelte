@@ -20,7 +20,7 @@
       <SaveExport />
     </div>
     <div class="section">
-      <Settings />
+      <Settings settings={data.userProfile.settings} />
     </div>
   </div>
 </Page>

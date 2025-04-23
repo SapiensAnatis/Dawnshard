@@ -10,6 +10,9 @@ export const handleUser: HttpResponseResolver = () => {
 export const handleUserProfile: HttpResponseResolver = () => {
   return HttpResponse.json({
     lastSaveImportTime: '2024-06-29T11:57:40Z',
-    lastLoginTime: '2024-06-28T11:57:40Z'
+    lastLoginTime: '2024-06-28T11:57:40Z',
+    settings: {
+      dailyGifts: true
+    }
   });
 };

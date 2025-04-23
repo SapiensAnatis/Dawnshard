@@ -9,7 +9,10 @@ export const userProfileSchema = z.object({
   lastLoginTime: z
     .string()
     .datetime({ offset: true })
-    .transform((val) => new Date(val))
+    .transform((val) => new Date(val)),
+  settings: z.object({
+    dailyGifts: z.boolean()
+  })
 });
 
 export type UserProfile = z.infer<typeof userProfileSchema>;
