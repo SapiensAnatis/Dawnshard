@@ -15,7 +15,7 @@
     <div class="section">
       <UserInformation user={data.user} userProfile={data.userProfile} />
     </div>
-    <div class="section flex sm:flex-col md:flex-row">
+    <div class="section flex flex-col md:flex-row">
       <SaveImport lastSaveImportTime={data.userProfile.lastSaveImportTime} />
       <SaveExport />
     </div>
