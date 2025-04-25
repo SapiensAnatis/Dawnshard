@@ -3,7 +3,7 @@
   import Settings from 'lucide-svelte/icons/settings';
   import { toast } from 'svelte-sonner';
 
-  import { enhance } from '$app/forms';
+  import { applyAction, enhance } from '$app/forms';
   import type { UserProfile } from '$main/account/profile/userProfile.ts';
   import { Button } from '$shadcn/components/ui/button';
   import * as Card from '$shadcn/components/ui/card';
@@ -29,9 +29,9 @@
     return false;
   });
 
-  // The form data is represented as an object like { dailyGifts: 'on' }, in which a key
+  // The form data is represented as an object like { dailyGifts: 'true' }, in which a key
   // not being present means it is toggled off.
-  type FormReturn = Partial<Record<keyof SettingsType, 'on'>>;
+  type FormReturn = Partial<Record<keyof SettingsType, 'true'>>;
 
   const mapFormResultToState = (
     result: Extract<ActionResult<FormReturn, undefined>, { type: 'success' }>
@@ -71,6 +71,7 @@
         if (result.type === 'success') {
           toast.success('Successfully changed settings');
           remoteSettings = mapFormResultToState(result);
+          await applyAction(result);
         } else if (result.type === 'failure') {
           toast.error('Failed to change settings');
         }
