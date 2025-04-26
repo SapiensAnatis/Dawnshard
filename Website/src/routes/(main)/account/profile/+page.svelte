@@ -11,11 +11,11 @@
 </script>
 
 <Page title="Profile">
-  <div class="w-full px-3 lg:w-[75%]">
+  <div class="flex w-full flex-col gap-2 px-3 lg:w-[75%]">
     <div class="section">
       <UserInformation user={data.user} userProfile={data.userProfile} />
     </div>
-    <div class="section flex flex-col md:flex-row">
+    <div class="grid grid-cols-1 gap-2 md:grid-cols-2">
       <SaveImport lastSaveImportTime={data.userProfile.lastSaveImportTime} />
       <SaveExport />
     </div>
@@ -26,8 +26,4 @@
 </Page>
 
 <style>
-  .section + .section {
-    margin-top: 1rem;
-    gap: 1rem;
-  }
 </style>

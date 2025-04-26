@@ -49,13 +49,13 @@
   </Card.Header>
   <Card.Content>
     <div>
-      <p>
+      <p class="mb-2">
         You can use the below button to export your save. This allows you to transfer it to another
         server, or to edit it and re-import it.
       </p>
       <p>
         For a tool to ease the process of editing your save, check out the
-        <a class="link" href="https://github.com/sockperson/DragaliaSaveEditor/releases/latest">
+        <a class="link" href="https://sockperson.github.io/Vite-DragaliaSaveEditor/">
           DragaliaSaveEditor
         </a> by sockperson.
       </p>

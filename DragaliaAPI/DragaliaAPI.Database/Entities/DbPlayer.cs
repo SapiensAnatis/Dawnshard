@@ -108,6 +108,8 @@ public class DbPlayer
 
     public List<DbPlayerFriendship> Friendships { get; set; } = [];
 
+    public DbSettings? Settings { get; set; }
+
     private class Configuration : IEntityTypeConfiguration<DbPlayer>
     {
         public void Configure(EntityTypeBuilder<DbPlayer> builder)

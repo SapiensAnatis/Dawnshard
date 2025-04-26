@@ -29,9 +29,9 @@
     return false;
   });
 
-  // The form data is represented as an object like { dailyGifts: 'true' }, in which a key
+  // The form data is represented as an object like { dailyGifts: 'on' }, in which a key
   // not being present means it is toggled off.
-  type FormReturn = Partial<Record<keyof SettingsType, 'true'>>;
+  type FormReturn = Partial<Record<keyof SettingsType, 'on'>>;
 
   const mapFormResultToState = (
     result: Extract<ActionResult<FormReturn, undefined>, { type: 'success' }>
@@ -86,11 +86,7 @@
         <!-- Would be nice to use a snippet here, but you can't bind to snippet props :( -->
         <div class="flex flex-row-reverse items-center gap-2">
           <Label for="daily-gifts">Receive daily material gifts</Label>
-          <Switch
-            name="dailyGifts"
-            id="daily-gifts"
-            bind:checked={localSettings.dailyGifts}
-            value={localSettings.dailyGifts} />
+          <Switch name="dailyGifts" id="daily-gifts" bind:checked={localSettings.dailyGifts} />
         </div>
       </div>
     </Card.Content>
