@@ -23,7 +23,7 @@ updates:
   - package-ecosystem: "docker"
     directory: "/PhotonStateManager/DragaliaAPI.Photon.StateManager"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     groups:
       docker:
         patterns:
@@ -39,7 +39,7 @@ updates:
   - package-ecosystem: "cargo"
     directory: "/MaintenanceWorker"
     schedule:
-      interval: "weekly"
+      interval: "quarterly"
     groups:
       cargo:
         patterns:
@@ -47,7 +47,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/MaintenanceWorker"
     schedule:
-      interval: "weekly"
+      interval: "quarterly"
     groups:
       npm:
         patterns:
