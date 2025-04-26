@@ -115,6 +115,7 @@ public class UserTests : WebTestFixture
                 {
                     LastLoginTime = DateTimeOffset.UnixEpoch,
                     LastSaveImportTime = null,
+                    Settings = new() { DailyGifts = true },
                 }
             );
     }

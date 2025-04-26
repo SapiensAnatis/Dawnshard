@@ -1,21 +1,26 @@
+using DragaliaAPI.Database.Entities.Owned;
 using DragaliaAPI.Features.Present;
+using DragaliaAPI.Features.Web.Settings;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.Presents;
 
 namespace DragaliaAPI.Features.Login.Actions;
 
-public class LoginGiftResetAction : IDailyResetAction
+internal sealed class LoginGiftResetAction(
+    IPresentService presentService,
+    SettingsService settingsService
+) : IDailyResetAction
 {
-    private readonly IPresentService presentService;
-
-    public LoginGiftResetAction(IPresentService presentService)
+    public async Task Apply()
     {
-        this.presentService = presentService;
-    }
+        PlayerSettings settings = await settingsService.GetSettings(CancellationToken.None);
 
-    public Task Apply()
-    {
-        this.presentService.AddPresent(
+        if (!settings.DailyGifts)
+        {
+            return;
+        }
+
+        presentService.AddPresent(
             new Present.Present(
                 PresentMessage.DragaliaLostTeamMessage,
                 EntityTypes.Material,
@@ -24,7 +29,7 @@ public class LoginGiftResetAction : IDailyResetAction
             )
         );
 
-        this.presentService.AddPresent(
+        presentService.AddPresent(
             new Present.Present(
                 PresentMessage.DragaliaLostTeamMessage,
                 EntityTypes.Material,
@@ -33,7 +38,7 @@ public class LoginGiftResetAction : IDailyResetAction
             )
         );
 
-        this.presentService.AddPresent(
+        presentService.AddPresent(
             new Present.Present(
                 PresentMessage.DragaliaLostTeamMessage,
                 EntityTypes.Material,
@@ -41,7 +46,7 @@ public class LoginGiftResetAction : IDailyResetAction
             )
         );
 
-        this.presentService.AddPresent(
+        presentService.AddPresent(
             new Present.Present(
                 PresentMessage.DragaliaLostTeamMessage,
                 EntityTypes.Material,
@@ -50,7 +55,7 @@ public class LoginGiftResetAction : IDailyResetAction
             )
         );
 
-        this.presentService.AddPresent(
+        presentService.AddPresent(
             new Materials[]
             {
                 Materials.FlameTome,
@@ -65,7 +70,5 @@ public class LoginGiftResetAction : IDailyResetAction
                 5
             ))
         );
-
-        return Task.CompletedTask;
     }
 }

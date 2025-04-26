@@ -10,12 +10,6 @@ namespace DragaliaAPI.Features.Web.Settings;
 [Authorize(Policy = AuthConstants.PolicyNames.RequireDawnshardIdentity)]
 internal sealed class SettingsController(SettingsService settingsService) : ControllerBase
 {
-    [HttpGet]
-    public async Task<PlayerSettings> GetSettings(CancellationToken cancellationToken)
-    {
-        return await settingsService.GetSettings(cancellationToken);
-    }
-
     [HttpPut]
     public async Task SetSettings(PlayerSettings settings, CancellationToken cancellationToken)
     {
