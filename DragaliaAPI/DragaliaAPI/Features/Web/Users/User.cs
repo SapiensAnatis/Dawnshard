@@ -1,6 +1,8 @@
-﻿namespace DragaliaAPI.Features.Web.Users;
+﻿using DragaliaAPI.Database.Entities.Owned;
 
-public class User
+namespace DragaliaAPI.Features.Web.Users;
+
+internal sealed class User
 {
     public long ViewerId { get; init; }
 
@@ -9,9 +11,11 @@ public class User
     public bool IsAdmin { get; init; }
 }
 
-public class UserProfile
+internal sealed class UserProfile
 {
     public DateTimeOffset? LastSaveImportTime { get; init; }
 
     public DateTimeOffset LastLoginTime { get; init; }
+
+    public required PlayerSettings Settings { get; init; }
 }

@@ -7,14 +7,13 @@ IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(ar
 IResourceBuilder<PostgresServerResource> postgres = builder
     .AddPostgres("postgres")
     .WithImage("postgres", "16.4")
-    .WithDataVolume("dragalia-api-pgdata");
+    .WithDataVolume("dragalia-api-pgdata")
+    .WithLifetime(ContainerLifetime.Persistent);
 
 IResourceBuilder<RedisResource> redis = builder
     .AddRedis("redis")
     .WithImage("redis/redis-stack", "7.4.0-v0")
-    // Persistence isn't critical but is nice to avoid long session refreshes on every restart
-    .WithVolume("dragalia-api-redisdata", "/data")
-    .WithEnvironment("REDIS_ARGS", "--save 10 3"); // Save every 10 seconds if >= 3 keys changed
+    .WithLifetime(ContainerLifetime.Persistent);
 
 IResourceBuilder<ProjectResource> dragaliaApi = builder
     .AddProject<Projects.DragaliaAPI>("dragalia-api")
