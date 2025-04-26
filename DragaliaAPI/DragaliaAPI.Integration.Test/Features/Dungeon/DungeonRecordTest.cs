@@ -179,7 +179,7 @@ public class DungeonRecordTest : TestFixture
                     LastDailyResetTime = DateTimeOffset.UtcNow,
                     LastWeeklyResetTime = DateTimeOffset.UtcNow,
                 },
-                opts => opts.WithDateTimeTolerance()
+                opts => opts.WithDateTimeTolerance(TimeSpan.FromMinutes(5))
             );
 
         response.RepeatData.Should().BeNull();

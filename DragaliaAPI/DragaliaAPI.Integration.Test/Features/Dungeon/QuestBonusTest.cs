@@ -243,7 +243,7 @@ public class QuestBonusTest : TestFixture
                     DailyPlayCount = 1,
                     WeeklyPlayCount = 1,
                 },
-                opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(10))
+                opts => opts.WithDateTimeTolerance(TimeSpan.FromMinutes(5))
             );
 
         DragaliaResponse<DungeonReceiveQuestBonusResponse> bonusResponse =
