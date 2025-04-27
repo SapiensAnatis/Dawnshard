@@ -8,10 +8,10 @@ import {
 
 import { handleNews, handleNewsItem } from './news.ts';
 import { handleSavefileEdit, handleSavefileExport } from './savefile.ts';
+import { handleSettings } from './settings.ts';
 import { handleQuests, handleRankings } from './timeAttack.ts';
 import { handleUser, handleUserProfile } from './user.ts';
 import { handlePresentData } from './widgets.ts';
-import { handleSettings } from './settings.ts';
 
 // We need to be able to intercept requests to the Vite proxy (http://localhost:3001) as well as
 // SSR requests to the "API" (http://localhost:5000 or whatever is in .env).

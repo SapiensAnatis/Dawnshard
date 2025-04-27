@@ -1,9 +1,9 @@
 <script lang="ts">
   import '../app.pcss';
 
-  import { PUBLIC_VERSION } from '$env/static/public';
-
   import { onMount } from 'svelte';
+
+  import { PUBLIC_VERSION } from '$env/static/public';
 
   onMount(() => {
     document.body.classList.add('started');

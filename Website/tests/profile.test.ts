@@ -1,4 +1,5 @@
 import { devices, expect, test } from '@playwright/test';
+
 import { gotoWithHydration } from './util.ts';
 
 test('displays correctly', async ({ page }) => {

@@ -1,10 +1,4 @@
-import {
-  type DefaultBodyType,
-  delay,
-  HttpResponse,
-  type HttpResponseResolver,
-  type PathParams
-} from 'msw';
+import { delay, HttpResponse, type HttpResponseResolver } from 'msw';
 
 export const handleSettings: HttpResponseResolver = async () => {
   await delay(500);
