@@ -2,7 +2,7 @@ import { userProfileSchema } from '$main/account/profile/userProfile.ts';
 
 import type { Actions } from './$types';
 
-const settingKeys = Object.keys(userProfileSchema.shape.settings.shape) as const;
+const settingKeys = Object.freeze(Object.keys(userProfileSchema.shape.settings.shape));
 
 export const actions = {
   settings: async ({ request, fetch, url }) => {
