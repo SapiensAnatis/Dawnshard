@@ -11,8 +11,10 @@ namespace DragaliaAPI.Features.Web.Settings;
 internal sealed class SettingsController(SettingsService settingsService) : ControllerBase
 {
     [HttpPut]
-    public async Task SetSettings(PlayerSettings settings, CancellationToken cancellationToken)
+    public async Task SetSettings(SettingsDto settings, CancellationToken cancellationToken)
     {
-        await settingsService.SetSettings(settings, cancellationToken);
+        PlayerSettings internalSettings = new() { DailyGifts = settings.DailyGifts };
+
+        await settingsService.SetSettings(internalSettings, cancellationToken);
     }
 }
