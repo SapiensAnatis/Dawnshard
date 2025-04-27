@@ -1,6 +1,7 @@
 using DragaliaAPI.Features.Web;
 using DragaliaAPI.Features.Web.News;
 using DragaliaAPI.Features.Web.Savefile;
+using DragaliaAPI.Features.Web.Settings;
 using DragaliaAPI.Features.Web.TimeAttack;
 using DragaliaAPI.Features.Web.Users;
 using DragaliaAPI.Shared.PlayerDetails;
@@ -17,7 +18,8 @@ public static partial class FeatureExtensions
             .AddScoped<UserService>()
             .AddScoped<NewsService>()
             .AddScoped<SavefileEditService>()
-            .AddScoped<TimeAttackService>();
+            .AddScoped<TimeAttackService>()
+            .AddScoped<SettingsService>();
 
         serviceCollection
             .AddAuthentication()

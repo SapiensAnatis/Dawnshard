@@ -7,7 +7,7 @@ namespace DragaliaAPI.Features.Web.Users;
 
 [ApiController]
 [Route("/api/user")]
-public class UserController(UserService userService, ILogger<UserController> logger)
+internal sealed class UserController(UserService userService, ILogger<UserController> logger)
     : ControllerBase
 {
     [HttpGet("me")]

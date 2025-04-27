@@ -1,7 +1,13 @@
 <script lang="ts">
   import '../app.pcss';
 
+  import { onMount } from 'svelte';
+
   import { PUBLIC_VERSION } from '$env/static/public';
+
+  onMount(() => {
+    document.body.classList.add('started');
+  });
 </script>
 
 <svelte:head>

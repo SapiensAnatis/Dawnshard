@@ -38,7 +38,7 @@
   });
 </script>
 
-<Card.Root>
+<Card.Root class="flex flex-col">
   <Card.Header>
     <Card.Title level={2}>
       <div class="flex flex-row items-center justify-items-start gap-2">
@@ -49,18 +49,20 @@
   </Card.Header>
   <Card.Content>
     <div>
-      <p>
+      <p class="mb-2">
         You can use the below button to export your save. This allows you to transfer it to another
         server, or to edit it and re-import it.
       </p>
       <p>
         For a tool to ease the process of editing your save, check out the
-        <a class="link" href="https://github.com/sockperson/DragaliaSaveEditor/releases/latest">
+        <a class="link" href="https://sockperson.github.io/Vite-DragaliaSaveEditor/">
           DragaliaSaveEditor
         </a> by sockperson.
       </p>
     </div>
   </Card.Content>
+  <!-- Spacer to align 'visit BaaS' and 'export save' buttons when horizontal -->
+  <div class="grow"></div>
   <Card.Footer>
     {#if enhance}
       <div class="flex items-center gap-2">
@@ -77,9 +79,7 @@
         {/await}
       </div>
     {:else}
-      <Button variant="secondary" href={savefileExportUrl.href} download={savefileExportUrl}>
-        Export Save
-      </Button>
+      <Button href={savefileExportUrl.href} download={savefileExportUrl}>Export Save</Button>
     {/if}
   </Card.Footer>
 </Card.Root>

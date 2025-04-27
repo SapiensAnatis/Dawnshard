@@ -1,10 +1,16 @@
 ﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities.Owned;
+using DragaliaAPI.Features.Web.Settings;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Web.Users;
 
-public class UserService(IPlayerIdentityService playerIdentityService, ApiContext apiContext)
+internal sealed class UserService(
+    IPlayerIdentityService playerIdentityService,
+    SettingsService settingsService,
+    ApiContext apiContext
+)
 {
     public Task<User> GetUser(CancellationToken cancellationToken) =>
         apiContext
@@ -17,12 +23,23 @@ public class UserService(IPlayerIdentityService playerIdentityService, ApiContex
             })
             .FirstAsync(cancellationToken);
 
-    public Task<UserProfile> GetUserProfile(CancellationToken cancellationToken) =>
-        apiContext
-            .PlayerUserData.Select(x => new UserProfile()
+    public async Task<UserProfile> GetUserProfile(CancellationToken cancellationToken)
+    {
+        var userData = await apiContext
+            .PlayerUserData.Select(x => new
             {
                 LastSaveImportTime = x.Owner!.LastSavefileImportTime,
                 LastLoginTime = x.LastLoginTime,
             })
             .FirstAsync(cancellationToken);
+
+        PlayerSettings settings = await settingsService.GetSettings(cancellationToken);
+
+        return new UserProfile()
+        {
+            LastSaveImportTime = userData.LastSaveImportTime,
+            LastLoginTime = userData.LastLoginTime,
+            Settings = settings,
+        };
+    }
 }

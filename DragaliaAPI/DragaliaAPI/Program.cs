@@ -71,6 +71,8 @@ builder.Services.AddStackExchangeRedisCache(options =>
     options.InstanceName = "RedisInstance";
 });
 
+builder.Services.AddMemoryCache();
+
 if (hangfireOptions is { Enabled: true })
 {
     builder.Services.ConfigureHangfire();

@@ -1,30 +1,29 @@
 <script lang="ts">
   import Page from '$lib/components/page.svelte';
 
-  import type { PageData } from './$types';
+  import type { PageProps } from './$types';
   import SaveExport from './saveExport.svelte';
   import SaveImport from './saveImport.svelte';
+  import Settings from './settings.svelte';
   import UserInformation from './userInformation.svelte';
 
-  export let data: PageData;
+  const { data }: PageProps = $props();
 </script>
 
 <Page title="Profile">
-  <div class="w-full px-3 lg:w-[75%]">
-    <div class="card">
+  <div class="flex w-full flex-col gap-2 px-3 lg:w-[75%]">
+    <div>
       <UserInformation user={data.user} userProfile={data.userProfile} />
     </div>
-    <div class="card">
+    <div class="grid grid-cols-1 gap-2 md:grid-cols-2">
+      <SaveImport lastSaveImportTime={data.userProfile.lastSaveImportTime} />
       <SaveExport />
     </div>
-    <div class="card">
-      <SaveImport lastSaveImportTime={data.userProfile.lastSaveImportTime} />
+    <div>
+      <Settings settings={data.userProfile.settings} />
     </div>
   </div>
 </Page>
 
 <style>
-  .card + .card {
-    margin-top: 1rem;
-  }
 </style>
