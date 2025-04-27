@@ -56,7 +56,7 @@
 
 <Card.Root>
   <Card.Header>
-    <Card.Title level={2}>
+    <Card.Title level={2} id="settings-title">
       <div class="flex flex-row items-center justify-items-start gap-2">
         <Settings aria-hidden={true} size={25} />
         Settings
@@ -66,6 +66,7 @@
   <form
     method="POST"
     action="?/settings"
+    aria-labelledby="settings-title"
     use:enhance={() => {
       return async ({ result }) => {
         if (result.type === 'success') {

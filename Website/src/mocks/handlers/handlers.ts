@@ -1,6 +1,6 @@
 import {
   type DefaultBodyType,
-  http as mswHttp,
+  http,
   HttpResponse,
   type HttpResponseResolver,
   type PathParams
@@ -11,30 +11,11 @@ import { handleSavefileEdit, handleSavefileExport } from './savefile.ts';
 import { handleQuests, handleRankings } from './timeAttack.ts';
 import { handleUser, handleUserProfile } from './user.ts';
 import { handlePresentData } from './widgets.ts';
+import { handleSettings } from './settings.ts';
 
-const createHttpHandler = <
-  Params extends PathParams<keyof Params> = PathParams,
-  RequestBodyType extends DefaultBodyType = DefaultBodyType,
-  ResponseBodyType extends DefaultBodyType = DefaultBodyType
->(
-  method: keyof typeof mswHttp
-) => {
-  return (
-    path: string,
-    resolver: HttpResponseResolver<Params, RequestBodyType, ResponseBodyType>
-  ) => [mswHttp[method](path, resolver), mswHttp[method](`http://localhost*${path}`, resolver)];
-};
-
-const http = {
-  all: createHttpHandler('all'),
-  head: createHttpHandler('head'),
-  get: createHttpHandler('get'),
-  post: createHttpHandler('post'),
-  put: createHttpHandler('put'),
-  delete: createHttpHandler('delete'),
-  patch: createHttpHandler('patch'),
-  options: createHttpHandler('options')
-};
+// We need to be able to intercept requests to the Vite proxy (http://localhost:3001) as well as
+// SSR requests to the "API" (http://localhost:5000 or whatever is in .env).
+const BASE_URL = 'http://localhost*';
 
 const withAuth = <
   Params extends PathParams,
@@ -58,18 +39,20 @@ const withAuth = <
 };
 
 export const handlers = [
-  mswHttp.get('http://localhost:5000/ping', () => new Response(null, { status: 200 })),
+  http.get('http://localhost:5000/ping', () => new Response(null, { status: 200 })),
 
-  ...http.get('/api/news', handleNews),
-  ...http.get('/api/news/:itemId', handleNewsItem),
+  http.get(`${BASE_URL}/api/news`, handleNews),
+  http.get(`${BASE_URL}/api/news/:itemId`, handleNewsItem),
 
-  ...http.get('/api/user/me', withAuth(handleUser)),
-  ...http.get('/api/user/me/profile', withAuth(handleUserProfile)),
+  http.get(`${BASE_URL}/api/user/me`, withAuth(handleUser)),
+  http.get(`${BASE_URL}/api/user/me/profile`, withAuth(handleUserProfile)),
 
-  ...http.get('/api/savefile/export', withAuth(handleSavefileExport)),
-  ...http.post('/api/savefile/edit', withAuth(handleSavefileEdit)),
-  ...http.get('/api/savefile/edit/widgets/present', withAuth(handlePresentData)),
+  http.put(`${BASE_URL}/api/settings`, withAuth(handleSettings)),
 
-  ...http.get('/api/time_attack/quests', handleQuests),
-  ...http.get('/api/time_attack/rankings/*', handleRankings)
+  http.get(`${BASE_URL}/api/savefile/export`, withAuth(handleSavefileExport)),
+  http.post(`${BASE_URL}/api/savefile/edit`, withAuth(handleSavefileEdit)),
+  http.get(`${BASE_URL}/api/savefile/edit/widgets/present`, withAuth(handlePresentData)),
+
+  http.get(`${BASE_URL}/api/time_attack/quests`, handleQuests),
+  http.get(`${BASE_URL}/api/time_attack/rankings/*`, handleRankings)
 ];

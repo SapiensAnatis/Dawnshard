@@ -10,7 +10,7 @@ export const handleUser: HttpResponseResolver = () => {
 };
 
 export const handleUserProfile: HttpResponseResolver = () => {
-  const settings: UserProfile['settings'] = { dailyGifts: false };
+  const settings: UserProfile['settings'] = { dailyGifts: true };
 
   return HttpResponse.json({
     lastSaveImportTime: '2024-06-29T11:57:40Z',

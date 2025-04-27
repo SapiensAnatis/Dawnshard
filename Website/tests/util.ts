@@ -8,3 +8,14 @@ export const waitForImagesToLoad = async (page: Page) => {
     });
   });
 };
+
+export const gotoWithHydration = async (
+  page: Page,
+  url: string,
+  opts?: { waitForStarted?: boolean }
+) => {
+  await page.goto(url);
+  if (opts?.waitForStarted !== false) {
+    await page.waitForSelector('body.started', { timeout: 5000 });
+  }
+};

@@ -12,14 +12,14 @@
 
 <Page title="Profile">
   <div class="flex w-full flex-col gap-2 px-3 lg:w-[75%]">
-    <div class="section">
+    <div>
       <UserInformation user={data.user} userProfile={data.userProfile} />
     </div>
     <div class="grid grid-cols-1 gap-2 md:grid-cols-2">
       <SaveImport lastSaveImportTime={data.userProfile.lastSaveImportTime} />
       <SaveExport />
     </div>
-    <div class="section">
+    <div>
       <Settings settings={data.userProfile.settings} />
     </div>
   </div>
