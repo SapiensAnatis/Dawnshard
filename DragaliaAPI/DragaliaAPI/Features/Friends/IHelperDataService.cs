@@ -4,7 +4,12 @@ namespace DragaliaAPI.Features.Friends;
 
 internal interface IHelperDataService
 {
-    public Task<QuestGetSupportUserListResponse> GetHelperList();
+    public Task<QuestGetSupportUserListResponse> GetHelperList(CancellationToken cancellationToken);
 
-    public Task UseHelper(long helperViewerId);
+    public Task<UserSupportList?> GetHelper(
+        long helperViewerId,
+        CancellationToken cancellationToken
+    );
+
+    public Task UseHelper(long helperViewerId, CancellationToken cancellationToken);
 }

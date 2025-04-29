@@ -4,14 +4,14 @@ namespace DragaliaAPI.Features.Friends;
 
 public interface IHelperService
 {
-    Task<QuestGetSupportUserListResponse> GetHelpers();
+    Task<QuestGetSupportUserListResponse> GetHelpers(CancellationToken cancellationToken = default);
 
     AtgenSupportData BuildHelperData(
         UserSupportList helperInfo,
         AtgenSupportUserDetailList helperDetails
     );
 
-    Task<UserSupportList?> GetLegacyHelper(ulong viewerId);
+    Task<UserSupportList?> GetHelper(long viewerId, CancellationToken cancellationToken = default);
 
     Task<UserSupportList> GetLeadUnit(int partyNo);
 
@@ -19,7 +19,7 @@ public interface IHelperService
         UserSupportList staticHelperInfo
     );
 
-    Task<SettingSupport> GetPlayerHelper(CancellationToken cancellationToken);
+    Task<SettingSupport> GetPlayerHelper(CancellationToken cancellationToken = default);
 
     Task<SettingSupport> SetPlayerHelper(
         FriendSetSupportCharaRequest request,
