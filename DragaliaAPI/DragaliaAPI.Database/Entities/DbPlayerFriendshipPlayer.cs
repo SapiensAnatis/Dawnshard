@@ -19,5 +19,5 @@ public class DbPlayerFriendshipPlayer
     /// Gets the time that the <see cref="Player"/> last used the helper associated with the other player
     /// in this friendship.
     /// </summary>
-    public DateTimeOffset LastHelperUseDate { get; set; } = DateTimeOffset.UnixEpoch;
+    public DateTimeOffset LastHelperUseDate { get; set; }
 }

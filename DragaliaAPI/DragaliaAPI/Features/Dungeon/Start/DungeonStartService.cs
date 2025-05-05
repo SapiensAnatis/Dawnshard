@@ -16,6 +16,7 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
+using Riok.Mapperly.Abstractions;
 using static DragaliaAPI.Features.Tutorial.TutorialService;
 
 namespace DragaliaAPI.Features.Dungeon.Start;
@@ -264,18 +265,14 @@ internal sealed partial class DungeonStartService(
 
     private async Task<AtgenSupportData> GetSupportData(ulong supportViewerId)
     {
-        QuestGetSupportUserListResponse helperList = await helperService.GetHelpers();
-
-        UserSupportList? helperInfo = helperList.SupportUserList.FirstOrDefault(helper =>
-            helper.ViewerId == supportViewerId
+        AtgenSupportUserDataDetail? helperDetails = await helperService.GetHelperDetail(
+            (long)supportViewerId
         );
 
-        AtgenSupportUserDetailList? helperDetails = helperList.SupportUserDetailList.FirstOrDefault(
-            helper => helper.ViewerId == supportViewerId
-        );
-
-        if (helperInfo is not null && helperDetails is not null)
-            return helperService.BuildHelperData(helperInfo, helperDetails);
+        if (helperDetails is not null)
+        {
+            return BuildHelperData(helperDetails);
+        }
 
         logger.LogDebug("SupportViewerId {id} returned null helper data.", supportViewerId);
         return new();
@@ -399,5 +396,40 @@ internal sealed partial class DungeonStartService(
         ).EventPassiveGrowList;
 
         return result;
+    }
+
+    private static AtgenSupportData BuildHelperData(AtgenSupportUserDataDetail helperDetails)
+    {
+        return new AtgenSupportData()
+        {
+            ViewerId = helperDetails.UserSupportData.ViewerId,
+            Name = helperDetails.UserSupportData.Name,
+            IsFriend = helperDetails.IsFriend,
+            CharaData = DungeonStartMapper.ToCharaList(helperDetails.UserSupportData.SupportChara),
+            DragonData = DungeonStartMapper.ToDragonList(
+                helperDetails.UserSupportData.SupportDragon
+            ),
+            WeaponBodyData = DungeonStartMapper.ToGameWeaponBody(
+                helperDetails.UserSupportData.SupportWeaponBody
+            ),
+            CrestSlotType1CrestList = helperDetails
+                .UserSupportData.SupportCrestSlotType1List.Select(
+                    DungeonStartMapper.ToGameAbilityCrest
+                )
+                .ToList(),
+            CrestSlotType2CrestList = helperDetails
+                .UserSupportData.SupportCrestSlotType2List.Select(
+                    DungeonStartMapper.ToGameAbilityCrest
+                )
+                .ToList(),
+            CrestSlotType3CrestList = helperDetails
+                .UserSupportData.SupportCrestSlotType3List.Select(
+                    DungeonStartMapper.ToGameAbilityCrest
+                )
+                .ToList(),
+            TalismanData = DungeonStartMapper.ToTalismanList(
+                helperDetails.UserSupportData.SupportTalisman
+            ),
+        };
     }
 }

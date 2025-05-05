@@ -37,14 +37,16 @@ internal sealed partial class FriendService(
             .AnyAsync(x => x.ViewerId == otherPlayerId, cancellationToken);
     }
 
-    public async Task<List<UserSupportList>> GetFriendList()
+    public async Task<List<UserSupportList>> GetFriendList(
+        CancellationToken cancellationToken = default
+    )
     {
         IQueryable<HelperProjection> helperQuery = this.GetFriendsQuery()
             .Select(x => x.Helper!)
             .ProjectToHelperProjection()
             .AsSplitQuery();
 
-        List<HelperProjection> mergedHelpers = await helperQuery.ToListAsync();
+        List<HelperProjection> mergedHelpers = await helperQuery.ToListAsync(cancellationToken);
 
         return mergedHelpers.Select(x => x.MapToUserSupportList()).ToList();
     }

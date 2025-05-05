@@ -54,7 +54,7 @@ internal sealed class QuestController(
     [HttpPost("get_support_user_list")]
     public async Task<DragaliaResult> GetUserSupportList(CancellationToken cancellationToken)
     {
-        QuestGetSupportUserListResponse response = await helperService.GetHelpers();
+        QuestGetSupportUserListResponse response = await helperService.GetHelperList();
 
         return Ok(response);
     }

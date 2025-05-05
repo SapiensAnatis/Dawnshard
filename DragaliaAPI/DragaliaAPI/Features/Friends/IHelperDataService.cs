@@ -11,5 +11,10 @@ internal interface IHelperDataService
         CancellationToken cancellationToken
     );
 
+    public Task<AtgenSupportUserDataDetail?> GetHelperDataDetail(
+        long helperViewerId,
+        CancellationToken cancellationToken = default
+    );
+
     public Task UseHelper(long helperViewerId, CancellationToken cancellationToken);
 }
