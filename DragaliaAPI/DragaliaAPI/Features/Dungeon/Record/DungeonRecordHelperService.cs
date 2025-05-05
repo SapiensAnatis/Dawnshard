@@ -27,7 +27,7 @@ internal sealed class DungeonRecordHelperService(
         if (supportViewerId is null)
             return (helperList, helperDetailList);
 
-        UserSupportList? supportList = await helperService.GetHelper(supportViewerId.Value);
+        UserSupportList? supportList = await helperService.GetHelper((long)supportViewerId.Value);
 
         if (supportList is not null)
         {

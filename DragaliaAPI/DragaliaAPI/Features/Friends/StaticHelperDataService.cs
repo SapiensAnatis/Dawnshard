@@ -1,9 +1,10 @@
+using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Features.Friends;
 
-public class StaticHelperDataService : IHelperDataService
+public class StaticHelperDataService(IBonusService bonusService) : IHelperDataService
 {
     public Task<QuestGetSupportUserListResponse> GetHelperList(CancellationToken cancellationToken)
     {
@@ -18,6 +19,36 @@ public class StaticHelperDataService : IHelperDataService
         return Task.FromResult(
             SupportListData.SupportUserList.FirstOrDefault(x => x.ViewerId == (ulong)helperViewerId)
         );
+    }
+
+    public async Task<AtgenSupportUserDataDetail?> GetHelperDataDetail(
+        long helperViewerId,
+        CancellationToken cancellationToken
+    )
+    {
+        UserSupportList? staticHelperInfo = SupportListData.SupportUserList.FirstOrDefault(x =>
+            x.ViewerId == (ulong)helperViewerId
+        );
+
+        if (staticHelperInfo is null)
+        {
+            return null;
+        }
+
+        FortBonusList bonusList = await bonusService.GetBonusList(cancellationToken);
+
+        return new()
+        {
+            UserSupportData = staticHelperInfo,
+            FortBonusList = bonusList,
+            ManaCirclePieceIdList = Enumerable.Range(
+                1,
+                staticHelperInfo.SupportChara.AdditionalMaxLevel == 20 ? 70 : 50
+            ),
+            DragonReliabilityLevel = 30,
+            IsFriend = true,
+            ApplySendStatus = 0,
+        };
     }
 
     public Task UseHelper(long helperViewerId, CancellationToken cancellationToken)

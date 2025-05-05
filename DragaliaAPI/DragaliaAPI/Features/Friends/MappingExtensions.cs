@@ -36,136 +36,142 @@ public static class MappingExtensions
         return helpers.Select(MapToSettingSupportExpression);
     }
 
-    public static AtgenSupportChara MapToSupportChara(this DbPlayerCharaData dbPlayerCharaData)
-    {
-        return new()
-        {
-            CharaId = dbPlayerCharaData.CharaId,
-            Level = dbPlayerCharaData.Level,
-            AdditionalMaxLevel = dbPlayerCharaData.AdditionalMaxLevel,
-            Rarity = dbPlayerCharaData.Rarity,
-            Hp = dbPlayerCharaData.Hp,
-            Attack = dbPlayerCharaData.Attack,
-            HpPlusCount = dbPlayerCharaData.HpPlusCount,
-            AttackPlusCount = dbPlayerCharaData.AttackPlusCount,
-            StatusPlusCount = 0,
-            Ability1Level = dbPlayerCharaData.Ability1Level,
-            Ability2Level = dbPlayerCharaData.Ability2Level,
-            Ability3Level = dbPlayerCharaData.Ability3Level,
-            ExAbilityLevel = dbPlayerCharaData.ExAbilityLevel,
-            ExAbility2Level = dbPlayerCharaData.ExAbility2Level,
-            Skill1Level = dbPlayerCharaData.Skill1Level,
-            Skill2Level = dbPlayerCharaData.Skill2Level,
-            IsUnlockEditSkill = dbPlayerCharaData.IsUnlockEditSkill,
-        };
-    }
-
-    public static AtgenSupportDragon MapToSupportDragon(this DbPlayerDragonData? dbPlayerDragonData)
-    {
-        // Where fields are null, the official servers returned a 'partial object' in which only the ID was set to 0.
-        // Not sure if we need to as well, but better to verge on the side of authenticity.
-        if (dbPlayerDragonData is null)
-        {
-            return new() { DragonKeyId = 0 };
-        }
-
-        return new AtgenSupportDragon
-        {
-            DragonKeyId = (ulong)dbPlayerDragonData.DragonKeyId,
-            DragonId = dbPlayerDragonData.DragonId,
-            Level = dbPlayerDragonData.Level,
-            Hp = 0, // HP and attack are not in the regular dragon model, maybe unused?
-            Attack = 0,
-            Skill1Level = dbPlayerDragonData.Skill1Level,
-            Ability1Level = dbPlayerDragonData.Ability1Level,
-            Ability2Level = dbPlayerDragonData.Ability2Level,
-            HpPlusCount = dbPlayerDragonData.HpPlusCount,
-            AttackPlusCount = dbPlayerDragonData.AttackPlusCount,
-            StatusPlusCount = 0,
-            LimitBreakCount = dbPlayerDragonData.LimitBreakCount,
-        };
-    }
-
-    public static AtgenSupportWeaponBody MapToSupportWeaponBody(this DbWeaponBody? dbWeaponBody)
-    {
-        if (dbWeaponBody is null)
-        {
-            return new() { WeaponBodyId = 0 };
-        }
-
-        return new AtgenSupportWeaponBody
-        {
-            WeaponBodyId = dbWeaponBody.WeaponBodyId,
-            BuildupCount = dbWeaponBody.BuildupCount,
-            LimitBreakCount = dbWeaponBody.LimitBreakCount,
-            LimitOverCount = dbWeaponBody.LimitOverCount,
-            AdditionalEffectCount = dbWeaponBody.AdditionalEffectCount,
-            EquipableCount = dbWeaponBody.EquipableCount,
-            AdditionalCrestSlotType1Count = dbWeaponBody.AdditionalCrestSlotType1Count,
-            AdditionalCrestSlotType2Count = dbWeaponBody.AdditionalCrestSlotType2Count,
-            AdditionalCrestSlotType3Count = dbWeaponBody.AdditionalCrestSlotType3Count,
-        };
-    }
-
-    public static AtgenSupportCrestSlotType1List MapToSupportAbilityCrest(
-        this DbAbilityCrest? dbAbilityCrest
-    )
-    {
-        if (dbAbilityCrest is null)
-        {
-            return new() { AbilityCrestId = 0 };
-        }
-
-        return new AtgenSupportCrestSlotType1List(
-            dbAbilityCrest.AbilityCrestId,
-            dbAbilityCrest.BuildupCount,
-            dbAbilityCrest.LimitBreakCount,
-            dbAbilityCrest.HpPlusCount,
-            dbAbilityCrest.AttackPlusCount,
-            dbAbilityCrest.EquipableCount
-        );
-    }
-
-    public static AtgenSupportTalisman MapToSupportTalisman(this DbTalisman? dbTalisman)
-    {
-        if (dbTalisman is null)
-        {
-            return new() { TalismanId = 0 };
-        }
-
-        return new AtgenSupportTalisman
-        {
-            TalismanKeyId = (ulong)dbTalisman.TalismanKeyId,
-            TalismanId = dbTalisman.TalismanId,
-            TalismanAbilityId1 = dbTalisman.TalismanAbilityId1,
-            TalismanAbilityId2 = dbTalisman.TalismanAbilityId2,
-            TalismanAbilityId3 = dbTalisman.TalismanAbilityId3,
-            AdditionalHp = dbTalisman.AdditionalHp,
-            AdditionalAttack = dbTalisman.AdditionalAttack,
-        };
-    }
-
     public static IQueryable<HelperProjection> ProjectToHelperProjection(
         this IQueryable<DbPlayerHelper> helpers
     )
     {
         return helpers.Select(x => new HelperProjection(
-            x.EquippedChara!,
-            x.EquippedDragon,
-            x.EquippedWeaponBody,
-            x.EquippedCrestSlotType1Crest1,
-            x.EquippedCrestSlotType1Crest2,
-            x.EquippedCrestSlotType1Crest3,
-            x.EquippedCrestSlotType2Crest1,
-            x.EquippedCrestSlotType2Crest2,
-            x.EquippedCrestSlotType3Crest1,
-            x.EquippedCrestSlotType3Crest2,
-            x.EquippedTalisman,
-            x.Owner!.UserData!,
-            x.Owner!.DragonReliabilityList.FirstOrDefault(y =>
-                y.DragonId == x.EquippedDragon!.DragonId
+            new AtgenSupportChara()
+            {
+                CharaId = x.EquippedChara!.CharaId,
+                Level = x.EquippedChara.Level,
+                AdditionalMaxLevel = x.EquippedChara.AdditionalMaxLevel,
+                Rarity = x.EquippedChara.Rarity,
+                Hp = x.EquippedChara.Hp,
+                Attack = x.EquippedChara.Attack,
+                HpPlusCount = x.EquippedChara.HpPlusCount,
+                AttackPlusCount = x.EquippedChara.AttackPlusCount,
+                StatusPlusCount = 0,
+                Ability1Level = x.EquippedChara.Ability1Level,
+                Ability2Level = x.EquippedChara.Ability2Level,
+                Ability3Level = x.EquippedChara.Ability3Level,
+                ExAbilityLevel = x.EquippedChara.ExAbilityLevel,
+                ExAbility2Level = x.EquippedChara.ExAbility2Level,
+                Skill1Level = x.EquippedChara.Skill1Level,
+                Skill2Level = x.EquippedChara.Skill2Level,
+                IsUnlockEditSkill = x.EquippedChara.IsUnlockEditSkill,
+            },
+            new AtgenSupportDragon
+            {
+                DragonKeyId = (ulong)x.EquippedDragon!.DragonKeyId,
+                DragonId = x.EquippedDragon.DragonId,
+                Level = x.EquippedDragon.Level,
+                Hp = 0, // HP and attack are not in the regular dragon model, maybe unused?
+                Attack = 0,
+                Skill1Level = x.EquippedDragon.Skill1Level,
+                Ability1Level = x.EquippedDragon.Ability1Level,
+                Ability2Level = x.EquippedDragon.Ability2Level,
+                HpPlusCount = x.EquippedDragon.HpPlusCount,
+                AttackPlusCount = x.EquippedDragon.AttackPlusCount,
+                StatusPlusCount = 0,
+                LimitBreakCount = x.EquippedDragon.LimitBreakCount,
+            },
+            new AtgenSupportWeaponBody
+            {
+                WeaponBodyId = x.EquippedWeaponBody!.WeaponBodyId,
+                BuildupCount = x.EquippedWeaponBody.BuildupCount,
+                LimitBreakCount = x.EquippedWeaponBody.LimitBreakCount,
+                LimitOverCount = x.EquippedWeaponBody.LimitOverCount,
+                AdditionalEffectCount = x.EquippedWeaponBody.AdditionalEffectCount,
+                EquipableCount = x.EquippedWeaponBody.EquipableCount,
+                AdditionalCrestSlotType1Count = x.EquippedWeaponBody.AdditionalCrestSlotType1Count,
+                AdditionalCrestSlotType2Count = x.EquippedWeaponBody.AdditionalCrestSlotType2Count,
+                AdditionalCrestSlotType3Count = x.EquippedWeaponBody.AdditionalCrestSlotType3Count,
+            },
+            new AtgenSupportCrestSlotType1List()
+            {
+                AbilityCrestId = x.EquippedCrestSlotType1Crest1!.AbilityCrestId,
+                BuildupCount = x.EquippedCrestSlotType1Crest1.BuildupCount,
+                LimitBreakCount = x.EquippedCrestSlotType1Crest1.LimitBreakCount,
+                HpPlusCount = x.EquippedCrestSlotType1Crest1.HpPlusCount,
+                AttackPlusCount = x.EquippedCrestSlotType1Crest1.AttackPlusCount,
+                EquipableCount = x.EquippedCrestSlotType1Crest1.EquipableCount,
+            },
+            new AtgenSupportCrestSlotType1List()
+            {
+                AbilityCrestId = x.EquippedCrestSlotType1Crest2!.AbilityCrestId,
+                BuildupCount = x.EquippedCrestSlotType1Crest2.BuildupCount,
+                LimitBreakCount = x.EquippedCrestSlotType1Crest2.LimitBreakCount,
+                HpPlusCount = x.EquippedCrestSlotType1Crest2.HpPlusCount,
+                AttackPlusCount = x.EquippedCrestSlotType1Crest2.AttackPlusCount,
+                EquipableCount = x.EquippedCrestSlotType1Crest2.EquipableCount,
+            },
+            new AtgenSupportCrestSlotType1List()
+            {
+                AbilityCrestId = x.EquippedCrestSlotType1Crest3!.AbilityCrestId,
+                BuildupCount = x.EquippedCrestSlotType1Crest3.BuildupCount,
+                LimitBreakCount = x.EquippedCrestSlotType1Crest3.LimitBreakCount,
+                HpPlusCount = x.EquippedCrestSlotType1Crest3.HpPlusCount,
+                AttackPlusCount = x.EquippedCrestSlotType1Crest3.AttackPlusCount,
+                EquipableCount = x.EquippedCrestSlotType1Crest3.EquipableCount,
+            },
+            new AtgenSupportCrestSlotType1List()
+            {
+                AbilityCrestId = x.EquippedCrestSlotType2Crest1!.AbilityCrestId,
+                BuildupCount = x.EquippedCrestSlotType2Crest1.BuildupCount,
+                LimitBreakCount = x.EquippedCrestSlotType2Crest1.LimitBreakCount,
+                HpPlusCount = x.EquippedCrestSlotType2Crest1.HpPlusCount,
+                AttackPlusCount = x.EquippedCrestSlotType2Crest1.AttackPlusCount,
+                EquipableCount = x.EquippedCrestSlotType2Crest1.EquipableCount,
+            },
+            new AtgenSupportCrestSlotType1List()
+            {
+                AbilityCrestId = x.EquippedCrestSlotType2Crest2!.AbilityCrestId,
+                BuildupCount = x.EquippedCrestSlotType2Crest2.BuildupCount,
+                LimitBreakCount = x.EquippedCrestSlotType2Crest2.LimitBreakCount,
+                HpPlusCount = x.EquippedCrestSlotType2Crest2.HpPlusCount,
+                AttackPlusCount = x.EquippedCrestSlotType2Crest2.AttackPlusCount,
+                EquipableCount = x.EquippedCrestSlotType2Crest2.EquipableCount,
+            },
+            new AtgenSupportCrestSlotType1List()
+            {
+                AbilityCrestId = x.EquippedCrestSlotType3Crest1!.AbilityCrestId,
+                BuildupCount = x.EquippedCrestSlotType3Crest1.BuildupCount,
+                LimitBreakCount = x.EquippedCrestSlotType3Crest1.LimitBreakCount,
+                HpPlusCount = x.EquippedCrestSlotType3Crest1.HpPlusCount,
+                AttackPlusCount = x.EquippedCrestSlotType3Crest1.AttackPlusCount,
+                EquipableCount = x.EquippedCrestSlotType3Crest1.EquipableCount,
+            },
+            new AtgenSupportCrestSlotType1List()
+            {
+                AbilityCrestId = x.EquippedCrestSlotType3Crest2!.AbilityCrestId,
+                BuildupCount = x.EquippedCrestSlotType3Crest2.BuildupCount,
+                LimitBreakCount = x.EquippedCrestSlotType3Crest2.LimitBreakCount,
+                HpPlusCount = x.EquippedCrestSlotType3Crest2.HpPlusCount,
+                AttackPlusCount = x.EquippedCrestSlotType3Crest2.AttackPlusCount,
+                EquipableCount = x.EquippedCrestSlotType3Crest2.EquipableCount,
+            },
+            new AtgenSupportTalisman
+            {
+                TalismanKeyId = (ulong)x.EquippedTalisman!.TalismanKeyId,
+                TalismanId = x.EquippedTalisman.TalismanId,
+                TalismanAbilityId1 = x.EquippedTalisman.TalismanAbilityId1,
+                TalismanAbilityId2 = x.EquippedTalisman.TalismanAbilityId2,
+                TalismanAbilityId3 = x.EquippedTalisman.TalismanAbilityId3,
+                AdditionalHp = x.EquippedTalisman.AdditionalHp,
+                AdditionalAttack = x.EquippedTalisman.AdditionalAttack,
+            },
+            new UserDataProjection(
+                x.Owner!.UserData!.ViewerId,
+                x.Owner.UserData.Name,
+                x.Owner.UserData.Level,
+                x.Owner.UserData.LastLoginTime,
+                x.Owner.UserData.EmblemId
             ),
-            x.Owner!.PartyPower!
+            x.Owner!.DragonReliabilityList.First(y =>
+                y.DragonId == x.EquippedDragon!.DragonId
+            )!.Level,
+            x.Owner!.PartyPower!.MaxPartyPower
         ));
     }
 
@@ -173,50 +179,33 @@ public static class MappingExtensions
     {
         UserSupportList mappedHelper = new()
         {
-            SupportChara = helper.EquippedChara.MapToSupportChara(),
+            SupportChara = helper.EquippedChara,
+            SupportDragon = helper.EquippedDragon ?? new() { DragonKeyId = 0 },
+            SupportWeaponBody = helper.EquippedWeaponBody ?? new() { WeaponBodyId = 0 },
+            SupportCrestSlotType1List =
+            [
+                helper.EquippedCrestSlotType1Crest1 ?? new() { AbilityCrestId = 0 },
+                helper.EquippedCrestSlotType1Crest2 ?? new() { AbilityCrestId = 0 },
+                helper.EquippedCrestSlotType1Crest3 ?? new() { AbilityCrestId = 0 },
+            ],
+            SupportCrestSlotType2List =
+            [
+                helper.EquippedCrestSlotType2Crest1 ?? new() { AbilityCrestId = 0 },
+                helper.EquippedCrestSlotType2Crest2 ?? new() { AbilityCrestId = 0 },
+            ],
+            SupportCrestSlotType3List =
+            [
+                helper.EquippedCrestSlotType3Crest1 ?? new() { AbilityCrestId = 0 },
+                helper.EquippedCrestSlotType3Crest2 ?? new() { AbilityCrestId = 0 },
+            ],
+            SupportTalisman = helper.EquippedTalisman,
+            ViewerId = (ulong)helper.UserData.ViewerId,
+            Name = helper.UserData.Name,
+            Level = helper.UserData.Level,
+            LastLoginDate = helper.UserData.LastLoginDate,
+            EmblemId = helper.UserData.EmblemId,
+            MaxPartyPower = helper.PartyPower ?? 0,
         };
-
-        mappedHelper.SupportDragon = helper.EquippedDragon.MapToSupportDragon();
-        mappedHelper.SupportWeaponBody = helper.EquippedWeaponBody.MapToSupportWeaponBody();
-
-        DbAbilityCrest?[] slot1Crests =
-        [
-            helper.EquippedCrestSlotType1Crest1,
-            helper.EquippedCrestSlotType1Crest2,
-            helper.EquippedCrestSlotType1Crest3,
-        ];
-
-        DbAbilityCrest?[] slot2Crests =
-        [
-            helper.EquippedCrestSlotType2Crest1,
-            helper.EquippedCrestSlotType2Crest2,
-        ];
-
-        DbAbilityCrest?[] slot3Crests =
-        [
-            helper.EquippedCrestSlotType3Crest1,
-            helper.EquippedCrestSlotType3Crest2,
-        ];
-
-        mappedHelper.SupportCrestSlotType1List = slot1Crests
-            .Select(x => x.MapToSupportAbilityCrest())
-            .ToList();
-        mappedHelper.SupportCrestSlotType2List = slot2Crests
-            .Select(x => x.MapToSupportAbilityCrest())
-            .ToList();
-        mappedHelper.SupportCrestSlotType3List = slot3Crests
-            .Select(x => x.MapToSupportAbilityCrest())
-            .ToList();
-
-        mappedHelper.SupportTalisman = helper.EquippedTalisman.MapToSupportTalisman();
-
-        mappedHelper.ViewerId = (ulong)helper.UserData.ViewerId;
-        mappedHelper.Name = helper.UserData.Name;
-        mappedHelper.Level = helper.UserData.Level;
-        mappedHelper.LastLoginDate = helper.UserData.LastLoginTime;
-        mappedHelper.EmblemId = helper.UserData.EmblemId;
-        mappedHelper.MaxPartyPower = helper.PartyPower?.MaxPartyPower ?? 0;
-        mappedHelper.Guild = new() { GuildId = 0 };
 
         return mappedHelper;
     }

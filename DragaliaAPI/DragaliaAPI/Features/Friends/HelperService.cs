@@ -5,22 +5,19 @@ using DragaliaAPI.Database.Entities.Owned;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon;
-using DragaliaAPI.Features.Fort;
-using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Features.Web.Settings;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Friends;
 
-internal sealed partial class HelperService(
+internal sealed class HelperService(
     IPartyRepository partyRepository,
     IDungeonRepository dungeonRepository,
     IUserDataRepository userDataRepository,
     IMapper mapper,
-    IBonusService bonusService,
     ApiContext apiContext,
     IPlayerIdentityService playerIdentityService,
     SettingsService settingsService,
@@ -28,7 +25,7 @@ internal sealed partial class HelperService(
     RealHelperDataService realDataService
 ) : IHelperService
 {
-    public async Task<QuestGetSupportUserListResponse> GetHelpers(
+    public async Task<QuestGetSupportUserListResponse> GetHelperList(
         CancellationToken cancellationToken
     )
     {
@@ -45,6 +42,16 @@ internal sealed partial class HelperService(
         IHelperDataService dataService = await this.GetDataService(cancellationToken);
 
         return await dataService.GetHelper(viewerId, cancellationToken);
+    }
+
+    public async Task<AtgenSupportUserDataDetail?> GetHelperDetail(
+        long viewerId,
+        CancellationToken cancellationToken
+    )
+    {
+        IHelperDataService dataService = await this.GetDataService(cancellationToken);
+
+        return await dataService.GetHelperDataDetail(viewerId, cancellationToken);
     }
 
     public async Task<UserSupportList> GetLeadUnit(int partyNo)
@@ -82,57 +89,125 @@ internal sealed partial class HelperService(
         return supportList;
     }
 
-    public AtgenSupportData BuildHelperData(
-        UserSupportList helperInfo,
-        AtgenSupportUserDetailList helperDetails
-    )
+    public async Task<SettingSupport> GetOwnHelper(CancellationToken cancellationToken)
     {
-        return new AtgenSupportData()
-        {
-            ViewerId = helperInfo.ViewerId,
-            Name = helperInfo.Name,
-            IsFriend = helperDetails.IsFriend,
-            CharaData = mapper.Map<CharaList>(helperInfo.SupportChara),
-            DragonData = mapper.Map<DragonList>(helperInfo.SupportDragon),
-            WeaponBodyData = mapper.Map<GameWeaponBody>(helperInfo.SupportWeaponBody),
-            CrestSlotType1CrestList = helperInfo.SupportCrestSlotType1List.Select(
-                mapper.Map<GameAbilityCrest>
-            ),
-            CrestSlotType2CrestList = helperInfo.SupportCrestSlotType2List.Select(
-                mapper.Map<GameAbilityCrest>
-            ),
-            CrestSlotType3CrestList = helperInfo.SupportCrestSlotType3List.Select(
-                mapper.Map<GameAbilityCrest>
-            ),
-            TalismanData = mapper.Map<TalismanList>(helperInfo.SupportTalisman),
-        };
+        return await apiContext
+            .PlayerHelpers.ProjectToSettingSupport()
+            .FirstAsync(cancellationToken);
     }
 
-    public async Task<AtgenSupportUserDataDetail> BuildStaticSupportUserDataDetail(
-        UserSupportList staticHelperInfo
+    public async Task<SettingSupport> SetOwnHelper(
+        FriendSetSupportCharaRequest request,
+        CancellationToken cancellationToken
     )
     {
-        AtgenSupportUserDetailList helperDetail = new()
-        {
-            IsFriend = true,
-            ViewerId = staticHelperInfo.ViewerId,
-            GettableManaPoint = 50,
-        };
+        // Foreign keys will validate most of the entities are owned, but the foreign key to
+        // the dragons table is only on DragonKeyId, due to that being the primary key of the
+        // dragons table.
+        // Explicitly validate the dragon is owned to account for this.
+        bool dragonValid =
+            request.DragonKeyId == 0
+            || await apiContext
+                .PlayerDragonData.Where(x => x.ViewerId == playerIdentityService.ViewerId)
+                .AnyAsync(x => x.DragonKeyId == (long)request.DragonKeyId, cancellationToken);
 
-        FortBonusList bonusList = await bonusService.GetBonusList();
-
-        return new()
+        if (!dragonValid)
         {
-            UserSupportData = staticHelperInfo,
-            FortBonusList = bonusList,
-            ManaCirclePieceIdList = Enumerable.Range(
-                1,
-                staticHelperInfo?.SupportChara.AdditionalMaxLevel == 20 ? 70 : 50
-            ),
-            DragonReliabilityLevel = 30,
-            IsFriend = helperDetail.IsFriend,
-            ApplySendStatus = 0,
-        };
+            throw new DragaliaException(
+                ResultCode.CommonInvalidArgument,
+                $"Dragon key id {request.DragonKeyId} is not owned"
+            );
+        }
+
+        // Same thing for Kaleidoscape prints.
+        bool talismanValid =
+            request.TalismanKeyId == 0
+            || await apiContext
+                .PlayerTalismans.Where(x => x.ViewerId == playerIdentityService.ViewerId)
+                .AnyAsync(x => x.TalismanKeyId == (long)request.TalismanKeyId, cancellationToken);
+
+        if (!talismanValid)
+        {
+            throw new DragaliaException(
+                ResultCode.CommonInvalidArgument,
+                $"Talisman key id {request.TalismanKeyId} is not owned"
+            );
+        }
+
+        DbPlayerHelper existingHelper = await apiContext
+            .PlayerHelpers.AsTracking()
+            .FirstAsync(cancellationToken);
+
+        existingHelper.CharaId = request.CharaId;
+        existingHelper.EquipDragonKeyId = (long?)NullIfZero(request.DragonKeyId);
+        existingHelper.EquipWeaponBodyId = NullIfZeroEnum(request.WeaponBodyId);
+        existingHelper.EquipCrestSlotType1CrestId1 = NullIfZeroEnum(request.CrestSlotType1CrestId1);
+        existingHelper.EquipCrestSlotType1CrestId2 = NullIfZeroEnum(request.CrestSlotType1CrestId2);
+        existingHelper.EquipCrestSlotType1CrestId3 = NullIfZeroEnum(request.CrestSlotType1CrestId3);
+        existingHelper.EquipCrestSlotType2CrestId1 = NullIfZeroEnum(request.CrestSlotType2CrestId1);
+        existingHelper.EquipCrestSlotType2CrestId2 = NullIfZeroEnum(request.CrestSlotType2CrestId2);
+        existingHelper.EquipCrestSlotType3CrestId1 = NullIfZeroEnum(request.CrestSlotType3CrestId1);
+        existingHelper.EquipCrestSlotType3CrestId2 = NullIfZeroEnum(request.CrestSlotType3CrestId2);
+        existingHelper.EquipTalismanKeyId = (long?)NullIfZero(request.TalismanKeyId);
+
+        return existingHelper.MapToSettingSupport();
+
+        static ulong? NullIfZero(ulong value)
+        {
+            if (value == 0)
+            {
+                return null;
+            }
+
+            return value;
+        }
+
+        static TEnum? NullIfZeroEnum<TEnum>(TEnum value)
+            where TEnum : struct, Enum
+        {
+            if ((int)(object)value == 0)
+            {
+                return null;
+            }
+
+            return value;
+        }
+    }
+
+    public async Task<UserSupportList?> GetUserSupportList(
+        long viewerId,
+        CancellationToken cancellationToken
+    )
+    {
+        HelperProjection? helper = await GetHelperProjectionOrDefault(viewerId, cancellationToken);
+
+        return helper?.MapToUserSupportList();
+    }
+
+    private async Task<HelperProjection> GetHelperProjection(
+        long viewerId,
+        CancellationToken cancellationToken
+    )
+    {
+        return await apiContext
+            .PlayerHelpers.IgnoreQueryFilters()
+            .AsSplitQuery()
+            .Where(x => x.ViewerId == viewerId)
+            .ProjectToHelperProjection()
+            .FirstAsync(cancellationToken);
+    }
+
+    private async Task<HelperProjection?> GetHelperProjectionOrDefault(
+        long viewerId,
+        CancellationToken cancellationToken
+    )
+    {
+        return await apiContext
+            .PlayerHelpers.IgnoreQueryFilters()
+            .AsSplitQuery()
+            .Where(x => x.ViewerId == viewerId)
+            .ProjectToHelperProjection()
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     private async Task<IHelperDataService> GetDataService(CancellationToken cancellationToken)
