@@ -25,21 +25,24 @@ internal sealed class DungeonRecordHelperService(
         List<AtgenHelperDetailList> helperDetailList = new();
 
         if (supportViewerId is null)
+        {
             return (helperList, helperDetailList);
+        }
 
-        UserSupportList? supportList = await helperService.GetHelper((long)supportViewerId.Value);
+        AtgenSupportUserDataDetail? supportList = await helperService.GetHelperDetail(
+            (long)supportViewerId.Value
+        );
 
         if (supportList is not null)
         {
-            helperList.Add(supportList);
+            helperList.Add(supportList.UserSupportData);
 
-            // TODO: Replace with friends system once fully added
             helperDetailList.Add(
                 new AtgenHelperDetailList()
                 {
-                    ViewerId = supportList.ViewerId,
-                    IsFriend = true,
-                    ApplySendStatus = 1,
+                    ViewerId = supportList.UserSupportData.ViewerId,
+                    IsFriend = supportList.IsFriend,
+                    ApplySendStatus = supportList.ApplySendStatus,
                     GetManaPoint = 50,
                 }
             );

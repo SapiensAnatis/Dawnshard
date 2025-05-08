@@ -91,6 +91,7 @@ internal sealed class RealHelperDataService(
             .Players.Where(x => x.ViewerId == helperViewerId)
             .Select(x => x.Helper!)
             .ProjectToHelperProjection()
+            .IgnoreQueryFilters()
             .FirstOrDefaultAsync(cancellationToken);
 
         if (projection is null)
@@ -110,6 +111,7 @@ internal sealed class RealHelperDataService(
             .Players.Where(x => x.ViewerId == helperViewerId)
             .Select(x => x.Helper!)
             .ProjectToHelperProjection()
+            .IgnoreQueryFilters()
             .FirstOrDefaultAsync(cancellationToken);
 
         if (projection is null)

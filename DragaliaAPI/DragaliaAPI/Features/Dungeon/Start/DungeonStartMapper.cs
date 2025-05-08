@@ -15,7 +15,7 @@ public static partial class DungeonStartMapper
     [MapperIgnoreTarget(nameof(CharaList.ManaCirclePieceIdList))]
     [MapperIgnoreTarget(nameof(CharaList.IsTemporary))]
     [MapperIgnoreTarget(nameof(CharaList.ListViewFlag))]
-    public static partial CharaList ToCharaList(AtgenSupportChara supportChara);
+    public static partial CharaList ToCharaList(this AtgenSupportChara supportChara);
 
     [MapperIgnoreTarget(nameof(DragonList.Exp))]
     [MapperIgnoreTarget(nameof(DragonList.IsLock))]
@@ -23,22 +23,24 @@ public static partial class DungeonStartMapper
     [MapperIgnoreTarget(nameof(DragonList.GetTime))]
     [MapperIgnoreSource(nameof(AtgenSupportDragon.Hp))]
     [MapperIgnoreSource(nameof(AtgenSupportDragon.Attack))]
-    public static partial DragonList ToDragonList(AtgenSupportDragon supportDragon);
+    public static partial DragonList ToDragonList(this AtgenSupportDragon supportDragon);
 
     [MapperIgnoreTarget(nameof(GameWeaponBody.SkillNo))]
     [MapperIgnoreTarget(nameof(GameWeaponBody.SkillLevel))]
     [MapperIgnoreTarget(nameof(GameWeaponBody.Ability1Level))]
     [MapperIgnoreTarget(nameof(GameWeaponBody.Ability2Level))]
-    public static partial GameWeaponBody ToGameWeaponBody(AtgenSupportWeaponBody supportWeaponBody);
+    public static partial GameWeaponBody ToGameWeaponBody(
+        this AtgenSupportWeaponBody supportWeaponBody
+    );
 
     [MapperIgnoreTarget(nameof(GameAbilityCrest.Ability1Level))]
     [MapperIgnoreTarget(nameof(GameAbilityCrest.Ability2Level))]
     public static partial GameAbilityCrest ToGameAbilityCrest(
-        AtgenSupportCrestSlotType1List supportCrest
+        this AtgenSupportCrestSlotType1List supportCrest
     );
 
     [MapperIgnoreTarget(nameof(TalismanList.IsNew))]
     [MapperIgnoreTarget(nameof(TalismanList.IsLock))]
     [MapperIgnoreTarget(nameof(TalismanList.GetTime))]
-    public static partial TalismanList ToTalismanList(AtgenSupportTalisman supportTalisman);
+    public static partial TalismanList ToTalismanList(this AtgenSupportTalisman supportTalisman);
 }
