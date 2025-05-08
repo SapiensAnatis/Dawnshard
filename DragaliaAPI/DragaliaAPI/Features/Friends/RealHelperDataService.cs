@@ -1,8 +1,11 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DragaliaAPI.Features.Friends;
 
@@ -10,6 +13,7 @@ internal sealed class RealHelperDataService(
     ApiContext apiContext,
     TimeProvider timeProvider,
     FriendService friendService,
+    IBonusService bonusService,
     IPlayerIdentityService playerIdentityService
 ) : IHelperDataService
 {
@@ -44,6 +48,7 @@ internal sealed class RealHelperDataService(
                 )
                 .Select(x => x.Helper)
                 .ProjectToHelperProjection()
+                .IgnoreQueryFilters()
                 .ToListAsync(cancellationToken)
         )
             .Select(x => x.MapToUserSupportList())
@@ -77,24 +82,98 @@ internal sealed class RealHelperDataService(
         };
     }
 
-    public Task<UserSupportList?> GetHelper(
+    public async Task<UserSupportList?> GetHelper(
         long helperViewerId,
         CancellationToken cancellationToken
     )
     {
-        throw new NotImplementedException();
+        HelperProjection? projection = await apiContext
+            .Players.Where(x => x.ViewerId == helperViewerId)
+            .Select(x => x.Helper!)
+            .ProjectToHelperProjection()
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (projection is null)
+        {
+            return null;
+        }
+
+        return projection.MapToUserSupportList();
     }
 
-    public Task<AtgenSupportUserDataDetail?> GetHelperDataDetail(
+    public async Task<AtgenSupportUserDataDetail?> GetHelperDataDetail(
         long helperViewerId,
         CancellationToken cancellationToken
     )
     {
-        throw new NotImplementedException();
+        HelperProjection? projection = await apiContext
+            .Players.Where(x => x.ViewerId == helperViewerId)
+            .Select(x => x.Helper!)
+            .ProjectToHelperProjection()
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (projection is null)
+        {
+            return null;
+        }
+
+        IQueryable<DbPlayer> friends = apiContext
+            .Players.Where(x => x.ViewerId == playerIdentityService.ViewerId)
+            .SelectMany(x => x.Friendships)
+            .SelectMany(x => x.Players)
+            .IgnoreQueryFilters();
+
+        bool isFriend = await friends.AnyAsync(
+            x => x.ViewerId == helperViewerId,
+            cancellationToken
+        );
+
+        bool hasSentFriendRequest = await apiContext.PlayerFriendRequests.AnyAsync(
+            x =>
+                x.FromPlayerViewerId == playerIdentityService.ViewerId
+                && x.ToPlayerViewerId == helperViewerId,
+            cancellationToken
+        );
+
+        FortBonusList fortBonusList = await bonusService.GetBonusList(
+            helperViewerId,
+            cancellationToken
+        );
+
+        return new AtgenSupportUserDataDetail()
+        {
+            UserSupportData = projection.MapToUserSupportList(),
+            ManaCirclePieceIdList = projection.ManaCirclePieceIdList,
+            DragonReliabilityLevel = projection.ReliabilityLevel ?? 0,
+            IsFriend = isFriend,
+            ApplySendStatus = hasSentFriendRequest ? 1 : 0,
+            FortBonusList = fortBonusList,
+        };
     }
 
-    public Task UseHelper(long helperViewerId, CancellationToken cancellationToken)
+    public async Task UseHelper(long helperViewerId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        await using IDbContextTransaction transaction =
+            await apiContext.Database.BeginTransactionAsync(cancellationToken);
+
+        int rowsUpdated = await apiContext
+            .PlayerFriendshipPlayers.Where(x =>
+                x.PlayerViewerId == playerIdentityService.ViewerId
+                && x.Friendship!.Players.Any(y => y.ViewerId == helperViewerId)
+            )
+            .ExecuteUpdateAsync(
+                e => e.SetProperty(p => p.LastHelperUseDate, DateTimeOffset.UtcNow),
+                cancellationToken
+            );
+
+        if (rowsUpdated != 1)
+        {
+            throw new DragaliaException(
+                ResultCode.CommonInvalidArgument,
+                "Failed to update helper use date"
+            );
+        }
+
+        await transaction.CommitAsync(cancellationToken);
     }
 }

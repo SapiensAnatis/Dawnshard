@@ -17,8 +17,13 @@ public record HelperProjection(
     AtgenSupportTalisman? EquippedTalisman,
     UserDataProjection UserData,
     int? ReliabilityLevel,
-    int? PartyPower
-);
+    int? PartyPower,
+    ushort ManaNodeUnlockCount
+)
+{
+    public SortedSet<int> ManaCirclePieceIdList { get; } =
+        ManaNodesUtil.GetSetFromManaNodes((ManaNodes)ManaNodeUnlockCount);
+}
 
 public record UserDataProjection(
     long ViewerId,

@@ -61,106 +61,129 @@ public static class MappingExtensions
                 Skill2Level = x.EquippedChara.Skill2Level,
                 IsUnlockEditSkill = x.EquippedChara.IsUnlockEditSkill,
             },
-            new AtgenSupportDragon
-            {
-                DragonKeyId = (ulong)x.EquippedDragon!.DragonKeyId,
-                DragonId = x.EquippedDragon.DragonId,
-                Level = x.EquippedDragon.Level,
-                Hp = 0, // HP and attack are not in the regular dragon model, maybe unused?
-                Attack = 0,
-                Skill1Level = x.EquippedDragon.Skill1Level,
-                Ability1Level = x.EquippedDragon.Ability1Level,
-                Ability2Level = x.EquippedDragon.Ability2Level,
-                HpPlusCount = x.EquippedDragon.HpPlusCount,
-                AttackPlusCount = x.EquippedDragon.AttackPlusCount,
-                StatusPlusCount = 0,
-                LimitBreakCount = x.EquippedDragon.LimitBreakCount,
-            },
-            new AtgenSupportWeaponBody
-            {
-                WeaponBodyId = x.EquippedWeaponBody!.WeaponBodyId,
-                BuildupCount = x.EquippedWeaponBody.BuildupCount,
-                LimitBreakCount = x.EquippedWeaponBody.LimitBreakCount,
-                LimitOverCount = x.EquippedWeaponBody.LimitOverCount,
-                AdditionalEffectCount = x.EquippedWeaponBody.AdditionalEffectCount,
-                EquipableCount = x.EquippedWeaponBody.EquipableCount,
-                AdditionalCrestSlotType1Count = x.EquippedWeaponBody.AdditionalCrestSlotType1Count,
-                AdditionalCrestSlotType2Count = x.EquippedWeaponBody.AdditionalCrestSlotType2Count,
-                AdditionalCrestSlotType3Count = x.EquippedWeaponBody.AdditionalCrestSlotType3Count,
-            },
-            new AtgenSupportCrestSlotType1List()
-            {
-                AbilityCrestId = x.EquippedCrestSlotType1Crest1!.AbilityCrestId,
-                BuildupCount = x.EquippedCrestSlotType1Crest1.BuildupCount,
-                LimitBreakCount = x.EquippedCrestSlotType1Crest1.LimitBreakCount,
-                HpPlusCount = x.EquippedCrestSlotType1Crest1.HpPlusCount,
-                AttackPlusCount = x.EquippedCrestSlotType1Crest1.AttackPlusCount,
-                EquipableCount = x.EquippedCrestSlotType1Crest1.EquipableCount,
-            },
-            new AtgenSupportCrestSlotType1List()
-            {
-                AbilityCrestId = x.EquippedCrestSlotType1Crest2!.AbilityCrestId,
-                BuildupCount = x.EquippedCrestSlotType1Crest2.BuildupCount,
-                LimitBreakCount = x.EquippedCrestSlotType1Crest2.LimitBreakCount,
-                HpPlusCount = x.EquippedCrestSlotType1Crest2.HpPlusCount,
-                AttackPlusCount = x.EquippedCrestSlotType1Crest2.AttackPlusCount,
-                EquipableCount = x.EquippedCrestSlotType1Crest2.EquipableCount,
-            },
-            new AtgenSupportCrestSlotType1List()
-            {
-                AbilityCrestId = x.EquippedCrestSlotType1Crest3!.AbilityCrestId,
-                BuildupCount = x.EquippedCrestSlotType1Crest3.BuildupCount,
-                LimitBreakCount = x.EquippedCrestSlotType1Crest3.LimitBreakCount,
-                HpPlusCount = x.EquippedCrestSlotType1Crest3.HpPlusCount,
-                AttackPlusCount = x.EquippedCrestSlotType1Crest3.AttackPlusCount,
-                EquipableCount = x.EquippedCrestSlotType1Crest3.EquipableCount,
-            },
-            new AtgenSupportCrestSlotType1List()
-            {
-                AbilityCrestId = x.EquippedCrestSlotType2Crest1!.AbilityCrestId,
-                BuildupCount = x.EquippedCrestSlotType2Crest1.BuildupCount,
-                LimitBreakCount = x.EquippedCrestSlotType2Crest1.LimitBreakCount,
-                HpPlusCount = x.EquippedCrestSlotType2Crest1.HpPlusCount,
-                AttackPlusCount = x.EquippedCrestSlotType2Crest1.AttackPlusCount,
-                EquipableCount = x.EquippedCrestSlotType2Crest1.EquipableCount,
-            },
-            new AtgenSupportCrestSlotType1List()
-            {
-                AbilityCrestId = x.EquippedCrestSlotType2Crest2!.AbilityCrestId,
-                BuildupCount = x.EquippedCrestSlotType2Crest2.BuildupCount,
-                LimitBreakCount = x.EquippedCrestSlotType2Crest2.LimitBreakCount,
-                HpPlusCount = x.EquippedCrestSlotType2Crest2.HpPlusCount,
-                AttackPlusCount = x.EquippedCrestSlotType2Crest2.AttackPlusCount,
-                EquipableCount = x.EquippedCrestSlotType2Crest2.EquipableCount,
-            },
-            new AtgenSupportCrestSlotType1List()
-            {
-                AbilityCrestId = x.EquippedCrestSlotType3Crest1!.AbilityCrestId,
-                BuildupCount = x.EquippedCrestSlotType3Crest1.BuildupCount,
-                LimitBreakCount = x.EquippedCrestSlotType3Crest1.LimitBreakCount,
-                HpPlusCount = x.EquippedCrestSlotType3Crest1.HpPlusCount,
-                AttackPlusCount = x.EquippedCrestSlotType3Crest1.AttackPlusCount,
-                EquipableCount = x.EquippedCrestSlotType3Crest1.EquipableCount,
-            },
-            new AtgenSupportCrestSlotType1List()
-            {
-                AbilityCrestId = x.EquippedCrestSlotType3Crest2!.AbilityCrestId,
-                BuildupCount = x.EquippedCrestSlotType3Crest2.BuildupCount,
-                LimitBreakCount = x.EquippedCrestSlotType3Crest2.LimitBreakCount,
-                HpPlusCount = x.EquippedCrestSlotType3Crest2.HpPlusCount,
-                AttackPlusCount = x.EquippedCrestSlotType3Crest2.AttackPlusCount,
-                EquipableCount = x.EquippedCrestSlotType3Crest2.EquipableCount,
-            },
-            new AtgenSupportTalisman
-            {
-                TalismanKeyId = (ulong)x.EquippedTalisman!.TalismanKeyId,
-                TalismanId = x.EquippedTalisman.TalismanId,
-                TalismanAbilityId1 = x.EquippedTalisman.TalismanAbilityId1,
-                TalismanAbilityId2 = x.EquippedTalisman.TalismanAbilityId2,
-                TalismanAbilityId3 = x.EquippedTalisman.TalismanAbilityId3,
-                AdditionalHp = x.EquippedTalisman.AdditionalHp,
-                AdditionalAttack = x.EquippedTalisman.AdditionalAttack,
-            },
+            x.EquippedDragon != null
+                ? new AtgenSupportDragon
+                {
+                    DragonKeyId = (ulong)x.EquippedDragon.DragonKeyId,
+                    DragonId = x.EquippedDragon.DragonId,
+                    Level = x.EquippedDragon.Level,
+                    Hp = 0, // HP and attack are not in the regular dragon model, maybe unused?
+                    Attack = 0,
+                    Skill1Level = x.EquippedDragon.Skill1Level,
+                    Ability1Level = x.EquippedDragon.Ability1Level,
+                    Ability2Level = x.EquippedDragon.Ability2Level,
+                    HpPlusCount = x.EquippedDragon.HpPlusCount,
+                    AttackPlusCount = x.EquippedDragon.AttackPlusCount,
+                    StatusPlusCount = 0,
+                    LimitBreakCount = x.EquippedDragon.LimitBreakCount,
+                }
+                : null,
+            x.EquippedWeaponBody != null
+                ? new AtgenSupportWeaponBody
+                {
+                    WeaponBodyId = x.EquippedWeaponBody.WeaponBodyId,
+                    BuildupCount = x.EquippedWeaponBody.BuildupCount,
+                    LimitBreakCount = x.EquippedWeaponBody.LimitBreakCount,
+                    LimitOverCount = x.EquippedWeaponBody.LimitOverCount,
+                    AdditionalEffectCount = x.EquippedWeaponBody.AdditionalEffectCount,
+                    EquipableCount = x.EquippedWeaponBody.EquipableCount,
+                    AdditionalCrestSlotType1Count =
+                        x.EquippedWeaponBody.AdditionalCrestSlotType1Count,
+                    AdditionalCrestSlotType2Count =
+                        x.EquippedWeaponBody.AdditionalCrestSlotType2Count,
+                    AdditionalCrestSlotType3Count =
+                        x.EquippedWeaponBody.AdditionalCrestSlotType3Count,
+                }
+                : null,
+            x.EquippedCrestSlotType1Crest1 != null
+                ? new AtgenSupportCrestSlotType1List()
+                {
+                    AbilityCrestId = x.EquippedCrestSlotType1Crest1.AbilityCrestId,
+                    BuildupCount = x.EquippedCrestSlotType1Crest1.BuildupCount,
+                    LimitBreakCount = x.EquippedCrestSlotType1Crest1.LimitBreakCount,
+                    HpPlusCount = x.EquippedCrestSlotType1Crest1.HpPlusCount,
+                    AttackPlusCount = x.EquippedCrestSlotType1Crest1.AttackPlusCount,
+                    EquipableCount = x.EquippedCrestSlotType1Crest1.EquipableCount,
+                }
+                : null,
+            x.EquippedCrestSlotType1Crest2 != null
+                ? new AtgenSupportCrestSlotType1List()
+                {
+                    AbilityCrestId = x.EquippedCrestSlotType1Crest2.AbilityCrestId,
+                    BuildupCount = x.EquippedCrestSlotType1Crest2.BuildupCount,
+                    LimitBreakCount = x.EquippedCrestSlotType1Crest2.LimitBreakCount,
+                    HpPlusCount = x.EquippedCrestSlotType1Crest2.HpPlusCount,
+                    AttackPlusCount = x.EquippedCrestSlotType1Crest2.AttackPlusCount,
+                    EquipableCount = x.EquippedCrestSlotType1Crest2.EquipableCount,
+                }
+                : null,
+            x.EquippedCrestSlotType1Crest3 != null
+                ? new AtgenSupportCrestSlotType1List()
+                {
+                    AbilityCrestId = x.EquippedCrestSlotType1Crest3.AbilityCrestId,
+                    BuildupCount = x.EquippedCrestSlotType1Crest3.BuildupCount,
+                    LimitBreakCount = x.EquippedCrestSlotType1Crest3.LimitBreakCount,
+                    HpPlusCount = x.EquippedCrestSlotType1Crest3.HpPlusCount,
+                    AttackPlusCount = x.EquippedCrestSlotType1Crest3.AttackPlusCount,
+                    EquipableCount = x.EquippedCrestSlotType1Crest3.EquipableCount,
+                }
+                : null,
+            x.EquippedCrestSlotType2Crest1 != null
+                ? new AtgenSupportCrestSlotType1List()
+                {
+                    AbilityCrestId = x.EquippedCrestSlotType2Crest1.AbilityCrestId,
+                    BuildupCount = x.EquippedCrestSlotType2Crest1.BuildupCount,
+                    LimitBreakCount = x.EquippedCrestSlotType2Crest1.LimitBreakCount,
+                    HpPlusCount = x.EquippedCrestSlotType2Crest1.HpPlusCount,
+                    AttackPlusCount = x.EquippedCrestSlotType2Crest1.AttackPlusCount,
+                    EquipableCount = x.EquippedCrestSlotType2Crest1.EquipableCount,
+                }
+                : null,
+            x.EquippedCrestSlotType2Crest2 != null
+                ? new AtgenSupportCrestSlotType1List()
+                {
+                    AbilityCrestId = x.EquippedCrestSlotType2Crest2.AbilityCrestId,
+                    BuildupCount = x.EquippedCrestSlotType2Crest2.BuildupCount,
+                    LimitBreakCount = x.EquippedCrestSlotType2Crest2.LimitBreakCount,
+                    HpPlusCount = x.EquippedCrestSlotType2Crest2.HpPlusCount,
+                    AttackPlusCount = x.EquippedCrestSlotType2Crest2.AttackPlusCount,
+                    EquipableCount = x.EquippedCrestSlotType2Crest2.EquipableCount,
+                }
+                : null,
+            x.EquippedCrestSlotType3Crest1 != null
+                ? new AtgenSupportCrestSlotType1List()
+                {
+                    AbilityCrestId = x.EquippedCrestSlotType3Crest1.AbilityCrestId,
+                    BuildupCount = x.EquippedCrestSlotType3Crest1.BuildupCount,
+                    LimitBreakCount = x.EquippedCrestSlotType3Crest1.LimitBreakCount,
+                    HpPlusCount = x.EquippedCrestSlotType3Crest1.HpPlusCount,
+                    AttackPlusCount = x.EquippedCrestSlotType3Crest1.AttackPlusCount,
+                    EquipableCount = x.EquippedCrestSlotType3Crest1.EquipableCount,
+                }
+                : null,
+            x.EquippedCrestSlotType3Crest2 != null
+                ? new AtgenSupportCrestSlotType1List()
+                {
+                    AbilityCrestId = x.EquippedCrestSlotType3Crest2.AbilityCrestId,
+                    BuildupCount = x.EquippedCrestSlotType3Crest2.BuildupCount,
+                    LimitBreakCount = x.EquippedCrestSlotType3Crest2.LimitBreakCount,
+                    HpPlusCount = x.EquippedCrestSlotType3Crest2.HpPlusCount,
+                    AttackPlusCount = x.EquippedCrestSlotType3Crest2.AttackPlusCount,
+                    EquipableCount = x.EquippedCrestSlotType3Crest2.EquipableCount,
+                }
+                : null,
+            x.EquippedTalisman != null
+                ? new AtgenSupportTalisman
+                {
+                    TalismanKeyId = (ulong)x.EquippedTalisman.TalismanKeyId,
+                    TalismanId = x.EquippedTalisman.TalismanId,
+                    TalismanAbilityId1 = x.EquippedTalisman.TalismanAbilityId1,
+                    TalismanAbilityId2 = x.EquippedTalisman.TalismanAbilityId2,
+                    TalismanAbilityId3 = x.EquippedTalisman.TalismanAbilityId3,
+                    AdditionalHp = x.EquippedTalisman.AdditionalHp,
+                    AdditionalAttack = x.EquippedTalisman.AdditionalAttack,
+                }
+                : null,
             new UserDataProjection(
                 x.Owner!.UserData!.ViewerId,
                 x.Owner.UserData.Name,
@@ -168,10 +191,13 @@ public static class MappingExtensions
                 x.Owner.UserData.LastLoginTime,
                 x.Owner.UserData.EmblemId
             ),
-            x.Owner!.DragonReliabilityList.First(y =>
-                y.DragonId == x.EquippedDragon!.DragonId
-            )!.Level,
-            x.Owner!.PartyPower!.MaxPartyPower
+            x.EquippedDragon != null
+                ? x.Owner!.DragonReliabilityList.First(y =>
+                    y.DragonId == x.EquippedDragon.DragonId
+                ).Level
+                : 0,
+            x.Owner!.PartyPower!.MaxPartyPower,
+            x.EquippedChara.ManaNodeUnlockCount
         ));
     }
 
