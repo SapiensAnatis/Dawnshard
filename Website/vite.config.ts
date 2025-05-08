@@ -8,8 +8,8 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [
-      sveltekit(),
       enhancedImages(),
+      sveltekit(),
       checker({
         typescript: false, // https://github.com/huntabyte/shadcn-svelte/issues/1468
         eslint: { lintCommand: 'eslint ./src/**/*.{ts,svelte}', useFlatConfig: true }
