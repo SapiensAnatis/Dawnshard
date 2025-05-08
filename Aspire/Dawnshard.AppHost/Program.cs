@@ -4,11 +4,14 @@ using Microsoft.Extensions.Configuration;
 
 IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(args);
 
+#pragma warning disable ASPIREPROXYENDPOINTS001
 IResourceBuilder<PostgresServerResource> postgres = builder
     .AddPostgres("postgres")
     .WithImage("postgres", "17.5")
     .WithDataVolume("dragalia-api-pgdata")
-    .WithLifetime(ContainerLifetime.Persistent);
+    .WithLifetime(ContainerLifetime.Persistent)
+    .WithEndpointProxySupport(false);
+#pragma warning restore ASPIREPROXYENDPOINTS001
 
 IResourceBuilder<RedisResource> redis = builder
     .AddRedis("redis")

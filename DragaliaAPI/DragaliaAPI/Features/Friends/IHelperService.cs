@@ -23,4 +23,6 @@ public interface IHelperService
         FriendSetSupportCharaRequest request,
         CancellationToken cancellationToken
     );
+
+    Task UseHelper(long supportViewerId, CancellationToken cancellationToken = default);
 }

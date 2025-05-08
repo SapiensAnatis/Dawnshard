@@ -54,6 +54,13 @@ internal sealed class HelperService(
         return await dataService.GetHelperDataDetail(viewerId, cancellationToken);
     }
 
+    public async Task UseHelper(long supportViewerId, CancellationToken cancellationToken = default)
+    {
+        IHelperDataService dataService = await this.GetDataService(cancellationToken);
+
+        await dataService.UseHelper(supportViewerId, cancellationToken);
+    }
+
     public async Task<UserSupportList> GetLeadUnit(int partyNo)
     {
         DbPlayerUserData userData = await userDataRepository.GetUserDataAsync();

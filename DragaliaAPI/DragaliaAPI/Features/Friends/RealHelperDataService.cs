@@ -155,6 +155,8 @@ internal sealed class RealHelperDataService(
 
     public async Task UseHelper(long helperViewerId, CancellationToken cancellationToken)
     {
+        // TODO BEFORE MERGE: grant mana
+
         await using IDbContextTransaction transaction =
             await apiContext.Database.BeginTransactionAsync(cancellationToken);
 
