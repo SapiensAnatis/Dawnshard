@@ -405,13 +405,9 @@ internal sealed partial class DungeonStartService(
             ViewerId = helperDetails.UserSupportData.ViewerId,
             Name = helperDetails.UserSupportData.Name,
             IsFriend = helperDetails.IsFriend,
-            CharaData = DungeonStartMapper.ToCharaList(helperDetails.UserSupportData.SupportChara),
-            DragonData = DungeonStartMapper.ToDragonList(
-                helperDetails.UserSupportData.SupportDragon
-            ),
-            WeaponBodyData = DungeonStartMapper.ToGameWeaponBody(
-                helperDetails.UserSupportData.SupportWeaponBody
-            ),
+            CharaData = helperDetails.UserSupportData.SupportChara.ToCharaList(),
+            DragonData = helperDetails.UserSupportData.SupportDragon?.ToDragonList(),
+            WeaponBodyData = helperDetails.UserSupportData.SupportWeaponBody.ToGameWeaponBody(),
             CrestSlotType1CrestList = helperDetails
                 .UserSupportData.SupportCrestSlotType1List.Select(
                     DungeonStartMapper.ToGameAbilityCrest
@@ -427,9 +423,7 @@ internal sealed partial class DungeonStartService(
                     DungeonStartMapper.ToGameAbilityCrest
                 )
                 .ToList(),
-            TalismanData = DungeonStartMapper.ToTalismanList(
-                helperDetails.UserSupportData.SupportTalisman
-            ),
+            TalismanData = helperDetails.UserSupportData.SupportTalisman?.ToTalismanList(),
         };
     }
 }
