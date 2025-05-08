@@ -6,7 +6,7 @@ IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(ar
 
 IResourceBuilder<PostgresServerResource> postgres = builder
     .AddPostgres("postgres")
-    .WithImage("postgres", "16.4")
+    .WithImage("postgres", "17.5")
     .WithDataVolume("dragalia-api-pgdata")
     .WithLifetime(ContainerLifetime.Persistent);
 
