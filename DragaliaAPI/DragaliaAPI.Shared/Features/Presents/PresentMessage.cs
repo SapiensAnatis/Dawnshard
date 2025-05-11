@@ -203,6 +203,13 @@ public enum PresentMessage
     WyrmsigilReward = 2070004,
 
     /// <summary>
+    /// Title: Helper Reward
+    /// <br/>
+    /// Description: A reward for your helper being used\nby {0} players.
+    /// </summary>
+    HelperUseReward = 2080001,
+
+    /// <summary>
     /// Title: Mana Node Unlocking Reward
     /// <br/>
     /// Description: For unlocking a node on one of {0}'s mana circles.

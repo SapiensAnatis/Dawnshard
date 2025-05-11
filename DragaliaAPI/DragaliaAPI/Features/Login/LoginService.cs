@@ -1,9 +1,12 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Friends;
+using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Login;
 using DragaliaAPI.Shared.PlayerDetails;
@@ -13,6 +16,7 @@ namespace DragaliaAPI.Features.Login;
 
 public class LoginService(
     IRewardService rewardService,
+    IPresentService presentService,
     TimeProvider dateTimeProvider,
     ApiContext apiContext,
     IWallService wallService,
@@ -148,5 +152,37 @@ public class LoginService(
                 IsReceiveReward = wallRewardStatus,
             },
         ];
+    }
+
+    public async Task RewardHelperMana()
+    {
+        DbPlayerHelper? helper = await apiContext
+            .PlayerHelpers.AsTracking()
+            .FirstOrDefaultAsync(x => x.ViewerId == playerIdentityService.ViewerId);
+
+        if (helper is null)
+        {
+            // Some corner cases around save import can cause this...
+            return;
+        }
+
+        int helperUseCount = helper.HelperRewardCount + helper.HelperFriendRewardCount;
+
+        if (helperUseCount > 0)
+        {
+            int manaCount =
+                (helper.HelperRewardCount * HelperConstants.HelperRewardMana)
+                + (helper.HelperFriendRewardCount * HelperConstants.HelperFriendRewardMana);
+
+            presentService.AddPresent(
+                new Present.Present(PresentMessage.HelperUseReward, EntityTypes.Mana, 0, manaCount)
+                {
+                    MessageParamValues = [helperUseCount],
+                }
+            );
+
+            helper.HelperRewardCount = 0;
+            helper.HelperFriendRewardCount = 0;
+        }
     }
 }

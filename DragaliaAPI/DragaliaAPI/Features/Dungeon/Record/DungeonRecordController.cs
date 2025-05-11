@@ -43,11 +43,13 @@ internal sealed class DungeonRecordController(
 
         (
             IEnumerable<UserSupportList> helperList,
-            IEnumerable<AtgenHelperDetailList> helperDetailList
+            IEnumerable<AtgenHelperDetailList> helperDetailList,
+            int rewardMana
         ) = await dungeonRecordHelperService.ProcessHelperDataSolo(session.SupportViewerId);
 
         ingameResultData.HelperList = helperList;
         ingameResultData.HelperDetailList = helperDetailList;
+        ingameResultData.GrowRecord.TakeMana += rewardMana;
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 

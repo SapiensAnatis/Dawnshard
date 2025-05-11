@@ -4,6 +4,8 @@ using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.PlayerDetails;
+using LinqToDB;
+using LinqToDB.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -32,31 +34,66 @@ internal sealed class RealHelperDataService(
                 on friendship.FriendshipId equals friend.FriendshipId
             select new
             {
-                friend.Player.Helper,
-                friendship.LastHelperUseDate,
+                friend.Player!.Helper,
+                LastHelperUseDate = friend.Player.Helper!.UseDates.FirstOrDefault(x =>
+                    x.PlayerViewerId == playerIdentityService.ViewerId
+                ),
                 LastQuestClearDate = friend
                     .Player.QuestList.OrderByDescending(x => x.LastDailyResetTime)
                     .First()
-                    .LastDailyResetTime, // does this even get translated?
+                    .LastDailyResetTime,
             };
 
         List<UserSupportList> friends = (
             await friendsQuery
                 .Where(x =>
-                    x.LastHelperUseDate < x.LastQuestClearDate
-                    || x.LastHelperUseDate < lastResetDate
+                    x.LastHelperUseDate == null
+                    || x.LastHelperUseDate.UseDate < x.LastQuestClearDate
+                    || x.LastHelperUseDate.UseDate < lastResetDate
                 )
                 .Select(x => x.Helper)
                 .ProjectToHelperProjection()
                 .IgnoreQueryFilters()
-                .ToListAsync(cancellationToken)
+                .ToListAsyncEF(cancellationToken)
         )
             .Select(x => x.MapToUserSupportList())
             .ToList();
 
-        List<UserSupportList> nonFriends = await friendService.GetRecommendedFriendsList(
-            cancellationToken
-        );
+        List<UserSupportList> nonFriends = (
+            await apiContext
+                .Players.Where(x => x.ViewerId != playerIdentityService.ViewerId)
+                .OrderByDescending(x => x.UserData!.LastLoginTime)
+                .Where(x => x.Helper != null)
+                .Where(x =>
+                    // Don't suggest people who are already your friends
+                    !apiContext.PlayerFriendships.Any(y =>
+                        y.PlayerFriendshipPlayers.Any(z =>
+                            z.PlayerViewerId == playerIdentityService.ViewerId
+                        ) && y.PlayerFriendshipPlayers.Any(z => z.PlayerViewerId == x.ViewerId)
+                    )
+                )
+                .Select(x => new
+                {
+                    x.Helper,
+                    LastHelperUseDate = x.Helper!.UseDates.FirstOrDefault(y =>
+                        y.PlayerViewerId == playerIdentityService.ViewerId
+                    ),
+                    LastQuestClearDate = x
+                        .QuestList.OrderByDescending(y => y.LastDailyResetTime)
+                        .First()
+                        .LastDailyResetTime,
+                })
+                .Take(10)
+                .Where(x =>
+                    x.LastHelperUseDate == null
+                    || x.LastHelperUseDate.UseDate < x.LastQuestClearDate
+                    || x.LastHelperUseDate.UseDate < lastResetDate
+                )
+                .Select(x => x.Helper!)
+                .ProjectToHelperProjection()
+                .IgnoreQueryFilters()
+                .ToListAsyncEF(cancellationToken)
+        ).Select(x => x.MapToUserSupportList()).ToList();
 
         List<UserSupportList> merged = [.. friends, .. nonFriends];
         List<AtgenSupportUserDetailList> details =
@@ -64,13 +101,13 @@ internal sealed class RealHelperDataService(
             .. friends.Select(x => new AtgenSupportUserDetailList()
             {
                 ViewerId = x.ViewerId,
-                GettableManaPoint = 50,
+                GettableManaPoint = HelperConstants.HelperFriendRewardMana,
                 IsFriend = true,
             }),
             .. nonFriends.Select(x => new AtgenSupportUserDetailList()
             {
                 ViewerId = x.ViewerId,
-                GettableManaPoint = 25,
+                GettableManaPoint = HelperConstants.HelperRewardMana,
                 IsFriend = false,
             }),
         ];
@@ -87,12 +124,14 @@ internal sealed class RealHelperDataService(
         CancellationToken cancellationToken
     )
     {
-        HelperProjection? projection = await apiContext
-            .Players.Where(x => x.ViewerId == helperViewerId)
-            .Select(x => x.Helper!)
-            .ProjectToHelperProjection()
-            .IgnoreQueryFilters()
-            .FirstOrDefaultAsync(cancellationToken);
+        HelperProjection? projection = await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(
+            apiContext
+                .Players.Where(x => x.ViewerId == helperViewerId)
+                .Select(x => x.Helper!)
+                .ProjectToHelperProjection()
+                .IgnoreQueryFilters(),
+            cancellationToken
+        );
 
         if (projection is null)
         {
@@ -107,12 +146,14 @@ internal sealed class RealHelperDataService(
         CancellationToken cancellationToken
     )
     {
-        HelperProjection? projection = await apiContext
-            .Players.Where(x => x.ViewerId == helperViewerId)
-            .Select(x => x.Helper!)
-            .ProjectToHelperProjection()
-            .IgnoreQueryFilters()
-            .FirstOrDefaultAsync(cancellationToken);
+        HelperProjection? projection = await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(
+            apiContext
+                .Players.Where(x => x.ViewerId == helperViewerId)
+                .Select(x => x.Helper!)
+                .ProjectToHelperProjection()
+                .IgnoreQueryFilters(),
+            cancellationToken
+        );
 
         if (projection is null)
         {
@@ -125,12 +166,12 @@ internal sealed class RealHelperDataService(
             .SelectMany(x => x.Players)
             .IgnoreQueryFilters();
 
-        bool isFriend = await friends.AnyAsync(
+        bool isFriend = await friends.AnyAsyncEF(
             x => x.ViewerId == helperViewerId,
             cancellationToken
         );
 
-        bool hasSentFriendRequest = await apiContext.PlayerFriendRequests.AnyAsync(
+        bool hasSentFriendRequest = await apiContext.PlayerFriendRequests.AnyAsyncEF(
             x =>
                 x.FromPlayerViewerId == playerIdentityService.ViewerId
                 && x.ToPlayerViewerId == helperViewerId,
@@ -155,26 +196,67 @@ internal sealed class RealHelperDataService(
 
     public async Task UseHelper(long helperViewerId, CancellationToken cancellationToken)
     {
-        // TODO BEFORE MERGE: grant mana
-
         await using IDbContextTransaction transaction =
             await apiContext.Database.BeginTransactionAsync(cancellationToken);
 
-        int rowsUpdated = await apiContext
-            .PlayerFriendshipPlayers.Where(x =>
-                x.PlayerViewerId == playerIdentityService.ViewerId
-                && x.Friendship!.Players.Any(y => y.ViewerId == helperViewerId)
-            )
-            .ExecuteUpdateAsync(
-                e => e.SetProperty(p => p.LastHelperUseDate, DateTimeOffset.UtcNow),
+        await apiContext
+            .PlayerHelperUseDates.ToLinqToDBTable()
+            .InsertOrUpdateAsync(
+                () =>
+                    new DbPlayerHelperUseDate()
+                    {
+                        HelperViewerId = helperViewerId,
+                        PlayerViewerId = playerIdentityService.ViewerId,
+                        UseDate = DateTimeOffset.UtcNow,
+                    },
+                existing => new DbPlayerHelperUseDate()
+                {
+                    HelperViewerId = existing.HelperViewerId,
+                    PlayerViewerId = existing.PlayerViewerId,
+                    UseDate = DateTimeOffset.UtcNow,
+                },
                 cancellationToken
             );
 
-        if (rowsUpdated != 1)
+        bool helperIsFriend = await friendService
+            .GetFriendsQuery()
+            .AnyAsyncEF(x => x.ViewerId == helperViewerId, cancellationToken);
+
+        IQueryable<DbPlayerHelper> targetHelper = apiContext
+            .PlayerHelpers.Where(x => x.ViewerId == helperViewerId)
+            .IgnoreQueryFilters();
+
+        int rewardRowsUpdated;
+
+        if (helperIsFriend)
+        {
+            rewardRowsUpdated = await targetHelper.ExecuteUpdateAsync(
+                e =>
+                    e.SetProperty(
+                        p => p.HelperFriendRewardCount,
+                        p => p.HelperFriendRewardCount + 1
+                    ),
+                cancellationToken
+            );
+        }
+        else
+        {
+            // csharpier-ignore
+            rewardRowsUpdated = await targetHelper.ExecuteUpdateAsync(
+                e =>
+                    e.SetProperty(
+                        p => p.HelperRewardCount,
+                        p => p.HelperRewardCount + 1
+                    ),
+                cancellationToken
+            );
+        }
+
+        if (rewardRowsUpdated != 1)
         {
             throw new DragaliaException(
                 ResultCode.CommonInvalidArgument,
-                "Failed to update helper use date"
+                "Failed to grant helper rewards"
             );
         }
 

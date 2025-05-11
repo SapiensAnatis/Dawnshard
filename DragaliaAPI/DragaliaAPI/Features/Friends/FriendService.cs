@@ -404,7 +404,7 @@ internal sealed partial class FriendService(
         return friendLimit;
     }
 
-    private IQueryable<DbPlayer> GetFriendsQuery()
+    public IQueryable<DbPlayer> GetFriendsQuery()
     {
         IQueryable<DbPlayer> currentPlayer = apiContext.Players.Where(x =>
             x.ViewerId == playerIdentityService.ViewerId

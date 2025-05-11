@@ -18,7 +18,8 @@ internal sealed class DungeonRecordHelperService(
 {
     public async Task<(
         IEnumerable<UserSupportList> HelperList,
-        IEnumerable<AtgenHelperDetailList> HelperDetailList
+        IEnumerable<AtgenHelperDetailList> HelperDetailList,
+        int RewardMana
     )> ProcessHelperDataSolo(ulong? supportViewerId)
     {
         List<UserSupportList> helperList = new();
@@ -26,12 +27,14 @@ internal sealed class DungeonRecordHelperService(
 
         if (supportViewerId is null)
         {
-            return (helperList, helperDetailList);
+            return (helperList, helperDetailList, 0);
         }
 
         AtgenSupportUserDataDetail? supportList = await helperService.GetHelperDetail(
             (long)supportViewerId.Value
         );
+
+        int rewardMana = 25;
 
         if (supportList is not null)
         {
@@ -45,12 +48,19 @@ internal sealed class DungeonRecordHelperService(
                     ViewerId = supportList.UserSupportData.ViewerId,
                     IsFriend = supportList.IsFriend,
                     ApplySendStatus = supportList.ApplySendStatus,
-                    GetManaPoint = 50,
+                    GetManaPoint = supportList.IsFriend
+                        ? HelperConstants.HelperFriendRewardMana
+                        : HelperConstants.HelperRewardMana,
                 }
             );
+
+            if (supportList.IsFriend)
+            {
+                rewardMana = 50;
+            }
         }
 
-        return (helperList, helperDetailList);
+        return (helperList, helperDetailList, rewardMana);
     }
 
     public async Task<(

@@ -73,7 +73,8 @@ public class WallRecordController : DragaliaControllerBase
         // Get helper data
         (
             IEnumerable<UserSupportList> helperList,
-            IEnumerable<AtgenHelperDetailList> helperDetailList
+            IEnumerable<AtgenHelperDetailList> helperDetailList,
+            int rewardMana
         ) = await dungeonRecordHelperService.ProcessHelperDataSolo(dungeonSession.SupportViewerId);
 
         // Response data
@@ -101,7 +102,7 @@ public class WallRecordController : DragaliaControllerBase
         // Grant Rewards
         _ = await rewardService.GrantReward(GoldCrystals);
         _ = await rewardService.GrantReward(Rupies);
-        _ = await rewardService.GrantReward(Mana);
+        _ = await rewardService.GrantReward(Mana with { Quantity = Mana.Quantity + rewardMana });
 
         // Don't grant first clear wyrmite if you are re-clearing the last level
         if (!isRecompletingMaxLevel)

@@ -143,6 +143,8 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
 
     public DbSet<DbSettings> PlayerSettings { get; set; }
 
+    public DbSet<DbPlayerHelperUseDate> PlayerHelperUseDates { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApiContext).Assembly);

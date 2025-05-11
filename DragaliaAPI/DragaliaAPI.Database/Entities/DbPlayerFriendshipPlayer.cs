@@ -14,10 +14,4 @@ public class DbPlayerFriendshipPlayer
     public DbPlayer? Player { get; set; }
 
     public DbPlayerFriendship? Friendship { get; set; }
-
-    /// <summary>
-    /// Gets the time that the <see cref="Player"/> last used the helper associated with the other player
-    /// in this friendship.
-    /// </summary>
-    public DateTimeOffset LastHelperUseDate { get; set; }
 }
