@@ -6,4 +6,7 @@ internal sealed class SettingsDto
 {
     [JsonRequired]
     public bool DailyGifts { get; set; }
+
+    [JsonRequired]
+    public bool UseLegacyHelpers { get; set; }
 }
