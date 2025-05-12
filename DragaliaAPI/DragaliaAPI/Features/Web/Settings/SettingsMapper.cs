@@ -1,3 +1,12 @@
+using DragaliaAPI.Database.Entities.Owned;
+using Riok.Mapperly.Abstractions;
+
 namespace DragaliaAPI.Features.Web.Settings;
 
-public class SettingsMapper { }
+[Mapper]
+internal static partial class SettingsMapper
+{
+    public static partial PlayerSettings MapToDatabaseSettings(
+        UpdateSettingsRequest updateSettingsRequest
+    );
+}
