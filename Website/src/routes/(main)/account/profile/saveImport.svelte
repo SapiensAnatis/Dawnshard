@@ -7,7 +7,9 @@
 
   import renderDate from './renderDate.ts';
 
-  export let lastSaveImportTime: Date | null;
+  let { lastSaveImportTime }: { lastSaveImportTime: Date | null } = $props();
+
+  const formattedLastSaveImportTime = $derived(renderDate(lastSaveImportTime));
 </script>
 
 <Card.Root class="flex flex-col">
@@ -23,7 +25,7 @@
     <div>
       <p>You can import a save file by visiting the BaaS and uploading a file.</p>
       <p class="mt-2 font-semibold">Last save import time</p>
-      <p>{renderDate(lastSaveImportTime)}</p>
+      <p>{formattedLastSaveImportTime}</p>
     </div>
   </Card.Content>
   <!-- Spacer to align 'visit BaaS' and 'export save' buttons when horizontal -->

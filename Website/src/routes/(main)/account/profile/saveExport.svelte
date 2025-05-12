@@ -79,7 +79,9 @@
         {/await}
       </div>
     {:else}
-      <Button href={savefileExportUrl.href} download={savefileExportUrl}>Export Save</Button>
+      <Button variant="secondary" href={savefileExportUrl.href} download={savefileExportUrl}
+        >Export save
+      </Button>
     {/if}
   </Card.Footer>
 </Card.Root>

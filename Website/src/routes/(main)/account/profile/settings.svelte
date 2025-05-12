@@ -83,7 +83,7 @@
         Use the following settings to customise your gameplay experience. Some settings may require
         the game to be restarted before they can be applied.
       </div>
-      <div class="flex items-center gap-2">
+      <div class="flex flex-row flex-wrap items-start gap-6">
         <!-- Would be nice to use a snippet here, but you can't bind to snippet props :( -->
         <div class="settings-container">
           <Label for="daily-gifts">Receive daily material gifts</Label>

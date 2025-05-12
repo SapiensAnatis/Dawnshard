@@ -22,8 +22,9 @@
     return chunkedId.join(' ');
   };
 
-  export let user: User;
-  export let userProfile: UserProfile;
+  let { user, userProfile }: { user: User; userProfile: UserProfile } = $props();
+
+  const lastLoginTime = $derived(renderDate(userProfile.lastLoginTime));
 </script>
 
 <Card.Root>
@@ -47,7 +48,7 @@
       </div>
       <div>
         <p class="font-semibold">Last login time</p>
-        <p>{renderDate(userProfile.lastLoginTime)}</p>
+        <p>{lastLoginTime}</p>
       </div>
     </div>
   </Card.Content>
