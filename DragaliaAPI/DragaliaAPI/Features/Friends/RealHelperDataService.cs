@@ -92,6 +92,7 @@ internal sealed class RealHelperDataService(
                 .Select(x => x.Helper!)
                 .ProjectToHelperProjection()
                 .IgnoreQueryFilters()
+                .AsSplitQuery()
                 .ToListAsyncEF(cancellationToken)
         ).Select(x => x.MapToUserSupportList()).ToList();
 
@@ -129,6 +130,7 @@ internal sealed class RealHelperDataService(
                 .Players.Where(x => x.ViewerId == helperViewerId)
                 .Select(x => x.Helper!)
                 .ProjectToHelperProjection()
+                .AsSplitQuery()
                 .IgnoreQueryFilters(),
             cancellationToken
         );
@@ -146,14 +148,13 @@ internal sealed class RealHelperDataService(
         CancellationToken cancellationToken
     )
     {
-        HelperProjection? projection = await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(
-            apiContext
-                .Players.Where(x => x.ViewerId == helperViewerId)
-                .Select(x => x.Helper!)
-                .ProjectToHelperProjection()
-                .IgnoreQueryFilters(),
-            cancellationToken
-        );
+        HelperProjection? projection = await apiContext
+            .Players.Where(x => x.ViewerId == helperViewerId)
+            .Select(x => x.Helper!)
+            .ProjectToHelperProjection()
+            .IgnoreQueryFilters()
+            .AsSplitQuery()
+            .FirstOrDefaultAsyncEF(cancellationToken);
 
         if (projection is null)
         {

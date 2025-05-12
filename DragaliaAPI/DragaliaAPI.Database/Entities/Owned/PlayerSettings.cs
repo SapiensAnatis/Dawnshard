@@ -1,7 +1,7 @@
 namespace DragaliaAPI.Database.Entities.Owned;
 
 /// <summary>
-/// DTO for user settings.
+/// Owned entity for user settings.
 /// </summary>
 public class PlayerSettings
 {
@@ -15,7 +15,7 @@ public class PlayerSettings
     /// </summary>
     /// <remarks>
     /// The legacy system allows choosing from a static list of meta helpers, instead of a list drawn from your friends
-    /// plus an assortment of random players,
+    /// plus an assortment of random players.
     /// </remarks>
     public bool UseLegacyHelpers { get; init; }
 }

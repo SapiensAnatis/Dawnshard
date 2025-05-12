@@ -163,9 +163,10 @@ internal sealed partial class FriendService(
                 .PlayerFriendRequests.Where(x =>
                     x.FromPlayerViewerId == playerIdentityService.ViewerId
                 )
-                .IgnoreQueryFilters()
                 .Select(x => x.ToPlayer!.Helper!)
                 .ProjectToHelperProjection()
+                .IgnoreQueryFilters()
+                .AsSplitQuery()
                 .ToListAsync()
         )
             .Select(x => x.MapToUserSupportList())
@@ -179,9 +180,10 @@ internal sealed partial class FriendService(
                 .PlayerFriendRequests.Where(x =>
                     x.ToPlayerViewerId == playerIdentityService.ViewerId
                 )
-                .IgnoreQueryFilters()
                 .Select(x => x.FromPlayer!.Helper!)
                 .ProjectToHelperProjection()
+                .IgnoreQueryFilters()
+                .AsSplitQuery()
                 .ToListAsync()
         )
             .Select(x => x.MapToUserSupportList())
@@ -220,8 +222,7 @@ internal sealed partial class FriendService(
         // It is also a good heuristic as active players are more likely to accept a friend
         // request.
         IQueryable<HelperProjection> eligibleUsers = apiContext
-            .Players.IgnoreQueryFilters()
-            .Where(x => x.ViewerId != playerIdentityService.ViewerId)
+            .Players.Where(x => x.ViewerId != playerIdentityService.ViewerId)
             .Where(x =>
                 // Don't suggest people you have already sent a friend request to
                 !apiContext.PlayerFriendRequests.Any(y =>
@@ -240,7 +241,9 @@ internal sealed partial class FriendService(
             .OrderByDescending(x => x.UserData!.LastLoginTime)
             .Where(x => x.Helper != null)
             .Select(x => x.Helper!)
-            .ProjectToHelperProjection();
+            .ProjectToHelperProjection()
+            .IgnoreQueryFilters()
+            .AsSplitQuery();
 
         List<HelperProjection> selectedUsers = await eligibleUsers
             .Take(10)
