@@ -208,13 +208,13 @@ internal sealed class RealHelperDataService(
                     {
                         HelperViewerId = helperViewerId,
                         PlayerViewerId = playerIdentityService.ViewerId,
-                        UseDate = DateTimeOffset.UtcNow,
+                        UseDate = timeProvider.GetUtcNow(),
                     },
                 existing => new DbPlayerHelperUseDate()
                 {
                     HelperViewerId = existing.HelperViewerId,
                     PlayerViewerId = existing.PlayerViewerId,
-                    UseDate = DateTimeOffset.UtcNow,
+                    UseDate = timeProvider.GetUtcNow(),
                 },
                 cancellationToken
             );

@@ -224,13 +224,14 @@ public static class MappingExtensions
                 helper.EquippedCrestSlotType3Crest1 ?? new() { AbilityCrestId = 0 },
                 helper.EquippedCrestSlotType3Crest2 ?? new() { AbilityCrestId = 0 },
             ],
-            SupportTalisman = helper.EquippedTalisman,
+            SupportTalisman = helper.EquippedTalisman ?? new() { TalismanKeyId = 0 },
             ViewerId = (ulong)helper.UserData.ViewerId,
             Name = helper.UserData.Name,
             Level = helper.UserData.Level,
             LastLoginDate = helper.UserData.LastLoginDate,
             EmblemId = helper.UserData.EmblemId,
             MaxPartyPower = helper.PartyPower ?? 0,
+            Guild = new() { GuildId = 0 },
         };
 
         return mappedHelper;

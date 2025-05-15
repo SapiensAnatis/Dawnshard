@@ -133,6 +133,15 @@ public class SupportCharaTest : TestFixture
     [Fact]
     public async Task GetSupportCharaDetail_StaticCharacter_GetsCorrectCharacter()
     {
+        this.ApiContext.PlayerSettings.Add(
+            new()
+            {
+                ViewerId = this.ViewerId,
+                SettingsJson = new() { UseLegacyHelpers = true },
+            }
+        );
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
         FriendGetSupportCharaDetailResponse response = (
             await this.Client.PostMsgpack<FriendGetSupportCharaDetailResponse>(
                 "/friend/get_support_chara_detail",

@@ -32,6 +32,15 @@ public class DungeonSkipTest : TestFixture
             }
         );
 
+        this.ApiContext.PlayerSettings.Add(
+            new()
+            {
+                ViewerId = this.ViewerId,
+                SettingsJson = new() { UseLegacyHelpers = true },
+            }
+        );
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
         DbPlayerUserData oldUserData = this
             .ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
@@ -84,6 +93,15 @@ public class DungeonSkipTest : TestFixture
         int questId = 100010301; // Save the Paladyn (Very Hard)
         int staminaCost = 8;
         int playCount = 5;
+
+        this.ApiContext.PlayerSettings.Add(
+            new()
+            {
+                ViewerId = this.ViewerId,
+                SettingsJson = new() { UseLegacyHelpers = true },
+            }
+        );
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         await this.AddToDatabase(
             new DbQuest()
@@ -153,6 +171,15 @@ public class DungeonSkipTest : TestFixture
         int flameIoStandard = 211010102; // 9 stam
 
         int totalStamina = 9 + 9 + 9 + 12 + 9;
+
+        this.ApiContext.PlayerSettings.Add(
+            new()
+            {
+                ViewerId = this.ViewerId,
+                SettingsJson = new() { UseLegacyHelpers = true },
+            }
+        );
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         DbPlayerUserData oldUserData = this
             .ApiContext.PlayerUserData.AsNoTracking()
