@@ -3,6 +3,7 @@ using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Infrastructure.Results;
+using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Caching.Distributed;
@@ -419,6 +420,38 @@ public class HelperTest : TestFixture
         listResponse2
             .Data.SupportUserDetailList.Should()
             .Contain(x => x.ViewerId == (ulong)nonFriend.ViewerId);
+    }
+
+    [Fact]
+    public async Task UseHelper_GrantsOtherPlayerMana()
+    {
+        DbPlayer nonFriend = await this.AddNonFriendHelper();
+
+        _ = await ClearDungeonWithHelper(nonFriend.ViewerId);
+
+        HttpClient client = this.CreateClientForOtherPlayer(nonFriend);
+
+        // make a somewhat functional save file
+        this.ApiContext.PlayerDiamondData.Add(
+            new() { ViewerId = nonFriend.ViewerId, FreeDiamond = 0 }
+        );
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        await client.PostMsgpack<PresentGetPresentListResponse>(
+            "login/index",
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        DragaliaResponse<PresentGetPresentListResponse> response =
+            await client.PostMsgpack<PresentGetPresentListResponse>(
+                "present/get_present_list",
+                new PresentGetPresentListRequest() { IsLimit = false, PresentId = 0 },
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        response
+            .Data.PresentList.Should()
+            .Contain(x => x.EntityType == EntityTypes.Mana && x.EntityQuantity == 25);
     }
 
     private async Task<DbPlayer> AddNonFriendHelper()
