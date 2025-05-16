@@ -48,8 +48,10 @@ public class ShopService(
 
         if (shopPaymentType == PaymentTypes.Other)
         {
-            // TODO?: Only single stamina refills use the PriceChangeData (which should be used in this case)
-            shopPaymentType = PaymentTypes.Wyrmite;
+            // In theory, we should now look up an entry in PriceChangeData using _OptionValue and determine what
+            // 'step' we are at and adjust the cost appropriately. However, all rows in the table have _PaymentType = 4
+            // and _Cost = 30, so we can just statically take those values.
+            shopPaymentType = PaymentTypes.DiamantiumOrWyrmite;
             price = 30;
         }
 
