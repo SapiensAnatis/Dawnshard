@@ -6,4 +6,5 @@ public interface ILoginService
 {
     Task<IEnumerable<AtgenLoginBonusList>> RewardLoginBonus();
     Task<IList<AtgenMonthlyWallReceiveList>> GetWallMonthlyReceiveList();
+    Task RewardHelperMana();
 }

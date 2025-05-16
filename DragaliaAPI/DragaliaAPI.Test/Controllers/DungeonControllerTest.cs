@@ -80,7 +80,7 @@ public class DungeonControllerTest
             .Returns(Task.CompletedTask);
 
         this.mockDungeonRecordHelperService.Setup(x => x.ProcessHelperDataSolo(4))
-            .ReturnsAsync((userSupportList, supportDetailList));
+            .ReturnsAsync((userSupportList, supportDetailList, 0));
 
         DungeonFailResponse? response = (
             await this.dungeonController.Fail(

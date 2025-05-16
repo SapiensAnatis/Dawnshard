@@ -11,7 +11,8 @@ export const userProfileSchema = z.object({
     .datetime({ offset: true })
     .transform((val) => new Date(val)),
   settings: z.object({
-    dailyGifts: z.boolean()
+    dailyGifts: z.boolean(),
+    useLegacyHelpers: z.boolean()
   })
 });
 

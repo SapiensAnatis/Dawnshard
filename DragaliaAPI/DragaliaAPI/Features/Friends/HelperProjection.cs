@@ -1,20 +1,34 @@
-using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Features.Friends;
 
 public record HelperProjection(
-    DbPlayerCharaData EquippedChara,
-    DbPlayerDragonData? EquippedDragon,
-    DbWeaponBody? EquippedWeaponBody,
-    DbAbilityCrest? EquippedCrestSlotType1Crest1,
-    DbAbilityCrest? EquippedCrestSlotType1Crest2,
-    DbAbilityCrest? EquippedCrestSlotType1Crest3,
-    DbAbilityCrest? EquippedCrestSlotType2Crest1,
-    DbAbilityCrest? EquippedCrestSlotType2Crest2,
-    DbAbilityCrest? EquippedCrestSlotType3Crest1,
-    DbAbilityCrest? EquippedCrestSlotType3Crest2,
-    DbTalisman? EquippedTalisman,
-    DbPlayerUserData UserData,
-    DbPlayerDragonReliability? Reliability,
-    DbPartyPower? PartyPower
+    AtgenSupportChara EquippedChara,
+    AtgenSupportDragon? EquippedDragon,
+    AtgenSupportWeaponBody? EquippedWeaponBody,
+    AtgenSupportCrestSlotType1List? EquippedCrestSlotType1Crest1,
+    AtgenSupportCrestSlotType1List? EquippedCrestSlotType1Crest2,
+    AtgenSupportCrestSlotType1List? EquippedCrestSlotType1Crest3,
+    AtgenSupportCrestSlotType1List? EquippedCrestSlotType2Crest1,
+    AtgenSupportCrestSlotType1List? EquippedCrestSlotType2Crest2,
+    AtgenSupportCrestSlotType1List? EquippedCrestSlotType3Crest1,
+    AtgenSupportCrestSlotType1List? EquippedCrestSlotType3Crest2,
+    AtgenSupportTalisman? EquippedTalisman,
+    UserDataProjection UserData,
+    int? ReliabilityLevel,
+    int? PartyPower,
+    ushort ManaNodeUnlockCount
+)
+{
+    public SortedSet<int> ManaCirclePieceIdList { get; } =
+        ManaNodesUtil.GetSetFromManaNodes((ManaNodes)ManaNodeUnlockCount);
+}
+
+public record UserDataProjection(
+    long ViewerId,
+    string Name,
+    int Level,
+    DateTimeOffset LastLoginDate,
+    Emblems EmblemId
 );

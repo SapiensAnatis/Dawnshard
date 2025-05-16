@@ -82,7 +82,7 @@ public class DungeonController(
         }
         else
         {
-            (response.FailHelperList, response.FailHelperDetailList) =
+            (response.FailHelperList, response.FailHelperDetailList, _) =
                 await dungeonRecordHelperService.ProcessHelperDataSolo(session.SupportViewerId);
         }
 

@@ -64,6 +64,8 @@ public class LoginController(
         resp.MonthlyWallReceiveList = await loginService.GetWallMonthlyReceiveList();
         resp.DragonContactFreeGiftCount = await dragonService.GetFreeGiftCount();
 
+        await loginService.RewardHelperMana();
+
         resp.PenaltyData = new AtgenPenaltyData();
 
         // NOTE: Cancelling the request + savefile updates may cause issues with request loops on debug builds,

@@ -248,8 +248,10 @@ public class DungeonSkipController(
             session
         );
 
-        (ingameResultData.HelperList, ingameResultData.HelperDetailList) =
+        (ingameResultData.HelperList, ingameResultData.HelperDetailList, int manaGained) =
             await dungeonRecordHelperService.ProcessHelperDataSolo(supportViewerId);
+
+        ingameResultData.GrowRecord.TakeMana += manaGained;
 
         return ingameResultData;
     }

@@ -83,11 +83,18 @@
         Use the following settings to customise your gameplay experience. Some settings may require
         the game to be restarted before they can be applied.
       </div>
-      <div class="flex items-center gap-2">
+      <div class="flex flex-row flex-wrap items-start gap-6">
         <!-- Would be nice to use a snippet here, but you can't bind to snippet props :( -->
-        <div class="flex flex-row-reverse items-center gap-2">
+        <div class="settings-container">
           <Label for="daily-gifts">Receive daily material gifts</Label>
           <Switch name="dailyGifts" id="daily-gifts" bind:checked={localSettings.dailyGifts} />
+        </div>
+        <div class="settings-container">
+          <Label for="use-legacy-helpers">Use legacy helper system</Label>
+          <Switch
+            name="useLegacyHelpers"
+            id="use-legacy-helpers"
+            bind:checked={localSettings.useLegacyHelpers} />
         </div>
       </div>
     </Card.Content>
@@ -99,3 +106,12 @@
     </Card.Footer>
   </form>
 </Card.Root>
+
+<style>
+  .settings-container {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: calc(var(--spacing) * 2);
+  }
+</style>

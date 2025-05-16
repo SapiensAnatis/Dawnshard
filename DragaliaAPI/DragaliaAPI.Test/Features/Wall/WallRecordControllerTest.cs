@@ -84,7 +84,7 @@ public class WallRecordControllerTest
 
         mockDungeonRecordHelperService
             .Setup(x => x.ProcessHelperDataSolo(supportViewerId))
-            .ReturnsAsync((helperList, helperDetailList));
+            .ReturnsAsync((helperList, helperDetailList, 0));
 
         mockRewardService
             .Setup(x => x.GrantReward(WallRecordController.GoldCrystals))

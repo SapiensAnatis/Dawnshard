@@ -18,34 +18,49 @@ internal sealed class DungeonRecordHelperService(
 {
     public async Task<(
         IEnumerable<UserSupportList> HelperList,
-        IEnumerable<AtgenHelperDetailList> HelperDetailList
+        IEnumerable<AtgenHelperDetailList> HelperDetailList,
+        int RewardMana
     )> ProcessHelperDataSolo(ulong? supportViewerId)
     {
         List<UserSupportList> helperList = new();
         List<AtgenHelperDetailList> helperDetailList = new();
 
         if (supportViewerId is null)
-            return (helperList, helperDetailList);
+        {
+            return (helperList, helperDetailList, 0);
+        }
 
-        UserSupportList? supportList = await helperService.GetLegacyHelper(supportViewerId.Value);
+        AtgenSupportUserDataDetail? supportList = await helperService.GetHelperDetail(
+            (long)supportViewerId.Value
+        );
+
+        int rewardMana = 25;
 
         if (supportList is not null)
         {
-            helperList.Add(supportList);
+            await helperService.UseHelper((long)supportViewerId.Value);
 
-            // TODO: Replace with friends system once fully added
+            helperList.Add(supportList.UserSupportData);
+
             helperDetailList.Add(
                 new AtgenHelperDetailList()
                 {
-                    ViewerId = supportList.ViewerId,
-                    IsFriend = true,
-                    ApplySendStatus = 1,
-                    GetManaPoint = 50,
+                    ViewerId = supportList.UserSupportData.ViewerId,
+                    IsFriend = supportList.IsFriend,
+                    ApplySendStatus = supportList.ApplySendStatus,
+                    GetManaPoint = supportList.IsFriend
+                        ? HelperConstants.HelperFriendRewardMana
+                        : HelperConstants.HelperRewardMana,
                 }
             );
+
+            if (supportList.IsFriend)
+            {
+                rewardMana = 50;
+            }
         }
 
-        return (helperList, helperDetailList);
+        return (helperList, helperDetailList, rewardMana);
     }
 
     public async Task<(

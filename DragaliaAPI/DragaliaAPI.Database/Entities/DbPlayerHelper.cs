@@ -31,6 +31,10 @@ public class DbPlayerHelper
 
     public long? EquipTalismanKeyId { get; set; }
 
+    public int HelperRewardCount { get; set; }
+
+    public int HelperFriendRewardCount { get; set; }
+
     public DbPlayer? Owner { get; set; }
 
     public DbPlayerCharaData? EquippedChara { get; set; }
@@ -54,6 +58,8 @@ public class DbPlayerHelper
     public DbAbilityCrest? EquippedCrestSlotType3Crest2 { get; set; }
 
     public DbTalisman? EquippedTalisman { get; set; }
+
+    public List<DbPlayerHelperUseDate> UseDates { get; set; } = [];
 
     private class Configuration : IEntityTypeConfiguration<DbPlayerHelper>
     {

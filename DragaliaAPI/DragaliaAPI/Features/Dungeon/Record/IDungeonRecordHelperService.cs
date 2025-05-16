@@ -6,7 +6,8 @@ public interface IDungeonRecordHelperService
 {
     Task<(
         IEnumerable<UserSupportList> HelperList,
-        IEnumerable<AtgenHelperDetailList> HelperDetailList
+        IEnumerable<AtgenHelperDetailList> HelperDetailList,
+        int RewardMana
     )> ProcessHelperDataSolo(ulong? supportViewerId);
 
     Task<(
