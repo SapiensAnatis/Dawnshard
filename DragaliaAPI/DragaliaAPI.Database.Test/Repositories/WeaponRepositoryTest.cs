@@ -194,7 +194,9 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.fixture.ApiContext.PlayerWeaponSkins.Should()
-            .ContainEquivalentOf(
+            .Contain(x => x.WeaponSkinId == 4)
+            .Which.Should()
+            .BeEquivalentTo(
                 new DbWeaponSkin()
                 {
                     ViewerId = IdentityTestUtils.ViewerId,
