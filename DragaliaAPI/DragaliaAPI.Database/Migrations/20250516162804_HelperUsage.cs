@@ -6,14 +6,24 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DragaliaAPI.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class HelperRethink : Migration
+    public partial class HelperUsage : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "LastHelperUseDate",
-                table: "PlayerFriendshipPlayers");
+            migrationBuilder.AddColumn<int>(
+                name: "HelperFriendRewardCount",
+                table: "PlayerHelpers",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.AddColumn<int>(
+                name: "HelperRewardCount",
+                table: "PlayerHelpers",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0);
 
             migrationBuilder.CreateTable(
                 name: "PlayerHelperUseDates",
@@ -52,12 +62,13 @@ namespace DragaliaAPI.Database.Migrations
             migrationBuilder.DropTable(
                 name: "PlayerHelperUseDates");
 
-            migrationBuilder.AddColumn<DateTimeOffset>(
-                name: "LastHelperUseDate",
-                table: "PlayerFriendshipPlayers",
-                type: "timestamp with time zone",
-                nullable: false,
-                defaultValue: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
+            migrationBuilder.DropColumn(
+                name: "HelperFriendRewardCount",
+                table: "PlayerHelpers");
+
+            migrationBuilder.DropColumn(
+                name: "HelperRewardCount",
+                table: "PlayerHelpers");
         }
     }
 }
