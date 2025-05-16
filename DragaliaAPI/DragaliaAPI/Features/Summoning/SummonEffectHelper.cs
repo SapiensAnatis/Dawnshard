@@ -6,9 +6,11 @@ public static class SummonEffectHelper
 {
     public static SummonEffect CalculateEffect(SummonService.SummonResultMetaInfo metaInfo)
     {
-        int reversalIndex = metaInfo.LastIndexOfRare5;
-        if (reversalIndex != -1 && new Random().NextSingle() < 0.95)
+        int reversalIndex = metaInfo.LastIndexOfNew5Char;
+        if (reversalIndex != -1 && Random.Shared.NextSingle() < 0.95)
+        {
             reversalIndex = -1;
+        }
 
         int sageEffect;
         int circleEffect;

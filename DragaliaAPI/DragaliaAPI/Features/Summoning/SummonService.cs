@@ -400,7 +400,7 @@ public sealed partial class SummonService(
         List<AtgenResultUnitList> returnedResult = [];
         List<AtgenDuplicateEntityList> newGetEntityList = [];
 
-        int lastIndexOfRare5 = 0;
+        int lastIndexOfNew5Char = -1;
         int countOfRare5Char = 0;
         int countOfRare5Dragon = 0;
         int countOfRare4 = 0;
@@ -461,11 +461,20 @@ public sealed partial class SummonService(
             {
                 case 5:
                 {
-                    lastIndexOfRare5 = index;
                     if (result.EntityType is EntityTypes.Chara)
+                    {
+                        if (isNew)
+                        {
+                            lastIndexOfNew5Char = index;
+                        }
+
                         countOfRare5Char++;
+                    }
                     else
+                    {
                         countOfRare5Dragon++;
+                    }
+
                     break;
                 }
                 case 4:
@@ -492,7 +501,7 @@ public sealed partial class SummonService(
         return (
             returnedResult,
             new SummonResultMetaInfo(
-                LastIndexOfRare5: lastIndexOfRare5,
+                LastIndexOfNew5Char: lastIndexOfNew5Char,
                 CountOfRare5Char: countOfRare5Char,
                 CountOfRare5Dragon: countOfRare5Dragon,
                 CountOfRare4: countOfRare4
@@ -559,7 +568,7 @@ public sealed partial class SummonService(
     }
 
     public readonly record struct SummonResultMetaInfo(
-        int LastIndexOfRare5,
+        int LastIndexOfNew5Char,
         int CountOfRare5Char,
         int CountOfRare5Dragon,
         int CountOfRare4
