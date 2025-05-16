@@ -204,7 +204,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
                     IsNew = false,
                     GetTime = DateTimeOffset.UtcNow,
                 },
-                opts => opts.WithDateTimeTolerance()
+                opts => opts.WithDateTimeTolerance().ExcludingOwner()
             );
     }
 
