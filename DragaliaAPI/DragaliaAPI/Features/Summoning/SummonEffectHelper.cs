@@ -6,8 +6,8 @@ public static class SummonEffectHelper
 {
     public static SummonEffect CalculateEffect(SummonService.SummonResultMetaInfo metaInfo)
     {
-        int reversalIndex = 0;
-        if (metaInfo.EligibleForFakeout && new Random().NextSingle() < 0.95)
+        int reversalIndex = metaInfo.LastIndexOfNew5Char;
+        if (Random.Shared.NextSingle() < 0.95)
         {
             reversalIndex = -1;
         }
