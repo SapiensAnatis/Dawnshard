@@ -24,7 +24,7 @@ jobs:
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "9.0.202"
+          dotnet-version: "9.0.300"
       - name: Install tool dependencies
         run: dotnet tool restore
       - name: CSharpier check

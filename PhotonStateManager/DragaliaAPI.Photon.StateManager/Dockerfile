@@ -3,7 +3,7 @@ USER app
 EXPOSE 8080
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0.203 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0.300 AS build
 WORKDIR /src
 COPY ["PhotonStateManager/Directory.Build.props", "."]
 COPY ["Directory.Packages.props", "."]
