@@ -23,7 +23,7 @@ Dictionary<string, GenerateMasterAssetAttributeInstance> attributeInstancesByPro
 
 Dictionary<string, ExtendMasterAssetAttribute> extensionAttributesByPath = typeof(MasterAsset)
     .Assembly.GetCustomAttributes<ExtendMasterAssetAttribute>()
-    .ToDictionary(x => x.Filepath, x => x);
+    .ToDictionary(x => x.Filepath.Replace('/', Path.DirectorySeparatorChar), x => x);
 
 foreach (string fullJsonPath in jsonFiles)
 {
@@ -54,7 +54,7 @@ foreach (string fullJsonPath in jsonFiles)
     }
     else
     {
-        throw new ArgumentException("Unable to find attribute instance for " + fullJsonPath);
+        throw new ArgumentException("Unable to find attribute instance for " + relativePath);
     }
 }
 
