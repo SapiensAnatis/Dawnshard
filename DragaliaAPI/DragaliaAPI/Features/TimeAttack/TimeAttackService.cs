@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Features.TimeAttack.Validation;
@@ -17,7 +18,7 @@ public class TimeAttackService(
     ITimeAttackCacheService timeAttackCacheService,
     ITimeAttackRepository timeAttackRepository,
     IOptionsMonitor<TimeAttackOptions> options,
-    IQuestRepository questRepository,
+    ApiContext apiContext,
     IRewardService rewardService,
     IPlayerIdentityService playerIdentityService,
     ILogger<TimeAttackService> logger
@@ -93,8 +94,8 @@ public class TimeAttackService(
 
     public async Task<IEnumerable<RankingTierReward>> ReceiveTierReward(int questId)
     {
-        float bestClearTime = await questRepository
-            .Quests.Where(x => x.QuestId == questId)
+        float bestClearTime = await apiContext
+            .PlayerQuests.Where(x => x.QuestId == questId)
             .Select(x => x.BestClearTime)
             .FirstOrDefaultAsync();
 

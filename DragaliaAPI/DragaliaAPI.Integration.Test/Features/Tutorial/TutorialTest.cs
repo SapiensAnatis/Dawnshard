@@ -39,7 +39,7 @@ public class TutorialTest : TestFixture
 
         DbPlayerUserData dbUserData = (
             await this.ApiContext.PlayerUserData.FindAsync(
-                this.ViewerId,
+                [this.ViewerId],
                 TestContext.Current.CancellationToken
             )
         )!;

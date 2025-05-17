@@ -115,7 +115,7 @@ public class LoadService(
                 ServerTime = timeProvider.GetUtcNow(),
                 TreasureTradeAllList = tradeService.GetCurrentTreasureTradeList(),
                 MissionNotice = await missionService.GetMissionNotice(null),
-                FortBonusList = await bonusService.GetBonusList(),
+                FortBonusList = await bonusService.GetBonusList(cancellationToken),
                 PresentNotice = await presentService.GetPresentNotice(),
                 SummonPointList = await summonService.GetSummonPointList(),
                 FunctionalMaintenanceList = [],

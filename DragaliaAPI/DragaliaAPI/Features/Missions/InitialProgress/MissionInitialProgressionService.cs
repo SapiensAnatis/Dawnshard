@@ -21,7 +21,6 @@ public class MissionInitialProgressionService(
     FortDataService fortDataService,
     IMissionRepository missionRepository,
     IAbilityCrestRepository abilityCrestRepository,
-    IQuestRepository questRepository,
     IUnitRepository unitRepository,
     IWeaponRepository weaponRepository,
     IStoryRepository storyRepository,
@@ -409,8 +408,8 @@ public class MissionInitialProgressionService(
     {
         if (questId != null)
         {
-            return await questRepository
-                .Quests.Where(x => x.QuestId == questId)
+            return await apiContext
+                .PlayerQuests.Where(x => x.QuestId == questId)
                 .Select(x => x.PlayCount)
                 .FirstOrDefaultAsync();
         }
@@ -422,8 +421,8 @@ public class MissionInitialProgressionService(
             .Select(x => x.Id)
             .ToList();
 
-        return await questRepository
-                .Quests.Where(x => validQuests.Contains(x.QuestId))
+        return await apiContext
+                .PlayerQuests.Where(x => validQuests.Contains(x.QuestId))
                 .SumAsync(x => (int?)x.PlayCount) ?? 0;
     }
 
@@ -592,8 +591,8 @@ public class MissionInitialProgressionService(
             .Select(x => x.Id)
             .ToList();
 
-        return await questRepository
-                .Quests.Where(x => questPool.Contains(x.QuestId))
+        return await apiContext
+                .PlayerQuests.Where(x => questPool.Contains(x.QuestId))
                 .SumAsync(x => (int?)x.PlayCount) ?? 0;
     }
 
