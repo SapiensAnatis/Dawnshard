@@ -48,10 +48,7 @@ public partial class WallService(
 
     public async Task SetQuestWallIsStartNextLevel(int wallId, bool value)
     {
-        DbPlayerQuestWall questWall =
-            await apiContext.PlayerQuestWalls.FirstOrDefaultAsync(x => x.WallId == wallId)
-            ?? throw new InvalidOperationException($"Could not get questwall {wallId}");
-
+        DbPlayerQuestWall questWall = await this.GetQuestWall(wallId);
         questWall.IsStartNextLevel = value;
     }
 
@@ -280,9 +277,31 @@ public partial class WallService(
         return eligible;
     }
 
-    public async Task<DbPlayerQuestWall> GetQuestWall(int wallId) =>
-        await apiContext.PlayerQuestWalls.FirstOrDefaultAsync(x => x.WallId == wallId)
-        ?? throw new InvalidOperationException($"Could not get questwall {wallId}");
+    public async Task<DbPlayerQuestWall> GetQuestWall(int wallId)
+    {
+        DbPlayerQuestWall? wall = await apiContext
+            .PlayerQuestWalls.AsTracking()
+            .FirstOrDefaultAsync(x => x.WallId == wallId);
+
+        if (wall is null)
+        {
+            // Some savefiles imported from the official servers can have less than 5 wall entries,
+            // which passes InitializeWall and friends, but which can cause random failures here. The
+            // client doesn't mind data not being missing and assumes that they have yet to clear
+            // level 1.
+
+            wall = new DbPlayerQuestWall()
+            {
+                ViewerId = playerIdentityService.ViewerId,
+                WallId = wallId,
+            };
+
+            apiContext.PlayerQuestWalls.Add(wall);
+            await apiContext.SaveChangesAsync();
+        }
+
+        return wall;
+    }
 
     private static partial class Log
     {
