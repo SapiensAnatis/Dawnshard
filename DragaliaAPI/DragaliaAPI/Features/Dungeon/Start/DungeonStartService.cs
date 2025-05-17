@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon.AutoRepeat;
@@ -16,7 +17,6 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
-using Riok.Mapperly.Abstractions;
 using static DragaliaAPI.Features.Tutorial.TutorialService;
 
 namespace DragaliaAPI.Features.Dungeon.Start;
@@ -28,7 +28,7 @@ internal sealed partial class DungeonStartService(
     IDungeonService dungeonService,
     IPlayerIdentityService playerIdentityService,
     IQuestService questService,
-    IQuestRepository questRepository,
+    ApiContext apiContext,
     IBonusService bonusService,
     IHelperService helperService,
     IUserService userService,
@@ -240,7 +240,7 @@ internal sealed partial class DungeonStartService(
 
     public async Task<IngameQuestData> UpdateDbQuest(int questId)
     {
-        DbQuest? quest = await questRepository.Quests.FirstOrDefaultAsync(x =>
+        DbQuest? quest = await apiContext.PlayerQuests.FirstOrDefaultAsync(x =>
             x.QuestId == questId
         );
 

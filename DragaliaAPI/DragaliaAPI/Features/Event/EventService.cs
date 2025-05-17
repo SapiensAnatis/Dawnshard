@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Shared.Reward;
@@ -17,7 +18,7 @@ public class EventService(
     ILogger<EventService> logger,
     IEventRepository eventRepository,
     IRewardService rewardService,
-    IQuestRepository questRepository,
+    ApiContext apiContext,
     IMissionProgressionService missionProgressionService,
     IMissionService missionService
 ) : IEventService
@@ -128,7 +129,7 @@ public class EventService(
 
         CombatEventLocation location = MasterAsset.CombatEventLocation[locationId];
         if (
-            await questRepository.Quests.SingleOrDefaultAsync(x =>
+            await apiContext.PlayerQuests.SingleOrDefaultAsync(x =>
                 x.QuestId == location.ClearQuestId
             )
             is not { State: 3 }
@@ -225,8 +226,8 @@ public class EventService(
                 .Select(x => x.Id)
                 .ToHashSet();
 
-            List<int> completedQuestIds = await questRepository
-                .Quests.Where(x => x.State == 3 && relevantQuestIds.Contains(x.QuestId))
+            List<int> completedQuestIds = await apiContext
+                .PlayerQuests.Where(x => x.State == 3 && relevantQuestIds.Contains(x.QuestId))
                 .Select(x => x.QuestId)
                 .ToListAsync();
 

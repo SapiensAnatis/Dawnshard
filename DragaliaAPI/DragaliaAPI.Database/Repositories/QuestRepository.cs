@@ -15,17 +15,6 @@ public class QuestRepository : IQuestRepository
         this.playerIdentityService = playerIdentityService;
     }
 
-    [Obsolete("This entity has a global query filter, use ApiContext.PlayerQuests instead.")]
-    public IQueryable<DbQuest> Quests => this.apiContext.PlayerQuests;
-
-    public IQueryable<DbQuestEvent> QuestEvents =>
-        this.apiContext.QuestEvents.Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
-
-    public IQueryable<DbQuestTreasureList> QuestTreasureList =>
-        this.apiContext.QuestTreasureList.Where(x =>
-            x.ViewerId == this.playerIdentityService.ViewerId
-        );
-
     private async Task<DbQuest?> FindQuestAsync(int questId)
     {
         return await apiContext.PlayerQuests.FindAsync(playerIdentityService.ViewerId, questId);
@@ -64,7 +53,7 @@ public class QuestRepository : IQuestRepository
     public async Task DeleteQuests(IEnumerable<int> questIds)
     {
         List<DbQuest> questEntities = await this
-            .Quests.Where(x => questIds.Contains(x.QuestId))
+            .apiContext.PlayerQuests.Where(x => questIds.Contains(x.QuestId))
             .ToListAsync();
         this.apiContext.PlayerQuests.RemoveRange(questEntities);
     }
