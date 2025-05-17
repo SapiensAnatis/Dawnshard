@@ -51,6 +51,11 @@ public class PartyController(
         // TODO: Talisman validation
         // TODO: Shared skill validation
 
+        logger.LogDebug(
+            "Received party update request: {@request}",
+            requestParty.RequestPartySettingList
+        );
+
         List<Charas> selectedCharas = requestParty
             .RequestPartySettingList.Where(x => x.CharaId != 0)
             .Select(y => y.CharaId)
@@ -105,6 +110,8 @@ public class PartyController(
         }
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+
+        logger.LogDebug("Returning updated party list: {@list}", updateDataList.PartyList);
 
         return this.Ok(new PartySetPartySettingResponse(updateDataList, new()));
     }
