@@ -107,7 +107,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
 
         (
             await this.fixture.ApiContext.PlayerFortDetails.FindAsync(
-                DbTestFixture.ViewerId,
+                [DbTestFixture.ViewerId],
                 TestContext.Current.CancellationToken
             )
         )!
@@ -178,7 +178,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
 
         (
             await this.fixture.ApiContext.PlayerFortBuilds.FindAsync(
-                12L,
+                [12L],
                 TestContext.Current.CancellationToken
             )
         )
@@ -204,7 +204,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
 
         (
             await this.fixture.ApiContext.PlayerFortBuilds.FindAsync(
-                44L,
+                [44L],
                 TestContext.Current.CancellationToken
             )
         )

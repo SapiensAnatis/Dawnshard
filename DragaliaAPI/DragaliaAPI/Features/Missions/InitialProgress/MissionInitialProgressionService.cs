@@ -21,7 +21,6 @@ public class MissionInitialProgressionService(
     FortDataService fortDataService,
     IMissionRepository missionRepository,
     IAbilityCrestRepository abilityCrestRepository,
-    IQuestRepository questRepository,
     IUnitRepository unitRepository,
     IWeaponRepository weaponRepository,
     IStoryRepository storyRepository,

@@ -64,7 +64,12 @@ public class V2UpdateTest : SavefileUpdateTestFixture
                         .WithMapping<DbEquippedStamp>(dto => dto.Slot, db => db.Slot)
                         .WithMapping<DbEquippedStamp>(dto => dto.StampId, db => db.StampId)
             );
-        (await this.ApiContext.Players.FindAsync(ViewerId, TestContext.Current.CancellationToken))!
+        (
+            await this.ApiContext.Players.FindAsync(
+                [ViewerId],
+                TestContext.Current.CancellationToken
+            )
+        )!
             .SavefileVersion.Should()
             .Be(MaxVersion);
     }

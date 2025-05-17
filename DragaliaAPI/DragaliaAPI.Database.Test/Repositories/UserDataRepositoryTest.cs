@@ -45,7 +45,7 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
     {
         DbPlayerUserData userData = (
             await this.fixture.ApiContext.PlayerUserData.FindAsync(
-                IdentityTestUtils.ViewerId,
+                [IdentityTestUtils.ViewerId],
                 TestContext.Current.CancellationToken
             )
         )!;
