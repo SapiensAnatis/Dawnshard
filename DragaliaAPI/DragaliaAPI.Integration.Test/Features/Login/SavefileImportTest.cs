@@ -285,6 +285,28 @@ public class SavefileImportTest : TestFixture
             .Be(500);
     }
 
+    [Fact]
+    public async Task Import_DeletesHelper()
+    {
+        this.ApiContext.PlayerHelperUseDates.Add(
+            new()
+            {
+                Player = new() { AccountId = "helperuser" },
+                HelperViewerId = this.ViewerId,
+            }
+        );
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        HttpContent content = PrepareSavefileRequest("endgame_savefile.json");
+
+        HttpResponseMessage importResponse = await this.Client.PostAsync(
+            $"savefile/import/{this.ViewerId}",
+            content,
+            TestContext.Current.CancellationToken
+        );
+        importResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
+    }
+
     private static HttpContent PrepareSavefileRequest(string path)
     {
         string savefileJson = File.ReadAllText(Path.Join("Data", path));
