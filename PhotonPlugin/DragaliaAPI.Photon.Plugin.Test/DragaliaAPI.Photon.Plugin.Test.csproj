@@ -4,6 +4,7 @@
     <TargetFramework>net481</TargetFramework>
     <IsPackable>false</IsPackable>
     <PlatformTarget>x64</PlatformTarget>
+    <OutputType>exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>

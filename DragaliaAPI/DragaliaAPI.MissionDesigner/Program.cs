@@ -71,7 +71,7 @@ foreach ((_, MissionProgressionInfo progInfo) in missions)
     {
         UnlockedOnComplete =
         [
-            .. missions[requiredMissionId].UnlockedOnComplete,
+            .. (missions[requiredMissionId].UnlockedOnComplete ?? []),
             progInfo.MissionId,
         ],
     };

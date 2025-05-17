@@ -171,7 +171,7 @@ public class RewardService(
         return handler;
     }
 
-    public async Task<(RewardGrantResult Result, DbTalisman? Talisman)> GrantTalisman(
+    public Task<(RewardGrantResult Result, DbTalisman? Talisman)> GrantTalisman(
         Talismans id,
         int abilityId1,
         int abilityId2,
@@ -180,10 +180,12 @@ public class RewardService(
         int atk
     )
     {
-        // int currentCount = await unitRepository.Talismans.CountAsync();
-
+        /*
+        // TODO: currentCount >= TalismanService.TalismanMaxCount once we get presents working with it
+        int currentCount = await unitRepository.Talismans.CountAsync();
+        
         if (
-            false /*TODO: currentCount >= TalismanService.TalismanMaxCount once we get presents working with it*/
+            false
         )
         {
             Entity coinReward = new(EntityTypes.Rupies, 0, TalismanService.TalismanCoinReward);
@@ -195,6 +197,7 @@ public class RewardService(
 
             return (RewardGrantResult.Converted, null);
         }
+        */
 
         DbTalisman talisman = unitRepository.AddTalisman(
             id,
@@ -205,7 +208,9 @@ public class RewardService(
             atk
         );
 
-        return (RewardGrantResult.Added, talisman);
+        return Task.FromResult<(RewardGrantResult Result, DbTalisman? Talisman)>(
+            (RewardGrantResult.Added, talisman)
+        );
     }
 
     public EntityResult GetEntityResult()
