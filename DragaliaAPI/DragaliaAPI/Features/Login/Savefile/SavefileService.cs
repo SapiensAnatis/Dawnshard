@@ -432,6 +432,9 @@ internal sealed class SavefileService(
         // Options commented out have been excluded from save import deletion process.
         // They will still be deleted by cascade delete when a player is actually deleted
         // without being re-added as they are in save imports.
+        await apiContext
+            .PlayerHelperUseDates.Where(x => x.HelperViewerId == viewerId)
+            .ExecuteDeleteAsync();
         await apiContext.PlayerHelpers.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
         await apiContext.PlayerUserData.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
         await apiContext.PlayerCharaData.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
