@@ -4,8 +4,8 @@
         "Banners": [
             {
                 "Id": 1020121,
-                "Start": "2024-02-24T15:22:06Z",
-                "End": "2025-02-24T15:22:06Z",
+                "Start": "2001-01-24T15:22:06Z",
+                "End": "2038-01-24T15:22:06Z",
                 "IsGala": false,
                 "IsPrizeShowcase": false,
                 "PickupCharas": [
