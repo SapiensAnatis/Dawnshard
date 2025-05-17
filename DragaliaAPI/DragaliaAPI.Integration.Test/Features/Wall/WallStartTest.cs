@@ -49,6 +49,34 @@ public class WallStartTest : TestFixture
     }
 
     [Fact]
+    public async Task Start_PartiallyInitializedWall_ReturnsExpectedResponse()
+    {
+        // https://github.com/SapiensAnatis/Dawnshard/issues/1318
+        this.ApiContext.PlayerQuestWalls.Should().BeEmpty();
+
+        WallStartStartRequest request = new()
+        {
+            WallId = 216010001,
+            WallLevel = 1,
+            PartyNo = 1,
+        };
+
+        WallStartStartResponse response = (
+            await Client.PostMsgpack<WallStartStartResponse>(
+                "/wall_start/start",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        ).Data;
+
+        response
+            .IngameWallData.Should()
+            .BeEquivalentTo(
+                new IngameWallData() { WallId = request.WallId, WallLevel = request.WallLevel }
+            );
+    }
+
+    [Fact]
     public async Task StartAssignUnit_ReturnsExpectedResponse()
     {
         int wallLevel = 15;
