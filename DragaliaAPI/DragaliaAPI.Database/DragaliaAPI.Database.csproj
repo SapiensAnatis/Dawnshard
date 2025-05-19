@@ -13,9 +13,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
     <PackageReference Include="Serilog" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj" />
   </ItemGroup>
-
 </Project>

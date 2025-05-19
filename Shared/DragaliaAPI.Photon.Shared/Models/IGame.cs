@@ -45,6 +45,5 @@ public interface IGame
     /// <summary>
     /// The list of players in this game.
     /// </summary>
-
     List<Player> Players { get; set; }
 }

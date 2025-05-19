@@ -10,7 +10,6 @@ namespace DragaliaAPI.Mapping.AutoMapper;
 /// <summary>
 /// Resolvers to calculate base and node atk/hp for an input CharaList.
 /// </summary>
-
 public class CharaBaseHpResolver : IValueResolver<CharaList, DbPlayerCharaData, ushort>
 {
     public ushort Resolve(

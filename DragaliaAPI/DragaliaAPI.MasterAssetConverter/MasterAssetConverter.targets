@@ -1,33 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Project>
   <PropertyGroup>
-    <_InvokeConverterCommand>&quot;$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MasterAssetConverter&quot;</_InvokeConverterCommand>
+    <_InvokeConverterCommand>"$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MasterAssetConverter"</_InvokeConverterCommand>
     <!-- For Docker builds, where we pass /p:UseAppHost=false -->
-    <_InvokeConverterCommand Condition="$(UseAppHost) == 'false'">dotnet &quot;$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MasterAssetConverter.dll&quot;</_InvokeConverterCommand>
+    <_InvokeConverterCommand Condition="$(UseAppHost) == 'false'"
+      >dotnet "$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MasterAssetConverter.dll"</_InvokeConverterCommand
+    >
   </PropertyGroup>
-  
   <Target Name="_PrepareForMasterAssetConverter">
     <ItemGroup>
-      <_MasterAssetJsonFiles Visible="false" Include="$(MasterAssetResources)**/*.json" Exclude="$(MasterAssetResources)**/*.schema.json" />
+      <_MasterAssetJsonFiles
+        Visible="false"
+        Include="$(MasterAssetResources)**/*.json"
+        Exclude="$(MasterAssetResources)**/*.schema.json"
+      />
     </ItemGroup>
   </Target>
-
   <!-- Hook into build before CopyFilesToOutputDirectory so that we update FileWrites before FileListAbsolute.txt gets written -->
-  <Target Name="MasterAssetConverter"
-          DependsOnTargets="_PrepareForMasterAssetConverter"
-          BeforeTargets="CopyFilesToOutputDirectory"
-          Inputs="@(_MasterAssetJsonFiles)" Outputs="@(_MasterAssetJsonFiles->'$(OutDir)Resources/%(RecursiveDir)%(Filename).msgpack')">
+  <Target
+    Name="MasterAssetConverter"
+    DependsOnTargets="_PrepareForMasterAssetConverter"
+    BeforeTargets="CopyFilesToOutputDirectory"
+    Inputs="@(_MasterAssetJsonFiles)"
+    Outputs="@(_MasterAssetJsonFiles-&gt;'$(OutDir)Resources/%(RecursiveDir)%(Filename).msgpack')"
+  >
     <Exec
-      Command="$(_InvokeConverterCommand) &quot;$(OutDir)Resources&quot; &quot;$(MasterAssetResources)&quot; @(_MasterAssetJsonFiles->'&quot;%(FullPath)&quot;', ' ')" 
-      ConsoleToMSBuild="true" />
-
+      Command="$(_InvokeConverterCommand) &quot;$(OutDir)Resources&quot; &quot;$(MasterAssetResources)&quot; @(_MasterAssetJsonFiles-&gt;'&quot;%(FullPath)&quot;', ' ')"
+      ConsoleToMSBuild="true"
+    />
     <ItemGroup>
       <MasterAssetMessagePackFiles Include="$(OutDir)Resources/**/*.msgpack" />
-      <FileWrites Include="@(MasterAssetMessagePackFiles)"/>
+      <FileWrites Include="@(MasterAssetMessagePackFiles)" />
     </ItemGroup>
   </Target>
-
-  <Target Name="CopyMsgpackToPublish" AfterTargets="Publish" DependsOnTargets="MasterAssetConverter">
-    <Copy SourceFiles="@(MasterAssetMessagePackFiles)" DestinationFolder="$(PublishDir)Resources/%(RecursiveDir)" />
+  <Target
+    Name="CopyMsgpackToPublish"
+    AfterTargets="Publish"
+    DependsOnTargets="MasterAssetConverter"
+  >
+    <Copy
+      SourceFiles="@(MasterAssetMessagePackFiles)"
+      DestinationFolder="$(PublishDir)Resources/%(RecursiveDir)"
+    />
   </Target>
 </Project>

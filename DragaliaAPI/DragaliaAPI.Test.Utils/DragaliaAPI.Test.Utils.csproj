@@ -1,11 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <ItemGroup>
     <ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj" />
     <ProjectReference Include="..\DragaliaAPI\DragaliaAPI.csproj" />
     <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" />
@@ -13,11 +11,9 @@
     <PackageReference Include="Moq" />
     <PackageReference Include="NSubstitute" />
   </ItemGroup>
-
   <ItemGroup>
     <None Update="RSA_key.pem">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>

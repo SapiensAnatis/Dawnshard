@@ -285,7 +285,6 @@ public static class ServiceConfiguration
     {
         // Custom config on top of ServiceDefaults
 
-
         builder
             .Services.AddOpenTelemetry()
             .ConfigureResource(cfg =>

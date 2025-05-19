@@ -1,19 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
   </PropertyGroup>
-
   <ItemGroup>
     <!-- Exclude the output of source generators from the compilation -->
     <Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" />
     <PackageReference Include="MessagePack" />
@@ -27,23 +23,27 @@
     <PackageReference Include="Microsoft.FeatureManagement" />
     <PackageReference Include="Serilog" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj" />
-    <ProjectReference Include="..\DragaliaAPI.Shared.SourceGenerator\DragaliaAPI.Shared.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
+    <ProjectReference
+      Include="..\DragaliaAPI.Shared.SourceGenerator\DragaliaAPI.Shared.SourceGenerator.csproj"
+      OutputItemType="Analyzer"
+      ReferenceOutputAssembly="false"
+      PrivateAssets="all"
+    />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="Resources\**\*.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties resources_4missions_4mainstorymissiongrouprewards_1json__JsonSchema="MainStoryMissionGroupRewards.schema.json" resources_4missions_4missionprogressioninfo_1json__JsonSchema="MissionProgressionInfo.schema.json" resources_4questschedule_4questscheduleinfo_1json__JsonSchema="QuestScheduleInfo.schema.json" />
+      <UserProperties
+        resources_4missions_4mainstorymissiongrouprewards_1json__JsonSchema="MainStoryMissionGroupRewards.schema.json"
+        resources_4missions_4missionprogressioninfo_1json__JsonSchema="MissionProgressionInfo.schema.json"
+        resources_4questschedule_4questscheduleinfo_1json__JsonSchema="QuestScheduleInfo.schema.json"
+      />
     </VisualStudio>
   </ProjectExtensions>
-
-
 </Project>

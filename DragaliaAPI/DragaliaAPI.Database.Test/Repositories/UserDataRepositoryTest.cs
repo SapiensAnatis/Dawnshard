@@ -99,8 +99,8 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
         await this.userDataRepository.SetDewpoint(1000);
         await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
-        ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(
-            () => this.userDataRepository.UpdateDewpoint(-1500)
+        ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(() =>
+            this.userDataRepository.UpdateDewpoint(-1500)
         );
         await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
@@ -149,8 +149,8 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
             .Select(x => x.DewPoint)
             .SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(
-            () => this.userDataRepository.SetDewpoint(-1)
+        ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(() =>
+            this.userDataRepository.SetDewpoint(-1)
         );
         await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
