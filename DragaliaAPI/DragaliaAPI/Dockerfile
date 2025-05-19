@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:9.0.4-noble-chiseled AS base
+FROM mcr.microsoft.com/dotnet/aspnet:9.0.5-noble-chiseled AS base
 USER app
 EXPOSE 8080
 WORKDIR /app
