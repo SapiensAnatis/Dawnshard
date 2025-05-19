@@ -29,5 +29,4 @@ jobs:
         run: dotnet tool restore
       - name: CSharpier check
         run: |
-          dotnet csharpier --version
-          dotnet csharpier . --check
+          dotnet csharpier check .
