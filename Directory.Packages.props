@@ -3,10 +3,10 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.2.1" />
-    <PackageVersion Include="Aspire.Hosting.NodeJs" Version="9.2.1" />
-    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="9.2.1" />
-    <PackageVersion Include="Aspire.Hosting.Redis" Version="9.2.1" />
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.3.0" />
+    <PackageVersion Include="Aspire.Hosting.NodeJs" Version="9.3.0" />
+    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="9.3.0" />
+    <PackageVersion Include="Aspire.Hosting.Redis" Version="9.3.0" />
     <PackageVersion Include="AutoMapper" Version="14.0.0" />
     <PackageVersion Include="Basic.Reference.Assemblies" Version="1.8.0" />
     <PackageVersion Include="EntityGraphQL" Version="5.6.1" />
@@ -85,7 +85,7 @@
     <PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="4.1.1" />
     <PackageVersion Include="Serilog.Sinks.Seq" Version="9.0.0" />
     <PackageVersion Include="System.Text.Json" Version="9.0.5" />
-    <PackageVersion Include="Serilog" Version="4.2.0" />
+    <PackageVersion Include="Serilog" Version="4.3.0" />
     <PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.0.0" />
     <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
