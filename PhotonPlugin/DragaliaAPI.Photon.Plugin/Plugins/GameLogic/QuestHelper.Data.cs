@@ -5,7 +5,6 @@ namespace DragaliaAPI.Photon.Plugin.Plugins.GameLogic
     /// <summary>
     /// QuestHelper data.
     /// </summary>
-
     public partial class QuestHelper
     {
         /// <summary>

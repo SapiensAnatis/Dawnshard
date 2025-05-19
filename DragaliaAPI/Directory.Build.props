@@ -5,26 +5,29 @@
     <Nullable>enable</Nullable>
     <AnalysisLevel>latest-minimum</AnalysisLevel>
   </PropertyGroup>
-  
   <ItemGroup>
     <PackageReference Include="Nerdbank.GitVersioning" Condition="!Exists('packages.config')">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-
   <PropertyGroup>
     <MasterAssetResources>$(MSBuildThisFileDirectory)DragaliaAPI.Shared/Resources/</MasterAssetResources>
     <ApiOutputDirectory>$(MSBuildThisFileDirectory)DragaliaAPI\bin\$(Configuration)\$(TargetFramework)\</ApiOutputDirectory>
   </PropertyGroup>
-  
-  <Target Name="CopyApiMsgpackFiles" AfterTargets="Build" Condition="$(DependsOnApiMsgpackFiles) == 'true'">
+  <Target
+    Name="CopyApiMsgpackFiles"
+    AfterTargets="Build"
+    Condition="$(DependsOnApiMsgpackFiles) == 'true'"
+  >
     <ItemGroup>
       <MasterAssetMsgpackFiles Include="$(ApiOutputDirectory)Resources\**\*.msgpack" />
     </ItemGroup>
-    <Copy SourceFiles="@(MasterAssetMsgpackFiles)" DestinationFolder="$(OutDir)Resources\%(RecursiveDir)" />
-    
+    <Copy
+      SourceFiles="@(MasterAssetMsgpackFiles)"
+      DestinationFolder="$(OutDir)Resources\%(RecursiveDir)"
+    />
     <ItemGroup>
-      <FileWrites Include="@(MasterAssetMessagePackFiles->'$(OutDir)Resources\%(RecursiveDir)%(Filename).msgpack')" />
+      <FileWrites Include="@(MasterAssetMessagePackFiles-&gt;'$(OutDir)Resources\%(RecursiveDir)%(Filename).msgpack')" />
     </ItemGroup>
   </Target>
 </Project>

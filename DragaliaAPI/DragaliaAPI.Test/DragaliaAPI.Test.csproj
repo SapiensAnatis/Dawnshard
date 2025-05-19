@@ -25,23 +25,19 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\DragaliaAPI.Database.Test\DragaliaAPI.Database.Test.csproj" />
     <ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj" />
     <ProjectReference Include="..\DragaliaAPI\DragaliaAPI.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <EditorConfigFiles Remove="C:\Users\jay0\Documents\Programming\dragalia\DragaliaAPI\DragaliaAPI.Test\.editorconfig" />
   </ItemGroup>
-
   <ItemGroup>
     <None Update="Data\endgame_savefile.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
   <PropertyGroup>
     <DependsOnApiMsgpackFiles>true</DependsOnApiMsgpackFiles>
   </PropertyGroup>

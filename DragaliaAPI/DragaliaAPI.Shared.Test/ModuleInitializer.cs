@@ -16,8 +16,8 @@ public static class ModuleInitializer
     public static void InitializeMasterAsset()
     {
         TaskFactory
-            .StartNew(
-                () => MasterAsset.MasterAsset.LoadAsync(FeatureFlagUtils.AllEnabledFeatureManager)
+            .StartNew(() =>
+                MasterAsset.MasterAsset.LoadAsync(FeatureFlagUtils.AllEnabledFeatureManager)
             )
             .Unwrap()
             .ConfigureAwait(false)

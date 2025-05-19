@@ -1,26 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <Import Project="./MissionDesigner.targets" />
-  
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="$(MasterAssetResources)\Missions\MissionNormalData.json" LinkBase="Resources">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
-
 </Project>

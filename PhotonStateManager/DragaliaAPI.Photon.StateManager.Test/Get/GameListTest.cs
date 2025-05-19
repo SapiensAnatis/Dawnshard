@@ -56,7 +56,6 @@ public class GameListTest : TestFixture
             },
             // Visible = false
 
-
             new()
             {
                 RoomId = 12345,

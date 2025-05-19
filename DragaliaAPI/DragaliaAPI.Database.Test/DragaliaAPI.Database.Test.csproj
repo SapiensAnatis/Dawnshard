@@ -15,7 +15,6 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj" />
     <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj" />
@@ -23,9 +22,7 @@
     <!-- No symbols from DragaliaAPI.csproj are required, but we need the msgpack generation targets -->
     <ProjectReference Include="..\DragaliaAPI\DragaliaAPI.csproj" />
   </ItemGroup>
-
   <PropertyGroup>
     <DependsOnApiMsgpackFiles>true</DependsOnApiMsgpackFiles>
   </PropertyGroup>
-
 </Project>
