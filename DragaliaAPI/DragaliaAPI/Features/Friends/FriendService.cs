@@ -37,6 +37,19 @@ internal sealed partial class FriendService(
             .AnyAsync(x => x.ViewerId == otherPlayerId, cancellationToken);
     }
 
+    public async Task<bool> CheckIfFriendRequestExists(
+        long otherPlayerId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return await apiContext.PlayerFriendRequests.AnyAsync(
+            x =>
+                x.FromPlayerViewerId == playerIdentityService.ViewerId
+                && x.ToPlayerViewerId == otherPlayerId,
+            cancellationToken
+        );
+    }
+
     public async Task<List<UserSupportList>> GetFriendList(
         CancellationToken cancellationToken = default
     )
