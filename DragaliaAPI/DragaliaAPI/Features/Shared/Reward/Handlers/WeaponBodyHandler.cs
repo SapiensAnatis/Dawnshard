@@ -36,7 +36,10 @@ public class WeaponBodyHandler(ApiContext apiContext, IPlayerIdentityService pla
 
             Debug.Assert(MasterAsset.WeaponBody[weaponId].IsPlayable);
 
-            if (owned.Contains(weaponId))
+            if (
+                owned.Contains(weaponId)
+                || apiContext.PlayerWeapons.Local.Any(x => x.WeaponBodyId == weaponId)
+            )
             {
                 // The WeaponBody asset contains 'duplicate entity' information, but attempting to return a
                 // converted entity result doesn't work properly - it brings up an empty window and has text
