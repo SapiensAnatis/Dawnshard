@@ -755,6 +755,55 @@ public class PresentTest : TestFixture
     }
 
     [Fact]
+    public async Task Receive_DuplicateWeapons_HandlesCorrectly()
+    {
+        List<DbPlayerPresent> presents =
+        [
+            new DbPlayerPresent()
+            {
+                EntityType = EntityTypes.WeaponBody,
+                EntityId = (int)WeaponBodies.AbsoluteAqua,
+                EntityQuantity = 1,
+            },
+            new DbPlayerPresent()
+            {
+                EntityType = EntityTypes.WeaponBody,
+                EntityId = (int)WeaponBodies.AbsoluteAqua,
+                EntityQuantity = 1,
+            },
+        ];
+
+        await this
+            .ApiContext.PlayerWeapons.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteDeleteAsync(cancellationToken: TestContext.Current.CancellationToken);
+
+        await this.AddRangeToDatabase(presents);
+
+        IEnumerable<ulong> presentIdList = presents.Select(x => (ulong)x.PresentId);
+
+        DragaliaResponse<PresentReceiveResponse> response =
+            await this.Client.PostMsgpack<PresentReceiveResponse>(
+                $"{Controller}/receive",
+                new PresentReceiveRequest() { PresentIdList = presentIdList },
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        response
+            .Data.DeletePresentIdList.Should()
+            .ContainSingle()
+            .Which.Should()
+            .Be((ulong)presents[1].PresentId);
+
+        response
+            .Data.UpdateDataList.WeaponBodyList.Should()
+            .ContainSingle(x => x.WeaponBodyId == WeaponBodies.AbsoluteAqua);
+
+        this.ApiContext.PlayerWeapons.Where(x => x.ViewerId == this.ViewerId)
+            .Should()
+            .ContainSingle(x => x.WeaponBodyId == WeaponBodies.AbsoluteAqua);
+    }
+
+    [Fact]
     public async Task GetPresentHistoryList_IsPagedCorrectly()
     {
         List<DbPlayerPresentHistory> presentHistories = Enumerable
