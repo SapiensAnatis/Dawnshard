@@ -15,7 +15,9 @@ IResourceBuilder<PostgresServerResource> postgres = builder
 
 IResourceBuilder<RedisResource> redis = builder
     .AddRedis("redis")
-    .WithImage("redis/redis-stack", "7.4.0-v0")
+    .WithImage("redis/redis-stack", "7.4.0-v3")
+    .WithPassword(null)
+    .WithEntrypoint("/entrypoint.sh") // Default Aspire entrypoint doesn't load modules correctly
     .WithLifetime(ContainerLifetime.Persistent);
 
 IResourceBuilder<ProjectResource> dragaliaApi = builder
