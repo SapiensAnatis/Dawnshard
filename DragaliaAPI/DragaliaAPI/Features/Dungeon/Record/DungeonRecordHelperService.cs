@@ -85,17 +85,20 @@ internal sealed class DungeonRecordHelperService(
             connectingViewerIdList
         );
 
-        List<long> friendsList = await friendService.CheckFriendStatus(connectingViewerIdList);
+        List<(long ViewerId, bool IsFriend, bool HasFriendRequest)> friendCheckList =
+            await friendService.CheckFriendStatus(connectingViewerIdList);
 
         logger.LogDebug("Retrieved teammate support list {@supportList}", teammateSupportLists);
 
-        IEnumerable<AtgenHelperDetailList> teammateDetailLists = connectingViewerIdList.Select(
+        IEnumerable<AtgenHelperDetailList> teammateDetailLists = friendCheckList.Select(
             x => new AtgenHelperDetailList()
             {
-                IsFriend = friendsList.Contains(x),
-                ViewerId = (ulong)x,
-                GetManaPoint = 50,
-                ApplySendStatus = 0,
+                IsFriend = x.IsFriend,
+                ViewerId = (ulong)x.ViewerId,
+                GetManaPoint = x.IsFriend
+                    ? HelperConstants.HelperFriendRewardMana
+                    : HelperConstants.HelperRewardMana,
+                ApplySendStatus = x.HasFriendRequest ? 1 : 0,
             }
         );
 

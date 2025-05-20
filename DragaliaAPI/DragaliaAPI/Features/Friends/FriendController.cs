@@ -161,6 +161,16 @@ internal sealed class FriendController(
             return this.Code(ResultCode.FriendIdsearchError);
         }
 
+        bool requestAlreadySent = await friendService.CheckIfFriendRequestExists(
+            searchId,
+            cancellationToken
+        );
+
+        if (requestAlreadySent)
+        {
+            return this.Code(ResultCode.FriendApplyExists);
+        }
+
         bool alreadyFriends = await friendService.CheckIfFriendshipExists(
             searchId,
             cancellationToken
@@ -235,18 +245,16 @@ internal sealed class FriendController(
         }
         catch (DbUpdateException ex) when (ex.IsUniqueViolation())
         {
-            throw new DragaliaException(
+            return this.Code(
                 ResultCode.FriendApplyExists,
-                "Cannot send friend request - one already exists",
-                ex
+                "Cannot send friend request - one already exists"
             );
         }
         catch (DbUpdateException ex) when (ex.IsForeignKeyViolation())
         {
-            throw new DragaliaException(
+            return this.Code(
                 ResultCode.FriendApplyError,
-                "Cannot send friend request - foreign key violation",
-                ex
+                "Cannot send friend request - player not found"
             );
         }
 

@@ -37,6 +37,19 @@ internal sealed partial class FriendService(
             .AnyAsync(x => x.ViewerId == otherPlayerId, cancellationToken);
     }
 
+    public async Task<bool> CheckIfFriendRequestExists(
+        long otherPlayerId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return await apiContext.PlayerFriendRequests.AnyAsync(
+            x =>
+                x.FromPlayerViewerId == playerIdentityService.ViewerId
+                && x.ToPlayerViewerId == otherPlayerId,
+            cancellationToken
+        );
+    }
+
     public async Task<List<UserSupportList>> GetFriendList(
         CancellationToken cancellationToken = default
     )
@@ -324,12 +337,31 @@ internal sealed partial class FriendService(
     /// </summary>
     /// <param name="filterIds">The IDs to filter by.</param>
     /// <returns>A subset of <param name="filterIds"/> containing friends.</returns>
-    public async Task<List<long>> CheckFriendStatus(IEnumerable<long> filterIds)
+    public async Task<
+        List<(long ViewerId, bool IsFriend, bool HasFriendRequest)>
+    > CheckFriendStatus(IEnumerable<long> filterIds)
     {
-        return await this.GetFriendsQuery()
+        IQueryable<(long, bool, bool)> query = apiContext
+            .Players.IgnoreQueryFilters()
             .Where(x => filterIds.Contains(x.ViewerId))
-            .Select(x => x.ViewerId)
-            .ToListAsync();
+            .Select(x => new
+            {
+                x.ViewerId,
+                IsFriend = x.Friendships.Any(y =>
+                    y.Players.Any(z => z.ViewerId == playerIdentityService.ViewerId)
+                ),
+                HasFriendRequest = apiContext.PlayerFriendRequests.Any(y =>
+                    y.FromPlayerViewerId == playerIdentityService.ViewerId
+                    && y.ToPlayerViewerId == x.ViewerId
+                ),
+            })
+            .Select(x => new ValueTuple<long, bool, bool>(
+                x.ViewerId,
+                x.IsFriend,
+                x.HasFriendRequest
+            ));
+
+        return await query.ToListAsync();
     }
 
     public async Task<FriendLimitCheckResult> CheckIfFriendLimitExceeded() =>
