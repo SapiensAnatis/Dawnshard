@@ -6,6 +6,7 @@
       "command": "dotnet",
       "args": [
         "csharpier",
+        "format",
         "${staged}"
       ],
       "include": [
