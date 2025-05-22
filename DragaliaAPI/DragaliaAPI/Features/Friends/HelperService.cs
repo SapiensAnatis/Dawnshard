@@ -22,7 +22,8 @@ internal sealed class HelperService(
     IPlayerIdentityService playerIdentityService,
     SettingsService settingsService,
     StaticHelperDataService staticDataService,
-    RealHelperDataService realDataService
+    RealHelperDataService realDataService,
+    ILogger<HelperService> logger
 ) : IHelperService
 {
     public async Task<QuestGetSupportUserListResponse> GetHelperList(
@@ -39,6 +40,8 @@ internal sealed class HelperService(
         CancellationToken cancellationToken
     )
     {
+        logger.LogDebug("Looking up UserSupportList for ID: {ViewerId}", viewerId);
+
         IHelperDataService dataService = await this.GetDataService(cancellationToken);
 
         return await dataService.GetHelper(viewerId, cancellationToken);
@@ -49,6 +52,8 @@ internal sealed class HelperService(
         CancellationToken cancellationToken
     )
     {
+        logger.LogDebug("Looking up AtgenSupportUserDataDetail for ID: {ViewerId}", viewerId);
+
         IHelperDataService dataService = await this.GetDataService(cancellationToken);
 
         return await dataService.GetHelperDataDetail(viewerId, cancellationToken);
@@ -189,19 +194,6 @@ internal sealed class HelperService(
         HelperProjection? helper = await GetHelperProjectionOrDefault(viewerId, cancellationToken);
 
         return helper?.MapToUserSupportList();
-    }
-
-    private async Task<HelperProjection> GetHelperProjection(
-        long viewerId,
-        CancellationToken cancellationToken
-    )
-    {
-        return await apiContext
-            .PlayerHelpers.IgnoreQueryFilters()
-            .AsSplitQuery()
-            .Where(x => x.ViewerId == viewerId)
-            .ProjectToHelperProjection()
-            .FirstAsync(cancellationToken);
     }
 
     private async Task<HelperProjection?> GetHelperProjectionOrDefault(

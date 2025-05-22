@@ -16,6 +16,10 @@ internal partial class ResultCodeLoggingMiddleware(ILogger<ResultCodeLoggingMidd
             ResultCode.FriendTargetNone,
             ResultCode.FriendTargetAlready,
             ResultCode.FriendApplyExists,
+            ResultCode.FriendCountLimit,
+            ResultCode.FriendCountOtherLimit,
+            ResultCode.FriendApplyCountLimit,
+            ResultCode.FriendApplyCountOtherLimit,
         ];
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
