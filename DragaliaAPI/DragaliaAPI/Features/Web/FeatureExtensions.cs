@@ -5,6 +5,7 @@ using DragaliaAPI.Features.Web.Settings;
 using DragaliaAPI.Features.Web.TimeAttack;
 using DragaliaAPI.Features.Web.Users;
 using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.IdentityModel.Logging;
 using static DragaliaAPI.Infrastructure.Authentication.AuthConstants;
 
 // ReSharper disable once CheckNamespace
@@ -55,6 +56,9 @@ public static partial class FeatureExtensions
                         .RequireClaim(CustomClaimType.AccountId)
                         .RequireClaim(CustomClaimType.ViewerId)
             );
+
+        IdentityModelEventSource.ShowPII = true;
+        IdentityModelEventSource.LogCompleteSecurityArtifact = true;
 
         return serviceCollection;
     }
