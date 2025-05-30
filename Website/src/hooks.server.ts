@@ -44,7 +44,9 @@ export const handleFetch: HandleFetch = ({ request, event, fetch }) => {
     // We need to explicitly add the JWT back in, because SvelteKit seems to refuse to forward cookies here; it's
     // possible it views the request as changing origins and no longer internal.
     const idToken = event.cookies.get(Cookies.IdToken);
-    if (idToken) {
+
+    // /api/user/me will manually attach the header, avoid adding a second header in this case.
+    if (idToken && !request.headers.has('Authorization')) {
       request.headers.append('Authorization', `Bearer ${idToken}`);
     }
 
