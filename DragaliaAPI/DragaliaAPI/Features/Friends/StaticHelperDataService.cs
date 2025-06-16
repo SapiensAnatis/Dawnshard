@@ -377,7 +377,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 3,
+                ViewerId = long.MaxValue - 4,
                 Name = "alkaemist",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -510,7 +510,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 4,
+                ViewerId = long.MaxValue - 5,
                 Name = "QwerbyKing",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -643,7 +643,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 5,
+                ViewerId = long.MaxValue - 6,
                 Name = "Zappypants",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -776,7 +776,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 6,
+                ViewerId = long.MaxValue - 7,
                 Name = "stairs",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -909,7 +909,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 7,
+                ViewerId = long.MaxValue - 8,
                 Name = "no",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -1042,7 +1042,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 8,
+                ViewerId = long.MaxValue - 9,
                 Name = "Euden",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -1175,7 +1175,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 9,
+                ViewerId = long.MaxValue - 10,
                 Name = "Euden",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -1308,7 +1308,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 10,
+                ViewerId = long.MaxValue - 11,
                 Name = "Leon",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -1441,7 +1441,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 11,
+                ViewerId = long.MaxValue - 12,
                 Name = "Crown",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -1574,7 +1574,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 12,
+                ViewerId = long.MaxValue - 13,
                 Name = "Euden",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -1707,7 +1707,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 13,
+                ViewerId = long.MaxValue - 14,
                 Name = "sockperson",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -1840,7 +1840,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 14,
+                ViewerId = long.MaxValue - 15,
                 Name = "Delpolo",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -1973,7 +1973,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 15,
+                ViewerId = long.MaxValue - 16,
                 Name = "Euden",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -2106,7 +2106,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 16,
+                ViewerId = long.MaxValue - 17,
                 Name = "Nahxela",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -2239,7 +2239,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 17,
+                ViewerId = long.MaxValue - 18,
                 Name = "Shiny ☆",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -2372,7 +2372,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 18,
+                ViewerId = long.MaxValue - 19,
                 Name = "hateklauster",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -2506,7 +2506,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 19,
+                ViewerId = long.MaxValue - 20,
                 Name = "g.",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -2641,7 +2641,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 20,
+                ViewerId = long.MaxValue - 21,
                 Name = "J. R. Oppenheimer",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -2776,7 +2776,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 21,
+                ViewerId = long.MaxValue - 22,
                 Name = "Ms. Flashburn",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -2911,7 +2911,7 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             },
             new()
             {
-                ViewerId = long.MaxValue - 22,
+                ViewerId = long.MaxValue - 23,
                 Name = "boggers",
                 Level = 250,
                 LastLoginDate = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
@@ -3049,12 +3049,6 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
         {
             new()
             {
-                ViewerId = long.MaxValue,
-                GettableManaPoint = 50,
-                IsFriend = true,
-            },
-            new()
-            {
                 ViewerId = long.MaxValue - 1,
                 GettableManaPoint = 50,
                 IsFriend = true,
@@ -3182,6 +3176,12 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
             new()
             {
                 ViewerId = long.MaxValue - 22,
+                GettableManaPoint = 50,
+                IsFriend = true,
+            },
+            new()
+            {
+                ViewerId = long.MaxValue - 23,
                 GettableManaPoint = 50,
                 IsFriend = true,
             },
