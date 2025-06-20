@@ -1469,6 +1469,99 @@ public class DungeonRecordTest : TestFixture
             .Be(existingEssenceQuantity + 1);
     }
 
+    [Fact]
+    public async Task Record_Fafnirs_BoostsRupiesAndMana()
+    {
+        int avenueToFortuneQuestId = 202060104;
+
+        DbPlayerDragonData goldFafnir = new() { DragonId = DragonId.GoldFafnir, Ability1Level = 5 };
+        DbPlayerDragonData silverFafnir = new()
+        {
+            DragonId = DragonId.SilverFafnir,
+            Ability1Level = 5,
+        };
+
+        await AddRangeToDatabase(
+            [
+                new DbQuest()
+                {
+                    QuestId = avenueToFortuneQuestId,
+                    State = 0,
+                    ViewerId = ViewerId,
+                },
+                goldFafnir,
+                silverFafnir,
+            ]
+        );
+
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>()
+            {
+                new()
+                {
+                    CharaId = Charas.ThePrince,
+                    EquipDragonKeyId = (ulong)goldFafnir.DragonKeyId,
+                },
+                new()
+                {
+                    CharaId = Charas.Marty,
+                    EquipDragonKeyId = (ulong)silverFafnir.DragonKeyId,
+                },
+            },
+            QuestData = MasterAsset.QuestData.Get(avenueToFortuneQuestId),
+            EnemyList = new Dictionary<int, IList<AtgenEnemy>>()
+            {
+                {
+                    1,
+                    new List<AtgenEnemy>()
+                    {
+                        new()
+                        {
+                            EnemyIdx = 0,
+                            EnemyDropList = new List<EnemyDropList>()
+                            {
+                                new() { Coin = 1000, Mana = 1000 },
+                            },
+                        },
+                    }
+                },
+            },
+        };
+
+        string key = await this.StartDungeon(mockSession);
+
+        DungeonRecordRecordResponse response = (
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    DungeonKey = key,
+                    PlayRecord = new PlayRecord
+                    {
+                        Time = 10,
+                        TreasureRecord = new List<AtgenTreasureRecord>()
+                        {
+                            new()
+                            {
+                                AreaIdx = 1,
+                                Enemy = new List<int> { 1, 0 },
+                            },
+                        },
+                        LiveUnitNoList = new List<int>(),
+                        DamageRecord = new List<AtgenDamageRecord>(),
+                        DragonDamageRecord = new List<AtgenDamageRecord>(),
+                        BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                    },
+                },
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        ).Data;
+
+        response.IngameResultData.RewardRecord.TakeCoin.Should().Be(1500);
+        response.IngameResultData.GrowRecord.TakeMana.Should().Be(1500);
+    }
+
     private async Task<string> StartDungeon(DungeonSession session)
     {
         string key = this.DungeonService.CreateSession(session);
