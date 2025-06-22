@@ -4,7 +4,10 @@ using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Features.Friends;
 
-public class StaticHelperDataService(IBonusService bonusService) : IHelperDataService
+internal sealed class StaticHelperDataService(
+    IBonusService bonusService,
+    RealHelperDataService realHelperDataService
+) : IHelperDataService
 {
     public Task<QuestGetSupportUserListResponse> GetHelperList(CancellationToken cancellationToken)
     {
@@ -32,7 +35,20 @@ public class StaticHelperDataService(IBonusService bonusService) : IHelperDataSe
 
         if (staticHelperInfo is null)
         {
-            return null;
+            // When playing co-op, if you view details for another player, the client will make a call to
+            // /friend/get_support_chara_detail with their ID. If you have static helpers enabled, this will fail. We
+            // should fall back to real helper data to handle this case.
+            // We expect this particular case to always hit this path rather than a static helper shadowing a real
+            // player, because all the static helper IDs are near ulong.MaxValue. So there is a clear separation, unless
+            // we get a LOT of new players.
+            //
+            // Note: it shouldn't be necessary to do this for GetHelper above as that is only called from
+            // /friend/id_search.
+            //
+            return await realHelperDataService.GetHelperDataDetail(
+                helperViewerId,
+                cancellationToken
+            );
         }
 
         FortBonusList bonusList = await bonusService.GetBonusList(cancellationToken);
