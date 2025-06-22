@@ -83,8 +83,7 @@ public class DungeonRecordService(
             IEnumerable<AtgenScoringEnemyPointList> enemyScoreMissionList,
             int takeAccumulatePoint,
             int takeBoostAccumulatePoint,
-            IEnumerable<AtgenEventPassiveUpList> eventPassiveUpLists,
-            IEnumerable<AtgenDropAll> eventDrops
+            IEnumerable<AtgenEventPassiveUpList> eventPassiveUpLists
         ) = await dungeonRecordRewardService.ProcessEventRewards(playRecord, session);
 
         ingameResultData.ScoreMissionSuccessList = scoreMissionSuccessList;
@@ -92,7 +91,6 @@ public class DungeonRecordService(
         ingameResultData.ScoringEnemyPointList = enemyScoreMissionList;
         ingameResultData.RewardRecord.TakeBoostAccumulatePoint = takeBoostAccumulatePoint;
         ingameResultData.EventPassiveUpList = eventPassiveUpLists;
-        ingameResultData.RewardRecord.DropAll.AddRange(eventDrops);
 
         ingameResultData.ConvertedEntityList = rewardService
             .GetConvertedEntityList()

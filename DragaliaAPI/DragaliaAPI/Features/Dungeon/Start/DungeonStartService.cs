@@ -92,6 +92,10 @@ internal sealed partial class DungeonStartService(
 
         QuestData questInfo = MasterAsset.QuestData.Get(questId);
 
+        List<List<int>> rewardBoostingAbilities = AbilityLogic.GetRewardBoostingAbilitiesByUnit(
+            detailedPartyUnits
+        );
+
         result.PartyInfo.PartyUnitList = await ProcessDetailedUnitList(detailedPartyUnits);
         result.DungeonKey = dungeonService.CreateSession(
             new()
@@ -99,6 +103,7 @@ internal sealed partial class DungeonStartService(
                 QuestData = questInfo,
                 Party = party.Where(x => x.CharaId != 0),
                 SupportViewerId = supportViewerId,
+                RewardBoostingAbilitiesPerUnit = rewardBoostingAbilities,
             }
         );
 

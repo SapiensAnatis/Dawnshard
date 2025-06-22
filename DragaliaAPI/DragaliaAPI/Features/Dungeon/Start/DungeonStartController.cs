@@ -115,7 +115,9 @@ public class DungeonStartController(
     )
     {
         if (!await dungeonStartService.ValidateStamina(request.QuestId, StaminaType.Single))
+        {
             return this.Code(ResultCode.QuestStaminaSingleShort);
+        }
 
         IngameData ingameData = await dungeonStartService.GetAssignUnitIngameData(
             request.QuestId,

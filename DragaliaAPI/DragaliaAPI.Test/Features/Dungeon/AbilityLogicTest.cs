@@ -1,83 +1,34 @@
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Features.AbilityCrests;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
-using Microsoft.Extensions.Logging.Abstractions;
+using DragaliaAPI.Shared.MasterAsset;
 using MockQueryable;
 
 namespace DragaliaAPI.Test.Features.Dungeon;
 
-public class AbilityCrestMultiplierServiceTest
+public class AbilityLogicTest
 {
-    private readonly Mock<IAbilityCrestRepository> mockAbilityCrestRepository;
-    private readonly IAbilityCrestMultiplierService abilityCrestMultiplierService;
-
-    public AbilityCrestMultiplierServiceTest()
-    {
-        this.mockAbilityCrestRepository = new(MockBehavior.Strict);
-
-        this.abilityCrestMultiplierService = new AbilityCrestMultiplierService(
-            this.mockAbilityCrestRepository.Object,
-            NullLogger<AbilityCrestMultiplierService>.Instance
-        );
-    }
-
     [Fact]
-    public async Task GetFacilityEventMultiplier_ReturnsExpectedResult()
+    public void GetFacilityEventMultiplier_ReturnsExpectedResult()
     {
         int flamesOfReflectionCompendiumId = 20816;
 
-        this.mockAbilityCrestRepository.Setup(x => x.AbilityCrests)
-            .Returns(
-                new List<DbAbilityCrest>()
-                {
-                    new()
-                    {
-                        ViewerId = 1,
-                        AbilityCrestId = AbilityCrestId.SistersDayOut,
-                        LimitBreakCount = 4,
-                    },
-                    new()
-                    {
-                        ViewerId = 1,
-                        AbilityCrestId = AbilityCrestId.TheDragonSmiths,
-                        LimitBreakCount = 4,
-                    },
-                }
-                    .AsQueryable()
-                    .BuildMock()
-            );
+        List<List<int>> abilityIds =
+        [
+            [
+                .. MasterAsset.AbilityCrest[AbilityCrestId.SistersDayOut].GetAbilities(3),
+                .. MasterAsset.AbilityCrest[AbilityCrestId.TheDragonSmiths].GetAbilities(3),
+            ],
+        ];
 
-        List<PartySettingList> party = new()
-        {
-            new()
-            {
-                EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut,
-                EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths,
-            },
-            new()
-            {
-                EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut,
-                EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths,
-            },
-            new()
-            {
-                EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut,
-                EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths,
-            },
-            new()
-            {
-                EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut,
-                EquipCrestSlotType1CrestId2 = AbilityCrestId.TheDragonSmiths,
-            },
-        };
-
-        (double material, double point) = (
-            await this.abilityCrestMultiplierService.GetEventMultiplier(
-                party,
-                flamesOfReflectionCompendiumId
-            )
+        double material = AbilityLogic.CalculateEventMaterialMultiplier(
+            abilityIds,
+            flamesOfReflectionCompendiumId
+        );
+        double point = AbilityLogic.CalculateEventPointMultiplier(
+            abilityIds,
+            flamesOfReflectionCompendiumId
         );
 
         material.Should().Be(4); // +300%
@@ -85,50 +36,23 @@ public class AbilityCrestMultiplierServiceTest
     }
 
     [Fact]
-    public async Task GetFacilityEventMultiplier_UnitOverCap_ReturnsBoostCap()
+    public void GetFacilityEventMultiplier_UnitOverCap_ReturnsBoostCap()
     {
         int flamesOfReflectionCompendiumId = 20816;
 
-        this.mockAbilityCrestRepository.Setup(x => x.AbilityCrests)
-            .Returns(
-                new List<DbAbilityCrest>()
-                {
-                    new()
-                    {
-                        ViewerId = 1,
-                        AbilityCrestId = AbilityCrestId.SistersDayOut,
-                        LimitBreakCount = 4,
-                    },
-                    new()
-                    {
-                        ViewerId = 1,
-                        AbilityCrestId = AbilityCrestId.TotheExtreme,
-                        LimitBreakCount = 4,
-                    },
-                }
-                    .AsQueryable()
-                    .BuildMock()
-            );
+        List<List<int>> abilityIds =
+        [
+            [
+                .. MasterAsset.AbilityCrest[AbilityCrestId.SistersDayOut].GetAbilities(3), // +150%
+                .. MasterAsset.AbilityCrest[AbilityCrestId.TotheExtreme].GetAbilities(3), // +100%
+            ],
+        ];
 
-        List<PartySettingList> party = new()
-        {
-            new()
-            {
-                EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut, // +150%
-                EquipCrestSlotType2CrestId1 =
-                    AbilityCrestId.TotheExtreme // +100%
-                ,
-            },
-        };
-
-        (double material, double point) = (
-            await this.abilityCrestMultiplierService.GetEventMultiplier(
-                party,
-                flamesOfReflectionCompendiumId
-            )
+        double point = AbilityLogic.CalculateEventPointMultiplier(
+            abilityIds,
+            flamesOfReflectionCompendiumId
         );
 
-        material.Should().Be(1);
         point.Should().Be(2.5); // +150%
     }
 

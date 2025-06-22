@@ -172,8 +172,7 @@ public class DungeonRecordServiceTest
                     enemyScoring,
                     takeAccumulatePoint,
                     takeBoostAccumulatePoint,
-                    passiveUpLists,
-                    eventDrops
+                    passiveUpLists
                 )
             );
         this.mockDungeonRewardService.Setup(x => x.ProcessDraconicEssenceDrops(session))

@@ -18,8 +18,7 @@ public class DungeonRecordRewardService(
     IQuestCompletionService questCompletionService,
     IRewardService rewardService,
     IPresentService presentService,
-    IAbilityCrestMultiplierService abilityCrestMultiplierService,
-    IEventDropService eventDropService,
+    EventDropService eventDropService,
     IMissionProgressionService missionProgressionService,
     IQuestRepository questRepository,
     ApiContext apiContext,
@@ -159,8 +158,10 @@ public class DungeonRecordRewardService(
         DungeonSession session
     )
     {
-        (double materialMultiplier, double pointMultiplier) =
-            await abilityCrestMultiplierService.GetEventMultiplier(session.Party, session.QuestGid);
+        double pointMultiplier = AbilityLogic.CalculateEventPointMultiplier(
+            session.RewardBoostingAbilitiesPerUnit,
+            eventId: session.QuestGid
+        );
 
         (
             IEnumerable<AtgenScoreMissionSuccessList> scoreMissions,
@@ -198,19 +199,12 @@ public class DungeonRecordRewardService(
         IEnumerable<AtgenEventPassiveUpList> passiveUpList =
             await eventDropService.ProcessEventPassiveDrops(session.QuestData);
 
-        IEnumerable<AtgenDropAll> eventDrops = await eventDropService.ProcessEventMaterialDrops(
-            session.QuestData,
-            playRecord!,
-            materialMultiplier
-        );
-
         return new EventRewardData(
             ScoreMissions: scoreMissions,
             EnemyScoreMissions: enemyScoreMissions,
             TakeAccumulatePoint: totalPoints + boostedPoints + enemyScore,
             TakeBoostAccumulatePoint: boostedPoints,
-            PassiveUpList: passiveUpList,
-            EventDrops: eventDrops
+            PassiveUpList: passiveUpList
         );
     }
 
@@ -286,8 +280,7 @@ public class DungeonRecordRewardService(
         IEnumerable<AtgenScoringEnemyPointList> EnemyScoreMissions,
         int TakeAccumulatePoint,
         int TakeBoostAccumulatePoint,
-        IEnumerable<AtgenEventPassiveUpList> PassiveUpList,
-        IEnumerable<AtgenDropAll> EventDrops
+        IEnumerable<AtgenEventPassiveUpList> PassiveUpList
     );
 }
 
