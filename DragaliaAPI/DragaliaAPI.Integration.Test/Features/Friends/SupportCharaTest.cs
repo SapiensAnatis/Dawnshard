@@ -292,6 +292,32 @@ public class SupportCharaTest : TestFixture
     }
 
     [Fact]
+    public async Task GetSupportCharaDetail_StaticEnabled_SendsRealViewerId_GetsCorrectCharacter()
+    {
+        // See comment in StaticHelperDataService explaining why this is a valid scenario
+
+        this.ApiContext.PlayerSettings.Add(
+            new()
+            {
+                ViewerId = this.ViewerId,
+                SettingsJson = new() { UseLegacyHelpers = true },
+            }
+        );
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        DragaliaResponse<FriendGetSupportCharaDetailResponse> response = (
+            await this.Client.PostMsgpack<FriendGetSupportCharaDetailResponse>(
+                "/friend/get_support_chara_detail",
+                new FriendGetSupportCharaDetailRequest() { SupportViewerId = (ulong)this.ViewerId },
+                cancellationToken: TestContext.Current.CancellationToken,
+                ensureSuccessHeader: false
+            )
+        );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
+    }
+
+    [Fact]
     public async Task GetSupportCharaDetail_RealViewerId_GetsSupportCharaDetail()
     {
         await this.AddSupportCharaEquipment();
