@@ -9,6 +9,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 using Microsoft.EntityFrameworkCore;
 
@@ -98,12 +99,62 @@ public class DungeonRecordRewardService(
             }
         }
 
-        (manaDrop, coinDrop) = await this.ApplyFafnirAbilities(session.Party, manaDrop, coinDrop);
-
         entities = entities.Merge().ToList();
-        List<AtgenDropAll> drops = entities.Select(x => x.ToDropAll()).ToList();
+
+        double coinMultiplier = AbilityLogic.CalculateCoinMultiplier(
+            session.RewardBoostingAbilitiesPerUnit
+        );
+        double manaMultiplier = AbilityLogic.CalculateCoinMultiplier(
+            session.RewardBoostingAbilitiesPerUnit
+        );
+
+        coinDrop = (int)Math.Round(coinDrop * coinMultiplier);
+        manaDrop = (int)Math.Round(manaDrop * manaMultiplier);
+
+        double buildEventMaterialMultiplier = AbilityLogic.CalculateEventMaterialMultiplier(
+            session.RewardBoostingAbilitiesPerUnit,
+            session.QuestGid
+        );
+
+        List<AtgenDropAll> drops = [];
+
+        List<Entity> bonusEntities = [];
+
+        if (buildEventMaterialMultiplier > 1)
+        {
+            // There is already a drop, so to apply an e.g. 50% bonus, instead of multiplying by 1.5 when adding a new
+            // drop, multiply by 0.5 instead.
+            double additiveMultiplier = buildEventMaterialMultiplier - 1;
+
+            EventData eventData = MasterAsset.EventData[session.QuestGid];
+
+            foreach (Entity entity in entities)
+            {
+                if (
+                    entity.Type != eventData.ViewEntityType1
+                    || entity.Id != eventData.ViewEntityId1
+                )
+                {
+                    // Bonuses only apply to T1 materials
+                    continue;
+                }
+
+                int boostedQuantity = (int)Math.Round(entity.Quantity * additiveMultiplier);
+                Entity bonusEntity = entity with { Quantity = boostedQuantity };
+                bonusEntities.Add(bonusEntity);
+
+                // We have no way to communicate 'factor' using the Entity model, so add ourselves to the AtgenDropAll
+                // collection instead of merging into 'entities' and waiting to be added below
+                AtgenDropAll drop = bonusEntity.ToDropAll();
+                drop.Place = 9;
+                drops.Add(drop);
+            }
+        }
+
+        drops.AddRange(entities.Select(x => x.ToDropAll()));
 
         await rewardService.GrantRewards(entities);
+        await rewardService.GrantRewards(bonusEntities);
         await rewardService.GrantReward(new Entity(EntityTypes.Mana, Quantity: manaDrop));
         await rewardService.GrantReward(new Entity(EntityTypes.Rupies, Quantity: coinDrop));
 
@@ -234,45 +285,6 @@ public class DungeonRecordRewardService(
             Headcount = connectingViewerIdList.Count,
             TotalQuantity = quantity,
         };
-    }
-
-    // Array with index = ability level, value = ability percentage boost
-    private static readonly float[] FafnirPercentageMultipliers = [0, .25f, .30f, .35f, .40f, .50f];
-
-    private async Task<(int MultipliedMana, int MultipliedCoin)> ApplyFafnirAbilities(
-        IEnumerable<PartySettingList> party,
-        int originalMana,
-        int originalCoin
-    )
-    {
-        var dragons = await apiContext
-            .PlayerDragonData.Where(x =>
-                party.Select(y => y.EquipDragonKeyId).Contains((ulong)x.DragonKeyId)
-            )
-            .Select(x => new { x.DragonId, x.Ability1Level })
-            .Where(x => x.DragonId == DragonId.SilverFafnir || x.DragonId == DragonId.GoldFafnir)
-            .Where(x => x.Ability1Level >= 1 && x.Ability1Level <= 5) // valid levels only
-            .ToListAsync();
-
-        float manaMultiplier = 1;
-        float coinMultiplier = 1;
-
-        foreach (var dragon in dragons)
-        {
-            if (dragon.DragonId == DragonId.SilverFafnir)
-            {
-                manaMultiplier += FafnirPercentageMultipliers[dragon.Ability1Level];
-            }
-            else if (dragon.DragonId == DragonId.GoldFafnir)
-            {
-                coinMultiplier += FafnirPercentageMultipliers[dragon.Ability1Level];
-            }
-        }
-
-        int multipliedMana = (int)float.Round(originalMana * manaMultiplier);
-        int multipliedCoin = (int)float.Round(originalCoin * coinMultiplier);
-
-        return (multipliedMana, multipliedCoin);
     }
 
     public record EventRewardData(

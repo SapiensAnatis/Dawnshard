@@ -89,24 +89,14 @@ public static class AbilityLogic
         int eventId
     )
     {
-        double pointBoost = 0;
-
-        foreach (IEnumerable<int> abilityIds in abilityIdsPerUnit)
-        {
-            List<AbilityData> abilityData = abilityIds
-                .Select(x => MasterAsset.AbilityData[x])
-                .Where(x =>
-                    x.EventId == eventId
-                    && x.AbilityType1
-                        is AbilityTypes.BuildEventPointBoost
-                            or AbilityTypes.DefensiveEventPointBoost
-                )
-                .ToList();
-
-            pointBoost += CalculateMultiplierPercentageValue(abilityData);
-        }
-
-        return 1 + (pointBoost / 100);
+        return CalculateCappedAbilityMultiplier(
+            abilityIdsPerUnit,
+            ability =>
+                ability.EventId == eventId
+                && ability.AbilityType1
+                    is AbilityTypes.BuildEventPointBoost
+                        or AbilityTypes.DefensiveEventPointBoost
+        );
     }
 
     public static double CalculateEventMaterialMultiplier(
@@ -114,24 +104,79 @@ public static class AbilityLogic
         int eventId
     )
     {
-        double pointBoost = 0;
+        return CalculateCappedAbilityMultiplier(
+            abilityIdsPerUnit,
+            ability =>
+                ability.EventId == eventId
+                && ability.AbilityType1 == AbilityTypes.BuildEventMaterialBoost
+        );
+    }
+
+    public static double CalculateCoinMultiplier(IEnumerable<IEnumerable<int>> abilityIdsPerUnit)
+    {
+        return CalculateAbilityMultiplier(
+            abilityIdsPerUnit,
+            static ability => ability.AbilityType1 == AbilityTypes.CoinUp
+        );
+    }
+
+    public static double CalculateManaMultiplier(IEnumerable<IEnumerable<int>> abilityIdsPerUnit)
+    {
+        return CalculateAbilityMultiplier(
+            abilityIdsPerUnit,
+            static ability => ability.AbilityType1 == AbilityTypes.ManaUp
+        );
+    }
+
+    private static double CalculateAbilityMultiplier(
+        IEnumerable<IEnumerable<int>> abilityIdsPerUnit,
+        Func<AbilityData, bool> filter
+    )
+    {
+        if (abilityIdsPerUnit.TryGetNonEnumeratedCount(out int count) && count == 0)
+        {
+            return 1;
+        }
+
+        double boost = 0;
+
+        foreach (IEnumerable<int> abilityIds in abilityIdsPerUnit)
+        {
+            boost += abilityIds
+                .Select(x => MasterAsset.AbilityData[x])
+                .Where(filter)
+                .Sum(x => x.AbilityType1UpValue);
+        }
+
+        return 1 + (boost / 100);
+    }
+
+    private static double CalculateCappedAbilityMultiplier(
+        IEnumerable<IEnumerable<int>> abilityIdsPerUnit,
+        Func<AbilityData, bool> filter
+    )
+    {
+        if (abilityIdsPerUnit.TryGetNonEnumeratedCount(out int count) && count == 0)
+        {
+            return 1;
+        }
+
+        double boost = 0;
 
         foreach (IEnumerable<int> abilityIds in abilityIdsPerUnit)
         {
             List<AbilityData> abilityData = abilityIds
                 .Select(x => MasterAsset.AbilityData[x])
-                .Where(x =>
-                    x.EventId == eventId && x.AbilityType1 == AbilityTypes.BuildEventMaterialBoost
-                )
+                .Where(filter)
                 .ToList();
 
-            pointBoost += CalculateMultiplierPercentageValue(abilityData);
+            boost += CalculateCappedMultiplierPercentageValue(abilityData);
         }
 
-        return 1 + (pointBoost / 100);
+        return 1 + (boost / 100);
     }
 
-    private static double CalculateMultiplierPercentageValue(List<AbilityData> abilities)
+    private static double CalculateCappedMultiplierPercentageValue(List<AbilityData> abilities)
     {
         if (abilities.Count == 0)
         {

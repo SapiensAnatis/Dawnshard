@@ -11,7 +11,7 @@ public partial class AtgenDropAll
     /// Known values:
     /// <ul>
     /// <li>0: Normal</li>
-    /// <li>1: Capacity Reached + Rainbow effect (???)</li>
+    /// <li>1: Capacity Reached + Rainbow effect but only sometimes (???)</li>
     /// <li>9: Bonus</li>
     /// </ul>
     /// Might correspond to RewardItemPlaceType in il2cpp.
