@@ -25,7 +25,7 @@ internal sealed class DungeonRecordHelperService(
         List<UserSupportList> helperList = new();
         List<AtgenHelperDetailList> helperDetailList = new();
 
-        if (supportViewerId is null)
+        if (supportViewerId is null or 0)
         {
             return (helperList, helperDetailList, 0);
         }

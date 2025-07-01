@@ -143,8 +143,26 @@ public class AbilityLogicTest
             ],
         ];
 
-        double point = AbilityLogic.CalculateCoinMultiplier(abilityIds);
+        double coin = AbilityLogic.CalculateCoinMultiplier(abilityIds);
 
-        point.Should().Be(2.3); // +130%
+        coin.Should().Be(2.3); // +130%
+    }
+
+    [Fact]
+    public void CalculateManaMultiplier_ReturnsExpectedResult()
+    {
+        List<List<int>> abilityIds =
+        [
+            [
+                MasterAsset.DragonData[DragonId.SilverFafnir].GetAbility(1, 1), // +25% mana
+                MasterAsset.DragonData[DragonId.SilverFafnir].GetAbility(1, 2), // +30% mana
+                MasterAsset.DragonData[DragonId.SilverFafnir].GetAbility(1, 3), // +35% mana
+                MasterAsset.DragonData[DragonId.SilverFafnir].GetAbility(1, 4), // +40% mana
+            ],
+        ];
+
+        double mana = AbilityLogic.CalculateManaMultiplier(abilityIds);
+
+        mana.Should().Be(2.3); // +130%
     }
 }

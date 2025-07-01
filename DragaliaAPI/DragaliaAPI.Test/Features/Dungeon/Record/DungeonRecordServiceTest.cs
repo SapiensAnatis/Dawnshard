@@ -80,16 +80,6 @@ public class DungeonRecordServiceTest
             },
         };
 
-        List<AtgenDropAll> eventDrops = new()
-        {
-            new()
-            {
-                Id = (int)Materials.WoodlandHerbs,
-                Quantity = 20,
-                Type = EntityTypes.Material,
-            },
-        };
-
         List<AtgenScoreMissionSuccessList> scoreMissionSuccessLists = new()
         {
             new()
@@ -209,7 +199,7 @@ public class DungeonRecordServiceTest
                     CurrentPlayCount = 1,
                     RewardRecord = new()
                     {
-                        DropAll = dropList.Concat(eventDrops).ToList(),
+                        DropAll = dropList,
                         TakeBoostAccumulatePoint = takeBoostAccumulatePoint,
                         TakeAccumulatePoint = takeAccumulatePoint,
                         TakeCoin = takeCoin,

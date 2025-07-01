@@ -104,7 +104,7 @@ public class DungeonRecordRewardService(
         double coinMultiplier = AbilityLogic.CalculateCoinMultiplier(
             session.RewardBoostingAbilitiesPerUnit
         );
-        double manaMultiplier = AbilityLogic.CalculateCoinMultiplier(
+        double manaMultiplier = AbilityLogic.CalculateManaMultiplier(
             session.RewardBoostingAbilitiesPerUnit
         );
 

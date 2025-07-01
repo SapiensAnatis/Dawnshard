@@ -228,7 +228,20 @@ public class DungeonRecordTest : TestFixture
             EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
         };
 
-        string key = await this.StartDungeon(mockSession);
+        string key = await this.StartDungeon(
+            new DungeonStartStartAssignUnitRequest()
+            {
+                RequestPartySettingList = new List<PartySettingList>()
+                {
+                    new()
+                    {
+                        CharaId = Charas.ThePrince,
+                        EquipCrestSlotType1CrestId1 = AbilityCrestId.SistersDayOut,
+                    },
+                },
+                QuestId = questId,
+            }
+        );
 
         DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
@@ -322,22 +335,21 @@ public class DungeonRecordTest : TestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        DungeonSession mockSession = new()
-        {
-            Party = new List<PartySettingList>()
+        string key = await this.StartDungeon(
+            new DungeonStartStartAssignUnitRequest()
             {
-                new()
+                QuestId = questId,
+                RequestPartySettingList = new List<PartySettingList>()
                 {
-                    CharaId = Charas.ThePrince,
-                    EquipCrestSlotType1CrestId1 = AbilityCrestId.SuperSoakingAndroids,
-                    EquipCrestSlotType2CrestId1 = AbilityCrestId.HavingaSummerBall,
+                    new()
+                    {
+                        CharaId = Charas.ThePrince,
+                        EquipCrestSlotType1CrestId1 = AbilityCrestId.SuperSoakingAndroids,
+                        EquipCrestSlotType2CrestId1 = AbilityCrestId.HavingaSummerBall,
+                    },
                 },
-            },
-            QuestData = MasterAsset.QuestData.Get(questId),
-            EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
-        };
-
-        string key = await this.StartDungeon(mockSession);
+            }
+        );
 
         DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
@@ -1065,7 +1077,7 @@ public class DungeonRecordTest : TestFixture
         );
 
         string dungeonKey = await this.StartDungeon(
-            new()
+            new DungeonSession()
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
@@ -1119,7 +1131,7 @@ public class DungeonRecordTest : TestFixture
             );
 
         request.DungeonKey = await this.StartDungeon(
-            new()
+            new DungeonSession()
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
@@ -1162,7 +1174,7 @@ public class DungeonRecordTest : TestFixture
         );
 
         string dungeonKey = await this.StartDungeon(
-            new()
+            new DungeonSession()
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
@@ -1214,7 +1226,7 @@ public class DungeonRecordTest : TestFixture
         );
 
         string dungeonKey = await this.StartDungeon(
-            new()
+            new DungeonSession()
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
@@ -1287,7 +1299,7 @@ public class DungeonRecordTest : TestFixture
         await this.AddToDatabase(new DbQuest() { QuestId = questId, DailyPlayCount = 0 });
 
         string dungeonKey = await this.StartDungeon(
-            new()
+            new DungeonSession()
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
@@ -1348,7 +1360,7 @@ public class DungeonRecordTest : TestFixture
         );
 
         string dungeonKey = await this.StartDungeon(
-            new()
+            new DungeonSession()
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
@@ -1389,7 +1401,7 @@ public class DungeonRecordTest : TestFixture
             .Be(existingEssenceQuantity + 1);
 
         request.DungeonKey = await this.StartDungeon(
-            new()
+            new DungeonSession()
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
@@ -1428,7 +1440,7 @@ public class DungeonRecordTest : TestFixture
         );
 
         string dungeonKey = await this.StartDungeon(
-            new()
+            new DungeonSession()
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
@@ -1494,42 +1506,31 @@ public class DungeonRecordTest : TestFixture
             ]
         );
 
-        DungeonSession mockSession = new()
-        {
-            Party = new List<PartySettingList>()
-            {
-                new()
+        DragaliaResponse<DungeonStartStartAssignUnitResponse> startResponse =
+            await this.Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(
+                "/dungeon_start/start_assign_unit",
+                new DungeonStartStartAssignUnitRequest()
                 {
-                    CharaId = Charas.ThePrince,
-                    EquipDragonKeyId = (ulong)goldFafnir.DragonKeyId,
-                },
-                new()
-                {
-                    CharaId = Charas.Marty,
-                    EquipDragonKeyId = (ulong)silverFafnir.DragonKeyId,
-                },
-            },
-            QuestData = MasterAsset.QuestData.Get(avenueToFortuneQuestId),
-            EnemyList = new Dictionary<int, IList<AtgenEnemy>>()
-            {
-                {
-                    1,
-                    new List<AtgenEnemy>()
+                    SupportViewerId = 0,
+                    RequestPartySettingList = new List<PartySettingList>()
                     {
                         new()
                         {
-                            EnemyIdx = 0,
-                            EnemyDropList = new List<EnemyDropList>()
-                            {
-                                new() { Coin = 1000, Mana = 1000 },
-                            },
+                            CharaId = Charas.ThePrince,
+                            EquipDragonKeyId = (ulong)goldFafnir.DragonKeyId,
                         },
-                    }
+                        new()
+                        {
+                            CharaId = Charas.Marty,
+                            EquipDragonKeyId = (ulong)silverFafnir.DragonKeyId,
+                        },
+                    },
+                    QuestId = avenueToFortuneQuestId,
                 },
-            },
-        };
+                cancellationToken: TestContext.Current.CancellationToken
+            );
 
-        string key = await this.StartDungeon(mockSession);
+        string key = startResponse.Data.IngameData.DungeonKey;
 
         DungeonRecordRecordResponse response = (
             await Client.PostMsgpack<DungeonRecordRecordResponse>(
@@ -1544,8 +1545,11 @@ public class DungeonRecordTest : TestFixture
                         {
                             new()
                             {
-                                AreaIdx = 1,
-                                Enemy = new List<int> { 1, 0 },
+                                AreaIdx = 0,
+                                Enemy = Enumerable.Repeat(
+                                    1,
+                                    startResponse.Data.OddsInfo.Enemy.Count
+                                ),
                             },
                         },
                         LiveUnitNoList = new List<int>(),
@@ -1558,8 +1562,19 @@ public class DungeonRecordTest : TestFixture
             )
         ).Data;
 
-        response.IngameResultData.RewardRecord.TakeCoin.Should().Be(1500);
-        response.IngameResultData.GrowRecord.TakeMana.Should().Be(1500);
+        int rupiesFromEnemies = startResponse
+            .Data.OddsInfo.Enemy.SelectMany(x => x.EnemyDropList)
+            .Sum(x => x.Coin);
+        int manaFromEnemies = startResponse
+            .Data.OddsInfo.Enemy.SelectMany(x => x.EnemyDropList)
+            .Sum(x => x.Mana);
+
+        response
+            .IngameResultData.RewardRecord.TakeCoin.Should()
+            .Be((int)Math.Round(rupiesFromEnemies * 1.5));
+        response
+            .IngameResultData.GrowRecord.TakeMana.Should()
+            .Be((int)Math.Round(manaFromEnemies * 1.5));
     }
 
     private async Task<string> StartDungeon(DungeonSession session)
@@ -1568,6 +1583,18 @@ public class DungeonRecordTest : TestFixture
         await this.DungeonService.SaveSession(CancellationToken.None);
 
         return key;
+    }
+
+    private async Task<string> StartDungeon(DungeonStartStartAssignUnitRequest request)
+    {
+        DragaliaResponse<DungeonStartStartAssignUnitResponse> response =
+            await this.Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(
+                "/dungeon_start/start_assign_unit",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        return response.Data.IngameData.DungeonKey;
     }
 
     private void SetupPhotonAuthentication()
