@@ -26,6 +26,8 @@ public class DungeonSession
 
     public int WallLevel { get; init; }
 
+    public List<List<int>> RewardBoostingAbilitiesPerUnit { get; init; } = [];
+
     public int QuestId => this.QuestData?.Id ?? 0;
 
     public int QuestGid => this.QuestData?.Gid ?? 0;

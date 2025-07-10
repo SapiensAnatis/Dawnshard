@@ -12,10 +12,12 @@ namespace DragaliaAPI.Features.Dungeon;
 
 public class QuestEnemyService : IQuestEnemyService
 {
+    private readonly EventDropService eventDropService;
     private readonly ILogger<QuestEnemyService> logger;
 
-    public QuestEnemyService(ILogger<QuestEnemyService> logger)
+    public QuestEnemyService(EventDropService eventDropService, ILogger<QuestEnemyService> logger)
     {
+        this.eventDropService = eventDropService;
         this.logger = logger;
     }
 
@@ -23,13 +25,18 @@ public class QuestEnemyService : IQuestEnemyService
     {
         AtgenEnemy[] enemyList = this.GetEnemyList(questId, areaNum);
 
-        if (!MasterAsset.QuestDropInfo.TryGetValue(questId, out QuestDropInfo? questDropInfo))
+        if (
+            !MasterAsset.QuestDropInfo.TryGetValue(questId, out QuestDropInfo? questDropInfo)
+            || !MasterAsset.QuestData.TryGetValue(questId, out QuestData? questData)
+        )
         {
             this.logger.LogWarning("Failed to get drop data for quest id {questId}", questId);
             return enemyList;
         }
 
-        if (questDropInfo.Drops.Length == 0 || enemyList.Length == 0)
+        questDropInfo.Drops.AddRange(eventDropService.GenerateEventMaterialDrops(questData));
+
+        if (questDropInfo.Drops.Count == 0 || enemyList.Length == 0)
         {
             return enemyList;
         }
@@ -48,7 +55,6 @@ public class QuestEnemyService : IQuestEnemyService
 
         for (int i = 0; i < totalQuantity; i++)
         {
-            // TODO: Only give drops to boss enemies for boss quests with minions
             AtgenEnemy enemy = enemyPicker.PickOne();
             DropEntity drop = dropPicker.PickOne();
 
@@ -59,7 +65,7 @@ public class QuestEnemyService : IQuestEnemyService
                     {
                         Coin = 0,
                         Mana = 0,
-                        DropList = new List<AtgenDropList>(),
+                        DropList = [],
                     }
                 );
             }
@@ -83,7 +89,9 @@ public class QuestEnemyService : IQuestEnemyService
         foreach (AtgenEnemy enemy in enemyList)
         {
             if (enemy.EnemyDropList.Count == 0)
+            {
                 continue;
+            }
 
             enemy.EnemyDropList[0].DropList = enemy
                 .EnemyDropList[0]
@@ -121,7 +129,7 @@ public class QuestEnemyService : IQuestEnemyService
         if (boss != null)
         {
             // Do not assign drops to minions
-            enemyList = new[] { boss };
+            enemyList = [boss];
         }
 
         return GetPicker(
@@ -129,7 +137,9 @@ public class QuestEnemyService : IQuestEnemyService
             enemy =>
             {
                 if (MasterAsset.EnemyParam.TryGetValue(enemy.ParamId, out EnemyParam? param))
+                {
                     return (int)param.Tough + 1;
+                }
 
                 return 1;
             }
@@ -139,9 +149,9 @@ public class QuestEnemyService : IQuestEnemyService
     private static IPick<DropEntity> GetDropPicker(QuestDropInfo questDropInfo) =>
         GetPicker(questDropInfo.Drops, entity => entity.Weight);
 
-    private static IPick<T> GetPicker<T>(T[] elements, Func<T, int> weight) =>
+    private static IPick<T> GetPicker<T>(IList<T> elements, Func<T, int> weight) =>
         // Workaround for FluentRandomPicker throwing when passing in single-element collections
-        elements.Length switch
+        elements.Count switch
         {
             1 => new SingleValuePicker<T>(elements[0]),
             > 1 => Out.Of().PrioritizedElements(elements).WithWeightSelector(weight),
@@ -165,7 +175,7 @@ public class QuestEnemyService : IQuestEnemyService
                 areaNum,
                 questId
             );
-            return Array.Empty<AtgenEnemy>();
+            return [];
         }
 
         string assetName = $"{areaInfo.ScenePath}/{areaInfo.AreaName}".ToLowerInvariant();
@@ -177,7 +187,7 @@ public class QuestEnemyService : IQuestEnemyService
                 questId,
                 assetName
             );
-            return Array.Empty<AtgenEnemy>();
+            return [];
         }
 
         if (!enemies.Enemies.TryGetValue(questData.VariationType, out IEnumerable<int>? enemyList))
@@ -186,7 +196,7 @@ public class QuestEnemyService : IQuestEnemyService
                 "Unable to retrieve enemy list for variation type {type}",
                 questData.VariationType
             );
-            return Array.Empty<AtgenEnemy>();
+            return [];
         }
 
         IEnumerable<EnemyParam> enemyParamList = enemyList.Select(x => MasterAsset.EnemyParam[x]);
@@ -218,17 +228,17 @@ public class QuestEnemyService : IQuestEnemyService
     private static List<AtgenEnemy> GetWallEnemyList(int wallId, int wallLevel)
     {
         QuestWallDetail questWallDetail = MasterAssetUtils.GetQuestWallDetail(wallId, wallLevel);
-        return new List<AtgenEnemy>()
-        {
+        return
+        [
             new AtgenEnemy()
             {
                 EnemyIdx = 0,
                 IsPop = true,
                 IsRare = false,
                 ParamId = questWallDetail.BossEnemyParamId,
-                EnemyDropList = new List<EnemyDropList>(),
+                EnemyDropList = [],
             },
-        };
+        ];
     }
 
     private static IEnumerable<EnemyParam> DuplicateEarnEventEnemies(

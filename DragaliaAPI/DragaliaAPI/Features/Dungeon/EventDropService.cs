@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Photon.Shared.Enums;
@@ -8,11 +9,11 @@ using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
+using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 
-namespace DragaliaAPI.Features.Event;
+namespace DragaliaAPI.Features.Dungeon;
 
-public class EventDropService(IRewardService rewardService, IEventRepository eventRepository)
-    : IEventDropService
+public class EventDropService(IEventRepository eventRepository)
 {
     // NOTE: This file will have comments from the relevant event wiki page. For further reference, see https://dragalialost.wiki/w/Special_Events
 
@@ -56,7 +57,7 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         if (progress.Count == 0)
             return Enumerable.Empty<AtgenEventPassiveUpList>();
 
-        int amount = rdm.Next(progress.Count);
+        int amount = this.rdm.Next(progress.Count);
         if (amount == 0)
             return Enumerable.Empty<AtgenEventPassiveUpList>();
 
@@ -70,12 +71,12 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
 
         for (int i = 0; i < amount; i++)
         {
-            int roll = rdm.Next(101);
+            int roll = this.rdm.Next(101);
 
             bool isRare = roll > 95;
             List<int> table = isRare ? rare : normal;
 
-            int drop = rdm.Next(table);
+            int drop = this.rdm.Next(table);
 
             if (!drops.TryAdd(drop, 1))
                 drops[drop]++;
@@ -111,64 +112,37 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         return drops.Select(x => new AtgenEventPassiveUpList(x.Key, x.Value));
     }
 
-    public async Task<IEnumerable<AtgenDropAll>> ProcessEventMaterialDrops(
-        QuestData quest,
-        PlayRecord record,
-        double buildDropMultiplier
-    )
+    public IEnumerable<DropEntity> GenerateEventMaterialDrops(QuestData quest)
     {
         int eventId = quest.Gid;
 
         if (!MasterAsset.EventData.TryGetValue(eventId, out EventData? evt))
         {
             // TODO: Add support for story events where all quests should drop rewards
-            return Enumerable.Empty<AtgenDropAll>();
+            return [];
         }
 
         EventKindType type = evt.EventKindType;
 
-        IEnumerable<Entity> drops = type switch
+        IEnumerable<DropEntity> drops = type switch
         {
-            EventKindType.Build => ProcessBuildEventDrops(quest, evt, record, buildDropMultiplier),
-            EventKindType.Raid => ProcessRaidEventDrops(quest, evt, record),
-            EventKindType.Combat => ProcessCombatEventDrops(quest, evt, record),
-            EventKindType.Clb01 => ProcessClb01EventDrops(quest, evt, record),
+            EventKindType.Build => this.GenerateBuildEventDrops(quest, evt),
+            EventKindType.Raid => this.GenerateRaidEventDrops(quest, evt),
+            EventKindType.Combat => this.GenerateCombatEventDrops(quest, evt),
+            EventKindType.Clb01 => this.GenerateClb01EventDrops(quest, evt),
             EventKindType.Collect => throw new NotImplementedException(), // see above
-            EventKindType.ExRush => ProcessExRushEventDrops(quest, evt, record),
+            EventKindType.ExRush => this.GenerateExRushEventDrops(quest, evt),
             EventKindType.ExHunter => throw new NotImplementedException(), // TODO: This is similar to Raid events I think
             EventKindType.Simple => throw new NotImplementedException(), // Only item is 'Pup Grub' lol
             EventKindType.BattleRoyal => throw new NotImplementedException(),
-            EventKindType.Earn => ProcessEarnEventDrops(quest, evt, record),
+            EventKindType.Earn => this.GenerateEarnEventDrops(quest, evt),
             _ => throw new UnreachableException(),
         };
 
-        List<AtgenDropAll> dropList = new();
-        foreach (Entity drop in drops)
-        {
-            if (drop.Quantity <= 0)
-                continue;
-
-            await rewardService.GrantReward(drop);
-            dropList.Add(
-                new AtgenDropAll(
-                    drop.Id,
-                    drop.Type,
-                    drop.Quantity,
-                    0,
-                    drop.Type == EntityTypes.BuildEventItem ? (float)buildDropMultiplier : 0
-                )
-            );
-        }
-
-        return dropList;
+        return drops;
     }
 
-    private IEnumerable<Entity> ProcessBuildEventDrops(
-        QuestData quest,
-        EventData evt,
-        PlayRecord record,
-        double buildDropMultiplier
-    )
+    private IEnumerable<DropEntity> GenerateBuildEventDrops(QuestData quest, EventData evt)
     {
         // https://dragalialost.wiki/w/Facility_Events
         DungeonTypes type = quest.DungeonType;
@@ -190,39 +164,30 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
             // It therefore provides a multiplier of 1 for the hard quest, and 0.5 for the easy quest.
             double t3Multiplier = quest.Id % 10 / 2d;
 
-            int t3Quantity = GenerateDropAmount(
-                10 * record.Wave * t3Multiplier * buildDropMultiplier
-            );
-            yield return new Entity(evt.ViewEntityType3, evt.ViewEntityId3, t3Quantity);
+            int t3Quantity = this.GenerateDropAmount(10 * t3Multiplier);
+            yield return new DropEntity(evt.ViewEntityId3, evt.ViewEntityType3, t3Quantity);
         }
 
         // T1 and T2 drop from all quests
         // But more often on harder quests
-        int t2Quantity = GenerateDropAmount(
-            10d
-                * (int)variation
-                * (variation < VariationTypes.VeryHard ? 0.5 : 1)
-                * buildDropMultiplier
+        int t2Quantity = this.GenerateDropAmount(
+            10d * (int)variation * (variation < VariationTypes.VeryHard ? 0.5 : 1)
         );
-        yield return new Entity(evt.ViewEntityType2, evt.ViewEntityId2, t2Quantity);
+        yield return new DropEntity(evt.ViewEntityId2, evt.ViewEntityType2, t2Quantity);
 
         // T1 drops from every quest
         // But we incentivize playing the other non Challenge Battle quests for it
-        int t1Quantity = GenerateDropAmount(
-            10d * (int)variation * (type == DungeonTypes.Normal ? 1.5 : 1) * buildDropMultiplier
+        int t1Quantity = this.GenerateDropAmount(
+            10d * (int)variation * (type == DungeonTypes.Normal ? 1.5 : 1)
         );
-        yield return new Entity(evt.ViewEntityType1, evt.ViewEntityId1, t1Quantity);
+        yield return new DropEntity(evt.ViewEntityId1, evt.ViewEntityType1, t1Quantity);
 
         // Each Facility Event features a differently-named variety of Event Points that can be collected during the event.
         // These points cannot be spent, but instead act as a score system, with rewards available depending on the total amount of points collected.
         // ===> See QuestCompletionService for those
     }
 
-    private IEnumerable<Entity> ProcessRaidEventDrops(
-        QuestData quest,
-        EventData evt,
-        PlayRecord record
-    )
+    private IEnumerable<DropEntity> GenerateRaidEventDrops(QuestData quest, EventData evt)
     {
         // All quests cost stamina, without any need for Otherworld Fragments, Otherworld Gems, Omega Keys.
         if (evt.IsMemoryEvent)
@@ -241,19 +206,19 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
             // Otherworld Fragments are a resource that can be used alongside getherwings to challenge raid battles. They are primarily obtained as drops from boss battles.
             case DungeonTypes.Normal:
             {
-                int fragmentQuantity = GenerateDropAmount(
+                int fragmentQuantity = this.GenerateDropAmount(
                     10d * (int)variation * (variation == VariationTypes.VeryHard ? 2 : 0.5)
                 );
-                yield return new Entity(
-                    EntityTypes.RaidEventItem,
+                yield return new DropEntity(
                     itemDict[RaidEventItemType.AdventItem1],
+                    EntityTypes.RaidEventItem,
                     fragmentQuantity
                 );
 
-                int emblem1Quantity = GenerateDropAmount(20d * (int)variation);
-                yield return new Entity(
-                    EntityTypes.RaidEventItem,
+                int emblem1Quantity = this.GenerateDropAmount(20d * (int)variation);
+                yield return new DropEntity(
                     itemDict[RaidEventItemType.RaidPoint1],
+                    EntityTypes.RaidEventItem,
                     emblem1Quantity
                 );
                 break;
@@ -265,12 +230,12 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
                 // They can be obtained as drops from Expert or Nightmare-difficulty raid battles.
                 if (variation is VariationTypes.Extreme or >= VariationTypes.Hell)
                 {
-                    int quantity = GenerateDropAmount(
+                    int quantity = this.GenerateDropAmount(
                         10d * (int)variation * (variation == VariationTypes.Hell ? 1.5 : 1)
                     );
-                    yield return new Entity(
-                        EntityTypes.RaidEventItem,
+                    yield return new DropEntity(
                         itemDict[RaidEventItemType.AdventItem2],
+                        EntityTypes.RaidEventItem,
                         quantity
                     );
                 }
@@ -285,31 +250,27 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
 
                 // Many raid events provide access to an EX Raid that can be accessed with Otherworld Gems after clearing the Expert-difficulty raid battle.
                 // Rewards primarily include a significantly larger amount of Gold Emblems than Expert difficulty offers.
-                int emblem2Quantity = GenerateDropAmount(
+                int emblem2Quantity = this.GenerateDropAmount(
                     10d
                         * (int)variation
                         * (variation >= VariationTypes.Hell ? 5 * (int)variation : 1)
                 );
-                yield return new Entity(EntityTypes.RaidEventItem, itemId, emblem2Quantity);
+                yield return new DropEntity(itemId, EntityTypes.RaidEventItem, emblem2Quantity);
                 break;
             }
         }
 
         // Participating in the raid event will award Peregrine Blazons.
         // TODO: No idea what the quantity should be for this lol
-        int blazonQuantity = GenerateDropAmount(50d * (int)variation);
-        yield return new Entity(
-            EntityTypes.RaidEventItem,
+        int blazonQuantity = this.GenerateDropAmount(50d * (int)variation);
+        yield return new DropEntity(
             itemDict[RaidEventItemType.SummonPoint],
+            EntityTypes.RaidEventItem,
             blazonQuantity
         );
     }
 
-    private IEnumerable<Entity> ProcessCombatEventDrops(
-        QuestData quest,
-        EventData evt,
-        PlayRecord record
-    )
+    private IEnumerable<DropEntity> GenerateCombatEventDrops(QuestData quest, EventData evt)
     {
         // https://dragalialost.wiki/w/Defensive_Events
 
@@ -321,10 +282,10 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
 
         // General versions of Defensive Events have only one form of currency, Primal Crystals,
         // which can be exchanged in the Event Shop for various rewards.
-        int primalCrystalQuantity = GenerateDropAmount(10d * (int)variation);
-        yield return new Entity(
-            EntityTypes.CombatEventItem,
+        int primalCrystalQuantity = this.GenerateDropAmount(10d * (int)variation);
+        yield return new DropEntity(
             itemDict[CombatEventItemType.ExchangeItem],
+            EntityTypes.CombatEventItem,
             primalCrystalQuantity
         );
 
@@ -332,20 +293,16 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         // They can be obtained as drops from Master-difficulty quests.
         if (variation >= VariationTypes.VeryHard)
         {
-            int stratagemQuantity = GenerateDropAmount(2d);
-            yield return new Entity(
-                EntityTypes.CombatEventItem,
+            int stratagemQuantity = this.GenerateDropAmount(2d);
+            yield return new DropEntity(
                 itemDict[CombatEventItemType.AdventItem],
+                EntityTypes.CombatEventItem,
                 stratagemQuantity
             );
         }
     }
 
-    private IEnumerable<Entity> ProcessClb01EventDrops(
-        QuestData quest,
-        EventData evt,
-        PlayRecord record
-    )
+    private IEnumerable<DropEntity> GenerateClb01EventDrops(QuestData quest, EventData evt)
     {
         // Also https://dragalialost.wiki/w/Defensive_Events
 
@@ -360,29 +317,25 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         // TODO: I have no idea how to check this, hopefully DungeonType should be good enough
         if (type != DungeonTypes.Normal)
         {
-            int t2Quantity = GenerateDropAmount(10d * (int)variation);
-            yield return new Entity(
-                EntityTypes.Clb01EventItem,
+            int t2Quantity = this.GenerateDropAmount(10d * (int)variation);
+            yield return new DropEntity(
                 itemDict[Clb01EventItemType.ExchangeItem2],
+                EntityTypes.Clb01EventItem,
                 t2Quantity
             );
         }
 
-        int t1Quantity = GenerateDropAmount(
+        int t1Quantity = this.GenerateDropAmount(
             20d * (int)variation * (variation >= VariationTypes.Hard ? 2 : 1)
         );
-        yield return new Entity(
-            EntityTypes.Clb01EventItem,
+        yield return new DropEntity(
             itemDict[Clb01EventItemType.ExchangeItem1],
+            EntityTypes.Clb01EventItem,
             t1Quantity
         );
     }
 
-    private IEnumerable<Entity> ProcessExRushEventDrops(
-        QuestData quest,
-        EventData evt,
-        PlayRecord record
-    )
+    private IEnumerable<DropEntity> GenerateExRushEventDrops(QuestData quest, EventData evt)
     {
         // Mega Man event
 
@@ -396,29 +349,25 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
 
         if (variation >= VariationTypes.VeryHard)
         {
-            int t2Quantity = GenerateDropAmount(5d * (int)variation);
-            yield return new Entity(
-                EntityTypes.ExRushEventItem,
+            int t2Quantity = this.GenerateDropAmount(5d * (int)variation);
+            yield return new DropEntity(
                 itemDict[ExRushEventItemType.ExRushPoint2],
+                EntityTypes.ExRushEventItem,
                 t2Quantity
             );
         }
 
-        int t1Quantity = GenerateDropAmount(
+        int t1Quantity = this.GenerateDropAmount(
             10d * (int)variation * (variation >= VariationTypes.Hard ? 2 : 1)
         );
-        yield return new Entity(
-            EntityTypes.ExRushEventItem,
+        yield return new DropEntity(
             itemDict[ExRushEventItemType.ExRushPoint1],
+            EntityTypes.ExRushEventItem,
             t1Quantity
         );
     }
 
-    private IEnumerable<Entity> ProcessEarnEventDrops(
-        QuestData quest,
-        EventData evt,
-        PlayRecord record
-    )
+    private IEnumerable<DropEntity> GenerateEarnEventDrops(QuestData quest, EventData evt)
     {
         // Invasion Events have two forms of currency, Guardian's Shields and Guardian's Swords,
         // which can be exchanged in the Event Shop for various rewards.
@@ -429,28 +378,28 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
 
         VariationTypes variation = quest.VariationType;
 
-        int t1Quantity = GenerateDropAmount(
+        int t1Quantity = this.GenerateDropAmount(
             10d * (int)variation * (variation >= VariationTypes.Hard ? 2 : 1)
         );
-        int t2Quantity = GenerateDropAmount(
+        int t2Quantity = this.GenerateDropAmount(
             10d * (int)variation * (variation <= VariationTypes.VeryHard ? 0.25 : 1)
         );
 
-        yield return new Entity(
-            EntityTypes.EarnEventItem,
+        yield return new DropEntity(
             itemDict[EarnEventItemType.ExchangeItem1],
+            EntityTypes.EarnEventItem,
             t1Quantity
         );
-        yield return new Entity(
-            EntityTypes.EarnEventItem,
+        yield return new DropEntity(
             itemDict[EarnEventItemType.ExchangeItem2],
+            EntityTypes.EarnEventItem,
             t2Quantity
         );
     }
 
     private int GenerateDropAmount(double average)
     {
-        double val = rdm.Next(75, 126) / 100d;
+        double val = this.rdm.Next(75, 126) / 100d;
         return (int)Math.Floor(average * val);
     }
 }
