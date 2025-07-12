@@ -12,5 +12,5 @@ public static partial class TalismanMapper
 
     [MapperRequiredMapping(RequiredMappingStrategy.Target)]
     [MapperIgnoreTarget(nameof(DbTalisman.Owner))]
-    public static partial DbTalisman ToDbTalisman(this TalismanList talismanList, long viewerId);
+    public static partial DbTalisman MapToDbTalisman(this TalismanList talismanList, long viewerId);
 }

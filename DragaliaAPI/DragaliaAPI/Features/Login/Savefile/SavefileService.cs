@@ -168,7 +168,10 @@ internal sealed class SavefileService(
             foreach (DragonList d in savefile.DragonList?.Take(cappedDragonStorage) ?? [])
             {
                 ulong oldKeyId = d.DragonKeyId;
-                DbPlayerDragonData dbEntry = d.ToDbPlayerDragonData(playerIdentityService.ViewerId);
+                DbPlayerDragonData dbEntry = d.MapToDbPlayerDragonData(
+                    playerIdentityService.ViewerId
+                );
+                dbEntry.DragonKeyId = 0; // Prevent EF from thinking this is an update
                 player.DragonList.Add(dbEntry);
 
                 dragonKeyIds.TryAdd((long)oldKeyId, dbEntry);
@@ -184,7 +187,8 @@ internal sealed class SavefileService(
             foreach (TalismanList t in savefile.TalismanList ?? new List<TalismanList>())
             {
                 ulong oldKeyId = t.TalismanKeyId;
-                DbTalisman dbEntry = t.ToDbTalisman(playerIdentityService.ViewerId);
+                DbTalisman dbEntry = t.MapToDbTalisman(playerIdentityService.ViewerId);
+                dbEntry.TalismanKeyId = 0;
                 player.TalismanList.Add(dbEntry);
 
                 talismanKeyIds.TryAdd((long)oldKeyId, dbEntry);
@@ -338,6 +342,11 @@ internal sealed class SavefileService(
                 )
             );
 
+            foreach (DbFortBuild fortBuild in player.BuildList)
+            {
+                fortBuild.BuildId = 0;
+            }
+
             logger.LogDebug(
                 "Mapping DbFortBuild step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
@@ -409,6 +418,11 @@ internal sealed class SavefileService(
                     SummonMapper.MapToDbSummonTicket
                 )
             );
+
+            foreach (DbSummonTicket ticket in player.SummonTickets)
+            {
+                ticket.KeyId = 0;
+            }
 
             logger.LogDebug(
                 "Mapping DbSummonTicket step done after {t} ms",

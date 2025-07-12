@@ -13,7 +13,7 @@ public static partial class DragonMapper
 
     [MapperRequiredMapping(RequiredMappingStrategy.Target)]
     [MapperIgnoreTarget(nameof(DbPlayerDragonData.Owner))]
-    public static partial DbPlayerDragonData ToDbPlayerDragonData(
+    public static partial DbPlayerDragonData MapToDbPlayerDragonData(
         this DragonList dragonList,
         long viewerId
     );

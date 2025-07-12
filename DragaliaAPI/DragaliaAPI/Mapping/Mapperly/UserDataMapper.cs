@@ -45,9 +45,11 @@ public static partial class UserDataMapper
             LastStaminaMultiUpdateTime = userData.LastStaminaMultiUpdateTime,
             StaminaMultiSurplusSecond = userData.StaminaMultiSurplusSecond,
             TutorialStatus = userData.TutorialStatus,
-            TutorialFlag = TutorialFlagUtil.ConvertFlagIntListToInt(userData.TutorialFlagList),
+            TutorialFlagList = userData.TutorialFlagList.ToHashSet(),
             FortOpenTime = userData.FortOpenTime,
             CreateTime = userData.CreateTime,
+            QuestSkipPoint = userData.QuestSkipPoint,
+            MaxDragonQuantity = userData.MaxDragonQuantity,
         };
     }
 }
