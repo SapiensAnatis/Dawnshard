@@ -235,7 +235,7 @@ public sealed partial class SummonService(
         await apiContext
             .PlayerSummonHistory.OrderByDescending(x => x.ExecDate)
             .Take(30) // See: https://dragalialost.wiki/w/Version_Changelog/Ver_1.18.0_Version_Update#Summon_History
-            .Select(x => x.ToSummonHistoryList())
+            .Select(x => x.MapToSummonHistoryList())
             .ToListAsync();
 
     public void AddSummonHistory(

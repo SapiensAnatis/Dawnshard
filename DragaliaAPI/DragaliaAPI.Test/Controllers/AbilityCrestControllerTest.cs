@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.AbilityCrests;
 using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Infrastructure.Results;
+using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -17,7 +17,6 @@ public class AbilityCrestControllerTest
     private readonly Mock<IAbilityCrestRepository> mockAbilityCrestRepository;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly Mock<IAbilityCrestService> mockAbilityCrestService;
-    private readonly IMapper mapper;
 
     public AbilityCrestControllerTest()
     {
@@ -25,16 +24,11 @@ public class AbilityCrestControllerTest
         this.mockUpdateDataService = new(MockBehavior.Strict);
         this.mockAbilityCrestService = new(MockBehavior.Strict);
 
-        this.mapper = new MapperConfiguration(cfg =>
-            cfg.AddMaps(typeof(Program).Assembly)
-        ).CreateMapper();
-
         this.abilityCrestController = new AbilityCrestController(
             mockAbilityCrestRepository.Object,
             mockUpdateDataService.Object,
             mockAbilityCrestService.Object,
-            LoggerTestUtils.Create<AbilityCrestController>(),
-            mapper
+            LoggerTestUtils.Create<AbilityCrestController>()
         );
 
         this.abilityCrestController.SetupMockContext();
@@ -290,13 +284,11 @@ public class AbilityCrestControllerTest
             abilityCrestSet
                 .Should()
                 .BeEquivalentTo(
-                    mapper.Map<AbilityCrestSetList>(
-                        new DbAbilityCrestSet()
-                        {
-                            ViewerId = IdentityTestUtils.ViewerId,
-                            AbilityCrestSetNo = setNo,
-                        }
-                    )
+                    new DbAbilityCrestSet()
+                    {
+                        ViewerId = IdentityTestUtils.ViewerId,
+                        AbilityCrestSetNo = setNo,
+                    }.ToAbilityCrestSetList()
                 );
 
             ++setNo;
@@ -350,22 +342,20 @@ public class AbilityCrestControllerTest
                 abilityCrestSet
                     .Should()
                     .BeEquivalentTo(
-                        mapper.Map<AbilityCrestSetList>(
-                            new DbAbilityCrestSet()
-                            {
-                                ViewerId = IdentityTestUtils.ViewerId,
-                                AbilityCrestSetNo = mappedSet,
-                                AbilityCrestSetName = "test",
-                                CrestSlotType1CrestId1 = AbilityCrestId.WorthyRivals,
-                                CrestSlotType1CrestId2 = AbilityCrestId.WhatDreamsMayCome,
-                                CrestSlotType1CrestId3 = AbilityCrestId.InanUnendingWorld,
-                                CrestSlotType2CrestId1 = AbilityCrestId.HisCleverBrother,
-                                CrestSlotType2CrestId2 = AbilityCrestId.DragonsNest,
-                                CrestSlotType3CrestId1 = AbilityCrestId.CrownofLightSerpentsBoon,
-                                CrestSlotType3CrestId2 = AbilityCrestId.TutelarysDestinyWolfsBoon,
-                                TalismanKeyId = 1,
-                            }
-                        )
+                        new DbAbilityCrestSet()
+                        {
+                            ViewerId = IdentityTestUtils.ViewerId,
+                            AbilityCrestSetNo = mappedSet,
+                            AbilityCrestSetName = "test",
+                            CrestSlotType1CrestId1 = AbilityCrestId.WorthyRivals,
+                            CrestSlotType1CrestId2 = AbilityCrestId.WhatDreamsMayCome,
+                            CrestSlotType1CrestId3 = AbilityCrestId.InanUnendingWorld,
+                            CrestSlotType2CrestId1 = AbilityCrestId.HisCleverBrother,
+                            CrestSlotType2CrestId2 = AbilityCrestId.DragonsNest,
+                            CrestSlotType3CrestId1 = AbilityCrestId.CrownofLightSerpentsBoon,
+                            CrestSlotType3CrestId2 = AbilityCrestId.TutelarysDestinyWolfsBoon,
+                            TalismanKeyId = 1,
+                        }.ToAbilityCrestSetList()
                     );
             }
             else
@@ -373,13 +363,11 @@ public class AbilityCrestControllerTest
                 abilityCrestSet
                     .Should()
                     .BeEquivalentTo(
-                        mapper.Map<AbilityCrestSetList>(
-                            new DbAbilityCrestSet()
-                            {
-                                ViewerId = IdentityTestUtils.ViewerId,
-                                AbilityCrestSetNo = setNo,
-                            }
-                        )
+                        new DbAbilityCrestSet()
+                        {
+                            ViewerId = IdentityTestUtils.ViewerId,
+                            AbilityCrestSetNo = setNo,
+                        }.ToAbilityCrestSetList()
                     );
             }
 

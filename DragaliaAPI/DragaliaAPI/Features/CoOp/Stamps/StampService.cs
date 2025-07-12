@@ -1,5 +1,5 @@
-using AutoMapper;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.PlayerDetails;
@@ -11,17 +11,11 @@ public class StampService : IStampService
     public const int EquipListSize = 32;
 
     private readonly IStampRepository repository;
-    private readonly IMapper mapper;
     private readonly IPlayerIdentityService playerIdentityService;
 
-    public StampService(
-        IStampRepository repository,
-        IMapper mapper,
-        IPlayerIdentityService playerIdentityService
-    )
+    public StampService(IStampRepository repository, IPlayerIdentityService playerIdentityService)
     {
         this.repository = repository;
-        this.mapper = mapper;
         this.playerIdentityService = playerIdentityService;
     }
 
@@ -45,19 +39,13 @@ public class StampService : IStampService
     )
     {
         // TODO: validate which stamps are owned
+        List<EquipStampList> concreteList =
+            newStampList as List<EquipStampList> ?? newStampList.ToList();
 
         await this.repository.SetEquipStampList(
-            newStampList.Select(x =>
-                this.mapper.Map<EquipStampList, DbEquippedStamp>(
-                    x,
-                    opts =>
-                        opts.AfterMap(
-                            (src, dest) => dest.ViewerId = this.playerIdentityService.ViewerId
-                        )
-                )
-            )
+            concreteList.Select(x => x.MapToDbEquippedStamp(playerIdentityService.ViewerId))
         );
 
-        return newStampList;
+        return concreteList;
     }
 }

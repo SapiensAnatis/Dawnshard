@@ -1,8 +1,8 @@
-using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
@@ -15,7 +15,6 @@ public class ClearPartyService : IClearPartyService
     private readonly IClearPartyRepository clearPartyRepository;
     private readonly IUnitRepository unitRepository;
     private readonly IDungeonRepository dungeonRepository;
-    private readonly IMapper mapper;
     private readonly IPlayerIdentityService playerIdentityService;
     private readonly ILogger<ClearPartyService> logger;
 
@@ -23,7 +22,6 @@ public class ClearPartyService : IClearPartyService
         IClearPartyRepository clearPartyRepository,
         IUnitRepository unitRepository,
         IDungeonRepository dungeonRepository,
-        IMapper mapper,
         IPlayerIdentityService playerIdentityService,
         ILogger<ClearPartyService> logger
     )
@@ -31,7 +29,6 @@ public class ClearPartyService : IClearPartyService
         this.clearPartyRepository = clearPartyRepository;
         this.unitRepository = unitRepository;
         this.dungeonRepository = dungeonRepository;
-        this.mapper = mapper;
         this.playerIdentityService = playerIdentityService;
         this.logger = logger;
     }
@@ -53,13 +50,13 @@ public class ClearPartyService : IClearPartyService
         );
 
         IEnumerable<PartySettingList> mappedPartyList = clearPartyUnits.Select(
-            this.mapper.Map<PartySettingList>
+            PartyMapper.MapToPartySettingList
         );
 
         if (!clearPartyUnits.Any())
         {
             // The game gracefully handles receiving an empty party by disabling the button
-            return new(mappedPartyList, Enumerable.Empty<AtgenLostUnitList>());
+            return new(mappedPartyList, []);
         }
 
         IEnumerable<DbDetailedPartyUnit> detailedPartyUnits = await this
@@ -94,34 +91,49 @@ public class ClearPartyService : IClearPartyService
             )
             .ToDictionaryAsync(x => x.TalismanKeyId, x => x.TalismanId);
 
-        IEnumerable<DbQuestClearPartyUnit> dbUnits = party.Select(x =>
-            this.mapper.Map<DbQuestClearPartyUnit>(
-                x,
-                opts =>
-                    opts.AfterMap(
-                        (src, dest) =>
-                        {
-                            dest.ViewerId = this.playerIdentityService.ViewerId;
-                            dest.QuestId = questId;
-                            dest.IsMulti = isMulti;
+        List<DbQuestClearPartyUnit> dbUnits = party
+            .Select(x =>
+            {
+                DragonId equippedDragonEntityId = dragons.GetValueOrDefault(
+                    (long)x.EquipDragonKeyId,
+                    DragonId.Empty
+                );
 
-                            dest.EquippedDragonEntityId = dragons.GetValueOrDefault(
-                                dest.EquipDragonKeyId,
-                                DragonId.Empty
-                            );
-                            dest.EquippedTalismanEntityId = talismans.GetValueOrDefault(
-                                dest.EquipTalismanKeyId,
-                                Talismans.Empty
-                            );
-                        }
-                    )
-            )
-        );
+                Talismans equippedTalismanEntityId = talismans.GetValueOrDefault(
+                    (long)x.EquipTalismanKeyId,
+                    Talismans.Empty
+                );
+
+                return new DbQuestClearPartyUnit()
+                {
+                    ViewerId = this.playerIdentityService.ViewerId,
+                    QuestId = questId,
+                    IsMulti = isMulti,
+                    UnitNo = x.UnitNo,
+                    CharaId = x.CharaId,
+                    EquipDragonKeyId = (long)x.EquipDragonKeyId,
+                    EquipWeaponBodyId = x.EquipWeaponBodyId,
+                    EquipCrestSlotType1CrestId1 = x.EquipCrestSlotType1CrestId1,
+                    EquipCrestSlotType1CrestId2 = x.EquipCrestSlotType1CrestId2,
+                    EquipCrestSlotType1CrestId3 = x.EquipCrestSlotType1CrestId3,
+                    EquipCrestSlotType2CrestId1 = x.EquipCrestSlotType2CrestId1,
+                    EquipCrestSlotType2CrestId2 = x.EquipCrestSlotType2CrestId2,
+                    EquipCrestSlotType3CrestId1 = x.EquipCrestSlotType3CrestId1,
+                    EquipCrestSlotType3CrestId2 = x.EquipCrestSlotType3CrestId2,
+                    EquipTalismanKeyId = (long)x.EquipTalismanKeyId,
+                    EquippedDragonEntityId = equippedDragonEntityId,
+                    EquippedTalismanEntityId = equippedTalismanEntityId,
+                    EquipWeaponSkinId = x.EquipWeaponSkinId,
+                    EditSkill1CharaId = x.EditSkill1CharaId,
+                    EditSkill2CharaId = x.EditSkill2CharaId,
+                };
+            })
+            .ToList();
 
         this.logger.LogDebug(
             "Storing quest clear party for quest {questId} with {n} units",
             questId,
-            dbUnits.Count()
+            dbUnits.Count
         );
 
         this.clearPartyRepository.SetQuestClearParty(questId, isMulti, dbUnits);

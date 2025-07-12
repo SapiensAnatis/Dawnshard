@@ -26,11 +26,18 @@ public static partial class SummonMapper
     );
 
     [MapperRequiredMapping(RequiredMappingStrategy.Target)]
-    public static partial SummonTicketList ToSummonTicketList(this DbSummonTicket summonTicket);
+    public static partial SummonTicketList MapToSummonTicketList(this DbSummonTicket summonTicket);
 
     [MapperRequiredMapping(RequiredMappingStrategy.Target)]
     [MapProperty(nameof(DbPlayerSummonHistory.SummonId), nameof(SummonHistoryList.SummonPointId))] // Always the same for our purposes.
-    public static partial SummonHistoryList ToSummonHistoryList(
+    public static partial SummonHistoryList MapToSummonHistoryList(
         this DbPlayerSummonHistory summonHistory
+    );
+
+    [MapperRequiredMapping(RequiredMappingStrategy.Target)]
+    [MapperIgnoreTarget(nameof(DbSummonTicket.Owner))]
+    public static partial DbSummonTicket MapToDbSummonTicket(
+        this SummonTicketList summonTicketList,
+        long viewerId
     );
 }

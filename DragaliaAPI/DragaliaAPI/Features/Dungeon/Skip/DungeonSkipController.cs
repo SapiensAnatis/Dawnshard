@@ -1,10 +1,10 @@
-﻿using AutoMapper;
-using DragaliaAPI.Database.Repositories;
+﻿using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Infrastructure;
+using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -22,8 +22,7 @@ public class DungeonSkipController(
     IOddsInfoService oddsInfoService,
     IPaymentService paymentService,
     IRewardService rewardService,
-    IUpdateDataService updateDataService,
-    IMapper mapper
+    IUpdateDataService updateDataService
 ) : DragaliaControllerBase
 {
     [HttpPost("start")]
@@ -41,7 +40,7 @@ public class DungeonSkipController(
                 .GetPartyUnits(request.PartyNo)
                 .AsNoTracking()
                 .ToListAsync(cancellationToken)
-        ).Select(mapper.Map<PartySettingList>);
+        ).Select(PartyMapper.MapToPartySettingList);
 
         IngameResultData ingameData = await this.GetIngameResultData(
             request.QuestId,
@@ -111,7 +110,7 @@ public class DungeonSkipController(
                 .AsNoTracking()
                 .ToListAsync(cancellationToken)
         )
-            .Select(mapper.Map<PartySettingList>)
+            .Select(PartyMapper.MapToPartySettingList)
             .ToList();
 
         List<IngameResultData> results = new(request.RequestQuestMultipleList.Count());

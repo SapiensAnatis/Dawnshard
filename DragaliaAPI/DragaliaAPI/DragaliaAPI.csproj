@@ -8,7 +8,6 @@
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AutoMapper" />
     <PackageReference Include="EntityGraphQL" />
     <PackageReference Include="EntityGraphQL.AspNet" />
     <PackageReference Include="FluentRandomPicker" />

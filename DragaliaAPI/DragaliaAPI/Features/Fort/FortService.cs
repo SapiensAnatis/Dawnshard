@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
@@ -23,7 +22,6 @@ public class FortService(
     IInventoryRepository inventoryRepository,
     ILogger<FortService> logger,
     IPlayerIdentityService playerIdentityService,
-    IMapper mapper,
     IFortMissionProgressionService fortMissionProgressionService,
     IPaymentService paymentService,
     IRewardService rewardService,
@@ -37,9 +35,25 @@ public class FortService(
 
     public async Task<IEnumerable<BuildList>> GetBuildList()
     {
-        return (await fortRepository.Builds.AsNoTracking().ToListAsync()).Select(
-            mapper.Map<BuildList>
-        );
+        return await fortRepository
+            .Builds.AsNoTracking()
+            .Select(x => new BuildList(
+                (ulong)x.BuildId,
+                x.PlantId,
+                x.Level,
+                // Using NotMapped getters like FortPlantDetailId isn't great, and will cause all columns to be
+                // retrieved, but the query needs to retrieve all but one of the columns anyway.
+                x.FortPlantDetailId,
+                x.PositionX,
+                x.PositionZ,
+                x.BuildStatus,
+                x.BuildStartDate,
+                x.BuildEndDate,
+                x.RemainTime,
+                x.LastIncomeTime,
+                x.IsNew
+            ))
+            .ToListAsync();
     }
 
     public async Task<FortDetail> AddCarpenter(PaymentTypes paymentType)

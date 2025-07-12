@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using DragaliaAPI.Features.Login.Savefile;
+﻿using DragaliaAPI.Features.Login.Savefile;
 using DragaliaAPI.Infrastructure.Metrics;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +31,6 @@ public class DbTestFixture : IDisposable
         SavefileService savefileService = new(
             this.ApiContext,
             mockCache.Object,
-            new MapperConfiguration(opts => opts.AddMaps(typeof(Program).Assembly)).CreateMapper(),
             mockLogger.Object,
             IdentityTestUtils.MockPlayerDetailsService.Object,
             [],

@@ -1,10 +1,10 @@
-using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Infrastructure;
+using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +21,6 @@ public class PartyController(
     IUnitRepository unitRepository,
     IUserDataRepository userDataRepository,
     IUpdateDataService updateDataService,
-    IMapper mapper,
     ILogger<PartyController> logger,
     IPartyPowerService partyPowerService,
     IPartyPowerRepository partyPowerRepository,
@@ -94,13 +93,17 @@ public class PartyController(
 
         logger.LogTrace("Party power {power}", partyPower);
 
-        DbParty dbEntry = mapper.Map<DbParty>(
-            new PartyList(
-                requestParty.PartyNo,
-                requestParty.PartyName,
-                requestParty.RequestPartySettingList
-            )
-        );
+        DbParty dbEntry = new DbParty()
+        {
+            ViewerId = this.ViewerId,
+            PartyNo = requestParty.PartyNo,
+            PartyName = requestParty.PartyName,
+            Units = requestParty
+                .RequestPartySettingList.Select(x =>
+                    x.MapToDbPartyUnit(this.ViewerId, requestParty.PartyNo)
+                )
+                .ToList(),
+        };
 
         await partyRepository.SetParty(dbEntry);
 

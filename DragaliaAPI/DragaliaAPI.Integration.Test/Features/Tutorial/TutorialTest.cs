@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Tutorial;
+using DragaliaAPI.Mapping.Mapperly;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Tutorial;
@@ -44,7 +45,7 @@ public class TutorialTest : TestFixture
             )
         )!;
 
-        UserData expUserData = this.Mapper.Map<UserData>(dbUserData);
+        UserData expUserData = dbUserData.MapToUserData();
         expUserData.TutorialStatus = step;
         UpdateDataList expUpdateData = new() { UserData = expUserData };
 

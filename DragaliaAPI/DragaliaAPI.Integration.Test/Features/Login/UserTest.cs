@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Mapping.Mapperly;
 
 namespace DragaliaAPI.Integration.Test.Features.Login;
 
@@ -14,7 +15,7 @@ public class UserTest : TestFixture
             x.ViewerId == this.ViewerId
         );
 
-        UserData expectedUserData = this.Mapper.Map<UserData>(dbUserData);
+        UserData expectedUserData = dbUserData.MapToUserData();
 
         (
             await this.Client.PostMsgpack<UserLinkedNAccountResponse>(

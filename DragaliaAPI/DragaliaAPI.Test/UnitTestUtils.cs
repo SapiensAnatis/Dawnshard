@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Infrastructure;
@@ -91,11 +90,6 @@ public static class UnitTestUtils
                 )
                 .WhenTypeIs<TimeSpan>()
         );
-    }
-
-    public static IMapper CreateMapper()
-    {
-        return new MapperConfiguration(cfg => cfg.AddMaps(typeof(Program).Assembly)).CreateMapper();
     }
 
     public static IReturnsResult<IUserDataRepository> SetupUserData(

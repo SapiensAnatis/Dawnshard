@@ -8,5 +8,12 @@ namespace DragaliaAPI.Mapping.Mapperly;
 public static partial class DragonGiftMapper
 {
     [MapperRequiredMapping(RequiredMappingStrategy.Target)]
-    public static partial DragonGiftList ToDragonGift(this DbPlayerDragonGift dbEntity);
+    public static partial DragonGiftList MapToDragonGiftList(this DbPlayerDragonGift dbEntity);
+
+    [MapperRequiredMapping(RequiredMappingStrategy.Target)]
+    [MapperIgnoreTarget(nameof(DbPlayerDragonGift.Owner))]
+    public static partial DbPlayerDragonGift MapToDbPlayerDragonGift(
+        this DragonGiftList dragonGiftList,
+        long viewerId
+    );
 }

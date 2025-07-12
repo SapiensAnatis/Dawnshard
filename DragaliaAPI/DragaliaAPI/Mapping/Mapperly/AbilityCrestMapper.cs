@@ -11,4 +11,11 @@ public static partial class AbilityCrestMapper
     [MapProperty(nameof(DbAbilityCrest.AbilityLevel), nameof(AbilityCrestList.Ability1Level))]
     [MapProperty(nameof(DbAbilityCrest.AbilityLevel), nameof(AbilityCrestList.Ability2Level))]
     public static partial AbilityCrestList ToAbilityCrestList(this DbAbilityCrest dbModel);
+
+    [MapperRequiredMapping(RequiredMappingStrategy.Target)]
+    [MapperIgnoreTarget(nameof(DbAbilityCrest.Owner))]
+    public static partial DbAbilityCrest MapToDbAbilityCrest(
+        this AbilityCrestList dbModel,
+        long viewerId
+    );
 }

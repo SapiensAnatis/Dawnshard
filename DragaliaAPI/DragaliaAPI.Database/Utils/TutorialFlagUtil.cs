@@ -69,7 +69,7 @@ public static class TutorialFlagUtil
         return ConvertFlagIntListToInt(flagList.Select(v => (int)v).ToHashSet(), flags);
     }
 
-    public static int ConvertFlagIntListToInt(ISet<int> flagList)
+    public static int ConvertFlagIntListToInt(IEnumerable<int> flagList)
     {
         return ConvertFlagIntListToInt(flagList, 0);
     }

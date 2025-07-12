@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.AbilityCrests;
 using DragaliaAPI.Infrastructure.Results;
+using DragaliaAPI.Mapping.Mapperly;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.AbilityCrests;
@@ -575,15 +576,13 @@ public class AbilityCrestTest : TestFixture
                 abilityCrestSet
                     .Should()
                     .BeEquivalentTo(
-                        this.Mapper.Map<AbilityCrestSetList>(
-                            new DbAbilityCrestSet()
-                            {
-                                ViewerId = this.ViewerId,
-                                AbilityCrestSetNo = setNo,
-                                AbilityCrestSetName = "test",
-                                CrestSlotType1CrestId1 = AbilityCrestId.WorthyRivals,
-                            }
-                        )
+                        new DbAbilityCrestSet()
+                        {
+                            ViewerId = this.ViewerId,
+                            AbilityCrestSetNo = setNo,
+                            AbilityCrestSetName = "test",
+                            CrestSlotType1CrestId1 = AbilityCrestId.WorthyRivals,
+                        }.ToAbilityCrestSetList()
                     );
             }
             else
@@ -591,9 +590,7 @@ public class AbilityCrestTest : TestFixture
                 abilityCrestSet
                     .Should()
                     .BeEquivalentTo(
-                        this.Mapper.Map<AbilityCrestSetList>(
-                            new DbAbilityCrestSet(this.ViewerId, index)
-                        )
+                        new DbAbilityCrestSet(this.ViewerId, index).ToAbilityCrestSetList()
                     );
             }
 

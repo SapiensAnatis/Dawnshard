@@ -94,7 +94,6 @@ builder
         );
     })
     .ConfigureHealthchecks()
-    .AddAutoMapper(Assembly.GetExecutingAssembly())
     .AddFeatureManagement();
 
 builder

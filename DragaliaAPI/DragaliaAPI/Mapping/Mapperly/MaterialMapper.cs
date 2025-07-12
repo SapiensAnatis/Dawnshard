@@ -8,5 +8,12 @@ namespace DragaliaAPI.Mapping.Mapperly;
 public static partial class MaterialMapper
 {
     [MapperRequiredMapping(RequiredMappingStrategy.Target)]
-    public static partial MaterialList ToMaterialList(this DbPlayerMaterial dbEntity);
+    public static partial MaterialList MapToMaterialList(this DbPlayerMaterial dbEntity);
+
+    [MapperRequiredMapping(RequiredMappingStrategy.Target)]
+    [MapperIgnoreTarget(nameof(DbPlayerMaterial.Owner))]
+    public static partial DbPlayerMaterial MapToDbPlayerMaterial(
+        this MaterialList materialList,
+        long viewerId
+    );
 }

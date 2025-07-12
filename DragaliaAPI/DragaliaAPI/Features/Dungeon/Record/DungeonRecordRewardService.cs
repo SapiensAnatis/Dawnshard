@@ -22,7 +22,6 @@ public class DungeonRecordRewardService(
     EventDropService eventDropService,
     IMissionProgressionService missionProgressionService,
     IQuestRepository questRepository,
-    ApiContext apiContext,
     ILogger<DungeonRecordRewardService> logger
 ) : IDungeonRecordRewardService
 {

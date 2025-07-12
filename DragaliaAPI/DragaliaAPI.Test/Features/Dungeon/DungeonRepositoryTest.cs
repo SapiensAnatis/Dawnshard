@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
@@ -61,7 +62,7 @@ public class DungeonRepositoryTest : RepositoryTestFixture
             await this
                 .ApiContext.PlayerPartyUnits.Where(x => x.ViewerId == ViewerId && x.PartyNo == 1)
                 .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
-        ).Select(this.Mapper.Map<PartySettingList>);
+        ).Select(PartyMapper.MapToPartySettingList);
 
         IEnumerable<IQueryable<DbDetailedPartyUnit>> buildQuery =
             this.dungeonRepository.BuildDetailedPartyUnit(party);

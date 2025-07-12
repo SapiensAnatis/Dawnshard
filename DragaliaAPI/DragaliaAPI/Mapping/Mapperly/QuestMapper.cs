@@ -8,5 +8,9 @@ namespace DragaliaAPI.Mapping.Mapperly;
 public static partial class QuestMapper
 {
     [MapperRequiredMapping(RequiredMappingStrategy.Target)]
-    public static partial QuestList ToQuestList(this DbQuest dbEntity);
+    public static partial QuestList MapToQuestList(this DbQuest dbEntity);
+
+    [MapperRequiredMapping(RequiredMappingStrategy.Target)]
+    [MapperIgnoreTarget(nameof(DbQuest.Owner))]
+    public static partial DbQuest MapToDbQuest(this QuestList questList, long viewerId);
 }
