@@ -27,7 +27,7 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       // Hack to get top-level await support required by Mock Service Worker for Playwright
-      target: mode === 'development' ? 'es2022' : 'modules'
+      target: mode === 'development' ? 'es2022' : 'baseline-widely-available'
     },
     preview: {
       port: 3001,
