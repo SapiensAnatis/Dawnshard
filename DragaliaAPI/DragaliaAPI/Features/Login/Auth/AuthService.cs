@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Security.Claims;
-using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Login.Savefile;
@@ -119,7 +118,7 @@ internal sealed partial class AuthService(
             LoadIndexResponse pendingSave = await baasRequestHelper.GetSavefile(token.EncodedToken);
             await savefileService.ThreadSafeImport(pendingSave);
         }
-        catch (Exception e) when (e is JsonException or AutoMapperMappingException)
+        catch (Exception e) when (e is JsonException)
         {
             Log.SavefileInvalid(logger, e);
         }

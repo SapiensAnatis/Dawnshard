@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using DragaliaAPI.Database;
+﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Owned;
 using DragaliaAPI.Database.Entities.Scaffold;
@@ -7,6 +6,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Web.Settings;
 using DragaliaAPI.Infrastructure;
+using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +17,6 @@ internal sealed class HelperService(
     IPartyRepository partyRepository,
     IDungeonRepository dungeonRepository,
     IUserDataRepository userDataRepository,
-    IMapper mapper,
     ApiContext apiContext,
     IPlayerIdentityService playerIdentityService,
     SettingsService settingsService,
@@ -84,9 +83,20 @@ internal sealed class HelperService(
             EmblemId = userData.EmblemId,
             MaxPartyPower = 1000,
             Guild = new() { GuildId = 0 },
+            SupportChara = detailedUnit.CharaData?.ToSupportChara(),
+            SupportWeaponBody = detailedUnit.WeaponBodyData?.ToSupportWeaponBody(),
+            SupportDragon = detailedUnit.DragonData?.ToSupportDragon(),
+            SupportCrestSlotType1List = detailedUnit
+                .CrestSlotType1CrestList.Select(SupportMapper.MapToSupportAbilityCrestList)
+                .ToList(),
+            SupportCrestSlotType2List = detailedUnit
+                .CrestSlotType2CrestList.Select(SupportMapper.MapToSupportAbilityCrestList)
+                .ToList(),
+            SupportCrestSlotType3List = detailedUnit
+                .CrestSlotType3CrestList.Select(SupportMapper.MapToSupportAbilityCrestList)
+                .ToList(),
+            SupportTalisman = detailedUnit.TalismanData?.ToSupportTalisman(),
         };
-
-        mapper.Map(detailedUnit, supportList);
 
         supportList.SupportCrestSlotType1List = supportList.SupportCrestSlotType1List.Where(x =>
             x != null

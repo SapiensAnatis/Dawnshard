@@ -8,5 +8,12 @@ namespace DragaliaAPI.Mapping.Mapperly;
 public static partial class WeaponSkinMapper
 {
     [MapperRequiredMapping(RequiredMappingStrategy.Target)]
-    public static partial WeaponSkinList ToWeaponSkinList(this DbWeaponSkin dbEntity);
+    public static partial WeaponSkinList MapToWeaponSkinList(this DbWeaponSkin dbEntity);
+
+    [MapperRequiredMapping(RequiredMappingStrategy.Target)]
+    [MapperIgnoreTarget(nameof(DbWeaponSkin.Owner))]
+    public static partial DbWeaponSkin MapToDbWeaponSkin(
+        this WeaponSkinList weaponSkinList,
+        long viewerId
+    );
 }

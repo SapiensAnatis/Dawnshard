@@ -65,7 +65,7 @@ public class UpdateDataService(
             switch (entity)
             {
                 case DbPlayerUserData userData:
-                    list.UserData = userData.ToUserData();
+                    list.UserData = userData.MapToUserData();
                     break;
                 case DbPlayerCharaData charaData:
                     list.CharaList ??= [];
@@ -81,11 +81,11 @@ public class UpdateDataService(
                     break;
                 case DbWeaponBody weaponBody:
                     list.WeaponBodyList ??= [];
-                    list.WeaponBodyList.Add(weaponBody.ToWeaponBodyList());
+                    list.WeaponBodyList.Add(weaponBody.MapToWeaponBodyList());
                     break;
                 case DbWeaponSkin weaponSkin:
                     list.WeaponSkinList ??= [];
-                    list.WeaponSkinList.Add(weaponSkin.ToWeaponSkinList());
+                    list.WeaponSkinList.Add(weaponSkin.MapToWeaponSkinList());
                     break;
                 case DbAbilityCrest abilityCrest:
                     list.AbilityCrestList ??= [];
@@ -97,43 +97,45 @@ public class UpdateDataService(
                     break;
                 case DbParty party:
                     list.PartyList ??= [];
-                    list.PartyList.Add(party.ToPartyList());
+                    list.PartyList.Add(party.MapToPartyList());
                     break;
                 case DbPlayerStoryState { StoryType: StoryTypes.Quest } story:
                     list.QuestStoryList ??= [];
-                    list.QuestStoryList.Add(story.ToQuestStoryList());
+                    list.QuestStoryList.Add(story.MapToQuestStoryList());
                     break;
                 case DbPlayerStoryState { StoryType: StoryTypes.Chara or StoryTypes.Dragon } story:
                     list.UnitStoryList ??= [];
-                    list.UnitStoryList.Add(story.ToUnitStoryList());
+                    list.UnitStoryList.Add(story.MapToUnitStoryList());
                     break;
                 case DbPlayerStoryState { StoryType: StoryTypes.Castle } story:
                     list.CastleStoryList ??= [];
-                    list.CastleStoryList.Add(story.ToCastleStoryList());
+                    list.CastleStoryList.Add(story.MapToCastleStoryList());
                     break;
                 case DbPlayerStoryState { StoryType: StoryTypes.DungeonMode } story:
                     list.DmodeStoryList ??= [];
-                    list.DmodeStoryList.Add(story.ToDmodeStoryList());
+                    list.DmodeStoryList.Add(story.MapToDmodeStoryList());
                     break;
                 case DbPlayerMaterial material:
                     list.MaterialList ??= [];
-                    list.MaterialList.Add(material.ToMaterialList());
+                    list.MaterialList.Add(material.MapToMaterialList());
                     break;
                 case DbPlayerDragonGift dragonGift:
                     list.DragonGiftList ??= [];
-                    list.DragonGiftList.Add(dragonGift.ToDragonGift());
+                    list.DragonGiftList.Add(dragonGift.MapToDragonGiftList());
                     break;
                 case DbQuest quest:
                     list.QuestList ??= [];
-                    list.QuestList.Add(quest.ToQuestList());
+                    list.QuestList.Add(quest.MapToQuestList());
                     break;
                 case DbFortBuild build:
                     list.BuildList ??= [];
-                    list.BuildList.Add(build.ToBuildList());
+                    list.BuildList.Add(build.MapToBuildList());
                     break;
                 case DbWeaponPassiveAbility weaponPassive:
                     list.WeaponPassiveAbilityList ??= [];
-                    list.WeaponPassiveAbilityList.Add(weaponPassive.ToWeaponPassiveAbilityList());
+                    list.WeaponPassiveAbilityList.Add(
+                        weaponPassive.MapToWeaponPassiveAbilityList()
+                    );
                     break;
                 case DbPlayerUseItem useItem:
                     list.ItemList ??= [];
@@ -145,22 +147,22 @@ public class UpdateDataService(
                     break;
                 case DbSummonTicket summonTicket:
                     list.SummonTicketList ??= [];
-                    list.SummonTicketList.Add(summonTicket.ToSummonTicketList());
+                    list.SummonTicketList.Add(summonTicket.MapToSummonTicketList());
                     break;
                 case DbQuestEvent questEvent:
                     list.QuestEventList ??= [];
-                    list.QuestEventList.Add(questEvent.ToQuestEventList());
+                    list.QuestEventList.Add(questEvent.MapToQuestEventList());
                     break;
                 case DbQuestTreasureList questTreasure:
                     list.QuestTreasureList ??= [];
-                    list.QuestTreasureList.Add(questTreasure.ToQuestTreasureList());
+                    list.QuestTreasureList.Add(questTreasure.MapToQuestTreasureList());
                     break;
                 case DbPartyPower partyPower:
                     list.PartyPowerData = partyPower.ToPartyPowerData();
                     break;
                 case DbPlayerQuestWall wall:
                     list.QuestWallList ??= [];
-                    list.QuestWallList.Add(wall.ToQuestWallList());
+                    list.QuestWallList.Add(wall.MapToQuestWallList());
                     break;
                 case DbPlayerBannerData bannerData:
                     list.SummonPointList ??= [];

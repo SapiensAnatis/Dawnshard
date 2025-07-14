@@ -9,4 +9,13 @@ public static partial class PartyPowerMapper
 {
     [MapperRequiredMapping(RequiredMappingStrategy.Target)]
     public static partial PartyPowerData ToPartyPowerData(this DbPartyPower dbEntity);
+
+    public static DbPartyPower MapToDbPartyPower(this PartyPowerData partyPowerData, long viewerId)
+    {
+        return new DbPartyPower()
+        {
+            ViewerId = viewerId,
+            MaxPartyPower = partyPowerData.MaxPartyPower,
+        };
+    }
 }

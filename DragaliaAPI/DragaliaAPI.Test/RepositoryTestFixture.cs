@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using DragaliaAPI.Database;
+﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Login.Savefile;
 using DragaliaAPI.Infrastructure.Metrics;
@@ -16,8 +15,6 @@ namespace DragaliaAPI.Test;
 public class RepositoryTestFixture : IDisposable
 {
     protected ApiContext ApiContext { get; init; }
-
-    protected IMapper Mapper { get; init; }
 
     public const long ViewerId = 1;
 
@@ -42,15 +39,12 @@ public class RepositoryTestFixture : IDisposable
         SavefileService savefileService = new(
             this.ApiContext,
             mockCache.Object,
-            new MapperConfiguration(opts => opts.AddMaps(typeof(Program).Assembly)).CreateMapper(),
             mockLogger.Object,
             IdentityTestUtils.MockPlayerDetailsService.Object,
             [],
             Substitute.For<IDragaliaApiMetrics>()
         );
         savefileService.Create().Wait();
-
-        this.Mapper = UnitTestUtils.CreateMapper();
     }
 
     public async Task AddToDatabase<TEntity>(TEntity data)

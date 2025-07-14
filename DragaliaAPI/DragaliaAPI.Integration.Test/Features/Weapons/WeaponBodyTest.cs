@@ -158,7 +158,7 @@ public class WeaponBodyTest : TestFixture
         response
             .UpdateDataList.WeaponBodyList.Should()
             .BeEquivalentTo(
-                new List<WeaponBodyList>() { testCase.ExpFinalState.ToWeaponBodyList() },
+                new List<WeaponBodyList>() { testCase.ExpFinalState.MapToWeaponBodyList() },
                 opts => opts.WithDateTimeTolerance()
             );
 
@@ -191,7 +191,7 @@ public class WeaponBodyTest : TestFixture
         {
             response
                 .UpdateDataList.WeaponPassiveAbilityList.Should()
-                .ContainEquivalentOf(this.Mapper.Map<WeaponPassiveAbilityList>(expPassive));
+                .ContainEquivalentOf(expPassive.MapToWeaponPassiveAbilityList());
 
             this.ApiContext.PlayerPassiveAbilities.Should()
                 .ContainEquivalentOf(expPassive, opts => opts.Excluding(x => x.ViewerId));
@@ -203,7 +203,7 @@ public class WeaponBodyTest : TestFixture
             response
                 .UpdateDataList.WeaponSkinList.Should()
                 .ContainEquivalentOf(
-                    this.Mapper.Map<WeaponSkinList>(expPassive),
+                    expPassive.MapToWeaponSkinList(),
                     opts => opts.Excluding(x => x.GetTime)
                 );
 

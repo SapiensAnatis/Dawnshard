@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Infrastructure;
+using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -16,15 +16,13 @@ public class AbilityCrestController(
     IAbilityCrestRepository abilityCrestRepository,
     IUpdateDataService updateDataService,
     IAbilityCrestService abilityCrestService,
-    ILogger<AbilityCrestController> logger,
-    IMapper mapper
+    ILogger<AbilityCrestController> logger
 ) : DragaliaControllerBase
 {
     private readonly IAbilityCrestRepository abilityCrestRepository = abilityCrestRepository;
     private readonly IUpdateDataService updateDataService = updateDataService;
     private readonly IAbilityCrestService abilityCrestService = abilityCrestService;
     private readonly ILogger<AbilityCrestController> logger = logger;
-    private readonly IMapper mapper = mapper;
 
     [Route("set_favorite")]
     [HttpPost]
@@ -185,7 +183,7 @@ public class AbilityCrestController(
                     ? dbAbilityCrestSets[index++]
                     : new DbAbilityCrestSet() { ViewerId = this.ViewerId, AbilityCrestSetNo = x }
             )
-            .Select(this.mapper.Map<AbilityCrestSetList>)
+            .Select(AbilityCrestSetMapper.ToAbilityCrestSetList)
             .ToArray();
 
         return this.Ok(
@@ -209,7 +207,21 @@ public class AbilityCrestController(
             return this.Code(ResultCode.CommonInvalidArgument);
         }
 
-        DbAbilityCrestSet newAbilityCrestSet = this.mapper.Map<DbAbilityCrestSet>(request);
+        DbAbilityCrestSet newAbilityCrestSet = new()
+        {
+            ViewerId = this.ViewerId,
+            AbilityCrestSetNo = request.AbilityCrestSetNo,
+            AbilityCrestSetName = request.AbilityCrestSetName,
+            CrestSlotType1CrestId1 = request.RequestAbilityCrestSetData.CrestSlotType1CrestId1,
+            CrestSlotType1CrestId2 = request.RequestAbilityCrestSetData.CrestSlotType1CrestId2,
+            CrestSlotType1CrestId3 = request.RequestAbilityCrestSetData.CrestSlotType1CrestId3,
+            CrestSlotType2CrestId1 = request.RequestAbilityCrestSetData.CrestSlotType2CrestId1,
+            CrestSlotType2CrestId2 = request.RequestAbilityCrestSetData.CrestSlotType2CrestId2,
+            CrestSlotType3CrestId1 = request.RequestAbilityCrestSetData.CrestSlotType3CrestId1,
+            CrestSlotType3CrestId2 = request.RequestAbilityCrestSetData.CrestSlotType3CrestId2,
+            TalismanKeyId = request.RequestAbilityCrestSetData.TalismanKeyId,
+        };
+
         await this.abilityCrestRepository.AddOrUpdateSet(newAbilityCrestSet);
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync(

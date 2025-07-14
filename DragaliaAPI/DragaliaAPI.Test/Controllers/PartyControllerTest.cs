@@ -1,4 +1,3 @@
-using AutoMapper;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Parties;
@@ -28,16 +27,11 @@ public class PartyControllerTest : RepositoryTestFixture
         this.mockLogger = new(MockBehavior.Loose);
         this.mockMissionProgressionService = new(MockBehavior.Strict);
 
-        IMapper mapper = new MapperConfiguration(cfg =>
-            cfg.AddMaps(typeof(Program).Assembly)
-        ).CreateMapper();
-
         this.partyController = new(
             this.mockPartyRepository.Object,
             this.mockUnitRepository.Object,
             this.mockUserDataRepository.Object,
             this.mockUpdateDataService.Object,
-            mapper,
             this.mockLogger.Object,
             new Mock<IPartyPowerService>().Object,
             new Mock<IPartyPowerRepository>().Object,
