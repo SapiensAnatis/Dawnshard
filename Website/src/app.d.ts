@@ -7,6 +7,7 @@ declare global {
     // interface Error {}
     interface Locals {
       hasValidJwt: boolean;
+      isAdmin: boolean;
       logger: bunyan.Logger;
     }
     // interface PageData {}

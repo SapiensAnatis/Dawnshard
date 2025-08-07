@@ -5,7 +5,10 @@ import type { UserProfile } from '$main/account/profile/userProfile.ts';
 export const handleUser: HttpResponseResolver = () => {
   return HttpResponse.json({
     viewerId: 1,
-    name: 'Euden'
+    name: 'Euden',
+    claims: {
+      admin: "true"
+    }
   });
 };
 
