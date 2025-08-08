@@ -140,7 +140,7 @@ public class DungeonRecordService(
         PlayerLevelResult playerLevelResult = await userService.AddExperience(experience); // TODO: Exp boost
 
         rewardRecord.PlayerLevelUpFstone = playerLevelResult.RewardedWyrmite;
-        growRecord.TakePlayerExp = experience;
+        growRecord.TakePlayerExp = playerLevelResult.ExpGained;
 
         int experiencePerChara = experience * 2;
 
