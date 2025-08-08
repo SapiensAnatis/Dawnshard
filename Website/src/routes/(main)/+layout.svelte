@@ -3,11 +3,11 @@
 
   import { Toaster } from '$shadcn/components/ui/sonner';
 
-  import type { LayoutData } from './$types';
+  import type { LayoutProps } from './$types';
   import Header from './header.svelte';
   import SideNav from './sideNav.svelte';
 
-  export let data: LayoutData;
+  const { data, children }: LayoutProps = $props();
 </script>
 
 <svelte:head>
@@ -15,10 +15,10 @@
 </svelte:head>
 
 <ModeWatcher disableHeadScriptInjection />
-<Header hasValidJwt={data.hasValidJwt} />
-<SideNav hasValidJwt={data.hasValidJwt} />
+<Header hasValidJwt={data.hasValidJwt} isAdmin={data.isAdmin} />
+<SideNav hasValidJwt={data.hasValidJwt} isAdmin={data.isAdmin} />
 <Toaster richColors />
 
 <main class="pl-0 md:pl-[var(--navigation-width)]" style:padding-top="var(--header-height)">
-  <slot />
+  {@render children?.()}
 </main>

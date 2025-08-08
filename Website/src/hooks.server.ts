@@ -101,7 +101,16 @@ const handleAuth: Handle = ({ event, resolve }) => {
   return resolve(event);
 };
 
-export const handle = sequence(handleHeadScript, handleLogger, handleAuth);
+const handleIsAdmin: Handle = ({ event, resolve }) => {
+  event.locals.isAdmin = false;
+  const isAdminString = event.cookies.get(Cookies.IsAdmin);
+
+  event.locals.isAdmin = isAdminString === 'true';
+
+  return resolve(event);
+};
+
+export const handle = sequence(handleHeadScript, handleLogger, handleAuth, handleIsAdmin);
 
 export const handleError: HandleServerError = ({ error, event, status, message }) => {
   event.locals.logger.error({ error, status, message }, 'Unhandled error occurred: {message}');

@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { PUBLIC_BAAS_CLIENT_ID, PUBLIC_BAAS_URL, PUBLIC_ENABLE_MSW } from '$env/static/public';
 import Cookies from '$lib/auth/cookies.ts';
 import getJwtMetadata from '$lib/auth/jwt.ts';
+import { userSchema } from '$main/account/user.ts';
 
 import type { PageServerLoad } from './$types';
 
@@ -17,6 +18,16 @@ const sessionTokenResponseSchema = z.object({
 
 const sdkTokenResponseSchema = z.object({
   idToken: z.string()
+});
+
+const baseCookieSettings = Object.freeze({
+  path: '/',
+  httpOnly: false,
+  ...(!PUBLIC_ENABLE_MSW && {
+    sameSite: 'lax',
+    httpOnly: true,
+    secure: true
+  })
 });
 
 export const load: PageServerLoad = async ({ cookies, locals, url, fetch }) => {
@@ -53,20 +64,16 @@ export const load: PageServerLoad = async ({ cookies, locals, url, fetch }) => {
 
   const maxAge = (jwtMetadata.expiryTimestampMs - Date.now()) / 1000;
 
-  if (!(await checkUserExists(idToken, url, fetch))) {
+  const userInfo = await getUserInfo(idToken, url, fetch);
+
+  if (!userInfo) {
     redirect(302, '/unauthorized/404');
   }
 
-  cookies.set(Cookies.IdToken, idToken, {
-    path: '/',
-    maxAge,
-    httpOnly: false,
-    ...(!PUBLIC_ENABLE_MSW && {
-      sameSite: 'lax',
-      httpOnly: true,
-      secure: true
-    })
-  });
+  const cookieSettings = { ...baseCookieSettings, maxAge };
+
+  cookies.set(Cookies.IdToken, idToken, cookieSettings);
+  cookies.set(Cookies.IsAdmin, userInfo.isAdmin.toString(), cookieSettings);
 
   cookies.delete('challengeString', {
     path: '/'
@@ -140,7 +147,7 @@ const getBaasToken = async (
   return idToken;
 };
 
-const checkUserExists = async (
+const getUserInfo = async (
   idToken: string,
   url: URL,
   fetch: (url: URL, req: RequestInit) => Promise<Response>
@@ -152,9 +159,9 @@ const checkUserExists = async (
   });
 
   if (userMeResponse.ok) {
-    return true;
+    return userSchema.parse(await userMeResponse.json());
   } else if (userMeResponse.status === 404) {
-    return false;
+    return null;
   } else {
     throw new Error(`Unexpected /user/me response in OAuth callback: ${userMeResponse.status}`);
   }

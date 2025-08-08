@@ -6,6 +6,7 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies }) => {
   cookies.delete(Cookies.IdToken, { path: '/' });
+  cookies.delete(Cookies.IsAdmin, { path: '/' });
 
   redirect(302, '/');
 };

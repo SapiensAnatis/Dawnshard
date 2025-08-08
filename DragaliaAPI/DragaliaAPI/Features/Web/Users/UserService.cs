@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities.Owned;
+using DragaliaAPI.Features.Login.Auth;
 using DragaliaAPI.Features.Web.Settings;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ namespace DragaliaAPI.Features.Web.Users;
 
 internal sealed class UserService(
     IPlayerIdentityService playerIdentityService,
+    ISessionService sessionService,
     SettingsService settingsService,
     ApiContext apiContext
 )
@@ -41,5 +43,44 @@ internal sealed class UserService(
             LastLoginTime = userData.LastLoginTime,
             Settings = settings,
         };
+    }
+
+    public async Task<ImpersonationSession> GetImpersonationSession(
+        CancellationToken cancellationToken
+    )
+    {
+        Session? session = await sessionService.LoadImpersonationSession(
+            playerIdentityService.AccountId
+        );
+
+        return new ImpersonationSession(session?.ViewerId);
+    }
+
+    public async Task ClearImpersonationSession(CancellationToken cancellationToken)
+    {
+        await sessionService.ClearUserImpersonation();
+    }
+
+    public async Task<string?> GetImpersonationTargetAccountId(
+        long impersonatedViewerId,
+        CancellationToken cancellationToken
+    )
+    {
+        return await apiContext
+            .Players.IgnoreQueryFilters()
+            .Where(x => x.ViewerId == impersonatedViewerId)
+            .Select(x => x.AccountId)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<ImpersonationSession> SetImpersonationSession(
+        string impersonatedAccountId,
+        long impersonatedViewerId,
+        CancellationToken cancellationToken
+    )
+    {
+        await sessionService.StartUserImpersonation(impersonatedAccountId, impersonatedViewerId);
+
+        return new ImpersonationSession(impersonatedViewerId);
     }
 }

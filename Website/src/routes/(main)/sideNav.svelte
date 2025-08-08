@@ -1,12 +1,12 @@
 <script lang="ts">
   import Routes from '$main/routes.svelte';
 
-  export let hasValidJwt: boolean;
+  const { hasValidJwt, isAdmin }: { hasValidJwt: boolean; isAdmin: boolean } = $props();
 </script>
 
 <div id="navigation" class="hidden flex-col gap-4 py-2 md:flex">
   <nav class="grid gap-1 px-2">
-    <Routes {hasValidJwt} />
+    <Routes {hasValidJwt} {isAdmin} />
   </nav>
 </div>
 
