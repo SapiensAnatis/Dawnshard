@@ -10,7 +10,12 @@ import { handleNews, handleNewsItem } from './news.ts';
 import { handleSavefileEdit, handleSavefileExport } from './savefile.ts';
 import { handleSettings } from './settings.ts';
 import { handleQuests, handleRankings } from './timeAttack.ts';
-import { handleUser, handleUserProfile } from './user.ts';
+import {
+  handleSetUserImpersonation,
+  handleUser,
+  handleUserImpersonation,
+  handleUserProfile
+} from './user.ts';
 import { handlePresentData } from './widgets.ts';
 
 // We need to be able to intercept requests to the Vite proxy (http://localhost:3001) as well as
@@ -54,5 +59,8 @@ export const handlers = [
   http.get(`${BASE_URL}/api/savefile/edit/widgets/present`, withAuth(handlePresentData)),
 
   http.get(`${BASE_URL}/api/time_attack/quests`, handleQuests),
-  http.get(`${BASE_URL}/api/time_attack/rankings/*`, handleRankings)
+  http.get(`${BASE_URL}/api/time_attack/rankings/*`, handleRankings),
+
+  http.get(`${BASE_URL}/api/user/impersonation_session`, withAuth(handleUserImpersonation)),
+  http.put(`${BASE_URL}/api/user/impersonation_session`, withAuth(handleSetUserImpersonation))
 ];
