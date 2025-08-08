@@ -1,3 +1,8 @@
 ﻿namespace DragaliaAPI.Features.Player;
 
-public record struct PlayerLevelResult(bool LevelUp, int NewLevel, int RewardedWyrmite);
+public record struct PlayerLevelResult(
+    bool LevelUp,
+    int NewLevel,
+    int ExpGained,
+    int RewardedWyrmite
+);
