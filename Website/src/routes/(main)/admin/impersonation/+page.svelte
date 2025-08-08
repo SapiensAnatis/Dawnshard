@@ -62,12 +62,9 @@
   <div class="flex w-[350px] flex-col gap-4">
     <div class="flex flex-col gap-3">
       <p>Current impersonation session: {impersonatedViewerId ?? 'null'}</p>
-      <Button
-        variant="secondary"
-        disabled={!impersonatedViewerId}
-        onclick={() => {
-          handleClear();
-        }}>Clear impersonation</Button>
+      <Button variant="secondary" dsabled={!impersonatedViewerId} onclick={handleClear}>
+        Clear impersonation
+      </Button>
     </div>
     <hr />
     <form class="flex flex-col gap-3" onsubmit={handleSubmit}>
