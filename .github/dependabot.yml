@@ -7,7 +7,7 @@ updates:
   - package-ecosystem: "nuget"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     groups:
       nuget:
         patterns:
@@ -15,7 +15,7 @@ updates:
   - package-ecosystem: "docker"
     directory: "/DragaliaAPI/DragaliaAPI"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     groups:
       docker:
         patterns:
@@ -31,7 +31,7 @@ updates:
   - package-ecosystem: "docker"
     directory: "/Website"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     groups:
       docker:
         patterns:
@@ -55,7 +55,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/Website"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     groups:
       npm:
         patterns:
