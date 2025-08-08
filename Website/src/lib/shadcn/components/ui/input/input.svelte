@@ -1,25 +1,36 @@
 <script lang="ts">
-	import type { HTMLInputAttributes } from "svelte/elements";
-	import type { WithElementRef } from "bits-ui";
-	import { cn } from "$lib/shadcn/utils.js.js";
-	import type { Field } from 'svelte-form-helper';
+  import type { HTMLInputAttributes } from 'svelte/elements';
+  import type { WithElementRef } from 'bits-ui';
+  import { cn } from '$lib/shadcn/utils.js.js';
+  import type { Field } from 'svelte-form-helper';
 
-	let {
-		ref = $bindable(null),
-		value = $bindable(),
-		field,
-		class: className,
-		...restProps
-	}: WithElementRef<HTMLInputAttributes> & {field: Field} = $props();
+  let {
+    ref = $bindable(null),
+    value = $bindable(),
+    field,
+    class: className,
+    ...restProps
+  }: WithElementRef<HTMLInputAttributes> & { field?: Field } = $props();
+
+  const mergedClass = cn(
+    'border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-base file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+    className
+  );
 </script>
 
-<input
-	bind:this={ref}
-	class={cn(
-		"border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-base file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-		className
-	)}
-	bind:value
-	use:field
-	{...restProps}
-/>
+{#if field}
+  <input
+    bind:this={ref}
+    class={mergedClass}
+    bind:value
+    use:field
+    {...restProps}
+  />
+{:else}
+  <input
+    bind:this={ref}
+    class={mergedClass}
+    bind:value
+    {...restProps}
+  />
+{/if}

@@ -10,9 +10,9 @@
 
   import HeaderContents from './headerContents.svelte';
 
-  let enhance = false;
+  let enhance = $state(false);
 
-  export let hasValidJwt: boolean;
+  const { hasValidJwt, isAdmin }: { hasValidJwt: boolean; isAdmin: boolean } = $props();
 
   onMount(() => {
     enhance = true;
@@ -39,7 +39,7 @@
                   Close <Close class="mt-0.5 ml-2 h-5 w-5" />
                 </Button>
               </Drawer.Close>
-              <Routes {hasValidJwt} drawer={true} />
+              <Routes {hasValidJwt} {isAdmin} drawer={true} />
             </div>
           </Drawer.Content>
         </Drawer.Portal>
