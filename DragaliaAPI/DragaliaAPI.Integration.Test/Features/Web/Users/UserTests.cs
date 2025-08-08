@@ -119,4 +119,33 @@ public class UserTests : WebTestFixture
                 }
             );
     }
+
+    public static TheoryData<HttpMethod> ImpersonationHttpMethods { get; } =
+        [HttpMethod.Get, HttpMethod.Put, HttpMethod.Delete];
+
+    [Theory]
+    [MemberData(nameof(ImpersonationHttpMethods))]
+    public async Task UserImpersonation_CannotAccessAsNonAdmin(HttpMethod method)
+    {
+        // Not interested in full tests for this functionality as it is a developer utility -- but it is essential to
+        // ensure it is secured and not accessible to regular users.
+
+        string token = TokenHelper.GetToken(
+            this.WebAccountId,
+            DateTime.UtcNow + TimeSpan.FromMinutes(5)
+        );
+
+        this.Client.DefaultRequestHeaders.Add("Cookie", $"idToken={token}");
+
+        HttpResponseMessage resp = await this.Client.SendAsync(
+            new HttpRequestMessage()
+            {
+                RequestUri = new Uri("/api/user/me/impersonation_session"),
+                Method = method,
+            },
+            TestContext.Current.CancellationToken
+        );
+
+        resp.Should().HaveStatusCode(HttpStatusCode.Forbidden);
+    }
 }

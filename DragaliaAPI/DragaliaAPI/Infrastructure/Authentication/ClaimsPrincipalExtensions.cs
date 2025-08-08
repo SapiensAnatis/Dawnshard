@@ -12,7 +12,8 @@ internal static class ClaimsPrincipalExtensions
         this ClaimsPrincipal claimsPrincipal,
         string accountId,
         long viewerId,
-        string? playerName = null
+        string? playerName = null,
+        bool isAdmin = false
     )
     {
         ClaimsIdentity dawnshardIdentity = new(
@@ -28,6 +29,11 @@ internal static class ClaimsPrincipalExtensions
         if (playerName is not null)
         {
             dawnshardIdentity.AddClaim(new Claim(CustomClaimType.PlayerName, playerName));
+        }
+
+        if (isAdmin)
+        {
+            dawnshardIdentity.AddClaim(new Claim(CustomClaimType.IsAdmin, "true"));
         }
 
         claimsPrincipal.AddIdentity(dawnshardIdentity);

@@ -28,4 +28,40 @@ internal sealed class UserController(UserService userService, ILogger<UserContro
     public async Task<ActionResult<UserProfile>> GetSelfProfile(
         CancellationToken cancellationToken
     ) => await userService.GetUserProfile(cancellationToken);
+
+    [HttpGet("me/impersonation_session")]
+    [Authorize(Policy = PolicyNames.RequireAdmin)]
+    public async Task<ActionResult<ImpersonationSession>> GetImpersonationSession(
+        CancellationToken cancellationToken
+    ) => await userService.GetImpersonationSession(cancellationToken);
+
+    [HttpPut("me/impersonation_session")]
+    [Authorize(Policy = PolicyNames.RequireAdmin)]
+    public async Task<ActionResult<ImpersonationSession>> SetImpersonationSession(
+        [FromForm] long impersonatedViewerId,
+        CancellationToken cancellationToken
+    )
+    {
+        string? impersonatedAccountId = await userService.GetImpersonationTargetAccountId(
+            impersonatedViewerId,
+            cancellationToken
+        );
+
+        if (impersonatedAccountId is null)
+        {
+            // Target player does not exist
+            return NotFound();
+        }
+
+        return await userService.SetImpersonationSession(
+            impersonatedAccountId,
+            impersonatedViewerId,
+            cancellationToken
+        );
+    }
+
+    [HttpDelete("me/impersonation_session")]
+    [Authorize(Policy = PolicyNames.RequireAdmin)]
+    public async Task ClearImpersonationSession(CancellationToken cancellationToken) =>
+        await userService.ClearImpersonationSession(cancellationToken);
 }

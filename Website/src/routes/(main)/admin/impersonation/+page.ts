@@ -2,7 +2,7 @@ import { impersonationSessionSchema } from '$main/admin/impersonation/impersonat
 
 import type { PageLoad } from './$types';
 
-const endpoint = '/api/user/impersonation_session';
+const endpoint = '/api/user/me/impersonation_session';
 
 export const load: PageLoad = async ({ fetch, url }) => {
   const presentRequest = new URL(endpoint, url.origin);

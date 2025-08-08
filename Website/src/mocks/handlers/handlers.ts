@@ -11,6 +11,7 @@ import { handleSavefileEdit, handleSavefileExport } from './savefile.ts';
 import { handleSettings } from './settings.ts';
 import { handleQuests, handleRankings } from './timeAttack.ts';
 import {
+  handleClearUserImpersonation,
   handleSetUserImpersonation,
   handleUser,
   handleUserImpersonation,
@@ -61,6 +62,10 @@ export const handlers = [
   http.get(`${BASE_URL}/api/time_attack/quests`, handleQuests),
   http.get(`${BASE_URL}/api/time_attack/rankings/*`, handleRankings),
 
-  http.get(`${BASE_URL}/api/user/impersonation_session`, withAuth(handleUserImpersonation)),
-  http.put(`${BASE_URL}/api/user/impersonation_session`, withAuth(handleSetUserImpersonation))
+  http.get(`${BASE_URL}/api/user/me/impersonation_session`, withAuth(handleUserImpersonation)),
+  http.put(`${BASE_URL}/api/user/me/impersonation_session`, withAuth(handleSetUserImpersonation)),
+  http.delete(
+    `${BASE_URL}/api/user/me/impersonation_session`,
+    withAuth(handleClearUserImpersonation)
+  )
 ];

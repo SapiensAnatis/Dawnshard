@@ -8,6 +8,8 @@
 
   import type { PageProps } from './$types';
 
+  const endpoint = '/api/user/me/impersonation_session';
+
   const { data }: PageProps = $props();
 
   let impersonatedViewerId = $state(data.impersonatedViewerId);
@@ -18,10 +20,8 @@
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    let response;
-
     try {
-      response = await fetch('/api/user/impersonation_session', {
+      const response = await fetch(endpoint, {
         method: 'PUT',
         body: data
       });
@@ -29,43 +29,32 @@
       if (!response.ok) {
         throw new Error('Invalid status code: ' + response.status);
       }
+
+      const parsedResponse = impersonationSessionSchema.parse(await response.json());
+      impersonatedViewerId = parsedResponse.impersonatedViewerId;
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
       toast.error('Failed to set impersonation session');
-
-      return;
     }
-
-    const parsedResponse = impersonationSessionSchema.parse(await response.json());
-    impersonatedViewerId = parsedResponse.impersonatedViewerId;
   }
 
   async function handleClear() {
-    const data = new FormData();
-    data.set('impersonatedViewerId', 'null');
-
-    let response;
-
     try {
-      response = await fetch('/api/user/impersonation_session', {
-        method: 'PUT',
-        body: data
+      const response = await fetch(endpoint, {
+        method: 'DELETE'
       });
 
       if (!response.ok) {
         throw new Error('Invalid status code: ' + response.status);
       }
+
+      impersonatedViewerId = null;
     } catch (error) {
       // eslint-disable-next-line
       console.error(error);
-      toast.error('Failed to set impersonation session');
-
-      return;
+      toast.error('Failed to clear impersonation session');
     }
-
-    const parsedResponse = impersonationSessionSchema.parse(await response.json());
-    impersonatedViewerId = parsedResponse.impersonatedViewerId;
   }
 </script>
 

@@ -52,7 +52,8 @@ public static class WebAuthenticationHelper
             context.Principal?.InitializeDawnshardIdentity(
                 playerInfo.AccountId,
                 playerInfo.ViewerId,
-                playerInfo.Name
+                playerInfo.Name,
+                isAdmin: playerInfo.IsAdmin
             );
         }
     }
@@ -94,7 +95,12 @@ public static class WebAuthenticationHelper
         var dbPlayerInfo = await dbContext
             .Players.IgnoreQueryFilters()
             .Where(x => x.AccountId == gameAccountId)
-            .Select(x => new { x.ViewerId, x.UserData!.Name })
+            .Select(x => new
+            {
+                x.ViewerId,
+                x.UserData!.Name,
+                x.IsAdmin,
+            })
             .FirstOrDefaultAsync();
 
         logger.LogDebug(
@@ -113,6 +119,7 @@ public static class WebAuthenticationHelper
             AccountId = gameAccountId,
             Name = dbPlayerInfo.Name,
             ViewerId = dbPlayerInfo.ViewerId,
+            IsAdmin = dbPlayerInfo.IsAdmin,
         };
 
         await cache.SetJsonAsync(
@@ -137,5 +144,7 @@ public static class WebAuthenticationHelper
         public long ViewerId { get; init; }
 
         public required string Name { get; init; }
+
+        public bool IsAdmin { get; init; }
     }
 }

@@ -7,6 +7,8 @@ public static class AuthConstants
         public const string RequireValidWebJwt = "RequireValidWebJwt";
 
         public const string RequireDawnshardIdentity = "RequireDawnshardIdentity";
+
+        public const string RequireAdmin = "RequireAdmin";
     }
 
     public static class IdentityLabels

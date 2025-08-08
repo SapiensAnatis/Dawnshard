@@ -19,4 +19,12 @@ public static class CustomClaimType
     /// Player name from user_data.
     /// </summary>
     public const string PlayerName = "PlayerName";
+
+    /// <summary>
+    /// Whether the user is an admin, based on the corresponding column in the Players table.
+    /// </summary>
+    /// <remarks>
+    /// Being an admin grants access to server administration tools on the website.
+    /// </remarks>
+    public const string IsAdmin = "IsAdmin";
 }

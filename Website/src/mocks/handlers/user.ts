@@ -30,9 +30,9 @@ export const handleSetUserImpersonation: HttpResponseResolver<
   PathParams,
   { target: number | null }
 > = async ({ request }) => {
-  const body = await request.clone().formData();
+  const data = await request.clone().formData();
 
-  const viewerId = body.get('impersonatedViewerId');
+  const viewerId = data.get('impersonatedViewerId');
   if (!viewerId || typeof viewerId !== 'string') {
     return HttpResponse.text(undefined, { status: 400 });
   }
@@ -52,4 +52,8 @@ export const handleSetUserImpersonation: HttpResponseResolver<
   return HttpResponse.json({
     impersonatedViewerId: viewerIdNumber
   });
+};
+
+export const handleClearUserImpersonation: HttpResponseResolver = () => {
+  return new HttpResponse(null, { status: 200 });
 };

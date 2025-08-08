@@ -55,6 +55,14 @@ public static partial class FeatureExtensions
                         )
                         .RequireClaim(CustomClaimType.AccountId)
                         .RequireClaim(CustomClaimType.ViewerId)
+            )
+            .AddPolicy(
+                PolicyNames.RequireAdmin,
+                builder =>
+                    builder
+                        .RequireAuthenticatedUser()
+                        .AddAuthenticationSchemes(SchemeNames.WebJwt)
+                        .RequireClaim(CustomClaimType.IsAdmin, "true")
             );
 
         IdentityModelEventSource.ShowPII = true;
