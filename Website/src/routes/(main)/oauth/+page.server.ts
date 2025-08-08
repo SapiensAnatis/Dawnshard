@@ -73,7 +73,7 @@ export const load: PageServerLoad = async ({ cookies, locals, url, fetch }) => {
   const cookieSettings = { ...baseCookieSettings, maxAge };
 
   cookies.set(Cookies.IdToken, idToken, cookieSettings);
-  cookies.set(Cookies.Claims, JSON.stringify(userInfo.claims), cookieSettings);
+  cookies.set(Cookies.IsAdmin, userInfo.isAdmin.toString(), cookieSettings);
 
   cookies.delete('challengeString', {
     path: '/'

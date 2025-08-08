@@ -101,34 +101,16 @@ const handleAuth: Handle = ({ event, resolve }) => {
   return resolve(event);
 };
 
-const handleClaims: Handle = ({ event, resolve }) => {
+const handleIsAdmin: Handle = ({ event, resolve }) => {
   event.locals.isAdmin = false;
-  const claims = event.cookies.get(Cookies.Claims);
+  const isAdminString = event.cookies.get(Cookies.IsAdmin);
 
-  if (!claims) {
-    return resolve(event);
-  }
-
-  let claimsObject: unknown;
-
-  try {
-    claimsObject = JSON.parse(claims);
-  } catch (err) {
-    console.error('Failed to parse claim cookie: ', err);
-    return resolve(event);
-  }
-
-  if (!claimsObject || typeof claimsObject !== 'object') {
-    console.error('Cookie was valid JSON but invalid type');
-    return resolve(event);
-  }
-
-  event.locals.isAdmin = 'admin' in claimsObject;
+  event.locals.isAdmin = isAdminString === 'true';
 
   return resolve(event);
 };
 
-export const handle = sequence(handleHeadScript, handleLogger, handleAuth, handleClaims);
+export const handle = sequence(handleHeadScript, handleLogger, handleAuth, handleIsAdmin);
 
 export const handleError: HandleServerError = ({ error, event, status, message }) => {
   event.locals.logger.error({ error, status, message }, 'Unhandled error occurred: {message}');

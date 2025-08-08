@@ -22,7 +22,7 @@ export const load: LayoutLoad = async ({ fetch, url }) => {
 
   const user = userSchema.parse(await response.json());
 
-  if (!('admin' in user.claims)) {
+  if (!user.isAdmin) {
     redirect(303, `/unauthorized/403?originalPage=${encodeURIComponent(url.pathname)}`);
   }
 };

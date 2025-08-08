@@ -1,7 +1,7 @@
 enum Cookies {
   ChallengeString = 'challengeString',
   IdToken = 'idToken',
-  Claims = 'claims'
+  IsAdmin = 'isAdmin'
 }
 
 export default Cookies;

@@ -6,9 +6,7 @@ export const handleUser: HttpResponseResolver = () => {
   return HttpResponse.json({
     viewerId: 1,
     name: 'Euden',
-    claims: {
-      admin: 'true'
-    }
+    isAdmin: true
   });
 };
 
