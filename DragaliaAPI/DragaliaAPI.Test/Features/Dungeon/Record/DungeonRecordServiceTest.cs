@@ -147,7 +147,7 @@ public class DungeonRecordServiceTest
         this.mockUserService.Setup(x => x.RemoveStamina(StaminaType.Single, 40))
             .Returns(Task.CompletedTask);
         this.mockUserService.Setup(x => x.AddExperience(400))
-            .ReturnsAsync(new PlayerLevelResult(true, 100, 50));
+            .ReturnsAsync(new PlayerLevelResult(true, 100, 400, 50));
 
         this.mockDungeonRewardService.Setup(x =>
                 x.ProcessQuestMissionCompletion(playRecord, session)

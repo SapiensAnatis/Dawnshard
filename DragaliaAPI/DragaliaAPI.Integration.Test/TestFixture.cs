@@ -302,8 +302,8 @@ public class TestFixture
         userData.Crystal = 1_200_000;
         userData.DewPoint = 100_000_000;
         userData.ManaPoint = 100_000_000;
-        userData.Level = 250;
-        userData.Exp = 28253490;
+        userData.Level = 100; // Tests expect to receive XP but you won't get any at level 250
+        userData.Exp = 423490;
         userData.StaminaSingle = 999;
         userData.QuestSkipPoint = 300;
 
