@@ -106,9 +106,10 @@ if (builder.Configuration.GetValue<bool>("EnablePhoton"))
 if (builder.Configuration.GetValue<bool>("EnableWebsite"))
 {
     builder
-        .AddNpmApp("website", workingDirectory: "../Website", scriptName: "dev")
+        .AddNpmApp("website", workingDirectory: "../../Website", scriptName: "dev")
         .WithEnvironment("PUBLIC_ENABLE_MSW", "false")
-        .WithEnvironment("DAWNSHARD_API_URL_SSR", dragaliaApi.GetEndpoint("http"));
+        .WithEnvironment("DAWNSHARD_API_URL_SSR", dragaliaApi.GetEndpoint("http"))
+        .WithHttpEndpoint(null, 3001, "http");
 }
 
 builder.Build().Run();
