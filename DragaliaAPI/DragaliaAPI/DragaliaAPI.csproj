@@ -8,8 +8,6 @@
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="EntityGraphQL" />
-    <PackageReference Include="EntityGraphQL.AspNet" />
     <PackageReference Include="FluentRandomPicker" />
     <PackageReference Include="FluentValidation" />
     <PackageReference Include="Hangfire.AspNetCore" />

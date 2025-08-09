@@ -21,8 +21,6 @@ public class ApiJsonOptions
         options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         options.PropertyNamingPolicy = CustomSnakeCaseNamingPolicy.Instance;
         options.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
-        // GraphQL
-        options.IncludeFields = true;
     };
 
     static ApiJsonOptions()
