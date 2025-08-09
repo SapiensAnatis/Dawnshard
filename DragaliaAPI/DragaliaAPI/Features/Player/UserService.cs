@@ -21,6 +21,10 @@ public class UserService(
 
     private const int WyrmiteLevelUpReward = 50;
 
+    private const int MaxLevel = 250;
+
+    private static readonly int MaxTotalExp = MasterAsset.UserLevel[MaxLevel].TotalExp;
+
     public int QuestSkipPointMax => MaxQuestSkipPoint;
     public int StaminaMultiMax => MaxMultiStamina;
 
@@ -197,7 +201,9 @@ public class UserService(
 
         DbPlayerUserData data = await userDataRepository.GetUserDataAsync();
 
-        data.Exp += experience;
+        int oldExp = data.Exp;
+        data.Exp = Math.Min(data.Exp + experience, MaxTotalExp);
+        int expGained = data.Exp - oldExp;
 
         UserLevel current = MasterAsset.UserLevel[data.Level];
 
@@ -220,6 +226,6 @@ public class UserService(
             current = next;
         }
 
-        return new PlayerLevelResult(totalReward > 0, data.Level, totalReward);
+        return new PlayerLevelResult(totalReward > 0, data.Level, expGained, totalReward);
     }
 }
