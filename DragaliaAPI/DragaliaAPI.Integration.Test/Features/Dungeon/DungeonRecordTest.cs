@@ -6,6 +6,7 @@ using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
+using LinqToDB.Tools;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Dungeon;
@@ -1575,6 +1576,147 @@ public class DungeonRecordTest : TestFixture
         response
             .IngameResultData.GrowRecord.TakeMana.Should()
             .Be((int)Math.Round(manaFromEnemies * 1.5));
+    }
+
+    [Fact]
+    public async Task Record_PlayerLevelMaxed_GrantsZeroXp()
+    {
+        int avenueToFortuneQuestId = 202060104;
+
+        int maxLevel = 250;
+        int maxTotalExp = MasterAsset.UserLevel[maxLevel].TotalExp;
+
+        await this
+            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdateAsync(
+                e => e.SetProperty(p => p.Exp, maxTotalExp).SetProperty(p => p.Level, maxLevel),
+                TestContext.Current.CancellationToken
+            );
+
+        await AddRangeToDatabase(
+            [
+                new DbQuest()
+                {
+                    QuestId = avenueToFortuneQuestId,
+                    State = 0,
+                    ViewerId = ViewerId,
+                },
+            ]
+        );
+
+        DragaliaResponse<DungeonStartStartAssignUnitResponse> startResponse =
+            await this.Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(
+                "/dungeon_start/start_assign_unit",
+                new DungeonStartStartAssignUnitRequest()
+                {
+                    SupportViewerId = 0,
+                    RequestPartySettingList = new List<PartySettingList>()
+                    {
+                        new() { CharaId = Charas.ThePrince },
+                    },
+                    QuestId = avenueToFortuneQuestId,
+                },
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        string key = startResponse.Data.IngameData.DungeonKey;
+
+        DungeonRecordRecordResponse response = (
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    DungeonKey = key,
+                    PlayRecord = new PlayRecord
+                    {
+                        Time = 10,
+                        TreasureRecord = new List<AtgenTreasureRecord>()
+                        {
+                            new() { AreaIdx = 0, Enemy = [] },
+                        },
+                        LiveUnitNoList = new List<int>(),
+                        DamageRecord = new List<AtgenDamageRecord>(),
+                        DragonDamageRecord = new List<AtgenDamageRecord>(),
+                        BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                    },
+                },
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        ).Data;
+
+        response.IngameResultData.GrowRecord.TakePlayerExp.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task Record_PlayerLevelBecomesMaxed_GrantsOnlyNecessaryXp()
+    {
+        int avenueToFortuneQuestId = 202060104;
+
+        int maxLevel = 250;
+        int maxTotalExp = MasterAsset.UserLevel[maxLevel].TotalExp;
+
+        await this
+            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdateAsync(
+                e =>
+                    e.SetProperty(p => p.Exp, maxTotalExp - 1)
+                        .SetProperty(p => p.Level, maxLevel - 1),
+                TestContext.Current.CancellationToken
+            );
+
+        await AddRangeToDatabase(
+            [
+                new DbQuest()
+                {
+                    QuestId = avenueToFortuneQuestId,
+                    State = 0,
+                    ViewerId = ViewerId,
+                },
+            ]
+        );
+
+        DragaliaResponse<DungeonStartStartAssignUnitResponse> startResponse =
+            await this.Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(
+                "/dungeon_start/start_assign_unit",
+                new DungeonStartStartAssignUnitRequest()
+                {
+                    SupportViewerId = 0,
+                    RequestPartySettingList = new List<PartySettingList>()
+                    {
+                        new() { CharaId = Charas.ThePrince },
+                    },
+                    QuestId = avenueToFortuneQuestId,
+                },
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        string key = startResponse.Data.IngameData.DungeonKey;
+
+        DungeonRecordRecordResponse response = (
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    DungeonKey = key,
+                    PlayRecord = new PlayRecord
+                    {
+                        Time = 10,
+                        TreasureRecord = new List<AtgenTreasureRecord>()
+                        {
+                            new() { AreaIdx = 0, Enemy = [] },
+                        },
+                        LiveUnitNoList = new List<int>(),
+                        DamageRecord = new List<AtgenDamageRecord>(),
+                        DragonDamageRecord = new List<AtgenDamageRecord>(),
+                        BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                    },
+                },
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        ).Data;
+
+        response.IngameResultData.GrowRecord.TakePlayerExp.Should().Be(1);
+        response.IngameResultData.RewardRecord.PlayerLevelUpFstone.Should().Be(50);
     }
 
     private async Task<string> StartDungeon(DungeonSession session)
