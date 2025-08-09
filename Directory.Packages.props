@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.4.0" />
@@ -27,8 +28,8 @@
     />
     <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="9.0.8" />
     <PackageVersion Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="4.14.0" />
-    <!-- Pin Microsoft.CodeAnalysis.CSharp to compiler version of .NET 9.0.100 SDK -->
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="[4.12.0]" />
+    <!-- Pin Microsoft.CodeAnalysis.CSharp to compiler version of Visual Studio 17.8 -->
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="[4.8.0]" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="4.14.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.8" />
@@ -84,7 +85,7 @@
     <PackageVersion Include="Serilog.Sinks.Async" Version="2.1.0" />
     <PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="4.2.0" />
     <PackageVersion Include="Serilog.Sinks.Seq" Version="9.0.0" />
-    <PackageVersion Include="System.Text.Json" Version="9.0.5" />
+    <PackageVersion Include="System.Text.Json" Version="9.0.8" />
     <PackageVersion Include="Serilog" Version="4.3.0" />
     <PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.0.0" />
