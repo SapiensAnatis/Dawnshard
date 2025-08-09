@@ -269,7 +269,7 @@ public class AbilityCrestControllerTest
     public async Task GetAbilityCrestSetList_ReturnsAllEmptySetsIfNoEntriesInDb()
     {
         this.mockAbilityCrestRepository.Setup(x => x.AbilityCrestSets)
-            .Returns(new List<DbAbilityCrestSet>().AsQueryable().BuildMock());
+            .Returns(new List<DbAbilityCrestSet>().BuildMock());
 
         AbilityCrestGetAbilityCrestSetListResponse data = (
             await this.abilityCrestController.GetAbilityCrestSetList(
@@ -322,9 +322,7 @@ public class AbilityCrestControllerTest
                         CrestSlotType3CrestId2 = AbilityCrestId.TutelarysDestinyWolfsBoon,
                         TalismanKeyId = 1,
                     },
-                }
-                    .AsQueryable()
-                    .BuildMock()
+                }.BuildMock()
             );
 
         AbilityCrestGetAbilityCrestSetListResponse data = (

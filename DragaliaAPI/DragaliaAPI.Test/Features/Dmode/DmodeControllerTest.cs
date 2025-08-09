@@ -100,9 +100,7 @@ public class DmodeControllerTest
                         StoryType = StoryTypes.DungeonMode,
                         State = StoryState.Read,
                     },
-                }
-                    .AsQueryable()
-                    .BuildMock()
+                }.BuildMock()
             );
 
         List<DmodeServitorPassiveList> passiveList = new()
@@ -185,9 +183,7 @@ public class DmodeControllerTest
                         StoryType = StoryTypes.DungeonMode,
                         State = StoryState.Read,
                     },
-                }
-                    .AsQueryable()
-                    .BuildMock()
+                }.BuildMock()
             );
 
         List<DmodeServitorPassiveList> passiveList = new()

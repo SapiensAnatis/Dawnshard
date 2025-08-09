@@ -76,9 +76,7 @@ public class DmodeServiceTest
                         RecoveryCount = recoveryCount,
                         RecoveryTime = this.fixedTime,
                     },
-                }
-                    .AsQueryable()
-                    .BuildMock()
+                }.BuildMock()
             );
 
         DmodeInfo info = await dmodeService.GetInfo();
@@ -103,7 +101,7 @@ public class DmodeServiceTest
 
         mockDmodeRepository
             .SetupGet(x => x.Info)
-            .Returns(new List<DbPlayerDmodeInfo>().AsQueryable().BuildMock());
+            .Returns(new List<DbPlayerDmodeInfo>().BuildMock());
 
         DmodeInfo info = await dmodeService.GetInfo();
 
@@ -137,11 +135,7 @@ public class DmodeServiceTest
 
         mockDmodeRepository
             .SetupGet(x => x.Dungeon)
-            .Returns(
-                new List<DbPlayerDmodeDungeon> { dbDungeon }
-                    .AsQueryable()
-                    .BuildMock()
-            );
+            .Returns(new List<DbPlayerDmodeDungeon> { dbDungeon }.BuildMock());
 
         DmodeDungeonInfo info = await dmodeService.GetDungeonInfo();
 
@@ -161,7 +155,7 @@ public class DmodeServiceTest
     {
         mockDmodeRepository
             .SetupGet(x => x.Dungeon)
-            .Returns(new List<DbPlayerDmodeDungeon>().AsQueryable().BuildMock());
+            .Returns(new List<DbPlayerDmodeDungeon>().BuildMock());
 
         DmodeDungeonInfo expectedInfo = new();
 
@@ -192,9 +186,7 @@ public class DmodeServiceTest
                         PassiveId = DmodeServitorPassiveType.Exp,
                         Level = 5,
                     },
-                }
-                    .AsQueryable()
-                    .BuildMock()
+                }.BuildMock()
             );
 
         List<DmodeServitorPassiveList> servitors = (
@@ -224,11 +216,7 @@ public class DmodeServiceTest
 
         mockDmodeRepository
             .SetupGet(x => x.Expedition)
-            .Returns(
-                new List<DbPlayerDmodeExpedition>() { dbExpedition }
-                    .AsQueryable()
-                    .BuildMock()
-            );
+            .Returns(new List<DbPlayerDmodeExpedition>() { dbExpedition }.BuildMock());
 
         DmodeExpedition expedition = await dmodeService.GetExpedition();
 
@@ -372,9 +360,7 @@ public class DmodeServiceTest
             },
         };
 
-        mockDmodeRepository
-            .SetupGet(x => x.ServitorPassives)
-            .Returns(dbServitors.AsQueryable().BuildMock());
+        mockDmodeRepository.SetupGet(x => x.ServitorPassives).Returns(dbServitors.BuildMock());
 
         mockPaymentService
             .Setup(x => x.ProcessPayment(It.IsAny<Entity>(), null))
@@ -406,9 +392,7 @@ public class DmodeServiceTest
             Level = 0,
         };
 
-        mockDmodeRepository
-            .SetupGet(x => x.ServitorPassives)
-            .Returns(dbServitors.AsQueryable().BuildMock());
+        mockDmodeRepository.SetupGet(x => x.ServitorPassives).Returns(dbServitors.BuildMock());
         mockDmodeRepository
             .Setup(x => x.AddServitorPassive(DmodeServitorPassiveType.Exp, 0))
             .Returns(expServitor);
@@ -450,9 +434,7 @@ public class DmodeServiceTest
             inputList.Add(new DmodeServitorPassiveList(DmodeServitorPassiveType.Exp, i));
         }
 
-        mockDmodeRepository
-            .SetupGet(x => x.ServitorPassives)
-            .Returns(dbServitors.AsQueryable().BuildMock());
+        mockDmodeRepository.SetupGet(x => x.ServitorPassives).Returns(dbServitors.BuildMock());
 
         mockPaymentService
             .Setup(x => x.ProcessPayment(It.IsAny<Entity>(), null))
@@ -546,7 +528,7 @@ public class DmodeServiceTest
 
         mockDmodeRepository
             .SetupGet(x => x.ServitorPassives)
-            .Returns(new List<DbPlayerDmodeServitorPassive>().AsQueryable().BuildMock());
+            .Returns(new List<DbPlayerDmodeServitorPassive>().BuildMock());
 
         DmodeExpeditionFloor floorData = MasterAsset.DmodeExpeditionFloor[dbExpedition.TargetFloor];
 

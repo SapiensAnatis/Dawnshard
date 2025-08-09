@@ -107,8 +107,7 @@ public class SessionService : ISessionService
         Session session = new(string.Empty, string.Empty, targetAccountId, targetViewerId);
 
         // Set permanent key
-        // We can use the identity service here as this is called from GraphQL mutations which
-        // set the context via the other kind of user impersonation.
+        // We can use the identity service here as this is called from the website /api endpoints.
         await this.cache.SetStringAsync(
             Schema.ImpersonatedSession_DeviceAccountId(this.playerIdentityService.AccountId),
             JsonSerializer.Serialize(session)

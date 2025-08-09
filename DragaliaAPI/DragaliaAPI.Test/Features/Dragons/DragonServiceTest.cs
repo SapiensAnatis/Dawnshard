@@ -315,8 +315,7 @@ public class DragonServiceTest : RepositoryTestFixture
 
         List<DbPlayerDragonData> dragonDataList = new List<DbPlayerDragonData>() { dragonData };
 
-        this.mockUnitRepository.SetupGet(x => x.Dragons)
-            .Returns(dragonDataList.AsQueryable().BuildMock());
+        this.mockUnitRepository.SetupGet(x => x.Dragons).Returns(dragonDataList.BuildMock());
 
         DbPlayerMaterial mat = new DbPlayerMaterial()
         {
@@ -325,11 +324,7 @@ public class DragonServiceTest : RepositoryTestFixture
             Quantity = 100,
         };
         this.mockInventoryRepository.SetupGet(x => x.Materials)
-            .Returns(
-                new List<DbPlayerMaterial>() { mat }
-                    .AsQueryable()
-                    .BuildMock()
-            );
+            .Returns(new List<DbPlayerMaterial>() { mat }.BuildMock());
 
         await this.dragonService.DoBuildup(
             new DragonBuildupRequest()
@@ -371,8 +366,7 @@ public class DragonServiceTest : RepositoryTestFixture
 
         List<DbPlayerDragonData> dragonDataList = new List<DbPlayerDragonData>() { dragonData };
 
-        this.mockUnitRepository.SetupGet(x => x.Dragons)
-            .Returns(dragonDataList.AsQueryable().BuildMock());
+        this.mockUnitRepository.SetupGet(x => x.Dragons).Returns(dragonDataList.BuildMock());
 
         UnitElement element = MasterAsset.DragonData[dragon].ElementalType;
 
@@ -387,11 +381,7 @@ public class DragonServiceTest : RepositoryTestFixture
             Quantity = usedQuantity,
         };
         this.mockInventoryRepository.SetupGet(x => x.Materials)
-            .Returns(
-                new List<DbPlayerMaterial>() { mat }
-                    .AsQueryable()
-                    .BuildMock()
-            );
+            .Returns(new List<DbPlayerMaterial>() { mat }.BuildMock());
 
         await this.dragonService.DoBuildup(
             new DragonBuildupRequest()
@@ -427,8 +417,7 @@ public class DragonServiceTest : RepositoryTestFixture
 
         List<DbPlayerDragonData> dragonDataList = new List<DbPlayerDragonData>() { dragonData };
 
-        this.mockUnitRepository.SetupGet(x => x.Dragons)
-            .Returns(dragonDataList.AsQueryable().BuildMock());
+        this.mockUnitRepository.SetupGet(x => x.Dragons).Returns(dragonDataList.BuildMock());
 
         DbPlayerMaterial mat = new DbPlayerMaterial()
         {
@@ -510,8 +499,7 @@ public class DragonServiceTest : RepositoryTestFixture
             dragonDataSacrifice,
         };
 
-        this.mockUnitRepository.SetupGet(x => x.Dragons)
-            .Returns(dragonDataList.AsQueryable().BuildMock());
+        this.mockUnitRepository.SetupGet(x => x.Dragons).Returns(dragonDataList.BuildMock());
         this.mockUnitRepository.Setup(x => x.RemoveDragons(It.IsAny<IEnumerable<long>>()))
             .Callback(() => dragonDataList.RemoveAll(x => x.DragonKeyId == 2));
 
@@ -568,8 +556,7 @@ public class DragonServiceTest : RepositoryTestFixture
 
         List<DbPlayerDragonData> dragonDataList = new List<DbPlayerDragonData>() { dragonData };
 
-        this.mockUnitRepository.SetupGet(x => x.Dragons)
-            .Returns(dragonDataList.AsQueryable().BuildMock());
+        this.mockUnitRepository.SetupGet(x => x.Dragons).Returns(dragonDataList.BuildMock());
 
         await this.dragonService.DoDragonSetLock(
             new DragonSetLockRequest() { DragonKeyId = 1, IsLock = true },
@@ -591,9 +578,10 @@ public class DragonServiceTest : RepositoryTestFixture
             DewPoint = 0,
         };
 
-        IQueryable<DbPlayerUserData> userDataList = new List<DbPlayerUserData>() { userData }
-            .AsQueryable()
-            .BuildMock();
+        IQueryable<DbPlayerUserData> userDataList = new List<DbPlayerUserData>()
+        {
+            userData,
+        }.BuildMock();
 
         this.mockUserDataRepository.SetupGet(x => x.UserData).Returns(userDataList);
 
@@ -602,8 +590,7 @@ public class DragonServiceTest : RepositoryTestFixture
 
         List<DbPlayerDragonData> dragonDataList = new List<DbPlayerDragonData>() { dragonData };
 
-        this.mockUnitRepository.SetupGet(x => x.Dragons)
-            .Returns(dragonDataList.AsQueryable().BuildMock());
+        this.mockUnitRepository.SetupGet(x => x.Dragons).Returns(dragonDataList.BuildMock());
         this.mockUnitRepository.Setup(x => x.RemoveDragons(new List<long>() { 1 }))
             .Callback(() => dragonDataList.RemoveAll(x => x.DragonKeyId == 1));
 
@@ -656,16 +643,17 @@ public class DragonServiceTest : RepositoryTestFixture
 
         userData = new DbPlayerUserData() { ViewerId = ViewerId, Coin = 100000 };
 
-        IQueryable<DbPlayerUserData> userDataList = new List<DbPlayerUserData>() { userData }
-            .AsQueryable()
-            .BuildMock();
+        IQueryable<DbPlayerUserData> userDataList = new List<DbPlayerUserData>()
+        {
+            userData,
+        }.BuildMock();
 
         this.mockUserDataRepository.SetupGet(x => x.UserData).Returns(userDataList);
 
         userDragonRels = new List<DbPlayerDragonReliability>();
 
         this.mockUnitRepository.SetupGet(x => x.DragonReliabilities)
-            .Returns(userDragonRels.AsQueryable().BuildMock());
+            .Returns(userDragonRels.BuildMock());
 
         stories = new List<DbPlayerStoryState>();
 
