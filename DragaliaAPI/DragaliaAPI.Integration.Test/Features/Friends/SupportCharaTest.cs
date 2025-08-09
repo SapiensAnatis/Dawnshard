@@ -371,7 +371,7 @@ public class SupportCharaTest : TestFixture
                 {
                     ViewerId = (ulong)this.ViewerId,
                     Name = "Euden",
-                    Level = 250,
+                    Level = 100,
                     EmblemId = Emblems.DragonbloodPrince,
                     MaxPartyPower = 444,
                     SupportChara = new()
@@ -547,7 +547,7 @@ public class SupportCharaTest : TestFixture
                 {
                     ViewerId = (ulong)this.ViewerId,
                     Name = "Euden",
-                    Level = 250,
+                    Level = 100,
                     EmblemId = Emblems.DragonbloodPrince,
                     MaxPartyPower = 444,
                     SupportChara = new()

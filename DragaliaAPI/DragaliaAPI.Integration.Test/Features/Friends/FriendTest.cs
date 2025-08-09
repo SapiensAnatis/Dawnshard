@@ -8,6 +8,8 @@ namespace DragaliaAPI.Integration.Test.Features.Friends;
 
 public class FriendTest : TestFixture
 {
+    private const int Level100FriendLimit = 75;
+
     public FriendTest(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
         : base(factory, testOutputHelper) { }
 
@@ -354,7 +356,7 @@ public class FriendTest : TestFixture
     public async Task Request_OwnFriendRequestLimitReached_ReturnsFriendApplyCountLimit()
     {
         DbPlayer otherPlayer = await this.CreateOtherPlayer();
-        await this.CreateFriends(this.ViewerId, 173);
+        await this.CreateFriends(this.ViewerId, Level100FriendLimit - 2);
 
         this.ApiContext.PlayerFriendRequests.AddRange(
             [
