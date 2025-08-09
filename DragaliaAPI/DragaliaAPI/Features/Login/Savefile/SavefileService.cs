@@ -35,6 +35,9 @@ internal sealed class SavefileService(
         .DefaultIfEmpty()
         .Max();
 
+    private const int MaxLevel = 250;
+    private static readonly int MaxTotalExp = MasterAsset.UserLevel[MaxLevel].TotalExp;
+
     private static class RedisSchema
     {
         public static string PendingImport(string deviceAccountId) =>
@@ -135,6 +138,10 @@ internal sealed class SavefileService(
             // TODO: What was the actual maximum dragon storage you could get?
             int cappedDragonStorage = Math.Min(savefile.UserData.MaxDragonQuantity, 500);
             player.UserData.MaxDragonQuantity = cappedDragonStorage;
+
+            // You can run into softlocks if your XP gets too high
+            int cappedExp = Math.Min(savefile.UserData.Exp, MaxTotalExp);
+            player.UserData.Exp = cappedExp;
 
             logger.LogDebug(
                 "Mapping DbPlayerUserData step done after {t} ms",
