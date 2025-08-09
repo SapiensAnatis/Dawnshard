@@ -7,6 +7,7 @@
     type PaginationState
   } from '@tanstack/table-core';
   import { onMount, tick } from 'svelte';
+  import { SvelteURLSearchParams } from 'svelte/reactivity';
   import { slide } from 'svelte/transition';
 
   import { goto } from '$app/navigation';
@@ -128,7 +129,7 @@
     // table.toggleAllRowsExpanded doesn't seem to do anything
     expanded = {};
 
-    const params = new URLSearchParams(page.url.searchParams);
+    const params = new SvelteURLSearchParams(page.url.searchParams);
     params.set('page', (newPage + 1).toString());
 
     await goto(`?${params.toString()}`, { noScroll: true });

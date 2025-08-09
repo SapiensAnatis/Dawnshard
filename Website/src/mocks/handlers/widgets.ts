@@ -36,7 +36,19 @@ export const handlePresentData: HttpResponseResolver = () => {
         {
           id: 10002
         }
-      ]
+      ],
+      Dragon: [],
+      Wyrmite: [],
+      Wyrmprint: [],
+      Rupies: [],
+      Item: [],
+      SkipTicket: [],
+      DragonGift: [],
+      FreeDiamantium: [],
+      HustleHammer: [],
+      Dew: [],
+      WeaponBody: [],
+      WeaponSkin: []
     }
   });
 };
