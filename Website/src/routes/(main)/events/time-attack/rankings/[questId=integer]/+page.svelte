@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { page } from '$app/stores';
   import Page from '$lib/components/page.svelte';
   import Typography from '$lib/components/typography.svelte';
   import { t } from '$lib/translations';
@@ -7,9 +6,9 @@
   import type { PageProps } from './$types';
   import DataTable from './dataTable.svelte';
 
-  let { data }: PageProps = $props();
+  let { data, params }: PageProps = $props();
 
-  let currentQuest = $derived(data.questList.find((q) => q.id === parseInt($page.params.questId)));
+  let currentQuest = $derived(data.questList.find((q) => q.id === parseInt(params.questId)));
 </script>
 
 <Page title="Time Attack Rankings">

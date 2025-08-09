@@ -1,6 +1,7 @@
 <script lang="ts">
   import ChevronLeft from 'lucide-svelte/icons/chevron-left';
   import ChevronRight from 'lucide-svelte/icons/chevron-right';
+  import { SvelteURLSearchParams } from 'svelte/reactivity';
 
   import { page } from '$app/stores';
   import { Button } from '$shadcn/components/ui/button';
@@ -9,7 +10,7 @@
   export let numPages: number;
 
   const getPagePath = (pageNo: number) => {
-    const params = new URLSearchParams($page.url.searchParams);
+    const params = new SvelteURLSearchParams($page.url.searchParams);
     params.set('page', pageNo.toString());
 
     return `?${params}`;
