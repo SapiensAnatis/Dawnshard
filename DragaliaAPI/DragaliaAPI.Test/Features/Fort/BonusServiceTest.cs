@@ -69,7 +69,7 @@ public class BonusServiceTest
                         PlantId = x.PlantId,
                         Level = x.Level,
                     })
-                    .AsQueryable()
+                    .ToList()
                     .BuildMock()
             );
 
@@ -82,7 +82,7 @@ public class BonusServiceTest
                         WeaponBodyId = x.WeaponBodyId,
                         FortPassiveCharaWeaponBuildupCount = x.FortPassiveCharaWeaponBuildupCount,
                     })
-                    .AsQueryable()
+                    .ToList()
                     .BuildMock()
             );
 
@@ -114,9 +114,7 @@ public class BonusServiceTest
                         PlantId = FortPlants.ArctosMonument,
                         Level = 10,
                     },
-                }
-                    .AsQueryable()
-                    .BuildMock()
+                }.BuildMock()
             );
 
         (await this.bonusService.GetEventBoost(flamesOfReflectionCompendiumId))

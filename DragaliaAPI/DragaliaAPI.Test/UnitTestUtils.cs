@@ -97,11 +97,7 @@ public static class UnitTestUtils
         DbPlayerUserData returnValue
     ) =>
         mock.SetupGet(x => x.UserData)
-            .Returns(
-                new List<DbPlayerUserData>() { returnValue }
-                    .AsQueryable()
-                    .BuildMock()
-            );
+            .Returns(new List<DbPlayerUserData>() { returnValue }.BuildMock());
 
     public static bool IsEquivalent(this object input, object comparison, ITestOutputHelper? output)
     {

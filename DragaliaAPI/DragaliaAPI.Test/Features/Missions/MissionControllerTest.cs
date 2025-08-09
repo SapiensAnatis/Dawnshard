@@ -111,9 +111,7 @@ public class MissionControllerTest
                         Start = DateTimeOffset.UnixEpoch,
                         End = DateTimeOffset.UnixEpoch,
                     },
-                }
-                    .AsQueryable()
-                    .BuildMock()
+                }.BuildMock()
             );
 
         DragaliaResult<MissionGetDrillMissionListResponse> resp =
@@ -253,7 +251,7 @@ public class MissionControllerTest
             .ReturnsAsync(new UpdateDataList());
 
         this.mockMissionRepository.Setup(x => x.GetMissionsByType(MissionType.Drill))
-            .Returns(Enumerable.Empty<DbPlayerMission>().AsQueryable().BuildMock());
+            .Returns(Array.Empty<DbPlayerMission>().BuildMock());
 
         this.mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());
 

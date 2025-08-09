@@ -124,9 +124,7 @@ public class FortServiceTest
                         Level = 5,
                         PlantId = FortPlants.Dragontree,
                     },
-                }
-                    .AsQueryable()
-                    .BuildMock()
+                }.BuildMock()
             );
 
         (await fortService.GetBuildList())
@@ -419,9 +417,7 @@ public class FortServiceTest
             .Setup(x => x.GetFortDetail())
             .ReturnsAsync(new DbFortDetail() { ViewerId = 1, CarpenterNum = 1 });
         mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(1);
-        mockFortRepository
-            .Setup(x => x.Builds)
-            .Returns(Array.Empty<DbFortBuild>().AsQueryable().BuildMock());
+        mockFortRepository.Setup(x => x.Builds).Returns(Array.Empty<DbFortBuild>().BuildMock());
 
         await fortService
             .Invoking(x => x.BuildStart(FortPlants.BlueFlowers, 2, 3))
@@ -498,9 +494,7 @@ public class FortServiceTest
             .ReturnsAsync(new DbFortDetail() { ViewerId = 1, CarpenterNum = 1 });
         mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(1);
         mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
-        mockFortRepository
-            .Setup(x => x.Builds)
-            .Returns(Array.Empty<DbFortBuild>().AsQueryable().BuildMock());
+        mockFortRepository.Setup(x => x.Builds).Returns(Array.Empty<DbFortBuild>().BuildMock());
 
         await fortService
             .Invoking(x => x.LevelupStart(1))

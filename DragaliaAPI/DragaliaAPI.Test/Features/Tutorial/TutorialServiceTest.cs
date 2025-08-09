@@ -47,9 +47,7 @@ public class TutorialServiceTest
                 new List<DbPlayerUserData>
                 {
                     new() { ViewerId = 1, TutorialStatus = 1 },
-                }
-                    .AsQueryable()
-                    .BuildMock()
+                }.BuildMock()
             );
 
         int currentStatus = await this.tutorialService.UpdateTutorialStatus(80000);
@@ -65,9 +63,7 @@ public class TutorialServiceTest
                 new List<DbPlayerUserData>
                 {
                     new() { ViewerId = 1, TutorialStatus = 99999 },
-                }
-                    .AsQueryable()
-                    .BuildMock()
+                }.BuildMock()
             );
 
         int currentStatus = await this.tutorialService.UpdateTutorialStatus(80000);
@@ -83,9 +79,7 @@ public class TutorialServiceTest
                 new List<DbPlayerUserData>
                 {
                     new() { ViewerId = 1, TutorialStatus = 1 },
-                }
-                    .AsQueryable()
-                    .BuildMock()
+                }.BuildMock()
             );
 
         this.mockFortRepository.Setup(x => x.AddDojos()).Returns(Task.CompletedTask);

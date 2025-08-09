@@ -80,7 +80,7 @@ public class StoryServiceTest : IClassFixture<DbTestFixture>
     public async Task CheckUnitStoryEligibility_MissingQuestStory_ReturnsFalse()
     {
         this.mockStoryRepository.SetupGet(x => x.QuestStories)
-            .Returns(new List<DbPlayerStoryState>().AsQueryable().BuildMock());
+            .Returns(new List<DbPlayerStoryState>().BuildMock());
 
         this.mockStoryRepository.Setup(x => x.GetOrCreateStory(StoryTypes.Chara, 100004101))
             .ReturnsAsync(new DbPlayerStoryState() { ViewerId = 1, State = StoryState.Unlocked });
@@ -96,7 +96,7 @@ public class StoryServiceTest : IClassFixture<DbTestFixture>
     public async Task CheckUnitStoryEligibility_MissingUnitStory_ReturnsFalse()
     {
         this.mockStoryRepository.SetupGet(x => x.UnitStories)
-            .Returns(new List<DbPlayerStoryState>().AsQueryable().BuildMock());
+            .Returns(new List<DbPlayerStoryState>().BuildMock());
 
         this.mockStoryRepository.Setup(x => x.GetOrCreateStory(StoryTypes.Chara, 110013012))
             .ReturnsAsync(new DbPlayerStoryState() { ViewerId = 1, State = StoryState.Unlocked });
@@ -125,9 +125,7 @@ public class StoryServiceTest : IClassFixture<DbTestFixture>
                         State = StoryState.Read,
                         StoryType = StoryTypes.Chara,
                     },
-                }
-                    .AsQueryable()
-                    .BuildMock()
+                }.BuildMock()
             );
 
         (await this.storyService.CheckStoryEligibility(StoryTypes.Chara, 110013013))
