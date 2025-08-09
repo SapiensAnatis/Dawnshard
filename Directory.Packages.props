@@ -9,6 +9,8 @@
     <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="9.4.0" />
     <PackageVersion Include="Aspire.Hosting.Redis" Version="9.4.0" />
     <PackageVersion Include="Basic.Reference.Assemblies" Version="1.8.3" />
+    <!-- Pin Docker.Dotnet.Enhanced to fix Podman issues -->
+    <PackageVersion Include="Docker.Dotnet.Enhanced" Version="3.128.5 " />
     <PackageVersion Include="FluentRandomPicker" Version="3.5.1" />
     <PackageVersion Include="FluentValidation" Version="12.0.0" />
     <PackageVersion Include="Hangfire.AspNetCore" Version="1.8.20" />
@@ -102,8 +104,8 @@
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.8" />
     <PackageVersion Include="Nerdbank.GitVersioning" Version="3.7.115" />
     <PackageVersion Include="Respawn" Version="6.2.1" />
-    <PackageVersion Include="Testcontainers" Version="[4.0.0]" />
-    <PackageVersion Include="Testcontainers.PostgreSql" Version="[4.0.0]" />
+    <PackageVersion Include="Testcontainers" Version="4.6.0" />
+    <PackageVersion Include="Testcontainers.PostgreSql" Version="4.6.0" />
     <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="9.0.5" />
     <PackageVersion Include="Moq.EntityFrameworkCore" Version="9.0.0.5" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
