@@ -510,6 +510,9 @@ internal sealed class SavefileService(
             player.LastSavefileImportTime = DateTimeOffset.UtcNow;
             player.SavefileOrigin = savefile.Origin;
 
+            // Set helper to default. This will break if you try and delete Euden from your save, but...
+            player.Helper = new() { CharaId = Charas.ThePrince };
+
             await apiContext.SaveChangesAsync();
             await transaction.CommitAsync();
 
