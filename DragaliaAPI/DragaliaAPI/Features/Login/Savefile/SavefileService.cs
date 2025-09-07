@@ -73,12 +73,18 @@ internal sealed class SavefileService(
 
         try
         {
+            // Place a lock preventing any concurrent save imports
+            await cache.SetStringAsync(
+                RedisSchema.PendingImport(playerIdentityService.AccountId),
+                "true",
+                RedisOptions
+            );
+
             await Import(savefile);
         }
-        catch (Exception)
+        finally
         {
             await cache.RemoveAsync(RedisSchema.PendingImport(playerIdentityService.AccountId));
-            throw;
         }
     }
 
@@ -90,19 +96,22 @@ internal sealed class SavefileService(
     /// <remarks>Not thread safe if called for the same account id from two different threads.</remarks>
     public async Task Import(LoadIndexResponse savefile)
     {
-        string deviceAccountId = playerIdentityService.AccountId;
         Stopwatch stopwatch = Stopwatch.StartNew();
 
-        // Place a lock preventing any concurrent save imports
-        await cache.SetStringAsync(
-            RedisSchema.PendingImport(deviceAccountId),
-            "true",
-            RedisOptions
+        logger.LogInformation(
+            "Beginning savefile import for account {AccountId}",
+            playerIdentityService.AccountId
         );
 
-        logger.LogInformation(
-            "Beginning savefile import for account {accountId}",
-            playerIdentityService.AccountId
+        if (!Validate(savefile))
+        {
+            logger.LogInformation("Savefile to be imported is invalid");
+            return;
+        }
+
+        logger.LogDebug(
+            "Validating save file step done after {t} ms",
+            stopwatch.Elapsed.TotalMilliseconds
         );
 
         try
@@ -510,14 +519,12 @@ internal sealed class SavefileService(
             player.LastSavefileImportTime = DateTimeOffset.UtcNow;
             player.SavefileOrigin = savefile.Origin;
 
-            // Set helper to default. This will break if you try and delete Euden from your save, but...
+            // Set helper to default. This will break if you try and delete Euden from your save, but we protect
+            // against this in Validate()
             player.Helper = new() { CharaId = Charas.ThePrince };
 
             await apiContext.SaveChangesAsync();
             await transaction.CommitAsync();
-
-            // Remove lock
-            await cache.RemoveAsync(RedisSchema.PendingImport(deviceAccountId));
 
             metrics.OnSaveImport(savefile);
 
@@ -531,6 +538,46 @@ internal sealed class SavefileService(
             apiContext.ChangeTracker.Clear();
             throw;
         }
+    }
+
+    private bool Validate(LoadIndexResponse savefile)
+    {
+        // Ensure the save does not contain any invalid IDs for dragons and other entities - the server frequently
+        // does dict[key] lookups in the master asset which throw errors for out-of-range IDs. Such invalid data should
+        // be rejected outright rather than allowed to break later.
+
+        bool hasEuden = false;
+
+        foreach (CharaList chara in savefile.CharaList)
+        {
+            if (!MasterAsset.CharaData.ContainsKey(chara.CharaId))
+            {
+                logger.LogDebug("Invalid character ID: {CharaId}", chara.CharaId);
+                return false;
+            }
+
+            if (chara.CharaId == Charas.ThePrince)
+            {
+                hasEuden = true;
+            }
+        }
+
+        if (!hasEuden)
+        {
+            logger.LogDebug("Savefile does not have ThePrince");
+            return false;
+        }
+
+        foreach (DragonList dragon in savefile.DragonList)
+        {
+            if (!MasterAsset.DragonData.ContainsKey(dragon.DragonId))
+            {
+                logger.LogDebug("Invalid dragon ID: {DragonId}", dragon.DragonId);
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private async Task Delete()
