@@ -54,7 +54,7 @@
     "typescript": "5.9.2",
     "typescript-eslint": "8.41.0",
     "vaul-svelte": "1.0.0-next.7",
-    "vite": "7.1.4",
+    "vite": "7.1.5",
     "vite-plugin-checker": "0.10.3"
   },
   "type": "module",
