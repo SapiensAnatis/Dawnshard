@@ -1,6 +1,7 @@
 <svelte:options immutable={true} />
 
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import Page from '$lib/components/page.svelte';
   import Typography from '$lib/components/typography.svelte';
   import { Separator } from '$shadcn/components/ui/separator';
@@ -27,7 +28,7 @@
         DragaliaSaveEditor
       </a>
       by sockperson is recommended, but it requires importing and exporting your save file. You can do
-      this on the <a class="link" href="/account/profile">Profile</a> page.
+      this on the <a class="link" href={resolve('/account/profile')}>Profile</a> page.
     </p>
   </div>
   <br />

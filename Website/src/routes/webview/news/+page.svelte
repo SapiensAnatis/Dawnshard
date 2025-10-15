@@ -2,7 +2,8 @@
   import { onMount } from 'svelte';
 
   import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
+  import { resolve } from '$app/paths';
+  import { page } from '$app/state';
   import BuyMeACoffee from '$main/(home)/icons/buyMeACoffee.svelte';
   import Discord from '$main/(home)/icons/discord.svelte';
   import GitHub from '$main/(home)/icons/github.svelte';
@@ -11,20 +12,20 @@
   import { getPageNoFromParams, lastReadKey, pageSize } from '$main/news/news.ts';
   import NewsPagination from '$main/news/pagination.svelte';
 
-  import type { PageData } from './$types';
+  import type { PageProps } from './$types';
   import IconButton from './iconButton.svelte';
 
-  let lastRead: Date;
+  let lastRead: Date = $state(new Date());
 
-  export let data: PageData;
+  let { data }: PageProps = $props();
 
-  $: currentPage = getPageNoFromParams($page.url.searchParams);
+  const currentPage = $derived(getPageNoFromParams(page.url.searchParams));
 
   onMount(() => {
     // Required for showing the Mercurial Gauntlet rewards page, which unconditionally routes to
     // the URL we provide for the news page, plus #detail/20000 in the hash.
     // Hash-based routing is not really supported by SvelteKit, so we will just rewrite to an actual route.
-    const openedNewsId = Number.parseInt($page.url.hash.replace('#detail/', '')) || null;
+    const openedNewsId = Number.parseInt(page.url.hash.replace('#detail/', '')) || null;
 
     if (openedNewsId) {
       onOpenNewsItem(openedNewsId);
@@ -41,7 +42,7 @@
   });
 
   const onOpenNewsItem = (id: number) => {
-    goto(`/webview/news/detail/${id}`);
+    goto(resolve(`/webview/news/detail/[id=integer]`, { id: id.toString() }));
   };
 </script>
 
@@ -58,7 +59,9 @@
   <hr class="mt-4 mb-1" />
   <div class="flex flex-col gap-3 p-3">
     {#each data.news.data as item (item.id)}
-      <a tabindex="0" href={`/webview/news/detail/${item.id}`}>
+      <a
+        tabindex="0"
+        href={resolve('/webview/news/detail/[id=integer]', { id: item.id.toString() })}>
         <NewsItem {item} description={false} {lastRead} />
       </a>
     {/each}

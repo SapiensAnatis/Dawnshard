@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import Page from '$lib/components/page.svelte';
   import Typography from '$lib/components/typography.svelte';
   import { t } from '$lib/translations';
@@ -21,7 +22,9 @@
             <a
               class="hover:underline"
               aria-current={questId === currentQuest?.id ? 'page' : undefined}
-              href="/events/time-attack/rankings/{questId}">
+              href={resolve('/(main)/events/time-attack/rankings/[questId=integer]', {
+                questId: questId.toString()
+              })}>
               {$t(`timeAttack.quest.${questId}`)}
             </a>
           </li>

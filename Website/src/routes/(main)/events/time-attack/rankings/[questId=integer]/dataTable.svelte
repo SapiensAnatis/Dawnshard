@@ -132,6 +132,8 @@
     const params = new SvelteURLSearchParams(page.url.searchParams);
     params.set('page', (newPage + 1).toString());
 
+    // https://github.com/sveltejs/eslint-plugin-svelte/issues/1327
+    // eslint-disable-next-line svelte/no-navigation-without-resolve
     await goto(`?${params.toString()}`, { noScroll: true });
 
     const el = document.querySelector('#time-attack-table-title');
