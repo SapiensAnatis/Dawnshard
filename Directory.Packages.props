@@ -30,8 +30,12 @@
     />
     <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="9.0.10" />
     <PackageVersion Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="4.14.0" />
-    <!-- Pin Microsoft.CodeAnalysis.CSharp to compiler version of Visual Studio 17.12 / SDK 9.0.100 -->
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="[4.14.0]" />
+    <!-- 
+      Pin Microsoft.CodeAnalysis.CSharp to compiler version of Visual Studio 17.12 / SDK 9.0.100
+      See: https://github.com/dotnet/roslyn/blob/main/docs/wiki/NuGet-packages.md and
+           https://learn.microsoft.com/en-gb/dotnet/core/porting/versioning-sdk-msbuild-vs#lifecycle
+     -->
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="[4.12.0]" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="4.14.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.10" />
