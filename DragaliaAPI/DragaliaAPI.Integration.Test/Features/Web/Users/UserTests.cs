@@ -121,7 +121,7 @@ public class UserTests : WebTestFixture
     }
 
     public static TheoryData<HttpMethod> ImpersonationHttpMethods { get; } =
-        [HttpMethod.Get, HttpMethod.Put, HttpMethod.Delete];
+    [HttpMethod.Get, HttpMethod.Put, HttpMethod.Delete];
 
     [Theory]
     [MemberData(nameof(ImpersonationHttpMethods))]

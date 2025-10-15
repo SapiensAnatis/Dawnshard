@@ -13,7 +13,7 @@ public class DiamantiumHandler(ApiContext apiContext) : IRewardHandler, IBatchRe
     private const int MaxDiamantium = 9_999_999;
 
     public IReadOnlyList<EntityTypes> SupportedTypes { get; } =
-        [EntityTypes.FreeDiamantium, EntityTypes.PaidDiamantium];
+    [EntityTypes.FreeDiamantium, EntityTypes.PaidDiamantium];
 
     public async Task<GrantReturn> Grant(Entity entity)
     {

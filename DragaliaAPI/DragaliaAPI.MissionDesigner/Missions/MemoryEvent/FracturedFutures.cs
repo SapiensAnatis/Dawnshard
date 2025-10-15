@@ -27,32 +27,24 @@ public static class FracturedFutures
     [MissionType(MissionType.MemoryEvent)]
     [EventId(20427)] // Event ID used directly as requested
     public static List<Mission> Missions { get; } =
-        [
-            // Participate in the Event
-            new EventParticipationMission() { MissionId = 10090101 },
-            // Clear Shining Cyclops Assault
-            new ClearQuestMission()
-            {
-                MissionId = 10090201,
-                QuestId = ShiningCyclopsAssaultQuestId,
-            },
-            // Clear Chronos Clash
-            new ClearQuestMission() { MissionId = 10090301, QuestId = ChronosClashQuestId },
-            // Clear Chronos Nyx Clash
-            new ClearQuestMission() { MissionId = 10090401, QuestId = ChronosNyxClashQuestId },
-            // Read the Epilogue
-            new ReadQuestStoryMission() { MissionId = 10090501, QuestStoryId = EpilogueStoryId },
-            // Clear Chronos Clash: Omega
-            new ClearQuestMission() { MissionId = 10090601, QuestId = ChronosClashOmegaQuestId },
-            // Clear Chronos Nyx Clash: Omega
-            new ClearQuestMission()
-            {
-                MissionId = 10090701,
-                QuestId = ChronosNyxClashOmegaQuestId,
-            },
-            // Clear The Decisive Battle
-            new ClearQuestMission() { MissionId = 10090801, QuestId = TheDecisiveBattleQuestId },
-            // Clear Time's End
-            new ClearQuestMission() { MissionId = 10090901, QuestId = TimesEndQuestId },
-        ];
+    [
+        // Participate in the Event
+        new EventParticipationMission() { MissionId = 10090101 },
+        // Clear Shining Cyclops Assault
+        new ClearQuestMission() { MissionId = 10090201, QuestId = ShiningCyclopsAssaultQuestId },
+        // Clear Chronos Clash
+        new ClearQuestMission() { MissionId = 10090301, QuestId = ChronosClashQuestId },
+        // Clear Chronos Nyx Clash
+        new ClearQuestMission() { MissionId = 10090401, QuestId = ChronosNyxClashQuestId },
+        // Read the Epilogue
+        new ReadQuestStoryMission() { MissionId = 10090501, QuestStoryId = EpilogueStoryId },
+        // Clear Chronos Clash: Omega
+        new ClearQuestMission() { MissionId = 10090601, QuestId = ChronosClashOmegaQuestId },
+        // Clear Chronos Nyx Clash: Omega
+        new ClearQuestMission() { MissionId = 10090701, QuestId = ChronosNyxClashOmegaQuestId },
+        // Clear The Decisive Battle
+        new ClearQuestMission() { MissionId = 10090801, QuestId = TheDecisiveBattleQuestId },
+        // Clear Time's End
+        new ClearQuestMission() { MissionId = 10090901, QuestId = TimesEndQuestId },
+    ];
 }
