@@ -223,8 +223,7 @@ public class EventDropService(IEventRepository eventRepository)
                 );
                 break;
             }
-            case DungeonTypes.Raid
-            or DungeonTypes.RaidSingle:
+            case DungeonTypes.Raid or DungeonTypes.RaidSingle:
             {
                 // Otherworld Gems are a resource that can be used to challenge EX-difficulty Raid battles.
                 // They can be obtained as drops from Expert or Nightmare-difficulty raid battles.

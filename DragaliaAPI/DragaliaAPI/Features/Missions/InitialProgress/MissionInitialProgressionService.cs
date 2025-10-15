@@ -136,7 +136,8 @@ public class MissionInitialProgressionService(
                         .ToListAsync()
                 )
                     .Select(x => (int?)Math.Min(x.AttackPlusCount, x.HpPlusCount))
-                    .Max() ?? 0,
+                    .Max()
+                ?? 0,
                 MissionCompleteType.AbilityCrestLevelUp => (
                     await abilityCrestRepository
                         .AbilityCrests.Where(x =>
@@ -285,7 +286,8 @@ public class MissionInitialProgressionService(
                 )
                     .Where(x => MasterAsset.CharaData[x.CharaId].ElementalType == element)
                     .Select(x => (int?)x.Level)
-                    .Max() ?? 0;
+                    .Max()
+                ?? 0;
         }
 
         return await apiContext.PlayerCharaData.MaxAsync(x => x.Level);
@@ -325,7 +327,8 @@ public class MissionInitialProgressionService(
                 )
                     .Where(x => MasterAsset.CharaData[x.CharaId].ElementalType == element)
                     .Select(x => (int?)x.ManaNodeUnlockCount)
-                    .Max() ?? 0;
+                    .Max()
+                ?? 0;
         }
 
         return await apiContext.PlayerCharaData.Select(x => (int?)x.ManaNodeUnlockCount).MaxAsync()
@@ -351,7 +354,8 @@ public class MissionInitialProgressionService(
                 )
                     .Where(x => MasterAsset.DragonData[x.DragonId].ElementalType == element)
                     .Select(x => (int?)x.Level)
-                    .Max() ?? 0;
+                    .Max()
+                ?? 0;
         }
 
         return await unitRepository.Dragons.MaxAsync(x => (int?)x.Level) ?? 0;
@@ -394,7 +398,8 @@ public class MissionInitialProgressionService(
                 )
                     .Where(x => MasterAsset.DragonData[x.DragonId].ElementalType == element)
                     .Select(x => (int?)x.Level)
-                    .Max() ?? 0;
+                    .Max()
+                ?? 0;
         }
 
         return await unitRepository.DragonReliabilities.MaxAsync(x => (int?)x.Level) ?? 0;

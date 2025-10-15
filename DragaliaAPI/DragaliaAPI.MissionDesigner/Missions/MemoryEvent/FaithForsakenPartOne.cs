@@ -26,26 +26,22 @@ public static class FaithForsakenPartOne
     [MissionType(MissionType.MemoryEvent)] // Using MemoryEvent as requested
     [EventId(20443)] // Event ID used directly as requested
     public static List<Mission> Missions { get; } =
-        [
-            // Participate in the Event
-            new EventParticipationMission() { MissionId = 10160101 },
-            // Clear Resistance of the Innocent
-            new ClearQuestMission()
-            {
-                MissionId = 10160201,
-                QuestId = ResistanceOfTheInnocentQuestId,
-            },
-            // Clear The Might of Heaven
-            new ClearQuestMission() { MissionId = 10160301, QuestId = TheMightOfHeavenQuestId },
-            // Clear Assault on Michael
-            new ClearQuestMission() { MissionId = 10160401, QuestId = AssaultOnMichaelQuestId },
-            // Clear Asura Clash on Expert
-            new ClearQuestMission() { MissionId = 10160501, QuestId = AsuraClashExpertQuestId },
-            // Clear Asura Clash on Nightmare
-            new ClearQuestMission() { MissionId = 10160601, QuestId = AsuraClashNightmareQuestId },
-            // Read the Epilogue
-            new ReadQuestStoryMission() { MissionId = 10160701, QuestStoryId = EpilogueStoryId },
-            // Clear Asura Clash: Omega
-            new ClearQuestMission() { MissionId = 10160801, QuestId = AsuraClashOmegaQuestId },
-        ];
+    [
+        // Participate in the Event
+        new EventParticipationMission() { MissionId = 10160101 },
+        // Clear Resistance of the Innocent
+        new ClearQuestMission() { MissionId = 10160201, QuestId = ResistanceOfTheInnocentQuestId },
+        // Clear The Might of Heaven
+        new ClearQuestMission() { MissionId = 10160301, QuestId = TheMightOfHeavenQuestId },
+        // Clear Assault on Michael
+        new ClearQuestMission() { MissionId = 10160401, QuestId = AssaultOnMichaelQuestId },
+        // Clear Asura Clash on Expert
+        new ClearQuestMission() { MissionId = 10160501, QuestId = AsuraClashExpertQuestId },
+        // Clear Asura Clash on Nightmare
+        new ClearQuestMission() { MissionId = 10160601, QuestId = AsuraClashNightmareQuestId },
+        // Read the Epilogue
+        new ReadQuestStoryMission() { MissionId = 10160701, QuestStoryId = EpilogueStoryId },
+        // Clear Asura Clash: Omega
+        new ClearQuestMission() { MissionId = 10160801, QuestId = AsuraClashOmegaQuestId },
+    ];
 }

@@ -25,20 +25,20 @@ public static class ForgottenTruths
     [MissionType(MissionType.MemoryEvent)] // Identified as Raid Event
     [EventId(20428)] // Event ID used directly as requested
     public static List<Mission> Missions { get; } =
-        [
-            // Participate in the Event
-            new EventParticipationMission() { MissionId = 10080101 },
-            // Clear Assault on Zephyr
-            new ClearQuestMission() { MissionId = 10080201, QuestId = AssaultOnZephyrId },
-            // Clear Morsayati Clash on Expert
-            new ClearQuestMission() { MissionId = 10080301, QuestId = MorsayatiClashExpertId },
-            // Clear Morsayati Clash on Nightmare
-            new ClearQuestMission() { MissionId = 10080401, QuestId = MorsayatiClashNightmareId },
-            // Read the Epilogue
-            new ReadQuestStoryMission() { MissionId = 10080501, QuestStoryId = EpilogueStoryId },
-            // Clear Morsayati Clash: Omega
-            new ClearQuestMission() { MissionId = 10080601, QuestId = MorsayatiClashOmegaId },
-            // Clear The War of Binding's Climax
-            new ClearQuestMission() { MissionId = 10080701, QuestId = WarOfBindingClimaxId },
-        ];
+    [
+        // Participate in the Event
+        new EventParticipationMission() { MissionId = 10080101 },
+        // Clear Assault on Zephyr
+        new ClearQuestMission() { MissionId = 10080201, QuestId = AssaultOnZephyrId },
+        // Clear Morsayati Clash on Expert
+        new ClearQuestMission() { MissionId = 10080301, QuestId = MorsayatiClashExpertId },
+        // Clear Morsayati Clash on Nightmare
+        new ClearQuestMission() { MissionId = 10080401, QuestId = MorsayatiClashNightmareId },
+        // Read the Epilogue
+        new ReadQuestStoryMission() { MissionId = 10080501, QuestStoryId = EpilogueStoryId },
+        // Clear Morsayati Clash: Omega
+        new ClearQuestMission() { MissionId = 10080601, QuestId = MorsayatiClashOmegaId },
+        // Clear The War of Binding's Climax
+        new ClearQuestMission() { MissionId = 10080701, QuestId = WarOfBindingClimaxId },
+    ];
 }

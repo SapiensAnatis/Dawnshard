@@ -160,24 +160,24 @@ public class SavefileEditTests : WebTestFixture
     }
 
     public static TheoryData<PresentFormSubmission> InvalidEditRequests { get; } =
-        [
-            new PresentFormSubmission()
-            {
-                Type = EntityTypes.Chara,
-                Item = -4,
-                Quantity = -2,
-            },
-            new PresentFormSubmission()
-            {
-                Type = EntityTypes.Chara,
-                Item = (int)Charas.SummerAlex,
-                Quantity = 23,
-            },
-            new PresentFormSubmission()
-            {
-                Type = EntityTypes.SkipTicket,
-                Item = 0,
-                Quantity = 9_999_999,
-            },
-        ];
+    [
+        new PresentFormSubmission()
+        {
+            Type = EntityTypes.Chara,
+            Item = -4,
+            Quantity = -2,
+        },
+        new PresentFormSubmission()
+        {
+            Type = EntityTypes.Chara,
+            Item = (int)Charas.SummerAlex,
+            Quantity = 23,
+        },
+        new PresentFormSubmission()
+        {
+            Type = EntityTypes.SkipTicket,
+            Item = 0,
+            Quantity = 9_999_999,
+        },
+    ];
 }

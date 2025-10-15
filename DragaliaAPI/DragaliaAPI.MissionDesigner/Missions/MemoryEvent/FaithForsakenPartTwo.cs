@@ -25,22 +25,22 @@ public static class FaithForsakenPartTwo
     [MissionType(MissionType.MemoryEvent)] // Using MemoryEvent as requested
     [EventId(20444)] // Event ID used directly as requested
     public static List<Mission> Missions { get; } =
-        [
-            // Participate in the Event
-            new EventParticipationMission() { MissionId = 10170101 },
-            // Clear Ceaseless Tragedy
-            new ClearQuestMission() { MissionId = 10170201, QuestId = CeaselessTragedyQuestId },
-            // Clear A Glimmer of Hope
-            new ClearQuestMission() { MissionId = 10170301, QuestId = AGlimmerOfHopeQuestId },
-            // Clear Assault on Lilith
-            new ClearQuestMission() { MissionId = 10170401, QuestId = AssaultOnLilithQuestId },
-            // Clear Satan Clash on Expert
-            new ClearQuestMission() { MissionId = 10170501, QuestId = SatanClashExpertQuestId },
-            // Clear Satan Clash on Nightmare
-            new ClearQuestMission() { MissionId = 10170601, QuestId = SatanClashNightmareQuestId },
-            // Read the Epilogue
-            new ReadQuestStoryMission() { MissionId = 10170701, QuestStoryId = EpilogueStoryId },
-            // Clear Satan Clash: Omega
-            new ClearQuestMission() { MissionId = 10170801, QuestId = SatanClashOmegaQuestId },
-        ];
+    [
+        // Participate in the Event
+        new EventParticipationMission() { MissionId = 10170101 },
+        // Clear Ceaseless Tragedy
+        new ClearQuestMission() { MissionId = 10170201, QuestId = CeaselessTragedyQuestId },
+        // Clear A Glimmer of Hope
+        new ClearQuestMission() { MissionId = 10170301, QuestId = AGlimmerOfHopeQuestId },
+        // Clear Assault on Lilith
+        new ClearQuestMission() { MissionId = 10170401, QuestId = AssaultOnLilithQuestId },
+        // Clear Satan Clash on Expert
+        new ClearQuestMission() { MissionId = 10170501, QuestId = SatanClashExpertQuestId },
+        // Clear Satan Clash on Nightmare
+        new ClearQuestMission() { MissionId = 10170601, QuestId = SatanClashNightmareQuestId },
+        // Read the Epilogue
+        new ReadQuestStoryMission() { MissionId = 10170701, QuestStoryId = EpilogueStoryId },
+        // Clear Satan Clash: Omega
+        new ClearQuestMission() { MissionId = 10170801, QuestId = SatanClashOmegaQuestId },
+    ];
 }
