@@ -2,8 +2,8 @@
   "compilerOptions": {
     "module": "NodeNext",
     "types": [
-      "@cloudflare/workers-types",
-      "vitest-environment-miniflare/globals",
+      "./worker-configuration.d.ts",
+      "@cloudflare/vitest-pool-workers",
       "jest"
     ]
   },
