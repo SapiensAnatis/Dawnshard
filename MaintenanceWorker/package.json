@@ -4,11 +4,11 @@
   "version": "1.0.0",
   "description": "Cloudflare worker for showing the maintenance screen even if the origin server is down",
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "0.9.13",
+    "@cloudflare/vitest-pool-workers": "0.10.3",
     "@msgpack/msgpack": "3.1.2",
     "@types/jest": "30.0.0",
-    "vitest": "3.2.4",
-    "wrangler": "4.40.3"
+    "vitest": "4.0.6",
+    "wrangler": "4.45.3"
   },
   "type": "module",
   "scripts": {
