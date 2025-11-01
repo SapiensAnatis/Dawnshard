@@ -4,10 +4,10 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.4.0" />
-    <PackageVersion Include="Aspire.Hosting.NodeJs" Version="9.5.0" />
-    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="9.5.0" />
-    <PackageVersion Include="Aspire.Hosting.Redis" Version="9.5.0" />
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.5.2" />
+    <PackageVersion Include="Aspire.Hosting.NodeJs" Version="9.5.2" />
+    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="9.5.2" />
+    <PackageVersion Include="Aspire.Hosting.Redis" Version="9.5.2" />
     <PackageVersion Include="Basic.Reference.Assemblies" Version="1.8.3" />
     <!-- Pin Docker.Dotnet.Enhanced to fix Podman issues -->
     <PackageVersion Include="Docker.Dotnet.Enhanced" Version="3.128.5 " />
@@ -35,7 +35,7 @@
       See: https://github.com/dotnet/roslyn/blob/main/docs/wiki/NuGet-packages.md and
            https://learn.microsoft.com/en-gb/dotnet/core/porting/versioning-sdk-msbuild-vs#lifecycle
      -->
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="[4.12.0]" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="[4.14.0]" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="4.14.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.10" />
@@ -45,7 +45,7 @@
     <PackageVersion Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
     <PackageVersion Include="Microsoft.FeatureManagement" Version="4.3.0" />
     <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.14.0" />
-    <PackageVersion Include="MockQueryable.EntityFrameworkCore" Version="8.0.0" />
+    <PackageVersion Include="MockQueryable.EntityFrameworkCore" Version="9.0.0" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10" />
     <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.10" />
@@ -71,14 +71,14 @@
       Version="1.12.0-beta.1"
     />
     <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.13.1" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.13.0" />
     <PackageVersion
       Include="OpenTelemetry.Instrumentation.EntityFrameworkCore"
       Version="1.12.0-beta.2"
     />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.13.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Process" Version="0.5.0-beta.7" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.12.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.13.0" />
     <PackageVersion
       Include="OpenTelemetry.Instrumentation.StackExchangeRedis"
       Version="1.12.0-beta.2"
@@ -99,14 +99,14 @@
     <PackageVersion Include="FluentAssertions" Version="[6.12.2]" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.10" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
-    <PackageVersion Include="MockQueryable.Moq" Version="8.0.0" />
+    <PackageVersion Include="MockQueryable.Moq" Version="9.0.0" />
     <PackageVersion Include="Moq" Version="4.20.72" />
     <PackageVersion Include="Verify.SourceGenerators" Version="2.5.0" />
-    <PackageVersion Include="Verify.XunitV3" Version="30.19.2" />
+    <PackageVersion Include="Verify.XunitV3" Version="31.4.0" />
     <PackageVersion Include="xunit.v3" Version="3.1.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.10" />
-    <PackageVersion Include="Nerdbank.GitVersioning" Version="3.7.115" />
+    <PackageVersion Include="Nerdbank.GitVersioning" Version="3.8.118" />
     <PackageVersion Include="Respawn" Version="6.2.1" />
     <PackageVersion Include="Testcontainers" Version="4.6.0" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="4.6.0" />
