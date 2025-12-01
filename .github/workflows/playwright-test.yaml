@@ -20,7 +20,7 @@ jobs:
       BAAS_USERNAME: ${{ secrets.BAAS_USERNAME }}
       BAAS_PASSWORD: ${{ secrets.BAAS_PASSWORD }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref }}
           fetch-depth: 0
