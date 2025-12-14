@@ -11,7 +11,7 @@ jobs:
     name: Generate test report
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Download artifacts
         uses: actions/download-artifact@v6
         with:
