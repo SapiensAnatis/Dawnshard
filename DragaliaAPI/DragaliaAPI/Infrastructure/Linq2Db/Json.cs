@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 using LinqToDB;
+using LinqToDB.Internal.SqlQuery;
 using LinqToDB.SqlQuery;
 
 namespace DragaliaAPI.Infrastructure.Linq2Db;
@@ -15,7 +16,7 @@ internal static class Json
 {
     private sealed class JsonValuePathBuilder : Sql.IExtensionCallBuilder
     {
-        public void Build(Sql.ISqExtensionBuilder builder)
+        public void Build(Sql.ISqlExtensionBuilder builder)
         {
             ISqlExpression? propExpression = builder.GetExpression(0);
 
@@ -31,7 +32,7 @@ internal static class Json
             string expressionStr = "{0}->>" + propertyName.ToString().Replace('\"', '\'');
 
             ISqlExpression valueExpression = new SqlExpression(
-                typeof(string),
+                new DbDataType(typeof(string)),
                 expressionStr,
                 Precedence.Primary,
                 parameters.ToArray()
