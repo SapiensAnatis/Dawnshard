@@ -70,7 +70,4 @@
   <Folder Name="/Solution Items/.husky/">
     <File Path=".husky/task-runner.json" />
   </Folder>
-  <Project Path="docker-compose.dcproj">
-    <Build />
-  </Project>
 </Solution>
