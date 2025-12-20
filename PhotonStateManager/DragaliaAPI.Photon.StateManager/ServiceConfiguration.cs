@@ -25,20 +25,6 @@ internal static class ServiceConfiguration
 
         builder.Services.AddHealthChecks().AddCheck<RedisHealthCheck>("Redis");
 
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen(config =>
-        {
-            config.SwaggerDoc(
-                "v1",
-                new()
-                {
-                    Version = "v1",
-                    Title = "Photon State Manager",
-                    Description = "API for storing room state received from Photon webhooks.",
-                }
-            );
-        });
-
         builder.Services.AddSingleton<IConnectionMultiplexer>(serviceProvider =>
         {
             string connectionString =

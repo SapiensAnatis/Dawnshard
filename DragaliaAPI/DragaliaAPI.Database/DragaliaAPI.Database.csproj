@@ -10,7 +10,7 @@
       We have transitive pinning enabled, but don't intend to pin MS.EFC.Design to MS.CodeAnalysis.CSharp to 4.12.0. Use
       a version override to restore the original transitive version. 
     -->
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" VersionOverride="4.8.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" VersionOverride="[4.14.0]">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
