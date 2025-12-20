@@ -1,0 +1,25 @@
+{
+    "$comment": "Solution filter that ignores the Photon plugin projects which are Windows-only"
+    "solution": {
+        "path": "./DragaliaAPI.slnx",
+        "projects": [
+            "Aspire/Dawnshard.AppHost/Dawnshard.AppHost.csproj",
+            "Aspire/Dawnshard.ServiceDefaults/Dawnshard.ServiceDefaults.csproj",
+            "DragaliaAPI/DragaliaAPI.Database.Test/DragaliaAPI.Database.Test.csproj",
+            "DragaliaAPI/DragaliaAPI.Database/DragaliaAPI.Database.csproj",
+            "DragaliaAPI/DragaliaAPI.Integration.Test/DragaliaAPI.Integration.Test.csproj",
+            "DragaliaAPI/DragaliaAPI.MasterAssetConverter/DragaliaAPI.MasterAssetConverter.csproj",
+            "DragaliaAPI/DragaliaAPI.MissionDesigner/DragaliaAPI.MissionDesigner.csproj",
+            "DragaliaAPI/DragaliaAPI.Shared.SourceGenerator.Test/DragaliaAPI.Shared.SourceGenerator.Test.csproj",
+            "DragaliaAPI/DragaliaAPI.Shared.SourceGenerator/DragaliaAPI.Shared.SourceGenerator.csproj",
+            "DragaliaAPI/DragaliaAPI.Shared.Test/DragaliaAPI.Shared.Test.csproj",
+            "DragaliaAPI/DragaliaAPI.Shared/DragaliaAPI.Shared.csproj",
+            "DragaliaAPI/DragaliaAPI.Test.Utils/DragaliaAPI.Test.Utils.csproj",
+            "DragaliaAPI/DragaliaAPI.Test/DragaliaAPI.Test.csproj",
+            "DragaliaAPI/DragaliaAPI/DragaliaAPI.csproj",
+            "PhotonStateManager/DragaliaAPI.Photon.StateManager.Test/DragaliaAPI.Photon.StateManager.Test.csproj",
+            "PhotonStateManager/DragaliaAPI.Photon.StateManager/DragaliaAPI.Photon.StateManager.csproj",
+            "Shared/DragaliaAPI.Photon.Shared/DragaliaAPI.Photon.Shared.csproj"
+        ]
+    }
+}
