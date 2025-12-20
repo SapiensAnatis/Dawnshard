@@ -3,7 +3,7 @@ USER app
 EXPOSE 8080
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:10.0.100 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0.101 AS build
 WORKDIR /src
 COPY ["DragaliaAPI/Directory.Build.props", "."]
 COPY ["Directory.Packages.props", "."]
