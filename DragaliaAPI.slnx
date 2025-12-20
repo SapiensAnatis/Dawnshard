@@ -1,0 +1,76 @@
+<Solution>
+  <Folder Name="/Aspire/">
+    <File Path="Aspire/Directory.Build.props" />
+    <Project Path="Aspire/Dawnshard.AppHost/Dawnshard.AppHost.csproj" />
+    <Project Path="Aspire/Dawnshard.ServiceDefaults/Dawnshard.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/DragaliaAPI/">
+    <File Path="DragaliaAPI/Directory.Build.props" />
+    <File Path="DragaliaAPI/README.md" />
+    <File Path="DragaliaAPI/version.json" />
+    <Project Path="DragaliaAPI/DragaliaAPI.Database.Test/DragaliaAPI.Database.Test.csproj" />
+    <Project Path="DragaliaAPI/DragaliaAPI.Database/DragaliaAPI.Database.csproj" />
+    <Project Path="DragaliaAPI/DragaliaAPI.Integration.Test/DragaliaAPI.Integration.Test.csproj" />
+    <Project Path="DragaliaAPI/DragaliaAPI.Shared.SourceGenerator.Test/DragaliaAPI.Shared.SourceGenerator.Test.csproj" />
+    <Project Path="DragaliaAPI/DragaliaAPI.Shared.SourceGenerator/DragaliaAPI.Shared.SourceGenerator.csproj" />
+    <Project Path="DragaliaAPI/DragaliaAPI.Shared.Test/DragaliaAPI.Shared.Test.csproj" />
+    <Project Path="DragaliaAPI/DragaliaAPI.Shared/DragaliaAPI.Shared.csproj" />
+    <Project Path="DragaliaAPI/DragaliaAPI.Test.Utils/DragaliaAPI.Test.Utils.csproj" />
+    <Project Path="DragaliaAPI/DragaliaAPI.Test/DragaliaAPI.Test.csproj" />
+    <Project Path="DragaliaAPI/DragaliaAPI/DragaliaAPI.csproj" />
+  </Folder>
+  <Folder Name="/DragaliaAPI/Tools/">
+    <Project Path="DragaliaAPI/DragaliaAPI.MasterAssetConverter/DragaliaAPI.MasterAssetConverter.csproj" />
+    <Project Path="DragaliaAPI/DragaliaAPI.MissionDesigner/DragaliaAPI.MissionDesigner.csproj" />
+  </Folder>
+  <Folder Name="/PhotonPlugin/">
+    <File Path="PhotonPlugin/Directory.Build.props" />
+    <File Path="PhotonPlugin/README.md" />
+    <Project Path="PhotonPlugin/DragaliaAPI.Photon.Plugin.Test/DragaliaAPI.Photon.Plugin.Test.csproj" />
+    <Project Path="PhotonPlugin/DragaliaAPI.Photon.Plugin/DragaliaAPI.Photon.Plugin.csproj" />
+  </Folder>
+  <Folder Name="/PhotonStateManager/">
+    <File Path="PhotonStateManager/Directory.Build.props" />
+    <File Path="PhotonStateManager/README.md" />
+    <File Path="PhotonStateManager/version.json" />
+    <Project Path="PhotonStateManager/DragaliaAPI.Photon.StateManager.Test/DragaliaAPI.Photon.StateManager.Test.csproj" />
+    <Project Path="PhotonStateManager/DragaliaAPI.Photon.StateManager/DragaliaAPI.Photon.StateManager.csproj" />
+  </Folder>
+  <Folder Name="/Shared/">
+    <Project Path="Shared/DragaliaAPI.Photon.Shared/DragaliaAPI.Photon.Shared.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".config/dotnet-tools.json" />
+    <File Path=".editorconfig" />
+    <File Path=".git-blame-ignore-revs" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+    <File Path="nuget.config" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/">
+    <File Path=".github/workflows/build-manual.yaml" />
+    <File Path=".github/workflows/build.yaml" />
+    <File Path=".github/workflows/deploy.yaml" />
+    <File Path=".github/workflows/integration-test.yaml" />
+    <File Path=".github/workflows/lint.yaml" />
+    <File Path=".github/workflows/playwright-test.yaml" />
+    <File Path=".github/workflows/publish-api.yaml" />
+    <File Path=".github/workflows/publish-statemanager.yaml" />
+    <File Path=".github/workflows/publish-website.yaml" />
+    <File Path=".github/workflows/test-api.yaml" />
+    <File Path=".github/workflows/test-report.yaml" />
+    <File Path=".github/workflows/test-statemanager.yaml" />
+    <File Path=".github/workflows/test-worker.yaml" />
+    <File Path=".github/workflows/test.yaml" />
+    <File Path=".github/workflows/website-snapshots.yaml" />
+    <File Path=".github/workflows/website.yaml" />
+  </Folder>
+  <Folder Name="/Solution Items/.husky/">
+    <File Path=".husky/task-runner.json" />
+  </Folder>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
+</Solution>
