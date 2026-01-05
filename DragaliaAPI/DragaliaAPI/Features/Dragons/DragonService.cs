@@ -122,7 +122,7 @@ public partial class DragonService(
                 dragonReliability.Level++;
                 if (dragonReliability.Level / 5 > levelRewardIndex)
                 {
-                    RewardReliabilityList? reward = await this.GetRewardDataForLevel(
+                    RewardReliabilityList? reward = await this.GrantRewardDataForLevel(
                         dragonReliability.Level,
                         dragonData.Rarity,
                         dragonReliability.DragonId
@@ -191,7 +191,7 @@ public partial class DragonService(
 
     private static readonly int[] PuppyLevelRewardQuantity = new int[] { 1, 21, 28, 34, 40, 1 };
 
-    private async Task<RewardReliabilityList?> GetRewardDataForLevel(
+    private async Task<RewardReliabilityList?> GrantRewardDataForLevel(
         int level,
         int rarity,
         int[] dragonStories,
@@ -213,9 +213,13 @@ public partial class DragonService(
                 {
                     reward.IsReleaseStory = true;
 
-                    int nextStoryUnlockIndex = await apiContext
-                        .PlayerStoryState.Where(x => dragonStories.Contains(x.StoryId))
-                        .CountAsync();
+                    int nextStoryUnlockIndex =
+                        await apiContext.PlayerStoryState.CountAsync(x =>
+                            dragonStories.Contains(x.StoryId)
+                        )
+                        + apiContext.PlayerStoryState.Local.Count(x =>
+                            dragonStories.Contains(x.StoryId)
+                        );
 
                     int nextStoryId = dragonStories.ElementAtOrDefault(nextStoryUnlockIndex);
 

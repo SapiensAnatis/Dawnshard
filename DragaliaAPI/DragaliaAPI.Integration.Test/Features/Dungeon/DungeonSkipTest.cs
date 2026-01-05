@@ -299,7 +299,7 @@ public class DungeonSkipTest : TestFixture
                     QuestBonusStackCount = 0,
                     QuestBonusStackTime = DateTimeOffset.UnixEpoch,
                 },
-                opts => opts.WithDateTimeTolerance(TimeSpan.FromSeconds(10))
+                opts => opts.WithDateTimeTolerance()
             );
     }
 
