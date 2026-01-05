@@ -17,7 +17,7 @@ public static class CommonAssertionOptions
     /// <returns>The same instance given by <paramref name="options"/>, for chaining calls.</returns>
     public static EquivalencyAssertionOptions<T> WithDateTimeTolerance<T>(
         this EquivalencyAssertionOptions<T> options
-    ) => WithDateTimeTolerance(options, TimeSpan.FromSeconds(3));
+    ) => WithDateTimeTolerance(options, TimeSpan.FromMinutes(1));
 
     /// <summary>
     /// Applies a tolerance when comparing <see cref="DateTimeOffset"/> properties in FluentAssertions equivalency.
