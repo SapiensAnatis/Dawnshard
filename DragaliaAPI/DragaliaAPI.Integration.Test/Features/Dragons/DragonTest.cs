@@ -386,6 +386,56 @@ public class DragonTest : TestFixture
     }
 
     [Fact]
+    public async Task DragonGiftSendMultiple_ReachLevel15_ReturnsExpectedRewardReliabilityList()
+    {
+        await this.AddToDatabase(
+            new DbPlayerDragonReliability(this.ViewerId, DragonId.Takemikazuchi)
+        );
+
+        DragonSendGiftMultipleRequest request = new DragonSendGiftMultipleRequest()
+        {
+            DragonId = DragonId.Takemikazuchi,
+            DragonGiftId = DragonGifts.FourLeafClover,
+            Quantity = 7, // 6,300 XP required, clovers are 1,000 each
+        };
+
+        DragonSendGiftMultipleResponse? response = (
+            await this.Client.PostMsgpack<DragonSendGiftMultipleResponse>(
+                "dragon/send_gift_multiple",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        ).Data;
+
+        response
+            .RewardReliabilityList.Should()
+            .Contain(x => x.Level == 5)
+            .Which.Should()
+            .BeEquivalentTo(
+                new RewardReliabilityList()
+                {
+                    Level = 5,
+                    IsReleaseStory = true,
+                    LevelupEntityList = [],
+                }
+            );
+        response
+            .RewardReliabilityList.Should()
+            .Contain(x => x.Level == 15)
+            .Which.Should()
+            .BeEquivalentTo(
+                new RewardReliabilityList()
+                {
+                    Level = 15,
+                    IsReleaseStory = true,
+                    LevelupEntityList = [],
+                }
+            );
+
+        response.UpdateDataList.UnitStoryList.Should().HaveCount(2);
+    }
+
+    [Fact]
     public async Task DragonSendGiftMultiple_CompletesMissionsCorrectly()
     {
         int missionId = 302600; // Reach Bond Lv. 30 with a Dragon
