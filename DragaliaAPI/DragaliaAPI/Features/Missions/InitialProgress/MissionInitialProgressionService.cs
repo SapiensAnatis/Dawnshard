@@ -313,6 +313,7 @@ public class MissionInitialProgressionService(
 
     private async Task<int> GetCharacterManaNodeCount(Charas? charaId, UnitElement? element)
     {
+        // FIXME: This should not be using ManaNodeUnlockCount as that's a bit mask, not a literal count of unlocked nodes
         if (charaId != null)
         {
             return (await unitRepository.FindCharaAsync(charaId.Value))?.ManaNodeUnlockCount ?? 0;

@@ -1,19 +1,20 @@
 namespace DragaliaAPI.Shared.Definitions.Enums;
 
+// csharpier-ignore-start
 [Flags]
 public enum ManaNodes : ushort
 {
-    Clear = 0,
-    Node1 = 0b_0000_0000_0000_0001,
-    Node2 = 0b_0000_0000_0000_0010,
-    Node3 = 0b_0000_0000_0000_0100,
-    Node4 = 0b_0000_0000_0000_1000,
-    Node5 = 0b_0000_0000_0001_0000,
-    Node6 = 0b_0000_0000_0010_0000,
-    Node7 = 0b_0000_0000_0100_0000,
-    Node8 = 0b_0000_0000_1000_0000,
-    Node9 = 0b_0000_0001_0000_0000,
-    Node10 = 0b_0000_0010_0000_0000,
+    Clear   = 0,
+    Node1   = 0b_0000_0000_0000_0001,
+    Node2   = 0b_0000_0000_0000_0010,
+    Node3   = 0b_0000_0000_0000_0100,
+    Node4   = 0b_0000_0000_0000_1000,
+    Node5   = 0b_0000_0000_0001_0000,
+    Node6   = 0b_0000_0000_0010_0000,
+    Node7   = 0b_0000_0000_0100_0000,
+    Node8   = 0b_0000_0000_1000_0000,
+    Node9   = 0b_0000_0001_0000_0000,
+    Node10  = 0b_0000_0010_0000_0000,
     Circle1 = 0b_0000_0100_0000_0000,
     Circle2 = 0b_0000_1000_0000_0000,
     Circle3 = 0b_0000_1100_0000_0000,
@@ -22,6 +23,7 @@ public enum ManaNodes : ushort
     Circle6 = 0b_0001_1000_0000_0000,
     Circle7 = 0b_0001_1100_0000_0000,
 }
+// csharpier-ignore-end
 
 public static class ManaNodesUtil
 {
@@ -35,32 +37,51 @@ public static class ManaNodesUtil
         ManaNodes baseNodes = ManaNodes.Clear
     )
     {
-        if (!enumerable.Any() || enumerable.Contains(0))
-            return ManaNodes.Clear;
+        SortedSet<int> set = enumerable as SortedSet<int> ?? new SortedSet<int>(enumerable);
 
-        int max = enumerable.Max();
+        if (set.Count == 0 || set.Contains(0))
+        {
+            return ManaNodes.Clear;
+        }
+
+        int max = set.Max;
         ManaNodes flag = baseNodes;
 
-        //These flags are usually set by limitbreaking but not for circle 6 and 7, so I manually do
+        // Bottom limit on for loop - how many nodes are already unlocked?
+        int minNode = 10 * ((int)(flag & ManaNodes.Circle7) >> 10);
+
+        // These flags are usually set by setting LimitBreakCount but not for circle 6 and 7 i.e. mana spirals
         if (max is > 50 and < 71)
         {
+            ManaNodes existingNonLimitBreakFlags = flag & ~ManaNodes.Circle7;
+            ManaNodes newLimitBreakFlag = (ManaNodes)((max / 10) << 10);
+
             flag = (ManaNodes)
                 Math.Min(
-                    (int)(flag & ~ManaNodes.Circle7) | ((max / 10) << 10),
+                    (int)(newLimitBreakFlag | existingNonLimitBreakFlags),
                     (ushort)ManaNodes.Circle7
                 );
         }
 
         ManaNodes[] allNodes = Enum.GetValues<ManaNodes>();
 
-        int minNode = 10 * ((int)(flag & ManaNodes.Circle7) >> 10);
-
         for (int i = minNode + 1; i <= max; ++i)
         {
-            if (enumerable.Contains(i))
+            if (set.Contains(i))
             {
                 int id = (i - minNode) % 10;
                 flag |= allNodes[id == 0 ? 10 : id];
+            }
+
+            if (i is > 50 and < 71 && i % 10 == 0)
+            {
+                // In the mana spiral, if we reach a limit break, discard non limit break nodes
+                // Consider the transition from node 59 to 60:
+                // Node 59: ManaNodes.Circle5 | ManaNodes.Node9 ... ManaNodes.Node1
+                // Node 60: ManaNodes.Circle6
+                // Node 61: ManaNodes.Circle6 | ManaNodes.Node1
+                // We can use Circle7 as a 'spiral limit break only' bitmask because Circle7 = Circle6 | Circle5
+                flag &= ManaNodes.Circle7;
             }
         }
 

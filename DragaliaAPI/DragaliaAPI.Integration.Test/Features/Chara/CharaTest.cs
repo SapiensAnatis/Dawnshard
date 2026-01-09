@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Collections.Immutable;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Chara;
@@ -39,6 +40,7 @@ public class CharaTest : TestFixture
         this.AddCharacter(Charas.Delphi);
         this.AddCharacter(Charas.GalaAudric);
         this.AddCharacter(Charas.Gauld);
+        this.AddCharacter(Charas.Valerio);
     }
 
     [Fact]
@@ -219,6 +221,37 @@ public class CharaTest : TestFixture
         );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
+    }
+
+    [Fact]
+    public async Task CharaBuildupMana_Node60_DoesNotSkip()
+    {
+        // https://github.com/SapiensAnatis/Dawnshard/issues/765
+        ImmutableArray<int> nodes59 = [.. Enumerable.Range(1, 59)];
+        ushort node59Bitmask = (ushort)ManaNodesUtil.SetManaCircleNodesFromSet(nodes59);
+
+        await this
+            .ApiContext.PlayerCharaData.Where(x =>
+                x.ViewerId == this.ViewerId && x.CharaId == Charas.Valerio
+            )
+            .ExecuteUpdateAsync(
+                x => x.SetProperty(p => p.ManaNodeUnlockCount, node59Bitmask),
+                TestContext.Current.CancellationToken
+            );
+
+        DragaliaResponse<CharaBuildupManaResponse> response = (
+            await this.Client.PostMsgpack<CharaBuildupManaResponse>(
+                "chara/buildup_mana",
+                new CharaBuildupManaRequest(Charas.Valerio, [60], false),
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        );
+
+        response
+            .Data.UpdateDataList.CharaList.Should()
+            .Contain(x => x.CharaId == Charas.Valerio)
+            .Which.ManaCirclePieceIdList.Should()
+            .BeEquivalentTo(nodes59.Add(60));
     }
 
     [Fact]

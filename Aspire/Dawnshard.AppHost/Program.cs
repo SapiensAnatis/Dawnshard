@@ -13,12 +13,15 @@ IResourceBuilder<PostgresServerResource> postgres = builder
     .WithEndpointProxySupport(false);
 #pragma warning restore ASPIREPROXYENDPOINTS001
 
+#pragma warning disable ASPIRECERTIFICATES001
 IResourceBuilder<RedisResource> redis = builder
     .AddRedis("redis")
-    .WithImage("redis/redis-stack", "7.4.0-v3")
+    .WithImage("redis/redis-stack", "7.4.0-v8")
+    .WithoutHttpsCertificate()
     .WithPassword(null)
     .WithEntrypoint("/entrypoint.sh") // Default Aspire entrypoint doesn't load modules correctly
     .WithLifetime(ContainerLifetime.Persistent);
+#pragma warning restore ASPIRECERTIFICATES001
 
 IResourceBuilder<ProjectResource> dragaliaApi = builder
     .AddProject<Projects.DragaliaAPI>("dragalia-api")
