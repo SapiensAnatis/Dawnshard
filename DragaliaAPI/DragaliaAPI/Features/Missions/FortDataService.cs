@@ -14,7 +14,8 @@ public class FortDataService(IFortRepository fortRepository)
                 .Builds.Where(x => x.PlantId != FortPlants.TheHalidom)
                 .SumAsync(x =>
                     x.BuildEndDate == DateTimeOffset.UnixEpoch ? x.Level : (int?)x.Level - 1
-                ) ?? 0;
+                )
+            ?? 0;
     }
 
     public async Task<int> GetMaxFortPlantLevel(FortPlants plant)
@@ -22,7 +23,8 @@ public class FortDataService(IFortRepository fortRepository)
         return await fortRepository
                 .Builds.Where(x => x.PlantId == plant)
                 .Select(x => (int?)x.Level)
-                .MaxAsync() ?? 0;
+                .MaxAsync()
+            ?? 0;
     }
 
     public async Task<int> GetFortPlantCount(FortPlants plant)

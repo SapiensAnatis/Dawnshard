@@ -322,12 +322,10 @@ public class DungeonRecordTest : TestFixture
         int questId = 208450301; // The Stirring Abyss: Beginner
         int eventId = 20845; // Toll of the Deep
 
-        await this.AddRangeToDatabase(
-            [
-                new DbAbilityCrest() { AbilityCrestId = AbilityCrestId.HavingaSummerBall },
-                new DbAbilityCrest() { AbilityCrestId = AbilityCrestId.SuperSoakingAndroids },
-            ]
-        );
+        await this.AddRangeToDatabase([
+            new DbAbilityCrest() { AbilityCrestId = AbilityCrestId.HavingaSummerBall },
+            new DbAbilityCrest() { AbilityCrestId = AbilityCrestId.SuperSoakingAndroids },
+        ]);
 
         await Client.PostMsgpack<MemoryEventActivateResponse>(
             "/memory_event/activate",
@@ -936,7 +934,7 @@ public class DungeonRecordTest : TestFixture
 
         DbTimeAttackClear recordedClear = await this
             .ApiContext.TimeAttackClears.Include(x => x.Players)
-            .ThenInclude(x => x.Units)
+                .ThenInclude(x => x.Units)
             .FirstAsync(
                 x => x.GameId == gameId,
                 cancellationToken: TestContext.Current.CancellationToken
@@ -1112,23 +1110,21 @@ public class DungeonRecordTest : TestFixture
 
         response
             .IngameResultData.RewardRecord.FirstClearSet.Should()
-            .BeEquivalentTo(
-                [
-                    new AtgenFirstClearSet()
-                    {
-                        Type = EntityTypes.Material,
-                        Id = (int)Materials.DestituteOnesMaskFragment,
-                        Quantity = 80,
-                    },
-                    new AtgenFirstClearSet()
-                    {
-                        Type = EntityTypes.Material,
-                        Id = (int)Materials.PlaguedOnesMaskFragment,
-                        Quantity = 30,
-                    },
-                    new AtgenFirstClearSet() { Type = EntityTypes.Wyrmite, Quantity = 5 },
-                ]
-            );
+            .BeEquivalentTo([
+                new AtgenFirstClearSet()
+                {
+                    Type = EntityTypes.Material,
+                    Id = (int)Materials.DestituteOnesMaskFragment,
+                    Quantity = 80,
+                },
+                new AtgenFirstClearSet()
+                {
+                    Type = EntityTypes.Material,
+                    Id = (int)Materials.PlaguedOnesMaskFragment,
+                    Quantity = 30,
+                },
+                new AtgenFirstClearSet() { Type = EntityTypes.Wyrmite, Quantity = 5 },
+            ]);
 
         request.DungeonKey = await this.StartDungeon(
             new DungeonSession()
@@ -1493,18 +1489,16 @@ public class DungeonRecordTest : TestFixture
             Ability1Level = 5,
         };
 
-        await AddRangeToDatabase(
-            [
-                new DbQuest()
-                {
-                    QuestId = avenueToFortuneQuestId,
-                    State = 0,
-                    ViewerId = ViewerId,
-                },
-                goldFafnir,
-                silverFafnir,
-            ]
-        );
+        await AddRangeToDatabase([
+            new DbQuest()
+            {
+                QuestId = avenueToFortuneQuestId,
+                State = 0,
+                ViewerId = ViewerId,
+            },
+            goldFafnir,
+            silverFafnir,
+        ]);
 
         DragaliaResponse<DungeonStartStartAssignUnitResponse> startResponse =
             await this.Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(
@@ -1592,16 +1586,14 @@ public class DungeonRecordTest : TestFixture
                 TestContext.Current.CancellationToken
             );
 
-        await AddRangeToDatabase(
-            [
-                new DbQuest()
-                {
-                    QuestId = avenueToFortuneQuestId,
-                    State = 0,
-                    ViewerId = ViewerId,
-                },
-            ]
-        );
+        await AddRangeToDatabase([
+            new DbQuest()
+            {
+                QuestId = avenueToFortuneQuestId,
+                State = 0,
+                ViewerId = ViewerId,
+            },
+        ]);
 
         DragaliaResponse<DungeonStartStartAssignUnitResponse> startResponse =
             await this.Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(
@@ -1663,16 +1655,14 @@ public class DungeonRecordTest : TestFixture
                 TestContext.Current.CancellationToken
             );
 
-        await AddRangeToDatabase(
-            [
-                new DbQuest()
-                {
-                    QuestId = avenueToFortuneQuestId,
-                    State = 0,
-                    ViewerId = ViewerId,
-                },
-            ]
-        );
+        await AddRangeToDatabase([
+            new DbQuest()
+            {
+                QuestId = avenueToFortuneQuestId,
+                State = 0,
+                ViewerId = ViewerId,
+            },
+        ]);
 
         DragaliaResponse<DungeonStartStartAssignUnitResponse> startResponse =
             await this.Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(
@@ -1734,16 +1724,14 @@ public class DungeonRecordTest : TestFixture
                 TestContext.Current.CancellationToken
             );
 
-        await AddRangeToDatabase(
-            [
-                new DbQuest()
-                {
-                    QuestId = avenueToFortuneQuestId,
-                    State = 0,
-                    ViewerId = ViewerId,
-                },
-            ]
-        );
+        await AddRangeToDatabase([
+            new DbQuest()
+            {
+                QuestId = avenueToFortuneQuestId,
+                State = 0,
+                ViewerId = ViewerId,
+            },
+        ]);
 
         DragaliaResponse<DungeonStartStartAssignUnitResponse> startResponse =
             await this.Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(

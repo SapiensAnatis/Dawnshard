@@ -34,12 +34,10 @@ public class SummonOddsLogicTest
 
         pickupRates
             .Should()
-            .BeEquivalentTo(
-                [
-                    new UnitRate(Charas.FaeblessedTobias, 0.005m),
-                    new UnitRate(DragonId.Simurgh, 0.008m),
-                ]
-            );
+            .BeEquivalentTo([
+                new UnitRate(Charas.FaeblessedTobias, 0.005m),
+                new UnitRate(DragonId.Simurgh, 0.008m),
+            ]);
 
         normalRates.Should().NotContain(x => x.Id == (int)Charas.FaeblessedTobias);
         normalRates.Should().NotContain(x => x.Id == (int)DragonId.Simurgh);
@@ -95,13 +93,11 @@ public class SummonOddsLogicTest
 
         pickupRates
             .Should()
-            .BeEquivalentTo(
-                [
-                    new UnitRate(Charas.GalaNedrick, 0.005m),
-                    new UnitRate(Charas.Akasha, 0.005m),
-                    new UnitRate(Charas.Eirene, 0.005m),
-                ]
-            );
+            .BeEquivalentTo([
+                new UnitRate(Charas.GalaNedrick, 0.005m),
+                new UnitRate(Charas.Akasha, 0.005m),
+                new UnitRate(Charas.Eirene, 0.005m),
+            ]);
 
         decimal expectedOffPickupRate = 0.04m - 0.005m - 0.005m - 0.005m;
         normalRates
@@ -140,13 +136,11 @@ public class SummonOddsLogicTest
 
         pickupRates
             .Should()
-            .BeEquivalentTo(
-                [
-                    new UnitRate(Charas.GalaZena, 0.005m),
-                    new UnitRate(Charas.GalaRanzal, 0.005m),
-                    new UnitRate(DragonId.GalaBeastCiella, 0.008m),
-                ]
-            );
+            .BeEquivalentTo([
+                new UnitRate(Charas.GalaZena, 0.005m),
+                new UnitRate(Charas.GalaRanzal, 0.005m),
+                new UnitRate(DragonId.GalaBeastCiella, 0.008m),
+            ]);
 
         combined.SumOfRatesForRarity(5).Should().BeApproximately(0.06m, AssertionPrecision);
 
@@ -191,13 +185,11 @@ public class SummonOddsLogicTest
 
         pickupRates
             .Should()
-            .BeEquivalentTo(
-                [
-                    new UnitRate(Charas.GalaZena, 0.005m),
-                    new UnitRate(Charas.GalaRanzal, 0.005m),
-                    new UnitRate(DragonId.GalaBeastCiella, 0.008m),
-                ]
-            );
+            .BeEquivalentTo([
+                new UnitRate(Charas.GalaZena, 0.005m),
+                new UnitRate(Charas.GalaRanzal, 0.005m),
+                new UnitRate(DragonId.GalaBeastCiella, 0.008m),
+            ]);
 
         List<Charas> offPickupCharaIds = normalRates
             .Where(x => x is { EntityType: EntityTypes.Chara, Rarity: 5 })
@@ -478,9 +470,10 @@ public class SummonOddsLogicTest
 
         pickupRates
             .Should()
-            .BeEquivalentTo(
-                [new UnitRate(Charas.KuHai, 0.035m), new UnitRate(DragonId.Roc, 0.035m)]
-            );
+            .BeEquivalentTo([
+                new UnitRate(Charas.KuHai, 0.035m),
+                new UnitRate(DragonId.Roc, 0.035m),
+            ]);
 
         combined.SumOfRatesForRarity(5).Should().BeApproximately(0.04m, AssertionPrecision);
         combined.SumOfRatesForRarity(4).Should().BeApproximately(0.16m, AssertionPrecision);
@@ -521,14 +514,12 @@ public class SummonOddsLogicTest
 
         pickupRates
             .Should()
-            .BeEquivalentTo(
-                [
-                    new UnitRate(Charas.KuHai, 0.035m),
-                    new UnitRate(Charas.GalaAudric, 0.005m),
-                    new UnitRate(DragonId.Roc, 0.035m),
-                    new UnitRate(DragonId.GalaBahamut, 0.008m),
-                ]
-            );
+            .BeEquivalentTo([
+                new UnitRate(Charas.KuHai, 0.035m),
+                new UnitRate(Charas.GalaAudric, 0.005m),
+                new UnitRate(DragonId.Roc, 0.035m),
+                new UnitRate(DragonId.GalaBahamut, 0.008m),
+            ]);
 
         combined.SumOfRatesForRarity(5).Should().BeApproximately(0.06m, AssertionPrecision);
 
@@ -598,9 +589,10 @@ public class SummonOddsLogicTest
 
         pickupRates
             .Should()
-            .BeEquivalentTo(
-                [new UnitRate(Charas.Joe, 0.04m), new UnitRate(DragonId.PallidImp, 0.04m)]
-            );
+            .BeEquivalentTo([
+                new UnitRate(Charas.Joe, 0.04m),
+                new UnitRate(DragonId.PallidImp, 0.04m),
+            ]);
 
         combined.SumOfRatesForRarity(5).Should().BeApproximately(0.04m, AssertionPrecision);
 
@@ -670,14 +662,12 @@ public class SummonOddsLogicTest
 
         pickupRates
             .Should()
-            .BeEquivalentTo(
-                [
-                    new UnitRate(Charas.Joe, 0.04m),
-                    new UnitRate(Charas.GalaZethia, 0.005m),
-                    new UnitRate(DragonId.PallidImp, 0.04m),
-                    new UnitRate(DragonId.GalaRebornJeanne, 0.008m),
-                ]
-            );
+            .BeEquivalentTo([
+                new UnitRate(Charas.Joe, 0.04m),
+                new UnitRate(Charas.GalaZethia, 0.005m),
+                new UnitRate(DragonId.PallidImp, 0.04m),
+                new UnitRate(DragonId.GalaRebornJeanne, 0.008m),
+            ]);
 
         combined.SumOfRatesForRarity(5).Should().BeApproximately(0.06m, AssertionPrecision);
 
@@ -890,9 +880,10 @@ public class SummonOddsLogicTest
 
         pickupRates
             .Should()
-            .BeEquivalentTo(
-                [new UnitRate(Charas.Eirene, 0.005m), new UnitRate(DragonId.Agni, 0.008m)]
-            );
+            .BeEquivalentTo([
+                new UnitRate(Charas.Eirene, 0.005m),
+                new UnitRate(DragonId.Agni, 0.008m),
+            ]);
 
         decimal expectedOffPickupRate = 0.04m - 0.005m - 0.008m;
         normalRates
@@ -971,12 +962,10 @@ public class SummonOddsLogicTest
 
         pickupRates
             .Should()
-            .BeEquivalentTo(
-                [
-                    new UnitRate(Charas.GalaLeif, 0.005m),
-                    new UnitRate(DragonId.GalaRebornAgni, 0.008m),
-                ]
-            );
+            .BeEquivalentTo([
+                new UnitRate(Charas.GalaLeif, 0.005m),
+                new UnitRate(DragonId.GalaRebornAgni, 0.008m),
+            ]);
 
         decimal expectedOffPickupRate = 0.06m - 0.005m - 0.008m;
         normalRates
@@ -1085,14 +1074,12 @@ public class SummonOddsLogicTest
 
         pickupRates
             .Should()
-            .BeEquivalentTo(
-                [
-                    new UnitRate(Charas.KuHai, 0.205625m),
-                    new UnitRate(Charas.GalaCleo, 0.005m),
-                    new UnitRate(DragonId.Roc, 0.205625m),
-                    new UnitRate(DragonId.GalaChronosNyx, 0.008m),
-                ]
-            );
+            .BeEquivalentTo([
+                new UnitRate(Charas.KuHai, 0.205625m),
+                new UnitRate(Charas.GalaCleo, 0.005m),
+                new UnitRate(DragonId.Roc, 0.205625m),
+                new UnitRate(DragonId.GalaChronosNyx, 0.008m),
+            ]);
 
         combined.SumOfRatesForRarity(5).Should().BeApproximately(0.06m, AssertionPrecision);
         combined.SumOfRatesForRarity(4).Should().BeApproximately(0.94m, AssertionPrecision);
@@ -1197,12 +1184,10 @@ public class SummonOddsLogicTest
 
         pickupRates
             .Should()
-            .BeEquivalentTo(
-                [
-                    new UnitRate(Charas.GalaZethia, 0.005m),
-                    new UnitRate(DragonId.GalaRebornJeanne, 0.008m),
-                ]
-            );
+            .BeEquivalentTo([
+                new UnitRate(Charas.GalaZethia, 0.005m),
+                new UnitRate(DragonId.GalaRebornJeanne, 0.008m),
+            ]);
 
         combined.SumOfRatesForRarity(5).Should().BeApproximately(0.06m, AssertionPrecision);
 

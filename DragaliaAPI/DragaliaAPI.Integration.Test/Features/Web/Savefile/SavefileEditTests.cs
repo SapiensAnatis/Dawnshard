@@ -52,12 +52,10 @@ public class SavefileEditTests : WebTestFixture
         data.AvailableItems.Should()
             .ContainKey(EntityTypes.DmodePoint)
             .WhoseValue.Should()
-            .BeEquivalentTo(
-                [
-                    new EntityTypeItem() { Id = (int)DmodePoint.Point1 },
-                    new EntityTypeItem() { Id = (int)DmodePoint.Point2 },
-                ]
-            );
+            .BeEquivalentTo([
+                new EntityTypeItem() { Id = (int)DmodePoint.Point1 },
+                new EntityTypeItem() { Id = (int)DmodePoint.Point2 },
+            ]);
     }
 
     [Fact]

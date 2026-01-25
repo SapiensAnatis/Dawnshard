@@ -344,22 +344,20 @@ public class DungeonSkipTest : TestFixture
         int playCount = 5;
         int clear5QuestsMission = 15070501;
 
-        await this.AddRangeToDatabase(
-            [
-                new DbQuest()
-                {
-                    ViewerId = ViewerId,
-                    QuestId = questId,
-                    State = 3,
-                },
-                new DbPlayerMission()
-                {
-                    Id = clear5QuestsMission,
-                    Type = MissionType.Daily,
-                    State = MissionState.InProgress,
-                },
-            ]
-        );
+        await this.AddRangeToDatabase([
+            new DbQuest()
+            {
+                ViewerId = ViewerId,
+                QuestId = questId,
+                State = 3,
+            },
+            new DbPlayerMission()
+            {
+                Id = clear5QuestsMission,
+                Type = MissionType.Daily,
+                State = MissionState.InProgress,
+            },
+        ]);
 
         DragaliaResponse<DungeonSkipStartResponse> response =
             await this.Client.PostMsgpack<DungeonSkipStartResponse>(

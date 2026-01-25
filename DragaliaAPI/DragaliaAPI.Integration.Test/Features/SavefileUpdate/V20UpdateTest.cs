@@ -16,24 +16,22 @@ public class V20UpdateTest : SavefileUpdateTestFixture
     [Fact]
     public async Task V20Update_StoriesCompleted_AddsMissingCompendiumCharacters()
     {
-        await this.AddRangeToDatabase(
-            [
-                new DbPlayerStoryState()
-                {
-                    ViewerId = this.ViewerId,
-                    StoryId = HarleStoryId,
-                    StoryType = StoryTypes.Quest,
-                    State = StoryState.Read,
-                },
-                new DbPlayerStoryState()
-                {
-                    ViewerId = this.ViewerId,
-                    StoryId = OrigaStoryId,
-                    StoryType = StoryTypes.Quest,
-                    State = StoryState.Read,
-                },
-            ]
-        );
+        await this.AddRangeToDatabase([
+            new DbPlayerStoryState()
+            {
+                ViewerId = this.ViewerId,
+                StoryId = HarleStoryId,
+                StoryType = StoryTypes.Quest,
+                State = StoryState.Read,
+            },
+            new DbPlayerStoryState()
+            {
+                ViewerId = this.ViewerId,
+                StoryId = OrigaStoryId,
+                StoryType = StoryTypes.Quest,
+                State = StoryState.Read,
+            },
+        ]);
 
         await this.LoadIndex();
 
@@ -48,24 +46,22 @@ public class V20UpdateTest : SavefileUpdateTestFixture
     [Fact]
     public async Task V20Update_StoriesNotCompleted_DoesNotAddCharacters()
     {
-        this.ApiContext.PlayerStoryState.AddRange(
-            [
-                new DbPlayerStoryState()
-                {
-                    Owner = new DbPlayer() { AccountId = "other player" },
-                    StoryId = HarleStoryId,
-                    StoryType = StoryTypes.Quest,
-                    State = StoryState.Read,
-                },
-                new DbPlayerStoryState()
-                {
-                    ViewerId = this.ViewerId,
-                    StoryId = OrigaStoryId,
-                    StoryType = StoryTypes.Quest,
-                    State = StoryState.Unlocked,
-                },
-            ]
-        );
+        this.ApiContext.PlayerStoryState.AddRange([
+            new DbPlayerStoryState()
+            {
+                Owner = new DbPlayer() { AccountId = "other player" },
+                StoryId = HarleStoryId,
+                StoryType = StoryTypes.Quest,
+                State = StoryState.Read,
+            },
+            new DbPlayerStoryState()
+            {
+                ViewerId = this.ViewerId,
+                StoryId = OrigaStoryId,
+                StoryType = StoryTypes.Quest,
+                State = StoryState.Unlocked,
+            },
+        ]);
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
         await this.LoadIndex();
 
@@ -80,26 +76,24 @@ public class V20UpdateTest : SavefileUpdateTestFixture
     [Fact]
     public async Task V20Update_StoriesCompleted_CharactersOwned_DoesNotAddCharacters()
     {
-        await this.AddRangeToDatabase(
-            [
-                new DbPlayerStoryState()
-                {
-                    ViewerId = this.ViewerId,
-                    StoryId = HarleStoryId,
-                    StoryType = StoryTypes.Quest,
-                    State = StoryState.Read,
-                },
-                new DbPlayerStoryState()
-                {
-                    ViewerId = this.ViewerId,
-                    StoryId = OrigaStoryId,
-                    StoryType = StoryTypes.Quest,
-                    State = StoryState.Read,
-                },
-                new DbPlayerCharaData(this.ViewerId, Charas.Harle),
-                new DbPlayerCharaData(this.ViewerId, Charas.Origa),
-            ]
-        );
+        await this.AddRangeToDatabase([
+            new DbPlayerStoryState()
+            {
+                ViewerId = this.ViewerId,
+                StoryId = HarleStoryId,
+                StoryType = StoryTypes.Quest,
+                State = StoryState.Read,
+            },
+            new DbPlayerStoryState()
+            {
+                ViewerId = this.ViewerId,
+                StoryId = OrigaStoryId,
+                StoryType = StoryTypes.Quest,
+                State = StoryState.Read,
+            },
+            new DbPlayerCharaData(this.ViewerId, Charas.Harle),
+            new DbPlayerCharaData(this.ViewerId, Charas.Origa),
+        ]);
 
         await this.LoadIndex();
 

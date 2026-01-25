@@ -130,31 +130,29 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
     {
         int natalieStoryId = MasterAsset.CharaStories[(int)Charas.Natalie].StoryIds[0];
         int catherineStoryId = MasterAsset.CharaStories[(int)Charas.Catherine].StoryIds[0];
-        await this.fixture.AddRangeToDatabase(
-            [
-                new DbPlayerStoryState()
-                {
-                    ViewerId = ViewerId,
-                    StoryType = StoryTypes.Chara,
-                    StoryId = natalieStoryId,
-                    State = 0,
-                },
-                new DbPlayerStoryState()
-                {
-                    ViewerId = ViewerId,
-                    StoryType = StoryTypes.Dragon,
-                    StoryId = catherineStoryId,
-                    State = 0,
-                },
-                new DbPlayerStoryState()
-                {
-                    ViewerId = ViewerId + 1,
-                    StoryType = StoryTypes.Chara,
-                    StoryId = catherineStoryId,
-                    State = 0,
-                },
-            ]
-        );
+        await this.fixture.AddRangeToDatabase([
+            new DbPlayerStoryState()
+            {
+                ViewerId = ViewerId,
+                StoryType = StoryTypes.Chara,
+                StoryId = natalieStoryId,
+                State = 0,
+            },
+            new DbPlayerStoryState()
+            {
+                ViewerId = ViewerId,
+                StoryType = StoryTypes.Dragon,
+                StoryId = catherineStoryId,
+                State = 0,
+            },
+            new DbPlayerStoryState()
+            {
+                ViewerId = ViewerId + 1,
+                StoryType = StoryTypes.Chara,
+                StoryId = catherineStoryId,
+                State = 0,
+            },
+        ]);
 
         List<Charas> idList = [Charas.Natalie, Charas.Catherine];
 
@@ -209,20 +207,14 @@ public class UnitServiceTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task AddDragons_HandlesExistingReliability()
     {
-        await this.fixture.AddRangeToDatabase(
-            [
-                new DbPlayerDragonReliability()
-                {
-                    ViewerId = ViewerId,
-                    DragonId = DragonId.AC011Garland,
-                },
-                new DbPlayerDragonReliability()
-                {
-                    ViewerId = ViewerId + 1,
-                    DragonId = DragonId.Agni,
-                },
-            ]
-        );
+        await this.fixture.AddRangeToDatabase([
+            new DbPlayerDragonReliability()
+            {
+                ViewerId = ViewerId,
+                DragonId = DragonId.AC011Garland,
+            },
+            new DbPlayerDragonReliability() { ViewerId = ViewerId + 1, DragonId = DragonId.Agni },
+        ]);
 
         List<DragonId> idList = [DragonId.AC011Garland, DragonId.Agni];
 

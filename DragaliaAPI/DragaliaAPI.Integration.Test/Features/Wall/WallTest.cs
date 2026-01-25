@@ -58,41 +58,39 @@ public class WallTest : TestFixture
     [Fact]
     public async Task GetMonthlyReward_ReturnsExpectedResponse()
     {
-        await this.AddRangeToDatabase(
-            [
-                new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UnixEpoch },
-                new DbPlayerQuestWall()
-                {
-                    ViewerId = ViewerId,
-                    WallId = 216010001,
-                    WallLevel = 1,
-                },
-                new DbPlayerQuestWall()
-                {
-                    ViewerId = ViewerId,
-                    WallId = 216010002,
-                    WallLevel = 2,
-                },
-                new DbPlayerQuestWall()
-                {
-                    ViewerId = ViewerId,
-                    WallId = 216010003,
-                    WallLevel = 3,
-                },
-                new DbPlayerQuestWall()
-                {
-                    ViewerId = ViewerId,
-                    WallId = 216010004,
-                    WallLevel = 4,
-                },
-                new DbPlayerQuestWall()
-                {
-                    ViewerId = ViewerId,
-                    WallId = 216010005,
-                    WallLevel = 5,
-                },
-            ]
-        );
+        await this.AddRangeToDatabase([
+            new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UnixEpoch },
+            new DbPlayerQuestWall()
+            {
+                ViewerId = ViewerId,
+                WallId = 216010001,
+                WallLevel = 1,
+            },
+            new DbPlayerQuestWall()
+            {
+                ViewerId = ViewerId,
+                WallId = 216010002,
+                WallLevel = 2,
+            },
+            new DbPlayerQuestWall()
+            {
+                ViewerId = ViewerId,
+                WallId = 216010003,
+                WallLevel = 3,
+            },
+            new DbPlayerQuestWall()
+            {
+                ViewerId = ViewerId,
+                WallId = 216010004,
+                WallLevel = 4,
+            },
+            new DbPlayerQuestWall()
+            {
+                ViewerId = ViewerId,
+                WallId = 216010005,
+                WallLevel = 5,
+            },
+        ]);
 
         WallGetMonthlyRewardResponse response = (
             await this.Client.PostMsgpack<WallGetMonthlyRewardResponse>(
@@ -233,17 +231,15 @@ public class WallTest : TestFixture
     [Fact]
     public async Task ReceiveMonthlyRewawrds_NotEligible_ReturnsInvalidArgument()
     {
-        await this.AddRangeToDatabase(
-            [
-                new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UtcNow },
-                new DbPlayerQuestWall()
-                {
-                    ViewerId = ViewerId,
-                    WallId = 216010001,
-                    WallLevel = 5,
-                },
-            ]
-        );
+        await this.AddRangeToDatabase([
+            new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UtcNow },
+            new DbPlayerQuestWall()
+            {
+                ViewerId = ViewerId,
+                WallId = 216010001,
+                WallLevel = 5,
+            },
+        ]);
 
         DragaliaResponse<ResultCodeResponse> response = (
             await this.Client.PostMsgpack<ResultCodeResponse>(

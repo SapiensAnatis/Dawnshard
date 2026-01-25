@@ -517,12 +517,10 @@ public class LoginTest : TestFixture
     [Fact]
     public async Task LoginIndex_WallInitialized_Eligible_SendsRewardAvailable()
     {
-        await this.AddRangeToDatabase(
-            [
-                new DbPlayerQuestWall() { WallId = WallService.FlameWallId, WallLevel = 10 },
-                new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UnixEpoch },
-            ]
-        );
+        await this.AddRangeToDatabase([
+            new DbPlayerQuestWall() { WallId = WallService.FlameWallId, WallLevel = 10 },
+            new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UnixEpoch },
+        ]);
 
         LoginIndexResponse response = (
             await this.Client.PostMsgpack<LoginIndexResponse>(
@@ -548,12 +546,10 @@ public class LoginTest : TestFixture
     [Fact]
     public async Task LoginIndex_WallInitialized_Claimed_SendsRewardReceived()
     {
-        await this.AddRangeToDatabase(
-            [
-                new DbPlayerQuestWall() { WallId = WallService.FlameWallId, WallLevel = 10 },
-                new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UtcNow },
-            ]
-        );
+        await this.AddRangeToDatabase([
+            new DbPlayerQuestWall() { WallId = WallService.FlameWallId, WallLevel = 10 },
+            new DbWallRewardDate() { LastClaimDate = DateTimeOffset.UtcNow },
+        ]);
 
         LoginIndexResponse response = (
             await this.Client.PostMsgpack<LoginIndexResponse>(

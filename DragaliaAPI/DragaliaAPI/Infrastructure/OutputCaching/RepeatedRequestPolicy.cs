@@ -15,9 +15,10 @@ internal class RepeatedRequestPolicy(ILogger<RepeatedRequestPolicy> logger) : IO
         context.AllowCacheLookup = shouldCache;
         context.AllowCacheStorage = shouldCache;
 
-        context.CacheVaryByRules.HeaderNames = new StringValues(
-            [Headers.RequestToken, Headers.SessionId]
-        );
+        context.CacheVaryByRules.HeaderNames = new StringValues([
+            Headers.RequestToken,
+            Headers.SessionId,
+        ]);
 
         return ValueTask.CompletedTask;
     }

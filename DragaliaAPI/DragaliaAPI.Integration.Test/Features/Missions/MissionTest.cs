@@ -349,57 +349,53 @@ public class MissionTest : TestFixture
         DateOnly today = DateOnly.FromDateTime(timeProvider.GetLastDailyReset().Date);
         DateOnly yesterday = today.AddDays(-1);
 
-        await this.AddToDatabase(
-            [
-                new DbCompletedDailyMission()
-                {
-                    ViewerId = this.ViewerId,
-                    Id = missionId1,
-                    Date = today,
-                },
-                new DbCompletedDailyMission()
-                {
-                    ViewerId = this.ViewerId,
-                    Id = missionId2,
-                    Date = today,
-                },
-                new DbCompletedDailyMission()
-                {
-                    ViewerId = this.ViewerId,
-                    Id = missionId1,
-                    Date = yesterday,
-                },
-                new DbCompletedDailyMission()
-                {
-                    ViewerId = this.ViewerId,
-                    Id = missionId2,
-                    Date = yesterday,
-                },
-            ]
-        );
+        await this.AddToDatabase([
+            new DbCompletedDailyMission()
+            {
+                ViewerId = this.ViewerId,
+                Id = missionId1,
+                Date = today,
+            },
+            new DbCompletedDailyMission()
+            {
+                ViewerId = this.ViewerId,
+                Id = missionId2,
+                Date = today,
+            },
+            new DbCompletedDailyMission()
+            {
+                ViewerId = this.ViewerId,
+                Id = missionId1,
+                Date = yesterday,
+            },
+            new DbCompletedDailyMission()
+            {
+                ViewerId = this.ViewerId,
+                Id = missionId2,
+                Date = yesterday,
+            },
+        ]);
 
-        await this.AddToDatabase(
-            [
-                new DbPlayerMission()
-                {
-                    ViewerId = this.ViewerId,
-                    Id = missionId1,
-                    Type = MissionType.Daily,
-                    State = MissionState.Completed,
-                    Start = timeProvider.GetLastDailyReset(),
-                    End = timeProvider.GetLastDailyReset().AddDays(1),
-                },
-                new DbPlayerMission()
-                {
-                    ViewerId = this.ViewerId,
-                    Id = missionId2,
-                    Type = MissionType.Daily,
-                    State = MissionState.Completed,
-                    Start = timeProvider.GetLastDailyReset(),
-                    End = timeProvider.GetLastDailyReset().AddDays(1),
-                },
-            ]
-        );
+        await this.AddToDatabase([
+            new DbPlayerMission()
+            {
+                ViewerId = this.ViewerId,
+                Id = missionId1,
+                Type = MissionType.Daily,
+                State = MissionState.Completed,
+                Start = timeProvider.GetLastDailyReset(),
+                End = timeProvider.GetLastDailyReset().AddDays(1),
+            },
+            new DbPlayerMission()
+            {
+                ViewerId = this.ViewerId,
+                Id = missionId2,
+                Type = MissionType.Daily,
+                State = MissionState.Completed,
+                Start = timeProvider.GetLastDailyReset(),
+                End = timeProvider.GetLastDailyReset().AddDays(1),
+            },
+        ]);
 
         DragaliaResponse<MissionReceiveDailyRewardResponse> response =
             await this.Client.PostMsgpack<MissionReceiveDailyRewardResponse>(
@@ -487,22 +483,20 @@ public class MissionTest : TestFixture
         DateOnly today = DateOnly.FromDateTime(DateTime.Now);
         DateOnly yesterday = today.AddDays(-1);
 
-        await this.AddToDatabase(
-            [
-                new DbCompletedDailyMission()
-                {
-                    ViewerId = this.ViewerId,
-                    Id = missionId,
-                    Date = today,
-                },
-                new DbCompletedDailyMission()
-                {
-                    ViewerId = this.ViewerId,
-                    Id = missionId,
-                    Date = yesterday,
-                },
-            ]
-        );
+        await this.AddToDatabase([
+            new DbCompletedDailyMission()
+            {
+                ViewerId = this.ViewerId,
+                Id = missionId,
+                Date = today,
+            },
+            new DbCompletedDailyMission()
+            {
+                ViewerId = this.ViewerId,
+                Id = missionId,
+                Date = yesterday,
+            },
+        ]);
 
         await this.AddToDatabase(
             new DbPlayerMission()
@@ -652,13 +646,11 @@ public class MissionTest : TestFixture
 
         response
             .DrillMissionGroupList.Should()
-            .BeEquivalentTo(
-                [
-                    new DrillMissionGroupList(1),
-                    new DrillMissionGroupList(2),
-                    new DrillMissionGroupList(3),
-                ]
-            );
+            .BeEquivalentTo([
+                new DrillMissionGroupList(1),
+                new DrillMissionGroupList(2),
+                new DrillMissionGroupList(3),
+            ]);
     }
 
     [Fact]
@@ -724,9 +716,12 @@ public class MissionTest : TestFixture
             End = DateTimeOffset.UnixEpoch,
         };
 
-        await this.AddRangeToDatabase(
-            [expiredMission, notStartedMission, expectedMission, otherExpectedMission]
-        );
+        await this.AddRangeToDatabase([
+            expiredMission,
+            notStartedMission,
+            expectedMission,
+            otherExpectedMission,
+        ]);
 
         MissionGetMissionListResponse response = (
             await this.Client.PostMsgpack<MissionGetMissionListResponse>(

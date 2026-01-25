@@ -45,7 +45,8 @@ internal sealed partial class BaasApi : IBaasApi
                 await savefileResponse.Content.ReadFromJsonAsync<
                     DragaliaResponse<LoadIndexResponse>
                 >(ApiJsonOptions.Instance)
-            )?.Data ?? throw new JsonException("Deserialized savefile was null");
+            )?.Data
+            ?? throw new JsonException("Deserialized savefile was null");
     }
 
     public async Task<string?> GetUserId(string webIdToken)

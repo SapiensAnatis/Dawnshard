@@ -20,12 +20,10 @@ public class SummonHistoryJobTest : TestFixture
     [Fact]
     public async Task SummonHistoryJob_PurgesOlderThan14Days()
     {
-        await this.AddRangeToDatabase(
-            [
-                new DbPlayerSummonHistory() { ExecDate = DateTimeOffset.UtcNow },
-                new DbPlayerSummonHistory() { ExecDate = DateTimeOffset.UtcNow.AddDays(-20) },
-            ]
-        );
+        await this.AddRangeToDatabase([
+            new DbPlayerSummonHistory() { ExecDate = DateTimeOffset.UtcNow },
+            new DbPlayerSummonHistory() { ExecDate = DateTimeOffset.UtcNow.AddDays(-20) },
+        ]);
 
         await this.summonHistoryJob.PurgeSummonHistory();
 
