@@ -21,7 +21,7 @@
   };
 
   const getAbilityCrestName = (abilityCrest: AbilityCrest) =>
-    $t(`entity.abilityCrest.item.${abilityCrest.id}`);
+    $t(`entity.wyrmprint.item.${abilityCrest.id}`);
 
   const emptyIconRarityLookup: Partial<Record<number, string>> = {
     5: 'Icon_Blank_07_A.webp',
