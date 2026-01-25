@@ -45,7 +45,7 @@
     },
     {
       accessorKey: 'players',
-      header: coop ? 'Players' : 'Player',
+      header: () => (coop ? 'Players' : 'Player'),
       cell: ({ getValue }) => {
         return getValue<TimeAttackPlayer[]>()
           .map((p) => p.name)
@@ -81,41 +81,43 @@
     }
   ];
 
-  const table = createSvelteTable({
-    get data() {
-      return data;
-    },
-    columns,
-    state: {
-      get pagination() {
-        return pagination;
+  const table = $derived(
+    createSvelteTable({
+      get data() {
+        return data;
       },
-      get expanded() {
-        return expanded;
-      }
-    },
-    onPaginationChange: (updaterOrValue) => {
-      if (typeof updaterOrValue === 'function') {
-        pagination = updaterOrValue(pagination);
-      } else {
-        pagination = updaterOrValue;
-      }
+      columns,
+      state: {
+        get pagination() {
+          return pagination;
+        },
+        get expanded() {
+          return expanded;
+        }
+      },
+      onPaginationChange: (updaterOrValue) => {
+        if (typeof updaterOrValue === 'function') {
+          pagination = updaterOrValue(pagination);
+        } else {
+          pagination = updaterOrValue;
+        }
 
-      handlePageChange(pagination.pageIndex);
-    },
-    onExpandedChange: (updaterOrValue) => {
-      if (typeof updaterOrValue === 'function') {
-        expanded = updaterOrValue(expanded);
-      } else {
-        expanded = expanded;
-      }
-    },
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    manualPagination: true,
-    rowCount: itemCount,
-    enableExpanding: true
-  });
+        handlePageChange(pagination.pageIndex);
+      },
+      onExpandedChange: (updaterOrValue) => {
+        if (typeof updaterOrValue === 'function') {
+          expanded = updaterOrValue(expanded);
+        } else {
+          expanded = expanded;
+        }
+      },
+      getCoreRowModel: getCoreRowModel(),
+      getPaginationRowModel: getPaginationRowModel(),
+      manualPagination: true,
+      rowCount: itemCount,
+      enableExpanding: true
+    })
+  );
 
   let initialized = $state(false);
   let showExpanded = $state(true);

@@ -12,7 +12,7 @@
 
   const { data }: PageProps = $props();
 
-  let impersonatedViewerId = $state(data.impersonatedViewerId);
+  let impersonatedViewerId = $derived(data.impersonatedViewerId);
 
   async function handleSubmit(
     event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }

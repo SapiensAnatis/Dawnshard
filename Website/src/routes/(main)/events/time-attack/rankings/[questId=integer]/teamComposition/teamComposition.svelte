@@ -14,7 +14,7 @@
     key
   }: { units: TimeAttackUnit[]; unitKeys: string[]; coop: boolean; key: unknown } = $props();
 
-  const id = `team-composition-${key}`;
+  const id = $derived(`team-composition-${key}`);
 
   const spacerClass = 'max-w-0 flex-grow sm:max-w-0.5 md:max-w-2';
 </script>
