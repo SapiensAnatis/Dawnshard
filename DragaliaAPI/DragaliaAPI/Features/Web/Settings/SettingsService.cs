@@ -26,7 +26,8 @@ internal sealed partial class SettingsService(
             await apiContext
                 .PlayerSettings.AsNoTracking()
                 .Select(x => x.SettingsJson)
-                .FirstOrDefaultAsync(cancellationToken) ?? new PlayerSettings();
+                .FirstOrDefaultAsync(cancellationToken)
+            ?? new PlayerSettings();
 
         cache.Set(this.GetCacheKey(), retrievedSettings);
 

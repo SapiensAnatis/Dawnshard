@@ -16,42 +16,38 @@ public class V25UpdateTest : SavefileUpdateTestFixture
     [Fact]
     public async Task V25Update_AddsCorrectMissingDragonStories()
     {
-        await this.AddRangeToDatabase(
-            [
-                new DbPlayerDragonReliability() { DragonId = DragonId.Marishiten, Level = 15 },
-                new DbPlayerDragonReliability() { DragonId = DragonId.Arctos, Level = 13 },
-                new DbPlayerDragonReliability() { DragonId = DragonId.Shinobi, Level = 17 },
-            ]
-        );
+        await this.AddRangeToDatabase([
+            new DbPlayerDragonReliability() { DragonId = DragonId.Marishiten, Level = 15 },
+            new DbPlayerDragonReliability() { DragonId = DragonId.Arctos, Level = 13 },
+            new DbPlayerDragonReliability() { DragonId = DragonId.Shinobi, Level = 17 },
+        ]);
 
         StoryData marishitenStories = MasterAsset.DragonStories[(int)DragonId.Marishiten];
         StoryData arctosStories = MasterAsset.DragonStories[(int)DragonId.Arctos];
         StoryData shinobiStories = MasterAsset.DragonStories[(int)DragonId.Shinobi];
 
-        await this.AddRangeToDatabase(
-            [
-                new DbPlayerStoryState()
-                {
-                    StoryId = marishitenStories.StoryIds[0],
-                    StoryType = StoryTypes.Dragon,
-                },
-                new DbPlayerStoryState()
-                {
-                    StoryId = marishitenStories.StoryIds[1],
-                    StoryType = StoryTypes.Dragon,
-                },
-                new DbPlayerStoryState()
-                {
-                    StoryId = arctosStories.StoryIds[0],
-                    StoryType = StoryTypes.Dragon,
-                },
-                new DbPlayerStoryState()
-                {
-                    StoryId = shinobiStories.StoryIds[0], // missing second Shinobi story
-                    StoryType = StoryTypes.Dragon,
-                },
-            ]
-        );
+        await this.AddRangeToDatabase([
+            new DbPlayerStoryState()
+            {
+                StoryId = marishitenStories.StoryIds[0],
+                StoryType = StoryTypes.Dragon,
+            },
+            new DbPlayerStoryState()
+            {
+                StoryId = marishitenStories.StoryIds[1],
+                StoryType = StoryTypes.Dragon,
+            },
+            new DbPlayerStoryState()
+            {
+                StoryId = arctosStories.StoryIds[0],
+                StoryType = StoryTypes.Dragon,
+            },
+            new DbPlayerStoryState()
+            {
+                StoryId = shinobiStories.StoryIds[0], // missing second Shinobi story
+                StoryType = StoryTypes.Dragon,
+            },
+        ]);
 
         this.ApiContext.ChangeTracker.Clear();
 

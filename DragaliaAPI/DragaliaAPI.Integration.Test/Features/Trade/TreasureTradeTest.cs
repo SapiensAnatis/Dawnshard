@@ -73,7 +73,8 @@ public class TreasureTradeTest : TestFixture
                     await this
                         .Services.GetRequiredService<IInventoryRepository>()
                         .GetMaterial(Materials.DamascusIngot)
-                )?.Quantity ?? 0;
+                )?.Quantity
+                ?? 0;
         }
 
         TreasureTradeTradeResponse response = (

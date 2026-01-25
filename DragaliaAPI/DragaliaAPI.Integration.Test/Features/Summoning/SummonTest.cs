@@ -48,104 +48,94 @@ public class SummonTest : TestFixture
 
         normalOdds
             .RarityList.Should()
-            .BeEquivalentTo(
-                [
-                    new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
-                    new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
-                    new AtgenRarityList { Rarity = 3, TotalRate = "80.00%" },
-                ]
-            );
+            .BeEquivalentTo([
+                new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
+                new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
+                new AtgenRarityList { Rarity = 3, TotalRate = "80.00%" },
+            ]);
 
         guaranteeOdds
             .RarityList.Should()
-            .BeEquivalentTo(
-                [
-                    new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
-                    new AtgenRarityList { Rarity = 4, TotalRate = "96.00%" },
-                ]
-            );
+            .BeEquivalentTo([
+                new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
+                new AtgenRarityList { Rarity = 4, TotalRate = "96.00%" },
+            ]);
 
         normalOdds
             .RarityGroupList.Should()
-            .BeEquivalentTo(
-                [
-                    new AtgenRarityGroupList
-                    {
-                        Rarity = 5,
-                        CharaRate = "1.00%",
-                        DragonRate = "0.80%",
-                        Pickup = true,
-                        TotalRate = "1.80%",
-                    },
-                    new AtgenRarityGroupList
-                    {
-                        Rarity = 5,
-                        CharaRate = "1.10%",
-                        DragonRate = "1.10%",
-                        Pickup = false,
-                        TotalRate = "2.20%",
-                    },
-                    new AtgenRarityGroupList
-                    {
-                        Rarity = 4,
-                        CharaRate = "8.55%",
-                        DragonRate = "7.45%",
-                        Pickup = false,
-                        TotalRate = "16.00%",
-                    },
-                    new AtgenRarityGroupList
-                    {
-                        Rarity = 3,
-                        CharaRate = "48.00%",
-                        DragonRate = "32.00%",
-                        Pickup = false,
-                        TotalRate = "80.00%",
-                    },
-                ]
-            );
+            .BeEquivalentTo([
+                new AtgenRarityGroupList
+                {
+                    Rarity = 5,
+                    CharaRate = "1.00%",
+                    DragonRate = "0.80%",
+                    Pickup = true,
+                    TotalRate = "1.80%",
+                },
+                new AtgenRarityGroupList
+                {
+                    Rarity = 5,
+                    CharaRate = "1.10%",
+                    DragonRate = "1.10%",
+                    Pickup = false,
+                    TotalRate = "2.20%",
+                },
+                new AtgenRarityGroupList
+                {
+                    Rarity = 4,
+                    CharaRate = "8.55%",
+                    DragonRate = "7.45%",
+                    Pickup = false,
+                    TotalRate = "16.00%",
+                },
+                new AtgenRarityGroupList
+                {
+                    Rarity = 3,
+                    CharaRate = "48.00%",
+                    DragonRate = "32.00%",
+                    Pickup = false,
+                    TotalRate = "80.00%",
+                },
+            ]);
 
         guaranteeOdds
             .RarityGroupList.Should()
-            .BeEquivalentTo(
-                [
-                    new AtgenRarityGroupList
-                    {
-                        Rarity = 5,
-                        CharaRate = "1.00%",
-                        DragonRate = "0.80%",
-                        Pickup = true,
-                        TotalRate = "1.80%",
-                    },
-                    new AtgenRarityGroupList
-                    {
-                        Rarity = 5,
-                        CharaRate = "1.10%",
-                        DragonRate = "1.10%",
-                        Pickup = false,
-                        TotalRate = "2.20%",
-                    },
-                    new AtgenRarityGroupList
-                    {
-                        Rarity = 4,
-                        CharaRate = "51.30%",
-                        DragonRate = "44.70%",
-                        Pickup = false,
-                        TotalRate = "96.00%",
-                    },
-                ]
-            );
+            .BeEquivalentTo([
+                new AtgenRarityGroupList
+                {
+                    Rarity = 5,
+                    CharaRate = "1.00%",
+                    DragonRate = "0.80%",
+                    Pickup = true,
+                    TotalRate = "1.80%",
+                },
+                new AtgenRarityGroupList
+                {
+                    Rarity = 5,
+                    CharaRate = "1.10%",
+                    DragonRate = "1.10%",
+                    Pickup = false,
+                    TotalRate = "2.20%",
+                },
+                new AtgenRarityGroupList
+                {
+                    Rarity = 4,
+                    CharaRate = "51.30%",
+                    DragonRate = "44.70%",
+                    Pickup = false,
+                    TotalRate = "96.00%",
+                },
+            ]);
 
         normalOdds.Unit.CharaOddsList.Should().HaveCount(4);
 
         normalOdds
             .Unit.CharaOddsList.ElementAt(0)
             .UnitList.Should()
-            .BeEquivalentTo(
-                [
-                    new AtgenUnitList { Id = (int)Charas.Joker, Rate = "0.500%" },
-                    new AtgenUnitList { Id = (int)Charas.Mona, Rate = "0.500%" },
-                ]
-            );
+            .BeEquivalentTo([
+                new AtgenUnitList { Id = (int)Charas.Joker, Rate = "0.500%" },
+                new AtgenUnitList { Id = (int)Charas.Mona, Rate = "0.500%" },
+            ]);
         normalOdds
             .Unit.DragonOddsList.ElementAt(0)
             .UnitList.Should()
@@ -221,22 +211,18 @@ public class SummonTest : TestFixture
 
         normalOdds
             .RarityList.Should()
-            .BeEquivalentTo(
-                [
-                    new AtgenRarityList { Rarity = 5, TotalRate = "5.00%" },
-                    new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
-                    new AtgenRarityList { Rarity = 3, TotalRate = "79.00%" },
-                ]
-            );
+            .BeEquivalentTo([
+                new AtgenRarityList { Rarity = 5, TotalRate = "5.00%" },
+                new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
+                new AtgenRarityList { Rarity = 3, TotalRate = "79.00%" },
+            ]);
 
         guaranteeOdds
             .RarityList.Should()
-            .BeEquivalentTo(
-                [
-                    new AtgenRarityList { Rarity = 5, TotalRate = "5.00%" },
-                    new AtgenRarityList { Rarity = 4, TotalRate = "95.00%" },
-                ]
-            );
+            .BeEquivalentTo([
+                new AtgenRarityList { Rarity = 5, TotalRate = "5.00%" },
+                new AtgenRarityList { Rarity = 4, TotalRate = "95.00%" },
+            ]);
     }
 
     [Fact]
@@ -805,13 +791,11 @@ public class SummonTest : TestFixture
 
         oddsResponse
             .OddsRateList.Normal.RarityList.Should()
-            .BeEquivalentTo(
-                [
-                    new AtgenRarityList { Rarity = 5, TotalRate = "9.00%" },
-                    new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
-                    new AtgenRarityList { Rarity = 3, TotalRate = "75.00%" },
-                ]
-            );
+            .BeEquivalentTo([
+                new AtgenRarityList { Rarity = 5, TotalRate = "9.00%" },
+                new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
+                new AtgenRarityList { Rarity = 3, TotalRate = "75.00%" },
+            ]);
 
         DbPlayerUserData userData = await this
             .ApiContext.PlayerUserData.AsNoTracking()
@@ -845,13 +829,11 @@ public class SummonTest : TestFixture
 
         oddsResponse
             .OddsRateList.Normal.RarityList.Should()
-            .BeEquivalentTo(
-                [
-                    new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
-                    new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
-                    new AtgenRarityList { Rarity = 3, TotalRate = "80.00%" },
-                ]
-            );
+            .BeEquivalentTo([
+                new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
+                new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
+                new AtgenRarityList { Rarity = 3, TotalRate = "80.00%" },
+            ]);
     }
 
     [Fact]
@@ -897,13 +879,11 @@ public class SummonTest : TestFixture
 
         oddsResponse
             .OddsRateList.Normal.RarityList.Should()
-            .BeEquivalentTo(
-                [
-                    new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
-                    new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
-                    new AtgenRarityList { Rarity = 3, TotalRate = "80.00%" },
-                ]
-            );
+            .BeEquivalentTo([
+                new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
+                new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
+                new AtgenRarityList { Rarity = 3, TotalRate = "80.00%" },
+            ]);
     }
 
     [Fact]
@@ -919,13 +899,11 @@ public class SummonTest : TestFixture
 
         oddsResponse
             .OddsRateList.Normal.RarityList.Should()
-            .BeEquivalentTo(
-                [
-                    new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
-                    new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
-                    new AtgenRarityList { Rarity = 3, TotalRate = "80.00%" },
-                ]
-            );
+            .BeEquivalentTo([
+                new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
+                new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
+                new AtgenRarityList { Rarity = 3, TotalRate = "80.00%" },
+            ]);
 
         IEnumerable<AtgenResultUnitList> result;
 

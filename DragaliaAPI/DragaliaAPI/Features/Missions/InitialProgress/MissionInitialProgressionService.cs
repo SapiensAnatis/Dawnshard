@@ -137,7 +137,7 @@ public class MissionInitialProgressionService(
                 )
                     .Select(x => (int?)Math.Min(x.AttackPlusCount, x.HpPlusCount))
                     .Max()
-                ?? 0,
+                    ?? 0,
                 MissionCompleteType.AbilityCrestLevelUp => (
                     await abilityCrestRepository
                         .AbilityCrests.Where(x =>
@@ -343,7 +343,8 @@ public class MissionInitialProgressionService(
             return await unitRepository
                     .Dragons.Where(x => x.DragonId == dragonId)
                     .Select(x => (int?)x.Level)
-                    .MaxAsync() ?? 0;
+                    .MaxAsync()
+                ?? 0;
         }
 
         if (element != null)
@@ -429,7 +430,8 @@ public class MissionInitialProgressionService(
 
         return await apiContext
                 .PlayerQuests.Where(x => validQuests.Contains(x.QuestId))
-                .SumAsync(x => (int?)x.PlayCount) ?? 0;
+                .SumAsync(x => (int?)x.PlayCount)
+            ?? 0;
     }
 
     private async Task<int> GetCharacterBuildupCount(
@@ -512,10 +514,12 @@ public class MissionInitialProgressionService(
         {
             PlusCountType.Hp => await abilityCrestRepository
                 .AbilityCrests.Select(x => (int?)x.HpPlusCount)
-                .MaxAsync() ?? 0,
+                .MaxAsync()
+                ?? 0,
             PlusCountType.Atk => await abilityCrestRepository
                 .AbilityCrests.Select(x => (int?)x.AttackPlusCount)
-                .MaxAsync() ?? 0,
+                .MaxAsync()
+                ?? 0,
             _ => throw new DragaliaException(
                 ResultCode.CommonInvalidArgument,
                 $"Invalid PlusCountType for wyrmprint in mission requirement, parameter: {type}"
@@ -572,7 +576,8 @@ public class MissionInitialProgressionService(
 
         return await weaponRepository
                 .WeaponBodies.Where(x => validWeaponBodies.Contains(x.WeaponBodyId))
-                .SumAsync(x => (int?)x.LimitOverCount) ?? 0;
+                .SumAsync(x => (int?)x.LimitOverCount)
+            ?? 0;
     }
 
     private async Task<int> GetQuestGroupClearedCount(
@@ -599,7 +604,8 @@ public class MissionInitialProgressionService(
 
         return await apiContext
                 .PlayerQuests.Where(x => questPool.Contains(x.QuestId))
-                .SumAsync(x => (int?)x.PlayCount) ?? 0;
+                .SumAsync(x => (int?)x.PlayCount)
+            ?? 0;
     }
 
     private async Task<int> GetEventParticipationProgress(int? eventId)

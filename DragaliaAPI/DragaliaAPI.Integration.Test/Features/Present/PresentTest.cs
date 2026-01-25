@@ -615,16 +615,10 @@ public class PresentTest : TestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        await this.AddRangeToDatabase(
-            [
-                new DbPlayerDragonGift()
-                {
-                    DragonGiftId = DragonGifts.FourLeafClover,
-                    Quantity = 4,
-                },
-                .. presents,
-            ]
-        );
+        await this.AddRangeToDatabase([
+            new DbPlayerDragonGift() { DragonGiftId = DragonGifts.FourLeafClover, Quantity = 4 },
+            .. presents,
+        ]);
 
         IEnumerable<ulong> presentIdList = presents.Select(x => (ulong)x.PresentId);
 
@@ -637,30 +631,26 @@ public class PresentTest : TestFixture
 
         response
             .Data.UpdateDataList.DragonGiftList.Should()
-            .BeEquivalentTo<DragonGiftList>(
-                [
-                    new() { DragonGiftId = DragonGifts.FourLeafClover, Quantity = 6 },
-                    new() { DragonGiftId = DragonGifts.DragonyuleCake, Quantity = 2 },
-                ]
-            );
+            .BeEquivalentTo<DragonGiftList>([
+                new() { DragonGiftId = DragonGifts.FourLeafClover, Quantity = 6 },
+                new() { DragonGiftId = DragonGifts.DragonyuleCake, Quantity = 2 },
+            ]);
 
         this.ApiContext.PlayerDragonGifts.Should()
-            .BeEquivalentTo<DbPlayerDragonGift>(
-                [
-                    new DbPlayerDragonGift()
-                    {
-                        ViewerId = this.ViewerId,
-                        DragonGiftId = DragonGifts.FourLeafClover,
-                        Quantity = 6,
-                    },
-                    new DbPlayerDragonGift()
-                    {
-                        ViewerId = this.ViewerId,
-                        DragonGiftId = DragonGifts.DragonyuleCake,
-                        Quantity = 2,
-                    },
-                ]
-            );
+            .BeEquivalentTo<DbPlayerDragonGift>([
+                new DbPlayerDragonGift()
+                {
+                    ViewerId = this.ViewerId,
+                    DragonGiftId = DragonGifts.FourLeafClover,
+                    Quantity = 6,
+                },
+                new DbPlayerDragonGift()
+                {
+                    ViewerId = this.ViewerId,
+                    DragonGiftId = DragonGifts.DragonyuleCake,
+                    Quantity = 2,
+                },
+            ]);
     }
 
     [Fact]

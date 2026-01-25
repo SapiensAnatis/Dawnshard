@@ -16,12 +16,10 @@ internal static class ClaimsPrincipalExtensions
         bool isAdmin = false
     )
     {
-        ClaimsIdentity dawnshardIdentity = new(
-            [
-                new Claim(CustomClaimType.AccountId, accountId),
-                new Claim(CustomClaimType.ViewerId, viewerId.ToString()),
-            ]
-        )
+        ClaimsIdentity dawnshardIdentity = new([
+            new Claim(CustomClaimType.AccountId, accountId),
+            new Claim(CustomClaimType.ViewerId, viewerId.ToString()),
+        ])
         {
             Label = AuthConstants.IdentityLabels.Dawnshard,
         };

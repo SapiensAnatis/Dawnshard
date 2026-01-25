@@ -41,17 +41,15 @@ public class RewardServiceTest : TestFixture
         );
 
         this.ApiContext.PlayerSummonTickets.Should()
-            .BeEquivalentTo(
-                [
-                    new DbSummonTicket()
-                    {
-                        KeyId = ticket.KeyId,
-                        ViewerId = this.ViewerId,
-                        SummonTicketId = ticketType,
-                        Quantity = 6,
-                    },
-                ]
-            );
+            .BeEquivalentTo([
+                new DbSummonTicket()
+                {
+                    KeyId = ticket.KeyId,
+                    ViewerId = this.ViewerId,
+                    SummonTicketId = ticketType,
+                    Quantity = 6,
+                },
+            ]);
     }
 
     [Theory]

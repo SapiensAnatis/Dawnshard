@@ -449,12 +449,10 @@ public class DragonTest : TestFixture
             }
         );
 
-        await this.AddRangeToDatabase(
-            [
-                new DbPlayerDragonReliability() { DragonId = DragonId.Apollo },
-                new DbPlayerDragonReliability() { DragonId = DragonId.Kagutsuchi },
-            ]
-        );
+        await this.AddRangeToDatabase([
+            new DbPlayerDragonReliability() { DragonId = DragonId.Apollo },
+            new DbPlayerDragonReliability() { DragonId = DragonId.Kagutsuchi },
+        ]);
 
         await this.Client.PostMsgpack<DragonSendGiftMultipleResponse>(
             "dragon/send_gift_multiple",

@@ -92,12 +92,10 @@ public class GlobalQueryFilterTest : TestFixture
         this.ApiContext.PlayerPresents.Add(otherPresent);
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
-        this.ApiContext.PlayerPresentHistory.AddRange(
-            [
-                new() { Id = present.PresentId, ViewerId = this.ViewerId },
-                new() { Id = otherPresent.PresentId, ViewerId = otherPresent.ViewerId },
-            ]
-        );
+        this.ApiContext.PlayerPresentHistory.AddRange([
+            new() { Id = present.PresentId, ViewerId = this.ViewerId },
+            new() { Id = otherPresent.PresentId, ViewerId = otherPresent.ViewerId },
+        ]);
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.ApiContext.PlayerPresentHistory.Should()

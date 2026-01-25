@@ -19,28 +19,22 @@ public class FriendTest : TestFixture
         DbPlayer other1 = await this.CreateOtherPlayer();
         DbPlayer other2 = await this.CreateOtherPlayer();
 
-        this.ApiContext.AddRange(
-            [
-                new DbPlayerFriendRequest()
-                {
-                    FromPlayerViewerId = other1.ViewerId,
-                    ToPlayerViewerId = this.ViewerId,
-                    IsNew = true,
-                },
-                new DbPlayerFriendship()
-                {
-                    PlayerFriendshipPlayers =
-                    [
-                        new DbPlayerFriendshipPlayer()
-                        {
-                            PlayerViewerId = this.ViewerId,
-                            IsNew = true,
-                        },
-                        new DbPlayerFriendshipPlayer() { PlayerViewerId = other2.ViewerId },
-                    ],
-                },
-            ]
-        );
+        this.ApiContext.AddRange([
+            new DbPlayerFriendRequest()
+            {
+                FromPlayerViewerId = other1.ViewerId,
+                ToPlayerViewerId = this.ViewerId,
+                IsNew = true,
+            },
+            new DbPlayerFriendship()
+            {
+                PlayerFriendshipPlayers =
+                [
+                    new DbPlayerFriendshipPlayer() { PlayerViewerId = this.ViewerId, IsNew = true },
+                    new DbPlayerFriendshipPlayer() { PlayerViewerId = other2.ViewerId },
+                ],
+            },
+        ]);
         this.ApiContext.SaveChanges();
 
         DragaliaResponse<FriendFriendIndexResponse> response =
@@ -358,20 +352,18 @@ public class FriendTest : TestFixture
         DbPlayer otherPlayer = await this.CreateOtherPlayer();
         await this.CreateFriends(this.ViewerId, Level100FriendLimit - 2);
 
-        this.ApiContext.PlayerFriendRequests.AddRange(
-            [
-                new()
-                {
-                    FromPlayerViewerId = this.ViewerId,
-                    ToPlayer = new DbPlayer() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
-                },
-                new()
-                {
-                    FromPlayer = new DbPlayer() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
-                    ToPlayerViewerId = this.ViewerId,
-                },
-            ]
-        );
+        this.ApiContext.PlayerFriendRequests.AddRange([
+            new()
+            {
+                FromPlayerViewerId = this.ViewerId,
+                ToPlayer = new DbPlayer() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
+            },
+            new()
+            {
+                FromPlayer = new DbPlayer() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
+                ToPlayerViewerId = this.ViewerId,
+            },
+        ]);
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         DragaliaResponse<FriendRequestResponse> response =
@@ -391,20 +383,18 @@ public class FriendTest : TestFixture
         DbPlayer otherPlayer = await this.CreateOtherPlayer();
         await this.CreateFriends(otherPlayer.ViewerId, 23); // Fresh player has a limit of 25 friends
 
-        this.ApiContext.PlayerFriendRequests.AddRange(
-            [
-                new()
-                {
-                    FromPlayerViewerId = otherPlayer.ViewerId,
-                    ToPlayer = new DbPlayer() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
-                },
-                new()
-                {
-                    FromPlayer = new DbPlayer() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
-                    ToPlayerViewerId = otherPlayer.ViewerId,
-                },
-            ]
-        );
+        this.ApiContext.PlayerFriendRequests.AddRange([
+            new()
+            {
+                FromPlayerViewerId = otherPlayer.ViewerId,
+                ToPlayer = new DbPlayer() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
+            },
+            new()
+            {
+                FromPlayer = new DbPlayer() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
+                ToPlayerViewerId = otherPlayer.ViewerId,
+            },
+        ]);
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         DragaliaResponse<FriendRequestResponse> response =

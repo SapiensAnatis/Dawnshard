@@ -65,22 +65,20 @@ public class UpdateTest : TestFixture
         DbPlayer player1 = new() { AccountId = $"ResetNew_{Guid.NewGuid().ToString()}" };
         DbPlayer player2 = new() { AccountId = $"ResetNew_{Guid.NewGuid().ToString()}" };
 
-        this.ApiContext.PlayerFriendRequests.AddRange(
-            [
-                new DbPlayerFriendRequest()
-                {
-                    FromPlayer = player1,
-                    ToPlayerViewerId = this.ViewerId,
-                    IsNew = true,
-                },
-                new DbPlayerFriendRequest()
-                {
-                    FromPlayer = player2,
-                    ToPlayerViewerId = this.ViewerId,
-                    IsNew = true,
-                },
-            ]
-        );
+        this.ApiContext.PlayerFriendRequests.AddRange([
+            new DbPlayerFriendRequest()
+            {
+                FromPlayer = player1,
+                ToPlayerViewerId = this.ViewerId,
+                IsNew = true,
+            },
+            new DbPlayerFriendRequest()
+            {
+                FromPlayer = player2,
+                ToPlayerViewerId = this.ViewerId,
+                IsNew = true,
+            },
+        ]);
 
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
@@ -118,26 +116,24 @@ public class UpdateTest : TestFixture
         DbPlayer player1 = new() { AccountId = $"ResetNew_{Guid.NewGuid().ToString()}" };
         DbPlayer player2 = new() { AccountId = $"ResetNew_{Guid.NewGuid().ToString()}" };
 
-        this.ApiContext.PlayerFriendships.AddRange(
-            [
-                new DbPlayerFriendship()
-                {
-                    PlayerFriendshipPlayers =
-                    [
-                        new() { PlayerViewerId = this.ViewerId, IsNew = true },
-                        new() { Player = player1 },
-                    ],
-                },
-                new DbPlayerFriendship()
-                {
-                    PlayerFriendshipPlayers =
-                    [
-                        new() { PlayerViewerId = this.ViewerId, IsNew = true },
-                        new() { Player = player2 },
-                    ],
-                },
-            ]
-        );
+        this.ApiContext.PlayerFriendships.AddRange([
+            new DbPlayerFriendship()
+            {
+                PlayerFriendshipPlayers =
+                [
+                    new() { PlayerViewerId = this.ViewerId, IsNew = true },
+                    new() { Player = player1 },
+                ],
+            },
+            new DbPlayerFriendship()
+            {
+                PlayerFriendshipPlayers =
+                [
+                    new() { PlayerViewerId = this.ViewerId, IsNew = true },
+                    new() { Player = player2 },
+                ],
+            },
+        ]);
 
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
