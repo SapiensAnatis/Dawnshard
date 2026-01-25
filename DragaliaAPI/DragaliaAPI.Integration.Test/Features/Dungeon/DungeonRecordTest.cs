@@ -1718,6 +1718,104 @@ public class DungeonRecordTest : TestFixture
         response.IngameResultData.RewardRecord.PlayerLevelUpFstone.Should().Be(50);
     }
 
+    [Fact]
+    public async Task Record_PlayerLevelsUp_GrantsRewardWyrmite()
+    {
+        int avenueToFortuneQuestId = 202060104;
+
+        int currentLevel = 1;
+        int nextLevel = 2;
+        int currentExp = MasterAsset.UserLevel[nextLevel].TotalExp - 1;
+
+        await this
+            .ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdateAsync(
+                e => e.SetProperty(p => p.Exp, currentExp).SetProperty(p => p.Level, currentLevel),
+                TestContext.Current.CancellationToken
+            );
+
+        await AddRangeToDatabase(
+            [
+                new DbQuest()
+                {
+                    QuestId = avenueToFortuneQuestId,
+                    State = 0,
+                    ViewerId = ViewerId,
+                },
+            ]
+        );
+
+        DragaliaResponse<DungeonStartStartAssignUnitResponse> startResponse =
+            await this.Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(
+                "/dungeon_start/start_assign_unit",
+                new DungeonStartStartAssignUnitRequest()
+                {
+                    SupportViewerId = 0,
+                    RequestPartySettingList = new List<PartySettingList>()
+                    {
+                        new() { CharaId = Charas.ThePrince },
+                    },
+                    QuestId = avenueToFortuneQuestId,
+                },
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        string key = startResponse.Data.IngameData.DungeonKey;
+
+        DungeonRecordRecordResponse response = (
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    DungeonKey = key,
+                    PlayRecord = new PlayRecord
+                    {
+                        Time = 10,
+                        TreasureRecord = new List<AtgenTreasureRecord>()
+                        {
+                            new() { AreaIdx = 0, Enemy = [] },
+                        },
+                        LiveUnitNoList = new List<int>(),
+                        DamageRecord = new List<AtgenDamageRecord>(),
+                        DragonDamageRecord = new List<AtgenDamageRecord>(),
+                        BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                    },
+                },
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        ).Data;
+
+        response.IngameResultData.GrowRecord.TakePlayerExp.Should().BeGreaterThan(0);
+        response.IngameResultData.RewardRecord.PlayerLevelUpFstone.Should().Be(50);
+        response.UpdateDataList.PresentNotice.PresentCount.Should().Be(1);
+
+        PresentGetPresentListResponse getPresentListResponse = (
+            await this.Client.PostMsgpack<PresentGetPresentListResponse>(
+                "/present/get_present_list",
+                new PresentGetPresentListRequest() { IsLimit = false },
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        ).Data;
+
+        getPresentListResponse
+            .PresentList.Should()
+            .ContainSingle()
+            .Which.Should()
+            .BeEquivalentTo(
+                new PresentDetailList()
+                {
+                    EntityType = EntityTypes.Wyrmite,
+                    EntityQuantity = 50,
+                    EntityLevel = 1,
+                    MessageId = PresentMessage.PlayerLevelUp,
+                    MessageParamValue1 = nextLevel,
+                    ReceiveLimitTime = DateTimeOffset.UnixEpoch,
+                    CreateTime = DateTimeOffset.UtcNow,
+                },
+                opts => opts.Excluding(x => x.PresentId).WithDateTimeTolerance()
+            );
+    }
+
     private async Task<string> StartDungeon(DungeonSession session)
     {
         string key = this.DungeonService.CreateSession(session);
