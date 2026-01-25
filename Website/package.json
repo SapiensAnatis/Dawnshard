@@ -45,7 +45,7 @@
     "prettier": "3.7.4",
     "prettier-plugin-svelte": "3.4.1",
     "prettier-plugin-tailwindcss": "0.7.2",
-    "svelte": "5.46.1",
+    "svelte": "5.46.4",
     "svelte-check": "4.3.5",
     "svelte-eslint-parser": "1.4.1",
     "svelte-sonner": "1.0.7",
