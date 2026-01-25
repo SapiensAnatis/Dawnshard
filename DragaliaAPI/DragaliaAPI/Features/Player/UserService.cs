@@ -245,23 +245,20 @@ public class UserService(
             await AddStamina(StaminaType.Single, next.StaminaSingle);
             await AddStamina(StaminaType.Multi, MaxMultiStaminaRegen);
 
-            logger.LogDebug("Player leveled up to level {level}", data.Level);
-            current = next;
-        }
-
-        if (totalReward > 0)
-        {
             presentService.AddPresent(
                 new Present.Present(
                     MessageId: PresentMessage.PlayerLevelUp,
                     EntityType: EntityTypes.Wyrmite,
                     EntityId: 0,
-                    EntityQuantity: totalReward
+                    EntityQuantity: WyrmiteLevelUpReward
                 )
                 {
                     MessageParamValues = [data.Level],
                 }
             );
+
+            logger.LogDebug("Player leveled up to level {level}", data.Level);
+            current = next;
         }
 
         return new PlayerLevelResult(totalReward > 0, data.Level, expGained, totalReward);
