@@ -14,7 +14,8 @@
 
   let { settings }: { settings: SettingsType } = $props();
 
-  let remoteSettings = $state(settings);
+  let remoteSettings = $derived(settings);
+  // svelte-ignore state_referenced_locally
   let localSettings = $state(settings);
 
   let isChanged = $derived.by(() => {

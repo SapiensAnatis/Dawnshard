@@ -37,12 +37,10 @@
       alt="Promotional banner for selected time attack quest" />
   </div>
   <Typography typography="h2" id="time-attack-table-title">Clears</Typography>
-  {#key currentQuest?.id}
-    <DataTable
-      data={data.clearData.data}
-      itemCount={data.clearData.pagination.totalCount}
-      coop={currentQuest?.isCoop ?? false} />
-  {/key}
+  <DataTable
+    data={data.clearData.data}
+    itemCount={data.clearData.pagination.totalCount}
+    coop={currentQuest?.isCoop ?? false} />
 </Page>
 
 <style>
