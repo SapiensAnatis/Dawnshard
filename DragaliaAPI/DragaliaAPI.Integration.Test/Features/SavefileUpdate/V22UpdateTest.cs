@@ -16,8 +16,10 @@ public class V22UpdateTest : SavefileUpdateTestFixture
     [Fact]
     public async Task V22Update_Chapter10Completed_GrantsRewards()
     {
+        int originalLevel = 30;
+
         await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            u => u.SetProperty(e => e.Level, 30).SetProperty(e => e.Exp, 18990),
+            u => u.SetProperty(e => e.Level, originalLevel).SetProperty(e => e.Exp, 18990),
             cancellationToken: TestContext.Current.CancellationToken
         );
 
@@ -42,7 +44,9 @@ public class V22UpdateTest : SavefileUpdateTestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
-        userData.Level.Should().Be(65);
+        int expectedNewLevel = 65;
+
+        userData.Level.Should().Be(expectedNewLevel);
         userData.Exp.Should().Be(88980);
 
         List<DbPlayerPresent> presentData = await this
@@ -55,7 +59,7 @@ public class V22UpdateTest : SavefileUpdateTestFixture
             .Rewards.Where(x => x.Type is EntityTypes.Material or EntityTypes.HustleHammer)
             .ToList();
 
-        presentData.Count.Should().Be(rewards.Count);
+        presentData.Count.Should().BeGreaterThanOrEqualTo(rewards.Count); // later updates also grant level up rewards
 
         foreach (QuestStoryReward reward in rewards)
         {
@@ -96,6 +100,10 @@ public class V22UpdateTest : SavefileUpdateTestFixture
             .ApiContext.PlayerPresents.Where(x => x.ViewerId == this.ViewerId)
             .ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        presentData.Count.Should().Be(0);
+        presentData
+            .Should()
+            .NotContain(x =>
+                x.EntityType == EntityTypes.Material || x.EntityType == EntityTypes.HustleHammer
+            );
     }
 }
