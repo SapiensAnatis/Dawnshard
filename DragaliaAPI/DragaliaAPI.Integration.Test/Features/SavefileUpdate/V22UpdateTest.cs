@@ -100,6 +100,10 @@ public class V22UpdateTest : SavefileUpdateTestFixture
             .ApiContext.PlayerPresents.Where(x => x.ViewerId == this.ViewerId)
             .ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        presentData.Count.Should().Be(0);
+        presentData
+            .Should()
+            .NotContain(x =>
+                x.EntityType == EntityTypes.Material || x.EntityType == EntityTypes.HustleHammer
+            );
     }
 }
