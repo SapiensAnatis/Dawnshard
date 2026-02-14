@@ -1,6 +1,6 @@
 <script lang="ts">
-  import TriangleAlert from 'lucide-svelte/icons/triangle-alert';
-  import Upload from 'lucide-svelte/icons/upload';
+  import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
+  import Upload from '@lucide/svelte/icons/upload';
   import { onMount } from 'svelte';
 
   import { page } from '$app/stores';

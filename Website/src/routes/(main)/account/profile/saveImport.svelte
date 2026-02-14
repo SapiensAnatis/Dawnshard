@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Download from 'lucide-svelte/icons/download';
+  import Download from '@lucide/svelte/icons/download';
 
   import { PUBLIC_BAAS_URL } from '$env/static/public';
   import { Button } from '$shadcn/components/ui/button';

@@ -1,6 +1,6 @@
 <script lang="ts">
+  import Settings from '@lucide/svelte/icons/settings';
   import type { ActionResult } from '@sveltejs/kit';
-  import Settings from 'lucide-svelte/icons/settings';
   import { toast } from 'svelte-sonner';
 
   import { applyAction, enhance } from '$app/forms';

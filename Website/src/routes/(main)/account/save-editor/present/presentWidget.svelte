@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Gift from 'lucide-svelte/icons/gift';
+  import Gift from '@lucide/svelte/icons/gift';
   import { createForm } from 'svelte-form-helper';
 
   import { Select } from '$lib/components/select';

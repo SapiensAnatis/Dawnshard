@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Menu from 'lucide-svelte/icons/menu';
-  import Close from 'lucide-svelte/icons/x';
+  import Menu from '@lucide/svelte/icons/menu';
+  import Close from '@lucide/svelte/icons/x';
   import { onMount } from 'svelte';
 
   import Routes from '$main/routes.svelte';
@@ -36,7 +36,8 @@
             <div id="my-content">
               <Drawer.Close class="flex w-full flex-col pl-0">
                 <Button variant="ghost" class="w-[7rem] self-end">
-                  Close <Close class="mt-0.5 ml-2 h-5 w-5" />
+                  Close
+                  <Close class="mt-0.5 ml-2 h-5 w-5" />
                 </Button>
               </Drawer.Close>
               <Routes {hasValidJwt} {isAdmin} drawer={true} />

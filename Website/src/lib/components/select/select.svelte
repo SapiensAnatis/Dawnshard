@@ -2,8 +2,9 @@
   import type { HTMLSelectAttributes } from 'svelte/elements';
   import type { Field } from 'svelte-form-helper';
 
-  import type { SelectItem } from './types.ts';
   import { cn } from '$shadcn/utils.ts';
+
+  import type { SelectItem } from './types.ts';
 
   type SelectProps<T> = {
     items: SelectItem<T>[];

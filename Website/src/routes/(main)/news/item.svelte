@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { Newspaper } from '@lucide/svelte';
   import { Image } from '@unpic/svelte';
-  import { Newspaper } from 'lucide-svelte';
 
   import * as Card from '$shadcn/components/ui/card/index.js';
 

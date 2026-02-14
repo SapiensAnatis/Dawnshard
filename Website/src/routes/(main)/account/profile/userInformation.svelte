@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Info from 'lucide-svelte/icons/info';
+  import Info from '@lucide/svelte/icons/info';
 
   import renderDate from '$main/account/profile/renderDate.ts';
   import * as Card from '$shadcn/components/ui/card';

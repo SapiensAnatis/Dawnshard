@@ -1,6 +1,6 @@
 <script lang="ts">
+  import ChevronLeft from '@lucide/svelte/icons/chevron-left';
   import { Image } from '@unpic/svelte';
-  import ChevronLeft from 'lucide-svelte/icons/chevron-left';
 
   import { afterNavigate } from '$app/navigation';
   import { getImageSrc } from '$main/news/news.ts';
