@@ -3,7 +3,7 @@ import { devices, expect, test } from '@playwright/test';
 test('displays correctly', async ({ page }) => {
   await page.goto('/');
 
-  const profileLink = page.getByRole('link', { name: 'Save Editor' });
+  const profileLink = page.getByRole('link', { name: 'Save Editor', exact: true });
   await expect(profileLink).toBeVisible();
   await profileLink.click();
 
@@ -18,7 +18,7 @@ test('displays correctly on mobile', async ({ page }) => {
   await page.goto('/');
 
   await page.getByRole('button', { name: 'Open navigation' }).click();
-  await page.getByRole('link', { name: 'Save Editor' }).click();
+  await page.getByRole('link', { name: 'Save Editor', exact: true }).click();
 
   await expect(page.getByRole('heading', { name: 'Save Editor' })).toBeVisible();
 

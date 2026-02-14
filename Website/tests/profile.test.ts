@@ -5,7 +5,7 @@ import { gotoWithHydration } from './util.ts';
 test('displays correctly', async ({ page }) => {
   await page.goto('/');
 
-  const profileLink = page.getByRole('link', { name: 'Profile' });
+  const profileLink = page.getByRole('link', { name: 'Profile', exact: true });
   await expect(profileLink).toBeVisible();
   await profileLink.click();
 
@@ -20,7 +20,7 @@ test('displays correctly on mobile', async ({ page }) => {
   await page.goto('/');
 
   await page.getByRole('button', { name: 'Open navigation' }).click();
-  await page.getByRole('link', { name: 'Profile' }).click();
+  await page.getByRole('link', { name: 'Profile', exact: true }).click();
 
   await expect(page.getByRole('heading', { name: 'Profile' })).toBeVisible();
 
@@ -30,7 +30,7 @@ test('displays correctly on mobile', async ({ page }) => {
 test('export save', async ({ page }) => {
   await page.goto('/');
 
-  const profileLink = page.getByRole('link', { name: 'Profile' });
+  const profileLink = page.getByRole('link', { name: 'Profile', exact: true });
   await expect(profileLink).toBeVisible();
   await profileLink.click();
 

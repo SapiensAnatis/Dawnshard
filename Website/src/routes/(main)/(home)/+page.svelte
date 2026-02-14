@@ -189,8 +189,8 @@
       <p>
         If you link an account and log in, you can also use this website's
         <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-        <a class="link" href={saveEditorLink}>save editor</a> to easily add characters and resources directly
-        to your present box in-game.
+        <a class="link" href={saveEditorLink}>save editor page</a> to easily add characters and resources
+        directly to your present box in-game.
       </p>
     </div>
     <div>
