@@ -215,7 +215,7 @@
       {/each}
     </Table.Body>
   </Table.Root>
-  <div class="flex items-center justify-center space-x-4 border-t py-2.5">
+  <div class="flex items-center justify-center space-x-4 py-2.5">
     <Button
       variant="outline"
       size="sm"
