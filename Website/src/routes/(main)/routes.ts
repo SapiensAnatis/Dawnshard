@@ -1,4 +1,4 @@
-import { type Icon, type IconProps } from '@lucide/svelte';
+import { type IconProps } from '@lucide/svelte';
 import ChartBarIncreasing from '@lucide/svelte/icons/chart-bar-increasing';
 import House from '@lucide/svelte/icons/house';
 import Newspaper from '@lucide/svelte/icons/newspaper';
