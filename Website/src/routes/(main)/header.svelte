@@ -58,7 +58,7 @@
       which leads to layout shift when hydration occurs and this markup is briefly visible.
       Add a similarly empty div to mimic this effect and prevent the layout shift.
      -->
-    <div></div>
+    <div class="md:hidden"></div>
   </header>
 {/if}
 
