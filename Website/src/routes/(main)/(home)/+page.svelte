@@ -7,10 +7,10 @@
   import Nightmerp from '$lib/assets/acknowledgement/nightmerp.webp';
   import Skazord from '$lib/assets/acknowledgement/skazord.webp';
   import Sockperson from '$lib/assets/acknowledgement/sockperson.webp';
-  import bannerDarkNarrow from '$lib/assets/bannerDark-narrow.webp';
-  import bannerDarkWide from '$lib/assets/bannerDark-wide.webp';
-  import bannerLightNarrow from '$lib/assets/bannerLight-narrow.webp';
-  import bannerLightWide from '$lib/assets/bannerLight-wide.webp';
+  import bannerDarkNarrow from '$lib/assets/bannerDark-narrow.avif';
+  import bannerDarkWide from '$lib/assets/bannerDark-wide.avif';
+  import bannerLightNarrow from '$lib/assets/bannerLight-narrow.avif';
+  import bannerLightWide from '$lib/assets/bannerLight-wide.avif';
   import Typography from '$lib/components/typography.svelte';
   import * as Card from '$shadcn/components/ui/card/index';
 
@@ -220,23 +220,27 @@
     rel="preload"
     as="image"
     href={bannerDarkWide}
-    media="(min-width: 1080px) and (prefers-color-scheme: dark)" />
+    media="(min-width: 1080px) and (prefers-color-scheme: dark)"
+    type="image/avif" />
   <link
     rel="preload"
     as="image"
     href={bannerLightWide}
-    media="(min-width: 1080px) and (prefers-color-scheme: light)" />
+    media="(min-width: 1080px) and (prefers-color-scheme: light)"
+    type="image/avif" />
 
   <link
     rel="preload"
     as="image"
     href={bannerDarkNarrow}
-    media="(max-width: 1080px) and (prefers-color-scheme: dark)" />
+    media="(max-width: 1080px) and (prefers-color-scheme: dark)"
+    type="image/avif" />
   <link
     rel="preload"
     as="image"
     href={bannerLightNarrow}
-    media="(max-width: 1080px) and (prefers-color-scheme: light)" />
+    media="(max-width: 1080px) and (prefers-color-scheme: light)"
+    type="image/avif" />
 </svelte:head>
 
 <style>
@@ -253,22 +257,34 @@
     #banner {
       padding: 75px 50px 200px;
       background-position: 10% 20%;
-      background-image: url('/src/lib/assets/bannerLight-wide.webp');
+      background-image: image-set(
+        url('/src/lib/assets/bannerLight-wide.avif') type('image/avif'),
+        url('/src/lib/assets/bannerLight-wide.webp') type('image/webp')
+      );
     }
 
     :global(.dark #banner) {
-      background-image: url('/src/lib/assets/bannerDark-wide.webp');
+      background-image: image-set(
+        url('/src/lib/assets/bannerDark-wide.avif') type('image/avif'),
+        url('/src/lib/assets/bannerDark-wide.webp') type('image/webp')
+      );
     }
   }
 
   @media (max-width: 1080px) {
     #banner {
       background-position: 10% 10%;
-      background-image: url('/src/lib/assets/bannerLight-narrow.webp');
+      background-image: image-set(
+        url('/src/lib/assets/bannerLight-narrow.avif') type('image/avif'),
+        url('/src/lib/assets/bannerLight-narrow.webp') type('image/webp')
+      );
     }
 
     :global(.dark #banner) {
-      background-image: url('/src/lib/assets/bannerDark-narrow.webp');
+      background-image: image-set(
+        url('/src/lib/assets/bannerDark-narrow.avif') type('image/avif'),
+        url('/src/lib/assets/bannerDark-narrow.webp') type('image/webp')
+      );
     }
   }
 
