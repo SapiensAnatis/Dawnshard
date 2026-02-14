@@ -1,12 +1,12 @@
 <script lang="ts">
-  import Menu from 'lucide-svelte/icons/menu';
-  import Close from 'lucide-svelte/icons/x';
+  import Menu from '@lucide/svelte/icons/menu';
+  import Close from '@lucide/svelte/icons/x';
   import { onMount } from 'svelte';
 
   import Routes from '$main/routes.svelte';
   import { Button, buttonVariants } from '$shadcn/components/ui/button';
   import * as Drawer from '$shadcn/components/ui/drawer';
-  import { cn } from '$shadcn/utils.js.ts';
+  import { cn } from '$shadcn/utils.ts';
 
   import HeaderContents from './headerContents.svelte';
 
@@ -36,7 +36,8 @@
             <div id="my-content">
               <Drawer.Close class="flex w-full flex-col pl-0">
                 <Button variant="ghost" class="w-[7rem] self-end">
-                  Close <Close class="mt-0.5 ml-2 h-5 w-5" />
+                  Close
+                  <Close class="mt-0.5 ml-2 h-5 w-5" />
                 </Button>
               </Drawer.Close>
               <Routes {hasValidJwt} {isAdmin} drawer={true} />
@@ -49,9 +50,15 @@
 {:else}
   <header id="header" class="bg-background z-50 gap-1 px-2 md:gap-2 md:px-3">
     <Button variant="ghost" size="sm" class="md:hidden" href="/navigation">
-      <Menu />
+      <Menu class="size-6" />
     </Button>
     <HeaderContents {hasValidJwt} />
+    <!--
+      On mobile, the closed drawer div affects the flexbox layout despite having width 0,
+      which leads to layout shift when hydration occurs and this markup is briefly visible.
+      Add a similarly empty div to mimic this effect and prevent the layout shift.
+     -->
+    <div></div>
   </header>
 {/if}
 
@@ -59,7 +66,6 @@
   #header {
     display: flex;
     flex-grow: 1;
-    justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid;
     border-color: var(--divider);

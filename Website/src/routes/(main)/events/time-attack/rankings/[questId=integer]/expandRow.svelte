@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ChevronDown, ChevronUp } from 'lucide-svelte';
+  import { ChevronDown, ChevronUp } from '@lucide/svelte';
 
   import { Button } from '$lib/shadcn/components/ui/button/index.js';
 

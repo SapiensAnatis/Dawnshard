@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Gift from 'lucide-svelte/icons/gift';
+  import Gift from '@lucide/svelte/icons/gift';
   import { createForm } from 'svelte-form-helper';
 
   import { Select } from '$lib/components/select';
@@ -110,8 +110,8 @@
             field={type}
             onchange={onTypeChange}
             class="
-              touched:invalid:border-red-700
-              touched:invalid:text-red-700
+               aria-invalid:data-touched:border-red-700
+               aria-invalid:data-touched:text-red-700
             "
             required
             bind:value={typeValue} />
@@ -127,7 +127,10 @@
             items={availableItems}
             field={item}
             required
-            class="touched:invalid:border-red-700 touched:invalid:text-red-700"
+            class="
+               aria-invalid:data-touched:border-red-700
+               aria-invalid:data-touched:text-red-700
+            "
             bind:value={itemValue} />
           {#if $item.show}
             <p class="helper">{$item.message}</p>
@@ -145,8 +148,8 @@
             max={maxQuantity}
             required
             class="
-              touched:invalid:border-red-700
-              touched:invalid:text-red-700
+               aria-invalid:data-touched:border-red-700
+               aria-invalid:data-touched:text-red-700
             "
             bind:value={quantityValue} />
           {#if $quantity.show}

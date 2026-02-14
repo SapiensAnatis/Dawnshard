@@ -55,28 +55,31 @@ test('change settings', async ({ page }) => {
 
   const form = page.getByRole('form', { name: 'Settings' });
 
+  const resetButton = page.getByRole('button', { name: 'Reset', exact: true });
+  const saveButton = page.getByRole('button', { name: 'Save', exact: true });
+
   await expect(form.getByRole('switch', { name: 'Receive daily material gifts' })).toBeEnabled();
   await expect(form.getByRole('switch', { name: 'Receive daily material gifts' })).toBeChecked(); // Default is enabled
-  await expect(form.getByRole('button', { name: 'Reset' })).toBeDisabled();
-  await expect(form.getByRole('button', { name: 'Save' })).toBeDisabled();
+  await expect(resetButton).toBeDisabled();
+  await expect(saveButton).toBeDisabled();
 
   // Submit
   await form.getByRole('switch', { name: 'Receive daily material gifts' }).click();
   await expect(
     form.getByRole('switch', { name: 'Receive daily material gifts' })
   ).not.toBeChecked();
-  await expect(form.getByRole('button', { name: 'Save' })).toBeEnabled();
-  await form.getByRole('button', { name: 'Save' }).click();
+  await expect(saveButton).toBeEnabled();
+  await saveButton.click();
   await expect(page.getByText('Successfully changed settings')).toBeVisible();
 
   // Reset
   await form.getByRole('switch', { name: 'Receive daily material gifts' }).click();
   await expect(form.getByRole('switch', { name: 'Receive daily material gifts' })).toBeChecked();
-  await expect(form.getByRole('button', { name: 'Reset' })).toBeEnabled();
-  await form.getByRole('button', { name: 'Reset' }).click();
+  await expect(resetButton).toBeEnabled();
+  await resetButton.click();
   await expect(
     form.getByRole('switch', { name: 'Receive daily material gifts' })
   ).not.toBeChecked();
-  await expect(form.getByRole('button', { name: 'Reset' })).toBeDisabled();
-  await expect(form.getByRole('button', { name: 'Save' })).toBeDisabled();
+  await expect(resetButton).toBeDisabled();
+  await expect(saveButton).toBeDisabled();
 });

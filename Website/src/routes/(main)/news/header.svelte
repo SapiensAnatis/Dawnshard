@@ -9,14 +9,14 @@
 
 <CardHeader class="">
   <div class="flex items-center gap-4">
-    <CardTitle level={2} class="text-2xl">
-      {item.headline}
+    <CardTitle class="text-2xl">
+      <h2 class="text-2xl">{item.headline}</h2>
     </CardTitle>
     {#if item.date > lastRead}
       <Badge class="h-6">New!</Badge>
     {/if}
   </div>
-  <CardDescription>
+  <CardDescription class="mb-1">
     {item.date.toLocaleString(undefined, {
       dateStyle: 'medium',
       timeStyle: 'short'

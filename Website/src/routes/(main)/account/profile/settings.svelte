@@ -1,6 +1,6 @@
 <script lang="ts">
+  import Settings from '@lucide/svelte/icons/settings';
   import type { ActionResult } from '@sveltejs/kit';
-  import Settings from 'lucide-svelte/icons/settings';
   import { toast } from 'svelte-sonner';
 
   import { applyAction, enhance } from '$app/forms';
@@ -17,6 +17,8 @@
   let remoteSettings = $derived(settings);
   // svelte-ignore state_referenced_locally
   let localSettings = $state(settings);
+
+  let loading = $state(false);
 
   let isChanged = $derived.by(() => {
     for (const setting in remoteSettings) {
@@ -57,29 +59,35 @@
 
 <Card.Root>
   <Card.Header>
-    <Card.Title level={2} id="settings-title">
+    <Card.Title id="settings-title">
       <div class="flex flex-row items-center justify-items-start gap-2">
         <Settings aria-hidden={true} size={25} />
-        Settings
+        <h2>Settings</h2>
       </div>
     </Card.Title>
   </Card.Header>
-  <form
-    method="POST"
-    action="?/settings"
-    aria-labelledby="settings-title"
-    use:enhance={() => {
-      return async ({ result }) => {
-        if (result.type === 'success') {
-          toast.success('Successfully changed settings');
-          remoteSettings = mapFormResultToState(result);
-          await applyAction(result);
-        } else if (result.type === 'failure') {
-          toast.error('Failed to change settings');
-        }
-      };
-    }}>
-    <Card.Content>
+
+  <Card.Content>
+    <form
+      id="settings-form"
+      method="POST"
+      action="?/settings"
+      aria-labelledby="settings-title"
+      use:enhance={() => {
+        loading = true;
+
+        return async ({ result }) => {
+          loading = false;
+
+          if (result.type === 'success') {
+            toast.success('Successfully changed settings');
+            remoteSettings = mapFormResultToState(result);
+            await applyAction(result);
+          } else if (result.type === 'failure') {
+            toast.error('Failed to change settings');
+          }
+        };
+      }}>
       <div class="mb-4">
         Use the following settings to customise your gameplay experience. Some settings may require
         the game to be restarted before they can be applied.
@@ -98,14 +106,14 @@
             bind:checked={localSettings.useLegacyHelpers} />
         </div>
       </div>
-    </Card.Content>
-    <Card.Footer>
-      <div>
-        <Button variant="outline" disabled={!isChanged} onclick={handleReset}>Reset</Button>
-        <Button type="submit" disabled={!isChanged}>Save</Button>
-      </div>
-    </Card.Footer>
-  </form>
+    </form>
+  </Card.Content>
+  <Card.Footer>
+    <div>
+      <Button variant="outline" disabled={!isChanged} onclick={handleReset}>Reset</Button>
+      <Button type="submit" {loading} form="settings-form" disabled={!isChanged}>Save</Button>
+    </div>
+  </Card.Footer>
 </Card.Root>
 
 <style>

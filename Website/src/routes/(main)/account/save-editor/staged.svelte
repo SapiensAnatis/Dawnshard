@@ -1,5 +1,5 @@
 <script lang="ts">
-  import NotebookPen from 'lucide-svelte/icons/notebook-pen';
+  import NotebookPen from '@lucide/svelte/icons/notebook-pen';
   import { toast } from 'svelte-sonner';
 
   import type { SaveChangesRequest } from '$main/account/save-editor/present/presentTypes';

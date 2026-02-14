@@ -23,9 +23,9 @@
 </script>
 
 <div id="banner">
-  <Card.Root class="w-full md:max-w-[60%]">
+  <Card.Root class="bg-background w-full md:max-w-[60%]">
     <Card.Header>
-      <Card.Title level={2} class="text-4xl">Welcome to Dawnshard</Card.Title>
+      <Card.Title><h2 class="text-4xl">Welcome to Dawnshard</h2></Card.Title>
     </Card.Header>
     <Card.Content>
       <p class="text-2xl font-semibold" style:margin-bottom="0.5rem">
@@ -190,8 +190,8 @@
         the event compendium, endeavours, and more.
       </Acknowledgement>
       <Acknowledgement name="Ceris" avatarSrc={Ceris}>
-        for developing <a href="https://orchis.cherrymint.live">Orchis</a>, another server revival
-        project for Dragalia Lost.
+        for developing <a class="link" href="https://orchis.cherrymint.live">Orchis</a>, another
+        server revival project for Dragalia Lost.
       </Acknowledgement>
       <Acknowledgement name="Nano" avatarSrc={Nano}>
         for contributing character, summoning and dragon functionality to the server

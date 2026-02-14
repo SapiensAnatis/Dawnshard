@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Download from 'lucide-svelte/icons/download';
+  import Download from '@lucide/svelte/icons/download';
 
   import { PUBLIC_BAAS_URL } from '$env/static/public';
   import { Button } from '$shadcn/components/ui/button';
@@ -14,10 +14,10 @@
 
 <Card.Root class="flex flex-col">
   <Card.Header>
-    <Card.Title level={2}>
+    <Card.Title>
       <div class="flex flex-row items-center justify-items-start gap-2">
         <Download aria-hidden={true} size={25} />
-        Save import
+        <h2>Save import</h2>
       </div>
     </Card.Title>
   </Card.Header>
@@ -31,6 +31,6 @@
   <!-- Spacer to align 'visit BaaS' and 'export save' buttons when horizontal -->
   <div class="grow"></div>
   <Card.Footer>
-    <Button href={PUBLIC_BAAS_URL}>Visit the BaaS</Button>
+    <Button href={PUBLIC_BAAS_URL} variant="default">Visit the BaaS</Button>
   </Card.Footer>
 </Card.Root>

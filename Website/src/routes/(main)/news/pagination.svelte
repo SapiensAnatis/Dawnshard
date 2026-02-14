@@ -1,6 +1,6 @@
 <script lang="ts">
-  import ChevronLeft from 'lucide-svelte/icons/chevron-left';
-  import ChevronRight from 'lucide-svelte/icons/chevron-right';
+  import ChevronLeft from '@lucide/svelte/icons/chevron-left';
+  import ChevronRight from '@lucide/svelte/icons/chevron-right';
   import { SvelteURLSearchParams } from 'svelte/reactivity';
 
   import { page } from '$app/stores';
