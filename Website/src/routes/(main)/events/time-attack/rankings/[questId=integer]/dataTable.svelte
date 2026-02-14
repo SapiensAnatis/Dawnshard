@@ -158,7 +158,7 @@
   });
 </script>
 
-<div class="rounded-md border">
+<div class="bg-card text-card-foreground rounded-xl border shadow-sm">
   <Table.Root id="time-attack-table" aria-labelledby="time-attack-table-title">
     <Table.Header id="time-attack-table-header" class="hidden md:[display:revert]">
       {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}

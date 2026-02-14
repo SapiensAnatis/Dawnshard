@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Drawer as DrawerPrimitive } from "vaul-svelte";
-	import { cn } from "$lib/shadcn/utils.js.js";
+	import { cn } from "$shadcn/utils.ts";
 
 	let {
 		ref = $bindable(null),
@@ -11,6 +11,10 @@
 
 <DrawerPrimitive.Overlay
 	bind:ref
-	class={cn("fixed inset-0 z-50 bg-black/80", className)}
+	data-slot="drawer-overlay"
+	class={cn(
+		"data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
+		className
+	)}
 	{...restProps}
 />

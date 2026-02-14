@@ -2,7 +2,7 @@
   import { Image } from '@unpic/svelte';
   import { Newspaper } from 'lucide-svelte';
 
-  import { Card, CardContent } from '$shadcn/components/ui/card/index.js';
+  import * as Card from '$shadcn/components/ui/card/index.js';
 
   import Header from './header.svelte';
   import { getImageSrc, type NewsItem } from './news.ts';
@@ -16,7 +16,7 @@
   const headerImageSrc = $derived(getImageSrc(item.headerImagePath));
 </script>
 
-<Card class="flex flex-col overflow-hidden lg:flex-row">
+<Card.Root class="flex flex-col overflow-hidden py-0 lg:flex-row">
   <div class="flex shrink-0 grow-0 basis-52 items-center justify-center">
     {#if headerImageSrc}
       <Image
@@ -28,14 +28,14 @@
       <Newspaper class="size-[12rem] p-4" strokeWidth={1} aria-label="Newspaper vector icon" />
     {/if}
   </div>
-  <div class:pb-7={!description}>
+  <div class:pb-7={!description} class="py-4">
     <Header {item} {lastRead} />
     {#if description}
-      <CardContent class="min-h-32">
+      <Card.Content class="min-h-32">
         <!-- Trusted input from API server - XSS is unlikely without server being compromised -->
         <!-- eslint-disable-next-line svelte/no-at-html-tags -->
         {@html item.description}
-      </CardContent>
+      </Card.Content>
     {/if}
   </div>
-</Card>
+</Card.Root>

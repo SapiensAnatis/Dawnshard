@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { cn } from '$shadcn/utils.js';
+  import { cn } from '$shadcn/utils.ts';
 
   export let typography: 'h1' | 'h2' | 'h3' | 'h4';
   export let id: string | undefined = undefined;

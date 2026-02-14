@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Drawer as DrawerPrimitive } from "vaul-svelte";
-	import { cn } from "$lib/shadcn/utils.js.js";
+	import { cn } from "$shadcn/utils.ts";
 
 	let {
 		ref = $bindable(null),
@@ -11,6 +11,7 @@
 
 <DrawerPrimitive.Title
 	bind:ref
-	class={cn("text-lg font-semibold leading-none tracking-tight", className)}
+	data-slot="drawer-title"
+	class={cn("text-foreground font-semibold", className)}
 	{...restProps}
 />

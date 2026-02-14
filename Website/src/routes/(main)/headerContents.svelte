@@ -31,17 +31,17 @@
 <div class="flex-grow"></div>
 <Button onclick={toggleMode} variant="outline" size="icon" data-loaded={initialized}>
   <Sun
-    class="absolute size-8 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90"
+    class="absolute size-5 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90"
     size="400"
     aria-hidden />
   <Moon
-    class="absolute size-8 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0"
+    class="absolute size-5 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0"
     aria-hidden />
   <span class="sr-only">Toggle theme</span>
 </Button>
 
 {#if hasValidJwt}
-  <Button href="/logout" variant="secondary" data-sveltekit-reload>Log out</Button>
+  <Button href="/logout" variant="destructive" data-sveltekit-reload>Log out</Button>
 {:else}
   <Button href={`/login?originalPage=${originalPage}`} data-sveltekit-preload-data="off">
     Login

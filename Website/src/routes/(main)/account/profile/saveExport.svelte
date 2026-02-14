@@ -40,10 +40,10 @@
 
 <Card.Root class="flex flex-col">
   <Card.Header>
-    <Card.Title level={2}>
+    <Card.Title>
       <div class="flex flex-row items-center justify-items-start gap-2">
         <Upload aria-hidden={true} size={25} />
-        Save export
+        <h2>Save export</h2>
       </div>
     </Card.Title>
   </Card.Header>

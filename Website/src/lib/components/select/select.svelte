@@ -3,6 +3,7 @@
   import type { Field } from 'svelte-form-helper';
 
   import type { SelectItem } from './types.ts';
+  import { cn } from '$shadcn/utils.ts';
 
   type SelectProps<T> = {
     items: SelectItem<T>[];
@@ -30,7 +31,12 @@
   });
 </script>
 
-<select class={className} {id} bind:value use:field {...restProps}>
+<select
+  class={cn(className, 'bg-background dark:bg-input/30')}
+  {id}
+  bind:value
+  use:field
+  {...restProps}>
   <option value="" hidden disabled selected>{placeholder}</option>
   {#each items as item (item.value)}
     <option value={item.value}>{item.label}</option>

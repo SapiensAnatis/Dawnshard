@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { cn } from '$shadcn/utils.js';
+  import { cn } from '$shadcn/utils.ts';
 
   export let size: number = 24;
   let className: string | undefined = undefined;
