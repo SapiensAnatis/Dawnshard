@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import Ceris from '$lib/assets/acknowledgement/ceris.webp';
   import FatesTimelines1337 from '$lib/assets/acknowledgement/fatestimelines1337.webp';
   import Lati from '$lib/assets/acknowledgement/lati.webp';
@@ -14,15 +15,13 @@
   import Typography from '$lib/components/typography.svelte';
   import * as Card from '$shadcn/components/ui/card/index';
 
+  import type { PageProps } from './$types';
   import Acknowledgement from './acknowledgement.svelte';
   import BuyMeACoffee from './icons/buyMeACoffee.svelte';
   import Discord from './icons/discord.svelte';
   import GitHub from './icons/github.svelte';
   import Patreon from './icons/patreon.svelte';
   import LinkButton from './linkButton.svelte';
-  import { resolve } from '$app/paths';
-
-  import type { PageProps } from './$types';
 
   const { data }: PageProps = $props();
 
