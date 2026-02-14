@@ -18,6 +18,8 @@
   // svelte-ignore state_referenced_locally
   let localSettings = $state(settings);
 
+  let loading = $state(false);
+
   let isChanged = $derived.by(() => {
     for (const setting in remoteSettings) {
       const castedSetting = setting as keyof typeof remoteSettings;
@@ -72,7 +74,11 @@
       action="?/settings"
       aria-labelledby="settings-title"
       use:enhance={() => {
+        loading = true;
+
         return async ({ result }) => {
+          loading = false;
+
           if (result.type === 'success') {
             toast.success('Successfully changed settings');
             remoteSettings = mapFormResultToState(result);
@@ -105,7 +111,7 @@
   <Card.Footer>
     <div>
       <Button variant="outline" disabled={!isChanged} onclick={handleReset}>Reset</Button>
-      <Button type="submit" form="settings-form" disabled={!isChanged}>Save</Button>
+      <Button type="submit" {loading} form="settings-form" disabled={!isChanged}>Save</Button>
     </div>
   </Card.Footer>
 </Card.Root>
