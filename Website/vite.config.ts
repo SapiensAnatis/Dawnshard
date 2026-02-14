@@ -1,5 +1,6 @@
 import { enhancedImages } from '@sveltejs/enhanced-img';
 import { sveltekit } from '@sveltejs/kit/vite';
+import tailwindcss from '@tailwindcss/vite';
 import { defineConfig, loadEnv } from 'vite';
 import checker from 'vite-plugin-checker';
 
@@ -13,7 +14,8 @@ export default defineConfig(({ mode }) => {
       checker({
         typescript: false, // https://github.com/huntabyte/shadcn-svelte/issues/1468
         eslint: { lintCommand: 'eslint ./src/**/*.{ts,svelte}', useFlatConfig: true }
-      })
+      }),
+      tailwindcss()
     ],
     server: {
       port: 3001,

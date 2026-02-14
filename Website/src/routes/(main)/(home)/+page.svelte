@@ -190,8 +190,8 @@
         the event compendium, endeavours, and more.
       </Acknowledgement>
       <Acknowledgement name="Ceris" avatarSrc={Ceris}>
-        for developing <a href="https://orchis.cherrymint.live">Orchis</a>, another server revival
-        project for Dragalia Lost.
+        for developing <a class="link" href="https://orchis.cherrymint.live">Orchis</a>, another
+        server revival project for Dragalia Lost.
       </Acknowledgement>
       <Acknowledgement name="Nano" avatarSrc={Nano}>
         for contributing character, summoning and dragon functionality to the server
