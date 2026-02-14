@@ -30,6 +30,10 @@
       ? resolve('/account/save-editor')
       : resolve('/login?originalPage=/account/save-editor')
   );
+
+  const profileLink = $derived.by(() =>
+    data.hasValidJwt ? resolve('/account/profile') : resolve('/login?originalPage=/account/profile')
+  );
 </script>
 
 <div id="banner">
@@ -59,7 +63,7 @@
   </Card.Root>
 </div>
 
-<div class="flex flex-col gap-5 p-5 md:w-[75%]">
+<div class="flex flex-col gap-6 p-5 md:w-[75%]">
   <div>
     <Typography typography="h2">About</Typography>
     <p>
@@ -69,7 +73,7 @@
       possible to progress largely as normal.
     </p>
   </div>
-  <div class="grid grid-cols-12 gap-4">
+  <div class="grid grid-flow-row auto-rows-min grid-cols-12 gap-4">
     <div class="col-span-12">
       <Typography typography="h2">How to play</Typography>
       <p>
@@ -80,19 +84,24 @@
         possible to do this on an Android emulator, even though the original game could not be
         played on emulators. If you encounter any issues during the set-up process, consider joining
         the
-        <a class="link" href="https://discord.gg/j9zSttjjWj">community Discord server</a>.
+        <a class="link" href="https://discord.gg/j9zSttjjWj" rel="external"
+          >community Discord server</a
+        >.
       </p>
     </div>
     <div class="col-span-12 md:col-span-6 lg:col-span-8">
       <Typography typography="h3">Android</Typography>
-      <ol class="list-inside list-decimal px-4">
+      <ol class="mb-4 list-inside list-decimal px-4">
         <li>
           Ensure you have the original Dragalia Lost app installed. The Dragalipatch app works by
           taking the files from the original app and modifying them.
         </li>
         <li>
           Download the Dragalipatch app by LukeFZ from the
-          <a class="link" href="https://github.com/lukefz/dragalipatch/releases/latest">
+          <a
+            class="link"
+            rel="external"
+            href="https://github.com/lukefz/dragalipatch/releases/latest">
             GitHub releases page.
           </a>
         </li>
@@ -102,7 +111,7 @@
         </li>
         <li>
           Leave the CDN address field blank. You can try entering
-          <a href="https://cdn.minty.sbs">https://cdn.minty.sbs</a> if this is not accepted.
+          <a rel="external" href="https://cdn.minty.sbs">https://cdn.minty.sbs</a> if this is not accepted.
         </li>
         <li>Press the &apos;Patch App&apos; button in the lower right corner.</li>
         <li>
@@ -110,8 +119,15 @@
           on the screen that follows.
         </li>
       </ol>
+      A more detailed Android guide is available
+      <a
+        href="https://docs.google.com/document/d/1SR3WcfaFEkisJ6BsVxLvGwy-2RYazwF9F4XLFi-UV1k/edit?usp=sharing"
+        rel="external"
+        class="link">here</a
+      >.
     </div>
-    <aside class="col-span-12 flex flex-col items-center px-5 md:col-span-6 lg:col-span-4">
+    <aside
+      class="col-span-12 row-span-2 flex flex-col items-center px-5 md:col-span-6 lg:col-span-4">
       <enhanced:img
         src="$lib/assets/dragalipatch.png"
         class="block w-full max-w-80 align-middle dark:hidden"
@@ -124,21 +140,24 @@
         loading="lazy" />
       <p class="mt-1 italic">Example Dragalipatch inputs</p>
     </aside>
-    <div class="col-span-12">
+    <div class="col-span-12 md:col-span-6 lg:col-span-8">
       <Typography typography="h3">iOS</Typography>
       <p>
         For information on how to play on iOS, please see
-        <a class="link" href="https://twitter.com/FloppyEarsRCute/status/1672549774870953985">
-          this tweet, containing a guide on Google Docs</a
+        <a
+          class="link"
+          rel="external"
+          href="https://docs.google.com/document/d/1EaioDIddITTX8NrE8dTTDLfDrq2iVEK_5omw7T7kCKs/edit?usp=sharing">
+          this Google Doc</a
         >. At a high level, you will need to use
-        <a class="link" href="https://sideloadly.io/">Sideloadly</a> to install a pre-patched IPA file
-        that allows configuring the server address.
+        <a class="link" rel="external" href="https://sideloadly.io/">Sideloadly</a> to install a pre-patched
+        IPA file that allows configuring the server address.
       </p>
     </div>
   </div>
 
-  <Typography typography="h2">Frequently asked questions</Typography>
-  <div class="flex flex-col gap-6">
+  <div class="flex flex-col gap-4">
+    <Typography typography="h2">Frequently asked questions</Typography>
     <div>
       <Typography typography="h3">
         Can I link an account to save my progress across devices?
@@ -146,6 +165,7 @@
       <p>
         Yes, if you follow the prompts to link an account in-game, you will be taken to the <a
           class="link"
+          rel="external"
           href="https://baas.lukefz.xyz">BaaS website</a
         >. This is a replacement for the Nintendo account linking system. If you create a new
         account and link it to your game&apos;s account, you will be able to access your progress
@@ -161,6 +181,7 @@
         such as this
         <a
           href="https://drive.google.com/drive/folders/17pR_hZtjIZ7NKBMUjtiY355FCM_-TqgO?usp=sharing"
+          rel="external"
           class="link">
           maxed out save file</a
         >, to skip parts of the game you do not want to play again.
@@ -170,6 +191,23 @@
         <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
         <a class="link" href={saveEditorLink}>save editor</a> to easily add characters and resources directly
         to your present box in-game.
+      </p>
+    </div>
+    <div>
+      <Typography typography="h3">Can I transfer my progress between servers?</Typography>
+      <p class="mb-2">
+        Theoretically, using the save export available on the
+        <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+        <a class="link" href={profileLink}>profile page</a>, or similar functionality available on
+        <a class="link" rel="external" href="https://orchis.cherrymint.live">Orchis</a>, you can use
+        the account linking system to transfer progress between servers. Note that progress made
+        beyond what is uploaded to the account linking system is not automatically synchronised
+        between servers.
+      </p>
+      <p>
+        In practice, however, this functionality will cause some progress to be lost: not every
+        detail of an account is exported in a save file, and some fields may be ignored when
+        importing a save.
       </p>
     </div>
     <div>
@@ -209,8 +247,9 @@
         the event compendium, endeavours, and more.
       </Acknowledgement>
       <Acknowledgement name="Ceris" avatarSrc={Ceris}>
-        for developing <a class="link" href="https://orchis.cherrymint.live">Orchis</a>, another
-        server revival project for Dragalia Lost.
+        for developing <a class="link" rel="external" href="https://orchis.cherrymint.live"
+          >Orchis</a
+        >, another server revival project for Dragalia Lost.
       </Acknowledgement>
       <Acknowledgement name="Nano" avatarSrc={Nano}>
         for contributing character, summoning and dragon functionality to the server
