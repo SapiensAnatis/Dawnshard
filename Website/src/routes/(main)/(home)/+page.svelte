@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import Ceris from '$lib/assets/acknowledgement/ceris.webp';
   import FatesTimelines1337 from '$lib/assets/acknowledgement/fatestimelines1337.webp';
   import Lati from '$lib/assets/acknowledgement/lati.webp';
@@ -7,19 +8,32 @@
   import Nightmerp from '$lib/assets/acknowledgement/nightmerp.webp';
   import Skazord from '$lib/assets/acknowledgement/skazord.webp';
   import Sockperson from '$lib/assets/acknowledgement/sockperson.webp';
-  import bannerDarkNarrow from '$lib/assets/bannerDark-narrow.webp';
-  import bannerDarkWide from '$lib/assets/bannerDark-wide.webp';
-  import bannerLightNarrow from '$lib/assets/bannerLight-narrow.webp';
-  import bannerLightWide from '$lib/assets/bannerLight-wide.webp';
+  import bannerDarkNarrow from '$lib/assets/bannerDark-narrow.avif';
+  import bannerDarkWide from '$lib/assets/bannerDark-wide.avif';
+  import bannerLightNarrow from '$lib/assets/bannerLight-narrow.avif';
+  import bannerLightWide from '$lib/assets/bannerLight-wide.avif';
   import Typography from '$lib/components/typography.svelte';
   import * as Card from '$shadcn/components/ui/card/index';
 
+  import type { PageProps } from './$types';
   import Acknowledgement from './acknowledgement.svelte';
   import BuyMeACoffee from './icons/buyMeACoffee.svelte';
   import Discord from './icons/discord.svelte';
   import GitHub from './icons/github.svelte';
   import Patreon from './icons/patreon.svelte';
   import LinkButton from './linkButton.svelte';
+
+  const { data }: PageProps = $props();
+
+  const saveEditorLink = $derived.by(() =>
+    data.hasValidJwt
+      ? resolve('/account/save-editor')
+      : resolve('/login?originalPage=/account/save-editor')
+  );
+
+  const profileLink = $derived.by(() =>
+    data.hasValidJwt ? resolve('/account/profile') : resolve('/login?originalPage=/account/profile')
+  );
 </script>
 
 <div id="banner">
@@ -49,7 +63,7 @@
   </Card.Root>
 </div>
 
-<div class="flex flex-col gap-5 p-5 md:w-[75%]">
+<div class="flex flex-col gap-6 p-5 md:w-[75%]">
   <div>
     <Typography typography="h2">About</Typography>
     <p>
@@ -59,7 +73,7 @@
       possible to progress largely as normal.
     </p>
   </div>
-  <div class="grid grid-cols-12 gap-4">
+  <div class="grid grid-flow-row auto-rows-min grid-cols-12 gap-4">
     <div class="col-span-12">
       <Typography typography="h2">How to play</Typography>
       <p>
@@ -70,19 +84,24 @@
         possible to do this on an Android emulator, even though the original game could not be
         played on emulators. If you encounter any issues during the set-up process, consider joining
         the
-        <a class="link" href="https://discord.gg/j9zSttjjWj">community Discord server</a>.
+        <a class="link" href="https://discord.gg/j9zSttjjWj" rel="external"
+          >community Discord server</a
+        >.
       </p>
     </div>
     <div class="col-span-12 md:col-span-6 lg:col-span-8">
       <Typography typography="h3">Android</Typography>
-      <ol class="list-inside list-decimal px-4">
+      <ol class="mb-4 list-inside list-decimal px-4">
         <li>
           Ensure you have the original Dragalia Lost app installed. The Dragalipatch app works by
           taking the files from the original app and modifying them.
         </li>
         <li>
           Download the Dragalipatch app by LukeFZ from the
-          <a class="link" href="https://github.com/lukefz/dragalipatch/releases/latest">
+          <a
+            class="link"
+            rel="external"
+            href="https://github.com/lukefz/dragalipatch/releases/latest">
             GitHub releases page.
           </a>
         </li>
@@ -92,7 +111,7 @@
         </li>
         <li>
           Leave the CDN address field blank. You can try entering
-          <a href="https://cdn.minty.sbs">https://cdn.minty.sbs</a> if this is not accepted.
+          <a rel="external" href="https://cdn.minty.sbs">https://cdn.minty.sbs</a> if this is not accepted.
         </li>
         <li>Press the &apos;Patch App&apos; button in the lower right corner.</li>
         <li>
@@ -100,8 +119,15 @@
           on the screen that follows.
         </li>
       </ol>
+      A more detailed Android guide is available
+      <a
+        href="https://docs.google.com/document/d/1SR3WcfaFEkisJ6BsVxLvGwy-2RYazwF9F4XLFi-UV1k/edit?usp=sharing"
+        rel="external"
+        class="link">here</a
+      >.
     </div>
-    <aside class="col-span-12 flex flex-col items-center px-5 md:col-span-6 lg:col-span-4">
+    <aside
+      class="col-span-12 row-span-2 flex flex-col items-center px-5 md:col-span-6 lg:col-span-4">
       <enhanced:img
         src="$lib/assets/dragalipatch.png"
         class="block w-full max-w-80 align-middle dark:hidden"
@@ -114,20 +140,23 @@
         loading="lazy" />
       <p class="mt-1 italic">Example Dragalipatch inputs</p>
     </aside>
-    <div class="col-span-12">
+    <div class="col-span-12 md:col-span-6 lg:col-span-8">
       <Typography typography="h3">iOS</Typography>
       <p>
         For information on how to play on iOS, please see
-        <a class="link" href="https://twitter.com/FloppyEarsRCute/status/1672549774870953985">
-          this tweet, containing a guide on Google Docs</a
+        <a
+          class="link"
+          rel="external"
+          href="https://docs.google.com/document/d/1EaioDIddITTX8NrE8dTTDLfDrq2iVEK_5omw7T7kCKs/edit?usp=sharing">
+          this Google Doc</a
         >. At a high level, you will need to use
-        <a class="link" href="https://sideloadly.io/">Sideloadly</a> to install a pre-patched IPA file
-        that allows configuring the server address.
+        <a class="link" rel="external" href="https://sideloadly.io/">Sideloadly</a> to install a pre-patched
+        IPA file that allows configuring the server address.
       </p>
     </div>
   </div>
 
-  <div class="flex flex-col gap-3">
+  <div class="flex flex-col gap-4">
     <Typography typography="h2">Frequently asked questions</Typography>
     <div>
       <Typography typography="h3">
@@ -136,6 +165,7 @@
       <p>
         Yes, if you follow the prompts to link an account in-game, you will be taken to the <a
           class="link"
+          rel="external"
           href="https://baas.lukefz.xyz">BaaS website</a
         >. This is a replacement for the Nintendo account linking system. If you create a new
         account and link it to your game&apos;s account, you will be able to access your progress
@@ -144,16 +174,40 @@
     </div>
     <div>
       <Typography typography="h3">Do I have to start over?</Typography>
-      <p>
+      <p class="mb-2">
         It is no longer possible to recover your progress from the original servers. However, you
         can import a save using the account linking system. You can upload a JSON file after logging
         into the BaaS with save data to be applied to the server. You can use a preset save file,
         such as this
         <a
           href="https://drive.google.com/drive/folders/17pR_hZtjIZ7NKBMUjtiY355FCM_-TqgO?usp=sharing"
+          rel="external"
           class="link">
           maxed out save file</a
         >, to skip parts of the game you do not want to play again.
+      </p>
+      <p>
+        If you link an account and log in, you can also use this website's
+        <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+        <a class="link" href={saveEditorLink}>save editor page</a> to easily add characters and resources
+        directly to your present box in-game.
+      </p>
+    </div>
+    <div>
+      <Typography typography="h3">Can I transfer my progress between servers?</Typography>
+      <p class="mb-2">
+        Theoretically, using the save export available on the
+        <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+        <a class="link" href={profileLink}>profile page</a>, or similar functionality available on
+        <a class="link" rel="external" href="https://orchis.cherrymint.live">Orchis</a>, you can use
+        the account linking system to transfer progress between servers. Note that progress made
+        beyond what is uploaded to the account linking system is not automatically synchronised
+        between servers.
+      </p>
+      <p>
+        In practice, however, this functionality will cause some progress to be lost: not every
+        detail of an account is exported in a save file, and some fields may be ignored when
+        importing a save.
       </p>
     </div>
     <div>
@@ -161,20 +215,23 @@
       <p>The majority of core gameplay mechanics have been implemented:</p>
       <ul class="list-inside list-disc px-4">
         <li>Completing quests</li>
-        <li>The Halidom castle builder</li>
-        <li>Co-op</li>
+        <li>Summoning</li>
+        <li>The Halidom</li>
+        <li>Co-op play</li>
         <li>Kaleidoscape</li>
-        <li>Upgrading weapons, wyrmprints, dragons</li>
+        <li>Upgrading weapons, wyrmprints, and dragons</li>
+        <li>Friends and helper system</li>
+        <li>Daily endeavours</li>
       </ul>
     </div>
     <div>
       <Typography typography="h3">What is still being worked on?</Typography>
       <p>Here is a non-exhaustive list of features that are still being developed:</p>
       <ul class="list-inside list-disc px-4">
-        <li>Friends and alliances</li>
         <li>Alberian Battle Royale</li>
         <li>Astral raids</li>
-        <li>Endeavours: some are available and are being slowly added</li>
+        <li>Normal endeavours</li>
+        <li>Accurate quest drop rates</li>
       </ul>
     </div>
   </div>
@@ -190,8 +247,9 @@
         the event compendium, endeavours, and more.
       </Acknowledgement>
       <Acknowledgement name="Ceris" avatarSrc={Ceris}>
-        for developing <a class="link" href="https://orchis.cherrymint.live">Orchis</a>, another
-        server revival project for Dragalia Lost.
+        for developing <a class="link" rel="external" href="https://orchis.cherrymint.live"
+          >Orchis</a
+        >, another server revival project for Dragalia Lost.
       </Acknowledgement>
       <Acknowledgement name="Nano" avatarSrc={Nano}>
         for contributing character, summoning and dragon functionality to the server
@@ -220,23 +278,27 @@
     rel="preload"
     as="image"
     href={bannerDarkWide}
-    media="(min-width: 1080px) and (prefers-color-scheme: dark)" />
+    media="(min-width: 1080px) and (prefers-color-scheme: dark)"
+    type="image/avif" />
   <link
     rel="preload"
     as="image"
     href={bannerLightWide}
-    media="(min-width: 1080px) and (prefers-color-scheme: light)" />
+    media="(min-width: 1080px) and (prefers-color-scheme: light)"
+    type="image/avif" />
 
   <link
     rel="preload"
     as="image"
     href={bannerDarkNarrow}
-    media="(max-width: 1080px) and (prefers-color-scheme: dark)" />
+    media="(max-width: 1080px) and (prefers-color-scheme: dark)"
+    type="image/avif" />
   <link
     rel="preload"
     as="image"
     href={bannerLightNarrow}
-    media="(max-width: 1080px) and (prefers-color-scheme: light)" />
+    media="(max-width: 1080px) and (prefers-color-scheme: light)"
+    type="image/avif" />
 </svelte:head>
 
 <style>
@@ -253,22 +315,34 @@
     #banner {
       padding: 75px 50px 200px;
       background-position: 10% 20%;
-      background-image: url('/src/lib/assets/bannerLight-wide.webp');
+      background-image: image-set(
+        url('/src/lib/assets/bannerLight-wide.avif') type('image/avif'),
+        url('/src/lib/assets/bannerLight-wide.webp') type('image/webp')
+      );
     }
 
     :global(.dark #banner) {
-      background-image: url('/src/lib/assets/bannerDark-wide.webp');
+      background-image: image-set(
+        url('/src/lib/assets/bannerDark-wide.avif') type('image/avif'),
+        url('/src/lib/assets/bannerDark-wide.webp') type('image/webp')
+      );
     }
   }
 
   @media (max-width: 1080px) {
     #banner {
       background-position: 10% 10%;
-      background-image: url('/src/lib/assets/bannerLight-narrow.webp');
+      background-image: image-set(
+        url('/src/lib/assets/bannerLight-narrow.avif') type('image/avif'),
+        url('/src/lib/assets/bannerLight-narrow.webp') type('image/webp')
+      );
     }
 
     :global(.dark #banner) {
-      background-image: url('/src/lib/assets/bannerDark-narrow.webp');
+      background-image: image-set(
+        url('/src/lib/assets/bannerDark-narrow.avif') type('image/avif'),
+        url('/src/lib/assets/bannerDark-narrow.webp') type('image/webp')
+      );
     }
   }
 
