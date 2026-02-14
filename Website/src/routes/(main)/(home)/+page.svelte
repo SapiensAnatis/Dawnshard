@@ -20,6 +20,17 @@
   import GitHub from './icons/github.svelte';
   import Patreon from './icons/patreon.svelte';
   import LinkButton from './linkButton.svelte';
+  import { resolve } from '$app/paths';
+
+  import type { PageProps } from './$types';
+
+  const { data }: PageProps = $props();
+
+  const saveEditorLink = $derived.by(() =>
+    data.hasValidJwt
+      ? resolve('/account/save-editor')
+      : resolve('/login?originalPage=/account/save-editor')
+  );
 </script>
 
 <div id="banner">
@@ -127,8 +138,8 @@
     </div>
   </div>
 
-  <div class="flex flex-col gap-3">
-    <Typography typography="h2">Frequently asked questions</Typography>
+  <Typography typography="h2">Frequently asked questions</Typography>
+  <div class="flex flex-col gap-6">
     <div>
       <Typography typography="h3">
         Can I link an account to save my progress across devices?
@@ -144,7 +155,7 @@
     </div>
     <div>
       <Typography typography="h3">Do I have to start over?</Typography>
-      <p>
+      <p class="mb-2">
         It is no longer possible to recover your progress from the original servers. However, you
         can import a save using the account linking system. You can upload a JSON file after logging
         into the BaaS with save data to be applied to the server. You can use a preset save file,
@@ -155,26 +166,35 @@
           maxed out save file</a
         >, to skip parts of the game you do not want to play again.
       </p>
+      <p>
+        If you link an account and log in, you can also use this website's
+        <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+        <a class="link" href={saveEditorLink}>save editor</a> to easily add characters and resources directly
+        to your present box in-game.
+      </p>
     </div>
     <div>
       <Typography typography="h3">What has been implemented?</Typography>
       <p>The majority of core gameplay mechanics have been implemented:</p>
       <ul class="list-inside list-disc px-4">
         <li>Completing quests</li>
-        <li>The Halidom castle builder</li>
-        <li>Co-op</li>
+        <li>Summoning</li>
+        <li>The Halidom</li>
+        <li>Co-op play</li>
         <li>Kaleidoscape</li>
-        <li>Upgrading weapons, wyrmprints, dragons</li>
+        <li>Upgrading weapons, wyrmprints, and dragons</li>
+        <li>Friends and helper system</li>
+        <li>Daily endeavours</li>
       </ul>
     </div>
     <div>
       <Typography typography="h3">What is still being worked on?</Typography>
       <p>Here is a non-exhaustive list of features that are still being developed:</p>
       <ul class="list-inside list-disc px-4">
-        <li>Friends and alliances</li>
         <li>Alberian Battle Royale</li>
         <li>Astral raids</li>
-        <li>Endeavours: some are available and are being slowly added</li>
+        <li>Normal endeavours</li>
+        <li>Accurate quest drop rates</li>
       </ul>
     </div>
   </div>
