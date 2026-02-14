@@ -23,12 +23,12 @@
 </script>
 
 <div id="banner">
-  <Card.Root class="w-full max-w-[55rem]">
+  <Card.Root class="w-full md:max-w-[60%]">
     <Card.Header>
-      <Card.Title level={2} class="text-3xl">Welcome to Dawnshard</Card.Title>
+      <Card.Title level={2} class="text-4xl">Welcome to Dawnshard</Card.Title>
     </Card.Header>
     <Card.Content>
-      <p class="text-lg font-semibold" style:margin-bottom="0.5rem">
+      <p class="text-2xl font-semibold" style:margin-bottom="0.5rem">
         Dawnshard is a server emulator project aimed at enabling continued play of Dragalia Lost.
       </p>
       <p>
@@ -36,7 +36,7 @@
         development as a fan-led reimplementation of the game&apos;s web backend.
       </p>
     </Card.Content>
-    <Card.Footer class="flex-row flex-wrap gap-2">
+    <Card.Footer class="mt-4 flex-row flex-wrap gap-2">
       <LinkButton href="https://github.com/sapiensanatis/dawnshard" icon={GitHub}>
         Source code
       </LinkButton>
@@ -241,7 +241,7 @@
 
 <style>
   #banner {
-    padding: 3rem;
+    padding: 50px;
     object-position: 100% 50%;
     background-size: cover;
     background-repeat: no-repeat;
@@ -251,6 +251,7 @@
 
   @media (min-width: 1080px) {
     #banner {
+      padding: 75px 50px 200px;
       background-position: 10% 20%;
       background-image: url('/src/lib/assets/bannerLight-wide.webp');
     }
