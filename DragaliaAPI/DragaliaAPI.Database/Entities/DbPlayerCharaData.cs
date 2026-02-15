@@ -161,12 +161,19 @@ public class DbPlayerCharaData : DbPlayerData
     /// <summary>
     /// EF Core / test constructor.
     /// </summary>
+    [Obsolete(
+        """
+            Do not use this constructor unless you intend to set every field properly. 
+            Each character can have different default stats so you can easily make broken characters by using this overload improperly!
+            """
+    )]
     public DbPlayerCharaData() { }
 
     /// <summary>
     /// User-facing constructor.
     /// </summary>
-    /// <param name="deviceAccountId">Primary key.</param>
+    /// <param name="viewerId">Primary key.</param>
+    /// <param name="id">ID of the character to add.</param>
     [SetsRequiredMembers]
     public DbPlayerCharaData(long viewerId, Charas id)
     {

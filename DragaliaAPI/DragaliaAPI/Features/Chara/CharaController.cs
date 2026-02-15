@@ -654,13 +654,16 @@ public class CharaController(
                     playerCharData.Skill2Level++;
                     break;
                 case ManaNodeTypes.A1:
-                    playerCharData.Ability1Level++;
+                    playerCharData.Ability1Level = (byte)
+                        Math.Min(playerCharData.Ability1Level + 1, charaData.MaxAbility1Level);
                     break;
                 case ManaNodeTypes.A2:
-                    playerCharData.Ability2Level++;
+                    playerCharData.Ability2Level = (byte)
+                        Math.Min(playerCharData.Ability2Level + 1, charaData.MaxAbility2Level);
                     break;
                 case ManaNodeTypes.A3:
-                    playerCharData.Ability3Level++;
+                    playerCharData.Ability3Level = (byte)
+                        Math.Min(playerCharData.Ability3Level + 1, charaData.MaxAbility3Level);
                     break;
                 case ManaNodeTypes.Ex:
                     playerCharData.ExAbilityLevel++;
