@@ -2,6 +2,7 @@ using System.Diagnostics;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DragaliaAPI.Features.Login.SavefileUpdate;
 
@@ -46,6 +47,14 @@ public class SavefileUpdateService : ISavefileUpdateService
 
         Stopwatch s = new();
 
+        // Start a transaction; some savefile updates use LinqToDb.EntityFrameworkCore, which applies immediately
+        // without SaveChanges. This means if something goes wrong during the update these changes will persist.
+        // However, LinqToDb will inherit the EFC transaction if one is active. So we can make this operation
+        // atomic by wrapping it in a transaction.
+
+        await using IDbContextTransaction transaction =
+            await this.context.Database.BeginTransactionAsync();
+
         foreach (ISavefileUpdate update in this.savefileUpdates.OrderBy(x => x.SavefileVersion))
         {
             if (player.SavefileVersion < update.SavefileVersion)
@@ -66,5 +75,7 @@ public class SavefileUpdateService : ISavefileUpdateService
 
         // Do not need an UpdateDataList as this is called during /load/index
         await this.context.SaveChangesAsync();
+
+        await transaction.CommitAsync();
     }
 }
