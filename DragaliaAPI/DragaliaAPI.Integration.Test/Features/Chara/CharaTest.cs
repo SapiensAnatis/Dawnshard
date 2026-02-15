@@ -41,6 +41,7 @@ public class CharaTest : TestFixture
         this.AddCharacter(Charas.GalaAudric);
         this.AddCharacter(Charas.Gauld);
         this.AddCharacter(Charas.Valerio);
+        this.AddCharacter(Charas.Cleo);
     }
 
     [Fact]
@@ -252,6 +253,41 @@ public class CharaTest : TestFixture
             .Contain(x => x.CharaId == Charas.Valerio)
             .Which.ManaCirclePieceIdList.Should()
             .BeEquivalentTo(nodes59.Add(60));
+    }
+
+    [Fact]
+    public async Task CharaBuildupMana_DoesNotIncreaseBeyondMaxAbilityLevels()
+    {
+        // Node 59 gives Cleo ability 1 at level 3
+        ImmutableArray<int> nodes58 = [.. Enumerable.Range(1, 58)];
+        ushort node58Bitmask = (ushort)ManaNodesUtil.SetManaCircleNodesFromSet(nodes58);
+
+        await this
+            .ApiContext.PlayerCharaData.Where(x =>
+                x.ViewerId == this.ViewerId && x.CharaId == Charas.Cleo
+            )
+            .ExecuteUpdateAsync(
+                x =>
+                    x.SetProperty(p => p.ManaNodeUnlockCount, node58Bitmask)
+                        // Characters could already have ability 1 level 3 going into this upgrade under particular
+                        // circumstances - see https://github.com/SapiensAnatis/Dawnshard/issues/1231
+                        .SetProperty(p => p.Ability1Level, 3),
+                TestContext.Current.CancellationToken
+            );
+
+        DragaliaResponse<CharaBuildupManaResponse> response = (
+            await this.Client.PostMsgpack<CharaBuildupManaResponse>(
+                "chara/buildup_mana",
+                new CharaBuildupManaRequest(Charas.Cleo, [59], false),
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        );
+
+        response
+            .Data.UpdateDataList.CharaList.Should()
+            .Contain(x => x.CharaId == Charas.Cleo)
+            .Which.Ability1Level.Should()
+            .Be(3);
     }
 
     [Fact]

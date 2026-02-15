@@ -251,4 +251,32 @@ public class StorySkipTest : TestFixture
                 }
             );
     }
+
+    [Fact]
+    public async Task StorySkip_GrantsCharasWithCorrectAbilityLevels()
+    {
+        DbPlayerCharaData? cleo = await this
+            .ApiContext.PlayerCharaData.AsNoTracking()
+            .FirstOrDefaultAsync(
+                x => x.CharaId == Charas.Cleo,
+                TestContext.Current.CancellationToken
+            );
+
+        cleo.Should().BeNull();
+
+        await this.Client.PostMsgpack<StorySkipSkipResponse>(
+            "story_skip/skip",
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        cleo = await this
+            .ApiContext.PlayerCharaData.AsNoTracking()
+            .FirstOrDefaultAsync(
+                x => x.CharaId == Charas.Cleo,
+                TestContext.Current.CancellationToken
+            );
+
+        cleo.Should().NotBeNull();
+        cleo!.Ability1Level.Should().Be(0);
+    }
 }
