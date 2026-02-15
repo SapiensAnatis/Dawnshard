@@ -113,5 +113,21 @@ const handleIsAdmin: Handle = ({ event, resolve }) => {
 export const handle = sequence(handleHeadScript, handleLogger, handleAuth, handleIsAdmin);
 
 export const handleError: HandleServerError = ({ error, event, status, message }) => {
+  if (status === 405 && event.request.method === 'POST') {
+    // Public websites are subject to scraping by all sorts of crawlers, which target URLs like
+    // /api/graphql and xmlrpc.php scanning for vulnerabilities. Failed POST requests to these
+    // endpoints should not be logged as errors as they're just noise.
+    event.locals.logger.info(
+      {
+        error,
+        status,
+        message
+      },
+      'Rejected invalid POST request to page {requestPath}' // requestPath added by handleLogger
+    );
+
+    return;
+  }
+
   event.locals.logger.error({ error, status, message }, 'Unhandled error occurred: {message}');
 };
