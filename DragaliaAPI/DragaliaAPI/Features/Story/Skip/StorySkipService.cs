@@ -271,35 +271,11 @@ public class StorySkipService(
             if (!charaExists)
             {
                 logger.LogDebug("Rewarding character {chara}", chara);
-                CharaData charaData = MasterAsset.CharaData[chara];
-                StoryData storyData = MasterAsset.CharaStories[(int)chara]; // Every character we add here has stories
 
-                DbPlayerCharaData newUserChara = new()
-                {
-                    ViewerId = playerIdentityService.ViewerId,
-                    CharaId = chara,
-                    Rarity = 4,
-                    Exp = 0,
-                    Level = 1,
-                    HpPlusCount = 0,
-                    AttackPlusCount = 0,
-                    IsNew = true,
-                    Skill1Level = 1,
-                    Skill2Level = 0,
-                    Ability1Level = 1,
-                    Ability2Level = 0,
-                    Ability3Level = 0,
-                    BurstAttackLevel = 0,
-                    ComboBuildupCount = 0,
-                    HpBase = (ushort)charaData.MinHp4,
-                    HpNode = 0,
-                    AttackBase = (ushort)charaData.MinAtk4,
-                    AttackNode = 0,
-                    ExAbilityLevel = 1,
-                    ExAbility2Level = 1,
-                    IsTemporary = false,
-                };
-                DbPlayerStoryState newCharaStory = new DbPlayerStoryState()
+                DbPlayerCharaData newUserChara = new(playerIdentityService.ViewerId, chara);
+
+                StoryData storyData = MasterAsset.CharaStories[(int)chara]; // Every character we add here has stories
+                DbPlayerStoryState newCharaStory = new()
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     StoryType = StoryTypes.Chara,
