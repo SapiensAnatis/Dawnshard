@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 
 import type { Handle, HandleFetch, HandleServerError } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
-import { generateSetInitialModeExpression } from 'mode-watcher';
+import { createInitialModeExpression } from 'mode-watcher';
 
 import { env } from '$env/dynamic/private';
 import { PUBLIC_ENABLE_MSW } from '$env/static/public';
@@ -59,13 +59,19 @@ export const handleFetch: HandleFetch = ({ request, event, fetch }) => {
 const handleHeadScript: Handle = ({ event, resolve }) => {
   if (event.request.url.includes('webview')) {
     // Don't inject dark mode script into webview pages, otherwise a user with the storage key set
-    // from visiting the actual website will get dark mode in-game, which looks bad
-    return resolve(event);
+    // from visiting the actual website will get dark mode in-game, which looks bad.
+    // We should still remove the placeholder though; it's invalid JS and will cause a console error to be logged if
+    // evaluated directly.
+    return resolve(event, {
+      transformPageChunk: ({ html }) => {
+        return html.replace('%modewatcher.snippet%', '');
+      }
+    });
   }
 
   return resolve(event, {
     transformPageChunk: ({ html }) => {
-      return html.replace('%modewatcher.snippet%', generateSetInitialModeExpression({}));
+      return html.replace('%modewatcher.snippet%', createInitialModeExpression({}));
     }
   });
 };
@@ -113,5 +119,21 @@ const handleIsAdmin: Handle = ({ event, resolve }) => {
 export const handle = sequence(handleHeadScript, handleLogger, handleAuth, handleIsAdmin);
 
 export const handleError: HandleServerError = ({ error, event, status, message }) => {
+  if (status === 405 && event.request.method === 'POST') {
+    // Public websites are subject to scraping by all sorts of crawlers, which target URLs like
+    // /api/graphql and xmlrpc.php scanning for vulnerabilities. Failed POST requests to these
+    // endpoints should not be logged as errors as they're just noise.
+    event.locals.logger.info(
+      {
+        error,
+        status,
+        message
+      },
+      'Rejected invalid POST request to page {requestPath}' // requestPath added by handleLogger
+    );
+
+    return;
+  }
+
   event.locals.logger.error({ error, status, message }, 'Unhandled error occurred: {message}');
 };

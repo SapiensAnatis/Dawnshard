@@ -279,12 +279,14 @@
     as="image"
     href={bannerDarkWide}
     media="(min-width: 1080px) and (prefers-color-scheme: dark)"
+    fetchpriority="high"
     type="image/avif" />
   <link
     rel="preload"
     as="image"
     href={bannerLightWide}
     media="(min-width: 1080px) and (prefers-color-scheme: light)"
+    fetchpriority="high"
     type="image/avif" />
 
   <link
@@ -292,12 +294,14 @@
     as="image"
     href={bannerDarkNarrow}
     media="(max-width: 1080px) and (prefers-color-scheme: dark)"
+    fetchpriority="high"
     type="image/avif" />
   <link
     rel="preload"
     as="image"
     href={bannerLightNarrow}
     media="(max-width: 1080px) and (prefers-color-scheme: light)"
+    fetchpriority="high"
     type="image/avif" />
 </svelte:head>
 
