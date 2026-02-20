@@ -20,6 +20,8 @@ internal sealed class NewsController(NewsService newsService) : ControllerBase
             cancellationToken
         );
 
+        data = data.Select(this.DoTemplateSubstitutions).ToList();
+
         int totalCount = await newsService.GetNewsItemCountAsync(cancellationToken);
 
         return new()
@@ -39,7 +41,15 @@ internal sealed class NewsController(NewsService newsService) : ControllerBase
             return this.NotFound();
         }
 
-        return item;
+        return this.DoTemplateSubstitutions(item);
+    }
+
+    private NewsItem DoTemplateSubstitutions(NewsItem newsItem)
+    {
+        return newsItem with
+        {
+            Description = newsItem.Description.Replace("{{Hostname}}", this.Request.Host.Host),
+        };
     }
 }
 
