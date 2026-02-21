@@ -5,7 +5,7 @@
   import * as Card from '$shadcn/components/ui/card/index.js';
 
   import Header from './header.svelte';
-  import { getImageSrc, type NewsItem } from './news.ts';
+  import { formatDescription, getImageSrc, type NewsItem } from './news.ts';
 
   const {
     item,
@@ -14,6 +14,7 @@
   }: { item: NewsItem; lastRead: Date; description?: boolean } = $props();
 
   const headerImageSrc = $derived(getImageSrc(item.headerImagePath));
+  const formattedDescription = $derived(formatDescription(item.description));
 </script>
 
 <Card.Root class="flex flex-col overflow-hidden py-0 lg:flex-row">
@@ -32,9 +33,12 @@
     <Header {item} {lastRead} />
     {#if description}
       <Card.Content class="min-h-32">
-        <!-- Trusted input from API server - XSS is unlikely without server being compromised -->
+        <!--
+          Trusted input from API server - XSS is unlikely without server being compromised, and our
+          Content-Security-Policy should block inline scripts anyway
+         -->
         <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-        {@html item.description}
+        {@html formattedDescription}
       </Card.Content>
     {/if}
   </div>

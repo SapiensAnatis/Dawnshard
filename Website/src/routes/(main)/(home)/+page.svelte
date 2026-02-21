@@ -111,7 +111,8 @@
         </li>
         <li>
           Leave the CDN address field blank. You can try entering
-          <a rel="external" href="https://cdn.minty.sbs">https://cdn.minty.sbs</a> if this is not accepted.
+          <a rel="external" class="link" href="https://cdn.minty.sbs">https://cdn.minty.sbs</a> if this
+          is not accepted.
         </li>
         <li>Press the &apos;Patch App&apos; button in the lower right corner.</li>
         <li>
@@ -119,12 +120,11 @@
           on the screen that follows.
         </li>
       </ol>
-      A more detailed Android guide is available
+      If you encounter issues with the above, a more
       <a
         href="https://docs.google.com/document/d/1SR3WcfaFEkisJ6BsVxLvGwy-2RYazwF9F4XLFi-UV1k/edit?usp=sharing"
         rel="external"
-        class="link">here</a
-      >.
+        class="link">detailed Android guide</a> is also available.
     </div>
     <aside
       class="col-span-12 row-span-2 flex flex-col items-center px-5 md:col-span-6 lg:col-span-4">
@@ -140,7 +140,7 @@
         loading="lazy" />
       <p class="mt-1 italic">Example Dragalipatch inputs</p>
     </aside>
-    <div class="col-span-12 md:col-span-6 lg:col-span-8">
+    <div class="col-span-12 md:col-span-6 lg:col-span-12">
       <Typography typography="h3">iOS</Typography>
       <p>
         For information on how to play on iOS, please see

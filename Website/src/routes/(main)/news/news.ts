@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { page } from '$app/state';
 import { PUBLIC_CDN_URL } from '$env/static/public';
 
 export type NewsItem = z.infer<typeof newsItemSchema>;
@@ -11,10 +12,7 @@ export const newsItemSchema = z.object({
   id: z.number(),
   headline: z.string(),
   description: z.string(),
-  date: z
-    .string()
-    .datetime({ offset: true })
-    .transform((val) => new Date(val)),
+  date: z.iso.datetime({ offset: true }).transform((val) => new Date(val)),
   headerImagePath: z.string().nullable(),
   headerImageAltText: z.string().nullable(),
   bodyImagePath: z.string().nullable(),
@@ -43,4 +41,8 @@ export const getImageSrc = (path: string | null) =>
 export const getPageNoFromParams = (params: URLSearchParams) => {
   const pageNoStr = params.get('page') || '1';
   return Number.parseInt(pageNoStr) || 1;
+};
+
+export const formatDescription = (description: string) => {
+  return description.replace('{{Hostname}}', page.url.hostname);
 };
