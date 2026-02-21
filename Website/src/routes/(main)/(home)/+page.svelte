@@ -140,7 +140,7 @@
         loading="lazy" />
       <p class="mt-1 italic">Example Dragalipatch inputs</p>
     </aside>
-    <div class="col-span-12 md:col-span-6 lg:col-span-8">
+    <div class="col-span-12 md:col-span-6 lg:col-span-12">
       <Typography typography="h3">iOS</Typography>
       <p>
         For information on how to play on iOS, please see
