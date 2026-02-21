@@ -12,10 +12,7 @@ export const newsItemSchema = z.object({
   id: z.number(),
   headline: z.string(),
   description: z.string(),
-  date: z
-    .iso
-    .datetime({ offset: true })
-    .transform((val) => new Date(val)),
+  date: z.iso.datetime({ offset: true }).transform((val) => new Date(val)),
   headerImagePath: z.string().nullable(),
   headerImageAltText: z.string().nullable(),
   bodyImagePath: z.string().nullable(),
@@ -47,5 +44,5 @@ export const getPageNoFromParams = (params: URLSearchParams) => {
 };
 
 export const formatDescription = (description: string) => {
-  return description.replace("{{Hostname}}", page.url.hostname);
-}
+  return description.replace('{{Hostname}}', page.url.hostname);
+};
