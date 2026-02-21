@@ -3,7 +3,7 @@
   import { Image } from '@unpic/svelte';
 
   import { afterNavigate } from '$app/navigation';
-  import { getImageSrc } from '$main/news/news.ts';
+  import { formatDescription, getImageSrc } from '$main/news/news.ts';
   import { Button } from '$shadcn/components/ui/button';
 
   import type { PageProps } from './$types';
@@ -20,6 +20,7 @@
 
   let headerImageSrc = $derived(getImageSrc(item.headerImagePath));
   let bodyImageSrc = $derived(getImageSrc(item.bodyImagePath));
+  let description = $derived(formatDescription(item.description));
 </script>
 
 <div class="p-4">
@@ -52,7 +53,7 @@
       <br />
       <!-- Trusted input from API server - XSS is unlikely without server being compromised -->
       <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-      <p>{@html item.description}</p>
+      <p>{@html description}</p>
       <br />
       {#if bodyImageSrc}
         <Image src={bodyImageSrc} layout="fullWidth" class="w-full" alt={item.bodyImageAltText} />
