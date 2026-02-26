@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Features.Chara;
+﻿using DragaliaAPI.Features.Album;
+using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Features.Shared.Reward;
@@ -16,6 +17,7 @@ public class DungeonRecordService(
     ITutorialService tutorialService,
     ICharaService charaService,
     IRewardService rewardService,
+    IAlbumService albumService,
     ILogger<DungeonRecordService> logger
 ) : IDungeonRecordService
 {
@@ -63,6 +65,8 @@ public class DungeonRecordService(
             session
         );
 
+        await this.ProcessCharaHonors(session);
+
         ingameResultData.RewardRecord.FirstClearSet = firstClearSets;
         ingameResultData.RewardRecord.MissionsClearSet = missionStatus.MissionsClearSet;
         ingameResultData.RewardRecord.MissionComplete = missionStatus.MissionCompleteSet;
@@ -108,6 +112,17 @@ public class DungeonRecordService(
         }
 
         return ingameResultData;
+    }
+
+    private async Task ProcessCharaHonors(DungeonSession session)
+    {
+        foreach (PartySettingList chara in session.Party)
+        {
+            if (chara.CharaId == 0)
+                continue;
+
+            await albumService.GrantCharaHonor(chara.CharaId, session.QuestId);
+        }
     }
 
     private async Task ProcessStaminaConsumption(DungeonSession session)
