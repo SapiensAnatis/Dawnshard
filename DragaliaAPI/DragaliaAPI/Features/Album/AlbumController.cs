@@ -5,20 +5,18 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Features.Album;
 
 [Route("album")]
-public class AlbumController : DragaliaControllerBase
+public class AlbumController(IAlbumService albumService) : DragaliaControllerBase
 {
     [HttpPost("index")]
-    public DragaliaResult Index()
+    public async Task<DragaliaResult> Index()
     {
-        AlbumIndexResponse stubResponse = new()
+        return this.Ok(new AlbumIndexResponse()
         {
             AlbumDragonList = Enumerable.Empty<AlbumDragonData>(),
             AlbumQuestPlayRecordList = Enumerable.Empty<AtgenAlbumQuestPlayRecordList>(),
-            CharaHonorList = Enumerable.Empty<AtgenCharaHonorList>(),
+            CharaHonorList = await albumService.GetCharaHonorList(),
             AlbumPassiveUpdateResult = new(),
             UpdateDataList = new(),
-        };
-
-        return this.Ok(stubResponse);
+        });
     }
 }

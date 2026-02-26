@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database;
+using DragaliaAPI.Features.Album;
 using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.CoOp;
@@ -129,6 +130,8 @@ public static class ServiceConfiguration
             // Party power feature
             .AddScoped<IPartyPowerService, PartyPowerService>()
             .AddScoped<IPartyPowerRepository, PartyPowerRepository>()
+            // Album feature
+            .AddScoped<IAlbumService, AlbumService>()
             // Chara feature
             .AddScoped<ICharaService, CharaService>()
             .AddScoped<IResourceVersionService, ResourceVersionService>()
