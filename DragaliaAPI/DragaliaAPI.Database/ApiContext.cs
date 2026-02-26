@@ -90,6 +90,8 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
     public DbSet<DbPlayerEventPassive> PlayerEventPassives { get; set; } = null!;
 
     public DbSet<DbQuestClearPartyUnit> QuestClearPartyUnits { get; set; } = null!;
+    
+    public DbSet<DbPlayerCharaHonor> PlayerCharaHonors { get; set; } = null!;
 
     public DbSet<DbPlayerDmodeInfo> PlayerDmodeInfos { get; set; } = null!;
 
