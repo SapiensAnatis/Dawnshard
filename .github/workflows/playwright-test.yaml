@@ -50,7 +50,7 @@ jobs:
         run: pnpm exec playwright test ${{ inputs.update-snapshots && '--update-snapshots changed' || '' }}
 
       - name: Upload report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
@@ -58,7 +58,7 @@ jobs:
           retention-days: 3
 
       - name: Upload snapshots
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: ${{ inputs.update-snapshots == true }}
         with:
           name: snapshots
