@@ -1,9 +1,9 @@
-FROM mcr.microsoft.com/dotnet/aspnet:10.0.2-noble-chiseled AS base
+FROM mcr.microsoft.com/dotnet/aspnet:10.0.3-noble-chiseled AS base
 USER app
 EXPOSE 8080
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:10.0.102 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0.103 AS build
 WORKDIR /src
 COPY ["DragaliaAPI/Directory.Build.props", "."]
 COPY ["Directory.Packages.props", "."]
