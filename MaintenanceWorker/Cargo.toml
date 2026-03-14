@@ -15,7 +15,7 @@ wasm-opt = false
 crate-type = ["cdylib"]
 
 [dependencies]
-worker = { version="0.7.2", features=['http', 'axum'] }
-serde = { version = "1.0.219", default-features = false }
-time = { version="0.3.44", features=['parsing','macros','formatting'] }
+worker = { version="0.7.5", features=['http', 'axum'] }
+serde = { version = "1.0.228", default-features = false }
+time = { version="0.3.47", features=['parsing','macros','formatting'] }
 rmp-serde =  { version = "1.3.1", default-features = false }

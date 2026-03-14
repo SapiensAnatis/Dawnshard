@@ -1,16 +1,16 @@
-import { SELF } from "cloudflare:test";
+import { exports } from "cloudflare:workers";
 import { decode, decodeAsync } from "@msgpack/msgpack";
 
 describe("web", () => {
   test("renders webpage", async () => {
-    const res = await SELF.fetch("http://localhost");
+    const res = await exports.default.fetch("http://localhost");
 
     expect(res.ok).toBe(true);
     expect(await res.text()).toMatchSnapshot();
   });
 
   test("renders webpage on any other path", async () => {
-    const res = await SELF.fetch("http://localhost/aaaaaa");
+    const res = await exports.default.fetch("http://localhost/aaaaaa");
 
     expect(res.ok).toBe(true);
     expect(await res.text()).toMatch(/^<!DOCTYPE html>/);
@@ -27,7 +27,7 @@ describe("game", () => {
   };
 
   test("sends maintenance response", async () => {
-    const res = await SELF.fetch(
+    const res = await exports.default.fetch(
       "http://localhost/2.19.0_20220714193707/dungeon_start/start",
       {
         method: "POST",
@@ -48,7 +48,7 @@ describe("game", () => {
   });
 
   test("sends maintenance text", async () => {
-    const res = await SELF.fetch(
+    const res = await exports.default.fetch(
       "http://localhost/2.19.0_20220719103923/maintenance/get_text",
       {
         method: "POST",
