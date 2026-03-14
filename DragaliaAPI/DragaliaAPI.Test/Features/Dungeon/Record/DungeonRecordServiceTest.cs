@@ -24,7 +24,7 @@ public class DungeonRecordServiceTest
     private readonly Mock<ICharaService> mockCharaService;
     private readonly Mock<IRewardService> mockRewardService;
     private readonly Mock<ILogger<DungeonRecordService>> mockLogger;
-    private readonly Mock<AlbumService> mockAlbumService;
+    private readonly Mock<IAlbumService> mockAlbumService;
 
     private readonly DungeonRecordService dungeonRecordService;
 

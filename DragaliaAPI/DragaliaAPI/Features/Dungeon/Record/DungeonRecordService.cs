@@ -17,7 +17,7 @@ internal partial class DungeonRecordService(
     ITutorialService tutorialService,
     ICharaService charaService,
     IRewardService rewardService,
-    AlbumService albumService,
+    IAlbumService albumService,
     ILogger<DungeonRecordService> logger
 ) : IDungeonRecordService
 {

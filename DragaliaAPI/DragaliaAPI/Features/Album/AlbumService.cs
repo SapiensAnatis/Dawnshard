@@ -13,7 +13,7 @@ internal partial class AlbumService(
     IPlayerIdentityService playerIdentityService,
     ApiContext apiContext,
     ILogger<AlbumService> logger
-)
+) : IAlbumService
 {
     public async Task GrantCharaHonors(IEnumerable<Charas> charas, int questId)
     {

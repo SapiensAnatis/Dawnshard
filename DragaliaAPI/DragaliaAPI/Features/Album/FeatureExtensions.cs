@@ -7,6 +7,6 @@ public static partial class FeatureExtensions
 {
     public static IServiceCollection AddAlbumFeature(this IServiceCollection serviceCollection)
     {
-        return serviceCollection.AddScoped<AlbumService, AlbumService>();
+        return serviceCollection.AddScoped<IAlbumService, AlbumService>();
     }
 }

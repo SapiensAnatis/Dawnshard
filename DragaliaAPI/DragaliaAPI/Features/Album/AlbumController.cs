@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Features.Album;
 
 [Route("album")]
-internal class AlbumController(AlbumService albumService) : DragaliaControllerBase
+internal class AlbumController(IAlbumService albumService) : DragaliaControllerBase
 {
     [HttpPost("index")]
     public async Task<DragaliaResult> Index()
