@@ -284,9 +284,7 @@ public static class ServiceConfiguration
             builder
                 .Services.AddOpenTelemetry()
                 .WithTracing(tracing =>
-                    tracing.AddEntityFrameworkCoreInstrumentation(options =>
-                        options.SetDbStatementForText = true
-                    )
+                    tracing.AddEntityFrameworkCoreInstrumentation()
                 //  Not compatible with IDistributedCache as requires IConnectionMultiplexer
                 // .AddRedisInstrumentation()
                 );
