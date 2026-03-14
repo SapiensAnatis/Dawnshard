@@ -89,7 +89,8 @@ public static class ServiceConfiguration
             .AddTutorialFeature()
             .AddZenaFeature()
             .AddFriendFeature()
-            .AddDungeonFeature();
+            .AddDungeonFeature()
+            .AddAlbumFeature();
 
         services
             .RegisterMissionServices()
@@ -130,8 +131,6 @@ public static class ServiceConfiguration
             // Party power feature
             .AddScoped<IPartyPowerService, PartyPowerService>()
             .AddScoped<IPartyPowerRepository, PartyPowerRepository>()
-            // Album feature
-            .AddScoped<IAlbumService, AlbumService>()
             // Chara feature
             .AddScoped<ICharaService, CharaService>()
             .AddScoped<IResourceVersionService, ResourceVersionService>()

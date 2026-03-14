@@ -9986,9 +9986,6 @@ public partial class PlayRecord
     [Key("lower_drawbridge_count")]
     public int LowerDrawbridgeCount { get; set; }
 
-    [Key("live_unit_no_list")]
-    public IEnumerable<int> LiveUnitNoList { get; set; } = [];
-
     [Key("total_play_damage")]
     public long TotalPlayDamage { get; set; }
 
@@ -10037,7 +10034,7 @@ public partial class PlayRecord
         int protectionDamage,
         int remainingTime,
         int lowerDrawbridgeCount,
-        IEnumerable<int> liveUnitNoList,
+        IReadOnlyList<int> liveUnitNoList,
         long totalPlayDamage,
         IEnumerable<AtgenDamageRecord> damageRecord,
         IEnumerable<AtgenDamageRecord> dragonDamageRecord,

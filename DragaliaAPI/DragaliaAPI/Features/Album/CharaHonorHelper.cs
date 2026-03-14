@@ -1,213 +1,445 @@
+using System.Collections.Frozen;
+
 namespace DragaliaAPI.Features.Album;
 
 public static class CharaHonorHelper
 {
-    private static readonly int[] DragonTrialMaster =
-    [
-        203010104, 203020104, 203030104, 203040104, 203050104,
-    ];
+    private const int DragonTrialMasterHonorId = 100101;
+    private const int AstralRaidHonorId = 100201;
+    private const int VoidDragonStandardHonorId = 100301;
+    private const int VoidDragonExpertHonorId = 100302;
+    private const int VoidChimeraStandardHonorId = 100401;
+    private const int VoidChimeraExpertHonorId = 100402;
+    private const int HighDragonStandardHonorId = 100501;
+    private const int HighDragonExpertHonorId = 100502;
+    private const int HighDragonMasterHonorId = 100503;
+    private const int AgitoStandardHonorId = 100601;
+    private const int AgitoExpertHonorId = 100602;
+    private const int AgitoMasterHonorId = 100603;
+    private const int AgitoLegendHonorId = 100701;
+    private const int SinDomStandardHonorId = 100801;
+    private const int SinDomExpertHonorId = 100802;
+    private const int SinDomMasterHonorId = 100803;
+    private const int SinDomLegendHonorId = 101101;
+    private const int MorsayatiHonorId = 100901;
+    private const int PrimalDragonStandardHonorId = 101301;
+    private const int PrimalDragonExpertHonorId = 101302;
+    private const int PrimalDragonMasterHonorId = 101303;
+    private const int TotmStandardHonorId = 101001;
+    private const int TotmExpertHonorId = 101002;
+    private const int TotmMasterHonorId = 101003;
 
-    private static readonly int[] AstralRaid =
-    [
-        217010104, 217020104, 217030104, 217040104, 217050104,
-        217060104, 217070104, 217080104, 217090104,
-    ];
-
-    private static readonly int[] VoidDragonStandard =
-    [
-        227010102, 227020102, 227030102, 227040102, 227040102,
-        227060102, 227070102, 227080102, 227090102, 227100102,
-        227110102, 300040101, 300041101, 300080101, 300081101,
-        300120101, 300121101, 300130101, 300131101, 300180101,
-        300181101,
-    ];
-
-    private static readonly int[] VoidDragonExpert =
-    [
-        300040102, 300041102, 300080102, 300081102, 300120102,
-        300121102, 300130102, 300131102, 300180102, 300181102,
-    ];
-
-    private static readonly int[] VoidChimeraStandard =
-    [
-        300220101, 300221101, 300240101, 300241101, 300280101,
-        300281101, 300310101, 300311101, 300320101, 300321101,
-    ];
-
-    private static readonly int[] VoidChimeraExpert =
-    [
-        300220102, 300221102, 300240102, 300241102, 300280102,
-        300281102, 300310102, 300311102, 300320102, 300321102,
-    ];
-
-    private static readonly int[] HighDragonStandard =
-    [
-        210010101, 210020101, 210030101, 210040101, 210050101,
-        210011101, 210021101, 210031101, 210041101, 210051101,
-    ];
-
-    private static readonly int[] HighDragonExpert =
-    [
-        210010103, 210020103, 210030103, 210040103, 210050103,
-        210011103, 210021103, 210031103, 210041103, 210051103,
-        227010103, 227020103, 227030103, 227040103, 227050103,
-        227060103, 227070103, 227080103, 227090103, 227100103,
-        227110103,
-    ];
-
-    private static readonly int[] HighDragonMaster =
-    [
-        210010104, 210020104, 210030104, 210040104, 210050104,
-        210011104, 210021104, 210031104, 210041104, 210051104,
-        227060104, 227070104, 227080104, 227090104, 227100104,
-        227110104,
-    ];
-
-    private static readonly int[] AgitoStandard =
-    [
-        219010101, 219020101, 219030101, 219040101, 219050101,
-        219011101, 219021101, 219031101, 219041101, 219051101,
-    ];
-
-    private static readonly int[] AgitoExpert =
-    [
-        219010102, 219020102, 219030102, 219040102, 219050102,
-        219011102, 219021102, 219031102, 219041102, 219051102,
-    ];
-
-    private static readonly int[] AgitoMaster =
-    [
-        219010103, 219020103, 219030103, 219040103, 219050103,
-        219011103, 219021103, 219031103, 219041103, 219051103,
-    ];
-
-    private static readonly int[] AgitoLegend =
-    [
-        225010101, 225020101, 225030101, 225040101, 225050101,
-        225011101, 225021101, 225031101, 225041101, 225051101,
-    ];
-
-    private static readonly int[] SinDomStandard =
-    [
-        228010101, 228020101, 228030101, 228040101, 228050101,
-        228011101, 228021101, 228031101, 228041101, 228051101,
-    ];
-
-    private static readonly int[] SinDomExpert =
-    [
-        228010102, 228020102, 228030102, 228040102, 228050102,
-        228011102, 228021102, 228031102, 228041102, 228051102,
-    ];
-
-    private static readonly int[] SinDomMaster =
-    [
-        228010103, 228020103, 228030103, 228040103, 228050103,
-        228011103, 228021103, 228031103, 228041103, 228051103,
-    ];
-
-    private static readonly int[] SinDomLegend =
-    [
-        232010101, 232020101, 232030101, 232040101, 232050101,
-        232011101, 232021101, 232031101, 232041101, 232051101,
-    ];
-
-    private static readonly int[] Morsayati = [226010101, 226011101];
-
-    private static readonly int[] PrimalDragonStandard =
-    [
-        233010101, 233020101, 233030101, 233040101, 233050101,
-        233011101, 233021101, 233031101, 233041101, 233051101,
-    ];
-
-    private static readonly int[] PrimalDragonExpert =
-    [
-        233010102, 233020102, 233030102, 233040102, 233050102,
-        233011102, 233021102, 233031102, 233041102, 233051102,
-    ];
-
-    private static readonly int[] PrimalDragonMaster =
-    [
-        233010103, 233020103, 233030103, 233040103, 233050103,
-        233011103, 233021103, 233031103, 233041103, 233051103,
-    ];
-
-    private static readonly int[] TotMStandard =
-    [
-        320010101, 320020101, 320030101, 320040101, 320050101,
-        320060101, 320070101, 320080101, 320090101, 320100101,
-        320110101, 320120101, 320130101, 320140101, 320150101,
-        320160101, 320170101, 320180101, 320190101, 320200101,
-        320210101, 320220101, 320230101, 320240101, 320250101,
-        320260101,
-
-        320011101, 320021101, 320031101, 320041101, 320051101,
-        320061101, 320071101, 320081101, 320091101, 320101101,
-        320111101, 320121101, 320131101, 320141101, 320151101,
-        320161101, 320171101, 320181101, 320191101, 320201101,
-        320211101, 320221101, 320231101, 320241101, 320251101,
-        320261101,
-    ];
-
-    private static readonly int[] TotMExpert =
-    [
-        320010102, 320020102, 320030102, 320040102, 320050102,
-        320060102, 320070102, 320080102, 320090102, 320100102,
-        320110102, 320120102, 320130102, 320140102, 320150102,
-        320160102, 320170102, 320180102, 320190102, 320200102,
-        320210102, 320220102, 320230102, 320240102, 320250102,
-        320260102,
-
-        320011102, 320021102, 320031102, 320041102, 320051102,
-        320061102, 320071102, 320081102, 320091102, 320101102,
-        320111102, 320121102, 320131102, 320141102, 320151102,
-        320161102, 320171102, 320181102, 320191102, 320201102,
-        320211102, 320221102, 320231102, 320241102, 320251102,
-        320261102,
-    ];
-
-    private static readonly int[] TotMMaster =
-    [
-        320010103, 320020103, 320030103, 320040103, 320050103,
-        320060103, 320070103, 320080103, 320090103, 320100103,
-        320110103, 320120103, 320130103, 320140103, 320150103,
-        320160103, 320170103, 320180103, 320190103, 320200103,
-        320210103, 320220103, 320230103, 320240103, 320250103,
-        320260103,
-
-        320011103, 320021103, 320031103, 320041103, 320051103,
-        320061103, 320071103, 320081103, 320091103, 320101103,
-        320111103, 320121103, 320131103, 320141103, 320151103,
-        320161103, 320171103, 320181103, 320191103, 320201103,
-        320211103, 320221103, 320231103, 320241103, 320251103,
-        320261103,
-    ];
-
-    public static int GetMedalId(int questId) => questId switch
+    private static readonly FrozenDictionary<int, int> QuestIdToHonorIdLookup = new Dictionary<
+        int,
+        int
+    >
     {
-        _ when DragonTrialMaster.Contains(questId)    => 100101,
-        _ when AstralRaid.Contains(questId)           => 100201,
-        _ when VoidDragonStandard.Contains(questId)   => 100301,
-        _ when VoidDragonExpert.Contains(questId)     => 100302,
-        _ when VoidChimeraStandard.Contains(questId)  => 100401,
-        _ when VoidChimeraExpert.Contains(questId)    => 100402,
-        _ when HighDragonStandard.Contains(questId)   => 100501,
-        _ when HighDragonExpert.Contains(questId)     => 100502,
-        _ when HighDragonMaster.Contains(questId)     => 100503,
-        _ when AgitoStandard.Contains(questId)        => 100601,
-        _ when AgitoExpert.Contains(questId)          => 100602,
-        _ when AgitoMaster.Contains(questId)          => 100603,
-        _ when AgitoLegend.Contains(questId)          => 100701,
-        _ when SinDomStandard.Contains(questId)       => 100801,
-        _ when SinDomExpert.Contains(questId)         => 100802,
-        _ when SinDomMaster.Contains(questId)         => 100803,
-        _ when SinDomLegend.Contains(questId)         => 101101,
-        _ when Morsayati.Contains(questId)            => 100901,
-        _ when PrimalDragonStandard.Contains(questId) => 101301,
-        _ when PrimalDragonExpert.Contains(questId)   => 101302,
-        _ when PrimalDragonMaster.Contains(questId)   => 101303,
-        _ when TotMStandard.Contains(questId)         => 101001,
-        _ when TotMExpert.Contains(questId)           => 101002,
-        _ when TotMMaster.Contains(questId)           => 101003,
-        _                                             => 0,
-    };
+        [203010104] = DragonTrialMasterHonorId,
+        [203020104] = DragonTrialMasterHonorId,
+        [203030104] = DragonTrialMasterHonorId,
+        [203040104] = DragonTrialMasterHonorId,
+        [203050104] = DragonTrialMasterHonorId,
+
+        [217010104] = AstralRaidHonorId,
+        [217020104] = AstralRaidHonorId,
+        [217030104] = AstralRaidHonorId,
+        [217040104] = AstralRaidHonorId,
+        [217050104] = AstralRaidHonorId,
+        [217060104] = AstralRaidHonorId,
+        [217070104] = AstralRaidHonorId,
+        [217080104] = AstralRaidHonorId,
+        [217090104] = AstralRaidHonorId,
+
+        [227010102] = VoidDragonStandardHonorId,
+        [227020102] = VoidDragonStandardHonorId,
+        [227030102] = VoidDragonStandardHonorId,
+        [227040102] = VoidDragonStandardHonorId,
+        [227060102] = VoidDragonStandardHonorId,
+        [227070102] = VoidDragonStandardHonorId,
+        [227080102] = VoidDragonStandardHonorId,
+        [227090102] = VoidDragonStandardHonorId,
+        [227100102] = VoidDragonStandardHonorId,
+        [227110102] = VoidDragonStandardHonorId,
+        [300040101] = VoidDragonStandardHonorId,
+        [300041101] = VoidDragonStandardHonorId,
+        [300080101] = VoidDragonStandardHonorId,
+        [300081101] = VoidDragonStandardHonorId,
+        [300120101] = VoidDragonStandardHonorId,
+        [300121101] = VoidDragonStandardHonorId,
+        [300130101] = VoidDragonStandardHonorId,
+        [300131101] = VoidDragonStandardHonorId,
+        [300180101] = VoidDragonStandardHonorId,
+        [300181101] = VoidDragonStandardHonorId,
+
+        [300040102] = VoidDragonExpertHonorId,
+        [300041102] = VoidDragonExpertHonorId,
+        [300080102] = VoidDragonExpertHonorId,
+        [300081102] = VoidDragonExpertHonorId,
+        [300120102] = VoidDragonExpertHonorId,
+        [300121102] = VoidDragonExpertHonorId,
+        [300130102] = VoidDragonExpertHonorId,
+        [300131102] = VoidDragonExpertHonorId,
+        [300180102] = VoidDragonExpertHonorId,
+        [300181102] = VoidDragonExpertHonorId,
+
+        [300220101] = VoidChimeraStandardHonorId,
+        [300221101] = VoidChimeraStandardHonorId,
+        [300240101] = VoidChimeraStandardHonorId,
+        [300241101] = VoidChimeraStandardHonorId,
+        [300280101] = VoidChimeraStandardHonorId,
+        [300281101] = VoidChimeraStandardHonorId,
+        [300310101] = VoidChimeraStandardHonorId,
+        [300311101] = VoidChimeraStandardHonorId,
+        [300320101] = VoidChimeraStandardHonorId,
+        [300321101] = VoidChimeraStandardHonorId,
+
+        [300220102] = VoidChimeraExpertHonorId,
+        [300221102] = VoidChimeraExpertHonorId,
+        [300240102] = VoidChimeraExpertHonorId,
+        [300241102] = VoidChimeraExpertHonorId,
+        [300280102] = VoidChimeraExpertHonorId,
+        [300281102] = VoidChimeraExpertHonorId,
+        [300310102] = VoidChimeraExpertHonorId,
+        [300311102] = VoidChimeraExpertHonorId,
+        [300320102] = VoidChimeraExpertHonorId,
+        [300321102] = VoidChimeraExpertHonorId,
+
+        [210010101] = HighDragonStandardHonorId,
+        [210020101] = HighDragonStandardHonorId,
+        [210030101] = HighDragonStandardHonorId,
+        [210040101] = HighDragonStandardHonorId,
+        [210050101] = HighDragonStandardHonorId,
+        [210011101] = HighDragonStandardHonorId,
+        [210021101] = HighDragonStandardHonorId,
+        [210031101] = HighDragonStandardHonorId,
+        [210041101] = HighDragonStandardHonorId,
+        [210051101] = HighDragonStandardHonorId,
+
+        [210010103] = HighDragonExpertHonorId,
+        [210020103] = HighDragonExpertHonorId,
+        [210030103] = HighDragonExpertHonorId,
+        [210040103] = HighDragonExpertHonorId,
+        [210050103] = HighDragonExpertHonorId,
+        [210011103] = HighDragonExpertHonorId,
+        [210021103] = HighDragonExpertHonorId,
+        [210031103] = HighDragonExpertHonorId,
+        [210041103] = HighDragonExpertHonorId,
+        [210051103] = HighDragonExpertHonorId,
+        [227010103] = HighDragonExpertHonorId,
+        [227020103] = HighDragonExpertHonorId,
+        [227030103] = HighDragonExpertHonorId,
+        [227040103] = HighDragonExpertHonorId,
+        [227050103] = HighDragonExpertHonorId,
+        [227060103] = HighDragonExpertHonorId,
+        [227070103] = HighDragonExpertHonorId,
+        [227080103] = HighDragonExpertHonorId,
+        [227090103] = HighDragonExpertHonorId,
+        [227100103] = HighDragonExpertHonorId,
+        [227110103] = HighDragonExpertHonorId,
+
+        [210010104] = HighDragonMasterHonorId,
+        [210020104] = HighDragonMasterHonorId,
+        [210030104] = HighDragonMasterHonorId,
+        [210040104] = HighDragonMasterHonorId,
+        [210050104] = HighDragonMasterHonorId,
+        [210011104] = HighDragonMasterHonorId,
+        [210021104] = HighDragonMasterHonorId,
+        [210031104] = HighDragonMasterHonorId,
+        [210041104] = HighDragonMasterHonorId,
+        [210051104] = HighDragonMasterHonorId,
+        [227060104] = HighDragonMasterHonorId,
+        [227070104] = HighDragonMasterHonorId,
+        [227080104] = HighDragonMasterHonorId,
+        [227090104] = HighDragonMasterHonorId,
+        [227100104] = HighDragonMasterHonorId,
+        [227110104] = HighDragonMasterHonorId,
+
+        [219010101] = AgitoStandardHonorId,
+        [219020101] = AgitoStandardHonorId,
+        [219030101] = AgitoStandardHonorId,
+        [219040101] = AgitoStandardHonorId,
+        [219050101] = AgitoStandardHonorId,
+        [219011101] = AgitoStandardHonorId,
+        [219021101] = AgitoStandardHonorId,
+        [219031101] = AgitoStandardHonorId,
+        [219041101] = AgitoStandardHonorId,
+        [219051101] = AgitoStandardHonorId,
+
+        [219010102] = AgitoExpertHonorId,
+        [219020102] = AgitoExpertHonorId,
+        [219030102] = AgitoExpertHonorId,
+        [219040102] = AgitoExpertHonorId,
+        [219050102] = AgitoExpertHonorId,
+        [219011102] = AgitoExpertHonorId,
+        [219021102] = AgitoExpertHonorId,
+        [219031102] = AgitoExpertHonorId,
+        [219041102] = AgitoExpertHonorId,
+        [219051102] = AgitoExpertHonorId,
+
+        [219010103] = AgitoMasterHonorId,
+        [219020103] = AgitoMasterHonorId,
+        [219030103] = AgitoMasterHonorId,
+        [219040103] = AgitoMasterHonorId,
+        [219050103] = AgitoMasterHonorId,
+        [219011103] = AgitoMasterHonorId,
+        [219021103] = AgitoMasterHonorId,
+        [219031103] = AgitoMasterHonorId,
+        [219041103] = AgitoMasterHonorId,
+        [219051103] = AgitoMasterHonorId,
+
+        [225010101] = AgitoLegendHonorId,
+        [225020101] = AgitoLegendHonorId,
+        [225030101] = AgitoLegendHonorId,
+        [225040101] = AgitoLegendHonorId,
+        [225050101] = AgitoLegendHonorId,
+        [225011101] = AgitoLegendHonorId,
+        [225021101] = AgitoLegendHonorId,
+        [225031101] = AgitoLegendHonorId,
+        [225041101] = AgitoLegendHonorId,
+        [225051101] = AgitoLegendHonorId,
+
+        [228010101] = SinDomStandardHonorId,
+        [228020101] = SinDomStandardHonorId,
+        [228030101] = SinDomStandardHonorId,
+        [228040101] = SinDomStandardHonorId,
+        [228050101] = SinDomStandardHonorId,
+        [228011101] = SinDomStandardHonorId,
+        [228021101] = SinDomStandardHonorId,
+        [228031101] = SinDomStandardHonorId,
+        [228041101] = SinDomStandardHonorId,
+        [228051101] = SinDomStandardHonorId,
+
+        [228010102] = SinDomExpertHonorId,
+        [228020102] = SinDomExpertHonorId,
+        [228030102] = SinDomExpertHonorId,
+        [228040102] = SinDomExpertHonorId,
+        [228050102] = SinDomExpertHonorId,
+        [228011102] = SinDomExpertHonorId,
+        [228021102] = SinDomExpertHonorId,
+        [228031102] = SinDomExpertHonorId,
+        [228041102] = SinDomExpertHonorId,
+        [228051102] = SinDomExpertHonorId,
+
+        [228010103] = SinDomMasterHonorId,
+        [228020103] = SinDomMasterHonorId,
+        [228030103] = SinDomMasterHonorId,
+        [228040103] = SinDomMasterHonorId,
+        [228050103] = SinDomMasterHonorId,
+        [228011103] = SinDomMasterHonorId,
+        [228021103] = SinDomMasterHonorId,
+        [228031103] = SinDomMasterHonorId,
+        [228041103] = SinDomMasterHonorId,
+        [228051103] = SinDomMasterHonorId,
+
+        [232010101] = SinDomLegendHonorId,
+        [232020101] = SinDomLegendHonorId,
+        [232030101] = SinDomLegendHonorId,
+        [232040101] = SinDomLegendHonorId,
+        [232050101] = SinDomLegendHonorId,
+        [232011101] = SinDomLegendHonorId,
+        [232021101] = SinDomLegendHonorId,
+        [232031101] = SinDomLegendHonorId,
+        [232041101] = SinDomLegendHonorId,
+        [232051101] = SinDomLegendHonorId,
+
+        [226010101] = MorsayatiHonorId,
+        [226011101] = MorsayatiHonorId,
+
+        [233010101] = PrimalDragonStandardHonorId,
+        [233020101] = PrimalDragonStandardHonorId,
+        [233030101] = PrimalDragonStandardHonorId,
+        [233040101] = PrimalDragonStandardHonorId,
+        [233050101] = PrimalDragonStandardHonorId,
+        [233011101] = PrimalDragonStandardHonorId,
+        [233021101] = PrimalDragonStandardHonorId,
+        [233031101] = PrimalDragonStandardHonorId,
+        [233041101] = PrimalDragonStandardHonorId,
+        [233051101] = PrimalDragonStandardHonorId,
+
+        [233010102] = PrimalDragonExpertHonorId,
+        [233020102] = PrimalDragonExpertHonorId,
+        [233030102] = PrimalDragonExpertHonorId,
+        [233040102] = PrimalDragonExpertHonorId,
+        [233050102] = PrimalDragonExpertHonorId,
+        [233011102] = PrimalDragonExpertHonorId,
+        [233021102] = PrimalDragonExpertHonorId,
+        [233031102] = PrimalDragonExpertHonorId,
+        [233041102] = PrimalDragonExpertHonorId,
+        [233051102] = PrimalDragonExpertHonorId,
+
+        [233010103] = PrimalDragonMasterHonorId,
+        [233020103] = PrimalDragonMasterHonorId,
+        [233030103] = PrimalDragonMasterHonorId,
+        [233040103] = PrimalDragonMasterHonorId,
+        [233050103] = PrimalDragonMasterHonorId,
+        [233011103] = PrimalDragonMasterHonorId,
+        [233021103] = PrimalDragonMasterHonorId,
+        [233031103] = PrimalDragonMasterHonorId,
+        [233041103] = PrimalDragonMasterHonorId,
+        [233051103] = PrimalDragonMasterHonorId,
+
+        [320010101] = TotmStandardHonorId,
+        [320020101] = TotmStandardHonorId,
+        [320030101] = TotmStandardHonorId,
+        [320040101] = TotmStandardHonorId,
+        [320050101] = TotmStandardHonorId,
+        [320060101] = TotmStandardHonorId,
+        [320070101] = TotmStandardHonorId,
+        [320080101] = TotmStandardHonorId,
+        [320090101] = TotmStandardHonorId,
+        [320100101] = TotmStandardHonorId,
+        [320110101] = TotmStandardHonorId,
+        [320120101] = TotmStandardHonorId,
+        [320130101] = TotmStandardHonorId,
+        [320140101] = TotmStandardHonorId,
+        [320150101] = TotmStandardHonorId,
+        [320160101] = TotmStandardHonorId,
+        [320170101] = TotmStandardHonorId,
+        [320180101] = TotmStandardHonorId,
+        [320190101] = TotmStandardHonorId,
+        [320200101] = TotmStandardHonorId,
+        [320210101] = TotmStandardHonorId,
+        [320220101] = TotmStandardHonorId,
+        [320230101] = TotmStandardHonorId,
+        [320240101] = TotmStandardHonorId,
+        [320250101] = TotmStandardHonorId,
+        [320260101] = TotmStandardHonorId,
+        [320011101] = TotmStandardHonorId,
+        [320021101] = TotmStandardHonorId,
+        [320031101] = TotmStandardHonorId,
+        [320041101] = TotmStandardHonorId,
+        [320051101] = TotmStandardHonorId,
+        [320061101] = TotmStandardHonorId,
+        [320071101] = TotmStandardHonorId,
+        [320081101] = TotmStandardHonorId,
+        [320091101] = TotmStandardHonorId,
+        [320101101] = TotmStandardHonorId,
+        [320111101] = TotmStandardHonorId,
+        [320121101] = TotmStandardHonorId,
+        [320131101] = TotmStandardHonorId,
+        [320141101] = TotmStandardHonorId,
+        [320151101] = TotmStandardHonorId,
+        [320161101] = TotmStandardHonorId,
+        [320171101] = TotmStandardHonorId,
+        [320181101] = TotmStandardHonorId,
+        [320191101] = TotmStandardHonorId,
+        [320201101] = TotmStandardHonorId,
+        [320211101] = TotmStandardHonorId,
+        [320221101] = TotmStandardHonorId,
+        [320231101] = TotmStandardHonorId,
+        [320241101] = TotmStandardHonorId,
+        [320251101] = TotmStandardHonorId,
+        [320261101] = TotmStandardHonorId,
+
+        [320010102] = TotmExpertHonorId,
+        [320020102] = TotmExpertHonorId,
+        [320030102] = TotmExpertHonorId,
+        [320040102] = TotmExpertHonorId,
+        [320050102] = TotmExpertHonorId,
+        [320060102] = TotmExpertHonorId,
+        [320070102] = TotmExpertHonorId,
+        [320080102] = TotmExpertHonorId,
+        [320090102] = TotmExpertHonorId,
+        [320100102] = TotmExpertHonorId,
+        [320110102] = TotmExpertHonorId,
+        [320120102] = TotmExpertHonorId,
+        [320130102] = TotmExpertHonorId,
+        [320140102] = TotmExpertHonorId,
+        [320150102] = TotmExpertHonorId,
+        [320160102] = TotmExpertHonorId,
+        [320170102] = TotmExpertHonorId,
+        [320180102] = TotmExpertHonorId,
+        [320190102] = TotmExpertHonorId,
+        [320200102] = TotmExpertHonorId,
+        [320210102] = TotmExpertHonorId,
+        [320220102] = TotmExpertHonorId,
+        [320230102] = TotmExpertHonorId,
+        [320240102] = TotmExpertHonorId,
+        [320250102] = TotmExpertHonorId,
+        [320260102] = TotmExpertHonorId,
+        [320011102] = TotmExpertHonorId,
+        [320021102] = TotmExpertHonorId,
+        [320031102] = TotmExpertHonorId,
+        [320041102] = TotmExpertHonorId,
+        [320051102] = TotmExpertHonorId,
+        [320061102] = TotmExpertHonorId,
+        [320071102] = TotmExpertHonorId,
+        [320081102] = TotmExpertHonorId,
+        [320091102] = TotmExpertHonorId,
+        [320101102] = TotmExpertHonorId,
+        [320111102] = TotmExpertHonorId,
+        [320121102] = TotmExpertHonorId,
+        [320131102] = TotmExpertHonorId,
+        [320141102] = TotmExpertHonorId,
+        [320151102] = TotmExpertHonorId,
+        [320161102] = TotmExpertHonorId,
+        [320171102] = TotmExpertHonorId,
+        [320181102] = TotmExpertHonorId,
+        [320191102] = TotmExpertHonorId,
+        [320201102] = TotmExpertHonorId,
+        [320211102] = TotmExpertHonorId,
+        [320221102] = TotmExpertHonorId,
+        [320231102] = TotmExpertHonorId,
+        [320241102] = TotmExpertHonorId,
+        [320251102] = TotmExpertHonorId,
+        [320261102] = TotmExpertHonorId,
+
+        [320010103] = TotmMasterHonorId,
+        [320020103] = TotmMasterHonorId,
+        [320030103] = TotmMasterHonorId,
+        [320040103] = TotmMasterHonorId,
+        [320050103] = TotmMasterHonorId,
+        [320060103] = TotmMasterHonorId,
+        [320070103] = TotmMasterHonorId,
+        [320080103] = TotmMasterHonorId,
+        [320090103] = TotmMasterHonorId,
+        [320100103] = TotmMasterHonorId,
+        [320110103] = TotmMasterHonorId,
+        [320120103] = TotmMasterHonorId,
+        [320130103] = TotmMasterHonorId,
+        [320140103] = TotmMasterHonorId,
+        [320150103] = TotmMasterHonorId,
+        [320160103] = TotmMasterHonorId,
+        [320170103] = TotmMasterHonorId,
+        [320180103] = TotmMasterHonorId,
+        [320190103] = TotmMasterHonorId,
+        [320200103] = TotmMasterHonorId,
+        [320210103] = TotmMasterHonorId,
+        [320220103] = TotmMasterHonorId,
+        [320230103] = TotmMasterHonorId,
+        [320240103] = TotmMasterHonorId,
+        [320250103] = TotmMasterHonorId,
+        [320260103] = TotmMasterHonorId,
+        [320011103] = TotmMasterHonorId,
+        [320021103] = TotmMasterHonorId,
+        [320031103] = TotmMasterHonorId,
+        [320041103] = TotmMasterHonorId,
+        [320051103] = TotmMasterHonorId,
+        [320061103] = TotmMasterHonorId,
+        [320071103] = TotmMasterHonorId,
+        [320081103] = TotmMasterHonorId,
+        [320091103] = TotmMasterHonorId,
+        [320101103] = TotmMasterHonorId,
+        [320111103] = TotmMasterHonorId,
+        [320121103] = TotmMasterHonorId,
+        [320131103] = TotmMasterHonorId,
+        [320141103] = TotmMasterHonorId,
+        [320151103] = TotmMasterHonorId,
+        [320161103] = TotmMasterHonorId,
+        [320171103] = TotmMasterHonorId,
+        [320181103] = TotmMasterHonorId,
+        [320191103] = TotmMasterHonorId,
+        [320201103] = TotmMasterHonorId,
+        [320211103] = TotmMasterHonorId,
+        [320221103] = TotmMasterHonorId,
+        [320231103] = TotmMasterHonorId,
+        [320241103] = TotmMasterHonorId,
+        [320251103] = TotmMasterHonorId,
+        [320261103] = TotmMasterHonorId,
+    }.ToFrozenDictionary();
+
+    public static int? GetMedalId(int questId)
+    {
+        return QuestIdToHonorIdLookup.TryGetValue(questId, out int honorId) ? honorId : null;
+    }
 }
