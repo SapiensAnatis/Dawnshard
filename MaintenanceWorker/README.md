@@ -17,14 +17,42 @@ MAINTENANCE_BODY = "Dawnshard is currently under maintenance\nto upgrade the ser
 
 1. Install dependencies:
 
-```bash
-pnpm i
-```
+    ```bash
+    pnpm i
+    ```
 
 2. Start the worker in development:
 
-```bash
-pnpm run
+    ```bash
+    pnpm start
+    ```
+
+## Running tests
+
+1. Build the worker
+
+    ```bash
+    pnpm exec wrangler deploy --dry-run
+    ```
+   
+2. Run tests
+
+   ```
+   pnpm test
+   ```
+
+## Troubleshooting
+
+When building after installing dependencies, if you get an error like
+
+```
+/bin/sh: line 1: worker-build: command not found
+```
+
+then you may need to add the `cargo` bin path to your `PATH`:
+
+```
+PATH=$PATH:$HOME/.cargo/bin pnpm exec wrangler deploy --dry-run
 ```
 
 ## Deployment 
