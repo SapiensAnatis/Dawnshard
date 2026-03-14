@@ -1,4 +1,5 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Album;
 using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Dungeon.Record;
@@ -23,6 +24,7 @@ public class DungeonRecordServiceTest
     private readonly Mock<ICharaService> mockCharaService;
     private readonly Mock<IRewardService> mockRewardService;
     private readonly Mock<ILogger<DungeonRecordService>> mockLogger;
+    private readonly Mock<IAlbumService> mockAlbumService;
 
     private readonly DungeonRecordService dungeonRecordService;
 
@@ -35,6 +37,7 @@ public class DungeonRecordServiceTest
         this.mockCharaService = new(MockBehavior.Strict);
         this.mockRewardService = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
+        this.mockAlbumService = new(MockBehavior.Loose);
 
         this.dungeonRecordService = new DungeonRecordService(
             this.mockDungeonRewardService.Object,
@@ -43,6 +46,7 @@ public class DungeonRecordServiceTest
             this.mockTutorialService.Object,
             this.mockCharaService.Object,
             this.mockRewardService.Object,
+            this.mockAlbumService.Object,
             this.mockLogger.Object
         );
 

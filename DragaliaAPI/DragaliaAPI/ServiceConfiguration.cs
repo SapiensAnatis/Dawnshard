@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database;
+using DragaliaAPI.Features.Album;
 using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.CoOp;
@@ -88,7 +89,8 @@ public static class ServiceConfiguration
             .AddTutorialFeature()
             .AddZenaFeature()
             .AddFriendFeature()
-            .AddDungeonFeature();
+            .AddDungeonFeature()
+            .AddAlbumFeature();
 
         services
             .RegisterMissionServices()

@@ -91,6 +91,8 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
 
     public DbSet<DbQuestClearPartyUnit> QuestClearPartyUnits { get; set; } = null!;
 
+    public DbSet<DbPlayerCharaHonor> PlayerCharaHonors { get; set; } = null!;
+
     public DbSet<DbPlayerDmodeInfo> PlayerDmodeInfos { get; set; } = null!;
 
     public DbSet<DbPlayerDmodeChara> PlayerDmodeCharas { get; set; } = null!;
@@ -232,5 +234,9 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
         modelBuilder
             .Entity<DbSettings>()
             .HasQueryFilter(e => e.ViewerId == this.playerIdentityService.ViewerId);
+
+        modelBuilder
+            .Entity<DbPlayerCharaHonor>()
+            .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
     }
 }

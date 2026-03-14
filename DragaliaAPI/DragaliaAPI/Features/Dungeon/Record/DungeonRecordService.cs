@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Features.Chara;
+﻿using DragaliaAPI.Features.Album;
+using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Features.Shared.Reward;
@@ -9,13 +10,14 @@ using static DragaliaAPI.Features.Tutorial.TutorialService;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
-public class DungeonRecordService(
+internal partial class DungeonRecordService(
     IDungeonRecordRewardService dungeonRecordRewardService,
     IQuestService questService,
     IUserService userService,
     ITutorialService tutorialService,
     ICharaService charaService,
     IRewardService rewardService,
+    IAlbumService albumService,
     ILogger<DungeonRecordService> logger
 ) : IDungeonRecordService
 {
@@ -27,11 +29,7 @@ public class DungeonRecordService(
     {
         await tutorialService.AddTutorialFlag(1022);
 
-        logger.LogDebug(
-            "Processing completion of quest {id}. isHost: {isHost}",
-            session.QuestId,
-            session.IsHost
-        );
+        Log.ProcessingCompletionOfQuest(logger, session.QuestId, session.IsHost);
 
         IngameResultData ingameResultData = new()
         {
@@ -51,7 +49,7 @@ public class DungeonRecordService(
 
         await this.ProcessStaminaConsumption(session);
 
-        (QuestMissionStatus missionStatus, IEnumerable<AtgenFirstClearSet>? firstClearSets) =
+        (QuestMissionStatus missionStatus, IEnumerable<AtgenFirstClearSet> firstClearSets) =
             await dungeonRecordRewardService.ProcessQuestMissionCompletion(playRecord, session);
 
         (ingameResultData.IsBestClearTime, ingameResultData.RewardRecord.QuestBonusList) =
@@ -62,6 +60,8 @@ public class DungeonRecordService(
             ingameResultData.RewardRecord,
             session
         );
+
+        await this.ProcessCharaHonors(playRecord, session);
 
         ingameResultData.RewardRecord.FirstClearSet = firstClearSets;
         ingameResultData.RewardRecord.MissionsClearSet = missionStatus.MissionsClearSet;
@@ -110,6 +110,73 @@ public class DungeonRecordService(
         return ingameResultData;
     }
 
+    private async Task ProcessCharaHonors(PlayRecord playRecord, DungeonSession session)
+    {
+        /*
+         * From the wiki (https://dragalialost.wiki/w/Medals), the criteria for receiving medals is:
+         *
+         * 1. By clearing certain quests without using skip tickets, your adventurers can earn medals.
+         *
+         * 2. If an adventurer's HP falls to zero, they will not gain any medals. If you use any revives or continues,
+         * none of your adventurers will gain any medals.
+         *
+         * 3. When playing co-op, only adventurers you yourself control will be eligible for medals. Also, if a player
+         * disconnects immediately after a quest begins and your own adventurer(s) are forced to take their place,
+         * those adventurers will not be able to obtain any medals.
+         *
+         * 4. Adventurers that are only temporarily part of your roster can only earn medals once they have permanently
+         * joined you.
+         *
+         * 1) and 2) are handled here, 3) is hopefully handled by the client and what it chooses to send as
+         * session.Party, 4) is handled in AlbumService (though irrelevant until raids are implemented).
+         */
+
+        if (playRecord.RebornCount > 0)
+        {
+            Log.IneligibleRevivesUsed(logger);
+            return;
+        }
+
+        // This check is redundant, since the only quests that allow continuing but don't allow reviving are event
+        // quests that don't grant medals anyway. If a quest has revives enabled these will always be used before the
+        // player is given an option to use a continue.
+
+        if (playRecord.PlayContinueCount > 0)
+        {
+            Log.IneligibleContinuesUsed(logger);
+            return;
+        }
+
+        if (session.IsSkipTicket)
+        {
+            Log.IneligibleSkipTicketsUsed(logger);
+            return;
+        }
+
+        List<Charas> honorRecipients = new(8); // SinDom
+
+        foreach (PartySettingList chara in session.Party)
+        {
+            if (chara.CharaId == 0)
+            {
+                continue;
+            }
+
+            if (!playRecord.LiveUnitNoList.Contains(chara.UnitNo))
+            {
+                Log.CharacterNotInLiveUnitNoList(logger, chara.CharaId, chara.UnitNo);
+                continue;
+            }
+
+            honorRecipients.Add(chara.CharaId);
+        }
+
+        if (honorRecipients.Count > 0)
+        {
+            await albumService.GrantCharaHonors(honorRecipients, session.QuestId);
+        }
+    }
+
     private async Task ProcessStaminaConsumption(DungeonSession session)
     {
         StaminaType type = session.IsMulti ? StaminaType.Multi : StaminaType.Single;
@@ -117,8 +184,10 @@ public class DungeonRecordService(
 
         amount *= session.PlayCount;
 
-        if (type != StaminaType.None && amount != 0)
+        if (amount != 0)
+        {
             await userService.RemoveStamina(type, amount);
+        }
     }
 
     private async Task ProcessExperience(
@@ -149,7 +218,9 @@ public class DungeonRecordService(
         foreach (PartySettingList chara in session.Party)
         {
             if (chara.CharaId == 0)
+            {
                 continue;
+            }
 
             await charaService.LevelUpChara(chara.CharaId, experiencePerChara);
 
@@ -160,5 +231,40 @@ public class DungeonRecordService(
         growRecord.CharaGrowRecord = charaGrowRecord;
         growRecord.BonusFactor = 1;
         growRecord.ManaBonusFactor = 1;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Processing completion of quest {Id}. isHost: {IsHost}")]
+        public static partial void ProcessingCompletionOfQuest(
+            ILogger<DungeonRecordService> logger,
+            int id,
+            bool isHost
+        );
+
+        [LoggerMessage(LogLevel.Information, "Quest clear is ineligible for medals: revives used")]
+        public static partial void IneligibleRevivesUsed(ILogger<DungeonRecordService> logger);
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Quest clear is ineligible for medals: continues used"
+        )]
+        public static partial void IneligibleContinuesUsed(ILogger<DungeonRecordService> logger);
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Quest clear is ineligible for medals: skip tickets used"
+        )]
+        public static partial void IneligibleSkipTicketsUsed(ILogger<DungeonRecordService> logger);
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Character {CharaId} (no. {UnitNo}) is ineligible for medals: not in live_unit_no_list"
+        )]
+        public static partial void CharacterNotInLiveUnitNoList(
+            ILogger<DungeonRecordService> logger,
+            Charas charaId,
+            int unitNo
+        );
     }
 }
