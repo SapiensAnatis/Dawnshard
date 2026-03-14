@@ -80,7 +80,7 @@ jobs:
           --logger "trx;LogFileName=${{ steps.get-name.outputs.name }}.trx"
 
       - name: Upload test report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: success() || failure() # run this step even if previous step failed
         with:
           name: test-result-${{ steps.get-name.outputs.name }}

@@ -62,7 +62,7 @@ jobs:
           exit 1
 
       - name: Get NerdBank version
-        uses: dotnet/nbgv@v0.4.2
+        uses: dotnet/nbgv@v0.5.1
         id: nbgv
         with:
           path: ${{ env.VERSION_JSON_PATH }}
