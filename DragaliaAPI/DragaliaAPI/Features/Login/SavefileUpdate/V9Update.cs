@@ -1,5 +1,4 @@
 using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Story;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -65,7 +64,9 @@ public partial class V9Update(
             {
                 ManaNode node = charaData.GetManaNode(nodeNum);
                 if (!node.IsReleaseStory)
+                {
                     continue;
+                }
 
                 storyArrayIdx++;
 
@@ -82,7 +83,9 @@ public partial class V9Update(
                 }
 
                 if (stories.Contains(storyId))
+                {
                     continue;
+                }
 
                 Log.AddingMissingStoryEpisodeForChara(logger, storyId, storyArrayIdx + 1, chara);
                 this.AddStory(storyId);
@@ -93,7 +96,7 @@ public partial class V9Update(
     private void AddStory(int storyId)
     {
         apiContext.PlayerStoryState.Add(
-            new DbPlayerStoryState()
+            new()
             {
                 ViewerId = playerIdentityService.ViewerId,
                 StoryId = storyId,

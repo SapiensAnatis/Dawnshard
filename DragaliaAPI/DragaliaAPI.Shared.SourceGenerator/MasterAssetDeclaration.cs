@@ -38,7 +38,7 @@ public readonly record struct MasterAssetDeclaration(
     private static string GetFieldName(string jsonPath)
     {
         string propertyName = GetPropertyName(jsonPath);
-        return new string([char.ToLower(propertyName[0]), .. propertyName[1..]]);
+        return new([char.ToLower(propertyName[0]), .. propertyName[1..]]);
     }
 
     private static string GetTaskName(string jsonPath) => $"{GetFieldName(jsonPath)}Task";

@@ -56,8 +56,8 @@ public static class UnitTestUtils
                     new ClaimsIdentity(
                         new List<Claim>()
                         {
-                            new Claim(CustomClaimType.AccountId, AccountId),
-                            new Claim(CustomClaimType.ViewerId, ViewerId.ToString()),
+                            new(CustomClaimType.AccountId, AccountId),
+                            new(CustomClaimType.ViewerId, ViewerId.ToString()),
                         }
                     )
                 ),

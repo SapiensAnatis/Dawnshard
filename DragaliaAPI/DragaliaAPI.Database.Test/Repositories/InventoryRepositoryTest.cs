@@ -16,7 +16,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
     public InventoryRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
-        this.inventoryRepository = new InventoryRepository(
+        this.inventoryRepository = new(
             this.fixture.ApiContext,
             IdentityTestUtils.MockPlayerDetailsService.Object,
             LoggerTestUtils.Create<InventoryRepository>()

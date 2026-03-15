@@ -42,11 +42,7 @@ public partial class LoginService(
 
             if (dbBonus is null)
             {
-                dbBonus = new DbLoginBonus()
-                {
-                    ViewerId = playerIdentityService.ViewerId,
-                    Id = bonusData.Id,
-                };
+                dbBonus = new() { ViewerId = playerIdentityService.ViewerId, Id = bonusData.Id };
                 apiContext.LoginBonuses.Add(dbBonus);
             }
 
@@ -81,11 +77,13 @@ public partial class LoginService(
 
             dbBonus.CurrentDay = dayId;
             if (dbBonus.CurrentDay >= bonusCount && !bonusData.IsLoop)
+            {
                 dbBonus.IsComplete = true;
+            }
 
             // TODO: Propagate this information up to the EntityResult
             _ = await rewardService.GrantReward(
-                new Entity(
+                new(
                     reward.EntityType,
                     reward.EntityId,
                     reward.EntityQuantity,
@@ -96,7 +94,7 @@ public partial class LoginService(
             );
 
             bonusList.Add(
-                new AtgenLoginBonusList(
+                new(
                     0,
                     bonusData.Id,
                     dbBonus.CurrentDay,
@@ -113,7 +111,7 @@ public partial class LoginService(
             {
                 // TODO: Propagate this information up to the EntityResult
                 _ = await rewardService.GrantReward(
-                    new Entity(
+                    new(
                         bonusData.EachDayEntityType,
                         bonusData.EachDayEntityId,
                         bonusData.EachDayEntityQuantity

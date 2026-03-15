@@ -31,21 +31,21 @@ public record Entity(
 
     public AtgenFirstClearSet ToFirstClearSet()
     {
-        return new AtgenFirstClearSet(this.Id, this.Type, this.Quantity);
+        return new(this.Id, this.Type, this.Quantity);
     }
 
     public AtgenMissionsClearSet ToMissionClearSet(int missionNo)
     {
-        return new AtgenMissionsClearSet(this.Id, this.Type, this.Quantity, missionNo);
+        return new(this.Id, this.Type, this.Quantity, missionNo);
     }
 
     public AtgenDropAll ToDropAll()
     {
-        return new AtgenDropAll(this.Id, this.Type, this.Quantity, 0, 0);
+        return new(this.Id, this.Type, this.Quantity, 0, 0);
     }
 
     public static Entity FromQuestBonusDrop(QuestBonusDrop drop)
     {
-        return new Entity(Type: drop.EntityType, Id: drop.Id, Quantity: drop.Quantity);
+        return new(Type: drop.EntityType, Id: drop.Id, Quantity: drop.Quantity);
     }
 };

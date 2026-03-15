@@ -1,9 +1,7 @@
 using System.Diagnostics;
 using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
-using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,7 +47,7 @@ public class WeaponBodyHandler(ApiContext apiContext, IPlayerIdentityService pla
             else
             {
                 apiContext.PlayerWeapons.Add(
-                    new DbWeaponBody()
+                    new()
                     {
                         ViewerId = playerIdentityService.ViewerId,
                         WeaponBodyId = weaponId,

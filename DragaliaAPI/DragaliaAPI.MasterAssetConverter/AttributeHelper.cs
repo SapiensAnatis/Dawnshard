@@ -28,7 +28,7 @@ public static class AttributeHelper
             itemType.GetProperty(key)?.PropertyType
             ?? throw new InvalidOperationException("Failed to get key type");
 
-        return new GenerateMasterAssetAttributeInstance(itemType, keyType, jsonPath, group);
+        return new(itemType, keyType, jsonPath, group);
     }
 }
 

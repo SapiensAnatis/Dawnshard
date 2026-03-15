@@ -49,22 +49,22 @@ public class SummonTest : TestFixture
         normalOdds
             .RarityList.Should()
             .BeEquivalentTo([
-                new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
-                new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
+                new() { Rarity = 5, TotalRate = "4.00%" },
+                new() { Rarity = 4, TotalRate = "16.00%" },
                 new AtgenRarityList { Rarity = 3, TotalRate = "80.00%" },
             ]);
 
         guaranteeOdds
             .RarityList.Should()
             .BeEquivalentTo([
-                new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
+                new() { Rarity = 5, TotalRate = "4.00%" },
                 new AtgenRarityList { Rarity = 4, TotalRate = "96.00%" },
             ]);
 
         normalOdds
             .RarityGroupList.Should()
             .BeEquivalentTo([
-                new AtgenRarityGroupList
+                new()
                 {
                     Rarity = 5,
                     CharaRate = "1.00%",
@@ -72,7 +72,7 @@ public class SummonTest : TestFixture
                     Pickup = true,
                     TotalRate = "1.80%",
                 },
-                new AtgenRarityGroupList
+                new()
                 {
                     Rarity = 5,
                     CharaRate = "1.10%",
@@ -80,7 +80,7 @@ public class SummonTest : TestFixture
                     Pickup = false,
                     TotalRate = "2.20%",
                 },
-                new AtgenRarityGroupList
+                new()
                 {
                     Rarity = 4,
                     CharaRate = "8.55%",
@@ -101,7 +101,7 @@ public class SummonTest : TestFixture
         guaranteeOdds
             .RarityGroupList.Should()
             .BeEquivalentTo([
-                new AtgenRarityGroupList
+                new()
                 {
                     Rarity = 5,
                     CharaRate = "1.00%",
@@ -109,7 +109,7 @@ public class SummonTest : TestFixture
                     Pickup = true,
                     TotalRate = "1.80%",
                 },
-                new AtgenRarityGroupList
+                new()
                 {
                     Rarity = 5,
                     CharaRate = "1.10%",
@@ -133,7 +133,7 @@ public class SummonTest : TestFixture
             .Unit.CharaOddsList.ElementAt(0)
             .UnitList.Should()
             .BeEquivalentTo([
-                new AtgenUnitList { Id = (int)Charas.Joker, Rate = "0.500%" },
+                new() { Id = (int)Charas.Joker, Rate = "0.500%" },
                 new AtgenUnitList { Id = (int)Charas.Mona, Rate = "0.500%" },
             ]);
         normalOdds
@@ -212,15 +212,15 @@ public class SummonTest : TestFixture
         normalOdds
             .RarityList.Should()
             .BeEquivalentTo([
-                new AtgenRarityList { Rarity = 5, TotalRate = "5.00%" },
-                new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
+                new() { Rarity = 5, TotalRate = "5.00%" },
+                new() { Rarity = 4, TotalRate = "16.00%" },
                 new AtgenRarityList { Rarity = 3, TotalRate = "79.00%" },
             ]);
 
         guaranteeOdds
             .RarityList.Should()
             .BeEquivalentTo([
-                new AtgenRarityList { Rarity = 5, TotalRate = "5.00%" },
+                new() { Rarity = 5, TotalRate = "5.00%" },
                 new AtgenRarityList { Rarity = 4, TotalRate = "95.00%" },
             ]);
     }
@@ -554,7 +554,7 @@ public class SummonTest : TestFixture
                     SummonExecTypes.Single,
                     1,
                     PaymentTypes.Wyrmite,
-                    new PaymentTarget(userData.Crystal, 120) // TODO: Change when banners are implemented otherwise this test breaks
+                    new(userData.Crystal, 120) // TODO: Change when banners are implemented otherwise this test breaks
                 ),
                 cancellationToken: TestContext.Current.CancellationToken
             )
@@ -581,7 +581,7 @@ public class SummonTest : TestFixture
                     SummonExecTypes.Tenfold,
                     0,
                     PaymentTypes.Wyrmite,
-                    new PaymentTarget(userData.Crystal, 1200)
+                    new(userData.Crystal, 1200)
                 ),
                 cancellationToken: TestContext.Current.CancellationToken
             )
@@ -611,7 +611,7 @@ public class SummonTest : TestFixture
                     SummonExecTypes.Single,
                     1,
                     PaymentTypes.Ticket,
-                    new PaymentTarget(1, 1)
+                    new(1, 1)
                 ),
                 ensureSuccessHeader: false,
                 cancellationToken: TestContext.Current.CancellationToken
@@ -635,7 +635,7 @@ public class SummonTest : TestFixture
                     SummonExecTypes.Single,
                     5,
                     PaymentTypes.Ticket,
-                    new PaymentTarget(5, 5)
+                    new(5, 5)
                 ),
                 ensureSuccessHeader: false,
                 cancellationToken: TestContext.Current.CancellationToken
@@ -659,7 +659,7 @@ public class SummonTest : TestFixture
                     SummonExecTypes.Tenfold,
                     0,
                     PaymentTypes.Ticket,
-                    new PaymentTarget(1, 1)
+                    new(1, 1)
                 ),
                 ensureSuccessHeader: false,
                 cancellationToken: TestContext.Current.CancellationToken
@@ -684,7 +684,7 @@ public class SummonTest : TestFixture
                     SummonExecTypes.Tenfold,
                     1,
                     PaymentTypes.Wyrmite,
-                    new PaymentTarget(userData.Crystal, 1200)
+                    new(userData.Crystal, 1200)
                 ),
                 cancellationToken: TestContext.Current.CancellationToken
             )
@@ -703,7 +703,7 @@ public class SummonTest : TestFixture
                     SummonExecTypes.Single,
                     3,
                     PaymentTypes.Wyrmite,
-                    new PaymentTarget(userData.Crystal - 1200, 360)
+                    new(userData.Crystal - 1200, 360)
                 ),
                 cancellationToken: TestContext.Current.CancellationToken
             )
@@ -729,13 +729,7 @@ public class SummonTest : TestFixture
         DragaliaResponse<SummonRequestResponse> response =
             await this.Client.PostMsgpack<SummonRequestResponse>(
                 "summon/request",
-                new SummonRequestRequest(
-                    TestBannerId,
-                    types,
-                    0,
-                    PaymentTypes.Ticket,
-                    new PaymentTarget(0, 1)
-                ),
+                new SummonRequestRequest(TestBannerId, types, 0, PaymentTypes.Ticket, new(0, 1)),
                 ensureSuccessHeader: false,
                 cancellationToken: TestContext.Current.CancellationToken
             );
@@ -760,7 +754,7 @@ public class SummonTest : TestFixture
                     SummonExecTypes.Single,
                     0,
                     PaymentTypes.Ticket,
-                    new PaymentTarget(1, 1)
+                    new(1, 1)
                 ),
                 cancellationToken: TestContext.Current.CancellationToken
             )
@@ -792,8 +786,8 @@ public class SummonTest : TestFixture
         oddsResponse
             .OddsRateList.Normal.RarityList.Should()
             .BeEquivalentTo([
-                new AtgenRarityList { Rarity = 5, TotalRate = "9.00%" },
-                new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
+                new() { Rarity = 5, TotalRate = "9.00%" },
+                new() { Rarity = 4, TotalRate = "16.00%" },
                 new AtgenRarityList { Rarity = 3, TotalRate = "75.00%" },
             ]);
 
@@ -812,7 +806,7 @@ public class SummonTest : TestFixture
                     SummonExecTypes.Single,
                     1,
                     PaymentTypes.Wyrmite,
-                    new PaymentTarget(userData.Crystal, 120)
+                    new(userData.Crystal, 120)
                 ),
                 cancellationToken: TestContext.Current.CancellationToken
             );
@@ -830,8 +824,8 @@ public class SummonTest : TestFixture
         oddsResponse
             .OddsRateList.Normal.RarityList.Should()
             .BeEquivalentTo([
-                new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
-                new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
+                new() { Rarity = 5, TotalRate = "4.00%" },
+                new() { Rarity = 4, TotalRate = "16.00%" },
                 new AtgenRarityList { Rarity = 3, TotalRate = "80.00%" },
             ]);
     }
@@ -862,7 +856,7 @@ public class SummonTest : TestFixture
                     SummonExecTypes.Single,
                     1,
                     PaymentTypes.Wyrmite,
-                    new PaymentTarget(userData.Crystal, 120)
+                    new(userData.Crystal, 120)
                 ),
                 cancellationToken: TestContext.Current.CancellationToken
             );
@@ -880,8 +874,8 @@ public class SummonTest : TestFixture
         oddsResponse
             .OddsRateList.Normal.RarityList.Should()
             .BeEquivalentTo([
-                new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
-                new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
+                new() { Rarity = 5, TotalRate = "4.00%" },
+                new() { Rarity = 4, TotalRate = "16.00%" },
                 new AtgenRarityList { Rarity = 3, TotalRate = "80.00%" },
             ]);
     }
@@ -900,8 +894,8 @@ public class SummonTest : TestFixture
         oddsResponse
             .OddsRateList.Normal.RarityList.Should()
             .BeEquivalentTo([
-                new AtgenRarityList { Rarity = 5, TotalRate = "4.00%" },
-                new AtgenRarityList { Rarity = 4, TotalRate = "16.00%" },
+                new() { Rarity = 5, TotalRate = "4.00%" },
+                new() { Rarity = 4, TotalRate = "16.00%" },
                 new AtgenRarityList { Rarity = 3, TotalRate = "80.00%" },
             ]);
 
@@ -924,7 +918,7 @@ public class SummonTest : TestFixture
                         SummonExecTypes.Tenfold,
                         1,
                         PaymentTypes.Wyrmite,
-                        new PaymentTarget(userData.Crystal, 1200)
+                        new(userData.Crystal, 1200)
                     ),
                     cancellationToken: TestContext.Current.CancellationToken
                 );
@@ -965,7 +959,7 @@ public class SummonTest : TestFixture
                     SummonExecTypes.Tenfold,
                     1,
                     PaymentTypes.Diamantium,
-                    new PaymentTarget(1210, 1200)
+                    new(1210, 1200)
                 ),
                 cancellationToken: TestContext.Current.CancellationToken
             );
@@ -991,7 +985,7 @@ public class SummonTest : TestFixture
                     SummonExecTypes.DailyDeal,
                     1,
                     PaymentTypes.Diamantium,
-                    new PaymentTarget(30, 30)
+                    new(30, 30)
                 ),
                 cancellationToken: TestContext.Current.CancellationToken
             );
@@ -1024,7 +1018,7 @@ public class SummonTest : TestFixture
                     SummonExecTypes.DailyDeal,
                     1,
                     PaymentTypes.Diamantium,
-                    new PaymentTarget(30, 30)
+                    new(30, 30)
                 ),
                 ensureSuccessHeader: false,
                 cancellationToken: TestContext.Current.CancellationToken

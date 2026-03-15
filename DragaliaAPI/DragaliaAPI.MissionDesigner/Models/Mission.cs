@@ -29,7 +29,7 @@ public abstract class Mission
     protected virtual bool UseTotalValue => false;
 
     public MissionProgressionInfo ToMissionProgressionInfo() =>
-        new MissionProgressionInfo(
+        new(
             this.Id,
             this.Type,
             this.MissionId,

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Features.Shop;
@@ -37,7 +36,10 @@ public partial class ItemService(
         {
             UseItemData data = MasterAsset.UseItem[item.ItemId];
             if (effect == UseItemEffect.None)
+            {
                 effect = data.ItemEffect;
+            }
+
             totalQuantity += data.ItemEffectValue * item.ItemQuantity;
 
             await paymentService.ProcessPayment(
@@ -65,7 +67,7 @@ public partial class ItemService(
                 );
         }
 
-        return new AtgenRecoverData(effect, totalQuantity);
+        return new(effect, totalQuantity);
     }
 
     private static partial class Log

@@ -6,7 +6,6 @@ using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Infrastructure.Results;
-using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Test.Utils;
 
@@ -62,7 +61,7 @@ public class PaymentServiceTest : RepositoryTestFixture
 
         this.mockUserDataRepository.SetupUserData(userData);
 
-        await this.paymentService.ProcessPayment(type, new PaymentTarget(total, cost), cost);
+        await this.paymentService.ProcessPayment(type, new(total, cost), cost);
 
         userData
             .BuildTimePoint.Should()
@@ -131,7 +130,7 @@ public class PaymentServiceTest : RepositoryTestFixture
         this.mockUserDataRepository.SetupUserData(userData);
 
         await this
-            .paymentService.Invoking(x => x.ProcessPayment(type, new PaymentTarget(total, cost)))
+            .paymentService.Invoking(x => x.ProcessPayment(type, new(total, cost)))
             .Should()
             .ThrowAsync<DragaliaException>()
             .Where(x => x.Code == ResultCode.CommonMaterialShort);

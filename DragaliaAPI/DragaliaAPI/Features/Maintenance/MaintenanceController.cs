@@ -11,7 +11,8 @@ public partial class MaintenanceController(
 ) : DragaliaControllerBaseCore
 {
     [HttpPost("get_text")]
-    public DragaliaResult<MaintenanceGetTextResponse> GetText(MaintenanceGetTextRequest request)
+    public DragaliaResult<MaintenanceGetTextResponse> GetText( /* MaintenanceGetTextRequest request */
+    )
     {
         if (!maintenanceService.CheckIsMaintenance())
         {

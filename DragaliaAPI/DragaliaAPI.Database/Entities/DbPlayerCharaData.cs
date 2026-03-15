@@ -31,42 +31,35 @@ public class DbPlayerCharaData : DbPlayerData
     // Divides unlocked node count by nodes/limit breaks that increase max Level
     // Only if the unlockCount is equal or higher than the divisor the quotient will return a 1, adding 5 levels for that step
     [NotMapped]
-    public byte AdditionalMaxLevel
-    {
-        get
-        {
-            return (byte)(
-                ((ManaNodeUnlockCount / (ushort)ManaNodes.Circle5) * 5)
-                + (
-                    (
-                        ManaNodeUnlockCount
-                        / (ushort)(
-                            ManaNodes.Circle5
-                            | ManaNodes.Node1
-                            | ManaNodes.Node2
-                            | ManaNodes.Node3
-                            | ManaNodes.Node4
-                            | ManaNodes.Node5
-                        )
-                    ) * 5
+    public byte AdditionalMaxLevel =>
+        (byte)(
+            (this.ManaNodeUnlockCount / (ushort)ManaNodes.Circle5 * 5)
+            + (
+                this.ManaNodeUnlockCount
+                / (ushort)(
+                    ManaNodes.Circle5
+                    | ManaNodes.Node1
+                    | ManaNodes.Node2
+                    | ManaNodes.Node3
+                    | ManaNodes.Node4
+                    | ManaNodes.Node5
                 )
-                + ((ManaNodeUnlockCount / (ushort)ManaNodes.Circle6) * 5)
-                + (
-                    (
-                        ManaNodeUnlockCount
-                        / (ushort)(
-                            ManaNodes.Circle6
-                            | ManaNodes.Node1
-                            | ManaNodes.Node2
-                            | ManaNodes.Node3
-                            | ManaNodes.Node4
-                            | ManaNodes.Node5
-                        )
-                    ) * 5
+                * 5
+            )
+            + (this.ManaNodeUnlockCount / (ushort)ManaNodes.Circle6 * 5)
+            + (
+                this.ManaNodeUnlockCount
+                / (ushort)(
+                    ManaNodes.Circle6
+                    | ManaNodes.Node1
+                    | ManaNodes.Node2
+                    | ManaNodes.Node3
+                    | ManaNodes.Node4
+                    | ManaNodes.Node5
                 )
-            );
-        }
-    }
+                * 5
+            )
+        );
 
     [Column("HpPlusCount")]
     public byte HpPlusCount { get; set; } = 0;

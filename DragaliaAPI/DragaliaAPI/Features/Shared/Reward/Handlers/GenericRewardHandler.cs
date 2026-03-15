@@ -91,11 +91,18 @@ public partial class GenericRewardHandler(
             case EntityTypes.DmodePoint:
                 DbPlayerDmodeInfo info = await dmodeRepository.GetInfoAsync();
                 if (entity.Id == (int)DmodePoint.Point1)
+                {
                     info.Point1Quantity += entity.Quantity;
+                }
                 else if (entity.Id == (int)DmodePoint.Point2)
+                {
                     info.Point2Quantity += entity.Quantity;
+                }
                 else
+                {
                     throw new UnreachableException("Invalid dmode point id");
+                }
+
                 break;
             default:
                 Log.TriedToRewardUnsupportedEntity(logger, entity);

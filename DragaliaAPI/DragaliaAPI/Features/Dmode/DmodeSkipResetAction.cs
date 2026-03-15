@@ -11,7 +11,9 @@ public class DmodeSkipResetAction(IDmodeRepository dmodeRepository, TimeProvider
     {
         DbPlayerDmodeInfo? info = await dmodeRepository.Info.SingleOrDefaultAsync();
         if (info == null)
+        {
             return;
+        }
 
         DateTimeOffset time = dateTimeProvider.GetUtcNow();
 

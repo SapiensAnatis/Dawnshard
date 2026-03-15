@@ -78,7 +78,7 @@ public class DbNewsItemConfiguration : IEntityTypeConfiguration<DbNewsItem>
                     "The below infographic shows the endeavour rewards available for the progressing the Mercurial Gauntlet.",
                 BodyImagePath = "/dawnshard/news/mg-endeavours.webp",
                 BodyImageAltText = "Mercurial Gauntlet rewards infographic",
-                Date = new DateTimeOffset(2024, 06, 02, 16, 07, 00, TimeSpan.FromHours(1)),
+                Date = new(2024, 06, 02, 16, 07, 00, TimeSpan.FromHours(1)),
             }
         );
     }

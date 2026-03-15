@@ -57,8 +57,8 @@ public class V19UpdateTest : SavefileUpdateTestFixture
     {
         DbSummonTicket[] tickets =
         [
-            new DbSummonTicket() { SummonTicketId = SummonTickets.SingleSummon, Quantity = 5 },
-            new DbSummonTicket() { SummonTicketId = SummonTickets.TenfoldSummon, Quantity = 7 },
+            new() { SummonTicketId = SummonTickets.SingleSummon, Quantity = 5 },
+            new() { SummonTicketId = SummonTickets.TenfoldSummon, Quantity = 7 },
         ];
 
         await this.AddRangeToDatabase(tickets);

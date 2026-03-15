@@ -21,18 +21,17 @@ public class RaidEventController(
     [HttpPost("get_event_data")]
     public async Task<DragaliaResult> GetEventData(RaidEventGetEventDataRequest request)
     {
-        RaidEventGetEventDataResponse resp = new();
-
-        resp.IsReceiveEventDamageReward = await eventService.GetCustomEventFlag(
-            request.RaidEventId
-        );
-        resp.RaidEventUserData = await eventService.GetRaidEventUserData(request.RaidEventId);
-        resp.RaidEventRewardList = await eventService.GetEventRewardList<RaidEventRewardList>(
-            request.RaidEventId
-        );
-        resp.EventPassiveList = new List<EventPassiveList>
+        RaidEventGetEventDataResponse resp = new()
         {
-            await eventService.GetEventPassiveList(request.RaidEventId),
+            IsReceiveEventDamageReward = await eventService.GetCustomEventFlag(request.RaidEventId),
+            RaidEventUserData = await eventService.GetRaidEventUserData(request.RaidEventId),
+            RaidEventRewardList = await eventService.GetEventRewardList<RaidEventRewardList>(
+                request.RaidEventId
+            ),
+            EventPassiveList = new List<EventPassiveList>
+            {
+                await eventService.GetEventPassiveList(request.RaidEventId),
+            },
         };
 
         if (
@@ -54,11 +53,12 @@ public class RaidEventController(
         CancellationToken cancellationToken
     )
     {
-        RaidEventEntryResponse resp = new();
-
-        resp.RaidEventUserData = await eventService.GetRaidEventUserData(request.RaidEventId);
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
-        resp.EntityResult = rewardService.GetEntityResult();
+        RaidEventEntryResponse resp = new()
+        {
+            RaidEventUserData = await eventService.GetRaidEventUserData(request.RaidEventId),
+            UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken),
+            EntityResult = rewardService.GetEntityResult(),
+        };
 
         return Ok(resp);
     }

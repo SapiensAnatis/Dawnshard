@@ -50,7 +50,7 @@ public class RedoableSummonController(
         return new RedoableSummonGetDataResponse()
         {
             UserRedoableSummonData = null,
-            RedoableSummonOddsRateList = new RedoableSummonOddsRateList()
+            RedoableSummonOddsRateList = new()
             {
                 Normal = normalOddsRate,
                 Guarantee = guaranteeRate,
@@ -76,9 +76,7 @@ public class RedoableSummonController(
             }
         );
 
-        return this.Ok(
-            new RedoableSummonPreExecResponse(new UserRedoableSummonData(true, summonResult))
-        );
+        return this.Ok(new RedoableSummonPreExecResponse(new(true, summonResult)));
     }
 
     [HttpPost]
@@ -94,7 +92,9 @@ public class RedoableSummonController(
         );
 
         if (string.IsNullOrEmpty(cachedResultJson))
+        {
             return this.BadRequest();
+        }
 
         List<AtgenRedoableSummonResultUnitList> cachedResult =
             JsonSerializer.Deserialize<List<AtgenRedoableSummonResultUnitList>>(cachedResultJson)
@@ -145,16 +145,13 @@ public class RedoableSummonController(
         return this.Ok(
             new RedoableSummonFixExecResponse()
             {
-                UserRedoableSummonData = new UserRedoableSummonData()
+                UserRedoableSummonData = new()
                 {
                     IsFixedResult = true,
                     RedoableSummonResultUnitList = cachedResult,
                 },
                 UpdateDataList = updateData,
-                EntityResult = new EntityResult()
-                {
-                    NewGetEntityList = newCharas.Concat(newDragons),
-                },
+                EntityResult = new() { NewGetEntityList = newCharas.Concat(newDragons) },
             }
         );
     }

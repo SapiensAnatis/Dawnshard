@@ -23,9 +23,10 @@ internal sealed class SavefileController(ILoadService loadService, IDragaliaApiM
         DragaliaResponse<LoadIndexResponse> savefile = new(
             sanitizedResponse,
             new DataHeaders(ResultCode.Success)
-        );
-
-        savefile.Data.Origin = "dawnshard";
+        )
+        {
+            Data = { Origin = "dawnshard" },
+        };
 
         metrics.OnSaveExport();
 

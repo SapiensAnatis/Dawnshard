@@ -31,7 +31,7 @@ public class DmodeServiceTest
     public DmodeServiceTest()
     {
         mockDmodeRepository = new(MockBehavior.Strict);
-        mockDateTimeProvider = new FakeTimeProvider();
+        mockDateTimeProvider = new();
         mockDmodeCacheService = new(MockBehavior.Strict);
         mockLogger = new(MockBehavior.Loose);
         mockPaymentService = new(MockBehavior.Strict);
@@ -170,10 +170,7 @@ public class DmodeServiceTest
     [Fact]
     public async Task GetServitorPassiveList_ReturnsList()
     {
-        List<DmodeServitorPassiveList> expected = new()
-        {
-            new DmodeServitorPassiveList(DmodeServitorPassiveType.Exp, 5),
-        };
+        List<DmodeServitorPassiveList> expected = new() { new(DmodeServitorPassiveType.Exp, 5) };
 
         mockDmodeRepository
             .Setup(x => x.ServitorPassives)
@@ -352,7 +349,7 @@ public class DmodeServiceTest
 
         List<DbPlayerDmodeServitorPassive> dbServitors = new()
         {
-            new DbPlayerDmodeServitorPassive
+            new()
             {
                 ViewerId = UnitTestUtils.ViewerId,
                 PassiveId = DmodeServitorPassiveType.Exp,
@@ -420,7 +417,7 @@ public class DmodeServiceTest
 
         List<DbPlayerDmodeServitorPassive> dbServitors = new()
         {
-            new DbPlayerDmodeServitorPassive
+            new()
             {
                 ViewerId = UnitTestUtils.ViewerId,
                 PassiveId = DmodeServitorPassiveType.Exp,
@@ -431,7 +428,7 @@ public class DmodeServiceTest
         List<DmodeServitorPassiveList> inputList = new();
         for (int i = 2; i <= 5; i++)
         {
-            inputList.Add(new DmodeServitorPassiveList(DmodeServitorPassiveType.Exp, i));
+            inputList.Add(new(DmodeServitorPassiveType.Exp, i));
         }
 
         mockDmodeRepository.SetupGet(x => x.ServitorPassives).Returns(dbServitors.BuildMock());

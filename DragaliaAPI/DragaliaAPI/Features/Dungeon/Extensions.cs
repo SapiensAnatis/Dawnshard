@@ -17,7 +17,9 @@ public static class Extensions
     )
     {
         if (first == null)
+        {
             return second;
+        }
 
         first.RewardRecord = first.RewardRecord.CombineWith(second.RewardRecord);
         first.GrowRecord = first.GrowRecord.CombineWith(second.GrowRecord);
@@ -32,7 +34,9 @@ public static class Extensions
     public static UpdateDataList CombineWith(this UpdateDataList? first, UpdateDataList second)
     {
         if (first == null)
+        {
             return second;
+        }
 
         /*
          * Combining a massive type like UpdateDataList is a huge endeavour, but here we are only going to combine
@@ -120,10 +124,14 @@ public static class Extensions
     )
     {
         if (first == null)
+        {
             return second;
+        }
 
         if (second == null)
+        {
             return first;
+        }
 
         return first.UnionBy(second, keySelector);
     }

@@ -16,7 +16,7 @@ public class DmodeDungeonControllerTest
 
     private readonly UpdateDataList updateDataList = new()
     {
-        MaterialList = new List<MaterialList>() { new(Materials.Squishums, 5000) },
+        MaterialList = new() { new(Materials.Squishums, 5000) },
     };
 
     public DmodeDungeonControllerTest()
@@ -93,7 +93,7 @@ public class DmodeDungeonControllerTest
         DungeonState state = DungeonState.Playing;
         DmodeFloorData floorData = new()
         {
-            DmodeAreaInfo = new AtgenDmodeAreaInfo()
+            DmodeAreaInfo = new()
             {
                 FloorNum = 50,
                 CurrentAreaId = 10,
@@ -109,7 +109,7 @@ public class DmodeDungeonControllerTest
 
         DmodeDungeonFloorResponse? resp = (
             await dmodeDungeonController.Floor(
-                new DmodeDungeonFloorRequest(playRecord),
+                new(playRecord),
                 TestContext.Current.CancellationToken
             )
         ).GetData<DmodeDungeonFloorResponse>();
@@ -140,7 +140,7 @@ public class DmodeDungeonControllerTest
 
         DmodeDungeonFinishResponse? resp = (
             await dmodeDungeonController.Finish(
-                new DmodeDungeonFinishRequest(isGameOver),
+                new(isGameOver),
                 TestContext.Current.CancellationToken
             )
         ).GetData<DmodeDungeonFinishResponse>();

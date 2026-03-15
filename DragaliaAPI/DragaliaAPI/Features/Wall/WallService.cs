@@ -33,7 +33,9 @@ public partial class WallService(
 
         // Increment level if it's not at max
         if (questWall.WallLevel >= MaximumQuestWallLevel)
+        {
             return;
+        }
 
         questWall.WallLevel++;
         questWall.IsStartNextLevel = false;
@@ -65,6 +67,7 @@ public partial class WallService(
             );
             return MaximumQuestWallTotalLevel;
         }
+
         return levelTotal;
     }
 
@@ -83,7 +86,7 @@ public partial class WallService(
             for (int element = 0; element < 5; element++)
             {
                 apiContext.PlayerQuestWalls.Add(
-                    new DbPlayerQuestWall()
+                    new()
                     {
                         ViewerId = playerIdentityService.ViewerId,
                         WallId = FlameWallId + element,
@@ -99,7 +102,7 @@ public partial class WallService(
         if (!await apiContext.WallRewardDates.AnyAsync())
         {
             apiContext.WallRewardDates.Add(
-                new DbWallRewardDate()
+                new()
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     LastClaimDate = DateTimeOffset.UtcNow, // Make them wait until next month to claim
@@ -140,34 +143,32 @@ public partial class WallService(
         // just currency.
         if (totalRupies > 0)
         {
-            _ = await rewardService.GrantReward(new Entity(EntityTypes.Rupies, 0, totalRupies));
+            _ = await rewardService.GrantReward(new(EntityTypes.Rupies, 0, totalRupies));
         }
 
         if (totalMana > 0)
         {
-            _ = await rewardService.GrantReward(new Entity(EntityTypes.Mana, 0, totalMana));
+            _ = await rewardService.GrantReward(new(EntityTypes.Mana, 0, totalMana));
         }
 
         if (totalEldwater > 0)
         {
-            _ = await rewardService.GrantReward(new Entity(EntityTypes.Dew, 0, totalEldwater));
+            _ = await rewardService.GrantReward(new(EntityTypes.Dew, 0, totalEldwater));
         }
 
         if (totalSand > 0)
         {
             _ = await rewardService.GrantReward(
-                new Entity(EntityTypes.Material, (int)Materials.TwinklingSand, totalSand)
+                new(EntityTypes.Material, (int)Materials.TwinklingSand, totalSand)
             );
         }
 
-        DbWallRewardDate? trackedRewardDate = apiContext.WallRewardDates.Local.FirstOrDefault();
-
-        if (trackedRewardDate is null)
-        {
-            throw new InvalidOperationException(
+        DbWallRewardDate trackedRewardDate =
+            apiContext.WallRewardDates.Local.FirstOrDefault()
+            ?? throw new InvalidOperationException(
                 "No instance of DbWallRewardDate is being tracked - update failed"
             );
-        }
+        ;
 
         trackedRewardDate.LastClaimDate = timeProvider.GetUtcNow();
     }
@@ -180,7 +181,7 @@ public partial class WallService(
         {
             QuestWallMonthlyReward reward = MasterAsset.QuestWallMonthlyReward.Get(level);
             rewardList.Add(
-                new AtgenBuildEventRewardEntityList()
+                new()
                 {
                     EntityType = reward.RewardEntityType,
                     EntityId = reward.RewardEntityId,
@@ -188,6 +189,7 @@ public partial class WallService(
                 }
             );
         }
+
         return rewardList;
     }
 
@@ -226,7 +228,9 @@ public partial class WallService(
         ];
 
         foreach (int missionId in elementalMissionStarts)
+        {
             await missionService.StartMission(MissionType.Normal, missionId);
+        }
 
         const int allMissionStart = 10010701; // Clear Lv. 2 of The Mercurial Gauntlet in All Elements
         await missionService.StartMission(MissionType.Normal, allMissionStart);
@@ -236,17 +240,14 @@ public partial class WallService(
     {
         // Get AsTracking for GrantMonthlyRewardEntityList
         // Does not do anything for now -- but anticipates turning query tracking off later
-        DbWallRewardDate? wallRewardDate = await apiContext
-            .WallRewardDates.AsTracking()
-            .FirstOrDefaultAsync();
 
-        if (wallRewardDate is null)
-        {
-            // We expect, if this function is being called properly behind a CheckWallInitialized, that there
-            // should be data here. Between InitializeWall and the V21Update, everyone using this data
-            // should have a row in this table.
-            throw new InvalidOperationException("Failed to fetch last DbWallRewardDate");
-        }
+        // We expect, if this function is being called properly behind a CheckWallInitialized, that there
+        // should be data here. Between InitializeWall and the V21Update, everyone using this data
+        // should have a row in this table.
+        DbWallRewardDate? wallRewardDate =
+            await apiContext.WallRewardDates.AsTracking().FirstOrDefaultAsync()
+            ?? throw new InvalidOperationException("Failed to fetch last DbWallRewardDate");
+        ;
 
         return wallRewardDate;
     }
@@ -287,11 +288,7 @@ public partial class WallService(
             // client doesn't mind data not being missing and assumes that they have yet to clear
             // level 1.
 
-            wall = new DbPlayerQuestWall()
-            {
-                ViewerId = playerIdentityService.ViewerId,
-                WallId = wallId,
-            };
+            wall = new() { ViewerId = playerIdentityService.ViewerId, WallId = wallId };
 
             apiContext.PlayerQuestWalls.Add(wall);
             await apiContext.SaveChangesAsync();

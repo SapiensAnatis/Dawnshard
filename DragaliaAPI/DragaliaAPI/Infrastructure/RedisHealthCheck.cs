@@ -29,7 +29,7 @@ public partial class RedisHealthCheck : IHealthCheck
         {
             Log.RedisHealthCheckFailed(this.logger, ex);
 
-            return new HealthCheckResult(
+            return new(
                 status: context.Registration.FailureStatus,
                 exception: ex,
                 description: "Failed to connect to Redis"

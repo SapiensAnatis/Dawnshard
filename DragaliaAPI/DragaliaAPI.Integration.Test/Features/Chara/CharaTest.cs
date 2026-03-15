@@ -91,7 +91,7 @@ public class CharaTest : TestFixture
                     Charas.Celliera,
                     new List<AtgenEnemyPiece>()
                     {
-                        new AtgenEnemyPiece() { Id = Materials.GoldCrystal, Quantity = 300 },
+                        new() { Id = Materials.GoldCrystal, Quantity = 300 },
                     }
                 ),
                 cancellationToken: TestContext.Current.CancellationToken
@@ -103,7 +103,7 @@ public class CharaTest : TestFixture
         );
 
         int expectedXp = Math.Min(
-            UpgradeMaterials.buildupXpValues[Materials.GoldCrystal] * 300,
+            UpgradeMaterials.BuildupXpValues[Materials.GoldCrystal] * 300,
             CharaConstants.XpLimits[maxLevel - 1]
         );
 
@@ -131,7 +131,7 @@ public class CharaTest : TestFixture
             "chara/buildup",
             new CharaBuildupRequest(
                 Charas.Gauld,
-                [new AtgenEnemyPiece() { Id = Materials.GoldCrystal, Quantity = 10 }]
+                [new() { Id = Materials.GoldCrystal, Quantity = 10 }]
             ),
             cancellationToken: TestContext.Current.CancellationToken
         );
@@ -145,7 +145,7 @@ public class CharaTest : TestFixture
             "chara/buildup",
             new CharaBuildupRequest(
                 Charas.Gauld,
-                [new AtgenEnemyPiece() { Id = Materials.BronzeCrystal, Quantity = 1 }]
+                [new() { Id = Materials.BronzeCrystal, Quantity = 1 }]
             ),
             cancellationToken: TestContext.Current.CancellationToken
         );
@@ -213,13 +213,12 @@ public class CharaTest : TestFixture
             );
         }
 
-        DragaliaResponse<CharaBuildupManaResponse> response = (
+        DragaliaResponse<CharaBuildupManaResponse> response =
             await this.Client.PostMsgpack<CharaBuildupManaResponse>(
                 "chara/buildup_mana",
                 new CharaBuildupManaRequest(Charas.GalaAudric, new List<int>() { 5 }, false),
                 cancellationToken: TestContext.Current.CancellationToken
-            )
-        );
+            );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
@@ -240,13 +239,12 @@ public class CharaTest : TestFixture
                 TestContext.Current.CancellationToken
             );
 
-        DragaliaResponse<CharaBuildupManaResponse> response = (
+        DragaliaResponse<CharaBuildupManaResponse> response =
             await this.Client.PostMsgpack<CharaBuildupManaResponse>(
                 "chara/buildup_mana",
                 new CharaBuildupManaRequest(Charas.Valerio, [60], false),
                 cancellationToken: TestContext.Current.CancellationToken
-            )
-        );
+            );
 
         response
             .Data.UpdateDataList.CharaList.Should()
@@ -275,13 +273,12 @@ public class CharaTest : TestFixture
                 TestContext.Current.CancellationToken
             );
 
-        DragaliaResponse<CharaBuildupManaResponse> response = (
+        DragaliaResponse<CharaBuildupManaResponse> response =
             await this.Client.PostMsgpack<CharaBuildupManaResponse>(
                 "chara/buildup_mana",
                 new CharaBuildupManaRequest(Charas.Cleo, [59], false),
                 cancellationToken: TestContext.Current.CancellationToken
-            )
-        );
+            );
 
         response
             .Data.UpdateDataList.CharaList.Should()
@@ -777,7 +774,7 @@ public class CharaTest : TestFixture
                     1,
                     "Exercise",
                     Charas.Celliera,
-                    new AtgenRequestCharaUnitSetData() { DragonKeyId = 5 }
+                    new() { DragonKeyId = 5 }
                 ),
                 cancellationToken: TestContext.Current.CancellationToken
             )

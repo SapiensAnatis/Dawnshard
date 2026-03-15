@@ -1,6 +1,5 @@
 using Dawnshard.ServiceDefaults;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -33,14 +32,8 @@ public static class Extensions
 
     public static WebApplication MapDefaultEndpoints(this WebApplication app)
     {
-        app.MapHealthChecks(
-            "/health",
-            new HealthCheckOptions() { ResponseWriter = HealthCheckWriter.WriteResponse }
-        );
-        app.MapHealthChecks(
-            "/ping",
-            new HealthCheckOptions { Predicate = r => r.Tags.Contains("live") }
-        );
+        app.MapHealthChecks("/health", new() { ResponseWriter = HealthCheckWriter.WriteResponse });
+        app.MapHealthChecks("/ping", new() { Predicate = r => r.Tags.Contains("live") });
         app.MapPrometheusScrapingEndpoint();
 
         return app;

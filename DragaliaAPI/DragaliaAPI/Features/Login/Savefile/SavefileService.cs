@@ -398,7 +398,7 @@ internal sealed partial class SavefileService(
             )
             {
                 player.Emblems.Add(
-                    new DbEmblem
+                    new()
                     {
                         EmblemId = savefile.UserData.EmblemId,
                         GetTime = DateTimeOffset.UnixEpoch,
@@ -695,12 +695,12 @@ internal sealed partial class SavefileService(
     {
         foreach (Charas c in DefaultSavefileData.Characters)
         {
-            player.CharaList.Add(new DbPlayerCharaData(player.ViewerId, c));
+            player.CharaList.Add(new(player.ViewerId, c));
 
             if (MasterAsset.CharaStories.TryGetValue((int)c, out StoryData? story))
             {
                 player.StoryStates.Add(
-                    new DbPlayerStoryState
+                    new()
                     {
                         ViewerId = player.ViewerId,
                         StoryType = StoryTypes.Chara,
@@ -723,13 +723,13 @@ internal sealed partial class SavefileService(
 
     private static void AddShopInfo(DbPlayer player)
     {
-        player.ShopInfo = new DbPlayerShopInfo();
+        player.ShopInfo = new();
     }
 
     private static void AddDefaultEmblem(DbPlayer player)
     {
         player.Emblems.Add(
-            new DbEmblem
+            new()
             {
                 EmblemId = DefaultSavefileData.DefaultEmblem,
                 GetTime = DateTimeOffset.UnixEpoch,

@@ -99,6 +99,6 @@ public static class MasterAssetGroup
             )
             .ToFrozenDictionary();
 
-        return new MasterAssetGroup<TGroupKey, TKey, TItem>(dict);
+        return new(dict);
     }
 }

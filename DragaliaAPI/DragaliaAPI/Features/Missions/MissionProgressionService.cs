@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
@@ -292,9 +291,7 @@ public partial class MissionProgressionService(
         int? parameter4 = null
     )
     {
-        eventQueue.Enqueue(
-            new MissionEvent(type, value, total, parameter, parameter2, parameter3, parameter4)
-        );
+        eventQueue.Enqueue(new(type, value, total, parameter, parameter2, parameter3, parameter4));
     }
 
     public async Task ProcessMissionEvents(CancellationToken cancellationToken)
@@ -302,7 +299,9 @@ public partial class MissionProgressionService(
         using Activity? activity = activitySource.StartActivity();
 
         if (this.eventQueue.Count == 0)
+        {
             return;
+        }
 
         Stopwatch stopwatch = Stopwatch.StartNew();
         int eventCount = this.eventQueue.Count;
@@ -327,7 +326,9 @@ public partial class MissionProgressionService(
                 .ToList();
 
             if (affectedMissions.Count == 0)
+            {
                 continue;
+            }
 
             missionList ??= await missionRepository
                 .Missions.Where(x => x.State == MissionState.InProgress)
@@ -350,7 +351,9 @@ public partial class MissionProgressionService(
                 if (progressionInfo.UseTotalValue)
                 {
                     if (progressingMission.Progress >= evt.TotalValue)
+                    {
                         continue;
+                    }
 
                     progressingMission.Progress = evt.TotalValue;
                 }
@@ -367,7 +370,7 @@ public partial class MissionProgressionService(
                     if (progressionInfo.ProgressionGroupId != null)
                     {
                         this.eventQueue.Enqueue(
-                            new MissionEvent(
+                            new(
                                 MissionCompleteType.ProgressionGroupCleared,
                                 1,
                                 1,

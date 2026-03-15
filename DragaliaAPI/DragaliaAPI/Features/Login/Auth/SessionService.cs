@@ -130,7 +130,9 @@ public class SessionService : ISessionService
         string? json = await this.cache.GetStringAsync(key);
 
         if (json is null)
+        {
             return null;
+        }
 
         return JsonSerializer.Deserialize<Session>(json);
     }

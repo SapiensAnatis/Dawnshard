@@ -1,4 +1,3 @@
-using System;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -32,17 +31,23 @@ public partial class PaymentService(
     public async Task ProcessPayment(Entity entity, PaymentTarget? payment = null)
     {
         if (entity.Type == EntityTypes.None)
+        {
             throw new ArgumentException("Invalid entity type", nameof(entity));
+        }
 
         bool hasPaymentTarget = payment is not null;
 
         if (entity.Quantity == 0) // For free stuff, if needed.
+        {
             return;
+        }
 
         Log.ProcessingPayment(logger, entity.Type, hasPaymentTarget ? payment : entity);
 
         if (hasPaymentTarget && entity.Quantity != payment!.TargetCost)
+        {
             throw new DragaliaException(ResultCode.CommonUserStatusError, "Price mismatch.");
+        }
 
         int price = entity.Quantity;
         long? quantity;
@@ -114,9 +119,13 @@ public partial class PaymentService(
                 updater = () =>
                 {
                     if (isPoint1)
+                    {
                         dmodeInfo.Point1Quantity -= price;
+                    }
                     else
+                    {
                         dmodeInfo.Point2Quantity -= price;
+                    }
                 };
                 break;
             case EntityTypes.SummonTicket:
@@ -190,10 +199,12 @@ public partial class PaymentService(
     )
     {
         if (type == PaymentTypes.DiamantiumOrWyrmite)
+        {
             throw new ArgumentException(
                 "Cannot process DiamantiumOrWyrmite payment type",
                 nameof(type)
             );
+        }
 
         switch (type)
         {
@@ -208,7 +219,7 @@ public partial class PaymentService(
                 }
 
                 await ProcessPayment(
-                    new Entity(entityType, Quantity: expectedPrice ?? payment?.TargetCost ?? 0),
+                    new(entityType, Quantity: expectedPrice ?? payment?.TargetCost ?? 0),
                     payment
                 );
                 break;
@@ -222,7 +233,7 @@ public partial class PaymentService(
 
     public DeleteDataList GetDeleteDataList()
     {
-        return new DeleteDataList(dragonList, talismanList, weaponList, amuletList);
+        return new(dragonList, talismanList, weaponList, amuletList);
     }
 
     private static partial class Log

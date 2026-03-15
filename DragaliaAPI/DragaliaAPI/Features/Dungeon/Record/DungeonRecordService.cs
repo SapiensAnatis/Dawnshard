@@ -224,7 +224,7 @@ internal partial class DungeonRecordService(
 
             await charaService.LevelUpChara(chara.CharaId, experiencePerChara);
 
-            charaGrowRecord.Add(new AtgenCharaGrowRecord(chara.CharaId, experiencePerChara));
+            charaGrowRecord.Add(new(chara.CharaId, experiencePerChara));
             growRecord.TakeCharaExp += experiencePerChara;
         }
 

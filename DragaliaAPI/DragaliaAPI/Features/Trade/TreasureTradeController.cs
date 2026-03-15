@@ -17,11 +17,12 @@ public class TreasureTradeController(
     [HttpPost("get_list_all")]
     public async Task<DragaliaResult> GetListAll()
     {
-        TreasureTradeGetListAllResponse resp = new();
-
-        resp.TreasureTradeAllList = tradeService.GetCurrentTreasureTradeList();
-        resp.UserTreasureTradeList = await tradeService.GetUserTreasureTradeList();
-        resp.DmodeInfo = await dmodeService.GetInfo();
+        TreasureTradeGetListAllResponse resp = new()
+        {
+            TreasureTradeAllList = tradeService.GetCurrentTreasureTradeList(),
+            UserTreasureTradeList = await tradeService.GetUserTreasureTradeList(),
+            DmodeInfo = await dmodeService.GetInfo(),
+        };
 
         return Ok(resp);
     }

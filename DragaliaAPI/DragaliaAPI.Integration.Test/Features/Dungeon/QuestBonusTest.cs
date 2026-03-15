@@ -366,7 +366,7 @@ public class QuestBonusTest : TestFixture
                         LiveUnitNoList = new List<int>(),
                         DamageRecord = new List<AtgenDamageRecord>(),
                         DragonDamageRecord = new List<AtgenDamageRecord>(),
-                        BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                        BattleRoyalRecord = new(),
                     },
                 }
             );

@@ -21,7 +21,9 @@ public class DmodeDeveloperController(
     {
         string? accountId = await this.GetAccountId(viewerId);
         if (accountId is null)
+        {
             return this.NotFound("Player not found");
+        }
 
         using IDisposable ctx = playerIdentityService.StartUserImpersonation(viewerId, accountId);
 
@@ -41,7 +43,9 @@ public class DmodeDeveloperController(
     {
         string? accountId = await this.GetAccountId(viewerId);
         if (accountId is null)
+        {
             return this.NotFound("Player not found");
+        }
 
         using IDisposable ctx = playerIdentityService.StartUserImpersonation(viewerId, accountId);
 
@@ -60,7 +64,9 @@ public class DmodeDeveloperController(
     {
         string? accountId = await this.GetAccountId(viewerId);
         if (accountId is null)
+        {
             return this.NotFound("Player not found");
+        }
 
         using IDisposable ctx = playerIdentityService.StartUserImpersonation(viewerId, accountId);
         try

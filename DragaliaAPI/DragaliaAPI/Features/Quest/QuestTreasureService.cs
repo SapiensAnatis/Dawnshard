@@ -33,7 +33,7 @@ public class QuestTreasureService(
         if (questTreasureData.EntityType != EntityTypes.None)
         {
             await rewardService.GrantReward(
-                new Entity(
+                new(
                     questTreasureData.EntityType,
                     questTreasureData.EntityId,
                     questTreasureData.EntityQuantity
@@ -41,7 +41,7 @@ public class QuestTreasureService(
             );
 
             rewards.Add(
-                new AtgenBuildEventRewardEntityList(
+                new(
                     questTreasureData.EntityType,
                     questTreasureData.EntityId,
                     questTreasureData.EntityQuantity
@@ -56,7 +56,7 @@ public class QuestTreasureService(
         }
 
         apiContext.QuestTreasureList.Add(
-            new DbQuestTreasureList()
+            new()
             {
                 ViewerId = playerIdentityService.ViewerId,
                 QuestTreasureId = questTreasureData.Id,
@@ -71,7 +71,7 @@ public class QuestTreasureService(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
-        return new QuestOpenTreasureResponse()
+        return new()
         {
             UpdateDataList = updateDataList,
             EntityResult = entityResult,

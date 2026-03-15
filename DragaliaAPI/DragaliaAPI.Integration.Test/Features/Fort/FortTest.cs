@@ -25,7 +25,7 @@ public class FortTest : TestFixture
         DateTimeOffset income = DateTimeOffset.FromUnixTimeSeconds(1358149643);
 
         this.ApiContext.PlayerFortBuilds.Add(
-            new DbFortBuild()
+            new()
             {
                 ViewerId = ViewerId,
                 PlantId = FortPlants.AxeDojo,
@@ -667,14 +667,13 @@ public class FortTest : TestFixture
                 })
         );
 
-        DragaliaResponse<FortBuildStartResponse> response = (
+        DragaliaResponse<FortBuildStartResponse> response =
             await this.Client.PostMsgpack<FortBuildStartResponse>(
                 "/fort/build_start",
                 new FortBuildStartRequest(FortPlants.FlameAltar, 1, 1),
                 ensureSuccessHeader: false,
                 cancellationToken: TestContext.Current.CancellationToken
-            )
-        );
+            );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.FortBuildCarpenterBusy);
     }
@@ -694,13 +693,12 @@ public class FortTest : TestFixture
                 })
         );
 
-        DragaliaResponse<FortBuildStartResponse> response = (
+        DragaliaResponse<FortBuildStartResponse> response =
             await this.Client.PostMsgpack<FortBuildStartResponse>(
                 "/fort/build_start",
                 new FortBuildStartRequest(FortPlants.FlameAltar, 1, 1),
                 cancellationToken: TestContext.Current.CancellationToken
-            )
-        );
+            );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
         response.Data.FortDetail.CarpenterNum.Should().Be(2);

@@ -24,25 +24,25 @@ public class MypageController(
     [HttpPost]
     public async Task<DragaliaResult> Info(CancellationToken cancellationToken)
     {
-        MypageInfoResponse resp = new();
+        MypageInfoResponse resp = new()
+        {
+            UserSummonList = new List<UserSummonList>(),
+            QuestEventScheduleList = new List<QuestEventScheduleList>(),
+            QuestScheduleDetailList = MasterAsset.QuestScheduleInfo.Enumerable.Select(
+                x => new QuestScheduleDetailList(
+                    x.Id,
+                    x.ScheduleGroupId,
+                    x.DropBonusCount,
+                    0,
+                    x.IntervalType,
+                    x.StartDate,
+                    x.EndDate
+                )
+            ),
+            IsShopNotification = await shopRepository.GetDailySummonCountAsync() == 0,
+            UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken),
+        };
 
-        resp.UserSummonList = new List<UserSummonList>();
-        resp.QuestEventScheduleList = new List<QuestEventScheduleList>();
-
-        resp.QuestScheduleDetailList = MasterAsset.QuestScheduleInfo.Enumerable.Select(
-            x => new QuestScheduleDetailList(
-                x.Id,
-                x.ScheduleGroupId,
-                x.DropBonusCount,
-                0,
-                x.IntervalType,
-                x.StartDate,
-                x.EndDate
-            )
-        );
-
-        resp.IsShopNotification = await shopRepository.GetDailySummonCountAsync() == 0;
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.UpdateDataList.MissionNotice = await missionService.GetMissionNotice(null);
 
         RepeatInfo? repeatInfo = await autoRepeatService.GetRepeatInfo();

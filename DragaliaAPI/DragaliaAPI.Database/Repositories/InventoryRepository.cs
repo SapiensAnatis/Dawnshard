@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
@@ -30,7 +29,7 @@ public partial class InventoryRepository : IInventoryRepository
     {
         return apiContext
             .PlayerMaterials.Add(
-                new DbPlayerMaterial()
+                new()
                 {
                     ViewerId = this.playerIdentityService.ViewerId,
                     MaterialId = type,
@@ -43,7 +42,9 @@ public partial class InventoryRepository : IInventoryRepository
     public async Task UpdateQuantity(Materials item, int quantity)
     {
         if (item == MaterialsEnum.Empty)
+        {
             return;
+        }
 
         DbPlayerMaterial material = await this.FindAsync(item);
 
@@ -112,7 +113,9 @@ public partial class InventoryRepository : IInventoryRepository
         foreach (KeyValuePair<Materials, int> requested in quantityMap)
         {
             if (requested.Key == MaterialsEnum.Empty)
+            {
                 continue;
+            }
 
             DbPlayerMaterial mat = await this.FindAsync(requested.Key);
 

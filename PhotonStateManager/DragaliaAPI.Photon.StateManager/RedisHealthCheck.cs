@@ -23,7 +23,7 @@ public class RedisHealthCheck : IHealthCheck
             RedisReply reply = await connectionprovider.Connection.ExecuteAsync("PING");
             if (reply.Error)
             {
-                return new HealthCheckResult(
+                return new(
                     status: context.Registration.FailureStatus,
                     exception: null,
                     description: "Ping command returned error"
@@ -34,7 +34,7 @@ public class RedisHealthCheck : IHealthCheck
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(
+            return new(
                 status: context.Registration.FailureStatus,
                 exception: ex,
                 description: "Failed to connect to Redis"

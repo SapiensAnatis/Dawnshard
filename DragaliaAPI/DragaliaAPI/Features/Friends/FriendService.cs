@@ -160,7 +160,7 @@ internal sealed partial class FriendService(
         }
 
         apiContext.PlayerFriendRequests.Add(
-            new DbPlayerFriendRequest()
+            new()
             {
                 FromPlayerViewerId = playerIdentityService.ViewerId,
                 ToPlayerViewerId = targetViewerId,
@@ -277,15 +277,11 @@ internal sealed partial class FriendService(
                     x.FromPlayerViewerId == requestViewerId
                     && x.ToPlayerViewerId == playerIdentityService.ViewerId,
                 cancellationToken
-            );
-
-        if (requestEntity is null)
-        {
-            throw new DragaliaException(
+            )
+            ?? throw new DragaliaException(
                 ResultCode.CommonInvalidArgument,
                 $"Cannot reply to friend request from viewer ID {requestViewerId} - does not exist"
             );
-        }
 
         apiContext.PlayerFriendRequests.Remove(requestEntity);
 
@@ -311,22 +307,19 @@ internal sealed partial class FriendService(
 
     public async Task DeleteFriend(long viewerId, CancellationToken cancellationToken)
     {
-        DbPlayerFriendship? friendship = await apiContext
-            .PlayerFriendships.Where(x =>
-                x.PlayerFriendshipPlayers.Any(y =>
-                    y.PlayerViewerId == playerIdentityService.ViewerId
-                ) && x.PlayerFriendshipPlayers.Any(y => y.PlayerViewerId == viewerId)
-            )
-            .Include(x => x.PlayerFriendshipPlayers)
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (friendship is null)
-        {
-            throw new DragaliaException(
+        DbPlayerFriendship friendship =
+            await apiContext
+                .PlayerFriendships.Where(x =>
+                    x.PlayerFriendshipPlayers.Any(y =>
+                        y.PlayerViewerId == playerIdentityService.ViewerId
+                    ) && x.PlayerFriendshipPlayers.Any(y => y.PlayerViewerId == viewerId)
+                )
+                .Include(x => x.PlayerFriendshipPlayers)
+                .FirstOrDefaultAsync(cancellationToken)
+            ?? throw new DragaliaException(
                 ResultCode.FriendDeleteError,
                 "Could not find friendship to delete"
             );
-        }
 
         apiContext.PlayerFriendshipPlayers.RemoveRange(friendship.PlayerFriendshipPlayers);
         apiContext.PlayerFriendships.Remove(friendship);
@@ -377,11 +370,7 @@ internal sealed partial class FriendService(
 
         if (friendCount >= friendLimit)
         {
-            return new FriendLimitCheckResult
-            {
-                ListLimitExceeded = true,
-                RequestLimitExceeded = true,
-            };
+            return new() { ListLimitExceeded = true, RequestLimitExceeded = true };
         }
 
         int sentRequestCount = await apiContext.PlayerFriendRequests.CountAsync(x =>
@@ -393,18 +382,10 @@ internal sealed partial class FriendService(
 
         if (friendCount + sentRequestCount + pendingRequestCount >= friendLimit)
         {
-            return new FriendLimitCheckResult
-            {
-                ListLimitExceeded = false,
-                RequestLimitExceeded = true,
-            };
+            return new() { ListLimitExceeded = false, RequestLimitExceeded = true };
         }
 
-        return new FriendLimitCheckResult
-        {
-            ListLimitExceeded = false,
-            RequestLimitExceeded = false,
-        };
+        return new() { ListLimitExceeded = false, RequestLimitExceeded = false };
     }
 
     public async Task<bool> CheckIfPendingRequestLimitExceeded(long viewerId)
@@ -453,7 +434,7 @@ internal sealed partial class FriendService(
     }
 
     private static DbPlayerFriendship CreateFriendship(long player1Id, long player2Id) =>
-        new DbPlayerFriendship()
+        new()
         {
             PlayerFriendshipPlayers =
             [

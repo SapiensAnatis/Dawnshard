@@ -21,9 +21,7 @@ public partial class V14Update(
     {
         int[] readStoryIdList = await storyRepository
             .UnitStories.Where(x =>
-                (x.State == StoryState.Read)
-                && x.StoryType == StoryTypes.Chara
-                && x.StoryId % 10 == 5
+                x.State == StoryState.Read && x.StoryType == StoryTypes.Chara && x.StoryId % 10 == 5
             )
             .Select(x => x.StoryId)
             .ToArrayAsync();
@@ -42,14 +40,20 @@ public partial class V14Update(
             Emblems emblem = (Emblems)storyCharacterId;
 
             if (readStoryId != characterStoryList.Last() || ownedEmblems.Contains(emblem))
+            {
                 continue;
+            }
 
             if (!Enum.IsDefined(emblem))
+            {
                 continue;
+            }
 
             // Avoid conflicts in case V10Update has added an equipped story epithet to the change tracker
             if (apiContext.ChangeTracker.Entries<DbEmblem>().Any(x => x.Entity.EmblemId == emblem))
+            {
                 continue;
+            }
 
             Log.GrantingEmblem(logger, emblem);
 

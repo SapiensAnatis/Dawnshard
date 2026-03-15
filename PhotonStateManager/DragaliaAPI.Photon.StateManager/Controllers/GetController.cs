@@ -1,4 +1,3 @@
-using System;
 using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Photon.StateManager.Models;

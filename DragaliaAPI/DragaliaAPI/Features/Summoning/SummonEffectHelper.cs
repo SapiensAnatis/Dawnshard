@@ -44,7 +44,7 @@ public static class SummonEffectHelper
             }
         }
 
-        return new SummonEffect(
+        return new(
             SageEffect: sageEffect,
             CircleEffect: circleEffect,
             ReversalIndex: reversalIndex

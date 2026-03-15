@@ -70,9 +70,9 @@ public partial class PhotonAuthenticationHandler(
         }
 
         ClaimsIdentity identity = new(this.Scheme.Name);
-        identity.AddClaim(new Claim(CustomClaimType.ViewerId, viewerId.ToString()));
-        identity.AddClaim(new Claim(CustomClaimType.AccountId, accountId));
-        identity.AddClaim(new Claim(ClaimTypes.Role, Role));
+        identity.AddClaim(new(CustomClaimType.ViewerId, viewerId.ToString()));
+        identity.AddClaim(new(CustomClaimType.AccountId, accountId));
+        identity.AddClaim(new(ClaimTypes.Role, Role));
 
         ClaimsPrincipal principal = new(identity);
         AuthenticationTicket ticket = new(principal, this.Scheme.Name);

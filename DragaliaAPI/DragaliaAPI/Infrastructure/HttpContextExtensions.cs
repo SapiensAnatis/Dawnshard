@@ -11,7 +11,7 @@ internal static class HttpContextExtensions
         context.Response.StatusCode = StatusCodes.Status200OK;
         context.Items[nameof(ResultCode)] = code;
 
-        DragaliaResponse<DataHeaders> gameResponse = new(new DataHeaders(code), code);
+        DragaliaResponse<DataHeaders> gameResponse = new(new(code), code);
 
         await context.Response.Body.WriteAsync(
             MessagePackSerializer.Serialize(gameResponse, CustomResolver.Options)

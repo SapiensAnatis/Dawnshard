@@ -42,7 +42,7 @@ public class SummonTicketHandler(
                 throw new ArgumentException($"Invalid ticket type: {ticketId}");
         }
 
-        return new GrantReturn(RewardGrantResult.Added);
+        return new(RewardGrantResult.Added);
     }
 
     private async Task AddStackableTicket(SummonTickets ticketId, int quantity)
@@ -60,11 +60,7 @@ public class SummonTicketHandler(
     private DbSummonTicket InitializeEmptyStackableTicket(SummonTickets ticketId) =>
         apiContext
             .PlayerSummonTickets.Add(
-                new DbSummonTicket()
-                {
-                    ViewerId = playerIdentityService.ViewerId,
-                    SummonTicketId = ticketId,
-                }
+                new() { ViewerId = playerIdentityService.ViewerId, SummonTicketId = ticketId }
             )
             .Entity;
 }

@@ -19,14 +19,14 @@ public class BuildEventController(
     [HttpPost("get_event_data")]
     public async Task<DragaliaResult> GetEventData(BuildEventGetEventDataRequest request)
     {
-        BuildEventGetEventDataResponse resp = new();
-
-        resp.IsReceivableEventDailyBonus = await eventService.GetCustomEventFlag(request.EventId);
-
-        resp.BuildEventUserData = await eventService.GetBuildEventUserData(request.EventId);
-        resp.BuildEventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
-            request.EventId
-        );
+        BuildEventGetEventDataResponse resp = new()
+        {
+            IsReceivableEventDailyBonus = await eventService.GetCustomEventFlag(request.EventId),
+            BuildEventUserData = await eventService.GetBuildEventUserData(request.EventId),
+            BuildEventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
+                request.EventId
+            ),
+        };
 
         if (
             MasterAsset
@@ -47,12 +47,13 @@ public class BuildEventController(
         CancellationToken cancellationToken
     )
     {
-        BuildEventEntryResponse resp = new();
-
-        resp.IsReceivableEventDailyBonus = await eventService.GetCustomEventFlag(request.EventId);
-        resp.BuildEventUserData = await eventService.GetBuildEventUserData(request.EventId);
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
-        resp.EntityResult = rewardService.GetEntityResult();
+        BuildEventEntryResponse resp = new()
+        {
+            IsReceivableEventDailyBonus = await eventService.GetCustomEventFlag(request.EventId),
+            BuildEventUserData = await eventService.GetBuildEventUserData(request.EventId),
+            UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken),
+            EntityResult = rewardService.GetEntityResult(),
+        };
 
         return Ok(resp);
     }
@@ -63,16 +64,15 @@ public class BuildEventController(
         CancellationToken cancellationToken
     )
     {
-        BuildEventReceiveBuildPointRewardResponse resp = new();
-
-        resp.BuildEventRewardEntityList = await eventService.ReceiveEventRewards(request.EventId);
-
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
-        resp.EntityResult = rewardService.GetEntityResult();
-
-        resp.BuildEventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
-            request.EventId
-        );
+        BuildEventReceiveBuildPointRewardResponse resp = new()
+        {
+            BuildEventRewardEntityList = await eventService.ReceiveEventRewards(request.EventId),
+            UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken),
+            EntityResult = rewardService.GetEntityResult(),
+            BuildEventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
+                request.EventId
+            ),
+        };
 
         return Ok(resp);
     }

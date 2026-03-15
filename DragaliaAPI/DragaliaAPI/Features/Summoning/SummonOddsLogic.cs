@@ -3,12 +3,14 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.Summoning;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using UnitRateCollection = (
+    System.Collections.Generic.IEnumerable<DragaliaAPI.Features.Summoning.UnitRate> PickupRates,
+    System.Collections.Generic.IEnumerable<DragaliaAPI.Features.Summoning.UnitRate> NormalRates
+);
 
 namespace DragaliaAPI.Features.Summoning;
 
 /* Algorithm sourced from https://dragalialost.wiki/w/Summoning#Rarity_Distribution */
-
-using UnitRateCollection = (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates);
 
 public static class SummonOddsLogic
 {
@@ -16,7 +18,7 @@ public static class SummonOddsLogic
     {
         if (banner.OverrideCharaPool is not null)
         {
-            return new UnitRateCollection
+            return new()
             {
                 NormalRates = banner.OverrideCharaPool.Select(x => new UnitRate(
                     x,
@@ -28,7 +30,7 @@ public static class SummonOddsLogic
 
         if (banner.OverrideDragonPool is not null)
         {
-            return new UnitRateCollection
+            return new()
             {
                 NormalRates = banner.OverrideDragonPool.Select(x => new UnitRate(
                     x,
@@ -195,6 +197,7 @@ public static class SummonOddsLogic
         {
             fiveStarAdvRate = 0.005m * advPoolMetadata.FiveStarPoolSize;
         }
+
         if (dragonPoolMetadata.FiveStarPoolSize > 0)
         {
             fiveStarDragonRate = 0.008m * dragonPoolMetadata.FiveStarPoolSize;
@@ -228,12 +231,13 @@ public static class SummonOddsLogic
         {
             threeStarAdvRate = 0.04m * advPoolMetadata.ThreeStarPoolSize;
         }
+
         if (dragonPoolMetadata.ThreeStarPoolSize > 0)
         {
             threeStarDragonRate = 0.04m * dragonPoolMetadata.ThreeStarPoolSize;
         }
 
-        return new BaseRateData(
+        return new(
             FiveStarAdvRate: fiveStarAdvRate,
             FiveStarDragonRate: fiveStarDragonRate,
             FourStarAdvRate: fourStarAdvRate,
@@ -346,7 +350,7 @@ public static class SummonOddsLogic
                 ),
             };
 
-            yield return new UnitRate(chara.Id, rate);
+            yield return new(chara.Id, rate);
         }
 
         foreach (DragonData dragon in dragonPool)
@@ -361,7 +365,7 @@ public static class SummonOddsLogic
                 ),
             };
 
-            yield return new UnitRate(dragon.Id, rate);
+            yield return new(dragon.Id, rate);
         }
     }
 

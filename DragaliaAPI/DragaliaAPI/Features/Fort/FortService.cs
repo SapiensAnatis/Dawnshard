@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
@@ -128,7 +127,7 @@ public partial class FortService(
                             ? detail.CostMax
                             : (int)(detail.CostMax * (incomeTime / detail.CostMaxTime));
 
-                    coinList.Add(new AtgenAddCoinList(build.BuildId, rupies));
+                    coinList.Add(new(build.BuildId, rupies));
                     coinTotal += rupies;
                     break;
                 case FortPlants.Dragontree:
@@ -147,23 +146,29 @@ public partial class FortService(
                     {
                         int value = rdm.Next(101);
                         if (odds.Normal >= value)
+                        {
                             normal++;
+                        }
                         else if (odds.Normal + odds.Ripe >= value)
+                        {
                             ripe++;
+                        }
                         else
+                        {
                             succulent++;
+                        }
                     }
 
                     AtgenAddHarvestList[] lists = new AtgenAddHarvestList[3];
-                    lists[0] = new AtgenAddHarvestList(Materials.Dragonfruit, normal);
-                    lists[1] = new AtgenAddHarvestList(Materials.RipeDragonfruit, ripe);
-                    lists[2] = new AtgenAddHarvestList(Materials.SucculentDragonfruit, succulent);
+                    lists[0] = new(Materials.Dragonfruit, normal);
+                    lists[1] = new(Materials.RipeDragonfruit, ripe);
+                    lists[2] = new(Materials.SucculentDragonfruit, succulent);
 
                     normalTotal += normal;
                     ripeTotal += ripe;
                     succulentTotal += succulent;
 
-                    harvestList.Add(new AtgenHarvestBuildList(build.BuildId, lists));
+                    harvestList.Add(new(build.BuildId, lists));
                     break;
                 case FortPlants.TheHalidom:
                     int stamina =
@@ -173,7 +178,7 @@ public partial class FortService(
 
                     staminaTotal += stamina;
 
-                    staminaList.Add(new AtgenAddStaminaList(build.BuildId, stamina));
+                    staminaList.Add(new(build.BuildId, stamina));
                     break;
                 default:
                     throw new DragaliaException(
@@ -187,28 +192,28 @@ public partial class FortService(
 
         if (coinTotal != 0)
         {
-            await rewardService.GrantReward(new Entity(EntityTypes.Rupies, 1, coinTotal));
+            await rewardService.GrantReward(new(EntityTypes.Rupies, 1, coinTotal));
             fortMissionProgressionService.OnFortIncomeCollected(EntityTypes.Rupies);
         }
 
         if (normalTotal != 0)
         {
             await rewardService.GrantReward(
-                new Entity(EntityTypes.Material, (int)Materials.Dragonfruit, coinTotal)
+                new(EntityTypes.Material, (int)Materials.Dragonfruit, coinTotal)
             );
         }
 
         if (ripeTotal != 0)
         {
             await rewardService.GrantReward(
-                new Entity(EntityTypes.Material, (int)Materials.RipeDragonfruit, coinTotal)
+                new(EntityTypes.Material, (int)Materials.RipeDragonfruit, coinTotal)
             );
         }
 
         if (succulentTotal != 0)
         {
             await rewardService.GrantReward(
-                new Entity(EntityTypes.Material, (int)Materials.SucculentDragonfruit, coinTotal)
+                new(EntityTypes.Material, (int)Materials.SucculentDragonfruit, coinTotal)
             );
         }
 
@@ -307,7 +312,9 @@ public partial class FortService(
         DbFortBuild build = await fortRepository.GetBuilding(buildId);
 
         if (build.BuildStatus is not FortBuildStatus.Building)
+        {
             throw new InvalidOperationException($"This building is not currently being built.");
+        }
 
         fortRepository.DeleteBuild(build);
 
@@ -321,7 +328,9 @@ public partial class FortService(
         DbFortBuild build = await fortRepository.GetBuilding(buildId);
 
         if (build.BuildStatus is not FortBuildStatus.LevelUp)
+        {
             throw new InvalidOperationException($"This building is not currently being upgraded.");
+        }
 
         build.BuildStartDate = DateTimeOffset.UnixEpoch;
         build.BuildEndDate = DateTimeOffset.UnixEpoch;
@@ -338,7 +347,9 @@ public partial class FortService(
         DbFortBuild build = await fortRepository.GetBuilding(buildId);
 
         if (build.BuildStatus is not FortBuildStatus.Building)
+        {
             throw new DragaliaException(ResultCode.FortBuildIncomplete, "Invalid state");
+        }
 
         if (current < build.BuildEndDate)
         {
@@ -388,9 +399,13 @@ public partial class FortService(
         build.Level++;
 
         if (levelUp)
+        {
             await fortMissionProgressionService.OnFortPlantLevelUp(build.PlantId, build.Level);
+        }
         else
+        {
             await fortMissionProgressionService.OnFortPlantBuild(build.PlantId);
+        }
     }
 
     public async Task<DbFortBuild> BuildStart(FortPlants fortPlantId, int positionX, int positionZ)
@@ -546,7 +561,9 @@ public partial class FortService(
     )
     {
         if (paymentType == PaymentTypes.HalidomHustleHammer)
+        {
             return 1; // Only 1 Hammer is consumed
+        }
 
         // Construction can be immediately completed by spending either Wyrmite or Diamantium,
         // where the amount required depends on the time left until construction is complete.
@@ -593,7 +610,7 @@ public partial class FortService(
             max += detail.CostMax;
         }
 
-        return new AtgenProductionRp(production, max);
+        return new(production, max);
     }
 
     public async Task<AtgenProductionRp> GetDragonfruitProduction()
@@ -603,15 +620,12 @@ public partial class FortService(
         );
         if (build == null)
         {
-            return new AtgenProductionRp(0, 0);
+            return new(0, 0);
         }
 
         FortPlantDetail detail = MasterAsset.FortPlantDetail[build.FortPlantDetailId];
 
-        return new AtgenProductionRp(
-            detail.MaterialMax / (float)detail.MaterialMaxTime,
-            detail.MaterialMax
-        );
+        return new(detail.MaterialMax / (float)detail.MaterialMaxTime, detail.MaterialMax);
     }
 
     public async Task<AtgenProductionRp> GetStaminaProduction()
@@ -621,15 +635,12 @@ public partial class FortService(
         );
         if (build == null)
         {
-            return new AtgenProductionRp(0, 0);
+            return new(0, 0);
         }
 
         FortPlantDetail detail = MasterAsset.FortPlantDetail[build.FortPlantDetailId];
 
-        return new AtgenProductionRp(
-            detail.StaminaMax / (float)detail.StaminaMaxTime,
-            detail.StaminaMax
-        );
+        return new(detail.StaminaMax / (float)detail.StaminaMaxTime, detail.StaminaMax);
     }
 
     public async Task<(int HalidomLevel, int SmithyLevel)> GetCoreLevels()

@@ -209,7 +209,7 @@ public class UpdateDataService(
 
         if (updatedInfo.Count > 0)
         {
-            list.ShopNotice = new ShopNotice(updatedInfo.First().DailySummonCount == 0);
+            list.ShopNotice = new(updatedInfo.First().DailySummonCount == 0);
         }
 
         List<int> updatedEvents = new();
@@ -317,8 +317,10 @@ public class UpdateDataService(
         {
             DmodeInfo info = await dmodeService.GetInfo();
             if (info.IsEntry)
-                // This is done to ensure that the change tracker does not mess anything up
+            // This is done to ensure that the change tracker does not mess anything up
+            {
                 list.DmodeInfo = info;
+            }
         }
 
         list.FriendNotice = await friendNotificationService.GetFriendNotice(cancellationToken);
@@ -335,7 +337,9 @@ public class UpdateDataService(
             {
                 T? data = await dataCreator(id);
                 if (data is not null)
+                {
                     list.Add(data);
+                }
             }
 
             return list;

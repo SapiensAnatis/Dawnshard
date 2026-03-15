@@ -94,7 +94,7 @@ public class MissionRepository(
     {
         return this
             .apiContext.PlayerMissions.Add(
-                new DbPlayerMission
+                new()
                 {
                     ViewerId = this.playerIdentityService.ViewerId,
                     Id = id,
@@ -116,10 +116,12 @@ public class MissionRepository(
         DateOnly date = DateOnly.FromDateTime(timeProvider.GetLastDailyReset().UtcDateTime);
 
         if (await this.apiContext.CompletedDailyMissions.FindAsync(viewerId, id, date) != null)
+        {
             return;
+        }
 
         this.apiContext.CompletedDailyMissions.Add(
-            new DbCompletedDailyMission()
+            new()
             {
                 ViewerId = viewerId,
                 Id = id,
@@ -148,7 +150,9 @@ public class MissionRepository(
     {
         // Fully complete types
         if (mission.Type is MissionType.Drill or MissionType.MainStory)
+        {
             return true;
+        }
 
         int missionProgressionId = MasterAssetUtils.GetMissionProgressionId(
             mission.Id,

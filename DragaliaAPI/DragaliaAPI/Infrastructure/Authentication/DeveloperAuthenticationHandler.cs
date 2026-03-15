@@ -54,7 +54,9 @@ public partial class DeveloperAuthenticationHandler
         }
 
         if (authHeader.Parameter is null || !expectedTokens.Contains(authHeader.Parameter))
+        {
             return Task.FromResult(AuthenticateResult.Fail("Invalid Authorization header"));
+        }
 
         Log.AuthenticatedUsingToken(this.Logger, authHeader.Parameter[..3] + "...");
 

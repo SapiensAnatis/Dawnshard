@@ -11,7 +11,7 @@ public class TimeAttackRepositoryTest : RepositoryTestFixture
 
     public TimeAttackRepositoryTest()
     {
-        this.mockPlayerIdentityService = new Mock<IPlayerIdentityService>(MockBehavior.Strict);
+        this.mockPlayerIdentityService = new(MockBehavior.Strict);
         this.timeAttackRepository = new TimeAttackRepository(
             this.ApiContext,
             this.mockPlayerIdentityService.Object
@@ -27,7 +27,7 @@ public class TimeAttackRepositoryTest : RepositoryTestFixture
         {
             GameId = gameId,
             QuestId = 1,
-            Players = new List<DbTimeAttackPlayer>()
+            Players = new()
             {
                 new()
                 {
@@ -54,7 +54,7 @@ public class TimeAttackRepositoryTest : RepositoryTestFixture
             {
                 GameId = gameId,
                 QuestId = 1,
-                Players = new List<DbTimeAttackPlayer>()
+                Players = new()
                 {
                     new()
                     {
@@ -73,7 +73,7 @@ public class TimeAttackRepositoryTest : RepositoryTestFixture
             {
                 GameId = gameId,
                 QuestId = 1,
-                Players = new List<DbTimeAttackPlayer>()
+                Players = new()
                 {
                     new()
                     {

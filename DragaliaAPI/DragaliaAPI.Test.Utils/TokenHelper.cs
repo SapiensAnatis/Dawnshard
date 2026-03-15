@@ -31,10 +31,7 @@ public static class TokenHelper
         {
             Issuer = issuer,
             Audience = audience,
-            SigningCredentials = new SigningCredentials(
-                SecurityKeys.First(),
-                SecurityAlgorithms.RsaSha256
-            ),
+            SigningCredentials = new(SecurityKeys.First(), SecurityAlgorithms.RsaSha256),
             Claims = new Dictionary<string, object>() { ["sub"] = accountId },
             Expires = expiryTime.UtcDateTime,
         };

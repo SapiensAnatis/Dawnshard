@@ -84,7 +84,7 @@ public class DungeonControllerTest
 
         DungeonFailResponse? response = (
             await this.dungeonController.Fail(
-                new DungeonFailRequest() { DungeonKey = "my key" },
+                new() { DungeonKey = "my key" },
                 CancellationToken.None
             )
         ).GetData<DungeonFailResponse>();
@@ -152,7 +152,7 @@ public class DungeonControllerTest
 
         DungeonFailResponse? response = (
             await this.dungeonController.Fail(
-                new DungeonFailRequest() { DungeonKey = "my key" },
+                new() { DungeonKey = "my key" },
                 CancellationToken.None
             )
         ).GetData<DungeonFailResponse>();

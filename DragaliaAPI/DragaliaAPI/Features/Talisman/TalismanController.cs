@@ -19,11 +19,12 @@ public class TalismanController(
         CancellationToken cancellationToken
     )
     {
-        TalismanSellResponse resp = new();
-
-        resp.DeleteDataList = await talismanService.SellTalismans(request.TalismanKeyIdList);
-        resp.EntityResult = rewardService.GetEntityResult();
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+        TalismanSellResponse resp = new()
+        {
+            DeleteDataList = await talismanService.SellTalismans(request.TalismanKeyIdList),
+            EntityResult = rewardService.GetEntityResult(),
+            UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken),
+        };
 
         return Ok(resp);
     }

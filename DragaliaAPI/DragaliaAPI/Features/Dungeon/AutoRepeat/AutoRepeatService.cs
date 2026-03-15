@@ -78,7 +78,7 @@ public partial class AutoRepeatService(
 
         await this.WriteRepeatInfo(info);
 
-        return new RepeatData()
+        return new()
         {
             RepeatCount = info.CurrentCount,
             RepeatKey = info.Key.ToString(),
@@ -92,7 +92,9 @@ public partial class AutoRepeatService(
             Schema.RepeatKey(this.playerIdentityService.ViewerId)
         );
         if (key == null)
+        {
             return null;
+        }
 
         return await this.GetRepeatInfo(Guid.Parse(key));
     }
@@ -101,7 +103,9 @@ public partial class AutoRepeatService(
     {
         RepeatInfo? info = await this.GetRepeatInfo();
         if (info != null)
+        {
             await this.distributedCache.RemoveAsync(Schema.RepeatInfo(info.Key));
+        }
 
         await this.distributedCache.RemoveAsync(
             Schema.RepeatKey(this.playerIdentityService.ViewerId)

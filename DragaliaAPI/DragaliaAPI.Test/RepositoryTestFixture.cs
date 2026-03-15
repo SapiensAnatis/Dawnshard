@@ -28,7 +28,7 @@ public class RepositoryTestFixture : IDisposable
             .ConfigureWarnings(config => config.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
 
-        this.ApiContext = new ApiContext(options, new StubPlayerIdentityService(ViewerId));
+        this.ApiContext = new(options, new StubPlayerIdentityService(ViewerId));
 
         // Unused for creating saves
         Mock<ILogger<SavefileService>> mockLogger = new(MockBehavior.Loose);
@@ -50,7 +50,9 @@ public class RepositoryTestFixture : IDisposable
     public async Task AddToDatabase<TEntity>(TEntity data)
     {
         if (data is null)
+        {
             return;
+        }
 
         await this.ApiContext.AddAsync(data);
         await this.ApiContext.SaveChangesAsync();
@@ -59,7 +61,9 @@ public class RepositoryTestFixture : IDisposable
     public async Task AddRangeToDatabase<TEntity>(IEnumerable<TEntity> data)
     {
         if (data is null)
+        {
             return;
+        }
 
         await this.ApiContext.AddRangeAsync((IEnumerable<object>)data);
         await this.ApiContext.SaveChangesAsync();

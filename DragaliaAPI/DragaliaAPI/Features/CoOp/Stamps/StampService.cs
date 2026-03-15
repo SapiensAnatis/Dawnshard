@@ -1,4 +1,3 @@
-using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Mapping.Mapperly;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.MasterAsset;

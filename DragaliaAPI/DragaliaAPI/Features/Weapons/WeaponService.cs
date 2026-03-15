@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -181,7 +180,9 @@ public partial class WeaponService : IWeaponService
         }
 
         if (!await this.ValidateCost(materialMap, coin))
+        {
             return ResultCode.CommonMaterialShort;
+        }
 
         DbWeaponBody? entity = await this.weaponRepository.FindAsync(body.Id);
         ArgumentNullException.ThrowIfNull(entity);
@@ -201,17 +202,26 @@ public partial class WeaponService : IWeaponService
         {
             case BuildupPieceTypes.Copies:
                 if (!this.ValidateStep(entity.EquipableCount, buildup))
+                {
                     return ResultCode.WeaponBodyBuildupPieceStepError;
+                }
+
                 entity.EquipableCount = buildup.Step;
                 break;
             case BuildupPieceTypes.Unbind:
                 if (!this.ValidateStep(entity.LimitBreakCount, buildup))
+                {
                     return ResultCode.WeaponBodyBuildupPieceStepError;
+                }
+
                 entity.LimitBreakCount = buildup.Step;
                 break;
             case BuildupPieceTypes.Refine:
                 if (!this.ValidateStep(entity.LimitOverCount, buildup))
+                {
                     return ResultCode.WeaponBodyBuildupPieceStepError;
+                }
+
                 entity.LimitOverCount = buildup.Step;
                 this.missionProgressionService.OnWeaponRefined(
                     1,
@@ -224,17 +234,26 @@ public partial class WeaponService : IWeaponService
                 break;
             case BuildupPieceTypes.WeaponBonus:
                 if (!this.ValidateStep(entity.FortPassiveCharaWeaponBuildupCount, buildup))
+                {
                     return ResultCode.WeaponBodyBuildupPieceStepError;
+                }
+
                 entity.FortPassiveCharaWeaponBuildupCount = buildup.Step;
                 break;
             case BuildupPieceTypes.CrestSlotType1:
                 if (!this.ValidateStep(entity.AdditionalCrestSlotType1Count, buildup))
+                {
                     return ResultCode.WeaponBodyBuildupPieceStepError;
+                }
+
                 entity.AdditionalCrestSlotType1Count = buildup.Step;
                 break;
             case BuildupPieceTypes.CrestSlotType3:
                 if (!this.ValidateStep(entity.AdditionalCrestSlotType3Count, buildup))
+                {
                     return ResultCode.WeaponBodyBuildupPieceStepError;
+                }
+
                 entity.AdditionalCrestSlotType3Count = buildup.Step;
                 break;
             case BuildupPieceTypes.Stats:
@@ -280,7 +299,9 @@ public partial class WeaponService : IWeaponService
         long coin = passiveAbility.UnlockCoin;
 
         if (!await this.ValidateCost(materialMap, coin))
+        {
             return ResultCode.CommonMaterialShort;
+        }
 
         DbWeaponBody? entity = await this.weaponRepository.FindAsync(body.Id);
         ArgumentNullException.ThrowIfNull(entity);
@@ -331,13 +352,17 @@ public partial class WeaponService : IWeaponService
         Dictionary<Materials, int> materialMap = buildupLevel.MaterialMap.ToDictionary();
 
         if (!await this.ValidateCost(materialMap))
+        {
             return ResultCode.CommonMaterialShort;
+        }
 
         DbWeaponBody? entity = await this.weaponRepository.FindAsync(body.Id);
         ArgumentNullException.ThrowIfNull(entity);
 
         if (!this.ValidateStep(entity.BuildupCount, buildup))
+        {
             return ResultCode.WeaponBodyBuildupPieceStepError;
+        }
 
         entity.BuildupCount = buildup.Step;
         await this.inventoryRepository.UpdateQuantity(materialMap.Invert());
@@ -354,7 +379,9 @@ public partial class WeaponService : IWeaponService
     private async Task<bool> ValidateCost(Dictionary<Materials, int> materialMap, long coin)
     {
         if (!await this.ValidateCost(materialMap))
+        {
             return false;
+        }
 
         if (!await this.userDataRepository.CheckCoin(coin))
         {
@@ -427,7 +454,7 @@ public partial class WeaponService : IWeaponService
             ),
         };
 
-        materialMap = new Dictionary<Materials, int>() { { mat, 1 } };
+        materialMap = new() { { mat, 1 } };
         coin = 0;
     }
 
@@ -472,10 +499,14 @@ public partial class WeaponService : IWeaponService
     private async Task AddRewardWeaponSkins(WeaponPassiveAbility passiveAbility)
     {
         if (passiveAbility.RewardWeaponSkinId1 != 0)
+        {
             await this.weaponRepository.AddSkin(passiveAbility.RewardWeaponSkinId1);
+        }
 
         if (passiveAbility.RewardWeaponSkinId2 != 0)
+        {
             await this.weaponRepository.AddSkin(passiveAbility.RewardWeaponSkinId2);
+        }
     }
 
     private static partial class Log

@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Reflection;
 using DragaliaAPI;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.Dragalipatch;
@@ -96,7 +95,7 @@ builder
     .AddFeatureManagement();
 
 builder
-    .Services.ConfigureGameServices(builder.Configuration)
+    .Services.ConfigureGameServices()
     .ConfigureGameOptions(builder.Configuration)
     .ConfigureSharedServices();
 

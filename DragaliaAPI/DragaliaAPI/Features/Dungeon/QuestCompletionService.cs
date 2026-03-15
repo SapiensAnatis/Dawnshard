@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Shared.Reward;
@@ -29,14 +28,18 @@ public partial class QuestCompletionService(
         int scoringEnemyGroupId = int.Parse($"{session.QuestGid}01");
 
         if (IsEarnTicketQuest(session.QuestId))
+        {
             scoringEnemyGroupId++;
+        }
 
         Dictionary<int, QuestScoringEnemy> scoringEnemies = MasterAsset
             .QuestScoringEnemy.Enumerable.Where(x => x.ScoringEnemyGroupId == scoringEnemyGroupId)
             .ToDictionary(x => x.EnemyListId, x => x);
 
         if (scoringEnemies.Count == 0)
+        {
             return (Enumerable.Empty<AtgenScoringEnemyPointList>(), 0);
+        }
 
         // Assume all invasion events are single-area
         AtgenTreasureRecord treasureRecord = record.TreasureRecord.First();
@@ -58,7 +61,9 @@ public partial class QuestCompletionService(
             int enemyListId = GetEnemyListId(paramId);
 
             if (!scoringEnemies.TryGetValue(enemyListId, out QuestScoringEnemy? questScoringEnemy))
+            {
                 continue;
+            }
 
             if (!results.TryGetValue(questScoringEnemy.Id, out AtgenScoringEnemyPointList? value))
             {
@@ -77,9 +82,7 @@ public partial class QuestCompletionService(
 
         int eventPointsId = int.Parse($"{session.QuestGid}01");
 
-        await rewardService.GrantReward(
-            new Entity(EntityTypes.EarnEventItem, eventPointsId, totalPoints)
-        );
+        await rewardService.GrantReward(new(EntityTypes.EarnEventItem, eventPointsId, totalPoints));
 
         missionProgressionService.EnqueueEvent(
             MissionCompleteType.EarnEnemiesKilled,
@@ -133,11 +136,7 @@ public partial class QuestCompletionService(
 
             multiplier += percentageAdded;
             missions.Add(
-                new AtgenScoreMissionSuccessList(
-                    condition.QuestCompleteType,
-                    condition.QuestCompleteValue,
-                    percentageAdded
-                )
+                new(condition.QuestCompleteType, condition.QuestCompleteValue, percentageAdded)
             );
         }
 
@@ -156,7 +155,7 @@ public partial class QuestCompletionService(
             .EventKindType;
 
         await rewardService.GrantReward(
-            new Entity(eventType.ToItemType(), (int)info.RewardEntityId, rewardQuantity)
+            new(eventType.ToItemType(), (int)info.RewardEntityId, rewardQuantity)
         );
 
         int boostPoints = 0;
@@ -168,7 +167,7 @@ public partial class QuestCompletionService(
             Log.RewardingExtraPointsDueToAbilities(logger, boostPoints);
 
             await rewardService.GrantReward(
-                new Entity(eventType.ToItemType(), (int)info.RewardEntityId, boostPoints)
+                new(eventType.ToItemType(), (int)info.RewardEntityId, boostPoints)
             );
         }
 
@@ -194,9 +193,9 @@ public partial class QuestCompletionService(
             {
                 newState[i] = true;
                 (EntityTypes entity, int id, int quantity) = rewardData.Entities[i];
-                await rewardService.GrantReward(new Entity(entity, id, quantity));
+                await rewardService.GrantReward(new(entity, id, quantity));
                 Log.CompletedQuestMission(logger, i);
-                clearSet.Add(new AtgenMissionsClearSet(id, entity, quantity, i + 1));
+                clearSet.Add(new(id, entity, quantity, i + 1));
             }
         }
 
@@ -205,7 +204,7 @@ public partial class QuestCompletionService(
         if (currentState.Any(x => !x) && newState.All(x => x))
         {
             await rewardService.GrantReward(
-                new Entity(
+                new(
                     rewardData.MissionCompleteEntityType,
                     rewardData.MissionCompleteEntityId,
                     rewardData.MissionCompleteEntityQuantity
@@ -213,7 +212,7 @@ public partial class QuestCompletionService(
             );
             Log.GrantingBonusForCompletingAllMissions(logger);
             completeSet.Add(
-                new AtgenFirstClearSet(
+                new(
                     rewardData.MissionCompleteEntityId,
                     rewardData.MissionCompleteEntityType,
                     rewardData.MissionCompleteEntityQuantity
@@ -373,9 +372,7 @@ public partial class QuestCompletionService(
         )
         {
             await rewardService.GrantReward(rewardEntity);
-            rewards.Add(
-                new AtgenFirstClearSet(rewardEntity.Id, rewardEntity.Type, rewardEntity.Quantity)
-            );
+            rewards.Add(new(rewardEntity.Id, rewardEntity.Type, rewardEntity.Quantity));
         }
 
         return rewards;

@@ -322,13 +322,13 @@ public partial class AbilityCrestService : IAbilityCrestService
         {
             case 4:
             {
-                materialMap = new Dictionary<Materials, int>() { { Materials.SilverKey, 1 } };
+                materialMap = new() { { Materials.SilverKey, 1 } };
                 dewpoint = 0;
                 return;
             }
             case 5:
             {
-                materialMap = new Dictionary<Materials, int>() { { Materials.GoldenKey, 1 } };
+                materialMap = new() { { Materials.GoldenKey, 1 } };
                 dewpoint = 0;
                 return;
             }
@@ -368,15 +368,11 @@ public partial class AbilityCrestService : IAbilityCrestService
             abilityCrestId
         );
 
-        if (dbAbilityCrest is null)
-        {
-            throw new DragaliaException(
+        return dbAbilityCrest
+            ?? throw new DragaliaException(
                 ResultCode.AbilityCrestBuildupPieceUnablePiece,
                 $"Player does not own ability crest with id {abilityCrestId}"
             );
-        }
-
-        return dbAbilityCrest;
     }
 
     private async Task<bool> ValidateCost(Dictionary<Materials, int> materialMap)

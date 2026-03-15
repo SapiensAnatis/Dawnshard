@@ -27,7 +27,7 @@ public class MissionControllerTest
         this.mockRewardService = new(MockBehavior.Strict);
         this.mockUpdateDataService = new(MockBehavior.Strict);
 
-        this.missionController = new MissionController(
+        this.missionController = new(
             this.mockMissionService.Object,
             this.mockMissionRepository.Object,
             this.mockRewardService.Object,
@@ -42,11 +42,7 @@ public class MissionControllerTest
     {
         MissionNotice notice = new()
         {
-            NormalMissionNotice = new AtgenNormalMissionNotice()
-            {
-                IsUpdate = true,
-                AllMissionCount = 420,
-            },
+            NormalMissionNotice = new() { IsUpdate = true, AllMissionCount = 420 },
         };
 
         CurrentMainStoryMission mainStoryMission = new(
@@ -87,16 +83,11 @@ public class MissionControllerTest
     {
         MissionNotice notice = new()
         {
-            NormalMissionNotice = new AtgenNormalMissionNotice()
-            {
-                IsUpdate = true,
-                AllMissionCount = 420,
-            },
+            NormalMissionNotice = new() { IsUpdate = true, AllMissionCount = 420 },
         };
 
         this.mockMissionService.Setup(x => x.GetMissionNotice(null)).ReturnsAsync(notice);
-        this.mockMissionService.Setup(x => x.GetCompletedDrillGroups())
-            .ReturnsAsync([new DrillMissionGroupList(1)]);
+        this.mockMissionService.Setup(x => x.GetCompletedDrillGroups()).ReturnsAsync([new(1)]);
 
         this.mockMissionRepository.Setup(x => x.GetMissionsByType(MissionType.Drill))
             .Returns(
@@ -159,7 +150,7 @@ public class MissionControllerTest
 
         DragaliaResult<MissionUnlockDrillMissionGroupResponse> resp =
             await this.missionController.UnlockDrillMissionGroup(
-                new MissionUnlockDrillMissionGroupRequest(100),
+                new(100),
                 TestContext.Current.CancellationToken
             );
 
@@ -200,7 +191,7 @@ public class MissionControllerTest
 
         DragaliaResult<MissionUnlockMainStoryGroupResponse> resp =
             await this.missionController.UnlockMainStoryMissionGroup(
-                new MissionUnlockMainStoryGroupRequest(100),
+                new(100),
                 TestContext.Current.CancellationToken
             );
 
@@ -257,7 +248,7 @@ public class MissionControllerTest
 
         DragaliaResult<MissionReceiveDrillRewardResponse> resp =
             await this.missionController.ReceiveDrillStoryReward(
-                new MissionReceiveDrillRewardRequest(fakeIdList, Enumerable.Empty<int>()),
+                new(fakeIdList, Enumerable.Empty<int>()),
                 TestContext.Current.CancellationToken
             );
 

@@ -89,7 +89,7 @@ public class CombatEventTest : TestFixture
         );
 
         ApiContext.PlayerQuests.Add(
-            new DbQuest
+            new()
             {
                 ViewerId = ViewerId,
                 QuestId = 222130103,

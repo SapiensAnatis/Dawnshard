@@ -21,8 +21,6 @@ public partial class PlayerIdentityService : IPlayerIdentityService
 
     private HttpContext Context => this.httpContextAccessor.HttpContext!;
 
-    private string? accountId;
-
     public string AccountId
     {
         get
@@ -35,10 +33,9 @@ public partial class PlayerIdentityService : IPlayerIdentityService
                     );
             }
 
-            this.accountId ??= this.Context.User.FindFirstValue(CustomClaimType.AccountId);
+            field ??= this.Context.User.FindFirstValue(CustomClaimType.AccountId);
 
-            return this.accountId
-                ?? throw new InvalidOperationException("No AccountId claim value found");
+            return field ?? throw new InvalidOperationException("No AccountId claim value found");
         }
     }
 
@@ -80,7 +77,7 @@ public partial class PlayerIdentityService : IPlayerIdentityService
             );
         }
 
-        impersonationContext = new ImpersonationContext(this, viewer, account);
+        impersonationContext = new(this, viewer, account);
 
         Log.StartingUserImpersonation(
             logger,

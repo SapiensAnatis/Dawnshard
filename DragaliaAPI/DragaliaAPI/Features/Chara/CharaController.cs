@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
@@ -181,7 +180,7 @@ public partial class CharaController(
             new Entity(EntityTypes.Rupies, Quantity: CharaConstants.AugmentResetCost * plusCount)
         );
 
-        await rewardService.GrantReward(new Entity(EntityTypes.Material, (int)material, plusCount));
+        await rewardService.GrantReward(new(EntityTypes.Material, (int)material, plusCount));
 
         resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
@@ -432,7 +431,7 @@ public partial class CharaController(
         };
 
         resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
-        resp.UpdateDataList.CharaUnitSetList = new List<CharaUnitSetList> { setList };
+        resp.UpdateDataList.CharaUnitSetList = new() { setList };
         resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
@@ -468,7 +467,9 @@ public partial class CharaController(
                 foreach ((Materials id, int quantity) in orbs)
                 {
                     if (id != Materials.Empty)
+                    {
                         await paymentService.ProcessPayment(id, quantity);
+                    }
                 }
 
                 if (uniqueGrowMaterial1 > 0)
@@ -508,7 +509,9 @@ public partial class CharaController(
     )
     {
         if (!manaNodes.Any())
+        {
             return;
+        }
 
         DateTimeOffset time = timeProvider.GetUtcNow();
 
@@ -667,7 +670,7 @@ public partial class CharaController(
                     break;
                 case ManaNodeTypes.Mat:
                     await rewardService.GrantReward(
-                        new Entity(EntityTypes.Material, (int)Materials.DamascusCrystal)
+                        new(EntityTypes.Material, (int)Materials.DamascusCrystal)
                     );
                     break;
                 case ManaNodeTypes.StdAtkUp:
@@ -708,7 +711,9 @@ public partial class CharaController(
 
             // they smoked some shit
             if (isOmnicite)
+            {
                 continue;
+            }
 
             bool isOnlyUsingGrowMaterial =
                 charaData.GrowMaterialOnlyStartDate <= time
@@ -759,7 +764,9 @@ public partial class CharaController(
                     foreach ((Materials id, int quantity) in material.NeededMaterials)
                     {
                         if (id != Materials.Empty)
+                        {
                             await paymentService.ProcessPayment(id, quantity);
+                        }
                     }
 
                     ManaPieceType pieceType = MasterAsset.ManaPieceType[manaNodeInfo.ManaPieceType];
@@ -767,7 +774,9 @@ public partial class CharaController(
                     foreach ((EntityTypes type, int id, int quantity) in pieceType.NeededEntities)
                     {
                         if (type != EntityTypes.None)
+                        {
                             await paymentService.ProcessPayment(new Entity(type, id, quantity));
+                        }
                     }
                 }
 
@@ -813,7 +822,7 @@ public partial class CharaController(
 
     private static AtgenCharaUnitSetDetailList ToAtgenCharaUnitSetDetailList(DbSetUnit unit)
     {
-        return new AtgenCharaUnitSetDetailList
+        return new()
         {
             UnitSetNo = unit.UnitSetNo,
             UnitSetName = unit.UnitSetName,

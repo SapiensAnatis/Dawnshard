@@ -44,7 +44,9 @@ public partial class ShopService(
         int price = shop.NeedCost * goodsQuantity;
 
         if (price < 0)
+        {
             throw new DragaliaException(ResultCode.CommonDataValidationError, "Price overflow");
+        }
 
         if (shopPaymentType == PaymentTypes.Other)
         {
@@ -85,14 +87,16 @@ public partial class ShopService(
             if (type != EntityTypes.None)
             {
                 await rewardService.GrantReward(
-                    new Entity(type, id, quantity * goodsQuantity, limitBreakCount)
+                    new(type, id, quantity * goodsQuantity, limitBreakCount)
                 );
             }
         }
 
         // Now shop specific behavior
         if (shopType is ShopType.Special)
+        {
             throw new NotImplementedException("We dont take Diamantium nor real money");
+        }
 
         if (shopType is ShopType.Normal)
         {
@@ -144,9 +148,7 @@ public partial class ShopService(
 
         if (newlyAdded) // Change tracker weirdness
         {
-            currentPurchases.Add(
-                new ShopPurchaseList(goodsId, purchaseTime, startTime, endTime, goodsQuantity)
-            );
+            currentPurchases.Add(new(goodsId, purchaseTime, startTime, endTime, goodsQuantity));
         }
 
         return currentPurchases;

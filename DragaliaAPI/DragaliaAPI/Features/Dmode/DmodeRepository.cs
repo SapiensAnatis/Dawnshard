@@ -56,17 +56,11 @@ public class DmodeRepository(ApiContext apiContext, IPlayerIdentityService playe
 
     public void InitializeForPlayer()
     {
-        apiContext.PlayerDmodeInfos.Add(
-            new DbPlayerDmodeInfo { ViewerId = playerIdentityService.ViewerId }
-        );
+        apiContext.PlayerDmodeInfos.Add(new() { ViewerId = playerIdentityService.ViewerId });
 
-        apiContext.PlayerDmodeDungeons.Add(
-            new DbPlayerDmodeDungeon { ViewerId = playerIdentityService.ViewerId }
-        );
+        apiContext.PlayerDmodeDungeons.Add(new() { ViewerId = playerIdentityService.ViewerId });
 
-        apiContext.PlayerDmodeExpeditions.Add(
-            new DbPlayerDmodeExpedition { ViewerId = playerIdentityService.ViewerId }
-        );
+        apiContext.PlayerDmodeExpeditions.Add(new() { ViewerId = playerIdentityService.ViewerId });
     }
 
     public DbPlayerDmodeChara AddChara(Charas charaId)
@@ -87,7 +81,7 @@ public class DmodeRepository(ApiContext apiContext, IPlayerIdentityService playe
     {
         return apiContext
             .PlayerDmodeServitorPassives.Add(
-                new DbPlayerDmodeServitorPassive
+                new()
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     PassiveId = passiveId,

@@ -37,13 +37,13 @@ public class V16UpdateTest : SavefileUpdateTestFixture
             .Should()
             .BeEquivalentTo(
                 [
-                    new DbPlayerEventItem()
+                    new()
                     {
                         EventId = 20844,
                         Id = 2084401,
                         Type = 10001,
                     },
-                    new DbPlayerEventItem()
+                    new()
                     {
                         EventId = 20844,
                         Id = 2084402,

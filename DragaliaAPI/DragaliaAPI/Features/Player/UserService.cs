@@ -214,7 +214,7 @@ public partial class UserService(
 
         if (experience == 0)
         {
-            return new PlayerLevelResult();
+            return new();
         }
 
         DbPlayerUserData data = await userDataRepository.GetUserDataAsync();
@@ -261,7 +261,7 @@ public partial class UserService(
             current = next;
         }
 
-        return new PlayerLevelResult(totalReward > 0, data.Level, expGained, totalReward);
+        return new(totalReward > 0, data.Level, expGained, totalReward);
     }
 
     private static partial class Log

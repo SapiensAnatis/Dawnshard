@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Database;
-using DragaliaAPI.Features.Album;
 using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.CoOp;
@@ -7,14 +6,9 @@ using DragaliaAPI.Features.CoOp.Stamps;
 using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.DmodeDungeon;
 using DragaliaAPI.Features.Dragons;
-using DragaliaAPI.Features.Dungeon;
-using DragaliaAPI.Features.Dungeon.AutoRepeat;
-using DragaliaAPI.Features.Dungeon.Record;
-using DragaliaAPI.Features.Dungeon.Start;
 using DragaliaAPI.Features.Emblem;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Fort;
-using DragaliaAPI.Features.Friends;
 using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Login.Auth;
 using DragaliaAPI.Features.Login.Savefile;
@@ -36,7 +30,6 @@ using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Infrastructure.Authentication;
 using DragaliaAPI.Infrastructure.Metrics;
 using DragaliaAPI.Infrastructure.Middleware;
-using DragaliaAPI.Models.Generated;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -53,10 +46,7 @@ namespace DragaliaAPI;
 
 public static class ServiceConfiguration
 {
-    public static IServiceCollection ConfigureGameServices(
-        this IServiceCollection services,
-        IConfiguration configuration
-    )
+    public static IServiceCollection ConfigureGameServices(this IServiceCollection services)
     {
         services
             .AddScoped<ISessionService, SessionService>()

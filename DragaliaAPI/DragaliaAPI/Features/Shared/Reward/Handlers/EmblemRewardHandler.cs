@@ -18,7 +18,9 @@ public class EmblemRewardHandler(IEmblemRepository repository) : IRewardHandler
         Emblems emblem = (Emblems)entity.Id;
 
         if (!Enum.IsDefined(emblem))
+        {
             throw new ArgumentException("Entity ID is not a valid emblem", nameof(entity));
+        }
 
         if (!await repository.HasEmblem(emblem))
         {

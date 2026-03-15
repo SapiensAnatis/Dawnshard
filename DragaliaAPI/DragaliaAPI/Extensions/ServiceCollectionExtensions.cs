@@ -18,7 +18,7 @@ public static class ServiceCollectionExtensions
                 && !type.IsAbstract
             )
             {
-                serviceCollection.Add(new ServiceDescriptor(typeof(TInterface), type, lifetime));
+                serviceCollection.Add(new(typeof(TInterface), type, lifetime));
             }
         }
 

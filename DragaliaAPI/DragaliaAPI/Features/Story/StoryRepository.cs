@@ -48,7 +48,7 @@ public partial class StoryRepository : IStoryRepository
 
             state = this
                 .apiContext.PlayerStoryState.Add(
-                    new DbPlayerStoryState
+                    new()
                     {
                         ViewerId = this.playerIdentityService.ViewerId,
                         StoryId = storyId,

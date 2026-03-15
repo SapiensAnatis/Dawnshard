@@ -49,10 +49,9 @@ public class ShopController : DragaliaControllerBase
             ProductLockList = new List<AtgenProductLockList>(),
             ProductList = new List<ProductList>(),
             InfancyPaidDiamondLimit = 4800,
+            UserItemSummon = await this.itemSummonService.GetItemSummon(),
+            UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken),
         };
-
-        response.UserItemSummon = await this.itemSummonService.GetItemSummon();
-        response.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(response);
     }
@@ -69,13 +68,13 @@ public class ShopController : DragaliaControllerBase
         CancellationToken cancellationToken
     )
     {
-        ShopItemSummonExecResponse resp = new();
-
-        resp.ItemSummonRewardList = await this.itemSummonService.DoSummon(request);
-        resp.UserItemSummon = await this.itemSummonService.GetItemSummon();
-        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
-
-        resp.EntityResult = this.rewardService.GetEntityResult();
+        ShopItemSummonExecResponse resp = new()
+        {
+            ItemSummonRewardList = await this.itemSummonService.DoSummon(request),
+            UserItemSummon = await this.itemSummonService.GetItemSummon(),
+            UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken),
+            EntityResult = this.rewardService.GetEntityResult(),
+        };
 
         return Ok(resp);
     }
@@ -86,16 +85,16 @@ public class ShopController : DragaliaControllerBase
         CancellationToken cancellationToken
     )
     {
-        ShopMaterialShopPurchaseResponse resp = new();
-
-        resp.MaterialShopPurchase = await this.shopService.DoPurchase(
-            request.ShopType.ToShopType(),
-            request.PaymentType,
-            request.GoodsId,
-            request.Quantity
-        );
-
-        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
+        ShopMaterialShopPurchaseResponse resp = new()
+        {
+            MaterialShopPurchase = await this.shopService.DoPurchase(
+                request.ShopType.ToShopType(),
+                request.PaymentType,
+                request.GoodsId,
+                request.Quantity
+            ),
+            UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken),
+        };
 
         return Ok(resp);
     }
@@ -106,16 +105,16 @@ public class ShopController : DragaliaControllerBase
         CancellationToken cancellationToken
     )
     {
-        ShopNormalShopPurchaseResponse resp = new();
-
-        resp.NormalShopPurchase = await this.shopService.DoPurchase(
-            ShopType.Normal,
-            request.PaymentType,
-            request.GoodsId,
-            request.Quantity
-        );
-
-        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
+        ShopNormalShopPurchaseResponse resp = new()
+        {
+            NormalShopPurchase = await this.shopService.DoPurchase(
+                ShopType.Normal,
+                request.PaymentType,
+                request.GoodsId,
+                request.Quantity
+            ),
+            UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken),
+        };
 
         return Ok(resp);
     }
@@ -126,16 +125,16 @@ public class ShopController : DragaliaControllerBase
         CancellationToken cancellationToken
     )
     {
-        ShopSpecialShopPurchaseResponse resp = new();
-
-        resp.SpecialShopPurchase = await this.shopService.DoPurchase(
-            ShopType.Special,
-            request.PaymentType,
-            request.GoodsId,
-            request.Quantity
-        );
-
-        resp.UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken);
+        ShopSpecialShopPurchaseResponse resp = new()
+        {
+            SpecialShopPurchase = await this.shopService.DoPurchase(
+                ShopType.Special,
+                request.PaymentType,
+                request.GoodsId,
+                request.Quantity
+            ),
+            UpdateDataList = await this.updateDataService.SaveChangesAsync(cancellationToken),
+        };
 
         return Ok(resp);
     }

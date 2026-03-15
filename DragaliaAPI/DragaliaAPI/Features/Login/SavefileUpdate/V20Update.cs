@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Shared.Definitions.Enums;

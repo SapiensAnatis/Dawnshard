@@ -23,21 +23,19 @@ public class DmodeController(
     [HttpPost("get_data")]
     public async Task<DragaliaResult> GetData(CancellationToken cancellationToken)
     {
-        DmodeGetDataResponse resp = new();
-
-        resp.CurrentServerTime = dateTimeProvider.GetUtcNow();
-
-        resp.DmodeInfo = await dmodeService.GetInfo();
-        resp.DmodeCharaList = await dmodeService.GetCharaList();
-        resp.DmodeExpedition = await dmodeService.GetExpedition();
-        resp.DmodeDungeonInfo = await dmodeService.GetDungeonInfo();
-        resp.DmodeServitorPassiveList = await dmodeService.GetServitorPassiveList();
-
-        resp.DmodeStoryList = (
-            await storyRepository.DmodeStories.ToListAsync(cancellationToken)
-        ).Select(x => new DmodeStoryList(x.StoryId, x.State == StoryState.Read));
-
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+        DmodeGetDataResponse resp = new()
+        {
+            CurrentServerTime = dateTimeProvider.GetUtcNow(),
+            DmodeInfo = await dmodeService.GetInfo(),
+            DmodeCharaList = await dmodeService.GetCharaList(),
+            DmodeExpedition = await dmodeService.GetExpedition(),
+            DmodeDungeonInfo = await dmodeService.GetDungeonInfo(),
+            DmodeServitorPassiveList = await dmodeService.GetServitorPassiveList(),
+            DmodeStoryList = (
+                await storyRepository.DmodeStories.ToListAsync(cancellationToken)
+            ).Select(x => new DmodeStoryList(x.StoryId, x.State == StoryState.Read)),
+            UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken),
+        };
 
         return Ok(resp);
     }
@@ -58,15 +56,16 @@ public class DmodeController(
         CancellationToken cancellationToken
     )
     {
-        DmodeReadStoryResponse resp = new();
-
-        resp.DmodeStoryRewardList = await storyService.ReadStory(
-            StoryTypes.DungeonMode,
-            request.DmodeStoryId
-        );
-        resp.DuplicateEntityList = new List<AtgenDuplicateEntityList>();
-        resp.EntityResult = rewardService.GetEntityResult();
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+        DmodeReadStoryResponse resp = new()
+        {
+            DmodeStoryRewardList = await storyService.ReadStory(
+                StoryTypes.DungeonMode,
+                request.DmodeStoryId
+            ),
+            DuplicateEntityList = new List<AtgenDuplicateEntityList>(),
+            EntityResult = rewardService.GetEntityResult(),
+            UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken),
+        };
 
         return Ok(resp);
     }
@@ -77,12 +76,13 @@ public class DmodeController(
         CancellationToken cancellationToken
     )
     {
-        DmodeBuildupServitorPassiveResponse resp = new();
-
-        resp.DmodeServitorPassiveList = await dmodeService.BuildupServitorPassive(
-            request.RequestBuildupPassiveList
-        );
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+        DmodeBuildupServitorPassiveResponse resp = new()
+        {
+            DmodeServitorPassiveList = await dmodeService.BuildupServitorPassive(
+                request.RequestBuildupPassiveList
+            ),
+            UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken),
+        };
 
         return Ok(resp);
     }
@@ -93,13 +93,14 @@ public class DmodeController(
         CancellationToken cancellationToken
     )
     {
-        DmodeExpeditionStartResponse resp = new();
-
-        resp.DmodeExpedition = await dmodeService.StartExpedition(
-            request.TargetFloorNum,
-            request.CharaIdList
-        );
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+        DmodeExpeditionStartResponse resp = new()
+        {
+            DmodeExpedition = await dmodeService.StartExpedition(
+                request.TargetFloorNum,
+                request.CharaIdList
+            ),
+            UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken),
+        };
 
         return Ok(resp);
     }

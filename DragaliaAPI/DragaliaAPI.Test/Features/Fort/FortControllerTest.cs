@@ -88,7 +88,7 @@ public class FortControllerTest
     [Fact]
     public async Task AddCarpenter_AddsCarpenter()
     {
-        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        UpdateDataList updateDataList = new() { BuildList = new() };
         FortDetail detail = new() { WorkingCarpenterNum = 4 };
 
         mockFortService
@@ -102,7 +102,7 @@ public class FortControllerTest
 
         FortAddCarpenterResponse data = (
             await fortController.AddCarpenter(
-                new FortAddCarpenterRequest() { PaymentType = PaymentTypes.Diamantium },
+                new() { PaymentType = PaymentTypes.Diamantium },
                 TestContext.Current.CancellationToken
             )
         ).GetData<FortAddCarpenterResponse>()!;
@@ -118,7 +118,7 @@ public class FortControllerTest
     [Fact]
     public async Task BuildAtOnce_CallsBuildAtOnce()
     {
-        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        UpdateDataList updateDataList = new() { BuildList = new() };
         FortBonusList bonusList = new() { AllBonus = new(2, 3) };
         FortDetail detail = new() { WorkingCarpenterNum = 4 };
 
@@ -149,11 +149,7 @@ public class FortControllerTest
 
         FortBuildAtOnceResponse data = (
             await fortController.BuildAtOnce(
-                new FortBuildAtOnceRequest()
-                {
-                    PaymentType = PaymentTypes.HalidomHustleHammer,
-                    BuildId = 8,
-                },
+                new() { PaymentType = PaymentTypes.HalidomHustleHammer, BuildId = 8 },
                 TestContext.Current.CancellationToken
             )
         ).GetData<FortBuildAtOnceResponse>()!;
@@ -172,7 +168,7 @@ public class FortControllerTest
     [Fact]
     public async Task BuildCancel_CallsCancelBuild()
     {
-        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        UpdateDataList updateDataList = new() { BuildList = new() };
         FortDetail detail = new() { WorkingCarpenterNum = 4 };
 
         mockFortService
@@ -186,7 +182,7 @@ public class FortControllerTest
 
         FortBuildCancelResponse data = (
             await fortController.BuildCancel(
-                new FortBuildCancelRequest() { BuildId = 1 },
+                new() { BuildId = 1 },
                 TestContext.Current.CancellationToken
             )
         ).GetData<FortBuildCancelResponse>()!;
@@ -203,7 +199,7 @@ public class FortControllerTest
     [Fact]
     public async Task BuildEnd_CallsEndBuild()
     {
-        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        UpdateDataList updateDataList = new() { BuildList = new() };
         FortBonusList bonusList = new() { AllBonus = new(2, 3) };
         FortDetail detail = new() { WorkingCarpenterNum = 4 };
 
@@ -232,7 +228,7 @@ public class FortControllerTest
 
         FortBuildEndResponse data = (
             await fortController.BuildEnd(
-                new FortBuildEndRequest() { BuildId = 8 },
+                new() { BuildId = 8 },
                 TestContext.Current.CancellationToken
             )
         ).GetData<FortBuildEndResponse>()!;
@@ -251,7 +247,7 @@ public class FortControllerTest
     [Fact]
     public async Task BuildStart_CallsBuildStart()
     {
-        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        UpdateDataList updateDataList = new() { BuildList = new() };
         FortDetail detail = new() { WorkingCarpenterNum = 4 };
         DbFortBuild build = new()
         {
@@ -272,7 +268,7 @@ public class FortControllerTest
 
         FortBuildStartResponse data = (
             await fortController.BuildStart(
-                new FortBuildStartRequest()
+                new()
                 {
                     FortPlantId = FortPlants.BroadleafTree,
                     PositionX = 2,
@@ -297,7 +293,7 @@ public class FortControllerTest
     [Fact]
     public async Task LevelupAtOnce_CallsLevelupAtOnce()
     {
-        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        UpdateDataList updateDataList = new() { BuildList = new() };
         FortBonusList bonusList = new() { AllBonus = new(2, 3) };
         FortDetail detail = new() { WorkingCarpenterNum = 4 };
 
@@ -329,11 +325,7 @@ public class FortControllerTest
 
         FortLevelupAtOnceResponse data = (
             await fortController.LevelupAtOnce(
-                new FortLevelupAtOnceRequest()
-                {
-                    PaymentType = PaymentTypes.HalidomHustleHammer,
-                    BuildId = 8,
-                },
+                new() { PaymentType = PaymentTypes.HalidomHustleHammer, BuildId = 8 },
                 TestContext.Current.CancellationToken
             )
         ).GetData<FortLevelupAtOnceResponse>()!;
@@ -354,7 +346,7 @@ public class FortControllerTest
     [Fact]
     public async Task LevelupCancel_CallsCancelLevelup()
     {
-        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        UpdateDataList updateDataList = new() { BuildList = new() };
         FortDetail detail = new() { WorkingCarpenterNum = 4 };
 
         mockFortService
@@ -368,7 +360,7 @@ public class FortControllerTest
 
         FortLevelupCancelResponse data = (
             await fortController.LevelupCancel(
-                new FortLevelupCancelRequest() { BuildId = 1 },
+                new() { BuildId = 1 },
                 TestContext.Current.CancellationToken
             )
         ).GetData<FortLevelupCancelResponse>()!;
@@ -385,7 +377,7 @@ public class FortControllerTest
     [Fact]
     public async Task LevelupEnd_CallsEndLevelup()
     {
-        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        UpdateDataList updateDataList = new() { BuildList = new() };
         FortBonusList bonusList = new() { AllBonus = new(2, 3) };
         FortDetail detail = new() { WorkingCarpenterNum = 4 };
 
@@ -415,7 +407,7 @@ public class FortControllerTest
 
         FortLevelupEndResponse data = (
             await fortController.LevelupEnd(
-                new FortLevelupEndRequest() { BuildId = 8 },
+                new() { BuildId = 8 },
                 TestContext.Current.CancellationToken
             )
         ).GetData<FortLevelupEndResponse>()!;
@@ -436,7 +428,7 @@ public class FortControllerTest
     [Fact]
     public async Task LevelupStart_CallsBuildStart()
     {
-        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        UpdateDataList updateDataList = new() { BuildList = new() };
         FortDetail detail = new() { WorkingCarpenterNum = 4 };
         DbFortBuild build = new()
         {
@@ -457,7 +449,7 @@ public class FortControllerTest
 
         FortLevelupStartResponse data = (
             await fortController.LevelupStart(
-                new FortLevelupStartRequest() { BuildId = 1 },
+                new() { BuildId = 1 },
                 TestContext.Current.CancellationToken
             )
         ).GetData<FortLevelupStartResponse>()!;
@@ -477,7 +469,7 @@ public class FortControllerTest
     [Fact]
     public async Task Move_CallsMove()
     {
-        UpdateDataList updateDataList = new() { BuildList = new List<BuildList>() };
+        UpdateDataList updateDataList = new() { BuildList = new() };
         FortBonusList bonusList = new() { AllBonus = new(2, 3) };
 
         mockFortService
@@ -506,7 +498,7 @@ public class FortControllerTest
 
         FortMoveResponse data = (
             await fortController.Move(
-                new FortMoveRequest()
+                new()
                 {
                     BuildId = 1,
                     AfterPositionX = 2,

@@ -8,20 +8,21 @@ public static class MappingExtensions
 {
     private static readonly Expression<
         Func<DbPlayerHelper, SettingSupport>
-    > MapToSettingSupportExpression = x => new SettingSupport()
-    {
-        CharaId = x.CharaId,
-        EquipDragonKeyId = (ulong)(x.EquipDragonKeyId ?? 0),
-        EquipWeaponBodyId = x.EquipWeaponBodyId ?? 0,
-        EquipCrestSlotType1CrestId1 = x.EquipCrestSlotType1CrestId1 ?? 0,
-        EquipCrestSlotType1CrestId2 = x.EquipCrestSlotType1CrestId2 ?? 0,
-        EquipCrestSlotType1CrestId3 = x.EquipCrestSlotType1CrestId3 ?? 0,
-        EquipCrestSlotType2CrestId1 = x.EquipCrestSlotType2CrestId1 ?? 0,
-        EquipCrestSlotType2CrestId2 = x.EquipCrestSlotType2CrestId2 ?? 0,
-        EquipCrestSlotType3CrestId1 = x.EquipCrestSlotType3CrestId1 ?? 0,
-        EquipCrestSlotType3CrestId2 = x.EquipCrestSlotType3CrestId2 ?? 0,
-        EquipTalismanKeyId = (ulong)(x.EquipTalismanKeyId ?? 0),
-    };
+    > MapToSettingSupportExpression = x =>
+        new()
+        {
+            CharaId = x.CharaId,
+            EquipDragonKeyId = (ulong)(x.EquipDragonKeyId ?? 0),
+            EquipWeaponBodyId = x.EquipWeaponBodyId ?? 0,
+            EquipCrestSlotType1CrestId1 = x.EquipCrestSlotType1CrestId1 ?? 0,
+            EquipCrestSlotType1CrestId2 = x.EquipCrestSlotType1CrestId2 ?? 0,
+            EquipCrestSlotType1CrestId3 = x.EquipCrestSlotType1CrestId3 ?? 0,
+            EquipCrestSlotType2CrestId1 = x.EquipCrestSlotType2CrestId1 ?? 0,
+            EquipCrestSlotType2CrestId2 = x.EquipCrestSlotType2CrestId2 ?? 0,
+            EquipCrestSlotType3CrestId1 = x.EquipCrestSlotType3CrestId1 ?? 0,
+            EquipCrestSlotType3CrestId2 = x.EquipCrestSlotType3CrestId2 ?? 0,
+            EquipTalismanKeyId = (ulong)(x.EquipTalismanKeyId ?? 0),
+        };
 
     private static readonly Func<DbPlayerHelper, SettingSupport> MapToSettingSupportFunc =
         MapToSettingSupportExpression.Compile();
@@ -41,7 +42,7 @@ public static class MappingExtensions
     )
     {
         return helpers.Select(x => new HelperProjection(
-            new AtgenSupportChara()
+            new()
             {
                 CharaId = x.EquippedChara!.CharaId,
                 Level = x.EquippedChara.Level,
@@ -184,7 +185,7 @@ public static class MappingExtensions
                     AdditionalAttack = x.EquippedTalisman.AdditionalAttack,
                 }
                 : null,
-            new UserDataProjection(
+            new(
                 x.Owner!.UserData!.ViewerId,
                 x.Owner.UserData.Name,
                 x.Owner.UserData.Level,

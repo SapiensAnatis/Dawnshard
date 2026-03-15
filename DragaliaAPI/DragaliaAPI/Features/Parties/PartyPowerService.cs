@@ -122,7 +122,9 @@ public class PartyPowerService(
     )
     {
         if (charaId == 0)
+        {
             return 0;
+        }
 
         bonus ??= await bonusService.GetBonusList();
 
@@ -253,7 +255,9 @@ public class PartyPowerService(
     )
     {
         if (dbChara.CharaId == 0)
+        {
             return 0;
+        }
 
         CharaData charaData = MasterAsset.CharaData[dbChara.CharaId];
 
@@ -282,10 +286,14 @@ public class PartyPowerService(
         if (addSkillBonus)
         {
             if (editSkill1 != 0)
+            {
                 charaPowerParam += 100;
+            }
 
             if (editSkill2 != 0)
+            {
                 charaPowerParam += 100;
+            }
         }
 
         return charaPowerParam;
@@ -329,7 +337,9 @@ public class PartyPowerService(
     )
     {
         if (dbDragon == null || reliability == null || dragonData == null || rarity == null)
+        {
             return 0;
+        }
 
         int maxLevel = rarity.Id == 5 ? rarity.LimitLevel04 : rarity.MaxLimitLevel;
 
@@ -398,7 +408,9 @@ public class PartyPowerService(
     )
     {
         if (dbWeapon == null || weaponBody == null || weaponRarity == null)
+        {
             return 0;
+        }
 
         int weaponBodyHp = 0;
         int weaponBodyAtk = 0;
@@ -409,16 +421,18 @@ public class PartyPowerService(
         )
         {
             weaponBodyHp = CeilToInt(
-                (double)dbWeapon.BuildupCount
+                (
+                    (double)dbWeapon.BuildupCount
                     / weaponRarity.MaxLimitLevelByLimitBreak4
                     * (weaponBody.MaxHp1 - weaponBody.BaseHp)
-                    + weaponBody.BaseHp
+                ) + weaponBody.BaseHp
             );
             weaponBodyAtk = CeilToInt(
-                (double)dbWeapon.BuildupCount
+                (
+                    (double)dbWeapon.BuildupCount
                     / weaponRarity.MaxLimitLevelByLimitBreak4
                     * (weaponBody.MaxAtk1 - weaponBody.BaseAtk)
-                    + weaponBody.BaseAtk
+                ) + weaponBody.BaseAtk
             );
         }
         else if (
@@ -427,22 +441,24 @@ public class PartyPowerService(
         )
         {
             weaponBodyHp = CeilToInt(
-                (double)(dbWeapon.BuildupCount - weaponRarity.MaxLimitLevelByLimitBreak4)
+                (
+                    (double)(dbWeapon.BuildupCount - weaponRarity.MaxLimitLevelByLimitBreak4)
                     / (
                         weaponRarity.MaxLimitLevelByLimitBreak8
                         - weaponRarity.MaxLimitLevelByLimitBreak4
                     )
                     * (weaponBody.MaxHp2 - weaponBody.MaxHp1)
-                    + weaponBody.MaxHp1
+                ) + weaponBody.MaxHp1
             );
             weaponBodyAtk = CeilToInt(
-                (double)(dbWeapon.BuildupCount - weaponRarity.MaxLimitLevelByLimitBreak4)
+                (
+                    (double)(dbWeapon.BuildupCount - weaponRarity.MaxLimitLevelByLimitBreak4)
                     / (
                         weaponRarity.MaxLimitLevelByLimitBreak8
                         - weaponRarity.MaxLimitLevelByLimitBreak4
                     )
                     * (weaponBody.MaxAtk2 - weaponBody.MaxAtk1)
-                    + weaponBody.MaxAtk1
+                ) + weaponBody.MaxAtk1
             );
         }
         else if (
@@ -451,22 +467,24 @@ public class PartyPowerService(
         )
         {
             weaponBodyHp = CeilToInt(
-                (double)(dbWeapon.BuildupCount - weaponRarity.MaxLimitLevelByLimitBreak8)
+                (
+                    (double)(dbWeapon.BuildupCount - weaponRarity.MaxLimitLevelByLimitBreak8)
                     / (
                         weaponRarity.MaxLimitLevelByLimitBreak9
                         - weaponRarity.MaxLimitLevelByLimitBreak8
                     )
                     * (weaponBody.MaxHp3 - weaponBody.MaxHp2)
-                    + weaponBody.MaxHp2
+                ) + weaponBody.MaxHp2
             );
             weaponBodyAtk = CeilToInt(
-                (double)(dbWeapon.BuildupCount - weaponRarity.MaxLimitLevelByLimitBreak8)
+                (
+                    (double)(dbWeapon.BuildupCount - weaponRarity.MaxLimitLevelByLimitBreak8)
                     / (
                         weaponRarity.MaxLimitLevelByLimitBreak9
                         - weaponRarity.MaxLimitLevelByLimitBreak8
                     )
                     * (weaponBody.MaxAtk3 - weaponBody.MaxAtk2)
-                    + weaponBody.MaxAtk2
+                ) + weaponBody.MaxAtk2
             );
         }
 
@@ -478,11 +496,15 @@ public class PartyPowerService(
         int weaponBodyPowerParam = weaponPower + weaponSkillPower;
 
         if (dbWeapon.LimitOverCount >= 1)
+        {
             weaponBodyPowerParam += weaponBody.LimitOverCountPartyPower1;
+        }
 
         // funnily enough the only weapons that can reach limit over count 2, agito weapons, don't have stat boosts for it
         if (dbWeapon.LimitOverCount >= 2)
+        {
             weaponBodyPowerParam += weaponBody.LimitOverCountPartyPower2;
+        }
 
         return weaponBodyPowerParam;
     }
@@ -491,14 +513,18 @@ public class PartyPowerService(
     {
         int ability1Id = charaData.ExAbility[dbChara.ExAbilityLevel - 1];
         if (!MasterAsset.ExAbilityData.TryGetValue(ability1Id, out ExAbilityData? exAbilityData1))
+        {
             return 0;
+        }
 
         int power = exAbilityData1.PartyPowerWeight;
 
         // yes this is intentionally AbilityData
         int ability2Id = charaData.ExAbility2[dbChara.ExAbility2Level - 1];
         if (!MasterAsset.AbilityData.TryGetValue(ability2Id, out AbilityData? exAbilityData2))
+        {
             return power;
+        }
 
         return power + exAbilityData2.PartyPowerWeight;
     }
@@ -522,10 +548,14 @@ public class PartyPowerService(
             foreach ((int count, int abilityId, int power) in ability.Abilities)
             {
                 if (abilityId == 0)
+                {
                     break;
+                }
 
                 if (unionCrestCount >= count)
+                {
                     maxPower = power;
+                }
             }
 
             totalPower += maxPower;
@@ -598,20 +628,26 @@ public class PartyPowerService(
     )
     {
         if (id == 0)
+        {
             return (0, 0);
+        }
 
         AbilityCrest crest = MasterAsset.AbilityCrest[id];
         AbilityCrestRarity rarity = MasterAsset.AbilityCrestRarity[crest.Rarity];
 
         if (buildup == 0)
+        {
             return (crest.BaseAtk + atkPlus, crest.BaseHp + hpPlus);
+        }
 
         int atkDiff = crest.MaxAtk - crest.BaseAtk;
         int hpDiff = crest.MaxHp - crest.BaseHp;
 
         double multiplier = buildup;
         if (buildup > rarity.MaxLimitLevelByLimitBreak4)
+        {
             multiplier = rarity.MaxLimitLevelByLimitBreak4;
+        }
 
         int atk =
             crest.BaseAtk
@@ -650,7 +686,7 @@ file record BonusParams(double FortAtk, double FortHp, double AlbumAtk, double A
             x.ElementalType == data.ElementalType
         );
 
-        return new BonusParams(atk, hp, albumBonus.Attack / 100.0, albumBonus.Hp / 100.0);
+        return new(atk, hp, albumBonus.Attack / 100.0, albumBonus.Hp / 100.0);
     }
 
     public static BonusParams GetBonus(ref FortBonusList bonus, DragonId dragonId)
@@ -668,6 +704,6 @@ file record BonusParams(double FortAtk, double FortHp, double AlbumAtk, double A
             x.ElementalType == data.ElementalType
         );
 
-        return new BonusParams(atk, hp, albumBonus.Attack / 100.0, albumBonus.Hp / 100.0);
+        return new(atk, hp, albumBonus.Attack / 100.0, albumBonus.Hp / 100.0);
     }
 };

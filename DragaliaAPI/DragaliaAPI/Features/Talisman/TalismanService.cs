@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Shared.Reward;
@@ -39,11 +38,11 @@ public partial class TalismanService(
             }
 
             unitRepository.RemoveTalisman(talisman);
-            await rewardService.GrantReward(new Entity(EntityTypes.Rupies, 0, TalismanCoinReward));
+            await rewardService.GrantReward(new(EntityTypes.Rupies, 0, TalismanCoinReward));
             deletedTalismanIds.Add(talisman.TalismanKeyId);
         }
 
-        return new DeleteDataList
+        return new()
         {
             DeleteTalismanList = deletedTalismanIds.Select(x => new AtgenDeleteTalismanList(x)),
         };

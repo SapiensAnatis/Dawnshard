@@ -12,7 +12,9 @@ public class CodeStringBuilder
     public void DecreaseIndent()
     {
         if (this.indentLevel == 0)
+        {
             return;
+        }
 
         this.indentLevel--;
     }
@@ -21,7 +23,7 @@ public class CodeStringBuilder
 
     public void AppendLine(string value)
     {
-        string indent = new string(' ', this.indentLevel * 4);
+        string indent = new(' ', this.indentLevel * 4);
         string indentedValue = value.Replace("\n", $"\n{indent}");
 
         this.stringBuilder.AppendLine($"{indent}{indentedValue}");
@@ -29,7 +31,7 @@ public class CodeStringBuilder
 
     public void Append(string value)
     {
-        string indent = new string(' ', this.indentLevel * 4);
+        string indent = new(' ', this.indentLevel * 4);
         string indentedValue = value.Replace("\n", $"\n{indent}");
 
         this.stringBuilder.Append($"{indent}{indentedValue}");

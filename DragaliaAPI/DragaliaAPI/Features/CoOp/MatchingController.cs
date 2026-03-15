@@ -17,7 +17,8 @@ public partial class MatchingController : DragaliaControllerBase
     }
 
     [HttpPost("get_room_list")]
-    public async Task<DragaliaResult> GetRoomList(MatchingGetRoomListRequest request)
+    public async Task<DragaliaResult> GetRoomList( /* MatchingGetRoomListRequest request */
+    )
     {
         return this.Ok(
             new MatchingGetRoomListResponse()
@@ -56,7 +57,8 @@ public partial class MatchingController : DragaliaControllerBase
     }
 
     [HttpPost("check_penalty_user")]
-    public DragaliaResult CheckPenaltyUser(MatchingCheckPenaltyUserRequest request)
+    public DragaliaResult CheckPenaltyUser( /* MatchingCheckPenaltyUserRequest request */
+    )
     {
         return this.Ok(new MatchingCheckPenaltyUserResponse() { Result = 1 });
     }

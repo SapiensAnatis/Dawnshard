@@ -12,7 +12,9 @@ string resourcesPath = args[^1];
 
 // Get legacy missions
 foreach (MissionProgressionInfo mission in V1Missions.V1MissionList)
+{
     missions[mission.Id] = mission;
+}
 
 IEnumerable<Type> types = Assembly
     .GetExecutingAssembly()
@@ -71,7 +73,7 @@ foreach ((_, MissionProgressionInfo progInfo) in missions)
     {
         UnlockedOnComplete =
         [
-            .. (missions[requiredMissionId].UnlockedOnComplete ?? []),
+            .. missions[requiredMissionId].UnlockedOnComplete ?? [],
             progInfo.MissionId,
         ],
     };

@@ -11,7 +11,7 @@ public static class TreasureTradeMapper
         long viewerId
     )
     {
-        return new DbPlayerTrade()
+        return new()
         {
             ViewerId = viewerId,
             Id = tradeList.TreasureTradeId,

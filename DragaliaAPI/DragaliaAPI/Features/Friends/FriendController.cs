@@ -219,6 +219,7 @@ internal sealed class FriendController(
         {
             return this.Code(ResultCode.FriendCountLimit);
         }
+
         if (selfLimit.RequestLimitExceeded)
         {
             return this.Code(ResultCode.FriendApplyCountLimit);
@@ -230,6 +231,7 @@ internal sealed class FriendController(
         {
             return this.Code(ResultCode.FriendCountOtherLimit);
         }
+
         if (otherLimit.RequestLimitExceeded)
         {
             return this.Code(ResultCode.FriendApplyCountOtherLimit);

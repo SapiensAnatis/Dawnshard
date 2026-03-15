@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using DragaliaAPI.Database.Repositories;
@@ -59,7 +58,9 @@ public static partial class DatabaseConfiguration
         ApiContext context = scope.ServiceProvider.GetRequiredService<ApiContext>();
 
         if (!context.Database.IsRelational())
+        {
             return;
+        }
 
         int tries = 0;
 
@@ -89,7 +90,9 @@ public static partial class DatabaseConfiguration
         Log.PendingMigrations(app.Logger, pendingMigrations);
 
         if (!pendingMigrations.Any())
+        {
             return;
+        }
 
         context.Database.Migrate();
     }

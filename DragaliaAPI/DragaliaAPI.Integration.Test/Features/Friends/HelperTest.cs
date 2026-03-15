@@ -3,7 +3,6 @@ using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Infrastructure.Results;
-using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Caching.Distributed;
@@ -672,7 +671,7 @@ public class HelperTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IList<AtgenEnemy>>(),
+                EnemyList = new(),
                 SupportViewerId = (ulong)helperViewerId,
             }
         );
@@ -682,7 +681,7 @@ public class HelperTest : TestFixture
         DungeonRecordRecordRequest request = new()
         {
             DungeonKey = dungeonKey,
-            PlayRecord = new PlayRecord
+            PlayRecord = new()
             {
                 Time = 10,
                 TreasureRecord = new List<AtgenTreasureRecord>()
@@ -692,7 +691,7 @@ public class HelperTest : TestFixture
                 LiveUnitNoList = new List<int>(),
                 DamageRecord = [],
                 DragonDamageRecord = [],
-                BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                BattleRoyalRecord = new(),
             },
         };
 
@@ -736,7 +735,7 @@ public class HelperTest : TestFixture
                     new() { CharaId = player.CharaList.First().CharaId },
                 },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IList<AtgenEnemy>>(),
+                EnemyList = new(),
             }
         );
 
@@ -745,7 +744,7 @@ public class HelperTest : TestFixture
         DungeonRecordRecordRequest request = new()
         {
             DungeonKey = dungeonKey,
-            PlayRecord = new PlayRecord
+            PlayRecord = new()
             {
                 Time = 10,
                 TreasureRecord = new List<AtgenTreasureRecord>()
@@ -755,7 +754,7 @@ public class HelperTest : TestFixture
                 LiveUnitNoList = new List<int>(),
                 DamageRecord = [],
                 DragonDamageRecord = [],
-                BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                BattleRoyalRecord = new(),
             },
         };
 

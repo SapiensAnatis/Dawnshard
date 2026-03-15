@@ -23,11 +23,11 @@ public class GameBase : IGame
     public int QuestId { get; set; }
 
     /// <inheritdoc/>
-    public EntryConditions EntryConditions { get; set; } = new EntryConditions();
+    public EntryConditions EntryConditions { get; set; } = new();
 
     /// <inheritdoc/>
     public DateTimeOffset StartEntryTime { get; set; } = DateTimeOffset.UtcNow;
 
     /// <inheritdoc/>
-    public List<Player> Players { get; set; } = new List<Player>();
+    public List<Player> Players { get; set; } = new();
 }

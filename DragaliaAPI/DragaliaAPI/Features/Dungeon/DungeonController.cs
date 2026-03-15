@@ -99,16 +99,16 @@ public partial class DungeonController(
         CancellationToken cancellationToken
     )
     {
-        DungeonReceiveQuestBonusResponse resp = new();
-
-        resp.ReceiveQuestBonus = await questService.ReceiveQuestBonus(
-            request.QuestEventId,
-            request.IsReceive,
-            request.ReceiveBonusCount
-        );
-
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
-        resp.EntityResult = rewardService.GetEntityResult();
+        DungeonReceiveQuestBonusResponse resp = new()
+        {
+            ReceiveQuestBonus = await questService.ReceiveQuestBonus(
+                request.QuestEventId,
+                request.IsReceive,
+                request.ReceiveBonusCount
+            ),
+            UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken),
+            EntityResult = rewardService.GetEntityResult(),
+        };
 
         return Ok(resp);
     }

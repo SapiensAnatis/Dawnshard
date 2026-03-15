@@ -5,7 +5,6 @@ using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Weapons;
 using DragaliaAPI.Infrastructure.Results;
-using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -21,7 +20,7 @@ public class WeaponServiceTest
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
 
-    private static Dictionary<Materials, int> InfernoApogeePassive1Map = new()
+    private static readonly Dictionary<Materials, int> InfernoApogeePassive1Map = new()
     {
         { Materials.Granite, 80 },
         { Materials.OldCloth, 30 },
@@ -30,13 +29,13 @@ public class WeaponServiceTest
         { Materials.BlazeOrb, 8 },
     };
 
-    private static Dictionary<Materials, int> MjolnirBuildup40Map = new()
+    private static readonly Dictionary<Materials, int> MjolnirBuildup40Map = new()
     {
         { Materials.BronzeWhetstone, 5 },
         { Materials.GoldWhetstone, 5 },
     };
 
-    private static Dictionary<Materials, int> PrimalHexUnbind5Map = new()
+    private static readonly Dictionary<Materials, int> PrimalHexUnbind5Map = new()
     {
         { Materials.PrimalShadowwyrmsSphere, 8 },
         { Materials.PrimalShadowwyrmsGreatsphere, 5 },
@@ -44,7 +43,7 @@ public class WeaponServiceTest
         { Materials.Orichalcum, 1 },
     };
 
-    private static Dictionary<Materials, int> PrimalHexWeaponBonusMap = new()
+    private static readonly Dictionary<Materials, int> PrimalHexWeaponBonusMap = new()
     {
         { Materials.PrimalShadowwyrmsSphere, 25 },
         { Materials.PrimalShadowwyrmsGreatsphere, 25 },
@@ -52,7 +51,7 @@ public class WeaponServiceTest
         { Materials.Orichalcum, 15 },
     };
 
-    private static Dictionary<Materials, int> AmeNoMurakumoRefineMap = new()
+    private static readonly Dictionary<Materials, int> AmeNoMurakumoRefineMap = new()
     {
         { Materials.SoaringOnesMaskFragment, 40 },
         { Materials.LiberatedOnesMaskFragment, 30 },
@@ -71,7 +70,7 @@ public class WeaponServiceTest
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockMissionProgressionService = new(MockBehavior.Strict);
 
-        this.weaponService = new WeaponService(
+        this.weaponService = new(
             this.mockWeaponRepository.Object,
             this.mockInventoryRepository.Object,
             this.mockFortRepository.Object,
@@ -302,7 +301,7 @@ public class WeaponServiceTest
         (
             await this.weaponService.TryBuildup(
                 body,
-                new AtgenBuildupWeaponBodyPieceList()
+                new()
                 {
                     BuildupPieceType = BuildupPieceTypes.Passive,
                     BuildupPieceNo = 4000,
@@ -329,7 +328,7 @@ public class WeaponServiceTest
         (
             await this.weaponService.TryBuildup(
                 body,
-                new AtgenBuildupWeaponBodyPieceList()
+                new()
                 {
                     BuildupPieceType = BuildupPieceTypes.Passive,
                     BuildupPieceNo = 1,
@@ -359,7 +358,7 @@ public class WeaponServiceTest
         (
             await this.weaponService.TryBuildup(
                 body,
-                new AtgenBuildupWeaponBodyPieceList()
+                new()
                 {
                     BuildupPieceType = BuildupPieceTypes.Passive,
                     BuildupPieceNo = 1,
@@ -392,7 +391,7 @@ public class WeaponServiceTest
         (
             await this.weaponService.TryBuildup(
                 body,
-                new AtgenBuildupWeaponBodyPieceList()
+                new()
                 {
                     BuildupPieceType = BuildupPieceTypes.Passive,
                     BuildupPieceNo = 1,
@@ -450,7 +449,7 @@ public class WeaponServiceTest
         (
             await this.weaponService.TryBuildup(
                 body,
-                new AtgenBuildupWeaponBodyPieceList()
+                new()
                 {
                     BuildupPieceType = BuildupPieceTypes.Passive,
                     BuildupPieceNo = 1,
@@ -476,7 +475,7 @@ public class WeaponServiceTest
         (
             await this.weaponService.TryBuildup(
                 body,
-                new AtgenBuildupWeaponBodyPieceList()
+                new()
                 {
                     BuildupPieceType = BuildupPieceTypes.Stats,
                     BuildupPieceNo = 1,
@@ -506,7 +505,7 @@ public class WeaponServiceTest
         (
             await this.weaponService.TryBuildup(
                 body,
-                new AtgenBuildupWeaponBodyPieceList()
+                new()
                 {
                     BuildupPieceType = BuildupPieceTypes.Stats,
                     BuildupPieceNo = 1,
@@ -538,7 +537,7 @@ public class WeaponServiceTest
         (
             await this.weaponService.TryBuildup(
                 body,
-                new AtgenBuildupWeaponBodyPieceList()
+                new()
                 {
                     BuildupPieceType = BuildupPieceTypes.Stats,
                     BuildupPieceNo = 1,
@@ -578,7 +577,7 @@ public class WeaponServiceTest
         (
             await this.weaponService.TryBuildup(
                 body,
-                new AtgenBuildupWeaponBodyPieceList()
+                new()
                 {
                     BuildupPieceType = BuildupPieceTypes.Stats,
                     BuildupPieceNo = 1,
@@ -601,7 +600,7 @@ public class WeaponServiceTest
         (
             await this.weaponService.TryBuildup(
                 body,
-                new AtgenBuildupWeaponBodyPieceList()
+                new()
                 {
                     BuildupPieceType = BuildupPieceTypes.Unbind,
                     BuildupPieceNo = 1,
@@ -628,7 +627,7 @@ public class WeaponServiceTest
         (
             await this.weaponService.TryBuildup(
                 body,
-                new AtgenBuildupWeaponBodyPieceList()
+                new()
                 {
                     BuildupPieceType = BuildupPieceTypes.Unbind,
                     BuildupPieceNo = 1,
@@ -658,7 +657,7 @@ public class WeaponServiceTest
         (
             await this.weaponService.TryBuildup(
                 body,
-                new AtgenBuildupWeaponBodyPieceList()
+                new()
                 {
                     BuildupPieceType = BuildupPieceTypes.Unbind,
                     BuildupPieceNo = 1,
@@ -691,7 +690,7 @@ public class WeaponServiceTest
         (
             await this.weaponService.TryBuildup(
                 body,
-                new AtgenBuildupWeaponBodyPieceList()
+                new()
                 {
                     BuildupPieceType = BuildupPieceTypes.WeaponBonus,
                     BuildupPieceNo = 1,
@@ -742,7 +741,7 @@ public class WeaponServiceTest
         (
             await this.weaponService.TryBuildup(
                 body,
-                new AtgenBuildupWeaponBodyPieceList()
+                new()
                 {
                     BuildupPieceType = pieceType,
                     BuildupPieceNo = 1,
@@ -793,7 +792,7 @@ public class WeaponServiceTest
         (
             await this.weaponService.TryBuildup(
                 body,
-                new AtgenBuildupWeaponBodyPieceList()
+                new()
                 {
                     BuildupPieceType = BuildupPieceTypes.Unbind,
                     BuildupPieceNo = 1,
@@ -848,7 +847,7 @@ public class WeaponServiceTest
         (
             await this.weaponService.TryBuildup(
                 body,
-                new AtgenBuildupWeaponBodyPieceList()
+                new()
                 {
                     BuildupPieceType = BuildupPieceTypes.Unbind,
                     BuildupPieceNo = 1,
@@ -921,7 +920,7 @@ public class WeaponServiceTest
         (
             await this.weaponService.TryBuildup(
                 body,
-                new AtgenBuildupWeaponBodyPieceList()
+                new()
                 {
                     BuildupPieceType = pieceType,
                     BuildupPieceNo = 1,
@@ -987,7 +986,7 @@ public class WeaponServiceTest
         (
             await this.weaponService.TryBuildup(
                 body,
-                new AtgenBuildupWeaponBodyPieceList()
+                new()
                 {
                     BuildupPieceType = BuildupPieceTypes.Refine,
                     BuildupPieceNo = 1,
@@ -1016,12 +1015,16 @@ public class WeaponServiceTest
     )
     {
         if (input.Count != expected.Count)
+        {
             return false;
+        }
 
         foreach ((Materials material, int quantity) in input)
         {
             if (expected[material] != quantity)
+            {
                 return false;
+            }
         }
 
         return true;

@@ -12,9 +12,7 @@ public class ItemController(IUpdateDataService updateDataService, IItemService i
     [HttpPost("get_list")]
     public async Task<DragaliaResult> GetList()
     {
-        ItemGetListResponse resp = new();
-
-        resp.ItemList = await itemService.GetItemList();
+        ItemGetListResponse resp = new() { ItemList = await itemService.GetItemList() };
 
         return Ok(resp);
     }
@@ -25,11 +23,12 @@ public class ItemController(IUpdateDataService updateDataService, IItemService i
         CancellationToken cancellationToken
     )
     {
-        ItemUseRecoveryStaminaResponse resp = new();
-
-        resp.RecoverData = await itemService.UseItems(request.UseItemList);
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
-        resp.EntityResult = new EntityResult();
+        ItemUseRecoveryStaminaResponse resp = new()
+        {
+            RecoverData = await itemService.UseItems(request.UseItemList),
+            UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken),
+            EntityResult = new(),
+        };
 
         return Ok(resp);
     }

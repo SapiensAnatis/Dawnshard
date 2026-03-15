@@ -1,9 +1,7 @@
 using DragaliaAPI.Database;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Shared.PlayerDetails;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NSubstitute;
@@ -35,7 +33,7 @@ public class TimeAttackServiceTest
         // nor will they ever, because we don't test at this level much anymore.
         this.substituteApiContext = null!;
 
-        this.timeAttackService = new TimeAttackService(
+        this.timeAttackService = new(
             this.substituteCacheService,
             this.substituteRepository,
             this.substituteOptions,

@@ -178,7 +178,7 @@ public class FortController : DragaliaControllerBase
             FortDetail = fortDetail,
             UpdateDataList = updateDataList,
             EntityResult =
-                new EntityResult() // What does it do?
+                new() // What does it do?
             ,
         };
         return Ok(data);
@@ -196,15 +196,15 @@ public class FortController : DragaliaControllerBase
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
-        (int HalidomLevel, int SmithyLevel) levels = await this.fortService.GetCoreLevels();
+        (int halidomLevel, int smithyLevel) = await this.fortService.GetCoreLevels();
         FortDetail fortDetail = await fortService.GetFortDetail();
 
         FortLevelupAtOnceResponse data = new()
         {
             Result = 1,
             BuildId = request.BuildId,
-            CurrentFortLevel = levels.HalidomLevel,
-            CurrentFortCraftLevel = levels.SmithyLevel,
+            CurrentFortLevel = halidomLevel,
+            CurrentFortCraftLevel = smithyLevel,
             FortBonusList = bonusList,
             ProductionRp = await this.fortService.GetRupieProduction(),
             ProductionSt = await this.fortService.GetStaminaProduction(),
@@ -248,15 +248,15 @@ public class FortController : DragaliaControllerBase
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
-        (int HalidomLevel, int SmithyLevel) levels = await this.fortService.GetCoreLevels();
+        (int halidomLevel, int smithyLevel) = await this.fortService.GetCoreLevels();
         FortDetail fortDetail = await fortService.GetFortDetail();
 
         FortLevelupEndResponse data = new()
         {
             Result = 1,
             BuildId = request.BuildId,
-            CurrentFortLevel = levels.HalidomLevel,
-            CurrentFortCraftLevel = levels.SmithyLevel,
+            CurrentFortLevel = halidomLevel,
+            CurrentFortCraftLevel = smithyLevel,
             FortBonusList = bonusList,
             ProductionRp = await this.fortService.GetRupieProduction(),
             ProductionSt = await this.fortService.GetStaminaProduction(),

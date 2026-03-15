@@ -18,24 +18,25 @@ public class ToolControllerTest
     {
         this.mockAuthService = Substitute.For<IAuthService>();
 
-        this.toolController = new(this.mockAuthService);
-
-        this.toolController.ControllerContext = new()
+        this.toolController = new(this.mockAuthService)
         {
-            HttpContext = new DefaultHttpContext()
+            ControllerContext = new()
             {
-                User = new(
-                    new ClaimsIdentity(
-                        new List<Claim>()
+                HttpContext = new DefaultHttpContext()
+                {
+                    User = new(
+                        new ClaimsIdentity(
+                            new List<Claim>()
+                            {
+                                new(CustomClaimType.AccountId, "AccountId"),
+                                new(CustomClaimType.ViewerId, "1"),
+                            }
+                        )
                         {
-                            new Claim(CustomClaimType.AccountId, "AccountId"),
-                            new Claim(CustomClaimType.ViewerId, "1"),
+                            Label = AuthConstants.IdentityLabels.Dawnshard,
                         }
-                    )
-                    {
-                        Label = AuthConstants.IdentityLabels.Dawnshard,
-                    }
-                ),
+                    ),
+                },
             },
         };
     }

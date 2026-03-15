@@ -24,7 +24,7 @@ public class AbilityCrestControllerTest
         this.mockUpdateDataService = new(MockBehavior.Strict);
         this.mockAbilityCrestService = new(MockBehavior.Strict);
 
-        this.abilityCrestController = new AbilityCrestController(
+        this.abilityCrestController = new(
             mockAbilityCrestRepository.Object,
             mockUpdateDataService.Object,
             mockAbilityCrestService.Object,
@@ -79,7 +79,7 @@ public class AbilityCrestControllerTest
 
         ResultCodeResponse response = (
             await this.abilityCrestController.BuildupPiece(
-                new AbilityCrestBuildupPieceRequest()
+                new()
                 {
                     AbilityCrestId = AbilityCrestId.ManaFount,
                     BuildupAbilityCrestPieceList = new List<AtgenBuildupAbilityCrestPieceList>()
@@ -115,7 +115,7 @@ public class AbilityCrestControllerTest
 
         AbilityCrestBuildupPieceResponse data = (
             await this.abilityCrestController.BuildupPiece(
-                new AbilityCrestBuildupPieceRequest()
+                new()
                 {
                     AbilityCrestId = AbilityCrestId.ManaFount,
                     BuildupAbilityCrestPieceList = new List<AtgenBuildupAbilityCrestPieceList>()
@@ -161,7 +161,7 @@ public class AbilityCrestControllerTest
 
         ResultCodeResponse response = (
             await this.abilityCrestController.BuildupPlusCount(
-                new AbilityCrestBuildupPlusCountRequest()
+                new()
                 {
                     AbilityCrestId = AbilityCrestId.ManaFount,
                     PlusCountParamsList = new List<AtgenPlusCountParamsList>() { new(), new() },
@@ -193,7 +193,7 @@ public class AbilityCrestControllerTest
 
         AbilityCrestBuildupPlusCountResponse data = (
             await this.abilityCrestController.BuildupPlusCount(
-                new AbilityCrestBuildupPlusCountRequest()
+                new()
                 {
                     AbilityCrestId = AbilityCrestId.ManaFount,
                     PlusCountParamsList = new List<AtgenPlusCountParamsList>() { new(), new() },
@@ -218,7 +218,7 @@ public class AbilityCrestControllerTest
 
         ResultCodeResponse response = (
             await this.abilityCrestController.ResetPlusCount(
-                new AbilityCrestResetPlusCountRequest()
+                new()
                 {
                     AbilityCrestId = AbilityCrestId.ManaFount,
                     PlusCountTypeList = new List<PlusCountType>() { PlusCountType.Hp, 0 },
@@ -247,7 +247,7 @@ public class AbilityCrestControllerTest
 
         AbilityCrestResetPlusCountResponse data = (
             await this.abilityCrestController.ResetPlusCount(
-                new AbilityCrestResetPlusCountRequest()
+                new()
                 {
                     AbilityCrestId = AbilityCrestId.ManaFount,
                     PlusCountTypeList = new List<PlusCountType>()
@@ -308,7 +308,7 @@ public class AbilityCrestControllerTest
             .Returns(
                 new List<DbAbilityCrestSet>()
                 {
-                    new DbAbilityCrestSet()
+                    new()
                     {
                         ViewerId = IdentityTestUtils.ViewerId,
                         AbilityCrestSetNo = mappedSet,
@@ -408,7 +408,7 @@ public class AbilityCrestControllerTest
 
         AbilityCrestSetAbilityCrestSetResponse data = (
             await this.abilityCrestController.SetAbilityCrestSet(
-                new AbilityCrestSetAbilityCrestSetRequest()
+                new()
                 {
                     AbilityCrestSetName = "",
                     AbilityCrestSetNo = setNo,
@@ -447,11 +447,7 @@ public class AbilityCrestControllerTest
 
         AbilityCrestUpdateAbilityCrestSetNameResponse data = (
             await this.abilityCrestController.UpdateAbilityCrestSetName(
-                new AbilityCrestUpdateAbilityCrestSetNameRequest()
-                {
-                    AbilityCrestSetNo = setNo,
-                    AbilityCrestSetName = newName,
-                },
+                new() { AbilityCrestSetNo = setNo, AbilityCrestSetName = newName },
                 TestContext.Current.CancellationToken
             )
         ).GetData<AbilityCrestUpdateAbilityCrestSetNameResponse>()!;
@@ -483,11 +479,7 @@ public class AbilityCrestControllerTest
 
         AbilityCrestUpdateAbilityCrestSetNameResponse data = (
             await this.abilityCrestController.UpdateAbilityCrestSetName(
-                new AbilityCrestUpdateAbilityCrestSetNameRequest()
-                {
-                    AbilityCrestSetNo = setNo,
-                    AbilityCrestSetName = newName,
-                },
+                new() { AbilityCrestSetNo = setNo, AbilityCrestSetName = newName },
                 TestContext.Current.CancellationToken
             )
         ).GetData<AbilityCrestUpdateAbilityCrestSetNameResponse>()!;

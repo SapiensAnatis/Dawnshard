@@ -153,7 +153,9 @@ public partial class TradeService(
         )
         {
             if (type == EntityTypes.None)
+            {
                 continue;
+            }
 
             await paymentService.ProcessPayment(
                 new Entity(type, id, quantity * count, limitBreakCount)
@@ -182,7 +184,7 @@ public partial class TradeService(
         {
             entities = new()
             {
-                [1] = new Entity(
+                [1] = new(
                     trade.DestinationEntityType,
                     trade.DestinationEntityId,
                     trade.DestinationEntityQuantity * count,
@@ -227,7 +229,9 @@ public partial class TradeService(
         Log.ProcessingAbilityCrestTrades(logger, count, id);
 
         if (count != 1)
+        {
             throw new DragaliaException(ResultCode.CommonDataValidationError, "Invalid count");
+        }
 
         AbilityCrestTrade trade = MasterAsset.AbilityCrestTrade[id];
 
@@ -239,9 +243,7 @@ public partial class TradeService(
         // The client is unlikely to trade for an ability crest which it cannot hold more of, so it is unlikely we would
         // get anything other than RewardGrantResult.Added here.
         // TODO: this should be validated
-        _ = await rewardService.GrantReward(
-            new Entity(EntityTypes.Wyrmprint, (int)trade.AbilityCrestId)
-        );
+        _ = await rewardService.GrantReward(new(EntityTypes.Wyrmprint, (int)trade.AbilityCrestId));
 
         await tradeRepository.AddTrade(TradeType.AbilityCrest, id, count);
     }

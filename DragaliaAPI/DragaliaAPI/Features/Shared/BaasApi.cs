@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Net.Http.Headers;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Serialization;
@@ -77,7 +76,7 @@ internal sealed partial class BaasApi : IBaasApi
     {
         HttpRequestMessage request = new(HttpMethod.Get, endpoint)
         {
-            Headers = { Authorization = new AuthenticationHeaderValue("Bearer", bearerToken) },
+            Headers = { Authorization = new("Bearer", bearerToken) },
         };
 
         HttpResponseMessage response = await this.client.SendAsync(request);

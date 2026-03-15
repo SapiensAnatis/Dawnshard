@@ -20,9 +20,15 @@ public class DragaliaResult<TValue> : IConvertToActionResult
 
     public TValue? Value { get; }
 
-    public static implicit operator DragaliaResult<TValue>(TValue value) => new(value);
+    public static implicit operator DragaliaResult<TValue>(TValue value)
+    {
+        return new DragaliaResult<TValue>(value);
+    }
 
-    public static implicit operator DragaliaResult<TValue>(ActionResult result) => new(result);
+    public static implicit operator DragaliaResult<TValue>(ActionResult result)
+    {
+        return new DragaliaResult<TValue>(result);
+    }
 
     public IActionResult Convert()
     {
@@ -49,5 +55,8 @@ public class DragaliaResult : DragaliaResult<object>
     public DragaliaResult(ActionResult result)
         : base(result) { }
 
-    public static implicit operator DragaliaResult(ActionResult result) => new(result);
+    public static implicit operator DragaliaResult(ActionResult result)
+    {
+        return new DragaliaResult(result);
+    }
 }

@@ -32,7 +32,9 @@ public partial class SessionAuthenticationHandler(
         string? sid = value.FirstOrDefault();
 
         if (sid is null)
+        {
             return AuthenticateResult.Fail("Invalid SID header: value was null");
+        }
 
         string deviceAccountId;
         string viewerId;

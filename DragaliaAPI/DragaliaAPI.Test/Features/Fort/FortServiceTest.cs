@@ -55,11 +55,11 @@ public class FortServiceTest
             .Returns(
                 new DragonfruitConfig
                 {
-                    FruitOdds = new Dictionary<string, DragonfruitOdds>
+                    FruitOdds = new()
                     {
                         {
                             "NormalOdds",
-                            new DragonfruitOdds()
+                            new()
                             {
                                 Normal = 100,
                                 Ripe = 0,
@@ -68,7 +68,7 @@ public class FortServiceTest
                         },
                         {
                             "RipeOdds",
-                            new DragonfruitOdds()
+                            new()
                             {
                                 Normal = 0,
                                 Ripe = 100,
@@ -77,7 +77,7 @@ public class FortServiceTest
                         },
                         {
                             "SucculentOdds",
-                            new DragonfruitOdds()
+                            new()
                             {
                                 Normal = 0,
                                 Ripe = 0,
@@ -88,7 +88,7 @@ public class FortServiceTest
                 }
             );
 
-        fortService = new FortService(
+        fortService = new(
             mockFortRepository.Object,
             mockUserDataRepository.Object,
             mockInventoryRepository.Object,

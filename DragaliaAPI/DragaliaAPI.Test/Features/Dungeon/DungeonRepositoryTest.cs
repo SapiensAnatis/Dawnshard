@@ -95,14 +95,12 @@ public class DungeonRepositoryTest : RepositoryTestFixture
             Skill2Level = 2,
         };
 
-        DbPlayerDragonData dragon = new DbPlayerDragonData(ViewerId, DragonId.MidgardsormrZero);
-        dragon.DragonKeyId = 400;
+        DbPlayerDragonData dragon = new(ViewerId, DragonId.MidgardsormrZero) { DragonKeyId = 400 };
 
-        DbPlayerDragonReliability reliability = new DbPlayerDragonReliability(
-            ViewerId,
-            DragonId.MidgardsormrZero
-        );
-        reliability.Level = 15;
+        DbPlayerDragonReliability reliability = new(ViewerId, DragonId.MidgardsormrZero)
+        {
+            Level = 15,
+        };
 
         DbWeaponBody weapon = new() { ViewerId = ViewerId, WeaponBodyId = WeaponBodies.Excalibur };
 
@@ -166,7 +164,7 @@ public class DungeonRepositoryTest : RepositoryTestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        return new DbDetailedPartyUnit()
+        return new()
         {
             ViewerId = ViewerId,
             Position = 1,

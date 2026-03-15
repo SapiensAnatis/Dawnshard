@@ -15,7 +15,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         PickupCharas = [Charas.FaeblessedTobias],
@@ -35,7 +35,7 @@ public class SummonOddsLogicTest
         pickupRates
             .Should()
             .BeEquivalentTo([
-                new UnitRate(Charas.FaeblessedTobias, 0.005m),
+                new(Charas.FaeblessedTobias, 0.005m),
                 new UnitRate(DragonId.Simurgh, 0.008m),
             ]);
 
@@ -75,7 +75,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         PickupCharas = [Charas.GalaNedrick, Charas.Akasha, Charas.Eirene],
@@ -94,8 +94,8 @@ public class SummonOddsLogicTest
         pickupRates
             .Should()
             .BeEquivalentTo([
-                new UnitRate(Charas.GalaNedrick, 0.005m),
-                new UnitRate(Charas.Akasha, 0.005m),
+                new(Charas.GalaNedrick, 0.005m),
+                new(Charas.Akasha, 0.005m),
                 new UnitRate(Charas.Eirene, 0.005m),
             ]);
 
@@ -116,7 +116,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         IsGala = true,
@@ -137,8 +137,8 @@ public class SummonOddsLogicTest
         pickupRates
             .Should()
             .BeEquivalentTo([
-                new UnitRate(Charas.GalaZena, 0.005m),
-                new UnitRate(Charas.GalaRanzal, 0.005m),
+                new(Charas.GalaZena, 0.005m),
+                new(Charas.GalaRanzal, 0.005m),
                 new UnitRate(DragonId.GalaBeastCiella, 0.008m),
             ]);
 
@@ -169,7 +169,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         IsGala = true,
@@ -186,8 +186,8 @@ public class SummonOddsLogicTest
         pickupRates
             .Should()
             .BeEquivalentTo([
-                new UnitRate(Charas.GalaZena, 0.005m),
-                new UnitRate(Charas.GalaRanzal, 0.005m),
+                new(Charas.GalaZena, 0.005m),
+                new(Charas.GalaRanzal, 0.005m),
                 new UnitRate(DragonId.GalaBeastCiella, 0.008m),
             ]);
 
@@ -242,7 +242,7 @@ public class SummonOddsLogicTest
     {
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
-                InitializeBanner(new Banner() { Id = 1, PickupCharas = [Charas.BeauticianZardin] }),
+                InitializeBanner(new() { Id = 1, PickupCharas = [Charas.BeauticianZardin] }),
                 numSummonsSinceLastFiveStar: 0
             );
 
@@ -365,7 +365,7 @@ public class SummonOddsLogicTest
     {
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
-                InitializeBanner(new Banner() { Id = 1, PickupCharas = [Charas.BeauticianZardin] }),
+                InitializeBanner(new() { Id = 1, PickupCharas = [Charas.BeauticianZardin] }),
                 numSummonsSinceLastFiveStar: 0
             );
 
@@ -435,7 +435,7 @@ public class SummonOddsLogicTest
     {
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
-                InitializeBanner(new Banner() { Id = 1, LimitedCharas = [Charas.Joker] }),
+                InitializeBanner(new() { Id = 1, LimitedCharas = [Charas.Joker] }),
                 numSummonsSinceLastFiveStar: 0
             );
 
@@ -451,7 +451,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         PickupCharas = [Charas.KuHai],
@@ -470,10 +470,7 @@ public class SummonOddsLogicTest
 
         pickupRates
             .Should()
-            .BeEquivalentTo([
-                new UnitRate(Charas.KuHai, 0.035m),
-                new UnitRate(DragonId.Roc, 0.035m),
-            ]);
+            .BeEquivalentTo([new(Charas.KuHai, 0.035m), new UnitRate(DragonId.Roc, 0.035m)]);
 
         combined.SumOfRatesForRarity(5).Should().BeApproximately(0.04m, AssertionPrecision);
         combined.SumOfRatesForRarity(4).Should().BeApproximately(0.16m, AssertionPrecision);
@@ -494,7 +491,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         IsGala = true,
@@ -515,9 +512,9 @@ public class SummonOddsLogicTest
         pickupRates
             .Should()
             .BeEquivalentTo([
-                new UnitRate(Charas.KuHai, 0.035m),
-                new UnitRate(Charas.GalaAudric, 0.005m),
-                new UnitRate(DragonId.Roc, 0.035m),
+                new(Charas.KuHai, 0.035m),
+                new(Charas.GalaAudric, 0.005m),
+                new(DragonId.Roc, 0.035m),
                 new UnitRate(DragonId.GalaBahamut, 0.008m),
             ]);
 
@@ -541,7 +538,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         IsGala = false,
@@ -570,7 +567,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         PickupCharas = [Charas.Joe],
@@ -589,10 +586,7 @@ public class SummonOddsLogicTest
 
         pickupRates
             .Should()
-            .BeEquivalentTo([
-                new UnitRate(Charas.Joe, 0.04m),
-                new UnitRate(DragonId.PallidImp, 0.04m),
-            ]);
+            .BeEquivalentTo([new(Charas.Joe, 0.04m), new UnitRate(DragonId.PallidImp, 0.04m)]);
 
         combined.SumOfRatesForRarity(5).Should().BeApproximately(0.04m, AssertionPrecision);
 
@@ -614,7 +608,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         PickupCharas = [Charas.Joe],
@@ -642,7 +636,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         IsGala = true,
@@ -663,9 +657,9 @@ public class SummonOddsLogicTest
         pickupRates
             .Should()
             .BeEquivalentTo([
-                new UnitRate(Charas.Joe, 0.04m),
-                new UnitRate(Charas.GalaZethia, 0.005m),
-                new UnitRate(DragonId.PallidImp, 0.04m),
+                new(Charas.Joe, 0.04m),
+                new(Charas.GalaZethia, 0.005m),
+                new(DragonId.PallidImp, 0.04m),
                 new UnitRate(DragonId.GalaRebornJeanne, 0.008m),
             ]);
 
@@ -689,7 +683,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         IsGala = false,
@@ -733,7 +727,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         IsGala = false,
@@ -779,7 +773,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         IsGala = true,
@@ -816,7 +810,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         IsGala = true,
@@ -838,21 +832,17 @@ public class SummonOddsLogicTest
 
         pickupRates.SumOfRates().Should().BeApproximately(0.0148m, AssertionPrecision);
 
-        using (var ass = new AssertionScope())
-        {
-            normalRates
-                .SumOfRatesForRarity(5)
-                .Should()
-                .BeApproximately(0.0752m, AssertionPrecision);
-            normalRates
-                .SumOfRatesForRarityAndType(5, EntityTypes.Dragon)
-                .Should()
-                .BeApproximately(0.0451m, AssertionPrecision * 10);
-            normalRates
-                .SumOfRatesForRarityAndType(5, EntityTypes.Chara)
-                .Should()
-                .BeApproximately(0.03m, AssertionPrecision * 10);
-        }
+        using AssertionScope _ = new();
+
+        normalRates.SumOfRatesForRarity(5).Should().BeApproximately(0.0752m, AssertionPrecision);
+        normalRates
+            .SumOfRatesForRarityAndType(5, EntityTypes.Dragon)
+            .Should()
+            .BeApproximately(0.0451m, AssertionPrecision * 10);
+        normalRates
+            .SumOfRatesForRarityAndType(5, EntityTypes.Chara)
+            .Should()
+            .BeApproximately(0.03m, AssertionPrecision * 10);
     }
 
     [Fact]
@@ -861,7 +851,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetGuaranteeRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         PickupCharas = [Charas.Eirene],
@@ -880,10 +870,7 @@ public class SummonOddsLogicTest
 
         pickupRates
             .Should()
-            .BeEquivalentTo([
-                new UnitRate(Charas.Eirene, 0.005m),
-                new UnitRate(DragonId.Agni, 0.008m),
-            ]);
+            .BeEquivalentTo([new(Charas.Eirene, 0.005m), new UnitRate(DragonId.Agni, 0.008m)]);
 
         decimal expectedOffPickupRate = 0.04m - 0.005m - 0.008m;
         normalRates
@@ -913,7 +900,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetGuaranteeRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         PickupCharas = [Charas.Eirene],
@@ -940,7 +927,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetGuaranteeRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         IsGala = true,
@@ -963,7 +950,7 @@ public class SummonOddsLogicTest
         pickupRates
             .Should()
             .BeEquivalentTo([
-                new UnitRate(Charas.GalaLeif, 0.005m),
+                new(Charas.GalaLeif, 0.005m),
                 new UnitRate(DragonId.GalaRebornAgni, 0.008m),
             ]);
 
@@ -992,7 +979,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetGuaranteeRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         PickupCharas = [Charas.KuHai],
@@ -1011,7 +998,7 @@ public class SummonOddsLogicTest
 
         pickupRates
             .Should()
-            .BeEquivalentTo([new UnitRate(Charas.KuHai, 0.21m), new UnitRate(DragonId.Roc, 0.21m)]);
+            .BeEquivalentTo([new(Charas.KuHai, 0.21m), new UnitRate(DragonId.Roc, 0.21m)]);
 
         combined.SumOfRatesForRarity(5).Should().BeApproximately(0.04m, AssertionPrecision);
         combined.SumOfRatesForRarity(4).Should().BeApproximately(0.96m, AssertionPrecision);
@@ -1025,7 +1012,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetGuaranteeRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         PickupCharas = [Charas.KuHai],
@@ -1054,7 +1041,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetGuaranteeRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         IsGala = true,
@@ -1075,9 +1062,9 @@ public class SummonOddsLogicTest
         pickupRates
             .Should()
             .BeEquivalentTo([
-                new UnitRate(Charas.KuHai, 0.205625m),
-                new UnitRate(Charas.GalaCleo, 0.005m),
-                new UnitRate(DragonId.Roc, 0.205625m),
+                new(Charas.KuHai, 0.205625m),
+                new(Charas.GalaCleo, 0.005m),
+                new(DragonId.Roc, 0.205625m),
                 new UnitRate(DragonId.GalaChronosNyx, 0.008m),
             ]);
 
@@ -1093,7 +1080,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetGuaranteeRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         PickupCharas = [Charas.Joe],
@@ -1132,7 +1119,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetGuaranteeRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         PickupCharas = [Charas.Joe],
@@ -1163,7 +1150,7 @@ public class SummonOddsLogicTest
         (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rates =
             SummonOddsLogic.GetGuaranteeRates(
                 InitializeBanner(
-                    new Banner()
+                    new()
                     {
                         Id = 1,
                         IsGala = true,
@@ -1185,7 +1172,7 @@ public class SummonOddsLogicTest
         pickupRates
             .Should()
             .BeEquivalentTo([
-                new UnitRate(Charas.GalaZethia, 0.005m),
+                new(Charas.GalaZethia, 0.005m),
                 new UnitRate(DragonId.GalaRebornJeanne, 0.008m),
             ]);
 

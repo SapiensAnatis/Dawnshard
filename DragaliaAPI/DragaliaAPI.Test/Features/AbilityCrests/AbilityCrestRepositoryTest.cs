@@ -17,9 +17,9 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
     public AbilityCrestRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
-        this.logger = new Mock<ILogger<AbilityCrestRepository>>();
+        this.logger = new();
 
-        this.abilityCrestRepository = new AbilityCrestRepository(
+        this.abilityCrestRepository = new(
             this.fixture.ApiContext,
             IdentityTestUtils.MockPlayerDetailsService.Object,
             this.logger.Object
@@ -82,9 +82,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task AddOrUpdateSet_AddsWhenNonexistentAndUpdatesWhenExists()
     {
-        await this.abilityCrestRepository.AddOrUpdateSet(
-            new DbAbilityCrestSet(IdentityTestUtils.ViewerId, 54)
-        );
+        await this.abilityCrestRepository.AddOrUpdateSet(new(IdentityTestUtils.ViewerId, 54));
         await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         this.fixture.ApiContext.PlayerAbilityCrestSets.Single(x =>
@@ -97,7 +95,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
             );
 
         await this.abilityCrestRepository.AddOrUpdateSet(
-            new DbAbilityCrestSet()
+            new()
             {
                 ViewerId = IdentityTestUtils.ViewerId,
                 AbilityCrestSetNo = 54,
@@ -124,9 +122,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task FindSetAsync_FindsAbilityCrestSetAsExpected()
     {
-        await this.abilityCrestRepository.AddOrUpdateSet(
-            new DbAbilityCrestSet(IdentityTestUtils.ViewerId, 1)
-        );
+        await this.abilityCrestRepository.AddOrUpdateSet(new(IdentityTestUtils.ViewerId, 1));
         await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         (await this.abilityCrestRepository.FindSetAsync(1))

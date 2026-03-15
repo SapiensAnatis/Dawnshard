@@ -100,14 +100,7 @@ public static class TalismanHelper
             additionalAtk -= AdditionalRemoveNum;
         }
 
-        return new AtgenRewardTalismanList(
-            talismanId,
-            abilityId1,
-            abilityId2,
-            0,
-            additionalHp,
-            additionalAtk
-        );
+        return new(talismanId, abilityId1, abilityId2, 0, additionalHp, additionalAtk);
     }
 
     private static int GenerateAbility(

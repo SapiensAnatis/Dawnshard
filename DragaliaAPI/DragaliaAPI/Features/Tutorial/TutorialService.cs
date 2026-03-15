@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
@@ -49,6 +48,7 @@ public partial class TutorialService : ITutorialService
             userData.TutorialStatus = newStatus;
             await this.OnTutorialStatusChange(newStatus);
         }
+
         return userData.TutorialStatus;
     }
 
@@ -137,7 +137,10 @@ public partial class TutorialService : ITutorialService
         await this.userDataRepository.UpdateDewpoint(100);
         await this.inventoryRepository.UpdateQuantity(Materials.HolyWater, 10);
         if (await this.abilityCrestRepository.FindAsync(AbilityCrestId.ManaFount) == null)
+        {
             await this.abilityCrestRepository.Add(AbilityCrestId.ManaFount);
+        }
+
         Log.AddedMaterialsForTheWyrmprintTutorial(this.logger);
     }
 

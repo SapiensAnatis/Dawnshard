@@ -146,7 +146,9 @@ public sealed partial class SummonService(
         // Note: could be written to only fetch player data for a single banner to be more efficient. Should still be
         // one query so not a high priority for now.
         if (bannerId == SummonConstants.RedoableSummonBannerId)
+        {
             return null;
+        }
 
         IList<SummonList> availableBanners = await GetSummonList();
         return availableBanners.FirstOrDefault(x => x.SummonId == bannerId);
@@ -184,7 +186,7 @@ public sealed partial class SummonService(
             return null;
         }
 
-        return new SummonPointList()
+        return new()
         {
             SummonPointId = bannerData.SummonBannerId,
             SummonPoint = bannerData.SummonPoints,
@@ -244,7 +246,7 @@ public sealed partial class SummonService(
         AtgenResultUnitList result
     ) =>
         apiContext.PlayerSummonHistory.Add(
-            new DbPlayerSummonHistory()
+            new()
             {
                 ViewerId = playerIdentityService.ViewerId,
                 SummonId = summonList.SummonId,
@@ -386,7 +388,7 @@ public sealed partial class SummonService(
         }
 
         await paymentService.ProcessPayment(
-            new Entity(requestInfo.PaymentType.ToEntityType(), entityId, paymentCost),
+            new(requestInfo.PaymentType.ToEntityType(), entityId, paymentCost),
             requestInfo.PaymentTarget
         );
     }
@@ -449,11 +451,7 @@ public sealed partial class SummonService(
             else
             {
                 newGetEntityList.Add(
-                    new AtgenDuplicateEntityList
-                    {
-                        EntityType = result.EntityType,
-                        EntityId = result.Id,
-                    }
+                    new() { EntityType = result.EntityType, EntityId = result.Id }
                 );
             }
 
@@ -500,13 +498,13 @@ public sealed partial class SummonService(
 
         return (
             returnedResult,
-            new SummonResultMetaInfo(
+            new(
                 LastIndexOfNew5Char: lastIndexOfNew5Char,
                 CountOfRare5Char: countOfRare5Char,
                 CountOfRare5Dragon: countOfRare5Dragon,
                 CountOfRare4: countOfRare4
             ),
-            new EntityResult()
+            new()
             {
                 // We are not using the RewardService method as it would include OverDiscardEntityList for any characters that were already owned.
                 NewGetEntityList = newGetEntityList,
@@ -529,14 +527,11 @@ public sealed partial class SummonService(
         SummonResultMetaInfo metaInfo
     )
     {
-        DbPlayerBannerData? playerBannerData = await this.GetPlayerBannerData(summonList.SummonId);
-
-        if (playerBannerData is null)
-        {
-            throw new InvalidOperationException(
+        DbPlayerBannerData playerBannerData =
+            await this.GetPlayerBannerData(summonList.SummonId)
+            ?? throw new InvalidOperationException(
                 $"PlayerBannerData for banner {summonList.SummonId} was not found"
             );
-        }
 
         playerBannerData.SummonPoints += requestInfo.ResultSummonPoint;
         playerBannerData.SummonCount += requestInfo.SummonCount;
@@ -555,7 +550,7 @@ public sealed partial class SummonService(
             playerBannerData.DailyLimitedSummonCount += requestInfo.SummonCount;
         }
 
-        return new UserSummonList()
+        return new()
         {
             SummonId = summonList.SummonId,
             SummonCount = playerBannerData.SummonCount,
@@ -583,10 +578,10 @@ public sealed partial class SummonService(
             bannerId
         );
 
-        (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates) rateData =
+        (IEnumerable<UnitRate> pickupRates, IEnumerable<UnitRate> normalRates) =
             summonOddsService.GetUnitRates(bannerId, numSummonsSinceLastFiveStar);
 
-        List<UnitRate> allRates = [.. rateData.PickupRates, .. rateData.NormalRates];
+        List<UnitRate> allRates = [.. pickupRates, .. normalRates];
 
         IPick<AtgenRedoableSummonResultUnitList> picker = Out.Of()
             .PrioritizedElements(allRates)

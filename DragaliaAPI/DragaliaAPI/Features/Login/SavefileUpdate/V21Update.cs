@@ -1,5 +1,4 @@
 using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Shared.PlayerDetails;
 using JetBrains.Annotations;
@@ -26,7 +25,7 @@ public partial class V21Update(
             Log.AddingRewardDate(logger);
 
             apiContext.WallRewardDates.Add(
-                new DbWallRewardDate()
+                new()
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     LastClaimDate = DateTimeOffset.UnixEpoch, // Allow immediately claiming the reward.

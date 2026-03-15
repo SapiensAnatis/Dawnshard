@@ -154,7 +154,9 @@ internal sealed class QuestController(
     {
         IEnumerable<DropEntity> drops = Enumerable.Empty<DropEntity>();
         if (MasterAsset.QuestDropInfo.TryGetValue(request.QuestId, out QuestDropInfo? dropInfo))
+        {
             drops = dropInfo.Drops;
+        }
 
         return Ok(
             new QuestDropListResponse()

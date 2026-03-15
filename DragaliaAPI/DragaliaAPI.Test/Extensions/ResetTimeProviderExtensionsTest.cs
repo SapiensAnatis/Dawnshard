@@ -21,20 +21,20 @@ public class ResetTimeProviderExtensionsTest
         new()
         {
             {
-                new DateTimeOffset(2023, 06, 25, 13, 15, 20, TimeSpan.Zero),
-                new DateTimeOffset(2023, 06, 25, 06, 00, 00, TimeSpan.Zero)
+                new(2023, 06, 25, 13, 15, 20, TimeSpan.Zero),
+                new(2023, 06, 25, 06, 00, 00, TimeSpan.Zero)
             },
             {
-                new DateTimeOffset(2023, 06, 25, 04, 20, 13, TimeSpan.Zero),
-                new DateTimeOffset(2023, 06, 24, 06, 00, 00, TimeSpan.Zero)
+                new(2023, 06, 25, 04, 20, 13, TimeSpan.Zero),
+                new(2023, 06, 24, 06, 00, 00, TimeSpan.Zero)
             },
             {
-                new DateTimeOffset(2023, 06, 25, 06, 20, 13, TimeSpan.Zero),
-                new DateTimeOffset(2023, 06, 25, 06, 00, 00, TimeSpan.Zero)
+                new(2023, 06, 25, 06, 20, 13, TimeSpan.Zero),
+                new(2023, 06, 25, 06, 00, 00, TimeSpan.Zero)
             },
             {
-                new DateTimeOffset(2023, 06, 25, 05, 01, 13, TimeSpan.Zero),
-                new DateTimeOffset(2023, 06, 24, 06, 00, 00, TimeSpan.Zero)
+                new(2023, 06, 25, 05, 01, 13, TimeSpan.Zero),
+                new(2023, 06, 24, 06, 00, 00, TimeSpan.Zero)
             },
         };
 
@@ -47,19 +47,19 @@ public class ResetTimeProviderExtensionsTest
         new()
         {
             {
-                new DateTimeOffset(2023, 06, 25, 13, 15, 20, TimeSpan.Zero),
+                new(2023, 06, 25, 13, 15, 20, TimeSpan.Zero),
                 DayOfWeek.Sunday // 2023-06-25
             },
             {
-                new DateTimeOffset(2023, 06, 25, 04, 20, 13, TimeSpan.Zero),
+                new(2023, 06, 25, 04, 20, 13, TimeSpan.Zero),
                 DayOfWeek.Saturday // 2023-06-24
             },
             {
-                new DateTimeOffset(2023, 06, 25, 06, 20, 13, TimeSpan.Zero),
+                new(2023, 06, 25, 06, 20, 13, TimeSpan.Zero),
                 DayOfWeek.Sunday // 2023-06-25
             },
             {
-                new DateTimeOffset(2023, 06, 25, 05, 01, 13, TimeSpan.Zero),
+                new(2023, 06, 25, 05, 01, 13, TimeSpan.Zero),
                 DayOfWeek.Saturday // 2023-06-24
             },
         };
@@ -68,20 +68,20 @@ public class ResetTimeProviderExtensionsTest
         new()
         {
             {
-                new DateTimeOffset(2023, 06, 25, 13, 15, 20, TimeSpan.Zero),
-                new DateTimeOffset(2023, 06, 19, 06, 00, 00, TimeSpan.Zero)
+                new(2023, 06, 25, 13, 15, 20, TimeSpan.Zero),
+                new(2023, 06, 19, 06, 00, 00, TimeSpan.Zero)
             },
             {
-                new DateTimeOffset(2023, 06, 23, 13, 15, 20, TimeSpan.Zero),
-                new DateTimeOffset(2023, 06, 19, 06, 00, 00, TimeSpan.Zero)
+                new(2023, 06, 23, 13, 15, 20, TimeSpan.Zero),
+                new(2023, 06, 19, 06, 00, 00, TimeSpan.Zero)
             },
             {
-                new DateTimeOffset(2023, 06, 19, 04, 20, 13, TimeSpan.Zero),
-                new DateTimeOffset(2023, 06, 12, 06, 00, 00, TimeSpan.Zero)
+                new(2023, 06, 19, 04, 20, 13, TimeSpan.Zero),
+                new(2023, 06, 12, 06, 00, 00, TimeSpan.Zero)
             },
             {
-                new DateTimeOffset(2023, 06, 19, 06, 20, 13, TimeSpan.Zero),
-                new DateTimeOffset(2023, 06, 19, 06, 00, 00, TimeSpan.Zero)
+                new(2023, 06, 19, 06, 20, 13, TimeSpan.Zero),
+                new(2023, 06, 19, 06, 00, 00, TimeSpan.Zero)
             },
         };
 
@@ -89,20 +89,20 @@ public class ResetTimeProviderExtensionsTest
         new()
         {
             {
-                new DateTimeOffset(2023, 06, 25, 13, 15, 20, TimeSpan.Zero),
-                new DateTimeOffset(2023, 06, 01, 06, 00, 00, TimeSpan.Zero)
+                new(2023, 06, 25, 13, 15, 20, TimeSpan.Zero),
+                new(2023, 06, 01, 06, 00, 00, TimeSpan.Zero)
             },
             {
-                new DateTimeOffset(2023, 06, 01, 04, 20, 13, TimeSpan.Zero),
-                new DateTimeOffset(2023, 05, 01, 06, 00, 00, TimeSpan.Zero)
+                new(2023, 06, 01, 04, 20, 13, TimeSpan.Zero),
+                new(2023, 05, 01, 06, 00, 00, TimeSpan.Zero)
             },
             {
-                new DateTimeOffset(2023, 07, 31, 13, 15, 20, TimeSpan.Zero),
-                new DateTimeOffset(2023, 07, 01, 06, 00, 00, TimeSpan.Zero)
+                new(2023, 07, 31, 13, 15, 20, TimeSpan.Zero),
+                new(2023, 07, 01, 06, 00, 00, TimeSpan.Zero)
             },
             {
-                new DateTimeOffset(2023, 07, 01, 13, 15, 20, TimeSpan.Zero),
-                new DateTimeOffset(2023, 07, 01, 06, 00, 00, TimeSpan.Zero)
+                new(2023, 07, 01, 13, 15, 20, TimeSpan.Zero),
+                new(2023, 07, 01, 06, 00, 00, TimeSpan.Zero)
             },
         };
 

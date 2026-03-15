@@ -48,10 +48,12 @@ public readonly struct EquatableReadOnlyList<T>(IReadOnlyList<T>? collection)
 
     public override int GetHashCode()
     {
-        var hashCode = new HashCode();
+        HashCode hashCode = new();
 
-        foreach (var item in this.Collection)
+        foreach (T item in this.Collection)
+        {
             hashCode.Add(item);
+        }
 
         return hashCode.ToHashCode();
     }
@@ -63,9 +65,13 @@ public readonly struct EquatableReadOnlyList<T>(IReadOnlyList<T>? collection)
     public int Count => this.Collection.Count;
     public T this[int index] => this.Collection[index];
 
-    public static bool operator ==(EquatableReadOnlyList<T> left, EquatableReadOnlyList<T> right) =>
-        left.Equals(right);
+    public static bool operator ==(EquatableReadOnlyList<T> left, EquatableReadOnlyList<T> right)
+    {
+        return left.Equals(right);
+    }
 
-    public static bool operator !=(EquatableReadOnlyList<T> left, EquatableReadOnlyList<T> right) =>
-        !left.Equals(right);
+    public static bool operator !=(EquatableReadOnlyList<T> left, EquatableReadOnlyList<T> right)
+    {
+        return !left.Equals(right);
+    }
 }

@@ -35,7 +35,7 @@ public static partial class CharaMapper
         int hpNode = charaList.Hp - hpBase;
 
 #pragma warning disable CS0618 // Type or member is obsolete: This is a mapping method so we want control over every field.
-        return new DbPlayerCharaData()
+        return new()
 #pragma warning restore CS0618 // Type or member is obsolete
         {
             ViewerId = viewerId,
@@ -64,7 +64,7 @@ public static partial class CharaMapper
             IsUnlockEditSkill = charaList.IsUnlockEditSkill,
             ListViewFlag = charaList.ListViewFlag,
             GetTime = charaList.GetTime,
-            ManaCirclePieceIdList = new SortedSet<int>(charaList.ManaCirclePieceIdList),
+            ManaCirclePieceIdList = new(charaList.ManaCirclePieceIdList),
         };
     }
 }

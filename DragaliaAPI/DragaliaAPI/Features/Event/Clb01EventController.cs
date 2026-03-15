@@ -16,12 +16,13 @@ public class Clb01EventController(
     [HttpPost("get_event_data")]
     public async Task<DragaliaResult> GetEventData(Clb01EventGetEventDataRequest request)
     {
-        Clb01EventGetEventDataResponse resp = new();
-
-        resp.Clb01EventUserData = await eventService.GetClb01EventUserData(request.EventId);
-        resp.Clb01EventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
-            request.EventId
-        );
+        Clb01EventGetEventDataResponse resp = new()
+        {
+            Clb01EventUserData = await eventService.GetClb01EventUserData(request.EventId),
+            Clb01EventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
+                request.EventId
+            ),
+        };
 
         return Ok(resp);
     }
@@ -32,13 +33,13 @@ public class Clb01EventController(
         CancellationToken cancellationToken
     )
     {
-        Clb01EventEntryResponse resp = new();
-
-        // TODO: Complete first event mission once thats implemented
-
-        resp.Clb01EventUserData = await eventService.GetClb01EventUserData(request.EventId);
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
-        resp.EntityResult = rewardService.GetEntityResult();
+        Clb01EventEntryResponse resp = new()
+        {
+            // TODO: Complete first event mission once thats implemented
+            Clb01EventUserData = await eventService.GetClb01EventUserData(request.EventId),
+            UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken),
+            EntityResult = rewardService.GetEntityResult(),
+        };
 
         return Ok(resp);
     }
@@ -49,16 +50,15 @@ public class Clb01EventController(
         CancellationToken cancellationToken
     )
     {
-        Clb01EventReceiveClb01PointRewardResponse resp = new();
-
-        resp.Clb01EventRewardEntityList = await eventService.ReceiveEventRewards(request.EventId);
-
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
-        resp.EntityResult = rewardService.GetEntityResult();
-
-        resp.Clb01EventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
-            request.EventId
-        );
+        Clb01EventReceiveClb01PointRewardResponse resp = new()
+        {
+            Clb01EventRewardEntityList = await eventService.ReceiveEventRewards(request.EventId),
+            UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken),
+            EntityResult = rewardService.GetEntityResult(),
+            Clb01EventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
+                request.EventId
+            ),
+        };
 
         return Ok(resp);
     }

@@ -7,24 +7,16 @@ public static class DragonConstants
 {
     public static byte GetMaxLevelFor(int rarity, int limitBreak)
     {
-        int baseLevel;
-        switch (rarity)
+        int baseLevel = rarity switch
         {
-            case 3:
-                baseLevel = MinMaxLevel[rarity - 3] + (10 * Math.Min(4, limitBreak));
-                break;
-            case 4:
-                baseLevel =
-                    MinMaxLevel[rarity - 3]
-                    + (10 * Math.Min(4, limitBreak))
-                    + ((limitBreak / 3 > 0 ? 5 : 0) * Math.Clamp(limitBreak - 2, 0, 2));
-                break;
-            case 5:
-                baseLevel = MinMaxLevel[rarity - 3] + (15 * Math.Min(4, limitBreak));
-                break;
-            default:
-                throw new ArgumentException("Invalid rarity");
-        }
+            3 => MinMaxLevel[rarity - 3] + (10 * Math.Min(4, limitBreak)),
+            4 => MinMaxLevel[rarity - 3]
+                + (10 * Math.Min(4, limitBreak))
+                + ((limitBreak / 3 > 0 ? 5 : 0) * Math.Clamp(limitBreak - 2, 0, 2)),
+            5 => MinMaxLevel[rarity - 3] + (15 * Math.Min(4, limitBreak)),
+            _ => throw new ArgumentException("Invalid rarity"),
+        };
+
         return (byte)(baseLevel + (AddMaxLevel * (limitBreak / 5)));
     }
 

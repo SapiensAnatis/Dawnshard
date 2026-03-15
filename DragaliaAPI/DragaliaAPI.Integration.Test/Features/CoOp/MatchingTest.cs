@@ -24,7 +24,7 @@ public class MatchingTest : TestFixture
                         RoomId = 911948,
                         Name = "7942ce2a-c0ac-4e41-8472-0cf5918f3953",
                         QuestId = 204550501,
-                        Players = new List<Player>()
+                        Players = new()
                         {
                             new()
                             {
@@ -110,7 +110,7 @@ public class MatchingTest : TestFixture
                         RoomId = 911948,
                         Name = "7942ce2a-c0ac-4e41-8472-0cf5918f3953",
                         QuestId = 204550501,
-                        Players = new List<Player>()
+                        Players = new()
                         {
                             new()
                             {
@@ -198,7 +198,7 @@ public class MatchingTest : TestFixture
                     RoomId = 911948,
                     Name = "7942ce2a-c0ac-4e41-8472-0cf5918f3953",
                     QuestId = 204550501,
-                    Players = new List<Player>()
+                    Players = new()
                     {
                         new()
                         {
@@ -282,7 +282,7 @@ public class MatchingTest : TestFixture
                     RoomId = 911948,
                     Name = "7942ce2a-c0ac-4e41-8472-0cf5918f3953",
                     QuestId = 204550501,
-                    Players = new List<Player>()
+                    Players = new()
                     {
                         new()
                         {

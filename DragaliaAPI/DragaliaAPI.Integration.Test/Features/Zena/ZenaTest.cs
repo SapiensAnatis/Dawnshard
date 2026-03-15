@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using DragaliaAPI.Features.Zena;
 
@@ -12,10 +11,7 @@ public class ZenaTest : TestFixture
     {
         Environment.SetEnvironmentVariable("ZENA_TOKEN", "token");
 
-        this.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-            "Bearer",
-            "token"
-        );
+        this.Client.DefaultRequestHeaders.Authorization = new("Bearer", "token");
     }
 
     [Fact]

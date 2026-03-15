@@ -6,10 +6,12 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using UnitRateCollection = (
+    System.Collections.Generic.IEnumerable<DragaliaAPI.Features.Summoning.UnitRate> PickupRates,
+    System.Collections.Generic.IEnumerable<DragaliaAPI.Features.Summoning.UnitRate> NormalRates
+);
 
 namespace DragaliaAPI.Features.Summoning;
-
-using UnitRateCollection = (IEnumerable<UnitRate> PickupRates, IEnumerable<UnitRate> NormalRates);
 
 public class SummonOddsService(
     IOptionsMonitor<SummonBannerOptions> optionsMonitor,
@@ -99,7 +101,7 @@ public class SummonOddsService(
             .. rarityLists.Values,
         ];
 
-        return new OddsRate()
+        return new()
         {
             RarityList = combined
                 .GroupBy(x => x.Rarity)

@@ -24,6 +24,6 @@ public static class ResetTimeProviderExtensions
     public static DateTimeOffset GetLastMonthlyReset(this TimeProvider timeProvider)
     {
         DateTimeOffset lastDaily = timeProvider.GetLastDailyReset();
-        return new DateTimeOffset(lastDaily.Year, lastDaily.Month, 1, 6, 0, 0, TimeSpan.Zero);
+        return new(lastDaily.Year, lastDaily.Month, 1, 6, 0, 0, TimeSpan.Zero);
     }
 }

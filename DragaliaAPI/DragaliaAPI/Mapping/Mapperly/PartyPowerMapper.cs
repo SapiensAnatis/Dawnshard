@@ -12,10 +12,6 @@ public static partial class PartyPowerMapper
 
     public static DbPartyPower MapToDbPartyPower(this PartyPowerData partyPowerData, long viewerId)
     {
-        return new DbPartyPower()
-        {
-            ViewerId = viewerId,
-            MaxPartyPower = partyPowerData.MaxPartyPower,
-        };
+        return new() { ViewerId = viewerId, MaxPartyPower = partyPowerData.MaxPartyPower };
     }
 }

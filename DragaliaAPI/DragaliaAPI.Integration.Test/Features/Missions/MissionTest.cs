@@ -179,7 +179,7 @@ public class MissionTest : TestFixture
                     BaseDragonKeyId = (ulong)this.GetDragonKeyId(DragonId.Midgardsormr),
                     GrowMaterialList = new List<GrowMaterialList>()
                     {
-                        new GrowMaterialList()
+                        new()
                         {
                             Type = EntityTypes.Material,
                             Id = (int)Materials.Dragonfruit,
@@ -220,7 +220,7 @@ public class MissionTest : TestFixture
                     BaseDragonKeyId = (ulong)this.GetDragonKeyId(DragonId.Midgardsormr),
                     GrowMaterialList = new List<GrowMaterialList>()
                     {
-                        new GrowMaterialList()
+                        new()
                         {
                             Type = EntityTypes.Material,
                             Id = (int)Materials.SucculentDragonfruit,
@@ -258,7 +258,7 @@ public class MissionTest : TestFixture
                     Charas.Karina,
                     new List<AtgenEnemyPiece>()
                     {
-                        new AtgenEnemyPiece() { Id = Materials.GoldCrystal, Quantity = 10 },
+                        new() { Id = Materials.GoldCrystal, Quantity = 10 },
                     }
                 ),
                 cancellationToken: TestContext.Current.CancellationToken
@@ -291,7 +291,7 @@ public class MissionTest : TestFixture
                     Charas.Karina,
                     new List<AtgenEnemyPiece>()
                     {
-                        new AtgenEnemyPiece() { Id = Materials.GoldCrystal, Quantity = 15 },
+                        new() { Id = Materials.GoldCrystal, Quantity = 15 },
                     }
                 ),
                 cancellationToken: TestContext.Current.CancellationToken
@@ -416,13 +416,13 @@ public class MissionTest : TestFixture
             .Data.DailyMissionList.Should()
             .BeEquivalentTo(
                 [
-                    new DailyMissionList()
+                    new()
                     {
                         DailyMissionId = missionId1,
                         DayNo = today,
                         State = MissionState.Claimed,
                     },
-                    new DailyMissionList()
+                    new()
                     {
                         DailyMissionId = missionId2,
                         DayNo = today,
@@ -518,7 +518,7 @@ public class MissionTest : TestFixture
             .Data.DailyMissionList.Should()
             .BeEquivalentTo(
                 [
-                    new DailyMissionList()
+                    new()
                     {
                         DailyMissionId = missionId,
                         DayNo = today,
@@ -629,7 +629,7 @@ public class MissionTest : TestFixture
 
         response
             .DrillMissionGroupList.Should()
-            .BeEquivalentTo([new DrillMissionGroupList(1), new DrillMissionGroupList(2)]);
+            .BeEquivalentTo([new(1), new DrillMissionGroupList(2)]);
 
         await this.AddRangeToDatabase(
             MasterAsset
@@ -646,11 +646,7 @@ public class MissionTest : TestFixture
 
         response
             .DrillMissionGroupList.Should()
-            .BeEquivalentTo([
-                new DrillMissionGroupList(1),
-                new DrillMissionGroupList(2),
-                new DrillMissionGroupList(3),
-            ]);
+            .BeEquivalentTo([new(1), new(2), new DrillMissionGroupList(3)]);
     }
 
     [Fact]
