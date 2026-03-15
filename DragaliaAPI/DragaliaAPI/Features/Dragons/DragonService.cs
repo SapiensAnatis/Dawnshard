@@ -1058,5 +1058,16 @@ public partial class DragonService(
             long rupies,
             int eldwater
         );
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Last daily reset: {Reset} on {DayOfWeek}. Rotating gift: {Gift}"
+        )]
+        public static partial void CurrentRotatingGift(
+            ILogger logger,
+            DateTimeOffset reset,
+            DayOfWeek dayOfWeek,
+            DragonGifts gift
+        );
     }
 }
