@@ -27,11 +27,7 @@ public class DragonGiftResetAction(
         {
             if (!dbGifts.TryGetValue(giftId, out DbPlayerDragonGift? dbGift))
             {
-                dbGift = new DbPlayerDragonGift()
-                {
-                    ViewerId = playerIdentityService.ViewerId,
-                    DragonGiftId = giftId,
-                };
+                dbGift = new() { ViewerId = playerIdentityService.ViewerId, DragonGiftId = giftId };
 
                 apiContext.PlayerDragonGifts.Add(dbGift);
 
@@ -47,7 +43,7 @@ public class DragonGiftResetAction(
         {
             if (!dbGifts.TryGetValue(dailyGiftId, out DbPlayerDragonGift? dbGift))
             {
-                dbGift = new DbPlayerDragonGift()
+                dbGift = new()
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     DragonGiftId = dailyGiftId,
@@ -58,14 +54,8 @@ public class DragonGiftResetAction(
                 dbGifts[dailyGiftId] = dbGift;
             }
 
-            if (DragonConstants.RotatingGifts[(int)todayDayOfWeek] == dailyGiftId)
-            {
-                dbGift.Quantity = 1;
-            }
-            else
-            {
-                dbGift.Quantity = 0;
-            }
+            dbGift.Quantity =
+                DragonConstants.RotatingGifts[(int)todayDayOfWeek] == dailyGiftId ? 1 : 0;
         }
     }
 }

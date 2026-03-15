@@ -73,7 +73,7 @@ public class DragonController : DragaliaControllerBase
     {
         DragonBuyGiftToSendMultipleResponse resultData =
             await this.dragonService.DoDragonBuyGiftToSendMultiple(
-                new DragonBuyGiftToSendMultipleRequest()
+                new()
                 {
                     DragonId = request.DragonId,
                     DragonGiftIdList = new List<DragonGifts>() { request.DragonGiftId },
@@ -117,7 +117,7 @@ public class DragonController : DragaliaControllerBase
     {
         DragonSendGiftMultipleResponse resultData =
             await this.dragonService.DoDragonSendGiftMultiple(
-                new DragonSendGiftMultipleRequest()
+                new()
                 {
                     DragonId = request.DragonId,
                     DragonGiftId = request.DragonGiftId,

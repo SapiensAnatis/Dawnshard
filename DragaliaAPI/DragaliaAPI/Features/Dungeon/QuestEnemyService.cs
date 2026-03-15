@@ -61,7 +61,7 @@ public partial class QuestEnemyService : IQuestEnemyService
             if (enemy.EnemyDropList.Count == 0)
             {
                 enemy.EnemyDropList.Add(
-                    new EnemyDropList()
+                    new()
                     {
                         Coin = 0,
                         Mana = 0,
@@ -76,7 +76,7 @@ public partial class QuestEnemyService : IQuestEnemyService
             enemy
                 .EnemyDropList[0]
                 .DropList.Add(
-                    new AtgenDropList()
+                    new()
                     {
                         Id = drop.Id,
                         Type = drop.EntityType,
@@ -219,7 +219,7 @@ public partial class QuestEnemyService : IQuestEnemyService
         QuestWallDetail questWallDetail = MasterAssetUtils.GetQuestWallDetail(wallId, wallLevel);
         return
         [
-            new AtgenEnemy()
+            new()
             {
                 EnemyIdx = 0,
                 IsPop = true,
@@ -245,7 +245,9 @@ public partial class QuestEnemyService : IQuestEnemyService
 
             // For Hard quests, duplicate 4x
             if (variationType == VariationTypes.Hard)
+            {
                 yield return enemy;
+            }
         }
 
         // For Very Hard quests, duplicate normal enemies 4x, bosses 2x

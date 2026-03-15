@@ -138,11 +138,7 @@ public class UserTests : WebTestFixture
         this.Client.DefaultRequestHeaders.Add("Cookie", $"idToken={token}");
 
         HttpResponseMessage resp = await this.Client.SendAsync(
-            new HttpRequestMessage()
-            {
-                RequestUri = new Uri("/api/user/me/impersonation_session"),
-                Method = method,
-            },
+            new() { RequestUri = new("/api/user/me/impersonation_session"), Method = method },
             TestContext.Current.CancellationToken
         );
 

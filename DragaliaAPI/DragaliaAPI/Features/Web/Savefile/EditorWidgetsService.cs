@@ -2,7 +2,6 @@ using System.Collections.Frozen;
 using System.Collections.ObjectModel;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace DragaliaAPI.Features.Web.Savefile;
 

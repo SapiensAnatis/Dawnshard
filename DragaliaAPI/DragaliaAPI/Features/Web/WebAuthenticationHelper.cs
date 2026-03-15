@@ -117,7 +117,7 @@ public static partial class WebAuthenticationHelper
         await cache.SetJsonAsync(
             cacheKey,
             playerInfo,
-            new DistributedCacheEntryOptions()
+            new()
             {
                 // The ID token lasts for one hour. We may retain cached data past the expiry of the ID token, but
                 // that should be okay, since the JWT authentication will return an unauthorized result before reaching

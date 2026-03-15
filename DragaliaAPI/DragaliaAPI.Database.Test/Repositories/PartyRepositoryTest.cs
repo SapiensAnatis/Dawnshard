@@ -16,7 +16,7 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
     public PartyRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
-        this.partyRepository = new PartyRepository(
+        this.partyRepository = new(
             this.fixture.ApiContext,
             IdentityTestUtils.MockPlayerDetailsService.Object
         );

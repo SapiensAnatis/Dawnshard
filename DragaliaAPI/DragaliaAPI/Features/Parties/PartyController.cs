@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -91,7 +90,7 @@ public partial class PartyController(
 
         Log.PartyPower(logger, partyPower);
 
-        DbParty dbEntry = new DbParty()
+        DbParty dbEntry = new()
         {
             ViewerId = this.ViewerId,
             PartyNo = requestParty.PartyNo,

@@ -12,7 +12,7 @@ public class DungeonRecordDamageService : IDungeonRecordDamageService
             OwnDamageRankingList = new List<AtgenOwnDamageRankingList>()
             {
                 // TODO: track in database to determine if it's a new personal best
-                new AtgenOwnDamageRankingList()
+                new()
                 {
                     CharaId = 0,
                     Rank = 0,

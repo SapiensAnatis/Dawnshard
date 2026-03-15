@@ -63,7 +63,9 @@ public partial class MissionInitialProgressionService(
             );
 
         if (progressionInfo == null)
+        {
             return;
+        }
 
         int amountToComplete = missionInfo.CompleteValue;
         int currentAmount;
@@ -203,7 +205,9 @@ public partial class MissionInitialProgressionService(
         }
 
         if (currentAmount == 0)
+        {
             return;
+        }
 
         if (currentAmount >= amountToComplete)
         {
@@ -444,7 +448,9 @@ public partial class MissionInitialProgressionService(
             DbPlayerCharaData? chara = await unitRepository.FindCharaAsync(charaId.Value);
 
             if (chara == null)
+            {
                 return 0;
+            }
 
             return type switch
             {
@@ -494,7 +500,9 @@ public partial class MissionInitialProgressionService(
             DbAbilityCrest? crest = await abilityCrestRepository.FindAsync(crestId.Value);
 
             if (crest == null)
+            {
                 return 0;
+            }
 
             return type switch
             {

@@ -165,7 +165,7 @@ public class ToolTest : TestFixture
             .Should()
             .BeEquivalentTo(
                 new DragaliaResponse<ResultCodeResponse>(
-                    new ResultCodeResponse(ResultCode.CommonAuthError),
+                    new(ResultCode.CommonAuthError),
                     new DataHeaders(ResultCode.CommonAuthError)
                 )
             );

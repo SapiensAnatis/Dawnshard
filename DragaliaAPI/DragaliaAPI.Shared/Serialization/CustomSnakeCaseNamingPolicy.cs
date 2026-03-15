@@ -16,13 +16,17 @@ public class CustomSnakeCaseNamingPolicy : JsonNamingPolicy
     public override string ConvertName(string name)
     {
         if (name == "GetTime")
+        {
             return "gettime";
+        }
 
         int requiredLength = name.Length;
         foreach (char c in name.AsSpan()[1..])
         {
             if (char.IsUpper(c) || char.IsDigit(c))
+            {
                 requiredLength++;
+            }
         }
 
         return string.Create(

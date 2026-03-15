@@ -40,8 +40,10 @@ public class MissionController(
     [HttpPost("get_drill_mission_list")]
     public async Task<DragaliaResult<MissionGetDrillMissionListResponse>> GetDrillMissionList()
     {
-        MissionGetDrillMissionListResponse response = new();
-        response.MissionNotice = await this.missionService.GetMissionNotice(null);
+        MissionGetDrillMissionListResponse response = new()
+        {
+            MissionNotice = await this.missionService.GetMissionNotice(null),
+        };
 
         IEnumerable<DbPlayerMission> drillMissions = await this
             .missionRepository.GetMissionsByType(MissionType.Drill)

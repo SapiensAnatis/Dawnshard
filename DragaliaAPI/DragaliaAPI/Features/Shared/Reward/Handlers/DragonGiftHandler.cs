@@ -21,7 +21,9 @@ public class DragonGiftHandler(ApiContext apiContext, IPlayerIdentityService pla
     {
         DragonGifts gift = (DragonGifts)reward.Id;
         if (!Enum.IsDefined(gift))
+        {
             throw new ArgumentException($"Invalid dragon gift ID {reward.Id}", nameof(reward));
+        }
 
         this.dragonGiftCache ??= await apiContext
             .PlayerDragonGifts.AsTracking()
@@ -44,6 +46,6 @@ public class DragonGiftHandler(ApiContext apiContext, IPlayerIdentityService pla
             this.dragonGiftCache[gift] = dragonGift;
         }
 
-        return new GrantReturn(RewardGrantResult.Added);
+        return new(RewardGrantResult.Added);
     }
 }

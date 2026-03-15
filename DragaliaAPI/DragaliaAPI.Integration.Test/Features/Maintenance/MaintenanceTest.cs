@@ -18,7 +18,7 @@ public class MaintenanceTest : TestFixture
     [Fact]
     public async Task MaintenanceActive_ReturnsResultCode()
     {
-        this.ConfigureMaintenanceClient(new MaintenanceOptions() { Enabled = true });
+        this.ConfigureMaintenanceClient(new() { Enabled = true });
 
         DragaliaResponse<ResultCodeResponse> response =
             await this.Client.PostMsgpack<ResultCodeResponse>(
@@ -33,7 +33,7 @@ public class MaintenanceTest : TestFixture
     [Fact]
     public async Task MaintenanceActive_CoreEndpoint_ReturnsNormalResponse()
     {
-        this.ConfigureMaintenanceClient(new MaintenanceOptions() { Enabled = true });
+        this.ConfigureMaintenanceClient(new() { Enabled = true });
 
         DragaliaResponse<ToolGetServiceStatusResponse> response =
             await this.Client.PostMsgpack<ToolGetServiceStatusResponse>(
@@ -50,7 +50,7 @@ public class MaintenanceTest : TestFixture
     public async Task MaintenanceActive_GetText_ReturnsText()
     {
         this.ConfigureMaintenanceClient(
-            new MaintenanceOptions()
+            new()
             {
                 Enabled = true,
                 Title = "Title",

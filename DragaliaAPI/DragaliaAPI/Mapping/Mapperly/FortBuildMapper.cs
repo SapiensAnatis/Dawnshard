@@ -12,7 +12,7 @@ public static partial class FortBuildMapper
 
     public static DbFortBuild MapToDbFortBuild(this BuildList buildList, long viewerId)
     {
-        return new DbFortBuild()
+        return new()
         {
             ViewerId = viewerId,
             BuildId = (long)buildList.BuildId,

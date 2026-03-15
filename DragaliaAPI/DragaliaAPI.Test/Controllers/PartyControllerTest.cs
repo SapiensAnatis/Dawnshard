@@ -49,7 +49,7 @@ public class PartyControllerTest : RepositoryTestFixture
 
         UpdateDataList updateDataList = new()
         {
-            PartyList = new List<PartyList>()
+            PartyList = new()
             {
                 new() { PartyName = "Z Team", PartyNo = 1 },
             },
@@ -61,7 +61,7 @@ public class PartyControllerTest : RepositoryTestFixture
 
         PartyUpdatePartyNameResponse? response = (
             await this.partyController.UpdatePartyName(
-                new PartyUpdatePartyNameRequest() { PartyName = "Z Team", PartyNo = 1 },
+                new() { PartyName = "Z Team", PartyNo = 1 },
                 TestContext.Current.CancellationToken
             )
         ).GetData<PartyUpdatePartyNameResponse>();

@@ -26,7 +26,9 @@ public partial class TimeAttackCacheService(
         string? json = await cache.GetStringAsync(this.Key);
 
         if (json is null)
+        {
             return null;
+        }
 
         return JsonSerializer.Deserialize<TimeAttackCacheEntry>(json);
     }

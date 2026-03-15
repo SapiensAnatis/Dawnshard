@@ -89,7 +89,9 @@ public class DbWeaponBody : DbPlayerData
         get
         {
             if (!MasterAsset.WeaponBody.TryGetValue(this.WeaponBodyId, out WeaponBody? weaponData))
+            {
                 throw new InvalidOperationException("Invalid weapon ID!");
+            }
 
             List<int> abilityIds = new()
             {
@@ -108,7 +110,9 @@ public class DbWeaponBody : DbPlayerData
         get
         {
             if (!MasterAsset.WeaponBody.TryGetValue(this.WeaponBodyId, out WeaponBody? weaponData))
+            {
                 throw new InvalidOperationException("Invalid weapon ID!");
+            }
 
             List<int> abilityIds = new()
             {
@@ -127,7 +131,9 @@ public class DbWeaponBody : DbPlayerData
         get
         {
             if (!MasterAsset.WeaponBody.TryGetValue(this.WeaponBodyId, out WeaponBody? weaponData))
+            {
                 throw new InvalidOperationException("Invalid weapon ID!");
+            }
 
             List<int> skillIds = new()
             {
@@ -144,7 +150,8 @@ public class DbWeaponBody : DbPlayerData
     public int SkillLevel =>
         // On the second skill it takes 8 unbinds to level up the skill
         // On the first skill it's always 4
-        (this.LimitBreakCount >= this.SkillNo * 4)
+        this.LimitBreakCount
+        >= this.SkillNo * 4
             ? 2
             : 1;
 
@@ -155,7 +162,9 @@ public class DbWeaponBody : DbPlayerData
 
         // Min return value: 0, so break when result == 0
         while (inputAbilityIds.ElementAtOrDefault(result - 1) == default && result > 0)
+        {
             result--;
+        }
 
         return result;
     }
@@ -168,13 +177,17 @@ public class DbWeaponBody : DbPlayerData
 
         // If the weapon has no skills
         if (!distinctSkillIds.Any())
+        {
             return 0;
+        }
 
         int result = this.LimitOverCount + 1;
 
         // Min return value: 1, so break when result == 1
         while (distinctSkillIds.ElementAtOrDefault(result - 1) == default && result > 1)
+        {
             result--;
+        }
 
         return result;
     }

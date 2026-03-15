@@ -35,7 +35,7 @@ public class ShopRepository : IShopRepository
     public void InitializeShopInfo()
     {
         this.apiContext.PlayerShopInfos.Add(
-            new DbPlayerShopInfo() { ViewerId = this.playerIdentityService.ViewerId }
+            new() { ViewerId = this.playerIdentityService.ViewerId }
         );
     }
 
@@ -72,7 +72,7 @@ public class ShopRepository : IShopRepository
         if (existing == null)
         {
             this.apiContext.PlayerPurchases.Add(
-                new DbPlayerShopPurchase()
+                new()
                 {
                     ViewerId = this.playerIdentityService.ViewerId,
                     ShopType = type.ToPurchaseShopType(),

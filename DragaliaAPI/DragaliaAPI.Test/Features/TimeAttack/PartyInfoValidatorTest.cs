@@ -8,7 +8,7 @@ namespace DragaliaAPI.Test.Features.TimeAttack;
 public class PartyInfoValidatorTest
 {
     private const int QuestId = 227010104; // Volk's Wrath Solo TA
-    private PartyInfoValidator validator;
+    private readonly PartyInfoValidator validator;
 
     public PartyInfoValidatorTest()
     {

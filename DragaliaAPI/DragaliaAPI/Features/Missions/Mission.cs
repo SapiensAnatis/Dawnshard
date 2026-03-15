@@ -23,18 +23,15 @@ public class Mission
     {
         return type switch
         {
-            MissionType.Album => new Mission(MasterAsset.MissionAlbumData.Get(id), type),
-            MissionType.Beginner => new Mission(MasterAsset.MissionBeginnerData.Get(id), type),
-            MissionType.Daily => new Mission(MasterAsset.MissionDailyData.Get(id), type),
-            MissionType.Drill => new Mission(MasterAsset.MissionDrillData.Get(id), type),
-            MissionType.MainStory => new Mission(MasterAsset.MissionMainStoryData.Get(id), type),
-            MissionType.MemoryEvent => new Mission(
-                MasterAsset.MissionMemoryEventData.Get(id),
-                type
-            ),
-            MissionType.Normal => new Mission(MasterAsset.MissionNormalData.Get(id), type),
-            MissionType.Period => new Mission(MasterAsset.MissionPeriodData.Get(id), type),
-            MissionType.Special => new Mission(MasterAsset.MissionSpecialData.Get(id), type),
+            MissionType.Album => new(MasterAsset.MissionAlbumData.Get(id), type),
+            MissionType.Beginner => new(MasterAsset.MissionBeginnerData.Get(id), type),
+            MissionType.Daily => new(MasterAsset.MissionDailyData.Get(id), type),
+            MissionType.Drill => new(MasterAsset.MissionDrillData.Get(id), type),
+            MissionType.MainStory => new(MasterAsset.MissionMainStoryData.Get(id), type),
+            MissionType.MemoryEvent => new(MasterAsset.MissionMemoryEventData.Get(id), type),
+            MissionType.Normal => new(MasterAsset.MissionNormalData.Get(id), type),
+            MissionType.Period => new(MasterAsset.MissionPeriodData.Get(id), type),
+            MissionType.Special => new(MasterAsset.MissionSpecialData.Get(id), type),
             MissionType.Invalid => throw new InvalidOperationException("Invalid MissionType"),
             _ => throw new UnreachableException("Unknown MissionType"),
         };

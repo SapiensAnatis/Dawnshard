@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -161,7 +160,7 @@ public partial class MatchingService : IMatchingService
             hostCharaData = new(1, Charas.ThePrince);
         }
 
-        return new RoomList()
+        return new()
         {
             RoomName = game.Name,
             ClusterName = game.ClusterName,

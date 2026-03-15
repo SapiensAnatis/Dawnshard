@@ -94,13 +94,13 @@ public class WallControllerTest
 
         List<AtgenBuildEventRewardEntityList> buildEventRewardEntityList = new()
         {
-            new AtgenBuildEventRewardEntityList()
+            new()
             {
                 EntityType = EntityTypes.Mana,
                 EntityId = 0,
                 EntityQuantity = 2500,
             },
-            new AtgenBuildEventRewardEntityList()
+            new()
             {
                 EntityType = EntityTypes.Rupies,
                 EntityId = 0,

@@ -5,7 +5,7 @@ namespace DragaliaAPI.Shared.Test;
 
 public static class ModuleInitializer
 {
-    private static readonly TaskFactory TaskFactory = new TaskFactory(
+    private static readonly TaskFactory TaskFactory = new(
         CancellationToken.None,
         TaskCreationOptions.None,
         TaskContinuationOptions.None,

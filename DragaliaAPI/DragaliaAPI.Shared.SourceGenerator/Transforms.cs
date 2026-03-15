@@ -54,7 +54,7 @@ public static class Transforms
 
                 ITypeSymbol keyTypeSymbol = keyPropertySymbol.Type;
 
-                yield return new MasterAssetDeclaration(
+                yield return new(
                     keyTypeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat),
                     itemTypeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat),
                     jsonPath,
@@ -93,11 +93,7 @@ public static class Transforms
 
                 attribute.TryGetNamedArgument("FeatureFlag", out string? featureFlag);
 
-                yield return new MasterAssetExtensionDeclaration(
-                    masterAssetName,
-                    jsonPath,
-                    featureFlag
-                );
+                yield return new(masterAssetName, jsonPath, featureFlag);
             }
         }
     }

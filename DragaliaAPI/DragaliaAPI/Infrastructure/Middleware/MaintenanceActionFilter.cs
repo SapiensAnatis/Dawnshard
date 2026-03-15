@@ -30,7 +30,7 @@ public partial class MaintenanceActionFilter(
         context.Result = new OkObjectResult(
             new DragaliaResponse<object>(
                 new ResultCodeResponse(MaintenanceCode),
-                dataHeaders: new DataHeaders(MaintenanceCode)
+                dataHeaders: new(MaintenanceCode)
             )
         );
     }

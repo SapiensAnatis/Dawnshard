@@ -47,18 +47,26 @@ public partial class AbilityCrestRepository : IAbilityCrestRepository
             return;
         }
 
-        DbAbilityCrest entity = new DbAbilityCrest()
+        DbAbilityCrest entity = new()
         {
             ViewerId = this.playerIdentityService.ViewerId,
             AbilityCrestId = abilityCrestId,
         };
 
         if (limitBreakCount is not null)
+        {
             entity.LimitBreakCount = limitBreakCount.Value;
+        }
+
         if (buildupCount is not null)
+        {
             entity.BuildupCount = buildupCount.Value;
+        }
+
         if (equipableCount is not null)
+        {
             entity.EquipableCount = equipableCount.Value;
+        }
 
         this.apiContext.PlayerAbilityCrests.Add(entity);
     }

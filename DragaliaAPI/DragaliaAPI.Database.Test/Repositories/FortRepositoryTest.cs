@@ -27,7 +27,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         this.fixture.ApiContext.Database.EnsureCreated();
         this.fixture.ApiContext.ChangeTracker.Clear();
 
-        this.fortRepository = new FortRepository(
+        this.fortRepository = new(
             this.fixture.ApiContext,
             this.mockPlayerIdentityService.Object,
             this.fakeTimeProvider,
@@ -70,11 +70,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetFortDetail_ReturnsFortDetail()
     {
-        DbFortDetail detail = new DbFortDetail()
-        {
-            ViewerId = DbTestFixture.ViewerId,
-            CarpenterNum = 2,
-        };
+        DbFortDetail detail = new() { ViewerId = DbTestFixture.ViewerId, CarpenterNum = 2 };
         await this.fixture.AddToDatabase(detail);
 
         (await this.fortRepository.GetFortDetail())

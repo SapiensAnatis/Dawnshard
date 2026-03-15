@@ -17,7 +17,7 @@ public partial class DungeonRecordTest
         {
             Party = [new() { CharaId = Charas.ThePrince, UnitNo = 1 }],
             QuestData = MasterAsset.QuestData.Get(volksWrathExpertQuestId),
-            EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
+            EnemyList = new() { { 1, [] } },
         };
 
         string key = await this.StartDungeon(mockSession);
@@ -27,14 +27,14 @@ public partial class DungeonRecordTest
             new DungeonRecordRecordRequest()
             {
                 DungeonKey = key,
-                PlayRecord = new PlayRecord
+                PlayRecord = new()
                 {
                     Time = 10,
                     TreasureRecord = [],
                     LiveUnitNoList = [1],
                     DamageRecord = [],
                     DragonDamageRecord = [],
-                    BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                    BattleRoyalRecord = new(),
                 },
             },
             cancellationToken: TestContext.Current.CancellationToken
@@ -49,7 +49,7 @@ public partial class DungeonRecordTest
             .BeEquivalentTo(
                 new Dictionary<Charas, IEnumerable<AtgenHonorList>>()
                 {
-                    [Charas.ThePrince] = [new AtgenHonorList() { HonorId = expectedHonorId }],
+                    [Charas.ThePrince] = [new() { HonorId = expectedHonorId }],
                 }
             );
     }
@@ -76,7 +76,7 @@ public partial class DungeonRecordTest
                 new() { CharaId = Charas.Luca, UnitNo = 4 },
             ],
             QuestData = MasterAsset.QuestData.Get(questId),
-            EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
+            EnemyList = new() { { 1, [] } },
         };
 
         string key = await this.StartDungeon(mockSession);
@@ -86,14 +86,14 @@ public partial class DungeonRecordTest
             new DungeonRecordRecordRequest()
             {
                 DungeonKey = key,
-                PlayRecord = new PlayRecord
+                PlayRecord = new()
                 {
                     Time = 10,
                     TreasureRecord = [],
                     LiveUnitNoList = [1, 2, 3], // Luca (UnitNo 4) did not survive
                     DamageRecord = [],
                     DragonDamageRecord = [],
-                    BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                    BattleRoyalRecord = new(),
                 },
             },
             cancellationToken: TestContext.Current.CancellationToken
@@ -108,9 +108,9 @@ public partial class DungeonRecordTest
             .BeEquivalentTo(
                 new Dictionary<Charas, IEnumerable<AtgenHonorList>>()
                 {
-                    [Charas.Elisanne] = [new AtgenHonorList() { HonorId = expectedHonorId }],
-                    [Charas.Ranzal] = [new AtgenHonorList() { HonorId = expectedHonorId }],
-                    [Charas.Cleo] = [new AtgenHonorList() { HonorId = expectedHonorId }],
+                    [Charas.Elisanne] = [new() { HonorId = expectedHonorId }],
+                    [Charas.Ranzal] = [new() { HonorId = expectedHonorId }],
+                    [Charas.Cleo] = [new() { HonorId = expectedHonorId }],
                 }
             );
     }
@@ -127,7 +127,7 @@ public partial class DungeonRecordTest
         {
             Party = [new() { CharaId = Charas.Laxi, UnitNo = 1 }],
             QuestData = MasterAsset.QuestData.Get(questId),
-            EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
+            EnemyList = new() { { 1, [] } },
         };
 
         string key = await this.StartDungeon(mockSession);
@@ -137,14 +137,14 @@ public partial class DungeonRecordTest
             new DungeonRecordRecordRequest()
             {
                 DungeonKey = key,
-                PlayRecord = new PlayRecord
+                PlayRecord = new()
                 {
                     Time = 10,
                     TreasureRecord = [],
                     LiveUnitNoList = [1],
                     DamageRecord = [],
                     DragonDamageRecord = [],
-                    BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                    BattleRoyalRecord = new(),
                     RebornCount = 1,
                 },
             },
@@ -176,7 +176,7 @@ public partial class DungeonRecordTest
         {
             Party = [new() { CharaId = Charas.Aldred, UnitNo = 1 }],
             QuestData = MasterAsset.QuestData.Get(questId),
-            EnemyList = new Dictionary<int, IList<AtgenEnemy>>() { { 1, [] } },
+            EnemyList = new() { { 1, [] } },
         };
 
         string key = await this.StartDungeon(mockSession);
@@ -186,14 +186,14 @@ public partial class DungeonRecordTest
             new DungeonRecordRecordRequest()
             {
                 DungeonKey = key,
-                PlayRecord = new PlayRecord
+                PlayRecord = new()
                 {
                     Time = 10,
                     TreasureRecord = [],
                     LiveUnitNoList = [1],
                     DamageRecord = [],
                     DragonDamageRecord = [],
-                    BattleRoyalRecord = new AtgenBattleRoyalRecord(),
+                    BattleRoyalRecord = new(),
                     RebornCount = 0,
                 },
             },

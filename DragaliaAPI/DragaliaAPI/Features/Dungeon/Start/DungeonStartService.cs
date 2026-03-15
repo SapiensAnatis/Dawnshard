@@ -322,22 +322,22 @@ internal sealed partial class DungeonStartService(
         {
             for (int i = units.Count; i < 4; i++)
             {
-                units.Add(new PartyUnitList { Position = i + 1 });
+                units.Add(new() { Position = i + 1 });
             }
         }
 
         foreach (PartyUnitList unit in units)
         {
-            unit.CharaData ??= new CharaList();
-            unit.DragonData ??= new DragonList();
-            unit.WeaponSkinData ??= new GameWeaponSkin();
-            unit.WeaponBodyData ??= new GameWeaponBody();
+            unit.CharaData ??= new();
+            unit.DragonData ??= new();
+            unit.WeaponSkinData ??= new();
+            unit.WeaponBodyData ??= new();
             unit.CrestSlotType1CrestList ??= Enumerable.Empty<GameAbilityCrest>();
             unit.CrestSlotType2CrestList ??= Enumerable.Empty<GameAbilityCrest>();
             unit.CrestSlotType3CrestList ??= Enumerable.Empty<GameAbilityCrest>();
-            unit.TalismanData ??= new TalismanList();
-            unit.EditSkill1CharaData ??= new EditSkillCharaData();
-            unit.EditSkill2CharaData ??= new EditSkillCharaData();
+            unit.TalismanData ??= new();
+            unit.EditSkill1CharaData ??= new();
+            unit.EditSkill2CharaData ??= new();
             unit.GameWeaponPassiveAbilityList ??= Enumerable.Empty<WeaponPassiveAbilityList>();
         }
 
@@ -410,7 +410,7 @@ internal sealed partial class DungeonStartService(
 
     private static AtgenSupportData BuildHelperData(AtgenSupportUserDataDetail helperDetails)
     {
-        return new AtgenSupportData()
+        return new()
         {
             ViewerId = helperDetails.UserSupportData.ViewerId,
             Name = helperDetails.UserSupportData.Name,

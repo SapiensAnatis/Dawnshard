@@ -33,9 +33,8 @@ internal sealed partial class UserController(
 
     [HttpGet("me/impersonation_session")]
     [Authorize(Policy = PolicyNames.RequireAdmin)]
-    public async Task<ActionResult<ImpersonationSession>> GetImpersonationSession(
-        CancellationToken cancellationToken
-    ) => await userService.GetImpersonationSession(cancellationToken);
+    public async Task<ActionResult<ImpersonationSession>> GetImpersonationSession() =>
+        await userService.GetImpersonationSession();
 
     [HttpPut("me/impersonation_session")]
     [Authorize(Policy = PolicyNames.RequireAdmin)]
@@ -57,15 +56,13 @@ internal sealed partial class UserController(
 
         return await userService.SetImpersonationSession(
             impersonatedAccountId,
-            impersonatedViewerId,
-            cancellationToken
+            impersonatedViewerId
         );
     }
 
     [HttpDelete("me/impersonation_session")]
     [Authorize(Policy = PolicyNames.RequireAdmin)]
-    public async Task ClearImpersonationSession(CancellationToken cancellationToken) =>
-        await userService.ClearImpersonationSession(cancellationToken);
+    public async Task ClearImpersonationSession() => await userService.ClearImpersonationSession();
 
     private static partial class Log
     {

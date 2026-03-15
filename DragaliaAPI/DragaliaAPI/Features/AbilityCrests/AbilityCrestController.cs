@@ -175,7 +175,7 @@ public partial class AbilityCrestController(
             .Select(x =>
                 index < dbAbilityCrestSets.Count && dbAbilityCrestSets[index].AbilityCrestSetNo == x
                     ? dbAbilityCrestSets[index++]
-                    : new DbAbilityCrestSet() { ViewerId = this.ViewerId, AbilityCrestSetNo = x }
+                    : new() { ViewerId = this.ViewerId, AbilityCrestSetNo = x }
             )
             .Select(AbilityCrestSetMapper.ToAbilityCrestSetList)
             .ToArray();
@@ -240,7 +240,7 @@ public partial class AbilityCrestController(
         if (dbAbilityCrestSet is null)
         {
             await this.abilityCrestRepository.AddOrUpdateSet(
-                new DbAbilityCrestSet()
+                new()
                 {
                     AbilityCrestSetNo = request.AbilityCrestSetNo,
                     AbilityCrestSetName = request.AbilityCrestSetName,

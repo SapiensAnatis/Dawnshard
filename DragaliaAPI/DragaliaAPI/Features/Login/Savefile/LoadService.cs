@@ -99,7 +99,7 @@ public partial class LoadService(
                     .Select(x => x.MapToUserSummonList()),
 
                 FriendNotice = new(0, 0),
-                ShopNotice = new ShopNotice(savefile.ShopInfo?.DailySummonCount == 0),
+                ShopNotice = new(savefile.ShopInfo?.DailySummonCount == 0),
                 GuildNotice = new(0, false, false, false, false),
                 StaminaMultiSystemMax = userService.StaminaMultiMax,
                 StaminaMultiUserMax = 12,
@@ -145,10 +145,12 @@ public partial class LoadService(
             {
                 partySettingList.EquipCrestSlotType1CrestId1 = 0;
             }
+
             if (partySettingList.EquipCrestSlotType1CrestId2 >= maxVanilllaId)
             {
                 partySettingList.EquipCrestSlotType1CrestId2 = 0;
             }
+
             if (partySettingList.EquipCrestSlotType1CrestId3 >= maxVanilllaId)
             {
                 partySettingList.EquipCrestSlotType1CrestId3 = 0;
@@ -293,7 +295,12 @@ public static partial class LoadMapper
 
     private static IEnumerable<PartySettingList?> MapOrderedUnitList(
         ICollection<DbPartyUnit> dbEntity
-    ) => dbEntity.OrderBy(x => x.UnitNo).Select(x => Map(x));
+    )
+    {
+#pragma warning disable IDE0200 // Needs to be an expression or EF will complain
+        return dbEntity.OrderBy(x => x.UnitNo).Select(x => Map(x));
+#pragma warning restore IDE0200
+    }
 
     [MapperIgnoreTarget(nameof(CharaList.StatusPlusCount))]
     private static partial CharaList Map(DbPlayerCharaData playerCharaData);

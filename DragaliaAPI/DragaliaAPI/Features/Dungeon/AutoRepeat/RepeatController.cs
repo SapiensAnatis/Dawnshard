@@ -5,25 +5,17 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Features.Dungeon.AutoRepeat;
 
 [Route("repeat")]
-public class RepeatController(
-    IAutoRepeatService autoRepeatService,
-    ILogger<RepeatController> logger
-) : DragaliaControllerBase
+public class RepeatController(IAutoRepeatService autoRepeatService) : DragaliaControllerBase
 {
-    private readonly IAutoRepeatService autoRepeatService = autoRepeatService;
-    private readonly ILogger<RepeatController> logger = logger;
-
     [HttpPost("end")]
     public async Task<DragaliaResult<RepeatEndResponse>> End()
     {
-        RepeatInfo? info = await this.autoRepeatService.ClearRepeatInfo();
-        if (info == null)
-        {
-            throw new DragaliaException(
+        RepeatInfo? info =
+            await autoRepeatService.ClearRepeatInfo()
+            ?? throw new DragaliaException(
                 ResultCode.DungeonRepeatNotPlayable,
                 "Failed to retrieve repeat data"
             );
-        }
 
         RepeatEndResponse response = new()
         {

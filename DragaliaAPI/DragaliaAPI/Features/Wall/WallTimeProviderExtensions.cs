@@ -9,14 +9,7 @@ public static class WallTimeProviderExtensions
         int month;
         int year = lastReset.Year;
 
-        if (lastReset.Day >= 15)
-        {
-            month = lastReset.Month;
-        }
-        else
-        {
-            month = lastReset.Month - 1;
-        }
+        month = lastReset.Day >= 15 ? lastReset.Month : lastReset.Month - 1;
 
         // Don't form an invalid date if we're in January
         if (month == 0)
@@ -25,7 +18,7 @@ public static class WallTimeProviderExtensions
             year -= 1;
         }
 
-        return new DateTimeOffset(
+        return new(
             year,
             month,
             15,

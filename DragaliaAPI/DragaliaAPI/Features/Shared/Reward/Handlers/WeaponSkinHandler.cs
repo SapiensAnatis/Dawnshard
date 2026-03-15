@@ -14,9 +14,11 @@ public class WeaponSkinHandler(IWeaponRepository weaponRepository) : IRewardHand
     {
         // TODO: lookup duplicate reward in masterasset
         if (await weaponRepository.WeaponSkins.AnyAsync(x => x.WeaponSkinId == entity.Id))
-            return new GrantReturn(RewardGrantResult.Discarded);
+        {
+            return new(RewardGrantResult.Discarded);
+        }
 
         await weaponRepository.AddSkin(entity.Id);
-        return new GrantReturn(RewardGrantResult.Added);
+        return new(RewardGrantResult.Added);
     }
 }

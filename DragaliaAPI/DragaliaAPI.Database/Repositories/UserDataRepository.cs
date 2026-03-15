@@ -92,13 +92,17 @@ public partial class UserDataRepository : BaseRepository, IUserDataRepository
     {
         Log.UpdatingPlayerRupiesBy(this.logger, offset);
         if (offset == 0)
+        {
             return;
+        }
 
         DbPlayerUserData userData = await UserData.SingleAsync();
 
         long newQuantity = userData.Coin + offset; // changed from += to + bc otherwise it adds to quantity anyways which i don't
         if (newQuantity < 0) // think was what was intended since it renders last line useless
+        {
             throw new ArgumentException("Player cannot have negative rupies");
+        }
 
         userData.Coin = newQuantity;
     }
@@ -125,13 +129,17 @@ public partial class UserDataRepository : BaseRepository, IUserDataRepository
     public async Task UpdateDewpoint(int quantity)
     {
         if (quantity == 0)
+        {
             return;
+        }
 
         DbPlayerUserData userData = await UserData.SingleAsync();
 
         int newQuantity = userData.DewPoint + quantity;
         if (newQuantity < 0)
+        {
             throw new ArgumentException("Player cannot have negative eldwater");
+        }
 
         userData.DewPoint = newQuantity;
     }
@@ -145,7 +153,9 @@ public partial class UserDataRepository : BaseRepository, IUserDataRepository
     public async Task SetDewpoint(int quantity)
     {
         if (quantity < 0)
+        {
             throw new ArgumentException("Player cannot have negative eldwater");
+        }
 
         DbPlayerUserData userData = await UserData.SingleAsync();
         userData.DewPoint = quantity;

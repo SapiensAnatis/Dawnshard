@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.CoOp;
 using DragaliaAPI.Features.Friends;
@@ -44,7 +43,7 @@ internal sealed partial class DungeonRecordHelperService(
             helperList.Add(supportList.UserSupportData);
 
             helperDetailList.Add(
-                new AtgenHelperDetailList()
+                new()
                 {
                     ViewerId = supportList.UserSupportData.ViewerId,
                     IsFriend = supportList.IsFriend,

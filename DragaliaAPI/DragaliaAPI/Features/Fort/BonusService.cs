@@ -99,11 +99,7 @@ public partial class BonusService(
 
         FortPlantDetail detail = MasterAssetUtils.GetFortPlant(eventData.EventFortId, level);
 
-        return new AtgenEventBoost()
-        {
-            EventEffect = detail.EventEffectType,
-            EffectValue = detail.EventEffectArgs,
-        };
+        return new() { EventEffect = detail.EventEffectType, EffectValue = detail.EventEffectArgs };
     }
 
     private static IEnumerable<AtgenElementBonus> GetFortElementBonus(List<int> buildIds)
@@ -122,7 +118,9 @@ public partial class BonusService(
             FortPlantDetail d = MasterAsset.FortPlantDetail.Get(id);
 
             if (d.EffectId != FortEffectTypes.Element)
+            {
                 continue;
+            }
 
             result[(UnitElement)d.EffType1].Hp += d.EffArgs1;
             result[(UnitElement)d.EffType1].Attack += d.EffArgs2;
@@ -160,7 +158,9 @@ public partial class BonusService(
             FortPlantDetail d = MasterAsset.FortPlantDetail.Get(id);
 
             if (d.EffectId != FortEffectTypes.Weapon)
+            {
                 continue;
+            }
 
             result[(WeaponTypes)d.EffType1].Hp += d.EffArgs1;
             result[(WeaponTypes)d.EffType1].Attack += d.EffArgs2;

@@ -46,9 +46,7 @@ public class EulaTest : TestFixture
 
         response
             .Should()
-            .BeEquivalentTo(
-                new EulaGetVersionResponse(new AtgenVersionHash("gb", "en_eu", 1, 1), false, 1)
-            );
+            .BeEquivalentTo(new EulaGetVersionResponse(new("gb", "en_eu", 1, 1), false, 1));
     }
 
     [Fact]
@@ -64,8 +62,6 @@ public class EulaTest : TestFixture
 
         response
             .Should()
-            .BeEquivalentTo(
-                new EulaGetVersionResponse(new AtgenVersionHash("gb", "en_us", 1, 1), false, 1)
-            );
+            .BeEquivalentTo(new EulaGetVersionResponse(new("gb", "en_us", 1, 1), false, 1));
     }
 }

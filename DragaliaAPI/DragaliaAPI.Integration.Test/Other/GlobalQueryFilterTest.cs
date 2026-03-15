@@ -165,7 +165,7 @@ public class GlobalQueryFilterTest : TestFixture
     private async Task TestGlobalQueryFilter<TEntity>()
         where TEntity : class, IDbPlayerData
     {
-        DbPlayer otherPlayer = new DbPlayer() { AccountId = "other" };
+        DbPlayer otherPlayer = new() { AccountId = "other" };
 
         this.ApiContext.Players.Add(otherPlayer);
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);

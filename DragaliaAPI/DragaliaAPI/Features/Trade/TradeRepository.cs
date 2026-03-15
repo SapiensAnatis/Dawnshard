@@ -33,10 +33,14 @@ public class TradeRepository : ITradeRepository
     public async Task<bool> AddTrade(TradeType type, int id, int count, DateTimeOffset? time = null)
     {
         if (type == TradeType.None)
+        {
             throw new ArgumentNullException(nameof(type));
+        }
 
         if (type == TradeType.Treasure && time == null)
+        {
             throw new ArgumentNullException(nameof(time));
+        }
 
         DateTimeOffset actualTime = time ?? DateTimeOffset.UnixEpoch;
 
@@ -45,7 +49,7 @@ public class TradeRepository : ITradeRepository
         if (existing == null)
         {
             this.apiContext.PlayerTrades.Add(
-                new DbPlayerTrade
+                new()
                 {
                     ViewerId = this.playerIdentityService.ViewerId,
                     Type = type,

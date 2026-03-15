@@ -53,7 +53,7 @@ public partial class EventController : ControllerBase
     public async Task<IActionResult> GameCreate(GameCreateRequest request)
     {
         RedisGame newGame = new(request.Game);
-        newGame.Players.Add(new RedisPlayer(request.Player));
+        newGame.Players.Add(new(request.Player));
 
         await this.Games.InsertAsync(newGame, this.KeyExpiry);
         await this.Games.SaveAsync();
@@ -93,7 +93,7 @@ public partial class EventController : ControllerBase
             return this.Conflict();
         }
 
-        game.Players.Add(new RedisPlayer(request.Player));
+        game.Players.Add(new(request.Player));
         await this.Games.UpdateAsync(game);
 
         Log.AddedPlayerToGame(this.logger, request.Player, game);

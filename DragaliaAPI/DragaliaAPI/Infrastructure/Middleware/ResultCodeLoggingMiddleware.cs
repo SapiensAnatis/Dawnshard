@@ -42,7 +42,7 @@ internal partial class ResultCodeLoggingMiddleware(ILogger<ResultCodeLoggingMidd
     }
 
     private static LogLevel GetLogLevelFromResultCode(ResultCode? code) =>
-        (code is null || NonErrorResultCodes.Contains(code.Value))
+        code is null || NonErrorResultCodes.Contains(code.Value)
             ? LogLevel.Information
             : LogLevel.Error;
 

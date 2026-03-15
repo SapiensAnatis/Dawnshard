@@ -31,7 +31,7 @@ public partial class FortRepository(
         {
             Log.InitializingPlayerFortDetail(logger);
             await apiContext.PlayerFortDetails.AddAsync(
-                new DbFortDetail()
+                new()
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     CarpenterNum = DefaultCarpenters,
@@ -43,7 +43,7 @@ public partial class FortRepository(
         {
             Log.InitializingHalidom(logger);
             await apiContext.PlayerFortBuilds.AddAsync(
-                new DbFortBuild()
+                new()
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     PlantId = FortPlants.TheHalidom,
@@ -63,7 +63,7 @@ public partial class FortRepository(
         {
             Log.InitializingSmithy(logger);
             await apiContext.PlayerFortBuilds.AddAsync(
-                new DbFortBuild
+                new()
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     PlantId = FortPlants.Smithy,
@@ -163,14 +163,9 @@ public partial class FortRepository(
 
     public async Task<DbFortBuild> GetBuilding(long buildId)
     {
-        DbFortBuild? fort = await apiContext
-            .PlayerFortBuilds.Where(x => x.BuildId == buildId)
-            .FirstOrDefaultAsync();
-
-        if (fort is null)
-        {
-            throw new InvalidOperationException($"Could not get building {buildId}");
-        }
+        DbFortBuild? fort =
+            await apiContext.PlayerFortBuilds.Where(x => x.BuildId == buildId).FirstOrDefaultAsync()
+            ?? throw new InvalidOperationException($"Could not get building {buildId}");
 
         return fort;
     }
@@ -196,14 +191,16 @@ public partial class FortRepository(
         Log.UserAlreadyOwnsCopies(logger, startQuantity);
 
         if (startQuantity >= quantity)
+        {
             return;
+        }
 
         int actualLevel = level ?? MasterAssetUtils.GetInitialFortPlant(plant).Level;
 
         for (int i = startQuantity; i < quantity; i++)
         {
             await apiContext.PlayerFortBuilds.AddAsync(
-                new DbFortBuild
+                new()
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     PlantId = plant,

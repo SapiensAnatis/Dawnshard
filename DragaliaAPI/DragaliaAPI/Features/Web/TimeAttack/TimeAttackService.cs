@@ -21,7 +21,7 @@ internal sealed class TimeAttackService(ApiContext apiContext)
 
     static TimeAttackService()
     {
-        DeserializePartyInfoOptions = new JsonSerializerOptions()
+        DeserializePartyInfoOptions = new()
         {
             PropertyNamingPolicy = CustomSnakeCaseNamingPolicy.Instance,
         };
@@ -138,7 +138,7 @@ internal sealed class TimeAttackService(ApiContext apiContext)
             })
             .ToList();
 
-        return new OffsetPagedResponse<TimeAttackRanking>(totalCount, mappedResults);
+        return new(totalCount, mappedResults);
     }
 
     private static List<TimeAttackUnit> MapUnits(string partyInfoJson)
@@ -236,7 +236,7 @@ internal sealed class TimeAttackService(ApiContext apiContext)
             MapSharedSkill(sharedSkillId2),
         ];
 
-        return new TimeAttackUnit()
+        return new()
         {
             Position = deserializedUnit.Position,
             Chara = chara,
@@ -257,7 +257,7 @@ internal sealed class TimeAttackService(ApiContext apiContext)
 
         AbilityCrest masterAssetAbilityCrest = MasterAsset.AbilityCrest[gameCrest.AbilityCrestId];
 
-        return new TimeAttackAbilityCrest()
+        return new()
         {
             Id = gameCrest.AbilityCrestId,
             BaseId = masterAssetAbilityCrest.BaseId,
@@ -269,10 +269,6 @@ internal sealed class TimeAttackService(ApiContext apiContext)
     {
         SkillData skillData = MasterAsset.SkillData[skillId];
 
-        return new TimeAttackSharedSkill()
-        {
-            Id = skillId,
-            SkillLv4IconName = skillData.SkillLv4IconName,
-        };
+        return new() { Id = skillId, SkillLv4IconName = skillData.SkillLv4IconName };
     }
 }

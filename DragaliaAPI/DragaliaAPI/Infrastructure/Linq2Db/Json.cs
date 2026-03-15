@@ -18,12 +18,9 @@ internal static class Json
     {
         public void Build(Sql.ISqlExtensionBuilder builder)
         {
-            ISqlExpression? propExpression = builder.GetExpression(0);
-
-            if (propExpression == null)
-            {
-                throw new InvalidOperationException("Invalid property.");
-            }
+            ISqlExpression propExpression =
+                builder.GetExpression(0)
+                ?? throw new InvalidOperationException("Invalid property.");
 
             List<ISqlExpression> parameters = [propExpression];
 
@@ -32,7 +29,7 @@ internal static class Json
             string expressionStr = "{0}->>" + propertyName.ToString().Replace('\"', '\'');
 
             ISqlExpression valueExpression = new SqlExpression(
-                new DbDataType(typeof(string)),
+                new(typeof(string)),
                 expressionStr,
                 Precedence.Primary,
                 parameters.ToArray()

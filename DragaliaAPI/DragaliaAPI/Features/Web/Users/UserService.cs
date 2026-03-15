@@ -31,13 +31,13 @@ internal sealed class UserService(
             .PlayerUserData.Select(x => new
             {
                 LastSaveImportTime = x.Owner!.LastSavefileImportTime,
-                LastLoginTime = x.LastLoginTime,
+                x.LastLoginTime,
             })
             .FirstAsync(cancellationToken);
 
         PlayerSettings settings = await settingsService.GetSettings(cancellationToken);
 
-        return new UserProfile()
+        return new()
         {
             LastSaveImportTime = userData.LastSaveImportTime,
             LastLoginTime = userData.LastLoginTime,
@@ -45,18 +45,16 @@ internal sealed class UserService(
         };
     }
 
-    public async Task<ImpersonationSession> GetImpersonationSession(
-        CancellationToken cancellationToken
-    )
+    public async Task<ImpersonationSession> GetImpersonationSession()
     {
         Session? session = await sessionService.LoadImpersonationSession(
             playerIdentityService.AccountId
         );
 
-        return new ImpersonationSession(session?.ViewerId);
+        return new(session?.ViewerId);
     }
 
-    public async Task ClearImpersonationSession(CancellationToken cancellationToken)
+    public async Task ClearImpersonationSession()
     {
         await sessionService.ClearUserImpersonation();
     }
@@ -75,12 +73,11 @@ internal sealed class UserService(
 
     public async Task<ImpersonationSession> SetImpersonationSession(
         string impersonatedAccountId,
-        long impersonatedViewerId,
-        CancellationToken cancellationToken
+        long impersonatedViewerId
     )
     {
         await sessionService.StartUserImpersonation(impersonatedAccountId, impersonatedViewerId);
 
-        return new ImpersonationSession(impersonatedViewerId);
+        return new(impersonatedViewerId);
     }
 }

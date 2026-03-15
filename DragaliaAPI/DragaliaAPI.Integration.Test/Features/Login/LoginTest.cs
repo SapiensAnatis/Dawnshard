@@ -73,9 +73,7 @@ public class LoginTest : TestFixture
                 cancellationToken: TestContext.Current.CancellationToken
             );
 
-        this.MockTimeProvider.SetUtcNow(
-            new DateTimeOffset(2049, 03, 16, 02, 13, 59, TimeSpan.Zero)
-        ); // Into Tuesday, but last reset was Monday
+        this.MockTimeProvider.SetUtcNow(new(2049, 03, 16, 02, 13, 59, TimeSpan.Zero)); // Into Tuesday, but last reset was Monday
 
         await this.Client.PostMsgpack<LoginIndexResponse>(
             "/login/index",
@@ -121,9 +119,7 @@ public class LoginTest : TestFixture
             .ApiContext.PlayerDragonGifts.Where(x => x.ViewerId == ViewerId)
             .ExecuteDeleteAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        this.MockTimeProvider.SetUtcNow(
-            new DateTimeOffset(2049, 03, 15, 23, 13, 59, TimeSpan.Zero)
-        ); // Monday
+        this.MockTimeProvider.SetUtcNow(new(2049, 03, 15, 23, 13, 59, TimeSpan.Zero)); // Monday
 
         await this.Client.PostMsgpack<LoginIndexResponse>(
             "/login/index",
@@ -155,9 +151,7 @@ public class LoginTest : TestFixture
             .ApiContext.PlayerDragonGifts.Where(x => x.ViewerId == ViewerId)
             .ExecuteDeleteAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        this.MockTimeProvider.SetUtcNow(
-            new DateTimeOffset(2049, 03, 14, 23, 13, 59, TimeSpan.Zero)
-        ); // Sunday
+        this.MockTimeProvider.SetUtcNow(new(2049, 03, 14, 23, 13, 59, TimeSpan.Zero)); // Sunday
 
         await this.Client.PostMsgpack<LoginIndexResponse>(
             "/login/index",
@@ -407,11 +401,11 @@ public class LoginTest : TestFixture
             .Should()
             .BeEquivalentTo(
                 [
-                    new DbPlayerMission() { Id = 15070101 },
-                    new DbPlayerMission() { Id = 15070201 },
-                    new DbPlayerMission() { Id = 15070301 },
-                    new DbPlayerMission() { Id = 15070401 },
-                    new DbPlayerMission() { Id = 15070501 },
+                    new() { Id = 15070101 },
+                    new() { Id = 15070201 },
+                    new() { Id = 15070301 },
+                    new() { Id = 15070401 },
+                    new() { Id = 15070501 },
                     new DbPlayerMission() { Id = 15070601 },
                 ],
                 opts => opts.Including(x => x.Id),
@@ -424,13 +418,13 @@ public class LoginTest : TestFixture
             .Should()
             .BeEquivalentTo(
                 [
-                    new DbPlayerMission() { Id = 11190101 },
-                    new DbPlayerMission() { Id = 11190102 },
-                    new DbPlayerMission() { Id = 11190103 },
-                    new DbPlayerMission() { Id = 11190104 },
-                    new DbPlayerMission() { Id = 11190105 },
-                    new DbPlayerMission() { Id = 11190201 },
-                    new DbPlayerMission() { Id = 11190202 },
+                    new() { Id = 11190101 },
+                    new() { Id = 11190102 },
+                    new() { Id = 11190103 },
+                    new() { Id = 11190104 },
+                    new() { Id = 11190105 },
+                    new() { Id = 11190201 },
+                    new() { Id = 11190202 },
                     new DbPlayerMission() { Id = 11190301 },
                 ],
                 opts => opts.Including(x => x.Id),
@@ -483,11 +477,11 @@ public class LoginTest : TestFixture
             .Should()
             .BeEquivalentTo(
                 [
-                    new DbPlayerMission() { Id = 15070101 },
-                    new DbPlayerMission() { Id = 15070201 },
-                    new DbPlayerMission() { Id = 15070301 },
-                    new DbPlayerMission() { Id = 15070401 },
-                    new DbPlayerMission() { Id = 15070501 },
+                    new() { Id = 15070101 },
+                    new() { Id = 15070201 },
+                    new() { Id = 15070301 },
+                    new() { Id = 15070401 },
+                    new() { Id = 15070501 },
                     new DbPlayerMission() { Id = 15070601 },
                 ],
                 opts => opts.Including(x => x.Id),

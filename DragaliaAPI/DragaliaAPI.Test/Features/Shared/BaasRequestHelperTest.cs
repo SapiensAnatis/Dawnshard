@@ -29,9 +29,9 @@ public class BaasRequestHelperTest
         this.cache = new MemoryDistributedCache(opts);
 
         this.baasRequestHelper = new BaasApi(
-            new HttpClient(this.mockHttpMessageHandler.Object)
+            new(this.mockHttpMessageHandler.Object)
             {
-                BaseAddress = new Uri("https://www.taylorswift.com"),
+                BaseAddress = new("https://www.taylorswift.com"),
             },
             this.cache,
             NullLogger<BaasApi>.Instance

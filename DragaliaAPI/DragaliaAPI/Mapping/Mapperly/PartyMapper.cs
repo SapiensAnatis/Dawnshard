@@ -30,7 +30,7 @@ public static partial class PartyMapper
 
     public static DbParty MapToDbParty(this PartyList partyList, long viewerId)
     {
-        return new DbParty()
+        return new()
         {
             ViewerId = viewerId,
             PartyNo = partyList.PartyNo,

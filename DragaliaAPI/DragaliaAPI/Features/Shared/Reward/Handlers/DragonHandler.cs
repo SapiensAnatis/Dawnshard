@@ -1,5 +1,4 @@
 using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
@@ -41,18 +40,14 @@ public partial class DragonHandler(
             return GrantReturn.Limit();
         }
 
-        apiContext.PlayerDragonData.Add(
-            new DbPlayerDragonData(playerIdentityService.ViewerId, (DragonId)entity.Id)
-        );
+        apiContext.PlayerDragonData.Add(new(playerIdentityService.ViewerId, (DragonId)entity.Id));
 
         if (
             !apiContext.PlayerDragonReliability.Local.Any(x => x.DragonId == dragon)
             && !await apiContext.PlayerDragonReliability.AnyAsync(x => x.DragonId == dragon)
         )
         {
-            apiContext.PlayerDragonReliability.Add(
-                new DbPlayerDragonReliability(playerIdentityService.ViewerId, dragon)
-            );
+            apiContext.PlayerDragonReliability.Add(new(playerIdentityService.ViewerId, dragon));
         }
 
         return GrantReturn.Added();
@@ -96,9 +91,7 @@ public partial class DragonHandler(
 
             for (int i = 0; i < entity.Quantity; i++)
             {
-                apiContext.PlayerDragonData.Add(
-                    new DbPlayerDragonData(playerIdentityService.ViewerId, dragon)
-                );
+                apiContext.PlayerDragonData.Add(new(playerIdentityService.ViewerId, dragon));
             }
 
             if (
@@ -106,9 +99,7 @@ public partial class DragonHandler(
                 && !apiContext.PlayerDragonReliability.Local.Any(x => x.DragonId == dragon)
             )
             {
-                apiContext.PlayerDragonReliability.Add(
-                    new DbPlayerDragonReliability(playerIdentityService.ViewerId, dragon)
-                );
+                apiContext.PlayerDragonReliability.Add(new(playerIdentityService.ViewerId, dragon));
                 ownedReliabilities.Add(dragon);
             }
 

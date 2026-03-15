@@ -87,7 +87,7 @@ public class PresentController : DragaliaControllerBase
         IEnumerable<PresentDetailList> limitPresentList =
             await this.presentControllerService.GetLimitPresentList(0);
 
-        PresentReceiveResponse data = new PresentReceiveResponse()
+        PresentReceiveResponse data = new()
         {
             ReceivePresentIdList = receivedPresents.Select(x => (ulong)x),
             NotReceivePresentIdList = notReceivedPresents.Select(x => (ulong)x),

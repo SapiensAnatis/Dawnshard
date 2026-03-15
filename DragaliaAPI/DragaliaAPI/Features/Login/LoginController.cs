@@ -66,7 +66,7 @@ public partial class LoginController(
 
         await loginService.RewardHelperMana();
 
-        resp.PenaltyData = new AtgenPenaltyData();
+        resp.PenaltyData = new();
 
         // NOTE: Cancelling the request + savefile updates may cause issues with request loops on debug builds,
         // but it should be fine on the actual server.

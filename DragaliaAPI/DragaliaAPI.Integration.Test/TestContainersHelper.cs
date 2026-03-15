@@ -11,13 +11,13 @@ public class TestContainersHelper
     private const int PostgresContainerPort = 5432;
     private const int RedisContainerPort = 6379;
 
-    private PostgreSqlContainer? postgresContainer;
-    private IContainer? redisContainer;
+    private readonly PostgreSqlContainer? postgresContainer;
+    private readonly IContainer? redisContainer;
 
-    private string postgresUser;
-    private string postgresPassword;
-    private string postgresDatabase;
-    private string postgresHost;
+    private readonly string postgresUser;
+    private readonly string postgresPassword;
+    private readonly string postgresDatabase;
+    private readonly string postgresHost;
     private int postgresPort;
 
     public string RedisHost { get; private set; }
@@ -50,7 +50,9 @@ public class TestContainersHelper
         get
         {
             if (IsGithubActions)
+            {
                 return false;
+            }
 
             ArgumentNullException.ThrowIfNull(this.postgresContainer);
             ArgumentNullException.ThrowIfNull(this.redisContainer);
@@ -67,16 +69,14 @@ public class TestContainersHelper
             this.postgresPassword = "aVerystrong(!)password123";
             this.postgresDatabase = "testing";
 
-            this.postgresContainer = new PostgreSqlBuilder()
-                .WithImage("postgres:16")
+            this.postgresContainer = new PostgreSqlBuilder("postgres:16")
                 .WithUsername(this.postgresUser)
                 .WithPassword(this.postgresPassword)
                 .WithDatabase(this.postgresDatabase)
                 .WithPortBinding(PostgresContainerPort, true)
                 .Build();
 
-            this.redisContainer = new ContainerBuilder()
-                .WithImage("redis/redis-stack:7.2.0-v6")
+            this.redisContainer = new ContainerBuilder("redis/redis-stack:7.2.0-v6")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilCommandIsCompleted("redis-cli PING"))
                 .WithPortBinding(RedisContainerPort, true)
                 .Build();
@@ -101,7 +101,9 @@ public class TestContainersHelper
     public async Task StartAsync()
     {
         if (!this.ContainersAvailable)
+        {
             return;
+        }
 
         await postgresContainer.StartAsync();
         await redisContainer.StartAsync();
@@ -115,7 +117,9 @@ public class TestContainersHelper
     public async Task StopAsync()
     {
         if (!this.ContainersAvailable)
+        {
             return;
+        }
 
         await this.postgresContainer.StopAsync();
         await this.redisContainer.StopAsync();

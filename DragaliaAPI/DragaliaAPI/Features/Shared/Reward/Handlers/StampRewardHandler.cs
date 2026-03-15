@@ -15,10 +15,7 @@ public class StampRewardHandler : IRewardHandler
         // Additionally, all stamps grant 25 wyrmite as the duplicate reward, so
         // there is no need to do a lookup here.
         return Task.FromResult(
-            new GrantReturn(
-                RewardGrantResult.Converted,
-                new Entity(EntityTypes.Wyrmite, Quantity: 25)
-            )
+            new GrantReturn(RewardGrantResult.Converted, new(EntityTypes.Wyrmite, Quantity: 25))
         );
     }
 }

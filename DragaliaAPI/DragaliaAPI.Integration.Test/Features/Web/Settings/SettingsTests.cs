@@ -1,7 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
 using DragaliaAPI.Database.Entities.Owned;
-using DragaliaAPI.Features.Web.Savefile;
 using DragaliaAPI.Features.Web.Users;
 
 namespace DragaliaAPI.Integration.Test.Features.Web.Settings;

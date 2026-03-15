@@ -32,7 +32,7 @@ public class DailyResetMiddleware
                 context.Response.StatusCode = 200;
 
                 DragaliaResponse<DataHeaders> gameResponse = new(
-                    new DataHeaders(ResultCode.CommonChangeDate),
+                    new(ResultCode.CommonChangeDate),
                     ResultCode.CommonChangeDate
                 );
 

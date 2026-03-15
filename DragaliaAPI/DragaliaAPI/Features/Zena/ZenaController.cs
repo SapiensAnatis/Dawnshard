@@ -19,14 +19,18 @@ public class ZenaController(IPlayerIdentityService playerIdentityService, IZenaS
     {
         List<int> teamNumbers = [teamnum];
         if (teamnum2 != -1)
+        {
             teamNumbers.Add(teamnum2);
+        }
 
         using IDisposable impersonation = playerIdentityService.StartUserImpersonation(id);
 
         GetTeamDataResponse? response = await zenaService.GetTeamData(teamNumbers);
 
         if (response is null)
+        {
             return this.NotFound();
+        }
 
         return response;
     }

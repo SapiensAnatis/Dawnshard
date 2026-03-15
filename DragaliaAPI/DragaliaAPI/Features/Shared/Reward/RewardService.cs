@@ -2,7 +2,6 @@ using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Shared.Reward.Handlers;
-using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 
@@ -125,9 +124,7 @@ public partial class RewardService(
                     );
                 }
 
-                this.convertedEntities.Add(
-                    new ConvertedEntity(entity, grantReturn.ConvertedEntity)
-                );
+                this.convertedEntities.Add(new(entity, grantReturn.ConvertedEntity));
                 await this.GetHandler(grantReturn.ConvertedEntity.Type)
                     .Grant(grantReturn.ConvertedEntity);
 

@@ -20,7 +20,7 @@ public class ApiContextFactory : IDesignTimeDbContextFactory<ApiContext>
             .UseNpgsql(configuration.GetConnectionString("IDesignTimeDbContextFactory"))
             .Options;
 
-        return new ApiContext(contextOptions, new StubPlayerIdentityService());
+        return new(contextOptions, new StubPlayerIdentityService());
     }
 
     private class StubPlayerIdentityService : IPlayerIdentityService

@@ -135,6 +135,6 @@ public static class MasterAssetData
             dict[keySelector(value)] = value;
         }
 
-        return new MasterAssetData<TKey, TItem>(dict.ToFrozenDictionary());
+        return new(dict.ToFrozenDictionary());
     }
 }

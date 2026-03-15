@@ -34,20 +34,19 @@ public class DragonTest : TestFixture
         public DragonBuildUpTheoryData()
         {
             #region GarudaDragonSacrifice
-            List<DbPlayerDragonData> setupDragons = new List<DbPlayerDragonData>
+            List<DbPlayerDragonData> setupDragons = new() { new(0, DragonId.Garuda) };
+            DbPlayerDragonData dragon = new(0, DragonId.Garuda)
             {
-                new DbPlayerDragonData(0, DragonId.Garuda),
+                AttackPlusCount = 25,
+                HpPlusCount = 25,
             };
-            DbPlayerDragonData dragon = new DbPlayerDragonData(0, DragonId.Garuda);
-            dragon.AttackPlusCount = 25;
-            dragon.HpPlusCount = 25;
             setupDragons.Add(dragon);
             this.Add(new DragonBuildUpTestCase(setupDragons, EntityTypes.Dragon, -1, 1, 1500, 5));
             #endregion
             #region FubukiFruit
             this.Add(
                 new DragonBuildUpTestCase(
-                    new List<DbPlayerDragonData>() { new DbPlayerDragonData(0, DragonId.Fubuki) },
+                    new() { new(0, DragonId.Fubuki) },
                     EntityTypes.Material,
                     (int)Materials.Dragonfruit,
                     30,
@@ -73,12 +72,12 @@ public class DragonTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
-        DragonBuildupRequest request = new DragonBuildupRequest()
+        DragonBuildupRequest request = new()
         {
             BaseDragonKeyId = (ulong)dbDragon.DragonKeyId,
             GrowMaterialList = new List<GrowMaterialList>()
             {
-                new GrowMaterialList()
+                new()
                 {
                     Type = testCase.MatType,
                     Id =
@@ -117,17 +116,17 @@ public class DragonTest : TestFixture
     public async Task DragonBuildUp_ReturnsDragonDataWithAugments()
     {
         DbPlayerDragonData dbDragon = this
-            .ApiContext.PlayerDragonData.Add(new DbPlayerDragonData(this.ViewerId, DragonId.Liger))
+            .ApiContext.PlayerDragonData.Add(new(this.ViewerId, DragonId.Liger))
             .Entity;
 
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
-        DragonBuildupRequest request = new DragonBuildupRequest()
+        DragonBuildupRequest request = new()
         {
             BaseDragonKeyId = (ulong)dbDragon.DragonKeyId,
             GrowMaterialList = new List<GrowMaterialList>()
             {
-                new GrowMaterialList()
+                new()
                 {
                     Type = EntityTypes.Material,
                     Id = (int)Materials.AmplifyingDragonscale,
@@ -156,8 +155,7 @@ public class DragonTest : TestFixture
     [Fact]
     public async Task DragonResetPlusCount_ResetsAugments()
     {
-        DbPlayerDragonData dragon = new DbPlayerDragonData(this.ViewerId, DragonId.Maritimus);
-        dragon.AttackPlusCount = 50;
+        DbPlayerDragonData dragon = new(this.ViewerId, DragonId.Maritimus) { AttackPlusCount = 50 };
         dragon = this.ApiContext.PlayerDragonData.Add(dragon).Entity;
 
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -176,7 +174,7 @@ public class DragonTest : TestFixture
             )
         )!.Quantity;
 
-        DragonResetPlusCountRequest request = new DragonResetPlusCountRequest()
+        DragonResetPlusCountRequest request = new()
         {
             DragonKeyId = (ulong)dragon.DragonKeyId,
             PlusCountType = PlusCountType.Atk,
@@ -226,9 +224,7 @@ public class DragonTest : TestFixture
     [Fact]
     public async Task DragonBuyGiftToSendMultiple_IncreasesReliabilityAndReturnsGifts()
     {
-        this.ApiContext.PlayerDragonReliability.Add(
-            new DbPlayerDragonReliability(this.ViewerId, DragonId.HighChthonius)
-        );
+        this.ApiContext.PlayerDragonReliability.Add(new(this.ViewerId, DragonId.HighChthonius));
 
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
@@ -239,7 +235,7 @@ public class DragonTest : TestFixture
 
         long startCoin = userData.Coin;
 
-        DragonBuyGiftToSendMultipleRequest request = new DragonBuyGiftToSendMultipleRequest()
+        DragonBuyGiftToSendMultipleRequest request = new()
         {
             DragonId = DragonId.HighChthonius,
             DragonGiftIdList = new List<DragonGifts>()
@@ -285,7 +281,7 @@ public class DragonTest : TestFixture
             new DbPlayerDragonReliability() { DragonId = DragonId.HighJupiter, Level = 1 }
         );
 
-        DragonBuyGiftToSendRequest request = new DragonBuyGiftToSendRequest()
+        DragonBuyGiftToSendRequest request = new()
         {
             DragonId = DragonId.HighJupiter,
             DragonGiftId = DragonGifts.HeartyStew,
@@ -324,7 +320,7 @@ public class DragonTest : TestFixture
             new DbPlayerDragonReliability(this.ViewerId, DragonId.HighMercury)
         );
 
-        DragonSendGiftMultipleRequest request = new DragonSendGiftMultipleRequest()
+        DragonSendGiftMultipleRequest request = new()
         {
             DragonId = DragonId.HighMercury,
             DragonGiftId = DragonGifts.FourLeafClover,
@@ -355,7 +351,7 @@ public class DragonTest : TestFixture
             new DbPlayerDragonReliability(this.ViewerId, DragonId.HighMercury)
         );
 
-        DragonSendGiftMultipleRequest request = new DragonSendGiftMultipleRequest()
+        DragonSendGiftMultipleRequest request = new()
         {
             DragonId = DragonId.HighMercury,
             DragonGiftId = DragonGifts.FourLeafClover,
@@ -392,7 +388,7 @@ public class DragonTest : TestFixture
             new DbPlayerDragonReliability(this.ViewerId, DragonId.Takemikazuchi)
         );
 
-        DragonSendGiftMultipleRequest request = new DragonSendGiftMultipleRequest()
+        DragonSendGiftMultipleRequest request = new()
         {
             DragonId = DragonId.Takemikazuchi,
             DragonGiftId = DragonGifts.FourLeafClover,
@@ -488,7 +484,7 @@ public class DragonTest : TestFixture
             .Progress.Should()
             .Be(9, "the progress is based on the highest level reached");
 
-        var completeMissionResponse = (
+        DragonSendGiftMultipleResponse completeMissionResponse = (
             await this.Client.PostMsgpack<DragonSendGiftMultipleResponse>(
                 "dragon/send_gift_multiple",
                 new DragonSendGiftMultipleRequest()
@@ -526,7 +522,7 @@ public class DragonTest : TestFixture
     {
         await this.AddToDatabase(new DbPlayerDragonReliability(this.ViewerId, DragonId.Puppy));
 
-        DragonSendGiftRequest request = new DragonSendGiftRequest()
+        DragonSendGiftRequest request = new()
         {
             DragonId = DragonId.Puppy,
             DragonGiftId = DragonGifts.PupGrub,
@@ -575,13 +571,12 @@ public class DragonTest : TestFixture
             Quantity = 100,
         };
 
-        DragaliaResponse<DragonSendGiftMultipleResponse>? response = (
+        DragaliaResponse<DragonSendGiftMultipleResponse>? response =
             await this.Client.PostMsgpack<DragonSendGiftMultipleResponse>(
                 "dragon/send_gift_multiple",
                 request,
                 cancellationToken: TestContext.Current.CancellationToken
-            )
-        );
+            );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
@@ -599,11 +594,7 @@ public class DragonTest : TestFixture
             #region JuggernautDupe
             this.Add(
                 new DragonLimitBreakTestCase(
-                    new List<DbPlayerDragonData>()
-                    {
-                        new DbPlayerDragonData(0, DragonId.Juggernaut),
-                        new DbPlayerDragonData(0, DragonId.Juggernaut),
-                    },
+                    new() { new(0, DragonId.Juggernaut), new(0, DragonId.Juggernaut) },
                     1,
                     DragonLimitBreakMatTypes.Dupe
                 )
@@ -612,10 +603,7 @@ public class DragonTest : TestFixture
             #region MidgardsormrStone
             this.Add(
                 new DragonLimitBreakTestCase(
-                    new List<DbPlayerDragonData>()
-                    {
-                        new DbPlayerDragonData(0, DragonId.Midgardsormr),
-                    },
+                    new() { new(0, DragonId.Midgardsormr) },
                     1,
                     DragonLimitBreakMatTypes.Stone
                 )
@@ -624,7 +612,7 @@ public class DragonTest : TestFixture
             #region CupidSpheres
             this.Add(
                 new DragonLimitBreakTestCase(
-                    new List<DbPlayerDragonData>() { new DbPlayerDragonData(0, DragonId.Cupid) },
+                    new() { new(0, DragonId.Cupid) },
                     1,
                     DragonLimitBreakMatTypes.Spheres
                 )
@@ -633,10 +621,7 @@ public class DragonTest : TestFixture
             #region HighBrunSpheresLB5
             this.Add(
                 new DragonLimitBreakTestCase(
-                    new List<DbPlayerDragonData>()
-                    {
-                        new DbPlayerDragonData(0, DragonId.HighBrunhilda),
-                    },
+                    new() { new(0, DragonId.HighBrunhilda) },
                     5,
                     DragonLimitBreakMatTypes.SpheresLB5
                 )
@@ -657,12 +642,12 @@ public class DragonTest : TestFixture
             dbDragonSacrifice = await this.AddToDatabase(testCase.SetupDragons[1]);
         }
 
-        DragonLimitBreakRequest request = new DragonLimitBreakRequest()
+        DragonLimitBreakRequest request = new()
         {
             BaseDragonKeyId = (ulong)dbDragon.DragonKeyId,
             LimitBreakGrowList = new List<LimitBreakGrowList>()
             {
-                new LimitBreakGrowList()
+                new()
                 {
                     LimitBreakCount = testCase.LimitBreakNr,
                     LimitBreakItemType = (int)testCase.LbMatType,
@@ -710,7 +695,7 @@ public class DragonTest : TestFixture
             new DbPlayerDragonData(this.ViewerId, DragonId.HighZodiark)
         );
 
-        DragonSetLockRequest request = new DragonSetLockRequest()
+        DragonSetLockRequest request = new()
         {
             DragonKeyId = (ulong)dragon.DragonKeyId,
             IsLock = true,
@@ -750,7 +735,7 @@ public class DragonTest : TestFixture
         long startCoin = uData.Coin;
         long startDew = uData.DewPoint;
 
-        DragonSellRequest request = new DragonSellRequest()
+        DragonSellRequest request = new()
         {
             DragonKeyIdList = new List<ulong>() { (ulong)dragon.DragonKeyId },
         };
@@ -776,15 +761,11 @@ public class DragonTest : TestFixture
     public async Task DragonSell_Multi_SuccessfulSale()
     {
         DbPlayerDragonData dragonSimurgh = this
-            .ApiContext.PlayerDragonData.Add(
-                new DbPlayerDragonData(this.ViewerId, DragonId.Simurgh)
-            )
+            .ApiContext.PlayerDragonData.Add(new(this.ViewerId, DragonId.Simurgh))
             .Entity;
 
         DbPlayerDragonData dragonStribog = this
-            .ApiContext.PlayerDragonData.Add(
-                new DbPlayerDragonData(this.ViewerId, DragonId.Stribog)
-            )
+            .ApiContext.PlayerDragonData.Add(new(this.ViewerId, DragonId.Stribog))
             .Entity;
 
         dragonStribog.LimitBreakCount = 4;
@@ -801,7 +782,7 @@ public class DragonTest : TestFixture
         long startCoin = uData.Coin;
         long startDew = uData.DewPoint;
 
-        DragonSellRequest request = new DragonSellRequest()
+        DragonSellRequest request = new()
         {
             DragonKeyIdList = new List<ulong>()
             {

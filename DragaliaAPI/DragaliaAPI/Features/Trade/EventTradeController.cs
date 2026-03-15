@@ -17,11 +17,12 @@ public class EventTradeController(
     [HttpPost("get_list")]
     public async Task<DragaliaResult> GetListAll(EventTradeGetListRequest request)
     {
-        EventTradeGetListResponse resp = new();
-
-        resp.EventTradeList = tradeService.GetEventTradeList(request.TradeGroupId);
-        resp.UserEventItemData = new UserEventItemData(); //await eventService.GetUserEventItemData(group.EventId);
-        resp.UserEventTradeList = await tradeService.GetUserEventTradeList();
+        EventTradeGetListResponse resp = new()
+        {
+            EventTradeList = tradeService.GetEventTradeList(request.TradeGroupId),
+            UserEventItemData = new(), //await eventService.GetUserEventItemData(group.EventId);
+            UserEventTradeList = await tradeService.GetUserEventTradeList(),
+        };
 
         return Ok(resp);
     }
@@ -40,7 +41,7 @@ public class EventTradeController(
         resp.EntityResult = rewardService.GetEntityResult();
         resp.EventTradeList = tradeService.GetEventTradeList(request.TradeGroupId);
         resp.UserEventTradeList = await tradeService.GetUserEventTradeList();
-        resp.UserEventItemData = new UserEventItemData(); // await eventService.GetUserEventItemData(group.EventId);
+        resp.UserEventItemData = new(); // await eventService.GetUserEventItemData(group.EventId);
 
         return Ok(resp);
     }

@@ -7,12 +7,12 @@ public static class StampMapper
 {
     public static EquipStampList MapToEquipStampList(this DbEquippedStamp dbEntity)
     {
-        return new EquipStampList() { StampId = dbEntity.StampId, Slot = dbEntity.Slot };
+        return new() { StampId = dbEntity.StampId, Slot = dbEntity.Slot };
     }
 
     public static DbEquippedStamp MapToDbEquippedStamp(this EquipStampList stampList, long viewerId)
     {
-        return new DbEquippedStamp()
+        return new()
         {
             ViewerId = viewerId,
             StampId = stampList.StampId,

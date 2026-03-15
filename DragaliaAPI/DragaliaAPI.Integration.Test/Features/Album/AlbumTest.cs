@@ -25,15 +25,11 @@ public class AlbumTest : TestFixture
 
         res.Data.CharaHonorList.Should()
             .BeEquivalentTo([
-                new AtgenCharaHonorList()
-                {
-                    CharaId = Charas.ThePrince,
-                    HonorList = [new AtgenHonorList(100401), new AtgenHonorList(100101)],
-                },
+                new() { CharaId = Charas.ThePrince, HonorList = [new(100401), new(100101)] },
                 new AtgenCharaHonorList()
                 {
                     CharaId = Charas.BondforgedPrince,
-                    HonorList = [new AtgenHonorList(100501)],
+                    HonorList = [new(100501)],
                 },
             ]);
     }

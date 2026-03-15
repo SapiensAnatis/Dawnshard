@@ -91,10 +91,14 @@ public partial class QuestService(
         }
 
         if (questData is { IsEventRegularBattle: true, EventKindType: EventKindType.Build })
+        {
             await this.RollExBattleUnlock(quest, questData);
+        }
 
         if (questData.IsEventExBattle)
+        {
             quest.IsAppear = false;
+        }
 
         return (isBestClearTime, questEventRewards);
     }
@@ -241,7 +245,7 @@ public partial class QuestService(
 
             await questCacheService.RemoveQuestGroupQuestIdAsync(eventGroupId);
 
-            return new AtgenReceiveQuestBonus() { TargetQuestId = questId ?? 0 };
+            return new() { TargetQuestId = questId ?? 0 };
         }
 
         if (count > questEvent.QuestBonusReserveCount + questEvent.QuestBonusStackCount)
@@ -276,7 +280,7 @@ public partial class QuestService(
         // Remove at the end so it doesn't get messed up when erroring
         await questCacheService.RemoveQuestGroupQuestIdAsync(eventGroupId);
 
-        return new AtgenReceiveQuestBonus(questId.Value, count, 1, bonusRewards);
+        return new(questId.Value, count, 1, bonusRewards);
     }
 
     private void ResetQuestEventBonus(DbQuestEvent questEvent, QuestEvent questEventData)
@@ -361,7 +365,9 @@ public partial class QuestService(
         bool exBattleUnlocked = quest.PlayCount % 3 == 0 || Random.Shared.NextDouble() < 0.15;
 
         if (!exBattleUnlocked)
+        {
             return;
+        }
 
         Log.UnlockingEXBattle(logger, exQuestId);
 

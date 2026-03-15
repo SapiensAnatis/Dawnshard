@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
@@ -61,7 +60,7 @@ public partial class DragonService(
                 IsBuy = x.Quantity > 0,
             })
             .ToList();
-        return new DragonGetContactDataResponse(giftList);
+        return new(giftList);
     }
 
     public Task<int> GetFreeGiftCount()
@@ -80,8 +79,7 @@ public partial class DragonService(
         IEnumerable<Tuple<DragonGifts, int>> giftsAndQuantity
     )
     {
-        List<Tuple<DragonGifts, List<RewardReliabilityList>>> levelGifts =
-            new List<Tuple<DragonGifts, List<RewardReliabilityList>>>();
+        List<Tuple<DragonGifts, List<RewardReliabilityList>>> levelGifts = new();
         int levelRewardIndex = dragonReliability.Level / 5;
         DragonData dragonData = MasterAsset.DragonData.Get(dragonReliability.DragonId);
         using IEnumerator<Tuple<DragonGifts, int>> enumerator = giftsAndQuantity.GetEnumerator();
@@ -108,7 +106,7 @@ public partial class DragonService(
                         * enumerator.Current.Item2
                     )
             );
-            List<RewardReliabilityList> returnGifts = new List<RewardReliabilityList>();
+            List<RewardReliabilityList> returnGifts = new();
 
             int levelDifference = 0;
 
@@ -139,6 +137,7 @@ public partial class DragonService(
                     {
                         returnGifts.Add(reward);
                     }
+
                     levelRewardIndex++;
                 }
             }
@@ -153,13 +152,9 @@ public partial class DragonService(
                 );
             }
 
-            levelGifts.Add(
-                new Tuple<DragonGifts, List<RewardReliabilityList>>(
-                    enumerator.Current.Item1,
-                    returnGifts
-                )
-            );
+            levelGifts.Add(new(enumerator.Current.Item1, returnGifts));
         }
+
         return levelGifts;
     }
 
@@ -202,7 +197,7 @@ public partial class DragonService(
         RewardReliabilityList? reward = null;
         if (level > 4 && level % 5 == 0)
         {
-            reward = new RewardReliabilityList() { Level = level, LevelupEntityList = [] };
+            reward = new() { Level = level, LevelupEntityList = [] };
             int levelIndex = level / 5;
             ImmutableArray<Materials> rewardMats = isPuppy ? PuppyLevelReward : DragonLevelReward;
             int[] rewardQuantity = isPuppy
@@ -210,7 +205,7 @@ public partial class DragonService(
                 : DragonLevelRewardQuantity[rarity - 3];
             if (!isPuppy)
             {
-                if (levelIndex == 1 || levelIndex == 3)
+                if (levelIndex is 1 or 3)
                 {
                     reward.IsReleaseStory = true;
 
@@ -238,12 +233,14 @@ public partial class DragonService(
 
                     return reward;
                 }
+
                 if (levelIndex == 6)
                 {
                     //TODO: Add Notte's Nottes Bonus
                 }
             }
-            DragonRewardEntityList rewardItem = new DragonRewardEntityList()
+
+            DragonRewardEntityList rewardItem = new()
             {
                 EntityType = EntityTypes.Material,
                 EntityId = (int)rewardMats[levelIndex - 1],
@@ -256,6 +253,7 @@ public partial class DragonService(
             mat.Quantity += rewardItem.EntityQuantity;
             reward.LevelupEntityList = [rewardItem];
         }
+
         return reward;
     }
 
@@ -263,8 +261,7 @@ public partial class DragonService(
         IEnumerable<Tuple<DragonGifts, DragonRewardEntityList>>
     > RollPuppyThankYouRewards(IEnumerable<DragonGifts> gifts)
     {
-        List<Tuple<DragonGifts, DragonRewardEntityList>> giftPerGift =
-            new List<Tuple<DragonGifts, DragonRewardEntityList>>();
+        List<Tuple<DragonGifts, DragonRewardEntityList>> giftPerGift = new();
         Materials[] rewards = new Materials[]
         {
             Materials.FiendsClaw,
@@ -281,7 +278,7 @@ public partial class DragonService(
                 await inventoryRepository.GetMaterial(material)
                 ?? inventoryRepository.AddMaterial(material)
             ).Quantity += rewardQuantity;
-            DragonRewardEntityList reward = new DragonRewardEntityList()
+            DragonRewardEntityList reward = new()
             {
                 EntityType = EntityTypes.Material,
                 EntityId = (int)material,
@@ -290,6 +287,7 @@ public partial class DragonService(
             };
             giftPerGift.Add(new(gift, reward));
         }
+
         return giftPerGift;
     }
 
@@ -302,9 +300,9 @@ public partial class DragonService(
     {
         Dictionary<UnitElement, Materials>[] orbs = new Dictionary<UnitElement, Materials>[]
         {
-            UpgradeMaterials.t1Orbs,
-            UpgradeMaterials.t2Orbs,
-            UpgradeMaterials.t3Orbs,
+            UpgradeMaterials.T1Orbs,
+            UpgradeMaterials.T2Orbs,
+            UpgradeMaterials.T3Orbs,
         };
         int[][] rarityQuantities = new int[][]
         {
@@ -318,18 +316,17 @@ public partial class DragonService(
             Materials.RipeDragonfruit,
             Materials.SucculentDragonfruit,
         };
-        List<Tuple<DragonGifts, List<DragonRewardEntityList>>> giftsPerGift =
-            new List<Tuple<DragonGifts, List<DragonRewardEntityList>>>();
-        Random r = new Random();
+        List<Tuple<DragonGifts, List<DragonRewardEntityList>>> giftsPerGift = new();
+        Random r = new();
         foreach (Tuple<DragonGifts, int> gift in gifts)
         {
-            List<DragonRewardEntityList> tyGiftsPerItem = new List<DragonRewardEntityList>();
+            List<DragonRewardEntityList> tyGiftsPerItem = new();
             for (int i = 0; i < gift.Item2; i++)
             {
-                List<DragonRewardEntityList> tyGifts = new List<DragonRewardEntityList>();
+                List<DragonRewardEntityList> tyGifts = new();
                 while (r.NextDouble() < 1 - (tyGifts.Count * 0.34))
                 {
-                    DragonRewardEntityList reward = new DragonRewardEntityList();
+                    DragonRewardEntityList reward = new();
                     switch (r.Next(4))
                     {
                         case 0:
@@ -373,10 +370,13 @@ public partial class DragonService(
                     //TODO: check for mat limit
                     tyGifts.Add(reward);
                 }
+
                 tyGiftsPerItem.AddRange(tyGifts);
             }
+
             giftsPerGift.Add(new(gift.Item1, tyGiftsPerItem));
         }
+
         return giftsPerGift;
     }
 
@@ -393,23 +393,22 @@ public partial class DragonService(
             .DragonGiftIdList.Select(x => DragonConstants.BuyGiftPrices[x])
             .Sum();
         if (userData.Coin < totalCost)
+        {
             throw new DragaliaException(ResultCode.CommonMaterialShort, "Insufficient Rupies");
+        }
 
         Dictionary<DragonGifts, DbPlayerDragonGift> gifts = await apiContext
             .PlayerDragonGifts.Where(x => request.DragonGiftIdList.Contains(x.DragonGiftId))
             .ToDictionaryAsync(x => x.DragonGiftId, cancellationToken);
 
-        DbPlayerDragonReliability dragonReliability = await unitRepository
-            .DragonReliabilities.Where(x => x.DragonId == request.DragonId)
-            .FirstAsync(cancellationToken);
-
-        if (dragonReliability == null)
-        {
-            throw new DragaliaException(
+        DbPlayerDragonReliability dragonReliability =
+            await unitRepository
+                .DragonReliabilities.Where(x => x.DragonId == request.DragonId)
+                .FirstOrDefaultAsync(cancellationToken)
+            ?? throw new DragaliaException(
                 ResultCode.EntityNotFoundError,
                 $"DragonReliability {request.DragonId} not found"
             );
-        }
 
         DragonData dragonData = MasterAsset.DragonData.Get(dragonReliability.DragonId);
 
@@ -418,7 +417,7 @@ public partial class DragonService(
                 ? (await this.RollPuppyThankYouRewards(request.DragonGiftIdList))
                     .Select(x => new Tuple<DragonGifts, List<DragonRewardEntityList>>(
                         x.Item1,
-                        new List<DragonRewardEntityList>() { x.Item2 }
+                        new() { x.Item2 }
                     ))
                     .ToList()
                 : await this.RollDragonThankYouRewards(
@@ -432,12 +431,12 @@ public partial class DragonService(
                 request.DragonGiftIdList.Select(x => new Tuple<DragonGifts, int>((DragonGifts)x, 1))
             );
 
-        List<AtgenDragonGiftRewardList> rewardObjList = new List<AtgenDragonGiftRewardList>();
+        List<AtgenDragonGiftRewardList> rewardObjList = new();
         Log.CreatingGiftRewardListFromRewardsAndLevelGifts(logger, rewards, levelGifts);
         foreach (DragonGifts gift in request.DragonGiftIdList)
         {
             rewardObjList.Add(
-                new AtgenDragonGiftRewardList()
+                new()
                 {
                     ReturnGiftList = rewards.First(x => x.Item1 == gift).Item2,
                     DragonGiftId = gift,
@@ -469,7 +468,7 @@ public partial class DragonService(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
-        return new DragonBuyGiftToSendMultipleResponse()
+        return new()
         {
             DragonContactFreeGiftCount = 0,
             DragonGiftRewardList = rewardObjList,
@@ -496,19 +495,16 @@ public partial class DragonService(
             );
         }
 
-        DbPlayerDragonReliability? dragonReliability = await unitRepository
-            .DragonReliabilities.Where(x => x.DragonId == request.DragonId)
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (dragonReliability == null)
-        {
-            throw new DragaliaException(
+        DbPlayerDragonReliability? dragonReliability =
+            await unitRepository
+                .DragonReliabilities.Where(x => x.DragonId == request.DragonId)
+                .FirstOrDefaultAsync(cancellationToken)
+            ?? throw new DragaliaException(
                 ResultCode.EntityNotFoundError,
                 $"No such dragon in inventory: {request.DragonId}"
             );
-        }
 
-        List<Tuple<DragonGifts, int>> requestGift = new List<Tuple<DragonGifts, int>>()
+        List<Tuple<DragonGifts, int>> requestGift = new()
         {
             Tuple.Create(request.DragonGiftId, request.Quantity),
         };
@@ -523,7 +519,7 @@ public partial class DragonService(
                     )
                 ).Select(x => new Tuple<DragonGifts, List<DragonRewardEntityList>>(
                     x.Item1,
-                    new List<DragonRewardEntityList>() { x.Item2 }
+                    new() { x.Item2 }
                 ))
                 : await this.RollDragonThankYouRewards(requestGift, dragonData.ElementalType);
 
@@ -543,7 +539,7 @@ public partial class DragonService(
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         Log.CreatingResponseFromRewardsAndLevelGifts(logger, rewards, levelGifts);
-        return new DragonSendGiftMultipleResponse()
+        return new()
         {
             IsFavorite = true,
             RewardReliabilityList =
@@ -579,6 +575,7 @@ public partial class DragonService(
                     "Invalid quantity for MaterialList"
                 );
             }
+
             if (
                 mat.Type == EntityTypes.Material
                 && (
@@ -593,6 +590,7 @@ public partial class DragonService(
                 );
             }
         }
+
         DbPlayerDragonData playerDragonData = await unitRepository.Dragons.FirstAsync(
             dragon => (ulong)dragon.DragonKeyId == request.BaseDragonKeyId,
             cancellationToken
@@ -604,6 +602,7 @@ public partial class DragonService(
         {
             dbMats[(Materials)mat.Key].Quantity -= mat.Value;
         }
+
         await unitRepository.RemoveDragons(
             request
                 .GrowMaterialList.Where(x => x.Type == EntityTypes.Dragon)
@@ -612,9 +611,9 @@ public partial class DragonService(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
-        return new DragonBuildupResponse(
+        return new(
             updateDataList,
-            new DeleteDataList(
+            new(
                 request
                     .GrowMaterialList.Where(x => x.Type == EntityTypes.Dragon)
                     .Select(x => new AtgenDeleteDragonList() { DragonKeyId = (ulong)x.Id }),
@@ -653,7 +652,7 @@ public partial class DragonService(
                         playerDragonData.Exp = Math.Min(
                             playerDragonData.Exp
                                 + (
-                                    UpgradeMaterials.buildupXpValues[(Materials)materialList.Id]
+                                    UpgradeMaterials.BuildupXpValues[(Materials)materialList.Id]
                                     * materialList.Quantity
                                 ),
                             DragonConstants.XpLimits[maxLevel - 1]
@@ -679,17 +678,19 @@ public partial class DragonService(
                             "Invalid MaterialList"
                         );
                 }
+
                 if (!usedMaterials.ContainsKey((int)materialList.Id))
                 {
                     usedMaterials.Add((int)materialList.Id, 0);
                 }
+
                 usedMaterials[(int)materialList.Id] += materialList.Quantity;
             }
             else if (materialList.Type == EntityTypes.Dragon)
             {
                 playerDragonData.Exp = Math.Min(
                     playerDragonData.Exp
-                        + UpgradeMaterials.dragonBuildupXp[
+                        + UpgradeMaterials.DragonBuildupXp[
                             MasterAsset.DragonData.Get(playerDragonData.DragonId).Rarity
                         ],
                     DragonConstants.XpLimits[maxLevel - 1]
@@ -789,11 +790,11 @@ public partial class DragonService(
             PaymentTypes.Coin,
             expectedPrice: DragonConstants.AugmentResetCost * plusCount
         );
-        await rewardService.GrantReward(new Entity(EntityTypes.Material, (int)material, plusCount));
+        await rewardService.GrantReward(new(EntityTypes.Material, (int)material, plusCount));
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
-        return new DragonResetPlusCountResponse(updateDataList, rewardService.GetEntityResult());
+        return new(updateDataList, rewardService.GetEntityResult());
     }
 
     public async Task<DragonLimitBreakResponse> DoDragonLimitBreak(
@@ -847,6 +848,7 @@ public partial class DragonService(
                     ResultCode.CommonStoneShort,
                     $"Not enough stones to spend"
                 );
+
             if (stones.Quantity < stonesToSpend)
             {
                 throw new DragaliaException(
@@ -854,6 +856,7 @@ public partial class DragonService(
                     $"Not enough stones to spend"
                 );
             }
+
             stones.Quantity -= stonesToSpend;
         }
 
@@ -880,6 +883,7 @@ public partial class DragonService(
                     ResultCode.CommonMaterialShort,
                     "Not enough spheres to spend"
                 );
+
             if (spheres.Quantity < spheresConsumed + lb5SpheresConsumed)
             {
                 throw new DragaliaException(
@@ -887,14 +891,15 @@ public partial class DragonService(
                     "Not enough spheres to spend"
                 );
             }
+
             spheres.Quantity -= spheresConsumed + lb5SpheresConsumed;
         }
 
         UpdateDataList udl = await updateDataService.SaveChangesAsync(cancellationToken);
 
-        return new DragonLimitBreakResponse()
+        return new()
         {
-            DeleteDataList = new DeleteDataList()
+            DeleteDataList = new()
             {
                 DeleteDragonList = deleteDragons.Select(x => new AtgenDeleteDragonList()
                 {
@@ -925,7 +930,7 @@ public partial class DragonService(
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         await userDataRepository.SaveChangesAsync();
-        return new DragonSetLockResponse(updateDataList, new());
+        return new(updateDataList, new());
     }
 
     public async Task<DragonSellResponse> DoDragonSell(
@@ -984,8 +989,8 @@ public partial class DragonService(
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         await userDataRepository.SaveChangesAsync();
-        return new DragonSellResponse(
-            new DeleteDataList(
+        return new(
+            new(
                 request.DragonKeyIdList.Select(x => new AtgenDeleteDragonList()
                 {
                     DragonKeyId = x,

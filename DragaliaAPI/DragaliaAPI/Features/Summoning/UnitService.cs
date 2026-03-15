@@ -4,11 +4,10 @@ using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.Presents;
 using Microsoft.EntityFrameworkCore;
+using CharaNewCheckResult = (DragaliaAPI.Shared.Definitions.Enums.Charas Id, bool IsNew);
+using DragonNewCheckResult = (DragaliaAPI.Shared.Definitions.Enums.DragonId Id, bool IsNew);
 
 namespace DragaliaAPI.Features.Summoning;
-
-using CharaNewCheckResult = (Charas Id, bool IsNew);
-using DragonNewCheckResult = (DragonId Id, bool IsNew);
 
 /// <summary>
 /// Service to assist with adding units after a summon result is generated.

@@ -74,7 +74,7 @@ public class TestFixture
         DbContextOptions<ApiContext> options = this.Services.GetRequiredService<
             DbContextOptions<ApiContext>
         >();
-        this.ApiContext = new ApiContext(options, stubPlayerIdentityService);
+        this.ApiContext = new(options, stubPlayerIdentityService);
         this.ApiContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
 
         this.DungeonService = new DungeonService(
@@ -197,10 +197,7 @@ public class TestFixture
         }
 
         HttpClient client = factoryToUse.CreateClient(
-            new WebApplicationFactoryClientOptions()
-            {
-                BaseAddress = new Uri("http://localhost/2.19.0_20220714193707/", UriKind.Absolute),
-            }
+            new() { BaseAddress = new("http://localhost/2.19.0_20220714193707/", UriKind.Absolute) }
         );
 
         client.DefaultRequestHeaders.Add(Headers.SessionId, this.SessionId);
@@ -286,7 +283,7 @@ public class TestFixture
         await fortRepository.InitializeFort();
 
         apiContext.PlayerFortBuilds.Add(
-            new DbFortBuild()
+            new()
             {
                 ViewerId = newPlayer.ViewerId,
                 PlantId = FortPlants.Smithy,
@@ -308,7 +305,7 @@ public class TestFixture
         userData.QuestSkipPoint = 300;
 
         apiContext.PlayerDmodeInfos.Add(
-            new DbPlayerDmodeInfo
+            new()
             {
                 ViewerId = newPlayer.ViewerId,
                 Point1Quantity = 100_000_000,
@@ -316,13 +313,9 @@ public class TestFixture
             }
         );
 
-        apiContext.PlayerDmodeDungeons.Add(
-            new DbPlayerDmodeDungeon { ViewerId = newPlayer.ViewerId }
-        );
+        apiContext.PlayerDmodeDungeons.Add(new() { ViewerId = newPlayer.ViewerId });
 
-        apiContext.PlayerDmodeExpeditions.Add(
-            new DbPlayerDmodeExpedition { ViewerId = newPlayer.ViewerId }
-        );
+        apiContext.PlayerDmodeExpeditions.Add(new() { ViewerId = newPlayer.ViewerId });
 
         await apiContext.SaveChangesAsync();
         apiContext.ChangeTracker.Clear();

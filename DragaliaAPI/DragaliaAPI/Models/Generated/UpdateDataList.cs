@@ -166,18 +166,18 @@ public partial class UpdateDataList
     [Key("functional_maintenance_list")]
     public List<FunctionalMaintenanceList>? FunctionalMaintenanceList { get; set; }
 
-    private List<PartyList>? partyList;
-
     [Key("party_list")]
     public List<PartyList>? PartyList
     {
-        get => this.partyList;
+        get;
         set
         {
             if (value is null)
+            {
                 return;
+            }
 
-            this.partyList = value
+            field = value
                 .Select(x => new PartyList()
                 {
                     PartyName = x.PartyName,

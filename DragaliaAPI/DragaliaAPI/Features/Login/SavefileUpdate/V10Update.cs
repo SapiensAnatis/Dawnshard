@@ -13,7 +13,9 @@ public class V10Update(IEmblemRepository emblemRepository, IUserDataRepository u
     public async Task Apply()
     {
         if (!await emblemRepository.HasEmblem(Emblems.DragonbloodPrince))
+        {
             emblemRepository.AddEmblem(Emblems.DragonbloodPrince);
+        }
 
         DbPlayerUserData userData = await userDataRepository.GetUserDataAsync();
         if (

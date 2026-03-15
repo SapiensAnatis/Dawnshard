@@ -186,7 +186,9 @@ public record CharaData(
             int val = pool[i];
 
             if (val == 0)
+            {
                 break;
+            }
 
             current = val;
         }

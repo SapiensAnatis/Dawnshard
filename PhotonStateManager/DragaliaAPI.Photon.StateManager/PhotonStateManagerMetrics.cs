@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Photon.StateManager.Models;
@@ -35,8 +34,8 @@ public class PhotonStateManagerMetrics
 
         return
         [
-            new Measurement<int>(publicRooms, [new("room.public", true)]),
-            new Measurement<int>(privateRooms, [new("room.public", false)]),
+            new(publicRooms, [new("room.public", true)]),
+            new(privateRooms, [new("room.public", false)]),
         ];
     }
 }

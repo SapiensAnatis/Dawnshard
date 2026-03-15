@@ -193,7 +193,7 @@ public class StoryServiceTest : IClassFixture<DbTestFixture>
             .ReturnsAsync(new DbPlayerStoryState() { ViewerId = 1, State = StoryState.Unlocked });
 
         this.mockRewardService.Setup(x =>
-                x.GrantReward(new Entity(EntityTypes.Title, expectedEmblemId, 1, null, null, null))
+                x.GrantReward(new(EntityTypes.Title, expectedEmblemId, 1, null, null, null))
             )
             .ReturnsAsync(RewardGrantResult.Added);
 
@@ -242,9 +242,7 @@ public class StoryServiceTest : IClassFixture<DbTestFixture>
         this.mockMissionProgressionService.Setup(x => x.OnQuestStoryCleared(1000311));
 
         this.mockRewardService.Setup(x =>
-                x.GrantReward(
-                    new Entity(EntityTypes.Dragon, (int)DragonId.Brunhilda, 1, null, null, null)
-                )
+                x.GrantReward(new(EntityTypes.Dragon, (int)DragonId.Brunhilda, 1, null, null, null))
             )
             .ReturnsAsync(RewardGrantResult.Added);
 

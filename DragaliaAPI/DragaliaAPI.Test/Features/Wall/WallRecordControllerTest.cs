@@ -108,7 +108,7 @@ public class WallRecordControllerTest
 
         WallRecordRecordResponse data = (
             await wallRecordController.Record(
-                new WallRecordRecordRequest(wallId, dungeonKey),
+                new(wallId, dungeonKey),
                 TestContext.Current.CancellationToken
             )
         ).GetData<WallRecordRecordResponse>()!;

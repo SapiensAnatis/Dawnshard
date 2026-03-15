@@ -156,7 +156,7 @@ public class PartyTest : TestFixture
             .Should()
             .BeEquivalentTo(
                 new DragaliaResponse<ResultCodeResponse>(
-                    new ResultCodeResponse(ResultCode.PartySwitchSettingCharaShort),
+                    new(ResultCode.PartySwitchSettingCharaShort),
                     new DataHeaders(ResultCode.PartySwitchSettingCharaShort)
                 )
             );
@@ -187,7 +187,7 @@ public class PartyTest : TestFixture
             .Should()
             .BeEquivalentTo(
                 new DragaliaResponse<ResultCodeResponse>(
-                    new ResultCodeResponse(ResultCode.PartySwitchSettingCharaShort),
+                    new(ResultCode.PartySwitchSettingCharaShort),
                     new DataHeaders(ResultCode.PartySwitchSettingCharaShort)
                 )
             );

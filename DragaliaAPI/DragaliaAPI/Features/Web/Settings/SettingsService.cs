@@ -1,6 +1,4 @@
-using System.Data;
 using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Owned;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
@@ -44,7 +42,7 @@ internal sealed partial class SettingsService(
         await apiContext.PlayerSettings.ExecuteDeleteAsync(cancellationToken);
 
         apiContext.PlayerSettings.Add(
-            new DbSettings() { ViewerId = playerIdentityService.ViewerId, SettingsJson = settings }
+            new() { ViewerId = playerIdentityService.ViewerId, SettingsJson = settings }
         );
 
         await apiContext.SaveChangesAsync(cancellationToken);

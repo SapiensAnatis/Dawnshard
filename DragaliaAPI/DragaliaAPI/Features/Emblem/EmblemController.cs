@@ -16,13 +16,14 @@ public class EmblemController(
     [HttpPost("get_list")]
     public async Task<DragaliaResult> GetList()
     {
-        EmblemGetListResponse resp = new();
-
-        resp.EmblemList = (await emblemRepository.GetEmblemsAsync()).Select(x => new EmblemList(
-            x.EmblemId,
-            x.IsNew,
-            x.GetTime
-        ));
+        EmblemGetListResponse resp = new()
+        {
+            EmblemList = (await emblemRepository.GetEmblemsAsync()).Select(x => new EmblemList(
+                x.EmblemId,
+                x.IsNew,
+                x.GetTime
+            )),
+        };
 
         return Ok(resp);
     }

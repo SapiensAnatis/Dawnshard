@@ -40,7 +40,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
         this.mockEventService = new(MockBehavior.Strict);
         this.mockDmodeService = new(MockBehavior.Strict);
         this.mockFriendNotificationService = new(MockBehavior.Strict);
-        this.mockActivitySource = new ActivitySource("TestSource");
+        this.mockActivitySource = new("TestSource");
 
         this.mockFriendNotificationService.Setup(x =>
                 x.GetFriendNotice(It.IsAny<CancellationToken>())
@@ -74,14 +74,8 @@ public class UpdateDataServiceTest : RepositoryTestFixture
 
         DbPlayerCharaData charaData = new(viewerId, Charas.GalaLeonidas);
 
-        DbPlayerDragonData dragonData = new DbPlayerDragonData(
-            viewerId,
-            DragonId.DreadkingRathalos
-        );
-        DbPlayerDragonReliability reliabilityData = new DbPlayerDragonReliability(
-            viewerId,
-            DragonId.DreadkingRathalos
-        );
+        DbPlayerDragonData dragonData = new(viewerId, DragonId.DreadkingRathalos);
+        DbPlayerDragonReliability reliabilityData = new(viewerId, DragonId.DreadkingRathalos);
 
         DbParty partyData = new()
         {

@@ -69,7 +69,7 @@ internal sealed partial class AuthService(
 
         Log.SuccessfullyAuthenticated(logger, player.ViewerId, sessionId);
 
-        return new AuthResult { ViewerId = player.ViewerId, SessionId = sessionId };
+        return new() { ViewerId = player.ViewerId, SessionId = sessionId };
     }
 
     public async Task ImportSaveIfPending(ClaimsPrincipal claimsPrincipal)
@@ -86,7 +86,7 @@ internal sealed partial class AuthService(
 
         Log.PollingSaveImport(logger, subject);
 
-        DateTimeOffset? remoteSavefileDate = GetRemoteSavefileDate(subject, claimsPrincipal);
+        DateTimeOffset? remoteSavefileDate = GetRemoteSavefileDate(claimsPrincipal);
 
         if (remoteSavefileDate is null)
         {
@@ -129,10 +129,7 @@ internal sealed partial class AuthService(
         }
     }
 
-    private static DateTimeOffset? GetRemoteSavefileDate(
-        string subject,
-        ClaimsPrincipal claimsPrincipal
-    )
+    private static DateTimeOffset? GetRemoteSavefileDate(ClaimsPrincipal claimsPrincipal)
     {
         if (claimsPrincipal.FindFirstValue("sav:a") != "true")
         {

@@ -68,7 +68,7 @@ public class PresentTest : TestFixture
                             ReceiveLimitTime = DateTimeOffset.UnixEpoch,
                         },
                     },
-                    UpdateDataList = new UpdateDataList()
+                    UpdateDataList = new()
                     {
                         PresentNotice = new() { PresentCount = 2, PresentLimitCount = 0 },
                     },
@@ -129,7 +129,7 @@ public class PresentTest : TestFixture
                             ReceiveLimitTime = expireDate,
                         },
                     },
-                    UpdateDataList = new UpdateDataList()
+                    UpdateDataList = new()
                     {
                         PresentNotice = new() { PresentCount = 1, PresentLimitCount = 1 },
                     },
@@ -543,13 +543,13 @@ public class PresentTest : TestFixture
     {
         List<DbPlayerPresent> presents =
         [
-            new DbPlayerPresent()
+            new()
             {
                 EntityType = EntityTypes.SummonTicket,
                 EntityId = (int)SummonTickets.AdventurerSummon,
                 EntityQuantity = 2,
             },
-            new DbPlayerPresent()
+            new()
             {
                 EntityType = EntityTypes.SummonTicket,
                 EntityId = (int)SummonTickets.AdventurerSummon,
@@ -575,7 +575,7 @@ public class PresentTest : TestFixture
             .Should()
             .BeEquivalentTo<DbSummonTicket>(
                 [
-                    new DbSummonTicket()
+                    new()
                     {
                         ViewerId = this.ViewerId,
                         SummonTicketId = SummonTickets.AdventurerSummon,
@@ -591,19 +591,19 @@ public class PresentTest : TestFixture
     {
         List<DbPlayerPresent> presents =
         [
-            new DbPlayerPresent()
+            new()
             {
                 EntityType = EntityTypes.DragonGift,
                 EntityId = (int)DragonGifts.FourLeafClover,
                 EntityQuantity = 2,
             },
-            new DbPlayerPresent()
+            new()
             {
                 EntityType = EntityTypes.DragonGift,
                 EntityId = (int)DragonGifts.DragonyuleCake,
                 EntityQuantity = 1,
             },
-            new DbPlayerPresent()
+            new()
             {
                 EntityType = EntityTypes.DragonGift,
                 EntityId = (int)DragonGifts.DragonyuleCake,
@@ -638,13 +638,13 @@ public class PresentTest : TestFixture
 
         this.ApiContext.PlayerDragonGifts.Should()
             .BeEquivalentTo<DbPlayerDragonGift>([
-                new DbPlayerDragonGift()
+                new()
                 {
                     ViewerId = this.ViewerId,
                     DragonGiftId = DragonGifts.FourLeafClover,
                     Quantity = 6,
                 },
-                new DbPlayerDragonGift()
+                new()
                 {
                     ViewerId = this.ViewerId,
                     DragonGiftId = DragonGifts.DragonyuleCake,
@@ -658,7 +658,7 @@ public class PresentTest : TestFixture
     {
         List<DbPlayerPresent> presents =
         [
-            new DbPlayerPresent()
+            new()
             {
                 EntityType = EntityTypes.Dragon,
                 EntityId = (int)DragonId.Andromeda,
@@ -685,11 +685,7 @@ public class PresentTest : TestFixture
         this.ApiContext.PlayerDragonData.Should()
             .BeEquivalentTo(
                 [
-                    new DbPlayerDragonData()
-                    {
-                        ViewerId = this.ViewerId,
-                        DragonId = DragonId.Andromeda,
-                    },
+                    new() { ViewerId = this.ViewerId, DragonId = DragonId.Andromeda },
                     new DbPlayerDragonData()
                     {
                         ViewerId = this.ViewerId,
@@ -709,19 +705,19 @@ public class PresentTest : TestFixture
 
         List<DbPlayerPresent> presents =
         [
-            new DbPlayerPresent()
+            new()
             {
                 EntityType = EntityTypes.DmodePoint,
                 EntityId = (int)DmodePoint.Point1,
                 EntityQuantity = 100,
             },
-            new DbPlayerPresent()
+            new()
             {
                 EntityType = EntityTypes.DmodePoint,
                 EntityId = (int)DmodePoint.Point1,
                 EntityQuantity = 100,
             },
-            new DbPlayerPresent()
+            new()
             {
                 EntityType = EntityTypes.DmodePoint,
                 EntityId = (int)DmodePoint.Point2,
@@ -749,13 +745,13 @@ public class PresentTest : TestFixture
     {
         List<DbPlayerPresent> presents =
         [
-            new DbPlayerPresent()
+            new()
             {
                 EntityType = EntityTypes.WeaponBody,
                 EntityId = (int)WeaponBodies.AbsoluteAqua,
                 EntityQuantity = 1,
             },
-            new DbPlayerPresent()
+            new()
             {
                 EntityType = EntityTypes.WeaponBody,
                 EntityId = (int)WeaponBodies.AbsoluteAqua,

@@ -1,5 +1,4 @@
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Models.Generated;
 using Riok.Mapperly.Abstractions;
 
@@ -23,7 +22,7 @@ public static partial class UserDataMapper
 
     public static DbPlayerUserData MapToDbPlayerUserData(this UserData userData, long viewerId)
     {
-        return new DbPlayerUserData()
+        return new()
         {
             ViewerId = viewerId,
             Name = userData.Name,

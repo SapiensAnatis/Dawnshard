@@ -30,8 +30,8 @@ public class FriendTest : TestFixture
             {
                 PlayerFriendshipPlayers =
                 [
-                    new DbPlayerFriendshipPlayer() { PlayerViewerId = this.ViewerId, IsNew = true },
-                    new DbPlayerFriendshipPlayer() { PlayerViewerId = other2.ViewerId },
+                    new() { PlayerViewerId = this.ViewerId, IsNew = true },
+                    new() { PlayerViewerId = other2.ViewerId },
                 ],
             },
         ]);
@@ -356,11 +356,11 @@ public class FriendTest : TestFixture
             new()
             {
                 FromPlayerViewerId = this.ViewerId,
-                ToPlayer = new DbPlayer() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
+                ToPlayer = new() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
             },
             new()
             {
-                FromPlayer = new DbPlayer() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
+                FromPlayer = new() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
                 ToPlayerViewerId = this.ViewerId,
             },
         ]);
@@ -387,11 +387,11 @@ public class FriendTest : TestFixture
             new()
             {
                 FromPlayerViewerId = otherPlayer.ViewerId,
-                ToPlayer = new DbPlayer() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
+                ToPlayer = new() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
             },
             new()
             {
-                FromPlayer = new DbPlayer() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
+                FromPlayer = new() { AccountId = $"ApplyLimit_{Guid.NewGuid()}" },
                 ToPlayerViewerId = otherPlayer.ViewerId,
             },
         ]);
@@ -605,12 +605,12 @@ public class FriendTest : TestFixture
     private async Task CreateFriendship(DbPlayer other)
     {
         this.ApiContext.PlayerFriendships.Add(
-            new DbPlayerFriendship()
+            new()
             {
                 PlayerFriendshipPlayers =
                 [
-                    new DbPlayerFriendshipPlayer() { PlayerViewerId = this.ViewerId },
-                    new DbPlayerFriendshipPlayer() { PlayerViewerId = other.ViewerId },
+                    new() { PlayerViewerId = this.ViewerId },
+                    new() { PlayerViewerId = other.ViewerId },
                 ],
             }
         );
@@ -621,11 +621,7 @@ public class FriendTest : TestFixture
     private async Task CreateFriendRequestTo(DbPlayer other)
     {
         this.ApiContext.PlayerFriendRequests.Add(
-            new DbPlayerFriendRequest()
-            {
-                FromPlayerViewerId = this.ViewerId,
-                ToPlayerViewerId = other.ViewerId,
-            }
+            new() { FromPlayerViewerId = this.ViewerId, ToPlayerViewerId = other.ViewerId }
         );
 
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -634,11 +630,7 @@ public class FriendTest : TestFixture
     private async Task CreateFriendRequestFrom(DbPlayer other)
     {
         this.ApiContext.PlayerFriendRequests.Add(
-            new DbPlayerFriendRequest()
-            {
-                FromPlayerViewerId = other.ViewerId,
-                ToPlayerViewerId = this.ViewerId,
-            }
+            new() { FromPlayerViewerId = other.ViewerId, ToPlayerViewerId = this.ViewerId }
         );
 
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -652,11 +644,8 @@ public class FriendTest : TestFixture
             {
                 PlayerFriendshipPlayers =
                 [
-                    new DbPlayerFriendshipPlayer() { PlayerViewerId = viewerId },
-                    new DbPlayerFriendshipPlayer()
-                    {
-                        Player = new() { AccountId = $"CreateFriends_{viewerId}_{x}" },
-                    },
+                    new() { PlayerViewerId = viewerId },
+                    new() { Player = new() { AccountId = $"CreateFriends_{viewerId}_{x}" } },
                 ],
             });
 

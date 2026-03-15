@@ -152,6 +152,6 @@ public record WeaponBody(
     public int GetAbility(int abilityNo, int level)
     {
         int[] pool = Abilities[abilityNo - 1];
-        return level < 1 || level > 3 ? 0 : pool[level - 1];
+        return level is < 1 or > 3 ? 0 : pool[level - 1];
     }
 };

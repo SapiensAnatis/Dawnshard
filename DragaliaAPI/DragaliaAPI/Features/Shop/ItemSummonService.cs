@@ -99,11 +99,7 @@ public partial class ItemSummonService : IItemSummonService
             int index = Array.IndexOf(this.summonWeights, this.summonWeights.Last(x => x <= value));
             ItemSummonOddsEntry entity = this.config.Odds[index];
             await this.rewardService.GrantReward(new(entity.Type, entity.Id, entity.Quantity));
-            results[i] = new AtgenBuildEventRewardEntityList(
-                entity.Type,
-                entity.Id,
-                entity.Quantity
-            );
+            results[i] = new(entity.Type, entity.Id, entity.Quantity);
         }
 
         this.missionProgressionService.OnItemSummon();

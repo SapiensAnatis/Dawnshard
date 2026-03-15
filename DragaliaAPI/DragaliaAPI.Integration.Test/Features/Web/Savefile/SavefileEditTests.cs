@@ -53,7 +53,7 @@ public class SavefileEditTests : WebTestFixture
             .ContainKey(EntityTypes.DmodePoint)
             .WhoseValue.Should()
             .BeEquivalentTo([
-                new EntityTypeItem() { Id = (int)DmodePoint.Point1 },
+                new() { Id = (int)DmodePoint.Point1 },
                 new EntityTypeItem() { Id = (int)DmodePoint.Point2 },
             ]);
     }
@@ -134,7 +134,7 @@ public class SavefileEditTests : WebTestFixture
             .Data.PresentList.Should()
             .BeEquivalentTo(
                 [
-                    new PresentDetailList()
+                    new()
                     {
                         EntityType = EntityTypes.Chara,
                         EntityId = (int)Charas.SummerCelliera,

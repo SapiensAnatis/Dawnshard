@@ -45,7 +45,7 @@ public static class TutorialFlagUtil
 
     public static ISet<int> ConvertIntToFlagIntList(int flags)
     {
-        SortedSet<int> setFlags = new SortedSet<int>();
+        SortedSet<int> setFlags = new();
         if (flags != (int)TutorialFlags.Clear)
         {
             for (int i = 0; i < 30; i++)
@@ -53,9 +53,12 @@ public static class TutorialFlagUtil
                 int flagNr = 1001 + i;
                 int flag = 1 << i;
                 if ((flags & flag) == flag)
+                {
                     setFlags.Add(flagNr);
+                }
             }
         }
+
         return setFlags;
     }
 
@@ -77,14 +80,16 @@ public static class TutorialFlagUtil
     public static int ConvertFlagIntListToInt(IEnumerable<int> flagList, int flags)
     {
         if (!flagList.Any() || flagList.Contains((int)TutorialFlags.Clear))
+        {
             return (int)TutorialFlags.Clear;
+        }
 
         foreach (int flagNr in flagList)
         {
             if (
                 flagNr
-                is < ((int)TutorialFlags.GrowthDragon)
-                    or > ((int)TutorialFlags.ServerClearSixteenthChapter)
+                is < (int)TutorialFlags.GrowthDragon
+                    or > (int)TutorialFlags.ServerClearSixteenthChapter
             )
             {
                 throw new ArgumentException($"Invalid flag {flagNr}", nameof(flagList));

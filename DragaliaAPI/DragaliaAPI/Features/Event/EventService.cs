@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Infrastructure;
@@ -58,7 +56,7 @@ public partial class EventService(
             eventId
         );
 
-        return new EventPassiveList(
+        return new(
             eventId,
             passives.Select(x => new AtgenEventPassiveUpList(x.PassiveId, x.Progress))
         );
@@ -178,9 +176,13 @@ public partial class EventService(
             eventRepository.CreateEventData(eventId);
 
             if (data.IsMemoryEvent)
+            {
                 await missionService.UnlockMemoryEventMissions(eventId);
+            }
             else
+            {
                 await missionService.UnlockEventMissions(eventId);
+            }
 
             firstEventEnter = true;
         }
@@ -197,7 +199,9 @@ public partial class EventService(
             .ToList();
 
         if (itemIds.Count > 0)
+        {
             eventRepository.CreateEventItems(eventId, itemIds);
+        }
 
         IEnumerable<int> currentEventPassiveIds = await eventRepository
             .Passives.Where(x => x.EventId == eventId)
@@ -209,7 +213,9 @@ public partial class EventService(
             .ToList();
 
         if (neededEventPassiveIds.Count > 0)
+        {
             eventRepository.CreateEventPassives(eventId, neededEventPassiveIds);
+        }
 
         // Doing this at the end so that everything should've been created
         if (data.EventKindType == EventKindType.Combat && firstEventEnter)
@@ -240,7 +246,7 @@ public partial class EventService(
                 Log.GrantingXDueToCompletedQuests(logger, entityQuantity, entityId, eventId);
 
                 await rewardService.GrantReward(
-                    new Entity(EntityTypes.CombatEventItem, entityId, entityQuantity)
+                    new(EntityTypes.CombatEventItem, entityId, entityQuantity)
                 );
             }
 
@@ -280,7 +286,7 @@ public partial class EventService(
             eventId
         );
 
-        return new BuildEventUserList(
+        return new(
             eventId,
             eventItems.Select(x => new AtgenUserBuildEventItemList(x.Type, x.Quantity))
         );
@@ -296,7 +302,7 @@ public partial class EventService(
 
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
-        return new RaidEventUserList(
+        return new(
             eventId,
             itemDict.GetValueOrDefault((int)RaidEventItemType.SummonPoint, 0),
             itemDict.GetValueOrDefault((int)RaidEventItemType.RaidPoint1, 0),
@@ -313,24 +319,25 @@ public partial class EventService(
     public async Task<Clb01EventUserList?> GetClb01EventUserData(int eventId)
     {
         if (!await eventRepository.HasEventDataAsync(eventId))
+        {
             return null;
+        }
 
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
-        return new Clb01EventUserList(
-            eventId,
-            itemDict.Select(x => new AtgenUserClb01EventItemList(x.Key, x.Value))
-        );
+        return new(eventId, itemDict.Select(x => new AtgenUserClb01EventItemList(x.Key, x.Value)));
     }
 
     public async Task<CollectEventUserList?> GetCollectEventUserData(int eventId)
     {
         if (!await eventRepository.HasEventDataAsync(eventId))
+        {
             return null;
+        }
 
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
-        return new CollectEventUserList(
+        return new(
             eventId,
             itemDict.Select(x => new AtgenUserCollectEventItemList(x.Key, x.Value))
         );
@@ -339,11 +346,13 @@ public partial class EventService(
     public async Task<CombatEventUserList?> GetCombatEventUserData(int eventId)
     {
         if (!await eventRepository.HasEventDataAsync(eventId))
+        {
             return null;
+        }
 
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
-        return new CombatEventUserList(
+        return new(
             eventId,
             itemDict.GetValueOrDefault((int)CombatEventItemType.EventPoint, 0),
             itemDict.GetValueOrDefault((int)CombatEventItemType.ExchangeItem, 0),
@@ -356,11 +365,13 @@ public partial class EventService(
     public async Task<EarnEventUserList?> GetEarnEventUserData(int eventId)
     {
         if (!await eventRepository.HasEventDataAsync(eventId))
+        {
             return null;
+        }
 
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
-        return new EarnEventUserList(
+        return new(
             eventId,
             itemDict.GetValueOrDefault((int)EarnEventItemType.EarnPoint, 0),
             itemDict.GetValueOrDefault((int)EarnEventItemType.ExchangeItem1, 0),
@@ -372,11 +383,13 @@ public partial class EventService(
     public async Task<ExHunterEventUserList?> GetExHunterEventUserData(int eventId)
     {
         if (!await eventRepository.HasEventDataAsync(eventId))
+        {
             return null;
+        }
 
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
-        return new ExHunterEventUserList(
+        return new(
             eventId,
             itemDict.GetValueOrDefault((int)ExHunterEventItemType.SummonPoint, 0),
             itemDict.GetValueOrDefault((int)ExHunterEventItemType.ExHunterPoint1, 0),
@@ -393,11 +406,13 @@ public partial class EventService(
     public async Task<ExRushEventUserList?> GetExRushEventUserData(int eventId)
     {
         if (!await eventRepository.HasEventDataAsync(eventId))
+        {
             return null;
+        }
 
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
-        return new ExRushEventUserList(
+        return new(
             eventId,
             itemDict.GetValueOrDefault((int)ExRushEventItemType.ExRushPoint1, 0),
             itemDict.GetValueOrDefault((int)ExRushEventItemType.ExRushPoint2, 0)
@@ -407,24 +422,25 @@ public partial class EventService(
     public async Task<MazeEventUserList?> GetMazeEventUserData(int eventId)
     {
         if (!await eventRepository.HasEventDataAsync(eventId))
+        {
             return null;
+        }
 
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
-        return new MazeEventUserList(
-            eventId,
-            itemDict.Select(x => new AtgenUserMazeEventItemList(x.Key, x.Value))
-        );
+        return new(eventId, itemDict.Select(x => new AtgenUserMazeEventItemList(x.Key, x.Value)));
     }
 
     public async Task<SimpleEventUserList?> GetSimpleEventUserData(int eventId)
     {
         if (!await eventRepository.HasEventDataAsync(eventId))
+        {
             return null;
+        }
 
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
-        return new SimpleEventUserList(
+        return new(
             eventId,
             itemDict.GetValueOrDefault((int)SimpleEventItemType.ExchangeItem1, 0),
             itemDict.GetValueOrDefault((int)SimpleEventItemType.ExchangeItem2, 0),

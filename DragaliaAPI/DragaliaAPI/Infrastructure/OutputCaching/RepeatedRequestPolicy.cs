@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.OutputCaching;
-using Microsoft.Extensions.Primitives;
 using static DragaliaAPI.Infrastructure.DragaliaHttpConstants;
 
 namespace DragaliaAPI.Infrastructure.OutputCaching;
@@ -16,10 +15,7 @@ internal partial class RepeatedRequestPolicy(ILogger<RepeatedRequestPolicy> logg
         context.AllowCacheLookup = shouldCache;
         context.AllowCacheStorage = shouldCache;
 
-        context.CacheVaryByRules.HeaderNames = new StringValues([
-            Headers.RequestToken,
-            Headers.SessionId,
-        ]);
+        context.CacheVaryByRules.HeaderNames = new([Headers.RequestToken, Headers.SessionId]);
 
         return ValueTask.CompletedTask;
     }

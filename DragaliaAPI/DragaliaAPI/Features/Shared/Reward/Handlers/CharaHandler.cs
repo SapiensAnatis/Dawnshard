@@ -1,5 +1,4 @@
 using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
@@ -33,9 +32,7 @@ public partial class CharaHandler(
             return GrantReturn.Discarded();
         }
 
-        apiContext.PlayerCharaData.Add(
-            new DbPlayerCharaData(playerIdentityService.ViewerId, chara)
-        );
+        apiContext.PlayerCharaData.Add(new(playerIdentityService.ViewerId, chara));
 
         if (
             MasterAsset.CharaStories.TryGetValue((int)chara, out StoryData? storyData)
@@ -45,7 +42,7 @@ public partial class CharaHandler(
         )
         {
             apiContext.PlayerStoryState.Add(
-                new DbPlayerStoryState()
+                new()
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     StoryType = StoryTypes.Chara,
@@ -98,9 +95,7 @@ public partial class CharaHandler(
                 continue;
             }
 
-            apiContext.PlayerCharaData.Add(
-                new DbPlayerCharaData(playerIdentityService.ViewerId, chara)
-            );
+            apiContext.PlayerCharaData.Add(new(playerIdentityService.ViewerId, chara));
             result.Add(key, GrantReturn.Added());
             ownedCharacters.Add(chara);
 
@@ -110,7 +105,7 @@ public partial class CharaHandler(
             )
             {
                 apiContext.PlayerStoryState.Add(
-                    new DbPlayerStoryState()
+                    new()
                     {
                         ViewerId = playerIdentityService.ViewerId,
                         StoryType = StoryTypes.Chara,

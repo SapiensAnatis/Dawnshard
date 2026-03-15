@@ -23,7 +23,7 @@ public class DbTestFixture : IDisposable
             .ConfigureWarnings(config => config.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
 
-        this.ApiContext = new ApiContext(options, new StubPlayerIdentityService(ViewerId));
+        this.ApiContext = new(options, new StubPlayerIdentityService(ViewerId));
         // Unused for creating saves
         Mock<ILogger<SavefileService>> mockLogger = new(MockBehavior.Loose);
         Mock<IDistributedCache> mockCache = new(MockBehavior.Loose);
@@ -42,7 +42,9 @@ public class DbTestFixture : IDisposable
     public async Task AddToDatabase<TEntity>(TEntity data)
     {
         if (data is null)
+        {
             return;
+        }
 
         await this.ApiContext.AddAsync(data);
         await this.ApiContext.SaveChangesAsync();

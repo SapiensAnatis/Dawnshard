@@ -56,7 +56,9 @@ public partial class HeroParamService(
     private static HeroParam? MapHeroParam(DbDetailedPartyUnit unit, FortBonusList fortBonusList)
     {
         if (unit.CharaData is null)
+        {
             return null;
+        }
 
         CharaData charaData = MasterAsset.CharaData[unit.CharaData.CharaId];
 

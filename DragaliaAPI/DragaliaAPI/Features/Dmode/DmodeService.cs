@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.DmodeDungeon;
@@ -30,12 +29,12 @@ public partial class DmodeService(
         DbPlayerDmodeInfo? info = await dmodeRepository.Info.SingleOrDefaultAsync();
         if (info == null)
         {
-            return new DmodeInfo();
+            return new();
         }
 
         int maxFloor = await dmodeRepository.GetTotalMaxFloorAsync();
 
-        return new DmodeInfo(
+        return new(
             maxFloor,
             info.RecoveryCount,
             info.RecoveryTime,
@@ -52,7 +51,7 @@ public partial class DmodeService(
         DbPlayerDmodeDungeon? dungeon = await dmodeRepository.Dungeon.SingleOrDefaultAsync();
         if (dungeon == null)
         {
-            return new DmodeDungeonInfo();
+            return new();
         }
 
         // Sanity checks so people dont get stuck
@@ -81,7 +80,9 @@ public partial class DmodeService(
                 );
 
                 if (record != null)
+                {
                     await dmodeCacheService.DeleteFloorInfo(record.FloorKey);
+                }
 
                 await dmodeCacheService.DeletePlayRecord();
                 await dmodeCacheService.DeleteIngameInfo();
@@ -90,7 +91,7 @@ public partial class DmodeService(
             }
         }
 
-        return new DmodeDungeonInfo(
+        return new(
             dungeon.CharaId,
             dungeon.Floor,
             dungeon.QuestTime,
@@ -114,10 +115,10 @@ public partial class DmodeService(
 
         if (expedition == null)
         {
-            return new DmodeExpedition();
+            return new();
         }
 
-        return new DmodeExpedition(
+        return new(
             expedition.CharaId1,
             expedition.CharaId2,
             expedition.CharaId3,
@@ -203,7 +204,9 @@ public partial class DmodeService(
             foreach ((EntityTypes type, int id, int quantity) in level.NeededMaterials)
             {
                 if (type == EntityTypes.None)
+                {
                     continue;
+                }
 
                 await paymentService.ProcessPayment(new Entity(type, id, quantity));
             }
@@ -237,7 +240,7 @@ public partial class DmodeService(
 
         expedition.State = ExpeditionState.Playing;
 
-        return new DmodeExpedition(
+        return new(
             expedition.CharaId1,
             expedition.CharaId2,
             expedition.CharaId3,
@@ -269,13 +272,15 @@ public partial class DmodeService(
 
         Log.FinishingExpeditionForceFinished(logger, dmodeExpedition, forceFinish);
 
-        DmodeIngameResult dmodeResult = new();
-        dmodeResult.CharaIdList = new[]
+        DmodeIngameResult dmodeResult = new()
         {
-            expedition.CharaId1,
-            expedition.CharaId2,
-            expedition.CharaId3,
-            expedition.CharaId4,
+            CharaIdList = new[]
+            {
+                expedition.CharaId1,
+                expedition.CharaId2,
+                expedition.CharaId3,
+                expedition.CharaId4,
+            },
         };
 
         List<AtgenRewardTalismanList> talismans = new();
@@ -284,7 +289,9 @@ public partial class DmodeService(
 
         // No rewards for force-finishing
         if (forceFinish)
+        {
             return (dmodeExpedition, dmodeResult);
+        }
 
         DmodeExpeditionFloor floor = MasterAsset.DmodeExpeditionFloor[expedition.TargetFloor];
         DateTimeOffset endTime = expedition.StartTime.AddSeconds(floor.NeedTime);
@@ -325,10 +332,10 @@ public partial class DmodeService(
         dmodeResult.TakeDmodePoint2 = (int)Math.Ceiling(floor.RewardDmodePoint2 * pointMultiplier2);
 
         await rewardService.GrantReward(
-            new Entity(EntityTypes.DmodePoint, (int)DmodePoint.Point1, dmodeResult.TakeDmodePoint1)
+            new(EntityTypes.DmodePoint, (int)DmodePoint.Point1, dmodeResult.TakeDmodePoint1)
         );
         await rewardService.GrantReward(
-            new Entity(EntityTypes.DmodePoint, (int)DmodePoint.Point2, dmodeResult.TakeDmodePoint2)
+            new(EntityTypes.DmodePoint, (int)DmodePoint.Point2, dmodeResult.TakeDmodePoint2)
         );
 
         Random rdm = Random.Shared;

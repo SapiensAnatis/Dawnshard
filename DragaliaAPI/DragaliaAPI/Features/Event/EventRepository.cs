@@ -95,7 +95,7 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
     {
         return apiContext
             .PlayerEventData.Add(
-                new DbPlayerEventData
+                new()
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     EventId = eventId,
@@ -109,7 +109,7 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
     {
         return apiContext
             .PlayerEventRewards.Add(
-                new DbPlayerEventReward
+                new()
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     EventId = eventId,
@@ -131,7 +131,7 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
             items.Add(
                 apiContext
                     .PlayerEventItems.Add(
-                        new DbPlayerEventItem
+                        new()
                         {
                             ViewerId = playerIdentityService.ViewerId,
                             EventId = eventId,
@@ -153,14 +153,12 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
     {
         List<DbPlayerEventPassive> passives = new();
 
-        string accountId = playerIdentityService.AccountId;
-
         foreach (int passiveId in passiveIds)
         {
             passives.Add(
                 apiContext
                     .PlayerEventPassives.Add(
-                        new DbPlayerEventPassive
+                        new()
                         {
                             ViewerId = playerIdentityService.ViewerId,
                             EventId = eventId,

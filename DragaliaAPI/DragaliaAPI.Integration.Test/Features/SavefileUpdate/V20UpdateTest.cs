@@ -47,14 +47,14 @@ public class V20UpdateTest : SavefileUpdateTestFixture
     public async Task V20Update_StoriesNotCompleted_DoesNotAddCharacters()
     {
         this.ApiContext.PlayerStoryState.AddRange([
-            new DbPlayerStoryState()
+            new()
             {
-                Owner = new DbPlayer() { AccountId = "other player" },
+                Owner = new() { AccountId = "other player" },
                 StoryId = HarleStoryId,
                 StoryType = StoryTypes.Quest,
                 State = StoryState.Read,
             },
-            new DbPlayerStoryState()
+            new()
             {
                 ViewerId = this.ViewerId,
                 StoryId = OrigaStoryId,

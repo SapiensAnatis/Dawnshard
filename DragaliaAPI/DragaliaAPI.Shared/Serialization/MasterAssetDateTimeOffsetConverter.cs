@@ -14,7 +14,9 @@ public class MasterAssetDateTimeOffsetConverter : JsonConverter<DateTimeOffset>
     {
         string? val = reader.GetString();
         if (string.IsNullOrEmpty(val))
+        {
             return DateTimeOffset.UnixEpoch;
+        }
 
         DateTimeOffset time = DateTimeOffset.Parse(
             val,

@@ -70,11 +70,7 @@ public partial class WeaponRepository : IWeaponRepository
         Log.AddingWeapon(this.logger, weaponBodyId);
 
         await this.apiContext.PlayerWeapons.AddAsync(
-            new DbWeaponBody()
-            {
-                ViewerId = this.playerIdentityService.ViewerId,
-                WeaponBodyId = weaponBodyId,
-            }
+            new() { ViewerId = this.playerIdentityService.ViewerId, WeaponBodyId = weaponBodyId }
         );
     }
 
@@ -95,7 +91,7 @@ public partial class WeaponRepository : IWeaponRepository
         }
 
         await this.apiContext.PlayerWeaponSkins.AddAsync(
-            new DbWeaponSkin()
+            new()
             {
                 ViewerId = this.playerIdentityService.ViewerId,
                 WeaponSkinId = weaponSkinId,
@@ -108,12 +104,10 @@ public partial class WeaponRepository : IWeaponRepository
     {
         List<WeaponBodies> filtered = weaponIds.Where(x => x != WeaponBodiesEnum.Empty).ToList();
 
-        return (
-                await this
-                    .WeaponBodies.Select(x => x.WeaponBodyId)
-                    .Where(x => filtered.Contains(x))
-                    .CountAsync()
-            ) == filtered.Count;
+        return await this
+                .WeaponBodies.Select(x => x.WeaponBodyId)
+                .Where(x => filtered.Contains(x))
+                .CountAsync() == filtered.Count;
     }
 
     public async Task<DbWeaponBody?> FindAsync(WeaponBodies id) =>

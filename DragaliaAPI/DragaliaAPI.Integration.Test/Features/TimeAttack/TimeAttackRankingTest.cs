@@ -37,7 +37,7 @@ public class TimeAttackRankingTest : TestFixture
         int questId = 227080101; // Battle in the Dornith Mountains: Beginner
 
         this.ApiContext.PlayerQuests.Add(
-            new DbQuest()
+            new()
             {
                 ViewerId = ViewerId,
                 BestClearTime = 200f,

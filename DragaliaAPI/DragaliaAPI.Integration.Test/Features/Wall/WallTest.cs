@@ -216,14 +216,13 @@ public class WallTest : TestFixture
     [Fact]
     public async Task ReceiveMonthlyRewawrds_NotInitialized_ReturnsInvalidArgument()
     {
-        DragaliaResponse<ResultCodeResponse> response = (
+        DragaliaResponse<ResultCodeResponse> response =
             await this.Client.PostMsgpack<ResultCodeResponse>(
                 "wall/receive_monthly_reward",
                 new WallGetMonthlyRewardRequest() { QuestGroupId = 21601 },
                 ensureSuccessHeader: false,
                 cancellationToken: TestContext.Current.CancellationToken
-            )
-        );
+            );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
     }
@@ -241,14 +240,13 @@ public class WallTest : TestFixture
             },
         ]);
 
-        DragaliaResponse<ResultCodeResponse> response = (
+        DragaliaResponse<ResultCodeResponse> response =
             await this.Client.PostMsgpack<ResultCodeResponse>(
                 "wall/receive_monthly_reward",
                 new WallGetMonthlyRewardRequest() { QuestGroupId = 21601 },
                 ensureSuccessHeader: false,
                 cancellationToken: TestContext.Current.CancellationToken
-            )
-        );
+            );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
     }

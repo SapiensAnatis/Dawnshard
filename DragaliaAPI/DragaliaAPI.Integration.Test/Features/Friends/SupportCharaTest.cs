@@ -305,14 +305,13 @@ public class SupportCharaTest : TestFixture
         );
         await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
-        DragaliaResponse<FriendGetSupportCharaDetailResponse> response = (
+        DragaliaResponse<FriendGetSupportCharaDetailResponse> response =
             await this.Client.PostMsgpack<FriendGetSupportCharaDetailResponse>(
                 "/friend/get_support_chara_detail",
                 new FriendGetSupportCharaDetailRequest() { SupportViewerId = (ulong)this.ViewerId },
                 cancellationToken: TestContext.Current.CancellationToken,
                 ensureSuccessHeader: false
-            )
-        );
+            );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }

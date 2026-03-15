@@ -92,7 +92,9 @@ public static class ManaNodesUtil
     {
         SortedSet<int> nodes = new();
         if (flag == ManaNodes.Clear)
+        {
             return nodes;
+        }
 
         ManaNodes circle = flag & ManaNodes.Circle7;
         int circleNr = ((int)circle >> 10) * 10;
@@ -109,7 +111,9 @@ public static class ManaNodesUtil
             for (int i = 1; !(allNodes[i] > nodeNr); i++)
             {
                 if (circle > ManaNodes.Circle4 || nodeNr.HasFlag(allNodes[i]))
+                {
                     nodes.Add(circleNr + i);
+                }
             }
         }
 

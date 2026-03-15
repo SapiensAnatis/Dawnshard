@@ -25,7 +25,9 @@ public class V11Update(
         {
             int partyPower = await partyPowerService.CalculatePartyPower(party, bonusList);
             if (partyPower > power)
+            {
                 power = partyPower;
+            }
         }
 
         await partyPowerRepository.SetMaxPartyPowerAsync(power);

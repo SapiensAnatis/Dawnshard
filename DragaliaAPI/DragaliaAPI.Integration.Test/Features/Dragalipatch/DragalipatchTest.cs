@@ -9,7 +9,7 @@ public class DragalipatchTest : TestFixture
         : base(factory, outputHelper)
     {
         // Don't use /api prefix
-        this.Client.BaseAddress = new Uri("http://localhost/");
+        this.Client.BaseAddress = new("http://localhost/");
     }
 
     [Fact]

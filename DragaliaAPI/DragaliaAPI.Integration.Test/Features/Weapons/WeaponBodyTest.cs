@@ -134,9 +134,13 @@ public class WeaponBodyTest : TestFixture
         await this.ApiContext.Entry(userData).ReloadAsync(TestContext.Current.CancellationToken);
 
         if (testCase.ExpCoinLoss != 0)
+        {
             response.UpdateDataList.UserData.Coin.Should().Be(oldCoin - testCase.ExpCoinLoss);
+        }
         else
+        {
             response.UpdateDataList.UserData.Should().BeNull();
+        }
 
         userData.Coin.Should().Be(oldCoin - testCase.ExpCoinLoss);
 
@@ -361,7 +365,7 @@ public class WeaponBodyTest : TestFixture
                         .ToList(),
                     new() { { Materials.BronzeWhetstone, 275 }, { Materials.GoldWhetstone, 5 } },
                     0,
-                    new DbWeaponBody()
+                    new()
                     {
                         ViewerId = 0,
                         WeaponBodyId = WeaponBodies.ChimeratechAnomalocaris,
@@ -407,7 +411,7 @@ public class WeaponBodyTest : TestFixture
                         { Materials.UnearthlyLantern, 1 },
                     },
                     160_000,
-                    new DbWeaponBody()
+                    new()
                     {
                         ViewerId = 0,
                         WeaponBodyId = WeaponBodies.EverfrostBow,
@@ -431,12 +435,12 @@ public class WeaponBodyTest : TestFixture
                             0,
                         },
                     },
-                    ExpPassiveAbilities: new List<DbWeaponPassiveAbility>()
+                    ExpPassiveAbilities: new()
                     {
                         new() { ViewerId = 0, WeaponPassiveAbilityId = 1060203 },
                         new() { ViewerId = 0, WeaponPassiveAbilityId = 1060204 },
                     },
-                    ExpNewSkins: new List<DbWeaponSkin>()
+                    ExpNewSkins: new()
                     {
                         new() { ViewerId = 0, WeaponSkinId = 30640203 },
                     }

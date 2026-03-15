@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -59,7 +58,7 @@ public partial class StoryService(
         return type switch
         {
             StoryTypes.Chara or StoryTypes.Dragon => await this.CheckUnitStoryEligibility(storyId),
-            StoryTypes.Castle => await this.CheckCastleStoryEligibility(storyId),
+            StoryTypes.Castle => await this.CheckCastleStoryEligibility(),
             StoryTypes.Quest => true,
             StoryTypes.Event => true,
             _ => throw new NotImplementedException($"Stories of type {type} are not implemented"),
@@ -103,7 +102,7 @@ public partial class StoryService(
         return true;
     }
 
-    private async Task<bool> CheckCastleStoryEligibility(int storyId)
+    private async Task<bool> CheckCastleStoryEligibility()
     {
         return await inventoryRepository.CheckQuantity(Materials.LookingGlass, 1);
     }
@@ -132,10 +131,10 @@ public partial class StoryService(
         List<AtgenBuildEventRewardEntityList> rewards = type switch
         {
             StoryTypes.Chara or StoryTypes.Dragon => await this.ReadUnitStory(storyId),
-            StoryTypes.Castle => await this.ReadCastleStory(storyId),
+            StoryTypes.Castle => await this.ReadCastleStory(),
             StoryTypes.Quest => await this.ReadQuestStory(storyId),
             StoryTypes.Event => await this.ReadEventStory(storyId),
-            StoryTypes.DungeonMode => await this.ReadDmodeStory(storyId),
+            StoryTypes.DungeonMode => await this.ReadDmodeStory(),
             _ => throw new NotImplementedException($"Stories of type {type} are not implemented"),
         };
 
@@ -160,7 +159,7 @@ public partial class StoryService(
             if (data.Id == charaStory.StoryIds.Last())
             {
                 emblemRewardId = data.ReleaseTriggerId;
-                emblemRewardEntity = new Entity(EntityTypes.Title, emblemRewardId, 1);
+                emblemRewardEntity = new(EntityTypes.Title, emblemRewardId, 1);
                 await rewardService.GrantReward(emblemRewardEntity);
                 rewardList.Add(emblemRewardEntity.ToBuildEventRewardEntityList());
             }
@@ -176,7 +175,7 @@ public partial class StoryService(
         return rewardList;
     }
 
-    private async Task<List<AtgenBuildEventRewardEntityList>> ReadCastleStory(int storyId)
+    private async Task<List<AtgenBuildEventRewardEntityList>> ReadCastleStory()
     {
         await inventoryRepository.UpdateQuantity(Materials.LookingGlass, -1);
         await userDataRepository.GiveWyrmite(CastleStoryWyrmite);
@@ -253,7 +252,7 @@ public partial class StoryService(
                 }
 
                 RewardGrantResult result = await rewardService.GrantReward(
-                    new Entity(reward.Type, reward.Id, reward.Quantity)
+                    new(reward.Type, reward.Id, reward.Quantity)
                 );
 
                 if (result == RewardGrantResult.Limit)
@@ -295,10 +294,10 @@ public partial class StoryService(
             Log.GrantingMemoryEventCharacter(logger, eventData.EventCharaId);
 
             await rewardService.GrantReward(
-                new Entity(EntityTypes.Chara, Id: (int)eventData.EventCharaId)
+                new(EntityTypes.Chara, Id: (int)eventData.EventCharaId)
             );
             rewardList.Add(
-                new AtgenBuildEventRewardEntityList()
+                new()
                 {
                     EntityId = (int)eventData.EventCharaId,
                     EntityQuantity = 1,
@@ -337,7 +336,7 @@ public partial class StoryService(
         return rewardList;
     }
 
-    private async Task<List<AtgenBuildEventRewardEntityList>> ReadDmodeStory(int storyId)
+    private async Task<List<AtgenBuildEventRewardEntityList>> ReadDmodeStory()
     {
         await userDataRepository.GiveWyrmite(DmodeStoryWyrmite);
 
@@ -372,7 +371,6 @@ public partial class StoryService(
 
     #endregion
 
-
     public static AtgenQuestStoryRewardList ToQuestStoryReward(
         AtgenBuildEventRewardEntityList reward
     )
@@ -385,7 +383,9 @@ public partial class StoryService(
         };
 
         if (reward.EntityType is EntityTypes.Chara or EntityTypes.Dragon)
+        {
             questReward.EntityLevel = 1;
+        }
 
         return questReward;
     }

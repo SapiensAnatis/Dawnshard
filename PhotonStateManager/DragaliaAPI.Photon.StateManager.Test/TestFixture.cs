@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Headers;
-using DragaliaAPI.Photon.StateManager.Models;
+﻿using DragaliaAPI.Photon.StateManager.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -10,8 +9,12 @@ namespace DragaliaAPI.Photon.StateManager.Test;
 [Collection(TestCollection.Name)]
 public class TestFixture : IAsyncLifetime
 {
-    public TestFixture(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
+    public ITestOutputHelper TestOutputHelper { get; }
+
+    public TestFixture(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
     {
+        this.TestOutputHelper = testOutputHelper;
+
         this.Client = factory
             .WithWebHostBuilder(builder =>
                 builder.ConfigureLogging(logging =>
@@ -21,10 +24,7 @@ public class TestFixture : IAsyncLifetime
             )
             .CreateClient();
 
-        this.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-            "Bearer",
-            "photontoken"
-        );
+        this.Client.DefaultRequestHeaders.Authorization = new("Bearer", "photontoken");
 
         this.RedisConnectionProvider =
             factory.Services.GetRequiredService<IRedisConnectionProvider>();

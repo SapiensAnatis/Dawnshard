@@ -42,19 +42,18 @@ public class UpdateTest : TestFixture
     [Fact]
     public async Task UpdateResetNew_NullList_Handles()
     {
-        DragaliaResponse<UpdateResetNewResponse> response = (
+        DragaliaResponse<UpdateResetNewResponse> response =
             await this.Client.PostMsgpack<UpdateResetNewResponse>(
                 "/update/reset_new",
                 new UpdateResetNewRequest()
                 {
                     TargetList = new List<AtgenTargetList>()
                     {
-                        new AtgenTargetList() { TargetName = "emblem", TargetIdList = null },
+                        new() { TargetName = "emblem", TargetIdList = null },
                     },
                 },
                 cancellationToken: TestContext.Current.CancellationToken
-            )
-        );
+            );
 
         response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
     }
@@ -66,13 +65,13 @@ public class UpdateTest : TestFixture
         DbPlayer player2 = new() { AccountId = $"ResetNew_{Guid.NewGuid().ToString()}" };
 
         this.ApiContext.PlayerFriendRequests.AddRange([
-            new DbPlayerFriendRequest()
+            new()
             {
                 FromPlayer = player1,
                 ToPlayerViewerId = this.ViewerId,
                 IsNew = true,
             },
-            new DbPlayerFriendRequest()
+            new()
             {
                 FromPlayer = player2,
                 ToPlayerViewerId = this.ViewerId,
@@ -94,10 +93,7 @@ public class UpdateTest : TestFixture
             "/update/reset_new",
             new UpdateResetNewRequest()
             {
-                TargetList =
-                [
-                    new AtgenTargetList() { TargetName = "friend_apply", TargetIdList = null },
-                ],
+                TargetList = [new() { TargetName = "friend_apply", TargetIdList = null }],
             },
             cancellationToken: TestContext.Current.CancellationToken
         );
@@ -117,7 +113,7 @@ public class UpdateTest : TestFixture
         DbPlayer player2 = new() { AccountId = $"ResetNew_{Guid.NewGuid().ToString()}" };
 
         this.ApiContext.PlayerFriendships.AddRange([
-            new DbPlayerFriendship()
+            new()
             {
                 PlayerFriendshipPlayers =
                 [
@@ -125,7 +121,7 @@ public class UpdateTest : TestFixture
                     new() { Player = player1 },
                 ],
             },
-            new DbPlayerFriendship()
+            new()
             {
                 PlayerFriendshipPlayers =
                 [
@@ -149,14 +145,7 @@ public class UpdateTest : TestFixture
             "/update/reset_new",
             new UpdateResetNewRequest()
             {
-                TargetList =
-                [
-                    new AtgenTargetList()
-                    {
-                        TargetName = "friend",
-                        TargetIdList = [player1.ViewerId],
-                    },
-                ],
+                TargetList = [new() { TargetName = "friend", TargetIdList = [player1.ViewerId] }],
             },
             cancellationToken: TestContext.Current.CancellationToken
         );

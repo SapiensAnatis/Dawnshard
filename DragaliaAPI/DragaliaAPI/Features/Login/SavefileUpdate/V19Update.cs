@@ -29,7 +29,9 @@ public class V19Update(ApiContext context, IPlayerIdentityService playerIdentity
                 .ToList();
 
             if (ticketsOfType.Count < 2)
+            {
                 continue;
+            }
 
             context.Add(
                 new DbSummonTicket()

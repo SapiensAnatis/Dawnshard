@@ -45,7 +45,9 @@ public class V4Update : ISavefileUpdate
         foreach ((int storyId, int status) in ChapterTutorialStatus)
         {
             if (await this.storyRepository.HasReadQuestStory(storyId))
+            {
                 await this.tutorialService.UpdateTutorialStatus(status);
+            }
         }
 
         if (userData.TutorialFlagList.Contains(1001))

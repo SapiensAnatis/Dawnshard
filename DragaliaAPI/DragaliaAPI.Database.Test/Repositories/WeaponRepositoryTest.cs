@@ -17,7 +17,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
     public WeaponRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
-        this.weaponRepository = new WeaponRepository(
+        this.weaponRepository = new(
             this.fixture.ApiContext,
             IdentityTestUtils.MockPlayerDetailsService.Object,
             LoggerTestUtils.Create<WeaponRepository>()

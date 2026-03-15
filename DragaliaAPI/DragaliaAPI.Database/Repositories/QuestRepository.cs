@@ -25,7 +25,7 @@ public class QuestRepository : IQuestRepository
         DbQuest? questData = await FindQuestAsync(questId);
         questData ??= this
             .apiContext.PlayerQuests.Add(
-                new DbQuest { ViewerId = this.playerIdentityService.ViewerId, QuestId = questId }
+                new() { ViewerId = this.playerIdentityService.ViewerId, QuestId = questId }
             )
             .Entity;
         return questData;
@@ -41,11 +41,7 @@ public class QuestRepository : IQuestRepository
         return await FindQuestEventAsync(questEventId)
             ?? apiContext
                 .QuestEvents.Add(
-                    new DbQuestEvent
-                    {
-                        ViewerId = playerIdentityService.ViewerId,
-                        QuestEventId = questEventId,
-                    }
+                    new() { ViewerId = playerIdentityService.ViewerId, QuestEventId = questEventId }
                 )
                 .Entity;
     }

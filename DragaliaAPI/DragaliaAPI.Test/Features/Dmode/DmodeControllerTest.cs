@@ -34,7 +34,7 @@ public class DmodeControllerTest
         mockDmodeService = new(MockBehavior.Strict);
         mockDmodeRepository = new(MockBehavior.Strict);
 
-        dmodeController = new DmodeController(
+        dmodeController = new(
             mockUpdateDataService.Object,
             mockStoryRepository.Object,
             mockRewardService.Object,
@@ -69,7 +69,7 @@ public class DmodeControllerTest
 
         List<DmodeCharaList> charaList = new()
         {
-            new DmodeCharaList(Charas.ThePrince, 50, 1, Charas.Nadine, Charas.Nadine, 0, 1000),
+            new(Charas.ThePrince, 50, 1, Charas.Nadine, Charas.Nadine, 0, 1000),
         };
         mockDmodeService.Setup(x => x.GetCharaList()).ReturnsAsync(charaList);
 
@@ -87,7 +87,7 @@ public class DmodeControllerTest
         DmodeDungeonInfo dungeonInfo = new(0, 0, 0, 0, false, DungeonState.Waiting);
         mockDmodeService.Setup(x => x.GetDungeonInfo()).ReturnsAsync(dungeonInfo);
 
-        List<DmodeStoryList> stories = new() { new DmodeStoryList(1000, true) };
+        List<DmodeStoryList> stories = new() { new(1000, true) };
         mockStoryRepository
             .SetupGet(x => x.DmodeStories)
             .Returns(
@@ -103,10 +103,7 @@ public class DmodeControllerTest
                 }.BuildMock()
             );
 
-        List<DmodeServitorPassiveList> passiveList = new()
-        {
-            new DmodeServitorPassiveList(DmodeServitorPassiveType.Exp, 5),
-        };
+        List<DmodeServitorPassiveList> passiveList = new() { new(DmodeServitorPassiveType.Exp, 5) };
         mockDmodeService.Setup(x => x.GetServitorPassiveList()).ReturnsAsync(passiveList);
 
         DmodeGetDataResponse? resp = (
@@ -152,7 +149,7 @@ public class DmodeControllerTest
 
         List<DmodeCharaList> charaList = new()
         {
-            new DmodeCharaList(Charas.ThePrince, 50, 1, Charas.Nadine, Charas.Nadine, 0, 1000),
+            new(Charas.ThePrince, 50, 1, Charas.Nadine, Charas.Nadine, 0, 1000),
         };
         mockDmodeService.Setup(x => x.GetCharaList()).ReturnsAsync(charaList);
 
@@ -170,7 +167,7 @@ public class DmodeControllerTest
         DmodeDungeonInfo dungeonInfo = new(0, 0, 0, 0, false, DungeonState.Waiting);
         mockDmodeService.Setup(x => x.GetDungeonInfo()).ReturnsAsync(dungeonInfo);
 
-        List<DmodeStoryList> stories = new() { new DmodeStoryList(1000, true) };
+        List<DmodeStoryList> stories = new() { new(1000, true) };
         mockStoryRepository
             .SetupGet(x => x.DmodeStories)
             .Returns(
@@ -186,10 +183,7 @@ public class DmodeControllerTest
                 }.BuildMock()
             );
 
-        List<DmodeServitorPassiveList> passiveList = new()
-        {
-            new DmodeServitorPassiveList(DmodeServitorPassiveType.Exp, 5),
-        };
+        List<DmodeServitorPassiveList> passiveList = new() { new(DmodeServitorPassiveType.Exp, 5) };
         mockDmodeService.Setup(x => x.GetServitorPassiveList()).ReturnsAsync(passiveList);
 
         DmodeGetDataResponse? resp = (
@@ -233,10 +227,7 @@ public class DmodeControllerTest
             .ReturnsAsync(updateDataList);
 
         DmodeReadStoryResponse? resp = (
-            await dmodeController.ReadStory(
-                new DmodeReadStoryRequest(1000),
-                TestContext.Current.CancellationToken
-            )
+            await dmodeController.ReadStory(new(1000), TestContext.Current.CancellationToken)
         ).GetData<DmodeReadStoryResponse>();
 
         resp.Should().NotBeNull();
@@ -258,10 +249,7 @@ public class DmodeControllerTest
             .Setup(x => x.SaveChangesAsync(TestContext.Current.CancellationToken))
             .ReturnsAsync(updateDataList);
 
-        List<DmodeServitorPassiveList> passiveList = new()
-        {
-            new DmodeServitorPassiveList(DmodeServitorPassiveType.Exp, 5),
-        };
+        List<DmodeServitorPassiveList> passiveList = new() { new(DmodeServitorPassiveType.Exp, 5) };
 
         mockDmodeService
             .Setup(x => x.BuildupServitorPassive(It.IsAny<IEnumerable<DmodeServitorPassiveList>>()))
@@ -269,7 +257,7 @@ public class DmodeControllerTest
 
         DmodeBuildupServitorPassiveResponse? resp = (
             await dmodeController.BuildupServitorPassive(
-                new DmodeBuildupServitorPassiveRequest(passiveList),
+                new(passiveList),
                 TestContext.Current.CancellationToken
             )
         ).GetData<DmodeBuildupServitorPassiveResponse>();
@@ -307,7 +295,7 @@ public class DmodeControllerTest
 
         DmodeExpeditionStartResponse? resp = (
             await dmodeController.ExpeditionStart(
-                new DmodeExpeditionStartRequest(10, charaIdList),
+                new(10, charaIdList),
                 TestContext.Current.CancellationToken
             )
         ).GetData<DmodeExpeditionStartResponse>();

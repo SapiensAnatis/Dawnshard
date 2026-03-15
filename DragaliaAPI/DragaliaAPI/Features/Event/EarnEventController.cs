@@ -21,12 +21,13 @@ public class EarnEventController(
     [HttpPost("get_event_data")]
     public async Task<DragaliaResult> GetEventData(EarnEventGetEventDataRequest request)
     {
-        EarnEventGetEventDataResponse resp = new();
-
-        resp.EarnEventUserData = await eventService.GetEarnEventUserData(request.EventId);
-        resp.EventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
-            request.EventId
-        );
+        EarnEventGetEventDataResponse resp = new()
+        {
+            EarnEventUserData = await eventService.GetEarnEventUserData(request.EventId),
+            EventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
+                request.EventId
+            ),
+        };
 
         if (
             MasterAsset
@@ -65,16 +66,15 @@ public class EarnEventController(
         CancellationToken cancellationToken
     )
     {
-        EarnEventReceiveEventPointRewardResponse resp = new();
-
-        resp.EventRewardEntityList = await eventService.ReceiveEventRewards(request.EventId);
-
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
-        resp.EntityResult = rewardService.GetEntityResult();
-
-        resp.EventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
-            request.EventId
-        );
+        EarnEventReceiveEventPointRewardResponse resp = new()
+        {
+            EventRewardEntityList = await eventService.ReceiveEventRewards(request.EventId),
+            UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken),
+            EntityResult = rewardService.GetEntityResult(),
+            EventRewardList = await eventService.GetEventRewardList<BuildEventRewardList>(
+                request.EventId
+            ),
+        };
 
         return Ok(resp);
     }

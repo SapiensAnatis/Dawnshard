@@ -210,7 +210,7 @@ public class AbilityCrestServiceTest
         this.mockMissionProgressionService = new(MockBehavior.Strict);
         this.mockTutorialService = new(MockBehavior.Loose);
 
-        this.abilityCrestService = new AbilityCrestService(
+        this.abilityCrestService = new(
             this.mockAbilityCrestRepository.Object,
             this.mockInventoryRepository.Object,
             this.mockUserDataRepository.Object,

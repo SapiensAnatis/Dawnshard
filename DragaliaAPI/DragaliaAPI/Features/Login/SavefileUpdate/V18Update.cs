@@ -114,7 +114,9 @@ public partial class V18Update(
     private static int GetMinLevelWallMissionId(int level)
     {
         if (level % 2 != 0)
+        {
             throw new ArgumentException("Attempted to get odd-lvl minimum wall mission");
+        }
 
         const int baseMissionId = 10010700;
 

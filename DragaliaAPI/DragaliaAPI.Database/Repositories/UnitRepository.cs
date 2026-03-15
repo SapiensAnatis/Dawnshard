@@ -78,7 +78,7 @@ public class UnitRepository : IUnitRepository
     {
         return apiContext
             .PlayerSetUnits.Add(
-                new DbSetUnit
+                new()
                 {
                     ViewerId = this.playerIdentityService.ViewerId,
                     CharaId = charaId,
@@ -119,7 +119,7 @@ public class UnitRepository : IUnitRepository
     {
         return apiContext
             .PlayerTalismans.Add(
-                new DbTalisman
+                new()
                 {
                     ViewerId = playerIdentityService.ViewerId,
                     TalismanId = id,

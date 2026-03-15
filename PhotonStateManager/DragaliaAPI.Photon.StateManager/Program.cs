@@ -1,6 +1,5 @@
 using DragaliaAPI.Photon.StateManager;
 using DragaliaAPI.Photon.StateManager.Models;
-using Microsoft.Extensions.Options;
 using Redis.OM;
 using Redis.OM.Contracts;
 using Serilog;

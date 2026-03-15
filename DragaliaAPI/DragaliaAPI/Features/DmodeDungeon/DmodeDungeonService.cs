@@ -175,7 +175,7 @@ public partial class DmodeDungeonService(
             Log.FailedToFetchKaleidoscapeDataClearingDungeonEntry(logger, ex);
             dungeon.Clear();
 
-            return (dungeon.State, new DmodeIngameResult());
+            return (dungeon.State, new());
         }
 
         int floorNum = playRecord.IsFloorIncomplete ? playRecord.FloorNum - 1 : playRecord.FloorNum; // We take the floor num from playRecord due to the additional /floor call on pressing end
@@ -259,16 +259,20 @@ public partial class DmodeDungeonService(
         );
 
         if (ingameResult.FloorNum > chara.MaxFloor)
+        {
             chara.MaxFloor = ingameResult.FloorNum;
+        }
 
         if (ingameResult.DmodeScore > chara.MaxScore)
+        {
             chara.MaxScore = ingameResult.DmodeScore;
+        }
 
         await rewardService.GrantReward(
-            new Entity(EntityTypes.DmodePoint, (int)DmodePoint.Point1, ingameResult.TakeDmodePoint1)
+            new(EntityTypes.DmodePoint, (int)DmodePoint.Point1, ingameResult.TakeDmodePoint1)
         );
         await rewardService.GrantReward(
-            new Entity(EntityTypes.DmodePoint, (int)DmodePoint.Point2, ingameResult.TakeDmodePoint2)
+            new(EntityTypes.DmodePoint, (int)DmodePoint.Point2, ingameResult.TakeDmodePoint2)
         );
 
         // Clear cache
@@ -348,21 +352,23 @@ public partial class DmodeDungeonService(
         foreach (Charas editSkillCharaId in editSkillCharaIds)
         {
             if (editSkillCharaId == 0)
+            {
                 continue;
+            }
 
             CharaData chara = MasterAsset.CharaData[editSkillCharaId];
             editSkillItemList.Add(
-                new DmodeDungeonItemList(
+                new(
                     editSkillItemList.Count + 1,
                     chara.EditSkillId,
                     DmodeDungeonItemState.SkillBag,
-                    new AtgenOption()
+                    new()
                 )
             );
         }
 
         floorData.DmodeAreaInfo = GenerateAreaInfo(floor, 0, 0, floorData.FloorKey);
-        floorData.DmodeUnitInfo = new AtgenDmodeUnitInfo
+        floorData.DmodeUnitInfo = new()
         {
             Level = 1,
             Exp = 0,
@@ -412,9 +418,7 @@ public partial class DmodeDungeonService(
                     dragon = rdm.Next(dragonPool);
                 } while (holdDragonList.Any(x => (int)x.DragonId == dragon.Id));
 
-                holdDragonList.Add(
-                    new AtgenDmodeHoldDragonList() { Count = 0, DragonId = (DragonId)dragon.Id }
-                );
+                holdDragonList.Add(new() { Count = 0, DragonId = (DragonId)dragon.Id });
             }
 
             floorData.DmodeUnitInfo.DmodeHoldDragonList = holdDragonList;
@@ -463,7 +467,9 @@ public partial class DmodeDungeonService(
         for (int i = 0; i < Math.Min(enemyKilledStatus.Length, enemies.Length); i++)
         {
             if (enemyKilledStatus[i] != 1)
+            {
                 continue;
+            }
 
             AtgenDmodeEnemy enemy = enemies[i];
             int dmodeEnemyParamGroupId = MasterAsset
@@ -479,6 +485,7 @@ public partial class DmodeDungeonService(
             {
                 continue;
             }
+
             unitInfo.Exp += (int)Math.Ceiling(enemyParam.DropExp * expMultiplier);
             unitInfo.TakeDmodePoint1 += enemyParam.DropDmodePoint1;
             unitInfo.TakeDmodePoint2 += enemyParam.DropDmodePoint2;
@@ -630,7 +637,7 @@ public partial class DmodeDungeonService(
             ? areas[floorKey.Sum(x => x) % areas.Count] // NOTE: This needs to be changed if floor key is made floor-independent
             : rdm.Next(areas);
 
-        return new AtgenDmodeAreaInfo(floor.FloorNum, questTime, score, area.ThemeGroupId, area.Id);
+        return new(floor.FloorNum, questTime, score, area.ThemeGroupId, area.Id);
     }
 
     private AtgenDmodeDungeonOdds GenerateOddsInfo(
@@ -682,7 +689,7 @@ public partial class DmodeDungeonService(
                     itemList
                 );
 
-                return new AtgenDmodeDropList(EntityTypes.DmodeDungeonItem, item.ItemNo, 1);
+                return new(EntityTypes.DmodeDungeonItem, item.ItemNo, 1);
             }
         );
 
@@ -710,11 +717,7 @@ public partial class DmodeDungeonService(
                     itemList
                 );
 
-                return (
-                    new AtgenDmodeDropList(EntityTypes.DmodeDungeonItem, item.ItemNo, 1),
-                    type,
-                    rarity
-                );
+                return (new(EntityTypes.DmodeDungeonItem, item.ItemNo, 1), type, rarity);
             }
         );
 
@@ -747,10 +750,11 @@ public partial class DmodeDungeonService(
 
                 alreadyRolledDragonIds.Add(dragon.Id);
 
-                AtgenDmodeSelectDragonList selectDragon = new();
-
-                selectDragon.SelectDragonNo = i + 1;
-                selectDragon.DragonId = (DragonId)dragon.DungeonItemTargetId;
+                AtgenDmodeSelectDragonList selectDragon = new()
+                {
+                    SelectDragonNo = i + 1,
+                    DragonId = (DragonId)dragon.DungeonItemTargetId,
+                };
 
                 int dragonRarity = MasterAsset.DragonData[selectDragon.DragonId].Rarity;
 
@@ -768,7 +772,7 @@ public partial class DmodeDungeonService(
             }
         }
 
-        return new AtgenDmodeDungeonOdds(dragonList, itemList, oddsInfo);
+        return new(dragonList, itemList, oddsInfo);
     }
 
     private (DmodeDungeonItemList Item, DmodeDungeonItemType Type) GenerateDungeonItem(
@@ -811,12 +815,7 @@ public partial class DmodeDungeonService(
                 .ToArray()
         );
 
-        DmodeDungeonItemList item = new(
-            0,
-            itemData.Id,
-            DmodeDungeonItemState.None,
-            new AtgenOption()
-        );
+        DmodeDungeonItemList item = new(0, itemData.Id, DmodeDungeonItemState.None, new());
 
         return item;
     }
@@ -833,12 +832,7 @@ public partial class DmodeDungeonService(
                 .ToArray()
         );
 
-        DmodeDungeonItemList item = new(
-            0,
-            weapon.Id,
-            DmodeDungeonItemState.None,
-            new AtgenOption()
-        );
+        DmodeDungeonItemList item = new(0, weapon.Id, DmodeDungeonItemState.None, new());
 
         item = CalculateAbilities(
             item,
@@ -861,12 +855,7 @@ public partial class DmodeDungeonService(
                 .ToArray()
         );
 
-        DmodeDungeonItemList item = new(
-            0,
-            itemData.Id,
-            DmodeDungeonItemState.None,
-            new AtgenOption()
-        );
+        DmodeDungeonItemList item = new(0, itemData.Id, DmodeDungeonItemState.None, new());
 
         DmodeAbilityCrest crest = MasterAsset.DmodeAbilityCrest[item.ItemId];
 
@@ -948,16 +937,13 @@ public partial class DmodeDungeonService(
                 case DropObject.None:
                     throw new InvalidOperationException("None DropObject");
                 case DropObject.Barrel:
-                    drops.Add(
-                        new AtgenDmodeDropList(EntityTypes.DungeonItem, (int)DungeonItem.Hp, 1)
-                    );
+                    drops.Add(new(EntityTypes.DungeonItem, (int)DungeonItem.Hp, 1));
                     break;
                 case DropObject.TreasureChest:
                     int pool = 3; // Max 3 items of rarity 1
                     while (pool > 0)
                     {
-                        (AtgenDmodeDropList drop, DmodeDungeonItemType itemType, int rarity) =
-                            generateDmodeItemDrop(pool);
+                        (AtgenDmodeDropList drop, _, int rarity) = generateDmodeItemDrop(pool);
 
                         drops.Add(drop);
                         pool -= rarity switch
@@ -974,7 +960,7 @@ public partial class DmodeDungeonService(
                     throw new UnreachableException();
             }
 
-            objs.Add(new AtgenDmodeDropObj(i + 1, (int)type, drops));
+            objs.Add(new(i + 1, (int)type, drops));
         }
 
         return objs;
@@ -1034,7 +1020,9 @@ public partial class DmodeDungeonService(
 
             // Occasionally grant drops to regular enemies with toughness 0
             if (rdm.Next(101) > 50)
+            {
                 numDrops += 1;
+            }
 
             for (int j = 0; j < numDrops; j++)
             {
@@ -1046,7 +1034,7 @@ public partial class DmodeDungeonService(
             bool hasSecondForm = paramData.Form2nd != 0;
 
             dmodeEnemies.Add(
-                new AtgenDmodeEnemy(
+                new(
                     dmodeEnemies.Count,
                     true,
                     enemyLevel,
@@ -1061,13 +1049,7 @@ public partial class DmodeDungeonService(
             {
                 int level = GenerateEnemyLevel(paramData.Form2nd);
                 dmodeEnemies.Add(
-                    new AtgenDmodeEnemy(
-                        dmodeEnemies.Count,
-                        false,
-                        level,
-                        paramData.Form2nd,
-                        enemyDropList
-                    )
+                    new(dmodeEnemies.Count, false, level, paramData.Form2nd, enemyDropList)
                 );
 
                 EnemyParam secondFormParam = MasterAsset.EnemyParam[paramData.Form2nd];
@@ -1093,7 +1075,9 @@ public partial class DmodeDungeonService(
             foreach (int param in paramData.Parts)
             {
                 if (param != 0)
+                {
                     AddChildEnemies(param, 1);
+                }
             }
         }
 
@@ -1122,7 +1106,7 @@ public partial class DmodeDungeonService(
             {
                 int level = GenerateEnemyLevel(enemyParam);
                 dmodeEnemies.Add(
-                    new AtgenDmodeEnemy(
+                    new(
                         dmodeEnemies.Count,
                         false,
                         level,

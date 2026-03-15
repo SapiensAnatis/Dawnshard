@@ -11,7 +11,6 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using StackExchange.Redis;
 
 namespace DragaliaAPI.Integration.Test;
 
@@ -22,7 +21,7 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
     public CustomWebApplicationFactory()
     {
-        this.testContainersHelper = new TestContainersHelper();
+        this.testContainersHelper = new();
     }
 
     public string PostgresConnectionString => this.testContainersHelper.PostgresConnectionString;

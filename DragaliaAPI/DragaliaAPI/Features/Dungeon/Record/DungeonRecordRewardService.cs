@@ -1,7 +1,5 @@
-using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Shared.Reward;
@@ -11,7 +9,6 @@ using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
-using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
@@ -151,8 +148,8 @@ public partial class DungeonRecordRewardService(
 
         await rewardService.GrantRewards(entities);
         await rewardService.GrantRewards(bonusEntities);
-        await rewardService.GrantReward(new Entity(EntityTypes.Mana, Quantity: manaDrop));
-        await rewardService.GrantReward(new Entity(EntityTypes.Rupies, Quantity: coinDrop));
+        await rewardService.GrantReward(new(EntityTypes.Mana, Quantity: manaDrop));
+        await rewardService.GrantReward(new(EntityTypes.Rupies, Quantity: coinDrop));
 
         return (drops, manaDrop, coinDrop);
     }
@@ -246,7 +243,7 @@ public partial class DungeonRecordRewardService(
         IEnumerable<AtgenEventPassiveUpList> passiveUpList =
             await eventDropService.ProcessEventPassiveDrops(session.QuestData);
 
-        return new EventRewardData(
+        return new(
             ScoreMissions: scoreMissions,
             EnemyScoreMissions: enemyScoreMissions,
             TakeAccumulatePoint: totalPoints + boostedPoints + enemyScore,
@@ -274,7 +271,7 @@ public partial class DungeonRecordRewardService(
             }
         );
 
-        return new AtgenFirstMeeting()
+        return new()
         {
             Id = 0,
             Type = EntityTypes.FreeDiamantium,

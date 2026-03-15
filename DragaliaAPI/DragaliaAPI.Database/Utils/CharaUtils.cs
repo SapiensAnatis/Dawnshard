@@ -6,7 +6,7 @@ public static class CharaUtils
 {
     public static byte GetMaxLevelFor(int rarity)
     {
-        return rarity < 3 || rarity > 5
+        return rarity is < 3 or > 5
             ? throw new ArgumentException("Invalid Rarity")
             : (byte)(MinMaxLevel + ((rarity - 3) * 10));
     }

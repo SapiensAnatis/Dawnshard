@@ -113,11 +113,7 @@ internal sealed class RealHelperDataService(
             }),
         ];
 
-        return new QuestGetSupportUserListResponse()
-        {
-            SupportUserList = merged,
-            SupportUserDetailList = details,
-        };
+        return new() { SupportUserList = merged, SupportUserDetailList = details };
     }
 
     public async Task<UserSupportList?> GetHelper(
@@ -184,7 +180,7 @@ internal sealed class RealHelperDataService(
             cancellationToken
         );
 
-        return new AtgenSupportUserDataDetail()
+        return new()
         {
             UserSupportData = projection.MapToUserSupportList(),
             ManaCirclePieceIdList = projection.ManaCirclePieceIdList,
@@ -204,18 +200,19 @@ internal sealed class RealHelperDataService(
             .PlayerHelperUseDates.ToLinqToDBTable()
             .InsertOrUpdateAsync(
                 () =>
-                    new DbPlayerHelperUseDate()
+                    new()
                     {
                         HelperViewerId = helperViewerId,
                         PlayerViewerId = playerIdentityService.ViewerId,
                         UseDate = timeProvider.GetUtcNow(),
                     },
-                existing => new DbPlayerHelperUseDate()
-                {
-                    HelperViewerId = existing.HelperViewerId,
-                    PlayerViewerId = existing.PlayerViewerId,
-                    UseDate = timeProvider.GetUtcNow(),
-                },
+                existing =>
+                    new()
+                    {
+                        HelperViewerId = existing.HelperViewerId,
+                        PlayerViewerId = existing.PlayerViewerId,
+                        UseDate = timeProvider.GetUtcNow(),
+                    },
                 cancellationToken
             );
 

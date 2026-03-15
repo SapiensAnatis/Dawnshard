@@ -58,7 +58,9 @@ public record DragonData(
             int val = pool[i];
 
             if (val == 0)
+            {
                 break;
+            }
 
             current = val;
         }

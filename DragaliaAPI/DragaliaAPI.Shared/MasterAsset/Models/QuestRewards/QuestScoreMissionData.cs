@@ -36,10 +36,14 @@ public record QuestScoreMissionData(
     {
         // Onslaught battles only have one score value
         if (this.scores.Count(x => x != 0) == 1)
+        {
             return this.scores.First(x => x != 0);
+        }
 
         if (wave != 0)
+        {
             return this.scores[wave];
+        }
 
         return this.scores[(int)variationType];
     }

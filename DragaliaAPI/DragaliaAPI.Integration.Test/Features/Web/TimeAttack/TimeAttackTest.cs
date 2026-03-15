@@ -23,7 +23,7 @@ public partial class TimeAttackTest : TestFixture
             .Should()
             .BeEquivalentTo(
                 [
-                    new TimeAttackQuest() { Id = 227010104, IsCoop = false },
+                    new() { Id = 227010104, IsCoop = false },
                     new TimeAttackQuest() { Id = 227010105, IsCoop = true },
                 ],
                 opts => opts.WithStrictOrdering()

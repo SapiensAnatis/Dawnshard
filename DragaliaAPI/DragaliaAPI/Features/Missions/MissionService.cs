@@ -1,5 +1,4 @@
 using System.Collections.Frozen;
-using System.Collections.Generic;
 using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -132,11 +131,13 @@ public partial class MissionService(
                 x.GroupId == groupId && x.Type == MissionType.Drill
             )
         )
+        {
             return await this
                 .missionRepository.Missions.Where(x =>
                     x.GroupId == groupId && x.Type == MissionType.Drill
                 )
                 .ToListAsync();
+        }
 
         Log.UnlockingDrillStoryMissionGroup(logger, groupId, missions.Select(x => x.Id));
 
@@ -163,11 +164,13 @@ public partial class MissionService(
                 x.GroupId == eventId && x.Type == MissionType.MemoryEvent
             )
         )
+        {
             return await this
                 .missionRepository.Missions.Where(x =>
                     x.GroupId == eventId && x.Type == MissionType.MemoryEvent
                 )
                 .ToListAsync();
+        }
 
         Log.UnlockingMemoryEventMissionGroup(logger, eventId, missions.Select(x => x.Id));
 
@@ -231,6 +234,7 @@ public partial class MissionService(
                 )
             );
         }
+
         foreach (DailyMission mission in dailyMissions)
         {
             dbMissions.Add(
@@ -294,11 +298,7 @@ public partial class MissionService(
                 break;
             default:
                 await this.rewardService.GrantReward(
-                    new Entity(
-                        missionInfo.EntityType,
-                        missionInfo.EntityId,
-                        missionInfo.EntityQuantity
-                    )
+                    new(missionInfo.EntityType, missionInfo.EntityId, missionInfo.EntityQuantity)
                 );
                 break;
         }
@@ -374,15 +374,21 @@ public partial class MissionService(
             .FirstOrDefaultAsync();
 
         if (currentMission == 0)
+        {
             return [];
+        }
 
         IEnumerable<(int Group, int MaxId)> maxIds = MasterAsset
             .MissionDrillData.Enumerable.GroupBy(x => x.MissionDrillGroupId)
             .Select(group => (group.Key, group.Max(x => x.Id)));
 
         foreach ((int group, int maxId) in maxIds)
+        {
             if (currentMission >= maxId)
+            {
                 completedGroups.Add(group);
+            }
+        }
 
         Log.ReturningCompletedDrillGroups(this.logger, completedGroups);
 
@@ -406,18 +412,10 @@ public partial class MissionService(
             {
                 DrillMissionGroup group = MasterAsset.MissionDrillGroup.Get(groupId);
                 rewards.Add(
-                    new AtgenBuildEventRewardEntityList(
-                        group.UnlockEntityType1,
-                        group.UnlockEntityId1,
-                        group.UnlockEntityQuantity1
-                    )
+                    new(group.UnlockEntityType1, group.UnlockEntityId1, group.UnlockEntityQuantity1)
                 );
                 await this.rewardService.GrantReward(
-                    new Entity(
-                        group.UnlockEntityType1,
-                        group.UnlockEntityId1,
-                        group.UnlockEntityQuantity1
-                    )
+                    new(group.UnlockEntityType1, group.UnlockEntityId1, group.UnlockEntityQuantity1)
                 );
             }
         }
@@ -433,9 +431,11 @@ public partial class MissionService(
             .MaxAsync(x => x.GroupId);
 
         if (mainStoryMissionGroupId == null)
-            return new CurrentMainStoryMission();
+        {
+            return new();
+        }
 
-        return new CurrentMainStoryMission()
+        return new()
         {
             MainStoryMissionGroupId = mainStoryMissionGroupId.Value,
             MainStoryMissionStateList = (
@@ -461,14 +461,20 @@ public partial class MissionService(
         async Task<AtgenNormalMissionNotice> BuildNotice(MissionType type)
         {
             if (updatedLookup == null)
+            {
                 return await BuildMissionNotice(type, Array.Empty<int>());
+            }
 
             if (!updatedLookup.Contains(type))
-                return new AtgenNormalMissionNotice();
+            {
+                return new();
+            }
 
             IEnumerable<DbPlayerMission> missions = updatedLookup[type].ToList();
             if (!missions.Any())
-                return new AtgenNormalMissionNotice();
+            {
+                return new();
+            }
 
             return await BuildMissionNotice(
                 type,
@@ -525,7 +531,7 @@ public partial class MissionService(
             }
         }
 
-        return new AtgenNormalMissionNotice
+        return new()
         {
             IsUpdate = true,
             AllMissionCount = totalCount,

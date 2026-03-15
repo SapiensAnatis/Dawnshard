@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
@@ -155,24 +154,22 @@ public partial class ClearPartyService : IClearPartyService
         foreach ((DbQuestClearPartyUnit clearUnit, DbDetailedPartyUnit? detailUnit) in query)
         {
             if (clearUnit.CharaId == Charas.Empty)
+            {
                 continue;
+            }
 
             if (detailUnit?.CharaData is null)
             {
                 // The game will just grey the button out if a character is missing.
                 // I don't blame them for not wanting to deal with it...
-                yield return new AtgenLostUnitList(
-                    clearUnit.UnitNo,
-                    EntityTypes.Chara,
-                    (int)clearUnit.CharaId
-                );
+                yield return new(clearUnit.UnitNo, EntityTypes.Chara, (int)clearUnit.CharaId);
                 clearUnit.Clear();
                 continue;
             }
 
             if (clearUnit.EquipDragonKeyId != 0 && detailUnit.DragonData is null)
             {
-                yield return new AtgenLostUnitList(
+                yield return new(
                     clearUnit.UnitNo,
                     EntityTypes.Dragon,
                     (int)clearUnit.EquippedDragonEntityId
@@ -182,7 +179,7 @@ public partial class ClearPartyService : IClearPartyService
 
             if (clearUnit.EquipTalismanKeyId != 0 && detailUnit.TalismanData is null)
             {
-                yield return new AtgenLostUnitList(
+                yield return new(
                     clearUnit.UnitNo,
                     EntityTypes.Talisman,
                     (int)clearUnit.EquippedTalismanEntityId
@@ -195,7 +192,7 @@ public partial class ClearPartyService : IClearPartyService
                 && detailUnit.WeaponBodyData is null
             )
             {
-                yield return new AtgenLostUnitList(
+                yield return new(
                     clearUnit.UnitNo,
                     EntityTypes.WeaponBody,
                     (int)clearUnit.EquipWeaponBodyId
@@ -219,7 +216,7 @@ public partial class ClearPartyService : IClearPartyService
 
             if (clearUnit.EquipWeaponSkinId != 0 && detailUnit.WeaponSkinData is null)
             {
-                yield return new AtgenLostUnitList(
+                yield return new(
                     clearUnit.UnitNo,
                     EntityTypes.WeaponSkin,
                     clearUnit.EquipWeaponSkinId
@@ -254,7 +251,7 @@ public partial class ClearPartyService : IClearPartyService
                 )
             )
             {
-                yield return new AtgenLostUnitList(
+                yield return new(
                     clearUnit.UnitNo,
                     EntityTypes.Wyrmprint,
                     (int)clearUnit.EquipCrestSlotType1CrestId1
@@ -268,7 +265,7 @@ public partial class ClearPartyService : IClearPartyService
                 )
             )
             {
-                yield return new AtgenLostUnitList(
+                yield return new(
                     clearUnit.UnitNo,
                     EntityTypes.Wyrmprint,
                     (int)clearUnit.EquipCrestSlotType1CrestId2
@@ -282,7 +279,7 @@ public partial class ClearPartyService : IClearPartyService
                 )
             )
             {
-                yield return new AtgenLostUnitList(
+                yield return new(
                     clearUnit.UnitNo,
                     EntityTypes.Wyrmprint,
                     (int)clearUnit.EquipCrestSlotType1CrestId3
@@ -296,7 +293,7 @@ public partial class ClearPartyService : IClearPartyService
                 )
             )
             {
-                yield return new AtgenLostUnitList(
+                yield return new(
                     clearUnit.UnitNo,
                     EntityTypes.Wyrmprint,
                     (int)clearUnit.EquipCrestSlotType2CrestId1
@@ -310,7 +307,7 @@ public partial class ClearPartyService : IClearPartyService
                 )
             )
             {
-                yield return new AtgenLostUnitList(
+                yield return new(
                     clearUnit.UnitNo,
                     EntityTypes.Wyrmprint,
                     (int)clearUnit.EquipCrestSlotType2CrestId2
@@ -324,7 +321,7 @@ public partial class ClearPartyService : IClearPartyService
                 )
             )
             {
-                yield return new AtgenLostUnitList(
+                yield return new(
                     clearUnit.UnitNo,
                     EntityTypes.Wyrmprint,
                     (int)clearUnit.EquipCrestSlotType3CrestId1
@@ -338,7 +335,7 @@ public partial class ClearPartyService : IClearPartyService
                 )
             )
             {
-                yield return new AtgenLostUnitList(
+                yield return new(
                     clearUnit.UnitNo,
                     EntityTypes.Wyrmprint,
                     (int)clearUnit.EquipCrestSlotType3CrestId2
@@ -383,7 +380,9 @@ file static class Extensions
     public static bool IsMissingCrest(this IEnumerable<DbAbilityCrest?> source, AbilityCrestId id)
     {
         if (id == AbilityCrestId.Empty)
+        {
             return false;
+        }
 
         // ReSharper disable once SimplifyLinqExpressionUseAll
         return !source.Any(x => x?.AbilityCrestId == id);

@@ -49,7 +49,7 @@ public partial class ZenaAuthenticationHandler : AuthenticationHandler<Authentic
             );
         }
 
-        Claim[] claims = [new Claim(ClaimTypes.Role, "Zena")];
+        Claim[] claims = [new(ClaimTypes.Role, "Zena")];
         ClaimsIdentity identity = new(claims, this.Scheme.Name);
         ClaimsPrincipal principal = new(identity);
         AuthenticationTicket ticket = new(principal, this.Scheme.Name);

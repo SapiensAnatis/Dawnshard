@@ -20,7 +20,7 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
         this.mockPlayerIdentityService.SetupGet(x => x.ViewerId)
             .Returns(IdentityTestUtils.ViewerId);
 
-        this.userDataRepository = new UserDataRepository(
+        this.userDataRepository = new(
             this.fixture.ApiContext,
             this.mockPlayerIdentityService.Object,
             LoggerTestUtils.Create<UserDataRepository>()

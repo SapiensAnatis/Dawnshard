@@ -1,6 +1,5 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Features.TimeAttack.Validation;
 using DragaliaAPI.Models.Generated;
@@ -67,7 +66,7 @@ public partial class TimeAttackService(
             .ToList();
 
         await timeAttackRepository.CreateOrUpdateClear(
-            new DbTimeAttackClear()
+            new()
             {
                 GameId = gameId,
                 QuestId = entry.QuestId,
@@ -98,7 +97,9 @@ public partial class TimeAttackService(
         Log.FoundClearTimeOfSForQuest(logger, bestClearTime, questId);
 
         if (bestClearTime <= 0)
+        {
             return Enumerable.Empty<RankingTierReward>();
+        }
 
         IEnumerable<int> receivedRewards = await timeAttackRepository
             .ReceivedRewards.Select(x => x.RewardId)
@@ -140,19 +141,29 @@ public partial class TimeAttackService(
         };
 
         if (x.CharaData is not null)
+        {
             unit.CharaId = x.CharaData.CharaId;
+        }
 
         if (x.DragonData is not null)
+        {
             unit.EquippedDragonEntityId = x.DragonData.DragonId;
+        }
 
         if (x.WeaponBodyData is not null)
+        {
             unit.EquipWeaponBodyId = x.WeaponBodyData.WeaponBodyId;
+        }
 
         if (x.EditSkill1CharaData is not null)
+        {
             unit.EditSkill1CharaId = x.EditSkill1CharaData.CharaId;
+        }
 
         if (x.EditSkill2CharaData is not null)
+        {
             unit.EditSkill2CharaId = x.EditSkill2CharaData.CharaId;
+        }
 
         if (x.TalismanData is not null)
         {

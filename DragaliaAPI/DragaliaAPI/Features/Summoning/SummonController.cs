@@ -24,17 +24,19 @@ public class SummonController(
     /// <returns></returns>
     [HttpPost]
     [Route("~/summon_exclude/get_list")]
-    public DragaliaResult SummonExcludeGetList(SummonExcludeGetListRequest request)
+    public DragaliaResult SummonExcludeGetList( /* SummonExcludeGetListRequest request */
+    )
     {
         //TODO Replace DummyData with real exludes from BannerInfo
         List<AtgenDuplicateEntityList> excludableList = new();
         foreach (Charas c in Enum.GetValues<Charas>())
         {
-            excludableList.Add(new AtgenDuplicateEntityList(EntityTypes.Chara, (int)c));
+            excludableList.Add(new(EntityTypes.Chara, (int)c));
         }
+
         foreach (DragonId d in Enum.GetValues<DragonId>())
         {
-            excludableList.Add(new AtgenDuplicateEntityList(EntityTypes.Dragon, (int)d));
+            excludableList.Add(new(EntityTypes.Dragon, (int)d));
         }
 
         return this.Ok(new SummonExcludeGetListResponse(excludableList));
@@ -65,8 +67,8 @@ public class SummonController(
         );
 
         return new SummonGetOddsDataResponse(
-            new OddsRateList(requiredCountToNext, baseOddsRate, guaranteeOddsRate),
-            new SummonPrizeOddsRateList(null, null)
+            new(requiredCountToNext, baseOddsRate, guaranteeOddsRate),
+            new(null, null)
         );
     }
 
@@ -144,15 +146,12 @@ public class SummonController(
         CancellationToken cancellationToken
     )
     {
-        SummonList? summonList = await summonService.GetSummonList(summonRequest.SummonId);
-
-        if (summonList is null)
-        {
-            throw new DragaliaException(
+        SummonList summonList =
+            await summonService.GetSummonList(summonRequest.SummonId)
+            ?? throw new DragaliaException(
                 ResultCode.SummonNotFound,
                 $"Failed to find a banner with ID {summonRequest.SummonId}"
             );
-        }
 
         SummonRequestInfo requestInfo = SummonRequestInfo.FromSummonRequest(
             summonRequest,

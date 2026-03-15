@@ -75,7 +75,7 @@ public class QuestControllerTest
 
         (
             await this.questController.ReadStory(
-                new QuestReadStoryRequest() { QuestStoryId = 1 },
+                new() { QuestStoryId = 1 },
                 TestContext.Current.CancellationToken
             )
         )

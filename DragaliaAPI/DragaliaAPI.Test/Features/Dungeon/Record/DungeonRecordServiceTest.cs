@@ -39,7 +39,7 @@ public class DungeonRecordServiceTest
         this.mockLogger = new(MockBehavior.Loose);
         this.mockAlbumService = new(MockBehavior.Loose);
 
-        this.dungeonRecordService = new DungeonRecordService(
+        this.dungeonRecordService = new(
             this.mockDungeonRewardService.Object,
             this.mockQuestService.Object,
             this.mockUserService.Object,
@@ -98,7 +98,7 @@ public class DungeonRecordServiceTest
             new() { PassiveId = 1, Progress = 2 },
         };
 
-        List<AtgenMissionsClearSet> missionsClearSets = new List<AtgenMissionsClearSet>()
+        List<AtgenMissionsClearSet> missionsClearSets = new()
         {
             new()
             {
