@@ -13,7 +13,7 @@ public class DungeonSkipTest : TestFixture
     public DungeonSkipTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
+        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
     }
 
     [Fact]

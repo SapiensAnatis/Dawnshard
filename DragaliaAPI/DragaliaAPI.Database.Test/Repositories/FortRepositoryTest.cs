@@ -258,7 +258,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetActiveCarpenters_ExcludesFinishedBuildings()
     {
-        this.fakeTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
+        this.fakeTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
 
         await this.fixture.AddRangeToDatabase(
             new List<DbFortBuild>()

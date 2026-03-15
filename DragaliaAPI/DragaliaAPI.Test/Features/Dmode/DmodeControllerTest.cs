@@ -44,7 +44,7 @@ public class DmodeControllerTest
             mockDmodeRepository.Object
         );
 
-        mockDateTimeProvider.SetUtcNow(this.fixedTime);
+        mockDateTimeProvider.AdjustTime(this.fixedTime);
     }
 
     [Fact]

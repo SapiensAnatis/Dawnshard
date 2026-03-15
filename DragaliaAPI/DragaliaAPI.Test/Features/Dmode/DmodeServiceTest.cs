@@ -46,7 +46,7 @@ public class DmodeServiceTest
             mockRewardService.Object
         );
 
-        mockDateTimeProvider.SetUtcNow(this.fixedTime);
+        mockDateTimeProvider.AdjustTime(this.fixedTime);
     }
 
     [Fact]

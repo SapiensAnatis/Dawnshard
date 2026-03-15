@@ -15,7 +15,7 @@ public class OutputCachingTest : TestFixture
     [Fact]
     public async Task RepeatedRequestPolicy_HandlesRepeatedUnsafeRequests()
     {
-        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
+        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
 
         DbFortBuild build = new()
         {

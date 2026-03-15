@@ -102,7 +102,7 @@ public class FortServiceTest
             mockDateTimeProvider
         );
 
-        mockDateTimeProvider.SetUtcNow(FixedTime);
+        mockDateTimeProvider.AdjustTime(FixedTime);
 
         UnitTestUtils.ApplyDateTimeAssertionOptions();
     }

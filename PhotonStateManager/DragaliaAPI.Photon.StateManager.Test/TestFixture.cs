@@ -15,14 +15,7 @@ public class TestFixture : IAsyncLifetime
     {
         this.TestOutputHelper = testOutputHelper;
 
-        this.Client = factory
-            .WithWebHostBuilder(builder =>
-                builder.ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                })
-            )
-            .CreateClient();
+        this.Client = factory.CreateClient();
 
         this.Client.DefaultRequestHeaders.Authorization = new("Bearer", "photontoken");
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Photon.StateManager.Test;
 
@@ -13,7 +14,8 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
         this.testContainersHelper = new();
     }
 
-    protected override void ConfigureWebHost(IWebHostBuilder builder) =>
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
         builder.ConfigureAppConfiguration(cfg =>
             cfg.AddInMemoryCollection(
                 new Dictionary<string, string?>
@@ -24,6 +26,13 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 }
             )
         );
+
+        builder.ConfigureLogging(logging =>
+        {
+            logging.ClearProviders();
+            logging.AddConsole();
+        });
+    }
 
     public async ValueTask InitializeAsync()
     {

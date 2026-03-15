@@ -367,7 +367,7 @@ public class HelperTest : TestFixture
             .Data.SupportUserDetailList.Should()
             .NotContain(x => x.ViewerId == (ulong)nonFriend.ViewerId);
 
-        this.MockTimeProvider.SetUtcNow(this.MockTimeProvider.GetLastDailyReset().AddDays(1));
+        this.MockTimeProvider.AdjustTime(this.MockTimeProvider.GetLastDailyReset().AddDays(1));
 
         DragaliaResponse<QuestGetSupportUserListResponse> listResponse2 =
             await this.Client.PostMsgpack<QuestGetSupportUserListResponse>(
