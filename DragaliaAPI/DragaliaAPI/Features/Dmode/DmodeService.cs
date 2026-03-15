@@ -358,7 +358,7 @@ public partial class DmodeService(
     {
         [LoggerMessage(
             LogLevel.Warning,
-            "Dmode cache sanity check failed (no floor or ingame info), resetting state. Exception: {ex}"
+            "Dmode cache sanity check failed (no floor or ingame info), resetting state."
         )]
         public static partial void DmodeCacheSanityCheckFailedNoFloorOrIngameInfoResettingStateException(
             ILogger logger,

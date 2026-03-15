@@ -860,7 +860,7 @@ public partial class CharaController(
 
         [LoggerMessage(
             LogLevel.Warning,
-            "Failed to unlock next story for character {char}: index {index} was out of range"
+            "Failed to unlock next story for character {charaId}: index {index} was out of range"
         )]
         public static partial void FailedToUnlockNextStoryForCharacterIndexWasOutOfRange(
             ILogger logger,

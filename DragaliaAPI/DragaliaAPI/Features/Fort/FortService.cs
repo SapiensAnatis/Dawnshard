@@ -734,6 +734,9 @@ public partial class FortService(
         public static partial void FortDetail(ILogger logger, FortDetail fortDetail);
 
         [LoggerMessage(LogLevel.Debug, "Currently in progress builds: {@Builds}")]
-        public static partial void CurrentlyInProgressBuilds(ILogger logger, List builds);
+        public static partial void CurrentlyInProgressBuilds(
+            ILogger logger,
+            IEnumerable<object> builds
+        );
     }
 }

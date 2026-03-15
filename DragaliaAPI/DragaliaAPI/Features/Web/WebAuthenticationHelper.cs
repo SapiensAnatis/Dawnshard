@@ -162,7 +162,7 @@ public static partial class WebAuthenticationHelper
         public static partial void PlayerInfoForGameAccount(
             ILogger logger,
             string gameAccountId,
-            object playerInfo
+            object? playerInfo
         );
     }
 }

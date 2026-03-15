@@ -290,7 +290,7 @@ public partial class WeaponService : IWeaponService
             Log.EntityWithLimitBreakCountWasIneligibleForBuildupGroupWithMinLimitBreakCount(
                 this.logger,
                 entity.LimitBreakCount,
-                buildupGroup.UnlockConditionLimitBreakCount
+                passiveAbility.UnlockConditionLimitBreakCount
             );
 
             return ResultCode.WeaponBodyBuildupPieceShortLimitBreakCount;

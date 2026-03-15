@@ -33,6 +33,6 @@ public static partial class ExceptionHandlerMiddleware
     private static partial class Log
     {
         [LoggerMessage(LogLevel.Warning, "Client cancelled request.")]
-        public static partial void ClientCancelledRequest(ILogger logger, Exception exception);
+        public static partial void ClientCancelledRequest(ILogger logger, Exception? exception);
     }
 }

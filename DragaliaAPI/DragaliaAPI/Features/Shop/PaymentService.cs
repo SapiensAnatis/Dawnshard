@@ -231,7 +231,7 @@ public partial class PaymentService(
         public static partial void ProcessingPayment(
             ILogger logger,
             EntityTypes paymentType,
-            object payment
+            object? payment
         );
 
         [LoggerMessage(LogLevel.Warning, "Unknown/invalid entity type for payment.")]
