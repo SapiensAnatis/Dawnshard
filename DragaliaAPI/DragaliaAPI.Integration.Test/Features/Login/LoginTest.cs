@@ -23,8 +23,6 @@ public class LoginTest : FakeTimeProviderTestFixture
     [Fact]
     public async Task LoginIndex_LastLoginBeforeReset_ResetsItemSummonCount()
     {
-        this.FakeTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
-
         await this
             .ApiContext.PlayerShopInfos.Where(x => x.ViewerId == ViewerId)
             .ExecuteUpdateAsync(
@@ -46,8 +44,6 @@ public class LoginTest : FakeTimeProviderTestFixture
     [Fact]
     public async Task LoginIndex_LastLoginBeforeReset_ResetsDragonGiftCount()
     {
-        this.FakeTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
-
         await this
             .ApiContext.PlayerDragonGifts.Where(x => x.ViewerId == ViewerId)
             .ExecuteUpdateAsync(
@@ -113,8 +109,6 @@ public class LoginTest : FakeTimeProviderTestFixture
     [Fact]
     public async Task LoginIndex_LastLoginBeforeReset_NoDragonGifts_ResetsDragonGiftCount()
     {
-        this.FakeTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
-
         await this
             .ApiContext.PlayerDragonGifts.Where(x => x.ViewerId == ViewerId)
             .ExecuteDeleteAsync(cancellationToken: TestContext.Current.CancellationToken);
@@ -171,8 +165,6 @@ public class LoginTest : FakeTimeProviderTestFixture
     [Fact]
     public async Task LoginIndex_GrantsLoginBonusBasedOnDb_GrantsEachDayReward()
     {
-        this.FakeTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
-
         /*
         int oldSkipTickets = (
             await this.ApiContext.PlayerUserData
@@ -220,8 +212,6 @@ public class LoginTest : FakeTimeProviderTestFixture
     [Fact]
     public async Task LoginIndex_LoginBonusLastDay_IsLoopTrue_RollsOver()
     {
-        this.FakeTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
-
         await this.AddToDatabase(
             new DbLoginBonus()
             {
@@ -317,8 +307,6 @@ public class LoginTest : FakeTimeProviderTestFixture
     [Fact]
     public async Task LoginIndex_DragonGift_GrantsReward()
     {
-        this.FakeTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
-
         await this.AddToDatabase(
             new DbLoginBonus()
             {
@@ -368,8 +356,6 @@ public class LoginTest : FakeTimeProviderTestFixture
     [Fact]
     public async Task LoginIndex_AddsNewDailyEndeavours()
     {
-        this.FakeTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
-
         int oldMissionId = 1;
         int starryDragonyuleEventId = 22903;
 
@@ -446,8 +432,6 @@ public class LoginTest : FakeTimeProviderTestFixture
     [Fact]
     public async Task LoginIndex_EventNotStarted_DoesAddEventDailyEndeavours()
     {
-        this.FakeTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
-
         int oldMissionId = 1;
         int starryDragonyuleEventId = 22903;
 
@@ -593,8 +577,6 @@ public class LoginTest : FakeTimeProviderTestFixture
     [Fact]
     public async Task LoginVerifyJws_ReturnsOK()
     {
-        this.FakeTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
-
         ResultCodeResponse response = (
             await this.Client.PostMsgpack<ResultCodeResponse>(
                 "/login/verify_jws",

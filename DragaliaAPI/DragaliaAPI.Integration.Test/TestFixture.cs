@@ -44,7 +44,6 @@ public class TestFixture
         this.MockPhotonStateApi = factory.MockPhotonStateApi;
 
         this.factory = factory;
-        this.factory.SetTestOutputHelper(this.TestOutputHelper);
 
         this.Client = this.CreateClient();
 

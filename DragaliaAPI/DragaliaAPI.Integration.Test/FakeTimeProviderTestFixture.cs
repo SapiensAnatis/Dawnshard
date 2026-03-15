@@ -8,7 +8,8 @@ namespace DragaliaAPI.Integration.Test;
 /// Fixture classes for tests that need to mock the system time.
 /// <remarks>
 /// Creates a separate server with a FakeTimeProvider injected, so that these tests don't interfere with other tests
-/// that rely on the system time being the actual real-world time.
+/// that rely on the system time being the actual real-world time. A new server will be created for each individual
+/// test method.
 /// </remarks>
 /// </summary>
 public class FakeTimeProviderTestFixture : TestFixture

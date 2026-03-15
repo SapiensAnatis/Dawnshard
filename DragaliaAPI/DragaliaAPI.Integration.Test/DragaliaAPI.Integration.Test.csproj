@@ -13,7 +13,6 @@
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" />
     <PackageReference Include="Moq" />
     <PackageReference Include="Respawn" />
-    <PackageReference Include="Serilog.Sinks.XUnit3" />
     <PackageReference Include="Testcontainers" />
     <PackageReference Include="Testcontainers.PostgreSql" />
     <PackageReference Include="Verify.XunitV3" />

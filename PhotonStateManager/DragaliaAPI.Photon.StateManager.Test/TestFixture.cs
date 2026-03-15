@@ -12,7 +12,6 @@ public class TestFixture : IAsyncLifetime
     public TestFixture(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
     {
         this.TestOutputHelper = testOutputHelper;
-        factory.SetTestOutputHelper(this.TestOutputHelper);
 
         this.Client = factory.CreateClient();
 
