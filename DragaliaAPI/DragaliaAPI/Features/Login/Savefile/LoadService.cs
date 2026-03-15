@@ -297,7 +297,9 @@ public static partial class LoadMapper
         ICollection<DbPartyUnit> dbEntity
     )
     {
-        return dbEntity.OrderBy(x => x.UnitNo).Select(Map);
+#pragma warning disable IDE0200 // Needs to be an expression or EF will complain
+        return dbEntity.OrderBy(x => x.UnitNo).Select(x => Map(x));
+#pragma warning restore IDE0200
     }
 
     [MapperIgnoreTarget(nameof(CharaList.StatusPlusCount))]
