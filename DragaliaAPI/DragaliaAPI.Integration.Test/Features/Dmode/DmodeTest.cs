@@ -4,13 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Dmode;
 
-public class DmodeTest : TestFixture
+public class DmodeTest : FakeTimeProviderTestFixture
 {
     public DmodeTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task GetData_ReturnsData()
@@ -253,7 +250,7 @@ public class DmodeTest : TestFixture
                 opts => opts.WithDateTimeTolerance()
             );
 
-        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow.AddDays(1));
+        this.FakeTimeProvider.AdjustTime(DateTimeOffset.UtcNow.AddDays(1));
 
         DragaliaResponse<DmodeExpeditionFinishResponse> finishResp =
             await this.Client.PostMsgpack<DmodeExpeditionFinishResponse>(

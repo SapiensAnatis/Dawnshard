@@ -15,10 +15,7 @@ namespace DragaliaAPI.Integration.Test.Features.Dragons;
 public class DragonTest : TestFixture
 {
     public DragonTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
-    }
+        : base(factory, outputHelper) { }
 
     public record DragonBuildUpTestCase(
         List<DbPlayerDragonData> SetupDragons,

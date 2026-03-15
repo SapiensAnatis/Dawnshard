@@ -9,10 +9,7 @@ namespace DragaliaAPI.Integration.Test.Features.Fort;
 public class FortTest : TestFixture
 {
     public FortTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task GetData_ReturnsBuildingData()

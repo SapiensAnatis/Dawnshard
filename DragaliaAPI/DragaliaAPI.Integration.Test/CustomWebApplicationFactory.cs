@@ -11,18 +11,18 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Time.Testing;
+using Serilog;
+using Serilog.Events;
 
 namespace DragaliaAPI.Integration.Test;
 
 [UsedImplicitly]
 public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly TestContainersHelper testContainersHelper;
-
-    public CustomWebApplicationFactory()
-    {
-        this.testContainersHelper = new();
-    }
+    private readonly TestContainersHelper testContainersHelper = new();
 
     public string PostgresConnectionString => this.testContainersHelper.PostgresConnectionString;
 
@@ -41,14 +41,17 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
         await context.Database.MigrateAsync();
     }
 
-    async ValueTask IAsyncDisposable.DisposeAsync() => await this.testContainersHelper.StopAsync();
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        await this.testContainersHelper.StopAsync();
+    }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureTestServices(services =>
         {
-            services.AddScoped(x => this.MockBaasApi.Object);
-            services.AddScoped(x => this.MockPhotonStateApi.Object);
+            services.AddScoped(_ => this.MockBaasApi.Object);
+            services.AddScoped(_ => this.MockPhotonStateApi.Object);
 
             services.RemoveAll<DbContextOptions<ApiContext>>();
             services.RemoveAll<IDistributedCache>();

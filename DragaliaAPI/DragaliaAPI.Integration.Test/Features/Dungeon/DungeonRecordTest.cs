@@ -21,8 +21,6 @@ public partial class DungeonRecordTest : TestFixture
         this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
             p.SetProperty(e => e.StaminaMulti, e => 100)
         );
-
-        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
     }
 
     [Fact]

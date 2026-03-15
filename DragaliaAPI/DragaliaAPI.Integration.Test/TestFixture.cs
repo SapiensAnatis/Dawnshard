@@ -13,11 +13,9 @@ using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Shared.Serialization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Time.Testing;
@@ -37,7 +35,7 @@ public class TestFixture
     /// </summary>
     protected string SessionId { get; } = $"session_id_{Guid.NewGuid()}";
 
-    private readonly WebApplicationFactory<Program> factory;
+    private readonly CustomWebApplicationFactory factory;
 
     protected TestFixture(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
     {
@@ -45,18 +43,7 @@ public class TestFixture
         this.MockBaasApi = factory.MockBaasApi;
         this.MockPhotonStateApi = factory.MockPhotonStateApi;
 
-        this.factory = factory.WithWebHostBuilder(builder =>
-        {
-            builder.ConfigureLogging(logging =>
-            {
-                logging.ClearProviders();
-                logging.AddConsole();
-            });
-            builder.ConfigureTestServices(services =>
-            {
-                services.AddSingleton<TimeProvider>(this.MockTimeProvider);
-            });
-        });
+        this.factory = factory;
 
         this.Client = this.CreateClient();
 
@@ -90,8 +77,6 @@ public class TestFixture
     protected Mock<IBaasApi> MockBaasApi { get; }
 
     protected Mock<IPhotonStateApi> MockPhotonStateApi { get; }
-
-    protected FakeTimeProvider MockTimeProvider { get; } = new();
 
     protected ITestOutputHelper TestOutputHelper { get; }
 

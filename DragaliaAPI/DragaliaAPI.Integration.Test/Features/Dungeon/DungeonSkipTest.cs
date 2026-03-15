@@ -11,10 +11,7 @@ public class DungeonSkipTest : TestFixture
     private const string Endpoint = "/dungeon_skip";
 
     public DungeonSkipTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task DungeonSkipStart_GrantsRewards()

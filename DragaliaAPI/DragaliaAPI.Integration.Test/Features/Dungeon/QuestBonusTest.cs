@@ -14,10 +14,7 @@ public class QuestBonusTest : TestFixture
      */
 
     public QuestBonusTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task QuestBonus_CanClaimWeeklyAgitoBonus()

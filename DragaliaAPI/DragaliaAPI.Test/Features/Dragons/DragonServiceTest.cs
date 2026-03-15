@@ -57,7 +57,7 @@ public class DragonServiceTest : RepositoryTestFixture
             this.ApiContext
         );
 
-        this.mockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
+        this.mockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
     }
 
     [Fact]
@@ -106,21 +106,21 @@ public class DragonServiceTest : RepositoryTestFixture
         );
 
         DateTimeOffset wednesday = new(2030, 12, 25, 19, 49, 23, TimeSpan.Zero);
-        this.mockTimeProvider.SetUtcNow(wednesday);
+        this.mockTimeProvider.AdjustTime(wednesday);
 
         (await this.dragonService.DoDragonGetContactData())
             .ShopGiftList.Should()
             .Contain(x => x.DragonGiftId == (int)DragonGifts.FloralCirclet);
 
         DateTimeOffset thuBeforeReset = new(2030, 12, 26, 01, 49, 23, TimeSpan.Zero);
-        this.mockTimeProvider.SetUtcNow(thuBeforeReset);
+        this.mockTimeProvider.AdjustTime(thuBeforeReset);
 
         (await this.dragonService.DoDragonGetContactData())
             .ShopGiftList.Should()
             .Contain(x => x.DragonGiftId == (int)DragonGifts.FloralCirclet);
 
         DateTimeOffset thursday = new(2030, 12, 26, 09, 49, 23, TimeSpan.Zero);
-        this.mockTimeProvider.SetUtcNow(thursday);
+        this.mockTimeProvider.AdjustTime(thursday);
 
         (await this.dragonService.DoDragonGetContactData())
             .ShopGiftList.Should()

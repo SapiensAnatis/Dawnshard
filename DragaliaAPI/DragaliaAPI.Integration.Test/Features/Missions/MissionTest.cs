@@ -12,10 +12,7 @@ namespace DragaliaAPI.Integration.Test.Features.Missions;
 public class MissionTest : TestFixture
 {
     public MissionTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task UnlockDrillMissionGroup_ValidRequest_UnlocksGroup()

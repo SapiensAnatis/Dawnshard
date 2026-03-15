@@ -10,8 +10,6 @@ public class Clb01EventTest : TestFixture
     public Clb01EventTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
-
         this.Client.PostMsgpack<MemoryEventActivateResponse>(
                 "memory_event/activate",
                 new MemoryEventActivateRequest(EventId)

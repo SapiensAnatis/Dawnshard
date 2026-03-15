@@ -57,8 +57,6 @@ public class ItemTest : TestFixture
     [Fact]
     public async Task UseRecoveryStamina_UpdatesStaminaBeforeAdd()
     {
-        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
-
         DbPlayerUserData userData = this
             .ApiContext.PlayerUserData.AsTracking()
             .First(x => x.ViewerId == this.ViewerId);
