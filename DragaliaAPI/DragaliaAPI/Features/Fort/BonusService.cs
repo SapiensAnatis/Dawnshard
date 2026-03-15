@@ -1,4 +1,4 @@
-﻿//#define CHEATS
+//#define CHEATS
 #if CHEATS && DEBUG
 #define CHEATING
 #endif
@@ -18,7 +18,7 @@ namespace DragaliaAPI.Features.Fort;
 /// <summary>
 /// Service for fort, weapon, and album bonuses
 /// </summary>
-public class BonusService(
+public partial class BonusService(
     IFortRepository fortRepository,
     IWeaponRepository weaponRepository,
     IPlayerIdentityService playerIdentityService,
@@ -82,7 +82,7 @@ public class BonusService(
             || eventData.EventFortId == 0
         )
         {
-            logger.LogDebug("No event facility found for eventId {eventId}", eventId);
+            Log.NoEventFacilityFoundForEventId(logger, eventId);
             return null;
         }
 
@@ -93,7 +93,7 @@ public class BonusService(
 
         if (level == 0)
         {
-            logger.LogDebug("Player did not own event facility {facility}", eventData.EventFortId);
+            Log.PlayerDidNotOwnEventFacility(logger, eventData.EventFortId);
             return null;
         }
 
@@ -339,5 +339,13 @@ public class BonusService(
                     },
                 }
             );
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "No event facility found for eventId {eventId}")]
+        public static partial void NoEventFacilityFoundForEventId(ILogger logger, int eventId);
+        [LoggerMessage(LogLevel.Debug, "Player did not own event facility {facility}")]
+        public static partial void PlayerDidNotOwnEventFacility(ILogger logger, FortPlants facility);
     }
 }

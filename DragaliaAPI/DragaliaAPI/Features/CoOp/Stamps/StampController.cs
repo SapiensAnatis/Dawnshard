@@ -2,11 +2,12 @@ using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.CoOp.Stamps;
 
 [Route("stamp")]
-public class StampController : DragaliaControllerBase
+public partial class StampController : DragaliaControllerBase
 {
     private readonly IStampService stampService;
     private readonly IUpdateDataService updateDataService;
@@ -37,7 +38,7 @@ public class StampController : DragaliaControllerBase
         CancellationToken cancellationToken
     )
     {
-        this.logger.LogDebug("Updating stamp list to: {@stampList}", request.StampList);
+        Log.UpdatingStampListTo(this.logger, request.StampList);
 
         IEnumerable<EquipStampList> newStampList = await this.stampService.SetEquipStampList(
             request.StampList
@@ -49,5 +50,11 @@ public class StampController : DragaliaControllerBase
         return this.Ok(
             new StampSetEquipStampResponse() { EquipStampList = newStampList.OrderBy(x => x.Slot) }
         );
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Updating stamp list to: {@stampList}")]
+        public static partial void UpdatingStampListTo(ILogger logger, IEnumerable<EquipStampList> stampList);
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
@@ -18,7 +18,7 @@ using Microsoft.Extensions.Caching.Distributed;
 
 namespace DragaliaAPI.Features.Login.Savefile;
 
-internal sealed class SavefileService(
+internal sealed partial class SavefileService(
     ApiContext apiContext,
     IDistributedCache cache,
     ILogger<SavefileService> logger,
@@ -63,11 +63,11 @@ internal sealed class SavefileService(
         {
             while (!string.IsNullOrEmpty(await cache.GetStringAsync(key)))
             {
-                logger.LogInformation("Savefile import is locked, waiting...");
+                Log.SavefileImportIsLockedWaiting(logger);
                 await Task.Delay(RecheckLockMs);
             }
 
-            logger.LogInformation("Savefile import lock released.");
+            Log.SavefileImportLockReleased(logger);
             return;
         }
 
@@ -98,21 +98,15 @@ internal sealed class SavefileService(
     {
         Stopwatch stopwatch = Stopwatch.StartNew();
 
-        logger.LogInformation(
-            "Beginning savefile import for account {AccountId}",
-            playerIdentityService.AccountId
-        );
+        Log.BeginningSavefileImportForAccount(logger, playerIdentityService.AccountId);
 
         if (!Validate(savefile))
         {
-            logger.LogInformation("Savefile to be imported is invalid");
+            Log.SavefileToBeImportedIsInvalid(logger);
             return;
         }
 
-        logger.LogDebug(
-            "Validating save file step done after {t} ms",
-            stopwatch.Elapsed.TotalMilliseconds
-        );
+        Log.ValidatingSaveFileStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
         try
         {
@@ -121,10 +115,7 @@ internal sealed class SavefileService(
 
             await Delete();
 
-            logger.LogDebug(
-                "Deleting savedata step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.DeletingSavedataStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             DbPlayer player = await apiContext.Players.FirstAsync(x =>
                 x.ViewerId == playerIdentityService.ViewerId
@@ -132,10 +123,7 @@ internal sealed class SavefileService(
 
             player.SavefileVersion = 0;
 
-            logger.LogDebug(
-                "Mapping DbPlayer step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbPlayerStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             // This has JsonRequired so this should never be triggered
             ArgumentNullException.ThrowIfNull(savefile.UserData);
@@ -152,19 +140,13 @@ internal sealed class SavefileService(
             int cappedExp = Math.Min(savefile.UserData.Exp, MaxTotalExp);
             player.UserData.Exp = cappedExp;
 
-            logger.LogDebug(
-                "Mapping DbPlayerUserData step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbPlayerUserDataStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.CharaList = savefile
                 .CharaList.ParallelMap(playerIdentityService.ViewerId, CharaMapper.ToDbPlayerChara)
                 .ToList();
 
-            logger.LogDebug(
-                "Mapping DbPlayerCharaData step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbPlayerCharaDataStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.DragonReliabilityList = savefile
                 .DragonReliabilityList.ParallelMap(
@@ -173,10 +155,7 @@ internal sealed class SavefileService(
                 )
                 .ToList();
 
-            logger.LogDebug(
-                "Mapping DbPlayerDragonReliability step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbPlayerDragonReliabilityStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             // Build key id mappings for dragons and talismans
             Dictionary<long, DbPlayerDragonData> dragonKeyIds = new();
@@ -193,10 +172,7 @@ internal sealed class SavefileService(
                 dragonKeyIds.TryAdd((long)oldKeyId, dbEntry);
             }
 
-            logger.LogDebug(
-                "Mapping DbPlayerDragonData step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbPlayerDragonDataStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             Dictionary<long, DbTalisman> talismanKeyIds = new();
 
@@ -210,25 +186,16 @@ internal sealed class SavefileService(
                 talismanKeyIds.TryAdd((long)oldKeyId, dbEntry);
             }
 
-            logger.LogDebug(
-                "Mapping DbTalisman step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbTalismanStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             // Must save changes for key ids to update
             await apiContext.SaveChangesAsync();
 
-            logger.LogDebug(
-                "SaveChangesAsync() #1 step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.SaveChangesAsync1StepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             AddShopInfo(player);
 
-            logger.LogDebug(
-                "Adding shop info step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.AddingShopInfoStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             if (savefile.PartyList is not null)
             {
@@ -264,10 +231,7 @@ internal sealed class SavefileService(
                 AddDefaultParties(player);
             }
 
-            logger.LogDebug(
-                "Mapping DbParty step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbPartyStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.AbilityCrestList.AddRange(
                 savefile.AbilityCrestList.Select(x =>
@@ -275,10 +239,7 @@ internal sealed class SavefileService(
                 )
             );
 
-            logger.LogDebug(
-                "Mapping DbAbilityCrest step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbAbilityCrestStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.WeaponBodyList.AddRange(
                 savefile.WeaponBodyList.Select(x =>
@@ -286,10 +247,7 @@ internal sealed class SavefileService(
                 )
             );
 
-            logger.LogDebug(
-                "Mapping DbWeaponBody step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbWeaponBodyStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.QuestList.AddRange(
                 savefile.QuestList.ParallelMap(
@@ -298,10 +256,7 @@ internal sealed class SavefileService(
                 )
             );
 
-            logger.LogDebug(
-                "Mapping DbQuest step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbQuestStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.StoryStates.AddRange(
                 savefile.QuestStoryList.ParallelMap(
@@ -310,10 +265,7 @@ internal sealed class SavefileService(
                 )
             );
 
-            logger.LogDebug(
-                "Mapping DbPlayerStoryState (QuestStoryList) step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbPlayerStoryStateQuestStoryListStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.StoryStates.AddRange(
                 savefile.UnitStoryList.ParallelMap(
@@ -322,10 +274,7 @@ internal sealed class SavefileService(
                 )
             );
 
-            logger.LogDebug(
-                "Mapping DbPlayerStoryState (UnitStoryList) step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbPlayerStoryStateUnitStoryListStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.StoryStates.AddRange(
                 savefile.CastleStoryList.ParallelMap(
@@ -334,10 +283,7 @@ internal sealed class SavefileService(
                 )
             );
 
-            logger.LogDebug(
-                "Mapping DbPlayerStoryState (CastleStoryList) step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbPlayerStoryStateCastleStoryListStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.MaterialList.AddRange(
                 savefile.MaterialList.ParallelMap(
@@ -346,10 +292,7 @@ internal sealed class SavefileService(
                 )
             );
 
-            logger.LogDebug(
-                "Mapping DbPlayerMaterial step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbPlayerMaterialStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.BuildList.AddRange(
                 savefile.BuildList.ParallelMap(
@@ -363,10 +306,7 @@ internal sealed class SavefileService(
                 fortBuild.BuildId = 0;
             }
 
-            logger.LogDebug(
-                "Mapping DbFortBuild step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbFortBuildStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.WeaponSkinList.AddRange(
                 savefile.WeaponSkinList.ParallelMap(
@@ -375,10 +315,7 @@ internal sealed class SavefileService(
                 )
             );
 
-            logger.LogDebug(
-                "Mapping DbWeaponSkin step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbWeaponSkinStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.WeaponPassiveAbilityList.AddRange(
                 savefile.WeaponPassiveAbilityList.ParallelMap(
@@ -387,10 +324,7 @@ internal sealed class SavefileService(
                 )
             );
 
-            logger.LogDebug(
-                "Mapping DbWeaponPassibeAbility step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbWeaponPassibeAbilityStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.DragonGiftList.AddRange(
                 savefile.DragonGiftList.ParallelMap(
@@ -399,10 +333,7 @@ internal sealed class SavefileService(
                 )
             );
 
-            logger.LogDebug(
-                "Mapping DbPlayerDragonGift step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbPlayerDragonGiftStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.EquippedStampList.AddRange(
                 savefile.EquipStampList.ParallelMap(
@@ -411,10 +342,7 @@ internal sealed class SavefileService(
                 )
             );
 
-            logger.LogDebug(
-                "Mapping DbEquippedStamp step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbEquippedStampStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.Trades.AddRange(
                 savefile.UserTreasureTradeList.ParallelMap(
@@ -423,10 +351,7 @@ internal sealed class SavefileService(
                 )
             );
 
-            logger.LogDebug(
-                "Mapping DbPlayerTrade step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbPlayerTradeStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.SummonTickets.AddRange(
                 savefile.SummonTicketList.ParallelMap(
@@ -440,10 +365,7 @@ internal sealed class SavefileService(
                 ticket.KeyId = 0;
             }
 
-            logger.LogDebug(
-                "Mapping DbSummonTicket step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbSummonTicketStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             if (
                 savefile.UserData.EmblemId != Emblems.DragonbloodPrince
@@ -461,19 +383,13 @@ internal sealed class SavefileService(
                 );
             }
 
-            logger.LogDebug(
-                "Adding DbEmblem step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.AddingDbEmblemStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.PartyPower = savefile.PartyPowerData.MapToDbPartyPower(
                 playerIdentityService.ViewerId
             );
 
-            logger.LogDebug(
-                "Mapping DbPartyPower step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbPartyPowerStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.QuestEvents = savefile
                 .QuestEventList.ParallelMap(
@@ -482,10 +398,7 @@ internal sealed class SavefileService(
                 )
                 .ToList();
 
-            logger.LogDebug(
-                "Mapping DbQuestEvent step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbQuestEventStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.QuestTreasureList = savefile
                 .QuestTreasureList.ParallelMap(
@@ -494,10 +407,7 @@ internal sealed class SavefileService(
                 )
                 .ToList();
 
-            logger.LogDebug(
-                "Mapping DbQuestTreasureList step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbQuestTreasureListStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.QuestWalls = savefile
                 .QuestWallList.ParallelMap(
@@ -506,15 +416,9 @@ internal sealed class SavefileService(
                 )
                 .ToList();
 
-            logger.LogDebug(
-                "Mapping DbPlayerQuestWall step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingDbPlayerQuestWallStepDoneAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
-            logger.LogInformation(
-                "Mapping completed after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.MappingCompletedAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
 
             player.LastSavefileImportTime = DateTimeOffset.UtcNow;
             player.SavefileOrigin = savefile.Origin;
@@ -528,10 +432,7 @@ internal sealed class SavefileService(
 
             metrics.OnSaveImport(savefile);
 
-            logger.LogInformation(
-                "Saved changes after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
+            Log.SavedChangesAfterMs(logger, stopwatch.Elapsed.TotalMilliseconds);
         }
         catch
         {
@@ -552,7 +453,7 @@ internal sealed class SavefileService(
         {
             if (!MasterAsset.CharaData.ContainsKey(chara.CharaId))
             {
-                logger.LogDebug("Invalid character ID: {CharaId}", chara.CharaId);
+                Log.InvalidCharacterID(logger, chara.CharaId);
                 return false;
             }
 
@@ -564,7 +465,7 @@ internal sealed class SavefileService(
 
         if (!hasEuden)
         {
-            logger.LogDebug("Savefile does not have ThePrince");
+            Log.SavefileDoesNotHaveThePrince(logger);
             return false;
         }
 
@@ -572,7 +473,7 @@ internal sealed class SavefileService(
         {
             if (!MasterAsset.DragonData.ContainsKey(dragon.DragonId))
             {
-                logger.LogDebug("Invalid dragon ID: {DragonId}", dragon.DragonId);
+                Log.InvalidDragonID(logger, dragon.DragonId);
                 return false;
             }
         }
@@ -682,7 +583,7 @@ internal sealed class SavefileService(
 
     public async Task<DbPlayer> Create(string deviceAccountId)
     {
-        logger.LogInformation("Creating new savefile for account ID {id}", deviceAccountId);
+        Log.CreatingNewSavefileForAccountID(logger, deviceAccountId);
 
         await using IDbContextTransaction transaction =
             await apiContext.Database.BeginTransactionAsync();
@@ -823,6 +724,90 @@ internal sealed class SavefileService(
         public const int PartySlotCount = 54;
 
         public const Emblems DefaultEmblem = Emblems.DragonbloodPrince;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "Savefile import is locked, waiting...")]
+        public static partial void SavefileImportIsLockedWaiting(ILogger logger);
+        [LoggerMessage(LogLevel.Information, "Savefile import lock released.")]
+        public static partial void SavefileImportLockReleased(ILogger logger);
+        [LoggerMessage(LogLevel.Information, "Beginning savefile import for account {AccountId}")]
+        public static partial void BeginningSavefileImportForAccount(ILogger logger, string accountId);
+        [LoggerMessage(LogLevel.Information, "Savefile to be imported is invalid")]
+        public static partial void SavefileToBeImportedIsInvalid(ILogger logger);
+        [LoggerMessage(LogLevel.Debug, "Validating save file step done after {t} ms")]
+        public static partial void ValidatingSaveFileStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Deleting savedata step done after {t} ms")]
+        public static partial void DeletingSavedataStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbPlayer step done after {t} ms")]
+        public static partial void MappingDbPlayerStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbPlayerUserData step done after {t} ms")]
+        public static partial void MappingDbPlayerUserDataStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbPlayerCharaData step done after {t} ms")]
+        public static partial void MappingDbPlayerCharaDataStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbPlayerDragonReliability step done after {t} ms")]
+        public static partial void MappingDbPlayerDragonReliabilityStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbPlayerDragonData step done after {t} ms")]
+        public static partial void MappingDbPlayerDragonDataStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbTalisman step done after {t} ms")]
+        public static partial void MappingDbTalismanStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "SaveChangesAsync() #1 step done after {t} ms")]
+        public static partial void SaveChangesAsync1StepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Adding shop info step done after {t} ms")]
+        public static partial void AddingShopInfoStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbParty step done after {t} ms")]
+        public static partial void MappingDbPartyStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbAbilityCrest step done after {t} ms")]
+        public static partial void MappingDbAbilityCrestStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbWeaponBody step done after {t} ms")]
+        public static partial void MappingDbWeaponBodyStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbQuest step done after {t} ms")]
+        public static partial void MappingDbQuestStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbPlayerStoryState (QuestStoryList) step done after {t} ms")]
+        public static partial void MappingDbPlayerStoryStateQuestStoryListStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbPlayerStoryState (UnitStoryList) step done after {t} ms")]
+        public static partial void MappingDbPlayerStoryStateUnitStoryListStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbPlayerStoryState (CastleStoryList) step done after {t} ms")]
+        public static partial void MappingDbPlayerStoryStateCastleStoryListStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbPlayerMaterial step done after {t} ms")]
+        public static partial void MappingDbPlayerMaterialStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbFortBuild step done after {t} ms")]
+        public static partial void MappingDbFortBuildStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbWeaponSkin step done after {t} ms")]
+        public static partial void MappingDbWeaponSkinStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbWeaponPassibeAbility step done after {t} ms")]
+        public static partial void MappingDbWeaponPassibeAbilityStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbPlayerDragonGift step done after {t} ms")]
+        public static partial void MappingDbPlayerDragonGiftStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbEquippedStamp step done after {t} ms")]
+        public static partial void MappingDbEquippedStampStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbPlayerTrade step done after {t} ms")]
+        public static partial void MappingDbPlayerTradeStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbSummonTicket step done after {t} ms")]
+        public static partial void MappingDbSummonTicketStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Adding DbEmblem step done after {t} ms")]
+        public static partial void AddingDbEmblemStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbPartyPower step done after {t} ms")]
+        public static partial void MappingDbPartyPowerStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbQuestEvent step done after {t} ms")]
+        public static partial void MappingDbQuestEventStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbQuestTreasureList step done after {t} ms")]
+        public static partial void MappingDbQuestTreasureListStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Mapping DbPlayerQuestWall step done after {t} ms")]
+        public static partial void MappingDbPlayerQuestWallStepDoneAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Information, "Mapping completed after {t} ms")]
+        public static partial void MappingCompletedAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Information, "Saved changes after {t} ms")]
+        public static partial void SavedChangesAfterMs(ILogger logger, double t);
+        [LoggerMessage(LogLevel.Debug, "Invalid character ID: {CharaId}")]
+        public static partial void InvalidCharacterID(ILogger logger, Charas charaId);
+        [LoggerMessage(LogLevel.Debug, "Savefile does not have ThePrince")]
+        public static partial void SavefileDoesNotHaveThePrince(ILogger logger);
+        [LoggerMessage(LogLevel.Debug, "Invalid dragon ID: {DragonId}")]
+        public static partial void InvalidDragonID(ILogger logger, DragonId dragonId);
+        [LoggerMessage(LogLevel.Information, "Creating new savefile for account ID {id}")]
+        public static partial void CreatingNewSavefileForAccountID(ILogger logger, string id);
     }
 }
 

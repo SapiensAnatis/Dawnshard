@@ -1,9 +1,9 @@
-﻿using DragaliaAPI.Shared.PlayerDetails;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace DragaliaAPI.Features.Quest;
 
-public class QuestCacheService(
+public partial class QuestCacheService(
     IDistributedCache distributedCache,
     IPlayerIdentityService playerIdentityService,
     ILogger<QuestCacheService> logger
@@ -12,7 +12,7 @@ public class QuestCacheService(
     public async Task SetQuestGroupQuestIdAsync(int questGroupId, int questId)
     {
         string key = Schema.QuestEventId(playerIdentityService.AccountId, questGroupId);
-        logger.LogDebug("Setting quest id key: {key}", key);
+        Log.SettingQuestIdKey(logger, key);
 
         await distributedCache.SetStringAsync(key, questId.ToString());
     }
@@ -28,10 +28,7 @@ public class QuestCacheService(
             return questId;
         }
 
-        logger.LogError(
-            "Tried to parse cached quest id string {questIdString} but it was not an int",
-            questIdString
-        );
+        Log.TriedToParseCachedQuestIdStringButItWasNotAnInt(logger, questIdString);
 
         return null;
     }
@@ -41,6 +38,14 @@ public class QuestCacheService(
         await distributedCache.RemoveAsync(
             Schema.QuestEventId(playerIdentityService.AccountId, questGroupId)
         );
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Setting quest id key: {key}")]
+        public static partial void SettingQuestIdKey(ILogger logger, string key);
+        [LoggerMessage(LogLevel.Error, "Tried to parse cached quest id string {questIdString} but it was not an int")]
+        public static partial void TriedToParseCachedQuestIdStringButItWasNotAnInt(ILogger logger, string? questIdString);
     }
 }
 

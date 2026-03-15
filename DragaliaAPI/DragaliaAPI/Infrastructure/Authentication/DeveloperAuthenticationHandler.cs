@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Headers;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Infrastructure.Authentication;
 
-public class DeveloperAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+public partial class DeveloperAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
     private readonly IWebHostEnvironment environment;
 
@@ -36,7 +36,7 @@ public class DeveloperAuthenticationHandler : AuthenticationHandler<Authenticati
 
         if (this.Request.Headers.Authorization.Count == 0)
         {
-            this.Logger.LogDebug("No Authorization header found.");
+            Log.NoAuthorizationHeaderFound(this.Logger);
             return Task.FromResult(AuthenticateResult.NoResult());
         }
 
@@ -55,10 +55,7 @@ public class DeveloperAuthenticationHandler : AuthenticationHandler<Authenticati
         if (authHeader.Parameter is null || !expectedTokens.Contains(authHeader.Parameter))
             return Task.FromResult(AuthenticateResult.Fail("Invalid Authorization header"));
 
-        this.Logger.LogDebug(
-            "Authenticated using token {token}",
-            authHeader.Parameter[..3] + "..."
-        );
+        Log.AuthenticatedUsingToken(this.Logger, authHeader.Parameter[..3] + "...");
 
         return Task.FromResult(this.GetSuccessResult());
     }
@@ -71,5 +68,13 @@ public class DeveloperAuthenticationHandler : AuthenticationHandler<Authenticati
         AuthenticationTicket ticket = new(principal, this.Scheme.Name);
 
         return AuthenticateResult.Success(ticket);
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "No Authorization header found.")]
+        public static partial void NoAuthorizationHeaderFound(ILogger logger);
+        [LoggerMessage(LogLevel.Debug, "Authenticated using token {token}")]
+        public static partial void AuthenticatedUsingToken(ILogger logger, string token);
     }
 }

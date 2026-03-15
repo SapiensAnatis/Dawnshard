@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Features.Album;
+using DragaliaAPI.Features.Album;
 using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
@@ -103,7 +103,7 @@ internal partial class DungeonRecordService(
             && await tutorialService.GetCurrentTutorialStatus() == TutorialStatusIds.CoopTutorial
         )
         {
-            logger.LogDebug("Detected co-op tutorial: updating tutorial status");
+            Log.DetectedCoOpTutorialUpdatingTutorialStatus(logger);
             await tutorialService.UpdateTutorialStatus(20501);
         }
 
@@ -266,5 +266,7 @@ internal partial class DungeonRecordService(
             Charas charaId,
             int unitNo
         );
+        [LoggerMessage(LogLevel.Debug, "Detected co-op tutorial: updating tutorial status")]
+        public static partial void DetectedCoOpTutorialUpdatingTutorialStatus(ILogger logger);
     }
 }

@@ -14,7 +14,7 @@ namespace DragaliaAPI.Features.Login.SavefileUpdate;
 /// <summary>
 /// Fixes missing stories for 3* characters due to issue #358
 /// </summary>
-public class V9Update(
+public partial class V9Update(
     IStoryRepository storyRepository,
     ApiContext apiContext,
     IPlayerIdentityService playerIdentityService,
@@ -48,7 +48,7 @@ public class V9Update(
                 || !MasterAsset.CharaStories.TryGetValue((int)chara, out StoryData? storyData)
             )
             {
-                logger.LogDebug("Skipping unknown character {chara}", chara);
+                Log.SkippingUnknownCharacter(logger, chara);
                 continue;
             }
 
@@ -56,11 +56,7 @@ public class V9Update(
 
             if (!stories.Contains(storyArray[0]))
             {
-                logger.LogDebug(
-                    "Adding missing first story {storyId} for chara {chara}",
-                    storyArray[0],
-                    chara
-                );
+                Log.AddingMissingFirstStoryForChara(logger, storyArray[0], chara);
                 this.AddStory(storyArray[0]);
             }
 
@@ -80,11 +76,7 @@ public class V9Update(
                 }
                 catch
                 {
-                    logger.LogError(
-                        "Failed to look up story {num} for chara {chara}",
-                        storyArrayIdx,
-                        chara
-                    );
+                    Log.FailedToLookUpStoryForChara(logger, storyArrayIdx, chara);
 
                     continue;
                 }
@@ -92,12 +84,7 @@ public class V9Update(
                 if (stories.Contains(storyId))
                     continue;
 
-                logger.LogDebug(
-                    "Adding missing story {storyId} (episode {episode}) for chara {chara}",
-                    storyId,
-                    storyArrayIdx + 1,
-                    chara
-                );
+                Log.AddingMissingStoryEpisodeForChara(logger, storyId, storyArrayIdx + 1, chara);
                 this.AddStory(storyId);
             }
         }
@@ -114,5 +101,17 @@ public class V9Update(
                 StoryType = StoryTypes.Chara,
             }
         );
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Skipping unknown character {chara}")]
+        public static partial void SkippingUnknownCharacter(ILogger logger, Charas chara);
+        [LoggerMessage(LogLevel.Debug, "Adding missing first story {storyId} for chara {chara}")]
+        public static partial void AddingMissingFirstStoryForChara(ILogger logger, int storyId, Charas chara);
+        [LoggerMessage(LogLevel.Error, "Failed to look up story {num} for chara {chara}")]
+        public static partial void FailedToLookUpStoryForChara(ILogger logger, int num, Charas chara);
+        [LoggerMessage(LogLevel.Debug, "Adding missing story {storyId} (episode {episode}) for chara {chara}")]
+        public static partial void AddingMissingStoryEpisodeForChara(ILogger logger, int storyId, int episode, Charas chara);
     }
 }

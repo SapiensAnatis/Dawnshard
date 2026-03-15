@@ -1,14 +1,15 @@
-﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Talisman;
 
-public class TalismanService(
+public partial class TalismanService(
     IUnitRepository unitRepository,
     IRewardService rewardService,
     ILogger<TalismanService> logger
@@ -25,7 +26,7 @@ public class TalismanService(
             .Talismans.Where(x => talismanIds.Contains(x.TalismanKeyId))
             .ToListAsync();
 
-        logger.LogDebug("Selling talismans {@talismanKeyIdList}", talismanIds);
+        Log.SellingTalismans(logger, talismanIds);
 
         foreach (DbTalisman talisman in dbTalismans)
         {
@@ -55,10 +56,14 @@ public class TalismanService(
         );
         talisman.IsLock = locked;
 
-        logger.LogDebug(
-            "Changed lock state of talisman {@talismanKeyId} to {isLocked}",
-            talismanKeyId,
-            locked
-        );
+        Log.ChangedLockStateOfTalismanTo(logger, talismanKeyId, locked);
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Selling talismans {@talismanKeyIdList}")]
+        public static partial void SellingTalismans(ILogger logger, IEnumerable<long> talismanKeyIdList);
+        [LoggerMessage(LogLevel.Debug, "Changed lock state of talisman {@talismanKeyId} to {isLocked}")]
+        public static partial void ChangedLockStateOfTalismanTo(ILogger logger, long talismanKeyId, bool isLocked);
     }
 }

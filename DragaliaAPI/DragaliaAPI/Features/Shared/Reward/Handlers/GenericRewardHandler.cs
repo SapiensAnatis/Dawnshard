@@ -14,7 +14,7 @@ namespace DragaliaAPI.Features.Shared.Reward.Handlers;
 
 // TODO: Move types out of this class into their own dedicated handlers.
 
-public class GenericRewardHandler(
+public partial class GenericRewardHandler(
     ILogger<RewardService> logger,
     IInventoryRepository inventoryRepository,
     IUserDataRepository userDataRepository,
@@ -98,10 +98,16 @@ public class GenericRewardHandler(
                     throw new UnreachableException("Invalid dmode point id");
                 break;
             default:
-                logger.LogWarning("Tried to reward unsupported entity {@entity}", entity);
+                Log.TriedToRewardUnsupportedEntity(logger, entity);
                 return new(RewardGrantResult.FailError);
         }
 
         return new(RewardGrantResult.Added);
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Warning, "Tried to reward unsupported entity {@entity}")]
+        public static partial void TriedToRewardUnsupportedEntity(ILogger logger, Entity entity);
     }
 }

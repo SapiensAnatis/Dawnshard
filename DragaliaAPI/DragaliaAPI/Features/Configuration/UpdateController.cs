@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Emblem;
@@ -16,7 +16,7 @@ namespace DragaliaAPI.Features.Configuration;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-internal sealed class UpdateController(
+internal sealed partial class UpdateController(
     ILogger<UpdateController> logger,
     IUserDataRepository userDataRepository,
     IUpdateDataService updateDataService,
@@ -49,7 +49,7 @@ internal sealed class UpdateController(
         foreach (AtgenTargetList target in request.TargetList)
         {
             IEnumerable<long> targetList = target.TargetIdList ?? [];
-            logger.LogDebug("reset_new target: {@target}", target);
+            Log.ResetNewTarget(logger, target);
 
             switch (target.TargetName)
             {
@@ -68,10 +68,7 @@ internal sealed class UpdateController(
                 case "stamp":
                 {
                     // TODO
-                    logger.LogInformation(
-                        "Unhandled type {resetType} in update/reset_new",
-                        target.TargetName
-                    );
+                    Log.UnhandledTypeInUpdateResetNew(logger, target.TargetName);
                     break;
                 }
                 case "emblem":
@@ -106,5 +103,13 @@ internal sealed class UpdateController(
         await updateDataService.SaveChangesAsync(cancellationToken);
 
         return this.Ok(new UpdateResetNewResponse(1));
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "reset_new target: {@target}")]
+        public static partial void ResetNewTarget(ILogger logger, AtgenTargetList target);
+        [LoggerMessage(LogLevel.Information, "Unhandled type {resetType} in update/reset_new")]
+        public static partial void UnhandledTypeInUpdateResetNew(ILogger logger, string resetType);
     }
 }

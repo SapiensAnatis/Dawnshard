@@ -14,7 +14,7 @@ namespace DragaliaAPI.Features.Login.SavefileUpdate;
 /// Update to grant chapter 10 completion rewards to players that previously cleared chapter 10 and did not receive rewards.
 /// </summary>
 [UsedImplicitly]
-public class V22Update(
+public partial class V22Update(
     ApiContext apiContext,
     IPresentService presentService,
     IUserService userService,
@@ -39,16 +39,11 @@ public class V22Update(
             )
             .AnyAsync();
 
-        logger.LogDebug(
-            "Player completed chapter 10: {PlayerCompletedChapter10}",
-            playerCompletedChapter10
-        );
+        Log.PlayerCompletedChapter10(logger, playerCompletedChapter10);
 
         if (playerCompletedChapter10)
         {
-            logger.LogInformation(
-                "Detected that chapter 10 was completed. Granting completion rewards."
-            );
+            Log.DetectedThatChapter10WasCompletedGrantingCompletionRewards(logger);
 
             await userService.AddExperience(69990);
 
@@ -67,5 +62,13 @@ public class V22Update(
                 }
             }
         }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Player completed chapter 10: {PlayerCompletedChapter10}")]
+        public static partial void PlayerCompletedChapter10(ILogger logger, bool playerCompletedChapter10);
+        [LoggerMessage(LogLevel.Information, "Detected that chapter 10 was completed. Granting completion rewards.")]
+        public static partial void DetectedThatChapter10WasCompletedGrantingCompletionRewards(ILogger logger);
     }
 }

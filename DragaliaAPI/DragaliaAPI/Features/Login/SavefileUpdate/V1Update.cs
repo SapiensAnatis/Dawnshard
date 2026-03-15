@@ -11,7 +11,7 @@ namespace DragaliaAPI.Features.Login.SavefileUpdate;
 /// <summary>
 /// Grants buildings awarded by the main quest.
 /// </summary>
-public class V1Update : ISavefileUpdate
+public partial class V1Update : ISavefileUpdate
 {
     private readonly IFortRepository fortRepository;
     private readonly IStoryRepository storyRepository;
@@ -62,11 +62,11 @@ public class V1Update : ISavefileUpdate
             {
                 if (await this.fortRepository.Builds.AnyAsync(x => x.PlantId == plantId))
                 {
-                    this.logger.LogDebug("Skipping plant {plant} as already owned", plantId);
+                    Log.SkippingPlantAsAlreadyOwned(this.logger, plantId);
                     continue;
                 }
 
-                this.logger.LogDebug("Adding facility {plant}", plantId);
+                Log.AddingFacility(this.logger, plantId);
                 await this.fortRepository.AddToStorage(plantId, quantity: 1, isTotalQuantity: true);
             }
         }
@@ -76,8 +76,18 @@ public class V1Update : ISavefileUpdate
             >= TutorialService.TutorialStatusIds.Dojos
         )
         {
-            this.logger.LogDebug("Adding dojos");
+            Log.AddingDojos(this.logger);
             await this.fortRepository.AddDojos();
         }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Skipping plant {plant} as already owned")]
+        public static partial void SkippingPlantAsAlreadyOwned(ILogger logger, FortPlants plant);
+        [LoggerMessage(LogLevel.Debug, "Adding facility {plant}")]
+        public static partial void AddingFacility(ILogger logger, FortPlants plant);
+        [LoggerMessage(LogLevel.Debug, "Adding dojos")]
+        public static partial void AddingDojos(ILogger logger);
     }
 }

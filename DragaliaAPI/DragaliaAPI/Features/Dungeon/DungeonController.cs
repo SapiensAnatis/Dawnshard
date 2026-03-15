@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Features.CoOp;
+using DragaliaAPI.Features.CoOp;
 using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Features.Shared;
@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Features.Dungeon;
 
 [Route("dungeon")]
-public class DungeonController(
+public partial class DungeonController(
     IDungeonService dungeonService,
     IOddsInfoService oddsInfoService,
     IQuestService questService,
@@ -58,7 +58,7 @@ public class DungeonController(
             cancellationToken
         );
 
-        logger.LogDebug("Processing fail request for quest {QuestId}", session.QuestId);
+        Log.ProcessingFailRequestForQuest(logger, session.QuestId);
 
         DungeonFailResponse response = new()
         {
@@ -72,7 +72,7 @@ public class DungeonController(
             },
         };
 
-        logger.LogDebug("Session is multiplayer: {IsMulti}", session.IsMulti);
+        Log.SessionIsMultiplayer(logger, session.IsMulti);
 
         if (session.IsMulti)
         {
@@ -86,7 +86,7 @@ public class DungeonController(
                 await dungeonRecordHelperService.ProcessHelperDataSolo(session.SupportViewerId);
         }
 
-        logger.LogDebug("Final response: {@Response}", response);
+        Log.FinalResponse(logger, response);
 
         await dungeonService.RemoveSession(request.DungeonKey, cancellationToken);
 
@@ -111,5 +111,15 @@ public class DungeonController(
         resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Processing fail request for quest {QuestId}")]
+        public static partial void ProcessingFailRequestForQuest(ILogger logger, int questId);
+        [LoggerMessage(LogLevel.Debug, "Session is multiplayer: {IsMulti}")]
+        public static partial void SessionIsMultiplayer(ILogger logger, bool isMulti);
+        [LoggerMessage(LogLevel.Debug, "Final response: {@Response}")]
+        public static partial void FinalResponse(ILogger logger, DungeonFailResponse response);
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace DragaliaAPI.Infrastructure.Middleware;
 
-public class ResourceVersionActionFilter(
+public partial class ResourceVersionActionFilter(
     IResourceVersionService resourceVersionService,
     ILogger<ResourceVersionActionFilter> logger
 ) : IActionFilter
@@ -29,11 +29,7 @@ public class ResourceVersionActionFilter(
 
         if (clientResourceVer != serverResourceVer)
         {
-            logger.LogInformation(
-                "Response rewritten due to resource version mismatch: client: {clientVer}, server: {serverVer}",
-                clientResourceVer,
-                serverResourceVer
-            );
+            Log.ResponseRewrittenDueToResourceVersionMismatchClientServer(logger, clientResourceVer, serverResourceVer);
 
             context.Result = new OkObjectResult(
                 new DragaliaResponse<object>(
@@ -42,5 +38,11 @@ public class ResourceVersionActionFilter(
                 )
             );
         }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "Response rewritten due to resource version mismatch: client: {clientVer}, server: {serverVer}")]
+        public static partial void ResponseRewrittenDueToResourceVersionMismatchClientServer(ILogger logger, string clientVer, string serverVer);
     }
 }

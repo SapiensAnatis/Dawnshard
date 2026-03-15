@@ -1,11 +1,11 @@
-﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 
 namespace DragaliaAPI.Features.AbilityCrests;
 
-public class AbilityCrestRepository : IAbilityCrestRepository
+public partial class AbilityCrestRepository : IAbilityCrestRepository
 {
     private readonly ApiContext apiContext;
     private readonly IPlayerIdentityService playerIdentityService;
@@ -39,11 +39,11 @@ public class AbilityCrestRepository : IAbilityCrestRepository
         int? equipableCount = null
     )
     {
-        this.logger.LogDebug("Adding ability crest {print}", abilityCrestId);
+        Log.AddingAbilityCrest(this.logger, abilityCrestId);
 
         if (await this.FindAsync(abilityCrestId) is not null)
         {
-            this.logger.LogWarning("Ability crest was already owned.");
+            Log.AbilityCrestWasAlreadyOwned(this.logger);
             return;
         }
 
@@ -92,4 +92,12 @@ public class AbilityCrestRepository : IAbilityCrestRepository
             this.playerIdentityService.ViewerId,
             abilityCrestSetNo
         );
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Adding ability crest {print}")]
+        public static partial void AddingAbilityCrest(ILogger logger, AbilityCrestId print);
+        [LoggerMessage(LogLevel.Warning, "Ability crest was already owned.")]
+        public static partial void AbilityCrestWasAlreadyOwned(ILogger logger);
+    }
 }

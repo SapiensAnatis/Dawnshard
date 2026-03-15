@@ -16,10 +16,11 @@ using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Story;
 
-public class StoryService(
+public partial class StoryService(
     IStoryRepository storyRepository,
     ILogger<StoryService> logger,
     IUserDataRepository userDataRepository,
@@ -46,12 +47,12 @@ public class StoryService(
     #region Eligibility check methods
     public async Task<bool> CheckStoryEligibility(StoryTypes type, int storyId)
     {
-        logger.LogDebug("Checking eligibility for story {id} of type: {type}", storyId, type);
+        Log.CheckingEligibilityForStoryOfType(logger, storyId, type);
         DbPlayerStoryState story = await storyRepository.GetOrCreateStory(type, storyId);
 
         if (story.State == StoryState.Read)
         {
-            logger.LogDebug("Story was already read");
+            Log.StoryWasAlreadyRead(logger);
             return true;
         }
 
@@ -69,7 +70,7 @@ public class StoryService(
     {
         if (!MasterAsset.UnitStory.TryGetValue(storyId, out UnitStory? storyData))
         {
-            logger.LogWarning("Non-existent unit story id {id}", storyId);
+            Log.NonExistentUnitStoryId(logger, storyId);
             return false;
         }
 
@@ -82,7 +83,7 @@ public class StoryService(
             )?.State != StoryState.Read
         )
         {
-            logger.LogWarning("Player was missing required quest story id");
+            Log.PlayerWasMissingRequiredQuestStoryId(logger);
             return false;
         }
 
@@ -95,7 +96,7 @@ public class StoryService(
             )?.State != StoryState.Read
         )
         {
-            logger.LogWarning("Player was missing required unit story id");
+            Log.PlayerWasMissingRequiredUnitStoryId(logger);
             return false;
         }
 
@@ -116,13 +117,13 @@ public class StoryService(
         int storyId
     )
     {
-        logger.LogInformation("Reading story {id} of type {type}", storyId, type);
+        Log.ReadingStoryOfType(logger, storyId, type);
 
         DbPlayerStoryState story = await storyRepository.GetOrCreateStory(type, storyId);
 
         if (story.State == StoryState.Read)
         {
-            logger.LogDebug("Story was already read");
+            Log.StoryWasAlreadyRead(logger);
             return [];
         }
 
@@ -138,7 +139,7 @@ public class StoryService(
             _ => throw new NotImplementedException($"Stories of type {type} are not implemented"),
         };
 
-        logger.LogDebug("Player earned story rewards: {@rewards}", rewards);
+        Log.PlayerEarnedStoryRewards(logger, rewards);
         return rewards;
     }
 
@@ -291,7 +292,7 @@ public class StoryService(
             && eventData.GuestJoinStoryId == storyId
         )
         {
-            logger.LogDebug("Granting memory event character {chara}", eventData.EventCharaId);
+            Log.GrantingMemoryEventCharacter(logger, eventData.EventCharaId);
 
             await rewardService.GrantReward(
                 new Entity(EntityTypes.Chara, Id: (int)eventData.EventCharaId)
@@ -308,7 +309,7 @@ public class StoryService(
 
         if (storyId == Chapter10LastStoryId)
         {
-            logger.LogDebug("Granting player experience for chapter 10 completion.");
+            Log.GrantingPlayerExperienceForChapter10Completion(logger);
             await userService.AddExperience(69990);
         }
 
@@ -397,5 +398,27 @@ public class StoryService(
         );
 
         return result;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Checking eligibility for story {id} of type: {type}")]
+        public static partial void CheckingEligibilityForStoryOfType(ILogger logger, int id, StoryTypes type);
+        [LoggerMessage(LogLevel.Debug, "Story was already read")]
+        public static partial void StoryWasAlreadyRead(ILogger logger);
+        [LoggerMessage(LogLevel.Warning, "Non-existent unit story id {id}")]
+        public static partial void NonExistentUnitStoryId(ILogger logger, int id);
+        [LoggerMessage(LogLevel.Warning, "Player was missing required quest story id")]
+        public static partial void PlayerWasMissingRequiredQuestStoryId(ILogger logger);
+        [LoggerMessage(LogLevel.Warning, "Player was missing required unit story id")]
+        public static partial void PlayerWasMissingRequiredUnitStoryId(ILogger logger);
+        [LoggerMessage(LogLevel.Information, "Reading story {id} of type {type}")]
+        public static partial void ReadingStoryOfType(ILogger logger, int id, StoryTypes type);
+        [LoggerMessage(LogLevel.Debug, "Player earned story rewards: {@rewards}")]
+        public static partial void PlayerEarnedStoryRewards(ILogger logger, List<AtgenBuildEventRewardEntityList> rewards);
+        [LoggerMessage(LogLevel.Debug, "Granting memory event character {chara}")]
+        public static partial void GrantingMemoryEventCharacter(ILogger logger, Charas chara);
+        [LoggerMessage(LogLevel.Debug, "Granting player experience for chapter 10 completion.")]
+        public static partial void GrantingPlayerExperienceForChapter10Completion(ILogger logger);
     }
 }

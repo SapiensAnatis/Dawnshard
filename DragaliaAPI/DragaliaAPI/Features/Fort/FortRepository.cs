@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Fort;
 
-public class FortRepository(
+public partial class FortRepository(
     ApiContext apiContext,
     IPlayerIdentityService playerIdentityService,
     TimeProvider timeProvider,
@@ -21,7 +21,7 @@ public class FortRepository(
 
     public async Task InitializeFort()
     {
-        logger.LogInformation("Initializing fort.");
+        Log.InitializingFort(logger);
 
         if (
             !await apiContext.PlayerFortDetails.AnyAsync(x =>
@@ -29,7 +29,7 @@ public class FortRepository(
             )
         )
         {
-            logger.LogDebug("Initializing PlayerFortDetail.");
+            Log.InitializingPlayerFortDetail(logger);
             await apiContext.PlayerFortDetails.AddAsync(
                 new DbFortDetail()
                 {
@@ -41,7 +41,7 @@ public class FortRepository(
 
         if (!await apiContext.PlayerFortBuilds.AnyAsync(x => x.PlantId == FortPlants.TheHalidom))
         {
-            logger.LogDebug("Initializing Halidom.");
+            Log.InitializingHalidom(logger);
             await apiContext.PlayerFortBuilds.AddAsync(
                 new DbFortBuild()
                 {
@@ -57,11 +57,11 @@ public class FortRepository(
 
     public async Task InitializeSmithy()
     {
-        logger.LogInformation("Adding smithy to halidom.");
+        Log.AddingSmithyToHalidom(logger);
 
         if (!await apiContext.PlayerFortBuilds.AnyAsync(x => x.PlantId == FortPlants.Smithy))
         {
-            logger.LogDebug("Initializing Smithy.");
+            Log.InitializingSmithy(logger);
             await apiContext.PlayerFortBuilds.AddAsync(
                 new DbFortBuild
                 {
@@ -90,7 +90,7 @@ public class FortRepository(
             FortPlants.WandDojo,
         };
 
-        logger.LogDebug("Granting dojos.");
+        Log.GrantingDojos(logger);
 
         foreach (FortPlants plant in plants)
         {
@@ -102,7 +102,7 @@ public class FortRepository(
     {
         if (!await apiContext.PlayerFortBuilds.AnyAsync(x => x.PlantId == FortPlants.Dragontree))
         {
-            logger.LogDebug("Adding dragontree to storage.");
+            Log.AddingDragontreeToStorage(logger);
             await this.AddToStorage(FortPlants.Dragontree);
         }
     }
@@ -115,7 +115,7 @@ public class FortRepository(
 
         if (details == null)
         {
-            logger.LogInformation("Could not find details for player, creating anew...");
+            Log.CouldNotFindDetailsForPlayerCreatingAnew(logger);
 
             details = (
                 await apiContext.PlayerFortDetails.AddAsync(
@@ -141,12 +141,7 @@ public class FortRepository(
 
         if (!result)
         {
-            logger.LogDebug(
-                "Failed build level check: requested plant {plant} at level {requestLevel}, but had level {actualLevel}",
-                plant,
-                requiredLevel,
-                level
-            );
+            Log.FailedBuildLevelCheckRequestedPlantAtLevelButHadLevel(logger, plant, requiredLevel, level);
         }
 
         return result;
@@ -187,18 +182,13 @@ public class FortRepository(
         int? level = null
     )
     {
-        logger.LogDebug(
-            "Adding {quantity} copies of {plant} to storage (isTotalQuantity: {isTotalQuantity})",
-            quantity,
-            plant,
-            isTotalQuantity
-        );
+        Log.AddingCopiesOfToStorageIsTotalQuantity(logger, quantity, plant, isTotalQuantity);
 
         int startQuantity = isTotalQuantity
             ? await apiContext.PlayerFortBuilds.Where(x => x.PlantId == plant).CountAsync()
             : 0;
 
-        logger.LogDebug("User already owns {startQuantity} copies.", startQuantity);
+        Log.UserAlreadyOwnsCopies(logger, startQuantity);
 
         if (startQuantity >= quantity)
             return;
@@ -232,4 +222,30 @@ public class FortRepository(
         await apiContext.PlayerFortBuilds.CountAsync(x =>
             x.BuildEndDate > timeProvider.GetUtcNow()
         );
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "Initializing fort.")]
+        public static partial void InitializingFort(ILogger logger);
+        [LoggerMessage(LogLevel.Debug, "Initializing PlayerFortDetail.")]
+        public static partial void InitializingPlayerFortDetail(ILogger logger);
+        [LoggerMessage(LogLevel.Debug, "Initializing Halidom.")]
+        public static partial void InitializingHalidom(ILogger logger);
+        [LoggerMessage(LogLevel.Information, "Adding smithy to halidom.")]
+        public static partial void AddingSmithyToHalidom(ILogger logger);
+        [LoggerMessage(LogLevel.Debug, "Initializing Smithy.")]
+        public static partial void InitializingSmithy(ILogger logger);
+        [LoggerMessage(LogLevel.Debug, "Granting dojos.")]
+        public static partial void GrantingDojos(ILogger logger);
+        [LoggerMessage(LogLevel.Debug, "Adding dragontree to storage.")]
+        public static partial void AddingDragontreeToStorage(ILogger logger);
+        [LoggerMessage(LogLevel.Information, "Could not find details for player, creating anew...")]
+        public static partial void CouldNotFindDetailsForPlayerCreatingAnew(ILogger logger);
+        [LoggerMessage(LogLevel.Debug, "Failed build level check: requested plant {plant} at level {requestLevel}, but had level {actualLevel}")]
+        public static partial void FailedBuildLevelCheckRequestedPlantAtLevelButHadLevel(ILogger logger, FortPlants plant, int requestLevel, int actualLevel);
+        [LoggerMessage(LogLevel.Debug, "Adding {quantity} copies of {plant} to storage (isTotalQuantity: {isTotalQuantity})")]
+        public static partial void AddingCopiesOfToStorageIsTotalQuantity(ILogger logger, int quantity, FortPlants plant, bool isTotalQuantity);
+        [LoggerMessage(LogLevel.Debug, "User already owns {startQuantity} copies.")]
+        public static partial void UserAlreadyOwnsCopies(ILogger logger, int startQuantity);
+    }
 }

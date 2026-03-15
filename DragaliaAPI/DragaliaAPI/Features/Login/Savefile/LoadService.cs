@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Fort;
@@ -17,7 +17,7 @@ using Riok.Mapperly.Abstractions;
 
 namespace DragaliaAPI.Features.Login.Savefile;
 
-public class LoadService(
+public partial class LoadService(
     ApiContext apiContext,
     IBonusService bonusService,
     IOptionsMonitor<PhotonOptions> photonOptions,
@@ -54,7 +54,7 @@ public class LoadService(
             .AsNoTracking()
             .FirstAsync(cancellationToken);
 
-        logger.LogInformation("{Time} ms: Load query complete", stopwatch.ElapsedMilliseconds);
+        Log.MsLoadQueryComplete(logger, stopwatch.ElapsedMilliseconds);
         // TODO/NOTE: special shop purchase list is not set here. maybe change once that fully works?
         // csharpier-ignore-start
         LoadIndexResponse data =
@@ -122,7 +122,7 @@ public class LoadService(
             };
         // csharpier-ignore-end
 
-        logger.LogInformation("{Time} ms: Processing complete", stopwatch.ElapsedMilliseconds);
+        Log.MsProcessingComplete(logger, stopwatch.ElapsedMilliseconds);
         return data;
     }
 
@@ -156,6 +156,14 @@ public class LoadService(
         }
 
         return original;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "{Time} ms: Load query complete")]
+        public static partial void MsLoadQueryComplete(ILogger logger, long time);
+        [LoggerMessage(LogLevel.Information, "{Time} ms: Processing complete")]
+        public static partial void MsProcessingComplete(ILogger logger, long time);
     }
 }
 

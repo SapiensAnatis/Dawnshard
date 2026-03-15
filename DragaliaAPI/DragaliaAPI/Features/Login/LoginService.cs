@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Friends;
 using DragaliaAPI.Features.Present;
@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Login;
 
-public class LoginService(
+public partial class LoginService(
     IRewardService rewardService,
     IPresentService presentService,
     TimeProvider dateTimeProvider,
@@ -52,10 +52,7 @@ public class LoginService(
 
             if (dbBonus.IsComplete)
             {
-                logger.LogDebug(
-                    "Player has already completed login bonus {@bonus}, skipping...",
-                    dbBonus
-                );
+                Log.PlayerHasAlreadyCompletedLoginBonusSkipping(logger, dbBonus);
                 continue;
             }
 
@@ -73,12 +70,7 @@ public class LoginService(
 
             if (reward == null)
             {
-                logger.LogWarning(
-                    "Failed to get reward for bonus data {bonusDataId} with day {dayId} (IsLoop: {isLoop})",
-                    bonusData.Id,
-                    dayId,
-                    bonusData.IsLoop
-                );
+                Log.FailedToGetRewardForBonusDataWithDayIsLoop(logger, bonusData.Id, dayId, bonusData.IsLoop);
                 continue;
             }
 
@@ -184,5 +176,13 @@ public class LoginService(
             helper.HelperRewardCount = 0;
             helper.HelperFriendRewardCount = 0;
         }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Player has already completed login bonus {@bonus}, skipping...")]
+        public static partial void PlayerHasAlreadyCompletedLoginBonusSkipping(ILogger logger, DbLoginBonus bonus);
+        [LoggerMessage(LogLevel.Warning, "Failed to get reward for bonus data {bonusDataId} with day {dayId} (IsLoop: {isLoop})")]
+        public static partial void FailedToGetRewardForBonusDataWithDayIsLoop(ILogger logger, int bonusDataId, int dayId, bool isLoop);
     }
 }

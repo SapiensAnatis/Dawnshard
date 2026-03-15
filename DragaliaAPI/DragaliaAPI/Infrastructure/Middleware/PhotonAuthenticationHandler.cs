@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Headers;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using DragaliaAPI.Database;
@@ -11,7 +11,7 @@ using Microsoft.Extensions.Primitives;
 
 namespace DragaliaAPI.Infrastructure.Middleware;
 
-public class PhotonAuthenticationHandler(
+public partial class PhotonAuthenticationHandler(
     IOptionsMonitor<AuthenticationSchemeOptions> authOptions,
     IOptionsMonitor<PhotonOptions> photonOptions,
     ILoggerFactory logger,
@@ -32,22 +32,19 @@ public class PhotonAuthenticationHandler(
             )
         )
         {
-            this.Logger.LogDebug("Failed to parse Authorization header.");
+            Log.FailedToParseAuthorizationHeader(this.Logger);
             return AuthenticateResult.NoResult();
         }
 
         if (authenticationHeader.Parameter is null)
         {
-            this.Logger.LogDebug("AuthenticationHeader.Parameter was null");
+            Log.AuthenticationHeaderParameterWasNull(this.Logger);
             return AuthenticateResult.NoResult();
         }
 
         if (authenticationHeader.Parameter != photonOptions.CurrentValue.Token)
         {
-            this.Logger.LogInformation(
-                "AuthenticationHeader.Parameter value {param} did not match configured token.",
-                authenticationHeader.Parameter
-            );
+            Log.AuthenticationHeaderParameterValueDidNotMatchConfiguredToken(this.Logger, authenticationHeader.Parameter);
             return AuthenticateResult.Fail("Invalid token.");
         }
 
@@ -78,5 +75,15 @@ public class PhotonAuthenticationHandler(
         AuthenticationTicket ticket = new(principal, this.Scheme.Name);
 
         return AuthenticateResult.Success(ticket);
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Failed to parse Authorization header.")]
+        public static partial void FailedToParseAuthorizationHeader(ILogger logger);
+        [LoggerMessage(LogLevel.Debug, "AuthenticationHeader.Parameter was null")]
+        public static partial void AuthenticationHeaderParameterWasNull(ILogger logger);
+        [LoggerMessage(LogLevel.Information, "AuthenticationHeader.Parameter value {param} did not match configured token.")]
+        public static partial void AuthenticationHeaderParameterValueDidNotMatchConfiguredToken(ILogger logger, string param);
     }
 }

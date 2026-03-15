@@ -10,7 +10,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace DragaliaAPI.Features.Web;
 
-public static class WebAuthenticationHelper
+public static partial class WebAuthenticationHelper
 {
     public static Task OnMessageReceived(MessageReceivedContext context)
     {
@@ -72,18 +72,14 @@ public static class WebAuthenticationHelper
 
         if (await cache.GetJsonAsync<PlayerInfo>(cacheKey) is { } cachedPlayerInfo)
         {
-            logger.LogDebug("Using cached player info: {@PlayerInfo}", cachedPlayerInfo);
+            Log.UsingCachedPlayerInfo(logger, cachedPlayerInfo);
             return cachedPlayerInfo;
         }
 
         IBaasApi baasApi = context.HttpContext.RequestServices.GetRequiredService<IBaasApi>();
         string? gameAccountId = await baasApi.GetUserId(jwt.EncodedToken);
 
-        logger.LogDebug(
-            "Retrieved game account {GameAccountId} from BaaS for web account {WebAccountId}",
-            gameAccountId,
-            jwt.Subject
-        );
+        Log.RetrievedGameAccountFromBaaSForWebAccount(logger, gameAccountId, jwt.Subject);
 
         if (gameAccountId is null)
         {
@@ -103,11 +99,7 @@ public static class WebAuthenticationHelper
             })
             .FirstOrDefaultAsync();
 
-        logger.LogDebug(
-            "PlayerInfo for game account {GameAccountId}: {@PlayerInfo}",
-            gameAccountId,
-            dbPlayerInfo
-        );
+        Log.PlayerInfoForGameAccount(logger, gameAccountId, dbPlayerInfo);
 
         if (dbPlayerInfo is null)
         {
@@ -146,5 +138,15 @@ public static class WebAuthenticationHelper
         public required string Name { get; init; }
 
         public bool IsAdmin { get; init; }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Using cached player info: {@PlayerInfo}")]
+        public static partial void UsingCachedPlayerInfo(ILogger logger, PlayerInfo playerInfo);
+        [LoggerMessage(LogLevel.Debug, "Retrieved game account {GameAccountId} from BaaS for web account {WebAccountId}")]
+        public static partial void RetrievedGameAccountFromBaaSForWebAccount(ILogger logger, string? gameAccountId, string webAccountId);
+        [LoggerMessage(LogLevel.Debug, "PlayerInfo for game account {GameAccountId}: {@PlayerInfo}")]
+        public static partial void PlayerInfoForGameAccount(ILogger logger, string gameAccountId, object playerInfo);
     }
 }

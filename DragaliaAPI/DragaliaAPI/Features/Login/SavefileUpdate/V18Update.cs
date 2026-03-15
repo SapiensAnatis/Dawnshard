@@ -11,7 +11,7 @@ using JetBrains.Annotations;
 namespace DragaliaAPI.Features.Login.SavefileUpdate;
 
 [UsedImplicitly]
-public class V18Update(
+public partial class V18Update(
     IWallService wallService,
     IStoryRepository storyRepository,
     IMissionRepository missionRepository,
@@ -37,7 +37,7 @@ public class V18Update(
             )
         )
         {
-            this.logger.LogInformation("Player has not unlocked wall yet, skipping...");
+            Log.PlayerHasNotUnlockedWallYetSkipping(this.logger);
             return;
         }
 
@@ -48,11 +48,11 @@ public class V18Update(
             ) != null
         )
         {
-            this.logger.LogInformation("Player has already unlocked wall missions, skipping...");
+            Log.PlayerHasAlreadyUnlockedWallMissionsSkipping(this.logger);
             return;
         }
 
-        this.logger.LogInformation("Initializing wall missions");
+        Log.InitializingWallMissions(this.logger);
 
         await this.InitializePreCompletedWallMissions();
     }
@@ -122,5 +122,15 @@ public class V18Update(
         Debug.Assert(MasterAsset.MissionNormalData.ContainsKey(missionId));
 
         return missionId;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "Player has not unlocked wall yet, skipping...")]
+        public static partial void PlayerHasNotUnlockedWallYetSkipping(ILogger logger);
+        [LoggerMessage(LogLevel.Information, "Player has already unlocked wall missions, skipping...")]
+        public static partial void PlayerHasAlreadyUnlockedWallMissionsSkipping(ILogger logger);
+        [LoggerMessage(LogLevel.Information, "Initializing wall missions")]
+        public static partial void InitializingWallMissions(ILogger logger);
     }
 }

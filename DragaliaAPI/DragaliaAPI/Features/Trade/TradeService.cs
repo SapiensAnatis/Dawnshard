@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Features.Shop;
@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Trade;
 
-public class TradeService(
+public partial class TradeService(
     ITradeRepository tradeRepository,
     IRewardService rewardService,
     ILogger<TradeService> logger,
@@ -128,12 +128,7 @@ public class TradeService(
         IEnumerable<AtgenNeedUnitList>? needUnitList = null
     )
     {
-        logger.LogDebug(
-            "Processing {tradeQuantity}x {tradeId} of trade type {tradeType}",
-            count,
-            tradeId,
-            tradeType
-        );
+        Log.ProcessingXOfTradeType(logger, count, tradeId, tradeType);
 
         TreasureTrade trade = tradeType switch
         {
@@ -229,7 +224,7 @@ public class TradeService(
 
     public async Task DoAbilityCrestTrade(int id, int count)
     {
-        logger.LogDebug("Processing {tradeQuantity}x ability crest trade {tradeId}", count, id);
+        Log.ProcessingXAbilityCrestTrade(logger, count, id);
 
         if (count != 1)
             throw new DragaliaException(ResultCode.CommonDataValidationError, "Invalid count");
@@ -259,5 +254,13 @@ public class TradeService(
         );
 
         return result;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Processing {tradeQuantity}x {tradeId} of trade type {tradeType}")]
+        public static partial void ProcessingXOfTradeType(ILogger logger, int tradeQuantity, int tradeId, TradeType tradeType);
+        [LoggerMessage(LogLevel.Debug, "Processing {tradeQuantity}x ability crest trade {tradeId}")]
+        public static partial void ProcessingXAbilityCrestTrade(ILogger logger, int tradeQuantity, int tradeId);
     }
 }

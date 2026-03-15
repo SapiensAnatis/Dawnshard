@@ -15,7 +15,7 @@ namespace DragaliaAPI.Features.Login.SavefileUpdate;
 /// This updates rows where this mismatch occurs, but doesn't attempt to fix quantities.
 /// </remarks>
 [UsedImplicitly]
-public class V16Update(IEventRepository eventRepository, ILogger<V16Update> logger)
+public partial class V16Update(IEventRepository eventRepository, ILogger<V16Update> logger)
     : ISavefileUpdate
 {
     private static readonly FrozenDictionary<int, int> EventItemTypes;
@@ -40,15 +40,16 @@ public class V16Update(IEventRepository eventRepository, ILogger<V16Update> logg
 
             if (actualType != expectedType)
             {
-                logger.LogInformation(
-                    "Updating event item {item} type from {currentType} to {expectedType}",
-                    item.Id,
-                    item.Type,
-                    expectedType
-                );
+                Log.UpdatingEventItemTypeFromTo(logger, item.Id, item.Type, expectedType);
 
                 item.Type = expectedType;
             }
         }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "Updating event item {item} type from {currentType} to {expectedType}")]
+        public static partial void UpdatingEventItemTypeFromTo(ILogger logger, int item, int currentType, int expectedType);
     }
 }

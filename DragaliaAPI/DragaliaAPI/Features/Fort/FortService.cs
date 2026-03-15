@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
@@ -13,10 +13,11 @@ using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Fort;
 
-public class FortService(
+public partial class FortService(
     IFortRepository fortRepository,
     IUserDataRepository userDataRepository,
     IInventoryRepository inventoryRepository,
@@ -87,11 +88,7 @@ public class FortService(
         // Add carpenter
         await fortRepository.UpdateFortMaximumCarpenter(fortDetail.CarpenterNum + 1);
 
-        logger.LogDebug(
-            "Added carpenter using payment type {type}. New count: {count}",
-            paymentType,
-            fortDetail.CarpenterNum
-        );
+        Log.AddedCarpenterUsingPaymentTypeNewCount(logger, paymentType, fortDetail.CarpenterNum);
 
         return fortDetail;
     }
@@ -240,11 +237,7 @@ public class FortService(
         DbFortDetail dbDetail = await fortRepository.GetFortDetail();
         int activeCarpenters = await fortRepository.GetActiveCarpenters();
 
-        logger.LogDebug(
-            "Active carpenters: {n1}, max carpenters: {n2}",
-            activeCarpenters,
-            dbDetail.CarpenterNum
-        );
+        Log.ActiveCarpentersMaxCarpenters(logger, activeCarpenters, dbDetail.CarpenterNum);
 
         return new()
         {
@@ -256,7 +249,7 @@ public class FortService(
 
     public async Task BuildAtOnce(PaymentTypes paymentType, long buildId)
     {
-        logger.LogDebug("BuildAtOnce called for build {buildId}", buildId);
+        Log.BuildAtOnceCalledForBuild(logger, buildId);
 
         DbFortBuild build = await fortRepository.GetBuilding(buildId);
 
@@ -270,7 +263,7 @@ public class FortService(
 
     public async Task LevelupAtOnce(PaymentTypes paymentType, long buildId)
     {
-        logger.LogDebug("LevelupAtOnce called for build {buildId}", buildId);
+        Log.LevelupAtOnceCalledForBuild(logger, buildId);
 
         DbFortBuild build = await fortRepository.GetBuilding(buildId);
 
@@ -309,7 +302,7 @@ public class FortService(
 
     public async Task<DbFortBuild> CancelBuild(long buildId)
     {
-        logger.LogDebug("Build cancelled for build {buildId}", buildId);
+        Log.BuildCancelledForBuild(logger, buildId);
 
         DbFortBuild build = await fortRepository.GetBuilding(buildId);
 
@@ -323,7 +316,7 @@ public class FortService(
 
     public async Task<DbFortBuild> CancelLevelup(long buildId)
     {
-        logger.LogDebug("Levelup cancelled for build {buildId}", buildId);
+        Log.LevelupCancelledForBuild(logger, buildId);
 
         DbFortBuild build = await fortRepository.GetBuilding(buildId);
 
@@ -340,7 +333,7 @@ public class FortService(
     {
         DateTimeOffset current = dateTimeProvider.GetUtcNow();
 
-        logger.LogDebug("Build ended for build {buildId}", buildId);
+        Log.BuildEndedForBuild(logger, buildId);
 
         DbFortBuild build = await fortRepository.GetBuilding(buildId);
 
@@ -361,7 +354,7 @@ public class FortService(
 
     public async Task EndLevelup(long buildId)
     {
-        logger.LogDebug("Levelup ended for build {buildId}", buildId);
+        Log.LevelupEndedForBuild(logger, buildId);
 
         DbFortBuild build = await fortRepository.GetBuilding(buildId);
 
@@ -369,18 +362,14 @@ public class FortService(
 
         if (build.BuildStatus is not FortBuildStatus.LevelUp || time < build.BuildEndDate)
         {
-            logger.LogDebug(
-                "Building {@Build} has not finished levelling up. Current time: {Time}",
-                new
+            Log.BuildingHasNotFinishedLevellingUpCurrentTime(logger, new
                 {
                     build.BuildId,
                     build.PlantId,
                     build.Level,
                     build.BuildStartDate,
                     build.BuildEndDate,
-                },
-                time
-            );
+                }, time);
             throw new InvalidOperationException($"This building has not completed levelling up.");
         }
 
@@ -426,7 +415,7 @@ public class FortService(
 
     public async Task<DbFortBuild> LevelupStart(long buildId)
     {
-        logger.LogDebug("Levelup started for build {buildId}", buildId);
+        Log.LevelupStartedForBuild(logger, buildId);
 
         // Get building
         DbFortBuild build = await fortRepository.GetBuilding(buildId);
@@ -434,7 +423,7 @@ public class FortService(
         FortPlantDetail currentBuilding = MasterAsset.FortPlantDetail[build.FortPlantDetailId];
         if (currentBuilding.NextAssetGroup == 0)
         {
-            logger.LogError("Tried to level up build {@build} but it has no next level", build);
+            Log.TriedToLevelUpBuildButItHasNoNextLevel(logger, build);
             throw new DragaliaException(
                 ResultCode.FortPlantDetailNotFound,
                 "No next level available for building"
@@ -450,11 +439,7 @@ public class FortService(
         {
             // This is unlikely to happen, but best to keep the check just in case
 
-            logger.LogError(
-                "Failed to lookup build information for upgrade of build {@build} to level {level}!",
-                build,
-                build.Level + 1
-            );
+            Log.FailedToLookupBuildInformationForUpgradeOfBuildToLevel(logger, build, build.Level + 1);
 
             throw new DragaliaException(
                 ResultCode.FortPlantDetailNotFound,
@@ -475,23 +460,13 @@ public class FortService(
 
         if (build is { PositionX: -1, PositionZ: -1 })
         {
-            logger.LogDebug(
-                "Placed build {buildId} from storage at {x}/{z}",
-                buildId,
-                afterPositionX,
-                afterPositionZ
-            );
+            Log.PlacedBuildFromStorageAt(logger, buildId, afterPositionX, afterPositionZ);
 
             await fortMissionProgressionService.OnFortPlantPlace(build.PlantId);
         }
         else
         {
-            logger.LogDebug(
-                "Moved build {buildId} to {x}/{z}",
-                buildId,
-                afterPositionX,
-                afterPositionZ
-            );
+            Log.MovedBuildTo(logger, buildId, afterPositionX, afterPositionZ);
         }
 
         // Move building to requested coordinate
@@ -541,12 +516,9 @@ public class FortService(
                 })
                 .ToListAsync();
 
-            logger.LogDebug(
-                "Failed to perform upgrade {@PlantDetail} - carpenters busy",
-                plantDetail
-            );
-            logger.LogDebug("FortDetail: {@FortDetail}", fortDetail);
-            logger.LogDebug("Currently in progress builds: {@Builds}", builds);
+            Log.FailedToPerformUpgradeCarpentersBusy(logger, plantDetail);
+            Log.FortDetail(logger, fortDetail);
+            Log.CurrentlyInProgressBuilds(logger, builds);
 
             throw new DragaliaException(
                 ResultCode.FortBuildCarpenterBusy,
@@ -666,5 +638,43 @@ public class FortService(
         int smithyLevel = queryResult.FirstOrDefault(x => x.PlantId == FortPlants.Smithy).Level;
 
         return (halidomLevel, smithyLevel);
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Added carpenter using payment type {type}. New count: {count}")]
+        public static partial void AddedCarpenterUsingPaymentTypeNewCount(ILogger logger, PaymentTypes type, int count);
+        [LoggerMessage(LogLevel.Debug, "Active carpenters: {n1}, max carpenters: {n2}")]
+        public static partial void ActiveCarpentersMaxCarpenters(ILogger logger, int n1, int n2);
+        [LoggerMessage(LogLevel.Debug, "BuildAtOnce called for build {buildId}")]
+        public static partial void BuildAtOnceCalledForBuild(ILogger logger, long buildId);
+        [LoggerMessage(LogLevel.Debug, "LevelupAtOnce called for build {buildId}")]
+        public static partial void LevelupAtOnceCalledForBuild(ILogger logger, long buildId);
+        [LoggerMessage(LogLevel.Debug, "Build cancelled for build {buildId}")]
+        public static partial void BuildCancelledForBuild(ILogger logger, long buildId);
+        [LoggerMessage(LogLevel.Debug, "Levelup cancelled for build {buildId}")]
+        public static partial void LevelupCancelledForBuild(ILogger logger, long buildId);
+        [LoggerMessage(LogLevel.Debug, "Build ended for build {buildId}")]
+        public static partial void BuildEndedForBuild(ILogger logger, long buildId);
+        [LoggerMessage(LogLevel.Debug, "Levelup ended for build {buildId}")]
+        public static partial void LevelupEndedForBuild(ILogger logger, long buildId);
+        [LoggerMessage(LogLevel.Debug, "Building {@Build} has not finished levelling up. Current time: {Time}")]
+        public static partial void BuildingHasNotFinishedLevellingUpCurrentTime(ILogger logger, object build, DateTimeOffset time);
+        [LoggerMessage(LogLevel.Debug, "Levelup started for build {buildId}")]
+        public static partial void LevelupStartedForBuild(ILogger logger, long buildId);
+        [LoggerMessage(LogLevel.Error, "Tried to level up build {@build} but it has no next level")]
+        public static partial void TriedToLevelUpBuildButItHasNoNextLevel(ILogger logger, DbFortBuild build);
+        [LoggerMessage(LogLevel.Error, "Failed to lookup build information for upgrade of build {@build} to level {level}!")]
+        public static partial void FailedToLookupBuildInformationForUpgradeOfBuildToLevel(ILogger logger, DbFortBuild build, int level);
+        [LoggerMessage(LogLevel.Debug, "Placed build {buildId} from storage at {x}/{z}")]
+        public static partial void PlacedBuildFromStorageAt(ILogger logger, long buildId, int x, int z);
+        [LoggerMessage(LogLevel.Debug, "Moved build {buildId} to {x}/{z}")]
+        public static partial void MovedBuildTo(ILogger logger, long buildId, int x, int z);
+        [LoggerMessage(LogLevel.Debug, "Failed to perform upgrade {@PlantDetail} - carpenters busy")]
+        public static partial void FailedToPerformUpgradeCarpentersBusy(ILogger logger, FortPlantDetail plantDetail);
+        [LoggerMessage(LogLevel.Debug, "FortDetail: {@FortDetail}")]
+        public static partial void FortDetail(ILogger logger, FortDetail fortDetail);
+        [LoggerMessage(LogLevel.Debug, "Currently in progress builds: {@Builds}")]
+        public static partial void CurrentlyInProgressBuilds(ILogger logger, List builds);
     }
 }

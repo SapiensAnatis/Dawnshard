@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Models.Generated;
@@ -9,7 +9,7 @@ namespace DragaliaAPI.Features.Present;
 /// <summary>
 /// Present service to back <see cref="PresentController"/>.
 /// </summary>
-public class PresentControllerService(
+public partial class PresentControllerService(
     IRewardService rewardService,
     ApiContext apiContext,
     ILogger<PresentControllerService> logger
@@ -119,7 +119,7 @@ public class PresentControllerService(
                     break;
             }
 
-            logger.LogDebug("Claimed present {@present}", present);
+            Log.ClaimedPresent(logger, present);
 
             if (
                 grantResult
@@ -137,6 +137,12 @@ public class PresentControllerService(
     }
 
     public record ClaimPresentResult(List<long> Received, List<long> Converted, List<long> Removed);
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Claimed present {@present}")]
+        public static partial void ClaimedPresent(ILogger logger, DbPlayerPresent present);
+    }
 }
 
 file static class MappingExtensions

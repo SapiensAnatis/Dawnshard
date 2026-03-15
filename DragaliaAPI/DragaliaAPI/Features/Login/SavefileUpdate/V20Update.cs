@@ -4,6 +4,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.Presents;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Login.SavefileUpdate;
 
@@ -11,7 +12,7 @@ namespace DragaliaAPI.Features.Login.SavefileUpdate;
 /// Update to fix an issue where Harle and Origa were not correctly unlocked from the event compendium.
 /// </summary>
 [UsedImplicitly]
-public class V20Update(
+public partial class V20Update(
     ApiContext apiContext,
     IPresentService presentService,
     ILogger<V20Update> logger
@@ -37,12 +38,12 @@ public class V20Update(
             .Select(x => x.CharaId)
             .ToListAsync();
 
-        logger.LogDebug("Completed story IDs: {CompletedStoryIds}", completedStoryIds);
-        logger.LogDebug("Owned chara IDs: {OwnedCharaIds}", ownedCharaIds);
+        Log.CompletedStoryIDs(logger, completedStoryIds);
+        Log.OwnedCharaIDs(logger, ownedCharaIds);
 
         if (completedStoryIds.Contains(HarleStoryId) && !ownedCharaIds.Contains(Charas.Harle))
         {
-            logger.LogInformation("Detected Harle as missing. Adding present.");
+            Log.DetectedHarleAsMissingAddingPresent(logger);
 
             presentService.AddPresent(
                 new Present.Present(
@@ -55,7 +56,7 @@ public class V20Update(
 
         if (completedStoryIds.Contains(OrigaStoryId) && !ownedCharaIds.Contains(Charas.Origa))
         {
-            logger.LogInformation("Detected Origa as missing. Adding present.");
+            Log.DetectedOrigaAsMissingAddingPresent(logger);
 
             presentService.AddPresent(
                 new Present.Present(
@@ -65,5 +66,17 @@ public class V20Update(
                 )
             );
         }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Completed story IDs: {CompletedStoryIds}")]
+        public static partial void CompletedStoryIDs(ILogger logger, List<int> completedStoryIds);
+        [LoggerMessage(LogLevel.Debug, "Owned chara IDs: {OwnedCharaIds}")]
+        public static partial void OwnedCharaIDs(ILogger logger, List<Charas> ownedCharaIds);
+        [LoggerMessage(LogLevel.Information, "Detected Harle as missing. Adding present.")]
+        public static partial void DetectedHarleAsMissingAddingPresent(ILogger logger);
+        [LoggerMessage(LogLevel.Information, "Detected Origa as missing. Adding present.")]
+        public static partial void DetectedOrigaAsMissingAddingPresent(ILogger logger);
     }
 }

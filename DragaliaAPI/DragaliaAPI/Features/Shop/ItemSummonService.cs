@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Features.Shop;
 
-public class ItemSummonService : IItemSummonService
+public partial class ItemSummonService : IItemSummonService
 {
     private readonly ItemSummonConfig config;
     private readonly ILogger<ItemSummonService> logger;
@@ -108,8 +108,14 @@ public class ItemSummonService : IItemSummonService
 
         this.missionProgressionService.OnItemSummon();
 
-        this.logger.LogDebug("Item summon results: {@itemSummonResults}", (object)results);
+        Log.ItemSummonResults(this.logger, (object)results);
 
         return results;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Item summon results: {@itemSummonResults}")]
+        public static partial void ItemSummonResults(ILogger logger, object itemSummonResults);
     }
 }

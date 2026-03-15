@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Present;
@@ -10,7 +10,7 @@ using DragaliaAPI.Shared.MasterAsset.Models.User;
 
 namespace DragaliaAPI.Features.Player;
 
-public class UserService(
+public partial class UserService(
     IUserDataRepository userDataRepository,
     TimeProvider dateTimeProvider,
     IPresentService presentService,
@@ -46,7 +46,7 @@ public class UserService(
             throw new ArgumentOutOfRangeException(nameof(type));
         }
 
-        logger.LogDebug("Adding {staminaAmount}x {staminaType}", amount, type);
+        Log.AddingX(logger, amount, type);
 
         _ = await GetAndUpdateStamina(type);
 
@@ -85,7 +85,7 @@ public class UserService(
             throw new ArgumentOutOfRangeException(nameof(type));
         }
 
-        logger.LogDebug("Removing {staminaAmount}x {staminaType}", amount, type);
+        Log.RemovingX(logger, amount, type);
 
         int currentStamina = await GetAndUpdateStamina(type);
         if (amount > currentStamina)
@@ -97,7 +97,7 @@ public class UserService(
                 _ => throw new UnreachableException(),
             };
 
-            logger.LogError("Player did not have enough Stamina ({currentAmount})", currentStamina);
+            Log.PlayerDidNotHaveEnoughStamina(logger, currentStamina);
 
             throw new DragaliaException(code, "Not enough stamina");
         }
@@ -257,10 +257,22 @@ public class UserService(
                 }
             );
 
-            logger.LogDebug("Player leveled up to level {level}", data.Level);
+            Log.PlayerLeveledUpToLevel(logger, data.Level);
             current = next;
         }
 
         return new PlayerLevelResult(totalReward > 0, data.Level, expGained, totalReward);
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Adding {staminaAmount}x {staminaType}")]
+        public static partial void AddingX(ILogger logger, int staminaAmount, StaminaType staminaType);
+        [LoggerMessage(LogLevel.Debug, "Removing {staminaAmount}x {staminaType}")]
+        public static partial void RemovingX(ILogger logger, int staminaAmount, StaminaType staminaType);
+        [LoggerMessage(LogLevel.Error, "Player did not have enough Stamina ({currentAmount})")]
+        public static partial void PlayerDidNotHaveEnoughStamina(ILogger logger, int currentAmount);
+        [LoggerMessage(LogLevel.Debug, "Player leveled up to level {level}")]
+        public static partial void PlayerLeveledUpToLevel(ILogger logger, int level);
     }
 }

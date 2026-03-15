@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Shared.Reward;
@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Shop;
 
-public class ShopService(
+public partial class ShopService(
     IShopRepository shopRepository,
     IPaymentService paymentService,
     IRewardService rewardService,
@@ -27,16 +27,13 @@ public class ShopService(
         int goodsQuantity
     )
     {
-        logger.LogDebug(
-            "Processing purchase {@purchase}",
-            new
+        Log.ProcessingPurchase(logger, new
             {
                 Type = shopType,
                 Payment = paymentType,
                 Id = goodsId,
                 Quantity = goodsQuantity,
-            }
-        );
+            });
 
         IShop shop = Shop.From(shopType, goodsId);
 
@@ -190,5 +187,11 @@ public class ShopService(
             ),
             _ => throw new DragaliaException(ResultCode.CommonInvalidArgument, "Invalid ShopType"),
         };
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Processing purchase {@purchase}")]
+        public static partial void ProcessingPurchase(ILogger logger, object purchase);
     }
 }

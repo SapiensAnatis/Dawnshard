@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Owned;
 using DragaliaAPI.Database.Entities.Scaffold;
@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Friends;
 
-internal sealed class HelperService(
+internal sealed partial class HelperService(
     IPartyRepository partyRepository,
     IDungeonRepository dungeonRepository,
     IUserDataRepository userDataRepository,
@@ -39,7 +39,7 @@ internal sealed class HelperService(
         CancellationToken cancellationToken
     )
     {
-        logger.LogDebug("Looking up UserSupportList for ID: {ViewerId}", viewerId);
+        Log.LookingUpUserSupportListForID(logger, viewerId);
 
         IHelperDataService dataService = await this.GetDataService(cancellationToken);
 
@@ -51,7 +51,7 @@ internal sealed class HelperService(
         CancellationToken cancellationToken
     )
     {
-        logger.LogDebug("Looking up AtgenSupportUserDataDetail for ID: {ViewerId}", viewerId);
+        Log.LookingUpAtgenSupportUserDataDetailForID(logger, viewerId);
 
         IHelperDataService dataService = await this.GetDataService(cancellationToken);
 
@@ -223,5 +223,13 @@ internal sealed class HelperService(
     {
         PlayerSettings settings = await settingsService.GetSettings(cancellationToken);
         return settings.UseLegacyHelpers ? staticDataService : realDataService;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Looking up UserSupportList for ID: {ViewerId}")]
+        public static partial void LookingUpUserSupportListForID(ILogger logger, long viewerId);
+        [LoggerMessage(LogLevel.Debug, "Looking up AtgenSupportUserDataDetail for ID: {ViewerId}")]
+        public static partial void LookingUpAtgenSupportUserDataDetailForID(ILogger logger, long viewerId);
     }
 }

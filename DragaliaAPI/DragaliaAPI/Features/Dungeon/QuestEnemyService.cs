@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -10,7 +10,7 @@ using FluentRandomPicker.FluentInterfaces.General;
 
 namespace DragaliaAPI.Features.Dungeon;
 
-public class QuestEnemyService : IQuestEnemyService
+public partial class QuestEnemyService : IQuestEnemyService
 {
     private readonly EventDropService eventDropService;
     private readonly ILogger<QuestEnemyService> logger;
@@ -30,7 +30,7 @@ public class QuestEnemyService : IQuestEnemyService
             || !MasterAsset.QuestData.TryGetValue(questId, out QuestData? questData)
         )
         {
-            this.logger.LogWarning("Failed to get drop data for quest id {questId}", questId);
+            Log.FailedToGetDropDataForQuestId(this.logger, questId);
             return enemyList;
         }
 
@@ -170,11 +170,7 @@ public class QuestEnemyService : IQuestEnemyService
         QuestData questData = MasterAsset.QuestData[questId];
         if (!questData.AreaInfo.TryGetElementAt(areaNum, out AreaInfo? areaInfo))
         {
-            this.logger.LogWarning(
-                "Failed to get area number {no} from quest {quest}",
-                areaNum,
-                questId
-            );
+            Log.FailedToGetAreaNumberFromQuest(this.logger, areaNum, questId);
             return [];
         }
 
@@ -182,20 +178,13 @@ public class QuestEnemyService : IQuestEnemyService
 
         if (!MasterAsset.QuestEnemies.TryGetValue(assetName, out QuestEnemies? enemies))
         {
-            this.logger.LogWarning(
-                "Unable to retrieve enemy list for quest {quest} with area {area}",
-                questId,
-                assetName
-            );
+            Log.UnableToRetrieveEnemyListForQuestWithArea(this.logger, questId, assetName);
             return [];
         }
 
         if (!enemies.Enemies.TryGetValue(questData.VariationType, out IEnumerable<int>? enemyList))
         {
-            this.logger.LogWarning(
-                "Unable to retrieve enemy list for variation type {type}",
-                questData.VariationType
-            );
+            Log.UnableToRetrieveEnemyListForVariationType(this.logger, questData.VariationType);
             return [];
         }
 
@@ -264,5 +253,17 @@ public class QuestEnemyService : IQuestEnemyService
         {
             yield return enemy;
         }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Warning, "Failed to get drop data for quest id {questId}")]
+        public static partial void FailedToGetDropDataForQuestId(ILogger logger, int questId);
+        [LoggerMessage(LogLevel.Warning, "Failed to get area number {no} from quest {quest}")]
+        public static partial void FailedToGetAreaNumberFromQuest(ILogger logger, int no, int quest);
+        [LoggerMessage(LogLevel.Warning, "Unable to retrieve enemy list for quest {quest} with area {area}")]
+        public static partial void UnableToRetrieveEnemyListForQuestWithArea(ILogger logger, int quest, string area);
+        [LoggerMessage(LogLevel.Warning, "Unable to retrieve enemy list for variation type {type}")]
+        public static partial void UnableToRetrieveEnemyListForVariationType(ILogger logger, VariationTypes type);
     }
 }

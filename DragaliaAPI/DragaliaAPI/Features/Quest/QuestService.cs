@@ -13,7 +13,7 @@ using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 
 namespace DragaliaAPI.Features.Quest;
 
-public class QuestService(
+public partial class QuestService(
     ILogger<QuestService> logger,
     IQuestRepository questRepository,
     TimeProvider timeProvider,
@@ -45,7 +45,7 @@ public class QuestService(
 
         if (timeProvider.GetLastDailyReset() > quest.LastDailyResetTime)
         {
-            logger.LogTrace("Resetting daily play count for quest {questId}", questId);
+            Log.ResettingDailyPlayCountForQuest(logger, questId);
 
             quest.DailyPlayCount = 0;
             quest.LastDailyResetTime = timeProvider.GetUtcNow();
@@ -55,7 +55,7 @@ public class QuestService(
 
         if (timeProvider.GetLastWeeklyReset() > quest.LastWeeklyResetTime)
         {
-            logger.LogTrace("Resetting weekly play count for quest {questId}", questId);
+            Log.ResettingWeeklyPlayCountForQuest(logger, questId);
 
             quest.WeeklyPlayCount = 0;
             quest.LastWeeklyResetTime = timeProvider.GetUtcNow();
@@ -106,10 +106,7 @@ public class QuestService(
 
         if (questData.GroupType == QuestGroupType.MainStory && questEntity.State < 3)
         {
-            logger.LogDebug(
-                "Attempting first clear of main story quest {questId}: 0 stamina required",
-                questId
-            );
+            Log.AttemptingFirstClearOfMainStoryQuest0StaminaRequired(logger, questId);
 
             return 0;
         }
@@ -130,7 +127,7 @@ public class QuestService(
         int playCount
     )
     {
-        logger.LogTrace("Completing quest for quest group {eventGroupId}", eventGroupId);
+        Log.CompletingQuestForQuestGroup(logger, eventGroupId);
 
         DbQuestEvent questEvent = await questRepository.GetQuestEventAsync(eventGroupId);
         QuestEvent questEventData = MasterAsset.QuestEvent[eventGroupId];
@@ -208,7 +205,7 @@ public class QuestService(
             )
         )
         {
-            logger.LogWarning("Failed to retrieve bonus rewards for quest {questId}", questId);
+            Log.FailedToRetrieveBonusRewardsForQuest(logger, questId);
             return drops;
         }
 
@@ -237,7 +234,7 @@ public class QuestService(
 
         if (!isReceive || questId == null)
         {
-            logger.LogInformation("Cancelling receipt of quest bonus");
+            Log.CancellingReceiptOfQuestBonus(logger);
 
             questEvent.QuestBonusReserveCount = 0;
             questEvent.QuestBonusReserveTime = DateTimeOffset.UnixEpoch;
@@ -356,7 +353,7 @@ public class QuestService(
 
         if (!MasterAsset.QuestData.ContainsKey(exQuestId))
         {
-            logger.LogDebug("EX battle quest ID {ExQuestId} was not a valid quest", exQuestId);
+            Log.EXBattleQuestIDWasNotAValidQuest(logger, exQuestId);
             return;
         }
 
@@ -366,9 +363,29 @@ public class QuestService(
         if (!exBattleUnlocked)
             return;
 
-        logger.LogInformation("Unlocking EX battle {ExQuestId}", exQuestId);
+        Log.UnlockingEXBattle(logger, exQuestId);
 
         DbQuest exQuest = await questRepository.GetQuestDataAsync(exQuestId);
         exQuest.IsAppear = true;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Trace, "Resetting daily play count for quest {questId}")]
+        public static partial void ResettingDailyPlayCountForQuest(ILogger logger, int questId);
+        [LoggerMessage(LogLevel.Trace, "Resetting weekly play count for quest {questId}")]
+        public static partial void ResettingWeeklyPlayCountForQuest(ILogger logger, int questId);
+        [LoggerMessage(LogLevel.Debug, "Attempting first clear of main story quest {questId}: 0 stamina required")]
+        public static partial void AttemptingFirstClearOfMainStoryQuest0StaminaRequired(ILogger logger, int questId);
+        [LoggerMessage(LogLevel.Trace, "Completing quest for quest group {eventGroupId}")]
+        public static partial void CompletingQuestForQuestGroup(ILogger logger, int eventGroupId);
+        [LoggerMessage(LogLevel.Warning, "Failed to retrieve bonus rewards for quest {questId}")]
+        public static partial void FailedToRetrieveBonusRewardsForQuest(ILogger logger, int questId);
+        [LoggerMessage(LogLevel.Information, "Cancelling receipt of quest bonus")]
+        public static partial void CancellingReceiptOfQuestBonus(ILogger logger);
+        [LoggerMessage(LogLevel.Debug, "EX battle quest ID {ExQuestId} was not a valid quest")]
+        public static partial void EXBattleQuestIDWasNotAValidQuest(ILogger logger, int exQuestId);
+        [LoggerMessage(LogLevel.Information, "Unlocking EX battle {ExQuestId}")]
+        public static partial void UnlockingEXBattle(ILogger logger, int exQuestId);
     }
 }

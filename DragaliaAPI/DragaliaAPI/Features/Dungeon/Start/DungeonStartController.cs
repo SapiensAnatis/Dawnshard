@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Features.CoOp;
+using DragaliaAPI.Features.CoOp;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Features.TimeAttack;
@@ -11,7 +11,7 @@ namespace DragaliaAPI.Features.Dungeon.Start;
 
 [ApiController]
 [Route("dungeon_start")]
-public class DungeonStartController(
+public partial class DungeonStartController(
     IDungeonStartService dungeonStartService,
     IDungeonService dungeonService,
     IOddsInfoService oddsInfoService,
@@ -29,11 +29,7 @@ public class DungeonStartController(
         CancellationToken cancellationToken
     )
     {
-        logger.LogDebug(
-            "Attempting to start quest {QuestId} with helper {SupportViewerId}",
-            request.QuestId,
-            request.SupportViewerId
-        );
+        Log.AttemptingToStartQuestWithHelper(logger, request.QuestId, request.SupportViewerId);
 
         if (!await dungeonStartService.ValidateStamina(request.QuestId, StaminaType.Single))
         {
@@ -196,7 +192,7 @@ public class DungeonStartController(
         CancellationToken cancellationToken
     )
     {
-        logger.LogDebug("Starting dungeon for quest id {questId}", questId);
+        Log.StartingDungeonForQuestId(logger, questId);
 
         IngameQuestData ingameQuestData = await dungeonStartService.UpdateDbQuest(questId);
         UpdateDataList updateData = await updateDataService.SaveChangesAsync(cancellationToken);
@@ -223,5 +219,13 @@ public class DungeonStartController(
             OddsInfo = oddsInfo,
             UpdateDataList = updateData,
         };
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Attempting to start quest {QuestId} with helper {SupportViewerId}")]
+        public static partial void AttemptingToStartQuestWithHelper(ILogger logger, int questId, ulong supportViewerId);
+        [LoggerMessage(LogLevel.Debug, "Starting dungeon for quest id {questId}")]
+        public static partial void StartingDungeonForQuestId(ILogger logger, int questId);
     }
 }

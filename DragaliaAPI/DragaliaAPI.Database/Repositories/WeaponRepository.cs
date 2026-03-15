@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -10,7 +10,7 @@ using WeaponBodiesEnum = DragaliaAPI.Shared.Definitions.Enums.WeaponBodies;
 
 namespace DragaliaAPI.Database.Repositories;
 
-public class WeaponRepository : IWeaponRepository
+public partial class WeaponRepository : IWeaponRepository
 {
     private readonly ApiContext apiContext;
     private readonly IPlayerIdentityService playerIdentityService;
@@ -67,7 +67,7 @@ public class WeaponRepository : IWeaponRepository
 
     public async Task Add(WeaponBodies weaponBodyId)
     {
-        this.logger.LogDebug("Adding weapon {weapon}", weaponBodyId);
+        Log.AddingWeapon(this.logger, weaponBodyId);
 
         await this.apiContext.PlayerWeapons.AddAsync(
             new DbWeaponBody()
@@ -80,7 +80,7 @@ public class WeaponRepository : IWeaponRepository
 
     public async Task AddSkin(int weaponSkinId)
     {
-        this.logger.LogDebug("Adding weapon skin {skin}", weaponSkinId);
+        Log.AddingWeaponSkin(this.logger, weaponSkinId);
 
         if (
             await this.apiContext.PlayerWeaponSkins.FindAsync(
@@ -90,7 +90,7 @@ public class WeaponRepository : IWeaponRepository
             is not null
         )
         {
-            this.logger.LogDebug("Weapon skin was already owned.");
+            Log.WeaponSkinWasAlreadyOwned(this.logger);
             return;
         }
 
@@ -121,7 +121,7 @@ public class WeaponRepository : IWeaponRepository
 
     public async Task AddPassiveAbility(WeaponBodies id, WeaponPassiveAbility passiveAbility)
     {
-        this.logger.LogDebug("Unlocking passive ability {@ability}", passiveAbility);
+        Log.UnlockingPassiveAbility(this.logger, passiveAbility);
 
         DbWeaponBody? entity = await this.FindAsync(id);
         ArgumentNullException.ThrowIfNull(entity);
@@ -134,7 +134,7 @@ public class WeaponRepository : IWeaponRepository
             )
         )
         {
-            this.logger.LogDebug("Passive was already owned.");
+            Log.PassiveWasAlreadyOwned(this.logger);
             return;
         }
 
@@ -145,5 +145,19 @@ public class WeaponRepository : IWeaponRepository
                 WeaponPassiveAbilityId = passiveAbility.Id,
             }
         );
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Adding weapon {weapon}")]
+        public static partial void AddingWeapon(ILogger logger, WeaponBodies weapon);
+        [LoggerMessage(LogLevel.Debug, "Adding weapon skin {skin}")]
+        public static partial void AddingWeaponSkin(ILogger logger, int skin);
+        [LoggerMessage(LogLevel.Debug, "Weapon skin was already owned.")]
+        public static partial void WeaponSkinWasAlreadyOwned(ILogger logger);
+        [LoggerMessage(LogLevel.Debug, "Unlocking passive ability {@ability}")]
+        public static partial void UnlockingPassiveAbility(ILogger logger, WeaponPassiveAbility ability);
+        [LoggerMessage(LogLevel.Debug, "Passive was already owned.")]
+        public static partial void PassiveWasAlreadyOwned(ILogger logger);
     }
 }

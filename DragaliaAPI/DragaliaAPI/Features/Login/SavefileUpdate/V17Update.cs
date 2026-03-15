@@ -11,7 +11,7 @@ namespace DragaliaAPI.Features.Login.SavefileUpdate;
 /// Fixes dragons that have no dragon reliability entry.
 /// </summary>
 [UsedImplicitly]
-public class V17Update(
+public partial class V17Update(
     ApiContext apiContext,
     IPlayerIdentityService playerIdentityService,
     ILogger<V17Update> logger
@@ -41,10 +41,7 @@ public class V17Update(
 
         await foreach (DragonId missingReliability in missingReliabilities)
         {
-            this.logger.LogDebug(
-                "Adding reliability entry for {missingReliability}",
-                missingReliability
-            );
+            Log.AddingReliabilityEntryFor(this.logger, missingReliability);
 
             this.apiContext.PlayerDragonReliability.Add(
                 new DbPlayerDragonReliability(
@@ -53,5 +50,11 @@ public class V17Update(
                 )
             );
         }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Adding reliability entry for {missingReliability}")]
+        public static partial void AddingReliabilityEntryFor(ILogger logger, DragonId missingReliability);
     }
 }

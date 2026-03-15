@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Login.SavefileUpdate;
 
-public class V14Update(
+public partial class V14Update(
     IStoryRepository storyRepository,
     IEmblemRepository emblemRepository,
     ApiContext apiContext,
@@ -51,9 +51,15 @@ public class V14Update(
             if (apiContext.ChangeTracker.Entries<DbEmblem>().Any(x => x.Entity.EmblemId == emblem))
                 continue;
 
-            logger.LogDebug("Granting emblem {emblem}", emblem);
+            Log.GrantingEmblem(logger, emblem);
 
             emblemRepository.AddEmblem(emblem);
         }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Granting emblem {emblem}")]
+        public static partial void GrantingEmblem(ILogger logger, Emblems emblem);
     }
 }

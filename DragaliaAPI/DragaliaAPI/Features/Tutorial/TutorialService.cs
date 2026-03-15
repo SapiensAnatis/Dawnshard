@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.AbilityCrests;
@@ -6,10 +6,11 @@ using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Tutorial;
 
-public class TutorialService : ITutorialService
+public partial class TutorialService : ITutorialService
 {
     private readonly ILogger<TutorialService> logger;
     private readonly IInventoryRepository inventoryRepository;
@@ -44,7 +45,7 @@ public class TutorialService : ITutorialService
 
         if (newStatus > userData.TutorialStatus)
         {
-            this.logger.LogDebug("New tutorial status: {status}", newStatus);
+            Log.NewTutorialStatus(this.logger, newStatus);
             userData.TutorialStatus = newStatus;
             await this.OnTutorialStatusChange(newStatus);
         }
@@ -59,7 +60,7 @@ public class TutorialService : ITutorialService
         if (flags.Add(flag))
         {
             userData.TutorialFlag = TutorialFlagUtil.ConvertFlagIntListToInt(flags);
-            this.logger.LogDebug("Added tutorial flag: {flag} ({@flags})", flag, flags);
+            Log.AddedTutorialFlag(this.logger, flag, flags);
             await this.OnTutorialFlagAdded(flag);
         }
 
@@ -137,7 +138,7 @@ public class TutorialService : ITutorialService
         await this.inventoryRepository.UpdateQuantity(Materials.HolyWater, 10);
         if (await this.abilityCrestRepository.FindAsync(AbilityCrestId.ManaFount) == null)
             await this.abilityCrestRepository.Add(AbilityCrestId.ManaFount);
-        this.logger.LogDebug("Added materials for the wyrmprint tutorial");
+        Log.AddedMaterialsForTheWyrmprintTutorial(this.logger);
     }
 
     public static class TutorialStoryIds
@@ -170,5 +171,15 @@ public class TutorialService : ITutorialService
     internal static class TutorialFlagIds
     {
         public const int DragonUpgrading = 1001;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "New tutorial status: {status}")]
+        public static partial void NewTutorialStatus(ILogger logger, int status);
+        [LoggerMessage(LogLevel.Debug, "Added tutorial flag: {flag} ({@flags})")]
+        public static partial void AddedTutorialFlag(ILogger logger, int flag, ISet<int> flags);
+        [LoggerMessage(LogLevel.Debug, "Added materials for the wyrmprint tutorial")]
+        public static partial void AddedMaterialsForTheWyrmprintTutorial(ILogger logger);
     }
 }

@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Infrastructure;
@@ -10,10 +10,11 @@ using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Dungeon;
 
-public class QuestCompletionService(
+public partial class QuestCompletionService(
     IRewardService rewardService,
     IMissionProgressionService missionProgressionService,
     ILogger<QuestCompletionService> logger,
@@ -87,7 +88,7 @@ public class QuestCompletionService(
             session.QuestGid
         );
 
-        logger.LogDebug("Calculated enemy scoring {points}", totalPoints);
+        Log.CalculatedEnemyScoring(logger, totalPoints);
 
         return (results.Values, totalPoints);
     }
@@ -140,7 +141,7 @@ public class QuestCompletionService(
             );
         }
 
-        logger.LogDebug("Completed mission score missions {@missions}", missions);
+        Log.CompletedMissionScoreMissions(logger, missions);
 
         int questScoreMissionId = MasterAsset.QuestRewardData[questId].QuestScoreMissionId;
         int baseQuantity = MasterAsset
@@ -164,10 +165,7 @@ public class QuestCompletionService(
         {
             boostPoints = (int)Math.Floor(rewardQuantity * (abilityMultiplier - 1));
 
-            logger.LogDebug(
-                "Rewarding {boostPointQuantity} extra points due to abilities",
-                boostPoints
-            );
+            Log.RewardingExtraPointsDueToAbilities(logger, boostPoints);
 
             await rewardService.GrantReward(
                 new Entity(eventType.ToItemType(), (int)info.RewardEntityId, boostPoints)
@@ -197,7 +195,7 @@ public class QuestCompletionService(
                 newState[i] = true;
                 (EntityTypes entity, int id, int quantity) = rewardData.Entities[i];
                 await rewardService.GrantReward(new Entity(entity, id, quantity));
-                logger.LogDebug("Completed quest mission {missionId}", i);
+                Log.CompletedQuestMission(logger, i);
                 clearSet.Add(new AtgenMissionsClearSet(id, entity, quantity, i + 1));
             }
         }
@@ -213,7 +211,7 @@ public class QuestCompletionService(
                     rewardData.MissionCompleteEntityQuantity
                 )
             );
-            logger.LogDebug("Granting bonus for completing all missions");
+            Log.GrantingBonusForCompletingAllMissions(logger);
             completeSet.Add(
                 new AtgenFirstClearSet(
                     rewardData.MissionCompleteEntityId,
@@ -391,4 +389,18 @@ public class QuestCompletionService(
     }
 
     private static bool IsEarnTicketQuest(int questId) => questId % 1000 > 400;
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Calculated enemy scoring {points}")]
+        public static partial void CalculatedEnemyScoring(ILogger logger, int points);
+        [LoggerMessage(LogLevel.Debug, "Completed mission score missions {@missions}")]
+        public static partial void CompletedMissionScoreMissions(ILogger logger, List<AtgenScoreMissionSuccessList> missions);
+        [LoggerMessage(LogLevel.Debug, "Rewarding {boostPointQuantity} extra points due to abilities")]
+        public static partial void RewardingExtraPointsDueToAbilities(ILogger logger, int boostPointQuantity);
+        [LoggerMessage(LogLevel.Debug, "Completed quest mission {missionId}")]
+        public static partial void CompletedQuestMission(ILogger logger, int missionId);
+        [LoggerMessage(LogLevel.Debug, "Granting bonus for completing all missions")]
+        public static partial void GrantingBonusForCompletingAllMissions(ILogger logger);
+    }
 }

@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Shared.Reward;
@@ -14,7 +14,7 @@ using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Features.TimeAttack;
 
-public class TimeAttackService(
+public partial class TimeAttackService(
     ITimeAttackCacheService timeAttackCacheService,
     ITimeAttackRepository timeAttackRepository,
     IOptionsMonitor<TimeAttackOptions> options,
@@ -45,7 +45,7 @@ public class TimeAttackService(
 
         if (!result.IsValid)
         {
-            logger.LogInformation("Time attack validation failed: {@result}", result);
+            Log.TimeAttackValidationFailed(logger, result);
             return false;
         }
 
@@ -58,7 +58,7 @@ public class TimeAttackService(
     {
         if (await timeAttackCacheService.Get() is not { } entry)
         {
-            logger.LogWarning("Unable to retrieve cache entry for time attack clear");
+            Log.UnableToRetrieveCacheEntryForTimeAttackClear(logger);
             return;
         }
 
@@ -85,11 +85,7 @@ public class TimeAttackService(
             }
         );
 
-        logger.LogDebug(
-            "Registered time attack clear for room {room} and quest {questId}",
-            gameId,
-            entry.QuestId
-        );
+        Log.RegisteredTimeAttackClearForRoomAndQuest(logger, gameId, entry.QuestId);
     }
 
     public async Task<IEnumerable<RankingTierReward>> ReceiveTierReward(int questId)
@@ -99,7 +95,7 @@ public class TimeAttackService(
             .Select(x => x.BestClearTime)
             .FirstOrDefaultAsync();
 
-        logger.LogDebug("Found clear time of {time} s for quest {quest}", bestClearTime, questId);
+        Log.FoundClearTimeOfSForQuest(logger, bestClearTime, questId);
 
         if (bestClearTime <= 0)
             return Enumerable.Empty<RankingTierReward>();
@@ -182,5 +178,17 @@ public class TimeAttackService(
         unit.EquipCrestSlotType3CrestId2 = crests.ElementAtOrDefault(6);
 
         return unit;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "Time attack validation failed: {@result}")]
+        public static partial void TimeAttackValidationFailed(ILogger logger, ValidationResult result);
+        [LoggerMessage(LogLevel.Warning, "Unable to retrieve cache entry for time attack clear")]
+        public static partial void UnableToRetrieveCacheEntryForTimeAttackClear(ILogger logger);
+        [LoggerMessage(LogLevel.Debug, "Registered time attack clear for room {room} and quest {questId}")]
+        public static partial void RegisteredTimeAttackClearForRoomAndQuest(ILogger logger, string room, int questId);
+        [LoggerMessage(LogLevel.Debug, "Found clear time of {time} s for quest {quest}")]
+        public static partial void FoundClearTimeOfSForQuest(ILogger logger, float time, int quest);
     }
 }

@@ -1,12 +1,13 @@
-﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Logging;
 using MaterialsEnum = DragaliaAPI.Shared.Definitions.Enums.Materials;
+using System.Collections.Generic;
 
 namespace DragaliaAPI.Database.Repositories;
 
-public class InventoryRepository : IInventoryRepository
+public partial class InventoryRepository : IInventoryRepository
 {
     private readonly ApiContext apiContext;
     private readonly IPlayerIdentityService playerIdentityService;
@@ -82,11 +83,7 @@ public class InventoryRepository : IInventoryRepository
             await this.UpdateQuantity(m, quantity);
         }
 
-        this.logger.LogTrace(
-            "Updated list of materials by quantity {quantity}: {list}",
-            quantity,
-            list
-        );
+        Log.UpdatedListOfMaterialsByQuantity(this.logger, quantity, list);
     }
 
     public async Task UpdateQuantity(IEnumerable<KeyValuePair<Materials, int>> quantityMap)
@@ -96,7 +93,7 @@ public class InventoryRepository : IInventoryRepository
             await this.UpdateQuantity(mat, quantity);
         }
 
-        this.logger.LogTrace("Updated player materials by map {@map}", quantityMap);
+        Log.UpdatedPlayerMaterialsByMap(this.logger, quantityMap);
     }
 
     public async Task<DbPlayerMaterial?> GetMaterial(Materials materialId)
@@ -121,17 +118,22 @@ public class InventoryRepository : IInventoryRepository
 
             if (mat?.Quantity < requested.Value)
             {
-                this.logger.LogWarning(
-                    "Failed material {material} check: requested quantity {q1}, entity: {@mat}",
-                    requested.Key,
-                    requested.Value,
-                    mat
-                );
+                Log.FailedMaterialCheckRequestedQuantityEntity(this.logger, requested.Key, requested.Value, mat);
 
                 return false;
             }
         }
 
         return true;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Trace, "Updated list of materials by quantity {quantity}: {list}")]
+        public static partial void UpdatedListOfMaterialsByQuantity(ILogger logger, int quantity, IEnumerable<Materials> list);
+        [LoggerMessage(LogLevel.Trace, "Updated player materials by map {@map}")]
+        public static partial void UpdatedPlayerMaterialsByMap(ILogger logger, IEnumerable<KeyValuePair<Materials, int>> map);
+        [LoggerMessage(LogLevel.Warning, "Failed material {material} check: requested quantity {q1}, entity: {@mat}")]
+        public static partial void FailedMaterialCheckRequestedQuantityEntity(ILogger logger, Materials material, int q1, DbPlayerMaterial mat);
     }
 }

@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Missions;
@@ -9,7 +9,7 @@ using DragaliaAPI.Shared.MasterAsset.Models;
 
 namespace DragaliaAPI.Features.Chara;
 
-public class CharaService(
+public partial class CharaService(
     IUnitRepository unitRepository,
     ILogger<CharaService> logger,
     IMissionProgressionService missionProgressionService
@@ -21,7 +21,7 @@ public class CharaService(
             await unitRepository.FindCharaAsync(chara)
             ?? throw new DragaliaException(ResultCode.CommonDbError, "Unowned chara");
 
-        logger.LogDebug("Leveling up chara {@chara}", playerCharaData);
+        Log.LevelingUpChara(logger, playerCharaData);
 
         //TODO: For now we'll trust the client to not allow leveling up/enhancing beyond allowed limits
         byte maxLevel = (byte)(
@@ -133,6 +133,14 @@ public class CharaService(
             playerCharaData.AttackPlusCount = newAtkPlusCount;
         }
 
-        logger.LogDebug("New char data: {@chara}", playerCharaData);
+        Log.NewCharData(logger, playerCharaData);
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Leveling up chara {@chara}")]
+        public static partial void LevelingUpChara(ILogger logger, DbPlayerCharaData chara);
+        [LoggerMessage(LogLevel.Debug, "New char data: {@chara}")]
+        public static partial void NewCharData(ILogger logger, DbPlayerCharaData chara);
     }
 }

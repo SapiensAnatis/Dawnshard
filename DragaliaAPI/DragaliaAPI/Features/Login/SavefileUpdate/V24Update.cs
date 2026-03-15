@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Login.SavefileUpdate;
 
-public class V24Update(
+public partial class V24Update(
     ApiContext apiContext,
     IPlayerIdentityService playerIdentityService,
     ILogger<V24Update> logger
@@ -17,10 +17,16 @@ public class V24Update(
     {
         if (!await apiContext.PlayerHelpers.AnyAsync())
         {
-            logger.LogInformation("PlayerHelper not found: adding new row");
+            Log.PlayerHelperNotFoundAddingNewRow(logger);
             apiContext.PlayerHelpers.Add(
                 new() { ViewerId = playerIdentityService.ViewerId, CharaId = Charas.ThePrince }
             );
         }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "PlayerHelper not found: adding new row")]
+        public static partial void PlayerHelperNotFoundAddingNewRow(ILogger logger);
     }
 }

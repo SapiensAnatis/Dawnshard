@@ -10,10 +10,11 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace DragaliaAPI.Features.Shop;
 
-public class PaymentService(
+public partial class PaymentService(
     ILogger<PaymentService> logger,
     IUserDataRepository userDataRepository,
     IInventoryRepository inventoryRepository,
@@ -38,11 +39,7 @@ public class PaymentService(
         if (entity.Quantity == 0) // For free stuff, if needed.
             return;
 
-        logger.LogDebug(
-            "Processing {paymentType} payment {@payment}.",
-            entity.Type,
-            hasPaymentTarget ? payment : entity
-        );
+        Log.ProcessingPayment(logger, entity.Type, hasPaymentTarget ? payment : entity);
 
         if (hasPaymentTarget && entity.Quantity != payment!.TargetCost)
             throw new DragaliaException(ResultCode.CommonUserStatusError, "Price mismatch.");
@@ -149,7 +146,7 @@ public class PaymentService(
 
                 break;
             default:
-                logger.LogWarning("Unknown/invalid entity type for payment.");
+                Log.UnknownInvalidEntityTypeForPayment(logger);
                 throw new DragaliaException(
                     ResultCode.ShopPaymentTypeInvalid,
                     "Invalid payment type."
@@ -158,18 +155,14 @@ public class PaymentService(
 
         if (quantity == null)
         {
-            logger.LogError("Player does not own any of the entity.");
+            Log.PlayerDoesNotOwnAnyOfTheEntity(logger);
 
             throw new DragaliaException(ResultCode.CommonMaterialShort, "No entity owned.");
         }
 
         if (hasPaymentTarget && quantity != payment!.TargetHoldQuantity)
         {
-            logger.LogError(
-                "Held quantity {quantity} does not match target of payment {@payment}",
-                quantity,
-                payment
-            );
+            Log.HeldQuantityDoesNotMatchTargetOfPayment(logger, quantity, payment);
 
             throw new DragaliaException(
                 ResultCode.CommonUserStatusError,
@@ -179,11 +172,7 @@ public class PaymentService(
 
         if (quantity < price)
         {
-            logger.LogError(
-                "Held quantity {quantity} does not meet price {price}",
-                quantity,
-                price
-            );
+            Log.HeldQuantityDoesNotMeetPrice(logger, quantity, price);
 
             throw new DragaliaException(
                 ResultCode.CommonMaterialShort,
@@ -234,5 +223,19 @@ public class PaymentService(
     public DeleteDataList GetDeleteDataList()
     {
         return new DeleteDataList(dragonList, talismanList, weaponList, amuletList);
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Processing {paymentType} payment {@payment}.")]
+        public static partial void ProcessingPayment(ILogger logger, EntityTypes paymentType, object payment);
+        [LoggerMessage(LogLevel.Warning, "Unknown/invalid entity type for payment.")]
+        public static partial void UnknownInvalidEntityTypeForPayment(ILogger logger);
+        [LoggerMessage(LogLevel.Error, "Player does not own any of the entity.")]
+        public static partial void PlayerDoesNotOwnAnyOfTheEntity(ILogger logger);
+        [LoggerMessage(LogLevel.Error, "Held quantity {quantity} does not match target of payment {@payment}")]
+        public static partial void HeldQuantityDoesNotMatchTargetOfPayment(ILogger logger, long? quantity, PaymentTarget payment);
+        [LoggerMessage(LogLevel.Error, "Held quantity {quantity} does not meet price {price}")]
+        public static partial void HeldQuantityDoesNotMeetPrice(ILogger logger, long? quantity, int price);
     }
 }

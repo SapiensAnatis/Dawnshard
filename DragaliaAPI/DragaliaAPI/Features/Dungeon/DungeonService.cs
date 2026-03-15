@@ -1,11 +1,11 @@
-﻿using DragaliaAPI.Features.Shared.Options;
+using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Features.Dungeon;
 
-public class DungeonService(
+public partial class DungeonService(
     IDistributedCache cache,
     IOptionsMonitor<RedisCachingOptions> options,
     IPlayerIdentityService playerIdentityService,
@@ -32,7 +32,7 @@ public class DungeonService(
         this.currentKey = Guid.NewGuid().ToString();
         this.currentSession = dungeonSession;
 
-        logger.LogDebug("Created dungeon session with key {Key}", currentKey);
+        Log.CreatedDungeonSessionWithKey(logger, currentKey);
 
         return currentKey;
     }
@@ -84,7 +84,7 @@ public class DungeonService(
 
     public async Task RemoveSession(string dungeonKey, CancellationToken cancellationToken)
     {
-        logger.LogDebug("Removing dungeon session with key {Key}", dungeonKey);
+        Log.RemovingDungeonSessionWithKey(logger, dungeonKey);
 
         await cache.RemoveAsync(
             Schema.DungeonKey_DungeonData(playerIdentityService.ViewerId, dungeonKey),
@@ -93,5 +93,13 @@ public class DungeonService(
 
         this.currentSession = null;
         this.currentKey = null;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Created dungeon session with key {Key}")]
+        public static partial void CreatedDungeonSessionWithKey(ILogger logger, string key);
+        [LoggerMessage(LogLevel.Debug, "Removing dungeon session with key {Key}")]
+        public static partial void RemovingDungeonSessionWithKey(ILogger logger, string key);
     }
 }
