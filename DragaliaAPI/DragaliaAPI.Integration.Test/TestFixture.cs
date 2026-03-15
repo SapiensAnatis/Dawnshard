@@ -37,26 +37,20 @@ public class TestFixture
     /// </summary>
     protected string SessionId { get; } = $"session_id_{Guid.NewGuid()}";
 
-    private readonly WebApplicationFactory<Program> factory;
+    private readonly CustomWebApplicationFactory factory;
 
     protected TestFixture(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
     {
         this.TestOutputHelper = testOutputHelper;
         this.MockBaasApi = factory.MockBaasApi;
         this.MockPhotonStateApi = factory.MockPhotonStateApi;
+        this.MockTimeProvider = factory.MockTimeProvider;
 
-        this.factory = factory.WithWebHostBuilder(builder =>
-        {
-            builder.ConfigureLogging(logging =>
-            {
-                logging.ClearProviders();
-                logging.AddConsole();
-            });
-            builder.ConfigureTestServices(services =>
-            {
-                services.AddSingleton<TimeProvider>(this.MockTimeProvider);
-            });
-        });
+        // Set back to default time to prevent tests from interfering
+        this.MockTimeProvider.AdjustTime(new(2000, 1, 1, 0, 0, 0, 0, TimeSpan.Zero));
+
+        this.factory = factory;
+        this.factory.SetTestOutputHelper(this.TestOutputHelper);
 
         this.Client = this.CreateClient();
 
@@ -91,7 +85,7 @@ public class TestFixture
 
     protected Mock<IPhotonStateApi> MockPhotonStateApi { get; }
 
-    protected FakeTimeProvider MockTimeProvider { get; } = new();
+    protected FakeTimeProvider MockTimeProvider { get; }
 
     protected ITestOutputHelper TestOutputHelper { get; }
 

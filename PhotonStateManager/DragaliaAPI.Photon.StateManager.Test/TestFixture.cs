@@ -1,7 +1,5 @@
 ﻿using DragaliaAPI.Photon.StateManager.Models;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Redis.OM.Contracts;
 
 namespace DragaliaAPI.Photon.StateManager.Test;
@@ -14,15 +12,9 @@ public class TestFixture : IAsyncLifetime
     public TestFixture(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
     {
         this.TestOutputHelper = testOutputHelper;
+        factory.SetTestOutputHelper(this.TestOutputHelper);
 
-        this.Client = factory
-            .WithWebHostBuilder(builder =>
-                builder.ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                })
-            )
-            .CreateClient();
+        this.Client = factory.CreateClient();
 
         this.Client.DefaultRequestHeaders.Authorization = new("Bearer", "photontoken");
 

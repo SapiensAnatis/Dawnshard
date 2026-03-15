@@ -44,7 +44,7 @@ public class WallTimeProviderExtensionsTests
         DateTimeOffset expectedRewardDate
     )
     {
-        this.fakeTimeProvider.SetUtcNow(currentTime);
+        this.fakeTimeProvider.AdjustTime(currentTime);
 
         this.fakeTimeProvider.GetLastWallRewardDate().Should().Be(expectedRewardDate);
     }

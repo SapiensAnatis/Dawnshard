@@ -22,7 +22,7 @@ public partial class DungeonRecordTest : TestFixture
             p.SetProperty(e => e.StaminaMulti, e => 100)
         );
 
-        this.MockTimeProvider.SetUtcNow(DateTimeOffset.UtcNow);
+        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
     }
 
     [Fact]

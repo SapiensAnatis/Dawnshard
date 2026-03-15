@@ -113,7 +113,7 @@ public class ResetTimeProviderExtensionsTest
         DateTimeOffset expectedReset
     )
     {
-        this.fakeTimeProvider.SetUtcNow(now);
+        this.fakeTimeProvider.AdjustTime(now);
         this.fakeTimeProvider.SetLocalTimeZone(
             TimeZoneInfo.FindSystemTimeZoneById("Europe/Berlin")
         );
@@ -129,7 +129,7 @@ public class ResetTimeProviderExtensionsTest
         DayOfWeek expectedDayOfWeek
     )
     {
-        this.fakeTimeProvider.SetUtcNow(now);
+        this.fakeTimeProvider.AdjustTime(now);
         this.fakeTimeProvider.SetLocalTimeZone(
             TimeZoneInfo.FindSystemTimeZoneById("Europe/Berlin")
         );
@@ -144,7 +144,7 @@ public class ResetTimeProviderExtensionsTest
         DateTimeOffset expectedReset
     )
     {
-        this.fakeTimeProvider.SetUtcNow(now);
+        this.fakeTimeProvider.AdjustTime(now);
 
         this.fakeTimeProvider.GetLastWeeklyReset().Should().Be(expectedReset);
     }
@@ -156,7 +156,7 @@ public class ResetTimeProviderExtensionsTest
         DateTimeOffset expectedReset
     )
     {
-        this.fakeTimeProvider.SetUtcNow(now);
+        this.fakeTimeProvider.AdjustTime(now);
 
         this.fakeTimeProvider.GetLastMonthlyReset().Should().Be(expectedReset);
     }
