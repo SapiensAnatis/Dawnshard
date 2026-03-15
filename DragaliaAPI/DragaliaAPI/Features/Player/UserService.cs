@@ -85,7 +85,7 @@ public partial class UserService(
             throw new ArgumentOutOfRangeException(nameof(type));
         }
 
-        Log.RemovingX(logger, amount, type);
+        Log.RemovingStamina(logger, amount, type);
 
         int currentStamina = await GetAndUpdateStamina(type);
         if (amount > currentStamina)
@@ -274,7 +274,7 @@ public partial class UserService(
         );
 
         [LoggerMessage(LogLevel.Debug, "Removing {staminaAmount}x {staminaType}")]
-        public static partial void RemovingX(
+        public static partial void RemovingStamina(
             ILogger logger,
             int staminaAmount,
             StaminaType staminaType

@@ -128,7 +128,7 @@ public partial class TradeService(
         IEnumerable<AtgenNeedUnitList>? needUnitList = null
     )
     {
-        Log.ProcessingXOfTradeType(logger, count, tradeId, tradeType);
+        Log.ProcessingTrades(logger, count, tradeId, tradeType);
 
         TreasureTrade trade = tradeType switch
         {
@@ -224,7 +224,7 @@ public partial class TradeService(
 
     public async Task DoAbilityCrestTrade(int id, int count)
     {
-        Log.ProcessingXAbilityCrestTrade(logger, count, id);
+        Log.ProcessingAbilityCrestTrades(logger, count, id);
 
         if (count != 1)
             throw new DragaliaException(ResultCode.CommonDataValidationError, "Invalid count");
@@ -262,7 +262,7 @@ public partial class TradeService(
             LogLevel.Debug,
             "Processing {tradeQuantity}x {tradeId} of trade type {tradeType}"
         )]
-        public static partial void ProcessingXOfTradeType(
+        public static partial void ProcessingTrades(
             ILogger logger,
             int tradeQuantity,
             int tradeId,
@@ -270,7 +270,7 @@ public partial class TradeService(
         );
 
         [LoggerMessage(LogLevel.Debug, "Processing {tradeQuantity}x ability crest trade {tradeId}")]
-        public static partial void ProcessingXAbilityCrestTrade(
+        public static partial void ProcessingAbilityCrestTrades(
             ILogger logger,
             int tradeQuantity,
             int tradeId

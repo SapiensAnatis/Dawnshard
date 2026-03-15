@@ -44,7 +44,7 @@ public partial class StoryRepository : IStoryRepository
 
         if (state is null)
         {
-            Log.RequestedStoryIdWithTypeWasNotFoundCreating(this.logger, storyId, storyType);
+            Log.CreatingNewStory(this.logger, storyId, storyType);
 
             state = this
                 .apiContext.PlayerStoryState.Add(
@@ -76,10 +76,6 @@ public partial class StoryRepository : IStoryRepository
             LogLevel.Debug,
             "Requested story id {id} with type {type} was not found, creating..."
         )]
-        public static partial void RequestedStoryIdWithTypeWasNotFoundCreating(
-            ILogger logger,
-            int id,
-            StoryTypes type
-        );
+        public static partial void CreatingNewStory(ILogger logger, int id, StoryTypes type);
     }
 }

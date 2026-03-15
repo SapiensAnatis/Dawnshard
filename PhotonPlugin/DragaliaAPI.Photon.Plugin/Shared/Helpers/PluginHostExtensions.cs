@@ -7,7 +7,7 @@ using Photon.Hive.Plugin;
 
 namespace DragaliaAPI.Photon.Plugin.Shared.Helpers
 {
-    public static partial class PluginHostExtensions
+    public static class PluginHostExtensions
     {
         private const int EventDataKey = 245;
         private const int EventActorNrKey = 254;
