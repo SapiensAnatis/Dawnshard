@@ -57,4 +57,5 @@ jobs:
         if: success() || failure() # run this step even if previous step failed
         with:
           name: test-result-${{ steps.get-name.outputs.name }}
-          path: ${{ inputs.project }}/TestResults/${{ steps.get-name.outputs.name }}.trx
+          path: ${{ inputs.project }}/bin/**/${{ steps.get-name.outputs.name }}.trx
+          if-no-files-found: error
