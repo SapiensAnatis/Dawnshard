@@ -373,18 +373,34 @@ public partial class QuestService(
     {
         [LoggerMessage(LogLevel.Trace, "Resetting daily play count for quest {questId}")]
         public static partial void ResettingDailyPlayCountForQuest(ILogger logger, int questId);
+
         [LoggerMessage(LogLevel.Trace, "Resetting weekly play count for quest {questId}")]
         public static partial void ResettingWeeklyPlayCountForQuest(ILogger logger, int questId);
-        [LoggerMessage(LogLevel.Debug, "Attempting first clear of main story quest {questId}: 0 stamina required")]
-        public static partial void AttemptingFirstClearOfMainStoryQuest0StaminaRequired(ILogger logger, int questId);
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Attempting first clear of main story quest {questId}: 0 stamina required"
+        )]
+        public static partial void AttemptingFirstClearOfMainStoryQuest0StaminaRequired(
+            ILogger logger,
+            int questId
+        );
+
         [LoggerMessage(LogLevel.Trace, "Completing quest for quest group {eventGroupId}")]
         public static partial void CompletingQuestForQuestGroup(ILogger logger, int eventGroupId);
+
         [LoggerMessage(LogLevel.Warning, "Failed to retrieve bonus rewards for quest {questId}")]
-        public static partial void FailedToRetrieveBonusRewardsForQuest(ILogger logger, int questId);
+        public static partial void FailedToRetrieveBonusRewardsForQuest(
+            ILogger logger,
+            int questId
+        );
+
         [LoggerMessage(LogLevel.Information, "Cancelling receipt of quest bonus")]
         public static partial void CancellingReceiptOfQuestBonus(ILogger logger);
+
         [LoggerMessage(LogLevel.Debug, "EX battle quest ID {ExQuestId} was not a valid quest")]
         public static partial void EXBattleQuestIDWasNotAValidQuest(ILogger logger, int exQuestId);
+
         [LoggerMessage(LogLevel.Information, "Unlocking EX battle {ExQuestId}")]
         public static partial void UnlockingEXBattle(ILogger logger, int exQuestId);
     }

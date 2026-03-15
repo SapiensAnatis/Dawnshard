@@ -76,7 +76,12 @@ public partial class SavefileUpdateService : ISavefileUpdateService
     {
         [LoggerMessage(LogLevel.Information, "Could not find player {player}")]
         public static partial void CouldNotFindPlayer(ILogger logger, string player);
+
         [LoggerMessage(LogLevel.Information, "Applied savefile update {update} (took: {time} ms)")]
-        public static partial void AppliedSavefileUpdateTookMs(ILogger logger, ISavefileUpdate update, long time);
+        public static partial void AppliedSavefileUpdateTookMs(
+            ILogger logger,
+            ISavefileUpdate update,
+            long time
+        );
     }
 }

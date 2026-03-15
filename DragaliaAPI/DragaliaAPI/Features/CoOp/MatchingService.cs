@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -6,7 +7,6 @@ using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.CoOp;
 
@@ -144,7 +144,12 @@ public partial class MatchingService : IMatchingService
         }
         catch (Exception ex)
         {
-            Log.FailedToLookupHostDataForHostIDPartyUsingFallback(this.logger, ex, game.HostViewerId, game.HostPartyNo);
+            Log.FailedToLookupHostDataForHostIDPartyUsingFallback(
+                this.logger,
+                ex,
+                game.HostViewerId,
+                game.HostPartyNo
+            );
 
             hostUserData = new()
             {
@@ -195,19 +200,38 @@ public partial class MatchingService : IMatchingService
     {
         [LoggerMessage(LogLevel.Debug, "Got room list: {@list}")]
         public static partial void GotRoomList(ILogger logger, List<RoomList> list);
+
         [LoggerMessage(LogLevel.Debug, "Got room list for quest {quest}: {@list}")]
-        public static partial void GotRoomListForQuest(ILogger logger, int quest, List<RoomList> list);
+        public static partial void GotRoomListForQuest(
+            ILogger logger,
+            int quest,
+            List<RoomList> list
+        );
+
         [LoggerMessage(LogLevel.Debug, "Getting room for ID {id}")]
         public static partial void GettingRoomForID(ILogger logger, int id);
+
         [LoggerMessage(LogLevel.Debug, "Game was null")]
         public static partial void GameWasNull(ILogger logger);
+
         [LoggerMessage(LogLevel.Debug, "Got room: {@room}")]
         public static partial void GotRoom(ILogger logger, RoomList room);
+
         [LoggerMessage(LogLevel.Warning, "Failed to retrieve game for ID {viewerId}")]
         public static partial void FailedToRetrieveGameForID(ILogger logger, long viewerId);
+
         [LoggerMessage(LogLevel.Debug, "Viewer ID {viewerId} isHost result: {isHost}")]
         public static partial void ViewerIDIsHostResult(ILogger logger, long viewerId, bool isHost);
-        [LoggerMessage(LogLevel.Warning, "Failed to lookup host data for host ID {hostId} party #{partyNo}. Using fallback.")]
-        public static partial void FailedToLookupHostDataForHostIDPartyUsingFallback(ILogger logger, Exception exception, long hostId, int partyNo);
+
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Failed to lookup host data for host ID {hostId} party #{partyNo}. Using fallback."
+        )]
+        public static partial void FailedToLookupHostDataForHostIDPartyUsingFallback(
+            ILogger logger,
+            Exception exception,
+            long hostId,
+            int partyNo
+        );
     }
 }

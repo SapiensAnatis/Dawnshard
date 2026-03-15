@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -9,7 +10,6 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Parties;
 
@@ -73,7 +73,12 @@ public partial class PartyController(
 
         if (ownedCharaCount < selectedCharas.Count || ownedDragonCount < selectedDragons.Count)
         {
-            Log.PartyUpdateValidationFailedPartyUnitCountOwnedCharaCountOwnedDragonCount(logger, requestParty.RequestPartySettingList.Count, ownedCharaCount, ownedDragonCount);
+            Log.PartyUpdateValidationFailedPartyUnitCountOwnedCharaCountOwnedDragonCount(
+                logger,
+                requestParty.RequestPartySettingList.Count,
+                ownedCharaCount,
+                ownedDragonCount
+            );
             throw new DragaliaException(ResultCode.PartySwitchSettingCharaShort);
         }
 
@@ -141,11 +146,25 @@ public partial class PartyController(
     private static partial class Log
     {
         [LoggerMessage(LogLevel.Debug, "Received party update request: {@request}")]
-        public static partial void ReceivedPartyUpdateRequest(ILogger logger, IList<PartySettingList> request);
-        [LoggerMessage(LogLevel.Error, "Party update validation failed. Party unit count: {PartyUnitCount}; owned chara count: {OwnedCharaCount}; owned dragon count {OwnedDragonCount}")]
-        public static partial void PartyUpdateValidationFailedPartyUnitCountOwnedCharaCountOwnedDragonCount(ILogger logger, int partyUnitCount, int ownedCharaCount, int ownedDragonCount);
+        public static partial void ReceivedPartyUpdateRequest(
+            ILogger logger,
+            IList<PartySettingList> request
+        );
+
+        [LoggerMessage(
+            LogLevel.Error,
+            "Party update validation failed. Party unit count: {PartyUnitCount}; owned chara count: {OwnedCharaCount}; owned dragon count {OwnedDragonCount}"
+        )]
+        public static partial void PartyUpdateValidationFailedPartyUnitCountOwnedCharaCountOwnedDragonCount(
+            ILogger logger,
+            int partyUnitCount,
+            int ownedCharaCount,
+            int ownedDragonCount
+        );
+
         [LoggerMessage(LogLevel.Trace, "Party power {power}")]
         public static partial void PartyPower(ILogger logger, int power);
+
         [LoggerMessage(LogLevel.Debug, "Returning updated party list: {@list}")]
         public static partial void ReturningUpdatedPartyList(ILogger logger, List<PartyList>? list);
     }

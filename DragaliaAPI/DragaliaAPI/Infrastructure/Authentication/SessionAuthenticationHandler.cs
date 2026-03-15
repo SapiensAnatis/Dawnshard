@@ -57,7 +57,10 @@ public partial class SessionAuthenticationHandler(
 
         if (impersonatedSession != null)
         {
-            Log.UserImpersonationActivated(this.Logger, new { impersonatedSession.DeviceAccountId, impersonatedSession.ViewerId });
+            Log.UserImpersonationActivated(
+                this.Logger,
+                new { impersonatedSession.DeviceAccountId, impersonatedSession.ViewerId }
+            );
 
             deviceAccountId = impersonatedSession.DeviceAccountId;
             viewerId = impersonatedSession.ViewerId.ToString();
@@ -90,8 +93,10 @@ public partial class SessionAuthenticationHandler(
     {
         [LoggerMessage(LogLevel.Debug, "SID header was missing.")]
         public static partial void SIDHeaderWasMissing(ILogger logger);
+
         [LoggerMessage(LogLevel.Information, "User impersonation activated: {@impersonation}")]
         public static partial void UserImpersonationActivated(ILogger logger, object impersonation);
+
         [LoggerMessage(LogLevel.Debug, "Returning Session-Expired BadRequest response")]
         public static partial void ReturningSessionExpiredBadRequestResponse(ILogger logger);
     }

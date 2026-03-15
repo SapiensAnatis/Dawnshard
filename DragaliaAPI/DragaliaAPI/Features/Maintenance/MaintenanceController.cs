@@ -27,7 +27,12 @@ public partial class MaintenanceController(
 
     private static partial class Log
     {
-        [LoggerMessage(LogLevel.Error, "Invalid call to get maintenance text: maintenance is not active")]
-        public static partial void InvalidCallToGetMaintenanceTextMaintenanceIsNotActive(ILogger logger);
+        [LoggerMessage(
+            LogLevel.Error,
+            "Invalid call to get maintenance text: maintenance is not active"
+        )]
+        public static partial void InvalidCallToGetMaintenanceTextMaintenanceIsNotActive(
+            ILogger logger
+        );
     }
 }

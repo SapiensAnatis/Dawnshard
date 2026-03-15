@@ -117,8 +117,10 @@ public partial class DungeonController(
     {
         [LoggerMessage(LogLevel.Debug, "Processing fail request for quest {QuestId}")]
         public static partial void ProcessingFailRequestForQuest(ILogger logger, int questId);
+
         [LoggerMessage(LogLevel.Debug, "Session is multiplayer: {IsMulti}")]
         public static partial void SessionIsMultiplayer(ILogger logger, bool isMulti);
+
         [LoggerMessage(LogLevel.Debug, "Final response: {@Response}")]
         public static partial void FinalResponse(ILogger logger, DungeonFailResponse response);
     }

@@ -65,7 +65,12 @@ public partial class MatchingController : DragaliaControllerBase
     {
         [LoggerMessage(LogLevel.Debug, "Could not find room with id {id}")]
         public static partial void CouldNotFindRoomWithId(ILogger logger, int id);
+
         [LoggerMessage(LogLevel.Debug, "Found room with id {id}: {@room}")]
-        public static partial void FoundRoomWithId(ILogger logger, int id, MatchingGetRoomNameResponse room);
+        public static partial void FoundRoomWithId(
+            ILogger logger,
+            int id,
+            MatchingGetRoomNameResponse room
+        );
     }
 }

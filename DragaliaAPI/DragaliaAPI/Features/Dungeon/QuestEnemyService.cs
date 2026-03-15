@@ -259,11 +259,28 @@ public partial class QuestEnemyService : IQuestEnemyService
     {
         [LoggerMessage(LogLevel.Warning, "Failed to get drop data for quest id {questId}")]
         public static partial void FailedToGetDropDataForQuestId(ILogger logger, int questId);
+
         [LoggerMessage(LogLevel.Warning, "Failed to get area number {no} from quest {quest}")]
-        public static partial void FailedToGetAreaNumberFromQuest(ILogger logger, int no, int quest);
-        [LoggerMessage(LogLevel.Warning, "Unable to retrieve enemy list for quest {quest} with area {area}")]
-        public static partial void UnableToRetrieveEnemyListForQuestWithArea(ILogger logger, int quest, string area);
+        public static partial void FailedToGetAreaNumberFromQuest(
+            ILogger logger,
+            int no,
+            int quest
+        );
+
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Unable to retrieve enemy list for quest {quest} with area {area}"
+        )]
+        public static partial void UnableToRetrieveEnemyListForQuestWithArea(
+            ILogger logger,
+            int quest,
+            string area
+        );
+
         [LoggerMessage(LogLevel.Warning, "Unable to retrieve enemy list for variation type {type}")]
-        public static partial void UnableToRetrieveEnemyListForVariationType(ILogger logger, VariationTypes type);
+        public static partial void UnableToRetrieveEnemyListForVariationType(
+            ILogger logger,
+            VariationTypes type
+        );
     }
 }

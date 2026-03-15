@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -9,7 +10,6 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using Serilog.Context;
-using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Weapons;
 
@@ -56,7 +56,11 @@ public partial class WeaponService : IWeaponService
             )
         )
         {
-            Log.PlayerSmithyLevelWasTooLowToCraftWeaponNeedsLevel(this.logger, weaponBodyId, weaponData.NeedFortCraftLevel);
+            Log.PlayerSmithyLevelWasTooLowToCraftWeaponNeedsLevel(
+                this.logger,
+                weaponBodyId,
+                weaponData.NeedFortCraftLevel
+            );
             return false;
         }
 
@@ -67,7 +71,12 @@ public partial class WeaponService : IWeaponService
             )
         )
         {
-            Log.PlayerDidNotHaveOneOrMoreWeaponsRequiredToCraft(this.logger, weaponData.NeedCreateWeaponBodyId1, weaponData.NeedCreateWeaponBodyId2, weaponBodyId);
+            Log.PlayerDidNotHaveOneOrMoreWeaponsRequiredToCraft(
+                this.logger,
+                weaponData.NeedCreateWeaponBodyId1,
+                weaponData.NeedCreateWeaponBodyId2,
+                weaponBodyId
+            );
             return false;
         }
 
@@ -179,7 +188,11 @@ public partial class WeaponService : IWeaponService
 
         if (entity.LimitBreakCount < buildupGroup.UnlockConditionLimitBreakCount)
         {
-            Log.EntityWithLimitBreakCountWasIneligibleForBuildupGroupWithMinLimitBreakCount(this.logger, entity.LimitBreakCount, buildupGroup.UnlockConditionLimitBreakCount);
+            Log.EntityWithLimitBreakCountWasIneligibleForBuildupGroupWithMinLimitBreakCount(
+                this.logger,
+                entity.LimitBreakCount,
+                buildupGroup.UnlockConditionLimitBreakCount
+            );
 
             return ResultCode.WeaponBodyBuildupPieceShortLimitBreakCount;
         }
@@ -274,7 +287,11 @@ public partial class WeaponService : IWeaponService
 
         if (entity.LimitBreakCount < passiveAbility.UnlockConditionLimitBreakCount)
         {
-            Log.EntityWithLimitBreakCountWasIneligibleForBuildupGroupWithMinLimitBreakCount(this.logger, entity.LimitBreakCount, buildupGroup.UnlockConditionLimitBreakCount);
+            Log.EntityWithLimitBreakCountWasIneligibleForBuildupGroupWithMinLimitBreakCount(
+                this.logger,
+                entity.LimitBreakCount,
+                buildupGroup.UnlockConditionLimitBreakCount
+            );
 
             return ResultCode.WeaponBodyBuildupPieceShortLimitBreakCount;
         }
@@ -375,7 +392,11 @@ public partial class WeaponService : IWeaponService
     {
         if (entityProperty != buildup.Step - 1)
         {
-            Log.WeaponPropertyValueWasInInvalidStateForBuildup(this.logger, entityProperty, buildup);
+            Log.WeaponPropertyValueWasInInvalidStateForBuildup(
+                this.logger,
+                entityProperty,
+                buildup
+            );
             return false;
         }
 
@@ -461,31 +482,85 @@ public partial class WeaponService : IWeaponService
     {
         [LoggerMessage(LogLevel.Warning, "Player already owns weapon {weapon}")]
         public static partial void PlayerAlreadyOwnsWeapon(ILogger logger, WeaponBodies weapon);
-        [LoggerMessage(LogLevel.Warning, "Player smithy level was too low to craft weapon {weapon} (needs level {level2})")]
-        public static partial void PlayerSmithyLevelWasTooLowToCraftWeaponNeedsLevel(ILogger logger, WeaponBodies weapon, int level2);
-        [LoggerMessage(LogLevel.Warning, "Player did not have one or more weapons ({weapon1}, {weapon2}) required to craft {weapon3}")]
-        public static partial void PlayerDidNotHaveOneOrMoreWeaponsRequiredToCraft(ILogger logger, WeaponBodies weapon1, WeaponBodies weapon2, WeaponBodies weapon3);
+
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Player smithy level was too low to craft weapon {weapon} (needs level {level2})"
+        )]
+        public static partial void PlayerSmithyLevelWasTooLowToCraftWeaponNeedsLevel(
+            ILogger logger,
+            WeaponBodies weapon,
+            int level2
+        );
+
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Player did not have one or more weapons ({weapon1}, {weapon2}) required to craft {weapon3}"
+        )]
+        public static partial void PlayerDidNotHaveOneOrMoreWeaponsRequiredToCraft(
+            ILogger logger,
+            WeaponBodies weapon1,
+            WeaponBodies weapon2,
+            WeaponBodies weapon3
+        );
+
         [LoggerMessage(LogLevel.Warning, "Player lacked materials to craft weapon {weapon}")]
-        public static partial void PlayerLackedMaterialsToCraftWeapon(ILogger logger, WeaponBodies weapon);
+        public static partial void PlayerLackedMaterialsToCraftWeapon(
+            ILogger logger,
+            WeaponBodies weapon
+        );
+
         [LoggerMessage(LogLevel.Warning, "Player lacked rupies to craft weapon {weapon}")]
-        public static partial void PlayerLackedRupiesToCraftWeapon(ILogger logger, WeaponBodies weapon);
+        public static partial void PlayerLackedRupiesToCraftWeapon(
+            ILogger logger,
+            WeaponBodies weapon
+        );
+
         [LoggerMessage(LogLevel.Error, "Could not find buildup group with key {key}")]
         public static partial void CouldNotFindBuildupGroupWithKey(ILogger logger, int key);
+
         [LoggerMessage(LogLevel.Information, "Using special material; material map set to {map}")]
-        public static partial void UsingSpecialMaterialMaterialMapSetTo(ILogger logger, Dictionary<Materials, int> map);
-        [LoggerMessage(LogLevel.Error, "Entity with limit break count {count} was ineligible for buildupGroup with min limit break count {count2}")]
-        public static partial void EntityWithLimitBreakCountWasIneligibleForBuildupGroupWithMinLimitBreakCount(ILogger logger, int count, int count2);
+        public static partial void UsingSpecialMaterialMaterialMapSetTo(
+            ILogger logger,
+            Dictionary<Materials, int> map
+        );
+
+        [LoggerMessage(
+            LogLevel.Error,
+            "Entity with limit break count {count} was ineligible for buildupGroup with min limit break count {count2}"
+        )]
+        public static partial void EntityWithLimitBreakCountWasIneligibleForBuildupGroupWithMinLimitBreakCount(
+            ILogger logger,
+            int count,
+            int count2
+        );
+
         [LoggerMessage(LogLevel.Warning, "buildup_piece_type had invalid value: {type}")]
-        public static partial void BuildupPieceTypeHadInvalidValue(ILogger logger, BuildupPieceTypes type);
+        public static partial void BuildupPieceTypeHadInvalidValue(
+            ILogger logger,
+            BuildupPieceTypes type
+        );
+
         [LoggerMessage(LogLevel.Error, "Invalid weapon passive ability key {key}")]
         public static partial void InvalidWeaponPassiveAbilityKey(ILogger logger, int key);
+
         [LoggerMessage(LogLevel.Error, "Invalid weapon stat buildup key {key}")]
         public static partial void InvalidWeaponStatBuildupKey(ILogger logger, int key);
+
         [LoggerMessage(LogLevel.Warning, "Player had insufficient rupies to upgrade weapon")]
         public static partial void PlayerHadInsufficientRupiesToUpgradeWeapon(ILogger logger);
+
         [LoggerMessage(LogLevel.Warning, "Player had insufficient materials to upgrade weapon")]
         public static partial void PlayerHadInsufficientMaterialsToUpgradeWeapon(ILogger logger);
-        [LoggerMessage(LogLevel.Warning, "Weapon property value {value} was in invalid state for buildup {@buildup}")]
-        public static partial void WeaponPropertyValueWasInInvalidStateForBuildup(ILogger logger, int value, AtgenBuildupWeaponBodyPieceList buildup);
+
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Weapon property value {value} was in invalid state for buildup {@buildup}"
+        )]
+        public static partial void WeaponPropertyValueWasInInvalidStateForBuildup(
+            ILogger logger,
+            int value,
+            AtgenBuildupWeaponBodyPieceList buildup
+        );
     }
 }

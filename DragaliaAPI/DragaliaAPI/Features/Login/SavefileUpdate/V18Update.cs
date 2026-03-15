@@ -128,8 +128,13 @@ public partial class V18Update(
     {
         [LoggerMessage(LogLevel.Information, "Player has not unlocked wall yet, skipping...")]
         public static partial void PlayerHasNotUnlockedWallYetSkipping(ILogger logger);
-        [LoggerMessage(LogLevel.Information, "Player has already unlocked wall missions, skipping...")]
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Player has already unlocked wall missions, skipping..."
+        )]
         public static partial void PlayerHasAlreadyUnlockedWallMissionsSkipping(ILogger logger);
+
         [LoggerMessage(LogLevel.Information, "Initializing wall missions")]
         public static partial void InitializingWallMissions(ILogger logger);
     }

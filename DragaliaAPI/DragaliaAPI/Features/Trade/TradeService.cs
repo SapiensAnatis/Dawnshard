@@ -258,9 +258,22 @@ public partial class TradeService(
 
     private static partial class Log
     {
-        [LoggerMessage(LogLevel.Debug, "Processing {tradeQuantity}x {tradeId} of trade type {tradeType}")]
-        public static partial void ProcessingXOfTradeType(ILogger logger, int tradeQuantity, int tradeId, TradeType tradeType);
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Processing {tradeQuantity}x {tradeId} of trade type {tradeType}"
+        )]
+        public static partial void ProcessingXOfTradeType(
+            ILogger logger,
+            int tradeQuantity,
+            int tradeId,
+            TradeType tradeType
+        );
+
         [LoggerMessage(LogLevel.Debug, "Processing {tradeQuantity}x ability crest trade {tradeId}")]
-        public static partial void ProcessingXAbilityCrestTrade(ILogger logger, int tradeQuantity, int tradeId);
+        public static partial void ProcessingXAbilityCrestTrade(
+            ILogger logger,
+            int tradeQuantity,
+            int tradeId
+        );
     }
 }

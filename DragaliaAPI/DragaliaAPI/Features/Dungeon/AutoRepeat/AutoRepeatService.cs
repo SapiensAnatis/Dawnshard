@@ -153,10 +153,20 @@ public partial class AutoRepeatService(
     {
         [LoggerMessage(LogLevel.Debug, "Saving auto-repeat setting: {@info}")]
         public static partial void SavingAutoRepeatSetting(ILogger logger, RepeatInfo info);
+
         [LoggerMessage(LogLevel.Trace, "Repeat key {Key} found: {@Info}")]
         public static partial void RepeatKeyFound(ILogger logger, string key, RepeatInfo? info);
-        [LoggerMessage(LogLevel.Trace, "Repeat key lookup for key {Key} failed. Viewer ID lookup found: {@Info}")]
-        public static partial void RepeatKeyLookupForKeyFailedViewerIDLookupFound(ILogger logger, string? key, RepeatInfo? info);
+
+        [LoggerMessage(
+            LogLevel.Trace,
+            "Repeat key lookup for key {Key} failed. Viewer ID lookup found: {@Info}"
+        )]
+        public static partial void RepeatKeyLookupForKeyFailedViewerIDLookupFound(
+            ILogger logger,
+            string? key,
+            RepeatInfo? info
+        );
+
         [LoggerMessage(LogLevel.Trace, "Both lookups failed. Default data initialized.")]
         public static partial void BothLookupsFailedDefaultDataInitialized(ILogger logger);
     }

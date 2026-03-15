@@ -54,8 +54,16 @@ public partial class AbilityCrestRewardHandler(
 
     private static partial class Log
     {
-        [LoggerMessage(LogLevel.Trace, "Converted ability crest entity: {@Entity} to {@DuplicateEntity}.")]
-        public static partial void ConvertedAbilityCrestEntityTo(ILogger logger, Entity entity, Entity duplicateEntity);
+        [LoggerMessage(
+            LogLevel.Trace,
+            "Converted ability crest entity: {@Entity} to {@DuplicateEntity}."
+        )]
+        public static partial void ConvertedAbilityCrestEntityTo(
+            ILogger logger,
+            Entity entity,
+            Entity duplicateEntity
+        );
+
         [LoggerMessage(LogLevel.Trace, "Granted new ability crest entity: {@Entity}")]
         public static partial void GrantedNewAbilityCrestEntity(ILogger logger, Entity entity);
     }

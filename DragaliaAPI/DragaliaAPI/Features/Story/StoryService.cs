@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -16,7 +17,6 @@ using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Story;
 
@@ -403,21 +403,36 @@ public partial class StoryService(
     private static partial class Log
     {
         [LoggerMessage(LogLevel.Debug, "Checking eligibility for story {id} of type: {type}")]
-        public static partial void CheckingEligibilityForStoryOfType(ILogger logger, int id, StoryTypes type);
+        public static partial void CheckingEligibilityForStoryOfType(
+            ILogger logger,
+            int id,
+            StoryTypes type
+        );
+
         [LoggerMessage(LogLevel.Debug, "Story was already read")]
         public static partial void StoryWasAlreadyRead(ILogger logger);
+
         [LoggerMessage(LogLevel.Warning, "Non-existent unit story id {id}")]
         public static partial void NonExistentUnitStoryId(ILogger logger, int id);
+
         [LoggerMessage(LogLevel.Warning, "Player was missing required quest story id")]
         public static partial void PlayerWasMissingRequiredQuestStoryId(ILogger logger);
+
         [LoggerMessage(LogLevel.Warning, "Player was missing required unit story id")]
         public static partial void PlayerWasMissingRequiredUnitStoryId(ILogger logger);
+
         [LoggerMessage(LogLevel.Information, "Reading story {id} of type {type}")]
         public static partial void ReadingStoryOfType(ILogger logger, int id, StoryTypes type);
+
         [LoggerMessage(LogLevel.Debug, "Player earned story rewards: {@rewards}")]
-        public static partial void PlayerEarnedStoryRewards(ILogger logger, List<AtgenBuildEventRewardEntityList> rewards);
+        public static partial void PlayerEarnedStoryRewards(
+            ILogger logger,
+            List<AtgenBuildEventRewardEntityList> rewards
+        );
+
         [LoggerMessage(LogLevel.Debug, "Granting memory event character {chara}")]
         public static partial void GrantingMemoryEventCharacter(ILogger logger, Charas chara);
+
         [LoggerMessage(LogLevel.Debug, "Granting player experience for chapter 10 completion.")]
         public static partial void GrantingPlayerExperienceForChapter10Completion(ILogger logger);
     }

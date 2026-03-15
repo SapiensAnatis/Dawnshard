@@ -1,10 +1,10 @@
+using System.Collections.Generic;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.Presents;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Login.SavefileUpdate;
 
@@ -72,10 +72,13 @@ public partial class V20Update(
     {
         [LoggerMessage(LogLevel.Debug, "Completed story IDs: {CompletedStoryIds}")]
         public static partial void CompletedStoryIDs(ILogger logger, List<int> completedStoryIds);
+
         [LoggerMessage(LogLevel.Debug, "Owned chara IDs: {OwnedCharaIds}")]
         public static partial void OwnedCharaIDs(ILogger logger, List<Charas> ownedCharaIds);
+
         [LoggerMessage(LogLevel.Information, "Detected Harle as missing. Adding present.")]
         public static partial void DetectedHarleAsMissingAddingPresent(ILogger logger);
+
         [LoggerMessage(LogLevel.Information, "Detected Origa as missing. Adding present.")]
         public static partial void DetectedOrigaAsMissingAddingPresent(ILogger logger);
     }

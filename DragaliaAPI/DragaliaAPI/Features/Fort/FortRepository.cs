@@ -141,7 +141,12 @@ public partial class FortRepository(
 
         if (!result)
         {
-            Log.FailedBuildLevelCheckRequestedPlantAtLevelButHadLevel(logger, plant, requiredLevel, level);
+            Log.FailedBuildLevelCheckRequestedPlantAtLevelButHadLevel(
+                logger,
+                plant,
+                requiredLevel,
+                level
+            );
         }
 
         return result;
@@ -227,24 +232,50 @@ public partial class FortRepository(
     {
         [LoggerMessage(LogLevel.Information, "Initializing fort.")]
         public static partial void InitializingFort(ILogger logger);
+
         [LoggerMessage(LogLevel.Debug, "Initializing PlayerFortDetail.")]
         public static partial void InitializingPlayerFortDetail(ILogger logger);
+
         [LoggerMessage(LogLevel.Debug, "Initializing Halidom.")]
         public static partial void InitializingHalidom(ILogger logger);
+
         [LoggerMessage(LogLevel.Information, "Adding smithy to halidom.")]
         public static partial void AddingSmithyToHalidom(ILogger logger);
+
         [LoggerMessage(LogLevel.Debug, "Initializing Smithy.")]
         public static partial void InitializingSmithy(ILogger logger);
+
         [LoggerMessage(LogLevel.Debug, "Granting dojos.")]
         public static partial void GrantingDojos(ILogger logger);
+
         [LoggerMessage(LogLevel.Debug, "Adding dragontree to storage.")]
         public static partial void AddingDragontreeToStorage(ILogger logger);
+
         [LoggerMessage(LogLevel.Information, "Could not find details for player, creating anew...")]
         public static partial void CouldNotFindDetailsForPlayerCreatingAnew(ILogger logger);
-        [LoggerMessage(LogLevel.Debug, "Failed build level check: requested plant {plant} at level {requestLevel}, but had level {actualLevel}")]
-        public static partial void FailedBuildLevelCheckRequestedPlantAtLevelButHadLevel(ILogger logger, FortPlants plant, int requestLevel, int actualLevel);
-        [LoggerMessage(LogLevel.Debug, "Adding {quantity} copies of {plant} to storage (isTotalQuantity: {isTotalQuantity})")]
-        public static partial void AddingCopiesOfToStorageIsTotalQuantity(ILogger logger, int quantity, FortPlants plant, bool isTotalQuantity);
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Failed build level check: requested plant {plant} at level {requestLevel}, but had level {actualLevel}"
+        )]
+        public static partial void FailedBuildLevelCheckRequestedPlantAtLevelButHadLevel(
+            ILogger logger,
+            FortPlants plant,
+            int requestLevel,
+            int actualLevel
+        );
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Adding {quantity} copies of {plant} to storage (isTotalQuantity: {isTotalQuantity})"
+        )]
+        public static partial void AddingCopiesOfToStorageIsTotalQuantity(
+            ILogger logger,
+            int quantity,
+            FortPlants plant,
+            bool isTotalQuantity
+        );
+
         [LoggerMessage(LogLevel.Debug, "User already owns {startQuantity} copies.")]
         public static partial void UserAlreadyOwnsCopies(ILogger logger, int startQuantity);
     }

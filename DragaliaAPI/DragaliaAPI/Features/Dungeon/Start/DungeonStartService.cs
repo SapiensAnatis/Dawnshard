@@ -53,7 +53,12 @@ internal sealed partial class DungeonStartService(
         // Makes auto repeat stamina work amazingly enough
         if (currentStamina < requiredStamina)
         {
-            Log.PlayerDidNotHaveRequiredStaminaForQuestHasNeeds(logger, questId, currentStamina, requiredStamina);
+            Log.PlayerDidNotHaveRequiredStaminaForQuestHasNeeds(
+                logger,
+                questId,
+                currentStamina,
+                requiredStamina
+            );
 
             return false;
         }
@@ -436,14 +441,27 @@ internal sealed partial class DungeonStartService(
     {
         [LoggerMessage(LogLevel.Information, "Quest {quest} does not exist")]
         public static partial void QuestDoesNotExist(ILogger logger, int quest);
-        [LoggerMessage(LogLevel.Information, "Player did not have required stamina for quest {quest}: has {currentStamina}, needs {requiredStamina}")]
-        public static partial void PlayerDidNotHaveRequiredStaminaForQuestHasNeeds(ILogger logger, int quest, int currentStamina, int requiredStamina);
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Player did not have required stamina for quest {quest}: has {currentStamina}, needs {requiredStamina}"
+        )]
+        public static partial void PlayerDidNotHaveRequiredStaminaForQuestHasNeeds(
+            ILogger logger,
+            int quest,
+            int currentStamina,
+            int requiredStamina
+        );
+
         [LoggerMessage(LogLevel.Debug, "Detected co-op tutorial: setting is_bot_tutorial")]
         public static partial void DetectedCoOpTutorialSettingIsBotTutorial(ILogger logger);
+
         [LoggerMessage(LogLevel.Debug, "Updating quest {@quest} state")]
         public static partial void UpdatingQuestState(ILogger logger, DbQuest quest);
+
         [LoggerMessage(LogLevel.Debug, "SupportViewerId {id} returned null helper data.")]
         public static partial void SupportViewerIdReturnedNullHelperData(ILogger logger, ulong id);
+
         [LoggerMessage(LogLevel.Debug, "Using event boost {@boost}")]
         public static partial void UsingEventBoost(ILogger logger, AtgenEventBoost? boost);
     }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
@@ -6,7 +7,6 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Missions;
 
@@ -396,7 +396,13 @@ public partial class MissionProgressionService(
                 }
                 else
                 {
-                    Log.ProgressedMission(logger, progressingMission.Type, progressingMission.Id, progressingMission.Progress, mission.CompleteValue);
+                    Log.ProgressedMission(
+                        logger,
+                        progressingMission.Type,
+                        progressingMission.Id,
+                        progressingMission.Progress,
+                        mission.CompleteValue
+                    );
                 }
             }
         }
@@ -419,14 +425,38 @@ public partial class MissionProgressionService(
     private static partial class Log
     {
         [LoggerMessage(LogLevel.Debug, "Processing mission progression events {@events}")]
-        public static partial void ProcessingMissionProgressionEvents(ILogger logger, List<MissionEvent> events);
+        public static partial void ProcessingMissionProgressionEvents(
+            ILogger logger,
+            List<MissionEvent> events
+        );
+
         [LoggerMessage(LogLevel.Debug, "Completed {missionType} mission {missionId}")]
-        public static partial void CompletedMission(ILogger logger, MissionType missionType, int missionId);
+        public static partial void CompletedMission(
+            ILogger logger,
+            MissionType missionType,
+            int missionId
+        );
+
         [LoggerMessage(LogLevel.Information, "Adding dependent missions: {Missions}")]
         public static partial void AddingDependentMissions(ILogger logger, int[]? missions);
-        [LoggerMessage(LogLevel.Debug, "Progressed {missionType} mission {missionId} ({currentCount}/{totalCount})")]
-        public static partial void ProgressedMission(ILogger logger, MissionType missionType, int missionId, int currentCount, int totalCount);
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Progressed {missionType} mission {missionId} ({currentCount}/{totalCount})"
+        )]
+        public static partial void ProgressedMission(
+            ILogger logger,
+            MissionType missionType,
+            int missionId,
+            int currentCount,
+            int totalCount
+        );
+
         [LoggerMessage(LogLevel.Debug, "Processed {EventCount} mission events in {ElapsedTime} ms")]
-        public static partial void ProcessedMissionEventsInMs(ILogger logger, int eventCount, long elapsedTime);
+        public static partial void ProcessedMissionEventsInMs(
+            ILogger logger,
+            int eventCount,
+            long elapsedTime
+        );
     }
 }

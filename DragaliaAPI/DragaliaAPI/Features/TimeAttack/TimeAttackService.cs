@@ -183,11 +183,24 @@ public partial class TimeAttackService(
     private static partial class Log
     {
         [LoggerMessage(LogLevel.Information, "Time attack validation failed: {@result}")]
-        public static partial void TimeAttackValidationFailed(ILogger logger, ValidationResult result);
+        public static partial void TimeAttackValidationFailed(
+            ILogger logger,
+            ValidationResult result
+        );
+
         [LoggerMessage(LogLevel.Warning, "Unable to retrieve cache entry for time attack clear")]
         public static partial void UnableToRetrieveCacheEntryForTimeAttackClear(ILogger logger);
-        [LoggerMessage(LogLevel.Debug, "Registered time attack clear for room {room} and quest {questId}")]
-        public static partial void RegisteredTimeAttackClearForRoomAndQuest(ILogger logger, string room, int questId);
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Registered time attack clear for room {room} and quest {questId}"
+        )]
+        public static partial void RegisteredTimeAttackClearForRoomAndQuest(
+            ILogger logger,
+            string room,
+            int questId
+        );
+
         [LoggerMessage(LogLevel.Debug, "Found clear time of {time} s for quest {quest}")]
         public static partial void FoundClearTimeOfSForQuest(ILogger logger, float time, int quest);
     }

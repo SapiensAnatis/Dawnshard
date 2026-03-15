@@ -27,13 +27,16 @@ public partial class ShopService(
         int goodsQuantity
     )
     {
-        Log.ProcessingPurchase(logger, new
+        Log.ProcessingPurchase(
+            logger,
+            new
             {
                 Type = shopType,
                 Payment = paymentType,
                 Id = goodsId,
                 Quantity = goodsQuantity,
-            });
+            }
+        );
 
         IShop shop = Shop.From(shopType, goodsId);
 

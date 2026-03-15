@@ -67,8 +67,17 @@ public partial class V22Update(
     private static partial class Log
     {
         [LoggerMessage(LogLevel.Debug, "Player completed chapter 10: {PlayerCompletedChapter10}")]
-        public static partial void PlayerCompletedChapter10(ILogger logger, bool playerCompletedChapter10);
-        [LoggerMessage(LogLevel.Information, "Detected that chapter 10 was completed. Granting completion rewards.")]
-        public static partial void DetectedThatChapter10WasCompletedGrantingCompletionRewards(ILogger logger);
+        public static partial void PlayerCompletedChapter10(
+            ILogger logger,
+            bool playerCompletedChapter10
+        );
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Detected that chapter 10 was completed. Granting completion rewards."
+        )]
+        public static partial void DetectedThatChapter10WasCompletedGrantingCompletionRewards(
+            ILogger logger
+        );
     }
 }

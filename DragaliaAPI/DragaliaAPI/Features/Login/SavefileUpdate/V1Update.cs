@@ -85,8 +85,10 @@ public partial class V1Update : ISavefileUpdate
     {
         [LoggerMessage(LogLevel.Debug, "Skipping plant {plant} as already owned")]
         public static partial void SkippingPlantAsAlreadyOwned(ILogger logger, FortPlants plant);
+
         [LoggerMessage(LogLevel.Debug, "Adding facility {plant}")]
         public static partial void AddingFacility(ILogger logger, FortPlants plant);
+
         [LoggerMessage(LogLevel.Debug, "Adding dojos")]
         public static partial void AddingDojos(ILogger logger);
     }

@@ -367,10 +367,13 @@ public partial class StorySkipService(
     {
         [LoggerMessage(LogLevel.Debug, "Updating fort at BuildId {buildId}")]
         public static partial void UpdatingFortAtBuildId(ILogger logger, long buildId);
+
         [LoggerMessage(LogLevel.Debug, "Adding fort {plantId}")]
         public static partial void AddingFort(ILogger logger, FortPlants plantId);
+
         [LoggerMessage(LogLevel.Debug, "Rewarding character {chara}")]
         public static partial void RewardingCharacter(ILogger logger, Charas chara);
+
         [LoggerMessage(LogLevel.Debug, "Rewarding dragon {dragon}")]
         public static partial void RewardingDragon(ILogger logger, DragonId dragon);
     }

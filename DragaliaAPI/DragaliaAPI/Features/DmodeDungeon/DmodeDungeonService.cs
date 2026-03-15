@@ -1184,13 +1184,26 @@ public partial class DmodeDungeonService(
     {
         [LoggerMessage(LogLevel.Debug, "Restarting dmode floor")]
         public static partial void RestartingDmodeFloor(ILogger logger);
+
         [LoggerMessage(LogLevel.Debug, "Skipping dmode floors")]
         public static partial void SkippingDmodeFloors(ILogger logger);
+
         [LoggerMessage(LogLevel.Debug, "Halting dungeon. User halt: {isUserHalt}")]
         public static partial void HaltingDungeonUserHalt(ILogger logger, bool isUserHalt);
-        [LoggerMessage(LogLevel.Error, "Failed to fetch Kaleidoscape data. Clearing dungeon entry.")]
-        public static partial void FailedToFetchKaleidoscapeDataClearingDungeonEntry(ILogger logger, Exception exception);
+
+        [LoggerMessage(
+            LogLevel.Error,
+            "Failed to fetch Kaleidoscape data. Clearing dungeon entry."
+        )]
+        public static partial void FailedToFetchKaleidoscapeDataClearingDungeonEntry(
+            ILogger logger,
+            Exception exception
+        );
+
         [LoggerMessage(LogLevel.Debug, "Generated dmode floor with area info {@dmodeAreaInfo}")]
-        public static partial void GeneratedDmodeFloorWithAreaInfo(ILogger logger, AtgenDmodeAreaInfo dmodeAreaInfo);
+        public static partial void GeneratedDmodeFloorWithAreaInfo(
+            ILogger logger,
+            AtgenDmodeAreaInfo dmodeAreaInfo
+        );
     }
 }

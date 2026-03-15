@@ -140,6 +140,7 @@ public partial class CharaService(
     {
         [LoggerMessage(LogLevel.Debug, "Leveling up chara {@chara}")]
         public static partial void LevelingUpChara(ILogger logger, DbPlayerCharaData chara);
+
         [LoggerMessage(LogLevel.Debug, "New char data: {@chara}")]
         public static partial void NewCharData(ILogger logger, DbPlayerCharaData chara);
     }

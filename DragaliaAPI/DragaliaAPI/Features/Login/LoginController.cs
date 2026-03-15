@@ -99,6 +99,9 @@ public partial class LoginController(
     private static partial class Log
     {
         [LoggerMessage(LogLevel.Information, "Applying daily reset action: {action}")]
-        public static partial void ApplyingDailyResetAction(ILogger logger, IDailyResetAction action);
+        public static partial void ApplyingDailyResetAction(
+            ILogger logger,
+            IDailyResetAction action
+        );
     }
 }

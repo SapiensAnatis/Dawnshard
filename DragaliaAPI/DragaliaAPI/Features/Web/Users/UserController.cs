@@ -7,8 +7,10 @@ namespace DragaliaAPI.Features.Web.Users;
 
 [ApiController]
 [Route("/api/user")]
-internal sealed partial class UserController(UserService userService, ILogger<UserController> logger)
-    : ControllerBase
+internal sealed partial class UserController(
+    UserService userService,
+    ILogger<UserController> logger
+) : ControllerBase
 {
     [HttpGet("me")]
     [Authorize(Policy = PolicyNames.RequireValidWebJwt)]

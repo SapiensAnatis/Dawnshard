@@ -85,8 +85,10 @@ public partial class DailyEndeavourResetAction(
     {
         [LoggerMessage(LogLevel.Debug, "Adding permanent daily endeavours")]
         public static partial void AddingPermanentDailyEndeavours(ILogger logger);
+
         [LoggerMessage(LogLevel.Debug, "Adding daily endeavours for event {eventId}")]
         public static partial void AddingDailyEndeavoursForEvent(ILogger logger, int eventId);
+
         [LoggerMessage(LogLevel.Debug, "Skipping as event data uninitialized")]
         public static partial void SkippingAsEventDataUninitialized(ILogger logger);
     }

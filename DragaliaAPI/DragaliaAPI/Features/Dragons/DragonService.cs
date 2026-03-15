@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
@@ -14,7 +15,6 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Dragons;
 
@@ -230,7 +230,10 @@ public partial class DragonService(
                     }
                     else
                     {
-                        Log.FailedToUnlockNextStoryForDragonIndexWasOutOfRange(logger, nextStoryUnlockIndex);
+                        Log.FailedToUnlockNextStoryForDragonIndexWasOutOfRange(
+                            logger,
+                            nextStoryUnlockIndex
+                        );
                     }
 
                     return reward;
@@ -998,23 +1001,62 @@ public partial class DragonService(
 
     private static partial class Log
     {
-        [LoggerMessage(LogLevel.Warning, "Failed to unlock next story for dragon: index {index} was out of range")]
-        public static partial void FailedToUnlockNextStoryForDragonIndexWasOutOfRange(ILogger logger, int index);
-        [LoggerMessage(LogLevel.Debug, "Creating GiftRewardList from rewards {@rewards} and levelGifts: {@levelGifts}")]
-        public static partial void CreatingGiftRewardListFromRewardsAndLevelGifts(ILogger logger, List<Tuple<DragonGifts, List<DragonRewardEntityList>>> rewards, List<Tuple<DragonGifts, List<RewardReliabilityList>>> levelGifts);
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Failed to unlock next story for dragon: index {index} was out of range"
+        )]
+        public static partial void FailedToUnlockNextStoryForDragonIndexWasOutOfRange(
+            ILogger logger,
+            int index
+        );
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Creating GiftRewardList from rewards {@rewards} and levelGifts: {@levelGifts}"
+        )]
+        public static partial void CreatingGiftRewardListFromRewardsAndLevelGifts(
+            ILogger logger,
+            List<Tuple<DragonGifts, List<DragonRewardEntityList>>> rewards,
+            List<Tuple<DragonGifts, List<RewardReliabilityList>>> levelGifts
+        );
+
         [LoggerMessage(LogLevel.Debug, "GiftRewardList: {@list}")]
-        public static partial void GiftRewardList(ILogger logger, List<AtgenDragonGiftRewardList> list);
-        [LoggerMessage(LogLevel.Debug, "Creating response from rewards {@rewards} and levelGifts: {@levelGifts}")]
-        public static partial void CreatingResponseFromRewardsAndLevelGifts(ILogger logger, IEnumerable<Tuple<DragonGifts, List<DragonRewardEntityList>>> rewards, IEnumerable<Tuple<DragonGifts, List<RewardReliabilityList>>> levelGifts);
+        public static partial void GiftRewardList(
+            ILogger logger,
+            List<AtgenDragonGiftRewardList> list
+        );
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Creating response from rewards {@rewards} and levelGifts: {@levelGifts}"
+        )]
+        public static partial void CreatingResponseFromRewardsAndLevelGifts(
+            ILogger logger,
+            IEnumerable<Tuple<DragonGifts, List<DragonRewardEntityList>>> rewards,
+            IEnumerable<Tuple<DragonGifts, List<RewardReliabilityList>>> levelGifts
+        );
+
         [LoggerMessage(LogLevel.Debug, "Pre-LimitBreak Dragon: {@dragon}")]
         public static partial void PreLimitBreakDragon(ILogger logger, DbPlayerDragonData dragon);
+
         [LoggerMessage(LogLevel.Debug, "Post-LimitBreak Dragon: {@dragon}")]
         public static partial void PostLimitBreakDragon(ILogger logger, DbPlayerDragonData dragon);
+
         [LoggerMessage(LogLevel.Information, "Requested sale of {count} dragons: {@list}")]
-        public static partial void RequestedSaleOfDragons(ILogger logger, int count, List<DbPlayerDragonData> list);
+        public static partial void RequestedSaleOfDragons(
+            ILogger logger,
+            int count,
+            List<DbPlayerDragonData> list
+        );
+
         [LoggerMessage(LogLevel.Debug, "Pre-sale: rupies {rupies}, eldwater {eldwater}")]
         public static partial void PreSaleRupiesEldwater(ILogger logger, long rupies, int eldwater);
+
         [LoggerMessage(LogLevel.Debug, "Post-sale: rupies {rupies}, eldwater {eldwater}")]
-        public static partial void PostSaleRupiesEldwater(ILogger logger, long rupies, int eldwater);
+        public static partial void PostSaleRupiesEldwater(
+            ILogger logger,
+            long rupies,
+            int eldwater
+        );
     }
 }

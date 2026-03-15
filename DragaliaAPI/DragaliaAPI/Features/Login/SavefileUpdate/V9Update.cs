@@ -107,11 +107,30 @@ public partial class V9Update(
     {
         [LoggerMessage(LogLevel.Debug, "Skipping unknown character {chara}")]
         public static partial void SkippingUnknownCharacter(ILogger logger, Charas chara);
+
         [LoggerMessage(LogLevel.Debug, "Adding missing first story {storyId} for chara {chara}")]
-        public static partial void AddingMissingFirstStoryForChara(ILogger logger, int storyId, Charas chara);
+        public static partial void AddingMissingFirstStoryForChara(
+            ILogger logger,
+            int storyId,
+            Charas chara
+        );
+
         [LoggerMessage(LogLevel.Error, "Failed to look up story {num} for chara {chara}")]
-        public static partial void FailedToLookUpStoryForChara(ILogger logger, int num, Charas chara);
-        [LoggerMessage(LogLevel.Debug, "Adding missing story {storyId} (episode {episode}) for chara {chara}")]
-        public static partial void AddingMissingStoryEpisodeForChara(ILogger logger, int storyId, int episode, Charas chara);
+        public static partial void FailedToLookUpStoryForChara(
+            ILogger logger,
+            int num,
+            Charas chara
+        );
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Adding missing story {storyId} (episode {episode}) for chara {chara}"
+        )]
+        public static partial void AddingMissingStoryEpisodeForChara(
+            ILogger logger,
+            int storyId,
+            int episode,
+            Charas chara
+        );
     }
 }

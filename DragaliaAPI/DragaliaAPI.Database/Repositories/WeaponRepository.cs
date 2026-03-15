@@ -151,12 +151,19 @@ public partial class WeaponRepository : IWeaponRepository
     {
         [LoggerMessage(LogLevel.Debug, "Adding weapon {weapon}")]
         public static partial void AddingWeapon(ILogger logger, WeaponBodies weapon);
+
         [LoggerMessage(LogLevel.Debug, "Adding weapon skin {skin}")]
         public static partial void AddingWeaponSkin(ILogger logger, int skin);
+
         [LoggerMessage(LogLevel.Debug, "Weapon skin was already owned.")]
         public static partial void WeaponSkinWasAlreadyOwned(ILogger logger);
+
         [LoggerMessage(LogLevel.Debug, "Unlocking passive ability {@ability}")]
-        public static partial void UnlockingPassiveAbility(ILogger logger, WeaponPassiveAbility ability);
+        public static partial void UnlockingPassiveAbility(
+            ILogger logger,
+            WeaponPassiveAbility ability
+        );
+
         [LoggerMessage(LogLevel.Debug, "Passive was already owned.")]
         public static partial void PassiveWasAlreadyOwned(ILogger logger);
     }

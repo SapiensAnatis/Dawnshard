@@ -109,6 +109,7 @@ internal sealed partial class UpdateController(
     {
         [LoggerMessage(LogLevel.Debug, "reset_new target: {@target}")]
         public static partial void ResetNewTarget(ILogger logger, AtgenTargetList target);
+
         [LoggerMessage(LogLevel.Information, "Unhandled type {resetType} in update/reset_new")]
         public static partial void UnhandledTypeInUpdateResetNew(ILogger logger, string resetType);
     }

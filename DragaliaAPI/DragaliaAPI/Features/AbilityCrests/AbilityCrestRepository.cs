@@ -97,6 +97,7 @@ public partial class AbilityCrestRepository : IAbilityCrestRepository
     {
         [LoggerMessage(LogLevel.Debug, "Adding ability crest {print}")]
         public static partial void AddingAbilityCrest(ILogger logger, AbilityCrestId print);
+
         [LoggerMessage(LogLevel.Warning, "Ability crest was already owned.")]
         public static partial void AbilityCrestWasAlreadyOwned(ILogger logger);
     }

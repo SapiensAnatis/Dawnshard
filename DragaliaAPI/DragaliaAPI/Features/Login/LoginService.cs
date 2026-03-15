@@ -70,7 +70,12 @@ public partial class LoginService(
 
             if (reward == null)
             {
-                Log.FailedToGetRewardForBonusDataWithDayIsLoop(logger, bonusData.Id, dayId, bonusData.IsLoop);
+                Log.FailedToGetRewardForBonusDataWithDayIsLoop(
+                    logger,
+                    bonusData.Id,
+                    dayId,
+                    bonusData.IsLoop
+                );
                 continue;
             }
 
@@ -180,9 +185,24 @@ public partial class LoginService(
 
     private static partial class Log
     {
-        [LoggerMessage(LogLevel.Debug, "Player has already completed login bonus {@bonus}, skipping...")]
-        public static partial void PlayerHasAlreadyCompletedLoginBonusSkipping(ILogger logger, DbLoginBonus bonus);
-        [LoggerMessage(LogLevel.Warning, "Failed to get reward for bonus data {bonusDataId} with day {dayId} (IsLoop: {isLoop})")]
-        public static partial void FailedToGetRewardForBonusDataWithDayIsLoop(ILogger logger, int bonusDataId, int dayId, bool isLoop);
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Player has already completed login bonus {@bonus}, skipping..."
+        )]
+        public static partial void PlayerHasAlreadyCompletedLoginBonusSkipping(
+            ILogger logger,
+            DbLoginBonus bonus
+        );
+
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Failed to get reward for bonus data {bonusDataId} with day {dayId} (IsLoop: {isLoop})"
+        )]
+        public static partial void FailedToGetRewardForBonusDataWithDayIsLoop(
+            ILogger logger,
+            int bonusDataId,
+            int dayId,
+            bool isLoop
+        );
     }
 }

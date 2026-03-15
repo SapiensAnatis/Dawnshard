@@ -286,6 +286,7 @@ public partial class HeroParamService(
     {
         [LoggerMessage(LogLevel.Debug, "Fetching HeroParam for slot {partySlots}")]
         public static partial void FetchingHeroParamForSlot(ILogger logger, int partySlots);
+
         [LoggerMessage(LogLevel.Debug, "Retrieved {n} party units")]
         public static partial void RetrievedPartyUnits(ILogger logger, int n);
     }

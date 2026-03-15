@@ -99,6 +99,7 @@ public partial class DungeonService(
     {
         [LoggerMessage(LogLevel.Debug, "Created dungeon session with key {Key}")]
         public static partial void CreatedDungeonSessionWithKey(ILogger logger, string key);
+
         [LoggerMessage(LogLevel.Debug, "Removing dungeon session with key {Key}")]
         public static partial void RemovingDungeonSessionWithKey(ILogger logger, string key);
     }

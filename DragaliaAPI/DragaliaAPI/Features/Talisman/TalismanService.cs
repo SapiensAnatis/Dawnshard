@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Shared.Reward;
@@ -5,7 +6,6 @@ using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Talisman;
 
@@ -62,8 +62,19 @@ public partial class TalismanService(
     private static partial class Log
     {
         [LoggerMessage(LogLevel.Debug, "Selling talismans {@talismanKeyIdList}")]
-        public static partial void SellingTalismans(ILogger logger, IEnumerable<long> talismanKeyIdList);
-        [LoggerMessage(LogLevel.Debug, "Changed lock state of talisman {@talismanKeyId} to {isLocked}")]
-        public static partial void ChangedLockStateOfTalismanTo(ILogger logger, long talismanKeyId, bool isLocked);
+        public static partial void SellingTalismans(
+            ILogger logger,
+            IEnumerable<long> talismanKeyIdList
+        );
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Changed lock state of talisman {@talismanKeyId} to {isLocked}"
+        )]
+        public static partial void ChangedLockStateOfTalismanTo(
+            ILogger logger,
+            long talismanKeyId,
+            bool isLocked
+        );
     }
 }

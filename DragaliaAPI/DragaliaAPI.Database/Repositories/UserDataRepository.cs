@@ -155,7 +155,15 @@ public partial class UserDataRepository : BaseRepository, IUserDataRepository
     {
         [LoggerMessage(LogLevel.Debug, "Updating player rupies by {offset}")]
         public static partial void UpdatingPlayerRupiesBy(ILogger logger, long offset);
-        [LoggerMessage(LogLevel.Warning, "Failed rupie check: requested {quantity} rupies, but user had {coin}")]
-        public static partial void FailedRupieCheckRequestedRupiesButUserHad(ILogger logger, long quantity, long coin);
+
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Failed rupie check: requested {quantity} rupies, but user had {coin}"
+        )]
+        public static partial void FailedRupieCheckRequestedRupiesButUserHad(
+            ILogger logger,
+            long quantity,
+            long coin
+        );
     }
 }

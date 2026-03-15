@@ -4,7 +4,8 @@ using static DragaliaAPI.Infrastructure.DragaliaHttpConstants;
 
 namespace DragaliaAPI.Infrastructure.OutputCaching;
 
-internal partial class RepeatedRequestPolicy(ILogger<RepeatedRequestPolicy> logger) : IOutputCachePolicy
+internal partial class RepeatedRequestPolicy(ILogger<RepeatedRequestPolicy> logger)
+    : IOutputCachePolicy
 {
     public ValueTask CacheRequestAsync(OutputCacheContext context, CancellationToken cancellation)
     {
@@ -88,7 +89,10 @@ internal partial class RepeatedRequestPolicy(ILogger<RepeatedRequestPolicy> logg
 
     private static partial class Log
     {
-        [LoggerMessage(LogLevel.Information, "Detected repeated Request-Token. Serving cached output.")]
+        [LoggerMessage(
+            LogLevel.Information,
+            "Detected repeated Request-Token. Serving cached output."
+        )]
         public static partial void DetectedRepeatedRequestTokenServingCachedOutput(ILogger logger);
     }
 }

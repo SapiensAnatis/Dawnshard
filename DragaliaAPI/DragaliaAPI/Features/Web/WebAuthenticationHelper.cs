@@ -144,9 +144,25 @@ public static partial class WebAuthenticationHelper
     {
         [LoggerMessage(LogLevel.Debug, "Using cached player info: {@PlayerInfo}")]
         public static partial void UsingCachedPlayerInfo(ILogger logger, PlayerInfo playerInfo);
-        [LoggerMessage(LogLevel.Debug, "Retrieved game account {GameAccountId} from BaaS for web account {WebAccountId}")]
-        public static partial void RetrievedGameAccountFromBaaSForWebAccount(ILogger logger, string? gameAccountId, string webAccountId);
-        [LoggerMessage(LogLevel.Debug, "PlayerInfo for game account {GameAccountId}: {@PlayerInfo}")]
-        public static partial void PlayerInfoForGameAccount(ILogger logger, string gameAccountId, object playerInfo);
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Retrieved game account {GameAccountId} from BaaS for web account {WebAccountId}"
+        )]
+        public static partial void RetrievedGameAccountFromBaaSForWebAccount(
+            ILogger logger,
+            string? gameAccountId,
+            string webAccountId
+        );
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "PlayerInfo for game account {GameAccountId}: {@PlayerInfo}"
+        )]
+        public static partial void PlayerInfoForGameAccount(
+            ILogger logger,
+            string gameAccountId,
+            object playerInfo
+        );
     }
 }

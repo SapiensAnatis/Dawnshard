@@ -223,8 +223,16 @@ public partial class DungeonStartController(
 
     private static partial class Log
     {
-        [LoggerMessage(LogLevel.Debug, "Attempting to start quest {QuestId} with helper {SupportViewerId}")]
-        public static partial void AttemptingToStartQuestWithHelper(ILogger logger, int questId, ulong supportViewerId);
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Attempting to start quest {QuestId} with helper {SupportViewerId}"
+        )]
+        public static partial void AttemptingToStartQuestWithHelper(
+            ILogger logger,
+            int questId,
+            ulong supportViewerId
+        );
+
         [LoggerMessage(LogLevel.Debug, "Starting dungeon for quest id {questId}")]
         public static partial void StartingDungeonForQuestId(ILogger logger, int questId);
     }

@@ -72,7 +72,14 @@ public partial class StoryRepository : IStoryRepository
 
     private static partial class Log
     {
-        [LoggerMessage(LogLevel.Debug, "Requested story id {id} with type {type} was not found, creating...")]
-        public static partial void RequestedStoryIdWithTypeWasNotFoundCreating(ILogger logger, int id, StoryTypes type);
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Requested story id {id} with type {type} was not found, creating..."
+        )]
+        public static partial void RequestedStoryIdWithTypeWasNotFoundCreating(
+            ILogger logger,
+            int id,
+            StoryTypes type
+        );
     }
 }

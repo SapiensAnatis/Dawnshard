@@ -61,7 +61,11 @@ public partial class WallRecordController : DragaliaControllerBase
 
         bool isRecompletingMaxLevel = questWall.WallLevel == WallService.MaximumQuestWallLevel;
 
-        Log.ClearedWallQuestWithWallIdAndWallLevel(logger, request.WallId, dungeonSession.WallLevel);
+        Log.ClearedWallQuestWithWallIdAndWallLevel(
+            logger,
+            request.WallId,
+            dungeonSession.WallLevel
+        );
 
         // Level up completed wall quest
         await wallService.LevelupQuestWall(request.WallId);
@@ -150,7 +154,14 @@ public partial class WallRecordController : DragaliaControllerBase
 
     private static partial class Log
     {
-        [LoggerMessage(LogLevel.Information, "Cleared wall quest with 'wall_id' {@wall_id} and 'wall_level' {@wall_level}")]
-        public static partial void ClearedWallQuestWithWallIdAndWallLevel(ILogger logger, int wall_id, int wall_level);
+        [LoggerMessage(
+            LogLevel.Information,
+            "Cleared wall quest with 'wall_id' {@wall_id} and 'wall_level' {@wall_level}"
+        )]
+        public static partial void ClearedWallQuestWithWallIdAndWallLevel(
+            ILogger logger,
+            int wall_id,
+            int wall_level
+        );
     }
 }

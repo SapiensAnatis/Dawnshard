@@ -1,3 +1,5 @@
+using DragaliaAPI.Photon.Shared.Enums;
+using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Photon.Shared.Requests;
 using DragaliaAPI.Photon.StateManager.Authentication;
 using DragaliaAPI.Photon.StateManager.Models;
@@ -6,8 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Redis.OM.Contracts;
 using Redis.OM.Searching;
-using DragaliaAPI.Photon.Shared.Enums;
-using DragaliaAPI.Photon.Shared.Models;
 
 namespace DragaliaAPI.Photon.StateManager.Controllers;
 
@@ -261,31 +261,84 @@ public partial class EventController : ControllerBase
     {
         [LoggerMessage(LogLevel.Information, "Created new game: {@game}")]
         public static partial void CreatedNewGame(ILogger logger, RedisGame game);
+
         [LoggerMessage(LogLevel.Error, "Could not find game {name}")]
         public static partial void CouldNotFindGame(ILogger logger, string name);
+
         [LoggerMessage(LogLevel.Error, "Player {@player} attempted to join full game {@game}")]
-        public static partial void PlayerAttemptedToJoinFullGame(ILogger logger, Player player, RedisGame game);
-        [LoggerMessage(LogLevel.Error, "Player {@player} attempted to join game {@game} that they were already in.")]
-        public static partial void PlayerAttemptedToJoinGameThatTheyWereAlreadyIn(ILogger logger, Player player, RedisGame game);
+        public static partial void PlayerAttemptedToJoinFullGame(
+            ILogger logger,
+            Player player,
+            RedisGame game
+        );
+
+        [LoggerMessage(
+            LogLevel.Error,
+            "Player {@player} attempted to join game {@game} that they were already in."
+        )]
+        public static partial void PlayerAttemptedToJoinGameThatTheyWereAlreadyIn(
+            ILogger logger,
+            Player player,
+            RedisGame game
+        );
+
         [LoggerMessage(LogLevel.Information, "Added player {@player} to game {@game}")]
         public static partial void AddedPlayerToGame(ILogger logger, Player player, RedisGame game);
+
         [LoggerMessage(LogLevel.Information, "Player {@player} was not in game {@game}")]
-        public static partial void PlayerWasNotInGame(ILogger logger, Player player, RedisGame game);
+        public static partial void PlayerWasNotInGame(
+            ILogger logger,
+            Player player,
+            RedisGame game
+        );
+
         [LoggerMessage(LogLevel.Debug, "Hiding game {@game}")]
         public static partial void HidingGame(ILogger logger, RedisGame game);
+
         [LoggerMessage(LogLevel.Information, "Removed player {@player} from game {@game}")]
-        public static partial void RemovedPlayerFromGame(ILogger logger, Player player, RedisGame game);
-        [LoggerMessage(LogLevel.Information, "Could not find game {name}. It may have already been closed.")]
-        public static partial void CouldNotFindGameItMayHaveAlreadyBeenClosed(ILogger logger, string name);
+        public static partial void RemovedPlayerFromGame(
+            ILogger logger,
+            Player player,
+            RedisGame game
+        );
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Could not find game {name}. It may have already been closed."
+        )]
+        public static partial void CouldNotFindGameItMayHaveAlreadyBeenClosed(
+            ILogger logger,
+            string name
+        );
+
         [LoggerMessage(LogLevel.Information, "Removed game {@game}")]
         public static partial void RemovedGame(ILogger logger, RedisGame game);
-        [LoggerMessage(LogLevel.Information, "Updated game {game} entry conditions to {@conditions}")]
-        public static partial void UpdatedGameEntryConditionsTo(ILogger logger, string game, EntryConditions conditions);
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Updated game {game} entry conditions to {@conditions}"
+        )]
+        public static partial void UpdatedGameEntryConditionsTo(
+            ILogger logger,
+            string game,
+            EntryConditions conditions
+        );
+
         [LoggerMessage(LogLevel.Information, "Updated game {game} matching type to {type}")]
-        public static partial void UpdatedGameMatchingTypeTo(ILogger logger, string game, MatchingTypes type);
+        public static partial void UpdatedGameMatchingTypeTo(
+            ILogger logger,
+            string game,
+            MatchingTypes type
+        );
+
         [LoggerMessage(LogLevel.Information, "Updated game {game} room ID to {newId}")]
         public static partial void UpdatedGameRoomIDTo(ILogger logger, string game, int newId);
+
         [LoggerMessage(LogLevel.Information, "Updated game {game} visibility to {newVisibility}")]
-        public static partial void UpdatedGameVisibilityTo(ILogger logger, string game, bool newVisibility);
+        public static partial void UpdatedGameVisibilityTo(
+            ILogger logger,
+            string game,
+            bool newVisibility
+        );
     }
 }

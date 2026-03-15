@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
@@ -6,7 +7,6 @@ using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Tutorial;
 
@@ -177,8 +177,10 @@ public partial class TutorialService : ITutorialService
     {
         [LoggerMessage(LogLevel.Debug, "New tutorial status: {status}")]
         public static partial void NewTutorialStatus(ILogger logger, int status);
+
         [LoggerMessage(LogLevel.Debug, "Added tutorial flag: {flag} ({@flags})")]
         public static partial void AddedTutorialFlag(ILogger logger, int flag, ISet<int> flags);
+
         [LoggerMessage(LogLevel.Debug, "Added materials for the wyrmprint tutorial")]
         public static partial void AddedMaterialsForTheWyrmprintTutorial(ILogger logger);
     }

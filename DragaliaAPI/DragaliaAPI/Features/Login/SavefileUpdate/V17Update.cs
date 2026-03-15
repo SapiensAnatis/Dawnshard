@@ -55,6 +55,9 @@ public partial class V17Update(
     private static partial class Log
     {
         [LoggerMessage(LogLevel.Debug, "Adding reliability entry for {missingReliability}")]
-        public static partial void AddingReliabilityEntryFor(ILogger logger, DragonId missingReliability);
+        public static partial void AddingReliabilityEntryFor(
+            ILogger logger,
+            DragonId missingReliability
+        );
     }
 }

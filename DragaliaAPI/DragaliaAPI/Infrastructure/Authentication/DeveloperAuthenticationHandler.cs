@@ -6,7 +6,8 @@ using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Infrastructure.Authentication;
 
-public partial class DeveloperAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+public partial class DeveloperAuthenticationHandler
+    : AuthenticationHandler<AuthenticationSchemeOptions>
 {
     private readonly IWebHostEnvironment environment;
 
@@ -74,6 +75,7 @@ public partial class DeveloperAuthenticationHandler : AuthenticationHandler<Auth
     {
         [LoggerMessage(LogLevel.Debug, "No Authorization header found.")]
         public static partial void NoAuthorizationHeaderFound(ILogger logger);
+
         [LoggerMessage(LogLevel.Debug, "Authenticated using token {token}")]
         public static partial void AuthenticatedUsingToken(ILogger logger, string token);
     }

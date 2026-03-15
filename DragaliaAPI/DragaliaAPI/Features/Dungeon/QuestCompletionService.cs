@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Shared.Reward;
@@ -10,7 +11,6 @@ using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Dungeon;
 
@@ -394,12 +394,25 @@ public partial class QuestCompletionService(
     {
         [LoggerMessage(LogLevel.Debug, "Calculated enemy scoring {points}")]
         public static partial void CalculatedEnemyScoring(ILogger logger, int points);
+
         [LoggerMessage(LogLevel.Debug, "Completed mission score missions {@missions}")]
-        public static partial void CompletedMissionScoreMissions(ILogger logger, List<AtgenScoreMissionSuccessList> missions);
-        [LoggerMessage(LogLevel.Debug, "Rewarding {boostPointQuantity} extra points due to abilities")]
-        public static partial void RewardingExtraPointsDueToAbilities(ILogger logger, int boostPointQuantity);
+        public static partial void CompletedMissionScoreMissions(
+            ILogger logger,
+            List<AtgenScoreMissionSuccessList> missions
+        );
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Rewarding {boostPointQuantity} extra points due to abilities"
+        )]
+        public static partial void RewardingExtraPointsDueToAbilities(
+            ILogger logger,
+            int boostPointQuantity
+        );
+
         [LoggerMessage(LogLevel.Debug, "Completed quest mission {missionId}")]
         public static partial void CompletedQuestMission(ILogger logger, int missionId);
+
         [LoggerMessage(LogLevel.Debug, "Granting bonus for completing all missions")]
         public static partial void GrantingBonusForCompletingAllMissions(ILogger logger);
     }

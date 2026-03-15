@@ -61,9 +61,17 @@ public partial class ZenaAuthenticationHandler : AuthenticationHandler<Authentic
     {
         [LoggerMessage(LogLevel.Warning, "Failed to acquire Zena bearer token")]
         public static partial void FailedToAcquireZenaBearerToken(ILogger logger);
+
         [LoggerMessage(LogLevel.Information, "Failed to parse Authorization header.")]
         public static partial void FailedToParseAuthorizationHeader(ILogger logger);
-        [LoggerMessage(LogLevel.Information, "Authorization header {@Header} did not meet requirements")]
-        public static partial void AuthorizationHeaderDidNotMeetRequirements(ILogger logger, AuthenticationHeaderValue header);
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Authorization header {@Header} did not meet requirements"
+        )]
+        public static partial void AuthorizationHeaderDidNotMeetRequirements(
+            ILogger logger,
+            AuthenticationHeaderValue header
+        );
     }
 }

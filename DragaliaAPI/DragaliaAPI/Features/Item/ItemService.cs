@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Features.Shop;
@@ -7,7 +8,6 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Trade;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Item;
 
@@ -71,6 +71,9 @@ public partial class ItemService(
     private static partial class Log
     {
         [LoggerMessage(LogLevel.Debug, "Processing items {@useItems}")]
-        public static partial void ProcessingItems(ILogger logger, IEnumerable<AtgenUseItemList> useItems);
+        public static partial void ProcessingItems(
+            ILogger logger,
+            IEnumerable<AtgenUseItemList> useItems
+        );
     }
 }

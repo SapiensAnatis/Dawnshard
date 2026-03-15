@@ -1,10 +1,10 @@
+using System.Collections.Generic;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.CoOp;
 using DragaliaAPI.Features.Friends;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
@@ -146,10 +146,22 @@ internal sealed partial class DungeonRecordHelperService(
     private static partial class Log
     {
         [LoggerMessage(LogLevel.Debug, "Retrieved teammate support list {@supportList}")]
-        public static partial void RetrievedTeammateSupportList(ILogger logger, IEnumerable<UserSupportList> supportList);
+        public static partial void RetrievedTeammateSupportList(
+            ILogger logger,
+            IEnumerable<UserSupportList> supportList
+        );
+
         [LoggerMessage(LogLevel.Warning, "No user details returned for viewer ID {ViewerId}")]
         public static partial void NoUserDetailsReturnedForViewerID(ILogger logger, long viewerId);
-        [LoggerMessage(LogLevel.Warning, "Failed to populate multiplayer support info for viewer ID {ViewerId}")]
-        public static partial void FailedToPopulateMultiplayerSupportInfoForViewerID(ILogger logger, Exception exception, long viewerId);
+
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Failed to populate multiplayer support info for viewer ID {ViewerId}"
+        )]
+        public static partial void FailedToPopulateMultiplayerSupportInfoForViewerID(
+            ILogger logger,
+            Exception exception,
+            long viewerId
+        );
     }
 }

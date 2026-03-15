@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.DmodeDungeon;
@@ -9,7 +10,6 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Dmode;
 
@@ -75,7 +75,10 @@ public partial class DmodeService(
             catch (DragaliaException ex)
             {
                 // Cache data has errors, resetting dungeon info
-                Log.DmodeCacheSanityCheckFailedNoFloorOrIngameInfoResettingStateException(logger, ex);
+                Log.DmodeCacheSanityCheckFailedNoFloorOrIngameInfoResettingStateException(
+                    logger,
+                    ex
+                );
 
                 if (record != null)
                     await dmodeCacheService.DeleteFloorInfo(record.FloorKey);
@@ -353,13 +356,39 @@ public partial class DmodeService(
 
     private static partial class Log
     {
-        [LoggerMessage(LogLevel.Warning, "Dmode cache sanity check failed (no floor or ingame info), resetting state. Exception: {ex}")]
-        public static partial void DmodeCacheSanityCheckFailedNoFloorOrIngameInfoResettingStateException(ILogger logger, DragaliaException ex);
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Dmode cache sanity check failed (no floor or ingame info), resetting state. Exception: {ex}"
+        )]
+        public static partial void DmodeCacheSanityCheckFailedNoFloorOrIngameInfoResettingStateException(
+            ILogger logger,
+            DragaliaException ex
+        );
+
         [LoggerMessage(LogLevel.Debug, "Building up servitors: {@servitorBuildups}")]
-        public static partial void BuildingUpServitors(ILogger logger, IEnumerable<DmodeServitorPassiveList> servitorBuildups);
-        [LoggerMessage(LogLevel.Debug, "Starting dmode expedition to floor {targetFloor} with characters {@charas}")]
-        public static partial void StartingDmodeExpeditionToFloorWithCharacters(ILogger logger, int targetFloor, IEnumerable<Charas> charas);
-        [LoggerMessage(LogLevel.Debug, "Finishing expedition {@expedition}. Force-finished: {isForceFinish}")]
-        public static partial void FinishingExpeditionForceFinished(ILogger logger, DmodeExpedition expedition, bool isForceFinish);
+        public static partial void BuildingUpServitors(
+            ILogger logger,
+            IEnumerable<DmodeServitorPassiveList> servitorBuildups
+        );
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Starting dmode expedition to floor {targetFloor} with characters {@charas}"
+        )]
+        public static partial void StartingDmodeExpeditionToFloorWithCharacters(
+            ILogger logger,
+            int targetFloor,
+            IEnumerable<Charas> charas
+        );
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Finishing expedition {@expedition}. Force-finished: {isForceFinish}"
+        )]
+        public static partial void FinishingExpeditionForceFinished(
+            ILogger logger,
+            DmodeExpedition expedition,
+            bool isForceFinish
+        );
     }
 }

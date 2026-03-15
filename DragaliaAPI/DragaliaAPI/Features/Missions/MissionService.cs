@@ -1,4 +1,5 @@
 using System.Collections.Frozen;
+using System.Collections.Generic;
 using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -12,7 +13,6 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Missions;
 
@@ -642,23 +642,70 @@ public partial class MissionService(
     private static partial class Log
     {
         [LoggerMessage(LogLevel.Information, "Starting mission {missionId} ({missionType})")]
-        public static partial void StartingMission(ILogger logger, int missionId, MissionType missionType);
-        [LoggerMessage(LogLevel.Information, "Adding completed mission {missionId} ({missionType})")]
-        public static partial void AddingCompletedMission(ILogger logger, int missionId, MissionType missionType);
-        [LoggerMessage(LogLevel.Information, "Unlocking main story mission group {groupId} ({groupMissionIds})")]
-        public static partial void UnlockingMainStoryMissionGroup(ILogger logger, int groupId, IEnumerable<int> groupMissionIds);
-        [LoggerMessage(LogLevel.Information, "Unlocking drill story mission group {groupId} ({groupMissionIds})")]
-        public static partial void UnlockingDrillStoryMissionGroup(ILogger logger, int groupId, IEnumerable<int> groupMissionIds);
-        [LoggerMessage(LogLevel.Information, "Unlocking memory event mission group {eventId} ({groupMissionIds})")]
-        public static partial void UnlockingMemoryEventMissionGroup(ILogger logger, int eventId, IEnumerable<int> groupMissionIds);
+        public static partial void StartingMission(
+            ILogger logger,
+            int missionId,
+            MissionType missionType
+        );
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Adding completed mission {missionId} ({missionType})"
+        )]
+        public static partial void AddingCompletedMission(
+            ILogger logger,
+            int missionId,
+            MissionType missionType
+        );
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Unlocking main story mission group {groupId} ({groupMissionIds})"
+        )]
+        public static partial void UnlockingMainStoryMissionGroup(
+            ILogger logger,
+            int groupId,
+            IEnumerable<int> groupMissionIds
+        );
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Unlocking drill story mission group {groupId} ({groupMissionIds})"
+        )]
+        public static partial void UnlockingDrillStoryMissionGroup(
+            ILogger logger,
+            int groupId,
+            IEnumerable<int> groupMissionIds
+        );
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Unlocking memory event mission group {eventId} ({groupMissionIds})"
+        )]
+        public static partial void UnlockingMemoryEventMissionGroup(
+            ILogger logger,
+            int eventId,
+            IEnumerable<int> groupMissionIds
+        );
+
         [LoggerMessage(LogLevel.Debug, "Starting missions for event with run info {@info}")]
-        public static partial void StartingMissionsForEventWithRunInfo(ILogger logger, EventRunInformation info);
+        public static partial void StartingMissionsForEventWithRunInfo(
+            ILogger logger,
+            EventRunInformation info
+        );
+
         [LoggerMessage(LogLevel.Information, "Unlocking event missions for event {eventId}")]
         public static partial void UnlockingEventMissionsForEvent(ILogger logger, int eventId);
+
         [LoggerMessage(LogLevel.Information, "Redeeming mission {missionId}")]
         public static partial void RedeemingMission(ILogger logger, int missionId);
+
         [LoggerMessage(LogLevel.Debug, "Claiming daily missions: {@missions}")]
-        public static partial void ClaimingDailyMissions(ILogger logger, IEnumerable<AtgenMissionParamsList> missions);
+        public static partial void ClaimingDailyMissions(
+            ILogger logger,
+            IEnumerable<AtgenMissionParamsList> missions
+        );
+
         [LoggerMessage(LogLevel.Debug, "Returning completed drill groups: {groups}")]
         public static partial void ReturningCompletedDrillGroups(ILogger logger, List<int> groups);
     }

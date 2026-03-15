@@ -266,6 +266,7 @@ internal partial class DungeonRecordService(
             Charas charaId,
             int unitNo
         );
+
         [LoggerMessage(LogLevel.Debug, "Detected co-op tutorial: updating tutorial status")]
         public static partial void DetectedCoOpTutorialUpdatingTutorialStatus(ILogger logger);
     }

@@ -453,12 +453,16 @@ public partial class AbilityCrestService : IAbilityCrestService
     {
         [LoggerMessage(LogLevel.Warning, "BuildupGroupId {id} invalid")]
         public static partial void BuildupGroupIdInvalid(ILogger logger, int id);
+
         [LoggerMessage(LogLevel.Warning, "BuildupLevelId {id} invalid")]
         public static partial void BuildupLevelIdInvalid(ILogger logger, int id);
+
         [LoggerMessage(LogLevel.Warning, "Player doesn't have enough materials to perform action")]
         public static partial void PlayerDoesnTHaveEnoughMaterialsToPerformAction(ILogger logger);
+
         [LoggerMessage(LogLevel.Warning, "Player doesn't have enough dewpoint to perform action")]
         public static partial void PlayerDoesnTHaveEnoughDewpointToPerformAction(ILogger logger);
+
         [LoggerMessage(LogLevel.Warning, "Cannot upgrade in increments greater than 1")]
         public static partial void CannotUpgradeInIncrementsGreaterThan1(ILogger logger);
     }

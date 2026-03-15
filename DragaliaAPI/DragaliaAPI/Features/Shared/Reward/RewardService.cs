@@ -231,11 +231,17 @@ public partial class RewardService(
     {
         [LoggerMessage(LogLevel.Trace, "Granting reward {@rewardEntity}")]
         public static partial void GrantingReward(ILogger logger, Entity rewardEntity);
+
         [LoggerMessage(LogLevel.Trace, "Result: {result}")]
         public static partial void Result(ILogger logger, RewardGrantResult result);
+
         [LoggerMessage(LogLevel.Error, "Granting of entity {@entity} failed.")]
         public static partial void GrantingOfEntityFailed(ILogger logger, Entity entity);
+
         [LoggerMessage(LogLevel.Error, "Failed to find reward handler for entity type {type}")]
-        public static partial void FailedToFindRewardHandlerForEntityType(ILogger logger, EntityTypes type);
+        public static partial void FailedToFindRewardHandlerForEntityType(
+            ILogger logger,
+            EntityTypes type
+        );
     }
 }

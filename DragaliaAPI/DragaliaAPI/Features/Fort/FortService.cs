@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
@@ -13,7 +14,6 @@ using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
 
 namespace DragaliaAPI.Features.Fort;
 
@@ -362,14 +362,18 @@ public partial class FortService(
 
         if (build.BuildStatus is not FortBuildStatus.LevelUp || time < build.BuildEndDate)
         {
-            Log.BuildingHasNotFinishedLevellingUpCurrentTime(logger, new
+            Log.BuildingHasNotFinishedLevellingUpCurrentTime(
+                logger,
+                new
                 {
                     build.BuildId,
                     build.PlantId,
                     build.Level,
                     build.BuildStartDate,
                     build.BuildEndDate,
-                }, time);
+                },
+                time
+            );
             throw new InvalidOperationException($"This building has not completed levelling up.");
         }
 
@@ -439,7 +443,11 @@ public partial class FortService(
         {
             // This is unlikely to happen, but best to keep the check just in case
 
-            Log.FailedToLookupBuildInformationForUpgradeOfBuildToLevel(logger, build, build.Level + 1);
+            Log.FailedToLookupBuildInformationForUpgradeOfBuildToLevel(
+                logger,
+                build,
+                build.Level + 1
+            );
 
             throw new DragaliaException(
                 ResultCode.FortPlantDetailNotFound,
@@ -642,38 +650,89 @@ public partial class FortService(
 
     private static partial class Log
     {
-        [LoggerMessage(LogLevel.Debug, "Added carpenter using payment type {type}. New count: {count}")]
-        public static partial void AddedCarpenterUsingPaymentTypeNewCount(ILogger logger, PaymentTypes type, int count);
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Added carpenter using payment type {type}. New count: {count}"
+        )]
+        public static partial void AddedCarpenterUsingPaymentTypeNewCount(
+            ILogger logger,
+            PaymentTypes type,
+            int count
+        );
+
         [LoggerMessage(LogLevel.Debug, "Active carpenters: {n1}, max carpenters: {n2}")]
         public static partial void ActiveCarpentersMaxCarpenters(ILogger logger, int n1, int n2);
+
         [LoggerMessage(LogLevel.Debug, "BuildAtOnce called for build {buildId}")]
         public static partial void BuildAtOnceCalledForBuild(ILogger logger, long buildId);
+
         [LoggerMessage(LogLevel.Debug, "LevelupAtOnce called for build {buildId}")]
         public static partial void LevelupAtOnceCalledForBuild(ILogger logger, long buildId);
+
         [LoggerMessage(LogLevel.Debug, "Build cancelled for build {buildId}")]
         public static partial void BuildCancelledForBuild(ILogger logger, long buildId);
+
         [LoggerMessage(LogLevel.Debug, "Levelup cancelled for build {buildId}")]
         public static partial void LevelupCancelledForBuild(ILogger logger, long buildId);
+
         [LoggerMessage(LogLevel.Debug, "Build ended for build {buildId}")]
         public static partial void BuildEndedForBuild(ILogger logger, long buildId);
+
         [LoggerMessage(LogLevel.Debug, "Levelup ended for build {buildId}")]
         public static partial void LevelupEndedForBuild(ILogger logger, long buildId);
-        [LoggerMessage(LogLevel.Debug, "Building {@Build} has not finished levelling up. Current time: {Time}")]
-        public static partial void BuildingHasNotFinishedLevellingUpCurrentTime(ILogger logger, object build, DateTimeOffset time);
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Building {@Build} has not finished levelling up. Current time: {Time}"
+        )]
+        public static partial void BuildingHasNotFinishedLevellingUpCurrentTime(
+            ILogger logger,
+            object build,
+            DateTimeOffset time
+        );
+
         [LoggerMessage(LogLevel.Debug, "Levelup started for build {buildId}")]
         public static partial void LevelupStartedForBuild(ILogger logger, long buildId);
+
         [LoggerMessage(LogLevel.Error, "Tried to level up build {@build} but it has no next level")]
-        public static partial void TriedToLevelUpBuildButItHasNoNextLevel(ILogger logger, DbFortBuild build);
-        [LoggerMessage(LogLevel.Error, "Failed to lookup build information for upgrade of build {@build} to level {level}!")]
-        public static partial void FailedToLookupBuildInformationForUpgradeOfBuildToLevel(ILogger logger, DbFortBuild build, int level);
+        public static partial void TriedToLevelUpBuildButItHasNoNextLevel(
+            ILogger logger,
+            DbFortBuild build
+        );
+
+        [LoggerMessage(
+            LogLevel.Error,
+            "Failed to lookup build information for upgrade of build {@build} to level {level}!"
+        )]
+        public static partial void FailedToLookupBuildInformationForUpgradeOfBuildToLevel(
+            ILogger logger,
+            DbFortBuild build,
+            int level
+        );
+
         [LoggerMessage(LogLevel.Debug, "Placed build {buildId} from storage at {x}/{z}")]
-        public static partial void PlacedBuildFromStorageAt(ILogger logger, long buildId, int x, int z);
+        public static partial void PlacedBuildFromStorageAt(
+            ILogger logger,
+            long buildId,
+            int x,
+            int z
+        );
+
         [LoggerMessage(LogLevel.Debug, "Moved build {buildId} to {x}/{z}")]
         public static partial void MovedBuildTo(ILogger logger, long buildId, int x, int z);
-        [LoggerMessage(LogLevel.Debug, "Failed to perform upgrade {@PlantDetail} - carpenters busy")]
-        public static partial void FailedToPerformUpgradeCarpentersBusy(ILogger logger, FortPlantDetail plantDetail);
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Failed to perform upgrade {@PlantDetail} - carpenters busy"
+        )]
+        public static partial void FailedToPerformUpgradeCarpentersBusy(
+            ILogger logger,
+            FortPlantDetail plantDetail
+        );
+
         [LoggerMessage(LogLevel.Debug, "FortDetail: {@FortDetail}")]
         public static partial void FortDetail(ILogger logger, FortDetail fortDetail);
+
         [LoggerMessage(LogLevel.Debug, "Currently in progress builds: {@Builds}")]
         public static partial void CurrentlyInProgressBuilds(ILogger logger, List builds);
     }

@@ -1,10 +1,10 @@
 using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
-using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Features.Weapons;
 
@@ -99,17 +99,36 @@ public partial class WeaponBodyController : DragaliaControllerBase
     {
         [LoggerMessage(LogLevel.Warning, "Weapon craft request was invalid.")]
         public static partial void WeaponCraftRequestWasInvalid(ILogger logger);
+
         [LoggerMessage(LogLevel.Information, "Validated request to craft weapon {weapon}")]
-        public static partial void ValidatedRequestToCraftWeapon(ILogger logger, WeaponBodies weapon);
+        public static partial void ValidatedRequestToCraftWeapon(
+            ILogger logger,
+            WeaponBodies weapon
+        );
+
         [LoggerMessage(LogLevel.Debug, "Received request to upgrade weapon {weapon}")]
-        public static partial void ReceivedRequestToUpgradeWeapon(ILogger logger, WeaponBodies weapon);
+        public static partial void ReceivedRequestToUpgradeWeapon(
+            ILogger logger,
+            WeaponBodies weapon
+        );
+
         [LoggerMessage(LogLevel.Error, "Weapon {weapon} had no MasterAsset entry")]
         public static partial void WeaponHadNoMasterAssetEntry(ILogger logger, WeaponBodies weapon);
+
         [LoggerMessage(LogLevel.Error, "User did not own weapon {weapon}")]
         public static partial void UserDidNotOwnWeapon(ILogger logger, WeaponBodies weapon);
+
         [LoggerMessage(LogLevel.Error, "buildup_piece request {@request} was invalid: {result}")]
-        public static partial void BuildupPieceRequestWasInvalid(ILogger logger, WeaponBodyBuildupPieceRequest request, ResultCode result);
+        public static partial void BuildupPieceRequestWasInvalid(
+            ILogger logger,
+            WeaponBodyBuildupPieceRequest request,
+            ResultCode result
+        );
+
         [LoggerMessage(LogLevel.Information, "Completed request to upgrade weapon {weapon}")]
-        public static partial void CompletedRequestToUpgradeWeapon(ILogger logger, WeaponBodies weapon);
+        public static partial void CompletedRequestToUpgradeWeapon(
+            ILogger logger,
+            WeaponBodies weapon
+        );
     }
 }

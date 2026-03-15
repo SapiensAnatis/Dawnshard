@@ -264,14 +264,28 @@ public partial class AbilityCrestController(
     {
         [LoggerMessage(LogLevel.Error, "Player does not own ability crest {id}")]
         public static partial void PlayerDoesNotOwnAbilityCrest(ILogger logger, AbilityCrestId id);
+
         [LoggerMessage(LogLevel.Error, "Ability crest {id} had no MasterAsset entry")]
-        public static partial void AbilityCrestHadNoMasterAssetEntry(ILogger logger, AbilityCrestId id);
+        public static partial void AbilityCrestHadNoMasterAssetEntry(
+            ILogger logger,
+            AbilityCrestId id
+        );
+
         [LoggerMessage(LogLevel.Error, "Buildup piece {@piece} invalid")]
-        public static partial void BuildupPieceInvalid(ILogger logger, AtgenBuildupAbilityCrestPieceList piece);
+        public static partial void BuildupPieceInvalid(
+            ILogger logger,
+            AtgenBuildupAbilityCrestPieceList piece
+        );
+
         [LoggerMessage(LogLevel.Error, "Buildup plus count param {piece} invalid")]
-        public static partial void BuildupPlusCountParamInvalid(ILogger logger, AtgenPlusCountParamsList piece);
+        public static partial void BuildupPlusCountParamInvalid(
+            ILogger logger,
+            AtgenPlusCountParamsList piece
+        );
+
         [LoggerMessage(LogLevel.Error, "Resetting augment type {type} invalid")]
         public static partial void ResettingAugmentTypeInvalid(ILogger logger, PlusCountType type);
+
         [LoggerMessage(LogLevel.Error, "Invalid ability crest no {no}")]
         public static partial void InvalidAbilityCrestNo(ILogger logger, int no);
     }

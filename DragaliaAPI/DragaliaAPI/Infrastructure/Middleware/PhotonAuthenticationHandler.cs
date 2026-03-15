@@ -44,7 +44,10 @@ public partial class PhotonAuthenticationHandler(
 
         if (authenticationHeader.Parameter != photonOptions.CurrentValue.Token)
         {
-            Log.AuthenticationHeaderParameterValueDidNotMatchConfiguredToken(this.Logger, authenticationHeader.Parameter);
+            Log.AuthenticationHeaderParameterValueDidNotMatchConfiguredToken(
+                this.Logger,
+                authenticationHeader.Parameter
+            );
             return AuthenticateResult.Fail("Invalid token.");
         }
 
@@ -81,9 +84,17 @@ public partial class PhotonAuthenticationHandler(
     {
         [LoggerMessage(LogLevel.Debug, "Failed to parse Authorization header.")]
         public static partial void FailedToParseAuthorizationHeader(ILogger logger);
+
         [LoggerMessage(LogLevel.Debug, "AuthenticationHeader.Parameter was null")]
         public static partial void AuthenticationHeaderParameterWasNull(ILogger logger);
-        [LoggerMessage(LogLevel.Information, "AuthenticationHeader.Parameter value {param} did not match configured token.")]
-        public static partial void AuthenticationHeaderParameterValueDidNotMatchConfiguredToken(ILogger logger, string param);
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "AuthenticationHeader.Parameter value {param} did not match configured token."
+        )]
+        public static partial void AuthenticationHeaderParameterValueDidNotMatchConfiguredToken(
+            ILogger logger,
+            string param
+        );
     }
 }

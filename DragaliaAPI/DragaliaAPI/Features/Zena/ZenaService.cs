@@ -23,7 +23,10 @@ public partial class ZenaService(
 
         if (playerName is null)
         {
-            Log.FailedToGetTeamDataPlayerWithIDDoesNotExist(logger, this.playerIdentityService.ViewerId);
+            Log.FailedToGetTeamDataPlayerWithIDDoesNotExist(
+                logger,
+                this.playerIdentityService.ViewerId
+            );
 
             return null;
         }
@@ -66,7 +69,13 @@ public partial class ZenaService(
 
     private static partial class Log
     {
-        [LoggerMessage(LogLevel.Warning, "Failed to get team data: player with ID {ViewerId} does not exist.")]
-        public static partial void FailedToGetTeamDataPlayerWithIDDoesNotExist(ILogger logger, long viewerId);
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Failed to get team data: player with ID {ViewerId} does not exist."
+        )]
+        public static partial void FailedToGetTeamDataPlayerWithIDDoesNotExist(
+            ILogger logger,
+            long viewerId
+        );
     }
 }

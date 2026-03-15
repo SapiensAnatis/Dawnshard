@@ -162,6 +162,7 @@ public partial class LoadService(
     {
         [LoggerMessage(LogLevel.Information, "{Time} ms: Load query complete")]
         public static partial void MsLoadQueryComplete(ILogger logger, long time);
+
         [LoggerMessage(LogLevel.Information, "{Time} ms: Processing complete")]
         public static partial void MsProcessingComplete(ILogger logger, long time);
     }

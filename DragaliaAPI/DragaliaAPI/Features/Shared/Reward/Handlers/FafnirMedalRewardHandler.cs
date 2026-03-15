@@ -4,7 +4,8 @@ using JetBrains.Annotations;
 namespace DragaliaAPI.Features.Shared.Reward.Handlers;
 
 [UsedImplicitly]
-public partial class FafnirMedalRewardHandler(ILogger<FafnirMedalRewardHandler> logger) : IRewardHandler
+public partial class FafnirMedalRewardHandler(ILogger<FafnirMedalRewardHandler> logger)
+    : IRewardHandler
 {
     private readonly ILogger<FafnirMedalRewardHandler> logger = logger;
 

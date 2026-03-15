@@ -1,3 +1,4 @@
+using System;
 using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Photon.StateManager.Models;
@@ -6,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Redis.OM;
 using Redis.OM.Contracts;
 using Redis.OM.Searching;
-using System;
 
 namespace DragaliaAPI.Photon.StateManager.Controllers;
 
@@ -139,24 +139,37 @@ public partial class GetController : ControllerBase
     {
         [LoggerMessage(LogLevel.Debug, "Retrieving all open games.")]
         public static partial void RetrievingAllOpenGames(ILogger logger);
+
         [LoggerMessage(LogLevel.Debug, "Filtering by quest ID {id}")]
         public static partial void FilteringByQuestID(ILogger logger, int? id);
+
         [LoggerMessage(LogLevel.Debug, "Found {n} games")]
         public static partial void FoundGames(ILogger logger, int n);
+
         [LoggerMessage(LogLevel.Debug, "Searching for games with ID {roomId}")]
         public static partial void SearchingForGamesWithID(ILogger logger, int roomId);
+
         [LoggerMessage(LogLevel.Debug, "Game not found.")]
         public static partial void GameNotFound(ILogger logger);
+
         [LoggerMessage(LogLevel.Debug, "Found game: {@game}")]
         public static partial void FoundGame(ILogger logger, RedisGame game);
+
         [LoggerMessage(LogLevel.Debug, "Checking whether player {viewerId} is a host in any game")]
-        public static partial void CheckingWhetherPlayerIsAHostInAnyGame(ILogger logger, long viewerId);
+        public static partial void CheckingWhetherPlayerIsAHostInAnyGame(
+            ILogger logger,
+            long viewerId
+        );
+
         [LoggerMessage(LogLevel.Debug, "Result: {result}")]
         public static partial void Result(ILogger logger, bool result);
+
         [LoggerMessage(LogLevel.Debug, "Searching for game containing player {viewerId}")]
         public static partial void SearchingForGameContainingPlayer(ILogger logger, long viewerId);
+
         [LoggerMessage(LogLevel.Debug, "Could not find any game with given player.")]
         public static partial void CouldNotFindAnyGameWithGivenPlayer(ILogger logger);
+
         [LoggerMessage(LogLevel.Debug, "Found player in game {@game}")]
         public static partial void FoundPlayerInGame(ILogger logger, RedisGame game);
     }

@@ -44,10 +44,13 @@ public partial class StorySkipController(
     {
         [LoggerMessage(LogLevel.Debug, "Beginning story skip.")]
         public static partial void BeginningStorySkip(ILogger logger);
+
         [LoggerMessage(LogLevel.Debug, "Wyrmite earned from quests: {Wyrmite}")]
         public static partial void WyrmiteEarnedFromQuests(ILogger logger, int wyrmite);
+
         [LoggerMessage(LogLevel.Debug, "Wyrmite earned from quest stories: {Wyrmite}")]
         public static partial void WyrmiteEarnedFromQuestStories(ILogger logger, int wyrmite);
+
         [LoggerMessage(LogLevel.Debug, "Story Skip completed.")]
         public static partial void StorySkipCompleted(ILogger logger);
     }

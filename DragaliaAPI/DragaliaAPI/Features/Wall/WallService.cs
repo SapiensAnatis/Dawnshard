@@ -58,7 +58,11 @@ public partial class WallService(
 
         if (levelTotal > MaximumQuestWallTotalLevel)
         {
-            Log.UserHadAQuestWallTotalLevelAboveTheMaxOf400(logger, playerIdentityService.AccountId, levelTotal);
+            Log.UserHadAQuestWallTotalLevelAboveTheMaxOf400(
+                logger,
+                playerIdentityService.AccountId,
+                levelTotal
+            );
             return MaximumQuestWallTotalLevel;
         }
         return levelTotal;
@@ -316,11 +320,27 @@ public partial class WallService(
             "Wall monthly reward eligibility check result: {CheckResult}"
         )]
         public static partial void ClaimCheckResult(ILogger logger, bool checkResult);
-        [LoggerMessage(LogLevel.Warning, "User {@accountId} had a quest wall total level above the max of 400: {@levelTotal}")]
-        public static partial void UserHadAQuestWallTotalLevelAboveTheMaxOf400(ILogger logger, string accountId, int levelTotal);
+
+        [LoggerMessage(
+            LogLevel.Warning,
+            "User {@accountId} had a quest wall total level above the max of 400: {@levelTotal}"
+        )]
+        public static partial void UserHadAQuestWallTotalLevelAboveTheMaxOf400(
+            ILogger logger,
+            string accountId,
+            int levelTotal
+        );
+
         [LoggerMessage(LogLevel.Information, "Initializing wall levels.")]
         public static partial void InitializingWallLevels(ILogger logger);
-        [LoggerMessage(LogLevel.Information, "Granting wall monthly reward list with size: {@wallRewardListSize}")]
-        public static partial void GrantingWallMonthlyRewardListWithSize(ILogger logger, int wallRewardListSize);
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Granting wall monthly reward list with size: {@wallRewardListSize}"
+        )]
+        public static partial void GrantingWallMonthlyRewardListWithSize(
+            ILogger logger,
+            int wallRewardListSize
+        );
     }
 }

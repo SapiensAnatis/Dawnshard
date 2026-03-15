@@ -66,6 +66,7 @@ public partial class StoryController : DragaliaControllerBase
     {
         [LoggerMessage(LogLevel.Warning, "Requested to read non-existent unit story {id}")]
         public static partial void RequestedToReadNonExistentUnitStory(ILogger logger, int id);
+
         [LoggerMessage(LogLevel.Warning, "User did not have access to story {id}")]
         public static partial void UserDidNotHaveAccessToStory(ILogger logger, int id);
     }

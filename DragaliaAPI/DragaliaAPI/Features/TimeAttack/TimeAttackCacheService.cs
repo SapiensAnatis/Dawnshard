@@ -37,6 +37,7 @@ public partial class TimeAttackCacheService(
     {
         [LoggerMessage(LogLevel.Debug, "Setting time attack cache entry for quest id {id}")]
         public static partial void SettingTimeAttackCacheEntryForQuestId(ILogger logger, int id);
+
         [LoggerMessage(LogLevel.Debug, "Getting time attack cache entry")]
         public static partial void GettingTimeAttackCacheEntry(ILogger logger);
     }

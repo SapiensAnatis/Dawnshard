@@ -1,3 +1,4 @@
+using System;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -10,7 +11,6 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace DragaliaAPI.Features.Shop;
 
@@ -228,14 +228,33 @@ public partial class PaymentService(
     private static partial class Log
     {
         [LoggerMessage(LogLevel.Debug, "Processing {paymentType} payment {@payment}.")]
-        public static partial void ProcessingPayment(ILogger logger, EntityTypes paymentType, object payment);
+        public static partial void ProcessingPayment(
+            ILogger logger,
+            EntityTypes paymentType,
+            object payment
+        );
+
         [LoggerMessage(LogLevel.Warning, "Unknown/invalid entity type for payment.")]
         public static partial void UnknownInvalidEntityTypeForPayment(ILogger logger);
+
         [LoggerMessage(LogLevel.Error, "Player does not own any of the entity.")]
         public static partial void PlayerDoesNotOwnAnyOfTheEntity(ILogger logger);
-        [LoggerMessage(LogLevel.Error, "Held quantity {quantity} does not match target of payment {@payment}")]
-        public static partial void HeldQuantityDoesNotMatchTargetOfPayment(ILogger logger, long? quantity, PaymentTarget payment);
+
+        [LoggerMessage(
+            LogLevel.Error,
+            "Held quantity {quantity} does not match target of payment {@payment}"
+        )]
+        public static partial void HeldQuantityDoesNotMatchTargetOfPayment(
+            ILogger logger,
+            long? quantity,
+            PaymentTarget payment
+        );
+
         [LoggerMessage(LogLevel.Error, "Held quantity {quantity} does not meet price {price}")]
-        public static partial void HeldQuantityDoesNotMeetPrice(ILogger logger, long? quantity, int price);
+        public static partial void HeldQuantityDoesNotMeetPrice(
+            ILogger logger,
+            long? quantity,
+            int price
+        );
     }
 }

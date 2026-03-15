@@ -29,7 +29,12 @@ public partial class V6Update : ISavefileUpdate
         {
             if (!MasterAsset.FortPlantDetail.TryGetValue(build.FortPlantDetailId, out _))
             {
-                Log.FixingBuildingCurrentLevelDetailId(this.logger, build.BuildId, build.Level, build.FortPlantDetailId);
+                Log.FixingBuildingCurrentLevelDetailId(
+                    this.logger,
+                    build.BuildId,
+                    build.Level,
+                    build.FortPlantDetailId
+                );
 
                 build.Level--;
             }
@@ -38,7 +43,15 @@ public partial class V6Update : ISavefileUpdate
 
     private static partial class Log
     {
-        [LoggerMessage(LogLevel.Debug, "Fixing building {buildId}, current level {level}, detail id {detailId}")]
-        public static partial void FixingBuildingCurrentLevelDetailId(ILogger logger, long buildId, int level, int detailId);
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Fixing building {buildId}, current level {level}, detail id {detailId}"
+        )]
+        public static partial void FixingBuildingCurrentLevelDetailId(
+            ILogger logger,
+            long buildId,
+            int level,
+            int detailId
+        );
     }
 }

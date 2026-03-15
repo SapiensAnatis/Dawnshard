@@ -1,9 +1,9 @@
+using System.Collections.Generic;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Logging;
 using MaterialsEnum = DragaliaAPI.Shared.Definitions.Enums.Materials;
-using System.Collections.Generic;
 
 namespace DragaliaAPI.Database.Repositories;
 
@@ -118,7 +118,12 @@ public partial class InventoryRepository : IInventoryRepository
 
             if (mat?.Quantity < requested.Value)
             {
-                Log.FailedMaterialCheckRequestedQuantityEntity(this.logger, requested.Key, requested.Value, mat);
+                Log.FailedMaterialCheckRequestedQuantityEntity(
+                    this.logger,
+                    requested.Key,
+                    requested.Value,
+                    mat
+                );
 
                 return false;
             }
@@ -130,10 +135,27 @@ public partial class InventoryRepository : IInventoryRepository
     private static partial class Log
     {
         [LoggerMessage(LogLevel.Trace, "Updated list of materials by quantity {quantity}: {list}")]
-        public static partial void UpdatedListOfMaterialsByQuantity(ILogger logger, int quantity, IEnumerable<Materials> list);
+        public static partial void UpdatedListOfMaterialsByQuantity(
+            ILogger logger,
+            int quantity,
+            IEnumerable<Materials> list
+        );
+
         [LoggerMessage(LogLevel.Trace, "Updated player materials by map {@map}")]
-        public static partial void UpdatedPlayerMaterialsByMap(ILogger logger, IEnumerable<KeyValuePair<Materials, int>> map);
-        [LoggerMessage(LogLevel.Warning, "Failed material {material} check: requested quantity {q1}, entity: {@mat}")]
-        public static partial void FailedMaterialCheckRequestedQuantityEntity(ILogger logger, Materials material, int q1, DbPlayerMaterial mat);
+        public static partial void UpdatedPlayerMaterialsByMap(
+            ILogger logger,
+            IEnumerable<KeyValuePair<Materials, int>> map
+        );
+
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Failed material {material} check: requested quantity {q1}, entity: {@mat}"
+        )]
+        public static partial void FailedMaterialCheckRequestedQuantityEntity(
+            ILogger logger,
+            Materials material,
+            int q1,
+            DbPlayerMaterial mat
+        );
     }
 }

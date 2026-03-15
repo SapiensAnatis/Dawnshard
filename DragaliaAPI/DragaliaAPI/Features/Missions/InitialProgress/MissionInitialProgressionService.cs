@@ -209,7 +209,13 @@ public partial class MissionInitialProgressionService(
         {
             mission.Progress = amountToComplete;
             mission.State = MissionState.Completed;
-            Log.MissionHadAllRequirementsMetAutoCompleting(logger, mission.Id, mission.Type, currentAmount, amountToComplete);
+            Log.MissionHadAllRequirementsMetAutoCompleting(
+                logger,
+                mission.Id,
+                mission.Type,
+                currentAmount,
+                amountToComplete
+            );
 
             foreach (int dependentMissionId in progressionInfo.UnlockedOnComplete ?? [])
             {
@@ -221,7 +227,13 @@ public partial class MissionInitialProgressionService(
         else
         {
             mission.Progress = currentAmount;
-            Log.MissionHadSomeRequirementsMet(logger, mission.Id, mission.Type, currentAmount, amountToComplete);
+            Log.MissionHadSomeRequirementsMet(
+                logger,
+                mission.Id,
+                mission.Type,
+                currentAmount,
+                amountToComplete
+            );
         }
     }
 
@@ -605,11 +617,31 @@ public partial class MissionInitialProgressionService(
 
     private static partial class Log
     {
-        [LoggerMessage(LogLevel.Debug, "Mission {missionId} ({missionType}) had all requirements met ({currentProgress}/{requiredProgress}), auto-completing.")]
-        public static partial void MissionHadAllRequirementsMetAutoCompleting(ILogger logger, int missionId, MissionType missionType, int currentProgress, int requiredProgress);
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Mission {missionId} ({missionType}) had all requirements met ({currentProgress}/{requiredProgress}), auto-completing."
+        )]
+        public static partial void MissionHadAllRequirementsMetAutoCompleting(
+            ILogger logger,
+            int missionId,
+            MissionType missionType,
+            int currentProgress,
+            int requiredProgress
+        );
+
         [LoggerMessage(LogLevel.Information, "Starting dependent mission {DependentMissionId}")]
         public static partial void StartingDependentMission(ILogger logger, int dependentMissionId);
-        [LoggerMessage(LogLevel.Debug, "Mission {missionId} ({missionType}) had some requirements met ({currentProgress}/{requiredProgress}).")]
-        public static partial void MissionHadSomeRequirementsMet(ILogger logger, int missionId, MissionType missionType, int currentProgress, int requiredProgress);
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Mission {missionId} ({missionType}) had some requirements met ({currentProgress}/{requiredProgress})."
+        )]
+        public static partial void MissionHadSomeRequirementsMet(
+            ILogger logger,
+            int missionId,
+            MissionType missionType,
+            int currentProgress,
+            int requiredProgress
+        );
     }
 }

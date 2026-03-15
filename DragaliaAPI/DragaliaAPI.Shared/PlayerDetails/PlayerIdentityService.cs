@@ -82,14 +82,20 @@ public partial class PlayerIdentityService : IPlayerIdentityService
 
         impersonationContext = new ImpersonationContext(this, viewer, account);
 
-        Log.StartingUserImpersonation(logger, new { impersonationContext.AccountId, impersonationContext.ViewerId });
+        Log.StartingUserImpersonation(
+            logger,
+            new { impersonationContext.AccountId, impersonationContext.ViewerId }
+        );
 
         return impersonationContext;
     }
 
     internal void StopUserImpersonation()
     {
-        Log.StoppingUserImpersonation(logger, new { impersonationContext!.AccountId, impersonationContext.ViewerId });
+        Log.StoppingUserImpersonation(
+            logger,
+            new { impersonationContext!.AccountId, impersonationContext.ViewerId }
+        );
 
         this.impersonationContext = null;
     }
@@ -98,6 +104,7 @@ public partial class PlayerIdentityService : IPlayerIdentityService
     {
         [LoggerMessage(LogLevel.Debug, "Starting user impersonation: {@context}")]
         public static partial void StartingUserImpersonation(ILogger logger, object context);
+
         [LoggerMessage(LogLevel.Debug, "Stopping user impersonation: {@context}")]
         public static partial void StoppingUserImpersonation(ILogger logger, object context);
     }

@@ -229,7 +229,11 @@ internal sealed partial class HelperService(
     {
         [LoggerMessage(LogLevel.Debug, "Looking up UserSupportList for ID: {ViewerId}")]
         public static partial void LookingUpUserSupportListForID(ILogger logger, long viewerId);
+
         [LoggerMessage(LogLevel.Debug, "Looking up AtgenSupportUserDataDetail for ID: {ViewerId}")]
-        public static partial void LookingUpAtgenSupportUserDataDetailForID(ILogger logger, long viewerId);
+        public static partial void LookingUpAtgenSupportUserDataDetailForID(
+            ILogger logger,
+            long viewerId
+        );
     }
 }

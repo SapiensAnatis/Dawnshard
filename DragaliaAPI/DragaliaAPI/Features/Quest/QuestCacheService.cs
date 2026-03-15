@@ -44,8 +44,15 @@ public partial class QuestCacheService(
     {
         [LoggerMessage(LogLevel.Debug, "Setting quest id key: {key}")]
         public static partial void SettingQuestIdKey(ILogger logger, string key);
-        [LoggerMessage(LogLevel.Error, "Tried to parse cached quest id string {questIdString} but it was not an int")]
-        public static partial void TriedToParseCachedQuestIdStringButItWasNotAnInt(ILogger logger, string? questIdString);
+
+        [LoggerMessage(
+            LogLevel.Error,
+            "Tried to parse cached quest id string {questIdString} but it was not an int"
+        )]
+        public static partial void TriedToParseCachedQuestIdStringButItWasNotAnInt(
+            ILogger logger,
+            string? questIdString
+        );
     }
 }
 

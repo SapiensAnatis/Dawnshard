@@ -267,11 +267,22 @@ public partial class UserService(
     private static partial class Log
     {
         [LoggerMessage(LogLevel.Debug, "Adding {staminaAmount}x {staminaType}")]
-        public static partial void AddingX(ILogger logger, int staminaAmount, StaminaType staminaType);
+        public static partial void AddingX(
+            ILogger logger,
+            int staminaAmount,
+            StaminaType staminaType
+        );
+
         [LoggerMessage(LogLevel.Debug, "Removing {staminaAmount}x {staminaType}")]
-        public static partial void RemovingX(ILogger logger, int staminaAmount, StaminaType staminaType);
+        public static partial void RemovingX(
+            ILogger logger,
+            int staminaAmount,
+            StaminaType staminaType
+        );
+
         [LoggerMessage(LogLevel.Error, "Player did not have enough Stamina ({currentAmount})")]
         public static partial void PlayerDidNotHaveEnoughStamina(ILogger logger, int currentAmount);
+
         [LoggerMessage(LogLevel.Debug, "Player leveled up to level {level}")]
         public static partial void PlayerLeveledUpToLevel(ILogger logger, int level);
     }

@@ -49,7 +49,15 @@ public partial class V16Update(IEventRepository eventRepository, ILogger<V16Upda
 
     private static partial class Log
     {
-        [LoggerMessage(LogLevel.Information, "Updating event item {item} type from {currentType} to {expectedType}")]
-        public static partial void UpdatingEventItemTypeFromTo(ILogger logger, int item, int currentType, int expectedType);
+        [LoggerMessage(
+            LogLevel.Information,
+            "Updating event item {item} type from {currentType} to {expectedType}"
+        )]
+        public static partial void UpdatingEventItemTypeFromTo(
+            ILogger logger,
+            int item,
+            int currentType,
+            int expectedType
+        );
     }
 }

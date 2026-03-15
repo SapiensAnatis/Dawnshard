@@ -89,8 +89,6 @@ namespace DragaliaAPI.Photon.Plugin.Shared.Helpers
             pluginHost.BroadcastErrorInfoEvent(msg);
         }
 
-        private static partial class Log
-        {
-        }
+        private static partial class Log { }
     }
 }
