@@ -168,7 +168,6 @@ public partial class WallService(
             ?? throw new InvalidOperationException(
                 "No instance of DbWallRewardDate is being tracked - update failed"
             );
-        ;
 
         trackedRewardDate.LastClaimDate = timeProvider.GetUtcNow();
     }
