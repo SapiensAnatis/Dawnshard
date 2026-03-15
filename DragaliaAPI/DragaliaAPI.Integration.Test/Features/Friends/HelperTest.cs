@@ -471,6 +471,7 @@ public class HelperTest : TestFixture
 
         player.Helper = new()
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             EquippedChara = new()
             {
                 CharaId = Charas.DragonyuleIlia,
@@ -490,6 +491,7 @@ public class HelperTest : TestFixture
                 IsUnlockEditSkill = true,
                 Owner = player,
             },
+#pragma warning restore CS0618 // Type or member is obsolete
         };
 
         this.ApiContext.Players.Add(player);
@@ -516,6 +518,7 @@ public class HelperTest : TestFixture
 
         player.Helper = new()
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             EquippedChara = new()
             {
                 CharaId = Charas.GalaEmile,
@@ -535,6 +538,7 @@ public class HelperTest : TestFixture
                 IsUnlockEditSkill = true,
                 Owner = player,
             },
+#pragma warning restore CS0618 // Type or member is obsolete
             EquippedDragon = new()
             {
                 DragonKeyId = 0,

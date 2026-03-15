@@ -26,8 +26,7 @@ public class TestContainersHelper
     {
         if (!IsGithubActions)
         {
-            redisContainer = new ContainerBuilder()
-                .WithImage("redis/redis-stack")
+            redisContainer = new ContainerBuilder("redis/redis-stack")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilCommandIsCompleted("redis-cli PING"))
                 .WithPortBinding(RedisContainerPort, true)
                 .WithPortBinding(8001, true)

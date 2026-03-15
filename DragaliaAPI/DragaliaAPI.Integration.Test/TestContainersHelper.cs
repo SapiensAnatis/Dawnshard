@@ -67,16 +67,14 @@ public class TestContainersHelper
             this.postgresPassword = "aVerystrong(!)password123";
             this.postgresDatabase = "testing";
 
-            this.postgresContainer = new PostgreSqlBuilder()
-                .WithImage("postgres:16")
+            this.postgresContainer = new PostgreSqlBuilder("postgres:16")
                 .WithUsername(this.postgresUser)
                 .WithPassword(this.postgresPassword)
                 .WithDatabase(this.postgresDatabase)
                 .WithPortBinding(PostgresContainerPort, true)
                 .Build();
 
-            this.redisContainer = new ContainerBuilder()
-                .WithImage("redis/redis-stack:7.2.0-v6")
+            this.redisContainer = new ContainerBuilder("redis/redis-stack:7.2.0-v6")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilCommandIsCompleted("redis-cli PING"))
                 .WithPortBinding(RedisContainerPort, true)
                 .Build();
