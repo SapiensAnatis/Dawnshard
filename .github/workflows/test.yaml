@@ -47,8 +47,9 @@ jobs:
           dotnet test ${{ inputs.project }}
           -c Release
           --no-restore 
-          --logger "console;verbosity=detailed"
-          --logger "trx;LogFileName=${{ steps.get-name.outputs.name }}.trx"
+          --output Detailed
+          --report-xunit-trx
+          --report-xunit-trx-filename "${{ steps.get-name.outputs.name }}.trx"
 
       - name: Upload test report
         uses: actions/upload-artifact@v7
