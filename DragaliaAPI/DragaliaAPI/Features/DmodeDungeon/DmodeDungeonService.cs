@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Dmode;
@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.DmodeDungeon;
 
-public class DmodeDungeonService(
+public partial class DmodeDungeonService(
     IDmodeRepository dmodeRepository,
     IDmodeCacheService dmodeCacheService,
     IDmodeService dmodeService,
@@ -109,7 +109,7 @@ public class DmodeDungeonService(
 
     public async Task<(DungeonState State, DmodeIngameData IngameData)> RestartDungeon()
     {
-        logger.LogDebug("Restarting dmode floor");
+        Log.RestartingDmodeFloor(logger);
 
         await dmodeService.UseRecovery();
 
@@ -132,7 +132,7 @@ public class DmodeDungeonService(
     // TODO: Add random equipment
     public async Task<DungeonState> SkipFloor()
     {
-        logger.LogDebug("Skipping dmode floors");
+        Log.SkippingDmodeFloors(logger);
 
         await dmodeService.UseSkip();
 
@@ -145,7 +145,7 @@ public class DmodeDungeonService(
 
     public async Task<DungeonState> HaltDungeon(bool userHalt)
     {
-        logger.LogDebug("Halting dungeon. User halt: {isUserHalt}", userHalt);
+        Log.HaltingDungeonUserHalt(logger, userHalt);
 
         DbPlayerDmodeDungeon dungeon = await dmodeRepository.GetDungeonAsync();
 
@@ -172,7 +172,7 @@ public class DmodeDungeonService(
         }
         catch (DragaliaException ex) when (ex.Code == ResultCode.CommonDbError)
         {
-            logger.LogError(ex, "Failed to fetch Kaleidoscape data. Clearing dungeon entry.");
+            Log.FailedToFetchKaleidoscapeDataClearingDungeonEntry(logger, ex);
             dungeon.Clear();
 
             return (dungeon.State, new DmodeIngameResult());
@@ -318,10 +318,7 @@ public class DmodeDungeonService(
         dungeon.QuestTime = (int)Math.Ceiling(floorData.DmodeAreaInfo.QuestTime);
         dungeon.IsPlayEnd = floorData.IsPlayEnd;
 
-        logger.LogDebug(
-            "Generated dmode floor with area info {@dmodeAreaInfo}",
-            floorData.DmodeAreaInfo
-        );
+        Log.GeneratedDmodeFloorWithAreaInfo(logger, floorData.DmodeAreaInfo);
 
         return (dungeon.State, floorData);
     }
@@ -1181,5 +1178,32 @@ public class DmodeDungeonService(
         }
 
         return expMultiplier;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Restarting dmode floor")]
+        public static partial void RestartingDmodeFloor(ILogger logger);
+
+        [LoggerMessage(LogLevel.Debug, "Skipping dmode floors")]
+        public static partial void SkippingDmodeFloors(ILogger logger);
+
+        [LoggerMessage(LogLevel.Debug, "Halting dungeon. User halt: {isUserHalt}")]
+        public static partial void HaltingDungeonUserHalt(ILogger logger, bool isUserHalt);
+
+        [LoggerMessage(
+            LogLevel.Error,
+            "Failed to fetch Kaleidoscape data. Clearing dungeon entry."
+        )]
+        public static partial void FailedToFetchKaleidoscapeDataClearingDungeonEntry(
+            ILogger logger,
+            Exception exception
+        );
+
+        [LoggerMessage(LogLevel.Debug, "Generated dmode floor with area info {@dmodeAreaInfo}")]
+        public static partial void GeneratedDmodeFloorWithAreaInfo(
+            ILogger logger,
+            AtgenDmodeAreaInfo dmodeAreaInfo
+        );
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Features.Dungeon.AutoRepeat;
 
-public class AutoRepeatService(
+public partial class AutoRepeatService(
     IDistributedCache distributedCache,
     IPlayerIdentityService playerIdentityService,
     IOptionsMonitor<RedisCachingOptions> options,
@@ -33,7 +33,7 @@ public class AutoRepeatService(
             CurrentCount = 0,
         };
 
-        logger.LogDebug("Saving auto-repeat setting: {@info}", info);
+        Log.SavingAutoRepeatSetting(logger, info);
 
         await this.WriteRepeatInfo(info);
     }
@@ -57,23 +57,19 @@ public class AutoRepeatService(
         if (repeatKey != null)
         {
             info = await this.GetRepeatInfo(Guid.Parse(repeatKey));
-            logger.LogTrace("Repeat key {Key} found: {@Info}", repeatKey, info);
+            Log.RepeatKeyFound(logger, repeatKey, info);
         }
 
         if (info == null)
         {
             info = await this.GetRepeatInfo();
-            logger.LogTrace(
-                "Repeat key lookup for key {Key} failed. Viewer ID lookup found: {@Info}",
-                repeatKey,
-                info
-            );
+            Log.RepeatKeyLookupForKeyFailedViewerIDLookupFound(logger, repeatKey, info);
         }
 
         if (info == null)
         {
             info = CreateDefaultRepeatInfo();
-            logger.LogTrace("Both lookups failed. Default data initialized.");
+            Log.BothLookupsFailedDefaultDataInitialized(logger);
         }
 
         info.CurrentCount += 1;
@@ -151,5 +147,27 @@ public class AutoRepeatService(
             info,
             this.cacheOptions
         );
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Saving auto-repeat setting: {@info}")]
+        public static partial void SavingAutoRepeatSetting(ILogger logger, RepeatInfo info);
+
+        [LoggerMessage(LogLevel.Trace, "Repeat key {Key} found: {@Info}")]
+        public static partial void RepeatKeyFound(ILogger logger, string key, RepeatInfo? info);
+
+        [LoggerMessage(
+            LogLevel.Trace,
+            "Repeat key lookup for key {Key} failed. Viewer ID lookup found: {@Info}"
+        )]
+        public static partial void RepeatKeyLookupForKeyFailedViewerIDLookupFound(
+            ILogger logger,
+            string? key,
+            RepeatInfo? info
+        );
+
+        [LoggerMessage(LogLevel.Trace, "Both lookups failed. Default data initialized.")]
+        public static partial void BothLookupsFailedDefaultDataInitialized(ILogger logger);
     }
 }

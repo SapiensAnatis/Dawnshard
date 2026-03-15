@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using DragaliaAPI.Features.Login.Auth;
 using DragaliaAPI.Shared.PlayerDetails;
@@ -9,7 +9,7 @@ using static DragaliaAPI.Infrastructure.DragaliaHttpConstants;
 
 namespace DragaliaAPI.Infrastructure.Authentication;
 
-public class SessionAuthenticationHandler(
+public partial class SessionAuthenticationHandler(
     IOptionsMonitor<AuthenticationSchemeOptions> options,
     ILoggerFactory logger,
     UrlEncoder encoder,
@@ -25,7 +25,7 @@ public class SessionAuthenticationHandler(
     {
         if (!this.Request.Headers.TryGetValue(Headers.SessionId, out StringValues value))
         {
-            this.Logger.LogDebug("SID header was missing.");
+            Log.SIDHeaderWasMissing(this.Logger);
             return AuthenticateResult.NoResult();
         }
 
@@ -57,8 +57,8 @@ public class SessionAuthenticationHandler(
 
         if (impersonatedSession != null)
         {
-            this.Logger.LogInformation(
-                "User impersonation activated: {@impersonation}",
+            Log.UserImpersonationActivated(
+                this.Logger,
                 new { impersonatedSession.DeviceAccountId, impersonatedSession.ViewerId }
             );
 
@@ -82,10 +82,22 @@ public class SessionAuthenticationHandler(
     protected override Task HandleChallengeAsync(AuthenticationProperties properties)
     {
         // Should make the client go back to /tool/reauth
-        this.Logger.LogDebug("Returning Session-Expired BadRequest response");
+        Log.ReturningSessionExpiredBadRequestResponse(this.Logger);
         this.Response.StatusCode = 400;
         this.Response.Headers.Append(SessionExpired, True);
 
         return Task.CompletedTask;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "SID header was missing.")]
+        public static partial void SIDHeaderWasMissing(ILogger logger);
+
+        [LoggerMessage(LogLevel.Information, "User impersonation activated: {@impersonation}")]
+        public static partial void UserImpersonationActivated(ILogger logger, object impersonation);
+
+        [LoggerMessage(LogLevel.Debug, "Returning Session-Expired BadRequest response")]
+        public static partial void ReturningSessionExpiredBadRequestResponse(ILogger logger);
     }
 }

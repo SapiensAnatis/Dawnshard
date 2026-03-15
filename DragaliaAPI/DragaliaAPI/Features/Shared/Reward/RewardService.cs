@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Shared.Reward.Handlers;
@@ -8,7 +8,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Features.Shared.Reward;
 
-public class RewardService(
+public partial class RewardService(
     ILogger<RewardService> logger,
     IUnitRepository unitRepository,
     IEnumerable<IRewardHandler> rewardHandlers,
@@ -27,14 +27,14 @@ public class RewardService(
             return RewardGrantResult.Added;
         }
 
-        logger.LogTrace("Granting reward {@rewardEntity}", entity);
+        Log.GrantingReward(logger, entity);
 
         IRewardHandler handler = this.GetHandler(entity.Type);
 
         GrantReturn grantReturn = await handler.Grant(entity);
         await this.ProcessGrantResult(grantReturn, entity);
 
-        logger.LogTrace("Result: {result}", grantReturn.Result);
+        Log.Result(logger, grantReturn.Result);
 
         return grantReturn.Result;
     }
@@ -144,7 +144,7 @@ public class RewardService(
             }
             case RewardGrantResult.FailError:
             {
-                logger.LogError("Granting of entity {@entity} failed.", entity);
+                Log.GrantingOfEntityFailed(logger, entity);
                 throw new InvalidOperationException("Failed to grant reward");
             }
             default:
@@ -164,7 +164,7 @@ public class RewardService(
 
         if (handler is null)
         {
-            logger.LogError("Failed to find reward handler for entity type {type}", type);
+            Log.FailedToFindRewardHandlerForEntityType(logger, type);
             throw new InvalidOperationException("Failed to grant reward");
         }
 
@@ -226,4 +226,22 @@ public class RewardService(
     }
 
     public IEnumerable<ConvertedEntity> GetConvertedEntityList() => this.convertedEntities.ToList();
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Trace, "Granting reward {@rewardEntity}")]
+        public static partial void GrantingReward(ILogger logger, Entity rewardEntity);
+
+        [LoggerMessage(LogLevel.Trace, "Result: {result}")]
+        public static partial void Result(ILogger logger, RewardGrantResult result);
+
+        [LoggerMessage(LogLevel.Error, "Granting of entity {@entity} failed.")]
+        public static partial void GrantingOfEntityFailed(ILogger logger, Entity entity);
+
+        [LoggerMessage(LogLevel.Error, "Failed to find reward handler for entity type {type}")]
+        public static partial void FailedToFindRewardHandlerForEntityType(
+            ILogger logger,
+            EntityTypes type
+        );
+    }
 }

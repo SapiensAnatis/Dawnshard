@@ -14,7 +14,7 @@ using static DragaliaAPI.Shared.Features.StorySkip.StorySkipRewards;
 
 namespace DragaliaAPI.Features.Story.Skip;
 
-public class StorySkipService(
+public partial class StorySkipService(
     IMissionProgressionService missionProgressionService,
     FortDataService fortDataService,
     IWallService wallService,
@@ -51,7 +51,7 @@ public class StorySkipService(
                 {
                     currentFortLevel += fortConfig.Level - fortToUpdate.Level;
 
-                    logger.LogDebug("Updating fort at BuildId {buildId}", fortToUpdate.BuildId);
+                    Log.UpdatingFortAtBuildId(logger, fortToUpdate.BuildId);
                     fortToUpdate.Level = fortConfig.Level;
                     fortToUpdate.BuildStartDate = DateTimeOffset.UnixEpoch;
                     fortToUpdate.BuildEndDate = DateTimeOffset.UnixEpoch;
@@ -72,7 +72,7 @@ public class StorySkipService(
 
             for (int x = fortsToUpdate.Count; x < fortConfig.BuildCount; x++)
             {
-                logger.LogDebug("Adding fort {plantId}", fortPlant);
+                Log.AddingFort(logger, fortPlant);
                 DbFortBuild newUserFort = new()
                 {
                     ViewerId = playerIdentityService.ViewerId,
@@ -270,7 +270,7 @@ public class StorySkipService(
 
             if (!charaExists)
             {
-                logger.LogDebug("Rewarding character {chara}", chara);
+                Log.RewardingCharacter(logger, chara);
 
                 DbPlayerCharaData newUserChara = new(playerIdentityService.ViewerId, chara);
 
@@ -303,7 +303,7 @@ public class StorySkipService(
 
             if (!dragonExists)
             {
-                logger.LogDebug("Rewarding dragon {dragon}", dragon);
+                Log.RewardingDragon(logger, dragon);
 
                 DbPlayerDragonData newDragonEntity = new()
                 {
@@ -361,5 +361,20 @@ public class StorySkipService(
         // Select quest with a subgroup like 100010|107| instead of 100010|207| (the latter is hard mode)
         int subgroup = questId % 1000;
         return subgroup is > 100 and < 200;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Updating fort at BuildId {buildId}")]
+        public static partial void UpdatingFortAtBuildId(ILogger logger, long buildId);
+
+        [LoggerMessage(LogLevel.Debug, "Adding fort {plantId}")]
+        public static partial void AddingFort(ILogger logger, FortPlants plantId);
+
+        [LoggerMessage(LogLevel.Debug, "Rewarding character {chara}")]
+        public static partial void RewardingCharacter(ILogger logger, Charas chara);
+
+        [LoggerMessage(LogLevel.Debug, "Rewarding dragon {dragon}")]
+        public static partial void RewardingDragon(ILogger logger, DragonId dragon);
     }
 }

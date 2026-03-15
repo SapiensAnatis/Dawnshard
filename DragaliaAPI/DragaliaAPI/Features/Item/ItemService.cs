@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Features.Player;
+using System.Collections.Generic;
+using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Infrastructure;
@@ -10,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Item;
 
-public class ItemService(
+public partial class ItemService(
     IItemRepository itemRepository,
     ILogger<ItemService> logger,
     IUserService userService,
@@ -27,7 +28,7 @@ public class ItemService(
 
     public async Task<AtgenRecoverData> UseItems(IEnumerable<AtgenUseItemList> items)
     {
-        logger.LogDebug("Processing items {@useItems}", items);
+        Log.ProcessingItems(logger, items);
 
         UseItemEffect effect = UseItemEffect.None;
         int totalQuantity = 0;
@@ -65,5 +66,14 @@ public class ItemService(
         }
 
         return new AtgenRecoverData(effect, totalQuantity);
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Processing items {@useItems}")]
+        public static partial void ProcessingItems(
+            ILogger logger,
+            IEnumerable<AtgenUseItemList> useItems
+        );
     }
 }

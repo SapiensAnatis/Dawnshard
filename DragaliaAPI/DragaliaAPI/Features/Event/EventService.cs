@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database;
+using System.Collections.Generic;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
@@ -14,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Event;
 
-public class EventService(
+public partial class EventService(
     ILogger<EventService> logger,
     IEventRepository eventRepository,
     IRewardService rewardService,
@@ -98,11 +99,7 @@ public class EventService(
             return rewardEntities;
         }
 
-        logger.LogDebug(
-            "Granting rewards for event {eventId}: {@rewards}",
-            eventId,
-            availableRewards.Select(x => x.Id)
-        );
+        Log.GrantingRewardsForEvent(logger, eventId, availableRewards.Select(x => x.Id));
 
         foreach (IEventReward reward in availableRewards)
         {
@@ -144,12 +141,7 @@ public class EventService(
             )
             .ToList();
 
-        logger.LogDebug(
-            "Granted location reward {locationId} for event {eventId}: {@rewards}",
-            locationId,
-            eventId,
-            rewards
-        );
+        Log.GrantedLocationRewardForEvent(logger, locationId, eventId, rewards);
 
         foreach (CombatEventLocationReward reward in rewards)
         {
@@ -182,7 +174,7 @@ public class EventService(
 
         if (await eventRepository.GetEventDataAsync(eventId) == null)
         {
-            logger.LogInformation("Creating event data for event {eventId}", eventId);
+            Log.CreatingEventDataForEvent(logger, eventId);
             eventRepository.CreateEventData(eventId);
 
             if (data.IsMemoryEvent)
@@ -245,12 +237,7 @@ public class EventService(
                     .ToDictionary(x => x.Key, x => x.Max())
             )
             {
-                logger.LogDebug(
-                    "Granting {quantity}x {itemId} ({eventId}) due to completed quests",
-                    entityQuantity,
-                    entityId,
-                    eventId
-                );
+                Log.GrantingXDueToCompletedQuests(logger, entityQuantity, entityId, eventId);
 
                 await rewardService.GrantReward(
                     new Entity(EntityTypes.CombatEventItem, entityId, entityQuantity)
@@ -265,11 +252,7 @@ public class EventService(
                     .Select(x => x.Id)
             )
             {
-                logger.LogDebug(
-                    "Completing location reward {rewardId} ({eventId}) due to completed quests",
-                    locationId,
-                    eventId
-                );
+                Log.CompletingLocationRewardDueToCompletedQuests(logger, locationId, eventId);
 
                 eventRepository.CreateEventReward(eventId, locationId);
             }
@@ -446,6 +429,51 @@ public class EventService(
             itemDict.GetValueOrDefault((int)SimpleEventItemType.ExchangeItem1, 0),
             itemDict.GetValueOrDefault((int)SimpleEventItemType.ExchangeItem2, 0),
             itemDict.GetValueOrDefault((int)SimpleEventItemType.ExchangeItem3, 0)
+        );
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Granting rewards for event {eventId}: {@rewards}")]
+        public static partial void GrantingRewardsForEvent(
+            ILogger logger,
+            int eventId,
+            IEnumerable<int> rewards
+        );
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Granted location reward {locationId} for event {eventId}: {@rewards}"
+        )]
+        public static partial void GrantedLocationRewardForEvent(
+            ILogger logger,
+            int locationId,
+            int eventId,
+            List<CombatEventLocationReward> rewards
+        );
+
+        [LoggerMessage(LogLevel.Information, "Creating event data for event {eventId}")]
+        public static partial void CreatingEventDataForEvent(ILogger logger, int eventId);
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Granting {quantity}x {itemId} ({eventId}) due to completed quests"
+        )]
+        public static partial void GrantingXDueToCompletedQuests(
+            ILogger logger,
+            int quantity,
+            int itemId,
+            int eventId
+        );
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Completing location reward {rewardId} ({eventId}) due to completed quests"
+        )]
+        public static partial void CompletingLocationRewardDueToCompletedQuests(
+            ILogger logger,
+            int rewardId,
+            int eventId
         );
     }
 

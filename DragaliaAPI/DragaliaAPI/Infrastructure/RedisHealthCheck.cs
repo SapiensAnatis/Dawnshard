@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace DragaliaAPI.Infrastructure;
 
-public class RedisHealthCheck : IHealthCheck
+public partial class RedisHealthCheck : IHealthCheck
 {
     private readonly IDistributedCache cache;
     private readonly ILogger<RedisHealthCheck> logger;
@@ -27,7 +27,7 @@ public class RedisHealthCheck : IHealthCheck
         }
         catch (Exception ex)
         {
-            this.logger.LogError(ex, "Redis health check failed");
+            Log.RedisHealthCheckFailed(this.logger, ex);
 
             return new HealthCheckResult(
                 status: context.Registration.FailureStatus,
@@ -35,5 +35,11 @@ public class RedisHealthCheck : IHealthCheck
                 description: "Failed to connect to Redis"
             );
         }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Error, "Redis health check failed")]
+        public static partial void RedisHealthCheckFailed(ILogger logger, Exception exception);
     }
 }

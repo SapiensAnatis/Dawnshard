@@ -1,8 +1,8 @@
-﻿using System.Net;
+using System.Net;
 
 namespace DragaliaAPI.Infrastructure.Middleware;
 
-public class NotFoundHandlerMiddleware
+public partial class NotFoundHandlerMiddleware
 {
     private readonly ILogger<NotFoundHandlerMiddleware> logger;
     private readonly RequestDelegate next;
@@ -30,8 +30,14 @@ public class NotFoundHandlerMiddleware
             return;
         }
 
-        this.logger.LogInformation("HTTP 404 on {RequestPath}", context.Request.Path);
+        Log.HTTP404On(this.logger, context.Request.Path);
 
         await context.WriteResultCodeResponse(NotFoundCode);
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "HTTP 404 on {RequestPath}")]
+        public static partial void HTTP404On(ILogger logger, PathString requestPath);
     }
 }

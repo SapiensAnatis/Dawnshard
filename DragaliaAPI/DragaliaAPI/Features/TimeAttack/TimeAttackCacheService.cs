@@ -1,10 +1,10 @@
-﻿using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace DragaliaAPI.Features.TimeAttack;
 
-public class TimeAttackCacheService(
+public partial class TimeAttackCacheService(
     IDistributedCache cache,
     IPlayerIdentityService playerIdentityService,
     ILogger<TimeAttackCacheService> logger
@@ -12,7 +12,7 @@ public class TimeAttackCacheService(
 {
     public async Task Set(int questId, PartyInfo partyInfo)
     {
-        logger.LogDebug("Setting time attack cache entry for quest id {id}", questId);
+        Log.SettingTimeAttackCacheEntryForQuestId(logger, questId);
 
         TimeAttackCacheEntry entry = new(questId, partyInfo);
 
@@ -21,7 +21,7 @@ public class TimeAttackCacheService(
 
     public async Task<TimeAttackCacheEntry?> Get()
     {
-        logger.LogDebug("Getting time attack cache entry");
+        Log.GettingTimeAttackCacheEntry(logger);
 
         string? json = await cache.GetStringAsync(this.Key);
 
@@ -32,4 +32,13 @@ public class TimeAttackCacheService(
     }
 
     private string Key => $":timeattack:{playerIdentityService.AccountId}";
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Setting time attack cache entry for quest id {id}")]
+        public static partial void SettingTimeAttackCacheEntryForQuestId(ILogger logger, int id);
+
+        [LoggerMessage(LogLevel.Debug, "Getting time attack cache entry")]
+        public static partial void GettingTimeAttackCacheEntry(ILogger logger);
+    }
 }

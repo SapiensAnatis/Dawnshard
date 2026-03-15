@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Features.Maintenance;
 
 [Route("maintenance")]
-public class MaintenanceController(
+public partial class MaintenanceController(
     MaintenanceService maintenanceService,
     ILogger<MaintenanceService> logger
 ) : DragaliaControllerBaseCore
@@ -15,7 +15,7 @@ public class MaintenanceController(
     {
         if (!maintenanceService.CheckIsMaintenance())
         {
-            logger.LogError("Invalid call to get maintenance text: maintenance is not active");
+            Log.InvalidCallToGetMaintenanceTextMaintenanceIsNotActive(logger);
             return this.Code(ResultCode.CommonServerError);
         }
 
@@ -23,5 +23,16 @@ public class MaintenanceController(
         {
             MaintenanceText = maintenanceService.GetMaintenanceText(),
         };
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(
+            LogLevel.Error,
+            "Invalid call to get maintenance text: maintenance is not active"
+        )]
+        public static partial void InvalidCallToGetMaintenanceTextMaintenanceIsNotActive(
+            ILogger logger
+        );
     }
 }

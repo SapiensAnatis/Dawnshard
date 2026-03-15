@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Present;
@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Features.Wall;
 
 [Route("wall_record")]
-public class WallRecordController : DragaliaControllerBase
+public partial class WallRecordController : DragaliaControllerBase
 {
     private readonly IUpdateDataService updateDataService;
     private readonly IWallService wallService;
@@ -61,8 +61,8 @@ public class WallRecordController : DragaliaControllerBase
 
         bool isRecompletingMaxLevel = questWall.WallLevel == WallService.MaximumQuestWallLevel;
 
-        logger.LogInformation(
-            "Cleared wall quest with 'wall_id' {@wall_id} and 'wall_level' {@wall_level}",
+        Log.ClearedWallQuestWithWallIdAndWallLevel(
+            logger,
             request.WallId,
             dungeonSession.WallLevel
         );
@@ -151,4 +151,17 @@ public class WallRecordController : DragaliaControllerBase
         Wyrmites.Id,
         Wyrmites.Quantity
     );
+
+    private static partial class Log
+    {
+        [LoggerMessage(
+            LogLevel.Information,
+            "Cleared wall quest with 'wall_id' {@wall_id} and 'wall_level' {@wall_level}"
+        )]
+        public static partial void ClearedWallQuestWithWallIdAndWallLevel(
+            ILogger logger,
+            int wall_id,
+            int wall_level
+        );
+    }
 }

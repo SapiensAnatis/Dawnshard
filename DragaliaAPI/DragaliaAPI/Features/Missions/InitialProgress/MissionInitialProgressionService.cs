@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Missions.InitialProgress;
 
-public class MissionInitialProgressionService(
+public partial class MissionInitialProgressionService(
     ILogger<MissionInitialProgressionService> logger,
     FortDataService fortDataService,
     IMissionRepository missionRepository,
@@ -209,8 +209,8 @@ public class MissionInitialProgressionService(
         {
             mission.Progress = amountToComplete;
             mission.State = MissionState.Completed;
-            logger.LogDebug(
-                "Mission {missionId} ({missionType}) had all requirements met ({currentProgress}/{requiredProgress}), auto-completing.",
+            Log.MissionHadAllRequirementsMetAutoCompleting(
+                logger,
                 mission.Id,
                 mission.Type,
                 currentAmount,
@@ -219,10 +219,7 @@ public class MissionInitialProgressionService(
 
             foreach (int dependentMissionId in progressionInfo.UnlockedOnComplete ?? [])
             {
-                logger.LogInformation(
-                    "Starting dependent mission {DependentMissionId}",
-                    dependentMissionId
-                );
+                Log.StartingDependentMission(logger, dependentMissionId);
 
                 await this.StartMission(progressionInfo.MissionType, dependentMissionId);
             }
@@ -230,8 +227,8 @@ public class MissionInitialProgressionService(
         else
         {
             mission.Progress = currentAmount;
-            logger.LogDebug(
-                "Mission {missionId} ({missionType}) had some requirements met ({currentProgress}/{requiredProgress}).",
+            Log.MissionHadSomeRequirementsMet(
+                logger,
                 mission.Id,
                 mission.Type,
                 currentAmount,
@@ -616,5 +613,35 @@ public class MissionInitialProgressionService(
         }
 
         return await eventRepository.GetEventDataAsync(eventId.Value) != null ? 1 : 0;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Mission {missionId} ({missionType}) had all requirements met ({currentProgress}/{requiredProgress}), auto-completing."
+        )]
+        public static partial void MissionHadAllRequirementsMetAutoCompleting(
+            ILogger logger,
+            int missionId,
+            MissionType missionType,
+            int currentProgress,
+            int requiredProgress
+        );
+
+        [LoggerMessage(LogLevel.Information, "Starting dependent mission {DependentMissionId}")]
+        public static partial void StartingDependentMission(ILogger logger, int dependentMissionId);
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Mission {missionId} ({missionType}) had some requirements met ({currentProgress}/{requiredProgress})."
+        )]
+        public static partial void MissionHadSomeRequirementsMet(
+            ILogger logger,
+            int missionId,
+            MissionType missionType,
+            int currentProgress,
+            int requiredProgress
+        );
     }
 }

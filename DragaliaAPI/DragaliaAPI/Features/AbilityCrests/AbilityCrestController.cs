@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Mapping.Mapperly;
@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Features.AbilityCrests;
 
 [Route("ability_crest")]
-public class AbilityCrestController(
+public partial class AbilityCrestController(
     IAbilityCrestRepository abilityCrestRepository,
     IUpdateDataService updateDataService,
     IAbilityCrestService abilityCrestService,
@@ -37,7 +37,7 @@ public class AbilityCrestController(
 
         if (abilityCrest == null)
         {
-            this.logger.LogError("Player does not own ability crest {id}", request.AbilityCrestId);
+            Log.PlayerDoesNotOwnAbilityCrest(this.logger, request.AbilityCrestId);
             return this.Code(ResultCode.CommonInvalidArgument);
         }
 
@@ -63,10 +63,7 @@ public class AbilityCrestController(
             )
         )
         {
-            this.logger.LogError(
-                "Ability crest {id} had no MasterAsset entry",
-                request.AbilityCrestId
-            );
+            Log.AbilityCrestHadNoMasterAssetEntry(this.logger, request.AbilityCrestId);
             return this.Code(ResultCode.AbilityCrestIsNotPlayable);
         }
 
@@ -83,7 +80,7 @@ public class AbilityCrestController(
 
             if (resultCode != ResultCode.Success)
             {
-                this.logger.LogError("Buildup piece {@piece} invalid", buildupPiece);
+                Log.BuildupPieceInvalid(this.logger, buildupPiece);
                 return this.Code(resultCode);
             }
         }
@@ -108,10 +105,7 @@ public class AbilityCrestController(
             )
         )
         {
-            this.logger.LogError(
-                "Ability crest {id} had no MasterAsset entry",
-                request.AbilityCrestId
-            );
+            Log.AbilityCrestHadNoMasterAssetEntry(this.logger, request.AbilityCrestId);
             return this.Code(ResultCode.AbilityCrestIsNotPlayable);
         }
 
@@ -124,7 +118,7 @@ public class AbilityCrestController(
 
             if (resultCode != ResultCode.Success)
             {
-                this.logger.LogError("Buildup plus count param {piece} invalid", buildup);
+                Log.BuildupPlusCountParamInvalid(this.logger, buildup);
                 return this.Code(resultCode);
             }
         }
@@ -153,7 +147,7 @@ public class AbilityCrestController(
 
             if (resultCode != ResultCode.Success)
             {
-                this.logger.LogError("Resetting augment type {type} invalid", augmentType);
+                Log.ResettingAugmentTypeInvalid(this.logger, augmentType);
                 return this.Code(resultCode);
             }
         }
@@ -203,7 +197,7 @@ public class AbilityCrestController(
     {
         if (request.AbilityCrestSetNo is <= 0 or > 54)
         {
-            this.logger.LogError("Invalid ability crest no {no}", request.AbilityCrestSetNo);
+            Log.InvalidAbilityCrestNo(this.logger, request.AbilityCrestSetNo);
             return this.Code(ResultCode.CommonInvalidArgument);
         }
 
@@ -264,5 +258,35 @@ public class AbilityCrestController(
         return this.Ok(
             new AbilityCrestUpdateAbilityCrestSetNameResponse() { UpdateDataList = updateDataList }
         );
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Error, "Player does not own ability crest {id}")]
+        public static partial void PlayerDoesNotOwnAbilityCrest(ILogger logger, AbilityCrestId id);
+
+        [LoggerMessage(LogLevel.Error, "Ability crest {id} had no MasterAsset entry")]
+        public static partial void AbilityCrestHadNoMasterAssetEntry(
+            ILogger logger,
+            AbilityCrestId id
+        );
+
+        [LoggerMessage(LogLevel.Error, "Buildup piece {@piece} invalid")]
+        public static partial void BuildupPieceInvalid(
+            ILogger logger,
+            AtgenBuildupAbilityCrestPieceList piece
+        );
+
+        [LoggerMessage(LogLevel.Error, "Buildup plus count param {piece} invalid")]
+        public static partial void BuildupPlusCountParamInvalid(
+            ILogger logger,
+            AtgenPlusCountParamsList piece
+        );
+
+        [LoggerMessage(LogLevel.Error, "Resetting augment type {type} invalid")]
+        public static partial void ResettingAugmentTypeInvalid(ILogger logger, PlusCountType type);
+
+        [LoggerMessage(LogLevel.Error, "Invalid ability crest no {no}")]
+        public static partial void InvalidAbilityCrestNo(ILogger logger, int no);
     }
 }

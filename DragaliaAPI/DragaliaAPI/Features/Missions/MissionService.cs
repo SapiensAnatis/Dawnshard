@@ -1,4 +1,5 @@
-﻿using System.Collections.Frozen;
+using System.Collections.Frozen;
+using System.Collections.Generic;
 using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -15,7 +16,7 @@ using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Features.Missions;
 
-public class MissionService(
+public partial class MissionService(
     ILogger<MissionService> logger,
     IMissionRepository missionRepository,
     IRewardService rewardService,
@@ -49,7 +50,7 @@ public class MissionService(
         DateTimeOffset? endTime = null
     )
     {
-        logger.LogInformation("Starting mission {missionId} ({missionType})", id, type);
+        Log.StartingMission(logger, id, type);
 
         DbPlayerMission mission = await this.missionInitialProgressionService.StartMission(
             type,
@@ -70,7 +71,7 @@ public class MissionService(
         DateTimeOffset? endTime = null
     )
     {
-        logger.LogInformation("Adding completed mission {missionId} ({missionType})", id, type);
+        Log.AddingCompletedMission(logger, id, type);
         Mission missionInfo = Mission.From(type, id);
 
         DbPlayerMission dbMission = missionRepository.AddMission(
@@ -99,11 +100,7 @@ public class MissionService(
             .MainStoryMissionGroupRewards.Get(groupId)
             .Rewards.ToList();
 
-        logger.LogInformation(
-            "Unlocking main story mission group {groupId} ({groupMissionIds})",
-            groupId,
-            missions.Select(x => x.Id)
-        );
+        Log.UnlockingMainStoryMissionGroup(logger, groupId, missions.Select(x => x.Id));
 
         List<DbPlayerMission> dbMissions = new();
         foreach (MainStoryMission mission in missions)
@@ -141,11 +138,7 @@ public class MissionService(
                 )
                 .ToListAsync();
 
-        logger.LogInformation(
-            "Unlocking drill story mission group {groupId} ({groupMissionIds})",
-            groupId,
-            missions.Select(x => x.Id)
-        );
+        Log.UnlockingDrillStoryMissionGroup(logger, groupId, missions.Select(x => x.Id));
 
         List<DbPlayerMission> dbMissions = new();
         foreach (DrillMission mission in missions)
@@ -176,11 +169,7 @@ public class MissionService(
                 )
                 .ToListAsync();
 
-        logger.LogInformation(
-            "Unlocking memory event mission group {eventId} ({groupMissionIds})",
-            eventId,
-            missions.Select(x => x.Id)
-        );
+        Log.UnlockingMemoryEventMissionGroup(logger, eventId, missions.Select(x => x.Id));
 
         List<DbPlayerMission> dbMissions = new();
         foreach (MemoryEventMission mission in missions)
@@ -206,7 +195,7 @@ public class MissionService(
                 "Attempted to start missions for an event without any configuration in appsettings.json"
             );
 
-        this.logger.LogDebug("Starting missions for event with run info {@info}", runInfo);
+        Log.StartingMissionsForEventWithRunInfo(this.logger, runInfo);
 
         if (
             this.timeProvider.GetLastDailyReset() < runInfo.Start
@@ -227,7 +216,7 @@ public class MissionService(
             .MissionDailyData.Enumerable.Where(x => x.QuestGroupId == eventId)
             .ToList();
 
-        logger.LogInformation("Unlocking event missions for event {eventId}", eventId);
+        Log.UnlockingEventMissionsForEvent(logger, eventId);
 
         List<DbPlayerMission> dbMissions = new(periodMissions.Count + dailyMissions.Count);
         foreach (PeriodMission mission in periodMissions)
@@ -260,7 +249,7 @@ public class MissionService(
 
     public async Task RedeemMission(MissionType type, int id)
     {
-        logger.LogInformation("Redeeming mission {missionId}", id);
+        Log.RedeemingMission(logger, id);
 
         DbPlayerMission dbMission = await missionRepository.GetMissionByIdAsync(type, id);
         if (dbMission.State != MissionState.Completed)
@@ -325,7 +314,7 @@ public class MissionService(
 
     public async Task RedeemDailyMissions(IEnumerable<AtgenMissionParamsList> missions)
     {
-        this.logger.LogDebug("Claiming daily missions: {@missions}", missions);
+        Log.ClaimingDailyMissions(this.logger, missions);
 
         int[] ids = missions.Select(x => x.DailyMissionId).ToArray();
 
@@ -395,7 +384,7 @@ public class MissionService(
             if (currentMission >= maxId)
                 completedGroups.Add(group);
 
-        this.logger.LogDebug("Returning completed drill groups: {groups}", completedGroups);
+        Log.ReturningCompletedDrillGroups(this.logger, completedGroups);
 
         return completedGroups.Select(x => new DrillMissionGroupList(x));
     }
@@ -649,4 +638,75 @@ public class MissionService(
                 DayNo = x.Date,
             })
             .ToListAsync();
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "Starting mission {missionId} ({missionType})")]
+        public static partial void StartingMission(
+            ILogger logger,
+            int missionId,
+            MissionType missionType
+        );
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Adding completed mission {missionId} ({missionType})"
+        )]
+        public static partial void AddingCompletedMission(
+            ILogger logger,
+            int missionId,
+            MissionType missionType
+        );
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Unlocking main story mission group {groupId} ({groupMissionIds})"
+        )]
+        public static partial void UnlockingMainStoryMissionGroup(
+            ILogger logger,
+            int groupId,
+            IEnumerable<int> groupMissionIds
+        );
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Unlocking drill story mission group {groupId} ({groupMissionIds})"
+        )]
+        public static partial void UnlockingDrillStoryMissionGroup(
+            ILogger logger,
+            int groupId,
+            IEnumerable<int> groupMissionIds
+        );
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Unlocking memory event mission group {eventId} ({groupMissionIds})"
+        )]
+        public static partial void UnlockingMemoryEventMissionGroup(
+            ILogger logger,
+            int eventId,
+            IEnumerable<int> groupMissionIds
+        );
+
+        [LoggerMessage(LogLevel.Debug, "Starting missions for event with run info {@info}")]
+        public static partial void StartingMissionsForEventWithRunInfo(
+            ILogger logger,
+            EventRunInformation info
+        );
+
+        [LoggerMessage(LogLevel.Information, "Unlocking event missions for event {eventId}")]
+        public static partial void UnlockingEventMissionsForEvent(ILogger logger, int eventId);
+
+        [LoggerMessage(LogLevel.Information, "Redeeming mission {missionId}")]
+        public static partial void RedeemingMission(ILogger logger, int missionId);
+
+        [LoggerMessage(LogLevel.Debug, "Claiming daily missions: {@missions}")]
+        public static partial void ClaimingDailyMissions(
+            ILogger logger,
+            IEnumerable<AtgenMissionParamsList> missions
+        );
+
+        [LoggerMessage(LogLevel.Debug, "Returning completed drill groups: {groups}")]
+        public static partial void ReturningCompletedDrillGroups(ILogger logger, List<int> groups);
+    }
 }

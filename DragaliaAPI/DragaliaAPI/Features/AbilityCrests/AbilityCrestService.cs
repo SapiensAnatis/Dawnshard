@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Missions;
@@ -12,7 +12,7 @@ using static DragaliaAPI.Features.Tutorial.TutorialService.TutorialStatusIds;
 
 namespace DragaliaAPI.Features.AbilityCrests;
 
-public class AbilityCrestService : IAbilityCrestService
+public partial class AbilityCrestService : IAbilityCrestService
 {
     private readonly IAbilityCrestRepository abilityCrestRepository;
     private readonly IInventoryRepository inventoryRepository;
@@ -96,7 +96,7 @@ public class AbilityCrestService : IAbilityCrestService
             )
         )
         {
-            this.logger.LogWarning("BuildupGroupId {id} invalid", buildupId);
+            Log.BuildupGroupIdInvalid(this.logger, buildupId);
             return ResultCode.AbilityCrestBuildupPieceUnablePiece;
         }
 
@@ -157,7 +157,7 @@ public class AbilityCrestService : IAbilityCrestService
             )
         )
         {
-            this.logger.LogWarning("BuildupLevelId {id} invalid", levelId);
+            Log.BuildupLevelIdInvalid(this.logger, levelId);
             return ResultCode.AbilityCrestBuildupPieceUnablePiece;
         }
 
@@ -383,7 +383,7 @@ public class AbilityCrestService : IAbilityCrestService
     {
         if (!await this.inventoryRepository.CheckQuantity(materialMap))
         {
-            this.logger.LogWarning("Player doesn't have enough materials to perform action");
+            Log.PlayerDoesnTHaveEnoughMaterialsToPerformAction(this.logger);
             return false;
         }
 
@@ -394,7 +394,7 @@ public class AbilityCrestService : IAbilityCrestService
     {
         if (!await this.userDataRepository.CheckDewpoint(dewpoint))
         {
-            this.logger.LogWarning("Player doesn't have enough dewpoint to perform action");
+            Log.PlayerDoesnTHaveEnoughDewpointToPerformAction(this.logger);
             return false;
         }
 
@@ -405,7 +405,7 @@ public class AbilityCrestService : IAbilityCrestService
     {
         if (step != currLevel + 1)
         {
-            this.logger.LogWarning("Cannot upgrade in increments greater than 1");
+            Log.CannotUpgradeInIncrementsGreaterThan1(this.logger);
             return false;
         }
 
@@ -447,5 +447,23 @@ public class AbilityCrestService : IAbilityCrestService
         };
 
         return amount <= augmentLimit;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Warning, "BuildupGroupId {id} invalid")]
+        public static partial void BuildupGroupIdInvalid(ILogger logger, int id);
+
+        [LoggerMessage(LogLevel.Warning, "BuildupLevelId {id} invalid")]
+        public static partial void BuildupLevelIdInvalid(ILogger logger, int id);
+
+        [LoggerMessage(LogLevel.Warning, "Player doesn't have enough materials to perform action")]
+        public static partial void PlayerDoesnTHaveEnoughMaterialsToPerformAction(ILogger logger);
+
+        [LoggerMessage(LogLevel.Warning, "Player doesn't have enough dewpoint to perform action")]
+        public static partial void PlayerDoesnTHaveEnoughDewpointToPerformAction(ILogger logger);
+
+        [LoggerMessage(LogLevel.Warning, "Cannot upgrade in increments greater than 1")]
+        public static partial void CannotUpgradeInIncrementsGreaterThan1(ILogger logger);
     }
 }

@@ -4,7 +4,8 @@ using JetBrains.Annotations;
 namespace DragaliaAPI.Features.Shared.Reward.Handlers;
 
 [UsedImplicitly]
-public class FafnirMedalRewardHandler(ILogger<FafnirMedalRewardHandler> logger) : IRewardHandler
+public partial class FafnirMedalRewardHandler(ILogger<FafnirMedalRewardHandler> logger)
+    : IRewardHandler
 {
     private readonly ILogger<FafnirMedalRewardHandler> logger = logger;
 
@@ -12,7 +13,13 @@ public class FafnirMedalRewardHandler(ILogger<FafnirMedalRewardHandler> logger) 
 
     public Task<GrantReturn> Grant(Entity entity)
     {
-        this.logger.LogInformation("Discarding fafnir medal entity: {@entity}", entity);
+        Log.DiscardingFafnirMedalEntity(this.logger, entity);
         return Task.FromResult(new GrantReturn(RewardGrantResult.Discarded));
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "Discarding fafnir medal entity: {@entity}")]
+        public static partial void DiscardingFafnirMedalEntity(ILogger logger, Entity entity);
     }
 }

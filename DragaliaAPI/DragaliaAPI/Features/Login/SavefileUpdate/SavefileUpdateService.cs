@@ -9,7 +9,7 @@ namespace DragaliaAPI.Features.Login.SavefileUpdate;
 /// <summary>
 /// Service to apply <see cref="ISavefileUpdate"/> instances.
 /// </summary>
-public class SavefileUpdateService : ISavefileUpdateService
+public partial class SavefileUpdateService : ISavefileUpdateService
 {
     private readonly ApiContext context;
     private readonly IPlayerIdentityService playerIdentityService;
@@ -37,10 +37,7 @@ public class SavefileUpdateService : ISavefileUpdateService
 
         if (player is null)
         {
-            this.logger.LogInformation(
-                "Could not find player {player}",
-                this.playerIdentityService.AccountId
-            );
+            Log.CouldNotFindPlayer(this.logger, this.playerIdentityService.AccountId);
 
             return;
         }
@@ -65,11 +62,7 @@ public class SavefileUpdateService : ISavefileUpdateService
 
                 player.SavefileVersion = update.SavefileVersion;
 
-                this.logger.LogInformation(
-                    "Applied savefile update {$update} (took: {time} ms)",
-                    update,
-                    s.ElapsedMilliseconds
-                );
+                Log.AppliedSavefileUpdateTookMs(this.logger, update, s.ElapsedMilliseconds);
             }
         }
 
@@ -77,5 +70,18 @@ public class SavefileUpdateService : ISavefileUpdateService
         await this.context.SaveChangesAsync();
 
         await transaction.CommitAsync();
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "Could not find player {player}")]
+        public static partial void CouldNotFindPlayer(ILogger logger, string player);
+
+        [LoggerMessage(LogLevel.Information, "Applied savefile update {update} (took: {time} ms)")]
+        public static partial void AppliedSavefileUpdateTookMs(
+            ILogger logger,
+            ISavefileUpdate update,
+            long time
+        );
     }
 }

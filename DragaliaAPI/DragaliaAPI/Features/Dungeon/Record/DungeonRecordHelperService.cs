@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database;
+using System.Collections.Generic;
+using DragaliaAPI.Database;
 using DragaliaAPI.Features.CoOp;
 using DragaliaAPI.Features.Friends;
 using DragaliaAPI.Models.Generated;
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
-internal sealed class DungeonRecordHelperService(
+internal sealed partial class DungeonRecordHelperService(
     IPlayerIdentityService playerIdentityService,
     ApiContext apiContext,
     IHelperService helperService,
@@ -88,7 +89,7 @@ internal sealed class DungeonRecordHelperService(
         List<(long ViewerId, bool IsFriend, bool HasFriendRequest)> friendCheckList =
             await friendService.CheckFriendStatus(connectingViewerIdList);
 
-        logger.LogDebug("Retrieved teammate support list {@supportList}", teammateSupportLists);
+        Log.RetrievedTeammateSupportList(logger, teammateSupportLists);
 
         IEnumerable<AtgenHelperDetailList> teammateDetailLists = friendCheckList.Select(
             x => new AtgenHelperDetailList()
@@ -120,7 +121,7 @@ internal sealed class DungeonRecordHelperService(
         {
             if (!userDetails.TryGetValue(viewerId, out var userData))
             {
-                logger.LogWarning("No user details returned for viewer ID {ViewerId}", viewerId);
+                Log.NoUserDetailsReturnedForViewerID(logger, viewerId);
                 continue;
             }
 
@@ -135,14 +136,32 @@ internal sealed class DungeonRecordHelperService(
             }
             catch (Exception e)
             {
-                logger.LogWarning(
-                    e,
-                    "Failed to populate multiplayer support info for viewer ID {ViewerId}",
-                    viewerId
-                );
+                Log.FailedToPopulateMultiplayerSupportInfoForViewerID(logger, e, viewerId);
             }
         }
 
         return helperList;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Retrieved teammate support list {@supportList}")]
+        public static partial void RetrievedTeammateSupportList(
+            ILogger logger,
+            IEnumerable<UserSupportList> supportList
+        );
+
+        [LoggerMessage(LogLevel.Warning, "No user details returned for viewer ID {ViewerId}")]
+        public static partial void NoUserDetailsReturnedForViewerID(ILogger logger, long viewerId);
+
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Failed to populate multiplayer support info for viewer ID {ViewerId}"
+        )]
+        public static partial void FailedToPopulateMultiplayerSupportInfoForViewerID(
+            ILogger logger,
+            Exception exception,
+            long viewerId
+        );
     }
 }

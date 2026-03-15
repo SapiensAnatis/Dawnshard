@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Redis.OM;
 using Redis.OM.Contracts;
 using Serilog;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -19,12 +20,12 @@ IRedisConnectionProvider provider = app.Services.GetRequiredService<IRedisConnec
 bool created = await provider.Connection.CreateIndexAsync(typeof(RedisGame));
 RedisIndexInfo? info = await provider.Connection.GetIndexInfoAsync(typeof(RedisGame));
 
-app.Logger.LogInformation("Index created: {Created}", created);
-app.Logger.LogInformation("Index info: {@Info}", info);
+Log.IndexCreated(app.Logger, created);
+Log.IndexInfo(app.Logger, info);
 
 if (builder.Environment.IsDevelopment())
 {
-    app.Logger.LogInformation("App is in development mode -- clearing all pre-existing games");
+    Log.DevelopmentModeClearing(app.Logger);
     await provider.RedisCollection<RedisGame>().DeleteAsync(provider.RedisCollection<RedisGame>());
 }
 
@@ -45,4 +46,19 @@ namespace DragaliaAPI.Photon.StateManager
 {
     // Needed for creating test fixture
     public class Program { }
+}
+
+internal static partial class Log
+{
+    [LoggerMessage(Level = LogLevel.Information, Message = "Index created: {Created}")]
+    public static partial void IndexCreated(ILogger logger, bool created);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Index info: {@Info}")]
+    public static partial void IndexInfo(ILogger logger, RedisIndexInfo? info);
+
+    [LoggerMessage(
+        Level = LogLevel.Information,
+        Message = "App is in development mode -- clearing all pre-existing games"
+    )]
+    public static partial void DevelopmentModeClearing(ILogger logger);
 }

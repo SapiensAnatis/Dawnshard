@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Login.SavefileUpdate;
 
-public class V6Update : ISavefileUpdate
+public partial class V6Update : ISavefileUpdate
 {
     private readonly IFortRepository fortRepository;
     private readonly ILogger<V6Update> logger;
@@ -29,8 +29,8 @@ public class V6Update : ISavefileUpdate
         {
             if (!MasterAsset.FortPlantDetail.TryGetValue(build.FortPlantDetailId, out _))
             {
-                this.logger.LogDebug(
-                    "Fixing building {buildId}, current level {level}, detail id {detailId}",
+                Log.FixingBuildingCurrentLevelDetailId(
+                    this.logger,
                     build.BuildId,
                     build.Level,
                     build.FortPlantDetailId
@@ -39,5 +39,19 @@ public class V6Update : ISavefileUpdate
                 build.Level--;
             }
         }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Fixing building {buildId}, current level {level}, detail id {detailId}"
+        )]
+        public static partial void FixingBuildingCurrentLevelDetailId(
+            ILogger logger,
+            long buildId,
+            int level,
+            int detailId
+        );
     }
 }

@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Story;
 
-public class StoryRepository : IStoryRepository
+public partial class StoryRepository : IStoryRepository
 {
     private readonly ApiContext apiContext;
     private readonly IPlayerIdentityService playerIdentityService;
@@ -44,11 +44,7 @@ public class StoryRepository : IStoryRepository
 
         if (state is null)
         {
-            this.logger.LogDebug(
-                "Requested story id {id} with type {type} was not found, creating...",
-                storyId,
-                storyType
-            );
+            Log.CreatingNewStory(this.logger, storyId, storyType);
 
             state = this
                 .apiContext.PlayerStoryState.Add(
@@ -73,4 +69,13 @@ public class StoryRepository : IStoryRepository
         this.apiContext.RemoveRange(
             await this.QuestStories.Where(x => storyIds.Contains(x.StoryId)).ToListAsync()
         );
+
+    private static partial class Log
+    {
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Requested story id {id} with type {type} was not found, creating..."
+        )]
+        public static partial void CreatingNewStory(ILogger logger, int id, StoryTypes type);
+    }
 }

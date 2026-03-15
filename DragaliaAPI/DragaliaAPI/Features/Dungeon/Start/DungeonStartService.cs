@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
@@ -43,7 +43,7 @@ internal sealed partial class DungeonStartService(
     {
         if (!MasterAsset.QuestData.TryGetValue(questId, out QuestData? _))
         {
-            logger.LogInformation("Quest {quest} does not exist", questId);
+            Log.QuestDoesNotExist(logger, questId);
             return false;
         }
 
@@ -53,8 +53,8 @@ internal sealed partial class DungeonStartService(
         // Makes auto repeat stamina work amazingly enough
         if (currentStamina < requiredStamina)
         {
-            logger.LogInformation(
-                "Player did not have required stamina for quest {quest}: has {currentStamina}, needs {requiredStamina}",
+            Log.PlayerDidNotHaveRequiredStaminaForQuestHasNeeds(
+                logger,
                 questId,
                 currentStamina,
                 requiredStamina
@@ -122,7 +122,7 @@ internal sealed partial class DungeonStartService(
             && await tutorialService.GetCurrentTutorialStatus() == TutorialStatusIds.CoopTutorial
         )
         {
-            logger.LogDebug("Detected co-op tutorial: setting is_bot_tutorial");
+            Log.DetectedCoOpTutorialSettingIsBotTutorial(logger);
             result.IsBotTutorial = true;
         }
 
@@ -256,7 +256,7 @@ internal sealed partial class DungeonStartService(
 
         if (quest?.State < 3)
         {
-            logger.LogDebug("Updating quest {@quest} state", quest);
+            Log.UpdatingQuestState(logger, quest);
             quest.State = 2;
         }
 
@@ -284,7 +284,7 @@ internal sealed partial class DungeonStartService(
             return BuildHelperData(helperDetails);
         }
 
-        logger.LogDebug("SupportViewerId {id} returned null helper data.", supportViewerId);
+        Log.SupportViewerIdReturnedNullHelperData(logger, supportViewerId);
         return new();
     }
 
@@ -394,7 +394,7 @@ internal sealed partial class DungeonStartService(
         result.PartyInfo.FortBonusList = await bonusService.GetBonusList();
         result.PartyInfo.EventBoost = await bonusService.GetEventBoost(questInfo.Gid);
 
-        logger.LogDebug("Using event boost {@boost}", result.PartyInfo.EventBoost);
+        Log.UsingEventBoost(logger, result.PartyInfo.EventBoost);
 
         if (supportViewerId is not null and not 0)
         {
@@ -435,5 +435,49 @@ internal sealed partial class DungeonStartService(
                 .ToList(),
             TalismanData = helperDetails.UserSupportData.SupportTalisman?.ToTalismanList(),
         };
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "Quest {quest} does not exist")]
+        public static partial void QuestDoesNotExist(ILogger logger, int quest);
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Player did not have required stamina for quest {quest}: has {currentStamina}, needs {requiredStamina}"
+        )]
+        public static partial void PlayerDidNotHaveRequiredStaminaForQuestHasNeeds(
+            ILogger logger,
+            int quest,
+            int currentStamina,
+            int requiredStamina
+        );
+
+        [LoggerMessage(LogLevel.Debug, "Detected co-op tutorial: setting is_bot_tutorial")]
+        public static partial void DetectedCoOpTutorialSettingIsBotTutorial(ILogger logger);
+
+        [LoggerMessage(LogLevel.Debug, "Updating quest {@quest} state")]
+        public static partial void UpdatingQuestState(ILogger logger, DbQuest quest);
+
+        [LoggerMessage(LogLevel.Debug, "SupportViewerId {id} returned null helper data.")]
+        public static partial void SupportViewerIdReturnedNullHelperData(ILogger logger, ulong id);
+
+        [LoggerMessage(LogLevel.Debug, "Using event boost {@boost}")]
+        public static partial void UsingEventBoost(ILogger logger, AtgenEventBoost? boost);
+
+        [LoggerMessage(LogLevel.Debug, "Loading party data for party number {PartyNumber}")]
+        public static partial void LoadingFromPartyNumber(ILogger logger, int partyNumber);
+
+        [LoggerMessage(LogLevel.Debug, "Loading party data for party numbers {PartyNumbers}")]
+        public static partial void LoadingFromPartyNumbers(ILogger logger, IList<int> partyNumbers);
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Loading party data for party setting list {@PartySettingList}"
+        )]
+        public static partial void LoadingFromPartySettingList(
+            ILogger logger,
+            IList<PartySettingList> partySettingList
+        );
     }
 }

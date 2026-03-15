@@ -1,11 +1,11 @@
-﻿using DragaliaAPI.Infrastructure;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.CoOp;
 
 [Route("matching")]
-public class MatchingController : DragaliaControllerBase
+public partial class MatchingController : DragaliaControllerBase
 {
     private readonly IMatchingService matchingService;
     private readonly ILogger<MatchingController> logger;
@@ -34,11 +34,11 @@ public class MatchingController : DragaliaControllerBase
 
         if (data is null)
         {
-            this.logger.LogDebug("Could not find room with id {id}", request.RoomId);
+            Log.CouldNotFindRoomWithId(this.logger, request.RoomId);
             return this.Code(ResultCode.MatchingRoomIdNotFound);
         }
 
-        this.logger.LogDebug("Found room with id {id}: {@room}", request.RoomId, data);
+        Log.FoundRoomWithId(this.logger, request.RoomId, data);
         return this.Ok(data);
     }
 
@@ -59,5 +59,18 @@ public class MatchingController : DragaliaControllerBase
     public DragaliaResult CheckPenaltyUser(MatchingCheckPenaltyUserRequest request)
     {
         return this.Ok(new MatchingCheckPenaltyUserResponse() { Result = 1 });
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Could not find room with id {id}")]
+        public static partial void CouldNotFindRoomWithId(ILogger logger, int id);
+
+        [LoggerMessage(LogLevel.Debug, "Found room with id {id}: {@room}")]
+        public static partial void FoundRoomWithId(
+            ILogger logger,
+            int id,
+            MatchingGetRoomNameResponse room
+        );
     }
 }

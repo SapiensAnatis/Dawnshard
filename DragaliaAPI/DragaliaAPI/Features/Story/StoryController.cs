@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.MasterAsset;
@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Features.Story;
 
 [Route("story")]
-public class StoryController : DragaliaControllerBase
+public partial class StoryController : DragaliaControllerBase
 {
     private readonly IStoryService storyService;
     private readonly IUpdateDataService updateDataService;
@@ -33,17 +33,14 @@ public class StoryController : DragaliaControllerBase
     {
         if (!MasterAsset.UnitStory.TryGetValue(request.UnitStoryId, out UnitStory? data))
         {
-            this.logger.LogWarning(
-                "Requested to read non-existent unit story {id}",
-                request.UnitStoryId
-            );
+            Log.RequestedToReadNonExistentUnitStory(this.logger, request.UnitStoryId);
 
             return this.Code(ResultCode.StoryNotGet);
         }
 
         if (!await this.storyService.CheckStoryEligibility(data.Type, request.UnitStoryId))
         {
-            this.logger.LogWarning("User did not have access to story {id}", request.UnitStoryId);
+            Log.UserDidNotHaveAccessToStory(this.logger, request.UnitStoryId);
             return this.Code(ResultCode.StoryNotReadThePrevious);
         }
 
@@ -63,5 +60,14 @@ public class StoryController : DragaliaControllerBase
                 UpdateDataList = updateDataList,
             }
         );
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Warning, "Requested to read non-existent unit story {id}")]
+        public static partial void RequestedToReadNonExistentUnitStory(ILogger logger, int id);
+
+        [LoggerMessage(LogLevel.Warning, "User did not have access to story {id}")]
+        public static partial void UserDidNotHaveAccessToStory(ILogger logger, int id);
     }
 }

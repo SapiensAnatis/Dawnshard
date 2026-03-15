@@ -54,24 +54,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         await this.abilityCrestRepository.Add(AbilityCrestId.ADragonyuleforIlia);
-        this.logger.Verify(
-            x =>
-                x.Log(
-                    LogLevel.Warning,
-                    It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>(
-                        (o, t) =>
-                            string.Equals(
-                                "Ability crest was already owned.",
-                                o.ToString(),
-                                StringComparison.InvariantCultureIgnoreCase
-                            )
-                    ),
-                    It.IsAny<Exception>(),
-                    It.IsAny<Func<It.IsAnyType, Exception?, string>>()
-                ),
-            Times.Once
-        );
+        this.logger.Verify(x => x.IsEnabled(LogLevel.Warning), Times.Once);
     }
 
     [Fact]

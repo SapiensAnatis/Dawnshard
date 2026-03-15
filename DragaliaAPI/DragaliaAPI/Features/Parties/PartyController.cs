@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -16,7 +17,7 @@ namespace DragaliaAPI.Features.Parties;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class PartyController(
+public partial class PartyController(
     IPartyRepository partyRepository,
     IUnitRepository unitRepository,
     IUserDataRepository userDataRepository,
@@ -50,10 +51,7 @@ public class PartyController(
         // TODO: Talisman validation
         // TODO: Shared skill validation
 
-        logger.LogDebug(
-            "Received party update request: {@request}",
-            requestParty.RequestPartySettingList
-        );
+        Log.ReceivedPartyUpdateRequest(logger, requestParty.RequestPartySettingList);
 
         List<Charas> selectedCharas = requestParty
             .RequestPartySettingList.Where(x => x.CharaId != 0)
@@ -75,8 +73,8 @@ public class PartyController(
 
         if (ownedCharaCount < selectedCharas.Count || ownedDragonCount < selectedDragons.Count)
         {
-            logger.LogError(
-                "Party update validation failed. Party unit count: {PartyUnitCount}; owned chara count: {OwnedCharaCount}; owned dragon count {OwnedDragonCount}",
+            Log.PartyUpdateValidationFailedPartyUnitCountOwnedCharaCountOwnedDragonCount(
+                logger,
                 requestParty.RequestPartySettingList.Count,
                 ownedCharaCount,
                 ownedDragonCount
@@ -91,7 +89,7 @@ public class PartyController(
         await partyPowerRepository.SetMaxPartyPowerAsync(partyPower);
         missionProgressionService.OnPartyPowerReached(partyPower);
 
-        logger.LogTrace("Party power {power}", partyPower);
+        Log.PartyPower(logger, partyPower);
 
         DbParty dbEntry = new DbParty()
         {
@@ -114,7 +112,7 @@ public class PartyController(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
-        logger.LogDebug("Returning updated party list: {@list}", updateDataList.PartyList);
+        Log.ReturningUpdatedPartyList(logger, updateDataList.PartyList);
 
         return this.Ok(new PartySetPartySettingResponse(updateDataList, new()));
     }
@@ -143,5 +141,31 @@ public class PartyController(
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         return this.Ok(new PartyUpdatePartyNameResponse() { UpdateDataList = updateDataList });
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Received party update request: {@request}")]
+        public static partial void ReceivedPartyUpdateRequest(
+            ILogger logger,
+            IList<PartySettingList> request
+        );
+
+        [LoggerMessage(
+            LogLevel.Error,
+            "Party update validation failed. Party unit count: {PartyUnitCount}; owned chara count: {OwnedCharaCount}; owned dragon count {OwnedDragonCount}"
+        )]
+        public static partial void PartyUpdateValidationFailedPartyUnitCountOwnedCharaCountOwnedDragonCount(
+            ILogger logger,
+            int partyUnitCount,
+            int ownedCharaCount,
+            int ownedDragonCount
+        );
+
+        [LoggerMessage(LogLevel.Trace, "Party power {power}")]
+        public static partial void PartyPower(ILogger logger, int power);
+
+        [LoggerMessage(LogLevel.Debug, "Returning updated party list: {@list}")]
+        public static partial void ReturningUpdatedPartyList(ILogger logger, List<PartyList>? list);
     }
 }

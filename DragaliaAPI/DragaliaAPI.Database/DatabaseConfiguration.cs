@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using DragaliaAPI.Database.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -12,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Database;
 
-public static class DatabaseConfiguration
+public static partial class DatabaseConfiguration
 {
     private const int MigrationMaxRetries = 5;
     private const int RetrySleepMs = 3000;
@@ -65,8 +66,8 @@ public static class DatabaseConfiguration
         while (!context.Database.CanConnect())
         {
             tries++;
-            app.Logger.LogWarning(
-                "Failed to connect to database to check migration status. Retrying... ({x}/{y})",
+            Log.FailedToConnectToDatabaseToCheckMigrationStatusRetrying(
+                app.Logger,
                 tries,
                 MigrationMaxRetries
             );
@@ -84,12 +85,37 @@ public static class DatabaseConfiguration
         IEnumerable<string> appliedMigrations = context.Database.GetAppliedMigrations();
         IEnumerable<string> pendingMigrations = context.Database.GetPendingMigrations();
 
-        app.Logger.LogInformation("Existing migrations: {@migrations}", appliedMigrations);
-        app.Logger.LogInformation("Pending migrations: {@migrations}", pendingMigrations);
+        Log.ExistingMigrations(app.Logger, appliedMigrations);
+        Log.PendingMigrations(app.Logger, pendingMigrations);
 
         if (!pendingMigrations.Any())
             return;
 
         context.Database.Migrate();
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Failed to connect to database to check migration status. Retrying... ({x}/{y})"
+        )]
+        public static partial void FailedToConnectToDatabaseToCheckMigrationStatusRetrying(
+            ILogger logger,
+            int x,
+            int y
+        );
+
+        [LoggerMessage(LogLevel.Information, "Existing migrations: {@migrations}")]
+        public static partial void ExistingMigrations(
+            ILogger logger,
+            IEnumerable<string> migrations
+        );
+
+        [LoggerMessage(LogLevel.Information, "Pending migrations: {@migrations}")]
+        public static partial void PendingMigrations(
+            ILogger logger,
+            IEnumerable<string> migrations
+        );
     }
 }

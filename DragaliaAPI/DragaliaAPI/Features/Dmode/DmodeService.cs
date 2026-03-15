@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.DmodeDungeon;
 using DragaliaAPI.Features.Shared.Reward;
@@ -12,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Dmode;
 
-public class DmodeService(
+public partial class DmodeService(
     IDmodeRepository dmodeRepository,
     TimeProvider dateTimeProvider,
     IDmodeCacheService dmodeCacheService,
@@ -74,8 +75,8 @@ public class DmodeService(
             catch (DragaliaException ex)
             {
                 // Cache data has errors, resetting dungeon info
-                logger.LogWarning(
-                    "Dmode cache sanity check failed (no floor or ingame info), resetting state. Exception: {ex}",
+                Log.DmodeCacheSanityCheckFailedNoFloorOrIngameInfoResettingStateException(
+                    logger,
                     ex
                 );
 
@@ -178,7 +179,7 @@ public class DmodeService(
             await dmodeRepository.ServitorPassives.ToListAsync()
         ).ToDictionary(x => x.PassiveId, x => x);
 
-        logger.LogDebug("Building up servitors: {@servitorBuildups}", buildupList);
+        Log.BuildingUpServitors(logger, buildupList);
 
         foreach (DmodeServitorPassiveList passiveList in buildupList.OrderBy(x => x.PassiveLevel))
         {
@@ -218,11 +219,7 @@ public class DmodeService(
 
     public async Task<DmodeExpedition> StartExpedition(int targetFloor, IEnumerable<Charas> charas)
     {
-        logger.LogDebug(
-            "Starting dmode expedition to floor {targetFloor} with characters {@charas}",
-            targetFloor,
-            charas
-        );
+        Log.StartingDmodeExpeditionToFloorWithCharacters(logger, targetFloor, charas);
 
         DbPlayerDmodeExpedition expedition = await dmodeRepository.GetExpeditionAsync();
 
@@ -270,11 +267,7 @@ public class DmodeService(
             expedition.State
         );
 
-        logger.LogDebug(
-            "Finishing expedition {@expedition}. Force-finished: {isForceFinish}",
-            dmodeExpedition,
-            forceFinish
-        );
+        Log.FinishingExpeditionForceFinished(logger, dmodeExpedition, forceFinish);
 
         DmodeIngameResult dmodeResult = new();
         dmodeResult.CharaIdList = new[]
@@ -359,5 +352,43 @@ public class DmodeService(
         dmodeResult.RewardTalismanList = talismans;
 
         return (dmodeExpedition, dmodeResult);
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Dmode cache sanity check failed (no floor or ingame info), resetting state."
+        )]
+        public static partial void DmodeCacheSanityCheckFailedNoFloorOrIngameInfoResettingStateException(
+            ILogger logger,
+            DragaliaException ex
+        );
+
+        [LoggerMessage(LogLevel.Debug, "Building up servitors: {@servitorBuildups}")]
+        public static partial void BuildingUpServitors(
+            ILogger logger,
+            IEnumerable<DmodeServitorPassiveList> servitorBuildups
+        );
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Starting dmode expedition to floor {targetFloor} with characters {@charas}"
+        )]
+        public static partial void StartingDmodeExpeditionToFloorWithCharacters(
+            ILogger logger,
+            int targetFloor,
+            IEnumerable<Charas> charas
+        );
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Finishing expedition {@expedition}. Force-finished: {isForceFinish}"
+        )]
+        public static partial void FinishingExpeditionForceFinished(
+            ILogger logger,
+            DmodeExpedition expedition,
+            bool isForceFinish
+        );
     }
 }

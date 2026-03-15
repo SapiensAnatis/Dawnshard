@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -12,7 +13,7 @@ using Serilog.Context;
 
 namespace DragaliaAPI.Features.Weapons;
 
-public class WeaponService : IWeaponService
+public partial class WeaponService : IWeaponService
 {
     private readonly IWeaponRepository weaponRepository;
     private readonly IInventoryRepository inventoryRepository;
@@ -42,7 +43,7 @@ public class WeaponService : IWeaponService
     {
         if (await this.weaponRepository.CheckOwnsWeapons(weaponBodyId))
         {
-            this.logger.LogWarning("Player already owns weapon {weapon}", weaponBodyId);
+            Log.PlayerAlreadyOwnsWeapon(this.logger, weaponBodyId);
             return false;
         }
 
@@ -55,8 +56,8 @@ public class WeaponService : IWeaponService
             )
         )
         {
-            this.logger.LogWarning(
-                "Player smithy level was too low to craft weapon {weapon} (needs level {level2})",
+            Log.PlayerSmithyLevelWasTooLowToCraftWeaponNeedsLevel(
+                this.logger,
                 weaponBodyId,
                 weaponData.NeedFortCraftLevel
             );
@@ -70,8 +71,8 @@ public class WeaponService : IWeaponService
             )
         )
         {
-            this.logger.LogWarning(
-                "Player did not have one or more weapons ({weapon1}, {weapon2}) required to craft {weapon3}",
+            Log.PlayerDidNotHaveOneOrMoreWeaponsRequiredToCraft(
+                this.logger,
                 weaponData.NeedCreateWeaponBodyId1,
                 weaponData.NeedCreateWeaponBodyId2,
                 weaponBodyId
@@ -83,16 +84,13 @@ public class WeaponService : IWeaponService
 
         if (!await this.inventoryRepository.CheckQuantity(weaponData.CreateMaterialMap))
         {
-            this.logger.LogWarning(
-                "Player lacked materials to craft weapon {weapon}",
-                weaponBodyId
-            );
+            Log.PlayerLackedMaterialsToCraftWeapon(this.logger, weaponBodyId);
             return false;
         }
 
         if (!await this.userDataRepository.CheckCoin(weaponData.CreateCoin))
         {
-            this.logger.LogWarning("Player lacked rupies to craft weapon {weapon}", weaponBodyId);
+            Log.PlayerLackedRupiesToCraftWeapon(this.logger, weaponBodyId);
             return false;
         }
 
@@ -169,7 +167,7 @@ public class WeaponService : IWeaponService
             )
         )
         {
-            this.logger.LogError("Could not find buildup group with key {key}", buildupKey);
+            Log.CouldNotFindBuildupGroupWithKey(this.logger, buildupKey);
             return ResultCode.WeaponBodyBuildupPieceUnablePiece;
         }
 
@@ -179,10 +177,7 @@ public class WeaponService : IWeaponService
         if (buildup is { BuildupPieceType: BuildupPieceTypes.Unbind, IsUseDedicatedMaterial: true })
         {
             SetMaterialMapSpecial(body, ref materialMap, ref coin);
-            this.logger.LogInformation(
-                "Using special material; material map set to {map}",
-                materialMap
-            );
+            Log.UsingSpecialMaterialMaterialMapSetTo(this.logger, materialMap);
         }
 
         if (!await this.ValidateCost(materialMap, coin))
@@ -193,8 +188,8 @@ public class WeaponService : IWeaponService
 
         if (entity.LimitBreakCount < buildupGroup.UnlockConditionLimitBreakCount)
         {
-            this.logger.LogError(
-                "Entity with limit break count {count} was ineligible for buildupGroup with min limit break count {count2}",
+            Log.EntityWithLimitBreakCountWasIneligibleForBuildupGroupWithMinLimitBreakCount(
+                this.logger,
                 entity.LimitBreakCount,
                 buildupGroup.UnlockConditionLimitBreakCount
             );
@@ -246,10 +241,7 @@ public class WeaponService : IWeaponService
             case BuildupPieceTypes.Passive:
                 throw new UnreachableException("Received non-generic buildup_piece_type");
             default:
-                this.logger.LogWarning(
-                    "buildup_piece_type had invalid value: {type}",
-                    buildup.BuildupPieceType
-                );
+                Log.BuildupPieceTypeHadInvalidValue(this.logger, buildup.BuildupPieceType);
                 return ResultCode.CommonInvalidArgument;
         }
 
@@ -280,7 +272,7 @@ public class WeaponService : IWeaponService
             )
         )
         {
-            this.logger.LogError("Invalid weapon passive ability key {key}", passiveKey);
+            Log.InvalidWeaponPassiveAbilityKey(this.logger, passiveKey);
             return ResultCode.WeaponBodyBuildupPieceUnablePiece;
         }
 
@@ -295,8 +287,8 @@ public class WeaponService : IWeaponService
 
         if (entity.LimitBreakCount < passiveAbility.UnlockConditionLimitBreakCount)
         {
-            this.logger.LogError(
-                "Entity with limit break count {count} was ineligible for buildupGroup with min limit break count {count2}",
+            Log.EntityWithLimitBreakCountWasIneligibleForBuildupGroupWithMinLimitBreakCount(
+                this.logger,
                 entity.LimitBreakCount,
                 passiveAbility.UnlockConditionLimitBreakCount
             );
@@ -332,7 +324,7 @@ public class WeaponService : IWeaponService
             )
         )
         {
-            this.logger.LogError("Invalid weapon stat buildup key {key}", passiveKey);
+            Log.InvalidWeaponStatBuildupKey(this.logger, passiveKey);
             return ResultCode.WeaponBodyBuildupPieceUnablePiece;
         }
 
@@ -366,7 +358,7 @@ public class WeaponService : IWeaponService
 
         if (!await this.userDataRepository.CheckCoin(coin))
         {
-            this.logger.LogWarning("Player had insufficient rupies to upgrade weapon");
+            Log.PlayerHadInsufficientRupiesToUpgradeWeapon(this.logger);
             return false;
         }
 
@@ -382,7 +374,7 @@ public class WeaponService : IWeaponService
     {
         if (!await this.inventoryRepository.CheckQuantity(materialMap))
         {
-            this.logger.LogWarning("Player had insufficient materials to upgrade weapon");
+            Log.PlayerHadInsufficientMaterialsToUpgradeWeapon(this.logger);
             return false;
         }
 
@@ -400,8 +392,8 @@ public class WeaponService : IWeaponService
     {
         if (entityProperty != buildup.Step - 1)
         {
-            this.logger.LogWarning(
-                "Weapon property value {value} was in invalid state for buildup {@buildup}",
+            Log.WeaponPropertyValueWasInInvalidStateForBuildup(
+                this.logger,
                 entityProperty,
                 buildup
             );
@@ -484,5 +476,91 @@ public class WeaponService : IWeaponService
 
         if (passiveAbility.RewardWeaponSkinId2 != 0)
             await this.weaponRepository.AddSkin(passiveAbility.RewardWeaponSkinId2);
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Warning, "Player already owns weapon {weapon}")]
+        public static partial void PlayerAlreadyOwnsWeapon(ILogger logger, WeaponBodies weapon);
+
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Player smithy level was too low to craft weapon {weapon} (needs level {level2})"
+        )]
+        public static partial void PlayerSmithyLevelWasTooLowToCraftWeaponNeedsLevel(
+            ILogger logger,
+            WeaponBodies weapon,
+            int level2
+        );
+
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Player did not have one or more weapons ({weapon1}, {weapon2}) required to craft {weapon3}"
+        )]
+        public static partial void PlayerDidNotHaveOneOrMoreWeaponsRequiredToCraft(
+            ILogger logger,
+            WeaponBodies weapon1,
+            WeaponBodies weapon2,
+            WeaponBodies weapon3
+        );
+
+        [LoggerMessage(LogLevel.Warning, "Player lacked materials to craft weapon {weapon}")]
+        public static partial void PlayerLackedMaterialsToCraftWeapon(
+            ILogger logger,
+            WeaponBodies weapon
+        );
+
+        [LoggerMessage(LogLevel.Warning, "Player lacked rupies to craft weapon {weapon}")]
+        public static partial void PlayerLackedRupiesToCraftWeapon(
+            ILogger logger,
+            WeaponBodies weapon
+        );
+
+        [LoggerMessage(LogLevel.Error, "Could not find buildup group with key {key}")]
+        public static partial void CouldNotFindBuildupGroupWithKey(ILogger logger, int key);
+
+        [LoggerMessage(LogLevel.Information, "Using special material; material map set to {map}")]
+        public static partial void UsingSpecialMaterialMaterialMapSetTo(
+            ILogger logger,
+            Dictionary<Materials, int> map
+        );
+
+        [LoggerMessage(
+            LogLevel.Error,
+            "Entity with limit break count {count} was ineligible for buildupGroup with min limit break count {count2}"
+        )]
+        public static partial void EntityWithLimitBreakCountWasIneligibleForBuildupGroupWithMinLimitBreakCount(
+            ILogger logger,
+            int count,
+            int count2
+        );
+
+        [LoggerMessage(LogLevel.Warning, "buildup_piece_type had invalid value: {type}")]
+        public static partial void BuildupPieceTypeHadInvalidValue(
+            ILogger logger,
+            BuildupPieceTypes type
+        );
+
+        [LoggerMessage(LogLevel.Error, "Invalid weapon passive ability key {key}")]
+        public static partial void InvalidWeaponPassiveAbilityKey(ILogger logger, int key);
+
+        [LoggerMessage(LogLevel.Error, "Invalid weapon stat buildup key {key}")]
+        public static partial void InvalidWeaponStatBuildupKey(ILogger logger, int key);
+
+        [LoggerMessage(LogLevel.Warning, "Player had insufficient rupies to upgrade weapon")]
+        public static partial void PlayerHadInsufficientRupiesToUpgradeWeapon(ILogger logger);
+
+        [LoggerMessage(LogLevel.Warning, "Player had insufficient materials to upgrade weapon")]
+        public static partial void PlayerHadInsufficientMaterialsToUpgradeWeapon(ILogger logger);
+
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Weapon property value {value} was in invalid state for buildup {@buildup}"
+        )]
+        public static partial void WeaponPropertyValueWasInInvalidStateForBuildup(
+            ILogger logger,
+            int value,
+            AtgenBuildupWeaponBodyPieceList buildup
+        );
     }
 }

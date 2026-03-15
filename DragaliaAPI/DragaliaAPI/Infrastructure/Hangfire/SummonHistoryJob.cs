@@ -22,4 +22,10 @@ public partial class SummonHistoryJob(
             .Where(x => x.ExecDate < cutOffTime)
             .ExecuteDeleteAsync();
     }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "Purging all summon history older than {CutOffDate}")]
+        public static partial void PurgingSummonHistory(ILogger logger, DateTimeOffset cutOffDate);
+    }
 }

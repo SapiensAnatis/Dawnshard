@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Shared.Reward;
@@ -58,8 +58,8 @@ public partial class WallService(
 
         if (levelTotal > MaximumQuestWallTotalLevel)
         {
-            logger.LogWarning(
-                "User {@accountId} had a quest wall total level above the max of 400: {@levelTotal}",
+            Log.UserHadAQuestWallTotalLevelAboveTheMaxOf400(
+                logger,
                 playerIdentityService.AccountId,
                 levelTotal
             );
@@ -78,7 +78,7 @@ public partial class WallService(
     {
         if (!await this.CheckWallLevelsInitialized())
         {
-            logger.LogInformation("Initializing wall levels.");
+            Log.InitializingWallLevels(logger);
 
             for (int element = 0; element < 5; element++)
             {
@@ -110,10 +110,7 @@ public partial class WallService(
 
     public async Task GrantMonthlyRewardEntityList(IList<AtgenBuildEventRewardEntityList> rewards)
     {
-        logger.LogInformation(
-            "Granting wall monthly reward list with size: {@wallRewardListSize}",
-            rewards.Count
-        );
+        Log.GrantingWallMonthlyRewardListWithSize(logger, rewards.Count);
 
         int totalRupies = 0;
         int totalMana = 0;
@@ -323,5 +320,27 @@ public partial class WallService(
             "Wall monthly reward eligibility check result: {CheckResult}"
         )]
         public static partial void ClaimCheckResult(ILogger logger, bool checkResult);
+
+        [LoggerMessage(
+            LogLevel.Warning,
+            "User {@accountId} had a quest wall total level above the max of 400: {@levelTotal}"
+        )]
+        public static partial void UserHadAQuestWallTotalLevelAboveTheMaxOf400(
+            ILogger logger,
+            string accountId,
+            int levelTotal
+        );
+
+        [LoggerMessage(LogLevel.Information, "Initializing wall levels.")]
+        public static partial void InitializingWallLevels(ILogger logger);
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Granting wall monthly reward list with size: {@wallRewardListSize}"
+        )]
+        public static partial void GrantingWallMonthlyRewardListWithSize(
+            ILogger logger,
+            int wallRewardListSize
+        );
     }
 }

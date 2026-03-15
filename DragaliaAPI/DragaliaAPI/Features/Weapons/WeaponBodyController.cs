@@ -1,6 +1,7 @@
 using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Features.Weapons;
 
 [Route("weapon_body")]
-public class WeaponBodyController : DragaliaControllerBase
+public partial class WeaponBodyController : DragaliaControllerBase
 {
     private readonly IWeaponService weaponService;
     private readonly IUpdateDataService updateDataService;
@@ -33,14 +34,11 @@ public class WeaponBodyController : DragaliaControllerBase
     {
         if (!await this.weaponService.ValidateCraft(request.WeaponBodyId))
         {
-            this.logger.LogWarning("Weapon craft request was invalid.");
+            Log.WeaponCraftRequestWasInvalid(this.logger);
             return this.Code(ResultCode.WeaponBodyCraftShortWeaponBody);
         }
 
-        this.logger.LogInformation(
-            "Validated request to craft weapon {weapon}",
-            request.WeaponBodyId
-        );
+        Log.ValidatedRequestToCraftWeapon(this.logger, request.WeaponBodyId);
 
         await this.weaponService.Craft(request.WeaponBodyId);
 
@@ -58,17 +56,17 @@ public class WeaponBodyController : DragaliaControllerBase
         CancellationToken cancellationToken
     )
     {
-        this.logger.LogDebug("Received request to upgrade weapon {weapon}", request.WeaponBodyId);
+        Log.ReceivedRequestToUpgradeWeapon(this.logger, request.WeaponBodyId);
 
         if (!MasterAsset.WeaponBody.TryGetValue(request.WeaponBodyId, out WeaponBody? bodyData))
         {
-            this.logger.LogError("Weapon {weapon} had no MasterAsset entry", request.WeaponBodyId);
+            Log.WeaponHadNoMasterAssetEntry(this.logger, request.WeaponBodyId);
             return this.Code(ResultCode.WeaponBodyIsNotPlayable);
         }
 
         if (!await this.weaponService.CheckOwned(request.WeaponBodyId))
         {
-            this.logger.LogError("User did not own weapon {weapon}", request.WeaponBodyId);
+            Log.UserDidNotOwnWeapon(this.logger, request.WeaponBodyId);
             return this.Code(ResultCode.WeaponBodyCraftShortWeaponBody);
         }
 
@@ -82,11 +80,7 @@ public class WeaponBodyController : DragaliaControllerBase
 
             if (buildupResult != ResultCode.Success)
             {
-                this.logger.LogError(
-                    "buildup_piece request {@request} was invalid: {result}",
-                    request,
-                    buildupResult
-                );
+                Log.BuildupPieceRequestWasInvalid(this.logger, request, buildupResult);
 
                 return this.Code(buildupResult);
             }
@@ -96,11 +90,45 @@ public class WeaponBodyController : DragaliaControllerBase
             cancellationToken
         );
 
-        this.logger.LogInformation(
-            "Completed request to upgrade weapon {weapon}",
-            request.WeaponBodyId
-        );
+        Log.CompletedRequestToUpgradeWeapon(this.logger, request.WeaponBodyId);
 
         return this.Ok(new WeaponBodyBuildupPieceResponse() { UpdateDataList = updateDataList });
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Warning, "Weapon craft request was invalid.")]
+        public static partial void WeaponCraftRequestWasInvalid(ILogger logger);
+
+        [LoggerMessage(LogLevel.Information, "Validated request to craft weapon {weapon}")]
+        public static partial void ValidatedRequestToCraftWeapon(
+            ILogger logger,
+            WeaponBodies weapon
+        );
+
+        [LoggerMessage(LogLevel.Debug, "Received request to upgrade weapon {weapon}")]
+        public static partial void ReceivedRequestToUpgradeWeapon(
+            ILogger logger,
+            WeaponBodies weapon
+        );
+
+        [LoggerMessage(LogLevel.Error, "Weapon {weapon} had no MasterAsset entry")]
+        public static partial void WeaponHadNoMasterAssetEntry(ILogger logger, WeaponBodies weapon);
+
+        [LoggerMessage(LogLevel.Error, "User did not own weapon {weapon}")]
+        public static partial void UserDidNotOwnWeapon(ILogger logger, WeaponBodies weapon);
+
+        [LoggerMessage(LogLevel.Error, "buildup_piece request {@request} was invalid: {result}")]
+        public static partial void BuildupPieceRequestWasInvalid(
+            ILogger logger,
+            WeaponBodyBuildupPieceRequest request,
+            ResultCode result
+        );
+
+        [LoggerMessage(LogLevel.Information, "Completed request to upgrade weapon {weapon}")]
+        public static partial void CompletedRequestToUpgradeWeapon(
+            ILogger logger,
+            WeaponBodies weapon
+        );
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 namespace DragaliaAPI.Infrastructure.Middleware;
 
 [UsedImplicitly]
-public class MaintenanceActionFilter(
+public partial class MaintenanceActionFilter(
     IOptionsMonitor<MaintenanceOptions> options,
     ILogger<MaintenanceActionFilter> logger
 ) : IActionFilter
@@ -23,7 +23,7 @@ public class MaintenanceActionFilter(
             return;
         }
 
-        logger.LogInformation("Rewriting response due to active maintenance.");
+        Log.RewritingResponseDueToActiveMaintenance(logger);
 
         context.HttpContext.Items[nameof(ResultCode)] = MaintenanceCode;
 
@@ -33,5 +33,11 @@ public class MaintenanceActionFilter(
                 dataHeaders: new DataHeaders(MaintenanceCode)
             )
         );
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "Rewriting response due to active maintenance.")]
+        public static partial void RewritingResponseDueToActiveMaintenance(ILogger logger);
     }
 }

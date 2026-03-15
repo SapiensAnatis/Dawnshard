@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Event;
@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
-public class DungeonRecordRewardService(
+public partial class DungeonRecordRewardService(
     IQuestCompletionService questCompletionService,
     IRewardService rewardService,
     IPresentService presentService,
@@ -72,10 +72,7 @@ public class DungeonRecordRewardService(
         {
             if (!session.EnemyList.TryGetValue(record.AreaIdx, out IList<AtgenEnemy>? enemyList))
             {
-                logger.LogWarning(
-                    "Could not retrieve enemy list for area_idx {idx}",
-                    record.AreaIdx
-                );
+                Log.CouldNotRetrieveEnemyListForAreaIdx(logger, record.AreaIdx);
                 continue;
             }
 
@@ -293,6 +290,12 @@ public class DungeonRecordRewardService(
         int TakeBoostAccumulatePoint,
         IEnumerable<AtgenEventPassiveUpList> PassiveUpList
     );
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Warning, "Could not retrieve enemy list for area_idx {idx}")]
+        public static partial void CouldNotRetrieveEnemyListForAreaIdx(ILogger logger, int idx);
+    }
 }
 
 file static class Extensions

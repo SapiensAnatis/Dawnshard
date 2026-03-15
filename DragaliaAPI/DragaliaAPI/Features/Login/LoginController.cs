@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Dragons;
 using DragaliaAPI.Features.Login.Actions;
@@ -15,7 +15,7 @@ namespace DragaliaAPI.Features.Login;
 
 [Route("login")]
 [BypassDailyReset]
-public class LoginController(
+public partial class LoginController(
     ApiContext apiContext,
     IUpdateDataService updateDataService,
     IEnumerable<IDailyResetAction> resetActions,
@@ -52,7 +52,7 @@ public class LoginController(
         {
             foreach (IDailyResetAction action in resetActions)
             {
-                logger.LogInformation("Applying daily reset action: {$action}", action);
+                Log.ApplyingDailyResetAction(logger, action);
                 await action.Apply();
             }
 
@@ -94,5 +94,14 @@ public class LoginController(
     public DragaliaResult VerifyJws()
     {
         return Code(ResultCode.Success);
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "Applying daily reset action: {action}")]
+        public static partial void ApplyingDailyResetAction(
+            ILogger logger,
+            IDailyResetAction action
+        );
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Login.SavefileUpdate;
 
-public class V23Update(
+public partial class V23Update(
     ApiContext apiContext,
     IPlayerIdentityService playerIdentityService,
     ILogger<V23Update> logger
@@ -16,8 +16,14 @@ public class V23Update(
     {
         if (!await apiContext.PlayerDiamondData.AnyAsync())
         {
-            logger.LogInformation("PlayerDiamondData not found: adding new row");
+            Log.PlayerDiamondDataNotFoundAddingNewRow(logger);
             apiContext.PlayerDiamondData.Add(new() { ViewerId = playerIdentityService.ViewerId });
         }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "PlayerDiamondData not found: adding new row")]
+        public static partial void PlayerDiamondDataNotFoundAddingNewRow(ILogger logger);
     }
 }

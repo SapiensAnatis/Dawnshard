@@ -5,7 +5,7 @@ using Serilog.Context;
 
 namespace DragaliaAPI.Shared.PlayerDetails;
 
-public class PlayerIdentityService : IPlayerIdentityService
+public partial class PlayerIdentityService : IPlayerIdentityService
 {
     private readonly IHttpContextAccessor httpContextAccessor;
     private readonly ILogger<PlayerIdentityService> logger;
@@ -82,8 +82,8 @@ public class PlayerIdentityService : IPlayerIdentityService
 
         impersonationContext = new ImpersonationContext(this, viewer, account);
 
-        logger.LogDebug(
-            "Starting user impersonation: {@context}",
+        Log.StartingUserImpersonation(
+            logger,
             new { impersonationContext.AccountId, impersonationContext.ViewerId }
         );
 
@@ -92,12 +92,21 @@ public class PlayerIdentityService : IPlayerIdentityService
 
     internal void StopUserImpersonation()
     {
-        logger.LogDebug(
-            "Stopping user impersonation: {@context}",
+        Log.StoppingUserImpersonation(
+            logger,
             new { impersonationContext!.AccountId, impersonationContext.ViewerId }
         );
 
         this.impersonationContext = null;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Starting user impersonation: {@context}")]
+        public static partial void StartingUserImpersonation(ILogger logger, object context);
+
+        [LoggerMessage(LogLevel.Debug, "Stopping user impersonation: {@context}")]
+        public static partial void StoppingUserImpersonation(ILogger logger, object context);
     }
 }
 

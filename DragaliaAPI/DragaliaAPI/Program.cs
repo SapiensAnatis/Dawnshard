@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
 using Serilog;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -101,7 +102,7 @@ builder
 
 WebApplication app = builder.Build();
 
-app.Logger.LogDebug("Using key-per-file configuration from path {KpfPath}", kpfPath);
+Log.UsingKpfPath(app.Logger, kpfPath);
 
 Stopwatch watch = new();
 app.Logger.LogInformation("Loading MasterAsset data.");
@@ -110,17 +111,11 @@ watch.Start();
 await MasterAsset.LoadAsync(app.Services.GetRequiredService<IFeatureManager>());
 watch.Stop();
 
-app.Logger.LogInformation("Loaded MasterAsset in {Time} ms.", watch.ElapsedMilliseconds);
+Log.LoadedMasterAsset(app.Logger, watch.ElapsedMilliseconds);
 
-app.Logger.LogDebug(
-    "Using PostgreSQL connection {ConnectionString}",
-    builder.Configuration.GetConnectionString("postgres")
-);
-
-app.Logger.LogDebug(
-    "Using PostgreSQL connection {ConnectionString}",
-    builder.Configuration.GetConnectionString("postgres")
-);
+#pragma warning disable CA1873 // Evaluation of this argument may be expensive and unnecessary if logging is disabled
+Log.UsingPostgresConnection(app.Logger, builder.Configuration.GetConnectionString("postgres"));
+#pragma warning restore CA1873
 
 PostgresOptions postgresOptions = app
     .Services.GetRequiredService<IOptions<PostgresOptions>>()
@@ -207,4 +202,25 @@ app.Run();
 namespace DragaliaAPI
 {
     public class Program;
+}
+
+static partial class Log
+{
+    [LoggerMessage(
+        Level = LogLevel.Debug,
+        Message = "Using key-per-file configuration from path {KpfPath}"
+    )]
+    public static partial void UsingKpfPath(ILogger logger, string kpfPath);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Loading MasterAsset data.")]
+    public static partial void LoadingMasterAsset(ILogger logger);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Loaded MasterAsset in {Time} ms.")]
+    public static partial void LoadedMasterAsset(ILogger logger, long time);
+
+    [LoggerMessage(
+        Level = LogLevel.Debug,
+        Message = "Using PostgreSQL connection {ConnectionString}"
+    )]
+    public static partial void UsingPostgresConnection(ILogger logger, string? connectionString);
 }

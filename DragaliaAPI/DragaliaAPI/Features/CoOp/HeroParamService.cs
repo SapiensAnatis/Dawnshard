@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.CoOp;
 
-public class HeroParamService(
+public partial class HeroParamService(
     IDungeonRepository dungeonRepository,
     IWeaponRepository weaponRepository,
     IBonusService bonusService,
@@ -25,7 +25,7 @@ public class HeroParamService(
 {
     public async Task<List<HeroParam>> GetHeroParam(long viewerId, int partySlot)
     {
-        logger.LogDebug("Fetching HeroParam for slot {partySlots}", partySlot);
+        Log.FetchingHeroParamForSlot(logger, partySlot);
 
         using IDisposable ctx = playerIdentityService.StartUserImpersonation(viewerId);
 
@@ -33,7 +33,7 @@ public class HeroParamService(
             .BuildDetailedPartyUnit(partyRepository.GetPartyUnits(partySlot), partySlot)
             .ToListAsync();
 
-        logger.LogDebug("Retrieved {n} party units", detailedPartyUnits.Count);
+        Log.RetrievedPartyUnits(logger, detailedPartyUnits.Count);
 
         foreach (DbDetailedPartyUnit unit in detailedPartyUnits)
         {
@@ -280,5 +280,14 @@ public class HeroParamService(
             result.AbilityCrest7HpPlusCount = crest7.HpPlusCount;
             result.AbilityCrest7AttackPlusCount = crest7.AttackPlusCount;
         }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Fetching HeroParam for slot {partySlots}")]
+        public static partial void FetchingHeroParamForSlot(ILogger logger, int partySlots);
+
+        [LoggerMessage(LogLevel.Debug, "Retrieved {n} party units")]
+        public static partial void RetrievedPartyUnits(ILogger logger, int n);
     }
 }

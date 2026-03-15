@@ -11,7 +11,7 @@ namespace DragaliaAPI.Features.Login.SavefileUpdate;
 /// Start missions for players who have already created memory event data.
 /// </summary>
 [UsedImplicitly]
-public class V13Update(
+public partial class V13Update(
     IEventRepository eventRepository,
     IMissionService missionService,
     ILogger<V13Update> logger
@@ -36,8 +36,14 @@ public class V13Update(
                 continue;
             }
 
-            logger.LogDebug("Unlocking missions for memory event {eventId}", eventId);
+            Log.UnlockingMissionsForMemoryEvent(logger, eventId);
             await missionService.UnlockMemoryEventMissions(eventId);
         }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Unlocking missions for memory event {eventId}")]
+        public static partial void UnlockingMissionsForMemoryEvent(ILogger logger, int eventId);
     }
 }

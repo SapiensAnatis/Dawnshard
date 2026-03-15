@@ -1,11 +1,11 @@
-﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Zena;
 
-public class ZenaService(
+public partial class ZenaService(
     IPlayerIdentityService playerIdentityService,
     ApiContext apiContext,
     ILogger<ZenaService> logger
@@ -23,8 +23,8 @@ public class ZenaService(
 
         if (playerName is null)
         {
-            logger.LogWarning(
-                "Failed to get team data: player with ID {ViewerId} does not exist.",
+            Log.FailedToGetTeamDataPlayerWithIDDoesNotExist(
+                logger,
                 this.playerIdentityService.ViewerId
             );
 
@@ -65,5 +65,17 @@ public class ZenaService(
             Unit3 = charas.ElementAtOrDefault(2),
             Unit4 = charas.ElementAtOrDefault(3),
         };
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Failed to get team data: player with ID {ViewerId} does not exist."
+        )]
+        public static partial void FailedToGetTeamDataPlayerWithIDDoesNotExist(
+            ILogger logger,
+            long viewerId
+        );
     }
 }

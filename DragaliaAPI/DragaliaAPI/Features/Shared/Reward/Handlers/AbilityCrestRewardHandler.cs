@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 namespace DragaliaAPI.Features.Shared.Reward.Handlers;
 
 [UsedImplicitly]
-public class AbilityCrestRewardHandler(
+public partial class AbilityCrestRewardHandler(
     IAbilityCrestRepository abilityCrestRepository,
     ILogger<AbilityCrestRewardHandler> logger
 ) : IRewardHandler
@@ -35,16 +35,12 @@ public class AbilityCrestRewardHandler(
                 Quantity: crestData.DuplicateEntityQuantity * entity.Quantity
             );
 
-            logger.LogTrace(
-                "Converted ability crest entity: {@Entity} to {@DuplicateEntity}.",
-                entity,
-                duplicateEntity
-            );
+            Log.ConvertedAbilityCrestEntityTo(logger, entity, duplicateEntity);
 
             return new(RewardGrantResult.Converted, duplicateEntity);
         }
 
-        logger.LogTrace("Granted new ability crest entity: {@Entity}", entity);
+        Log.GrantedNewAbilityCrestEntity(logger, entity);
 
         await abilityCrestRepository.Add(
             crest,
@@ -54,5 +50,21 @@ public class AbilityCrestRewardHandler(
         );
 
         return new(RewardGrantResult.Added);
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(
+            LogLevel.Trace,
+            "Converted ability crest entity: {@Entity} to {@DuplicateEntity}."
+        )]
+        public static partial void ConvertedAbilityCrestEntityTo(
+            ILogger logger,
+            Entity entity,
+            Entity duplicateEntity
+        );
+
+        [LoggerMessage(LogLevel.Trace, "Granted new ability crest entity: {@Entity}")]
+        public static partial void GrantedNewAbilityCrestEntity(ILogger logger, Entity entity);
     }
 }

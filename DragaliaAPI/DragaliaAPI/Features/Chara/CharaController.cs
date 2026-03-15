@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -20,7 +21,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Features.Chara;
 
 [Route("chara")]
-public class CharaController(
+public partial class CharaController(
     IUnitRepository unitRepository,
     IStoryRepository storyRepository,
     IUpdateDataService updateDataService,
@@ -196,7 +197,7 @@ public class CharaController(
     {
         CharaBuildupManaResponse resp = new();
 
-        logger.LogDebug("Received mana node request {@request}", request);
+        Log.ReceivedManaNodeRequest(logger, request);
 
         DbPlayerCharaData playerCharData =
             await unitRepository.FindCharaAsync(request.CharaId)
@@ -445,12 +446,7 @@ public class CharaController(
     {
         CharaData data = MasterAsset.CharaData[charaData.CharaId];
 
-        logger.LogDebug(
-            "Limit-breaking chara {charaId} from {currentLimitBreak} to {limitBreakNum}",
-            data.Id,
-            charaData.LimitBreakCount,
-            limitBreakNum
-        );
+        Log.LimitBreakingCharaFromTo(logger, data.Id, charaData.LimitBreakCount, limitBreakNum);
 
         CharaLimitBreak limitBreak = MasterAsset.CharaLimitBreak[data.CharaLimitBreak];
 
@@ -516,7 +512,7 @@ public class CharaController(
 
         DateTimeOffset time = timeProvider.GetUtcNow();
 
-        logger.LogDebug("Pre-upgrade CharaData: {@charaData}", playerCharData);
+        Log.PreUpgradeCharaData(logger, playerCharData);
 
         CharaData charaData = MasterAsset.CharaData[playerCharData.CharaId];
 
@@ -571,11 +567,11 @@ public class CharaController(
 
         SortedSet<int> nodes = playerCharData.ManaCirclePieceIdList;
 
-        logger.LogInformation("Unlocking nodes {@nodes}", manaNodes);
+        Log.UnlockingNodes(logger, manaNodes);
 
         foreach (int nodeNr in manaNodes)
         {
-            logger.LogTrace("Node: {nodeNr}", nodeNr);
+            Log.Node(logger, nodeNr);
 
             if (manaNodeInfos.Count < nodeNr)
             {
@@ -702,8 +698,8 @@ public class CharaController(
                 }
                 else
                 {
-                    logger.LogWarning(
-                        "Failed to unlock next story for character {char}: index {index} was out of range",
+                    Log.FailedToUnlockNextStoryForCharacterIndexWasOutOfRange(
+                        logger,
                         charaData.Id,
                         nextStoryUnlockIndex
                     );
@@ -804,18 +800,15 @@ public class CharaController(
 
         if (manaNodes.Contains(50))
         {
-            logger.LogDebug("Applying 50MC bonus");
+            Log.Applying50MCBonus(logger);
             playerCharData.HpNode += (ushort)charaData.McFullBonusHp5;
             playerCharData.AttackNode += (ushort)charaData.McFullBonusAtk5;
         }
 
         playerCharData.ManaCirclePieceIdList = nodes;
-        logger.LogDebug("New CharaData: {@charaData}", playerCharData);
+        Log.NewCharaData(logger, playerCharData);
 
-        logger.LogDebug(
-            "New bitmask: {bitmask}",
-            Convert.ToString(playerCharData.ManaNodeUnlockCount, 2)
-        );
+        Log.NewBitmask(logger, Convert.ToString(playerCharData.ManaNodeUnlockCount, 2));
     }
 
     private static AtgenCharaUnitSetDetailList ToAtgenCharaUnitSetDetailList(DbSetUnit unit)
@@ -835,5 +828,53 @@ public class CharaController(
             CrestSlotType3CrestId2 = unit.EquipCrestSlotType3CrestId2,
             TalismanKeyId = unit.EquipTalismanKeyId,
         };
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Received mana node request {@request}")]
+        public static partial void ReceivedManaNodeRequest(
+            ILogger logger,
+            CharaBuildupManaRequest request
+        );
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Limit-breaking chara {charaId} from {currentLimitBreak} to {limitBreakNum}"
+        )]
+        public static partial void LimitBreakingCharaFromTo(
+            ILogger logger,
+            Charas charaId,
+            byte currentLimitBreak,
+            byte limitBreakNum
+        );
+
+        [LoggerMessage(LogLevel.Debug, "Pre-upgrade CharaData: {@charaData}")]
+        public static partial void PreUpgradeCharaData(ILogger logger, DbPlayerCharaData charaData);
+
+        [LoggerMessage(LogLevel.Information, "Unlocking nodes {@nodes}")]
+        public static partial void UnlockingNodes(ILogger logger, IList<int> nodes);
+
+        [LoggerMessage(LogLevel.Trace, "Node: {nodeNr}")]
+        public static partial void Node(ILogger logger, int nodeNr);
+
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Failed to unlock next story for character {charaId}: index {index} was out of range"
+        )]
+        public static partial void FailedToUnlockNextStoryForCharacterIndexWasOutOfRange(
+            ILogger logger,
+            Charas charaId,
+            int index
+        );
+
+        [LoggerMessage(LogLevel.Debug, "Applying 50MC bonus")]
+        public static partial void Applying50MCBonus(ILogger logger);
+
+        [LoggerMessage(LogLevel.Debug, "New CharaData: {@charaData}")]
+        public static partial void NewCharaData(ILogger logger, DbPlayerCharaData charaData);
+
+        [LoggerMessage(LogLevel.Debug, "New bitmask: {bitmask}")]
+        public static partial void NewBitmask(ILogger logger, string bitmask);
     }
 }

@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +9,7 @@ namespace DragaliaAPI.Database.Repositories;
 /// <summary>
 /// Provides methods to interface with the UserData table.
 /// </summary>
-public class UserDataRepository : BaseRepository, IUserDataRepository
+public partial class UserDataRepository : BaseRepository, IUserDataRepository
 {
     private readonly ApiContext apiContext;
     private readonly IPlayerIdentityService playerIdentityService;
@@ -90,7 +90,7 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
 
     public async Task UpdateCoin(long offset)
     {
-        this.logger.LogDebug("Updating player rupies by {offset}", offset);
+        Log.UpdatingPlayerRupiesBy(this.logger, offset);
         if (offset == 0)
             return;
 
@@ -110,11 +110,7 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
 
         if (!result)
         {
-            this.logger.LogWarning(
-                "Failed rupie check: requested {quantity} rupies, but user had {coin}",
-                quantity,
-                coin
-            );
+            Log.FailedRupieCheckRequestedRupiesButUserHad(this.logger, quantity, coin);
         }
 
         return result;
@@ -153,5 +149,21 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
 
         DbPlayerUserData userData = await UserData.SingleAsync();
         userData.DewPoint = quantity;
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Updating player rupies by {offset}")]
+        public static partial void UpdatingPlayerRupiesBy(ILogger logger, long offset);
+
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Failed rupie check: requested {quantity} rupies, but user had {coin}"
+        )]
+        public static partial void FailedRupieCheckRequestedRupiesButUserHad(
+            ILogger logger,
+            long quantity,
+            long coin
+        );
     }
 }

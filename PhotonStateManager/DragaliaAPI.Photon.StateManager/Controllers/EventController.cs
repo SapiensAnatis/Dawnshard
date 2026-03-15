@@ -1,3 +1,5 @@
+using DragaliaAPI.Photon.Shared.Enums;
+using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Photon.Shared.Requests;
 using DragaliaAPI.Photon.StateManager.Authentication;
 using DragaliaAPI.Photon.StateManager.Models;
@@ -15,7 +17,7 @@ namespace DragaliaAPI.Photon.StateManager.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Authorize(AuthenticationSchemes = nameof(PhotonAuthenticationHandler))]
-public class EventController : ControllerBase
+public partial class EventController : ControllerBase
 {
     private readonly IOptionsMonitor<RedisCachingOptions> options;
     private readonly IRedisConnectionProvider connectionProvider;
@@ -56,7 +58,7 @@ public class EventController : ControllerBase
         await this.Games.InsertAsync(newGame, this.KeyExpiry);
         await this.Games.SaveAsync();
 
-        this.logger.LogInformation("Created new game: {@game}", newGame);
+        Log.CreatedNewGame(this.logger, newGame);
 
         return this.Ok();
     }
@@ -73,28 +75,20 @@ public class EventController : ControllerBase
 
         if (game is null)
         {
-            this.logger.LogError("Could not find game {name}", request.GameName);
+            Log.CouldNotFindGame(this.logger, request.GameName);
             return this.NotFound();
         }
 
         if (game.Players.Count >= 4)
         {
-            this.logger.LogError(
-                "Player {@player} attempted to join full game {@game}",
-                request.Player,
-                game
-            );
+            Log.PlayerAttemptedToJoinFullGame(this.logger, request.Player, game);
 
             return this.Conflict();
         }
 
         if (game.Players.Any(x => x.ViewerId == request.Player.ViewerId))
         {
-            this.logger.LogError(
-                "Player {@player} attempted to join game {@game} that they were already in.",
-                request.Player,
-                game
-            );
+            Log.PlayerAttemptedToJoinGameThatTheyWereAlreadyIn(this.logger, request.Player, game);
 
             return this.Conflict();
         }
@@ -102,7 +96,7 @@ public class EventController : ControllerBase
         game.Players.Add(new RedisPlayer(request.Player));
         await this.Games.UpdateAsync(game);
 
-        this.logger.LogInformation("Added player {@player} to game {@game}", request.Player, game);
+        Log.AddedPlayerToGame(this.logger, request.Player, game);
 
         return this.Ok();
     }
@@ -119,7 +113,7 @@ public class EventController : ControllerBase
 
         if (game is null)
         {
-            this.logger.LogError("Could not find game {name}", request.GameName);
+            Log.CouldNotFindGame(this.logger, request.GameName);
             return this.NotFound();
         }
 
@@ -129,11 +123,7 @@ public class EventController : ControllerBase
 
         if (toRemove is null)
         {
-            this.logger.LogInformation(
-                "Player {@player} was not in game {@game}",
-                request.Player,
-                game
-            );
+            Log.PlayerWasNotInGame(this.logger, request.Player, game);
 
             return this.Ok();
         }
@@ -142,17 +132,13 @@ public class EventController : ControllerBase
         if (game.Players.Count == 0 || request.Player.ActorNr == 1)
         {
             // Don't remove it just yet, as Photon will request that shortly
-            this.logger.LogDebug("Hiding game {@game}", game);
+            Log.HidingGame(this.logger, game);
             game.Visible = false;
         }
 
         await this.Games.UpdateAsync(game);
 
-        this.logger.LogInformation(
-            "Removed player {@player} from game {@game}",
-            request.Player,
-            game
-        );
+        Log.RemovedPlayerFromGame(this.logger, request.Player, game);
 
         return this.Ok();
     }
@@ -169,16 +155,13 @@ public class EventController : ControllerBase
 
         if (game is null)
         {
-            this.logger.LogInformation(
-                "Could not find game {name}. It may have already been closed.",
-                request.GameName
-            );
+            Log.CouldNotFindGameItMayHaveAlreadyBeenClosed(this.logger, request.GameName);
 
             return this.Ok();
         }
 
         await this.Games.DeleteAsync(game);
-        this.logger.LogInformation("Removed game {@game}", game);
+        Log.RemovedGame(this.logger, game);
 
         return this.Ok();
     }
@@ -195,18 +178,14 @@ public class EventController : ControllerBase
 
         if (game is null)
         {
-            this.logger.LogError("Could not find game {name}", request.GameName);
+            Log.CouldNotFindGame(this.logger, request.GameName);
             return this.NotFound();
         }
 
         game.EntryConditions = request.NewEntryConditions;
         await this.Games.UpdateAsync(game);
 
-        this.logger.LogInformation(
-            "Updated game {game} entry conditions to {@conditions}",
-            game.Name,
-            game.EntryConditions
-        );
+        Log.UpdatedGameEntryConditionsTo(this.logger, game.Name, game.EntryConditions);
 
         return this.Ok();
     }
@@ -223,18 +202,14 @@ public class EventController : ControllerBase
 
         if (game is null)
         {
-            this.logger.LogError("Could not find game {name}", request.GameName);
+            Log.CouldNotFindGame(this.logger, request.GameName);
             return this.NotFound();
         }
 
         game.MatchingType = request.NewMatchingType;
         await this.Games.UpdateAsync(game);
 
-        this.logger.LogInformation(
-            "Updated game {game} matching type to {type}",
-            game.Name,
-            game.MatchingType
-        );
+        Log.UpdatedGameMatchingTypeTo(this.logger, game.Name, game.MatchingType);
 
         return this.Ok();
     }
@@ -251,18 +226,14 @@ public class EventController : ControllerBase
 
         if (game is null)
         {
-            this.logger.LogError("Could not find game {name}", request.GameName);
+            Log.CouldNotFindGame(this.logger, request.GameName);
             return this.NotFound();
         }
 
         game.RoomId = request.NewRoomId;
         await this.Games.UpdateAsync(game);
 
-        this.logger.LogInformation(
-            "Updated game {game} room ID to {newId}",
-            game.Name,
-            game.RoomId
-        );
+        Log.UpdatedGameRoomIDTo(this.logger, game.Name, game.RoomId);
 
         return this.Ok();
     }
@@ -274,19 +245,100 @@ public class EventController : ControllerBase
 
         if (game is null)
         {
-            this.logger.LogError("Could not find game {name}", request.GameName);
+            Log.CouldNotFindGame(this.logger, request.GameName);
             return this.NotFound();
         }
 
         game.Visible = request.NewVisibility;
         await this.Games.UpdateAsync(game);
 
-        this.logger.LogInformation(
-            "Updated game {game} visibility to {newVisibility}",
-            game.Name,
-            game.Visible
-        );
+        Log.UpdatedGameVisibilityTo(this.logger, game.Name, game.Visible);
 
         return this.Ok();
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "Created new game: {@game}")]
+        public static partial void CreatedNewGame(ILogger logger, RedisGame game);
+
+        [LoggerMessage(LogLevel.Error, "Could not find game {name}")]
+        public static partial void CouldNotFindGame(ILogger logger, string name);
+
+        [LoggerMessage(LogLevel.Error, "Player {@player} attempted to join full game {@game}")]
+        public static partial void PlayerAttemptedToJoinFullGame(
+            ILogger logger,
+            Player player,
+            RedisGame game
+        );
+
+        [LoggerMessage(
+            LogLevel.Error,
+            "Player {@player} attempted to join game {@game} that they were already in."
+        )]
+        public static partial void PlayerAttemptedToJoinGameThatTheyWereAlreadyIn(
+            ILogger logger,
+            Player player,
+            RedisGame game
+        );
+
+        [LoggerMessage(LogLevel.Information, "Added player {@player} to game {@game}")]
+        public static partial void AddedPlayerToGame(ILogger logger, Player player, RedisGame game);
+
+        [LoggerMessage(LogLevel.Information, "Player {@player} was not in game {@game}")]
+        public static partial void PlayerWasNotInGame(
+            ILogger logger,
+            Player player,
+            RedisGame game
+        );
+
+        [LoggerMessage(LogLevel.Debug, "Hiding game {@game}")]
+        public static partial void HidingGame(ILogger logger, RedisGame game);
+
+        [LoggerMessage(LogLevel.Information, "Removed player {@player} from game {@game}")]
+        public static partial void RemovedPlayerFromGame(
+            ILogger logger,
+            Player player,
+            RedisGame game
+        );
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Could not find game {name}. It may have already been closed."
+        )]
+        public static partial void CouldNotFindGameItMayHaveAlreadyBeenClosed(
+            ILogger logger,
+            string name
+        );
+
+        [LoggerMessage(LogLevel.Information, "Removed game {@game}")]
+        public static partial void RemovedGame(ILogger logger, RedisGame game);
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Updated game {game} entry conditions to {@conditions}"
+        )]
+        public static partial void UpdatedGameEntryConditionsTo(
+            ILogger logger,
+            string game,
+            EntryConditions conditions
+        );
+
+        [LoggerMessage(LogLevel.Information, "Updated game {game} matching type to {type}")]
+        public static partial void UpdatedGameMatchingTypeTo(
+            ILogger logger,
+            string game,
+            MatchingTypes type
+        );
+
+        [LoggerMessage(LogLevel.Information, "Updated game {game} room ID to {newId}")]
+        public static partial void UpdatedGameRoomIDTo(ILogger logger, string game, int newId);
+
+        [LoggerMessage(LogLevel.Information, "Updated game {game} visibility to {newVisibility}")]
+        public static partial void UpdatedGameVisibilityTo(
+            ILogger logger,
+            string game,
+            bool newVisibility
+        );
     }
 }

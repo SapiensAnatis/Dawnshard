@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Features.Story;
 
 [Route("castle_story")]
-public class CastleStoryController(
+public partial class CastleStoryController(
     IStoryService storyService,
     IUpdateDataService updateDataService,
     ILogger<CastleStoryController> logger
@@ -27,10 +27,7 @@ public class CastleStoryController(
             !await this.storyService.CheckStoryEligibility(StoryTypes.Castle, request.CastleStoryId)
         )
         {
-            this.logger.LogWarning(
-                "User was not eligible to read castle story {id}",
-                request.CastleStoryId
-            );
+            Log.UserWasNotEligibleToReadCastleStory(this.logger, request.CastleStoryId);
             return this.Code(ResultCode.StoryNotGet);
         }
 
@@ -50,5 +47,11 @@ public class CastleStoryController(
                 UpdateDataList = updateDataList,
             }
         );
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Warning, "User was not eligible to read castle story {id}")]
+        public static partial void UserWasNotEligibleToReadCastleStory(ILogger logger, int id);
     }
 }

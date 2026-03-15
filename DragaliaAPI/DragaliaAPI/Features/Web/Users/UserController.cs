@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Infrastructure.Authentication;
+using DragaliaAPI.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static DragaliaAPI.Infrastructure.Authentication.AuthConstants;
@@ -7,8 +7,10 @@ namespace DragaliaAPI.Features.Web.Users;
 
 [ApiController]
 [Route("/api/user")]
-internal sealed class UserController(UserService userService, ILogger<UserController> logger)
-    : ControllerBase
+internal sealed partial class UserController(
+    UserService userService,
+    ILogger<UserController> logger
+) : ControllerBase
 {
     [HttpGet("me")]
     [Authorize(Policy = PolicyNames.RequireValidWebJwt)]
@@ -16,7 +18,7 @@ internal sealed class UserController(UserService userService, ILogger<UserContro
     {
         if (!this.User.HasDawnshardIdentity())
         {
-            logger.LogInformation("User does not have a Dawnshard identity.");
+            Log.UserDoesNotHaveADawnshardIdentity(logger);
             return this.NotFound();
         }
 
@@ -64,4 +66,10 @@ internal sealed class UserController(UserService userService, ILogger<UserContro
     [Authorize(Policy = PolicyNames.RequireAdmin)]
     public async Task ClearImpersonationSession(CancellationToken cancellationToken) =>
         await userService.ClearImpersonationSession(cancellationToken);
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Information, "User does not have a Dawnshard identity.")]
+        public static partial void UserDoesNotHaveADawnshardIdentity(ILogger logger);
+    }
 }

@@ -38,7 +38,7 @@ internal partial class ResultCodeLoggingMiddleware(ILogger<ResultCodeLoggingMidd
 
         LogLevel logLevel = GetLogLevelFromResultCode(resultCode);
 
-        Log.EndpointResponded(logger, logLevel, context.Request.Path.ToString(), resultCode);
+        Log.EndpointResponded(logger, logLevel, context.Request.Path, resultCode);
     }
 
     private static LogLevel GetLogLevelFromResultCode(ResultCode? code) =>
@@ -52,7 +52,7 @@ internal partial class ResultCodeLoggingMiddleware(ILogger<ResultCodeLoggingMidd
         public static partial void EndpointResponded(
             ILogger logger,
             LogLevel level,
-            string requestPath,
+            PathString requestPath,
             ResultCode? resultCode
         );
     }

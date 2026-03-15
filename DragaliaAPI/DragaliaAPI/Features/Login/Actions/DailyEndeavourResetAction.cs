@@ -10,7 +10,7 @@ using Microsoft.Extensions.Options;
 namespace DragaliaAPI.Features.Login.Actions;
 
 [UsedImplicitly]
-public class DailyEndeavourResetAction(
+public partial class DailyEndeavourResetAction(
     IOptionsMonitor<EventOptions> eventOptionsMonitor,
     IMissionRepository missionRepository,
     TimeProvider timeProvider,
@@ -34,7 +34,7 @@ public class DailyEndeavourResetAction(
     {
         await this.missionRepository.ClearDailyMissions();
 
-        this.logger.LogDebug("Adding permanent daily endeavours");
+        Log.AddingPermanentDailyEndeavours(this.logger);
 
         DateTimeOffset lastDailyReset = this.timeProvider.GetLastDailyReset();
 
@@ -55,11 +55,11 @@ public class DailyEndeavourResetAction(
 
         foreach (EventRunInformation activeEvent in activeEvents)
         {
-            this.logger.LogDebug("Adding daily endeavours for event {eventId}", activeEvent.Id);
+            Log.AddingDailyEndeavoursForEvent(this.logger, activeEvent.Id);
 
             if (!await this.eventRepository.HasEventDataAsync(activeEvent.Id))
             {
-                this.logger.LogDebug("Skipping as event data uninitialized");
+                Log.SkippingAsEventDataUninitialized(this.logger);
                 continue;
             }
 
@@ -79,5 +79,17 @@ public class DailyEndeavourResetAction(
                 );
             }
         }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(LogLevel.Debug, "Adding permanent daily endeavours")]
+        public static partial void AddingPermanentDailyEndeavours(ILogger logger);
+
+        [LoggerMessage(LogLevel.Debug, "Adding daily endeavours for event {eventId}")]
+        public static partial void AddingDailyEndeavoursForEvent(ILogger logger, int eventId);
+
+        [LoggerMessage(LogLevel.Debug, "Skipping as event data uninitialized")]
+        public static partial void SkippingAsEventDataUninitialized(ILogger logger);
     }
 }

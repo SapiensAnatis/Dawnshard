@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -229,8 +230,8 @@ public partial class DragonService(
                     }
                     else
                     {
-                        logger.LogWarning(
-                            "Failed to unlock next story for dragon: index {index} was out of range",
+                        Log.FailedToUnlockNextStoryForDragonIndexWasOutOfRange(
+                            logger,
                             nextStoryUnlockIndex
                         );
                     }
@@ -432,11 +433,7 @@ public partial class DragonService(
             );
 
         List<AtgenDragonGiftRewardList> rewardObjList = new List<AtgenDragonGiftRewardList>();
-        logger.LogDebug(
-            "Creating GiftRewardList from rewards {@rewards} and levelGifts: {@levelGifts}",
-            rewards,
-            levelGifts
-        );
+        Log.CreatingGiftRewardListFromRewardsAndLevelGifts(logger, rewards, levelGifts);
         foreach (DragonGifts gift in request.DragonGiftIdList)
         {
             rewardObjList.Add(
@@ -461,7 +458,7 @@ public partial class DragonService(
             );
         }
 
-        logger.LogDebug("GiftRewardList: {@list}", rewardObjList);
+        Log.GiftRewardList(logger, rewardObjList);
 
         foreach (DbPlayerDragonGift gift in gifts.Values)
         {
@@ -545,11 +542,7 @@ public partial class DragonService(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
-        logger.LogDebug(
-            "Creating response from rewards {@rewards} and levelGifts: {@levelGifts}",
-            rewards,
-            levelGifts
-        );
+        Log.CreatingResponseFromRewardsAndLevelGifts(logger, rewards, levelGifts);
         return new DragonSendGiftMultipleResponse()
         {
             IsFavorite = true,
@@ -819,14 +812,14 @@ public partial class DragonService(
 
         DragonData dragonData = MasterAsset.DragonData.Get(playerDragonData.DragonId);
 
-        logger.LogDebug("Pre-LimitBreak Dragon: {@dragon}", playerDragonData);
+        Log.PreLimitBreakDragon(logger, playerDragonData);
 
         playerDragonData.LimitBreakCount = (byte)request.LimitBreakGrowList.Last().LimitBreakCount;
         playerDragonData.Skill1Level = (byte)(1 + (playerDragonData.LimitBreakCount / 4));
         playerDragonData.Ability1Level = (byte)(playerDragonData.LimitBreakCount + 1);
         playerDragonData.Ability2Level = (byte)(playerDragonData.LimitBreakCount + 1);
 
-        logger.LogDebug("Post-LimitBreak Dragon: {@dragon}", playerDragonData);
+        Log.PostLimitBreakDragon(logger, playerDragonData);
 
         LimitBreakGrowList[] deleteDragons = request
             .LimitBreakGrowList.Where(x =>
@@ -965,22 +958,14 @@ public partial class DragonService(
             );
         }
 
-        logger.LogInformation(
-            "Requested sale of {count} dragons: {@list}",
-            selectedPlayerDragons.Count,
-            selectedPlayerDragons
-        );
+        Log.RequestedSaleOfDragons(logger, selectedPlayerDragons.Count, selectedPlayerDragons);
 
         //DbPlayerCurrency rupies = await inventoryRepository.GetCurrency(deviceAccountId, CurrencyTypes.Rupies) ?? inventoryRepository.AddCurrency(deviceAccountId, CurrencyTypes.Rupies);
         //DbPlayerCurrency dew = await inventoryRepository.GetCurrency(deviceAccountId, CurrencyTypes.Dew) ?? inventoryRepository.AddCurrency(deviceAccountId, CurrencyTypes.Dew);
         DbPlayerUserData userData = await userDataRepository.UserData.SingleAsync(
             cancellationToken
         );
-        logger.LogDebug(
-            "Pre-sale: rupies {rupies}, eldwater {eldwater}",
-            userData.Coin,
-            userData.DewPoint
-        );
+        Log.PreSaleRupiesEldwater(logger, userData.Coin, userData.DewPoint);
 
         foreach (DbPlayerDragonData dd in selectedPlayerDragons)
         {
@@ -992,11 +977,7 @@ public partial class DragonService(
                 MasterAsset.DragonData.Get(dd.DragonId).SellDewPoint * (dd.LimitBreakCount + 1);
         }
 
-        logger.LogDebug(
-            "Post-sale: rupies {rupies}, eldwater {eldwater}",
-            userData.Coin,
-            userData.DewPoint
-        );
+        Log.PostSaleRupiesEldwater(logger, userData.Coin, userData.DewPoint);
 
         await unitRepository.RemoveDragons(request.DragonKeyIdList.Select(x => (long)x));
 
@@ -1015,6 +996,78 @@ public partial class DragonService(
             ),
             updateDataList,
             new()
+        );
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(
+            LogLevel.Warning,
+            "Failed to unlock next story for dragon: index {index} was out of range"
+        )]
+        public static partial void FailedToUnlockNextStoryForDragonIndexWasOutOfRange(
+            ILogger logger,
+            int index
+        );
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Creating GiftRewardList from rewards {@rewards} and levelGifts: {@levelGifts}"
+        )]
+        public static partial void CreatingGiftRewardListFromRewardsAndLevelGifts(
+            ILogger logger,
+            List<Tuple<DragonGifts, List<DragonRewardEntityList>>> rewards,
+            List<Tuple<DragonGifts, List<RewardReliabilityList>>> levelGifts
+        );
+
+        [LoggerMessage(LogLevel.Debug, "GiftRewardList: {@list}")]
+        public static partial void GiftRewardList(
+            ILogger logger,
+            List<AtgenDragonGiftRewardList> list
+        );
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Creating response from rewards {@rewards} and levelGifts: {@levelGifts}"
+        )]
+        public static partial void CreatingResponseFromRewardsAndLevelGifts(
+            ILogger logger,
+            IEnumerable<Tuple<DragonGifts, List<DragonRewardEntityList>>> rewards,
+            IEnumerable<Tuple<DragonGifts, List<RewardReliabilityList>>> levelGifts
+        );
+
+        [LoggerMessage(LogLevel.Debug, "Pre-LimitBreak Dragon: {@dragon}")]
+        public static partial void PreLimitBreakDragon(ILogger logger, DbPlayerDragonData dragon);
+
+        [LoggerMessage(LogLevel.Debug, "Post-LimitBreak Dragon: {@dragon}")]
+        public static partial void PostLimitBreakDragon(ILogger logger, DbPlayerDragonData dragon);
+
+        [LoggerMessage(LogLevel.Information, "Requested sale of {count} dragons: {@list}")]
+        public static partial void RequestedSaleOfDragons(
+            ILogger logger,
+            int count,
+            List<DbPlayerDragonData> list
+        );
+
+        [LoggerMessage(LogLevel.Debug, "Pre-sale: rupies {rupies}, eldwater {eldwater}")]
+        public static partial void PreSaleRupiesEldwater(ILogger logger, long rupies, int eldwater);
+
+        [LoggerMessage(LogLevel.Debug, "Post-sale: rupies {rupies}, eldwater {eldwater}")]
+        public static partial void PostSaleRupiesEldwater(
+            ILogger logger,
+            long rupies,
+            int eldwater
+        );
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Last daily reset: {Reset} on {DayOfWeek}. Rotating gift: {Gift}"
+        )]
+        public static partial void CurrentRotatingGift(
+            ILogger logger,
+            DateTimeOffset reset,
+            DayOfWeek dayOfWeek,
+            DragonGifts gift
         );
     }
 }

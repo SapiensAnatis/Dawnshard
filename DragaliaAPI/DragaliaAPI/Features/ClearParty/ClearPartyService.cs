@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
@@ -10,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.ClearParty;
 
-public class ClearPartyService : IClearPartyService
+public partial class ClearPartyService : IClearPartyService
 {
     private readonly IClearPartyRepository clearPartyRepository;
     private readonly IUnitRepository unitRepository;
@@ -43,8 +44,8 @@ public class ClearPartyService : IClearPartyService
 
         IEnumerable<DbQuestClearPartyUnit> clearPartyUnits = await clearPartyQuery.ToListAsync();
 
-        this.logger.LogDebug(
-            "Retrieved quest clear party for quest {questId} with {n} units",
+        Log.RetrievedQuestClearPartyForQuestWithUnits(
+            this.logger,
             questId,
             clearPartyUnits.Count()
         );
@@ -68,7 +69,7 @@ public class ClearPartyService : IClearPartyService
             )
             .ToList();
 
-        this.logger.LogDebug("Generated lostUnitList: {@lostUnitList}", lostUnitList);
+        Log.GeneratedLostUnitList(this.logger, lostUnitList);
 
         return new(mappedPartyList, lostUnitList);
     }
@@ -130,11 +131,7 @@ public class ClearPartyService : IClearPartyService
             })
             .ToList();
 
-        this.logger.LogDebug(
-            "Storing quest clear party for quest {questId} with {n} units",
-            questId,
-            dbUnits.Count
-        );
+        Log.StoringQuestClearPartyForQuestWithUnits(this.logger, questId, dbUnits.Count);
 
         this.clearPartyRepository.SetQuestClearParty(questId, isMulti, dbUnits);
     }
@@ -349,6 +346,35 @@ public class ClearPartyService : IClearPartyService
                 clearUnit.EquipCrestSlotType3CrestId2 = 0;
             }
         }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Retrieved quest clear party for quest {questId} with {n} units"
+        )]
+        public static partial void RetrievedQuestClearPartyForQuestWithUnits(
+            ILogger logger,
+            int questId,
+            int n
+        );
+
+        [LoggerMessage(LogLevel.Debug, "Generated lostUnitList: {@lostUnitList}")]
+        public static partial void GeneratedLostUnitList(
+            ILogger logger,
+            IEnumerable<AtgenLostUnitList> lostUnitList
+        );
+
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Storing quest clear party for quest {questId} with {n} units"
+        )]
+        public static partial void StoringQuestClearPartyForQuestWithUnits(
+            ILogger logger,
+            int questId,
+            int n
+        );
     }
 }
 
