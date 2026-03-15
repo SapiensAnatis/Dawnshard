@@ -37,7 +37,7 @@ public class TestFixture
     /// </summary>
     protected string SessionId { get; } = $"session_id_{Guid.NewGuid()}";
 
-    private readonly WebApplicationFactory<Program> factory;
+    private readonly CustomWebApplicationFactory factory;
 
     protected TestFixture(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
     {
@@ -50,6 +50,7 @@ public class TestFixture
         this.MockTimeProvider.AdjustTime(new(2000, 1, 1, 0, 0, 0, 0, TimeSpan.Zero));
 
         this.factory = factory;
+        this.factory.SetTestOutputHelper(this.TestOutputHelper);
 
         this.Client = this.CreateClient();
 
