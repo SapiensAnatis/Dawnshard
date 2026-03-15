@@ -699,9 +699,15 @@ public class PresentTest : TestFixture
     [Fact]
     public async Task Receive_DmodePoint_InitializesKaleidoscapeData()
     {
-        this.ApiContext.PlayerDmodeInfos.ExecuteDelete();
-        this.ApiContext.PlayerDmodeDungeons.ExecuteDelete();
-        this.ApiContext.PlayerDmodeExpeditions.ExecuteDelete();
+        await this
+            .ApiContext.PlayerDmodeInfos.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteDeleteAsync(TestContext.Current.CancellationToken);
+        await this
+            .ApiContext.PlayerDmodeDungeons.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteDeleteAsync(TestContext.Current.CancellationToken);
+        await this
+            .ApiContext.PlayerDmodeExpeditions.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteDeleteAsync(TestContext.Current.CancellationToken);
 
         List<DbPlayerPresent> presents =
         [
