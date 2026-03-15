@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Item;
 
-[Collection(TestCollectionNames.MockTimeProvider)]
 public class ItemTest : TestFixture
 {
     public ItemTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
@@ -58,8 +57,6 @@ public class ItemTest : TestFixture
     [Fact]
     public async Task UseRecoveryStamina_UpdatesStaminaBeforeAdd()
     {
-        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
-
         DbPlayerUserData userData = this
             .ApiContext.PlayerUserData.AsTracking()
             .First(x => x.ViewerId == this.ViewerId);

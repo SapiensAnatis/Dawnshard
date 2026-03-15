@@ -31,8 +31,6 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
     public Mock<IPhotonStateApi> MockPhotonStateApi { get; } = new();
 
-    public FakeTimeProvider MockTimeProvider { get; } = new(DateTimeOffset.UtcNow);
-
     public async ValueTask InitializeAsync()
     {
         await MasterAsset.LoadAsync(FeatureFlagUtils.AllEnabledFeatureManager);
@@ -96,7 +94,6 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
         {
             services.AddScoped(_ => this.MockBaasApi.Object);
             services.AddScoped(_ => this.MockPhotonStateApi.Object);
-            services.AddSingleton<TimeProvider>(this.MockTimeProvider);
 
             services.RemoveAll<DbContextOptions<ApiContext>>();
             services.RemoveAll<IDistributedCache>();

@@ -3,7 +3,6 @@ using DragaliaAPI.Infrastructure.Results;
 
 namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 
-[Collection(TestCollectionNames.MockTimeProvider)]
 public class QuestBonusTest : TestFixture
 {
     /*
@@ -15,10 +14,7 @@ public class QuestBonusTest : TestFixture
      */
 
     public QuestBonusTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task QuestBonus_CanClaimWeeklyAgitoBonus()

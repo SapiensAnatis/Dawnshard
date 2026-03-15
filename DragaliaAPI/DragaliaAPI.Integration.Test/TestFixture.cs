@@ -42,7 +42,6 @@ public class TestFixture
         this.TestOutputHelper = testOutputHelper;
         this.MockBaasApi = factory.MockBaasApi;
         this.MockPhotonStateApi = factory.MockPhotonStateApi;
-        this.MockTimeProvider = factory.MockTimeProvider;
 
         this.factory = factory;
         this.factory.SetTestOutputHelper(this.TestOutputHelper);
@@ -79,8 +78,6 @@ public class TestFixture
     protected Mock<IBaasApi> MockBaasApi { get; }
 
     protected Mock<IPhotonStateApi> MockPhotonStateApi { get; }
-
-    protected FakeTimeProvider MockTimeProvider { get; }
 
     protected ITestOutputHelper TestOutputHelper { get; }
 

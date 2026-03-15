@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Event;
 
-[Collection(TestCollectionNames.MockTimeProvider)]
 public class Clb01EventTest : TestFixture
 {
     public Clb01EventTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)

@@ -4,8 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Dmode;
 
-[Collection(TestCollectionNames.MockTimeProvider)]
-public class DmodeTest : TestFixture
+public class DmodeTest : FakeTimeProviderTestFixture
 {
     public DmodeTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
@@ -251,7 +250,7 @@ public class DmodeTest : TestFixture
                 opts => opts.WithDateTimeTolerance()
             );
 
-        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow.AddDays(1));
+        this.FakeTimeProvider.AdjustTime(DateTimeOffset.UtcNow.AddDays(1));
 
         DragaliaResponse<DmodeExpeditionFinishResponse> finishResp =
             await this.Client.PostMsgpack<DmodeExpeditionFinishResponse>(

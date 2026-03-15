@@ -12,8 +12,7 @@ using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Integration.Test.Features.Friends;
 
-[Collection(TestCollectionNames.MockTimeProvider)]
-public class HelperTest : TestFixture
+public class HelperTest : FakeTimeProviderTestFixture
 {
     public HelperTest(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
         : base(factory, testOutputHelper) { }
@@ -368,7 +367,7 @@ public class HelperTest : TestFixture
             .Data.SupportUserDetailList.Should()
             .NotContain(x => x.ViewerId == (ulong)nonFriend.ViewerId);
 
-        this.MockTimeProvider.AdjustTime(this.MockTimeProvider.GetLastDailyReset().AddDays(1));
+        this.FakeTimeProvider.AdjustTime(this.FakeTimeProvider.GetLastDailyReset().AddDays(1));
 
         DragaliaResponse<QuestGetSupportUserListResponse> listResponse2 =
             await this.Client.PostMsgpack<QuestGetSupportUserListResponse>(
@@ -404,7 +403,7 @@ public class HelperTest : TestFixture
             .Data.SupportUserDetailList.Should()
             .NotContain(x => x.ViewerId == (ulong)nonFriend.ViewerId);
 
-        this.MockTimeProvider.Advance(TimeSpan.FromMinutes(1));
+        this.FakeTimeProvider.Advance(TimeSpan.FromMinutes(1));
 
         _ = await ClearDungeonAsOtherPlayer(nonFriend);
 

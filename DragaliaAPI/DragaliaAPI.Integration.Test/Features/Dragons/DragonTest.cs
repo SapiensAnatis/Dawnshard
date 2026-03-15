@@ -12,14 +12,10 @@ namespace DragaliaAPI.Integration.Test.Features.Dragons;
 /// <summary>
 /// Tests <see cref="DragonController"/>
 /// </summary>
-[Collection(TestCollectionNames.MockTimeProvider)]
 public class DragonTest : TestFixture
 {
     public DragonTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
-    }
+        : base(factory, outputHelper) { }
 
     public record DragonBuildUpTestCase(
         List<DbPlayerDragonData> SetupDragons,

@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 
 [SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments")]
-[Collection(TestCollectionNames.MockTimeProvider)]
 public partial class DungeonRecordTest : TestFixture
 {
     public DungeonRecordTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
@@ -22,8 +21,6 @@ public partial class DungeonRecordTest : TestFixture
         this.ApiContext.PlayerUserData.ExecuteUpdate(p =>
             p.SetProperty(e => e.StaminaMulti, e => 100)
         );
-
-        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
     }
 
     [Fact]

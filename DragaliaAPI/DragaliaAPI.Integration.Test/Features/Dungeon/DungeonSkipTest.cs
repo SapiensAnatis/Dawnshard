@@ -6,16 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 
-[Collection(TestCollectionNames.MockTimeProvider)]
 public class DungeonSkipTest : TestFixture
 {
     private const string Endpoint = "/dungeon_skip";
 
     public DungeonSkipTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task DungeonSkipStart_GrantsRewards()
