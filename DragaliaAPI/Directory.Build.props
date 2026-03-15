@@ -31,4 +31,8 @@
       <FileWrites Include="@(MasterAssetMessagePackFiles-&gt;'$(OutDir)Resources\%(RecursiveDir)%(Filename).msgpack')" />
     </ItemGroup>
   </Target>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
 </Project>
