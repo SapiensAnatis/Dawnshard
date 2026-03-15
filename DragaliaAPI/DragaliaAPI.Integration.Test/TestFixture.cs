@@ -13,11 +13,9 @@ using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Shared.Serialization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Time.Testing;
@@ -45,9 +43,6 @@ public class TestFixture
         this.MockBaasApi = factory.MockBaasApi;
         this.MockPhotonStateApi = factory.MockPhotonStateApi;
         this.MockTimeProvider = factory.MockTimeProvider;
-
-        // Set back to default time to prevent tests from interfering
-        this.MockTimeProvider.AdjustTime(new(2000, 1, 1, 0, 0, 0, 0, TimeSpan.Zero));
 
         this.factory = factory;
         this.factory.SetTestOutputHelper(this.TestOutputHelper);

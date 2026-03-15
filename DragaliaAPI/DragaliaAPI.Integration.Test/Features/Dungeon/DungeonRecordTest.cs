@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 
 [SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments")]
+[Collection(TestCollectionNames.MockTimeProvider)]
 public partial class DungeonRecordTest : TestFixture
 {
     public DungeonRecordTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)

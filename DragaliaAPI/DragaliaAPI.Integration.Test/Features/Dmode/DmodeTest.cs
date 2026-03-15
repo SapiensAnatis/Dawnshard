@@ -4,13 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Dmode;
 
+[Collection(TestCollectionNames.MockTimeProvider)]
 public class DmodeTest : TestFixture
 {
     public DmodeTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task GetData_ReturnsData()

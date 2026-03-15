@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Integration.Test.Features.Login;
 
+[Collection(TestCollectionNames.MockTimeProvider)]
 public class LoginTest : TestFixture
 {
     public LoginTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)

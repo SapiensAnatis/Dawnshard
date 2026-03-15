@@ -3,6 +3,7 @@ using DragaliaAPI.Infrastructure.Results;
 
 namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 
+[Collection(TestCollectionNames.MockTimeProvider)]
 public class QuestBonusTest : TestFixture
 {
     /*

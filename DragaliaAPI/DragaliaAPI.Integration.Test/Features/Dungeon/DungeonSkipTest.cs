@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 
+[Collection(TestCollectionNames.MockTimeProvider)]
 public class DungeonSkipTest : TestFixture
 {
     private const string Endpoint = "/dungeon_skip";

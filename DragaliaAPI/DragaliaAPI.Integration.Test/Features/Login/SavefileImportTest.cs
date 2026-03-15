@@ -12,6 +12,7 @@ namespace DragaliaAPI.Integration.Test.Features.Login;
 /// <summary>
 /// Tests <see cref="SavefileController"/>
 /// </summary>
+[Collection(TestCollectionNames.MockTimeProvider)]
 public class SavefileImportTest : TestFixture
 {
     public SavefileImportTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
@@ -53,6 +54,8 @@ public class SavefileImportTest : TestFixture
     [Fact]
     public async Task Import_LoadIndexReturnsImportedSavefile()
     {
+        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
+
         string savefileJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
 
         LoadIndexResponse savefile = JsonSerializer

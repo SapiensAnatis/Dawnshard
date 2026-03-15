@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Item;
 
+[Collection(TestCollectionNames.MockTimeProvider)]
 public class ItemTest : TestFixture
 {
     public ItemTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)

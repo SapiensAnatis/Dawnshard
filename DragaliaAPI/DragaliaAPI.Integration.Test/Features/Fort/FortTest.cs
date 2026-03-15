@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Fort;
 
+[Collection(TestCollectionNames.MockTimeProvider)]
 public class FortTest : TestFixture
 {
     public FortTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)

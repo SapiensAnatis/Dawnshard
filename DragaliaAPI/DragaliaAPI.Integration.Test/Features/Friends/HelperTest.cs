@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Integration.Test.Features.Friends;
 
+[Collection(TestCollectionNames.MockTimeProvider)]
 public class HelperTest : TestFixture
 {
     public HelperTest(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)

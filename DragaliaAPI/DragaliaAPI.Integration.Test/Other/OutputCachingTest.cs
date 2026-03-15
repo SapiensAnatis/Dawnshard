@@ -15,13 +15,11 @@ public class OutputCachingTest : TestFixture
     [Fact]
     public async Task RepeatedRequestPolicy_HandlesRepeatedUnsafeRequests()
     {
-        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
-
         DbFortBuild build = new()
         {
             PlantId = FortPlants.WindAltar,
-            BuildStartDate = DateTimeOffset.UtcNow.AddDays(-2),
-            BuildEndDate = DateTimeOffset.UtcNow.AddDays(-1),
+            BuildStartDate = DateTimeOffset.UnixEpoch.AddDays(1),
+            BuildEndDate = DateTimeOffset.UnixEpoch.AddDays(1),
             Level = 5,
         };
 

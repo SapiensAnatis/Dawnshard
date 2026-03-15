@@ -5,13 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Event;
 
+[Collection(TestCollectionNames.MockTimeProvider)]
 public class Clb01EventTest : TestFixture
 {
     public Clb01EventTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
-
         this.Client.PostMsgpack<MemoryEventActivateResponse>(
                 "memory_event/activate",
                 new MemoryEventActivateRequest(EventId)

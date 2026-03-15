@@ -10,8 +10,6 @@ public class CombatEventTest : TestFixture
     public CombatEventTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
-
         this.Client.PostMsgpack<MemoryEventActivateResponse>(
                 "memory_event/activate",
                 new MemoryEventActivateRequest(EventId)

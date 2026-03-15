@@ -31,7 +31,7 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
     public Mock<IPhotonStateApi> MockPhotonStateApi { get; } = new();
 
-    public FakeTimeProvider MockTimeProvider { get; } = new();
+    public FakeTimeProvider MockTimeProvider { get; } = new(DateTimeOffset.UtcNow);
 
     public async ValueTask InitializeAsync()
     {

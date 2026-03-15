@@ -9,10 +9,7 @@ namespace DragaliaAPI.Integration.Test.Features.Event;
 public class EarnEventTest : TestFixture
 {
     public EarnEventTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        this.MockTimeProvider.AdjustTime(DateTimeOffset.UtcNow);
-    }
+        : base(factory, outputHelper) { }
 
     // One Starry Dragonyule
     private const int EventId = 22903;
