@@ -1,5 +1,6 @@
 <script lang="ts">
   import Gift from '@lucide/svelte/icons/gift';
+  import { onMount } from 'svelte';
   import { createForm } from 'svelte-form-helper';
 
   import { Select } from '$lib/components/select';
@@ -17,7 +18,6 @@
     type PresentFormSubmission,
     type PresentWidgetData
   } from './presentTypes.ts';
-  import { onMount } from 'svelte';
 
   let { widgetData }: { widgetData: PresentWidgetData } = $props();
 
