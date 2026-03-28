@@ -871,9 +871,6 @@ public partial class AtgenBoxSummonData
     [Key("box_summon_seq")]
     public int BoxSummonSeq { get; set; }
 
-    [Key("reset_possible")]
-    public int ResetPossible { get; set; }
-
     [Key("remaining_quantity")]
     public int RemainingQuantity { get; set; }
 
@@ -887,7 +884,7 @@ public partial class AtgenBoxSummonData
         int eventId,
         int eventPoint,
         int boxSummonSeq,
-        int resetPossible,
+        bool resetPossible,
         int remainingQuantity,
         int maxExecCount,
         IEnumerable<AtgenBoxSummonDetail> boxSummonDetail
@@ -926,9 +923,6 @@ public partial class AtgenBoxSummonDetail
     [Key("pickup_item_state")]
     public int PickupItemState { get; set; }
 
-    [Key("reset_item_flag")]
-    public int ResetItemFlag { get; set; }
-
     [Key("total_count")]
     public int TotalCount { get; set; }
 
@@ -942,7 +936,7 @@ public partial class AtgenBoxSummonDetail
         int entityQuantity,
         int limit,
         int pickupItemState,
-        int resetItemFlag,
+        bool resetItemFlag,
         int totalCount,
         int twoStepId
     )
@@ -970,9 +964,6 @@ public partial class AtgenBoxSummonResult
     [Key("box_summon_seq")]
     public int BoxSummonSeq { get; set; }
 
-    [Key("reset_possible")]
-    public int ResetPossible { get; set; }
-
     [Key("remaining_quantity")]
     public int RemainingQuantity { get; set; }
 
@@ -995,7 +986,7 @@ public partial class AtgenBoxSummonResult
     public AtgenBoxSummonResult(
         int eventId,
         int boxSummonSeq,
-        int resetPossible,
+        bool resetPossible,
         int remainingQuantity,
         int maxExecCount,
         bool isStoppedByTarget,

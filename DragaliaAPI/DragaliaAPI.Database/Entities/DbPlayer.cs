@@ -107,6 +107,8 @@ public class DbPlayer
 
     public DbSettings? Settings { get; set; }
 
+    public List<DbPlayerEventSummonData> EventSummonData { get; set; } = [];
+
     private class Configuration : IEntityTypeConfiguration<DbPlayer>
     {
         public void Configure(EntityTypeBuilder<DbPlayer> builder)

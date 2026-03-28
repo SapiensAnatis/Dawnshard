@@ -1,0 +1,2 @@
+# Sometimes Rider makes malformed object folders when adding a new migration
+bin\\Debug

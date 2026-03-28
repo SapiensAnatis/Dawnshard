@@ -1,0 +1,157 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "EventSummonOptions",
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+        "EventSummons": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/EventSummonConfiguration"
+            }
+        }
+    },
+    "definitions": {
+        "EventSummonConfiguration": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "$comment": {
+                    "type": "string"
+                },
+                "EventId": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "Items": {
+                    "type": [
+                        "object"
+                    ],
+                    "additionalProperties": {
+                        "$ref": "#/definitions/EventSummonItemConfiguration"
+                    }
+                }
+            }
+        },
+        "EventSummonItemConfiguration": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "$comment": {
+                    "type": "string"
+                },
+                "EntityType": {
+                    "$ref": "#/definitions/EntityTypes"
+                },
+                "EntityId": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "EntityQuantity": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "PickupItemState": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "ResetItemFlag": {
+                    "type": "boolean"
+                },
+                "TotalCounts": {
+                    "$ref": "#/definitions/EventSummonItemCount"
+                },
+                "TwoStepId": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ],
+                    "format": "int32"
+                }
+            },
+            "required": [
+                "EntityType",
+                "EntityId",
+                "EntityQuantity",
+                "TotalCounts"
+            ]
+        },
+        "EntityTypes": {
+            "type": "string",
+            "description": "",
+            "enum": [
+                "None",
+                "Chara",
+                "Item",
+                "Weapon",
+                "Rupies",
+                "FreeDiamantium",
+                "PaidDiamantium",
+                "Dragon",
+                "Material",
+                "FortPlant",
+                "Title",
+                "Stamp",
+                "Amulet",
+                "DungeonItem",
+                "Dew",
+                "DragonGift",
+                "SkipTicket",
+                "SummonTicket",
+                "Mana",
+                "ExchangeTicket",
+                "RaidEventItem",
+                "MazeEventItem",
+                "BuildEventItem",
+                "Wyrmite",
+                "CollectEventItem",
+                "Clb01EventItem",
+                "AstralItem",
+                "GuildEmblem",
+                "HustleHammer",
+                "ExRushEventItem",
+                "SimpleEventItem",
+                "LotteryTicket",
+                "ExHunterEventItem",
+                "FafnirMedal",
+                "CombatEventItem",
+                "SummonPoint",
+                "BattleRoyalEventItem",
+                "WeaponSkin",
+                "WeaponBody",
+                "Wyrmprint",
+                "EarnEventItem",
+                "Talisman",
+                "DmodePoint",
+                "DmodeDungeonItem"
+            ]
+        },
+        "EventSummonItemCount": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Box1Count": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "Box2Count": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "Box3Count": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "Box4Count": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "FinalCount": {
+                    "type": "integer",
+                    "format": "int32"
+                }
+            },
+            "required": ["Box1Count", "Box2Count", "Box3Count", "Box4Count", "FinalCount"]
+        }
+    }
+}

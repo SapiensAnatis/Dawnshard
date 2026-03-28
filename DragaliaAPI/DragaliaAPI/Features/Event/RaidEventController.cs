@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Features.Event;
 
 [Route("raid_event")]
+[ServiceFilter<EventValidationFilter>]
 public class RaidEventController(
     IUpdateDataService updateDataService,
     IRewardService rewardService,
@@ -23,22 +24,27 @@ public class RaidEventController(
     {
         RaidEventGetEventDataResponse resp = new()
         {
-            IsReceiveEventDamageReward = await eventService.GetCustomEventFlag(request.RaidEventId),
             RaidEventUserData = await eventService.GetRaidEventUserData(request.RaidEventId),
-            RaidEventRewardList = await eventService.GetEventRewardList<RaidEventRewardList>(
-                request.RaidEventId
-            ),
-            EventPassiveList = new List<EventPassiveList>
-            {
-                await eventService.GetEventPassiveList(request.RaidEventId),
-            },
         };
 
+        if (resp.RaidEventUserData is not null)
+        {
+            resp.IsReceiveEventDamageReward = await eventService.GetCustomEventFlag(
+                request.RaidEventId
+            );
+
+            resp.RaidEventRewardList = await eventService.GetEventRewardList<RaidEventRewardList>(
+                request.RaidEventId
+            );
+
+            resp.EventPassiveList = [await eventService.GetEventPassiveList(request.RaidEventId)];
+        }
+
         if (
-            MasterAsset
-                .EventTradeGroup.Enumerable.FirstOrDefault(x => x.EventId == request.RaidEventId)
-                ?.Id is
-            { } tradeGroupId
+            MasterAsset.EventTradeGroup.Enumerable.FirstOrDefault(x =>
+                x.EventId == request.RaidEventId
+            ) is
+            { Id: var tradeGroupId }
         )
         {
             resp.EventTradeList = tradeService.GetEventTradeList(tradeGroupId);
@@ -53,19 +59,20 @@ public class RaidEventController(
         CancellationToken cancellationToken
     )
     {
-        RaidEventEntryResponse resp = new()
-        {
-            RaidEventUserData = await eventService.GetRaidEventUserData(request.RaidEventId),
-            UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken),
-            EntityResult = rewardService.GetEntityResult(),
-        };
+        RaidEventEntryResponse resp = new();
+
+        await eventService.CreateEventData(request.RaidEventId);
+
+        resp.RaidEventUserData = await eventService.GetRaidEventUserData(request.RaidEventId);
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+        resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
 
     [HttpPost("receive_raid_point_reward")]
     public async Task<DragaliaResult> ReceiveRaidPointReward(
-        RaidEventReceiveRaidPointRewardRequest request,
+        EventOverrides request,
         CancellationToken cancellationToken
     )
     {
