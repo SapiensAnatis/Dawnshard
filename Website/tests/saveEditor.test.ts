@@ -34,8 +34,6 @@ test('edit save and submit', async ({ page }) => {
   const submitButton = giftBoxForm.getByRole('button', { name: 'Add' });
   await expect(submitButton).toBeDisabled();
 
-  await page.waitForTimeout(500); // otherwise the form screws up?
-
   const typeSelect = giftBoxForm.getByRole('combobox', { name: 'Type' });
   await typeSelect.selectOption({ label: 'Material' });
   await typeSelect.press('Tab');
@@ -62,4 +60,25 @@ test('edit save and submit', async ({ page }) => {
   await expect(page.getByText('Successfully edited save')).toBeVisible();
 
   await expect(listItem).not.toBeVisible();
+});
+
+test('can add without touching quantity', async ({ page }) => {
+  await page.goto('/account/save-editor');
+
+  const giftBoxForm = page.getByRole('form', { name: 'Gift box' });
+  await expect(giftBoxForm).toBeVisible();
+
+  const submitButton = giftBoxForm.getByRole('button', { name: 'Add' });
+  await expect(submitButton).toBeDisabled();
+
+  const typeSelect = giftBoxForm.getByRole('combobox', { name: 'Type' });
+  await typeSelect.selectOption({ label: 'Adventurer' });
+  await typeSelect.press('Tab');
+
+  const itemSelect = giftBoxForm.getByRole('combobox', { name: 'Item' });
+  await itemSelect.selectOption({ label: 'Summer Celliera' });
+  await itemSelect.press('Tab');
+
+  await expect(submitButton).toBeEnabled();
+  await submitButton.click();
 });
