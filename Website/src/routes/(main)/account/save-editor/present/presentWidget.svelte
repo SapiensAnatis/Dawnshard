@@ -17,6 +17,7 @@
     type PresentFormSubmission,
     type PresentWidgetData
   } from './presentTypes.ts';
+  import { onMount } from 'svelte';
 
   let { widgetData }: { widgetData: PresentWidgetData } = $props();
 
@@ -26,6 +27,12 @@
   let itemValue: number | '' = $state('');
   let quantityValue: number = $state(1);
   let presentIdCounter: number = $state(0);
+
+  let ready = $state(false);
+
+  onMount(() => {
+    ready = true;
+  });
 
   const form = createForm();
   const type = form.field();
@@ -108,6 +115,7 @@
             placeholder="Select an item type"
             items={types}
             field={type}
+            disabled={!ready}
             onchange={onTypeChange}
             class="
                aria-invalid:data-touched:border-red-700
@@ -126,6 +134,7 @@
             placeholder="Select an item"
             items={availableItems}
             field={item}
+            disabled={!ready}
             required
             class="
                aria-invalid:data-touched:border-red-700
@@ -142,7 +151,7 @@
             id="quantity"
             placeholder="Enter a quantity"
             type="number"
-            disabled={maxQuantity === 1}
+            disabled={!ready || maxQuantity === 1}
             field={quantity}
             min={1}
             max={maxQuantity}
@@ -150,6 +159,7 @@
             class="
                aria-invalid:data-touched:border-red-700
                aria-invalid:data-touched:text-red-700
+               aria-invalid:data-touched:placeholder:text-red-700
             "
             bind:value={quantityValue} />
           {#if $quantity.show}
@@ -166,6 +176,8 @@
 </Card.Root>
 
 <style>
+  @reference "tailwindcss";
+
   .labelled-input {
     width: 12.5rem;
     display: flex;
@@ -175,6 +187,6 @@
 
   .helper {
     font-size: 0.75rem;
-    color: hsl(var(--muted-foreground));
+    color: theme(--color-red-700);
   }
 </style>
