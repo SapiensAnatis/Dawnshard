@@ -341,6 +341,251 @@ public class QuestBonusTest : TestFixture
                 opts => opts.WithDateTimeTolerance()
             );
     }
+    
+    [Fact]
+    public async Task QuestBonus_Totm_CanClaimWithStackCount()
+    {
+        int questId = 320011101; // Thor's Trial: Standard
+        int questEventId = 32000;
+
+        DateTimeOffset resetTime = DateTimeOffset.UtcNow;
+
+        await this.AddToDatabase(
+            new DbQuestEvent()
+            {
+                ViewerId = this.ViewerId,
+                QuestEventId = questEventId,
+                LastWeeklyResetTime = resetTime,
+                LastDailyResetTime = resetTime,
+                QuestBonusReceiveCount = 1,
+                QuestBonusStackCount = 2,
+                QuestBonusStackTime = resetTime,
+            }
+        );
+
+        DragaliaResponse<DungeonRecordRecordResponse> response = await this.CompleteQuest(questId);
+
+        response
+            .Data.UpdateDataList.QuestEventList.Should()
+            .ContainEquivalentOf(
+                new QuestEventList()
+                {
+                    QuestEventId = questEventId,
+                    QuestBonusReceiveCount = 1,
+                    QuestBonusReserveCount = 1,
+                    QuestBonusReserveTime = response.Data.IngameResultData.EndTime,
+                    QuestBonusStackCount = 2,
+                    QuestBonusStackTime = resetTime,
+                    LastDailyResetTime = resetTime,
+                    LastWeeklyResetTime = resetTime,
+                    DailyPlayCount = 1,
+                    WeeklyPlayCount = 1,
+                },
+                opts => opts.WithDateTimeTolerance()
+            );
+
+        DragaliaResponse<DungeonReceiveQuestBonusResponse> bonusResponse =
+            await this.Client.PostMsgpack<DungeonReceiveQuestBonusResponse>(
+                "/dungeon/receive_quest_bonus",
+                new DungeonReceiveQuestBonusRequest()
+                {
+                    QuestEventId = questEventId,
+                    IsReceive = true,
+                    ReceiveBonusCount = 1,
+                },
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        bonusResponse.Data.ReceiveQuestBonus.TargetQuestId.Should().Be(questId);
+        bonusResponse.Data.ReceiveQuestBonus.ReceiveBonusCount.Should().Be(1);
+
+        bonusResponse
+            .Data.UpdateDataList.QuestEventList.Should()
+            .ContainEquivalentOf(
+                new QuestEventList()
+                {
+                    QuestEventId = questEventId,
+                    QuestBonusReceiveCount = 2,
+                    QuestBonusReserveCount = 0,
+                    QuestBonusReserveTime = DateTimeOffset.UnixEpoch,
+                    QuestBonusStackCount = 1,
+                    QuestBonusStackTime = DateTimeOffset.UtcNow,
+                    LastDailyResetTime = resetTime,
+                    LastWeeklyResetTime = resetTime,
+                    DailyPlayCount = 1,
+                    WeeklyPlayCount = 1,
+                },
+                opts => opts.WithDateTimeTolerance()
+            );
+    }
+
+    [Fact]
+    public async Task QuestBonus_Totm_CanClaimMultipleWithStackCount()
+    {
+        int questId = 320011101; // Thor's Trial: Standard
+        int questEventId = 32000;
+
+        DateTimeOffset resetTime = DateTimeOffset.UtcNow;
+
+        await this.AddToDatabase(
+            new DbQuestEvent()
+            {
+                ViewerId = this.ViewerId,
+                QuestEventId = questEventId,
+                LastWeeklyResetTime = resetTime,
+                LastDailyResetTime = resetTime,
+                QuestBonusStackCount = 2,
+                QuestBonusStackTime = resetTime,
+            }
+        );
+
+        DragaliaResponse<DungeonSkipStartResponse> response =
+            await this.CompleteQuestWithSkipTickets(questId, 3);
+
+        response
+            .Data.UpdateDataList.QuestEventList.Should()
+            .ContainEquivalentOf(
+                new QuestEventList()
+                {
+                    QuestEventId = questEventId,
+                    QuestBonusReceiveCount = 0,
+                    QuestBonusReserveCount = 2,
+                    QuestBonusReserveTime = response.Data.IngameResultData.EndTime,
+                    QuestBonusStackCount = 2,
+                    QuestBonusStackTime = resetTime,
+                    LastDailyResetTime = resetTime,
+                    LastWeeklyResetTime = resetTime,
+                    DailyPlayCount = 3,
+                    WeeklyPlayCount = 3,
+                },
+                opts => opts.WithDateTimeTolerance()
+            );
+
+        DragaliaResponse<DungeonReceiveQuestBonusResponse> bonusResponse =
+            await this.Client.PostMsgpack<DungeonReceiveQuestBonusResponse>(
+                "/dungeon/receive_quest_bonus",
+                new DungeonReceiveQuestBonusRequest()
+                {
+                    QuestEventId = questEventId,
+                    IsReceive = true,
+                    ReceiveBonusCount = 2,
+                },
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        bonusResponse.Data.ReceiveQuestBonus.TargetQuestId.Should().Be(questId);
+        bonusResponse.Data.ReceiveQuestBonus.ReceiveBonusCount.Should().Be(2);
+
+        bonusResponse
+            .Data.UpdateDataList.QuestEventList.Should()
+            .ContainEquivalentOf(
+                new QuestEventList()
+                {
+                    QuestEventId = questEventId,
+                    QuestBonusReceiveCount = 2,
+                    QuestBonusReserveCount = 0,
+                    QuestBonusReserveTime = DateTimeOffset.UnixEpoch,
+                    QuestBonusStackCount = 0,
+                    QuestBonusStackTime = DateTimeOffset.UtcNow,
+                    LastDailyResetTime = resetTime,
+                    LastWeeklyResetTime = resetTime,
+                    DailyPlayCount = 3,
+                    WeeklyPlayCount = 3,
+                },
+                opts => opts.WithDateTimeTolerance()
+            );
+    }
+
+    [Fact]
+    public async Task QuestBonus_Totm_DailyResetIncrementsStackCount()
+    {
+        int questId = 320011101; // Thor's Trial: Standard
+        int questEventId = 32000;
+
+        DateTimeOffset yesterday = DateTimeOffset.UtcNow - TimeSpan.FromDays(1);
+
+        await this.AddToDatabase(
+            new DbQuestEvent()
+            {
+                ViewerId = this.ViewerId,
+                QuestEventId = questEventId,
+                LastWeeklyResetTime = yesterday,
+                LastDailyResetTime = yesterday,
+                QuestBonusStackCount = 0,
+                QuestBonusStackTime = yesterday,
+            }
+        );
+
+        DragaliaResponse<DungeonRecordRecordResponse> response = await this.CompleteQuest(questId);
+
+        response
+            .Data.UpdateDataList.QuestEventList.Should()
+            .ContainEquivalentOf(
+                new QuestEventList()
+                {
+                    QuestEventId = questEventId,
+                    QuestBonusReceiveCount = 0,
+                    QuestBonusReserveCount = 1,
+                    QuestBonusReserveTime = response.Data.IngameResultData.EndTime,
+                    QuestBonusStackCount = 1,
+                    QuestBonusStackTime = response.Data.IngameResultData.EndTime,
+                    LastDailyResetTime = response.Data.IngameResultData.EndTime,
+                    LastWeeklyResetTime = yesterday,
+                    DailyPlayCount = 1,
+                    WeeklyPlayCount = 1,
+                },
+                opts => opts.WithDateTimeTolerance()
+            );
+
+        DragaliaResponse<DungeonReceiveQuestBonusResponse> bonusResponse =
+            await this.Client.PostMsgpack<DungeonReceiveQuestBonusResponse>(
+                "/dungeon/receive_quest_bonus",
+                new DungeonReceiveQuestBonusRequest()
+                {
+                    QuestEventId = questEventId,
+                    IsReceive = true,
+                    ReceiveBonusCount = 1,
+                },
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        bonusResponse.Data.ReceiveQuestBonus.TargetQuestId.Should().Be(questId);
+        bonusResponse.Data.ReceiveQuestBonus.ReceiveBonusCount.Should().Be(1);
+
+        bonusResponse
+            .Data.UpdateDataList.QuestEventList.Should()
+            .ContainEquivalentOf(
+                new QuestEventList()
+                {
+                    QuestEventId = questEventId,
+                    QuestBonusReceiveCount = 1,
+                    QuestBonusReserveCount = 0,
+                    QuestBonusReserveTime = DateTimeOffset.UnixEpoch,
+                    QuestBonusStackCount = 0,
+                    QuestBonusStackTime = DateTimeOffset.UtcNow,
+                    LastDailyResetTime = response.Data.IngameResultData.EndTime,
+                    LastWeeklyResetTime = yesterday,
+                    DailyPlayCount = 1,
+                    WeeklyPlayCount = 1,
+                },
+                opts => opts.WithDateTimeTolerance()
+            );
+    }
+
+    private async Task<DragaliaResponse<DungeonSkipStartResponse>> CompleteQuestWithSkipTickets(
+        int questId,
+        int playCount
+    )
+    {
+        DragaliaResponse<DungeonSkipStartResponse> response =
+            await this.Client.PostMsgpack<DungeonSkipStartResponse>(
+                "/dungeon_skip/start",
+                new DungeonSkipStartRequest() { QuestId = questId, PartyNo = 1, PlayCount = playCount },
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        return response;
+    }
 
     private async Task<DragaliaResponse<DungeonRecordRecordResponse>> CompleteQuest(int questId)
     {

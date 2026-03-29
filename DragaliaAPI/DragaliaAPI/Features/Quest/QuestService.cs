@@ -276,6 +276,14 @@ public partial class QuestService(
             );
         }
 
+        if (count < 0)
+        {
+            throw new DragaliaException(
+                ResultCode.CommonInvalidArgument,
+                "Cannot claim < 0 quest bonuses"
+            );
+        }
+
         if (questEventData.QuestBonusReceiveType == QuestBonusReceiveType.StackSelectReceive)
         {
             questEvent.QuestBonusStackCount = Math.Max(0, questEvent.QuestBonusStackCount - count);
