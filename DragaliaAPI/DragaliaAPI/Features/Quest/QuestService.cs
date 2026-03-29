@@ -200,7 +200,7 @@ public partial class QuestService(
             // quest_bonus_reserve_count appears to prompt the client to ask whether a bonus should be claimed.
             // If the player confirms, a request will be sent to /dungeon/receive_quest_bonus.
 
-            questEvent.QuestBonusReserveCount += bonusesToReceive;
+            questEvent.QuestBonusReserveCount = bonusesToReceive;
             questEvent.QuestBonusReserveTime = timeProvider.GetUtcNow();
 
             return [];
@@ -256,6 +256,8 @@ public partial class QuestService(
 
         if (!isReceive || questId == null)
         {
+            // isReceive is false if the player declines to receive the bonus
+
             Log.CancellingReceiptOfQuestBonus(logger);
 
             questEvent.QuestBonusReserveCount = 0;

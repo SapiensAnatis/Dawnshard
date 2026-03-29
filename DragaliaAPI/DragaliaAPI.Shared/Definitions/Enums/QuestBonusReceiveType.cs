@@ -13,8 +13,8 @@ public enum QuestBonusReceiveType
     /// </summary>
     /// <remarks>
     /// Confirming Yes on the clear screen initiates a separate call to /dungeon/receive_quest_bonus. The client will
-    /// only prompt the user if the QuestData.QuestBonusReserveCount and QuestBonusReserveTime are set in the dungeon
-    /// record response (I think).
+    /// only prompt the user if the QuestEventList.QuestBonusReserveCount and QuestBonusReserveTime are set in the
+    /// dungeon record response.
     /// </remarks>
     SelectReceive,
 
