@@ -497,6 +497,47 @@ public class QuestBonusTest : TestFixture
     }
 
     [Fact]
+    public async Task QuestBonus_Totm_FreshRow_SetsReserveCountToThree()
+    {
+        int questId = 320011101; // Thor's Trial: Standard
+        int questEventId = 32000;
+
+        await this.AddToDatabase(
+            new DbQuestEvent()
+            {
+                ViewerId = this.ViewerId,
+                QuestEventId = questEventId,
+                LastWeeklyResetTime = DateTimeOffset.UnixEpoch,
+                LastDailyResetTime = DateTimeOffset.UnixEpoch,
+                QuestBonusStackCount = 0,
+                QuestBonusStackTime = DateTimeOffset.UnixEpoch,
+            }
+        );
+
+        DragaliaResponse<DungeonSkipStartResponse> response =
+            await this.CompleteQuestWithSkipTickets(questId, 3);
+
+        response
+            .Data.UpdateDataList.QuestEventList.Should()
+            .ContainEquivalentOf(
+                new QuestEventList()
+                {
+                    QuestEventId = questEventId,
+                    QuestBonusReceiveCount = 0,
+                    QuestBonusReserveCount = 3,
+                    QuestBonusReserveTime = response.Data.IngameResultData.EndTime,
+                    QuestBonusStackCount = 3,
+                    QuestBonusStackTime = DateTimeOffset.UtcNow,
+                    LastDailyResetTime = DateTimeOffset.UtcNow,
+                    LastWeeklyResetTime = DateTimeOffset.UtcNow,
+                    DailyPlayCount = 3,
+                    WeeklyPlayCount = 3,
+                },
+                opts => opts.WithDateTimeTolerance()
+            );
+    }
+
+    [Fact]
     public async Task QuestBonus_Totm_DailyResetIncrementsStackCount()
     {
         int questId = 320011101; // Thor's Trial: Standard

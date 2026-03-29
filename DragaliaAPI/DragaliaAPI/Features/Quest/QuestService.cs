@@ -319,6 +319,12 @@ public partial class QuestService(
         {
             if (questEventData.QuestBonusStackCountMax > 0) // Equivalent to questEventData.QuestBonusReceiveType == StackSelectReceive
             {
+                // Note: this has the behaviour of granting 3 bonuses the first time you touch a row (as QuestBonusStackTime
+                // will be UnixEpoch).
+                // Unsure how this behaved during live service: on the first day of a ToTM quest would you only get one
+                // bonus? What if you first played it 2 days after it started running? Not really relevant for Dawnshard,
+                // however, as we do not rotate the individual ToTM quests.
+
                 DateTimeOffset stackDailyReset = questEvent.QuestBonusStackTime.GetLastDailyReset();
                 DateTimeOffset lastReset = timeProvider.GetLastDailyReset();
                 int resetsSinceStackTime = (lastReset - stackDailyReset).Days;
