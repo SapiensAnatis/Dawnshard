@@ -14,29 +14,28 @@ public static class QuestOrderPartyMapper
     {
         List<PartyUnitList> units = [];
 
-        foreach ((int index, QuestOrderParty orderParty) in orderPartyUnits.Index())
+        foreach ((int index, QuestOrderParty unit) in orderPartyUnits.Index())
         {
-            CharaData charaData = MasterAsset.CharaData[orderParty.CharaId];
-            DragonData dragonData = MasterAsset.DragonData[orderParty.DragonId];
+            CharaData charaData = MasterAsset.CharaData[unit.CharaId];
 
-            ValidateCharaData(charaData, orderParty);
-            ValidateCrests(orderParty);
+            ValidateChara(unit, charaData);
+            ValidateCrests(unit);
 
             units.Add(
                 new PartyUnitList
                 {
-                    Position = index,
-                    CharaData = MapCharaData(orderParty, charaData),
-                    DragonData = MapDragonData(orderParty),
-                    DragonReliabilityLevel = dragonData.DefaultReliabilityLevel,
+                    Position = index + 1,
+                    CharaData = MapCharaData(unit, charaData),
+                    DragonData = MapDragonData(unit),
+                    DragonReliabilityLevel = 30,
                     WeaponBodyData = new GameWeaponBody
                     {
-                        WeaponBodyId = orderParty.WeaponBodyId,
-                        BuildupCount = orderParty.WeaponBodyBuildupCount,
-                        LimitBreakCount = orderParty.WeaponBodyLimitBreakCount,
-                        LimitOverCount = orderParty.WeaponBodyLimitOverCount,
+                        WeaponBodyId = unit.WeaponBodyId,
+                        BuildupCount = unit.WeaponBodyBuildupCount,
+                        LimitBreakCount = unit.WeaponBodyLimitBreakCount,
+                        LimitOverCount = unit.WeaponBodyLimitOverCount,
                     },
-                    WeaponSkinData = new GameWeaponSkin(orderParty.WeaponSkinId),
+                    WeaponSkinData = new GameWeaponSkin(unit.WeaponSkinId),
                     CrestSlotType1CrestList = [],
                     CrestSlotType2CrestList = [],
                     CrestSlotType3CrestList = [],
@@ -83,7 +82,7 @@ public static class QuestOrderPartyMapper
             result.Add(
                 new PartySettingList
                 {
-                    UnitNo = index,
+                    UnitNo = index + 1,
                     CharaId = orderParty.CharaId,
                     EquipWeaponBodyId = orderParty.WeaponBodyId,
                     EquipWeaponSkinId = orderParty.WeaponSkinId,
@@ -112,34 +111,34 @@ public static class QuestOrderPartyMapper
         }
     }
 
-    private static void ValidateCharaData(CharaData charaData, QuestOrderParty orderParty)
+    private static void ValidateChara(QuestOrderParty fixedUnit, CharaData charaData)
     {
         if (charaData.HasManaSpiral)
         {
             throw new NotSupportedException(
-                $"QuestOrderParty {orderParty.Id} uses character {orderParty.CharaId} which has a mana spiral. "
+                $"QuestOrderParty {fixedUnit.Id} uses character {fixedUnit.CharaId} which has a mana spiral. "
                     + "Fixed party characters with mana spirals are not currently supported."
             );
         }
 
-        if (orderParty.ReleaseManaCircle != 50)
+        if (fixedUnit.ReleaseManaCircle != 50)
         {
             throw new NotSupportedException(
-                $"QuestOrderParty {orderParty.Id} has ReleaseManaCircle={orderParty.ReleaseManaCircle}, expected 50. "
+                $"QuestOrderParty {fixedUnit.Id} has ReleaseManaCircle={fixedUnit.ReleaseManaCircle}, expected 50. "
                     + "Only MC50 fixed party characters are currently supported."
             );
         }
     }
 
-    private static CharaList MapCharaData(QuestOrderParty orderParty, CharaData charaData)
+    private static CharaList MapCharaData(QuestOrderParty fixedUnit, CharaData charaData)
     {
         return new CharaList
         {
-            CharaId = orderParty.CharaId,
-            Level = orderParty.CharaLevel,
-            Rarity = orderParty.CharaRarity,
-            HpPlusCount = orderParty.CharaHpPlusCount,
-            AttackPlusCount = orderParty.CharaAttackPlusCount,
+            CharaId = fixedUnit.CharaId,
+            Level = fixedUnit.CharaLevel,
+            Rarity = fixedUnit.CharaRarity,
+            HpPlusCount = fixedUnit.CharaHpPlusCount,
+            AttackPlusCount = fixedUnit.CharaAttackPlusCount,
 
             // We can assume the character is maxed out but not spiraled because of ValidateCharaData
             Hp = charaData.MaxHp, // Despite this, Euden in Fight For Humanity has like 80,000 HP; possibly ignored by the client
