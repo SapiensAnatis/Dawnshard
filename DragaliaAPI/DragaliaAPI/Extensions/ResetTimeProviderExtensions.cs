@@ -3,10 +3,17 @@ namespace DragaliaAPI.Extensions;
 public static class ResetTimeProviderExtensions
 {
     /// <summary>
+    /// Gets the last daily reset that occurred before the given time point.
+    /// </summary>
+    /// <param name="time">The time point to check.</param>
+    public static DateTimeOffset GetLastDailyReset(this DateTimeOffset time) =>
+        time.AddHours(-6).UtcDateTime.Date.AddHours(6);
+
+    /// <summary>
     /// Gets the last daily reset (6AM UTC of the previous/current day).
     /// </summary>
     public static DateTimeOffset GetLastDailyReset(this TimeProvider timeProvider) =>
-        timeProvider.GetUtcNow().AddHours(-6).UtcDateTime.Date.AddHours(6);
+        timeProvider.GetUtcNow().GetLastDailyReset();
 
     /// <summary>
     /// Gets the last weekly reset (6AM UTC of the previous Monday).
