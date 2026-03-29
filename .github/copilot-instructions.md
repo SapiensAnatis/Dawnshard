@@ -32,11 +32,11 @@ Dawnshard/
 - **Cache/Session:** Redis 7 (redis-stack image)
 - **Serialization:** MessagePack (game protocol), JSON (REST/admin)
 - **Background jobs:** Hangfire
-- **Logging:** Serilog (structured, with Seq sink in development)
-- **Frontend:** SvelteKit 2, Svelte 5, Tailwind CSS, shadcn-svelte, TypeScript
+- **Logging:** Serilog (structured, with Seq sink)
+- **Frontend:** SvelteKit 2 (`@sveltejs/kit` 2.x), Svelte 5, Tailwind CSS, shadcn-svelte, TypeScript
 - **Local orchestration:** .NET Aspire (starts DB, cache, API, and frontend together)
 - **Containerization:** Docker (multi-stage, chiseled ASP.NET base images)
-- **Testing:** xUnit v3, Moq, FluentAssertions, Playwright (E2E)
+- **Testing:** xUnit v3, FluentAssertions, Playwright (E2E)
 
 ## Building the Project
 
@@ -51,7 +51,7 @@ Dawnshard/
 
 ```bash
 # Restore and build
-dotnet build DragaliaAPI/DragaliaAPI.sln
+dotnet build DragaliaAPI.slnx
 
 # Run locally via Aspire (recommended — starts Postgres, Redis, API automatically)
 cd Aspire/Dawnshard.AppHost
@@ -79,7 +79,7 @@ docker build -f DragaliaAPI/DragaliaAPI/Dockerfile -t dragalia-api .
 
 ```bash
 # All tests
-dotnet test DragaliaAPI/DragaliaAPI.sln -c Release
+dotnet test DragaliaAPI.slnx -c Release
 
 # Single project
 dotnet test DragaliaAPI/DragaliaAPI.Test/DragaliaAPI.Test.csproj -c Release
@@ -88,7 +88,7 @@ dotnet test DragaliaAPI/DragaliaAPI.Test/DragaliaAPI.Test.csproj -c Release
 dotnet test DragaliaAPI/DragaliaAPI.Integration.Test/DragaliaAPI.Integration.Test.csproj -c Release
 ```
 
-Test framework is **xUnit v3** using the Microsoft Testing Platform runner. Mocking is done with **Moq**; assertions use **FluentAssertions**.
+Test framework is **xUnit v3** using the Microsoft Testing Platform runner. Assertions use **FluentAssertions**. **Moq is no longer used** — new tests should be written as integration tests rather than unit tests.
 
 ### Website tests
 
@@ -145,22 +145,19 @@ These rules are enforced by `.editorconfig` and will produce compiler warnings/e
 ### DragaliaAPI layered structure
 
 ```
-Controllers/          → HTTP request handling, route mapping
-Features/             → Business logic, one subfolder per game feature
-Services/             → Cross-cutting services (auth, reward, etc.)
-Database/Repositories → Data access layer (repository pattern)
+Features/             → Business logic, controllers, one subfolder per game feature
+Database/Repositories → Data access layer (existing repositories only)
 Database/Entities     → EF Core entity classes
 Shared/Models         → MessagePack-annotated request/response DTOs
 ```
 
 ### Key patterns
 
-1. **Repository pattern** — All database access goes through `IXxxRepository` interfaces injected via DI. Do not use `ApiContext` directly in features/services.
-2. **Unit of Work** — `IUnitOfWork` (wraps `ApiContext.SaveChangesAsync`) must be called to persist changes. Repositories do not auto-save.
-3. **MessagePack DTOs** — Request/response models in `DragaliaAPI.Shared/` carry `[MessagePackObject]` and `[Key(n)]` attributes. These are used by the game client binary protocol.
-4. **Source generators** — `DragaliaAPI.Shared.SourceGenerator` emits MessagePack formatters at compile time.
-5. **Feature-based controller discovery** — `CustomControllerFeatureProvider` discovers controllers dynamically; follow existing controller naming/routing conventions.
-6. **Dependency injection** — Everything is constructor-injected; prefer `IServiceCollection` extension methods in `ServiceExtensions` classes when registering groups of related services.
+1. **Database access** — Use `ApiContext` directly in features/services wherever possible. Do **not** add new repository classes; existing repositories are kept for legacy compatibility only.
+2. **MessagePack DTOs** — Request/response models in `DragaliaAPI.Shared/` carry `[MessagePackObject]` and `[Key(n)]` attributes. These are used by the game client binary protocol.
+3. **Source generators** — `DragaliaAPI.Shared.SourceGenerator` emits code to load static master (game data) assets at compile time.
+4. **Feature-based controller discovery** — Controllers live inside their feature subfolder under `Features/`. `CustomControllerFeatureProvider` discovers them dynamically; follow existing controller naming/routing conventions.
+5. **Dependency injection** — Everything is constructor-injected; prefer `IServiceCollection` extension methods in `ServiceExtensions` classes when registering groups of related services.
 
 ### Authentication
 
@@ -184,20 +181,18 @@ dotnet ef database update --project DragaliaAPI.Database --startup-project Draga
 ```
 
 - Migrations live in `DragaliaAPI/DragaliaAPI.Database/Migrations/`.
-- Migrations are applied automatically on startup in development.
+- Migrations are applied automatically on startup.
 - Follow the existing naming convention: `<Description>` (PascalCase, descriptive).
 - NuGet package versions are centrally managed in `Directory.Packages.props` — do not specify `Version=` in individual `.csproj` files; add only `<PackageReference Include="..." />`.
 
 ## Adding a New Feature (Typical Workflow)
 
-1. Add/update MessagePack DTOs in `DragaliaAPI.Shared/Models/`.
+1. Add/update MessagePack DTOs in `DragaliaAPI.Shared/Models/` if needed (a full set already exists for known endpoints).
 2. Create or update EF entities in `DragaliaAPI.Database/Entities/`.
-3. Add repository interface + implementation in `DragaliaAPI.Database/Repositories/` if new data access is needed.
-4. Implement the business logic in `DragaliaAPI/Features/<FeatureName>/`.
-5. Create or update the controller in `DragaliaAPI/Controllers/`.
-6. Write unit tests in `DragaliaAPI.Test/` (mock repositories with Moq).
-7. Write integration tests in `DragaliaAPI.Integration.Test/` for end-to-end verification.
-8. Run `dotnet csharpier .` to format and `dotnet build` to check for warnings.
+3. Implement the business logic in `DragaliaAPI/Features/<FeatureName>/`. Controllers live in the same feature subfolder.
+4. Use `ApiContext` directly for data access; do **not** add new repository classes.
+5. Write integration tests in `DragaliaAPI.Integration.Test/` to verify the feature end-to-end.
+6. Run `dotnet csharpier .` to format and `dotnet build DragaliaAPI.slnx` to check for warnings.
 
 ## CI Workflows
 
@@ -233,7 +228,7 @@ A small ASP.NET Core service that stores Photon room state in Redis. It exposes 
 
 ```bash
 # Build everything
-dotnet build DragaliaAPI/DragaliaAPI.sln
+dotnet build DragaliaAPI.slnx
 
 # Format C# code
 dotnet tool restore && dotnet csharpier .
