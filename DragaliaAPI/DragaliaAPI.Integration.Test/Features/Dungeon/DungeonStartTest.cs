@@ -319,6 +319,72 @@ public class DungeonStartTest : TestFixture
     }
 
     [Fact]
+    public async Task Start_FixedPartyQuest_ReturnsFixedPartyUnits()
+    {
+        // Quest 204290104 uses QuestOrderPartyGroupId 2042902, which has 4 fixed units
+        DungeonStartStartResponse response = (
+            await Client.PostMsgpack<DungeonStartStartResponse>(
+                "/dungeon_start/start",
+                new DungeonStartStartRequest()
+                {
+                    PartyNoList = new List<int>() { 1 },
+                    QuestId = 204290104,
+                },
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        ).Data;
+
+        response.IngameData.PartyInfo.PartyUnitList.Should().HaveCount(4);
+        response.IngameData.PartyInfo.PartyUnitList.Should().BeInAscendingOrder(x => x.Position);
+        response.IngameData.PartyInfo.PartyUnitList.Should().OnlyHaveUniqueItems(x => x.Position);
+
+        // Verify the fixed party characters match QuestOrderParty data
+        response
+            .IngameData.PartyInfo.PartyUnitList.Select(x => x.CharaData!.CharaId)
+            .Should()
+            .BeEquivalentTo(
+                [Charas.Joker, Charas.SophiePersona, Charas.Mona, Charas.Panther],
+                opts => opts.WithStrictOrdering()
+            );
+
+        // Verify character levels are from fixed party data, not the player's database
+        response
+            .IngameData.PartyInfo.PartyUnitList.Should()
+            .OnlyContain(x => x.CharaData!.Level == 80);
+    }
+
+    [Fact]
+    public async Task Start_FixedPartyQuest_SingleUnit_PadsToFour()
+    {
+        // Quest 100260109 uses QuestOrderPartyGroupId 1002601, which has 1 fixed unit
+        DungeonStartStartResponse response = (
+            await Client.PostMsgpack<DungeonStartStartResponse>(
+                "/dungeon_start/start",
+                new DungeonStartStartRequest()
+                {
+                    PartyNoList = new List<int>() { 1 },
+                    QuestId = 100260109,
+                },
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        ).Data;
+
+        response.IngameData.PartyInfo.PartyUnitList.Should().HaveCount(4);
+
+        // First unit should be the fixed character
+        response
+            .IngameData.PartyInfo.PartyUnitList.First()
+            .CharaData!.CharaId.Should()
+            .Be((Charas)15150306); // Unplayable Joker variant
+
+        // Remaining units should be empty padding
+        response
+            .IngameData.PartyInfo.PartyUnitList.Skip(1)
+            .Should()
+            .OnlyContain(x => x.CharaData!.CharaId == Charas.Empty);
+    }
+
+    [Fact]
     public async Task Start_OffElementWeapon_SendsCorrectWeaponBonuses()
     {
         int flameDullRes = 1010104;

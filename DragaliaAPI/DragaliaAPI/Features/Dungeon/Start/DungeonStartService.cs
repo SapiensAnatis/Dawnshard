@@ -11,6 +11,7 @@ using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Tutorial;
+using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -75,33 +76,57 @@ internal sealed partial class DungeonStartService(
     {
         Log.LoadingFromPartyNumbers(logger, partyNoList);
 
-        IQueryable<DbPartyUnit> partyQuery = partyRepository
-            .GetPartyUnits(partyNoList)
-            .AsNoTracking();
-
-        List<PartySettingList> party = ProcessUnitList(
-            await partyQuery.ToListAsync(),
-            partyNoList.First()
-        );
-
         IngameData result = await InitializeIngameData(questId, supportViewerId);
-
-        List<DbDetailedPartyUnit> detailedPartyUnits = await dungeonRepository
-            .BuildDetailedPartyUnit(partyQuery, partyNoList.First())
-            .ToListAsync();
 
         QuestData questInfo = MasterAsset.QuestData.Get(questId);
 
-        List<List<int>> rewardBoostingAbilities = AbilityLogic.GetRewardBoostingAbilitiesByUnit(
-            detailedPartyUnits
-        );
+        List<PartySettingList> party;
+        List<List<int>> rewardBoostingAbilities = [];
+        bool isFixedParty = questInfo.QuestOrderPartyGroupId != 0;
 
-        result.PartyInfo.PartyUnitList = await ProcessDetailedUnitList(detailedPartyUnits);
+        if (isFixedParty)
+        {
+            Log.LoadingFixedParty(logger, questInfo.QuestOrderPartyGroupId);
+
+            List<QuestOrderParty> orderPartyUnits = MasterAsset
+                .QuestOrderParty.Enumerable.Where(x =>
+                    x.QuestOrderPartyGroupId == questInfo.QuestOrderPartyGroupId
+                )
+                .OrderBy(x => x.Id)
+                .ToList();
+
+            result.PartyInfo.PartyUnitList = QuestOrderPartyMapper.MapToPartyUnitList(
+                orderPartyUnits
+            );
+
+            party = QuestOrderPartyMapper.MapToPartySettingList(orderPartyUnits);
+        }
+        else
+        {
+            IQueryable<DbPartyUnit> partyQuery = partyRepository
+                .GetPartyUnits(partyNoList)
+                .AsNoTracking();
+
+            party = ProcessUnitList(await partyQuery.ToListAsync(), partyNoList.First());
+
+            List<DbDetailedPartyUnit> detailedPartyUnits = await dungeonRepository
+                .BuildDetailedPartyUnit(partyQuery, partyNoList.First())
+                .ToListAsync();
+
+            rewardBoostingAbilities = AbilityLogic.GetRewardBoostingAbilitiesByUnit(
+                detailedPartyUnits
+            );
+
+            result.PartyInfo.PartyUnitList = await ProcessDetailedUnitList(detailedPartyUnits);
+            isFixedParty = false;
+        }
+
         result.DungeonKey = dungeonService.CreateSession(
             new()
             {
                 QuestData = questInfo,
                 Party = party.Where(x => x.CharaId != 0),
+                IsFixedParty = isFixedParty,
                 SupportViewerId = supportViewerId,
                 RewardBoostingAbilitiesPerUnit = rewardBoostingAbilities,
             }
@@ -136,6 +161,18 @@ internal sealed partial class DungeonStartService(
         RepeatSetting? repeatSetting = null
     )
     {
+        bool isFixedTeamQuest = MasterAsset.QuestData[questId].QuestOrderPartyGroupId != 0;
+        if (isFixedTeamQuest)
+        {
+            // The client doesn't call /dungeon_start/start_assign_unit when replaying fixed party quests, so
+            // we don't need to handle fixed parties here
+
+            throw new DragaliaException(
+                ResultCode.CommonInvalidArgument,
+                "Cannot play a fixed team quest with /dungeon_start/start_assign_unit"
+            );
+        }
+
         Log.LoadingFromPartySettingList(logger, party);
 
         IngameData result = await InitializeIngameData(questId, supportViewerId);
@@ -470,6 +507,9 @@ internal sealed partial class DungeonStartService(
 
         [LoggerMessage(LogLevel.Debug, "Loading party data for party numbers {PartyNumbers}")]
         public static partial void LoadingFromPartyNumbers(ILogger logger, IList<int> partyNumbers);
+
+        [LoggerMessage(LogLevel.Debug, "Loading fixed party for quest order party group {GroupId}")]
+        public static partial void LoadingFixedParty(ILogger logger, int groupId);
 
         [LoggerMessage(
             LogLevel.Debug,

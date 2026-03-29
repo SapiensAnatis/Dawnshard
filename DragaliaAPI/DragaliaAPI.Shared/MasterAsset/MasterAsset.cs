@@ -51,6 +51,7 @@ namespace DragaliaAPI.Shared.MasterAsset;
 [GenerateMasterAsset<StampData>("StampData.json")]
 [GenerateMasterAsset<UseItemData>("UseItem.json")]
 [GenerateMasterAsset<EmblemData>("EmblemData.json")]
+[GenerateMasterAsset<QuestOrderParty>("QuestOrderParty.json")]
 [GenerateMasterAsset<AlbumMission>("Missions/MissionAlbumData.json")]
 [GenerateMasterAsset<NormalMission>("Missions/MissionBeginnerData.json")]
 [GenerateMasterAsset<DailyMission>("Missions/MissionDailyData.json")]

@@ -14,6 +14,8 @@ public class DungeonSession
 
     public bool IsMulti { get; set; }
 
+    public bool IsFixedParty { get; init; }
+
     public ulong? SupportViewerId { get; init; }
 
     public DateTimeOffset StartTime { get; init; }

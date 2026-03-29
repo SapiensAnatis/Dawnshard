@@ -91,6 +91,9 @@ public static partial class MasterAsset
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Emblems, global::DragaliaAPI.Shared.MasterAsset.Models.EmblemData>? emblemData;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<global::DragaliaAPI.Shared.Definitions.Enums.Emblems, global::DragaliaAPI.Shared.MasterAsset.Models.EmblemData> EmblemData => emblemData ?? throw new InvalidOperationException(ErrorUninitialized);
 
+    private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestOrderParty>? questOrderParty;
+    public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestOrderParty> QuestOrderParty => questOrderParty ?? throw new InvalidOperationException(ErrorUninitialized);
+
     private static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.AlbumMission>? missionAlbumData;
     public static global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.Missions.AlbumMission> MissionAlbumData => missionAlbumData ?? throw new InvalidOperationException(ErrorUninitialized);
 
@@ -532,6 +535,13 @@ public static partial class MasterAsset
             global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<global::DragaliaAPI.Shared.Definitions.Enums.Emblems, global::DragaliaAPI.Shared.MasterAsset.Models.EmblemData>(
                 "EmblemData.msgpack",
                 (global::DragaliaAPI.Shared.MasterAsset.Models.EmblemData x) => x.Id,
+                null
+            );
+        
+        global::System.Threading.Tasks.ValueTask<global::DragaliaAPI.Shared.MasterAsset.MasterAssetData<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestOrderParty>> questOrderPartyTask =
+            global::DragaliaAPI.Shared.MasterAsset.MasterAssetData.LoadAsync<int, global::DragaliaAPI.Shared.MasterAsset.Models.QuestOrderParty>(
+                "QuestOrderParty.msgpack",
+                (global::DragaliaAPI.Shared.MasterAsset.Models.QuestOrderParty x) => x.Id,
                 null
             );
         
@@ -1141,6 +1151,7 @@ public static partial class MasterAsset
         stampData = await stampDataTask;
         useItem = await useItemTask;
         emblemData = await emblemDataTask;
+        questOrderParty = await questOrderPartyTask;
         missionAlbumData = await missionAlbumDataTask;
         missionBeginnerData = await missionBeginnerDataTask;
         missionDailyData = await missionDailyDataTask;

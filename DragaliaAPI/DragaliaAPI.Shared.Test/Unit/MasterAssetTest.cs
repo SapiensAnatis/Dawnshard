@@ -282,7 +282,8 @@ public class MasterAssetTest
                     HoldEntityType: EntityTypes.None,
                     HoldEntityId: 0,
                     HoldEntityQuantity: 0,
-                    IsSumUpTotalDamage: false
+                    IsSumUpTotalDamage: false,
+                    QuestOrderPartyGroupId: 0
                 )
             );
 
