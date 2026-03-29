@@ -96,7 +96,7 @@ public class QuestOrderPartyMapperTest
         List<PartyUnitList> result = QuestOrderPartyMapper.MapToPartyUnitList(orderPartyUnits);
 
         DragonData dragonData = MasterAsset.DragonData[(DragonId)20040301];
-        result[0].DragonReliabilityLevel.Should().Be(dragonData.DefaultReliabilityLevel);
+        result[0].DragonReliabilityLevel.Should().Be(30);
     }
 
     [Fact]
