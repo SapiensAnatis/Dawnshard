@@ -341,7 +341,7 @@ public class QuestBonusTest : TestFixture
                 opts => opts.WithDateTimeTolerance()
             );
     }
-    
+
     [Fact]
     public async Task QuestBonus_Totm_CanClaimWithStackCount()
     {
@@ -580,7 +580,12 @@ public class QuestBonusTest : TestFixture
         DragaliaResponse<DungeonSkipStartResponse> response =
             await this.Client.PostMsgpack<DungeonSkipStartResponse>(
                 "/dungeon_skip/start",
-                new DungeonSkipStartRequest() { QuestId = questId, PartyNo = 1, PlayCount = playCount },
+                new DungeonSkipStartRequest()
+                {
+                    QuestId = questId,
+                    PartyNo = 1,
+                    PlayCount = playCount,
+                },
                 cancellationToken: TestContext.Current.CancellationToken
             );
 
