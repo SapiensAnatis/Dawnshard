@@ -1814,7 +1814,10 @@ public partial class DungeonRecordTest : TestFixture
             IsFixedParty = true,
             EnemyList = new()
             {
-                { 1, new List<AtgenEnemy>() { new() { EnemyIdx = 0 } } },
+                {
+                    1,
+                    new List<AtgenEnemy>() { new() { EnemyIdx = 0 } }
+                },
             },
         };
 
@@ -1831,7 +1834,11 @@ public partial class DungeonRecordTest : TestFixture
                         Time = 10,
                         TreasureRecord = new List<AtgenTreasureRecord>()
                         {
-                            new() { AreaIdx = 1, Enemy = new List<int>() { 0 } },
+                            new()
+                            {
+                                AreaIdx = 1,
+                                Enemy = new List<int>() { 0 },
+                            },
                         },
                         LiveUnitNoList = new List<int>() { 1, 2, 3, 4 },
                         DamageRecord = new List<AtgenDamageRecord>(),
