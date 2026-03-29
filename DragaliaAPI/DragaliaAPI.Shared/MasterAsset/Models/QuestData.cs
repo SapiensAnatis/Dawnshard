@@ -42,7 +42,8 @@ public record QuestData(
     EntityTypes HoldEntityType,
     int HoldEntityId,
     int HoldEntityQuantity,
-    bool IsSumUpTotalDamage
+    bool IsSumUpTotalDamage,
+    int QuestOrderPartyGroupId
 )
 {
     private int IdSuffix => this.Id % 1000;
