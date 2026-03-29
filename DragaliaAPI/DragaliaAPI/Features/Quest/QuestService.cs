@@ -171,22 +171,39 @@ public partial class QuestService(
             1
         );
 
-        int totalBonusCount = questEvent.QuestBonusReserveCount + questEvent.QuestBonusReceiveCount;
-        int remainingBonusCount = questEventData.QuestBonusCount - totalBonusCount;
+        int remainingBonusCount;
+
+        if (questEventData.QuestBonusReceiveType == QuestBonusReceiveType.StackSelectReceive)
+        {
+            // TOTM quests have QuestBonusCount = 1 but QuestBonusReceiveCount can be >1 due to stacking, so we need
+            // to use the stack count to view how many are available. This should have just been updated by
+            // ResetQuestEventBonus before we got here.
+
+            remainingBonusCount = questEvent.QuestBonusStackCount;
+        }
+        else
+        {
+            remainingBonusCount =
+                questEventData.QuestBonusCount - questEvent.QuestBonusReceiveCount;
+        }
 
         if (questEventData.QuestBonusCount == 0 || remainingBonusCount <= 0)
         {
-            return Enumerable.Empty<AtgenFirstClearSet>();
+            return [];
         }
 
         int bonusesToReceive = Math.Min(playCount, remainingBonusCount);
 
         if (questEventData.QuestBonusReceiveType != QuestBonusReceiveType.AutoReceive)
         {
-            questEvent.QuestBonusReserveCount += bonusesToReceive;
+            // For quests which have discretionary bonus claims, sending a quest_event_list entry with a non-zero
+            // quest_bonus_reserve_count appears to prompt the client to ask whether a bonus should be claimed.
+            // If the player confirms, a request will be sent to /dungeon/receive_quest_bonus.
+
+            questEvent.QuestBonusReserveCount = bonusesToReceive;
             questEvent.QuestBonusReserveTime = timeProvider.GetUtcNow();
 
-            return Enumerable.Empty<AtgenFirstClearSet>();
+            return [];
         }
 
         questEvent.QuestBonusReceiveCount += bonusesToReceive;
@@ -233,11 +250,14 @@ public partial class QuestService(
     )
     {
         DbQuestEvent questEvent = await questRepository.GetQuestEventAsync(eventGroupId);
+        QuestEvent questEventData = MasterAsset.QuestEvent[eventGroupId];
 
         int? questId = await questCacheService.GetQuestGroupQuestIdAsync(eventGroupId);
 
         if (!isReceive || questId == null)
         {
+            // isReceive is false if the player declines to receive the bonus
+
             Log.CancellingReceiptOfQuestBonus(logger);
 
             questEvent.QuestBonusReserveCount = 0;
@@ -248,7 +268,7 @@ public partial class QuestService(
             return new() { TargetQuestId = questId ?? 0 };
         }
 
-        if (count > questEvent.QuestBonusReserveCount + questEvent.QuestBonusStackCount)
+        if (count > questEvent.QuestBonusReserveCount)
         {
             throw new DragaliaException(
                 ResultCode.QuestSelectBonusReceivableLimit,
@@ -256,15 +276,23 @@ public partial class QuestService(
             );
         }
 
-        if (count > questEvent.QuestBonusReserveCount)
+        if (count < 0)
         {
-            questEvent.QuestBonusStackCount -= count - questEvent.QuestBonusReserveCount;
-            questEvent.QuestBonusStackTime =
-                questEvent.QuestBonusStackCount == 0
-                    ? DateTimeOffset.UnixEpoch
-                    : timeProvider.GetUtcNow();
+            throw new DragaliaException(
+                ResultCode.CommonInvalidArgument,
+                "Cannot claim < 0 quest bonuses"
+            );
+        }
 
-            count = questEvent.QuestBonusReserveCount;
+        if (questEventData.QuestBonusReceiveType == QuestBonusReceiveType.StackSelectReceive)
+        {
+            questEvent.QuestBonusStackCount = Math.Max(0, questEvent.QuestBonusStackCount - count);
+            questEvent.QuestBonusStackTime = timeProvider.GetUtcNow();
+
+            // For TOTM the quest bonus display works like
+            // Opened chests = QuestBonusReceiveCount
+            // Closed chests = (# of resets since QuestBonusStackTime) + QuestBonusStackCount
+            // Greyed out closed chests = QuestBonusStackCountMax - (# closed chests) - (# of open chests)
         }
 
         questEvent.QuestBonusReserveCount = 0;
@@ -289,10 +317,19 @@ public partial class QuestService(
 
         if (questEventData.QuestBonusReceiveType != QuestBonusReceiveType.AutoReceive)
         {
-            if (questEventData.QuestBonusStackCountMax > 0)
+            if (questEventData.QuestBonusStackCountMax > 0) // Equivalent to questEventData.QuestBonusReceiveType == StackSelectReceive
             {
-                int newStackCount =
-                    questEvent.QuestBonusReserveCount + questEvent.QuestBonusStackCount;
+                // Note: this has the behaviour of granting 3 bonuses the first time you touch a row (as QuestBonusStackTime
+                // will be UnixEpoch).
+                // Unsure how this behaved during live service: on the first day of a ToTM quest would you only get one
+                // bonus? What if you first played it 2 days after it started running? Not really relevant for Dawnshard,
+                // however, as we do not rotate the individual ToTM quests.
+
+                DateTimeOffset stackDailyReset = questEvent.QuestBonusStackTime.GetLastDailyReset();
+                DateTimeOffset lastReset = timeProvider.GetLastDailyReset();
+                int resetsSinceStackTime = (lastReset - stackDailyReset).Days;
+
+                int newStackCount = questEvent.QuestBonusStackCount + resetsSinceStackTime;
 
                 questEvent.QuestBonusStackCount = Math.Min(
                     questEventData.QuestBonusStackCountMax,
