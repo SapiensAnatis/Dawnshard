@@ -1787,6 +1787,71 @@ public partial class DungeonRecordTest : TestFixture
             );
     }
 
+    [Fact]
+    public async Task Record_FixedParty_DoesNotGrantCharaExp()
+    {
+        int questId = 204290104; // Fixed party quest with group 2042902
+
+        await AddToDatabase(
+            new DbQuest()
+            {
+                QuestId = questId,
+                State = 0,
+                ViewerId = ViewerId,
+            }
+        );
+
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>()
+            {
+                new() { UnitNo = 1, CharaId = Charas.Joker },
+                new() { UnitNo = 2, CharaId = Charas.SophiePersona },
+                new() { UnitNo = 3, CharaId = Charas.Mona },
+                new() { UnitNo = 4, CharaId = Charas.Panther },
+            },
+            QuestData = MasterAsset.QuestData.Get(questId),
+            IsFixedParty = true,
+            EnemyList = new()
+            {
+                { 1, new List<AtgenEnemy>() { new() { EnemyIdx = 0 } } },
+            },
+        };
+
+        string key = await this.StartDungeon(mockSession);
+
+        DungeonRecordRecordResponse response = (
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    DungeonKey = key,
+                    PlayRecord = new()
+                    {
+                        Time = 10,
+                        TreasureRecord = new List<AtgenTreasureRecord>()
+                        {
+                            new() { AreaIdx = 1, Enemy = new List<int>() { 0 } },
+                        },
+                        LiveUnitNoList = new List<int>() { 1, 2, 3, 4 },
+                        DamageRecord = new List<AtgenDamageRecord>(),
+                        DragonDamageRecord = new List<AtgenDamageRecord>(),
+                        BattleRoyalRecord = new(),
+                    },
+                },
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        ).Data;
+
+        response.IngameResultData.DungeonKey.Should().Be(key);
+        response.IngameResultData.QuestId.Should().Be(questId);
+
+        // Fixed party should not grant character exp
+        response.IngameResultData.GrowRecord.CharaGrowRecord.Should().BeNullOrEmpty();
+        // Player exp should still be granted
+        response.IngameResultData.GrowRecord.TakePlayerExp.Should().NotBe(0);
+    }
+
     private async Task<string> StartDungeon(DungeonSession session)
     {
         string key = this.DungeonService.CreateSession(session);

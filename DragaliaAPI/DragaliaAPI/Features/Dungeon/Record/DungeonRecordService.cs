@@ -153,6 +153,11 @@ internal partial class DungeonRecordService(
             return;
         }
 
+        if (session.IsFixedParty)
+        {
+            return;
+        }
+
         List<Charas> honorRecipients = new(8); // SinDom
 
         foreach (PartySettingList chara in session.Party)
@@ -210,6 +215,13 @@ internal partial class DungeonRecordService(
 
         rewardRecord.PlayerLevelUpFstone = playerLevelResult.RewardedWyrmite;
         growRecord.TakePlayerExp = playerLevelResult.ExpGained;
+
+        if (session.IsFixedParty)
+        {
+            growRecord.BonusFactor = 1;
+            growRecord.ManaBonusFactor = 1;
+            return;
+        }
 
         int experiencePerChara = experience * 2;
 
