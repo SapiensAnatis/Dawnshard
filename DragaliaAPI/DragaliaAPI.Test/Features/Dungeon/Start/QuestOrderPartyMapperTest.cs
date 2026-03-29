@@ -87,7 +87,7 @@ public class QuestOrderPartyMapperTest
     }
 
     [Fact]
-    public void MapToPartyUnitList_DragonReliabilityLevel_DerivedFromMasterData()
+    public void MapToPartyUnitList_DragonReliabilityLevel_SetToMax()
     {
         List<QuestOrderParty> orderPartyUnits = MasterAsset
             .QuestOrderParty.Enumerable.Where(x => x.QuestOrderPartyGroupId == 1002601)
@@ -95,7 +95,6 @@ public class QuestOrderPartyMapperTest
 
         List<PartyUnitList> result = QuestOrderPartyMapper.MapToPartyUnitList(orderPartyUnits);
 
-        DragonData dragonData = MasterAsset.DragonData[(DragonId)20040301];
         result[0].DragonReliabilityLevel.Should().Be(30);
     }
 

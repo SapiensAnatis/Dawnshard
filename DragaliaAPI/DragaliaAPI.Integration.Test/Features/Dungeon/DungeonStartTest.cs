@@ -343,7 +343,8 @@ public class DungeonStartTest : TestFixture
             .IngameData.PartyInfo.PartyUnitList.Select(x => x.CharaData!.CharaId)
             .Should()
             .BeEquivalentTo(
-                new[] { Charas.Joker, Charas.SophiePersona, Charas.Mona, Charas.Panther }
+                [Charas.Joker, Charas.SophiePersona, Charas.Mona, Charas.Panther],
+                opts => opts.WithStrictOrdering()
             );
 
         // Verify character levels are from fixed party data, not the player's database

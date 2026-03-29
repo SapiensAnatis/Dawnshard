@@ -2,7 +2,6 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
-using LinqToDB;
 
 namespace DragaliaAPI.Features.Dungeon.Start;
 
@@ -140,7 +139,7 @@ public static class QuestOrderPartyMapper
             HpPlusCount = fixedUnit.CharaHpPlusCount,
             AttackPlusCount = fixedUnit.CharaAttackPlusCount,
 
-            // We can assume the character is maxed out but not spiraled because of ValidateCharaData
+            // We can assume the character is maxed out but not spiraled because of ValidateChara
             Hp = charaData.MaxHp, // Despite this, Euden in Fight For Humanity has like 80,000 HP; possibly ignored by the client
             Attack = charaData.MaxAtk,
             Skill1Level = 3,
