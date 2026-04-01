@@ -1,9 +1,9 @@
-FROM mcr.microsoft.com/dotnet/aspnet:10.0.3-noble-chiseled AS base
+FROM mcr.microsoft.com/dotnet/aspnet:10.0.5-noble-chiseled AS base
 USER app
 EXPOSE 8080
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:10.0.103 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0.201 AS build
 WORKDIR /src
 COPY ["PhotonStateManager/Directory.Build.props", "."]
 COPY ["Directory.Packages.props", "."]
