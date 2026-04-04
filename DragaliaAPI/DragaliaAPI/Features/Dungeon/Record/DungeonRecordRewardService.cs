@@ -1,5 +1,7 @@
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Shared.Reward;
@@ -9,6 +11,7 @@ using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
@@ -19,9 +22,15 @@ public partial class DungeonRecordRewardService(
     EventDropService eventDropService,
     IMissionProgressionService missionProgressionService,
     IQuestRepository questRepository,
+    ApiContext apiContext,
+    TimeProvider timeProvider,
     ILogger<DungeonRecordRewardService> logger
 ) : IDungeonRecordRewardService
 {
+    private const int FafnirMedalId = 10001;
+    private const int MedalsPerCompletion = 5;
+    private const int WeeklyMedalCap = 50;
+
     public async Task<(
         QuestMissionStatus MissionStatus,
         IEnumerable<AtgenFirstClearSet> FirstClearRewards
@@ -287,6 +296,39 @@ public partial class DungeonRecordRewardService(
         int TakeBoostAccumulatePoint,
         IEnumerable<AtgenEventPassiveUpList> PassiveUpList
     );
+
+    public async Task<IList<AtgenDropAll>> ProcessGatherItemDrops(DungeonSession session)
+    {
+        DbPlayerGatherItem gatherItem =
+            await apiContext.PlayerGatherItems.FirstOrDefaultAsync(x =>
+                x.GatherItemId == FafnirMedalId
+            )
+            ?? apiContext
+                .PlayerGatherItems.Add(new DbPlayerGatherItem { GatherItemId = FafnirMedalId })
+                .Entity;
+
+        if (timeProvider.GetLastWeeklyReset() > gatherItem.QuestLastWeeklyResetTime)
+        {
+            gatherItem.QuestTakeWeeklyQuantity = 0;
+            gatherItem.QuestLastWeeklyResetTime = timeProvider.GetUtcNow();
+        }
+
+        int remaining = WeeklyMedalCap - gatherItem.QuestTakeWeeklyQuantity;
+
+        if (remaining <= 0)
+        {
+            return [];
+        }
+
+        int rewardQuantity = Math.Min(session.PlayCount * MedalsPerCompletion, remaining);
+
+        gatherItem.QuestTakeWeeklyQuantity += rewardQuantity;
+
+        Entity medal = new(EntityTypes.FafnirMedal, FafnirMedalId, rewardQuantity);
+        await rewardService.GrantReward(medal);
+
+        return [medal.ToDropAll()];
+    }
 
     private static partial class Log
     {

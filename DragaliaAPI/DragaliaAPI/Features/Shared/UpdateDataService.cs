@@ -175,6 +175,10 @@ public class UpdateDataService(
                         PaidDiamond = diamondData.PaidDiamond,
                     };
                     break;
+                case DbPlayerGatherItem gatherItem:
+                    list.GatherItemList ??= [];
+                    list.GatherItemList.Add(gatherItem.MapToGatherItemList());
+                    break;
                 default:
                     continue;
             }

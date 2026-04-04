@@ -21,4 +21,5 @@ public interface IDungeonRecordRewardService
 
     AtgenFirstMeeting ProcessFirstMeetingRewards(IList<long> connectingViewerIdList);
     Task<IList<AtgenDropAll>> ProcessDraconicEssenceDrops(DungeonSession session);
+    Task<IList<AtgenDropAll>> ProcessGatherItemDrops(DungeonSession session);
 }
