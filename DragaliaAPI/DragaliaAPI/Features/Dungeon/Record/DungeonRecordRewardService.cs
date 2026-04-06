@@ -323,9 +323,9 @@ public partial class DungeonRecordRewardService(
         int rewardQuantity = Math.Min(session.PlayCount * MedalsPerCompletion, remaining);
 
         gatherItem.QuestTakeWeeklyQuantity += rewardQuantity;
+        gatherItem.Quantity += rewardQuantity;
 
         Entity medal = new(EntityTypes.FafnirMedal, FafnirMedalId, rewardQuantity);
-        await rewardService.GrantReward(medal);
 
         return [medal.ToDropAll()];
     }
