@@ -58,7 +58,7 @@ public class TestContainersHelper
         await this.redisContainer.StopAsync();
     }
 
-    [MemberNotNull(nameof(this.redisContainer))]
+    [MemberNotNull(nameof(redisContainer))]
     private void ThrowIfRedisContainerNull()
     {
         if (this.redisContainer is null)
