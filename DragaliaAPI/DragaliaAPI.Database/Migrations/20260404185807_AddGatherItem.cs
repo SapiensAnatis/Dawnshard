@@ -29,7 +29,7 @@ namespace DragaliaAPI.Database.Migrations
                         column: x => x.ViewerId,
                         principalTable: "Players",
                         principalColumn: "ViewerId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
         }
 

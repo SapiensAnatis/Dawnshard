@@ -2553,7 +2553,7 @@ namespace DragaliaAPI.Database.Migrations
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
                         .WithMany("GatherItemList")
                         .HasForeignKey("ViewerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Owner");
