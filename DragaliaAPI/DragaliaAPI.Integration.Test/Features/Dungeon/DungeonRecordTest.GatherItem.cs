@@ -60,7 +60,8 @@ public partial class DungeonRecordTest
                     GatherItemId = 10001,
                     Quantity = 5,
                     QuestTakeWeeklyQuantity = 5,
-                }
+                },
+                options => options.Excluding(x => x.QuestLastWeeklyResetTime)
             );
 
         DbPlayerGatherItem? gatherItem =

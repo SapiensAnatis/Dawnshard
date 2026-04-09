@@ -18,7 +18,10 @@ public class FafnirMedalRewardHandler(
     public async Task<GrantReturn> Grant(Entity entity)
     {
         DbPlayerGatherItem gatherItem =
-            await apiContext.PlayerGatherItems.FirstOrDefaultAsync(x => x.GatherItemId == entity.Id)
+            apiContext.PlayerGatherItems.Local.FirstOrDefault(x => x.GatherItemId == entity.Id)
+            ?? await apiContext.PlayerGatherItems.FirstOrDefaultAsync(x =>
+                x.GatherItemId == entity.Id
+            )
             ?? apiContext
                 .PlayerGatherItems.Add(
                     new DbPlayerGatherItem

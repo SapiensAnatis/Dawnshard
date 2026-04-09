@@ -302,7 +302,8 @@ public partial class DungeonRecordRewardService(
     public async Task<IList<AtgenDropAll>> ProcessGatherItemDrops(DungeonSession session)
     {
         DbPlayerGatherItem gatherItem =
-            await apiContext.PlayerGatherItems.FirstOrDefaultAsync(x =>
+            apiContext.PlayerGatherItems.Local.FirstOrDefault(x => x.GatherItemId == FafnirMedalId)
+            ?? await apiContext.PlayerGatherItems.FirstOrDefaultAsync(x =>
                 x.GatherItemId == FafnirMedalId
             )
             ?? apiContext

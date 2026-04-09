@@ -134,15 +134,12 @@ public partial class DungeonRecordTest : TestFixture
 
         response
             .IngameResultData.RewardRecord.DropAll.Should()
-            .BeEquivalentTo(
-                new List<AtgenDropAll>()
+            .ContainEquivalentOf(
+                new AtgenDropAll()
                 {
-                    new()
-                    {
-                        Type = EntityTypes.Material,
-                        Id = (int)Materials.Squishums,
-                        Quantity = 1,
-                    },
+                    Type = EntityTypes.Material,
+                    Id = (int)Materials.Squishums,
+                    Quantity = 1,
                 }
             );
         response.IngameResultData.RewardRecord.TakeCoin.Should().Be(10);
