@@ -4,6 +4,7 @@ using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Infrastructure;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +39,6 @@ internal class EventSummonService(
                 .Select(x => new
                 {
                     x.BoxNumber,
-                    x.Points,
                     Items = x.Items.Select(y => new { y.ItemId, y.TimesSummoned }),
                 })
                 .FirstOrDefaultAsync(cancellationToken)
@@ -46,6 +46,13 @@ internal class EventSummonService(
                 ResultCode.EntityRaidEventDataNotFound,
                 "No event summon data found"
             );
+
+        int points = await apiContext
+            .PlayerEventItems.Where(x =>
+                x.EventId == eventId && x.Type == (int)RaidEventItemType.SummonPoint
+            )
+            .Select(x => x.Quantity)
+            .FirstOrDefaultAsync(cancellationToken);
 
         IReadOnlyDictionary<int, EventSummonItemConfiguration> itemDict = GetEventConfig(
             eventId
@@ -60,7 +67,7 @@ internal class EventSummonService(
         return new()
         {
             EventId = eventId,
-            EventPoint = userData.Points,
+            EventPoint = points,
             MaxExecCount = MaxExecCount,
             RemainingQuantity = data.RemainingQuantity,
             ResetPossible = data.ResetPossible,
@@ -94,15 +101,21 @@ internal class EventSummonService(
                 "No event summon data found"
             );
 
+        DbPlayerEventItem? points = await apiContext
+            .PlayerEventItems.Where(x =>
+                x.EventId == eventId && x.Type == (int)RaidEventItemType.SummonPoint
+            )
+            .FirstOrDefaultAsync(cancellationToken);
+
         IReadOnlyDictionary<int, EventSummonItemConfiguration> itemDict = GetEventConfig(
             eventId
         ).Items;
 
-        if (userData.Points < numSummons * boxSummonData.CostNum)
+        if (points is null || points.Quantity < numSummons * boxSummonData.CostNum)
         {
             throw new DragaliaException(
                 ResultCode.SummonPointShort,
-                $"Insufficient event summon points: need {numSummons * boxSummonData.CostNum}, have {userData.Points}"
+                $"Insufficient event summon points: need {numSummons * boxSummonData.CostNum}, have {points?.Quantity}"
             );
         }
 
@@ -134,7 +147,7 @@ internal class EventSummonService(
             }
 
             summonItem.TimesSummoned += 1;
-            userData.Points -= boxSummonData.CostNum;
+            points.Quantity -= boxSummonData.CostNum;
 
             idPool.RemoveAt(selectedIdIndex);
 
@@ -159,7 +172,7 @@ internal class EventSummonService(
                 break;
             }
 
-            if (userData.Points < boxSummonData.CostNum)
+            if (points.Quantity < boxSummonData.CostNum)
             {
                 break;
             }
@@ -199,7 +212,7 @@ internal class EventSummonService(
         return new()
         {
             EventId = eventId,
-            EventPoint = userData.Points,
+            EventPoint = points.Quantity,
             MaxExecCount = MaxExecCount,
             RemainingQuantity = newBoxSummonInfo.RemainingQuantity,
             ResetPossible = newBoxSummonInfo.ResetPossible,

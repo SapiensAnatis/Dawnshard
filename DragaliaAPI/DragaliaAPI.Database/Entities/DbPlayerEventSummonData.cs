@@ -9,8 +9,6 @@ public class DbPlayerEventSummonData : DbPlayerData
 {
     public int EventId { get; set; }
 
-    public int Points { get; set; }
-
     public int BoxNumber { get; set; } = 1;
 
     public List<DbPlayerEventSummonItem> Items { get; set; } = [];
