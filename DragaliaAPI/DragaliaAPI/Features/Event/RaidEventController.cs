@@ -62,9 +62,9 @@ public class RaidEventController(
         RaidEventEntryResponse resp = new();
 
         await eventService.CreateEventData(request.RaidEventId);
+        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
 
         resp.RaidEventUserData = await eventService.GetRaidEventUserData(request.RaidEventId);
-        resp.UpdateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
         resp.EntityResult = rewardService.GetEntityResult();
 
         return Ok(resp);
