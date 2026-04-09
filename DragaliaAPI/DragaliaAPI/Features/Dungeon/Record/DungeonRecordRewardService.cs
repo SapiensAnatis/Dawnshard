@@ -11,6 +11,7 @@ using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
@@ -24,6 +25,7 @@ public partial class DungeonRecordRewardService(
     IQuestRepository questRepository,
     ApiContext apiContext,
     TimeProvider timeProvider,
+    IPlayerIdentityService playerIdentityService,
     ILogger<DungeonRecordRewardService> logger
 ) : IDungeonRecordRewardService
 {
@@ -304,7 +306,13 @@ public partial class DungeonRecordRewardService(
                 x.GatherItemId == FafnirMedalId
             )
             ?? apiContext
-                .PlayerGatherItems.Add(new DbPlayerGatherItem { GatherItemId = FafnirMedalId })
+                .PlayerGatherItems.Add(
+                    new DbPlayerGatherItem
+                    {
+                        ViewerId = playerIdentityService.ViewerId,
+                        GatherItemId = FafnirMedalId,
+                    }
+                )
                 .Entity;
 
         if (timeProvider.GetLastWeeklyReset() > gatherItem.QuestLastWeeklyResetTime)

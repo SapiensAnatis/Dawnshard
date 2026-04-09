@@ -1,13 +1,17 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Shared.Reward.Handlers;
 
 [UsedImplicitly]
-public partial class FafnirMedalRewardHandler(ApiContext apiContext) : IRewardHandler
+public class FafnirMedalRewardHandler(
+    ApiContext apiContext,
+    IPlayerIdentityService playerIdentityService
+) : IRewardHandler
 {
     public IReadOnlyList<EntityTypes> SupportedTypes { get; } = [EntityTypes.FafnirMedal];
 
@@ -16,7 +20,13 @@ public partial class FafnirMedalRewardHandler(ApiContext apiContext) : IRewardHa
         DbPlayerGatherItem gatherItem =
             await apiContext.PlayerGatherItems.FirstOrDefaultAsync(x => x.GatherItemId == entity.Id)
             ?? apiContext
-                .PlayerGatherItems.Add(new DbPlayerGatherItem { GatherItemId = entity.Id })
+                .PlayerGatherItems.Add(
+                    new DbPlayerGatherItem
+                    {
+                        ViewerId = playerIdentityService.ViewerId,
+                        GatherItemId = entity.Id,
+                    }
+                )
                 .Entity;
 
         gatherItem.Quantity += entity.Quantity;
